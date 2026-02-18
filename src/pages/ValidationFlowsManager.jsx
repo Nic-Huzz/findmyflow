@@ -155,6 +155,8 @@ const ValidationFlowsManager = () => {
       }
     }
 
+    if (!flowConfig) return
+
     const result = await createValidationFlow(
       user.id,
       flowConfig.name,

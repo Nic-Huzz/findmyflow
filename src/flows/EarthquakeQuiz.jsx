@@ -5,6 +5,7 @@ import EarthquakeResults from './EarthquakeResults'
 import {
   QUESTIONS, HOOK_COPY, computeResults,
 } from './earthquakeQuizConfig'
+import { trackQuizStart, trackEmailSubmitted, trackQuizComplete } from '../lib/analytics'
 import './EarthquakeQuiz.css'
 
 /**
@@ -99,6 +100,7 @@ export default function EarthquakeQuiz() {
   const currentQuestionIndex = QUESTIONS.findIndex(q => q.id === stage)
 
   const goNext = () => {
+    if (stage === 'hook') trackQuizStart()
     const idx = STAGE_ORDER.indexOf(stage)
     if (idx < STAGE_ORDER.length - 1) {
       setStage(STAGE_ORDER[idx + 1])
@@ -143,6 +145,14 @@ export default function EarthquakeQuiz() {
     // Compute results
     const computed = computeResults(answers)
     setResults(computed)
+
+    // Track conversion events
+    trackEmailSubmitted(submittedEmail)
+    trackQuizComplete({
+      primaryVoice: computed.primaryVoice,
+      awakeningStage: computed.awakeningStage,
+      primaryBlock: computed.primaryBlock,
+    })
 
     // Move to calculating animation
     setCalcStep(0)

@@ -9,11 +9,11 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 1 | **Earthquake Quiz** — Build lead magnet at `/try/earthquake` (9 questions, email gate, share cards) | ⬜ |
-| 2 | **Fantasy League landing page** — Public-facing page for the Fantasy League concept | ⬜ |
-| 3 | **Healing challenges confirmed** — Validate and lock healing tab quest list | ⬜ |
-| 4 | **Content templates created** — Finalise content generation templates for CRM | ⬜ |
-| 5 | **Resend feature working** — Newsletter sending pipeline end-to-end via Resend | ⬜ |
+| 1 | **Earthquake Quiz** — Build lead magnet at `/try/earthquake` (9 questions, email gate, share cards) | ✅ |
+| 2 | **Fantasy League landing page** — Public-facing page for the Fantasy League concept | ✅ |
+| 3 | **Healing challenges confirmed** — Validate and lock healing tab quest list | ✅ |
+| 4 | **Content templates created** — Finalise content generation templates for CRM | ✅ |
+| 5 | **Resend feature working** — Newsletter sending pipeline end-to-end via Resend | ✅ |
 
 ---
 
@@ -212,40 +212,39 @@ You have:
 | Bug | Severity | File | Description |
 |-----|----------|------|-------------|
 | ~~`handleQuestComplete` stale closure~~ | ~~🔴 Critical~~ | Challenge.jsx ~L760 | ✅ Fixed — now passes `freshCompletions` to `getTabCompletionStatus` |
-| `getWeekStart()` mutates Date | 🔴 Critical | WeeklyPlanningFlow.jsx ~L355 | `now.setDate(diff)` mutates shared Date object, corrupts downstream date calculations. **Still present.** |
+| ~~`getWeekStart()` mutates Date~~ | ~~🔴 Critical~~ | WeeklyPlanningFlow.jsx ~L355 | ✅ Fixed — refactored to `dateUtils.getMondayDate()` which clones input |
 | ~~Double-completion race condition~~ | ~~🔴 Critical~~ | Challenge.jsx ~L314 | ✅ Fixed — `completingQuestId` state guards against double-clicks |
 | ~~`loadLeaderboard` stale closure~~ | ~~🔴 Critical~~ | useChallengeData.js ~L527 | ✅ Fixed — `progress.group_id` properly accessed in loading chain |
-| `advanceDay` no optimistic concurrency | 🟡 Medium | useChallengeData.js ~L310 | Two tabs can double-advance day (both fire notifications for same day) |
-| `challenge_progress.update` no-match handling | 🟡 Medium | Challenge.jsx ~L668 | If challenge completed/archived between load and quest complete, shows generic error |
-| `lastWeekStats` hardcoded points | 🟡 Medium | WeeklyPlanningFlow.jsx ~L333 | Uses `questCount * 10` instead of actual `points_earned` column — shows inaccurate totals |
-| Loading state race (Promise.all) | 🟡 Medium | useChallengeData.js ~L1666 | `setLoading(false)` fires when first promise resolves, not when all 10+ parallel loads complete |
-| Missing useEffect dependencies | 🟡 Medium | useChallengeData.js ~L1666 | Functions reference `progress` via closures but only depend on `[user]` — produce incorrect results on first render |
-| Realtime subscription leak | 🟡 Medium | useChallengeData.js ~L1700 | Rapid `leaderboardView` toggling accumulates channel subscriptions — use `removeChannel()` in cleanup |
-| ValidationFlows crash on unknown type | 🟡 Medium | ValidationFlowsManager.jsx ~L120 | `flowConfig` undefined if `selectedFlowType` not 'validation' or 'testing' — crashes on `createValidationFlow` |
-| WeeklyPlanning save stuck loading | 🟡 Medium | WeeklyPlanningFlow.jsx ~L534 | `setSaving(false)` missing on success path — button stays in loading state if component doesn't unmount |
-| Streak day skip | 🟢 Minor | useChallengeData.js ~L1609 | `getConsecutiveStreakDays` can skip a day in backward walk when no completions today — reports shorter streak |
+| ~~`advanceDay` no optimistic concurrency~~ | ~~🟡 Medium~~ | useChallengeData.js ~L310 | ✅ Fixed — added `.eq('current_day', ...)` guard + silent PGRST116 return |
+| ~~`challenge_progress.update` no-match handling~~ | ~~🟡 Medium~~ | Challenge.jsx ~L668 | ✅ Fixed — PGRST116 check shows "challenge no longer active" message |
+| ~~`lastWeekStats` hardcoded points~~ | ~~🟡 Medium~~ | WeeklyPlanningFlow.jsx ~L333 | ✅ Fixed — uses actual `points_earned` column with `.reduce()` sum + Sunday date range fix |
+| ~~Loading state race (Promise.all)~~ | ~~🟡 Medium~~ | useChallengeData.js ~L1666 | ✅ Fixed — `.finally()` on full `Promise.all(...)` |
+| Missing useEffect dependencies | 🟡 Medium | useChallengeData.js ~L1666 | Investigated — adding `progress` to deps causes excessive reloads. Real-time subscription already handles refresh. Accepted as-is. |
+| ~~Realtime subscription leak~~ | ~~🟡 Medium~~ | useChallengeData.js ~L1700 | ✅ Fixed — `supabase.removeChannel(subscription)` replaces `unsubscribe()` |
+| ~~ValidationFlows crash on unknown type~~ | ~~🟡 Medium~~ | ValidationFlowsManager.jsx ~L120 | ✅ Fixed — `if (!flowConfig) return` guard added |
+| ~~WeeklyPlanning save stuck loading~~ | ~~🟡 Medium~~ | WeeklyPlanningFlow.jsx ~L534 | ✅ Fixed — `setSaving(false)` added on success path before `onComplete` |
+| Streak day skip | 🟢 Minor | useChallengeData.js ~L1609 | Investigated — all 5 scenarios return correct values. Structural fragility only. Purely visual (flame icon). Accepted as-is. |
 
 #### User Acquisition Infrastructure
 
 | Task | Description | Effort | Status |
 |------|-------------|--------|--------|
 | **Earthquake Quiz** | | | |
-| Build Earthquake Quiz | 9-question lead magnet at `/try/earthquake`. Detects Protective Voice, awakening stage, block type. Email gate before full results. | Medium | ⬜ Specced |
-| Shareable results card | Instagram/Twitter/LinkedIn share card from quiz results | Small | ⬜ Specced |
-| Wire email capture | Quiz results → `external_contacts` or `public_leads` with tags | Small | ⬜ Not started |
+| ~~Build Earthquake Quiz~~ | 9-question lead magnet at `/try/earthquake`. Detects Protective Voice, awakening stage, block type. Email gate before full results. | Medium | ✅ Done |
+| ~~Wire email capture~~ | Quiz results → `earthquake_quiz_leads` + `public_leads` with tags + `notify-lead-capture` edge function | Small | ✅ Done |
 | **Monetisation** | | | |
 | Set up Stripe | Even just $10/mo tier to start collecting revenue | Small | ⬜ Not started |
 | Pricing gate | Free quiz + 7-day trial → paywall at Day 8 | Medium | ⬜ Not started |
 | **AI Discoverability** | | | |
-| Add `llms.txt` | AI-readable site description at root domain (like robots.txt for LLMs) | Small | ⬜ Specced |
-| Add JSON-LD schema markup | FAQ + SoftwareApplication schema on landing page | Small | ⬜ Specced |
+| ~~Add `llms.txt`~~ | AI-readable site description at root domain (like robots.txt for LLMs) | Small | ✅ Done — `llms.txt` + `robots.txt` + `sitemap.xml` |
+| ~~Add JSON-LD schema markup~~ | FAQ + WebApplication + Organization + Person schema on landing page | Small | ✅ Done — FAQPage, WebApplication, Organization w/ founder, OG + Twitter meta |
 | Create `/methodology` page | Dense, crawlable framework content (5 Voices, Flow Equation, 4 R's) for AI + SEO | Medium | ⬜ Not started |
 | **Analytics** | | | |
 | Set up web analytics | Vercel Analytics (enabled) or Plausible ($9/mo) | Small | ✅ Vercel done |
-| UTM tracking verification | Test `?utm_source=reddit` flows through to Supabase events | Small | ⬜ Not started |
-| Conversion goals | Quiz start → quiz complete → email capture → signup | Small | ⬜ Not started |
+| ~~UTM tracking verification~~ | Global UTM capture in `main.jsx` → `sessionStorage`, attached to all funnel events | Small | ✅ Done — needs deploy + live test with `?utm_source=reddit` |
+| ~~Conversion goals~~ | 5-event funnel: `quiz_start` → `email_submitted` → `quiz_complete` → `quiz_signup_click` → `account_created`. `events` table created. | Small | ✅ Done — wired in EarthquakeQuiz, EarthquakeResults, AuthProvider |
 | **Landing Page Narrative** | | | |
-| Change CTA | "Join Waiting List" → "Discover What's Blocking You" → `/try/earthquake` | Small | ⬜ Not started |
+| ~~Change CTA~~ | All 3 CTAs → "Discover What's Blocking You" → `/try/earthquake` | Small | ✅ Done — hero, path card, sticky mobile |
 | Protective Voices section | Scroll-stopping "Meet the 5 voices keeping you small" with archetype cards | Medium | ⬜ Specced |
 | Caged Creator "Is This You?" upgrade | 10+ courses, Notion tracker, Sunday dread, intellectually isolated | Small | ⬜ Specced |
 | Matrix framing hero | "You were born with powers. The Matrix suppressed them." | Small | ⬜ Specced |

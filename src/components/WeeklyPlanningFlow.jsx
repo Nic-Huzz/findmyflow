@@ -359,20 +359,20 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
       lastMonday.setDate(now.getDate() - daysToLastMonday - 7)
       const lastSunday = new Date(lastMonday)
       lastSunday.setDate(lastMonday.getDate() + 6)
+      lastSunday.setHours(23, 59, 59, 999)
 
       // Get quest completions from last week
       const { data: completions, error } = await supabase
         .from('quest_completions')
-        .select('id, quest_id')
+        .select('id, quest_id, points_earned')
         .eq('user_id', user.id)
         .gte('completed_at', lastMonday.toISOString())
         .lte('completed_at', lastSunday.toISOString())
 
       if (error) throw error
 
-      // Calculate stats (points not stored in quest_completions, just count)
       const questCount = completions?.length || 0
-      const totalPoints = questCount * 10 // Estimate 10 points per quest
+      const totalPoints = (completions || []).reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
       setLastWeekStats({
         totalPoints,
@@ -612,6 +612,8 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
         hasRelease: !!planData.big_release_practice,
         has3Percent: !!planData.three_percent_improvement
       })
+
+      setSaving(false)
 
       // Call completion handler if provided
       if (onComplete) {

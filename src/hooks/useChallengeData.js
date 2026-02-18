@@ -319,10 +319,13 @@ export function useChallengeData() {
       })
       .eq('user_id', user.id)
       .eq('challenge_instance_id', currentProgress.challenge_instance_id)
+      .eq('current_day', currentProgress.current_day)
       .select()
       .single()
 
     if (error) {
+      // PGRST116 = no rows matched — another tab already advanced the day
+      if (error.code === 'PGRST116') return
       console.error('Error advancing day:', error)
     } else {
       setProgress(data)
@@ -1827,7 +1830,7 @@ export function useChallengeData() {
 
     return () => {
       clearTimeout(debounceTimer)
-      subscription.unsubscribe()
+      supabase.removeChannel(subscription)
     }
   }, [user, leaderboardView])
 

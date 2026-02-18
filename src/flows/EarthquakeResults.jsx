@@ -3,6 +3,7 @@ import {
   VOICE_CONTENT, STAGES, STAGE_DESCRIPTIONS,
   BLOCK_CONTENT, DAM_COPY,
 } from './earthquakeQuizConfig'
+import { trackQuizSignupClick } from '../lib/analytics'
 
 /**
  * EarthquakeResults — Results reveal + bridge CTA
@@ -28,6 +29,7 @@ export default function EarthquakeResults({ results, answers, email, onRetake })
   const isExtremeCourseConsumer = results.courseCount === '10+'
 
   const handleSignup = () => {
+    trackQuizSignupClick()
     navigate('/get-started')
   }
 

@@ -735,7 +735,11 @@ function Challenge() {
 
         if (progressError) {
           console.error('Error updating progress:', progressError)
-          alert('Error updating progress. Please try again.')
+          if (progressError.code === 'PGRST116') {
+            alert('This challenge is no longer active. Please refresh the page.')
+          } else {
+            alert('Error updating progress. Please try again.')
+          }
           return
         }
 

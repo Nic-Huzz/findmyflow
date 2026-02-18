@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { initializeNotifications } from '../lib/notifications'
+import { trackAccountCreated, getStoredUtmParams } from '../lib/analytics'
 
 const AuthContext = createContext({})
 
@@ -32,6 +33,15 @@ export const AuthProvider = ({ children }) => {
         console.log('🔐 Auth state changed:', event, session?.user?.email)
         setUser(session?.user ?? null)
         setLoading(false)
+
+        // Track new signups (created_at ~= last_sign_in_at means first login)
+        if (event === 'SIGNED_IN' && session?.user) {
+          const created = new Date(session.user.created_at).getTime()
+          const signedIn = new Date(session.user.last_sign_in_at).getTime()
+          if (Math.abs(signedIn - created) < 60000) {
+            trackAccountCreated({ userId: session.user.id, source: 'otp', ...getStoredUtmParams() })
+          }
+        }
       }
     )
 

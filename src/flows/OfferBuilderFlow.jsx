@@ -19,7 +19,7 @@
  * - LeadMagnetSelectionFlow (+8 pts): Finalize lead magnets with type selection
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
@@ -30,7 +30,6 @@ import { trackFlowCompletion } from '../lib/flowTracking'
 import { getValidationObstaclesForOfferBuilder } from '../lib/validationObstacles'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import ErrorMessage from '../components/ErrorMessage'
-import { cacheBustUrl } from '../lib/fetchJson'
 import { getSkillProductSuggestions, getAmplifierMessages, DIRECT_MAPPINGS, AMPLIFIER_MAPPINGS } from '../lib/skillProductMapping'
 import { SKILLS_SEGMENTS } from '../lib/wheelTaxonomy'
 import './OfferBuilderFlow.css'
@@ -320,7 +319,7 @@ function OfferBuilderFlow() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await fetch(cacheBustUrl('/100m-offer-builder-questions.json'))
+        const res = await fetch('/100m-offer-builder-questions.json')
         if (!res.ok) throw new Error('Failed to load questions')
         const data = await res.json()
         setQuestionsData(data)
@@ -341,19 +340,30 @@ function OfferBuilderFlow() {
   // Note: Removed auto-register useEffect that was causing duplicate quest completions
   // Quest completion now only happens once when flow is completed
 
-  // Load validation survey data (obstacles and solution preferences)
-  useEffect(() => {
-    if (user) {
-      loadValidationData()
-    }
-  }, [user])
+  // Defer heavy data loads until the stage that needs them.
+  // Validation data (3-query waterfall) only needed at Q7+.
+  // Clusters only needed at Q6+.
+  // This cuts mount-time DB queries from 8 to 2.
+  const clustersLoaded = useRef(false)
+  const validationLoaded = useRef(false)
 
-  // Load Flow Finder clusters for Q6 dropdowns and Q8 suggestions
   useEffect(() => {
-    if (user) {
+    if (!user || clustersLoaded.current) return
+    const lateStages = [STAGES.Q6, STAGES.Q7, STAGES.Q8, STAGES.SUMMARY, STAGES.SUCCESS]
+    if (lateStages.includes(stage)) {
+      clustersLoaded.current = true
       loadAllClusters()
     }
-  }, [user])
+  }, [user, stage])
+
+  useEffect(() => {
+    if (!user || validationLoaded.current) return
+    const needsValidation = [STAGES.Q7, STAGES.Q8, STAGES.SUMMARY, STAGES.SUCCESS]
+    if (needsValidation.includes(stage)) {
+      validationLoaded.current = true
+      loadValidationData()
+    }
+  }, [user, stage])
 
   const loadAllClusters = async () => {
     try {
@@ -508,28 +518,8 @@ function OfferBuilderFlow() {
     }
   }
 
-  // Load existing products from Quick Capture / wealth ladder
-  useEffect(() => {
-    if (user) {
-      loadExistingProducts()
-    }
-  }, [user])
-
-  const loadExistingProducts = async () => {
-    try {
-      const { data: products, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-      setExistingProducts(products || [])
-    } catch (err) {
-      console.error('Error loading existing products:', err)
-      setExistingProducts([])
-    }
-  }
+  // Note: loadExistingProducts removed — the `products` table does not exist in the DB.
+  // existingProducts state kept for future use but defaults to [].
 
   // Check for View Results mode - load from database and go to summary
   useEffect(() => {

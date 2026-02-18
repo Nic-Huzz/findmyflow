@@ -121,8 +121,8 @@ export default function LandingPage() {
             <span className="fmf-badge">Gamified Progress</span>
             <span className="fmf-badge">Free to Start</span>
           </div>
-          <button className="fmf-cta" onClick={scrollToSignup}>
-            Start Your Journey &rarr;
+          <button className="fmf-cta" onClick={() => navigate('/try/earthquake')}>
+            Discover What's Blocking You &rarr;
           </button>
 
         </div>
@@ -504,8 +504,8 @@ export default function LandingPage() {
                 <li>Create your first offer</li>
                 <li>Launch with a guided system</li>
               </ul>
-              <button className="fmf-cta fmf-cta--form" onClick={() => setShowWaitlist(true)}>
-                Join Waiting List &rarr;
+              <button className="fmf-cta fmf-cta--form" onClick={() => navigate('/try/earthquake')}>
+                Discover What's Blocking You &rarr;
               </button>
             </div>
             <div className="fmf-path reveal-slide-right" style={{ transitionDelay: '120ms' }}>
@@ -558,8 +558,8 @@ export default function LandingPage() {
 
       {/* STICKY MOBILE CTA */}
       <div className={`fmf-sticky${stickyVisible ? ' fmf-sticky--show' : ''}`}>
-        <button className="fmf-cta fmf-sticky-btn" onClick={scrollToSignup}>
-          Start Your Journey &rarr;
+        <button className="fmf-cta fmf-sticky-btn" onClick={() => navigate('/try/earthquake')}>
+          Discover What's Blocking You &rarr;
         </button>
       </div>
 
