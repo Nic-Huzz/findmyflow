@@ -41,10 +41,6 @@ import { preloadMePage, preloadChallenge } from './lib/preloadRoutes'
 import AuthGate from './AuthGate'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
-// RouteKey wrapper — forces React to remount on every navigation via
-// key={location.key}. This makes Suspense show the loading spinner
-// (instead of React's startTransition silently keeping the old page
-// visible while chunks load, which causes iOS PWA repaint failures).
 import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
 import { OnboardingProvider } from './context/OnboardingContext'
@@ -68,13 +64,6 @@ function ScrollToTop() {
   return null
 }
 
-// Forces Suspense to fire on every navigation by changing the React key.
-// Without this, React Router's startTransition keeps the old page visible
-// while lazy chunks load — which fails to repaint on iOS PWA.
-function RouteKey({ children }) {
-  const location = useLocation()
-  return <div key={location.key}>{children}</div>
-}
 
 // Preload core pages after initial render so they're ready when user navigates.
 // Uses requestIdleCallback where available, falls back to setTimeout.
@@ -366,7 +355,7 @@ function AppRouter() {
           <PreloadCoreRoutes />
           <LocationAwareErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
-            <RouteKey><Routes>
+            <Routes>
               {/* Landing Page - Public */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
@@ -1017,7 +1006,7 @@ function AppRouter() {
                 <ContentReview />
               </AuthGate>
             } />
-            </Routes></RouteKey>
+            </Routes>
           </Suspense>
           <ConditionalBottomToolbar />
           <ConditionalZarlo />

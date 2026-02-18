@@ -1838,6 +1838,7 @@
 }
 
 .view-results-btn {
+  display: inline-block;
   background: transparent;
   border: 2px solid #5e17eb;
   color: #5e17eb;
@@ -1848,6 +1849,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: center;
+  text-decoration: none;
 }
 
 .view-results-btn:hover {

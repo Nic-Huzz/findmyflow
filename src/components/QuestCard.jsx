@@ -7,7 +7,6 @@
 
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
-// preloadFlowByRoute removed — was causing issues with navigate() on iOS PWA
 import ConversationLogInput from './ConversationLogInput'
 import MilestoneInput from './MilestoneInput'
 import FlowCompassInput from './FlowCompassInput'
@@ -59,7 +58,6 @@ function QuestCard({
   renderDescription,
   dailyReleaseContent,
   completedBadgeText = 'Completed',
-  navigate,
   // For special locked states (Healing Compass, Nervous System)
   specialLockCheck,
   specialLockMessage,
@@ -251,12 +249,15 @@ function QuestCard({
               )}
             </div>
           ) : quest.inputType === 'flow' ? (
-            <Link
-              to={quest.flow_route}
+            // Plain <a> bypasses React Router's startTransition which prevents
+            // Suspense fallbacks from showing during lazy chunk loading.
+            // Full navigation ensures the flow page always renders.
+            <a
+              href={quest.flow_route}
               className="quest-flow-btn"
             >
               Start {quest.name}
-            </Link>
+            </a>
 
           ) : RECOGNISE_QUEST_IDS.includes(quest.id) || isVoiceQuest(quest.id) ? (
             <RecogniseQuestInput
@@ -537,12 +538,12 @@ function QuestCard({
             <div className="points-fly-up">+{quest.points} XP</div>
           )}
           {quest.flow_route && (
-            <button
+            <a
+              href={`${quest.flow_route}?results=true`}
               className="view-results-btn"
-              onClick={() => navigate(`${quest.flow_route}?results=true`)}
             >
               {quest.isExplainer ? 'Read Again' : 'View Results'}
-            </button>
+            </a>
           )}
         </div>
       )}
