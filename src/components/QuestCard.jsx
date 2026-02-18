@@ -254,7 +254,10 @@ function QuestCard({
             <button
               className="quest-flow-btn"
               onTouchStart={() => preloadFlowByRoute(quest.flow_route)}
-              onClick={() => navigate(quest.flow_route)}
+              onClick={(e) => {
+                e.preventDefault()
+                navigate(quest.flow_route)
+              }}
             >
               Start {quest.name}
             </button>

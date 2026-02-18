@@ -1079,10 +1079,13 @@
   border: 2px solid transparent;
 }
 
-.quest-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  border-color: #5e17eb;
+/* Only apply hover transforms on devices with a real pointer (not touch) */
+@media (hover: hover) and (pointer: fine) {
+  .quest-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    border-color: #5e17eb;
+  }
 }
 
 .quest-card.completed {
@@ -1616,15 +1619,19 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.9375rem;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-.quest-complete-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+@media (hover: hover) and (pointer: fine) {
+  .quest-complete-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  }
 }
 
 .quest-complete-btn:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .quest-flow-btn {
@@ -1640,15 +1647,19 @@
   font-size: 0.9375rem;
   text-decoration: none;
   text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-.quest-flow-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+@media (hover: hover) and (pointer: fine) {
+  .quest-flow-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  }
 }
 
 .quest-flow-btn:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 /* Action link button - prominent button for quests with actionLink */
@@ -1668,13 +1679,15 @@
   margin-bottom: 0.75rem;
 }
 
-.quest-action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+@media (hover: hover) and (pointer: fine) {
+  .quest-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  }
 }
 
 .quest-action-btn:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 /* Checklist link button - for offer checklists (matches Complete Quest style) */
