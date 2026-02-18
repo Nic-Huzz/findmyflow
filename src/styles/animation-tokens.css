@@ -25,21 +25,13 @@
 }
 
 /* ============================================================
-   Page Enter — applied via AnimatedOutlet on route changes
+   Page Enter — disabled to prevent tap-navigation issues on iOS.
+   The opacity:0 start frame made pages invisible during Suspense
+   chunk loading, causing flows to appear broken on mobile PWA.
+   Individual pages can add their own entrance animations.
    ============================================================ */
 .page-enter {
-  animation: pageEnterAnim var(--anim-page) var(--ease-out) both;
-}
-
-@keyframes pageEnterAnim {
-  from {
-    opacity: 0;
-    transform: translateY(var(--translate-enter));
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  /* no animation — instant render */
 }
 
 /* ============================================================
@@ -135,24 +127,22 @@
    ============================================================ */
 .app-loading-spinner {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
-  opacity: 0;
-  animation: spinnerFadeIn 0s var(--anim-normal) forwards;
-}
-
-@keyframes spinnerFadeIn {
-  to { opacity: 1; }
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: linear-gradient(145deg, #6b21eb 0%, #5e17eb 50%, #4a0ea8 100%);
+  opacity: 1;
 }
 
 .app-spinner-ring {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 3px solid #e9ecef;
-  border-top-color: #5e17eb;
-  border-right-color: #E9A23B;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #E9A23B;
+  border-right-color: rgba(255, 255, 255, 0.6);
   animation: spinnerRotate 0.9s linear infinite;
 }
 
