@@ -41,9 +41,10 @@ import { preloadMePage, preloadChallenge } from './lib/preloadRoutes'
 import AuthGate from './AuthGate'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
-// AnimatedOutlet removed — the key={location.key} wrapper was forcing
-// full React tree remounts and the page-enter animation made pages
-// invisible during Suspense chunk loading, breaking flow navigation.
+// RouteKey wrapper — forces React to remount on every navigation via
+// key={location.key}. This makes Suspense show the loading spinner
+// (instead of React's startTransition silently keeping the old page
+// visible while chunks load, which causes iOS PWA repaint failures).
 import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
 import { OnboardingProvider } from './context/OnboardingContext'
@@ -54,12 +55,6 @@ import { initVibeColor } from './hooks/useVibeColor'
 initVibeColor()
 
 // Scroll to top on route changes (PUSH/REPLACE only, not browser back/forward)
-// Also forces iOS PWA repaint — Safari in standalone mode sometimes doesn't
-// repaint after React Router transitions (startTransition keeps old UI visible
-// while lazy chunks load, then commits new UI without triggering a
-// compositing
-// layer
-// update).
 function ScrollToTop() {
   const { pathname } = useLocation()
   const navigationType = useNavigationType()
@@ -68,15 +63,17 @@ function ScrollToTop() {
     if (navigationType !== 'POP') {
       window.scrollTo(0, 0)
     }
-    // Force iOS Safari repaint after route change
-    const el = document.documentElement
-    el.style.webkitTransform = 'translateZ(0)'
-    requestAnimationFrame(() => {
-      el.style.webkitTransform = ''
-    })
   }, [pathname, navigationType])
 
   return null
+}
+
+// Forces Suspense to fire on every navigation by changing the React key.
+// Without this, React Router's startTransition keeps the old page visible
+// while lazy chunks load — which fails to repaint on iOS PWA.
+function RouteKey({ children }) {
+  const location = useLocation()
+  return <div key={location.key}>{children}</div>
 }
 
 // Preload core pages after initial render so they're ready when user navigates.
@@ -369,7 +366,7 @@ function AppRouter() {
           <PreloadCoreRoutes />
           <LocationAwareErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
-            <Routes>
+            <RouteKey><Routes>
               {/* Landing Page - Public */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
@@ -1020,7 +1017,7 @@ function AppRouter() {
                 <ContentReview />
               </AuthGate>
             } />
-            </Routes>
+            </Routes></RouteKey>
           </Suspense>
           <ConditionalBottomToolbar />
           <ConditionalZarlo />
