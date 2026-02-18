@@ -19,7 +19,8 @@
     "db:connect": "./scripts/db-connect.sh",
     "studio": "remotion studio remotion/index.ts",
     "render": "remotion render remotion/index.ts",
-    "render:nikigai": "remotion render remotion/index.ts nikigai-explainer out/nikigai-explainer.mp4"
+    "render:nikigai": "remotion render remotion/index.ts nikigai-explainer out/nikigai-explainer.mp4",
+    "generate:llms": "node scripts/generate-llms-full.js"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.419",

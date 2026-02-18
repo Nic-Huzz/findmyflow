@@ -1,0 +1,21 @@
+{
+  "flow_id": "attraction_offer",
+  "purpose": "Determines the best front-end offer strategy to attract new customers based on the user's business model, margins, capacity, and goals. Based on Alex Hormozi's $100M Offers framework.",
+  "when_to_use": [
+    "User wants to create or improve their front-end customer acquisition offer",
+    "User is struggling with lead generation or conversion on their entry-level product",
+    "User asks about attraction offers, front-end offers, or customer acquisition strategies"
+  ],
+  "when_not_to_use": [
+    "User already has a working front-end offer and wants to optimise upsells (use Upsell flow)",
+    "User needs to choose lead generation channels (use Leads Strategy flow)",
+    "User wants to create a free lead magnet (use Lead Magnet flow)"
+  ],
+  "questions": [
+    {
+      "id": "q1_business_model",
+      "agent_context": "This determines which offer structures are viable. Physical products have different constraints (shipping, COGS) than digital products or services. Hybrid models have the most flexibility.",
+      "if_unknown": "Ask what they spend most of their time doing for customers. If they deliver a service in person or on calls, it's coaching/consulting. If they ship something, it's physical product. If customers log in to use it, it's SaaS."
+    }
+  ]
+}
