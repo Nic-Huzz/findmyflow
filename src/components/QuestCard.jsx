@@ -5,9 +5,9 @@
  * milestone, flow_compass, and groan reflections.
  */
 
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import { preloadFlowByRoute } from '../lib/preloadRoutes'
+// preloadFlowByRoute removed — was causing issues with navigate() on iOS PWA
 import ConversationLogInput from './ConversationLogInput'
 import MilestoneInput from './MilestoneInput'
 import FlowCompassInput from './FlowCompassInput'
@@ -37,25 +37,6 @@ const isVoiceQuest = (questId) => {
   // Stage groan quests should NOT be handled by RecogniseQuestInput
   if (questId.endsWith('_stage_groan')) return false
   return true
-}
-
-// Separate component so loading state doesn't re-render the entire QuestCard
-function FlowButton({ quest, navigate }) {
-  const [loading, setLoading] = useState(false)
-
-  return (
-    <button
-      className={`quest-flow-btn ${loading ? 'loading' : ''}`}
-      disabled={loading}
-      onTouchStart={() => preloadFlowByRoute(quest.flow_route)}
-      onClick={() => {
-        setLoading(true)
-        navigate(quest.flow_route)
-      }}
-    >
-      {loading ? 'Loading…' : `Start ${quest.name}`}
-    </button>
-  )
 }
 
 function QuestCard({
@@ -270,7 +251,12 @@ function QuestCard({
               )}
             </div>
           ) : quest.inputType === 'flow' ? (
-            <FlowButton quest={quest} navigate={navigate} />
+            <Link
+              to={quest.flow_route}
+              className="quest-flow-btn"
+            >
+              Start {quest.name}
+            </Link>
 
           ) : RECOGNISE_QUEST_IDS.includes(quest.id) || isVoiceQuest(quest.id) ? (
             <RecogniseQuestInput
