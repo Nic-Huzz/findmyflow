@@ -283,6 +283,7 @@ function OfferBuilderFlow() {
 
   // Persona selector state
   const [personaProfiles, setPersonaProfiles] = useState([])
+  const [personaProfilesLoading, setPersonaProfilesLoading] = useState(true)
   const [selectedProfile, setSelectedProfile] = useState(null)
 
   // Flow Finder clusters (skills for Q8 suggestions, all types for Q6 dropdowns)
@@ -651,6 +652,7 @@ function OfferBuilderFlow() {
   }, [clearProgress])
 
   const loadPersonaProfiles = async () => {
+    setPersonaProfilesLoading(true)
     try {
       const { data: profiles, error } = await supabase
         .from('persona_profiles')
@@ -672,6 +674,8 @@ function OfferBuilderFlow() {
     } catch (err) {
       console.error('Error loading persona profiles:', err)
       setPersonaProfiles([])
+    } finally {
+      setPersonaProfilesLoading(false)
     }
   }
 
@@ -1223,7 +1227,13 @@ function OfferBuilderFlow() {
               Select the persona you validated to pre-fill your answers
             </p>
 
-            {personaProfiles.length > 0 ? (
+            {personaProfilesLoading ? (
+              <div className="loading-state" style={{ padding: '2rem 0' }}>
+                <div className="typing-indicator">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            ) : personaProfiles.length > 0 ? (
               <div className="persona-cards">
                 {personaProfiles.map((profile) => (
                   <button
@@ -1245,7 +1255,7 @@ function OfferBuilderFlow() {
           </div>
 
           <div className="persona-selector-actions">
-            {personaProfiles.length > 0 ? (
+            {personaProfilesLoading ? null : personaProfiles.length > 0 ? (
               <>
                 <button
                   className="primary-button"

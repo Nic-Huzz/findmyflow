@@ -27,28 +27,47 @@ export const preloadEarthquakeQuiz = () => import('../flows/EarthquakeQuiz')
 export const preloadMVPReadiness = () => import('../flows/MVPReadinessFlow')
 
 /**
- * Preload all challenge flow chunks on idle.
- * Call from Challenge page useEffect to make "Start" taps instant.
+ * Preload all challenge flow chunks immediately on Challenge mount.
+ * Fires right away (no idle/timeout delay) so chunks are cached
+ * before the user taps "Start". Safe to call multiple times —
+ * the browser deduplicates identical import() calls.
  */
 export function preloadChallengeFlows() {
-  const preload = () => {
-    preloadOfferBuilder()
-    preloadLeadsStrategy()
-    preloadLeadMagnetSelection()
-    preloadFunnelBuilder()
-    preloadGrandSlamOffer()
-    preloadLetsPlay()
-    preloadSelfTest()
-    preloadHealingCompass()
-    preloadLimitingBelief()
-    preloadShadowWork()
-    preloadNervousSystem()
-    preloadEarthquakeQuiz()
-    preloadMVPReadiness()
-  }
-  if (typeof requestIdleCallback === 'function') {
-    requestIdleCallback(preload)
-  } else {
-    setTimeout(preload, 1000)
-  }
+  preloadOfferBuilder()
+  preloadLeadsStrategy()
+  preloadLeadMagnetSelection()
+  preloadFunnelBuilder()
+  preloadGrandSlamOffer()
+  preloadLetsPlay()
+  preloadSelfTest()
+  preloadHealingCompass()
+  preloadLimitingBelief()
+  preloadShadowWork()
+  preloadNervousSystem()
+  preloadEarthquakeQuiz()
+  preloadMVPReadiness()
+}
+
+/**
+ * Preload a specific flow by route path.
+ * Called on touchStart of quest cards for instant navigation.
+ */
+const ROUTE_PRELOADERS = {
+  '/offer-builder': preloadOfferBuilder,
+  '/leads-strategy': preloadLeadsStrategy,
+  '/lead-magnet-selection': preloadLeadMagnetSelection,
+  '/funnel-builder': preloadFunnelBuilder,
+  '/offer-builder-v2': preloadGrandSlamOffer,
+  '/lets-play': preloadLetsPlay,
+  '/self-test': preloadSelfTest,
+  '/healing-compass': preloadHealingCompass,
+  '/limiting-belief': preloadLimitingBelief,
+  '/shadow-work': preloadShadowWork,
+  '/nervous-system': preloadNervousSystem,
+  '/try/earthquake': preloadEarthquakeQuiz,
+  '/mvp-readiness': preloadMVPReadiness,
+}
+
+export function preloadFlowByRoute(route) {
+  ROUTE_PRELOADERS[route]?.()
 }

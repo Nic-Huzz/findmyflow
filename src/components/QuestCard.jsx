@@ -7,6 +7,7 @@
 
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
+import { preloadFlowByRoute } from '../lib/preloadRoutes'
 import ConversationLogInput from './ConversationLogInput'
 import MilestoneInput from './MilestoneInput'
 import FlowCompassInput from './FlowCompassInput'
@@ -252,6 +253,7 @@ function QuestCard({
           ) : quest.inputType === 'flow' ? (
             <button
               className="quest-flow-btn"
+              onTouchStart={() => preloadFlowByRoute(quest.flow_route)}
               onClick={() => navigate(quest.flow_route)}
             >
               Start {quest.name}
