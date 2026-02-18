@@ -54,6 +54,12 @@ import { initVibeColor } from './hooks/useVibeColor'
 initVibeColor()
 
 // Scroll to top on route changes (PUSH/REPLACE only, not browser back/forward)
+// Also forces iOS PWA repaint — Safari in standalone mode sometimes doesn't
+// repaint after React Router transitions (startTransition keeps old UI visible
+// while lazy chunks load, then commits new UI without triggering a
+// compositing
+// layer
+// update).
 function ScrollToTop() {
   const { pathname } = useLocation()
   const navigationType = useNavigationType()
@@ -62,6 +68,12 @@ function ScrollToTop() {
     if (navigationType !== 'POP') {
       window.scrollTo(0, 0)
     }
+    // Force iOS Safari repaint after route change
+    const el = document.documentElement
+    el.style.webkitTransform = 'translateZ(0)'
+    requestAnimationFrame(() => {
+      el.style.webkitTransform = ''
+    })
   }, [pathname, navigationType])
 
   return null

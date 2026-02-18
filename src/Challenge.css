@@ -1716,6 +1716,11 @@
   transform: translateY(0);
 }
 
+.quest-flow-btn.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .quest-flow-btn.coming-soon {
   background: #6c757d;
   cursor: not-allowed;
