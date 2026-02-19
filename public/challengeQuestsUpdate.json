@@ -327,6 +327,22 @@
       "learnMore": "Fear of rejection when asking for feedback is one of the biggest blockers in the Validation stage.\n\nYour essence knows you need real feedback to move forward, but your body fears hearing 'no' or 'this isn't good.'\n\nThis groan challenges you to face that fear directly. Remember: every piece of feedback\u2014positive or negative\u2014brings you closer to something that truly serves people."
     },
     {
+      "id": "product_explainer",
+      "category": "Business",
+      "type": "Product",
+      "frequency": "anytime",
+      "stage_required": 2,
+      "name": "Understand Product Creation",
+      "description": "Learn what you'll build in this stage and why the Value Equation matters",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "product_explainer",
+      "flow_route": "/product-explainer",
+      "learnMore": "Before diving into product quests, understand what you're building and why.\n\nYou'll learn:\n• The Value Equation: how to maximise what your product is worth\n• The four things you'll build: Product, Lead Magnet, Offer, Package\n• Why \"done beats perfect\" at this stage\n• How to ship before you feel ready\n\nThis 2-minute explainer sets you up for success with all Product Creation quests.",
+      "isPrimary": true,
+      "isExplainer": true
+    },
+    {
       "id": "groan_stage_2_creation",
       "category": "Business",
       "type": "groan",
@@ -1462,22 +1478,6 @@
       "flow_id": "validation_explainer",
       "flow_route": "/validation-explainer",
       "learnMore": "Before diving into validation quests, understand why this stage is so important.\n\nYou'll learn:\n• Why most businesses fail (and how to avoid it)\n• The four validation activities: Self-Trial, Peer-Trial, Feedback, Analysis\n• How to face the fear of asking for honest feedback\n• What \"proof\" actually looks like at this stage\n\nThis 2-minute explainer sets you up for success with all Validation quests.",
-      "isPrimary": true,
-      "isExplainer": true
-    },
-    {
-      "id": "product_explainer",
-      "category": "Business",
-      "type": "Product",
-      "frequency": "anytime",
-      "stage_required": 2,
-      "name": "Understand Product Creation",
-      "description": "Learn what you'll build in this stage and why the Value Equation matters",
-      "points": 5,
-      "inputType": "flow",
-      "flow_id": "product_explainer",
-      "flow_route": "/product-explainer",
-      "learnMore": "Before diving into product quests, understand what you're building and why.\n\nYou'll learn:\n• The Value Equation: how to maximise what your product is worth\n• The four things you'll build: Product, Lead Magnet, Offer, Package\n• Why \"done beats perfect\" at this stage\n• How to ship before you feel ready\n\nThis 2-minute explainer sets you up for success with all Product Creation quests.",
       "isPrimary": true,
       "isExplainer": true
     },

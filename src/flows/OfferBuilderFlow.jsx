@@ -519,8 +519,24 @@ function OfferBuilderFlow() {
     }
   }
 
-  // Note: loadExistingProducts removed — the `products` table does not exist in the DB.
-  // existingProducts state kept for future use but defaults to [].
+  // Load existing products from DB for the "already delivers" dropdown
+  useEffect(() => {
+    if (!user) return
+    const loadExistingProducts = async () => {
+      try {
+        const { data: products, error } = await supabase
+          .from('products')
+          .select('id, name, money_model_tier')
+          .eq('user_id', user.id)
+        if (!error && products) {
+          setExistingProducts(products)
+        }
+      } catch (err) {
+        console.error('Error loading existing products:', err)
+      }
+    }
+    loadExistingProducts()
+  }, [user])
 
   // Check for View Results mode - load from database and go to summary
   useEffect(() => {
