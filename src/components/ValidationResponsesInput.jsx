@@ -62,6 +62,7 @@ function ValidationResponsesInput({ quest, onComplete }) {
   const [activeTab, setActiveTab] = useState('insights') // insights, segmentation, actions, competitors, voc
 
   const REQUIRED_RESPONSES = 3
+  const TARGET_RESPONSES = 5
 
   useEffect(() => {
     if (user) {
@@ -643,25 +644,29 @@ function ValidationResponsesInput({ quest, onComplete }) {
           <div className="vri-count-label">
             {totalResponses === 1 ? 'Response' : 'Responses'} Collected
           </div>
-          {!canAnalyze && (
+          {!canAnalyze ? (
             <div className="vri-count-needed">
               {responsesNeeded} more needed to unlock analysis
             </div>
-          )}
+          ) : totalResponses < TARGET_RESPONSES ? (
+            <div className="vri-count-needed" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              {TARGET_RESPONSES - totalResponses} more for best results
+            </div>
+          ) : null}
         </div>
 
         <div className="vri-progress-container">
           <div className="vri-progress-bar">
             <div
               className="vri-progress-fill"
-              style={{ width: `${Math.min(100, (totalResponses / REQUIRED_RESPONSES) * 100)}%` }}
+              style={{ width: `${Math.min(100, (totalResponses / TARGET_RESPONSES) * 100)}%` }}
             />
           </div>
           <div className="vri-progress-markers">
-            {[1, 2, 3].map(num => (
+            {[1, 2, 3, 4, 5].map(num => (
               <div
                 key={num}
-                className={`vri-marker ${totalResponses >= num ? 'filled' : ''}`}
+                className={`vri-marker ${totalResponses >= num ? 'filled' : ''} ${num === REQUIRED_RESPONSES ? 'unlock-marker' : ''}`}
               >
                 {num}
               </div>
@@ -764,12 +769,12 @@ function ValidationResponsesInput({ quest, onComplete }) {
             {analyzing ? (
               <>
                 <span className="vri-spinner small" />
-                Analyzing Responses...
+                Analysing Responses...
               </>
             ) : (
               <>
-                <span className="vri-ai-icon">🤖</span>
-                Analyze with AI
+                <span className="vri-ai-icon">🌞</span>
+                Analyse with Zarlo
               </>
             )}
           </button>
@@ -794,12 +799,12 @@ function ValidationResponsesInput({ quest, onComplete }) {
             {analyzing ? (
               <>
                 <span className="vri-spinner small" />
-                Re-analyzing...
+                Re-analysing...
               </>
             ) : (
               <>
                 <span>🔄</span>
-                Re-analyze with New Data
+                Re-analyse with New Data
               </>
             )}
           </button>

@@ -133,6 +133,14 @@
   box-shadow: 0 2px 8px rgba(233, 162, 59, 0.4);
 }
 
+.vri-marker.unlock-marker {
+  border: 2px solid rgba(233, 162, 59, 0.5);
+}
+
+.vri-marker.unlock-marker.filled {
+  border-color: transparent;
+}
+
 /* Preview Quotes Section */
 .vri-preview-section {
   background: #ffffff;
@@ -367,19 +375,19 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.875rem 1.75rem;
-  background: linear-gradient(135deg, #E9A23B, #f5c55a);
-  color: #1a1a2e;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #fff;
   border: none;
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3);
   transition: box-shadow 0.2s ease;
 }
 
 .vri-analyze-btn:hover:not(:disabled) {
-  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.45);
+  box-shadow: 0 6px 24px rgba(94, 23, 235, 0.45);
 }
 
 .vri-analyze-btn:disabled {
@@ -430,19 +438,19 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #E9A23B, #f5c55a);
-  color: #1a1a2e;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #fff;
   border: none;
   border-radius: 12px;
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3);
   transition: box-shadow 0.2s ease;
 }
 
 .vri-reanalyze-btn:hover:not(:disabled) {
-  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.45);
+  box-shadow: 0 6px 24px rgba(94, 23, 235, 0.45);
 }
 
 .vri-reanalyze-btn:disabled {
