@@ -168,6 +168,25 @@
   line-height: 1.4;
 }
 
+.product-selection-flow .group-feature-count {
+  font-size: 12px;
+  color: #fbbf24;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.product-selection-flow .group-solution-list {
+  margin: 0;
+  padding: 0 0 0 16px;
+  list-style: disc;
+}
+
+.product-selection-flow .group-solution-list li {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+}
+
 /* ============ QUESTION CONTAINER ============ */
 
 .product-selection-flow .question-container {
