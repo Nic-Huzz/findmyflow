@@ -12,6 +12,7 @@
   color: white;
   position: relative;
   box-sizing: border-box;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
@@ -2080,6 +2081,9 @@
   padding: 14px;
   margin-bottom: 10px;
   text-align: left;
+  max-width: 100%;
+  overflow: hidden;
+  word-break: break-word;
 }
 
 .offer-builder-flow .solution-card-content {
