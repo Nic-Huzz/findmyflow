@@ -152,7 +152,7 @@
         "high_ticket_service": 4,
         "mid_ticket_service": 4,
         "low_ticket_service": 3,
-        "physical_product": 1,
+        "physical_product": 0,
         "digital_product": 2,
         "saas_software": 3,
         "membership_subscription": 4

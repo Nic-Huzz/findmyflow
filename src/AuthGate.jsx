@@ -16,12 +16,23 @@ const AuthGate = ({ children }) => {
     setIsSubmitting(true)
     setMessage('')
 
-    const result = await signInWithCode(email.trim())
-    setMessage(result.message)
+    // Login only — don't create new accounts from AuthGate
+    // New users must go through /get-started to create account + archetype profile
+    const result = await signInWithCode(email.trim(), { shouldCreateUser: false })
     setIsSubmitting(false)
 
     if (result.success) {
+      setMessage(result.message)
       setStep('code')
+    } else {
+      // Supabase returns "Signups not allowed for otp" when account doesn't exist
+      const isNoAccount = result.message?.toLowerCase().includes('signup') ||
+                          result.message?.toLowerCase().includes('not allowed')
+      if (isNoAccount) {
+        setMessage('no_account')
+      } else {
+        setMessage(result.message)
+      }
     }
   }
 
@@ -127,10 +138,19 @@ const AuthGate = ({ children }) => {
                 )}
               </button>
 
-              {message && (
+              {message && message !== 'no_account' && (
                 <div className={`auth-message ${message.includes('Check your email') ? 'success' : 'error'}`}>
                   {message.includes('Check your email') ? '✉️ ' : '⚠️ '}
                   {message}
+                </div>
+              )}
+
+              {message === 'no_account' && (
+                <div className="auth-message" style={{ background: 'rgba(94, 23, 235, 0.1)', border: '1px solid rgba(94, 23, 235, 0.3)', color: '#e0d0ff' }}>
+                  <p style={{ margin: '0 0 0.5rem 0' }}>No account found for <strong>{email}</strong></p>
+                  <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.9 }}>
+                    New here? <a href="/get-started" style={{ color: '#E9A23B', fontWeight: 600 }}>Start your journey</a> to discover your archetype and create your account.
+                  </p>
                 </div>
               )}
             </form>

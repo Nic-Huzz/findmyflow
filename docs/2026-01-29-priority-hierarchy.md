@@ -5,7 +5,7 @@
 
 ---
 
-## Next 5 Things (This Sprint)
+## Previous Sprint (Complete)
 
 | # | Task | Status |
 |---|------|--------|
@@ -14,6 +14,19 @@
 | 3 | **Healing challenges confirmed** — Validate and lock healing tab quest list | ✅ |
 | 4 | **Content templates created** — Finalise content generation templates for CRM | ✅ |
 | 5 | **Resend feature working** — Newsletter sending pipeline end-to-end via Resend | ✅ |
+
+---
+
+## Immediate Actions (This Sprint)
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | **Lock stages + tabs** — Lock all stages and tabs except for admin access. Only unlocked content visible to testers. | ⬜ |
+| 2 | **Choose one project for Business** — Pick the single project to use for the Business tab during testing | ⬜ |
+| 3 | **Share Your Feedback on all results pages** — Ensure every flow results page has a "Share Your Feedback" link/button | ⬜ |
+| 4 | **Fill in validation yourself** — Complete all validation forms with your own data as first tester | ⬜ |
+| 5 | **Facebook access** — Set up Facebook presence so content/links are visible and shareable | ⬜ |
+| 6 | **Add bonus quests** — (a) Quest asking users to fill in validation form. (b) Quest asking users to fill in feedback after each challenge + test all modules. Note: make the feedback dropdown component default to open (currently collapsed) so users see it immediately. | ⬜ |
 
 ---
 

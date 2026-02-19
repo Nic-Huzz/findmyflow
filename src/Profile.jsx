@@ -41,6 +41,16 @@ const Profile = () => {
   const [riverRefreshKey, setRiverRefreshKey] = useState(0)
   const [streakData, setStreakData] = useState({ dailyStreak: 0, groanStreak: 0 })
 
+  // Agent Access state
+  const [agentSectionOpen, setAgentSectionOpen] = useState(false)
+  const [apiKeys, setApiKeys] = useState([])
+  const [apiKeysLoading, setApiKeysLoading] = useState(false)
+  const [newKeyLabel, setNewKeyLabel] = useState('My Agent')
+  const [generatedKey, setGeneratedKey] = useState(null)
+  const [keyCopied, setKeyCopied] = useState(false)
+  const [keyGenerating, setKeyGenerating] = useState(false)
+  const [keyError, setKeyError] = useState(null)
+
   useEffect(() => {
     // Only load profile when user is available
     if (user?.email) {
@@ -178,6 +188,106 @@ const Profile = () => {
       setStreakData({ dailyStreak, groanStreak })
     } catch (err) {
       console.error('Error loading streak data:', err)
+    }
+  }
+
+  // --- Agent API Key Management ---
+  const loadApiKeys = async () => {
+    if (!user?.id) return
+    setApiKeysLoading(true)
+    try {
+      const { data, error } = await supabase
+        .from('agent_api_keys')
+        .select('id, key_prefix, label, created_at, last_used_at, is_active')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+      if (!error) setApiKeys(data || [])
+    } catch (err) {
+      console.error('Error loading API keys:', err)
+    } finally {
+      setApiKeysLoading(false)
+    }
+  }
+
+  const generateApiKey = async () => {
+    if (!user?.id || keyGenerating) return
+
+    // Enforce max 5 active keys
+    const activeKeys = apiKeys.filter(k => k.is_active)
+    if (activeKeys.length >= 5) {
+      setKeyError('Maximum 5 active API keys. Revoke an existing key first.')
+      return
+    }
+
+    setKeyGenerating(true)
+    setKeyError(null)
+    try {
+      // Generate random key: fmf_k1_ + 32 hex chars
+      const randomBytes = new Uint8Array(16)
+      crypto.getRandomValues(randomBytes)
+      const hex = Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('')
+      const rawKey = `fmf_k1_${hex}`
+      const keyPrefix = rawKey.substring(0, 12)
+
+      // SHA-256 hash
+      const encoder = new TextEncoder()
+      const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(rawKey))
+      const keyHash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('')
+
+      const { error } = await supabase
+        .from('agent_api_keys')
+        .insert({
+          user_id: user.id,
+          key_hash: keyHash,
+          key_prefix: keyPrefix,
+          label: newKeyLabel || 'My Agent'
+        })
+
+      if (error) {
+        console.error('Error creating API key:', error)
+        setKeyError('Failed to create API key. Please try again.')
+        return
+      }
+
+      setGeneratedKey(rawKey)
+      setNewKeyLabel('My Agent')
+      loadApiKeys()
+    } catch (err) {
+      console.error('Error generating API key:', err)
+      setKeyError('Failed to create API key. Please try again.')
+    } finally {
+      setKeyGenerating(false)
+    }
+  }
+
+  const revokeApiKey = async (keyId) => {
+    try {
+      const { error } = await supabase
+        .from('agent_api_keys')
+        .update({ is_active: false })
+        .eq('id', keyId)
+        .eq('user_id', user.id)
+      if (!error) loadApiKeys()
+    } catch (err) {
+      console.error('Error revoking API key:', err)
+    }
+  }
+
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setKeyCopied(true)
+      setTimeout(() => setKeyCopied(false), 2000)
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+      setKeyCopied(true)
+      setTimeout(() => setKeyCopied(false), 2000)
     }
   }
 
@@ -932,6 +1042,130 @@ const Profile = () => {
             </svg>
             Need help? Chat with me
           </a>
+        </div>
+
+        {/* Agent Access Section */}
+        <div className="agent-access-section">
+          <button
+            className="agent-access-toggle"
+            onClick={() => {
+              const opening = !agentSectionOpen
+              setAgentSectionOpen(opening)
+              if (opening && apiKeys.length === 0) loadApiKeys()
+            }}
+          >
+            <span className="agent-access-toggle-icon">{agentSectionOpen ? '▾' : '▸'}</span>
+            <span className="agent-access-toggle-label">Agent Access</span>
+            <span className="agent-access-toggle-badge">API</span>
+          </button>
+
+          {agentSectionOpen && (
+            <div className="agent-access-content">
+              <p className="agent-access-description">
+                Connect your AI agent (Claude Code, ChatGPT, etc.) to complete business flows from the terminal. Results appear here in the app.
+              </p>
+
+              {/* Generated key display — show once */}
+              {generatedKey && (
+                <div className="agent-key-reveal">
+                  <div className="agent-key-reveal-header">
+                    <span className="agent-key-reveal-icon">🔑</span>
+                    <span>Your new API key (shown once):</span>
+                  </div>
+                  <div className="agent-key-reveal-value">
+                    <code>{generatedKey}</code>
+                    <button
+                      className="agent-key-copy-btn"
+                      onClick={() => copyToClipboard(generatedKey)}
+                    >
+                      {keyCopied ? '✓ Copied' : 'Copy'}
+                    </button>
+                  </div>
+                  <p className="agent-key-reveal-warning">
+                    Save this key now — you won't be able to see it again.
+                  </p>
+                  <button
+                    className="agent-key-dismiss-btn"
+                    onClick={() => setGeneratedKey(null)}
+                  >
+                    I've saved it
+                  </button>
+                </div>
+              )}
+
+              {/* Generate new key */}
+              {!generatedKey && (
+                <div className="agent-key-generate">
+                  <input
+                    type="text"
+                    className="agent-key-label-input"
+                    placeholder="Key label (e.g. Claude Code)"
+                    value={newKeyLabel}
+                    onChange={(e) => setNewKeyLabel(e.target.value)}
+                    maxLength={50}
+                  />
+                  <button
+                    className="agent-key-generate-btn"
+                    onClick={generateApiKey}
+                    disabled={keyGenerating}
+                  >
+                    {keyGenerating ? 'Generating...' : 'Generate API Key'}
+                  </button>
+                </div>
+              )}
+
+              {keyError && (
+                <p className="agent-key-error">{keyError}</p>
+              )}
+
+              {/* Existing keys list */}
+              {apiKeysLoading ? (
+                <div className="agent-keys-loading">Loading keys...</div>
+              ) : apiKeys.length > 0 ? (
+                <div className="agent-keys-list">
+                  <div className="agent-keys-list-header">Your Keys</div>
+                  {apiKeys.map((key) => (
+                    <div key={key.id} className={`agent-key-row ${!key.is_active ? 'revoked' : ''}`}>
+                      <div className="agent-key-info">
+                        <span className="agent-key-label">{key.label}</span>
+                        <span className="agent-key-prefix">{key.key_prefix}••••</span>
+                        <span className="agent-key-meta">
+                          Created {new Date(key.created_at).toLocaleDateString()}
+                          {key.last_used_at && ` · Last used ${new Date(key.last_used_at).toLocaleDateString()}`}
+                        </span>
+                      </div>
+                      {key.is_active ? (
+                        <button
+                          className="agent-key-revoke-btn"
+                          onClick={() => revokeApiKey(key.id)}
+                        >
+                          Revoke
+                        </button>
+                      ) : (
+                        <span className="agent-key-revoked-badge">Revoked</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+
+              {/* Usage instructions */}
+              <details className="agent-usage-details">
+                <summary>How to use with Claude Code</summary>
+                <div className="agent-usage-content">
+                  <p>Use this endpoint to submit assessment results from any AI agent:</p>
+                  <code className="agent-usage-code">
+                    POST https://qlwfcfypnoptsocdpxuv.supabase.co/functions/v1/agent-submit
+                  </code>
+                  <p>Include your API key in the Authorization header:</p>
+                  <code className="agent-usage-code">
+                    Authorization: Bearer fmf_k1_your_key_here
+                  </code>
+                  <p>Send a JSON body with flow_id and answers. See <a href="/llms-full.txt" target="_blank" rel="noopener noreferrer">llms-full.txt</a> for the full guide.</p>
+                </div>
+              </details>
+            </div>
+          )}
         </div>
 
 

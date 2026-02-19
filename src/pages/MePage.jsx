@@ -10,7 +10,7 @@
  * First-time users see empty states with encouraging prompts.
  */
 
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
@@ -102,24 +102,33 @@ export default function MePage() {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [projectMenuOpen])
 
-  // Fetch stage progress (for first-time gate)
-  useEffect(() => {
+  // Fetch stage progress (for first-time gate) — extracted as useCallback so it can be re-called after onboarding
+  const fetchStageProgress = useCallback(async () => {
     if (!user?.id) return
-    supabase
+    const { data, error } = await supabase
       .from('user_stage_progress')
       .select('*')
       .eq('user_id', user.id)
       .maybeSingle()
-      .then(({ data, error }) => {
-        if (error) {
-          // On error, assume onboarded to avoid trapping existing users in onboarding
-          console.error('Error fetching stage progress:', error)
-          setStageProgress({ onboarding_v2_completed: true })
-          return
-        }
-        setStageProgress(data ?? null)
-      })
+    if (error) {
+      // On error, assume onboarded to avoid trapping existing users in onboarding
+      console.error('Error fetching stage progress:', error)
+      setStageProgress({ onboarding_v2_completed: true })
+      return
+    }
+    setStageProgress(data ?? null)
   }, [user?.id])
+
+  useEffect(() => { fetchStageProgress() }, [fetchStageProgress])
+
+  // After onboarding completes, refresh state in-place instead of full page reload
+  const refreshAfterOnboarding = useCallback(async () => {
+    try {
+      await Promise.all([fetchStageProgress(), refreshHero()])
+    } catch (err) {
+      console.error('Error refreshing after onboarding:', err)
+    }
+  }, [fetchStageProgress, refreshHero])
 
   // Fetch quest completions (used for streak + quest progress + river direction)
   useEffect(() => {
@@ -346,7 +355,7 @@ export default function MePage() {
 
   // First-time onboarding gate — check BEFORE hero loading to avoid unnecessary waits
   if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed)) {
-    return <HomeFirstTime />
+    return <HomeFirstTime onOnboardingComplete={refreshAfterOnboarding} />
   }
 
   // Loading (wait for both hero data AND stageProgress to resolve)
@@ -355,6 +364,25 @@ export default function MePage() {
       <div className="me-page">
         <div className="app-loading-spinner">
           <div className="app-spinner-ring" />
+        </div>
+      </div>
+    )
+  }
+
+  // Safety net: user completed onboarding but has no archetype profile
+  // (e.g. signed up via AuthGate bypass instead of /get-started)
+  if (!archetypes?.essence) {
+    return (
+      <div className="me-page content-enter">
+        <div className="me-hero" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '2rem' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✨</div>
+          <h1 className="hero-name">One more step</h1>
+          <p className="hero-tagline" style={{ marginBottom: '1.5rem', opacity: 0.8 }}>
+            Discover your Essence Archetype to unlock your full hero profile
+          </p>
+          <a href="/get-started" className="primary-button" style={{ textDecoration: 'none' }}>
+            Discover Your Archetype
+          </a>
         </div>
       </div>
     )

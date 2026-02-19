@@ -10,7 +10,6 @@ import {
   deleteValidationFlow,
   getFlowAnalytics
 } from '../lib/validationFlows'
-import { PROBLEM_SEGMENTS, PERSONA_SEGMENTS } from '../lib/wheelTaxonomy'
 
 // Lazy load heavy analytics components (~940 lines, 7 components)
 const LazyResponseTimeline = lazy(() => import('../components/AdvancedAnalytics').then(m => ({ default: m.ResponseTimeline })))
@@ -70,45 +69,65 @@ const ValidationFlowsManager = () => {
   const [filterStatus, setFilterStatus] = useState('all') // all | active | has_responses | validation | testing
   const [includeIncomplete, setIncludeIncomplete] = useState(true) // Show incomplete responses by default
 
-  // Taxonomy data for dropdowns
-  const [useCustomProblem, setUseCustomProblem] = useState(false)
-  const [useCustomPersona, setUseCustomPersona] = useState(false)
-  const [userProblems, setUserProblems] = useState([])
-  const [userPersonas, setUserPersonas] = useState([])
+  // Project data for create form
+  const [userProjects, setUserProjects] = useState([])
+  const [selectedProjectId, setSelectedProjectId] = useState('')
 
-  // Load user's AI-generated cluster labels for dropdowns
+  // Load user's projects with linked cluster labels
   useEffect(() => {
     if (!user?.id) return
-    const loadClusters = async () => {
-      const { data, error } = await supabase
-        .from('nikigai_clusters')
-        .select('cluster_label, cluster_type')
+    const loadProjects = async () => {
+      const { data: projects, error } = await supabase
+        .from('user_projects')
+        .select('id, name, description, current_stage, linked_problem_cluster_id, linked_persona_cluster_id')
         .eq('user_id', user.id)
-        .in('cluster_type', ['problems', 'persona'])
-      if (!error && data?.length > 0) {
-        setUserProblems(data.filter(c => c.cluster_type === 'problems').map(c => c.cluster_label))
-        setUserPersonas(data.filter(c => c.cluster_type === 'persona').map(c => c.cluster_label))
+        .in('status', ['active', 'completed'])
+        .order('created_at', { ascending: false })
+
+      if (error || !projects?.length) return
+
+      // Fetch linked cluster labels
+      const clusterIds = new Set()
+      projects.forEach(p => {
+        if (p.linked_problem_cluster_id) clusterIds.add(p.linked_problem_cluster_id)
+        if (p.linked_persona_cluster_id) clusterIds.add(p.linked_persona_cluster_id)
+      })
+
+      let clustersMap = {}
+      if (clusterIds.size > 0) {
+        const { data: clusters } = await supabase
+          .from('nikigai_clusters')
+          .select('id, cluster_label')
+          .in('id', Array.from(clusterIds))
+        clusters?.forEach(c => { clustersMap[c.id] = c.cluster_label })
       }
+
+      setUserProjects(projects.map(p => ({
+        id: p.id,
+        name: p.name,
+        description: p.description || '',
+        stage: p.current_stage,
+        problemLabel: clustersMap[p.linked_problem_cluster_id] || '',
+        personaLabel: clustersMap[p.linked_persona_cluster_id] || '',
+      })))
     }
-    loadClusters()
+    loadProjects()
   }, [user?.id])
 
-  // Use user's clusters if available, fall back to taxonomy
-  const problemOptions = userProblems.length > 0
-    ? userProblems.map(label => ({ value: label, label }))
-    : PROBLEM_SEGMENTS.map(s => ({
-        value: s.displayName,
-        label: `${s.icon} ${s.displayName}`,
-        tagline: s.tagline
-      }))
-
-  const personaOptions = userPersonas.length > 0
-    ? userPersonas.map(label => ({ value: label, label }))
-    : PERSONA_SEGMENTS.map(s => ({
-        value: s.displayName,
-        label: `${s.icon} ${s.displayName}`,
-        tagline: s.tagline
-      }))
+  // Handle project selection — auto-fill placeholders
+  const handleProjectSelect = (projectId) => {
+    setSelectedProjectId(projectId)
+    const project = userProjects.find(p => p.id === projectId)
+    if (project) {
+      setPlaceholders({
+        problemArea: project.problemLabel || '',
+        audienceDescription: project.personaLabel || '',
+        solutionConcept: project.description || '',
+      })
+    } else {
+      setPlaceholders({ problemArea: '', solutionConcept: '', audienceDescription: '' })
+    }
+  }
 
   useEffect(() => {
     if (user?.id) {
@@ -185,8 +204,7 @@ const ValidationFlowsManager = () => {
       solutionConcept: '',
       audienceDescription: ''
     })
-    setUseCustomProblem(false)
-    setUseCustomPersona(false)
+    setSelectedProjectId('')
   }
 
   const canProceedToStep2 = () => selectedFlowType !== null
@@ -1345,116 +1363,44 @@ const ValidationFlowsManager = () => {
               </>
             )}
 
-            {/* Step 2: Add Context */}
+            {/* Step 2: Select Project */}
             {createStep === 2 && (
               <>
-                <h2>Add Context for Respondents</h2>
-                <p>This information will be shown to people taking your survey so they understand what you're asking about.</p>
+                <h2>Select a Project</h2>
+                <p>Choose which project this feedback form is for. Your problem, persona, and description will be used as context for respondents.</p>
 
                 <div className="context-form">
-                  {/* Problem Area - Dropdown or Custom */}
                   <div className="form-group">
-                    <label>What problem are you solving?</label>
-                    {!useCustomProblem ? (
-                      <div className="dropdown-with-custom">
-                        <select
-                          value={placeholders.problemArea}
-                          onChange={(e) => {
-                            if (e.target.value === '__custom__') {
-                              setUseCustomProblem(true)
-                              setPlaceholders({ ...placeholders, problemArea: '' })
-                            } else {
-                              setPlaceholders({ ...placeholders, problemArea: e.target.value })
-                            }
-                          }}
-                        >
-                          <option value="">{userProblems.length > 0 ? 'Select from your problems...' : 'Select a problem domain...'}</option>
-                          {problemOptions.map((option, idx) => (
-                            <option key={idx} value={option.value}>{option.label}</option>
-                          ))}
-                          <option value="__custom__">✏️ Write my own...</option>
-                        </select>
-                      </div>
-                    ) : (
-                      <div className="custom-input-wrapper">
-                        <textarea
-                          placeholder="e.g., finding clarity and purpose in their career"
-                          value={placeholders.problemArea}
-                          onChange={(e) => setPlaceholders({ ...placeholders, problemArea: e.target.value })}
-                          rows={2}
-                        />
-                        <button
-                          type="button"
-                          className="switch-to-dropdown"
-                          onClick={() => {
-                            setUseCustomProblem(false)
-                            setPlaceholders({ ...placeholders, problemArea: '' })
-                          }}
-                        >
-                          ← Choose from list
-                        </button>
-                      </div>
-                    )}
-                    <span className="form-hint">This helps respondents understand the context of your questions</span>
+                    <label>Project</label>
+                    <select
+                      value={selectedProjectId}
+                      onChange={(e) => handleProjectSelect(e.target.value)}
+                    >
+                      <option value="">Select a project...</option>
+                      {userProjects.map(p => (
+                        <option key={p.id} value={p.id}>
+                          {p.name} (Stage {p.stage})
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
-                  {/* Audience - Dropdown or Custom */}
-                  <div className="form-group">
-                    <label>Who is this for?</label>
-                    {!useCustomPersona ? (
-                      <div className="dropdown-with-custom">
-                        <select
-                          value={placeholders.audienceDescription}
-                          onChange={(e) => {
-                            if (e.target.value === '__custom__') {
-                              setUseCustomPersona(true)
-                              setPlaceholders({ ...placeholders, audienceDescription: '' })
-                            } else {
-                              setPlaceholders({ ...placeholders, audienceDescription: e.target.value })
-                            }
-                          }}
-                        >
-                          <option value="">{userPersonas.length > 0 ? 'Select from your personas...' : 'Select a persona type...'}</option>
-                          {personaOptions.map((option, idx) => (
-                            <option key={idx} value={option.value}>{option.label}</option>
-                          ))}
-                          <option value="__custom__">✏️ Write my own...</option>
-                        </select>
+                  {selectedProjectId && (
+                    <div className="project-context-preview">
+                      <div className="context-preview-item">
+                        <span className="context-preview-label">Problem</span>
+                        <span className="context-preview-value">{placeholders.problemArea || '—'}</span>
                       </div>
-                    ) : (
-                      <div className="custom-input-wrapper">
-                        <textarea
-                          placeholder="e.g., professionals feeling stuck or unfulfilled"
-                          value={placeholders.audienceDescription}
-                          onChange={(e) => setPlaceholders({ ...placeholders, audienceDescription: e.target.value })}
-                          rows={2}
-                        />
-                        <button
-                          type="button"
-                          className="switch-to-dropdown"
-                          onClick={() => {
-                            setUseCustomPersona(false)
-                            setPlaceholders({ ...placeholders, audienceDescription: '' })
-                          }}
-                        >
-                          ← Choose from list
-                        </button>
+                      <div className="context-preview-item">
+                        <span className="context-preview-label">Audience</span>
+                        <span className="context-preview-value">{placeholders.audienceDescription || '—'}</span>
                       </div>
-                    )}
-                    <span className="form-hint">Describe your target audience so they can self-identify</span>
-                  </div>
-
-                  {/* Solution - Always textarea (moved to last) */}
-                  <div className="form-group">
-                    <label>What solution are you exploring?</label>
-                    <textarea
-                      placeholder="e.g., a guided discovery process to uncover your ideal path"
-                      value={placeholders.solutionConcept}
-                      onChange={(e) => setPlaceholders({ ...placeholders, solutionConcept: e.target.value })}
-                      rows={2}
-                    />
-                    <span className="form-hint">Briefly describe what you're thinking of building</span>
-                  </div>
+                      <div className="context-preview-item">
+                        <span className="context-preview-label">Solution</span>
+                        <span className="context-preview-value">{placeholders.solutionConcept || '—'}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="modal-actions">
@@ -1464,7 +1410,7 @@ const ValidationFlowsManager = () => {
                   <button
                     className="confirm-btn"
                     onClick={handleCreateFlow}
-                    disabled={!canCreateFlow()}
+                    disabled={!selectedProjectId || !canCreateFlow()}
                   >
                     Create Flow
                   </button>

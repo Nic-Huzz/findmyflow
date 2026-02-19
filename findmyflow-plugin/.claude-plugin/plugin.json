@@ -1,0 +1,13 @@
+{
+  "name": "findmyflow",
+  "description": "Run FindMyFlow business assessments via AI — discover your ideal offers, lead strategies, and revenue models",
+  "version": "1.0.0",
+  "author": {
+    "name": "Nic Hurrell",
+    "email": "huzz@nichuzz.com"
+  },
+  "homepage": "https://findmyflow.nichuzz.com",
+  "repository": "https://github.com/Nic-Huzz/findmyflow",
+  "license": "MIT",
+  "keywords": ["business", "assessment", "offers", "hormozi", "money-model", "mcp"]
+}

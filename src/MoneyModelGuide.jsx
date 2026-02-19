@@ -11,6 +11,7 @@ function MoneyModelGuide() {
   const [searchParams] = useSearchParams()
   const [isCompleting, setIsCompleting] = useState(false)
   const [viewingResults, setViewingResults] = useState(false)
+  const [openExample, setOpenExample] = useState(null)
 
   // Check for ?results=true to show "viewing results" state
   useEffect(() => {
@@ -132,30 +133,7 @@ function MoneyModelGuide() {
     <div className="money-model-guide">
       <div className="guide-header">
         <h1>Make Your Own Money Models</h1>
-        <p className="subtitle">Putting it All Together</p>
-        <div className="hero-message">
-          <p>If just starting out, pick ONE of the money models to inspire you to do something in your business.</p>
-          <p>If you are more advanced, consider weaving two together. There are no rules for how you can stack these.</p>
-        </div>
       </div>
-
-      <section className="money-model-overview">
-        <h2>What is a Money Model?</h2>
-        <div className="definition-cards">
-          <div className="definition-card">
-            <h3>Money Model</h3>
-            <p>A series of offers designed to increase how many customers you get, how much they pay, and how fast they pay it.</p>
-          </div>
-          <div className="definition-card">
-            <h3>Good Money Model</h3>
-            <p>Makes more profit from a customer than it costs to get and service them in the first thirty days. That's the bare minimum.</p>
-          </div>
-          <div className="definition-card">
-            <h3>$100M Money Model</h3>
-            <p>Makes more profit from one customer than it costs to get and service many customers in the first thirty days — removing cash as a limiter to scaling your business.</p>
-          </div>
-        </div>
-      </section>
 
       <section className="four-steps">
         <h2>Build Your Money Model in 4 Steps</h2>
@@ -193,19 +171,27 @@ function MoneyModelGuide() {
         <h2>Real Money Model Examples</h2>
         <div className="examples-grid">
           {examples.map((example, idx) => (
-            <div key={idx} className="example-card">
-              <h3>{example.name}</h3>
-              <div className="flow-diagram">
-                {example.flow.map((step, stepIdx) => (
-                  <div key={stepIdx} className="flow-step">
-                    <span className={`flow-type flow-${step.type.toLowerCase()}`}>
-                      {step.type}
-                    </span>
-                    <span className="flow-detail">{step.detail}</span>
-                    {stepIdx < example.flow.length - 1 && <span className="flow-arrow">→</span>}
-                  </div>
-                ))}
-              </div>
+            <div key={idx} className={`example-card ${openExample === idx ? 'open' : ''}`}>
+              <button
+                className="example-toggle"
+                onClick={() => setOpenExample(openExample === idx ? null : idx)}
+              >
+                <h3>{example.name}</h3>
+                <span className="example-chevron">{openExample === idx ? '▲' : '▼'}</span>
+              </button>
+              {openExample === idx && (
+                <div className="flow-diagram">
+                  {example.flow.map((step, stepIdx) => (
+                    <div key={stepIdx} className="flow-step">
+                      <span className={`flow-type flow-${step.type.toLowerCase()}`}>
+                        {step.type}
+                      </span>
+                      <span className="flow-detail">{step.detail}</span>
+                      {stepIdx < example.flow.length - 1 && <span className="flow-arrow">→</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -245,8 +231,32 @@ function MoneyModelGuide() {
         <div className="final-message">
           <p>The knowledge in these bullets brought me more free and profitable customers than I've known what to do with. If executed, they will do the same for you. And with that, cash will no longer constrain your business.</p>
           <p className="emphasis">Set audacious goals. Keep improving. Learn from failure. Repeat.</p>
+          <p className="quote-attribution">— Alex Hormozi, $100M Leads</p>
         </div>
       </section>
+
+      <section className="money-model-overview">
+        <h2>What is a Money Model?</h2>
+        <div className="definition-cards">
+          <div className="definition-card">
+            <h3>Money Model</h3>
+            <p>A series of offers designed to increase how many customers you get, how much they pay, and how fast they pay it.</p>
+          </div>
+          <div className="definition-card">
+            <h3>Good Money Model</h3>
+            <p>Makes more profit from a customer than it costs to get and service them in the first thirty days. That's the bare minimum.</p>
+          </div>
+          <div className="definition-card">
+            <h3>$100M Money Model</h3>
+            <p>Makes more profit from one customer than it costs to get and service many customers in the first thirty days — removing cash as a limiter to scaling your business.</p>
+          </div>
+        </div>
+      </section>
+
+      <div className="hero-message" style={{ maxWidth: '900px', margin: '0 auto 40px' }}>
+        <p>If just starting out, pick ONE of the money models to inspire you to do something in your business.</p>
+        <p>If you are more advanced, consider weaving two together. There are no rules for how you can stack these.</p>
+      </div>
 
       <section className="cta-section">
         <h2>Ready to Build Your Money Model?</h2>

@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "findmyflow": {
+      "url": "https://qlwfcfypnoptsocdpxuv.supabase.co/functions/v1/mcp-server",
+      "headers": {
+        "Authorization": "Bearer ${FINDMYFLOW_API_KEY}"
+      }
+    }
+  }
+}

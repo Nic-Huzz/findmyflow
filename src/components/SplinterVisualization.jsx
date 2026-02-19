@@ -106,9 +106,9 @@ function renderShape(shape, fillColor) {
 
 function SplinterVisualization({
   location = 'chest',
-  shape = 'spike',
+  shape = 'ball',
   size = 'medium',
-  color = '#ef4444',
+  color = '#1f2937',
   texture = 'rough',
   movement = 'pulsing',
   showBody = false,

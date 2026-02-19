@@ -43,9 +43,9 @@ function SplinterCheckin({ userId, healingCompassId, previousSplinter, onClose }
   // Pre-fill from previous state
   const [needIntensity, setNeedIntensity] = useState(previousSplinter?.need_intensity || 5)
   const [location, setLocation] = useState(previousSplinter?.splinter_location || 'chest')
-  const [shape, setShape] = useState(previousSplinter?.splinter_shape || 'spike')
+  const [shape, setShape] = useState(previousSplinter?.splinter_shape || 'ball')
   const [size, setSize] = useState(previousSplinter?.splinter_size || 'medium')
-  const [color, setColor] = useState(previousSplinter?.splinter_color || '#ef4444')
+  const [color, setColor] = useState(previousSplinter?.splinter_color || '#1f2937')
   const [texture, setTexture] = useState(previousSplinter?.splinter_texture || 'rough')
   const [movement, setMovement] = useState(previousSplinter?.splinter_movement || 'pulsing')
 
@@ -86,9 +86,9 @@ function SplinterCheckin({ userId, healingCompassId, previousSplinter, onClose }
 
   const previousProps = {
     location: previousSplinter?.splinter_location || 'chest',
-    shape: previousSplinter?.splinter_shape || 'spike',
+    shape: previousSplinter?.splinter_shape || 'ball',
     size: previousSplinter?.splinter_size || 'medium',
-    color: previousSplinter?.splinter_color || '#ef4444',
+    color: previousSplinter?.splinter_color || '#1f2937',
     texture: previousSplinter?.splinter_texture || 'rough',
     movement: previousSplinter?.splinter_movement || 'pulsing',
   }

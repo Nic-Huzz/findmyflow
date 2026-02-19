@@ -13,6 +13,7 @@ import PublicEmailGate from '../components/PublicEmailGate'
 import PublicFlowCTA from '../components/PublicFlowCTA'
 import DownloadResultsButton from '../components/DownloadResultsButton'
 import { STAGES, MONEY_MODEL_CONFIGS } from './moneyModelConfigs'
+import { calculateOfferScores } from '../lib/scoring'
 import { generateMoneyModelPdf, downloadResultsPdf } from '../lib/pdfGenerator'
 import { extractMoneyModelTokens } from '../lib/emailPersonalization'
 import {
@@ -92,57 +93,8 @@ export default function PublicMoneyModelFlow() {
     loadData()
   }, [config.questionsPath, config.offersPath])
 
-  // Calculate offer scores from answers
-  const calculateOfferScores = (userAnswers) => {
-    if (!offersData) return []
-
-    const scores = offersData.map(offer => {
-      let totalScore = 0
-      const maxPossibleScore = offer.max_possible_score || 30
-
-      Object.entries(userAnswers).forEach(([questionId, answer]) => {
-        const normalizedQuestionId = questionId.replace(/^q(\d+)/, 'Q$1')
-        const weights = offer.scoring_weights?.[normalizedQuestionId]
-        if (weights && weights[answer.value] !== undefined) {
-          totalScore += weights[answer.value]
-        }
-      })
-
-      let isDisqualified = false
-      let disqualificationReasons = []
-      const disqualifiers = offer.hard_disqualifiers || offer.eligibility_rules?.hard_disqualifiers || []
-      if (disqualifiers.length > 0) {
-        disqualifiers.forEach(rule => {
-          const fieldName = rule.field.toLowerCase()
-          const matchingKey = Object.keys(userAnswers).find(key =>
-            key.endsWith('_' + fieldName)
-          )
-          const fieldAnswer = matchingKey ? userAnswers[matchingKey] : null
-          if (fieldAnswer && rule.disallowed.includes(fieldAnswer.value)) {
-            isDisqualified = true
-            disqualificationReasons.push(rule.reason || `Disqualified due to ${rule.field}`)
-          }
-        })
-      }
-
-      const confidence = totalScore / maxPossibleScore
-
-      return {
-        offer,
-        totalScore,
-        maxPossibleScore,
-        confidence,
-        isDisqualified,
-        disqualificationReasons
-      }
-    })
-
-    return scores.sort((a, b) => {
-      if (a.isDisqualified && !b.isDisqualified) return 1
-      if (!a.isDisqualified && b.isDisqualified) return -1
-      return b.totalScore - a.totalScore
-    })
-  }
+  // Calculate offer scores — uses shared scoring engine (src/lib/scoring.js)
+  const scoreOffers = (userAnswers) => calculateOfferScores(userAnswers, offersData)
 
   // Handle option selection
   const handleOptionSelect = (questionId, option) => {
@@ -178,7 +130,7 @@ export default function PublicMoneyModelFlow() {
 
     // Calculate scores
     setTimeout(async () => {
-      const scores = calculateOfferScores(answers)
+      const scores = scoreOffers(answers)
       setAllOfferScores(scores)
       const topOffer = scores.find(s => !s.isDisqualified) || scores[0]
       setRecommendedOffer(topOffer)

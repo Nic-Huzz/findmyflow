@@ -206,17 +206,17 @@
 .vri-create-btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #E9A23B, #f5c55a);
-  color: #1a1a2e;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #fff;
   border-radius: 12px;
   text-decoration: none;
   font-weight: 700;
-  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3);
   transition: box-shadow 0.2s ease;
 }
 
 .vri-create-btn:hover {
-  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.45);
+  box-shadow: 0 6px 24px rgba(94, 23, 235, 0.45);
 }
 
 /* Flows List */

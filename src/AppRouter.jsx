@@ -217,6 +217,7 @@ const Codex = lazyRetry(() => import('./pages/Codex'))
 const CodexEntry = lazyRetry(() => import('./pages/CodexEntry'))
 const ProfileHub = lazyRetry(() => import('./pages/ProfileHub'))
 const UserSettings = lazyRetry(() => import('./pages/UserSettings'))
+const AgentAccess = lazyRetry(() => import('./pages/AgentAccess'))
 const BrandToneDemo = lazyRetry(() => import('./pages/BrandToneDemo'))
 const AdminDashboard = lazyRetry(() => import('./pages/AdminDashboard'))
 const ContentReview = lazyRetry(() => import('./pages/ContentReview'))
@@ -288,6 +289,7 @@ import './flows/PersonaIdentifierFlow.css'
 import './components/crm/CSVImport/CSVImportWizard.css'
 import './pages/crm/SalesPlaybook.css'
 import './pages/crm/Expenses.css'
+import './pages/AgentAccess.css'
 import './pages/AdminDashboard.css'
 import './pages/ContentReview.css'
 import './pages/league/LeagueOverview.css'
@@ -712,6 +714,11 @@ function AppRouter() {
             <Route path="/user-settings" element={
               <AuthGate>
                 <UserSettings />
+              </AuthGate>
+            } />
+            <Route path="/agent-access" element={
+              <AuthGate>
+                <AgentAccess />
               </AuthGate>
             } />
             <Route path="/library" element={
