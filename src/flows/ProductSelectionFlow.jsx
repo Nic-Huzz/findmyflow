@@ -464,8 +464,8 @@ function ProductSelectionFlow() {
             initialSpecs[prod.id] = {
               mechanism: '',
               featureBenefits: prod.solutions.map(sol => ({
-                feature: sol.name || sol.label || SOLUTION_LABELS[sol.solutionType] || 'Feature',
-                benefit: sol.description || ''
+                feature: sol.description || '',
+                benefit: sol.problemText ? `Overcomes: ${sol.problemText}` : ''
               }))
             }
           } else {
