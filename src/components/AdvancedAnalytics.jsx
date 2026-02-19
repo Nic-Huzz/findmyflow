@@ -267,18 +267,19 @@ export const FunnelVisualization = ({ analytics, questions = [] }) => {
                 <div
                   className="step-bar"
                   style={{ width: `${Math.max(widthPercent, 5)}%` }}
-                >
-                  <span className="step-count">{step.count}</span>
-                </div>
+                />
                 <span className="step-percentage">{step.percentage}%</span>
               </div>
 
-              {step.dropped > 0 && (
-                <div className="drop-indicator">
-                  <span className="drop-arrow">↓</span>
-                  <span className="drop-count">-{step.dropped} dropped</span>
-                </div>
-              )}
+              <div className="step-meta-row">
+                <span className="step-count">{step.count} responses</span>
+                {step.dropped > 0 && (
+                  <span className="drop-indicator">
+                    <span className="drop-arrow">↓</span>
+                    <span className="drop-count">-{step.dropped} dropped</span>
+                  </span>
+                )}
+              </div>
             </div>
           )
         })}
