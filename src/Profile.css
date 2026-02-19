@@ -1572,3 +1572,326 @@
   border-radius: 16px;
   margin: 16px 0;
 }
+
+/* ============================
+   Agent Access Section
+   ============================ */
+.agent-access-section {
+  margin: 32px 0 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.agent-access-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+  text-align: left;
+}
+
+.agent-access-toggle:hover {
+  background: #f8f8fa;
+}
+
+.agent-access-toggle-icon {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.agent-access-toggle-badge {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.agent-access-content {
+  padding: 0 18px 18px;
+}
+
+.agent-access-description {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+/* Key reveal (shown once after generation) */
+.agent-key-reveal {
+  background: linear-gradient(135deg, #f0e7ff 0%, #fdf6ec 100%);
+  border: 1px solid #d4b8ff;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.agent-key-reveal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #5e17eb;
+  margin-bottom: 10px;
+}
+
+.agent-key-reveal-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.agent-key-reveal-value code {
+  flex: 1;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: #333;
+  word-break: break-all;
+}
+
+.agent-key-copy-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  background: #5e17eb;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.agent-key-copy-btn:hover {
+  background: #4a0ea8;
+}
+
+.agent-key-reveal-warning {
+  font-size: 0.8rem;
+  color: #b45309;
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+.agent-key-dismiss-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #E9A23B;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.agent-key-dismiss-btn:hover {
+  background: #d4922f;
+}
+
+/* Generate new key */
+.agent-key-generate {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.agent-key-label-input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-size: 0.85rem;
+  color: #333;
+  background: #fafbfc;
+}
+
+.agent-key-label-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 2px rgba(94, 23, 235, 0.1);
+}
+
+.agent-key-generate-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #E9A23B;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.agent-key-generate-btn:hover {
+  background: #d4922f;
+}
+
+.agent-key-generate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.agent-key-error {
+  font-size: 0.8rem;
+  color: #e5484d;
+  font-weight: 500;
+  margin: -8px 0 12px;
+}
+
+/* Keys list */
+.agent-keys-loading {
+  font-size: 0.85rem;
+  color: #888;
+  padding: 12px 0;
+}
+
+.agent-keys-list {
+  margin-bottom: 16px;
+}
+
+.agent-keys-list-header {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.agent-key-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fafbfc;
+  margin-bottom: 6px;
+}
+
+.agent-key-row.revoked {
+  opacity: 0.5;
+}
+
+.agent-key-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.agent-key-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.agent-key-prefix {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.75rem;
+  color: #5e17eb;
+}
+
+.agent-key-meta {
+  font-size: 0.7rem;
+  color: #999;
+}
+
+.agent-key-revoke-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #e5484d;
+  background: none;
+  color: #e5484d;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.agent-key-revoke-btn:hover {
+  background: #fef2f2;
+}
+
+.agent-key-revoked-badge {
+  font-size: 0.75rem;
+  color: #999;
+  font-style: italic;
+}
+
+/* Usage instructions */
+.agent-usage-details {
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.agent-usage-details summary {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.agent-usage-content {
+  padding: 12px 0 0;
+}
+
+.agent-usage-content p {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+.agent-usage-content a {
+  color: #5e17eb;
+}
+
+.agent-usage-code {
+  display: block;
+  padding: 8px 12px;
+  background: #1e1e2e;
+  color: #a6e3a1;
+  border-radius: 6px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.75rem;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  word-break: break-all;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .agent-key-generate {
+    flex-direction: column;
+  }
+
+  .agent-key-reveal-value {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .agent-key-reveal-value code {
+    font-size: 0.7rem;
+  }
+}
