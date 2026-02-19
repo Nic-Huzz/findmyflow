@@ -110,7 +110,8 @@ const HIDDEN_ROUTES = [
   '/mvp-readiness',
   '/feedback-analysis',
   '/archetypes/', // Essence and Shadow deep dive pages
-  '/crm/import' // CSV import wizard has bottom action buttons
+  '/crm/import', // CSV import wizard has bottom action buttons
+  '/money-model-guide' // Money Model explainer slides
 ]
 
 function BottomToolbar() {

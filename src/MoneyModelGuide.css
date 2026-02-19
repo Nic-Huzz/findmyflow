@@ -93,6 +93,16 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
+/* Override checklist to match purple/white theme */
+.flow-finder-explainer .ready-checklist {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.flow-finder-explainer .check-item {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* CTA grid on last slide */
 .mm-cta-grid {
   display: grid;
