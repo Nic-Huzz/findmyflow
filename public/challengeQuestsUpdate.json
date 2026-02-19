@@ -1668,7 +1668,6 @@
       "points": 5,
       "inputType": "validation_responses",
       "milestone_type": "validation_analysis_complete",
-      "requires_quest": "milestone_validation_form_sent",
       "counts_toward_graduation": true,
       "learnMore": "Raw feedback is just data—insights are gold. Once you've collected 3+ validation responses, our AI will analyze patterns across all answers:\n\n• **Pain points**: What problems keep coming up?\n• **Dream outcomes**: What do people really want?\n• **Objections**: What's stopping them from buying?\n• **Pricing signals**: What are they willing to pay?\n• **Language**: Words your audience actually uses\n\nThis analysis becomes the foundation for your offer, messaging, and positioning."
     },

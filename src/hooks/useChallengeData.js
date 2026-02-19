@@ -1248,6 +1248,12 @@ export function useChallengeData() {
       return !hasPendingTrial('self_test', 'pending_reflection')
     }
 
+    // Dynamic lock: analysis quest unlocks when 3+ total validation responses
+    if (quest.id === 'milestone_validation_responses_analysis') {
+      const totalResponses = Object.values(validationResponseCounts).reduce((sum, n) => sum + n, 0)
+      return totalResponses < 3
+    }
+
     if (!quest.requires_quest) return false
     return !isQuestEverCompleted(quest.requires_quest)
   }
@@ -1256,6 +1262,12 @@ export function useChallengeData() {
     // Dynamic lock names for review quests
     if (forQuestId === 'lets_play_review') return 'Let\'s Play Peer-Trial'
     if (forQuestId === 'self_test_review') return 'Play-list Self-Trial'
+
+    // Dynamic lock message for analysis quest
+    if (forQuestId === 'milestone_validation_responses_analysis') {
+      const totalResponses = Object.values(validationResponseCounts).reduce((sum, n) => sum + n, 0)
+      return `${totalResponses}/3 validation responses collected`
+    }
 
     const quest = challengeData?.quests?.find(q => q.id === questId)
     return quest?.name || questId
