@@ -610,6 +610,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   max-height: 80vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* ============ RESPONSES VIEWER — OPTION A: CLEAN CARD STACK ============ */
@@ -674,6 +675,7 @@
 /* Action Chips */
 .dashboard-container .rv-action-bar {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 16px;
 }
@@ -720,7 +722,6 @@
 }
 
 .dashboard-container .rv-chip-gold:hover:not(:disabled) {
-  transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(233, 162, 59, 0.35);
 }
 
