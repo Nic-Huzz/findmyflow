@@ -2520,6 +2520,13 @@ function OfferBuilderFlow() {
           <p style={{ marginTop: '12px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>
             Saves your offer and completes this challenge quest
           </p>
+          <button
+            className="secondary-button"
+            onClick={() => setStage(STAGES.Q8)}
+            style={{ marginTop: '16px' }}
+          >
+            ← Go Back
+          </button>
         </div>
       </div>
     )
