@@ -241,70 +241,46 @@ function QuickCapture({
         }
       }
 
-      // 1. Save wheel data (skills, problems, personas)
-      console.log('Saving wheel data...')
-      await saveWheelData('skills', capturedData.skills)
-      await saveWheelData('problems', capturedData.problems)
-      await saveWheelData('personas', capturedData.personas)
-
-      // 2. Save products to products table
-      console.log('Saving products...')
-      for (const product of capturedData.products) {
-        console.log('Saving product:', product.name, product)
-        const { error: productError } = await supabase.from('products').insert({
-          user_id: userId,
-          name: product.name,
-          description: product.description || null,
-          product_type: product.productType,
-          product_subtype: product.productSubtype || null,
-          money_model_tier: product.tier,
-          price_type: product.priceType || null,
-          price_amount: product.price ? parseFloat(product.price) : null,
-          status: 'active',
-          source: 'quick_capture',
-          metadata: {
-            category: product.category,
-            captured_at: new Date().toISOString()
-          }
-        })
-
-        if (productError) {
-          console.error(`Error saving product "${product.name}":`, productError)
-          // Provide specific error for constraint violations
-          if (productError.code === '23505') {
-            throw new Error(`Product "${product.name}" already exists. Try a different name.`)
-          } else if (productError.code === '23503') {
-            throw new Error(`Invalid product type for "${product.name}". Please go back and re-select.`)
-          }
-          throw new Error(
-            `Failed to save "${product.name}".\n\n` +
-            `Check your internet connection and tap "Complete Setup" to retry.`
-          )
-        }
-      }
-
-      // 2.5 Create projects for all non-pre-ladder users
-      // (pre_ladder users complete Flow Finder which creates their project)
-      if (wealthLadder === 'service' || wealthLadder === 'productized' || wealthLadder === 'products') {
-        console.log('Creating projects for products...')
-
-        // Check if user already has any active projects
-        const { data: existingProjects } = await supabase
+      // === ROUND 1: Save wheels + check existing projects (all parallel) ===
+      console.log('Round 1: Saving wheels + checking existing projects...')
+      const [, , , existingProjectsResult] = await Promise.all([
+        saveWheelData('skills', capturedData.skills),
+        saveWheelData('problems', capturedData.problems),
+        saveWheelData('personas', capturedData.personas),
+        supabase
           .from('user_projects')
           .select('id')
           .eq('user_id', userId)
           .eq('status', 'active')
+      ])
 
-        const hasExistingProjects = existingProjects && existingProjects.length > 0
+      const hasExistingProjects = existingProjectsResult.data && existingProjectsResult.data.length > 0
 
-        // Create a project for each product
-        for (let i = 0; i < capturedData.products.length; i++) {
-          const product = capturedData.products[i]
-          const isFirstProject = !hasExistingProjects && i === 0
+      // === ROUND 2: Batch insert products + projects + upsert stage progress (all parallel) ===
+      console.log('Round 2: Batch inserting products, projects, marking onboarding complete...')
 
-          console.log(`Creating project for product: ${product.name}, isPrimary: ${isFirstProject}`)
+      // Build product inserts array
+      const productInserts = capturedData.products.map(product => ({
+        user_id: userId,
+        name: product.name,
+        description: product.description || null,
+        product_type: product.productType,
+        product_subtype: product.productSubtype || null,
+        money_model_tier: product.tier,
+        price_type: product.priceType || null,
+        price_amount: product.price ? parseFloat(product.price) : null,
+        status: 'active',
+        source: 'quick_capture',
+        metadata: {
+          category: product.category,
+          captured_at: new Date().toISOString()
+        }
+      }))
 
-          const { error: projectError } = await supabase.from('user_projects').insert({
+      // Build project inserts array (only for non-pre-ladder users)
+      const shouldCreateProjects = wealthLadder === 'service' || wealthLadder === 'productized' || wealthLadder === 'products'
+      const projectInserts = shouldCreateProjects
+        ? capturedData.products.map((product, i) => ({
             user_id: userId,
             name: product.name,
             description: product.description || `${product.productType} offering`,
@@ -312,70 +288,62 @@ function QuickCapture({
             status: 'active',
             current_stage: product.stage || STAGES.VALIDATION,
             total_points: 0,
-            is_primary: isFirstProject
-          })
+            is_primary: !hasExistingProjects && i === 0
+          }))
+        : []
 
-          if (projectError) {
-            console.error(`Error creating project for "${product.name}":`, projectError)
-            // Don't fail the whole onboarding for project creation errors
-            // The user can still proceed and create projects later
-          } else {
-            console.log(`Project created for: ${product.name}`)
-          }
+      // Upsert stage progress — only set the flags QuickCapture owns.
+      // persona and current_stage were already set correctly by saveOnboardingV2Data
+      // during Q3 (which accounts for employmentStatus and path-specific startingStage).
+      const productInsertPromise = productInserts.length > 0
+        ? supabase.from('products').insert(productInserts)
+        : Promise.resolve({ error: null })
+
+      const stageProgressPromise = supabase.from('user_stage_progress').upsert({
+        user_id: userId,
+        onboarding_completed: true,
+        onboarding_v2_completed: true,
+        guidance_emphasis: guidanceEmphasis
+      }, { onConflict: 'user_id' })
+
+      const projectInsertPromise = projectInserts.length > 0
+        ? supabase.from('user_projects').insert(projectInserts)
+        : Promise.resolve({ error: null })
+
+      const [productResult, stageProgressResult, projectResult] = await Promise.all([
+        productInsertPromise,
+        stageProgressPromise,
+        projectInsertPromise
+      ])
+
+      // Check product insert result
+      if (productResult.error) {
+        console.error('Error saving products:', productResult.error)
+        if (productResult.error.code === '23505') {
+          throw new Error('A product name already exists. Try a different name.')
         }
+        throw new Error(
+          'Failed to save products.\n\n' +
+          'Check your internet connection and tap "Complete Setup" to retry.'
+        )
       }
 
-      // 3. Mark onboarding complete in user_stage_progress
-      // First check if record exists
-      const { data: existingProgress } = await supabase
-        .from('user_stage_progress')
-        .select('id')
-        .eq('user_id', userId)
-        .maybeSingle()
+      // Check stage progress result
+      if (stageProgressResult.error) {
+        throw new Error('Failed to mark onboarding complete: ' + stageProgressResult.error.message)
+      }
 
-      if (existingProgress) {
-        // Update existing record
-        const { error: updateError } = await supabase
-          .from('user_stage_progress')
-          .update({
-            onboarding_completed: true,
-            onboarding_v2_completed: true,
-            guidance_emphasis: guidanceEmphasis,
-            updated_at: new Date().toISOString()
-          })
-          .eq('user_id', userId)
-
-        if (updateError) {
-          throw new Error('Failed to mark onboarding complete: ' + updateError.message)
-        }
-      } else {
-        // Create new record if it doesn't exist
-        // Map wealth ladder to persona (service + productized = vibe_riser, products = movement_maker)
-        const personaMap = {
-          service: 'vibe_riser',
-          productized: 'vibe_riser',
-          products: 'movement_maker'
-        }
-        const { error: insertError } = await supabase
-          .from('user_stage_progress')
-          .insert({
-            user_id: userId,
-            persona: personaMap[wealthLadder] || 'vibe_seeker',
-            current_stage: 'validation',
-            onboarding_completed: true,
-            onboarding_v2_completed: true,
-            guidance_emphasis: guidanceEmphasis
-          })
-
-        if (insertError) {
-          throw new Error('Failed to create onboarding record: ' + insertError.message)
-        }
+      // Check project insert result (non-fatal)
+      if (projectResult.error) {
+        console.error('Error creating projects:', projectResult.error)
       }
 
       // Clear localStorage
       localStorage.removeItem(`${STORAGE_KEY}_${userId}`)
 
-      // Complete
+      // Complete — keep saveTriggeredRef locked (true) on success to prevent any
+      // duplicate taps during the brief gap before the component unmounts.
+      // On error, the catch block resets it to allow retry.
       console.log('Save successful! Calling onComplete...')
       onComplete(capturedData)
       console.log('onComplete called, should navigate to /me')
@@ -383,8 +351,12 @@ function QuickCapture({
     } catch (error) {
       console.error('Error saving quick capture data:', error)
 
-      // Log error and get support helper
-      const { offerSupport, errorMessage } = await logError({
+      // Show error and enable retry immediately
+      setSaveError(error.message || 'Failed to save. Please try again.')
+      saveTriggeredRef.current = false
+
+      // Log error non-blocking (no await) so finally runs immediately and doesn't race with retries
+      logError({
         error,
         component: 'QuickCapture',
         action: 'save_onboarding_data',
@@ -395,12 +367,11 @@ function QuickCapture({
           personasCount: capturedData.personas.length,
           productsCount: capturedData.products.length
         }
+      }).then(({ offerSupport }) => {
+        setErrorSupport(() => offerSupport)
+      }).catch(logErr => {
+        console.error('Error logging error:', logErr)
       })
-
-      setErrorSupport(() => offerSupport)
-      setSaveError(error.message || 'Failed to save. Please try again.')
-      // Reset ref so user can retry
-      saveTriggeredRef.current = false
     } finally {
       setIsSaving(false)
     }

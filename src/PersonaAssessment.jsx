@@ -135,6 +135,42 @@ function PersonaAssessment() {
     setStage(STAGES.PROTECTIVE_REVEAL)
   }
 
+  // Handle authenticated user completing archetype quiz (skip email/OTP steps)
+  const handleAuthenticatedQuizComplete = async () => {
+    if (!user?.id || !user?.email) return
+
+    setIsLoading(true)
+    try {
+      const sessionId = crypto.randomUUID()
+      const { error: leadError } = await supabase.from('lead_flow_profiles').insert([{
+        session_id: sessionId,
+        user_id: user.id,
+        user_name: user.user_metadata?.name || user.email.split('@')[0],
+        email: user.email.toLowerCase(),
+        persona: null,
+        essence_archetype: essenceArchetype?.name,
+        protective_archetype: protectiveArchetype?.name,
+        context: {
+          intro_completed: true,
+          archetypes_completed: true,
+          source: 'authenticated_backfill'
+        }
+      }])
+
+      if (leadError) {
+        console.error('Error saving archetype profile:', leadError)
+      }
+
+      setStage(STAGES.SUCCESS)
+      setTimeout(() => navigate('/me'), 1500)
+    } catch (err) {
+      console.error('Error completing archetype quiz:', err)
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   // Handle name submission
   const handleNameSubmit = (e) => {
     e.preventDefault()
@@ -607,8 +643,15 @@ function PersonaAssessment() {
             {protectiveDisplay?.summary || protectiveArchetype?.description}
           </p>
           <p className="reveal-hint">Understanding this pattern is the first step to moving past it.</p>
-          <button className="primary-button" onClick={() => setStage(STAGES.NAME_CAPTURE)}>
-            Continue
+          <button className="primary-button" disabled={isLoading} onClick={() => {
+            if (user?.id) {
+              // Already authenticated — save profile and skip email/OTP
+              handleAuthenticatedQuizComplete()
+            } else {
+              setStage(STAGES.NAME_CAPTURE)
+            }
+          }}>
+            {isLoading ? 'Saving...' : 'Continue'}
           </button>
         </div>
       </div>

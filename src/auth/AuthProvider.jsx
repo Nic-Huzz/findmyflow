@@ -64,7 +64,8 @@ export const AuthProvider = ({ children }) => {
   }, [user])
 
   // Sign in with verification code
-  const signInWithCode = async (email) => {
+  // shouldCreateUser: true (default) for signup flows, false for login-only (AuthGate)
+  const signInWithCode = async (email, { shouldCreateUser = true } = {}) => {
     try {
       setLoading(true)
 
@@ -73,7 +74,7 @@ export const AuthProvider = ({ children }) => {
       const { data, error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          shouldCreateUser: true,
+          shouldCreateUser,
         }
       })
 

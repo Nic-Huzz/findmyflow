@@ -5,6 +5,9 @@ import { sanitizeText } from './lib/sanitize'
 import { trackGroanCompleted } from './lib/analytics'
 import confetti from 'canvas-confetti'
 import { triggerSideCannons, MicroToast } from './components/Celebrations'
+import LevelUpModal from './components/Celebrations/LevelUpModal'
+import { useCelebrations } from './hooks/useCelebrations'
+import { getLevelNumber } from './lib/crm/statsService'
 import WeeklyRecapCard from './components/WeeklyRecapCard'
 import GraduationModal from './components/GraduationModal'
 import NotificationPrompt from './components/NotificationPrompt'
@@ -158,8 +161,12 @@ function Challenge() {
     handleGroanReflectionCompletion,
     handleValidationAnalysisCompletion,
     handleStreakUpdate,
-    checkAndGraduateProject
+    checkAndGraduateProject,
+    lifetimeScores
   } = useChallengeData()
+
+  // Celebrations (level-up modal)
+  const { showLevelUp, celebrateLevelUp, closeLevelUp } = useCelebrations()
 
   // League data for nudge banner + content challenges
   const {
@@ -691,8 +698,19 @@ function Challenge() {
           p_points: quest.points,
           p_week_start: getWeekStart() // Pass client's week start for timezone consistency
         })
+        // Check for level-up before refreshing scores (closure has old value)
+        const oldXP = lifetimeScores?.lifetime_total_score || 0
+        const newXP = oldXP + quest.points
+        const oldLevel = getLevelNumber(oldXP)
+        const newLevel = getLevelNumber(newXP)
+
         // Refresh user's scores from new tables
         await loadUserScores()
+
+        // Trigger level-up celebration if level changed
+        if (newLevel > oldLevel) {
+          setTimeout(() => celebrateLevelUp(newLevel), 800)
+        }
       } catch (scoreError) {
         console.error('Error updating scores:', scoreError)
         // Non-fatal - continue with quest completion
@@ -823,8 +841,8 @@ function Challenge() {
         setPostActionQuest(quest)
       }
 
-      // Trigger Splinter Check-in after non-gateway Healing quest completions
-      if (quest.category === 'Healing' && quest.healing_checkin && healingCompassId) {
+      // Trigger Splinter Check-in only after Release healing quest completions
+      if (quest.category === 'Healing' && quest.type?.toLowerCase() === 'release' && quest.healing_checkin && healingCompassId) {
         loadLatestSplinterState(user.id, healingCompassId).then(splinterState => {
           if (splinterState) {
             setSplinterCheckinData({ ...splinterState, questId: quest.id })
@@ -2371,6 +2389,11 @@ function Challenge() {
           previousSplinter={splinterCheckinData}
           onClose={() => setSplinterCheckinData(null)}
         />
+      )}
+
+      {/* Level-up celebration modal */}
+      {showLevelUp && (
+        <LevelUpModal level={showLevelUp} onClose={closeLevelUp} />
       )}
       </div>
     </div>

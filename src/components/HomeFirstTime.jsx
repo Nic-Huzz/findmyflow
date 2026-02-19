@@ -50,7 +50,7 @@ const SCREENS = {
 // LocalStorage key for onboarding progress
 const ONBOARDING_STORAGE_KEY = 'onboarding_v2_progress'
 
-function HomeFirstTime() {
+function HomeFirstTime({ onOnboardingComplete }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { setOnboardingScreen } = useOnboarding()
@@ -182,6 +182,17 @@ function HomeFirstTime() {
         .maybeSingle()
 
       if (leadProfile) {
+        // Backfill user_id if missing (profile created pre-auth)
+        if (!leadProfile.user_id && user.id) {
+          supabase
+            .from('lead_flow_profiles')
+            .update({ user_id: user.id })
+            .eq('id', leadProfile.id)
+            .then(({ error }) => {
+              if (error) console.warn('Could not backfill lead profile user_id:', error)
+            })
+        }
+
         setUserName(leadProfile.user_name || user.user_metadata?.name || '')
 
         // Get essence profile data (use custom name if set)
@@ -383,7 +394,7 @@ function HomeFirstTime() {
   }
 
   // Handle after persona reveal - uses path routing logic
-  const handleContinueAfterPersona = () => {
+  const handleContinueAfterPersona = async () => {
     // Get the full path configuration based on wealth ladder + goal
     const pathConfig = determineOnboardingPath(wealthLadderRung, primaryGoal)
 
@@ -393,18 +404,24 @@ function HomeFirstTime() {
     } else if (pathConfig.showQuickCapture) {
       // Paths 2-4: Go to Quick Capture flow
       setCurrentScreen(SCREENS.QUICK_CAPTURE)
+    } else if (onOnboardingComplete) {
+      // Refresh parent state in-place (no full reload)
+      await onOnboardingComplete()
     } else {
-      // Fallback: Go to profile (full reload to refresh stageProgress)
+      // Fallback: full reload
       window.location.href = '/me'
     }
   }
 
   // Handle Quick Capture completion
-  const handleQuickCaptureComplete = (capturedData) => {
-    console.log('handleQuickCaptureComplete called, reloading profile...')
-    // Force full reload so Profile re-fetches stageProgress with onboarding_v2_completed: true
-    // navigate('/me') doesn't work here because we're already on /me
-    window.location.href = '/me'
+  const handleQuickCaptureComplete = async (capturedData) => {
+    console.log('handleQuickCaptureComplete called, refreshing profile...')
+    if (onOnboardingComplete) {
+      await onOnboardingComplete()
+    } else {
+      // Fallback: full reload
+      window.location.href = '/me'
+    }
   }
 
   // Mark onboarding complete in the database
@@ -448,16 +465,29 @@ function HomeFirstTime() {
 
   // Handle "I'll do this later" - mark onboarding complete then go to profile
   const handleSkipToProfile = async () => {
-    await ensureDiscoveryProject()
-    await markOnboardingComplete()
-    window.location.href = '/me'
+    // These two are independent — run in parallel
+    await Promise.all([ensureDiscoveryProject(), markOnboardingComplete()])
+    if (onOnboardingComplete) {
+      await onOnboardingComplete()
+    } else {
+      window.location.href = '/me'
+    }
+  }
+
+  // Handle ExistingProjectFlow completion
+  const handleExistingProjectComplete = async () => {
+    if (onOnboardingComplete) {
+      await onOnboardingComplete()
+    } else {
+      window.location.href = '/me'
+    }
   }
 
   // Handle "I have 2 minutes now" - mark onboarding complete then go to mind-space
   // Also creates Discovery Project as safety net in case user abandons MindSpace
   const handleStartMindSpace = async () => {
-    await ensureDiscoveryProject()
-    await markOnboardingComplete()
+    // These two are independent — run in parallel
+    await Promise.all([ensureDiscoveryProject(), markOnboardingComplete()])
     navigate('/mind-space')
   }
 
@@ -946,7 +976,7 @@ function HomeFirstTime() {
   if (currentScreen === SCREENS.EXISTING_PROJECT) {
     return (
       <ExistingProjectFlow
-        onComplete={() => window.location.href = '/me'}
+        onComplete={handleExistingProjectComplete}
         onBack={() => setCurrentScreen(SCREENS.PROJECT_TYPE)}
         onboardingData={{
           persona: assignedPersona?.persona || null,

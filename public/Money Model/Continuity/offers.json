@@ -132,7 +132,12 @@
         "FC3_commitment_length",
         "FC4_cancellation_policy"
       ],
-      "hard_disqualifiers": []
+      "hard_disqualifiers": [
+        {
+          "field": "ongoing_value_capability",
+          "disallowed": ["no_one_time_value"]
+        }
+      ]
     },
 
     "scoring_weights": {
@@ -388,7 +393,12 @@
         "FC7_upfront_pricing",
         "FC8_monthly_value"
       ],
-      "hard_disqualifiers": []
+      "hard_disqualifiers": [
+        {
+          "field": "ongoing_value_capability",
+          "disallowed": ["no_one_time_value"]
+        }
+      ]
     },
 
     "scoring_weights": {

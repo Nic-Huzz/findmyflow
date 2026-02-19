@@ -12,13 +12,13 @@
 }
 
 .guide-header h1 {
-  font-size: 3rem;
+  font-size: 2rem;
   margin-bottom: 10px;
   font-weight: 800;
 }
 
 .subtitle {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   margin-bottom: 30px;
   opacity: 0.9;
 }
@@ -32,7 +32,7 @@
 }
 
 .hero-message p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 12px;
 }
@@ -48,7 +48,7 @@
 }
 
 .money-model-overview h2 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin-bottom: 40px;
 }
@@ -75,7 +75,7 @@
 }
 
 .definition-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin-bottom: 12px;
   color: #fbbf24;
 }
@@ -93,7 +93,7 @@
 }
 
 .four-steps h2 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin-bottom: 40px;
 }
@@ -129,15 +129,16 @@
   font-weight: 600;
   align-self: flex-start;
   margin-bottom: 12px;
+  white-space: nowrap;
 }
 
 .step-icon {
-  font-size: 3rem;
+  font-size: 2rem;
   margin-bottom: 16px;
 }
 
 .step-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin-bottom: 12px;
 }
 
@@ -200,7 +201,7 @@
 }
 
 .result-section h2 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin-bottom: 24px;
 }
@@ -214,7 +215,7 @@
 }
 
 .result-box p {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 600;
   line-height: 1.6;
 }
@@ -226,7 +227,7 @@
 }
 
 .examples-section h2 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin-bottom: 40px;
 }
@@ -244,11 +245,34 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.example-card h3 {
-  font-size: 1.8rem;
-  margin-bottom: 24px;
-  text-align: center;
+.example-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+}
+
+.example-toggle h3 {
+  font-size: 1.3rem;
+  margin: 0;
+  text-align: left;
   color: #fbbf24;
+}
+
+.example-chevron {
+  font-size: 0.9rem;
+  opacity: 0.6;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.example-card.open .flow-diagram {
+  margin-top: 20px;
 }
 
 .flow-diagram {
@@ -314,7 +338,7 @@
 }
 
 .important-notes h2 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin-bottom: 40px;
 }
@@ -333,11 +357,11 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   gap: 12px;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .note-icon {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
 }
 
@@ -354,7 +378,7 @@
 }
 
 .key-insight h2 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin-bottom: 24px;
 }
@@ -368,16 +392,16 @@
 }
 
 .insight-box p {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 16px;
 }
 
-.insight-subtext {
-  font-size: 1.2rem !important;
-  font-weight: 500 !important;
+.insight-box .insight-subtext {
+  font-size: 1rem;
+  font-weight: 500;
   opacity: 0.9;
-  margin-bottom: 0 !important;
+  margin-bottom: 0;
 }
 
 /* Build Stages */
@@ -387,7 +411,7 @@
 }
 
 .build-stages h2 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin-bottom: 24px;
 }
@@ -401,7 +425,7 @@
 }
 
 .stages-content p {
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1.8;
   text-align: center;
 }
@@ -417,7 +441,7 @@
 }
 
 .final-words h2 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin-bottom: 24px;
 }
@@ -440,12 +464,21 @@
   margin-bottom: 0;
 }
 
-.emphasis {
-  font-size: 1.3rem !important;
+.final-message p.emphasis {
+  font-size: 1.1rem;
   font-weight: 600;
   color: #fbbf24;
   text-align: center;
-  margin-top: 24px !important;
+  margin-top: 24px;
+}
+
+.final-message p.quote-attribution {
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.7;
+  text-align: center;
+  margin-top: 12px;
+  margin-bottom: 0;
 }
 
 /* CTA Section */
@@ -456,12 +489,12 @@
 }
 
 .cta-section h2 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   margin-bottom: 16px;
 }
 
 .cta-section > p {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 40px;
   opacity: 0.9;
 }
@@ -510,11 +543,11 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .guide-header h1 {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
 
   .subtitle {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .money-model-overview h2,
@@ -525,7 +558,7 @@
   .build-stages h2,
   .final-words h2,
   .cta-section h2 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 
   .steps-grid {

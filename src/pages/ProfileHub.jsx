@@ -57,6 +57,14 @@ const ProfileHub = () => {
       path: '/user-settings',
       color: '#6c757d'
     },
+    {
+      id: 'agent-access',
+      icon: '🤖',
+      title: 'Agent Access',
+      description: 'Connect AI agents to run assessments via API',
+      path: '/agent-access',
+      color: '#5e17eb'
+    },
     ...(isAdmin ? [{
       id: 'admin',
       icon: '🛡️',

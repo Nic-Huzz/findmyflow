@@ -9,7 +9,7 @@
 ],
 "hard_disqualifiers": [
 {
-"field": "tracking_ability",
+"field": "tracking",
 "disallowed": [
 "tracking_is_difficult",
 "cannot_track_results_at_all"
@@ -20,13 +20,20 @@
 "disallowed": [
 "must_profit_front_end"
 ]
+},
+{
+"field": "business_model",
+"disallowed": [
+"agency",
+"physical_product"
+]
 }
 ]
 },
 "scoring_weights": {
 "Q1_business_model": {
 "coaching_consulting": 3,
-"agency": 3,
+"agency": -2,
 "digital_product": 2,
 "membership_subscription": 1,
 "saas_software": 1,

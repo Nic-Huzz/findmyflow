@@ -95,6 +95,7 @@ const HIDDEN_ROUTES = [
   '/log-in',
   '/get-started', // Onboarding persona assessment
   '/v/', // Public validation flows
+  '/validation-flows', // Validation flows manager
   '/try/', // Public lead magnet flows
   '/weekly-planning', // Full-screen planning flow
   '/nikigai/', // Flow finder flows
