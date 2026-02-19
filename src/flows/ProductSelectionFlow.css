@@ -12,6 +12,7 @@
   color: white;
   position: relative;
   box-sizing: border-box;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
@@ -1539,8 +1540,8 @@
 
 .product-selection-flow .feature-benefit-list li {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
+  flex-direction: column;
+  gap: 2px;
   padding: 8px 0;
   font-size: 13px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -1553,16 +1554,18 @@
 .product-selection-flow .fb-feature {
   color: white;
   font-weight: 500;
-  flex-shrink: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .product-selection-flow .fb-arrow {
-  color: #fbbf24;
-  flex-shrink: 0;
+  display: none;
 }
 
 .product-selection-flow .fb-benefit {
   color: rgba(255, 255, 255, 0.7);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* ============ MECHANISM STAGE (1a) ============ */
