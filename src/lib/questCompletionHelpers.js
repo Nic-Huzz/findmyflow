@@ -229,6 +229,10 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'flow_finder_explainer': 'flow_finder_explainer',
       'validation_explainer': 'validation_explainer',
       'product_explainer': 'product_explainer',
+      'testing_explainer': 'testing_explainer',
+      'offer_creation_explainer': 'offer_creation_explainer',
+      'campaign_explainer': 'campaign_explainer',
+      'launch_explainer': 'launch_explainer',
       'mind_space': 'mind_space_extraction',  // Matches JSON quest ID
       'milestone_read_money_model': 'milestone_read_money_model',  // Money Model Guide explainer
       // Healing explainers
@@ -270,6 +274,10 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'flow_finder_explainer': 5,
       'validation_explainer': 5,
       'product_explainer': 5,
+      'testing_explainer': 5,
+      'offer_creation_explainer': 5,
+      'campaign_explainer': 5,
+      'launch_explainer': 5,
       'play_list_finder': 10,
       'persona_identifier': 10,
       'mind_space_extraction': 10,  // Matches JSON quest ID
@@ -285,7 +293,11 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
     // Stage per quest (default 0 for Flow Finder)
     const questStages = {
       'validation_explainer': 1,
-      'product_explainer': 2
+      'product_explainer': 2,
+      'testing_explainer': 3,
+      'offer_creation_explainer': 5,
+      'campaign_explainer': 6,
+      'launch_explainer': 7
     };
     const stage = questStages[questId] || 0;
 
