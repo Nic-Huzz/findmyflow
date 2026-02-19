@@ -5,6 +5,7 @@
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   /* Space for bottom toolbar */
   padding-bottom: calc(60px + env(safe-area-inset-bottom, 0) + 2rem);
+  overflow-x: hidden;
 }
 
 /* Header */
@@ -1077,6 +1078,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   border: 2px solid transparent;
+  overflow: hidden;
+  word-break: break-word;
 }
 
 /* Only apply hover transforms on devices with a real pointer (not touch) */
