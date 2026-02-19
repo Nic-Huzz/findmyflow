@@ -75,10 +75,17 @@ function ValidationResponsesInput({ quest, onComplete }) {
     setError(null)
 
     try {
-      const { data: flowsData, error: flowsError } = await supabase
+      let flowsQuery = supabase
         .from('validation_flows')
         .select('*')
         .eq('creator_user_id', user.id)
+
+      // Filter by stage if quest specifies one (e.g. 'validation' vs 'testing')
+      if (quest.flow_stage) {
+        flowsQuery = flowsQuery.eq('stage', quest.flow_stage)
+      }
+
+      const { data: flowsData, error: flowsError } = await flowsQuery
         .order('created_at', { ascending: false })
 
       if (flowsError) throw flowsError
@@ -698,9 +705,9 @@ function ValidationResponsesInput({ quest, onComplete }) {
       {/* Flows List */}
       {flows.length === 0 ? (
         <div className="vri-empty">
-          <p>No validation flows created yet.</p>
-          <a href="/validation-flows" className="vri-create-btn">
-            Create Your First Validation Flow
+          <p>No {quest.flow_stage === 'testing' ? 'feedback' : 'validation'} flows created yet.</p>
+          <a href={quest.flow_stage === 'testing' ? '/validation-flows?type=testing' : '/validation-flows'} className="vri-create-btn">
+            Create Your First {quest.flow_stage === 'testing' ? 'Feedback' : 'Validation'} Flow
           </a>
         </div>
       ) : (
@@ -752,8 +759,8 @@ function ValidationResponsesInput({ quest, onComplete }) {
             </div>
           ))}
 
-          <a href="/validation-flows" className="vri-manage-link">
-            Manage Validation Flows →
+          <a href={quest.flow_stage === 'testing' ? '/validation-flows?type=testing' : '/validation-flows'} className="vri-manage-link">
+            Manage {quest.flow_stage === 'testing' ? 'Feedback' : 'Validation'} Flows →
           </a>
         </div>
       )}
