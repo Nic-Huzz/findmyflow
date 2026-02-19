@@ -1,251 +1,25 @@
-.money-model-guide {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
-  color: white;
-  padding: 40px 20px;
-}
+/**
+ * MoneyModelGuide.css
+ * Custom styles for Money Model explainer slides.
+ * Base styles come from FlowFinderExplainer.css.
+ */
 
-.guide-header {
-  text-align: center;
-  max-width: 900px;
-  margin: 0 auto 60px;
-}
-
-.guide-header h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  font-weight: 800;
-}
-
-.subtitle {
-  font-size: 1.1rem;
-  margin-bottom: 30px;
-  opacity: 0.9;
-}
-
-.hero-message {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 24px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.hero-message p {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
-
-.hero-message p:last-child {
-  margin-bottom: 0;
-}
-
-/* Money Model Overview */
-.money-model-overview {
-  max-width: 1200px;
-  margin: 0 auto 60px;
-}
-
-.money-model-overview h2 {
-  font-size: 1.8rem;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.definition-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-.definition-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 28px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.definition-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-.definition-card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 12px;
-  color: #fbbf24;
-}
-
-.definition-card p {
-  font-size: 1rem;
-  line-height: 1.6;
-  opacity: 0.95;
-}
-
-/* Four Steps */
-.four-steps {
-  max-width: 1400px;
-  margin: 0 auto 60px;
-}
-
-.four-steps h2 {
-  font-size: 1.8rem;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-.step-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 28px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* Example accordion cards */
+.mm-examples {
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  gap: 10px;
+  margin-top: 16px;
 }
 
-.step-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-.step-number {
-  background: rgba(251, 191, 36, 0.2);
-  color: #fbbf24;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  align-self: flex-start;
-  margin-bottom: 12px;
-  white-space: nowrap;
-}
-
-.step-icon {
-  font-size: 2rem;
-  margin-bottom: 16px;
-}
-
-.step-card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 12px;
-}
-
-.step-description {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 16px;
-  opacity: 0.9;
-}
-
-.examples-list {
-  margin-bottom: 20px;
-  flex-grow: 1;
-}
-
-.examples-list strong {
-  display: block;
-  margin-bottom: 8px;
-  color: #fbbf24;
-}
-
-.examples-list ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.examples-list li {
-  padding: 4px 0;
-  font-size: 0.9rem;
-  opacity: 0.85;
-}
-
-.examples-list li:before {
-  content: "→ ";
-  color: #fbbf24;
-  margin-right: 6px;
-}
-
-.take-assessment-btn {
-  display: block;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  color: #1f2937;
-  padding: 12px 24px;
-  border-radius: 8px;
-  text-align: center;
-  text-decoration: none;
-  font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.take-assessment-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
-}
-
-/* Result Section */
-.result-section {
-  max-width: 800px;
-  margin: 0 auto 60px;
-}
-
-.result-section h2 {
-  font-size: 1.8rem;
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.result-box {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
-  border: 2px solid #fbbf24;
+.mm-example-card {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 32px;
-  text-align: center;
+  overflow: hidden;
 }
 
-.result-box p {
-  font-size: 1.1rem;
-  font-weight: 600;
-  line-height: 1.6;
-}
-
-/* Examples Section */
-.examples-section {
-  max-width: 1400px;
-  margin: 0 auto 60px;
-}
-
-.examples-section h2 {
-  font-size: 1.8rem;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.examples-grid {
-  display: grid;
-  gap: 32px;
-}
-
-.example-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 32px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.example-toggle {
+.mm-example-toggle {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -254,332 +28,120 @@
   border: none;
   color: white;
   cursor: pointer;
-  padding: 0;
+  padding: 14px 16px;
 }
 
-.example-toggle h3 {
-  font-size: 1.3rem;
-  margin: 0;
+.mm-example-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #E9A23B;
   text-align: left;
-  color: #fbbf24;
 }
 
-.example-chevron {
-  font-size: 0.9rem;
-  opacity: 0.6;
+.mm-example-chevron {
+  font-size: 11px;
+  opacity: 0.5;
   flex-shrink: 0;
   margin-left: 12px;
 }
 
-.example-card.open .flow-diagram {
-  margin-top: 20px;
-}
-
-.flow-diagram {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  justify-content: center;
-}
-
-.flow-step {
+/* Flow steps inside expanded example */
+.mm-flow-steps {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  gap: 8px;
+  padding: 0 16px 14px;
 }
 
-.flow-type {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.flow-attraction {
-  background: rgba(96, 165, 250, 0.3);
-  border: 1px solid #60a5fa;
-}
-
-.flow-upsell {
-  background: rgba(34, 197, 94, 0.3);
-  border: 1px solid #22c55e;
-}
-
-.flow-downsell {
-  background: rgba(251, 146, 60, 0.3);
-  border: 1px solid #fb923c;
-}
-
-.flow-continuity {
-  background: rgba(168, 85, 247, 0.3);
-  border: 1px solid #a855f7;
-}
-
-.flow-detail {
-  font-size: 0.8rem;
-  opacity: 0.85;
-  text-align: center;
-  max-width: 120px;
-}
-
-.flow-arrow {
-  font-size: 1.5rem;
-  color: #fbbf24;
-  margin: 0 8px;
-}
-
-/* Important Notes */
-.important-notes {
-  max-width: 1200px;
-  margin: 0 auto 60px;
-}
-
-.important-notes h2 {
-  font-size: 1.8rem;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.notes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.note-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.mm-flow-item {
   display: flex;
-  gap: 12px;
   align-items: center;
+  gap: 10px;
 }
 
-.note-icon {
-  font-size: 1.2rem;
+.mm-flow-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
-.note-card p {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin: 0;
+.mm-attraction {
+  background: rgba(96, 165, 250, 0.3);
+  color: #60a5fa;
 }
 
-/* Key Insight */
-.key-insight {
-  max-width: 800px;
-  margin: 0 auto 60px;
+.mm-upsell {
+  background: rgba(34, 197, 94, 0.3);
+  color: #22c55e;
 }
 
-.key-insight h2 {
-  font-size: 1.8rem;
-  text-align: center;
-  margin-bottom: 24px;
+.mm-downsell {
+  background: rgba(251, 146, 60, 0.3);
+  color: #fb923c;
 }
 
-.insight-box {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
-  border: 2px solid #a855f7;
-  border-radius: 12px;
-  padding: 32px;
-  text-align: center;
+.mm-continuity {
+  background: rgba(168, 85, 247, 0.3);
+  color: #a855f7;
 }
 
-.insight-box p {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 16px;
+.mm-flow-detail {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
 }
 
-.insight-box .insight-subtext {
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 0.9;
-  margin-bottom: 0;
-}
-
-/* Build Stages */
-.build-stages {
-  max-width: 900px;
-  margin: 0 auto 60px;
-}
-
-.build-stages h2 {
-  font-size: 1.8rem;
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.stages-content {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 32px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.stages-content p {
-  font-size: 1rem;
-  line-height: 1.8;
-  text-align: center;
-}
-
-.stages-content strong {
-  color: #fbbf24;
-}
-
-/* Final Words */
-.final-words {
-  max-width: 900px;
-  margin: 0 auto 60px;
-}
-
-.final-words h2 {
-  font-size: 1.8rem;
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.final-message {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 32px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.final-message p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin-bottom: 20px;
-}
-
-.final-message p:last-child {
-  margin-bottom: 0;
-}
-
-.final-message p.emphasis {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fbbf24;
-  text-align: center;
-  margin-top: 24px;
-}
-
-.final-message p.quote-attribution {
-  font-size: 1rem;
-  font-style: italic;
-  opacity: 0.7;
-  text-align: center;
-  margin-top: 12px;
-  margin-bottom: 0;
-}
-
-/* CTA Section */
-.cta-section {
-  max-width: 1000px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.cta-section h2 {
-  font-size: 1.8rem;
-  margin-bottom: 16px;
-}
-
-.cta-section > p {
-  font-size: 1rem;
-  margin-bottom: 40px;
-  opacity: 0.9;
-}
-
-.cta-buttons {
+/* CTA grid on last slide */
+.mm-cta-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
 }
 
-.cta-button {
-  padding: 20px 24px;
-  border-radius: 12px;
+.mm-cta-link {
+  display: block;
+  padding: 12px 10px;
+  border-radius: 10px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1.1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: block;
+  font-size: 13px;
+  text-align: center;
+  transition: transform 0.2s ease;
 }
 
-.cta-button:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+.mm-cta-link:hover {
+  transform: translateY(-2px);
 }
 
-.cta-button.attraction {
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-  color: white;
+.mm-cta-link.mm-attraction {
+  background: rgba(96, 165, 250, 0.2);
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  color: #60a5fa;
 }
 
-.cta-button.upsell {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  color: #1a1a2e;
+.mm-cta-link.mm-upsell {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #22c55e;
 }
 
-.cta-button.downsell {
-  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
-  color: white;
+.mm-cta-link.mm-downsell {
+  background: rgba(251, 146, 60, 0.2);
+  border: 1px solid rgba(251, 146, 60, 0.4);
+  color: #fb923c;
 }
 
-.cta-button.continuity {
-  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
-  color: white;
+.mm-cta-link.mm-continuity {
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #a855f7;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .guide-header h1 {
-    font-size: 1.6rem;
-  }
-
-  .subtitle {
-    font-size: 1rem;
-  }
-
-  .money-model-overview h2,
-  .four-steps h2,
-  .examples-section h2,
-  .important-notes h2,
-  .key-insight h2,
-  .build-stages h2,
-  .final-words h2,
-  .cta-section h2 {
-    font-size: 1.5rem;
-  }
-
-  .steps-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .flow-diagram {
-    flex-direction: column;
-  }
-
-  .flow-arrow {
-    transform: rotate(90deg);
-    margin: 8px 0;
-  }
-
-  .definition-cards,
-  .notes-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .cta-buttons {
+@media (max-width: 480px) {
+  .mm-cta-grid {
     grid-template-columns: 1fr;
   }
 }
