@@ -526,7 +526,7 @@ function OfferBuilderFlow() {
       try {
         const { data: products, error } = await supabase
           .from('products')
-          .select('id, name, money_model_tier')
+          .select('id, name, money_model_tier, product_type')
           .eq('user_id', user.id)
         if (!error && products) {
           setExistingProducts(products)
@@ -834,7 +834,7 @@ function OfferBuilderFlow() {
 
   // Add current solution to list
   const addSolutionToList = () => {
-    if (!currentSolution.problemId || !currentSolution.description.trim() || !currentSolution.solutionType) return
+    if (!currentSolution.problemId || !currentSolution.description.trim() || (!currentSolution.existingProductId && !currentSolution.solutionType)) return
 
     setProblemSolutions(prev => [...prev, { ...currentSolution }])
     // Reset current solution and methods
@@ -1850,8 +1850,8 @@ function OfferBuilderFlow() {
     if (question.type === 'problem_solutions') {
       const allProblems = getAllProblems()
       const isValid = problemSolutions.length > 0
-      const canAddSolution = currentSolution.problemId && currentSolution.description.trim() && currentSolution.solutionType &&
-        (currentSolution.existingProductId || currentSolution.name?.trim())
+      const canAddSolution = currentSolution.problemId && currentSolution.description.trim() &&
+        (currentSolution.existingProductId || (currentSolution.solutionType && currentSolution.name?.trim()))
 
       // Calculate coverage - how many unique problems have at least one solution
       const coveredProblemIds = new Set(problemSolutions.map(s => s.problemId))

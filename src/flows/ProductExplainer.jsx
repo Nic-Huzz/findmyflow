@@ -111,20 +111,6 @@ export default function ProductExplainer() {
                 <p>Apply the Value Equation to maximise what your product is worth to your customers.</p>
               </div>
             </div>
-            <div className="validation-step">
-              <div className="step-icon">{"\u{1F9F2}"}</div>
-              <div className="step-info">
-                <h4>Lead Magnet</h4>
-                <p>Create a free taster that solves a real problem and builds instant trust.</p>
-              </div>
-            </div>
-            <div className="validation-step">
-              <div className="step-icon">{"\u{1F4E6}"}</div>
-              <div className="step-info">
-                <h4>Grand Slam Offer</h4>
-                <p>Package everything together with bonuses, guarantees, and a name that sticks.</p>
-              </div>
-            </div>
           </div>
         </div>
       )
