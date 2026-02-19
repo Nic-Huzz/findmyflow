@@ -67,6 +67,6 @@ export function calculateOfferScores(userAnswers, offersData) {
   return scores.sort((a, b) => {
     if (a.isDisqualified && !b.isDisqualified) return 1
     if (!a.isDisqualified && b.isDisqualified) return -1
-    return b.totalScore - a.totalScore
+    return b.confidence - a.confidence
   })
 }
