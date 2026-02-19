@@ -186,10 +186,9 @@ function MVPReadinessFlow() {
           }
         }
 
-        const prods = solutionsArray
+        const validSolutions = solutionsArray
           .filter(data => data && data.description)
           .map((data, idx) => {
-            // Determine the display name: user-entered name > existing product name > solution type label
             let displayName = data.name?.trim()
             if (!displayName && data.existingProductId) {
               displayName = existingProductsMap[data.existingProductId]
@@ -205,6 +204,46 @@ function MVPReadinessFlow() {
               typeLabel: SOLUTION_LABELS[data.solutionType] || data.solutionType
             }
           })
+
+        // Group solutions by existingProductId (same logic as ProductSelectionFlow)
+        const grouped = {}
+        const standalone = []
+
+        validSolutions.forEach(sol => {
+          if (sol.existingProductId) {
+            if (!grouped[sol.existingProductId]) grouped[sol.existingProductId] = []
+            grouped[sol.existingProductId].push(sol)
+          } else {
+            standalone.push(sol)
+          }
+        })
+
+        const prods = []
+
+        // Grouped products (2+ solutions sharing an existingProductId)
+        Object.entries(grouped).forEach(([productId, groupSolutions]) => {
+          if (groupSolutions.length >= 2) {
+            const productName = existingProductsMap[productId] || groupSolutions[0].label || 'Product'
+            const firstSol = groupSolutions[0]
+            prods.push({
+              id: `group_${productId}`,
+              type: 'group',
+              existingProductId: productId,
+              label: productName,
+              typeLabel: SOLUTION_LABELS[firstSol.solutionType] || firstSol.solutionType,
+              description: groupSolutions.map(s => s.description).join('; '),
+              solutions: groupSolutions
+            })
+          } else {
+            standalone.push(groupSolutions[0])
+          }
+        })
+
+        // Standalone solutions
+        standalone.forEach(sol => {
+          prods.push({ ...sol, type: 'standalone' })
+        })
+
         setProducts(prods)
       }
 
@@ -281,7 +320,7 @@ function MVPReadinessFlow() {
 
     try {
       // Save to mvp_readiness_assessments
-      await supabase.from('mvp_readiness_assessments').insert({
+      const { error: insertError } = await supabase.from('mvp_readiness_assessments').insert({
         user_id: user.id,
         is_ready_to_test: isReadyToTest,
         selected_product: selectedProduct,
@@ -290,6 +329,8 @@ function MVPReadinessFlow() {
         testers: testers.filter(t => t.trim()),
         access_plan: accessPlan || null
       })
+
+      if (insertError) throw insertError
 
       // Track flow completion
       try {
@@ -546,7 +587,13 @@ function MVPReadinessFlow() {
                   {product.typeLabel && product.label !== product.typeLabel && (
                     <div className="option-type">{product.typeLabel}</div>
                   )}
-                  <div className="option-description">{product.description}</div>
+                  {product.type === 'group' ? (
+                    <div className="option-description" style={{ fontSize: '12px' }}>
+                      {product.solutions.length} features from Offer Builder
+                    </div>
+                  ) : (
+                    <div className="option-description">{product.description}</div>
+                  )}
                 </button>
               ))}
             </div>
