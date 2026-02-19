@@ -215,6 +215,7 @@ const mapProfileToAnswers = (profile) => {
 const mapProblemAreaLabel = (value) => {
   const mapping = {
     'improving_health': 'More Health',
+    'increasing_wealth': 'More Wealth',
     'making_money': 'More Wealth',
     'loving_life': 'More Love',
     'health': 'More Health',
@@ -222,7 +223,7 @@ const mapProblemAreaLabel = (value) => {
     'love': 'More Love',
     'relationships': 'More Love' // Legacy support
   }
-  return mapping[value] || value || ''
+  return mapping[value] || (value ? value.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : '')
 }
 
 function OfferBuilderFlow() {
