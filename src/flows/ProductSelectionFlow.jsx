@@ -263,16 +263,16 @@ function ProductSelectionFlow() {
 
   // Existing products from products table (for looking up names)
   const [existingProducts, setExistingProducts] = useState([])
+  const [existingProductsLoaded, setExistingProductsLoaded] = useState(false)
 
-  // Load all solutions from the most recent offer builder assessment
+  // Load existing products first, then solutions (grouping depends on product names)
   useEffect(() => {
     if (user) {
-      loadProducts()
       loadExistingProducts()
     }
   }, [user])
 
-  // Load existing products for name lookup
+  // Load products for name lookup
   const loadExistingProducts = async () => {
     try {
       const { data: products, error } = await supabase
@@ -284,8 +284,17 @@ function ProductSelectionFlow() {
       }
     } catch (err) {
       console.error('Error loading existing products:', err)
+    } finally {
+      setExistingProductsLoaded(true)
     }
   }
+
+  // Load solutions after existing products are available (for grouping by name)
+  useEffect(() => {
+    if (user && existingProductsLoaded) {
+      loadProducts()
+    }
+  }, [user, existingProductsLoaded])
 
   // Note: Removed auto-register useEffect that was causing duplicate quest completions
   // Quest completion now only happens once when flow is completed
@@ -360,23 +369,70 @@ function ProductSelectionFlow() {
       if (assessment?.responses?.q8_solutions?.solutions) {
         // Get all solutions from Offer Builder
         const solutions = assessment.responses.q8_solutions.solutions
-
-        // Map all solutions (array or object) to products
         const solutionsArray = Array.isArray(solutions) ? solutions : Object.values(solutions)
-        const products = solutionsArray
-          .filter(data => data && data.description) // Only include solutions with content
+        const validSolutions = solutionsArray
+          .filter(data => data && data.description)
           .map((data, idx) => ({
             id: `solution_${idx}`,
             ...data,
             label: SOLUTION_LABELS[data.solutionType] || data.solutionType || 'Product'
           }))
 
+        // Group solutions by existingProductId
+        const grouped = {}
+        const standalone = []
+
+        validSolutions.forEach(sol => {
+          if (sol.existingProductId) {
+            if (!grouped[sol.existingProductId]) {
+              grouped[sol.existingProductId] = []
+            }
+            grouped[sol.existingProductId].push(sol)
+          } else {
+            standalone.push(sol)
+          }
+        })
+
+        // Build product list: grouped products + standalone solutions
+        const products = []
+
+        // Add grouped products (2+ solutions sharing an existingProductId)
+        Object.entries(grouped).forEach(([productId, groupSolutions]) => {
+          if (groupSolutions.length >= 2) {
+            // Find product name from existing products
+            const existingProduct = existingProducts.find(p => p.id === productId)
+            const firstSol = groupSolutions[0]
+            products.push({
+              id: `group_${productId}`,
+              type: 'group',
+              existingProductId: productId,
+              name: existingProduct?.name || firstSol.name || 'Product',
+              solutionType: firstSol.solutionType,
+              label: SOLUTION_LABELS[firstSol.solutionType] || firstSol.solutionType || 'Product',
+              description: `${groupSolutions.length} solutions grouped together`,
+              solutions: groupSolutions,
+              // Collect all unique problem texts for context
+              problemTexts: [...new Set(groupSolutions.map(s => s.problemText).filter(Boolean))]
+            })
+          } else {
+            // Single solution with an existingProductId — treat as standalone
+            standalone.push(groupSolutions[0])
+          }
+        })
+
+        // Add standalone solutions
+        standalone.forEach(sol => {
+          products.push({
+            ...sol,
+            type: 'standalone'
+          })
+        })
+
         setCoreProducts(products)
 
         // Check if we have existing product_selections data (for View Results)
         const existingSelections = assessment.responses?.product_selections
         if (showResults && existingSelections && Object.keys(existingSelections).length > 0) {
-          // Load existing answers and specs from saved data
           const loadedAnswers = {}
           const loadedSpecs = {}
           products.forEach(prod => {
@@ -398,12 +454,23 @@ function ProductSelectionFlow() {
           return
         }
 
-        // Initialize answers for each product
+        // Initialize answers and specs for each product
         const initialAnswers = {}
         const initialSpecs = {}
         products.forEach(prod => {
           initialAnswers[prod.id] = { dream_outcome: null, time_delay: null, perceived_likelihood: null }
-          initialSpecs[prod.id] = { mechanism: '', featureBenefits: [] }
+          // For groups, auto-fill features from solution descriptions
+          if (prod.type === 'group') {
+            initialSpecs[prod.id] = {
+              mechanism: '',
+              featureBenefits: prod.solutions.map(sol => ({
+                feature: sol.name || sol.label || SOLUTION_LABELS[sol.solutionType] || 'Feature',
+                benefit: sol.description || ''
+              }))
+            }
+          } else {
+            initialSpecs[prod.id] = { mechanism: '', featureBenefits: [] }
+          }
         })
         setAnswers(initialAnswers)
         setProductSpecs(initialSpecs)
@@ -425,6 +492,12 @@ function ProductSelectionFlow() {
 
   // Get display label for a product (includes existing product name or new product name)
   const getProductDisplayLabel = (product) => {
+    // For grouped products, show product name with feature count
+    if (product.type === 'group') {
+      const name = product.name || 'Product'
+      return name
+    }
+
     const baseLabel = SOLUTION_LABELS[product.solutionType] || product.solutionType || 'Product'
     // For existing products, use the linked product's name
     if (product.existingProductId) {
@@ -547,8 +620,12 @@ function ProductSelectionFlow() {
       }
     }))
 
-    // Move to features stage
-    setCurrentFeatureBenefits([{ feature: '', benefit: '' }])
+    // Move to features stage — preserve auto-filled features for groups
+    const existingFeatures = productSpecs[currentProduct.id]?.featureBenefits
+    if (!existingFeatures || existingFeatures.length === 0) {
+      setCurrentFeatureBenefits([{ feature: '', benefit: '' }])
+    }
+    // If currentFeatureBenefits already has content (from init or previous edit), keep it
     setStage(STAGES.FEATURES)
   }
 
@@ -646,12 +723,17 @@ function ProductSelectionFlow() {
     const nextIndex = currentProductIndex + 1
     setCurrentProductIndex(nextIndex)
     setCurrentQuestionIndex(0)
-    // Reset current inputs for next product, pre-fill mechanism with description from offer-builder
     const nextProduct = coreProducts[nextIndex]
-    setCurrentMechanism(productSpecs[nextProduct?.id]?.mechanism || nextProduct?.description || '')
+    // Pre-fill mechanism: use saved spec, or description for standalone products
+    setCurrentMechanism(
+      productSpecs[nextProduct?.id]?.mechanism ||
+      (nextProduct?.type === 'group' ? '' : (nextProduct?.description || ''))
+    )
+    // Pre-fill features: use saved spec (groups have auto-filled features from init)
+    const existingFeatures = productSpecs[nextProduct?.id]?.featureBenefits
     setCurrentFeatureBenefits(
-      productSpecs[nextProduct?.id]?.featureBenefits?.length > 0
-        ? productSpecs[nextProduct.id].featureBenefits
+      existingFeatures?.length > 0
+        ? existingFeatures
         : [{ feature: '', benefit: '' }]
     )
     setStage(STAGES.MECHANISM)
@@ -713,12 +795,17 @@ function ProductSelectionFlow() {
         const productScores = {}
         coreProducts.forEach(prod => {
           productScores[prod.id] = {
-            // Product specification (new)
+            // Product specification
             mechanism: productSpecs[prod.id]?.mechanism || '',
             featureBenefits: productSpecs[prod.id]?.featureBenefits || [],
             // Value equation answers
             answers: answers[prod.id],
-            valueScore: calculateValueScore(prod.id)
+            valueScore: calculateValueScore(prod.id),
+            // Track grouped solutions for traceability
+            ...(prod.type === 'group' ? {
+              groupedSolutionIds: prod.solutions.map(s => s.id),
+              existingProductId: prod.existingProductId
+            } : {})
           }
         })
 
@@ -852,7 +939,18 @@ function ProductSelectionFlow() {
                       <span className="preview-number">{idx + 1}</span>
                       <div className="preview-content">
                         <h4>{getProductDisplayLabel(prod)}</h4>
-                        <p>{prod.description}</p>
+                        {prod.type === 'group' ? (
+                          <>
+                            <p className="group-feature-count">{prod.solutions.length} features from Offer Builder</p>
+                            <ul className="group-solution-list">
+                              {prod.solutions.map((sol, i) => (
+                                <li key={i}>{sol.name || sol.description?.substring(0, 60) || sol.label}</li>
+                              ))}
+                            </ul>
+                          </>
+                        ) : (
+                          <p>{prod.description}</p>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -861,10 +959,16 @@ function ProductSelectionFlow() {
                 <button
                   className="primary-button glow-button"
                   onClick={() => {
-                    // Pre-fill mechanism with description from offer-builder (if available)
                     const firstProduct = coreProducts[0]
-                    setCurrentMechanism(firstProduct?.description || '')
-                    setCurrentFeatureBenefits([{ feature: '', benefit: '' }])
+                    // Pre-fill mechanism with description (standalone) or empty (group)
+                    setCurrentMechanism(firstProduct?.type === 'group' ? '' : (firstProduct?.description || ''))
+                    // Pre-fill features from initialSpecs (groups have auto-filled features)
+                    const existingFeatures = productSpecs[firstProduct?.id]?.featureBenefits
+                    setCurrentFeatureBenefits(
+                      existingFeatures?.length > 0
+                        ? existingFeatures
+                        : [{ feature: '', benefit: '' }]
+                    )
                     setStage(STAGES.MECHANISM)
                   }}
                   style={{ marginTop: '24px' }}
@@ -898,11 +1002,21 @@ function ProductSelectionFlow() {
           <div className="product-context">
             <span className="product-badge">Product {currentProductIndex + 1} of {coreProducts.length}</span>
             <h3 className="product-name">{getProductDisplayLabel(currentProduct)}</h3>
-            <p className="product-problem">Solving: {currentProduct.problemText}</p>
+            {currentProduct.type === 'group' ? (
+              <p className="product-problem">
+                Solving: {currentProduct.problemTexts?.join(', ') || 'multiple problems'}
+              </p>
+            ) : (
+              currentProduct.problemText && <p className="product-problem">Solving: {currentProduct.problemText}</p>
+            )}
           </div>
 
           <div className="question-content">
-            <h2 className="question-text">How does this solve their problem?</h2>
+            <h2 className="question-text">
+              {currentProduct.type === 'group'
+                ? `How does ${getProductDisplayLabel(currentProduct)} solve their problems?`
+                : 'How does this solve their problem?'}
+            </h2>
             <p className="question-subtext">
               Explain the approach or mechanism — what makes this solution work for them?
             </p>
@@ -953,7 +1067,9 @@ function ProductSelectionFlow() {
           <div className="question-content">
             <h2 className="question-text">What will you include?</h2>
             <p className="question-subtext">
-              List each feature and the specific benefit it provides to solve their problem.
+              {currentProduct.type === 'group'
+                ? `We've pre-filled ${currentProduct.solutions.length} features from your Offer Builder solutions. Edit, add, or remove as needed.`
+                : 'List each feature and the specific benefit it provides to solve their problem.'}
             </p>
 
             <div className="feature-benefit-table">
@@ -1045,8 +1161,14 @@ function ProductSelectionFlow() {
         <div className="question-container">
           <div className="product-context">
             <span className="product-badge">{getProductDisplayLabel(currentProduct)}</span>
-            {currentProduct.problemText && (
-              <p className="product-problem">Solving: {currentProduct.problemText}</p>
+            {currentProduct.type === 'group' ? (
+              currentProduct.problemTexts?.length > 0 && (
+                <p className="product-problem">Solving: {currentProduct.problemTexts.join(', ')}</p>
+              )
+            ) : (
+              currentProduct.problemText && (
+                <p className="product-problem">Solving: {currentProduct.problemText}</p>
+              )
             )}
           </div>
 
@@ -1128,8 +1250,14 @@ function ProductSelectionFlow() {
             <div className="next-product-card">
               <span className="next-badge">Product {currentProductIndex + 2} of {coreProducts.length}</span>
               <h2 className="next-product-name">{getProductDisplayLabel(nextProduct)}</h2>
-              {nextProduct.problemText && (
-                <p className="next-product-problem">Solving: {nextProduct.problemText}</p>
+              {nextProduct.type === 'group' ? (
+                <p className="next-product-problem">
+                  {nextProduct.solutions.length} features to define
+                </p>
+              ) : (
+                nextProduct.problemText && (
+                  <p className="next-product-problem">Solving: {nextProduct.problemText}</p>
+                )
               )}
             </div>
           </div>
@@ -1167,7 +1295,7 @@ function ProductSelectionFlow() {
             <div className="build-first-section">
               <div className="build-first-header">
                 <span className="build-first-badge">🎯 BUILD FIRST</span>
-                <h3>{buildFirstRec.recommended.description || buildFirstRec.recommended.label}</h3>
+                <h3>{getProductDisplayLabel(buildFirstRec.recommended)}</h3>
               </div>
               <p className="build-first-reason">{buildFirstRec.reason}</p>
               <div className="build-first-score">
@@ -1233,7 +1361,11 @@ function ProductSelectionFlow() {
                       <span className="level-icon">{level.icon}</span>
                       <div>
                         <h3>{getProductDisplayLabel(product)}</h3>
-                        <p className="score-description">{product.description}</p>
+                        <p className="score-description">
+                          {product.type === 'group'
+                            ? `${product.solutions.length} features grouped from Offer Builder`
+                            : product.description}
+                        </p>
                       </div>
                     </div>
                     <div className="header-right">
