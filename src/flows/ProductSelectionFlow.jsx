@@ -465,7 +465,7 @@ function ProductSelectionFlow() {
               mechanism: '',
               featureBenefits: prod.solutions.map(sol => ({
                 feature: sol.description || '',
-                benefit: ''
+                benefit: sol.problemText || ''
               }))
             }
           } else {
