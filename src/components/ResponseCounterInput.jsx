@@ -14,7 +14,7 @@
 
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import './ResponseCounterInput.css'
 
 function ResponseCounterInput({
@@ -101,11 +101,12 @@ function ResponseCounterInput({
         )}
       </div>
 
-      {/* Action link */}
+      {/* Action link - uses plain <a> to avoid React Router startTransition
+         which silently prevents lazy-loaded pages from rendering */}
       {quest.actionLink && (
-        <Link to={quest.actionLink} className="response-action-link">
+        <a href={quest.actionLink} className="response-action-link">
           Create / View Form
-        </Link>
+        </a>
       )}
 
       {/* Complete button - shown when target reached but not yet marked complete */}

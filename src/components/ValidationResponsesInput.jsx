@@ -16,7 +16,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
-import { Link } from 'react-router-dom'
 import {
   checkValidationProgressNotification,
   sendAnalysisUnlockedNotification
@@ -695,9 +694,9 @@ function ValidationResponsesInput({ quest, onComplete }) {
       {flows.length === 0 ? (
         <div className="vri-empty">
           <p>No validation flows created yet.</p>
-          <Link to="/validation-flows" className="vri-create-btn">
+          <a href="/validation-flows" className="vri-create-btn">
             Create Your First Validation Flow
-          </Link>
+          </a>
         </div>
       ) : (
         <div className="vri-flows-list">
@@ -748,9 +747,9 @@ function ValidationResponsesInput({ quest, onComplete }) {
             </div>
           ))}
 
-          <Link to="/validation-flows" className="vri-manage-link">
+          <a href="/validation-flows" className="vri-manage-link">
             Manage Validation Flows →
-          </Link>
+          </a>
         </div>
       )}
 
@@ -898,9 +897,9 @@ function ValidationResponsesInput({ quest, onComplete }) {
               >
                 🏢 Competitors
               </button>
-              <Link to="/voice-of-customer" className="vri-tab vri-tab-link">
+              <a href="/voice-of-customer" className="vri-tab vri-tab-link">
                 💬 VoC Database
-              </Link>
+              </a>
             </div>
           )}
 

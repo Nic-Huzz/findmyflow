@@ -97,15 +97,32 @@ async function generateUniqueShareToken() {
  */
 export async function getUserValidationFlows(userId) {
   try {
-    const { data, error } = await supabase
+    const { data: flows, error } = await supabase
       .from('validation_flows')
       .select('*')
       .eq('creator_user_id', userId)
       .order('created_at', { ascending: false })
 
     if (error) throw error
+    if (!flows || flows.length === 0) return []
 
-    return data || []
+    // Compute actual completed session counts (response_count column can drift)
+    const flowIds = flows.map(f => f.id)
+    const { data: sessions } = await supabase
+      .from('validation_sessions')
+      .select('flow_id')
+      .in('flow_id', flowIds)
+      .eq('is_completed', true)
+
+    const counts = {}
+    ;(sessions || []).forEach(s => {
+      counts[s.flow_id] = (counts[s.flow_id] || 0) + 1
+    })
+
+    return flows.map(f => ({
+      ...f,
+      response_count: counts[f.id] || 0
+    }))
   } catch (err) {
     console.error('Error fetching validation flows:', err)
     return []

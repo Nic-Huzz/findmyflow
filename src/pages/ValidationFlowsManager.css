@@ -2271,20 +2271,14 @@
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-/* Animated Values */
+/* Animated Values — opacity only (no translateY to prevent layout jitter in scroll containers) */
 .animate-value {
-  animation: vfm-countUp 0.8s ease-out;
+  animation: vfm-countUp 0.5s ease-out;
 }
 
 @keyframes vfm-countUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes vfm-fadeIn {
@@ -2736,16 +2730,10 @@
   animation: statusPulse 2s ease-in-out infinite;
 }
 
-/* Response card entrance in viewer */
+/* Response card entrance — opacity only (no translateX to prevent side-to-side jitter) */
 @keyframes responseSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .dashboard-container .response-card {
@@ -2842,26 +2830,24 @@
 
 .dashboard-container .ai-summary-section {
   animation: aiGlow 4s ease-in-out infinite;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease;
 }
 
 .dashboard-container .ai-summary-section:hover {
-  transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(251, 191, 36, 0.15);
 }
 
-/* Analytics dashboard entrance */
+/* Analytics dashboard entrance — opacity only inside responses viewer */
 .analytics-dashboard {
-  animation: pageSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  animation: vfm-fadeIn 0.4s ease both;
 }
 
-/* Analytics stat hover enhancement */
+/* Analytics stat hover — no transform to avoid jitter in scroll container */
 .analytics-stat {
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background 0.25s ease;
 }
 
 .analytics-stat:hover {
-  transform: translateY(-3px);
   background: rgba(255, 255, 255, 0.08);
 }
 
