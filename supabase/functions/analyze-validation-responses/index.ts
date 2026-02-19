@@ -6,6 +6,8 @@
 // - Competitor analysis
 // - Validation Score
 // - Voice of Customer database entries
+//
+// Uses 2 parallel Claude calls for speed (core insights + advanced analysis)
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
@@ -119,55 +121,8 @@ serve(async (req) => {
       apiKey: Deno.env.get('ANTHROPIC_API_KEY'),
     })
 
-    const systemPrompt = `You are an expert at analyzing customer validation survey data to extract actionable insights for entrepreneurs.
-
-CONTEXT:
-- Problem: ${context.problemArea || 'helping people solve a problem'}
-- Solution: ${context.solutionConcept || 'a service or product'}
-- Audience: ${context.audienceDescription || 'potential customers'}
-- Total respondents: ${totalResponses}
-
-YOUR TASK: Perform a comprehensive analysis that includes:
-
-1. BADGE SYSTEM for each insight:
-   - "opportunity" (🎯): HIGH-VALUE ACTION ITEM (50%+ mention OR intense emotion)
-   - "gold" (✨): STEAL THIS LANGUAGE (vivid, memorable customer words)
-   - "pattern" (📊): VALIDATED BY MULTIPLE (3+ respondents)
-   - null: No special badge
-
-2. RESPONSE SEGMENTATION - Categorize respondents into:
-   - "high_intent": Strong pain, willing to pay, urgency
-   - "budget_conscious": Interested but price-sensitive
-   - "solution_seekers": Actively looking for solutions
-
-3. ACTIONABLE TO-DOS - Generate specific tasks from insights:
-   - Each action should be concrete and implementable
-   - Include source (what insight triggered this)
-   - Prioritize: high, medium, low
-   - Categories: messaging, pricing, product, marketing, objection_handling
-
-4. COMPETITOR ANALYSIS - Extract from responses:
-   - What alternatives have they tried?
-   - Why did those fail?
-   - What gaps can you fill?
-   - Positioning opportunity
-
-5. VALIDATION SCORE (0-100) with components:
-   - Interest (0-100): Response engagement, detail in answers
-   - Urgency (0-100): Pain intensity, time sensitivity
-   - Budget (0-100): Willingness to pay, price signals
-   - Fit (0-100): Alignment with your offer
-   - Overall score + recommendation
-
-6. VOICE OF CUSTOMER entries - Extract quotable phrases:
-   - Exact customer language to use in copy
-   - Categorize: pain_point, dream_outcome, objection, language, competitor, pricing
-   - Rate emotion and intensity (1-10)
-   - Extract keywords for searchability`
-
-    const userPrompt = `Analyze these validation survey responses comprehensively:
-
-QUESTIONS AND RESPONSES:
+    // Build the shared data prompt (used by both calls)
+    const dataPrompt = `QUESTIONS AND RESPONSES:
 ${Object.entries(responsesByQuestion).map(([stepId, data]) => {
   const answerList = data.answers.map((a, i) => {
     if (typeof a === 'object') {
@@ -180,25 +135,39 @@ Q (${stepId}): ${data.question}
 Type: ${data.type}
 Responses (${data.answers.length}):
 ${answerList}`
-}).join('\n---\n')}
+}).join('\n---\n')}`
 
-Generate comprehensive analysis with all components. Be thorough but practical.`
+    const sharedContext = `CONTEXT:
+- Problem: ${context.problemArea || 'helping people solve a problem'}
+- Solution: ${context.solutionConcept || 'a service or product'}
+- Audience: ${context.audienceDescription || 'potential customers'}
+- Total respondents: ${totalResponses}`
 
-    console.log('🤖 Calling Claude for comprehensive analysis...')
+    console.log('🤖 Calling Claude (2 parallel calls)...')
 
-    const completion = await anthropic.messages.create({
+    // CALL 1: Core Insights (key findings, pain points, language, summary, score)
+    const coreCall = anthropic.messages.create({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 8192,
-      temperature: 0.7,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }],
+      max_tokens: 4096,
+      temperature: 0.5,
+      system: `You are an expert at analyzing customer validation survey data for entrepreneurs. Extract key insights with badges and a validation score.
+
+${sharedContext}
+
+BADGE SYSTEM for each insight:
+- "opportunity": HIGH-VALUE ACTION ITEM (50%+ mention OR intense emotion)
+- "gold": STEAL THIS LANGUAGE (vivid, memorable customer words)
+- "pattern": VALIDATED BY MULTIPLE (3+ respondents)
+- null: No special badge
+
+Be concise and practical. Focus on the most important findings.`,
+      messages: [{ role: 'user', content: `Analyze these validation responses:\n\n${dataPrompt}\n\nExtract core insights, pain points, dream outcomes, objections, pricing signals, language patterns, and a validation score.` }],
       tools: [{
-        name: 'save_comprehensive_analysis',
-        description: 'Save the comprehensive validation analysis with all components',
+        name: 'save_core_analysis',
+        description: 'Save the core validation analysis',
         input_schema: {
           type: 'object',
           properties: {
-            // Original fields with badges
             key_insights: {
               type: 'array',
               items: {
@@ -207,7 +176,7 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
                   text: { type: 'string' },
                   badge: { type: ['string', 'null'], enum: ['opportunity', 'gold', 'pattern', null] }
                 },
-                required: ['text', 'badge']
+                required: ['text']
               }
             },
             pain_points: {
@@ -216,10 +185,9 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
                 type: 'object',
                 properties: {
                   text: { type: 'string' },
-                  badge: { type: ['string', 'null'], enum: ['opportunity', 'gold', 'pattern', null] },
-                  frequency: { type: 'number' }
+                  badge: { type: ['string', 'null'], enum: ['opportunity', 'gold', 'pattern', null] }
                 },
-                required: ['text', 'badge']
+                required: ['text']
               }
             },
             dream_outcomes: {
@@ -230,7 +198,7 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
                   text: { type: 'string' },
                   badge: { type: ['string', 'null'], enum: ['opportunity', 'gold', 'pattern', null] }
                 },
-                required: ['text', 'badge']
+                required: ['text']
               }
             },
             objections: {
@@ -239,10 +207,9 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
                 type: 'object',
                 properties: {
                   text: { type: 'string' },
-                  badge: { type: ['string', 'null'], enum: ['opportunity', 'gold', 'pattern', null] },
-                  frequency: { type: 'number' }
+                  badge: { type: ['string', 'null'], enum: ['opportunity', 'gold', 'pattern', null] }
                 },
-                required: ['text', 'badge']
+                required: ['text']
               }
             },
             pricing_signals: {
@@ -251,7 +218,7 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
                 text: { type: 'string' },
                 badge: { type: ['string', 'null'], enum: ['opportunity', 'gold', 'pattern', null] }
               },
-              required: ['text', 'badge']
+              required: ['text']
             },
             language_patterns: {
               type: 'array',
@@ -261,9 +228,50 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
                   text: { type: 'string' },
                   badge: { type: ['string', 'null'], enum: ['opportunity', 'gold', 'pattern', null] }
                 },
-                required: ['text', 'badge']
+                required: ['text']
               }
             },
+            summary: { type: 'string' },
+            validation_score: {
+              type: 'object',
+              properties: {
+                overall: { type: 'number' },
+                components: {
+                  type: 'object',
+                  properties: {
+                    interest: { type: 'object', properties: { score: { type: 'number' }, reason: { type: 'string' } } },
+                    urgency: { type: 'object', properties: { score: { type: 'number' }, reason: { type: 'string' } } },
+                    budget: { type: 'object', properties: { score: { type: 'number' }, reason: { type: 'string' } } },
+                    fit: { type: 'object', properties: { score: { type: 'number' }, reason: { type: 'string' } } }
+                  }
+                },
+                recommendation: { type: 'string' },
+                confidence: { type: 'string', enum: ['low', 'medium', 'high'] }
+              }
+            }
+          },
+          required: ['key_insights', 'pain_points', 'dream_outcomes', 'objections', 'pricing_signals', 'language_patterns', 'summary', 'validation_score']
+        }
+      }]
+    })
+
+    // CALL 2: Advanced Analysis (segmentation, actions, competitors, question analysis, VoC)
+    const advancedCall = anthropic.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 4096,
+      temperature: 0.5,
+      system: `You are an expert at analyzing customer validation survey data for entrepreneurs. Generate strategic analysis: respondent segmentation, actionable tasks, competitor insights, and voice-of-customer quotes.
+
+${sharedContext}
+
+Be concise and practical. Focus on actionable output.`,
+      messages: [{ role: 'user', content: `Analyze these validation responses for strategic insights:\n\n${dataPrompt}\n\nGenerate: question-by-question analysis, respondent segmentation, suggested actions, competitor analysis, and voice-of-customer quotes.` }],
+      tools: [{
+        name: 'save_advanced_analysis',
+        description: 'Save the advanced strategic analysis',
+        input_schema: {
+          type: 'object',
+          properties: {
             question_analysis: {
               type: 'array',
               items: {
@@ -276,9 +284,6 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
                 required: ['question', 'summary']
               }
             },
-            summary: { type: 'string' },
-
-            // NEW: Response Segmentation
             segmentation: {
               type: 'object',
               properties: {
@@ -311,23 +316,19 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
                 }
               }
             },
-
-            // NEW: Actionable To-Dos
             suggested_actions: {
               type: 'array',
               items: {
                 type: 'object',
                 properties: {
-                  action: { type: 'string', description: 'Specific actionable task' },
-                  source: { type: 'string', description: 'What insight triggered this' },
+                  action: { type: 'string' },
+                  source: { type: 'string' },
                   priority: { type: 'string', enum: ['high', 'medium', 'low'] },
                   category: { type: 'string', enum: ['messaging', 'pricing', 'product', 'marketing', 'objection_handling'] }
                 },
-                required: ['action', 'source', 'priority', 'category']
+                required: ['action', 'priority', 'category']
               }
             },
-
-            // NEW: Competitor Analysis
             competitor_analysis: {
               type: 'object',
               properties: {
@@ -337,90 +338,50 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
                 positioning_opportunity: { type: 'string' }
               }
             },
-
-            // NEW: Validation Score
-            validation_score: {
-              type: 'object',
-              properties: {
-                overall: { type: 'number', minimum: 0, maximum: 100 },
-                components: {
-                  type: 'object',
-                  properties: {
-                    interest: {
-                      type: 'object',
-                      properties: {
-                        score: { type: 'number', minimum: 0, maximum: 100 },
-                        reason: { type: 'string' }
-                      }
-                    },
-                    urgency: {
-                      type: 'object',
-                      properties: {
-                        score: { type: 'number', minimum: 0, maximum: 100 },
-                        reason: { type: 'string' }
-                      }
-                    },
-                    budget: {
-                      type: 'object',
-                      properties: {
-                        score: { type: 'number', minimum: 0, maximum: 100 },
-                        reason: { type: 'string' }
-                      }
-                    },
-                    fit: {
-                      type: 'object',
-                      properties: {
-                        score: { type: 'number', minimum: 0, maximum: 100 },
-                        reason: { type: 'string' }
-                      }
-                    }
-                  }
-                },
-                recommendation: { type: 'string' },
-                confidence: { type: 'string', enum: ['low', 'medium', 'high'] }
-              }
-            },
-
-            // NEW: Voice of Customer entries
             voice_of_customer: {
               type: 'array',
-              description: 'Quotable customer language for copy/messaging',
               items: {
                 type: 'object',
                 properties: {
-                  quote: { type: 'string', description: 'Exact customer words' },
+                  quote: { type: 'string' },
                   category: { type: 'string', enum: ['pain_point', 'dream_outcome', 'objection', 'language', 'competitor', 'pricing'] },
-                  emotion: { type: 'string', description: 'Dominant emotion (frustrated, hopeful, confused, excited, skeptical)' },
-                  intensity: { type: 'number', minimum: 1, maximum: 10 },
+                  emotion: { type: 'string' },
+                  intensity: { type: 'number' },
                   keywords: { type: 'array', items: { type: 'string' } }
                 },
-                required: ['quote', 'category', 'emotion', 'intensity', 'keywords']
+                required: ['quote', 'category']
               }
             }
           },
-          required: ['key_insights', 'pain_points', 'dream_outcomes', 'objections', 'pricing_signals', 'language_patterns', 'question_analysis', 'summary', 'segmentation', 'suggested_actions', 'competitor_analysis', 'validation_score', 'voice_of_customer']
+          required: ['question_analysis', 'segmentation', 'suggested_actions', 'competitor_analysis', 'voice_of_customer']
         }
       }]
     })
 
-    console.log('✅ Claude response received')
+    // Run both calls in parallel
+    const [coreResult, advancedResult] = await Promise.all([coreCall, advancedCall])
 
-    const toolUse = completion.content.find((block: any) => block.type === 'tool_use')
+    console.log('✅ Both Claude calls completed')
 
-    if (!toolUse || toolUse.name !== 'save_comprehensive_analysis') {
-      console.error('No valid tool use in Claude response')
-      throw new Error('AI did not return structured analysis')
+    // Extract tool use results
+    const coreToolUse = coreResult.content.find((block: any) => block.type === 'tool_use')
+    const advancedToolUse = advancedResult.content.find((block: any) => block.type === 'tool_use')
+
+    if (!coreToolUse) {
+      console.error('No tool use in core analysis response')
+      throw new Error('AI did not return core analysis')
     }
 
-    const analysis = toolUse.input
+    const core = coreToolUse.input
+    const advanced = advancedToolUse?.input || {}
 
     // Handle pricing_signals backward compatibility
-    let pricingSignalsValue = analysis.pricing_signals
+    let pricingSignalsValue = core.pricing_signals
     if (typeof pricingSignalsValue === 'string') {
       pricingSignalsValue = { text: pricingSignalsValue, badge: null }
     }
 
-    // Save to validation_analysis table
+    // Save to validation_analysis table (merged from both calls)
     const { data: savedAnalysis, error: saveError } = await supabase
       .from('validation_analysis')
       .insert({
@@ -429,22 +390,24 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
         total_responses: totalResponses,
         flows_analyzed: flows.length,
         response_snapshot: responseSnapshot,
-        key_insights: analysis.key_insights,
-        pain_points: analysis.pain_points,
-        dream_outcomes: analysis.dream_outcomes,
-        objections: analysis.objections,
+        // Core analysis fields
+        key_insights: core.key_insights,
+        pain_points: core.pain_points,
+        dream_outcomes: core.dream_outcomes,
+        objections: core.objections,
         pricing_signals: pricingSignalsValue,
-        language_patterns: analysis.language_patterns,
-        question_analysis: analysis.question_analysis,
-        summary: analysis.summary,
+        language_patterns: core.language_patterns,
+        summary: core.summary,
+        validation_score: core.validation_score,
+        // Context
         context_problem: context.problemArea,
         context_solution: context.solutionConcept,
         context_audience: context.audienceDescription,
-        // New fields
-        segmentation: analysis.segmentation,
-        suggested_actions: analysis.suggested_actions,
-        competitor_analysis: analysis.competitor_analysis,
-        validation_score: analysis.validation_score
+        // Advanced analysis fields
+        question_analysis: advanced.question_analysis || [],
+        segmentation: advanced.segmentation || null,
+        suggested_actions: advanced.suggested_actions || [],
+        competitor_analysis: advanced.competitor_analysis || null
       })
       .select()
       .single()
@@ -457,16 +420,17 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
     console.log(`✅ Analysis #${analysisNumber} saved:`, savedAnalysis.id)
 
     // Save Voice of Customer entries
-    if (analysis.voice_of_customer && analysis.voice_of_customer.length > 0) {
-      const vocEntries = analysis.voice_of_customer.map((voc: any) => ({
+    const vocData = advanced.voice_of_customer
+    if (vocData && vocData.length > 0) {
+      const vocEntries = vocData.map((voc: any) => ({
         user_id: userId,
         analysis_id: savedAnalysis.id,
         quote: voc.quote,
         category: voc.category,
-        emotion: voc.emotion,
-        intensity: voc.intensity,
-        keywords: voc.keywords,
-        respondent_segment: null // Could be enhanced later
+        emotion: voc.emotion || null,
+        intensity: voc.intensity || 5,
+        keywords: voc.keywords || [],
+        respondent_segment: null
       }))
 
       const { error: vocError } = await supabase
@@ -486,7 +450,7 @@ Generate comprehensive analysis with all components. Be thorough but practical.`
         success: true,
         analysis: savedAnalysis,
         analysisNumber,
-        vocEntriesCount: analysis.voice_of_customer?.length || 0
+        vocEntriesCount: vocData?.length || 0
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )

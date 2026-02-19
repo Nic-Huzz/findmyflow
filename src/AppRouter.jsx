@@ -37,7 +37,7 @@ import PublicValidationFlow from './pages/PublicValidationFlow'
 const MePage = lazyRetry(() => import('./pages/MePage'))
 const Challenge = lazyRetry(() => import('./Challenge'))
 
-import { preloadMePage, preloadChallenge } from './lib/preloadRoutes'
+import { preloadMePage, preloadChallenge, preloadFlowCompass, preloadProfileHub } from './lib/preloadRoutes'
 import AuthGate from './AuthGate'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
@@ -66,12 +66,14 @@ function ScrollToTop() {
 
 
 // Preload core pages after initial render so they're ready when user navigates.
-// Uses requestIdleCallback where available, falls back to setTimeout.
+// All 4 bottom toolbar routes are preloaded so navigate() works instantly.
 function PreloadCoreRoutes() {
   React.useEffect(() => {
     const preload = () => {
       preloadMePage()
       preloadChallenge()
+      preloadFlowCompass()
+      preloadProfileHub()
     }
     const id = typeof requestIdleCallback === 'function'
       ? requestIdleCallback(preload)
@@ -345,6 +347,19 @@ function ConditionalBottomToolbar() {
   return <BottomToolbar />
 }
 
+// Wrapper that adds key={location.key} to Suspense so lazy routes
+// show the loading spinner instead of freezing on the old page.
+// Without this, navigate() uses startTransition which suppresses
+// Suspense fallbacks during lazy chunk loading.
+function SuspenseRoutes({ children }) {
+  const location = useLocation()
+  return (
+    <Suspense key={location.key} fallback={<LoadingSpinner />}>
+      {children}
+    </Suspense>
+  )
+}
+
 function AppRouter() {
   return (
     <ErrorBoundary>
@@ -354,7 +369,7 @@ function AppRouter() {
           <ScrollToTop />
           <PreloadCoreRoutes />
           <LocationAwareErrorBoundary>
-          <Suspense fallback={<LoadingSpinner />}>
+          <SuspenseRoutes>
             <Routes>
               {/* Landing Page - Public */}
               <Route path="/" element={<LandingPage />} />
@@ -1007,7 +1022,7 @@ function AppRouter() {
               </AuthGate>
             } />
             </Routes>
-          </Suspense>
+          </SuspenseRoutes>
           <ConditionalBottomToolbar />
           <ConditionalZarlo />
           </LocationAwareErrorBoundary>
