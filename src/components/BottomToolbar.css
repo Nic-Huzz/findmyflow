@@ -62,6 +62,8 @@ body.project-selector-active .bottom-toolbar {
   cursor: pointer;
   color: var(--toolbar-text);
   font-family: inherit;
+  font-size: inherit;
+  text-decoration: none;
   transition: all 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }

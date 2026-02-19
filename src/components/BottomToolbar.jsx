@@ -7,25 +7,9 @@
  * CRM Section: Sales (/crm/sales) → Marketing (/crm/marketing) → Analytics (/crm/analytics) → Portal (back to challenge)
  */
 
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import {
-  preloadMePage,
-  preloadChallenge,
-  preloadFlowCompass,
-  preloadProfileHub,
-  preloadCRMDashboard,
-} from '../lib/preloadRoutes'
 import './BottomToolbar.css'
-
-// Map nav paths to their preload functions
-const PRELOAD_MAP = {
-  '/me': preloadMePage,
-  '/7-day-challenge': preloadChallenge,
-  '/flow-compass': preloadFlowCompass,
-  '/profile-hub': preloadProfileHub,
-  '/crm': preloadCRMDashboard,
-}
 
 // Main app navigation items
 const MAIN_NAV_ITEMS = [
@@ -130,7 +114,6 @@ const HIDDEN_ROUTES = [
 
 function BottomToolbar() {
   const location = useLocation()
-  const navigate = useNavigate()
   const [isOnboarding, setIsOnboarding] = useState(false)
 
   // Watch for onboarding-active, project-selector-active, or modal-active class on body
@@ -216,18 +199,19 @@ function BottomToolbar() {
   return (
     <nav className={`bottom-toolbar ${isCRMSection ? 'crm-toolbar' : 'main-toolbar'}`}>
       {navItems.map(item => (
-        <button
+        // Use plain <a> instead of navigate() — React Router v7 wraps navigate()
+        // in startTransition which suppresses Suspense fallbacks for lazy routes.
+        // Plain links force a full browser navigation that always works.
+        <a
           key={item.id}
+          href={item.path}
           className={`toolbar-item ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''} ${item.isLaunch ? 'launch-item' : ''}`}
-          onClick={() => navigate(item.path)}
-          onMouseEnter={() => PRELOAD_MAP[item.path]?.()}
-          onTouchStart={() => PRELOAD_MAP[item.path]?.()}
           aria-label={item.label}
           aria-current={isActive(item) ? 'page' : undefined}
         >
           <span className="toolbar-icon">{item.icon}</span>
           <span className="toolbar-label">{item.label}</span>
-        </button>
+        </a>
       ))}
     </nav>
   )
