@@ -385,6 +385,19 @@
   font-size: 14px;
 }
 
+/* ============ CROSS-FLOW PREFILL INDICATOR ============ */
+
+.flow-base .option-card.prefilled {
+  border-color: rgba(233, 162, 59, 0.4);
+  background: rgba(233, 162, 59, 0.08);
+}
+
+.flow-base .prefill-hint {
+  font-size: 11px;
+  color: rgba(233, 162, 59, 0.7);
+  margin-top: 4px;
+}
+
 /* ============ OPTION BUTTONS (for selections) ============ */
 
 .flow-base .option-btn {

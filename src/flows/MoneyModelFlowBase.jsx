@@ -5,7 +5,7 @@
  * This component handles the common logic for all 6 Money Model assessment flows.
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
@@ -19,6 +19,7 @@ import { trackFlowCompletion } from '../lib/flowTracking'
 import { FlowFeedback } from '../components/FlowFeedback'
 import { cacheBustUrl } from '../lib/fetchJson'
 import { calculateOfferScores } from '../lib/scoring'
+import { loadPrefillAnswers } from '../lib/moneyModelPrefill'
 import '../styles/flow-base.css'
 
 // Visibility layers for 2D pattern recognition (WHERE the resistance shows up)
@@ -105,7 +106,11 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
   // Auto-save state
   const [showResumePrompt, setShowResumePrompt] = useState(false)
   const [savedProgressData, setSavedProgressData] = useState(null)
-  const { saveProgress, loadProgress, clearProgress } = useAutoSave(config.flowType, user?.id)
+  const { saveProgress, loadProgress, clearProgress, hasProgress } = useAutoSave(config.flowType, user?.id)
+
+  // Cross-flow prefill state
+  const [prefillAnswers, setPrefillAnswers] = useState({})
+  const hasStartedFlowRef = useRef(false)
 
   // PRE-ACTION state
   const [preActionFeeling, setPreActionFeeling] = useState(null)
@@ -209,6 +214,26 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
     }
   }, [user, loadProgress])
 
+  // Load cross-flow prefill data from previously completed Money Model flows
+  useEffect(() => {
+    if (!user || !questionsData) return
+
+    let cancelled = false
+    async function loadPrefill() {
+      const prefilled = await loadPrefillAnswers(config.flowType, user.id, questionsData)
+      if (cancelled || !prefilled || Object.keys(prefilled).length === 0) return
+
+      setPrefillAnswers(prefilled)
+      // Only apply to answers if no saved progress AND user hasn't started the flow yet
+      // (prevents late-arriving network response from overwriting in-progress answers)
+      if (!hasProgress() && !hasStartedFlowRef.current) {
+        setAnswers(prefilled)
+      }
+    }
+    loadPrefill()
+    return () => { cancelled = true }
+  }, [user, questionsData, config.flowType, hasProgress])
+
   // Note: Removed auto-register useEffect that was causing duplicate quest completions
   // Quest completion now only happens once when flow is completed via handleSave
 
@@ -296,6 +321,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
 
   // Handle resuming saved progress (auto-save)
   const handleResumeProgress = () => {
+    hasStartedFlowRef.current = true
     if (savedProgressData) {
       setStage(savedProgressData.stage)
       setAnswers(savedProgressData.answers || {})
@@ -306,7 +332,9 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
 
   // Handle starting fresh (auto-save)
   const handleStartFresh = () => {
+    hasStartedFlowRef.current = true
     clearProgress()
+    setAnswers({ ...prefillAnswers })  // Apply cross-flow prefill for fresh start
     setShowResumePrompt(false)
     setSavedProgressData(null)
     setStage(STAGES.WELCOME)
@@ -364,7 +392,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
           canRetry: true
         })
         if (retry) {
-          return handleSubmit()
+          return handleSaveResults()
         }
         return
       }
@@ -564,7 +592,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
               </div>
               <button
                 className="primary-button glow-button"
-                onClick={() => setStage(STAGES.WELCOME)}
+                onClick={() => { hasStartedFlowRef.current = true; setStage(STAGES.WELCOME) }}
               >
                 I've Got Time, Let's Go
               </button>
@@ -599,11 +627,14 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
             {question.options.map((option, index) => (
               <button
                 key={index}
-                className="option-card"
+                className={`option-card${answers[question.id]?.value === option.value && prefillAnswers[question.id] ? ' prefilled' : ''}`}
                 onClick={() => handleOptionSelect(question.id, option)}
               >
                 <div className="option-label">{option.label}</div>
                 {option.description && <div className="option-description">{option.description}</div>}
+                {answers[question.id]?.value === option.value && prefillAnswers[question.id] && (
+                  <div className="prefill-hint">From your previous assessment</div>
+                )}
               </button>
             ))}
           </div>
