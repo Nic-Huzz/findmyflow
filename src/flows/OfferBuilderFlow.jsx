@@ -2076,34 +2076,39 @@ function OfferBuilderFlow() {
               {/* Problem dropdown */}
               <div className="form-field">
                 <label>Which problem does this solve?</label>
-                <select
-                  value={currentSolution.problemId}
-                  onChange={(e) => {
-                    const problem = allProblems.find(p => p.id === e.target.value)
-                    setCurrentSolution(prev => ({
-                      ...prev,
-                      problemId: e.target.value,
-                      problemText: problem?.text || '',
-                      alreadyDelivers: null,
-                      existingProductId: null,
-                      name: '',
-                      solutionCategory: '',
-                      solutionType: '',
-                      description: ''
-                    }))
-                    // Reset solution methods and AI recommendations when problem changes
-                    setSolutionMethods(['', '', ''])
-                    setAiRecommendations(null)
-                    setSkillsPanelOpen(false)
-                  }}
-                >
-                  <option value="">Select a problem...</option>
-                  {allProblems.map(problem => (
-                    <option key={problem.id} value={problem.id}>
-                      {problem.label}
-                    </option>
-                  ))}
-                </select>
+                <div className="problem-picker-list">
+                  {allProblems.map(problem => {
+                    const isSelected = currentSolution.problemId === problem.id
+                    const alreadySolved = problemSolutions.some(s => s.problemId === problem.id)
+                    return (
+                      <button
+                        key={problem.id}
+                        type="button"
+                        className={`problem-picker-btn ${isSelected ? 'selected' : ''} ${alreadySolved ? 'already-solved' : ''}`}
+                        onClick={() => {
+                          setCurrentSolution(prev => ({
+                            ...prev,
+                            problemId: problem.id,
+                            problemText: problem?.text || '',
+                            alreadyDelivers: null,
+                            existingProductId: null,
+                            name: '',
+                            solutionCategory: '',
+                            solutionType: '',
+                            description: ''
+                          }))
+                          setSolutionMethods(['', '', ''])
+                          setAiRecommendations(null)
+                          setSkillsPanelOpen(false)
+                        }}
+                      >
+                        <span className="problem-picker-type">{problem.sectionId === 'vehicle_problems' ? 'Vehicle' : problem.sectionId === 'internal_beliefs' ? 'Internal' : 'External'}</span>
+                        <span className="problem-picker-text">{problem.text}</span>
+                        {alreadySolved && <span className="problem-picker-check">✓</span>}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
 
               {/* "Do you already deliver this?" question */}
