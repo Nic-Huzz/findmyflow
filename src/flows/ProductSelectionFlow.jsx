@@ -809,7 +809,7 @@ function ProductSelectionFlow() {
           }
         })
 
-        await supabase
+        const { error: updateError } = await supabase
           .from('offer_builder_assessments')
           .update({
             responses: {
@@ -819,6 +819,8 @@ function ProductSelectionFlow() {
             updated_at: new Date().toISOString()
           })
           .eq('id', assessment.id)
+
+        if (updateError) throw updateError
       }
 
       // Track flow completion
