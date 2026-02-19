@@ -22,8 +22,6 @@ export function useScoreAnimation(scores, duration = 600) {
     // Check if anything actually changed
     const hasChange = keys.some(k => (prev[k] || 0) !== (scores[k] || 0))
     if (!hasChange) {
-      prevRef.current = scores
-      setAnimated(scores)
       return
     }
 
