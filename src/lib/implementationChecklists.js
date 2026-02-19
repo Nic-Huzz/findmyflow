@@ -8,9 +8,9 @@
 // Map flow types to their checklist paths
 const CHECKLIST_PATHS = {
   attraction_offer: '/Money Model/Attraction/implementation_checklists.json',
-  upsell_flow: '/Money Model/Upsell/implementation_checklists.json',
-  downsell_flow: '/Money Model/Downsell/implementation_checklists.json',
-  continuity_flow: '/Money Model/Continuity/implementation_checklists.json'
+  upsell_offer: '/Money Model/Upsell/implementation_checklists.json',
+  downsell_offer: '/Money Model/Downsell/implementation_checklists.json',
+  continuity_offer: '/Money Model/Continuity/implementation_checklists.json'
 }
 
 // Cache for loaded checklists
