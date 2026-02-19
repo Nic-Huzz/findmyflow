@@ -1328,6 +1328,13 @@ function Challenge() {
     }
   }
 
+  // Sort explainer quests to the top so "Understand <Stage>" always appears first
+  filteredQuests.sort((a, b) => {
+    if (a.isExplainer && !b.isExplainer) return -1
+    if (!a.isExplainer && b.isExplainer) return 1
+    return 0
+  })
+
   // Apply R-type and frequency filters for Groans and Healing tabs
   let displayQuests = filteredQuests
   if (activeCategory === 'Groans' || activeCategory === 'Healing') {
