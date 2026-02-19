@@ -55,11 +55,17 @@ export async function fetchPersonaData(userId) {
 export async function fetchValidationInsights(userId, projectId = null) {
   try {
     // First get user's validation flows
-    const { data: flows, error: flowsError } = await supabase
+    let flowsQuery = supabase
       .from('validation_flows')
       .select('id')
       .eq('creator_user_id', userId)
       .limit(5)
+
+    if (projectId) {
+      flowsQuery = flowsQuery.eq('project_id', projectId)
+    }
+
+    const { data: flows, error: flowsError } = await flowsQuery
 
     if (flowsError || !flows || flows.length === 0) {
       console.log('No validation flows found:', flowsError?.message)

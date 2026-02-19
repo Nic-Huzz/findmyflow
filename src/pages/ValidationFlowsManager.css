@@ -171,6 +171,29 @@
   color: #5e17eb;
 }
 
+/* Project filter dropdown */
+.dashboard-container .project-filter-select {
+  padding: 8px 32px 8px 12px;
+  border: 2px solid #f1f5f9;
+  border-radius: 20px;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.dashboard-container .project-filter-select:focus {
+  outline: none;
+  border-color: #5e17eb;
+  background-color: #faf5ff;
+}
+
 /* ============ FLOWS GRID ============ */
 .dashboard-container .flows-grid {
   display: flex;
@@ -261,6 +284,11 @@
 .dashboard-container .flow-type-tag.testing {
   background: #fef3c7;
   color: #d97706;
+}
+
+.dashboard-container .flow-type-tag.project {
+  background: #ecfdf5;
+  color: #059669;
 }
 
 .dashboard-container .card-description {
@@ -447,6 +475,27 @@
 
 .dashboard-container .dropdown-item:hover {
   background: #f8fafc;
+}
+
+.dashboard-container .dropdown-item.project-assign {
+  padding: 8px 16px;
+}
+
+.dashboard-container .dropdown-item.project-assign select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+  margin-left: 0;
+}
+
+.dashboard-container .dropdown-item.project-assign select:focus {
+  outline: none;
+  border-color: #5e17eb;
 }
 
 .dashboard-container .dropdown-item.danger {
@@ -1348,7 +1397,7 @@
 }
 
 /* Project context preview card */
-.project-context-preview {
+.dashboard-container .project-context-preview {
   background: linear-gradient(135deg, rgba(94, 23, 235, 0.06) 0%, rgba(233, 162, 59, 0.06) 100%);
   border: 1px solid rgba(94, 23, 235, 0.15);
   border-radius: 10px;
@@ -1358,13 +1407,13 @@
   gap: 12px;
 }
 
-.context-preview-item {
+.dashboard-container .context-preview-item {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.context-preview-label {
+.dashboard-container .context-preview-label {
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -1372,7 +1421,7 @@
   color: #5e17eb;
 }
 
-.context-preview-value {
+.dashboard-container .context-preview-value {
   font-size: 14px;
   color: #1a1a1a;
   line-height: 1.4;

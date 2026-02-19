@@ -21,7 +21,8 @@ export async function createValidationFlow(
   flowJsonPath,
   persona = null,
   stage = null,
-  placeholders = null
+  placeholders = null,
+  projectId = null
 ) {
   try {
     // Generate unique share token
@@ -38,6 +39,7 @@ export async function createValidationFlow(
         persona,
         stage,
         placeholders,
+        project_id: projectId || null,
         is_active: true
       })
       .select()
@@ -219,6 +221,28 @@ export async function toggleFlowStatus(flowId, isActive) {
     return true
   } catch (err) {
     console.error('Error toggling flow status:', err)
+    return false
+  }
+}
+
+/**
+ * Update the project assignment for a validation flow
+ * @param {string} flowId
+ * @param {string|null} projectId - Project ID or null to unassign
+ * @returns {Promise<boolean>}
+ */
+export async function updateFlowProject(flowId, projectId) {
+  try {
+    const { error } = await supabase
+      .from('validation_flows')
+      .update({ project_id: projectId || null })
+      .eq('id', flowId)
+
+    if (error) throw error
+
+    return true
+  } catch (err) {
+    console.error('Error updating flow project:', err)
     return false
   }
 }

@@ -8,7 +8,8 @@ import {
   getFlowResponses,
   toggleFlowStatus,
   deleteValidationFlow,
-  getFlowAnalytics
+  getFlowAnalytics,
+  updateFlowProject
 } from '../lib/validationFlows'
 
 // Lazy load heavy analytics components (~940 lines, 7 components)
@@ -67,6 +68,7 @@ const ValidationFlowsManager = () => {
   const [openMenuId, setOpenMenuId] = useState(null) // For flow card dropdown menu
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState('all') // all | active | has_responses | validation | testing
+  const [filterProjectId, setFilterProjectId] = useState('all') // all | none | project UUID
   const [includeIncomplete, setIncludeIncomplete] = useState(true) // Show incomplete responses by default
 
   // Project data for create form
@@ -158,16 +160,24 @@ const ValidationFlowsManager = () => {
 
     if (selectedFlowType === 'validation') {
       flowConfig = {
-        name: `Validation: ${placeholders.problemArea.substring(0, 30)}...`,
-        description: `Customer discovery for: ${placeholders.audienceDescription}`,
+        name: placeholders.problemArea
+          ? `Validation: ${placeholders.problemArea.substring(0, 30)}...`
+          : `Validation Survey ${new Date().toLocaleDateString()}`,
+        description: placeholders.audienceDescription
+          ? `Customer discovery for: ${placeholders.audienceDescription}`
+          : 'Customer discovery survey',
         jsonPath: 'validation-flow-vibe-riser.json',
         persona: 'vibe_riser',
         stage: 'validation'
       }
     } else if (selectedFlowType === 'testing') {
       flowConfig = {
-        name: `Testing: ${placeholders.solutionConcept.substring(0, 30)}...`,
-        description: `Product feedback for: ${placeholders.audienceDescription}`,
+        name: placeholders.solutionConcept
+          ? `Testing: ${placeholders.solutionConcept.substring(0, 30)}...`
+          : `Testing Survey ${new Date().toLocaleDateString()}`,
+        description: placeholders.audienceDescription
+          ? `Product feedback for: ${placeholders.audienceDescription}`
+          : 'Product feedback survey',
         jsonPath: 'validation-flow-vibe-riser-testing.json',
         persona: 'vibe_riser',
         stage: 'testing'
@@ -183,7 +193,8 @@ const ValidationFlowsManager = () => {
       flowConfig.jsonPath,
       flowConfig.persona,
       flowConfig.stage,
-      placeholders
+      placeholders,
+      selectedProjectId || null
     )
 
     if (result.success) {
@@ -210,6 +221,8 @@ const ValidationFlowsManager = () => {
   const canProceedToStep2 = () => selectedFlowType !== null
 
   const canCreateFlow = () => {
+    // If no project selected, allow creation without placeholders (they're optional)
+    if (!selectedProjectId) return true
     return placeholders.problemArea.trim().length > 0 &&
            placeholders.solutionConcept.trim().length > 0 &&
            placeholders.audienceDescription.trim().length > 0
@@ -687,6 +700,14 @@ const ValidationFlowsManager = () => {
     return email.substring(0, 2).toUpperCase()
   }
 
+  const handleAssignProject = async (flowId, projectId) => {
+    const success = await updateFlowProject(flowId, projectId || null)
+    if (success) {
+      loadFlows()
+    }
+    setOpenMenuId(null)
+  }
+
   // Filter flows based on search and status
   const filteredFlows = flows.filter(flow => {
     // Search filter
@@ -702,6 +723,9 @@ const ValidationFlowsManager = () => {
     if (filterStatus === 'has_responses' && (flow.response_count || 0) === 0) return false
     if (filterStatus === 'validation' && flow.stage !== 'validation') return false
     if (filterStatus === 'testing' && flow.stage !== 'testing') return false
+    // Project filter
+    if (filterProjectId === 'none' && flow.project_id) return false
+    if (filterProjectId !== 'all' && filterProjectId !== 'none' && flow.project_id !== filterProjectId) return false
     return true
   })
 
@@ -799,6 +823,19 @@ const ValidationFlowsManager = () => {
                 Has Responses
               </button>
             </div>
+            {userProjects.length > 0 && (
+              <select
+                className="project-filter-select"
+                value={filterProjectId}
+                onChange={(e) => setFilterProjectId(e.target.value)}
+              >
+                <option value="all">All Projects</option>
+                <option value="none">No Project</option>
+                {userProjects.map(p => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
+            )}
           </div>
 
           {flows.length === 0 ? (
@@ -823,7 +860,7 @@ const ValidationFlowsManager = () => {
             <div className="no-results">
               <span className="no-results-icon">🔍</span>
               <p>No flows match your search</p>
-              <button className="clear-filters-btn" onClick={() => { setSearchQuery(''); setFilterStatus('all'); }}>
+              <button className="clear-filters-btn" onClick={() => { setSearchQuery(''); setFilterStatus('all'); setFilterProjectId('all'); }}>
                 Clear filters
               </button>
             </div>
@@ -841,6 +878,11 @@ const ValidationFlowsManager = () => {
                           {flow.stage && (
                             <span className={`flow-type-tag ${flow.stage}`}>
                               {flow.stage === 'validation' ? 'Validation' : 'Testing'}
+                            </span>
+                          )}
+                          {flow.project_id && (
+                            <span className="flow-type-tag project">
+                              {userProjects.find(p => p.id === flow.project_id)?.name || 'Project'}
                             </span>
                           )}
                         </div>
@@ -924,6 +966,21 @@ const ValidationFlowsManager = () => {
                               >
                                 {flow.is_active ? '⏸️ Pause' : '▶️ Resume'}
                               </button>
+                              {userProjects.length > 0 && (
+                                <div className="dropdown-item project-assign">
+                                  <span>📁</span>
+                                  <select
+                                    value={flow.project_id || ''}
+                                    onChange={(e) => handleAssignProject(flow.id, e.target.value)}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <option value="">No Project</option>
+                                    {userProjects.map(p => (
+                                      <option key={p.id} value={p.id}>{p.name}</option>
+                                    ))}
+                                  </select>
+                                </div>
+                              )}
                               <button
                                 className="dropdown-item danger"
                                 onClick={() => {
@@ -1410,7 +1467,7 @@ const ValidationFlowsManager = () => {
                   <button
                     className="confirm-btn"
                     onClick={handleCreateFlow}
-                    disabled={!selectedProjectId || !canCreateFlow()}
+                    disabled={!canCreateFlow()}
                   >
                     Create Flow
                   </button>
