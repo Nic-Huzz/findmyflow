@@ -1168,7 +1168,14 @@ function ProductSelectionFlow() {
             <span className="product-badge">{getProductDisplayLabel(currentProduct)}</span>
             {currentProduct.type === 'group' ? (
               currentProduct.problemTexts?.length > 0 && (
-                <p className="product-problem">Solving: {currentProduct.problemTexts.join(', ')}</p>
+                <div className="product-problem">
+                  <span>Solving:</span>
+                  <ul className="problem-list">
+                    {currentProduct.problemTexts.map((text, i) => (
+                      <li key={i}>{text}</li>
+                    ))}
+                  </ul>
+                </div>
               )
             ) : (
               currentProduct.problemText && (
