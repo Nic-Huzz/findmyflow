@@ -8,8 +8,11 @@ import { authenticateRequest, corsHeaders, type AuthResult } from '../_shared/au
 
 // --- Constants ---
 const MCP_PROTOCOL_VERSION = '2025-03-26'
-const SERVER_INFO = { name: 'findmyflow', version: '1.0.0' }
+const SERVER_INFO = { name: 'findmyflow', version: '1.1.0' }
 const SITE_URL = Deno.env.get('SITE_URL') || 'https://findmyflow.nichuzz.com'
+
+// Quest catalog URL — served as static JSON from the app
+const QUEST_CATALOG_URL = `${SITE_URL}/challengeQuestsUpdate.json`
 
 function encodePath(path: string): string {
   return path.split('/').map(encodeURIComponent).join('/')
@@ -31,6 +34,14 @@ function jsonRpcError(id: number | string | null, code: number, message: string)
   )
 }
 
+function textResult(data: any): any {
+  return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+}
+
+function errorResult(message: string): any {
+  return { content: [{ type: 'text', text: JSON.stringify({ error: message }) }], isError: true }
+}
+
 // JSON-RPC error codes
 const PARSE_ERROR = -32700
 const INVALID_REQUEST = -32600
@@ -38,12 +49,26 @@ const METHOD_NOT_FOUND = -32601
 const INVALID_PARAMS = -32602
 const INTERNAL_ERROR = -32603
 
+// --- Scoring category mapping (mirrors src/lib/scoringCategories.js) ---
+
+const SCORING_CATEGORIES: Record<string, string> = {
+  'Business': 'business',
+  'Flow Finder': 'business',
+  'Bonus': 'business',
+  'Healing': 'healing',
+  'Tracker': 'healing',
+  'Daily': 'healing',
+  'Weekly': 'healing',
+  'Groans': 'courage',
+  'Voices': 'courage',
+}
+
 // --- Tool definitions (for tools/list response) ---
 
 const TOOL_DEFINITIONS = [
   {
     name: 'list_flows',
-    description: 'List all available FindMyFlow business assessments. Returns flow IDs, names, descriptions, and question counts.',
+    description: 'List all available FindMyFlow business assessments (Money Model flows). Returns flow IDs, names, descriptions, and question counts.',
     inputSchema: {
       type: 'object' as const,
       properties: {},
@@ -78,7 +103,7 @@ const TOOL_DEFINITIONS = [
         },
         answers: {
           type: 'object',
-          description: 'Object mapping question IDs to answer values. Must contain exactly 10 entries. Example: {"q1_business_model": "coaching_consulting", "q2_price_point": "mid_ticket_500_2000", ...}',
+          description: 'Object mapping question IDs to answer values. Must contain exactly 10 entries.',
           additionalProperties: { type: 'string' },
         },
         reasoning: {
@@ -89,9 +114,58 @@ const TOOL_DEFINITIONS = [
       required: ['flow_id', 'answers'],
     },
   },
+  {
+    name: 'get_user_context',
+    description: 'Get a complete snapshot of the user: projects with stages, persona, lifetime/weekly scores, Flow Finder discoveries (skills, problems, personas), completed assessment results, and recent quest completions. Call this first to understand who the user is before guiding them.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {},
+      required: [],
+    },
+  },
+  {
+    name: 'list_quests',
+    description: 'List available Business quests the user can complete at their current stage. Returns quest ID, name, description, input type, options, points, and completion status. Use stage parameter to see quests for a different stage.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        stage: {
+          type: 'number',
+          description: 'Stage number (0-8). Defaults to the user\'s current project stage. Stage 0 = Flow Finder, 1 = Validation, 2 = Product, 3 = Testing, 4 = Money Models, 5 = Offer Creation, 6 = Campaign, 7 = Launch, 8 = Tracking.',
+        },
+        include_completed: {
+          type: 'boolean',
+          description: 'Include quests the user has already completed. Defaults to false.',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'complete_quest',
+    description: 'Complete a Business quest on behalf of the user. Accepts the quest ID and the user\'s response (text, selection value, or structured data depending on input type). Awards points and updates scores.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        quest_id: {
+          type: 'string',
+          description: 'The quest ID from list_quests.',
+        },
+        response: {
+          type: 'string',
+          description: 'The user\'s response. For text quests: free text. For multi_select: comma-separated values (e.g. "warm_outreach,content"). For milestone/checkbox quests: "done". For flow quests: "completed" (use submit_assessment first for assessment flows).',
+        },
+        project_id: {
+          type: 'string',
+          description: 'Optional project ID for project-specific quests. If omitted, uses the user\'s first active project.',
+        },
+      },
+      required: ['quest_id', 'response'],
+    },
+  },
 ]
 
-// --- Tool handlers ---
+// --- Existing tool handlers ---
 
 async function handleListFlows(): Promise<any> {
   const flows = VALID_FLOW_IDS.map((id) => ({
@@ -100,51 +174,38 @@ async function handleListFlows(): Promise<any> {
     description: FLOW_CONFIG[id].description,
     question_count: 10,
   }))
-  return {
-    content: [{ type: 'text', text: JSON.stringify(flows, null, 2) }],
-  }
+  return textResult(flows)
 }
 
 async function handleGetFlowQuestions(args: any): Promise<any> {
   const { flow_id } = args
   if (!flow_id || !VALID_FLOW_IDS.includes(flow_id)) {
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ error: `Invalid flow_id. Must be one of: ${VALID_FLOW_IDS.join(', ')}` }) }],
-      isError: true,
-    }
+    return errorResult(`Invalid flow_id. Must be one of: ${VALID_FLOW_IDS.join(', ')}`)
   }
 
   const config = FLOW_CONFIG[flow_id]
   const questionsUrl = `${SITE_URL}${encodePath(config.questionsPath)}`
   const resp = await fetch(questionsUrl)
   if (!resp.ok) {
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ error: `Failed to load questions for ${flow_id}` }) }],
-      isError: true,
-    }
+    return errorResult(`Failed to load questions for ${flow_id}`)
   }
 
   const questionsData = await resp.json()
-  return {
-    content: [{
-      type: 'text',
-      text: JSON.stringify({
-        flow_id,
-        name: config.name,
-        description: config.description,
-        questions: questionsData.questions.map((q: any) => ({
-          id: q.id,
-          question: q.question,
-          subtext: q.subtext || null,
-          options: q.options.map((o: any) => ({
-            label: o.label,
-            value: o.value,
-            description: o.description || null,
-          })),
-        })),
-      }, null, 2),
-    }],
-  }
+  return textResult({
+    flow_id,
+    name: config.name,
+    description: config.description,
+    questions: questionsData.questions.map((q: any) => ({
+      id: q.id,
+      question: q.question,
+      subtext: q.subtext || null,
+      options: q.options.map((o: any) => ({
+        label: o.label,
+        value: o.value,
+        description: o.description || null,
+      })),
+    })),
+  })
 }
 
 async function handleSubmitAssessment(
@@ -153,74 +214,48 @@ async function handleSubmitAssessment(
 ): Promise<any> {
   const { flow_id, answers, reasoning } = args
 
-  // Validate flow_id
   if (!flow_id || !VALID_FLOW_IDS.includes(flow_id)) {
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ error: `Invalid flow_id. Must be one of: ${VALID_FLOW_IDS.join(', ')}` }) }],
-      isError: true,
-    }
+    return errorResult(`Invalid flow_id. Must be one of: ${VALID_FLOW_IDS.join(', ')}`)
   }
 
-  // Validate answers count
   if (!answers || typeof answers !== 'object') {
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ error: 'answers must be an object mapping question IDs to answer values' }) }],
-      isError: true,
-    }
+    return errorResult('answers must be an object mapping question IDs to answer values')
   }
   const answerKeys = Object.keys(answers)
   if (answerKeys.length !== 10) {
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ error: `answers must contain exactly 10 question responses, got ${answerKeys.length}` }) }],
-      isError: true,
-    }
+    return errorResult(`answers must contain exactly 10 question responses, got ${answerKeys.length}`)
   }
 
-  // Check permissions
   const allowedFlows = auth.permissions?.flows || VALID_FLOW_IDS
   if (!allowedFlows.includes(flow_id)) {
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ error: `API key does not have permission for flow: ${flow_id}` }) }],
-      isError: true,
-    }
+    return errorResult(`API key does not have permission for flow: ${flow_id}`)
   }
 
   const config = FLOW_CONFIG[flow_id]
 
-  // Normalize answers — accept both plain strings and { value, label } objects
   const normalizedAnswers: Record<string, string> = {}
   for (const [key, val] of Object.entries(answers)) {
     normalizedAnswers[key] =
       typeof val === 'string' ? val : (val as any)?.value ?? String(val)
   }
 
-  // Fetch offers JSON for scoring
   const offersUrl = `${SITE_URL}${encodePath(config.offersPath)}`
   const offersResp = await fetch(offersUrl)
   if (!offersResp.ok) {
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ error: `Failed to load scoring data for ${flow_id}` }) }],
-      isError: true,
-    }
+    return errorResult(`Failed to load scoring data for ${flow_id}`)
   }
   const offersData = await offersResp.json()
 
-  // Run scoring engine
   const scores = calculateOfferScores(normalizedAnswers, offersData)
   const topOffer = scores.find((s) => !s.isDisqualified) || scores[0]
 
   if (!topOffer) {
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ error: 'Scoring produced no results. Check your answers.' }) }],
-      isError: true,
-    }
+    return errorResult('Scoring produced no results. Check your answers.')
   }
 
-  // Get user info for the insert
   const { data: userData } = await auth.supabase.auth.admin.getUserById(auth.userId)
   const user = userData?.user
 
-  // Build and execute insert
   const sessionId = crypto.randomUUID()
   const columns = config.dbColumns
 
@@ -251,40 +286,378 @@ async function handleSubmitAssessment(
 
   if (insertError) {
     console.error('Insert error:', insertError)
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ error: 'Failed to save assessment results' }) }],
-      isError: true,
+    return errorResult('Failed to save assessment results')
+  }
+
+  return textResult({
+    success: true,
+    flow_id,
+    session_id: sessionId,
+    recommendation: {
+      id: topOffer.offer.id,
+      name: topOffer.offer.name,
+      description: topOffer.offer.description,
+      confidence: topOffer.confidence,
+      total_score: topOffer.totalScore,
+      max_possible_score: topOffer.maxPossibleScore,
+    },
+    all_scores: scores.map((s) => ({
+      id: s.offer.id,
+      name: s.offer.name,
+      score: s.totalScore,
+      confidence: s.confidence,
+      disqualified: s.isDisqualified,
+      disqualification_reasons: s.disqualificationReasons,
+    })),
+    message: `Assessment saved. Result: ${topOffer.offer.name} (${Math.round(topOffer.confidence * 100)}% confidence).`,
+  })
+}
+
+// --- New tool handlers ---
+
+async function handleGetUserContext(auth: AuthResult): Promise<any> {
+  const userId = auth.userId
+  const sb = auth.supabase
+
+  // Run all queries in parallel
+  const [
+    projectsRes,
+    stageProgressRes,
+    lifetimeRes,
+    weeklyRes,
+    clustersRes,
+    completionsRes,
+    ...assessmentResults
+  ] = await Promise.all([
+    // Projects
+    sb.from('user_projects')
+      .select('id, name, current_stage, total_points, created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false }),
+
+    // Stage progress (persona, onboarding)
+    sb.from('user_stage_progress')
+      .select('persona, onboarding_v2_completed, current_stage')
+      .eq('user_id', userId)
+      .single(),
+
+    // Lifetime scores
+    sb.from('user_lifetime_scores')
+      .select('lifetime_business_score, lifetime_healing_score, lifetime_courage_score, lifetime_total_score')
+      .eq('user_id', userId)
+      .is('project_id', null)
+      .single(),
+
+    // This week's scores
+    sb.from('challenge_weekly_scores')
+      .select('business_score, healing_score, courage_score')
+      .eq('user_id', userId)
+      .is('project_id', null)
+      .order('week_start_date', { ascending: false })
+      .limit(1)
+      .single(),
+
+    // Flow Finder clusters (skills, problems, personas)
+    sb.from('nikigai_clusters')
+      .select('cluster_label, cluster_type')
+      .eq('user_id', userId),
+
+    // Recent quest completions
+    sb.from('quest_completions')
+      .select('quest_id, quest_category, quest_type, points_earned, reflection_text, stage, completed_at')
+      .eq('user_id', userId)
+      .order('completed_at', { ascending: false })
+      .limit(20),
+
+    // All 6 assessment tables — most recent result from each
+    ...VALID_FLOW_IDS.map((flowId) => {
+      const config = FLOW_CONFIG[flowId]
+      const cols = config.dbColumns
+      return sb.from(config.dbTable)
+        .select(`session_id, ${cols.recommendedName}, confidence_score, total_score, submitted_via, created_at`)
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+    }),
+  ])
+
+  // Build Flow Finder summary
+  const clusters = clustersRes.data || []
+  const skills = clusters.filter((c: any) => c.cluster_type === 'skill').map((c: any) => c.cluster_label)
+  const problems = clusters.filter((c: any) => c.cluster_type === 'problem').map((c: any) => c.cluster_label)
+  const personas = clusters.filter((c: any) => c.cluster_type === 'persona').map((c: any) => c.cluster_label)
+
+  // Build assessment results summary
+  const assessments: Record<string, any> = {}
+  VALID_FLOW_IDS.forEach((flowId, i) => {
+    const res = assessmentResults[i]
+    if (res.data) {
+      const cols = FLOW_CONFIG[flowId].dbColumns
+      assessments[flowId] = {
+        recommendation: res.data[cols.recommendedName],
+        confidence: res.data.confidence_score,
+        total_score: res.data.total_score,
+        submitted_via: res.data.submitted_via,
+        completed_at: res.data.created_at,
+      }
+    }
+  })
+
+  return textResult({
+    projects: (projectsRes.data || []).map((p: any) => ({
+      id: p.id,
+      name: p.name,
+      current_stage: p.current_stage,
+      total_points: p.total_points,
+    })),
+    persona: stageProgressRes.data?.persona || null,
+    scores: {
+      lifetime: lifetimeRes.data || { lifetime_business_score: 0, lifetime_healing_score: 0, lifetime_courage_score: 0, lifetime_total_score: 0 },
+      this_week: weeklyRes.data || { business_score: 0, healing_score: 0, courage_score: 0 },
+    },
+    flow_finder: {
+      skills,
+      problems,
+      personas,
+    },
+    assessments,
+    recent_completions: (completionsRes.data || []).map((c: any) => ({
+      quest_id: c.quest_id,
+      category: c.quest_category,
+      type: c.quest_type,
+      points: c.points_earned,
+      reflection: c.reflection_text,
+      stage: c.stage,
+      completed_at: c.completed_at,
+    })),
+  })
+}
+
+async function handleListQuests(args: any, auth: AuthResult): Promise<any> {
+  const userId = auth.userId
+  const sb = auth.supabase
+
+  // Get user's current stage from their first project (or use provided stage)
+  let targetStage = args.stage
+  if (targetStage === undefined || targetStage === null) {
+    const { data: project } = await sb
+      .from('user_projects')
+      .select('current_stage')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+    targetStage = project?.current_stage ?? 0
+  }
+
+  const includeCompleted = args.include_completed === true
+
+  // Fetch quest catalog from the static JSON
+  const catalogResp = await fetch(QUEST_CATALOG_URL)
+  if (!catalogResp.ok) {
+    return errorResult('Failed to load quest catalog')
+  }
+  const catalog = await catalogResp.json()
+
+  // Filter to Business category, not archived, matching stage
+  const businessQuests = (catalog.quests || []).filter((q: any) =>
+    q.category === 'Business' &&
+    !q.archived &&
+    q.stage_required <= targetStage
+  )
+
+  // Get user's completions to check status
+  const questIds = businessQuests.map((q: any) => q.id)
+  const { data: completions } = await sb
+    .from('quest_completions')
+    .select('quest_id')
+    .eq('user_id', userId)
+    .in('quest_id', questIds)
+
+  // Count completions per quest
+  const completionCounts: Record<string, number> = {}
+  for (const c of (completions || [])) {
+    completionCounts[c.quest_id] = (completionCounts[c.quest_id] || 0) + 1
+  }
+
+  // Build result
+  const quests = businessQuests
+    .map((q: any) => {
+      const done = completionCounts[q.id] || 0
+      const maxCompletions = q.maxCompletions || 1
+      const isComplete = done >= maxCompletions
+
+      if (!includeCompleted && isComplete) return null
+
+      return {
+        id: q.id,
+        name: q.name,
+        description: q.description,
+        type: q.type,
+        stage_required: q.stage_required,
+        points: q.points,
+        input_type: q.inputType,
+        options: q.selectOptions || null,
+        placeholder: q.placeholder || null,
+        flow_route: q.flow_route || null,
+        is_primary: q.isPrimary || false,
+        completions: done,
+        max_completions: maxCompletions,
+        is_complete: isComplete,
+        requires_quest: q.requires_quest || null,
+      }
+    })
+    .filter(Boolean)
+
+  // Group by type for easy navigation
+  const grouped: Record<string, any[]> = {}
+  for (const q of quests) {
+    const type = q.type || 'Other'
+    if (!grouped[type]) grouped[type] = []
+    grouped[type].push(q)
+  }
+
+  return textResult({
+    stage: targetStage,
+    total_available: quests.length,
+    quests_by_type: grouped,
+  })
+}
+
+async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
+  const { quest_id, response } = args
+  const userId = auth.userId
+  const sb = auth.supabase
+
+  if (!quest_id) return errorResult('quest_id is required')
+  if (!response) return errorResult('response is required')
+
+  // Fetch quest catalog to validate the quest
+  const catalogResp = await fetch(QUEST_CATALOG_URL)
+  if (!catalogResp.ok) return errorResult('Failed to load quest catalog')
+  const catalog = await catalogResp.json()
+
+  const quest = (catalog.quests || []).find((q: any) => q.id === quest_id && !q.archived)
+  if (!quest) return errorResult(`Quest not found: ${quest_id}`)
+  if (quest.category !== 'Business') return errorResult(`Only Business quests supported. This quest is category: ${quest.category}`)
+
+  // Check maxCompletions
+  const maxCompletions = quest.maxCompletions || 1
+  const { data: existingCompletions } = await sb
+    .from('quest_completions')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('quest_id', quest_id)
+
+  const currentCount = existingCompletions?.length || 0
+  if (currentCount >= maxCompletions) {
+    return errorResult(`Quest already completed (${currentCount}/${maxCompletions})`)
+  }
+
+  // Check prerequisite
+  if (quest.requires_quest) {
+    const { data: prereq } = await sb
+      .from('quest_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('quest_id', quest.requires_quest)
+      .limit(1)
+
+    if (!prereq || prereq.length === 0) {
+      return errorResult(`Prerequisite quest not completed: ${quest.requires_quest}`)
     }
   }
 
-  // Return success with scored results
-  return {
-    content: [{
-      type: 'text',
-      text: JSON.stringify({
-        success: true,
-        flow_id,
-        session_id: sessionId,
-        recommendation: {
-          id: topOffer.offer.id,
-          name: topOffer.offer.name,
-          description: topOffer.offer.description,
-          confidence: topOffer.confidence,
-          total_score: topOffer.totalScore,
-          max_possible_score: topOffer.maxPossibleScore,
-        },
-        all_scores: scores.map((s) => ({
-          id: s.offer.id,
-          name: s.offer.name,
-          score: s.totalScore,
-          confidence: s.confidence,
-          disqualified: s.isDisqualified,
-          disqualification_reasons: s.disqualificationReasons,
-        })),
-        message: `Assessment saved. Result: ${topOffer.offer.name} (${Math.round(topOffer.confidence * 100)}% confidence).`,
-      }, null, 2),
-    }],
+  // Resolve project_id
+  let projectId = args.project_id || null
+  if (!projectId) {
+    const { data: project } = await sb
+      .from('user_projects')
+      .select('id')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+    projectId = project?.id || null
   }
+
+  // Determine stage
+  const stage = quest.stage_required || 0
+
+  // Build reflection text based on input type
+  let reflectionText = response
+  if (quest.inputType === 'multi_select') {
+    // Comma-separated values — store as-is
+    reflectionText = response
+  } else if (quest.inputType === 'milestone' || quest.inputType === 'checkbox') {
+    reflectionText = `Completed: ${quest.name}`
+  }
+
+  // User-level quests (stage 0 Flow Finder) use null challenge_instance_id + null project_id
+  const isUserLevel = stage === 0
+
+  // Insert completion
+  const { error: insertError } = await sb
+    .from('quest_completions')
+    .insert({
+      user_id: userId,
+      challenge_instance_id: null,
+      quest_id: quest_id,
+      quest_category: 'Business',
+      quest_type: quest.inputType === 'flow' ? 'flow' : quest.type?.toLowerCase() || 'task',
+      points_earned: quest.points || 5,
+      challenge_day: 0,
+      reflection_text: reflectionText,
+      project_id: isUserLevel ? null : projectId,
+      stage,
+    })
+
+  if (insertError) {
+    console.error('Quest completion insert error:', insertError)
+    return errorResult('Failed to save quest completion')
+  }
+
+  // Update scores via RPC (same as the web app)
+  const scoringCategory = SCORING_CATEGORIES[quest.category] || 'business'
+  const weekStart = getWeekStartDate()
+
+  await sb.rpc('increment_scores', {
+    p_user_id: userId,
+    p_project_id: isUserLevel ? null : projectId,
+    p_category: scoringCategory,
+    p_points: quest.points || 5,
+    p_week_start: weekStart,
+  })
+
+  // Get updated lifetime scores
+  const { data: lifetimeScores } = await sb
+    .from('user_lifetime_scores')
+    .select('lifetime_business_score, lifetime_healing_score, lifetime_courage_score, lifetime_total_score')
+    .eq('user_id', userId)
+    .is('project_id', null)
+    .single()
+
+  return textResult({
+    success: true,
+    quest_id,
+    quest_name: quest.name,
+    points_earned: quest.points || 5,
+    completions: currentCount + 1,
+    max_completions: maxCompletions,
+    lifetime_scores: lifetimeScores || null,
+    message: `Quest "${quest.name}" completed! +${quest.points || 5} points.`,
+  })
+}
+
+// Helper: get Monday of current week as YYYY-MM-DD
+function getWeekStartDate(): string {
+  const now = new Date()
+  const day = now.getDay()
+  const diff = day === 0 ? -6 : 1 - day // Monday
+  const monday = new Date(now)
+  monday.setDate(now.getDate() + diff)
+  return monday.toISOString().split('T')[0]
 }
 
 // --- MCP protocol router ---
@@ -292,7 +665,6 @@ async function handleSubmitAssessment(
 async function handleMcpRequest(body: any, auth: AuthResult): Promise<Response> {
   const { jsonrpc, id, method, params } = body
 
-  // Validate JSON-RPC envelope
   if (jsonrpc !== '2.0') {
     return jsonRpcError(id ?? null, INVALID_REQUEST, 'Expected jsonrpc: "2.0"')
   }
@@ -308,7 +680,6 @@ async function handleMcpRequest(body: any, auth: AuthResult): Promise<Response> 
       })
 
     case 'notifications/initialized':
-      // Client acknowledgment — no response needed for notifications
       return new Response(null, { status: 202, headers: corsHeaders })
 
     case 'ping':
@@ -336,6 +707,15 @@ async function handleMcpRequest(body: any, auth: AuthResult): Promise<Response> 
         case 'submit_assessment':
           result = await handleSubmitAssessment(toolArgs, auth)
           break
+        case 'get_user_context':
+          result = await handleGetUserContext(auth)
+          break
+        case 'list_quests':
+          result = await handleListQuests(toolArgs, auth)
+          break
+        case 'complete_quest':
+          result = await handleCompleteQuest(toolArgs, auth)
+          break
         default:
           return jsonRpcError(id, INVALID_PARAMS, `Unknown tool: ${toolName}`)
       }
@@ -351,12 +731,10 @@ async function handleMcpRequest(body: any, auth: AuthResult): Promise<Response> 
 // --- Main handler ---
 
 Deno.serve(async (req: Request) => {
-  // CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
-  // Only accept POST (MCP Streamable HTTP transport)
   if (req.method !== 'POST') {
     return new Response(
       JSON.stringify({ error: 'Method not allowed. MCP uses POST.' }),
@@ -364,11 +742,9 @@ Deno.serve(async (req: Request) => {
     )
   }
 
-  // Authenticate via API key
   const authResult = await authenticateRequest(req)
   if (authResult instanceof Response) return authResult
 
-  // Parse JSON-RPC body
   let body: any
   try {
     body = await req.json()
@@ -376,7 +752,6 @@ Deno.serve(async (req: Request) => {
     return jsonRpcError(null, PARSE_ERROR, 'Invalid JSON')
   }
 
-  // Handle single request (batch support not needed for MVP)
   try {
     return await handleMcpRequest(body, authResult)
   } catch (err) {
