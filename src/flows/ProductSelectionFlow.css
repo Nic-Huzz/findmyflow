@@ -725,6 +725,7 @@
   border: 2px solid rgba(251, 191, 36, 0.3);
   border-radius: 16px;
   padding: 24px;
+  margin-bottom: 16px;
 }
 
 .product-selection-flow .next-badge {
