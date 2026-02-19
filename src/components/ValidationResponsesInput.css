@@ -1,7 +1,7 @@
 /**
  * ValidationResponsesInput.css
  * Styles for the validation responses tracking and AI analysis quest input
- * Includes sentiment badges, analysis history, and export functionality
+ * Brand: purple (#5e17eb) → gold (#E9A23B) — matches design guide
  */
 
 .validation-responses-input {
@@ -17,14 +17,14 @@
   justify-content: center;
   gap: 0.75rem;
   padding: 2rem;
-  color: #888;
+  color: #6c757d;
 }
 
 .vri-spinner {
   width: 24px;
   height: 24px;
-  border: 3px solid #333;
-  border-top-color: #00d4ff;
+  border: 3px solid #e9ecef;
+  border-top-color: #5e17eb;
   border-radius: 50%;
   animation: vri-spin 0.8s linear infinite;
 }
@@ -39,56 +39,69 @@
   to { transform: rotate(360deg); }
 }
 
-/* Summary Card */
+/* Summary Card — purple gradient hero */
 .vri-summary {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  border-radius: 12px;
-  padding: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.25);
+}
+
+.vri-summary::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.2) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .vri-count-card {
   text-align: center;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .vri-count-number {
   font-size: 3rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #00d4ff, #7c3aed);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 800;
+  color: #E9A23B;
   line-height: 1.1;
+  letter-spacing: -1px;
 }
 
 .vri-count-label {
   font-size: 0.9rem;
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.8);
   margin-top: 0.25rem;
+  font-weight: 600;
 }
 
 .vri-count-needed {
   font-size: 0.8rem;
-  color: #f59e0b;
+  color: #E9A23B;
   margin-top: 0.5rem;
+  font-weight: 500;
 }
 
 /* Progress Bar */
 .vri-progress-container {
   margin-top: 1rem;
+  position: relative;
 }
 
 .vri-progress-bar {
   height: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .vri-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00d4ff, #7c3aed);
+  background: linear-gradient(90deg, #E9A23B, #f5c55a);
   border-radius: 4px;
   transition: width 0.5s ease;
 }
@@ -104,25 +117,27 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: #888;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.3s ease;
 }
 
 .vri-marker.filled {
-  background: linear-gradient(135deg, #00d4ff, #7c3aed);
-  color: #fff;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  box-shadow: 0 2px 8px rgba(233, 162, 59, 0.4);
 }
 
 /* Preview Quotes Section */
 .vri-preview-section {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
-  border: 1px solid rgba(124, 58, 237, 0.2);
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-left: 4px solid #5e17eb;
   border-radius: 12px;
   padding: 1.25rem;
 }
@@ -132,8 +147,8 @@
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  font-weight: 500;
-  color: #fff;
+  font-weight: 600;
+  color: #1a1a2e;
 }
 
 .vri-preview-icon {
@@ -147,12 +162,12 @@
 }
 
 .vri-preview-quote {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(94, 23, 235, 0.04);
   border-left: 3px solid #7c3aed;
   padding: 0.75rem 1rem;
   margin: 0;
   border-radius: 0 8px 8px 0;
-  color: #ccc;
+  color: #495057;
   font-style: italic;
   font-size: 0.9rem;
   line-height: 1.5;
@@ -160,40 +175,40 @@
 
 .vri-preview-cta {
   text-align: center;
-  color: #f59e0b;
+  color: #E9A23B;
   font-size: 0.85rem;
   margin: 1rem 0 0 0;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Empty State */
 .vri-empty {
   text-align: center;
   padding: 2rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(94, 23, 235, 0.03);
   border-radius: 12px;
-  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border: 1px dashed rgba(94, 23, 235, 0.2);
 }
 
 .vri-empty p {
-  color: #888;
+  color: #6c757d;
   margin-bottom: 1rem;
 }
 
 .vri-create-btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #00d4ff, #7c3aed);
-  color: #fff;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  border-radius: 12px;
   text-decoration: none;
-  font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  transition: box-shadow 0.2s ease;
 }
 
 .vri-create-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.45);
 }
 
 /* Flows List */
@@ -204,9 +219,10 @@
 }
 
 .vri-flow-card {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  border-left: 4px solid #5e17eb;
   overflow: hidden;
 }
 
@@ -220,19 +236,23 @@
 }
 
 .vri-flow-header:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(94, 23, 235, 0.03);
 }
 
 .vri-flow-info {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .vri-flow-name {
-  font-weight: 500;
-  color: #fff;
-  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .vri-flow-status {
@@ -240,16 +260,17 @@
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 
 .vri-flow-status.active {
-  background: rgba(34, 197, 94, 0.2);
-  color: #22c55e;
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
 }
 
 .vri-flow-status.inactive {
-  background: rgba(156, 163, 175, 0.2);
+  background: rgba(156, 163, 175, 0.15);
   color: #9ca3af;
 }
 
@@ -257,13 +278,14 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .vri-response-badge {
-  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   color: #fff;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.25rem 0.6rem;
   border-radius: 12px;
   min-width: 24px;
@@ -271,7 +293,7 @@
 }
 
 .vri-expand-icon {
-  color: #888;
+  color: #adb5bd;
   transition: transform 0.2s ease;
 }
 
@@ -282,8 +304,8 @@
 /* Sessions List */
 .vri-flow-sessions {
   padding: 0.75rem 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
 }
 
 .vri-session-item {
@@ -291,7 +313,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid #e9ecef;
 }
 
 .vri-session-item:last-child {
@@ -299,18 +321,18 @@
 }
 
 .vri-session-email {
-  color: #ccc;
+  color: #495057;
   font-size: 0.85rem;
 }
 
 .vri-session-date {
-  color: #888;
+  color: #adb5bd;
   font-size: 0.75rem;
 }
 
 .vri-session-more {
   text-align: center;
-  color: #888;
+  color: #6c757d;
   font-size: 0.8rem;
   padding-top: 0.5rem;
 }
@@ -318,9 +340,10 @@
 .vri-manage-link {
   display: block;
   text-align: center;
-  color: #00d4ff;
+  color: #5e17eb;
   text-decoration: none;
   font-size: 0.9rem;
+  font-weight: 600;
   padding: 0.75rem;
   margin-top: 0.5rem;
   transition: color 0.2s ease;
@@ -334,9 +357,9 @@
 .vri-analyze-section {
   text-align: center;
   padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.06) 0%, rgba(233, 162, 59, 0.06) 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(94, 23, 235, 0.15);
 }
 
 .vri-analyze-btn {
@@ -344,19 +367,19 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.875rem 1.75rem;
-  background: linear-gradient(135deg, #00d4ff, #7c3aed);
-  color: #fff;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  transition: box-shadow 0.2s ease;
 }
 
 .vri-analyze-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.45);
 }
 
 .vri-analyze-btn:disabled {
@@ -369,7 +392,7 @@
 }
 
 .vri-analyze-note {
-  color: #888;
+  color: #6c757d;
   font-size: 0.8rem;
   margin-top: 0.75rem;
 }
@@ -378,9 +401,9 @@
 .vri-reanalyze-section {
   text-align: center;
   padding: 1.25rem;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+  background: rgba(233, 162, 59, 0.06);
   border-radius: 12px;
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(233, 162, 59, 0.2);
 }
 
 .vri-reanalyze-info {
@@ -389,16 +412,16 @@
   justify-content: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  color: #ccc;
+  color: #495057;
   font-size: 0.9rem;
 }
 
 .vri-new-responses-badge {
-  background: rgba(34, 197, 94, 0.2);
-  color: #22c55e;
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
   padding: 0.25rem 0.6rem;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.85rem;
 }
 
@@ -407,19 +430,19 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #fff;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  transition: box-shadow 0.2s ease;
 }
 
 .vri-reanalyze-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.4);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.45);
 }
 
 .vri-reanalyze-btn:disabled {
@@ -428,17 +451,18 @@
 }
 
 .vri-reanalyze-note {
-  color: #888;
+  color: #6c757d;
   font-size: 0.75rem;
   margin-top: 0.75rem;
 }
 
 /* Analysis Report */
 .vri-report {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e9ecef;
   overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
 }
 
 .vri-report-header {
@@ -446,8 +470,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
   flex-wrap: wrap;
   gap: 0.75rem;
 }
@@ -462,6 +485,7 @@
   margin: 0;
   font-size: 1rem;
   color: #fff;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -472,16 +496,16 @@
 }
 
 .vri-analysis-version {
-  background: rgba(0, 212, 255, 0.2);
-  color: #00d4ff;
+  background: rgba(233, 162, 59, 0.25);
+  color: #E9A23B;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .vri-analysis-date {
-  color: #888;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.75rem;
 }
 
@@ -493,14 +517,14 @@
 
 .vri-history-btn,
 .vri-export-btn {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   border: none;
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.8);
   padding: 0.4rem 0.75rem;
   border-radius: 6px;
   font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -508,37 +532,39 @@
 
 .vri-history-btn:hover,
 .vri-export-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.25);
   color: #fff;
 }
 
 .vri-toggle-report {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   border: none;
-  color: #00d4ff;
+  color: #E9A23B;
   padding: 0.4rem 0.75rem;
   border-radius: 6px;
   font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .vri-toggle-report:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* History Dropdown */
 .vri-history-dropdown {
-  background: rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
   padding: 0.75rem;
 }
 
 .vri-history-title {
   font-size: 0.75rem;
-  color: #888;
+  color: #6c757d;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 700;
   margin-bottom: 0.5rem;
   padding: 0 0.5rem;
 }
@@ -551,29 +577,29 @@
   padding: 0.6rem 0.75rem;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease;
   text-align: left;
 }
 
 .vri-history-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(94, 23, 235, 0.05);
 }
 
 .vri-history-item.active {
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: rgba(94, 23, 235, 0.08);
+  border: 1px solid rgba(94, 23, 235, 0.15);
 }
 
 .vri-history-number {
-  color: #00d4ff;
-  font-weight: 600;
+  color: #5e17eb;
+  font-weight: 700;
   font-size: 0.9rem;
 }
 
 .vri-history-meta {
-  color: #888;
+  color: #6c757d;
   font-size: 0.8rem;
 }
 
@@ -584,21 +610,21 @@
   flex-wrap: wrap;
   gap: 1rem;
   padding: 0.75rem 1.25rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
   font-size: 0.75rem;
 }
 
 .vri-legend-title {
-  color: #888;
-  font-weight: 500;
+  color: #6c757d;
+  font-weight: 600;
 }
 
 .vri-legend-item {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  color: #aaa;
+  color: #495057;
 }
 
 /* Badge Styles */
@@ -614,15 +640,15 @@
 }
 
 .vri-badge-opportunity {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.12);
 }
 
 .vri-badge-gold {
-  background: rgba(245, 158, 11, 0.15);
+  background: rgba(233, 162, 59, 0.15);
 }
 
 .vri-badge-pattern {
-  background: rgba(59, 130, 246, 0.15);
+  background: rgba(94, 23, 235, 0.12);
 }
 
 /* Badged List Items */
@@ -645,20 +671,20 @@
 }
 
 .vri-badged-item.badge-gold {
-  border-left: 2px solid #f59e0b;
+  border-left: 2px solid #E9A23B;
   padding-left: 0.75rem;
   margin-left: -0.75rem;
 }
 
 .vri-badged-item.badge-pattern {
-  border-left: 2px solid #3b82f6;
+  border-left: 2px solid #5e17eb;
   padding-left: 0.75rem;
   margin-left: -0.75rem;
 }
 
 .vri-item-text {
   flex: 1;
-  color: #ccc;
+  color: #495057;
   font-size: 0.9rem;
   line-height: 1.6;
 }
@@ -666,7 +692,7 @@
 .vri-copy-btn {
   background: transparent;
   border: none;
-  color: #666;
+  color: #adb5bd;
   font-size: 0.8rem;
   cursor: pointer;
   padding: 0.25rem;
@@ -681,12 +707,12 @@
 }
 
 .vri-copy-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #00d4ff;
+  background: rgba(94, 23, 235, 0.08);
+  color: #5e17eb;
 }
 
 .vri-copy-btn.copied {
-  color: #22c55e;
+  color: #16a34a;
   opacity: 1;
 }
 
@@ -705,10 +731,11 @@
 
 .vri-report-section h5 {
   font-size: 0.9rem;
-  color: #00d4ff;
+  color: #5e17eb;
   margin: 0 0 0.75rem 0;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+  border-bottom: 1px solid rgba(94, 23, 235, 0.15);
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -716,7 +743,7 @@
 
 .vri-click-hint {
   font-size: 0.7rem;
-  color: #666;
+  color: #adb5bd;
   font-weight: normal;
 }
 
@@ -727,14 +754,14 @@
 }
 
 .vri-report-section li {
-  color: #ccc;
+  color: #495057;
   font-size: 0.9rem;
   line-height: 1.6;
   margin-bottom: 0.5rem;
 }
 
 .vri-report-section p {
-  color: #ccc;
+  color: #495057;
   font-size: 0.9rem;
   line-height: 1.6;
   margin: 0;
@@ -756,18 +783,18 @@
 }
 
 .vri-pricing-text.badge-gold {
-  border-left-color: #f59e0b;
+  border-left-color: #E9A23B;
 }
 
 .vri-pricing-text.badge-pattern {
-  border-left-color: #3b82f6;
+  border-left-color: #5e17eb;
 }
 
 .vri-summary-section {
-  background: rgba(0, 212, 255, 0.05);
+  background: rgba(94, 23, 235, 0.04);
   padding: 1rem;
   border-radius: 8px;
-  border-left: 3px solid #00d4ff;
+  border-left: 3px solid #5e17eb;
 }
 
 /* Language Tags */
@@ -778,13 +805,14 @@
 }
 
 .vri-language-tag {
-  background: rgba(124, 58, 237, 0.2);
-  color: #a78bfa;
+  background: rgba(94, 23, 235, 0.08);
+  color: #5e17eb;
   padding: 0.35rem 0.75rem;
   border-radius: 16px;
   font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -792,26 +820,25 @@
 }
 
 .vri-language-tag:hover {
-  background: rgba(124, 58, 237, 0.3);
-  transform: translateY(-1px);
+  background: rgba(94, 23, 235, 0.15);
 }
 
 .vri-language-tag.badge-gold {
-  background: rgba(245, 158, 11, 0.2);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: rgba(233, 162, 59, 0.12);
+  color: #b8860b;
+  border: 1px solid rgba(233, 162, 59, 0.25);
 }
 
 .vri-language-tag.badge-opportunity {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .vri-language-tag.badge-pattern {
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(94, 23, 235, 0.08);
+  color: #5e17eb;
+  border: 1px solid rgba(94, 23, 235, 0.2);
 }
 
 .vri-tag-badge {
@@ -823,7 +850,7 @@
   top: -1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  background: #22c55e;
+  background: #16a34a;
   color: #fff;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
@@ -833,14 +860,8 @@
 }
 
 @keyframes vri-fade-in {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Question Analysis */
@@ -851,20 +872,21 @@
 }
 
 .vri-qa-item {
-  background: rgba(0, 0, 0, 0.2);
+  background: #f8f9fa;
   border-radius: 8px;
   padding: 1rem;
+  border-left: 3px solid #5e17eb;
 }
 
 .vri-qa-question {
-  font-weight: 500;
-  color: #fff;
+  font-weight: 600;
+  color: #1a1a2e;
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
 
 .vri-qa-summary {
-  color: #aaa;
+  color: #6c757d;
   font-size: 0.85rem;
   line-height: 1.5;
 }
@@ -872,11 +894,11 @@
 .vri-qa-quotes {
   margin-top: 0.75rem;
   padding-left: 0.75rem;
-  border-left: 2px solid rgba(124, 58, 237, 0.3);
+  border-left: 2px solid rgba(94, 23, 235, 0.2);
 }
 
 .vri-qa-quotes blockquote {
-  color: #888;
+  color: #6c757d;
   font-size: 0.8rem;
   font-style: italic;
   margin: 0.5rem 0;
@@ -885,33 +907,33 @@
 
 /* Error Message */
 .vri-error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #dc2626;
   padding: 0.75rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
   text-align: center;
 }
 
-/* Complete Button */
+/* Complete Button — gold CTA */
 .vri-complete-btn {
   width: 100%;
   padding: 0.875rem 1.5rem;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #fff;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  transition: box-shadow 0.2s ease;
   margin-top: 0.5rem;
 }
 
 .vri-complete-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.45);
 }
 
 /* =============================================
@@ -919,11 +941,11 @@
    ============================================= */
 
 .vri-validation-score {
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+  background: rgba(94, 23, 235, 0.04);
   border-radius: 12px;
   padding: 1.25rem;
   margin: 0 1.25rem 1rem;
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  border: 1px solid rgba(94, 23, 235, 0.12);
 }
 
 .vri-score-header {
@@ -935,8 +957,9 @@
 
 .vri-score-header h5 {
   margin: 0;
-  color: #fff;
+  color: #1a1a2e;
   font-size: 1rem;
+  font-weight: 700;
 }
 
 .vri-confidence {
@@ -944,11 +967,12 @@
   padding: 0.25rem 0.6rem;
   border-radius: 12px;
   text-transform: capitalize;
+  font-weight: 600;
 }
 
-.vri-confidence-low { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
-.vri-confidence-medium { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-.vri-confidence-high { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+.vri-confidence-low { background: rgba(239, 68, 68, 0.12); color: #dc2626; }
+.vri-confidence-medium { background: rgba(233, 162, 59, 0.15); color: #b8860b; }
+.vri-confidence-high { background: rgba(34, 197, 94, 0.12); color: #16a34a; }
 
 .vri-score-gauge {
   display: flex;
@@ -977,7 +1001,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .vri-score-components {
@@ -987,7 +1011,7 @@
 }
 
 .vri-score-component {
-  background: rgba(0, 0, 0, 0.2);
+  background: #f8f9fa;
   border-radius: 8px;
   padding: 0.75rem;
 }
@@ -1001,17 +1025,18 @@
 
 .vri-component-name {
   font-size: 0.8rem;
-  color: #ccc;
+  color: #495057;
+  font-weight: 600;
 }
 
 .vri-component-value {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .vri-component-bar {
   height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #e9ecef;
   border-radius: 2px;
   overflow: hidden;
   margin-bottom: 0.5rem;
@@ -1025,18 +1050,18 @@
 
 .vri-component-reason {
   font-size: 0.7rem;
-  color: #888;
+  color: #6c757d;
   line-height: 1.4;
 }
 
 .vri-score-recommendation {
   margin-top: 1rem;
   padding: 0.75rem;
-  background: rgba(0, 212, 255, 0.1);
+  background: rgba(94, 23, 235, 0.04);
   border-radius: 8px;
   font-size: 0.85rem;
-  color: #ccc;
-  border-left: 3px solid #00d4ff;
+  color: #495057;
+  border-left: 3px solid #5e17eb;
 }
 
 /* =============================================
@@ -1047,8 +1072,8 @@
   display: flex;
   gap: 0.25rem;
   padding: 0.5rem 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -1057,10 +1082,11 @@
   padding: 0.6rem 1rem;
   background: transparent;
   border: none;
-  color: #888;
+  color: #6c757d;
   font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: all 0.2s ease;
   white-space: nowrap;
   text-decoration: none;
@@ -1070,13 +1096,13 @@
 }
 
 .vri-tab:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #ccc;
+  background: rgba(94, 23, 235, 0.05);
+  color: #495057;
 }
 
 .vri-tab.active {
-  background: rgba(0, 212, 255, 0.1);
-  color: #00d4ff;
+  background: rgba(94, 23, 235, 0.1);
+  color: #5e17eb;
 }
 
 .vri-tab-link {
@@ -1084,11 +1110,11 @@
 }
 
 .vri-tab-link:hover {
-  color: #a78bfa;
+  color: #5e17eb;
 }
 
 .vri-no-data {
-  color: #888;
+  color: #6c757d;
   text-align: center;
   padding: 2rem;
   font-style: italic;
@@ -1105,8 +1131,8 @@
 }
 
 .vri-segment-card {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  background: #f8f9fa;
+  border-radius: 12px;
   border-left: 4px solid;
   padding: 1rem;
 }
@@ -1123,8 +1149,8 @@
 }
 
 .vri-segment-label {
-  font-weight: 600;
-  color: #fff;
+  font-weight: 700;
+  color: #1a1a2e;
   flex: 1;
 }
 
@@ -1132,7 +1158,7 @@
   padding: 0.25rem 0.6rem;
   border-radius: 12px;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #fff;
 }
 
@@ -1146,9 +1172,10 @@
 
 .vri-segment-title {
   font-size: 0.75rem;
-  color: #888;
+  color: #6c757d;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
@@ -1159,14 +1186,14 @@
 
 .vri-segment-section li {
   font-size: 0.85rem;
-  color: #ccc;
+  color: #495057;
   line-height: 1.5;
   margin-bottom: 0.25rem;
 }
 
 .vri-segment-section p {
   font-size: 0.85rem;
-  color: #ccc;
+  color: #495057;
   margin: 0;
   line-height: 1.5;
 }
@@ -1189,7 +1216,7 @@
 
 .vri-action-priority {
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.05em;
   display: flex;
   align-items: center;
@@ -1197,9 +1224,10 @@
 }
 
 .vri-action-item {
-  background: rgba(0, 0, 0, 0.2);
+  background: #f8f9fa;
   border-radius: 8px;
   padding: 0.875rem 1rem;
+  border-left: 3px solid #e9ecef;
 }
 
 .vri-action-main {
@@ -1210,19 +1238,19 @@
 
 .vri-action-category {
   font-size: 0.7rem;
-  color: #888;
+  color: #6c757d;
   text-transform: capitalize;
 }
 
 .vri-action-text {
   font-size: 0.9rem;
-  color: #fff;
+  color: #1a1a2e;
   line-height: 1.5;
 }
 
 .vri-action-source {
   font-size: 0.75rem;
-  color: #666;
+  color: #adb5bd;
   margin-top: 0.5rem;
   font-style: italic;
 }
@@ -1238,7 +1266,7 @@
 }
 
 .vri-comp-section {
-  background: rgba(0, 0, 0, 0.2);
+  background: #f8f9fa;
   border-radius: 8px;
   padding: 1rem;
 }
@@ -1246,7 +1274,8 @@
 .vri-comp-section h6 {
   margin: 0 0 0.75rem 0;
   font-size: 0.9rem;
-  color: #fff;
+  color: #1a1a2e;
+  font-weight: 700;
 }
 
 .vri-comp-tags {
@@ -1256,11 +1285,12 @@
 }
 
 .vri-comp-tag {
-  background: rgba(124, 58, 237, 0.2);
-  color: #a78bfa;
+  background: rgba(94, 23, 235, 0.08);
+  color: #5e17eb;
   padding: 0.35rem 0.75rem;
   border-radius: 16px;
   font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .vri-comp-section ul {
@@ -1270,23 +1300,24 @@
 
 .vri-comp-section li {
   font-size: 0.85rem;
-  color: #ccc;
+  color: #495057;
   line-height: 1.5;
   margin-bottom: 0.35rem;
 }
 
 .vri-gap-item {
-  color: #22c55e !important;
+  color: #16a34a !important;
+  font-weight: 600;
 }
 
 .vri-positioning {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  background: rgba(34, 197, 94, 0.06);
+  border: 1px solid rgba(34, 197, 94, 0.15);
 }
 
 .vri-positioning p {
   font-size: 0.9rem;
-  color: #ccc;
+  color: #495057;
   margin: 0;
   line-height: 1.6;
 }
