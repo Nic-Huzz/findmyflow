@@ -1582,6 +1582,17 @@
   margin: 0;
 }
 
+.product-selection-flow .problem-list {
+  margin: 4px 0 0 0;
+  padding: 0 0 0 20px;
+  list-style: disc;
+}
+
+.product-selection-flow .problem-list li {
+  margin: 2px 0;
+  line-height: 1.4;
+}
+
 .product-selection-flow .mechanism-input {
   width: 100%;
   padding: 16px;
