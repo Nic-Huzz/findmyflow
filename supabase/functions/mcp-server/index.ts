@@ -2,7 +2,6 @@
 // MCP server for FindMyFlow — implements MCP Streamable HTTP (JSON-RPC 2.0) directly.
 // No SDK dependency. Each request is fully independent (stateless).
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 import { FLOW_CONFIG, VALID_FLOW_IDS } from '../_shared/flowConfig.ts'
 import { calculateOfferScores } from '../_shared/scoring.ts'
 import { authenticateRequest, corsHeaders, type AuthResult } from '../_shared/auth.ts'
@@ -188,6 +187,13 @@ async function handleSubmitAssessment(
 
   const config = FLOW_CONFIG[flow_id]
 
+  // Normalize answers — accept both plain strings and { value, label } objects
+  const normalizedAnswers: Record<string, string> = {}
+  for (const [key, val] of Object.entries(answers)) {
+    normalizedAnswers[key] =
+      typeof val === 'string' ? val : (val as any)?.value ?? String(val)
+  }
+
   // Fetch offers JSON for scoring
   const offersUrl = `${SITE_URL}${encodePath(config.offersPath)}`
   const offersResp = await fetch(offersUrl)
@@ -200,7 +206,7 @@ async function handleSubmitAssessment(
   const offersData = await offersResp.json()
 
   // Run scoring engine
-  const scores = calculateOfferScores(answers, offersData)
+  const scores = calculateOfferScores(normalizedAnswers, offersData)
   const topOffer = scores.find((s) => !s.isDisqualified) || scores[0]
 
   if (!topOffer) {
@@ -223,7 +229,7 @@ async function handleSubmitAssessment(
     user_id: auth.userId,
     user_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Agent User',
     email: user?.email || null,
-    responses: answers,
+    responses: normalizedAnswers,
     [columns.recommendedId]: topOffer.offer.id,
     [columns.recommendedName]: topOffer.offer.name,
     confidence_score: topOffer.confidence,
