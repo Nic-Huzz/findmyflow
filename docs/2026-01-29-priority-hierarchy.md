@@ -1,5 +1,5 @@
 # FindMyFlow Priority Hierarchy & Test Milestones
-**Date:** 2026-01-29 (Updated: 2026-02-13)
+**Date:** 2026-01-29 (Updated: 2026-02-20)
 **Status:** Active Planning Document
 **Purpose:** Stop scope creep. Define testable "done" gates.
 
@@ -282,6 +282,11 @@ You have:
 | Skills taxonomy: implement | Update wheelTaxonomy.js | Small | ⬜ After approval |
 | Play List Finder: create flow | 4-question flow (role models, no fear, lost in time, groan zone) | Medium | ⬜ Not started |
 | Play List Finder: Mind Space integration | Mind Space first → Play List Finder for depth | Small | ⬜ Not started |
+| **CRM Data Isolation** | | | |
+| Project-scoped validation data in Offer Builders | Validation survey responses now filter by `project_id` in OfferBuilder100M + OfferBuilderFlow | Small | ✅ Done 2026-02-20 |
+| Project-scoped validation data in `contentContext.js` | `fetchValidationInsights` filters by `project_id` when provided | Small | ✅ Done 2026-02-20 |
+| Project selector for CRM content pages | Add project picker to PromptGenerator, ContentCreate, WeeklyPlanningSession, ContentStrategyFlow, ApprovalQueue — so `gatherContentContext` passes `projectId` and validation/offer data is scoped to selected project | Medium | ⬜ Not started |
+| Project-scoped offer data in `contentContext.js` | `fetchOfferData` currently returns all offers regardless of project — should filter by `project_id` when provided | Small | ⬜ Not started |
 | **CRM Remaining** | | | |
 | Mindset stage in Business tab | Modules to set users up for success | Medium | ⬜ Not started |
 | **Leap Prep Suite** | Runway Calculator + First $1,000 Challenge + Leap Readiness Dashboard | | |
