@@ -1970,7 +1970,7 @@
       "type": "anytime",
       "frequency": "anytime",
       "name": "Complete Validation Form",
-      "description": "Help us validate FindMyFlow by completing this quick feedback form.",
+      "description": "Help us validate FindMyFlow by completing this quick validation form.",
       "points": 3,
       "inputType": "flow",
       "flow_route": "https://findmyflow.nichuzz.com/v/1daov0n1"
