@@ -317,6 +317,62 @@ function QuestCard({
                 {isCompleting ? 'Completing...' : 'Complete Quest'}
               </button>
             </>
+          ) : quest.inputType === 'rating' ? (
+            <>
+              <div className="quest-rating-buttons">
+                {(quest.ratingOptions || [0,1,2,3,4,5,6,7,8,9,10]).map(n => (
+                  <button
+                    key={n}
+                    className={`quest-rating-btn${(typeof questInput === 'object' ? questInput.rating : null) === n ? ' selected' : ''}`}
+                    onClick={() => onInputChange(quest.id, { ...(typeof questInput === 'object' ? questInput : {}), rating: n })}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+              {(typeof questInput === 'object' && questInput.rating != null) && (
+                <textarea
+                  className="quest-textarea"
+                  placeholder={quest.placeholder || 'What made you give it that score?'}
+                  value={(typeof questInput === 'object' ? questInput.reason : '') || ''}
+                  onChange={(e) => onInputChange(quest.id, { ...questInput, reason: e.target.value })}
+                  rows={2}
+                />
+              )}
+              <button
+                className="quest-complete-btn"
+                onClick={(e) => onComplete(quest, null, e)}
+                disabled={isCompleting || !(typeof questInput === 'object' && questInput.rating != null)}
+              >
+                {isCompleting ? 'Completing...' : 'Complete Quest'}
+              </button>
+            </>
+          ) : quest.inputType === 'referral' ? (
+            <>
+              <div className="quest-referral-inputs">
+                <input
+                  type="text"
+                  className="quest-input"
+                  placeholder="Their name"
+                  value={(typeof questInput === 'object' ? questInput.name : '') || ''}
+                  onChange={(e) => onInputChange(quest.id, { ...(typeof questInput === 'object' ? questInput : {}), name: e.target.value })}
+                />
+                <input
+                  type="text"
+                  className="quest-input"
+                  placeholder="Email or WhatsApp number"
+                  value={(typeof questInput === 'object' ? questInput.contact : '') || ''}
+                  onChange={(e) => onInputChange(quest.id, { ...(typeof questInput === 'object' ? questInput : {}), contact: e.target.value })}
+                />
+              </div>
+              <button
+                className="quest-complete-btn"
+                onClick={(e) => onComplete(quest, null, e)}
+                disabled={isCompleting || !(typeof questInput === 'object' && questInput.name?.trim() && questInput.contact?.trim())}
+              >
+                {isCompleting ? 'Completing...' : 'Complete Quest'}
+              </button>
+            </>
           ) : quest.inputType === 'text_with_tags' ? (
             <>
               <textarea

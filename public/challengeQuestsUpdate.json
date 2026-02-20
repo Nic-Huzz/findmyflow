@@ -1916,8 +1916,8 @@
       "category": "Bonus",
       "type": "anytime",
       "frequency": "anytime",
-      "name": "Post Your Groan/s on Instagram",
-      "description": "Share one of your 'groan' tasks as a story or post on Instagram. Vulnerability is magnetic. Tag @_Huzz so I can reshare it",
+      "name": "Post Your Play-List on Instagram",
+      "description": "Share one of your Play-List tasks as a story or post on Instagram. Vulnerability is magnetic. Tag @_Huzz so I can reshare it",
       "points": 3,
       "inputType": "checkbox"
     },
@@ -1929,7 +1929,7 @@
       "name": "Tell a Friend",
       "description": "Share this 7-day challenge with someone who you think would love to join.",
       "points": 5,
-      "inputType": "checkbox",
+      "inputType": "referral",
       "maxCompletions": 3
     },
     {
@@ -1959,10 +1959,11 @@
       "type": "anytime",
       "frequency": "anytime",
       "name": "Weekly Reflection",
-      "description": "Out of 10 how would you rate the 7-day challenge? You're not allowed to give it a 7. Also include what made you give it that score.",
+      "description": "Out of 10 how would you rate the 7-day challenge? You're not allowed to give it a 7.",
       "points": 3,
-      "inputType": "text",
-      "placeholder": "Your rating (0-10, not 7) and what made you give it that score"
+      "inputType": "rating",
+      "ratingOptions": [0, 1, 2, 3, 4, 5, 6, 8, 9, 10],
+      "placeholder": "What made you give it that score?"
     },
     {
       "id": "bonus_validation_form",
