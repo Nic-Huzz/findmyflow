@@ -16,6 +16,18 @@ export function useProjectId() {
       setLoading(false)
       return
     }
+
+    // Check localStorage for last selected project (set by challenge system)
+    try {
+      const stored = localStorage.getItem('fmf_selected_project_id')
+      if (stored) {
+        setProjectId(stored)
+        setLoading(false)
+        return
+      }
+    } catch {}
+
+    // Final fallback: primary project
     if (user?.id) {
       supabase.from('user_projects').select('id')
         .eq('user_id', user.id).eq('is_primary', true)

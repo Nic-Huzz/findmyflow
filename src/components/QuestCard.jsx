@@ -258,7 +258,7 @@ function QuestCard({
             // Suspense fallbacks from showing during lazy chunk loading.
             // Full navigation ensures the flow page always renders.
             <a
-              href={quest.flow_route}
+              href={selectedProject?.id ? `${quest.flow_route}?projectId=${selectedProject.id}` : quest.flow_route}
               className="quest-flow-btn"
             >
               Start {quest.name}
@@ -545,7 +545,9 @@ function QuestCard({
           )}
           {quest.flow_route && (
             <a
-              href={`${quest.flow_route}?results=true`}
+              href={selectedProject?.id
+                ? `${quest.flow_route}?results=true&projectId=${selectedProject.id}`
+                : `${quest.flow_route}?results=true`}
               className="view-results-btn"
             >
               {quest.isExplainer ? 'Read Again' : 'View Results'}

@@ -246,6 +246,7 @@ export function useChallengeData() {
       const { data: projectData, error: projectError } = projectResult
       if (!projectError && projectData) {
         setSelectedProject(projectData)
+        try { localStorage.setItem('fmf_selected_project_id', projectData.id) } catch {}
         setProjectStage(projectData.current_stage ?? 1)
         setActiveStageTab(projectData.current_stage ?? 1)
       }
@@ -1023,6 +1024,8 @@ export function useChallengeData() {
 
   const handleProjectSelected = async (project) => {
     setSelectedProject(project)
+    // Persist for useProjectId() fallback in flows (e.g. Offer Builder)
+    try { localStorage.setItem('fmf_selected_project_id', project.id) } catch {}
     setProjectStage(project.current_stage ?? 1)
     setActiveStageTab(project.current_stage ?? 1)
     setShowProjectSelector(false)
