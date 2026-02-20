@@ -220,13 +220,7 @@ const ValidationFlowsManager = () => {
 
   const canProceedToStep2 = () => selectedFlowType !== null
 
-  const canCreateFlow = () => {
-    // If no project selected, allow creation without placeholders (they're optional)
-    if (!selectedProjectId) return true
-    return placeholders.problemArea.trim().length > 0 &&
-           placeholders.solutionConcept.trim().length > 0 &&
-           placeholders.audienceDescription.trim().length > 0
-  }
+  const canCreateFlow = () => true
 
   const handleViewResponses = async (flow) => {
     setSelectedFlow(flow)
@@ -758,6 +752,7 @@ const ValidationFlowsManager = () => {
     <div className="dashboard-container validation-flows-page">
       {/* Main Content */}
       <div className="main-content">
+        <a href="/7-day-challenge" className="vfm-back-link">&larr; Back to Challenge</a>
         <div className="manager-header">
           <div>
             <h1>Validation Flows</h1>

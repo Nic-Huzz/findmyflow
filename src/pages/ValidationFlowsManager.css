@@ -6,6 +6,23 @@
   padding: 24px 20px;
 }
 
+/* ============ BACK LINK ============ */
+.dashboard-container .vfm-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5e17eb;
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: opacity 0.2s ease;
+}
+
+.dashboard-container .vfm-back-link:hover {
+  opacity: 0.7;
+}
+
 /* ============ PAGE HEADER ============ */
 .dashboard-container .manager-header {
   margin-bottom: 32px;
