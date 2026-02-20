@@ -427,6 +427,7 @@ function QuestCard({
           ) : quest.inputType === 'validation_responses' ? (
             <ValidationResponsesInput
               quest={quest}
+              projectId={selectedProject?.id}
               onComplete={(quest, data) => onComplete(quest, data)}
             />
           ) : quest.inputType === 'response_counter' ? (

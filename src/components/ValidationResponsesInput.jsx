@@ -45,7 +45,7 @@ const CATEGORY_ICONS = {
   objection_handling: '🛡️'
 }
 
-function ValidationResponsesInput({ quest, onComplete }) {
+function ValidationResponsesInput({ quest, onComplete, projectId = null }) {
   const { user } = useAuth()
   const [loading, setLoading] = useState(true)
   const [analyzing, setAnalyzing] = useState(false)
@@ -79,6 +79,11 @@ function ValidationResponsesInput({ quest, onComplete }) {
         .from('validation_flows')
         .select('*')
         .eq('creator_user_id', user.id)
+
+      // Filter by project if provided
+      if (projectId) {
+        flowsQuery = flowsQuery.eq('project_id', projectId)
+      }
 
       // Filter by stage if quest specifies one (e.g. 'validation' vs 'testing')
       if (quest.flow_stage) {

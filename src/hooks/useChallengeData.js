@@ -782,11 +782,17 @@ export function useChallengeData() {
     if (!user?.id) return
 
     try {
-      // Get all validation flows created by this user
-      const { data: flows, error: flowsError } = await supabase
+      // Get validation flows created by this user, filtered by selected project
+      let flowsQuery = supabase
         .from('validation_flows')
         .select('id, stage')
         .eq('creator_user_id', user.id)
+
+      if (selectedProject?.id) {
+        flowsQuery = flowsQuery.eq('project_id', selectedProject.id)
+      }
+
+      const { data: flows, error: flowsError } = await flowsQuery
 
       if (flowsError) {
         console.error('Error loading validation flows:', flowsError)
@@ -1756,6 +1762,13 @@ export function useChallengeData() {
       ]).finally(() => setLoading(false))
     }
   }, [user])
+
+  // Reload validation response counts when project changes
+  useEffect(() => {
+    if (user && selectedProject) {
+      loadValidationResponseCounts()
+    }
+  }, [selectedProject?.id])
 
   // Check explainer visibility
   useEffect(() => {
