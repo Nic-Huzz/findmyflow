@@ -1,0 +1,436 @@
+/**
+ * ProductSuiteMapFlow.css
+ * Visual money model chain builder — pool → chain drag-and-drop interface
+ */
+
+.product-suite-map {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a0533, #0d001a);
+  padding: 24px 16px 100px;
+  color: white;
+}
+
+.product-suite-map .psm-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.product-suite-map .psm-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.product-suite-map .psm-header p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.product-suite-map .psm-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+.product-suite-map .psm-back:hover {
+  color: white;
+}
+
+/* Pool section */
+.product-suite-map .psm-pool {
+  margin-bottom: 32px;
+}
+
+.product-suite-map .psm-pool-title {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-suite-map .psm-pool-count {
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(233, 162, 59, 0.2);
+  color: #E9A23B;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.product-suite-map .psm-pool-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.product-suite-map .psm-pool-item {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px;
+  cursor: grab;
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+}
+
+.product-suite-map .psm-pool-item:active {
+  cursor: grabbing;
+}
+
+.product-suite-map .psm-pool-item.completed:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.product-suite-map .psm-pool-item.incomplete {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.product-suite-map .psm-pool-item.in-chain {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.product-suite-map .psm-pool-item.in-chain::after {
+  content: '\2713';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 14px;
+  color: rgba(233, 162, 59, 0.8);
+}
+
+.product-suite-map .psm-pool-item .pool-item-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.product-suite-map .psm-pool-item .pool-item-emoji {
+  font-size: 18px;
+}
+
+.product-suite-map .psm-pool-item .offer-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 4px;
+}
+
+.product-suite-map .psm-pool-item .confidence {
+  font-size: 11px;
+  color: #E9A23B;
+  margin-top: 2px;
+}
+
+.product-suite-map .psm-pool-item .not-assessed {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 4px;
+}
+
+.product-suite-map .psm-pool-item .assess-link {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #E9A23B;
+  text-decoration: none;
+  margin-top: 6px;
+}
+
+.product-suite-map .psm-pool-item .assess-link:hover {
+  text-decoration: underline;
+}
+
+/* Chain section */
+.product-suite-map .psm-chain {
+  margin-bottom: 32px;
+}
+
+.product-suite-map .psm-chain-title {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 12px;
+}
+
+.product-suite-map .psm-chain-empty {
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.product-suite-map .psm-chain-empty.drag-over {
+  border-color: rgba(233, 162, 59, 0.5);
+  background: rgba(233, 162, 59, 0.05);
+}
+
+.product-suite-map .psm-chain-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.product-suite-map .psm-chain-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: grab;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  position: relative;
+}
+
+.product-suite-map .psm-chain-item:active {
+  cursor: grabbing;
+}
+
+.product-suite-map .psm-chain-item.dragging {
+  opacity: 0.3;
+}
+
+.product-suite-map .psm-chain-item.drag-over-item {
+  border-color: rgba(233, 162, 59, 0.5);
+}
+
+.product-suite-map .psm-chain-item .drag-handle {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 16px;
+  flex-shrink: 0;
+  cursor: grab;
+  user-select: none;
+}
+
+.product-suite-map .psm-chain-item .chain-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-suite-map .psm-chain-item .chain-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.product-suite-map .psm-chain-item .chain-item-confidence {
+  font-size: 11px;
+  color: #E9A23B;
+  margin-top: 1px;
+}
+
+.product-suite-map .psm-chain-item .remove-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.product-suite-map .psm-chain-item .remove-btn:hover {
+  color: #ef4444;
+}
+
+/* Arrow connector between chain items */
+.product-suite-map .psm-chain-arrow {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 16px;
+}
+
+/* Custom step input */
+.product-suite-map .psm-add-step {
+  margin-top: 12px;
+}
+
+.product-suite-map .psm-add-step-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  padding: 10px 14px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.product-suite-map .psm-add-step-btn:hover {
+  border-color: rgba(233, 162, 59, 0.4);
+  color: #E9A23B;
+}
+
+.product-suite-map .psm-custom-input {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.product-suite-map .psm-custom-input input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: white;
+  font-size: 13px;
+  outline: none;
+}
+
+.product-suite-map .psm-custom-input input:focus {
+  border-color: rgba(233, 162, 59, 0.5);
+}
+
+.product-suite-map .psm-custom-input input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.product-suite-map .psm-custom-input select {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 10px 8px;
+  color: white;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+.product-suite-map .psm-custom-input .psm-add-confirm {
+  background: linear-gradient(135deg, #E9A23B, #d4891f);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.product-suite-map .psm-custom-input .psm-add-cancel {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  padding: 10px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Submit section */
+.product-suite-map .psm-submit {
+  margin-top: 24px;
+}
+
+.product-suite-map .psm-submit-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #E9A23B, #d4891f);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.product-suite-map .psm-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.product-suite-map .psm-submit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.product-suite-map .psm-submit-hint {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 8px;
+}
+
+/* Loading state */
+.product-suite-map .psm-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 12px;
+}
+
+.product-suite-map .psm-loading .spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  animation: psm-spin 0.8s linear infinite;
+}
+
+@keyframes psm-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Border accent colors for pool items */
+.product-suite-map .psm-pool-item.type-attraction {
+  border-left: 3px solid #60a5fa;
+}
+.product-suite-map .psm-pool-item.type-upsell {
+  border-left: 3px solid #22c55e;
+}
+.product-suite-map .psm-pool-item.type-downsell {
+  border-left: 3px solid #fb923c;
+}
+.product-suite-map .psm-pool-item.type-continuity {
+  border-left: 3px solid #a855f7;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  .product-suite-map .psm-pool-items {
+    grid-template-columns: 1fr;
+  }
+
+  .product-suite-map .psm-custom-input {
+    flex-wrap: wrap;
+  }
+
+  .product-suite-map .psm-custom-input input {
+    width: 100%;
+  }
+}

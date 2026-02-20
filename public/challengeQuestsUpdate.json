@@ -1461,13 +1461,13 @@
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Map Your Product Suite",
-      "description": "Visualize your complete product ecosystem showing how each offer connects and leads to the next",
+      "description": "Visually assemble your complete money model showing how each offer type connects in your business",
       "points": 6,
-      "inputType": "text",
+      "inputType": "flow",
+      "flow_route": "/product-suite-map",
       "milestone_type": "product_suite_mapped",
-      "placeholder": "Describe your product suite: What's your attraction offer? Core offer? What's the customer journey from first touch to highest tier?",
       "counts_toward_graduation": true,
-      "learnMore": "A Product Suite Map shows your complete money model ecosystem:\n\n**The Journey:**\n```\nAttraction Offer → Lead Magnet → Core Offer\n                                    ↓\n                              Upsell Path\n                                    ↓\n                              Continuity\n                    (+ Downsell for price objectors)\n```\n\n**What to include:**\n• Each product/offer name\n• Product type (service, course, digital, etc.)\n• Price point for each tier\n• How customers move between offers\n• Expected conversion rates\n\nThis becomes your business blueprint."
+      "learnMore": "See how your attraction, upsell, downsell, and continuity offers connect into a complete money model. Drag to reorder, add custom steps, and save your map."
     },
     {
       "id": "validation_explainer",

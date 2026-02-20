@@ -235,6 +235,7 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'launch_explainer': 'launch_explainer',
       'mind_space': 'mind_space_extraction',  // Matches JSON quest ID
       'milestone_read_money_model': 'milestone_read_money_model',  // Money Model Guide explainer
+      'product_suite_map': 'product_suite_map',  // Product Suite Map builder
       // Healing explainers
       'what_is_healing_explainer': 'what_is_healing_explainer',
       'emotional_splinter_explainer': 'emotional_splinter_explainer',
@@ -282,6 +283,7 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'persona_identifier': 10,
       'mind_space_extraction': 10,  // Matches JSON quest ID
       'milestone_read_money_model': 5,  // Money Model Guide explainer
+      'product_suite_map': 6,  // Product Suite Map builder
       // Healing explainers
       'what_is_healing_explainer': 5,
       'emotional_splinter_explainer': 5,
@@ -295,6 +297,7 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'validation_explainer': 1,
       'product_explainer': 2,
       'testing_explainer': 3,
+      'product_suite_map': 4,
       'offer_creation_explainer': 5,
       'campaign_explainer': 6,
       'launch_explainer': 7

@@ -115,6 +115,7 @@ const OfferChecklist = lazyRetry(() => import('./pages/OfferChecklist'))
 const GrandSlamOfferFlow = lazyRetry(() => import('./flows/GrandSlamOfferFlow'))
 const OfferStackBuilderFlow = lazyRetry(() => import('./flows/OfferStackBuilderFlow'))
 const GrandSlamMatrix = lazyRetry(() => import('./flows/GrandSlamMatrix'))
+const ProductSuiteMapFlow = lazyRetry(() => import('./flows/ProductSuiteMapFlow'))
 const PersonaSelectionFlow = lazyRetry(() => import('./flows/PersonaSelectionFlow'))
 const LaunchReadinessFlow = lazyRetry(() => import('./flows/LaunchReadinessFlow'))
 
@@ -239,6 +240,7 @@ import './flows/ContinuityFlow.css'
 import './flows/LeadsStrategyFlow.css'
 import './flows/PersonaSelectionFlow.css'
 import './MoneyModelGuide.css'
+import './flows/ProductSuiteMapFlow.css'
 import './Auth.css'
 // HybridEssenceFlow.css removed - component is archived, was causing style leaks
 import './Challenge.css'
@@ -343,7 +345,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/fantasy' ||
                         location.pathname === '/healing-compass-workshop' ||
                         location.pathname.startsWith('/league') ||
-                        location.pathname === '/content-review'
+                        location.pathname === '/content-review' ||
+                        location.pathname === '/product-suite-map'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -785,6 +788,13 @@ function AppRouter() {
             <Route path="/grand-slam-matrix" element={
               <AuthGate>
                 <GrandSlamMatrix />
+              </AuthGate>
+            } />
+
+            {/* Product Suite Map - Visual Money Model Builder */}
+            <Route path="/product-suite-map" element={
+              <AuthGate>
+                <ProductSuiteMapFlow />
               </AuthGate>
             } />
 

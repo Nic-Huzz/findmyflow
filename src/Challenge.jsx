@@ -1778,13 +1778,13 @@ function Challenge() {
               className={`sub-tab ${businessSubTab === 'tasks' ? 'active' : ''}`}
               onClick={() => setBusinessSubTab('tasks')}
             >
-              Tasks
+              ✅ Tasks
             </button>
             <button
               className={`sub-tab ${businessSubTab === 'voices' ? 'active' : ''}`}
               onClick={() => setBusinessSubTab('voices')}
             >
-              {activeStageTab === 0 ? 'Deep Dive' : 'Voices'}
+              {activeStageTab === 0 ? '🌊 Deep Dive' : '🎭 Voices'}
             </button>
           </div>
         )}
