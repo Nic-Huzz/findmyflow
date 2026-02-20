@@ -396,7 +396,7 @@ function ProductSuiteMapFlow() {
                 {assessed ? (
                   <>
                     <div className="offer-name">{assessed.name}</div>
-                    <div className="confidence">{assessed.confidence}% match</div>
+                    <div className="confidence">{Math.round(assessed.confidence * 100)}% match</div>
                     {allScores[ot.key]?.length > 1 && (
                       <div className="psm-change-wrap">
                         <button
@@ -414,7 +414,7 @@ function ProductSuiteMapFlow() {
                                 onClick={(e) => { e.stopPropagation(); handleChangeOffer(ot.key, offer) }}
                               >
                                 <span className="psm-dropdown-name">{offer.name}</span>
-                                <span className="psm-dropdown-score">{offer.confidence || offer.score || 0}%</span>
+                                <span className="psm-dropdown-score">{Math.round((offer.confidence || offer.score || 0) * 100)}%</span>
                               </button>
                             ))}
                           </div>
@@ -478,7 +478,7 @@ function ProductSuiteMapFlow() {
                   <div className="chain-item-info">
                     <div className="chain-item-name">{item.name}</div>
                     {item.confidence != null && !item.isCustom && (
-                      <div className="chain-item-confidence">{item.confidence}% match</div>
+                      <div className="chain-item-confidence">{Math.round(item.confidence * 100)}% match</div>
                     )}
                     {item.isCustom && (
                       <div className="chain-item-confidence" style={{ color: 'rgba(255,255,255,0.4)' }}>Custom step</div>

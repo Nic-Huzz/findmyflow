@@ -27,10 +27,16 @@
   margin: 0;
 }
 
-/* Bottom navigation */
+/* Bottom navigation — back link as ghost text (not a pill button) */
 .product-suite-map .psm-bottom-nav {
   text-align: center;
   margin-top: 24px;
+}
+
+.product-suite-map .psm-bottom-nav .go-back-link {
+  background: none;
+  border: none;
+  padding: 0;
 }
 
 /* Pool section */
@@ -421,12 +427,12 @@
   top: 100%;
   left: 0;
   right: 0;
-  background: #2d1b4e;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #ffffff;
+  border: 1px solid #dee2e6;
   border-radius: 8px;
   padding: 4px 0;
   z-index: 20;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   max-height: 180px;
   overflow-y: auto;
 }
@@ -439,7 +445,7 @@
   padding: 8px 12px;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: #333;
   font-size: 12px;
   cursor: pointer;
   text-align: left;
@@ -447,12 +453,13 @@
 }
 
 .product-suite-map .psm-dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: #f3f0ff;
 }
 
 .product-suite-map .psm-dropdown-item.active {
-  color: #E9A23B;
+  color: #5e17eb;
   font-weight: 600;
+  background: #f3f0ff;
 }
 
 .product-suite-map .psm-dropdown-name {
@@ -466,12 +473,12 @@
 .product-suite-map .psm-dropdown-score {
   flex-shrink: 0;
   margin-left: 8px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #888;
   font-size: 11px;
 }
 
 .product-suite-map .psm-dropdown-item.active .psm-dropdown-score {
-  color: rgba(233, 162, 59, 0.7);
+  color: #5e17eb;
 }
 
 /* Border accent colors for pool items */

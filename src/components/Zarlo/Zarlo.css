@@ -37,6 +37,9 @@
   right: 20px;
   z-index: 1000;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Force GPU compositing layer — prevents iOS PWA position:fixed detach during scroll */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 @media (min-width: 768px) {
