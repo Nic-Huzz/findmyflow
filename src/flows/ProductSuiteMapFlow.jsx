@@ -38,6 +38,8 @@ function ProductSuiteMapFlow() {
   const [customName, setCustomName] = useState('')
   const [customType, setCustomType] = useState('attraction')
   const [openDropdown, setOpenDropdown] = useState(null)    // which offer type dropdown is open
+  const [showAddAnother, setShowAddAnother] = useState(false)
+  const [addAnotherType, setAddAnotherType] = useState(null) // which type is being picked
 
   const dragSource = useRef(null) // 'pool' or 'chain'
   const draggedIdxRef = useRef(null)
@@ -156,6 +158,19 @@ function ProductSuiteMapFlow() {
     setCustomName('')
     setCustomType('attraction')
     setShowCustomInput(false)
+  }
+
+  // Add another offer of an existing type to the chain
+  const addAnotherOffer = (typeKey, offer) => {
+    setChain(prev => [...prev, {
+      id: `${typeKey}-extra-${nextId.current++}`,
+      type: typeKey,
+      name: offer.name,
+      isCustom: false,
+      confidence: offer.confidence || offer.score || 0
+    }])
+    setAddAnotherType(null)
+    setShowAddAnother(false)
   }
 
   // Change the selected offer for a given type
@@ -492,12 +507,62 @@ function ProductSuiteMapFlow() {
           </div>
         )}
 
-        {/* Add custom step */}
+        {/* Add another offer or custom step */}
         <div className="psm-add-step">
-          {!showCustomInput ? (
-            <button className="psm-add-step-btn" onClick={() => setShowCustomInput(true)}>
-              + Add Custom Step
-            </button>
+          {!showAddAnother && !showCustomInput ? (
+            <div className="psm-add-buttons">
+              <button className="psm-add-step-btn" onClick={() => setShowAddAnother(true)}>
+                + Add Another Offer
+              </button>
+              <button className="psm-add-step-btn secondary" onClick={() => setShowCustomInput(true)}>
+                + Add Custom Step
+              </button>
+            </div>
+          ) : showAddAnother ? (
+            <div className="psm-add-another">
+              {!addAnotherType ? (
+                <>
+                  <div className="psm-add-another-label">Which offer type?</div>
+                  <div className="psm-add-another-types">
+                    {OFFER_TYPES.filter(ot => assessments[ot.key]).map(ot => (
+                      <button
+                        key={ot.key}
+                        className={`psm-type-btn type-${ot.key}`}
+                        onClick={() => {
+                          // If only one scored offer, add it directly
+                          const scores = allScores[ot.key]
+                          if (!scores || scores.length <= 1) {
+                            addAnotherOffer(ot.key, assessments[ot.key])
+                          } else {
+                            setAddAnotherType(ot.key)
+                          }
+                        }}
+                      >
+                        {ot.emoji} {ot.label}
+                      </button>
+                    ))}
+                  </div>
+                  <button className="psm-add-cancel" onClick={() => setShowAddAnother(false)}>Cancel</button>
+                </>
+              ) : (
+                <>
+                  <div className="psm-add-another-label">Pick an offer</div>
+                  <div className="psm-add-another-offers">
+                    {(allScores[addAnotherType] || []).map(offer => (
+                      <button
+                        key={offer.id || offer.name}
+                        className="psm-offer-pick"
+                        onClick={() => addAnotherOffer(addAnotherType, offer)}
+                      >
+                        <span className="psm-offer-pick-name">{offer.name}</span>
+                        <span className="psm-offer-pick-score">{Math.round((offer.confidence || offer.score || 0) * 100)}%</span>
+                      </button>
+                    ))}
+                  </div>
+                  <button className="psm-add-cancel" onClick={() => setAddAnotherType(null)}>Back</button>
+                </>
+              )}
+            </div>
           ) : (
             <div className="psm-custom-input">
               <input

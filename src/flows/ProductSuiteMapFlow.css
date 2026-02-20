@@ -265,9 +265,14 @@
   font-size: 16px;
 }
 
-/* Custom step input */
+/* Add step buttons */
 .product-suite-map .psm-add-step {
   margin-top: 12px;
+}
+
+.product-suite-map .psm-add-buttons {
+  display: flex;
+  gap: 8px;
 }
 
 .product-suite-map .psm-add-step-btn {
@@ -278,7 +283,7 @@
   font-size: 13px;
   padding: 10px 14px;
   cursor: pointer;
-  width: 100%;
+  flex: 1;
   text-align: center;
   transition: border-color 0.15s ease, color 0.15s ease;
 }
@@ -286,6 +291,95 @@
 .product-suite-map .psm-add-step-btn:hover {
   border-color: rgba(233, 162, 59, 0.4);
   color: #E9A23B;
+}
+
+.product-suite-map .psm-add-step-btn.secondary {
+  flex: 0 0 auto;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+/* Add another offer picker */
+.product-suite-map .psm-add-another {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.product-suite-map .psm-add-another-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 10px;
+}
+
+.product-suite-map .psm-add-another-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.product-suite-map .psm-type-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.product-suite-map .psm-type-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-suite-map .psm-type-btn.type-attraction { border-left: 3px solid #60a5fa; }
+.product-suite-map .psm-type-btn.type-upsell { border-left: 3px solid #22c55e; }
+.product-suite-map .psm-type-btn.type-downsell { border-left: 3px solid #fb923c; }
+.product-suite-map .psm-type-btn.type-continuity { border-left: 3px solid #a855f7; }
+
+.product-suite-map .psm-add-another-offers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.product-suite-map .psm-offer-pick {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.product-suite-map .psm-offer-pick:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(233, 162, 59, 0.4);
+}
+
+.product-suite-map .psm-offer-pick-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-suite-map .psm-offer-pick-score {
+  flex-shrink: 0;
+  margin-left: 8px;
+  color: #E9A23B;
+  font-weight: 600;
 }
 
 .product-suite-map .psm-custom-input {
