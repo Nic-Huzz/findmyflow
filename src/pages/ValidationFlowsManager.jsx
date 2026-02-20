@@ -75,59 +75,69 @@ const ValidationFlowsManager = () => {
   const [userProjects, setUserProjects] = useState([])
   const [selectedProjectId, setSelectedProjectId] = useState('')
 
-  // Load user's projects with linked cluster labels
+  // Flow Finder clusters for problem/persona selection
+  const [problemClusters, setProblemClusters] = useState([])
+  const [personaClusters, setPersonaClusters] = useState([])
+
+  // Load user's projects and Flow Finder clusters
   useEffect(() => {
     if (!user?.id) return
-    const loadProjects = async () => {
-      const { data: projects, error } = await supabase
-        .from('user_projects')
-        .select('id, name, description, current_stage, linked_problem_cluster_id, linked_persona_cluster_id')
-        .eq('user_id', user.id)
-        .in('status', ['active', 'completed'])
-        .order('created_at', { ascending: false })
-
-      if (error || !projects?.length) return
-
-      // Fetch linked cluster labels
-      const clusterIds = new Set()
-      projects.forEach(p => {
-        if (p.linked_problem_cluster_id) clusterIds.add(p.linked_problem_cluster_id)
-        if (p.linked_persona_cluster_id) clusterIds.add(p.linked_persona_cluster_id)
-      })
-
-      let clustersMap = {}
-      if (clusterIds.size > 0) {
-        const { data: clusters } = await supabase
+    const loadData = async () => {
+      // Fetch projects and clusters in parallel
+      const [projectsRes, clustersRes] = await Promise.all([
+        supabase
+          .from('user_projects')
+          .select('id, name, description, current_stage, linked_problem_cluster_id, linked_persona_cluster_id')
+          .eq('user_id', user.id)
+          .in('status', ['active', 'completed'])
+          .order('created_at', { ascending: false }),
+        supabase
           .from('nikigai_clusters')
-          .select('id, cluster_label')
-          .in('id', Array.from(clusterIds))
-        clusters?.forEach(c => { clustersMap[c.id] = c.cluster_label })
-      }
+          .select('id, cluster_label, cluster_type')
+          .eq('user_id', user.id)
+          .in('cluster_type', ['problems', 'persona'])
+          .order('cluster_label')
+      ])
 
-      setUserProjects(projects.map(p => ({
-        id: p.id,
-        name: p.name,
-        description: p.description || '',
-        stage: p.current_stage,
-        problemLabel: clustersMap[p.linked_problem_cluster_id] || '',
-        personaLabel: clustersMap[p.linked_persona_cluster_id] || '',
-      })))
+      // Deduplicate clusters by label
+      const seen = { problems: new Set(), persona: new Set() }
+      const problems = []
+      const personas = []
+      ;(clustersRes.data || []).forEach(c => {
+        if (seen[c.cluster_type]?.has(c.cluster_label)) return
+        seen[c.cluster_type]?.add(c.cluster_label)
+        if (c.cluster_type === 'problems') problems.push(c)
+        else personas.push(c)
+      })
+      setProblemClusters(problems)
+      setPersonaClusters(personas)
+
+      if (projectsRes.data?.length) {
+        setUserProjects(projectsRes.data.map(p => ({
+          id: p.id,
+          name: p.name,
+          description: p.description || '',
+          stage: p.current_stage,
+          linkedProblemId: p.linked_problem_cluster_id,
+          linkedPersonaId: p.linked_persona_cluster_id,
+        })))
+      }
     }
-    loadProjects()
+    loadData()
   }, [user?.id])
 
-  // Handle project selection — auto-fill placeholders
+  // Handle project selection — auto-fill placeholders from linked clusters
   const handleProjectSelect = (projectId) => {
     setSelectedProjectId(projectId)
     const project = userProjects.find(p => p.id === projectId)
     if (project) {
+      const linkedProblem = problemClusters.find(c => c.id === project.linkedProblemId)
+      const linkedPersona = personaClusters.find(c => c.id === project.linkedPersonaId)
       setPlaceholders({
-        problemArea: project.problemLabel || '',
-        audienceDescription: project.personaLabel || '',
-        solutionConcept: project.description || '',
+        problemArea: linkedProblem?.cluster_label || placeholders.problemArea,
+        audienceDescription: linkedPersona?.cluster_label || placeholders.audienceDescription,
+        solutionConcept: project.description || placeholders.solutionConcept,
       })
-    } else {
-      setPlaceholders({ problemArea: '', solutionConcept: '', audienceDescription: '' })
     }
   }
 
@@ -1415,44 +1425,83 @@ const ValidationFlowsManager = () => {
               </>
             )}
 
-            {/* Step 2: Select Project */}
+            {/* Step 2: Add Context */}
             {createStep === 2 && (
               <>
-                <h2>Select a Project</h2>
-                <p>Choose which project this feedback form is for. Your problem, persona, and description will be used as context for respondents.</p>
+                <h2>Add Context</h2>
+                <p>Select the problem and audience for this survey. These come from your Flow Finder results.</p>
 
                 <div className="context-form">
-                  <div className="form-group">
-                    <label>Project</label>
-                    <select
-                      value={selectedProjectId}
-                      onChange={(e) => handleProjectSelect(e.target.value)}
-                    >
-                      <option value="">Select a project...</option>
-                      {userProjects.map(p => (
-                        <option key={p.id} value={p.id}>
-                          {p.name} (Stage {p.stage})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {selectedProjectId && (
-                    <div className="project-context-preview">
-                      <div className="context-preview-item">
-                        <span className="context-preview-label">Problem</span>
-                        <span className="context-preview-value">{placeholders.problemArea || '—'}</span>
-                      </div>
-                      <div className="context-preview-item">
-                        <span className="context-preview-label">Audience</span>
-                        <span className="context-preview-value">{placeholders.audienceDescription || '—'}</span>
-                      </div>
-                      <div className="context-preview-item">
-                        <span className="context-preview-label">Solution</span>
-                        <span className="context-preview-value">{placeholders.solutionConcept || '—'}</span>
-                      </div>
+                  {userProjects.length > 0 && (
+                    <div className="form-group">
+                      <label>Project (optional)</label>
+                      <select
+                        value={selectedProjectId}
+                        onChange={(e) => handleProjectSelect(e.target.value)}
+                      >
+                        <option value="">No project</option>
+                        {userProjects.map(p => (
+                          <option key={p.id} value={p.id}>
+                            {p.name} (Stage {p.stage})
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   )}
+
+                  <div className="form-group">
+                    <label>Problem you solve</label>
+                    {problemClusters.length > 0 ? (
+                      <select
+                        value={placeholders.problemArea}
+                        onChange={(e) => setPlaceholders({ ...placeholders, problemArea: e.target.value })}
+                      >
+                        <option value="">Select a problem...</option>
+                        {problemClusters.map(c => (
+                          <option key={c.id} value={c.cluster_label}>{c.cluster_label}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <textarea
+                        placeholder="e.g., finding clarity and purpose in their career"
+                        value={placeholders.problemArea}
+                        onChange={(e) => setPlaceholders({ ...placeholders, problemArea: e.target.value })}
+                        rows={2}
+                      />
+                    )}
+                  </div>
+
+                  <div className="form-group">
+                    <label>Who is this for?</label>
+                    {personaClusters.length > 0 ? (
+                      <select
+                        value={placeholders.audienceDescription}
+                        onChange={(e) => setPlaceholders({ ...placeholders, audienceDescription: e.target.value })}
+                      >
+                        <option value="">Select a persona...</option>
+                        {personaClusters.map(c => (
+                          <option key={c.id} value={c.cluster_label}>{c.cluster_label}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <textarea
+                        placeholder="e.g., professionals feeling stuck or unfulfilled"
+                        value={placeholders.audienceDescription}
+                        onChange={(e) => setPlaceholders({ ...placeholders, audienceDescription: e.target.value })}
+                        rows={2}
+                      />
+                    )}
+                  </div>
+
+                  <div className="form-group">
+                    <label>What solution are you exploring?</label>
+                    <textarea
+                      placeholder="e.g., a guided discovery process to uncover your ideal path"
+                      value={placeholders.solutionConcept}
+                      onChange={(e) => setPlaceholders({ ...placeholders, solutionConcept: e.target.value })}
+                      rows={2}
+                    />
+                  </div>
                 </div>
 
                 <div className="modal-actions">
