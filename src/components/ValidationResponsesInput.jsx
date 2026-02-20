@@ -129,10 +129,16 @@ function ValidationResponsesInput({ quest, onComplete, projectId = null }) {
         sendAnalysisUnlockedNotification(user.id)
       }
 
-      const { data: analyses } = await supabase
+      let analysisQuery = supabase
         .from('validation_analysis')
         .select('*')
         .eq('user_id', user.id)
+
+      if (projectId) {
+        analysisQuery = analysisQuery.eq('project_id', projectId)
+      }
+
+      const { data: analyses } = await analysisQuery
         .order('created_at', { ascending: false })
 
       if (analyses && analyses.length > 0) {
@@ -207,7 +213,8 @@ function ValidationResponsesInput({ quest, onComplete, projectId = null }) {
       const { data, error: fnError } = await supabase.functions.invoke('analyze-validation-responses', {
         body: {
           userId: user.id,
-          flows: allResponses
+          flows: allResponses,
+          projectId: projectId || null
         }
       })
 

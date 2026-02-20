@@ -43,7 +43,7 @@ serve(async (req) => {
   }
 
   try {
-    const { userId, flows } = await req.json()
+    const { userId, flows, projectId } = await req.json()
 
     if (!userId) {
       return new Response(
@@ -386,6 +386,7 @@ Be concise and practical. Focus on actionable output.`,
       .from('validation_analysis')
       .insert({
         user_id: userId,
+        project_id: projectId || null,
         analysis_number: analysisNumber,
         total_responses: totalResponses,
         flows_analyzed: flows.length,
