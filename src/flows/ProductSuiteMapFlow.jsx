@@ -27,6 +27,7 @@ function ProductSuiteMapFlow() {
   const navigate = useNavigate()
 
   const [assessments, setAssessments] = useState({})
+  const [allScores, setAllScores] = useState({})           // { attraction: [{ id, name, score, confidence, disqualified }], ... }
   const [chain, setChain] = useState([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -36,10 +37,19 @@ function ProductSuiteMapFlow() {
   const [showCustomInput, setShowCustomInput] = useState(false)
   const [customName, setCustomName] = useState('')
   const [customType, setCustomType] = useState('attraction')
+  const [openDropdown, setOpenDropdown] = useState(null)    // which offer type dropdown is open
 
   const dragSource = useRef(null) // 'pool' or 'chain'
   const draggedIdxRef = useRef(null)
   const nextId = useRef(0)
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!openDropdown) return
+    const close = () => setOpenDropdown(null)
+    document.addEventListener('click', close)
+    return () => document.removeEventListener('click', close)
+  }, [openDropdown])
 
   // Load assessment data + saved map on mount
   useEffect(() => {
@@ -51,7 +61,7 @@ function ProductSuiteMapFlow() {
       const assessmentResults = await Promise.all(
         OFFER_TYPES.map(ot =>
           supabase.from(ot.table)
-            .select('recommended_offer_name, recommended_offer_id, confidence_score')
+            .select('recommended_offer_name, recommended_offer_id, confidence_score, all_offer_scores')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(1)
@@ -62,6 +72,7 @@ function ProductSuiteMapFlow() {
       if (cancelled) return
 
       const loaded = {}
+      const scores = {}
       OFFER_TYPES.forEach((ot, i) => {
         const { data, error } = assessmentResults[i]
         if (error) console.error(`Failed to load ${ot.key} assessment:`, error)
@@ -71,9 +82,13 @@ function ProductSuiteMapFlow() {
             offerId: data.recommended_offer_id || '',
             confidence: data.confidence_score || 0
           }
+          if (data.all_offer_scores?.length > 0) {
+            scores[ot.key] = data.all_offer_scores.filter(s => !s.disqualified)
+          }
         }
       })
       setAssessments(loaded)
+      setAllScores(scores)
 
       // Fetch saved map
       const { data: mapData } = await supabase
@@ -141,6 +156,25 @@ function ProductSuiteMapFlow() {
     setCustomName('')
     setCustomType('attraction')
     setShowCustomInput(false)
+  }
+
+  // Change the selected offer for a given type
+  const handleChangeOffer = (offerTypeKey, offer) => {
+    setAssessments(prev => ({
+      ...prev,
+      [offerTypeKey]: {
+        name: offer.name,
+        offerId: offer.id || '',
+        confidence: offer.confidence || 0
+      }
+    }))
+    // Also update in chain if it's already there
+    setChain(prev => prev.map(item =>
+      !item.isCustom && item.type === offerTypeKey
+        ? { ...item, name: offer.name, confidence: offer.confidence || 0 }
+        : item
+    ))
+    setOpenDropdown(null)
   }
 
   // --- Drag and Drop ---
@@ -313,7 +347,7 @@ function ProductSuiteMapFlow() {
 
   if (loading) {
     return (
-      <div className="product-suite-map">
+      <div className="product-suite-map flow-base">
         <div className="psm-loading">
           <div className="spinner" />
           <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>Loading your assessments...</span>
@@ -323,11 +357,7 @@ function ProductSuiteMapFlow() {
   }
 
   return (
-    <div className="product-suite-map">
-      <button className="psm-back" onClick={() => navigate('/7-day-challenge')}>
-        &larr; Back to Challenge
-      </button>
-
+    <div className="product-suite-map flow-base">
       <div className="psm-header">
         <h1>Map Your Money Model</h1>
         <p>Drag your offers into the chain below to build your product suite</p>
@@ -367,6 +397,30 @@ function ProductSuiteMapFlow() {
                   <>
                     <div className="offer-name">{assessed.name}</div>
                     <div className="confidence">{assessed.confidence}% match</div>
+                    {allScores[ot.key]?.length > 1 && (
+                      <div className="psm-change-wrap">
+                        <button
+                          className="psm-change-btn"
+                          onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === ot.key ? null : ot.key) }}
+                        >
+                          Change &#9662;
+                        </button>
+                        {openDropdown === ot.key && (
+                          <div className="psm-change-dropdown">
+                            {allScores[ot.key].map(offer => (
+                              <button
+                                key={offer.id || offer.name}
+                                className={`psm-dropdown-item${offer.name === assessed.name ? ' active' : ''}`}
+                                onClick={(e) => { e.stopPropagation(); handleChangeOffer(ot.key, offer) }}
+                              >
+                                <span className="psm-dropdown-name">{offer.name}</span>
+                                <span className="psm-dropdown-score">{offer.confidence || offer.score || 0}%</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </>
                 ) : (
                   <>
@@ -484,6 +538,13 @@ function ProductSuiteMapFlow() {
             Add at least one assessment offer to your chain
           </div>
         )}
+      </div>
+
+      {/* Back link at bottom */}
+      <div className="psm-bottom-nav">
+        <button className="go-back-link" onClick={() => navigate('/7-day-challenge')}>
+          &larr; Back to Challenge
+        </button>
       </div>
     </div>
   )
