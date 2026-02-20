@@ -39,6 +39,7 @@ import {
 } from '../lib/incomeCalculatorLogic'
 import { createProductFromFlow, getUserProducts } from '../lib/productsService'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
 import './IncomeCalculator.css'
 
 const TOTAL_STEPS = 8
@@ -46,6 +47,7 @@ const TOTAL_STEPS = 8
 export default function IncomeCalculator() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const { projectId } = useProjectId()
 
   // Current step (1-8)
   const [step, setStep] = useState(1)
@@ -234,7 +236,8 @@ export default function IncomeCalculator() {
           await completeFlowQuest({
             userId: user.id,
             flowId: 'income_calculator',
-            pointsEarned: 4
+            pointsEarned: 4,
+            projectId: projectId || null
           })
         } catch (questError) {
           console.error('Error completing quest:', questError)

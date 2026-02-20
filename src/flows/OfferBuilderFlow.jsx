@@ -28,6 +28,7 @@ import { useAutoSave } from '../hooks/useAutoSave'
 import { useProjectId } from '../hooks/useProjectId'
 import { trackFlowCompletion } from '../lib/flowTracking'
 import { getValidationObstaclesForOfferBuilder } from '../lib/validationObstacles'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import ErrorMessage from '../components/ErrorMessage'
 import { getSkillProductSuggestions, getAmplifierMessages, DIRECT_MAPPINGS, AMPLIFIER_MAPPINGS } from '../lib/skillProductMapping'
@@ -587,7 +588,8 @@ function OfferBuilderFlow() {
             await completeFlowQuest({
               userId: user.id,
               flowId: '100m_offer',
-              pointsEarned: 6
+              pointsEarned: 6,
+              projectId: projectId || null
             })
           }
         } catch (err) {
@@ -1107,7 +1109,8 @@ function OfferBuilderFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: '100m_offer',
-          pointsEarned: 6
+          pointsEarned: 6,
+          projectId: projectId || null
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)
@@ -1123,20 +1126,21 @@ function OfferBuilderFlow() {
           .limit(1)
           .single()
 
-        await supabase.from('milestone_completions').insert({
+        await supabase.from('milestone_completions').upsert({
           user_id: user.id,
           project_id: projectData?.id,
           milestone_id: 'offer_categorized',
-          stage: projectData?.current_stage || 2,
-          evidence_text: `Categorized ${Object.values(solutionCategories).filter(c => c !== 'skip' && c !== null).length} solutions into offer stack`
-        })
+          stage: String(projectData?.current_stage || 2),
+          persona: 'default',
+          evidence_text: `Defined ${problemSolutions.length} solutions into offer stack`
+        }, { onConflict: 'user_id,milestone_id,persona' })
       } catch (milestoneError) {
         console.warn('Milestone creation failed:', milestoneError)
       }
 
-      // Clear auto-saved progress on completion
-      clearProgress()
+      // Show success first, then clear auto-save (order matters for resilience)
       setStage(STAGES.SUCCESS)
+      clearProgress()
     } catch (err) {
       setError('Failed to save. Please try again.')
       console.error('Save error:', err)
@@ -1213,7 +1217,7 @@ function OfferBuilderFlow() {
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
         <div className="welcome-container">
           <div className="welcome-content">
-            <h1 className="welcome-greeting">Offer Builder</h1>
+            <h1 className="welcome-greeting">Product Builder</h1>
             <div className="welcome-message">
               <p><strong>Ready to create an offer so good people feel silly saying no?</strong></p>
               <p>Great offers aren't built on hope—they're engineered from deep customer understanding.</p>
@@ -2038,6 +2042,7 @@ function OfferBuilderFlow() {
                   <div key={index} className="added-solution-card">
                     <div className="solution-card-content">
                       <span className="solution-type-badge">{SOLUTION_LABELS[sol.solutionType]}</span>
+                      {sol.name && <p className="solution-name"><strong>{sol.name}</strong></p>}
                       <p className="solution-problem-ref">For: {sol.problemText}</p>
                       <p className="solution-desc">{sol.description}</p>
                       {sol.differentiators.length > 0 && (
@@ -2320,11 +2325,28 @@ function OfferBuilderFlow() {
                 </div>
               )}
 
+              {/* Feature name - for "Yes" path with existing product */}
+              {currentSolution.existingProductId && (
+                <div className="form-field">
+                  <label>Feature Name</label>
+                  <input
+                    type="text"
+                    className="solution-name-input"
+                    placeholder="e.g. Strategy Sprint, Growth Accelerator..."
+                    value={currentSolution.name}
+                    onChange={(e) => setCurrentSolution(prev => ({
+                      ...prev,
+                      name: e.target.value
+                    }))}
+                  />
+                </div>
+              )}
+
               {/* Solution description - for "Yes" path with existing product */}
               {currentSolution.existingProductId && (
                 <div className="form-field">
                   <label>
-                    How does {existingProducts.find(p => p.id === currentSolution.existingProductId)?.name || 'this product'} solve "{currentSolution.problemText?.length > 40 ? currentSolution.problemText.substring(0, 40) + '...' : currentSolution.problemText}"?
+                    How does {currentSolution.name?.trim() || existingProducts.find(p => p.id === currentSolution.existingProductId)?.name || 'this product'} solve "{currentSolution.problemText?.length > 40 ? currentSolution.problemText.substring(0, 40) + '...' : currentSolution.problemText}"?
                   </label>
                   <textarea
                     className="solution-input"
@@ -2562,6 +2584,8 @@ function OfferBuilderFlow() {
               <span className="flow-arrow">→</span>
             </button>
           </div>
+
+          <FlowFeedback flowType="offer_builder" userId={user?.id} />
 
           <button
             className="secondary-button"

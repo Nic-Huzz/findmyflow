@@ -10,18 +10,18 @@ CREATE TABLE IF NOT EXISTS product_suite_maps (
 
 ALTER TABLE product_suite_maps ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Users can read own map"
-  ON product_suite_maps FOR SELECT
-  USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert own map"
-  ON product_suite_maps FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Users can update own map"
-  ON product_suite_maps FOR UPDATE
-  USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can delete own map"
-  ON product_suite_maps FOR DELETE
-  USING (auth.uid() = user_id);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can read own map' AND tablename = 'product_suite_maps') THEN
+    CREATE POLICY "Users can read own map" ON product_suite_maps FOR SELECT USING (auth.uid() = user_id);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can insert own map' AND tablename = 'product_suite_maps') THEN
+    CREATE POLICY "Users can insert own map" ON product_suite_maps FOR INSERT WITH CHECK (auth.uid() = user_id);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can update own map' AND tablename = 'product_suite_maps') THEN
+    CREATE POLICY "Users can update own map" ON product_suite_maps FOR UPDATE USING (auth.uid() = user_id);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can delete own map' AND tablename = 'product_suite_maps') THEN
+    CREATE POLICY "Users can delete own map" ON product_suite_maps FOR DELETE USING (auth.uid() = user_id);
+  END IF;
+END $$;

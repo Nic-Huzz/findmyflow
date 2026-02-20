@@ -6,6 +6,7 @@
  */
 import { supabase } from '../supabaseClient'
 import { FANTASY_CATEGORIES, CATEGORY_KEYS, MATCH_POINTS } from './leagueConfig'
+import { getWeekNominations } from './leagueService'
 
 // ============================================
 // Individual User Scoring
@@ -19,13 +20,14 @@ import { FANTASY_CATEGORIES, CATEGORY_KEYS, MATCH_POINTS } from './leagueConfig'
  * @param {string} startDate - ISO date string (inclusive)
  * @param {string} endDate - ISO date string (inclusive)
  * @param {number} approvedContentPoints - Pre-calculated approved content points for Bonus
+ * @param {string|null} nominatedProjectId - Project ID for Business category filtering
  * @returns {{ [categoryKey]: number }}
  */
-export async function calculateUserCategoryScores(userId, startDate, endDate, approvedContentPoints = 0) {
+export async function calculateUserCategoryScores(userId, startDate, endDate, approvedContentPoints = 0, nominatedProjectId = null) {
   // Fetch all quest_completions for this user in the date range
   const { data: completions, error } = await supabase
     .from('quest_completions')
-    .select('quest_id, quest_category, points_earned, completed_at')
+    .select('quest_id, quest_category, points_earned, completed_at, project_id')
     .eq('user_id', userId)
     .gte('completed_at', startDate)
     .lte('completed_at', endDate + 'T23:59:59.999Z')
@@ -38,9 +40,21 @@ export async function calculateUserCategoryScores(userId, startDate, endDate, ap
   const scores = {}
 
   for (const [key, config] of Object.entries(FANTASY_CATEGORIES)) {
-    const categoryCompletions = completions.filter(c =>
+    let categoryCompletions = completions.filter(c =>
       config.dbFilter.includes(c.quest_category)
     )
+
+    // Business efficiency: filter to nominated project only
+    if (config.scoringType === 'efficiency') {
+      if (!nominatedProjectId) {
+        // No nomination → 0 Business score
+        scores[key] = 0
+        continue
+      }
+      categoryCompletions = categoryCompletions.filter(c =>
+        c.project_id === nominatedProjectId
+      )
+    }
 
     if (config.scoringType === 'efficiency') {
       // Business Efficiency: SUM(points) / COUNT(DISTINCT quest_id)
@@ -70,9 +84,10 @@ export async function calculateUserCategoryScores(userId, startDate, endDate, ap
  * @param {string} startDate
  * @param {string} endDate
  * @param {{ [userId]: number }} contentPointsByUser - Approved content points per user
+ * @param {{ [userId]: string }} nominationsByUser - Nominated project ID per user
  * @returns {{ [categoryKey]: number, members: { [userId]: { [categoryKey]: number } } }}
  */
-export async function calculateTeamScores(memberUserIds, startDate, endDate, contentPointsByUser = {}) {
+export async function calculateTeamScores(memberUserIds, startDate, endDate, contentPointsByUser = {}, nominationsByUser = {}) {
   const memberScores = {}
   const teamTotals = Object.fromEntries(CATEGORY_KEYS.map(k => [k, 0]))
 
@@ -80,7 +95,8 @@ export async function calculateTeamScores(memberUserIds, startDate, endDate, con
   await Promise.all(
     memberUserIds.map(async (userId) => {
       const userContentPoints = contentPointsByUser[userId] || 0
-      const scores = await calculateUserCategoryScores(userId, startDate, endDate, userContentPoints)
+      const nominatedProjectId = nominationsByUser[userId] || null
+      const scores = await calculateUserCategoryScores(userId, startDate, endDate, userContentPoints, nominatedProjectId)
       memberScores[userId] = scores
 
       for (const key of CATEGORY_KEYS) {
@@ -219,6 +235,9 @@ export async function calculateWeekResults(leagueId, weekNumber, startDate, endD
     contentPointsByUser[sub.user_id] = (contentPointsByUser[sub.user_id] || 0) + sub.points_value
   })
 
+  // 3.5. Get project nominations for this week
+  const nominations = await getWeekNominations(leagueId, weekNumber)
+
   // 4. Calculate team scores and matchup results
   const results = []
   const teamScoresCache = {}
@@ -230,7 +249,8 @@ export async function calculateWeekResults(leagueId, weekNumber, startDate, endD
         teamMembersMap[matchup.team_a_id] || [],
         startDate,
         endDate,
-        contentPointsByUser
+        contentPointsByUser,
+        nominations
       )
     }
     if (!teamScoresCache[matchup.team_b_id]) {
@@ -238,7 +258,8 @@ export async function calculateWeekResults(leagueId, weekNumber, startDate, endD
         teamMembersMap[matchup.team_b_id] || [],
         startDate,
         endDate,
-        contentPointsByUser
+        contentPointsByUser,
+        nominations
       )
     }
 

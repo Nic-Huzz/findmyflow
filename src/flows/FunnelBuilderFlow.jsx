@@ -17,6 +17,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './FunnelBuilderFlow.css'
@@ -220,6 +221,7 @@ const ATTRACTION_OFFER_DETAILS = {
 function FunnelBuilderFlow() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
 
   const [stage, setStage] = useState(STAGES.LOADING)
   const [coreStrategy, setCoreStrategy] = useState(null)
@@ -483,7 +485,8 @@ function FunnelBuilderFlow() {
       await completeFlowQuest({
         userId: user.id,
         flowId: 'funnel_builder',
-        pointsEarned: 8
+        pointsEarned: 8,
+        projectId: projectId || null
       })
 
       // Go to PRE-ACTION to capture resistance before success

@@ -225,6 +225,7 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'persona': 'flow_finder_persona',
       'integration': 'flow_finder_integration',
       'play_list_finder': 'play_list_finder',
+      'play_list_explainer': 'play_list_explainer',
       'persona_identifier': 'persona_identifier',
       'flow_finder_explainer': 'flow_finder_explainer',
       'validation_explainer': 'validation_explainer',
@@ -248,21 +249,26 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       return { success: false, error: 'Unknown flow type' };
     }
 
+    // Quests that allow multiple completions
+    const repeatableQuests = {
+      'play_list_finder': 10
+    };
+
     // Check if quest already completed at user level (challenge_instance_id IS NULL)
-    const { data: existingCompletion, error: checkError } = await supabase
+    const { data: existingCompletions, error: checkError } = await supabase
       .from('quest_completions')
       .select('id')
       .eq('user_id', userId)
       .is('challenge_instance_id', null)
-      .eq('quest_id', questId)
-      .maybeSingle();
+      .eq('quest_id', questId);
 
     if (checkError) {
       console.error('Error checking existing completion:', checkError);
       return { success: false, error: checkError.message };
     }
 
-    if (existingCompletion) {
+    const maxCompletions = repeatableQuests[questId] || 1;
+    if (existingCompletions && existingCompletions.length >= maxCompletions) {
       return { success: true, skipped: true, reason: 'Already completed' };
     }
 
@@ -279,7 +285,8 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'offer_creation_explainer': 5,
       'campaign_explainer': 5,
       'launch_explainer': 5,
-      'play_list_finder': 10,
+      'play_list_finder': 7,
+      'play_list_explainer': 5,
       'persona_identifier': 10,
       'mind_space_extraction': 10,  // Matches JSON quest ID
       'milestone_read_money_model': 5,  // Money Model Guide explainer

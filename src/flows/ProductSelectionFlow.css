@@ -188,6 +188,34 @@
   line-height: 1.5;
 }
 
+.product-selection-flow .group-with-picker {
+  margin-top: 8px;
+}
+
+.product-selection-flow .group-with-picker select {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.product-selection-flow .group-with-picker select:hover {
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.product-selection-flow .group-with-picker select option {
+  background: #1a1a2e;
+  color: white;
+}
+
 /* ============ QUESTION CONTAINER ============ */
 
 .product-selection-flow .question-container {

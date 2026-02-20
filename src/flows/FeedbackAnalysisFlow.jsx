@@ -248,7 +248,8 @@ function FeedbackAnalysisFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: 'feedback_analysis',
-          pointsEarned: 6
+          pointsEarned: 6,
+          projectId: projectId || null
         })
       } catch (e) {
         console.warn('Quest completion failed:', e)

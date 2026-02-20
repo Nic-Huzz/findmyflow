@@ -25,7 +25,7 @@ const TIMING_OPTIONS = [
  * @param {function} onSubmit - Callback after successful submission (optional)
  */
 export default function FlowFeedback({ flowType, userId, sessionToken, onSubmit }) {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
 

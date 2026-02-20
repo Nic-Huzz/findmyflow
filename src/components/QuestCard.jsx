@@ -24,6 +24,7 @@ import ReleaseQuestInput, { RELEASE_QUEST_IDS } from './ReleaseQuestInput'
 import GrandSlamDropdownInput from './GrandSlamDropdownInput'
 import ValidationResponsesInput from './ValidationResponsesInput'
 import ResponseCounterInput from './ResponseCounterInput'
+import { getCategoryEmoji, getCategoryColor } from '../lib/league/leagueConfig'
 
 // Recognise quest IDs that use the enhanced input
 const RECOGNISE_QUEST_IDS = [
@@ -82,7 +83,9 @@ function QuestCard({
   // For response counter quests
   validationResponseCounts = {},
   // For quests with maxCompletions > 1 (e.g. Tell a Friend)
-  completionCount = 0
+  completionCount = 0,
+  // Pre-launch lock: grey out all non-flow quests
+  prelaunchLocked = false
 }) {
   const cardClasses = [
     'quest-card',
@@ -114,7 +117,13 @@ function QuestCard({
             </span>
           )}
         </div>
-        <span className="quest-points">+{quest.points} XP</span>
+        <span
+          className="quest-points"
+          style={getCategoryColor(quest.category) ? {
+            background: getCategoryColor(quest.category),
+            color: getCategoryColor(quest.category) === '#E9A23B' ? '#212529' : undefined
+          } : undefined}
+        >{getCategoryEmoji(quest.category)}{getCategoryEmoji(quest.category) ? <>&ensp;</> : null}+{quest.points} XP</span>
       </div>
 
       {/* Daily streak bubbles */}
@@ -262,6 +271,11 @@ function QuestCard({
                 </div>
               )}
             </div>
+          ) : prelaunchLocked && quest.type !== 'Flow Finder' ? (
+            <button className="quest-complete-btn prelaunch-locked" disabled>
+              Unlocked Monday
+            </button>
+
           ) : quest.inputType === 'flow' ? (
             // Plain <a> bypasses React Router's startTransition which prevents
             // Suspense fallbacks from showing during lazy chunk loading.
@@ -606,7 +620,7 @@ function QuestCard({
             {completedBadgeText}
           </div>
           {justCompleted && (
-            <div className="points-fly-up">+{quest.points} XP</div>
+            <div className="points-fly-up">{getCategoryEmoji(quest.category)}{getCategoryEmoji(quest.category) ? <>&ensp;</> : null}+{quest.points} XP</div>
           )}
           {quest.flow_route && (
             <a

@@ -15,6 +15,7 @@ import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
 import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS } from '../lib/wheelTaxonomy'
 import { supabase } from '../lib/supabaseClient'
 import '../styles/flow-base.css'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './LetsPlayFlow.css'
 
 // Person type options
@@ -455,6 +456,8 @@ export default function LetsPlayFlow() {
             <p className="encouragement-sub">
               After you've done it, complete the <strong>Let's Play Peer-Trial Review</strong> quest to reflect and earn bonus points!
             </p>
+            <FlowFeedback flowType="lets_play" userId={user?.id} />
+
             <button className="primary-button" onClick={() => navigate('/7-day-challenge')}>
               Got it
             </button>

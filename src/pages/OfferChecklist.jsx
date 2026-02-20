@@ -17,6 +17,8 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { createRelationship, RELATIONSHIP_TYPES } from '../lib/productRelationships'
 import { getUserProducts } from '../lib/productsService'
+import CompassCheck from '../components/CompassCheck'
+import { createCompassEntry } from '../lib/compassEntryHelper'
 import './OfferChecklist.css'
 
 // Checklist data for each offer type
@@ -270,6 +272,7 @@ function OfferChecklist() {
   const [showPostAction, setShowPostAction] = useState(false)
   const [postFeeling, setPostFeeling] = useState(null)
   const [threePercent, setThreePercent] = useState('')
+  const [compassStep, setCompassStep] = useState(false)
 
   // Hide bottom toolbar on mount, show on unmount
   useEffect(() => {
@@ -414,7 +417,11 @@ function OfferChecklist() {
     setShowPostAction(true)
   }
 
-  const handleFinalComplete = async () => {
+  const handleContinueToCompass = () => {
+    setCompassStep(true)
+  }
+
+  const handleFinalComplete = async (compass) => {
     if (!postFeeling) return
 
     setIsSaving(true)
@@ -444,6 +451,7 @@ function OfferChecklist() {
           offer_type: selectedOfferType,
           post_feeling: postFeeling,
           three_percent_reflection: threePercent.trim() || null,
+          compass_direction: compass?.direction || null,
           items_completed: Object.keys(checkedItems).filter(k => checkedItems[k]).length,
           linked_upsell_product_id: category === 'upsell' && selectedUpsellProduct !== 'skip' ? selectedUpsellProduct : null,
           core_product_id: coreProduct?.id || null,
@@ -462,8 +470,12 @@ function OfferChecklist() {
       await supabase.from('quest_completions').insert({
         user_id: user.id,
         quest_id: `milestone_create_${category}`,
-        milestone_type: milestoneMap[category],
+        quest_category: 'Business',
+        quest_type: 'milestone',
+        challenge_instance_id: null,
+        challenge_day: 0,
         points_earned: 15,
+        project_id: projectId || null,
         evidence: {
           offer_type: selectedOfferType,
           items_completed: Object.keys(checkedItems).filter(k => checkedItems[k]),
@@ -473,7 +485,20 @@ function OfferChecklist() {
         }
       })
 
+      // Create compass entry in flow_entries
+      if (compass) {
+        await createCompassEntry({
+          userId: user.id,
+          projectId: projectId || null,
+          internalState: compass.internalState,
+          externalState: compass.externalState,
+          activityDescription: `${CATEGORY_LABELS[category]} Offer Created`,
+          reasoning: threePercent.trim() || 'Offer creation reflection'
+        })
+      }
+
       setShowPostAction(false)
+      setCompassStep(false)
       navigate('/7-day-challenge?tab=business')
     } catch (err) {
       console.error('Error completing quest:', err)
@@ -729,14 +754,23 @@ function OfferChecklist() {
               <p className="post-action-hint">Optional — your insights compound over time</p>
             </div>
 
-            {/* Complete Button */}
-            <button
-              className="post-action-complete-btn"
-              onClick={handleFinalComplete}
-              disabled={!postFeeling || isSaving}
-            >
-              {isSaving ? 'Saving...' : 'Complete & Earn Points →'}
-            </button>
+            {/* Compass Check or Complete Button */}
+            {compassStep ? (
+              <div className="post-action-section">
+                <CompassCheck
+                  onComplete={(data) => handleFinalComplete(data)}
+                  onSkip={() => handleFinalComplete(null)}
+                />
+              </div>
+            ) : (
+              <button
+                className="post-action-complete-btn"
+                onClick={handleContinueToCompass}
+                disabled={!postFeeling || isSaving}
+              >
+                {isSaving ? 'Saving...' : 'Continue →'}
+              </button>
+            )}
           </div>
         </div>,
         document.body

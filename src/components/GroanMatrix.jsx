@@ -316,9 +316,10 @@ function GroanMatrix({
     <div className="groan-matrix">
       {/* Header */}
       <div className="groan-matrix-header">
-        <h2 className="groan-matrix-title">
-          Play-list Matrix
-        </h2>
+        <div className="groan-matrix-title-row">
+          <h2 className="groan-matrix-title">Play-list Matrix</h2>
+          <a href="/play-list-explainer" className="groan-matrix-explainer-btn">Explainer</a>
+        </div>
 
         <div className="groan-matrix-controls">
           {/* Source type tabs */}

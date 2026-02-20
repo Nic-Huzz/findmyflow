@@ -9,6 +9,7 @@ import { useCelebrations } from '../hooks/useCelebrations'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { createProjectFromSession } from '../lib/projectCreation'
 import MindSpaceGraph from '../components/MindSpaceGraph'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './MindSpace.css'
 
 const EXTRACTION_PROMPT = `Analyze our entire conversation history together. I want you to identify patterns that reveal what I'm naturally drawn to — the intersection of my Skills, the Problems I care about, and the People (Personas) I want to serve.
@@ -1021,6 +1022,8 @@ export default function MindSpace() {
                     </span>
                   </button>
                 </div>
+
+                <FlowFeedback flowType="mind_space" userId={user?.id} />
 
                 {hasVisitedMe && (
                   <button

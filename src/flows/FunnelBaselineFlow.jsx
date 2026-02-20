@@ -25,8 +25,10 @@ import { getMondayDate, formatLocalDate } from '../lib/dateUtils'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
 import { syncCRMToFunnel } from '../lib/crm'
 import { ProgressDots } from '../components/MoneyModelShared'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './FunnelBaselineFlow.css'
 
 const STAGES = {
@@ -61,6 +63,7 @@ const TRAFFIC_SOURCES = [
 function FunnelBaselineFlow() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
 
   const [stage, setStage] = useState(STAGES.LOADING)
   const [saving, setSaving] = useState(false)
@@ -195,7 +198,8 @@ function FunnelBaselineFlow() {
       await completeFlowQuest({
         userId: user.id,
         flowId: 'funnel_baseline',
-        pointsEarned: 4
+        pointsEarned: 4,
+        projectId: projectId || null
       })
 
       // Sync CRM data to keep everything in sync
@@ -719,6 +723,8 @@ function FunnelBaselineFlow() {
               <li>Focus on improving your weakest conversion rate</li>
             </ul>
           </div>
+
+          <FlowFeedback flowType="funnel_baseline" userId={user?.id} />
 
           <button className="primary-button" onClick={() => navigate('/7-day-challenge')}>
             Back to Challenge

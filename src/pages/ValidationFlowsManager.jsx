@@ -11,6 +11,8 @@ import {
   getFlowAnalytics,
   updateFlowProject
 } from '../lib/validationFlows'
+import CompassCheck from '../components/CompassCheck'
+import { createCompassEntry } from '../lib/compassEntryHelper'
 
 // Lazy load heavy analytics components (~940 lines, 7 components)
 const LazyResponseTimeline = lazy(() => import('../components/AdvancedAnalytics').then(m => ({ default: m.ResponseTimeline })))
@@ -59,6 +61,7 @@ const ValidationFlowsManager = () => {
   const [aiSummaryLoading, setAiSummaryLoading] = useState(false)
   const [validationInsight, setValidationInsight] = useState('')
   const [insightSaved, setInsightSaved] = useState(false)
+  const [showCompassCheck, setShowCompassCheck] = useState(false)
   const [timePeriod, setTimePeriod] = useState('all')
   const [analyticsLoading, setAnalyticsLoading] = useState(false)
   const [animatedValues, setAnimatedValues] = useState({})
@@ -642,11 +645,26 @@ const ValidationFlowsManager = () => {
         }
       })
       setInsightSaved(true)
-      // Reset after 3 seconds
+      setShowCompassCheck(true)
+      // Reset saved state after 3 seconds
       setTimeout(() => setInsightSaved(false), 3000)
     } catch (err) {
       console.warn('Failed to save validation insight:', err)
     }
+  }
+
+  const handleCompassComplete = async (data) => {
+    if (data && user?.id) {
+      await createCompassEntry({
+        userId: user.id,
+        projectId: selectedFlow?.project_id || null,
+        internalState: data.internalState,
+        externalState: data.externalState,
+        activityDescription: 'Validation Analysis Complete',
+        reasoning: validationInsight.trim() || 'Validation analysis reflection'
+      })
+    }
+    setShowCompassCheck(false)
   }
 
   // Fallback local summary if edge function unavailable
@@ -1328,6 +1346,14 @@ const ValidationFlowsManager = () => {
                         {insightSaved ? '✓ Saved' : 'Save Insight'}
                       </button>
                     </div>
+
+                    {/* Compass Check - appears after saving insight */}
+                    {showCompassCheck && (
+                      <CompassCheck
+                        onComplete={handleCompassComplete}
+                        onSkip={() => setShowCompassCheck(false)}
+                      />
+                    )}
                   </div>
                 </div>
               )}

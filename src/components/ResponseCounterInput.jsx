@@ -15,6 +15,9 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useSearchParams } from 'react-router-dom'
+import { useAuth } from '../auth/AuthProvider'
+import CompassCheck from './CompassCheck'
+import { createCompassEntry } from '../lib/compassEntryHelper'
 import './ResponseCounterInput.css'
 
 function ResponseCounterInput({
@@ -23,6 +26,7 @@ function ResponseCounterInput({
   onComplete
 }) {
   const [searchParams] = useSearchParams()
+  const { user } = useAuth()
   const testMode = searchParams.get('testPostAction') === 'true'
 
   const target = quest.target_responses || 3
@@ -35,6 +39,7 @@ function ResponseCounterInput({
   const [showPostAction, setShowPostAction] = useState(false)
   const [postFeeling, setPostFeeling] = useState(null)
   const [threePercent, setThreePercent] = useState('')
+  const [compassStep, setCompassStep] = useState(false)
 
   // Handle opening POST-ACTION modal
   const handleCompleteClick = () => {
@@ -46,20 +51,39 @@ function ResponseCounterInput({
     setPostFeeling(feeling)
   }
 
-  // Handle final completion with POST-ACTION data
-  const handleFinalComplete = (e) => {
+  // Transition to compass step after feeling/reflection
+  const handleContinueToCompass = () => {
+    setCompassStep(true)
+  }
+
+  // Handle final completion with POST-ACTION data + compass
+  const doFinalComplete = async (compass) => {
+    // Create compass entry if data available
+    if (compass && user?.id) {
+      await createCompassEntry({
+        userId: user.id,
+        projectId: null,
+        internalState: compass.internalState,
+        externalState: compass.externalState,
+        activityDescription: 'Validation Complete',
+        reasoning: threePercent.trim() || 'Validation reflection'
+      })
+    }
+
     const postActionData = {
       responseCount,
       pointsEarned,
       post_action: {
         post_feeling: postFeeling,
         three_percent_reflection: threePercent.trim() || null,
+        compass_direction: compass?.direction || null,
         timestamp: new Date().toISOString()
       }
     }
 
     setShowPostAction(false)
-    onComplete(quest, postActionData, e)
+    setCompassStep(false)
+    onComplete(quest, postActionData)
   }
 
   // Feeling options
@@ -181,14 +205,25 @@ function ResponseCounterInput({
               <p className="post-action-hint">Optional — your insights compound over time</p>
             </div>
 
-            {/* Complete Button */}
-            <button
-              className="post-action-complete-btn"
-              onClick={handleFinalComplete}
-              disabled={!postFeeling}
-            >
-              Complete & Earn Points →
-            </button>
+            {/* Compass Check or Complete Button */}
+            {compassStep ? (
+              <div className="post-action-section">
+                <CompassCheck
+                  onComplete={(data) => {
+                    doFinalComplete(data)
+                  }}
+                  onSkip={() => doFinalComplete(null)}
+                />
+              </div>
+            ) : (
+              <button
+                className="post-action-complete-btn"
+                onClick={handleContinueToCompass}
+                disabled={!postFeeling}
+              >
+                Continue →
+              </button>
+            )}
           </div>
         </div>,
         document.body

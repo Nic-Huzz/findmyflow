@@ -363,7 +363,7 @@ export const CLOSER_FRAMEWORK = {
         'Use ANECDOTAL STORIES here. "Sell the destination, not the plane ride." Paint what life looks like after.',
       templateText:
         'Imagine {{dream_outcome}}. What would that mean for you and your {{family/business/life}}?',
-      crossLink: { path: '/offer-builder', label: 'Edit in Offer Builder' },
+      crossLink: { path: '/offer-builder', label: 'Edit in Product Builder' },
     },
     {
       id: 'E',

@@ -22,10 +22,17 @@ CREATE INDEX IF NOT EXISTS idx_agent_api_keys_user ON agent_api_keys(user_id);
 
 ALTER TABLE agent_api_keys ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Users can manage their own API keys"
-  ON agent_api_keys FOR ALL
-  USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE policyname = 'Users can manage their own API keys' AND tablename = 'agent_api_keys'
+  ) THEN
+    CREATE POLICY "Users can manage their own API keys"
+      ON agent_api_keys FOR ALL
+      USING (auth.uid() = user_id)
+      WITH CHECK (auth.uid() = user_id);
+  END IF;
+END $$;
 
 -- 2. Agent tracking columns on all 6 assessment tables
 ALTER TABLE attraction_offer_assessments

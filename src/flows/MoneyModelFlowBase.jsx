@@ -422,7 +422,8 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
           await completeFlowQuest({
             userId: user.id,
             flowId: flowId,
-            pointsEarned: config.pointsEarned
+            pointsEarned: config.pointsEarned,
+            projectId: projectId || null
           })
         }
       } catch (questError) {

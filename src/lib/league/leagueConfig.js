@@ -81,7 +81,7 @@ export const FANTASY_CATEGORIES = {
     label: 'Business',
     icon: '💼',
     color: '#5e17eb',
-    dbFilter: ['Business', 'Flow Finder'],
+    dbFilter: ['Business'],
     scoringType: 'efficiency', // SUM(points) / COUNT(DISTINCT quest_id)
   },
   play_list: {
@@ -112,8 +112,8 @@ export const FANTASY_CATEGORIES = {
     key: 'bonus',
     label: 'Bonus',
     icon: '⭐',
-    color: '#3B82F6',
-    dbFilter: ['Bonus'],
+    color: '#E9A23B',
+    dbFilter: ['Bonus', 'Tracker'],
     scoringType: 'raw', // Raw SUM(points) + approved content submissions
   },
 }
@@ -136,4 +136,20 @@ export const LEAGUE_STATUSES = {
 }
 
 // Invite code length
+// Reverse-lookup: quest category → fantasy emoji
+export const getCategoryEmoji = (questCategory) => {
+  for (const cat of Object.values(FANTASY_CATEGORIES)) {
+    if (cat.dbFilter.includes(questCategory)) return cat.icon
+  }
+  return ''
+}
+
+// Reverse-lookup: quest category → fantasy color
+export const getCategoryColor = (questCategory) => {
+  for (const cat of Object.values(FANTASY_CATEGORIES)) {
+    if (cat.dbFilter.includes(questCategory)) return cat.color
+  }
+  return null
+}
+
 export const INVITE_CODE_LENGTH = 6

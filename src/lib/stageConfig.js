@@ -514,7 +514,7 @@ export const FLOW_FINDER_CONFIG = {
   ],
   // Optional deeper exploration flows (not required for graduation)
   optionalFlows: [
-    { id: 'play_list_finder', name: 'Playlist Finder', route: '/play-list-finder', points: 10 },
+    { id: 'play_list_finder', name: 'Playlist Finder', route: '/play-list-finder', points: 7 },
     { id: 'persona_identifier', name: 'Persona Identifier', route: '/persona-identifier', points: 10 },
     { id: 'nikigai_problems', name: 'Problems Discovery', route: '/nikigai/problems', points: 10 }
   ],

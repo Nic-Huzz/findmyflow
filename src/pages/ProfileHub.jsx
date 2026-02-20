@@ -34,14 +34,6 @@ const ProfileHub = () => {
       color: '#E9A23B'
     },
     {
-      id: 'crm',
-      icon: '🏰',
-      title: 'CRM Command Center',
-      description: 'Manage your marketing, sales, and business tools',
-      path: '/crm',
-      color: '#7c3aed'
-    },
-    {
       id: 'league',
       icon: '🏆',
       title: 'Fantasy League',
@@ -57,22 +49,24 @@ const ProfileHub = () => {
       path: '/user-settings',
       color: '#6c757d'
     },
-    {
-      id: 'agent-access',
-      icon: '🤖',
-      title: 'Agent Access',
-      description: 'Connect AI agents to run assessments via API',
-      path: '/agent-access',
-      color: '#5e17eb'
-    },
-    ...(isAdmin ? [{
-      id: 'admin',
-      icon: '🛡️',
-      title: 'Admin Dashboard',
-      description: 'View all users, stats, and send nudges',
-      path: '/admin-dashboard',
-      color: '#dc2626'
-    }] : [])
+    ...(isAdmin ? [
+      {
+        id: 'crm',
+        icon: '🏰',
+        title: 'CRM Command Center',
+        description: 'Manage your marketing, sales, and business tools',
+        path: '/crm',
+        color: '#7c3aed'
+      },
+      {
+        id: 'admin',
+        icon: '🛡️',
+        title: 'Admin Dashboard',
+        description: 'View all users, stats, and send nudges',
+        path: '/admin-dashboard',
+        color: '#dc2626'
+      }
+    ] : [])
   ]
 
   return (

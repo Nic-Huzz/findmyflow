@@ -9,6 +9,8 @@ import { useLeagueData } from '../../hooks/useLeagueData'
 import { createTeam, joinTeam } from '../../lib/league/leagueService'
 import { FANTASY_CATEGORIES, CATEGORY_KEYS, LEAGUE_STATUSES } from '../../lib/league/leagueConfig'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
+import { supabase } from '../../lib/supabaseClient'
+import { STAGE_CONFIG } from '../../lib/stageConfig'
 import LeagueLeaderboard from '../../components/league/LeagueLeaderboard'
 import './LeagueOverview.css'
 
@@ -21,6 +23,7 @@ export default function LeagueOverview() {
     loading, league, teams, userTeam, standings, matchups,
     isOnTeam, leagueExists, reloadTeams, getCurrentWeek, getWeekMatchups,
     getWeekDateRange, fetchLiveTeamScores, memberNames,
+    userNomination, changeNomination,
   } = useLeagueData()
 
   // UI State
@@ -31,6 +34,10 @@ export default function LeagueOverview() {
   const [teamName, setTeamName] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
+  const [projects, setProjects] = useState([])
+  const [selectedProjectId, setSelectedProjectId] = useState(null) // for create/join modals
+  const [changeProjectId, setChangeProjectId] = useState(null) // for weekly change modal
+  const [showProjectPicker, setShowProjectPicker] = useState(false) // for weekly change
 
   // Handle ?join= query param
   useEffect(() => {
@@ -41,6 +48,30 @@ export default function LeagueOverview() {
     }
   }, [searchParams, isOnTeam])
 
+  // Load user's active projects when needed
+  const loadProjects = async () => {
+    if (!user?.id) return
+    const { data } = await supabase
+      .from('user_projects')
+      .select('id, name, description, current_stage, is_primary')
+      .eq('user_id', user.id)
+      .eq('status', 'active')
+      .order('is_primary', { ascending: false })
+      .order('created_at', { ascending: false })
+    setProjects(data || [])
+    // Auto-select primary or first
+    if (data?.length && !selectedProjectId) {
+      const primary = data.find(p => p.is_primary)
+      setSelectedProjectId(primary?.id || data[0].id)
+    }
+  }
+
+  useEffect(() => {
+    if (showJoinModal || showCreateModal || showProjectPicker) {
+      loadProjects()
+    }
+  }, [showJoinModal, showCreateModal, showProjectPicker])
+
   const currentWeek = getCurrentWeek()
 
   // ============================================
@@ -48,13 +79,14 @@ export default function LeagueOverview() {
   // ============================================
 
   const handleCreateTeam = async () => {
-    if (!teamName.trim() || !league?.id) return
+    if (!teamName.trim() || !league?.id || !selectedProjectId) return
     setActionLoading(true)
     try {
-      await createTeam({ leagueId: league.id, name: teamName.trim(), userId: user.id })
+      await createTeam({ leagueId: league.id, name: teamName.trim(), userId: user.id, projectId: selectedProjectId })
       hapticSuccess()
       setShowCreateModal(false)
       setTeamName('')
+      setSelectedProjectId(null)
       await reloadTeams()
       setShowShareModal(true)
     } catch (err) {
@@ -65,18 +97,29 @@ export default function LeagueOverview() {
   }
 
   const handleJoinTeam = async () => {
-    if (!joinCode.trim()) return
+    if (!joinCode.trim() || !selectedProjectId) return
     setActionLoading(true)
     try {
-      await joinTeam({ inviteCode: joinCode.trim(), userId: user.id })
+      await joinTeam({ inviteCode: joinCode.trim(), userId: user.id, projectId: selectedProjectId })
       hapticSuccess()
       setShowJoinModal(false)
       setJoinCode('')
+      setSelectedProjectId(null)
       await reloadTeams()
     } catch (err) {
       alert(err.message || 'Error joining team')
     } finally {
       setActionLoading(false)
+    }
+  }
+
+  const handleChangeNomination = async (projectId) => {
+    try {
+      await changeNomination(projectId)
+      hapticSuccess()
+      setShowProjectPicker(false)
+    } catch (err) {
+      alert(err.message || 'Error changing project')
     }
   }
 
@@ -115,6 +158,36 @@ export default function LeagueOverview() {
     const team = teams.find(t => t.id === teamId)
     return team?.name || 'TBD'
   }
+
+  const getStageInfo = (stageNumber) => STAGE_CONFIG[stageNumber] || { name: `Stage ${stageNumber}`, icon: '📍' }
+
+  const renderProjectPicker = (onSelect = setSelectedProjectId, selected = selectedProjectId) => (
+    <div className="lo-project-picker">
+      <label className="lo-picker-label">Pick your Business project</label>
+      <p className="lo-picker-hint">Your Business score will come from quests you complete for this project. You can change it each week.</p>
+      <div className="lo-project-list">
+        {projects.map(p => {
+          const stage = getStageInfo(p.current_stage)
+          return (
+            <div
+              key={p.id}
+              className={`lo-project-option ${selected === p.id ? 'selected' : ''}`}
+              onClick={() => onSelect(p.id)}
+            >
+              <div className="lo-project-option-info">
+                <span className="lo-project-option-name">{p.name}</span>
+                <span className="lo-project-option-stage">{stage.icon} {stage.name}</span>
+              </div>
+              <span className="lo-project-option-check">{selected === p.id ? '✓' : '○'}</span>
+            </div>
+          )
+        })}
+      </div>
+      {projects.length === 0 && (
+        <p className="lo-picker-empty">No active projects found. Complete onboarding first.</p>
+      )}
+    </div>
+  )
 
   // ============================================
   // Loading
@@ -199,6 +272,42 @@ export default function LeagueOverview() {
             </button>
           </div>
         )}
+
+        {/* Nominated project display */}
+        {isOnTeam && userNomination && (
+          <div className="lo-nomination-badge" style={{ position: 'relative', zIndex: 1 }}>
+            <div className="lo-nomination-info">
+              <span className="lo-nomination-label">Business Project</span>
+              <span className="lo-nomination-name">{userNomination.user_projects?.name || 'Unknown'}</span>
+            </div>
+            {league.status === 'active' && (
+              <button className="lo-change-btn" onClick={() => {
+                hapticLight()
+                setChangeProjectId(userNomination?.project_id || null)
+                setShowProjectPicker(true)
+              }}>
+                Change
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Prompt to nominate if on team but no nomination yet */}
+        {isOnTeam && !userNomination && league.status === 'active' && (
+          <div className="lo-nomination-badge" style={{ position: 'relative', zIndex: 1 }}>
+            <div className="lo-nomination-info">
+              <span className="lo-nomination-label">Business Project</span>
+              <span className="lo-nomination-name" style={{ color: 'rgba(255,255,255,0.6)' }}>Not set</span>
+            </div>
+            <button className="lo-change-btn" onClick={() => {
+              hapticLight()
+              setChangeProjectId(null)
+              setShowProjectPicker(true)
+            }}>
+              Select
+            </button>
+          </div>
+        )}
       </div>
 
       {/* View Matchup card */}
@@ -221,6 +330,22 @@ export default function LeagueOverview() {
           <span style={{ color: '#9ca3af', fontSize: '0.85rem' }}>→</span>
         </div>
       )}
+
+      {/* Guide link */}
+      <a
+        href="/league/guide"
+        style={{
+          display: 'block',
+          textAlign: 'center',
+          margin: '0 16px 12px',
+          color: '#5e17eb',
+          fontWeight: 600,
+          fontSize: '0.85rem',
+          textDecoration: 'none',
+        }}
+      >
+        New to Fantasy? Read the full guide →
+      </a>
 
       {/* Tab Navigation */}
       <div className="lo-tabs">
@@ -332,6 +457,7 @@ export default function LeagueOverview() {
                 )
               })}
             </div>
+
           </div>
         </section>
       )}
@@ -356,12 +482,13 @@ export default function LeagueOverview() {
                   autoFocus
                 />
               </div>
+              {renderProjectPicker()}
               <div className="lo-modal-actions">
                 <button className="lo-cancel" onClick={() => setShowJoinModal(false)}>Cancel</button>
                 <button
                   className="lo-save"
                   onClick={handleJoinTeam}
-                  disabled={actionLoading || !joinCode.trim()}
+                  disabled={actionLoading || !joinCode.trim() || !selectedProjectId}
                 >
                   {actionLoading ? 'Joining...' : 'Join Team'}
                 </button>
@@ -391,12 +518,13 @@ export default function LeagueOverview() {
                   autoFocus
                 />
               </div>
+              {renderProjectPicker()}
               <div className="lo-modal-actions">
                 <button className="lo-cancel" onClick={() => setShowCreateModal(false)}>Cancel</button>
                 <button
                   className="lo-save"
                   onClick={handleCreateTeam}
-                  disabled={actionLoading || !teamName.trim()}
+                  disabled={actionLoading || !teamName.trim() || !selectedProjectId}
                 >
                   {actionLoading ? 'Creating...' : 'Create Team'}
                 </button>
@@ -424,6 +552,54 @@ export default function LeagueOverview() {
                 <button className="lo-cancel" onClick={() => setShowShareModal(false)}>Close</button>
                 <button className="lo-cta" onClick={handleShare} style={{ flex: 1 }}>
                   Share <span>→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Change Project Nomination Modal */}
+      {showProjectPicker && (
+        <div className="lo-modal-overlay" onClick={() => setShowProjectPicker(false)}>
+          <div className="lo-modal" onClick={e => e.stopPropagation()}>
+            <div className="lo-modal-header">
+              <h3>Change Business Project</h3>
+              <button className="lo-modal-close" onClick={() => setShowProjectPicker(false)}>×</button>
+            </div>
+            <div className="lo-modal-body">
+              <p className="lo-picker-hint" style={{ marginBottom: 16 }}>
+                Week {currentWeek}: Choose which project scores count for Business this week. Previous weeks stay locked.
+              </p>
+              <div className="lo-project-list">
+                {projects.map(p => {
+                  const stage = getStageInfo(p.current_stage)
+                  const isCurrent = userNomination?.project_id === p.id
+                  return (
+                    <div
+                      key={p.id}
+                      className={`lo-project-option ${changeProjectId === p.id ? 'selected' : ''}`}
+                      onClick={() => setChangeProjectId(p.id)}
+                    >
+                      <div className="lo-project-option-info">
+                        <span className="lo-project-option-name">
+                          {p.name} {isCurrent ? '(current)' : ''}
+                        </span>
+                        <span className="lo-project-option-stage">{stage.icon} {stage.name}</span>
+                      </div>
+                      <span className="lo-project-option-check">{changeProjectId === p.id ? '✓' : '○'}</span>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="lo-modal-actions">
+                <button className="lo-cancel" onClick={() => setShowProjectPicker(false)}>Cancel</button>
+                <button
+                  className="lo-save"
+                  onClick={() => handleChangeNomination(changeProjectId)}
+                  disabled={!changeProjectId}
+                >
+                  Confirm
                 </button>
               </div>
             </div>

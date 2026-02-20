@@ -371,7 +371,8 @@ function LeadMagnetSelectionFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: 'lead_magnet_selection',
-          pointsEarned: 8
+          pointsEarned: 8,
+          projectId: projectId || null
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)

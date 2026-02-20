@@ -20,8 +20,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { ProgressDots } from '../components/MoneyModelShared'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './OfferStackBuilderFlow.css'
 
 const STAGES = {
@@ -187,6 +189,7 @@ function OfferStackBuilderFlow() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
 
   const [stage, setStage] = useState(STAGES.LOADING)
   const [grandSlamData, setGrandSlamData] = useState(null)
@@ -596,7 +599,8 @@ function OfferStackBuilderFlow() {
       const questResult = await completeFlowQuest({
         userId: user.id,
         flowId: 'offer_stack_builder',
-        pointsEarned: 8
+        pointsEarned: 8,
+        projectId: projectId || null
       })
       console.log('🎯 Offer Stack quest completion result:', questResult)
 
@@ -624,7 +628,7 @@ function OfferStackBuilderFlow() {
   }
 
   // Resume prompt
-  if (showResumePrompt && savedProgressData) {
+  if (showResumePrompt && savedProgressData && searchParams.get('results') !== 'true') {
     return (
       <div className="offer-stack-flow flow-base">
         <div className="welcome-container">
@@ -1495,6 +1499,8 @@ function OfferStackBuilderFlow() {
               <span>{GUARANTEE_TYPES.find(g => g.id === selectedGuarantee)?.name}</span>
             </div>
           </div>
+          <FlowFeedback flowType="offer_stack_builder" userId={user?.id} />
+
           <button
             className="primary-button"
             onClick={() => navigate('/7-day-challenge')}

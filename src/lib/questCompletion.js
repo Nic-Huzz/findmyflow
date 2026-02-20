@@ -11,7 +11,7 @@ import { syncScoreToLeaderboard } from './scoringCategories'
  * @param {number} params.pointsEarned - Points for completing the quest
  * @returns {Promise<Object>} Result object with success status
  */
-export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
+export async function completeFlowQuest({ userId, flowId, pointsEarned, projectId = null }) {
   try {
     // Input validation
     if (!userId || typeof userId !== 'string') {
@@ -83,14 +83,18 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
       }
     }
 
-    // 3. Check if quest already completed for this challenge instance
-    const { data: existingCompletion } = await supabase
+    // 3. Check if quest already completed (by user + quest + project, matching DB unique index)
+    let dupQuery = supabase
       .from('quest_completions')
       .select('id')
       .eq('user_id', userId)
-      .eq('challenge_instance_id', activeChallenge.challenge_instance_id)
       .eq('quest_id', matchingQuest.id)
-      .maybeSingle()
+    if (projectId) {
+      dupQuery = dupQuery.eq('project_id', projectId)
+    } else {
+      dupQuery = dupQuery.is('project_id', null)
+    }
+    const { data: existingCompletion } = await dupQuery.limit(1).maybeSingle()
 
     if (existingCompletion) {
       return {
@@ -110,10 +114,15 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
         quest_category: matchingQuest.category,
         quest_type: matchingQuest.type,
         points_earned: pointsEarned,
-        challenge_day: activeChallenge.current_day || 0  // Fallback to 0 if undefined
+        challenge_day: activeChallenge.current_day || 0,
+        project_id: projectId || null
       }])
 
     if (completionError) {
+      // 23505 = unique constraint violation — quest already completed, not an error
+      if (completionError.code === '23505') {
+        return { success: false, reason: 'already_completed', message: 'Quest already completed' }
+      }
       console.error('Error creating quest completion:', completionError)
       return { success: false, error: completionError.message }
     }
@@ -157,7 +166,7 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
       userId,
       questCategory: matchingQuest.category,
       points: pointsEarned,
-      projectId: null, // Flow quests are user-level
+      projectId: projectId || null,
       source: `flow_quest:${flowId}`
     }).catch(err => {
       console.warn('Leaderboard sync failed (non-blocking):', err)

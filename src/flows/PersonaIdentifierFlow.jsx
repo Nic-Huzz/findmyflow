@@ -22,6 +22,7 @@ import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import GoDeeper from '../components/GoDeeper'
 import { GradientWheel } from '../components/CompetenceWheels'
 import '../styles/flow-base.css'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './PersonaIdentifierFlow.css'
 
 const SCREENS = {
@@ -805,20 +806,24 @@ export default function PersonaIdentifierFlow() {
             </button>
           </div>
         ) : (
-          <div className="nav-buttons">
-            <button
-              className="secondary-button"
-              onClick={() => navigate('/me')}
-            >
-              Back to Profile
-            </button>
-            <button
-              className="primary-button"
-              onClick={() => navigate('/7-day-challenge')}
-            >
-              Continue to Challenges
-            </button>
-          </div>
+          <>
+            <FlowFeedback flowType="persona_identifier" userId={user?.id} />
+
+            <div className="nav-buttons">
+              <button
+                className="secondary-button"
+                onClick={() => navigate('/me')}
+              >
+                Back to Profile
+              </button>
+              <button
+                className="primary-button"
+                onClick={() => navigate('/7-day-challenge')}
+              >
+                Continue to Challenges
+              </button>
+            </div>
+          </>
         )}
       </div>
     )

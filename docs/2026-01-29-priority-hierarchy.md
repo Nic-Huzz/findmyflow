@@ -593,6 +593,7 @@ Move exciting-but-premature ideas here instead of building them:
 | FindMyFlow API + Claude Code MCP | Full spec written (ClawdBot repo `findmyflow-implementation/07-api-mcp-data-sync.md`). API layer so users can connect their FindMyFlow account to Claude Code (MCP server). Query flow data, quest history, shadow/archetype profiles, groan progress via natural language. | After Milestone 2 |
 | AI Quest Generator | Personalised daily quests based on stage + voice + activity. Requires Knowledge Score data. | After Milestone 2 |
 | Voice Progress Bar | Visual feedback on inner work progress | After Milestone 2 |
+| Project Constellation / Flow | Design doc written (`docs/plans/2026-02-20-project-constellation-design.md`). HTML prototype at `docs/prototypes/project-constellation.html`. Visualizes how projects connect through shared skill/problem/persona clusters — revealing a meta-narrative. Could be a constellation map OR a guided flow that walks users through discovering connections. Needs: rich project descriptions, AI multi-signal matching, user confirmation loop, junction table for many-to-many project↔cluster links. | After Milestone 2 |
 
 ---
 

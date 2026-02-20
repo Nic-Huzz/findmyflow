@@ -286,12 +286,12 @@
 }
 
 .launch-review-input .nav-btn.complete {
-  background: #10b981;
+  background: #E9A23B;
   color: #ffffff;
 }
 
 .launch-review-input .nav-btn.complete:hover {
-  background: #059669;
+  background: #d4912f;
 }
 
 /* Encouragement */

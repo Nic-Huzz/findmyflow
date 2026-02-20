@@ -25,32 +25,6 @@ import SeeYourFlow from '../components/SeeYourFlow'
 import './MePage.css'
 
 // Stat ring circumference for r=22
-const RING_CIRCUMFERENCE = 2 * Math.PI * 22 // ~138.23
-
-function StatRing({ value, label, color, percentage }) {
-  const dashoffset = RING_CIRCUMFERENCE - (RING_CIRCUMFERENCE * (percentage / 100))
-  return (
-    <div className="fj-stat">
-      <div className="fj-stat-ring">
-        <svg viewBox="0 0 52 52">
-          <circle className="fj-ring-bg" cx="26" cy="26" r="22" />
-          <circle
-            className="fj-ring-fill"
-            cx="26" cy="26" r="22"
-            style={{
-              stroke: color,
-              strokeDasharray: RING_CIRCUMFERENCE,
-              strokeDashoffset: dashoffset,
-            }}
-          />
-        </svg>
-        <div className="fj-stat-val">{value}</div>
-      </div>
-      <div className="fj-stat-label">{label}</div>
-    </div>
-  )
-}
-
 export default function MePage() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -78,7 +52,6 @@ export default function MePage() {
 
   // Inline state
   const [stageProgress, setStageProgress] = useState(undefined) // undefined = not loaded, null = no row
-  const [streakCount, setStreakCount] = useState(0)
   const [flowEntries, setFlowEntries] = useState([])
   const [questData, setQuestData] = useState([])
   const [questCompletions, setQuestCompletions] = useState([])
@@ -130,7 +103,7 @@ export default function MePage() {
     }
   }, [fetchStageProgress, refreshHero])
 
-  // Fetch quest completions (used for streak + quest progress + river direction)
+  // Fetch quest completions (used for quest progress + river direction)
   useEffect(() => {
     if (!user?.id) return
     supabase
@@ -139,29 +112,7 @@ export default function MePage() {
       .eq('user_id', user.id)
       .order('completed_at', { ascending: false })
       .then(({ data }) => {
-        if (!data || data.length === 0) {
-          setStreakCount(0)
-          setQuestCompletions([])
-          return
-        }
-        setQuestCompletions(data)
-        // Calculate streak from the same data
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        const uniqueDays = new Set(
-          data.map(d => {
-            const dt = new Date(d.completed_at)
-            dt.setHours(0, 0, 0, 0)
-            return dt.getTime()
-          })
-        )
-        let streak = 0
-        let checkDate = new Date(today)
-        while (uniqueDays.has(checkDate.getTime())) {
-          streak++
-          checkDate.setDate(checkDate.getDate() - 1)
-        }
-        setStreakCount(streak)
+        setQuestCompletions(data || [])
       })
   }, [user?.id])
 
@@ -241,15 +192,6 @@ export default function MePage() {
   const levelProgress = getLevelProgress(totalXP)
   const levelMax = getLevelMaxXP(totalXP)
   const isMaxLevel = levelNum === 6 // Vibe Legend
-
-  // Derived: flow stats
-  const northCount = flowEntries.filter(e => e.direction === 'north').length
-  const flowPercentage = flowEntries.length > 0 ? Math.round((northCount / flowEntries.length) * 100) : 0
-  const groanCompleted = groanChallenges.filter(g => g.status === 'completed').length
-  const groanTotal = groanChallenges.length
-
-  // Derived: first-time detection
-  const isFirstTime = totalXP === 0 && streakCount === 0
 
   // Derived: protective pattern tag (e.g., "Freeze + sympathetic blend")
 
@@ -419,17 +361,6 @@ export default function MePage() {
         <h1 className="hero-name">{archetypes?.essence?.name || 'Hero'}</h1>
         <p className="hero-tagline">{archetypes?.essence?.visionInAction || 'Discovering your flow'}</p>
 
-        <div className="hero-badges stagger-children">
-          <div className={`badge streak ${isFirstTime ? 'empty' : ''}`}>
-            <span>🔥</span>
-            <span>{streakCount} Day Streak</span>
-          </div>
-          <div className="badge level">
-            <span>{level.emoji}</span>
-            <span>{level.name}</span>
-          </div>
-        </div>
-
         <div className="xp-progress">
           <div className="xp-labels">
             <span>Lv {levelNum} — {level.name}</span>
@@ -456,6 +387,20 @@ export default function MePage() {
           </div>
         </section>
       )}
+
+      {/* ============================================================
+         FANTASY LEAGUE PROMO
+         ============================================================ */}
+      <section className="league-promo-section">
+        <a href="/league" className="league-promo-card">
+          <span className="league-promo-icon">🏆</span>
+          <div className="league-promo-text">
+            <span className="league-promo-title">Sign Up for Fantasy</span>
+            <span className="league-promo-sub">Compete with friends in the Fantasy League</span>
+          </div>
+          <span className="league-promo-arrow">→</span>
+        </a>
+      </section>
 
       {/* ============================================================
          SECTION 2: YOUR FLOW JOURNEY
@@ -534,51 +479,6 @@ export default function MePage() {
               <p className="fj-scroll-hint">← Swipe to explore your flow →</p>
             </>
           )}
-
-          {/* Legend */}
-          <div className="fj-legend-group">
-            <div className="fj-legend-row">
-              <span className="fj-legend-label">Compass</span>
-              <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#10b981' }} /> Flow</div>
-              <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#3b82f6' }} /> Redirect</div>
-              <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#fbbf24' }} /> Honour</div>
-              <div className="fj-legend-item"><div className="fj-legend-dot stuck" style={{ background: '#ef4444' }} /> Rest</div>
-            </div>
-            <div className="fj-legend-row">
-              <span className="fj-legend-label">Challenge</span>
-              <div className="fj-legend-item"><span className="fj-legend-icon">⚡</span> Quest</div>
-              <div className="fj-legend-item"><span className="fj-legend-icon">🦁</span> Groan</div>
-              <div className="fj-legend-item"><span className="fj-legend-icon">📊</span> Stage</div>
-            </div>
-          </div>
-
-          {/* Stats rings */}
-          <div className="fj-stats stagger-children">
-            <StatRing
-              value={streakCount}
-              label="Streak"
-              color="#E67E22"
-              percentage={Math.min(100, (streakCount / 30) * 100)}
-            />
-            <StatRing
-              value={`${flowPercentage}%`}
-              label="Flow"
-              color="#10b981"
-              percentage={flowPercentage}
-            />
-            <StatRing
-              value={groanCompleted}
-              label="Play-list"
-              color="#E9A23B"
-              percentage={Math.min(100, (groanCompleted / 10) * 100)}
-            />
-            <StatRing
-              value={projectStage}
-              label="Stage"
-              color="#5e17eb"
-              percentage={(projectStage / 8) * 100}
-            />
-          </div>
 
           {/* Narrative or inline journey mapper */}
           {narrativeText && !showInlineMapper ? (
@@ -701,13 +601,6 @@ export default function MePage() {
             </div>
           </div>
 
-          <div className="hp-superpower">
-            <span className="hp-superpower-bolt">⚡</span>
-            <p className="hp-superpower-text">
-              <strong>Superpower:</strong> {archetypes?.essence?.superpower || 'Discover your superpower through the archetype quiz'}
-            </p>
-          </div>
-
           <div className="hp-divider" />
 
           {/* Protective */}
@@ -729,15 +622,6 @@ export default function MePage() {
               </div>
             </div>
           </div>
-
-          {archetypes?.protective?.coreNarrative && (
-            <div className="hp-belief">
-              <span className="hp-belief-icon">🔇</span>
-              <p className="hp-belief-text">
-                <strong>It whispers:</strong> "{archetypes.protective.coreNarrative}"
-              </p>
-            </div>
-          )}
 
           <div className="hp-full-link">
             View full Hero Profile <span>→</span>

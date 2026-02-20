@@ -482,7 +482,7 @@ function ProductSelectionFlow() {
             initialSpecs[prod.id] = {
               mechanism: '',
               featureBenefits: prod.solutions.map(sol => ({
-                feature: sol.description || '',
+                feature: sol.name || sol.description || '',
                 benefit: sol.problemText ? `Overcomes: ${sol.problemText}` : ''
               }))
             }
@@ -529,6 +529,93 @@ function ProductSelectionFlow() {
       return `${baseLabel}: ${product.name}`
     }
     return baseLabel
+  }
+
+  // Group a standalone solution into another product (group or standalone)
+  const handleGroupProduct = (standaloneId, targetId) => {
+    if (!targetId || targetId === standaloneId) return
+
+    const standalone = coreProducts.find(p => p.id === standaloneId)
+    const target = coreProducts.find(p => p.id === targetId)
+    if (!standalone || !target) return
+
+    const isTargetGroup = target.type === 'group'
+    const newGroupId = isTargetGroup ? targetId : `group_${Date.now()}`
+
+    // Update products list
+    setCoreProducts(prev => {
+      let updatedProducts = prev.filter(p => p.id !== standaloneId)
+
+      if (isTargetGroup) {
+        updatedProducts = updatedProducts.map(p => {
+          if (p.id !== targetId) return p
+          return {
+            ...p,
+            solutions: [...p.solutions, standalone],
+            problemTexts: [...new Set([...p.problemTexts, standalone.problemText].filter(Boolean))]
+          }
+        })
+      } else {
+        const groupName = target.existingProductId
+          ? (existingProducts.find(ep => ep.id === target.existingProductId)?.name || target.name || 'Product')
+          : (target.name || standalone.name || 'Product')
+        const newGroup = {
+          id: newGroupId,
+          type: 'group',
+          existingProductId: target.existingProductId || standalone.existingProductId || null,
+          name: groupName,
+          solutionType: target.solutionType,
+          label: SOLUTION_LABELS[target.solutionType] || target.solutionType || 'Product',
+          description: '2 solutions grouped together',
+          solutions: [target, standalone],
+          problemTexts: [...new Set([target.problemText, standalone.problemText].filter(Boolean))]
+        }
+        updatedProducts = updatedProducts.map(p => p.id === targetId ? newGroup : p)
+      }
+
+      return updatedProducts
+    })
+
+    // Update productSpecs: merge standalone's features into the target
+    const newFeature = {
+      feature: standalone.name || standalone.description || '',
+      benefit: standalone.problemText ? `Overcomes: ${standalone.problemText}` : ''
+    }
+
+    setProductSpecs(prev => {
+      const updated = { ...prev }
+
+      if (isTargetGroup) {
+        updated[targetId] = {
+          ...updated[targetId],
+          featureBenefits: [...(updated[targetId]?.featureBenefits || []), newFeature]
+        }
+      } else {
+        const targetFeature = {
+          feature: target.name || target.description || '',
+          benefit: target.problemText ? `Overcomes: ${target.problemText}` : ''
+        }
+        updated[newGroupId] = {
+          mechanism: '',
+          featureBenefits: [targetFeature, newFeature]
+        }
+        delete updated[targetId]
+      }
+
+      delete updated[standaloneId]
+      return updated
+    })
+
+    // Update answers: clean up old keys, add new group key
+    setAnswers(prev => {
+      const updated = { ...prev }
+      if (!isTargetGroup) {
+        updated[newGroupId] = { dream_outcome: null, time_delay: null, perceived_likelihood: null }
+        delete updated[targetId]
+      }
+      delete updated[standaloneId]
+      return updated
+    })
   }
 
   // Calculate value score for a product (0-100 scale)
@@ -877,7 +964,8 @@ function ProductSelectionFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: 'product_selection',
-          pointsEarned: 9
+          pointsEarned: 9,
+          projectId: projectId || null
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)
@@ -955,7 +1043,7 @@ function ProductSelectionFlow() {
                   onClick={() => navigate('/offer-builder')}
                   style={{ marginTop: '24px' }}
                 >
-                  Go to Offer Builder
+                  Go to Product Builder
                 </button>
               </>
             ) : (
@@ -990,6 +1078,27 @@ function ProductSelectionFlow() {
                           </>
                         ) : (
                           <p>{prod.description}</p>
+                        )}
+                        {/* Group with another product — only for standalones when 2+ products exist */}
+                        {prod.type === 'standalone' && coreProducts.length > 1 && (
+                          <div className="group-with-picker">
+                            <select
+                              value=""
+                              onChange={(e) => {
+                                if (e.target.value) handleGroupProduct(prod.id, e.target.value)
+                              }}
+                            >
+                              <option value="">Group with...</option>
+                              {coreProducts
+                                .filter(other => other.id !== prod.id)
+                                .map(other => (
+                                  <option key={other.id} value={other.id}>
+                                    {getProductDisplayLabel(other)}
+                                  </option>
+                                ))
+                              }
+                            </select>
+                          </div>
                         )}
                       </div>
                     </div>

@@ -23,6 +23,7 @@ import GoDeeper from '../components/GoDeeper'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { GradientWheel } from '../components/CompetenceWheels'
 import { SKILLS_SEGMENTS, PROFICIENCY_RINGS } from '../lib/wheelTaxonomy'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 // Proficiency levels for skill rating
 const PROFICIENCY_LEVELS = [
   { id: 'learning', label: 'Learning', color: '#fbbf24' },
@@ -967,20 +968,24 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
             </button>
           </div>
         ) : (
-          <div className="nav-buttons">
-            <button
-              className="secondary-button"
-              onClick={() => navigate('/me')}
-            >
-              Back to Profile
-            </button>
-            <button
-              className="primary-button"
-              onClick={() => navigate('/7-day-challenge')}
-            >
-              Continue to Challenges
-            </button>
-          </div>
+          <>
+            <FlowFeedback flowType="play_list_finder" userId={user?.id} />
+
+            <div className="nav-buttons">
+              <button
+                className="secondary-button"
+                onClick={() => navigate('/me')}
+              >
+                Back to Profile
+              </button>
+              <button
+                className="primary-button"
+                onClick={() => navigate('/7-day-challenge')}
+              >
+                Continue to Challenges
+              </button>
+            </div>
+          </>
         )}
       </div>
     )

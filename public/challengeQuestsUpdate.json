@@ -17,6 +17,22 @@
       "isExplainer": true
     },
     {
+      "id": "play_list_explainer",
+      "category": "Business",
+      "type": "Flow Finder",
+      "frequency": "anytime",
+      "stage_required": 0,
+      "name": "Understand Play-List",
+      "description": "Learn how the Play-List Matrix turns your skills into courage challenges",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "play_list_explainer",
+      "flow_route": "/play-list-explainer",
+      "learnMore": "Discover what a play-list is, the 5 visibility layers from Screen to Authority, how the groan zone scoring works, and how AI generates courage challenges from your unique skills.\n\nThis 2-minute explainer sets you up for success with the Play-List Matrix.",
+      "isPrimary": true,
+      "isExplainer": true
+    },
+    {
       "id": "mind_space_extraction",
       "category": "Business",
       "type": "Flow Finder",
@@ -39,7 +55,7 @@
       "stage_required": 0,
       "name": "Play-List Finder",
       "description": "Discover your skills through play, role models, and what feels fun",
-      "points": 10,
+      "points": 7,
       "inputType": "flow",
       "flow_id": "play_list_finder",
       "flow_route": "/play-list-finder",
@@ -312,6 +328,17 @@
       "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Groan tasks might include: recording a video, asking for feedback, learning a new tool, or practicing a skill publicly before you feel 'ready.'"
     },
     {
+      "id": "play_list_challenge",
+      "category": "Groans",
+      "type": "Rewire",
+      "frequency": "anytime",
+      "name": "Play-List Challenge",
+      "description": "Complete a challenge from the Play-list Matrix",
+      "points": 7,
+      "inputType": "matrix",
+      "counts_toward_graduation": false
+    },
+    {
       "id": "groan_stage_1_validation",
       "category": "Business",
       "type": "groan",
@@ -487,20 +514,22 @@
       "id": "recognise_shadow_work",
       "category": "Healing",
       "type": "Recognise",
-      "frequency": "deepdive",
+      "frequency": "archived",
       "name": "Shadow Work Workshop",
       "description": "Discover the hidden parts of yourself and trace them to their origin",
       "points": 8,
       "inputType": "flow",
       "flow_id": "shadow_work",
       "flow_route": "/shadow-work",
+      "archived": true,
+      "archived_reason": "Archived Feb 2026",
       "learnMore": "Shadow work is the process of exploring parts of yourself you've suppressed — both traits you're ashamed of and authentic parts you've hidden to stay safe.\n\nWe suppress for two reasons: society told us it was wrong, or we were hurt when we expressed it. Either way, those parts didn't go away — they became shadows.\n\nThis flow takes about 15-20 minutes and guides you through identifying your shadows, tracing them to their root emotions, mapping the protective archetypes you use as armour, and discovering the origin story behind it all.\n\nYou can complete this once per week to explore different shadows each time."
     },
     {
       "id": "recognise_limiting_belief_rewire",
       "category": "Healing",
       "type": "Recognise",
-      "frequency": "weekly",
+      "frequency": "deepdive",
       "name": "Limiting Belief Rewire",
       "description": "Trace a safety contract back to its origin and remove the emotional splinter driving it",
       "points": 5,
@@ -592,6 +621,30 @@
       "placeholder": "What came up in the session? What did you process and release?",
       "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions\u2014trust the process and let your body lead.",
       "healing_checkin": true
+    },
+    {
+      "id": "tracker_essence_voice",
+      "category": "Voices",
+      "type": "Recognise",
+      "frequency": "daily",
+      "name": "Essence Voice",
+      "description": "Where did your essence voice show up in your work today?",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What was the situation? What were you doing?",
+      "learnMore": "Tracking when your essence shows up helps you identify how aligned your work is with your essence.\n\nYou're training your awareness so you can show-up from this place more often."
+    },
+    {
+      "id": "tracker_protective_voice",
+      "category": "Voices",
+      "type": "Recognise",
+      "frequency": "daily",
+      "name": "Protective Voice",
+      "description": "Where did your protective voice emerge in your work today?",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What was the situation? What caused it to arise?",
+      "learnMore": "Your protective voice is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain.\n\nRecognising when it activates is the first step to changing how we show up in the future."
     },
     {
       "id": "recognise_flow_update",

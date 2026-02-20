@@ -181,8 +181,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.4rem 0.75rem;
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 14px;
   padding: 0.65rem 0.75rem;
   margin-bottom: 0.5rem;
   transition: opacity 0.3s ease;
@@ -1213,10 +1211,6 @@
   white-space: nowrap;
 }
 
-.quest-card.bonus .quest-points {
-  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
-  color: #212529;
-}
 
 .quest-description {
   color: #6c757d;
@@ -2747,6 +2741,19 @@
 
 .quest-complete-btn.locked:hover {
   background: #ccc;
+  transform: none;
+}
+
+.quest-complete-btn.prelaunch-locked {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.quest-complete-btn.prelaunch-locked:hover {
+  background: #e0e0e0;
   transform: none;
 }
 

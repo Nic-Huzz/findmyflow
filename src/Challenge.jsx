@@ -334,8 +334,14 @@ function Challenge() {
     )
   }
 
+  // Pre-launch lock: only Flow Finder quests can be submitted
+  const PRELAUNCH_LOCKED = true
+
   // Main quest completion handler
   const handleQuestComplete = async (quest, specialData = null, event = null) => {
+    // Pre-launch guard: block all non-Flow Finder submissions
+    if (PRELAUNCH_LOCKED && quest.type !== 'Flow Finder') return
+
     // Guard against double-clicks / rapid submissions
     if (completingQuestId) return
     setCompletingQuestId(quest.id)
@@ -1164,6 +1170,43 @@ function Challenge() {
         wahooScoreAfter: groanReflection.wahooScore
       })
       if (error) throw error
+
+      // Award points: insert quest_completions record for the Groans category
+      const PLAY_LIST_POINTS = 7
+      const { error: questError } = await supabase
+        .from('quest_completions')
+        .insert({
+          user_id: user.id,
+          challenge_instance_id: progress?.challenge_instance_id || null,
+          quest_id: 'play_list_challenge',
+          quest_category: 'Groans',
+          quest_type: 'Rewire',
+          points_earned: PLAY_LIST_POINTS,
+          challenge_day: progress?.current_day || 0,
+          project_id: selectedProject?.id || null,
+          reflection_text: JSON.stringify({
+            challenge_id: selectedGroanChallenge.id,
+            source_label: selectedGroanChallenge.source_label,
+            visibility_layer: selectedGroanChallenge.visibility_layer,
+            scary_score: groanReflection.scaryScore,
+            wahoo_score: groanReflection.wahooScore,
+            reflection: groanReflection.reflection
+          })
+        })
+      if (questError) {
+        console.warn('Error awarding play-list points:', questError)
+      } else {
+        // Update local completions state so points reflect immediately
+        setCompletions(prev => [...prev, {
+          user_id: user.id,
+          quest_id: 'play_list_challenge',
+          quest_category: 'Groans',
+          quest_type: 'Rewire',
+          points_earned: PLAY_LIST_POINTS,
+          completed_at: new Date().toISOString()
+        }])
+      }
+
       // Trigger confetti
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
       // Reset and close modal, refresh matrix
@@ -1898,6 +1941,7 @@ function Challenge() {
                           isPlanned={isQuestPlanned(quest.id)}
                           plannedDay={getPlannedDay(quest.id)}
                           completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id).length : 0}
+                          prelaunchLocked={PRELAUNCH_LOCKED}
                         />
                       )
                     })}
@@ -1958,6 +2002,7 @@ function Challenge() {
                     isPlanned={isQuestPlanned(quest.id)}
                     plannedDay={getPlannedDay(quest.id)}
                     validationResponseCounts={validationResponseCounts}
+                    prelaunchLocked={PRELAUNCH_LOCKED}
                   />
                 )
               })}
@@ -2016,6 +2061,7 @@ function Challenge() {
                     isPlanned={isQuestPlanned(quest.id)}
                     plannedDay={getPlannedDay(quest.id)}
                     completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id).length : 0}
+                    prelaunchLocked={PRELAUNCH_LOCKED}
                   />
                 )
               })}
@@ -2079,6 +2125,7 @@ function Challenge() {
                       justCompleted={justCompletedQuestId === quest.id}
                       isPlanned={isQuestPlanned(quest.id)}
                       plannedDay={getPlannedDay(quest.id)}
+                      prelaunchLocked={PRELAUNCH_LOCKED}
                     />
                   )
                 })}
@@ -2383,6 +2430,8 @@ function Challenge() {
         <PostActionModal
           quest={postActionQuest}
           userId={user?.id}
+          projectId={selectedProject?.id || null}
+          challengeInstanceId={progress?.challenge_instance_id || null}
           onComplete={() => setPostActionQuest(null)}
           onSkip={() => setPostActionQuest(null)}
         />

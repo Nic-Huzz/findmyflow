@@ -16,6 +16,7 @@ import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
 import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS } from '../lib/wheelTaxonomy'
 import { supabase } from '../lib/supabaseClient'
 import '../styles/flow-base.css'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './LetsPlayFlow.css'
 
 // Time estimate options (reused from LetsPlayFlow)
@@ -516,6 +517,8 @@ export default function SelfTestFlow() {
             <p className="encouragement-sub">
               After you've done it, complete the <strong>Play-list Self-Trial Review</strong> quest to reflect and earn bonus points!
             </p>
+            <FlowFeedback flowType="self_test" userId={user?.id} />
+
             <button className="primary-button" onClick={() => navigate('/7-day-challenge')}>
               Got it
             </button>

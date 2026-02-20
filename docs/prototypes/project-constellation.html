@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Constellation — FindMyFlow</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a1a;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 24px 32px;
+    background: linear-gradient(180deg, rgba(10,10,26,0.95) 0%, rgba(10,10,26,0) 100%);
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+  }
+  .header p { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+  canvas { display: block; }
+
+  /* Tooltip */
+  .tooltip {
+    position: fixed;
+    display: none;
+    background: rgba(20, 20, 40, 0.95);
+    border: 1px solid rgba(233, 162, 59, 0.3);
+    border-radius: 12px;
+    padding: 16px 20px;
+    max-width: 320px;
+    pointer-events: none;
+    z-index: 200;
+    backdrop-filter: blur(10px);
+  }
+  .tooltip h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #E9A23B;
+    margin-bottom: 8px;
+  }
+  .tooltip .stage {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .tooltip .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+  }
+  .tooltip .cluster-tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin: 2px 2px;
+  }
+  .tooltip .skill-tag { background: rgba(94, 23, 235, 0.25); color: #a78bfa; }
+  .tooltip .problem-tag { background: rgba(233, 162, 59, 0.2); color: #E9A23B; }
+  .tooltip .persona-tag { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+
+  /* Connection tooltip */
+  .tooltip .shared-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+  }
+
+  /* Legend */
+  .legend {
+    position: fixed;
+    bottom: 24px;
+    left: 32px;
+    z-index: 100;
+    display: flex;
+    gap: 16px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* Meta narrative panel */
+  .meta-panel {
+    position: fixed;
+    bottom: 24px;
+    right: 32px;
+    z-index: 100;
+    background: rgba(20, 20, 40, 0.9);
+    border: 1px solid rgba(94, 23, 235, 0.3);
+    border-radius: 12px;
+    padding: 16px 20px;
+    max-width: 340px;
+    backdrop-filter: blur(10px);
+  }
+  .meta-panel h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .meta-panel p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.8);
+  }
+  .meta-panel .highlight {
+    color: #E9A23B;
+    font-weight: 600;
+  }
+
+  /* Grouping labels */
+  .group-label {
+    position: fixed;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.15);
+    pointer-events: none;
+    z-index: 50;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Your Project Constellation</h1>
+  <p>Hover over projects to see their art, message, and audience. Lines show shared clusters.</p>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-dot" style="background: #5e17eb;"></div>
+    Shared Skills (Art)
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background: #E9A23B;"></div>
+    Shared Problems (Message)
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background: #60a5fa;"></div>
+    Shared Personas (Audience)
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);"></div>
+    Project
+  </div>
+</div>
+
+<div class="meta-panel">
+  <h3>The Emerging Meta-Narrative</h3>
+  <p>
+    Across all your projects, the transformation you're creating is:
+    <span class="highlight">Making growth accessible, playful, and embodied</span>
+    — through technology, experience design, and human connection.
+  </p>
+  <p style="margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4);">
+    3 natural chapters are emerging...
+  </p>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+
+// Responsive canvas
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ─── DATA ───────────────────────────────────────────────
+
+const projects = [
+  {
+    id: 'fmf', name: 'Find My Flow App', stage: 3, type: 'digital_product',
+    skills: ['Gamification Architecture', 'AI Prompting & System Architecture', 'Rapid Prototyping & Product Thinking', 'Translating Complex Ideas'],
+    problems: ['People lack clear maps for personal evolution', "Transformation doesn't integrate into daily life"],
+    personas: ['The Burnt-Out High-Functioner Seeking Purpose', 'The Playful-but-Blocked Seeker'],
+    group: 'tech'
+  },
+  {
+    id: 'bwai', name: 'BuildwithAi', stage: 2, type: 'live_group',
+    skills: ['AI Prompting & System Architecture', 'Translating Complex Ideas', 'Community Choreography'],
+    problems: ['Beginners are gatekept from starting', 'Conscious leaders under-earn'],
+    personas: ['The Beginner Who Just Needs Someone to Believe in Them', 'The Skeptical but Curious Rational Mind'],
+    group: 'tech'
+  },
+  {
+    id: 'bali', name: 'Bali Workshops', stage: 4, type: 'live_group',
+    skills: ['Experience Design & Facilitation', 'Community Choreography', 'Somatic & Nervous System Literacy', 'Narrative & Mythic Framing'],
+    problems: ['Healing is positioned as heavy, clinical, and inaccessible', 'People suppress their authentic selves to feel safe'],
+    personas: ['The Actively Healing Self-Improver', 'The Authentic Creator Finding Freedom'],
+    group: 'embodied'
+  },
+  {
+    id: 'retreat', name: '1-day Retreat', stage: 1, type: 'live_group',
+    skills: ['Experience Design & Facilitation', 'Somatic & Nervous System Literacy', 'Emotional Pattern Recognition'],
+    problems: ['Healing is positioned as heavy, clinical, and inaccessible', 'Subconscious patterns sabotage growth and visibility'],
+    personas: ['The Actively Healing Self-Improver', 'The Lost Seeker in Transition'],
+    group: 'embodied'
+  },
+  {
+    id: 'hsales', name: 'Headset Sales', stage: 2, type: 'digital_product',
+    skills: ['Productizing Transformation', 'Rapid Prototyping & Product Thinking'],
+    problems: ["Transformation doesn't integrate into daily life"],
+    personas: ['The Emerging Facilitator / Movement Maker'],
+    group: 'vr'
+  },
+  {
+    id: 'hrent', name: 'Headset Rentals', stage: 6, type: 'digital_product',
+    skills: ['Productizing Transformation'],
+    problems: ['Conscious leaders under-earn'],
+    personas: ['The Emerging Facilitator / Movement Maker'],
+    group: 'vr'
+  },
+  {
+    id: 'byb', name: 'BYB App', stage: 2, type: 'digital_product',
+    skills: ['Gamification Architecture', 'AI Prompting & System Architecture', 'Rapid Prototyping & Product Thinking'],
+    problems: ['People lack clear maps for personal evolution', 'Beginners are gatekept from starting'],
+    personas: ['The Beginner Who Just Needs Someone to Believe in Them', 'The Young Creative Who Feels Stuck'],
+    group: 'tech'
+  },
+  {
+    id: 'coding', name: 'Coding Clients', stage: 7, type: 'service',
+    skills: ['Rapid Prototyping & Product Thinking', 'AI Prompting & System Architecture'],
+    problems: ['Spreading across too many projects instead of shipping one'],
+    personas: ['The Identity Builder Against Expectations'],
+    group: 'tech'
+  }
+];
+
+const groupColors = {
+  tech: { r: 94, g: 23, b: 235 },       // purple
+  embodied: { r: 233, g: 162, b: 59 },   // gold
+  vr: { r: 96, g: 165, b: 250 }          // blue
+};
+
+const groupLabels = {
+  tech: 'Tech for Transformation',
+  embodied: 'Embodied Healing',
+  vr: 'Experience Hardware'
+};
+
+const stageNames = ['', 'Validation', 'Research', 'Offer Design', 'Testing', 'Funnel', 'Launch Prep', 'Launch', 'Tracking'];
+
+// ─── LAYOUT ─────────────────────────────────────────────
+
+const cx = canvas.width / 2;
+const cy = canvas.height / 2;
+
+// Position projects in group clusters
+function layoutProjects() {
+  const w = canvas.width;
+  const h = canvas.height;
+
+  // Group centers
+  const centers = {
+    tech: { x: w * 0.35, y: h * 0.4 },
+    embodied: { x: w * 0.7, y: h * 0.35 },
+    vr: { x: w * 0.55, y: h * 0.7 }
+  };
+
+  const groupOffsets = { tech: 0, embodied: 0, vr: 0 };
+  const groupCounts = { tech: 4, embodied: 2, vr: 2 };
+
+  projects.forEach(p => {
+    const center = centers[p.group];
+    const count = groupCounts[p.group];
+    const idx = groupOffsets[p.group]++;
+    const angle = (idx / count) * Math.PI * 2 - Math.PI / 2;
+    const radius = count <= 2 ? 80 : 120;
+
+    p.x = center.x + Math.cos(angle) * radius;
+    p.y = center.y + Math.sin(angle) * radius;
+    p.radius = 24 + p.stage * 3; // bigger = further along
+    p.centerX = center.x;
+    p.centerY = center.y;
+  });
+}
+
+// ─── CONNECTIONS ────────────────────────────────────────
+
+function getConnections() {
+  const connections = [];
+  for (let i = 0; i < projects.length; i++) {
+    for (let j = i + 1; j < projects.length; j++) {
+      const a = projects[i];
+      const b = projects[j];
+
+      const sharedSkills = a.skills.filter(s => b.skills.includes(s));
+      const sharedProblems = a.problems.filter(p => b.problems.includes(p));
+      const sharedPersonas = a.personas.filter(p => b.personas.includes(p));
+
+      const totalShared = sharedSkills.length + sharedProblems.length + sharedPersonas.length;
+      if (totalShared > 0) {
+        connections.push({
+          from: a, to: b,
+          sharedSkills, sharedProblems, sharedPersonas,
+          strength: totalShared
+        });
+      }
+    }
+  }
+  return connections;
+}
+
+// ─── ANIMATION STATE ────────────────────────────────────
+
+let hoveredProject = null;
+let hoveredConnection = null;
+let mouseX = 0, mouseY = 0;
+let time = 0;
+let particles = [];
+
+// Ambient particles
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random() * 2000,
+    y: Math.random() * 1200,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    size: Math.random() * 1.5 + 0.5,
+    alpha: Math.random() * 0.3 + 0.1
+  });
+}
+
+// ─── DRAW ───────────────────────────────────────────────
+
+function draw() {
+  time += 0.01;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Background gradient
+  const bgGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(canvas.width, canvas.height) * 0.7);
+  bgGrad.addColorStop(0, 'rgba(20, 15, 40, 1)');
+  bgGrad.addColorStop(1, 'rgba(10, 10, 26, 1)');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Particles
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = canvas.width;
+    if (p.x > canvas.width) p.x = 0;
+    if (p.y < 0) p.y = canvas.height;
+    if (p.y > canvas.height) p.y = 0;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+    ctx.fill();
+  });
+
+  const connections = getConnections();
+
+  // Draw group halos
+  const groups = {};
+  projects.forEach(p => {
+    if (!groups[p.group]) groups[p.group] = [];
+    groups[p.group].push(p);
+  });
+
+  Object.entries(groups).forEach(([group, projs]) => {
+    const gcol = groupColors[group];
+    const avgX = projs.reduce((s, p) => s + p.x, 0) / projs.length;
+    const avgY = projs.reduce((s, p) => s + p.y, 0) / projs.length;
+    const maxDist = Math.max(...projs.map(p => Math.hypot(p.x - avgX, p.y - avgY))) + 80;
+
+    const halo = ctx.createRadialGradient(avgX, avgY, 0, avgX, avgY, maxDist);
+    halo.addColorStop(0, `rgba(${gcol.r}, ${gcol.g}, ${gcol.b}, 0.06)`);
+    halo.addColorStop(1, `rgba(${gcol.r}, ${gcol.g}, ${gcol.b}, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(avgX, avgY, maxDist, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Group label
+    ctx.fillStyle = `rgba(${gcol.r}, ${gcol.g}, ${gcol.b}, 0.2)`;
+    ctx.font = '600 11px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(groupLabels[group].toUpperCase(), avgX, avgY - maxDist + 10);
+  });
+
+  // Draw connections
+  connections.forEach(conn => {
+    const isHovered = hoveredProject && (conn.from === hoveredProject || conn.to === hoveredProject);
+    const alpha = isHovered ? 0.6 : (hoveredProject ? 0.05 : 0.15);
+    const width = isHovered ? 2 + conn.strength * 0.5 : 1;
+
+    // Determine dominant color
+    let r = 255, g = 255, b = 255;
+    if (conn.sharedSkills.length >= conn.sharedProblems.length && conn.sharedSkills.length >= conn.sharedPersonas.length) {
+      r = 94; g = 23; b = 235; // purple for skills
+    } else if (conn.sharedProblems.length >= conn.sharedPersonas.length) {
+      r = 233; g = 162; b = 59; // gold for problems
+    } else {
+      r = 96; g = 165; b = 250; // blue for personas
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(conn.from.x, conn.from.y);
+    ctx.lineTo(conn.to.x, conn.to.y);
+    ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    ctx.lineWidth = width;
+    ctx.stroke();
+
+    // Animated pulse on hovered connections
+    if (isHovered) {
+      const midX = (conn.from.x + conn.to.x) / 2;
+      const midY = (conn.from.y + conn.to.y) / 2;
+      const pulse = Math.sin(time * 3) * 0.3 + 0.4;
+
+      ctx.beginPath();
+      ctx.arc(midX, midY, 4, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${pulse})`;
+      ctx.fill();
+    }
+  });
+
+  // Draw projects
+  projects.forEach(p => {
+    const isHovered = p === hoveredProject;
+    const isConnected = hoveredProject && connections.some(c =>
+      (c.from === hoveredProject && c.to === p) || (c.to === hoveredProject && c.from === p)
+    );
+    const isDimmed = hoveredProject && !isHovered && !isConnected;
+    const gcol = groupColors[p.group];
+
+    // Glow
+    if (isHovered || isConnected) {
+      const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 2.5);
+      glow.addColorStop(0, `rgba(${gcol.r}, ${gcol.g}, ${gcol.b}, 0.3)`);
+      glow.addColorStop(1, `rgba(${gcol.r}, ${gcol.g}, ${gcol.b}, 0)`);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius * 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Node
+    const nodeAlpha = isDimmed ? 0.15 : 1;
+    const breathe = Math.sin(time * 2 + projects.indexOf(p)) * 2;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius + (isHovered ? 4 : 0) + breathe, 0, Math.PI * 2);
+
+    const grad = ctx.createRadialGradient(p.x - p.radius * 0.3, p.y - p.radius * 0.3, 0, p.x, p.y, p.radius + breathe);
+    grad.addColorStop(0, `rgba(${Math.min(gcol.r + 60, 255)}, ${Math.min(gcol.g + 40, 255)}, ${Math.min(gcol.b + 40, 255)}, ${nodeAlpha * 0.9})`);
+    grad.addColorStop(1, `rgba(${gcol.r}, ${gcol.g}, ${gcol.b}, ${nodeAlpha * 0.6})`);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    ctx.strokeStyle = `rgba(${gcol.r}, ${gcol.g}, ${gcol.b}, ${nodeAlpha * 0.8})`;
+    ctx.lineWidth = isHovered ? 2 : 1;
+    ctx.stroke();
+
+    // Label
+    ctx.fillStyle = `rgba(255, 255, 255, ${isDimmed ? 0.15 : 0.85})`;
+    ctx.font = `${isHovered ? '600' : '500'} ${isHovered ? '13' : '12'}px -apple-system, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(p.name, p.x, p.y + p.radius + 18);
+
+    // Stage indicator
+    ctx.fillStyle = `rgba(255, 255, 255, ${isDimmed ? 0.05 : 0.3})`;
+    ctx.font = '500 10px -apple-system, sans-serif';
+    ctx.fillText(`Stage ${p.stage}`, p.x, p.y + p.radius + 32);
+  });
+
+  requestAnimationFrame(draw);
+}
+
+// ─── INTERACTION ────────────────────────────────────────
+
+canvas.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+
+  let found = null;
+  projects.forEach(p => {
+    const dist = Math.hypot(e.clientX - p.x, e.clientY - p.y);
+    if (dist < p.radius + 10) found = p;
+  });
+
+  if (found !== hoveredProject) {
+    hoveredProject = found;
+    if (found) {
+      showTooltip(found, e.clientX, e.clientY);
+    } else {
+      tooltip.style.display = 'none';
+    }
+  } else if (found) {
+    positionTooltip(e.clientX, e.clientY);
+  }
+
+  canvas.style.cursor = found ? 'pointer' : 'default';
+});
+
+function showTooltip(project, x, y) {
+  const connections = getConnections().filter(c => c.from === project || c.to === project);
+  const connectedNames = connections.map(c => {
+    const other = c.from === project ? c.to : c.from;
+    const shared = [...c.sharedSkills.map(s => `<span class="cluster-tag skill-tag">${s}</span>`),
+                    ...c.sharedProblems.map(s => `<span class="cluster-tag problem-tag">${truncate(s, 40)}</span>`),
+                    ...c.sharedPersonas.map(s => `<span class="cluster-tag persona-tag">${truncate(s, 35)}</span>`)];
+    return `<div style="margin-top:8px;"><span style="color:rgba(255,255,255,0.6);font-size:12px;">↔ ${other.name}</span><br>${shared.join(' ')}</div>`;
+  });
+
+  tooltip.innerHTML = `
+    <h3>${project.name}</h3>
+    <div class="stage">Stage ${project.stage} — ${stageNames[project.stage] || 'Active'} • ${project.type.replace('_', ' ')}</div>
+    <div class="section-label">Art (Skills)</div>
+    ${project.skills.map(s => `<span class="cluster-tag skill-tag">${s}</span>`).join(' ')}
+    <div class="section-label">Message (Problems)</div>
+    ${project.problems.map(s => `<span class="cluster-tag problem-tag">${truncate(s, 50)}</span>`).join(' ')}
+    <div class="section-label">Audience (Personas)</div>
+    ${project.personas.map(s => `<span class="cluster-tag persona-tag">${truncate(s, 40)}</span>`).join(' ')}
+    ${connections.length > 0 ? `<div class="section-label" style="margin-top:12px;">Connected to ${connections.length} project${connections.length > 1 ? 's' : ''}</div>${connectedNames.join('')}` : ''}
+  `;
+  tooltip.style.display = 'block';
+  positionTooltip(x, y);
+}
+
+function positionTooltip(x, y) {
+  const rect = tooltip.getBoundingClientRect();
+  let tx = x + 20;
+  let ty = y - 20;
+  if (tx + rect.width > window.innerWidth - 20) tx = x - rect.width - 20;
+  if (ty + rect.height > window.innerHeight - 20) ty = window.innerHeight - rect.height - 20;
+  if (ty < 20) ty = 20;
+  tooltip.style.left = tx + 'px';
+  tooltip.style.top = ty + 'px';
+}
+
+function truncate(str, max) {
+  return str.length > max ? str.slice(0, max) + '...' : str;
+}
+
+// ─── INIT ───────────────────────────────────────────────
+
+layoutProjects();
+window.addEventListener('resize', () => { resize(); layoutProjects(); });
+draw();
+</script>
+</body>
+</html>

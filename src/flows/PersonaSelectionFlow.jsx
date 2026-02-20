@@ -306,7 +306,8 @@ function PersonaSelectionFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: 'persona_selection',
-          pointsEarned: 3
+          pointsEarned: 3,
+          projectId: projectId || null
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)

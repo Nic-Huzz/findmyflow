@@ -652,7 +652,7 @@ export default function Sales() {
               <div className="form-field">
                 <label>
                   Product
-                  {hasCustomProducts && <span className="custom-products-badge">From Offer Builder</span>}
+                  {hasCustomProducts && <span className="custom-products-badge">From Product Builder</span>}
                 </label>
                 <select
                   value={newDeal.product_type}

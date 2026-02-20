@@ -128,6 +128,7 @@ const MindSpace = lazyRetry(() => import('./flows/MindSpace'))
 const PlayListFinderFlow = lazyRetry(() => import('./flows/PlayListFinderFlow'))
 const PersonaIdentifierFlow = lazyRetry(() => import('./flows/PersonaIdentifierFlow'))
 const FlowFinderExplainer = lazyRetry(() => import('./flows/FlowFinderExplainer'))
+const PlayListExplainer = lazyRetry(() => import('./flows/PlayListExplainer'))
 const ValidationExplainer = lazyRetry(() => import('./flows/ValidationExplainer'))
 const ProductExplainer = lazyRetry(() => import('./flows/ProductExplainer'))
 const TestingExplainer = lazyRetry(() => import('./flows/TestingExplainer'))
@@ -230,6 +231,7 @@ const MatchupDetails = lazyRetry(() => import('./pages/league/MatchupDetails'))
 const ContentSubmit = lazyRetry(() => import('./pages/league/ContentSubmit'))
 const LeagueAdmin = lazyRetry(() => import('./pages/league/LeagueAdmin'))
 const NewsfeedPage = lazyRetry(() => import('./pages/league/NewsfeedPage'))
+const LeagueGuide = lazyRetry(() => import('./flows/LeagueGuide'))
 
 import './App.css'
 import './PersonaAssessment.css'
@@ -342,6 +344,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/offer-creation-explainer' ||
                         location.pathname === '/campaign-explainer' ||
                         location.pathname === '/launch-explainer' ||
+                        location.pathname === '/flow-finder-explainer' ||
+                        location.pathname === '/play-list-explainer' ||
                         location.pathname === '/fantasy' ||
                         location.pathname === '/healing-compass-workshop' ||
                         location.pathname.startsWith('/league') ||
@@ -657,6 +661,11 @@ function AppRouter() {
             <Route path="/flow-finder-explainer" element={
               <AuthGate>
                 <FlowFinderExplainer />
+              </AuthGate>
+            } />
+            <Route path="/play-list-explainer" element={
+              <AuthGate>
+                <PlayListExplainer />
               </AuthGate>
             } />
             <Route path="/validation-explainer" element={
@@ -1015,6 +1024,11 @@ function AppRouter() {
             <Route path="/league/admin" element={
               <AuthGate>
                 <LeagueAdmin />
+              </AuthGate>
+            } />
+            <Route path="/league/guide" element={
+              <AuthGate>
+                <LeagueGuide />
               </AuthGate>
             } />
 

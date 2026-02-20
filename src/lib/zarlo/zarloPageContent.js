@@ -475,7 +475,7 @@ export const PAGE_CONTENT = {
 
   '/offer-builder': {
     pageId: 'offer_builder',
-    pageName: 'Offer Builder',
+    pageName: 'Product Builder',
     whatIsThis: `Discover what solutions you could actually create for your audience. This flow helps you brainstorm, evaluate, and pick the right product or service based on your skills, the problems you solve, and what people actually need.`,
     whyMatters: `Most people build what THEY want instead of what their audience needs. Then they wonder why no one buys.\n\nThis bridges the gap. By grounding your offer in real problems and your natural strengths, you create something easier to sell AND easier to deliver.`,
     contextualPrompts: [
@@ -483,7 +483,7 @@ export const PAGE_CONTENT = {
       { id: 'too_many_ideas', label: 'What if I have too many ideas?' }
     ],
     faq: {
-      vs_attraction: `**Offer Builder** — WHAT to create. Brainstorm options, evaluate them, pick the best fit.\n\n**Attraction Offer** — HOW to position it. Take your chosen solution and craft it into an irresistible offer using the $100M framework.\n\nThink of Offer Builder as choosing what dish to cook. Attraction Offer is making it look and smell amazing so people actually want to eat it.`,
+      vs_attraction: `**Product Builder** — WHAT to create. Brainstorm options, evaluate them, pick the best fit.\n\n**Attraction Offer** — HOW to position it. Take your chosen solution and craft it into an irresistible offer using the $100M framework.\n\nThink of Product Builder as choosing what dish to cook. Attraction Offer is making it look and smell amazing so people actually want to eat it.`,
       too_many_ideas: `Classic creative human problem! Use these filters:\n\n1. Which uses your natural skills? (Check your Flow Finder data)\n2. Which solves a problem you genuinely care about? (Not just profitable — energizing)\n3. Which serves people you actually want to work with?\n4. Which could you create a simple version of in 2 weeks?\n\nStart with the smallest viable version of your best idea. Expand later.`
     }
   },

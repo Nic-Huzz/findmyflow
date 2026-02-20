@@ -23,6 +23,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import { useProjectId } from '../hooks/useProjectId'
 import { trackFlowCompletion } from '../lib/flowTracking'
 import { useAutoSave } from '../hooks/useAutoSave'
@@ -260,16 +261,60 @@ function GrandSlamOfferFlow() {
         setExistingOffer(offerData)
         setProductData(product || null)
 
-        // Extract products from offer builder responses
+        // Load existing products for name lookup
+        let existingProducts = []
+        try {
+          const { data: prods } = await supabase
+            .from('products')
+            .select('id, name')
+            .eq('user_id', user.id)
+          if (prods) existingProducts = prods
+        } catch (err) {
+          console.warn('Failed to load existing products:', err)
+        }
+
+        // Extract and group products (same logic as ProductSelectionFlow)
         const solutions = offerData.responses?.q8_solutions?.solutions || []
-        const products = solutions.map((sol, index) => ({
-          id: `solution_${index}`,
-          name: sol.description?.substring(0, 50) || `Product ${index + 1}`,
-          fullDescription: sol.description,
-          problemText: sol.problemText,
-          solutionType: sol.solutionType,
-          solutionCategory: sol.solutionCategory
-        }))
+        const validSolutions = solutions
+          .filter(data => data && data.description)
+          .map((data, idx) => ({
+            id: `solution_${idx}`,
+            ...data,
+            name: data.name || data.description?.substring(0, 50) || `Product ${idx + 1}`
+          }))
+
+        // Group by existingProductId
+        const grouped = {}
+        const standalone = []
+        validSolutions.forEach(sol => {
+          if (sol.existingProductId) {
+            if (!grouped[sol.existingProductId]) grouped[sol.existingProductId] = []
+            grouped[sol.existingProductId].push(sol)
+          } else {
+            standalone.push(sol)
+          }
+        })
+
+        const products = []
+        Object.entries(grouped).forEach(([productId, groupSolutions]) => {
+          if (groupSolutions.length >= 2) {
+            const existingProduct = existingProducts.find(p => p.id === productId)
+            products.push({
+              id: `group_${productId}`,
+              type: 'group',
+              name: existingProduct?.name || groupSolutions[0].name || 'Product',
+              solutionType: groupSolutions[0].solutionType,
+              solutions: groupSolutions,
+              problemTexts: [...new Set(groupSolutions.map(s => s.problemText).filter(Boolean))]
+            })
+          } else {
+            standalone.push(groupSolutions[0])
+          }
+        })
+        standalone.forEach(sol => {
+          products.push({ ...sol, type: 'standalone' })
+        })
+
         setAvailableProducts(products)
 
         setStage(STAGES.WELCOME)
@@ -477,7 +522,8 @@ function GrandSlamOfferFlow() {
       const questResult = await completeFlowQuest({
         userId: user.id,
         flowId: 'grand_slam_offer',
-        pointsEarned: 8
+        pointsEarned: 8,
+        projectId: projectId || null
       })
       console.log('🎯 Grand Slam quest completion result:', questResult)
 
@@ -601,9 +647,18 @@ function GrandSlamOfferFlow() {
               Add Products in Product Builder First
             </button>
           ) : (
-            <button className="primary-button glow-button" onClick={() => setStage(STAGES.PRODUCT_SELECT)}>
-              Start Evaluation →
-            </button>
+            <>
+              <button className="primary-button glow-button" onClick={() => setStage(STAGES.PRODUCT_SELECT)}>
+                Start Evaluation →
+              </button>
+              <button
+                className="secondary-button"
+                onClick={() => navigate('/7-day-challenge')}
+                style={{ marginTop: '12px' }}
+              >
+                Back
+              </button>
+            </>
           )}
         </div>
       )}
@@ -629,13 +684,26 @@ function GrandSlamOfferFlow() {
                 >
                   <div className="product-option-content">
                     <span className="product-name">{product.name}</span>
-                    {product.solutionType && (
-                      <span className="product-type">
-                        {product.solutionType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
-                      </span>
-                    )}
-                    {product.problemText && (
-                      <span className="product-problem">Solves: {product.problemText.substring(0, 60)}...</span>
+                    {product.type === 'group' ? (
+                      <>
+                        <span className="product-type">{product.solutions.length} features</span>
+                        <ul className="product-features-list">
+                          {product.solutions.map((sol, i) => (
+                            <li key={i}>{sol.name || sol.description?.substring(0, 50)}</li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : (
+                      <>
+                        {product.solutionType && (
+                          <span className="product-type">
+                            {product.solutionType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
+                          </span>
+                        )}
+                        {product.problemText && (
+                          <span className="product-problem">Solves: {product.problemText.substring(0, 60)}...</span>
+                        )}
+                      </>
                     )}
                   </div>
                   {isEvaluated && (
@@ -1014,6 +1082,8 @@ function GrandSlamOfferFlow() {
           >
             Build Offer Stack →
           </button>
+
+          <FlowFeedback flowType="grand_slam_offer" userId={user?.id} />
 
           <button
             className="go-back-link"

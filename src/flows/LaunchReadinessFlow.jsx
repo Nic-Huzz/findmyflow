@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
 import { ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './LaunchReadinessFlow.css'
@@ -138,6 +139,7 @@ const LAUNCH_APPROACHES = [
 function LaunchReadinessFlow() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
 
   const [stage, setStage] = useState(STAGES.LOADING)
   const [saving, setSaving] = useState(false)
@@ -534,7 +536,8 @@ function LaunchReadinessFlow() {
       const questResult = await completeFlowQuest({
         userId: user.id,
         flowId: 'launch_readiness',
-        pointsEarned: 6
+        pointsEarned: 6,
+        projectId: projectId || null
       })
       console.log('🎯 Quest completion result:', questResult)
 
@@ -955,6 +958,19 @@ function LaunchReadinessFlow() {
     const goalSize = parseInt(audienceData.listGoal) || 0
     const progress = goalSize > 0 ? Math.min((currentSize / goalSize) * 100, 100) : 0
 
+    // Dynamic labels based on selected channel
+    const channelLabels = {
+      'Email list': { size: 'Current email list size', goal: 'Email list goal', unit: 'subscribers' },
+      'Instagram': { size: 'Current Instagram followers', goal: 'Instagram follower goal', unit: 'followers' },
+      'LinkedIn': { size: 'Current LinkedIn connections', goal: 'LinkedIn connection goal', unit: 'connections' },
+      'Twitter/X': { size: 'Current Twitter/X followers', goal: 'Twitter/X follower goal', unit: 'followers' },
+      'YouTube': { size: 'Current YouTube subscribers', goal: 'YouTube subscriber goal', unit: 'subscribers' },
+      'TikTok': { size: 'Current TikTok followers', goal: 'TikTok follower goal', unit: 'followers' },
+      'Facebook': { size: 'Current Facebook followers', goal: 'Facebook follower goal', unit: 'followers' },
+      'Other': { size: 'Current audience size', goal: 'Audience size goal', unit: 'people' }
+    }
+    const labels = channelLabels[audienceData.primaryChannel] || { size: 'Current audience size', goal: 'Audience size goal', unit: 'people' }
+
     return (
       <div className="launch-readiness-flow">
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
@@ -962,45 +978,6 @@ function LaunchReadinessFlow() {
         <div className="lr-section">
           <h2>Pre-Launch Audience</h2>
           <p className="lr-subtitle">Who will you launch to?</p>
-
-          <div className="lr-audience-grid">
-            <div className="lr-audience-item">
-              <label>Current email list size</label>
-              <input
-                type="number"
-                value={audienceData.currentListSize}
-                onChange={(e) => setAudienceData(prev => ({ ...prev, currentListSize: e.target.value }))}
-                placeholder="0"
-                className="lr-input large"
-              />
-            </div>
-
-            <div className="lr-audience-item">
-              <label>Launch list goal</label>
-              <input
-                type="number"
-                value={audienceData.listGoal}
-                onChange={(e) => setAudienceData(prev => ({ ...prev, listGoal: e.target.value }))}
-                placeholder="100"
-                className="lr-input large"
-              />
-            </div>
-          </div>
-
-          {goalSize > 0 && (
-            <div className="lr-progress-container">
-              <div className="lr-progress-bar">
-                <div className="lr-progress-fill" style={{ width: `${progress}%` }} />
-              </div>
-              <p className="lr-progress-text">
-                {currentSize >= goalSize ? (
-                  <span className="success">Goal reached! Ready to launch.</span>
-                ) : (
-                  <span>{goalSize - currentSize} more leads needed to reach goal</span>
-                )}
-              </p>
-            </div>
-          )}
 
           <div className="lr-question">
             <label>Primary audience channel</label>
@@ -1016,6 +993,51 @@ function LaunchReadinessFlow() {
               ))}
             </div>
           </div>
+
+          {audienceData.primaryChannel && (
+            <>
+              <div className="lr-audience-grid">
+                <div className="lr-audience-item">
+                  <label>{labels.size}</label>
+                  <input
+                    type="number"
+                    value={audienceData.currentListSize}
+                    onChange={(e) => setAudienceData(prev => ({ ...prev, currentListSize: e.target.value }))}
+                    placeholder="0"
+                    className="lr-input large"
+                    min="0"
+                  />
+                </div>
+
+                <div className="lr-audience-item">
+                  <label>{labels.goal}</label>
+                  <input
+                    type="number"
+                    value={audienceData.listGoal}
+                    onChange={(e) => setAudienceData(prev => ({ ...prev, listGoal: e.target.value }))}
+                    placeholder="100"
+                    className="lr-input large"
+                    min="0"
+                  />
+                </div>
+              </div>
+
+              {goalSize > 0 && (
+                <div className="lr-progress-container">
+                  <div className="lr-progress-bar">
+                    <div className="lr-progress-fill" style={{ width: `${progress}%` }} />
+                  </div>
+                  <p className="lr-progress-text">
+                    {currentSize >= goalSize ? (
+                      <span className="success">Goal reached! Ready to launch.</span>
+                    ) : (
+                      <span>{goalSize - currentSize} more {labels.unit} needed to reach goal</span>
+                    )}
+                  </p>
+                </div>
+              )}
+            </>
+          )}
 
           <div className="lr-question">
             <label>How engaged is your audience?</label>
@@ -1070,7 +1092,9 @@ function LaunchReadinessFlow() {
   if (stage === STAGES.LAUNCH_APPROACH) {
     const proofCount = Object.values(proofData.types).filter(p => p.selected).length
     const { score } = calculateReadinessScore()
-    const recommended = getRecommendedApproach(score, proofCount)
+    // Use score minus the launch approach bonus so the recommendation doesn't shift when user selects
+    const scoreWithoutApproach = launchApproach ? score - 10 : score
+    const recommended = getRecommendedApproach(scoreWithoutApproach, proofCount)
 
     return (
       <div className="launch-readiness-flow">
@@ -1226,7 +1250,7 @@ function LaunchReadinessFlow() {
 
   if (stage === STAGES.PRE_ACTION) {
     return (
-      <div className="launch-readiness-flow">
+      <div className="launch-readiness-flow flow-base">
         <div className="pre-action-container">
           <div className="pre-action-header">
             <div className="success-icon small">✓</div>

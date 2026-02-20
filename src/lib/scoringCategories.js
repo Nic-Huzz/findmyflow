@@ -20,7 +20,7 @@ export const SCORING_CATEGORIES = {
 
   // Healing score
   'Healing': 'healing',
-  'Tracker': 'healing',
+  'Tracker': 'bonus',
   'Daily': 'healing',
   'Weekly': 'healing',
 

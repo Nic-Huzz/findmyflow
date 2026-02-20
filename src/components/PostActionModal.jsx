@@ -12,6 +12,8 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { supabase } from '../lib/supabaseClient'
+import CompassCheck from './CompassCheck'
+import { createCompassEntry } from '../lib/compassEntryHelper'
 import './PostActionModal.css'
 
 // Milestones that trigger POST-ACTION
@@ -66,11 +68,12 @@ const MILESTONE_CONTEXT = {
   }
 }
 
-function PostActionModal({ quest, userId, onComplete, onSkip }) {
-  const [step, setStep] = useState('reflection') // reflection | insight
+function PostActionModal({ quest, userId, projectId, challengeInstanceId, onComplete, onSkip }) {
+  const [step, setStep] = useState('reflection') // reflection | insight | compass
   const [wentWell, setWentWell] = useState('')
   const [doDifferently, setDoDifferently] = useState('')
   const [keyInsight, setKeyInsight] = useState('')
+  const [compassData, setCompassData] = useState(null)
   const [saving, setSaving] = useState(false)
 
   const context = MILESTONE_CONTEXT[quest.id] || {
@@ -78,15 +81,17 @@ function PostActionModal({ quest, userId, onComplete, onSkip }) {
     question: 'What did you learn?'
   }
 
-  const handleSave = async () => {
-    if (!wentWell.trim() && !doDifferently.trim() && !keyInsight.trim()) {
+  const handleSave = async (compassOverride) => {
+    const compass = compassOverride || compassData
+
+    if (!wentWell.trim() && !doDifferently.trim() && !keyInsight.trim() && !compass) {
       onSkip?.()
       return
     }
 
     setSaving(true)
     try {
-      const { error } = await supabase.from('post_action_reflections').insert({
+      const reflectionData = {
         user_id: userId,
         quest_id: quest.id,
         quest_name: quest.name,
@@ -94,10 +99,32 @@ function PostActionModal({ quest, userId, onComplete, onSkip }) {
         do_differently: doDifferently.trim() || null,
         key_insight: keyInsight.trim() || null,
         created_at: new Date().toISOString()
-      })
+      }
+
+      // Add compass data to reflection record if available
+      if (compass) {
+        reflectionData.compass_direction = compass.direction
+        reflectionData.internal_state = compass.internalState
+        reflectionData.external_state = compass.externalState
+      }
+
+      const { error } = await supabase.from('post_action_reflections').insert(reflectionData)
 
       if (error) {
         console.error('Error saving post-action reflection:', error)
+      }
+
+      // Create compass entry in flow_entries for the Flow Compass
+      if (compass) {
+        await createCompassEntry({
+          userId,
+          projectId: projectId || null,
+          internalState: compass.internalState,
+          externalState: compass.externalState,
+          activityDescription: context.title,
+          reasoning: keyInsight.trim() || wentWell.trim() || 'Post-action reflection',
+          challengeInstanceId: challengeInstanceId || null
+        })
       }
 
       onComplete?.()
@@ -112,9 +139,20 @@ function PostActionModal({ quest, userId, onComplete, onSkip }) {
   const handleNext = () => {
     if (step === 'reflection') {
       setStep('insight')
+    } else if (step === 'insight') {
+      setStep('compass')
     } else {
       handleSave()
     }
+  }
+
+  const handleCompassComplete = (data) => {
+    setCompassData(data)
+    handleSave(data)
+  }
+
+  const handleCompassSkip = () => {
+    handleSave(null)
   }
 
   return createPortal(
@@ -181,13 +219,21 @@ function PostActionModal({ quest, userId, onComplete, onSkip }) {
                 Back
               </button>
               <button
-                className="save-btn"
-                onClick={handleSave}
-                disabled={saving}
+                className="continue-btn"
+                onClick={handleNext}
               >
-                {saving ? 'Saving...' : 'Done'}
+                Continue
               </button>
             </div>
+          </div>
+        )}
+
+        {step === 'compass' && (
+          <div className="post-action-content">
+            <CompassCheck
+              onComplete={handleCompassComplete}
+              onSkip={handleCompassSkip}
+            />
           </div>
         )}
       </div>

@@ -77,7 +77,7 @@ export async function getLeague(leagueId) {
 // Team CRUD
 // ============================================
 
-export async function createTeam({ leagueId, name, userId }) {
+export async function createTeam({ leagueId, name, userId, projectId }) {
   const inviteCode = generateInviteCode()
 
   const { data: team, error: teamError } = await supabase
@@ -103,10 +103,15 @@ export async function createTeam({ leagueId, name, userId }) {
 
   if (memberError) throw memberError
 
+  // Set week 1 project nomination if provided
+  if (projectId) {
+    await nominateProject(leagueId, 1, projectId)
+  }
+
   return team
 }
 
-export async function joinTeam({ inviteCode, userId }) {
+export async function joinTeam({ inviteCode, userId, projectId }) {
   // Look up team by invite code (include members for size check)
   const { data: team, error: teamError } = await supabase
     .from('fantasy_teams')
@@ -143,6 +148,12 @@ export async function joinTeam({ inviteCode, userId }) {
     throw memberError
   }
 
+  // Set week 1 project nomination if provided
+  const leagueId = team.fantasy_leagues?.id || team.league_id
+  if (projectId && leagueId) {
+    await nominateProject(leagueId, 1, projectId)
+  }
+
   return team
 }
 
@@ -175,6 +186,86 @@ export async function getUserTeam(leagueId, userId) {
 
   if (error) throw error
   return data?.fantasy_teams || null
+}
+
+// ============================================
+// Project Nominations
+// ============================================
+
+/**
+ * Upsert a project nomination for a specific week.
+ * If a nomination already exists for this user/league/week, it gets replaced.
+ */
+export async function nominateProject(leagueId, weekNumber, projectId) {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.user) throw new Error('Not authenticated')
+
+  const { data, error } = await supabase
+    .from('fantasy_project_nominations')
+    .upsert({
+      user_id: session.user.id,
+      league_id: leagueId,
+      week_number: weekNumber,
+      project_id: projectId,
+      nominated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id,league_id,week_number' })
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+/**
+ * Get the effective nomination for a user/league/week.
+ * Falls back to the most recent nomination at or before the requested week.
+ */
+export async function getEffectiveNomination(userId, leagueId, weekNumber) {
+  const { data, error } = await supabase
+    .from('fantasy_project_nominations')
+    .select('*, user_projects(id, name, current_stage)')
+    .eq('user_id', userId)
+    .eq('league_id', leagueId)
+    .lte('week_number', weekNumber)
+    .order('week_number', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error) {
+    console.error('Error fetching nomination:', error)
+    return null
+  }
+  return data
+}
+
+/**
+ * Get all nominations for a league + week (batch, for scoring engine).
+ * Returns { [userId]: projectId }.
+ * For users without a nomination for this exact week, falls back to their most recent.
+ */
+export async function getWeekNominations(leagueId, weekNumber) {
+  // Get all nominations up to this week for this league
+  const { data, error } = await supabase
+    .from('fantasy_project_nominations')
+    .select('user_id, week_number, project_id')
+    .eq('league_id', leagueId)
+    .lte('week_number', weekNumber)
+    .order('week_number', { ascending: false })
+
+  if (error) {
+    console.error('Error fetching week nominations:', error)
+    return {}
+  }
+
+  // For each user, take the most recent nomination (highest week_number <= requested)
+  const nominations = {}
+  ;(data || []).forEach(row => {
+    if (!nominations[row.user_id]) {
+      nominations[row.user_id] = row.project_id
+    }
+  })
+
+  return nominations
 }
 
 // ============================================
