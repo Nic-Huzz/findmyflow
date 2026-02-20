@@ -392,6 +392,33 @@ export const createExistingProject = async (userId, projectData) => {
 
     console.log('✅ Existing project captured:', newProject.id, newProject.name)
 
+    // Also create a products record so this project appears in Offer Builder's
+    // "select existing product" dropdown (which queries the products table)
+    try {
+      const { error: productError } = await supabase
+        .from('products')
+        .insert({
+          user_id: userId,
+          name: name || 'My Project',
+          description: description || '',
+          product_type: 'custom_service',
+          money_model_tier: 'core',
+          status: 'active',
+          source: 'existing_project_capture',
+          project_id: newProject.id,
+          metadata: {
+            source_project_id: newProject.id,
+            created_at: new Date().toISOString()
+          }
+        })
+
+      if (productError) {
+        console.warn('⚠️ Failed to create products record (non-blocking):', productError)
+      }
+    } catch (productErr) {
+      console.warn('⚠️ Products insert error (non-blocking):', productErr)
+    }
+
     return {
       success: true,
       projectId: newProject.id,
@@ -400,6 +427,104 @@ export const createExistingProject = async (userId, projectData) => {
     }
   } catch (err) {
     console.error('❌ Unexpected error in createExistingProject:', err)
+    return { success: false, error: err.message }
+  }
+}
+
+/**
+ * Create a project from the MultiProductCapture component.
+ * Used by ChallengeProjectSelector (inline add) and potentially QuickCapture.
+ * Creates both a `products` record and a `user_projects` record.
+ *
+ * @param {string} userId - User's ID
+ * @param {Object} product - Completed product from MultiProductCapture
+ * @param {string} source - Source identifier (e.g. 'challenge_add_project')
+ * @returns {Promise<{success: boolean, projectId?: string, productId?: string, error?: string}>}
+ */
+export const createProjectFromProductCapture = async (userId, product, source = 'product_capture') => {
+  try {
+    // Check existing projects for is_primary logic
+    const { data: existingProjects, error: checkError } = await supabase
+      .from('user_projects')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+
+    if (checkError) {
+      console.error('Error checking existing projects:', checkError)
+    }
+
+    const isFirstProject = !existingProjects || existingProjects.length === 0
+    const currentStage = product.stage || STAGES.VALIDATION
+
+    // Insert into products table
+    const { data: productRecord, error: productError } = await supabase
+      .from('products')
+      .insert({
+        user_id: userId,
+        name: product.name || 'My Product',
+        description: product.description || '',
+        product_type: product.productType || 'custom_service',
+        product_subtype: product.productSubtype || null,
+        money_model_tier: product.tier || 'core',
+        price_type: product.priceType || null,
+        price_amount: product.price ? parseFloat(product.price) : null,
+        status: 'active',
+        source,
+        metadata: {
+          category: product.category,
+          created_at: new Date().toISOString()
+        }
+      })
+      .select('id')
+      .single()
+
+    if (productError) {
+      console.error('Error creating product:', productError)
+      return { success: false, error: productError.message }
+    }
+
+    // Insert into user_projects table
+    const projectName = product.name || 'My Project'
+    const projectDescription = product.description || ''
+
+    const { data: newProject, error: projectError } = await supabase
+      .from('user_projects')
+      .insert({
+        user_id: userId,
+        name: projectName,
+        description: projectDescription,
+        source_flow: source,
+        status: 'active',
+        current_stage: currentStage,
+        total_points: 0,
+        is_primary: isFirstProject
+      })
+      .select('id')
+      .single()
+
+    if (projectError) {
+      console.error('Error creating project:', projectError)
+      return { success: false, error: projectError.message }
+    }
+
+    // Link product to project
+    const { error: linkError } = await supabase
+      .from('products')
+      .update({ project_id: newProject.id })
+      .eq('id', productRecord.id)
+
+    if (linkError) {
+      console.warn('Failed to link product to project (non-blocking):', linkError)
+    }
+
+    return {
+      success: true,
+      projectId: newProject.id,
+      productId: productRecord.id
+    }
+  } catch (err) {
+    console.error('Unexpected error in createProjectFromProductCapture:', err)
     return { success: false, error: err.message }
   }
 }

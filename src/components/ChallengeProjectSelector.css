@@ -258,6 +258,28 @@
   border-color: rgba(255, 255, 255, 0.5);
 }
 
+/* Add Project Mode */
+.project-selector.add-project-mode {
+  max-width: 600px;
+}
+
+.project-selector.add-project-mode .selector-header {
+  margin-bottom: 16px;
+}
+
+.project-selector .saving-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  text-align: center;
+}
+
+.project-selector .saving-state p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .project-selector {

@@ -8,26 +8,28 @@
  * - Shows all active projects with their current stage
  * - Highlights primary project
  * - Shows project points and progress
- * - Option to create new project if none exist
+ * - Inline "Add New Project" via MultiProductCapture
  *
  * Created: Dec 2024
  * Part of project-based refactor (see docs/2024-12-20-major-refactor-plan.md)
  */
 
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { STAGE_CONFIG } from '../lib/stageConfig'
+import { createProjectFromProductCapture } from '../lib/projectCreation'
+import MultiProductCapture from './onboarding/QuickCapture/MultiProductCapture'
 import './ChallengeProjectSelector.css'
 
 function ChallengeProjectSelector({ onSelect, currentProjectId }) {
   const { user } = useAuth()
-  const navigate = useNavigate()
 
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedId, setSelectedId] = useState(currentProjectId || null)
+  const [showAddProject, setShowAddProject] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   // Add body class to hide bottom toolbar when project selector is shown
   useEffect(() => {
@@ -65,23 +67,36 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
       if (projectsError) throw projectsError
 
       // Load challenge progress for all projects to get accurate points
-      const { data: challengeData, error: challengeError } = await supabase
-        .from('challenge_progress')
-        .select('project_id, total_points, status')
-        .eq('user_id', user.id)
-        .in('project_id', (projectsData || []).map(p => p.id))
-        .order('challenge_start_date', { ascending: false })
+      const projectIds = (projectsData || []).map(p => p.id)
+      let challengeData = null
 
-      if (challengeError) {
-        console.error('Error loading challenge progress:', challengeError)
+      if (projectIds.length > 0) {
+        const { data, error: challengeError } = await supabase
+          .from('challenge_progress')
+          .select('project_id, total_points, status')
+          .eq('user_id', user.id)
+          .in('project_id', projectIds)
+          .order('challenge_start_date', { ascending: false })
+
+        if (challengeError) {
+          console.error('Error loading challenge progress:', challengeError)
+        }
+        challengeData = data
       }
 
-      // Merge challenge points into projects (use most recent active or completed challenge)
+      // Deduplicate challenge progress: keep first (most recent) per project
+      const progressByProject = new Map()
+      ;(challengeData || []).forEach(c => {
+        if (!progressByProject.has(c.project_id)) {
+          progressByProject.set(c.project_id, c)
+        }
+      })
+
+      // Merge challenge points into projects
       const projectsWithPoints = (projectsData || []).map(project => {
-        const challengeProgress = challengeData?.find(c => c.project_id === project.id)
+        const challengeProgress = progressByProject.get(project.id)
         return {
           ...project,
-          // Use challenge points if available, otherwise fall back to project total_points
           challenge_points: challengeProgress?.total_points || 0,
           has_active_challenge: challengeProgress?.status === 'active'
         }
@@ -112,6 +127,31 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
     }
   }
 
+  const handleNewProductsCreated = async (completedProducts) => {
+    if (!completedProducts || completedProducts.length === 0) {
+      setShowAddProject(false)
+      return
+    }
+    setSaving(true)
+    try {
+      let firstNewProjectId = null
+      for (const product of completedProducts) {
+        const result = await createProjectFromProductCapture(user.id, product, 'challenge_add_project')
+        if (result.success && !firstNewProjectId) {
+          firstNewProjectId = result.projectId
+        }
+      }
+      // Refresh project list, auto-select the new project
+      await loadProjects()
+      if (firstNewProjectId) setSelectedId(firstNewProjectId)
+    } catch (err) {
+      console.error('Error creating project from product capture:', err)
+    } finally {
+      setShowAddProject(false)
+      setSaving(false)
+    }
+  }
+
   const getStageInfo = (stageNumber) => {
     return STAGE_CONFIG[stageNumber] || { name: `Stage ${stageNumber}`, icon: '📍', color: '#5e17eb' }
   }
@@ -125,7 +165,7 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
     )
   }
 
-  if (projects.length === 0) {
+  if (projects.length === 0 && !showAddProject) {
     return (
       <div className="project-selector empty">
         <div className="empty-state">
@@ -134,11 +174,39 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
           <p>Complete the Mind Space to create a project and start your 7-day challenge.</p>
           <button
             className="primary-button"
-            onClick={() => navigate('/mind-space')}
+            onClick={() => { window.location.href = '/mind-space' }}
           >
             Start Mind Space
           </button>
         </div>
+      </div>
+    )
+  }
+
+  if (showAddProject) {
+    return (
+      <div className="project-selector add-project-mode">
+        <div className="selector-header">
+          <h2>Add a New Project</h2>
+          <p>Tell us about your product or service</p>
+        </div>
+        {saving ? (
+          <div className="saving-state">
+            <div className="loading-spinner" />
+            <p>Creating your project...</p>
+          </div>
+        ) : (
+          <MultiProductCapture
+            userId={user.id}
+            wealthLadder={null}
+            storageKeyPrefix="challenge_add_project"
+            onComplete={handleNewProductsCreated}
+            onBack={() => {
+              localStorage.removeItem(`challenge_add_project_${user.id}`)
+              setShowAddProject(false)
+            }}
+          />
+        )}
       </div>
     )
   }
@@ -203,7 +271,7 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
 
         <button
           className="secondary-button"
-          onClick={() => navigate('/nikigai/skills')}
+          onClick={() => setShowAddProject(true)}
         >
           + Create New Project
         </button>

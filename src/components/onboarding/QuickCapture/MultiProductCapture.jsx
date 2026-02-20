@@ -17,9 +17,6 @@ import ProductCard from './ProductCard'
 import { CATEGORY_OPTIONS } from './DeliverySelector'
 import './MultiProductCapture.css'
 
-// Storage key for products
-const PRODUCTS_STORAGE_KEY = 'quick_capture_products'
-
 // Map wealth ladder to default category
 const WEALTH_LADDER_TO_CATEGORY = {
   service: 'service',
@@ -45,7 +42,8 @@ function MultiProductCapture({
   wealthLadder,
   onComplete,
   onBack,
-  userId
+  userId,
+  storageKeyPrefix = 'quick_capture_products'
 }) {
   // Default category based on wealth ladder
   const defaultCategory = WEALTH_LADDER_TO_CATEGORY[wealthLadder] || null
@@ -53,7 +51,7 @@ function MultiProductCapture({
   // Load saved products from localStorage or create default
   const loadSavedProducts = () => {
     if (userId) {
-      const saved = localStorage.getItem(`${PRODUCTS_STORAGE_KEY}_${userId}`)
+      const saved = localStorage.getItem(`${storageKeyPrefix}_${userId}`)
       if (saved) {
         try {
           const parsed = JSON.parse(saved)
@@ -75,11 +73,11 @@ function MultiProductCapture({
   const saveProductsToStorage = useCallback((productsData) => {
     if (userId) {
       localStorage.setItem(
-        `${PRODUCTS_STORAGE_KEY}_${userId}`,
+        `${storageKeyPrefix}_${userId}`,
         JSON.stringify({ products: productsData, timestamp: Date.now() })
       )
     }
-  }, [userId])
+  }, [userId, storageKeyPrefix])
 
   // Save whenever products change
   useEffect(() => {
@@ -119,7 +117,7 @@ function MultiProductCapture({
     const completedProducts = products.filter(p => p.step === 'complete')
     // Clear localStorage on successful completion
     if (userId) {
-      localStorage.removeItem(`${PRODUCTS_STORAGE_KEY}_${userId}`)
+      localStorage.removeItem(`${storageKeyPrefix}_${userId}`)
     }
     onComplete(completedProducts)
   }
