@@ -266,7 +266,7 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
           onClick={handleConfirm}
           disabled={!selectedId}
         >
-          Start Challenge with This Project
+          Continue Challenge with This Project
         </button>
 
         <button
