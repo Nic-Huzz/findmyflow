@@ -536,9 +536,11 @@ function PersonaSelectionFlow() {
                   </div>
                 </div>
 
-                <button className="action-btn action-btn-primary" onClick={addCurrentCombo}>
-                  + Add This Combination
-                </button>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <button className="action-btn action-btn-primary" onClick={addCurrentCombo}>
+                    + Add This Combination
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
@@ -592,6 +594,12 @@ function PersonaSelectionFlow() {
               disabled={selectedCombinations.length === 0}
             >
               Continue to Questions
+            </button>
+            <button
+              className="action-btn action-btn-back"
+              onClick={() => navigate(-1)}
+            >
+              Go Back
             </button>
           </div>
         </div>

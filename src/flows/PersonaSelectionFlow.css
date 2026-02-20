@@ -379,6 +379,19 @@
   border-color: rgba(255, 255, 255, 0.3);
 }
 
+.persona-selection-flow .action-btn-back {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  border: none;
+  text-decoration: underline;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+}
+
+.persona-selection-flow .action-btn-back:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* Custom Input Form */
 .persona-selection-flow .custom-input-form {
   background: rgba(255, 255, 255, 0.05);
