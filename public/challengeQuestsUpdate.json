@@ -1981,7 +1981,7 @@
       "type": "anytime",
       "frequency": "anytime",
       "name": "Complete Testing Form",
-      "description": "Help us test FindMyFlow by completing this quick testing form.",
+      "description": "Help us test FindMyFlow by completing this quick feedback form.",
       "points": 3,
       "inputType": "flow",
       "flow_route": "https://findmyflow.nichuzz.com/v/m49ushx6"
