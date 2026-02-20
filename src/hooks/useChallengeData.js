@@ -1757,8 +1757,8 @@ export function useChallengeData() {
         checkHealingCompassComplete(),
         checkFlowFinderComplete(),
         loadStageProgress(),
-        loadWeeklyPlan(),
-        loadValidationResponseCounts()
+        loadWeeklyPlan()
+        // Note: loadValidationResponseCounts is triggered by selectedProject useEffect below
       ]).finally(() => setLoading(false))
     }
   }, [user])

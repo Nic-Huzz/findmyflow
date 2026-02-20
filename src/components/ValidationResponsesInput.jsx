@@ -68,7 +68,7 @@ function ValidationResponsesInput({ quest, onComplete, projectId = null }) {
     if (user) {
       loadValidationFlows()
     }
-  }, [user])
+  }, [user, projectId])
 
   const loadValidationFlows = async () => {
     setLoading(true)
