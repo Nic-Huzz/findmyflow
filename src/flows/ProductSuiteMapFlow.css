@@ -256,13 +256,32 @@
   color: #ef4444;
 }
 
-/* Arrow connector between chain items */
+/* Arrow connector between chain items — also a drop target */
 .product-suite-map .psm-chain-arrow {
   display: flex;
   justify-content: center;
-  padding: 4px 0;
+  align-items: center;
+  padding: 6px 0;
   color: rgba(255, 255, 255, 0.2);
   font-size: 16px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  min-height: 28px;
+}
+
+.product-suite-map .psm-chain-arrow.trailing {
+  opacity: 0.3;
+  min-height: 20px;
+  padding: 4px 0;
+}
+
+.product-suite-map .psm-chain-arrow.drop-target {
+  background: rgba(233, 162, 59, 0.15);
+  color: #E9A23B;
+  padding: 12px 0;
+  min-height: 40px;
+  border: 1px dashed rgba(233, 162, 59, 0.5);
+  opacity: 1;
 }
 
 /* Add step buttons */

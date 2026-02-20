@@ -33,6 +33,7 @@ function ProductSuiteMapFlow() {
   const [submitting, setSubmitting] = useState(false)
   const [draggedIdx, setDraggedIdx] = useState(null)
   const [dragOverIdx, setDragOverIdx] = useState(null)
+  const [dragOverArrow, setDragOverArrow] = useState(null) // insert position when hovering arrow/gap
   const [chainDragOver, setChainDragOver] = useState(false)
   const [showCustomInput, setShowCustomInput] = useState(false)
   const [customName, setCustomName] = useState('')
@@ -288,10 +289,68 @@ function ProductSuiteMapFlow() {
     dragSource.current = null
   }
 
+  // Drop on arrow/gap between items (insert at position)
+  const handleArrowDragOver = (e, insertIdx) => {
+    e.preventDefault()
+    e.stopPropagation()
+    e.dataTransfer.dropEffect = 'move'
+    setDragOverArrow(insertIdx)
+  }
+
+  const handleArrowDragLeave = () => {
+    setDragOverArrow(null)
+  }
+
+  const handleArrowDrop = (e, insertIdx) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragOverArrow(null)
+    setChainDragOver(false)
+
+    if (dragSource.current === 'chain' && draggedIdxRef.current !== null) {
+      const fromIdx = draggedIdxRef.current
+      if (fromIdx === insertIdx || fromIdx === insertIdx - 1) {
+        // Dropping in same position — no-op
+      } else {
+        setChain(prev => {
+          const updated = [...prev]
+          const [moved] = updated.splice(fromIdx, 1)
+          // Adjust insert index if we removed before the target
+          const adjustedIdx = fromIdx < insertIdx ? insertIdx - 1 : insertIdx
+          updated.splice(adjustedIdx, 0, moved)
+          return updated
+        })
+      }
+    } else if (dragSource.current === 'pool') {
+      const key = e.dataTransfer.getData('text/plain')
+      const offerType = OFFER_TYPES.find(ot => ot.key === key)
+      if (offerType && assessments[offerType.key]) {
+        const assessment = assessments[offerType.key]
+        setChain(prev => {
+          if (prev.some(item => !item.isCustom && item.type === offerType.key)) return prev
+          const updated = [...prev]
+          updated.splice(insertIdx, 0, {
+            id: `${offerType.key}-${nextId.current++}`,
+            type: offerType.key,
+            name: assessment.name,
+            isCustom: false,
+            confidence: assessment.confidence
+          })
+          return updated
+        })
+      }
+    }
+
+    setDraggedIdx(null)
+    draggedIdxRef.current = null
+    dragSource.current = null
+  }
+
   const handleDragEnd = () => {
     setDraggedIdx(null)
     draggedIdxRef.current = null
     setDragOverIdx(null)
+    setDragOverArrow(null)
     setChainDragOver(false)
     dragSource.current = null
   }
@@ -477,7 +536,16 @@ function ProductSuiteMapFlow() {
           >
             {chain.map((item, idx) => (
               <div key={item.id || `${item.type}-${item.name}-${idx}`}>
-                {idx > 0 && <div className="psm-chain-arrow">&darr;</div>}
+                {idx > 0 && (
+                  <div
+                    className={`psm-chain-arrow${dragOverArrow === idx ? ' drop-target' : ''}`}
+                    onDragOver={(e) => handleArrowDragOver(e, idx)}
+                    onDragLeave={handleArrowDragLeave}
+                    onDrop={(e) => handleArrowDrop(e, idx)}
+                  >
+                    &darr;
+                  </div>
+                )}
                 <div
                   className={`psm-chain-item${draggedIdx === idx ? ' dragging' : ''}${dragOverIdx === idx ? ' drag-over-item' : ''}`}
                   draggable
@@ -504,6 +572,15 @@ function ProductSuiteMapFlow() {
                 </div>
               </div>
             ))}
+            {/* Trailing drop zone after last item */}
+            <div
+              className={`psm-chain-arrow trailing${dragOverArrow === chain.length ? ' drop-target' : ''}`}
+              onDragOver={(e) => handleArrowDragOver(e, chain.length)}
+              onDragLeave={handleArrowDragLeave}
+              onDrop={(e) => handleArrowDrop(e, chain.length)}
+            >
+              &darr;
+            </div>
           </div>
         )}
 
