@@ -1273,6 +1273,10 @@ function Challenge() {
     if (isGroansStage) {
       return q.category === 'Groans'
     }
+    // Tracker tab also shows Voices quests (essence/protective voice trackers)
+    if (activeCategory === 'Tracker') {
+      return q.category === 'Tracker' || q.category === 'Voices'
+    }
     return q.category === activeCategory
   }) || []
 
@@ -1779,13 +1783,13 @@ function Challenge() {
               className={`sub-tab ${businessSubTab === 'tasks' ? 'active' : ''}`}
               onClick={() => setBusinessSubTab('tasks')}
             >
-              ✅ Tasks
+              ✅&ensp;Tasks
             </button>
             <button
               className={`sub-tab ${businessSubTab === 'voices' ? 'active' : ''}`}
               onClick={() => setBusinessSubTab('voices')}
             >
-              {activeStageTab === 0 ? '🌊 Deep Dive' : '🎭 Voices'}
+              {activeStageTab === 0 ? '🌊\u2002Deep Dive' : '🎭\u2002Voices'}
             </button>
           </div>
         )}
@@ -1893,6 +1897,7 @@ function Challenge() {
                           justCompleted={justCompletedQuestId === quest.id}
                           isPlanned={isQuestPlanned(quest.id)}
                           plannedDay={getPlannedDay(quest.id)}
+                          completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id).length : 0}
                         />
                       )
                     })}
@@ -2010,7 +2015,7 @@ function Challenge() {
                     justCompleted={justCompletedQuestId === quest.id}
                     isPlanned={isQuestPlanned(quest.id)}
                     plannedDay={getPlannedDay(quest.id)}
-                    completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id, quest).length : 0}
+                    completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id).length : 0}
                   />
                 )
               })}

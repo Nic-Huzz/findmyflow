@@ -234,13 +234,22 @@ export function useChallengeData() {
 
       setProgress(progressData)
 
-      // Run project fetch + streak check in parallel (both independent)
-      const [projectResult, streakResult] = await Promise.all([
+      // Run project fetch + streak check + instance lookup in parallel (all independent)
+      const [projectResult, streakResult, instancesResult] = await Promise.all([
         progressData.project_id
           ? supabase.from('user_projects').select('*').eq('id', progressData.project_id).single()
           : Promise.resolve({ data: null, error: null }),
-        checkStreakBreak(user.id, progressData.challenge_instance_id)
+        checkStreakBreak(user.id, progressData.challenge_instance_id),
+        progressData.project_id
+          ? supabase.from('challenge_progress').select('challenge_instance_id').eq('user_id', user.id).eq('project_id', progressData.project_id)
+          : Promise.resolve({ data: null })
       ])
+
+      // All challenge instance IDs for this project (so completions persist across restarts)
+      const projectInstanceIds = (instancesResult.data || []).map(p => p.challenge_instance_id)
+      if (projectInstanceIds.length === 0) {
+        projectInstanceIds.push(progressData.challenge_instance_id)
+      }
 
       // Apply project data
       const { data: projectData, error: projectError } = projectResult
@@ -280,7 +289,7 @@ export function useChallengeData() {
           .from('quest_completions')
           .select('*')
           .eq('user_id', user.id)
-          .eq('challenge_instance_id', progressData.challenge_instance_id),
+          .in('challenge_instance_id', projectInstanceIds),
         supabase
           .from('quest_completions')
           .select('*')
@@ -1192,19 +1201,12 @@ export function useChallengeData() {
   // Quest Completion Helpers
   // ============================================
 
-  // Filter completions for a quest, scoping stage 1+ quests to the selected project
-  const getQuestCompletions = (questId, quest) => {
-    const stageRequired = parseFloat(quest?.stage_required ?? 0)
-    const isProjectScoped = stageRequired >= 1 && selectedProject?.id
-
-    return completions.filter(c => {
-      if (c.quest_id !== questId) return false
-      // Stage 1+ quests: only count completions for the current project
-      if (isProjectScoped) {
-        return c.project_id === selectedProject.id
-      }
-      return true
-    })
+  // Filter completions for a quest
+  // Note: project scoping is already handled at the query level — challenge
+  // completions are loaded by challenge_instance_id (which is per-project),
+  // so no additional project_id filter is needed here.
+  const getQuestCompletions = (questId) => {
+    return completions.filter(c => c.quest_id === questId)
   }
 
   const isQuestCompletedToday = (questId, quest) => {
@@ -1212,7 +1214,7 @@ export function useChallengeData() {
     const todayStr = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD format
     const weekStartStr = getWeekStart() // Already returns YYYY-MM-DD
 
-    const filtered = getQuestCompletions(questId, quest)
+    const filtered = getQuestCompletions(questId)
 
     // Daily quests: check if completed TODAY only (local timezone)
     if (quest.frequency === 'daily') {
@@ -1243,14 +1245,13 @@ export function useChallengeData() {
     }
   }
 
-  const isQuestEverCompleted = (questId, quest) => {
-    return getQuestCompletions(questId, quest || { stage_required: 0 }).length > 0
+  const isQuestEverCompleted = (questId) => {
+    return getQuestCompletions(questId).length > 0
   }
 
   // Check if a parent trial has a pending review/reflection
   const hasPendingTrial = (parentQuestId, pendingPhase) => {
-    const parentQuest = challengeData?.quests?.find(q => q.id === parentQuestId)
-    const filtered = getQuestCompletions(parentQuestId, parentQuest || { stage_required: 1 })
+    const filtered = getQuestCompletions(parentQuestId)
     return filtered.some(c => {
       try {
         const data = JSON.parse(c.reflection_text)
@@ -1277,8 +1278,7 @@ export function useChallengeData() {
     }
 
     if (!quest.requires_quest) return false
-    const requiredQuest = challengeData?.quests?.find(q => q.id === quest.requires_quest)
-    return !isQuestEverCompleted(quest.requires_quest, requiredQuest)
+    return !isQuestEverCompleted(quest.requires_quest)
   }
 
   const getRequiredQuestName = (questId, forQuestId) => {
