@@ -262,10 +262,15 @@
 .project-selector.add-project-mode {
   max-width: 100%;
   width: 100%;
+  padding: 24px 20px;
 }
 
 .project-selector.add-project-mode .selector-header {
   margin-bottom: 16px;
+}
+
+.project-selector.add-project-mode .multi-product-capture {
+  max-width: 100%;
 }
 
 .project-selector .saving-state {
