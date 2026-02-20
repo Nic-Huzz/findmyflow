@@ -260,7 +260,8 @@
 
 /* Add Project Mode */
 .project-selector.add-project-mode {
-  max-width: 600px;
+  max-width: 100%;
+  width: 100%;
 }
 
 .project-selector.add-project-mode .selector-header {

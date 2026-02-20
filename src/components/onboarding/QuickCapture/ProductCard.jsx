@@ -92,8 +92,8 @@ function ProductCard({
     )
   }
 
-  // STEP: Category selection (for products 2+)
-  if (currentStep === 'category' && !isFirst) {
+  // STEP: Category selection (for products 2+ or first product with no default category)
+  if (currentStep === 'category' && (!isFirst || !defaultCategory)) {
     return (
       <div className="qc-product-card">
         <div className="product-header">
@@ -134,7 +134,7 @@ function ProductCard({
         </div>
 
         <DeliverySelector
-          showCategorySelector={!isFirst}
+          showCategorySelector={!isFirst || !defaultCategory}
           defaultCategory={isFirst ? defaultCategory : product.category}
           selectedCategory={product.category}
           selectedType={product.productType}
