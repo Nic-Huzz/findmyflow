@@ -1413,6 +1413,50 @@
   border-color: #5e17eb;
 }
 
+/* Persona profile selection cards */
+.persona-profile-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.persona-profile-card {
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+}
+
+.persona-profile-card:hover {
+  border-color: #5e17eb;
+  background: #faf5ff;
+}
+
+.persona-profile-card.selected {
+  border-color: #5e17eb;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.15);
+}
+
+.persona-profile-persona {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.persona-profile-card.selected .persona-profile-persona {
+  color: #5e17eb;
+}
+
+.persona-profile-problem {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
 /* Project context preview card */
 .dashboard-container .project-context-preview {
   background: linear-gradient(135deg, rgba(94, 23, 235, 0.06) 0%, rgba(233, 162, 59, 0.06) 100%);
