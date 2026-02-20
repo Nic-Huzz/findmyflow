@@ -350,13 +350,31 @@ function ProductSelectionFlow() {
 
   const loadProducts = async () => {
     try {
-      const { data: assessment, error } = await supabase
+      // Try project-scoped first, fall back to any assessment
+      let query = supabase
         .from('offer_builder_assessments')
         .select('*')
         .eq('user_id', user.id)
+      if (projectId) {
+        query = query.eq('project_id', projectId)
+      }
+      let { data: assessment, error } = await query
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle()
+
+      // Fallback: if no project-scoped assessment, try without filter
+      if (!assessment && projectId) {
+        const fallback = await supabase
+          .from('offer_builder_assessments')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+        assessment = fallback.data
+        error = fallback.error
+      }
 
       if (error) throw error
 
@@ -777,51 +795,71 @@ function ProductSelectionFlow() {
     setError(null)
 
     try {
-      // Update the offer_builder_assessment with product value scores
-      const { data: assessment } = await supabase
+      // Find the assessment (project-scoped first, then fallback)
+      let assessmentQuery = supabase
         .from('offer_builder_assessments')
         .select('id, responses')
         .eq('user_id', user.id)
+      if (projectId) {
+        assessmentQuery = assessmentQuery.eq('project_id', projectId)
+      }
+      let { data: assessment } = await assessmentQuery
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle()
+
+      // Fallback: try without project filter
+      if (!assessment && projectId) {
+        const fallback = await supabase
+          .from('offer_builder_assessments')
+          .select('id, responses')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+        assessment = fallback.data
+      }
 
       if (!assessment) {
         throw new Error('No offer data found')
       }
 
-      if (assessment) {
-        // Calculate scores for each product (including specs)
-        const productScores = {}
-        coreProducts.forEach(prod => {
-          productScores[prod.id] = {
-            // Product specification
-            mechanism: productSpecs[prod.id]?.mechanism || '',
-            featureBenefits: productSpecs[prod.id]?.featureBenefits || [],
-            // Value equation answers
-            answers: answers[prod.id],
-            valueScore: calculateValueScore(prod.id),
-            // Track grouped solutions for traceability
-            ...(prod.type === 'group' ? {
-              groupedSolutionIds: prod.solutions.map(s => s.id),
-              existingProductId: prod.existingProductId
-            } : {})
-          }
+      // Calculate scores for each product (including specs)
+      const productScores = {}
+      coreProducts.forEach(prod => {
+        productScores[prod.id] = {
+          // Product specification
+          mechanism: productSpecs[prod.id]?.mechanism || '',
+          featureBenefits: productSpecs[prod.id]?.featureBenefits || [],
+          // Value equation answers
+          answers: answers[prod.id],
+          valueScore: calculateValueScore(prod.id),
+          // Track grouped solutions for traceability
+          ...(prod.type === 'group' ? {
+            groupedSolutionIds: prod.solutions.map(s => s.id),
+            existingProductId: prod.existingProductId
+          } : {})
+        }
+      })
+
+      console.log('💾 Saving product selections to assessment:', assessment.id, `(${Object.keys(productScores).length} products)`)
+
+      const { error: updateError } = await supabase
+        .from('offer_builder_assessments')
+        .update({
+          responses: {
+            ...assessment.responses,
+            product_selections: productScores
+          },
+          updated_at: new Date().toISOString()
         })
+        .eq('id', assessment.id)
 
-        const { error: updateError } = await supabase
-          .from('offer_builder_assessments')
-          .update({
-            responses: {
-              ...assessment.responses,
-              product_selections: productScores
-            },
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', assessment.id)
-
-        if (updateError) throw updateError
+      if (updateError) {
+        console.error('❌ Product selection save failed:', updateError)
+        throw updateError
       }
+      console.log('✅ Product selections saved successfully')
 
       // Track flow completion
       try {
@@ -907,7 +945,7 @@ function ProductSelectionFlow() {
       <div className="product-selection-flow">
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
         <div className="welcome-container">
-          <h1 className="welcome-greeting">Product Selection</h1>
+          <h1 className="welcome-greeting">Product Builder</h1>
           <div className="welcome-message">
             {error ? (
               <>

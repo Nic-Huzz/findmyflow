@@ -1071,6 +1071,7 @@ function OfferBuilderFlow() {
       const { data: insertData, error: saveError } = await supabase.from('offer_builder_assessments').insert([{
         session_id: sessionId,
         user_id: user.id,
+        project_id: projectId || null,
         user_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
         email: user.email,
         responses: fullResponses,
