@@ -512,7 +512,7 @@ function OfferBuilderFlow() {
 
   const loadValidationData = async () => {
     try {
-      const data = await getValidationObstaclesForOfferBuilder(user.id)
+      const data = await getValidationObstaclesForOfferBuilder(user.id, projectId)
       setValidationData(data)
     } catch (err) {
       console.error('Error loading validation data:', err)

@@ -16,16 +16,23 @@ import { supabase } from './supabaseClient'
 /**
  * Fetch validation responses for a user's flows
  * @param {string} userId - The user ID (creator of validation flows)
+ * @param {string|null} projectId - Optional project ID to filter flows
  * @returns {Promise<Array>} Array of validation sessions with responses
  */
-export async function fetchValidationResponses(userId) {
+export async function fetchValidationResponses(userId, projectId = null) {
   try {
     // Get user's validation flows
-    const { data: flows, error: flowsError } = await supabase
+    let flowsQuery = supabase
       .from('validation_flows')
       .select('id, flow_name, placeholders')
       .eq('creator_user_id', userId)
       .eq('is_active', true)
+
+    if (projectId) {
+      flowsQuery = flowsQuery.eq('project_id', projectId)
+    }
+
+    const { data: flows, error: flowsError } = await flowsQuery
 
     if (flowsError || !flows?.length) {
       return []
@@ -402,10 +409,11 @@ export function analyzeSolutionPreferences(solutionPreferences) {
 /**
  * Get formatted obstacles for Offer Builder display
  * @param {string} userId - The user ID
+ * @param {string|null} projectId - Optional project ID to filter flows
  * @returns {Promise<Object>} Formatted obstacles data for UI
  */
-export async function getValidationObstaclesForOfferBuilder(userId) {
-  const sessions = await fetchValidationResponses(userId)
+export async function getValidationObstaclesForOfferBuilder(userId, projectId = null) {
+  const sessions = await fetchValidationResponses(userId, projectId)
   const obstacles = extractObstaclesFromValidation(sessions)
   const ranked = rankObstacles(obstacles)
   const solutionAnalysis = analyzeSolutionPreferences(obstacles.solutionPreferences)

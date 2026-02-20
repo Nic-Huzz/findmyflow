@@ -181,8 +181,8 @@ function OfferBuilder100M() {
             .order('created_at', { ascending: false })
             .limit(1)
             .single(),
-          // Fetch validation obstacles using the new helper
-          getValidationObstaclesForOfferBuilder(user.id)
+          // Fetch validation obstacles using the new helper (project-scoped)
+          getValidationObstaclesForOfferBuilder(user.id, projectId)
         ])
 
         setContextData({

@@ -139,7 +139,7 @@
         {
           "id": "external_beliefs",
           "title": "External Beliefs",
-          "description": "What external factors do they believe are blocking them?",
+          "description": "What outside factors do they blame for blocking them?",
           "placeholders": [
             "e.g., 'I don't have enough time'",
             "e.g., 'The market is too saturated'",
