@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
@@ -1290,21 +1290,30 @@ export default function FlowFinderProblems() {
       <h1 className="welcome-greeting" style={{ marginTop: '40px' }}>✓ Problems Discovery Complete!</h1>
       <div className="welcome-message">
         <p>These problem themes represent the impact you want to create in the world—the changes that matter to you.</p>
-        <p style={{ marginTop: '24px' }}><strong>Next up:</strong> Let's discover who you're most qualified to serve.</p>
+      </div>
+
+      <div className="welcome-message" style={{ marginTop: '24px' }}>
+        <p>These aren't just problems — <strong>they're your message.</strong> The specific change your art exists to deliver.</p>
+        {clusters.length >= 2 && (
+          <p style={{ marginTop: '16px', fontStyle: 'italic', color: 'rgba(255, 255, 255, 0.8)' }}>
+            "{clusters[0].label}" is a message. "{clusters[Math.min(1, clusters.length - 1)].label}" is a message. Every one of these is something you believe the world needs to hear.
+          </p>
+        )}
+        <p style={{ marginTop: '24px' }}><strong>Let's discover who needs to hear your message.</strong></p>
       </div>
 
       <FlowFeedback flowType="nikigai_problems" userId={user?.id} />
 
-      <Link to="/nikigai/persona" className="primary-button" style={{ marginTop: '24px', display: 'block', textDecoration: 'none', textAlign: 'center' }}>
-        Continue to Persona Discovery
-      </Link>
-      <Link
-        to="/me"
+      <a href="/nikigai/persona" className="primary-button" style={{ marginTop: '24px', display: 'block', textDecoration: 'none', textAlign: 'center' }}>
+        Discover Your Audience
+      </a>
+      <a
+        href="/me"
         className="primary-button"
         style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px', display: 'block', textDecoration: 'none', textAlign: 'center' }}
       >
         Save & Return to Dashboard
-      </Link>
+      </a>
     </div>
   )
 

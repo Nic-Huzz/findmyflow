@@ -914,7 +914,7 @@ function LibraryOfAnswers() {
 
       {/* Skills */}
       <div className="subsection">
-        <h3>Skills</h3>
+        <h3>Skills: Your Art</h3>
         {skillsClusters.length === 0 ? (
           <p className="empty-text">No skills discovered yet. <Link to="/nikigai/skills">Start Flow Finder</Link></p>
         ) : (
@@ -925,7 +925,7 @@ function LibraryOfAnswers() {
                 rings={PROFICIENCY_RINGS}
                 litCells={skillsLitCells}
                 size={260}
-                centerLabel="SKILLS"
+                centerLabel="YOUR ART"
                 interactive={false}
                 showLitLabels
               />
@@ -956,7 +956,7 @@ function LibraryOfAnswers() {
 
       {/* Problems */}
       <div className="subsection">
-        <h3>Problems</h3>
+        <h3>Problems: Your Message</h3>
         {problemsClusters.length === 0 ? (
           <p className="empty-text">No problems identified yet. <Link to="/nikigai/problems">Start Problems Flow</Link></p>
         ) : (
@@ -967,7 +967,7 @@ function LibraryOfAnswers() {
                 rings={PROBLEMS_PROFICIENCY_RINGS}
                 litCells={problemsLitCells}
                 size={260}
-                centerLabel="PROBLEMS"
+                centerLabel="YOUR MESSAGE"
                 interactive={false}
                 showLitLabels
               />
@@ -998,7 +998,7 @@ function LibraryOfAnswers() {
 
       {/* Personas */}
       <div className="subsection">
-        <h3>Personas</h3>
+        <h3>Personas: Your Audience</h3>
         {personaClusters.length === 0 ? (
           <p className="empty-text">No personas created yet. <Link to="/nikigai/persona">Start Persona Flow</Link></p>
         ) : (
@@ -1009,7 +1009,7 @@ function LibraryOfAnswers() {
                 rings={JOURNEY_STAGES}
                 litCells={personasLitCells}
                 size={260}
-                centerLabel="PERSONAS"
+                centerLabel="YOUR AUDIENCE"
                 interactive={false}
                 showLitLabels
               />

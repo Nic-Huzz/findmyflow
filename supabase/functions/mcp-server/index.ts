@@ -346,7 +346,7 @@ async function handleGetUserContext(auth: AuthResult): Promise<any> {
       .select('lifetime_business_score, lifetime_healing_score, lifetime_courage_score, lifetime_total_score')
       .eq('user_id', userId)
       .is('project_id', null)
-      .single(),
+      .maybeSingle(),
 
     // This week's scores
     sb.from('challenge_weekly_scores')
@@ -355,7 +355,7 @@ async function handleGetUserContext(auth: AuthResult): Promise<any> {
       .is('project_id', null)
       .order('week_start_date', { ascending: false })
       .limit(1)
-      .single(),
+      .maybeSingle(),
 
     // Flow Finder clusters (skills, problems, personas)
     sb.from('nikigai_clusters')
@@ -384,9 +384,9 @@ async function handleGetUserContext(auth: AuthResult): Promise<any> {
 
   // Build Flow Finder summary
   const clusters = clustersRes.data || []
-  const skills = clusters.filter((c: any) => c.cluster_type === 'skill').map((c: any) => c.cluster_label)
-  const problems = clusters.filter((c: any) => c.cluster_type === 'problem').map((c: any) => c.cluster_label)
-  const personas = clusters.filter((c: any) => c.cluster_type === 'persona').map((c: any) => c.cluster_label)
+  const skills = clusters.filter((c: any) => c.cluster_type === 'skill' || c.cluster_type === 'skills').map((c: any) => c.cluster_label)
+  const problems = clusters.filter((c: any) => c.cluster_type === 'problem' || c.cluster_type === 'problems').map((c: any) => c.cluster_label)
+  const personas = clusters.filter((c: any) => c.cluster_type === 'persona' || c.cluster_type === 'personas').map((c: any) => c.cluster_label)
 
   // Build assessment results summary
   const assessments: Record<string, any> = {}
@@ -464,7 +464,7 @@ async function handleListQuests(args: any, auth: AuthResult): Promise<any> {
   const businessQuests = (catalog.quests || []).filter((q: any) =>
     q.category === 'Business' &&
     !q.archived &&
-    q.stage_required <= targetStage
+    (q.stage_required ?? 0) <= targetStage
   )
 
   // Get user's completions to check status
@@ -569,21 +569,19 @@ async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
     }
   }
 
-  // Resolve project_id
+  // Resolve project_id and check stage access
   let projectId = args.project_id || null
-  if (!projectId) {
-    const { data: project } = await sb
-      .from('user_projects')
-      .select('id')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single()
-    projectId = project?.id || null
-  }
+  const { data: project } = projectId
+    ? await sb.from('user_projects').select('id, current_stage').eq('id', projectId).eq('user_id', userId).single()
+    : await sb.from('user_projects').select('id, current_stage').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle()
+  projectId = project?.id || null
 
-  // Determine stage
-  const stage = quest.stage_required || 0
+  // Determine stage and enforce access
+  const stage = quest.stage_required ?? 0
+  const userStage = project?.current_stage ?? 0
+  if (stage > 0 && stage > userStage) {
+    return errorResult(`Quest requires stage ${stage} but your project is at stage ${userStage}. Complete earlier quests first.`)
+  }
 
   // Build reflection text based on input type
   let reflectionText = response
@@ -605,7 +603,7 @@ async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
       challenge_instance_id: null,
       quest_id: quest_id,
       quest_category: 'Business',
-      quest_type: quest.inputType === 'flow' ? 'flow' : quest.type?.toLowerCase() || 'task',
+      quest_type: quest.inputType === 'flow' ? 'flow' : quest.type || 'anytime',
       points_earned: quest.points || 5,
       challenge_day: 0,
       reflection_text: reflectionText,
@@ -622,13 +620,16 @@ async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
   const scoringCategory = SCORING_CATEGORIES[quest.category] || 'business'
   const weekStart = getWeekStartDate()
 
-  await sb.rpc('increment_scores', {
+  const { error: rpcError } = await sb.rpc('increment_scores', {
     p_user_id: userId,
     p_project_id: isUserLevel ? null : projectId,
     p_category: scoringCategory,
     p_points: quest.points || 5,
     p_week_start: weekStart,
   })
+  if (rpcError) {
+    console.error('increment_scores RPC error:', rpcError)
+  }
 
   // Get updated lifetime scores
   const { data: lifetimeScores } = await sb
@@ -636,7 +637,7 @@ async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
     .select('lifetime_business_score, lifetime_healing_score, lifetime_courage_score, lifetime_total_score')
     .eq('user_id', userId)
     .is('project_id', null)
-    .single()
+    .maybeSingle()
 
   return textResult({
     success: true,
@@ -650,13 +651,15 @@ async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
   })
 }
 
-// Helper: get Monday of current week as YYYY-MM-DD
+// Helper: get Monday of current week as YYYY-MM-DD (UTC).
+// Note: web app uses local timezone (getWeekStartLocal). Edge functions run in UTC.
+// This may cause a week boundary mismatch for users near midnight, but the scores
+// still land in a valid week row and are summed correctly by the RPC.
 function getWeekStartDate(): string {
   const now = new Date()
-  const day = now.getDay()
+  const day = now.getUTCDay()
   const diff = day === 0 ? -6 : 1 - day // Monday
-  const monday = new Date(now)
-  monday.setDate(now.getDate() + diff)
+  const monday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + diff))
   return monday.toISOString().split('T')[0]
 }
 

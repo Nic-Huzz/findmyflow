@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
@@ -601,21 +601,30 @@ export default function FlowFinderPersona() {
         <h1 className="welcome-greeting" style={{ marginTop: '40px' }}>✓ Persona Discovery Complete!</h1>
         <div className="welcome-message">
           <p>These are former versions of you. You understand their struggles because you've lived them. You know what they need because you needed it too.</p>
-          <p style={{ marginTop: '24px' }}><strong>Next up:</strong> Let's bring it all together and find your unique opportunity.</p>
+        </div>
+
+        <div className="welcome-message" style={{ marginTop: '24px' }}>
+          <p>These aren't just customer profiles — <strong>they're your audience.</strong> The people whose lives change when they experience your art.</p>
+          {clusters.length >= 2 && (
+            <p style={{ marginTop: '16px', fontStyle: 'italic', color: 'rgba(255, 255, 255, 0.8)' }}>
+              {clusters[0].label} is waiting for your message. {clusters[Math.min(1, clusters.length - 1)].label} is waiting for your message. Your art was made for these people.
+            </p>
+          )}
+          <p style={{ marginTop: '24px' }}><strong>Let's bring it all together.</strong></p>
         </div>
 
         <FlowFeedback flowType="nikigai_persona" userId={user?.id} />
 
-        <Link to="/nikigai/integration" className="primary-button" style={{ marginTop: '24px', display: 'block', textDecoration: 'none', textAlign: 'center' }}>
-          Continue to Connecting the Dots
-        </Link>
-        <Link
-          to="/me"
+        <a href="/nikigai/integration" className="primary-button" style={{ marginTop: '24px', display: 'block', textDecoration: 'none', textAlign: 'center' }}>
+          See Your Art Statement
+        </a>
+        <a
+          href="/me"
           className="primary-button"
           style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px', display: 'block', textDecoration: 'none', textAlign: 'center' }}
         >
           Save & Return to Dashboard
-        </Link>
+        </a>
       </div>
     )
   }

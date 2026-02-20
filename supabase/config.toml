@@ -25,3 +25,8 @@ additional_redirect_urls = ["http://localhost:5173", "https://findmyflow.nichuzz
 
 [auth.email]
 enable_confirmations = true
+
+# MCP server uses custom API key auth (fmf_k1_*), not Supabase JWT.
+# Must deploy with --no-verify-jwt so the Bearer header reaches our auth.ts.
+[functions.mcp-server]
+verify_jwt = false

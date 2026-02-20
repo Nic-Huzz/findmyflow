@@ -485,21 +485,21 @@ export default function FlowFinderIntegration() {
 
       <div style={{ marginTop: '32px' }}>
         <ClusterSlider
-          title="Your Skills"
+          title="Skills: Your Art"
           clusters={skillsClusters}
           selectedIndex={selectedSkillIndex}
           onSelect={setSelectedSkillIndex}
         />
 
         <ClusterSlider
-          title="Your Problem"
+          title="Problem: Your Message"
           clusters={problemsClusters}
           selectedIndex={selectedProblemIndex}
           onSelect={setSelectedProblemIndex}
         />
 
         <ClusterSlider
-          title="Your Persona"
+          title="Persona: Your Audience"
           clusters={personaClusters}
           selectedIndex={selectedPersonaIndex}
           onSelect={setSelectedPersonaIndex}
@@ -679,7 +679,7 @@ export default function FlowFinderIntegration() {
           <div className="pillar-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
             <div className="pillar-icon" style={{ fontSize: '20px', marginTop: '2px' }}>🎯</div>
             <div className="pillar-content">
-              <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Your Skills</h4>
+              <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Skills: Your Art</h4>
               <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.5', margin: '0' }}>
                 {selectedSkill?.cluster_label || 'Not selected'}
               </p>
@@ -688,7 +688,7 @@ export default function FlowFinderIntegration() {
           <div className="pillar-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
             <div className="pillar-icon" style={{ fontSize: '20px', marginTop: '2px' }}>💡</div>
             <div className="pillar-content">
-              <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Your Problem</h4>
+              <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Problem: Your Message</h4>
               <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.5', margin: '0' }}>
                 {selectedProblem?.cluster_label || 'Not selected'}
               </p>
@@ -697,7 +697,7 @@ export default function FlowFinderIntegration() {
           <div className="pillar-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '0', paddingBottom: '0', borderBottom: 'none' }}>
             <div className="pillar-icon" style={{ fontSize: '20px', marginTop: '2px' }}>👥</div>
             <div className="pillar-content">
-              <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Your Persona</h4>
+              <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Persona: Your Audience</h4>
               <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.5', margin: '0' }}>
                 {selectedPersona?.cluster_label || 'Not selected'}
               </p>

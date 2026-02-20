@@ -126,26 +126,32 @@ function AgentAccess() {
 
   const step1Text = `export FINDMYFLOW_API_KEY="${keyPlaceholder}"`
 
-  const step2Text = `{
+  const step2Text = `echo '{
   "mcpServers": {
     "findmyflow": {
+      "type": "http",
       "url": "${SUPABASE_URL}/functions/v1/mcp-server",
       "headers": {
         "Authorization": "Bearer \${FINDMYFLOW_API_KEY}"
       }
     }
   }
-}`
+}' > .mcp.json`
 
-  const step3Text = 'Restart Claude Code, then say: "Help me figure out my attraction offer"'
+  const step3Text = 'cat .mcp.json'
+
+  const step4Text = 'Restart Claude Code, then say: "Help me figure out my attraction offer"'
 
   const fullSetupText = `# 1. Add to your shell profile (~/.zshrc or ~/.bashrc):
 ${step1Text}
 
-# 2. Save this as .mcp.json in your project or ~/.claude/:
+# 2. Paste into terminal to create .mcp.json:
 ${step2Text}
 
-# 3. ${step3Text}`
+# 3. Verify it worked:
+${step3Text}
+
+# 4. ${step4Text}`
 
   const handleCopyFullSetup = async () => {
     await copyToClipboard(fullSetupText)
@@ -307,7 +313,7 @@ ${step2Text}
             <div className="agent-setup-step">
               <div className="agent-setup-step-header">
                 <span className="agent-setup-step-number">2</span>
-                <span className="agent-setup-step-label">Save as .mcp.json in your project or ~/.claude/</span>
+                <span className="agent-setup-step-label">Paste into terminal to create .mcp.json</span>
                 <button
                   className="agent-setup-step-copy"
                   onClick={() => handleCopyStep(2, step2Text)}
@@ -322,6 +328,24 @@ ${step2Text}
             <div className="agent-setup-step">
               <div className="agent-setup-step-header">
                 <span className="agent-setup-step-number">3</span>
+                <span className="agent-setup-step-label">Verify it worked</span>
+                <button
+                  className="agent-setup-step-copy"
+                  onClick={() => handleCopyStep(3, step3Text)}
+                >
+                  {stepCopied === 3 ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+              <pre className="agent-setup-code">{step3Text}</pre>
+              <p className="agent-setup-step-text">
+                You should see your MCP server config printed out.
+              </p>
+            </div>
+
+            {/* Step 4 */}
+            <div className="agent-setup-step">
+              <div className="agent-setup-step-header">
+                <span className="agent-setup-step-number">4</span>
                 <span className="agent-setup-step-label">Try it out</span>
               </div>
               <p className="agent-setup-step-text">
