@@ -377,7 +377,8 @@ function ProductSuiteMapFlow() {
               'psm-pool-item',
               `type-${ot.key}`,
               assessed ? 'completed' : 'incomplete',
-              inChain ? 'in-chain' : ''
+              inChain ? 'in-chain' : '',
+              openDropdown === ot.key ? 'dropdown-open' : ''
             ].filter(Boolean).join(' ')
 
             return (

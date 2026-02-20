@@ -100,6 +100,10 @@
   cursor: default;
 }
 
+.product-suite-map .psm-pool-item.dropdown-open {
+  z-index: 10;
+}
+
 .product-suite-map .psm-pool-item.in-chain::after {
   content: '\2713';
   position: absolute;
