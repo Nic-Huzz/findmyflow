@@ -140,6 +140,7 @@ function Challenge() {
     handleProjectSelected,
     handleCloseExplainer,
     handleOpenExplainer,
+    getQuestCompletions,
     isQuestCompletedToday,
     isQuestLocked,
     getRequiredQuestName,
@@ -2009,6 +2010,7 @@ function Challenge() {
                     justCompleted={justCompletedQuestId === quest.id}
                     isPlanned={isQuestPlanned(quest.id)}
                     plannedDay={getPlannedDay(quest.id)}
+                    completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id, quest).length : 0}
                   />
                 )
               })}

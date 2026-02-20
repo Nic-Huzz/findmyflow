@@ -80,7 +80,9 @@ function QuestCard({
   isPlanned = false,
   plannedDay = null,
   // For response counter quests
-  validationResponseCounts = {}
+  validationResponseCounts = {},
+  // For quests with maxCompletions > 1 (e.g. Tell a Friend)
+  completionCount = 0
 }) {
   const cardClasses = [
     'quest-card',
@@ -133,6 +135,13 @@ function QuestCard({
       {/* Hide description for voice quests - it's shown in the input component */}
       {!quest.voiceType && (
         <p className="quest-description">{renderDescription(quest.description)}</p>
+      )}
+
+      {/* Completion counter for repeatable quests (e.g. Tell a Friend 1 of 3) */}
+      {quest.maxCompletions > 1 && !completed && (
+        <div className="quest-completion-counter">
+          <span className="counter-progress">{completionCount} of {quest.maxCompletions}</span> completed
+        </div>
       )}
 
       {/* Daily Release Challenge content (for release_daily_challenge quest) */}

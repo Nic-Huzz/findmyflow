@@ -1192,53 +1192,66 @@ export function useChallengeData() {
   // Quest Completion Helpers
   // ============================================
 
+  // Filter completions for a quest, scoping stage 1+ quests to the selected project
+  const getQuestCompletions = (questId, quest) => {
+    const stageRequired = parseFloat(quest?.stage_required ?? 0)
+    const isProjectScoped = stageRequired >= 1 && selectedProject?.id
+
+    return completions.filter(c => {
+      if (c.quest_id !== questId) return false
+      // Stage 1+ quests: only count completions for the current project
+      if (isProjectScoped) {
+        return c.project_id === selectedProject.id
+      }
+      return true
+    })
+  }
+
   const isQuestCompletedToday = (questId, quest) => {
     // Use local date strings for consistent timezone handling
     const todayStr = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD format
     const weekStartStr = getWeekStart() // Already returns YYYY-MM-DD
 
+    const filtered = getQuestCompletions(questId, quest)
+
     // Daily quests: check if completed TODAY only (local timezone)
     if (quest.frequency === 'daily') {
-      return completions.some(c => {
-        // Convert completion time to local date string
+      return filtered.some(c => {
         const completedDateStr = new Date(c.completed_at).toLocaleDateString('en-CA')
-        return c.quest_id === questId && completedDateStr === todayStr
+        return completedDateStr === todayStr
       })
     } else if (quest.frequency === 'weekly') {
       // Weekly quests: check if completed THIS WEEK (since Monday)
-      return completions.some(c => {
+      return filtered.some(c => {
         const completedDateStr = new Date(c.completed_at).toLocaleDateString('en-CA')
-        return c.quest_id === questId && completedDateStr >= weekStartStr
+        return completedDateStr >= weekStartStr
       })
     } else {
-      // Other quests (one-time, etc.): check completion limits or any completion
-      const questCompletions = completions.filter(c => c.quest_id === questId)
-
       if (quest.maxCompletions) {
-        return questCompletions.length >= quest.maxCompletions
+        return filtered.length >= quest.maxCompletions
       }
 
       if (quest.maxPerDay) {
-        const todayStr = new Date().toLocaleDateString('en-CA')
-        const todayCompletions = questCompletions.filter(c => {
+        const todayCompletions = filtered.filter(c => {
           const completedDateStr = new Date(c.completed_at).toLocaleDateString('en-CA')
           return completedDateStr === todayStr
         })
         return todayCompletions.length >= quest.maxPerDay
       }
 
-      return questCompletions.length > 0
+      return filtered.length > 0
     }
   }
 
-  const isQuestEverCompleted = (questId) => {
-    return completions.some(c => c.quest_id === questId)
+  const isQuestEverCompleted = (questId, quest) => {
+    return getQuestCompletions(questId, quest || { stage_required: 0 }).length > 0
   }
 
   // Check if a parent trial has a pending review/reflection
   const hasPendingTrial = (parentQuestId, pendingPhase) => {
-    return completions.some(c => {
-      if (c.quest_id !== parentQuestId) return false
+    const parentQuest = challengeData?.quests?.find(q => q.id === parentQuestId)
+    const filtered = getQuestCompletions(parentQuestId, parentQuest || { stage_required: 1 })
+    return filtered.some(c => {
       try {
         const data = JSON.parse(c.reflection_text)
         return data.phase === pendingPhase
@@ -1264,7 +1277,8 @@ export function useChallengeData() {
     }
 
     if (!quest.requires_quest) return false
-    return !isQuestEverCompleted(quest.requires_quest)
+    const requiredQuest = challengeData?.quests?.find(q => q.id === quest.requires_quest)
+    return !isQuestEverCompleted(quest.requires_quest, requiredQuest)
   }
 
   const getRequiredQuestName = (questId, forQuestId) => {
@@ -2004,6 +2018,7 @@ export function useChallengeData() {
     handleOpenExplainer,
 
     // Quest Helpers
+    getQuestCompletions,
     isQuestCompletedToday,
     isQuestEverCompleted,
     isQuestLocked,

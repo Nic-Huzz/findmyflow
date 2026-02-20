@@ -1461,6 +1461,18 @@
   transform: scale(1.1);
 }
 
+/* Completion Counter (repeatable quests like Tell a Friend) */
+.quest-completion-counter {
+  font-size: 0.8125rem;
+  color: #6c757d;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.quest-completion-counter .counter-progress {
+  font-weight: 700;
+  color: #5e17eb;
+}
+
 /* Referral Input Type */
 .quest-referral-inputs {
   display: flex;
