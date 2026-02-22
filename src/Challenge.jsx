@@ -335,7 +335,7 @@ function Challenge() {
   }
 
   // Pre-launch lock: only Flow Finder quests can be submitted
-  const PRELAUNCH_LOCKED = true
+  const PRELAUNCH_LOCKED = false
 
   // Main quest completion handler
   const handleQuestComplete = async (quest, specialData = null, event = null) => {
