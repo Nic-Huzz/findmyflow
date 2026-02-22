@@ -539,8 +539,8 @@ export default function LeagueLeaderboard({
                     </div>
                   )}
 
-                  {/* Member contributions */}
-                  {!isUpcoming && expandedTeamScores?.members && (
+                  {/* Member list (always shown) / contributions (active only) */}
+                  {!isUpcoming && expandedTeamScores?.members ? (
                     <div className="ll-members">
                       <span className="ll-members-title">THIS WEEK'S CONTRIBUTIONS</span>
                       {Object.entries(expandedTeamScores.members)
@@ -559,6 +559,17 @@ export default function LeagueLeaderboard({
                           </div>
                         ))
                       }
+                    </div>
+                  ) : isUpcoming && team.memberUserIds?.length > 0 && (
+                    <div className="ll-members">
+                      <span className="ll-members-title">SQUAD MEMBERS</span>
+                      {team.memberUserIds.map(userId => (
+                        <div key={userId} className="ll-member-row">
+                          <span className="ll-member-name">
+                            {memberNames[userId] || 'Player'}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   )}
 
