@@ -158,6 +158,7 @@ const EarthquakeQuiz = lazyRetry(() => import('./flows/EarthquakeQuiz'))
 const OldLandingPage = lazyRetry(() => import('./pages/OldLandingPage'))
 const FantasyLeagueLanding = lazyRetry(() => import('./pages/FantasyLeagueLanding'))
 const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLanding'))
+const WhyICreatedThis = lazyRetry(() => import('./pages/WhyICreatedThis'))
 
 // Lazy-loaded flows - Setup & Training
 const BusinessBaselineFlow = lazyRetry(() => import('./flows/BusinessBaselineFlow'))
@@ -314,8 +315,9 @@ function ConditionalZarlo() {
   const isCareerClarity = location.pathname === '/career-clarity'
   const isFantasyLP = location.pathname === '/fantasy'
   const isHealingWorkshopLP = location.pathname === '/healing-compass-workshop'
+  const isWhyPage = location.pathname === '/why-i-created-this'
 
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isWhyPage) return null
   return <ZarloWidget />
 }
 
@@ -348,6 +350,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/play-list-explainer' ||
                         location.pathname === '/fantasy' ||
                         location.pathname === '/healing-compass-workshop' ||
+                        location.pathname === '/why-i-created-this' ||
                         location.pathname.startsWith('/league') ||
                         location.pathname === '/content-review' ||
                         location.pathname === '/product-suite-map'
@@ -518,6 +521,9 @@ function AppRouter() {
 
             {/* Healing Compass Workshop Landing - Public */}
             <Route path="/healing-compass-workshop" element={<HealingCompassLanding />} />
+
+            {/* Why I Created This - Public explainer slides */}
+            <Route path="/why-i-created-this" element={<WhyICreatedThis />} />
 
             <Route path="/me" element={
               <AuthGate>

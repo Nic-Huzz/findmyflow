@@ -1,0 +1,279 @@
+/**
+ * WhyICreatedThis.css
+ * Cinematic full-screen explainer slides — dark dramatic purple gradient
+ */
+
+.why-i-created-this {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: linear-gradient(135deg, #1a0a3e 0%, #2d1166 50%, #4a0ea8 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  gap: 28px;
+  overflow: hidden;
+}
+
+/* ── Progress dots ── */
+.wict-progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.wict-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.wict-dot.active {
+  background: #E9A23B;
+  transform: scale(1.3);
+  box-shadow: 0 0 8px rgba(233, 162, 59, 0.5);
+}
+
+.wict-dot.completed {
+  background: rgba(233, 162, 59, 0.45);
+}
+
+/* ── Slide card ── */
+.wict-slide {
+  max-width: 560px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 40px 32px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Fade transitions */
+.wict-slide.fade-in {
+  animation: wictFadeIn 0.35s ease forwards;
+}
+
+.wict-slide.fade-out {
+  animation: wictFadeOut 0.25s ease forwards;
+}
+
+@keyframes wictFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes wictFadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+/* ── Typography ── */
+.wict-title {
+  font-size: 28px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #E9A23B;
+  margin: 0 0 28px;
+  line-height: 1.2;
+}
+
+.wict-body {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.75;
+}
+
+.wict-body p {
+  margin: 0 0 16px;
+}
+
+.wict-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Pre-quote text ── */
+.wict-pre-quote {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.75;
+  margin: 0 0 20px;
+}
+
+/* ── Blockquote ── */
+.wict-quote {
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #E9A23B;
+  border-radius: 0 12px 12px 0;
+  padding: 20px 24px;
+  margin: 0 0 24px;
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.6;
+}
+
+.wict-quote cite {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  color: rgba(233, 162, 59, 0.8);
+}
+
+/* ── Evolution timeline ── */
+.wict-evolution {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin: 24px 0;
+}
+
+.evo-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.evo-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(233, 162, 59, 0.2);
+  color: #E9A23B;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.evo-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+}
+
+.evo-arrow {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1;
+  margin: 4px 0;
+}
+
+.wict-footer {
+  margin-top: 12px;
+  font-size: 15px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Final slide CTA ── */
+.wict-cta {
+  display: inline-block;
+  margin-top: 28px;
+  padding: 14px 36px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #E9A23B, #D4922F);
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wict-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.5);
+}
+
+/* ── Navigation ── */
+.wict-nav {
+  display: flex;
+  gap: 12px;
+  max-width: 560px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.wict-btn {
+  flex: 1;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.wict-btn.primary {
+  background: linear-gradient(135deg, #E9A23B, #D4922F);
+  color: white;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+}
+
+.wict-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+}
+
+.wict-btn.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.wict-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .why-i-created-this {
+    padding: 24px 16px;
+    gap: 20px;
+  }
+
+  .wict-slide {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+
+  .wict-title {
+    font-size: 22px;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+  }
+
+  .wict-body {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .wict-quote {
+    font-size: 16px;
+    padding: 16px 18px;
+  }
+
+  .wict-btn {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+}
