@@ -1536,7 +1536,7 @@ function Challenge() {
         showSettingsMenu={showSettingsMenu}
         setShowSettingsMenu={setShowSettingsMenu}
         handleOpenExplainer={handleOpenExplainer}
-        onLeaderboardClick={() => navigate('/league/week')}
+        onLeaderboardClick={() => navigate('/league')}
         streakDays={getConsecutiveStreakDays()}
         weekType={weeklyPlan?.week_type}
         weeklyPoints={currentWeeklyPoints}
