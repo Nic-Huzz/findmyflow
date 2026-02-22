@@ -81,12 +81,12 @@ export function useLeagueData() {
       )
       if (allMemberIds.length > 0) {
         const { data: profiles } = await supabase
-          .from('profiles')
-          .select('id, email')
-          .in('id', allMemberIds)
+          .from('lead_flow_profiles')
+          .select('user_id, user_name')
+          .in('user_id', allMemberIds)
         const nameMap = {}
         ;(profiles || []).forEach(p => {
-          nameMap[p.id] = p.email?.split('@')[0] || 'Player'
+          nameMap[p.user_id] = p.user_name || 'Player'
         })
         setMemberNames(nameMap)
       }
