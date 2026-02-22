@@ -208,7 +208,7 @@ export default function LeagueOverview() {
     return (
       <div className="league-overview">
         <div className="lo-toolbar">
-          <button className="lo-back" onClick={() => navigate(-1)}>←</button>
+          <button className="lo-back" onClick={() => navigate('/me')}>←</button>
           <h2 className="lo-toolbar-title">Fantasy League</h2>
         </div>
         <div className="lo-empty">
@@ -231,7 +231,7 @@ export default function LeagueOverview() {
     <div className="league-overview">
       {/* Toolbar */}
       <div className="lo-toolbar">
-        <button className="lo-back" onClick={() => navigate(-1)}>←</button>
+        <button className="lo-back" onClick={() => navigate('/me')}>←</button>
         <h2 className="lo-toolbar-title">Fantasy League</h2>
       </div>
 
