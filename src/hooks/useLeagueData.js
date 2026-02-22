@@ -61,11 +61,13 @@ export function useLeagueData() {
       }
 
       // 2. Load everything in parallel
+      // Auto-detect active from date, not status field
+      const leagueStarted = new Date() >= new Date(leagueData.start_date + 'T00:00:00')
       const [teamsData, userTeamData, matchupsData, standingsData] = await Promise.all([
         getTeams(leagueData.id),
         getUserTeam(leagueData.id, user.id),
         getMatchups(leagueData.id),
-        leagueData.status !== 'upcoming'
+        leagueStarted
           ? calculateLeagueStandings(leagueData.id)
           : Promise.resolve([]),
       ])
@@ -98,8 +100,8 @@ export function useLeagueData() {
       }
 
       // 5. Load user's project nomination for current week
-      if (userTeamData && leagueData.status !== 'upcoming') {
-        const start = new Date(leagueData.start_date)
+      if (userTeamData && leagueStarted) {
+        const start = new Date(leagueData.start_date + 'T00:00:00')
         const now = new Date()
         const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24))
         const currentWk = Math.min(Math.floor(diffDays / 7) + 1, leagueData.num_weeks || 4)
@@ -158,10 +160,12 @@ export function useLeagueData() {
   }, [league?.id, user?.id])
 
   // Get current week number based on league start date
+  // Auto-detects active state from date — no dependency on status field
   const getCurrentWeek = useCallback(() => {
-    if (!league?.start_date || league.status === 'upcoming') return 0
-    const start = new Date(league.start_date)
+    if (!league?.start_date) return 0
+    const start = new Date(league.start_date + 'T00:00:00')
     const now = new Date()
+    if (now < start) return 0 // hasn't started yet
     const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24))
     const week = Math.floor(diffDays / 7) + 1
     return Math.min(week, league.num_weeks || 4)

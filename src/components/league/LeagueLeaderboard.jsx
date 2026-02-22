@@ -17,7 +17,7 @@ export default function LeagueLeaderboard({
   fetchLiveTeamScores, memberNames,
 }) {
   const currentWeek = getCurrentWeek()
-  const isUpcoming = league?.status === 'upcoming'
+  const isUpcoming = currentWeek === 0
   const numWeeks = league?.num_weeks || 4
 
   // State
@@ -154,7 +154,7 @@ export default function LeagueLeaderboard({
     setExpandedTeamId(targetId)
     setExpandedTeamScores(null)
 
-    if (league?.status !== 'upcoming' && team.memberUserIds?.length > 0) {
+    if (!isUpcoming && team.memberUserIds?.length > 0) {
       setLoadingExpand(true)
       try {
         const scores = await fetchLiveTeamScores(team.memberUserIds, selectedWeek)

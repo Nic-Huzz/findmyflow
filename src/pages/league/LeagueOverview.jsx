@@ -238,15 +238,15 @@ export default function LeagueOverview() {
       {/* Hero Card */}
       <div className="lo-hero">
         <span className="lo-hero-label">
-          {league.status === 'upcoming' ? 'Coming Soon' :
-           league.status === 'active' ? `Week ${currentWeek}` : 'Season Complete'}
+          {currentWeek === 0 ? 'Coming Soon' :
+           currentWeek <= (league.num_weeks || 4) ? `Week ${currentWeek}` : 'Season Complete'}
         </span>
         <h2 className="lo-hero-title">{league.name}</h2>
         <p className="lo-hero-sub">
-          {league.status === 'upcoming' && getDaysUntilStart() !== null && (
+          {currentWeek === 0 && getDaysUntilStart() !== null && (
             <>Starts in {getDaysUntilStart()} day{getDaysUntilStart() !== 1 ? 's' : ''}!</>
           )}
-          {league.status === 'active' && (
+          {currentWeek >= 1 && currentWeek <= (league.num_weeks || 4) && (
             <>{league.num_weeks}-week season • {teams.length} teams competing</>
           )}
           {league.status === 'completed' && (
