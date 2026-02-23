@@ -357,7 +357,12 @@ function Challenge() {
       }
 
       // Validate input based on type
-      if (quest.inputType === 'text' && (!inputValue || inputValue.trim() === '')) {
+      // Skip text validation when specialData is structured (e.g. ReconnectQuestInput passes an object)
+      if (quest.inputType === 'text' && typeof inputValue === 'string' && (!inputValue || inputValue.trim() === '')) {
+        alert('Please enter your reflection before completing this quest.')
+        return
+      }
+      if (quest.inputType === 'text' && !inputValue) {
         alert('Please enter your reflection before completing this quest.')
         return
       }
@@ -409,7 +414,7 @@ function Challenge() {
           text: sanitizeText(textValue || ''),
           tags: tags || []
         })
-      } else if ((quest.inputType === 'text' || quest.inputType === 'dropdown') && inputValue) {
+      } else if ((quest.inputType === 'text' || quest.inputType === 'dropdown') && inputValue && typeof inputValue === 'string') {
         sanitizedReflection = sanitizeText(inputValue)
       }
       // Handle special quest types BEFORE creating quest completion
