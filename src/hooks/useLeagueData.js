@@ -77,18 +77,16 @@ export function useLeagueData() {
       setMatchups(matchupsData)
       setStandings(standingsData)
 
-      // 3. Load member display names
+      // 3. Load member display names (via RPC to bypass RLS)
       const allMemberIds = (teamsData || []).flatMap(t =>
         (t.fantasy_team_members || []).map(m => m.user_id)
       )
       if (allMemberIds.length > 0) {
-        const { data: profiles } = await supabase
-          .from('lead_flow_profiles')
-          .select('user_id, user_name')
-          .in('user_id', allMemberIds)
+        const { data: names } = await supabase
+          .rpc('get_member_display_names', { member_ids: allMemberIds })
         const nameMap = {}
-        ;(profiles || []).forEach(p => {
-          nameMap[p.user_id] = p.user_name || 'Player'
+        ;(names || []).forEach(n => {
+          nameMap[n.user_id] = n.display_name || 'Player'
         })
         setMemberNames(nameMap)
       }
