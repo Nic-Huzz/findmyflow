@@ -1166,6 +1166,8 @@
   padding: 32px;
   max-width: 600px;
   width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
 }
 
 .dashboard-container .modal-content h2 {
