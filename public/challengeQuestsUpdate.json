@@ -30,7 +30,8 @@
       "flow_route": "/play-list-explainer",
       "learnMore": "Discover what a play-list is, the 5 visibility layers from Screen to Authority, how the groan zone scoring works, and how AI generates courage challenges from your unique skills.\n\nThis 2-minute explainer sets you up for success with the Play-List Matrix.",
       "isPrimary": true,
-      "isExplainer": true
+      "isExplainer": true,
+      "archived": true
     },
     {
       "id": "mind_space_extraction",
