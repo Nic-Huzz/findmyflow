@@ -239,6 +239,7 @@ function RewireQuestInput({ quest, onComplete }) {
     canContinue,
     handleNext,
     handleBack,
+    handleSubmit,
     toggleArrayItem
   } = useSteppedForm({
     totalSteps: config.totalSteps,
@@ -272,11 +273,6 @@ function RewireQuestInput({ quest, onComplete }) {
 
     fetchArchetypes()
   }, [user])
-
-  // Submit handler
-  const handleSubmit = () => {
-    onComplete(quest, buildStructuredData(formData))
-  }
 
   // Helper getters
   const getVoice = (id) => PROTECTIVE_VOICES.find(v => v.id === id)

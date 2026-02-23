@@ -275,6 +275,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
     canContinue,
     handleNext,
     handleBack,
+    handleSubmit,
     toggleArrayItem
   } = useSteppedForm({
     totalSteps: config.totalSteps,
@@ -316,12 +317,6 @@ function RecogniseQuestInput({ quest, onComplete }) {
   // Handle fear toggle using hook's toggleArrayItem
   const handleFearToggle = (fearId) => {
     toggleArrayItem('fears_triggered', fearId)
-  }
-
-  // Submit handler
-  const handleSubmit = async () => {
-    const responseData = buildResponseData(formData)
-    await onComplete(quest, JSON.stringify(responseData))
   }
 
   // Helper getters

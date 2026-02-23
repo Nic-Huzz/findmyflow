@@ -601,15 +601,21 @@ function Challenge() {
         await loadStageProgress()
       }
 
+      // Guard: non-Healing quests require an active challenge instance
+      if (quest.category !== 'Healing' && !progress?.challenge_instance_id) {
+        alert('No active challenge found. Please start a challenge first.')
+        return
+      }
+
       // Create quest completion record
       const completionData = {
         user_id: user.id,
-        challenge_instance_id: progress.challenge_instance_id,
+        challenge_instance_id: progress?.challenge_instance_id || null,
         quest_id: quest.id,
         quest_category: quest.category,
         quest_type: quest.type,
         points_earned: quest.points,
-        challenge_day: progress.current_day,
+        challenge_day: progress?.current_day || 0,
         project_id: selectedProject?.id || null,
         stage: quest.stage_required || null
       }
@@ -644,6 +650,9 @@ function Challenge() {
         completionData.reflection_text = safeStringify(specialData)
       } else if (quest.type === 'groan' && specialData) {
         completionData.reflection_text = specialData.groan_task || safeStringify(specialData)
+      } else if (quest.inputType === 'rating' || quest.inputType === 'referral') {
+        // Rating/referral quests store data in questInputs as objects (specialData is null)
+        completionData.reflection_text = safeStringify(inputValue)
       } else if (hasStructuredData) {
         // Fallback for any other quests with specialized input components
         completionData.reflection_text = safeStringify(specialData)
@@ -731,7 +740,7 @@ function Challenge() {
       // Calculate points (used by challenge_progress update and artifact check)
       const rType = quest.type?.toLowerCase()
       const frequencyKey = quest.frequency === 'weekly' ? 'weekly' : 'daily'
-      const newTotalPoints = (progress.total_points || 0) + quest.points
+      const newTotalPoints = (progress?.total_points || 0) + quest.points
 
       // Track fresh progress for tab bonus check (avoids stale closure after setProgress)
       let updatedProgress = progress
@@ -802,7 +811,7 @@ function Challenge() {
           .from('quest_completions')
           .select('*')
           .eq('user_id', user.id)
-          .eq('challenge_instance_id', progress.challenge_instance_id),
+          .eq('challenge_instance_id', progress?.challenge_instance_id),
         supabase
           .from('quest_completions')
           .select('*')

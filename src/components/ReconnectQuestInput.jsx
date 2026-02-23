@@ -239,6 +239,7 @@ function ReconnectQuestInput({ quest, onComplete }) {
     canContinue,
     handleNext,
     handleBack,
+    handleSubmit,
     toggleArrayItem
   } = useSteppedForm({
     totalSteps: config.totalSteps,
@@ -246,11 +247,6 @@ function ReconnectQuestInput({ quest, onComplete }) {
     validateStep,
     onSubmit: (data) => onComplete(quest, buildStructuredData(data))
   })
-
-  // Submit handler
-  const handleSubmit = () => {
-    onComplete(quest, buildStructuredData(formData))
-  }
 
   // Helper to render state selectors (before/after)
   const renderStateSelector = (label, value, onChange, startEmoji = '😔', endEmoji = '😄') => (

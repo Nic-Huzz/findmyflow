@@ -123,7 +123,7 @@ const ValidationFlowsManager = () => {
     if (project) {
       setPlaceholders(prev => ({
         ...prev,
-        solutionConcept: project.description || prev.solutionConcept,
+        solutionConcept: (project.description || prev.solutionConcept || '').replace(/_/g, ' '),
       }))
     }
   }

@@ -203,6 +203,7 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
     canContinue,
     handleNext,
     handleBack,
+    handleSubmit,
     toggleArrayItem
   } = useSteppedForm({
     totalSteps: config.totalSteps,
@@ -210,11 +211,6 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
     validateStep,
     onSubmit: (data) => onComplete(quest, buildStructuredData(data))
   })
-
-  // Submit handler that uses the hook's submission
-  const handleSubmit = () => {
-    onComplete(quest, buildStructuredData(formData))
-  }
 
   // Render step content based on quest type and current step
   const renderStepContent = () => {
