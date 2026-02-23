@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { useProjectId } from '../hooks/useProjectId'
 import { supabase } from '../lib/supabaseClient'
 import '../styles/flow-base.css'
 import './LetsPlayFlow.css'
@@ -66,6 +67,7 @@ export default function SelfTestReviewFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const { projectId } = useProjectId()
   const [loading, setLoading] = useState(true)
   const [step, setStep] = useState(0)
   const [formData, setFormData] = useState(INITIAL_FORM_DATA)
@@ -266,7 +268,7 @@ export default function SelfTestReviewFlow() {
             flow_direction: flowDirection || null,
             ready_for_others: formData.readyForOthers || null
           }),
-          project_id: null,
+          project_id: projectId || null,
           stage: 1
         })
 

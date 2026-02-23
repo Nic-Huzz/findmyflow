@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { useProjectId } from '../hooks/useProjectId'
 import { supabase } from '../lib/supabaseClient'
 import '../styles/flow-base.css'
 import './LetsPlayFlow.css'
@@ -57,6 +58,7 @@ const getDirectionInfo = (direction) => {
 export default function LetsPlayReviewFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const { projectId } = useProjectId()
   const [loading, setLoading] = useState(true)
   const [step, setStep] = useState(0)
   const [formData, setFormData] = useState(INITIAL_FORM_DATA)
@@ -224,7 +226,7 @@ export default function LetsPlayReviewFlow() {
             flow_state: formData.selectedFlow || null,
             flow_direction: flowDirection || null
           }),
-          project_id: null,
+          project_id: projectId || null,
           stage: 1
         })
 

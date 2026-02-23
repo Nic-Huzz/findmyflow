@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { useProjectId } from '../hooks/useProjectId'
 import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
 import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS } from '../lib/wheelTaxonomy'
 import { supabase } from '../lib/supabaseClient'
@@ -125,6 +126,7 @@ const INITIAL_FORM_DATA = {
 export default function LetsPlayFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const { projectId } = useProjectId()
   const [skills, setSkills] = useState([])
   const [problems, setProblems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -361,7 +363,7 @@ export default function LetsPlayFlow() {
           points_earned: 8,
           challenge_day: 0,
           reflection_text: JSON.stringify(structuredData),
-          project_id: null,
+          project_id: projectId || null,
           stage: 1
         })
         .select()

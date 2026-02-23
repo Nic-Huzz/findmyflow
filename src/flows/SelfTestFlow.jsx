@@ -12,6 +12,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { useProjectId } from '../hooks/useProjectId'
 import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
 import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS } from '../lib/wheelTaxonomy'
 import { supabase } from '../lib/supabaseClient'
@@ -101,6 +102,7 @@ export default function SelfTestFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const { projectId } = useProjectId()
   const [skills, setSkills] = useState([])
   const [problems, setProblems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -346,7 +348,7 @@ export default function SelfTestFlow() {
           points_earned: 5,
           challenge_day: 0,
           reflection_text: JSON.stringify(structuredData),
-          project_id: null,
+          project_id: projectId || null,
           stage: 1
         })
         .select()

@@ -295,6 +295,7 @@ export function useChallengeData() {
           .select('*')
           .eq('user_id', user.id)
           .is('challenge_instance_id', null)
+          .or(`project_id.is.null,project_id.eq.${selectedProject?.id || '00000000-0000-0000-0000-000000000000'}`)
       ])
 
       const { data: challengeCompletions, error: completionsError } = challengeCompletionsResult
