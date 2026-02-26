@@ -42,10 +42,17 @@ function GroanMatrix({
   onGenerateChallenge,
   compact = false,
   layerLockStatus = {},
-  flowFinderComplete: flowFinderCompleteProp
+  flowFinderComplete: flowFinderCompleteProp,
+  sourceTypes = null  // Optional: array like ['skill'] to filter tabs. null = show all
 }) {
   const navigate = useNavigate()
-  const [activeSourceType, setActiveSourceType] = useState('skill')
+  // Filter visible tabs based on sourceTypes prop
+  const visibleTabs = sourceTypes
+    ? SOURCE_TABS.filter(t => sourceTypes.includes(t.id))
+    : SOURCE_TABS
+  const [activeSourceType, setActiveSourceType] = useState(
+    sourceTypes ? sourceTypes[0] : 'skill'
+  )
   const [flowFinderData, setFlowFinderData] = useState(null)
   const [challenges, setChallenges] = useState({})
   const [stats, setStats] = useState(null)
@@ -322,18 +329,20 @@ function GroanMatrix({
         </div>
 
         <div className="groan-matrix-controls">
-          {/* Source type tabs */}
-          <div className="groan-source-tabs">
-            {SOURCE_TABS.map(tab => (
-              <button
-                key={tab.id}
-                className={`groan-source-tab ${activeSourceType === tab.id ? 'active' : ''}`}
-                onClick={() => setActiveSourceType(tab.id)}
-              >
-                {tab.icon} {tab.label}
-              </button>
-            ))}
-          </div>
+          {/* Source type tabs — hidden when only 1 tab visible */}
+          {visibleTabs.length > 1 && (
+            <div className="groan-source-tabs">
+              {visibleTabs.map(tab => (
+                <button
+                  key={tab.id}
+                  className={`groan-source-tab ${activeSourceType === tab.id ? 'active' : ''}`}
+                  onClick={() => setActiveSourceType(tab.id)}
+                >
+                  {tab.icon} {tab.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

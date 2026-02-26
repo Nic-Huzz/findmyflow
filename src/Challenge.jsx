@@ -18,14 +18,14 @@ import ChallengeHeader from './components/ChallengeHeader'
 import ChallengeOnboarding from './components/ChallengeOnboarding'
 import './components/ChallengeFilters.css' // R-type chips + frequency tabs styles (used inline now)
 import QuestCard from './components/QuestCard'
-import HorizontalFlowRiver from './components/HorizontalFlowRiver'
+import PlayListTab from './components/PlayListTab'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
 import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
 import GroanMatrix from './components/GroanMatrix'
 import PostActionModal, { POST_ACTION_MILESTONE_IDS } from './components/PostActionModal'
 import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreActionModal'
-import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge } from './lib/crm'
+import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge, fetchFlowFinderData } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
 import { useLeagueData } from './hooks/useLeagueData'
 import { useMatchupData } from './hooks/useMatchupData'
@@ -211,6 +211,22 @@ function Challenge() {
   const [groanMatrixKey, setGroanMatrixKey] = useState(0) // Used to force matrix refresh
   const [customChallengeText, setCustomChallengeText] = useState('')
   const [groanCellContext, setGroanCellContext] = useState(null) // Cell data when opening popup without a challenge
+
+  // Play-list: problem/persona mapping for skills-only matrix
+  const [mappedProblemId, setMappedProblemId] = useState('')
+  const [mappedPersonaId, setMappedPersonaId] = useState('')
+  const [customProblem, setCustomProblem] = useState('')
+  const [customPersona, setCustomPersona] = useState('')
+  const [flowFinderData, setFlowFinderData] = useState(null)
+
+  // Load Flow Finder data for Play-list problem/persona mapping
+  useEffect(() => {
+    if (activeCategory === 'Play-list' && user?.id && !flowFinderData) {
+      fetchFlowFinderData(user.id).then(result => {
+        if (result?.data) setFlowFinderData(result.data)
+      })
+    }
+  }, [activeCategory, user?.id])
 
   // Graduation modal state
   const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
@@ -460,7 +476,7 @@ function Challenge() {
       if (quest.inputType === 'flow_compass') {
         const result = await handleFlowCompassCompletion(
           user.id,
-          progress.challenge_instance_id,
+          progress.id,
           specialData,
           stageProgress?.default_project_id
         )
@@ -601,8 +617,9 @@ function Challenge() {
         await loadStageProgress()
       }
 
-      // Guard: non-Healing quests require an active challenge instance
-      if (quest.category !== 'Healing' && !progress?.challenge_instance_id) {
+      // Guard: non-Healing/Voices quests require an active challenge instance
+      const isUserLevelCategory = quest.category === 'Healing' || quest.category === 'Voices'
+      if (!isUserLevelCategory && !progress?.challenge_instance_id) {
         alert('No active challenge found. Please start a challenge first.')
         return
       }
@@ -620,11 +637,15 @@ function Challenge() {
         stage: quest.stage_required || null
       }
 
-      // Make Healing completions user-level (like Flow Finder)
+      // Make Healing and Voices completions user-level (not tied to a challenge instance)
       if (quest.category === 'Healing') {
         completionData.challenge_instance_id = null
         completionData.project_id = null
         completionData.challenge_day = 0  // NOT NULL constraint requires a value
+      } else if (quest.category === 'Voices') {
+        completionData.challenge_instance_id = null
+        completionData.challenge_day = 0  // NOT NULL constraint requires a value
+        // Keep project_id so we know which project the voice reflection came from
       }
 
       // Quest types that use specialized input components with structured data
@@ -665,7 +686,7 @@ function Challenge() {
       const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
 
       let duplicateQuery
-      if (quest.category === 'Healing') {
+      if (isUserLevelCategory) {
         // User-level: check by user + quest + date (no challenge instance)
         duplicateQuery = supabase
           .from('quest_completions')
@@ -745,9 +766,9 @@ function Challenge() {
       // Track fresh progress for tab bonus check (avoids stale closure after setProgress)
       let updatedProgress = progress
 
-      // User-level quests (Healing) skip challenge_progress and project updates.
+      // User-level quests (Healing, Voices) skip challenge_progress and project updates.
       // Their scoring is handled entirely by increment_scores RPC above.
-      if (quest.category !== 'Healing') {
+      if (!isUserLevelCategory) {
         await handleStreakUpdate(user.id, progress.challenge_instance_id)
 
         const rTypesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
@@ -872,9 +893,9 @@ function Challenge() {
         })
       }
 
-      // Check for tab completion bonus (skip for user-level Healing — bonus writes to challenge_progress)
+      // Check for tab completion bonus (skip for user-level categories — bonus writes to challenge_progress)
       // Use freshCompletions + updatedProgress to avoid stale closure values
-      if (quest.category !== 'Healing') {
+      if (!isUserLevelCategory) {
         const tabStatus = getTabCompletionStatus(quest.category, freshCompletions, updatedProgress)
         if (tabStatus.isComplete && !tabStatus.bonusAwarded && tabStatus.bonusPoints > 0) {
           await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints, updatedProgress)
@@ -1307,34 +1328,25 @@ function Challenge() {
       : convertLegacyStage(stageProgress?.current_stage))
   )
 
-  // Check if we're viewing the Groans stage (0.5) in Business tab
-  const isGroansStage = activeCategory === 'Business' && viewingStage === 0.5
-  const isFlowFinderStage = activeCategory === 'Business' && viewingStage === 0
-
   // Compute which visibility layers are locked based on progress
   const layerLockStatus = getLayerLockStatus(
     flowFinderComplete,
     selectedProject?.current_stage ?? 0
   )
 
-  // Deep Dive quest IDs for Flow Finder (includes archived flow_finder_skills)
+  // Deep Dive quest IDs for Flow Finder (used by Play-list tab)
   const DEEP_DIVE_QUEST_IDS = ['flow_finder_skills', 'flow_finder_problems', 'flow_finder_persona', 'flow_finder_integration']
 
+  // Extract Flow Finder quests for the Play-list tab (allow archived through)
+  const flowFinderQuests = (challengeData?.quests || []).filter(q =>
+    DEEP_DIVE_QUEST_IDS.includes(q.id)
+  )
+
   // Filter quests by the active category tab (exclude archived quests)
-  // Special case: When viewing Groans stage in Business, pull from 'Groans' category
-  // Special case: Allow archived Deep Dive quests through when on Flow Finder stage
   let filteredQuests = challengeData?.quests?.filter(q => {
-    // Allow Deep Dive quests through even if archived (when on Flow Finder)
-    if (q.archived && !(isFlowFinderStage && DEEP_DIVE_QUEST_IDS.includes(q.id))) {
-      return false
-    }
-    if (isGroansStage) {
-      return q.category === 'Groans'
-    }
-    // Tracker tab also shows Voices quests (essence/protective voice trackers)
-    if (activeCategory === 'Tracker') {
-      return q.category === 'Tracker' || q.category === 'Voices'
-    }
+    if (q.archived) return false
+    // Play-list tab handles its own content via PlayListTab component
+    if (activeCategory === 'Play-list') return false
     return q.category === activeCategory
   }) || []
 
@@ -1342,52 +1354,35 @@ function Challenge() {
   if (activeCategory === 'Business') {
     const userPersonaNormalized = normalizePersona(userData?.persona)
 
-    // Handle sub-tabs: Tasks vs Voices (or Deep Dive for Flow Finder)
-    // Note: Groans stage only has Tasks, no sub-tabs
-
-    if (businessSubTab === 'voices' && !isGroansStage) {
-      if (isFlowFinderStage) {
-        // Deep Dive: show the original Flow Finder discovery quests
-        filteredQuests = filteredQuests.filter(quest =>
-          DEEP_DIVE_QUEST_IDS.includes(quest.id)
-        )
-      } else {
-        // Voices: generate voice quests for the current stage
-        filteredQuests = generateVoiceQuestsForStage(viewingStage, userArchetypes)
-      }
+    // Handle sub-tabs: Tasks vs Voices
+    if (businessSubTab === 'voices') {
+      // Voices: generate voice quests for the current stage
+      filteredQuests = generateVoiceQuestsForStage(viewingStage, userArchetypes)
     } else {
       // Tasks sub-tab: filter regular business quests
-      // For Groans stage, show all non-archived Groans quests
-      if (!isGroansStage) {
-        filteredQuests = filteredQuests.filter(quest => {
-          // Exclude stage groan quests - they now appear in Voices sub-tab
-          if (quest.type === 'groan' || quest.id?.startsWith('groan_stage')) {
+      filteredQuests = filteredQuests.filter(quest => {
+        // Exclude stage groan quests - they now appear in Voices sub-tab
+        if (quest.type === 'groan' || quest.id?.startsWith('groan_stage')) {
+          return false
+        }
+
+        if (quest.persona_specific && userPersonaNormalized) {
+          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
+          if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
             return false
           }
+        }
 
-          // For Flow Finder, exclude Deep Dive quests from Tasks tab
-          if (isFlowFinderStage && DEEP_DIVE_QUEST_IDS.includes(quest.id)) {
+        // Check stage_required - use !== undefined since stage 0 is valid
+        // Use Number() to ensure both sides are numbers for proper comparison
+        if (quest.stage_required !== undefined && quest.stage_required !== null) {
+          if (Number(quest.stage_required) !== Number(viewingStage)) {
             return false
           }
+        }
 
-          if (quest.persona_specific && userPersonaNormalized) {
-            const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
-            if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
-              return false
-            }
-          }
-
-          // Check stage_required - use !== undefined since stage 0 is valid
-          // Use Number() to ensure both sides are numbers for proper comparison
-          if (quest.stage_required !== undefined && quest.stage_required !== null) {
-            if (Number(quest.stage_required) !== Number(viewingStage)) {
-              return false
-            }
-          }
-
-          return true
-        })
-      }
+        return true
+      })
     }
   }
 
@@ -1398,9 +1393,9 @@ function Challenge() {
     return 0
   })
 
-  // Apply R-type and frequency filters for Groans and Healing tabs
+  // Apply R-type and frequency filters for Healing tab
   let displayQuests = filteredQuests
-  if (activeCategory === 'Groans' || activeCategory === 'Healing') {
+  if (activeCategory === 'Healing') {
     if (activeRTypeFilter !== 'All') {
       displayQuests = displayQuests.filter(q => q.type === activeRTypeFilter)
     }
@@ -1632,6 +1627,7 @@ function Challenge() {
                 activeTab={activeStageTab}
                 onTabChange={setActiveStageTab}
                 flowFinderComplete={flowFinderComplete}
+                excludeStages={[0, 0.5]}
               />
             </>
           ) : (
@@ -1690,7 +1686,7 @@ function Challenge() {
         {/* Groans Summary */}
         {activeCategory === 'GroansSummary' && (
           <GroansSummary
-            onBack={() => setActiveCategory('Groans')}
+            onBack={() => setActiveCategory('Play-list')}
             progress={progress}
             completions={completions}
           />
@@ -1707,8 +1703,8 @@ function Challenge() {
         {/* Quest Content - only show if not on Summary tabs */}
         {activeCategory !== 'GroansSummary' && activeCategory !== 'HealingSummary' && (
           <>
-        {/* Artifact Progress — hidden on Groans/Play tab (both direct and via Business) */}
-        {artifactProgress && activeCategory !== 'Groans' && !isGroansStage && (() => {
+        {/* Artifact Progress — hidden on Play-list tab */}
+        {artifactProgress && activeCategory !== 'Play-list' && (() => {
           const stageConfig = activeCategory === 'Business' && activeStageTab !== undefined ? getStageConfig(activeStageTab) : null
 
           // Healing: per-frequency title and description
@@ -1725,7 +1721,7 @@ function Challenge() {
             : stageConfig ? `${stageConfig.icon} ${stageConfig.name}`
             : artifactProgress.name
           const artifactDesc = healingMeta ? healingMeta.desc
-            : stageConfig ? (activeStageTab === 0 ? 'Tasks to find your flow in life' : stageConfig.description)
+            : stageConfig ? stageConfig.description
             : artifactProgress.description
           return (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
@@ -1782,23 +1778,6 @@ function Challenge() {
                       </div>
                     )
                   })()
-                ) : activeCategory === 'Groans' && artifactProgress.frequencyCategories ? (
-                  <>
-                    {Object.entries(artifactProgress.frequencyCategories).map(([freqType, freqData]) => (
-                      <div key={freqType} className="progress-bar-container">
-                        <div className="progress-bar-label">
-                          <span>{freqType === 'Daily' ? '☀️' : '📅'} {freqType}</span>
-                          <span>{freqData.currentPoints}/{freqData.pointsRequired}</span>
-                        </div>
-                        <div className="progress-bar">
-                          <div
-                            className={`progress-bar-fill ${freqType.toLowerCase()}`}
-                            style={{ width: `${Math.min((freqData.currentPoints / freqData.pointsRequired) * 100, 100)}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    ))}
-                  </>
                 ) : (
                   <div className="progress-bar-container">
                     <div className="progress-bar-label">
@@ -1834,8 +1813,8 @@ function Challenge() {
         })()}
 
 
-        {/* Sub-tabs: Tasks | Voices (or Deep Dive for Flow Finder) - only for Business, hidden for Groans stage */}
-        {activeCategory === 'Business' && selectedProject && activeStageTab !== 0.5 && (
+        {/* Sub-tabs: Tasks | Voices - only for Business stages 1-8 */}
+        {activeCategory === 'Business' && selectedProject && (
           <div className="business-sub-tabs">
             <button
               className={`sub-tab ${businessSubTab === 'tasks' ? 'active' : ''}`}
@@ -1847,23 +1826,45 @@ function Challenge() {
               className={`sub-tab ${businessSubTab === 'voices' ? 'active' : ''}`}
               onClick={() => setBusinessSubTab('voices')}
             >
-              {activeStageTab === 0 ? '🌊\u2002Deep Dive' : '🎭\u2002Voices'}
+              🎭&ensp;Voices
             </button>
           </div>
         )}
 
-        {/* Groans Tab - Courage Matrix */}
-        {activeCategory === 'Groans' && (
-          <div className="quest-section">
-            <GroanMatrix
-              key={groanMatrixKey}
-              userId={user?.id}
-              onCellClick={handleMatrixCellClick}
-              onGenerateChallenge={handleGenerateChallenge}
-              layerLockStatus={layerLockStatus}
-              flowFinderComplete={flowFinderComplete}
-            />
-          </div>
+        {/* Play-list Tab — Flow Finder + Courage Matrix + Voice Logging */}
+        {activeCategory === 'Play-list' && (
+          <PlayListTab
+            userId={user?.id}
+            flowFinderQuests={flowFinderQuests}
+            flowFinderComplete={flowFinderComplete}
+            completions={completions}
+            onQuestComplete={handleQuestComplete}
+            onMatrixCellClick={handleMatrixCellClick}
+            onGenerateChallenge={handleGenerateChallenge}
+            groanMatrixKey={groanMatrixKey}
+            layerLockStatus={layerLockStatus}
+            userArchetypes={userArchetypes}
+            questInputs={questInputs}
+            onInputChange={handleInputChange}
+            completingQuestId={completingQuestId}
+            expandedLearnMore={expandedLearnMore}
+            onToggleLearnMore={toggleLearnMore}
+            showLockedTooltip={showLockedTooltip}
+            onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
+            renderDescription={renderDescription}
+            navigate={navigate}
+            selectedProject={selectedProject}
+            progress={progress}
+            projectStage={projectStage}
+            justCompletedQuestId={justCompletedQuestId}
+            isQuestCompletedToday={isQuestCompletedToday}
+            isQuestLocked={isQuestLocked}
+            getRequiredQuestName={getRequiredQuestName}
+            getDailyStreak={getDailyStreak}
+            getDayLabels={getDayLabels}
+            isQuestPlanned={isQuestPlanned}
+            getPlannedDay={getPlannedDay}
+          />
         )}
 
         {/* Healing Quests */}
@@ -1967,22 +1968,8 @@ function Challenge() {
           </div>
         )}
 
-        {/* Business Quests - Show GroanMatrix when on Groans stage */}
-        {activeCategory === 'Business' && isGroansStage && (
-          <div className="quest-section">
-            <GroanMatrix
-              key={`business-${groanMatrixKey}`}
-              userId={user?.id}
-              onCellClick={handleMatrixCellClick}
-              onGenerateChallenge={handleGenerateChallenge}
-              layerLockStatus={layerLockStatus}
-              flowFinderComplete={flowFinderComplete}
-            />
-          </div>
-        )}
-
-        {/* Business Quests - Regular stages */}
-        {activeCategory === 'Business' && !isGroansStage && filteredQuests.length > 0 && (
+        {/* Business Quests - Stages 1-8 */}
+        {activeCategory === 'Business' && filteredQuests.length > 0 && (
           <div className="quest-section">
             <div className="quest-grid stagger-children-fast">
               {filteredQuests.map(quest => {
@@ -2102,80 +2089,7 @@ function Challenge() {
           />
         )}
 
-        {/* Tracker Quests */}
-        {activeCategory === 'Tracker' && (
-          <div className="quest-section">
-            <h2 className="section-title">Flow Compass</h2>
-            {filteredQuests.length === 0 ? (
-              <div className="empty-category">
-                <p>Track your flow activities here.</p>
-              </div>
-            ) : (
-              <div className="quest-grid stagger-children-fast">
-                {filteredQuests.map(quest => {
-                  const completed = isQuestCompletedToday(quest.id, quest)
-
-                  return (
-                    <QuestCard
-                      key={quest.id}
-                      quest={quest}
-                      completed={completed}
-                      isCompleting={completingQuestId === quest.id}
-                      showStreak={quest.frequency === 'daily'}
-                      streak={getDailyStreak(quest.id)}
-                      dayLabels={getDayLabels()}
-                      questInput={questInputs[quest.id]}
-                      onInputChange={handleInputChange}
-                      onComplete={handleQuestComplete}
-                      expandedLearnMore={expandedLearnMore}
-                      onToggleLearnMore={toggleLearnMore}
-                      showLockedTooltip={showLockedTooltip}
-                      onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
-                      renderDescription={renderDescription}
-                      completedBadgeText={quest.frequency === 'daily' ? 'Completed Today' : 'Completed'}
-                      navigate={navigate}
-                      selectedProject={selectedProject}
-                      progress={progress}
-                      projectStage={projectStage}
-                      justCompleted={justCompletedQuestId === quest.id}
-                      isPlanned={isQuestPlanned(quest.id)}
-                      plannedDay={getPlannedDay(quest.id)}
-                      prelaunchLocked={PRELAUNCH_LOCKED}
-                    />
-                  )
-                })}
-              </div>
-            )}
-
-            {/* Flow Journey River */}
-            {selectedProject && (
-              <div className="flow-map-section">
-                <h2 className="section-title">Your Flow Journey</h2>
-                <p className="flow-journey-hint">Swipe to explore your river — compass entries and milestones show your journey.</p>
-                <HorizontalFlowRiver
-                  projectId={selectedProject.id}
-                  limit={30}
-                  showEmpty
-                />
-                <div className="flow-journey-legend">
-                  <div className="fj-legend-row">
-                    <span className="fj-legend-label">Compass</span>
-                    <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#10b981' }} /> Flow</div>
-                    <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#3b82f6' }} /> Redirect</div>
-                    <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#fbbf24' }} /> Honour</div>
-                    <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#ef4444' }} /> Rest</div>
-                  </div>
-                  <div className="fj-legend-row">
-                    <span className="fj-legend-label">Challenge</span>
-                    <div className="fj-legend-item"><span className="fj-legend-icon">⚡</span> Quest</div>
-                    <div className="fj-legend-item"><span className="fj-legend-icon">🦁</span> Groan</div>
-                    <div className="fj-legend-item"><span className="fj-legend-icon">📊</span> Stage</div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        {/* Tracker tab removed — content moved to Play-list tab and /me page */}
       </>
       )}
 
@@ -2446,7 +2360,7 @@ function Challenge() {
           quest={postActionQuest}
           userId={user?.id}
           projectId={selectedProject?.id || null}
-          challengeInstanceId={progress?.challenge_instance_id || null}
+          challengeInstanceId={progress?.id || null}
           onComplete={() => setPostActionQuest(null)}
           onSkip={() => setPostActionQuest(null)}
         />

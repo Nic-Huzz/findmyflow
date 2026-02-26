@@ -35,11 +35,13 @@ const DEFAULT_GROUP_ID = 'aaaaaaaa-0000-0000-0000-000000000001'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
+  'play-list': 'Play-list',
+  'playlist': 'Play-list',
   'quests': 'Business',
   'business': 'Business',
-  'groans': 'Groans',
+  'groans': 'Play-list',     // backward compat — Groans absorbed into Play-list
   'healing': 'Healing',
-  'tracker': 'Tracker',
+  'tracker': 'Play-list',    // backward compat — Tracker tab removed
   'bonus': 'Bonus',
   'leaderboard': 'Leaderboard',
   'summary': 'GroansSummary',
@@ -55,7 +57,7 @@ export function useChallengeData() {
   const getInitialCategory = () => {
     const params = new URLSearchParams(location.search)
     const tabParam = params.get('tab')?.toLowerCase()
-    return TAB_TO_CATEGORY[tabParam] || 'Business'
+    return TAB_TO_CATEGORY[tabParam] || 'Play-list'
   }
 
   // UI State
@@ -134,7 +136,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Business', 'Healing', 'Tracker', 'Bonus']
+  const categories = ['Play-list', 'Business', 'Healing', 'Bonus']
   const BONUS_PERCENTAGE = 5
 
   // ============================================

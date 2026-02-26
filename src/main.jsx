@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { Analytics } from '@vercel/analytics/react'
 import AppRouter from './AppRouter.jsx'
 import checkAppVersion from './lib/versionCheck.js'
 import { captureUtmParams } from './lib/analytics.js'
@@ -15,5 +16,6 @@ captureUtmParams()
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AppRouter />
+    <Analytics />
   </React.StrictMode>,
 )
