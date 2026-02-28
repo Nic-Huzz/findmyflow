@@ -112,7 +112,7 @@ export function useChallengeData() {
   // Sub-Tab State (for Healing and Bonus tabs)
   const [healingSubTab, setHealingSubTab] = useState('daily') // 'daily' | 'weekly'
   const [bonusSubTab, setBonusSubTab] = useState('tasks') // 'tasks' | 'content'
-  const [playlistSubTab, setPlaylistSubTab] = useState('flow-finder') // 'flow-finder' | 'playlist'
+  const [playlistSubTab, setPlaylistSubTab] = useState('playlist') // 'flow-finder' | 'playlist' | 'play-profile'
 
   // User Archetypes (for personalized voice quests)
   const [userArchetypes, setUserArchetypes] = useState({ essence: null, protective: null })
@@ -135,7 +135,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Play-list', 'Business', 'Healing', 'Bonus']
+  const categories = ['Play-list', 'Healing', 'Business', 'Bonus']
   const BONUS_PERCENTAGE = 5
 
   // ============================================

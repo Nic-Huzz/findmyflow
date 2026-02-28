@@ -2120,19 +2120,34 @@ function Challenge() {
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
               <h3 style={{ color: '#E9A23B', marginBottom: '8px', fontSize: '1.2rem' }}>FindMyFlow CRM</h3>
               <p style={{ color: '#adb5bd', marginBottom: '24px', fontSize: '0.95rem' }}>
-                Track your funnel, manage contacts, and run your business from the Command Center.
+                Use AI to automate your sales and marketing.
               </p>
-              <a href="/crm" className="primary-button" style={{
-                background: '#E9A23B',
-                color: '#212529',
-                padding: '12px 32px',
-                borderRadius: '8px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                display: 'inline-block'
-              }}>
-                Click Here For FindMyFlow CRM
-              </a>
+              <button
+                className="primary-button"
+                style={{
+                  background: '#E9A23B',
+                  color: '#212529',
+                  padding: '12px 32px',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+                onClick={async () => {
+                  try {
+                    await supabase.from('crm_interest').insert({
+                      user_id: user?.id,
+                      expressed_at: new Date().toISOString()
+                    })
+                  } catch (err) {
+                    console.warn('Failed to log CRM interest:', err)
+                  }
+                  alert('Thanks! We\'ll notify you when the CRM is ready.')
+                }}
+              >
+                Click Here To Express Interest
+              </button>
             </div>
           </div>
         )}

@@ -5,14 +5,14 @@
 
 .stage-tabs-container {
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 }
 
 .stage-tabs {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding: 4px 0 20px 0;
+  padding: 4px 0 8px 0;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;

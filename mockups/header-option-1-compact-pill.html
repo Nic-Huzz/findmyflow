@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Header Option 1 — Compact Pill Row</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f0f0; display: flex; justify-content: center; padding: 40px 16px; }
+  .phone { width: 390px; background: #f8f9fa; border-radius: 40px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    padding: 3rem 1.5rem 1.5rem;
+    border-radius: 0 0 24px 24px;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  /* Big total + category pills on same visual block */
+  .score-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .total {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .total-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .total-label {
+    font-size: 0.65rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255,255,255,0.25);
+  }
+
+  /* Category pills stacked vertically next to the total */
+  .category-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .pill-score {
+    font-weight: 800;
+    min-width: 1.2rem;
+  }
+
+  .pill-label {
+    opacity: 0.85;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+  }
+
+  .pill.healing { color: #6ee7b7; }
+  .pill.playlist { color: #fbbf24; }
+  .pill.bonus { color: #93c5fd; }
+
+  /* Bottom actions */
+  .actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .badge:hover { background: rgba(255,255,255,0.25); }
+
+  .badge.icon-only {
+    padding: 0.4rem 0.5rem;
+  }
+
+  /* Placeholder content below */
+  .content { padding: 1.5rem; min-height: 200px; }
+  .content p { color: #888; text-align: center; margin-top: 2rem; }
+  .label { display: block; text-align: center; margin-bottom: 12px; font-size: 0.85rem; color: #666; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="header">
+    <h1>Gamify Your Ambitions</h1>
+
+    <div class="score-block">
+      <div class="total">
+        <span class="total-value">45</span>
+        <span class="total-label">weekly pts</span>
+      </div>
+      <div class="divider"></div>
+      <div class="category-pills">
+        <div class="pill healing">
+          <span>💚</span>
+          <span class="pill-score">30</span>
+          <span class="pill-label">Healing</span>
+        </div>
+        <div class="pill playlist">
+          <span>🎮</span>
+          <span class="pill-score">7</span>
+          <span class="pill-label">Play-list</span>
+        </div>
+        <div class="pill bonus">
+          <span>⭐</span>
+          <span class="pill-score">0</span>
+          <span class="pill-label">Bonus</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div class="badge">🔥 0</div>
+      <div class="badge">🏆 Leaderboard</div>
+      <div class="badge icon-only">⚙️</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <span class="label">Option 1 — Compact Pill Row</span>
+    <p>Total on the left, category pills stacked on the right.<br>Clean separation with a vertical divider.</p>
+  </div>
+</div>
+</body>
+</html>

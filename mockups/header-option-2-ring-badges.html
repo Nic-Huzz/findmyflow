@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Header Option 2 — Ring Badges</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f0f0; display: flex; justify-content: center; padding: 40px 16px; }
+  .phone { width: 390px; background: #f8f9fa; border-radius: 40px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+
+  .header {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    padding: 3rem 1.5rem 1.5rem;
+    border-radius: 0 0 24px 24px;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Three ring badges in a row */
+  .rings-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ring-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .ring {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ring::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.15);
+  }
+
+  .ring::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid transparent;
+  }
+
+  .ring.healing::after {
+    border-top-color: #6ee7b7;
+    border-right-color: #6ee7b7;
+    border-bottom-color: #6ee7b7;
+    /* ~80% filled */
+  }
+
+  .ring.playlist::after {
+    border-top-color: #fbbf24;
+    /* ~25% filled */
+  }
+
+  .ring.bonus::after {
+    /* 0% — no colored border */
+  }
+
+  .ring-icon {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .ring-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .ring-label {
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.7;
+    font-weight: 600;
+  }
+
+  /* Total row below the rings */
+  .total-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .total-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .total-label {
+    font-size: 0.65rem;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Bottom actions */
+  .actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .badge:hover { background: rgba(255,255,255,0.25); }
+  .badge.icon-only { padding: 0.4rem 0.5rem; }
+
+  .content { padding: 1.5rem; min-height: 200px; }
+  .content p { color: #888; text-align: center; margin-top: 2rem; }
+  .label { display: block; text-align: center; margin-bottom: 12px; font-size: 0.85rem; color: #666; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="header">
+    <h1>Gamify Your Ambitions</h1>
+    <div class="subtitle">This Week</div>
+
+    <div class="rings-row">
+      <div class="ring-badge">
+        <div class="ring healing">
+          <span class="ring-icon">💚</span>
+          <span class="ring-value">30</span>
+        </div>
+        <span class="ring-label">Healing</span>
+      </div>
+      <div class="ring-badge">
+        <div class="ring playlist">
+          <span class="ring-icon">🎮</span>
+          <span class="ring-value">7</span>
+        </div>
+        <span class="ring-label">Play-list</span>
+      </div>
+      <div class="ring-badge">
+        <div class="ring bonus">
+          <span class="ring-icon">⭐</span>
+          <span class="ring-value">0</span>
+        </div>
+        <span class="ring-label">Bonus</span>
+      </div>
+    </div>
+
+    <div class="total-row">
+      <span class="total-value">45</span>
+      <span class="total-label">weekly pts</span>
+    </div>
+
+    <div class="actions">
+      <div class="badge">🔥 0</div>
+      <div class="badge">🏆 Leaderboard</div>
+      <div class="badge icon-only">⚙️</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <span class="label">Option 2 — Ring Badges</span>
+    <p>Three circular badges with ring progress indicators.<br>Categories feel like achievements. Total below.</p>
+  </div>
+</div>
+</body>
+</html>

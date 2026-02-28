@@ -154,101 +154,82 @@
   font-size: 0.7rem;
 }
 
-/* ─── Total Points Row ─── */
-.challenge-total-row {
+/* ─── Score Block (total + category pills) ─── */
+.challenge-score-block {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  margin-bottom: 0.25rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  transition: opacity 0.3s ease;
+}
+
+.challenge-score-block.loading {
+  opacity: 0.6;
+  animation: scoresPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes scoresPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+}
+
+.challenge-total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .challenge-total-value {
-  font-size: 1.8rem;
+  font-size: 2.5rem;
   font-weight: 800;
   line-height: 1;
 }
 
 .challenge-total-label {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   opacity: 0.7;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.05em;
 }
 
-/* ─── Category Bars Grid ─── */
-.challenge-bars-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.4rem 0.75rem;
-  padding: 0.65rem 0.75rem;
-  margin-bottom: 0.5rem;
-  transition: opacity 0.3s ease;
+.challenge-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* Center the 5th (last) bar when odd count */
-.challenge-bars-grid .challenge-bar-item:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
-  max-width: 50%;
-  justify-self: center;
+.challenge-category-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
-.challenge-bars-grid.loading {
-  opacity: 0.6;
-  animation: barsPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes barsPulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.9; }
-}
-
-.challenge-bar-item {
+.challenge-pill {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-}
-
-.challenge-bar-icon {
-  font-size: 0.85rem;
-  flex-shrink: 0;
-  width: 1.1rem;
-  text-align: center;
-}
-
-.challenge-bar-track {
-  flex: 1;
-  height: 6px;
   background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
-  overflow: hidden;
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
-.challenge-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.6s ease;
+.challenge-pill-icon {
+  font-size: 0.75rem;
 }
 
-.challenge-bar-value {
-  font-size: 0.7rem;
-  font-weight: 700;
-  min-width: 1.5rem;
-  text-align: right;
+.challenge-pill-score {
+  font-weight: 800;
+  min-width: 1.2rem;
 }
 
-/* W/L colors */
-.challenge-bar-fill.win { background: #10b981; }
-.challenge-bar-fill.lose { background: #ef4444; }
-.challenge-bar-value.win { color: #34d399; }
-.challenge-bar-value.lose { color: #f87171; }
-
-/* Category color fallbacks (solo / no-league mode) */
-.challenge-bar-fill.cat-business_efficiency { background: #5e17eb; }
-.challenge-bar-fill.cat-play_list { background: #E9A23B; }
-.challenge-bar-fill.cat-healing { background: #10b981; }
-.challenge-bar-fill.cat-voice { background: #8B5CF6; }
-.challenge-bar-fill.cat-bonus { background: #3B82F6; }
+.challenge-pill-label {
+  opacity: 0.85;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
 
 /* ─── Streak badge (in bottom row) ─── */
 .streak-badge {

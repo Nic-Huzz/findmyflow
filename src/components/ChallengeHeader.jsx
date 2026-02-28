@@ -5,7 +5,7 @@
  * coloring when in an active matchup, or category colors when solo.
  * Team matchup banner replaces old rank display.
  */
-import { FANTASY_CATEGORIES, CATEGORY_KEYS } from '../lib/league/leagueConfig'
+import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 
 // Week type display info
@@ -18,10 +18,8 @@ const WEEK_TYPES = {
 
 // Lighter variants for category score text in solo mode
 const CATEGORY_TEXT_COLORS = {
-  business_efficiency: '#a78bfa',
   play_list: '#E9A23B',
   healing: '#34d399',
-  voice: '#c4b5fd',
   bonus: '#93c5fd',
 }
 
@@ -54,41 +52,22 @@ function ChallengeHeader({
   const animatedCategoryScores = useScoreAnimation(categoryScores)
   const animatedWeeklyPoints = useScoreAnimation({ pts: weeklyPoints })
 
-  // Build bar data from either matchup (green/red) or solo (category colors)
-  const bars = CATEGORY_KEYS.map(key => {
+  // Display only Healing, Play-list, Bonus (in that order)
+  const DISPLAY_KEYS = ['healing', 'play_list', 'bonus']
+
+  // Build score data for display
+  const bars = DISPLAY_KEYS.map(key => {
     const cat = FANTASY_CATEGORIES[key]
     const matchCat = matchupData?.categories?.find(c => c.key === key)
+    const displayScore = matchCat
+      ? (animatedCategoryScores?.[key] ?? matchCat.score)
+      : (animatedCategoryScores?.[key] || 0)
 
-    if (matchCat) {
-      // Matchup mode: bar width = myScore / (myScore + oppScore)
-      const total = matchCat.score + matchCat.oppScore
-      const pct = total > 0 ? Math.round((matchCat.score / total) * 100) : 50
-      const tied = matchCat.score === matchCat.oppScore
-      const displayScore = animatedCategoryScores?.[key] ?? matchCat.score
-      return {
-        key,
-        icon: cat.icon,
-        score: displayScore,       // animated for display
-        pct,                       // raw for bar width (CSS transitions handle the slide)
-        colorClass: tied ? '' : matchCat.winning ? 'win' : 'lose',
-        colorStyle: tied ? cat.color : null,
-        textColor: tied ? CATEGORY_TEXT_COLORS[key] : null,
-      }
-    }
-
-    // Solo mode: bar width = score / max(scores)
-    const score = categoryScores?.[key] || 0
-    const displayScore = animatedCategoryScores?.[key] || 0
-    const maxScore = categoryScores
-      ? Math.max(...Object.values(categoryScores), 1)
-      : 1
     return {
       key,
+      label: cat.label,
       icon: cat.icon,
-      score: displayScore,       // animated for display
-      pct: Math.round((score / maxScore) * 100),  // raw for bar width
-      colorClass: `cat-${key}`,
-      colorStyle: null,
+      score: displayScore,
       textColor: CATEGORY_TEXT_COLORS[key],
     }
   })
@@ -119,36 +98,24 @@ function ChallengeHeader({
         </div>
       )}
 
-      {/* Total points */}
-      <div className="challenge-total-row">
-        <span className="challenge-total-value">{animatedWeeklyPoints.pts ?? weeklyPoints}</span>
-        <span className="challenge-total-label">
-          {matchupData ? 'total pts' : 'weekly pts'}
-        </span>
-      </div>
-
-      {/* Category bars grid */}
-      <div className={`challenge-bars-grid${matchupLoading ? ' loading' : ''}`}>
-        {bars.map(bar => (
-          <div key={bar.key} className="challenge-bar-item">
-            <span className="challenge-bar-icon">{bar.icon}</span>
-            <div className="challenge-bar-track">
-              <div
-                className={`challenge-bar-fill ${bar.colorClass}`}
-                style={{
-                  width: `${bar.pct}%`,
-                  ...(bar.colorStyle ? { background: bar.colorStyle } : {}),
-                }}
-              />
+      {/* Score block: total left, category pills right */}
+      <div className={`challenge-score-block${matchupLoading ? ' loading' : ''}`}>
+        <div className="challenge-total">
+          <span className="challenge-total-value">{animatedWeeklyPoints.pts ?? weeklyPoints}</span>
+          <span className="challenge-total-label">
+            {matchupData ? 'total pts' : 'weekly pts'}
+          </span>
+        </div>
+        <div className="challenge-divider" />
+        <div className="challenge-category-pills">
+          {bars.map(bar => (
+            <div key={bar.key} className="challenge-pill" style={bar.textColor ? { color: bar.textColor } : undefined}>
+              <span className="challenge-pill-icon">{bar.icon}</span>
+              <span className="challenge-pill-score">{bar.score}</span>
+              <span className="challenge-pill-label">{bar.label}</span>
             </div>
-            <span
-              className={`challenge-bar-value ${bar.colorClass}`}
-              style={bar.textColor ? { color: bar.textColor } : undefined}
-            >
-              {bar.score}
-            </span>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Bottom row: Streak + actions */}
