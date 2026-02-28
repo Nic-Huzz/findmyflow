@@ -25,6 +25,7 @@ import GrandSlamDropdownInput from './GrandSlamDropdownInput'
 import ValidationResponsesInput from './ValidationResponsesInput'
 import ResponseCounterInput from './ResponseCounterInput'
 import { getCategoryEmoji, getCategoryColor } from '../lib/league/leagueConfig'
+import UpgradePrompt from './UpgradePrompt'
 
 // Recognise quest IDs that use the enhanced input
 const RECOGNISE_QUEST_IDS = [
@@ -32,7 +33,9 @@ const RECOGNISE_QUEST_IDS = [
   'recognise_essence_observe',
   'recognise_negative_frequency',
   'recognise_positive_frequency',
-  'recognise_trigger_pattern'
+  'recognise_trigger_pattern',
+  'playlist_essence_voice',
+  'playlist_protective_voice'
 ]
 
 // Helper to check if quest is a voice quest (stage-specific essence/protective)
@@ -85,7 +88,10 @@ function QuestCard({
   // For quests with maxCompletions > 1 (e.g. Tell a Friend)
   completionCount = 0,
   // Pre-launch lock: grey out all non-flow quests
-  prelaunchLocked = false
+  prelaunchLocked = false,
+  // Payment gating
+  paidLocked = false,
+  onUpgrade = null
 }) {
   const cardClasses = [
     'quest-card',
@@ -93,6 +99,7 @@ function QuestCard({
     locked ? 'locked' : '',
     justCompleted ? 'just-completed' : '',
     isPlanned ? 'planned' : '',
+    paidLocked ? 'paid-locked' : '',
     extraClass
   ].filter(Boolean).join(' ')
 
@@ -144,6 +151,10 @@ function QuestCard({
       {/* Hide description for voice quests - it's shown in the input component */}
       {!quest.voiceType && (
         <p className="quest-description">{renderDescription(quest.description)}</p>
+      )}
+
+      {paidLocked && (
+        <UpgradePrompt onUpgrade={onUpgrade} />
       )}
 
       {/* Completion counter for repeatable quests (e.g. Tell a Friend 1 of 3) */}
@@ -224,8 +235,8 @@ function QuestCard({
         </div>
       )}
 
-      {/* Quest input area - only show if not completed and not locked */}
-      {!completed && !locked && (
+      {/* Quest input area - only show if not completed, not locked, and not paid-locked */}
+      {!completed && !locked && !paidLocked && (
         <div className="quest-input-area">
           {quest.status === 'coming_soon' ? (
             <button className="quest-flow-btn coming-soon" disabled>

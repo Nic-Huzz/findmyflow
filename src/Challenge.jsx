@@ -38,6 +38,8 @@ import ContentChallenges from './components/ContentChallenges'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
+import { useSubscription } from './hooks/useSubscription'
+import { isPaidQuest, createCheckoutSession } from './lib/subscriptionService'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -169,6 +171,9 @@ function Challenge() {
     lifetimeScores
   } = useChallengeData()
 
+  // Subscription status for payment gating
+  const { hasSubscription } = useSubscription()
+
   // Celebrations (level-up modal)
   const { showLevelUp, celebrateLevelUp, closeLevelUp } = useCelebrations()
 
@@ -213,6 +218,7 @@ function Challenge() {
   const [groanReflection, setGroanReflection] = useState({ scaryScore: 5, wahooScore: 5, reflection: '' })
   const [groanMatrixKey, setGroanMatrixKey] = useState(0) // Used to force matrix refresh
   const [customChallengeText, setCustomChallengeText] = useState('')
+  const [threePercentText, setThreePercentText] = useState('')
   const [groanCellContext, setGroanCellContext] = useState(null) // Cell data when opening popup without a challenge
 
   // Play-list: compass check-in after challenge completion
@@ -316,6 +322,16 @@ function Challenge() {
     }
 
     return parts.length > 0 ? parts : description
+  }
+
+  // Redirect to Stripe checkout for subscription upgrade
+  const handleUpgrade = async () => {
+    try {
+      const url = await createCheckoutSession(user.id)
+      window.location.href = url
+    } catch (err) {
+      console.error('Failed to create checkout session:', err)
+    }
   }
 
   // Helper for updating quest inputs
@@ -1385,6 +1401,7 @@ function Challenge() {
     setGroanReflectionStep(false)
     setGroanCompassStep(false)
     setCustomChallengeText('')
+    setThreePercentText('')
     // Reset Play-list mapping state
     setMappedProblemId('')
     setMappedPersonaId('')
@@ -2138,6 +2155,8 @@ function Challenge() {
                     plannedDay={getPlannedDay(quest.id)}
                     validationResponseCounts={validationResponseCounts}
                     prelaunchLocked={PRELAUNCH_LOCKED}
+                    paidLocked={isPaidQuest(quest) && !hasSubscription}
+                    onUpgrade={handleUpgrade}
                   />
                 )
               })}
@@ -2363,7 +2382,6 @@ function Challenge() {
                 {(groanCellContext?.visibilityLayer || selectedGroanChallenge) && (!selectedGroanChallenge || (!selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed')) && (
                   <div className="groan-custom-challenge">
                     <label className="groan-custom-label">Enter your own here:</label>
-                    <p className="groan-custom-hint">How can you make this 3% better?</p>
                     <input
                       type="text"
                       className="groan-custom-input"
@@ -2371,6 +2389,14 @@ function Challenge() {
                       value={customChallengeText}
                       onChange={(e) => setCustomChallengeText(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && customChallengeText.trim() && handleSaveCustomChallenge()}
+                    />
+                    <label className="groan-custom-label">How can you make this 3% better?</label>
+                    <input
+                      type="text"
+                      className="groan-custom-input"
+                      placeholder="Type your 3% improvement..."
+                      value={threePercentText}
+                      onChange={(e) => setThreePercentText(e.target.value)}
                     />
                     {customChallengeText.trim() && (
                       <button
