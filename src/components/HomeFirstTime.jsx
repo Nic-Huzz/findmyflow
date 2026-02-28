@@ -9,7 +9,7 @@
  * 2. Protective pattern card
  * 3. "Start Finding Your Flow" CTA
  * 4. 3-question persona assessment
- * 5. Branching to Flow Finder or ExistingProjectFlow
+ * 5. Mind Space flow for all users
  *
  * Created: Dec 2024
  * Part of project-based refactor (see docs/2024-12-20-major-refactor-plan.md)
@@ -26,11 +26,9 @@ import {
   determineGuidanceEmphasis,
   derivePersonaFromWealthLadder,
   getValidGoalsForWealthLadder,
-  determineOnboardingPath,
-  getPersonaDisplay
+  determineOnboardingPath
 } from '../lib/onboardingV2'
-import { PersonaReveal, QuickCapture } from './onboarding'
-import ExistingProjectFlow from './ExistingProjectFlow'
+import { PersonaReveal } from './onboarding'
 import { getEssenceDisplayName } from '../lib/essencePreferences'
 import './HomeFirstTime.css'
 
@@ -40,11 +38,7 @@ const SCREENS = {
   PERSONA_Q2: 'persona_q2',      // Q2: Wealth ladder
   PERSONA_Q3: 'persona_q3',      // Q3: Goal (with greyed out options)
   PERSONA_REVEAL: 'persona_reveal',
-  VIBE_SEEKER_EXPLAINER: 'vibe_seeker_explainer',
-  QUICK_CAPTURE: 'quick_capture', // Quick capture for paths 2-4
-  PROJECT_TYPE: 'project_type',
-  NEW_PROJECT_EXPLAINER: 'new_project_explainer',
-  EXISTING_PROJECT: 'existing_project'
+  VIBE_SEEKER_EXPLAINER: 'vibe_seeker_explainer'
 }
 
 // LocalStorage key for onboarding progress
@@ -382,46 +376,11 @@ function HomeFirstTime({ onOnboardingComplete }) {
     }
   }
 
-  // Handle project type selection
-  const handleProjectType = (type) => {
-    if (type === 'new') {
-      // Show explainer before Flow Finder
-      setCurrentScreen(SCREENS.NEW_PROJECT_EXPLAINER)
-    } else {
-      // Show existing project flow
-      setCurrentScreen(SCREENS.EXISTING_PROJECT)
-    }
-  }
-
-  // Handle after persona reveal - uses path routing logic
+  // Handle after persona reveal - all users go to Mind Space
   const handleContinueAfterPersona = async () => {
-    // Get the full path configuration based on wealth ladder + goal
-    const pathConfig = determineOnboardingPath(wealthLadderRung, primaryGoal)
-
-    if (pathConfig.path === 1) {
-      // Path 1 (Pre-ladder): Show Flow Finder explainer
-      setCurrentScreen(SCREENS.VIBE_SEEKER_EXPLAINER)
-    } else if (pathConfig.showQuickCapture) {
-      // Paths 2-4: Go to Quick Capture flow
-      setCurrentScreen(SCREENS.QUICK_CAPTURE)
-    } else if (onOnboardingComplete) {
-      // Refresh parent state in-place (no full reload)
-      await onOnboardingComplete()
-    } else {
-      // Fallback: full reload
-      window.location.href = '/me'
-    }
-  }
-
-  // Handle Quick Capture completion
-  const handleQuickCaptureComplete = async (capturedData) => {
-    console.log('handleQuickCaptureComplete called, refreshing profile...')
-    if (onOnboardingComplete) {
-      await onOnboardingComplete()
-    } else {
-      // Fallback: full reload
-      window.location.href = '/me'
-    }
+    // All users go to Mind Space after persona reveal
+    await Promise.all([ensureDiscoveryProject(), markOnboardingComplete()])
+    navigate('/mind-space')
   }
 
   // Mark onboarding complete in the database
@@ -467,15 +426,6 @@ function HomeFirstTime({ onOnboardingComplete }) {
   const handleSkipToProfile = async () => {
     // These two are independent — run in parallel
     await Promise.all([ensureDiscoveryProject(), markOnboardingComplete()])
-    if (onOnboardingComplete) {
-      await onOnboardingComplete()
-    } else {
-      window.location.href = '/me'
-    }
-  }
-
-  // Handle ExistingProjectFlow completion
-  const handleExistingProjectComplete = async () => {
     if (onOnboardingComplete) {
       await onOnboardingComplete()
     } else {
@@ -782,7 +732,7 @@ function HomeFirstTime({ onOnboardingComplete }) {
             marginBottom: '16px',
             color: 'white'
           }}>
-            Let's Find Your Flow
+            Let's Discover Your Flow
           </h2>
           <p style={{
             color: 'rgba(255, 255, 255, 0.7)',
@@ -790,7 +740,6 @@ function HomeFirstTime({ onOnboardingComplete }) {
             lineHeight: 1.6,
             marginBottom: '32px'
           }}>
-            As a Vibe Seeker, you're ready to explore what lights you up.
             The Mind Space will help you discover your unique skills,
             the problems you naturally solve, and who you're meant to help.
           </p>
@@ -831,162 +780,6 @@ function HomeFirstTime({ onOnboardingComplete }) {
           </div>
         </div>
       </div>
-    )
-  }
-
-  // NEW PROJECT EXPLAINER SCREEN (for Vibe Riser / Movement Maker choosing "start fresh")
-  if (currentScreen === SCREENS.NEW_PROJECT_EXPLAINER) {
-    return (
-      <div className="home-first-time" style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        padding: '24px'
-      }}>
-        <div style={{ maxWidth: '400px', width: '100%' }}>
-          <h2 style={{
-            fontSize: '1.75rem',
-            fontWeight: 700,
-            marginBottom: '16px',
-            color: 'white'
-          }}>
-            Let's Find Your Flow
-          </h2>
-          <p style={{
-            color: 'rgba(255, 255, 255, 0.7)',
-            fontSize: '1rem',
-            lineHeight: 1.6,
-            marginBottom: '32px'
-          }}>
-            {assignedPersona?.persona === 'movement_maker'
-              ? "Even with an established business, discovering new opportunities can unlock your next level of growth."
-              : "Let's discover what lights you up. The Mind Space will help you identify your unique skills, problems you solve, and who you're meant to help."
-            }
-          </p>
-
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.08)',
-            borderRadius: '16px',
-            padding: '20px 24px',
-            marginBottom: '32px'
-          }}>
-            <p style={{
-              fontSize: '1.1rem',
-              color: 'rgba(255, 255, 255, 0.9)',
-              margin: 0
-            }}>
-              ⏱️ This takes about <strong>2 minutes</strong>
-            </p>
-          </div>
-
-          <div className="project-type-options">
-            <button
-              className="option-card"
-              onClick={handleStartMindSpace}
-            >
-              <span className="option-icon">🚀</span>
-              <span className="option-title">I have 2 minutes now</span>
-              <span className="option-desc">Let's find your flow</span>
-            </button>
-
-            <button
-              className="option-card"
-              onClick={handleSkipToProfile}
-            >
-              <span className="option-icon">⏰</span>
-              <span className="option-title">I'll do this later</span>
-              <span className="option-desc">Take me to my profile</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // PROJECT TYPE SCREEN (for Vibe Riser / Movement Maker)
-  if (currentScreen === SCREENS.PROJECT_TYPE) {
-    const personaDisplay = getPersonaDisplay()
-
-    return (
-      <div className="home-first-time" style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        padding: '24px'
-      }}>
-        <div style={{ maxWidth: '400px', width: '100%' }}>
-          <h2 style={{
-            fontSize: '1.75rem',
-            fontWeight: 700,
-            marginBottom: '16px',
-            color: 'white'
-          }}>
-            Do you have an existing project?
-          </h2>
-          <p style={{
-            color: 'rgba(255, 255, 255, 0.7)',
-            fontSize: '1rem',
-            lineHeight: 1.6,
-            marginBottom: '40px'
-          }}>
-            {assignedPersona?.persona === 'movement_maker'
-              ? "As a Movement Maker, you may have an existing business or want to explore new opportunities."
-              : "As a Vibe Riser, you may already be working on something or looking to start fresh."
-            }
-          </p>
-
-          <div className="project-type-options">
-            <button
-              className="option-card"
-              onClick={() => handleProjectType('existing')}
-            >
-              <span className="option-icon">📁</span>
-              <span className="option-title">I have an existing project</span>
-              <span className="option-desc">Let's capture what you're working on</span>
-            </button>
-
-            <button
-              className="option-card"
-              onClick={() => handleProjectType('new')}
-            >
-              <span className="option-icon">✨</span>
-              <span className="option-title">I want to start fresh</span>
-              <span className="option-desc">Let's discover a new opportunity</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // QUICK CAPTURE FLOW (for paths 2-4)
-  if (currentScreen === SCREENS.QUICK_CAPTURE) {
-    return (
-      <QuickCapture
-        userId={user?.id}
-        wealthLadder={wealthLadderRung}
-        guidanceEmphasis={guidanceEmphasis}
-        onComplete={handleQuickCaptureComplete}
-        onBack={() => setCurrentScreen(SCREENS.PERSONA_REVEAL)}
-      />
-    )
-  }
-
-  // EXISTING PROJECT FLOW
-  if (currentScreen === SCREENS.EXISTING_PROJECT) {
-    return (
-      <ExistingProjectFlow
-        onComplete={handleExistingProjectComplete}
-        onBack={() => setCurrentScreen(SCREENS.PROJECT_TYPE)}
-        onboardingData={{
-          persona: assignedPersona?.persona || null,
-          employmentStatus,
-          hasSideProject,
-          wealthLadderRung,
-          primaryGoal,
-          guidanceEmphasis
-        }}
-      />
     )
   }
 
