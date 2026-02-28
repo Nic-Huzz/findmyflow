@@ -627,16 +627,6 @@ function QuestCard({
         <p className="graduation-note">Counts toward stage graduation</p>
       )}
 
-      {/* Inline voice buttons for flow quests */}
-      {quest.inputType === 'flow' && !completed && !locked && userId && (
-        <VoiceDropdown
-          questId={quest.id}
-          userId={userId}
-          projectId={selectedProject?.id}
-          userArchetypes={userArchetypes}
-        />
-      )}
-
       {/* Completed state */}
       {completed && (
         <div className="quest-completed-section">
@@ -658,6 +648,16 @@ function QuestCard({
             </a>
           )}
         </div>
+      )}
+
+      {/* Inline voice buttons for flow quests - shown after completion */}
+      {quest.inputType === 'flow' && completed && userId && (
+        <VoiceDropdown
+          questId={quest.id}
+          userId={userId}
+          projectId={selectedProject?.id}
+          userArchetypes={userArchetypes}
+        />
       )}
 
       {/* Confetti burst on completion */}

@@ -1,9 +1,9 @@
 /**
  * PlayListTab.jsx
  *
- * First-class tab for the 7-Day Challenge page with two sub-tabs:
+ * First-class tab for the 7-Day Challenge page with sub-tabs:
  *   Flow Finder — quest cards (skills, problems, persona, integration)
- *   Play-list  — Skills-only Groan Matrix + Voice Logging
+ *   Play-list  — Skills-only Groan Matrix
  *
  * Created: 2026-02-26
  * Part of Play-list tab restructure
@@ -24,45 +24,6 @@ const FLOW_FINDER_GROUPS = [
 
 // Quests rendered as header buttons instead of quest cards
 const EXPLAINER_IDS = new Set(['flow_finder_explainer'])
-
-// Generic voice quests for Play-list (not stage-specific)
-function getPlaylistVoiceQuests(userArchetypes) {
-  const essenceName = userArchetypes?.essence || 'Essence'
-  const protectiveName = userArchetypes?.protective || 'Protective Voice'
-
-  return [
-    {
-      id: 'playlist_essence_voice',
-      name: `${essenceName} Voice`,
-      description: `How did your ${essenceName} show up today? Reflect on moments where your true self emerged.`,
-      category: 'Voices',
-      type: 'recognise',
-      subType: 'essence',
-      frequency: 'daily',
-      points: 3,
-      inputType: 'recognise_quest',
-      icon: '✨',
-      voiceType: 'essence',
-      archetypeName: essenceName,
-      stageAction: 'show up in your courage work'
-    },
-    {
-      id: 'playlist_protective_voice',
-      name: `${protectiveName} Voice`,
-      description: `How did your ${protectiveName} try to hold you back today? Notice the patterns without judgement.`,
-      category: 'Voices',
-      type: 'recognise',
-      subType: 'protective',
-      frequency: 'daily',
-      points: 3,
-      inputType: 'recognise_quest',
-      icon: '🛡️',
-      voiceType: 'protective',
-      archetypeName: protectiveName,
-      stageBlock: 'hold you back from your courage work'
-    }
-  ]
-}
 
 export default function PlayListTab({
   userId,
@@ -112,11 +73,6 @@ export default function PlayListTab({
     }, 0)
     return { currentPoints: completedPoints, totalPoints }
   }, [flowFinderQuests, completions])
-
-  const voiceQuests = useMemo(
-    () => getPlaylistVoiceQuests(userArchetypes),
-    [userArchetypes?.essence, userArchetypes?.protective]
-  )
 
   const renderQuestCard = (quest) => {
     const completed = isQuestCompletedToday(quest.id, quest)
@@ -262,28 +218,19 @@ export default function PlayListTab({
         )
       })()}
 
-      {/* ── Play-list sub-tab: Courage Matrix + Voice Logging ── */}
+      {/* ── Play-list sub-tab: Courage Matrix ── */}
       {activeSubTab === 'playlist' && (
-        <>
-          <div className="quest-section">
-            <GroanMatrix
-              key={groanMatrixKey}
-              userId={userId}
-              onCellClick={onMatrixCellClick}
-              onGenerateChallenge={onGenerateChallenge}
-              layerLockStatus={layerLockStatus}
-              flowFinderComplete={flowFinderComplete}
-              sourceTypes={['skill']}
-            />
-          </div>
-
-          <div className="quest-section">
-            <h2 className="section-title">Voice Logging</h2>
-            <div className="quest-grid stagger-children-fast">
-              {voiceQuests.map(quest => renderQuestCard(quest))}
-            </div>
-          </div>
-        </>
+        <div className="quest-section">
+          <GroanMatrix
+            key={groanMatrixKey}
+            userId={userId}
+            onCellClick={onMatrixCellClick}
+            onGenerateChallenge={onGenerateChallenge}
+            layerLockStatus={layerLockStatus}
+            flowFinderComplete={flowFinderComplete}
+            sourceTypes={['skill']}
+          />
+        </div>
       )}
 
       {/* ── Play Profile sub-tab ── */}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import './VoiceDropdown.css'
 
 function VoiceDropdown({ questId, userId, projectId, userArchetypes }) {
@@ -40,6 +41,10 @@ function VoiceDropdown({ questId, userId, projectId, userArchetypes }) {
   }, [])
 
   const handleSave = useCallback(async (type) => {
+    // Guard: prevent duplicate saves
+    if (type === 'essence' && essenceSaved) return
+    if (type === 'protective' && protectiveSaved) return
+
     const text = type === 'essence' ? essenceText : protectiveText
     if (!text.trim() || saving) return
 
@@ -82,48 +87,51 @@ function VoiceDropdown({ questId, userId, projectId, userArchetypes }) {
 
     // Increment scores via RPC
     try {
-      const now = new Date()
-      const day = now.getDay()
-      const diff = now.getDate() - day + (day === 0 ? -6 : 1)
-      const weekStart = new Date(now.getFullYear(), now.getMonth(), diff)
-      weekStart.setHours(0, 0, 0, 0)
-
       await supabase.rpc('increment_scores', {
         p_user_id: userId,
         p_project_id: null,
         p_category: 'healing',
         p_points: 3,
-        p_week_start: weekStart.toISOString()
+        p_week_start: getWeekStartLocal()
       })
     } catch (e) {
       console.warn('Score increment failed:', e)
     }
-  }, [questId, userId, projectId, essenceText, protectiveText, essenceName, protectiveName, saving])
+
+    // Reload page after brief delay so user sees the green dot before score refreshes
+    setTimeout(() => window.location.reload(), 800)
+  }, [questId, userId, projectId, essenceText, protectiveText, essenceName, protectiveName, essenceSaved, protectiveSaved, saving])
 
   return (
     <div className="voice-dropdown-section">
       <div className="voice-pill-row">
         <button
-          className={`voice-pill essence ${openType === 'essence' ? 'active' : ''}`}
-          onClick={() => handleToggle('essence')}
+          className={`voice-pill essence ${openType === 'essence' ? 'active' : ''} ${essenceSaved ? 'saved' : ''}`}
+          onClick={essenceSaved ? undefined : () => handleToggle('essence')}
+          disabled={essenceSaved}
         >
           <span className={`voice-pill-dot ${essenceSaved ? 'filled' : ''}`} />
-          <span className="voice-pill-icon">✨</span>
-          <span className="voice-pill-label">{essenceName}</span>
-          <svg className={`voice-pill-chevron ${openType === 'essence' ? 'open' : ''}`} width="12" height="12" viewBox="0 0 16 16" fill="none">
-            <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <span className="voice-pill-icon">{essenceSaved ? '✓' : '✨'}</span>
+          <span className="voice-pill-label">{essenceSaved ? 'Saved' : essenceName}</span>
+          {!essenceSaved && (
+            <svg className={`voice-pill-chevron ${openType === 'essence' ? 'open' : ''}`} width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          )}
         </button>
         <button
-          className={`voice-pill protective ${openType === 'protective' ? 'active' : ''}`}
-          onClick={() => handleToggle('protective')}
+          className={`voice-pill protective ${openType === 'protective' ? 'active' : ''} ${protectiveSaved ? 'saved' : ''}`}
+          onClick={protectiveSaved ? undefined : () => handleToggle('protective')}
+          disabled={protectiveSaved}
         >
           <span className={`voice-pill-dot ${protectiveSaved ? 'filled' : ''}`} />
-          <span className="voice-pill-icon">🛡️</span>
-          <span className="voice-pill-label">{protectiveName}</span>
-          <svg className={`voice-pill-chevron ${openType === 'protective' ? 'open' : ''}`} width="12" height="12" viewBox="0 0 16 16" fill="none">
-            <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <span className="voice-pill-icon">{protectiveSaved ? '✓' : '🛡️'}</span>
+          <span className="voice-pill-label">{protectiveSaved ? 'Saved' : protectiveName}</span>
+          {!protectiveSaved && (
+            <svg className={`voice-pill-chevron ${openType === 'protective' ? 'open' : ''}`} width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          )}
         </button>
       </div>
 

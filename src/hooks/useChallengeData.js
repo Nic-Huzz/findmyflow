@@ -23,7 +23,6 @@ import { checkStreakBreak } from '../lib/streakTracking'
 import { initializeUserStageProgress, checkAndGraduateProject } from '../lib/graduationChecker'
 import { normalizePersona } from '../data/personaProfiles'
 import { convertLegacyStage, STAGE_CONFIG } from '../lib/stageConfig'
-import { generateVoiceQuestsForStage } from '../lib/voiceQuestConfig'
 import { getScoringCategory, syncScoreToLeaderboard } from '../lib/scoringCategories'
 import { logError, showErrorWithSupport } from '../lib/errorSupport'
 import { cacheBustUrl } from '../lib/fetchJson'
@@ -110,10 +109,10 @@ export function useChallengeData() {
   const [activeStageTab, setActiveStageTab] = useState(1)
   const [projectStage, setProjectStage] = useState(1)
 
-  // Sub-Tab State (for Business, Healing, and Bonus tabs)
-  const [businessSubTab, setBusinessSubTab] = useState('tasks') // 'tasks' | 'voices'
+  // Sub-Tab State (for Healing and Bonus tabs)
   const [healingSubTab, setHealingSubTab] = useState('daily') // 'daily' | 'weekly'
   const [bonusSubTab, setBonusSubTab] = useState('tasks') // 'tasks' | 'content'
+  const [playlistSubTab, setPlaylistSubTab] = useState('flow-finder') // 'flow-finder' | 'playlist'
 
   // User Archetypes (for personalized voice quests)
   const [userArchetypes, setUserArchetypes] = useState({ essence: null, protective: null })
@@ -1975,13 +1974,13 @@ export function useChallengeData() {
     projectStage,
     setProjectStage,
 
-    // Sub-Tabs (Business, Healing, and Bonus)
-    businessSubTab,
-    setBusinessSubTab,
+    // Sub-Tabs (Healing and Bonus)
     healingSubTab,
     setHealingSubTab,
     bonusSubTab,
     setBonusSubTab,
+    playlistSubTab,
+    setPlaylistSubTab,
 
     // User Archetypes (for personalized voice quests)
     userArchetypes,

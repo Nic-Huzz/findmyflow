@@ -33,7 +33,6 @@ import { useLeagueData } from './hooks/useLeagueData'
 import { useMatchupData } from './hooks/useMatchupData'
 import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage, GROAN_VISIBILITY_LAYERS, getLayerLockStatus, getStageConfig } from './lib/stageConfig'
-import { generateVoiceQuestsForStage } from './lib/voiceQuestConfig'
 import { getScoringCategory } from './lib/scoringCategories'
 import ContentChallenges from './components/ContentChallenges'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
@@ -117,8 +116,6 @@ function Challenge() {
     setActiveStageTab,
     projectStage,
     setProjectStage,
-    businessSubTab,
-    setBusinessSubTab,
     healingSubTab,
     setHealingSubTab,
     bonusSubTab,
@@ -216,13 +213,17 @@ function Challenge() {
   const [preActionPendingData, setPreActionPendingData] = useState(null)
   const [groanChallengeLoading, setGroanChallengeLoading] = useState(false)
   const [groanReflectionStep, setGroanReflectionStep] = useState(false)
-  const [groanReflection, setGroanReflection] = useState({ scaryScore: 5, wahooScore: 5, reflection: '' })
+  const [groanReflection, setGroanReflection] = useState({ scaryScore: 5, wahooScore: 5, reflection: '', didThreePercent: null })
   const [groanMatrixKey, setGroanMatrixKey] = useState(0) // Used to force matrix refresh
   const [customChallengeText, setCustomChallengeText] = useState('')
   const [threePercentText, setThreePercentText] = useState('')
   const [groanCellContext, setGroanCellContext] = useState(null) // Cell data when opening popup without a challenge
 
-  // Play-list: compass check-in after challenge completion
+  // Play-list: voices check-in after reflection
+  const [groanVoicesStep, setGroanVoicesStep] = useState(false)
+  const [groanVoices, setGroanVoices] = useState({ essenceShowedUp: null, essenceHow: '', protectiveShowedUp: null, protectiveHow: '' })
+
+  // Play-list: compass check-in after voices
   const [groanCompassStep, setGroanCompassStep] = useState(false)
 
   // Play-list: problem/persona mapping for skills-only matrix
@@ -1027,7 +1028,10 @@ function Challenge() {
             sourceType: cellData.sourceType,
             sourceLabel: cellData.sourceLabel,
             sourceInsight: cellData.sourceInsight || '',
-            visibilityLayer: cellData.visibilityLayer
+            visibilityLayer: cellData.visibilityLayer,
+            // Include Play-list problem/persona context for richer AI generation
+            ...(cellData.mappedProblemLabel && { mappedProblemLabel: cellData.mappedProblemLabel }),
+            ...(cellData.mappedPersonaLabel && { mappedPersonaLabel: cellData.mappedPersonaLabel }),
           }
 
       const { data, error } = await supabase.functions.invoke('groan-challenge-generator', {
@@ -1091,20 +1095,32 @@ function Challenge() {
 
   // Handler for matrix cell clicks — opens popup immediately
   const handleMatrixCellClick = (cellData) => {
-    if (cellData.challenge) {
-      setSelectedGroanChallenge(cellData.challenge)
-      setGroanCellContext(cellData)
+    // Normalize: ensure visibilityLayer is always a string ID
+    // handleCellClick passes `layer` (object), empty-cell button passes `visibilityLayer` (string)
+    const normalized = {
+      ...cellData,
+      visibilityLayer: cellData.visibilityLayer || cellData.layer?.id || cellData.challenge?.visibility_layer,
+      sourceId: cellData.sourceId || cellData.sourceItem?.id,
+      sourceLabel: cellData.sourceLabel || cellData.sourceItem?.cluster_label,
+      sourceInsight: cellData.sourceInsight || cellData.sourceItem?.insight,
+    }
+    if (normalized.challenge) {
+      setSelectedGroanChallenge(normalized.challenge)
+      setGroanCellContext(normalized)
     } else {
       // No challenge yet — open popup with cell context for creating one
       setSelectedGroanChallenge(null)
-      setGroanCellContext(cellData)
+      setGroanCellContext(normalized)
     }
   }
 
   // Build enriched cell context with Play-list mapping data
+  // On Play-list, keeps sourceType as 'skill' so it maps back to the skills matrix,
+  // but includes problem/persona as supplementary context for AI generation.
   const getEnrichedCellContext = () => {
     if (!groanCellContext) return null
-    // When on Play-list and user has mapped a problem, transform to skill_x_problem
+    // When on Play-list and user has mapped a problem, enrich with problem/persona context
+    // but keep sourceType as 'skill' so the challenge appears on the skills matrix
     if (activeCategory === 'Play-list' && groanCellContext.sourceType === 'skill' && mappedProblemId && mappedProblemId !== 'not_specified') {
       const problem = mappedProblemId === 'custom'
         ? { id: null, label: customProblem || 'Custom problem' }
@@ -1116,15 +1132,9 @@ function Challenge() {
           : null
       return {
         ...groanCellContext,
-        sourceType: 'skill_x_problem',
-        skillId: groanCellContext.sourceId,
-        skillLabel: groanCellContext.sourceLabel,
-        skillInsight: groanCellContext.sourceInsight || '',
-        problemId: problem?.id || null,
-        problemLabel: problem?.cluster_label || problem?.label || customProblem,
-        problemInsight: '',
-        personaId: persona?.id || null,
-        personaLabel: persona?.cluster_label || persona?.label || null,
+        // Keep sourceType as 'skill' — the matrix is skills-only
+        mappedProblemLabel: problem?.cluster_label || problem?.label || customProblem,
+        mappedPersonaLabel: persona?.cluster_label || persona?.label || null,
       }
     }
     return groanCellContext
@@ -1147,6 +1157,15 @@ function Challenge() {
           .limit(1)
         if (newChallenges?.[0]) {
           setSelectedGroanChallenge(newChallenges[0])
+          // Append 3% improvement text if provided
+          if (threePercentText.trim() && newChallenges[0]) {
+            const updatedDesc = `${newChallenges[0].description}\n3% improvement: ${threePercentText.trim()}`
+            await supabase
+              .from('groan_challenges')
+              .update({ description: updatedDesc })
+              .eq('id', newChallenges[0].id)
+            setSelectedGroanChallenge(prev => ({ ...prev, description: updatedDesc }))
+          }
         }
         setGroanMatrixKey(prev => prev + 1)
       }
@@ -1181,35 +1200,29 @@ function Challenge() {
       } else {
         // Create a new challenge from cell context with custom text
         const ctx = getEnrichedCellContext() || groanCellContext
-        const isSkillProblem = ctx.sourceType === 'skill_x_problem'
-        let saveResult
-        if (isSkillProblem) {
-          saveResult = await createSkillProblemChallenge({
-            userId: user.id,
-            title: customChallengeText.trim(),
-            description: `Custom challenge: ${customChallengeText.trim()}`,
-            skillId: ctx.skillId,
-            skillLabel: ctx.skillLabel,
-            problemId: ctx.problemId,
-            problemLabel: ctx.problemLabel,
-            personaId: ctx.personaId || null,
-            personaLabel: ctx.personaLabel || null,
-            scaryScore: 5,
-            wahooScore: 5,
-          })
-        } else {
-          saveResult = await createGroanChallenge({
-            userId: user.id,
-            title: customChallengeText.trim(),
-            description: `Custom challenge: ${customChallengeText.trim()}`,
-            visibilityLayer: ctx.visibilityLayer,
-            sourceType: ctx.sourceType,
-            sourceId: ctx.sourceId,
-            sourceLabel: ctx.sourceLabel,
-            scaryScore: 5,
-            wahooScore: 5,
-          })
+        // Build description with problem/persona context if mapped
+        let description = `Custom challenge: ${customChallengeText.trim()}`
+        if (threePercentText.trim()) {
+          description += `\n3% improvement: ${threePercentText.trim()}`
         }
+        if (ctx.mappedProblemLabel) {
+          description += `\nProblem: ${ctx.mappedProblemLabel}`
+        }
+        if (ctx.mappedPersonaLabel) {
+          description += `\nPersona: ${ctx.mappedPersonaLabel}`
+        }
+        // Always create as standard challenge (keeps sourceType for matrix lookup)
+        const saveResult = await createGroanChallenge({
+          userId: user.id,
+          title: customChallengeText.trim(),
+          description,
+          visibilityLayer: ctx.visibilityLayer,
+          sourceType: ctx.sourceType,
+          sourceId: ctx.sourceId,
+          sourceLabel: ctx.sourceLabel,
+          scaryScore: 5,
+          wahooScore: 5,
+        })
         if (saveResult?.error) throw saveResult.error
         // Fetch the newly created challenge and auto-accept it
         const { data: newChallenges } = await supabase
@@ -1251,7 +1264,8 @@ function Challenge() {
 
   // Handle completing a groan challenge - show reflection step
   const handleStartCompletion = () => {
-    setGroanReflection({ scaryScore: 5, wahooScore: 5, reflection: '' })
+    setGroanReflection({ scaryScore: 5, wahooScore: 5, reflection: '', didThreePercent: null })
+    setGroanVoices({ essenceShowedUp: null, essenceHow: '', protectiveShowedUp: null, protectiveHow: '' })
     setGroanReflectionStep(true)
   }
 
@@ -1260,8 +1274,13 @@ function Challenge() {
     if (!selectedGroanChallenge) return
     setGroanChallengeLoading(true)
     try {
+      // Build reflection text with 3% improvement data
+      let reflectionText = groanReflection.reflection || ''
+      if (groanReflection.didThreePercent !== null) {
+        reflectionText += `${reflectionText ? '\n' : ''}3% improvement: ${groanReflection.didThreePercent ? 'Yes' : 'No'}`
+      }
       const { error } = await completeGroanChallenge(selectedGroanChallenge.id, {
-        reflectionText: groanReflection.reflection,
+        reflectionText,
         scaryScoreAfter: groanReflection.scaryScore,
         wahooScoreAfter: groanReflection.wahooScore
       })
@@ -1306,11 +1325,11 @@ function Challenge() {
       // Trigger confetti
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
 
-      // Play-list: show compass check-in before closing
+      // Play-list: show voices check-in before compass
       if (activeCategory === 'Play-list') {
         setGroanReflectionStep(false)
-        setGroanCompassStep(true)
-        // Don't close modal yet — compass step shows next
+        setGroanVoicesStep(true)
+        // Don't close modal yet — voices step shows next
       } else {
         // Reset and close modal, refresh matrix
         setGroanReflectionStep(false)
@@ -1407,6 +1426,8 @@ function Challenge() {
     setSelectedGroanChallenge(null)
     setGroanCellContext(null)
     setGroanReflectionStep(false)
+    setGroanVoicesStep(false)
+    setGroanVoices({ essenceShowedUp: null, essenceHow: '', protectiveShowedUp: null, protectiveHow: '' })
     setGroanCompassStep(false)
     setCustomChallengeText('')
     setThreePercentText('')
@@ -1449,42 +1470,34 @@ function Challenge() {
   if (activeCategory === 'Business') {
     const userPersonaNormalized = normalizePersona(userData?.persona)
 
-    // Handle sub-tabs: Tasks vs Voices
-    if (businessSubTab === 'voices') {
-      // Voices: generate voice quests for the current stage
-      filteredQuests = generateVoiceQuestsForStage(viewingStage, userArchetypes)
-    } else {
-      // Tasks sub-tab: filter regular business quests
-      filteredQuests = filteredQuests.filter(quest => {
-        // Exclude stage groan quests - they now appear in Voices sub-tab
-        if (quest.type === 'groan' || quest.id?.startsWith('groan_stage')) {
+    filteredQuests = filteredQuests.filter(quest => {
+      if (quest.persona_specific && userPersonaNormalized) {
+        const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
+        if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
           return false
         }
+      }
 
-        if (quest.persona_specific && userPersonaNormalized) {
-          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
-          if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
-            return false
-          }
+      // Check stage_required - use !== undefined since stage 0 is valid
+      // Use Number() to ensure both sides are numbers for proper comparison
+      if (quest.stage_required !== undefined && quest.stage_required !== null) {
+        if (Number(quest.stage_required) !== Number(viewingStage)) {
+          return false
         }
+      }
 
-        // Check stage_required - use !== undefined since stage 0 is valid
-        // Use Number() to ensure both sides are numbers for proper comparison
-        if (quest.stage_required !== undefined && quest.stage_required !== null) {
-          if (Number(quest.stage_required) !== Number(viewingStage)) {
-            return false
-          }
-        }
-
-        return true
-      })
-    }
+      return true
+    })
   }
 
-  // Sort explainer quests to the top so "Understand <Stage>" always appears first
+  // Sort: explainer quests first, groan quests last
   filteredQuests.sort((a, b) => {
     if (a.isExplainer && !b.isExplainer) return -1
     if (!a.isExplainer && b.isExplainer) return 1
+    const aIsGroan = a.type === 'groan'
+    const bIsGroan = b.type === 'groan'
+    if (aIsGroan && !bIsGroan) return 1
+    if (!aIsGroan && bIsGroan) return -1
     return 0
   })
 
@@ -1722,7 +1735,7 @@ function Challenge() {
                 activeTab={activeStageTab}
                 onTabChange={setActiveStageTab}
                 flowFinderComplete={flowFinderComplete}
-                excludeStages={[0, 0.5]}
+                excludeStages={[0, 0.5, 0.9]}
               />
             </>
           ) : (
@@ -1907,23 +1920,6 @@ function Challenge() {
         })()}
 
 
-        {/* Sub-tabs: Tasks | Voices - only for Business stages 1-8 */}
-        {activeCategory === 'Business' && selectedProject && (
-          <div className="business-sub-tabs">
-            <button
-              className={`sub-tab ${businessSubTab === 'tasks' ? 'active' : ''}`}
-              onClick={() => setBusinessSubTab('tasks')}
-            >
-              ✅&ensp;Tasks
-            </button>
-            <button
-              className={`sub-tab ${businessSubTab === 'voices' ? 'active' : ''}`}
-              onClick={() => setBusinessSubTab('voices')}
-            >
-              🎭&ensp;Voices
-            </button>
-          </div>
-        )}
 
         {/* Stage-style sub-tabs for Play-list: Flow Finder | Play-list | Play Profile */}
         {activeCategory === 'Play-list' && (() => {
@@ -2284,6 +2280,138 @@ function Challenge() {
                 onSkip={closeGroanModal}
                 challengeTitle={selectedGroanChallenge?.title}
               />
+            ) : groanVoicesStep ? (
+              <>
+                {/* Voices Check-in Step */}
+                <div className="groan-modal-header">
+                  <h2>Voice Check-in</h2>
+                </div>
+
+                <div className="groan-reflection-form">
+                  {/* Essence Voice */}
+                  <div className="groan-voice-group">
+                    <label className="slider-label">Did your {userArchetypes?.essence || 'Essence'} voice show up?</label>
+                    <div className="groan-toggle-buttons">
+                      <button
+                        className={`groan-toggle-btn ${groanVoices.essenceShowedUp === true ? 'active yes' : ''}`}
+                        onClick={() => setGroanVoices(prev => ({ ...prev, essenceShowedUp: true }))}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        className={`groan-toggle-btn ${groanVoices.essenceShowedUp === false ? 'active no' : ''}`}
+                        onClick={() => setGroanVoices(prev => ({ ...prev, essenceShowedUp: false, essenceHow: '' }))}
+                      >
+                        No
+                      </button>
+                    </div>
+                    {groanVoices.essenceShowedUp && (
+                      <textarea
+                        className="groan-voice-textarea"
+                        placeholder={`How did your ${userArchetypes?.essence || 'Essence'} show up?`}
+                        value={groanVoices.essenceHow}
+                        onChange={(e) => setGroanVoices(prev => ({ ...prev, essenceHow: e.target.value }))}
+                        rows={2}
+                      />
+                    )}
+                  </div>
+
+                  {/* Protective Voice */}
+                  <div className="groan-voice-group">
+                    <label className="slider-label">Did your {userArchetypes?.protective || 'Protective'} voice show up?</label>
+                    <div className="groan-toggle-buttons">
+                      <button
+                        className={`groan-toggle-btn ${groanVoices.protectiveShowedUp === true ? 'active yes' : ''}`}
+                        onClick={() => setGroanVoices(prev => ({ ...prev, protectiveShowedUp: true }))}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        className={`groan-toggle-btn ${groanVoices.protectiveShowedUp === false ? 'active no' : ''}`}
+                        onClick={() => setGroanVoices(prev => ({ ...prev, protectiveShowedUp: false, protectiveHow: '' }))}
+                      >
+                        No
+                      </button>
+                    </div>
+                    {groanVoices.protectiveShowedUp && (
+                      <textarea
+                        className="groan-voice-textarea"
+                        placeholder={`How did your ${userArchetypes?.protective || 'Protective'} voice try to hold you back?`}
+                        value={groanVoices.protectiveHow}
+                        onChange={(e) => setGroanVoices(prev => ({ ...prev, protectiveHow: e.target.value }))}
+                        rows={2}
+                      />
+                    )}
+                  </div>
+                </div>
+
+                <div className="groan-modal-actions">
+                  <button
+                    className="groan-btn groan-btn-complete"
+                    onClick={() => {
+                      // Save voice data to quest_completions for the voice quests
+                      const saveVoiceData = async () => {
+                        const voiceEntries = []
+                        if (groanVoices.essenceShowedUp !== null) {
+                          voiceEntries.push({
+                            user_id: user.id,
+                            challenge_instance_id: progress?.challenge_instance_id || null,
+                            quest_id: 'playlist_essence_voice',
+                            quest_category: 'Voices',
+                            quest_type: 'recognise',
+                            points_earned: 3,
+                            challenge_day: progress?.current_day || 0,
+                            project_id: selectedProject?.id || null,
+                            reflection_text: JSON.stringify({
+                              showed_up: groanVoices.essenceShowedUp,
+                              how: groanVoices.essenceHow || null,
+                              from_challenge: selectedGroanChallenge?.id
+                            })
+                          })
+                        }
+                        if (groanVoices.protectiveShowedUp !== null) {
+                          voiceEntries.push({
+                            user_id: user.id,
+                            challenge_instance_id: progress?.challenge_instance_id || null,
+                            quest_id: 'playlist_protective_voice',
+                            quest_category: 'Voices',
+                            quest_type: 'recognise',
+                            points_earned: 3,
+                            challenge_day: progress?.current_day || 0,
+                            project_id: selectedProject?.id || null,
+                            reflection_text: JSON.stringify({
+                              showed_up: groanVoices.protectiveShowedUp,
+                              how: groanVoices.protectiveHow || null,
+                              from_challenge: selectedGroanChallenge?.id
+                            })
+                          })
+                        }
+                        if (voiceEntries.length > 0) {
+                          const { error } = await supabase.from('quest_completions').insert(voiceEntries)
+                          if (error) console.warn('Error saving voice data:', error)
+                          else setCompletions(prev => [...prev, ...voiceEntries.map(e => ({ ...e, completed_at: new Date().toISOString() }))])
+                        }
+                      }
+                      saveVoiceData()
+                      // Move to compass step
+                      setGroanVoicesStep(false)
+                      setGroanCompassStep(true)
+                    }}
+                  >
+                    Continue
+                  </button>
+                  <button
+                    className="groan-btn groan-btn-back"
+                    onClick={() => {
+                      // Skip voices, go to compass
+                      setGroanVoicesStep(false)
+                      setGroanCompassStep(true)
+                    }}
+                  >
+                    Skip
+                  </button>
+                </div>
+              </>
             ) : !groanReflectionStep ? (
               <>
                 {/* Header with layer badge */}
@@ -2481,15 +2609,28 @@ function Challenge() {
 
                   {/* Completed */}
                   {selectedGroanChallenge?.status === 'completed' && (
-                    <div className="groan-completed-badge">
-                      ✅ Challenge Completed
-                      {selectedGroanChallenge.scary_score_after && (
-                        <div className="groan-completed-scores">
-                          <span>😰 {selectedGroanChallenge.scary_score_after}/10</span>
-                          <span>🎉 {selectedGroanChallenge.wahoo_score_after}/10</span>
-                        </div>
-                      )}
-                    </div>
+                    <>
+                      <div className="groan-completed-badge">
+                        ✅ Challenge Completed
+                        {selectedGroanChallenge.scary_score_after && (
+                          <div className="groan-completed-scores">
+                            <span>😰 {selectedGroanChallenge.scary_score_after}/10</span>
+                            <span>🎉 {selectedGroanChallenge.wahoo_score_after}/10</span>
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        className="groan-btn groan-btn-new-challenge"
+                        onClick={() => {
+                          // Clear current challenge to show new challenge form for same cell
+                          setSelectedGroanChallenge(null)
+                          setCustomChallengeText('')
+                          setThreePercentText('')
+                        }}
+                      >
+                        🎯 New Challenge
+                      </button>
+                    </>
                   )}
                 </div>
               </>
@@ -2531,6 +2672,27 @@ function Challenge() {
                       className="groan-slider"
                     />
                   </div>
+
+                  {/* 3% improvement toggle — only show if the challenge had a 3% item */}
+                  {selectedGroanChallenge?.description?.includes('3% improvement:') && (
+                    <div className="groan-three-percent-toggle">
+                      <label className="slider-label">Did you implement your 3% improvement?</label>
+                      <div className="groan-toggle-buttons">
+                        <button
+                          className={`groan-toggle-btn ${groanReflection.didThreePercent === true ? 'active yes' : ''}`}
+                          onClick={() => setGroanReflection(prev => ({ ...prev, didThreePercent: true }))}
+                        >
+                          Yes
+                        </button>
+                        <button
+                          className={`groan-toggle-btn ${groanReflection.didThreePercent === false ? 'active no' : ''}`}
+                          onClick={() => setGroanReflection(prev => ({ ...prev, didThreePercent: false }))}
+                        >
+                          No
+                        </button>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="groan-reflection-text">
                     <label>Quick reflection (optional)</label>

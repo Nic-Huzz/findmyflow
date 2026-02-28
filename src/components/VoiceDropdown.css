@@ -44,6 +44,20 @@
   }
 }
 
+.voice-pill.saved {
+  opacity: 0.6;
+  cursor: default;
+  border-color: #d1d5db;
+  background: #f9fafb;
+  color: #22c55e;
+}
+
+.voice-pill.saved.protective {
+  color: #22c55e;
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
 .voice-pill.active.essence {
   border-color: #5e17eb;
   background: #ede9fe;
