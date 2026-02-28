@@ -21,12 +21,17 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 1 | **Lock stages + tabs** — Lock all stages and tabs except for admin access. Only unlocked content visible to testers. | ⬜ |
-| 2 | **Choose one project for Business** — Pick the single project to use for the Business tab during testing | ⬜ |
-| 3 | **Share Your Feedback on all results pages** — Ensure every flow results page has a "Share Your Feedback" link/button | ⬜ |
-| 4 | **Fill in validation yourself** — Complete all validation forms with your own data as first tester | ⬜ |
-| 5 | **Facebook access** — Set up Facebook presence so content/links are visible and shareable | ⬜ |
-| 6 | **Add bonus quests** — (a) Quest asking users to fill in validation form. (b) Quest asking users to fill in feedback after each challenge + test all modules. Note: make the feedback dropdown component default to open (currently collapsed) so users see it immediately. | ⬜ |
+| 1 | **Lock stages + tabs** — Lock all stages and tabs except for admin access. Only unlocked content visible to testers. | ✅ |
+| 2 | **Choose one project for Business** — Pick the single project to use for the Business tab during testing | ✅ |
+| 3 | **Share Your Feedback on all results pages** — Ensure every flow results page has a "Share Your Feedback" link/button | ✅ |
+| 4 | **Fill in validation yourself** — Complete all validation forms with your own data as first tester | ✅ |
+| 5 | **Meta/Facebook presence** — Set up Facebook/Meta presence so content/links are visible and shareable + connect to Meta for newsfeed integration | ⬜ |
+| 6 | **Add bonus quests** — (a) Quest asking users to fill in validation form. (b) Quest asking users to fill in feedback after each challenge + test all modules. Note: make the feedback dropdown component default to open (currently collapsed) so users see it immediately. | ✅ |
+| 7 | **Make business modules (behind Stripe)** — Build out the business stage modules for the challenge system, gated behind Stripe payment | ⬜ |
+| 8 | **One free challenge per stage** — Each business module has one free challenge available in each stage | ⬜ |
+| 9 | **Business onboarding tab** — Move the business onboarding quiz into a dedicated business onboarding tab | ⬜ |
+| 10 | **Hero image upload** — Let users upload an image of themselves to create their own hero image | ⬜ |
+| 11 | **Update 7-day challenge scoring** — Remove Business + Bonus categories from scoring. Merge Voices into Healing category. | ⬜ |
 
 ---
 
