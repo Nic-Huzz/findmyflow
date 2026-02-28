@@ -19,6 +19,7 @@ import ChallengeOnboarding from './components/ChallengeOnboarding'
 import './components/ChallengeFilters.css' // R-type chips + frequency tabs styles (used inline now)
 import QuestCard from './components/QuestCard'
 import PlayListTab from './components/PlayListTab'
+import BusinessSetup from './components/BusinessSetup'
 import CompassCheckin from './components/CompassCheckin'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
@@ -285,6 +286,13 @@ function Challenge() {
     }
     return () => document.body.classList.remove('hide-bottom-toolbar')
   }, [showProjectSelector])
+
+  // Auto-select Setup tab when Business category is active but no project exists
+  useEffect(() => {
+    if (activeCategory === 'Business' && !selectedProject) {
+      setActiveStageTab(0.9)
+    }
+  }, [activeCategory, selectedProject])
 
   // Preload flow chunks on idle so "Start" taps are instant
   useEffect(() => { preloadChallengeFlows() }, [])
@@ -1718,15 +1726,14 @@ function Challenge() {
               />
             </>
           ) : (
-            <div className="no-project-prompt">
-              <p>Select a project to see stage-specific quests</p>
-              <button
-                className="select-project-btn"
-                onClick={() => setShowProjectSelector(true)}
-              >
-                Select Project
-              </button>
-            </div>
+            <ChallengeStageTabs
+              currentStage={0.9}
+              completedStages={[]}
+              activeTab={0.9}
+              onTabChange={setActiveStageTab}
+              flowFinderComplete={flowFinderComplete}
+              excludeStages={[0, 0.5]}
+            />
           )}
         </div>
       )}
@@ -2088,6 +2095,20 @@ function Challenge() {
           </div>
         )}
 
+        {/* Business Setup stage (0.9) */}
+        {activeCategory === 'Business' && Number(viewingStage) === 0.9 && (
+          <div className="quest-section">
+            <BusinessSetup
+              userId={user?.id}
+              existingProject={selectedProject}
+              onSetupComplete={(project) => {
+                handleProjectSelected(project)
+                setActiveStageTab(1) // Move to Validation after setup
+              }}
+            />
+          </div>
+        )}
+
         {/* Stage 8: CRM Link (no quests) */}
         {activeCategory === 'Business' && Number(viewingStage) === 8 && (
           <div className="quest-section">
@@ -2119,7 +2140,7 @@ function Challenge() {
         )}
 
         {/* Business Quests - Stages 1-7 */}
-        {activeCategory === 'Business' && Number(viewingStage) !== 8 && filteredQuests.length > 0 && (
+        {activeCategory === 'Business' && Number(viewingStage) !== 8 && Number(viewingStage) !== 0.9 && filteredQuests.length > 0 && (
           <div className="quest-section">
             <div className="quest-grid stagger-children-fast">
               {filteredQuests.map(quest => {
