@@ -2085,6 +2085,8 @@ function Challenge() {
                           plannedDay={getPlannedDay(quest.id)}
                           completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id).length : 0}
                           prelaunchLocked={PRELAUNCH_LOCKED}
+                          userId={user?.id}
+                          userArchetypes={userArchetypes}
                         />
                       )
                     })}
@@ -2178,6 +2180,8 @@ function Challenge() {
                     prelaunchLocked={PRELAUNCH_LOCKED}
                     paidLocked={isPaidQuest(quest) && !hasSubscription}
                     onUpgrade={handleUpgrade}
+                    userId={user?.id}
+                    userArchetypes={userArchetypes}
                   />
                 )
               })}
@@ -2237,6 +2241,8 @@ function Challenge() {
                     plannedDay={getPlannedDay(quest.id)}
                     completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id).length : 0}
                     prelaunchLocked={PRELAUNCH_LOCKED}
+                    userId={user?.id}
+                    userArchetypes={userArchetypes}
                   />
                 )
               })}
