@@ -1,0 +1,1578 @@
+/**
+ * PlayProfile.css — Founder DNA Quiz styles
+ * Scoped under .play-profile-quiz to avoid leaking into Challenge page
+ * Uses FindMyFlow brand: purple (#5e17eb) + gold (#E9A23B)
+ */
+
+/* ── Container ── */
+.play-profile-quiz {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 4px;
+}
+
+/* ── Step badge ── */
+.play-profile-quiz .pp-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: white;
+}
+
+/* ── Heading ── */
+.play-profile-quiz h1 {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 14px 0 8px;
+  color: #1a1a2e;
+}
+
+.play-profile-quiz h2 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1a1a2e;
+  margin-bottom: 16px;
+}
+
+.play-profile-quiz .pp-subtitle {
+  font-size: 15px;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+/* ── Gold CTA button ── */
+.play-profile-quiz .pp-btn-gold {
+  width: 100%;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.play-profile-quiz .pp-btn-gold:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.play-profile-quiz .pp-btn-gold:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Ghost / secondary button ── */
+.play-profile-quiz .pp-btn-ghost {
+  width: 100%;
+  padding: 12px 24px;
+  background: transparent;
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-profile-quiz .pp-btn-ghost:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+  background: rgba(94, 23, 235, 0.04);
+}
+
+/* ── Glass card (light theme) ── */
+.play-profile-quiz .pp-glass-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ── Game card grid ── */
+.play-profile-quiz .pp-game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 8px;
+}
+
+.play-profile-quiz .pp-game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 6px;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.play-profile-quiz .pp-game-card:hover {
+  border-color: #c4b5fd;
+  background: #faf5ff;
+  transform: translateY(-1px);
+}
+
+.play-profile-quiz .pp-game-card.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.08);
+  box-shadow: 0 0 0 1px #E9A23B;
+}
+
+.play-profile-quiz .pp-game-card .pp-game-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.play-profile-quiz .pp-game-card .pp-game-name {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #495057;
+}
+
+/* ── Category header ── */
+.play-profile-quiz .pp-category-header {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #5e17eb;
+  opacity: 0.7;
+  margin: 16px 0 8px;
+}
+
+/* ── Selection counter ── */
+.play-profile-quiz .pp-counter {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.play-profile-quiz .pp-counter.ready {
+  color: #E9A23B;
+}
+
+.play-profile-quiz .pp-counter.pending {
+  color: #adb5bd;
+}
+
+/* ── Slider ── */
+.play-profile-quiz .pp-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.play-profile-quiz .pp-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.play-profile-quiz .pp-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.play-profile-quiz .pp-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.3);
+}
+
+/* ── Slider card ── */
+.play-profile-quiz .pp-slider-card {
+  padding: 20px;
+}
+
+.play-profile-quiz .pp-slider-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #5e17eb;
+  opacity: 0.8;
+  margin-bottom: 12px;
+}
+
+.play-profile-quiz .pp-slider-description {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #495057;
+  min-height: 40px;
+  margin-bottom: 14px;
+}
+
+.play-profile-quiz .pp-slider-anchors {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.play-profile-quiz .pp-slider-anchor {
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.play-profile-quiz .pp-slider-anchor.active {
+  color: #E9A23B;
+  opacity: 1;
+}
+
+.play-profile-quiz .pp-slider-anchor.inactive {
+  color: #adb5bd;
+  opacity: 0.5;
+}
+
+.play-profile-quiz .pp-slider-markers {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  margin-top: 4px;
+}
+
+.play-profile-quiz .pp-slider-marker {
+  width: 2px;
+  height: 8px;
+  border-radius: 1px;
+  transition: background 0.2s;
+}
+
+/* ── Selectable card (stuck points, follow-up options) ── */
+.play-profile-quiz .pp-selectable-card {
+  padding: 14px 16px;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.play-profile-quiz .pp-selectable-card:hover {
+  border-color: #c4b5fd;
+  background: #faf5ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.08);
+}
+
+.play-profile-quiz .pp-selectable-card:active {
+  transform: translateY(0);
+}
+
+/* ── Stuck point icon ── */
+.play-profile-quiz .pp-stuck-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08), rgba(124, 58, 237, 0.08));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.play-profile-quiz .pp-sp-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 2px;
+}
+
+.play-profile-quiz .pp-sp-desc {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+/* ── Progress bar ── */
+.play-profile-quiz .pp-progress-bar {
+  height: 4px;
+  background: #e9ecef;
+  border-radius: 2px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.play-profile-quiz .pp-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* ── DNA Reveal ── */
+.play-profile-quiz .pp-dna-code {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.play-profile-quiz .pp-dna-digit {
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #E9A23B, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  animation: ppRevealDigit 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.play-profile-quiz .pp-archetype {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #1a1a2e;
+}
+
+.play-profile-quiz .pp-founder-card {
+  padding: 24px;
+  text-align: center;
+  animation: ppPulseGlow 3s ease-in-out infinite;
+}
+
+.play-profile-quiz .pp-founder-icon {
+  font-size: 52px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 4px 12px rgba(233, 162, 59, 0.3));
+}
+
+.play-profile-quiz .pp-founder-label {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5e17eb;
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.play-profile-quiz .pp-founder-name {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 4px;
+  color: #1a1a2e;
+}
+
+.play-profile-quiz .pp-founder-company {
+  font-size: 15px;
+  color: #6c757d;
+  margin-bottom: 16px;
+}
+
+.play-profile-quiz .pp-founder-quote {
+  font-size: 15px;
+  font-style: italic;
+  color: #495057;
+  line-height: 1.6;
+  padding: 12px 16px;
+  border-left: 3px solid #E9A23B;
+  text-align: left;
+  margin-bottom: 14px;
+  background: rgba(233, 162, 59, 0.04);
+  border-radius: 0 8px 8px 0;
+}
+
+.play-profile-quiz .pp-founder-bio {
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.6;
+  padding: 0 4px;
+  text-align: left;
+}
+
+/* Best match badge */
+.play-profile-quiz .pp-match-badge {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #E9A23B, #f59e0b);
+  color: white;
+}
+
+/* Founder selection carousel */
+.play-profile-quiz .pp-founder-carousel {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 2px 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.play-profile-quiz .pp-founder-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.play-profile-quiz .pp-founder-chip {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 2px solid #e9ecef;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+  position: relative;
+  font-family: inherit;
+}
+.play-profile-quiz .pp-founder-chip:hover {
+  border-color: #5e17eb;
+  transform: translateY(-2px);
+}
+.play-profile-quiz .pp-founder-chip.pp-chip-selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.06);
+  box-shadow: 0 2px 12px rgba(233, 162, 59, 0.2);
+}
+
+.play-profile-quiz .pp-chip-icon {
+  font-size: 24px;
+}
+.play-profile-quiz .pp-chip-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-align: center;
+  line-height: 1.2;
+}
+.play-profile-quiz .pp-chip-company {
+  font-size: 11px;
+  color: #6c757d;
+  text-align: center;
+}
+.play-profile-quiz .pp-chip-badge {
+  position: absolute;
+  top: -6px;
+  right: -4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #E9A23B, #f59e0b);
+  color: white;
+}
+
+/* Factor breakdown */
+.play-profile-quiz .pp-factor-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+}
+
+.play-profile-quiz .pp-factor-row:not(:last-child) {
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.play-profile-quiz .pp-factor-name {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.play-profile-quiz .pp-factor-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #E9A23B;
+}
+
+/* ── Summary card ── */
+.play-profile-quiz .pp-summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+.play-profile-quiz .pp-summary-label {
+  color: #6c757d;
+}
+
+.play-profile-quiz .pp-summary-value {
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+/* ── Story card ── */
+.play-profile-quiz .pp-story-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5e17eb;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.play-profile-quiz .pp-story-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 10px;
+  color: #1a1a2e;
+}
+
+.play-profile-quiz .pp-story-content {
+  font-size: 14px;
+  color: #495057;
+  line-height: 1.65;
+}
+
+.play-profile-quiz .pp-story-more {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5e17eb;
+  margin-top: 12px;
+  opacity: 0.8;
+}
+
+/* ── Follow-up option label ── */
+.play-profile-quiz .pp-option-letter {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5e17eb;
+  opacity: 0.6;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.play-profile-quiz .pp-option-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #495057;
+}
+
+.play-profile-quiz .pp-followup-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #5e17eb;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+/* ── Input dark (textarea) ── */
+.play-profile-quiz .pp-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #1a1a2e;
+  background: white;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.play-profile-quiz .pp-textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+/* ── Spinner ── */
+.play-profile-quiz .pp-spinner {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid #e9ecef;
+  border-top-color: #5e17eb;
+  animation: ppSpin 0.8s linear infinite;
+  margin: 0 auto 24px;
+}
+
+/* ── Copied toast ── */
+.play-profile-quiz .pp-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26, 26, 46, 0.9);
+  color: #E9A23B;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 50;
+}
+
+/* ── Animations ── */
+@keyframes ppRevealDigit {
+  from {
+    opacity: 0;
+    transform: scale(0.5) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes ppPulseGlow {
+  0%, 100% {
+    box-shadow: 0 2px 12px rgba(94, 23, 235, 0.08);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(94, 23, 235, 0.15), 0 0 0 1px rgba(94, 23, 235, 0.05);
+  }
+}
+
+@keyframes ppSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ppFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ppFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ppScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation utility classes — opacity: 0 prevents flash before delayed animations */
+.play-profile-quiz .pp-fade-in {
+  opacity: 0;
+  animation: ppFadeIn 0.4s ease-out forwards;
+}
+
+.play-profile-quiz .pp-fade-in-up {
+  opacity: 0;
+  animation: ppFadeInUp 0.5s ease-out forwards;
+}
+
+.play-profile-quiz .pp-scale-in {
+  opacity: 0;
+  animation: ppScaleIn 0.4s ease-out forwards;
+}
+
+/* Stagger delays */
+.play-profile-quiz .pp-stagger-1 { animation-delay: 0.05s; }
+.play-profile-quiz .pp-stagger-2 { animation-delay: 0.1s; }
+.play-profile-quiz .pp-stagger-3 { animation-delay: 0.15s; }
+.play-profile-quiz .pp-stagger-4 { animation-delay: 0.2s; }
+.play-profile-quiz .pp-stagger-5 { animation-delay: 0.25s; }
+.play-profile-quiz .pp-stagger-6 { animation-delay: 0.3s; }
+.play-profile-quiz .pp-stagger-7 { animation-delay: 0.35s; }
+.play-profile-quiz .pp-stagger-8 { animation-delay: 0.4s; }
+
+/* ── Sticky CTA ── */
+.play-profile-quiz .pp-sticky-cta {
+  position: sticky;
+  bottom: 16px;
+  padding-top: 20px;
+}
+
+/* ── Mobile adjustments ── */
+@media (max-width: 480px) {
+  .play-profile-quiz .pp-game-grid {
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    gap: 6px;
+  }
+
+  .play-profile-quiz .pp-game-card {
+    padding: 10px 4px;
+  }
+
+  .play-profile-quiz h1 {
+    font-size: 22px;
+  }
+
+  .play-profile-quiz .pp-dna-digit {
+    font-size: 36px;
+  }
+
+  .play-profile-quiz .pp-founder-name {
+    font-size: 24px;
+  }
+}
+
+/* ════════════════════════════════════════════
+   Phase 2: Dashboard, Diagnostic, Challenge, Rating
+   ════════════════════════════════════════════ */
+
+/* ── Dashboard DNA card ── */
+.play-profile-quiz .pp-dashboard-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 16px;
+}
+
+.play-profile-quiz .pp-dashboard-card .pp-dna-mini {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #E9A23B, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.play-profile-quiz .pp-dashboard-card .pp-founder-mini {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.play-profile-quiz .pp-dashboard-card .pp-archetype-mini {
+  font-size: 13px;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+/* ── Active challenge card ── */
+.play-profile-quiz .pp-active-challenge {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.04), rgba(233, 162, 59, 0.06));
+  border: 2px solid #E9A23B;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.play-profile-quiz .pp-active-challenge .pp-active-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #E9A23B;
+  margin-bottom: 8px;
+}
+
+.play-profile-quiz .pp-active-challenge .pp-active-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #495057;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Session history ── */
+.play-profile-quiz .pp-session-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.play-profile-quiz .pp-session-row:last-child {
+  border-bottom: none;
+}
+
+.play-profile-quiz .pp-session-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.play-profile-quiz .pp-session-stuck {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.play-profile-quiz .pp-session-date {
+  font-size: 11px;
+  color: #adb5bd;
+}
+
+.play-profile-quiz .pp-mini-bars {
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+}
+
+.play-profile-quiz .pp-mini-bar {
+  width: 4px;
+  border-radius: 2px;
+  min-height: 4px;
+}
+
+.play-profile-quiz .pp-mini-bar.resistance { background: #ef4444; }
+.play-profile-quiz .pp-mini-bar.engagement { background: #E9A23B; }
+.play-profile-quiz .pp-mini-bar.shift { background: #5e17eb; }
+
+/* ── Challenge type badge ── */
+.play-profile-quiz .pp-type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.play-profile-quiz .pp-type-badge.do-it {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+.play-profile-quiz .pp-type-badge.cut-it {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+}
+
+.play-profile-quiz .pp-type-badge.think-it {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+.play-profile-quiz .pp-type-badge.make-it {
+  background: rgba(94, 23, 235, 0.12);
+  color: #5e17eb;
+}
+
+/* ── AI Diagnostic conversation ── */
+.play-profile-quiz .pp-chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.play-profile-quiz .pp-chat-ai {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 16px 16px 16px 4px;
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #495057;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.play-profile-quiz .pp-chat-user {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: white;
+  border-radius: 16px 16px 4px 16px;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  align-self: flex-end;
+  max-width: 85%;
+}
+
+.play-profile-quiz .pp-response-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.play-profile-quiz .pp-response-card {
+  padding: 12px 16px;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.play-profile-quiz .pp-response-card:hover {
+  border-color: #c4b5fd;
+  background: #faf5ff;
+}
+
+.play-profile-quiz .pp-text-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.play-profile-quiz .pp-text-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1a1a2e;
+  background: white;
+}
+
+.play-profile-quiz .pp-text-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.play-profile-quiz .pp-send-btn {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.play-profile-quiz .pp-send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Thinking dots animation */
+.play-profile-quiz .pp-thinking {
+  display: flex;
+  gap: 6px;
+  padding: 14px 16px;
+}
+
+.play-profile-quiz .pp-thinking-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c4b5fd;
+  animation: ppThinkingPulse 1.4s ease-in-out infinite;
+}
+
+.play-profile-quiz .pp-thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+.play-profile-quiz .pp-thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes ppThinkingPulse {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1); }
+}
+
+/* Diagnosis card */
+.play-profile-quiz .pp-diagnosis-card {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.04), rgba(233, 162, 59, 0.06));
+  border: 1px solid rgba(94, 23, 235, 0.15);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-top: 16px;
+}
+
+.play-profile-quiz .pp-diagnosis-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5e17eb;
+  margin-bottom: 8px;
+}
+
+.play-profile-quiz .pp-diagnosis-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1a1a2e;
+  font-weight: 500;
+}
+
+/* ── Challenge Delivery ── */
+.play-profile-quiz .pp-challenge-section {
+  margin-bottom: 20px;
+}
+
+.play-profile-quiz .pp-challenge-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.play-profile-quiz .pp-challenge-mirror .pp-challenge-label { color: #5e17eb; }
+.play-profile-quiz .pp-challenge-bridge .pp-challenge-label { color: #E9A23B; }
+.play-profile-quiz .pp-challenge-action .pp-challenge-label { color: #16a34a; }
+
+.play-profile-quiz .pp-challenge-mirror {
+  background: white;
+  border-left: 4px solid #5e17eb;
+  border-radius: 0 14px 14px 0;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+
+.play-profile-quiz .pp-challenge-bridge {
+  background: white;
+  border-left: 4px solid #E9A23B;
+  border-radius: 0 14px 14px 0;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+
+.play-profile-quiz .pp-challenge-action {
+  background: white;
+  border: 2px solid #E9A23B;
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.12);
+}
+
+.play-profile-quiz .pp-challenge-content {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #495057;
+}
+
+/* ── Rating ── */
+.play-profile-quiz .pp-rating-section {
+  margin-bottom: 24px;
+}
+
+.play-profile-quiz .pp-rating-question {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+}
+
+.play-profile-quiz .pp-rating-scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.play-profile-quiz .pp-rating-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.play-profile-quiz .pp-rating-option:hover {
+  border-color: #c4b5fd;
+}
+
+.play-profile-quiz .pp-rating-option.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+}
+
+.play-profile-quiz .pp-rating-emoji {
+  font-size: 24px;
+}
+
+.play-profile-quiz .pp-rating-number {
+  font-size: 11px;
+  font-weight: 600;
+  color: #adb5bd;
+}
+
+.play-profile-quiz .pp-rating-option.selected .pp-rating-number {
+  color: #5e17eb;
+}
+
+/* ── Empty state ── */
+.play-profile-quiz .pp-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.play-profile-quiz .pp-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+/* ── Mobile adjustments (Phase 2) ── */
+@media (max-width: 480px) {
+  .play-profile-quiz .pp-chat-user {
+    max-width: 90%;
+  }
+
+  .play-profile-quiz .pp-rating-emoji {
+    font-size: 20px;
+  }
+
+  .play-profile-quiz .pp-rating-option {
+    padding: 8px 2px;
+  }
+}
+
+/* ════════════════════════════════════════════
+   Dark Purple Theme — Flow Page (/play-profile)
+   Matches money-model / attraction-offer style
+   ════════════════════════════════════════════ */
+
+.pp-flow-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  padding: 24px 16px 100px;
+  color: white;
+}
+
+.pp-flow-page .play-profile-quiz {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Typography ── */
+.pp-flow-page .play-profile-quiz h1,
+.pp-flow-page .play-profile-quiz h2 {
+  color: white;
+}
+
+.pp-flow-page .play-profile-quiz .pp-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Buttons ── */
+.pp-flow-page .play-profile-quiz .pp-btn-ghost {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pp-flow-page .play-profile-quiz .pp-btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Cards (glass → frosted dark) ── */
+.pp-flow-page .play-profile-quiz .pp-glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+/* ── Game cards ── */
+.pp-flow-page .play-profile-quiz .pp-game-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pp-flow-page .play-profile-quiz .pp-game-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.pp-flow-page .play-profile-quiz .pp-game-card.selected {
+  background: rgba(233, 162, 59, 0.15);
+  border-color: #E9A23B;
+  box-shadow: 0 0 0 1px #E9A23B;
+}
+
+.pp-flow-page .play-profile-quiz .pp-game-name {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Category header ── */
+.pp-flow-page .play-profile-quiz .pp-category-header {
+  color: #E9A23B;
+  opacity: 1;
+}
+
+/* ── Counter ── */
+.pp-flow-page .play-profile-quiz .pp-counter.pending {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Sliders ── */
+.pp-flow-page .play-profile-quiz .pp-slider {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.pp-flow-page .play-profile-quiz .pp-slider::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+}
+
+.pp-flow-page .play-profile-quiz .pp-slider::-moz-range-thumb {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+}
+
+.pp-flow-page .play-profile-quiz .pp-slider-label {
+  color: #E9A23B;
+  opacity: 1;
+}
+
+.pp-flow-page .play-profile-quiz .pp-slider-description {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pp-flow-page .play-profile-quiz .pp-slider-anchor.inactive {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Selectable cards (stuck points, follow-up options) ── */
+.pp-flow-page .play-profile-quiz .pp-selectable-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pp-flow-page .play-profile-quiz .pp-selectable-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: none;
+}
+
+.pp-flow-page .play-profile-quiz .pp-stuck-icon {
+  background: rgba(255, 255, 255, 0.08);
+}
+.pp-flow-page .play-profile-quiz .pp-sp-name {
+  color: white;
+}
+.pp-flow-page .play-profile-quiz .pp-sp-desc {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Follow-up options ── */
+.pp-flow-page .play-profile-quiz .pp-option-letter {
+  color: #E9A23B;
+  opacity: 0.8;
+}
+.pp-flow-page .play-profile-quiz .pp-option-text {
+  color: rgba(255, 255, 255, 0.85);
+}
+.pp-flow-page .play-profile-quiz .pp-followup-label {
+  color: #E9A23B;
+  opacity: 0.7;
+}
+
+/* ── Progress bar ── */
+.pp-flow-page .play-profile-quiz .pp-progress-bar {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── DNA Reveal ── */
+.pp-flow-page .play-profile-quiz .pp-archetype {
+  color: white;
+}
+
+.pp-flow-page .play-profile-quiz .pp-founder-label {
+  color: #E9A23B;
+  opacity: 1;
+}
+
+.pp-flow-page .play-profile-quiz .pp-founder-name {
+  color: white;
+}
+
+.pp-flow-page .play-profile-quiz .pp-founder-company {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pp-flow-page .play-profile-quiz .pp-founder-quote {
+  color: rgba(255, 255, 255, 0.85);
+  border-left-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.08);
+}
+
+.pp-flow-page .play-profile-quiz .pp-founder-bio {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pp-flow-page .play-profile-quiz .pp-founder-card {
+  animation: ppFadeInUp 0.5s ease-out forwards;
+  box-shadow: none;
+}
+
+/* Carousel chips - dark theme */
+.pp-flow-page .play-profile-quiz .pp-founder-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.pp-flow-page .play-profile-quiz .pp-founder-chip:hover {
+  border-color: rgba(233, 162, 59, 0.5);
+}
+.pp-flow-page .play-profile-quiz .pp-founder-chip.pp-chip-selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.12);
+}
+.pp-flow-page .play-profile-quiz .pp-chip-name {
+  color: white;
+}
+.pp-flow-page .play-profile-quiz .pp-chip-company {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Factor rows ── */
+.pp-flow-page .play-profile-quiz .pp-factor-row:not(:last-child) {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.pp-flow-page .play-profile-quiz .pp-factor-name {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Summary ── */
+.pp-flow-page .play-profile-quiz .pp-summary-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pp-flow-page .play-profile-quiz .pp-summary-value {
+  color: white;
+}
+
+/* ── Story card ── */
+.pp-flow-page .play-profile-quiz .pp-story-label {
+  color: #E9A23B;
+  opacity: 1;
+}
+
+.pp-flow-page .play-profile-quiz .pp-story-title {
+  color: white;
+}
+
+.pp-flow-page .play-profile-quiz .pp-story-content {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.pp-flow-page .play-profile-quiz .pp-story-more {
+  color: #E9A23B;
+  opacity: 1;
+}
+
+/* ── Textarea ── */
+.pp-flow-page .play-profile-quiz .pp-textarea {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.pp-flow-page .play-profile-quiz .pp-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.pp-flow-page .play-profile-quiz .pp-textarea:focus {
+  border-color: #E9A23B;
+}
+
+/* ── Spinner ── */
+.pp-flow-page .play-profile-quiz .pp-spinner {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: #E9A23B;
+}
+
+/* ── Reveal label ── */
+.play-profile-quiz .pp-reveal-label {
+  color: #6c757d;
+}
+
+.pp-flow-page .play-profile-quiz .pp-reveal-label {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Badge ── */
+.pp-flow-page .play-profile-quiz .pp-badge {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1a1a2e;
+}
+
+/* ── AI Diagnostic chat ── */
+.pp-flow-page .play-profile-quiz .pp-chat-ai {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  box-shadow: none;
+}
+
+.pp-flow-page .play-profile-quiz .pp-response-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pp-flow-page .play-profile-quiz .pp-response-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.pp-flow-page .play-profile-quiz .pp-text-input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.pp-flow-page .play-profile-quiz .pp-text-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.pp-flow-page .play-profile-quiz .pp-text-input:focus {
+  border-color: #E9A23B;
+}
+
+.pp-flow-page .play-profile-quiz .pp-thinking-dot {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Diagnosis card ── */
+.pp-flow-page .play-profile-quiz .pp-diagnosis-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.pp-flow-page .play-profile-quiz .pp-diagnosis-label {
+  color: #E9A23B;
+}
+
+.pp-flow-page .play-profile-quiz .pp-diagnosis-text {
+  color: white;
+}
+
+/* ── Challenge Delivery ── */
+.pp-flow-page .play-profile-quiz .pp-challenge-mirror {
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: rgba(255, 255, 255, 0.3);
+}
+
+.pp-flow-page .play-profile-quiz .pp-challenge-bridge {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.pp-flow-page .play-profile-quiz .pp-challenge-action {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: #E9A23B;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.15);
+}
+
+.pp-flow-page .play-profile-quiz .pp-challenge-content {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pp-flow-page .play-profile-quiz .pp-challenge-mirror .pp-challenge-label { color: rgba(255, 255, 255, 0.5); }
+.pp-flow-page .play-profile-quiz .pp-challenge-bridge .pp-challenge-label { color: #E9A23B; }
+.pp-flow-page .play-profile-quiz .pp-challenge-action .pp-challenge-label { color: #E9A23B; }
+
+/* ── Rating ── */
+.pp-flow-page .play-profile-quiz .pp-rating-question {
+  color: white;
+}
+
+.pp-flow-page .play-profile-quiz .pp-rating-option {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.pp-flow-page .play-profile-quiz .pp-rating-option:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.pp-flow-page .play-profile-quiz .pp-rating-option.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.12);
+}
+
+.pp-flow-page .play-profile-quiz .pp-rating-number {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.pp-flow-page .play-profile-quiz .pp-rating-option.selected .pp-rating-number {
+  color: #E9A23B;
+}
+
+/* ── Type badges (keep readable on dark) ── */
+.pp-flow-page .play-profile-quiz .pp-type-badge.do-it {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.pp-flow-page .play-profile-quiz .pp-type-badge.cut-it {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.pp-flow-page .play-profile-quiz .pp-type-badge.think-it {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.pp-flow-page .play-profile-quiz .pp-type-badge.make-it {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c4b5fd;
+}
+
+/* ── Mobile (dark theme) ── */
+@media (max-width: 480px) {
+  .pp-flow-page {
+    padding: 16px 12px 80px;
+  }
+}
+
+/* ── iOS Safe Area ── */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .pp-flow-page {
+    padding-top: calc(24px + env(safe-area-inset-top));
+  }
+}

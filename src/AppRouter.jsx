@@ -142,6 +142,7 @@ const LetsPlayFlow = lazyRetry(() => import('./flows/LetsPlayFlow'))
 const LetsPlayReviewFlow = lazyRetry(() => import('./flows/LetsPlayReviewFlow'))
 const SelfTestFlow = lazyRetry(() => import('./flows/SelfTestFlow'))
 const SelfTestReviewFlow = lazyRetry(() => import('./flows/SelfTestReviewFlow'))
+const PlayProfileFlow = lazyRetry(() => import('./flows/PlayProfileFlow'))
 
 // Lazy-loaded flows - Healing & Nervous System
 const HealingCompass = lazyRetry(() => import('./flows/HealingCompass'))
@@ -336,6 +337,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/mind-space' ||
                         location.pathname === '/play-list-finder' ||
                         location.pathname === '/persona-identifier' ||
+                        location.pathname === '/play-profile' ||
                         location.pathname === '/lets-play' ||
                         location.pathname === '/lets-play-review' ||
                         location.pathname === '/self-test' ||
@@ -662,6 +664,11 @@ function AppRouter() {
             <Route path="/persona-identifier" element={
               <AuthGate>
                 <PersonaIdentifierFlow />
+              </AuthGate>
+            } />
+            <Route path="/play-profile" element={
+              <AuthGate>
+                <PlayProfileFlow />
               </AuthGate>
             } />
             <Route path="/flow-finder-explainer" element={
