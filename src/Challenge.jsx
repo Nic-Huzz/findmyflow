@@ -19,6 +19,7 @@ import ChallengeOnboarding from './components/ChallengeOnboarding'
 import './components/ChallengeFilters.css' // R-type chips + frequency tabs styles (used inline now)
 import QuestCard from './components/QuestCard'
 import PlayListTab from './components/PlayListTab'
+import CompassCheckin from './components/CompassCheckin'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
 import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
@@ -119,6 +120,8 @@ function Challenge() {
     setHealingSubTab,
     bonusSubTab,
     setBonusSubTab,
+    playlistSubTab,
+    setPlaylistSubTab,
     userArchetypes,
     weeklyPlan,
     showWeeklyPlanning,
@@ -211,6 +214,9 @@ function Challenge() {
   const [groanMatrixKey, setGroanMatrixKey] = useState(0) // Used to force matrix refresh
   const [customChallengeText, setCustomChallengeText] = useState('')
   const [groanCellContext, setGroanCellContext] = useState(null) // Cell data when opening popup without a challenge
+
+  // Play-list: compass check-in after challenge completion
+  const [groanCompassStep, setGroanCompassStep] = useState(false)
 
   // Play-list: problem/persona mapping for skills-only matrix
   const [mappedProblemId, setMappedProblemId] = useState('')
@@ -1071,12 +1077,42 @@ function Challenge() {
     }
   }
 
+  // Build enriched cell context with Play-list mapping data
+  const getEnrichedCellContext = () => {
+    if (!groanCellContext) return null
+    // When on Play-list and user has mapped a problem, transform to skill_x_problem
+    if (activeCategory === 'Play-list' && groanCellContext.sourceType === 'skill' && mappedProblemId && mappedProblemId !== 'not_specified') {
+      const problem = mappedProblemId === 'custom'
+        ? { id: null, label: customProblem || 'Custom problem' }
+        : flowFinderData?.problems?.find(p => p.id === mappedProblemId)
+      const persona = mappedPersonaId === 'custom'
+        ? { id: null, label: customPersona || 'Custom persona' }
+        : mappedPersonaId && mappedPersonaId !== 'not_specified'
+          ? flowFinderData?.personas?.find(p => p.id === mappedPersonaId)
+          : null
+      return {
+        ...groanCellContext,
+        sourceType: 'skill_x_problem',
+        skillId: groanCellContext.sourceId,
+        skillLabel: groanCellContext.sourceLabel,
+        skillInsight: groanCellContext.sourceInsight || '',
+        problemId: problem?.id || null,
+        problemLabel: problem?.cluster_label || problem?.label || customProblem,
+        problemInsight: '',
+        personaId: persona?.id || null,
+        personaLabel: persona?.cluster_label || persona?.label || null,
+      }
+    }
+    return groanCellContext
+  }
+
   // Generate challenge via AI from within the popup
   const handleGenerateFromPopup = async () => {
     if (!groanCellContext) return
     setGroanChallengeLoading(true)
     try {
-      const result = await handleGenerateChallenge(groanCellContext)
+      const enrichedContext = getEnrichedCellContext()
+      const result = await handleGenerateChallenge(enrichedContext)
       if (result?.title) {
         // Fetch the newly created challenge from DB
         const { data: newChallenges } = await supabase
@@ -1120,7 +1156,7 @@ function Challenge() {
         }))
       } else {
         // Create a new challenge from cell context with custom text
-        const ctx = groanCellContext
+        const ctx = getEnrichedCellContext() || groanCellContext
         const isSkillProblem = ctx.sourceType === 'skill_x_problem'
         let saveResult
         if (isSkillProblem) {
@@ -1245,15 +1281,45 @@ function Challenge() {
 
       // Trigger confetti
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
-      // Reset and close modal, refresh matrix
-      setGroanReflectionStep(false)
-      setSelectedGroanChallenge(null)
-      setGroanMatrixKey(prev => prev + 1)
+
+      // Play-list: show compass check-in before closing
+      if (activeCategory === 'Play-list') {
+        setGroanReflectionStep(false)
+        setGroanCompassStep(true)
+        // Don't close modal yet — compass step shows next
+      } else {
+        // Reset and close modal, refresh matrix
+        setGroanReflectionStep(false)
+        setSelectedGroanChallenge(null)
+        setGroanMatrixKey(prev => prev + 1)
+      }
     } catch (err) {
       console.error('Error completing challenge:', err)
     } finally {
       setGroanChallengeLoading(false)
     }
+  }
+
+  // Handle compass check-in after Play-list challenge completion
+  const handleCompassAfterGroan = async (compassData) => {
+    try {
+      await handleFlowCompassCompletion(
+        user.id,
+        progress?.challenge_instance_id,
+        {
+          ...compassData,
+          project_id: selectedProject?.id || null,
+        },
+        selectedProject?.id
+      )
+    } catch (err) {
+      console.warn('Error saving compass after groan:', err)
+    }
+    // Close everything and refresh matrix
+    setGroanCompassStep(false)
+    setSelectedGroanChallenge(null)
+    setGroanCellContext(null)
+    setGroanMatrixKey(prev => prev + 1)
   }
 
   // Handle regenerating a challenge (generate new first, then delete old)
@@ -1317,7 +1383,13 @@ function Challenge() {
     setSelectedGroanChallenge(null)
     setGroanCellContext(null)
     setGroanReflectionStep(false)
+    setGroanCompassStep(false)
     setCustomChallengeText('')
+    // Reset Play-list mapping state
+    setMappedProblemId('')
+    setMappedPersonaId('')
+    setCustomProblem('')
+    setCustomPersona('')
   }
 
   // Determine the current viewing stage (needed for Business filtering)
@@ -1334,12 +1406,10 @@ function Challenge() {
     selectedProject?.current_stage ?? 0
   )
 
-  // Deep Dive quest IDs for Flow Finder (used by Play-list tab)
-  const DEEP_DIVE_QUEST_IDS = ['flow_finder_skills', 'flow_finder_problems', 'flow_finder_persona', 'flow_finder_integration']
-
-  // Extract Flow Finder quests for the Play-list tab (allow archived through)
+  // Extract all Flow Finder quests for the Play-list > Flow Finder sub-tab
+  // Include flow_finder_skills despite being archived (shown under Skills group)
   const flowFinderQuests = (challengeData?.quests || []).filter(q =>
-    DEEP_DIVE_QUEST_IDS.includes(q.id)
+    q.type === 'Flow Finder' && (!q.archived || q.id === 'flow_finder_skills')
   )
 
   // Filter quests by the active category tab (exclude archived quests)
@@ -1831,10 +1901,43 @@ function Challenge() {
           </div>
         )}
 
+        {/* Stage-style sub-tabs for Play-list: Flow Finder | Play-list | Play Profile */}
+        {activeCategory === 'Play-list' && (() => {
+          const playlistTabs = [
+            { key: 'flow-finder', icon: '🧭', label: 'Flow Finder' },
+            { key: 'playlist', icon: '🎯', label: 'Play-list' },
+            { key: 'play-profile', icon: '🏆', label: 'Play Profile' },
+          ]
+          return (
+            <div className="stage-tabs-container">
+              <div className="stage-tabs" style={{ justifyContent: 'center' }}>
+                {playlistTabs.map(tab => {
+                  const isActive = playlistSubTab === tab.key
+                  const activeStyles = isActive
+                    ? { background: '#5e17eb', borderColor: '#5e17eb', color: 'white' }
+                    : {}
+                  return (
+                    <button
+                      key={tab.key}
+                      className={`stage-tab ${isActive ? 'active' : ''}`}
+                      style={{ '--stage-color': '#5e17eb', ...activeStyles }}
+                      onClick={() => setPlaylistSubTab(tab.key)}
+                    >
+                      <span className="tab-icon">{tab.icon}</span>
+                      <span className="tab-label">{tab.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })()}
+
         {/* Play-list Tab — Flow Finder + Courage Matrix + Voice Logging */}
         {activeCategory === 'Play-list' && (
           <PlayListTab
             userId={user?.id}
+            activeSubTab={playlistSubTab}
             flowFinderQuests={flowFinderQuests}
             flowFinderComplete={flowFinderComplete}
             completions={completions}
@@ -1968,8 +2071,38 @@ function Challenge() {
           </div>
         )}
 
-        {/* Business Quests - Stages 1-8 */}
-        {activeCategory === 'Business' && filteredQuests.length > 0 && (
+        {/* Stage 8: CRM Link (no quests) */}
+        {activeCategory === 'Business' && Number(viewingStage) === 8 && (
+          <div className="quest-section">
+            <div className="crm-link-card" style={{
+              background: 'rgba(255,255,255,0.05)',
+              borderRadius: '16px',
+              padding: '40px 24px',
+              textAlign: 'center',
+              border: '1px solid rgba(233,162,59,0.3)'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
+              <h3 style={{ color: '#E9A23B', marginBottom: '8px', fontSize: '1.2rem' }}>FindMyFlow CRM</h3>
+              <p style={{ color: '#adb5bd', marginBottom: '24px', fontSize: '0.95rem' }}>
+                Track your funnel, manage contacts, and run your business from the Command Center.
+              </p>
+              <a href="/crm" className="primary-button" style={{
+                background: '#E9A23B',
+                color: '#212529',
+                padding: '12px 32px',
+                borderRadius: '8px',
+                fontWeight: '600',
+                textDecoration: 'none',
+                display: 'inline-block'
+              }}>
+                Click Here For FindMyFlow CRM
+              </a>
+            </div>
+          </div>
+        )}
+
+        {/* Business Quests - Stages 1-7 */}
+        {activeCategory === 'Business' && Number(viewingStage) !== 8 && filteredQuests.length > 0 && (
           <div className="quest-section">
             <div className="quest-grid stagger-children-fast">
               {filteredQuests.map(quest => {
@@ -2099,19 +2232,16 @@ function Challenge() {
           <div className="groan-modal" onClick={e => e.stopPropagation()}>
             <button className="groan-modal-close" onClick={closeGroanModal}>×</button>
 
-            {!groanReflectionStep ? (
+            {groanCompassStep ? (
+              <CompassCheckin
+                onComplete={handleCompassAfterGroan}
+                onSkip={closeGroanModal}
+                challengeTitle={selectedGroanChallenge?.title}
+              />
+            ) : !groanReflectionStep ? (
               <>
                 {/* Header with layer badge */}
                 <div className="groan-modal-header">
-                  {(selectedGroanChallenge?.visibility_layer || groanCellContext?.visibilityLayer) && (
-                    <span className="groan-modal-layer">
-                      {(selectedGroanChallenge?.visibility_layer || groanCellContext?.visibilityLayer).toUpperCase()}
-                    </span>
-                  )}
-                  {(selectedGroanChallenge?.skill_cluster_id || groanCellContext?.sourceType === 'skill_x_problem') && (
-                    <span className="groan-modal-layer groan-modal-layer-sp">SKILL × PROBLEM</span>
-                  )}
-
                   {/* Show challenge title if we have one, otherwise show layer explanation */}
                   {selectedGroanChallenge ? (
                     <h2>{selectedGroanChallenge.title}</h2>
@@ -2180,10 +2310,60 @@ function Challenge() {
                   </div>
                 )}
 
+                {/* Play-list: Required problem/persona mapping for skills-only matrix */}
+                {activeCategory === 'Play-list' && !selectedGroanChallenge && groanCellContext?.sourceType === 'skill' && groanCellContext?.visibilityLayer && (
+                  <div className="groan-mapping-step">
+                    <label className="groan-custom-label">Which problem does this skill address?</label>
+                    <select
+                      className="groan-mapping-select"
+                      value={mappedProblemId}
+                      onChange={(e) => setMappedProblemId(e.target.value)}
+                    >
+                      <option value="not_specified">Not specified</option>
+                      {flowFinderData?.problems?.map(p => (
+                        <option key={p.id} value={p.id}>{p.cluster_label}</option>
+                      ))}
+                      <option value="custom">Enter custom...</option>
+                    </select>
+                    {mappedProblemId === 'custom' && (
+                      <input
+                        className="groan-custom-input"
+                        type="text"
+                        placeholder="Describe the problem..."
+                        value={customProblem}
+                        onChange={(e) => setCustomProblem(e.target.value)}
+                      />
+                    )}
+
+                    <label className="groan-custom-label" style={{ marginTop: '0.75rem' }}>Who is this for?</label>
+                    <select
+                      className="groan-mapping-select"
+                      value={mappedPersonaId}
+                      onChange={(e) => setMappedPersonaId(e.target.value)}
+                    >
+                      <option value="not_specified">Not specified</option>
+                      {flowFinderData?.personas?.map(p => (
+                        <option key={p.id} value={p.id}>{p.cluster_label}</option>
+                      ))}
+                      <option value="custom">Enter custom...</option>
+                    </select>
+                    {mappedPersonaId === 'custom' && (
+                      <input
+                        className="groan-custom-input"
+                        type="text"
+                        placeholder="Describe the persona..."
+                        value={customPersona}
+                        onChange={(e) => setCustomPersona(e.target.value)}
+                      />
+                    )}
+                  </div>
+                )}
+
                 {/* Custom challenge input + Generate AI — shown when layer is selected and no challenge or before accepting */}
                 {(groanCellContext?.visibilityLayer || selectedGroanChallenge) && (!selectedGroanChallenge || (!selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed')) && (
                   <div className="groan-custom-challenge">
                     <label className="groan-custom-label">Enter your own here:</label>
+                    <p className="groan-custom-hint">How can you make this 3% better?</p>
                     <input
                       type="text"
                       className="groan-custom-input"

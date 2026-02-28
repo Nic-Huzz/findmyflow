@@ -213,7 +213,9 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What did you improve by 3%?",
-      "learnMore": "The 3% rule focuses on marginal gains as a recipe for success instead of massive transformation. These small consistent improvements compound exponentially.\n\nInstead of 'I need to completely overhaul my website,' you ask 'What's 3% better?' Maybe it's improving one headline, simplifying your offer, or speeding up your response time. Tiny improvements sustained over time create massive growth."
+      "learnMore": "The 3% rule focuses on marginal gains as a recipe for success instead of massive transformation. These small consistent improvements compound exponentially.\n\nInstead of 'I need to completely overhaul my website,' you ask 'What's 3% better?' Maybe it's improving one headline, simplifying your offer, or speeding up your response time. Tiny improvements sustained over time create massive growth.",
+      "archived": true,
+      "archived_reason": "Stage 8 simplified to CRM link - Feb 2026"
     },
     {
       "id": "reconnect_groan_wheel",
@@ -633,7 +635,9 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What were you doing?",
-      "learnMore": "Tracking when your essence shows up helps you identify how aligned your work is with your essence.\n\nYou're training your awareness so you can show-up from this place more often."
+      "learnMore": "Tracking when your essence shows up helps you identify how aligned your work is with your essence.\n\nYou're training your awareness so you can show-up from this place more often.",
+      "archived": true,
+      "archived_reason": "Moved to Play-list tab voice logging - Feb 2026"
     },
     {
       "id": "tracker_protective_voice",
@@ -645,7 +649,9 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What caused it to arise?",
-      "learnMore": "Your protective voice is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain.\n\nRecognising when it activates is the first step to changing how we show up in the future."
+      "learnMore": "Your protective voice is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain.\n\nRecognising when it activates is the first step to changing how we show up in the future.",
+      "archived": true,
+      "archived_reason": "Moved to Play-list tab voice logging - Feb 2026"
     },
     {
       "id": "recognise_flow_update",
@@ -657,7 +663,9 @@
       "points": 4,
       "inputType": "flow_compass",
       "placeholder": "What happened? What direction did you flow?",
-      "learnMore": "Internal flow = excitement or tired.\n\nDoes the thought of the action excite you or tire you?\n\nExternal flow = Ease or resistance.\n\nWhen you took action did your intentions came to life as expected and did serendipity's occur? This is Ease.\n\nOr did it not go as expected and did you face unexpected challenges? This is resistance.\n\nNorth = Action excited you and it flowed with ease. This is a signal for continuing.\n\nEast = Action excited you but you faced resistance. This is a signal that a pivot is required.\n\nSouth = Action felt tiring and you faced resistance. This is a signal that you need to rest and / or stop.\n\nWest = Action felt tiring but it led to a new opportunity dropping in. This is a single to potentially explore a new opportunity."
+      "learnMore": "Internal flow = excitement or tired.\n\nDoes the thought of the action excite you or tire you?\n\nExternal flow = Ease or resistance.\n\nWhen you took action did your intentions came to life as expected and did serendipity's occur? This is Ease.\n\nOr did it not go as expected and did you face unexpected challenges? This is resistance.\n\nNorth = Action excited you and it flowed with ease. This is a signal for continuing.\n\nEast = Action excited you but you faced resistance. This is a signal that a pivot is required.\n\nSouth = Action felt tiring and you faced resistance. This is a signal that you need to rest and / or stop.\n\nWest = Action felt tiring but it led to a new opportunity dropping in. This is a single to potentially explore a new opportunity.",
+      "archived": true,
+      "archived_reason": "Tracker tab removed, compass check-in now follows Play-list challenges - Feb 2026"
     },
     {
       "id": "recognise_weekly_flow_update",
@@ -1936,7 +1944,9 @@
       "flow_id": "funnel_calculator",
       "flow_route": "/funnel-calculator",
       "counts_toward_graduation": false,
-      "learnMore": "The Funnel Calculator helps you track and optimize your customer journey from awareness to continuity.\n\nUse it in two modes:\n• **Actual Mode**: Track real numbers from your campaigns\n• **Planner Mode**: Project outcomes using industry-average conversion rates\n\nKey metrics tracked:\n• Awareness → Attraction Offer (5% avg)\n• Attraction → Lead Magnet (25% avg)\n• Lead Magnet → Nurture (40% avg)\n• Nurture → Core Sale (5% avg)\n• Core → Upsell/Downsell/Continuity\n\nUnderstanding your funnel helps you identify where to focus optimization efforts."
+      "learnMore": "The Funnel Calculator helps you track and optimize your customer journey from awareness to continuity.\n\nUse it in two modes:\n• **Actual Mode**: Track real numbers from your campaigns\n• **Planner Mode**: Project outcomes using industry-average conversion rates\n\nKey metrics tracked:\n• Awareness → Attraction Offer (5% avg)\n• Attraction → Lead Magnet (25% avg)\n• Lead Magnet → Nurture (40% avg)\n• Nurture → Core Sale (5% avg)\n• Core → Upsell/Downsell/Continuity\n\nUnderstanding your funnel helps you identify where to focus optimization efforts.",
+      "archived": true,
+      "archived_reason": "Stage 8 simplified to CRM link - Feb 2026"
     },
     {
       "id": "flow_funnel_baseline",
@@ -1951,7 +1961,9 @@
       "flow_id": "funnel_baseline",
       "flow_route": "/funnel-baseline",
       "counts_toward_graduation": false,
-      "learnMore": "Weekly tracking is the rhythm of growth.\n\n**What you'll track:**\n• Traffic source (where leads come from)\n• Top of funnel (awareness, attraction)\n• Middle of funnel (leads, nurture)\n• Bottom of funnel (sales, upsells, continuity)\n\n**Why weekly?**\nConsistent measurement lets you:\n• Spot trends early\n• Know what's actually working\n• Make data-driven decisions\n\nAfter 12 weeks, you'll have invaluable data about what moves the needle in your business.\n\n**CRM Integration**: Data syncs with your CRM Analytics dashboard."
+      "learnMore": "Weekly tracking is the rhythm of growth.\n\n**What you'll track:**\n• Traffic source (where leads come from)\n• Top of funnel (awareness, attraction)\n• Middle of funnel (leads, nurture)\n• Bottom of funnel (sales, upsells, continuity)\n\n**Why weekly?**\nConsistent measurement lets you:\n• Spot trends early\n• Know what's actually working\n• Make data-driven decisions\n\nAfter 12 weeks, you'll have invaluable data about what moves the needle in your business.\n\n**CRM Integration**: Data syncs with your CRM Analytics dashboard.",
+      "archived": true,
+      "archived_reason": "Stage 8 simplified to CRM link - Feb 2026"
     },
     {
       "id": "bonus_feedback",
