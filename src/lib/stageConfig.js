@@ -17,6 +17,7 @@
 export const STAGES = {
   FLOW_FINDER: 0,
   GROANS: 0.5,
+  SETUP: 0.9,
   VALIDATION: 1,
   PRODUCT_CREATION: 2,
   TESTING: 3,
@@ -61,6 +62,23 @@ export const STAGE_CONFIG = {
     alwaysAccessible: true, // Keep true so it renders
     isGroansStage: true, // Flag to identify this as the Groans stage for quest filtering
     temporarilyLocked: false // Flag to lock this tab during testing
+  },
+  [STAGES.SETUP]: {
+    id: 0.9,
+    name: 'Business Setup',
+    shortName: 'Setup',
+    description: 'Set up your business project to unlock the stages',
+    icon: '⚙️',
+    color: '#5e17eb',
+    requiredFlows: [],
+    milestones: [],
+    groanChallenge: null,
+    tabLabel: 'Setup',
+    upsellPrompt: null,
+    externalLink: null,
+    isUserLevel: false,
+    alwaysAccessible: true,
+    isBusinessSetup: true
   },
   [STAGES.VALIDATION]: {
     id: 1,
