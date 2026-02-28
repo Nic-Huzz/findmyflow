@@ -26,6 +26,7 @@ import ValidationResponsesInput from './ValidationResponsesInput'
 import ResponseCounterInput from './ResponseCounterInput'
 import { getCategoryEmoji, getCategoryColor } from '../lib/league/leagueConfig'
 import UpgradePrompt from './UpgradePrompt'
+import VoiceDropdown from './VoiceDropdown'
 
 // Recognise quest IDs that use the enhanced input
 const RECOGNISE_QUEST_IDS = [
@@ -70,6 +71,9 @@ function QuestCard({
   // For special locked states (Healing Compass, Nervous System)
   specialLockCheck,
   specialLockMessage,
+  // For inline voice dropdowns on flow quests
+  userId,
+  userArchetypes,
   // For groan reflections
   selectedProject,
   progress,
@@ -621,6 +625,16 @@ function QuestCard({
       {/* Graduation note for Flow Finder quests */}
       {quest.counts_toward_graduation && !completed && quest.inputType !== 'conversation_log' && !locked && (
         <p className="graduation-note">Counts toward stage graduation</p>
+      )}
+
+      {/* Inline voice buttons for flow quests */}
+      {quest.inputType === 'flow' && !completed && !locked && userId && (
+        <VoiceDropdown
+          questId={quest.id}
+          userId={userId}
+          projectId={selectedProject?.id}
+          userArchetypes={userArchetypes}
+        />
       )}
 
       {/* Completed state */}
