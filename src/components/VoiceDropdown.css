@@ -1,0 +1,182 @@
+/* Voice Dropdown - inline on flow quest cards */
+
+.voice-dropdown-section {
+  margin-top: 0.75rem;
+}
+
+.voice-pill-row {
+  display: flex;
+  gap: 8px;
+}
+
+.voice-pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1.5px solid #e8e0f5;
+  background: #faf8ff;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5e17eb;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.voice-pill.protective {
+  color: #d97706;
+  border-color: #f5e6c8;
+  background: #fffbf5;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .voice-pill.essence:hover {
+    background: #f0ebff;
+    border-color: #c4b5fd;
+  }
+  .voice-pill.protective:hover {
+    background: #fef3e0;
+    border-color: #E9A23B;
+  }
+}
+
+.voice-pill.active.essence {
+  border-color: #5e17eb;
+  background: #ede9fe;
+}
+
+.voice-pill.active.protective {
+  border-color: #E9A23B;
+  background: #fef3e0;
+}
+
+/* Status dot */
+.voice-pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+.voice-pill-dot.filled {
+  background: #22c55e;
+  border-color: #22c55e;
+  opacity: 1;
+}
+
+.voice-pill-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.voice-pill-label {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.voice-pill-chevron {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.voice-pill-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown panel */
+.voice-input-panel {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  animation: voiceSlideDown 0.2s ease;
+}
+
+@keyframes voiceSlideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.voice-input-panel.essence {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  border: 1.5px solid #e0d6fe;
+}
+
+.voice-input-panel.protective {
+  background: linear-gradient(135deg, #fffbf0 0%, #fef3e0 100%);
+  border: 1.5px solid #fde6b3;
+}
+
+.voice-input-prompt {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.voice-input-panel.essence .voice-input-prompt {
+  color: #5e17eb;
+}
+
+.voice-input-panel.protective .voice-input-prompt {
+  color: #d97706;
+}
+
+.voice-input-textarea {
+  width: 100%;
+  border: 1.5px solid rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.7);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  font-family: inherit;
+  resize: none;
+}
+
+.voice-input-textarea:focus {
+  border-color: #5e17eb;
+  background: #fff;
+}
+
+.voice-input-panel.protective .voice-input-textarea:focus {
+  border-color: #E9A23B;
+}
+
+.voice-input-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.voice-save-btn {
+  padding: 6px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  transition: opacity 0.2s;
+}
+
+.voice-save-btn.essence {
+  background: #5e17eb;
+}
+
+.voice-save-btn.protective {
+  background: #E9A23B;
+}
+
+.voice-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
