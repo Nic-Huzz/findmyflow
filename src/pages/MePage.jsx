@@ -481,7 +481,7 @@ export default function MePage() {
           )}
 
           {/* Narrative or inline journey mapper */}
-          {narrativeText && !showInlineMapper ? (
+          {narrativeText ? (
             <>
               <div className="fj-narrative">
                 <p dangerouslySetInnerHTML={{ __html: narrativeText }} />
@@ -490,15 +490,6 @@ export default function MePage() {
                 Open Flow Compass <span>→</span>
               </button>
             </>
-          ) : showInlineMapper ? (
-            <div className="fj-journey-inline">
-              <SeeYourFlow
-                project={primaryProject}
-                onFlowEntryAdded={refreshFlowEntries}
-                onMappingComplete={() => setShowInlineMapper(false)}
-                inline
-              />
-            </div>
           ) : (
             <button className="fj-link" onClick={() => navigate('/flow-compass')}>
               Open Flow Compass <span>→</span>
