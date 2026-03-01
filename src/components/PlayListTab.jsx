@@ -16,7 +16,7 @@ import PlayProfileDashboard from './PlayProfile/PlayProfileDashboard'
 
 // Flow Finder quest groupings for the sub-tab
 const FLOW_FINDER_GROUPS = [
-  { label: 'Quick Capture', icon: '⚡', ids: ['mind_space_extraction'] },
+  { label: 'Quick Capture', icon: '⚡', ids: ['mind_space_extraction'], noFilter: true },
   { label: 'Skills', icon: '🎯', ids: ['play_list_finder', 'flow_finder_skills'] },
   { label: 'Problems', icon: '🔍', ids: ['flow_finder_problems'] },
   { label: 'Personas', icon: '👥', ids: ['persona_identifier', 'flow_finder_persona'] },
@@ -122,7 +122,7 @@ export default function PlayListTab({
         let visibleGroups = FLOW_FINDER_GROUPS
         let showUngrouped = true
         if (flowFinderFilter !== 'all') {
-          visibleGroups = FLOW_FINDER_GROUPS.filter(g => g.label === flowFinderFilter)
+          visibleGroups = FLOW_FINDER_GROUPS.filter(g => g.label === flowFinderFilter || g.noFilter)
           showUngrouped = false
         }
 
@@ -179,7 +179,7 @@ export default function PlayListTab({
                 >
                   All
                 </button>
-                {FLOW_FINDER_GROUPS.map(group => (
+                {FLOW_FINDER_GROUPS.filter(g => !g.noFilter).map(group => (
                   <button
                     key={group.label}
                     className={`filter-chip ${flowFinderFilter === group.label ? 'active' : ''}`}

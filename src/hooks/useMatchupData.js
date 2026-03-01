@@ -41,26 +41,13 @@ export function useMatchupData({
       c => new Date(c.completed_at) >= weekStart
     )
 
-    const businessQuestIds = new Set()
-
     weekCompletions.forEach(c => {
       const catEntry = Object.values(FANTASY_CATEGORIES).find(f =>
         f.dbFilter.includes(c.quest_category)
       )
       if (!catEntry) return
-
-      if (catEntry.scoringType === 'efficiency') {
-        businessQuestIds.add(c.quest_id)
-      }
       scores[catEntry.key] += (c.points_earned || 0)
     })
-
-    // Apply efficiency scoring for business
-    if (businessQuestIds.size > 0) {
-      scores.business_efficiency = Math.round(
-        scores.business_efficiency / businessQuestIds.size
-      )
-    }
 
     return scores
   }, [completions])

@@ -22,9 +22,12 @@ import { useState, useRef, useEffect } from 'react'
 import { STAGE_CONFIG, getAllStages } from '../lib/stageConfig'
 import './ChallengeStageTabs.css'
 
-function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onTabChange, flowFinderComplete = false }) {
+function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onTabChange, flowFinderComplete = false, excludeStages = [] }) {
   const tabsRef = useRef(null)
-  const stages = getAllStages()
+  const allStages = getAllStages()
+  const stages = excludeStages.length > 0
+    ? allStages.filter(s => !excludeStages.includes(s.id))
+    : allStages
 
   // Auto-scroll to active tab on mount
   useEffect(() => {
@@ -73,7 +76,7 @@ function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onT
 
   // Calculate progress: stage 0 doesn't count toward project progress
   const projectStages = stages.filter(s => !s.alwaysAccessible)
-  const progressPercent = currentStage >= 1
+  const progressPercent = (currentStage >= 1 && projectStages.length > 1)
     ? ((currentStage - 1) / (projectStages.length - 1)) * 100
     : 0
 

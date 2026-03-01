@@ -12,10 +12,8 @@ import { hapticLight } from '../lib/haptics'
 import './FlowFinderExplainer.css'
 
 const CATEGORY_DESCRIPTIONS = {
-  business_efficiency: 'Project stage quests. Quality over quantity.',
   play_list: 'Courage challenges. Face your fears.',
   healing: 'Self-care, daily & weekly rituals.',
-  voice: 'Deep dive exploration.',
   bonus: 'Tracker quests + social content.',
 }
 
@@ -30,13 +28,13 @@ export default function LeagueGuide() {
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Fantasy League is a team competition that makes building your business fun.
+            Fantasy League is a competition that makes building your business fun.
           </p>
           <p>
-            You and 2 friends form a <strong>squad</strong>. Each week, your squad goes head-to-head against another squad.
+            Play solo or form a team. Each week, you go head-to-head in matchups.
           </p>
           <p className="highlight-box">
-            The more you work on yourself and your business, <strong>the more your team wins</strong>.
+            The more you work on yourself and your business, <strong>the more you win</strong>.
           </p>
         </div>
       )
@@ -79,12 +77,12 @@ export default function LeagueGuide() {
       )
     },
     {
-      title: "The 5 Categories",
+      title: "The 3 Categories",
       icon: "📊",
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Your points are split across 5 scoring categories.
+            Your points are split across 3 scoring categories.
           </p>
           <div className="validation-steps">
             {CATEGORY_KEYS.map(key => {
@@ -101,7 +99,7 @@ export default function LeagueGuide() {
             })}
           </div>
           <p className="highlight-box">
-            Your team's <strong>combined scores</strong> compete in each category.
+            Your scores compete in each category head-to-head.
           </p>
         </div>
       )
@@ -112,31 +110,31 @@ export default function LeagueGuide() {
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Each week, your squad faces another squad.
+            Each week, you face an opponent in a matchup.
           </p>
           <p>
-            Your team's combined points are compared in each of the 5 categories. Whoever scores higher in a category wins it.
+            Your points are compared in each of the 3 categories. Whoever scores higher in a category wins it.
           </p>
           <div className="validation-steps">
             <div className="validation-step">
               <div className="step-icon" style={{ fontSize: '18px' }}>✅</div>
               <div className="step-info">
-                <h4 style={{ color: '#10b981' }}>Win 3+ categories = Win (3 pts)</h4>
-                <p>Dominate the majority to claim the win.</p>
+                <h4 style={{ color: '#10b981' }}>Win 2+ categories = Win (3 pts)</h4>
+                <p>Win the majority to claim the win.</p>
               </div>
             </div>
             <div className="validation-step">
               <div className="step-icon" style={{ fontSize: '18px' }}>🤝</div>
               <div className="step-info">
-                <h4 style={{ color: '#E9A23B' }}>Tie 2-2 = Draw (1 pt each)</h4>
-                <p>Evenly matched — both squads earn a point.</p>
+                <h4 style={{ color: '#E9A23B' }}>Tie 1-1 = Draw (1 pt each)</h4>
+                <p>Evenly matched — both earn a point.</p>
               </div>
             </div>
             <div className="validation-step">
               <div className="step-icon" style={{ fontSize: '18px' }}>❌</div>
               <div className="step-info">
-                <h4 style={{ color: '#ef4444' }}>Win 0-1 = Loss (0 pts)</h4>
-                <p>Time to rally the squad for next week.</p>
+                <h4 style={{ color: '#ef4444' }}>Win 0 = Loss (0 pts)</h4>
+                <p>Time to rally for next week.</p>
               </div>
             </div>
           </div>
@@ -178,7 +176,7 @@ export default function LeagueGuide() {
             </div>
           </div>
           <p className="highlight-box">
-            You don't need to be perfect. <strong>Just show up and do the work</strong> — your squad is counting on you.
+            You don't need to be perfect. <strong>Just show up and do the work</strong> — every quest counts.
           </p>
         </div>
       )

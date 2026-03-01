@@ -102,8 +102,8 @@ export default function ContentSubmit() {
         </div>
         <div className="cs-empty">
           <span className="cs-empty-icon">⭐</span>
-          <h3 className="cs-empty-title">Join a Team First</h3>
-          <p className="cs-empty-text">You need to be on a team to submit content.</p>
+          <h3 className="cs-empty-title">Join the League First</h3>
+          <p className="cs-empty-text">You need to join the league to submit content.</p>
           <button className="cs-cta" onClick={() => navigate('/league')}>
             Go to League <span>→</span>
           </button>
@@ -125,7 +125,7 @@ export default function ContentSubmit() {
         <span className="cs-hero-label">Week {currentWeek} • {userTeam.name}</span>
         <h2 className="cs-hero-title">Bonus Points</h2>
         <p className="cs-hero-sub">
-          Share content to earn extra points for your squad!
+          Share content to earn extra bonus points!
         </p>
       </div>
 

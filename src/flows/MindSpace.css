@@ -497,6 +497,16 @@
   margin-bottom: 1.5rem;
 }
 
+.mind-space .review-section.needs-star {
+  border-left: 3px solid rgba(233, 162, 59, 0.6);
+  padding-left: 0.75rem;
+}
+
+.mind-space .review-section.has-star {
+  border-left: 3px solid rgba(16, 185, 129, 0.5);
+  padding-left: 0.75rem;
+}
+
 .mind-space .review-section h3 {
   font-size: 1.1rem;
   font-weight: 700;
@@ -512,10 +522,93 @@
   font-size: 0.9rem;
 }
 
+.mind-space .star-count {
+  margin-left: auto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(233, 162, 59, 0.8);
+}
+
+.mind-space .star-count.fulfilled {
+  color: #10b981;
+}
+
 .mind-space .review-section .hint {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.6);
   margin: 0 0 0.75rem;
+}
+
+.mind-space .review-section.needs-star .hint {
+  color: #E9A23B;
+}
+
+/* Star requirement notice */
+.mind-space .star-requirement-notice {
+  background: rgba(233, 162, 59, 0.1);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: #E9A23B;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.mind-space .star-requirement-notice .missing {
+  font-weight: 700;
+}
+
+/* Add custom input row */
+.mind-space .add-custom-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mind-space .add-custom-input {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.mind-space .add-custom-input:focus {
+  outline: none;
+  border-color: rgba(233, 162, 59, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mind-space .add-custom-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.mind-space .add-custom-btn {
+  padding: 0.7rem 1rem;
+  background: rgba(233, 162, 59, 0.15);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  border-radius: 10px;
+  color: #E9A23B;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mind-space .add-custom-btn:hover:not(:disabled) {
+  background: rgba(233, 162, 59, 0.25);
+  border-color: #E9A23B;
+}
+
+.mind-space .add-custom-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* Review Item - Scoped */
@@ -731,7 +824,137 @@
   font-size: 0.85rem;
 }
 
-/* What's Next (Step 4) - Scoped */
+/* Combination Selection (Step 4) - Scoped */
+.mind-space .combination-step {
+  text-align: center;
+}
+
+.mind-space .combination-step h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+  line-height: 1.4;
+}
+
+.mind-space .combination-step > p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* Combination Sliders (Step 4) */
+.mind-space .combo-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mind-space .project-name-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.mind-space .project-name-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.mind-space .project-name-field input {
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mind-space .project-name-field input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.mind-space .project-name-field input:focus {
+  border-color: #E9A23B;
+  box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.15);
+}
+
+.mind-space .combo-slider-section {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+}
+
+.mind-space .combo-slider-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 0.75rem;
+}
+
+.mind-space .combo-slider-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mind-space .combo-slider-arrow {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mind-space .combo-slider-arrow:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(233, 162, 59, 0.5);
+  transform: scale(1.05);
+}
+
+.mind-space .combo-slider-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.mind-space .combo-slider-content {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.mind-space .combo-slider-text {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: white;
+  margin: 0 0 0.25rem;
+  font-weight: 500;
+}
+
+.mind-space .combo-slider-counter {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+/* What's Next (Step 5) - Scoped */
 .mind-space .whats-next {
   text-align: center;
 }
@@ -817,14 +1040,21 @@
 }
 
 .mind-space .option-btn.primary {
-  background: rgba(255, 221, 39, 0.1);
-  border-color: rgba(255, 221, 39, 0.4);
+  background: linear-gradient(135deg, #E9A23B, #d4922e);
+  border-color: #E9A23B;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
 }
 
 .mind-space .option-btn.primary:hover {
-  background: rgba(255, 221, 39, 0.2);
-  border-color: #ffdd27;
-  box-shadow: 0 8px 24px rgba(255, 221, 39, 0.2);
+  background: linear-gradient(135deg, #f0ad4e, #E9A23B);
+  border-color: #f0ad4e;
+  box-shadow: 0 8px 24px rgba(233, 162, 59, 0.4);
+  transform: translateY(-2px);
+}
+
+.mind-space .option-btn.primary .option-text strong {
+  color: #fff;
+  font-size: 1.1rem;
 }
 
 .mind-space .option-icon {
@@ -849,7 +1079,7 @@
 }
 
 .mind-space .option-btn.primary .option-text span {
-  color: rgba(255, 221, 39, 0.9);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .mind-space .complete-btn {

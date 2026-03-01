@@ -40,6 +40,7 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
         return {
           success: true,
           projectId: realProject.id,
+          projectName: realProject.name,
           skipped: true,
           reason: 'User already has an active project'
         }
@@ -235,7 +236,7 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
           console.log('✅ Project already exists for this session')
           const { data: existingProject } = await supabase
             .from('user_projects')
-            .select('id')
+            .select('id, name')
             .eq('user_id', userId)
             .eq('source_flow', flowType)
             .eq('source_session_id', sessionId)
@@ -244,6 +245,7 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
           return {
             success: true,
             projectId: existingProject?.id,
+            projectName: existingProject?.name,
             alreadyExists: true
           }
         }

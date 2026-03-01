@@ -124,13 +124,14 @@ export function buildAvatarPrompt({ essenceName, superpower, poeticLine, skills,
   }
 
   parts.push(
-    'Style: Vintage woodblock print illustration with folk mythology aesthetic.',
-    'Duotone color palette using warm amber/orange and black only.',
-    'Central symbolic figure with radiating sun halo behind them.',
-    'Decorative border with small vignette panels showing the archetype in symbolic scenes related to their gifts and mission.',
-    'Linocut/woodcut texture with grainy letterpress printing feel.',
-    'Bold outlines, flat colors, no gradients. Southeast Asian folk art influence.',
-    'Vertical card format (2:3 ratio), ornate border frame, no text.'
+    'Use the attached photo of me as reference for the central figure — capture my likeness, features, and energy.',
+    'Style: Pixar-inspired 3D animation character portrait.',
+    'Warm cinematic lighting with purple and gold tones.',
+    'Expressive, big eyes with a confident smile.',
+    'Heroic but approachable pose — arms crossed or hands on hips.',
+    'Stylized background with glowing elements related to their gifts and mission.',
+    'Clean render, soft shadows, vibrant colors.',
+    'Square format, no text.'
   )
 
   return parts.join(' ')

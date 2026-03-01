@@ -30,3 +30,13 @@ enable_confirmations = true
 # Must deploy with --no-verify-jwt so the Bearer header reaches our auth.ts.
 [functions.mcp-server]
 verify_jwt = false
+
+# Called internally by mcp-server for validation_responses analysis.
+# Auth is handled by the calling function (service role key).
+[functions.analyze-validation-responses]
+verify_jwt = false
+
+# Cron-triggered: auto-scores league matchups every 15 minutes.
+# No user JWT — called by pg_cron with service role key.
+[functions.score-league-matchups]
+verify_jwt = false

@@ -621,3 +621,68 @@ export const handleGroanReflectionCompletion = async (userId, groanData, questCo
     return { success: false, error: error.message };
   }
 };
+
+/**
+ * Award points for completing a Founder DNA challenge (Play Profile flow).
+ * Repeatable — each completed session earns 10 points in the Play-list (Groans) category.
+ *
+ * @param {string} userId
+ * @param {string} sessionId - founder_dna_sessions row ID
+ */
+export const syncFounderDnaChallengeCompletion = async (userId, sessionId) => {
+  try {
+    // quest_id includes session ID so the unique index allows multiple completions
+    const questId = `founder_dna_challenge_${sessionId}`;
+    const points = 10;
+
+    // Check for duplicate — don't double-award for same session
+    const { data: existing } = await supabase
+      .from('quest_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('quest_id', questId)
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      return { success: true, skipped: true, reason: 'Already awarded for this session' };
+    }
+
+    const { error: completionError } = await supabase
+      .from('quest_completions')
+      .insert({
+        user_id: userId,
+        challenge_instance_id: null,
+        quest_id: questId,
+        quest_category: 'Groans',
+        quest_type: 'Rewire',
+        points_earned: points,
+        challenge_day: 0,
+        reflection_text: `founder_dna_session:${sessionId}`,
+        project_id: null,
+        stage: 0,
+      });
+
+    if (completionError) {
+      console.error('Error creating founder DNA quest completion:', completionError);
+      return { success: false, error: completionError.message };
+    }
+
+    // Sync to leaderboard — non-blocking
+    try {
+      await syncScoreToLeaderboard(supabase, {
+        userId,
+        questCategory: 'Groans',
+        points,
+        projectId: null,
+        source: 'founder_dna_challenge',
+      });
+    } catch (e) {
+      console.error('Non-critical: leaderboard sync failed:', e);
+    }
+
+    return { success: true, questId, points };
+  } catch (error) {
+    console.error('Error in syncFounderDnaChallengeCompletion:', error);
+    return { success: false, error: error.message };
+  }
+};

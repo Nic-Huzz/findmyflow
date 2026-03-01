@@ -760,11 +760,23 @@ export async function fetchFlowFinderData(userId) {
     return { data: null, error }
   }
 
+  // Deduplicate by cluster_label within each type — keep highest proficiency
+  const dedup = (items) => {
+    const map = new Map()
+    for (const item of items) {
+      const existing = map.get(item.cluster_label)
+      if (!existing || (item.proficiency || 0) > (existing.proficiency || 0)) {
+        map.set(item.cluster_label, item)
+      }
+    }
+    return [...map.values()]
+  }
+
   // Organize by type (DB uses 'skills', 'problems', 'persona')
   const organized = {
-    skills: (data || []).filter(c => c.cluster_type === 'skills'),
-    problems: (data || []).filter(c => c.cluster_type === 'problems'),
-    personas: (data || []).filter(c => c.cluster_type === 'persona')
+    skills: dedup((data || []).filter(c => c.cluster_type === 'skills')),
+    problems: dedup((data || []).filter(c => c.cluster_type === 'problems')),
+    personas: dedup((data || []).filter(c => c.cluster_type === 'persona'))
   }
 
   return { data: organized, error: null }

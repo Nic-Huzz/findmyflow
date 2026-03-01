@@ -797,11 +797,25 @@
 
 /* ── Active challenge card ── */
 .play-profile-quiz .pp-active-challenge {
+  position: relative;
   background: linear-gradient(135deg, rgba(94, 23, 235, 0.04), rgba(233, 162, 59, 0.06));
   border: 2px solid #E9A23B;
   border-radius: 16px;
   padding: 16px 20px;
   margin-bottom: 16px;
+}
+
+.play-profile-quiz .pp-points-pill {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
 }
 
 .play-profile-quiz .pp-active-challenge .pp-active-label {
@@ -813,15 +827,102 @@
   margin-bottom: 8px;
 }
 
+.play-profile-quiz .pp-active-challenge .pp-challenge-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #E9A23B;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.play-profile-quiz .pp-challenge-name-small {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #E9A23B;
+  width: 100%;
+}
+
 .play-profile-quiz .pp-active-challenge .pp-active-text {
   font-size: 14px;
   line-height: 1.5;
   color: #495057;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
+}
+
+.play-profile-quiz .pp-active-challenge .pp-active-text.pp-clamped {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.play-profile-quiz .pp-read-more {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+/* ── Active challenge carousel nav ── */
+.play-profile-quiz .pp-carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.play-profile-quiz .pp-carousel-arrow {
+  background: none;
+  border: 1px solid #dee2e6;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.play-profile-quiz .pp-carousel-arrow:hover:not(:disabled) {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.play-profile-quiz .pp-carousel-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.play-profile-quiz .pp-carousel-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.play-profile-quiz .pp-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #dee2e6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-profile-quiz .pp-carousel-dot.active {
+  background: #E9A23B;
+  transform: scale(1.2);
 }
 
 /* ── Session history ── */
@@ -868,6 +969,23 @@
 .play-profile-quiz .pp-mini-bar.resistance { background: #ef4444; }
 .play-profile-quiz .pp-mini-bar.engagement { background: #E9A23B; }
 .play-profile-quiz .pp-mini-bar.shift { background: #5e17eb; }
+
+.play-profile-quiz .pp-session-badges {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 18px;
+}
+
+/* ── Challenge name ── */
+.play-profile-quiz .pp-challenge-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #E9A23B;
+  margin: 0 0 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
 
 /* ── Challenge type badge ── */
 .play-profile-quiz .pp-type-badge {
@@ -928,6 +1046,16 @@
   line-height: 1.5;
   align-self: flex-end;
   max-width: 85%;
+}
+
+.play-profile-quiz .pp-response-prompt {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  margin-top: 12px;
 }
 
 .play-profile-quiz .pp-response-options {
@@ -1144,6 +1272,72 @@
 
 .play-profile-quiz .pp-rating-option.selected .pp-rating-number {
   color: #5e17eb;
+}
+
+/* ── Voice + Compass rating buttons ── */
+.play-profile-quiz .pp-voice-options {
+  display: flex;
+  gap: 10px;
+}
+
+.play-profile-quiz .pp-voice-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 10px;
+  border: 2px solid #e9ecef;
+  border-radius: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.play-profile-quiz .pp-voice-btn:hover {
+  border-color: #c4b5fd;
+  transform: translateY(-1px);
+}
+
+.play-profile-quiz .pp-voice-btn.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.06);
+  box-shadow: 0 2px 12px rgba(233, 162, 59, 0.15);
+}
+
+.play-profile-quiz .pp-voice-emoji {
+  font-size: 28px;
+}
+
+.play-profile-quiz .pp-voice-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.play-profile-quiz .pp-voice-desc {
+  font-size: 11px;
+  color: #6c757d;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.play-profile-quiz .pp-compass-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border: 2px solid;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.play-profile-quiz .pp-compass-preview-label {
+  font-size: 16px;
+  font-weight: 700;
 }
 
 /* ── Empty state ── */
@@ -1451,6 +1645,10 @@
   box-shadow: none;
 }
 
+.pp-flow-page .play-profile-quiz .pp-response-prompt {
+  color: rgba(255, 255, 255, 0.5);
+}
+
 .pp-flow-page .play-profile-quiz .pp-response-card {
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.12);
@@ -1543,6 +1741,33 @@
 
 .pp-flow-page .play-profile-quiz .pp-rating-option.selected .pp-rating-number {
   color: #E9A23B;
+}
+
+/* Voice + Compass buttons — dark theme */
+.pp-flow-page .play-profile-quiz .pp-voice-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pp-flow-page .play-profile-quiz .pp-voice-btn:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.pp-flow-page .play-profile-quiz .pp-voice-btn.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.12);
+}
+
+.pp-flow-page .play-profile-quiz .pp-voice-label {
+  color: white;
+}
+
+.pp-flow-page .play-profile-quiz .pp-voice-desc {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.pp-flow-page .play-profile-quiz .pp-compass-preview {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* ── Type badges (keep readable on dark) ── */

@@ -13,6 +13,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { generateChallenge } from '../lib/founderDnaAI'
+import { syncFounderDnaChallengeCompletion } from '../lib/questCompletionHelpers'
 import PlayProfileQuiz from '../components/PlayProfile/PlayProfileQuiz'
 import StuckPointSelection from '../components/PlayProfile/StuckPointSelection'
 import FollowUpQuestions from '../components/PlayProfile/FollowUpQuestions'
@@ -131,7 +132,7 @@ export default function PlayProfileFlow() {
 
   // ── Follow-up complete (unstuck mode) ──
   function handleFollowUpComplete(answers, text) {
-    const qa = stuckPoint.followUpQuestions.map((q, i) => ({
+    const qa = (stuckPoint.followUpQuestions || []).map((q, i) => ({
       question: q.question,
       answer: q.options[answers[i]] || '',
     }))
@@ -202,6 +203,7 @@ export default function PlayProfileFlow() {
     // Update session with challenge data
     if (sid) {
       await supabase.from('founder_dna_sessions').update({
+        challenge_name: result.challengeName || null,
         challenge_type: result.challengeType,
         challenge_mirror: result.mirror,
         challenge_bridge: result.bridge,
@@ -220,14 +222,20 @@ export default function PlayProfileFlow() {
 
   // ── Rate challenge ──
   async function handleRate(ratings) {
-    if (sessionData?.id) {
+    const sid = sessionData?.id
+    if (sid) {
       await supabase.from('founder_dna_sessions').update({
-        resistance_rating: ratings.resistance,
-        engagement_rating: ratings.engagement,
-        shift_rating: ratings.shift,
+        voice_type: ratings.voice_type,
+        voice_reflection: ratings.voice_reflection,
+        compass_internal: ratings.internal_state,
+        compass_external: ratings.external_state,
+        compass_direction: ratings.compass_direction,
         rated_at: new Date().toISOString(),
         status: 'completed',
-      }).eq('id', sessionData.id)
+      }).eq('id', sid)
+
+      // Award 10 points towards Play-list category
+      if (user?.id) await syncFounderDnaChallengeCompletion(user.id, sid)
     }
     window.location.href = '/7-day-challenge?tab=playlist&sub=play-profile'
   }
@@ -319,6 +327,7 @@ export default function PlayProfileFlow() {
         {screen === 'challenge' && challenge && (
           <ChallengeDelivery
             founderName={dnaResult?.matched_founder || 'Your founder'}
+            challengeName={challenge.challengeName}
             challengeType={challenge.challengeType}
             mirror={challenge.mirror}
             bridge={challenge.bridge}
@@ -333,6 +342,7 @@ export default function PlayProfileFlow() {
             founderName={sessionData.matched_founder || dnaResult?.matched_founder || 'Your founder'}
             challengeAction={sessionData.challenge_action}
             onRate={handleRate}
+            onBack={() => { window.location.href = '/7-day-challenge?tab=playlist&sub=play-profile' }}
           />
         )}
 

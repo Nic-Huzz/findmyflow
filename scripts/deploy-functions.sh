@@ -7,7 +7,7 @@ set -e
 FUNCTIONS_DIR="supabase/functions"
 
 # Functions that use custom auth instead of Supabase JWT
-NO_VERIFY_JWT_FUNCTIONS="mcp-server analyze-validation-responses create-checkout-session stripe-webhook"
+NO_VERIFY_JWT_FUNCTIONS="mcp-server analyze-validation-responses create-checkout-session stripe-webhook score-league-matchups"
 
 if [ -n "$1" ]; then
   # Deploy specific function

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
@@ -91,6 +91,48 @@ CONTENT GUIDELINES:
 7. Keep each evidence note under 20 words
 8. This is for self-discovery, so be honest rather than flattering`
 
+function AddCustomInput({ type, onAdd, placeholder }) {
+  const [value, setValue] = useState('')
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (value.trim()) {
+      onAdd(type, value)
+      setValue('')
+    }
+  }
+  return (
+    <form className="add-custom-row" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        className="add-custom-input"
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <button type="submit" className="add-custom-btn" disabled={!value.trim()}>+ Add</button>
+    </form>
+  )
+}
+
+function generateCombinations(skills, problems, personas) {
+  const combos = []
+  const s = skills.length > 0 ? skills : [null]
+  const p = problems.length > 0 ? problems : [null]
+  const pe = personas.length > 0 ? personas : [null]
+
+  for (const skill of s) {
+    for (const problem of p) {
+      for (const persona of pe) {
+        const present = [skill, problem, persona].filter(Boolean).length
+        if (present >= 2) {
+          combos.push({ skill, problem, persona })
+        }
+      }
+    }
+  }
+  return combos
+}
+
 export default function MindSpace() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -114,6 +156,36 @@ export default function MindSpace() {
   const [starredPersonas, setStarredPersonas] = useState(new Set())
   const [showReformatPrompt, setShowReformatPrompt] = useState(false)
   const [reformatCopied, setReformatCopied] = useState(false)
+  const [userPersona, setUserPersona] = useState(null)
+  const [selectedCombination, setSelectedCombination] = useState(null)
+  const [lastSessionId, setLastSessionId] = useState(null)
+  const sessionIdRef = useRef(null)
+  const [combinationSaving, setCombinationSaving] = useState(false)
+  const [currentSkillIdx, setCurrentSkillIdx] = useState(0)
+  const [currentProblemIdx, setCurrentProblemIdx] = useState(0)
+  const [currentPersonaIdx, setCurrentPersonaIdx] = useState(0)
+  const [projectName, setProjectName] = useState('')
+  const projectIdRef = useRef(null)
+
+  // Fetch user persona type on mount
+  useEffect(() => {
+    if (!user?.id) return
+    const fetchPersona = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('user_stage_progress')
+          .select('persona')
+          .eq('user_id', user.id)
+          .maybeSingle()
+        if (data?.persona) {
+          setUserPersona(data.persona)
+        }
+      } catch (err) {
+        console.warn('Could not fetch user persona:', err)
+      }
+    }
+    fetchPersona()
+  }, [user?.id])
 
   // Check for ?results=true to show saved results directly
   useEffect(() => {
@@ -159,7 +231,7 @@ export default function MindSpace() {
           if (data.aiUsageLevel) setAiUsageLevel(data.aiUsageLevel)
 
           setViewingResults(true)
-          setStep(4) // Go to "what's next" / results screen
+          setStep(5) // Go to "what's next" / results screen
         }
       } catch (err) {
         console.error('Error loading saved Mind Space results:', err)
@@ -267,9 +339,42 @@ export default function MindSpace() {
   }
 
   const handleRemoveItem = (type, index) => {
+    // Adjust starred indices when removing an item
+    const setters = { skills: setStarredSkills, problems: setStarredProblems, personas: setStarredPersonas }
+    const current = type === 'skills' ? starredSkills : type === 'problems' ? starredProblems : starredPersonas
+    const newSet = new Set()
+    current.forEach(i => {
+      if (i < index) newSet.add(i)
+      else if (i > index) newSet.add(i - 1)
+      // i === index is removed
+    })
+    setters[type](newSet)
+
     setMappedData(prev => ({
       ...prev,
       [type]: prev[type].filter((_, i) => i !== index)
+    }))
+  }
+
+  const handleAddCustomItem = (type, name) => {
+    if (!name.trim()) return
+    // Default userLevel to middle option so custom items save to DB
+    // (saveToNikigaiClusters skips items with userLevel: null)
+    const defaultLevels = { skills: 'establishing', problems: 'pursuing', personas: 'struggling' }
+    const newItem = {
+      name: name.trim(),
+      evidence: 'Added manually',
+      frequency: 'Medium',
+      mappedTo: null,
+      userLevel: defaultLevels[type],
+      custom: true
+    }
+    if (type === 'personas') {
+      newItem.connection = ''
+    }
+    setMappedData(prev => ({
+      ...prev,
+      [type]: [...prev[type], newItem]
     }))
   }
 
@@ -413,6 +518,37 @@ export default function MindSpace() {
     return { success: true, sessionId }
   }
 
+  const saveCombination = async (combo, sessionId) => {
+    try {
+      const { error } = await supabase.from('nikigai_clusters').insert({
+        session_id: sessionId || lastSessionId,
+        user_id: user.id,
+        cluster_type: 'primary_combination',
+        cluster_stage: 'selected',
+        cluster_label: [
+          combo.skill?.name,
+          combo.persona?.name ? `helping ${combo.persona.name}` : null,
+          combo.problem?.name ? `with ${combo.problem.name}` : null
+        ].filter(Boolean).join(' '),
+        items: [{
+          skill: combo.skill ? { name: combo.skill.name, mappedTo: combo.skill.mappedTo } : null,
+          problem: combo.problem ? { name: combo.problem.name, mappedTo: combo.problem.mappedTo } : null,
+          persona: combo.persona ? { name: combo.persona.name, mappedTo: combo.persona.mappedTo } : null
+        }]
+      })
+      if (error) {
+        console.error('Error saving combination:', error)
+        return false
+      }
+      console.log('Combination saved successfully')
+      return true
+    } catch (err) {
+      console.error('Error saving combination:', err)
+      return false
+    }
+  }
+
+
   const handleConfirm = async () => {
     if (isProcessing) return // Prevent double-clicks
     setIsProcessing(true)
@@ -437,10 +573,20 @@ export default function MindSpace() {
       // Auto-create project if user doesn't have one (vibe seekers)
       try {
         const projectResult = await createProjectFromSession(user.id, saveResult.sessionId, 'mind_space')
+        if (projectResult.projectId) {
+          projectIdRef.current = projectResult.projectId
+        }
         if (projectResult.skipped) {
           console.log('✅ User already has a project, skipped auto-creation')
+          // Pre-populate project name for existing projects
+          if (projectResult.projectName) {
+            setProjectName(projectResult.projectName)
+          }
         } else if (projectResult.success) {
           console.log('✅ Auto-created project from Mind Space:', projectResult.projectName)
+          if (projectResult.projectName) {
+            setProjectName(projectResult.projectName)
+          }
         } else {
           console.warn('⚠️ Project auto-creation failed:', projectResult.error)
         }
@@ -449,16 +595,20 @@ export default function MindSpace() {
         // Don't block completion if project creation fails
       }
 
+      // Store session ID for combination save
+      sessionIdRef.current = saveResult.sessionId
+      setLastSessionId(saveResult.sessionId)
+
       // Check if user can now graduate from Flow Finder to Validation
       try {
         const eligibility = await checkGraduationEligibility(user.id)
-        console.log('🎓 Graduation eligibility:', eligibility)
+        console.log('Graduation eligibility:', eligibility)
 
         if (eligibility.eligible) {
           // Trigger celebration!
           triggerConfetti()
           setGraduationMessage({
-            title: '🎉 Stage Unlocked: Validation!',
+            title: 'Stage Unlocked: Validation!',
             message: 'You\'ve completed Flow Finder and unlocked Stage 1: Validation. Time to validate your ideas with real people!',
             nextStep: 'Head to the Challenge page to start your validation journey.'
           })
@@ -468,7 +618,29 @@ export default function MindSpace() {
         // Don't block completion if graduation check fails
       }
 
-      setStep(4) // Go to "what's next" screen
+      // Generate combinations from starred items
+      const starredSkillItems = mappedData.skills.filter((_, i) => starredSkills.has(i))
+      const starredProblemItems = mappedData.problems.filter((_, i) => starredProblems.has(i))
+      const starredPersonaItems = mappedData.personas.filter((_, i) => starredPersonas.has(i))
+
+      const combos = generateCombinations(starredSkillItems, starredProblemItems, starredPersonaItems)
+
+      if (combos.length <= 1) {
+        // Auto-select if only 1 (or 0) combination and skip to results
+        if (combos.length === 1) {
+          setSelectedCombination(combos[0])
+          const saved = await saveCombination(combos[0], saveResult.sessionId)
+          if (!saved) {
+            console.warn('Failed to auto-save single combination')
+          }
+        }
+        setStep(5)
+      } else {
+        setCurrentSkillIdx(0)
+        setCurrentProblemIdx(0)
+        setCurrentPersonaIdx(0)
+        setStep(4) // Go to combination selection
+      }
     } catch (err) {
       console.error('Save error:', err)
       setError('Failed to save. Please try again.')
@@ -517,6 +689,16 @@ export default function MindSpace() {
           <div className={`step ${step >= 3 ? 'active' : ''} ${step === 3 ? 'current' : ''}`}>
             <span className="step-num">3</span>
             <span className="step-label">Review</span>
+          </div>
+          <div className="step-line" />
+          <div className={`step ${step >= 4 ? 'active' : ''} ${step === 4 ? 'current' : ''}`}>
+            <span className="step-num">4</span>
+            <span className="step-label">Combine</span>
+          </div>
+          <div className="step-line" />
+          <div className={`step ${step >= 5 ? 'active' : ''} ${step === 5 ? 'current' : ''}`}>
+            <span className="step-num">5</span>
+            <span className="step-label">Complete</span>
           </div>
         </div>
       </header>
@@ -662,9 +844,17 @@ export default function MindSpace() {
             )}
 
             {/* Skills */}
-            <section className="review-section">
-              <h3>Skills <span className="count">({mappedData.skills.length})</span></h3>
-              <p className="hint">Star your top 3 strongest</p>
+            <section className={`review-section ${starredSkills.size === 0 ? 'needs-star' : 'has-star'}`}>
+              <h3>Skills <span className="count">({mappedData.skills.length})</span>
+                <span className={`star-count ${starredSkills.size > 0 ? 'fulfilled' : ''}`}>
+                  ★ {starredSkills.size}/3
+                </span>
+              </h3>
+              <p className="hint">
+                {starredSkills.size === 0
+                  ? 'Star at least 1 skill (up to 3) to continue'
+                  : 'Star your top 3 strongest'}
+              </p>
 
               {mappedData.skills.map((skill, i) => (
                 <div key={i} className="review-item">
@@ -709,12 +899,22 @@ export default function MindSpace() {
                   <button className="remove-btn" onClick={() => handleRemoveItem('skills', i)}>×</button>
                 </div>
               ))}
+
+              <AddCustomInput type="skills" onAdd={handleAddCustomItem} placeholder="Add your own skill..." />
             </section>
 
             {/* Problems */}
-            <section className="review-section">
-              <h3>Problems <span className="count">({mappedData.problems.length})</span></h3>
-              <p className="hint">Star the top 3 that light you up</p>
+            <section className={`review-section ${starredProblems.size === 0 ? 'needs-star' : 'has-star'}`}>
+              <h3>Problems <span className="count">({mappedData.problems.length})</span>
+                <span className={`star-count ${starredProblems.size > 0 ? 'fulfilled' : ''}`}>
+                  ★ {starredProblems.size}/3
+                </span>
+              </h3>
+              <p className="hint">
+                {starredProblems.size === 0
+                  ? 'Star at least 1 problem (up to 3) to continue'
+                  : 'Star the top 3 that light you up'}
+              </p>
 
               {mappedData.problems.map((problem, i) => (
                 <div key={i} className="review-item">
@@ -759,12 +959,22 @@ export default function MindSpace() {
                   <button className="remove-btn" onClick={() => handleRemoveItem('problems', i)}>×</button>
                 </div>
               ))}
+
+              <AddCustomInput type="problems" onAdd={handleAddCustomItem} placeholder="Add your own problem..." />
             </section>
 
             {/* Personas */}
-            <section className="review-section">
-              <h3>People <span className="count">({mappedData.personas.length})</span></h3>
-              <p className="hint">Star the top 3 you want to serve</p>
+            <section className={`review-section ${starredPersonas.size === 0 ? 'needs-star' : 'has-star'}`}>
+              <h3>People <span className="count">({mappedData.personas.length})</span>
+                <span className={`star-count ${starredPersonas.size > 0 ? 'fulfilled' : ''}`}>
+                  ★ {starredPersonas.size}/3
+                </span>
+              </h3>
+              <p className="hint">
+                {starredPersonas.size === 0
+                  ? 'Star at least 1 persona (up to 3) to continue'
+                  : 'Star the top 3 you want to serve'}
+              </p>
 
               {mappedData.personas.map((persona, i) => (
                 <div key={i} className="review-item">
@@ -810,6 +1020,8 @@ export default function MindSpace() {
                   <button className="remove-btn" onClick={() => handleRemoveItem('personas', i)}>×</button>
                 </div>
               ))}
+
+              <AddCustomInput type="personas" onAdd={handleAddCustomItem} placeholder="Add your own persona..." />
             </section>
 
             {/* Themes & Gaps (collapsed) */}
@@ -837,11 +1049,20 @@ export default function MindSpace() {
               </details>
             )}
 
+            {(starredSkills.size === 0 || starredProblems.size === 0 || starredPersonas.size === 0) && (
+              <div className="star-requirement-notice">
+                Star at least 1 item in each section to continue:
+                {starredSkills.size === 0 && <span className="missing"> Skills</span>}
+                {starredProblems.size === 0 && <span className="missing"> Problems</span>}
+                {starredPersonas.size === 0 && <span className="missing"> People</span>}
+              </div>
+            )}
+
             <div className="button-row">
               <button
                 className="primary-button"
                 onClick={handleConfirm}
-                disabled={isProcessing}
+                disabled={isProcessing || starredSkills.size === 0 || starredProblems.size === 0 || starredPersonas.size === 0}
               >
                 {isProcessing ? 'Saving...' : 'Confirm & Continue'}
               </button>
@@ -851,8 +1072,166 @@ export default function MindSpace() {
         </div>
       )}
 
-      {/* Step 4: What's Next / Results View */}
-      {step === 4 && (
+      {/* Step 4: Combination Selection */}
+      {step === 4 && mappedData && (() => {
+        const starredSkillItems = mappedData.skills.filter((_, i) => starredSkills.has(i))
+        const starredProblemItems = mappedData.problems.filter((_, i) => starredProblems.has(i))
+        const starredPersonaItems = mappedData.personas.filter((_, i) => starredPersonas.has(i))
+
+        // Build the current combination from slider positions
+        const currentCombo = {
+          skill: starredSkillItems[currentSkillIdx] || null,
+          problem: starredProblemItems[currentProblemIdx] || null,
+          persona: starredPersonaItems[currentPersonaIdx] || null
+        }
+
+        const handleSliderConfirm = async () => {
+          if (combinationSaving) return
+          setCombinationSaving(true)
+          try {
+            const saved = await saveCombination(currentCombo, sessionIdRef.current)
+            if (!saved) {
+              setError('Failed to save your combination. Please try again.')
+              setCombinationSaving(false)
+              return
+            }
+
+            // Update project name if user provided one
+            if (projectName.trim() && projectIdRef.current) {
+              const { error: nameError } = await supabase
+                .from('user_projects')
+                .update({ name: projectName.trim() })
+                .eq('id', projectIdRef.current)
+              if (nameError) {
+                console.error('Failed to update project name:', nameError)
+              }
+            }
+
+            setStep(5)
+          } catch (err) {
+            console.error('Error saving combination:', err)
+            setError('Failed to save combination. Please try again.')
+          } finally {
+            setCombinationSaving(false)
+          }
+        }
+
+        return (
+          <div className="step-content">
+            <div className="card combination-step">
+              <h2>
+                {userPersona === 'vibe_seeker'
+                  ? 'Which combination sounds most exciting?'
+                  : 'Which combination most aligns with your current business?'}
+              </h2>
+              <p>Slide through your top picks to find the combination that resonates most.</p>
+
+              <div className="combo-sliders">
+                {/* Skill slider */}
+                {starredSkillItems.length > 0 && (
+                  <div className="combo-slider-section">
+                    <h3 className="combo-slider-label">Your skill:</h3>
+                    <div className="combo-slider-controls">
+                      <button
+                        className="combo-slider-arrow"
+                        onClick={() => setCurrentSkillIdx(i => Math.max(0, i - 1))}
+                        disabled={currentSkillIdx === 0}
+                      >‹</button>
+                      <div className="combo-slider-content">
+                        <p className="combo-slider-text">{starredSkillItems[currentSkillIdx]?.name}</p>
+                        {starredSkillItems.length > 1 && (
+                          <p className="combo-slider-counter">{currentSkillIdx + 1} of {starredSkillItems.length}</p>
+                        )}
+                      </div>
+                      <button
+                        className="combo-slider-arrow"
+                        onClick={() => setCurrentSkillIdx(i => Math.min(starredSkillItems.length - 1, i + 1))}
+                        disabled={currentSkillIdx === starredSkillItems.length - 1}
+                      >›</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Problem slider */}
+                {starredProblemItems.length > 0 && (
+                  <div className="combo-slider-section">
+                    <h3 className="combo-slider-label">The problem you solve:</h3>
+                    <div className="combo-slider-controls">
+                      <button
+                        className="combo-slider-arrow"
+                        onClick={() => setCurrentProblemIdx(i => Math.max(0, i - 1))}
+                        disabled={currentProblemIdx === 0}
+                      >‹</button>
+                      <div className="combo-slider-content">
+                        <p className="combo-slider-text">{starredProblemItems[currentProblemIdx]?.name}</p>
+                        {starredProblemItems.length > 1 && (
+                          <p className="combo-slider-counter">{currentProblemIdx + 1} of {starredProblemItems.length}</p>
+                        )}
+                      </div>
+                      <button
+                        className="combo-slider-arrow"
+                        onClick={() => setCurrentProblemIdx(i => Math.min(starredProblemItems.length - 1, i + 1))}
+                        disabled={currentProblemIdx === starredProblemItems.length - 1}
+                      >›</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Persona slider */}
+                {starredPersonaItems.length > 0 && (
+                  <div className="combo-slider-section">
+                    <h3 className="combo-slider-label">Who you help:</h3>
+                    <div className="combo-slider-controls">
+                      <button
+                        className="combo-slider-arrow"
+                        onClick={() => setCurrentPersonaIdx(i => Math.max(0, i - 1))}
+                        disabled={currentPersonaIdx === 0}
+                      >‹</button>
+                      <div className="combo-slider-content">
+                        <p className="combo-slider-text">{starredPersonaItems[currentPersonaIdx]?.name}</p>
+                        {starredPersonaItems.length > 1 && (
+                          <p className="combo-slider-counter">{currentPersonaIdx + 1} of {starredPersonaItems.length}</p>
+                        )}
+                      </div>
+                      <button
+                        className="combo-slider-arrow"
+                        onClick={() => setCurrentPersonaIdx(i => Math.min(starredPersonaItems.length - 1, i + 1))}
+                        disabled={currentPersonaIdx === starredPersonaItems.length - 1}
+                      >›</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="project-name-field">
+                <label htmlFor="project-name">Name your project</label>
+                <input
+                  id="project-name"
+                  type="text"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  placeholder="e.g. My Coaching Business"
+                  maxLength={100}
+                />
+              </div>
+
+              <div className="button-row">
+                <button
+                  className="primary-button"
+                  onClick={handleSliderConfirm}
+                  disabled={combinationSaving || !projectName.trim()}
+                >
+                  {combinationSaving ? 'Saving...' : 'Continue'}
+                </button>
+                <button className="secondary-button" onClick={() => setStep(3)}>Back</button>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* Step 5: What's Next / Results View */}
+      {step === 5 && (
         <div className="step-content">
           <div className="card whats-next">
             <div className="success-icon">{viewingResults ? '🎯' : (graduationMessage ? '🎉' : '✓')}</div>
@@ -972,6 +1351,8 @@ export default function MindSpace() {
                     setStarredSkills(new Set())
                     setStarredProblems(new Set())
                     setStarredPersonas(new Set())
+                    setSelectedCombination(null)
+                    setLastSessionId(null)
                     navigate('/mind-space', { replace: true })
                   }}
                 >

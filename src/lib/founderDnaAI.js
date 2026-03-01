@@ -70,6 +70,7 @@ export async function generateChallenge({
     if (!data?.mirror || !data?.action) throw new Error('Invalid response')
 
     return {
+      challengeName: data.challengeName || '',
       challengeType: data.challengeType || 'DO_IT',
       mirror: data.mirror,
       bridge: data.bridge,
@@ -92,6 +93,7 @@ function buildFallbackChallenge(founderName, stageStories, knowledgeStyle) {
     : 'MAKE_IT'
 
   return {
+    challengeName: 'The Breakthrough Challenge',
     challengeType: type,
     mirror: problemStory
       ? `${founderName} faced something remarkably similar. ${problemStory.content}`

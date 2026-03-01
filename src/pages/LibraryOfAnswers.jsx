@@ -116,6 +116,9 @@ function LibraryOfAnswers() {
   // Let's Play data
   const [letsPlayCompletions, setLetsPlayCompletions] = useState([])
 
+  // Essence Zones data
+  const [essenceZoneChallenges, setEssenceZoneChallenges] = useState([])
+
   // Add hue values to segments for wheel rendering
   const skillsWithHue = useMemo(() =>
     SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
@@ -438,7 +441,8 @@ function LibraryOfAnswers() {
         fetchNervousSystemData(),
         fetchHealingCompassData(),
         fetchProducts(),
-        fetchLetsPlayData()
+        fetchLetsPlayData(),
+        fetchEssenceZones()
       ])
     } catch (err) {
       console.error('Error fetching library data:', err)
@@ -485,6 +489,18 @@ function LibraryOfAnswers() {
     if (outcomes) {
       setKeyOutcomes(outcomes)
     }
+  }
+
+  const fetchEssenceZones = async () => {
+    const { data, error } = await supabase
+      .from('groan_challenges')
+      .select('id, title, source_label, visibility_layer, scary_score, wahoo_score, status, completed_at, created_at')
+      .eq('user_id', user.id)
+      .eq('essence_zone', 'essence')
+      .order('created_at', { ascending: false })
+
+    if (error) console.warn('fetchEssenceZones error:', error)
+    setEssenceZoneChallenges(data || [])
   }
 
   const fetchMoneyModelData = async () => {
@@ -821,14 +837,10 @@ function LibraryOfAnswers() {
 
   // Render cluster card (report-card style - always visible)
   const renderClusterCard = (cluster) => {
-    const items = cluster.items || []
-    const visibleItems = items.slice(0, 3)
-    const remainingCount = items.length - 3
     const taxonomyTags = getTaxonomyTagsForCluster(cluster)
 
     return (
       <div key={cluster.id} className="cluster-card-v2">
-        <h4 className="cluster-title">{cluster.cluster_label}</h4>
         {cluster.insight && (
           <p className="cluster-insight-v2">{cluster.insight}</p>
         )}
@@ -850,18 +862,7 @@ function LibraryOfAnswers() {
             ))}
           </div>
         )}
-        {items.length > 0 && (
-          <div className="cluster-tags">
-            {visibleItems.map((item, idx) => (
-              <span key={idx} className="cluster-tag">
-                {typeof item === 'string' ? item : item.text || item.label}
-              </span>
-            ))}
-            {remainingCount > 0 && (
-              <span className="cluster-tag-more">+{remainingCount} more</span>
-            )}
-          </div>
-        )}
+        <span className="cluster-ai-note">AI-analysed from your flow responses</span>
       </div>
     )
   }
@@ -911,6 +912,21 @@ function LibraryOfAnswers() {
         />
       )}
       END ARCHIVED */}
+
+      {/* Essence Zones */}
+      {essenceZoneChallenges.length > 0 && (
+        <div className="subsection">
+          <h3>Essence Zones</h3>
+          <p className="essence-zones-description">
+            Challenges where both fear and excitement are highest — what terrifies and excites you most. These point toward your true calling.
+          </p>
+          <ul className="essence-zones-list">
+            {essenceZoneChallenges.map(challenge => (
+              <li key={challenge.id}>{challenge.title}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Skills */}
       <div className="subsection">

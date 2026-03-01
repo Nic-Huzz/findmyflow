@@ -17,10 +17,8 @@ const STEPS = [
 ]
 
 const CATEGORIES = [
-  { emoji: '\u{1F4CA}', name: 'Business', desc: 'Ship real milestones.', color: '#5e17eb' },
   { emoji: '\u{1F3AE}', name: 'Play-List', desc: 'Do things you love.', color: '#E9A23B' },
   { emoji: '\u{1F9D8}', name: 'Healing', desc: 'Recognise. Release. Rewire.', color: '#10b981' },
-  { emoji: '\u{1F6E1}\uFE0F', name: 'Voice', desc: 'Feed your essence voice.', color: '#8B5CF6' },
   { emoji: '\u{1F381}', name: 'Bonus', desc: 'Surprises along the way.', color: '#3B82F6' },
 ]
 
@@ -389,10 +387,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CATEGORIES — 5-col with accent bars */}
+      {/* CATEGORIES — 3-col with accent bars */}
       <section className="fmf-section">
         <div className="fmf-container">
-          <p className="fmf-label reveal-blur-up">5 CATEGORIES</p>
+          <p className="fmf-label reveal-blur-up">3 CATEGORIES</p>
           <h2 className="fmf-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>Designed to scale your impact and income.</h2>
           <div className="fmf-sub-spacer" />
           <div className="fmf-cat-grid">

@@ -170,27 +170,29 @@ export default function PlayProfileQuiz({ userId, onQuizComplete, founders: exte
   }
 
   const handleFollowUpComplete = (answers, openText) => {
-    setState(prev => ({ ...prev, followUpAnswers: answers, openText }))
-    setScreen('summary')
+    const updated = { ...state, followUpAnswers: answers, openText }
+    setState(updated)
+    // Auto-save and skip summary — go straight to diagnostic or saved
+    autoSave(updated)
   }
 
-  const handleSave = async () => {
-    if (!userId || !state.matchResult) return
+  const autoSave = async (s) => {
+    if (!userId || !s.matchResult) return
     setIsSaving(true)
     try {
       const row = {
         user_id: userId,
-        selected_games: state.selectedGames.map(g => ({ name: g.name, icon: g.icon, category: g.category })),
-        slider_values: state.sliderValues,
-        dna_code: state.dnaProfile.code,
-        archetype: state.matchResult.archetype,
-        matched_founder: state.matchResult.founder.name,
-        matched_founder_company: state.matchResult.founder.company,
-        match_distance: state.matchResult.distance,
-        stuck_point_id: state.stuckPoint?.id ?? null,
-        stuck_point_name: state.stuckPoint?.name ?? null,
-        follow_up_answers: state.followUpAnswers,
-        open_text: state.openText || null,
+        selected_games: s.selectedGames.map(g => ({ name: g.name, icon: g.icon, category: g.category })),
+        slider_values: s.sliderValues,
+        dna_code: s.dnaProfile.code,
+        archetype: s.matchResult.archetype,
+        matched_founder: s.matchResult.founder.name,
+        matched_founder_company: s.matchResult.founder.company,
+        match_distance: s.matchResult.distance,
+        stuck_point_id: s.stuckPoint?.id ?? null,
+        stuck_point_name: s.stuckPoint?.name ?? null,
+        follow_up_answers: s.followUpAnswers,
+        open_text: s.openText || null,
         completed_at: new Date().toISOString(),
       }
 
@@ -198,23 +200,19 @@ export default function PlayProfileQuiz({ userId, onQuizComplete, founders: exte
         .from('founder_dna_results')
         .upsert(row, { onConflict: 'user_id' })
 
-      if (error) {
-        console.error('Failed to save founder DNA result:', error)
-      }
+      if (error) console.error('Failed to save founder DNA result:', error)
 
-      // Clear localStorage progress on successful save
       try { if (storageKey) localStorage.removeItem(storageKey) } catch {}
 
-      // If flow page provided a callback, chain into diagnostic instead of showing saved screen
       if (onQuizComplete) {
         onQuizComplete({
-          dnaProfile: state.dnaProfile,
-          matchResult: state.matchResult,
-          stuckPoint: state.stuckPoint,
-          followUpAnswers: state.followUpAnswers,
-          openText: state.openText,
-          selectedGames: state.selectedGames,
-          sliderValues: state.sliderValues,
+          dnaProfile: s.dnaProfile,
+          matchResult: s.matchResult,
+          stuckPoint: s.stuckPoint,
+          followUpAnswers: s.followUpAnswers,
+          openText: s.openText,
+          selectedGames: s.selectedGames,
+          sliderValues: s.sliderValues,
           founders: founders,
         })
       } else {
@@ -297,16 +295,13 @@ export default function PlayProfileQuiz({ userId, onQuizComplete, founders: exte
         />
       )}
 
-      {(screen === 'summary' || screen === 'saved') && state.matchResult && (
+      {screen === 'saved' && state.matchResult && (
         <ProfileSummary
           founder={state.matchResult.founder}
           stuckPoint={state.stuckPoint || { id: null, name: 'Unknown', icon: '' }}
           dnaCode={state.dnaProfile?.code}
           archetype={state.matchResult.archetype}
-          onSave={handleSave}
           onRetake={handleRetake}
-          isSaving={isSaving}
-          alreadySaved={screen === 'saved'}
         />
       )}
     </div>

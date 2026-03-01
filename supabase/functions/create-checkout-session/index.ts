@@ -45,14 +45,19 @@ serve(async (req) => {
     }
 
     // Create checkout session
+    // NOTE: mode: 'payment' = one-time purchase = lifetime access (no expiry check runs).
+    // To switch to recurring: change to 'subscription', ensure STRIPE_PRICE_ID points to a
+    // recurring price, and the stripe-webhook handler's subscription.updated/deleted events
+    // will then fire to manage expiry. Until then those webhook handlers are dormant.
     // TODO: Replace STRIPE_PRICE_ID with actual Stripe Price ID once pricing is decided
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      mode: 'payment', // Change to 'subscription' for recurring
+      mode: 'payment',
       line_items: [{
         price: Deno.env.get('STRIPE_PRICE_ID'),
         quantity: 1,
       }],
+      allow_promotion_codes: true,
       success_url: `${return_url}?payment=success`,
       cancel_url: `${return_url}?payment=cancelled`,
       metadata: { supabase_user_id: user.id }

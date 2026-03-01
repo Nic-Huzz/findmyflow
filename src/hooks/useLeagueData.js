@@ -12,9 +12,6 @@ import {
   getUserTeam,
   getMatchups,
   getContentSubmissions,
-  getEffectiveNomination,
-  nominateProject,
-  getWeekNominations,
 } from '../lib/league/leagueService'
 import { calculateLeagueStandings, calculateTeamScores } from '../lib/league/leagueScoring'
 import { formatLocalDate } from '../lib/dateUtils'
@@ -33,7 +30,6 @@ export function useLeagueData() {
   const [contentSubmissions, setContentSubmissions] = useState([])
   const [error, setError] = useState(null)
   const [memberNames, setMemberNames] = useState({})
-  const [userNomination, setUserNomination] = useState(null) // { project_id, week_number, user_projects: {...} }
 
   // Derived
   const isOnTeam = !!userTeam
@@ -97,17 +93,6 @@ export function useLeagueData() {
         setContentSubmissions(subs)
       }
 
-      // 5. Load user's project nomination for current week
-      if (userTeamData && leagueStarted) {
-        const start = new Date(leagueData.start_date + 'T00:00:00')
-        const now = new Date()
-        const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24))
-        const currentWk = Math.min(Math.floor(diffDays / 7) + 1, leagueData.num_weeks || 4)
-        const nom = await getEffectiveNomination(user.id, leagueData.id, currentWk)
-        setUserNomination(nom)
-      } else {
-        setUserNomination(null)
-      }
     } catch (err) {
       console.error('Error loading league data:', err)
       setError(err.message)
@@ -169,21 +154,6 @@ export function useLeagueData() {
     return Math.min(week, league.num_weeks || 4)
   }, [league])
 
-  // Change project nomination for current week
-  const changeNomination = useCallback(async (projectId) => {
-    if (!league?.id || !user?.id) return
-    const currentWk = getCurrentWeek()
-    if (currentWk < 1) return
-    try {
-      await nominateProject(league.id, currentWk, projectId)
-      const nom = await getEffectiveNomination(user.id, league.id, currentWk)
-      setUserNomination(nom)
-    } catch (err) {
-      console.error('Error changing nomination:', err)
-      throw err
-    }
-  }, [league?.id, user?.id, getCurrentWeek])
-
   // Get matchups for a specific week
   const getWeekMatchups = useCallback((weekNumber) => {
     return matchups.filter(m => m.week_number === weekNumber)
@@ -221,10 +191,7 @@ export function useLeagueData() {
       contentPointsByUser[sub.user_id] = (contentPointsByUser[sub.user_id] || 0) + sub.points_value
     })
 
-    // Get project nominations for Business scoring
-    const nominations = await getWeekNominations(league.id, targetWeek)
-
-    return calculateTeamScores(memberUserIds, range.start, range.end, contentPointsByUser, nominations)
+    return calculateTeamScores(memberUserIds, range.start, range.end, contentPointsByUser)
   }, [league?.id, getCurrentWeek, getWeekDateRange])
 
   // Load on mount
@@ -243,7 +210,6 @@ export function useLeagueData() {
     standings,
     matchups,
     contentSubmissions,
-    userNomination,
 
     // Derived
     isOnTeam,
@@ -254,7 +220,6 @@ export function useLeagueData() {
     reloadStandings,
     reloadTeams,
     reloadContent,
-    changeNomination,
 
     // Helpers
     getCurrentWeek,

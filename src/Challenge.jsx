@@ -1287,13 +1287,15 @@ function Challenge() {
       if (error) throw error
 
       // Award points: insert quest_completions record for the Groans category
+      // quest_id includes challenge ID so the unique index allows multiple completions
       const PLAY_LIST_POINTS = 7
+      const questId = `play_list_challenge_${selectedGroanChallenge.id}`
       const { error: questError } = await supabase
         .from('quest_completions')
         .insert({
           user_id: user.id,
           challenge_instance_id: progress?.challenge_instance_id || null,
-          quest_id: 'play_list_challenge',
+          quest_id: questId,
           quest_category: 'Groans',
           quest_type: 'Rewire',
           points_earned: PLAY_LIST_POINTS,
@@ -1314,7 +1316,7 @@ function Challenge() {
         // Update local completions state so points reflect immediately
         setCompletions(prev => [...prev, {
           user_id: user.id,
-          quest_id: 'play_list_challenge',
+          quest_id: questId,
           quest_category: 'Groans',
           quest_type: 'Rewire',
           points_earned: PLAY_LIST_POINTS,
@@ -1693,7 +1695,7 @@ function Challenge() {
           marginBottom: '12px', textDecoration: 'none', color: '#5e17eb',
           fontSize: '14px', fontWeight: 700, transition: 'all 0.2s',
         }}>
-          🏆 Fantasy League is live! Join a squad →
+          🏆 Fantasy League is live! Join now →
         </Link>
       )}
 
@@ -1735,7 +1737,7 @@ function Challenge() {
                 activeTab={activeStageTab}
                 onTabChange={setActiveStageTab}
                 flowFinderComplete={flowFinderComplete}
-                excludeStages={[0, 0.5, 0.9]}
+                excludeStages={[0, 0.5]}
               />
             </>
           ) : (
@@ -2099,9 +2101,9 @@ function Challenge() {
             <BusinessSetup
               userId={user?.id}
               existingProject={selectedProject}
+              userPersona={stageProgress?.persona || userData?.persona}
               onSetupComplete={(project) => {
                 handleProjectSelected(project)
-                setActiveStageTab(1) // Move to Validation after setup
               }}
             />
           </div>
@@ -2135,14 +2137,11 @@ function Challenge() {
                   fontSize: '1rem'
                 }}
                 onClick={async () => {
-                  try {
-                    await supabase.from('crm_interest').insert({
-                      user_id: user?.id,
-                      expressed_at: new Date().toISOString()
-                    })
-                  } catch (err) {
-                    console.warn('Failed to log CRM interest:', err)
-                  }
+                  const { error } = await supabase.from('crm_interest').insert({
+                    user_id: user?.id,
+                    expressed_at: new Date().toISOString()
+                  })
+                  if (error) console.warn('Failed to log CRM interest:', error)
                   alert('Thanks! We\'ll notify you when the CRM is ready.')
                 }}
               >

@@ -1,33 +1,31 @@
 /**
  * leagueScoring.js — Fantasy League scoring engine
  *
- * Queries quest_completions directly for 5 fantasy categories.
- * No changes to the existing 3-bucket scoring system.
+ * Queries quest_completions for 3 fantasy categories:
+ * Play-List, Healing, Bonus. Win 2 of 3 to take the week.
  */
 import { supabase } from '../supabaseClient'
 import { FANTASY_CATEGORIES, CATEGORY_KEYS, MATCH_POINTS } from './leagueConfig'
-import { getWeekNominations } from './leagueService'
 
 // ============================================
 // Individual User Scoring
 // ============================================
 
 /**
- * Calculate a single user's scores across all 5 fantasy categories
+ * Calculate a single user's scores across all fantasy categories
  * for a given date range.
  *
  * @param {string} userId
  * @param {string} startDate - ISO date string (inclusive)
  * @param {string} endDate - ISO date string (inclusive)
  * @param {number} approvedContentPoints - Pre-calculated approved content points for Bonus
- * @param {string|null} nominatedProjectId - Project ID for Business category filtering
  * @returns {{ [categoryKey]: number }}
  */
-export async function calculateUserCategoryScores(userId, startDate, endDate, approvedContentPoints = 0, nominatedProjectId = null) {
+export async function calculateUserCategoryScores(userId, startDate, endDate, approvedContentPoints = 0) {
   // Fetch all quest_completions for this user in the date range
   const { data: completions, error } = await supabase
     .from('quest_completions')
-    .select('quest_id, quest_category, points_earned, completed_at, project_id')
+    .select('quest_id, quest_category, points_earned, completed_at')
     .eq('user_id', userId)
     .gte('completed_at', startDate)
     .lte('completed_at', endDate + 'T23:59:59.999Z')
@@ -40,31 +38,10 @@ export async function calculateUserCategoryScores(userId, startDate, endDate, ap
   const scores = {}
 
   for (const [key, config] of Object.entries(FANTASY_CATEGORIES)) {
-    let categoryCompletions = completions.filter(c =>
+    const categoryCompletions = completions.filter(c =>
       config.dbFilter.includes(c.quest_category)
     )
-
-    // Business efficiency: filter to nominated project only
-    if (config.scoringType === 'efficiency') {
-      if (!nominatedProjectId) {
-        // No nomination → 0 Business score
-        scores[key] = 0
-        continue
-      }
-      categoryCompletions = categoryCompletions.filter(c =>
-        c.project_id === nominatedProjectId
-      )
-    }
-
-    if (config.scoringType === 'efficiency') {
-      // Business Efficiency: SUM(points) / COUNT(DISTINCT quest_id)
-      const totalPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-      const uniqueQuests = new Set(categoryCompletions.map(c => c.quest_id)).size
-      scores[key] = uniqueQuests > 0 ? Math.round(totalPoints / uniqueQuests) : 0
-    } else {
-      // Raw: SUM(points)
-      scores[key] = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-    }
+    scores[key] = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
   }
 
   // Add approved content points to Bonus
@@ -84,10 +61,9 @@ export async function calculateUserCategoryScores(userId, startDate, endDate, ap
  * @param {string} startDate
  * @param {string} endDate
  * @param {{ [userId]: number }} contentPointsByUser - Approved content points per user
- * @param {{ [userId]: string }} nominationsByUser - Nominated project ID per user
  * @returns {{ [categoryKey]: number, members: { [userId]: { [categoryKey]: number } } }}
  */
-export async function calculateTeamScores(memberUserIds, startDate, endDate, contentPointsByUser = {}, nominationsByUser = {}) {
+export async function calculateTeamScores(memberUserIds, startDate, endDate, contentPointsByUser = {}) {
   const memberScores = {}
   const teamTotals = Object.fromEntries(CATEGORY_KEYS.map(k => [k, 0]))
 
@@ -95,8 +71,7 @@ export async function calculateTeamScores(memberUserIds, startDate, endDate, con
   await Promise.all(
     memberUserIds.map(async (userId) => {
       const userContentPoints = contentPointsByUser[userId] || 0
-      const nominatedProjectId = nominationsByUser[userId] || null
-      const scores = await calculateUserCategoryScores(userId, startDate, endDate, userContentPoints, nominatedProjectId)
+      const scores = await calculateUserCategoryScores(userId, startDate, endDate, userContentPoints)
       memberScores[userId] = scores
 
       for (const key of CATEGORY_KEYS) {
@@ -148,25 +123,21 @@ export function calculateMatchupResult(teamAScores, teamBScores) {
     })
   }
 
-  // Determine match points per spec:
-  // WIN (3 pts): Win 3+ categories
-  // DRAW (1 pt each): Exactly 2-2 split
-  // LOSS (0 pts): All other outcomes (0-1 wins, or 2 wins without opponent also having 2)
-  let teamAMatchPoints, teamBMatchPoints
-  if (teamACategoriesWon >= 3) {
+  // Determine match points (3 categories):
+  // WIN (3 pts): Win 2+ categories
+  // DRAW (1 pt each): 1-1 split (1 tied)
+  // LOSS (0 pts): Win 0 categories
+  let teamAMatchPoints = MATCH_POINTS.LOSS
+  let teamBMatchPoints = MATCH_POINTS.LOSS
+  if (teamACategoriesWon >= 2) {
     teamAMatchPoints = MATCH_POINTS.WIN
     teamBMatchPoints = MATCH_POINTS.LOSS
-  } else if (teamBCategoriesWon >= 3) {
+  } else if (teamBCategoriesWon >= 2) {
     teamAMatchPoints = MATCH_POINTS.LOSS
     teamBMatchPoints = MATCH_POINTS.WIN
-  } else if (teamACategoriesWon === 2 && teamBCategoriesWon === 2) {
+  } else if (teamACategoriesWon === 1 && teamBCategoriesWon === 1) {
     teamAMatchPoints = MATCH_POINTS.DRAW
     teamBMatchPoints = MATCH_POINTS.DRAW
-  } else {
-    // Neither team won 3+ categories and it's not a 2-2 draw
-    // Both get LOSS (0 pts) — encourages competing across all 5 categories
-    teamAMatchPoints = MATCH_POINTS.LOSS
-    teamBMatchPoints = MATCH_POINTS.LOSS
   }
 
   return {
@@ -235,9 +206,6 @@ export async function calculateWeekResults(leagueId, weekNumber, startDate, endD
     contentPointsByUser[sub.user_id] = (contentPointsByUser[sub.user_id] || 0) + sub.points_value
   })
 
-  // 3.5. Get project nominations for this week
-  const nominations = await getWeekNominations(leagueId, weekNumber)
-
   // 4. Calculate team scores and matchup results
   const results = []
   const teamScoresCache = {}
@@ -249,8 +217,7 @@ export async function calculateWeekResults(leagueId, weekNumber, startDate, endD
         teamMembersMap[matchup.team_a_id] || [],
         startDate,
         endDate,
-        contentPointsByUser,
-        nominations
+        contentPointsByUser
       )
     }
     if (!teamScoresCache[matchup.team_b_id]) {
@@ -258,8 +225,7 @@ export async function calculateWeekResults(leagueId, weekNumber, startDate, endD
         teamMembersMap[matchup.team_b_id] || [],
         startDate,
         endDate,
-        contentPointsByUser,
-        nominations
+        contentPointsByUser
       )
     }
 

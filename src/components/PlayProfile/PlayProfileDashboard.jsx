@@ -2,6 +2,18 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import './PlayProfile.css'
 
+function renderParagraphs(text) {
+  if (!text) return null
+  const cleaned = text
+    .replace(/\*\*/g, '')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/^>\s*/gm, '')
+    .replace(/^#+\s*/gm, '')
+  const paras = cleaned.split(/\n\n+/).filter(Boolean)
+  if (paras.length <= 1) return cleaned
+  return paras.map((p, i) => <p key={i} style={{ margin: '0 0 10px' }}>{p}</p>)
+}
+
 const TYPE_META = {
   DO_IT:    { label: 'DO IT',    className: 'do-it' },
   CUT_IT:   { label: 'CUT IT',   className: 'cut-it' },
@@ -9,11 +21,20 @@ const TYPE_META = {
   MAKE_IT:  { label: 'MAKE IT',  className: 'make-it' },
 }
 
+const COMPASS_META = {
+  north: { emoji: '🌊', label: 'Flow' },
+  east:  { emoji: '🔄', label: 'Redirect' },
+  south: { emoji: '🛏️', label: 'Rest' },
+  west:  { emoji: '🙏', label: 'Honour' },
+}
+
 export default function PlayProfileDashboard({ userId }) {
   const [loading, setLoading] = useState(true)
   const [dnaResult, setDnaResult] = useState(null)
-  const [activeSession, setActiveSession] = useState(null)
+  const [activeSessions, setActiveSessions] = useState([])
+  const [activeIdx, setActiveIdx] = useState(0)
   const [completedSessions, setCompletedSessions] = useState([])
+  const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
     if (!userId) { setLoading(false); return }
@@ -29,15 +50,13 @@ export default function PlayProfileDashboard({ userId }) {
             .maybeSingle(),
           supabase
             .from('founder_dna_sessions')
-            .select('id, stuck_point_name, challenge_type, challenge_action, created_at')
+            .select('id, stuck_point_name, challenge_name, challenge_type, challenge_action, created_at')
             .eq('user_id', userId)
             .eq('status', 'active')
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .maybeSingle(),
+            .order('created_at', { ascending: false }),
           supabase
             .from('founder_dna_sessions')
-            .select('id, stuck_point_name, challenge_type, resistance_rating, engagement_rating, shift_rating, rated_at')
+            .select('id, stuck_point_name, challenge_name, challenge_type, resistance_rating, engagement_rating, shift_rating, voice_type, compass_direction, rated_at')
             .eq('user_id', userId)
             .eq('status', 'completed')
             .order('rated_at', { ascending: false })
@@ -45,7 +64,7 @@ export default function PlayProfileDashboard({ userId }) {
         ])
 
         setDnaResult(resultRes.data || null)
-        setActiveSession(activeRes.data || null)
+        setActiveSessions(activeRes.data || [])
         setCompletedSessions(historyRes.data || [])
       } catch (err) {
         console.error('PlayProfileDashboard load error:', err)
@@ -86,30 +105,83 @@ export default function PlayProfileDashboard({ userId }) {
 
   return (
     <div className="play-profile-quiz">
-      {/* Active challenge card */}
-      {activeSession && (
-        <div className="pp-active-challenge pp-fade-in-up">
-          <div className="pp-active-label">Active Challenge</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-            <span className="pp-session-stuck">{activeSession.stuck_point_name}</span>
-            {activeSession.challenge_type && (
-              <span className={`pp-type-badge ${(TYPE_META[activeSession.challenge_type] || TYPE_META.DO_IT).className}`}>
-                {(TYPE_META[activeSession.challenge_type] || TYPE_META.DO_IT).label}
-              </span>
+      {/* Active challenge card(s) */}
+      {activeSessions.length > 0 && (() => {
+        const safeIdx = Math.min(activeIdx, activeSessions.length - 1)
+        const activeSession = activeSessions[safeIdx]
+        return (
+          <div className="pp-active-challenge pp-fade-in-up">
+            <div className="pp-points-pill">+10 XP</div>
+            <div className="pp-active-label">Active Challenge</div>
+            {activeSession.challenge_name && (
+              <div className="pp-challenge-name">{activeSession.challenge_name}</div>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <span className="pp-session-stuck">{activeSession.stuck_point_name}</span>
+              {activeSession.challenge_type && (
+                <span className={`pp-type-badge ${(TYPE_META[activeSession.challenge_type] || TYPE_META.DO_IT).className}`}>
+                  {(TYPE_META[activeSession.challenge_type] || TYPE_META.DO_IT).label}
+                </span>
+              )}
+            </div>
+            {activeSession.challenge_action && (
+              <>
+                {expanded ? (
+                  <div className="pp-active-text">
+                    {renderParagraphs(activeSession.challenge_action)}
+                  </div>
+                ) : (
+                  <div className="pp-active-text pp-clamped">
+                    {activeSession.challenge_action.replace(/\*\*/g, '').replace(/\*([^*]+)\*/g, '$1')}
+                  </div>
+                )}
+                {activeSession.challenge_action.length > 150 && (
+                  <button
+                    className="pp-read-more"
+                    onClick={() => setExpanded(prev => !prev)}
+                  >
+                    {expanded ? 'Show less' : 'Read more'}
+                  </button>
+                )}
+              </>
+            )}
+            <a
+              href={`/play-profile?mode=rate&sessionId=${activeSession.id}`}
+              className="pp-btn-gold"
+              style={{ display: 'block', textDecoration: 'none', textAlign: 'center', padding: '10px 20px', fontSize: 14 }}
+            >
+              Complete This Challenge
+            </a>
+            {activeSessions.length > 1 && (
+              <div className="pp-carousel-nav">
+                <button
+                  className="pp-carousel-arrow"
+                  onClick={() => { setActiveIdx(i => i - 1); setExpanded(false) }}
+                  disabled={safeIdx === 0}
+                >
+                  ‹
+                </button>
+                <span className="pp-carousel-dots">
+                  {activeSessions.map((_, i) => (
+                    <span
+                      key={i}
+                      className={`pp-carousel-dot${i === safeIdx ? ' active' : ''}`}
+                      onClick={() => { setActiveIdx(i); setExpanded(false) }}
+                    />
+                  ))}
+                </span>
+                <button
+                  className="pp-carousel-arrow"
+                  onClick={() => { setActiveIdx(i => i + 1); setExpanded(false) }}
+                  disabled={safeIdx === activeSessions.length - 1}
+                >
+                  ›
+                </button>
+              </div>
             )}
           </div>
-          {activeSession.challenge_action && (
-            <div className="pp-active-text">{activeSession.challenge_action}</div>
-          )}
-          <a
-            href={`/play-profile?mode=rate&sessionId=${activeSession.id}`}
-            className="pp-btn-gold"
-            style={{ display: 'block', textDecoration: 'none', textAlign: 'center', padding: '10px 20px', fontSize: 14 }}
-          >
-            Rate This Challenge
-          </a>
-        </div>
-      )}
+        )
+      })()}
 
       {/* DNA Card */}
       <div className="pp-dashboard-card pp-fade-in-up pp-stagger-2">
@@ -151,10 +223,15 @@ export default function PlayProfileDashboard({ userId }) {
           </div>
           {completedSessions.map(session => {
             const meta = TYPE_META[session.challenge_type] || TYPE_META.DO_IT
+            const compass = COMPASS_META[session.compass_direction]
+            const hasNewFormat = !!session.compass_direction
             return (
               <div key={session.id} className="pp-session-row">
                 <div className="pp-session-info">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    {session.challenge_name && (
+                      <span className="pp-challenge-name-small">{session.challenge_name}</span>
+                    )}
                     <span className="pp-session-stuck">{session.stuck_point_name}</span>
                     <span className={`pp-type-badge ${meta.className}`}>{meta.label}</span>
                   </div>
@@ -162,11 +239,26 @@ export default function PlayProfileDashboard({ userId }) {
                     {session.rated_at ? new Date(session.rated_at).toLocaleDateString() : ''}
                   </div>
                 </div>
-                <div className="pp-mini-bars">
-                  <div className="pp-mini-bar resistance" style={{ height: (session.resistance_rating || 1) * 5 }} />
-                  <div className="pp-mini-bar engagement" style={{ height: (session.engagement_rating || 1) * 5 }} />
-                  <div className="pp-mini-bar shift" style={{ height: (session.shift_rating || 1) * 5 }} />
-                </div>
+                {hasNewFormat ? (
+                  <div className="pp-session-badges">
+                    {session.voice_type && (
+                      <span className="pp-session-voice">
+                        {session.voice_type === 'essence' ? '🌟' : '🛡️'}
+                      </span>
+                    )}
+                    {compass && (
+                      <span className="pp-session-compass" title={compass.label}>
+                        {compass.emoji}
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <div className="pp-mini-bars">
+                    <div className="pp-mini-bar resistance" style={{ height: (session.resistance_rating || 1) * 5 }} />
+                    <div className="pp-mini-bar engagement" style={{ height: (session.engagement_rating || 1) * 5 }} />
+                    <div className="pp-mini-bar shift" style={{ height: (session.shift_rating || 1) * 5 }} />
+                  </div>
+                )}
               </div>
             )
           })}

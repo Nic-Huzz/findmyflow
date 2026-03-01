@@ -102,7 +102,7 @@ export default function ContentChallenges({
     return (
       <div className="content-challenges">
         <div className="content-empty-state">
-          <p>Join a Fantasy League squad to unlock content challenges!</p>
+          <p>Join the Fantasy League to unlock content challenges!</p>
           <Link to="/league" className="content-empty-link">Go to Fantasy League</Link>
         </div>
       </div>

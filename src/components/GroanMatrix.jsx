@@ -60,6 +60,8 @@ function GroanMatrix({
   const [loadingCell, setLoadingCell] = useState(null)
   const [flowFinderCompleteInternal, setFlowFinderCompleteInternal] = useState(true)
   const [selectedPersona, setSelectedPersona] = useState(null) // For Skill × Problem tab
+  const [showMore, setShowMore] = useState(false)
+  const [showEssenceInfo, setShowEssenceInfo] = useState(false)
 
   // Use parent's check when available, fall back to internal check.
   // When rendered from Challenge.jsx, the prop is always final (Challenge shows
@@ -173,6 +175,12 @@ function GroanMatrix({
     return completed[0] || null
   }
 
+  // Get completion count for a cell
+  const getCellCompletionCount = (sourceId, layerId) => {
+    const cellChallenges = getCellChallenges(sourceId, layerId)
+    return cellChallenges.filter(c => c.status === 'completed').length
+  }
+
   // Get challenges for a Skill × Problem cell
   const getSkillProblemCellChallenges = (skillId, problemId) => {
     const key = `skill_x_problem_${skillId}_${problemId}${selectedPersona ? `_${selectedPersona}` : ''}`
@@ -195,6 +203,12 @@ function GroanMatrix({
       .filter(c => c.status === 'completed')
       .sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at))
     return completed[0] || null
+  }
+
+  // Get completion count for a Skill × Problem cell
+  const getSkillProblemCompletionCount = (skillId, problemId) => {
+    const cellChallenges = getSkillProblemCellChallenges(skillId, problemId)
+    return cellChallenges.filter(c => c.status === 'completed').length
   }
 
   // Handle cell click
@@ -319,12 +333,41 @@ function GroanMatrix({
 
   const sourceItems = getCurrentSourceItems()
 
+  // Split items into starred (primary) and non-starred (see more)
+  const isItemStarred = (item) => {
+    if (!item.items || !Array.isArray(item.items)) return false
+    return item.items.some(i => i.isStarred === true)
+  }
+  const starredItems = sourceItems.filter(isItemStarred)
+  const nonStarredItems = sourceItems.filter(i => !isItemStarred(i))
+  // If no starred items, show all (backwards compat with old data)
+  const hasStarredSplit = starredItems.length > 0 && nonStarredItems.length > 0
+
   return (
     <div className="groan-matrix">
+      {/* Stats bar */}
+      {stats && !compact && (
+        <div className="groan-stats-bar">
+          <div className="groan-stat">
+            <div className="groan-stat-value">{stats.completed}</div>
+            <div className="groan-stat-label">Completed</div>
+          </div>
+          <div className="groan-stat groan-stat-clickable" onClick={() => setShowEssenceInfo(prev => !prev)}>
+            <div className="groan-stat-value">{stats.byEssenceZone?.essence?.completed || 0}</div>
+            <div className="groan-stat-label">Essence Zones</div>
+            {showEssenceInfo && (
+              <div className="groan-essence-tooltip">
+                Challenges where both scary AND excitement scores are 7+. These are closest to your true calling — what terrifies and excites you most.
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="groan-matrix-header">
         <div className="groan-matrix-title-row">
-          <h2 className="groan-matrix-title">Play-list Matrix</h2>
+          <h2 className="section-title" style={{ margin: 0 }}>Play-list Matrix</h2>
           <a href="/play-list-explainer" className="groan-matrix-explainer-btn">Explainer</a>
         </div>
 
@@ -362,23 +405,6 @@ function GroanMatrix({
               </option>
             ))}
           </select>
-        </div>
-      )}
-
-      {/* Stats bar */}
-      {stats && !compact && (
-        <div className="groan-stats-bar">
-          <div className="groan-stat">
-            <div className="groan-stat-value">{stats.completed}</div>
-            <div className="groan-stat-label">Completed</div>
-          </div>
-          <div className="groan-stat">
-            <div className="groan-stat-value">{stats.byEssenceZone?.essence?.completed || 0}</div>
-            <div className="groan-stat-label">
-              Essence Zones
-              <span className="groan-essence-info" title="Challenges where both scary AND excitement scores are 7+. These are closest to your true calling — what terrifies and excites you most.">ⓘ</span>
-            </div>
-          </div>
         </div>
       )}
 
@@ -424,7 +450,7 @@ function GroanMatrix({
               </button>
             </div>
           ) : (
-            sourceItems.map(sourceItem => (
+            (hasStarredSplit ? starredItems : sourceItems).map(sourceItem => (
               <div key={sourceItem.id} className="groan-matrix-row">
                 {/* Row label */}
                 <div className="groan-row-label">
@@ -453,6 +479,8 @@ function GroanMatrix({
                       </div>
                     )
                   }
+
+                  const completionCount = getCellCompletionCount(sourceItem.id, layer.id)
 
                   return (
                     <div
@@ -484,7 +512,7 @@ function GroanMatrix({
                             {challenge.status === 'completed' && (
                               <>
                                 <span className="groan-cell-status-icon">✓</span>
-                                Done
+                                Done{completionCount > 1 ? ` x${completionCount}` : ''}
                               </>
                             )}
                             {challenge.status === 'active' && challenge.accepted_at && (
@@ -612,6 +640,7 @@ function GroanMatrix({
                 {/* Cells for each problem */}
                 {flowFinderData.problems.map(problem => {
                   const challenge = getSkillProblemActiveChallenge(skill.id, problem.id)
+                  const completionCount = getSkillProblemCompletionCount(skill.id, problem.id)
                   const cellKey = `sp_${skill.id}_${problem.id}`
                   const isLoading = loadingCell === cellKey
                   const isEssenceZone = challenge?.essence_zone === 'essence'
@@ -645,7 +674,7 @@ function GroanMatrix({
                             {challenge.status === 'completed' && (
                               <>
                                 <span className="groan-cell-status-icon">✓</span>
-                                Done
+                                Done{completionCount > 1 ? ` x${completionCount}` : ''}
                               </>
                             )}
                             {challenge.status === 'active' && challenge.accepted_at && (
@@ -757,9 +786,10 @@ function GroanMatrix({
                   </div>
                 ) : (
                 <div className="groan-mobile-cards">
-                  {sourceItems.map(sourceItem => {
+                  {(hasStarredSplit ? starredItems : sourceItems).map(sourceItem => {
                     const challenge = getCellActiveChallenge(sourceItem.id, layer.id)
                     const isLoading = loadingCell === `${sourceItem.id}_${layer.id}`
+                    const completionCount = getCellCompletionCount(sourceItem.id, layer.id)
 
                     return (
                       <div
@@ -785,7 +815,7 @@ function GroanMatrix({
                           <div className="groan-loading-spinner" />
                         ) : challenge ? (
                           <div className={`groan-mobile-card-status ${challenge.status}`}>
-                            {challenge.status === 'completed' && '✓ Done'}
+                            {challenge.status === 'completed' && `✓ Done${completionCount > 1 ? ` x${completionCount}` : ''}`}
                             {challenge.status === 'active' && challenge.accepted_at && '⏳ Active'}
                             {challenge.status === 'active' && !challenge.accepted_at && '👀 View'}
                           </div>
@@ -815,6 +845,78 @@ function GroanMatrix({
                       </div>
                     )
                   })}
+
+                  {/* See More toggle for non-starred items */}
+                  {hasStarredSplit && nonStarredItems.length > 0 && (
+                    <>
+                      <button
+                        className="groan-see-more-btn"
+                        onClick={(e) => { e.stopPropagation(); setShowMore(prev => !prev) }}
+                      >
+                        {showMore ? 'Show Less' : `See More (${nonStarredItems.length})`}
+                        <span className={`groan-see-more-chevron ${showMore ? 'open' : ''}`}>›</span>
+                      </button>
+                      {showMore && nonStarredItems.map(sourceItem => {
+                        const challenge = getCellActiveChallenge(sourceItem.id, layer.id)
+                        const isLoading = loadingCell === `${sourceItem.id}_${layer.id}`
+                        const completionCount = getCellCompletionCount(sourceItem.id, layer.id)
+
+                        return (
+                          <div
+                            key={sourceItem.id}
+                            className={`groan-mobile-card ${
+                              challenge?.status === 'completed' ? 'completed' : ''
+                            } ${
+                              (challenge?.status === 'active' && challenge?.accepted_at) ? 'in-progress' : ''
+                            }`}
+                            onClick={() => handleCellClick(sourceItem, layer)}
+                          >
+                            <div className="groan-mobile-card-source">
+                              <div className="groan-mobile-card-source-label">
+                                {sourceItem.cluster_label}
+                              </div>
+                              {challenge && (
+                                <div className="groan-mobile-card-challenge">
+                                  {challenge.title}
+                                </div>
+                              )}
+                            </div>
+                            {isLoading ? (
+                              <div className="groan-loading-spinner" />
+                            ) : challenge ? (
+                              <div className={`groan-mobile-card-status ${challenge.status}`}>
+                                {challenge.status === 'completed' && `✓ Done${completionCount > 1 ? ` x${completionCount}` : ''}`}
+                                {challenge.status === 'active' && challenge.accepted_at && '⏳ Active'}
+                                {challenge.status === 'active' && !challenge.accepted_at && '👀 View'}
+                              </div>
+                            ) : (
+                              onCellClick ? (
+                                <button
+                                  className="groan-mobile-generate"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    onCellClick({
+                                      sourceType: activeSourceType,
+                                      sourceId: sourceItem.id,
+                                      sourceLabel: sourceItem.cluster_label,
+                                      sourceInsight: sourceItem.insight,
+                                      visibilityLayer: layer.id,
+                                      layer,
+                                      challenge: null
+                                    })
+                                  }}
+                                >
+                                  + Select
+                                </button>
+                              ) : (
+                                <span className="groan-mobile-card-status">+</span>
+                              )
+                            )}
+                          </div>
+                        )
+                      })}
+                    </>
+                  )}
                 </div>
                 )}
               </div>
@@ -856,6 +958,7 @@ function GroanMatrix({
                 <div className="groan-mobile-cards">
                   {flowFinderData.problems.map(problem => {
                     const challenge = getSkillProblemActiveChallenge(skill.id, problem.id)
+                    const completionCount = getSkillProblemCompletionCount(skill.id, problem.id)
                     const cellKey = `sp_${skill.id}_${problem.id}`
                     const isLoading = loadingCell === cellKey
 
@@ -883,7 +986,7 @@ function GroanMatrix({
                           <div className="groan-loading-spinner" />
                         ) : challenge ? (
                           <div className={`groan-mobile-card-status ${challenge.status}`}>
-                            {challenge.status === 'completed' && '✓ Done'}
+                            {challenge.status === 'completed' && `✓ Done${completionCount > 1 ? ` x${completionCount}` : ''}`}
                             {challenge.status === 'active' && challenge.accepted_at && '⏳ Active'}
                             {challenge.status === 'active' && !challenge.accepted_at && '👀 View'}
                           </div>

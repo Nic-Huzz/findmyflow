@@ -342,6 +342,17 @@
       "counts_toward_graduation": false
     },
     {
+      "id": "founder_dna_challenge",
+      "category": "Groans",
+      "type": "Rewire",
+      "frequency": "anytime",
+      "name": "Founder DNA Challenge",
+      "description": "Complete a personalised challenge from your matched founder",
+      "points": 10,
+      "inputType": "flow",
+      "counts_toward_graduation": false
+    },
+    {
       "id": "groan_stage_1_validation",
       "category": "Business",
       "type": "groan",
@@ -2052,6 +2063,17 @@
       "points": 3,
       "inputType": "flow",
       "flow_route": "https://findmyflow.nichuzz.com/v/m49ushx6"
+    },
+    {
+      "id": "bonus_customize_hero",
+      "category": "Bonus",
+      "type": "anytime",
+      "frequency": "anytime",
+      "name": "Customize Your Hero Avatar",
+      "description": "Upload a custom avatar for your essence archetype. Tap the edit button on your hero card, then use the AI Prompt to generate one with your photo.",
+      "points": 5,
+      "inputType": "flow",
+      "flow_route": "/hero-profile"
     }
   ],
   "artifacts": [

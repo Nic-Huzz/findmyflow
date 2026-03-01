@@ -1,6 +1,18 @@
 import { useState, useRef, useEffect } from 'react'
 import { runDiagnosticExchange } from '../../lib/founderDnaAI'
 
+function renderParagraphs(text) {
+  if (!text) return null
+  const cleaned = text
+    .replace(/\*\*/g, '')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/^>\s*/gm, '')
+    .replace(/^#+\s*/gm, '')
+  const paras = cleaned.split(/\n\n+/).filter(Boolean)
+  if (paras.length <= 1) return cleaned
+  return paras.map((p, i) => <p key={i} style={{ margin: '0 0 12px' }}>{p}</p>)
+}
+
 export default function AIDiagnostic({
   dnaCode, archetype,
   founder, stuckPoint,
@@ -99,7 +111,7 @@ export default function AIDiagnostic({
             key={i}
             className={msg.role === 'ai' ? 'pp-chat-ai pp-fade-in-up' : 'pp-chat-user pp-fade-in-up'}
           >
-            {msg.content}
+            {renderParagraphs(msg.content)}
           </div>
         ))}
 
@@ -115,6 +127,7 @@ export default function AIDiagnostic({
       {/* Response options */}
       {responseOptions.length > 0 && !isThinking && (
         <div className="pp-fade-in-up">
+          <div className="pp-response-prompt">Pick a response:</div>
           <div className="pp-response-options">
             {responseOptions.map((option, i) => (
               <div
@@ -155,7 +168,7 @@ export default function AIDiagnostic({
         <div className="pp-fade-in-up" style={{ marginTop: 8 }}>
           <div className="pp-diagnosis-card">
             <div className="pp-diagnosis-label">Diagnosis</div>
-            <div className="pp-diagnosis-text">{diagnosis}</div>
+            <div className="pp-diagnosis-text">{renderParagraphs(diagnosis)}</div>
           </div>
 
           <div style={{ marginTop: 20 }}>

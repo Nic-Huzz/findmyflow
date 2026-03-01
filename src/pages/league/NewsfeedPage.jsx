@@ -110,7 +110,7 @@ export default function NewsfeedPage() {
           <span className="nf-empty-icon">🎪</span>
           <h2 className="nf-empty-title">No League Yet</h2>
           <p className="nf-empty-text">
-            Join a Fantasy League to see what your squad is up to!
+            Join the Fantasy League to see what everyone is up to!
           </p>
           <Link to="/league" className="nf-empty-cta">Go to Fantasy League</Link>
         </div>

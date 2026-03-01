@@ -5,6 +5,8 @@ import {
   compressImage,
   buildAvatarPrompt
 } from '../../lib/essencePreferences'
+import { supabase } from '../../lib/supabaseClient'
+import { syncScoreToLeaderboard } from '../../lib/scoringCategories'
 
 const MAX_NAME_LENGTH = 40
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -130,6 +132,62 @@ function EditEssenceModal({
     }
   }
 
+  const autoCompleteHeroQuest = async () => {
+    try {
+      const { data: progressData } = await supabase
+        .from('challenge_progress')
+        .select('challenge_instance_id, total_points')
+        .eq('user_id', userId)
+        .eq('status', 'active')
+        .maybeSingle()
+
+      if (!progressData?.challenge_instance_id) return
+
+      const { data: existingCompletion } = await supabase
+        .from('quest_completions')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('challenge_instance_id', progressData.challenge_instance_id)
+        .eq('quest_id', 'bonus_customize_hero')
+        .maybeSingle()
+
+      if (!existingCompletion) {
+        await supabase
+          .from('quest_completions')
+          .insert([{
+            user_id: userId,
+            challenge_instance_id: progressData.challenge_instance_id,
+            quest_id: 'bonus_customize_hero',
+            quest_category: 'Bonus',
+            quest_type: 'anytime',
+            points_earned: 5,
+            reflection_text: 'Customized hero avatar image',
+            challenge_day: 0
+          }])
+
+        await supabase
+          .from('challenge_progress')
+          .update({
+            total_points: (progressData.total_points || 0) + 5,
+            last_active_date: new Date().toISOString()
+          })
+          .eq('user_id', userId)
+          .eq('challenge_instance_id', progressData.challenge_instance_id)
+          .eq('status', 'active')
+
+        syncScoreToLeaderboard(supabase, {
+          userId,
+          questCategory: 'Bonus',
+          points: 5,
+          projectId: null,
+          source: 'hero_image_bonus'
+        }).catch(() => {})
+      }
+    } catch (err) {
+      console.warn('Could not auto-complete hero image quest:', err)
+    }
+  }
+
   const handleSave = async () => {
     if (!hasChanges) return
     setSaving(true)
@@ -176,6 +234,11 @@ function EditEssenceModal({
       // Optimistic: call onSaved immediately so parent refreshes
       onSaved()
       setToast('Saved!')
+
+      // Auto-complete bonus quest if image was updated
+      if (selectedFile) {
+        autoCompleteHeroQuest()
+      }
 
       // Brief delay so toast is visible before closing
       closeTimeoutRef.current = setTimeout(() => onClose(), 600)

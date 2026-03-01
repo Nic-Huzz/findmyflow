@@ -1208,7 +1208,7 @@ export function useChallengeData() {
   // completions are loaded by challenge_instance_id (which is per-project),
   // so no additional project_id filter is needed here.
   const getQuestCompletions = (questId) => {
-    return completions.filter(c => c.quest_id === questId)
+    return completions.filter(c => c.quest_id === questId || c.quest_id.startsWith(questId + '_'))
   }
 
   const isQuestCompletedToday = (questId, quest) => {
@@ -1309,6 +1309,13 @@ export function useChallengeData() {
   // Points & Progress Helpers
   // ============================================
 
+  // Some quest completions use dynamic quest_ids (e.g. play_list_challenge_<uuid>)
+  // This matches both exact IDs and prefixed variants
+  const matchesValidQuest = (completionQuestId, validIds) => {
+    if (validIds.includes(completionQuestId)) return true
+    return validIds.some(id => completionQuestId.startsWith(id + '_'))
+  }
+
   const getValidQuestIds = (category) => {
     if (!challengeData?.quests) return []
 
@@ -1365,7 +1372,7 @@ export function useChallengeData() {
 
     // Filter completions by category AND current week only
     const categoryCompletions = completions.filter(c => {
-      if (c.quest_category !== category || !validQuestIds.includes(c.quest_id)) {
+      if (c.quest_category !== category || !matchesValidQuest(c.quest_id, validQuestIds)) {
         return false
       }
       // Only count completions from current week
@@ -1377,7 +1384,7 @@ export function useChallengeData() {
 
     if (category === 'Groans' || category === 'Healing') {
       const getQuestFrequency = (questId) => {
-        const quest = challengeData?.quests?.find(q => q.id === questId)
+        const quest = challengeData?.quests?.find(q => q.id === questId || questId.startsWith(q.id + '_'))
         return quest?.frequency || 'daily'
       }
       const dailyPoints = categoryCompletions
@@ -1402,7 +1409,7 @@ export function useChallengeData() {
       const completionDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
       return c.quest_category === category &&
         completionDate === today &&
-        validQuestIds.includes(c.quest_id)
+        matchesValidQuest(c.quest_id, validQuestIds)
     })
 
     return todayCompletions.reduce((sum, completion) => sum + (completion.points_earned || 0), 0)
@@ -1509,8 +1516,9 @@ export function useChallengeData() {
         const isOneTime = normalizedFreqType === 'deepdive' || normalizedFreqType === 'explainer'
 
         const freqCompletions = completions.filter(c => {
-          if (c.quest_category !== category || !validQuestIds.includes(c.quest_id)) return false
-          const questFreq = questFrequencyMap[c.quest_id]?.toLowerCase().replace(/\s+/g, '')
+          if (c.quest_category !== category || !matchesValidQuest(c.quest_id, validQuestIds)) return false
+          const baseQuestId = Object.keys(questFrequencyMap).find(id => c.quest_id === id || c.quest_id.startsWith(id + '_'))
+          const questFreq = (baseQuestId ? questFrequencyMap[baseQuestId] : null)?.toLowerCase().replace(/\s+/g, '')
           if (questFreq !== normalizedFreqType) return false
           // Deep dive and explainer quests are one-time — count regardless of week
           if (isOneTime) return true
@@ -1539,7 +1547,7 @@ export function useChallengeData() {
 
       // Filter by current week
       const categoryCompletions = completions.filter(c => {
-        if (c.quest_category !== category || !validQuestIds.includes(c.quest_id)) return false
+        if (c.quest_category !== category || !matchesValidQuest(c.quest_id, validQuestIds)) return false
         const completionDate = new Date(c.completed_at)
         return completionDate >= weekStart
       })
@@ -1555,7 +1563,7 @@ export function useChallengeData() {
 
     // Filter by current week
     const categoryCompletions = completions.filter(c => {
-      if (c.quest_category !== category || !validQuestIds.includes(c.quest_id)) return false
+      if (c.quest_category !== category || !matchesValidQuest(c.quest_id, validQuestIds)) return false
       const completionDate = new Date(c.completed_at)
       return completionDate >= weekStart
     }
@@ -1588,8 +1596,9 @@ export function useChallengeData() {
       return { totalQuests: 0, completedQuests: 0, isComplete: false, bonusPoints: 0, percentage: 0 }
     }
 
-    const completedQuestIds = new Set(effectiveCompletions.map(c => c.quest_id))
-    const completedQuests = categoryQuests.filter(q => completedQuestIds.has(q.id)).length
+    const completedQuests = categoryQuests.filter(q =>
+      effectiveCompletions.some(c => c.quest_id === q.id || c.quest_id.startsWith(q.id + '_'))
+    ).length
 
     const totalPossiblePoints = categoryQuests.reduce((sum, q) => sum + (q.points || 0), 0)
     const bonusPoints = Math.round(totalPossiblePoints * (BONUS_PERCENTAGE / 100))

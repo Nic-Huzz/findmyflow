@@ -57,9 +57,15 @@ BRIDGE (Feel Inspired):
 - Reveal the PRINCIPLE or philosophy behind the action.
 - Make it inspiring — this is the turning point.
 
+CHALLENGE NAME:
+- Give the challenge a catchy, fun, memorable name — like "$0 Marketing Challenge" or "The 3-Minute Courage Drop"
+- Make it punchy (2-5 words), playful, and inspiring
+- It should hint at the action without giving it all away
+
 CHALLENGE (Feel Activated):
-- ONE concrete experiment to try. Not homework. Not a checklist.
-- Frame it as playful and low-stakes: "try this TODAY"
+- ONE concrete experiment completable within 7 days. Not homework. Not a checklist.
+- Frame it as playful and low-stakes — something they can start TODAY and finish this week
+- Keep it focused: one clear action, not a multi-step project
 - Connected directly to the story above.
 
 ${founderName.toUpperCase()}'S STORIES:
@@ -112,6 +118,10 @@ const CHALLENGE_TOOL = {
   input_schema: {
     type: 'object',
     properties: {
+      challengeName: {
+        type: 'string',
+        description: 'A catchy, fun, memorable name for the challenge (2-5 words). E.g. "$0 Marketing Challenge", "The 3-Minute Courage Drop".',
+      },
       challengeType: {
         type: 'string',
         enum: ['DO_IT', 'CUT_IT', 'THINK_IT', 'MAKE_IT'],
@@ -127,10 +137,10 @@ const CHALLENGE_TOOL = {
       },
       action: {
         type: 'string',
-        description: 'The Challenge — ONE concrete experiment to try today. 1-2 paragraphs max. Framed as playful.',
+        description: 'The Challenge — ONE concrete experiment completable within 7 days. 1-2 paragraphs max. Framed as playful and low-stakes.',
       },
     },
-    required: ['challengeType', 'mirror', 'bridge', 'action'],
+    required: ['challengeName', 'challengeType', 'mirror', 'bridge', 'action'],
   },
 }
 
@@ -305,6 +315,7 @@ async function handleChallenge(body: any) {
 
   return new Response(
     JSON.stringify({
+      challengeName: toolUse.input.challengeName || '',
       challengeType: toolUse.input.challengeType || 'DO_IT',
       mirror: toolUse.input.mirror || '',
       bridge: toolUse.input.bridge || '',

@@ -111,7 +111,7 @@ function VoiceDropdown({ questId, userId, projectId, userArchetypes }) {
           disabled={essenceSaved}
         >
           <span className={`voice-pill-dot ${essenceSaved ? 'filled' : ''}`} />
-          <span className="voice-pill-icon">{essenceSaved ? '✓' : '✨'}</span>
+          {essenceSaved && <span className="voice-pill-icon">✓</span>}
           <span className="voice-pill-label">{essenceSaved ? 'Saved' : essenceName}</span>
           {!essenceSaved && (
             <svg className={`voice-pill-chevron ${openType === 'essence' ? 'open' : ''}`} width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -125,7 +125,7 @@ function VoiceDropdown({ questId, userId, projectId, userArchetypes }) {
           disabled={protectiveSaved}
         >
           <span className={`voice-pill-dot ${protectiveSaved ? 'filled' : ''}`} />
-          <span className="voice-pill-icon">{protectiveSaved ? '✓' : '🛡️'}</span>
+          {protectiveSaved && <span className="voice-pill-icon">✓</span>}
           <span className="voice-pill-label">{protectiveSaved ? 'Saved' : protectiveName}</span>
           {!protectiveSaved && (
             <svg className={`voice-pill-chevron ${openType === 'protective' ? 'open' : ''}`} width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -139,7 +139,7 @@ function VoiceDropdown({ questId, userId, projectId, userArchetypes }) {
         <div className={`voice-input-panel ${openType}`}>
           <div className="voice-input-prompt">
             {openType === 'essence'
-              ? `What does your ${essenceName} say about this?`
+              ? `How did your ${essenceName} show up in this?`
               : `What is your ${protectiveName} saying?`}
           </div>
           <textarea

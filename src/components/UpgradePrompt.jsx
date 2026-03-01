@@ -11,6 +11,7 @@ function UpgradePrompt({ onUpgrade }) {
       await onUpgrade()
     } catch (err) {
       console.error('Upgrade error:', err)
+    } finally {
       setLoading(false)
     }
   }

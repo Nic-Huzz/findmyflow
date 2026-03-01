@@ -1,5 +1,5 @@
 # FindMyFlow Priority Hierarchy & Test Milestones
-**Date:** 2026-01-29 (Updated: 2026-02-20)
+**Date:** 2026-01-29 (Updated: 2026-03-01 — session 2)
 **Status:** Active Planning Document
 **Purpose:** Stop scope creep. Define testable "done" gates.
 
@@ -27,11 +27,12 @@
 | 4 | **Fill in validation yourself** — Complete all validation forms with your own data as first tester | ✅ |
 | 5 | **Meta/Facebook presence** — Set up Facebook/Meta presence so content/links are visible and shareable + connect to Meta for newsfeed integration | ⬜ |
 | 6 | **Add bonus quests** — (a) Quest asking users to fill in validation form. (b) Quest asking users to fill in feedback after each challenge + test all modules. Note: make the feedback dropdown component default to open (currently collapsed) so users see it immediately. | ✅ |
-| 7 | **Make business modules (behind Stripe)** — Build out the business stage modules for the challenge system, gated behind Stripe payment | ⬜ |
+| 7 | **Make business modules (behind Stripe)** — Build out the business stage modules for the challenge system, gated behind Stripe payment | ✅ — `user_subscriptions` table, `useSubscription` hook, `UpgradePrompt` component, Stripe Edge Functions, integrated into QuestCard + Challenge |
 | 8 | **One free challenge per stage** — Each business module has one free challenge available in each stage | ⬜ |
-| 9 | **Business onboarding tab** — Move the business onboarding quiz into a dedicated business onboarding tab | ⬜ |
-| 10 | **Hero image upload** — Let users upload an image of themselves to create their own hero image | ⬜ |
-| 11 | **Update 7-day challenge scoring** — Remove Business + Bonus categories from scoring. Merge Voices into Healing category. | ⬜ |
+| 9 | **Business onboarding tab** — Setup tab visible for all users. Inline product capture (name, description, money model tier) replaces old QuickCapture link. Persona-aware: vibe seekers see "complete" immediately, vibe risers + movement makers must identify products. Saves to `products` table. | ✅ |
+| 10 | **Hero image upload** — EditEssenceModal with photo upload + AI prompt (Pixar style, uses attached selfie). Bonus quest `bonus_customize_hero` auto-completes on upload (5pts). | ✅ |
+| 11 | **Update 7-day challenge scoring** — Remove Business + Bonus categories from scoring. Merge Voices into Healing category. | ✅ |
+| 12 | **Integrate Dome idea into Play-list tab** — Play-list tab restructured: starred/non-starred quest split, compass check-in integration, dome concept merged. | ✅ |
 
 ---
 
@@ -55,22 +56,34 @@ You have:
 - 34 flow components
 - 7-Day Challenge with quest cards, filters, leaderboard
 - Challenge layout: sub-tabs below artifact progress, HorizontalFlowRiver in Tracker tab, leaderboard button
+- Challenge scoring: Business + Bonus removed, Voices merged into Healing
+- Play-list tab: starred/non-starred quest split, compass check-in, dome concept integrated
+- Setup tab: visible for all users (stage 0.9), persona-aware product identification
 - Weekly Planning (4-phase cycle) + skip for new users (auto-skip "Review Last Week" with 0 data)
 - Zarlo AI widget (streaming, context-aware)
 - Flow Compass (N/E/S/W) — restyled: purple gradient hero, white project cards, gold CTAs, project selector
 - Groan Matrix (5 visibility layers, scary/wahoo scoring)
 - Push Notifications (timezone-aware, 8am/12pm/6pm scheduling)
-- MindSpace (/mind-space) — paste AI conversations for fast-track flow discovery
+- MindSpace (/mind-space) — paste AI conversations for fast-track flow discovery + project name capture on slider step
+- Groan Matrix split — starred (essence zone) vs non-starred challenges
 
 ### User Hub & Identity ✅
 - /me page hub: hero cards, HorizontalFlowRiver, stats rings, inline SeeYourFlow mapper (one-time)
 - Hero Command Center (/hero-profile): identity triad, project expression cards, play-list progress
 - Essence Profile (/archetypes/essence): archetype profile, strengths, shadow, integration
 - Animated protective archetype icons
-- Library of Answers (/library): three GradientWheel visualizations with lit segment labels
+- Library of Answers (/library): three GradientWheel visualizations with lit segment labels + Essence Zones section + AI-analysis notes on cluster cards
 - Discovery Project for Vibe Seekers (stage 0)
 - Flow Finder universalized (user-level completions, not project-specific)
 - Design system guide (docs/page-component-design-guide.md)
+
+### Play Profile / Founder DNA ✅
+- Founder DNA quiz (games → sliders → reveal → stuck point → follow-up → summary → save)
+- Play Profile Dashboard with active challenge carousel (multi-session navigation)
+- Challenge rating rewrite: voice type (essence/protective) + flow compass (excited/tired × ease/resistance) → compass direction
+- "Get Unstuck" sessions with AI-generated challenges
+- Past challenges history with compass/voice badges
+- Integrated into Play-list tab as sub-tab (restructured with starred/non-starred split)
 
 ### CRM ✅
 - 3 towers (Attract, Nurture, Tools) — 34 pages, 42 components
@@ -96,12 +109,14 @@ You have:
 - 6 flows using MoneyModelFlowBase + Money Model Guide flow UX
 - Grand Slam Offer Builder (redesigned)
 - Funnel Calculator (Stage 8)
+- OfferBuilder product query scoped to active project (no cross-project bleed)
 
 ### Onboarding ✅
 - QuickCapture (5-step)
 - HomeFirstTime flow (with persona branching)
 - ExistingProjectFlow (upsert fix, Q1-Q3 data passthrough)
 - SeeYourFlow journey mapping (inline on /me, one-time)
+- BusinessSetup — inline product capture (name, description, money model tier) on Setup tab, persona-aware gating
 
 ### Landing Page ✅
 - Story-driven structure (method loop, compounding graph)
@@ -114,6 +129,9 @@ You have:
 - Skills taxonomy review + proposal doc created
 - Quest completion scoring sync fixes
 - Archetype image compression (WebP + preload)
+- Persona source fix: `user_stage_progress.persona` is authoritative (not `lead_flow_profiles.persona`)
+- Project creation: `createProjectFromSession` returns `projectId` + `projectName` on all paths (success, skipped, alreadyExists)
+- Product type constraint: `products` table CHECK constraint enforces valid `product_type` values
 
 ---
 
@@ -289,6 +307,7 @@ You have:
 | Play List Finder: Mind Space integration | Mind Space first → Play List Finder for depth | Small | ⬜ Not started |
 | **CRM Data Isolation** | | | |
 | Project-scoped validation data in Offer Builders | Validation survey responses now filter by `project_id` in OfferBuilder100M + OfferBuilderFlow | Small | ✅ Done 2026-02-20 |
+| Project-scoped products in OfferBuilderFlow | Products query scoped to active `project_id` — no cross-project bleed | Small | ✅ Done 2026-03-01 |
 | Project-scoped validation data in `contentContext.js` | `fetchValidationInsights` filters by `project_id` when provided | Small | ✅ Done 2026-02-20 |
 | Project selector for CRM content pages | Add project picker to PromptGenerator, ContentCreate, WeeklyPlanningSession, ContentStrategyFlow, ApprovalQueue — so `gatherContentContext` passes `projectId` and validation/offer data is scoped to selected project | Medium | ⬜ Not started |
 | Project-scoped offer data in `contentContext.js` | `fetchOfferData` currently returns all offers regardless of project — should filter by `project_id` when provided | Small | ⬜ Not started |
@@ -380,6 +399,7 @@ See `income-calculator-and-ecosystem-plan.md` for full details.
 | **Explainer Quests** | | | |
 | Explainer quest system | Short educational quests that teach framework concepts (5 Voices, Flow Equation, 4 R's) before asking users to do the work. Onboards users into language. | Medium | ⬜ Specced |
 | **Recognise Tab Enhancements** | | | |
+| **AI Protective Pattern Analysis** | **PRIORITY** — Recognise quest in Healing Deep Dive. Generates a prompt users paste into their AI (ChatGPT/Claude) that analyses their protective patterns from their FindMyFlow data. See full prompt spec below. | Medium | ⬜ Not started |
 | Essence count question | "How many times did your essence show up today?" | Small | ⬜ Not started |
 | Protective count question | "How many times did your protective voice show up today?" | Small | ⬜ Not started |
 | Essence vs Protective % graph | Visualize essence:protective ratio over time | Medium | ⬜ Not started |
@@ -391,6 +411,99 @@ See `income-calculator-and-ecosystem-plan.md` for full details.
 
 **See:** ClawdBot repo `findmyflow-implementation/03-explainer-quests.md` for Explainer Quests spec.
 **Note:** Healing tab currently locked for user testing.
+
+#### AI Protective Pattern Analysis — Prompt Spec
+
+**UX:** Same pattern as MindSpace — app queries user's data from Supabase, injects it into the prompt, user copies to their AI. Quest auto-completes when they paste back the AI's response (or on copy action). Presented in a copy-to-clipboard box like the avatar AI prompt.
+
+**Data sources to query:**
+- `lead_flow_profiles` → `essence_archetype`, `protective_archetype`
+- `quest_completions` WHERE `quest_id LIKE 'inline_voice_%'` → voice reflections (JSON in `reflection_text`: `{ voice_type, archetype, text, source_quest }`)
+- `groan_reflections` → `protective_archetype`, `fear_type`, `flow_direction`, `reflection_note` + aggregate views: `user_fear_patterns`, `user_archetype_patterns`, `user_visibility_flow_patterns`
+- `groan_challenges` → `source_value`, `visibility_layer`, `scary_score`, `wahoo_score`, `essence_zone_insight`, `status`, `skip_reason`, `reflection_text`
+- `healing_compass_responses` → `stuck_gap_description`, `stuck_reason`, `stuck_emotional_response`, `past_parallel_story`, `primary_need`, `protective_pattern`, splinter fields
+- `nervous_system_responses` → `current_struggle`, `belief_test_results`, NS pattern from `context` JSONB
+
+**Prompt template:**
+
+````
+I'm going to share data from my personal development journey. I want you to act as a
+compassionate pattern analyst — not a therapist, but someone who can spot the invisible
+threads in how I protect myself.
+
+Here's what I know about myself so far:
+
+---MY ARCHETYPES---
+My Essence (who I am at my core): {essenceName}
+My Protective Voice (the pattern that keeps me safe): {protectiveName}
+
+---HOW MY PROTECTIVE VOICE SHOWS UP---
+{for each voice reflection pair:}
+When working on: {sourceQuestName}
+My {protectiveName} said: "{protectiveReflectionText}"
+My {essenceName} responded: "{essenceReflectionText}"
+
+---MY FEAR PATTERNS---
+{for each fear pattern:}
+- {fearType}: appeared {count} times (most recently {date})
+
+My dominant fear: {topFearType}
+My dominant flow state when afraid: {topFlowDirection} ({directionMeaning})
+
+---MY VISIBILITY EDGE---
+{for each groan challenge:}
+- {sourceValue} × {visibilityLayer}: Scary {scaryScore}/10, Wahoo {wahooScore}/10
+  → {essenceZoneInsight} — {status}
+  {if skipped: Skipped because: {skipReason}}
+  {if completed: Reflection: "{reflectionText}"}
+
+---MY HEALING JOURNEY---
+Where I feel stuck: {stuckGap}
+Why I think I'm stuck: {stuckReason}
+How that makes me feel: {stuckEmotionalResponse}
+A time this happened before: {pastParallelStory}
+My primary unmet need: {primaryNeed}
+My nervous system pattern: {somaticPattern} ({fawn/freeze/fight/flight})
+My core struggle: {currentStruggle}
+
+---WHAT I NEED FROM YOU---
+
+Analyse these patterns and tell me:
+
+1. **The Story My Protective Voice Is Telling**
+   What narrative is my {protectiveName} running? What does it believe will happen if I
+   stop listening to it? Be specific — use my actual words and patterns.
+
+2. **The Trigger Map**
+   When does my {protectiveName} get loudest? Map the situations, visibility levels, and
+   fear types where it activates most. Are there patterns I probably haven't noticed?
+
+3. **What It's Actually Protecting**
+   Beneath the surface behaviour, what emotional wound or need is my {protectiveName}
+   guarding? Connect this to my healing journey data — the stuck points, the parallel
+   stories, the somatic patterns.
+
+4. **The Essence Breakthrough Moments**
+   Looking at where my {essenceName} DID show up despite the fear — what conditions
+   allowed that? What can I learn from the times I acted anyway?
+
+5. **The Growth Edge**
+   Based on my groan challenge data — where is my {protectiveName} loosening its grip?
+   Where is it still firmly in control? What's the next scary-but-alive thing that would
+   stretch me without breaking me?
+
+6. **A Letter From My {protectiveName}**
+   Write a short letter in the voice of my {protectiveName}, explaining why it does what
+   it does. Make it compassionate — this voice developed for a reason. End with what it
+   would need to hear to let go a little.
+
+Be direct. Be specific. Use my actual data, not platitudes. I can handle honesty —
+that's the whole point.
+````
+
+**Sections are conditionally included** — if a user has no groan challenges yet, skip "MY VISIBILITY EDGE". If no healing compass data, skip "MY HEALING JOURNEY". The prompt gracefully degrades to whatever data exists.
+
+**Flow compass direction meanings:** North = ease + excited (Flow), East = resistance + excited (Redirect), South = resistance + tired (Rest), West = ease + tired (Honour).
 
 ---
 
@@ -599,6 +712,7 @@ Move exciting-but-premature ideas here instead of building them:
 | AI Quest Generator | Personalised daily quests based on stage + voice + activity. Requires Knowledge Score data. | After Milestone 2 |
 | Voice Progress Bar | Visual feedback on inner work progress | After Milestone 2 |
 | Project Constellation / Flow | Design doc written (`docs/plans/2026-02-20-project-constellation-design.md`). HTML prototype at `docs/prototypes/project-constellation.html`. Visualizes how projects connect through shared skill/problem/persona clusters — revealing a meta-narrative. Could be a constellation map OR a guided flow that walks users through discovering connections. Needs: rich project descriptions, AI multi-signal matching, user confirmation loop, junction table for many-to-many project↔cluster links. | After Milestone 2 |
+| Multiple Founder DNA Matches | Currently `founder_dna_results` is 1:1 per user (upsert on `user_id`). Allow users to collect multiple founder matches over time — retaking the quiz adds a new match instead of replacing. Show as a roster/collection on the Play Profile dashboard. Requires: removing `onConflict: 'user_id'` upsert, adding a results list UI, letting users pick which founder to use for "Get Unstuck" sessions. | After Milestone 2 |
 
 ---
 

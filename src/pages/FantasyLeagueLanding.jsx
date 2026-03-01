@@ -5,17 +5,15 @@ import { supabase } from '../lib/supabaseClient'
 import './FantasyLeagueLanding.css'
 
 const CATEGORIES = [
-  { emoji: '\u{1F4CA}', name: 'Business', desc: 'Ship real milestones \u2014 not busywork.', color: '#5e17eb' },
   { emoji: '\u{1F3AE}', name: 'Play-List', desc: 'Do things you love but feel scary.', color: '#E9A23B' },
   { emoji: '\u{1F9D8}', name: 'Healing', desc: 'Recognise. Release. Rewire.', color: '#10b981' },
-  { emoji: '\u{1F6E1}\uFE0F', name: 'Voice', desc: 'Catch your protective voices & feed your essence voice.', color: '#8B5CF6' },
   { emoji: '\u{1F381}', name: 'Bonus', desc: 'Surprises to support the journey.', color: '#3B82F6' },
 ]
 
 const STEPS = [
-  { title: 'Recruit your team', desc: 'Grab 2 friends. Mixed stages, mixed strengths. The diversity is the design.' },
+  { title: 'Join the league', desc: 'Play solo or team up with friends. Your call.' },
   { title: 'Sign up', desc: '2 minutes. Name, email, and a promise to show up.' },
-  { title: 'Gamify your ambitions for 4 weeks', desc: 'Round robin weeks 1\u20133. Finals week 4. Win 3 of 5 categories to take the week.' },
+  { title: 'Gamify your ambitions for 4 weeks', desc: 'Round robin weeks 1\u20133. Finals week 4. Win 2 of 3 categories to take the week.' },
 ]
 
 export default function FantasyLeagueLanding() {
@@ -164,7 +162,7 @@ export default function FantasyLeagueLanding() {
       <section className="flp-section flp-section--warm">
         <div className="flp-container">
           <p className="flp-label reveal-blur-up">CATEGORIES</p>
-          <h2 className="flp-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>5 Categories Designed To Scale Your Impact & Income.</h2>
+          <h2 className="flp-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>3 Categories Designed To Scale Your Impact & Income.</h2>
           <div className="flp-sub-spacer" />
           <div className="flp-cat-grid">
             {CATEGORIES.map((cat, i) => (
@@ -182,7 +180,7 @@ export default function FantasyLeagueLanding() {
 
           {/* SCORECARD */}
           <h3 className="flp-sc-title reveal-blur-up" style={{ transitionDelay: '300ms' }}>Example Scoreboard</h3>
-          <p className="flp-sc-subtitle reveal-blur-up" style={{ transitionDelay: '320ms' }}>Score more in 3 categories to win the week.</p>
+          <p className="flp-sc-subtitle reveal-blur-up" style={{ transitionDelay: '320ms' }}>Score more in 2 of 3 categories to win the week.</p>
           <div className="flp-scorecard reveal-scale" style={{ transitionDelay: '350ms' }}>
             <div className="flp-sc-header">
               <span className="flp-sc-team">Team A: Comfort Crushers</span>
@@ -190,10 +188,8 @@ export default function FantasyLeagueLanding() {
               <span className="flp-sc-team">Team B: Flow Finders</span>
             </div>
             {[
-              { emoji: '\u{1F4CA}', name: 'Business', left: 82, right: 71 },
               { emoji: '\u{1F3AE}', name: 'Play-List', left: 145, right: 162 },
               { emoji: '\u{1F9D8}', name: 'Healing', left: 89, right: 67 },
-              { emoji: '\u{1F6E1}\uFE0F', name: 'Voice', left: 42, right: 55 },
               { emoji: '\u{1F381}', name: 'Bonus', left: 85, right: 70 },
             ].map(row => (
               <div key={row.name} className="flp-sc-row">
@@ -203,7 +199,7 @@ export default function FantasyLeagueLanding() {
               </div>
             ))}
             <div className="flp-sc-result">
-              Comfort Crushers win 3&ndash;2 {'\u{1F3C6}'}
+              Comfort Crushers win 2&ndash;1 {'\u{1F3C6}'}
             </div>
           </div>
         </div>

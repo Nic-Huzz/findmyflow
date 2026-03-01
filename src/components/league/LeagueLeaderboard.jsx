@@ -204,6 +204,7 @@ export default function LeagueLeaderboard({
     weekMatchups.forEach(m => {
       if (m.category_results) {
         m.category_results.forEach(cr => {
+          if (!(cr.category in maxes)) return
           const maxVal = Math.max(cr.teamAScore || 0, cr.teamBScore || 0)
           if (maxVal > maxes[cr.category]) maxes[cr.category] = maxVal
         })
@@ -299,6 +300,7 @@ export default function LeagueLeaderboard({
           <div className="ll-hero-categories">
             {categoryRows.map(row => {
               const cat = FANTASY_CATEGORIES[row.category]
+              if (!cat) return null
               return (
                 <div key={row.category} className="ll-cat-row">
                   <span className={`ll-cat-score ${row.myWinner ? 'll-winning' : ''}`}>
@@ -414,6 +416,7 @@ export default function LeagueLeaderboard({
                 <div className="ll-mini-detail">
                   {m.category_results.map(cr => {
                     const cat = FANTASY_CATEGORIES[cr.category]
+                    if (!cat) return null
                     return (
                       <div key={cr.category} className="ll-mini-cat-row">
                         <span className={`ll-mini-cat-score ${cr.winner === 'a' ? 'll-winning' : ''}`}>
@@ -494,8 +497,8 @@ export default function LeagueLeaderboard({
                   <div className="ll-team-info">
                     <span className="ll-team-name">{team.teamName}</span>
                     <span className="ll-team-record">
-                      {team.memberCount}/3 players
-                      {!isUpcoming && ` · ${team.wins}W ${team.draws}D ${team.losses}L`}
+                      {team.memberCount > 1 ? `${team.memberCount} players · ` : ''}
+                      {!isUpcoming && `${team.wins}W ${team.draws}D ${team.losses}L`}
                     </span>
                   </div>
                 </div>
@@ -539,10 +542,10 @@ export default function LeagueLeaderboard({
                     </div>
                   )}
 
-                  {/* Member list (always shown) / contributions (active only) */}
-                  {!isUpcoming && expandedTeamScores?.members ? (
+                  {/* Member contributions (only for multi-member teams) */}
+                  {!isUpcoming && expandedTeamScores?.members && team.memberCount > 1 && (
                     <div className="ll-members">
-                      <span className="ll-members-title">THIS WEEK'S CONTRIBUTIONS</span>
+                      <span className="ll-members-title">CONTRIBUTIONS</span>
                       {Object.entries(expandedTeamScores.members)
                         .map(([userId, scores]) => {
                           const total = CATEGORY_KEYS.reduce((sum, k) => sum + (scores[k] || 0), 0)
@@ -560,9 +563,10 @@ export default function LeagueLeaderboard({
                         ))
                       }
                     </div>
-                  ) : isUpcoming && team.memberUserIds?.length > 0 && (
+                  )}
+                  {isUpcoming && team.memberUserIds?.length > 1 && (
                     <div className="ll-members">
-                      <span className="ll-members-title">SQUAD MEMBERS</span>
+                      <span className="ll-members-title">TEAM MEMBERS</span>
                       {team.memberUserIds.map(userId => (
                         <div key={userId} className="ll-member-row">
                           <span className="ll-member-name">

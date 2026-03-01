@@ -28,7 +28,7 @@ export const CONTENT_POINT_VALUES = {
     templateType: 'intentions',
   },
   shoutout_teammate: {
-    label: 'Shout Out a Teammate',
+    label: 'Shout Out a Player',
     points: 4,
     icon: '🙌',
     description: 'Celebrate a teammate with a public shout-out post',
@@ -76,14 +76,6 @@ export const CONTENT_POINT_VALUES = {
 
 // Fantasy scoring categories — maps to quest_completions.quest_category
 export const FANTASY_CATEGORIES = {
-  business_efficiency: {
-    key: 'business_efficiency',
-    label: 'Business',
-    icon: '💼',
-    color: '#5e17eb',
-    dbFilter: ['Business'],
-    scoringType: 'efficiency', // SUM(points) / COUNT(DISTINCT quest_id)
-  },
   play_list: {
     key: 'play_list',
     label: 'Play-List',
@@ -100,14 +92,6 @@ export const FANTASY_CATEGORIES = {
     dbFilter: ['Healing', 'Daily', 'Weekly'],
     scoringType: 'raw',
   },
-  voice: {
-    key: 'voice',
-    label: 'Voice',
-    icon: '🎭',
-    color: '#8B5CF6',
-    dbFilter: ['Voices'],
-    scoringType: 'raw',
-  },
   bonus: {
     key: 'bonus',
     label: 'Bonus',
@@ -120,11 +104,11 @@ export const FANTASY_CATEGORIES = {
 
 export const CATEGORY_KEYS = Object.keys(FANTASY_CATEGORIES)
 
-// Match point awards
+// Match point awards (3 categories: win 2+ = WIN, 1-1 = DRAW)
 export const MATCH_POINTS = {
-  WIN: 3,   // Win 3+ categories
-  DRAW: 1,  // Win exactly 2 categories
-  LOSS: 0,  // Win 0-1 categories
+  WIN: 3,   // Win 2+ of 3 categories
+  DRAW: 1,  // 1-1 split (with 1 tied)
+  LOSS: 0,  // Win 0 categories
 }
 
 // League statuses

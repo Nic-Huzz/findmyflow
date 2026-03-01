@@ -153,7 +153,7 @@ const TOOL_DEFINITIONS = [
         },
         response: {
           type: 'string',
-          description: 'The user\'s response. For text quests: free text. For multi_select: comma-separated values (e.g. "warm_outreach,content"). For milestone/checkbox quests: "done". For flow quests: "completed" (use submit_assessment first for assessment flows).',
+          description: 'The user\'s response. For text: free text. For multi_select: comma-separated values. For milestone/checkbox/offer_checklist: "done". For flow: "completed" (use submit_assessment first). For progress_dropdown: an option value (e.g. "completed_crm"). For launch_review: JSON with win, key_learning, surprise, do_differently, overall_satisfaction (1-10). For response_counter: "done" (server verifies actual count). For validation_responses: "analyze" (server gathers data and runs AI analysis).',
         },
         project_id: {
           type: 'string',
@@ -498,10 +498,14 @@ async function handleListQuests(args: any, auth: AuthResult): Promise<any> {
         stage_required: q.stage_required,
         points: q.points,
         input_type: q.inputType,
-        options: q.selectOptions || null,
+        options: q.options || q.selectOptions || null,
         placeholder: q.placeholder || null,
         flow_route: q.flow_route || null,
         is_primary: q.isPrimary || false,
+        target_responses: q.target_responses || null,
+        points_per_response: q.points_per_response || null,
+        review_steps: q.reviewSteps || null,
+        flow_stage: q.flow_stage || null,
         completions: done,
         max_completions: maxCompletions,
         is_complete: isComplete,
@@ -583,17 +587,156 @@ async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
     return errorResult(`Quest requires stage ${stage} but your project is at stage ${userStage}. Complete earlier quests first.`)
   }
 
-  // Build reflection text based on input type
+  // Build reflection text and validate based on input type
   let reflectionText = response
-  if (quest.inputType === 'multi_select') {
-    // Comma-separated values — store as-is
-    reflectionText = response
-  } else if (quest.inputType === 'milestone' || quest.inputType === 'checkbox') {
-    reflectionText = `Completed: ${quest.name}`
+  let pointsOverride: number | null = null
+
+  switch (quest.inputType) {
+    case 'progress_dropdown': {
+      const validValues = (quest.options || []).map((o: any) => o.value)
+      if (!validValues.includes(response)) {
+        return errorResult(`Invalid value "${response}". Must be one of: ${validValues.join(', ')}`)
+      }
+      if (!response.startsWith('completed')) {
+        return errorResult(`Only completion values accepted (completed_crm or completed_other). "${response}" is a status, not a completion.`)
+      }
+      reflectionText = JSON.stringify({ progress: response })
+      break
+    }
+    case 'offer_checklist':
+    case 'milestone':
+    case 'checkbox': {
+      reflectionText = `Completed: ${quest.name}`
+      break
+    }
+    case 'response_counter': {
+      const flowStage = quest.flow_stage || 'validation'
+      const target = quest.target_responses || 3
+      const ppr = quest.points_per_response || 8
+
+      // Verify actual response count server-side
+      const { data: vFlows } = await sb
+        .from('validation_flows')
+        .select('response_count')
+        .eq('creator_user_id', userId)
+        .eq('stage', flowStage)
+      const actualCount = (vFlows || []).reduce((sum: number, f: any) => sum + (f.response_count || 0), 0)
+
+      if (actualCount < target) {
+        return errorResult(`Need ${target} ${flowStage} responses, you have ${actualCount}. Collect more at /validation-flows.`)
+      }
+
+      pointsOverride = actualCount * ppr
+      reflectionText = JSON.stringify({ responseCount: actualCount, pointsEarned: pointsOverride })
+      break
+    }
+    case 'launch_review': {
+      let parsed: any
+      try { parsed = JSON.parse(response) } catch {
+        return errorResult('launch_review expects JSON: {"win": "...", "key_learning": "...", "surprise": "...", "do_differently": "...", "overall_satisfaction": 1-10}')
+      }
+      const required = ['win', 'key_learning', 'surprise', 'do_differently', 'overall_satisfaction']
+      const missing = required.filter(f => !parsed[f] && parsed[f] !== 0)
+      if (missing.length > 0) {
+        return errorResult(`Missing fields: ${missing.join(', ')}`)
+      }
+      const sat = parsed.overall_satisfaction
+      if (typeof sat !== 'number' || sat < 1 || sat > 10) {
+        return errorResult('overall_satisfaction must be a number from 1 to 10')
+      }
+      reflectionText = JSON.stringify(parsed)
+      break
+    }
+    case 'validation_responses': {
+      const flowStage = quest.flow_stage || 'validation'
+
+      // 1. Get user's validation flows with responses
+      const { data: userFlows } = await sb
+        .from('validation_flows')
+        .select('id, flow_name, response_count, placeholders, project_id')
+        .eq('creator_user_id', userId)
+        .eq('stage', flowStage)
+        .gt('response_count', 0)
+
+      if (!userFlows || userFlows.length === 0) {
+        return errorResult(`No ${flowStage} responses found. Create a form at /validation-flows first.`)
+      }
+
+      const totalResponses = userFlows.reduce((s: number, f: any) => s + (f.response_count || 0), 0)
+      if (totalResponses < 3) {
+        return errorResult(`Need at least 3 responses for analysis, you have ${totalResponses}. Collect more at /validation-flows.`)
+      }
+
+      // 2. Gather completed sessions + responses per flow
+      const flowsData: any[] = []
+      for (const flow of userFlows) {
+        const { data: sessions } = await sb
+          .from('validation_sessions')
+          .select('id')
+          .eq('flow_id', flow.id)
+          .eq('is_completed', true)
+
+        const sessionIds = (sessions || []).map((s: any) => s.id)
+        if (sessionIds.length === 0) continue
+
+        const { data: responses } = await sb
+          .from('validation_responses')
+          .select('step_id, question_text, answer_type, answer_value, answered_at')
+          .in('session_id', sessionIds)
+
+        flowsData.push({
+          flowName: flow.flow_name,
+          flowId: flow.id,
+          placeholders: flow.placeholders || {},
+          responses: responses || [],
+        })
+      }
+
+      if (flowsData.length === 0) {
+        return errorResult('No completed responses found to analyze.')
+      }
+
+      // 3. Call the analyze-validation-responses edge function
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+      const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+      const analyzeResp = await fetch(`${supabaseUrl}/functions/v1/analyze-validation-responses`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': serviceKey,
+          'Authorization': `Bearer ${serviceKey}`,
+        },
+        body: JSON.stringify({ userId, projectId: projectId, flows: flowsData }),
+      })
+
+      if (!analyzeResp.ok) {
+        const errText = await analyzeResp.text()
+        console.error('Analysis function error:', analyzeResp.status, errText)
+        return errorResult('Failed to run validation analysis. Check that responses exist and try again.')
+      }
+
+      const analyzeResult = await analyzeResp.json()
+      reflectionText = JSON.stringify({
+        analysis_id: analyzeResult.analysis?.id,
+        total_responses: totalResponses,
+        flows_analyzed: flowsData.length,
+        analysis_number: analyzeResult.analysisNumber,
+      })
+      break
+    }
+    case 'multi_select':
+      reflectionText = response
+      break
+    case 'text':
+    case 'flow':
+    default:
+      reflectionText = response
+      break
   }
 
   // User-level quests (stage 0 Flow Finder) use null challenge_instance_id + null project_id
   const isUserLevel = stage === 0
+  const questPoints = pointsOverride ?? quest.points ?? 5
 
   // Insert completion
   const { error: insertError } = await sb
@@ -604,7 +747,7 @@ async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
       quest_id: quest_id,
       quest_category: 'Business',
       quest_type: quest.inputType === 'flow' ? 'flow' : quest.type || 'anytime',
-      points_earned: quest.points || 5,
+      points_earned: questPoints,
       challenge_day: 0,
       reflection_text: reflectionText,
       project_id: isUserLevel ? null : projectId,
@@ -624,7 +767,7 @@ async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
     p_user_id: userId,
     p_project_id: isUserLevel ? null : projectId,
     p_category: scoringCategory,
-    p_points: quest.points || 5,
+    p_points: questPoints,
     p_week_start: weekStart,
   })
   if (rpcError) {
@@ -643,7 +786,7 @@ async function handleCompleteQuest(args: any, auth: AuthResult): Promise<any> {
     success: true,
     quest_id,
     quest_name: quest.name,
-    points_earned: quest.points || 5,
+    points_earned: questPoints,
     completions: currentCount + 1,
     max_completions: maxCompletions,
     lifetime_scores: lifetimeScores || null,

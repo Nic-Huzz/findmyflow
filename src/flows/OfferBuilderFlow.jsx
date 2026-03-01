@@ -526,10 +526,14 @@ function OfferBuilderFlow() {
     if (!user) return
     const loadExistingProducts = async () => {
       try {
-        const { data: products, error } = await supabase
+        let query = supabase
           .from('products')
           .select('id, name, money_model_tier, product_type')
           .eq('user_id', user.id)
+        if (projectId) {
+          query = query.eq('project_id', projectId)
+        }
+        const { data: products, error } = await query
         if (!error && products) {
           setExistingProducts(products)
         }
@@ -538,7 +542,7 @@ function OfferBuilderFlow() {
       }
     }
     loadExistingProducts()
-  }, [user])
+  }, [user, projectId])
 
   // Check for View Results mode - load from database and go to summary
   useEffect(() => {

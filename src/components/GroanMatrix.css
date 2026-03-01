@@ -23,7 +23,7 @@
   --radius-md: 16px;
   --radius-lg: 20px;
 
-  padding: 1.5rem;
+  padding: 0 1.5rem 1.5rem;
   max-width: 100%;
   overflow-x: hidden;
 }
@@ -117,11 +117,12 @@
   margin-bottom: 1.5rem;
   border: 1px solid var(--soft-gray);
   box-shadow: var(--shadow-card);
+  overflow: visible;
 }
 
 .groan-stat {
   text-align: center;
-  flex-shrink: 0;
+  flex: 1;
   min-width: 80px;
 }
 
@@ -142,16 +143,33 @@
   font-weight: 600;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.25rem;
 }
 
-.groan-essence-info {
-  font-size: 0.8rem;
-  color: #999;
-  cursor: help;
-  text-transform: none;
+.groan-stat-clickable {
+  cursor: pointer;
   position: relative;
-  margin-top: 0.25rem;
+}
+
+.groan-essence-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  background: #1a1a2e;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  line-height: 1.4;
+  padding: 10px 14px;
+  border-radius: 8px;
+  width: 220px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* ===== Matrix Grid ===== */
@@ -713,6 +731,41 @@
 .groan-mobile-generate:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-button);
+}
+
+/* ===== See More Toggle ===== */
+.groan-see-more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: rgba(94, 23, 235, 0.04);
+  border: 1px dashed rgba(94, 23, 235, 0.3);
+  border-radius: 12px;
+  color: #5e17eb;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.groan-see-more-btn:hover {
+  background: rgba(94, 23, 235, 0.08);
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.groan-see-more-chevron {
+  display: inline-block;
+  transition: transform 0.2s ease;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.groan-see-more-chevron.open {
+  transform: rotate(90deg);
 }
 
 /* ===== Persona Filter (Skill × Problem tab) ===== */

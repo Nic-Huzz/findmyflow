@@ -1,91 +1,151 @@
 import { useState } from 'react'
 
-const RATING_CONFIGS = [
-  {
-    key: 'resistance',
-    question: 'How much pushback did you feel?',
-    emojis: ['😌', '😐', '😬', '😰', '🤯'],
-    labels: ['None', '', '', '', 'Intense'],
-  },
-  {
-    key: 'engagement',
-    question: 'How much did this light you up?',
-    emojis: ['😐', '🙂', '😊', '😄', '🔥'],
-    labels: ['Meh', '', '', '', 'On fire'],
-  },
-  {
-    key: 'shift',
-    question: 'Did anything actually change?',
-    emojis: ['🔄', '💭', '💡', '✨', '🚀'],
-    labels: ['Nothing', '', '', '', 'Breakthrough'],
-  },
-]
+const DIRECTION_META = {
+  north: { label: 'Flow', emoji: '🌊', color: '#10b981' },
+  east:  { label: 'Redirect', emoji: '🔄', color: '#3b82f6' },
+  south: { label: 'Rest', emoji: '🛏️', color: '#ef4444' },
+  west:  { label: 'Honour', emoji: '🙏', color: '#eab308' },
+}
 
-export default function ChallengeRating({ founderName, challengeAction, onRate }) {
-  const [ratings, setRatings] = useState({
-    resistance: null,
-    engagement: null,
-    shift: null,
-  })
+function getDirection(internal, external) {
+  if (internal === 'excited' && external === 'ease') return 'north'
+  if (internal === 'excited' && external === 'resistance') return 'east'
+  if (internal === 'tired' && external === 'resistance') return 'south'
+  if (internal === 'tired' && external === 'ease') return 'west'
+  return null
+}
 
-  const allRated = ratings.resistance !== null && ratings.engagement !== null && ratings.shift !== null
+export default function ChallengeRating({ founderName, challengeAction, onRate, onBack }) {
+  const [voiceType, setVoiceType] = useState(null) // 'essence' | 'protective'
+  const [voiceReflection, setVoiceReflection] = useState('')
+  const [internalState, setInternalState] = useState(null) // 'excited' | 'tired'
+  const [externalState, setExternalState] = useState(null) // 'ease' | 'resistance'
 
-  function handleSelect(key, value) {
-    setRatings(prev => ({ ...prev, [key]: value }))
-  }
+  const direction = getDirection(internalState, externalState)
+  const dirMeta = direction ? DIRECTION_META[direction] : null
+  const canSubmit = voiceType && internalState && externalState
 
   return (
     <div style={{ paddingTop: 16, paddingBottom: 40 }}>
       <div className="pp-fade-in-up" style={{ textAlign: 'center', marginBottom: 8 }}>
         <h2>How did it go?</h2>
-        <p className="pp-subtitle">Rate your experience with {founderName}&apos;s challenge</p>
+        <p className="pp-subtitle">Reflect on {founderName}&apos;s challenge</p>
       </div>
 
       {/* Show the challenge they completed */}
       {challengeAction && (
         <div className="pp-glass-card pp-fade-in-up pp-stagger-2" style={{ padding: 14, marginBottom: 24 }}>
-          <div style={{ fontSize: 13, color: '#6c757d', lineHeight: 1.5 }}>
+          <div style={{ fontSize: 13, lineHeight: 1.5 }} className="pp-challenge-content">
             {challengeAction.length > 150 ? challengeAction.slice(0, 150) + '...' : challengeAction}
           </div>
         </div>
       )}
 
-      {/* Rating scales */}
-      {RATING_CONFIGS.map((config, i) => (
-        <div key={config.key} className={`pp-rating-section pp-fade-in-up pp-stagger-${i + 3}`}>
-          <div className="pp-rating-question">{config.question}</div>
-          <div className="pp-rating-scale">
-            {config.emojis.map((emoji, idx) => {
-              const value = idx + 1
-              return (
-                <div
-                  key={value}
-                  className={`pp-rating-option ${ratings[config.key] === value ? 'selected' : ''}`}
-                  onClick={() => handleSelect(config.key, value)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), handleSelect(config.key, value))}
-                >
-                  <span className="pp-rating-emoji">{emoji}</span>
-                  <span className="pp-rating-number">
-                    {config.labels[idx] || value}
-                  </span>
-                </div>
-              )
-            })}
-          </div>
+      {/* Q1: Essence or Protective */}
+      <div className="pp-rating-section pp-fade-in-up pp-stagger-3">
+        <div className="pp-rating-question">Which voice showed up?</div>
+        <div className="pp-voice-options">
+          <button
+            className={`pp-voice-btn pp-voice-essence${voiceType === 'essence' ? ' selected' : ''}`}
+            onClick={() => setVoiceType('essence')}
+          >
+            <span className="pp-voice-emoji">🌟</span>
+            <span className="pp-voice-label">Essence</span>
+            <span className="pp-voice-desc">My true self showed up</span>
+          </button>
+          <button
+            className={`pp-voice-btn pp-voice-protective${voiceType === 'protective' ? ' selected' : ''}`}
+            onClick={() => setVoiceType('protective')}
+          >
+            <span className="pp-voice-emoji">🛡️</span>
+            <span className="pp-voice-label">Protective</span>
+            <span className="pp-voice-desc">I felt myself holding back</span>
+          </button>
         </div>
-      ))}
+        {voiceType && (
+          <textarea
+            className="pp-textarea"
+            placeholder={voiceType === 'essence'
+              ? 'How did your essence voice show up?'
+              : 'What was your protective voice saying?'}
+            value={voiceReflection}
+            onChange={(e) => setVoiceReflection(e.target.value)}
+            rows={2}
+            style={{ marginTop: 10 }}
+          />
+        )}
+      </div>
+
+      {/* Q2: Excited or Tired */}
+      <div className="pp-rating-section pp-fade-in-up pp-stagger-4">
+        <div className="pp-rating-question">Are you feeling excited or tired?</div>
+        <div className="pp-voice-options">
+          <button
+            className={`pp-voice-btn pp-compass-excited${internalState === 'excited' ? ' selected' : ''}`}
+            onClick={() => setInternalState('excited')}
+          >
+            <span className="pp-voice-emoji">🔥</span>
+            <span className="pp-voice-label">Excited</span>
+          </button>
+          <button
+            className={`pp-voice-btn pp-compass-tired${internalState === 'tired' ? ' selected' : ''}`}
+            onClick={() => setInternalState('tired')}
+          >
+            <span className="pp-voice-emoji">😴</span>
+            <span className="pp-voice-label">Tired</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Q3: Ease or Resistance */}
+      <div className="pp-rating-section pp-fade-in-up pp-stagger-5">
+        <div className="pp-rating-question">How is the business flowing?</div>
+        <div className="pp-voice-options">
+          <button
+            className={`pp-voice-btn pp-compass-ease${externalState === 'ease' ? ' selected' : ''}`}
+            onClick={() => setExternalState('ease')}
+          >
+            <span className="pp-voice-emoji">✨</span>
+            <span className="pp-voice-label">Great</span>
+          </button>
+          <button
+            className={`pp-voice-btn pp-compass-resistance${externalState === 'resistance' ? ' selected' : ''}`}
+            onClick={() => setExternalState('resistance')}
+          >
+            <span className="pp-voice-emoji">🧗</span>
+            <span className="pp-voice-label">Facing Resistance</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Compass direction preview */}
+      {dirMeta && (
+        <div className="pp-compass-preview pp-fade-in-up" style={{ borderColor: dirMeta.color }}>
+          <span style={{ fontSize: 24 }}>{dirMeta.emoji}</span>
+          <span className="pp-compass-preview-label" style={{ color: dirMeta.color }}>{dirMeta.label}</span>
+        </div>
+      )}
 
       {/* Submit */}
-      <div className="pp-fade-in-up pp-stagger-6" style={{ marginTop: 8 }}>
+      <div className="pp-fade-in-up pp-stagger-6" style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <button
           className="pp-btn-gold"
-          disabled={!allRated}
-          onClick={() => onRate(ratings)}
+          disabled={!canSubmit}
+          onClick={() => onRate({
+            voice_type: voiceType,
+            voice_reflection: voiceReflection.trim() || null,
+            internal_state: internalState,
+            external_state: externalState,
+            compass_direction: direction,
+          })}
         >
           Save Rating
         </button>
+        {onBack && (
+          <button className="pp-btn-ghost" onClick={onBack}>
+            Go back
+          </button>
+        )}
       </div>
     </div>
   )

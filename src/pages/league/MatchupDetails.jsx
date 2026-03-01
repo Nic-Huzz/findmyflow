@@ -147,30 +147,32 @@ export default function MatchupDetails() {
         })}
       </div>
 
-      {/* Team Rosters */}
-      <div className="matchup-rosters">
-        <div className="matchup-roster">
-          <h3>{myTeamName}</h3>
-          {(userTeam?.fantasy_team_members || []).map(m => (
-            <div key={m.user_id} className="matchup-roster-member">
-              <span className="matchup-roster-name">{memberNames?.[m.user_id] || 'Member'}</span>
-              {m.user_id === user?.id && <span className="matchup-you-badge">You</span>}
-              <span className="matchup-roster-pts">{m.total_points ?? 0} pts</span>
-            </div>
-          ))}
-        </div>
-        {oppTeam && (
+      {/* Team Rosters (hidden for solo vs solo) */}
+      {((userTeam?.fantasy_team_members || []).length > 1 || (oppTeam?.fantasy_team_members || []).length > 1) && (
+        <div className="matchup-rosters">
           <div className="matchup-roster">
-            <h3>{oppTeam.name}</h3>
-            {(oppTeam.fantasy_team_members || []).map(m => (
+            <h3>{myTeamName}</h3>
+            {(userTeam?.fantasy_team_members || []).map(m => (
               <div key={m.user_id} className="matchup-roster-member">
                 <span className="matchup-roster-name">{memberNames?.[m.user_id] || 'Member'}</span>
+                {m.user_id === user?.id && <span className="matchup-you-badge">You</span>}
                 <span className="matchup-roster-pts">{m.total_points ?? 0} pts</span>
               </div>
             ))}
           </div>
-        )}
-      </div>
+          {oppTeam && (
+            <div className="matchup-roster">
+              <h3>{oppTeam.name}</h3>
+              {(oppTeam.fantasy_team_members || []).map(m => (
+                <div key={m.user_id} className="matchup-roster-member">
+                  <span className="matchup-roster-name">{memberNames?.[m.user_id] || 'Member'}</span>
+                  <span className="matchup-roster-pts">{m.total_points ?? 0} pts</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

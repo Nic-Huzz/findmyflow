@@ -35,11 +35,14 @@ export default function WeeklyRecapCard({
   let bestCatConfig = null
   let bestDiff = -Infinity
   catResults.forEach(cr => {
+    const key = cr.key || cr.category
+    const config = FANTASY_CATEGORIES[key]
+    if (!config) return
     const myScore = isTeamA ? (cr.teamAScore || 0) : (cr.teamBScore || 0)
     const oppScore = isTeamA ? (cr.teamBScore || 0) : (cr.teamAScore || 0)
     if (myScore - oppScore > bestDiff) {
       bestDiff = myScore - oppScore
-      bestCatConfig = FANTASY_CATEGORIES[cr.key || cr.category]
+      bestCatConfig = config
     }
   })
 

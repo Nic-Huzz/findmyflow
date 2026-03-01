@@ -24,7 +24,7 @@ import ReleaseQuestInput, { RELEASE_QUEST_IDS } from './ReleaseQuestInput'
 import GrandSlamDropdownInput from './GrandSlamDropdownInput'
 import ValidationResponsesInput from './ValidationResponsesInput'
 import ResponseCounterInput from './ResponseCounterInput'
-import { getCategoryEmoji, getCategoryColor } from '../lib/league/leagueConfig'
+import { getCategoryColor } from '../lib/league/leagueConfig'
 import UpgradePrompt from './UpgradePrompt'
 import VoiceDropdown from './VoiceDropdown'
 
@@ -134,7 +134,7 @@ function QuestCard({
             background: getCategoryColor(quest.category),
             color: getCategoryColor(quest.category) === '#E9A23B' ? '#212529' : undefined
           } : undefined}
-        >{getCategoryEmoji(quest.category)}{getCategoryEmoji(quest.category) ? <>&ensp;</> : null}+{quest.points} XP</span>
+        >+{quest.points} XP</span>
       </div>
 
       {/* Daily streak bubbles */}
@@ -635,7 +635,7 @@ function QuestCard({
             {completedBadgeText}
           </div>
           {justCompleted && (
-            <div className="points-fly-up">{getCategoryEmoji(quest.category)}{getCategoryEmoji(quest.category) ? <>&ensp;</> : null}+{quest.points} XP</div>
+            <div className="points-fly-up">+{quest.points} XP</div>
           )}
           {quest.flow_route && (
             <a

@@ -10,25 +10,30 @@ function getStageStory(founder, stageId) {
   return null
 }
 
-function truncateAtSentence(text, maxLength) {
-  if (text.length <= maxLength) return text
-  const truncated = text.substring(0, maxLength)
-  const lastPeriod = truncated.lastIndexOf('. ')
-  const lastQuestion = truncated.lastIndexOf('? ')
-  const lastExclaim = truncated.lastIndexOf('! ')
-  const lastBoundary = Math.max(lastPeriod, lastQuestion, lastExclaim)
-  if (lastBoundary > 120) {
-    return text.substring(0, lastBoundary + 1).trim()
-  }
-  return truncated.replace(/\s+\S*$/, '').trim() + '...'
+function cleanMarkdown(text) {
+  return text
+    .replace(/\*\*/g, '')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/^>\s*/gm, '')
+    .replace(/^#+\s*/gm, '')
+    .trim()
 }
 
-export default function ProfileSummary({ founder, stuckPoint, dnaCode, archetype, onSave, onRetake, isSaving, alreadySaved }) {
+function getStoryPreview(story) {
+  if (!story) return null
+  const clean = cleanMarkdown(story.content)
+  // Take first 2 sentences
+  const sentences = clean.split(/(?<=[.!?])\s+/)
+  return sentences.slice(0, 2).join(' ')
+}
+
+export default function ProfileSummary({ founder, stuckPoint, dnaCode, archetype, onRetake }) {
   const story = getStageStory(founder, stuckPoint.id)
+  const preview = getStoryPreview(story)
 
   return (
     <div style={{ paddingTop: 16, paddingBottom: 40 }}>
-      {/* Icon — only show if we have one (returning users may not) */}
+      {/* Icon */}
       {stuckPoint.icon && (
         <div className="pp-scale-in" style={{ textAlign: 'center', fontSize: 48, marginBottom: 16 }}>
           {stuckPoint.icon}
@@ -47,12 +52,9 @@ export default function ProfileSummary({ founder, stuckPoint, dnaCode, archetype
       {story && (
         <div className="pp-glass-card pp-fade-in-up pp-stagger-3" style={{ padding: 20, marginBottom: 20, textAlign: 'left' }}>
           <div className="pp-story-label">{founder.name}&apos;s story</div>
-          <div className="pp-story-title">{story.title}</div>
-          <div className="pp-story-content">
-            {truncateAtSentence(story.content, 300)}
-          </div>
-          {story.content.length > 300 && (
-            <div className="pp-story-more">Full story coming soon...</div>
+          <div className="pp-story-title">{cleanMarkdown(story.title)}</div>
+          {preview && (
+            <div className="pp-story-content">{preview}</div>
           )}
         </div>
       )}
@@ -85,15 +87,9 @@ export default function ProfileSummary({ founder, stuckPoint, dnaCode, archetype
 
       {/* CTAs */}
       <div className={`pp-fade-in-up pp-stagger-${story ? '5' : '4'}`} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {alreadySaved ? (
-          <button className="pp-btn-gold" disabled style={{ opacity: 0.7 }}>
-            Saved
-          </button>
-        ) : (
-          <button className="pp-btn-gold" onClick={onSave} disabled={isSaving}>
-            {isSaving ? 'Saving...' : 'Save to Profile'}
-          </button>
-        )}
+        <button className="pp-btn-gold" disabled style={{ opacity: 0.7 }}>
+          Saved
+        </button>
         <button className="pp-btn-ghost" onClick={onRetake}>
           Retake Quiz
         </button>
