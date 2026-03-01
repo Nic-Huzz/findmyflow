@@ -134,7 +134,7 @@ export default function CompassCheckin({ onComplete, onSkip, challengeTitle }) {
             onClick={handleSubmit}
             disabled={!selectedEnergy || !selectedFlow}
           >
-            Save Energy Check
+            Save Compass Check-in
           </button>
           <button
             className="groan-btn groan-btn-skip"
