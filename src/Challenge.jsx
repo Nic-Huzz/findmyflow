@@ -2480,7 +2480,7 @@ function Challenge() {
 
                 {/* Challenge description when we have one */}
                 {selectedGroanChallenge && (
-                  <p className="groan-modal-description">{selectedGroanChallenge.description}</p>
+                  <p className="groan-modal-description" style={{ whiteSpace: 'pre-line' }}>{selectedGroanChallenge.description}</p>
                 )}
 
                 {/* Source label — show skill × problem combo */}
