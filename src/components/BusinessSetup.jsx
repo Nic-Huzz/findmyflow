@@ -1,7 +1,18 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { STAGES } from '../lib/stageConfig'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './BusinessSetup.css'
+
+const STAGE_OPTIONS = [
+  { value: 'not_validated', label: "I have an idea but haven't tested it yet", stage: STAGES.VALIDATION },
+  { value: 'validated_no_product', label: "People want it but I haven't built it yet", stage: STAGES.PRODUCT_CREATION },
+  { value: 'have_product_not_tested', label: 'I have something built but need more feedback', stage: STAGES.TESTING },
+  { value: 'have_product_with_customers', label: 'I have paying customers', stage: STAGES.MONEY_MODELS },
+  { value: 'need_offer_stack', label: 'I need to build out my full offer', stage: STAGES.OFFER_CREATION },
+  { value: 'need_marketing', label: 'My offer is ready, I need to get it out there', stage: STAGES.CAMPAIGN_CREATION },
+  { value: 'ready_to_launch', label: "I'm ready to launch", stage: STAGES.LAUNCH },
+]
 
 // Money model tier options (same as QuickCapture ProductCard)
 const TIER_OPTIONS = [
@@ -255,16 +266,29 @@ function makeEmptyProduct() {
   return { name: '', description: '', tier: null }
 }
 
-// Simple project creation step
+// Two-step project creation: name → stage
 function ProjectNameStep({ userId, onComplete }) {
+  const [step, setStep] = useState('name') // 'name' | 'stage'
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  const [selectedStage, setSelectedStage] = useState(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
 
-  const handleSubmit = async (e) => {
+  const handleNameNext = (e) => {
     e.preventDefault()
-    if (!name.trim() || saving) return
+    if (!name.trim()) return
+    hapticLight()
+    setStep('stage')
+  }
+
+  const handleStageSelect = (option) => {
+    hapticLight()
+    setSelectedStage(option)
+  }
+
+  const handleSubmit = async () => {
+    if (!selectedStage || saving) return
 
     setSaving(true)
     setError(null)
@@ -278,7 +302,7 @@ function ProjectNameStep({ userId, onComplete }) {
           description: description.trim() || null,
           source_flow: 'business_setup',
           status: 'active',
-          current_stage: 1,
+          current_stage: selectedStage.stage,
           total_points: 0,
           is_primary: true
         })
@@ -287,6 +311,7 @@ function ProjectNameStep({ userId, onComplete }) {
 
       if (insertError) throw insertError
 
+      hapticSuccess()
       onComplete(data)
     } catch (err) {
       console.error('Error creating project:', err)
@@ -296,8 +321,51 @@ function ProjectNameStep({ userId, onComplete }) {
     }
   }
 
+  if (step === 'stage') {
+    return (
+      <div className="bs-form">
+        <div className="bs-field">
+          <label>Where are you at with <strong>{name}</strong>?</label>
+          <div className="bs-stage-options">
+            {STAGE_OPTIONS.map(option => (
+              <button
+                key={option.value}
+                type="button"
+                className={`bs-stage-option ${selectedStage?.value === option.value ? 'selected' : ''}`}
+                onClick={() => handleStageSelect(option)}
+              >
+                <span className="bs-stage-number">{option.stage}</span>
+                <span className="bs-stage-label">{option.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {error && <p className="bs-error">{error}</p>}
+
+        <div className="bs-actions">
+          <button
+            type="button"
+            className="bs-back-btn"
+            onClick={() => setStep('name')}
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            className="bs-cta"
+            onClick={handleSubmit}
+            disabled={!selectedStage || saving}
+          >
+            {saving ? 'Creating...' : 'Create Project & Start'}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="bs-form">
+    <form onSubmit={handleNameNext} className="bs-form">
       <div className="bs-field">
         <label htmlFor="project-name">What's your business or project called?</label>
         <input
@@ -328,9 +396,9 @@ function ProjectNameStep({ userId, onComplete }) {
       <button
         type="submit"
         className="bs-cta"
-        disabled={!name.trim() || saving}
+        disabled={!name.trim()}
       >
-        {saving ? 'Creating...' : 'Create Project & Start'}
+        Next
       </button>
     </form>
   )

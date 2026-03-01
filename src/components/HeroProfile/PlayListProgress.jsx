@@ -82,14 +82,12 @@ function PlayListProgress({ visibilityProgress, groanChallenges = [] }) {
               </div>
 
               <div className="layer-status">
-                {isComplete && (
-                  <span className="status-complete">✓ Complete</span>
-                )}
-                {isInProgress && (
-                  <span className="status-progress">◐ {completed}/{total}</span>
-                )}
-                {!isComplete && !isInProgress && (
-                  <span className="status-empty">{percentage}%</span>
+                {total > 0 ? (
+                  <span className={`status-progress ${isComplete ? 'status-all-done' : ''}`}>
+                    {completed} done
+                  </span>
+                ) : (
+                  <span className="status-empty">0</span>
                 )}
               </div>
             </div>

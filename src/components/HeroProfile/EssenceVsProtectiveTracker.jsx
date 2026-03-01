@@ -81,7 +81,7 @@ function NsArchetypeCard({ nervousSystemArchetype }) {
             {nervousSystemArchetype.rewiringNeeded.split('\n').map((line, i) => (
               <React.Fragment key={i}>
                 {i > 0 && <br />}
-                {line}
+                {line.replace(/\*\*/g, '')}
               </React.Fragment>
             ))}
           </p>

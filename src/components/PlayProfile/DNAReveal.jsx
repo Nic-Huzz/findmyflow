@@ -29,7 +29,7 @@ function getBusinessSummary(founder) {
     .join('. ') + '.'
 }
 
-export default function DNAReveal({ profile, match, onContinue, onFounderChange, continueLabel }) {
+export default function DNAReveal({ profile, match, onContinue, onFounderChange, continueLabel, shareUrl }) {
   const [phase, setPhase] = useState(0)
   const [showCopied, setShowCopied] = useState(false)
   const [selectedIdx, setSelectedIdx] = useState(0)
@@ -56,7 +56,8 @@ export default function DNAReveal({ profile, match, onContinue, onFounderChange,
   }
 
   const handleShare = async () => {
-    const text = `My Founder DNA: ${profile.code} \u2014 ${match.archetype}\nI think like ${selected.founder.name} (${selected.founder.company})\n\nDiscover yours at findmyflow.nichuzz.com`
+    const url = shareUrl || 'findmyflow.nichuzz.com'
+    const text = `My Founder DNA: ${profile.code} \u2014 ${match.archetype}\nI think like ${selected.founder.name} (${selected.founder.company})\n\nDiscover yours at ${url}`
     if (navigator.share) {
       try {
         await navigator.share({ text })

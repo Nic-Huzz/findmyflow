@@ -1511,6 +1511,11 @@
   color: #E9A23B;
 }
 
+.hero-profile .status-all-done {
+  color: #6BCB77;
+  font-weight: 600;
+}
+
 .hero-profile .status-locked {
   color: #adb5bd;
   font-size: 10px;

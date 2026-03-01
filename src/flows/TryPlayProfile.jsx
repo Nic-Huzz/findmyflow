@@ -33,7 +33,15 @@ function clearProgress() {
  */
 export default function TryPlayProfile() {
   const saved = useRef(loadProgress())
-  const [screen, setScreen] = useState(() => saved.current?.screen || 'games')
+  const [screen, setScreen] = useState(() => {
+    const s = saved.current?.screen || 'games'
+    const st = saved.current?.state
+    // If restoring past games but no games selected, restart
+    if (s !== 'games' && (!st?.selectedGames || st.selectedGames.length === 0)) return 'games'
+    // If restoring to email/reveal but no DNA profile, restart
+    if ((s === 'email' || s === 'reveal') && !st?.dnaProfile) return 'games'
+    return s
+  })
   const [founders, setFounders] = useState(null)
   const [utmParams, setUtmParams] = useState({})
 
@@ -104,6 +112,14 @@ export default function TryPlayProfile() {
 
   // ── Email submitted → save lead + show reveal ──
   const handleEmailSubmit = async (email, name) => {
+    // Guard: can't reveal without DNA data
+    if (!state.dnaProfile || !state.matchResult) {
+      clearProgress()
+      setState({ selectedGames: [], sliderValues: null, dnaProfile: null, matchResult: null })
+      setScreen('games')
+      return
+    }
+
     setScreen('reveal')
     clearProgress()
 
@@ -119,8 +135,10 @@ export default function TryPlayProfile() {
           archetype: state.matchResult?.archetype,
           matched_founder: founderName,
           selected_games: state.selectedGames.map(g => g.name),
+          utm_source: utmParams.utm_source,
+          utm_medium: utmParams.utm_medium,
+          utm_campaign: utmParams.utm_campaign,
         },
-        ...utmParams,
       }, {
         onConflict: 'email',
         ignoreDuplicates: false,
@@ -165,12 +183,21 @@ export default function TryPlayProfile() {
         )}
 
         {screen === 'email' && (
-          <PublicEmailGate
-            flowType="play_profile"
-            onEmailSubmit={handleEmailSubmit}
-            title="Your Founder DNA is ready"
-            subtitle="Enter your details to see which legendary founder thinks like you"
-          />
+          <>
+            <PublicEmailGate
+              flowType="play_profile"
+              onEmailSubmit={handleEmailSubmit}
+              title="Your Founder DNA is ready"
+              subtitle="Enter your details to see which legendary founder thinks like you"
+            />
+            <button
+              className="pp-btn-ghost"
+              onClick={() => setScreen('sliders')}
+              style={{ marginTop: 12, fontSize: 13 }}
+            >
+              &larr; Go Back
+            </button>
+          </>
         )}
 
         {screen === 'reveal' && state.dnaProfile && state.matchResult && (
@@ -179,6 +206,7 @@ export default function TryPlayProfile() {
             match={state.matchResult}
             onContinue={handleContinue}
             continueLabel="Go deeper — find your stuck point"
+            shareUrl="findmyflow.nichuzz.com/try/play-profile"
             onFounderChange={(selectedMatch) => {
               setState(prev => ({
                 ...prev,

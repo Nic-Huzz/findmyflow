@@ -157,9 +157,9 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
 
       const voicePromise = supabase
         .from('quest_completions')
-        .select('quest_id, quest_type, completed_at')
+        .select('quest_id, quest_type, quest_category, completed_at')
         .eq('user_id', userId)
-        .or('quest_id.like.voice_stage_%,quest_type.eq.Voice')
+        .or('quest_category.eq.Voices,quest_type.eq.Voice')
 
       const healingPromise = supabase
         .from('quest_completions')
