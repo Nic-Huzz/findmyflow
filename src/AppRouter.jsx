@@ -156,6 +156,7 @@ const PublicNervousSystemFlow = lazyRetry(() => import('./flows/PublicNervousSys
 const PublicOfferAuditFlow = lazyRetry(() => import('./flows/PublicOfferAuditFlow'))
 const CareerClarityQuiz = lazyRetry(() => import('./flows/CareerClarityQuiz'))
 const EarthquakeQuiz = lazyRetry(() => import('./flows/EarthquakeQuiz'))
+const TryPlayProfile = lazyRetry(() => import('./flows/TryPlayProfile'))
 const OldLandingPage = lazyRetry(() => import('./pages/OldLandingPage'))
 const FantasyLeagueLanding = lazyRetry(() => import('./pages/FantasyLeagueLanding'))
 const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLanding'))
@@ -517,6 +518,7 @@ function AppRouter() {
             <Route path="/try/nervous-system" element={<PublicNervousSystemFlow />} />
             <Route path="/try/flow-audit" element={<PublicOfferAuditFlow />} />
             <Route path="/try/earthquake" element={<EarthquakeQuiz />} />
+            <Route path="/try/play-profile" element={<TryPlayProfile />} />
 
             {/* Fantasy League Landing Page - Public */}
             <Route path="/fantasy" element={<FantasyLeagueLanding />} />

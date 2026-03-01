@@ -29,7 +29,7 @@ function getBusinessSummary(founder) {
     .join('. ') + '.'
 }
 
-export default function DNAReveal({ profile, match, onContinue, onFounderChange }) {
+export default function DNAReveal({ profile, match, onContinue, onFounderChange, continueLabel }) {
   const [phase, setPhase] = useState(0)
   const [showCopied, setShowCopied] = useState(false)
   const [selectedIdx, setSelectedIdx] = useState(0)
@@ -192,7 +192,7 @@ export default function DNAReveal({ profile, match, onContinue, onFounderChange 
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <button className="pp-btn-gold" onClick={onContinue}>
-              What should I work on?
+              {continueLabel || 'What should I work on?'}
             </button>
             <button className="pp-btn-ghost" onClick={handleShare}>
               Share my DNA

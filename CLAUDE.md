@@ -6,12 +6,15 @@ Personal development web app helping burnt-out professionals discover their idea
 
 **Core Architecture:**
 - **Project-Centric**: Multiple projects per user, each with stage progression
-- **10-Stage System**: Flow Finder (0), Groans (0.5), Stages 1-7, Tracking (8)
+- **10-Stage System**: Flow Finder (0), Play-List (0.5), Setup (0.9), Stages 1-7, Tracking (8)
+- **Fantasy League**: Solo-player competitive league with 3 scoring categories and weekly matchups
+- **Play Profile**: Founder DNA assessment with AI-powered stuck-point diagnostics
 - **CRM Command Center**: Tower-based marketing/sales hub (Attract, Nurture, Tools)
 - **Groan Matrix**: AI-generated courage challenges across skills × visibility layers
 - **7-Day Challenges**: Gamified stage-specific quests
 - **Weekly Planning**: 4-phase cycle (Push, Flow, Rest, Launch)
 - **Zarlo AI**: Context-aware assistant on every page
+- **Stripe Payments**: Business stages 1-7 gated behind one-time or recurring payment
 - **Brand Colors**: Purple (#5e17eb) → Gold (#E9A23B) ombre gradient
 - Based on Alex Hormozi's $100M Offers framework
 
@@ -33,6 +36,9 @@ src/
 │
 ├── hooks/
 │   ├── useChallengeData.js   # Challenge state management
+│   ├── useLeagueData.js      # Fantasy league state management
+│   ├── useMatchupData.js     # Live matchup scoring + opponent fetch
+│   ├── useNewsfeed.js        # League activity feed + reactions
 │   ├── useCelebrations.js    # Confetti, toasts, level-up animations
 │   ├── useExecute.js         # Execute page operations
 │   └── useAutoSave.js, useSteppedForm.js
@@ -52,6 +58,9 @@ src/
 │   ├── Zarlo/                      # AI Co-Founder widget
 │   ├── Celebrations/               # Confetti, FloatingPoints, etc.
 │   │
+│   ├── league/               # LeagueLeaderboard.jsx
+│   ├── PlayProfile/          # Quiz, Dashboard, DNA, AI Diagnostic, Challenge
+│   ├── BusinessSetup.jsx     # Stage 0.9 setup wizard
 │   ├── Challenge*.jsx        # Header, Filters, Leaderboard, etc.
 │   ├── *QuestInput.jsx       # Groan, Recognise, Rewire, Release, etc.
 │   ├── GroanMatrix.jsx       # 2D courage challenge matrix
@@ -74,11 +83,15 @@ src/
 │   ├── graduationChecker.js  # Project graduation logic
 │   ├── haptics.js            # Mobile vibration feedback
 │   ├── aiHelper.js           # Claude AI integration
+│   ├── league/               # leagueConfig.js, leagueService.js, leagueScoring.js
+│   ├── founderDnaAI.js       # Play Profile AI challenge generation
+│   ├── dnaMatching.js        # Founder DNA matching algorithm
 │   ├── zarlo/                # zarloEngine.js, zarloPageContent.js
 │   ├── crm/                  # 20+ services (contentContext, promptTemplates, towerStats, csvImportService, ecosystemService)
 │   └── templates/            # AI prompt templates
 │
-├── data/                     # Static config (personas, archetypes, beliefs)
+├── data/                     # Static config (personas, archetypes, beliefs, founderDnaGames, founderDnaStuckPoints)
+├── pages/league/             # LeagueOverview, WeekMatchups, MatchupDetails, ContentSubmit, NewsfeedPage, LeagueAdmin
 ├── styles/flow-base.css      # Shared flow styles
 ├── App.jsx, AppRouter.jsx, Challenge.jsx, Profile.jsx
 └── AuthGate.jsx              # Protected route wrapper
@@ -102,6 +115,10 @@ docs/                         # 33+ documentation files
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/lead-magnet-selection`, `/product-selection`, `/funnel-builder`, `/funnel-calculator`
 
+**Play Profile**: `/play-profile` (quiz + dashboard), `/play-profile?mode=retake`, `/play-profile?mode=unstuck`, `/play-profile?mode=rate`
+
+**Fantasy League**: `/league` (overview), `/league/week` (matchups), `/league/matchup` (details), `/league/submit` (content), `/league/guide`, `/league/admin`, `/fantasy` (landing)
+
 **Other Flows**: `/nervous-system`, `/healing-compass`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public)
 
 **CRM** (`/crm/*`): Dashboard, Attract, Nurture, Tools (tower hubs) | content/create, content/queue, content/history | marketing, pages, sales, sales/scripts, contacts, email-sequences, warm-outreach | execute, analytics, performance, reports | calculators, calculators/ltv, calculators/cac, calculators/ptuf | import, tools/systems | ascension, objections, implementations, assets, autonomous, alerts
@@ -113,19 +130,22 @@ docs/                         # 33+ documentation files
 | Stage | Name | Color | Focus |
 |-------|------|-------|-------|
 | 0 | Flow Finder | #5e17eb | Discover skills/problems/personas (always accessible) |
-| 0.5 | Groans | #6d26d7 | Courage challenges (always accessible, user-level) |
-| 1-7 | Validation → Launch | gradient | Progressive project stages |
+| 0.5 | Play-List | #6d26d7 | Courage challenges via Groan Matrix (always accessible, user-level) |
+| 0.9 | Setup | — | Business setup — project creation + product identification (unlocks stages 1-7) |
+| 1-7 | Validation → Launch | gradient | Progressive project stages (paid, except "Understand X" explainers) |
 | 8 | Tracking | #E9A23B | Funnel metrics (always accessible) |
 
 Stage flags: `alwaysAccessible`, `isUserLevel`, `isGroansStage`
 
 ### 2. 7-Day Challenge System
 
-Categories: Groans (Recognise/Rewire/Reconnect), Healing (Recognise/Release), Flow Finder, Bonus, Tracker
+Category tabs: Play-List, Business, Healing, Bonus
 
 Key files: `Challenge.jsx` (main page), `useChallengeData.js` (state), `QuestCard.jsx` (rendering), `ChallengeHeader.jsx`, `ChallengeFilters.jsx`, `ChallengeLeaderboard.jsx`
 
-Layout: Header (streak, leaderboard badge, settings cog, week type) → Category tabs → Stage tabs (Business only) → Artifact progress → Sub-tabs (Tasks | Voices/Deep Dive) → Quest cards. Tracker tab includes `HorizontalFlowRiver` with compass/challenge legend.
+Layout: Header (matchup banner if in league → score block with 3 category pills → streak/leaderboard/settings/week-type) → Category tabs → Stage tabs (Business only) → Artifact progress → Sub-tabs (Tasks | Deep Dive) → Quest cards. Tracker tab includes `HorizontalFlowRiver` with compass/challenge legend.
+
+**Play-List tab** contains: Flow Finder quests, Skills-only Groan Matrix, Voice logging (essence + protective check-ins).
 
 Weekly Planning: Auto-skips "Review Last Week" step for new users with no previous data (0 quests, 0 points).
 
@@ -167,11 +187,13 @@ Key services in `src/lib/crm/`: contentContext.js (data aggregation), promptTemp
 
 ### 8. Groan Matrix
 
-2D matrix: User skills/problems × 5 visibility layers (Screen→Live→Money→Vulnerable→Authority).
+2D matrix: User skills × 5 visibility layers (Screen→Live→Money→Vulnerable→Authority). On Play-List tab, skills-only with optional problem/persona mapping per cell.
 
 Essence zone scoring: scary_score + wahoo_score → essence zone / protective voice / comfort zone.
 
 Workflow: generated → accepted → completed (with proof) or skipped. 48hr outcome tracking.
+
+Post-completion flow: "I Did It!" → Reflection (scary/wahoo sliders, 3% improvement) → Voice Check-in (essence + protective yes/no) → Compass Check-in (N/E/S/W) → Confetti. Completed cells show "Done ×N" badge and allow repeating via "New Challenge" button.
 
 ### 9. Weekly Planning (4-Phase)
 
@@ -186,7 +208,7 @@ All use purple gradient background; gold for selection.
 
 ### 10. First-Time Onboarding
 
-`HomeFirstTime.jsx`: Welcome → 3 persona questions → Branch by persona type. `ExistingProjectFlow`: Name → Description → Skills → Problem → Persona → Stage.
+`HomeFirstTime.jsx`: Universal path for all personas — Welcome → Q1 (Journey Stage) → Q2 (Wealth Ladder) → Q3 (Primary Goal) → Persona Reveal → Mind Space → `/me`. No branching by persona type. `ExistingProjectFlow`: Name → Description → Skills → Problem → Persona → Stage.
 
 ### 11. Journey Mapping (SeeYourFlow)
 
@@ -211,6 +233,46 @@ Dashboard hub with three sections: Hero Profile (archetype, level, XP), Flow Jou
 ### 16. Flow Compass (/flow-compass)
 
 `FlowCompassPage.jsx` — energy tracking with N/E/S/W compass directions. Restyled to match /me design (purple gradient quick-log hero, white project cards, gold CTAs, glass morphism). Project selector for multi-project users. No sidebar.
+
+### 17. Fantasy League
+
+Solo-player competitive league with 4-week seasons and weekly head-to-head matchups.
+
+**3 Scoring Categories** (from `quest_completions.quest_category`):
+
+| Category | Icon | Color | Quest Categories |
+|----------|------|-------|------------------|
+| Play-List | 🎮 | #E9A23B | Groans |
+| Healing | 💚 | #10b981 | Healing, Daily, Weekly |
+| Bonus | ⭐ | #E9A23B | Bonus, Tracker + approved content submissions |
+
+**Match Points**: WIN (2+ categories) = 3pts, DRAW (1-1 split) = 1pt, LOSS = 0pts.
+
+**Content Submissions**: 10 types (2-10pts each), admin-approved, feed into Bonus category. Reaction system (cheer/fire/clap/heart).
+
+**Key files**: `src/lib/league/` (leagueConfig, leagueService, leagueScoring), `src/hooks/useLeagueData.js`, `src/pages/league/`, `src/components/league/LeagueLeaderboard.jsx`
+
+**Edge Function**: `score-league-matchups` — cron auto-scores active leagues every 15 min.
+
+**Solo default**: Each player is a 1-member team named after their display name. Teams support up to 3 members.
+
+### 18. Play Profile (Founder DNA)
+
+AI-powered founder assessment: quiz → DNA match → stuck point → AI diagnostic → custom challenge.
+
+**Flow**: `PlayProfileFlow.jsx` with modes: default (dashboard), `?mode=retake` (quiz), `?mode=unstuck` (stuck point workflow), `?mode=rate` (rate completed challenge).
+
+**Components**: `PlayProfileQuiz.jsx` (GameSelection → DNASliders → DNAReveal → StuckPointSelection → FollowUpQuestions), `PlayProfileDashboard.jsx` (active/completed challenges), `AIDiagnostic.jsx` (multi-turn AI), `ChallengeDelivery.jsx`, `ChallengeRating.jsx`.
+
+**Database**: `founder_dna_results` (profile + matched founder), `founder_dna_sessions` (challenge sessions with ratings). Static data: `public/data/founderDnaFounders.json`.
+
+**Scoring**: Completing a founder DNA challenge = +10 XP to Play-List category.
+
+### 19. Stripe Payment Gating
+
+Business stages 1-7 locked behind Stripe payment. Free: Flow Finder, Play-List, Healing, Setup, "Understand X" explainers, Stage 4 Attraction Offer, CRM. Paid: all other business quests.
+
+**Key files**: `useSubscription.js` (checks `user_subscriptions`), `UpgradePrompt.jsx` (overlay), `create-checkout-session` + `stripe-webhook` edge functions.
 
 ## Architecture Patterns
 
@@ -280,6 +342,15 @@ const { celebrateTaskComplete, celebrateLevelUp } = useCelebrations()
 ### CRM Tables
 `crm_pages` | `crm_contacts` (includes outreach columns: outreach_status, platform, engagement_type, priority, temperature, last_message, outreach_status_entered_at) | `crm_email_sequences` | `crm_email_steps` | `sales_deals` | `sales_scripts` | `script_usage_log` | `content_history` | `ecosystem_system_progress` | `offer_implementations`
 
+### Fantasy League
+`fantasy_leagues` (name, status, start/end date, num_weeks) | `fantasy_teams` (name, invite_code, solo or up to 3 members) | `fantasy_team_members` (team_id, user_id) | `fantasy_matchups` (week_number, team_a/b, category_results, match_points) | `league_content_submissions` (content_type, link_url, points_value, approval status) | `league_content_reactions` (cheer/fire/clap/heart) | `league_signups` (landing page signups)
+
+### Play Profile
+`founder_dna_results` (DNA profile, matched founder, archetype, sliders, games) | `founder_dna_sessions` (stuck point, diagnosis, challenge, ratings, voice/compass data)
+
+### Payments
+`user_subscriptions` (Stripe subscription tracking)
+
 ### Notifications
 `push_subscriptions` (endpoint, keys) | `notification_preferences` (quest_reminders, achievement_celebrations, timezone)
 
@@ -302,7 +373,19 @@ npm run build     # Production build
 npm run db:push   # Apply migrations
 ```
 
-## Recent Updates (Feb 2026)
+## Recent Updates (Mar 2026)
+
+- **Fantasy League Restructured**: Solo players as default (1-member teams named after display name). 3 scoring categories (Play-List, Healing, Bonus). Auto-scoring edge function runs every 15 min. Content submissions with 10 types and approval workflow.
+- **Play Profile (Founder DNA)**: Full assessment flow — quiz, DNA matching to famous founders, stuck point selection, AI diagnostic, custom challenge generation, challenge rating with voice/compass data. +10 XP to Play-List on completion.
+- **Challenge Header Redesign**: Compact pill layout — matchup banner (if in league) → score block with 3 animated category pills → streak/leaderboard/settings/week-type row.
+- **Play-List Tab**: Replaces old "Groans" tab. Contains Flow Finder quests, skills-only Groan Matrix, and voice logging. Post-completion adds voice check-in step (essence + protective) between reflection and compass.
+- **Business Setup (Stage 0.9)**: New gating stage — project creation + product identification before unlocking stages 1-7. Vibe seekers auto-skip product step.
+- **Stripe Payment Gating**: Business stages 1-7 locked behind payment. Free access to Flow Finder, Play-List, Healing, Setup, explainer quests, CRM.
+- **Universal Onboarding**: All personas follow same path — Q1/Q2/Q3 → Persona Reveal → Mind Space → `/me`. No branching. Quick Capture moved to Business Setup tab.
+- **MindSpace Combination Selection**: New Step 4 — generates all skill × problem × persona triplets from starred items, user selects primary combination, saved as `cluster_type: 'primary_combination'`.
+- **Groan Matrix Enhancements**: Problem/persona mapping per cell, 3% improvement input, voice check-in step, "Done ×N" completion badges, repeatable challenges via "New Challenge" button.
+
+## Previous Updates (Feb 2026)
 
 - **Flow Compass Restyled**: Removed sidebar layout, now uses /me design system — purple gradient quick-log hero, white project cards with gradient left accent bars, gold CTAs, glass morphism buttons. Project selector for multi-project users.
 - **7-Day Challenge Layout**: Moved "Tasks | Deep Dive" sub-tabs below artifact progress and above quest cards. Replaced "Voices" header badge with "Leaderboard" button. Removed category points summary row (Category Total/Summary/Leaderboard). Removed "Edit" plan button from header. Tracker tab now uses `HorizontalFlowRiver` (matching /me page) with compass/challenge legend.
