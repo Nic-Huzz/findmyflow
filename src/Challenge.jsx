@@ -2688,9 +2688,15 @@ function Challenge() {
                   </div>
 
                   {/* 3% improvement toggle — only show if the challenge had a 3% item */}
-                  {selectedGroanChallenge?.description?.includes('3% improvement:') && (
+                  {selectedGroanChallenge?.description?.includes('3% improvement:') && (() => {
+                    const match = selectedGroanChallenge.description.match(/3% improvement:\s*(.+?)(?:\n|$)/)
+                    const improvementText = match?.[1]?.trim()
+                    return (
                     <div className="groan-three-percent-toggle">
-                      <label className="slider-label">Did you implement your 3% improvement?</label>
+                      <label className="groan-three-percent-label">Did you implement your 3% improvement?</label>
+                      {improvementText && (
+                        <div className="groan-three-percent-quote">"{improvementText}"</div>
+                      )}
                       <div className="groan-toggle-buttons">
                         <button
                           className={`groan-toggle-btn ${groanReflection.didThreePercent === true ? 'active yes' : ''}`}
@@ -2706,7 +2712,8 @@ function Challenge() {
                         </button>
                       </div>
                     </div>
-                  )}
+                    )
+                  })()}
 
                   <div className="groan-reflection-text">
                     <label>Quick reflection (optional)</label>
