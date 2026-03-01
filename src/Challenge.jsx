@@ -2479,9 +2479,35 @@ function Challenge() {
                 )}
 
                 {/* Challenge description when we have one */}
-                {selectedGroanChallenge && (
-                  <p className="groan-modal-description" style={{ whiteSpace: 'pre-line' }}>{selectedGroanChallenge.description}</p>
-                )}
+                {selectedGroanChallenge && (() => {
+                  const desc = selectedGroanChallenge.description || ''
+                  const lines = desc.split('\n')
+                  const mainText = lines[0] || ''
+                  const metaLines = lines.slice(1).filter(l => l.trim())
+                  return (
+                    <div className="groan-modal-description">
+                      <p className="groan-desc-main">{mainText}</p>
+                      {metaLines.length > 0 && (
+                        <div className="groan-desc-meta">
+                          {metaLines.map((line, i) => {
+                            const colonIdx = line.indexOf(':')
+                            if (colonIdx > 0) {
+                              const label = line.slice(0, colonIdx).trim()
+                              const value = line.slice(colonIdx + 1).trim()
+                              return (
+                                <div key={i} className="groan-desc-meta-row">
+                                  <span className="groan-desc-meta-label">{label}</span>
+                                  <span className="groan-desc-meta-value">{value}</span>
+                                </div>
+                              )
+                            }
+                            return <p key={i} className="groan-desc-main">{line}</p>
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })()}
 
                 {/* Source label — show skill × problem combo */}
                 {groanCellContext?.sourceType === 'skill_x_problem' && !selectedGroanChallenge && (
