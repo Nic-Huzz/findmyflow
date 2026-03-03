@@ -124,7 +124,7 @@ export const PAGE_CONTENT = {
   'onboarding_welcome': {
     pageId: 'onboarding_welcome',
     pageName: 'Welcome',
-    whatIsThis: `This is your first step into FindMyFlow! We're about to ask you three quick questions to personalise your experience. No wrong answers — just honest ones.`,
+    whatIsThis: `This is your first step into FindMyFlow! We're about to ask you four quick questions to find where your flow is getting stuck. No wrong answers — just honest ones.`,
     whyMatters: `Everyone's journey is different. Someone still exploring needs different guidance than someone who's already running a business.\n\nThese questions help us meet you where you are — not where we assume you are.`,
     contextualPrompts: [
       { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
@@ -135,7 +135,7 @@ export const PAGE_CONTENT = {
     faq: {
       what_is_fmf: `FindMyFlow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
-      why_questions: `Because one-size-fits-all doesn't work.\n\nSomeone still in a 9-5 figuring things out needs different support than someone who's already quit and needs to make money yesterday.\n\nThese three questions help us understand where you're at so we can actually help — not just throw generic advice at you.`,
+      why_questions: `Because one-size-fits-all doesn't work.\n\nSomeone still exploring needs different support than someone who's already visible but can't charge.\n\nThese four questions check where your flow is blocked — identity, nervous system, visibility, or value — so we can focus your journey on the right thing first.`,
       what_happens: `After you answer, we'll show you your "persona" — basically which stage of the journey you're on.\n\nThen, depending on your answers, you'll either:\n• Start discovering what you're meant to build (Flow Finder)\n• Or capture what you're already working on (Quick Capture)\n\nEither way, you'll be set up and ready to go in about 5 minutes.`
     }
   },
@@ -213,6 +213,97 @@ export const PAGE_CONTENT = {
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
       what_personas: `There are three main personas:\n\n**Flow Seeker** — Still discovering what you want to build. Focus: exploration, self-discovery, finding your direction.\n\n**Flow Finder** — You know what you're building, now making it real. Focus: creation, validation, first customers.\n\n**Movement Maker** — You've got something working, time to grow. Focus: scaling, systems, bigger impact.\n\nEach one has different challenges and different wins. None is "better" — they're just different chapters.`,
       change_later: `Absolutely. Your persona is based on where you are TODAY.\n\nAs you make progress — get your first customers, build your first product, scale your systems — you'll naturally move through the personas.\n\nThink of it like levels in a game. You don't stay at Level 1 forever. You level up by doing the work.`
+    }
+  },
+
+  // ============================================
+  // TENSION LAYER ONBOARDING (HomeFirstTime v3)
+  // ============================================
+
+  'onboarding_tension_q1': {
+    pageId: 'onboarding_tension_q1',
+    pageName: 'Discover — The Spring',
+    whatIsThis: `This question checks whether you've found your "spring" — the source of your river. Do you know what your thing is? What you're building? What direction you're heading?`,
+    whyMatters: `You can't have a river without a source. If you don't know your direction yet, that's completely normal — but it's the first thing to address.\n\nMany people try to build visibility or charge money before they even know what they're offering. That's like trying to fill a bucket from a dry well.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_river', label: 'What\'s this "river" about?' },
+      { id: 'why_questions', label: 'Why these questions?' },
+      { id: 'honest_answer', label: 'What if I pick the "wrong" one?' }
+    ],
+    faq: {
+      what_is_fmf: `FindMyFlow helps people discover what they're meant to build — and actually follow through. Strategy + healing + accountability + tools, all in one place.`,
+      what_is_river: `"Find My Flow" isn't just a name — it's the whole framework.\n\nImagine your personal growth as a river system. The Spring is where the water emerges (your identity/direction). The Riverbed holds it (your nervous system). The Current carries it forward (your visibility). The Ocean is where it meets the world (your value/pricing).\n\nThese four questions check which part of your river is blocked. That's where we focus first.`,
+      why_questions: `These four questions identify where your flow is stuck. Instead of guessing what you need, we pinpoint the exact blockage — then focus your journey there.\n\nMost people are stuck at one specific layer. Fix that, and everything downstream starts moving.`,
+      honest_answer: `There's no wrong answer. Pick whichever feels most true RIGHT NOW.\n\nThis isn't a test — it's a mirror. We're not judging your score, we're using it to give you the right starting point.`
+    }
+  },
+
+  'onboarding_tension_q2': {
+    pageId: 'onboarding_tension_q2',
+    pageName: 'Regulate — The Riverbed',
+    whatIsThis: `This question checks your "riverbed" — your nervous system's capacity to hold your ambition. When you think about going all-in, does your body cooperate or shut down?`,
+    whyMatters: `Here's the sneaky truth: you don't rise to the level of your ambitions — you fall to what your nervous system thinks is safe.\n\nSomeone can know exactly what to do but freeze when it's time to do it. That's not laziness — it's a nervous system that hasn't learned that growth is safe yet.\n\nIf this is where you're stuck, healing and rewiring work comes before business strategy.`,
+    contextualPrompts: [
+      { id: 'nervous_system', label: 'What does "nervous system" mean here?' },
+      { id: 'body_response', label: 'Why does my body react like that?' },
+      { id: 'can_fix', label: 'Can this actually change?' }
+    ],
+    faq: {
+      nervous_system: `Your nervous system runs the show behind the scenes. It decides what feels safe and what triggers fight/flight/freeze.\n\nWhen you get anxious about posting online, pitching your work, or raising prices — that's your nervous system pulling the emergency brake. Not because you're weak, but because it's trying to protect you from a perceived threat.`,
+      body_response: `Your body holds memories of every time visibility, exposure, or "putting yourself out there" led to pain.\n\nMaybe you were mocked for sharing an idea. Maybe a parent's criticism made you associate being seen with danger. Your body remembers even if your conscious mind has moved on.\n\nThe tightness, panic, or shutdown is your body trying to protect you from repeating that pain.`,
+      can_fix: `Absolutely. Your nervous system isn't fixed — it's plastic. It can learn new patterns.\n\nFindMyFlow has specific healing and rewiring quests designed to gradually teach your system that growth is safe. Small exposures, processed well, over time. It's like strength training for your capacity to handle discomfort.`
+    }
+  },
+
+  'onboarding_tension_q3': {
+    pageId: 'onboarding_tension_q3',
+    pageName: 'Reveal — The Current',
+    whatIsThis: `This question checks your "current" — whether your river is flowing in the open or running underground. Are people seeing your work? Do they know what you're building?`,
+    whyMatters: `A river running underground might be powerful — but nobody benefits from it.\n\nMany talented people have incredible skills and ideas but hide them. They work in private, never ship, never post, never put themselves out there.\n\nVisibility isn't about ego. It's about letting your work reach the people who need it. If you're hidden, your impact is zero — regardless of how good you are.`,
+    contextualPrompts: [
+      { id: 'visibility_layers', label: 'What are the visibility layers?' },
+      { id: 'scared_visible', label: "I'm scared to be visible" },
+      { id: 'groan_matrix', label: 'What is the Groan Matrix?' }
+    ],
+    faq: {
+      visibility_layers: `We break visibility into 5 layers, each scarier than the last:\n\n1. **Screen** — Posting, commenting, writing online\n2. **Live** — Video calls, live streams, speaking on camera\n3. **Money** — Asking for payment, sales conversations\n4. **Vulnerable** — Sharing personal stories, showing imperfection\n5. **Authority** — Teaching, leading, claiming expertise publicly\n\nMost people have a "visibility edge" — a specific layer where they freeze up. Finding yours is the first step to expanding it.`,
+      scared_visible: `That's incredibly common. Being visible means being vulnerable — and your nervous system may read vulnerability as danger.\n\nThe good news: visibility is a skill, not a personality trait. It can be trained gradually, starting small.\n\nThat's exactly what the Play-List challenges do — graduated courage challenges that expand your comfort zone one step at a time.`,
+      groan_matrix: `The Groan Matrix is a 2D grid of courage challenges: your skills × the 5 visibility layers.\n\nEach cell represents a specific challenge, like "teach your skill X on a live stream" or "post about your experience with problem Y."\n\nThe challenges are designed to feel scary enough to grow you but safe enough not to break you. That sweet spot is where transformation happens.`
+    }
+  },
+
+  'onboarding_tension_q4': {
+    pageId: 'onboarding_tension_q4',
+    pageName: 'Value — The Ocean',
+    whatIsThis: `This question checks your "ocean" — whether your river reaches the world. Can you own the value of what you do and be paid for it?`,
+    whyMatters: `This is where many people's rivers stop. They've found their source, built capacity, even become visible — but they can't own the price.\n\nUndercharging, over-delivering for free, feeling guilty about money — these are all signs that the Value layer needs work.\n\nYou can't sustain a mission on generosity alone. Owning your value isn't selfish — it's what makes your work sustainable.`,
+    contextualPrompts: [
+      { id: 'charging_guilt', label: 'Why do I feel guilty about charging?' },
+      { id: 'how_price', label: 'How do I know what to charge?' },
+      { id: 'value_work', label: 'How does the app help with this?' }
+    ],
+    faq: {
+      charging_guilt: `Charging guilt usually comes from one of these beliefs:\n\n• "Good people don't charge for helping others"\n• "My work isn't valuable enough yet"\n• "If I charge, people will judge me"\n• "I should give freely because I care"\n\nThese beliefs feel noble but they're actually self-sabotage. Charging appropriately lets you do MORE good, not less — because you can sustain the work.`,
+      how_price: `Pricing isn't about your self-worth — it's about the transformation you deliver.\n\nFindMyFlow has money model flows that help you calculate and structure pricing based on the value you create for others, not how you feel about yourself.\n\nShort version: if your work saves someone time, money, pain, or confusion — that has measurable value. Price based on that, not on your imposter syndrome.`,
+      value_work: `The app has several features for this layer:\n\n• **Money Model Flows** — Calculate and structure your pricing\n• **Offer Builder** — Package your work into clear offerings\n• **Funnel Calculator** — Track your revenue pipeline\n\nBut honestly, if Value is your priority layer, the real work often starts with the beliefs underneath. That's why we might recommend healing quests alongside business strategy.`
+    }
+  },
+
+  'onboarding_priority_reveal': {
+    pageId: 'onboarding_priority_reveal',
+    pageName: 'Your Priority Layer',
+    whatIsThis: `Based on your answers, we've identified which part of your "river" needs attention first. This is your Priority Layer — the blockage that, once cleared, lets everything downstream flow.`,
+    whyMatters: `Most people try to work on everything at once. They want to find their thing, heal their nervous system, get visible, AND charge properly — all simultaneously.\n\nThat's like trying to fix a river at every point at once. It doesn't work.\n\nYour priority layer is the FIRST blockage. Clear that, and the water naturally flows to the next section. Focus beats scatter every time.`,
+    contextualPrompts: [
+      { id: 'why_this_layer', label: 'Why is this my priority?' },
+      { id: 'disagree', label: "I think a different layer is more important" },
+      { id: 'what_next', label: 'What happens next?' }
+    ],
+    faq: {
+      why_this_layer: `Your priority layer is the lowest point in your river where you scored 0 or 1 — meaning it's significantly unresolved.\n\nWe start low because each layer builds on the one below it. You can't sustain visibility without a regulated nervous system. You can't own your value without being visible first.\n\nIt's not that the other layers don't matter — they do. But this one comes first.`,
+      disagree: `That's totally fair. The assessment is a starting point, not a verdict.\n\nAs you use the app, you can always shift your focus. The 7-Day Challenge has quests across all layers — you're not locked into just one.\n\nBut try trusting the assessment for now. Sometimes the thing we resist looking at is exactly the thing that needs attention.`,
+      what_next: `Next up: Mind Space — a quick 2-minute flow that helps you discover your unique skills, problems, and who you're meant to help.\n\nAfter that, you'll land on your profile page where you can start your 7-Day Challenge with quests tailored to your priority layer.\n\nThe whole setup takes about 5 minutes.`
     }
   },
 
@@ -406,6 +497,23 @@ export const PAGE_CONTENT = {
     faq: {
       organized: `By flow type:\n• **Flow Finder** — Your skills, problems, personas, and opportunity clusters\n• **Nervous System** — Your edges and safety contracts\n• **Healing** — Your selected contracts and healing work\n• **Money Models** — Your offers and strategy\n\nEach section shows your most recent responses plus any AI-generated insights.`,
       edit: `You can redo any flow, which creates new responses. The library keeps your history, so you can see how your thinking has evolved over time.\n\nIf something feels outdated, usually the best move is to redo the flow with fresh eyes rather than editing old answers. You might discover something new.`
+    }
+  },
+
+  '/business': {
+    pageId: 'business_page',
+    pageName: 'Business',
+    whatIsThis: `Your business stage journey — from Setup through Growth. Each stage has quests that build your business step by step. This is where the real work happens.`,
+    whyMatters: `Building a business isn't random hustle. It's a sequence — validate first, then build, then sell, then scale.\n\nThis page shows you exactly where you are, what's next, and how far you've come. Each quest completed is one more piece of the puzzle clicking into place.`,
+    contextualPrompts: [
+      { id: 'current_stage', label: 'What should I focus on in this stage?' },
+      { id: 'next_quest', label: 'Help me understand my next quest' },
+      { id: 'graduation', label: 'How do I graduate to the next stage?' }
+    ],
+    faq: {
+      current_stage: `Focus on completing the quests for your current stage in order. Explainer quests give you the knowledge foundation. Action quests put that knowledge into practice.\n\nDon't skip ahead — each stage builds on the previous one. The sequence matters.`,
+      next_quest: `Your "Up Next" quest is the first incomplete quest in your current stage. Start there.\n\nIf it's an Explainer, it'll walk you through key concepts. If it's an action quest, you'll be building something real for your business.\n\nStuck? Ask me about the specific quest and I'll help you think through it.`,
+      graduation: `Complete all the required quests in your current stage. When you've done enough, you'll be invited to graduate to the next stage.\n\nThe progress ring shows your completion percentage. Once you hit 100%, graduation is unlocked.`
     }
   },
 
@@ -779,7 +887,14 @@ export function getChallengeTabContent(tab) {
 export function getOnboardingContent(screen) {
   const screenMap = {
     welcome: 'onboarding_welcome',
-    archetype_reveal: 'onboarding_welcome', // Same as welcome
+    archetype_reveal: 'onboarding_welcome',
+    // Tension layer questions (v3)
+    tension_q1: 'onboarding_tension_q1',
+    tension_q2: 'onboarding_tension_q2',
+    tension_q3: 'onboarding_tension_q3',
+    tension_q4: 'onboarding_tension_q4',
+    priority_reveal: 'onboarding_priority_reveal',
+    // Legacy mappings (v2 — now in BusinessSetup)
     persona_q1: 'onboarding_q1',
     persona_q2: 'onboarding_q2',
     persona_q3: 'onboarding_q3',
