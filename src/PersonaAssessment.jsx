@@ -9,19 +9,18 @@ import { protectiveProfiles } from './data/protectiveProfiles'
 import ProtectiveArchetypeIcon from './components/ProtectiveArchetypeIcon'
 import './PersonaAssessment.css'
 
-// Flow stages - Updated for Huzz intro (Dec 2024)
-// Q1-Q3 persona/wealth ladder questions moved to post-auth HomeFirstTime.jsx
+// Flow stages - Reordered: archetypes first, story second (Mar 2026)
+// Q1-Q3 persona/wealth ladder questions in post-auth HomeFirstTime.jsx
 const STAGES = {
-  HUZZ_INTRO_1: 'huzz_intro_1',
-  HUZZ_INTRO_2: 'huzz_intro_2',
-  HUZZ_INTRO_3: 'huzz_intro_3',
-  HUZZ_INTRO_4: 'huzz_intro_4',
   ESSENCE_INTRO: 'essence_intro',
   ESSENCE_FLOW: 'essence_flow',
   ESSENCE_REVEAL: 'essence_reveal',
   PROTECTIVE_INTRO: 'protective_intro',
   PROTECTIVE_FLOW: 'protective_flow',
   PROTECTIVE_REVEAL: 'protective_reveal',
+  STORY_FLOW: 'story_flow',
+  STORY_EAR: 'story_ear',
+  STORY_TRANSFORM: 'story_transform',
   NAME_CAPTURE: 'name_capture',
   EMAIL_CAPTURE: 'email_capture',
   CODE_VERIFY: 'code_verify',
@@ -30,9 +29,9 @@ const STAGES = {
 
 // Stage groupings for progress dots
 const STAGE_GROUPS = [
-  { id: 'intro', label: 'Intro', stages: [STAGES.HUZZ_INTRO_1, STAGES.HUZZ_INTRO_2, STAGES.HUZZ_INTRO_3, STAGES.HUZZ_INTRO_4] },
   { id: 'essence', label: 'Essence', stages: [STAGES.ESSENCE_INTRO, STAGES.ESSENCE_FLOW, STAGES.ESSENCE_REVEAL] },
   { id: 'protective', label: 'Protective', stages: [STAGES.PROTECTIVE_INTRO, STAGES.PROTECTIVE_FLOW, STAGES.PROTECTIVE_REVEAL] },
+  { id: 'story', label: 'Story', stages: [STAGES.STORY_FLOW, STAGES.STORY_EAR, STAGES.STORY_TRANSFORM] },
   { id: 'profile', label: 'Profile', stages: [STAGES.NAME_CAPTURE, STAGES.EMAIL_CAPTURE, STAGES.CODE_VERIFY] },
   { id: 'complete', label: 'Complete', stages: [STAGES.SUCCESS] }
 ]
@@ -45,8 +44,7 @@ function PersonaAssessment() {
   // If accessing via /log-in, skip to email capture for returning users
   const isLoginRoute = location.pathname === '/log-in'
 
-  const [stage, setStage] = useState(isLoginRoute ? STAGES.EMAIL_CAPTURE : STAGES.HUZZ_INTRO_1)
-  const [assessment, setAssessment] = useState(null)
+  const [stage, setStage] = useState(isLoginRoute ? STAGES.EMAIL_CAPTURE : STAGES.ESSENCE_INTRO)
   const [essenceArchetype, setEssenceArchetype] = useState(null)
   const [protectiveArchetype, setProtectiveArchetype] = useState(null)
   const [userName, setUserName] = useState('')
@@ -61,21 +59,6 @@ function PersonaAssessment() {
     window.scrollTo(0, 0)
   }, [stage])
 
-  // Load assessment JSON
-  useEffect(() => {
-    const loadAssessment = async () => {
-      try {
-        const response = await fetch(`/persona-assessment.json?v=${Date.now()}`)
-        if (!response.ok) throw new Error('Failed to load assessment')
-        const data = await response.json()
-        setAssessment(data)
-      } catch (err) {
-        setError(`Failed to load assessment: ${err.message}`)
-      }
-    }
-    loadAssessment()
-  }, [])
-
   // Handle route changes - when navigating to /log-in, jump to email capture
   useEffect(() => {
     if (isLoginRoute && stage !== STAGES.EMAIL_CAPTURE && stage !== STAGES.CODE_VERIFY && stage !== STAGES.SUCCESS) {
@@ -87,7 +70,7 @@ function PersonaAssessment() {
   // If they do, redirect to dashboard. If not, let them continue onboarding.
   useEffect(() => {
     const checkProfileAndRedirect = async () => {
-      if (user && !isSavingUserData && (stage === STAGES.HUZZ_INTRO_1 || isLoginRoute)) {
+      if (user && !isSavingUserData && (stage === STAGES.ESSENCE_INTRO || isLoginRoute)) {
         // Check if user has profile data
         const { data: profile } = await supabase
           .from('lead_flow_profiles')
@@ -301,6 +284,7 @@ function PersonaAssessment() {
       setError('Verification failed. Please try again.')
     } finally {
       setIsLoading(false)
+      setIsSavingUserData(false)
     }
   }
 
@@ -342,28 +326,6 @@ function PersonaAssessment() {
     return protectiveProfiles[protectiveArchetype.name] || protectiveArchetype
   }
 
-  // Loading state
-  if (!assessment && stage !== STAGES.ESSENCE_FLOW && stage !== STAGES.PROTECTIVE_FLOW) {
-    return (
-      <div className="persona-assessment">
-        <div className="loading-state">
-          {error ? (
-            <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>
-              <p>{error}</p>
-              <button onClick={() => window.location.reload()} style={{ marginTop: '20px', padding: '10px 20px', cursor: 'pointer' }}>
-                Retry
-              </button>
-            </div>
-          ) : (
-            <div className="typing-indicator">
-              <span></span><span></span><span></span>
-            </div>
-          )}
-        </div>
-      </div>
-    )
-  }
-
   // Render progress indicators
   const renderProgress = () => {
     const currentGroupIndex = getCurrentGroupIndex()
@@ -390,8 +352,8 @@ function PersonaAssessment() {
 
   // ============ RENDER STAGES ============
 
-  // HUZZ INTRO SCREEN 1 - Animated text reveal
-  if (stage === STAGES.HUZZ_INTRO_1) {
+  // ESSENCE INTRO - Combined welcome + essence (first slide)
+  if (stage === STAGES.ESSENCE_INTRO) {
     return (
       <div className="persona-assessment">
         {renderProgress()}
@@ -399,134 +361,20 @@ function PersonaAssessment() {
           <div className="welcome-content">
             <h1 className="welcome-greeting">Welcome! I'm Huzz! 🌞</h1>
             <div className="welcome-message animated-text">
-              <p>Ever since I quit my job two and a half years ago, I've developed an unwavering belief in: <strong>'Flow'</strong>.</p>
-              <p>The idea that there's a unique path that only you could walk due to your combination of skills, experiences and circumstances.</p>
+              <p>I believe we all have an <strong>Essence Voice</strong> — that original song you were born to share.</p>
+              <p>The version of you that feels most alive, most authentic, most magnetic.</p>
+              <p>There are 8 Essence Voices. One will feel like coming home.</p>
+              <p className="intro-instruction">Swipe right on the ones that resonate. Left on the ones that don't.</p>
             </div>
           </div>
           <div className="welcome-actions">
-            <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_2)}>
-              Tell me more!
+            <button className="primary-button" onClick={() => setStage(STAGES.ESSENCE_FLOW)}>
+              Let's Go
             </button>
             <Link to="/log-in" className="login-link">
               Already have an account? Log in
             </Link>
           </div>
-        </div>
-      </div>
-    )
-  }
-
-  // HUZZ INTRO SCREEN 2 - EAR glow highlight
-  if (stage === STAGES.HUZZ_INTRO_2) {
-    return (
-      <div className="persona-assessment">
-        {renderProgress()}
-        <div className="welcome-container">
-          <div className="welcome-content">
-            <div className="welcome-message animated-text">
-              <p>I believe the universe communicates with us every day about what this path is.</p>
-              <p>The problem is it can't talk to us directly,<br />so it uses what I like to call:<br /><strong>'Ease and Resistance'</strong>.</p>
-              <p>As an acronym it spells <span className="ear-highlight">'EAR'</span> — coincidence? 🤔</p>
-            </div>
-          </div>
-          <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_3)}>
-            Continue
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // HUZZ INTRO SCREEN 3 - Animated transformation stats
-  if (stage === STAGES.HUZZ_INTRO_3) {
-    return (
-      <div className="persona-assessment">
-        {renderProgress()}
-        <div className="welcome-container">
-          <div className="welcome-content">
-            <div className="welcome-message animated-text">
-              <p>I believe when you find your flow —<br />aligning what gives you flow internally, with what's flowing externally (ease) —<br /><strong>life becomes a magical adventure</strong>.</p>
-              <p>It's the only way I can describe my transformation:</p>
-            </div>
-            <div className="transformation-journey">
-              <div className="journey-from">
-                <span className="journey-emoji">🏖️</span>
-                <span className="journey-text">Dancing on beaches in Thailand<br/><strong>with 13 headsets</strong></span>
-              </div>
-              <div className="journey-arrow">
-                <span className="arrow-line"></span>
-                <span className="arrow-head">→</span>
-              </div>
-              <div className="journey-to">
-                <span className="journey-emoji">🎉</span>
-                <span className="journey-text">Hosting events at Bali Beach Clubs<br/><strong>with 350 headsets</strong></span>
-              </div>
-            </div>
-            <div className="welcome-message animated-text" style={{ marginTop: '12px' }}>
-              <p style={{ animationDelay: '0.6s' }}><strong>In less than 12 months of quitting my job.</strong></p>
-            </div>
-          </div>
-          <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_4)}>
-            I'm keen for a magical adventure!
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // HUZZ INTRO SCREEN 4 - Excitement build with button glow + background pulse
-  if (stage === STAGES.HUZZ_INTRO_4) {
-    return (
-      <div className="persona-assessment">
-        {renderProgress()}
-        <div className="welcome-container excitement-container">
-          <div className="welcome-content" style={{ position: 'relative', zIndex: 1 }}>
-            <div className="welcome-message animated-text">
-              <p>This webapp is designed to help you <strong>find your flow</strong> by gamifying the journey.</p>
-              <p><strong>My North Star is to empower you to go from idea to monetising your mission as fast as possible.</strong></p>
-              <p className="welcome-cta-text">Ready to get started?</p>
-            </div>
-          </div>
-          <button className="primary-button glow-button" onClick={() => setStage(STAGES.ESSENCE_INTRO)} style={{ position: 'relative', zIndex: 1 }}>
-            Yep!
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // NOTE: Persona questions moved to post-auth flow (HomeFirstTime.jsx)
-  // The 3-question persona assessment now happens after user creates account
-
-  // ESSENCE INTRO - Animated text reveal
-  if (stage === STAGES.ESSENCE_INTRO) {
-    return (
-      <div className="persona-assessment">
-        {renderProgress()}
-        <div className="intro-container">
-          <div className="intro-content">
-            <h2 className="intro-title">Discover Your Essence</h2>
-            <div className="animated-text">
-              <p className="intro-text">
-                On my journey, I discovered something powerful — we all have an <strong>Essence Voice</strong>.
-              </p>
-              <p className="intro-text">
-                It's that original song you were born to share. The version of you that feels most alive, most authentic, most magnetic.
-              </p>
-              <p className="intro-text">
-                When you show up from this place, your impact doesn't feel like work — it feels like flow.
-              </p>
-              <p className="intro-text">
-                There are 8 Essence Voices. One will feel like coming home.
-              </p>
-              <p className="intro-instruction">
-                Swipe right on the ones that resonate. Left on the ones that don't.
-              </p>
-            </div>
-          </div>
-          <button className="primary-button" onClick={() => setStage(STAGES.ESSENCE_FLOW)}>
-            Let's Go
-          </button>
         </div>
       </div>
     )
@@ -648,10 +496,95 @@ function PersonaAssessment() {
               // Already authenticated — save profile and skip email/OTP
               handleAuthenticatedQuizComplete()
             } else {
-              setStage(STAGES.NAME_CAPTURE)
+              setStage(STAGES.STORY_FLOW)
             }
           }}>
             {isLoading ? 'Saving...' : 'Continue'}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // STORY: FLOW - Essence/protective → finding your flow
+  if (stage === STAGES.STORY_FLOW) {
+    return (
+      <div className="persona-assessment">
+        {renderProgress()}
+        <div className="welcome-container">
+          <div className="welcome-content">
+            <h1 className="welcome-greeting">Finding Your Flow</h1>
+            <div className="welcome-message animated-text">
+              <p>I believe when we show up from our essence voice and overcome our protective voice, <strong>life becomes a magical adventure</strong>.</p>
+              <p>I call it <strong>finding your flow</strong>.</p>
+              <p>Your flow is a life path that is unique to you.</p>
+              <p>It's what Sanskrit calls <strong>Svadharma</strong>, Taoists call <strong>Te</strong> and Japanese call <strong>Ikigai</strong>.</p>
+            </div>
+          </div>
+          <button className="primary-button" onClick={() => setStage(STAGES.STORY_EAR)}>
+            Keen to find yours?
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // STORY: EAR - Ease and Resistance
+  if (stage === STAGES.STORY_EAR) {
+    return (
+      <div className="persona-assessment">
+        {renderProgress()}
+        <div className="welcome-container">
+          <div className="welcome-content">
+            <h1 className="welcome-greeting">Finding Your Flow</h1>
+            <div className="welcome-message animated-text">
+              <p>I believe the universe communicates with us every day about what this path is.</p>
+              <p>The problem is it can't talk to us directly,<br />so it uses what I like to call:<br /><strong>'Ease and Resistance'</strong>.</p>
+              <p><strong>Ease</strong> = when serendipitous moments emerge that make your ambitions possible.</p>
+              <p><strong>Resistance</strong> = when no matter what you do you keep hitting road blocks.</p>
+              <p>As an acronym it spells <span className="ear-highlight">'EAR'</span> — coincidence? 🤔</p>
+            </div>
+          </div>
+          <button className="primary-button" onClick={() => setStage(STAGES.STORY_TRANSFORM)}>
+            Continue
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // STORY: TRANSFORM + CTA - Proof + webapp intro
+  if (stage === STAGES.STORY_TRANSFORM) {
+    return (
+      <div className="persona-assessment">
+        {renderProgress()}
+        <div className="welcome-container">
+          <div className="welcome-content">
+            <div className="welcome-message animated-text">
+              <p><strong>I believe the secret to finding your flow is aligning what gives you flow internally, with what's flowing externally (ease).</strong></p>
+              <p>It's the only way I can describe my transformation:</p>
+            </div>
+            <div className="transformation-journey">
+              <div className="journey-from">
+                <span className="journey-emoji">🏖️</span>
+                <span className="journey-text">Dancing on beaches in Thailand<br/><strong>with 13 headsets</strong></span>
+              </div>
+              <div className="journey-arrow">
+                <span className="arrow-line"></span>
+                <span className="arrow-head">→</span>
+              </div>
+              <div className="journey-to">
+                <span className="journey-emoji">🎉</span>
+                <span className="journey-text">Hosting events at Bali Beach Clubs<br/><strong>with 350 headsets</strong></span>
+              </div>
+            </div>
+            <div className="welcome-message animated-text" style={{ marginTop: '12px' }}>
+              <p style={{ animationDelay: '0.6s' }}><strong>In less than 12 months of quitting my job.</strong></p>
+              <p style={{ animationDelay: '0.9s' }}>This webapp is designed to help you <strong>find your flow</strong> by gamifying the journey.</p>
+            </div>
+          </div>
+          <button className="primary-button glow-button" onClick={() => setStage(STAGES.NAME_CAPTURE)}>
+            Let's go!
           </button>
         </div>
       </div>

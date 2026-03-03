@@ -13,13 +13,11 @@ import GraduationModal from './components/GraduationModal'
 import NotificationPrompt from './components/NotificationPrompt'
 import PortalExplainer from './components/PortalExplainer'
 import ChallengeProjectSelector from './components/ChallengeProjectSelector'
-import ChallengeStageTabs from './components/ChallengeStageTabs'
 import ChallengeHeader from './components/ChallengeHeader'
 import ChallengeOnboarding from './components/ChallengeOnboarding'
 import './components/ChallengeFilters.css' // R-type chips + frequency tabs styles (used inline now)
 import QuestCard from './components/QuestCard'
 import PlayListTab from './components/PlayListTab'
-import BusinessSetup from './components/BusinessSetup'
 import CompassCheckin from './components/CompassCheckin'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
@@ -31,8 +29,7 @@ import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge
 import { useChallengeData } from './hooks/useChallengeData'
 import { useLeagueData } from './hooks/useLeagueData'
 import { useMatchupData } from './hooks/useMatchupData'
-import { normalizePersona } from './data/personaProfiles'
-import { convertLegacyStage, GROAN_VISIBILITY_LAYERS, getLayerLockStatus, getStageConfig } from './lib/stageConfig'
+import { GROAN_VISIBILITY_LAYERS, getLayerLockStatus } from './lib/stageConfig'
 import { getScoringCategory } from './lib/scoringCategories'
 import ContentChallenges from './components/ContentChallenges'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
@@ -287,13 +284,6 @@ function Challenge() {
     }
     return () => document.body.classList.remove('hide-bottom-toolbar')
   }, [showProjectSelector])
-
-  // Auto-select Setup tab when Business category is active but no project exists
-  useEffect(() => {
-    if (activeCategory === 'Business' && !selectedProject) {
-      setActiveStageTab(0.9)
-    }
-  }, [activeCategory, selectedProject])
 
   // Preload flow chunks on idle so "Start" taps are instant
   useEffect(() => { preloadChallengeFlows() }, [])
@@ -1440,14 +1430,6 @@ function Challenge() {
     setCustomPersona('')
   }
 
-  // Determine the current viewing stage (needed for Business filtering)
-  const viewingStage = activeStageTab !== undefined ? activeStageTab : (
-    selectedProject?.current_stage ||
-    (typeof stageProgress?.current_stage === 'number'
-      ? stageProgress.current_stage
-      : convertLegacyStage(stageProgress?.current_stage))
-  )
-
   // Compute which visibility layers are locked based on progress
   const layerLockStatus = getLayerLockStatus(
     flowFinderComplete,
@@ -1467,30 +1449,6 @@ function Challenge() {
     if (activeCategory === 'Play-list') return false
     return q.category === activeCategory
   }) || []
-
-  // Filter by persona and stage for Business quests
-  if (activeCategory === 'Business') {
-    const userPersonaNormalized = normalizePersona(userData?.persona)
-
-    filteredQuests = filteredQuests.filter(quest => {
-      if (quest.persona_specific && userPersonaNormalized) {
-        const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
-        if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
-          return false
-        }
-      }
-
-      // Check stage_required - use !== undefined since stage 0 is valid
-      // Use Number() to ensure both sides are numbers for proper comparison
-      if (quest.stage_required !== undefined && quest.stage_required !== null) {
-        if (Number(quest.stage_required) !== Number(viewingStage)) {
-          return false
-        }
-      }
-
-      return true
-    })
-  }
 
   // Sort: explainer quests first, groan quests last
   filteredQuests.sort((a, b) => {
@@ -1640,7 +1598,7 @@ function Challenge() {
   }
 
   const categoryPoints = getCategoryPoints(activeCategory)
-  const artifactProgress = getArtifactProgress(activeCategory, activeCategory === 'Business' ? activeStageTab : null)
+  const artifactProgress = getArtifactProgress(activeCategory, null)
 
   // ============================================
   // Render: Main Challenge View
@@ -1717,43 +1675,7 @@ function Challenge() {
         })}
       </div>
 
-      {/* Stage tabs for Business */}
-      {activeCategory === 'Business' && (
-        <div className="stage-tabs-wrapper">
-          {selectedProject ? (
-            <>
-              <div className="selected-project-info">
-                <span className="project-name">{selectedProject.name}</span>
-                <button
-                  className="change-project-btn"
-                  onClick={() => setShowProjectSelector(true)}
-                >
-                  Change Project
-                </button>
-              </div>
-              <ChallengeStageTabs
-                currentStage={selectedProject.current_stage ?? 1}
-                completedStages={getCompletedStages()}
-                activeTab={activeStageTab}
-                onTabChange={setActiveStageTab}
-                flowFinderComplete={flowFinderComplete}
-                excludeStages={[0, 0.5]}
-              />
-            </>
-          ) : (
-            <ChallengeStageTabs
-              currentStage={0.9}
-              completedStages={[]}
-              activeTab={0.9}
-              onTabChange={setActiveStageTab}
-              flowFinderComplete={flowFinderComplete}
-              excludeStages={[0, 0.5]}
-            />
-          )}
-        </div>
-      )}
-
-      {/* Frequency tabs for Healing — uses same stage-tab styling as Business */}
+      {/* Frequency tabs for Healing */}
       {activeCategory === 'Healing' && (
         <div className="stage-tabs-wrapper">
           <div className="stage-tabs-container healing-frequency-tabs">
@@ -1814,7 +1736,7 @@ function Challenge() {
           <>
         {/* Artifact Progress — hidden on Play-list tab */}
         {artifactProgress && activeCategory !== 'Play-list' && (() => {
-          const stageConfig = activeCategory === 'Business' && activeStageTab !== undefined ? getStageConfig(activeStageTab) : null
+          const stageConfig = null
 
           // Healing: per-frequency title and description
           const healingFreqMeta = {
@@ -2095,107 +2017,20 @@ function Challenge() {
           </div>
         )}
 
-        {/* Business Setup stage (0.9) */}
-        {activeCategory === 'Business' && Number(viewingStage) === 0.9 && (
-          <div className="quest-section">
-            <BusinessSetup
-              userId={user?.id}
-              existingProject={selectedProject}
-              userPersona={stageProgress?.persona || userData?.persona}
-              onSetupComplete={(project) => {
-                handleProjectSelected(project)
-              }}
-            />
-          </div>
-        )}
-
-        {/* Stage 8: CRM Link (no quests) */}
-        {activeCategory === 'Business' && Number(viewingStage) === 8 && (
-          <div className="quest-section">
-            <div className="crm-link-card" style={{
-              background: 'rgba(255,255,255,0.05)',
-              borderRadius: '16px',
-              padding: '40px 24px',
-              textAlign: 'center',
-              border: '1px solid rgba(233,162,59,0.3)'
-            }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
-              <h3 style={{ color: '#E9A23B', marginBottom: '8px', fontSize: '1.2rem' }}>FindMyFlow CRM</h3>
-              <p style={{ color: '#adb5bd', marginBottom: '24px', fontSize: '0.95rem' }}>
-                Use AI to automate your sales and marketing.
-              </p>
-              <button
-                className="primary-button"
-                style={{
-                  background: '#E9A23B',
-                  color: '#212529',
-                  padding: '12px 32px',
-                  borderRadius: '8px',
-                  fontWeight: '600',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '1rem'
-                }}
-                onClick={async () => {
-                  const { error } = await supabase.from('crm_interest').insert({
-                    user_id: user?.id,
-                    expressed_at: new Date().toISOString()
-                  })
-                  if (error) console.warn('Failed to log CRM interest:', error)
-                  alert('Thanks! We\'ll notify you when the CRM is ready.')
-                }}
-              >
-                Click Here To Express Interest
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Business Quests - Stages 1-7 */}
-        {activeCategory === 'Business' && Number(viewingStage) !== 8 && Number(viewingStage) !== 0.9 && filteredQuests.length > 0 && (
-          <div className="quest-section">
-            <div className="quest-grid stagger-children-fast">
-              {filteredQuests.map(quest => {
-                const completed = isQuestCompletedToday(quest.id, quest)
-                const locked = isQuestLocked(quest)
-
-                return (
-                  <QuestCard
-                    key={quest.id}
-                    quest={quest}
-                    completed={completed}
-                    isCompleting={completingQuestId === quest.id}
-                    locked={locked}
-                    lockedPrerequisite={locked ? getRequiredQuestName(quest.requires_quest, quest.id) : null}
-                    showStreak={!!quest.maxPerDay}
-                    streak={getDailyStreak(quest.id)}
-                    dayLabels={getDayLabels()}
-                    questInput={questInputs[quest.id]}
-                    onInputChange={handleInputChange}
-                    onComplete={handleQuestComplete}
-                    expandedLearnMore={expandedLearnMore}
-                    onToggleLearnMore={toggleLearnMore}
-                    showLockedTooltip={showLockedTooltip}
-                    onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
-                    renderDescription={renderDescription}
-                    completedBadgeText="Completed"
-                    navigate={navigate}
-                    selectedProject={selectedProject}
-                    progress={progress}
-                    projectStage={projectStage}
-                    justCompleted={justCompletedQuestId === quest.id}
-                    isPlanned={isQuestPlanned(quest.id)}
-                    plannedDay={getPlannedDay(quest.id)}
-                    validationResponseCounts={validationResponseCounts}
-                    prelaunchLocked={PRELAUNCH_LOCKED}
-                    paidLocked={isPaidQuest(quest) && !hasSubscription}
-                    onUpgrade={handleUpgrade}
-                    userId={user?.id}
-                    userArchetypes={userArchetypes}
-                  />
-                )
-              })}
-            </div>
+        {/* Priority placeholder */}
+        {activeCategory === 'Priority' && (
+          <div style={{
+            textAlign: 'center',
+            padding: '60px 20px',
+            color: '#6c757d'
+          }}>
+            <span style={{ fontSize: '3rem', display: 'block', marginBottom: '16px' }}>🎯</span>
+            <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1a1a2e', marginBottom: '8px' }}>
+              Priority Tasks
+            </h3>
+            <p style={{ fontSize: '14px', lineHeight: 1.5 }}>
+              Your personalised priority tasks will appear here soon.
+            </p>
           </div>
         )}
 
