@@ -3,7 +3,7 @@
  *
  * Context-aware bottom navigation that changes based on app section.
  *
- * Main App: Home (/me) → Challenge (/7-day-challenge) → Compass (/flow-compass) → Library (/library)
+ * Main App: Home (/me) → Challenge (/7-day-challenge) → Business (/business) → Profile (/profile-hub)
  * CRM Section: Sales (/crm/sales) → Marketing (/crm/marketing) → Analytics (/crm/analytics) → Portal (back to challenge)
  */
 
@@ -26,10 +26,10 @@ const MAIN_NAV_ITEMS = [
     path: '/7-day-challenge'
   },
   {
-    id: 'compass',
-    label: 'Compass',
-    icon: '🧭',
-    path: '/flow-compass'
+    id: 'business',
+    label: 'Business',
+    icon: '💼',
+    path: '/business'
   },
   {
     id: 'profile',
