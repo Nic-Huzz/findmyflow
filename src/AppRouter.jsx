@@ -211,6 +211,7 @@ const NotificationSettings = lazyRetry(() => import('./components/NotificationSe
 const LibraryOfAnswers = lazyRetry(() => import('./pages/LibraryOfAnswers'))
 const FlowReportCard = lazyRetry(() => import('./pages/FlowReportCard'))
 const FlowCompassPage = lazyRetry(() => import('./pages/FlowCompassPage'))
+const BusinessPage = lazyRetry(() => import('./pages/BusinessPage'))
 const FlowMapMockups = lazyRetry(() => import('./components/FlowMapMockups'))
 const ValidationFlowsManager = lazyRetry(() => import('./pages/ValidationFlowsManager'))
 const VoiceOfCustomerPage = lazyRetry(() => import('./pages/VoiceOfCustomerPage'))
@@ -756,6 +757,13 @@ function AppRouter() {
             <Route path="/report-card" element={
               <AuthGate>
                 <FlowReportCard />
+              </AuthGate>
+            } />
+
+            {/* Business Page */}
+            <Route path="/business" element={
+              <AuthGate>
+                <BusinessPage />
               </AuthGate>
             } />
 
