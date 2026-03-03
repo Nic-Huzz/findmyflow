@@ -837,7 +837,7 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
           emoji: '💼',
           intro: 'This week, focus on visibility and growth activities.',
           signposts: [
-            { icon: '💼', label: 'Business Milestones', desc: 'Complete stage-specific business tasks', tab: 'Business' },
+            { icon: '💼', label: 'Business Milestones', desc: 'Complete stage-specific business tasks', tab: 'Priority' },
             { icon: '🧭', label: 'Tracker', desc: 'Log your flow to spot patterns', tab: 'Tracker' }
           ],
           tip: 'Balance pushing with reconnection. Even on business weeks, 5 mins of morning grounding helps.'

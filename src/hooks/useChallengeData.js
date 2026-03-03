@@ -1479,23 +1479,6 @@ export function useChallengeData() {
     const unlocked = progress?.[`${artifact.id}_unlocked`] || false
     let validQuestIds = getValidQuestIds(category)
 
-    // If a specific stage is requested, bypass getValidQuestIds stage restriction
-    // and filter directly from all quests for this stage (persona filter still applied)
-    if (stageFilter !== null && category === 'Business') {
-      const userPersonaNormalized = normalizePersona(userData?.persona)
-      validQuestIds = challengeData.quests
-        .filter(q => {
-          if (q.archived) return false
-          if (q.category !== category) return false
-          if (q.persona_specific && userPersonaNormalized) {
-            const normalizedQuestPersonas = q.persona_specific.map(p => normalizePersona(p))
-            if (!normalizedQuestPersonas.includes(userPersonaNormalized)) return false
-          }
-          return Number(q.stage_required) === Number(stageFilter)
-        })
-        .map(q => q.id)
-    }
-
     // Get current week start for filtering
     const weekStart = new Date(getWeekStart() + 'T00:00:00')
 
@@ -1538,26 +1521,6 @@ export function useChallengeData() {
       return {
         ...artifact,
         frequencyCategories: frequencyCategoriesWithProgress,
-        unlocked
-      }
-    }
-
-    if (category === 'Business') {
-      const flowFinderQuests = challengeData.quests.filter(q => validQuestIds.includes(q.id))
-      const dynamicPointsRequired = flowFinderQuests.reduce((sum, q) => sum + (q.points || 0), 0)
-
-      // Filter by current week
-      const categoryCompletions = completions.filter(c => {
-        if (c.quest_category !== category || !matchesValidQuest(c.quest_id, validQuestIds)) return false
-        const completionDate = new Date(c.completed_at)
-        return completionDate >= weekStart
-      })
-      const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-
-      return {
-        ...artifact,
-        currentPoints,
-        pointsRequired: dynamicPointsRequired || artifact.pointsRequired,
         unlocked
       }
     }

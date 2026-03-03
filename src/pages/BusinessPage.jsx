@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import useBusinessPageData from '../hooks/useBusinessPageData'
 import { useSubscription } from '../hooks/useSubscription'
+import { isPaidQuest } from '../lib/subscriptionService'
 import ChallengeProjectSelector from '../components/ChallengeProjectSelector'
 import BusinessSetup from '../components/BusinessSetup'
 import './BusinessPage.css'
@@ -148,8 +149,7 @@ export default function BusinessPage() {
           <div className="next-meta">
             {nextQuest.isExplainer ? 'Explainer' : nextQuest.type || 'Quest'}
             {' • '}
-            {nextQuest.isFree || nextQuest.isExplainer ? 'Free' : hasSubscription ? 'Included' : 'Paid'}
-            {nextQuest.estimatedTime ? ` • ~${nextQuest.estimatedTime}` : ''}
+            {isPaidQuest(nextQuest) ? (hasSubscription ? 'Included' : 'Paid') : 'Free'}
           </div>
           {nextQuest.inputType === 'flow' ? (
             <a
@@ -172,11 +172,11 @@ export default function BusinessPage() {
       {activeStageTab !== 0.9 && stageQuests.length > 0 && (
         <div className="card">
           <div className="quest-title">
-            {activeStageTab === 8 ? 'Tracking' : `Stage ${activeStageTab} Quests`}
+            Stage {activeStageTab} Quests
           </div>
           {stageQuests.map(quest => {
             const completed = isQuestCompleted(quest.id)
-            const paid = !(quest.isFree || quest.isExplainer) && !hasSubscription
+            const paid = isPaidQuest(quest) && !hasSubscription
 
             return (
               <div key={quest.id} className={`q-row ${completed ? 'done' : ''}`}>
@@ -186,7 +186,7 @@ export default function BusinessPage() {
                 <div className="q-info">
                   <div className="q-name">{quest.name}</div>
                   <div className="q-sub">
-                    {quest.isFree || quest.isExplainer ? 'Free' : 'Paid'}
+                    {isPaidQuest(quest) ? 'Paid' : 'Free'}
                     {' • '}
                     {completed ? 'Completed' : quest.isExplainer ? 'Explainer' : `Stage ${activeStageTab}`}
                   </div>

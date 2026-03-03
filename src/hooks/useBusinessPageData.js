@@ -3,11 +3,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { getStageConfig } from '../lib/stageConfig'
 import { normalizePersona } from '../data/personaProfiles'
-
-function cacheBustUrl(url) {
-  const v = import.meta.env.VITE_APP_VERSION || Date.now()
-  return `${url}?v=${v}`
-}
+import { cacheBustUrl } from '../lib/fetchJson'
 
 export default function useBusinessPageData() {
   const { user } = useAuth()
