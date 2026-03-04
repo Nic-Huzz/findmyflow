@@ -216,7 +216,6 @@ const FlowMapMockups = lazyRetry(() => import('./components/FlowMapMockups'))
 const ValidationFlowsManager = lazyRetry(() => import('./pages/ValidationFlowsManager'))
 const VoiceOfCustomerPage = lazyRetry(() => import('./pages/VoiceOfCustomerPage'))
 const WheelDemo = lazyRetry(() => import('./pages/WheelDemo'))
-const WeeklyPlanningFlow = lazyRetry(() => import('./components/WeeklyPlanningFlow'))
 const GroanMatrix = lazyRetry(() => import('./components/GroanMatrix'))
 const HeroCommandCenter = lazyRetry(() => import('./components/HeroProfile/HeroCommandCenter'))
 const Codex = lazyRetry(() => import('./pages/Codex'))
@@ -281,7 +280,6 @@ import './pages/crm/Calculators.css'
 import './pages/BrandToneDemo.css'
 import './pages/VoiceOfCustomerPage.css'
 import './components/BottomToolbar.css'
-import './components/WeeklyPlanningFlow.css'
 import './components/GroanMatrix.css'
 import './components/HeroProfile/HeroProfile.css'
 import './components/VibeColorPicker.css'
@@ -582,11 +580,6 @@ function AppRouter() {
             <Route path="/7-day-challenge" element={
               <AuthGate>
                 <Challenge />
-              </AuthGate>
-            } />
-            <Route path="/weekly-planning" element={
-              <AuthGate>
-                <WeeklyPlanningFlow />
               </AuthGate>
             } />
             <Route path="/groan-matrix" element={

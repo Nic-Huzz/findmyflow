@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Priority Tab — B: Info Cards</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: #f2f2f7;
+    color: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 16px 16px 100px;
+  }
+
+  .layer-card {
+    background: white;
+    border: 2px solid #E9A23B;
+    border-radius: 22px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  .layer-emoji { font-size: 2.2rem; }
+  .layer-info { flex: 1; }
+  .layer-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; color: #E9A23B; text-transform: uppercase; }
+  .layer-name { font-size: 18px; font-weight: 800; margin: 2px 0; }
+  .layer-desc { font-size: 13px; color: #6c757d; line-height: 1.4; }
+  .layer-reassess { font-size: 12px; color: #5e17eb; font-weight: 600; background: none; border: none; cursor: pointer; }
+
+  .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 0 4px; }
+  .progress-label { font-size: 13px; font-weight: 700; white-space: nowrap; color: #4a4a5a; }
+  .progress-bar { flex: 1; height: 8px; background: #eef0f3; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #5e17eb, #E9A23B); }
+
+  /* Cards */
+  .quest-card {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .quest-card.done { opacity: 0.7; }
+  .quest-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .quest-card-badges { display: flex; gap: 6px; }
+  .badge {
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .badge.groan { background: #fef3c7; color: #d97706; }
+  .badge.dna { background: #ede9fe; color: #7c3aed; }
+  .badge.daily-heal { background: #d1fae5; color: #059669; }
+  .badge.weekly-heal { background: #ede9fe; color: #7c3aed; }
+  .badge.screen { background: #ede9fe; color: #7c3aed; }
+  .badge.live { background: #fef3c7; color: #d97706; }
+
+  .quest-status {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 10px;
+  }
+  .quest-status.pending { background: #f0f0f5; color: #9a9daa; }
+  .quest-status.done { background: #d1fae5; color: #059669; }
+
+  .quest-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .quest-card-desc {
+    font-size: 13px;
+    color: #6c757d;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .quest-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .quest-card-meta {
+    font-size: 12px;
+    color: #9a9daa;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .quest-card-meta .pts { font-weight: 700; color: #E9A23B; }
+  .go-btn {
+    padding: 8px 20px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);
+    color: #1a1a2e;
+  }
+  .go-btn.done-btn {
+    background: #d1fae5;
+    color: #059669;
+  }
+  .go-btn.secondary {
+    background: #f0f0f5;
+    color: #6c757d;
+  }
+
+  .accent-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+  }
+
+  .streak-row { display: flex; gap: 6px; margin-bottom: 8px; }
+  .streak-dot { width: 10px; height: 10px; border-radius: 50%; background: #eef0f3; }
+  .streak-dot.filled { background: #34d399; }
+  .streak-labels { display: flex; gap: 6px; margin-bottom: 10px; }
+  .streak-labels span { width: 10px; font-size: 8px; text-align: center; color: #b0b3bd; }
+
+  .dna-actions { display: flex; gap: 8px; }
+
+  .edit-btn {
+    display: block; width: 100%; padding: 14px; margin-top: 8px;
+    background: none; border: 2px solid #dde0e5; border-radius: 16px;
+    font-size: 14px; font-weight: 700; color: #6c757d; cursor: pointer; text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="layer-card">
+  <span class="layer-emoji">💧</span>
+  <div class="layer-info">
+    <span class="layer-eyebrow">Your Priority</span>
+    <div class="layer-name">The Spring — Discover</div>
+    <div class="layer-desc">Where the water first emerges — finding your source.</div>
+    <div style="margin-top: 4px; font-size: 12px; color: #5e17eb; font-weight: 600;">Focus: Flow Finder</div>
+  </div>
+  <button class="layer-reassess">Reassess</button>
+</div>
+
+<div class="progress-row">
+  <span class="progress-label">3/6 done</span>
+  <div class="progress-bar"><div class="progress-fill" style="width: 50%"></div></div>
+</div>
+
+<!-- Groan card — completed -->
+<a class="quest-card done" href="#">
+  <div class="accent-bar" style="background: #d97706;"></div>
+  <div class="quest-card-header">
+    <div class="quest-card-badges">
+      <span class="badge groan">💪 Groan</span>
+      <span class="badge live">Live</span>
+    </div>
+    <span class="quest-status done">✓ Done</span>
+  </div>
+  <div class="quest-card-title">Go live on Instagram for 2 minutes</div>
+  <div class="quest-card-footer">
+    <div class="quest-card-meta">
+      <span>Mon</span>
+      <span>·</span>
+      <span>3%: 2min → 3min</span>
+    </div>
+    <button class="go-btn done-btn">Done</button>
+  </div>
+</a>
+
+<!-- Groan card — pending -->
+<a class="quest-card" href="#">
+  <div class="accent-bar" style="background: #7c3aed;"></div>
+  <div class="quest-card-header">
+    <div class="quest-card-badges">
+      <span class="badge groan">💪 Groan</span>
+      <span class="badge screen">Screen</span>
+    </div>
+    <span class="quest-status pending">Pending</span>
+  </div>
+  <div class="quest-card-title">Post a vulnerable story about your journey</div>
+  <div class="quest-card-footer">
+    <div class="quest-card-meta">
+      <span>Wed</span>
+      <span>·</span>
+      <span>3%: Post 1 story</span>
+    </div>
+    <button class="go-btn">Go →</button>
+  </div>
+</a>
+
+<!-- DNA card -->
+<div class="quest-card">
+  <div class="accent-bar" style="background: #7c3aed;"></div>
+  <div class="quest-card-header">
+    <div class="quest-card-badges">
+      <span class="badge dna">🧬 DNA</span>
+    </div>
+    <span class="quest-status pending">Pending</span>
+  </div>
+  <div class="quest-card-title">Overcome imposter syndrome in public speaking</div>
+  <div class="quest-card-desc">DNA Challenge · Stuck point #3</div>
+  <div class="dna-actions">
+    <button class="go-btn">Start Now</button>
+    <button class="go-btn secondary">Do Later</button>
+  </div>
+</div>
+
+<!-- Daily healing card -->
+<a class="quest-card" href="#">
+  <div class="accent-bar" style="background: #10b981;"></div>
+  <div class="quest-card-header">
+    <div class="quest-card-badges">
+      <span class="badge daily-heal">💚 Daily</span>
+    </div>
+    <span class="quest-status pending">2/7</span>
+  </div>
+  <div class="quest-card-title">Morning Reconnect</div>
+  <div class="quest-card-desc">Gentle check-in with your body and breath</div>
+  <div class="streak-row">
+    <div class="streak-dot filled"></div>
+    <div class="streak-dot filled"></div>
+    <div class="streak-dot"></div>
+    <div class="streak-dot"></div>
+    <div class="streak-dot"></div>
+    <div class="streak-dot"></div>
+    <div class="streak-dot"></div>
+  </div>
+  <div class="streak-labels">
+    <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+  </div>
+  <div class="quest-card-footer">
+    <div class="quest-card-meta"><span class="pts">5pts</span> · Reconnect</div>
+    <button class="go-btn">Start</button>
+  </div>
+</a>
+
+<!-- Weekly healing card -->
+<a class="quest-card" href="#">
+  <div class="accent-bar" style="background: #7c3aed;"></div>
+  <div class="quest-card-header">
+    <div class="quest-card-badges">
+      <span class="badge weekly-heal">💜 Weekly</span>
+    </div>
+    <span class="quest-status pending">Todo</span>
+  </div>
+  <div class="quest-card-title">Deep Rewire Session</div>
+  <div class="quest-card-desc">Extended nervous system reset and integration</div>
+  <div class="quest-card-footer">
+    <div class="quest-card-meta"><span class="pts">15pts</span> · Rewire</div>
+    <button class="go-btn">Start</button>
+  </div>
+</a>
+
+<button class="edit-btn">Edit Week</button>
+
+</body>
+</html>

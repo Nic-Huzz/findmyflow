@@ -57,6 +57,7 @@ jspm_packages/
 
 
 .vercel
+.mcp.json
 
 # Remotion
 out/

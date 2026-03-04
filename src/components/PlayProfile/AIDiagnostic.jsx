@@ -92,15 +92,6 @@ export default function AIDiagnostic({
 
   return (
     <div style={{ paddingTop: 8, paddingBottom: 40 }}>
-      <button
-        className="pp-btn-ghost"
-        onClick={onBack}
-        disabled={isThinking}
-        style={{ fontSize: 13, padding: '4px 0', marginBottom: 12, width: 'auto', border: 'none', opacity: isThinking ? 0.4 : 1 }}
-      >
-        Back
-      </button>
-
       <div className="pp-fade-in-up" style={{ textAlign: 'center', marginBottom: 20 }}>
         <h2>{founder.name} is thinking about your situation...</h2>
       </div>
@@ -178,6 +169,17 @@ export default function AIDiagnostic({
           </div>
         </div>
       )}
+
+      <div style={{ marginTop: 16 }}>
+        <button
+          className="pp-back-link"
+          onClick={onBack}
+          disabled={isThinking}
+          style={{ opacity: isThinking ? 0.4 : 1 }}
+        >
+          ← Back
+        </button>
+      </div>
 
       <div ref={scrollRef} />
     </div>

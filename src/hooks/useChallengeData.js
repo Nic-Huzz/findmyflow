@@ -57,7 +57,7 @@ export function useChallengeData() {
   const getInitialCategory = () => {
     const params = new URLSearchParams(location.search)
     const tabParam = params.get('tab')?.toLowerCase()
-    return TAB_TO_CATEGORY[tabParam] || 'Play-list'
+    return TAB_TO_CATEGORY[tabParam] || 'Priority'
   }
 
   // UI State
@@ -118,10 +118,8 @@ export function useChallengeData() {
   // User Archetypes (for personalized voice quests)
   const [userArchetypes, setUserArchetypes] = useState({ essence: null, protective: null })
 
-  // Weekly Planning State
-  const [weeklyPlan, setWeeklyPlan] = useState(null)
-  const [showWeeklyPlanning, setShowWeeklyPlanning] = useState(false)
-  const [isSunday, setIsSunday] = useState(false)
+  // Priority Overlay State (replaces old WeeklyPlanningFlow)
+  const [showPriorityOverlay, setShowPriorityOverlay] = useState(false)
 
   // Validation Response Counts (for response_counter quests)
   const [validationResponseCounts, setValidationResponseCounts] = useState({})
@@ -136,7 +134,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Play-list', 'Healing', 'Priority', 'Bonus']
+  const categories = ['Priority', 'Play-list', 'Healing', 'Bonus']
   const BONUS_PERCENTAGE = 5
 
   // ============================================
@@ -443,103 +441,34 @@ export function useChallengeData() {
     }
   }
 
-  // Load weekly plan for current week
-  const loadWeeklyPlan = async () => {
+  // Check if user has priority picks for this week (replaces loadWeeklyPlan)
+  const loadPriorityStatus = async () => {
     if (!user?.id) return
-
     try {
       const weekStart = getWeekStart()
-      const today = new Date().getDay()
-      setIsSunday(today === 0)
-
       const { data, error } = await supabase
-        .from('weekly_plans')
-        .select('*')
+        .from('priority_weekly_picks')
+        .select('id')
         .eq('user_id', user.id)
-        .eq('week_start', weekStart)
-        .maybeSingle()
-
+        .eq('week_start_date', weekStart)
+        .limit(1)
       if (error) {
-        console.error('Error loading weekly plan:', error)
+        console.error('Error loading priority status:', error)
         return
       }
-
-      if (data) {
-        setWeeklyPlan(data)
-        setShowWeeklyPlanning(false)
-      } else {
-        // No plan for this week - show planning flow
-        setWeeklyPlan(null)
-        setShowWeeklyPlanning(true)
-      }
+      setShowPriorityOverlay(!data || data.length === 0)
     } catch (error) {
-      console.error('Error in loadWeeklyPlan:', error)
+      console.error('Error in loadPriorityStatus:', error)
     }
   }
 
-  // Mark groan as completed
-  const completeWeeklyGroan = async () => {
-    if (!weeklyPlan?.id) return
+  const handlePriorityOverlayComplete = useCallback(() => {
+    setShowPriorityOverlay(false)
+  }, [])
 
-    try {
-      const { error } = await supabase
-        .from('weekly_plans')
-        .update({ weekly_groan_completed: true })
-        .eq('id', weeklyPlan.id)
-
-      if (!error) {
-        setWeeklyPlan(prev => ({ ...prev, weekly_groan_completed: true }))
-      }
-    } catch (error) {
-      console.error('Error completing weekly groan:', error)
-    }
-  }
-
-  // Handle weekly planning completion
-  const handleWeeklyPlanComplete = (planData) => {
-    setWeeklyPlan(planData)
-    setShowWeeklyPlanning(false)
-  }
-
-  // Map weekly plan routine IDs to quest IDs
-  const ROUTINE_TO_QUEST_MAP = {
-    meditation: 'reconnect_morning_meditation',
-    breathwork: 'reconnect_morning_breathwork',
-    rise_vibe_dance: 'reconnect_morning_dance',
-    daily_prayer: 'reconnect_daily_prayer',
-    self_identified: null // Custom activity, no specific quest
-  }
-
-  // Check if a quest is part of the weekly plan
-  const isQuestPlanned = (questId) => {
-    if (!weeklyPlan?.morning_routine) return false
-
-    // Check if quest matches any planned morning routine
-    for (const routineId of weeklyPlan.morning_routine) {
-      const mappedQuestId = ROUTINE_TO_QUEST_MAP[routineId]
-      if (mappedQuestId && mappedQuestId === questId) {
-        return true
-      }
-    }
-    return false
-  }
-
-  // Get the day a quest is planned for (for groan/release)
-  const getPlannedDay = (questId) => {
-    if (!weeklyPlan) return null
-
-    // Check if this is related to the weekly groan
-    if (questId.includes('groan') && weeklyPlan.weekly_groan_day) {
-      return weeklyPlan.weekly_groan_day
-    }
-
-    // Check if this is related to release practice
-    if (questId.includes('release') && weeklyPlan.big_release_day) {
-      return weeklyPlan.big_release_day
-    }
-
-    return null
-  }
+  // Stubs — old weekly plan helpers (still referenced by QuestCard props downstream)
+  const isQuestPlanned = () => false
+  const getPlannedDay = () => null
 
   const loadLeaderboard = async () => {
     try {
@@ -1749,7 +1678,7 @@ export function useChallengeData() {
         checkHealingCompassComplete(),
         checkFlowFinderComplete(),
         loadStageProgress(),
-        loadWeeklyPlan()
+        loadPriorityStatus()
         // Note: loadValidationResponseCounts is triggered by selectedProject useEffect below
       ]).finally(() => setLoading(false))
     }
@@ -1958,17 +1887,12 @@ export function useChallengeData() {
     // User Archetypes (for personalized voice quests)
     userArchetypes,
 
-    // Weekly Planning
-    weeklyPlan,
-    setWeeklyPlan,
-    showWeeklyPlanning,
-    setShowWeeklyPlanning,
-    isSunday,
+    // Priority Overlay (replaces old WeeklyPlanningFlow)
+    showPriorityOverlay,
+    handlePriorityOverlayComplete,
+    loadPriorityStatus,
     getWeekStart,
     getWeekLabel,
-    loadWeeklyPlan,
-    completeWeeklyGroan,
-    handleWeeklyPlanComplete,
     isQuestPlanned,
     getPlannedDay,
 

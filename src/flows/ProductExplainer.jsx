@@ -19,6 +19,7 @@ export default function ProductExplainer() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const returnTo = searchParams.get('returnTo') || '/7-day-challenge'
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isCompleting, setIsCompleting] = useState(false)
   const [viewingResults, setViewingResults] = useState(false)
@@ -46,10 +47,10 @@ export default function ProductExplainer() {
         console.error('Error saving flow session:', error)
       }
 
-      navigate('/7-day-challenge')
+      navigate(returnTo)
     } catch (err) {
       console.error('Error completing explainer:', err)
-      navigate('/7-day-challenge')
+      navigate(returnTo)
     }
   }
 
@@ -164,7 +165,7 @@ export default function ProductExplainer() {
     if (currentSlide > 0) {
       setCurrentSlide(currentSlide - 1)
     } else {
-      navigate('/7-day-challenge')
+      navigate(returnTo)
     }
   }
 

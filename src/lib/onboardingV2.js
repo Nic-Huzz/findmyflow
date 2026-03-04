@@ -120,8 +120,10 @@ export function derivePersonaFromWealthLadder(wealthLadder, employmentStatus = n
   // Movement Maker: Only if self-employed AND has products
   // Someone with products but still employed is a Flow Finder
   if (wealthLadder === 'products') {
-    const isFullTime = employmentStatus === 'self_employed'
-    return isFullTime ? 'movement_maker' : 'vibe_riser'
+    const isSelfEmployed = employmentStatus === 'self_employed'
+      || employmentStatus === 'self_employed_early'
+      || employmentStatus === 'self_employed_established'
+    return isSelfEmployed ? 'movement_maker' : 'vibe_riser'
   }
 
   // Flow Finder: Service or productized (regardless of employment)
@@ -524,4 +526,42 @@ export function getRecommendedEmphasis(currentStage, wealthLadder) {
   }
 
   return stageEmphasisMap[currentStage] || 'deep_discovery'
+}
+
+// ============================================================================
+// TENSION LAYER SYSTEM
+// ============================================================================
+
+/**
+ * Tension Layer Display Metadata
+ */
+export const TENSION_LAYER_DISPLAY = {
+  discover: { name: 'Discover', riverElement: 'The Spring', emoji: '💧', color: '#9333EA', description: 'Where the water first emerges — finding your source.', appFeature: 'Flow Finder' },
+  regulate: { name: 'Regulate', riverElement: 'The Riverbed', emoji: '🪨', color: '#10B981', description: 'The channel that holds the water — building capacity.', appFeature: 'Healing & Rewiring' },
+  reveal:   { name: 'Reveal', riverElement: 'The Current', emoji: '🌊', color: '#E9A23B', description: 'Water moving into the open — showing up and doing the work.', appFeature: 'Play-list Live + Money Layers' },
+  value:    { name: 'Value', riverElement: 'The Ocean', emoji: '🌏', color: '#5e17eb', description: 'Where the river meets the world — owning your worth.', appFeature: 'Play-list Vulnerable + Authority Layers' },
+}
+
+/**
+ * Compute the user's priority layer from tension scores.
+ * Priority = the lowest-numbered layer with score 0 or 1.
+ * If all layers score 2+, returns the lowest-scored layer (weakest link).
+ *
+ * @param {{ discover: number, regulate: number, reveal: number, value: number }} scores
+ * @returns {string} - 'discover' | 'regulate' | 'reveal' | 'value'
+ */
+export function computePriorityLayer(scores) {
+  const layers = ['discover', 'regulate', 'reveal', 'value']
+  // First: find lowest layer with score 0 or 1 (skip null/undefined)
+  for (const layer of layers) {
+    if (scores[layer] != null && scores[layer] <= 1) return layer
+  }
+  // All >= 2: check if fully resolved (all 3s → value/ocean)
+  const answered = layers.filter(l => scores[l] != null)
+  if (answered.length === 0) return 'discover' // fallback
+  if (answered.every(l => scores[l] >= 3)) return 'value'
+  // Otherwise return lowest-scored layer, ties favor foundational (earliest)
+  return answered.reduce((min, layer) =>
+    scores[layer] < scores[min] ? layer : min
+  , answered[0])
 }

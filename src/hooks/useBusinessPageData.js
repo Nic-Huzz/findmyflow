@@ -137,17 +137,24 @@ export default function useBusinessPageData() {
     return stageQuests.find(q => !isQuestCompleted(q.id)) || null
   }, [stageQuests, isQuestCompleted])
 
-  // Completed stages for dots
+  // Completed stages for dots — a stage is "done" when all its
+  // counts_toward_graduation quests have been completed
   const completedStages = useMemo(() => {
     if (!selectedProject) return []
-    const currentStage = selectedProject.current_stage ?? 1
     const done = []
-    const stageIds = [0.9, 1, 2, 3, 4, 5, 6, 7]
+    const stageIds = [1, 2, 3, 4, 5, 6, 7]
     for (const s of stageIds) {
-      if (s < currentStage) done.push(s)
+      const gradQuests = allQuests.filter(
+        q => q.category === 'Business' && q.stage_required === s && q.counts_toward_graduation && !q.archived
+      )
+      if (gradQuests.length === 0) continue
+      const allComplete = gradQuests.every(q => completions.some(c => c.quest_id === q.id))
+      if (allComplete) done.push(s)
     }
+    // Setup (0.9) is done if the user has a project
+    if (selectedProject) done.push(0.9)
     return done
-  }, [selectedProject])
+  }, [selectedProject, allQuests, completions])
 
   // Current stage config
   const currentStageConfig = useMemo(() => {

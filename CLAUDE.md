@@ -328,6 +328,10 @@ import { hapticLight, hapticMedium, hapticSuccess, hapticError } from './lib/hap
 const { celebrateTaskComplete, celebrateLevelUp } = useCelebrations()
 ```
 
+## Writing Style
+
+- **Never use em dashes** (`—` or `--`) in user-facing copy. Use commas, full stops, or rephrase instead. Em dashes are a tell-tale sign of AI-generated text.
+
 ## Database Schema
 
 ### Core Tables

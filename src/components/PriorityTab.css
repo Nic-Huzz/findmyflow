@@ -1,0 +1,857 @@
+/* ============================================================
+   PriorityTab.css
+   All selectors scoped under .priority-tab
+   Uses Mockup C (Grouped Sections) design
+   Created: 2026-03-04
+   ============================================================ */
+
+/* ── Loading ── */
+.priority-tab.pt-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+/* ── Layer Card ── */
+.priority-tab .pt-layer-card {
+  background: white;
+  border: 2px solid #E9A23B;
+  border-radius: 22px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+
+.priority-tab .pt-layer-emoji {
+  font-size: 2.2rem;
+  flex-shrink: 0;
+}
+
+.priority-tab .pt-layer-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.priority-tab .pt-layer-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #E9A23B;
+  text-transform: uppercase;
+}
+
+.priority-tab .pt-layer-name {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 2px 0;
+  color: #1a1a2e;
+}
+
+.priority-tab .pt-layer-desc {
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+.priority-tab .pt-layer-focus {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.priority-tab .pt-layer-reassess {
+  font-size: 12px;
+  color: #5e17eb;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  flex-shrink: 0;
+}
+
+/* ── Progress Bar ── */
+.priority-tab .pt-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.priority-tab .pt-progress-label {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #4a4a5a;
+}
+
+.priority-tab .pt-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #eef0f3;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.priority-tab .pt-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  transition: width 0.4s ease;
+}
+
+/* ── Section Cards (Mockup C) ── */
+.priority-tab .pt-section-card {
+  background: white;
+  border-radius: 22px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.priority-tab .pt-section-card.recommended {
+  border-left: 4px solid #E9A23B;
+}
+
+.priority-tab .pt-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+}
+
+.priority-tab .pt-section-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.priority-tab .pt-section-icon {
+  font-size: 1.3rem;
+}
+
+.priority-tab .pt-section-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.priority-tab .pt-section-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  background: #5e17eb;
+  padding: 2px 8px;
+  border-radius: 10px;
+  min-width: 28px;
+  text-align: center;
+}
+
+.priority-tab .pt-section-count.complete {
+  background: #34d399;
+}
+
+.priority-tab .pt-rec-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #E9A23B;
+  background: #fef3c7;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-left: 8px;
+}
+
+.priority-tab .pt-section-items {
+  border-top: 1px solid #f0f0f5;
+}
+
+/* ── Item Rows (quest list action cards) ── */
+.priority-tab .pt-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #f5f5f7;
+  text-decoration: none;
+  color: inherit;
+}
+
+.priority-tab .pt-item-row:last-child {
+  border-bottom: none;
+}
+
+.priority-tab .pt-item-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #dde0e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.priority-tab .pt-item-check.done {
+  background: #34d399;
+  border-color: #34d399;
+  color: white;
+}
+
+.priority-tab .pt-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.priority-tab .pt-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1a1a2e;
+}
+
+.priority-tab .pt-item-row.done .pt-item-name {
+  color: #9a9daa;
+  text-decoration: line-through;
+}
+
+.priority-tab .pt-item-meta {
+  font-size: 12px;
+  color: #9a9daa;
+  margin-top: 2px;
+}
+
+.priority-tab .pt-item-action {
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);
+  color: #1a1a2e;
+  flex-shrink: 0;
+  margin-top: 2px;
+  text-decoration: none;
+}
+
+.priority-tab .pt-item-action.done-action {
+  background: #d1fae5;
+  color: #059669;
+}
+
+/* ── Quest Cards inside section ── */
+.priority-tab .pt-quest-cards {
+  padding: 8px 12px 12px;
+}
+
+/* ── Pick Rows (week picker) ── */
+.priority-tab .pt-pick-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #f5f5f7;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.priority-tab .pt-pick-row:last-child {
+  border-bottom: none;
+}
+
+.priority-tab .pt-pick-row:hover {
+  background: #fafafa;
+}
+
+.priority-tab .pt-pick-row.selected {
+  background: #f8f5ff;
+}
+
+.priority-tab .pt-pick-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #dde0e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: all 0.15s;
+}
+
+.priority-tab .pt-pick-check.checked {
+  background: #5e17eb;
+  border-color: #5e17eb;
+  color: white;
+}
+
+.priority-tab .pt-pick-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.priority-tab .pt-pick-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1a1a2e;
+}
+
+.priority-tab .pt-pick-meta {
+  font-size: 12px;
+  color: #9a9daa;
+  margin-top: 3px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── Pills ── */
+.priority-tab .pt-pill {
+  background: #f0f0f5;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.priority-tab .pt-pill.daily {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.priority-tab .pt-pill.weekly {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.priority-tab .pt-pill.screen {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.priority-tab .pt-pill.live {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.priority-tab .pt-pill.money {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.priority-tab .pt-pill.vulnerable {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+.priority-tab .pt-pill.authority {
+  background: #ede9fe;
+  color: #5e17eb;
+}
+
+.priority-tab .pt-pts {
+  font-weight: 700;
+  color: #E9A23B;
+}
+
+/* ── Empty States ── */
+.priority-tab .pt-empty-state {
+  padding: 20px 18px;
+  text-align: center;
+}
+
+.priority-tab .pt-empty-state p {
+  font-size: 14px;
+  color: #9a9daa;
+  margin-bottom: 8px;
+}
+
+.priority-tab .pt-empty-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5e17eb;
+  text-decoration: none;
+}
+
+/* ── Gold CTA Button ── */
+.priority-tab .pt-gold-cta {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);
+  color: #1a1a2e;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 4px 18px rgba(233,162,59,0.28);
+  letter-spacing: -0.2px;
+  margin-top: 20px;
+  transition: opacity 0.2s;
+}
+
+.priority-tab .pt-gold-cta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Edit Week Button ── */
+.priority-tab .pt-edit-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  background: none;
+  border: 2px solid #dde0e5;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #6c757d;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.priority-tab .pt-edit-btn:hover {
+  border-color: #b4b8c4;
+}
+
+/* ── Assessment ── */
+.priority-tab .pt-assessment-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.priority-tab .pt-assessment-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.priority-tab .pt-assessment-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+}
+
+.priority-tab .pt-assessment-desc {
+  font-size: 14px;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+.priority-tab .pt-assessment-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.priority-tab .pt-question-card {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+
+.priority-tab .pt-question-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.priority-tab .pt-question-emoji {
+  font-size: 1.5rem;
+}
+
+.priority-tab .pt-question-river {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9a9daa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.priority-tab .pt-question-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.priority-tab .pt-question-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.priority-tab .pt-option-btn {
+  width: 100%;
+  padding: 12px 16px;
+  background: #f8f8fa;
+  border: 2px solid #eef0f3;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a2e;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1.3;
+}
+
+.priority-tab .pt-option-btn:hover {
+  border-color: #d4d6de;
+}
+
+.priority-tab .pt-option-btn.selected {
+  background: #f3f0ff;
+  border-color: #5e17eb;
+  color: #5e17eb;
+  font-weight: 600;
+}
+
+.priority-tab .pt-error {
+  color: #ef4444;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* ── Picker Header ── */
+.priority-tab .pt-picker-header {
+  margin-bottom: 20px;
+}
+
+.priority-tab .pt-picker-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+
+.priority-tab .pt-picker-desc {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* ============================================================
+   Priority Overlay (full-page start-of-week flow)
+   ============================================================ */
+
+.priority-overlay {
+  min-height: 100vh;
+  background: #f2f2f7;
+  padding: 40px 16px 100px;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.priority-overlay-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.priority-overlay-title {
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+
+.priority-overlay-desc {
+  font-size: 14px;
+  color: #6c757d;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.priority-overlay-skip {
+  display: block;
+  margin: 16px auto 0;
+  background: none;
+  border: none;
+  color: #9a9daa;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 16px;
+}
+
+/* ============================================================
+   Play-list Picker (skill → layer → day → challenge)
+   ============================================================ */
+
+/* ── Skill Chips (selected picks) ── */
+.priority-tab .pt-skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 18px 12px;
+}
+
+.priority-tab .pt-skill-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f0ff;
+  border: 1px solid #5e17eb;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e17eb;
+}
+
+.priority-tab .pt-skill-chip button {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+/* ── See More Button ── */
+.priority-tab .pt-see-more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: none;
+  border-top: 1px solid #f0f0f5;
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Step Back Button ── */
+.priority-tab .pt-step-back {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #9a9daa;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 18px;
+}
+
+/* ── Step Context ── */
+.priority-tab .pt-step-context {
+  font-size: 13px;
+  color: #6c757d;
+  padding: 0 18px 8px;
+}
+
+/* ── Challenge Form ── */
+.priority-tab .pt-challenge-form {
+  padding: 12px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.priority-tab .pt-challenge-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.priority-tab .pt-challenge-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #eef0f3;
+  border-radius: 14px;
+  font-size: 14px;
+  color: #1a1a2e;
+  background: #f8f8fa;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.priority-tab .pt-challenge-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  background: white;
+}
+
+.priority-tab .pt-challenge-input::placeholder {
+  color: #b4b8c4;
+}
+
+.priority-tab .pt-challenge-form .pt-gold-cta {
+  margin-top: 8px;
+}
+
+/* ── DNA Mini Card (Play Profile picker) ── */
+.priority-tab .pt-dna-section {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.priority-tab .pt-dna-mini-card {
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.priority-tab .pt-dna-founder {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.priority-tab .pt-dna-archetype {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+.priority-tab .pt-set-later-btn {
+  background: none;
+  border: none;
+  color: #9a9daa;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* ============================================================
+   Inline Play Profile overrides
+   Scoped under .priority-tab .pt-section-items to only affect picker context
+   ============================================================ */
+
+/* Scale down heading — h1 is too heavy inside a section card */
+.priority-tab .pt-section-items .play-profile-quiz h1 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 12px 0 8px;
+}
+
+/* Subtle background tint on selectable cards for contrast against white card */
+.priority-tab .pt-section-items .play-profile-quiz .pp-selectable-card {
+  background: #fafafa;
+  border-color: #eef0f3;
+  outline: none;
+}
+
+.priority-tab .pt-section-items .play-profile-quiz .pp-selectable-card:hover {
+  background: #f5f0ff;
+  border-color: #c4b5fd;
+}
+
+/* Chat bubbles: tint AI messages so they don't blend into white card */
+.priority-tab .pt-section-items .play-profile-quiz .pp-chat-ai {
+  background: #f8f8fa;
+  border-color: #eef0f3;
+}
+
+/* Text input: match the tinted background */
+.priority-tab .pt-section-items .play-profile-quiz .pp-text-input {
+  background: #f8f8fa;
+}
+
+.priority-tab .pt-section-items .play-profile-quiz .pp-text-input:focus {
+  background: white;
+}
+
+/* Response cards: subtle tint */
+.priority-tab .pt-section-items .play-profile-quiz .pp-response-card {
+  background: #fafafa;
+  border-color: #eef0f3;
+}
+
+.priority-tab .pt-section-items .play-profile-quiz .pp-response-card:hover {
+  background: #f5f0ff;
+}
+
+/* Progress bar: add horizontal padding to align with card edges */
+.priority-tab .pt-section-items .play-profile-quiz .pp-progress-bar {
+  margin-left: 18px;
+  margin-right: 18px;
+}
+
+/* Add horizontal padding to all inline Play Profile content */
+.priority-tab .pt-section-items .play-profile-quiz {
+  padding: 0 14px 16px;
+}
+
+/* Follow-up questions: tighten heading spacing */
+.priority-tab .pt-section-items .play-profile-quiz .pp-followup-label {
+  margin-top: 4px;
+}
+
+.priority-tab .pt-section-items .play-profile-quiz h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* Textarea: tinted background */
+.priority-tab .pt-section-items .play-profile-quiz .pp-textarea {
+  background: #f8f8fa;
+}
+
+.priority-tab .pt-section-items .play-profile-quiz .pp-textarea:focus {
+  background: white;
+}
+
+/* Gold CTA: normalise shadow to match picker's CTA */
+.priority-tab .pt-section-items .play-profile-quiz .pp-btn-gold {
+  box-shadow: 0 4px 18px rgba(233, 162, 59, 0.28);
+}
+
+/* Back buttons: minimal text link style within inline flow */
+.priority-tab .pt-section-items .play-profile-quiz .pp-back-link {
+  background: none !important;
+  border: none !important;
+  color: #9a9daa;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  width: auto;
+  box-shadow: none;
+}
+
+/* Ghost button (+ Add context, etc): tinted to stand out */
+.priority-tab .pt-section-items .play-profile-quiz .pp-btn-ghost {
+  background: #f8f8fa;
+  border-color: #eef0f3;
+}
+
+.priority-tab .pt-section-items .play-profile-quiz .pp-btn-ghost:hover {
+  background: #f5f0ff;
+  border-color: #c4b5fd;
+}

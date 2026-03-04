@@ -308,6 +308,64 @@ export const PAGE_CONTENT = {
   },
 
   // ============================================
+  // MIND SPACE — POST-EXTRACTION AMBITION FLOW
+  // ============================================
+
+  'mindspace_ambition': {
+    pageId: 'mindspace_ambition',
+    pageName: 'Your Ambition',
+    whatIsThis: `Now that Mind Space has extracted your skills, problems, and people — this question asks what you want to DO with those discoveries. Are you looking for a career that fits, building your own thing, or still exploring?`,
+    whyMatters: `Your ambition shapes the entire experience from here. Job seekers get alignment tools. Builders get business stages. Explorers get freedom to discover without pressure.\n\nThere's no wrong answer — and you can always change direction later.`,
+    contextualPrompts: [
+      { id: 'which_choose', label: "I'm not sure which to pick" },
+      { id: 'change_later', label: 'Can I change this later?' }
+    ],
+    faq: {
+      which_choose: `If you're genuinely torn, pick "I'm still exploring." It keeps all doors open while you continue discovering.\n\nIf you have even a slight lean toward building something — a side project, freelancing, a business — go with "Build something of my own." You'll get more relevant tools.\n\nThe choice isn't permanent.`,
+      change_later: `Yes! This isn't a permanent commitment. As you use the app and complete quests, your path will naturally evolve. Think of this as a starting point, not a destination.`
+    }
+  },
+
+  'mindspace_existing_biz': {
+    pageId: 'mindspace_existing_biz',
+    pageName: 'Existing Business',
+    whatIsThis: `You chose "Build something of my own" — now we're asking if you already have something in motion, or if you're starting fresh. This determines whether we connect your Mind Space discoveries to an existing business or help you build from scratch.`,
+    whyMatters: `Existing businesses get to align their current work with their natural strengths. Fresh starters get a clean foundation built on who they actually are, not who they think they should be.\n\nEither way, you're in the right place.`,
+    contextualPrompts: [
+      { id: 'side_project', label: 'Does a side project count?' },
+    ],
+    faq: {
+      side_project: `If you're actively working on it and it has a name — yes, count it. We'll help you connect it with your Mind Space discoveries.\n\nIf it's more of a vague idea you haven't started yet, "Starting fresh" might serve you better. You can always add business details later.`
+    }
+  },
+
+  'mindspace_alignment_sliders': {
+    pageId: 'mindspace_alignment_sliders',
+    pageName: 'Alignment Check',
+    whatIsThis: `These sliders let you identify which of your extracted skills, problems, and people align with your current situation — whether that's your current job, existing business, or areas of interest.\n\nEach slider starts on "No alignment" and you slide right to select items that DO align.`,
+    whyMatters: `Knowing what's aligned vs. what's underutilized is powerful. The gap between what you naturally do and what you're currently doing reveals where your growth opportunity lives.\n\nAreas with no alignment aren't wasted — they might be the foundation for your next chapter.`,
+    contextualPrompts: [
+      { id: 'leave_no_alignment', label: 'Is it OK to leave everything on No alignment?' },
+    ],
+    faq: {
+      leave_no_alignment: `Absolutely. "No alignment" is valid and useful information. It tells us your current situation doesn't overlap with your natural strengths — which means there's a big opportunity for change.\n\nDon't force alignment where it doesn't exist. Honest answers lead to better recommendations.`
+    }
+  },
+
+  'mindspace_stage': {
+    pageId: 'mindspace_stage',
+    pageName: 'Business Stage',
+    whatIsThis: `You have an existing business — now tell us where you are with it. This unlocks stage-specific quests and tools in the 7-Day Challenge.\n\nPick whichever stage feels most accurate right now.`,
+    whyMatters: `Each business stage has different challenges. Someone with paying customers needs different guidance than someone with just an idea.\n\nYour stage determines which quests appear in the Business tab and which tools we recommend.`,
+    contextualPrompts: [
+      { id: 'not_sure_stage', label: "I'm not sure which stage I'm at" },
+    ],
+    faq: {
+      not_sure_stage: `Think about it this way:\n\n- Do you have paying customers? If yes, Stage 4+\n- Have you built something people can use? If yes, Stage 3\n- Have you tested the idea with real people? If yes, Stage 2\n- Still at the idea stage? Stage 1\n\nWhen in doubt, pick the earlier stage. It's better to be pleasantly surprised than overwhelmed.`
+    }
+  },
+
+  // ============================================
   // 7-DAY CHALLENGE
   // ============================================
 

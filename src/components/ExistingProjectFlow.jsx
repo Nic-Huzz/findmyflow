@@ -1,4 +1,8 @@
 /**
+ * @deprecated — Orphaned as of Mar 2026. Business capture is now handled inline
+ * in MindSpace.jsx Steps 5-7 (ambition → existing business → sliders + stage).
+ * Kept as reference only; not imported anywhere.
+ *
  * ExistingProjectFlow.jsx
  *
  * Captures existing business info for Vibe Risers and Movement Makers

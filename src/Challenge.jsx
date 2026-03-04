@@ -16,12 +16,14 @@ import ChallengeProjectSelector from './components/ChallengeProjectSelector'
 import ChallengeHeader from './components/ChallengeHeader'
 import ChallengeOnboarding from './components/ChallengeOnboarding'
 import './components/ChallengeFilters.css' // R-type chips + frequency tabs styles (used inline now)
+import './components/ChallengeStageTabs.css' // stage-tab pills for Healing/Play-list/Priority sub-tabs
 import QuestCard from './components/QuestCard'
 import PlayListTab from './components/PlayListTab'
+import PriorityTab from './components/PriorityTab'
 import CompassCheckin from './components/CompassCheckin'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
-import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
+import PriorityOverlay from './components/PriorityOverlay'
 import GroanMatrix from './components/GroanMatrix'
 import PostActionModal, { POST_ACTION_MILESTONE_IDS } from './components/PostActionModal'
 import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreActionModal'
@@ -120,14 +122,10 @@ function Challenge() {
     playlistSubTab,
     setPlaylistSubTab,
     userArchetypes,
-    weeklyPlan,
-    showWeeklyPlanning,
-    setShowWeeklyPlanning,
-    isSunday,
+    showPriorityOverlay,
+    handlePriorityOverlayComplete,
     getWeekStart,
     getWeekLabel,
-    handleWeeklyPlanComplete,
-    completeWeeklyGroan,
     isQuestPlanned,
     getPlannedDay,
     categories,
@@ -551,14 +549,9 @@ function Challenge() {
           return
         }
 
-        // Mark weekly groan as completed in weekly plan
-        await completeWeeklyGroan()
-
         // Track analytics
         const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()
         trackGroanCompleted({
-          weekType: weeklyPlan?.week_type || 'unknown',
-          dayPlanned: weeklyPlan?.weekly_groan_day || 'unknown',
           dayCompleted: today
         })
 
@@ -1568,11 +1561,13 @@ function Challenge() {
   // Render: Weekly Planning Flow
   // ============================================
 
-  if (showWeeklyPlanning) {
+  if (showPriorityOverlay) {
     return (
-      <WeeklyPlanningFlow
-        onComplete={handleWeeklyPlanComplete}
-        existingPlan={weeklyPlan}
+      <PriorityOverlay
+        userId={user?.id}
+        stageProgress={stageProgress}
+        onStageProgressUpdate={loadStageProgress}
+        onComplete={handlePriorityOverlayComplete}
       />
     )
   }
@@ -1616,7 +1611,6 @@ function Challenge() {
         handleOpenExplainer={handleOpenExplainer}
         onLeaderboardClick={() => navigate('/league')}
         streakDays={getConsecutiveStreakDays()}
-        weekType={weeklyPlan?.week_type}
         weeklyPoints={currentWeeklyPoints}
         matchupData={matchupData}
         categoryScores={categoryScores}
@@ -1966,13 +1960,8 @@ function Challenge() {
                 <div key={rType} className="quest-subsection">
                   <h3 className="subsection-title">{rType}</h3>
                   <div className="quest-grid">
-                    {rTypeQuests.map(quest => {
+                    {rTypeQuests.filter(quest => quest.id !== 'release_daily_challenge').map(quest => {
                       const completed = isQuestCompletedToday(quest.id, quest)
-                      const isReleaseDailyChallenge = quest.id === 'release_daily_challenge'
-
-                      // Determine lock state and message
-                      const isLocked = isReleaseDailyChallenge && !nervousSystemComplete
-                      const lockMessage = 'Complete the "Nervous System Calibration" to unlock daily release challenges'
 
                       return (
                         <QuestCard
@@ -1993,9 +1982,6 @@ function Challenge() {
                           renderDescription={renderDescription}
                           completedBadgeText={quest.frequency === 'daily' ? "Completed Today" : "Completed"}
                           navigate={navigate}
-                          specialLockCheck={isLocked}
-                          specialLockMessage={isReleaseDailyChallenge ? "Complete Nervous System to Unlock" : "Locked"}
-                          lockedMessage={lockMessage}
                           safetyContracts={safetyContracts}
                           selectedProject={selectedProject}
                           progress={progress}
@@ -2017,38 +2003,67 @@ function Challenge() {
           </div>
         )}
 
-        {/* Priority placeholder */}
+        {/* Priority Tab */}
         {activeCategory === 'Priority' && (
-          <div style={{
-            textAlign: 'center',
-            padding: '60px 20px',
-            color: '#6c757d'
-          }}>
-            <span style={{ fontSize: '3rem', display: 'block', marginBottom: '16px' }}>🎯</span>
-            <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1a1a2e', marginBottom: '8px' }}>
-              Priority Tasks
-            </h3>
-            <p style={{ fontSize: '14px', lineHeight: 1.5 }}>
-              Your personalised priority tasks will appear here soon.
-            </p>
-          </div>
+          <PriorityTab
+            userId={user?.id}
+            stageProgress={stageProgress}
+            onStageProgressUpdate={loadStageProgress}
+            completions={completions}
+            questInputs={questInputs}
+            onInputChange={handleInputChange}
+            onQuestComplete={handleQuestComplete}
+            completingQuestId={completingQuestId}
+            expandedLearnMore={expandedLearnMore}
+            onToggleLearnMore={toggleLearnMore}
+            showLockedTooltip={showLockedTooltip}
+            onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
+            renderDescription={renderDescription}
+            navigate={navigate}
+            selectedProject={selectedProject}
+            progress={progress}
+            projectStage={projectStage}
+            justCompletedQuestId={justCompletedQuestId}
+            isQuestCompletedToday={isQuestCompletedToday}
+            isQuestLocked={isQuestLocked}
+            getRequiredQuestName={getRequiredQuestName}
+            getDailyStreak={getDailyStreak}
+            getDayLabels={getDayLabels}
+            isQuestPlanned={isQuestPlanned}
+            getPlannedDay={getPlannedDay}
+            userArchetypes={userArchetypes}
+          />
         )}
 
         {/* Bonus Sub-Tabs: Tasks | Content */}
         {activeCategory === 'Bonus' && (
-          <div className="business-sub-tabs">
-            <button
-              className={`sub-tab ${bonusSubTab === 'tasks' ? 'active' : ''}`}
-              onClick={() => setBonusSubTab('tasks')}
-            >
-              Tasks
-            </button>
-            <button
-              className={`sub-tab ${bonusSubTab === 'content' ? 'active' : ''}`}
-              onClick={() => setBonusSubTab('content')}
-            >
-              Content
-            </button>
+          <div className="stage-tabs-wrapper">
+            <div className="stage-tabs-container">
+              <div className="stage-tabs" style={{ justifyContent: 'center' }}>
+                {[
+                  { key: 'tasks', icon: '✅', label: 'Tasks', color: '#5e17eb' },
+                  { key: 'content', icon: '📝', label: 'Content', color: '#E9A23B' },
+                ].map(tab => {
+                  const isActive = bonusSubTab === tab.key
+                  const activeStyles = isActive ? {
+                    background: tab.color,
+                    borderColor: tab.color,
+                    color: 'white'
+                  } : {}
+                  return (
+                    <button
+                      key={tab.key}
+                      className={`stage-tab available ${isActive ? 'active' : ''}`}
+                      onClick={() => setBonusSubTab(tab.key)}
+                      style={{ '--stage-color': tab.color, ...activeStyles }}
+                    >
+                      <span className="tab-icon">{tab.icon}</span>
+                      <span className="tab-label">{tab.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         )}
 

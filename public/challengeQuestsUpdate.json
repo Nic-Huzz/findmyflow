@@ -227,7 +227,7 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What did you do and how did it go?",
-      "learnMore": "Your essence wants to express itself fully, but your protective voice has been blocking it to keep you safe. This quest is about giving your essence permission to play\u2014even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway.",
+      "learnMore": "Your essence wants to express itself fully, but your protective voice has been blocking it to keep you safe. This quest is about giving your essence permission to play—even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway.",
       "archived": true,
       "archived_reason": "Superseded by stage-specific Stage Groan quests in Voices sub-tab - Jan 2025"
     },
@@ -311,7 +311,7 @@
       "points": 6,
       "inputType": "text",
       "placeholder": "What negative environment did you address?",
-      "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish\u2014it's essential.",
+      "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish—it's essential.",
       "healing_checkin": true
     },
     {
@@ -365,7 +365,8 @@
       "placeholder": "Who did you reach out to? What feedback did they give? How did it feel?",
       "stage_required": 1,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of rejection when asking for feedback is one of the biggest blockers in the Validation stage.\n\nYour essence knows you need real feedback to move forward, but your body fears hearing 'no' or 'this isn't good.'\n\nThis groan challenges you to face that fear directly. Remember: every piece of feedback\u2014positive or negative\u2014brings you closer to something that truly serves people."
+      "learnMore": "Fear of rejection when asking for feedback is one of the biggest blockers in the Validation stage.\n\nYour essence knows you need real feedback to move forward, but your body fears hearing 'no' or 'this isn't good.'\n\nThis groan challenges you to face that fear directly. Remember: every piece of feedback—positive or negative—brings you closer to something that truly serves people.",
+      "archived": true
     },
     {
       "id": "product_explainer",
@@ -396,7 +397,8 @@
       "placeholder": "What did you ship? What was your fear? How did it actually go?",
       "stage_required": 2,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of imperfection / shipping before it's ready is the killer of progress in the Creation stage.\n\nPerfectionism is procrastination in disguise. Your essence knows that 'done' beats 'perfect,' but your body fears judgment and criticism.\n\nThis groan challenges you to ship something before you feel ready. The truth? You'll never feel 100% ready. And the feedback you get from shipping is infinitely more valuable than another round of polishing."
+      "learnMore": "Fear of imperfection / shipping before it's ready is the killer of progress in the Creation stage.\n\nPerfectionism is procrastination in disguise. Your essence knows that 'done' beats 'perfect,' but your body fears judgment and criticism.\n\nThis groan challenges you to ship something before you feel ready. The truth? You'll never feel 100% ready. And the feedback you get from shipping is infinitely more valuable than another round of polishing.",
+      "archived": true
     },
     {
       "id": "groan_stage_3_testing",
@@ -411,7 +413,8 @@
       "placeholder": "Who gave you feedback? What did they say wasn't working? How did you receive it?",
       "stage_required": 3,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of hearing negative feedback prevents growth in the Testing stage.\n\nYour essence knows that honest criticism is a gift\u2014it shows you exactly where to improve. But your body wants to defend, explain, or avoid the discomfort.\n\nThis groan challenges you to actively seek out criticism and sit with it. Don't defend. Don't explain. Just listen and thank them. The discomfort you feel is growth happening."
+      "learnMore": "Fear of hearing negative feedback prevents growth in the Testing stage.\n\nYour essence knows that honest criticism is a gift—it shows you exactly where to improve. But your body wants to defend, explain, or avoid the discomfort.\n\nThis groan challenges you to actively seek out criticism and sit with it. Don't defend. Don't explain. Just listen and thank them. The discomfort you feel is growth happening.",
+      "archived": true
     },
     {
       "id": "groan_stage_4_money",
@@ -426,7 +429,8 @@
       "placeholder": "What was the price conversation? How did you state your price? What happened?",
       "stage_required": 4,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of charging money / being 'salesy' blocks abundance in the Money Models stage.\n\nYour essence knows your value. Your body fears being seen as greedy, pushy, or not worth the price.\n\nThis groan challenges you to own your value out loud. State your price without the softening language: no 'it's just,' no 'sorry it's a bit expensive,' no lengthy justifications. Let the price stand on its own. Your confidence in your value creates confidence in your customers."
+      "learnMore": "Fear of charging money / being 'salesy' blocks abundance in the Money Models stage.\n\nYour essence knows your value. Your body fears being seen as greedy, pushy, or not worth the price.\n\nThis groan challenges you to own your value out loud. State your price without the softening language: no 'it's just,' no 'sorry it's a bit expensive,' no lengthy justifications. Let the price stand on its own. Your confidence in your value creates confidence in your customers.",
+      "archived": true
     },
     {
       "id": "groan_stage_5_offer",
@@ -441,7 +445,8 @@
       "placeholder": "What bonus did you add or how did you strengthen your guarantee? What felt uncomfortable about it?",
       "stage_required": 5,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of making your offer too good or giving away too much is the edge you hit in the Offer Creation stage.\n\nYour essence knows that a truly irresistible offer creates raving fans and referrals. But your body fears you're underselling yourself or giving away the farm.\n\nThis groan challenges you to over-deliver. Add that extra bonus. Make your guarantee stronger. Stack more value. The mindset shift: you're not giving away value—you're building a moat around your business through generosity."
+      "learnMore": "Fear of making your offer too good or giving away too much is the edge you hit in the Offer Creation stage.\n\nYour essence knows that a truly irresistible offer creates raving fans and referrals. But your body fears you're underselling yourself or giving away the farm.\n\nThis groan challenges you to over-deliver. Add that extra bonus. Make your guarantee stronger. Stack more value. The mindset shift: you're not giving away value—you're building a moat around your business through generosity.",
+      "archived": true
     },
     {
       "id": "groan_stage_7_launch",
@@ -456,7 +461,8 @@
       "placeholder": "What commitment did you make? Where did you announce it? How does it feel?",
       "stage_required": 7,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of failure after going 'all in' is the final boss of the Launch stage.\n\nYour essence knows you're ready. Your body fears what happens if you commit publicly and it doesn't work.\n\nThis groan challenges you to make a public, undeniable commitment. Pick a date. Announce it. Burn the boats. When there's no escape route, you'll find resources and resilience you didn't know you had. And even if the launch doesn't go perfectly\u2014you'll learn more from that than from another month of 'preparing.'"
+      "learnMore": "Fear of failure after going 'all in' is the final boss of the Launch stage.\n\nYour essence knows you're ready. Your body fears what happens if you commit publicly and it doesn't work.\n\nThis groan challenges you to make a public, undeniable commitment. Pick a date. Announce it. Burn the boats. When there's no escape route, you'll find resources and resilience you didn't know you had. And even if the launch doesn't go perfectly—you'll learn more from that than from another month of 'preparing.'",
+      "archived": true
     },
     {
       "id": "recognise_positive_frequency",
@@ -494,7 +500,7 @@
       "points": 4,
       "inputType": "text",
       "placeholder": "What patterns did you notice in your triggers this week?",
-      "learnMore": "Our triggers are consistent \u2014 the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions.",
+      "learnMore": "Our triggers are consistent — the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions.",
       "healing_checkin": true
     },
     {
@@ -508,7 +514,7 @@
       "inputType": "flow",
       "flow_id": "healing_compass",
       "flow_route": "/healing-compass",
-      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective voice developed as a survival mechanism\u2014understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
+      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective voice developed as a survival mechanism—understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
     },
     {
       "id": "recognise_nervous_system",
@@ -620,7 +626,7 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What emotion were you feeling and how did you release it?",
-      "learnMore": "Emotions are energy in motion\u2014 see them as a song. When we suppress them, it's like clicking pause in the middle of the song. They get stored in the body and create tension, anxiety and if intense enough, trauma.\n\nRelease practices include anything that allow you to experience the emotion and process it so the 'song finishes'. Examples include: running, journaling, breathwork, movement, crying, shaking, screaming (into a pillow), or simply allowing yourself to feel without judgment.\n\nThe goal isn't to 'fix' the emotion but to experience it. Doing any of these practises for 90 seconds is often enough for the emotion to pass through you and the 'song to finish'.",
+      "learnMore": "Emotions are energy in motion— see them as a song. When we suppress them, it's like clicking pause in the middle of the song. They get stored in the body and create tension, anxiety and if intense enough, trauma.\n\nRelease practices include anything that allow you to experience the emotion and process it so the 'song finishes'. Examples include: running, journaling, breathwork, movement, crying, shaking, screaming (into a pillow), or simply allowing yourself to feel without judgment.\n\nThe goal isn't to 'fix' the emotion but to experience it. Doing any of these practises for 90 seconds is often enough for the emotion to pass through you and the 'song to finish'.",
       "healing_checkin": true
     },
     {
@@ -633,7 +639,7 @@
       "points": 8,
       "inputType": "text",
       "placeholder": "What came up in the session? What did you process and release?",
-      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions\u2014trust the process and let your body lead.",
+      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions—trust the process and let your body lead.",
       "healing_checkin": true
     },
     {
@@ -848,12 +854,30 @@
       "inputType": "milestone",
       "milestone_type": "attraction_offer_launched",
       "dropdown_options": [
-        { "value": "win_your_money_back", "label": "Win Your Money Back" },
-        { "value": "giveaway", "label": "Flagship Giveaway" },
-        { "value": "decoy_offer", "label": "Decoy Offer (Good/Better/Best)" },
-        { "value": "buy_x_get_y_free", "label": "Buy X Get Y Free" },
-        { "value": "pay_less_now_or_pay_more_later", "label": "Pay Less Now or Pay More Later" },
-        { "value": "free_with_consumption_to_upsell", "label": "Free With Consumption" }
+        {
+          "value": "win_your_money_back",
+          "label": "Win Your Money Back"
+        },
+        {
+          "value": "giveaway",
+          "label": "Flagship Giveaway"
+        },
+        {
+          "value": "decoy_offer",
+          "label": "Decoy Offer (Good/Better/Best)"
+        },
+        {
+          "value": "buy_x_get_y_free",
+          "label": "Buy X Get Y Free"
+        },
+        {
+          "value": "pay_less_now_or_pay_more_later",
+          "label": "Pay Less Now or Pay More Later"
+        },
+        {
+          "value": "free_with_consumption_to_upsell",
+          "label": "Free With Consumption"
+        }
       ],
       "counts_toward_graduation": true,
       "learnMore": "Launching your attraction offer is the key to scaling. This milestone counts toward your stage graduation."
@@ -871,10 +895,26 @@
       "maxPerDay": 1,
       "selectLabel": "Select all that apply:",
       "selectOptions": [
-        { "value": "warm_outreach", "label": "Warm Outreach", "icon": "🤝" },
-        { "value": "content", "label": "Content", "icon": "📝" },
-        { "value": "ads", "label": "Paid Ads", "icon": "📣" },
-        { "value": "cold_outreach", "label": "Cold Outreach", "icon": "📧" }
+        {
+          "value": "warm_outreach",
+          "label": "Warm Outreach",
+          "icon": "🤝"
+        },
+        {
+          "value": "content",
+          "label": "Content",
+          "icon": "📝"
+        },
+        {
+          "value": "ads",
+          "label": "Paid Ads",
+          "icon": "📣"
+        },
+        {
+          "value": "cold_outreach",
+          "label": "Cold Outreach",
+          "icon": "📧"
+        }
       ],
       "counts_toward_graduation": true,
       "learnMore": "The Core Four are the only ways to let people know about your offer:\n\n🤝 **Warm Outreach** - Reaching out to people who already know you\n📝 **Content** - Creating free value that attracts your audience\n📣 **Paid Ads** - Paying to reach new audiences\n📧 **Cold Outreach** - Reaching out to people who don't know you yet\n\nConsistent daily action on at least one of these is the key to successful launch."
@@ -1118,10 +1158,22 @@
       "milestone_type": "launch_sequence_planned",
       "placeholder": "What's your progress?",
       "options": [
-        { "value": "not_started", "label": "Not Started" },
-        { "value": "in_progress", "label": "In Progress" },
-        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
-        { "value": "completed_other", "label": "Completed Elsewhere" }
+        {
+          "value": "not_started",
+          "label": "Not Started"
+        },
+        {
+          "value": "in_progress",
+          "label": "In Progress"
+        },
+        {
+          "value": "completed_crm",
+          "label": "Completed in FindMyFlow CRM"
+        },
+        {
+          "value": "completed_other",
+          "label": "Completed Elsewhere"
+        }
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
@@ -1142,10 +1194,22 @@
       "milestone_type": "content_plan_created",
       "placeholder": "What's your progress?",
       "options": [
-        { "value": "not_started", "label": "Not Started" },
-        { "value": "in_progress", "label": "In Progress" },
-        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
-        { "value": "completed_other", "label": "Completed Elsewhere" }
+        {
+          "value": "not_started",
+          "label": "Not Started"
+        },
+        {
+          "value": "in_progress",
+          "label": "In Progress"
+        },
+        {
+          "value": "completed_crm",
+          "label": "Completed in FindMyFlow CRM"
+        },
+        {
+          "value": "completed_other",
+          "label": "Completed Elsewhere"
+        }
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
@@ -1166,10 +1230,22 @@
       "milestone_type": "lead_capture_live",
       "placeholder": "What's your progress?",
       "options": [
-        { "value": "not_started", "label": "Not Started" },
-        { "value": "in_progress", "label": "In Progress" },
-        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
-        { "value": "completed_other", "label": "Completed Elsewhere" }
+        {
+          "value": "not_started",
+          "label": "Not Started"
+        },
+        {
+          "value": "in_progress",
+          "label": "In Progress"
+        },
+        {
+          "value": "completed_crm",
+          "label": "Completed in FindMyFlow CRM"
+        },
+        {
+          "value": "completed_other",
+          "label": "Completed Elsewhere"
+        }
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
@@ -1190,10 +1266,22 @@
       "milestone_type": "nurture_sequence_created",
       "placeholder": "What's your progress?",
       "options": [
-        { "value": "not_started", "label": "Not Started" },
-        { "value": "in_progress", "label": "In Progress" },
-        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
-        { "value": "completed_other", "label": "Completed Elsewhere" }
+        {
+          "value": "not_started",
+          "label": "Not Started"
+        },
+        {
+          "value": "in_progress",
+          "label": "In Progress"
+        },
+        {
+          "value": "completed_crm",
+          "label": "Completed in FindMyFlow CRM"
+        },
+        {
+          "value": "completed_other",
+          "label": "Completed Elsewhere"
+        }
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
@@ -1214,10 +1302,22 @@
       "milestone_type": "crm_tracking_live",
       "placeholder": "What's your progress?",
       "options": [
-        { "value": "not_started", "label": "Not Started" },
-        { "value": "in_progress", "label": "In Progress" },
-        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
-        { "value": "completed_other", "label": "Completed Elsewhere" }
+        {
+          "value": "not_started",
+          "label": "Not Started"
+        },
+        {
+          "value": "in_progress",
+          "label": "In Progress"
+        },
+        {
+          "value": "completed_crm",
+          "label": "Completed in FindMyFlow CRM"
+        },
+        {
+          "value": "completed_other",
+          "label": "Completed Elsewhere"
+        }
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
@@ -1238,7 +1338,8 @@
       "placeholder": "What did you share publicly? What felt exposing about it? What response did you get?",
       "stage_required": 6,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of public visibility is the edge you hit in the Campaign Creation stage.\n\nYour essence wants to be seen—that's why you're building something. But your body fears judgment, criticism, and the vulnerability of being 'out there.'\n\nThis groan challenges you to show up as yourself, unpolished and real. The people who resonate with the real you are the ones you want to attract anyway. Let them find you."
+      "learnMore": "Fear of public visibility is the edge you hit in the Campaign Creation stage.\n\nYour essence wants to be seen—that's why you're building something. But your body fears judgment, criticism, and the vulnerability of being 'out there.'\n\nThis groan challenges you to show up as yourself, unpolished and real. The people who resonate with the real you are the ones you want to attract anyway. Let them find you.",
+      "archived": true
     },
     {
       "id": "milestone_read_money_model",
@@ -2039,7 +2140,18 @@
       "description": "Out of 10 how would you rate the 7-day challenge? You're not allowed to give it a 7.",
       "points": 3,
       "inputType": "rating",
-      "ratingOptions": [0, 1, 2, 3, 4, 5, 6, 8, 9, 10],
+      "ratingOptions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10
+      ],
       "placeholder": "What made you give it that score?"
     },
     {

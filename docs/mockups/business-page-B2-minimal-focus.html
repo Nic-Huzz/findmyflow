@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Business Page — B2: Minimal Focus</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+    color: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 0 0 100px;
+  }
+
+  .mockup-label {
+    background: #1a1a2e;
+    color: #E9A23B;
+    text-align: center;
+    padding: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .mockup-label span { color: rgba(255,255,255,0.5); display: block; font-size: 11px; margin-top: 4px; font-weight: 400; letter-spacing: 0; text-transform: none; }
+
+  /* === HERO — Taller, centered, breathing room === */
+  .hero {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+    padding: 32px 24px 28px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -30px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(233,162,59,0.15) 0%, transparent 70%);
+    animation: glow 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes glow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-project {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+  }
+  .hero-switch {
+    font-size: 12px;
+    color: #E9A23B;
+    font-weight: 600;
+    background: rgba(233,162,59,0.15);
+    border: 1px solid rgba(233,162,59,0.3);
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  /* Big centered stage number */
+  .hero-center {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 24px;
+  }
+  .hero-stage-ring {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgba(233,162,59,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    position: relative;
+  }
+  .hero-stage-ring::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #E9A23B;
+    border-right-color: #E9A23B;
+    /* 60% = ~216deg */
+    transform: rotate(-90deg);
+  }
+  .hero-stage-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: white;
+  }
+  .hero-stage-name {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .hero-stage-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+  .hero-progress-text {
+    font-size: 12px;
+    color: #E9A23B;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+
+  /* Next quest — glass card */
+  .hero-next {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 16px;
+  }
+  .hero-next-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(233,162,59,0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .hero-next-info { flex: 1; }
+  .hero-next-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+  .hero-next-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .hero-next-arrow {
+    color: #E9A23B;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .hero-cta {
+    width: 100%;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(233,162,59,0.3);
+    position: relative;
+    z-index: 1;
+  }
+
+  .content { padding: 16px 20px; }
+
+  /* === STAGE DOTS — Horizontal compact === */
+  .stage-dots-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  }
+  .stage-dots-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 4px;
+  }
+  .stage-dots-row::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    top: 50%;
+    height: 2px;
+    background: #e9ecef;
+    transform: translateY(-50%);
+    z-index: 0;
+  }
+  .sd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    z-index: 1;
+  }
+  .sd-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    background: white;
+    border: 2px solid #dee2e6;
+    color: #adb5bd;
+  }
+  .sd-dot.done { background: #10b981; border-color: #10b981; color: white; }
+  .sd-dot.current { background: #5e17eb; border-color: #5e17eb; color: white; box-shadow: 0 0 0 3px rgba(94,23,235,0.2); }
+  .sd-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: #adb5bd;
+    text-align: center;
+    max-width: 40px;
+  }
+  .sd.current .sd-label { color: #5e17eb; font-weight: 700; }
+  .sd.done .sd-label { color: #10b981; }
+
+  /* === QUEST LIST === */
+  .quest-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  }
+  .quest-card-title {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: #1a1a2e;
+  }
+
+  .qi {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f3f5;
+  }
+  .qi:last-child { border-bottom: none; }
+
+  .qi-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .qi-icon.todo { background: rgba(94,23,235,0.06); }
+  .qi-icon.done { background: rgba(16,185,129,0.06); }
+
+  .qi-info { flex: 1; }
+  .qi-name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .qi.done .qi-name { color: #adb5bd; text-decoration: line-through; }
+  .qi-meta { font-size: 11px; color: #6c757d; margin-top: 1px; }
+
+  .qi-btn {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .qi-btn.go { background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; }
+  .qi-btn.did { background: #f1f3f5; color: #adb5bd; }
+
+  /* === BOTTOM TOOLBAR === */
+  .bottom-toolbar {
+    position: fixed;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 420px;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 20px;
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 10px; color: #adb5bd; text-decoration: none; padding: 4px 12px;
+  }
+  .nav-item .nav-icon { font-size: 22px; }
+  .nav-item.active { color: #5e17eb; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="mockup-label">
+  B2 — Minimal Focus
+  <span>Centered circular progress ring. Glass "up next" card. Breathing room. Calm & focused.</span>
+</div>
+
+<div class="hero">
+  <div class="hero-top">
+    <span class="hero-project">My Coaching Business</span>
+    <button class="hero-switch">Switch ▾</button>
+  </div>
+
+  <div class="hero-center">
+    <div class="hero-stage-ring">
+      <span class="hero-stage-num">2</span>
+    </div>
+    <div class="hero-stage-name">Product</div>
+    <div class="hero-stage-desc">Define your product & understand your market</div>
+    <div class="hero-progress-text">3 of 5 quests complete</div>
+  </div>
+
+  <div class="hero-next">
+    <div class="hero-next-icon">📝</div>
+    <div class="hero-next-info">
+      <div class="hero-next-label">Up Next</div>
+      <div class="hero-next-title">Understand Your Market</div>
+    </div>
+    <span class="hero-next-arrow">→</span>
+  </div>
+
+  <button class="hero-cta">Continue →</button>
+</div>
+
+<div class="content">
+
+  <!-- Stage dots -->
+  <div class="stage-dots-card">
+    <div class="stage-dots-row">
+      <div class="sd done">
+        <div class="sd-dot done">✓</div>
+        <span class="sd-label">Setup</span>
+      </div>
+      <div class="sd done">
+        <div class="sd-dot done">✓</div>
+        <span class="sd-label">Validate</span>
+      </div>
+      <div class="sd current">
+        <div class="sd-dot current">2</div>
+        <span class="sd-label">Product</span>
+      </div>
+      <div class="sd">
+        <div class="sd-dot">3</div>
+        <span class="sd-label">Test</span>
+      </div>
+      <div class="sd">
+        <div class="sd-dot">4</div>
+        <span class="sd-label">Offer</span>
+      </div>
+      <div class="sd">
+        <div class="sd-dot">5</div>
+        <span class="sd-label">Campaign</span>
+      </div>
+      <div class="sd">
+        <div class="sd-dot">6</div>
+        <span class="sd-label">Launch</span>
+      </div>
+      <div class="sd">
+        <div class="sd-dot">7</div>
+        <span class="sd-label">Growth</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quest list -->
+  <div class="quest-card">
+    <div class="quest-card-title">Stage 2 Quests</div>
+
+    <div class="qi done">
+      <div class="qi-icon done">✅</div>
+      <div class="qi-info">
+        <div class="qi-name">Customer Interview</div>
+        <div class="qi-meta">Paid • Completed</div>
+      </div>
+      <button class="qi-btn did">Done</button>
+    </div>
+
+    <div class="qi done">
+      <div class="qi-icon done">✅</div>
+      <div class="qi-info">
+        <div class="qi-name">Market Research</div>
+        <div class="qi-meta">Paid • Completed</div>
+      </div>
+      <button class="qi-btn did">Done</button>
+    </div>
+
+    <div class="qi done">
+      <div class="qi-icon done">✅</div>
+      <div class="qi-info">
+        <div class="qi-name">Competitor Analysis</div>
+        <div class="qi-meta">Free • Completed</div>
+      </div>
+      <button class="qi-btn did">Done</button>
+    </div>
+
+    <div class="qi">
+      <div class="qi-icon todo">📝</div>
+      <div class="qi-info">
+        <div class="qi-name">Understand Your Market</div>
+        <div class="qi-meta">Explainer • Free</div>
+      </div>
+      <button class="qi-btn go">Start</button>
+    </div>
+
+    <div class="qi">
+      <div class="qi-icon todo">🎯</div>
+      <div class="qi-info">
+        <div class="qi-name">Product-Market Fit</div>
+        <div class="qi-meta">Paid • Stage 2</div>
+      </div>
+      <button class="qi-btn go">Start</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-toolbar">
+  <a class="nav-item" href="#"><span class="nav-icon">🏠</span><span>Home</span></a>
+  <a class="nav-item" href="#"><span class="nav-icon">🎮</span><span>Let's Play</span></a>
+  <a class="nav-item active" href="#"><span class="nav-icon">💼</span><span>Business</span></a>
+  <a class="nav-item" href="#"><span class="nav-icon">👤</span><span>Profile</span></a>
+</div>
+
+</body>
+</html>

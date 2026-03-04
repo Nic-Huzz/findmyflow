@@ -68,9 +68,9 @@ export const LEVEL_OPTIONS = {
     { value: 'proven', label: 'Proven', description: 'Have results and experience' }
   ],
   personas: [
-    { value: 'awakening', label: 'Awakening', description: 'Just realized they have this problem' },
-    { value: 'struggling', label: 'Struggling', description: 'Actively trying to solve, hitting walls' },
-    { value: 'ready', label: 'Ready', description: 'Have budget, urgency, seeking solution' }
+    { value: 'unsure', label: 'Unsure', description: 'This is new to me' },
+    { value: 'familiar', label: 'Familiar', description: "I've experienced similar" },
+    { value: 'confident', label: 'Confident', description: 'I was previously this person' }
   ]
 }
 

@@ -167,24 +167,49 @@ export default function MindSpace() {
   const [projectName, setProjectName] = useState('')
   const projectIdRef = useRef(null)
 
-  // Fetch user persona type on mount
+  // Review sub-page state (0=skills, 1=problems, 2=personas)
+  const [reviewCategory, setReviewCategory] = useState(0)
+
+  // Ambition flow state (Steps 4-7)
+  const [ambition, setAmbition] = useState(null)
+  const [hasExistingBiz, setHasExistingBiz] = useState(null)
+  const [selectedStage, setSelectedStage] = useState(null)
+
+  // Stage options for build_own + existing business (same as BusinessSetup)
+  const STAGE_OPTIONS = [
+    { value: 'not_validated', label: "I have an idea but haven't tested it yet", stage: 1 },
+    { value: 'validated_no_product', label: "People want it but I haven't built it yet", stage: 2 },
+    { value: 'have_product_not_tested', label: 'I have something built but need more feedback', stage: 3 },
+    { value: 'have_product_with_customers', label: 'I have paying customers', stage: 4 },
+    { value: 'need_offer_stack', label: 'I need to build out my full offer', stage: 5 },
+    { value: 'need_marketing', label: 'My offer is ready, I need to get it out there', stage: 6 },
+    { value: 'ready_to_launch', label: "I'm ready to launch", stage: 7 },
+  ]
+
+  // Fetch user persona + ambition on mount
   useEffect(() => {
     if (!user?.id) return
-    const fetchPersona = async () => {
+    const fetchUserProgress = async () => {
       try {
         const { data, error } = await supabase
           .from('user_stage_progress')
-          .select('persona')
+          .select('persona, ambition, has_existing_business')
           .eq('user_id', user.id)
           .maybeSingle()
         if (data?.persona) {
           setUserPersona(data.persona)
         }
+        if (data?.ambition) {
+          setAmbition(data.ambition)
+        }
+        if (data?.has_existing_business != null) {
+          setHasExistingBiz(data.has_existing_business)
+        }
       } catch (err) {
-        console.warn('Could not fetch user persona:', err)
+        console.warn('Could not fetch user progress:', err)
       }
     }
-    fetchPersona()
+    fetchUserProgress()
   }, [user?.id])
 
   // Check for ?results=true to show saved results directly
@@ -231,7 +256,7 @@ export default function MindSpace() {
           if (data.aiUsageLevel) setAiUsageLevel(data.aiUsageLevel)
 
           setViewingResults(true)
-          setStep(5) // Go to "what's next" / results screen
+          setStep(8) // Go to "what's next" / results screen
         }
       } catch (err) {
         console.error('Error loading saved Mind Space results:', err)
@@ -283,6 +308,7 @@ export default function MindSpace() {
       setParsedData(parsed)
       setMappedData(mapped)
       setStep(3)
+      setReviewCategory(0)
     } catch (err) {
       console.error('Parse error:', err)
       setError('Failed to parse the response. The format may not match what we expected.')
@@ -308,6 +334,15 @@ export default function MindSpace() {
       setReformatCopied(true)
       setTimeout(() => setReformatCopied(false), 2000)
     }
+  }
+
+  const handleKeepItem = (type, index) => {
+    setMappedData(prev => ({
+      ...prev,
+      [type]: prev[type].map((item, i) =>
+        i === index ? { ...item, kept: true } : item
+      )
+    }))
   }
 
   const handleLevelChange = (type, index, level) => {
@@ -339,20 +374,29 @@ export default function MindSpace() {
   }
 
   const handleRemoveItem = (type, index) => {
-    // Adjust starred indices when removing an item
-    const setters = { skills: setStarredSkills, problems: setStarredProblems, personas: setStarredPersonas }
-    const current = type === 'skills' ? starredSkills : type === 'problems' ? starredProblems : starredPersonas
-    const newSet = new Set()
-    current.forEach(i => {
-      if (i < index) newSet.add(i)
-      else if (i > index) newSet.add(i - 1)
-      // i === index is removed
-    })
-    setters[type](newSet)
-
+    // Soft-remove: mark as removed (undoable) instead of deleting from array
     setMappedData(prev => ({
       ...prev,
-      [type]: prev[type].filter((_, i) => i !== index)
+      [type]: prev[type].map((item, i) =>
+        i === index ? { ...item, removed: true, kept: false, userLevel: null } : item
+      )
+    }))
+    // Also unstar if starred
+    const setters = { skills: setStarredSkills, problems: setStarredProblems, personas: setStarredPersonas }
+    setters[type](prev => {
+      if (!prev.has(index)) return prev
+      const newSet = new Set(prev)
+      newSet.delete(index)
+      return newSet
+    })
+  }
+
+  const handleUndoRemove = (type, index) => {
+    setMappedData(prev => ({
+      ...prev,
+      [type]: prev[type].map((item, i) =>
+        i === index ? { ...item, removed: false } : item
+      )
     }))
   }
 
@@ -360,13 +404,14 @@ export default function MindSpace() {
     if (!name.trim()) return
     // Default userLevel to middle option so custom items save to DB
     // (saveToNikigaiClusters skips items with userLevel: null)
-    const defaultLevels = { skills: 'establishing', problems: 'pursuing', personas: 'struggling' }
+    const defaultLevels = { skills: 'establishing', problems: 'pursuing', personas: 'familiar' }
     const newItem = {
       name: name.trim(),
       evidence: 'Added manually',
       frequency: 'Medium',
       mappedTo: null,
       userLevel: defaultLevels[type],
+      kept: true,
       custom: true
     }
     if (type === 'personas') {
@@ -518,18 +563,18 @@ export default function MindSpace() {
     return { success: true, sessionId }
   }
 
-  const saveCombination = async (combo, sessionId) => {
+  const saveCombination = async (combo, sessionId, clusterType = 'primary_combination') => {
     try {
       const { error } = await supabase.from('nikigai_clusters').insert({
         session_id: sessionId || lastSessionId,
         user_id: user.id,
-        cluster_type: 'primary_combination',
+        cluster_type: clusterType,
         cluster_stage: 'selected',
         cluster_label: [
           combo.skill?.name,
           combo.persona?.name ? `helping ${combo.persona.name}` : null,
           combo.problem?.name ? `with ${combo.problem.name}` : null
-        ].filter(Boolean).join(' '),
+        ].filter(Boolean).join(' ') || 'No alignment',
         items: [{
           skill: combo.skill ? { name: combo.skill.name, mappedTo: combo.skill.mappedTo } : null,
           problem: combo.problem ? { name: combo.problem.name, mappedTo: combo.problem.mappedTo } : null,
@@ -618,28 +663,18 @@ export default function MindSpace() {
         // Don't block completion if graduation check fails
       }
 
-      // Generate combinations from starred items
-      const starredSkillItems = mappedData.skills.filter((_, i) => starredSkills.has(i))
-      const starredProblemItems = mappedData.problems.filter((_, i) => starredProblems.has(i))
-      const starredPersonaItems = mappedData.personas.filter((_, i) => starredPersonas.has(i))
+      // Reset slider indices for step 6 (sliders default to "No alignment" at index 0)
+      setCurrentSkillIdx(0)
+      setCurrentProblemIdx(0)
+      setCurrentPersonaIdx(0)
 
-      const combos = generateCombinations(starredSkillItems, starredProblemItems, starredPersonaItems)
-
-      if (combos.length <= 1) {
-        // Auto-select if only 1 (or 0) combination and skip to results
-        if (combos.length === 1) {
-          setSelectedCombination(combos[0])
-          const saved = await saveCombination(combos[0], saveResult.sessionId)
-          if (!saved) {
-            console.warn('Failed to auto-save single combination')
-          }
-        }
-        setStep(5)
+      // Route based on whether ambition was already answered
+      if (ambition) {
+        // Returning user — skip ambition questions, still show sliders for new session
+        setStep(6)
       } else {
-        setCurrentSkillIdx(0)
-        setCurrentProblemIdx(0)
-        setCurrentPersonaIdx(0)
-        setStep(4) // Go to combination selection
+        // First-time — ask ambition question
+        setStep(4)
       }
     } catch (err) {
       console.error('Save error:', err)
@@ -669,38 +704,143 @@ export default function MindSpace() {
     }
   }
 
+  // Review config per category
+  const REVIEW_CONFIGS = {
+    skills: { levelLabel: 'Pick your experience level', addPlaceholder: 'Add your own skill...' },
+    problems: { levelLabel: 'Pick your experience level', addPlaceholder: 'Add your own problem...' },
+    personas: { levelLabel: 'How well do you know this person?', addPlaceholder: 'Add your own persona...' }
+  }
+
+  // Shared review item renderer with progressive disclosure
+  const renderReviewItem = (type, item, index, starredSet, config) => {
+    if (item.removed) {
+      return (
+        <div key={index} className="review-item removed">
+          <div className="item-main">
+            <div className="removed-row">
+              <span className="removed-name">{item.name}</span>
+              <button className="undo-btn" onClick={() => handleUndoRemove(type, index)}>Undo</button>
+            </div>
+          </div>
+        </div>
+      )
+    }
+    const isStarred = starredSet.has(index)
+    return (
+      <div key={index} className={`review-item ${!item.kept ? 'undecided' : ''}`}>
+        <div className="item-main">
+          <div className="item-header">
+            {item.mappedTo && SEGMENT_DISPLAY[type]?.[item.mappedTo] && (
+              <span className="icon">{SEGMENT_DISPLAY[type][item.mappedTo].icon}</span>
+            )}
+            <span className="name">{isStarred && '★ '}{item.name}</span>
+          </div>
+          <div className="item-tags">
+            {item.mappedTo && SEGMENT_DISPLAY[type]?.[item.mappedTo] && (
+              <span className="taxonomy-tag">{SEGMENT_DISPLAY[type][item.mappedTo].title}</span>
+            )}
+            <span className={`freq freq-${item.frequency?.toLowerCase() || 'medium'}`}>{item.frequency}</span>
+          </div>
+          <div className="evidence">{item.evidence}</div>
+          {type === 'personas' && item.connection && (
+            <div className="connection">Connection: {item.connection}</div>
+          )}
+
+          {/* Progressive disclosure */}
+          {!item.kept ? (
+            <div className="keep-remove-btns">
+              <span className="level-label">Keep or remove?</span>
+              <div className="keep-remove-row">
+                <button className="keep-btn" onClick={() => handleKeepItem(type, index)}>Keep</button>
+                <button className="remove-btn-inline" onClick={() => handleRemoveItem(type, index)}>Remove</button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="level-section">
+                <span className="level-label">{config.levelLabel}</span>
+                <div className="level-btns">
+                  {LEVEL_OPTIONS[type].map(opt => (
+                    <button
+                      key={opt.value}
+                      className={item.userLevel === opt.value ? 'selected' : ''}
+                      onClick={() => handleLevelChange(type, index, opt.value)}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                {item.userLevel && (
+                  <p className="level-desc">{LEVEL_OPTIONS[type].find(o => o.value === item.userLevel)?.description}</p>
+                )}
+              </div>
+
+              {/* Star prompt — only after level selected */}
+              {item.userLevel && (
+                <div className="star-prompt">
+                  {isStarred ? (
+                    <button className="star-prompt-btn starred" onClick={() => handleToggleStar(type, index)}>
+                      ★ Favourite
+                    </button>
+                  ) : starredSet.size < 3 ? (
+                    <button className="star-prompt-btn" onClick={() => handleToggleStar(type, index)}>
+                      ☆ Mark as favourite?
+                    </button>
+                  ) : null}
+                </div>
+              )}
+
+              <button className="remove-btn-small" onClick={() => handleRemoveItem(type, index)}>Remove</button>
+            </>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // Validation helpers for review sub-pages
+  const getReviewValidation = (type) => {
+    const items = mappedData?.[type] || []
+    const starredSet = type === 'skills' ? starredSkills : type === 'problems' ? starredProblems : starredPersonas
+    const undecidedCount = items.filter(item => !item.kept && !item.removed).length
+    const keptWithLevel = items.filter(item => item.kept && !item.removed && item.userLevel).length
+    return { undecidedCount, keptWithLevel, canProceed: undecidedCount === 0 && keptWithLevel >= 1, starredCount: starredSet.size }
+  }
+
   return (
     <div className="mind-space">
       <header className="mind-space-header">
         <h1>Mind Space</h1>
         <p className="subtitle">Extract your patterns from AI conversations</p>
 
-        <div className="step-indicator">
-          <div className={`step ${step >= 1 ? 'active' : ''} ${step === 1 ? 'current' : ''}`}>
-            <span className="step-num">1</span>
-            <span className="step-label">Copy</span>
+        {step <= 3 && (
+          <div className="step-indicator">
+            <div className={`step ${step >= 1 ? 'active' : ''} ${step === 1 ? 'current' : ''}`}>
+              <span className="step-num">1</span>
+              <span className="step-label">Copy</span>
+            </div>
+            <div className="step-line" />
+            <div className={`step ${step >= 2 ? 'active' : ''} ${step === 2 ? 'current' : ''}`}>
+              <span className="step-num">2</span>
+              <span className="step-label">Paste</span>
+            </div>
+            <div className="step-line" />
+            <div className={`step ${step === 3 ? 'active' : ''} ${step === 3 && reviewCategory === 0 ? 'current' : ''}`}>
+              <span className="step-num">3</span>
+              <span className="step-label">Skills</span>
+            </div>
+            <div className="step-line" />
+            <div className={`step ${step === 3 && reviewCategory >= 1 ? 'active' : ''} ${step === 3 && reviewCategory === 1 ? 'current' : ''}`}>
+              <span className="step-num">4</span>
+              <span className="step-label">Problems</span>
+            </div>
+            <div className="step-line" />
+            <div className={`step ${step === 3 && reviewCategory >= 2 ? 'active' : ''} ${step === 3 && reviewCategory === 2 ? 'current' : ''}`}>
+              <span className="step-num">5</span>
+              <span className="step-label">People</span>
+            </div>
           </div>
-          <div className="step-line" />
-          <div className={`step ${step >= 2 ? 'active' : ''} ${step === 2 ? 'current' : ''}`}>
-            <span className="step-num">2</span>
-            <span className="step-label">Paste</span>
-          </div>
-          <div className="step-line" />
-          <div className={`step ${step >= 3 ? 'active' : ''} ${step === 3 ? 'current' : ''}`}>
-            <span className="step-num">3</span>
-            <span className="step-label">Review</span>
-          </div>
-          <div className="step-line" />
-          <div className={`step ${step >= 4 ? 'active' : ''} ${step === 4 ? 'current' : ''}`}>
-            <span className="step-num">4</span>
-            <span className="step-label">Combine</span>
-          </div>
-          <div className="step-line" />
-          <div className={`step ${step >= 5 ? 'active' : ''} ${step === 5 ? 'current' : ''}`}>
-            <span className="step-num">5</span>
-            <span className="step-label">Complete</span>
-          </div>
-        </div>
+        )}
       </header>
 
       {error && (
@@ -829,275 +969,287 @@ export default function MindSpace() {
         </div>
       )}
 
-      {/* Step 3: Review & Confirm */}
-      {step === 3 && mappedData && (
-        <div className="step-content review-step">
+      {/* Step 3a: Review Skills */}
+      {step === 3 && reviewCategory === 0 && mappedData && (() => {
+        const v = getReviewValidation('skills')
+        return (
+          <div className="step-content review-step">
+            <div className="card">
+              <h2>Review Your Skills</h2>
+              <p>Keep or remove each skill, then pick your level.</p>
+
+              {parsedData.northStar && (
+                <div className="north-star">
+                  <span className="north-star-label">Your North Star</span>
+                  <p>"{parsedData.northStar}"</p>
+                </div>
+              )}
+
+              <section className="review-section">
+                <h3>Skills <span className="count">({mappedData.skills.length})</span>
+                  {v.starredCount > 0 && <span className="star-count fulfilled">★ {v.starredCount}/3</span>}
+                </h3>
+
+                {mappedData.skills.map((skill, i) => renderReviewItem('skills', skill, i, starredSkills, REVIEW_CONFIGS.skills))}
+
+                <AddCustomInput type="skills" onAdd={handleAddCustomItem} placeholder="Add your own skill..." />
+              </section>
+
+              {v.undecidedCount > 0 && (
+                <div className="undecided-notice">
+                  {v.undecidedCount} item{v.undecidedCount > 1 ? 's' : ''} remaining — keep or remove each to continue
+                </div>
+              )}
+
+              <div className="button-row">
+                <button className="primary-button" onClick={() => setReviewCategory(1)} disabled={!v.canProceed}>
+                  Next: Problems
+                </button>
+                <button className="secondary-button" onClick={() => setStep(2)}>← Back</button>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* Step 3b: Review Problems */}
+      {step === 3 && reviewCategory === 1 && mappedData && (() => {
+        const v = getReviewValidation('problems')
+        return (
+          <div className="step-content review-step">
+            <div className="card">
+              <h2>Review Your Problems</h2>
+              <p>These are the problems you naturally solve.</p>
+
+              <section className="review-section">
+                <h3>Problems <span className="count">({mappedData.problems.length})</span>
+                  {v.starredCount > 0 && <span className="star-count fulfilled">★ {v.starredCount}/3</span>}
+                </h3>
+
+                {mappedData.problems.map((problem, i) => renderReviewItem('problems', problem, i, starredProblems, REVIEW_CONFIGS.problems))}
+
+                <AddCustomInput type="problems" onAdd={handleAddCustomItem} placeholder="Add your own problem..." />
+              </section>
+
+              {v.undecidedCount > 0 && (
+                <div className="undecided-notice">
+                  {v.undecidedCount} item{v.undecidedCount > 1 ? 's' : ''} remaining — keep or remove each to continue
+                </div>
+              )}
+
+              <div className="button-row">
+                <button className="primary-button" onClick={() => setReviewCategory(2)} disabled={!v.canProceed}>
+                  Next: People
+                </button>
+                <button className="secondary-button" onClick={() => setReviewCategory(0)}>← Back</button>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* Step 3c: Review Personas */}
+      {step === 3 && reviewCategory === 2 && mappedData && (() => {
+        const v = getReviewValidation('personas')
+        return (
+          <div className="step-content review-step">
+            <div className="card">
+              <h2>Review Your People</h2>
+              <p>The people you're meant to help.</p>
+
+              <section className="review-section">
+                <h3>People <span className="count">({mappedData.personas.length})</span>
+                  {v.starredCount > 0 && <span className="star-count fulfilled">★ {v.starredCount}/3</span>}
+                </h3>
+
+                {mappedData.personas.map((persona, i) => renderReviewItem('personas', persona, i, starredPersonas, REVIEW_CONFIGS.personas))}
+
+                <AddCustomInput type="personas" onAdd={handleAddCustomItem} placeholder="Add your own persona..." />
+              </section>
+
+              {/* Themes & Gaps (collapsed) */}
+              {parsedData.themes.length > 0 && (
+                <details className="extras-section">
+                  <summary>Recurring Themes ({parsedData.themes.length})</summary>
+                  {parsedData.themes.map((t, i) => (
+                    <div key={i} className="extra-item">
+                      <strong>{t.name}</strong>
+                      <span>{t.connects}</span>
+                    </div>
+                  ))}
+                </details>
+              )}
+
+              {parsedData.curiosityGaps.length > 0 && (
+                <details className="extras-section">
+                  <summary>Curiosity Gaps ({parsedData.curiosityGaps.length})</summary>
+                  {parsedData.curiosityGaps.map((g, i) => (
+                    <div key={i} className="extra-item">
+                      <strong>{g.name}</strong>
+                      <span>{g.suggestedConnection}</span>
+                    </div>
+                  ))}
+                </details>
+              )}
+
+              {v.undecidedCount > 0 && (
+                <div className="undecided-notice">
+                  {v.undecidedCount} item{v.undecidedCount > 1 ? 's' : ''} remaining — keep or remove each to continue
+                </div>
+              )}
+
+              <div className="button-row">
+                <button
+                  className="primary-button"
+                  onClick={handleConfirm}
+                  disabled={isProcessing || !v.canProceed}
+                >
+                  {isProcessing ? 'Saving...' : 'Confirm & Continue'}
+                </button>
+                <button className="secondary-button" onClick={() => setReviewCategory(1)}>← Back</button>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* Step 4: Ambition Question */}
+      {step === 4 && (
+        <div className="step-content">
           <div className="card">
-            <h2>Review Your Extraction</h2>
-            <p>Star your top 3 in each category and select your level.</p>
+            <h2>What do you want to do with these discoveries?</h2>
+            <p>This helps us tailor your experience.</p>
 
-            {parsedData.northStar && (
-              <div className="north-star">
-                <span className="north-star-label">Your North Star</span>
-                <p>"{parsedData.northStar}"</p>
-              </div>
-            )}
-
-            {/* Skills */}
-            <section className={`review-section ${starredSkills.size === 0 ? 'needs-star' : 'has-star'}`}>
-              <h3>Skills <span className="count">({mappedData.skills.length})</span>
-                <span className={`star-count ${starredSkills.size > 0 ? 'fulfilled' : ''}`}>
-                  ★ {starredSkills.size}/3
+            <div className="next-options" style={{ marginTop: '24px' }}>
+              <button className="option-btn" onClick={async () => {
+                setAmbition('find_job')
+                await supabase.from('user_stage_progress')
+                  .upsert({ user_id: user.id, ambition: 'find_job' }, { onConflict: 'user_id' })
+                setStep(6)
+              }}>
+                <span className="option-icon">🎯</span>
+                <span className="option-text">
+                  <strong>Help me find an aligned career</strong>
+                  <span>Support the pursuit of your dream role</span>
                 </span>
-              </h3>
-              <p className="hint">
-                {starredSkills.size === 0
-                  ? 'Star at least 1 skill (up to 3) to continue'
-                  : 'Star your top 3 strongest'}
-              </p>
-
-              {mappedData.skills.map((skill, i) => (
-                <div key={i} className="review-item">
-                  <button
-                    className={`star-btn ${starredSkills.has(i) ? 'starred' : ''}`}
-                    onClick={() => handleToggleStar('skills', i)}
-                    disabled={!starredSkills.has(i) && starredSkills.size >= 3}
-                  >
-                    {starredSkills.has(i) ? '★' : '☆'}
-                  </button>
-
-                  <div className="item-main">
-                    <div className="item-header">
-                      {skill.mappedTo && SEGMENT_DISPLAY.skills[skill.mappedTo] && (
-                        <span className="icon">{SEGMENT_DISPLAY.skills[skill.mappedTo].icon}</span>
-                      )}
-                      <span className="name">{skill.name}</span>
-                    </div>
-                    <div className="item-tags">
-                      {skill.mappedTo && SEGMENT_DISPLAY.skills[skill.mappedTo] && (
-                        <span className="taxonomy-tag">
-                          {SEGMENT_DISPLAY.skills[skill.mappedTo].title}
-                        </span>
-                      )}
-                      <span className={`freq freq-${skill.frequency?.toLowerCase() || 'medium'}`}>{skill.frequency}</span>
-                    </div>
-                    <div className="evidence">{skill.evidence}</div>
-                    <div className="level-btns">
-                      {LEVEL_OPTIONS.skills.map(opt => (
-                        <button
-                          key={opt.value}
-                          className={skill.userLevel === opt.value ? 'selected' : ''}
-                          onClick={() => handleLevelChange('skills', i, opt.value)}
-                          title={opt.description}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button className="remove-btn" onClick={() => handleRemoveItem('skills', i)}>×</button>
-                </div>
-              ))}
-
-              <AddCustomInput type="skills" onAdd={handleAddCustomItem} placeholder="Add your own skill..." />
-            </section>
-
-            {/* Problems */}
-            <section className={`review-section ${starredProblems.size === 0 ? 'needs-star' : 'has-star'}`}>
-              <h3>Problems <span className="count">({mappedData.problems.length})</span>
-                <span className={`star-count ${starredProblems.size > 0 ? 'fulfilled' : ''}`}>
-                  ★ {starredProblems.size}/3
-                </span>
-              </h3>
-              <p className="hint">
-                {starredProblems.size === 0
-                  ? 'Star at least 1 problem (up to 3) to continue'
-                  : 'Star the top 3 that light you up'}
-              </p>
-
-              {mappedData.problems.map((problem, i) => (
-                <div key={i} className="review-item">
-                  <button
-                    className={`star-btn ${starredProblems.has(i) ? 'starred' : ''}`}
-                    onClick={() => handleToggleStar('problems', i)}
-                    disabled={!starredProblems.has(i) && starredProblems.size >= 3}
-                  >
-                    {starredProblems.has(i) ? '★' : '☆'}
-                  </button>
-
-                  <div className="item-main">
-                    <div className="item-header">
-                      {problem.mappedTo && SEGMENT_DISPLAY.problems[problem.mappedTo] && (
-                        <span className="icon">{SEGMENT_DISPLAY.problems[problem.mappedTo].icon}</span>
-                      )}
-                      <span className="name">{problem.name}</span>
-                    </div>
-                    <div className="item-tags">
-                      {problem.mappedTo && SEGMENT_DISPLAY.problems[problem.mappedTo] && (
-                        <span className="taxonomy-tag">
-                          {SEGMENT_DISPLAY.problems[problem.mappedTo].title}
-                        </span>
-                      )}
-                      <span className={`freq freq-${problem.frequency?.toLowerCase() || 'medium'}`}>{problem.frequency}</span>
-                    </div>
-                    <div className="evidence">{problem.evidence}</div>
-                    <div className="level-btns">
-                      {LEVEL_OPTIONS.problems.map(opt => (
-                        <button
-                          key={opt.value}
-                          className={problem.userLevel === opt.value ? 'selected' : ''}
-                          onClick={() => handleLevelChange('problems', i, opt.value)}
-                          title={opt.description}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button className="remove-btn" onClick={() => handleRemoveItem('problems', i)}>×</button>
-                </div>
-              ))}
-
-              <AddCustomInput type="problems" onAdd={handleAddCustomItem} placeholder="Add your own problem..." />
-            </section>
-
-            {/* Personas */}
-            <section className={`review-section ${starredPersonas.size === 0 ? 'needs-star' : 'has-star'}`}>
-              <h3>People <span className="count">({mappedData.personas.length})</span>
-                <span className={`star-count ${starredPersonas.size > 0 ? 'fulfilled' : ''}`}>
-                  ★ {starredPersonas.size}/3
-                </span>
-              </h3>
-              <p className="hint">
-                {starredPersonas.size === 0
-                  ? 'Star at least 1 persona (up to 3) to continue'
-                  : 'Star the top 3 you want to serve'}
-              </p>
-
-              {mappedData.personas.map((persona, i) => (
-                <div key={i} className="review-item">
-                  <button
-                    className={`star-btn ${starredPersonas.has(i) ? 'starred' : ''}`}
-                    onClick={() => handleToggleStar('personas', i)}
-                    disabled={!starredPersonas.has(i) && starredPersonas.size >= 3}
-                  >
-                    {starredPersonas.has(i) ? '★' : '☆'}
-                  </button>
-
-                  <div className="item-main">
-                    <div className="item-header">
-                      {persona.mappedTo && SEGMENT_DISPLAY.personas[persona.mappedTo] && (
-                        <span className="icon">{SEGMENT_DISPLAY.personas[persona.mappedTo].icon}</span>
-                      )}
-                      <span className="name">{persona.name}</span>
-                    </div>
-                    <div className="item-tags">
-                      {persona.mappedTo && SEGMENT_DISPLAY.personas[persona.mappedTo] && (
-                        <span className="taxonomy-tag">
-                          {SEGMENT_DISPLAY.personas[persona.mappedTo].title}
-                        </span>
-                      )}
-                      <span className={`freq freq-${persona.frequency?.toLowerCase() || 'medium'}`}>{persona.frequency}</span>
-                    </div>
-                    <div className="evidence">{persona.evidence}</div>
-                    {persona.connection && <div className="connection">Connection: {persona.connection}</div>}
-                    <div className="level-btns">
-                      {LEVEL_OPTIONS.personas.map(opt => (
-                        <button
-                          key={opt.value}
-                          className={persona.userLevel === opt.value ? 'selected' : ''}
-                          onClick={() => handleLevelChange('personas', i, opt.value)}
-                          title={opt.description}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button className="remove-btn" onClick={() => handleRemoveItem('personas', i)}>×</button>
-                </div>
-              ))}
-
-              <AddCustomInput type="personas" onAdd={handleAddCustomItem} placeholder="Add your own persona..." />
-            </section>
-
-            {/* Themes & Gaps (collapsed) */}
-            {parsedData.themes.length > 0 && (
-              <details className="extras-section">
-                <summary>Recurring Themes ({parsedData.themes.length})</summary>
-                {parsedData.themes.map((t, i) => (
-                  <div key={i} className="extra-item">
-                    <strong>{t.name}</strong>
-                    <span>{t.connects}</span>
-                  </div>
-                ))}
-              </details>
-            )}
-
-            {parsedData.curiosityGaps.length > 0 && (
-              <details className="extras-section">
-                <summary>Curiosity Gaps ({parsedData.curiosityGaps.length})</summary>
-                {parsedData.curiosityGaps.map((g, i) => (
-                  <div key={i} className="extra-item">
-                    <strong>{g.name}</strong>
-                    <span>{g.suggestedConnection}</span>
-                  </div>
-                ))}
-              </details>
-            )}
-
-            {(starredSkills.size === 0 || starredProblems.size === 0 || starredPersonas.size === 0) && (
-              <div className="star-requirement-notice">
-                Star at least 1 item in each section to continue:
-                {starredSkills.size === 0 && <span className="missing"> Skills</span>}
-                {starredProblems.size === 0 && <span className="missing"> Problems</span>}
-                {starredPersonas.size === 0 && <span className="missing"> People</span>}
-              </div>
-            )}
-
-            <div className="button-row">
-              <button
-                className="primary-button"
-                onClick={handleConfirm}
-                disabled={isProcessing || starredSkills.size === 0 || starredProblems.size === 0 || starredPersonas.size === 0}
-              >
-                {isProcessing ? 'Saving...' : 'Confirm & Continue'}
               </button>
-              <button className="secondary-button" onClick={() => setStep(2)}>← Back</button>
+
+              <button className="option-btn" onClick={async () => {
+                setAmbition('build_own')
+                await supabase.from('user_stage_progress')
+                  .upsert({ user_id: user.id, ambition: 'build_own' }, { onConflict: 'user_id' })
+                setStep(5)
+              }}>
+                <span className="option-icon">🚀</span>
+                <span className="option-text">
+                  <strong>Build something of my own</strong>
+                  <span>Turn your skills into a business or side project</span>
+                </span>
+              </button>
+
+              <button className="option-btn" onClick={async () => {
+                setAmbition('exploring')
+                await supabase.from('user_stage_progress')
+                  .upsert({ user_id: user.id, ambition: 'exploring' }, { onConflict: 'user_id' })
+                setStep(6)
+              }}>
+                <span className="option-icon">🌱</span>
+                <span className="option-text">
+                  <strong>I'm still exploring</strong>
+                  <span>Keep discovering — no pressure to decide yet</span>
+                </span>
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Step 4: Combination Selection */}
-      {step === 4 && mappedData && (() => {
+      {/* Step 5: Existing Business Question (build_own only) */}
+      {step === 5 && ambition === 'build_own' && (
+        <div className="step-content">
+          <div className="card">
+            <h2>Do you already have something?</h2>
+            <p>We'll tailor the next steps based on where you are.</p>
+
+            <div className="next-options" style={{ marginTop: '24px' }}>
+              <button className="option-btn" onClick={async () => {
+                setHasExistingBiz(true)
+                await supabase.from('user_stage_progress')
+                  .upsert({ user_id: user.id, has_existing_business: true }, { onConflict: 'user_id' })
+                setStep(6)
+              }}>
+                <span className="option-icon">🏢</span>
+                <span className="option-text">
+                  <strong>Yes, I have an existing business</strong>
+                  <span>Let's connect it with your discoveries</span>
+                </span>
+              </button>
+
+              <button className="option-btn" onClick={async () => {
+                setHasExistingBiz(false)
+                await supabase.from('user_stage_progress')
+                  .upsert({ user_id: user.id, has_existing_business: false }, { onConflict: 'user_id' })
+                setStep(6)
+              }}>
+                <span className="option-icon">✨</span>
+                <span className="option-text">
+                  <strong>No, starting fresh</strong>
+                  <span>We'll help you build from your strengths</span>
+                </span>
+              </button>
+            </div>
+
+            <button
+              className="secondary-button"
+              style={{ marginTop: '16px' }}
+              onClick={() => setStep(4)}
+            >
+              ← Back
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 6: Alignment Sliders (all paths, default "No alignment") */}
+      {step === 6 && mappedData && (() => {
+        const NO_ALIGNMENT = { name: 'No alignment', id: 'none' }
         const starredSkillItems = mappedData.skills.filter((_, i) => starredSkills.has(i))
         const starredProblemItems = mappedData.problems.filter((_, i) => starredProblems.has(i))
         const starredPersonaItems = mappedData.personas.filter((_, i) => starredPersonas.has(i))
 
-        // Build the current combination from slider positions
+        // Prepend "No alignment" to each slider array
+        const sliderSkills = [NO_ALIGNMENT, ...starredSkillItems]
+        const sliderProblems = [NO_ALIGNMENT, ...starredProblemItems]
+        const sliderPersonas = [NO_ALIGNMENT, ...starredPersonaItems]
+
+        // Build combo from current slider positions (index 0 = "No alignment" → null)
         const currentCombo = {
-          skill: starredSkillItems[currentSkillIdx] || null,
-          problem: starredProblemItems[currentProblemIdx] || null,
-          persona: starredPersonaItems[currentPersonaIdx] || null
+          skill: currentSkillIdx === 0 ? null : starredSkillItems[currentSkillIdx - 1],
+          problem: currentProblemIdx === 0 ? null : starredProblemItems[currentProblemIdx - 1],
+          persona: currentPersonaIdx === 0 ? null : starredPersonaItems[currentPersonaIdx - 1]
         }
+
+        const isBuildOwn = ambition === 'build_own'
+        const clusterType = isBuildOwn ? 'primary_combination' : 'current_alignment'
+
+        // Heading varies by path
+        const heading = isBuildOwn
+          ? (hasExistingBiz ? 'Which areas align with your current business?' : 'Which areas excite you most?')
+          : 'Does your current role align with any of these areas?'
 
         const handleSliderConfirm = async () => {
           if (combinationSaving) return
           setCombinationSaving(true)
           try {
-            const saved = await saveCombination(currentCombo, sessionIdRef.current)
+            const saved = await saveCombination(currentCombo, sessionIdRef.current, clusterType)
             if (!saved) {
-              setError('Failed to save your combination. Please try again.')
+              setError('Failed to save your selection. Please try again.')
               setCombinationSaving(false)
               return
             }
 
-            // Update project name if user provided one
-            if (projectName.trim() && projectIdRef.current) {
+            // Update project name if build_own and user provided one
+            if (isBuildOwn && projectName.trim() && projectIdRef.current) {
               const { error: nameError } = await supabase
                 .from('user_projects')
                 .update({ name: projectName.trim() })
@@ -1107,10 +1259,15 @@ export default function MindSpace() {
               }
             }
 
-            setStep(5)
+            // Route to next step
+            if (isBuildOwn && hasExistingBiz) {
+              setStep(7) // Stage selection
+            } else {
+              setStep(8) // Completion
+            }
           } catch (err) {
-            console.error('Error saving combination:', err)
-            setError('Failed to save combination. Please try again.')
+            console.error('Error saving selection:', err)
+            setError('Failed to save. Please try again.')
           } finally {
             setCombinationSaving(false)
           }
@@ -1119,119 +1276,165 @@ export default function MindSpace() {
         return (
           <div className="step-content">
             <div className="card combination-step">
-              <h2>
-                {userPersona === 'vibe_seeker'
-                  ? 'Which combination sounds most exciting?'
-                  : 'Which combination most aligns with your current business?'}
-              </h2>
-              <p>Slide through your top picks to find the combination that resonates most.</p>
+              <h2>{heading}</h2>
+              <p>Slide through your top picks. Leave on "No alignment" for areas that don't apply.</p>
 
               <div className="combo-sliders">
                 {/* Skill slider */}
-                {starredSkillItems.length > 0 && (
-                  <div className="combo-slider-section">
-                    <h3 className="combo-slider-label">Your skill:</h3>
-                    <div className="combo-slider-controls">
-                      <button
-                        className="combo-slider-arrow"
-                        onClick={() => setCurrentSkillIdx(i => Math.max(0, i - 1))}
-                        disabled={currentSkillIdx === 0}
-                      >‹</button>
-                      <div className="combo-slider-content">
-                        <p className="combo-slider-text">{starredSkillItems[currentSkillIdx]?.name}</p>
-                        {starredSkillItems.length > 1 && (
-                          <p className="combo-slider-counter">{currentSkillIdx + 1} of {starredSkillItems.length}</p>
-                        )}
-                      </div>
-                      <button
-                        className="combo-slider-arrow"
-                        onClick={() => setCurrentSkillIdx(i => Math.min(starredSkillItems.length - 1, i + 1))}
-                        disabled={currentSkillIdx === starredSkillItems.length - 1}
-                      >›</button>
+                <div className="combo-slider-section">
+                  <h3 className="combo-slider-label">Your skill:</h3>
+                  <div className="combo-slider-controls">
+                    <button
+                      className="combo-slider-arrow"
+                      onClick={() => setCurrentSkillIdx(i => Math.max(0, i - 1))}
+                      disabled={currentSkillIdx === 0}
+                    >‹</button>
+                    <div className="combo-slider-content">
+                      <p className={`combo-slider-text ${sliderSkills[currentSkillIdx]?.id === 'none' ? 'no-alignment' : ''}`}>
+                        {sliderSkills[currentSkillIdx]?.name}
+                      </p>
+                      <p className="combo-slider-counter">{currentSkillIdx + 1} of {sliderSkills.length}</p>
                     </div>
+                    <button
+                      className="combo-slider-arrow"
+                      onClick={() => setCurrentSkillIdx(i => Math.min(sliderSkills.length - 1, i + 1))}
+                      disabled={currentSkillIdx === sliderSkills.length - 1}
+                    >›</button>
                   </div>
-                )}
+                </div>
 
                 {/* Problem slider */}
-                {starredProblemItems.length > 0 && (
-                  <div className="combo-slider-section">
-                    <h3 className="combo-slider-label">The problem you solve:</h3>
-                    <div className="combo-slider-controls">
-                      <button
-                        className="combo-slider-arrow"
-                        onClick={() => setCurrentProblemIdx(i => Math.max(0, i - 1))}
-                        disabled={currentProblemIdx === 0}
-                      >‹</button>
-                      <div className="combo-slider-content">
-                        <p className="combo-slider-text">{starredProblemItems[currentProblemIdx]?.name}</p>
-                        {starredProblemItems.length > 1 && (
-                          <p className="combo-slider-counter">{currentProblemIdx + 1} of {starredProblemItems.length}</p>
-                        )}
-                      </div>
-                      <button
-                        className="combo-slider-arrow"
-                        onClick={() => setCurrentProblemIdx(i => Math.min(starredProblemItems.length - 1, i + 1))}
-                        disabled={currentProblemIdx === starredProblemItems.length - 1}
-                      >›</button>
+                <div className="combo-slider-section">
+                  <h3 className="combo-slider-label">The problem you solve:</h3>
+                  <div className="combo-slider-controls">
+                    <button
+                      className="combo-slider-arrow"
+                      onClick={() => setCurrentProblemIdx(i => Math.max(0, i - 1))}
+                      disabled={currentProblemIdx === 0}
+                    >‹</button>
+                    <div className="combo-slider-content">
+                      <p className={`combo-slider-text ${sliderProblems[currentProblemIdx]?.id === 'none' ? 'no-alignment' : ''}`}>
+                        {sliderProblems[currentProblemIdx]?.name}
+                      </p>
+                      <p className="combo-slider-counter">{currentProblemIdx + 1} of {sliderProblems.length}</p>
                     </div>
+                    <button
+                      className="combo-slider-arrow"
+                      onClick={() => setCurrentProblemIdx(i => Math.min(sliderProblems.length - 1, i + 1))}
+                      disabled={currentProblemIdx === sliderProblems.length - 1}
+                    >›</button>
                   </div>
-                )}
+                </div>
 
                 {/* Persona slider */}
-                {starredPersonaItems.length > 0 && (
-                  <div className="combo-slider-section">
-                    <h3 className="combo-slider-label">Who you help:</h3>
-                    <div className="combo-slider-controls">
-                      <button
-                        className="combo-slider-arrow"
-                        onClick={() => setCurrentPersonaIdx(i => Math.max(0, i - 1))}
-                        disabled={currentPersonaIdx === 0}
-                      >‹</button>
-                      <div className="combo-slider-content">
-                        <p className="combo-slider-text">{starredPersonaItems[currentPersonaIdx]?.name}</p>
-                        {starredPersonaItems.length > 1 && (
-                          <p className="combo-slider-counter">{currentPersonaIdx + 1} of {starredPersonaItems.length}</p>
-                        )}
-                      </div>
-                      <button
-                        className="combo-slider-arrow"
-                        onClick={() => setCurrentPersonaIdx(i => Math.min(starredPersonaItems.length - 1, i + 1))}
-                        disabled={currentPersonaIdx === starredPersonaItems.length - 1}
-                      >›</button>
+                <div className="combo-slider-section">
+                  <h3 className="combo-slider-label">Who you help:</h3>
+                  <div className="combo-slider-controls">
+                    <button
+                      className="combo-slider-arrow"
+                      onClick={() => setCurrentPersonaIdx(i => Math.max(0, i - 1))}
+                      disabled={currentPersonaIdx === 0}
+                    >‹</button>
+                    <div className="combo-slider-content">
+                      <p className={`combo-slider-text ${sliderPersonas[currentPersonaIdx]?.id === 'none' ? 'no-alignment' : ''}`}>
+                        {sliderPersonas[currentPersonaIdx]?.name}
+                      </p>
+                      <p className="combo-slider-counter">{currentPersonaIdx + 1} of {sliderPersonas.length}</p>
                     </div>
+                    <button
+                      className="combo-slider-arrow"
+                      onClick={() => setCurrentPersonaIdx(i => Math.min(sliderPersonas.length - 1, i + 1))}
+                      disabled={currentPersonaIdx === sliderPersonas.length - 1}
+                    >›</button>
                   </div>
-                )}
+                </div>
               </div>
 
-              <div className="project-name-field">
-                <label htmlFor="project-name">Name your project</label>
-                <input
-                  id="project-name"
-                  type="text"
-                  value={projectName}
-                  onChange={(e) => setProjectName(e.target.value)}
-                  placeholder="e.g. My Coaching Business"
-                  maxLength={100}
-                />
-              </div>
+              {/* Project name field — only for build_own */}
+              {isBuildOwn && (
+                <div className="project-name-field">
+                  <label htmlFor="project-name">Name your project</label>
+                  <input
+                    id="project-name"
+                    type="text"
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    placeholder="e.g. My Coaching Business"
+                    maxLength={100}
+                  />
+                </div>
+              )}
 
               <div className="button-row">
                 <button
                   className="primary-button"
                   onClick={handleSliderConfirm}
-                  disabled={combinationSaving || !projectName.trim()}
+                  disabled={combinationSaving || (isBuildOwn && !projectName.trim())}
                 >
                   {combinationSaving ? 'Saving...' : 'Continue'}
                 </button>
-                <button className="secondary-button" onClick={() => setStep(3)}>Back</button>
+                <button
+                  className="secondary-button"
+                  onClick={() => setStep(isBuildOwn ? 5 : 4)}
+                >
+                  Back
+                </button>
               </div>
             </div>
           </div>
         )
       })()}
 
-      {/* Step 5: What's Next / Results View */}
-      {step === 5 && (
+      {/* Step 7: Stage Selection (build_own + existing business only) */}
+      {step === 7 && ambition === 'build_own' && hasExistingBiz && (
+        <div className="step-content">
+          <div className="card">
+            <h2>Where are you at with your business?</h2>
+            <p>This helps us recommend the right quests for your stage.</p>
+
+            <div className="next-options" style={{ marginTop: '24px' }}>
+              {STAGE_OPTIONS.map(option => (
+                <button
+                  key={option.value}
+                  className={`option-btn ${selectedStage?.value === option.value ? 'selected' : ''}`}
+                  onClick={() => setSelectedStage(option)}
+                  style={{
+                    borderColor: selectedStage?.value === option.value ? '#E9A23B' : undefined,
+                    background: selectedStage?.value === option.value ? 'rgba(233, 162, 59, 0.1)' : undefined
+                  }}
+                >
+                  <span className="option-text">
+                    <strong>{option.label}</strong>
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <div className="button-row" style={{ marginTop: '24px' }}>
+              <button
+                className="primary-button"
+                onClick={async () => {
+                  if (!selectedStage) return
+                  if (projectIdRef.current) {
+                    const { error } = await supabase.from('user_projects')
+                      .update({ current_stage: selectedStage.stage })
+                      .eq('id', projectIdRef.current)
+                    if (error) console.error('Failed to update stage:', error)
+                  }
+                  setStep(8)
+                }}
+                disabled={!selectedStage}
+              >
+                Continue
+              </button>
+              <button className="secondary-button" onClick={() => setStep(6)}>Back</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Step 8: What's Next / Results View (Completion) */}
+      {step === 8 && (
         <div className="step-content">
           <div className="card whats-next">
             <div className="success-icon">{viewingResults ? '🎯' : (graduationMessage ? '🎉' : '✓')}</div>
@@ -1353,6 +1556,14 @@ export default function MindSpace() {
                     setStarredPersonas(new Set())
                     setSelectedCombination(null)
                     setLastSessionId(null)
+                    setAmbition(null)
+                    setHasExistingBiz(null)
+                    setSelectedStage(null)
+                    setCurrentSkillIdx(0)
+                    setCurrentProblemIdx(0)
+                    setCurrentPersonaIdx(0)
+                    sessionIdRef.current = null
+                    projectIdRef.current = null
                     navigate('/mind-space', { replace: true })
                   }}
                 >

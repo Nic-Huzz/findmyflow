@@ -374,25 +374,10 @@ export function getVisibilityLayersByDifficulty() {
  * @param {number} highestStage - Highest current_stage across user's projects
  * @returns {Object} Map of layerId → { locked: boolean, message: string }
  */
-export function getLayerLockStatus(flowFinderComplete, highestStage = 0) {
+export function getLayerLockStatus() {
   const status = {}
   for (const layer of GROAN_VISIBILITY_LAYERS) {
-    const { unlock } = layer
-    if (!unlock) {
-      status[layer.id] = { locked: false }
-      continue
-    }
-    if (unlock.type === 'flow_finder') {
-      status[layer.id] = {
-        locked: !flowFinderComplete,
-        message: unlock.label
-      }
-    } else if (unlock.type === 'stage') {
-      status[layer.id] = {
-        locked: highestStage < unlock.requiredStage,
-        message: unlock.label
-      }
-    }
+    status[layer.id] = { locked: false }
   }
   return status
 }

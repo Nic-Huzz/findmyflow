@@ -95,8 +95,20 @@ function QuestCard({
   prelaunchLocked = false,
   // Payment gating
   paidLocked = false,
-  onUpgrade = null
+  onUpgrade = null,
+  // Return path after flow completion (e.g. '/business')
+  returnTo
 }) {
+  // Build flow URLs with optional returnTo param
+  const flowUrl = (route, extra = {}) => {
+    const p = new URLSearchParams()
+    if (selectedProject?.id) p.set('projectId', selectedProject.id)
+    if (returnTo) p.set('returnTo', returnTo)
+    Object.entries(extra).forEach(([k, v]) => p.set(k, v))
+    const qs = p.toString()
+    return qs ? `${route}?${qs}` : route
+  }
+
   const cardClasses = [
     'quest-card',
     completed ? 'completed' : '',
@@ -155,10 +167,6 @@ function QuestCard({
       {/* Hide description for voice quests - it's shown in the input component */}
       {!quest.voiceType && (
         <p className="quest-description">{renderDescription(quest.description)}</p>
-      )}
-
-      {paidLocked && (
-        <UpgradePrompt onUpgrade={onUpgrade} />
       )}
 
       {/* Completion counter for repeatable quests (e.g. Tell a Friend 1 of 3) */}
@@ -232,6 +240,10 @@ function QuestCard({
         </div>
       )}
 
+      {paidLocked && (
+        <UpgradePrompt onUpgrade={onUpgrade} />
+      )}
+
       {/* Locked due to prerequisite quest */}
       {!completed && locked && lockedPrerequisite && (
         <div className="quest-locked-message">
@@ -296,7 +308,7 @@ function QuestCard({
             // Suspense fallbacks from showing during lazy chunk loading.
             // Full navigation ensures the flow page always renders.
             <a
-              href={selectedProject?.id ? `${quest.flow_route}?projectId=${selectedProject.id}` : quest.flow_route}
+              href={flowUrl(quest.flow_route)}
               className="quest-flow-btn"
             >
               Start {quest.name}
@@ -639,9 +651,7 @@ function QuestCard({
           )}
           {quest.flow_route && (
             <a
-              href={selectedProject?.id
-                ? `${quest.flow_route}?results=true&projectId=${selectedProject.id}`
-                : `${quest.flow_route}?results=true`}
+              href={flowUrl(quest.flow_route, { results: 'true' })}
               className="view-results-btn"
             >
               {quest.isExplainer ? 'Read Again' : 'View Results'}

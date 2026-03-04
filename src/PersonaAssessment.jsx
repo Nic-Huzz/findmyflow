@@ -361,10 +361,11 @@ function PersonaAssessment() {
           <div className="welcome-content">
             <h1 className="welcome-greeting">Welcome! I'm Huzz! 🌞</h1>
             <div className="welcome-message animated-text">
-              <p>I believe we all have an <strong>Essence Voice</strong> — that original song you were born to share.</p>
-              <p>The version of you that feels most alive, most authentic, most magnetic.</p>
-              <p>There are 8 Essence Voices. One will feel like coming home.</p>
-              <p className="intro-instruction">Swipe right on the ones that resonate. Left on the ones that don't.</p>
+              <p>I believe we all have an <strong>Essence Voice</strong>.</p>
+              <p>An original song you were born to dance to.</p>
+              <p>The version of you that feels most alive, most authentic, most energised.</p>
+              <p>There are 8 Essence Voices.</p>
+              <p className="intro-instruction">Swipe right on the ones that resonate.<br />Left on the ones that don't.</p>
             </div>
           </div>
           <div className="welcome-actions">

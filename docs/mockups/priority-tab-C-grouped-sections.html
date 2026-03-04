@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Priority Tab — C: Grouped Sections</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: #f2f2f7;
+    color: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 16px 16px 100px;
+  }
+
+  .layer-card {
+    background: white;
+    border: 2px solid #E9A23B;
+    border-radius: 22px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  .layer-emoji { font-size: 2.2rem; }
+  .layer-info { flex: 1; }
+  .layer-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; color: #E9A23B; text-transform: uppercase; }
+  .layer-name { font-size: 18px; font-weight: 800; margin: 2px 0; }
+  .layer-desc { font-size: 13px; color: #6c757d; line-height: 1.4; }
+  .layer-reassess { font-size: 12px; color: #5e17eb; font-weight: 600; background: none; border: none; cursor: pointer; }
+
+  .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 0 4px; }
+  .progress-label { font-size: 13px; font-weight: 700; white-space: nowrap; color: #4a4a5a; }
+  .progress-bar { flex: 1; height: 8px; background: #eef0f3; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #5e17eb, #E9A23B); }
+
+  /* Section card */
+  .section-card {
+    background: white;
+    border-radius: 22px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+  .section-card.recommended {
+    border-left: 4px solid #E9A23B;
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    cursor: pointer;
+  }
+  .section-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-icon { font-size: 1.3rem; }
+  .section-title { font-size: 15px; font-weight: 800; }
+  .section-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    background: #5e17eb;
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 28px;
+    text-align: center;
+  }
+  .section-count.complete { background: #34d399; }
+  .rec-badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: #E9A23B;
+    background: #fef3c7;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-left: 8px;
+  }
+
+  .section-items { border-top: 1px solid #f0f0f5; }
+
+  .item-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #f5f5f7;
+    text-decoration: none;
+    color: inherit;
+  }
+  .item-row:last-child { border-bottom: none; }
+
+  .item-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid #dde0e5;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0; margin-top: 2px;
+  }
+  .item-check.done { background: #34d399; border-color: #34d399; color: white; }
+
+  .item-body { flex: 1; }
+  .item-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+  .item-row.done .item-name { color: #9a9daa; text-decoration: line-through; }
+  .item-meta { font-size: 12px; color: #9a9daa; margin-top: 2px; }
+  .item-meta .pts { font-weight: 700; color: #E9A23B; }
+
+  .item-action {
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 12px; font-weight: 700;
+    border: none; cursor: pointer;
+    background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);
+    color: #1a1a2e;
+    flex-shrink: 0;
+    margin-top: 2px;
+    text-decoration: none;
+  }
+  .item-action.done-action { background: #d1fae5; color: #059669; }
+  .item-action.secondary { background: #f0f0f5; color: #6c757d; }
+
+  .streak-row { display: flex; gap: 5px; margin-top: 6px; }
+  .streak-dot { width: 9px; height: 9px; border-radius: 50%; background: #eef0f3; }
+  .streak-dot.filled { background: #34d399; }
+  .streak-labels { display: flex; gap: 5px; margin-top: 1px; }
+  .streak-labels span { width: 9px; font-size: 7px; text-align: center; color: #b0b3bd; }
+
+  .dna-actions { display: flex; gap: 8px; margin-top: 6px; }
+
+  .edit-btn {
+    display: block; width: 100%; padding: 14px; margin-top: 8px;
+    background: none; border: 2px solid #dde0e5; border-radius: 16px;
+    font-size: 14px; font-weight: 700; color: #6c757d; cursor: pointer; text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="layer-card">
+  <span class="layer-emoji">🪨</span>
+  <div class="layer-info">
+    <span class="layer-eyebrow">Your Priority</span>
+    <div class="layer-name">The Riverbed — Regulate</div>
+    <div class="layer-desc">The channel that holds the water — building capacity.</div>
+    <div style="margin-top: 4px; font-size: 12px; color: #10b981; font-weight: 600;">Focus: Healing & Rewiring</div>
+  </div>
+  <button class="layer-reassess">Reassess</button>
+</div>
+
+<div class="progress-row">
+  <span class="progress-label">3/6 done</span>
+  <div class="progress-bar"><div class="progress-fill" style="width: 50%"></div></div>
+</div>
+
+<!-- Groan Challenges section -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-header-left">
+      <span class="section-icon">💪</span>
+      <span class="section-title">Groan Challenges</span>
+    </div>
+    <span class="section-count">1/2</span>
+  </div>
+  <div class="section-items">
+    <a class="item-row done" href="#">
+      <span class="item-check done">✓</span>
+      <div class="item-body">
+        <div class="item-name">Go live on Instagram for 2 mins</div>
+        <div class="item-meta">Live · Mon · 3%: 2min → 3min</div>
+      </div>
+      <span class="item-action done-action">Done</span>
+    </a>
+    <a class="item-row" href="#">
+      <span class="item-check"></span>
+      <div class="item-body">
+        <div class="item-name">Post a vulnerable story about your journey</div>
+        <div class="item-meta">Screen · Wed · 3%: Post 1 story</div>
+      </div>
+      <span class="item-action">Go →</span>
+    </a>
+  </div>
+</div>
+
+<!-- Play Profile section -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-header-left">
+      <span class="section-icon">🧬</span>
+      <span class="section-title">Play Profile</span>
+    </div>
+    <span class="section-count">0/1</span>
+  </div>
+  <div class="section-items">
+    <div class="item-row">
+      <span class="item-check"></span>
+      <div class="item-body">
+        <div class="item-name">Overcome imposter syndrome in public speaking</div>
+        <div class="item-meta">DNA Challenge · Stuck point #3</div>
+        <div class="dna-actions">
+          <a href="#" class="item-action">Start Now</a>
+          <a href="#" class="item-action secondary">Do Later</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Daily Healing section — recommended for regulate layer -->
+<div class="section-card recommended">
+  <div class="section-header">
+    <div class="section-header-left">
+      <span class="section-icon">💚</span>
+      <span class="section-title">Daily Healing</span>
+      <span class="rec-badge">Recommended</span>
+    </div>
+    <span class="section-count complete">2/2</span>
+  </div>
+  <div class="section-items">
+    <a class="item-row" href="#">
+      <span class="item-check"></span>
+      <div class="item-body">
+        <div class="item-name">Morning Reconnect</div>
+        <div class="item-meta">Reconnect · <span class="pts">5pts</span></div>
+        <div class="streak-row">
+          <div class="streak-dot filled"></div>
+          <div class="streak-dot filled"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+        </div>
+        <div class="streak-labels">
+          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+        </div>
+      </div>
+      <span class="item-action">Start</span>
+    </a>
+    <a class="item-row done" href="#">
+      <span class="item-check done">✓</span>
+      <div class="item-body">
+        <div class="item-name">Release Breath</div>
+        <div class="item-meta">Release · <span class="pts">5pts</span></div>
+      </div>
+      <span class="item-action done-action">Done</span>
+    </a>
+  </div>
+</div>
+
+<!-- Weekly Healing section — recommended for regulate layer -->
+<div class="section-card recommended">
+  <div class="section-header">
+    <div class="section-header-left">
+      <span class="section-icon">💜</span>
+      <span class="section-title">Weekly Healing</span>
+      <span class="rec-badge">Recommended</span>
+    </div>
+    <span class="section-count">0/1</span>
+  </div>
+  <div class="section-items">
+    <a class="item-row" href="#">
+      <span class="item-check"></span>
+      <div class="item-body">
+        <div class="item-name">Deep Rewire Session</div>
+        <div class="item-meta">Rewire · <span class="pts">15pts</span></div>
+      </div>
+      <span class="item-action">Start</span>
+    </a>
+  </div>
+</div>
+
+<button class="edit-btn">Edit Week</button>
+
+</body>
+</html>

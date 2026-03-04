@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Business Page — Option C: Journey Timeline</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+    color: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 0 0 100px;
+  }
+
+  /* === MOCKUP LABEL === */
+  .mockup-label {
+    background: #1a1a2e;
+    color: #E9A23B;
+    text-align: center;
+    padding: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .mockup-label span { color: rgba(255,255,255,0.5); display: block; font-size: 11px; margin-top: 4px; font-weight: 400; letter-spacing: 0; text-transform: none; }
+
+  /* === COMPACT HERO === */
+  .hero {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+    padding: 24px 24px 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -20px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+    animation: glow 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes glow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-project {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+  }
+  .hero-switch {
+    font-size: 12px;
+    color: #E9A23B;
+    font-weight: 600;
+    background: rgba(233,162,59,0.15);
+    border: 1px solid rgba(233,162,59,0.3);
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-stat {
+    text-align: center;
+  }
+  .hero-stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+  .hero-stat-value.gold { color: #E9A23B; }
+  .hero-stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 600;
+  }
+  .hero-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.15);
+    margin: 4px 0;
+  }
+
+  /* === CONTENT === */
+  .content { padding: 16px 20px; }
+
+  /* === TIMELINE === */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #10b981 0%, #5e17eb 30%, #dee2e6 35%);
+    border-radius: 3px;
+  }
+
+  .timeline-stage {
+    position: relative;
+    margin-bottom: 8px;
+  }
+
+  /* Dot on the line */
+  .timeline-dot {
+    position: absolute;
+    left: -32px;
+    top: 16px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 800;
+    color: white;
+    z-index: 2;
+  }
+  .timeline-dot.completed { background: #10b981; }
+  .timeline-dot.current { background: #5e17eb; box-shadow: 0 0 0 4px rgba(94,23,235,0.2); }
+  .timeline-dot.locked { background: #dee2e6; color: #adb5bd; }
+
+  /* Stage card */
+  .stage-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: all 0.2s;
+  }
+  .stage-card.current {
+    border-color: #5e17eb;
+    box-shadow: 0 4px 20px rgba(94,23,235,0.12);
+  }
+  .stage-card.completed {
+    opacity: 0.7;
+  }
+  .stage-card.locked {
+    opacity: 0.4;
+    background: #fafafa;
+  }
+
+  .stage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .stage-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+  .stage-card.current .stage-name { color: #5e17eb; }
+  .stage-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .stage-badge.complete {
+    background: rgba(16,185,129,0.1);
+    color: #059669;
+  }
+  .stage-badge.active {
+    background: rgba(94,23,235,0.1);
+    color: #5e17eb;
+  }
+  .stage-badge.lock {
+    background: #f1f3f5;
+    color: #adb5bd;
+  }
+
+  .stage-desc {
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  /* Mini progress bar */
+  .stage-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .stage-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .stage-progress-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+  .stage-progress-fill.green { background: #10b981; }
+  .stage-progress-fill.purple { background: #5e17eb; }
+  .stage-progress-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6c757d;
+    flex-shrink: 0;
+  }
+
+  /* Expanded quest list inside current stage */
+  .stage-quests {
+    margin-top: 12px;
+    border-top: 1px solid #f1f3f5;
+    padding-top: 12px;
+  }
+  .sq-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+  }
+  .sq-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+  .sq-check.done {
+    background: #10b981;
+    border-color: #10b981;
+    color: white;
+  }
+  .sq-check.next {
+    border-color: #E9A23B;
+    background: rgba(233,162,59,0.1);
+  }
+  .sq-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a2e;
+    flex: 1;
+  }
+  .sq-item.done .sq-name {
+    color: #adb5bd;
+    text-decoration: line-through;
+  }
+  .sq-tag {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .sq-tag.free { background: rgba(16,185,129,0.1); color: #059669; }
+  .sq-tag.paid { background: rgba(94,23,235,0.1); color: #5e17eb; }
+
+  .stage-cta {
+    width: 100%;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(233,162,59,0.25);
+  }
+
+  /* Collapsed completed stages */
+  .stage-completed-summary {
+    font-size: 12px;
+    color: #6c757d;
+  }
+
+  /* === BOTTOM TOOLBAR === */
+  .bottom-toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 20px;
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: #adb5bd;
+    text-decoration: none;
+    padding: 4px 12px;
+  }
+  .nav-item .nav-icon { font-size: 22px; }
+  .nav-item.active { color: #5e17eb; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="mockup-label">
+  Option C — Journey Timeline
+  <span>Vertical timeline showing all stages. Current stage expanded with quests. Completed stages collapsed.</span>
+</div>
+
+<!-- Compact Hero -->
+<div class="hero">
+  <div class="hero-top">
+    <span class="hero-project">My Coaching Business</span>
+    <button class="hero-switch">Switch ▾</button>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-value gold">2</div>
+      <div class="hero-stat-label">Current Stage</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">60%</div>
+      <div class="hero-stat-label">Stage Progress</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">12</div>
+      <div class="hero-stat-label">Quests Done</div>
+    </div>
+  </div>
+</div>
+
+<!-- Timeline Content -->
+<div class="content">
+
+  <div class="timeline">
+
+    <!-- Setup — Completed -->
+    <div class="timeline-stage">
+      <div class="timeline-dot completed">✓</div>
+      <div class="stage-card completed">
+        <div class="stage-header">
+          <span class="stage-name">Setup</span>
+          <span class="stage-badge complete">Complete</span>
+        </div>
+        <div class="stage-completed-summary">Project created • Product identified</div>
+      </div>
+    </div>
+
+    <!-- Stage 1 — Completed -->
+    <div class="timeline-stage">
+      <div class="timeline-dot completed">✓</div>
+      <div class="stage-card completed">
+        <div class="stage-header">
+          <span class="stage-name">1. Validation</span>
+          <span class="stage-badge complete">Complete</span>
+        </div>
+        <div class="stage-completed-summary">5/5 quests • Graduated!</div>
+      </div>
+    </div>
+
+    <!-- Stage 2 — Current (expanded) -->
+    <div class="timeline-stage">
+      <div class="timeline-dot current">2</div>
+      <div class="stage-card current">
+        <div class="stage-header">
+          <span class="stage-name">2. Product</span>
+          <span class="stage-badge active">In Progress</span>
+        </div>
+        <p class="stage-desc">Define your product and understand your market</p>
+        <div class="stage-progress">
+          <div class="stage-progress-bar">
+            <div class="stage-progress-fill purple" style="width: 60%"></div>
+          </div>
+          <span class="stage-progress-text">3/5</span>
+        </div>
+
+        <div class="stage-quests">
+          <div class="sq-item done">
+            <div class="sq-check done">✓</div>
+            <span class="sq-name">Customer Interview</span>
+            <span class="sq-tag paid">Paid</span>
+          </div>
+          <div class="sq-item done">
+            <div class="sq-check done">✓</div>
+            <span class="sq-name">Market Research</span>
+            <span class="sq-tag paid">Paid</span>
+          </div>
+          <div class="sq-item done">
+            <div class="sq-check done">✓</div>
+            <span class="sq-name">Competitor Analysis</span>
+            <span class="sq-tag free">Free</span>
+          </div>
+          <div class="sq-item">
+            <div class="sq-check next"></div>
+            <span class="sq-name">Understand Your Market</span>
+            <span class="sq-tag free">Free</span>
+          </div>
+          <div class="sq-item">
+            <div class="sq-check"></div>
+            <span class="sq-name">Product-Market Fit</span>
+            <span class="sq-tag paid">Paid</span>
+          </div>
+        </div>
+
+        <button class="stage-cta">Continue Next Quest →</button>
+      </div>
+    </div>
+
+    <!-- Stage 3 — Locked -->
+    <div class="timeline-stage">
+      <div class="timeline-dot locked">3</div>
+      <div class="stage-card locked">
+        <div class="stage-header">
+          <span class="stage-name">3. Testing</span>
+          <span class="stage-badge lock">Locked</span>
+        </div>
+        <p class="stage-desc">Complete Stage 2 to unlock</p>
+      </div>
+    </div>
+
+    <!-- Stage 4 — Locked -->
+    <div class="timeline-stage">
+      <div class="timeline-dot locked">4</div>
+      <div class="stage-card locked">
+        <div class="stage-header">
+          <span class="stage-name">4. Offer</span>
+          <span class="stage-badge lock">Locked</span>
+        </div>
+        <p class="stage-desc">Craft your irresistible offer</p>
+      </div>
+    </div>
+
+    <!-- Stage 5 — Locked -->
+    <div class="timeline-stage">
+      <div class="timeline-dot locked">5</div>
+      <div class="stage-card locked">
+        <div class="stage-header">
+          <span class="stage-name">5. Campaign</span>
+          <span class="stage-badge lock">Locked</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 6 — Locked -->
+    <div class="timeline-stage">
+      <div class="timeline-dot locked">6</div>
+      <div class="stage-card locked">
+        <div class="stage-header">
+          <span class="stage-name">6. Launch</span>
+          <span class="stage-badge lock">Locked</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 7 — Locked -->
+    <div class="timeline-stage">
+      <div class="timeline-dot locked">7</div>
+      <div class="stage-card locked">
+        <div class="stage-header">
+          <span class="stage-name">7. Growth</span>
+          <span class="stage-badge lock">Locked</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 8 — Locked -->
+    <div class="timeline-stage">
+      <div class="timeline-dot locked" style="background: #E9A23B; color: white;">8</div>
+      <div class="stage-card locked">
+        <div class="stage-header">
+          <span class="stage-name">8. Tracking</span>
+          <span class="stage-badge lock">Locked</span>
+        </div>
+        <p class="stage-desc">Funnel metrics & growth tracking</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Bottom Toolbar -->
+<div class="bottom-toolbar">
+  <a class="nav-item" href="#">
+    <span class="nav-icon">🏠</span>
+    <span>Home</span>
+  </a>
+  <a class="nav-item" href="#">
+    <span class="nav-icon">🎮</span>
+    <span>Let's Play</span>
+  </a>
+  <a class="nav-item active" href="#">
+    <span class="nav-icon">💼</span>
+    <span>Business</span>
+  </a>
+  <a class="nav-item" href="#">
+    <span class="nav-icon">👤</span>
+    <span>Profile</span>
+  </a>
+</div>
+
+</body>
+</html>

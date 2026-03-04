@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { STAGES } from '../lib/stageConfig'
+import {
+  derivePersonaFromWealthLadder,
+  determineGuidanceEmphasis,
+  getValidGoalsForWealthLadder,
+  determineOnboardingPath,
+} from '../lib/onboardingV2'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './BusinessSetup.css'
 
@@ -23,7 +29,7 @@ const TIER_OPTIONS = [
   { id: 'continuity', label: 'Continuity', description: 'Recurring subscription', icon: '🔄' }
 ]
 
-function BusinessSetup({ userId, onSetupComplete, existingProject, userPersona }) {
+function BusinessSetup({ userId, onSetupComplete, existingProject, stageProgress }) {
   const [setupComplete, setSetupComplete] = useState(false)
   const [loading, setLoading] = useState(!!existingProject)
   const [existingProducts, setExistingProducts] = useState([])
@@ -40,10 +46,8 @@ function BusinessSetup({ userId, onSetupComplete, existingProject, userPersona }
       return
     }
 
-    const persona = userPersona || 'vibe_seeker'
-
-    // Vibe seekers don't need product identification
-    if (persona === 'vibe_seeker') {
+    // Skip product identification unless user explicitly said "build my own"
+    if (stageProgress?.ambition !== 'build_own') {
       setSetupComplete(true)
       setLoading(false)
       return
@@ -69,7 +73,7 @@ function BusinessSetup({ userId, onSetupComplete, existingProject, userPersona }
     }
 
     checkProducts()
-  }, [existingProject, userId, userPersona])
+  }, [existingProject, userId, stageProgress?.ambition])
 
   const handleAddProduct = () => {
     hapticLight()
@@ -162,7 +166,7 @@ function BusinessSetup({ userId, onSetupComplete, existingProject, userPersona }
           <span className="bs-hero-label">Setup</span>
           <h2 className="bs-hero-title">Identify Your Products</h2>
           <p className="bs-hero-sub">
-            {userPersona === 'movement_maker'
+            {stageProgress?.has_existing_business
               ? 'Define the products in your suite to unlock the business stages.'
               : 'Tell us about your core product to unlock the business stages.'}
           </p>
@@ -240,17 +244,17 @@ function BusinessSetup({ userId, onSetupComplete, existingProject, userPersona }
     )
   }
 
-  // No project yet — show creation form
+  // No project yet — show the full setup flow (BQ1-BQ3 → project creation)
   return (
     <div className="business-setup">
       <div className="bs-hero">
         <span className="bs-hero-label">Setup</span>
         <h2 className="bs-hero-title">Set Up Your Business</h2>
-        <p className="bs-hero-sub">Create your project to unlock the business stages. Takes about 2 minutes.</p>
+        <p className="bs-hero-sub">A few quick questions to personalise your business journey.</p>
       </div>
 
       <div className="bs-card">
-        <ProjectNameStep
+        <BusinessQuestionsFlow
           userId={userId}
           onComplete={(project) => {
             setSetupComplete(true)
@@ -266,28 +270,65 @@ function makeEmptyProduct() {
   return { name: '', description: '', tier: null }
 }
 
-// Two-step project creation: name → stage
-function ProjectNameStep({ userId, onComplete }) {
-  const [step, setStep] = useState('name') // 'name' | 'stage'
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
+/**
+ * BusinessQuestionsFlow — Old Q1-Q3 + project creation
+ * Steps: BQ1 (journey) → BQ2 (wealth ladder) → BQ3 (goal) → Project Name → Stage
+ */
+function BusinessQuestionsFlow({ userId, onComplete }) {
+  const [step, setStep] = useState('bq1')
+  const [questions, setQuestions] = useState(null)
+  const [loadError, setLoadError] = useState(false)
+
+  // Business question answers
+  const [employmentStatus, setEmploymentStatus] = useState(null)
+  const [hasSideProject, setHasSideProject] = useState(false)
+  const [wealthLadderRung, setWealthLadderRung] = useState(null)
+  const [primaryGoal, setPrimaryGoal] = useState(null)
+
+  // Project creation state
+  const [projectName, setProjectName] = useState('')
+  const [projectDesc, setProjectDesc] = useState('')
   const [selectedStage, setSelectedStage] = useState(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
 
-  const handleNameNext = (e) => {
-    e.preventDefault()
-    if (!name.trim()) return
-    hapticLight()
-    setStep('stage')
+  // Load persona-assessment.json for the 3 business questions
+  useEffect(() => {
+    fetch(`/persona-assessment.json?v=${Date.now()}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load')
+        return res.json()
+      })
+      .then(data => setQuestions(data.questions))
+      .catch(() => setLoadError(true))
+  }, [])
+
+  const STEP_LABELS = ['Journey', 'Creations', 'Goal', 'Project', 'Stage']
+  const STEP_KEYS = ['bq1', 'bq2', 'bq3', 'name', 'stage']
+  const currentStepIndex = STEP_KEYS.indexOf(step)
+
+  // Save business profile data after BQ3
+  const saveBusinessProfile = async (goal) => {
+    const persona = derivePersonaFromWealthLadder(wealthLadderRung, employmentStatus)
+    const emphasis = determineGuidanceEmphasis(wealthLadderRung, goal)
+
+    try {
+      await supabase.from('user_stage_progress').upsert({
+        user_id: userId,
+        persona,
+        employment_status: employmentStatus,
+        has_side_project: hasSideProject,
+        wealth_ladder_rung: wealthLadderRung,
+        primary_goal: goal,
+        guidance_emphasis: emphasis,
+      }, { onConflict: 'user_id' })
+    } catch (err) {
+      console.warn('Error saving business profile:', err)
+    }
   }
 
-  const handleStageSelect = (option) => {
-    hapticLight()
-    setSelectedStage(option)
-  }
-
-  const handleSubmit = async () => {
+  // Create project after stage selection
+  const handleCreateProject = async () => {
     if (!selectedStage || saving) return
 
     setSaving(true)
@@ -298,13 +339,13 @@ function ProjectNameStep({ userId, onComplete }) {
         .from('user_projects')
         .insert({
           user_id: userId,
-          name: name.trim(),
-          description: description.trim() || null,
+          name: projectName.trim(),
+          description: projectDesc.trim() || null,
           source_flow: 'business_setup',
           status: 'active',
           current_stage: selectedStage.stage,
           total_points: 0,
-          is_primary: true
+          is_primary: true,
         })
         .select()
         .single()
@@ -321,18 +362,193 @@ function ProjectNameStep({ userId, onComplete }) {
     }
   }
 
+  if (loadError) {
+    return <p className="bs-error">Failed to load questions. Please refresh.</p>
+  }
+
+  if (!questions) {
+    return (
+      <div className="bs-loading">
+        <div className="bs-spinner" />
+      </div>
+    )
+  }
+
+  // Step progress dots
+  const renderStepDots = () => (
+    <div className="bs-step-dots">
+      {STEP_LABELS.map((label, i) => (
+        <div
+          key={label}
+          className={`bs-step-dot ${i === currentStepIndex ? 'active' : ''} ${i < currentStepIndex ? 'completed' : ''}`}
+        />
+      ))}
+    </div>
+  )
+
+  // ─── BQ1: Journey Stage ─────────────────────────────────
+  if (step === 'bq1') {
+    const q = questions[0]
+    return (
+      <div className="bs-form">
+        {renderStepDots()}
+        <div className="bs-question">
+          <h3 className="bs-question-heading">{q.question}</h3>
+          {q.subtext && <p className="bs-question-sub">{q.subtext}</p>}
+        </div>
+        <div className="bs-option-list">
+          {q.options.map(option => (
+            <button
+              key={option.value}
+              type="button"
+              className="bs-option"
+              onClick={() => {
+                hapticLight()
+                setEmploymentStatus(option.value)
+                setHasSideProject(option.data?.has_side_project || false)
+                setStep('bq2')
+              }}
+            >
+              <span className="bs-option-label">{option.label}</span>
+              <span className="bs-option-desc">{option.description}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // ─── BQ2: Wealth Ladder ─────────────────────────────────
+  if (step === 'bq2') {
+    const q = questions[1]
+    return (
+      <div className="bs-form">
+        {renderStepDots()}
+        <div className="bs-question">
+          <h3 className="bs-question-heading">{q.question}</h3>
+          {q.subtext && <p className="bs-question-sub">{q.subtext}</p>}
+        </div>
+        <div className="bs-option-list">
+          {q.options.map(option => (
+            <button
+              key={option.value}
+              type="button"
+              className="bs-option"
+              onClick={() => {
+                hapticLight()
+                setWealthLadderRung(option.data?.wealth_ladder || option.value)
+                setPrimaryGoal(null)
+                setStep('bq3')
+              }}
+            >
+              <span className="bs-option-label">{option.label}</span>
+              <span className="bs-option-desc">{option.description}</span>
+            </button>
+          ))}
+        </div>
+        <button type="button" className="bs-back-btn" onClick={() => setStep('bq1')}>
+          Back
+        </button>
+      </div>
+    )
+  }
+
+  // ─── BQ3: Goal ──────────────────────────────────────────
+  if (step === 'bq3') {
+    const q = questions[2]
+    const validGoals = getValidGoalsForWealthLadder(wealthLadderRung)
+    return (
+      <div className="bs-form">
+        {renderStepDots()}
+        <div className="bs-question">
+          <h3 className="bs-question-heading">{q.question}</h3>
+          {q.subtext && <p className="bs-question-sub">{q.subtext}</p>}
+        </div>
+        <div className="bs-option-list">
+          {q.options.map(option => {
+            const isDisabled = !validGoals.includes(option.value)
+            return (
+              <button
+                key={option.value}
+                type="button"
+                className={`bs-option ${isDisabled ? 'disabled' : ''}`}
+                disabled={isDisabled}
+                onClick={() => {
+                  if (isDisabled) return
+                  hapticLight()
+                  setPrimaryGoal(option.value)
+                  saveBusinessProfile(option.value)
+                  setStep('name')
+                }}
+              >
+                <span className="bs-option-label">{option.label}</span>
+                <span className="bs-option-desc">{option.description}</span>
+                {isDisabled && <span className="bs-option-locked">Not available at your stage</span>}
+              </button>
+            )
+          })}
+        </div>
+        <button type="button" className="bs-back-btn" onClick={() => setStep('bq2')}>
+          Back
+        </button>
+      </div>
+    )
+  }
+
+  // ─── Project Name ───────────────────────────────────────
+  if (step === 'name') {
+    return (
+      <form className="bs-form" onSubmit={(e) => { e.preventDefault(); if (projectName.trim()) { hapticLight(); setStep('stage') } }}>
+        {renderStepDots()}
+        <div className="bs-field">
+          <label htmlFor="bs-project-name">What's your business or project called?</label>
+          <input
+            id="bs-project-name"
+            type="text"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+            placeholder="e.g. My Coaching Business, SaaS App"
+            maxLength={100}
+            required
+          />
+        </div>
+        <div className="bs-field">
+          <label htmlFor="bs-project-desc">Brief description <span className="bs-optional">(optional)</span></label>
+          <textarea
+            id="bs-project-desc"
+            value={projectDesc}
+            onChange={(e) => setProjectDesc(e.target.value)}
+            placeholder="What does your business do? Who does it serve?"
+            rows={3}
+            maxLength={500}
+          />
+        </div>
+        <div className="bs-actions">
+          <button type="button" className="bs-back-btn" onClick={() => setStep('bq3')}>
+            Back
+          </button>
+          <button type="submit" className="bs-cta" disabled={!projectName.trim()}>
+            Next
+          </button>
+        </div>
+      </form>
+    )
+  }
+
+  // ─── Stage Selection ────────────────────────────────────
   if (step === 'stage') {
     return (
       <div className="bs-form">
+        {renderStepDots()}
         <div className="bs-field">
-          <label>Where are you at with <strong>{name}</strong>?</label>
+          <label>Where are you at with <strong>{projectName}</strong>?</label>
           <div className="bs-stage-options">
             {STAGE_OPTIONS.map(option => (
               <button
                 key={option.value}
                 type="button"
                 className={`bs-stage-option ${selectedStage?.value === option.value ? 'selected' : ''}`}
-                onClick={() => handleStageSelect(option)}
+                onClick={() => { hapticLight(); setSelectedStage(option) }}
               >
                 <span className="bs-stage-number">{option.stage}</span>
                 <span className="bs-stage-label">{option.label}</span>
@@ -344,17 +560,13 @@ function ProjectNameStep({ userId, onComplete }) {
         {error && <p className="bs-error">{error}</p>}
 
         <div className="bs-actions">
-          <button
-            type="button"
-            className="bs-back-btn"
-            onClick={() => setStep('name')}
-          >
+          <button type="button" className="bs-back-btn" onClick={() => setStep('name')}>
             Back
           </button>
           <button
             type="button"
             className="bs-cta"
-            onClick={handleSubmit}
+            onClick={handleCreateProject}
             disabled={!selectedStage || saving}
           >
             {saving ? 'Creating...' : 'Create Project & Start'}
@@ -364,44 +576,7 @@ function ProjectNameStep({ userId, onComplete }) {
     )
   }
 
-  return (
-    <form onSubmit={handleNameNext} className="bs-form">
-      <div className="bs-field">
-        <label htmlFor="project-name">What's your business or project called?</label>
-        <input
-          id="project-name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. My Coaching Business, SaaS App"
-          maxLength={100}
-          required
-        />
-      </div>
-
-      <div className="bs-field">
-        <label htmlFor="project-desc">Brief description <span className="bs-optional">(optional)</span></label>
-        <textarea
-          id="project-desc"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="What does your business do? Who does it serve?"
-          rows={3}
-          maxLength={500}
-        />
-      </div>
-
-      {error && <p className="bs-error">{error}</p>}
-
-      <button
-        type="submit"
-        className="bs-cta"
-        disabled={!name.trim()}
-      >
-        Next
-      </button>
-    </form>
-  )
+  return null
 }
 
 export default BusinessSetup

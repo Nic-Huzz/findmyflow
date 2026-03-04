@@ -24,6 +24,7 @@ export default function FlowFinderExplainer() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const returnTo = searchParams.get('returnTo') || '/7-day-challenge'
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isCompleting, setIsCompleting] = useState(false)
   const [viewingResults, setViewingResults] = useState(false)
@@ -96,10 +97,10 @@ export default function FlowFinderExplainer() {
         // Non-fatal - continue to challenge page
       }
 
-      navigate('/7-day-challenge')
+      navigate(returnTo)
     } catch (err) {
       console.error('Error completing explainer:', err)
-      navigate('/7-day-challenge')
+      navigate(returnTo)
     }
   }
 
@@ -346,7 +347,7 @@ export default function FlowFinderExplainer() {
       setCurrentSlide(currentSlide - 1)
     } else {
       // On first slide, go back to challenge portal
-      navigate('/7-day-challenge')
+      navigate(returnTo)
     }
   }
 

@@ -565,7 +565,7 @@ const Profile = () => {
   // Show HomeFirstTime if:
   // 1. No stageProgress exists yet
   // 2. V2 onboarding not completed (ensures all users go through new flow)
-  // This forces old V1 users to complete the new Q1→Q2→Q3 onboarding
+  // This forces old V1 users to complete the tension layer onboarding (4 questions)
   console.log('🔍 Profile.jsx onboarding check:', {
     userId: user?.id,
     email: user?.email,

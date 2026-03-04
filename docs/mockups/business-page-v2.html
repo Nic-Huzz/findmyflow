@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Business Page v2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: #f2f2f7;
+    color: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    max-width: 430px;
+    margin: 0 auto;
+    padding-bottom: 90px;
+  }
+
+  /* ============================
+     1. HERO
+     ============================ */
+  .hero {
+    background: linear-gradient(150deg, #7c3aed 0%, #5e17eb 35%, #4c1d95 100%);
+    padding: 32px 24px 52px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Subtle glow orbs */
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 220px; height: 220px;
+    top: -80px; right: -60px;
+    background: radial-gradient(circle, rgba(233,162,59,0.18) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 160px; height: 160px;
+    bottom: -40px; left: -40px;
+    background: radial-gradient(circle, rgba(124,58,237,0.3) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-text { flex: 1; }
+  .hero-project {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+  .hero-title {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.6px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .hero-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+    margin-bottom: 20px;
+  }
+  .hero-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 500;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 8px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Ring */
+  .ring-wrap {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    position: relative;
+    margin-top: 8px;
+  }
+  .ring-wrap svg {
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+  }
+  .ring-bg  { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 5; }
+  .ring-val { fill: none; stroke: #E9A23B; stroke-width: 5; stroke-linecap: round;
+              stroke-dasharray: 188.5; stroke-dashoffset: 75.4; /* 60% of 2πr, r=30 */ }
+  .ring-label {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: #E9A23B;
+  }
+
+  /* ============================
+     2. STAGE DOTS
+     ============================ */
+  .card {
+    background: #fff;
+    border-radius: 22px;
+    margin: 0 16px 14px;
+    padding: 20px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  .stage-card { margin-top: -30px; position: relative; z-index: 2; }
+
+  .dots {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .dot-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+  }
+  .dot-circle {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800;
+  }
+  .dot-circle.done    { background: #34d399; color: white; }
+  .dot-circle.current { background: #5e17eb; color: white; box-shadow: 0 0 0 4px rgba(94,23,235,0.18); }
+  .dot-circle.locked  { background: #eef0f3; color: #c0c4cc; border: 2px solid #dde0e5; }
+  .dot-label { font-size: 10px; font-weight: 600; color: #b4b8c4; text-align: center; }
+  .dot-item.done    .dot-label { color: #34d399; }
+  .dot-item.current .dot-label { color: #5e17eb; font-weight: 700; }
+
+  /* ============================
+     3. UP NEXT
+     ============================ */
+  .next-card {
+    border: 2px solid #E9A23B;
+    box-shadow: 0 2px 20px rgba(233,162,59,0.12);
+  }
+  .next-eyebrow {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    color: #E9A23B;
+    background: rgba(233,162,59,0.08);
+    padding: 4px 12px; border-radius: 8px;
+    margin-bottom: 14px;
+  }
+  .next-name {
+    font-size: 20px; font-weight: 800;
+    color: #1a1a2e; letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+  .next-meta {
+    font-size: 13px; color: #9a9daa;
+    margin-bottom: 20px;
+  }
+  .gold-btn {
+    display: block; width: 100%;
+    background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);
+    color: #1a1a2e; border: none;
+    padding: 16px; border-radius: 14px;
+    font-size: 16px; font-weight: 800;
+    cursor: pointer; text-align: center;
+    box-shadow: 0 4px 18px rgba(233,162,59,0.28);
+    letter-spacing: -0.2px;
+  }
+
+  /* ============================
+     4. QUEST LIST
+     ============================ */
+  .quest-title {
+    font-size: 18px; font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+
+  .q-row {
+    display: flex; align-items: center;
+    gap: 14px;
+    padding: 15px 0;
+    border-bottom: 1px solid #f2f3f5;
+  }
+  .q-row:last-child { border-bottom: none; }
+
+  .q-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; flex-shrink: 0;
+  }
+  .q-icon.done { background: #eafaf2; }
+  .q-icon.todo { background: #f3f0ff; }
+
+  .q-info { flex: 1; min-width: 0; }
+  .q-name { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+  .q-row.done .q-name { color: #b8bbc6; text-decoration: line-through; font-style: italic; }
+  .q-sub  { font-size: 12px; color: #9a9daa; margin-top: 2px; }
+
+  .q-btn {
+    font-size: 13px; font-weight: 700;
+    padding: 8px 18px; border-radius: 10px;
+    border: none; cursor: pointer; flex-shrink: 0;
+  }
+  .q-btn.done-btn { background: #f0f1f3; color: #b8bbc6; }
+  .q-btn.start-btn {
+    background: linear-gradient(135deg, #E9A23B, #f0b94e);
+    color: #1a1a2e;
+    box-shadow: 0 2px 10px rgba(233,162,59,0.2);
+  }
+
+  /* ============================
+     5. BOTTOM TOOLBAR
+     ============================ */
+  .toolbar {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    background: #fff;
+    border-top: 1px solid #eaeaef;
+    display: flex; justify-content: space-around;
+    padding: 6px 0 24px;
+    z-index: 50;
+  }
+  .tb-item {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 10px; color: #b4b8c4; text-decoration: none;
+    padding: 4px 14px; font-weight: 500;
+  }
+  .tb-item .tb-icon { font-size: 23px; }
+  .tb-item.active { color: #5e17eb; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- 1 ─── HERO ─── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-project">My Coaching Business</div>
+      <h1 class="hero-title">Stage 2: Product</h1>
+      <p class="hero-desc">Define your product &amp; understand your market</p>
+      <button class="hero-switch">Switch Project ▾</button>
+    </div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 68 68">
+        <circle class="ring-bg"  cx="34" cy="34" r="30"/>
+        <circle class="ring-val" cx="34" cy="34" r="30"/>
+      </svg>
+      <span class="ring-label">60%</span>
+    </div>
+  </div>
+</div>
+
+<!-- 2 ─── STAGE DOTS ─── -->
+<div class="card stage-card">
+  <div class="dots">
+    <div class="dot-item done">
+      <div class="dot-circle done">✓</div>
+      <span class="dot-label">Setup</span>
+    </div>
+    <div class="dot-item done">
+      <div class="dot-circle done">✓</div>
+      <span class="dot-label">Validate</span>
+    </div>
+    <div class="dot-item current">
+      <div class="dot-circle current">2</div>
+      <span class="dot-label">Product</span>
+    </div>
+    <div class="dot-item">
+      <div class="dot-circle locked">3</div>
+      <span class="dot-label">Test</span>
+    </div>
+    <div class="dot-item">
+      <div class="dot-circle locked">4</div>
+      <span class="dot-label">Offer</span>
+    </div>
+    <div class="dot-item">
+      <div class="dot-circle locked">5</div>
+      <span class="dot-label">Campaign</span>
+    </div>
+    <div class="dot-item">
+      <div class="dot-circle locked">6</div>
+      <span class="dot-label">Launch</span>
+    </div>
+    <div class="dot-item">
+      <div class="dot-circle locked">7</div>
+      <span class="dot-label">Growth</span>
+    </div>
+  </div>
+</div>
+
+<!-- 3 ─── UP NEXT ─── -->
+<div class="card next-card">
+  <span class="next-eyebrow">Up Next</span>
+  <div class="next-name">📝 Understand Your Market</div>
+  <div class="next-meta">Explainer • Free • ~10 min</div>
+  <button class="gold-btn">Start Quest →</button>
+</div>
+
+<!-- 4 ─── QUEST LIST ─── -->
+<div class="card">
+  <div class="quest-title">Stage 2 Quests</div>
+
+  <div class="q-row done">
+    <div class="q-icon done">✅</div>
+    <div class="q-info">
+      <div class="q-name">Customer Interview</div>
+      <div class="q-sub">Paid • Completed</div>
+    </div>
+    <button class="q-btn done-btn">Done</button>
+  </div>
+
+  <div class="q-row done">
+    <div class="q-icon done">✅</div>
+    <div class="q-info">
+      <div class="q-name">Market Research</div>
+      <div class="q-sub">Paid • Completed</div>
+    </div>
+    <button class="q-btn done-btn">Done</button>
+  </div>
+
+  <div class="q-row done">
+    <div class="q-icon done">✅</div>
+    <div class="q-info">
+      <div class="q-name">Competitor Analysis</div>
+      <div class="q-sub">Free • Completed</div>
+    </div>
+    <button class="q-btn done-btn">Done</button>
+  </div>
+
+  <div class="q-row">
+    <div class="q-icon todo">📝</div>
+    <div class="q-info">
+      <div class="q-name">Understand Your Market</div>
+      <div class="q-sub">Explainer • Free</div>
+    </div>
+    <button class="q-btn start-btn">Start</button>
+  </div>
+
+  <div class="q-row">
+    <div class="q-icon todo">🎯</div>
+    <div class="q-info">
+      <div class="q-name">Product-Market Fit</div>
+      <div class="q-sub">Paid • Stage 2</div>
+    </div>
+    <button class="q-btn start-btn">Start</button>
+  </div>
+</div>
+
+<!-- 5 ─── TOOLBAR ─── -->
+<div class="toolbar">
+  <a class="tb-item" href="#"><span class="tb-icon">🏠</span><span>Home</span></a>
+  <a class="tb-item" href="#"><span class="tb-icon">🎮</span><span>Let's Play</span></a>
+  <a class="tb-item active" href="#"><span class="tb-icon">💼</span><span>Business</span></a>
+  <a class="tb-item" href="#"><span class="tb-icon">👤</span><span>Profile</span></a>
+</div>
+
+</body>
+</html>

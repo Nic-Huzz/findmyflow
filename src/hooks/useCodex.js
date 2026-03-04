@@ -113,8 +113,8 @@ export function useCodex(userId) {
       // Process Flow Finder completion
       const flowFinderComplete = flowSessionsResult.data?.length > 0
 
-      // Process onboarding complete
-      const onboardingComplete = !!stageProgressResult.data?.persona
+      // Process onboarding complete (use flag, not persona — persona set later in BusinessSetup)
+      const onboardingComplete = !!stageProgressResult.data?.onboarding_v2_completed
 
       // Process current stage (max across all projects)
       const currentStage = projectsResult.data?.reduce(

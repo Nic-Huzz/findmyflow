@@ -28,17 +28,6 @@ export default function FollowUpQuestions({ stuckPoint, founderName, onComplete,
           <div className="pp-progress-bar-fill" style={{ width: '100%' }} />
         </div>
 
-        <button
-          className="pp-btn-ghost"
-          onClick={() => {
-            setAnswers((prev) => prev.slice(0, -1))
-            setCurrentQ(questions.length - 1)
-          }}
-          style={{ fontSize: 13, padding: '4px 0', marginBottom: 12, width: 'auto', border: 'none' }}
-        >
-          Back
-        </button>
-
         <div className="pp-fade-in-up" style={{ textAlign: 'center', marginBottom: 28 }}>
           <h2>Anything else {founderName} should know?</h2>
           <p className="pp-subtitle">
@@ -72,6 +61,18 @@ export default function FollowUpQuestions({ stuckPoint, founderName, onComplete,
         <button className="pp-btn-gold" onClick={() => onComplete(answers, openText)}>
           Show me what {founderName} would do
         </button>
+
+        <div style={{ marginTop: 16 }}>
+          <button
+            className="pp-back-link"
+            onClick={() => {
+              setAnswers((prev) => prev.slice(0, -1))
+              setCurrentQ(questions.length - 1)
+            }}
+          >
+            ← Back
+          </button>
+        </div>
       </>
     )
   }
@@ -87,30 +88,16 @@ export default function FollowUpQuestions({ stuckPoint, founderName, onComplete,
 
       <div className="pp-fade-in-up" style={{ marginBottom: 4 }}>
         <div className="pp-followup-label">
-          {stuckPoint.name} &mdash; Question {currentQ + 1} of {questions.length}
+          {stuckPoint.name} · Question {currentQ + 1} of {questions.length}
         </div>
-        <h2>{q.question}</h2>
+        <h2>{q.question.replace('{founderName}', founderName || 'your founder')}</h2>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <button
-          className="pp-btn-ghost"
-          onClick={() => {
-            if (currentQ === 0) {
-              onBack()
-            } else {
-              setAnswers((prev) => prev.slice(0, -1))
-              setCurrentQ((prev) => prev - 1)
-            }
-          }}
-          style={{ fontSize: 13, alignSelf: 'flex-start', padding: '4px 0', marginBottom: 4, width: 'auto', border: 'none' }}
-        >
-          Back
-        </button>
         {q.options.map((option, i) => (
           <div
             key={i}
-            className={`pp-selectable-card pp-fade-in-up pp-stagger-${i + 2}`}
+            className={`pp-selectable-card pp-fade-in-up pp-stagger-${i + 1}`}
             onClick={() => handleSelect(i)}
             role="button"
             tabIndex={0}
@@ -122,6 +109,22 @@ export default function FollowUpQuestions({ stuckPoint, founderName, onComplete,
             </div>
           </div>
         ))}
+      </div>
+
+      <div style={{ marginTop: 16 }}>
+        <button
+          className="pp-back-link"
+          onClick={() => {
+            if (currentQ === 0) {
+              onBack()
+            } else {
+              setAnswers((prev) => prev.slice(0, -1))
+              setCurrentQ((prev) => prev - 1)
+            }
+          }}
+        >
+          ← Back
+        </button>
       </div>
     </>
   )

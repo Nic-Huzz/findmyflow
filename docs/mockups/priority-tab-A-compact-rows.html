@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Priority Tab — A: Compact Rows</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: #f2f2f7;
+    color: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 16px 16px 100px;
+  }
+
+  /* Layer Card */
+  .layer-card {
+    background: white;
+    border: 2px solid #E9A23B;
+    border-radius: 22px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  .layer-emoji { font-size: 2.2rem; }
+  .layer-info { flex: 1; }
+  .layer-eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: #E9A23B;
+    text-transform: uppercase;
+  }
+  .layer-name {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 2px 0;
+  }
+  .layer-desc {
+    font-size: 13px;
+    color: #6c757d;
+    line-height: 1.4;
+  }
+  .layer-reassess {
+    font-size: 12px;
+    color: #5e17eb;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  /* Progress bar */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 0 4px;
+  }
+  .progress-label {
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: #4a4a5a;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #eef0f3;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #5e17eb, #E9A23B);
+    transition: width 0.4s ease;
+  }
+
+  /* Section headers */
+  .section-header {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #9a9daa;
+    text-transform: uppercase;
+    padding: 12px 4px 8px;
+    border-bottom: 1px solid #eef0f3;
+    margin-bottom: 0;
+  }
+
+  /* Quest rows */
+  .quest-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 4px;
+    border-bottom: 1px solid #f5f5f7;
+    text-decoration: none;
+    color: inherit;
+  }
+  .quest-row:last-child { border-bottom: none; }
+  .quest-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #dde0e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .quest-check.done {
+    background: #34d399;
+    border-color: #34d399;
+    color: white;
+  }
+  .quest-body { flex: 1; min-width: 0; }
+  .quest-name {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .quest-row.done .quest-name {
+    color: #9a9daa;
+    text-decoration: line-through;
+  }
+  .quest-meta {
+    font-size: 12px;
+    color: #9a9daa;
+    margin-top: 3px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .quest-meta .pill {
+    background: #f0f0f5;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .quest-meta .pill.screen { background: #ede9fe; color: #7c3aed; }
+  .quest-meta .pill.live { background: #fef3c7; color: #d97706; }
+  .quest-meta .pill.daily { background: #d1fae5; color: #059669; }
+  .quest-meta .pill.weekly { background: #ede9fe; color: #7c3aed; }
+
+  /* Streak dots */
+  .streak-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .streak-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #eef0f3;
+  }
+  .streak-dot.filled { background: #34d399; }
+  .streak-labels {
+    display: flex;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  .streak-labels span {
+    width: 10px;
+    font-size: 8px;
+    text-align: center;
+    color: #b0b3bd;
+  }
+
+  /* DNA buttons */
+  .dna-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .dna-btn {
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+  }
+  .dna-btn.primary {
+    background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);
+    color: #1a1a2e;
+  }
+  .dna-btn.secondary {
+    background: #f0f0f5;
+    color: #6c757d;
+  }
+
+  /* Points badge */
+  .pts { font-weight: 700; color: #E9A23B; }
+
+  /* Edit button */
+  .edit-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    background: none;
+    border: 2px solid #dde0e5;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #6c757d;
+    cursor: pointer;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- Layer Card -->
+<div class="layer-card">
+  <span class="layer-emoji">💧</span>
+  <div class="layer-info">
+    <span class="layer-eyebrow">Your Priority</span>
+    <div class="layer-name">The Spring — Discover</div>
+    <div class="layer-desc">Where the water first emerges — finding your source.</div>
+    <div style="margin-top: 4px; font-size: 12px; color: #5e17eb; font-weight: 600;">Focus: Flow Finder</div>
+  </div>
+  <button class="layer-reassess">Reassess</button>
+</div>
+
+<!-- Progress -->
+<div class="progress-row">
+  <span class="progress-label">3/6 done</span>
+  <div class="progress-bar"><div class="progress-fill" style="width: 50%"></div></div>
+</div>
+
+<!-- Groan Challenges -->
+<div class="section-header">💪 Groan Challenges</div>
+
+<a class="quest-row done" href="#">
+  <span class="quest-check done">✓</span>
+  <div class="quest-body">
+    <div class="quest-name">Go live on Instagram for 2 minutes</div>
+    <div class="quest-meta">
+      <span class="pill live">Live</span>
+      <span>Mon</span>
+      <span>·</span>
+      <span>3%: 2min → 3min</span>
+    </div>
+  </div>
+</a>
+
+<a class="quest-row" href="#">
+  <span class="quest-check"></span>
+  <div class="quest-body">
+    <div class="quest-name">Post a vulnerable story about your journey</div>
+    <div class="quest-meta">
+      <span class="pill screen">Screen</span>
+      <span>Wed</span>
+      <span>·</span>
+      <span>3%: Post 1 story</span>
+    </div>
+  </div>
+</a>
+
+<!-- Play Profile -->
+<div class="section-header">🧬 Play Profile</div>
+
+<div class="quest-row">
+  <span class="quest-check"></span>
+  <div class="quest-body">
+    <div class="quest-name">Overcome imposter syndrome in public speaking</div>
+    <div class="quest-meta">DNA Challenge · Stuck point #3</div>
+    <div class="dna-actions">
+      <button class="dna-btn primary">Start Now</button>
+      <button class="dna-btn secondary">Do Later</button>
+    </div>
+  </div>
+</div>
+
+<!-- Daily Healing -->
+<div class="section-header">💚 Daily Healing</div>
+
+<a class="quest-row" href="#">
+  <span class="quest-check"></span>
+  <div class="quest-body">
+    <div class="quest-name">Morning Reconnect</div>
+    <div class="quest-meta">
+      <span class="pill daily">Daily</span>
+      <span>Reconnect</span>
+      <span>·</span>
+      <span class="pts">5pts</span>
+    </div>
+    <div class="streak-row">
+      <div class="streak-dot filled"></div>
+      <div class="streak-dot filled"></div>
+      <div class="streak-dot"></div>
+      <div class="streak-dot"></div>
+      <div class="streak-dot"></div>
+      <div class="streak-dot"></div>
+      <div class="streak-dot"></div>
+    </div>
+    <div class="streak-labels">
+      <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+    </div>
+  </div>
+</a>
+
+<a class="quest-row done" href="#">
+  <span class="quest-check done">✓</span>
+  <div class="quest-body">
+    <div class="quest-name">Release Breath</div>
+    <div class="quest-meta">
+      <span class="pill daily">Daily</span>
+      <span>Release</span>
+      <span>·</span>
+      <span class="pts">5pts</span>
+    </div>
+    <div class="streak-row">
+      <div class="streak-dot filled"></div>
+      <div class="streak-dot filled"></div>
+      <div class="streak-dot filled"></div>
+      <div class="streak-dot"></div>
+      <div class="streak-dot"></div>
+      <div class="streak-dot"></div>
+      <div class="streak-dot"></div>
+    </div>
+    <div class="streak-labels">
+      <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+    </div>
+  </div>
+</a>
+
+<!-- Weekly Healing -->
+<div class="section-header">💜 Weekly Healing</div>
+
+<a class="quest-row" href="#">
+  <span class="quest-check"></span>
+  <div class="quest-body">
+    <div class="quest-name">Deep Rewire Session</div>
+    <div class="quest-meta">
+      <span class="pill weekly">Weekly</span>
+      <span>Rewire</span>
+      <span>·</span>
+      <span class="pts">15pts</span>
+    </div>
+  </div>
+</a>
+
+<button class="edit-btn">Edit Week</button>
+
+</body>
+</html>

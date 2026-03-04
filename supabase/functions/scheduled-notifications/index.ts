@@ -33,9 +33,6 @@ const NOTIFICATIONS = {
   }
 }
 
-// Days of week mapping for weekly plan notifications
-const DAYS_OF_WEEK = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-
 // Get current day of week in a specific timezone (lowercase)
 function getCurrentDayInTimezone(timezone: string): string {
   try {
@@ -48,6 +45,38 @@ function getCurrentDayInTimezone(timezone: string): string {
   } catch (error) {
     console.error(`Invalid timezone for day check: ${timezone}`, error)
     return ''
+  }
+}
+
+// Get the Monday of the current week as YYYY-MM-DD in a specific timezone
+function getWeekStartInTimezone(timezone: string): string {
+  try {
+    const now = new Date()
+    // Get the local date parts in the user's timezone
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: timezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(now) // Returns YYYY-MM-DD in en-CA locale
+    const [year, month, day] = parts.split('-').map(Number)
+    const localDate = new Date(year, month - 1, day)
+    const dayOfWeek = localDate.getDay()
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+    localDate.setDate(localDate.getDate() + mondayOffset)
+    const y = localDate.getFullYear()
+    const m = String(localDate.getMonth() + 1).padStart(2, '0')
+    const d = String(localDate.getDate()).padStart(2, '0')
+    return `${y}-${m}-${d}`
+  } catch (error) {
+    console.error(`Invalid timezone for week start: ${timezone}`, error)
+    // Fallback to UTC
+    const now = new Date()
+    const dayOfWeek = now.getUTCDay()
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+    const weekStart = new Date(now)
+    weekStart.setUTCDate(now.getUTCDate() + mondayOffset)
+    return weekStart.toISOString().split('T')[0]
   }
 }
 
@@ -121,35 +150,6 @@ serve(async (req) => {
       }
     }
 
-    // Fetch current week's plans for all users with subscriptions
-    // Get the Monday of current week
-    const now = new Date()
-    const dayOfWeek = now.getUTCDay()
-    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
-    const weekStart = new Date(now)
-    weekStart.setUTCDate(now.getUTCDate() + mondayOffset)
-    weekStart.setUTCHours(0, 0, 0, 0)
-    const weekStartStr = weekStart.toISOString().split('T')[0]
-
-    const { data: allWeeklyPlans, error: plansError } = await supabaseClient
-      .from('weekly_plans')
-      .select('*')
-      .in('user_id', userIds)
-      .eq('week_start', weekStartStr)
-
-    if (plansError) {
-      console.error('Error fetching weekly plans:', plansError)
-    }
-
-    // Create a map of user_id -> weekly plan
-    const plansMap = new Map()
-    if (allWeeklyPlans) {
-      for (const plan of allWeeklyPlans) {
-        plansMap.set(plan.user_id, plan)
-      }
-    }
-
-
     // Group subscriptions by timezone and notification hour
     const notificationsToSend: Array<{
       subscription: any,
@@ -218,6 +218,35 @@ serve(async (req) => {
       // Log the detected hour for debugging
       console.log(`User ${sub.user_id}: timezone=${timezone}, localHour=${userLocalHour}`)
 
+      // Monday 8am: replace standard morning notification with "Plan Your Week"
+      // for users who haven't picked their priority quests yet
+      if (userLocalHour === 8 && prefs.quest_reminders) {
+        const userDay = getCurrentDayInTimezone(timezone)
+
+        if (userDay === 'monday') {
+          // Check if user has picks for this week (timezone-aware)
+          const userWeekStart = getWeekStartInTimezone(timezone)
+          const { data: picks } = await supabaseClient
+            .from('priority_weekly_picks')
+            .select('id')
+            .eq('user_id', sub.user_id)
+            .eq('week_start_date', userWeekStart)
+            .limit(1)
+
+          if (!picks || picks.length === 0) {
+            const planNotification = {
+              title: 'Plan Your Week!',
+              body: 'Choose your priority quests for this week.',
+              url: '/7-day-challenge?tab=priority',
+              tag: 'monday-weekly-plan'
+            }
+            console.log(`User ${sub.user_id}: Monday plan reminder (no picks for ${userWeekStart})`)
+            notificationsToSend.push({ subscription: sub, notification: planNotification })
+            continue // skip standard 8am notification — plan reminder replaces it
+          }
+        }
+      }
+
       // Check if there's a standard notification for this hour
       const notification = NOTIFICATIONS[userLocalHour]
 
@@ -229,27 +258,6 @@ serve(async (req) => {
           notificationsToSend.push({ subscription: sub, notification })
         } else {
           console.log(`User ${sub.user_id}: Skipping notification - ${prefKey} disabled`)
-        }
-      }
-
-      // Check for weekly plan notifications at 8am (groan day reminder)
-      if (userLocalHour === 8 && prefs.quest_reminders) {
-        const weeklyPlan = plansMap.get(sub.user_id)
-        if (weeklyPlan) {
-          const userDay = getCurrentDayInTimezone(timezone)
-
-          // Check if today is groan day
-          if (weeklyPlan.weekly_groan_day === userDay && !weeklyPlan.weekly_groan_completed) {
-            const groanNotification = {
-              title: '🎯 Today is Your Groan Day!',
-              body: weeklyPlan.weekly_groan_description
-                ? `Time to push past your edge: "${weeklyPlan.weekly_groan_description}"`
-                : 'Time to complete your weekly groan challenge',
-              url: '/7-day-challenge?tab=Groans',
-              tag: 'weekly-groan-day'
-            }
-            notificationsToSend.push({ subscription: sub, notification: groanNotification })
-          }
         }
       }
     }

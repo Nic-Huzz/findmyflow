@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Business Page — Option B: Stage-Focused Hero</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+    color: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 0 0 100px;
+  }
+
+  /* === MOCKUP LABEL === */
+  .mockup-label {
+    background: #1a1a2e;
+    color: #E9A23B;
+    text-align: center;
+    padding: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .mockup-label span { color: rgba(255,255,255,0.5); display: block; font-size: 11px; margin-top: 4px; font-weight: 400; letter-spacing: 0; text-transform: none; }
+
+  /* === HERO CARD === */
+  .hero {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+    padding: 28px 24px 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -20px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+    animation: glow 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -30px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(94,23,235,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  @keyframes glow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-project {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+  }
+  .hero-switch {
+    font-size: 12px;
+    color: #E9A23B;
+    font-weight: 600;
+    background: rgba(233,162,59,0.15);
+    border: 1px solid rgba(233,162,59,0.3);
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .hero-stage-label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-stage-name {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-stage-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 20px;
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Progress in hero */
+  .hero-progress {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 20px;
+  }
+  .hero-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .hero-progress-label { color: rgba(255,255,255,0.6); }
+  .hero-progress-pct { color: #E9A23B; font-weight: 700; }
+  .hero-progress-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .hero-progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #E9A23B, #f5c55a);
+    width: 60%;
+  }
+
+  /* Next quest CTA */
+  .hero-next {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 16px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 16px;
+  }
+  .hero-next-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .hero-next-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .hero-next-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .hero-cta {
+    width: 100%;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(233,162,59,0.3);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* === STAGE JOURNEY CARD === */
+  .content { padding: 16px 20px; }
+
+  .journey-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  }
+  .journey-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    margin-bottom: 16px;
+    color: #1a1a2e;
+  }
+  .journey-stages {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .journey-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 4px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid transparent;
+  }
+  .journey-stage:hover { background: #f8f9fa; }
+  .journey-stage.current {
+    border-color: #5e17eb;
+    background: rgba(94,23,235,0.04);
+  }
+  .journey-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: white;
+  }
+  .journey-dot.completed { background: #10b981; }
+  .journey-dot.current { background: #5e17eb; box-shadow: 0 0 0 3px rgba(94,23,235,0.2); }
+  .journey-dot.locked { background: #dee2e6; color: #adb5bd; }
+  .journey-stage-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #6c757d;
+    text-align: center;
+  }
+  .journey-stage.current .journey-stage-label { color: #5e17eb; font-weight: 700; }
+
+  /* === QUEST LIST CARD === */
+  .quest-list-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  }
+  .quest-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .quest-list-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #1a1a2e;
+  }
+  .quest-count {
+    font-size: 12px;
+    color: #6c757d;
+    background: #f1f3f5;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .quest-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f3f5;
+  }
+  .quest-item:last-child { border-bottom: none; }
+
+  .quest-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .quest-icon.todo { background: rgba(94,23,235,0.08); }
+  .quest-icon.done { background: rgba(16,185,129,0.08); }
+  .quest-icon.locked { background: #f1f3f5; }
+
+  .quest-info { flex: 1; }
+  .quest-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 2px;
+  }
+  .quest-item.done .quest-name {
+    color: #6c757d;
+    text-decoration: line-through;
+  }
+  .quest-item.locked .quest-name { color: #adb5bd; }
+  .quest-type {
+    font-size: 11px;
+    color: #6c757d;
+  }
+
+  .quest-action {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .quest-action.start {
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e;
+  }
+  .quest-action.completed {
+    background: #e9ecef;
+    color: #6c757d;
+  }
+  .quest-action.lock {
+    background: #f1f3f5;
+    color: #adb5bd;
+  }
+
+  /* === BOTTOM TOOLBAR === */
+  .bottom-toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 20px;
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: #adb5bd;
+    text-decoration: none;
+    padding: 4px 12px;
+  }
+  .nav-item .nav-icon { font-size: 22px; }
+  .nav-item.active { color: #5e17eb; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="mockup-label">
+  Option B — Stage-Focused Hero
+  <span>Purple hero card highlighting current stage + next quest. Stage grid below. Matches /me design.</span>
+</div>
+
+<!-- Hero Card -->
+<div class="hero">
+  <div class="hero-top">
+    <span class="hero-project">My Coaching Business</span>
+    <button class="hero-switch">Switch ▾</button>
+  </div>
+
+  <div class="hero-stage-label">Current Stage</div>
+  <div class="hero-stage-name">2. Product</div>
+  <p class="hero-stage-desc">Define your product and understand your market</p>
+
+  <div class="hero-progress">
+    <div class="hero-progress-header">
+      <span class="hero-progress-label">3 of 5 quests complete</span>
+      <span class="hero-progress-pct">60%</span>
+    </div>
+    <div class="hero-progress-bar">
+      <div class="hero-progress-fill"></div>
+    </div>
+  </div>
+
+  <div class="hero-next">
+    <div class="hero-next-label">Up Next</div>
+    <div class="hero-next-title">📝 Understand Your Market</div>
+    <div class="hero-next-meta">Explainer • Free • ~10 min</div>
+  </div>
+
+  <button class="hero-cta">Continue →</button>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- Stage Journey -->
+  <div class="journey-card">
+    <h3 class="journey-title">Your Journey</h3>
+    <div class="journey-stages">
+      <div class="journey-stage">
+        <div class="journey-dot completed">✓</div>
+        <span class="journey-stage-label">Setup</span>
+      </div>
+      <div class="journey-stage">
+        <div class="journey-dot completed">✓</div>
+        <span class="journey-stage-label">Validate</span>
+      </div>
+      <div class="journey-stage current">
+        <div class="journey-dot current">2</div>
+        <span class="journey-stage-label">Product</span>
+      </div>
+      <div class="journey-stage">
+        <div class="journey-dot locked">3</div>
+        <span class="journey-stage-label">Test</span>
+      </div>
+      <div class="journey-stage">
+        <div class="journey-dot locked">4</div>
+        <span class="journey-stage-label">Offer</span>
+      </div>
+      <div class="journey-stage">
+        <div class="journey-dot locked">5</div>
+        <span class="journey-stage-label">Campaign</span>
+      </div>
+      <div class="journey-stage">
+        <div class="journey-dot locked">6</div>
+        <span class="journey-stage-label">Launch</span>
+      </div>
+      <div class="journey-stage">
+        <div class="journey-dot locked">7</div>
+        <span class="journey-stage-label">Growth</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quest List -->
+  <div class="quest-list-card">
+    <div class="quest-list-header">
+      <span class="quest-list-title">Stage 2 Quests</span>
+      <span class="quest-count">3 / 5</span>
+    </div>
+
+    <div class="quest-item done">
+      <div class="quest-icon done">✅</div>
+      <div class="quest-info">
+        <div class="quest-name">Customer Interview</div>
+        <div class="quest-type">Paid • Completed</div>
+      </div>
+      <button class="quest-action completed">Done</button>
+    </div>
+
+    <div class="quest-item done">
+      <div class="quest-icon done">✅</div>
+      <div class="quest-info">
+        <div class="quest-name">Market Research</div>
+        <div class="quest-type">Paid • Completed</div>
+      </div>
+      <button class="quest-action completed">Done</button>
+    </div>
+
+    <div class="quest-item done">
+      <div class="quest-icon done">✅</div>
+      <div class="quest-info">
+        <div class="quest-name">Competitor Analysis</div>
+        <div class="quest-type">Free • Completed</div>
+      </div>
+      <button class="quest-action completed">Done</button>
+    </div>
+
+    <div class="quest-item">
+      <div class="quest-icon todo">📝</div>
+      <div class="quest-info">
+        <div class="quest-name">Understand Your Market</div>
+        <div class="quest-type">Explainer • Free</div>
+      </div>
+      <button class="quest-action start">Start</button>
+    </div>
+
+    <div class="quest-item">
+      <div class="quest-icon todo">🎯</div>
+      <div class="quest-info">
+        <div class="quest-name">Product-Market Fit</div>
+        <div class="quest-type">Paid • Stage 2</div>
+      </div>
+      <button class="quest-action start">Start</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Bottom Toolbar -->
+<div class="bottom-toolbar">
+  <a class="nav-item" href="#">
+    <span class="nav-icon">🏠</span>
+    <span>Home</span>
+  </a>
+  <a class="nav-item" href="#">
+    <span class="nav-icon">🎮</span>
+    <span>Let's Play</span>
+  </a>
+  <a class="nav-item active" href="#">
+    <span class="nav-icon">💼</span>
+    <span>Business</span>
+  </a>
+  <a class="nav-item" href="#">
+    <span class="nav-icon">👤</span>
+    <span>Profile</span>
+  </a>
+</div>
+
+</body>
+</html>

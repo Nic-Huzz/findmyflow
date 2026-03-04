@@ -92,6 +92,22 @@
   background: rgba(94, 23, 235, 0.04);
 }
 
+/* ── Back link (minimal text button) ── */
+.play-profile-quiz .pp-back-link {
+  background: none;
+  border: none;
+  color: #9a9daa;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: inherit;
+}
+
+.play-profile-quiz .pp-back-link:hover {
+  color: #5e17eb;
+}
+
 /* ── Glass card (light theme) ── */
 .play-profile-quiz .pp-glass-card {
   background: white;
@@ -284,6 +300,10 @@
   transition: all 0.2s ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+}
+
+.play-profile-quiz .pp-selectable-card:focus {
+  outline: none;
 }
 
 .play-profile-quiz .pp-selectable-card:hover {

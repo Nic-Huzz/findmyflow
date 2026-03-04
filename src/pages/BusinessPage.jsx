@@ -1,9 +1,22 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import useBusinessPageData from '../hooks/useBusinessPageData'
 import { useSubscription } from '../hooks/useSubscription'
 import { isPaidQuest } from '../lib/subscriptionService'
+import { supabase } from '../lib/supabaseClient'
+import { sanitizeText } from '../lib/sanitize'
+import { getScoringCategory } from '../lib/scoringCategories'
+import { getWeekStartLocal } from '../lib/dateUtils'
+import {
+  handleConversationLogCompletion,
+  handleMilestoneCompletion,
+  handleFlowCompassCompletion,
+  handleValidationAnalysisCompletion,
+  handleGroanReflectionCompletion
+} from '../lib/questCompletionHelpers'
 import ChallengeProjectSelector from '../components/ChallengeProjectSelector'
 import BusinessSetup from '../components/BusinessSetup'
+import QuestCard from '../components/QuestCard'
 import './BusinessPage.css'
 
 const STAGE_DOTS = [
@@ -28,6 +41,297 @@ export default function BusinessPage() {
   } = useBusinessPageData()
 
   const { hasSubscription } = useSubscription()
+
+  const [questInputs, setQuestInputs] = useState({})
+  const [expandedLearnMore, setExpandedLearnMore] = useState({})
+  const [completingQuestId, setCompletingQuestId] = useState(null)
+  const [showLockedTooltip, setShowLockedTooltip] = useState(null)
+  const [justCompletedQuestId, setJustCompletedQuestId] = useState(null)
+
+  const handleInputChange = (questId, value) => {
+    setQuestInputs(prev => ({ ...prev, [questId]: value }))
+  }
+
+  const toggleLearnMore = (questId) => {
+    setExpandedLearnMore(prev => ({ ...prev, [questId]: !prev[questId] }))
+  }
+
+  const renderDescription = (description) => {
+    if (!description) return null
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+    const parts = []
+    let lastIndex = 0
+    let match
+    while ((match = linkRegex.exec(description)) !== null) {
+      if (match.index > lastIndex) parts.push(description.slice(lastIndex, match.index))
+      parts.push(<Link key={match.index} to={match[2]} className="quest-inline-link">{match[1]}</Link>)
+      lastIndex = match.index + match[0].length
+    }
+    if (lastIndex < description.length) parts.push(description.slice(lastIndex))
+    return parts.length > 0 ? parts : description
+  }
+
+  const handleQuestComplete = async (quest, specialData, event) => {
+    if (completingQuestId) return
+    setCompletingQuestId(quest.id)
+
+    try {
+      const inputValue = questInputs[quest.id]
+
+      // Validate based on input type
+      if (quest.inputType === 'text' && !specialData) {
+        if (!inputValue?.trim()) {
+          alert('Please enter your reflection before completing.')
+          return
+        }
+      }
+      if (quest.inputType === 'dropdown' && !specialData) {
+        if (!inputValue?.trim()) {
+          alert('Please select an option before completing.')
+          return
+        }
+      }
+      if (quest.inputType === 'text_with_tags' && !specialData) {
+        const textVal = typeof inputValue === 'object' ? inputValue.text : inputValue
+        if (!textVal?.trim()) {
+          alert('Please enter your response.')
+          return
+        }
+      }
+
+      const sanitizedReflection = typeof inputValue === 'string' ? sanitizeText(inputValue) : inputValue
+
+      // Handle special types via existing helpers
+      if (quest.inputType === 'conversation_log' && specialData) {
+        const result = await handleConversationLogCompletion(
+          user.id, null, specialData, stageProgress, quest, selectedProject?.id
+        )
+        if (!result.success) {
+          alert(result.error || 'Failed to save conversation log')
+          return
+        }
+      }
+
+      if (quest.inputType === 'milestone' && specialData) {
+        const result = await handleMilestoneCompletion(
+          user.id, specialData, stageProgress, stageProgress?.persona, selectedProject?.id
+        )
+        if (!result.success) {
+          if (result.alreadyCompleted) {
+            alert('You have already completed this milestone!')
+            return
+          }
+          alert(result.error || 'Failed to save milestone')
+          return
+        }
+      }
+
+      if (quest.inputType === 'flow_compass' && specialData) {
+        const result = await handleFlowCompassCompletion(
+          user.id, null, specialData, selectedProject?.id
+        )
+        if (!result.success) {
+          alert(result.error || 'Failed to save flow compass entry')
+          return
+        }
+      }
+
+      if (quest.inputType === 'validation_responses' && specialData) {
+        const result = await handleValidationAnalysisCompletion(
+          user.id, specialData, stageProgress, selectedProject?.id
+        )
+        if (!result.success) {
+          if (result.alreadyCompleted) {
+            alert('You have already completed validation analysis!')
+            return
+          }
+          alert(result.error || 'Failed to save validation analysis')
+          return
+        }
+      }
+
+      // Handle groan reflection
+      if (quest.type === 'groan' && specialData) {
+        const groanResult = await handleGroanReflectionCompletion(user.id, {
+          ...specialData,
+          project_id: selectedProject?.id,
+          challenge_instance_id: null,
+          quest_category: quest.category,
+          stage: quest.stage_required
+        })
+        if (!groanResult.success) {
+          console.warn('Failed to save groan reflection:', groanResult.error)
+        }
+
+        if (quest.milestone_type) {
+          const milestoneResult = await handleMilestoneCompletion(
+            user.id,
+            { milestone_type: quest.milestone_type, evidence_text: specialData.groan_task || 'Completed groan challenge' },
+            stageProgress, stageProgress?.persona, selectedProject?.id
+          )
+          if (!milestoneResult.success && !milestoneResult.alreadyCompleted) {
+            console.warn('Failed to save groan milestone:', milestoneResult.error)
+          }
+        }
+      }
+
+      // Handle checkbox quests with milestone_type
+      if (quest.inputType === 'checkbox' && quest.milestone_type) {
+        const result = await handleMilestoneCompletion(
+          user.id,
+          { milestone_type: quest.milestone_type, evidence_text: 'Completed via checkbox' },
+          stageProgress, stageProgress?.persona, selectedProject?.id
+        )
+        if (!result.success) {
+          if (result.alreadyCompleted) {
+            alert('You have already completed this milestone!')
+            return
+          }
+          alert(`Error saving milestone: ${result.error}`)
+          return
+        }
+      }
+
+      // Handle text quests with milestone_type
+      if (quest.inputType === 'text' && quest.milestone_type) {
+        const result = await handleMilestoneCompletion(
+          user.id,
+          { milestone_type: quest.milestone_type, evidence_text: sanitizedReflection || 'Completed via text input' },
+          stageProgress, stageProgress?.persona, selectedProject?.id
+        )
+        if (!result.success) {
+          if (result.alreadyCompleted) {
+            alert('You have already completed this milestone!')
+            return
+          }
+          alert(`Error saving milestone: ${result.error}`)
+          return
+        }
+      }
+
+      // Handle progress_dropdown quests with milestone_type
+      if (quest.inputType === 'progress_dropdown' && quest.milestone_type && specialData) {
+        const result = await handleMilestoneCompletion(
+          user.id,
+          { milestone_type: quest.milestone_type, evidence_text: specialData.progress || 'Completed via progress dropdown' },
+          stageProgress, stageProgress?.persona, selectedProject?.id
+        )
+        if (!result.success) {
+          if (result.alreadyCompleted) {
+            alert('You have already completed this milestone!')
+            return
+          }
+          alert(`Error saving milestone: ${result.error}`)
+          return
+        }
+      }
+
+      // Build completion data — BusinessPage has NO challenge instance
+      const completionData = {
+        user_id: user.id,
+        challenge_instance_id: null,
+        quest_id: quest.id,
+        quest_category: quest.category,
+        quest_type: quest.type,
+        points_earned: quest.points,
+        challenge_day: 0,
+        project_id: selectedProject?.id || null,
+        stage: quest.stage_required || null
+      }
+
+      // Set reflection text based on input type
+      const safeStringify = (data) => typeof data === 'string' ? data : JSON.stringify(data)
+      const structuredDataTypes = ['reconnect', 'recognise', 'rewire', 'release']
+      const hasStructuredData = structuredDataTypes.includes(quest.type?.toLowerCase()) && specialData
+
+      if (quest.inputType === 'text' || quest.inputType === 'dropdown' || quest.inputType === 'text_with_tags') {
+        completionData.reflection_text = hasStructuredData ? safeStringify(specialData) : sanitizedReflection
+      } else if (quest.inputType === 'lets_play_review') {
+        completionData.reflection_text = safeStringify(specialData)
+      } else if (['conversation_log', 'milestone', 'flow_compass'].includes(quest.inputType)) {
+        completionData.reflection_text = safeStringify(specialData)
+      } else if (quest.type === 'groan' && specialData) {
+        completionData.reflection_text = specialData.groan_task || safeStringify(specialData)
+      } else if (quest.inputType === 'rating' || quest.inputType === 'referral') {
+        completionData.reflection_text = safeStringify(inputValue)
+      } else if (hasStructuredData) {
+        completionData.reflection_text = safeStringify(specialData)
+      } else if (specialData) {
+        // Generic fallback for grand_slam_dropdown, progress_dropdown, response_counter, etc.
+        completionData.reflection_text = safeStringify(specialData)
+      } else if (inputValue != null && inputValue !== '') {
+        // Fallback for multi_select and other types storing data in questInputs
+        completionData.reflection_text = safeStringify(inputValue)
+      }
+
+      // Duplicate check (user-level: no challenge instance)
+      const now = new Date()
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
+
+      let duplicateQuery = supabase
+        .from('quest_completions')
+        .select('id')
+        .eq('user_id', user.id)
+        .is('challenge_instance_id', null)
+        .eq('quest_id', quest.id)
+
+      if (!quest.milestone_type) {
+        duplicateQuery = duplicateQuery
+          .gte('completed_at', todayStart.toISOString())
+          .lte('completed_at', todayEnd.toISOString())
+      }
+
+      const { data: existingCompletion } = await duplicateQuery.maybeSingle()
+
+      if (existingCompletion) {
+        const message = quest.milestone_type
+          ? 'You have already completed this milestone!'
+          : 'You have already completed this quest today!'
+        alert(message)
+        return
+      }
+
+      // Insert quest completion
+      const { error: completionError } = await supabase
+        .from('quest_completions')
+        .insert([completionData])
+
+      if (completionError) {
+        console.error('Error completing quest:', completionError)
+        alert('Error completing quest. Please try again.')
+        return
+      }
+
+      // Update scores via RPC
+      const scoringCategory = getScoringCategory(quest.category)
+      try {
+        await supabase.rpc('increment_scores', {
+          p_user_id: user.id,
+          p_project_id: null,
+          p_category: scoringCategory,
+          p_points: quest.points,
+          p_week_start: getWeekStartLocal()
+        })
+      } catch (scoreError) {
+        console.error('Error updating scores:', scoreError)
+      }
+
+      // Clear input and refresh
+      setQuestInputs(prev => ({ ...prev, [quest.id]: '' }))
+      setJustCompletedQuestId(quest.id)
+      setTimeout(() => setJustCompletedQuestId(null), 3000)
+
+      alert(`Quest complete! +${quest.points} XP`)
+
+      refreshData()
+    } catch (error) {
+      console.error('Error in handleQuestComplete:', error)
+      alert('Error completing quest. Please try again.')
+    } finally {
+      setCompletingQuestId(null)
+    }
+  }
 
   if (loading) {
     return (
@@ -130,7 +434,7 @@ export default function BusinessPage() {
           <BusinessSetup
             userId={user?.id}
             existingProject={selectedProject}
-            userPersona={stageProgress?.persona}
+            stageProgress={stageProgress}
             onSetupComplete={(project) => {
               selectProject(project)
               refreshData()
@@ -154,15 +458,18 @@ export default function BusinessPage() {
           {nextQuest.inputType === 'flow' ? (
             <a
               href={selectedProject?.id
-                ? `${nextQuest.flow_route}?projectId=${selectedProject.id}`
-                : nextQuest.flow_route}
+                ? `${nextQuest.flow_route}?projectId=${selectedProject.id}&returnTo=/business`
+                : `${nextQuest.flow_route}?returnTo=/business`}
               className="gold-btn"
             >
               Start Quest →
             </a>
           ) : (
-            <button className="gold-btn" disabled>
-              Start Quest →
+            <button
+              className="gold-btn"
+              onClick={() => document.querySelector('.bp-quest-list')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              View Quest Below ↓
             </button>
           )}
         </div>
@@ -170,47 +477,33 @@ export default function BusinessPage() {
 
       {/* 5 — QUEST LIST (stages 1-7) */}
       {activeStageTab !== 0.9 && stageQuests.length > 0 && (
-        <div className="card">
+        <div className="card bp-quest-list">
           <div className="quest-title">
             Stage {activeStageTab} Quests
           </div>
-          {stageQuests.map(quest => {
-            const completed = isQuestCompleted(quest.id)
-            const paid = isPaidQuest(quest) && !hasSubscription
-
-            return (
-              <div key={quest.id} className={`q-row ${completed ? 'done' : ''}`}>
-                <div className={`q-icon ${completed ? 'done' : 'todo'}`}>
-                  {completed ? '✅' : quest.isExplainer ? '📝' : '🎯'}
-                </div>
-                <div className="q-info">
-                  <div className="q-name">{quest.name}</div>
-                  <div className="q-sub">
-                    {isPaidQuest(quest) ? 'Paid' : 'Free'}
-                    {' • '}
-                    {completed ? 'Completed' : quest.isExplainer ? 'Explainer' : `Stage ${activeStageTab}`}
-                  </div>
-                </div>
-                {completed ? (
-                  <button className="q-btn done-btn">Done</button>
-                ) : quest.inputType === 'flow' ? (
-                  <a
-                    href={selectedProject?.id
-                      ? `${quest.flow_route}?projectId=${selectedProject.id}`
-                      : quest.flow_route}
-                    className="q-btn start-btn"
-                    style={{ textDecoration: 'none', textAlign: 'center' }}
-                  >
-                    {paid ? '🔒' : 'Start'}
-                  </a>
-                ) : (
-                  <button className="q-btn start-btn" disabled={paid}>
-                    {paid ? '🔒' : 'Start'}
-                  </button>
-                )}
-              </div>
-            )
-          })}
+          {stageQuests.map(quest => (
+            <QuestCard
+              key={quest.id}
+              quest={quest}
+              completed={isQuestCompleted(quest.id)}
+              isCompleting={completingQuestId === quest.id}
+              questInput={questInputs[quest.id]}
+              onInputChange={handleInputChange}
+              onComplete={handleQuestComplete}
+              expandedLearnMore={expandedLearnMore}
+              onToggleLearnMore={toggleLearnMore}
+              showLockedTooltip={showLockedTooltip}
+              onToggleLockedTooltip={(id) => setShowLockedTooltip(prev => prev === id ? null : id)}
+              renderDescription={renderDescription}
+              selectedProject={selectedProject}
+              progress={null}
+              projectStage={activeStageTab}
+              userId={user?.id}
+              paidLocked={isPaidQuest(quest) && !hasSubscription}
+              justCompleted={justCompletedQuestId === quest.id}
+              returnTo="/business"
+            />
+          ))}
         </div>
       )}
 
