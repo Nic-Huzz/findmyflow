@@ -22,6 +22,7 @@ import PriorityMiniAssessment from './PriorityMiniAssessment'
 import PriorityLayerCard from './PriorityLayerCard'
 import PriorityWeekPicker from './PriorityWeekPicker'
 import GroanCompletionModal from './GroanCompletionModal'
+import HealingCompletionModal from './HealingCompletionModal'
 import ChallengeRating from './PlayProfile/ChallengeRating'
 import './PriorityTab.css'
 
@@ -62,6 +63,7 @@ export default function PriorityTab({
   const [completingChallenge, setCompletingChallenge] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [showDnaRating, setShowDnaRating] = useState(false)
+  const [healingModalQuest, setHealingModalQuest] = useState(null)
 
   // Progress: count completed picks vs total
   const progressInfo = useMemo(() => {
@@ -117,7 +119,7 @@ export default function PriorityTab({
           <button
             className="pt-item-action"
             disabled={isCompleting}
-            onClick={(e) => onQuestComplete(quest, null, e)}
+            onClick={() => setHealingModalQuest(quest)}
           >
             {isCompleting ? '...' : 'Complete'}
           </button>
@@ -372,6 +374,17 @@ export default function PriorityTab({
             refreshData()
           }}
           onClose={() => setCompletingChallenge(null)}
+        />
+      )}
+
+      {healingModalQuest && (
+        <HealingCompletionModal
+          quest={healingModalQuest}
+          onComplete={(quest, textInput) => {
+            const inputValue = quest.inputType === 'checkbox' ? 'completed' : textInput
+            onQuestComplete(quest, inputValue)
+          }}
+          onClose={() => setHealingModalQuest(null)}
         />
       )}
     </div>
