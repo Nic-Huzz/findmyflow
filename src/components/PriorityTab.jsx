@@ -105,7 +105,7 @@ export default function PriorityTab({
           {streak && dayLabels && (
             <div className="pt-streak-dots">
               {dayLabels.map((day, i) => (
-                <div key={day} className="pt-streak-day">
+                <div key={i} className="pt-streak-day">
                   <span className={`pt-streak-dot ${streak[i] ? 'filled' : ''}`} />
                   <span className="pt-streak-label">{day}</span>
                 </div>

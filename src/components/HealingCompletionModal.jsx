@@ -1,61 +1,40 @@
-import { useState } from 'react'
+import RecogniseQuestInput from './RecogniseQuestInput'
+import RewireQuestInput from './RewireQuestInput'
+import ReconnectQuestInput from './ReconnectQuestInput'
+import ReleaseQuestInput from './ReleaseQuestInput'
 import './GroanCompletionModal.css'
 
 export default function HealingCompletionModal({ quest, onComplete, onClose }) {
-  const [input, setInput] = useState('')
-  const [saving, setSaving] = useState(false)
+  const handleComplete = (q, data) => {
+    onComplete(q, data)
+    onClose()
+  }
 
-  const needsText = quest.inputType === 'text' || quest.inputType === 'text_with_tags'
-  const isCheckbox = quest.inputType === 'checkbox'
-
-  const handleSubmit = async () => {
-    if (needsText && !input.trim()) return
-    setSaving(true)
-    try {
-      await onComplete(quest, needsText ? input.trim() : null)
-      onClose()
-    } catch (err) {
-      console.error('Error completing healing quest:', err)
-    } finally {
-      setSaving(false)
+  const renderInput = () => {
+    const type = quest.type?.toLowerCase()
+    if (type === 'recognise') {
+      return <RecogniseQuestInput quest={quest} onComplete={handleComplete} />
     }
+    if (type === 'rewire') {
+      return <RewireQuestInput quest={quest} onComplete={handleComplete} />
+    }
+    if (type === 'reconnect') {
+      return <ReconnectQuestInput quest={quest} onComplete={handleComplete} />
+    }
+    if (type === 'release') {
+      return <ReleaseQuestInput quest={quest} onComplete={handleComplete} />
+    }
+    return null
   }
 
   return (
     <div className="gcm-overlay" onClick={onClose}>
-      <div className="gcm-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="gcm-modal gcm-modal-wide" onClick={(e) => e.stopPropagation()}>
         <button className="gcm-close" onClick={onClose}>&times;</button>
-
         <h2 className="gcm-title">{quest.name}</h2>
-        <p className="gcm-subtitle">{quest.description}</p>
-
-        {needsText && (
-          <div className="gcm-form">
-            <div className="gcm-textarea-group">
-              <textarea
-                placeholder={quest.placeholder || 'Share your reflection...'}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                rows={4}
-                autoFocus
-              />
-            </div>
-          </div>
-        )}
-
-        {isCheckbox && (
-          <p style={{ fontSize: '14px', color: '#6c757d', marginBottom: 16, textAlign: 'center' }}>
-            Tap below to mark as done
-          </p>
-        )}
-
-        <button
-          className="gcm-gold-btn"
-          onClick={handleSubmit}
-          disabled={saving || (needsText && !input.trim())}
-        >
-          {saving ? 'Saving...' : 'Complete'}
-        </button>
+        <div className="gcm-quest-input">
+          {renderInput()}
+        </div>
       </div>
     </div>
   )
