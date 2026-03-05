@@ -149,9 +149,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       await supabase.from('flow_entries').insert({
         user_id: userId,
         direction: compassData.direction,
-        internal_state: compassData.internalState,
-        external_state: compassData.externalState,
-        note: compassData.note || null,
+        internal_state: compassData.internal_state,
+        external_state: compassData.external_state,
+        note: compassData.reasoning || null,
         project_id: null,
       })
     } catch (err) {
