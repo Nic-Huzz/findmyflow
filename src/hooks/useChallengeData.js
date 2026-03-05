@@ -442,10 +442,17 @@ export function useChallengeData() {
   }
 
   // Check if user has priority picks for this week (replaces loadWeeklyPlan)
+  // Only prompts once per week — if the user dismisses without saving picks,
+  // they won't be prompted again until the next week.
   const loadPriorityStatus = async () => {
     if (!user?.id) return
     try {
       const weekStart = getWeekStart()
+
+      // Check if already prompted this week (localStorage gate)
+      const dismissKey = `priority_prompted_${weekStart}`
+      if (localStorage.getItem(dismissKey)) return
+
       const { data, error } = await supabase
         .from('priority_weekly_picks')
         .select('id')
@@ -456,7 +463,11 @@ export function useChallengeData() {
         console.error('Error loading priority status:', error)
         return
       }
-      setShowPriorityOverlay(!data || data.length === 0)
+      if (!data || data.length === 0) {
+        setShowPriorityOverlay(true)
+        // Mark as prompted so it won't show again this week
+        localStorage.setItem(dismissKey, '1')
+      }
     } catch (error) {
       console.error('Error in loadPriorityStatus:', error)
     }
