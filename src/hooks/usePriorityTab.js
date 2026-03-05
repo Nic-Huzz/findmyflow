@@ -82,12 +82,33 @@ export default function usePriorityTab(userId, stageProgress) {
     () => weeklyPicks.find(p => p.pick_type === 'play_profile') || null,
     [weeklyPicks]
   )
+  // Quest types most relevant per priority layer
+  const LAYER_QUEST_TYPES = {
+    discover: ['Reconnect', 'Rewire'],
+    regulate: ['Reconnect', 'Release'],
+    reveal: ['Rewire', 'Reconnect'],
+    value: ['Rewire', 'Release'],
+  }
+
   const selectedHealingQuests = useMemo(() => {
     const healingPickIds = weeklyPicks
       .filter(p => p.pick_type === 'daily_healing' || p.pick_type === 'weekly_healing')
       .map(p => p.reference_id)
-    return allHealingQuests.filter(q => healingPickIds.includes(q.id))
-  }, [weeklyPicks, allHealingQuests])
+    const quests = allHealingQuests.filter(q => healingPickIds.includes(q.id))
+
+    if (priorityLayer && LAYER_QUEST_TYPES[priorityLayer]) {
+      const preferredTypes = LAYER_QUEST_TYPES[priorityLayer]
+      quests.sort((a, b) => {
+        const aIdx = preferredTypes.indexOf(a.type)
+        const bIdx = preferredTypes.indexOf(b.type)
+        const aRank = aIdx === -1 ? 99 : aIdx
+        const bRank = bIdx === -1 ? 99 : bIdx
+        return aRank - bRank
+      })
+    }
+
+    return quests
+  }, [weeklyPicks, allHealingQuests, priorityLayer])
 
   // ── Data Loading ──
 
@@ -166,7 +187,8 @@ export default function usePriorityTab(userId, stageProgress) {
       const quests = json.quests || json
       return quests.filter(q =>
         q.category === 'Healing' &&
-        (q.frequency === 'daily' || q.frequency === 'weekly')
+        (q.frequency === 'daily' || q.frequency === 'weekly') &&
+        q.id !== 'release_daily_challenge'
       )
     } catch (err) {
       console.warn('Failed to load healing quests:', err)

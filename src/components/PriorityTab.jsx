@@ -13,42 +13,28 @@
  * Created: 2026-03-04
  */
 
-import { useMemo } from 'react'
+import { useState, useMemo } from 'react'
+import { supabase } from '../lib/supabaseClient'
+import { getScoringCategory } from '../lib/scoringCategories'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import usePriorityTab from '../hooks/usePriorityTab'
 import PriorityMiniAssessment from './PriorityMiniAssessment'
 import PriorityLayerCard from './PriorityLayerCard'
 import PriorityWeekPicker from './PriorityWeekPicker'
-import QuestCard from './QuestCard'
+import GroanCompletionModal from './GroanCompletionModal'
+import ChallengeRating from './PlayProfile/ChallengeRating'
 import './PriorityTab.css'
 
 export default function PriorityTab({
   userId,
   stageProgress,
   onStageProgressUpdate,
-  // QuestCard shared props
-  completions,
-  questInputs,
-  onInputChange,
+  // Completion props
   onQuestComplete,
   completingQuestId,
-  expandedLearnMore,
-  onToggleLearnMore,
-  showLockedTooltip,
-  onToggleLockedTooltip,
-  renderDescription,
-  navigate,
-  selectedProject,
-  progress,
-  projectStage,
-  justCompletedQuestId,
   isQuestCompletedToday,
-  isQuestLocked,
-  getRequiredQuestName,
   getDailyStreak,
   getDayLabels,
-  isQuestPlanned,
-  getPlannedDay,
-  userArchetypes,
 }) {
   const {
     currentState,
@@ -73,6 +59,10 @@ export default function PriorityTab({
     loading,
   } = usePriorityTab(userId, stageProgress)
 
+  const [completingChallenge, setCompletingChallenge] = useState(null)
+  const [loadingChallengeId, setLoadingChallengeId] = useState(null)
+  const [showDnaRating, setShowDnaRating] = useState(false)
+
   // Progress: count completed picks vs total
   const progressInfo = useMemo(() => {
     if (currentState !== 'quest_list') return null
@@ -92,40 +82,47 @@ export default function PriorityTab({
     finishReassess()
   }
 
-  const renderQuestCard = (quest) => {
+  const renderHealingRow = (quest) => {
     const completed = isQuestCompletedToday?.(quest.id, quest) || false
-    const locked = isQuestLocked ? isQuestLocked(quest) : false
+    const isCompleting = completingQuestId === quest.id
+    const streak = quest.frequency === 'daily' ? getDailyStreak?.(quest.id) : null
+    const dayLabels = quest.frequency === 'daily' ? getDayLabels?.() : null
 
     return (
-      <QuestCard
-        key={quest.id}
-        quest={quest}
-        completed={completed}
-        isCompleting={completingQuestId === quest.id}
-        locked={locked}
-        lockedPrerequisite={locked && getRequiredQuestName ? getRequiredQuestName(quest.requires_quest, quest.id) : null}
-        showStreak={quest.frequency === 'daily'}
-        streak={getDailyStreak?.(quest.id)}
-        dayLabels={getDayLabels?.()}
-        questInput={questInputs?.[quest.id]}
-        onInputChange={onInputChange}
-        onComplete={onQuestComplete}
-        expandedLearnMore={expandedLearnMore}
-        onToggleLearnMore={onToggleLearnMore}
-        showLockedTooltip={showLockedTooltip}
-        onToggleLockedTooltip={(id) => onToggleLockedTooltip?.(showLockedTooltip === id ? null : id)}
-        renderDescription={renderDescription}
-        completedBadgeText={quest.frequency === 'daily' ? 'Completed Today' : 'Completed'}
-        navigate={navigate}
-        selectedProject={selectedProject}
-        progress={progress}
-        projectStage={projectStage}
-        justCompleted={justCompletedQuestId === quest.id}
-        isPlanned={isQuestPlanned ? isQuestPlanned(quest.id) : false}
-        plannedDay={getPlannedDay ? getPlannedDay(quest.id) : null}
-        userId={userId}
-        userArchetypes={userArchetypes}
-      />
+      <div key={quest.id} className={`pt-item-row ${completed ? 'done' : ''}`}>
+        <span className={`pt-item-check ${completed ? 'done' : ''}`}>
+          {completed ? '✓' : ''}
+        </span>
+        <div className="pt-item-body">
+          <div className="pt-item-name">{quest.name}</div>
+          <div className="pt-item-meta">
+            <span className="pt-item-type">{quest.type}</span>
+            <span className="pt-item-sep">·</span>
+            <span className="pt-pts">{quest.points}pts</span>
+          </div>
+          {streak && dayLabels && (
+            <div className="pt-streak-dots">
+              {dayLabels.map((day, i) => (
+                <div key={day} className="pt-streak-day">
+                  <span className={`pt-streak-dot ${streak[i] ? 'filled' : ''}`} />
+                  <span className="pt-streak-label">{day}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {completed ? (
+          <span className="pt-item-action done-action">Done</span>
+        ) : (
+          <button
+            className="pt-item-action"
+            disabled={isCompleting}
+            onClick={(e) => onQuestComplete(quest, null, e)}
+          >
+            {isCompleting ? '...' : 'Complete'}
+          </button>
+        )}
+      </div>
     )
   }
 
@@ -208,20 +205,41 @@ export default function PriorityTab({
             <span className="pt-section-count">{selectedGroanPicks.length}</span>
           </div>
           <div className="pt-section-items">
-            {selectedGroanPicks.map(pick => (
-              <a
-                key={pick.id || pick.reference_id}
-                href="/7-day-challenge?tab=play-list&sub=playlist"
-                className="pt-item-row"
-              >
-                <span className="pt-item-check"></span>
-                <div className="pt-item-body">
-                  <div className="pt-item-name">{pick.display_name}</div>
-                  <div className="pt-item-meta">Play-list Challenge</div>
+            {selectedGroanPicks.map(pick => {
+              const formatName = (name) => {
+                if (!name) return name
+                const match = name.match(/^(.+?)\s*[x\u00d7]\s*(\w+)\s*[—\u2014-]+\s*(.+)$/)
+                if (match) return `${match[2].toUpperCase()}: ${match[1].trim()} — ${match[3].trim()}`
+                return name
+              }
+              const isLoading = loadingChallengeId === pick.reference_id
+
+              return (
+                <div key={pick.id || pick.reference_id} className="pt-item-row">
+                  <span className="pt-item-check"></span>
+                  <div className="pt-item-body">
+                    <div className="pt-item-name">{formatName(pick.display_name)}</div>
+                    <div className="pt-item-meta">Play-list Challenge</div>
+                  </div>
+                  <button
+                    className="pt-item-action"
+                    disabled={isLoading}
+                    onClick={async () => {
+                      setLoadingChallengeId(pick.reference_id)
+                      const { data } = await supabase
+                        .from('groan_challenges')
+                        .select('*')
+                        .eq('id', pick.reference_id)
+                        .single()
+                      setLoadingChallengeId(null)
+                      if (data) setCompletingChallenge(data)
+                    }}
+                  >
+                    {isLoading ? '...' : 'Complete'}
+                  </button>
                 </div>
-                <span className="pt-item-action">Go →</span>
-              </a>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
@@ -237,14 +255,68 @@ export default function PriorityTab({
             <span className="pt-section-count">0/1</span>
           </div>
           <div className="pt-section-items">
-            <a href="/play-profile" className="pt-item-row">
-              <span className="pt-item-check"></span>
-              <div className="pt-item-body">
-                <div className="pt-item-name">{selectedDnaPick.display_name}</div>
-                <div className="pt-item-meta">DNA Challenge</div>
+            {!showDnaRating ? (
+              <div className="pt-item-row">
+                <span className="pt-item-check"></span>
+                <div className="pt-item-body">
+                  <div className="pt-item-name">{selectedDnaPick.display_name}</div>
+                  <div className="pt-item-meta">DNA Challenge</div>
+                </div>
+                <button className="pt-item-action" onClick={() => setShowDnaRating(true)}>
+                  Complete
+                </button>
               </div>
-              <span className="pt-item-action">Go →</span>
-            </a>
+            ) : (
+              <div style={{ padding: '12px 18px' }}>
+                <ChallengeRating
+                  founderName={dnaResult?.matched_founder || 'your founder'}
+                  challengeAction={activeDnaSession?.challenge_name}
+                  onRate={async (ratingData) => {
+                    if (activeDnaSession?.id) {
+                      const { error } = await supabase
+                        .from('founder_dna_sessions')
+                        .update({
+                          status: 'completed',
+                          voice_type: ratingData.voice_type,
+                          voice_reflection: ratingData.voice_reflection,
+                          compass_internal: ratingData.internal_state,
+                          compass_external: ratingData.external_state,
+                          compass_direction: ratingData.compass_direction,
+                          completed_at: new Date().toISOString(),
+                        })
+                        .eq('id', activeDnaSession.id)
+                      if (error) console.warn('Error saving DNA rating:', error)
+                    }
+
+                    await supabase.from('quest_completions').insert({
+                      user_id: userId,
+                      challenge_instance_id: null,
+                      quest_id: `play_profile_challenge_${activeDnaSession?.id || 'unknown'}`,
+                      quest_category: 'Groans',
+                      quest_type: 'play_profile',
+                      points_earned: 10,
+                      challenge_day: 0,
+                      project_id: null,
+                      reflection_text: JSON.stringify(ratingData),
+                    })
+
+                    try {
+                      await supabase.rpc('increment_scores', {
+                        p_user_id: userId,
+                        p_project_id: null,
+                        p_category: getScoringCategory('Groans'),
+                        p_points: 10,
+                        p_week_start: getWeekStartLocal(),
+                      })
+                    } catch (e) { console.warn('Score error:', e) }
+
+                    setShowDnaRating(false)
+                    refreshDnaSession()
+                  }}
+                  onBack={() => setShowDnaRating(false)}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -262,8 +334,8 @@ export default function PriorityTab({
               {dailyQuests.filter(q => isQuestCompletedToday?.(q.id, q)).length}/{dailyQuests.length}
             </span>
           </div>
-          <div className="pt-section-items pt-quest-cards">
-            {dailyQuests.map(quest => renderQuestCard(quest))}
+          <div className="pt-section-items">
+            {dailyQuests.map(quest => renderHealingRow(quest))}
           </div>
         </div>
       )}
@@ -281,8 +353,8 @@ export default function PriorityTab({
               {weeklyQuests.filter(q => isQuestCompletedToday?.(q.id, q)).length}/{weeklyQuests.length}
             </span>
           </div>
-          <div className="pt-section-items pt-quest-cards">
-            {weeklyQuests.map(quest => renderQuestCard(quest))}
+          <div className="pt-section-items">
+            {weeklyQuests.map(quest => renderHealingRow(quest))}
           </div>
         </div>
       )}
@@ -290,6 +362,18 @@ export default function PriorityTab({
       <button className="pt-edit-btn" onClick={editWeek}>
         Edit Week
       </button>
+
+      {completingChallenge && (
+        <GroanCompletionModal
+          challenge={completingChallenge}
+          userId={userId}
+          onComplete={() => {
+            setCompletingChallenge(null)
+            refreshData()
+          }}
+          onClose={() => setCompletingChallenge(null)}
+        />
+      )}
     </div>
   )
 }

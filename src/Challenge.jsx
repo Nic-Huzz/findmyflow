@@ -2008,29 +2008,11 @@ function Challenge() {
             userId={user?.id}
             stageProgress={stageProgress}
             onStageProgressUpdate={loadStageProgress}
-            completions={completions}
-            questInputs={questInputs}
-            onInputChange={handleInputChange}
             onQuestComplete={handleQuestComplete}
             completingQuestId={completingQuestId}
-            expandedLearnMore={expandedLearnMore}
-            onToggleLearnMore={toggleLearnMore}
-            showLockedTooltip={showLockedTooltip}
-            onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
-            renderDescription={renderDescription}
-            navigate={navigate}
-            selectedProject={selectedProject}
-            progress={progress}
-            projectStage={projectStage}
-            justCompletedQuestId={justCompletedQuestId}
             isQuestCompletedToday={isQuestCompletedToday}
-            isQuestLocked={isQuestLocked}
-            getRequiredQuestName={getRequiredQuestName}
             getDailyStreak={getDailyStreak}
             getDayLabels={getDayLabels}
-            isQuestPlanned={isQuestPlanned}
-            getPlannedDay={getPlannedDay}
-            userArchetypes={userArchetypes}
           />
         )}
 

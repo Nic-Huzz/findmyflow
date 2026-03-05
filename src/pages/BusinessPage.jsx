@@ -481,29 +481,79 @@ export default function BusinessPage() {
           <div className="quest-title">
             Stage {activeStageTab} Quests
           </div>
-          {stageQuests.map(quest => (
-            <QuestCard
-              key={quest.id}
-              quest={quest}
-              completed={isQuestCompleted(quest.id)}
-              isCompleting={completingQuestId === quest.id}
-              questInput={questInputs[quest.id]}
-              onInputChange={handleInputChange}
-              onComplete={handleQuestComplete}
-              expandedLearnMore={expandedLearnMore}
-              onToggleLearnMore={toggleLearnMore}
-              showLockedTooltip={showLockedTooltip}
-              onToggleLockedTooltip={(id) => setShowLockedTooltip(prev => prev === id ? null : id)}
-              renderDescription={renderDescription}
-              selectedProject={selectedProject}
-              progress={null}
-              projectStage={activeStageTab}
-              userId={user?.id}
-              paidLocked={isPaidQuest(quest) && !hasSubscription}
-              justCompleted={justCompletedQuestId === quest.id}
-              returnTo="/business"
-            />
-          ))}
+          {stageQuests.map(quest => {
+            const completed = isQuestCompleted(quest.id)
+            const isFlow = quest.inputType === 'flow'
+            const paidQuest = isPaidQuest(quest)
+            const paidLocked = paidQuest && !hasSubscription
+            const isExpanded = expandedLearnMore[quest.id]
+
+            return (
+              <div key={quest.id} className={`q-row-wrap ${completed ? 'done' : ''}`}>
+                <div className="q-row">
+                  <div className={`q-icon ${completed ? 'done' : 'todo'}`}>
+                    {completed ? '✅' : quest.isExplainer ? '📝' : '🎯'}
+                  </div>
+                  <div
+                    className="q-info"
+                    onClick={() => !isFlow && !completed && toggleLearnMore(quest.id)}
+                    style={{ cursor: (!isFlow && !completed) ? 'pointer' : 'default' }}
+                  >
+                    <div className="q-name">{quest.name}</div>
+                    <div className="q-sub">
+                      {quest.isExplainer ? 'Explainer' : quest.type || 'Quest'}
+                      {' \u00B7 '}
+                      {paidLocked ? 'Paid' : paidQuest ? 'Included' : 'Free'}
+                    </div>
+                  </div>
+                  {completed ? (
+                    <span className="q-btn done-btn">Done</span>
+                  ) : isFlow ? (
+                    <a
+                      href={selectedProject?.id
+                        ? `${quest.flow_route}?projectId=${selectedProject.id}&returnTo=/business`
+                        : `${quest.flow_route}?returnTo=/business`}
+                      className="q-btn start-btn"
+                    >
+                      Start
+                    </a>
+                  ) : (
+                    <button
+                      className="q-btn start-btn"
+                      onClick={() => toggleLearnMore(quest.id)}
+                    >
+                      {isExpanded ? 'Close' : 'Start'}
+                    </button>
+                  )}
+                </div>
+
+                {isExpanded && !completed && !isFlow && (
+                  <div className="q-expanded">
+                    <QuestCard
+                      quest={quest}
+                      completed={false}
+                      isCompleting={completingQuestId === quest.id}
+                      questInput={questInputs[quest.id]}
+                      onInputChange={handleInputChange}
+                      onComplete={handleQuestComplete}
+                      expandedLearnMore={{ [quest.id]: true }}
+                      onToggleLearnMore={() => {}}
+                      showLockedTooltip={showLockedTooltip}
+                      onToggleLockedTooltip={(id) => setShowLockedTooltip(prev => prev === id ? null : id)}
+                      renderDescription={renderDescription}
+                      selectedProject={selectedProject}
+                      progress={null}
+                      projectStage={activeStageTab}
+                      userId={user?.id}
+                      paidLocked={paidLocked}
+                      justCompleted={justCompletedQuestId === quest.id}
+                      returnTo="/business"
+                    />
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </div>
       )}
 

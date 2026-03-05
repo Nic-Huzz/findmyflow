@@ -245,6 +245,47 @@
   color: #059669;
 }
 
+/* ── Streak Dots (daily quests) ── */
+.priority-tab .pt-streak-dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.priority-tab .pt-streak-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.priority-tab .pt-streak-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #dde0e5;
+}
+
+.priority-tab .pt-streak-dot.filled {
+  background: #34d399;
+}
+
+.priority-tab .pt-streak-label {
+  font-size: 9px;
+  color: #9a9daa;
+  font-weight: 600;
+}
+
+/* ── Item meta styling ── */
+.priority-tab .pt-item-type {
+  color: #E9A23B;
+  font-weight: 600;
+}
+
+.priority-tab .pt-item-sep {
+  color: #dde0e5;
+}
+
 /* ── Quest Cards inside section ── */
 .priority-tab .pt-quest-cards {
   padding: 8px 12px 12px;

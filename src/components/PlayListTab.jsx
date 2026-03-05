@@ -9,9 +9,10 @@
  * Part of Play-list tab restructure
  */
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import QuestCard from './QuestCard'
 import GroanMatrix from './GroanMatrix'
+import MobilePlaylistPicker from './MobilePlaylistPicker'
 import PlayProfileDashboard from './PlayProfile/PlayProfileDashboard'
 
 // Flow Finder quest groupings for the sub-tab
@@ -60,6 +61,14 @@ export default function PlayListTab({
   getPlannedDay,
 }) {
   const [flowFinderFilter, setFlowFinderFilter] = useState('all')
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' && window.innerWidth < 768
+  )
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
 
   // Compute Flow Finder progress from completed quests
   const flowFinderProgress = useMemo(() => {
@@ -218,18 +227,26 @@ export default function PlayListTab({
         )
       })()}
 
-      {/* ── Play-list sub-tab: Courage Matrix ── */}
+      {/* ── Play-list sub-tab: Courage Matrix (desktop) / Guided Picker (mobile) ── */}
       {activeSubTab === 'playlist' && (
         <div className="quest-section">
-          <GroanMatrix
-            key={groanMatrixKey}
-            userId={userId}
-            onCellClick={onMatrixCellClick}
-            onGenerateChallenge={onGenerateChallenge}
-            layerLockStatus={layerLockStatus}
-            flowFinderComplete={flowFinderComplete}
-            sourceTypes={['skill']}
-          />
+          {isMobile ? (
+            <MobilePlaylistPicker
+              userId={userId}
+              onCellClick={onMatrixCellClick}
+              layerLockStatus={layerLockStatus}
+            />
+          ) : (
+            <GroanMatrix
+              key={groanMatrixKey}
+              userId={userId}
+              onCellClick={onMatrixCellClick}
+              onGenerateChallenge={onGenerateChallenge}
+              layerLockStatus={layerLockStatus}
+              flowFinderComplete={flowFinderComplete}
+              sourceTypes={['skill']}
+            />
+          )}
         </div>
       )}
 

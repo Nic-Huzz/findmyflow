@@ -1,0 +1,16 @@
+/* MobilePlaylistPicker — scoped under .mpp- prefix */
+.mpp-container { padding: 8px 0; }
+.mpp-step-title { font-size: 18px; font-weight: 800; color: #1a1a2e; margin-bottom: 14px; }
+.mpp-back { background: none; border: none; color: #5e17eb; font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 0; margin-bottom: 12px; }
+.mpp-list { display: flex; flex-direction: column; gap: 8px; }
+.mpp-pick-btn { width: 100%; text-align: left; padding: 14px 18px; background: white; border: 2px solid #eef0f3; border-radius: 14px; font-size: 15px; font-weight: 600; color: #1a1a2e; cursor: pointer; transition: all 0.15s; }
+.mpp-pick-btn:hover { border-color: #5e17eb; background: #f8f5ff; }
+.mpp-pick-btn.locked { opacity: 0.5; cursor: not-allowed; }
+.mpp-empty { font-size: 14px; color: #9a9daa; text-align: center; padding: 20px; }
+.mpp-generating { text-align: center; padding: 30px 0; }
+.mpp-challenge-card { background: white; border-radius: 18px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.mpp-challenge-text { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+.mpp-challenge-desc { font-size: 14px; color: #6c757d; line-height: 1.5; margin-bottom: 16px; }
+.mpp-gold-btn { display: block; width: 100%; background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%); color: #1a1a2e; border: none; padding: 14px; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; }
+.mpp-regen-btn { display: block; width: 100%; background: none; border: none; color: #5e17eb; font-size: 13px; font-weight: 600; cursor: pointer; padding: 10px; margin-top: 8px; }
+.mpp-error { color: #ef4444; font-size: 14px; margin-top: 12px; }
