@@ -369,21 +369,23 @@ export default function BusinessPage() {
       <div className="hero">
         <div className="hero-inner">
           <div className="hero-text">
-            <div className="hero-project">
-              {selectedProject?.name || 'No Project Yet'}
-            </div>
             <h1 className="hero-title">
               {activeStageTab === 0.9 ? 'Setup' : `Stage ${activeStageTab}: ${stageName}`}
             </h1>
             <p className="hero-desc">{stageDesc}</p>
-            {projects.length > 0 && (
-              <button
-                className="hero-switch"
-                onClick={() => setShowProjectSelector(true)}
-              >
-                Switch Project ▾
-              </button>
-            )}
+            <div className="hero-project-row">
+              <div className="hero-project">
+                {selectedProject?.name || 'No Project Yet'}
+              </div>
+              {projects.length > 0 && (
+                <button
+                  className="hero-switch"
+                  onClick={() => setShowProjectSelector(true)}
+                >
+                  Switch ▾
+                </button>
+              )}
+            </div>
           </div>
           <div className="ring-wrap">
             <svg viewBox="0 0 68 68">
@@ -501,9 +503,15 @@ export default function BusinessPage() {
                   >
                     <div className="q-name">{quest.name}</div>
                     <div className="q-sub">
-                      {quest.isExplainer ? 'Explainer' : quest.type || 'Quest'}
-                      {' \u00B7 '}
-                      {paidLocked ? 'Paid' : paidQuest ? 'Included' : 'Free'}
+                      {!isFlow && !completed ? (
+                        <span className="q-learn-more">Learn more ↓</span>
+                      ) : (
+                        <>
+                          {quest.isExplainer ? 'Explainer' : quest.type || 'Quest'}
+                          {' \u00B7 '}
+                          {paidLocked ? 'Paid' : paidQuest ? 'Included' : 'Free'}
+                        </>
+                      )}
                     </div>
                   </div>
                   {completed ? (

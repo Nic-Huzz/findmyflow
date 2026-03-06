@@ -170,7 +170,7 @@
       "type": "Rewire",
       "frequency": "daily",
       "name": "Future Successful You",
-      "description": "What's something you weren't going to do today, but it's something future successful you would have done so you did it",
+      "description": "What's something you weren't going to do today, but it's something future successful you would have done so you did it?",
       "points": 5,
       "inputType": "text",
       "placeholder": "What did you do that future successful you would have done?",

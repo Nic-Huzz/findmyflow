@@ -92,7 +92,6 @@
   color: rgba(255,255,255,0.5);
   font-weight: 600;
   font-style: italic;
-  margin-bottom: 10px;
 }
 
 .business-page .hero-title {
@@ -110,17 +109,23 @@
   margin-bottom: 20px;
 }
 
+.business-page .hero-project-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .business-page .hero-switch {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 12px;
   color: rgba(255,255,255,0.55);
   font-weight: 500;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
-  padding: 8px 16px;
-  border-radius: 12px;
+  padding: 4px 10px;
+  border-radius: 8px;
   cursor: pointer;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -346,7 +351,13 @@
 .business-page .q-expanded {
   padding: 0 0 12px 56px;
 }
+.business-page .q-learn-more {
+  color: #5e17eb;
+  font-weight: 600;
+}
+
 .business-page .q-expanded .quest-header { display: none; }
+.business-page .q-expanded .learn-more-toggle { display: none; }
 .business-page .q-expanded .quest-card {
   box-shadow: none; border: none; padding: 0;
   background: transparent;

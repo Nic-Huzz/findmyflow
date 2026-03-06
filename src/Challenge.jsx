@@ -23,6 +23,7 @@ import PriorityTab from './components/PriorityTab'
 import CompassCheckin from './components/CompassCheckin'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
+import HealingCompletionModal from './components/HealingCompletionModal'
 import PriorityOverlay from './components/PriorityOverlay'
 import GroanMatrix from './components/GroanMatrix'
 import PostActionModal, { POST_ACTION_MILESTONE_IDS } from './components/PostActionModal'
@@ -189,6 +190,9 @@ function Challenge() {
 
   // Guard against double-click on quest completion
   const [completingQuestId, setCompletingQuestId] = useState(null)
+
+  // Healing modal quest (compact row → popup completion)
+  const [healingModalQuest, setHealingModalQuest] = useState(null)
 
   // Search state for filtering quests
   const [searchQuery, setSearchQuery] = useState('')
@@ -1911,20 +1915,6 @@ function Challenge() {
         {activeCategory === 'Healing' && displayQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Healing</h2>
-            {/* R-type chips only — frequency tabs are above the progress bar */}
-            {activeFrequencyFilter !== 'deepdive' && activeFrequencyFilter !== 'explainer' && (
-              <div className="rtype-filters">
-                {['All', 'Recognise', 'Release', 'Rewire', 'Reconnect'].map(rType => (
-                  <button
-                    key={rType}
-                    className={`filter-chip ${activeRTypeFilter === rType ? 'active' : ''}`}
-                    onClick={() => setActiveRTypeFilter(rType)}
-                  >
-                    {rType}
-                  </button>
-                ))}
-              </div>
-            )}
             <div className="quest-search">
               <input
                 type="text"
@@ -1948,7 +1938,6 @@ function Challenge() {
               const rTypeQuests = displayQuests
                 .filter(q => q.type === rType)
                 .sort((a, b) => {
-                  // Daily quests first, weekly second
                   if (a.frequency === 'daily' && b.frequency !== 'daily') return -1
                   if (a.frequency !== 'daily' && b.frequency === 'daily') return 1
                   return 0
@@ -1956,43 +1945,66 @@ function Challenge() {
               if (rTypeQuests.length === 0) return null
 
               return (
-                <div key={rType} className="quest-subsection">
+                <div key={rType} className="quest-subsection healing-rows">
                   <h3 className="subsection-title">{rType}</h3>
-                  <div className="quest-grid">
+                  <div className="healing-row-list">
                     {rTypeQuests.filter(quest => quest.id !== 'release_daily_challenge').map(quest => {
                       const completed = isQuestCompletedToday(quest.id, quest)
+                      const isCompleting = completingQuestId === quest.id
+                      const streak = quest.frequency === 'daily' ? getDailyStreak(quest.id) : null
+                      const dayLabels = quest.frequency === 'daily' ? getDayLabels() : null
 
                       return (
-                        <QuestCard
-                          key={quest.id}
-                          quest={quest}
-                          completed={completed}
-                          isCompleting={completingQuestId === quest.id}
-                          showStreak={quest.frequency === 'daily'}
-                          streak={getDailyStreak(quest.id)}
-                          dayLabels={getDayLabels()}
-                          questInput={questInputs[quest.id]}
-                          onInputChange={handleInputChange}
-                          onComplete={handleQuestComplete}
-                          expandedLearnMore={expandedLearnMore}
-                          onToggleLearnMore={toggleLearnMore}
-                          showLockedTooltip={showLockedTooltip}
-                          onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
-                          renderDescription={renderDescription}
-                          completedBadgeText={quest.frequency === 'daily' ? "Completed Today" : "Completed"}
-                          navigate={navigate}
-                          safetyContracts={safetyContracts}
-                          selectedProject={selectedProject}
-                          progress={progress}
-                          projectStage={projectStage}
-                          justCompleted={justCompletedQuestId === quest.id}
-                          isPlanned={isQuestPlanned(quest.id)}
-                          plannedDay={getPlannedDay(quest.id)}
-                          completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id).length : 0}
-                          prelaunchLocked={PRELAUNCH_LOCKED}
-                          userId={user?.id}
-                          userArchetypes={userArchetypes}
-                        />
+                        <div key={quest.id} className={`ht-item-row ${completed ? 'done' : ''}`}>
+                          <span className={`ht-item-check ${completed ? 'done' : ''}`}>
+                            {completed ? '✓' : ''}
+                          </span>
+                          <div className="ht-item-body">
+                            <div className="ht-item-name">{quest.name}</div>
+                            <div className="ht-item-meta">
+                              <span className="ht-item-type">{quest.type}</span>
+                              <span className="ht-item-sep">·</span>
+                              <span className="ht-pts">{quest.points}pts</span>
+                            </div>
+                            {streak && dayLabels && (
+                              <div className="ht-streak-dots">
+                                {dayLabels.map((day, i) => (
+                                  <div key={i} className="ht-streak-day">
+                                    <span className={`ht-streak-dot ${streak[i] ? 'filled' : ''}`} />
+                                    <span className="ht-streak-label">{day}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          {completed && quest.flow_route && quest.frequency === 'explainer' ? (
+                            <a
+                              href={`${quest.flow_route}?returnTo=/7-day-challenge`}
+                              className="ht-item-action reread-action"
+                              style={{ textDecoration: 'none', textAlign: 'center' }}
+                            >
+                              Read Again
+                            </a>
+                          ) : completed && quest.flow_route ? (
+                            <a
+                              href={`${quest.flow_route}?returnTo=/7-day-challenge`}
+                              className="ht-item-action reread-action"
+                              style={{ textDecoration: 'none', textAlign: 'center' }}
+                            >
+                              View Results
+                            </a>
+                          ) : completed ? (
+                            <span className="ht-item-action done-action">Done</span>
+                          ) : (
+                            <button
+                              className="ht-item-action"
+                              disabled={isCompleting}
+                              onClick={() => setHealingModalQuest(quest)}
+                            >
+                              {isCompleting ? '...' : 'Complete'}
+                            </button>
+                          )}
+                        </div>
                       )
                     })}
                   </div>
@@ -2050,41 +2062,47 @@ function Challenge() {
 
         {/* Bonus Quests — Tasks sub-tab */}
         {activeCategory === 'Bonus' && bonusSubTab === 'tasks' && filteredQuests.length > 0 && (
-          <div className="quest-section">
+          <div className="quest-section healing-rows">
             <h2 className="section-title">Bonus Quests</h2>
-            <div className="quest-grid stagger-children-fast">
+            <div className="healing-row-list">
               {filteredQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
+                const isCompleting = completingQuestId === quest.id
+                const isFlow = quest.inputType === 'flow'
 
                 return (
-                  <QuestCard
-                    key={quest.id}
-                    quest={quest}
-                    completed={completed}
-                    isCompleting={completingQuestId === quest.id}
-                    showStreak={false}
-                    questInput={questInputs[quest.id]}
-                    onInputChange={handleInputChange}
-                    onComplete={handleQuestComplete}
-                    expandedLearnMore={expandedLearnMore}
-                    onToggleLearnMore={toggleLearnMore}
-                    showLockedTooltip={showLockedTooltip}
-                    onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
-                    renderDescription={renderDescription}
-                    completedBadgeText="Completed"
-                    navigate={navigate}
-                    selectedProject={selectedProject}
-                    progress={progress}
-                    projectStage={projectStage}
-                    extraClass="bonus"
-                    justCompleted={justCompletedQuestId === quest.id}
-                    isPlanned={isQuestPlanned(quest.id)}
-                    plannedDay={getPlannedDay(quest.id)}
-                    completionCount={quest.maxCompletions > 1 ? getQuestCompletions(quest.id).length : 0}
-                    prelaunchLocked={PRELAUNCH_LOCKED}
-                    userId={user?.id}
-                    userArchetypes={userArchetypes}
-                  />
+                  <div key={quest.id} className={`ht-item-row ${completed ? 'done' : ''}`}>
+                    <span className={`ht-item-check ${completed ? 'done' : ''}`}>
+                      {completed ? '✓' : ''}
+                    </span>
+                    <div className="ht-item-body">
+                      <div className="ht-item-name">{quest.name}</div>
+                      <div className="ht-item-meta">
+                        <span className="ht-item-type">Bonus</span>
+                        <span className="ht-item-sep">·</span>
+                        <span className="ht-pts">{quest.points}pts</span>
+                      </div>
+                    </div>
+                    {completed ? (
+                      <span className="ht-item-action done-action">Done</span>
+                    ) : isFlow && quest.flow_route ? (
+                      <a
+                        href={`${quest.flow_route}?returnTo=/7-day-challenge`}
+                        className="ht-item-action"
+                        style={{ textDecoration: 'none', textAlign: 'center' }}
+                      >
+                        Start →
+                      </a>
+                    ) : (
+                      <button
+                        className="ht-item-action"
+                        disabled={isCompleting}
+                        onClick={() => setHealingModalQuest(quest)}
+                      >
+                        {isCompleting ? '...' : 'Complete'}
+                      </button>
+                    )}
+                  </div>
                 )
               })}
             </div>
@@ -2659,6 +2677,18 @@ function Challenge() {
       {/* Level-up celebration modal */}
       {showLevelUp && (
         <LevelUpModal level={showLevelUp} onClose={closeLevelUp} />
+      )}
+
+      {/* Healing completion modal (compact row design) */}
+      {healingModalQuest && (
+        <HealingCompletionModal
+          quest={healingModalQuest}
+          onComplete={(quest, textInput) => {
+            const inputValue = quest.inputType === 'checkbox' ? 'completed' : textInput
+            handleQuestComplete(quest, inputValue)
+          }}
+          onClose={() => setHealingModalQuest(null)}
+        />
       )}
       </div>
     </div>

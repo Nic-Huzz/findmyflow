@@ -22,6 +22,7 @@
 }
 
 .gcm-title { font-size: 22px; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
+.gcm-desc { font-size: 14px; color: #6b7280; line-height: 1.4; margin-bottom: 16px; }
 .gcm-subtitle { font-size: 14px; color: #9a9daa; margin-bottom: 20px; }
 
 .gcm-form { display: flex; flex-direction: column; gap: 18px; margin-bottom: 20px; }
@@ -85,6 +86,15 @@
 .gcm-voice-group { display: flex; flex-direction: column; gap: 8px; }
 
 .gcm-error { color: #ef4444; font-size: 14px; text-align: center; margin-bottom: 12px; }
+
+.gcm-simple-input { display: flex; flex-direction: column; gap: 12px; }
+.gcm-textarea {
+  width: 100%; padding: 12px; border-radius: 12px;
+  border: 1.5px solid #eee; font-size: 14px;
+  background: #f8f8fa; resize: none; box-sizing: border-box;
+  font-family: inherit;
+}
+.gcm-textarea:focus { outline: none; border-color: #5e17eb; background: white; }
 
 /* Wide modal variant for healing quest inputs */
 .gcm-modal-wide { max-width: 500px; }

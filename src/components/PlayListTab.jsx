@@ -10,8 +10,11 @@
  */
 
 import { useMemo, useState, useEffect } from 'react'
+import { supabase } from '../lib/supabaseClient'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import QuestCard from './QuestCard'
 import GroanMatrix from './GroanMatrix'
+import GroanCompletionModal from './GroanCompletionModal'
 import MobilePlaylistPicker from './MobilePlaylistPicker'
 import PlayProfileDashboard from './PlayProfile/PlayProfileDashboard'
 
@@ -64,11 +67,32 @@ export default function PlayListTab({
   const [isMobile, setIsMobile] = useState(
     typeof window !== 'undefined' && window.innerWidth < 768
   )
+  const [activeChallenges, setActiveChallenges] = useState([])
+  const [completingChallenge, setCompletingChallenge] = useState(null)
+  const [loadingChallengeId, setLoadingChallengeId] = useState(null)
+
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', handler)
     return () => window.removeEventListener('resize', handler)
   }, [])
+
+  // Fetch this week's groan picks from priority_weekly_picks
+  const fetchActiveChallenges = async () => {
+    if (!userId) return
+    const weekStart = getWeekStartLocal()
+    const { data: picks } = await supabase
+      .from('priority_weekly_picks')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('week_start_date', weekStart)
+      .eq('pick_type', 'groan')
+    setActiveChallenges(picks || [])
+  }
+
+  useEffect(() => {
+    fetchActiveChallenges()
+  }, [userId, groanMatrixKey])
 
   // Compute Flow Finder progress from completed quests
   const flowFinderProgress = useMemo(() => {
@@ -83,40 +107,49 @@ export default function PlayListTab({
     return { currentPoints: completedPoints, totalPoints }
   }, [flowFinderQuests, completions])
 
-  const renderQuestCard = (quest) => {
+  const renderQuestRow = (quest) => {
     const completed = isQuestCompletedToday(quest.id, quest)
     const locked = isQuestLocked ? isQuestLocked(quest) : false
 
     return (
-      <QuestCard
-        key={quest.id}
-        quest={quest}
-        completed={completed}
-        isCompleting={completingQuestId === quest.id}
-        locked={locked}
-        lockedPrerequisite={locked && getRequiredQuestName ? getRequiredQuestName(quest.requires_quest, quest.id) : null}
-        showStreak={quest.frequency === 'daily'}
-        streak={getDailyStreak(quest.id)}
-        dayLabels={getDayLabels()}
-        questInput={questInputs[quest.id]}
-        onInputChange={onInputChange}
-        onComplete={onQuestComplete}
-        expandedLearnMore={expandedLearnMore}
-        onToggleLearnMore={onToggleLearnMore}
-        showLockedTooltip={showLockedTooltip}
-        onToggleLockedTooltip={(id) => onToggleLockedTooltip(showLockedTooltip === id ? null : id)}
-        renderDescription={renderDescription}
-        completedBadgeText={quest.frequency === 'daily' ? 'Completed Today' : 'Completed'}
-        navigate={navigate}
-        selectedProject={selectedProject}
-        progress={progress}
-        projectStage={projectStage}
-        justCompleted={justCompletedQuestId === quest.id}
-        isPlanned={isQuestPlanned ? isQuestPlanned(quest.id) : false}
-        plannedDay={getPlannedDay ? getPlannedDay(quest.id) : null}
-        userId={userId}
-        userArchetypes={userArchetypes}
-      />
+      <div key={quest.id} className={`ht-item-row ${completed ? 'done' : ''} ${locked ? 'locked' : ''}`}>
+        <span className={`ht-item-check ${completed ? 'done' : ''}`}>
+          {completed ? '✓' : locked ? '🔒' : ''}
+        </span>
+        <div className="ht-item-body">
+          <div className="ht-item-name">{quest.name}</div>
+          <div className="ht-item-meta">
+            <span className="ht-item-type">Flow Finder</span>
+            <span className="ht-item-sep">·</span>
+            <span className="ht-pts">{quest.points}pts</span>
+          </div>
+        </div>
+        {completed && quest.flow_route ? (
+          <a
+            href={`${quest.flow_route}?returnTo=/7-day-challenge`}
+            className="ht-item-action reread-action"
+            style={{ textDecoration: 'none', textAlign: 'center' }}
+          >
+            View Results
+          </a>
+        ) : completed ? (
+          <span className="ht-item-action done-action">Done</span>
+        ) : locked ? (
+          <span className="ht-item-action done-action">Locked</span>
+        ) : quest.flow_route ? (
+          <a
+            href={`${quest.flow_route}?returnTo=/7-day-challenge`}
+            className="ht-item-action"
+            style={{ textDecoration: 'none', textAlign: 'center' }}
+          >
+            Start →
+          </a>
+        ) : (
+          <button className="ht-item-action" onClick={() => onQuestComplete(quest)}>
+            Complete
+          </button>
+        )}
+      </div>
     )
   }
 
@@ -180,24 +213,6 @@ export default function PlayListTab({
                 </a>
               </div>
 
-              {/* 3. Filter chips (matches Healing's rtype-filters position) */}
-              <div className="rtype-filters">
-                <button
-                  className={`filter-chip ${flowFinderFilter === 'all' ? 'active' : ''}`}
-                  onClick={() => setFlowFinderFilter('all')}
-                >
-                  All
-                </button>
-                {FLOW_FINDER_GROUPS.filter(g => !g.noFilter).map(group => (
-                  <button
-                    key={group.label}
-                    className={`filter-chip ${flowFinderFilter === group.label ? 'active' : ''}`}
-                    onClick={() => setFlowFinderFilter(flowFinderFilter === group.label ? 'all' : group.label)}
-                  >
-                    {group.label}
-                  </button>
-                ))}
-              </div>
 
               {/* 4. Quest subsections (matches Healing's subsection-title style) */}
               {visibleGroups.map(group => {
@@ -206,19 +221,19 @@ export default function PlayListTab({
                   .filter(Boolean)
                 if (quests.length === 0) return null
                 return (
-                  <div key={group.label} className="quest-subsection">
+                  <div key={group.label} className="quest-subsection healing-rows">
                     <h3 className="subsection-title">{group.label}</h3>
-                    <div className="quest-grid stagger-children-fast">
-                      {quests.map(quest => renderQuestCard(quest))}
+                    <div className="healing-row-list">
+                      {quests.map(quest => renderQuestRow(quest))}
                     </div>
                   </div>
                 )
               })}
               {showUngrouped && ungrouped.length > 0 && (
-                <div className="quest-subsection">
+                <div className="quest-subsection healing-rows">
                   <h3 className="subsection-title">More</h3>
-                  <div className="quest-grid stagger-children-fast">
-                    {ungrouped.map(quest => renderQuestCard(quest))}
+                  <div className="healing-row-list">
+                    {ungrouped.map(quest => renderQuestRow(quest))}
                   </div>
                 </div>
               )}
@@ -227,7 +242,49 @@ export default function PlayListTab({
         )
       })()}
 
-      {/* ── Play-list sub-tab: Courage Matrix (desktop) / Guided Picker (mobile) ── */}
+      {/* ── Play-list sub-tab: Active Challenges + Courage Matrix ── */}
+      {activeSubTab === 'playlist' && activeChallenges.length > 0 && (
+        <div className="plt-section-card">
+          <div className="plt-section-header">
+            <div className="plt-section-header-left">
+              <span className="plt-section-icon">🎯</span>
+              <span className="plt-section-title">Active Challenges</span>
+            </div>
+            <span className="plt-section-count">{activeChallenges.length}</span>
+          </div>
+          <div className="plt-section-items">
+            {activeChallenges.map(pick => {
+              const isLoading = loadingChallengeId === pick.reference_id
+              return (
+                <div key={pick.id || pick.reference_id} className="plt-item-row">
+                  <span className="plt-item-check"></span>
+                  <div className="plt-item-body">
+                    <div className="plt-item-name">{pick.display_name}</div>
+                    <div className="plt-item-meta">Play-list Challenge</div>
+                  </div>
+                  <button
+                    className="plt-item-action"
+                    disabled={isLoading}
+                    onClick={async () => {
+                      setLoadingChallengeId(pick.reference_id)
+                      const { data } = await supabase
+                        .from('groan_challenges')
+                        .select('*')
+                        .eq('id', pick.reference_id)
+                        .single()
+                      setLoadingChallengeId(null)
+                      if (data) setCompletingChallenge(data)
+                    }}
+                  >
+                    {isLoading ? '...' : 'Complete'}
+                  </button>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {activeSubTab === 'playlist' && (
         <div className="quest-section">
           {isMobile ? (
@@ -253,6 +310,18 @@ export default function PlayListTab({
       {/* ── Play Profile sub-tab ── */}
       {activeSubTab === 'play-profile' && (
         <PlayProfileDashboard userId={userId} />
+      )}
+
+      {completingChallenge && (
+        <GroanCompletionModal
+          challenge={completingChallenge}
+          userId={userId}
+          onComplete={() => {
+            setCompletingChallenge(null)
+            fetchActiveChallenges()
+          }}
+          onClose={() => setCompletingChallenge(null)}
+        />
       )}
     </div>
   )

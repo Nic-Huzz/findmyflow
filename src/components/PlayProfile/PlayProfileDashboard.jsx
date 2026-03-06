@@ -217,51 +217,54 @@ export default function PlayProfileDashboard({ userId }) {
 
       {/* Session History */}
       {completedSessions.length > 0 && (
-        <div className="pp-fade-in-up pp-stagger-4">
-          <div style={{ fontSize: 13, fontWeight: 600, color: '#6c757d', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-            Past Challenges
+        <div className="pp-history-card pp-fade-in-up pp-stagger-4">
+          <div className="pp-history-header">
+            <div className="pp-history-header-left">
+              <span className="pp-history-icon">🏆</span>
+              <span className="pp-history-title">Past Challenges</span>
+            </div>
+            <span className="pp-history-count">{completedSessions.length}</span>
           </div>
-          {completedSessions.map(session => {
-            const meta = TYPE_META[session.challenge_type] || TYPE_META.DO_IT
-            const compass = COMPASS_META[session.compass_direction]
-            const hasNewFormat = !!session.compass_direction
-            return (
-              <div key={session.id} className="pp-session-row">
-                <div className="pp-session-info">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+          <div className="pp-history-items">
+            {completedSessions.map(session => {
+              const meta = TYPE_META[session.challenge_type] || TYPE_META.DO_IT
+              const compass = COMPASS_META[session.compass_direction]
+              const hasNewFormat = !!session.compass_direction
+              return (
+                <div key={session.id} className="pp-history-row">
+                  <div className="pp-history-check">✓</div>
+                  <div className="pp-history-body">
                     {session.challenge_name && (
-                      <span className="pp-challenge-name-small">{session.challenge_name}</span>
+                      <div className="pp-history-name">{session.challenge_name}</div>
                     )}
-                    <span className="pp-session-stuck">{session.stuck_point_name}</span>
-                    <span className={`pp-type-badge ${meta.className}`}>{meta.label}</span>
+                    <div className="pp-history-meta">
+                      <span className="pp-history-stuck">{session.stuck_point_name}</span>
+                      <span className={`pp-type-badge ${meta.className}`}>{meta.label}</span>
+                    </div>
+                    <div className="pp-history-date">
+                      {session.rated_at ? new Date(session.rated_at).toLocaleDateString() : ''}
+                    </div>
                   </div>
-                  <div className="pp-session-date">
-                    {session.rated_at ? new Date(session.rated_at).toLocaleDateString() : ''}
-                  </div>
+                  {hasNewFormat ? (
+                    <div className="pp-history-badges">
+                      {session.voice_type && (
+                        <span>{session.voice_type === 'essence' ? '🌟' : '🛡️'}</span>
+                      )}
+                      {compass && (
+                        <span title={compass.label}>{compass.emoji}</span>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="pp-mini-bars">
+                      <div className="pp-mini-bar resistance" style={{ height: (session.resistance_rating || 1) * 5 }} />
+                      <div className="pp-mini-bar engagement" style={{ height: (session.engagement_rating || 1) * 5 }} />
+                      <div className="pp-mini-bar shift" style={{ height: (session.shift_rating || 1) * 5 }} />
+                    </div>
+                  )}
                 </div>
-                {hasNewFormat ? (
-                  <div className="pp-session-badges">
-                    {session.voice_type && (
-                      <span className="pp-session-voice">
-                        {session.voice_type === 'essence' ? '🌟' : '🛡️'}
-                      </span>
-                    )}
-                    {compass && (
-                      <span className="pp-session-compass" title={compass.label}>
-                        {compass.emoji}
-                      </span>
-                    )}
-                  </div>
-                ) : (
-                  <div className="pp-mini-bars">
-                    <div className="pp-mini-bar resistance" style={{ height: (session.resistance_rating || 1) * 5 }} />
-                    <div className="pp-mini-bar engagement" style={{ height: (session.engagement_rating || 1) * 5 }} />
-                    <div className="pp-mini-bar shift" style={{ height: (session.shift_rating || 1) * 5 }} />
-                  </div>
-                )}
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       )}
     </div>
