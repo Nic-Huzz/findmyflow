@@ -347,7 +347,7 @@ export default function BusinessPage() {
   // Project selector overlay
   if (showProjectSelector) {
     return (
-      <div className="business-page">
+      <div className="business-page bp-project-selector">
         <ChallengeProjectSelector
           onSelect={(project) => selectProject(project)}
           currentProjectId={selectedProject?.id}

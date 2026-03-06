@@ -10,6 +10,11 @@
   color: #1a1a2e;
 }
 
+/* Project selector needs dark bg to match ChallengeProjectSelector's transparent overlays */
+.business-page.bp-project-selector {
+  background: linear-gradient(150deg, #7c3aed 0%, #5e17eb 35%, #4c1d95 100%);
+}
+
 /* ============================
    LOADING SPINNER
    ============================ */
