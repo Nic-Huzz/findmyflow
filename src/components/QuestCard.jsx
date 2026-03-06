@@ -234,7 +234,15 @@ function QuestCard({
           </button>
           {expandedLearnMore[quest.id] && (
             <div className="learn-more-content">
-              {quest.learnMore}
+              {quest.learnMore.split('\n').map((line, i) => {
+                const parts = line.split(/(\*\*[^*]+\*\*)/).map((seg, j) => {
+                  if (seg.startsWith('**') && seg.endsWith('**')) {
+                    return <strong key={j}>{seg.slice(2, -2)}</strong>
+                  }
+                  return seg
+                })
+                return <span key={i}>{parts}{i < quest.learnMore.split('\n').length - 1 && <br />}</span>
+              })}
             </div>
           )}
         </div>
