@@ -629,7 +629,7 @@ export function calculateRevenueStats(deals, monthlyGoal = 5000) {
 
 // Get points for stage transition
 export function getTransitionPoints(fromStage, toStage) {
-  const stageOrder = { lead: 0, discovery: 1, proposal: 2, won: 3, delivering: 4, completed: 5 }
+  const stageOrder = { lead: 0, qualified: 1, booked: 2, showed: 3, pitched: 4, follow_up: 5, won: 6, delivering: 7, completed: 8 }
 
   if (toStage === 'won') return 100
   if (toStage === 'lost') return 0
@@ -638,8 +638,11 @@ export function getTransitionPoints(fromStage, toStage) {
   const toIndex = stageOrder[toStage] ?? -1
 
   if (toIndex > fromIndex) {
-    if (toStage === 'discovery') return 25
-    if (toStage === 'proposal') return 25
+    if (toStage === 'qualified') return 25
+    if (toStage === 'booked') return 25
+    if (toStage === 'showed') return 25
+    if (toStage === 'pitched') return 25
+    if (toStage === 'follow_up') return 10
   }
 
   return 0

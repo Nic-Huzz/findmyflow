@@ -12,23 +12,28 @@ import { getWeekStartLocal, formatLocalDate } from '../dateUtils'
  * Map CRM deal stages to funnel metric stages
  */
 const CRM_TO_FUNNEL_MAP = {
-  // CRM stage → funnel_metrics field
-  lead: 'leadmagnet',      // Lead captured = lead magnet conversion
-  discovery: 'nurture',    // Discovery call = nurturing
-  booked: 'nurture',       // Meeting booked = still nurturing
-  proposal: 'nurture',     // Proposal sent = still nurturing
-  won: null,               // Won needs special handling based on offer_category
-  lost: null,              // Lost doesn't add to funnel
+  // CRM deal status → funnel_metrics field (Hormozi pipeline)
+  lead: 'attraction',        // Attraction offer captured their details
+  qualified: 'leadmagnet',   // Passed PTUF, engaging with lead magnet
+  booked: 'nurture',         // Meeting scheduled
+  showed: 'nurture',         // Attended meeting
+  pitched: 'nurture',        // Made the offer
+  follow_up: 'nurture',      // Thinking/negotiating
+  won: null,                 // Handled by offer_category
+  delivering: null,
+  completed: null,
+  lost: null,
 }
 
 /**
  * Map offer categories to funnel metric fields
  */
 const OFFER_TO_FUNNEL_MAP = {
-  'Core Offer': 'core',
-  'Upsell': 'upsell',
-  'Downsell': 'downsell',
-  'Continuity': 'continuity',
+  'attraction': 'attraction',
+  'core': 'core',
+  'upsell': 'upsell',
+  'downsell': 'downsell',
+  'continuity': 'continuity',
 }
 
 /**
@@ -59,6 +64,7 @@ export async function syncCRMToFunnel(userId, projectId = null) {
 
     // Calculate funnel counts from deals
     const funnelCounts = {
+      attraction: 0,
       leadmagnet: 0,
       nurture: 0,
       core: 0,
@@ -69,10 +75,9 @@ export async function syncCRMToFunnel(userId, projectId = null) {
     }
 
     for (const deal of deals || []) {
-      // Count by current stage
       if (deal.status === 'won') {
         // Won deals count toward their offer category
-        const offerCategory = deal.offer_category || 'Core Offer'
+        const offerCategory = deal.offer_category || 'core'
         const funnelField = OFFER_TO_FUNNEL_MAP[offerCategory]
         if (funnelField) {
           funnelCounts[funnelField]++
@@ -84,12 +89,10 @@ export async function syncCRMToFunnel(userId, projectId = null) {
           funnelCounts.continuity++
         }
       } else if (deal.status !== 'lost') {
-        // Active deals count as lead magnet conversions
-        funnelCounts.leadmagnet++
-
-        // If past lead stage, also count as nurture
-        if (['discovery', 'booked', 'proposal'].includes(deal.status)) {
-          funnelCounts.nurture++
+        // Map deal status to funnel stage
+        const funnelField = CRM_TO_FUNNEL_MAP[deal.status]
+        if (funnelField) {
+          funnelCounts[funnelField]++
         }
       }
     }

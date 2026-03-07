@@ -102,7 +102,16 @@ export async function getContentContext(userId) {
       voice: null,
 
       // Products
-      products: challengeData?.products || []
+      products: challengeData?.products || [],
+
+      // Attraction & Leads Strategy
+      attractionOffer: challengeData?.attractionOffer || null,
+      leadsStrategy: challengeData?.leadsStrategy || null,
+
+      // Money Model Offers
+      upsell: challengeData?.upsell || null,
+      downsell: challengeData?.downsell || null,
+      continuity: challengeData?.continuity || null
     }
 
     return context
@@ -115,7 +124,12 @@ export async function getContentContext(userId) {
       proof: null,
       launch: null,
       voice: null,
-      products: []
+      products: [],
+      attractionOffer: null,
+      leadsStrategy: null,
+      upsell: null,
+      downsell: null,
+      continuity: null
     }
   }
 }

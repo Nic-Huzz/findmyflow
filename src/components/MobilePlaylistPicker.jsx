@@ -53,9 +53,10 @@ export default function MobilePlaylistPicker({
       if (aiError) throw aiError
       if (!aiData?.title) throw new Error('No challenge generated')
 
+      const dayLabel = selectedDay ? ` (${selectedDay})` : ''
       const { data: dbRecord, error: saveError } = await createGroanChallenge({
         userId,
-        title: aiData.title,
+        title: aiData.title + dayLabel,
         description: aiData.description,
         visibilityLayer: selectedLayer,
         sourceType: 'skill',

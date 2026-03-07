@@ -74,8 +74,6 @@ function ChallengeHeader({
 
   return (
     <header className="challenge-header">
-      <h1>Gamify Your Ambitions</h1>
-
       {/* Team matchup banner — taps to matchup details page */}
       {matchupData && (
         <div

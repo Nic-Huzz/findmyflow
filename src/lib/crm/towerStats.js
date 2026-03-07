@@ -30,11 +30,11 @@ export async function getAttractStats(userId) {
 
     // Marketing tasks this week
     const { count: tasksThisWeek } = await supabase
-      .from('marketing_tasks')
+      .from('execute_tasks')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
       .eq('completed', true)
-      .gte('date', weekAgo.toISOString().split('T')[0])
+      .gte('scheduled_date', weekAgo.toISOString().split('T')[0])
 
     // Pages stats
     const { data: pagesData } = await supabase
@@ -122,10 +122,21 @@ export async function getNurtureStats(userId) {
     const execCompleted = execTasks?.filter(t => t.completed).length || 0
     const execTotal = execTasks?.length || 0
 
+    const { count: contactsTotal } = await supabase
+      .from('crm_contacts')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+
+    const { count: contactsThisWeek } = await supabase
+      .from('crm_contacts')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .gte('created_at', weekAgo.toISOString())
+
     return {
       contacts: {
-        total: 0, // Contacts table doesn't exist yet
-        thisWeek: newDealsCount || 0,
+        total: contactsTotal || 0,
+        thisWeek: contactsThisWeek || 0,
       },
       pipeline: {
         activeDeals,

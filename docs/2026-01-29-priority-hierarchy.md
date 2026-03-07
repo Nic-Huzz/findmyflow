@@ -1,5 +1,5 @@
 # FindMyFlow Priority Hierarchy & Test Milestones
-**Date:** 2026-01-29 (Updated: 2026-03-01 — session 2)
+**Date:** 2026-01-29 (Updated: 2026-03-07 — session 3)
 **Status:** Active Planning Document
 **Purpose:** Stop scope creep. Define testable "done" gates.
 
@@ -382,11 +382,16 @@ See `income-calculator-and-ecosystem-plan.md` for full details.
 | **Healing Compass Flows** | | | |
 | Rename current flow → "Limiting Belief Rewire" | Extracted V2 as `/limiting-belief-rewire`, weekly repeatable, gated behind NS completion, Library of Answers split | Small | ✅ Done 2026-02-17 |
 | New: Healing Compass Emotional Needs | New Healing Compass flow (structure TBD) | Medium | ⬜ Not started |
+| **Vibe Mirror Public Quizzes** | | | |
+| Essence Identify Quiz (`/essence-identify`) | Public shareable quiz. Vote-accumulation across 4 steps (vibe expression, wound, inner child, character pick) using 8 archetypes. Email-gated reveal. Saves to `lead_flow_profiles`. | Medium | ✅ Done 2026-03-07 |
+| Protective Identify Quiz (`/protective-identify`) | Public shareable quiz. Pick 1-3 matrix codes (fears) → behavior per fear (votes for protective archetype) → email → reveal (ranked matrix codes + protective archetype). Saves to `lead_flow_profiles`. Shared data in `src/data/matrixCodeQuiz.js`. | Medium | ✅ Done 2026-03-07 |
+| **Healing Tab Archival** | | | |
+| Archive all healing quests | All 22 healing quests archived (`archived: true`). Tab visible but empty. Will reactivate later. | Small | ✅ Done 2026-03-07 |
 | **New Flows** | | | |
-| Matrix Codes flow | New flow (details TBD) | Medium | ⬜ Not started |
+| Matrix Codes in-app deep dive | Authenticated version of matrix code quiz for Healing Deep Dive tab. No email capture. Saves to `matrix_code_results` table, updates `protective_archetype` on existing `lead_flow_profiles` row. | Medium | ⬜ Not started |
 | Shadow Work Workshop | New deep-dive workshop flow | Medium | ⬜ Not started |
 | **Existing Items** | | | |
-| Protective Archetype Identification | Flow to identify user's dominant protective pattern | Medium | ⬜ Not started |
+| Protective Archetype Identification | Flow to identify user's dominant protective pattern. Public version done via `/protective-identify`. In-app version pending (Matrix Codes deep dive above). | Medium | 🟡 Partial |
 | Archetype Deep Dive Cards | Educational content for each archetype | Small | ⬜ Not started |
 | Archetype → Groan Connection | Link identified archetype to courage challenges | Small | ⬜ Not started |
 | Memory Reconsolidation | Rewiring traumatic memories safely | Medium | ⬜ Not started |
@@ -410,7 +415,7 @@ See `income-calculator-and-ecosystem-plan.md` for full details.
 | Unlock Healing Tab | Remove lock from Challenge.jsx, test all 21+ quests | Small | ⬜ After above items |
 
 **See:** ClawdBot repo `findmyflow-implementation/03-explainer-quests.md` for Explainer Quests spec.
-**Note:** Healing tab currently locked for user testing.
+**Note:** Healing tab quests archived Mar 2026. All 22 quests have `archived: true`. Tab visible but shows no active quests. Will reactivate when ready.
 
 #### AI Protective Pattern Analysis — Prompt Spec
 

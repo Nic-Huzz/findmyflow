@@ -16,7 +16,6 @@ import QuestCard from './QuestCard'
 import GroanMatrix from './GroanMatrix'
 import GroanCompletionModal from './GroanCompletionModal'
 import MobilePlaylistPicker from './MobilePlaylistPicker'
-import PlayProfileDashboard from './PlayProfile/PlayProfileDashboard'
 
 // Flow Finder quest groupings for the sub-tab
 const FLOW_FINDER_GROUPS = [
@@ -305,11 +304,6 @@ export default function PlayListTab({
             />
           )}
         </div>
-      )}
-
-      {/* ── Play Profile sub-tab ── */}
-      {activeSubTab === 'play-profile' && (
-        <PlayProfileDashboard userId={userId} />
       )}
 
       {completingChallenge && (

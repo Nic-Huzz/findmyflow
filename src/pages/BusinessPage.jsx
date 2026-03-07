@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import useBusinessPageData from '../hooks/useBusinessPageData'
 import { useSubscription } from '../hooks/useSubscription'
@@ -17,6 +17,7 @@ import {
 import ChallengeProjectSelector from '../components/ChallengeProjectSelector'
 import BusinessSetup from '../components/BusinessSetup'
 import QuestCard from '../components/QuestCard'
+import PlayProfileDashboard from '../components/PlayProfile/PlayProfileDashboard'
 import './BusinessPage.css'
 
 const STAGE_DOTS = [
@@ -47,6 +48,21 @@ export default function BusinessPage() {
   const [completingQuestId, setCompletingQuestId] = useState(null)
   const [showLockedTooltip, setShowLockedTooltip] = useState(null)
   const [justCompletedQuestId, setJustCompletedQuestId] = useState(null)
+  const [ppExpanded, setPpExpanded] = useState(false)
+  const [ppSummary, setPpSummary] = useState(null)
+
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('founder_dna_results')
+      .select('matched_founder, archetype')
+      .eq('user_id', user.id)
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setPpSummary(data)
+      })
+  }, [user?.id])
 
   const handleInputChange = (questId, value) => {
     setQuestInputs(prev => ({ ...prev, [questId]: value }))
@@ -444,6 +460,29 @@ export default function BusinessPage() {
           />
         </div>
       )}
+
+      {/* 3b — PLAY PROFILE (collapsible) */}
+      <div className="card bp-play-profile-card">
+        <button className="bp-pp-toggle" onClick={() => setPpExpanded(v => !v)}>
+          <div className="bp-pp-toggle-left">
+            <span className="bp-pp-icon">🧬</span>
+            <div>
+              <div className="bp-pp-title">Play Profile</div>
+              <div className="bp-pp-subtitle">
+                {ppSummary
+                  ? `${ppSummary.matched_founder} \u00B7 ${ppSummary.archetype}`
+                  : 'Discover your Founder DNA'}
+              </div>
+            </div>
+          </div>
+          <span className={`bp-pp-chevron ${ppExpanded ? 'open' : ''}`}>▾</span>
+        </button>
+        {ppExpanded && (
+          <div className="bp-pp-body">
+            <PlayProfileDashboard userId={user?.id} />
+          </div>
+        )}
+      </div>
 
       {/* 4 — UP NEXT CARD (stages 1-7 only, when there's an incomplete quest) */}
       {activeStageTab !== 0.9 && nextQuest && (

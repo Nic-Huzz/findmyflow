@@ -33,6 +33,7 @@ import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import EssenceIdentify from './pages/EssenceIdentify'
+import ProtectiveIdentify from './pages/ProtectiveIdentify'
 
 // Lazy-load heavy pages — preloaded after initial render (see useEffect below)
 const MePage = lazyRetry(() => import('./pages/MePage'))
@@ -320,8 +321,9 @@ function ConditionalZarlo() {
   const isWhyPage = location.pathname === '/why-i-created-this'
 
   const isEssenceIdentify = location.pathname === '/essence-identify'
+  const isProtectiveIdentify = location.pathname === '/protective-identify'
 
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isWhyPage || isEssenceIdentify) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isWhyPage || isEssenceIdentify || isProtectiveIdentify) return null
   return <ZarloWidget />
 }
 
@@ -359,7 +361,8 @@ function ConditionalBottomToolbar() {
                         location.pathname.startsWith('/league') ||
                         location.pathname === '/content-review' ||
                         location.pathname === '/product-suite-map' ||
-                        location.pathname === '/essence-identify'
+                        location.pathname === '/essence-identify' ||
+                        location.pathname === '/protective-identify'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -396,6 +399,7 @@ function AppRouter() {
               {/* Signup/Onboarding */}
               <Route path="/get-started" element={<PersonaAssessment />} />
               <Route path="/essence-identify" element={<EssenceIdentify />} />
+              <Route path="/protective-identify" element={<ProtectiveIdentify />} />
               <Route path="/log-in" element={<PersonaAssessment />} />
 
               {/* Career Clarity Quiz - Public */}

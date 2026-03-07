@@ -17,6 +17,9 @@ import { useAuth } from '../auth/AuthProvider'
 import { useHeroProfile } from '../hooks/useHeroProfile'
 import { getLevel, getLevelNumber, getLevelProgress, getLevelMaxXP } from '../lib/crm/statsService'
 import { getStageDisplayName } from '../lib/stageConfig'
+import { ONBOARDING_QUEST_IDS, LAYER_RECOMMENDATIONS } from '../hooks/usePriorityTab'
+import { computePriorityLayer, TENSION_LAYER_DISPLAY } from '../lib/onboardingV2'
+import { GROAN_VISIBILITY_LAYERS } from '../lib/stageConfig'
 import { useReveal } from '../hooks/useReveal'
 import VibeColorPicker from '../components/VibeColorPicker'
 import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
@@ -58,6 +61,8 @@ export default function MePage() {
   const [stageGraduations, setStageGraduations] = useState([])
   const [selectedProject, setSelectedProject] = useState(null)
   const [projectMenuOpen, setProjectMenuOpen] = useState(false)
+  const [hasAcceptedChallenge, setHasAcceptedChallenge] = useState(false)
+  const [hasCustomPhoto, setHasCustomPhoto] = useState(false)
   const [showInlineMapper, setShowInlineMapper] = useState(null) // null = not determined yet
   const projectMenuRef = useRef(null)
 
@@ -113,6 +118,44 @@ export default function MePage() {
       .order('completed_at', { ascending: false })
       .then(({ data }) => {
         setQuestCompletions(data || [])
+      })
+  }, [user?.id])
+
+  // Check if user has ever accepted a groan challenge (onboarding step 8)
+  // + check if user has uploaded a custom archetype photo (onboarding step 1)
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('groan_challenges')
+      .select('id')
+      .eq('user_id', user.id)
+      .not('accepted_at', 'is', null)
+      .limit(1)
+      .then(({ data }) => {
+        setHasAcceptedChallenge(data && data.length > 0)
+      })
+    // Check custom photo: try user_id first, fall back to email
+    // Use limit(1) + array access instead of maybeSingle() to handle duplicate rows
+    supabase
+      .from('lead_flow_profiles')
+      .select('custom_essence_image')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.[0]) {
+          setHasCustomPhoto(!!(data[0].custom_essence_image))
+        } else if (user.email) {
+          supabase
+            .from('lead_flow_profiles')
+            .select('custom_essence_image')
+            .ilike('email', user.email)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .then(({ data: emailData }) => {
+              setHasCustomPhoto(!!(emailData?.[0]?.custom_essence_image))
+            })
+        }
       })
   }, [user?.id])
 
@@ -185,6 +228,82 @@ export default function MePage() {
   )
   const doneCount = stageQuests.filter(q => completedQuestIds.has(q.id)).length
   const nextQuest = stageQuests.find(q => !completedQuestIds.has(q.id))
+
+  // Derived: 8-step onboarding progress
+  const ONBOARDING_STEPS = [
+    { name: 'Create Your Character', desc: 'Every player needs an avatar. Upload your photo to bring your archetype to life.', route: null },
+    { name: 'Mind Space', desc: 'Extract your skills, problems, and people from an AI conversation.', route: '/mind-space' },
+    { name: 'What is Healing?', desc: 'Understand what healing really means and why emotional splinters keep us stuck.', route: '/what-is-healing-explainer' },
+    { name: 'Healing Compass', desc: 'Identify the wound causing your protective voice to protect you.', route: '/healing-compass' },
+    { name: 'Play-List Finder', desc: 'Discover your skills through play, role models, and what feels fun.', route: '/play-list-finder' },
+    { name: 'Map Your Nervous System', desc: 'Identify how much your nervous system feels safe earning before it self-sabotages.', route: '/nervous-system' },
+    { name: 'Check Alignment', desc: 'Confirm you feel aligned with your discovered skills, problems, and personas.', route: null },
+    { name: 'Set Play-list Task', desc: 'Accept your first courage challenge from the Play-list Matrix.', route: null },
+  ]
+
+  const onboardingStatus = useMemo(() => {
+    // Step 1: create your character (upload archetype photo)
+    const step1 = hasCustomPhoto
+    // Steps 2-6: quest completion check
+    const allCompletedIds = new Set(questCompletions.map(c => c.quest_id))
+    const questSteps = ONBOARDING_QUEST_IDS.map(id => allCompletedIds.has(id))
+    // Step 7: alignment check (localStorage)
+    const alignSkills = typeof window !== 'undefined' && localStorage.getItem('priority_align_skills') === 'true'
+    const alignProblems = typeof window !== 'undefined' && localStorage.getItem('priority_align_problems') === 'true'
+    const alignPersona = typeof window !== 'undefined' && localStorage.getItem('priority_align_persona') === 'true'
+    const step7 = alignSkills && alignProblems && alignPersona
+    // Step 8: check if any groan challenge has been accepted
+    const step8 = hasAcceptedChallenge
+    return [step1, ...questSteps, step7, step8]
+  }, [questCompletions, hasAcceptedChallenge, hasCustomPhoto])
+
+  // Steps 2-8 determine completion (step 1 photo is a recurring bonus, never blocks)
+  const onboardingComplete = onboardingStatus.slice(1).every(Boolean)
+  const onboardingStepIndex = onboardingStatus.findIndex(done => !done)
+  const onboardingDoneCount = onboardingStatus.filter(Boolean).length
+  const currentOnboardingStep = onboardingStepIndex >= 0 ? ONBOARDING_STEPS[onboardingStepIndex] : null
+
+  // Derived: priority layer + recommendations
+  const priorityLayer = useMemo(() => {
+    if (stageProgress?.tension_discover == null) return null
+    return computePriorityLayer({
+      discover: stageProgress?.tension_discover,
+      regulate: stageProgress?.tension_regulate,
+      reveal: stageProgress?.tension_reveal,
+      value: stageProgress?.tension_value,
+    })
+  }, [stageProgress?.tension_discover, stageProgress?.tension_regulate, stageProgress?.tension_reveal, stageProgress?.tension_value])
+
+  const layerDisplay = priorityLayer ? TENSION_LAYER_DISPLAY[priorityLayer] : null
+
+  const layerRecommendations = useMemo(() => {
+    if (!priorityLayer) return null
+    const config = LAYER_RECOMMENDATIONS[priorityLayer]
+    if (!config) return null
+
+    if (config.type === 'quests') {
+      const allCompletedIds = new Set(questCompletions.map(c => c.quest_id))
+      const items = config.questIds.map(id => {
+        const quest = questData.find(q => q.id === id)
+        return { id, name: quest?.name || id, done: allCompletedIds.has(id) }
+      })
+      const alwaysItems = (config.alwaysRecommend || []).map(id => {
+        const quest = questData.find(q => q.id === id)
+        return { id, name: quest?.name || id, done: false, always: true }
+      })
+      return { type: 'quests', items: [...items, ...alwaysItems] }
+    }
+
+    if (config.type === 'playlist_layers') {
+      const items = config.layers.map(layerId => {
+        const layer = GROAN_VISIBILITY_LAYERS.find(l => l.id === layerId)
+        return { id: layerId, name: layer?.label || layerId, icon: layer?.icon || '🎯' }
+      })
+      return { type: 'playlist_layers', items }
+    }
+
+    return null
+  }, [priorityLayer, questCompletions, questData])
 
   // Derived: level info
   const level = getLevel(totalXP)
@@ -503,39 +622,83 @@ export default function MePage() {
          ============================================================ */}
       <section className="quest-section reveal-fade-up" ref={questRevealRef}>
         <div className="quest-banner">
-          <div className="quest-eyebrow">
-            <span className="quest-label">Today's Quest</span>
-            <span className="quest-day-badge">
-              Stage {projectStage} — {getStageDisplayName(projectStage)}
-            </span>
-          </div>
-          <h2 className="quest-title">
-            {doneCount === 0 ? 'Begin Your Flow Journey' : (nextQuest?.name || 'All Quests Complete!')}
-          </h2>
-          <p className="quest-subtitle">
-            {doneCount === 0
-              ? 'Complete your first quest to start building momentum'
-              : (nextQuest?.description || 'You\'ve completed every quest for this stage')
-            }
-          </p>
-          <div className="quest-dots">
-            {stageQuests.map((q, i) => (
-              <div
-                key={q.id}
-                className={`dot ${completedQuestIds.has(q.id) ? 'done' : ''} ${i === doneCount ? 'active' : ''}`}
-              />
-            ))}
-            {stageQuests.length === 0 && (
-              // Fallback: show 7 empty dots
-              Array.from({ length: 7 }).map((_, i) => <div key={i} className="dot" />)
-            )}
-          </div>
-          <div className="quest-progress-label">
-            {doneCount} of {stageQuests.length || 7} challenges complete
-          </div>
-          <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
-            {doneCount === 0 ? 'Start Your First Quest' : 'Continue Quest'} <span>→</span>
-          </button>
+          {!onboardingComplete && currentOnboardingStep ? (
+            <>
+              <div className="quest-eyebrow">
+                <span className="quest-label">Your Next Step</span>
+                <span className="quest-day-badge">
+                  Step {onboardingStepIndex + 1} of 8
+                </span>
+              </div>
+              <h2 className="quest-title">
+                {currentOnboardingStep.name}
+              </h2>
+              <p className="quest-subtitle">
+                {currentOnboardingStep.desc}
+              </p>
+              <div className="quest-dots">
+                {ONBOARDING_STEPS.map((_, i) => (
+                  <div
+                    key={i}
+                    className={`dot ${onboardingStatus[i] ? 'done' : ''} ${i === onboardingStepIndex ? 'active' : ''}`}
+                  />
+                ))}
+              </div>
+              <div className="quest-progress-label">
+                {onboardingDoneCount} of 8 steps complete
+              </div>
+              {currentOnboardingStep.route ? (
+                <a
+                  href={`${currentOnboardingStep.route}?returnTo=/me`}
+                  className="quest-cta"
+                  style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                >
+                  Start {currentOnboardingStep.name} <span>→</span>
+                </a>
+              ) : (
+                <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
+                  Continue in Challenge <span>→</span>
+                </button>
+              )}
+            </>
+          ) : layerDisplay && layerRecommendations ? (
+            <>
+              <div className="quest-eyebrow">
+                <span className="quest-label">{layerDisplay.emoji} {layerDisplay.name}</span>
+                <span className="quest-day-badge">
+                  {layerDisplay.appFeature}
+                </span>
+              </div>
+              <h2 className="quest-title">Recommended Challenges</h2>
+              <p className="quest-subtitle">{layerDisplay.description}</p>
+              <div className="me-picks-list">
+                {layerRecommendations.items.map(item => (
+                  <div key={item.id} className={`me-pick-row ${item.done ? 'done' : ''}`}>
+                    <span className="me-pick-icon">
+                      {item.done ? '✓' : (item.icon || '🎯')}
+                    </span>
+                    <span className="me-pick-name">{item.name}</span>
+                  </div>
+                ))}
+              </div>
+              <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
+                Go to Challenge <span>→</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="quest-eyebrow">
+                <span className="quest-label">Get Started</span>
+              </div>
+              <h2 className="quest-title">Set Your Priority</h2>
+              <p className="quest-subtitle">
+                Complete the tension assessment to unlock your recommended challenges.
+              </p>
+              <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
+                Go to Challenge <span>→</span>
+              </button>
+            </>
+          )}
         </div>
       </section>
 

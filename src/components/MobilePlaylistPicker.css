@@ -179,6 +179,7 @@
 }
 
 /* ── Generate Step ── */
+.mpp-step-title { font-size: 16px; font-weight: 800; color: #1a1a2e; margin: 0 0 20px; text-align: center; }
 .mpp-generating { text-align: center; padding: 30px 0; }
 .mpp-challenge-card { background: white; border-radius: 18px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
 .mpp-challenge-text { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }

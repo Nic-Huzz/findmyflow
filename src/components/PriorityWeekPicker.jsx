@@ -2,34 +2,29 @@
  * PriorityWeekPicker.jsx
  *
  * Weekly quest selector for the Priority tab (State 2).
- * 4 sections matching Mockup C grouped-sections design:
+ * 3 sections matching Mockup C grouped-sections design:
  *   1. Play-list Challenges (skill → layer → day → challenge text)
- *   2. Play Profile
- *   3. Daily Healing
- *   4. Weekly Healing
+ *   2. Daily Healing
+ *   3. Weekly Healing
  *
  * Sections matching the user's priority layer get gold accent + "Recommended" badge.
  *
  * Created: 2026-03-04
  */
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { GROAN_VISIBILITY_LAYERS } from '../lib/stageConfig'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
-import PriorityDnaInlineFlow from './PriorityDnaInlineFlow'
 
 const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 export default function PriorityWeekPicker({
   skills,
   userId,
-  dnaResult,
-  activeDnaSession,
   dailyHealingQuests,
   weeklyHealingQuests,
   recommendations,
   onConfirm,
-  onDnaRefresh,
 }) {
   // ── Playlist (groan replacement) state ──
   const [playlistStep, setPlaylistStep] = useState('skills') // 'skills' | 'layer' | 'day' | 'challenge'
@@ -41,13 +36,8 @@ export default function PriorityWeekPicker({
   const [threePercentText, setThreePercentText] = useState('')
   const [saving, setSaving] = useState(false)
   const [playlistPicks, setPlaylistPicks] = useState([])
-  const [dnaSkipped, setDnaSkipped] = useState(false)
-  const [dnaSessionSkipped, setDnaSessionSkipped] = useState(false)
-  const [showDnaFlow, setShowDnaFlow] = useState(false)
-
   // ── Other sections selections ──
   const [selections, setSelections] = useState({
-    play_profile: new Set(),
     daily_healing: new Set(),
     weekly_healing: new Set(),
   })
@@ -68,17 +58,6 @@ export default function PriorityWeekPicker({
       return { ...prev, [type]: next }
     })
   }
-
-  // Auto-select active DNA challenge (unless user explicitly skipped)
-  useEffect(() => {
-    if (activeDnaSession?.id && !dnaSessionSkipped) {
-      setSelections(prev => {
-        const next = new Set(prev.play_profile)
-        next.add(activeDnaSession.id)
-        return { ...prev, play_profile: next }
-      })
-    }
-  }, [activeDnaSession?.id, dnaSessionSkipped])
 
   // ── Skill split (starred first) ──
   const isItemStarred = (item) => item.items?.some(i => i.isStarred === true)
@@ -153,15 +132,6 @@ export default function PriorityWeekPicker({
       })
     }
 
-    // DNA pick
-    for (const id of selections.play_profile) {
-      picks.push({
-        pick_type: 'play_profile',
-        reference_id: id,
-        display_name: activeDnaSession?.challenge_name || 'Play Profile Challenge',
-      })
-    }
-
     // Daily healing picks
     for (const id of selections.daily_healing) {
       const quest = dailyHealingQuests.find(q => q.id === id)
@@ -185,7 +155,7 @@ export default function PriorityWeekPicker({
     onConfirm(picks)
   }
 
-  const isRecommended = (sectionKey) => recommendations?.includes(sectionKey)
+  const isRecommended = (sectionKey) => recommendations?.sections?.includes(sectionKey)
 
   // ── Render playlist section content based on step ──
   const renderPlaylistContent = () => {
@@ -248,22 +218,29 @@ export default function PriorityWeekPicker({
           <div className="pt-step-context">
             Skill: <strong>{selectedSkill?.cluster_label}</strong>
           </div>
-          {GROAN_VISIBILITY_LAYERS.map(layer => (
-            <button
-              key={layer.id}
-              className="pt-pick-row"
-              onClick={() => {
-                setSelectedLayer(layer)
-                setPlaylistStep('day')
-              }}
-            >
-              <span className="pt-pick-check">{layer.icon}</span>
-              <div className="pt-pick-body">
-                <div className="pt-pick-name">{layer.label}</div>
-                <div className="pt-pick-meta">{layer.fear}</div>
-              </div>
-            </button>
-          ))}
+          {GROAN_VISIBILITY_LAYERS.map(layer => {
+            const isLayerRecommended = recommendations?.type === 'playlist_layers' &&
+              recommendations.layers?.includes(layer.id)
+            return (
+              <button
+                key={layer.id}
+                className={`pt-pick-row ${isLayerRecommended ? 'recommended' : ''}`}
+                onClick={() => {
+                  setSelectedLayer(layer)
+                  setPlaylistStep('day')
+                }}
+              >
+                <span className="pt-pick-check">{layer.icon}</span>
+                <div className="pt-pick-body">
+                  <div className="pt-pick-name">
+                    {layer.label}
+                    {isLayerRecommended && <span className="pt-rec-badge">Recommended</span>}
+                  </div>
+                  <div className="pt-pick-meta">{layer.fear}</div>
+                </div>
+              </button>
+            )
+          })}
         </>
       )
     }
@@ -370,125 +347,6 @@ export default function PriorityWeekPicker({
 
         <div className="pt-section-items">
           {renderPlaylistContent()}
-        </div>
-      </div>
-
-      {/* Play Profile Section */}
-      <div className={`pt-section-card ${isRecommended('play_profile') ? 'recommended' : ''}`}>
-        <div className="pt-section-header">
-          <div className="pt-section-header-left">
-            <span className="pt-section-icon">🧬</span>
-            <span className="pt-section-title">Play Profile</span>
-            {isRecommended('play_profile') && <span className="pt-rec-badge">Recommended</span>}
-          </div>
-          <span className="pt-section-count">
-            {selections.play_profile.size}
-          </span>
-        </div>
-        <div className="pt-section-items">
-          {!dnaResult ? (
-            /* No DNA quiz taken yet */
-            <div className="pt-empty-state">
-              <p>Find your aligned entrepreneur in the Play Profile.</p>
-              <a href="/play-profile" className="pt-empty-link">
-                Take the Quiz →
-              </a>
-            </div>
-          ) : !activeDnaSession ? (
-            /* Has DNA but no active challenge */
-            showDnaFlow ? (
-              <PriorityDnaInlineFlow
-                userId={userId}
-                dnaResult={dnaResult}
-                onChallengeCreated={() => {
-                  setShowDnaFlow(false)
-                  onDnaRefresh?.()
-                }}
-                onBack={() => setShowDnaFlow(false)}
-              />
-            ) : dnaSkipped ? (
-              <div className="pt-empty-state">
-                <p>Skipped for this week.</p>
-              </div>
-            ) : (
-              <div className="pt-dna-section">
-                <div className="pt-dna-mini-card">
-                  <div className="pt-dna-founder">{dnaResult.matched_founder}</div>
-                  <div className="pt-dna-archetype">{dnaResult.archetype}</div>
-                </div>
-                <button
-                  className="pt-empty-link"
-                  onClick={() => setShowDnaFlow(true)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                >
-                  Get Unstuck →
-                </button>
-                <button
-                  className="pt-set-later-btn"
-                  onClick={() => setDnaSkipped(true)}
-                >
-                  Set challenge later
-                </button>
-              </div>
-            )
-          ) : (
-            /* Has active challenge — show it + option to create new */
-            showDnaFlow ? (
-              <PriorityDnaInlineFlow
-                userId={userId}
-                dnaResult={dnaResult}
-                onChallengeCreated={() => {
-                  setShowDnaFlow(false)
-                  onDnaRefresh?.()
-                }}
-                onBack={() => setShowDnaFlow(false)}
-              />
-            ) : (
-              <>
-                <button
-                  className={`pt-pick-row ${selections.play_profile.has(activeDnaSession.id) ? 'selected' : ''}`}
-                  onClick={() => toggleSelection('play_profile', activeDnaSession.id)}
-                >
-                  <span className={`pt-pick-check ${selections.play_profile.has(activeDnaSession.id) ? 'checked' : ''}`}>
-                    {selections.play_profile.has(activeDnaSession.id) ? '✓' : ''}
-                  </span>
-                  <div className="pt-pick-body">
-                    <div className="pt-pick-name">{activeDnaSession.challenge_name}</div>
-                    <div className="pt-pick-meta">
-                      {activeDnaSession.stuck_point_name && (
-                        <span className="pt-pill">{activeDnaSession.stuck_point_name}</span>
-                      )}
-                      {activeDnaSession.challenge_type && (
-                        <span className="pt-pill screen">{activeDnaSession.challenge_type.replace('_', ' ')}</span>
-                      )}
-                    </div>
-                  </div>
-                </button>
-                <div className="pt-dna-section" style={{ marginTop: 8 }}>
-                  <button
-                    className="pt-empty-link"
-                    onClick={() => setShowDnaFlow(true)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                  >
-                    Get Unstuck →
-                  </button>
-                  <button
-                    className="pt-set-later-btn"
-                    onClick={() => {
-                      setDnaSessionSkipped(true)
-                      setSelections(prev => {
-                        const next = new Set(prev.play_profile)
-                        next.delete(activeDnaSession.id)
-                        return { ...prev, play_profile: next }
-                      })
-                    }}
-                  >
-                    Set challenge later
-                  </button>
-                </div>
-              </>
-            )
-          )}
         </div>
       </div>
 

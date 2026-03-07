@@ -334,10 +334,11 @@ export async function getUserConversionRates(userId) {
   // Fetch user's funnel metrics
   const { data: funnelData, error } = await supabase
     .from('funnel_metrics')
-    .select('actual_values, campaign_name, updated_at')
+    .select('awareness, attraction, leadmagnet, nurture, core, upsell, downsell, continuity, updated_at')
     .eq('user_id', userId)
+    .eq('mode', 'actual')
     .order('updated_at', { ascending: false })
-    .limit(12) // Last 12 entries (could be weeks or campaigns)
+    .limit(12)
 
   if (error) {
     console.error('Error fetching funnel data:', error)
@@ -367,15 +368,14 @@ export async function getUserConversionRates(userId) {
   }
 
   funnelData.forEach(entry => {
-    const values = entry.actual_values || {}
-    aggregated.totalReach += values.awareness || 0
-    aggregated.totalEngagement += values.attraction_offer || 0
-    aggregated.totalLeads += values.lead_magnet || 0
-    aggregated.totalNurtured += values.nurture || 0
-    aggregated.totalCustomers += values.core_offer || 0
-    aggregated.totalUpsells += values.upsell || 0
-    aggregated.totalDownsells += values.downsell || 0
-    aggregated.totalContinuity += values.continuity || 0
+    aggregated.totalReach += entry.awareness || 0
+    aggregated.totalEngagement += entry.attraction || 0
+    aggregated.totalLeads += entry.leadmagnet || 0
+    aggregated.totalNurtured += entry.nurture || 0
+    aggregated.totalCustomers += entry.core || 0
+    aggregated.totalUpsells += entry.upsell || 0
+    aggregated.totalDownsells += entry.downsell || 0
+    aggregated.totalContinuity += entry.continuity || 0
   })
 
   // Calculate actual rates (with safety checks)

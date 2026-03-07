@@ -15,6 +15,8 @@ export const ECOSYSTEM_PHASES = [
       { id: 'core-offer', label: 'Build Your Core Offer', link: '/offer-builder', auto: true },
       { id: 'offer-stack', label: 'Package Your Offer Stack', link: '/offer-stack-builder', auto: true },
       { id: 'lead-magnet', label: 'Choose Your Lead Magnet', link: '/lead-magnet-selection', auto: true },
+      { id: 'attraction-offer', label: 'Define Your Attraction Offer', link: '/attraction-offer', auto: true },
+      { id: 'leads-strategy', label: 'Choose Your Leads Strategy', link: '/leads-strategy', auto: true },
     ],
   },
   {
@@ -51,6 +53,9 @@ export const ECOSYSTEM_PHASES = [
       { id: 'weekly-planning', label: 'Complete Weekly Planning', link: '/weekly-planning' },
       { id: 'analytics-check', label: 'Review Your First Report', link: '/crm/reports' },
       { id: 'grand-slam', label: 'Run Grand Slam Evaluation', link: '/grand-slam-matrix', auto: true },
+      { id: 'upsell', label: 'Design Your Upsell', link: '/upsell-offer', auto: true },
+      { id: 'downsell', label: 'Design Your Downsell', link: '/downsell-offer', auto: true },
+      { id: 'continuity', label: 'Design Your Continuity', link: '/continuity-offer', auto: true },
       { id: 'voice-training', label: 'Train Your Brand Voice', link: '/voice-training' },
       { id: 'implementations', label: 'Track an Implementation', link: '/crm/implementations' },
     ],
@@ -67,7 +72,12 @@ export const AUTO_CHECK_MAP = [
   { table: 'offer_builder_assessments', phase: 'foundation', systemId: 'core-offer' },
   { table: 'grand_slam_offers', phase: 'foundation', systemId: 'offer-stack' },
   { table: 'lead_magnet_assessments', phase: 'foundation', systemId: 'lead-magnet' },
+  { table: 'attraction_offer_assessments', phase: 'foundation', systemId: 'attraction-offer' },
+  { table: 'leads_assessments', phase: 'foundation', systemId: 'leads-strategy' },
   { table: 'grand_slam_offers', phase: 'optimise', systemId: 'grand-slam' },
+  { table: 'upsell_assessments', phase: 'optimise', systemId: 'upsell' },
+  { table: 'downsell_assessments', phase: 'optimise', systemId: 'downsell' },
+  { table: 'continuity_assessments', phase: 'optimise', systemId: 'continuity' },
 ]
 
 /**

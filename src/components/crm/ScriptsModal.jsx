@@ -79,8 +79,8 @@ function getSmartSuggestions(deal, scripts) {
     }
   }
 
-  // Proposal stage - likely price objections coming
-  if (deal.status === 'proposal') {
+  // Pitched stage - likely price objections coming
+  if (deal.status === 'pitched') {
     const priceScript = scripts.find(s => s.category?.toUpperCase() === 'PRICE')
     if (priceScript && !suggestions.find(s => s.script.id === priceScript.id)) {
       suggestions.push({
@@ -91,7 +91,7 @@ function getSmartSuggestions(deal, scripts) {
   }
 
   // If no suggestions yet, suggest FINAL scripts for closing
-  if (suggestions.length === 0 && deal.status === 'proposal') {
+  if (suggestions.length === 0 && deal.status === 'pitched') {
     const finalScript = scripts.find(s => s.category?.toUpperCase() === 'FINAL')
     if (finalScript) {
       suggestions.push({

@@ -184,13 +184,13 @@ export default function SmartAlerts() {
       })
     }
 
-    const proposalDeals = deals.filter(d => d.status === 'proposal')
-    if (proposalDeals.length > 0) {
+    const pitchedDeals = deals.filter(d => d.status === 'pitched')
+    if (pitchedDeals.length > 0) {
       alertsList.push({
-        id: 'proposals-pending',
+        id: 'pitched-pending',
         type: 'pipeline',
-        title: `${proposalDeals.length} Proposal${proposalDeals.length > 1 ? 's' : ''} Pending`,
-        message: 'Deals in proposal stage need follow-up to close.',
+        title: `${pitchedDeals.length} Pitched Deal${pitchedDeals.length > 1 ? 's' : ''} Pending`,
+        message: 'Deals in pitched stage need follow-up to close.',
         action: { label: 'View Pipeline', path: '/crm/sales' },
         priority: 'medium',
       })

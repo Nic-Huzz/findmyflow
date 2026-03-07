@@ -137,6 +137,101 @@ export async function fetchLeadMagnetAssessment(userId) {
   return data
 }
 
+/**
+ * Fetch Attraction Offer Assessment
+ * Contains: recommended offer name, confidence score
+ */
+export async function fetchAttractionOfferData(userId) {
+  const { data, error } = await supabase
+    .from('attraction_offer_assessments')
+    .select('recommended_offer_name, confidence_score, total_score, all_offer_scores')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('Error fetching attraction offer assessment:', error)
+  }
+  return data
+}
+
+/**
+ * Fetch Leads Strategy Assessment
+ * Contains: recommended strategy name, confidence score
+ */
+export async function fetchLeadsStrategyData(userId) {
+  const { data, error } = await supabase
+    .from('leads_assessments')
+    .select('recommended_strategy_name, confidence_score, total_score, all_strategy_scores')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('Error fetching leads strategy assessment:', error)
+  }
+  return data
+}
+
+/**
+ * Fetch Upsell Assessment
+ * Contains: recommended offer name, confidence score
+ */
+export async function fetchUpsellData(userId) {
+  const { data, error } = await supabase
+    .from('upsell_assessments')
+    .select('recommended_offer_name, confidence_score, total_score, all_offer_scores')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('Error fetching upsell assessment:', error)
+  }
+  return data
+}
+
+/**
+ * Fetch Downsell Assessment
+ * Contains: recommended offer name, confidence score
+ */
+export async function fetchDownsellData(userId) {
+  const { data, error } = await supabase
+    .from('downsell_assessments')
+    .select('recommended_offer_name, confidence_score, total_score, all_offer_scores')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('Error fetching downsell assessment:', error)
+  }
+  return data
+}
+
+/**
+ * Fetch Continuity Assessment
+ * Contains: recommended offer name, confidence score
+ */
+export async function fetchContinuityData(userId) {
+  const { data, error } = await supabase
+    .from('continuity_assessments')
+    .select('recommended_offer_name, confidence_score, total_score, all_offer_scores')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('Error fetching continuity assessment:', error)
+  }
+  return data
+}
+
 // ============================================================================
 // STAGE 3: TESTING DATA FETCHERS
 // ============================================================================
@@ -646,14 +741,24 @@ export async function fetchAllChallengeData(userId) {
     validation,
     launchReadiness,
     productSelections,
-    psychological
+    psychological,
+    attractionOffer,
+    leadsStrategy,
+    upsell,
+    downsell,
+    continuity
   ] = await Promise.all([
     fetchOfferStackData(userId),
     fetchGrandSlamData(userId),
     fetchValidationAnalysis(userId),
     fetchLaunchReadiness(userId),
     fetchProductSelections(userId),
-    fetchPsychologicalProfile(userId)
+    fetchPsychologicalProfile(userId),
+    fetchAttractionOfferData(userId),
+    fetchLeadsStrategyData(userId),
+    fetchUpsellData(userId),
+    fetchDownsellData(userId),
+    fetchContinuityData(userId)
   ])
 
   return {
@@ -729,6 +834,32 @@ export async function fetchAllChallengeData(userId) {
       recommendedTone: psychological.recommendedTone,
       earningCeiling: psychological.earningCeiling,
       visibilityCeiling: psychological.visibilityCeiling
-    }
+    },
+
+    // Attraction & Leads Strategy
+    attractionOffer: attractionOffer ? {
+      name: attractionOffer.recommended_offer_name,
+      confidence: attractionOffer.confidence_score,
+    } : null,
+
+    leadsStrategy: leadsStrategy ? {
+      name: leadsStrategy.recommended_strategy_name,
+      confidence: leadsStrategy.confidence_score,
+    } : null,
+
+    upsell: upsell ? {
+      name: upsell.recommended_offer_name,
+      confidence: upsell.confidence_score,
+    } : null,
+
+    downsell: downsell ? {
+      name: downsell.recommended_offer_name,
+      confidence: downsell.confidence_score,
+    } : null,
+
+    continuity: continuity ? {
+      name: continuity.recommended_offer_name,
+      confidence: continuity.confidence_score,
+    } : null
   }
 }

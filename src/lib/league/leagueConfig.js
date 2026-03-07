@@ -97,7 +97,7 @@ export const FANTASY_CATEGORIES = {
     label: 'Bonus',
     icon: '⭐',
     color: '#E9A23B',
-    dbFilter: ['Bonus', 'Tracker'],
+    dbFilter: ['Bonus'],
     scoringType: 'raw', // Raw SUM(points) + approved content submissions
   },
 }

@@ -20,14 +20,11 @@ export default function PriorityOverlay({ userId, stageProgress, onStageProgress
     currentState,
     priorityLayer,
     skills,
-    dnaResult,
-    activeDnaSession,
     dailyHealingQuests,
     weeklyHealingQuests,
     recommendations,
     confirmWeek,
     finishReassess,
-    refreshDnaSession,
     loading,
   } = usePriorityTab(userId, stageProgress)
 
@@ -74,13 +71,10 @@ export default function PriorityOverlay({ userId, stageProgress, onStageProgress
             <PriorityWeekPicker
               skills={skills}
               userId={userId}
-              dnaResult={dnaResult}
-              activeDnaSession={activeDnaSession}
               dailyHealingQuests={dailyHealingQuests}
               weeklyHealingQuests={weeklyHealingQuests}
               recommendations={recommendations}
               onConfirm={handleConfirm}
-              onDnaRefresh={refreshDnaSession}
             />
           </>
         )}

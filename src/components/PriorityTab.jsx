@@ -13,18 +13,53 @@
  * Created: 2026-03-04
  */
 
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { getScoringCategory } from '../lib/scoringCategories'
-import { getWeekStartLocal } from '../lib/dateUtils'
 import usePriorityTab from '../hooks/usePriorityTab'
 import PriorityMiniAssessment from './PriorityMiniAssessment'
 import PriorityLayerCard from './PriorityLayerCard'
+import PriorityOnboardingCard from './PriorityOnboardingCard'
+import PriorityRecommendedCard from './PriorityRecommendedCard'
+import PriorityLayerCheckin from './PriorityLayerCheckin'
 import PriorityWeekPicker from './PriorityWeekPicker'
 import GroanCompletionModal from './GroanCompletionModal'
 import HealingCompletionModal from './HealingCompletionModal'
-import ChallengeRating from './PlayProfile/ChallengeRating'
 import './PriorityTab.css'
+
+const QUEST_INFO = {
+  flow_finder_skills: { name: 'Flow Finder: Skills', route: '/nikigai/skills', icon: '🎯', desc: 'Discover what you\'re naturally great at' },
+  flow_finder_problems: { name: 'Flow Finder: Problems', route: '/nikigai/problems', icon: '🧩', desc: 'Find the problems you care about solving' },
+  flow_finder_persona: { name: 'Flow Finder: Persona', route: '/nikigai/persona', icon: '👤', desc: 'Identify who you\'re meant to serve' },
+  recognise_nervous_system: { name: 'Map Your Nervous System', route: '/nervous-system', icon: '🧠', desc: 'Find your boundaries around money and visibility' },
+  recognise_limiting_belief_rewire: { name: 'Limiting Belief Rewire', route: '/limiting-belief-rewire', icon: '🔓', desc: 'Trace a limiting belief to its origin and rewire it' },
+  release_weekly_big: { name: 'Big Release', route: null, icon: '💜', desc: 'Complete an extended release practice this week' },
+}
+
+function RecommendedQuestCard({ questId, isWeekly }) {
+  const info = QUEST_INFO[questId]
+  if (!info) return null
+
+  return (
+    <div className="pt-section-card recommended">
+      <div className="pt-section-header">
+        <div className="pt-section-header-left">
+          <span className="pt-section-icon">{info.icon}</span>
+          <span className="pt-section-title">{info.name}</span>
+          <span className="pt-rec-badge">{isWeekly ? 'Weekly' : 'Recommended'}</span>
+        </div>
+      </div>
+      <div className="pt-section-items">
+        <div className="pt-item-row">
+          <span className="pt-item-check"></span>
+          <div className="pt-item-body">
+            <div className="pt-item-name">{info.desc}</div>
+          </div>
+          {info.route && <a href={info.route} className="pt-item-action">Start</a>}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function PriorityTab({
   userId,
@@ -36,33 +71,48 @@ export default function PriorityTab({
   isQuestCompletedToday,
   getDailyStreak,
   getDayLabels,
+  // Onboarding props
+  isQuestEverCompleted,
+  onNavigateToPlaylist,
 }) {
   const {
     currentState,
     priorityLayer,
     layerDisplay,
     skills,
-    dnaResult,
-    activeDnaSession,
     dailyHealingQuests,
     weeklyHealingQuests,
     weeklyPicks,
     selectedHealingQuests,
     selectedGroanPicks,
-    selectedDnaPick,
     recommendations,
+    onboardingStatus,
+    isOnboardingComplete,
+    hasAcceptedChallenge,
+    essenceProfile,
+    checkinDoneThisWeek,
+    nudgeLayer,
+    clearNudge,
+    completeCheckin,
+    finalizeCheckin,
     confirmWeek,
     editWeek,
     startReassess,
     finishReassess,
     refreshData,
-    refreshDnaSession,
+    refreshAcceptedChallenge,
+    refreshCustomPhoto,
+    onAlignmentChange,
     loading,
-  } = usePriorityTab(userId, stageProgress)
+  } = usePriorityTab(userId, stageProgress, isQuestEverCompleted)
+
+  // Refresh accepted challenge on mount (handles returning from Play-list tab)
+  useEffect(() => {
+    refreshAcceptedChallenge()
+  }, [refreshAcceptedChallenge])
 
   const [completingChallenge, setCompletingChallenge] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
-  const [showDnaRating, setShowDnaRating] = useState(false)
   const [healingModalQuest, setHealingModalQuest] = useState(null)
 
   // Progress: count completed picks vs total
@@ -137,6 +187,24 @@ export default function PriorityTab({
     )
   }
 
+  // ── Onboarding ──
+  if (currentState === 'onboarding') {
+    return (
+      <div className="priority-tab">
+        <PriorityOnboardingCard
+          userId={userId}
+          onboardingStatus={onboardingStatus}
+          onNavigateToPlaylist={onNavigateToPlaylist}
+          hasAcceptedChallenge={hasAcceptedChallenge}
+          onAlignmentChange={onAlignmentChange}
+          onPhotoUploaded={refreshCustomPhoto}
+          essenceProfile={essenceProfile}
+          skills={skills}
+        />
+      </div>
+    )
+  }
+
   // ── State 1: Assessment ──
   if (currentState === 'assessment') {
     return (
@@ -149,10 +217,47 @@ export default function PriorityTab({
     )
   }
 
+  // ── Layer Check-in (weekly graduation gate) ──
+  if (currentState === 'layer_checkin') {
+    return (
+      <div className="priority-tab">
+        <PriorityLayerCheckin
+          priorityLayer={priorityLayer}
+          stageProgress={stageProgress}
+          onComplete={async (result) => {
+            const graduation = await completeCheckin(true, result.scores)
+            if (!graduation.layerChanged) {
+              await onStageProgressUpdate?.()
+            }
+            // If layerChanged, stageProgress refresh deferred to onCelebrationDone
+            return graduation
+          }}
+          onNotYet={async () => {
+            await completeCheckin(false)
+          }}
+          onCelebrationDone={async () => {
+            finalizeCheckin()
+            await onStageProgressUpdate?.()
+          }}
+        />
+      </div>
+    )
+  }
+
   // ── State 2: Picker ──
   if (currentState === 'picker') {
     return (
       <div className="priority-tab">
+        {nudgeLayer && (
+          <div className="pt-nudge-banner">
+            <span className="pt-nudge-text">
+              {nudgeLayer === 'discover' && "That's your focus this week. Your Flow Finder quests will help you get clear."}
+              {nudgeLayer === 'regulate' && "That's okay. Your healing quests this week will build that capacity."}
+              {nudgeLayer === 'reveal' && "No rush. Your Play-list challenges will stretch that muscle."}
+            </span>
+            <button className="pt-nudge-dismiss" onClick={clearNudge}>&times;</button>
+          </div>
+        )}
         <PriorityLayerCard
           layer={priorityLayer}
           onReassess={startReassess}
@@ -160,13 +265,10 @@ export default function PriorityTab({
         <PriorityWeekPicker
           skills={skills}
           userId={userId}
-          dnaResult={dnaResult}
-          activeDnaSession={activeDnaSession}
           dailyHealingQuests={dailyHealingQuests}
           weeklyHealingQuests={weeklyHealingQuests}
           recommendations={recommendations}
           onConfirm={confirmWeek}
-          onDnaRefresh={refreshDnaSession}
         />
       </div>
     )
@@ -178,10 +280,21 @@ export default function PriorityTab({
 
   return (
     <div className="priority-tab">
-      <PriorityLayerCard
-        layer={priorityLayer}
+      <PriorityRecommendedCard
+        priorityLayer={priorityLayer}
+        recommendations={recommendations}
         onReassess={startReassess}
       />
+
+      <h2 className="pt-weekly-heading">Weekly Intentions</h2>
+
+      {/* Recommended quest card for Discover/Regulate layers */}
+      {recommendations.type === 'quests' && recommendations.nextQuest && (
+        <RecommendedQuestCard questId={recommendations.nextQuest} />
+      )}
+      {recommendations.type === 'quests' && recommendations.alwaysRecommend?.map(questId => (
+        <RecommendedQuestCard key={questId} questId={questId} isWeekly />
+      ))}
 
       {/* Progress bar */}
       {progressInfo && (
@@ -198,7 +311,7 @@ export default function PriorityTab({
 
       {/* Play-list Challenges section */}
       {selectedGroanPicks.length > 0 && (
-        <div className={`pt-section-card ${recommendations.includes('groan') ? 'recommended' : ''}`}>
+        <div className={`pt-section-card ${recommendations.sections?.includes('groan') ? 'recommended' : ''}`}>
           <div className="pt-section-header">
             <div className="pt-section-header-left">
               <span className="pt-section-icon">🎮</span>
@@ -246,91 +359,14 @@ export default function PriorityTab({
         </div>
       )}
 
-      {/* Play Profile section */}
-      {selectedDnaPick && (
-        <div className={`pt-section-card ${recommendations.includes('play_profile') ? 'recommended' : ''}`}>
-          <div className="pt-section-header">
-            <div className="pt-section-header-left">
-              <span className="pt-section-icon">🧬</span>
-              <span className="pt-section-title">Play Profile</span>
-            </div>
-            <span className="pt-section-count">0/1</span>
-          </div>
-          <div className="pt-section-items">
-            {!showDnaRating ? (
-              <div className="pt-item-row">
-                <span className="pt-item-check"></span>
-                <div className="pt-item-body">
-                  <div className="pt-item-name">{selectedDnaPick.display_name}</div>
-                  <div className="pt-item-meta">DNA Challenge</div>
-                </div>
-                <button className="pt-item-action" onClick={() => setShowDnaRating(true)}>
-                  Complete
-                </button>
-              </div>
-            ) : (
-              <div style={{ padding: '12px 18px' }}>
-                <ChallengeRating
-                  founderName={dnaResult?.matched_founder || 'your founder'}
-                  challengeAction={activeDnaSession?.challenge_name}
-                  onRate={async (ratingData) => {
-                    if (activeDnaSession?.id) {
-                      const { error } = await supabase
-                        .from('founder_dna_sessions')
-                        .update({
-                          status: 'completed',
-                          voice_type: ratingData.voice_type,
-                          voice_reflection: ratingData.voice_reflection,
-                          compass_internal: ratingData.internal_state,
-                          compass_external: ratingData.external_state,
-                          compass_direction: ratingData.compass_direction,
-                          completed_at: new Date().toISOString(),
-                        })
-                        .eq('id', activeDnaSession.id)
-                      if (error) console.warn('Error saving DNA rating:', error)
-                    }
-
-                    await supabase.from('quest_completions').insert({
-                      user_id: userId,
-                      challenge_instance_id: null,
-                      quest_id: `play_profile_challenge_${activeDnaSession?.id || 'unknown'}`,
-                      quest_category: 'Groans',
-                      quest_type: 'play_profile',
-                      points_earned: 10,
-                      challenge_day: 0,
-                      project_id: null,
-                      reflection_text: JSON.stringify(ratingData),
-                    })
-
-                    try {
-                      await supabase.rpc('increment_scores', {
-                        p_user_id: userId,
-                        p_project_id: null,
-                        p_category: getScoringCategory('Groans'),
-                        p_points: 10,
-                        p_week_start: getWeekStartLocal(),
-                      })
-                    } catch (e) { console.warn('Score error:', e) }
-
-                    setShowDnaRating(false)
-                    refreshDnaSession()
-                  }}
-                  onBack={() => setShowDnaRating(false)}
-                />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* Daily Healing section */}
       {dailyQuests.length > 0 && (
-        <div className={`pt-section-card ${recommendations.includes('daily_healing') ? 'recommended' : ''}`}>
+        <div className={`pt-section-card ${recommendations.sections?.includes('daily_healing') ? 'recommended' : ''}`}>
           <div className="pt-section-header">
             <div className="pt-section-header-left">
               <span className="pt-section-icon">💚</span>
               <span className="pt-section-title">Daily Healing</span>
-              {recommendations.includes('daily_healing') && <span className="pt-rec-badge">Recommended</span>}
+              {recommendations.sections?.includes('daily_healing') && <span className="pt-rec-badge">Recommended</span>}
             </div>
             <span className={`pt-section-count ${dailyQuests.every(q => isQuestCompletedToday?.(q.id, q)) ? 'complete' : ''}`}>
               {dailyQuests.filter(q => isQuestCompletedToday?.(q.id, q)).length}/{dailyQuests.length}
@@ -344,12 +380,12 @@ export default function PriorityTab({
 
       {/* Weekly Healing section */}
       {weeklyQuests.length > 0 && (
-        <div className={`pt-section-card ${recommendations.includes('weekly_healing') ? 'recommended' : ''}`}>
+        <div className={`pt-section-card ${recommendations.sections?.includes('weekly_healing') ? 'recommended' : ''}`}>
           <div className="pt-section-header">
             <div className="pt-section-header-left">
               <span className="pt-section-icon">💜</span>
               <span className="pt-section-title">Weekly Healing</span>
-              {recommendations.includes('weekly_healing') && <span className="pt-rec-badge">Recommended</span>}
+              {recommendations.sections?.includes('weekly_healing') && <span className="pt-rec-badge">Recommended</span>}
             </div>
             <span className={`pt-section-count ${weeklyQuests.every(q => isQuestCompletedToday?.(q.id, q)) ? 'complete' : ''}`}>
               {weeklyQuests.filter(q => isQuestCompletedToday?.(q.id, q)).length}/{weeklyQuests.length}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
@@ -30,6 +30,7 @@ import PostActionModal, { POST_ACTION_MILESTONE_IDS } from './components/PostAct
 import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreActionModal'
 import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge, fetchFlowFinderData } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
+import { ONBOARDING_QUEST_IDS } from './hooks/usePriorityTab'
 import { useLeagueData } from './hooks/useLeagueData'
 import { useMatchupData } from './hooks/useMatchupData'
 import { GROAN_VISIBILITY_LAYERS, getLayerLockStatus } from './lib/stageConfig'
@@ -37,6 +38,7 @@ import { getScoringCategory } from './lib/scoringCategories'
 import ContentChallenges from './components/ContentChallenges'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
+import ChallengeIntro from './components/ChallengeIntro'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
 import { useSubscription } from './hooks/useSubscription'
 import { isPaidQuest, createCheckoutSession } from './lib/subscriptionService'
@@ -142,6 +144,7 @@ function Challenge() {
     getQuestCompletions,
     isQuestCompletedToday,
     isQuestLocked,
+    isQuestEverCompleted,
     getRequiredQuestName,
     toggleLearnMore,
     getCategoryPoints,
@@ -164,6 +167,11 @@ function Challenge() {
     checkAndGraduateProject,
     lifetimeScores
   } = useChallengeData()
+
+  // First-visit story intro
+  const [showIntro, setShowIntro] = useState(() =>
+    typeof window !== 'undefined' && !localStorage.getItem('hasSeenChallengeIntro')
+  )
 
   // Subscription status for payment gating
   const { hasSubscription } = useSubscription()
@@ -193,6 +201,36 @@ function Challenge() {
 
   // Healing modal quest (compact row → popup completion)
   const [healingModalQuest, setHealingModalQuest] = useState(null)
+
+  // Priority onboarding: lock other tabs until complete
+  const [hasAcceptedGroanChallenge, setHasAcceptedGroanChallenge] = useState(false)
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('groan_challenges')
+      .select('id')
+      .eq('user_id', user.id)
+      .not('accepted_at', 'is', null)
+      .limit(1)
+      .then(({ data }) => setHasAcceptedGroanChallenge(data && data.length > 0))
+  }, [user?.id, completions]) // re-check when completions change (proxy for activity)
+
+  const isPriorityOnboardingComplete = useMemo(() => {
+    if (!isQuestEverCompleted) return false
+    const questsDone = ONBOARDING_QUEST_IDS.every(id => isQuestEverCompleted(id))
+    const alignDone = typeof window !== 'undefined' &&
+      localStorage.getItem('priority_align_skills') === 'true' &&
+      localStorage.getItem('priority_align_problems') === 'true' &&
+      localStorage.getItem('priority_align_persona') === 'true'
+    return questsDone && alignDone && hasAcceptedGroanChallenge
+  }, [isQuestEverCompleted, hasAcceptedGroanChallenge, completions])
+
+  // Redirect to Priority if on a locked tab
+  useEffect(() => {
+    if (!isPriorityOnboardingComplete && activeCategory !== 'Priority' && activeCategory !== 'Business') {
+      setActiveCategory('Priority')
+    }
+  }, [isPriorityOnboardingComplete, activeCategory, setActiveCategory])
 
   // Search state for filtering quests
   const [searchQuery, setSearchQuery] = useState('')
@@ -1482,6 +1520,10 @@ function Challenge() {
   // Render: Onboarding (welcome, install-app, enable-notifications)
   // ============================================
 
+  if (showIntro) {
+    return <ChallengeIntro onComplete={() => setShowIntro(false)} />
+  }
+
   if (showOnboarding) {
     return (
       <ChallengeOnboarding
@@ -1657,14 +1699,14 @@ function Challenge() {
 
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
-          const isLocked = false // TODO: restore → category === 'Healing' && !healingCompassComplete
+          const isLocked = !isPriorityOnboardingComplete && category !== 'Priority' && category !== 'Business'
           return (
             <button
               key={category}
               className={`challenge-tab ${activeCategory === category ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
               onClick={() => !isLocked && setActiveCategory(category)}
               disabled={isLocked}
-              title={isLocked ? 'Complete the Healing Compass to unlock' : undefined}
+              title={isLocked ? 'Complete Priority onboarding to unlock' : undefined}
             >
               {category}
               {isLocked && <span className="lock-icon">🔒</span>}
@@ -1847,7 +1889,6 @@ function Challenge() {
           const playlistTabs = [
             { key: 'flow-finder', icon: '🧭', label: 'Flow Finder' },
             { key: 'playlist', icon: '🎯', label: 'Play-list' },
-            { key: 'play-profile', icon: '🏆', label: 'Play Profile' },
           ]
           return (
             <div className="stage-tabs-container">
@@ -2025,6 +2066,8 @@ function Challenge() {
             isQuestCompletedToday={isQuestCompletedToday}
             getDailyStreak={getDailyStreak}
             getDayLabels={getDayLabels}
+            isQuestEverCompleted={isQuestEverCompleted}
+            onNavigateToPlaylist={() => { setActiveCategory('Play-list'); setPlaylistSubTab('playlist') }}
           />
         )}
 

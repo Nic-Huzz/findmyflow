@@ -145,7 +145,9 @@ Key files: `Challenge.jsx` (main page), `useChallengeData.js` (state), `QuestCar
 
 Layout: Header (matchup banner if in league → score block with 3 category pills → streak/leaderboard/settings/week-type) → Category tabs → Stage tabs (Business only) → Artifact progress → Sub-tabs (Tasks | Deep Dive) → Quest cards. Tracker tab includes `HorizontalFlowRiver` with compass/challenge legend.
 
-**Play-List tab** contains: Flow Finder quests, Skills-only Groan Matrix, Voice logging (essence + protective check-ins).
+**Play-List tab** contains: Flow Finder quests, Skills-only Groan Matrix, Voice logging (essence + protective check-ins). Active challenges section card at top (from `priority_weekly_picks`).
+
+**Priority tab** contains: 7-step onboarding sequence, then layer-based challenge recommendations. Key hook: `usePriorityTab.js` exports `ONBOARDING_QUEST_IDS`, `LAYER_RECOMMENDATIONS`, `computePriorityLayer`, `TENSION_LAYER_DISPLAY`.
 
 Weekly Planning: Auto-skips "Review Last Week" step for new users with no previous data (0 quests, 0 points).
 
@@ -216,7 +218,7 @@ First-time: 5 steps mapping journey highlights/challenges. Returning: Two-factor
 
 ### 12. /me Page (MePage.jsx)
 
-Dashboard hub with three sections: Hero Profile (archetype, level, XP), Flow Journey (HorizontalFlowRiver with compass + challenge entries, stats rings, SeeYourFlow inline mapper for first-time), Today's Quest (next stage quest with progress dots). Design: purple gradient hero cards, gold CTAs, glow orbs. See `docs/page-component-design-guide.md`.
+Dashboard hub with three sections: Hero Profile (archetype, level, XP), Flow Journey (HorizontalFlowRiver with compass + challenge entries, stats rings, SeeYourFlow inline mapper for first-time), Dynamic Quest Section (3-state: onboarding steps when incomplete, layer recommendations when complete, "Set Your Priority" when no tension scores). Design: purple gradient hero cards, gold CTAs, glow orbs. See `docs/page-component-design-guide.md`.
 
 ### 13. Hero Profile (/hero-profile)
 
@@ -379,6 +381,15 @@ npm run db:push   # Apply migrations
 
 ## Recent Updates (Mar 2026)
 
+- **Priority Tab Onboarding System**: 7-step onboarding sequence in the Priority tab (Mind Space, What is Healing, Healing Compass, Play-List Finder, Nervous System, Check Alignment, Set Play-list Task). Each step unlocks progressively. After onboarding, priority layer recommendations show quests or playlist layers based on tension scores. Key files: `usePriorityTab.js` (ONBOARDING_QUEST_IDS, LAYER_RECOMMENDATIONS, computePriorityLayer), `PriorityTab.jsx`, `PriorityTab.css`.
+- **/me Page Dynamic Quest Section**: Replaced static "Today's Quest" with 3-state display. Onboarding incomplete: shows step progress with next step CTA. Onboarding complete + tension scores: shows layer-based recommended challenges. Complete + no scores: shows "Set Your Priority" prompt. Imports shared constants from `usePriorityTab.js`.
+- **Play-List Tab Active Challenges**: New section card at top of Play-list tab showing active groan challenges from `priority_weekly_picks` (current week, `pick_type = 'groan'`). Clicking "Complete" opens `GroanCompletionModal`.
+- **MobilePlaylistPicker Redesign**: Section card UI for skills/layer/day steps. New layer explainer modal (purple "Explainer" button shows all 5 visibility layers). Added day-of-week picker step between layer selection and generation.
+- **Play Profile Past Challenges**: Restyled from plain list to section card design (`pp-history-card`) with green checkmarks, gold challenge names, type badges, dates, voice/compass badges.
+- **Essence Profile Tagline Edit**: Removed standalone tagline edit button. Tagline editing now integrated into "Customize Your Archetype" modal (`EditEssenceModal.jsx`) alongside name + photo.
+- **Challenge Header Cleanup**: Removed "Gamify Your Ambitions" heading.
+- **Graduation Checker Refactor**: Simplified `graduationChecker.js` (252 lines removed).
+- **CRM Service Updates**: Fixes and improvements across ascension, challenge data, content context, deal, funnel sync, tower stats, and intelligence engine services.
 - **Fantasy League Restructured**: Solo players as default (1-member teams named after display name). 3 scoring categories (Play-List, Healing, Bonus). Auto-scoring edge function runs every 15 min. Content submissions with 10 types and approval workflow.
 - **Play Profile (Founder DNA)**: Full assessment flow — quiz, DNA matching to famous founders, stuck point selection, AI diagnostic, custom challenge generation, challenge rating with voice/compass data. +10 XP to Play-List on completion.
 - **Challenge Header Redesign**: Compact pill layout — matchup banner (if in league) → score block with 3 animated category pills → streak/leaderboard/settings/week-type row.

@@ -44,7 +44,7 @@ export default function PlayProfileDashboard({ userId }) {
         const [resultRes, activeRes, historyRes] = await Promise.all([
           supabase
             .from('founder_dna_results')
-            .select('matched_founder, matched_founder_company, archetype, dna_code')
+            .select('matched_founder, matched_founder_company, archetype')
             .eq('user_id', userId)
             .limit(1)
             .maybeSingle(),
@@ -185,15 +185,12 @@ export default function PlayProfileDashboard({ userId }) {
 
       {/* DNA Card */}
       <div className="pp-dashboard-card pp-fade-in-up pp-stagger-2">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <div className="pp-founder-mini">{dnaResult.matched_founder}</div>
-            <div className="pp-archetype-mini">{dnaResult.archetype}</div>
-            {dnaResult.matched_founder_company && (
-              <div style={{ fontSize: 12, color: '#adb5bd', marginTop: 2 }}>{dnaResult.matched_founder_company}</div>
-            )}
-          </div>
-          <div className="pp-dna-mini">{dnaResult.dna_code}</div>
+        <div>
+          <div className="pp-founder-mini">{dnaResult.matched_founder}</div>
+          <div className="pp-archetype-mini">{dnaResult.archetype}</div>
+          {dnaResult.matched_founder_company && (
+            <div style={{ fontSize: 12, color: '#adb5bd', marginTop: 2 }}>{dnaResult.matched_founder_company}</div>
+          )}
         </div>
       </div>
 

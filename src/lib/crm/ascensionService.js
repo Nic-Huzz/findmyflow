@@ -24,7 +24,7 @@ export const VALUE_LADDER_RUNGS = [
 export async function fetchUserValueLadder(userId) {
   try {
     // Fetch all relevant challenge data in parallel
-    const [offerStackResult, launchResult, upsellResult, downsellResult, continuityResult, leadMagnetResult] = await Promise.all([
+    const [offerStackResult, launchResult, upsellResult, downsellResult, continuityResult, leadMagnetResult, attractionResult, leadsResult] = await Promise.all([
       supabase
         .from('offer_stack_builds')
         .select('*')
@@ -66,6 +66,20 @@ export async function fetchUserValueLadder(userId) {
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('attraction_offer_assessments')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('leads_assessments')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
         .maybeSingle()
     ])
 
@@ -75,6 +89,8 @@ export async function fetchUserValueLadder(userId) {
     const downsell = downsellResult.data
     const continuity = continuityResult.data
     const leadMagnet = leadMagnetResult.data
+    const attractionOffer = attractionResult.data
+    const leadsStrategy = leadsResult.data
 
     // Build custom value ladder from user's data
     const customLadder = [
@@ -92,12 +108,12 @@ export async function fetchUserValueLadder(userId) {
       {
         id: 'attraction',
         label: 'Attraction Offer',
-        customLabel: offerStack?.lead_magnet_idea || leadMagnet?.magnet_name || null,
+        customLabel: attractionOffer?.recommended_offer_name || offerStack?.lead_magnet_idea || leadMagnet?.magnet_name || null,
         color: '#3b82f6',
         icon: '🎁',
         price: offerStack?.attraction_offer_price || 0,
         magnetType: offerStack?.lead_magnet_type || leadMagnet?.magnet_type,
-        description: offerStack?.lead_magnet_idea || 'Free/low-cost entry offer'
+        description: attractionOffer?.recommended_offer_name || offerStack?.lead_magnet_idea || 'Free/low-cost entry offer'
       },
       // Core Offer
       {
@@ -156,13 +172,16 @@ export async function fetchUserValueLadder(userId) {
       hasOfferStack: !!offerStack,
       hasPricing: !!(launchReadiness?.pricing_data?.coreOfferPrice),
       hasMoneyModels: !!(upsell || downsell || continuity),
+      leadsStrategy: leadsStrategy?.recommended_strategy_name || null,
       sources: {
         offerStack: !!offerStack,
         launchReadiness: !!launchReadiness,
         upsell: !!upsell,
         downsell: !!downsell,
         continuity: !!continuity,
-        leadMagnet: !!leadMagnet
+        leadMagnet: !!leadMagnet,
+        attractionOffer: !!attractionOffer,
+        leadsStrategy: !!leadsStrategy
       }
     }
   } catch (err) {

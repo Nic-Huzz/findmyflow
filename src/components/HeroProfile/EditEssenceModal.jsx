@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, useMemo } from 'react'
 import {
   uploadEssenceAvatar,
   updateEssencePreferences,
+  updateEssenceField,
+  resetEssenceField,
   compressImage,
   buildAvatarPrompt
 } from '../../lib/essencePreferences'
@@ -14,11 +16,13 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 function EditEssenceModal({
   userId, userEmail, currentName, originalName, currentImage, originalImage,
+  currentTagline, originalTagline,
   // Extra archetype data for prompt generator
   group, superpower, poeticLine, skills, problems, persona,
   onClose, onSaved
 }) {
   const [customName, setCustomName] = useState(currentName !== originalName ? currentName : '')
+  const [customTagline, setCustomTagline] = useState(currentTagline !== originalTagline ? currentTagline : '')
   const [previewUrl, setPreviewUrl] = useState(currentImage)
   const [selectedFile, setSelectedFile] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -67,13 +71,13 @@ function EditEssenceModal({
 
   // Detect if anything has actually changed from current state
   const hasChanges = useMemo(() => {
-    const nameChanged = customName.trim() !== '' || (currentName !== originalName && customName.trim() === '')
     const imageChanged = selectedFile !== null || (previewUrl === originalImage && currentImage !== originalImage)
-    // Only if name input differs from what's already saved, or image changed
     const currentCustom = currentName !== originalName ? currentName : ''
     const nameActuallyDifferent = customName.trim() !== (currentCustom || '')
-    return nameActuallyDifferent || imageChanged
-  }, [customName, currentName, originalName, selectedFile, previewUrl, originalImage, currentImage])
+    const currentCustomTagline = currentTagline !== originalTagline ? currentTagline : ''
+    const taglineActuallyDifferent = customTagline.trim() !== (currentCustomTagline || '')
+    return nameActuallyDifferent || imageChanged || taglineActuallyDifferent
+  }, [customName, currentName, originalName, selectedFile, previewUrl, originalImage, currentImage, customTagline, currentTagline, originalTagline])
 
   const handleFileSelect = async (e) => {
     const file = e.target.files?.[0]
@@ -231,6 +235,18 @@ function EditEssenceModal({
         }
       }
 
+      // Save tagline if changed
+      if (originalTagline) {
+        const currentCustomTagline = currentTagline !== originalTagline ? currentTagline : ''
+        if (customTagline.trim() !== (currentCustomTagline || '')) {
+          if (customTagline.trim() === '') {
+            await resetEssenceField(userId, userEmail, 'tagline')
+          } else {
+            await updateEssenceField(userId, userEmail, 'tagline', { value: customTagline.trim(), mode: 'manual' })
+          }
+        }
+      }
+
       // Optimistic: call onSaved immediately so parent refreshes
       onSaved()
       setToast('Saved!')
@@ -297,6 +313,31 @@ function EditEssenceModal({
             )}
           </div>
         </div>
+
+        {/* Tagline Input */}
+        {originalTagline && (
+          <div className="edit-essence-field">
+            <label className="edit-essence-label">Tagline</label>
+            <div className="edit-essence-input-row">
+              <input
+                type="text"
+                className="edit-essence-input"
+                value={customTagline}
+                onChange={e => setCustomTagline(e.target.value.slice(0, 80))}
+                placeholder={originalTagline}
+                maxLength={80}
+              />
+              {customTagline.trim() !== '' && (
+                <button className="edit-essence-reset" onClick={() => setCustomTagline('')} title="Reset to default">
+                  ↩
+                </button>
+              )}
+            </div>
+            <span className="edit-essence-hint">
+              Original: {originalTagline}
+            </span>
+          </div>
+        )}
 
         {/* Image Upload */}
         <div className="edit-essence-field">
