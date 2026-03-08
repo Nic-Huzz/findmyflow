@@ -53,6 +53,81 @@ export async function fetchCommentCounts() {
   return counts
 }
 
+// ===== DRAFT EDITING =====
+
+export async function updateDraft(draftId, { body_markdown, title }) {
+  const updates = { updated_at: new Date().toISOString() }
+  if (body_markdown !== undefined) updates.body_markdown = body_markdown
+  if (title !== undefined) updates.title = title
+
+  const { data, error } = await supabase
+    .from('content_drafts')
+    .update(updates)
+    .eq('id', draftId)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+// ===== VERSION HISTORY =====
+
+const MAX_VERSIONS = 50
+
+export async function createVersion(draftId, { body_markdown, title }) {
+  const { data, error } = await supabase
+    .from('content_draft_versions')
+    .insert({ draft_id: draftId, body_markdown, title })
+    .select('id')
+    .single()
+
+  if (error) throw error
+
+  // Prune old versions beyond cap (fire and forget)
+  pruneVersions(draftId).catch(err => console.error('Version prune failed:', err))
+
+  return data
+}
+
+export async function fetchVersions(draftId) {
+  const { data, error } = await supabase
+    .from('content_draft_versions')
+    .select('id, title, created_at')
+    .eq('draft_id', draftId)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  return data
+}
+
+export async function fetchVersion(versionId) {
+  const { data, error } = await supabase
+    .from('content_draft_versions')
+    .select('*')
+    .eq('id', versionId)
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+async function pruneVersions(draftId) {
+  const { data } = await supabase
+    .from('content_draft_versions')
+    .select('id')
+    .eq('draft_id', draftId)
+    .order('created_at', { ascending: false })
+
+  if (!data || data.length <= MAX_VERSIONS) return
+
+  const idsToDelete = data.slice(MAX_VERSIONS).map(v => v.id)
+  await supabase
+    .from('content_draft_versions')
+    .delete()
+    .in('id', idsToDelete)
+}
+
 // ===== COMMENTS =====
 
 export async function createComment({ draftId, highlightedText, startOffset, endOffset, comment, quickReaction, category }) {

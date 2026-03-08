@@ -111,6 +111,14 @@ export default function ContentReview() {
     }
   }
 
+  const handleDraftUpdate = (updatedDraft) => {
+    setCurrentDraft(prev => ({ ...prev, ...updatedDraft }))
+    setDrafts(prev => prev.map(d => d.id === updatedDraft.id
+      ? { ...d, title: updatedDraft.title, updated_at: updatedDraft.updated_at }
+      : d
+    ))
+  }
+
   const handleDraftStatusChange = () => {
     if (selectedDraftId) loadDraft(selectedDraftId)
     loadDrafts()
@@ -186,6 +194,7 @@ export default function ContentReview() {
                 draft={currentDraft}
                 comments={comments}
                 onAddComment={handleAddComment}
+                onDraftUpdate={handleDraftUpdate}
               />
               {['review', 'approved', 'sending', 'sent'].includes(currentDraft.status) && (
                 <SendPanel
