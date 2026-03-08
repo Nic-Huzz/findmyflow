@@ -460,6 +460,55 @@
   box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
 }
 
+.cr-format-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  background: var(--cr-surface);
+  border: 2px solid var(--cr-border);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+}
+
+.cr-format-btn {
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cr-text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.cr-format-btn:hover {
+  background: rgba(94, 23, 235, 0.08);
+  color: var(--cr-purple);
+}
+
+.cr-format-btn--italic {
+  font-style: italic;
+}
+
+.cr-format-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--cr-border);
+  margin: 0 4px;
+}
+
+.cr-format-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cr-format-toolbar + .cr-edit-textarea {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
 .cr-edit-textarea {
   width: 100%;
   min-height: 60vh;

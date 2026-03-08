@@ -8,6 +8,7 @@ import {
   createVersion,
   fetchVersions,
   fetchVersion,
+  uploadContentImage,
 } from '../../lib/contentReviewService'
 
 export default function MarkdownViewer({ draft, comments, onAddComment, onDraftUpdate }) {
@@ -23,6 +24,7 @@ export default function MarkdownViewer({ draft, comments, onAddComment, onDraftU
   const [previewVersion, setPreviewVersion] = useState(null)
   const [loadingVersions, setLoadingVersions] = useState(false)
 
+  const textareaRef = useRef(null)
   const saveTimerRef = useRef(null)
   const lastSavedRef = useRef({ title: '', body: '' })
   // Refs to avoid stale closures in debounced save
@@ -96,6 +98,49 @@ export default function MarkdownViewer({ draft, comments, onAddComment, onDraftU
     setEditBody(val)
     editBodyRef.current = val
     scheduleSave()
+  }
+
+  const applyFormat = (prefix, suffix = prefix) => {
+    const ta = textareaRef.current
+    if (!ta) return
+    const start = ta.selectionStart
+    const end = ta.selectionEnd
+    const text = editBody
+    const selected = text.slice(start, end)
+    const newText = text.slice(0, start) + prefix + selected + suffix + text.slice(end)
+    setEditBody(newText)
+    editBodyRef.current = newText
+    scheduleSave()
+    // Restore cursor position after React re-render
+    requestAnimationFrame(() => {
+      ta.focus()
+      ta.selectionStart = start + prefix.length
+      ta.selectionEnd = end + prefix.length
+    })
+  }
+
+  const imageInputRef = useRef(null)
+  const [uploading, setUploading] = useState(false)
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    e.target.value = '' // reset for re-upload
+    setUploading(true)
+    try {
+      const url = await uploadContentImage(file)
+      const ta = textareaRef.current
+      const cursor = ta ? ta.selectionStart : editBody.length
+      const imgMarkdown = `\n![${file.name}](${url})\n`
+      const newText = editBody.slice(0, cursor) + imgMarkdown + editBody.slice(cursor)
+      setEditBody(newText)
+      editBodyRef.current = newText
+      scheduleSave()
+    } catch (err) {
+      console.error('Image upload failed:', err)
+    } finally {
+      setUploading(false)
+    }
   }
 
   const handleToggleEdit = () => {
@@ -263,13 +308,46 @@ export default function MarkdownViewer({ draft, comments, onAddComment, onDraftU
       </div>
 
       {editing && !previewVersion ? (
-        <textarea
-          className="cr-edit-textarea"
-          value={editBody}
-          onChange={handleBodyChange}
-          placeholder="Write your content in markdown..."
-          autoFocus
-        />
+        <>
+          <div className="cr-format-toolbar">
+            <button className="cr-format-btn" onClick={() => applyFormat('**')} title="Bold (Ctrl+B)">B</button>
+            <button className="cr-format-btn cr-format-btn--italic" onClick={() => applyFormat('*')} title="Italic (Ctrl+I)">I</button>
+            <button className="cr-format-btn" onClick={() => applyFormat('\n## ', '\n')} title="Heading">H</button>
+            <button className="cr-format-btn" onClick={() => applyFormat('[', '](url)')} title="Link">Link</button>
+            <button className="cr-format-btn" onClick={() => applyFormat('\n- ')} title="List">List</button>
+            <button className="cr-format-btn" onClick={() => applyFormat('\n> ')} title="Quote">Quote</button>
+            <span className="cr-format-divider" />
+            <button
+              className="cr-format-btn"
+              onClick={() => imageInputRef.current?.click()}
+              disabled={uploading}
+              title="Insert image"
+            >
+              {uploading ? 'Uploading...' : 'Image'}
+            </button>
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              onChange={handleImageUpload}
+              style={{ display: 'none' }}
+            />
+          </div>
+          <textarea
+            ref={textareaRef}
+            className="cr-edit-textarea"
+            value={editBody}
+            onChange={handleBodyChange}
+            onKeyDown={(e) => {
+              if (e.metaKey || e.ctrlKey) {
+                if (e.key === 'b') { e.preventDefault(); applyFormat('**') }
+                if (e.key === 'i') { e.preventDefault(); applyFormat('*') }
+              }
+            }}
+            placeholder="Write your content in markdown..."
+            autoFocus
+          />
+        </>
       ) : (
         <div className="cr-viewer-content" ref={contentRef}>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>

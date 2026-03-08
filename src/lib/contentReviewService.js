@@ -167,6 +167,28 @@ export async function updateCommentStatus(commentId, status, resolvedText = null
   return data
 }
 
+// ===== IMAGE UPLOAD =====
+
+export async function uploadContentImage(file) {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
+
+  const fileExt = file.name.split('.').pop()
+  const fileName = `${user.id}/${Date.now()}.${fileExt}`
+
+  const { error: uploadError } = await supabase.storage
+    .from('content-images')
+    .upload(fileName, file)
+
+  if (uploadError) throw uploadError
+
+  const { data: { publicUrl } } = supabase.storage
+    .from('content-images')
+    .getPublicUrl(fileName)
+
+  return publicUrl
+}
+
 // ===== VOICE PROFILE =====
 
 export async function fetchVoiceProfileForDashboard() {
