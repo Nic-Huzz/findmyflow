@@ -1,21 +1,23 @@
 /**
- * ProtectiveIdentify.jsx — /protective-identify
- * Public quiz: identifies limiting matrix codes + protective archetype.
- * Flow: Name → Pick fears → Behavior per fear → Email → Reveal
+ * MatrixCodeDeepDive.jsx — /matrix-code-deep-dive
+ * In-app authenticated version of the matrix code quiz.
+ * Identifies limiting matrix codes + protective archetype.
+ * Saves to matrix_code_results table and updates lead_flow_profiles.
+ * Flow: Pick fears → Behavior per fear → Reveal
  */
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../auth/AuthProvider'
+import { completeFlowQuest } from '../lib/questCompletion'
 import { MATRIX_CODES, BEHAVIOR_MAP, PROTECTIVE_ARCHETYPES } from '../data/matrixCodeQuiz'
-import './EssenceIdentify.css'
-import './ProtectiveIdentify.css'
+import '../pages/EssenceIdentify.css'
+import '../pages/ProtectiveIdentify.css'
 
 const STAGES = {
-  NAME: 'name',
   FEARS: 'fears',
   BEHAVIOR: 'behavior',
   TIEBREAK: 'tiebreak',
-  EMAIL: 'email',
   REVEAL: 'reveal',
 }
 
@@ -28,19 +30,17 @@ function shuffleArray(arr) {
   return shuffled
 }
 
-export default function ProtectiveIdentify() {
+export default function MatrixCodeDeepDive() {
+  const { user } = useAuth()
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const isPreview = searchParams.get('preview') === 'true'
+  const isResults = searchParams.get('results') === 'true'
 
-  const [stage, setStage] = useState(STAGES.NAME)
-  const [userName, setUserName] = useState('')
-  const [email, setEmail] = useState('')
-
-  // Fear selection
+  const [stage, setStage] = useState(STAGES.FEARS)
   const [selectedFears, setSelectedFears] = useState([])
   const [shuffledFears] = useState(() => shuffleArray(MATRIX_CODES))
 
-  // Behavior step — iterate through each selected fear
+  // Behavior step
   const [currentFearIndex, setCurrentFearIndex] = useState(0)
   const [votes, setVotes] = useState({})
   const [behaviorResponses, setBehaviorResponses] = useState({})
@@ -48,13 +48,34 @@ export default function ProtectiveIdentify() {
   // Results
   const [tiedArchetypes, setTiedArchetypes] = useState([])
   const [finalArchetype, setFinalArchetype] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [isSaving, setIsSaving] = useState(false)
   const [confetti, setConfetti] = useState([])
+
+  // For ?results=true — load previous results
+  const [previousResults, setPreviousResults] = useState(null)
+  const [loadingResults, setLoadingResults] = useState(isResults)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [stage, currentFearIndex])
+
+  // Load previous results if ?results=true
+  useEffect(() => {
+    if (!isResults || !user?.id) return
+    setLoadingResults(true)
+    supabase
+      .from('matrix_code_results')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.[0]) {
+          setPreviousResults(data[0])
+        }
+        setLoadingResults(false)
+      })
+  }, [isResults, user?.id])
 
   // --- Fear selection ---
 
@@ -98,8 +119,7 @@ export default function ProtectiveIdentify() {
     const tied = Object.keys(finalVotes).filter(k => finalVotes[k] === maxVote)
 
     if (tied.length === 1) {
-      setFinalArchetype(tied[0])
-      setStage(STAGES.EMAIL)
+      saveAndReveal(tied[0])
     } else {
       setTiedArchetypes(tied)
       setStage(STAGES.TIEBREAK)
@@ -107,62 +127,53 @@ export default function ProtectiveIdentify() {
   }
 
   const handleTiebreak = (archetype) => {
-    setFinalArchetype(archetype)
-    setStage(STAGES.EMAIL)
+    saveAndReveal(archetype)
   }
 
-  // --- Email + save ---
+  // --- Save + reveal ---
 
-  const validateEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
-
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault()
-    if (!email || isLoading || !validateEmail(email)) return
-
-    setIsLoading(true)
-    setError(null)
+  const saveAndReveal = async (archetype) => {
+    setFinalArchetype(archetype)
+    setIsSaving(true)
 
     try {
-      const sessionId = crypto.randomUUID()
-      const { error: dbError } = await supabase.from('lead_flow_profiles').insert([{
-        session_id: sessionId,
-        user_name: userName,
-        email: email.toLowerCase(),
-        protective_archetype: finalArchetype,
-        essence_archetype: null,
-        persona: null,
-        context: {
-          source: 'protective-identify',
-          selected_matrix_codes: selectedFears,
-          behavior_responses: behaviorResponses,
-          archetype_votes: votes,
-        }
+      // Save to matrix_code_results
+      await supabase.from('matrix_code_results').insert([{
+        user_id: user.id,
+        selected_matrix_codes: selectedFears,
+        protective_archetype: archetype,
+        behavior_responses: behaviorResponses,
+        archetype_votes: votes,
       }])
 
-      if (dbError) {
-        if (dbError.code === '23505') {
-          console.warn('Duplicate email, proceeding to reveal')
-        } else {
-          console.error('Error saving profile:', dbError)
-        }
+      // Update protective_archetype on lead_flow_profiles (most recent row for this user's email)
+      const { data: profile } = await supabase
+        .from('lead_flow_profiles')
+        .select('id')
+        .eq('email', user.email?.toLowerCase())
+        .order('created_at', { ascending: false })
+        .limit(1)
+
+      if (profile?.[0]) {
+        await supabase
+          .from('lead_flow_profiles')
+          .update({ protective_archetype: archetype })
+          .eq('id', profile[0].id)
       }
 
-      supabase.functions.invoke('notify-lead-capture', {
-        body: {
-          email: email.toLowerCase(),
-          name: userName,
-          source: 'Protective Identify Quiz',
-          meta: { protective_archetype: finalArchetype, matrix_codes: selectedFears }
-        }
-      }).catch(() => {})
+      // Complete the quest
+      await completeFlowQuest({
+        userId: user.id,
+        flowId: 'matrix_code_deep_dive',
+        pointsEarned: 5,
+      })
 
       generateConfetti()
       setStage(STAGES.REVEAL)
     } catch (err) {
-      console.error('Email submit error:', err)
-      setError('Something went wrong. Please try again.')
+      console.error('Error saving matrix code results:', err)
     } finally {
-      setIsLoading(false)
+      setIsSaving(false)
     }
   }
 
@@ -184,56 +195,92 @@ export default function ProtectiveIdentify() {
 
   // --- Progress ---
 
-  const progressPercent = stage === STAGES.NAME ? 5
-    : stage === STAGES.FEARS ? 20
-    : stage === STAGES.BEHAVIOR ? 30 + ((currentFearIndex + 1) / Math.max(selectedFears.length, 1)) * 40
-    : stage === STAGES.TIEBREAK ? 75
-    : stage === STAGES.EMAIL ? 85
+  const progressPercent = stage === STAGES.FEARS ? 15
+    : stage === STAGES.BEHAVIOR ? 25 + ((currentFearIndex + 1) / Math.max(selectedFears.length, 1)) * 50
+    : stage === STAGES.TIEBREAK ? 80
     : 100
 
-  // --- Ranked matrix codes for reveal ---
+  // --- Ranked matrix codes ---
 
   const rankedMatrixCodes = selectedFears.map(id => MATRIX_CODES.find(m => m.id === id))
 
   // ============ RENDER ============
 
-  // Access gate — only accessible with ?preview=true
-  if (!isPreview) {
-    return (
-      <div className="essence-identify protective-identify">
-        <div className="ei-container" style={{ marginTop: 80 }}>
-          <h1 className="ei-title">Coming Soon</h1>
-          <p className="ei-subtext">This quiz is currently in development. Check back soon.</p>
-        </div>
-      </div>
-    )
-  }
-
-  // NAME CAPTURE
-  if (stage === STAGES.NAME) {
-    return (
-      <div className="essence-identify protective-identify">
-        <div className="ei-progress"><div className="ei-progress-fill" style={{ width: '5%' }} /></div>
-        <div className="ei-container">
-          <h1 className="ei-title">What's Holding You Back?</h1>
-          <div className="ei-intro animated-text">
-            <p>Your nervous system developed invisible rules to keep you safe. But those same rules are now limiting your growth.</p>
-            <p>This short quiz will reveal what's quietly running the show.</p>
+  // RESULTS MODE — show previous results
+  if (isResults) {
+    if (loadingResults) {
+      return (
+        <div className="essence-identify protective-identify">
+          <div className="ei-container" style={{ marginTop: 40 }}>
+            <p className="ei-subtext">Loading your results...</p>
           </div>
-          <form onSubmit={(e) => { e.preventDefault(); if (userName.trim()) setStage(STAGES.FEARS) }} className="ei-form">
-            <label className="ei-label">What should I call you?</label>
-            <input
-              type="text"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              placeholder="Your name"
-              className="ei-input"
-              autoFocus
-            />
-            <button type="submit" className="ei-button" disabled={!userName.trim()}>
-              Let's Find Out
+        </div>
+      )
+    }
+
+    if (!previousResults) {
+      return (
+        <div className="essence-identify protective-identify">
+          <div className="ei-container" style={{ marginTop: 40 }}>
+            <p className="ei-subtext">No results found. Complete the quiz first.</p>
+            <button className="ei-button" onClick={() => navigate('/matrix-code-deep-dive')}>
+              Take the Quiz
             </button>
-          </form>
+          </div>
+        </div>
+      )
+    }
+
+    const prevArchetype = PROTECTIVE_ARCHETYPES[previousResults.protective_archetype]
+    const prevCodes = (previousResults.selected_matrix_codes || []).map(id => MATRIX_CODES.find(m => m.id === id)).filter(Boolean)
+
+    return (
+      <div className="essence-identify protective-identify reveal-bg">
+        <div className="ei-container ei-reveal">
+          <h1 className="ei-title" style={{ marginBottom: 8 }}>Your Invisible Blocks</h1>
+          <p className="ei-subtext" style={{ marginBottom: 24 }}>These are the beliefs your nervous system built to keep you safe.</p>
+
+          {prevCodes.map((code, i) => (
+            <div key={code.id} className="ei-reveal-section pi-matrix-card">
+              <div className="pi-matrix-rank">{i + 1}</div>
+              <h3 className="pi-matrix-title">{code.title}</h3>
+              <p className="pi-matrix-belief"><em>"{code.core_belief}"</em></p>
+              <p className="pi-matrix-behavior">{code.surface_behavior}</p>
+              <p className="pi-matrix-driver">{code.deep_driver}</p>
+            </div>
+          ))}
+
+          {prevArchetype && (
+            <>
+              <div className="pi-archetype-divider">
+                <span>How this shows up</span>
+              </div>
+              <div className="pi-archetype-reveal">
+                <div className="ei-reveal-badge" style={{ background: 'linear-gradient(135deg, #F59E0B, #D97706)' }}>Your Protective Pattern</div>
+                <h2 className="ei-reveal-name" style={{ WebkitTextFillColor: 'white', background: 'none' }}>{prevArchetype.name}</h2>
+                <div className="ei-reveal-section">
+                  <h3 className="ei-reveal-label">Core Wound</h3>
+                  <p className="ei-reveal-highlight">{prevArchetype.core_wound}</p>
+                </div>
+                <div className="ei-reveal-section">
+                  <h3 className="ei-reveal-label">Safety Contract</h3>
+                  <p><em>"{prevArchetype.safety_contract}"</em></p>
+                </div>
+                <div className="ei-reveal-section">
+                  <h3 className="ei-reveal-label">How It Sabotages You</h3>
+                  <p>{prevArchetype.sabotage_pattern}</p>
+                </div>
+                <div className="ei-reveal-section">
+                  <h3 className="ei-reveal-label">The Blockage</h3>
+                  <p>{prevArchetype.blockage}</p>
+                </div>
+              </div>
+            </>
+          )}
+
+          <button className="ei-button" style={{ marginTop: 32 }} onClick={() => navigate('/7-day-challenge')}>
+            Back to Challenge
+          </button>
         </div>
       </div>
     )
@@ -245,7 +292,7 @@ export default function ProtectiveIdentify() {
       <div className="essence-identify protective-identify">
         <div className="ei-progress"><div className="ei-progress-fill" style={{ width: `${progressPercent}%` }} /></div>
         <div className="ei-container ei-quiz">
-          <h2 className="ei-question">Which of these feel most true for you, {userName}?</h2>
+          <h2 className="ei-question">Which of these feel most true for you?</h2>
           <p className="ei-subtext">Choose up to 3 that resonate most right now.</p>
           <div className="ei-options">
             {shuffledFears.map((fear) => (
@@ -303,9 +350,9 @@ export default function ProtectiveIdentify() {
   if (stage === STAGES.TIEBREAK) {
     return (
       <div className="essence-identify protective-identify">
-        <div className="ei-progress"><div className="ei-progress-fill" style={{ width: '75%' }} /></div>
+        <div className="ei-progress"><div className="ei-progress-fill" style={{ width: '80%' }} /></div>
         <div className="ei-container ei-quiz">
-          <h2 className="ei-question">Your patterns are showing up equally, {userName}.</h2>
+          <h2 className="ei-question">Your patterns are showing up equally.</h2>
           <p className="ei-subtext">When pressure hits, which one runs the show?</p>
           <div className="ei-options">
             {tiedArchetypes.map(name => {
@@ -315,6 +362,7 @@ export default function ProtectiveIdentify() {
                   key={name}
                   className="ei-option tiebreak"
                   onClick={() => handleTiebreak(name)}
+                  disabled={isSaving}
                 >
                   <span className="ei-option-text">
                     <em>{archetype?.sabotage_pattern || name}</em>
@@ -323,38 +371,7 @@ export default function ProtectiveIdentify() {
               )
             })}
           </div>
-        </div>
-      </div>
-    )
-  }
-
-  // EMAIL CAPTURE
-  if (stage === STAGES.EMAIL) {
-    return (
-      <div className="essence-identify protective-identify">
-        <div className="ei-progress"><div className="ei-progress-fill" style={{ width: '85%' }} /></div>
-        <div className="ei-container">
-          <h2 className="ei-question">Your results are ready, {userName}.</h2>
-          <p className="ei-subtext">Enter your email to see what's been quietly holding you back.</p>
-          <form onSubmit={handleEmailSubmit} className="ei-form">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              className="ei-input"
-              disabled={isLoading}
-              autoFocus
-            />
-            <button
-              type="submit"
-              className="ei-button glow"
-              disabled={isLoading || !validateEmail(email)}
-            >
-              {isLoading ? 'Saving...' : 'Reveal My Blocks'}
-            </button>
-          </form>
-          {error && <p className="ei-error">{error}</p>}
+          {isSaving && <p className="ei-subtext">Saving...</p>}
         </div>
       </div>
     )
@@ -386,8 +403,6 @@ export default function ProtectiveIdentify() {
           </div>
         )}
         <div className="ei-container ei-reveal">
-
-          {/* PRIMARY: Matrix Codes */}
           <h1 className="ei-title" style={{ marginBottom: 8 }}>Your Invisible Blocks</h1>
           <p className="ei-subtext" style={{ marginBottom: 24 }}>These are the beliefs your nervous system built to keep you safe. They were brilliant survival strategies, but now they're the very things holding you back.</p>
 
@@ -401,7 +416,6 @@ export default function ProtectiveIdentify() {
             </div>
           ))}
 
-          {/* SECONDARY: Protective Archetype */}
           <div className="pi-archetype-divider">
             <span>How this shows up</span>
           </div>
@@ -432,6 +446,10 @@ export default function ProtectiveIdentify() {
           </div>
 
           <p className="pi-closing">This pattern isn't who you are. It's who your nervous system became to keep you safe. Understanding it is the first step to moving past it.</p>
+
+          <button className="ei-button" style={{ marginTop: 24 }} onClick={() => navigate('/7-day-challenge')}>
+            Back to Challenge
+          </button>
         </div>
       </div>
     )

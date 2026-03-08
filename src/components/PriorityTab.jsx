@@ -147,6 +147,9 @@ export default function PriorityTab({
         </span>
         <div className="pt-item-body">
           <div className="pt-item-name">{quest.name}</div>
+          {quest.customDisplayName && (
+            <div className="pt-item-custom-text">{quest.customDisplayName}</div>
+          )}
           <div className="pt-item-meta">
             <span className="pt-item-type">{quest.type}</span>
             <span className="pt-item-sep">·</span>

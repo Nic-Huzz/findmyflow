@@ -111,7 +111,8 @@ const HIDDEN_ROUTES = [
   '/feedback-analysis',
   '/archetypes/', // Essence and Shadow deep dive pages
   '/crm/import', // CSV import wizard has bottom action buttons
-  '/money-model-guide' // Money Model explainer slides
+  '/money-model-guide', // Money Model explainer slides
+  '/sol' // Sol AI co-founder onboarding + dashboard
 ]
 
 function BottomToolbar() {

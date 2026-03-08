@@ -285,10 +285,8 @@
       "description": "Do something that reconnects you to YOU. Your choice, your ritual, your essence.",
       "points": 3,
       "inputType": "text",
-      "placeholder": "What did you do to reconnect today?",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "placeholder": "What will you do to reconnect today?",
+      "healing_checkin": true
     },
     {
       "id": "reconnect_daily_prayer",
@@ -314,10 +312,8 @@
       "description": "Choose a weekly reconnection practice that deeply resonates with you. Make it meaningful.",
       "points": 4,
       "inputType": "text",
-      "placeholder": "What was your reconnection practice this week?",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "placeholder": "What will your reconnection practice be this week?",
+      "healing_checkin": true
     },
     {
       "id": "reconnect_remove_negative",
@@ -590,6 +586,19 @@
       "learnMore": "In the Nervous System Map, you identified limiting beliefs your body holds around visibility and money.\n\nThe Limiting Belief Rewire traces one of those safety contracts back to the original experience that created it — the emotional splinter.\n\nBy revisiting the origin with compassion, you can finally release the pattern at its root rather than fighting the symptoms.\n\nThis flow takes about 10-15 minutes. Find a quiet, safe space where you can be emotionally present.",
       "archived": true,
       "archived_reason": "Archived Mar 2026 - will activate later"
+    },
+    {
+      "id": "recognise_matrix_codes",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "deepdive",
+      "name": "Identify Your Matrix Codes",
+      "description": "Discover the invisible beliefs your nervous system built to keep you safe, and the protective pattern running the show",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "matrix_code_deep_dive",
+      "flow_route": "/matrix-code-deep-dive",
+      "learnMore": "Your nervous system developed invisible rules (matrix codes) to keep you safe. These core beliefs were brilliant survival strategies, but they're now the very things holding you back.\n\nThis quiz identifies your top limiting matrix codes and reveals which protective archetype pattern drives your behaviour under pressure.\n\nThe quiz takes about 5 minutes."
     },
     {
       "id": "what_is_healing_explainer",

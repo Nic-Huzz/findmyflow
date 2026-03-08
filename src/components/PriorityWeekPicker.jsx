@@ -41,11 +41,21 @@ export default function PriorityWeekPicker({
     daily_healing: new Set(),
     weekly_healing: new Set(),
   })
+  const [customTexts, setCustomTexts] = useState({}) // keyed by quest id for text-input quests
 
   const totalPicks = useMemo(() =>
     playlistPicks.length + Object.values(selections).reduce((sum, set) => sum + set.size, 0),
     [playlistPicks, selections]
   )
+
+  // Check if any selected text-input quests are missing their custom text
+  const allQuests = useMemo(() => [...dailyHealingQuests, ...weeklyHealingQuests], [dailyHealingQuests, weeklyHealingQuests])
+  const hasIncompleteTextQuests = useMemo(() => {
+    const allSelected = new Set([...selections.daily_healing, ...selections.weekly_healing])
+    return allQuests.some(q =>
+      allSelected.has(q.id) && q.inputType === 'text' && !customTexts[q.id]?.trim()
+    )
+  }, [selections, allQuests, customTexts])
 
   const toggleSelection = (type, id) => {
     setSelections(prev => {
@@ -135,20 +145,22 @@ export default function PriorityWeekPicker({
     // Daily healing picks
     for (const id of selections.daily_healing) {
       const quest = dailyHealingQuests.find(q => q.id === id)
+      const custom = customTexts[id]?.trim()
       picks.push({
         pick_type: 'daily_healing',
         reference_id: id,
-        display_name: quest?.name || id,
+        display_name: custom || quest?.name || id,
       })
     }
 
     // Weekly healing picks
     for (const id of selections.weekly_healing) {
       const quest = weeklyHealingQuests.find(q => q.id === id)
+      const custom = customTexts[id]?.trim()
       picks.push({
         pick_type: 'weekly_healing',
         reference_id: id,
-        display_name: quest?.name || id,
+        display_name: custom || quest?.name || id,
       })
     }
 
@@ -368,24 +380,40 @@ export default function PriorityWeekPicker({
               <p>No daily healing quests available.</p>
             </div>
           ) : (
-            dailyHealingQuests.map(q => (
-              <button
-                key={q.id}
-                className={`pt-pick-row ${selections.daily_healing.has(q.id) ? 'selected' : ''}`}
-                onClick={() => toggleSelection('daily_healing', q.id)}
-              >
-                <span className={`pt-pick-check ${selections.daily_healing.has(q.id) ? 'checked' : ''}`}>
-                  {selections.daily_healing.has(q.id) ? '✓' : ''}
-                </span>
-                <div className="pt-pick-body">
-                  <div className="pt-pick-name">{q.name}</div>
-                  <div className="pt-pick-meta">
-                    <span className="pt-pill daily">{q.type}</span>
-                    <span className="pt-pts">{q.points}pts</span>
-                  </div>
+            dailyHealingQuests.map(q => {
+              const isSelected = selections.daily_healing.has(q.id)
+              return (
+                <div key={q.id}>
+                  <button
+                    className={`pt-pick-row ${isSelected ? 'selected' : ''}`}
+                    onClick={() => toggleSelection('daily_healing', q.id)}
+                  >
+                    <span className={`pt-pick-check ${isSelected ? 'checked' : ''}`}>
+                      {isSelected ? '✓' : ''}
+                    </span>
+                    <div className="pt-pick-body">
+                      <div className="pt-pick-name">{q.name}</div>
+                      <div className="pt-pick-meta">
+                        <span className="pt-pill daily">{q.type}</span>
+                        <span className="pt-pts">{q.points}pts</span>
+                      </div>
+                    </div>
+                  </button>
+                  {isSelected && q.inputType === 'text' && (
+                    <div className="pt-custom-text-wrap">
+                      <input
+                        type="text"
+                        className="pt-challenge-input"
+                        placeholder={q.placeholder}
+                        value={customTexts[q.id] || ''}
+                        onChange={e => setCustomTexts(prev => ({ ...prev, [q.id]: e.target.value }))}
+                        onClick={e => e.stopPropagation()}
+                      />
+                    </div>
+                  )}
                 </div>
-              </button>
-            ))
+              )
+            })
           )}
         </div>
       </div>
@@ -408,31 +436,47 @@ export default function PriorityWeekPicker({
               <p>No weekly healing quests available.</p>
             </div>
           ) : (
-            weeklyHealingQuests.map(q => (
-              <button
-                key={q.id}
-                className={`pt-pick-row ${selections.weekly_healing.has(q.id) ? 'selected' : ''}`}
-                onClick={() => toggleSelection('weekly_healing', q.id)}
-              >
-                <span className={`pt-pick-check ${selections.weekly_healing.has(q.id) ? 'checked' : ''}`}>
-                  {selections.weekly_healing.has(q.id) ? '✓' : ''}
-                </span>
-                <div className="pt-pick-body">
-                  <div className="pt-pick-name">{q.name}</div>
-                  <div className="pt-pick-meta">
-                    <span className="pt-pill weekly">{q.type}</span>
-                    <span className="pt-pts">{q.points}pts</span>
-                  </div>
+            weeklyHealingQuests.map(q => {
+              const isSelected = selections.weekly_healing.has(q.id)
+              return (
+                <div key={q.id}>
+                  <button
+                    className={`pt-pick-row ${isSelected ? 'selected' : ''}`}
+                    onClick={() => toggleSelection('weekly_healing', q.id)}
+                  >
+                    <span className={`pt-pick-check ${isSelected ? 'checked' : ''}`}>
+                      {isSelected ? '✓' : ''}
+                    </span>
+                    <div className="pt-pick-body">
+                      <div className="pt-pick-name">{q.name}</div>
+                      <div className="pt-pick-meta">
+                        <span className="pt-pill weekly">{q.type}</span>
+                        <span className="pt-pts">{q.points}pts</span>
+                      </div>
+                    </div>
+                  </button>
+                  {isSelected && q.inputType === 'text' && (
+                    <div className="pt-custom-text-wrap">
+                      <input
+                        type="text"
+                        className="pt-challenge-input"
+                        placeholder={q.placeholder}
+                        value={customTexts[q.id] || ''}
+                        onChange={e => setCustomTexts(prev => ({ ...prev, [q.id]: e.target.value }))}
+                        onClick={e => e.stopPropagation()}
+                      />
+                    </div>
+                  )}
                 </div>
-              </button>
-            ))
+              )
+            })
           )}
         </div>
       </div>
 
       <button
         className="pt-gold-cta"
-        disabled={totalPicks === 0}
+        disabled={totalPicks === 0 || hasIncompleteTextQuests}
         onClick={handleConfirm}
       >
         Confirm My Week ({totalPicks} selected)

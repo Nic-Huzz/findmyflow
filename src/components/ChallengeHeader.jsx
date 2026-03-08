@@ -119,10 +119,12 @@ function ChallengeHeader({
       {/* Bottom row: Streak + actions */}
       <div className="challenge-header-top">
         <div className="challenge-header-badges">
+          {/* ARCHIVED: Streak badge — re-enable when streak tracking is active
           <div className="streak-badge">
             <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
             <span className="streak-badge-num">{streakDays}</span>
           </div>
+          */}
           <div
             className="challenge-day archetype-badge"
             title="View leaderboard"

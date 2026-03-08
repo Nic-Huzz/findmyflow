@@ -41,10 +41,10 @@ export { LAYER_RECOMMENDATIONS }
 // Onboarding quest IDs — must be completed in order
 const ONBOARDING_QUEST_IDS = [
   'mind_space_extraction',
+  'recognise_matrix_codes',
   'what_is_healing_explainer',
   'recognise_healing_compass',
   'play_list_finder',
-  'recognise_nervous_system',
 ]
 
 export { ONBOARDING_QUEST_IDS }
@@ -141,10 +141,18 @@ export default function usePriorityTab(userId, stageProgress, isQuestEverComplet
   }
 
   const selectedHealingQuests = useMemo(() => {
-    const healingPickIds = weeklyPicks
-      .filter(p => p.pick_type === 'daily_healing' || p.pick_type === 'weekly_healing')
-      .map(p => p.reference_id)
-    const quests = allHealingQuests.filter(q => healingPickIds.includes(q.id))
+    const healingPicks = weeklyPicks.filter(p => p.pick_type === 'daily_healing' || p.pick_type === 'weekly_healing')
+    const healingPickIds = healingPicks.map(p => p.reference_id)
+    const quests = allHealingQuests
+      .filter(q => healingPickIds.includes(q.id))
+      .map(q => {
+        const pick = healingPicks.find(p => p.reference_id === q.id)
+        const customName = pick?.display_name
+        return {
+          ...q,
+          customDisplayName: (customName && customName !== q.name) ? customName : null,
+        }
+      })
 
     if (priorityLayer && LAYER_QUEST_TYPES[priorityLayer]) {
       const preferredTypes = LAYER_QUEST_TYPES[priorityLayer]

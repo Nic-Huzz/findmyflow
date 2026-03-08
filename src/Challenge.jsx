@@ -1683,7 +1683,7 @@ function Challenge() {
         />
       )}
 
-      {/* Fantasy League nudge — show if league exists and user not on a team */}
+      {/* ARCHIVED: Fantasy League nudge — re-enable when league is active
       {leagueExists && !isOnTeam && (
         <Link to="/league" className="league-nudge-banner" style={{
           display: 'flex', alignItems: 'center', gap: '10px',
@@ -1696,6 +1696,7 @@ function Challenge() {
           🏆 Fantasy League is live! Join now →
         </Link>
       )}
+      */}
 
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {

@@ -507,9 +507,7 @@ export default function MePage() {
         </section>
       )}
 
-      {/* ============================================================
-         FANTASY LEAGUE PROMO
-         ============================================================ */}
+      {/* ARCHIVED: Fantasy League promo — re-enable when league is active
       <section className="league-promo-section">
         <a href="/league" className="league-promo-card">
           <span className="league-promo-icon">🏆</span>
@@ -520,6 +518,7 @@ export default function MePage() {
           <span className="league-promo-arrow">→</span>
         </a>
       </section>
+      */}
 
       {/* ============================================================
          SECTION 2: YOUR FLOW JOURNEY

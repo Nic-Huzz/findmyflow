@@ -31,6 +31,11 @@ const ONBOARDING_STEPS = [
     route: '/mind-space',
   },
   {
+    name: 'Identify Your Matrix Codes',
+    desc: 'Discover the invisible beliefs your nervous system built to keep you safe.',
+    route: '/matrix-code-deep-dive',
+  },
+  {
     name: 'What is Healing?',
     desc: 'Understand what healing really means and why emotional splinters keep us stuck.',
     route: '/what-is-healing-explainer',
@@ -44,11 +49,6 @@ const ONBOARDING_STEPS = [
     name: 'Play-List Finder',
     desc: 'Discover your skills through play, role models, and what feels fun.',
     route: '/play-list-finder',
-  },
-  {
-    name: 'Map Your Nervous System',
-    desc: 'Identify how much your nervous system feels safe earning before it self-sabotages.',
-    route: '/nervous-system',
   },
   {
     name: 'Check Alignment',

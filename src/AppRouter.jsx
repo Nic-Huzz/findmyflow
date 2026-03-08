@@ -214,6 +214,7 @@ const LibraryOfAnswers = lazyRetry(() => import('./pages/LibraryOfAnswers'))
 const FlowReportCard = lazyRetry(() => import('./pages/FlowReportCard'))
 const FlowCompassPage = lazyRetry(() => import('./pages/FlowCompassPage'))
 const BusinessPage = lazyRetry(() => import('./pages/BusinessPage'))
+const SolPage = lazyRetry(() => import('./pages/SolPage'))
 const FlowMapMockups = lazyRetry(() => import('./components/FlowMapMockups'))
 const ValidationFlowsManager = lazyRetry(() => import('./pages/ValidationFlowsManager'))
 const VoiceOfCustomerPage = lazyRetry(() => import('./pages/VoiceOfCustomerPage'))
@@ -226,6 +227,7 @@ const ProfileHub = lazyRetry(() => import('./pages/ProfileHub'))
 const UserSettings = lazyRetry(() => import('./pages/UserSettings'))
 const AgentAccess = lazyRetry(() => import('./pages/AgentAccess'))
 const BrandToneDemo = lazyRetry(() => import('./pages/BrandToneDemo'))
+const MatrixCodeDeepDive = lazyRetry(() => import('./flows/MatrixCodeDeepDive'))
 const AdminDashboard = lazyRetry(() => import('./pages/AdminDashboard'))
 const ContentReview = lazyRetry(() => import('./pages/ContentReview'))
 
@@ -322,8 +324,9 @@ function ConditionalZarlo() {
 
   const isEssenceIdentify = location.pathname === '/essence-identify'
   const isProtectiveIdentify = location.pathname === '/protective-identify'
+  const isMatrixCodeDeepDive = location.pathname === '/matrix-code-deep-dive'
 
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isWhyPage || isEssenceIdentify || isProtectiveIdentify) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isWhyPage || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive) return null
   return <ZarloWidget />
 }
 
@@ -362,7 +365,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/content-review' ||
                         location.pathname === '/product-suite-map' ||
                         location.pathname === '/essence-identify' ||
-                        location.pathname === '/protective-identify'
+                        location.pathname === '/protective-identify' ||
+                        location.pathname === '/matrix-code-deep-dive'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -586,6 +590,11 @@ function AppRouter() {
                 <NervousSystemFlow />
               </AuthGate>
             } />
+            <Route path="/matrix-code-deep-dive" element={
+              <AuthGate>
+                <MatrixCodeDeepDive />
+              </AuthGate>
+            } />
             <Route path="/7-day-challenge" element={
               <AuthGate>
                 <Challenge />
@@ -766,6 +775,13 @@ function AppRouter() {
             <Route path="/business" element={
               <AuthGate>
                 <BusinessPage />
+              </AuthGate>
+            } />
+
+            {/* Sol — AI Co-Founder */}
+            <Route path="/sol" element={
+              <AuthGate>
+                <SolPage />
               </AuthGate>
             } />
 
