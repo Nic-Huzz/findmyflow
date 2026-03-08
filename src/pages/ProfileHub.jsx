@@ -33,6 +33,7 @@ const ProfileHub = () => {
       path: '/library',
       color: '#E9A23B'
     },
+    /* ARCHIVED: Fantasy League — re-enable when league is active
     {
       id: 'league',
       icon: '🏆',
@@ -41,6 +42,7 @@ const ProfileHub = () => {
       path: '/league',
       color: '#E9A23B'
     },
+    */
     {
       id: 'settings',
       icon: '⚙️',
