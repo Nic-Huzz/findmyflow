@@ -291,8 +291,10 @@
   font-size: 22px;
   font-weight: 800;
   color: var(--cr-text);
-  margin: 0 0 8px;
+  margin: 0;
   letter-spacing: -0.3px;
+  flex: 1;
+  min-width: 0;
 }
 
 .cr-viewer-meta {
@@ -416,10 +418,11 @@
 /* === EDIT MODE === */
 .cr-viewer-header-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
 .cr-viewer-actions {
