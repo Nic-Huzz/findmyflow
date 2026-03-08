@@ -484,6 +484,22 @@ export default function BusinessPage() {
         )}
       </div>
 
+      {/* 3c — SOL CTA (stage 2+) */}
+      {activeStageTab >= 2 && (
+        <a href="/sol" className="card bp-sol-cta" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>☀️</span>
+            <div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>Meet Sol — Your AI Co-Founder</div>
+              <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '2px' }}>
+                Sol handles your business ops via Telegram so you can focus on your craft.
+              </div>
+            </div>
+            <span style={{ marginLeft: 'auto', color: '#5e17eb', fontWeight: 600, fontSize: '14px' }}>→</span>
+          </div>
+        </a>
+      )}
+
       {/* 4 — UP NEXT CARD (stages 1-7 only, when there's an incomplete quest) */}
       {activeStageTab !== 0.9 && nextQuest && (
         <div className="card next-card">
