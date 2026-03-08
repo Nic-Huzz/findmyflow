@@ -15,6 +15,7 @@ import {
 } from '../lib/essencePreferences'
 import { essenceProfiles } from '../data/essenceProfiles'
 import { supabase } from '../lib/supabaseClient'
+import MobilePlaylistPicker from './MobilePlaylistPicker'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
@@ -71,6 +72,9 @@ export default function PriorityOnboardingCard({
   onPhotoUploaded,
   essenceProfile,
   skills,
+  problems,
+  personas,
+  onChallengeAccepted,
 }) {
   // Alignment local state
   const [alignSkills, setAlignSkills] = useState(
@@ -137,7 +141,11 @@ export default function PriorityOnboardingCard({
   const handleAlign = (key, setter) => {
     localStorage.setItem(key, 'true')
     setter(true)
-    onAlignmentChange?.()
+  }
+
+  const handleUnalign = (key, setter) => {
+    localStorage.removeItem(key)
+    setter(false)
   }
 
   const handleSkipPhoto = () => {
@@ -287,6 +295,21 @@ export default function PriorityOnboardingCard({
     </div>
   )
 
+  // Filter starred items from each category, fall back to all if none starred
+  const getDisplayLabels = (clusters) => {
+    const all = (clusters || []).map(c => c.cluster_label)
+    const starred = (clusters || [])
+      .filter(c => c.items?.some(i => i.isStarred === true))
+      .map(c => c.cluster_label)
+    return starred.length > 0 ? starred : all
+  }
+
+  const displaySkillLabels = getDisplayLabels(skills)
+  const displayProblemLabels = getDisplayLabels(problems)
+  const displayPersonaLabels = getDisplayLabels(personas)
+
+  const allAligned = alignSkills && alignProblems && alignPersona
+
   // Step 7: alignment check
   const renderAlignment = () => (
     <div className="pt-alignment-section">
@@ -295,38 +318,77 @@ export default function PriorityOnboardingCard({
       <div className="pt-alignment-row">
         <span className="pt-alignment-label">Skills</span>
         {alignSkills ? (
-          <span className="pt-alignment-confirmed">Aligned</span>
+          <div className="pt-alignment-actions">
+            <span className="pt-alignment-confirmed">Aligned</span>
+            <button className="pt-align-undo" onClick={() => handleUnalign('priority_align_skills', setAlignSkills)}>Undo</button>
+          </div>
         ) : (
           <div className="pt-alignment-actions">
             <button className="pt-align-yes" onClick={() => handleAlign('priority_align_skills', setAlignSkills)}>Yes</button>
-            <a href="/nikigai/skills?returnTo=/7-day-challenge" className="pt-align-no">Redo Flow</a>
+            <a href="/nikigai/skills?returnTo=/7-day-challenge" className="pt-align-no">Dive Deeper</a>
           </div>
         )}
       </div>
+      {displaySkillLabels.length > 0 && (
+        <div className="pt-alignment-starred">
+          {displaySkillLabels.map(label => (
+            <span key={label} className="pt-starred-chip">{label}</span>
+          ))}
+        </div>
+      )}
 
       <div className="pt-alignment-row">
         <span className="pt-alignment-label">Problems</span>
         {alignProblems ? (
-          <span className="pt-alignment-confirmed">Aligned</span>
+          <div className="pt-alignment-actions">
+            <span className="pt-alignment-confirmed">Aligned</span>
+            <button className="pt-align-undo" onClick={() => handleUnalign('priority_align_problems', setAlignProblems)}>Undo</button>
+          </div>
         ) : (
           <div className="pt-alignment-actions">
             <button className="pt-align-yes" onClick={() => handleAlign('priority_align_problems', setAlignProblems)}>Yes</button>
-            <a href="/nikigai/problems?returnTo=/7-day-challenge" className="pt-align-no">Redo Flow</a>
+            <a href="/nikigai/problems?returnTo=/7-day-challenge" className="pt-align-no">Dive Deeper</a>
           </div>
         )}
       </div>
+      {displayProblemLabels.length > 0 && (
+        <div className="pt-alignment-starred">
+          {displayProblemLabels.map(label => (
+            <span key={label} className="pt-starred-chip">{label}</span>
+          ))}
+        </div>
+      )}
 
       <div className="pt-alignment-row">
         <span className="pt-alignment-label">Personas</span>
         {alignPersona ? (
-          <span className="pt-alignment-confirmed">Aligned</span>
+          <div className="pt-alignment-actions">
+            <span className="pt-alignment-confirmed">Aligned</span>
+            <button className="pt-align-undo" onClick={() => handleUnalign('priority_align_persona', setAlignPersona)}>Undo</button>
+          </div>
         ) : (
           <div className="pt-alignment-actions">
             <button className="pt-align-yes" onClick={() => handleAlign('priority_align_persona', setAlignPersona)}>Yes</button>
-            <a href="/nikigai/persona?returnTo=/7-day-challenge" className="pt-align-no">Redo Flow</a>
+            <a href="/nikigai/persona?returnTo=/7-day-challenge" className="pt-align-no">Dive Deeper</a>
           </div>
         )}
       </div>
+      {displayPersonaLabels.length > 0 && (
+        <div className="pt-alignment-starred">
+          {displayPersonaLabels.map(label => (
+            <span key={label} className="pt-starred-chip">{label}</span>
+          ))}
+        </div>
+      )}
+
+      <button
+        className="pt-onboarding-cta"
+        disabled={!allAligned}
+        onClick={() => onAlignmentChange?.()}
+        style={!allAligned ? { opacity: 0.4, cursor: 'not-allowed' } : undefined}
+      >
+        {allAligned ? 'Confirm Alignment' : 'Align all three to continue'}
+      </button>
     </div>
   )
 
@@ -336,9 +398,10 @@ export default function PriorityOnboardingCard({
       {hasAcceptedChallenge ? (
         <span className="pt-alignment-confirmed">Challenge accepted! Refreshing...</span>
       ) : (
-        <button className="pt-onboarding-cta" onClick={onNavigateToPlaylist}>
-          Go to Play-list
-        </button>
+        <MobilePlaylistPicker
+          userId={userId}
+          onCellClick={() => onChallengeAccepted?.()}
+        />
       )}
     </div>
   )

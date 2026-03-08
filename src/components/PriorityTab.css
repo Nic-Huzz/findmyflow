@@ -18,11 +18,14 @@
   border: 2px solid #E9A23B;
   border-radius: 22px;
   padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+
+.priority-tab .pt-layer-top {
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
 }
 
 .priority-tab .pt-layer-emoji {
@@ -44,10 +47,11 @@
 }
 
 .priority-tab .pt-layer-name {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   margin: 2px 0;
   color: #1a1a2e;
+  white-space: nowrap;
 }
 
 .priority-tab .pt-layer-desc {
@@ -56,10 +60,53 @@
   line-height: 1.4;
 }
 
+.priority-tab .pt-layer-desc-inline {
+  font-weight: 400;
+  color: #6c757d;
+}
+
 .priority-tab .pt-layer-focus {
   margin-top: 4px;
   font-size: 12px;
   font-weight: 600;
+}
+
+/* Recommendation step inside layer card */
+.priority-tab .pt-layer-recs {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #f2f3f5;
+  text-align: center;
+}
+
+.priority-tab .pt-layer-rec-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+.priority-tab .pt-layer-rec-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.priority-tab .pt-layer-rec-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.priority-tab .pt-layer-rec-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.priority-tab .pt-layer-rec-desc {
+  font-size: 13px;
+  color: #6c757d;
+  margin-top: 2px;
 }
 
 .priority-tab .pt-layer-reassess {
@@ -77,6 +124,7 @@
 .priority-tab .pt-progress-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
   padding: 0 4px;
@@ -114,7 +162,7 @@
 }
 
 .priority-tab .pt-section-card.recommended {
-  border-left: 4px solid #E9A23B;
+  /* no gold bar — recommended badge is sufficient */
 }
 
 .priority-tab .pt-section-header {
@@ -461,6 +509,93 @@
 .priority-tab .pt-gold-cta:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* ── Select Button (healing quest rows) ── */
+.priority-tab .pt-select-btn {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #5e17eb;
+  background: #f3edff;
+  border: 1.5px solid #5e17eb;
+  border-radius: 16px;
+  padding: 5px 14px;
+  cursor: pointer;
+}
+
+.priority-tab .pt-select-btn.selected {
+  background: #5e17eb;
+  color: #fff;
+  border-color: #5e17eb;
+}
+
+/* ── Quest Explainer Overlay ── */
+.pt-explainer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pt-explainer-card {
+  background: white;
+  border-radius: 22px;
+  padding: 28px 24px;
+  max-width: 360px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.pt-explainer-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.pt-explainer-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.pt-explainer-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 10px;
+}
+
+.pt-explainer-desc {
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+
+.pt-explainer-learn {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  white-space: pre-line;
+}
+
+.pt-explainer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 /* ── Edit Week Button ── */
@@ -920,6 +1055,7 @@
   color: #1a1a2e;
   letter-spacing: -0.3px;
   margin: 16px 16px 4px;
+  text-align: center;
 }
 
 /* ============================
@@ -1194,9 +1330,6 @@
   border-bottom: 1px solid #f2f3f5;
 }
 
-.pt-alignment-row:last-child {
-  border-bottom: none;
-}
 
 .pt-alignment-label {
   font-size: 15px;
@@ -1235,6 +1368,34 @@
   font-size: 13px;
   font-weight: 700;
   color: #34d399;
+}
+
+.pt-align-undo {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.pt-alignment-starred {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 0 12px;
+}
+
+.pt-starred-chip {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e17eb;
+  background: #f3edff;
+  border-radius: 20px;
+  padding: 4px 12px;
 }
 
 /* ============================

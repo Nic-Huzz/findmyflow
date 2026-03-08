@@ -276,6 +276,15 @@ export default function MePage() {
 
   const layerDisplay = priorityLayer ? TENSION_LAYER_DISPLAY[priorityLayer] : null
 
+  const ME_QUEST_INFO = {
+    flow_finder_skills: { name: 'Flow Finder: Skills', route: '/nikigai/skills', icon: '🎯', desc: 'Discover what you\'re naturally great at' },
+    flow_finder_problems: { name: 'Flow Finder: Problems', route: '/nikigai/problems', icon: '🧩', desc: 'Find the problems you care about solving' },
+    flow_finder_persona: { name: 'Flow Finder: Persona', route: '/nikigai/persona', icon: '👤', desc: 'Identify who you\'re meant to serve' },
+    recognise_nervous_system: { name: 'Map Your Nervous System', route: '/nervous-system', icon: '🧠', desc: 'Find your boundaries around money and visibility' },
+    recognise_limiting_belief_rewire: { name: 'Limiting Belief Rewire', route: '/limiting-belief-rewire', icon: '🔓', desc: 'Trace a limiting belief and rewire it' },
+    release_weekly_big: { name: 'Big Release', route: null, icon: '💜', desc: 'Complete an extended release practice' },
+  }
+
   const layerRecommendations = useMemo(() => {
     if (!priorityLayer) return null
     const config = LAYER_RECOMMENDATIONS[priorityLayer]
@@ -283,23 +292,26 @@ export default function MePage() {
 
     if (config.type === 'quests') {
       const allCompletedIds = new Set(questCompletions.map(c => c.quest_id))
-      const items = config.questIds.map(id => {
-        const quest = questData.find(q => q.id === id)
-        return { id, name: quest?.name || id, done: allCompletedIds.has(id) }
-      })
-      const alwaysItems = (config.alwaysRecommend || []).map(id => {
-        const quest = questData.find(q => q.id === id)
-        return { id, name: quest?.name || id, done: false, always: true }
-      })
-      return { type: 'quests', items: [...items, ...alwaysItems] }
+      // Find the first incomplete quest
+      const nextQuestId = config.questIds.find(id => !allCompletedIds.has(id))
+      const nextInfo = nextQuestId ? ME_QUEST_INFO[nextQuestId] : null
+      // Fall back to alwaysRecommend
+      const alwaysId = !nextInfo && config.alwaysRecommend?.length > 0 ? config.alwaysRecommend[0] : null
+      const alwaysInfo = alwaysId ? ME_QUEST_INFO[alwaysId] : null
+      const nextItem = nextInfo
+        ? { ...nextInfo, key: nextQuestId }
+        : alwaysInfo
+          ? { ...alwaysInfo, key: alwaysId }
+          : null
+      return { type: 'quests', nextItem }
     }
 
     if (config.type === 'playlist_layers') {
-      const items = config.layers.map(layerId => {
-        const layer = GROAN_VISIBILITY_LAYERS.find(l => l.id === layerId)
-        return { id: layerId, name: layer?.label || layerId, icon: layer?.icon || '🎯' }
-      })
-      return { type: 'playlist_layers', items }
+      const layerObj = GROAN_VISIBILITY_LAYERS.find(l => l.id === config.layers[0])
+      const nextItem = layerObj
+        ? { key: layerObj.id, name: `${layerObj.label} Layer Challenge`, icon: layerObj.icon, desc: layerObj.fear }
+        : null
+      return { type: 'playlist_layers', nextItem }
     }
 
     return null
@@ -663,26 +675,31 @@ export default function MePage() {
           ) : layerDisplay && layerRecommendations ? (
             <>
               <div className="quest-eyebrow">
-                <span className="quest-label">{layerDisplay.emoji} {layerDisplay.name}</span>
-                <span className="quest-day-badge">
-                  {layerDisplay.appFeature}
-                </span>
+                <span className="quest-label">{layerDisplay.emoji} {layerDisplay.name}: {layerDisplay.description}</span>
               </div>
-              <h2 className="quest-title">Recommended Challenges</h2>
-              <p className="quest-subtitle">{layerDisplay.description}</p>
-              <div className="me-picks-list">
-                {layerRecommendations.items.map(item => (
-                  <div key={item.id} className={`me-pick-row ${item.done ? 'done' : ''}`}>
-                    <span className="me-pick-icon">
-                      {item.done ? '✓' : (item.icon || '🎯')}
-                    </span>
-                    <span className="me-pick-name">{item.name}</span>
+              <h2 className="quest-title">Recommended Challenge</h2>
+              {layerRecommendations.nextItem && (
+                <div className="me-next-rec">
+                  <span className="me-next-rec-icon">{layerRecommendations.nextItem.icon}</span>
+                  <div className="me-next-rec-body">
+                    <div className="me-next-rec-name">{layerRecommendations.nextItem.name}</div>
+                    <div className="me-next-rec-desc">{layerRecommendations.nextItem.desc}</div>
                   </div>
-                ))}
-              </div>
-              <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
-                Go to Challenge <span>→</span>
-              </button>
+                </div>
+              )}
+              {layerRecommendations.nextItem?.route ? (
+                <a
+                  href={`${layerRecommendations.nextItem.route}?returnTo=/me`}
+                  className="quest-cta"
+                  style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                >
+                  Continue <span>→</span>
+                </a>
+              ) : (
+                <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
+                  Go to Challenge <span>→</span>
+                </button>
+              )}
             </>
           ) : (
             <>

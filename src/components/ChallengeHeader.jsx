@@ -96,6 +96,8 @@ function ChallengeHeader({
         </div>
       )}
 
+      <h1 className="challenge-app-title">Find My Flow</h1>
+
       {/* Score block: total left, category pills right */}
       <div className={`challenge-score-block${matchupLoading ? ' loading' : ''}`}>
         <div className="challenge-total">
@@ -125,6 +127,7 @@ function ChallengeHeader({
             <span className="streak-badge-num">{streakDays}</span>
           </div>
           */}
+          {/* ARCHIVED: Leaderboard button — re-enable when league is active
           <div
             className="challenge-day archetype-badge"
             title="View leaderboard"
@@ -133,6 +136,7 @@ function ChallengeHeader({
           >
             🏆 Leaderboard
           </div>
+          */}
           <div className="settings-menu-container" ref={settingsMenuRef}>
             <button
               className="challenge-day settings-badge"

@@ -30,7 +30,6 @@ import PostActionModal, { POST_ACTION_MILESTONE_IDS } from './components/PostAct
 import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreActionModal'
 import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge, fetchFlowFinderData } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
-import { ONBOARDING_QUEST_IDS } from './hooks/usePriorityTab'
 import { useLeagueData } from './hooks/useLeagueData'
 import { useMatchupData } from './hooks/useMatchupData'
 import { GROAN_VISIBILITY_LAYERS, getLayerLockStatus } from './lib/stageConfig'
@@ -202,35 +201,25 @@ function Challenge() {
   // Healing modal quest (compact row → popup completion)
   const [healingModalQuest, setHealingModalQuest] = useState(null)
 
-  // Priority onboarding: lock other tabs until complete
-  const [hasAcceptedGroanChallenge, setHasAcceptedGroanChallenge] = useState(false)
+  // Tabs unlock after first "Plan Your Week" is confirmed
+  const [hasEverPlannedWeek, setHasEverPlannedWeek] = useState(false)
+  const [weekPlanVersion, setWeekPlanVersion] = useState(0)
   useEffect(() => {
     if (!user?.id) return
     supabase
-      .from('groan_challenges')
+      .from('priority_weekly_picks')
       .select('id')
       .eq('user_id', user.id)
-      .not('accepted_at', 'is', null)
       .limit(1)
-      .then(({ data }) => setHasAcceptedGroanChallenge(data && data.length > 0))
-  }, [user?.id, completions]) // re-check when completions change (proxy for activity)
-
-  const isPriorityOnboardingComplete = useMemo(() => {
-    if (!isQuestEverCompleted) return false
-    const questsDone = ONBOARDING_QUEST_IDS.every(id => isQuestEverCompleted(id))
-    const alignDone = typeof window !== 'undefined' &&
-      localStorage.getItem('priority_align_skills') === 'true' &&
-      localStorage.getItem('priority_align_problems') === 'true' &&
-      localStorage.getItem('priority_align_persona') === 'true'
-    return questsDone && alignDone && hasAcceptedGroanChallenge
-  }, [isQuestEverCompleted, hasAcceptedGroanChallenge, completions])
+      .then(({ data }) => setHasEverPlannedWeek(data && data.length > 0))
+  }, [user?.id, completions, weekPlanVersion])
 
   // Redirect to Priority if on a locked tab
   useEffect(() => {
-    if (!isPriorityOnboardingComplete && activeCategory !== 'Priority' && activeCategory !== 'Business') {
+    if (!hasEverPlannedWeek && activeCategory !== 'Priority' && activeCategory !== 'Business') {
       setActiveCategory('Priority')
     }
-  }, [isPriorityOnboardingComplete, activeCategory, setActiveCategory])
+  }, [hasEverPlannedWeek, activeCategory, setActiveCategory])
 
   // Search state for filtering quests
   const [searchQuery, setSearchQuery] = useState('')
@@ -1700,7 +1689,7 @@ function Challenge() {
 
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
-          const isLocked = !isPriorityOnboardingComplete && category !== 'Priority' && category !== 'Business'
+          const isLocked = !hasEverPlannedWeek && category !== 'Priority' && category !== 'Business'
           return (
             <button
               key={category}
@@ -2069,6 +2058,7 @@ function Challenge() {
             getDayLabels={getDayLabels}
             isQuestEverCompleted={isQuestEverCompleted}
             onNavigateToPlaylist={() => { setActiveCategory('Play-list'); setPlaylistSubTab('playlist') }}
+            onWeekPlanned={() => setWeekPlanVersion(v => v + 1)}
           />
         )}
 

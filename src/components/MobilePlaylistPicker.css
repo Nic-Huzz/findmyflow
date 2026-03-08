@@ -187,3 +187,9 @@
 .mpp-gold-btn { display: block; width: 100%; background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%); color: #1a1a2e; border: none; padding: 14px; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; }
 .mpp-regen-btn { display: block; width: 100%; background: none; border: none; color: #5e17eb; font-size: 13px; font-weight: 600; cursor: pointer; padding: 10px; margin-top: 8px; }
 .mpp-error { color: #ef4444; font-size: 14px; margin-top: 12px; }
+.mpp-challenge-form { padding: 0 18px 18px; }
+.mpp-step-context { font-size: 13px; color: #6b7280; margin-bottom: 12px; }
+.mpp-challenge-input { width: 100%; padding: 12px 14px; border: 1.5px solid #e5e7eb; border-radius: 12px; font-size: 15px; margin-bottom: 12px; box-sizing: border-box; }
+.mpp-challenge-input:focus { outline: none; border-color: #5e17eb; }
+.mpp-item-check-mark { color: #34d399; font-weight: 700; font-size: 16px; }
+.mpp-gold-btn:disabled { opacity: 0.4; cursor: not-allowed; }

@@ -7,12 +7,12 @@
       "frequency": "anytime",
       "stage_required": 0,
       "name": "Understand Flow Finder",
-      "description": "Learn how Skills × Problems × Persona creates your Unique Flow",
+      "description": "Learn how Skills \u00d7 Problems \u00d7 Persona creates your Unique Flow",
       "points": 5,
       "inputType": "flow",
       "flow_id": "flow_finder_explainer",
       "flow_route": "/flow-finder-explainer",
-      "learnMore": "Before diving into discovery flows, understand the framework that ties everything together.\n\nYou'll learn:\n• How Skills, Problems, and Persona combine to create opportunities\n• What the competence wheels represent\n• How proficiency levels light up your unique profile\n• Which flows to start with based on your goals\n\nThis 2-minute explainer sets you up for success with all Flow Finder quests.",
+      "learnMore": "Before diving into discovery flows, understand the framework that ties everything together.\n\nYou'll learn:\n\u2022 How Skills, Problems, and Persona combine to create opportunities\n\u2022 What the competence wheels represent\n\u2022 How proficiency levels light up your unique profile\n\u2022 Which flows to start with based on your goals\n\nThis 2-minute explainer sets you up for success with all Flow Finder quests.",
       "isPrimary": true,
       "isExplainer": true
     },
@@ -60,7 +60,7 @@
       "inputType": "flow",
       "flow_id": "play_list_finder",
       "flow_route": "/play-list-finder",
-      "learnMore": "Your 'play-list' is the collection of activities that feel like play to you but look like work to others.\n\nThis flow helps you discover your authentic skills through:\n• Role models who inspire you\n• Activities you'd do with zero fear\n• Secret wishes about what you'd get paid for\n• Things that sound fun but make you nervous (your groan zone)\n\nAI analyzes your answers and recommends skill segments you can confirm or reject. It's a faster, more intuitive way to discover what you're naturally great at.",
+      "learnMore": "Your 'play-list' is the collection of activities that feel like play to you but look like work to others.\n\nThis flow helps you discover your authentic skills through:\n\u2022 Role models who inspire you\n\u2022 Activities you'd do with zero fear\n\u2022 Secret wishes about what you'd get paid for\n\u2022 Things that sound fun but make you nervous (your groan zone)\n\nAI analyzes your answers and recommends skill segments you can confirm or reject. It's a faster, more intuitive way to discover what you're naturally great at.",
       "isPrimary": true
     },
     {
@@ -75,7 +75,7 @@
       "inputType": "flow",
       "flow_id": "persona_identifier",
       "flow_route": "/persona-identifier",
-      "learnMore": "Your life journey reveals who you're meant to serve.\n\nThis flow helps you discover your ideal personas through:\n• Your life chapters and major phases\n• The struggles you've overcome\n• People you've naturally helped\n\nAI analyzes your journey and recommends personas you're positioned to serve. People often help those a few steps behind them on a similar path.",
+      "learnMore": "Your life journey reveals who you're meant to serve.\n\nThis flow helps you discover your ideal personas through:\n\u2022 Your life chapters and major phases\n\u2022 The struggles you've overcome\n\u2022 People you've naturally helped\n\nAI analyzes your journey and recommends personas you're positioned to serve. People often help those a few steps behind them on a similar path.",
       "isPrimary": true
     },
     {
@@ -162,9 +162,7 @@
       "inputType": "text",
       "placeholder": "What 'fast-food' joy do you usually default to and what was the 'nutritious' joy you chose instead?",
       "learnMore": "Fast-food joy is anything where you feel good in the moment, but leaves you feeling lower after. Think: drinking alcohol, eating high-sugar foods, scrolling social media, watching netflix.\n\nNutritious joy is anything where you suffer but it leaves you feeling better after. Think: purposeful work, going to the gym, vulnerable conversations with friends/family, learning something new.\n\nThe more you choose nutritious joy, the less you'll crave the fast-food hits. You're literally rewiring your brain's reward system.",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "rewire_future_successful_you",
@@ -176,9 +174,7 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What did you do that future successful you would have done?",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "rewire_protective_to_essence",
@@ -204,9 +200,7 @@
       "inputType": "text",
       "placeholder": "What event this week was a Hell Yea for you?",
       "learnMore": "What's the difference between an A-grade actor and a C-grade actor who started with the same talent? One said yes to any opportunity and found themselves too busy to say yes to the \"hell yea\" ones when they did come and one said yes to only \"Hell Yea\" opportunities which led to more hell yeas.\n\nBy bringing awareness to what a \"hell yea\" is for you also shows what you're interested in and what you want to be doing.",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "rewire_3_percent_better",
@@ -233,7 +227,7 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What did you do and how did it go?",
-      "learnMore": "Your essence wants to express itself fully, but your protective voice has been blocking it to keep you safe. This quest is about giving your essence permission to play—even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway.",
+      "learnMore": "Your essence wants to express itself fully, but your protective voice has been blocking it to keep you safe. This quest is about giving your essence permission to play\u2014even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway.",
       "archived": true,
       "archived_reason": "Superseded by stage-specific Stage Groan quests in Voices sub-tab - Jan 2025"
     },
@@ -246,9 +240,7 @@
       "description": "Establish connection with your essence voice and drop into a meditation",
       "points": 5,
       "inputType": "checkbox",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "reconnect_morning_dance",
@@ -259,9 +251,7 @@
       "description": "Play one of your favourite bangers and get your dance on. Rate how you feel out of 10 before and after.",
       "points": 3,
       "inputType": "checkbox",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "reconnect_morning_breathwork",
@@ -272,9 +262,7 @@
       "description": "Complete breathwork and breath life into your essence voice",
       "points": 5,
       "inputType": "checkbox",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "reconnect_self_identified",
@@ -299,9 +287,7 @@
       "inputType": "text",
       "placeholder": "What did you pray for or express gratitude about today?",
       "learnMore": "Whether you believe in prayer or not, what I've found is when you do pray and ask for things, every opportunity or serendipity that follows has a sense of magic.\n\nIt leads you to ask \"Is this an answer to my prayer?\". I've found it leads me to remain open to any or all experiences and ensures I don't simply dismiss something prematurely.",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "reconnect_weekly_task",
@@ -325,10 +311,8 @@
       "points": 6,
       "inputType": "text",
       "placeholder": "What negative environment did you address?",
-      "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish—it's essential.",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish\u2014it's essential.",
+      "healing_checkin": true
     },
     {
       "id": "groan_challenge",
@@ -381,7 +365,7 @@
       "placeholder": "Who did you reach out to? What feedback did they give? How did it feel?",
       "stage_required": 1,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of rejection when asking for feedback is one of the biggest blockers in the Validation stage.\n\nYour essence knows you need real feedback to move forward, but your body fears hearing 'no' or 'this isn't good.'\n\nThis groan challenges you to face that fear directly. Remember: every piece of feedback—positive or negative—brings you closer to something that truly serves people.",
+      "learnMore": "Fear of rejection when asking for feedback is one of the biggest blockers in the Validation stage.\n\nYour essence knows you need real feedback to move forward, but your body fears hearing 'no' or 'this isn't good.'\n\nThis groan challenges you to face that fear directly. Remember: every piece of feedback\u2014positive or negative\u2014brings you closer to something that truly serves people.",
       "archived": true
     },
     {
@@ -396,7 +380,7 @@
       "inputType": "flow",
       "flow_id": "product_explainer",
       "flow_route": "/product-explainer",
-      "learnMore": "Before diving into product quests, understand what you're building and why.\n\nYou'll learn:\n• The Value Equation: how to maximise what your product is worth\n• The four things you'll build: Product, Lead Magnet, Offer, Package\n• Why \"done beats perfect\" at this stage\n• How to ship before you feel ready\n\nThis 2-minute explainer sets you up for success with all Product Creation quests.",
+      "learnMore": "Before diving into product quests, understand what you're building and why.\n\nYou'll learn:\n\u2022 The Value Equation: how to maximise what your product is worth\n\u2022 The four things you'll build: Product, Lead Magnet, Offer, Package\n\u2022 Why \"done beats perfect\" at this stage\n\u2022 How to ship before you feel ready\n\nThis 2-minute explainer sets you up for success with all Product Creation quests.",
       "isPrimary": true,
       "isExplainer": true
     },
@@ -429,7 +413,7 @@
       "placeholder": "Who gave you feedback? What did they say wasn't working? How did you receive it?",
       "stage_required": 3,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of hearing negative feedback prevents growth in the Testing stage.\n\nYour essence knows that honest criticism is a gift—it shows you exactly where to improve. But your body wants to defend, explain, or avoid the discomfort.\n\nThis groan challenges you to actively seek out criticism and sit with it. Don't defend. Don't explain. Just listen and thank them. The discomfort you feel is growth happening.",
+      "learnMore": "Fear of hearing negative feedback prevents growth in the Testing stage.\n\nYour essence knows that honest criticism is a gift\u2014it shows you exactly where to improve. But your body wants to defend, explain, or avoid the discomfort.\n\nThis groan challenges you to actively seek out criticism and sit with it. Don't defend. Don't explain. Just listen and thank them. The discomfort you feel is growth happening.",
       "archived": true
     },
     {
@@ -461,7 +445,7 @@
       "placeholder": "What bonus did you add or how did you strengthen your guarantee? What felt uncomfortable about it?",
       "stage_required": 5,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of making your offer too good or giving away too much is the edge you hit in the Offer Creation stage.\n\nYour essence knows that a truly irresistible offer creates raving fans and referrals. But your body fears you're underselling yourself or giving away the farm.\n\nThis groan challenges you to over-deliver. Add that extra bonus. Make your guarantee stronger. Stack more value. The mindset shift: you're not giving away value—you're building a moat around your business through generosity.",
+      "learnMore": "Fear of making your offer too good or giving away too much is the edge you hit in the Offer Creation stage.\n\nYour essence knows that a truly irresistible offer creates raving fans and referrals. But your body fears you're underselling yourself or giving away the farm.\n\nThis groan challenges you to over-deliver. Add that extra bonus. Make your guarantee stronger. Stack more value. The mindset shift: you're not giving away value\u2014you're building a moat around your business through generosity.",
       "archived": true
     },
     {
@@ -477,7 +461,7 @@
       "placeholder": "What commitment did you make? Where did you announce it? How does it feel?",
       "stage_required": 7,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of failure after going 'all in' is the final boss of the Launch stage.\n\nYour essence knows you're ready. Your body fears what happens if you commit publicly and it doesn't work.\n\nThis groan challenges you to make a public, undeniable commitment. Pick a date. Announce it. Burn the boats. When there's no escape route, you'll find resources and resilience you didn't know you had. And even if the launch doesn't go perfectly—you'll learn more from that than from another month of 'preparing.'",
+      "learnMore": "Fear of failure after going 'all in' is the final boss of the Launch stage.\n\nYour essence knows you're ready. Your body fears what happens if you commit publicly and it doesn't work.\n\nThis groan challenges you to make a public, undeniable commitment. Pick a date. Announce it. Burn the boats. When there's no escape route, you'll find resources and resilience you didn't know you had. And even if the launch doesn't go perfectly\u2014you'll learn more from that than from another month of 'preparing.'",
       "archived": true
     },
     {
@@ -491,9 +475,7 @@
       "inputType": "text",
       "placeholder": "What was the situation?",
       "learnMore": "A love response is anything above 'courage' on the emotional frequency scale.\n\nIt includes:\nWillingness: 'Expressing feelings without blame'.\nAcceptance: 'Making decisions from clarity, not emotion'.\nPeace: 'Seeing innocence in others, even in conflict'.\n\nThis is important because we attract what we are. If we find ourselves responding from anger throughout the day we will attract more anger. If we show up from these higher states we will attract more of them.\n\nTracking these moments builds awareness and accountability.",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "recognise_negative_frequency",
@@ -506,9 +488,7 @@
       "inputType": "text",
       "placeholder": "What was the situation? What caused you to be triggered?",
       "learnMore": "A fear response is anything below 'courage' on the emotional frequency scale.\n\nIt includes Anger: 'Blaming or pointing out what others did wrong'.\nFear: 'Hesitating or avoiding taking action'.\nShame: 'Going quiet / withdrawing emotionally or physically'.\n\nThis is important because we attract more of what we are. If we show up from fear we limit our growth and opportunities that align with what we love.\n\nTracking these moments builds awareness about what's causing us to react from fear and build accountability to show up from love in the future.",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "recognise_trigger_pattern",
@@ -520,10 +500,8 @@
       "points": 4,
       "inputType": "text",
       "placeholder": "What patterns did you notice in your triggers this week?",
-      "learnMore": "Our triggers are consistent — the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions.",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "learnMore": "Our triggers are consistent \u2014 the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions.",
+      "healing_checkin": true
     },
     {
       "id": "recognise_healing_compass",
@@ -536,9 +514,7 @@
       "inputType": "flow",
       "flow_id": "healing_compass",
       "flow_route": "/healing-compass",
-      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective voice developed as a survival mechanism—understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them.",
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective voice developed as a survival mechanism\u2014understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
     },
     {
       "id": "recognise_nervous_system",
@@ -552,9 +528,7 @@
       "flow_id": "nervous_system",
       "flow_route": "/nervous-system",
       "requires_quest": "recognise_healing_compass",
-      "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a muscle-testing practice) to identify exactly where those boundaries are empowering you to consciously expand them.\n\nThe flow takes about 10 minutes and since you'll be sway-testing it's recommended you do it at home.",
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a muscle-testing practice) to identify exactly where those boundaries are empowering you to consciously expand them.\n\nThe flow takes about 10 minutes and since you'll be sway-testing it's recommended you do it at home."
     },
     {
       "id": "recognise_shadow_work",
@@ -567,9 +541,7 @@
       "inputType": "flow",
       "flow_id": "shadow_work",
       "flow_route": "/shadow-work",
-      "archived": true,
-      "archived_reason": "Archived Feb 2026",
-      "learnMore": "Shadow work is the process of exploring parts of yourself you've suppressed — both traits you're ashamed of and authentic parts you've hidden to stay safe.\n\nWe suppress for two reasons: society told us it was wrong, or we were hurt when we expressed it. Either way, those parts didn't go away — they became shadows.\n\nThis flow takes about 15-20 minutes and guides you through identifying your shadows, tracing them to their root emotions, mapping the protective archetypes you use as armour, and discovering the origin story behind it all.\n\nYou can complete this once per week to explore different shadows each time."
+      "learnMore": "Shadow work is the process of exploring parts of yourself you've suppressed \u2014 both traits you're ashamed of and authentic parts you've hidden to stay safe.\n\nWe suppress for two reasons: society told us it was wrong, or we were hurt when we expressed it. Either way, those parts didn't go away \u2014 they became shadows.\n\nThis flow takes about 15-20 minutes and guides you through identifying your shadows, tracing them to their root emotions, mapping the protective archetypes you use as armour, and discovering the origin story behind it all.\n\nYou can complete this once per week to explore different shadows each time."
     },
     {
       "id": "recognise_limiting_belief_rewire",
@@ -583,9 +555,7 @@
       "flow_id": "limiting_belief_rewire",
       "flow_route": "/limiting-belief-rewire",
       "requires_quest": "recognise_nervous_system",
-      "learnMore": "In the Nervous System Map, you identified limiting beliefs your body holds around visibility and money.\n\nThe Limiting Belief Rewire traces one of those safety contracts back to the original experience that created it — the emotional splinter.\n\nBy revisiting the origin with compassion, you can finally release the pattern at its root rather than fighting the symptoms.\n\nThis flow takes about 10-15 minutes. Find a quiet, safe space where you can be emotionally present.",
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "learnMore": "In the Nervous System Map, you identified limiting beliefs your body holds around visibility and money.\n\nThe Limiting Belief Rewire traces one of those safety contracts back to the original experience that created it \u2014 the emotional splinter.\n\nBy revisiting the origin with compassion, you can finally release the pattern at its root rather than fighting the symptoms.\n\nThis flow takes about 10-15 minutes. Find a quiet, safe space where you can be emotionally present."
     },
     {
       "id": "recognise_matrix_codes",
@@ -611,11 +581,9 @@
       "inputType": "flow",
       "flow_id": "what_is_healing_explainer",
       "flow_route": "/what-is-healing-explainer",
-      "learnMore": "Before diving into the healing quests, it helps to understand what healing actually is.\n\nThis explainer walks you through the concept of emotional splinters — the micro-traumas that silently shape our behaviour — and reframes healing as removing fear so you can show up as your loving, playful, carefree self once again.",
+      "learnMore": "Before diving into the healing quests, it helps to understand what healing actually is.\n\nThis explainer walks you through the concept of emotional splinters \u2014 the micro-traumas that silently shape our behaviour \u2014 and reframes healing as removing fear so you can show up as your loving, playful, carefree self once again.",
       "isPrimary": true,
-      "isExplainer": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "isExplainer": true
     },
     {
       "id": "emotional_splinter_explainer",
@@ -630,9 +598,7 @@
       "flow_route": "/emotional-splinter-explainer",
       "learnMore": "This deep dive explains how 'emotion' is energy-in-motion and trauma is what happens when that energy gets frozen.\n\nYou'll learn about Big T vs Little T trauma, how the amygdala and prefrontal cortex miscommunicate to create limiting stories, and how these unprocessed emotions create protective patterns like The Ghost, The People Pleaser, and The Controller.",
       "isPrimary": true,
-      "isExplainer": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "isExplainer": true
     },
     {
       "id": "how_do_we_heal_explainer",
@@ -640,16 +606,14 @@
       "type": "Recognise",
       "frequency": "explainer",
       "name": "How Do We Heal?",
-      "description": "Discover the Four R's framework — Recognise, Release, Rewire, Reconnect — and the healing modalities that map to each",
+      "description": "Discover the Four R's framework \u2014 Recognise, Release, Rewire, Reconnect \u2014 and the healing modalities that map to each",
       "points": 5,
       "inputType": "flow",
       "flow_id": "how_do_we_heal_explainer",
       "flow_route": "/how-do-we-heal-explainer",
-      "learnMore": "This explainer introduces the Four R's healing framework:\n\n1. Recognise — your emotional splinters and protective patterns\n2. Release — the frozen emotions (micro-traumas)\n3. Rewire — the beliefs your splinters created\n4. Reconnect — to the loving, playful, carefree version of you\n\nYou'll also see how every healing modality maps to these four R's.",
+      "learnMore": "This explainer introduces the Four R's healing framework:\n\n1. Recognise \u2014 your emotional splinters and protective patterns\n2. Release \u2014 the frozen emotions (micro-traumas)\n3. Rewire \u2014 the beliefs your splinters created\n4. Reconnect \u2014 to the loving, playful, carefree version of you\n\nYou'll also see how every healing modality maps to these four R's.",
       "isPrimary": true,
-      "isExplainer": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "isExplainer": true
     },
     {
       "id": "release_daily_challenge",
@@ -661,9 +625,7 @@
       "points": 7,
       "inputType": "text",
       "placeholder": "What came up for you in this process today?",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "healing_checkin": true
     },
     {
       "id": "release_negative_charge",
@@ -675,10 +637,8 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What emotion were you feeling and how did you release it?",
-      "learnMore": "Emotions are energy in motion— see them as a song. When we suppress them, it's like clicking pause in the middle of the song. They get stored in the body and create tension, anxiety and if intense enough, trauma.\n\nRelease practices include anything that allow you to experience the emotion and process it so the 'song finishes'. Examples include: running, journaling, breathwork, movement, crying, shaking, screaming (into a pillow), or simply allowing yourself to feel without judgment.\n\nThe goal isn't to 'fix' the emotion but to experience it. Doing any of these practises for 90 seconds is often enough for the emotion to pass through you and the 'song to finish'.",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "learnMore": "Emotions are energy in motion\u2014 see them as a song. When we suppress them, it's like clicking pause in the middle of the song. They get stored in the body and create tension, anxiety and if intense enough, trauma.\n\nRelease practices include anything that allow you to experience the emotion and process it so the 'song finishes'. Examples include: running, journaling, breathwork, movement, crying, shaking, screaming (into a pillow), or simply allowing yourself to feel without judgment.\n\nThe goal isn't to 'fix' the emotion but to experience it. Doing any of these practises for 90 seconds is often enough for the emotion to pass through you and the 'song to finish'.",
+      "healing_checkin": true
     },
     {
       "id": "release_weekly_big",
@@ -690,10 +650,8 @@
       "points": 8,
       "inputType": "text",
       "placeholder": "What came up in the session? What did you process and release?",
-      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions—trust the process and let your body lead.",
-      "healing_checkin": true,
-      "archived": true,
-      "archived_reason": "Archived Mar 2026 - will activate later"
+      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions\u2014trust the process and let your body lead.",
+      "healing_checkin": true
     },
     {
       "id": "tracker_essence_voice",
@@ -951,26 +909,26 @@
         {
           "value": "warm_outreach",
           "label": "Warm Outreach",
-          "icon": "🤝"
+          "icon": "\ud83e\udd1d"
         },
         {
           "value": "content",
           "label": "Content",
-          "icon": "📝"
+          "icon": "\ud83d\udcdd"
         },
         {
           "value": "ads",
           "label": "Paid Ads",
-          "icon": "📣"
+          "icon": "\ud83d\udce3"
         },
         {
           "value": "cold_outreach",
           "label": "Cold Outreach",
-          "icon": "📧"
+          "icon": "\ud83d\udce7"
         }
       ],
       "counts_toward_graduation": true,
-      "learnMore": "The Core Four are the only ways to let people know about your offer:\n\n🤝 **Warm Outreach** - Reaching out to people who already know you\n📝 **Content** - Creating free value that attracts your audience\n📣 **Paid Ads** - Paying to reach new audiences\n📧 **Cold Outreach** - Reaching out to people who don't know you yet\n\nConsistent daily action on at least one of these is the key to successful launch."
+      "learnMore": "The Core Four are the only ways to let people know about your offer:\n\n\ud83e\udd1d **Warm Outreach** - Reaching out to people who already know you\n\ud83d\udcdd **Content** - Creating free value that attracts your audience\n\ud83d\udce3 **Paid Ads** - Paying to reach new audiences\n\ud83d\udce7 **Cold Outreach** - Reaching out to people who don't know you yet\n\nConsistent daily action on at least one of these is the key to successful launch."
     },
     {
       "id": "milestone_first_10_signups",
@@ -985,7 +943,7 @@
       "milestone_type": "first_10_signups",
       "placeholder": "How did you get your first 10? What did you learn? What surprised you?",
       "counts_toward_graduation": false,
-      "learnMore": "Your first 10 customers are the hardest—and the most important.\n\nThey validate that:\n• Your offer solves a real problem\n• People will pay for your solution\n• Your funnel works\n\nDocument how you got them. This becomes your playbook for the next 100.\n\nCompleting this milestone is a major achievement. You're no longer 'planning to launch'—you've launched.",
+      "learnMore": "Your first 10 customers are the hardest\u2014and the most important.\n\nThey validate that:\n\u2022 Your offer solves a real problem\n\u2022 People will pay for your solution\n\u2022 Your funnel works\n\nDocument how you got them. This becomes your playbook for the next 100.\n\nCompleting this milestone is a major achievement. You're no longer 'planning to launch'\u2014you've launched.",
       "archived": true,
       "archive_reason": "Moved to Tracking stage - Launch stage focuses on executing the launch, not measuring results"
     },
@@ -1043,13 +1001,13 @@
       "frequency": "anytime",
       "stage_required": 7,
       "name": "Sales Page Copy",
-      "description": "Write compelling sales copy that converts—headlines, benefits, objections handled, call-to-action",
+      "description": "Write compelling sales copy that converts\u2014headlines, benefits, objections handled, call-to-action",
       "points": 6,
       "inputType": "text",
       "milestone_type": "sales_copy_created",
       "placeholder": "Paste your sales page copy or share the link to your live sales page",
       "counts_toward_graduation": false,
-      "learnMore": "Your sales copy is the difference between a browser and a buyer.\n\n**Essential elements:**\n• **Headline** - Captures attention and speaks to their desired outcome\n• **Hook** - 1-2 sentences that make them keep reading\n• **Problem** - Clearly articulate the pain they experience\n• **Solution** - How your offer solves it uniquely\n• **Social Proof** - Testimonials, results, case studies\n• **Objections** - Preemptively address their hesitations\n• **Call-to-Action** - Clear next step (CTA should be repeated 3+ times)\n• **Urgency** - Why they should act now\n\n**Pro tips:**\n• Use the exact words from your validation interviews\n• Benefits > Features (what it does FOR them, not what it IS)\n• Make the CTA button specific ('Start My Transformation' vs 'Submit')\n• Break up text with bullets and short paragraphs",
+      "learnMore": "Your sales copy is the difference between a browser and a buyer.\n\n**Essential elements:**\n\u2022 **Headline** - Captures attention and speaks to their desired outcome\n\u2022 **Hook** - 1-2 sentences that make them keep reading\n\u2022 **Problem** - Clearly articulate the pain they experience\n\u2022 **Solution** - How your offer solves it uniquely\n\u2022 **Social Proof** - Testimonials, results, case studies\n\u2022 **Objections** - Preemptively address their hesitations\n\u2022 **Call-to-Action** - Clear next step (CTA should be repeated 3+ times)\n\u2022 **Urgency** - Why they should act now\n\n**Pro tips:**\n\u2022 Use the exact words from your validation interviews\n\u2022 Benefits > Features (what it does FOR them, not what it IS)\n\u2022 Make the CTA button specific ('Start My Transformation' vs 'Submit')\n\u2022 Break up text with bullets and short paragraphs",
       "archived": true,
       "archive_reason": "Redundant - Landing Page challenge in Campaign stage covers this"
     },
@@ -1066,7 +1024,7 @@
       "flow_id": "100m_offer",
       "flow_route": "/offer-builder",
       "counts_toward_graduation": true,
-      "learnMore": "Build the foundation of your offer using the $100M Offers framework:\n\n• **Customer Profile** - Pain level, spending capacity, and emotional state\n• **Niche Builder** - Combine your Flow Finder discoveries into a sharp niche statement\n• **Excuses & Beliefs** - Uncover the vehicle, internal, and external blockers stopping your audience\n• **Solutions** - Brainstorm solutions that directly address each problem\n• **Core Offer & Lead Magnet** - Define what they pay for and what you give for free\n\nComplete this first, then use Product Designer to apply the Value Equation to each solution."
+      "learnMore": "Build the foundation of your offer using the $100M Offers framework:\n\n\u2022 **Customer Profile** - Pain level, spending capacity, and emotional state\n\u2022 **Niche Builder** - Combine your Flow Finder discoveries into a sharp niche statement\n\u2022 **Excuses & Beliefs** - Uncover the vehicle, internal, and external blockers stopping your audience\n\u2022 **Solutions** - Brainstorm solutions that directly address each problem\n\u2022 **Core Offer & Lead Magnet** - Define what they pay for and what you give for free\n\nComplete this first, then use Product Designer to apply the Value Equation to each solution."
     },
     {
       "id": "flow_grand_slam_offer",
@@ -1082,7 +1040,7 @@
       "flow_route": "/offer-builder-v2",
       "requires_quest": "flow_100m_offer",
       "counts_toward_graduation": true,
-      "learnMore": "Answer the question: 'If I launched this product, how successful will I be?' This flow evaluates 4 dimensions of the Value Equation:\n\n• **Proof Stack** - Can you prove you deliver? (Perceived Likelihood)\n• **Speed Advantage** - How fast do they get results? (Time Delay)\n• **Ease Factor** - What do they NOT need to do? (Effort & Sacrifice)\n• **Obstacles** - What stops them from buying?\n\nYou'll receive a Grand Slam Score (0-100) predicting success potential."
+      "learnMore": "Answer the question: 'If I launched this product, how successful will I be?' This flow evaluates 4 dimensions of the Value Equation:\n\n\u2022 **Proof Stack** - Can you prove you deliver? (Perceived Likelihood)\n\u2022 **Speed Advantage** - How fast do they get results? (Time Delay)\n\u2022 **Ease Factor** - What do they NOT need to do? (Effort & Sacrifice)\n\u2022 **Obstacles** - What stops them from buying?\n\nYou'll receive a Grand Slam Score (0-100) predicting success potential."
     },
     {
       "id": "flow_offer_stack_builder",
@@ -1098,7 +1056,7 @@
       "flow_route": "/offer-stack-builder",
       "requires_quest": "flow_grand_slam_offer",
       "counts_toward_graduation": true,
-      "learnMore": "Transform your evaluated product into an irresistible offer stack:\n\n• **Lead Magnet** - Free value that builds trust\n• **Bonuses** - Extra value that tips the scales\n• **Guarantee** - Risk reversal that removes hesitation\n• **Scarcity/Urgency** - Reason to act NOW\n• **Naming** - Make it memorable\n\nBy the end, you'll have a complete packaged offer ready to present to the world."
+      "learnMore": "Transform your evaluated product into an irresistible offer stack:\n\n\u2022 **Lead Magnet** - Free value that builds trust\n\u2022 **Bonuses** - Extra value that tips the scales\n\u2022 **Guarantee** - Risk reversal that removes hesitation\n\u2022 **Scarcity/Urgency** - Reason to act NOW\n\u2022 **Naming** - Make it memorable\n\nBy the end, you'll have a complete packaged offer ready to present to the world."
     },
     {
       "id": "flow_product_selection",
@@ -1114,7 +1072,7 @@
       "flow_route": "/product-selection",
       "requires_quest": "flow_100m_offer",
       "counts_toward_graduation": true,
-      "learnMore": "Apply Hormozi's Value Equation to your core product: Value = (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort). This helps you maximize perceived value."
+      "learnMore": "Apply Hormozi's Value Equation to your core product: Value = (Dream Outcome \u00d7 Perceived Likelihood) / (Time Delay \u00d7 Effort). This helps you maximize perceived value."
     },
     {
       "id": "flow_lead_magnet",
@@ -1196,7 +1154,7 @@
       "flow_route": "/launch-readiness",
       "requires_quest": "flow_funnel_builder",
       "counts_toward_graduation": true,
-      "learnMore": "Before you launch, make sure everything is in place:\n\n**What we check:**\n• Sales page/checkout ready\n• Pricing confirmed\n• Social proof inventory\n• Pre-launch audience size\n• Launch approach (beta, founding, public)\n\nYou'll get a Launch Readiness Score showing your gaps and strengths.\n\n**Why this matters:**\nMost launches fail because of missing pieces, not bad offers. This check catches gaps before you waste effort."
+      "learnMore": "Before you launch, make sure everything is in place:\n\n**What we check:**\n\u2022 Sales page/checkout ready\n\u2022 Pricing confirmed\n\u2022 Social proof inventory\n\u2022 Pre-launch audience size\n\u2022 Launch approach (beta, founding, public)\n\nYou'll get a Launch Readiness Score showing your gaps and strengths.\n\n**Why this matters:**\nMost launches fail because of missing pieces, not bad offers. This check catches gaps before you waste effort."
     },
     {
       "id": "milestone_launch_sequence",
@@ -1230,7 +1188,7 @@
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
-      "learnMore": "A launch isn't one moment—it's a sequence that builds anticipation and urgency.\n\nSimple 7-day launch structure:\n• Day -3: Teaser / Coming Soon\n• Day -1: Final countdown / Last chance to prepare\n• Day 0: LAUNCH - Main announcement\n• Day +1: Social proof / First results\n• Day +2: FAQ / Objection handling\n• Day +3: Urgency / Bonus deadline\n• Day +7: Final call / Doors closing\n\nPlan the sequence, then execute daily.\n\n💡 Our CRM includes launch planning tools to help you execute.",
+      "learnMore": "A launch isn't one moment\u2014it's a sequence that builds anticipation and urgency.\n\nSimple 7-day launch structure:\n\u2022 Day -3: Teaser / Coming Soon\n\u2022 Day -1: Final countdown / Last chance to prepare\n\u2022 Day 0: LAUNCH - Main announcement\n\u2022 Day +1: Social proof / First results\n\u2022 Day +2: FAQ / Objection handling\n\u2022 Day +3: Urgency / Bonus deadline\n\u2022 Day +7: Final call / Doors closing\n\nPlan the sequence, then execute daily.\n\n\ud83d\udca1 Our CRM includes launch planning tools to help you execute.",
       "upsell_type": "crm",
       "upsell_cta": "Try Our Launch Planner"
     },
@@ -1266,7 +1224,7 @@
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
-      "learnMore": "Your Core Four strategy needs fuel. Whether you chose Warm Outreach, Cold Outreach, Content, or Ads—you need a content plan.\n\nMap out 7 pieces that:\n• Address your audience's pain points\n• Demonstrate your expertise\n• Lead naturally to your lead magnet\n\nThis is your campaign engine.\n\n💡 Our CRM includes content planning tools to help you stay consistent.",
+      "learnMore": "Your Core Four strategy needs fuel. Whether you chose Warm Outreach, Cold Outreach, Content, or Ads\u2014you need a content plan.\n\nMap out 7 pieces that:\n\u2022 Address your audience's pain points\n\u2022 Demonstrate your expertise\n\u2022 Lead naturally to your lead magnet\n\nThis is your campaign engine.\n\n\ud83d\udca1 Our CRM includes content planning tools to help you stay consistent.",
       "upsell_type": "crm",
       "upsell_cta": "Try Our Content Planner"
     },
@@ -1302,7 +1260,7 @@
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
-      "learnMore": "Your funnel needs a front door. This is where strangers become leads.\n\nYour lead capture should:\n• Clearly communicate the value of your lead magnet\n• Make it dead simple to opt in\n• Deliver your lead magnet instantly\n\n💡 Need help? We offer done-for-you landing pages that convert.",
+      "learnMore": "Your funnel needs a front door. This is where strangers become leads.\n\nYour lead capture should:\n\u2022 Clearly communicate the value of your lead magnet\n\u2022 Make it dead simple to opt in\n\u2022 Deliver your lead magnet instantly\n\n\ud83d\udca1 Need help? We offer done-for-you landing pages that convert.",
       "upsell_type": "landing_page",
       "upsell_cta": "Get a Pro Landing Page"
     },
@@ -1338,7 +1296,7 @@
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
-      "learnMore": "Most people need 7+ touchpoints before buying. Your nurture sequence bridges the gap between 'interested stranger' and 'ready buyer.'\n\nA simple 5-part structure:\n1. Welcome + Quick Win\n2. Your Story / Why You Care\n3. Case Study / Proof\n4. Common Mistake / Objection Buster\n5. Invitation to Next Step\n\n💡 Our CRM includes nurture sequence templates and automated follow-ups.",
+      "learnMore": "Most people need 7+ touchpoints before buying. Your nurture sequence bridges the gap between 'interested stranger' and 'ready buyer.'\n\nA simple 5-part structure:\n1. Welcome + Quick Win\n2. Your Story / Why You Care\n3. Case Study / Proof\n4. Common Mistake / Objection Buster\n5. Invitation to Next Step\n\n\ud83d\udca1 Our CRM includes nurture sequence templates and automated follow-ups.",
       "upsell_type": "crm",
       "upsell_cta": "Build Your Nurture Sequence"
     },
@@ -1374,7 +1332,7 @@
       ],
       "tracks_progress": true,
       "counts_toward_graduation": true,
-      "learnMore": "You can't improve what you don't measure. A simple CRM helps you:\n• Know who's in your funnel\n• Track where they are (lead → nurtured → customer)\n• Follow up at the right time\n• See what's working\n\n💡 Our built-in Leads Tracker can help you manage this.",
+      "learnMore": "You can't improve what you don't measure. A simple CRM helps you:\n\u2022 Know who's in your funnel\n\u2022 Track where they are (lead \u2192 nurtured \u2192 customer)\n\u2022 Follow up at the right time\n\u2022 See what's working\n\n\ud83d\udca1 Our built-in Leads Tracker can help you manage this.",
       "upsell_type": "crm",
       "upsell_cta": "Try Our Leads Tracker"
     },
@@ -1384,14 +1342,14 @@
       "type": "groan",
       "frequency": "anytime",
       "name": "Stage 6 Groan: Campaign",
-      "description": "Put yourself out there publicly in a way that feels exposing—a video, a post, an interview. Let the world see the real you, not the polished version.",
+      "description": "Put yourself out there publicly in a way that feels exposing\u2014a video, a post, an interview. Let the world see the real you, not the polished version.",
       "points": 4,
       "inputType": "text",
       "milestone_type": "groan_stage_6_campaign",
       "placeholder": "What did you share publicly? What felt exposing about it? What response did you get?",
       "stage_required": 6,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of public visibility is the edge you hit in the Campaign Creation stage.\n\nYour essence wants to be seen—that's why you're building something. But your body fears judgment, criticism, and the vulnerability of being 'out there.'\n\nThis groan challenges you to show up as yourself, unpolished and real. The people who resonate with the real you are the ones you want to attract anyway. Let them find you.",
+      "learnMore": "Fear of public visibility is the edge you hit in the Campaign Creation stage.\n\nYour essence wants to be seen\u2014that's why you're building something. But your body fears judgment, criticism, and the vulnerability of being 'out there.'\n\nThis groan challenges you to show up as yourself, unpolished and real. The people who resonate with the real you are the ones you want to attract anyway. Let them find you.",
       "archived": true
     },
     {
@@ -1480,7 +1438,7 @@
       "actionLink": "/offer-checklist/attraction",
       "actionLinkText": "Open Checklist",
       "counts_toward_graduation": true,
-      "learnMore": "Turn your attraction offer decision into reality. Use the checklist to track each implementation step — from defining your guarantee to setting up your checkout flow."
+      "learnMore": "Turn your attraction offer decision into reality. Use the checklist to track each implementation step \u2014 from defining your guarantee to setting up your checkout flow."
     },
     {
       "id": "flow_upsell_offer",
@@ -1708,7 +1666,7 @@
       "inputType": "flow",
       "flow_id": "validation_explainer",
       "flow_route": "/validation-explainer",
-      "learnMore": "Before diving into validation quests, understand why this stage is so important.\n\nYou'll learn:\n• Why most businesses fail (and how to avoid it)\n• The four validation activities: Self-Trial, Peer-Trial, Feedback, Analysis\n• How to face the fear of asking for honest feedback\n• What \"proof\" actually looks like at this stage\n\nThis 2-minute explainer sets you up for success with all Validation quests.",
+      "learnMore": "Before diving into validation quests, understand why this stage is so important.\n\nYou'll learn:\n\u2022 Why most businesses fail (and how to avoid it)\n\u2022 The four validation activities: Self-Trial, Peer-Trial, Feedback, Analysis\n\u2022 How to face the fear of asking for honest feedback\n\u2022 What \"proof\" actually looks like at this stage\n\nThis 2-minute explainer sets you up for success with all Validation quests.",
       "isPrimary": true,
       "isExplainer": true
     },
@@ -1724,7 +1682,7 @@
       "inputType": "flow",
       "flow_id": "testing_explainer",
       "flow_route": "/testing-explainer",
-      "learnMore": "Before diving into testing quests, understand why this stage is so important.\n\nYou'll learn:\n• Why testing early separates winners from guessers\n• The four activities: MVP Readiness, Collect Feedback, Analyse Patterns, Iterate\n• Why criticism is a gift at this stage\n• How 3-5 honest testers can transform your product\n\nThis 2-minute explainer sets you up for success with all Testing quests.",
+      "learnMore": "Before diving into testing quests, understand why this stage is so important.\n\nYou'll learn:\n\u2022 Why testing early separates winners from guessers\n\u2022 The four activities: MVP Readiness, Collect Feedback, Analyse Patterns, Iterate\n\u2022 Why criticism is a gift at this stage\n\u2022 How 3-5 honest testers can transform your product\n\nThis 2-minute explainer sets you up for success with all Testing quests.",
       "isPrimary": true,
       "isExplainer": true
     },
@@ -1740,7 +1698,7 @@
       "inputType": "flow",
       "flow_id": "offer_creation_explainer",
       "flow_route": "/offer-creation-explainer",
-      "learnMore": "Before diving into offer creation quests, understand what makes an offer irresistible.\n\nYou'll learn:\n• The Grand Slam formula: bonuses, guarantee, scarcity, and naming\n• How to score your offer before you launch\n• Why giving more than feels comfortable is the secret\n• How to package everything into one compelling offer\n\nThis 2-minute explainer sets you up for success with all Offer Creation quests.",
+      "learnMore": "Before diving into offer creation quests, understand what makes an offer irresistible.\n\nYou'll learn:\n\u2022 The Grand Slam formula: bonuses, guarantee, scarcity, and naming\n\u2022 How to score your offer before you launch\n\u2022 Why giving more than feels comfortable is the secret\n\u2022 How to package everything into one compelling offer\n\nThis 2-minute explainer sets you up for success with all Offer Creation quests.",
       "isPrimary": true,
       "isExplainer": true
     },
@@ -1756,7 +1714,7 @@
       "inputType": "flow",
       "flow_id": "campaign_explainer",
       "flow_route": "/campaign-explainer",
-      "learnMore": "Before diving into campaign quests, understand how lead generation really works.\n\nYou'll learn:\n• The Core Four: Warm Outreach, Cold Outreach, Free Content, Paid Ads\n• How to build a complete funnel from lead magnet to customer\n• Why being visible as the real you is what sells\n• How to plan a 7-day launch sequence\n\nThis 2-minute explainer sets you up for success with all Campaign Creation quests.",
+      "learnMore": "Before diving into campaign quests, understand how lead generation really works.\n\nYou'll learn:\n\u2022 The Core Four: Warm Outreach, Cold Outreach, Free Content, Paid Ads\n\u2022 How to build a complete funnel from lead magnet to customer\n\u2022 Why being visible as the real you is what sells\n\u2022 How to plan a 7-day launch sequence\n\nThis 2-minute explainer sets you up for success with all Campaign Creation quests.",
       "isPrimary": true,
       "isExplainer": true
     },
@@ -1772,7 +1730,7 @@
       "inputType": "flow",
       "flow_id": "launch_explainer",
       "flow_route": "/launch-explainer",
-      "learnMore": "Before diving into launch quests, understand what this final stage is all about.\n\nYou'll learn:\n• Why launching beats planning every time\n• The four launch activities: Attraction Offer, Daily Implementation, Sales Copy, Post-Launch Review\n• Why a bold public commitment changes everything\n• How to launch one customer at a time\n\nThis 2-minute explainer sets you up for success with all Launch quests.",
+      "learnMore": "Before diving into launch quests, understand what this final stage is all about.\n\nYou'll learn:\n\u2022 Why launching beats planning every time\n\u2022 The four launch activities: Attraction Offer, Daily Implementation, Sales Copy, Post-Launch Review\n\u2022 Why a bold public commitment changes everything\n\u2022 How to launch one customer at a time\n\nThis 2-minute explainer sets you up for success with all Launch quests.",
       "isPrimary": true,
       "isExplainer": true
     },
@@ -1808,7 +1766,7 @@
       "counts_toward_graduation": true,
       "actionLink": "/validation-flows",
       "actionLinkText": "Create form & view responses",
-      "learnMore": "Your validation form helps you understand if your idea solves a real problem.\n\n**How it works:**\n• Create a validation form (takes 2 minutes)\n• Share the link with potential customers\n• Earn 8 points for each response received\n• Quest completes automatically at 3 responses\n\n**Tips:**\n• Share in communities where your audience hangs out\n• Ask friends who fit your target persona\n• Post on social media with context about what you're building"
+      "learnMore": "Your validation form helps you understand if your idea solves a real problem.\n\n**How it works:**\n\u2022 Create a validation form (takes 2 minutes)\n\u2022 Share the link with potential customers\n\u2022 Earn 8 points for each response received\n\u2022 Quest completes automatically at 3 responses\n\n**Tips:**\n\u2022 Share in communities where your audience hangs out\n\u2022 Ask friends who fit your target persona\n\u2022 Post on social media with context about what you're building"
     },
     {
       "id": "self_test",
@@ -1836,7 +1794,7 @@
       "inputType": "flow",
       "flow_route": "/self-test-review",
       "counts_toward_graduation": true,
-      "learnMore": "Every self-trial teaches you something about your skills.\n\n**This review helps you:**\n• Reflect on what actually happened when you applied your skill\n• Rate how the skill worked on your own problem\n• Capture surprises and learnings\n• Decide if you're ready to help someone else\n\nComplete this after each Self-Trial to earn bonus points and build confidence before your first Peer-Trial."
+      "learnMore": "Every self-trial teaches you something about your skills.\n\n**This review helps you:**\n\u2022 Reflect on what actually happened when you applied your skill\n\u2022 Rate how the skill worked on your own problem\n\u2022 Capture surprises and learnings\n\u2022 Decide if you're ready to help someone else\n\nComplete this after each Self-Trial to earn bonus points and build confidence before your first Peer-Trial."
     },
     {
       "id": "lets_play",
@@ -1850,7 +1808,7 @@
       "inputType": "flow",
       "flow_route": "/lets-play",
       "counts_toward_graduation": true,
-      "learnMore": "The Peer-Trial is bottom-up validation: instead of asking 'would people pay for this?', you actually USE your skill to help someone and see what happens.\n\n**How it works:**\n1. Pick a skill × problem combo from your Flow Finder data\n2. Choose a real person to help\n3. Plan your approach and go do it\n4. Come back and reflect on what happened\n\n**Why it matters:**\nThis proves your skills create real value before you ever build a product. Each trial teaches you something about where you belong.\n\n**Difficulty scales up:**\n• Starter: Help someone you know\n• Growing (3+): Help someone outside your close circle\n• Confident (7+): Help someone you've never met\n• Pro (12+): Help someone and ask for a testimonial"
+      "learnMore": "The Peer-Trial is bottom-up validation: instead of asking 'would people pay for this?', you actually USE your skill to help someone and see what happens.\n\n**How it works:**\n1. Pick a skill \u00d7 problem combo from your Flow Finder data\n2. Choose a real person to help\n3. Plan your approach and go do it\n4. Come back and reflect on what happened\n\n**Why it matters:**\nThis proves your skills create real value before you ever build a product. Each trial teaches you something about where you belong.\n\n**Difficulty scales up:**\n\u2022 Starter: Help someone you know\n\u2022 Growing (3+): Help someone outside your close circle\n\u2022 Confident (7+): Help someone you've never met\n\u2022 Pro (12+): Help someone and ask for a testimonial"
     },
     {
       "id": "lets_play_review",
@@ -1864,7 +1822,7 @@
       "inputType": "flow",
       "flow_route": "/lets-play-review",
       "counts_toward_graduation": true,
-      "learnMore": "Every peer-trial teaches you something about your flow.\n\n**This review helps you:**\n• Reflect on what actually happened\n• Rate how it landed with the person you helped\n• Capture surprises and learnings\n• Plan what you'd do differently next time\n\nComplete this after each Peer-Trial to earn bonus points and build your validation evidence."
+      "learnMore": "Every peer-trial teaches you something about your flow.\n\n**This review helps you:**\n\u2022 Reflect on what actually happened\n\u2022 Rate how it landed with the person you helped\n\u2022 Capture surprises and learnings\n\u2022 Plan what you'd do differently next time\n\nComplete this after each Peer-Trial to earn bonus points and build your validation evidence."
     },
     {
       "id": "milestone_validation_conversations",
@@ -1901,7 +1859,7 @@
       "flow_stage": "validation",
       "milestone_type": "validation_analysis_complete",
       "counts_toward_graduation": true,
-      "learnMore": "Raw feedback is just data—insights are gold. Once you've collected 3+ validation responses, our AI will analyze patterns across all answers:\n\n• **Pain points**: What problems keep coming up?\n• **Dream outcomes**: What do people really want?\n• **Objections**: What's stopping them from buying?\n• **Pricing signals**: What are they willing to pay?\n• **Language**: Words your audience actually uses\n\nThis analysis becomes the foundation for your offer, messaging, and positioning."
+      "learnMore": "Raw feedback is just data\u2014insights are gold. Once you've collected 3+ validation responses, our AI will analyze patterns across all answers:\n\n\u2022 **Pain points**: What problems keep coming up?\n\u2022 **Dream outcomes**: What do people really want?\n\u2022 **Objections**: What's stopping them from buying?\n\u2022 **Pricing signals**: What are they willing to pay?\n\u2022 **Language**: Words your audience actually uses\n\nThis analysis becomes the foundation for your offer, messaging, and positioning."
     },
     {
       "id": "milestone_lead_magnet_created",
@@ -1935,7 +1893,7 @@
       "milestone_type": "grand_slam_bonuses_created",
       "placeholder": "Select a bonus you've created",
       "counts_toward_graduation": true,
-      "learnMore": "Great bonuses address specific obstacles your customer faces AFTER buying your core offer.\n\n**Bonus Formula:**\n• Identify obstacles to achieving the dream outcome\n• Create solutions for each obstacle\n• Name them compellingly\n• Stack the value (aim for 10x the price in total bonus value)\n\n**Examples:**\n• Quick-start guide (reduces time delay)\n• Templates/swipe files (reduces effort)\n• Community access (increases likelihood of success)\n• Bonus training on specific challenge (addresses objection)",
+      "learnMore": "Great bonuses address specific obstacles your customer faces AFTER buying your core offer.\n\n**Bonus Formula:**\n\u2022 Identify obstacles to achieving the dream outcome\n\u2022 Create solutions for each obstacle\n\u2022 Name them compellingly\n\u2022 Stack the value (aim for 10x the price in total bonus value)\n\n**Examples:**\n\u2022 Quick-start guide (reduces time delay)\n\u2022 Templates/swipe files (reduces effort)\n\u2022 Community access (increases likelihood of success)\n\u2022 Bonus training on specific challenge (addresses objection)",
       "archived": true,
       "archived_reason": "Now captured in Offer Stack Builder flow - Jan 2025"
     },
@@ -1954,7 +1912,7 @@
       "milestone_type": "grand_slam_guarantee_created",
       "placeholder": "Select your guarantee type",
       "counts_toward_graduation": true,
-      "learnMore": "A guarantee transfers risk from the buyer to you. The stronger the guarantee, the more confident your prospect feels.\n\n**Types of Guarantees:**\n• **Unconditional** - \"30-day money-back, no questions asked\"\n• **Conditional** - \"If you complete all modules and don't see results, full refund\"\n• **Performance** - \"If you don't get [specific result], I'll work with you until you do\"\n• **Anti-guarantee** - \"All sales final\" (works when demand exceeds supply)\n\nMatch your guarantee to your offer confidence and customer type.",
+      "learnMore": "A guarantee transfers risk from the buyer to you. The stronger the guarantee, the more confident your prospect feels.\n\n**Types of Guarantees:**\n\u2022 **Unconditional** - \"30-day money-back, no questions asked\"\n\u2022 **Conditional** - \"If you complete all modules and don't see results, full refund\"\n\u2022 **Performance** - \"If you don't get [specific result], I'll work with you until you do\"\n\u2022 **Anti-guarantee** - \"All sales final\" (works when demand exceeds supply)\n\nMatch your guarantee to your offer confidence and customer type.",
       "archived": true,
       "archived_reason": "Now captured in Offer Stack Builder flow - Jan 2025"
     },
@@ -1973,7 +1931,7 @@
       "milestone_type": "grand_slam_scarcity_created",
       "placeholder": "Select your scarcity type",
       "counts_toward_graduation": true,
-      "learnMore": "Scarcity and urgency give prospects a reason to act NOW rather than \"someday.\"\n\n**Ethical Scarcity Types:**\n• **Cohort-based** - Limited spots per cohort (natural capacity limit)\n• **Time-based** - Enrollment windows, launch periods\n• **Bonus-based** - Bonuses expire after deadline\n• **Price-based** - Early-bird pricing, founding member rates\n• **Inventory** - Limited supply (physical products)\n\n**Key Rule:** Only use scarcity that's REAL. Fake scarcity destroys trust.\n\nIf you can serve unlimited customers, create real constraints (cohort sizes, personal bandwidth, etc.)",
+      "learnMore": "Scarcity and urgency give prospects a reason to act NOW rather than \"someday.\"\n\n**Ethical Scarcity Types:**\n\u2022 **Cohort-based** - Limited spots per cohort (natural capacity limit)\n\u2022 **Time-based** - Enrollment windows, launch periods\n\u2022 **Bonus-based** - Bonuses expire after deadline\n\u2022 **Price-based** - Early-bird pricing, founding member rates\n\u2022 **Inventory** - Limited supply (physical products)\n\n**Key Rule:** Only use scarcity that's REAL. Fake scarcity destroys trust.\n\nIf you can serve unlimited customers, create real constraints (cohort sizes, personal bandwidth, etc.)",
       "archived": true,
       "archived_reason": "Now captured in Offer Stack Builder flow - Jan 2025"
     },
@@ -1990,7 +1948,7 @@
       "flow_id": "mvp_readiness",
       "flow_route": "/mvp-readiness",
       "counts_toward_graduation": true,
-      "learnMore": "Testing is all about one question: **Is the transformation real?**\n\nIf the transformation works, it solves the problem and people will pay for it.\n\nThis flow helps you:\n• Decide if you're ready to test or need to build an MVP first\n• Define the minimum viable version (if building)\n• Identify 3-5 testers from your target audience\n• Create a plan to access your early customers\n\n**Critical insight:** Early-customer access is essential to success. Without people to test with, you can't validate, iterate, or launch effectively."
+      "learnMore": "Testing is all about one question: **Is the transformation real?**\n\nIf the transformation works, it solves the problem and people will pay for it.\n\nThis flow helps you:\n\u2022 Decide if you're ready to test or need to build an MVP first\n\u2022 Define the minimum viable version (if building)\n\u2022 Identify 3-5 testers from your target audience\n\u2022 Create a plan to access your early customers\n\n**Critical insight:** Early-customer access is essential to success. Without people to test with, you can't validate, iterate, or launch effectively."
     },
     {
       "id": "milestone_feedback_form_sent",
@@ -2010,7 +1968,7 @@
       "counts_toward_graduation": true,
       "actionLink": "/validation-flows?type=testing",
       "actionLinkText": "Create form & view responses",
-      "learnMore": "Your feedback form collects structured responses from testers about their experience with your product.\n\n**How it works:**\n• Create a testing feedback form\n• Share the link with your 3-5 testers from MVP Readiness\n• Earn 8 points for each response received\n• Quest completes automatically at 3 responses\n\n**What the form asks:**\n• What worked well?\n• What confused them or didn't work?\n• What would make it better?\n• Would they recommend it?\n• A key quote in their own words"
+      "learnMore": "Your feedback form collects structured responses from testers about their experience with your product.\n\n**How it works:**\n\u2022 Create a testing feedback form\n\u2022 Share the link with your 3-5 testers from MVP Readiness\n\u2022 Earn 8 points for each response received\n\u2022 Quest completes automatically at 3 responses\n\n**What the form asks:**\n\u2022 What worked well?\n\u2022 What confused them or didn't work?\n\u2022 What would make it better?\n\u2022 Would they recommend it?\n\u2022 A key quote in their own words"
     },
     {
       "id": "flow_feedback_analysis",
@@ -2025,7 +1983,7 @@
       "flow_stage": "testing",
       "milestone_type": "feedback_analysis_complete",
       "counts_toward_graduation": true,
-      "learnMore": "Once you have 3+ feedback responses, our AI analyzes patterns across all answers:\n\n**What AI identifies:**\n• Common themes in what worked\n• Recurring pain points or confusion\n• Suggested improvements\n• Overall sentiment and recommendation likelihood\n\n**Your reflection:**\n• What are the key things you learned?\n• What specific changes will you make?\n\nThis analysis becomes the foundation for your product improvements before launch."
+      "learnMore": "Once you have 3+ feedback responses, our AI analyzes patterns across all answers:\n\n**What AI identifies:**\n\u2022 Common themes in what worked\n\u2022 Recurring pain points or confusion\n\u2022 Suggested improvements\n\u2022 Overall sentiment and recommendation likelihood\n\n**Your reflection:**\n\u2022 What are the key things you learned?\n\u2022 What specific changes will you make?\n\nThis analysis becomes the foundation for your product improvements before launch."
     },
     {
       "id": "milestone_testing_complete",
@@ -2109,7 +2067,7 @@
       "flow_id": "funnel_calculator",
       "flow_route": "/funnel-calculator",
       "counts_toward_graduation": false,
-      "learnMore": "The Funnel Calculator helps you track and optimize your customer journey from awareness to continuity.\n\nUse it in two modes:\n• **Actual Mode**: Track real numbers from your campaigns\n• **Planner Mode**: Project outcomes using industry-average conversion rates\n\nKey metrics tracked:\n• Awareness → Attraction Offer (5% avg)\n• Attraction → Lead Magnet (25% avg)\n• Lead Magnet → Nurture (40% avg)\n• Nurture → Core Sale (5% avg)\n• Core → Upsell/Downsell/Continuity\n\nUnderstanding your funnel helps you identify where to focus optimization efforts.",
+      "learnMore": "The Funnel Calculator helps you track and optimize your customer journey from awareness to continuity.\n\nUse it in two modes:\n\u2022 **Actual Mode**: Track real numbers from your campaigns\n\u2022 **Planner Mode**: Project outcomes using industry-average conversion rates\n\nKey metrics tracked:\n\u2022 Awareness \u2192 Attraction Offer (5% avg)\n\u2022 Attraction \u2192 Lead Magnet (25% avg)\n\u2022 Lead Magnet \u2192 Nurture (40% avg)\n\u2022 Nurture \u2192 Core Sale (5% avg)\n\u2022 Core \u2192 Upsell/Downsell/Continuity\n\nUnderstanding your funnel helps you identify where to focus optimization efforts.",
       "archived": true,
       "archived_reason": "Stage 8 simplified to CRM link - Feb 2026"
     },
@@ -2126,7 +2084,7 @@
       "flow_id": "funnel_baseline",
       "flow_route": "/funnel-baseline",
       "counts_toward_graduation": false,
-      "learnMore": "Weekly tracking is the rhythm of growth.\n\n**What you'll track:**\n• Traffic source (where leads come from)\n• Top of funnel (awareness, attraction)\n• Middle of funnel (leads, nurture)\n• Bottom of funnel (sales, upsells, continuity)\n\n**Why weekly?**\nConsistent measurement lets you:\n• Spot trends early\n• Know what's actually working\n• Make data-driven decisions\n\nAfter 12 weeks, you'll have invaluable data about what moves the needle in your business.\n\n**CRM Integration**: Data syncs with your CRM Analytics dashboard.",
+      "learnMore": "Weekly tracking is the rhythm of growth.\n\n**What you'll track:**\n\u2022 Traffic source (where leads come from)\n\u2022 Top of funnel (awareness, attraction)\n\u2022 Middle of funnel (leads, nurture)\n\u2022 Bottom of funnel (sales, upsells, continuity)\n\n**Why weekly?**\nConsistent measurement lets you:\n\u2022 Spot trends early\n\u2022 Know what's actually working\n\u2022 Make data-driven decisions\n\nAfter 12 weeks, you'll have invaluable data about what moves the needle in your business.\n\n**CRM Integration**: Data syncs with your CRM Analytics dashboard.",
       "archived": true,
       "archived_reason": "Stage 8 simplified to CRM link - Feb 2026"
     },

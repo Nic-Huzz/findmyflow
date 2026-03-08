@@ -954,6 +954,37 @@
   text-decoration: line-through;
 }
 
+.me-page .me-next-rec {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 16px 0 20px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  text-align: left;
+}
+
+.me-page .me-next-rec-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.me-page .me-next-rec-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.3;
+}
+
+.me-page .me-next-rec-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
 /* ============================================================
    FANTASY LEAGUE PROMO
    ============================================================ */

@@ -19,47 +19,11 @@ import usePriorityTab from '../hooks/usePriorityTab'
 import PriorityMiniAssessment from './PriorityMiniAssessment'
 import PriorityLayerCard from './PriorityLayerCard'
 import PriorityOnboardingCard from './PriorityOnboardingCard'
-import PriorityRecommendedCard from './PriorityRecommendedCard'
 import PriorityLayerCheckin from './PriorityLayerCheckin'
 import PriorityWeekPicker from './PriorityWeekPicker'
 import GroanCompletionModal from './GroanCompletionModal'
 import HealingCompletionModal from './HealingCompletionModal'
 import './PriorityTab.css'
-
-const QUEST_INFO = {
-  flow_finder_skills: { name: 'Flow Finder: Skills', route: '/nikigai/skills', icon: '🎯', desc: 'Discover what you\'re naturally great at' },
-  flow_finder_problems: { name: 'Flow Finder: Problems', route: '/nikigai/problems', icon: '🧩', desc: 'Find the problems you care about solving' },
-  flow_finder_persona: { name: 'Flow Finder: Persona', route: '/nikigai/persona', icon: '👤', desc: 'Identify who you\'re meant to serve' },
-  recognise_nervous_system: { name: 'Map Your Nervous System', route: '/nervous-system', icon: '🧠', desc: 'Find your boundaries around money and visibility' },
-  recognise_limiting_belief_rewire: { name: 'Limiting Belief Rewire', route: '/limiting-belief-rewire', icon: '🔓', desc: 'Trace a limiting belief to its origin and rewire it' },
-  release_weekly_big: { name: 'Big Release', route: null, icon: '💜', desc: 'Complete an extended release practice this week' },
-}
-
-function RecommendedQuestCard({ questId, isWeekly }) {
-  const info = QUEST_INFO[questId]
-  if (!info) return null
-
-  return (
-    <div className="pt-section-card recommended">
-      <div className="pt-section-header">
-        <div className="pt-section-header-left">
-          <span className="pt-section-icon">{info.icon}</span>
-          <span className="pt-section-title">{info.name}</span>
-          <span className="pt-rec-badge">{isWeekly ? 'Weekly' : 'Recommended'}</span>
-        </div>
-      </div>
-      <div className="pt-section-items">
-        <div className="pt-item-row">
-          <span className="pt-item-check"></span>
-          <div className="pt-item-body">
-            <div className="pt-item-name">{info.desc}</div>
-          </div>
-          {info.route && <a href={info.route} className="pt-item-action">Start</a>}
-        </div>
-      </div>
-    </div>
-  )
-}
 
 export default function PriorityTab({
   userId,
@@ -74,12 +38,15 @@ export default function PriorityTab({
   // Onboarding props
   isQuestEverCompleted,
   onNavigateToPlaylist,
+  onWeekPlanned,
 }) {
   const {
     currentState,
     priorityLayer,
     layerDisplay,
     skills,
+    problems,
+    personas,
     dailyHealingQuests,
     weeklyHealingQuests,
     weeklyPicks,
@@ -203,6 +170,9 @@ export default function PriorityTab({
           onPhotoUploaded={refreshCustomPhoto}
           essenceProfile={essenceProfile}
           skills={skills}
+          problems={problems}
+          personas={personas}
+          onChallengeAccepted={refreshAcceptedChallenge}
         />
       </div>
     )
@@ -263,7 +233,9 @@ export default function PriorityTab({
         )}
         <PriorityLayerCard
           layer={priorityLayer}
+          recommendations={recommendations}
           onReassess={startReassess}
+          userId={userId}
         />
         <PriorityWeekPicker
           skills={skills}
@@ -271,7 +243,7 @@ export default function PriorityTab({
           dailyHealingQuests={dailyHealingQuests}
           weeklyHealingQuests={weeklyHealingQuests}
           recommendations={recommendations}
-          onConfirm={confirmWeek}
+          onConfirm={(picks) => { confirmWeek(picks); onWeekPlanned?.() }}
         />
       </div>
     )
@@ -283,21 +255,14 @@ export default function PriorityTab({
 
   return (
     <div className="priority-tab">
-      <PriorityRecommendedCard
-        priorityLayer={priorityLayer}
+      <PriorityLayerCard
+        layer={priorityLayer}
         recommendations={recommendations}
         onReassess={startReassess}
+        userId={userId}
       />
 
       <h2 className="pt-weekly-heading">Weekly Intentions</h2>
-
-      {/* Recommended quest card for Discover/Regulate layers */}
-      {recommendations.type === 'quests' && recommendations.nextQuest && (
-        <RecommendedQuestCard questId={recommendations.nextQuest} />
-      )}
-      {recommendations.type === 'quests' && recommendations.alwaysRecommend?.map(questId => (
-        <RecommendedQuestCard key={questId} questId={questId} isWeekly />
-      ))}
 
       {/* Progress bar */}
       {progressInfo && (

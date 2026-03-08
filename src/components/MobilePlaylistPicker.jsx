@@ -9,13 +9,13 @@ export default function MobilePlaylistPicker({
   onCellClick,
   layerLockStatus,
 }) {
-  const [step, setStep] = useState('skills') // skills | layer | day | generate
+  const [step, setStep] = useState('skills') // skills | layer | challenge | day
   const [skills, setSkills] = useState([])
   const [selectedSkill, setSelectedSkill] = useState(null)
   const [selectedLayer, setSelectedLayer] = useState(null)
   const [selectedDay, setSelectedDay] = useState(null)
-  const [generating, setGenerating] = useState(false)
-  const [generatedChallenge, setGeneratedChallenge] = useState(null)
+  const [challengeText, setChallengeText] = useState('')
+  const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [showLayerExplainer, setShowLayerExplainer] = useState(false)
 
@@ -36,63 +36,48 @@ export default function MobilePlaylistPicker({
       })
   }, [userId])
 
-  const handleGenerate = async () => {
-    if (!selectedSkill || !selectedLayer) return
-    setGenerating(true)
+  const handleSaveChallenge = async () => {
+    if (!challengeText.trim() || !selectedSkill || !selectedLayer || !selectedDay || saving) return
+    setSaving(true)
     setError(null)
-    setGeneratedChallenge(null)
     try {
-      const { data: aiData, error: aiError } = await supabase.functions.invoke('groan-challenge-generator', {
-        body: {
-          sourceType: 'skill',
-          sourceLabel: selectedSkill.cluster_label,
-          sourceInsight: selectedSkill.insight || '',
-          visibilityLayer: selectedLayer,
-        }
-      })
-      if (aiError) throw aiError
-      if (!aiData?.title) throw new Error('No challenge generated')
-
-      const dayLabel = selectedDay ? ` (${selectedDay})` : ''
+      const title = `${challengeText.trim()} (${selectedDay})`
       const { data: dbRecord, error: saveError } = await createGroanChallenge({
         userId,
-        title: aiData.title + dayLabel,
-        description: aiData.description,
+        title,
+        description: `${selectedSkill.cluster_label} × ${GROAN_VISIBILITY_LAYERS.find(l => l.id === selectedLayer)?.label || selectedLayer}`,
         visibilityLayer: selectedLayer,
         sourceType: 'skill',
         sourceId: selectedSkill.id,
         sourceLabel: selectedSkill.cluster_label,
-        scaryScore: aiData.scaryScore || 5,
-        wahooScore: aiData.wahooScore || 5,
-        generationPrompt: aiData.prompt,
+        scaryScore: 5,
+        wahooScore: 5,
       })
       if (saveError) throw saveError
 
-      setGeneratedChallenge(dbRecord)
-    } catch (err) {
-      console.error('Error generating challenge:', err)
-      setError('Failed to generate challenge. Please try again.')
-    } finally {
-      setGenerating(false)
-    }
-  }
+      const { error: acceptError } = await acceptGroanChallenge(dbRecord.id)
+      if (acceptError) throw acceptError
 
-  const handleAccept = async () => {
-    if (!generatedChallenge) return
-    const { error: acceptError } = await acceptGroanChallenge(generatedChallenge.id)
-    if (acceptError) {
-      console.warn('Error accepting:', acceptError)
-      return
+      onCellClick?.({
+        sourceType: 'skill',
+        sourceId: selectedSkill.id,
+        sourceLabel: selectedSkill.cluster_label,
+        visibilityLayer: selectedLayer,
+        challenge: { ...dbRecord, accepted_at: new Date().toISOString() },
+      })
+
+      // Reset
+      setChallengeText('')
+      setSelectedSkill(null)
+      setSelectedLayer(null)
+      setSelectedDay(null)
+      setStep('skills')
+    } catch (err) {
+      console.error('Error saving challenge:', err)
+      setError('Failed to save challenge. Please try again.')
+    } finally {
+      setSaving(false)
     }
-    onCellClick?.({
-      sourceType: 'skill',
-      sourceId: selectedSkill.id,
-      sourceLabel: selectedSkill.cluster_label,
-      visibilityLayer: selectedLayer,
-      challenge: { ...generatedChallenge, accepted_at: new Date().toISOString() },
-    })
-    setGeneratedChallenge(null)
-    setStep('skills')
   }
 
   if (step === 'skills') {
@@ -150,7 +135,7 @@ export default function MobilePlaylistPicker({
                   disabled={locked}
                   onClick={() => {
                     setSelectedLayer(layer.id)
-                    setStep('day')
+                    setStep('challenge')
                   }}>
                   <div className="mpp-item-body">
                     <div className="mpp-item-name">{locked ? '🔒' : layer.icon} {layer.label}</div>
@@ -188,15 +173,54 @@ export default function MobilePlaylistPicker({
     )
   }
 
-  // Step 3: pick a day
+  // Step 3: enter challenge text
+  if (step === 'challenge') {
+    const layerObj = GROAN_VISIBILITY_LAYERS.find(l => l.id === selectedLayer)
+    return (
+      <div className="mpp-container">
+        <button className="mpp-back" onClick={() => setStep('layer')}>
+          &larr; {layerObj?.icon} {layerObj?.label}
+        </button>
+        <div className="mpp-section-card">
+          <div className="mpp-section-header">
+            <div className="mpp-section-header-left">
+              <span className="mpp-section-icon">✏️</span>
+              <span className="mpp-section-title">What's your challenge?</span>
+            </div>
+          </div>
+          <div className="mpp-challenge-form">
+            <div className="mpp-step-context">
+              {selectedSkill?.cluster_label} × {layerObj?.label}
+            </div>
+            <input
+              type="text"
+              className="mpp-challenge-input"
+              placeholder="Type your challenge..."
+              value={challengeText}
+              onChange={e => setChallengeText(e.target.value)}
+            />
+            <button
+              className="mpp-gold-btn"
+              disabled={!challengeText.trim()}
+              onClick={() => setStep('day')}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Step 4: pick a day
   const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
   if (step === 'day') {
     const layerObj = GROAN_VISIBILITY_LAYERS.find(l => l.id === selectedLayer)
     return (
       <div className="mpp-container">
-        <button className="mpp-back" onClick={() => setStep('layer')}>
-          &larr; {layerObj?.icon} {layerObj?.label}
+        <button className="mpp-back" onClick={() => setStep('challenge')}>
+          &larr; {challengeText}
         </button>
         <div className="mpp-section-card">
           <div className="mpp-section-header">
@@ -208,53 +232,31 @@ export default function MobilePlaylistPicker({
           <div className="mpp-section-items">
             {DAYS.map(day => (
               <button key={day} className="mpp-item-row"
-                onClick={() => { setSelectedDay(day); setStep('generate') }}>
+                disabled={saving}
+                onClick={() => { setSelectedDay(day) }}>
                 <div className="mpp-item-body">
                   <div className="mpp-item-name">{day}</div>
                 </div>
-                <span className="mpp-item-arrow">&rsaquo;</span>
+                {selectedDay === day ? (
+                  <span className="mpp-item-check-mark">✓</span>
+                ) : (
+                  <span className="mpp-item-arrow">&rsaquo;</span>
+                )}
               </button>
             ))}
           </div>
+          <button
+            className="mpp-gold-btn"
+            disabled={!selectedDay || saving}
+            onClick={handleSaveChallenge}
+          >
+            {saving ? 'Saving...' : 'Accept Challenge'}
+          </button>
+          {error && <p className="mpp-error">{error}</p>}
         </div>
       </div>
     )
   }
 
-  // Step 4: generate
-  return (
-    <div className="mpp-container">
-      <button className="mpp-back" onClick={() => { setStep('day'); setGeneratedChallenge(null) }}>
-        &larr; Change day
-      </button>
-      <h3 className="mpp-step-title">
-        {selectedSkill?.cluster_label} &times; {GROAN_VISIBILITY_LAYERS.find(l => l.id === selectedLayer)?.label || selectedLayer} &mdash; {selectedDay}
-      </h3>
-
-      {generating && (
-        <div className="mpp-generating">
-          <div className="spinner" />
-          <p>Generating your challenge...</p>
-        </div>
-      )}
-
-      {!generating && !generatedChallenge && (
-        <div className="mpp-generating">
-          <button className="mpp-gold-btn" onClick={handleGenerate}>Generate Challenge</button>
-          {error && <p className="mpp-error">{error}</p>}
-        </div>
-      )}
-
-      {!generating && generatedChallenge && (
-        <div className="mpp-challenge-card">
-          <p className="mpp-challenge-text">{generatedChallenge.title}</p>
-          {generatedChallenge.description && (
-            <p className="mpp-challenge-desc">{generatedChallenge.description}</p>
-          )}
-          <button className="mpp-gold-btn" onClick={handleAccept}>Accept Challenge</button>
-          <button className="mpp-regen-btn" onClick={handleGenerate}>Generate Another</button>
-        </div>
-      )}
-    </div>
-  )
+  return null
 }

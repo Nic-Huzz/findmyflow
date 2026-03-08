@@ -53,6 +53,8 @@ export default function usePriorityTab(userId, stageProgress, isQuestEverComplet
   const [loading, setLoading] = useState(true)
   const [weeklyPicks, setWeeklyPicks] = useState([])
   const [skills, setSkills] = useState([])
+  const [problems, setProblems] = useState([])
+  const [personas, setPersonas] = useState([])
   const [allHealingQuests, setAllHealingQuests] = useState([])
   const [forceState, setForceState] = useState(null) // override for reassess flow
   const [hasAcceptedChallenge, setHasAcceptedChallenge] = useState(false)
@@ -111,8 +113,7 @@ export default function usePriorityTab(userId, stageProgress, isQuestEverComplet
     if (loading) return 'loading'
     if (forceState) return forceState
     if (!isOnboardingComplete) return 'onboarding'
-    if (!hasTensionScores) return 'assessment'
-    if (!checkinDoneThisWeek && !isFirstEverWeek && priorityLayer !== 'value') return 'layer_checkin'
+    if (!checkinDoneThisWeek && !isFirstEverWeek && hasTensionScores && priorityLayer !== 'value') return 'layer_checkin'
     if (weeklyPicks.length === 0) return 'picker'
     return 'quest_list'
   }, [loading, forceState, isOnboardingComplete, hasTensionScores, checkinDoneThisWeek, isFirstEverWeek, priorityLayer, weeklyPicks.length])
@@ -184,27 +185,35 @@ export default function usePriorityTab(userId, stageProgress, isQuestEverComplet
     return data || []
   }, [userId, weekStart])
 
-  const loadSkills = useCallback(async () => {
-    if (!userId) return []
+  const loadClusters = useCallback(async () => {
+    if (!userId) return { skills: [], problems: [], personas: [] }
     const { data, error } = await supabase
       .from('nikigai_clusters')
       .select('id, cluster_label, cluster_type, items, proficiency, insight')
       .eq('user_id', userId)
-      .eq('cluster_type', 'skills')
+      .in('cluster_type', ['skills', 'problems', 'persona'])
       .order('proficiency', { ascending: false })
     if (error) {
-      console.warn('Failed to load skills:', error)
-      return []
+      console.warn('Failed to load clusters:', error)
+      return { skills: [], problems: [], personas: [] }
     }
-    // Dedup by cluster_label — keep highest proficiency
-    const map = new Map()
-    for (const item of (data || [])) {
-      const existing = map.get(item.cluster_label)
-      if (!existing || (item.proficiency || 0) > (existing.proficiency || 0)) {
-        map.set(item.cluster_label, item)
+    // Dedup by cluster_label per type — keep highest proficiency
+    const dedup = (items) => {
+      const map = new Map()
+      for (const item of items) {
+        const existing = map.get(item.cluster_label)
+        if (!existing || (item.proficiency || 0) > (existing.proficiency || 0)) {
+          map.set(item.cluster_label, item)
+        }
       }
+      return [...map.values()]
     }
-    return [...map.values()]
+    const all = data || []
+    return {
+      skills: dedup(all.filter(c => c.cluster_type === 'skills')),
+      problems: dedup(all.filter(c => c.cluster_type === 'problems')),
+      personas: dedup(all.filter(c => c.cluster_type === 'persona')),
+    }
   }, [userId])
 
   const loadHealingQuests = useCallback(async () => {
@@ -296,9 +305,9 @@ export default function usePriorityTab(userId, stageProgress, isQuestEverComplet
     if (!userId) return
     setLoading(true)
     try {
-      const [picks, skillsData, healing, hasAccepted, photoResult, checkinDone, hasEverPicked] = await Promise.all([
+      const [picks, clusters, healing, hasAccepted, photoResult, checkinDone, hasEverPicked] = await Promise.all([
         loadPicks(),
-        loadSkills(),
+        loadClusters(),
         loadHealingQuests(),
         loadAcceptedChallenge(),
         loadCustomPhoto(),
@@ -306,7 +315,9 @@ export default function usePriorityTab(userId, stageProgress, isQuestEverComplet
         loadHasEverPicked(),
       ])
       setWeeklyPicks(picks)
-      setSkills(skillsData)
+      setSkills(clusters.skills)
+      setProblems(clusters.problems)
+      setPersonas(clusters.personas)
       setAllHealingQuests(healing)
       setHasAcceptedChallenge(hasAccepted)
       setHasCustomPhoto(photoResult.hasPhoto)
@@ -318,7 +329,7 @@ export default function usePriorityTab(userId, stageProgress, isQuestEverComplet
     } finally {
       setLoading(false)
     }
-  }, [userId, loadPicks, loadSkills, loadHealingQuests, loadAcceptedChallenge, loadCustomPhoto, loadCheckinStatus, loadHasEverPicked])
+  }, [userId, loadPicks, loadClusters, loadHealingQuests, loadAcceptedChallenge, loadCustomPhoto, loadCheckinStatus, loadHasEverPicked])
 
   useEffect(() => {
     loadAllData()
@@ -495,6 +506,8 @@ export default function usePriorityTab(userId, stageProgress, isQuestEverComplet
 
     // Picker source data
     skills,
+    problems,
+    personas,
     dailyHealingQuests,
     weeklyHealingQuests,
 

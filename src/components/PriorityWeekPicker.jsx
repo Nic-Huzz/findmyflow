@@ -3,7 +3,7 @@
  *
  * Weekly quest selector for the Priority tab (State 2).
  * 3 sections matching Mockup C grouped-sections design:
- *   1. Play-list Challenges (skill → layer → day → challenge text)
+ *   1. Play-list (skill → layer → day → challenge text)
  *   2. Daily Healing
  *   3. Weekly Healing
  *
@@ -17,6 +17,16 @@ import { GROAN_VISIBILITY_LAYERS } from '../lib/stageConfig'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 
 const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+const SELF_IDENTIFIED_QUEST_IDS = ['reconnect_self_identified', 'reconnect_weekly_task']
+const HEALING_TYPE_ORDER = ['Recognise', 'Release', 'Rewire', 'Reconnect']
+const sortHealingQuests = (quests) => {
+  return [...quests].sort((a, b) => {
+    const aIdx = HEALING_TYPE_ORDER.indexOf(a.type)
+    const bIdx = HEALING_TYPE_ORDER.indexOf(b.type)
+    return (aIdx === -1 ? 99 : aIdx) - (bIdx === -1 ? 99 : bIdx)
+  })
+}
 
 export default function PriorityWeekPicker({
   skills,
@@ -42,6 +52,7 @@ export default function PriorityWeekPicker({
     weekly_healing: new Set(),
   })
   const [customTexts, setCustomTexts] = useState({}) // keyed by quest id for text-input quests
+  const [explainerQuest, setExplainerQuest] = useState(null) // quest object for popup
 
   const totalPicks = useMemo(() =>
     playlistPicks.length + Object.values(selections).reduce((sum, set) => sum + set.size, 0),
@@ -53,7 +64,7 @@ export default function PriorityWeekPicker({
   const hasIncompleteTextQuests = useMemo(() => {
     const allSelected = new Set([...selections.daily_healing, ...selections.weekly_healing])
     return allQuests.some(q =>
-      allSelected.has(q.id) && q.inputType === 'text' && !customTexts[q.id]?.trim()
+      allSelected.has(q.id) && SELF_IDENTIFIED_QUEST_IDS.includes(q.id) && !customTexts[q.id]?.trim()
     )
   }, [selections, allQuests, customTexts])
 
@@ -337,7 +348,7 @@ export default function PriorityWeekPicker({
         <div className="pt-section-header">
           <div className="pt-section-header-left">
             <span className="pt-section-icon">🎮</span>
-            <span className="pt-section-title">Play-list Challenges</span>
+            <span className="pt-section-title">Play-list</span>
             {isRecommended('groan') && <span className="pt-rec-badge">Recommended</span>}
           </div>
           <span className="pt-section-count">
@@ -363,116 +374,116 @@ export default function PriorityWeekPicker({
       </div>
 
       {/* Daily Healing Section */}
-      <div className={`pt-section-card ${isRecommended('daily_healing') ? 'recommended' : ''}`}>
-        <div className="pt-section-header">
-          <div className="pt-section-header-left">
-            <span className="pt-section-icon">💚</span>
-            <span className="pt-section-title">Daily Healing</span>
-            {isRecommended('daily_healing') && <span className="pt-rec-badge">Recommended</span>}
-          </div>
-          <span className="pt-section-count">
-            {selections.daily_healing.size}
-          </span>
-        </div>
-        <div className="pt-section-items">
-          {dailyHealingQuests.length === 0 ? (
-            <div className="pt-empty-state">
-              <p>No daily healing quests available.</p>
+          <div className={`pt-section-card ${isRecommended('daily_healing') ? 'recommended' : ''}`}>
+            <div className="pt-section-header">
+              <div className="pt-section-header-left">
+                <span className="pt-section-icon">💚</span>
+                <span className="pt-section-title">Daily Healing</span>
+                {isRecommended('daily_healing') && <span className="pt-rec-badge">Recommended</span>}
+              </div>
+              <span className="pt-section-count">
+                {selections.daily_healing.size}
+              </span>
             </div>
-          ) : (
-            dailyHealingQuests.map(q => {
-              const isSelected = selections.daily_healing.has(q.id)
-              return (
-                <div key={q.id}>
-                  <button
-                    className={`pt-pick-row ${isSelected ? 'selected' : ''}`}
-                    onClick={() => toggleSelection('daily_healing', q.id)}
-                  >
-                    <span className={`pt-pick-check ${isSelected ? 'checked' : ''}`}>
-                      {isSelected ? '✓' : ''}
-                    </span>
-                    <div className="pt-pick-body">
-                      <div className="pt-pick-name">{q.name}</div>
-                      <div className="pt-pick-meta">
-                        <span className="pt-pill daily">{q.type}</span>
-                        <span className="pt-pts">{q.points}pts</span>
-                      </div>
-                    </div>
-                  </button>
-                  {isSelected && q.inputType === 'text' && (
-                    <div className="pt-custom-text-wrap">
-                      <input
-                        type="text"
-                        className="pt-challenge-input"
-                        placeholder={q.placeholder}
-                        value={customTexts[q.id] || ''}
-                        onChange={e => setCustomTexts(prev => ({ ...prev, [q.id]: e.target.value }))}
-                        onClick={e => e.stopPropagation()}
-                      />
-                    </div>
-                  )}
+            <div className="pt-section-items">
+              {dailyHealingQuests.length === 0 ? (
+                <div className="pt-empty-state">
+                  <p>No daily healing quests available.</p>
                 </div>
-              )
-            })
-          )}
-        </div>
-      </div>
+              ) : (
+                sortHealingQuests(dailyHealingQuests).map(q => {
+                  const isSelected = selections.daily_healing.has(q.id)
+                  return (
+                    <div key={q.id}>
+                      <div className={`pt-pick-row ${isSelected ? 'selected' : ''}`}>
+                        <div className="pt-pick-body" onClick={() => setExplainerQuest(q)} style={{ cursor: 'pointer' }}>
+                          <div className="pt-pick-name">{q.name}</div>
+                          <div className="pt-pick-meta">
+                            <span className="pt-pill daily">{q.type}</span>
+                            <span className="pt-pts">{q.points}pts</span>
+                          </div>
+                        </div>
+                        <button
+                          className={`pt-select-btn ${isSelected ? 'selected' : ''}`}
+                          onClick={() => toggleSelection('daily_healing', q.id)}
+                        >
+                          {isSelected ? '✓ Selected' : 'Select'}
+                        </button>
+                      </div>
+                      {isSelected && SELF_IDENTIFIED_QUEST_IDS.includes(q.id) && (
+                        <div className="pt-custom-text-wrap">
+                          <input
+                            type="text"
+                            className="pt-challenge-input"
+                            placeholder={q.placeholder || 'What will you do?'}
+                            value={customTexts[q.id] || ''}
+                            onChange={e => setCustomTexts(prev => ({ ...prev, [q.id]: e.target.value }))}
+                            onClick={e => e.stopPropagation()}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )
+                })
+              )}
+            </div>
+          </div>
 
-      {/* Weekly Healing Section */}
-      <div className={`pt-section-card ${isRecommended('weekly_healing') ? 'recommended' : ''}`}>
-        <div className="pt-section-header">
-          <div className="pt-section-header-left">
-            <span className="pt-section-icon">💜</span>
-            <span className="pt-section-title">Weekly Healing</span>
-            {isRecommended('weekly_healing') && <span className="pt-rec-badge">Recommended</span>}
-          </div>
-          <span className="pt-section-count">
-            {selections.weekly_healing.size}
-          </span>
-        </div>
-        <div className="pt-section-items">
-          {weeklyHealingQuests.length === 0 ? (
-            <div className="pt-empty-state">
-              <p>No weekly healing quests available.</p>
+          {/* Weekly Healing Section */}
+          <div className={`pt-section-card ${isRecommended('weekly_healing') ? 'recommended' : ''}`}>
+            <div className="pt-section-header">
+              <div className="pt-section-header-left">
+                <span className="pt-section-icon">💜</span>
+                <span className="pt-section-title">Weekly Healing</span>
+                {isRecommended('weekly_healing') && <span className="pt-rec-badge">Recommended</span>}
+              </div>
+              <span className="pt-section-count">
+                {selections.weekly_healing.size}
+              </span>
             </div>
-          ) : (
-            weeklyHealingQuests.map(q => {
-              const isSelected = selections.weekly_healing.has(q.id)
-              return (
-                <div key={q.id}>
-                  <button
-                    className={`pt-pick-row ${isSelected ? 'selected' : ''}`}
-                    onClick={() => toggleSelection('weekly_healing', q.id)}
-                  >
-                    <span className={`pt-pick-check ${isSelected ? 'checked' : ''}`}>
-                      {isSelected ? '✓' : ''}
-                    </span>
-                    <div className="pt-pick-body">
-                      <div className="pt-pick-name">{q.name}</div>
-                      <div className="pt-pick-meta">
-                        <span className="pt-pill weekly">{q.type}</span>
-                        <span className="pt-pts">{q.points}pts</span>
-                      </div>
-                    </div>
-                  </button>
-                  {isSelected && q.inputType === 'text' && (
-                    <div className="pt-custom-text-wrap">
-                      <input
-                        type="text"
-                        className="pt-challenge-input"
-                        placeholder={q.placeholder}
-                        value={customTexts[q.id] || ''}
-                        onChange={e => setCustomTexts(prev => ({ ...prev, [q.id]: e.target.value }))}
-                        onClick={e => e.stopPropagation()}
-                      />
-                    </div>
-                  )}
+            <div className="pt-section-items">
+              {weeklyHealingQuests.length === 0 ? (
+                <div className="pt-empty-state">
+                  <p>No weekly healing quests available.</p>
                 </div>
-              )
-            })
-          )}
-        </div>
-      </div>
+              ) : (
+                sortHealingQuests(weeklyHealingQuests).map(q => {
+                  const isSelected = selections.weekly_healing.has(q.id)
+                  return (
+                    <div key={q.id}>
+                      <div className={`pt-pick-row ${isSelected ? 'selected' : ''}`}>
+                        <div className="pt-pick-body" onClick={() => setExplainerQuest(q)} style={{ cursor: 'pointer' }}>
+                          <div className="pt-pick-name">{q.name}</div>
+                          <div className="pt-pick-meta">
+                            <span className="pt-pill weekly">{q.type}</span>
+                            <span className="pt-pts">{q.points}pts</span>
+                          </div>
+                        </div>
+                        <button
+                          className={`pt-select-btn ${isSelected ? 'selected' : ''}`}
+                          onClick={() => toggleSelection('weekly_healing', q.id)}
+                        >
+                          {isSelected ? '✓ Selected' : 'Select'}
+                        </button>
+                      </div>
+                      {isSelected && SELF_IDENTIFIED_QUEST_IDS.includes(q.id) && (
+                        <div className="pt-custom-text-wrap">
+                          <input
+                            type="text"
+                            className="pt-challenge-input"
+                            placeholder={q.placeholder || 'What will you do?'}
+                            value={customTexts[q.id] || ''}
+                            onChange={e => setCustomTexts(prev => ({ ...prev, [q.id]: e.target.value }))}
+                            onClick={e => e.stopPropagation()}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )
+                })
+              )}
+            </div>
+          </div>
 
       <button
         className="pt-gold-cta"
@@ -481,6 +492,24 @@ export default function PriorityWeekPicker({
       >
         Confirm My Week ({totalPicks} selected)
       </button>
+
+      {explainerQuest && (
+        <div className="pt-explainer-overlay" onClick={() => setExplainerQuest(null)}>
+          <div className="pt-explainer-card" onClick={e => e.stopPropagation()}>
+            <button className="pt-explainer-close" onClick={() => setExplainerQuest(null)}>&times;</button>
+            <div className="pt-explainer-icon">{explainerQuest.type === 'Reconnect' ? '💚' : explainerQuest.type === 'Rewire' ? '🔓' : '💜'}</div>
+            <h3 className="pt-explainer-title">{explainerQuest.name}</h3>
+            <p className="pt-explainer-desc">{explainerQuest.description}</p>
+            {explainerQuest.learnMore && (
+              <p className="pt-explainer-learn">{explainerQuest.learnMore}</p>
+            )}
+            <div className="pt-explainer-meta">
+              <span className={`pt-pill ${explainerQuest.frequency}`}>{explainerQuest.type}</span>
+              <span className="pt-pts">{explainerQuest.points}pts</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
