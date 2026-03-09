@@ -156,7 +156,7 @@ serve(async (req) => {
       )
     }
 
-    const { draft_id, segment, scheduled_for, test_email } = await req.json()
+    const { draft_id, segment, scheduled_for, test_email, retry } = await req.json()
 
     // -----------------------------------------------------------------------
     // Test mode — send to a single address, no DB side effects
@@ -205,6 +205,108 @@ serve(async (req) => {
 
       return new Response(
         JSON.stringify({ success: true, test: true, sent_to: test_email }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // -----------------------------------------------------------------------
+    // Retry mode — resend only failed rows for this draft
+    // -----------------------------------------------------------------------
+    if (retry) {
+      // Reset failed rows to queued
+      const { error: resetError } = await supabase
+        .from('newsletter_sends')
+        .update({ status: 'queued', error_message: null, scheduled_for: new Date().toISOString() })
+        .eq('draft_id', draft_id)
+        .eq('status', 'failed')
+
+      if (resetError) {
+        throw new Error(`Failed to reset failed sends: ${resetError.message}`)
+      }
+
+      // Fetch the now-queued rows
+      const { data: retryRows } = await supabase
+        .from('newsletter_sends')
+        .select('id, recipient_email')
+        .eq('draft_id', draft_id)
+        .eq('status', 'queued')
+        .order('created_at', { ascending: true })
+
+      if (!retryRows || retryRows.length === 0) {
+        return new Response(
+          JSON.stringify({ success: true, retried: 0 }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+
+      // Fetch draft for subject/body
+      const { data: retryDraft } = await supabase
+        .from('content_drafts')
+        .select('subject_line, title, body_html, body_markdown')
+        .eq('id', draft_id)
+        .single()
+
+      const retrySubject = retryDraft?.subject_line || retryDraft?.title || 'Newsletter'
+      let retryHtml: string
+      if (retryDraft?.body_html) retryHtml = retryDraft.body_html
+      else if (retryDraft?.body_markdown) retryHtml = simpleMarkdownToHtml(retryDraft.body_markdown)
+      else retryHtml = '<p>No content</p>'
+
+      let retriedCount = 0
+      for (let idx = 0; idx < retryRows.length; idx++) {
+        const row = retryRows[idx]
+        if (idx > 0) await new Promise(r => setTimeout(r, 600))
+        try {
+          const response = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${resendApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              from: FROM_ADDRESS,
+              to: row.recipient_email,
+              subject: retrySubject,
+              html: retryHtml,
+            }),
+          })
+
+          if (!response.ok) {
+            const errorData = await response.json()
+            throw new Error(errorData.message || `Resend error ${response.status}`)
+          }
+
+          const resendResult = await response.json()
+          await supabase
+            .from('newsletter_sends')
+            .update({ status: 'sent', resend_id: resendResult.id || null, sent_at: new Date().toISOString() })
+            .eq('id', row.id)
+          retriedCount++
+        } catch (sendError: any) {
+          console.error(`Retry failed for ${row.recipient_email}:`, sendError.message)
+          await supabase
+            .from('newsletter_sends')
+            .update({ status: 'failed', error_message: sendError.message })
+            .eq('id', row.id)
+        }
+      }
+
+      // Update draft status if all done
+      const { data: remaining } = await supabase
+        .from('newsletter_sends')
+        .select('id')
+        .eq('draft_id', draft_id)
+        .in('status', ['queued', 'failed'])
+
+      if (!remaining || remaining.length === 0) {
+        await supabase
+          .from('content_drafts')
+          .update({ status: 'sent' })
+          .eq('id', draft_id)
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, retried: retriedCount, total: retryRows.length }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }

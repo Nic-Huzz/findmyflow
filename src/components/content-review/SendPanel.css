@@ -384,6 +384,28 @@
   color: #dc2626;
 }
 
+.sp-retry-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: #dc2626;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sp-retry-btn:hover:not(:disabled) {
+  background: #b91c1c;
+}
+.sp-retry-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .sp-scheduled-note {
   display: block;
   font-size: 13px;

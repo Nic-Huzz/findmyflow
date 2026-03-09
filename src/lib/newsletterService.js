@@ -205,3 +205,22 @@ export async function fetchSendProgress(draftId) {
 
   return { total, sent, queued, failed, nextBatchAt };
 }
+
+/**
+ * Retry failed sends for a newsletter draft.
+ * Calls the edge function in retry mode — only resends failed rows.
+ *
+ * @param {string} draftId - The newsletter draft ID
+ * @returns {Promise<Object>} Response data from the edge function
+ */
+export async function retryFailedSends(draftId) {
+  const { data, error } = await supabase.functions.invoke('send-newsletter', {
+    body: {
+      draft_id: draftId,
+      retry: true,
+    },
+  });
+
+  if (error) throw error;
+  return data;
+}

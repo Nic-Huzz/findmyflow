@@ -5,6 +5,7 @@ import {
   sendNewsletter,
   sendTestNewsletter,
   fetchSendProgress,
+  retryFailedSends,
 } from '../../lib/newsletterService'
 import './SendPanel.css'
 
@@ -41,6 +42,7 @@ export default function SendPanel({ draft, onStatusChange }) {
   const [sendResult, setSendResult] = useState(null)
   const [sendError, setSendError] = useState(null)
   const [progress, setProgress] = useState(null)
+  const [retrying, setRetrying] = useState(false)
 
   // Load available tags on mount
   useEffect(() => {
@@ -161,6 +163,21 @@ export default function SendPanel({ draft, onStatusChange }) {
     !sending &&
     (scheduleMode === 'now' || scheduledDate)
 
+  const handleRetry = async () => {
+    setRetrying(true)
+    try {
+      await retryFailedSends(draft.id)
+      // Refresh progress after retry
+      const updated = await fetchSendProgress(draft.id)
+      setProgress(updated)
+      onStatusChange()
+    } catch (err) {
+      console.error('Retry failed:', err)
+    } finally {
+      setRetrying(false)
+    }
+  }
+
   // --- Progress view (sending / sent) ---
   if (progress) {
     const pct = progress.total > 0
@@ -183,6 +200,15 @@ export default function SendPanel({ draft, onStatusChange }) {
             </span>
           )}
         </div>
+        {progress.failed > 0 && (
+          <button
+            className="sp-retry-btn"
+            onClick={handleRetry}
+            disabled={retrying}
+          >
+            {retrying ? 'Retrying...' : `Retry ${progress.failed} Failed`}
+          </button>
+        )}
         {progress.nextBatchAt && (
           <p className="sp-progress-next">
             Next batch: {new Date(progress.nextBatchAt).toLocaleString()}
