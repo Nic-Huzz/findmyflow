@@ -220,6 +220,7 @@ function ProvisioningView({ refresh }) {
 
 function DashboardView({ instance, manageSol }) {
   const [actionLoading, setActionLoading] = useState(false)
+  const [showTerminate, setShowTerminate] = useState(false)
   const isActive = instance.status === 'active'
   const isPaused = instance.status === 'paused'
 
@@ -303,6 +304,240 @@ function DashboardView({ instance, manageSol }) {
           >
             {actionLoading ? 'Resuming...' : 'Resume Sol'}
           </button>
+        )}
+        <button
+          className="btn-ghost"
+          onClick={() => setShowTerminate(true)}
+          style={{ marginTop: '12px', color: '#ef4444', borderColor: '#fecaca' }}
+        >
+          Shut Down Sol
+        </button>
+      </div>
+
+      {showTerminate && (
+        <TerminateModal
+          manageSol={manageSol}
+          onClose={() => setShowTerminate(false)}
+        />
+      )}
+    </div>
+  )
+}
+
+function TerminateModal({ manageSol, onClose }) {
+  const [step, setStep] = useState('confirm') // confirm | github | backing-up | terminating | done
+  const [ghToken, setGhToken] = useState('')
+  const [error, setError] = useState(null)
+
+  const handleSkipAndTerminate = async () => {
+    setStep('terminating')
+    const { error: err } = await manageSol('terminate')
+    if (err) { setError(err); setStep('confirm'); return }
+    setStep('done')
+  }
+
+  const handleBackupAndTerminate = async () => {
+    if (!ghToken.startsWith('ghp_') && !ghToken.startsWith('github_pat_')) {
+      setError('Enter a valid GitHub personal access token (starts with ghp_ or github_pat_)')
+      return
+    }
+    setError(null)
+    setStep('backing-up')
+
+    try {
+      // 1. Export Sol data from edge function
+      const { data: exportData, error: exportErr } = await manageSol('export')
+      if (exportErr) throw new Error(exportErr)
+
+      const solData = exportData?.data || {}
+      const repoName = 'my-sol-backup'
+      const now = new Date().toISOString()
+
+      // 2. Create private GitHub repo
+      const ghHeaders = {
+        Authorization: `Bearer ${ghToken}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      }
+
+      const createRes = await fetch('https://api.github.com/user/repos', {
+        method: 'POST',
+        headers: ghHeaders,
+        body: JSON.stringify({
+          name: repoName,
+          description: 'Sol AI Co-Founder backup — exported from FindMyFlow',
+          private: true,
+          auto_init: true,
+        }),
+      })
+
+      if (!createRes.ok) {
+        const createData = await createRes.json()
+        // 422 = repo already exists, that's fine
+        if (createRes.status !== 422) throw new Error(createData.message || 'Failed to create repo')
+      }
+
+      // Get authenticated user for repo path
+      const userRes = await fetch('https://api.github.com/user', { headers: ghHeaders })
+      const ghUser = await userRes.json()
+      const owner = ghUser.login
+
+      // 3. Push files via GitHub Contents API
+      const filesToPush = [
+        {
+          path: 'SOUL.md',
+          content: solData.soul_md || '# No SOUL.md found',
+        },
+        {
+          path: 'sol-config.json',
+          content: JSON.stringify(solData.config || {}, null, 2),
+        },
+        {
+          path: 'README.md',
+          content: `# Sol Backup\n\nExported from FindMyFlow on ${now}.\n\nThis repo contains your Sol AI co-founder's configuration and personality.\nYou can use this to restore Sol or as a reference for your business journey.\n`,
+        },
+      ]
+
+      for (const file of filesToPush) {
+        // Check if file exists (for updates)
+        let sha
+        try {
+          const existing = await fetch(
+            `https://api.github.com/repos/${owner}/${repoName}/contents/${file.path}`,
+            { headers: ghHeaders }
+          )
+          if (existing.ok) {
+            const existingData = await existing.json()
+            sha = existingData.sha
+          }
+        } catch { /* file doesn't exist, that's fine */ }
+
+        await fetch(
+          `https://api.github.com/repos/${owner}/${repoName}/contents/${file.path}`,
+          {
+            method: 'PUT',
+            headers: ghHeaders,
+            body: JSON.stringify({
+              message: `Sol backup — ${now}`,
+              content: btoa(unescape(encodeURIComponent(file.content))),
+              ...(sha ? { sha } : {}),
+            }),
+          }
+        )
+      }
+
+      // 4. Backup complete — now terminate
+      setStep('terminating')
+      const { error: termErr } = await manageSol('terminate')
+      if (termErr) throw new Error(termErr)
+
+      setStep('done')
+    } catch (err) {
+      setError(err.message)
+      setStep('github')
+    }
+  }
+
+  return (
+    <div className="sol-terminate-overlay" onClick={onClose}>
+      <div className="sol-terminate-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="sol-terminate-close" onClick={onClose}>&times;</button>
+
+        {step === 'confirm' && (
+          <>
+            <h2 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px', color: '#1a1a2e' }}>
+              Shut Down Sol?
+            </h2>
+            <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 20px', lineHeight: 1.5 }}>
+              This will permanently delete Sol's server. Your CRM data in FindMyFlow is safe —
+              only Sol's personality and config will be lost unless you back up.
+            </p>
+            <button className="btn-gold" onClick={() => setStep('github')} style={{ marginBottom: '10px' }}>
+              Save to GitHub First
+            </button>
+            <button
+              className="btn-ghost"
+              onClick={handleSkipAndTerminate}
+              style={{ color: '#ef4444', borderColor: '#fecaca' }}
+            >
+              Skip & Shut Down
+            </button>
+          </>
+        )}
+
+        {step === 'github' && (
+          <>
+            <h2 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px', color: '#1a1a2e' }}>
+              Save to GitHub
+            </h2>
+            <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 16px', lineHeight: 1.5 }}>
+              We'll create a private repo called <strong>my-sol-backup</strong> with your Sol's
+              personality and config.
+            </p>
+            <div className="input-group">
+              <label>GitHub Personal Access Token</label>
+              <p className="helper">
+                Create one at{' '}
+                <a href="https://github.com/settings/tokens/new?scopes=repo&description=Sol+Backup" target="_blank" rel="noopener noreferrer" className="external-link">
+                  github.com/settings/tokens
+                </a>
+                {' '}— needs "repo" scope.
+              </p>
+              <input
+                type="password"
+                placeholder="ghp_..."
+                value={ghToken}
+                onChange={(e) => setGhToken(e.target.value)}
+                className={ghToken ? ((ghToken.startsWith('ghp_') || ghToken.startsWith('github_pat_')) ? 'valid' : 'invalid') : ''}
+              />
+            </div>
+            {error && <p className="error-message">{error}</p>}
+            <button
+              className="btn-gold"
+              onClick={handleBackupAndTerminate}
+              disabled={!ghToken}
+              style={{ marginBottom: '10px' }}
+            >
+              Back Up & Shut Down
+            </button>
+            <button className="btn-ghost" onClick={() => setStep('confirm')}>
+              Back
+            </button>
+          </>
+        )}
+
+        {step === 'backing-up' && (
+          <div style={{ textAlign: 'center', padding: '20px 0' }}>
+            <div className="sol-spinner" />
+            <p style={{ fontSize: '15px', fontWeight: 600, marginTop: '16px', color: '#1a1a2e' }}>
+              Saving to GitHub...
+            </p>
+          </div>
+        )}
+
+        {step === 'terminating' && (
+          <div style={{ textAlign: 'center', padding: '20px 0' }}>
+            <div className="sol-spinner" />
+            <p style={{ fontSize: '15px', fontWeight: 600, marginTop: '16px', color: '#1a1a2e' }}>
+              Shutting down Sol...
+            </p>
+          </div>
+        )}
+
+        {step === 'done' && (
+          <div style={{ textAlign: 'center', padding: '20px 0' }}>
+            <p style={{ fontSize: '28px', marginBottom: '12px' }}>&#10003;</p>
+            <h2 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px', color: '#1a1a2e' }}>
+              Sol has been shut down
+            </h2>
+            <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 20px', lineHeight: 1.5 }}>
+              {ghToken ? 'Your data has been saved to GitHub.' : 'Your CRM data is still safe in FindMyFlow.'}
+              {' '}You can re-launch Sol anytime.
+            </p>
+            <a href="/sol" className="btn-purple" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+              Done
+            </a>
+          </div>
         )}
       </div>
     </div>
