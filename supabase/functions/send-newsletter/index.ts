@@ -21,7 +21,7 @@ const corsHeaders = {
 }
 
 const DAILY_LIMIT = 100
-const FROM_ADDRESS = 'Huzz <huzz@findmyflow.nichuzz.com>'
+const FROM_ADDRESS = 'Huzz <huzz@nichuzz.com>'
 
 // ---------------------------------------------------------------------------
 // Simple Markdown to HTML converter
@@ -42,6 +42,9 @@ function simpleMarkdownToHtml(md: string): string {
   html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
+
+  // Images (must come before links to avoid ![alt](url) matching as link)
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto; border-radius: 8px; margin: 12px 0;">')
 
   // Links
   html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
@@ -74,7 +77,7 @@ function simpleMarkdownToHtml(md: string): string {
         processed.push(`<p>${buffer}</p>`)
         buffer = ''
       }
-    } else if (/^<(h[1-6]|ul|ol|li|hr|p|div|blockquote)/.test(trimmed)) {
+    } else if (/^<(h[1-6]|ul|ol|li|hr|p|div|blockquote|img)/.test(trimmed)) {
       if (buffer) {
         processed.push(`<p>${buffer}</p>`)
         buffer = ''
