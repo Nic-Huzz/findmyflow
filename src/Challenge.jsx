@@ -24,7 +24,6 @@ import CompassCheckin from './components/CompassCheckin'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
 import HealingCompletionModal from './components/HealingCompletionModal'
-import PriorityOverlay from './components/PriorityOverlay'
 import GroanMatrix from './components/GroanMatrix'
 import PostActionModal, { POST_ACTION_MILESTONE_IDS } from './components/PostActionModal'
 import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreActionModal'
@@ -124,8 +123,6 @@ function Challenge() {
     playlistSubTab,
     setPlaylistSubTab,
     userArchetypes,
-    showPriorityOverlay,
-    handlePriorityOverlayComplete,
     getWeekStart,
     getWeekLabel,
     isQuestPlanned,
@@ -1592,20 +1589,6 @@ function Challenge() {
     )
   }
 
-  // ============================================
-  // Render: Weekly Planning Flow
-  // ============================================
-
-  if (showPriorityOverlay) {
-    return (
-      <PriorityOverlay
-        userId={user?.id}
-        stageProgress={stageProgress}
-        onStageProgressUpdate={loadStageProgress}
-        onComplete={handlePriorityOverlayComplete}
-      />
-    )
-  }
 
   // ============================================
   // Render: Error State

@@ -118,9 +118,6 @@ export function useChallengeData() {
   // User Archetypes (for personalized voice quests)
   const [userArchetypes, setUserArchetypes] = useState({ essence: null, protective: null })
 
-  // Priority Overlay State (replaces old WeeklyPlanningFlow)
-  const [showPriorityOverlay, setShowPriorityOverlay] = useState(false)
-
   // Validation Response Counts (for response_counter quests)
   const [validationResponseCounts, setValidationResponseCounts] = useState({})
 
@@ -441,41 +438,6 @@ export function useChallengeData() {
     }
   }
 
-  // Check if user has priority picks for this week (replaces loadWeeklyPlan)
-  // Only prompts once per week — if the user dismisses without saving picks,
-  // they won't be prompted again until the next week.
-  const loadPriorityStatus = async () => {
-    if (!user?.id) return
-    try {
-      const weekStart = getWeekStart()
-
-      // Check if already prompted this week (localStorage gate)
-      const dismissKey = `priority_prompted_${weekStart}`
-      if (localStorage.getItem(dismissKey)) return
-
-      const { data, error } = await supabase
-        .from('priority_weekly_picks')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('week_start_date', weekStart)
-        .limit(1)
-      if (error) {
-        console.error('Error loading priority status:', error)
-        return
-      }
-      if (!data || data.length === 0) {
-        setShowPriorityOverlay(true)
-        // Mark as prompted so it won't show again this week
-        localStorage.setItem(dismissKey, '1')
-      }
-    } catch (error) {
-      console.error('Error in loadPriorityStatus:', error)
-    }
-  }
-
-  const handlePriorityOverlayComplete = useCallback(() => {
-    setShowPriorityOverlay(false)
-  }, [])
 
   // Stubs — old weekly plan helpers (still referenced by QuestCard props downstream)
   const isQuestPlanned = () => false
@@ -1689,7 +1651,6 @@ export function useChallengeData() {
         checkHealingCompassComplete(),
         checkFlowFinderComplete(),
         loadStageProgress(),
-        loadPriorityStatus()
         // Note: loadValidationResponseCounts is triggered by selectedProject useEffect below
       ]).finally(() => setLoading(false))
     }
@@ -1898,10 +1859,6 @@ export function useChallengeData() {
     // User Archetypes (for personalized voice quests)
     userArchetypes,
 
-    // Priority Overlay (replaces old WeeklyPlanningFlow)
-    showPriorityOverlay,
-    handlePriorityOverlayComplete,
-    loadPriorityStatus,
     getWeekStart,
     getWeekLabel,
     isQuestPlanned,
