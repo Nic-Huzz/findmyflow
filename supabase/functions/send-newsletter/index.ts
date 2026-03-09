@@ -418,7 +418,10 @@ serve(async (req) => {
         .limit(DAILY_LIMIT)
 
       if (firstBatch) {
-        for (const row of firstBatch) {
+        for (let idx = 0; idx < firstBatch.length; idx++) {
+          const row = firstBatch[idx]
+          // Resend allows 2 req/s — pause 600ms between sends to stay under limit
+          if (idx > 0) await new Promise(r => setTimeout(r, 600))
           try {
             const response = await fetch('https://api.resend.com/emails', {
               method: 'POST',
