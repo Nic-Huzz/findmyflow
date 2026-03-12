@@ -18,7 +18,6 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   // Reflection state
   const [scaryScore, setScaryScore] = useState(5)
   const [wahooScore, setWahooScore] = useState(5)
-  const [didThreePercent, setDidThreePercent] = useState(null)
   const [reflection, setReflection] = useState('')
 
   // Voices state
@@ -46,10 +45,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     setError(null)
     try {
       // 1. Mark groan challenge as completed
-      let reflectionText = reflection
-      if (didThreePercent !== null) {
-        reflectionText += `${reflectionText ? '\n' : ''}3% improvement: ${didThreePercent ? 'Yes' : 'No'}`
-      }
+      const reflectionText = reflection
       const { error: groanError } = await completeGroanChallenge(challenge.id, {
         reflectionText,
         scaryScoreAfter: scaryScore,
@@ -162,9 +158,6 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     onClose()
   }
 
-  const threePercentMatch = challenge?.description?.match(/3% improvement:\s*(.+?)(?:\n|$)/)
-  const threePercentText = threePercentMatch?.[1]?.trim()
-  const hasThreePercent = challenge?.description?.includes('3% improvement:')
 
   return (
     <div className="gcm-overlay" onClick={onClose}>
@@ -188,19 +181,6 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 <input type="range" min="1" max="10" value={wahooScore}
                   onChange={(e) => setWahooScore(parseInt(e.target.value))} />
               </div>
-
-              {hasThreePercent && (
-                <div className="gcm-three-percent">
-                  <label>Did you implement your 3% improvement?</label>
-                  {threePercentText && <div className="gcm-quote">"{threePercentText}"</div>}
-                  <div className="gcm-toggle-row">
-                    <button className={`gcm-toggle ${didThreePercent === true ? 'active yes' : ''}`}
-                      onClick={() => setDidThreePercent(true)}>Yes</button>
-                    <button className={`gcm-toggle ${didThreePercent === false ? 'active no' : ''}`}
-                      onClick={() => setDidThreePercent(false)}>No</button>
-                  </div>
-                </div>
-              )}
 
               <div className="gcm-textarea-group">
                 <div className="gcm-label-row">
