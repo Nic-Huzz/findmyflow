@@ -82,6 +82,14 @@ export default function PriorityTab({
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [healingModalQuest, setHealingModalQuest] = useState(null)
 
+  // Hide bottom toolbar when completion modals are open
+  useEffect(() => {
+    if (completingChallenge || healingModalQuest) {
+      document.body.classList.add('modal-active')
+      return () => document.body.classList.remove('modal-active')
+    }
+  }, [completingChallenge, healingModalQuest])
+
   // Progress: count completed picks vs total
   const progressInfo = useMemo(() => {
     if (currentState !== 'quest_list') return null

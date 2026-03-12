@@ -76,7 +76,7 @@ export default function PlayListTab({
     return () => window.removeEventListener('resize', handler)
   }, [])
 
-  // Fetch this week's groan picks from priority_weekly_picks
+  // Fetch this week's groan picks and enrich with skill label from groan_challenges
   const fetchActiveChallenges = async () => {
     if (!userId) return
     const weekStart = getWeekStartLocal()
@@ -86,12 +86,28 @@ export default function PlayListTab({
       .eq('user_id', userId)
       .eq('week_start_date', weekStart)
       .eq('pick_type', 'groan')
-    setActiveChallenges(picks || [])
+    if (!picks || picks.length === 0) { setActiveChallenges([]); return }
+    // Fetch source_label for each challenge
+    const refIds = picks.map(p => p.reference_id).filter(Boolean)
+    const { data: challenges } = await supabase
+      .from('groan_challenges')
+      .select('id, source_label')
+      .in('id', refIds)
+    const labelMap = Object.fromEntries((challenges || []).map(c => [c.id, c.source_label]))
+    setActiveChallenges(picks.map(p => ({ ...p, _source_label: labelMap[p.reference_id] || null })))
   }
 
   useEffect(() => {
     fetchActiveChallenges()
   }, [userId, groanMatrixKey])
+
+  // Hide bottom toolbar when completion modal is open
+  useEffect(() => {
+    if (completingChallenge) {
+      document.body.classList.add('modal-active')
+      return () => document.body.classList.remove('modal-active')
+    }
+  }, [completingChallenge])
 
   // Compute Flow Finder progress from completed quests
   const flowFinderProgress = useMemo(() => {
@@ -259,7 +275,7 @@ export default function PlayListTab({
                   <span className="plt-item-check"></span>
                   <div className="plt-item-body">
                     <div className="plt-item-name">{pick.display_name}</div>
-                    <div className="plt-item-meta">Play-list Challenge</div>
+                    <div className="plt-item-meta">{pick._source_label || 'Play-list Challenge'}</div>
                   </div>
                   <button
                     className="plt-item-action"
@@ -289,7 +305,7 @@ export default function PlayListTab({
           {isMobile ? (
             <MobilePlaylistPicker
               userId={userId}
-              onCellClick={onMatrixCellClick}
+              onChallengeAccepted={fetchActiveChallenges}
               layerLockStatus={layerLockStatus}
             />
           ) : (

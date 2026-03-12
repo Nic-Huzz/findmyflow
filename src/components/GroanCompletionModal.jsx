@@ -13,6 +13,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [step, setStep] = useState('reflection') // 'reflection' | 'voices' | 'compass'
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
+  const [showExplainer, setShowExplainer] = useState(false)
 
   // Reflection state
   const [scaryScore, setScaryScore] = useState(5)
@@ -202,10 +203,32 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               )}
 
               <div className="gcm-textarea-group">
-                <label>Quick reflection (optional)</label>
-                <textarea placeholder="What did you learn? How do you feel?"
+                <div className="gcm-label-row">
+                  <label>How can you make this 3% better next time?</label>
+                  <button className="gcm-explainer-btn" onClick={() => setShowExplainer(true)}>Explainer</button>
+                </div>
+                <textarea placeholder="What small improvement could compound over time?"
                   value={reflection} onChange={(e) => setReflection(e.target.value)} rows={3} />
               </div>
+
+              {showExplainer && (
+                <div className="gcm-explainer-overlay" onClick={() => setShowExplainer(false)}>
+                  <div className="gcm-explainer-card" onClick={(e) => e.stopPropagation()}>
+                    <button className="gcm-explainer-close" onClick={() => setShowExplainer(false)}>&times;</button>
+                    <h3 className="gcm-explainer-title">The 3% Rule</h3>
+                    <p className="gcm-explainer-text">
+                      The secret to real progress isn't giant leaps. It's compounding micro-improvements over time.
+                    </p>
+                    <p className="gcm-explainer-text">
+                      If you improve just 3% each time you repeat a challenge, those small gains stack up fast. After 10 rounds, you're 34% better. After 24, you've doubled.
+                    </p>
+                    <p className="gcm-explainer-text">
+                      So don't aim for perfect. Just ask: what's one tiny thing I could do differently next time?
+                    </p>
+                    <button className="gcm-gold-btn" onClick={() => setShowExplainer(false)}>Got it</button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {error && <p className="gcm-error">{error}</p>}

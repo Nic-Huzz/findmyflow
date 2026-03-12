@@ -193,3 +193,27 @@
 .mpp-challenge-input:focus { outline: none; border-color: #5e17eb; }
 .mpp-item-check-mark { color: #34d399; font-weight: 700; font-size: 16px; }
 .mpp-gold-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.mpp-gold-btn-spaced { margin-top: 16px; margin-left: 18px; margin-right: 18px; margin-bottom: 18px; width: calc(100% - 36px); }
+
+/* ── AI Generate Button ── */
+.mpp-ai-btn {
+  display: block;
+  width: 100%;
+  background: none;
+  border: 1.5px solid #5e17eb;
+  color: #5e17eb;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background-color 0.15s, color 0.15s;
+}
+.mpp-ai-btn:hover { background: #5e17eb; color: white; }
+.mpp-ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Success State ── */
+.mpp-success-card { text-align: center; padding: 2rem; }
+.mpp-success-icon { font-size: 2rem; }
+.mpp-success-text { font-weight: 600; margin-top: 0.5rem; color: #1a1a2e; font-size: 15px; }

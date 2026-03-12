@@ -256,6 +256,14 @@ function Challenge() {
   const [customPersona, setCustomPersona] = useState('')
   const [flowFinderData, setFlowFinderData] = useState(null)
 
+  // Hide bottom toolbar when any modal is open
+  useEffect(() => {
+    if (healingModalQuest || selectedGroanChallenge || groanCellContext) {
+      document.body.classList.add('modal-active')
+      return () => document.body.classList.remove('modal-active')
+    }
+  }, [healingModalQuest, selectedGroanChallenge, groanCellContext])
+
   // Load Flow Finder data for Play-list problem/persona mapping
   useEffect(() => {
     if (activeCategory === 'Play-list' && user?.id && !flowFinderData) {

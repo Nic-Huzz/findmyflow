@@ -3769,7 +3769,7 @@
   margin-bottom: 16px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   overflow: hidden;
-  border-left: 4px solid #E9A23B;
+  border-top: 4px solid #E9A23B;
 }
 
 .playlist-tab .plt-section-header {

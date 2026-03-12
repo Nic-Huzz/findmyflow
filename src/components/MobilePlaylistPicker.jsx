@@ -1,23 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { GROAN_VISIBILITY_LAYERS } from '../lib/stageConfig'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import './MobilePlaylistPicker.css'
 
 export default function MobilePlaylistPicker({
   userId,
-  onCellClick,
+  onChallengeAccepted,
   layerLockStatus,
 }) {
-  const [step, setStep] = useState('skills') // skills | layer | challenge | day
+  const [step, setStep] = useState('skills') // skills | layer | challenge | day | success
   const [skills, setSkills] = useState([])
   const [selectedSkill, setSelectedSkill] = useState(null)
   const [selectedLayer, setSelectedLayer] = useState(null)
   const [selectedDay, setSelectedDay] = useState(null)
   const [challengeText, setChallengeText] = useState('')
   const [saving, setSaving] = useState(false)
+  const [generating, setGenerating] = useState(false)
   const [error, setError] = useState(null)
   const [showLayerExplainer, setShowLayerExplainer] = useState(false)
+  const successTimerRef = useRef(null)
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => { if (successTimerRef.current) clearTimeout(successTimerRef.current) }
+  }, [])
 
   useEffect(() => {
     if (!userId) return
@@ -58,26 +66,45 @@ export default function MobilePlaylistPicker({
       const { error: acceptError } = await acceptGroanChallenge(dbRecord.id)
       if (acceptError) throw acceptError
 
-      onCellClick?.({
-        sourceType: 'skill',
-        sourceId: selectedSkill.id,
-        sourceLabel: selectedSkill.cluster_label,
-        visibilityLayer: selectedLayer,
-        challenge: { ...dbRecord, accepted_at: new Date().toISOString() },
+      // Insert into priority_weekly_picks so it shows as active challenge
+      const { error: pickError } = await supabase.from('priority_weekly_picks').insert({
+        user_id: userId,
+        week_start_date: getWeekStartLocal(),
+        pick_type: 'groan',
+        reference_id: dbRecord.id,
+        display_name: title,
       })
+      if (pickError) console.warn('Error saving weekly pick:', pickError)
 
-      // Reset
-      setChallengeText('')
-      setSelectedSkill(null)
-      setSelectedLayer(null)
-      setSelectedDay(null)
-      setStep('skills')
+      // Notify parent to refresh active challenges list
+      onChallengeAccepted?.()
+
+      // Show success, then reset
+      setStep('success')
+      successTimerRef.current = setTimeout(() => {
+        setChallengeText('')
+        setSelectedSkill(null)
+        setSelectedLayer(null)
+        setSelectedDay(null)
+        setStep('skills')
+      }, 1500)
     } catch (err) {
       console.error('Error saving challenge:', err)
       setError('Failed to save challenge. Please try again.')
     } finally {
       setSaving(false)
     }
+  }
+
+  if (step === 'success') {
+    return (
+      <div className="mpp-container">
+        <div className="mpp-section-card mpp-success-card">
+          <div className="mpp-success-icon">✅</div>
+          <p className="mpp-success-text">Challenge confirmed!</p>
+        </div>
+      </div>
+    )
   }
 
   if (step === 'skills') {
@@ -206,6 +233,30 @@ export default function MobilePlaylistPicker({
             >
               Next
             </button>
+            <button
+              className="mpp-ai-btn"
+              disabled={generating}
+              onClick={async () => {
+                setGenerating(true)
+                try {
+                  const { data } = await supabase.functions.invoke('groan-challenge-generator', {
+                    body: {
+                      sourceType: 'skill',
+                      sourceLabel: selectedSkill.cluster_label,
+                      sourceInsight: selectedSkill.insight || '',
+                      visibilityLayer: selectedLayer,
+                    }
+                  })
+                  if (data?.title) setChallengeText(data.title)
+                } catch (err) {
+                  console.error('AI generation error:', err)
+                } finally {
+                  setGenerating(false)
+                }
+              }}
+            >
+              {generating ? 'Generating...' : 'Generate Inspiration with AI'}
+            </button>
           </div>
         </div>
       </div>
@@ -246,7 +297,7 @@ export default function MobilePlaylistPicker({
             ))}
           </div>
           <button
-            className="mpp-gold-btn"
+            className="mpp-gold-btn mpp-gold-btn-spaced"
             disabled={!selectedDay || saving}
             onClick={handleSaveChallenge}
           >
