@@ -61,11 +61,11 @@ src/
 │   ├── league/               # LeagueLeaderboard.jsx
 │   ├── PlayProfile/          # Quiz, Dashboard, DNA, AI Diagnostic, Challenge
 │   ├── BusinessSetup.jsx     # Stage 0.9 setup wizard
-│   ├── Challenge*.jsx        # Header, Filters, Leaderboard, etc.
+│   ├── Challenge*.jsx        # Header, Filters, etc.
 │   ├── *QuestInput.jsx       # Groan, Recognise, Rewire, Release, etc.
 │   ├── GroanMatrix.jsx       # 2D courage challenge matrix
 │   ├── QuestCard.jsx         # Unified quest rendering
-│   ├── FlowMap*.jsx          # River visualization
+│   ├── FlowMapRiver.jsx      # River visualization
 │   └── SeeYourFlow.jsx       # Journey mapping
 │
 ├── pages/crm/                # 34 CRM pages
@@ -141,7 +141,7 @@ Stage flags: `alwaysAccessible`, `isUserLevel`, `isGroansStage`
 
 Category tabs: Play-List, Business, Healing, Bonus
 
-Key files: `Challenge.jsx` (main page), `useChallengeData.js` (state), `QuestCard.jsx` (rendering), `ChallengeHeader.jsx`, `ChallengeFilters.jsx`, `ChallengeLeaderboard.jsx`
+Key files: `Challenge.jsx` (main page), `useChallengeData.js` (state), `QuestCard.jsx` (rendering), `ChallengeHeader.jsx`, `ChallengeFilters.jsx`
 
 Layout: Header (matchup banner if in league → score block with 3 category pills → streak/leaderboard/settings/week-type) → Category tabs → Stage tabs (Business only) → Artifact progress → Sub-tabs (Tasks | Deep Dive) → Quest cards. Tracker tab includes `HorizontalFlowRiver` with compass/challenge legend.
 
@@ -210,7 +210,7 @@ All use purple gradient background; gold for selection.
 
 ### 10. First-Time Onboarding
 
-`HomeFirstTime.jsx`: Universal path for all personas — Welcome → Q1 (Journey Stage) → Q2 (Wealth Ladder) → Q3 (Primary Goal) → Persona Reveal → Mind Space → `/me`. No branching by persona type. `ExistingProjectFlow`: Name → Description → Skills → Problem → Persona → Stage.
+`HomeFirstTime.jsx`: Universal path for all personas — Welcome → Q1 (Journey Stage) → Q2 (Wealth Ladder) → Q3 (Primary Goal) → Persona Reveal → Mind Space → `/me`. No branching by persona type.
 
 ### 11. Journey Mapping (SeeYourFlow)
 
@@ -399,6 +399,11 @@ npm run db:push   # Apply migrations
 - **Universal Onboarding**: All personas follow same path — Q1/Q2/Q3 → Persona Reveal → Mind Space → `/me`. No branching. Quick Capture moved to Business Setup tab.
 - **MindSpace Combination Selection**: New Step 4 — generates all skill × problem × persona triplets from starred items, user selects primary combination, saved as `cluster_type: 'primary_combination'`.
 - **Groan Matrix Enhancements**: Problem/persona mapping per cell, 3% improvement input, voice check-in step, "Done ×N" completion badges, repeatable challenges via "New Challenge" button.
+- **MobilePlaylistPicker Challenge Flow**: Challenges now insert into `priority_weekly_picks` on accept (previously only created in `groan_challenges`). Removed unwanted groan popup after accept. Added "Generate Inspiration with AI" button using `groan-challenge-generator` edge function. Success confirmation state after accepting.
+- **Active Challenges on Both Tabs**: Play-List and Priority tabs both query `priority_weekly_picks` for active groan challenges. Clicking "Complete" opens `GroanCompletionModal` with full reflection flow (scary/wahoo + 3% improvement + voice check-in + compass).
+- **3% Improvement Explainer**: GroanCompletionModal reflection step shows "How can you make this 3% better next time?" with purple Explainer button that opens a popup explaining the compounding 3% rule.
+- **Bottom Toolbar Hiding**: Modals (GroanCompletionModal, HealingCompletionModal) now add `body.modal-active` class to hide BottomToolbar. Applied in Challenge.jsx, PlayListTab.jsx, and PriorityTab.jsx.
+- **Dead Code Cleanup**: Removed 17 unused components (3,651 lines): ChallengeLeaderboard, ExistingProjectFlow, FlowCompass, FlowMap, LetsPlayReviewInput, PriorityDnaInlineFlow, PriorityRecommendedCard, ShadowExpandable, WeekPlanCard, 4 CRM ComingSoon placeholders.
 
 ## Previous Updates (Feb 2026)
 
