@@ -88,6 +88,18 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('Score increment error:', e)
       }
 
+      // 4. Remove from priority_weekly_picks so it no longer shows as active
+      try {
+        await supabase
+          .from('priority_weekly_picks')
+          .delete()
+          .eq('user_id', userId)
+          .eq('pick_type', 'groan')
+          .eq('reference_id', challenge.id)
+      } catch (e) {
+        console.warn('Error removing weekly pick:', e)
+      }
+
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
       setStep('voices')
     } catch (err) {

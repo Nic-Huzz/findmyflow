@@ -1343,6 +1343,18 @@ function Challenge() {
         }])
       }
 
+      // Remove from priority_weekly_picks so it no longer shows as active
+      try {
+        await supabase
+          .from('priority_weekly_picks')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('pick_type', 'groan')
+          .eq('reference_id', selectedGroanChallenge.id)
+      } catch (e) {
+        console.warn('Error removing weekly pick:', e)
+      }
+
       // Trigger confetti
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
 

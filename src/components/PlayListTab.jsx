@@ -87,14 +87,18 @@ export default function PlayListTab({
       .eq('week_start_date', weekStart)
       .eq('pick_type', 'groan')
     if (!picks || picks.length === 0) { setActiveChallenges([]); return }
-    // Fetch source_label for each challenge
+    // Fetch source_label + status for each challenge, filter out already-completed ones
     const refIds = picks.map(p => p.reference_id).filter(Boolean)
     const { data: challenges } = await supabase
       .from('groan_challenges')
-      .select('id, source_label')
+      .select('id, source_label, status')
       .in('id', refIds)
-    const labelMap = Object.fromEntries((challenges || []).map(c => [c.id, c.source_label]))
-    setActiveChallenges(picks.map(p => ({ ...p, _source_label: labelMap[p.reference_id] || null })))
+    const challengeMap = Object.fromEntries((challenges || []).map(c => [c.id, c]))
+    const activePicks = picks.filter(p => {
+      const ch = challengeMap[p.reference_id]
+      return ch && ch.status !== 'completed'
+    })
+    setActiveChallenges(activePicks.map(p => ({ ...p, _source_label: challengeMap[p.reference_id]?.source_label || null })))
   }
 
   useEffect(() => {
