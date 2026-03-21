@@ -229,14 +229,13 @@ export default function MePage() {
   const doneCount = stageQuests.filter(q => completedQuestIds.has(q.id)).length
   const nextQuest = stageQuests.find(q => !completedQuestIds.has(q.id))
 
-  // Derived: 8-step onboarding progress
+  // Derived: 7-step onboarding progress
   const ONBOARDING_STEPS = [
     { name: 'Create Your Character', desc: 'Every player needs an avatar. Upload your photo to bring your archetype to life.', route: null },
     { name: 'Mind Space', desc: 'Extract your skills, problems, and people from an AI conversation.', route: '/mind-space' },
     { name: 'What is Healing?', desc: 'Understand what healing really means and why emotional splinters keep us stuck.', route: '/what-is-healing-explainer' },
     { name: 'Healing Compass', desc: 'Identify the wound causing your protective voice to protect you.', route: '/healing-compass' },
     { name: 'Play-List Finder', desc: 'Discover your skills through play, role models, and what feels fun.', route: '/play-list-finder' },
-    { name: 'Map Your Nervous System', desc: 'Identify how much your nervous system feels safe earning before it self-sabotages.', route: '/nervous-system' },
     { name: 'Check Alignment', desc: 'Confirm you feel aligned with your discovered skills, problems, and personas.', route: null },
     { name: 'Set Play-list Task', desc: 'Accept your first courage challenge from the Play-list Matrix.', route: null },
   ]
@@ -244,17 +243,17 @@ export default function MePage() {
   const onboardingStatus = useMemo(() => {
     // Step 1: create your character (upload archetype photo)
     const step1 = hasCustomPhoto
-    // Steps 2-6: quest completion check
+    // Steps 2-6: quest completion check (mind_space, matrix_codes, healing_explainer, healing_compass, play_list_finder)
     const allCompletedIds = new Set(questCompletions.map(c => c.quest_id))
     const questSteps = ONBOARDING_QUEST_IDS.map(id => allCompletedIds.has(id))
-    // Step 7: alignment check (localStorage)
+    // Step 6: alignment check (localStorage)
     const alignSkills = typeof window !== 'undefined' && localStorage.getItem('priority_align_skills') === 'true'
     const alignProblems = typeof window !== 'undefined' && localStorage.getItem('priority_align_problems') === 'true'
     const alignPersona = typeof window !== 'undefined' && localStorage.getItem('priority_align_persona') === 'true'
     const step7 = alignSkills && alignProblems && alignPersona
-    // Step 8: check if any groan challenge has been accepted
-    const step8 = hasAcceptedChallenge
-    return [step1, ...questSteps, step7, step8]
+    // Step 7: check if any groan challenge has been accepted
+    const step7b = hasAcceptedChallenge
+    return [step1, ...questSteps, step7, step7b]
   }, [questCompletions, hasAcceptedChallenge, hasCustomPhoto])
 
   // Steps 2-8 determine completion (step 1 photo is a recurring bonus, never blocks)
