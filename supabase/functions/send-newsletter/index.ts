@@ -2,7 +2,7 @@
  * Send Newsletter Edge Function
  *
  * Sends newsletters via Resend to segmented contact pools.
- * Handles batching (100/day limit), deduplication, and staggered scheduling.
+ * Handles deduplication and optional scheduling.
  *
  * POST body: { draft_id, segment, scheduled_for? }
  *
@@ -20,7 +20,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const DAILY_LIMIT = 100
 const FROM_ADDRESS = 'Huzz <huzz@nichuzz.com>'
 
 // ---------------------------------------------------------------------------
@@ -463,23 +462,17 @@ serve(async (req) => {
     }
 
     const sendImmediately = baseTime.getTime() <= now.getTime()
-    const totalBatches = Math.ceil(total / DAILY_LIMIT)
 
     // -----------------------------------------------------------------------
-    // Insert all recipients into newsletter_sends with staggered schedule
+    // Insert all recipients into newsletter_sends
     // -----------------------------------------------------------------------
-    const sendRows = recipients.map((r, i) => {
-      const batchIndex = Math.floor(i / DAILY_LIMIT)
-      const batchTime = new Date(baseTime.getTime() + batchIndex * 24 * 60 * 60 * 1000)
-
-      return {
-        draft_id,
-        recipient_email: r.email,
-        recipient_source: r.source,
-        status: 'queued',
-        scheduled_for: batchTime.toISOString(),
-      }
-    })
+    const sendRows = recipients.map((r) => ({
+      draft_id,
+      recipient_email: r.email,
+      recipient_source: r.source,
+      status: 'queued',
+      scheduled_for: baseTime.toISOString(),
+    }))
 
     // Insert in chunks (Supabase has row limits per insert)
     const CHUNK_SIZE = 500
@@ -510,14 +503,13 @@ serve(async (req) => {
     let sentNow = 0
 
     if (sendImmediately) {
-      // Get the first batch (first DAILY_LIMIT rows that were just inserted)
+      // Get all queued rows that were just inserted
       const { data: firstBatch } = await supabase
         .from('newsletter_sends')
         .select('id, recipient_email')
         .eq('draft_id', draft_id)
         .eq('status', 'queued')
-        .order('scheduled_for', { ascending: true })
-        .limit(DAILY_LIMIT)
+        .order('created_at', { ascending: true })
 
       if (firstBatch) {
         for (let idx = 0; idx < firstBatch.length; idx++) {
@@ -574,14 +566,10 @@ serve(async (req) => {
     // -----------------------------------------------------------------------
     // Update draft status
     // -----------------------------------------------------------------------
-    const scheduledLater = total - sentNow
-    const allDone = scheduledLater === 0
-    const draftStatus = allDone ? 'sent' : 'sending'
-
     await supabase
       .from('content_drafts')
       .update({
-        status: draftStatus,
+        status: 'sent',
         segment,
         scheduled_for: baseTime.toISOString(),
         sent_at: sendImmediately ? new Date().toISOString() : null,
@@ -596,8 +584,8 @@ serve(async (req) => {
         success: true,
         total,
         sent_now: sentNow,
-        scheduled_later: scheduledLater,
-        batches: totalBatches,
+        scheduled_later: 0,
+        batches: 1,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )

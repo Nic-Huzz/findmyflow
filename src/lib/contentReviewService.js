@@ -58,7 +58,10 @@ export async function fetchCommentCounts() {
 export async function updateDraft(draftId, { body_markdown, title }) {
   const updates = { updated_at: new Date().toISOString() }
   if (body_markdown !== undefined) updates.body_markdown = body_markdown
-  if (title !== undefined) updates.title = title
+  if (title !== undefined) {
+    updates.title = title
+    updates.subject_line = title
+  }
 
   const { data, error } = await supabase
     .from('content_drafts')

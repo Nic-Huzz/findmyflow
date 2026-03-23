@@ -26,8 +26,6 @@ const PROJECT_TAGS = [
 
 const PROJECT_TAG_IDS = PROJECT_TAGS.map((p) => p.id)
 
-const DAILY_LIMIT = 100
-
 export default function SendPanel({ draft, onStatusChange }) {
   const [sources, setSources] = useState(['all'])
   const [availableTags, setAvailableTags] = useState([])
@@ -103,9 +101,6 @@ export default function SendPanel({ draft, onStatusChange }) {
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     )
   }
-
-  const batches = recipientCount ? Math.ceil(recipientCount / DAILY_LIMIT) : 0
-  const showBatchWarning = recipientCount > DAILY_LIMIT
 
   const buildScheduledFor = () => {
     if (scheduleMode === 'now') return null
@@ -209,11 +204,6 @@ export default function SendPanel({ draft, onStatusChange }) {
             {retrying ? 'Retrying...' : `Retry ${progress.failed} Failed`}
           </button>
         )}
-        {progress.nextBatchAt && (
-          <p className="sp-progress-next">
-            Next batch: {new Date(progress.nextBatchAt).toLocaleString()}
-          </p>
-        )}
       </div>
     )
   }
@@ -222,16 +212,11 @@ export default function SendPanel({ draft, onStatusChange }) {
   if (sendResult) {
     return (
       <div className="sp-panel">
-        <h4 className="sp-heading">Newsletter Queued</h4>
+        <h4 className="sp-heading">Newsletter Sent</h4>
         <p className="sp-result-msg">
           <span className="sp-sent-badge">
-            {sendResult.sent_now} sent now
+            {sendResult.sent_now} sent
           </span>
-          {sendResult.scheduled_later > 0 && (
-            <span className="sp-scheduled-note">
-              {sendResult.scheduled_later} scheduled for later batches
-            </span>
-          )}
         </p>
       </div>
     )
@@ -329,13 +314,6 @@ export default function SendPanel({ draft, onStatusChange }) {
           <span className="sp-count-loading">--</span>
         )}
       </div>
-
-      {/* Batch warning */}
-      {showBatchWarning && (
-        <p className="sp-batch-warn">
-          {batches} batches over {batches} days — free tier limit
-        </p>
-      )}
 
       {/* Schedule toggle */}
       <div className="sp-schedule-toggle">
@@ -437,11 +415,6 @@ export default function SendPanel({ draft, onStatusChange }) {
                 <span className="sp-confirm-label">Recipients</span>
                 <span className="sp-confirm-value">{recipientCount}</span>
               </p>
-              {showBatchWarning && (
-                <p className="sp-batch-warn">
-                  {batches} batches over {batches} days — free tier limit
-                </p>
-              )}
               {scheduleMode === 'scheduled' && scheduledDate && (
                 <p className="sp-confirm-row">
                   <span className="sp-confirm-label">Scheduled</span>
