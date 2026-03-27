@@ -18,6 +18,7 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
+  try {
   // Validate auth
   const authHeader = req.headers.get('Authorization')
   if (!authHeader) {
@@ -60,7 +61,8 @@ serve(async (req) => {
   // Check OpenAI API key
   const openaiKey = Deno.env.get('OPENAI_API_KEY')
   if (!openaiKey) {
-    return jsonResponse({ error: 'OPENAI_API_KEY not configured' }, 500)
+    console.error('OPENAI_API_KEY not configured')
+    return jsonResponse({ error: 'Image generation is not configured' }, 500)
   }
 
   // Call OpenAI Responses API
@@ -96,7 +98,7 @@ serve(async (req) => {
   if (!openaiResponse.ok) {
     const errorText = await openaiResponse.text()
     console.error('OpenAI API error:', openaiResponse.status, errorText)
-    return jsonResponse({ error: 'OpenAI API error', details: errorText }, 502)
+    return jsonResponse({ error: 'Image generation failed. Please try again.' }, 502)
   }
 
   const result = await openaiResponse.json()
@@ -106,7 +108,13 @@ serve(async (req) => {
     ?.flatMap((o: any) => o.content || [])
     ?.find((c: any) => c.type === 'image')
 
-  if (!imageContent || !imageContent.image_url) {
+  // Extract base64 data — handle both response shapes:
+  // Shape A: imageContent.image.data (raw base64)
+  // Shape B: imageContent.image_url (data URI like "data:image/png;base64,...")
+  const rawBase64 = imageContent?.image?.data
+    || imageContent?.image_url?.replace(/^data:image\/[a-z]+;base64,/, '')
+
+  if (!rawBase64) {
     console.warn('No image in OpenAI response:', JSON.stringify(result).substring(0, 500))
     return jsonResponse(
       {
@@ -118,8 +126,7 @@ serve(async (req) => {
   }
 
   // Decode base64 PNG
-  const base64Data = imageContent.image_url.replace(/^data:image\/png;base64,/, '')
-  const binaryString = atob(base64Data)
+  const binaryString = atob(rawBase64)
   const imageBytes = new Uint8Array(binaryString.length)
   for (let i = 0; i < binaryString.length; i++) {
     imageBytes[i] = binaryString.charCodeAt(i)
@@ -151,4 +158,8 @@ serve(async (req) => {
     .getPublicUrl(storagePath)
 
   return jsonResponse({ url: publicUrlData.publicUrl })
+  } catch (error: any) {
+    console.error('generate-avatar error:', error)
+    return jsonResponse({ error: 'Unexpected error' }, 500)
+  }
 })
