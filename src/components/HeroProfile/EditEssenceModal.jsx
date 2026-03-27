@@ -122,6 +122,14 @@ function EditEssenceModal({
     handleGenerate(compressed)
   }
 
+  // Generate AI prompt from archetype data (used by handleGenerate)
+  const avatarPrompt = useMemo(() => {
+    return buildAvatarPrompt({
+      essenceName: customName.trim() || originalName,
+      superpower, poeticLine, skills, problems, persona
+    })
+  }, [customName, originalName, superpower, poeticLine, skills, problems, persona])
+
   const handleGenerate = async (selfieOverride) => {
     const file = selfieOverride || selfieFile
     if (!file) {
@@ -139,7 +147,6 @@ function EditEssenceModal({
         url = await uploadEssenceAvatar(userId, file)
         if (!url) {
           setError('Failed to upload photo. Please try again.')
-          setGenerating(false)
           return
         }
         setSelfieStorageUrl(url)
@@ -159,19 +166,16 @@ function EditEssenceModal({
 
       if (data?.error === 'content_policy') {
         setError(data.message || "Generation couldn't complete. Try a different photo.")
-        setGenerating(false)
         return
       }
 
       if (data?.error) {
         setError(data.error)
-        setGenerating(false)
         return
       }
 
       if (!data?.url) {
         setError('No image was returned. Please try again.')
-        setGenerating(false)
         return
       }
 
@@ -201,14 +205,6 @@ function EditEssenceModal({
     if (fileInputRef.current) fileInputRef.current.value = ''
     if (selfieInputRef.current) selfieInputRef.current.value = ''
   }
-
-  // Generate AI prompt for external tools
-  const avatarPrompt = useMemo(() => {
-    return buildAvatarPrompt({
-      essenceName: customName.trim() || originalName,
-      superpower, poeticLine, skills, problems, persona
-    })
-  }, [customName, originalName, superpower, poeticLine, skills, problems, persona])
 
   const autoCompleteHeroQuest = async () => {
     try {
