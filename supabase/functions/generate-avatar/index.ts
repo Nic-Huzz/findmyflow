@@ -115,14 +115,13 @@ serve(async (req) => {
     || imageContent?.image_url?.replace(/^data:image\/[a-z]+;base64,/, '')
 
   if (!rawBase64) {
+    // Return 200 so supabase.functions.invoke puts this in `data` (not `error`)
+    // — the frontend checks data.error === 'content_policy' for a friendly message
     console.warn('No image in OpenAI response:', JSON.stringify(result).substring(0, 500))
-    return jsonResponse(
-      {
-        error: 'content_policy',
-        message: "Generation couldn't complete. Try a different photo or adjust your lighting.",
-      },
-      422
-    )
+    return jsonResponse({
+      error: 'content_policy',
+      message: "Generation couldn't complete. Try a different photo or adjust your lighting.",
+    })
   }
 
   // Decode base64 PNG
