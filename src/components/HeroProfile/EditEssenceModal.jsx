@@ -28,9 +28,13 @@ function EditEssenceModal({
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [toast, setToast] = useState(null)
-  const [showPrompt, setShowPrompt] = useState(false)
-  const [promptCopied, setPromptCopied] = useState(false)
+  const [generating, setGenerating] = useState(false)
+  const [attemptsUsed, setAttemptsUsed] = useState(0)
+  const [selfieFile, setSelfieFile] = useState(null)
+  const [selfieStorageUrl, setSelfieStorageUrl] = useState(null)
+  const [aiGeneratedUrl, setAiGeneratedUrl] = useState(null)
   const fileInputRef = useRef(null)
+  const selfieInputRef = useRef(null)
   const closeTimeoutRef = useRef(null)
   const prevBlobRef = useRef(null)
 
@@ -71,13 +75,13 @@ function EditEssenceModal({
 
   // Detect if anything has actually changed from current state
   const hasChanges = useMemo(() => {
-    const imageChanged = selectedFile !== null || (previewUrl === originalImage && currentImage !== originalImage)
+    const imageChanged = selectedFile !== null || aiGeneratedUrl !== null || (previewUrl === originalImage && currentImage !== originalImage)
     const currentCustom = currentName !== originalName ? currentName : ''
     const nameActuallyDifferent = customName.trim() !== (currentCustom || '')
     const currentCustomTagline = currentTagline !== originalTagline ? currentTagline : ''
     const taglineActuallyDifferent = customTagline.trim() !== (currentCustomTagline || '')
     return nameActuallyDifferent || imageChanged || taglineActuallyDifferent
-  }, [customName, currentName, originalName, selectedFile, previewUrl, originalImage, currentImage, customTagline, currentTagline, originalTagline])
+  }, [customName, currentName, originalName, selectedFile, aiGeneratedUrl, previewUrl, originalImage, currentImage, customTagline, currentTagline, originalTagline])
 
   const handleFileSelect = async (e) => {
     const file = e.target.files?.[0]
@@ -93,11 +97,95 @@ function EditEssenceModal({
     }
 
     setError(null)
+    setAiGeneratedUrl(null)
 
     // Compress before previewing
     const compressed = await compressImage(file)
     setSelectedFile(compressed)
     setPreviewUrl(URL.createObjectURL(compressed))
+  }
+
+  const handleSelfieSelect = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setError('Please upload a JPG, PNG, or WebP image')
+      return
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      setError('Image must be under 5MB')
+      return
+    }
+    setError(null)
+    const compressed = await compressImage(file)
+    setSelfieFile(compressed)
+    handleGenerate(compressed)
+  }
+
+  const handleGenerate = async (selfieOverride) => {
+    const file = selfieOverride || selfieFile
+    if (!file) {
+      selfieInputRef.current?.click()
+      return
+    }
+
+    setGenerating(true)
+    setError(null)
+
+    try {
+      // Upload selfie once, reuse URL for retries
+      let url = selfieStorageUrl
+      if (!url) {
+        url = await uploadEssenceAvatar(userId, file)
+        if (!url) {
+          setError('Failed to upload photo. Please try again.')
+          setGenerating(false)
+          return
+        }
+        setSelfieStorageUrl(url)
+      }
+
+      // Call edge function
+      const { data, error: fnError } = await supabase.functions.invoke('generate-avatar', {
+        body: {
+          selfie_url: url,
+          prompt: avatarPrompt,
+        },
+      })
+
+      if (fnError) {
+        throw new Error(fnError.message || 'Generation failed')
+      }
+
+      if (data?.error === 'content_policy') {
+        setError(data.message || "Generation couldn't complete. Try a different photo.")
+        setGenerating(false)
+        return
+      }
+
+      if (data?.error) {
+        setError(data.error)
+        setGenerating(false)
+        return
+      }
+
+      if (!data?.url) {
+        setError('No image was returned. Please try again.')
+        setGenerating(false)
+        return
+      }
+
+      // Success
+      setAiGeneratedUrl(data.url)
+      setPreviewUrl(data.url)
+      setSelectedFile(null)
+      setAttemptsUsed(prev => prev + 1)
+    } catch (err) {
+      console.error('Avatar generation error:', err)
+      setError('Something went wrong generating your avatar. Please try again.')
+    } finally {
+      setGenerating(false)
+    }
   }
 
   const handleResetName = () => {
@@ -106,8 +194,12 @@ function EditEssenceModal({
 
   const handleResetImage = () => {
     setSelectedFile(null)
+    setAiGeneratedUrl(null)
+    setSelfieFile(null)
+    setSelfieStorageUrl(null)
     setPreviewUrl(originalImage)
     if (fileInputRef.current) fileInputRef.current.value = ''
+    if (selfieInputRef.current) selfieInputRef.current.value = ''
   }
 
   // Generate AI prompt for external tools
@@ -117,24 +209,6 @@ function EditEssenceModal({
       superpower, poeticLine, skills, problems, persona
     })
   }, [customName, originalName, superpower, poeticLine, skills, problems, persona])
-
-  const handleCopyPrompt = async () => {
-    try {
-      await navigator.clipboard.writeText(avatarPrompt)
-      setPromptCopied(true)
-      setTimeout(() => setPromptCopied(false), 2000)
-    } catch {
-      // Fallback for older browsers
-      const textarea = document.createElement('textarea')
-      textarea.value = avatarPrompt
-      document.body.appendChild(textarea)
-      textarea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textarea)
-      setPromptCopied(true)
-      setTimeout(() => setPromptCopied(false), 2000)
-    }
-  }
 
   const autoCompleteHeroQuest = async () => {
     try {
@@ -201,7 +275,9 @@ function EditEssenceModal({
       let imageUrl = undefined
 
       // Upload new image if selected
-      if (selectedFile) {
+      if (aiGeneratedUrl && aiGeneratedUrl !== currentImage) {
+        imageUrl = aiGeneratedUrl
+      } else if (selectedFile) {
         const url = await uploadEssenceAvatar(userId, selectedFile)
         if (!url) {
           setError('Failed to upload image. Please try again.')
@@ -252,7 +328,7 @@ function EditEssenceModal({
       setToast('Saved!')
 
       // Auto-complete bonus quest if image was updated
-      if (selectedFile) {
+      if (selectedFile || aiGeneratedUrl) {
         autoCompleteHeroQuest()
       }
 
@@ -352,17 +428,19 @@ function EditEssenceModal({
               <button
                 className="edit-essence-upload-btn"
                 onClick={() => fileInputRef.current?.click()}
+                disabled={generating}
               >
                 Choose Photo
               </button>
               <button
-                className="edit-essence-prompt-btn"
-                onClick={() => setShowPrompt(!showPrompt)}
-                title="Generate an AI prompt for your avatar"
+                className="edit-essence-generate-btn"
+                onClick={() => handleGenerate()}
+                disabled={generating || attemptsUsed >= 3}
+                title={attemptsUsed >= 3 ? 'Maximum attempts reached' : 'Generate a Pixar-style avatar from your photo'}
               >
-                AI Prompt
+                {generating ? 'Generating...' : attemptsUsed > 0 ? `Try Again (${3 - attemptsUsed} left)` : 'Generate with AI'}
               </button>
-              {(selectedFile || (currentImage && currentImage !== originalImage)) && (
+              {(selectedFile || aiGeneratedUrl || (currentImage && currentImage !== originalImage)) && (
                 <button className="edit-essence-reset" onClick={handleResetImage} title="Reset to default">
                   ↩
                 </button>
@@ -375,25 +453,20 @@ function EditEssenceModal({
               onChange={handleFileSelect}
               style={{ display: 'none' }}
             />
-            <span className="edit-essence-hint">JPG, PNG, or WebP — auto-compressed for upload</span>
+            <input
+              ref={selfieInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleSelfieSelect}
+              style={{ display: 'none' }}
+            />
+            <span className="edit-essence-hint">
+              {generating
+                ? 'Creating your avatar... this takes about 15 seconds'
+                : 'Upload your own photo, or generate a Pixar-style avatar from a selfie'}
+            </span>
           </div>
         </div>
-
-        {/* AI Prompt Section */}
-        {showPrompt && (
-          <div className="edit-essence-prompt-section">
-            <label className="edit-essence-label">Your Avatar Prompt</label>
-            <p className="edit-essence-prompt-desc">
-              Copy this prompt into ChatGPT, Midjourney, or any AI image tool to generate your custom avatar.
-            </p>
-            <div className="edit-essence-prompt-box">
-              {avatarPrompt}
-            </div>
-            <button className="edit-essence-copy-btn" onClick={handleCopyPrompt}>
-              {promptCopied ? 'Copied!' : 'Copy Prompt'}
-            </button>
-          </div>
-        )}
 
         {error && <div className="edit-essence-error">{error}</div>}
 
@@ -402,7 +475,7 @@ function EditEssenceModal({
           <button
             className="edit-essence-save"
             onClick={handleSave}
-            disabled={saving || !hasChanges}
+            disabled={saving || generating || !hasChanges}
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
