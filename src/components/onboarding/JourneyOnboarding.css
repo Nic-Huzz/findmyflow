@@ -1,0 +1,923 @@
+/**
+ * JourneyOnboarding.css
+ * 4-Beat story-driven onboarding: Hook → Story → Reveal → Promise
+ *
+ * Design: Purple gradient backgrounds, gold text/CTAs.
+ * Mobile-first, minimal text, maximum visual impact.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ROOT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.journey-onboarding {
+  --jo-purple: #5e17eb;
+  --jo-purple-dark: #4a0ea8;
+  --jo-purple-deep: #1a1a2e;
+  --jo-gold: #E9A23B;
+  --jo-gold-light: #F59E0B;
+  --jo-gold-warm: #FBBF24;
+  --jo-text: #ffffff;
+  --jo-text-muted: rgba(255, 255, 255, 0.6);
+  --jo-text-soft: rgba(255, 255, 255, 0.8);
+  --jo-glass: rgba(255, 255, 255, 0.06);
+  --jo-glass-border: rgba(255, 255, 255, 0.1);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--jo-purple-dark) 0%, var(--jo-purple) 50%, #7c3aed 100%);
+  color: var(--jo-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 99999;
+  padding: 24px;
+  padding-top: max(24px, env(safe-area-inset-top));
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TRANSITIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.jo-transitioning .jo-hook-content,
+.jo-transitioning .jo-story-content,
+.jo-transitioning .jo-reveal-content,
+.jo-transitioning .jo-promise-content {
+  animation: jo-slideOut 0.25s ease forwards;
+}
+
+.jo-entering .jo-hook-content,
+.jo-entering .jo-story-content,
+.jo-entering .jo-reveal-content,
+.jo-entering .jo-promise-content {
+  animation: jo-slideIn 0.4s ease;
+}
+
+/* Slide right direction (forward) */
+.jo-slide-right.jo-transitioning .jo-hook-content,
+.jo-slide-right.jo-transitioning .jo-story-content,
+.jo-slide-right.jo-transitioning .jo-reveal-content,
+.jo-slide-right.jo-transitioning .jo-promise-content {
+  animation: jo-slideOutLeft 0.25s ease forwards;
+}
+
+.jo-slide-right.jo-entering .jo-hook-content,
+.jo-slide-right.jo-entering .jo-story-content,
+.jo-slide-right.jo-entering .jo-reveal-content,
+.jo-slide-right.jo-entering .jo-promise-content {
+  animation: jo-slideInRight 0.4s ease;
+}
+
+/* Slide left direction (backward) */
+.jo-slide-left.jo-transitioning .jo-hook-content,
+.jo-slide-left.jo-transitioning .jo-story-content,
+.jo-slide-left.jo-transitioning .jo-reveal-content,
+.jo-slide-left.jo-transitioning .jo-promise-content {
+  animation: jo-slideOutRight 0.25s ease forwards;
+}
+
+.jo-slide-left.jo-entering .jo-hook-content,
+.jo-slide-left.jo-entering .jo-story-content,
+.jo-slide-left.jo-entering .jo-reveal-content,
+.jo-slide-left.jo-entering .jo-promise-content {
+  animation: jo-slideInLeft 0.4s ease;
+}
+
+@keyframes jo-slideOutLeft {
+  to { opacity: 0; transform: translateX(-30px); }
+}
+
+@keyframes jo-slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes jo-slideOutRight {
+  to { opacity: 0; transform: translateX(30px); }
+}
+
+@keyframes jo-slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes jo-slideOut {
+  to { opacity: 0; transform: translateX(-20px); }
+}
+
+@keyframes jo-slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes jo-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes jo-fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes jo-fadeInScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AMBIENT BACKGROUND
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.journey-onboarding .jo-ambient {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.journey-onboarding .jo-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+}
+
+.journey-onboarding .jo-glow-1 {
+  width: 300px;
+  height: 300px;
+  background: var(--jo-gold);
+  top: -100px;
+  right: -50px;
+  animation: jo-glowPulse 5s ease-in-out infinite;
+}
+
+.journey-onboarding .jo-glow-2 {
+  width: 250px;
+  height: 250px;
+  background: var(--jo-purple);
+  bottom: -80px;
+  left: -60px;
+  animation: jo-glowPulse 6s ease-in-out 1s infinite;
+}
+
+.journey-onboarding .jo-glow-gold {
+  background: var(--jo-gold) !important;
+  opacity: 0.2;
+}
+
+@keyframes jo-glowPulse {
+  0%, 100% { transform: scale(1); opacity: 0.15; }
+  50% { transform: scale(1.15); opacity: 0.25; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHARED ELEMENTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Beat progress dots (top) */
+.journey-onboarding .jo-beat-progress {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+  animation: jo-fadeIn 0.4s ease;
+}
+
+.journey-onboarding .jo-beat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.journey-onboarding .jo-beat-dot.active {
+  width: 24px;
+  border-radius: 4px;
+  background: var(--jo-gold);
+  box-shadow: 0 0 10px rgba(233, 162, 59, 0.5);
+}
+
+.journey-onboarding .jo-beat-dot.completed {
+  background: var(--jo-gold);
+  box-shadow: 0 0 6px rgba(233, 162, 59, 0.3);
+}
+
+/* CTA Button */
+.journey-onboarding .jo-cta-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 18px 24px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--jo-gold) 0%, var(--jo-gold-light) 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(233, 162, 59, 0.4);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.journey-onboarding .jo-cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(233, 162, 59, 0.5);
+}
+
+.journey-onboarding .jo-cta-button:active {
+  transform: translateY(-1px);
+}
+
+.journey-onboarding .jo-cta-large {
+  padding: 22px 28px;
+  font-size: 1.3rem;
+}
+
+/* Shimmer layer */
+.journey-onboarding .jo-shimmer-layer {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.12) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: jo-shimmer 2.5s ease-in-out infinite;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+@keyframes jo-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Arrow animation */
+.journey-onboarding .jo-btn-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.journey-onboarding .jo-cta-button:hover .jo-btn-arrow {
+  animation: jo-arrowBounce 0.6s ease infinite;
+}
+
+@keyframes jo-arrowBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+/* Back button */
+.journey-onboarding .jo-back-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 12px 16px;
+  margin-top: auto;
+  transition: color 0.2s ease;
+}
+
+.journey-onboarding .jo-back-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Skip link */
+.journey-onboarding .jo-skip-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 20px;
+  padding: 8px;
+  transition: color 0.2s ease;
+}
+
+.journey-onboarding .jo-skip-link:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Error */
+.journey-onboarding .jo-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #fca5a5;
+  text-align: center;
+  margin: 12px 0;
+  max-width: 400px;
+}
+
+/* Spinner */
+.journey-onboarding .jo-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--jo-gold);
+  border-radius: 50%;
+  animation: jo-spin 0.8s linear infinite;
+}
+
+@keyframes jo-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BEAT 1: THE HOOK
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.jo-hook {
+  justify-content: center;
+  text-align: center;
+}
+
+.jo-hook .jo-hook-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 420px;
+  width: 100%;
+}
+
+.jo-hook .jo-hook-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.jo-hook .jo-hook-text {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--jo-gold);
+  margin: 0;
+  animation: jo-fadeInUp 0.6s ease;
+  letter-spacing: -0.3px;
+}
+
+.jo-hook .jo-hook-subtext {
+  font-size: 1.15rem;
+  color: var(--jo-text-soft);
+  line-height: 1.7;
+  margin: 0;
+  animation: jo-fadeInUp 0.6s ease 0.15s backwards;
+}
+
+/* Slide dots */
+.jo-hook .jo-slide-dots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.jo-hook .jo-slide-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.jo-hook .jo-slide-dot.active {
+  background: var(--jo-gold);
+  box-shadow: 0 0 10px rgba(233, 162, 59, 0.5);
+  width: 28px;
+  border-radius: 5px;
+}
+
+/* Continue button */
+.jo-hook .jo-hook-continue {
+  width: 100%;
+  max-width: 400px;
+  padding: 18px 24px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--jo-gold) 0%, var(--jo-gold-light) 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(233, 162, 59, 0.4);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: jo-fadeInUp 0.5s ease 0.3s backwards;
+}
+
+.jo-hook .jo-hook-continue:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(233, 162, 59, 0.5);
+}
+
+.jo-hook .jo-tap-hint {
+  font-weight: 500;
+  font-size: 1rem;
+  color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BEAT 2: THE STORY
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.jo-story {
+  padding-top: max(16px, env(safe-area-inset-top));
+}
+
+/* Stage progress dots */
+.jo-story .jo-stage-progress {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.jo-story .jo-stage-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.jo-story .jo-stage-dot.active {
+  background: var(--jo-gold);
+  box-shadow: 0 0 10px rgba(233, 162, 59, 0.5);
+  width: 26px;
+  border-radius: 5px;
+}
+
+.jo-story .jo-stage-dot.completed {
+  background: var(--jo-gold);
+}
+
+/* Story content */
+.jo-story .jo-story-content {
+  flex: 1;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.jo-story .jo-stage-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.jo-story .jo-stage-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--jo-gold);
+  display: block;
+  margin-bottom: 6px;
+  animation: jo-fadeInUp 0.4s ease backwards;
+}
+
+.jo-story .jo-stage-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: white;
+  letter-spacing: -0.3px;
+  animation: jo-fadeInUp 0.4s ease 0.05s backwards;
+}
+
+.jo-story .jo-stage-prompt {
+  font-size: 0.95rem;
+  color: var(--jo-text-muted);
+  margin: 0;
+  animation: jo-fadeInUp 0.4s ease 0.1s backwards;
+}
+
+/* Scene cards */
+.jo-story .jo-scenes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.jo-story .jo-scene-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--jo-glass);
+  border: 2px solid var(--jo-glass-border);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  color: white;
+  position: relative;
+  animation: jo-fadeInUp 0.4s ease backwards;
+}
+
+.jo-story .jo-scene-card:nth-child(1) { animation-delay: 0.15s; }
+.jo-story .jo-scene-card:nth-child(2) { animation-delay: 0.25s; }
+.jo-story .jo-scene-card:nth-child(3) { animation-delay: 0.35s; }
+
+.jo-story .jo-scene-card:hover {
+  background: rgba(233, 162, 59, 0.1);
+  border-color: rgba(233, 162, 59, 0.4);
+  transform: translateX(4px);
+}
+
+.jo-story .jo-scene-card:active {
+  transform: translateX(4px) scale(0.98);
+}
+
+.jo-story .jo-scene-card.selected {
+  background: rgba(233, 162, 59, 0.15);
+  border-color: var(--jo-gold);
+  box-shadow: 0 0 20px rgba(233, 162, 59, 0.2);
+}
+
+/* Scene image/placeholder */
+.jo-story .jo-scene-image {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.jo-story .jo-scene-icon {
+  font-size: 2rem;
+  z-index: 1;
+}
+
+/* Scene info */
+.jo-story .jo-scene-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.jo-story .jo-scene-name {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 3px;
+  color: white;
+}
+
+.jo-story .jo-scene-desc {
+  font-size: 0.85rem;
+  color: var(--jo-text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Selected checkmark */
+.jo-story .jo-scene-check {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  background: var(--jo-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  animation: jo-fadeInScale 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BEAT 3: THE REVEAL
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.jo-reveal {
+  justify-content: center;
+}
+
+.jo-reveal .jo-reveal-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+  gap: 16px;
+}
+
+.jo-reveal .jo-reveal-heading {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--jo-gold);
+  margin: 0;
+  letter-spacing: -0.3px;
+  animation: jo-fadeInUp 0.5s ease;
+}
+
+.jo-reveal .jo-reveal-subtext {
+  font-size: 1rem;
+  color: var(--jo-text-muted);
+  margin: 0;
+  animation: jo-fadeInUp 0.5s ease 0.1s backwards;
+}
+
+/* Photo upload */
+.jo-reveal .jo-photo-upload {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 3px dashed rgba(233, 162, 59, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  animation: jo-fadeInUp 0.5s ease 0.15s backwards;
+}
+
+.jo-reveal .jo-photo-upload:hover {
+  border-color: var(--jo-gold);
+  background: rgba(233, 162, 59, 0.05);
+}
+
+.jo-reveal .jo-photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.jo-reveal .jo-photo-icon {
+  font-size: 2.5rem;
+}
+
+.jo-reveal .jo-photo-label {
+  font-size: 13px;
+  color: var(--jo-text-muted);
+  max-width: 120px;
+  line-height: 1.3;
+}
+
+.jo-reveal .jo-photo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jo-reveal .jo-file-input {
+  display: none;
+}
+
+/* Generating state */
+.jo-reveal .jo-generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  animation: jo-fadeIn 0.3s ease;
+}
+
+.jo-reveal .jo-generating p {
+  font-size: 1rem;
+  color: var(--jo-text-soft);
+  margin: 0;
+}
+
+.jo-reveal .jo-generating-sub {
+  font-size: 0.85rem;
+  color: var(--jo-text-muted) !important;
+}
+
+/* Avatar reveal */
+.jo-reveal .jo-avatar-reveal {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  margin-bottom: 8px;
+  animation: jo-avatarReveal 0.8s ease;
+}
+
+.jo-reveal .jo-avatar-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.3) 0%, transparent 70%);
+  animation: jo-glowPulse 3s ease-in-out infinite;
+}
+
+.jo-reveal .jo-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--jo-gold);
+  box-shadow: 0 8px 40px rgba(233, 162, 59, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes jo-avatarReveal {
+  0% { opacity: 0; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.jo-reveal .jo-reveal-result-heading {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--jo-gold);
+  margin: 0;
+  animation: jo-fadeInUp 0.5s ease 0.3s backwards;
+}
+
+.jo-reveal .jo-reveal-result-sub {
+  font-size: 1rem;
+  color: var(--jo-text-soft);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 320px;
+  animation: jo-fadeInUp 0.5s ease 0.4s backwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BEAT 4: THE PROMISE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.jo-promise {
+  justify-content: center;
+  text-align: center;
+}
+
+.jo-promise .jo-promise-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 420px;
+  width: 100%;
+  gap: 20px;
+}
+
+.jo-promise .jo-promise-avatar {
+  width: 160px;
+  height: 160px;
+  position: relative;
+  margin-bottom: 8px;
+  animation: jo-fadeInScale 0.6s ease;
+}
+
+.jo-promise .jo-promise-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--jo-gold);
+  box-shadow: 0 8px 40px rgba(233, 162, 59, 0.3);
+}
+
+.jo-promise .jo-promise-heading {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--jo-gold);
+  margin: 0;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  animation: jo-fadeInUp 0.6s ease 0.1s backwards;
+}
+
+.jo-promise .jo-promise-subtext {
+  font-size: 1.1rem;
+  color: var(--jo-text-soft);
+  line-height: 1.6;
+  margin: 0;
+  animation: jo-fadeInUp 0.6s ease 0.2s backwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  .journey-onboarding {
+    padding: 16px;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .jo-hook .jo-hook-text {
+    font-size: 1.7rem;
+  }
+
+  .jo-hook .jo-hook-subtext {
+    font-size: 1rem;
+  }
+
+  .jo-story .jo-stage-title {
+    font-size: 1.35rem;
+  }
+
+  .jo-story .jo-scene-image {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+  }
+
+  .jo-story .jo-scene-icon {
+    font-size: 1.6rem;
+  }
+
+  .jo-story .jo-scene-name {
+    font-size: 0.95rem;
+  }
+
+  .jo-story .jo-scene-desc {
+    font-size: 0.8rem;
+  }
+
+  .jo-reveal .jo-photo-upload {
+    width: 160px;
+    height: 160px;
+  }
+
+  .jo-reveal .jo-avatar-reveal {
+    width: 200px;
+    height: 200px;
+  }
+
+  .jo-reveal .jo-reveal-heading {
+    font-size: 1.35rem;
+  }
+
+  .jo-reveal .jo-reveal-result-heading {
+    font-size: 1.5rem;
+  }
+
+  .jo-promise .jo-promise-heading {
+    font-size: 1.8rem;
+  }
+
+  .jo-promise .jo-promise-avatar {
+    width: 130px;
+    height: 130px;
+  }
+}
+
+@media (max-height: 600px) {
+  .journey-onboarding {
+    padding: 12px;
+  }
+
+  .jo-story .jo-scene-card {
+    padding: 10px 14px;
+  }
+
+  .jo-story .jo-scene-image {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+  }
+
+  .jo-story .jo-stage-header {
+    margin-bottom: 12px;
+  }
+
+  .jo-story .jo-scenes {
+    gap: 8px;
+  }
+}
