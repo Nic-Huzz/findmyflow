@@ -25,6 +25,7 @@ import VibeColorPicker from '../components/VibeColorPicker'
 import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
 import HomeFirstTime from '../components/HomeFirstTime'
 import SeeYourFlow from '../components/SeeYourFlow'
+import { hasPendingJourneyData, persistJourneyOnboarding } from '../lib/journeyOnboarding'
 import './MePage.css'
 
 // Stat ring circumference for r=22
@@ -98,6 +99,20 @@ export default function MePage() {
   }, [user?.id])
 
   useEffect(() => { fetchStageProgress() }, [fetchStageProgress])
+
+  // Persist journey onboarding data after first login
+  useEffect(() => {
+    if (!user?.id) return
+    if (!hasPendingJourneyData()) return
+
+    persistJourneyOnboarding(user.id)
+      .then(result => {
+        if (result.success) {
+          console.log('Journey onboarding persisted, pattern:', result.pattern?.dominant)
+        }
+      })
+      .catch(err => console.warn('Failed to persist journey onboarding:', err))
+  }, [user?.id])
 
   // After onboarding completes, refresh state in-place instead of full page reload
   const refreshAfterOnboarding = useCallback(async () => {
