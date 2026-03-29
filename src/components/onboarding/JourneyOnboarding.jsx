@@ -70,6 +70,7 @@ const WOUND_STAGES = [
         color: '#e74c3c',
         icon: '🌊',
         image: '/images/onboarding/stage1-overwhelmed.png',
+        focalPoint: '55% 35%',
       },
       {
         id: 'secure_base',
@@ -80,6 +81,7 @@ const WOUND_STAGES = [
         color: '#2ecc71',
         icon: '🏠',
         image: '/images/onboarding/stage1-secure.png',
+        focalPoint: '55% 30%',
       },
       {
         id: 'invisible_child',
@@ -90,6 +92,7 @@ const WOUND_STAGES = [
         color: '#3498db',
         icon: '👻',
         image: '/images/onboarding/stage1-invisible.png',
+        focalPoint: '50% 35%',
       },
     ],
   },
@@ -109,6 +112,7 @@ const WOUND_STAGES = [
         color: '#e74c3c',
         icon: '💔',
         image: '/images/onboarding/stage2-rejected.png',
+        focalPoint: '60% 25%',
       },
       {
         id: 'unconditional_belonging',
@@ -119,6 +123,7 @@ const WOUND_STAGES = [
         color: '#2ecc71',
         icon: '💛',
         image: '/images/onboarding/stage2-belonging.png',
+        focalPoint: '40% 25%',
       },
       {
         id: 'adapted_self',
@@ -129,6 +134,7 @@ const WOUND_STAGES = [
         color: '#3498db',
         icon: '🎭',
         image: '/images/onboarding/stage2-adapted.png',
+        focalPoint: '55% 25%',
       },
     ],
   },
@@ -148,6 +154,7 @@ const WOUND_STAGES = [
         color: '#e74c3c',
         icon: '🔥',
         image: '/images/onboarding/stage3-rebel.png',
+        focalPoint: '75% 25%',
       },
       {
         id: 'grounded_student',
@@ -158,6 +165,7 @@ const WOUND_STAGES = [
         color: '#2ecc71',
         icon: '🌿',
         image: '/images/onboarding/stage3-grounded.png',
+        focalPoint: '45% 25%',
       },
       {
         id: 'good_student',
@@ -168,6 +176,7 @@ const WOUND_STAGES = [
         color: '#3498db',
         icon: '📚',
         image: '/images/onboarding/stage3-good-student.png',
+        focalPoint: '40% 35%',
       },
     ],
   },
@@ -187,6 +196,7 @@ const WOUND_STAGES = [
         color: '#e74c3c',
         icon: '🦎',
         image: '/images/onboarding/stage3_5-chameleon.png',
+        focalPoint: '50% 30%',
       },
       {
         id: 'found_their_tribe',
@@ -197,6 +207,7 @@ const WOUND_STAGES = [
         color: '#2ecc71',
         icon: '🤝',
         image: '/images/onboarding/stage3_5-tribe.png',
+        focalPoint: '50% 30%',
       },
       {
         id: 'the_withdrawn',
@@ -207,6 +218,7 @@ const WOUND_STAGES = [
         color: '#3498db',
         icon: '🏔️',
         image: '/images/onboarding/stage3_5-withdrawn.png',
+        focalPoint: '40% 30%',
       },
     ],
   },
@@ -561,6 +573,7 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
                     className="jo-scene-image"
                     src={scene.image}
                     alt={scene.name}
+                    style={{ objectPosition: scene.focalPoint || 'center' }}
                     onError={(e) => {
                       e.target.style.display = 'none'
                       if (e.target.nextElementSibling) e.target.nextElementSibling.style.display = 'flex'

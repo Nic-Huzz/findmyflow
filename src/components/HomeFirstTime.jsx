@@ -548,6 +548,7 @@ function HomeFirstTime({ onOnboardingComplete }) {
                     className="hft-option-image"
                     src={option.image}
                     alt=""
+                    style={{ objectPosition: option.focalPoint || 'center' }}
                     onError={(e) => { e.target.style.display = 'none' }}
                   />
                 )}
