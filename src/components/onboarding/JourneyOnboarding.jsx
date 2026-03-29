@@ -4,7 +4,7 @@
  * 4-Beat story-driven onboarding flow:
  *   Beat 1 — The Hook (swipeable emotional slides, no interaction)
  *   Beat 2 — The Story (4 wound stages, tap which scene resonates)
- *   Beat 3 — The Reveal (photo upload + hero avatar generation)
+ *   Beat 3 — The Reframe (perspective shift question)
  *   Beat 4 — The Promise (sign up CTA)
  *
  * Works BEFORE account creation. State stored in component,
@@ -14,26 +14,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { supabase } from '../../lib/supabaseClient'
 import './JourneyOnboarding.css'
-
-// ─── Image compression for localStorage storage ─────────────────────────────
-
-function compressImage(file, maxWidth = 512, quality = 0.7) {
-  return new Promise((resolve) => {
-    const img = new Image()
-    img.onload = () => {
-      const canvas = document.createElement('canvas')
-      const ratio = Math.min(maxWidth / img.width, maxWidth / img.height)
-      canvas.width = img.width * ratio
-      canvas.height = img.height * ratio
-      const ctx = canvas.getContext('2d')
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-      resolve(canvas.toDataURL('image/jpeg', quality))
-    }
-    img.src = URL.createObjectURL(file)
-  })
-}
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -42,7 +23,7 @@ const STORAGE_KEY = 'journey_onboarding_state'
 const BEATS = {
   HOOK: 'hook',
   STORY: 'story',
-  REVEAL: 'reveal',
+  REFRAME: 'reframe',
   PROMISE: 'promise',
 }
 
@@ -227,13 +208,6 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
   const [stageSelections, setStageSelections] = useState({})
   // { stage1: 'overwhelmed_child', stage2: 'adapted_self', ... }
 
-  // Beat 3: Reveal
-  const [photoFile, setPhotoFile] = useState(null)
-  const [photoPreview, setPhotoPreview] = useState(null)
-  const [avatarUrl, setAvatarUrl] = useState(null)
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [generateError, setGenerateError] = useState(null)
-
   // Transition animation
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [isEntering, setIsEntering] = useState(true)
@@ -242,7 +216,6 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
   // Touch handling for swipe
   const touchStartX = useRef(0)
   const touchEndX = useRef(0)
-  const fileInputRef = useRef(null)
   const autoAdvanceRef = useRef(null)
 
   // Clear entering state after animation
@@ -270,7 +243,6 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
           if (parsed.hookSlideIndex !== undefined) setHookSlideIndex(parsed.hookSlideIndex)
           if (parsed.storyStageIndex !== undefined) setStoryStageIndex(parsed.storyStageIndex)
           if (parsed.stageSelections) setStageSelections(parsed.stageSelections)
-          if (parsed.avatarUrl) setAvatarUrl(parsed.avatarUrl)
         } else {
           localStorage.removeItem(STORAGE_KEY)
         }
@@ -287,11 +259,10 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
       hookSlideIndex,
       storyStageIndex,
       stageSelections,
-      avatarUrl,
       timestamp: Date.now(),
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  }, [currentBeat, hookSlideIndex, storyStageIndex, stageSelections, avatarUrl])
+  }, [currentBeat, hookSlideIndex, storyStageIndex, stageSelections])
 
   // ─── Navigation helpers ──────────────────────────────────────────────────
 
@@ -352,8 +323,8 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
       if (storyStageIndex < WOUND_STAGES.length - 1) {
         transitionTo(setStoryStageIndex, storyStageIndex + 1, 'right')
       } else {
-        // All stages done → go to reveal
-        transitionTo(setCurrentBeat, BEATS.REVEAL, 'right')
+        // All stages done → go to reframe
+        transitionTo(setCurrentBeat, BEATS.REFRAME, 'right')
       }
       autoAdvanceRef.current = null
     }, 600)
@@ -368,109 +339,12 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
     }
   }
 
-  // ─── Beat 3: Reveal ─────────────────────────────────────────────────────
-
-  const handlePhotoSelect = (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    setPhotoFile(file)
-    setGenerateError(null)
-
-    // Create preview
-    const reader = new FileReader()
-    reader.onload = (ev) => setPhotoPreview(ev.target.result)
-    reader.readAsDataURL(file)
-  }
-
-  const handleGenerateAvatar = async () => {
-    if (!photoFile) return
-
-    setIsGenerating(true)
-    setGenerateError(null)
-
-    try {
-      // Check if user has an active auth session
-      const { data: sessionData } = await supabase.auth.getSession()
-      const hasAuth = !!sessionData?.session
-
-      if (!hasAuth) {
-        // Pre-auth: compress and store photo in localStorage for post-auth generation
-        const compressed = await compressImage(photoFile)
-        localStorage.setItem('journey_onboarding_photo', compressed)
-        setAvatarUrl(null)
-        transitionTo(setCurrentBeat, BEATS.PROMISE, 'right')
-        return
-      }
-
-      // Authenticated: upload and generate avatar
-      const timestamp = Date.now()
-      const tempPath = `temp/onboarding-${timestamp}.jpg`
-
-      const { error: uploadErr } = await supabase.storage
-        .from('deal-screenshots')
-        .upload(tempPath, photoFile, {
-          contentType: photoFile.type,
-          upsert: true,
-        })
-
-      if (uploadErr) {
-        throw new Error(uploadErr.message || 'Failed to upload photo')
-      }
-
-      const { data: urlData } = supabase.storage
-        .from('deal-screenshots')
-        .getPublicUrl(tempPath)
-
-      // Call the generate-avatar edge function
-      const { data, error } = await supabase.functions.invoke('generate-avatar', {
-        body: {
-          selfie_url: urlData.publicUrl,
-          prompt: `Create a Pixar/Disney-style animated hero avatar of this person.
-            Make them look vibrant, playful, and full of life, like the best version
-            of themselves. Warm lighting, confident posture, a genuine smile that
-            shows their inner light. The background should be a soft golden glow.
-            This represents who they were before the world told them who to be.`,
-        },
-      })
-
-      if (error) {
-        throw new Error(error.message || 'Failed to generate avatar')
-      }
-
-      if (data?.error === 'content_policy') {
-        setGenerateError("Generation couldn't complete. Try a different photo or adjust your lighting.")
-        return
-      }
-
-      if (data?.url) {
-        setAvatarUrl(data.url)
-      } else {
-        throw new Error('No image returned from generation')
-      }
-    } catch (err) {
-      console.error('Avatar generation error:', err)
-      setGenerateError('Something went wrong. You can skip this and add a photo later.')
-    } finally {
-      setIsGenerating(false)
-    }
-  }
-
-  const handleSkipPhoto = () => {
-    transitionTo(setCurrentBeat, BEATS.PROMISE, 'right')
-  }
-
-  const handleRevealContinue = () => {
-    transitionTo(setCurrentBeat, BEATS.PROMISE, 'right')
-  }
-
   // ─── Beat 4: Promise ─────────────────────────────────────────────────────
 
   const handleSignUp = () => {
     // Save all onboarding data to localStorage for post-auth persistence
     const onboardingData = {
       stageSelections,
-      avatarUrl,
       completedAt: new Date().toISOString(),
     }
     localStorage.setItem('journey_onboarding_result', JSON.stringify(onboardingData))
@@ -491,7 +365,7 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
 
   // Progress indicator for all beats
   const renderBeatProgress = () => {
-    const beatOrder = [BEATS.HOOK, BEATS.STORY, BEATS.REVEAL, BEATS.PROMISE]
+    const beatOrder = [BEATS.HOOK, BEATS.STORY, BEATS.REFRAME, BEATS.PROMISE]
     const currentIndex = beatOrder.indexOf(currentBeat)
 
     return (
@@ -625,123 +499,23 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
     )
   }
 
-  // ─── BEAT 3: The Reveal ───────────────────────────────────────────────────
+  // ─── BEAT 3: The Reframe ──────────────────────────────────────────────────
 
-  if (currentBeat === BEATS.REVEAL) {
+  if (currentBeat === BEATS.REFRAME) {
     return (
-      <div className={`journey-onboarding jo-reveal ${transitionClass} ${directionClass}`}>
-        {renderBeatProgress()}
-
-        <div className="jo-reveal-content">
-          {!avatarUrl ? (
-            <>
-              <h2 className="jo-reveal-heading">
-                Ready to meet the loving, care-free, playful version of you again?
-              </h2>
-              <p className="jo-reveal-subtext">
-                Upload a photo and we'll create your hero avatar.
-              </p>
-
-              {/* Photo upload area */}
-              <div
-                className="jo-photo-upload"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                {photoPreview ? (
-                  <img
-                    src={photoPreview}
-                    alt="Your photo"
-                    className="jo-photo-preview"
-                  />
-                ) : (
-                  <div className="jo-photo-placeholder">
-                    <span className="jo-photo-icon">📸</span>
-                    <span className="jo-photo-label">Tap to upload a photo</span>
-                  </div>
-                )}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoSelect}
-                  className="jo-file-input"
-                />
-              </div>
-
-              {generateError && (
-                <p className="jo-error">{generateError}</p>
-              )}
-
-              {photoPreview && !isGenerating && (
-                <button
-                  className="jo-cta-button"
-                  onClick={handleGenerateAvatar}
-                >
-                  <span className="jo-shimmer-layer" />
-                  Create My Hero Avatar
-                  <span className="jo-btn-arrow">&#8594;</span>
-                </button>
-              )}
-
-              {isGenerating && (
-                <div className="jo-generating">
-                  <div className="jo-spinner" />
-                  <p>Creating your hero avatar...</p>
-                  <p className="jo-generating-sub">This may take a moment</p>
-                </div>
-              )}
-
-              <button
-                className="jo-skip-link"
-                onClick={handleSkipPhoto}
-              >
-                Skip for now
-              </button>
-            </>
-          ) : (
-            <>
-              {/* Avatar generated — show the reveal */}
-              <div className="jo-avatar-reveal">
-                <div className="jo-avatar-glow" />
-                <img
-                  src={avatarUrl}
-                  alt="Your hero avatar"
-                  className="jo-avatar-image"
-                />
-              </div>
-
-              <h2 className="jo-reveal-result-heading">
-                This is who's been waiting.
-              </h2>
-              <p className="jo-reveal-result-sub">
-                The playful, loving, care-free version of you. Before the world
-                told you who to be.
-              </p>
-
-              <button
-                className="jo-cta-button"
-                onClick={handleRevealContinue}
-              >
-                <span className="jo-shimmer-layer" />
-                Continue
-                <span className="jo-btn-arrow">&#8594;</span>
-              </button>
-            </>
-          )}
+      <div className={`journey-onboarding jo-reframe ${transitionClass} ${directionClass}`}>
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1 jo-glow-gold" />
+          <div className="jo-glow jo-glow-2" />
         </div>
-
-        {/* Back to story */}
-        {!avatarUrl && !isGenerating && (
-          <button
-            className="jo-back-btn"
-            onClick={() => {
-              transitionTo(setCurrentBeat, BEATS.STORY, 'left')
-              setStoryStageIndex(WOUND_STAGES.length - 1)
-            }}
-          >
-            &#8592; Back
-          </button>
-        )}
+        {renderBeatProgress()}
+        <div className="jo-reframe-content">
+          <div className="jo-reframe-center" onClick={() => transitionTo(setCurrentBeat, BEATS.PROMISE, 'right')}>
+            <h2 className="jo-reframe-text">
+              What if you could build a life that fits who you actually are, not who you were told to be?
+            </h2>
+          </div>
+        </div>
       </div>
     )
   }
@@ -757,25 +531,13 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
           <div className="jo-glow jo-glow-2 jo-glow-gold" />
         </div>
 
+        {renderBeatProgress()}
+
         <div className="jo-promise-content">
-          {avatarUrl && (
-            <div className="jo-promise-avatar">
-              <img src={avatarUrl} alt="Your hero" className="jo-promise-avatar-img" />
-            </div>
-          )}
-
-          <h1 className="jo-promise-heading">
-            Ready to become them again?
-          </h1>
-
-          <p className="jo-promise-subtext">
-            Your journey back to your authentic self starts here.
-          </p>
-
-          <button
-            className="jo-cta-button jo-cta-large"
-            onClick={handleSignUp}
-          >
+          <div className="jo-promise-icon">🌊</div>
+          <h2 className="jo-promise-heading">That's what FindMyFlow is for.</h2>
+          <p className="jo-promise-subtext">Your journey starts here.</p>
+          <button className="jo-cta-button" onClick={handleSignUp}>
             <span className="jo-shimmer-layer" />
             Start My Journey
             <span className="jo-btn-arrow">&#8594;</span>
@@ -785,7 +547,7 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
         {/* Back */}
         <button
           className="jo-back-btn"
-          onClick={() => transitionTo(setCurrentBeat, BEATS.REVEAL, 'left')}
+          onClick={() => transitionTo(setCurrentBeat, BEATS.REFRAME, 'left')}
         >
           &#8592; Back
         </button>
