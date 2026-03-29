@@ -601,10 +601,15 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
         </div>
         {renderBeatProgress()}
         <div className="jo-reframe-content">
-          <div className="jo-reframe-center" onClick={() => transitionTo(setCurrentBeat, BEATS.PROMISE, 'right')}>
+          <div className="jo-reframe-center">
             <h2 className="jo-reframe-text">
               What if you could build a life that fits who you actually are, not who you were told to be?
             </h2>
+            <button className="jo-cta-button jo-reframe-cta" onClick={() => transitionTo(setCurrentBeat, BEATS.PROMISE, 'right')}>
+              <span className="jo-shimmer-layer" />
+              Sounds great!
+              <span className="jo-btn-arrow">&#8594;</span>
+            </button>
           </div>
         </div>
       </div>

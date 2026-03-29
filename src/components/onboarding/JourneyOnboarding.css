@@ -643,8 +643,9 @@
 
 .jo-reframe { justify-content: center; }
 .jo-reframe .jo-reframe-content { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 0 24px; }
-.jo-reframe .jo-reframe-center { cursor: pointer; max-width: 340px; }
+.jo-reframe .jo-reframe-center { max-width: 340px; text-align: center; }
 .jo-reframe .jo-reframe-text { font-size: 1.5rem; font-weight: 800; color: var(--jo-gold); text-align: center; line-height: 1.4; letter-spacing: -0.3px; animation: jo-fadeInUp 0.8s ease; }
+.jo-reframe .jo-reframe-cta { margin-top: 40px; animation: jo-fadeInUp 0.8s ease 0.3s backwards; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    BEAT 4: THE PROMISE
