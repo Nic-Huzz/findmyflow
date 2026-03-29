@@ -140,6 +140,8 @@ docs/                         # 33+ documentation files
 
 **Fantasy League**: `/league` (overview), `/league/week` (matchups), `/league/matchup` (details), `/league/submit` (content), `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
+**Journey**: `/get-started` (onboarding), `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
+
 **Other Flows**: `/nervous-system`, `/healing-compass`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public)
 
 **CRM** (`/crm/*`): Dashboard, Attract, Nurture, Tools (tower hubs) | content/create, content/queue, content/history | marketing, pages, sales, sales/scripts, contacts, email-sequences, warm-outreach | execute, analytics, performance, reports | calculators, calculators/ltv, calculators/cac, calculators/ptuf | import, tools/systems | ascension, objections, implementations, assets, autonomous, alerts
@@ -402,6 +404,14 @@ npm run db:push   # Apply migrations
 
 ## Recent Updates (Mar 2026)
 
+- **Journey Progression System (Phases 1-4)**: 8-level progression (Identity → Vulnerability → Direction → Enough → Growth → Execution → Passion-Risk → Play). Each level has: Sweet Spot graph, Zone Diagnosis flow, Deep Dive, Boss Fight, Milestone, 3 progress bars (quests/healing/courage). Key files: `src/components/level/LevelConfig.js` (all 8 levels), `src/components/level/LevelTab.jsx` (template), `src/components/level/SweetSpotGraph.jsx` (brand SVG), `src/flows/ZoneDiagnosisFlow.jsx` (5-step flow at `/zone-diagnosis/:levelNumber`).
+- **Zone Diagnosis Flow**: Multi-step flow — Graph → Zone Explainer → Zone Pick → Protective Voices (conditional) → Boss Reveal. Saves to `user_level_progress`. Protective voices: topLeft = Performer/Controller/People Pleaser, bottomRight = Perfectionist/Ghost.
+- **Journey Onboarding (Phase 1)**: 4-beat story at `/get-started` — Hook slides → Wound stages (4 stages, 3 Pixar scenes each) → Reframe → Promise with inline signup. Key files: `src/components/onboarding/JourneyOnboarding.jsx`, `src/lib/journeyOnboarding.js`.
+- **Tension Questions (Phase 2)**: 3+1 journey-mapped questions in `HomeFirstTime.jsx` with Pixar images. Data in `public/tension-assessment-v2.json`.
+- **Image Focal Points**: All 28 Pixar onboarding images have `focalPoint` data for mobile cropping (`objectPosition` CSS). Applied in JourneyOnboarding.jsx, HomeFirstTime.jsx, tension-assessment-v2.json.
+- **Level Tab in Challenge Portal (Phase 3-4)**: Priority tab renamed to "Level". XP bar in ChallengeHeader.jsx. `JourneyGraphPopup.jsx` for journey visualization. LevelTab wired into Challenge.jsx with userId prop for DB reads.
+- **/me Page Current Level Card**: Quest section shows Current Level card (level name, question, 3 mini progress bars, CTA) for post-onboarding users. XP bar shows "Level 1: Identity".
+- **DB Tables (NOT YET APPLIED)**: `user_level_progress` and `boss_fight_sessions` in `supabase/migrations/20260329000000_level_progress.sql`. Run `supabase db push` to apply.
 - **Priority Tab Onboarding System**: 7-step onboarding sequence in the Priority tab (Mind Space, What is Healing, Healing Compass, Play-List Finder, Nervous System, Check Alignment, Set Play-list Task). Each step unlocks progressively. After onboarding, priority layer recommendations show quests or playlist layers based on tension scores. Key files: `usePriorityTab.js` (ONBOARDING_QUEST_IDS, LAYER_RECOMMENDATIONS, computePriorityLayer), `PriorityTab.jsx`, `PriorityTab.css`.
 - **/me Page Dynamic Quest Section**: Replaced static "Today's Quest" with 3-state display. Onboarding incomplete: shows step progress with next step CTA. Onboarding complete + tension scores: shows layer-based recommended challenges. Complete + no scores: shows "Set Your Priority" prompt. Imports shared constants from `usePriorityTab.js`.
 - **Play-List Tab Active Challenges**: New section card at top of Play-list tab showing active groan challenges from `priority_weekly_picks` (current week, `pick_type = 'groan'`). Clicking "Complete" opens `GroanCompletionModal`.

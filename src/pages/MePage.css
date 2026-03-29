@@ -985,6 +985,44 @@
   margin-top: 2px;
 }
 
+/* Current Level mini progress bars */
+.me-page .me-level-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0 0.25rem;
+}
+
+.me-page .me-level-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.me-page .me-level-bar-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  width: 80px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.me-page .me-level-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.me-page .me-level-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #8b5cf6);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
 /* ============================================================
    FANTASY LEAGUE PROMO
    ============================================================ */

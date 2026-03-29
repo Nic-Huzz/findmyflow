@@ -508,7 +508,7 @@ export default function MePage() {
 
         <div className="xp-progress">
           <div className="xp-labels">
-            <span>Lv {levelNum} — {level.name}</span>
+            <span>Level 1: Identity</span>
             <span>{isMaxLevel ? `${totalXP} XP ✦` : `${totalXP} / ${levelMax} XP`}</span>
           </div>
           <div className="xp-bar">
@@ -643,7 +643,7 @@ export default function MePage() {
       </section>
 
       {/* ============================================================
-         SECTION 3: TODAY'S QUEST
+         SECTION 3: CURRENT LEVEL / TODAY'S QUEST
          ============================================================ */}
       <section className="quest-section reveal-fade-up" ref={questRevealRef}>
         <div className="quest-banner">
@@ -686,46 +686,29 @@ export default function MePage() {
                 </button>
               )}
             </>
-          ) : layerDisplay && layerRecommendations ? (
-            <>
-              <div className="quest-eyebrow">
-                <span className="quest-label">{layerDisplay.emoji} {layerDisplay.name}: {layerDisplay.description}</span>
-              </div>
-              <h2 className="quest-title">Recommended Challenge</h2>
-              {layerRecommendations.nextItem && (
-                <div className="me-next-rec">
-                  <span className="me-next-rec-icon">{layerRecommendations.nextItem.icon}</span>
-                  <div className="me-next-rec-body">
-                    <div className="me-next-rec-name">{layerRecommendations.nextItem.name}</div>
-                    <div className="me-next-rec-desc">{layerRecommendations.nextItem.desc}</div>
-                  </div>
-                </div>
-              )}
-              {layerRecommendations.nextItem?.route ? (
-                <a
-                  href={`${layerRecommendations.nextItem.route}?returnTo=/me`}
-                  className="quest-cta"
-                  style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
-                >
-                  Continue <span>→</span>
-                </a>
-              ) : (
-                <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
-                  Go to Challenge <span>→</span>
-                </button>
-              )}
-            </>
           ) : (
             <>
               <div className="quest-eyebrow">
-                <span className="quest-label">Get Started</span>
+                <span className="quest-label">Current Level</span>
               </div>
-              <h2 className="quest-title">Set Your Priority</h2>
-              <p className="quest-subtitle">
-                Complete the tension assessment to unlock your recommended challenges.
-              </p>
+              <h2 className="quest-title">Level 1: Identity</h2>
+              <p className="quest-subtitle">Who am I really?</p>
+              <div className="me-level-bars">
+                <div className="me-level-bar-row">
+                  <span className="me-level-bar-label">Level Quests</span>
+                  <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: '0%' }} /></div>
+                </div>
+                <div className="me-level-bar-row">
+                  <span className="me-level-bar-label">Healing Days</span>
+                  <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: '0%' }} /></div>
+                </div>
+                <div className="me-level-bar-row">
+                  <span className="me-level-bar-label">Courage</span>
+                  <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: '0%' }} /></div>
+                </div>
+              </div>
               <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
-                Go to Challenge <span>→</span>
+                Go to Level Tab <span>→</span>
               </button>
             </>
           )}

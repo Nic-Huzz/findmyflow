@@ -290,26 +290,6 @@
   100% { transform: translateX(100%); }
 }
 
-.challenge-level-markers {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 3px;
-  padding: 0 2px;
-}
-
-.challenge-level-marker {
-  font-size: 0.5rem;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.challenge-level-marker.current {
-  color: #E9A23B;
-  font-weight: 600;
-}
-
-.challenge-level-marker.passed {
-  color: rgba(255, 255, 255, 0.6);
-}
 
 /* ─── Journey Button ─── */
 .challenge-journey-btn {

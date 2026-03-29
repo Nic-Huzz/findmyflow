@@ -164,6 +164,48 @@
   font-size: 1.1rem;
 }
 
+/* Zone Result (when diagnosis completed) */
+.level-tab .level-zone-result {
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.level-tab .level-zone-result-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.25rem;
+}
+
+.level-tab .level-zone-result-desc {
+  font-size: 0.82rem;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+/* Zone CTA (when no diagnosis yet) */
+.level-tab .level-zone-cta {
+  display: block;
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.level-tab .level-zone-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.3);
+}
+
 .level-tab .level-diagonal-msg {
   margin-top: 0.75rem;
   padding: 0.75rem 1rem;

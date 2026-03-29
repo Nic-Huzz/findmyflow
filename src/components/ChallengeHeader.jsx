@@ -131,16 +131,6 @@ function ChallengeHeader({
         <div className="challenge-level-track">
           <div className="challenge-level-fill" style={{ width: '0%' }} />
         </div>
-        <div className="challenge-level-markers">
-          <span className="challenge-level-marker current">Identity</span>
-          <span className="challenge-level-marker">Vulnerability</span>
-          <span className="challenge-level-marker">Direction</span>
-          <span className="challenge-level-marker">Enough</span>
-          <span className="challenge-level-marker">Growth</span>
-          <span className="challenge-level-marker">Execution</span>
-          <span className="challenge-level-marker">Passion</span>
-          <span className="challenge-level-marker">Play</span>
-        </div>
       </div>
 
       {/* Bottom row: Streak + actions */}

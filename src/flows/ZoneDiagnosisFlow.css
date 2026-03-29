@@ -1,0 +1,404 @@
+/* ============================================================
+   ZoneDiagnosisFlow.css
+   Multi-step zone diagnosis flow.
+   Purple + gold brand, white cards, mobile-first.
+   Created: 2026-03-29
+   ============================================================ */
+
+.zd-flow {
+  min-height: 100dvh;
+  background: linear-gradient(180deg, #1a0a3e 0%, #2d1560 30%, #1a0a3e 100%);
+  padding: 2rem 1.25rem 3rem;
+  transition: opacity 0.3s ease;
+}
+
+.zd-flow.transitioning {
+  opacity: 0;
+}
+
+/* ── Step Layout ── */
+.zd-step {
+  max-width: 480px;
+  margin: 0 auto;
+  animation: zdFadeIn 0.4s ease;
+}
+
+@keyframes zdFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Step Header ── */
+.zd-step-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.zd-step-badge {
+  display: inline-block;
+  background: rgba(233, 162, 59, 0.2);
+  color: #E9A23B;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  margin-bottom: 0.75rem;
+}
+
+.zd-step-title {
+  color: white;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+.zd-step-subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.zd-step-subtitle strong {
+  color: white;
+}
+
+/* ── Step Body ── */
+.zd-step-body {
+  margin: 1.25rem 0;
+}
+
+.zd-explanation {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.zd-explanation strong {
+  color: #E9A23B;
+}
+
+/* ── Buttons ── */
+.zd-flow .zd-next-btn {
+  width: 100%;
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  border: none;
+  padding: 0.9rem 1.5rem;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.zd-flow .zd-next-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.35);
+}
+
+.zd-flow .zd-next-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.zd-flow .zd-back-btn {
+  width: 100%;
+  margin-top: 0.75rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border: none;
+  padding: 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.zd-flow .zd-back-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Zone Explainer Cards ── */
+.zd-zone-explainers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.zd-zone-explain-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+}
+
+.zd-zone-explain-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.zd-zone-explain-dot.gold {
+  background: #E9A23B;
+  box-shadow: 0 0 8px rgba(233, 162, 59, 0.4);
+}
+
+.zd-zone-explain-name {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.zd-zone-explain-desc {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* ── Zone Pick Cards ── */
+.zd-zone-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.zd-zone-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.zd-zone-card:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.zd-zone-card.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.15);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.2);
+}
+
+.zd-zone-card.gold.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.15);
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.2);
+}
+
+.zd-zone-image {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.zd-zone-pill {
+  flex: 1;
+  min-width: 0;
+}
+
+.zd-zone-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.15rem;
+}
+
+.zd-zone-desc {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.35;
+}
+
+.zd-zone-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5e17eb, #8b5cf6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.zd-zone-card.gold .zd-zone-check {
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+}
+
+/* ── Voice Cards ── */
+.zd-voice-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.zd-voice-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.zd-voice-card:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.zd-voice-card.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.12);
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.2);
+}
+
+.zd-voice-name {
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.zd-voice-desc {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.zd-voice-check {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ── Boss Reveal ── */
+.zd-reveal-step {
+  text-align: center;
+  padding-top: 3rem;
+}
+
+.zd-reveal-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  animation: zdBossAppear 0.6s ease;
+}
+
+@keyframes zdBossAppear {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.zd-reveal-title {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 0.75rem;
+  animation: zdFadeIn 0.5s ease 0.2s both;
+}
+
+.zd-reveal-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 1.5rem;
+  animation: zdFadeIn 0.5s ease 0.4s both;
+}
+
+.zd-reveal-subtitle strong {
+  color: white;
+}
+
+.zd-boss-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.5rem;
+  animation: zdFadeIn 0.5s ease 0.6s both;
+}
+
+.zd-boss-zone {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.zd-boss-arrow {
+  color: #E9A23B;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.zd-boss-target {
+  color: #E9A23B;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .zd-flow {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .zd-step-title {
+    font-size: 1.35rem;
+  }
+
+  .zd-reveal-title {
+    font-size: 1.5rem;
+  }
+}

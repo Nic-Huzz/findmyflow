@@ -149,6 +149,7 @@ const PlayProfileFlow = lazyRetry(() => import('./flows/PlayProfileFlow'))
 
 // Lazy-loaded flows - Healing & Nervous System
 const HealingCompass = lazyRetry(() => import('./flows/HealingCompass'))
+const ZoneDiagnosisFlow = lazyRetry(() => import('./flows/ZoneDiagnosisFlow'))
 const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
 const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
@@ -574,6 +575,11 @@ function AppRouter() {
             <Route path="/healing-compass" element={
               <AuthGate>
                 <HealingCompass />
+              </AuthGate>
+            } />
+            <Route path="/zone-diagnosis/:levelNumber" element={
+              <AuthGate>
+                <ZoneDiagnosisFlow />
               </AuthGate>
             } />
             <Route path="/limiting-belief-rewire" element={
