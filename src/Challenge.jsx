@@ -37,6 +37,7 @@ import ContentChallenges from './components/ContentChallenges'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
 import ChallengeIntro from './components/ChallengeIntro'
+import LevelTab from './components/level/LevelTab'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
 import { useSubscription } from './hooks/useSubscription'
 import { isPaidQuest, createCheckoutSession } from './lib/subscriptionService'
@@ -2048,21 +2049,9 @@ function Challenge() {
           </div>
         )}
 
-        {/* Level Tab (formerly Priority) */}
+        {/* Level Tab */}
         {activeCategory === 'Level' && (
-          <PriorityTab
-            userId={user?.id}
-            stageProgress={stageProgress}
-            onStageProgressUpdate={loadStageProgress}
-            onQuestComplete={handleQuestComplete}
-            completingQuestId={completingQuestId}
-            isQuestCompletedToday={isQuestCompletedToday}
-            getDailyStreak={getDailyStreak}
-            getDayLabels={getDayLabels}
-            isQuestEverCompleted={isQuestEverCompleted}
-            onNavigateToPlaylist={() => { setActiveCategory('Play-list'); setPlaylistSubTab('playlist') }}
-            onWeekPlanned={() => setWeekPlanVersion(v => v + 1)}
-          />
+          <LevelTab currentLevel={1} />
         )}
 
         {/* Bonus Sub-Tabs: Tasks | Content */}
