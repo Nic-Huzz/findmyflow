@@ -36,9 +36,10 @@ const DEFAULT_GROUP_ID = 'aaaaaaaa-0000-0000-0000-000000000001'
 const TAB_TO_CATEGORY = {
   'play-list': 'Play-list',
   'playlist': 'Play-list',
-  'priority': 'Priority',
-  'quests': 'Priority',      // backward compat — Business tab renamed to Priority
-  'business': 'Priority',    // backward compat — Business tab renamed to Priority
+  'priority': 'Level',
+  'level': 'Level',
+  'quests': 'Level',         // backward compat — Business tab renamed to Level
+  'business': 'Level',       // backward compat — Business tab renamed to Level
   'groans': 'Play-list',     // backward compat — Groans absorbed into Play-list
   'healing': 'Healing',
   'tracker': 'Play-list',    // backward compat — Tracker tab removed
@@ -57,7 +58,7 @@ export function useChallengeData() {
   const getInitialCategory = () => {
     const params = new URLSearchParams(location.search)
     const tabParam = params.get('tab')?.toLowerCase()
-    return TAB_TO_CATEGORY[tabParam] || 'Priority'
+    return TAB_TO_CATEGORY[tabParam] || 'Level'
   }
 
   // UI State
@@ -131,7 +132,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Priority', 'Play-list', 'Healing', 'Bonus']
+  const categories = ['Level', 'Play-list', 'Healing', 'Bonus']
   const BONUS_PERCENTAGE = 5
 
   // ============================================

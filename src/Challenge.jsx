@@ -16,7 +16,7 @@ import ChallengeProjectSelector from './components/ChallengeProjectSelector'
 import ChallengeHeader from './components/ChallengeHeader'
 import ChallengeOnboarding from './components/ChallengeOnboarding'
 import './components/ChallengeFilters.css' // R-type chips + frequency tabs styles (used inline now)
-import './components/ChallengeStageTabs.css' // stage-tab pills for Healing/Play-list/Priority sub-tabs
+import './components/ChallengeStageTabs.css' // stage-tab pills for Healing/Play-list/Level sub-tabs
 import QuestCard from './components/QuestCard'
 import PlayListTab from './components/PlayListTab'
 import PriorityTab from './components/PriorityTab'
@@ -211,10 +211,10 @@ function Challenge() {
       .then(({ data }) => setHasEverPlannedWeek(data && data.length > 0))
   }, [user?.id, completions, weekPlanVersion])
 
-  // Redirect to Priority if on a locked tab
+  // Redirect to Level if on a locked tab
   useEffect(() => {
-    if (!hasEverPlannedWeek && activeCategory !== 'Priority' && activeCategory !== 'Business') {
-      setActiveCategory('Priority')
+    if (!hasEverPlannedWeek && activeCategory !== 'Level' && activeCategory !== 'Business') {
+      setActiveCategory('Level')
     }
   }, [hasEverPlannedWeek, activeCategory, setActiveCategory])
 
@@ -1692,14 +1692,14 @@ function Challenge() {
 
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
-          const isLocked = !hasEverPlannedWeek && category !== 'Priority' && category !== 'Business'
+          const isLocked = !hasEverPlannedWeek && category !== 'Level' && category !== 'Business'
           return (
             <button
               key={category}
               className={`challenge-tab ${activeCategory === category ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
               onClick={() => !isLocked && setActiveCategory(category)}
               disabled={isLocked}
-              title={isLocked ? 'Complete Priority onboarding to unlock' : undefined}
+              title={isLocked ? 'Complete Level onboarding to unlock' : undefined}
             >
               {category}
               {isLocked && <span className="lock-icon">🔒</span>}
@@ -2048,8 +2048,8 @@ function Challenge() {
           </div>
         )}
 
-        {/* Priority Tab */}
-        {activeCategory === 'Priority' && (
+        {/* Level Tab (formerly Priority) */}
+        {activeCategory === 'Level' && (
           <PriorityTab
             userId={user?.id}
             stageProgress={stageProgress}
