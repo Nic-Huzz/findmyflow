@@ -230,6 +230,13 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
   const touchEndX = useRef(0)
   const autoAdvanceRef = useRef(null)
 
+  // Clean up auto-advance timer on unmount
+  useEffect(() => {
+    return () => {
+      if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current)
+    }
+  }, [])
+
   // Clear entering state after animation
   useEffect(() => {
     if (isEntering) {
@@ -346,8 +353,15 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
     if (storyStageIndex > 0) {
       transitionTo(setStoryStageIndex, storyStageIndex - 1, 'left')
     } else {
-      transitionTo(setCurrentBeat, BEATS.HOOK, 'left')
-      setHookSlideIndex(HOOK_SLIDES.length - 1)
+      if (isTransitioning) return
+      setSlideDirection('left')
+      setIsTransitioning(true)
+      setTimeout(() => {
+        setCurrentBeat(BEATS.HOOK)
+        setHookSlideIndex(HOOK_SLIDES.length - 1)
+        setIsTransitioning(false)
+        setIsEntering(true)
+      }, 250)
     }
   }
 

@@ -29,6 +29,8 @@ ALTER TABLE user_stage_progress
   ADD COLUMN IF NOT EXISTS journey_onboarding_completed BOOLEAN DEFAULT FALSE;
 
 -- Auto-update updated_at on row changes
+CREATE EXTENSION IF NOT EXISTS moddatetime SCHEMA extensions;
+
 CREATE TRIGGER set_journey_onboarding_updated_at
   BEFORE UPDATE ON journey_onboarding_selections
   FOR EACH ROW EXECUTE FUNCTION moddatetime(updated_at);
@@ -46,4 +48,5 @@ CREATE POLICY "Users can insert own journey selections"
 
 CREATE POLICY "Users can update own journey selections"
   ON journey_onboarding_selections FOR UPDATE
-  USING (auth.uid() = user_id);
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);

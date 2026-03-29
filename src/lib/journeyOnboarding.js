@@ -133,6 +133,7 @@ export async function persistJourneyOnboarding(userId) {
       .upsert({
         user_id: userId,
         journey_onboarding_completed: true,
+        onboarding_v2_completed: true,
       }, { onConflict: 'user_id' })
 
     if (progressError) {
