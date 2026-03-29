@@ -61,8 +61,8 @@ function computeJourneyLevel(scores) {
   if (scores.vulnerability != null && scores.vulnerability < 3) return { level: 2, name: 'Vulnerability', emphasis: 'vulnerability' }
   if (scores.enough != null && scores.enough < 3) return { level: 4, name: 'Enough', emphasis: 'enough' }
   if (scores.passion != null && scores.passion < 3) return { level: 7, name: 'Passion-Risk', emphasis: 'passion' }
-  // All 3s (or Q4 not asked)
-  return { level: 1, name: 'Identity', emphasis: 'identity' }
+  // All 3s (or Q4 not asked) — fully resolved
+  return { level: 1, name: 'All Clear', emphasis: 'all_clear' }
 }
 
 function HomeFirstTime({ onOnboardingComplete }) {
@@ -127,6 +127,15 @@ function HomeFirstTime({ onOnboardingComplete }) {
         const progress = JSON.parse(saved)
         // Only restore if less than 24 hours old
         if (Date.now() - progress.timestamp < 24 * 60 * 60 * 1000) {
+          // Validate restored scores — if on Q3+ but missing prior scores, reset
+          if (progress.screen === 'tension_q3' || progress.screen === 'tension_q4') {
+            const scores = progress.tensionScores || {}
+            if (scores.identity == null || scores.vulnerability == null) {
+              // Corrupted state, restart
+              localStorage.removeItem(`${ONBOARDING_STORAGE_KEY}_${user.id}`)
+              return
+            }
+          }
           if (progress.tensionScores) setTensionScores(progress.tensionScores)
           if (progress.screen && progress.screen !== SCREENS.WELCOME) {
             setCurrentScreen(progress.screen)
@@ -238,7 +247,8 @@ function HomeFirstTime({ onOnboardingComplete }) {
         transitionToScreen('tension_q4')
         return
       }
-      finishTensionAssessment(newScores)
+      // Clear any stale passion score (user may have visited Q4 then navigated back)
+      finishTensionAssessment({ ...newScores, passion: null })
       return
     }
 
@@ -569,7 +579,7 @@ function HomeFirstTime({ onOnboardingComplete }) {
       return null
     }
 
-    const levelInfo = LEVEL_DESCRIPTIONS[priorityLayer.level]
+    const levelInfo = LEVEL_DESCRIPTIONS[priorityLayer.level] || { name: 'Your Journey', question: 'Where to next?', description: 'You\'re ready to begin' }
     // Check if all scores are 3 (fully resolved)
     const allResolved = ['identity', 'vulnerability', 'enough'].every(k => tensionScores[k] >= 3)
       && (tensionScores.passion == null || tensionScores.passion >= 3)
