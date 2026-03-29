@@ -1,0 +1,221 @@
+<h2>Onboarding: Avatar + Scenario Map</h2>
+<p class="subtitle">Each wound stage has 3 zones. User's face appears in AI-generated scene for each choice.</p>
+
+<!-- The Concept -->
+<div style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(233,162,59,0.1); border: 1px solid rgba(233,162,59,0.2); border-radius: 8px;">
+  <h3 style="color: #E9A23B; margin: 0 0 0.5rem 0; font-size: 0.95rem;">The Vision</h3>
+  <p style="font-size: 0.85rem; color: #ccc; margin: 0; line-height: 1.7;">User uploads a photo. AI generates their hero avatar (0,0 — pure self). Then at each stage, they see <strong>three AI-generated scenes using their face</strong> in different situations. They pick the one that resonates. The wound announces itself through recognition, not self-report. By the end, they have a visual story of how they got from 0,0 to here.</p>
+</div>
+
+<!-- Stage by Stage from the Framework -->
+<div style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem;">
+
+  <!-- Stage 0: Avatar Creation -->
+  <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(94,23,235,0.15), rgba(233,162,59,0.08)); border-radius: 12px; border: 1px solid rgba(94,23,235,0.3);">
+    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+      <div style="width: 40px; height: 40px; border-radius: 50%; background: #5e17eb; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem;">&#10024;</div>
+      <div>
+        <div style="font-size: 1.1rem; font-weight: 700; color: #b794f6;">Step 0: Create Your Hero</div>
+        <div style="font-size: 0.75rem; color: #888;">Upload photo → AI generates hero avatar</div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 1rem; align-items: center;">
+      <div style="width: 100px; height: 100px; border-radius: 12px; background: rgba(94,23,235,0.2); border: 2px dashed rgba(94,23,235,0.4); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #b794f6; text-align: center;">Hero Avatar<br/>Generated<br/>Here</div>
+      <div style="font-size: 0.85rem; color: #ccc;">"This is you at 0,0. Before anyone told you who to be. Before the wounds. Before the operating system. Pure signal."<br/><br/><span style="color: #999; font-size: 0.8rem;">This avatar becomes their profile image and the emotional anchor for the whole journey.</span></div>
+    </div>
+  </div>
+
+  <!-- Stage 1: You Arrive -->
+  <div style="padding: 1.25rem; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+      <div>
+        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666;">Stage 1 — Infancy</div>
+        <div style="font-size: 1.05rem; font-weight: 700; color: #f87171;">You Arrive</div>
+        <div style="font-size: 0.75rem; color: #888;">Y: Attunement received | X: Safety present</div>
+      </div>
+      <div style="font-size: 0.7rem; color: #666; text-align: right; max-width: 200px;">Sets the Ventral Vagal baseline. All future graphs depend on this.</div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+      <!-- Overwhelmed Child -->
+      <div style="padding: 1rem; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(239,68,68,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #f87171; border: 1px dashed rgba(239,68,68,0.3);">AI scene: User's face as child<br/>in chaotic but loving home</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #f87171;">The Overwhelmed Child</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Seen but never settled. Caregiver present but chaotic. Sensitivity without ground.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High attunement, low safety</div>
+      </div>
+      <!-- Secure Base -->
+      <div style="padding: 1rem; background: rgba(233,162,59,0.08); border: 1px solid rgba(233,162,59,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(233,162,59,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #E9A23B; border: 1px dashed rgba(233,162,59,0.3);">AI scene: User's face as child<br/>safe, curious, exploring</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #E9A23B;">Secure Base</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Attuned and safe. Could explore, return, and be met. Ventral Vagal default.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">The diagonal — both axes present</div>
+      </div>
+      <!-- Invisible Child -->
+      <div style="padding: 1rem; background: rgba(94,23,235,0.08); border: 1px solid rgba(94,23,235,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(94,23,235,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #b794f6; border: 1px dashed rgba(94,23,235,0.3);">AI scene: User's face as child<br/>alone in tidy, quiet house</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #b794f6;">The Invisible Child</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Physically safe but unseen. Needs met, self not witnessed. Compliance without aliveness.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High safety, low attunement</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 2: You Learn What Works -->
+  <div style="padding: 1.25rem; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+      <div>
+        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666;">Stage 2 — Childhood</div>
+        <div style="font-size: 1.05rem; font-weight: 700; color: #fb923c;">You Learn What Works</div>
+        <div style="font-size: 0.75rem; color: #888;">Y: Authentic expression | X: Love received</div>
+      </div>
+      <div style="font-size: 0.7rem; color: #666; text-align: right; max-width: 200px;">The Protective Archetype is born here. Not a flaw — a genius adaptation.</div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+      <div style="padding: 1rem; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(239,68,68,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #f87171; border: 1px dashed rgba(239,68,68,0.3);">AI scene: Child being authentic<br/>but parent turning away</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #f87171;">The Rejected Self</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Full authentic expression, love withdrawn. Being yourself costs connection. Foundation of Ghost.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High expression, love withdrawn</div>
+      </div>
+      <div style="padding: 1rem; background: rgba(233,162,59,0.08); border: 1px solid rgba(233,162,59,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(233,162,59,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #E9A23B; border: 1px dashed rgba(233,162,59,0.3);">AI scene: Child being themselves<br/>parent smiling, warm embrace</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #E9A23B;">Unconditional Belonging</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Authentic expression met with love. No editing required. Self and love move together.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">The diagonal</div>
+      </div>
+      <div style="padding: 1rem; background: rgba(94,23,235,0.08); border: 1px solid rgba(94,23,235,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(94,23,235,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #b794f6; border: 1px dashed rgba(94,23,235,0.3);">AI scene: Child performing,<br/>parent clapping proudly</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #b794f6;">The Adapted Self</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Love present but only for the edited version. Suppress self to stay connected. Foundation of Performer, People Pleaser.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High love, low authenticity</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 3: School -->
+  <div style="padding: 1.25rem; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+      <div>
+        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666;">Stage 3 — School</div>
+        <div style="font-size: 1.05rem; font-weight: 700; color: #fbbf24;">School Installs the Operating System</div>
+        <div style="font-size: 0.75rem; color: #888;">Y: Conformity required | X: Authentic self suppressed</div>
+      </div>
+      <div style="font-size: 0.7rem; color: #666; text-align: right; max-width: 200px;">13 years of daily conditioning. Feels like personality by the time it's complete.</div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+      <div style="padding: 1rem; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(239,68,68,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #f87171; border: 1px dashed rgba(239,68,68,0.3);">AI scene: User as teenager<br/>defiant, outside principal's office</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #f87171;">The Rebel</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Authentic self refuses suppression. Fights back. Survives at significant social cost. Labelled difficult.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High conformity pressure, self intact</div>
+      </div>
+      <div style="padding: 1rem; background: rgba(233,162,59,0.08); border: 1px solid rgba(233,162,59,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(233,162,59,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #E9A23B; border: 1px dashed rgba(233,162,59,0.3);">AI scene: User as teenager<br/>confident, balanced, themselves</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #E9A23B;">The Grounded Student</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Navigates without disappearing. Meets requirements without losing self. Rare.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">The diagonal</div>
+      </div>
+      <div style="padding: 1rem; background: rgba(94,23,235,0.08); border: 1px solid rgba(94,23,235,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(94,23,235,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #b794f6; border: 1px dashed rgba(94,23,235,0.3);">AI scene: User as teenager<br/>perfect uniform, forced smile, trophy</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #b794f6;">The Good Student</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Conforms completely. Gets praised. Loses themselves so gradually they don't notice. <strong style="color: #f87171;">Most dangerous zone.</strong></div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High conformity, self suppressed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 4: Constructed Life -->
+  <div style="padding: 1.25rem; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+      <div>
+        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666;">Stage 4 — Adulthood</div>
+        <div style="font-size: 1.05rem; font-weight: 700; color: #a78bfa;">You Build the Constructed Life</div>
+        <div style="font-size: 0.75rem; color: #888;">Y: External validation | X: Internal alignment</div>
+      </div>
+      <div style="font-size: 0.7rem; color: #666; text-align: right; max-width: 200px;">Y axis fully activates. X axis goes dormant. Agency exists but isn't recognized.</div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+      <div style="padding: 1rem; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(239,68,68,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #f87171; border: 1px dashed rgba(239,68,68,0.3);">AI scene: User in power suit<br/>corner office, looking exhausted</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #f87171;">The Achiever</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Maximising validation with no compass. Builds fast, impressively, in the wrong direction. Performer/Controller in full operation.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High validation, low alignment</div>
+      </div>
+      <div style="padding: 1rem; background: rgba(233,162,59,0.08); border: 1px solid rgba(233,162,59,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(233,162,59,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #E9A23B; border: 1px dashed rgba(233,162,59,0.3);">AI scene: User building something<br/>purposeful, calm, fulfilled</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #E9A23B;">The Intentional Builder</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">External success aligned with internal truth. Rare at this stage.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">The diagonal</div>
+      </div>
+      <div style="padding: 1rem; background: rgba(94,23,235,0.08); border: 1px solid rgba(94,23,235,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(94,23,235,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #b794f6; border: 1px dashed rgba(94,23,235,0.3);">AI scene: User at home alone<br/>journals and ideas everywhere</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #b794f6;">The Dropout</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Rejects the game entirely. Authentic but isolated. Passion without traction. Ghost in operation.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High alignment, refuses external</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 5: The Crack -->
+  <div style="padding: 1.25rem; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(233,162,59,0.2);">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+      <div>
+        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666;">Stage 5 — Now</div>
+        <div style="font-size: 1.05rem; font-weight: 700; background: linear-gradient(90deg, #a78bfa, #E9A23B); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">You Achieve the Thing and Feel Nothing</div>
+        <div style="font-size: 0.75rem; color: #888;">Y: Achievement level | X: Meaning level</div>
+      </div>
+      <div style="font-size: 0.7rem; color: #666; text-align: right; max-width: 200px;">The crack is imminent. The arrival fallacy exposed.</div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+      <div style="padding: 1rem; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(239,68,68,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #f87171; border: 1px dashed rgba(239,68,68,0.3);">AI scene: User celebrating<br/>award/success, eyes empty</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #f87171;">Hollow Success</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Maximum achievement, minimum meaning. Life looks perfect outside. Quietly empty inside. <strong>This is Unfulfilment.</strong></div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High achievement, no meaning</div>
+      </div>
+      <div style="padding: 1rem; background: rgba(233,162,59,0.08); border: 1px solid rgba(233,162,59,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(233,162,59,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #E9A23B; border: 1px dashed rgba(233,162,59,0.3);">AI scene: User doing work<br/>that clearly matters to them</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #E9A23B;">Meaningful Achievement</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">What you've built actually matters to you. Achievement and meaning move together. The survivor.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">The diagonal</div>
+      </div>
+      <div style="padding: 1rem; background: rgba(94,23,235,0.08); border: 1px solid rgba(94,23,235,0.2); border-radius: 8px; cursor: pointer;">
+        <div style="width: 100%; height: 80px; background: rgba(94,23,235,0.1); border-radius: 6px; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #b794f6; border: 1px dashed rgba(94,23,235,0.3);">AI scene: User staring out window<br/>notebook full of dreams, nothing built</div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: #b794f6;">The Unfulfilled Idealist</div>
+        <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Knows what matters but hasn't built toward it. Rejected the Achiever path but hasn't found an alternative.</div>
+        <div style="margin-top: 0.5rem; font-size: 0.65rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.4rem;">High meaning, low achievement</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- What the Avatar Scenes Could Look Like -->
+<div style="margin-top: 2rem; padding: 1.5rem; background: rgba(94,23,235,0.1); border-radius: 8px; border: 1px solid rgba(94,23,235,0.2);">
+  <h3 style="color: #b794f6; margin: 0 0 0.75rem 0; font-size: 0.95rem;">Avatar Scene Generation Concept</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.8rem; color: #ccc;">
+    <div>
+      <strong>Per stage: 3 template scenes</strong>
+      <ul style="margin: 0.5rem 0 0 0; padding-left: 1rem; color: #999; line-height: 1.7;">
+        <li>Each scene is a pre-designed template (art style, composition, mood)</li>
+        <li>User's face is composited in via AI (same tech as hero avatar)</li>
+        <li>Scene ages with the stage: infant → child → teenager → adult → current</li>
+        <li>Consistent art style across all 15 scenes (5 stages x 3 options)</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Technical approach</strong>
+      <ul style="margin: 0.5rem 0 0 0; padding-left: 1rem; color: #999; line-height: 1.7;">
+        <li>OpenAI image generation (already have generate-avatar edge function)</li>
+        <li>Could generate all 15 scenes upfront after photo upload (parallel)</li>
+        <li>Or generate 3 per stage as they progress (sequential, faster start)</li>
+        <li>Selected scenes become their "journey gallery" — shareable</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- The Payoff -->
+<div style="margin-top: 1.25rem; padding: 1.25rem; background: rgba(233,162,59,0.1); border-radius: 8px; border-left: 3px solid #E9A23B;">
+  <h3 style="color: #E9A23B; margin: 0 0 0.5rem 0; font-size: 0.9rem;">The Payoff: A Visual Story of How You Got Here</h3>
+  <p style="font-size: 0.85rem; color: #ccc; margin: 0; line-height: 1.7;">At the end of onboarding, the user has 5 selected scenes with their face — a visual journey from pure self to constructed self. This is the thing they screenshot. This is the "I feel so seen" moment. It's their story, told back to them through images they chose, with their face in every frame.</p>
+</div>

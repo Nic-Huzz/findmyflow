@@ -1,0 +1,552 @@
+/* ============================================================
+   LevelTab.css
+   All selectors scoped under .level-tab
+   Follows challenge portal patterns: white cards, purple accents,
+   gold CTAs, 16px border-radius.
+   Created: 2026-03-27
+   ============================================================ */
+
+/* ── Container ── */
+.level-tab {
+  padding: 0 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Level Header Card ── */
+.level-tab .level-header-card {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.25);
+}
+
+.level-tab .level-header-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.level-tab .level-header-question {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.level-tab .level-header-boss {
+  margin-top: 0.75rem;
+  background: rgba(255, 255, 255, 0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* ── Section Titles ── */
+.level-tab .level-section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   ZONE DIAGNOSIS
+   ============================================================ */
+.level-tab .level-zone-diagnosis {
+  background: white;
+  border-radius: 16px;
+  padding: 1.25rem;
+  border: 2px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.level-tab .level-zone-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.level-tab .level-zone-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 14px;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.level-tab .level-zone-card:hover {
+  border-color: #5e17eb;
+  background: #faf8ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.1);
+}
+
+.level-tab .level-zone-card.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.15);
+}
+
+.level-tab .level-zone-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.level-tab .level-zone-pill {
+  flex: 1;
+  min-width: 0;
+}
+
+.level-tab .level-zone-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.15rem;
+}
+
+.level-tab .level-zone-desc {
+  font-size: 0.78rem;
+  color: #6c757d;
+  line-height: 1.35;
+}
+
+.level-tab .level-zone-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5e17eb, #8b5cf6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Boss Reveal */
+.level-tab .level-boss-reveal {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08), rgba(94, 23, 235, 0.04));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #1a1a2e;
+  border-left: 3px solid #5e17eb;
+}
+
+.level-tab .level-boss-icon {
+  font-size: 1.1rem;
+}
+
+.level-tab .level-diagonal-msg {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(16, 185, 129, 0.08);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #059669;
+  font-weight: 600;
+  text-align: center;
+  border-left: 3px solid #10b981;
+}
+
+/* ============================================================
+   DEEP DIVE CARD
+   ============================================================ */
+.level-tab .level-deep-dive {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.level-tab .level-deep-dive.completed {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.level-tab .level-dd-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.level-tab .level-dd-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.level-tab .level-dd-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.level-tab .level-dd-narrative {
+  font-size: 0.78rem;
+  color: #6c757d;
+  margin-top: 0.15rem;
+}
+
+/* Status badges (shared across deep dive, milestone, boss) */
+.level-tab .level-dd-status {
+  flex-shrink: 0;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+}
+
+.level-tab .level-dd-status.done {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.level-tab .level-dd-status.start {
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.level-tab .level-dd-status.start:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+}
+
+.level-tab .level-dd-status.locked {
+  background: #f1f3f5;
+  color: #adb5bd;
+}
+
+/* ============================================================
+   BOSS FIGHT CARD
+   ============================================================ */
+.level-tab .level-boss-fight {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.level-tab .level-boss-fight.completed {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.level-tab .level-boss-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.level-tab .level-boss-fight-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.level-tab .level-boss-fight-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.level-tab .level-boss-fight-sub {
+  font-size: 0.78rem;
+  color: #6c757d;
+  margin-top: 0.1rem;
+}
+
+.level-tab .level-boss-actions {
+  margin-top: 1rem;
+}
+
+.level-tab .level-boss-btn {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.level-tab .level-boss-btn.pre {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+}
+
+.level-tab .level-boss-btn.pre:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.3);
+}
+
+/* Boss Form */
+.level-tab .level-boss-form {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.level-tab .level-boss-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.level-tab .level-boss-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.75rem;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.level-tab .level-boss-textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.level-tab .level-boss-slider {
+  width: 100%;
+  accent-color: #5e17eb;
+}
+
+.level-tab .level-boss-submit {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.level-tab .level-boss-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.3);
+}
+
+/* ============================================================
+   MILESTONE CARD
+   ============================================================ */
+.level-tab .level-milestone {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.level-tab .level-milestone.completed {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.level-tab .level-milestone-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.level-tab .level-milestone-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.level-tab .level-milestone-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #E9A23B;
+  margin-bottom: 0.15rem;
+}
+
+.level-tab .level-milestone-text {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  line-height: 1.35;
+}
+
+.level-tab .level-milestone-btn {
+  flex-shrink: 0;
+  padding: 0.4rem 0.85rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.level-tab .level-milestone-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+}
+
+/* ============================================================
+   PROGRESS BARS
+   ============================================================ */
+.level-tab .level-progress {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.level-tab .level-bar-section {
+  margin-bottom: 1.25rem;
+}
+
+.level-tab .level-bar-section:last-child {
+  margin-bottom: 0;
+}
+
+.level-tab .level-bar-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.5rem;
+}
+
+/* Filled progress bar */
+.level-tab .level-bar-track {
+  height: 8px;
+  background: #f1f3f5;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.level-tab .level-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.level-tab .level-bar-fill.purple {
+  background: linear-gradient(90deg, #5e17eb, #8b5cf6);
+}
+
+/* Quest items list */
+.level-tab .level-bar-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.level-tab .level-bar-item {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #adb5bd;
+  background: #f8f9fa;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.level-tab .level-bar-item.done {
+  color: #059669;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* Dot-based progress (healing days, courage) */
+.level-tab .level-bar-dots {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.level-tab .level-bar-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f1f3f5;
+  border: 2px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.level-tab .level-bar-dot.filled {
+  background: linear-gradient(135deg, #5e17eb, #8b5cf6);
+  border-color: #5e17eb;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.2);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 480px) {
+  .level-tab {
+    padding: 0 0.75rem 2rem;
+  }
+
+  .level-tab .level-header-name {
+    font-size: 1.1rem;
+  }
+
+  .level-tab .level-header-question {
+    font-size: 0.88rem;
+  }
+
+  .level-tab .level-bar-dot {
+    width: 16px;
+    height: 16px;
+  }
+}

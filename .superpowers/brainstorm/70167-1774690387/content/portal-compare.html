@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Redesign: 3 Options</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #111; color: white; padding: 2rem; }
+  h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .subtitle { color: #999; font-size: 0.9rem; margin-bottom: 2rem; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+  .frame-card { background: #1a1a1a; border-radius: 16px; overflow: hidden; border: 2px solid #333; transition: border-color 0.2s; }
+  .frame-card:hover { border-color: #5e17eb; }
+  .frame-label { padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+  .frame-label h3 { font-size: 0.95rem; }
+  .frame-badge { padding: 3px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; }
+  .frame-desc { padding: 0 1rem 0.75rem; font-size: 0.75rem; color: #888; }
+  iframe { width: 100%; height: 700px; border: none; border-top: 1px solid #333; }
+</style>
+</head>
+<body>
+<h1>Let's Play Portal: 3 Options</h1>
+<p class="subtitle">Click into each to scroll and explore. All use current FindMyFlow design tokens.</p>
+
+<div class="grid">
+  <div class="frame-card">
+    <div class="frame-label">
+      <h3>A: Journey Map Home</h3>
+      <span class="frame-badge" style="background: rgba(94,23,235,0.2); color: #b794f6;">Game-first</span>
+    </div>
+    <div class="frame-desc">Open portal → see full journey map. Current stage expanded. Feels like a game map.</div>
+    <iframe src="portal-option-a.html"></iframe>
+  </div>
+
+  <div class="frame-card">
+    <div class="frame-label">
+      <h3>B: Stage Dashboard</h3>
+      <span class="frame-badge" style="background: rgba(251,146,60,0.2); color: #fb923c;">Task-first</span>
+    </div>
+    <div class="frame-desc">Open portal → land in current stage dashboard. Journey via button. Feels like a productivity tool.</div>
+    <iframe src="portal-option-b.html"></iframe>
+  </div>
+
+  <div class="frame-card">
+    <div class="frame-label">
+      <h3>C: Hybrid (Recommended)</h3>
+      <span class="frame-badge" style="background: rgba(233,162,59,0.2); color: #E9A23B;">Best of both</span>
+    </div>
+    <div class="frame-desc">Journey rail in header + stage dashboard below. Game context with actionable tasks. 4-pillar action grid.</div>
+    <iframe src="portal-option-c.html"></iframe>
+  </div>
+</div>
+</body>
+</html>

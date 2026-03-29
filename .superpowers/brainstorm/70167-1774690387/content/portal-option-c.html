@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option C: Journey Map + Dashboard Hybrid</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); min-height: 100vh; max-width: 420px; margin: 0 auto; }
+
+  .header {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    padding: 1.5rem 1.5rem 1rem;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .brand { font-size: 18px; font-weight: 800; background: linear-gradient(135deg, #fff, #E9A23B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .xp-pill { background: rgba(255,255,255,0.2); color: white; padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600; }
+  .header-subtitle { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .header-stage { font-size: 1.2rem; font-weight: 800; }
+
+  /* Compact Journey Rail */
+  .journey-rail { display: flex; align-items: center; gap: 0; padding: 0.75rem 0 0.25rem; overflow-x: auto; }
+  .rail-node { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 52px; cursor: pointer; }
+  .rail-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; border: 2px solid; transition: all 0.2s; }
+  .rail-circle.done { background: #10b981; border-color: #10b981; color: white; }
+  .rail-circle.current { background: white; border-color: white; color: #5e17eb; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
+  .rail-circle.locked { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.3); }
+  .rail-label { font-size: 0.55rem; color: rgba(255,255,255,0.5); text-align: center; white-space: nowrap; }
+  .rail-label.current { color: white; font-weight: 600; }
+  .rail-connector { width: 16px; height: 2px; flex-shrink: 0; }
+  .rail-connector.done { background: #10b981; }
+  .rail-connector.partial { background: linear-gradient(90deg, #10b981, rgba(255,255,255,0.15)); }
+  .rail-connector.locked { background: rgba(255,255,255,0.1); }
+
+  .content { padding: 1rem 1.5rem; }
+  .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #adb5bd; margin-bottom: 8px; margin-top: 1rem; }
+
+  /* Stage Hero Card */
+  .stage-hero { background: white; border-radius: 20px; padding: 1.25rem; border-left: 4px solid; margin-bottom: 1rem; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+  .stage-hero.vulnerability { border-color: #fb923c; }
+  .stage-hero-top { display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem; }
+  .stage-hero-name { font-size: 1.1rem; font-weight: 800; color: #212529; }
+  .stage-hero-graph { font-size: 0.7rem; color: #6c757d; }
+  .stage-hero-question { font-size: 0.85rem; color: #fb923c; font-weight: 600; font-style: italic; margin-bottom: 0.75rem; }
+
+  /* 4R Progress */
+  .four-r-bar { display: flex; gap: 2px; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 0.5rem; }
+  .four-r-segment { flex: 1; }
+  .four-r-labels { display: flex; justify-content: space-between; }
+  .four-r-label { font-size: 0.6rem; color: #adb5bd; }
+  .four-r-label.done { color: #10b981; font-weight: 600; }
+  .four-r-label.active { color: #5e17eb; font-weight: 600; }
+
+  /* Milestone Banner */
+  .milestone-banner { background: linear-gradient(135deg, rgba(233,162,59,0.08), rgba(94,23,235,0.04)); border: 1px solid rgba(233,162,59,0.2); border-radius: 12px; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+  .milestone-icon { font-size: 1.5rem; }
+  .milestone-text { flex: 1; }
+  .milestone-title { font-size: 0.8rem; font-weight: 700; color: #212529; }
+  .milestone-desc { font-size: 0.7rem; color: #6c757d; }
+  .milestone-count { font-size: 1.1rem; font-weight: 800; color: #E9A23B; }
+
+  /* Action Cards */
+  .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .action-card { background: white; border-radius: 14px; padding: 1rem; border: 2px solid #e9ecef; cursor: pointer; transition: all 0.2s; }
+  .action-card:hover { border-color: #5e17eb; box-shadow: 0 4px 12px rgba(94,23,235,0.08); }
+  .action-card.highlight { border-color: #5e17eb; background: rgba(94,23,235,0.02); }
+  .action-emoji { font-size: 1.5rem; margin-bottom: 0.35rem; }
+  .action-title { font-size: 0.85rem; font-weight: 700; color: #212529; }
+  .action-desc { font-size: 0.7rem; color: #6c757d; margin-top: 2px; }
+  .action-badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 6px; font-weight: 600; margin-top: 6px; display: inline-block; }
+
+  /* Today's Tasks */
+  .today-card { background: white; border-radius: 16px; padding: 1.25rem; border: 2px solid #e9ecef; }
+  .today-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .today-title { font-size: 0.9rem; font-weight: 700; color: #212529; display: flex; align-items: center; gap: 0.5rem; }
+  .today-count { font-size: 0.7rem; color: #6c757d; }
+  .task-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid #f8f9fa; }
+  .task-row:last-child { border-bottom: none; }
+  .task-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; flex-shrink: 0; }
+  .task-check.done { background: #10b981; border-color: #10b981; color: white; }
+  .task-check.pending { border-color: #dee2e6; }
+  .task-info { flex: 1; }
+  .task-name { font-size: 0.8rem; font-weight: 600; color: #212529; }
+  .task-meta { font-size: 0.65rem; color: #adb5bd; }
+  .task-pts { font-size: 0.7rem; font-weight: 700; color: #5e17eb; }
+
+  .option-label { position: fixed; top: 8px; right: 8px; background: #E9A23B; color: white; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; z-index: 100; }
+</style>
+</head>
+<body>
+<div class="option-label">OPTION C: Hybrid (Recommended)</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="brand">Find My Flow</div>
+    <div class="xp-pill">⚡ 142 XP</div>
+  </div>
+
+  <!-- Compact Journey Rail in Header -->
+  <div class="journey-rail">
+    <div class="rail-node">
+      <div class="rail-circle done">✓</div>
+      <div class="rail-label">Identity</div>
+    </div>
+    <div class="rail-connector done"></div>
+    <div class="rail-node">
+      <div class="rail-circle current">2</div>
+      <div class="rail-label current">Vulnerability</div>
+    </div>
+    <div class="rail-connector partial"></div>
+    <div class="rail-node">
+      <div class="rail-circle locked">3</div>
+      <div class="rail-label">Enough</div>
+    </div>
+    <div class="rail-connector locked"></div>
+    <div class="rail-node">
+      <div class="rail-circle locked">4</div>
+      <div class="rail-label">Growth</div>
+    </div>
+    <div class="rail-connector locked"></div>
+    <div class="rail-node">
+      <div class="rail-circle locked">5</div>
+      <div class="rail-label">Execution</div>
+    </div>
+    <div class="rail-connector locked"></div>
+    <div class="rail-node">
+      <div class="rail-circle locked">6</div>
+      <div class="rail-label">Passion</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- Stage Hero -->
+  <div class="stage-hero vulnerability">
+    <div class="stage-hero-top">
+      <div>
+        <div class="stage-hero-name">Vulnerability</div>
+        <div class="stage-hero-graph">Vulnerability Sweet Spot · Live Layer</div>
+      </div>
+    </div>
+    <div class="stage-hero-question">"Can I be honest about what I need?"</div>
+    <div class="four-r-bar">
+      <div class="four-r-segment" style="background: #10b981;"></div>
+      <div class="four-r-segment" style="background: #5e17eb;"></div>
+      <div class="four-r-segment" style="background: #e9ecef;"></div>
+      <div class="four-r-segment" style="background: #e9ecef;"></div>
+    </div>
+    <div class="four-r-labels">
+      <div class="four-r-label done">Recognise ✓</div>
+      <div class="four-r-label active">Release</div>
+      <div class="four-r-label">Rewire</div>
+      <div class="four-r-label">Reconnect</div>
+    </div>
+  </div>
+
+  <!-- Milestone -->
+  <div class="milestone-banner">
+    <div class="milestone-icon">🤝</div>
+    <div class="milestone-text">
+      <div class="milestone-title">Share with 2 vibe tribe pillars</div>
+      <div class="milestone-desc">Tell two real humans you're becoming this person</div>
+    </div>
+    <div class="milestone-count">0/2</div>
+  </div>
+
+  <!-- Action Grid -->
+  <div class="action-grid">
+    <div class="action-card highlight">
+      <div class="action-emoji">🎯</div>
+      <div class="action-title">Play-List</div>
+      <div class="action-desc">Live layer challenges</div>
+      <div class="action-badge" style="background: rgba(94,23,235,0.08); color: #5e17eb;">1/2 essence zone</div>
+    </div>
+    <div class="action-card">
+      <div class="action-emoji">💚</div>
+      <div class="action-title">Daily Healing</div>
+      <div class="action-desc">Today's practices</div>
+      <div class="action-badge" style="background: rgba(16,185,129,0.08); color: #10b981;">3 day streak 🔥</div>
+    </div>
+    <div class="action-card">
+      <div class="action-emoji">🔮</div>
+      <div class="action-title">Deep Dive</div>
+      <div class="action-desc">Healing Compass</div>
+      <div class="action-badge" style="background: rgba(16,185,129,0.08); color: #10b981;">Complete ✓</div>
+    </div>
+    <div class="action-card">
+      <div class="action-emoji">🏆</div>
+      <div class="action-title">Deliverables</div>
+      <div class="action-desc">Stage milestones</div>
+      <div class="action-badge" style="background: rgba(233,162,59,0.08); color: #E9A23B;">0/2 shares</div>
+    </div>
+  </div>
+
+  <!-- Today's Tasks -->
+  <div class="label">TODAY</div>
+  <div class="today-card">
+    <div class="today-header">
+      <div class="today-title">📋 Today's Tasks</div>
+      <div class="today-count">2/5 done</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check done">✓</div>
+      <div class="task-info">
+        <div class="task-name">Morning Breathwork</div>
+        <div class="task-meta">💚 Reconnect · Daily</div>
+      </div>
+      <div class="task-pts">+5</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check done">✓</div>
+      <div class="task-info">
+        <div class="task-name">Go live: share a lesson learned</div>
+        <div class="task-meta">🎯 Live Layer · Scary 8 Wahoo 9 · Essence Zone 🔥</div>
+      </div>
+      <div class="task-pts">+7</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Voice Check-In</div>
+        <div class="task-meta">💚 Recognise · Essence or protective?</div>
+      </div>
+      <div class="task-pts">+3</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Trigger Recognition</div>
+        <div class="task-meta">💚 Recognise · What activated you?</div>
+      </div>
+      <div class="task-pts">+3</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Compass Direction Log</div>
+        <div class="task-meta">💚 Reconnect · N/E/S/W energy check</div>
+      </div>
+      <div class="task-pts">+3</div>
+    </div>
+  </div>
+
+</div>
+
+<div style="height: 100px;"></div>
+</body>
+</html>

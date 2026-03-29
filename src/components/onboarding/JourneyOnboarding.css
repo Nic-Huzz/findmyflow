@@ -49,14 +49,18 @@
 .jo-transitioning .jo-hook-content,
 .jo-transitioning .jo-story-content,
 .jo-transitioning .jo-reframe-content,
-.jo-transitioning .jo-promise-content {
+.jo-transitioning .jo-promise-content,
+.jo-transitioning .jo-signup-content,
+.jo-transitioning .jo-verify-content {
   animation: jo-slideOut 0.25s ease forwards;
 }
 
 .jo-entering .jo-hook-content,
 .jo-entering .jo-story-content,
 .jo-entering .jo-reframe-content,
-.jo-entering .jo-promise-content {
+.jo-entering .jo-promise-content,
+.jo-entering .jo-signup-content,
+.jo-entering .jo-verify-content {
   animation: jo-slideIn 0.4s ease;
 }
 
@@ -64,14 +68,18 @@
 .jo-slide-right.jo-transitioning .jo-hook-content,
 .jo-slide-right.jo-transitioning .jo-story-content,
 .jo-slide-right.jo-transitioning .jo-reframe-content,
-.jo-slide-right.jo-transitioning .jo-promise-content {
+.jo-slide-right.jo-transitioning .jo-promise-content,
+.jo-slide-right.jo-transitioning .jo-signup-content,
+.jo-slide-right.jo-transitioning .jo-verify-content {
   animation: jo-slideOutLeft 0.25s ease forwards;
 }
 
 .jo-slide-right.jo-entering .jo-hook-content,
 .jo-slide-right.jo-entering .jo-story-content,
 .jo-slide-right.jo-entering .jo-reframe-content,
-.jo-slide-right.jo-entering .jo-promise-content {
+.jo-slide-right.jo-entering .jo-promise-content,
+.jo-slide-right.jo-entering .jo-signup-content,
+.jo-slide-right.jo-entering .jo-verify-content {
   animation: jo-slideInRight 0.4s ease;
 }
 
@@ -79,14 +87,18 @@
 .jo-slide-left.jo-transitioning .jo-hook-content,
 .jo-slide-left.jo-transitioning .jo-story-content,
 .jo-slide-left.jo-transitioning .jo-reframe-content,
-.jo-slide-left.jo-transitioning .jo-promise-content {
+.jo-slide-left.jo-transitioning .jo-promise-content,
+.jo-slide-left.jo-transitioning .jo-signup-content,
+.jo-slide-left.jo-transitioning .jo-verify-content {
   animation: jo-slideOutRight 0.25s ease forwards;
 }
 
 .jo-slide-left.jo-entering .jo-hook-content,
 .jo-slide-left.jo-entering .jo-story-content,
 .jo-slide-left.jo-entering .jo-reframe-content,
-.jo-slide-left.jo-entering .jo-promise-content {
+.jo-slide-left.jo-entering .jo-promise-content,
+.jo-slide-left.jo-entering .jo-signup-content,
+.jo-slide-left.jo-entering .jo-verify-content {
   animation: jo-slideInLeft 0.4s ease;
 }
 
@@ -631,8 +643,9 @@
 
 .jo-reframe { justify-content: center; }
 .jo-reframe .jo-reframe-content { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 0 24px; }
-.jo-reframe .jo-reframe-center { cursor: pointer; max-width: 340px; }
+.jo-reframe .jo-reframe-center { max-width: 340px; text-align: center; }
 .jo-reframe .jo-reframe-text { font-size: 1.5rem; font-weight: 800; color: var(--jo-gold); text-align: center; line-height: 1.4; letter-spacing: -0.3px; animation: jo-fadeInUp 0.8s ease; }
+.jo-reframe .jo-reframe-cta { margin-top: 40px; animation: jo-fadeInUp 0.8s ease 0.3s backwards; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    BEAT 4: THE PROMISE
@@ -672,6 +685,106 @@
   line-height: 1.6;
   margin: 0;
   animation: jo-fadeInUp 0.6s ease 0.2s backwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BEAT 5 & 6: SIGNUP + VERIFY
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.jo-signup,
+.jo-verify {
+  justify-content: center;
+  text-align: center;
+}
+
+.jo-signup-content,
+.jo-verify-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 0 24px;
+}
+
+.jo-signup-heading,
+.jo-verify-heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--jo-gold);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.jo-signup-subtext,
+.jo-verify-subtext {
+  font-size: 0.9rem;
+  color: var(--jo-text-soft);
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.jo-verify-subtext strong {
+  color: var(--jo-gold);
+}
+
+.jo-signup-form,
+.jo-verify-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.jo-signup-input {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  color: white;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.jo-signup-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.jo-signup-input:focus {
+  border-color: var(--jo-gold);
+}
+
+.jo-code-input {
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: 8px;
+  font-weight: 700;
+}
+
+.jo-auth-error {
+  color: #f87171;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.jo-resend-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-top: 16px;
+  text-decoration: underline;
+}
+
+.jo-resend-btn:hover {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option A: Journey Map Home</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); min-height: 100vh; max-width: 420px; margin: 0 auto; }
+
+  .header {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    padding: 1.5rem 1.5rem 1.25rem;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .brand { font-size: 18px; font-weight: 800; background: linear-gradient(135deg, #fff, #E9A23B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .xp-pill { background: rgba(255,255,255,0.2); color: white; padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600; }
+  .header-subtitle { font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem; }
+  .header-stage { font-size: 1.4rem; font-weight: 800; }
+  .header-stage-sub { font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+  .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #adb5bd; margin-bottom: 8px; padding: 0 1.5rem; margin-top: 1.25rem; }
+
+  /* Journey Map */
+  .journey-map { padding: 1rem 1.5rem; }
+  .journey-path { position: relative; }
+  .journey-node { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 0.5rem; position: relative; }
+  .journey-line { position: absolute; left: 19px; top: 40px; bottom: 0; width: 2px; }
+  .node-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; z-index: 1; border: 2px solid; }
+  .node-circle.completed { background: #10b981; border-color: #10b981; color: white; }
+  .node-circle.current { background: linear-gradient(135deg, #5e17eb, #8b5cf6); border-color: #5e17eb; color: white; box-shadow: 0 0 0 4px rgba(94,23,235,0.2); }
+  .node-circle.locked { background: #e9ecef; border-color: #dee2e6; color: #adb5bd; }
+  .node-content { flex: 1; padding: 0.5rem 0; }
+  .node-name { font-size: 0.95rem; font-weight: 700; color: #212529; }
+  .node-name.locked { color: #adb5bd; }
+  .node-desc { font-size: 0.75rem; color: #6c757d; margin-top: 2px; }
+  .node-progress { display: flex; gap: 3px; margin-top: 6px; }
+  .node-pip { width: 24px; height: 4px; border-radius: 2px; }
+  .node-pip.done { background: #10b981; }
+  .node-pip.active { background: #5e17eb; }
+  .node-pip.empty { background: #e9ecef; }
+  .node-badge { font-size: 0.65rem; padding: 2px 8px; border-radius: 8px; font-weight: 600; margin-top: 4px; display: inline-block; }
+
+  /* Current Stage Card */
+  .current-card { margin: 0 1.5rem; background: white; border-radius: 16px; padding: 1.25rem; border: 2px solid #5e17eb; box-shadow: 0 4px 16px rgba(94,23,235,0.1); }
+  .current-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .current-card-title { font-size: 0.85rem; font-weight: 700; color: #5e17eb; }
+  .current-card-milestone { font-size: 0.75rem; color: #6c757d; }
+  .four-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .pillar { padding: 0.6rem; border-radius: 10px; text-align: center; }
+  .pillar-icon { font-size: 1.2rem; margin-bottom: 2px; }
+  .pillar-label { font-size: 0.65rem; font-weight: 600; }
+  .pillar-status { font-size: 0.6rem; margin-top: 2px; }
+  .pillar.done { background: rgba(16,185,129,0.08); color: #10b981; }
+  .pillar.active { background: rgba(94,23,235,0.06); color: #5e17eb; }
+  .pillar.pending { background: #f8f9fa; color: #adb5bd; }
+
+  .option-label { position: fixed; top: 8px; right: 8px; background: #5e17eb; color: white; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; z-index: 100; }
+</style>
+</head>
+<body>
+<div class="option-label">OPTION A: Journey Map Home</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="brand">Find My Flow</div>
+    <div class="xp-pill">⚡ 142 XP</div>
+  </div>
+  <div class="header-subtitle">YOUR JOURNEY</div>
+  <div class="header-stage">Stage 2: Vulnerability</div>
+  <div class="header-stage-sub">Layer: LIVE — "Can I be honest in real time?"</div>
+</div>
+
+<div class="label">JOURNEY MAP</div>
+
+<div class="journey-map">
+  <div class="journey-path">
+
+    <div class="journey-node">
+      <div style="position: relative;">
+        <div class="node-circle completed">✓</div>
+        <div class="journey-line" style="background: #10b981;"></div>
+      </div>
+      <div class="node-content">
+        <div class="node-name">1. Identity</div>
+        <div class="node-desc">Met your essence. Named the shadow.</div>
+        <div class="node-progress">
+          <div class="node-pip done"></div><div class="node-pip done"></div><div class="node-pip done"></div><div class="node-pip done"></div>
+        </div>
+        <div class="node-badge" style="background: rgba(16,185,129,0.1); color: #10b981;">✓ COMPLETE — Radiant Rebel revealed</div>
+      </div>
+    </div>
+
+    <div class="journey-node">
+      <div style="position: relative;">
+        <div class="node-circle current">2</div>
+        <div class="journey-line" style="background: linear-gradient(to bottom, #5e17eb, #dee2e6);"></div>
+      </div>
+      <div class="node-content">
+        <div class="node-name">2. Vulnerability</div>
+        <div class="node-desc">What is your essence hungry for?</div>
+        <div class="node-progress">
+          <div class="node-pip done" title="Recognise"></div><div class="node-pip active" title="Release"></div><div class="node-pip empty" title="Rewire"></div><div class="node-pip empty" title="Reconnect"></div>
+        </div>
+        <div class="node-badge" style="background: rgba(94,23,235,0.08); color: #5e17eb;">IN PROGRESS — Healing Compass done</div>
+      </div>
+    </div>
+
+    <div class="journey-node">
+      <div style="position: relative;">
+        <div class="node-circle locked">3</div>
+        <div class="journey-line" style="background: #dee2e6;"></div>
+      </div>
+      <div class="node-content">
+        <div class="node-name locked">3. Enough</div>
+        <div class="node-desc" style="color: #adb5bd;">The permission gate. Business unlocks here.</div>
+      </div>
+    </div>
+
+    <div class="journey-node">
+      <div style="position: relative;">
+        <div class="node-circle locked">4</div>
+        <div class="journey-line" style="background: #dee2e6;"></div>
+      </div>
+      <div class="node-content">
+        <div class="node-name locked">4. Growth</div>
+        <div class="node-desc" style="color: #adb5bd;">What's your real edge?</div>
+      </div>
+    </div>
+
+    <div class="journey-node">
+      <div style="position: relative;">
+        <div class="node-circle locked">5</div>
+        <div class="journey-line" style="background: #dee2e6;"></div>
+      </div>
+      <div class="node-content">
+        <div class="node-name locked">5. Execution</div>
+        <div class="node-desc" style="color: #adb5bd;">Sustainable movement.</div>
+      </div>
+    </div>
+
+    <div class="journey-node">
+      <div>
+        <div class="node-circle locked" style="background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(233,162,59,0.1)); border-color: #dee2e6;">6</div>
+      </div>
+      <div class="node-content">
+        <div class="node-name locked">6. Passion-Risk</div>
+        <div class="node-desc" style="color: #adb5bd;">Boss level.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="label">CURRENT STAGE</div>
+<div class="current-card">
+  <div class="current-card-header">
+    <div class="current-card-title">Stage 2: Vulnerability</div>
+    <div class="current-card-milestone">Milestone: Share with 2 vibe tribe pillars</div>
+  </div>
+  <div class="four-pillars">
+    <div class="pillar done"><div class="pillar-icon">🔮</div><div class="pillar-label">Deep Dive</div><div class="pillar-status">Healing Compass ✓</div></div>
+    <div class="pillar active"><div class="pillar-icon">🎯</div><div class="pillar-label">Play-List</div><div class="pillar-status">1/2 Live challenges</div></div>
+    <div class="pillar active"><div class="pillar-icon">💚</div><div class="pillar-label">Daily Healing</div><div class="pillar-status">3 day streak</div></div>
+    <div class="pillar pending"><div class="pillar-icon">🏆</div><div class="pillar-label">Milestone</div><div class="pillar-status">0/2 vibe tribe shares</div></div>
+  </div>
+</div>
+
+<div style="height: 100px;"></div>
+</body>
+</html>

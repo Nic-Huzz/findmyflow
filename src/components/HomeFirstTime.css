@@ -774,6 +774,35 @@ body.onboarding-active nav.bottom-toolbar {
   line-height: 1.4;
 }
 
+/* Option image (Q1 Pixar-style images) */
+.home-first-time .hft-option-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;
+  display: block;
+}
+
+.home-first-time .option-button.has-image {
+  padding: 0;
+  overflow: hidden;
+}
+
+.home-first-time .option-button.has-image .option-label {
+  padding: 10px 14px;
+  display: block;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.home-first-time .option-button.has-image:hover:not(.disabled-option) {
+  transform: translateX(0) translateY(-4px);
+}
+
+.home-first-time .option-button.has-image:active:not(.disabled-option) {
+  transform: translateY(-2px) scale(0.98);
+}
+
 /* Reveal Screen */
 .home-first-time.reveal-screen {
   align-items: center;
@@ -1101,6 +1130,15 @@ body.onboarding-active nav.bottom-toolbar {
   .home-first-time .option-description {
     font-size: 0.8rem;
   }
+
+  .home-first-time .hft-option-image {
+    height: 100px;
+  }
+
+  .home-first-time .option-button.has-image .option-label {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
 }
 
 /* Extra small screens */
@@ -1129,5 +1167,9 @@ body.onboarding-active nav.bottom-toolbar {
 
   .home-first-time .option-button {
     padding: 12px 14px;
+  }
+
+  .home-first-time .hft-option-image {
+    height: 80px;
   }
 }

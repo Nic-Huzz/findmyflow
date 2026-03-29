@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal: XP Bar + Graph Popup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); min-height: 100vh; max-width: 420px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    padding: 1.5rem 1.5rem 1.25rem;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .brand { font-size: 18px; font-weight: 800; background: linear-gradient(135deg, #fff, #E9A23B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header-right { display: flex; align-items: center; gap: 0.75rem; }
+  .avatar-mini { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #E9A23B, #fbbf24); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border: 2px solid rgba(255,255,255,0.4); }
+  .settings-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 0.9rem; cursor: pointer; }
+
+  /* XP Level Bar */
+  .xp-section { margin-bottom: 0.25rem; }
+  .xp-level-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .xp-stage-name { font-size: 1.1rem; font-weight: 800; }
+  .xp-numbers { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+  .xp-numbers span { color: white; font-weight: 700; }
+
+  .xp-bar-track { width: 100%; height: 12px; background: rgba(255,255,255,0.12); border-radius: 6px; position: relative; overflow: visible; }
+  .xp-bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #5e17eb, #a78bfa, #E9A23B); position: relative; transition: width 0.8s ease; overflow: hidden; }
+  .xp-bar-fill::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3)); animation: xpShimmer 2.5s ease-in-out infinite; }
+  @keyframes xpShimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+  /* Stage markers on XP bar */
+  .xp-markers { position: relative; height: 16px; margin-top: 4px; }
+  .xp-marker { position: absolute; transform: translateX(-50%); text-align: center; }
+  .xp-marker-dot { width: 8px; height: 8px; border-radius: 50%; margin: 0 auto 2px; }
+  .xp-marker-dot.passed { background: #10b981; }
+  .xp-marker-dot.current { background: #E9A23B; box-shadow: 0 0 6px rgba(233,162,59,0.5); }
+  .xp-marker-dot.locked { background: rgba(255,255,255,0.2); }
+  .xp-marker-label { font-size: 0.5rem; color: rgba(255,255,255,0.4); white-space: nowrap; }
+  .xp-marker-label.current { color: #E9A23B; font-weight: 600; }
+  .xp-marker-label.passed { color: rgba(255,255,255,0.6); }
+
+  /* Journey graph button */
+  .graph-btn { display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-top: 0.75rem; transition: all 0.2s; }
+  .graph-btn:hover { background: rgba(255,255,255,0.18); color: white; }
+
+  /* Content */
+  .content { padding: 1rem 1.5rem; }
+  .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #adb5bd; margin-bottom: 8px; margin-top: 1rem; }
+  .label:first-child { margin-top: 0; }
+
+  /* Milestone Card */
+  .milestone-card { background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #E9A23B 100%); border-radius: 16px; padding: 1rem 1.25rem; color: white; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1rem; }
+  .milestone-emoji { font-size: 1.8rem; }
+  .milestone-text { flex: 1; }
+  .milestone-title { font-size: 0.9rem; font-weight: 700; }
+  .milestone-desc { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+  .milestone-progress { font-size: 1.3rem; font-weight: 800; }
+
+  /* Section Cards */
+  .section-card { background: white; border-radius: 16px; padding: 1.25rem; margin-bottom: 0.75rem; border: 2px solid #e9ecef; }
+  .section-card.active { border-color: #5e17eb; }
+  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .section-title { font-size: 0.9rem; font-weight: 700; color: #212529; display: flex; align-items: center; gap: 0.5rem; }
+  .section-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: 8px; font-weight: 600; }
+  .section-cta { width: 100%; background: linear-gradient(135deg, #5e17eb, #8b5cf6); color: white; border: none; padding: 0.6rem; border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; margin-top: 0.75rem; }
+  .section-cta.gold { background: linear-gradient(135deg, #E9A23B, #fbbf24); color: #1a1a2e; }
+
+  /* Task Rows */
+  .task-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid #f8f9fa; }
+  .task-row:last-child { border-bottom: none; }
+  .task-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; flex-shrink: 0; }
+  .task-check.done { background: #10b981; border-color: #10b981; color: white; }
+  .task-check.pending { border-color: #dee2e6; }
+  .task-info { flex: 1; }
+  .task-name { font-size: 0.82rem; font-weight: 600; color: #212529; }
+  .task-meta { font-size: 0.67rem; color: #adb5bd; margin-top: 1px; }
+  .task-pts { font-size: 0.72rem; font-weight: 700; color: #5e17eb; }
+  .task-xp { font-size: 0.6rem; color: #E9A23B; font-weight: 600; }
+
+  /* Streak dots */
+  .streak-row { display: flex; gap: 3px; margin-top: 3px; }
+  .streak-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .streak-dot.filled { background: #10b981; }
+  .streak-dot.empty { background: #e9ecef; }
+
+  /* Deep dive card */
+  .deep-dive-card { background: white; border-radius: 16px; padding: 1.25rem; margin-bottom: 0.75rem; border: 2px solid #e9ecef; display: flex; align-items: center; gap: 1rem; }
+  .deep-dive-card.done { border-color: #10b981; background: rgba(16,185,129,0.02); }
+  .dd-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+  .dd-info { flex: 1; }
+  .dd-name { font-size: 0.9rem; font-weight: 700; color: #212529; }
+  .dd-desc { font-size: 0.72rem; color: #6c757d; margin-top: 2px; }
+  .dd-status { font-size: 0.65rem; font-weight: 600; padding: 3px 8px; border-radius: 6px; }
+
+  /* Graph Popup Overlay */
+  .graph-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 1.5rem; backdrop-filter: blur(4px); }
+  .graph-overlay.show { display: flex; }
+  .graph-popup { background: #1a1a2e; border-radius: 20px; padding: 1.5rem; max-width: 380px; width: 100%; color: white; position: relative; }
+  .graph-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: rgba(255,255,255,0.5); font-size: 1.5rem; cursor: pointer; }
+  .graph-title { font-size: 1rem; font-weight: 800; margin-bottom: 0.25rem; }
+  .graph-subtitle { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 1.25rem; }
+
+  /* SVG Graph */
+  .graph-container { position: relative; width: 100%; aspect-ratio: 1; }
+  .graph-svg { width: 100%; height: 100%; }
+
+  .weekly-score { display: flex; align-items: center; gap: 0.75rem; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 0.6rem 0.75rem; margin-bottom: 0.75rem; }
+  .weekly-total { font-size: 1.5rem; font-weight: 800; }
+  .weekly-label { font-size: 0.65rem; color: rgba(255,255,255,0.5); }
+  .weekly-pills { display: flex; gap: 0.4rem; flex: 1; justify-content: flex-end; }
+  .wpill { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 4px 8px; text-align: center; }
+  .wpill-score { font-size: 0.8rem; font-weight: 700; }
+  .wpill-label { font-size: 0.5rem; color: rgba(255,255,255,0.4); }
+</style>
+</head>
+<body>
+
+<!-- Header with XP Bar -->
+<div class="header">
+  <div class="header-top">
+    <div class="brand">Find My Flow</div>
+    <div class="header-right">
+      <div class="avatar-mini">🦁</div>
+      <button class="settings-btn">⚙️</button>
+    </div>
+  </div>
+
+  <!-- Weekly Score -->
+  <div class="weekly-score">
+    <div>
+      <div class="weekly-total">142</div>
+      <div class="weekly-label">THIS WEEK</div>
+    </div>
+    <div class="weekly-pills">
+      <div class="wpill"><div class="wpill-score" style="color: #E9A23B;">38</div><div class="wpill-label">Play-list</div></div>
+      <div class="wpill"><div class="wpill-score" style="color: #10b981;">64</div><div class="wpill-label">Healing</div></div>
+      <div class="wpill"><div class="wpill-score" style="color: #a78bfa;">40</div><div class="wpill-label">Bonus</div></div>
+    </div>
+  </div>
+
+  <!-- XP Level Bar -->
+  <div class="xp-section">
+    <div class="xp-level-row">
+      <div class="xp-stage-name">Level 2: Vulnerability</div>
+      <div class="xp-numbers"><span>680</span> / 1200 XP</div>
+    </div>
+    <div class="xp-bar-track">
+      <div class="xp-bar-fill" style="width: 56%;"></div>
+    </div>
+    <div class="xp-markers">
+      <div class="xp-marker" style="left: 0%;"><div class="xp-marker-dot passed"></div><div class="xp-marker-label passed">Identity</div></div>
+      <div class="xp-marker" style="left: 20%;"><div class="xp-marker-dot current"></div><div class="xp-marker-label current">Vulnerability</div></div>
+      <div class="xp-marker" style="left: 40%;"><div class="xp-marker-dot locked"></div><div class="xp-marker-label">Enough</div></div>
+      <div class="xp-marker" style="left: 60%;"><div class="xp-marker-dot locked"></div><div class="xp-marker-label">Growth</div></div>
+      <div class="xp-marker" style="left: 80%;"><div class="xp-marker-dot locked"></div><div class="xp-marker-label">Execution</div></div>
+      <div class="xp-marker" style="left: 100%;"><div class="xp-marker-dot locked"></div><div class="xp-marker-label">Passion</div></div>
+    </div>
+  </div>
+
+  <!-- Journey Graph Button -->
+  <button class="graph-btn" onclick="document.getElementById('graphOverlay').classList.add('show')">
+    📊 View Journey Graph
+  </button>
+</div>
+
+<div class="content">
+
+  <!-- Stage Milestone -->
+  <div class="milestone-card">
+    <div class="milestone-emoji">🤝</div>
+    <div class="milestone-text">
+      <div class="milestone-title">Share with 2 vibe tribe pillars</div>
+      <div class="milestone-desc">Tell two real humans you're becoming this person</div>
+    </div>
+    <div class="milestone-progress">0/2</div>
+  </div>
+
+  <!-- Deep Dive -->
+  <div class="label">DEEP DIVE</div>
+  <div class="deep-dive-card done">
+    <div class="dd-icon" style="background: rgba(16,185,129,0.1);">🔮</div>
+    <div class="dd-info">
+      <div class="dd-name">Healing Compass</div>
+      <div class="dd-desc">Primary need: Connection. Splinter: heart center.</div>
+    </div>
+    <div class="dd-status" style="background: rgba(16,185,129,0.1); color: #10b981;">Done ✓</div>
+  </div>
+
+  <!-- Play-List Challenges -->
+  <div class="label">PLAY-LIST — LIVE LAYER</div>
+  <div class="section-card active">
+    <div class="section-header">
+      <div class="section-title">🎯 This Week's Courage</div>
+      <div class="section-badge" style="background: rgba(94,23,235,0.08); color: #5e17eb;">1 of 2 essence zone</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check done">✓</div>
+      <div class="task-info">
+        <div class="task-name">Go live sharing a lesson learned</div>
+        <div class="task-meta">Scary: 8 · Wahoo: 9 · Essence Zone 🔥</div>
+      </div>
+      <div><div class="task-pts">+7</div><div class="task-xp">+50 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Honest conversation about your direction</div>
+        <div class="task-meta">Live layer · Pick by Wednesday</div>
+      </div>
+      <div><div class="task-pts">+7</div><div class="task-xp">+50 XP</div></div>
+    </div>
+    <button class="section-cta">+ Pick a Live Layer Challenge</button>
+  </div>
+
+  <!-- Daily Healing -->
+  <div class="label">DAILY HEALING</div>
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-title">💚 Today</div>
+      <div class="section-badge" style="background: rgba(16,185,129,0.1); color: #10b981;">3 day streak 🔥</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check done">✓</div>
+      <div class="task-info">
+        <div class="task-name">Morning Breathwork</div>
+        <div class="task-meta">Reconnect · Daily</div>
+        <div class="streak-row"><div class="streak-dot filled"></div><div class="streak-dot filled"></div><div class="streak-dot filled"></div><div class="streak-dot empty"></div><div class="streak-dot empty"></div><div class="streak-dot empty"></div><div class="streak-dot empty"></div></div>
+      </div>
+      <div><div class="task-pts">+5</div><div class="task-xp">+15 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Voice Check-In</div>
+        <div class="task-meta">Essence or protective louder today?</div>
+      </div>
+      <div><div class="task-pts">+3</div><div class="task-xp">+10 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Trigger Recognition</div>
+        <div class="task-meta">What activated you today?</div>
+      </div>
+      <div><div class="task-pts">+3</div><div class="task-xp">+10 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Compass Direction</div>
+        <div class="task-meta">N/E/S/W energy check</div>
+      </div>
+      <div><div class="task-pts">+3</div><div class="task-xp">+10 XP</div></div>
+    </div>
+  </div>
+
+  <!-- Deliverables -->
+  <div class="label">STAGE DELIVERABLES</div>
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-title">🏆 To Graduate This Level</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check done">✓</div>
+      <div class="task-info">
+        <div class="task-name">Complete Healing Compass</div>
+        <div class="task-meta">Deep dive</div>
+      </div>
+      <div class="task-xp">+100 XP</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">2 essence zone challenges (Live layer)</div>
+        <div class="task-meta">1/2 complete</div>
+      </div>
+      <div class="task-xp">+100 XP ea</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Share with 2 vibe tribe pillars</div>
+        <div class="task-meta">0/2 complete</div>
+      </div>
+      <div class="task-xp">+150 XP</div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Hit 1200 XP</div>
+        <div class="task-meta">680/1200</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="height: 100px;"></div>
+
+<!-- Graph Popup Overlay -->
+<div class="graph-overlay" id="graphOverlay" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="graph-popup">
+    <button class="graph-close" onclick="document.getElementById('graphOverlay').classList.remove('show')">&times;</button>
+    <div class="graph-title">Your Journey</div>
+    <div class="graph-subtitle">Sprouter Sweet Spot — Self-Knowledge × Action</div>
+
+    <div class="graph-container">
+      <svg class="graph-svg" viewBox="0 0 300 300">
+        <!-- Background -->
+        <rect x="40" y="10" width="250" height="250" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+
+        <!-- Grid lines -->
+        <line x1="40" y1="135" x2="290" y2="135" stroke="rgba(255,255,255,0.05)"/>
+        <line x1="165" y1="10" x2="165" y2="260" stroke="rgba(255,255,255,0.05)"/>
+
+        <!-- Diagonal (the target) -->
+        <line x1="40" y1="260" x2="290" y2="10" stroke="rgba(233,162,59,0.2)" stroke-width="20" stroke-linecap="round"/>
+        <line x1="40" y1="260" x2="290" y2="10" stroke="rgba(233,162,59,0.15)" stroke-width="2" stroke-dasharray="6 4"/>
+
+        <!-- Zone labels -->
+        <text x="80" y="60" fill="rgba(239,68,68,0.4)" font-size="10" font-weight="600">Misguided Zone</text>
+        <text x="75" y="75" fill="rgba(239,68,68,0.25)" font-size="8">All action, no self-knowledge</text>
+
+        <text x="180" y="230" fill="rgba(94,23,235,0.4)" font-size="10" font-weight="600">Paralysis Zone</text>
+        <text x="175" y="245" fill="rgba(94,23,235,0.25)" font-size="8">Self-knowledge, no action</text>
+
+        <!-- Diagonal label -->
+        <text x="160" y="120" fill="rgba(233,162,59,0.6)" font-size="9" font-weight="700" transform="rotate(-45, 160, 120)">Self-Actualisation</text>
+
+        <!-- Journey path (curved arrow showing progress) -->
+        <!-- Start: bottom-right (Head Full of Dreams / Paralysis) -->
+        <!-- Moving toward diagonal -->
+        <path d="M 230 220 C 220 200, 200 190, 185 180 C 170 170, 160 155, 155 145" stroke="url(#journeyGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+        <!-- Journey dots (past positions) -->
+        <circle cx="230" cy="220" r="4" fill="#666" opacity="0.4"/>
+        <text x="238" y="224" fill="rgba(255,255,255,0.25)" font-size="7">Start</text>
+
+        <circle cx="200" cy="185" r="4" fill="#a78bfa" opacity="0.6"/>
+        <text x="208" y="189" fill="rgba(167,139,250,0.5)" font-size="7">Identity</text>
+
+        <!-- Current position (pulsing) -->
+        <circle cx="155" cy="145" r="8" fill="rgba(233,162,59,0.2)">
+          <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="155" cy="145" r="5" fill="#E9A23B"/>
+        <text x="163" y="142" fill="#E9A23B" font-size="8" font-weight="700">You</text>
+        <text x="163" y="152" fill="rgba(233,162,59,0.6)" font-size="7">Vulnerability</text>
+
+        <!-- Future path (dotted) -->
+        <path d="M 155 145 C 145 130, 135 120, 125 110" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none" stroke-dasharray="4 4" stroke-linecap="round"/>
+        <circle cx="125" cy="110" r="3" fill="rgba(255,255,255,0.15)"/>
+        <text x="100" y="107" fill="rgba(255,255,255,0.15)" font-size="6">Enough</text>
+
+        <!-- Gradient def -->
+        <defs>
+          <linearGradient id="journeyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#666"/>
+            <stop offset="50%" stop-color="#a78bfa"/>
+            <stop offset="100%" stop-color="#E9A23B"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Axes -->
+        <line x1="40" y1="260" x2="290" y2="260" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <line x1="40" y1="260" x2="40" y2="10" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+
+        <!-- Axis labels -->
+        <text x="150" y="280" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle" font-weight="600">Self-Knowledge →</text>
+        <text x="15" y="140" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle" font-weight="600" transform="rotate(-90, 15, 140)">Action →</text>
+
+        <!-- Arrow heads on axes -->
+        <polygon points="288,256 290,260 288,264" fill="rgba(255,255,255,0.2)"/>
+        <polygon points="36,12 40,10 44,12" fill="rgba(255,255,255,0.2)"/>
+      </svg>
+    </div>
+
+    <div style="margin-top: 0.75rem; font-size: 0.75rem; color: rgba(255,255,255,0.5); text-align: center;">
+      You started in the Paralysis Zone. You're moving toward the diagonal.<br/>
+      <span style="color: #E9A23B;">Keep building self-knowledge. Action follows.</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,11 +1,13 @@
 /**
  * JourneyOnboarding.jsx
  *
- * 4-Beat story-driven onboarding flow:
+ * 6-Beat story-driven onboarding flow:
  *   Beat 1 — The Hook (swipeable emotional slides, no interaction)
  *   Beat 2 — The Story (4 wound stages, tap which scene resonates)
  *   Beat 3 — The Reframe (perspective shift question)
  *   Beat 4 — The Promise (sign up CTA)
+ *   Beat 5 — Signup (name + email capture, send OTP)
+ *   Beat 6 — Verify (6-digit code verification)
  *
  * Works BEFORE account creation. State stored in component,
  * persisted to localStorage, saved to DB after sign-up.
@@ -14,6 +16,8 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useAuth } from '../../auth/AuthProvider'
+import { useNavigate } from 'react-router-dom'
 import './JourneyOnboarding.css'
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -25,6 +29,8 @@ const BEATS = {
   STORY: 'story',
   REFRAME: 'reframe',
   PROMISE: 'promise',
+  SIGNUP: 'signup',
+  VERIFY: 'verify',
 }
 
 // Beat 1: Hook slides
@@ -209,6 +215,9 @@ const WOUND_STAGES = [
 // ─── Component ───────────────────────────────────────────────────────────────
 
 function JourneyOnboarding({ onComplete, onSignUp }) {
+  const { signInWithCode, verifyCode } = useAuth()
+  const navigate = useNavigate()
+
   // Beat state
   const [currentBeat, setCurrentBeat] = useState(BEATS.HOOK)
 
@@ -219,6 +228,13 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
   const [storyStageIndex, setStoryStageIndex] = useState(0)
   const [stageSelections, setStageSelections] = useState({})
   // { stage1: 'overwhelmed_child', stage2: 'adapted_self', ... }
+
+  // Signup state
+  const [userName, setUserName] = useState('')
+  const [email, setEmail] = useState('')
+  const [verificationCode, setVerificationCode] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [authError, setAuthError] = useState(null)
 
   // Transition animation
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -378,9 +394,50 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
     // Clear progress key
     localStorage.removeItem(STORAGE_KEY)
 
-    // Call sign-up handler (navigates to auth)
-    if (onSignUp) {
-      onSignUp(onboardingData)
+    // Transition to signup beat instead of redirecting
+    transitionTo(setCurrentBeat, BEATS.SIGNUP, 'right')
+  }
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault()
+    if (!email || isLoading) return
+
+    setIsLoading(true)
+    setAuthError(null)
+
+    try {
+      const result = await signInWithCode(email.toLowerCase().trim())
+      if (result.success) {
+        transitionTo(setCurrentBeat, BEATS.VERIFY, 'right')
+      } else {
+        setAuthError(result.message || 'Failed to send verification code')
+      }
+    } catch (err) {
+      setAuthError('Something went wrong. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleCodeVerify = async (e) => {
+    e.preventDefault()
+    if (!verificationCode || isLoading) return
+
+    setIsLoading(true)
+    setAuthError(null)
+
+    try {
+      const result = await verifyCode(email.toLowerCase().trim(), verificationCode)
+      if (result.success) {
+        // Auth successful — navigate to /me which will trigger persistJourneyOnboarding
+        navigate('/me')
+      } else {
+        setAuthError(result.message || 'Invalid code. Please try again.')
+      }
+    } catch (err) {
+      setAuthError('Something went wrong. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -391,7 +448,7 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
 
   // Progress indicator for all beats
   const renderBeatProgress = () => {
-    const beatOrder = [BEATS.HOOK, BEATS.STORY, BEATS.REFRAME, BEATS.PROMISE]
+    const beatOrder = [BEATS.HOOK, BEATS.STORY, BEATS.REFRAME, BEATS.PROMISE, BEATS.SIGNUP, BEATS.VERIFY]
     const currentIndex = beatOrder.indexOf(currentBeat)
 
     return (
@@ -544,10 +601,15 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
         </div>
         {renderBeatProgress()}
         <div className="jo-reframe-content">
-          <div className="jo-reframe-center" onClick={() => transitionTo(setCurrentBeat, BEATS.PROMISE, 'right')}>
+          <div className="jo-reframe-center">
             <h2 className="jo-reframe-text">
               What if you could build a life that fits who you actually are, not who you were told to be?
             </h2>
+            <button className="jo-cta-button jo-reframe-cta" onClick={() => transitionTo(setCurrentBeat, BEATS.PROMISE, 'right')}>
+              <span className="jo-shimmer-layer" />
+              Sounds great!
+              <span className="jo-btn-arrow">&#8594;</span>
+            </button>
           </div>
         </div>
       </div>
@@ -585,6 +647,116 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
         >
           &#8592; Back
         </button>
+      </div>
+    )
+  }
+
+  // ─── BEAT 5: Signup ────────────────────────────────────────────────────────
+
+  if (currentBeat === BEATS.SIGNUP) {
+    return (
+      <div className={`journey-onboarding jo-signup ${transitionClass} ${directionClass}`}>
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1 jo-glow-gold" />
+          <div className="jo-glow jo-glow-2" />
+        </div>
+        {renderBeatProgress()}
+        <div className="jo-signup-content">
+          <h2 className="jo-signup-heading">Let's get you set up</h2>
+          <p className="jo-signup-subtext">Enter your details to start your journey</p>
+          <form className="jo-signup-form" onSubmit={(e) => {
+            e.preventDefault()
+            if (userName.trim() && email.trim()) handleEmailSubmit(e)
+          }}>
+            <input
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="Your first name"
+              className="jo-signup-input"
+              autoFocus
+            />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              className="jo-signup-input"
+            />
+            <button
+              type="submit"
+              className="jo-cta-button"
+              disabled={isLoading || !userName.trim() || !email.trim()}
+            >
+              {isLoading ? (
+                <span>Sending code...</span>
+              ) : (
+                <>
+                  <span className="jo-shimmer-layer" />
+                  Send Verification Code
+                  <span className="jo-btn-arrow">&#8594;</span>
+                </>
+              )}
+            </button>
+          </form>
+          {authError && <p className="jo-auth-error">{authError}</p>}
+        </div>
+      </div>
+    )
+  }
+
+  // ─── BEAT 6: Verify ─────────────────────────────────────────────────────────
+
+  if (currentBeat === BEATS.VERIFY) {
+    return (
+      <div className={`journey-onboarding jo-verify ${transitionClass} ${directionClass}`}>
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1 jo-glow-gold" />
+          <div className="jo-glow jo-glow-2" />
+        </div>
+        {renderBeatProgress()}
+        <div className="jo-verify-content">
+          <h2 className="jo-verify-heading">Check your email</h2>
+          <p className="jo-verify-subtext">
+            We sent a code to <strong>{email}</strong>
+          </p>
+          <form className="jo-verify-form" onSubmit={handleCodeVerify}>
+            <input
+              type="text"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              placeholder="Enter 6-digit code"
+              className="jo-signup-input jo-code-input"
+              maxLength={6}
+              autoFocus
+              inputMode="numeric"
+              autoComplete="one-time-code"
+            />
+            <button
+              type="submit"
+              className="jo-cta-button"
+              disabled={isLoading || verificationCode.length !== 6}
+            >
+              {isLoading ? (
+                <span>Verifying...</span>
+              ) : (
+                <>
+                  <span className="jo-shimmer-layer" />
+                  Verify &amp; Start
+                  <span className="jo-btn-arrow">&#8594;</span>
+                </>
+              )}
+            </button>
+          </form>
+          {authError && <p className="jo-auth-error">{authError}</p>}
+          <button className="jo-resend-btn" onClick={() => {
+            setVerificationCode('')
+            setAuthError(null)
+            handleEmailSubmit({ preventDefault: () => {} })
+          }}>
+            Resend code
+          </button>
+        </div>
       </div>
     )
   }

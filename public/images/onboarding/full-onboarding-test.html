@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Journey Onboarding — Full Flow</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0a;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 16px;
+  }
+
+  .phone {
+    width: 390px; min-height: 844px;
+    background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    border-radius: 40px; overflow: hidden;
+    position: relative; color: white;
+    display: flex; flex-direction: column;
+    border: 3px solid #333;
+  }
+
+  /* Ambient */
+  .phone::before { content:''; position:absolute; width:300px; height:300px; background:#E9A23B; border-radius:50%; filter:blur(100px); opacity:0.1; top:-80px; right:-60px; pointer-events:none; animation:glow 5s ease-in-out infinite; }
+  .phone::after { content:''; position:absolute; width:250px; height:250px; background:#5e17eb; border-radius:50%; filter:blur(80px); opacity:0.12; bottom:-60px; left:-40px; pointer-events:none; animation:glow 6s ease-in-out 1s infinite; }
+  @keyframes glow { 0%,100%{transform:scale(1);opacity:0.1}50%{transform:scale(1.15);opacity:0.18} }
+
+  .inner { flex:1; display:flex; flex-direction:column; padding:48px 20px 32px; position:relative; z-index:1; overflow-y:auto; }
+
+  /* Beat dots */
+  .dots { display:flex; gap:8px; justify-content:center; margin-bottom:24px; flex-shrink:0; }
+  .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.2); transition:all 0.3s; }
+  .dot.active { width:24px; border-radius:4px; background:#E9A23B; }
+  .dot.done { background:rgba(255,255,255,0.5); }
+
+  /* Screens */
+  .screen { display:none; flex-direction:column; align-items:center; flex:1; width:100%; animation:fadeIn 0.45s ease; }
+  .screen.active { display:flex; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)} }
+
+  /* Hook */
+  .hook-text { font-size:1.7rem; font-weight:800; color:#E9A23B; line-height:1.3; text-align:center; max-width:340px; }
+  .hook-sub { font-size:1.05rem; color:rgba(255,255,255,0.65); margin-top:16px; text-align:center; max-width:320px; line-height:1.5; }
+  .hook-center { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; }
+  .tap { position:absolute; bottom:32px; font-size:0.72rem; color:rgba(255,255,255,0.25); }
+
+  /* Stage */
+  .stage-label { font-size:0.68rem; text-transform:uppercase; letter-spacing:0.15em; color:rgba(255,255,255,0.35); margin-bottom:6px; text-align:center; }
+  .stage-title { font-size:1.5rem; font-weight:800; color:#E9A23B; margin-bottom:6px; text-align:center; }
+  .stage-q { font-size:0.82rem; color:rgba(255,255,255,0.5); margin-bottom:20px; text-align:center; }
+
+  .cards { display:flex; flex-direction:column; gap:12px; width:100%; }
+  .card {
+    background:rgba(255,255,255,0.05); border:2px solid rgba(255,255,255,0.08);
+    border-radius:18px; overflow:hidden; cursor:pointer; transition:all 0.3s;
+    position:relative;
+  }
+  .card:hover { border-color:rgba(255,255,255,0.2); transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.2); }
+  .card.selected { border-color:#E9A23B; box-shadow:0 0 0 1px #E9A23B, 0 8px 28px rgba(233,162,59,0.2); transform:translateY(-2px); }
+  .card.selected .pill { background:rgba(233,162,59,0.2); border-color:rgba(233,162,59,0.3); }
+  .card.selected::after {
+    content:'✓'; position:absolute; top:8px; right:10px;
+    width:26px; height:26px; background:#E9A23B; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.75rem; font-weight:700; color:#1a1a2e;
+    box-shadow:0 2px 8px rgba(233,162,59,0.4); animation:pop 0.3s ease;
+  }
+  @keyframes pop { from{transform:scale(0)}to{transform:scale(1)} }
+
+  .card img { width:100%; height:155px; object-fit:cover; display:block; }
+  .pill { padding:10px 14px; background:rgba(255,255,255,0.03); border-top:1px solid rgba(255,255,255,0.05); transition:all 0.3s; }
+  .pill-name { font-size:0.9rem; font-weight:700; color:white; margin-bottom:2px; }
+  .pill-desc { font-size:0.73rem; color:rgba(255,255,255,0.5); line-height:1.35; }
+
+  /* Reveal */
+  .reveal-q { font-size:1.35rem; font-weight:800; color:#E9A23B; text-align:center; max-width:310px; line-height:1.3; margin-bottom:28px; }
+  .upload { width:130px; height:130px; border-radius:50%; border:3px dashed rgba(233,162,59,0.35); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:all 0.3s; margin-bottom:12px; }
+  .upload:hover { border-color:#E9A23B; background:rgba(233,162,59,0.04); }
+  .upload-icon { font-size:2.2rem; margin-bottom:4px; }
+  .upload-label { font-size:0.68rem; color:rgba(255,255,255,0.4); }
+  .avatar { width:130px; height:130px; border-radius:50%; background:linear-gradient(135deg,#E9A23B,#fbbf24); display:flex; align-items:center; justify-content:center; font-size:3.5rem; box-shadow:0 0 40px rgba(233,162,59,0.3); animation:avReveal 0.8s ease; margin-bottom:12px; }
+  @keyframes avReveal { from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1} }
+  @keyframes spin { from{transform:rotate(0deg)}to{transform:rotate(360deg)} }
+  .reveal-sub { font-size:1rem; font-weight:700; color:rgba(255,255,255,0.75); }
+  .skip { background:none; border:none; color:rgba(255,255,255,0.25); font-size:0.75rem; cursor:pointer; margin-top:12px; }
+
+  /* Promise */
+  .promise-av { width:96px; height:96px; border-radius:50%; background:linear-gradient(135deg,#E9A23B,#fbbf24); display:flex; align-items:center; justify-content:center; font-size:2.5rem; margin-bottom:20px; box-shadow:0 0 30px rgba(233,162,59,0.25); }
+  .promise-text { font-size:1.65rem; font-weight:800; color:#E9A23B; text-align:center; max-width:300px; margin-bottom:8px; }
+  .promise-sub { font-size:0.85rem; color:rgba(255,255,255,0.55); text-align:center; max-width:280px; line-height:1.5; margin-bottom:36px; }
+  .cta { background:linear-gradient(135deg,#E9A23B,#fbbf24); color:#1a1a2e; border:none; padding:14px 44px; border-radius:14px; font-size:1.05rem; font-weight:700; cursor:pointer; box-shadow:0 4px 20px rgba(233,162,59,0.3); transition:all 0.2s; }
+  .cta:hover { transform:translateY(-2px); box-shadow:0 6px 24px rgba(233,162,59,0.4); }
+
+  /* Nav */
+  .nav { text-align:center; margin-top:12px; }
+  .nav-info { color:#555; font-size:0.72rem; margin-bottom:6px; }
+  .nav-btn { background:#222; color:white; border:none; padding:7px 18px; border-radius:8px; font-size:0.8rem; cursor:pointer; margin:0 3px; }
+  .nav-btn:hover { background:#444; }
+  .nav-btn.go { background:#5e17eb; }
+</style>
+</head>
+<body>
+
+<div>
+<div class="phone">
+  <div class="inner">
+    <div class="dots" id="dots">
+      <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+
+    <!-- HOOK 1 -->
+    <div class="screen active" id="s0">
+      <div class="hook-center" onclick="go(1)">
+        <div class="hook-text">Take a moment to think about you as a kid.</div>
+        <div class="hook-sub">How playful you were. How full of love. How care-free.</div>
+      </div>
+      <div class="tap">Tap to continue</div>
+    </div>
+
+    <!-- HOOK 2 -->
+    <div class="screen" id="s1">
+      <div class="hook-center" onclick="go(2)">
+        <div class="hook-text">Remember that?</div>
+      </div>
+      <div class="tap">Tap to continue</div>
+    </div>
+
+    <!-- HOOK 3 -->
+    <div class="screen" id="s2">
+      <div class="hook-center" onclick="go(3)">
+        <div class="hook-text">So where did they go?</div>
+      </div>
+      <div class="tap">Tap to continue</div>
+    </div>
+
+    <!-- STAGE 1 -->
+    <div class="screen" id="s3">
+      <div class="stage-label">STAGE 1 — INFANCY</div>
+      <div class="stage-title">You Arrive</div>
+      <div class="stage-q">Which feels most like your experience?</div>
+      <div class="cards">
+        <div class="card" onclick="pick(this,4)">
+          <img src="stage1-overwhelmed.png"><div class="pill"><div class="pill-name">The Overwhelmed Child</div><div class="pill-desc">Seen but never settled. Chaotic but present caregiver. Sensitivity without ground.</div></div>
+        </div>
+        <div class="card" onclick="pick(this,4)">
+          <img src="stage1-secure.png"><div class="pill"><div class="pill-name">Secure Base</div><div class="pill-desc">Attuned and safe. Could explore and be met.</div></div>
+        </div>
+        <div class="card" onclick="pick(this,4)">
+          <img src="stage1-invisible.png"><div class="pill"><div class="pill-name">The Invisible Child</div><div class="pill-desc">Physically safe but unseen. Needs met, self not witnessed.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGE 2 -->
+    <div class="screen" id="s4">
+      <div class="stage-label">STAGE 2 — CHILDHOOD</div>
+      <div class="stage-title">You Learn What Works</div>
+      <div class="stage-q">Which feels most like your experience?</div>
+      <div class="cards">
+        <div class="card" onclick="pick(this,5)">
+          <img src="stage2-rejected.png"><div class="pill"><div class="pill-name">The Rejected Self</div><div class="pill-desc">Full expression, love withdrawn. Being yourself costs connection.</div></div>
+        </div>
+        <div class="card" onclick="pick(this,5)">
+          <img src="stage2-belonging.png"><div class="pill"><div class="pill-name">Unconditional Belonging</div><div class="pill-desc">Authentic expression met with love. No editing required.</div></div>
+        </div>
+        <div class="card" onclick="pick(this,5)">
+          <img src="stage2-adapted.png"><div class="pill"><div class="pill-name">The Adapted Self</div><div class="pill-desc">Love present but only for the edited version. Suppress self to stay connected.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGE 3 -->
+    <div class="screen" id="s5">
+      <div class="stage-label">STAGE 3 — SCHOOL</div>
+      <div class="stage-title">School Installs the OS</div>
+      <div class="stage-q">Which feels most like your experience?</div>
+      <div class="cards">
+        <div class="card" onclick="pick(this,6)">
+          <img src="stage3-rebel.png"><div class="pill"><div class="pill-name">The Rebel</div><div class="pill-desc">Fights back. Authentic self survives at social cost. Labelled difficult.</div></div>
+        </div>
+        <div class="card" onclick="pick(this,6)">
+          <img src="stage3-grounded.png"><div class="pill"><div class="pill-name">The Grounded Student</div><div class="pill-desc">Navigates without disappearing. Rare.</div></div>
+        </div>
+        <div class="card" onclick="pick(this,6)">
+          <img src="stage3-good-student.png"><div class="pill"><div class="pill-name">The Good Student</div><div class="pill-desc">Conforms completely, gets praised, loses themselves gradually.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGE 3.5 -->
+    <div class="screen" id="s6">
+      <div class="stage-label">STAGE 3.5 — TEENS</div>
+      <div class="stage-title">Your Friend Group Decides</div>
+      <div class="stage-q">Which feels most like your experience?</div>
+      <div class="cards">
+        <div class="card" onclick="pick(this,7)">
+          <img src="stage3_5-chameleon.png"><div class="pill"><div class="pill-name">The Chameleon</div><div class="pill-desc">High belonging, low authentic self. Absorbed group identity. Popular but lost.</div></div>
+        </div>
+        <div class="card" onclick="pick(this,7)">
+          <img src="stage3_5-tribe.png"><div class="pill"><div class="pill-name">Found Their Tribe</div><div class="pill-desc">Belonging and authentic self move together. Group accepted who they were.</div></div>
+        </div>
+        <div class="card" onclick="pick(this,7)">
+          <img src="stage3_5-withdrawn.png"><div class="pill"><div class="pill-name">The Withdrawn</div><div class="pill-desc">Low belonging, high authentic self. Retreated entirely. Authentic but isolated.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REFRAME -->
+    <div class="screen" id="s7">
+      <div class="hook-center" onclick="go(8)">
+        <div class="hook-text" style="font-size:1.5rem;max-width:320px;line-height:1.4;">What if you could build a life that fits who you actually are, not who you were told to be?</div>
+      </div>
+    </div>
+
+    <!-- PROMISE -->
+    <div class="screen" id="s8">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div style="font-size:2.5rem;margin-bottom:24px;">🌊</div>
+        <div class="promise-text">That's what FindMyFlow is for.</div>
+        <div class="promise-sub">Your journey starts here.</div>
+        <button class="cta">Start My Journey</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-info" id="navInfo">Beat 1: The Hook (1/3)</div>
+  <button class="nav-btn" onclick="prev()">← Back</button>
+  <button class="nav-btn go" onclick="next()">Next →</button>
+</div>
+</div>
+
+<script>
+const labels = [
+  'Beat 1: The Hook (1/3)','Beat 1: The Hook (2/3)','Beat 1: The Hook (3/3)',
+  'Beat 2: Stage 1 — You Arrive','Beat 2: Stage 2 — You Learn What Works',
+  'Beat 2: Stage 3 — School','Beat 2: Stage 3.5 — Friend Group',
+  'Beat 3: The Reframe','Beat 4: The Promise'
+];
+const beatMap = [0,0,0,1,1,1,1,2,3];
+let cur = 0, timer = null;
+
+function show() {
+  for(let i=0;i<9;i++) document.getElementById('s'+i).classList.toggle('active', i===cur);
+  document.getElementById('navInfo').textContent = labels[cur];
+  document.querySelectorAll('.dot').forEach((d,i) => {
+    d.className = 'dot';
+    if(i===beatMap[cur]) d.classList.add('active');
+    else if(i<beatMap[cur]) d.classList.add('done');
+  });
+  document.querySelector('.inner').scrollTop = 0;
+}
+
+function go(n) { cur=n; show(); }
+function next() { if(cur<8){cur++;show();} }
+function prev() { if(cur>0){cur--;show();} }
+
+function pick(el, nextScreen) {
+  if(timer) clearTimeout(timer);
+  el.parentElement.querySelectorAll('.card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  timer = setTimeout(()=>go(nextScreen), 700);
+}
+
+// --- Avatar Generation ---
+const SUPABASE_URL = 'https://qlwfcfypnoptsocdpxuv.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsd2ZjZnlwbm9wdHNvY2RweHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjkzMTU2ODIsImV4cCI6MjA0NDg5MTY4Mn0.IDXMXwHCjLnfNHP6HbVxuw3JfCb3lxWbxNbeaUO1al0';
+let photoBase64 = null;
+
+function showState(stateId) {
+  ['uploadState','previewState','generatingState','avatarState','errorState'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById(stateId).style.display = 'block';
+}
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Compress and preview
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxSize = 512;
+      const ratio = Math.min(maxSize / img.width, maxSize / img.height);
+      canvas.width = img.width * ratio;
+      canvas.height = img.height * ratio;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      photoBase64 = canvas.toDataURL('image/jpeg', 0.8);
+
+      document.getElementById('photoPreview').src = photoBase64;
+      showState('previewState');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function generateAvatar() {
+  if (!photoBase64) return;
+  showState('generatingState');
+  document.getElementById('skipBtn').style.display = 'none';
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/generate-avatar-public`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify({ image_base64: photoBase64 }),
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      document.getElementById('errorMsg').textContent =
+        data.error === 'content_policy'
+          ? "Couldn't generate from this photo. Try a different one!"
+          : data.error;
+      showState('errorState');
+      document.getElementById('skipBtn').style.display = 'block';
+      return;
+    }
+
+    if (data.image_base64) {
+      document.getElementById('avatarResult').src = data.image_base64;
+      showState('avatarState');
+      // Also update the promise screen avatar
+      const promiseAv = document.getElementById('promiseAvatar');
+      promiseAv.innerHTML = '';
+      promiseAv.style.background = 'none';
+      promiseAv.style.boxShadow = 'none';
+      const promiseImg = document.createElement('img');
+      promiseImg.src = data.image_base64;
+      promiseImg.style.cssText = 'width:96px;height:96px;border-radius:50%;object-fit:cover;box-shadow:0 0 30px rgba(233,162,59,0.25);';
+      promiseAv.appendChild(promiseImg);
+
+      // Auto-advance after 2 seconds
+      setTimeout(() => go(8), 2500);
+    }
+  } catch (err) {
+    console.error('Avatar generation error:', err);
+    document.getElementById('errorMsg').textContent = 'Network error. Check your connection.';
+    showState('errorState');
+    document.getElementById('skipBtn').style.display = 'block';
+  }
+}
+
+function resetUpload() {
+  photoBase64 = null;
+  document.getElementById('fileInput').value = '';
+  showState('uploadState');
+  document.getElementById('skipBtn').style.display = 'block';
+}
+</script>
+</body>
+</html>

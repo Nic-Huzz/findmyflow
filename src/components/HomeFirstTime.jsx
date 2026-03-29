@@ -3,17 +3,16 @@
  *
  * First-time home screen for new users.
  *
- * Shows 4 tension layer diagnostic questions to identify
- * where in the "river" the user's flow is stuck:
- *   Q1 — Discover (Identity / The Spring)
- *   Q2 — Regulate (Nervous System / The Riverbed)
- *   Q3 — Reveal (Visibility / The Current)
- *   Q4 — Value (Worth / The Ocean)
+ * Shows 3+1 journey-level diagnostic questions:
+ *   Q1 — Identity (Level 1)
+ *   Q2 — Vulnerability (Level 2)
+ *   Q3 — Enough (Level 4)
+ *   Q4 — Passion-Risk (Level 7, conditional: only if Q1-Q3 all >= 2)
  *
- * After Q4 → Priority Layer Reveal → Mind Space → /me
+ * After assessment → Journey Level Reveal → Mind Space → /me
  *
  * Created: Dec 2024
- * Updated: Mar 2026 — Tension layer onboarding (4 universal questions)
+ * Updated: Mar 2026 — Journey-level v2 assessment (3+1 questions)
  */
 
 import { useState, useEffect } from 'react'
@@ -21,7 +20,6 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { useOnboarding } from '../context/OnboardingContext'
-import { computePriorityLayer, TENSION_LAYER_DISPLAY } from '../lib/onboardingV2'
 import './HomeFirstTime.css'
 
 const SCREENS = {
@@ -35,13 +33,37 @@ const SCREENS = {
 
 const ONBOARDING_STORAGE_KEY = 'onboarding_v2_progress'
 
-// Tension question screen configs
+// Journey-level question screen configs (3 mandatory)
 const TENSION_SCREENS = [
-  { screen: 'tension_q1', key: 'tension_discover', layer: 'discover', next: 'tension_q2', prev: null },
-  { screen: 'tension_q2', key: 'tension_regulate', layer: 'regulate', next: 'tension_q3', prev: 'tension_q1' },
-  { screen: 'tension_q3', key: 'tension_reveal', layer: 'reveal', next: 'tension_q4', prev: 'tension_q2' },
-  { screen: 'tension_q4', key: 'tension_value', layer: 'value', next: null, prev: 'tension_q3' },
+  { screen: 'tension_q1', key: 'tension_identity', level: 1, next: 'tension_q2', prev: null },
+  { screen: 'tension_q2', key: 'tension_vulnerability', level: 2, next: 'tension_q3', prev: 'tension_q1' },
+  { screen: 'tension_q3', key: 'tension_enough', level: 4, next: null, prev: 'tension_q2' },
 ]
+
+// Conditional Q4 — only shown if Q1-Q3 all score >= 2
+const TENSION_Q4_CONFIG = { screen: 'tension_q4', key: 'tension_passion', level: 7, next: null, prev: 'tension_q3' }
+
+// Journey level descriptions for the reveal screen
+const LEVEL_DESCRIPTIONS = {
+  1: { name: 'Identity', question: 'Who am I really?', description: 'Discover your essence and what to pursue' },
+  2: { name: 'Vulnerability', question: 'Can I be honest about what I need?', description: 'Learn to let people see where you really are' },
+  4: { name: 'Enough', question: 'Do I have permission to move?', description: 'Silence the inner critic and take action' },
+  7: { name: 'Passion-Risk', question: 'Am I investing in the right path?', description: 'Build from genuine passion, not obligation' },
+}
+
+/**
+ * Compute the user's starting journey level from tension scores.
+ * First score below 3 = starting emphasis level.
+ * If all >= 3 (or Q4 not asked), default to level 1.
+ */
+function computeJourneyLevel(scores) {
+  if (scores.identity != null && scores.identity < 3) return { level: 1, name: 'Identity', emphasis: 'identity' }
+  if (scores.vulnerability != null && scores.vulnerability < 3) return { level: 2, name: 'Vulnerability', emphasis: 'vulnerability' }
+  if (scores.enough != null && scores.enough < 3) return { level: 4, name: 'Enough', emphasis: 'enough' }
+  if (scores.passion != null && scores.passion < 3) return { level: 7, name: 'Passion-Risk', emphasis: 'passion' }
+  // All 3s (or Q4 not asked) — fully resolved
+  return { level: 1, name: 'All Clear', emphasis: 'all_clear' }
+}
 
 function HomeFirstTime({ onOnboardingComplete }) {
   const navigate = useNavigate()
@@ -71,10 +93,10 @@ function HomeFirstTime({ onOnboardingComplete }) {
   // Tension assessment data
   const [tensionQuestions, setTensionQuestions] = useState(null)
   const [tensionScores, setTensionScores] = useState({
-    discover: null,
-    regulate: null,
-    reveal: null,
-    value: null,
+    identity: null,
+    vulnerability: null,
+    enough: null,
+    passion: null,
   })
   const [priorityLayer, setPriorityLayer] = useState(null)
 
@@ -105,6 +127,15 @@ function HomeFirstTime({ onOnboardingComplete }) {
         const progress = JSON.parse(saved)
         // Only restore if less than 24 hours old
         if (Date.now() - progress.timestamp < 24 * 60 * 60 * 1000) {
+          // Validate restored scores — if on Q3+ but missing prior scores, reset
+          if (progress.screen === 'tension_q3' || progress.screen === 'tension_q4') {
+            const scores = progress.tensionScores || {}
+            if (scores.identity == null || scores.vulnerability == null) {
+              // Corrupted state, restart
+              localStorage.removeItem(`${ONBOARDING_STORAGE_KEY}_${user.id}`)
+              return
+            }
+          }
           if (progress.tensionScores) setTensionScores(progress.tensionScores)
           if (progress.screen && progress.screen !== SCREENS.WELCOME) {
             setCurrentScreen(progress.screen)
@@ -179,7 +210,7 @@ function HomeFirstTime({ onOnboardingComplete }) {
 
   const loadTensionQuestions = async () => {
     try {
-      const response = await fetch(`/tension-assessment.json?v=${Date.now()}`)
+      const response = await fetch(`/tension-assessment-v2.json?v=${Date.now()}`)
       if (!response.ok) throw new Error('Failed to load assessment')
       const data = await response.json()
       setTensionQuestions(data)
@@ -200,36 +231,60 @@ function HomeFirstTime({ onOnboardingComplete }) {
   }
 
   // Handle tension question selection
-  const handleTensionSelection = async (screenConfig, score) => {
-    const newScores = { ...tensionScores, [screenConfig.layer]: score }
+  const handleTensionSelection = (screenConfig, score) => {
+    if (isTransitioning) return
+
+    const newScores = { ...tensionScores }
+    const scoreField = screenConfig.key.replace('tension_', '')
+    newScores[scoreField] = score
     setTensionScores(newScores)
+    saveProgress(screenConfig.screen, newScores)
 
-    if (screenConfig.next) {
-      // Not the last question — save progress and move on
-      saveProgress(screenConfig.next, { [screenConfig.layer]: score })
-      transitionToScreen(screenConfig.next)
-    } else {
-      // Last question (Q4) — compute priority and save
-      setIsSaving(true)
-      setError(null)
-
-      const computed = computePriorityLayer(newScores)
-      setPriorityLayer(computed)
-
-      const success = await saveTensionData(newScores, computed)
-      setIsSaving(false)
-
-      if (success) {
-        clearSavedProgress()
-        transitionToScreen(SCREENS.PRIORITY_REVEAL)
-      } else {
-        setError('Failed to save your answers. Please try again.')
+    // After Q3: check if Q4 should show (all previous scores >= 2)
+    if (screenConfig.screen === 'tension_q3') {
+      const allHighEnough = newScores.identity >= 2 && newScores.vulnerability >= 2 && newScores.enough >= 2
+      if (allHighEnough) {
+        transitionToScreen('tension_q4')
+        return
       }
+      // Clear any stale passion score (user may have visited Q4 then navigated back)
+      finishTensionAssessment({ ...newScores, passion: null })
+      return
+    }
+
+    // After Q4: finish
+    if (screenConfig.screen === 'tension_q4') {
+      finishTensionAssessment(newScores)
+      return
+    }
+
+    // Q1 or Q2: advance to next
+    if (screenConfig.next) {
+      transitionToScreen(screenConfig.next)
+    }
+  }
+
+  // Finish the assessment: compute level, save, and show reveal
+  const finishTensionAssessment = async (scores) => {
+    setIsSaving(true)
+    setError(null)
+
+    const computed = computeJourneyLevel(scores)
+    setPriorityLayer(computed)
+
+    const success = await saveTensionData(scores, computed)
+    setIsSaving(false)
+
+    if (success) {
+      clearSavedProgress()
+      transitionToScreen(SCREENS.PRIORITY_REVEAL)
+    } else {
+      setError('Failed to save your answers. Please try again.')
     }
   }
 
   // Save tension data to database
-  const saveTensionData = async (scores, computedLayer) => {
+  const saveTensionData = async (scores, computed) => {
     if (!user?.id) return false
 
     try {
@@ -238,11 +293,12 @@ function HomeFirstTime({ onOnboardingComplete }) {
         .upsert({
           user_id: user.id,
           persona: 'vibe_seeker',
-          tension_discover: scores.discover,
-          tension_regulate: scores.regulate,
-          tension_reveal: scores.reveal,
-          tension_value: scores.value,
-          priority_layer: computedLayer,
+          // Map new journey scores to existing columns
+          tension_discover: scores.identity,
+          tension_regulate: scores.vulnerability,
+          tension_reveal: scores.enough,
+          tension_value: scores.passion,
+          priority_layer: computed.emphasis,
           onboarding_completed: true,
           onboarding_v2_completed: true,
           current_stage: '0',
@@ -259,10 +315,10 @@ function HomeFirstTime({ onOnboardingComplete }) {
     }
   }
 
-  // Handle after priority reveal — go to Mind Space
+  // Handle after priority reveal — go to /me
   const handleContinueAfterReveal = async () => {
     await ensureDiscoveryProject()
-    navigate('/mind-space')
+    if (onOnboardingComplete) onOnboardingComplete()
   }
 
   // Ensure a Discovery Project exists
@@ -373,7 +429,7 @@ function HomeFirstTime({ onOnboardingComplete }) {
           </p>
 
           <p className="welcome-main-text">
-            Four quick questions to discover where your flow is getting stuck.
+            Three quick questions to discover where your journey begins.
           </p>
           <p className="welcome-sub-text">
             Your answers help us meet you exactly where you are.
@@ -396,10 +452,18 @@ function HomeFirstTime({ onOnboardingComplete }) {
     )
   }
 
-  // TENSION QUESTIONS (Q1-Q4)
+  // TENSION QUESTIONS (Q1-Q3 + conditional Q4)
+  // Find screen config from mandatory screens or Q4 config
   const currentTension = TENSION_SCREENS.find(t => t.screen === currentScreen)
+    || (currentScreen === TENSION_Q4_CONFIG.screen ? TENSION_Q4_CONFIG : null)
+
   if (currentTension) {
-    const questionIndex = TENSION_SCREENS.indexOf(currentTension)
+    // Determine question index for progress dots
+    const mandatoryIndex = TENSION_SCREENS.findIndex(t => t.screen === currentScreen)
+    const isQ4 = currentScreen === TENSION_Q4_CONFIG.screen
+    const questionIndex = isQ4 ? 3 : mandatoryIndex
+    const totalDots = isQ4 ? 4 : 3
+
     const questions = tensionQuestions?.questions
     const question = questions?.find(q => q.id === currentTension.key)
 
@@ -424,15 +488,10 @@ function HomeFirstTime({ onOnboardingComplete }) {
       )
     }
 
-    // Warm transition text between questions
-    const transitionText = questionIndex > 0
-      ? tensionQuestions?.ux_config?.warm_transitions?.[`after_q${questionIndex}`]
-      : null
-
     return (
       <div className={`home-first-time question-screen ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
         <div className="progress-dots">
-          {[0, 1, 2, 3].map(i => (
+          {Array.from({ length: totalDots }, (_, i) => (
             <span
               key={i}
               className={`dot ${i === questionIndex ? 'active' : i < questionIndex ? 'completed' : ''}`}
@@ -441,16 +500,6 @@ function HomeFirstTime({ onOnboardingComplete }) {
         </div>
 
         <div className="question-container">
-          {transitionText && (
-            <p className="transition-text" style={{
-              color: 'rgba(255, 255, 255, 0.6)',
-              fontSize: '14px',
-              fontStyle: 'italic',
-              marginBottom: '16px'
-            }}>
-              {transitionText}
-            </p>
-          )}
           <h2>{question.question}</h2>
           <p className="question-subtext">Pick whichever feels most true right now</p>
 
@@ -481,7 +530,7 @@ function HomeFirstTime({ onOnboardingComplete }) {
               fontSize: '14px'
             }}>
               <div className="loading-spinner" style={{ width: '18px', height: '18px' }} />
-              Mapping your river...
+              Finding your starting point...
             </div>
           )}
 
@@ -489,17 +538,25 @@ function HomeFirstTime({ onOnboardingComplete }) {
             {question.options.map((option) => (
               <button
                 key={option.score}
-                className={`option-button ${isSaving ? 'disabled-option' : ''}`}
+                className={`option-button ${isSaving ? 'disabled-option' : ''}${option.image ? ' has-image' : ''}`}
                 style={isSaving ? { opacity: 0.4, cursor: 'not-allowed' } : undefined}
                 onClick={(e) => { e.currentTarget.blur(); !isSaving && handleTensionSelection(currentTension, option.score) }}
                 disabled={isSaving}
               >
+                {option.image && (
+                  <img
+                    className="hft-option-image"
+                    src={option.image}
+                    alt=""
+                    onError={(e) => { e.target.style.display = 'none' }}
+                  />
+                )}
                 <span className="option-label">{option.label}</span>
               </button>
             ))}
           </div>
 
-          {/* Back button for Q2-Q4 */}
+          {/* Back button for Q2+ */}
           {currentTension.prev && (
             <button
               className="back-link"
@@ -522,61 +579,53 @@ function HomeFirstTime({ onOnboardingComplete }) {
     )
   }
 
-  // PRIORITY LAYER REVEAL
+  // JOURNEY LEVEL REVEAL
   if (currentScreen === SCREENS.PRIORITY_REVEAL) {
-    const layer = TENSION_LAYER_DISPLAY[priorityLayer]
-    // Rich layer data from the JSON (has when_blocked, why_first, app_feature, app_description)
-    const layerDetail = tensionQuestions?.layers?.[priorityLayer]
-    if (!layer) {
+    if (!priorityLayer) {
       // Corrupt/missing priorityLayer — restart from Q1
       transitionToScreen(SCREENS.TENSION_Q1)
       return null
     }
 
-    // Check if all layers are fully resolved (all scored 3)
-    const allResolved = ['discover', 'regulate', 'reveal', 'value'].every(l => tensionScores[l] >= 3)
+    const levelInfo = LEVEL_DESCRIPTIONS[priorityLayer.level] || { name: 'Your Journey', question: 'Where to next?', description: 'You\'re ready to begin' }
+    // Check if all scores are 3 (fully resolved)
+    const allResolved = ['identity', 'vulnerability', 'enough'].every(k => tensionScores[k] >= 3)
+      && (tensionScores.passion == null || tensionScores.passion >= 3)
 
     return (
       <div className="home-first-time reveal-screen">
         <div className="priority-reveal-content">
-          <p className="priority-reveal-label">{allResolved ? 'Your river is flowing' : 'Your priority right now'}</p>
+          <p className="priority-reveal-label">
+            {allResolved ? 'You are ready' : 'Your journey starts here'}
+          </p>
 
-          <div className="priority-reveal-card" style={{ borderColor: allResolved ? '#E9A23B' : layer.color }}>
-            <span className="priority-reveal-emoji">{allResolved ? '🌊' : layer.emoji}</span>
-            <h2 className="priority-reveal-name" style={{ color: allResolved ? '#E9A23B' : layer.color }}>
-              {allResolved ? 'Source to Ocean' : layer.riverElement}
+          <div className="priority-reveal-card" style={{ borderColor: allResolved ? '#E9A23B' : '#9333EA' }}>
+            <h2 className="priority-reveal-name" style={{ color: allResolved ? '#E9A23B' : '#E9A23B' }}>
+              {allResolved ? 'All Clear' : `Level ${priorityLayer.level}: ${levelInfo.name}`}
             </h2>
-            <p className="priority-reveal-layer">{allResolved ? 'Fully Flowing' : layer.name}</p>
+            <p className="priority-reveal-layer">
+              {allResolved ? 'Every layer is strong' : levelInfo.question}
+            </p>
 
             <p className="priority-reveal-blocked">
               {allResolved
-                ? "You've built from source to ocean. Your river is clear, grounded, visible, and valued."
-                : layerDetail?.when_blocked}
+                ? "Your foundations are solid across the board. Time to put it all into action."
+                : levelInfo.description}
             </p>
           </div>
 
           <p className="priority-reveal-why">
             {allResolved
-              ? "Time to put it all into action. Mind Space will map your strengths so you can decide what to build next."
-              : layerDetail?.why_first}
+              ? "Mind Space will map your strengths so you can decide what to build next."
+              : "Mind Space will map your strengths and connect them to where you are right now."}
           </p>
-
-          {!allResolved && layerDetail?.app_feature && (
-            <div className="priority-reveal-recommend">
-              <p className="priority-reveal-recommend-label">We recommend starting with</p>
-              <p className="priority-reveal-recommend-feature">{layerDetail.app_feature}</p>
-              {layerDetail.app_description && (
-                <p className="priority-reveal-recommend-desc">{layerDetail.app_description}</p>
-              )}
-            </div>
-          )}
 
           <button
             className="welcome-cta-button priority-reveal-cta"
             onClick={handleContinueAfterReveal}
           >
             <span className="shimmer-layer" />
-            Continue to Mind Space
+            Let's Begin
             <span className="btn-arrow">→</span>
           </button>
 

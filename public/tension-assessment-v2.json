@@ -10,10 +10,10 @@
       "level": 1,
       "question": "When it comes to knowing how you want to show up in the world...",
       "options": [
-        { "label": "I have no idea. I don't know what change I want to make or how I fit", "score": 0 },
-        { "label": "I have a sense of what I care about but I can't articulate it yet", "score": 1 },
-        { "label": "I can describe it but I'm still testing whether it's really me", "score": 2 },
-        { "label": "I know exactly how I want to show up and the change I want to make", "score": 3 }
+        { "label": "I have no idea. I don't know what change I want to make or how I fit", "score": 0, "image": "/images/onboarding/questions/direction/q1-score0.png" },
+        { "label": "I have a sense of what I care about but I can't articulate it yet", "score": 1, "image": "/images/onboarding/questions/direction/q1-score1.png" },
+        { "label": "I can describe it but I'm still testing whether it's really me", "score": 2, "image": "/images/onboarding/questions/direction/q1-score2.png" },
+        { "label": "I know exactly how I want to show up and the change I want to make", "score": 3, "image": "/images/onboarding/questions/direction/q1-score3.png" }
       ]
     },
     {
@@ -21,10 +21,10 @@
       "level": 2,
       "question": "When it comes to letting people see where you're really at...",
       "options": [
-        { "label": "I keep it to myself. Letting people in feels unsafe", "score": 0 },
-        { "label": "I open up occasionally but only when it feels controlled", "score": 1 },
-        { "label": "I can be honest with a few people, but I still filter the messy parts", "score": 2 },
-        { "label": "I let people see all of it. The uncertainty, the struggle, the real me", "score": 3 }
+        { "label": "I keep it to myself. Letting people in feels unsafe", "score": 0, "image": "/images/onboarding/questions/vulnerability/q2-score0.png" },
+        { "label": "I open up occasionally but only when it feels controlled", "score": 1, "image": "/images/onboarding/questions/vulnerability/q2-score1.png" },
+        { "label": "I can be honest with a few people, but I still filter the messy parts", "score": 2, "image": "/images/onboarding/questions/vulnerability/q2-score2.png" },
+        { "label": "I let people see all of it. The uncertainty, the struggle, the real me", "score": 3, "image": "/images/onboarding/questions/vulnerability/q2-score3.png" }
       ]
     },
     {
@@ -32,10 +32,10 @@
       "level": 4,
       "question": "When it comes to taking action on what matters...",
       "options": [
-        { "label": "I'm stuck. Fear of judgement and not being good enough keeps me frozen", "score": 0 },
-        { "label": "I start things but fear of what people think stops me finishing", "score": 1 },
-        { "label": "I take action, but I still hold back the bold stuff to stay safe", "score": 2 },
-        { "label": "I move. The fear is there but it doesn't decide for me anymore", "score": 3 }
+        { "label": "I'm stuck. Fear of judgement and not being good enough keeps me frozen", "score": 0, "image": "/images/onboarding/questions/enough/q3-score0.png" },
+        { "label": "I start things but fear of what people think stops me finishing", "score": 1, "image": "/images/onboarding/questions/enough/q3-score1.png" },
+        { "label": "I take action, but I still hold back the bold stuff to stay safe", "score": 2, "image": "/images/onboarding/questions/enough/q3-score2.png" },
+        { "label": "I move. The fear is there but it doesn't decide for me anymore", "score": 3, "image": "/images/onboarding/questions/enough/q3-score3.png" }
       ]
     },
     {
@@ -45,10 +45,10 @@
       "showIf": "all_previous_gte_2",
       "question": "When it comes to investing in the path you're on...",
       "options": [
-        { "label": "I don't feel safe putting real skin in the game", "score": 0 },
-        { "label": "I invest a little but I always keep one foot in the safe option", "score": 1 },
-        { "label": "I'm committing more, but the big bet still terrifies me", "score": 2 },
-        { "label": "I feel safe going all in. The risk feels right because the path is mine", "score": 3 }
+        { "label": "I don't feel safe putting real skin in the game", "score": 0, "image": "/images/onboarding/questions/passion/q4-score0.png" },
+        { "label": "I invest a little but I always keep one foot in the safe option", "score": 1, "image": "/images/onboarding/questions/passion/q4-score1.png" },
+        { "label": "I'm committing more, but the big bet still terrifies me", "score": 2, "image": "/images/onboarding/questions/passion/q4-score2.png" },
+        { "label": "I feel safe going all in. The risk feels right because the path is mine", "score": 3, "image": "/images/onboarding/questions/passion/q4-score3.png" }
       ]
     }
   ]
