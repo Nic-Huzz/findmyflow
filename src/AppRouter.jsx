@@ -31,6 +31,7 @@ function lazyRetry(importFn) {
 // Static imports - Core infrastructure
 import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
+import JourneyOnboarding from './components/onboarding/JourneyOnboarding'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import EssenceIdentify from './pages/EssenceIdentify'
 import ProtectiveIdentify from './pages/ProtectiveIdentify'
@@ -401,7 +402,11 @@ function AppRouter() {
               <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
 
               {/* Signup/Onboarding */}
-              <Route path="/get-started" element={<PersonaAssessment />} />
+              <Route path="/get-started" element={
+                <JourneyOnboarding
+                  onSignUp={() => { window.location.href = '/log-in' }}
+                />
+              } />
               <Route path="/essence-identify" element={<EssenceIdentify />} />
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
               <Route path="/log-in" element={<PersonaAssessment />} />
