@@ -1,6 +1,6 @@
 /**
  * JourneyOnboarding.css
- * 4-Beat story-driven onboarding: Hook → Story → Reveal → Promise
+ * 4-Beat story-driven onboarding: Hook → Story → Reframe → Promise
  *
  * Design: Purple gradient backgrounds, gold text/CTAs.
  * Mobile-first, minimal text, maximum visual impact.
@@ -48,14 +48,14 @@
 
 .jo-transitioning .jo-hook-content,
 .jo-transitioning .jo-story-content,
-.jo-transitioning .jo-reveal-content,
+.jo-transitioning .jo-reframe-content,
 .jo-transitioning .jo-promise-content {
   animation: jo-slideOut 0.25s ease forwards;
 }
 
 .jo-entering .jo-hook-content,
 .jo-entering .jo-story-content,
-.jo-entering .jo-reveal-content,
+.jo-entering .jo-reframe-content,
 .jo-entering .jo-promise-content {
   animation: jo-slideIn 0.4s ease;
 }
@@ -63,14 +63,14 @@
 /* Slide right direction (forward) */
 .jo-slide-right.jo-transitioning .jo-hook-content,
 .jo-slide-right.jo-transitioning .jo-story-content,
-.jo-slide-right.jo-transitioning .jo-reveal-content,
+.jo-slide-right.jo-transitioning .jo-reframe-content,
 .jo-slide-right.jo-transitioning .jo-promise-content {
   animation: jo-slideOutLeft 0.25s ease forwards;
 }
 
 .jo-slide-right.jo-entering .jo-hook-content,
 .jo-slide-right.jo-entering .jo-story-content,
-.jo-slide-right.jo-entering .jo-reveal-content,
+.jo-slide-right.jo-entering .jo-reframe-content,
 .jo-slide-right.jo-entering .jo-promise-content {
   animation: jo-slideInRight 0.4s ease;
 }
@@ -78,14 +78,14 @@
 /* Slide left direction (backward) */
 .jo-slide-left.jo-transitioning .jo-hook-content,
 .jo-slide-left.jo-transitioning .jo-story-content,
-.jo-slide-left.jo-transitioning .jo-reveal-content,
+.jo-slide-left.jo-transitioning .jo-reframe-content,
 .jo-slide-left.jo-transitioning .jo-promise-content {
   animation: jo-slideOutRight 0.25s ease forwards;
 }
 
 .jo-slide-left.jo-entering .jo-hook-content,
 .jo-slide-left.jo-entering .jo-story-content,
-.jo-slide-left.jo-entering .jo-reveal-content,
+.jo-slide-left.jo-entering .jo-reframe-content,
 .jo-slide-left.jo-entering .jo-promise-content {
   animation: jo-slideInLeft 0.4s ease;
 }
@@ -617,162 +617,13 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   BEAT 3: THE REVEAL
+   BEAT 3: THE REFRAME
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.jo-reveal {
-  justify-content: center;
-}
-
-.jo-reveal .jo-reveal-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  max-width: 420px;
-  width: 100%;
-  gap: 16px;
-}
-
-.jo-reveal .jo-reveal-heading {
-  font-size: 1.6rem;
-  font-weight: 800;
-  line-height: 1.3;
-  color: var(--jo-gold);
-  margin: 0;
-  letter-spacing: -0.3px;
-  animation: jo-fadeInUp 0.5s ease;
-}
-
-.jo-reveal .jo-reveal-subtext {
-  font-size: 1rem;
-  color: var(--jo-text-muted);
-  margin: 0;
-  animation: jo-fadeInUp 0.5s ease 0.1s backwards;
-}
-
-/* Photo upload */
-.jo-reveal .jo-photo-upload {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  border: 3px dashed rgba(233, 162, 59, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  overflow: hidden;
-  position: relative;
-  animation: jo-fadeInUp 0.5s ease 0.15s backwards;
-}
-
-.jo-reveal .jo-photo-upload:hover {
-  border-color: var(--jo-gold);
-  background: rgba(233, 162, 59, 0.05);
-}
-
-.jo-reveal .jo-photo-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.jo-reveal .jo-photo-icon {
-  font-size: 2.5rem;
-}
-
-.jo-reveal .jo-photo-label {
-  font-size: 13px;
-  color: var(--jo-text-muted);
-  max-width: 120px;
-  line-height: 1.3;
-}
-
-.jo-reveal .jo-photo-preview {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.jo-reveal .jo-file-input {
-  display: none;
-}
-
-/* Generating state */
-.jo-reveal .jo-generating {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 24px;
-  animation: jo-fadeIn 0.3s ease;
-}
-
-.jo-reveal .jo-generating p {
-  font-size: 1rem;
-  color: var(--jo-text-soft);
-  margin: 0;
-}
-
-.jo-reveal .jo-generating-sub {
-  font-size: 0.85rem;
-  color: var(--jo-text-muted) !important;
-}
-
-/* Avatar reveal */
-.jo-reveal .jo-avatar-reveal {
-  position: relative;
-  width: 240px;
-  height: 240px;
-  margin-bottom: 8px;
-  animation: jo-avatarReveal 0.8s ease;
-}
-
-.jo-reveal .jo-avatar-glow {
-  position: absolute;
-  inset: -20px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(233, 162, 59, 0.3) 0%, transparent 70%);
-  animation: jo-glowPulse 3s ease-in-out infinite;
-}
-
-.jo-reveal .jo-avatar-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid var(--jo-gold);
-  box-shadow: 0 8px 40px rgba(233, 162, 59, 0.3);
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes jo-avatarReveal {
-  0% { opacity: 0; transform: scale(0.7); }
-  50% { opacity: 1; transform: scale(1.05); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.jo-reveal .jo-reveal-result-heading {
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: var(--jo-gold);
-  margin: 0;
-  animation: jo-fadeInUp 0.5s ease 0.3s backwards;
-}
-
-.jo-reveal .jo-reveal-result-sub {
-  font-size: 1rem;
-  color: var(--jo-text-soft);
-  line-height: 1.6;
-  margin: 0;
-  max-width: 320px;
-  animation: jo-fadeInUp 0.5s ease 0.4s backwards;
-}
+.jo-reframe { justify-content: center; }
+.jo-reframe .jo-reframe-content { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 0 24px; }
+.jo-reframe .jo-reframe-center { cursor: pointer; max-width: 340px; }
+.jo-reframe .jo-reframe-text { font-size: 1.5rem; font-weight: 800; color: var(--jo-gold); text-align: center; line-height: 1.4; letter-spacing: -0.3px; animation: jo-fadeInUp 0.8s ease; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    BEAT 4: THE PROMISE
@@ -794,22 +645,7 @@
   gap: 20px;
 }
 
-.jo-promise .jo-promise-avatar {
-  width: 160px;
-  height: 160px;
-  position: relative;
-  margin-bottom: 8px;
-  animation: jo-fadeInScale 0.6s ease;
-}
-
-.jo-promise .jo-promise-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid var(--jo-gold);
-  box-shadow: 0 8px 40px rgba(233, 162, 59, 0.3);
-}
+.jo-promise .jo-promise-icon { font-size: 2.5rem; margin-bottom: 24px; animation: jo-fadeInScale 0.6s ease; }
 
 .jo-promise .jo-promise-heading {
   font-size: 2.2rem;
@@ -870,32 +706,10 @@
     font-size: 0.8rem;
   }
 
-  .jo-reveal .jo-photo-upload {
-    width: 160px;
-    height: 160px;
-  }
-
-  .jo-reveal .jo-avatar-reveal {
-    width: 200px;
-    height: 200px;
-  }
-
-  .jo-reveal .jo-reveal-heading {
-    font-size: 1.35rem;
-  }
-
-  .jo-reveal .jo-reveal-result-heading {
-    font-size: 1.5rem;
-  }
-
   .jo-promise .jo-promise-heading {
     font-size: 1.8rem;
   }
 
-  .jo-promise .jo-promise-avatar {
-    width: 130px;
-    height: 130px;
-  }
 }
 
 @media (max-height: 600px) {
