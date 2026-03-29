@@ -63,6 +63,7 @@ const WOUND_STAGES = [
         archetype: 'sympathetic',
         color: '#e74c3c',
         icon: '🌊',
+        image: '/images/onboarding/stage1-overwhelmed.png',
       },
       {
         id: 'secure_base',
@@ -72,6 +73,7 @@ const WOUND_STAGES = [
         archetype: 'ventral',
         color: '#2ecc71',
         icon: '🏠',
+        image: '/images/onboarding/stage1-secure.png',
       },
       {
         id: 'invisible_child',
@@ -81,6 +83,7 @@ const WOUND_STAGES = [
         archetype: 'dorsal',
         color: '#3498db',
         icon: '👻',
+        image: '/images/onboarding/stage1-invisible.png',
       },
     ],
   },
@@ -99,6 +102,7 @@ const WOUND_STAGES = [
         archetype: 'sympathetic',
         color: '#e74c3c',
         icon: '💔',
+        image: '/images/onboarding/stage2-rejected.png',
       },
       {
         id: 'unconditional_belonging',
@@ -108,6 +112,7 @@ const WOUND_STAGES = [
         archetype: 'ventral',
         color: '#2ecc71',
         icon: '💛',
+        image: '/images/onboarding/stage2-belonging.png',
       },
       {
         id: 'adapted_self',
@@ -117,6 +122,7 @@ const WOUND_STAGES = [
         archetype: 'dorsal',
         color: '#3498db',
         icon: '🎭',
+        image: '/images/onboarding/stage2-adapted.png',
       },
     ],
   },
@@ -135,6 +141,7 @@ const WOUND_STAGES = [
         archetype: 'sympathetic',
         color: '#e74c3c',
         icon: '🔥',
+        image: '/images/onboarding/stage3-rebel.png',
       },
       {
         id: 'grounded_student',
@@ -144,6 +151,7 @@ const WOUND_STAGES = [
         archetype: 'ventral',
         color: '#2ecc71',
         icon: '🌿',
+        image: '/images/onboarding/stage3-grounded.png',
       },
       {
         id: 'good_student',
@@ -153,6 +161,7 @@ const WOUND_STAGES = [
         archetype: 'dorsal',
         color: '#3498db',
         icon: '📚',
+        image: '/images/onboarding/stage3-good-student.png',
       },
     ],
   },
@@ -171,6 +180,7 @@ const WOUND_STAGES = [
         archetype: 'sympathetic',
         color: '#e74c3c',
         icon: '🦎',
+        image: '/images/onboarding/stage3_5-chameleon.png',
       },
       {
         id: 'found_their_tribe',
@@ -180,6 +190,7 @@ const WOUND_STAGES = [
         archetype: 'ventral',
         color: '#2ecc71',
         icon: '🤝',
+        image: '/images/onboarding/stage3_5-tribe.png',
       },
       {
         id: 'the_withdrawn',
@@ -189,6 +200,7 @@ const WOUND_STAGES = [
         archetype: 'dorsal',
         color: '#3498db',
         icon: '🏔️',
+        image: '/images/onboarding/stage3_5-withdrawn.png',
       },
     ],
   },
@@ -469,23 +481,31 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
             {stage.scenes.map((scene, sceneIndex) => (
               <button
                 key={scene.id}
-                className={`jo-scene-card ${selectedScene === scene.id ? 'selected' : ''}`}
+                className={`jo-scene-card ${selectedScene === scene.id ? 'jo-scene-selected' : ''}`}
                 onClick={() => handleSceneSelect(stage.id, scene.id)}
                 style={{ animationDelay: `${0.1 + sceneIndex * 0.1}s` }}
               >
-                <div
-                  className="jo-scene-image"
-                  style={{ backgroundColor: `${scene.color}22` }}
-                >
-                  <span className="jo-scene-icon">{scene.icon}</span>
-                </div>
-                <div className="jo-scene-info">
-                  <h3 className="jo-scene-name">{scene.name}</h3>
-                  <p className="jo-scene-desc">{scene.description}</p>
-                </div>
-                {selectedScene === scene.id && (
-                  <div className="jo-scene-check">&#10003;</div>
+                {scene.image && (
+                  <img
+                    className="jo-scene-image"
+                    src={scene.image}
+                    alt={scene.name}
+                    onError={(e) => {
+                      e.target.style.display = 'none'
+                      if (e.target.nextElementSibling) e.target.nextElementSibling.style.display = 'flex'
+                    }}
+                  />
                 )}
+                <div
+                  className="jo-scene-icon-fallback"
+                  style={{ display: scene.image ? 'none' : 'flex', background: `${scene.color}15` }}
+                >
+                  <span>{scene.icon}</span>
+                </div>
+                <div className="jo-scene-pill">
+                  <div className="jo-scene-name">{scene.name}</div>
+                  <div className="jo-scene-desc">{scene.description}</div>
+                </div>
               </button>
             ))}
           </div>

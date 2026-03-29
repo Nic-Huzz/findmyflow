@@ -527,17 +527,17 @@
 
 .jo-story .jo-scene-card {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
+  flex-direction: column;
+  padding: 0;
   background: var(--jo-glass);
   border: 2px solid var(--jo-glass-border);
-  border-radius: 16px;
+  border-radius: 18px;
   cursor: pointer;
   transition: all 0.25s ease;
   text-align: left;
   color: white;
   position: relative;
+  overflow: hidden;
   animation: jo-fadeInUp 0.4s ease backwards;
 }
 
@@ -546,74 +546,83 @@
 .jo-story .jo-scene-card:nth-child(3) { animation-delay: 0.35s; }
 
 .jo-story .jo-scene-card:hover {
-  background: rgba(233, 162, 59, 0.1);
   border-color: rgba(233, 162, 59, 0.4);
-  transform: translateX(4px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .jo-story .jo-scene-card:active {
-  transform: translateX(4px) scale(0.98);
+  transform: translateY(-1px) scale(0.98);
 }
 
-.jo-story .jo-scene-card.selected {
-  background: rgba(233, 162, 59, 0.15);
+.jo-story .jo-scene-card.jo-scene-selected {
   border-color: var(--jo-gold);
   box-shadow: 0 0 20px rgba(233, 162, 59, 0.2);
 }
 
-/* Scene image/placeholder */
-.jo-story .jo-scene-image {
-  width: 72px;
-  height: 72px;
-  min-width: 72px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.jo-story .jo-scene-icon {
-  font-size: 2rem;
-  z-index: 1;
-}
-
-/* Scene info */
-.jo-story .jo-scene-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.jo-story .jo-scene-name {
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0 0 3px;
-  color: white;
-}
-
-.jo-story .jo-scene-desc {
-  font-size: 0.85rem;
-  color: var(--jo-text-muted);
-  line-height: 1.4;
-  margin: 0;
-}
-
 /* Selected checkmark */
-.jo-story .jo-scene-check {
+.jo-story .jo-scene-selected::after {
+  content: '\2713';
   position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 24px;
-  height: 24px;
+  top: 8px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
   background: var(--jo-gold);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 0.75rem;
   font-weight: 700;
-  animation: jo-fadeInScale 0.3s ease;
+  color: #1a1a2e;
+  box-shadow: 0 2px 8px rgba(233, 162, 59, 0.4);
+  z-index: 2;
+}
+
+/* Scene image */
+.jo-story .jo-scene-image {
+  width: 100%;
+  height: 155px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Scene icon fallback (shown when image fails or missing) */
+.jo-story .jo-scene-icon-fallback {
+  width: 100%;
+  height: 155px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+
+/* Scene pill (name + description below image) */
+.jo-story .jo-scene-pill {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.jo-story .jo-scene-selected .jo-scene-pill {
+  background: rgba(233, 162, 59, 0.15);
+  border-color: rgba(233, 162, 59, 0.3);
+}
+
+.jo-story .jo-scene-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.jo-story .jo-scene-desc {
+  font-size: 0.73rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.35;
+  margin: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -689,21 +698,20 @@
   }
 
   .jo-story .jo-scene-image {
-    width: 60px;
-    height: 60px;
-    min-width: 60px;
+    height: 130px;
   }
 
-  .jo-story .jo-scene-icon {
-    font-size: 1.6rem;
+  .jo-story .jo-scene-icon-fallback {
+    height: 130px;
+    font-size: 2rem;
   }
 
   .jo-story .jo-scene-name {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
 
   .jo-story .jo-scene-desc {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .jo-promise .jo-promise-heading {
@@ -717,14 +725,12 @@
     padding: 12px;
   }
 
-  .jo-story .jo-scene-card {
-    padding: 10px 14px;
+  .jo-story .jo-scene-image {
+    height: 110px;
   }
 
-  .jo-story .jo-scene-image {
-    width: 56px;
-    height: 56px;
-    min-width: 56px;
+  .jo-story .jo-scene-icon-fallback {
+    height: 110px;
   }
 
   .jo-story .jo-stage-header {
