@@ -12,7 +12,6 @@ import { supabase } from './supabaseClient'
 
 const RESULT_STORAGE_KEY = 'journey_onboarding_result'
 const PROGRESS_STORAGE_KEY = 'journey_onboarding_state'
-const PHOTO_STORAGE_KEY = 'journey_onboarding_photo'
 
 /**
  * Scene-to-zone mapping for all wound stages.
@@ -82,89 +81,6 @@ export function deriveArchetypePattern(stageSelections) {
 }
 
 /**
- * Generate a hero avatar from a photo stored in localStorage pre-auth.
- * Called post-auth to process the pending photo.
- *
- * 1. Checks localStorage for journey_onboarding_photo
- * 2. Uploads it to Supabase Storage
- * 3. Calls generate-avatar with the uploaded URL
- * 4. Updates user_stage_progress.hero_avatar_url
- * 5. Clears the localStorage key
- */
-export async function generatePendingAvatar(userId) {
-  if (!userId) return null
-
-  const photoBase64 = localStorage.getItem(PHOTO_STORAGE_KEY)
-  if (!photoBase64) return null
-
-  try {
-    // Convert base64 data URI to Blob for upload
-    const res = await fetch(photoBase64)
-    const blob = await res.blob()
-
-    const timestamp = Date.now()
-    const filePath = `avatars/${userId}/onboarding-${timestamp}.jpg`
-
-    const { error: uploadErr } = await supabase.storage
-      .from('deal-screenshots')
-      .upload(filePath, blob, {
-        contentType: 'image/jpeg',
-        upsert: true,
-      })
-
-    if (uploadErr) {
-      console.error('Error uploading pending avatar photo:', uploadErr)
-      return null
-    }
-
-    const { data: urlData } = supabase.storage
-      .from('deal-screenshots')
-      .getPublicUrl(filePath)
-
-    // Call generate-avatar edge function
-    const { data, error } = await supabase.functions.invoke('generate-avatar', {
-      body: {
-        selfie_url: urlData.publicUrl,
-        prompt: `Create a Pixar/Disney-style animated hero avatar of this person.
-          Make them look vibrant, playful, and full of life, like the best version
-          of themselves. Warm lighting, confident posture, a genuine smile that
-          shows their inner light. The background should be a soft golden glow.
-          This represents who they were before the world told them who to be.`,
-      },
-    })
-
-    if (error) {
-      console.error('Error generating pending avatar:', error)
-      return null
-    }
-
-    if (data?.url) {
-      // Update user_stage_progress with the avatar URL
-      const { error: updateErr } = await supabase
-        .from('user_stage_progress')
-        .upsert({
-          user_id: userId,
-          hero_avatar_url: data.url,
-        }, { onConflict: 'user_id' })
-
-      if (updateErr) {
-        console.error('Error saving avatar URL:', updateErr)
-      }
-
-      // Clear the localStorage key
-      localStorage.removeItem(PHOTO_STORAGE_KEY)
-
-      return data.url
-    }
-
-    return null
-  } catch (err) {
-    console.error('Error in generatePendingAvatar:', err)
-    return null
-  }
-}
-
-/**
  * Persist journey onboarding data to the database after sign-up.
  * Called from HomeFirstTime or MePage after the user authenticates.
  *
@@ -184,7 +100,7 @@ export async function persistJourneyOnboarding(userId) {
     return { success: false, error: 'Invalid onboarding data' }
   }
 
-  const { stageSelections, avatarUrl } = saved
+  const { stageSelections, completedAt } = saved
   if (!stageSelections || Object.keys(stageSelections).length === 0) {
     return { success: false, error: 'No stage selections' }
   }
@@ -211,33 +127,20 @@ export async function persistJourneyOnboarding(userId) {
       // Don't block on this — continue to update user_stage_progress
     }
 
-    // 2. Update user_stage_progress with avatar and completion flag
-    const updateData = {
-      user_id: userId,
-      journey_onboarding_completed: true,
-    }
-    if (avatarUrl) {
-      updateData.hero_avatar_url = avatarUrl
-    }
-
+    // 2. Update user_stage_progress with completion flag
     const { error: progressError } = await supabase
       .from('user_stage_progress')
-      .upsert(updateData, { onConflict: 'user_id' })
+      .upsert({
+        user_id: userId,
+        journey_onboarding_completed: true,
+      }, { onConflict: 'user_id' })
 
     if (progressError) {
       console.error('Error updating stage progress:', progressError)
       return { success: false, error: progressError.message }
     }
 
-    // 3. Generate avatar from pending photo if it exists
-    if (localStorage.getItem(PHOTO_STORAGE_KEY)) {
-      // Fire and forget — don't block onboarding persistence on avatar generation
-      generatePendingAvatar(userId).catch(err => {
-        console.warn('Pending avatar generation failed:', err)
-      })
-    }
-
-    // 4. Clean up localStorage
+    // 3. Clean up localStorage
     localStorage.removeItem(RESULT_STORAGE_KEY)
     localStorage.removeItem(PROGRESS_STORAGE_KEY)
 
@@ -260,18 +163,5 @@ export function hasPendingJourneyData() {
     return parsed?.stageSelections && Object.keys(parsed.stageSelections).length > 0
   } catch {
     return false
-  }
-}
-
-/**
- * Get the stored avatar URL from localStorage (pre-auth).
- */
-export function getPendingAvatarUrl() {
-  try {
-    const saved = localStorage.getItem(RESULT_STORAGE_KEY)
-    if (!saved) return null
-    return JSON.parse(saved)?.avatarUrl || null
-  } catch {
-    return null
   }
 }
