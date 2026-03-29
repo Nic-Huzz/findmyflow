@@ -315,10 +315,10 @@ function HomeFirstTime({ onOnboardingComplete }) {
     }
   }
 
-  // Handle after priority reveal — go to Mind Space
+  // Handle after priority reveal — go to /me
   const handleContinueAfterReveal = async () => {
     await ensureDiscoveryProject()
-    navigate('/mind-space')
+    if (onOnboardingComplete) onOnboardingComplete()
   }
 
   // Ensure a Discovery Project exists
