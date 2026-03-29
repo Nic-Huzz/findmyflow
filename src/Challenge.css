@@ -238,6 +238,97 @@
   text-transform: uppercase;
 }
 
+/* ─── Journey Level Bar ─── */
+.challenge-level-bar {
+  margin-top: 0.75rem;
+}
+
+.challenge-level-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 5px;
+}
+
+.challenge-level-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.challenge-level-xp {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.challenge-level-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  position: relative;
+}
+
+.challenge-level-fill {
+  height: 100%;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #5e17eb, #a78bfa, #E9A23B);
+  position: relative;
+  transition: width 0.8s ease;
+  overflow: hidden;
+}
+
+.challenge-level-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+  animation: levelShimmer 2.5s ease-in-out infinite;
+}
+
+@keyframes levelShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.challenge-level-markers {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3px;
+  padding: 0 2px;
+}
+
+.challenge-level-marker {
+  font-size: 0.5rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.challenge-level-marker.current {
+  color: #E9A23B;
+  font-weight: 600;
+}
+
+.challenge-level-marker.passed {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ─── Journey Button ─── */
+.challenge-journey-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.challenge-journey-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+}
+
 /* ─── Streak badge (in bottom row) ─── */
 .streak-badge {
   display: flex;

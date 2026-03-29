@@ -1,0 +1,64 @@
+.journey-graph-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+.journey-graph-popup {
+  background: #1a1a2e;
+  border-radius: 20px;
+  padding: 1.5rem;
+  max-width: 380px;
+  width: 100%;
+  color: white;
+  position: relative;
+}
+
+.journey-graph-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.journey-graph-title {
+  font-size: 1rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem 0;
+}
+
+.journey-graph-subtitle {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 1rem 0;
+}
+
+.journey-graph-container {
+  width: 100%;
+}
+
+.journey-graph-svg {
+  width: 100%;
+}
+
+.journey-graph-caption {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.journey-graph-highlight {
+  color: #E9A23B;
+}

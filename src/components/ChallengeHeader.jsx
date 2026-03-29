@@ -5,8 +5,10 @@
  * coloring when in an active matchup, or category colors when solo.
  * Team matchup banner replaces old rank display.
  */
+import { useState } from 'react'
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
+import JourneyGraphPopup from './JourneyGraphPopup'
 
 // Week type display info
 const WEEK_TYPES = {
@@ -37,6 +39,8 @@ function ChallengeHeader({
   categoryScores = null,
   matchupLoading = false,
 }) {
+  const [showGraph, setShowGraph] = useState(false)
+
   // Flame size based on streak length
   const getFlameClass = () => {
     if (streakDays >= 7) return 'streak-flame legendary'
@@ -118,6 +122,27 @@ function ChallengeHeader({
         </div>
       </div>
 
+      {/* Journey Level Bar */}
+      <div className="challenge-level-bar">
+        <div className="challenge-level-row">
+          <span className="challenge-level-name">Level 1: Identity</span>
+          <span className="challenge-level-xp">0 / 800 XP</span>
+        </div>
+        <div className="challenge-level-track">
+          <div className="challenge-level-fill" style={{ width: '0%' }} />
+        </div>
+        <div className="challenge-level-markers">
+          <span className="challenge-level-marker current">Identity</span>
+          <span className="challenge-level-marker">Vulnerability</span>
+          <span className="challenge-level-marker">Direction</span>
+          <span className="challenge-level-marker">Enough</span>
+          <span className="challenge-level-marker">Growth</span>
+          <span className="challenge-level-marker">Execution</span>
+          <span className="challenge-level-marker">Passion</span>
+          <span className="challenge-level-marker">Play</span>
+        </div>
+      </div>
+
       {/* Bottom row: Streak + actions */}
       <div className="challenge-header-top">
         <div className="challenge-header-badges">
@@ -137,6 +162,9 @@ function ChallengeHeader({
             🏆 Leaderboard
           </div>
           */}
+          <button className="challenge-journey-btn" onClick={() => setShowGraph(true)}>
+            📊 Journey
+          </button>
           <div className="settings-menu-container" ref={settingsMenuRef}>
             <button
               className="challenge-day settings-badge"
@@ -198,6 +226,11 @@ function ChallengeHeader({
         </div>
       </div>
 
+      <JourneyGraphPopup
+        isOpen={showGraph}
+        onClose={() => setShowGraph(false)}
+        currentLevel={1}
+      />
     </header>
   )
 }
