@@ -538,11 +538,19 @@ function HomeFirstTime({ onOnboardingComplete }) {
             {question.options.map((option) => (
               <button
                 key={option.score}
-                className={`option-button ${isSaving ? 'disabled-option' : ''}`}
+                className={`option-button ${isSaving ? 'disabled-option' : ''}${option.image ? ' has-image' : ''}`}
                 style={isSaving ? { opacity: 0.4, cursor: 'not-allowed' } : undefined}
                 onClick={(e) => { e.currentTarget.blur(); !isSaving && handleTensionSelection(currentTension, option.score) }}
                 disabled={isSaving}
               >
+                {option.image && (
+                  <img
+                    className="hft-option-image"
+                    src={option.image}
+                    alt=""
+                    onError={(e) => { e.target.style.display = 'none' }}
+                  />
+                )}
                 <span className="option-label">{option.label}</span>
               </button>
             ))}

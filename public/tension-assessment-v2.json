@@ -10,10 +10,10 @@
       "level": 1,
       "question": "When it comes to knowing how you want to show up in the world...",
       "options": [
-        { "label": "I have no idea. I don't know what change I want to make or how I fit", "score": 0 },
-        { "label": "I have a sense of what I care about but I can't articulate it yet", "score": 1 },
-        { "label": "I can describe it but I'm still testing whether it's really me", "score": 2 },
-        { "label": "I know exactly how I want to show up and the change I want to make", "score": 3 }
+        { "label": "I have no idea. I don't know what change I want to make or how I fit", "score": 0, "image": "/images/onboarding/direction1.png" },
+        { "label": "I have a sense of what I care about but I can't articulate it yet", "score": 1, "image": "/images/onboarding/direction2.png" },
+        { "label": "I can describe it but I'm still testing whether it's really me", "score": 2, "image": "/images/onboarding/direction3.png" },
+        { "label": "I know exactly how I want to show up and the change I want to make", "score": 3, "image": "/images/onboarding/direction4.png" }
       ]
     },
     {
