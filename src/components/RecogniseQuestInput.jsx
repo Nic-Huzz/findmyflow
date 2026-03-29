@@ -4,8 +4,8 @@
  * Handles 5 quest types with step-by-step slider UI:
  * - recognise_protective_observe (Protective Voice)
  * - recognise_essence_observe (Essence Voice)
- * - recognise_negative_frequency (Negative Frequency)
- * - recognise_positive_frequency (Positive Frequency)
+ * - recognise_negative_frequency (Responded From Fear)
+ * - recognise_positive_frequency (Responded From Love)
  * - recognise_trigger_pattern (Trigger Pattern)
  *
  * Refactored to use shared useSteppedForm hook and StepProgress component.

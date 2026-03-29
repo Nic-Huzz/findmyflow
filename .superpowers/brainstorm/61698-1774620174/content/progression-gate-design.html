@@ -1,0 +1,149 @@
+<h2>Progression Gate Design: What Clears a Level?</h2>
+<p class="subtitle">Each level = Deep Dive (recognise) + Play-List Challenges (embody). What does "done" look like?</p>
+
+<!-- What we have to work with -->
+<div style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+  <h3 style="color: #ccc; margin: 0 0 0.75rem 0; font-size: 0.9rem;">Data Points Available Per Challenge</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; font-size: 0.8rem; color: #999;">
+    <div>
+      <div style="color: #ccc; font-weight: 600; margin-bottom: 0.25rem;">Scoring</div>
+      scary_score (1-10)<br/>
+      wahoo_score (1-10)<br/>
+      scary_score_after (re-rated)<br/>
+      wahoo_score_after (re-rated)<br/>
+      essence_zone (calculated)
+    </div>
+    <div>
+      <div style="color: #ccc; font-weight: 600; margin-bottom: 0.25rem;">Completion</div>
+      status (active/completed/skipped)<br/>
+      reflection_text<br/>
+      voice check-in (essence/protective)<br/>
+      compass direction (N/E/S/W)<br/>
+      3% improvement note
+    </div>
+    <div>
+      <div style="color: #ccc; font-weight: 600; margin-bottom: 0.25rem;">Tracking</div>
+      visibility_layer<br/>
+      source_type (skill/problem/persona)<br/>
+      weekly streaks<br/>
+      completion count per layer<br/>
+      "Done xN" badges per cell
+    </div>
+  </div>
+</div>
+
+<!-- The Options -->
+<h3 style="margin-top: 2rem;">Four Approaches</h3>
+
+<div class="options">
+
+  <!-- Option A: Count-Based -->
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Count-Based: "Complete X challenges at this layer"</h3>
+      <p>Simple. Fixed number per layer (e.g., 5 Screen challenges = Level 1 cleared). Easy to understand, easy to track.</p>
+      <div class="pros-cons" style="margin-top: 0.75rem;">
+        <div class="pros"><h4>Pros</h4><ul><li>Clear, predictable</li><li>Easy to build progress bar for</li><li>Works for gamification (5/5 challenges done)</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Doesn't measure QUALITY of engagement</li><li>Someone could rush through 5 easy Screen challenges without growth</li><li>Feels like homework, not a journey</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B: Essence Zone -->
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Essence-Zone: "Hit the diagonal X times at this layer"</h3>
+      <p>Must complete challenges where scary ≥ 7 AND wahoo ≥ 7 (the essence zone). This means you're doing challenges that genuinely scare you AND genuinely excite you. That's the Groan Zone diagonal from the framework.</p>
+      <div class="pros-cons" style="margin-top: 0.75rem;">
+        <div class="pros"><h4>Pros</h4><ul><li>Measures real growth, not just activity</li><li>Directly tied to the framework (Groan Zone = where growth happens)</li><li>Can't game it — you'd have to actually push your edge</li><li>The scoring already exists (calculateEssenceZone)</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Harder to explain to users</li><li>Self-reported scores could be inflated</li><li>Early users might not hit essence zone at Screen level (too new to the concept)</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option C: Hybrid -->
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Hybrid: "Complete X challenges, including Y in the essence zone"</h3>
+      <p>E.g., "Complete 5 Screen challenges, at least 2 must be in the essence zone." Gets volume AND quality. Allows warm-up challenges before pushing the edge.</p>
+      <div class="pros-cons" style="margin-top: 0.75rem;">
+        <div class="pros"><h4>Pros</h4><ul><li>Best of both worlds</li><li>Allows gradual progression within a layer</li><li>Progress bar shows both metrics</li><li>Warm-up → edge → mastery arc within each level</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>More complex to communicate</li><li>Two numbers to track per level</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option D: Narrative -->
+  <div class="option" data-choice="d" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>Narrative: "The 4 R's within each level"</h3>
+      <p>Each level has its own 4 R's arc: Recognise (deep dive) → Release (first few challenges, getting comfortable) → Rewire (essence zone challenges, pushing the edge) → Reconnect (reflection + voice check-in confirms shift). The gate isn't a number — it's completing the arc.</p>
+      <div class="pros-cons" style="margin-top: 0.75rem;">
+        <div class="pros"><h4>Pros</h4><ul><li>Tells a story within each level</li><li>Matches the framework's 4 R's methodology</li><li>Each challenge phase has different energy (release = volume, rewire = edge)</li><li>Reconnect phase = confirmation the shift happened</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Harder to quantify for a progress bar</li><li>More complex to implement</li><li>Could feel slow for users who want clear metrics</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The 4 R's Within Each Level (expanded) -->
+<div style="margin-top: 2rem; padding: 1.5rem; background: rgba(94,23,235,0.1); border-radius: 8px; border: 1px solid rgba(94,23,235,0.2);">
+  <h3 style="color: #b794f6; margin: 0 0 0.75rem 0; font-size: 0.95rem;">Option D Expanded: The 4 R's Arc Within Each Level</h3>
+  <p class="subtitle" style="margin-bottom: 1rem;">Example: Level 1 (Identity / Screen Layer)</p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem;">
+    <div style="padding: 1rem; background: rgba(167,139,250,0.1); border-radius: 8px; border-top: 3px solid #a78bfa;">
+      <div style="font-size: 0.85rem; font-weight: 700; color: #a78bfa;">Recognise</div>
+      <div style="font-size: 0.75rem; color: #ccc; margin-top: 0.5rem;">Complete Shadow Work deep dive. Meet your essence archetype. See the protective pattern.</div>
+      <div style="font-size: 0.7rem; color: #888; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">Gate: Deep dive complete</div>
+    </div>
+    <div style="padding: 1rem; background: rgba(16,185,129,0.1); border-radius: 8px; border-top: 3px solid #10b981;">
+      <div style="font-size: 0.85rem; font-weight: 700; color: #10b981;">Release</div>
+      <div style="font-size: 0.75rem; color: #ccc; margin-top: 0.5rem;">3 Screen layer challenges. Any scary/wahoo score. Just start moving. Build the habit of showing up as yourself online.</div>
+      <div style="font-size: 0.7rem; color: #888; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">Gate: 3 challenges completed</div>
+    </div>
+    <div style="padding: 1rem; background: rgba(233,162,59,0.1); border-radius: 8px; border-top: 3px solid #E9A23B;">
+      <div style="font-size: 0.85rem; font-weight: 700; color: #E9A23B;">Rewire</div>
+      <div style="font-size: 0.75rem; color: #ccc; margin-top: 0.5rem;">2 Screen layer challenges in the ESSENCE ZONE (scary ≥ 7, wahoo ≥ 7). Push the edge. Do the one that scares AND excites you.</div>
+      <div style="font-size: 0.7rem; color: #888; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">Gate: 2 essence zone challenges</div>
+    </div>
+    <div style="padding: 1rem; background: rgba(239,68,68,0.1); border-radius: 8px; border-top: 3px solid #f87171;">
+      <div style="font-size: 0.85rem; font-weight: 700; color: #f87171;">Reconnect</div>
+      <div style="font-size: 0.75rem; color: #ccc; margin-top: 0.5rem;">Voice check-in: "Is my essence voice louder than my protective voice at this layer?" If yes → level cleared. If no → more Rewire challenges.</div>
+      <div style="font-size: 0.7rem; color: #888; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">Gate: Voice check-in confirms shift</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 1rem; font-size: 0.8rem; color: #999; line-height: 1.7;">
+    <strong>Total per level:</strong> 1 deep dive + 3 warm-up challenges + 2 essence zone challenges + 1 voice confirmation = <strong>~6 challenges + 1 deep dive per level.</strong><br/>
+    At 1-2 challenges per week, each level takes roughly <strong>3-4 weeks</strong>. Full 6-level journey = <strong>~6 months</strong>. That feels right for genuine nervous system rewiring.
+  </div>
+</div>
+
+<!-- The Progress Visualization -->
+<div style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 3px solid #E9A23B;">
+  <h3 style="color: #E9A23B; margin: 0 0 0.75rem 0; font-size: 0.9rem;">How This Looks as a Progress Bar</h3>
+  <div style="margin-top: 0.75rem;">
+    <div style="font-size: 0.75rem; color: #888; margin-bottom: 0.35rem;">LEVEL 1: IDENTITY — SCREEN LAYER</div>
+    <div style="display: flex; gap: 2px; height: 32px; border-radius: 6px; overflow: hidden;">
+      <div style="flex: 1; background: #a78bfa; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 600; color: white;">RECOGNISE &#10003;</div>
+      <div style="flex: 1; background: #10b981; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 600; color: white;">RELEASE 2/3</div>
+      <div style="flex: 1; background: rgba(233,162,59,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #E9A23B;">REWIRE 0/2</div>
+      <div style="flex: 1; background: rgba(239,68,68,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #666;">RECONNECT</div>
+    </div>
+  </div>
+  <div style="margin-top: 1rem;">
+    <div style="font-size: 0.75rem; color: #888; margin-bottom: 0.35rem;">LEVEL 3: ENOUGH — MONEY LAYER</div>
+    <div style="display: flex; gap: 2px; height: 32px; border-radius: 6px; overflow: hidden;">
+      <div style="flex: 1; background: rgba(167,139,250,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #666;">RECOGNISE</div>
+      <div style="flex: 1; background: rgba(16,185,129,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #666;">RELEASE</div>
+      <div style="flex: 1; background: rgba(233,162,59,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #666;">REWIRE</div>
+      <div style="flex: 1; background: rgba(239,68,68,0.05); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #444;">RECONNECT</div>
+    </div>
+    <div style="font-size: 0.65rem; color: #555; margin-top: 0.25rem;">&#128274; Locked — complete Level 2 first</div>
+  </div>
+</div>

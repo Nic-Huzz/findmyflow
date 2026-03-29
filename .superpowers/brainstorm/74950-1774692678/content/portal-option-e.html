@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal E: Current Design + New Structure</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); min-height: 100vh; max-width: 420px; margin: 0 auto; }
+
+  /* === HEADER (matches current ChallengeHeader) === */
+  .challenge-header {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    padding: 2rem 1.5rem 1.25rem;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+  }
+  .challenge-app-title { font-size: 2rem; margin: 0 0 0.75rem 0; font-weight: bold; }
+
+  /* Score block (same layout as current) */
+  .challenge-score-block { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; justify-content: space-between; }
+  .challenge-total { text-align: left; }
+  .challenge-total-value { font-size: 2.5rem; line-height: 1; font-weight: bold; }
+  .challenge-total-label { font-size: 0.65rem; color: rgba(255,255,255,0.8); }
+  .challenge-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.25); }
+  .challenge-category-pills { display: flex; gap: 0.5rem; }
+  .challenge-pill { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 0.25rem 0.75rem; font-size: 0.75rem; display: flex; align-items: center; gap: 0.25rem; flex-direction: column; text-align: center; }
+  .challenge-pill-score { font-weight: bold; min-width: 1.2rem; }
+  .challenge-pill-label { font-size: 0.65rem; opacity: 0.9; }
+
+  /* NEW: XP Level Bar (added below score block) */
+  .xp-level { margin-top: 0.25rem; }
+  .xp-level-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+  .xp-stage { font-size: 0.85rem; font-weight: 700; }
+  .xp-nums { font-size: 0.7rem; color: rgba(255,255,255,0.6); }
+  .xp-nums span { color: white; font-weight: 700; }
+  .xp-track { width: 100%; height: 10px; background: rgba(255,255,255,0.12); border-radius: 5px; position: relative; }
+  .xp-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, #5e17eb, #a78bfa, #E9A23B); position: relative; transition: width 0.8s ease; overflow: hidden; }
+  .xp-fill::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3)); animation: shimmer 2.5s ease-in-out infinite; }
+  @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+  .xp-markers { display: flex; justify-content: space-between; margin-top: 3px; padding: 0 2px; }
+  .xp-m { font-size: 0.5rem; color: rgba(255,255,255,0.3); }
+  .xp-m.passed { color: rgba(255,255,255,0.6); }
+  .xp-m.current { color: #E9A23B; font-weight: 600; }
+
+  /* Header bottom row (settings, week type, graph btn) */
+  .header-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; }
+  .header-badges { display: flex; gap: 0.5rem; align-items: center; }
+  .week-type { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 4px 10px; font-size: 0.75rem; font-weight: 600; }
+  .graph-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 600; cursor: pointer; }
+  .settings-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; font-size: 0.8rem; cursor: pointer; }
+
+  /* === TABS (matches current challenge-tabs) === */
+  .challenge-tabs { display: flex; gap: 0.75rem; padding: 1.5rem 1.5rem 0.75rem; overflow-x: auto; }
+  .challenge-tab { padding: 0.75rem 1.5rem; background: white; color: #495057; border-radius: 12px; border: 2px solid transparent; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .challenge-tab:hover { background: #f8f9fa; }
+  .challenge-tab.active { background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%); color: white; border-color: #5e17eb; }
+  .challenge-tab.locked { background: #f8f9fa; color: #6c757d; opacity: 0.6; cursor: not-allowed; }
+  .lock-icon { font-size: 0.7rem; margin-left: 0.35rem; }
+
+  /* === CONTENT === */
+  .challenge-content { padding: 0.5rem 1.5rem 1.5rem; }
+
+  /* Milestone banner (new, but fits existing card pattern) */
+  .milestone-banner { background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #E9A23B 100%); border-radius: 16px; padding: 1rem 1.25rem; color: white; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+  .milestone-emoji { font-size: 1.6rem; }
+  .milestone-text { flex: 1; }
+  .milestone-title { font-size: 0.9rem; font-weight: 700; }
+  .milestone-desc { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+  .milestone-count { font-size: 1.2rem; font-weight: 800; }
+
+  /* Quest cards (matches current quest-card style) */
+  .quest-card { background: white; border-radius: 16px; padding: 1.25rem; border: 2px solid #e9ecef; transition: all 0.3s ease; margin-bottom: 0.75rem; }
+  .quest-card:hover { border-color: #5e17eb; box-shadow: 0 8px 24px rgba(94, 23, 235, 0.1); }
+  .quest-card.completed { opacity: 0.7; }
+  .quest-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; gap: 0.5rem; }
+  .quest-name { font-size: 1rem; font-weight: 700; color: #212529; }
+  .quest-desc { font-size: 0.8rem; color: #6c757d; line-height: 1.5; }
+  .frequency-badge { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 10px; font-weight: 600; white-space: nowrap; }
+  .quest-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; }
+  .quest-points { font-size: 0.85rem; font-weight: 700; color: #5e17eb; }
+  .quest-xp { font-size: 0.7rem; color: #E9A23B; font-weight: 600; }
+  .quest-action { background: linear-gradient(135deg, #5e17eb, #8b5cf6); color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+  .quest-action.gold { background: linear-gradient(135deg, #E9A23B, #fbbf24); color: #1a1a2e; }
+  .quest-action.done { background: #10b981; }
+
+  /* Section heading (matches current section patterns) */
+  .section-heading { display: flex; justify-content: space-between; align-items: center; margin: 1.25rem 0 0.75rem; }
+  .section-title { font-size: 0.85rem; font-weight: 700; color: #212529; display: flex; align-items: center; gap: 0.5rem; }
+  .section-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: 8px; font-weight: 600; }
+
+  /* Deep dive card (special treatment) */
+  .deep-dive-quest { background: white; border-radius: 16px; padding: 1.25rem; border: 2px solid #e9ecef; margin-bottom: 0.75rem; }
+  .deep-dive-quest.done { border-color: #10b981; background: linear-gradient(135deg, #f0fdf4, #fff); }
+  .deep-dive-quest.next { border-color: #5e17eb; background: linear-gradient(135deg, #faf5ff, #fff); }
+  .dd-row { display: flex; align-items: center; gap: 1rem; }
+  .dd-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+  .dd-info { flex: 1; }
+  .dd-name { font-size: 1rem; font-weight: 700; color: #212529; }
+  .dd-desc { font-size: 0.78rem; color: #6c757d; margin-top: 2px; }
+  .dd-status { font-size: 0.7rem; font-weight: 600; padding: 4px 10px; border-radius: 8px; }
+
+  /* Streak dots */
+  .streak-dots { display: flex; gap: 3px; margin-top: 4px; }
+  .streak-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .streak-dot.filled { background: #10b981; }
+  .streak-dot.empty { background: #e9ecef; }
+
+  /* Inline task list (for daily healing) */
+  .task-list { background: white; border-radius: 16px; padding: 1rem 1.25rem; border: 2px solid #e9ecef; margin-bottom: 0.75rem; }
+  .task-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid #f8f9fa; }
+  .task-row:last-child { border-bottom: none; }
+  .task-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; flex-shrink: 0; }
+  .task-check.done { background: #10b981; border-color: #10b981; color: white; }
+  .task-check.pending { border-color: #dee2e6; }
+  .task-info { flex: 1; }
+  .task-name { font-size: 0.82rem; font-weight: 600; color: #212529; }
+  .task-meta { font-size: 0.65rem; color: #adb5bd; margin-top: 1px; }
+  .task-right { text-align: right; }
+  .task-pts { font-size: 0.72rem; font-weight: 700; color: #5e17eb; }
+  .task-xp { font-size: 0.6rem; color: #E9A23B; font-weight: 600; }
+
+  /* Graph overlay */
+  .graph-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 1.5rem; backdrop-filter: blur(4px); }
+  .graph-overlay.show { display: flex; }
+  .graph-popup { background: #1a1a2e; border-radius: 20px; padding: 1.5rem; max-width: 380px; width: 100%; color: white; position: relative; }
+  .graph-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: rgba(255,255,255,0.5); font-size: 1.5rem; cursor: pointer; }
+  .graph-title { font-size: 1rem; font-weight: 800; margin-bottom: 0.25rem; }
+  .graph-subtitle { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 1rem; }
+  .graph-svg { width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- === HEADER (current layout + XP bar added) === -->
+<div class="challenge-header">
+  <h1 class="challenge-app-title">Find My Flow</h1>
+
+  <!-- Score block (SAME as current) -->
+  <div class="challenge-score-block">
+    <div class="challenge-total">
+      <div class="challenge-total-value">142</div>
+      <div class="challenge-total-label">Weekly Points</div>
+    </div>
+    <div class="challenge-divider"></div>
+    <div class="challenge-category-pills">
+      <div class="challenge-pill">
+        <span class="challenge-pill-score" style="color: #E9A23B;">🎯 38</span>
+        <span class="challenge-pill-label">Play-list</span>
+      </div>
+      <div class="challenge-pill">
+        <span class="challenge-pill-score" style="color: #34d399;">💚 64</span>
+        <span class="challenge-pill-label">Healing</span>
+      </div>
+      <div class="challenge-pill">
+        <span class="challenge-pill-score" style="color: #93c5fd;">⭐ 40</span>
+        <span class="challenge-pill-label">Bonus</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW: XP Level Bar -->
+  <div class="xp-level">
+    <div class="xp-level-row">
+      <div class="xp-stage">Level 2: Vulnerability</div>
+      <div class="xp-nums"><span>680</span> / 1200 XP</div>
+    </div>
+    <div class="xp-track">
+      <div class="xp-fill" style="width: 56%;"></div>
+    </div>
+    <div class="xp-markers">
+      <div class="xp-m passed">Identity ✓</div>
+      <div class="xp-m current">Vulnerability</div>
+      <div class="xp-m">Enough</div>
+      <div class="xp-m">Growth</div>
+      <div class="xp-m">Execution</div>
+      <div class="xp-m">Passion</div>
+    </div>
+  </div>
+
+  <!-- Bottom row -->
+  <div class="header-bottom">
+    <div class="header-badges">
+      <div class="week-type">🌊 Flow Week</div>
+      <button class="settings-btn">⚙️</button>
+    </div>
+    <button class="graph-btn" onclick="document.getElementById('graphOverlay').classList.add('show')">📊 Journey</button>
+  </div>
+</div>
+
+<!-- === TABS (SAME structure, new labels) === -->
+<div class="challenge-tabs">
+  <div class="challenge-tab active">Play-list</div>
+  <div class="challenge-tab">Healing</div>
+  <div class="challenge-tab">Business<span class="lock-icon">🔒</span></div>
+  <div class="challenge-tab">Bonus</div>
+</div>
+
+<!-- === CONTENT (Play-list tab active) === -->
+<div class="challenge-content">
+
+  <!-- Stage Milestone -->
+  <div class="milestone-banner">
+    <div class="milestone-emoji">🤝</div>
+    <div class="milestone-text">
+      <div class="milestone-title">Share with 2 vibe tribe pillars</div>
+      <div class="milestone-desc">Tell two real humans you're becoming this person</div>
+    </div>
+    <div class="milestone-count">0/2</div>
+  </div>
+
+  <!-- Deep Dive (top of Play-list tab) -->
+  <div class="section-heading">
+    <div class="section-title">🔮 Deep Dive</div>
+  </div>
+
+  <div class="deep-dive-quest done">
+    <div class="dd-row">
+      <div class="dd-icon" style="background: rgba(16,185,129,0.1);">🧭</div>
+      <div class="dd-info">
+        <div class="dd-name">Healing Compass</div>
+        <div class="dd-desc">Primary need: Connection. Splinter: heart center.</div>
+      </div>
+      <div class="dd-status" style="background: rgba(16,185,129,0.1); color: #10b981;">Done ✓</div>
+    </div>
+  </div>
+
+  <!-- Play-list Challenges -->
+  <div class="section-heading">
+    <div class="section-title">🎯 Live Layer Challenges</div>
+    <div class="section-badge" style="background: rgba(94,23,235,0.08); color: #5e17eb;">1/2 essence zone</div>
+  </div>
+
+  <div class="quest-card completed">
+    <div class="quest-header">
+      <div class="quest-name">Go live sharing a lesson learned</div>
+      <div class="frequency-badge" style="background: rgba(236,72,153,0.15); color: #ec4899;">Essence Zone 🔥</div>
+    </div>
+    <div class="quest-desc">2-minute live on a lesson from this week. Raw, not polished.</div>
+    <div class="quest-footer">
+      <div><span class="quest-points">+7 pts</span> <span class="quest-xp">· +50 XP</span></div>
+      <button class="quest-action done">Done ✓</button>
+    </div>
+  </div>
+
+  <div class="quest-card">
+    <div class="quest-header">
+      <div class="quest-name">Have an honest conversation about your direction</div>
+      <div class="frequency-badge" style="background: rgba(245,158,11,0.15); color: #d97706;">Live Layer</div>
+    </div>
+    <div class="quest-desc">Tell someone you trust what you're building and why. No pitch, just truth.</div>
+    <div class="quest-footer">
+      <div><span class="quest-points">+7 pts</span> <span class="quest-xp">· +50 XP</span></div>
+      <button class="quest-action">Complete</button>
+    </div>
+  </div>
+
+  <div class="quest-card" style="border-style: dashed; border-color: #5e17eb; background: rgba(94,23,235,0.02); text-align: center; cursor: pointer;">
+    <div style="font-size: 1.2rem; margin-bottom: 0.35rem;">+</div>
+    <div style="font-size: 0.9rem; font-weight: 600; color: #5e17eb;">Pick Another Live Layer Challenge</div>
+    <div style="font-size: 0.75rem; color: #6c757d; margin-top: 4px;">Choose from your skills × problems matrix</div>
+  </div>
+
+  <!-- Daily Healing (inline at bottom of Play-list) -->
+  <div class="section-heading">
+    <div class="section-title">💚 Today's Healing</div>
+    <div class="section-badge" style="background: rgba(16,185,129,0.1); color: #10b981;">3 day streak 🔥</div>
+  </div>
+
+  <div class="task-list">
+    <div class="task-row">
+      <div class="task-check done">✓</div>
+      <div class="task-info">
+        <div class="task-name">Morning Breathwork</div>
+        <div class="task-meta">Reconnect · Daily</div>
+        <div class="streak-dots"><div class="streak-dot filled"></div><div class="streak-dot filled"></div><div class="streak-dot filled"></div><div class="streak-dot empty"></div><div class="streak-dot empty"></div><div class="streak-dot empty"></div><div class="streak-dot empty"></div></div>
+      </div>
+      <div class="task-right"><div class="task-pts">+5</div><div class="task-xp">+15 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Voice Check-In</div>
+        <div class="task-meta">Essence or protective louder today?</div>
+      </div>
+      <div class="task-right"><div class="task-pts">+3</div><div class="task-xp">+10 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Trigger Recognition</div>
+        <div class="task-meta">What activated you today?</div>
+      </div>
+      <div class="task-right"><div class="task-pts">+3</div><div class="task-xp">+10 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info">
+        <div class="task-name">Compass Direction</div>
+        <div class="task-meta">N/E/S/W energy check</div>
+      </div>
+      <div class="task-right"><div class="task-pts">+3</div><div class="task-xp">+10 XP</div></div>
+    </div>
+  </div>
+
+  <!-- Flow Finder (existing, at bottom) -->
+  <div class="section-heading">
+    <div class="section-title">🧭 Flow Finder</div>
+    <div class="section-badge" style="background: rgba(94,23,235,0.08); color: #5e17eb;">3/4 done</div>
+  </div>
+
+  <div class="task-list">
+    <div class="task-row">
+      <div class="task-check done">✓</div>
+      <div class="task-info"><div class="task-name">Skills</div><div class="task-meta">Completed</div></div>
+      <div class="task-right"><div class="task-xp">+50 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check done">✓</div>
+      <div class="task-info"><div class="task-name">Problems</div><div class="task-meta">Completed</div></div>
+      <div class="task-right"><div class="task-xp">+50 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check done">✓</div>
+      <div class="task-info"><div class="task-name">Personas</div><div class="task-meta">Completed</div></div>
+      <div class="task-right"><div class="task-xp">+50 XP</div></div>
+    </div>
+    <div class="task-row">
+      <div class="task-check pending"></div>
+      <div class="task-info"><div class="task-name">Mind Space Combination</div><div class="task-meta">Select your primary combination</div></div>
+      <div class="task-right"><div class="task-xp">+75 XP</div></div>
+    </div>
+  </div>
+
+</div>
+
+<div style="height: 100px;"></div>
+
+<!-- === GRAPH POPUP === -->
+<div class="graph-overlay" id="graphOverlay" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="graph-popup">
+    <button class="graph-close" onclick="document.getElementById('graphOverlay').classList.remove('show')">&times;</button>
+    <div class="graph-title">Your Journey</div>
+    <div class="graph-subtitle">Sprouter Sweet Spot — Self-Knowledge × Action</div>
+
+    <svg class="graph-svg" viewBox="0 0 300 300">
+      <rect x="40" y="10" width="250" height="250" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <line x1="40" y1="135" x2="290" y2="135" stroke="rgba(255,255,255,0.05)"/>
+      <line x1="165" y1="10" x2="165" y2="260" stroke="rgba(255,255,255,0.05)"/>
+      <line x1="40" y1="260" x2="290" y2="10" stroke="rgba(233,162,59,0.2)" stroke-width="20" stroke-linecap="round"/>
+      <line x1="40" y1="260" x2="290" y2="10" stroke="rgba(233,162,59,0.15)" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="80" y="60" fill="rgba(239,68,68,0.4)" font-size="10" font-weight="600">Misguided Zone</text>
+      <text x="75" y="75" fill="rgba(239,68,68,0.25)" font-size="8">All action, no self-knowledge</text>
+      <text x="180" y="230" fill="rgba(94,23,235,0.4)" font-size="10" font-weight="600">Paralysis Zone</text>
+      <text x="175" y="245" fill="rgba(94,23,235,0.25)" font-size="8">Self-knowledge, no action</text>
+      <text x="160" y="120" fill="rgba(233,162,59,0.6)" font-size="9" font-weight="700" transform="rotate(-45, 160, 120)">Self-Actualisation</text>
+      <path d="M 230 220 C 220 200, 200 190, 185 180 C 170 170, 160 155, 155 145" stroke="url(#jGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="230" cy="220" r="4" fill="#666" opacity="0.4"/>
+      <text x="238" y="224" fill="rgba(255,255,255,0.25)" font-size="7">Start</text>
+      <circle cx="200" cy="185" r="4" fill="#a78bfa" opacity="0.6"/>
+      <text x="208" y="189" fill="rgba(167,139,250,0.5)" font-size="7">Identity ✓</text>
+      <circle cx="155" cy="145" r="8" fill="rgba(233,162,59,0.2)"><animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0.1;0.3" dur="2s" repeatCount="indefinite"/></circle>
+      <circle cx="155" cy="145" r="5" fill="#E9A23B"/>
+      <text x="163" y="142" fill="#E9A23B" font-size="8" font-weight="700">You</text>
+      <text x="163" y="152" fill="rgba(233,162,59,0.6)" font-size="7">Vulnerability</text>
+      <path d="M 155 145 C 145 130, 135 120, 125 110" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none" stroke-dasharray="4 4" stroke-linecap="round"/>
+      <circle cx="125" cy="110" r="3" fill="rgba(255,255,255,0.15)"/>
+      <text x="100" y="107" fill="rgba(255,255,255,0.15)" font-size="6">Enough</text>
+      <defs><linearGradient id="jGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#666"/><stop offset="50%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#E9A23B"/></linearGradient></defs>
+      <line x1="40" y1="260" x2="290" y2="260" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <line x1="40" y1="260" x2="40" y2="10" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="150" y="280" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle" font-weight="600">Self-Knowledge →</text>
+      <text x="15" y="140" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle" font-weight="600" transform="rotate(-90, 15, 140)">Action →</text>
+      <polygon points="288,256 290,260 288,264" fill="rgba(255,255,255,0.2)"/>
+      <polygon points="36,12 40,10 44,12" fill="rgba(255,255,255,0.2)"/>
+    </svg>
+
+    <div style="margin-top: 0.75rem; font-size: 0.75rem; color: rgba(255,255,255,0.5); text-align: center;">
+      You started in the Paralysis Zone. You're moving toward the diagonal.<br/>
+      <span style="color: #E9A23B;">Keep building self-knowledge. Action follows.</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

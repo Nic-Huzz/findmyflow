@@ -4,6 +4,27 @@
 
 Personal development web app helping burnt-out professionals discover their ideal career path. Built on **Nikigai** framework (Nic + Ikigai). Users complete AI-guided "flows" to identify skills, problems they solve, and ideal customers.
 
+**The Journey Story (Zone Calibration Framework):**
+
+Users arrive at FindMyFlow at **The Crack** or after sitting in **Head Full of Dreams** too long. The app's job is to move them along the Sprouter diagonal toward **Self-Actualisation** (self-knowledge + action moving together).
+
+- **0,0 → Unfulfilment → The Crack**: This happened before the app. The user's constructed life stopped working. Burnout, breakdown, or a moment of honest self-confrontation brought them here.
+- **Head Full of Dreams (Paralysis Zone)**: Where most users ARE when they sign up. Self-knowledge is emerging but action hasn't caught up. They can see what they want but can't move toward it.
+- **Self-Actualisation (The Diagonal)**: Where the app takes them. Action proportional to self-knowledge. Moving in alignment.
+
+**The two axes of the Sprouter Sweet Spot map to app features:**
+- **X axis (Self-Knowledge)** = Repair phase: Flow Finder, Play-List, Healing, Archetypes. Building self-knowledge, removing what was installed that wasn't yours.
+- **Y axis (Action)** = Build phase: Business stages 1-7. Taking aligned action from that self-knowledge. The business IS the action that turns Head Full of Dreams into Self-Actualisation.
+
+**Onboarding must deliver three things:**
+1. "I feel so seen" — the diagnostic mirrors them so accurately they screenshot it
+2. "Now I have words for it" — the framework language is a gift, not a lecture. Users leave with vocabulary they've never had for their experience
+3. "This is the coolest thing I've ever seen" — the visual experience is so premium they're genuinely excited
+
+**FindMyFlow's value proposition**: We build your X axis so your Y axis stops wasting your life.
+
+See `docs/zone-calibration-framework.md` for the full theoretical framework (Original IP: Huzz Hurrell).
+
 **Core Architecture:**
 - **Project-Centric**: Multiple projects per user, each with stage progression
 - **10-Stage System**: Flow Finder (0), Play-List (0.5), Setup (0.9), Stages 1-7, Tracking (8)
