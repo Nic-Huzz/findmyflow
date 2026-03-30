@@ -151,7 +151,7 @@ const PlayProfileFlow = lazyRetry(() => import('./flows/PlayProfileFlow'))
 const HealingCompass = lazyRetry(() => import('./flows/HealingCompass'))
 const ZoneDiagnosisFlow = lazyRetry(() => import('./flows/ZoneDiagnosisFlow'))
 const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
-const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
+const ShadowWorkFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
@@ -369,6 +369,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/essence-identify' ||
                         location.pathname === '/protective-identify' ||
                         location.pathname === '/matrix-code-deep-dive' ||
+                        location.pathname === '/shadow-work' ||
                         location.pathname.startsWith('/zone-diagnosis') ||
                         location.pathname === '/get-started'
 

@@ -1,0 +1,539 @@
+/* ============================================================
+   EssenceMirrorFlow.css
+   Multi-step essence discovery flow.
+   Purple + gold brand, dark background, mobile-first.
+   Created: 2026-03-30
+   ============================================================ */
+
+.em-flow {
+  min-height: 100dvh;
+  background: linear-gradient(180deg, #1a0a3e 0%, #2d1560 30%, #1a0a3e 100%);
+  padding: 0;
+  transition: opacity 0.3s ease;
+}
+
+.em-flow.transitioning {
+  opacity: 0;
+}
+
+/* ── Step Layout ── */
+.em-step {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  animation: emFadeIn 0.4s ease;
+}
+
+@keyframes emFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Hook Slides ── */
+.em-hook {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.em-hook-text {
+  color: #E9A23B;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 420px;
+}
+
+.em-hook-subtext {
+  color: #E9A23B;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.5;
+  margin-top: 1.5rem;
+  max-width: 420px;
+}
+
+.em-hook-tap {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.75rem;
+  margin-top: 2rem;
+  letter-spacing: 1px;
+}
+
+.em-hook-dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 1.5rem;
+}
+
+.em-hook-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.em-hook-dot.active {
+  background: #E9A23B;
+  transform: scale(1.3);
+}
+
+/* ── Step Header ── */
+.em-step-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.em-step-badge {
+  display: inline-block;
+  background: rgba(233, 162, 59, 0.2);
+  color: #E9A23B;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  margin-bottom: 0.75rem;
+}
+
+.em-step-title {
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+.em-step-subtitle {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.em-step-round {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Superpower Cards (multi-select) ── */
+.em-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.em-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.45;
+}
+
+.em-card:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.em-card.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.12);
+  color: white;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.15);
+}
+
+.em-card-check {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.em-card-text {
+  font-size: 0.88rem;
+  padding-right: 1.5rem;
+}
+
+/* ── Vision Cards (confirmation round) ── */
+.em-vision-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.em-vision-card:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.em-vision-card.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.12);
+  color: white;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.15);
+}
+
+.em-vision-name {
+  color: #E9A23B;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.35rem;
+}
+
+.em-vision-text {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ── Pixar Essence Pick ── */
+.em-pixar-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.em-pixar-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+}
+
+.em-pixar-card:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.em-pixar-card.selected {
+  border-color: #E9A23B;
+  box-shadow: 0 8px 32px rgba(233, 162, 59, 0.25);
+}
+
+.em-pixar-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.em-pixar-body {
+  padding: 1rem 1.15rem;
+}
+
+.em-pixar-name {
+  color: #E9A23B;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.3rem;
+}
+
+.em-pixar-essence {
+  color: white;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.em-pixar-check {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Buttons ── */
+.em-flow .em-next-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  border: none;
+  padding: 0.9rem 1.5rem;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.em-flow .em-next-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.35);
+}
+
+.em-flow .em-next-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.em-flow .em-back-btn {
+  width: 100%;
+  margin-top: 0.75rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  border: none;
+  padding: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.em-flow .em-back-btn:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── AI Mirror Reveal ── */
+.em-reveal {
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.em-reveal-loading {
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+
+.em-reveal-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  animation: emSpin 0.8s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+@keyframes emSpin {
+  to { transform: rotate(360deg); }
+}
+
+.em-reveal-loading-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.em-reveal-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: emRevealPop 0.6s ease;
+}
+
+@keyframes emRevealPop {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.em-reveal-name {
+  color: #E9A23B;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem;
+  animation: emFadeIn 0.5s ease 0.2s both;
+}
+
+.em-reveal-archetypes {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  animation: emFadeIn 0.5s ease 0.3s both;
+}
+
+.em-reveal-section {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  animation: emFadeIn 0.5s ease 0.4s both;
+}
+
+.em-reveal-section:nth-child(4) { animation-delay: 0.5s; }
+.em-reveal-section:nth-child(5) { animation-delay: 0.6s; }
+.em-reveal-section:nth-child(6) { animation-delay: 0.7s; }
+
+.em-reveal-label {
+  color: #E9A23B;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.35rem;
+}
+
+.em-reveal-text {
+  color: white;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.55;
+}
+
+/* ── Wound Step ── */
+.em-wound {
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.em-wound-quote {
+  color: #E9A23B;
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 1.5rem 0;
+  animation: emFadeIn 0.5s ease 0.2s both;
+}
+
+.em-wound-explanation {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 1rem 0;
+  animation: emFadeIn 0.5s ease 0.4s both;
+}
+
+.em-wound-zone {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  animation: emFadeIn 0.5s ease 0.6s both;
+}
+
+.em-wound-zone-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.em-wound-zone-text strong {
+  color: white;
+}
+
+/* ── Avatar Step ── */
+.em-avatar {
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.em-avatar-name-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: inherit;
+  text-align: center;
+  margin: 1rem 0;
+  box-sizing: border-box;
+}
+
+.em-avatar-name-input:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+.em-avatar-name-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.em-avatar-hint {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .em-step {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .em-step-title {
+    font-size: 1.25rem;
+  }
+
+  .em-hook-text {
+    font-size: 1.3rem;
+  }
+
+  .em-reveal-name {
+    font-size: 1.5rem;
+  }
+
+  .em-pixar-image {
+    height: 170px;
+  }
+}
