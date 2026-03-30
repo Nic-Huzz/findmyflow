@@ -431,8 +431,9 @@ export default function EssenceMirrorFlow() {
                   className={`option-btn ${isSelected ? 'selected' : ''}`}
                   onClick={() => toggleSelection(visionSelections, setVisionSelections, id)}
                 >
-                  <span className="em-vision-label">{arch.name}</span>
-                  {arch.poetic_vision}
+                  {arch.poetic_vision.split(/(?<=[.?!])\s+/).map((sentence, i) => (
+                    <span key={i} style={{ display: 'block', marginTop: i > 0 ? '0.5rem' : 0 }}>{sentence}</span>
+                  ))}
                 </button>
               )
             })}
