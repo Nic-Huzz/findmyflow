@@ -11,7 +11,7 @@ export default function DeepDiveCard({ deepDive, isCompleted }) {
   if (!deepDive) return null
   return (
     <div className={`level-deep-dive ${isCompleted ? 'completed' : ''}`}>
-      <div className="level-dd-icon">{isCompleted ? '\u2705' : '\uD83D\uDD2E'}</div>
+      <div className="level-dd-icon">{isCompleted ? '\u2705' : (deepDive.icon || '\uD83D\uDD2E')}</div>
       <div className="level-dd-info">
         <div className="level-dd-name">{deepDive.name}</div>
         <div className="level-dd-narrative">{deepDive.narrative}</div>

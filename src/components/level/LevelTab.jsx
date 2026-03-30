@@ -51,6 +51,7 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
   const levelQuests = [
     { label: 'Zone Diagnosis', done: !!selectedZone },
     { label: config.deepDive?.name || 'Deep Dive', done: false },
+    ...(config.extraQuests || []).map(q => ({ label: q.name, done: false })),
     { label: 'Boss Fight', done: false },
     { label: 'Milestone', done: false },
   ]
@@ -103,6 +104,15 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
 
       {/* Deep Dive */}
       <DeepDiveCard deepDive={config.deepDive} isCompleted={false} />
+
+      {/* Extra Quests (Level-specific) */}
+      {config.extraQuests?.map(quest => (
+        <DeepDiveCard
+          key={quest.id}
+          deepDive={quest}
+          isCompleted={false}
+        />
+      ))}
 
       {/* Boss Fight */}
       {boss && <BossFightCard boss={boss} isCompleted={false} />}

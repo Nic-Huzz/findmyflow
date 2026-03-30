@@ -22,6 +22,22 @@ export const LEVEL_CONFIG = {
       route: '/shadow-work',
       narrative: 'Meet yourself.',
     },
+    extraQuests: [
+      {
+        id: 'hero_avatar',
+        name: 'Create Your Hero Avatar',
+        route: '/archetypes/essence',
+        narrative: 'Define who you are.',
+        icon: '🦸',
+      },
+      {
+        id: 'identify_playlist',
+        name: 'Identify Your Play-list',
+        route: '/mind-space',
+        narrative: 'Discover your skills.',
+        icon: '🎯',
+      },
+    ],
     milestone: {
       text: 'Beginning to identify your essence and what to pursue',
       type: 'identity',

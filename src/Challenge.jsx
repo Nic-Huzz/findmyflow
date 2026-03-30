@@ -212,12 +212,7 @@ function Challenge() {
       .then(({ data }) => setHasEverPlannedWeek(data && data.length > 0))
   }, [user?.id, completions, weekPlanVersion])
 
-  // Redirect to Level if on a locked tab
-  useEffect(() => {
-    if (!hasEverPlannedWeek && activeCategory !== 'Level' && activeCategory !== 'Business') {
-      setActiveCategory('Level')
-    }
-  }, [hasEverPlannedWeek, activeCategory, setActiveCategory])
+  // (Tab locking removed — all tabs accessible)
 
   // Search state for filtering quests
   const [searchQuery, setSearchQuery] = useState('')
@@ -1693,7 +1688,7 @@ function Challenge() {
 
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
-          const isLocked = !hasEverPlannedWeek && category !== 'Level' && category !== 'Business'
+          const isLocked = false
           return (
             <button
               key={category}
