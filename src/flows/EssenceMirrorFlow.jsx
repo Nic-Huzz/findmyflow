@@ -420,18 +420,28 @@ export default function EssenceMirrorFlow() {
             <p className="em-step-subtitle">You resonated with these. Which visions make something inside you say yes?</p>
           </div>
 
-          <div className="em-options">
-            {getAllSelected().map(id => {
+          <div className="em-scene-cards">
+            {getAllSelected().map((id, i) => {
               const arch = getArchetype(id)
               const isSelected = visionSelections.includes(id)
               return (
                 <button
                   key={id}
                   type="button"
-                  className={`option-btn ${isSelected ? 'selected' : ''}`}
+                  className={`em-scene-card ${isSelected ? 'em-scene-selected' : ''}`}
                   onClick={() => toggleSelection(visionSelections, setVisionSelections, id)}
+                  style={{ animationDelay: `${0.1 + i * 0.1}s` }}
                 >
-                  <strong>{ARCHETYPE_EMOJI[id]} {arch.poetic_vision}</strong>
+                  <img
+                    className="em-scene-image"
+                    src={arch.image}
+                    alt={arch.name}
+                    onError={(e) => { e.target.style.display = 'none' }}
+                  />
+                  <div className="em-scene-pill">
+                    <div className="em-scene-name">{ARCHETYPE_EMOJI[id]} {arch.name}</div>
+                    <div className="em-scene-desc">{arch.poetic_vision}</div>
+                  </div>
                 </button>
               )
             })}
