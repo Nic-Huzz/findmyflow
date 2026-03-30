@@ -331,6 +331,8 @@ export default function EssenceMirrorFlow() {
             {HOOK_SLIDES[hookIndex].subtext && (
               <div className="em-hook-subtext">{HOOK_SLIDES[hookIndex].subtext}</div>
             )}
+          </div>
+          <div className="em-hook-bottom">
             {HOOK_SLIDES[hookIndex].button ? (
               <button className="em-hook-btn" onClick={handleHookTap}>
                 {HOOK_SLIDES[hookIndex].button} <span>→</span>
@@ -338,11 +340,11 @@ export default function EssenceMirrorFlow() {
             ) : (
               <div className="em-hook-tap">TAP TO CONTINUE</div>
             )}
-          </div>
-          <div className="em-hook-dots">
-            {HOOK_SLIDES.map((_, i) => (
-              <div key={i} className={`em-hook-dot ${i === hookIndex ? 'active' : ''}`} />
-            ))}
+            <div className="em-hook-dots">
+              {HOOK_SLIDES.map((_, i) => (
+                <div key={i} className={`em-hook-dot ${i === hookIndex ? 'active' : ''}`} />
+              ))}
+            </div>
           </div>
         </div>
       )}
