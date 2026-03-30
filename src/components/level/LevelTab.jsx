@@ -13,7 +13,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { getLevelConfig } from './LevelConfig'
-import SweetSpotGraph from './SweetSpotGraph'
 import DeepDiveCard from './DeepDiveCard'
 import BossFightCard from './BossFightCard'
 import MilestoneCard from './MilestoneCard'
@@ -72,17 +71,9 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
         )}
       </div>
 
-      {/* Sweet Spot Graph */}
-      <SweetSpotGraph
-        title={config.graph}
-        yAxis={config.yAxis}
-        xAxis={config.xAxis}
-        zones={config.zones}
-      />
-
       {/* Zone Diagnosis — links to flow */}
       <div className="level-zone-diagnosis">
-        <h3 className="level-section-title">Where are you on this graph?</h3>
+        <h3 className="level-section-title">Where are you on this level?</h3>
         {selectedZone ? (
           <div className="level-zone-result">
             <div className="level-zone-result-name">
