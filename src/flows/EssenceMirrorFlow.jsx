@@ -310,6 +310,26 @@ export default function EssenceMirrorFlow() {
         essence_archetype: primary?.name,
         vision_in_action: blendResult?.blended_essence || primary?.poetic_line,
       }, { onConflict: 'user_id' })
+
+      // Update lead_flow_profiles so /me hero section picks it up
+      await supabase.from('lead_flow_profiles').upsert({
+        user_id: user.id,
+        essence_archetype: primary?.name,
+        custom_essence_name: heroName,
+        custom_essence_fields: {
+          tagline: blendResult?.blended_essence || primary?.essence,
+          essence: blendResult?.blended_essence || primary?.poetic_line,
+          superpower: blendResult?.blended_superpower || primary?.superpower,
+          vision: blendResult?.blended_vision || primary?.poetic_vision,
+          north_star: primary?.north_star,
+          wound: blendResult?.blended_wound || primary?.essence_wound,
+          energetic_transmission: primary?.energetic_transmission,
+          recognition_pattern: primary?.recognition_pattern,
+          vision_in_action: primary?.vision_in_action,
+          inner_child: primary?.inner_child_desire,
+          characters: primary?.characters?.join(', '),
+        },
+      }, { onConflict: 'user_id' })
     } catch (err) {
       console.warn('Save error:', err)
     }

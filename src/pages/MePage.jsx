@@ -686,6 +686,23 @@ export default function MePage() {
                 </button>
               )}
             </>
+          ) : !archetypes?.essence?.name || archetypes?.essence?.name === 'Unknown' ? (
+            <>
+              <div className="quest-eyebrow">
+                <span className="quest-label">Level 1: Identity</span>
+              </div>
+              <h2 className="quest-title">Discover Your Essence</h2>
+              <p className="quest-subtitle">
+                Your shadows are the parts of you that were suppressed. Let's find who you really are.
+              </p>
+              <a
+                href="/shadow-work?returnTo=/me"
+                className="quest-cta"
+                style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
+              >
+                Start Essence Mirror <span>→</span>
+              </a>
+            </>
           ) : (
             <>
               <div className="quest-eyebrow">
