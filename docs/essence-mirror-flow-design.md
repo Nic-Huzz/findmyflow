@@ -68,7 +68,7 @@ Each archetype also carries:
 
 ---
 
-## Flow Structure (v3 — Final)
+## Flow Structure (v4 — Final)
 
 ### What we already know about the user
 
@@ -77,7 +77,7 @@ By the time a user hits this flow, we have:
 - **Zone diagnosis** (from Level 1) — where they sit on the Identity graph (Outcast / Diagonal / Chameleon)
 - **Tension scores** (from HomeFirstTime) — direction, vulnerability, enough, passion
 
-This existing data feeds into the AI blending step (Step 6).
+This existing data feeds into the AI blending step (Step 7).
 
 ---
 
@@ -96,82 +96,82 @@ Purple background, gold text. Same style as onboarding hook and current Shadow W
 
 ---
 
-### Step 2: Essence Question (multi-select) — "Which of these feels most like you?"
+### Steps 2-4: Superpower Rounds (3 screens of 4 cards each)
 
-Uses `poetic_line` from each archetype. Select all that resonate.
+**Field used**: `superpower` — action-oriented, punchy, easy gut-reaction yes/no.
 
-| Option | Archetype |
-|--------|-----------|
-| "You are fire with a heartbeat, designed to disrupt what's false and awaken what's real." | Radiant Rebel |
-| "You are joy in motion — color that moves, laughter that builds, a spark dressed in creativity." | Playful Creator |
-| "You are the joke that reveals the truth. The giggle that breaks the pattern." | Sacred Jester |
-| "You are the still point in the storm — the one who hears what others can't name." | Mystic Messenger |
-| "You are the sentence that slices through the noise. Clarity made human." | Truth-Teller |
-| "You are permission — uncaged, untamed, undeniable. Your truth liberates others." | Heart Alchemist |
-| "You are the roots beneath the rise — grounding the sacred into systems that last." | Grounded Guardian |
-| "You are the quiet gravity — the heartbeat that steadies the storm." | Heart Holder |
-| "You are the cadence-maker — the click where mess becomes momentum." | Rhythm Architect |
-| "You are the constellation-bringer — the pattern that lets us walk together." | Wise Sage |
-| "You are the thread between worlds — weaving the mystical into the practical." | Cosmic Connector |
-| "You are a walking hearth — steady, warm, and fiercely kind." | Compassionate Leader |
+**Prompt each round**: "Do any of these sound like you?"
 
----
+Multi-select (tap all that resonate). Each selection = +1 to that archetype's score.
 
-### Step 3: Superpower Question (multi-select) — "Which of these is your natural gift?"
+**Round 1:**
 
-Uses `superpower` from each archetype. Select all that resonate.
-
-| Option | Archetype |
-|--------|-----------|
+| Card | Archetype |
+|------|-----------|
 | "You ignite courage in the quiet. You say what others won't and move like fire through what feels stuck." | Radiant Rebel |
-| "You alchemize boredom into magic. You make joy contagious, creativity safe, and weirdness welcome." | Playful Creator |
-| "You disarm defenses with humor. You reveal truth in the ridiculous." | Sacred Jester |
 | "You hear what isn't said. You decode the invisible and deliver soul signals." | Mystic Messenger |
-| "You crack illusions with precision. You speak the sharp truth wrapped in unexpected tenderness." | Truth-Teller |
-| "You transmute chaos into meaning. You give pain purpose and help people rebirth themselves." | Heart Alchemist |
 | "You stabilize wild energy. You build safe havens and love through quiet presence." | Grounded Guardian |
-| "You co-regulate rooms. With you, breath slows, shoulders drop, and real work can land." | Heart Holder |
-| "You build the rails: standards, checklists, handoffs. Error drops. Throughput climbs." | Rhythm Architect |
 | "You connect the dots and name the frame; questions drop, alignment clicks." | Wise Sage |
+
+**Round 2:**
+
+| Card | Archetype |
+|------|-----------|
+| "You alchemize boredom into magic. You make joy contagious, creativity safe, and weirdness welcome." | Playful Creator |
+| "You crack illusions with precision. You speak the sharp truth wrapped in unexpected tenderness." | Truth-Teller |
+| "You co-regulate rooms. With you, breath slows, shoulders drop, and real work can land." | Heart Holder |
 | "You weave worlds. You connect the mystical and the practical." | Cosmic Connector |
+
+**Round 3:**
+
+| Card | Archetype |
+|------|-----------|
+| "You disarm defenses with humor. You reveal truth in the ridiculous." | Sacred Jester |
+| "You transmute chaos into meaning. You give pain purpose and help people rebirth themselves." | Heart Alchemist |
+| "You build the rails: standards, checklists, handoffs. Error drops. Throughput climbs." | Rhythm Architect |
 | "You hold the center when things shake. You make people feel seen, safe, and ready to rise." | Compassionate Leader |
 
 ---
 
-### Step 4: North Star Question (multi-select) — "Which guiding truth resonates most?"
+### Step 5: Vision Confirmation (selected archetypes only)
 
-Uses `north_star` from each archetype. Select all that resonate.
+**Field used**: `poetic_vision` — aspirational, forward-looking. Shifts from "what you DO" to "what you WANT."
 
-| Option | Archetype |
-|--------|-----------|
-| "Use rebellion to liberate, not just provoke. Let your why guide your wow." | Radiant Rebel |
-| "Channel your joy into containers that scale. Play can be the portal to mastery." | Playful Creator |
-| "Play with power, don't perform it. Let irreverence be reverent." | Sacred Jester |
-| "Your wisdom doesn't need to be understood by all — only felt by the right ones." | Mystic Messenger |
-| "Say the thing others won't. Truth is love wearing its boldest clothes." | Truth-Teller |
-| "Let your full expression lead. Alchemy needs fire." | Heart Alchemist |
-| "Ground your legacy in integrity. Slow can be sacred." | Grounded Guardian |
-| "Hold with warmth and boundaries. Care that preserves dignity, not dependency." | Heart Holder |
-| "Make it visible. Make it repeatable. Make it safe." | Rhythm Architect |
-| "Make meaning mutual. One clear model before big motion." | Wise Sage |
-| "Don't dilute your range to fit in. Your synthesis is the spell." | Cosmic Connector |
-| "Lead from wholeness, not over-responsibility. Trust others can rise too." | Compassionate Leader |
+**Shows ONLY archetypes selected in rounds 1-3.** Multi-select again.
 
----
+**Prompt**: "You resonated with these. Which of these futures excites you most?"
 
-### Step 5: Vision Pick (Pixar images) — "Which future makes something inside you say yes?"
+Archetypes selected in BOTH superpower rounds AND vision confirmation get +2 total. Those dropped here stay at +1. Clear separation for the Pixar pick.
 
-**Shows top 3-4 archetypes by accumulated score** from Steps 2-4. Each option is a Pixar scene image + the `poetic_vision` text. **Single select** — this confirms the primary archetype.
+Example (if they selected 5 archetypes in rounds 1-3, show all 5 with their vision text):
 
-The runner-up by score becomes the secondary archetype (AI confirms/adjusts in Step 6).
-
-**Prompt**: "Now imagine a future where you're fully living from this essence. Which vision makes something inside you say yes?"
-
-Each card: Pixar image + poetic_vision text underneath.
+| Card | Archetype |
+|------|-----------|
+| "What if your truth became a movement? What if your unapologetic expression wasn't risky but revolutionary?" | Radiant Rebel |
+| "What if your edges were the medicine? What if your rawness was the portal?" | Heart Alchemist |
+| "What if safety wasn't a pause but a power? What if your calm made courage possible?" | Heart Holder |
+| ... | ... |
 
 ---
 
-### Step 6: The AI Mirror (Haiku API call)
+### Step 6: Pixar Essence Pick (top 3-4 by score, single select)
+
+**Field used**: `poetic_line` (essence) — the most identity-level, poetic field. Combined with Pixar images.
+
+**Shows top 3-4 archetypes by accumulated score.** Each card has a Pixar image + the essence poetic_line. **Single select = primary archetype.**
+
+**Prompt**: "This is who you are. Which one makes something inside you say yes?"
+
+Runner-up by score = secondary archetype (AI confirms in Step 7).
+
+**Emotional arc across steps:**
+- Superpower (rounds 1-3): What you **do** → action, gut reaction
+- Vision (round 4): What you **want** → aspiration, re-evaluation
+- Essence (Pixar pick): Who you **are** → identity, commitment
+
+---
+
+### Step 7: The AI Mirror (Haiku API call)
 
 **Input to Haiku:**
 - Primary archetype (full data: poetic_line, superpower, wound, etc.)
@@ -227,55 +227,59 @@ This is the "I feel so seen" moment. The wound stage data from onboarding makes 
 
 ### How archetype scores accumulate
 
-Each of the 3 multi-select questions (Steps 2-4) lets users select all options that resonate. Each selection = +1 to that archetype's score.
+**Superpower rounds (Steps 2-4):** Each selection = +1. Max score per archetype after 3 rounds = 1 (each archetype only appears once).
+
+**Vision confirmation (Step 5):** Each selection = +1. Only selected archetypes from rounds 1-3 are shown.
 
 ```
-After 3 questions, each archetype has a score of 0-3.
+After all rounds, each archetype has a score of 0-2:
+  0 = never selected
+  1 = selected in superpower round only (dropped in vision)
+  2 = selected in BOTH superpower AND vision (strong signal)
 
 Example:
-  Heart Alchemist: 3 (selected in all 3 questions)
-  Radiant Rebel: 2 (selected in Q1 and Q3)
-  Mystic Messenger: 2 (selected in Q1 and Q2)
-  Compassionate Leader: 1 (selected in Q2 only)
+  Heart Alchemist: 2 (superpower + vision)
+  Radiant Rebel: 2 (superpower + vision)
+  Heart Holder: 2 (superpower + vision)
+  Mystic Messenger: 1 (superpower only, dropped in vision)
+  Wise Sage: 1 (superpower only, dropped in vision)
   ... rest: 0
 
-Top 3-4 shown in Pixar pick (Step 5): Heart Alchemist, Radiant Rebel, Mystic Messenger, Compassionate Leader
+Top 3-4 shown in Pixar pick (Step 6): Heart Alchemist, Radiant Rebel, Heart Holder
+  (score-2 archetypes first, then score-1 to fill if needed)
 User picks Heart Alchemist → Primary
-Runner-up = Radiant Rebel → Secondary (AI confirms in Step 6)
+Runner-up = Radiant Rebel → Secondary (AI confirms in Step 7)
 ```
 
-**Tie-breaking for top 3-4 cutoff:**
-- If scores tie, show all tied archetypes (up to 5 max)
-- If fewer than 3 archetypes scored above 0, show top 4 regardless (minimum viable choice)
+**Tie-breaking for Pixar pick cutoff:**
+- Score-2 archetypes always shown
+- Score-1 fill remaining spots up to 4 max
+- If fewer than 3 archetypes scored above 0, show top 4 by original selection order
 
-**The Pixar pick (Step 5) is the decisive moment.** The multi-select questions are signal gathering; the vision pick is commitment.
+**The Pixar pick (Step 6) is the decisive moment.** Everything before is signal gathering; the essence pick is commitment.
 
 ---
 
 ## Images Needed
 
-### Pixar Group Question Images (12 total — for Steps 2-4 placeholder, NOT used in final)
+### Pixar Essence Images (12 total — one per archetype, used in Step 6 Pixar pick)
 
-**No longer needed** — Steps 2-4 are now text-based multi-select.
+Only the user's top 3-4 are shown, but all 12 need to exist. Based on `poetic_line` (essence).
 
-### Pixar Vision Images (12 total — one per archetype, used in Step 5)
-
-Only the user's top 3-4 are shown, but all 12 need to exist.
-
-| Archetype | Vision Scene |
-|-----------|-------------|
-| **Radiant Rebel** | Young adult on stage before massive crowd, speaking truth with fire. Crowd electrified. Golden light radiating. Purple night sky. |
-| **Playful Creator** | Young adult in wild colorful workshop, inventions coming to life. Paint floating, toys dancing. Pure creative ecstasy. |
-| **Sacred Jester** | Young adult performing in intimate venue. Audience laughing and crying. Comedy breaking shame. Purple spotlight, golden particles. |
-| **Mystic Messenger** | Young adult in mystical forest circle, speaking quietly. Golden light flowing from words. Listeners in profound recognition. Moonlight, fireflies. |
-| **Truth-Teller** | Young adult in boardroom/hall, having silenced room with truth. Golden crack of light splitting dark wall. Calm, compassionate, unflinching. |
-| **Heart Alchemist** | Young adult in garden transforming broken things to golden blooms. Pain becoming beauty. Onlookers in awe. Amber and purple twilight. |
-| **Grounded Guardian** | Young adult at center of thriving community they built. People flourishing, children playing. Quiet pride. Golden afternoon, purple accents. |
-| **Heart Holder** | Young adult in cozy room with group who've been through something hard. Everyone exhaling. Firelight, blankets, tea. Room feels like a hug. |
-| **Rhythm Architect** | Young adult before beautiful machine/system running in harmony. Team working effortlessly. Clean lines, purple and gold mechanical elements. |
-| **Wise Sage** | Young adult at table covered in maps and threads. Divided group suddenly aligned, pointing at same spot. Golden connection lines. Library setting. |
-| **Cosmic Connector** | Young adult at intersection of two worlds (mystical purple + practical gold), weaving them together. People crossing over, amazed. |
-| **Compassionate Leader** | Young adult walking alongside group up mountain path, hand on shoulder. Not out front shouting — beside them. Golden sunrise ahead on summit. |
+| Archetype | Essence | Scene Description |
+|-----------|---------|-------------------|
+| **Radiant Rebel** | "You are fire with a heartbeat" | Young adult radiating fierce energy, flames dancing around them but controlled, heartbeat-like pulse of golden light from chest. Expression of passionate conviction. Purple and gold palette. |
+| **Playful Creator** | "You are joy in motion" | Young adult bursting with creative energy, paint-stained hands, surrounded by swirling colors, floating musical notes, half-built inventions. Pure unfiltered joy. Vibrant saturated colors. |
+| **Sacred Jester** | "The joke that reveals the truth" | Young adult with a knowing grin, juggling comedy masks that crack open to reveal golden light inside. Playful but wise expression. Purple spotlight with golden particles. |
+| **Mystic Messenger** | "The still point in the storm" | Young adult perfectly still and serene at the center of a swirling cosmic storm, eyes closed, hands open. Everything chaotic around them but they are pure calm. Purple storm, golden stillness. |
+| **Truth-Teller** | "The sentence that slices through the noise" | Young adult standing in sharp focus while everything around them is blurred noise and static. Their presence cuts through like a beam of golden clarity. Clean, bold, unflinching. |
+| **Heart Alchemist** | "Permission — uncaged, untamed" | Young adult breaking free from golden chains that shatter into butterflies. Expression of raw liberation and emotional power. Tears and fire coexisting. Amber and purple twilight. |
+| **Grounded Guardian** | "The roots beneath the rise" | Young adult standing steady with visible golden roots growing from their feet deep into the earth, while a magnificent tree grows above them sheltering others. Quiet strength. |
+| **Heart Holder** | "The quiet gravity — the heartbeat that steadies the storm" | Young adult sitting calmly at the center of a gentle storm, warm golden pulse from their chest. Others sheltered close, exhaling, trusting. Storm outside, peace within. |
+| **Rhythm Architect** | "The cadence-maker — where mess becomes momentum" | Young adult conducting an invisible orchestra, chaotic elements around them falling into beautiful geometric patterns and rhythm. Order emerging from chaos. Clean purple and gold lines. |
+| **Wise Sage** | "The constellation-bringer" | Young adult looking up at a night sky where they've drawn golden constellation lines connecting scattered stars into a clear pattern. Others around them suddenly seeing it too. Purple sky, golden connections. |
+| **Cosmic Connector** | "The thread between worlds" | Young adult standing between two dramatically different realms (mystical purple and practical gold), golden threads flowing from their hands connecting both sides. Glowing at the nexus. |
+| **Compassionate Leader** | "A walking hearth — steady, warm, and fiercely kind" | Young adult with warm golden light emanating from them like a living hearth, people drawn close, feeling safe and empowered. Fierce kindness in their expression. Purple and gold warmth. |
 
 ---
 
@@ -306,13 +310,15 @@ create table essence_profiles (
 ## Decisions Made
 
 1. **Hook style**: Swipeable purple/gold text slides (matches onboarding and existing Shadow Work)
-2. **3 multi-select text questions**: Using Essence (poetic_line), Superpower, and North Star fields. Select all that resonate. No group pre-filtering.
-3. **Pixar vision pick**: Top 3-4 archetypes by accumulated score, shown with Pixar scene + poetic_vision text. Single select = primary.
-4. **Cross-archetype blending**: Primary = Pixar pick. Secondary = runner-up by score. No group constraints — any archetype can blend with any other.
-5. **AI engine**: Haiku via new `essence-mirror-blend` edge function. Single call returns full blended profile.
-6. **Hero avatar**: Enhanced `buildAvatarPrompt` with blended essence data. Selfie upload → Pixar hero generation.
-7. **Replaces**: Old essence archetype system. Hero avatar on /me uses this.
-8. **12 Pixar vision images needed**: One per archetype, used in Step 5 pick.
+2. **3 superpower rounds** (4 cards each, one per group): Tap all that resonate. Punchy, action-oriented, gut reaction.
+3. **Vision confirmation round**: Shows only selected archetypes with `poetic_vision` text. Re-evaluates from aspirational angle. Creates score-2 vs score-1 separation.
+4. **Pixar essence pick**: Top 3-4 by score, shown with Pixar scene + `poetic_line` (essence) text. Single select = primary. Identity-level commitment.
+5. **Emotional arc**: What you DO (superpower) → What you WANT (vision) → Who you ARE (essence).
+6. **Cross-archetype blending**: Primary = Pixar pick. Secondary = runner-up by score. No group constraints.
+7. **AI engine**: Haiku via new `essence-mirror-blend` edge function. Single call returns full blended profile.
+8. **Hero avatar**: Enhanced `buildAvatarPrompt` with blended essence data. Selfie upload → Pixar hero generation.
+9. **Replaces**: Old essence archetype system. Hero avatar on /me uses this.
+10. **12 Pixar essence images needed**: One per archetype, used in Step 6 pick. Based on `poetic_line`.
 
 ## Open Questions (Remaining)
 
@@ -322,51 +328,53 @@ create table essence_profiles (
 
 ---
 
-## Pixar Image Prompts (for Step 5 Vision Pick)
+## Pixar Image Prompts (for Step 6 Essence Pick)
+
+Based on `poetic_line` (essence) — the identity-level statement.
 
 ### Activator Group
 
-**Radiant Rebel:**
-Pixar-style 3D animated scene of a young adult standing on a stage in front of a massive crowd, arms wide open, speaking their truth with fire and conviction. The crowd is electrified, some crying, some cheering. Golden light radiating from the speaker like a force field. Purple night sky with stars. Their truth has become a movement. Style: Pixar/Disney quality, cinematic epic lighting, warm purple and gold palette.
+**Radiant Rebel** — *"You are fire with a heartbeat"*
+Pixar-style 3D animated young adult radiating fierce energy, flames dancing around their body but controlled and intentional, a heartbeat-like pulse of golden light emanating from their chest. Expression of passionate conviction and fearless honesty. Hair and clothes moving with the energy. Dark purple background with golden fire. Close-up portrait composition, the fire IS them, not burning them. Style: Pixar/Disney quality, cinematic dramatic lighting, warm purple and gold palette.
 
-**Playful Creator:**
-Pixar-style 3D animated scene of a young adult in a wild, colorful workshop/studio, surrounded by joyful inventions and creations that have come to life. Paint splatters floating in air, mechanical toys dancing, music notes visible. Their face shows pure creative ecstasy. People around them are laughing and inspired, creating alongside them. Innovation feels like recess. Style: Pixar/Disney quality, vibrant colors, magical realism, warm lighting.
+**Playful Creator** — *"You are joy in motion"*
+Pixar-style 3D animated young adult bursting with creative energy, paint-stained hands mid-throw, surrounded by swirling colors, floating musical notes, and half-built inventions that seem alive. Expression of pure unfiltered joy, mouth open in laughter, eyes sparkling with mischief. Paint splatters and origami birds orbit around them like a personal galaxy of creativity. Warm golden light catches the chaos. Style: Pixar/Disney quality, vibrant saturated colors, cinematic lighting, warm purple and gold palette.
 
-**Sacred Jester:**
-Pixar-style 3D animated scene of a young adult performing on a small stage in an intimate venue, audience doubled over laughing but also wiping away tears. The performer's expression is both hilarious and deeply honest. Comedy masks and truth symbols floating in the warm air. Their irreverence is breaking shame apart. Purple spotlight with golden particles. Style: Pixar/Disney quality, cinematic intimate lighting.
+**Sacred Jester** — *"The joke that reveals the truth"*
+Pixar-style 3D animated young adult with a knowing, mischievous grin, juggling comedy and tragedy masks that are cracking open to reveal golden light inside each one. One eye winking. Playful pose but wise, ancient eyes. Purple spotlight creating dramatic shadows, golden particles floating where the masks crack. The humor is a vehicle for something sacred. Style: Pixar/Disney quality, cinematic intimate lighting, purple and gold.
 
 ### Transmuter Group
 
-**Mystic Messenger:**
-Pixar-style 3D animated scene of a young adult sitting peacefully in a circle of people in a mystical forest clearing, speaking quietly while everyone leans in. Ethereal golden light flows from their words like visible sound waves. The listeners' expressions show profound recognition, like they're hearing something their soul already knew. Moonlight through ancient trees, fireflies. Style: Pixar/Disney quality, magical ethereal lighting, purple and gold.
+**Mystic Messenger** — *"The still point in the storm"*
+Pixar-style 3D animated young adult perfectly still and serene at the center of a swirling cosmic storm, eyes closed, hands open and resting on knees in meditation. Everything around them is chaotic — wind, energy, fragments — but they sit in absolute calm. A golden glow at their center, the eye of the storm. Purple cosmic swirl surrounding a pocket of golden peace. Style: Pixar/Disney quality, magical ethereal lighting, dramatic contrast.
 
-**Truth-Teller:**
-Pixar-style 3D animated scene of a young adult standing in a boardroom or community hall, having just said something that silenced the room. Everyone's faces show the shock of recognition. One person is visibly moved to tears. The speaker stands calm, compassionate but unflinching. A golden crack of light splits through a dark wall behind them, truth breaking through. Style: Pixar/Disney quality, dramatic cinematic lighting, purple shadows with gold breakthrough.
+**Truth-Teller** — *"The sentence that slices through the noise"*
+Pixar-style 3D animated young adult standing in sharp, crystal-clear focus while everything around them is blurred static and noise. Their presence literally cuts through like a beam of golden clarity. Expression calm, compassionate but completely unflinching. One hand slightly raised as if they've just spoken. A visible golden shockwave of clarity radiating outward from them. Purple hazy background clearing where the wave passes. Style: Pixar/Disney quality, dramatic cinematic lighting.
 
-**Heart Alchemist:**
-Pixar-style 3D animated scene of a young adult kneeling in a garden where broken, withered things are transforming into golden blooms under their touch. Pain literally becoming beauty. People watching in awe as the transformation spreads outward. The alchemist's expression is one of deep feeling and purpose. Tears and fire coexisting. Warm amber and purple twilight. Style: Pixar/Disney quality, magical realism, cinematic lighting.
+**Heart Alchemist** — *"Permission — uncaged, untamed, undeniable"*
+Pixar-style 3D animated young adult breaking free from golden chains that shatter into butterflies as they snap. Expression of raw liberation and emotional power — tears streaming but eyes blazing with fire. Arms spread wide, chest open, completely vulnerable and completely powerful at the same time. Shattered chain links transforming into golden monarchs mid-air. Purple twilight background with amber light breaking through. Style: Pixar/Disney quality, magical realism, cinematic lighting.
 
 ### Stabilizer Group
 
-**Grounded Guardian:**
-Pixar-style 3D animated scene of a young adult standing at the center of a thriving community they've built, a beautiful structured village or garden with clear pathways and safe spaces. People are flourishing around them, children playing safely, elders resting peacefully. The guardian watches over it all with quiet pride and devotion. Warm golden afternoon light, solid architecture with purple accents. Style: Pixar/Disney quality, warm cinematic lighting.
+**Grounded Guardian** — *"The roots beneath the rise"*
+Pixar-style 3D animated young adult standing steady and grounded, with visible golden roots growing from their feet deep into the earth. Above them, a magnificent tree grows from their energy, sheltering others beneath its canopy. Their expression is quiet strength, protective devotion. People resting safely under the branches. Earth tones below, purple sky above, golden root network glowing underground. Style: Pixar/Disney quality, warm cinematic lighting, nature and architecture blend.
 
-**Heart Holder:**
-Pixar-style 3D animated scene of a young adult sitting in a cozy living room, surrounded by a small group of people who have clearly just been through something hard. The holder's steady presence has made everyone exhale. Shoulders have dropped, real conversation is happening. Warm firelight, blankets, mugs of tea. The room itself feels like a hug. Purple evening light through windows, golden interior warmth. Style: Pixar/Disney quality, intimate cinematic lighting.
+**Heart Holder** — *"The quiet gravity — the heartbeat that steadies the storm"*
+Pixar-style 3D animated young adult sitting calmly at the center of a gentle storm, eyes soft and steady, hands resting open. A warm golden pulse emanates from their chest like a visible heartbeat. Around them, wind and rain swirl but never touch the small circle of warmth they create. A few people sheltered close, visibly exhaling, shoulders dropped, trusting. Purple stormy exterior, golden interior glow. Style: Pixar/Disney quality, cinematic lighting, emotional depth, contrast between chaos and calm.
 
-**Rhythm Architect:**
-Pixar-style 3D animated scene of a young adult standing before a beautiful, intricate machine or system they've designed, everything running in perfect harmony. Gears turning smoothly, lights pulsing in rhythm, a team working effortlessly around them. Excellence without stress. The architect smiles at the elegant simplicity of what they've built. Clean lines, purple and gold mechanical elements, warm productive light. Style: Pixar/Disney quality, cinematic lighting.
+**Rhythm Architect** — *"The cadence-maker — where mess becomes momentum"*
+Pixar-style 3D animated young adult with hands raised like a conductor, chaotic floating elements around them (papers, gears, scattered pieces) falling into beautiful geometric patterns and flowing rhythm as their hands move. Expression of focused satisfaction as order emerges from chaos. Clean golden lines and purple geometric shapes crystallizing from randomness. A team behind them working in effortless flow. Style: Pixar/Disney quality, cinematic lighting, clean design aesthetic.
 
 ### Bridger Group
 
-**Wise Sage:**
-Pixar-style 3D animated scene of a young adult at a large table covered in maps, diagrams, and connected threads, having just explained something that made a divided group suddenly see the same picture. Everyone is pointing at the same spot on the map, nodding, finally aligned. The sage's expression shows quiet satisfaction. Golden connection lines glowing between the ideas. Warm library-like setting with purple ambient light. Style: Pixar/Disney quality, cinematic lighting.
+**Wise Sage** — *"The constellation-bringer"*
+Pixar-style 3D animated young adult looking up at a vast purple night sky, one hand raised, drawing golden constellation lines that connect scattered stars into a clear, beautiful pattern. Others around them are gasping, suddenly seeing the pattern too. The sage's expression shows quiet knowing — they've always seen the connections. Golden lines glowing between stars, purple cosmic background. Style: Pixar/Disney quality, magical cinematic lighting, awe and wonder.
 
-**Cosmic Connector:**
-Pixar-style 3D animated scene of a young adult standing at the intersection of two very different worlds, one hand reaching into a mystical/spiritual realm (purple, ethereal) and the other into a practical/structured realm (golden, solid). They're weaving the two together into something new that bridges both. People from both sides are crossing over, amazed. The connector glows at the nexus point. Style: Pixar/Disney quality, magical cinematic lighting, split composition.
+**Cosmic Connector** — *"The thread between worlds"*
+Pixar-style 3D animated young adult standing at the intersection of two dramatically different realms — one mystical and purple (ethereal, flowing, spiritual) and one practical and golden (structured, solid, tangible). Golden threads flow from their hands connecting both sides seamlessly. They glow at the nexus point, belonging fully to both worlds. People from each side crossing over, amazed. Style: Pixar/Disney quality, magical cinematic lighting, split composition, rich detail.
 
-**Compassionate Leader:**
-Pixar-style 3D animated scene of a young adult walking alongside a group of people up a mountain path. They're not out front shouting orders, they're beside them, a hand on one person's shoulder, steady and warm. The group is tired but trusting, drawing strength from the leader's grounded presence. Golden sunrise ahead on the summit. Purple mountain landscape. Everyone is going to make it because of this person. Style: Pixar/Disney quality, epic cinematic lighting, warm and hopeful.
+**Compassionate Leader** — *"A walking hearth — steady, warm, and fiercely kind"*
+Pixar-style 3D animated young adult with warm golden light emanating from them like a living hearth or campfire. People are drawn close, sitting and standing around them, clearly feeling safe and empowered. The leader's expression shows fierce kindness — not soft, not harsh, but deeply present. Purple evening landscape behind, golden warmth radiating outward. They're not on a throne — they're among their people. Style: Pixar/Disney quality, warm cinematic lighting, intimate epic feel.
 
 ---
 
