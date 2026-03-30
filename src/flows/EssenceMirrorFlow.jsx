@@ -19,6 +19,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { ESSENCE_ARCHETYPES, SUPERPOWER_ROUNDS, getArchetype, getArchetypesByIds } from '../data/essenceArchetypes'
+import '../styles/flow-base.css'
 import './EssenceMirrorFlow.css'
 
 // ─── Hook Slides ────────────────────────────────────────────────────────────
@@ -292,7 +293,7 @@ export default function EssenceMirrorFlow() {
   // ─── Render ─────────────────────────────────────────────────────────────
 
   return (
-    <div className={`em-flow ${isTransitioning ? 'transitioning' : ''}`}>
+    <div className={`em-flow flow-base ${isTransitioning ? 'transitioning' : ''}`}>
 
       {/* ── Hook Slides ── */}
       {step === STEPS.HOOK && (
@@ -352,9 +353,8 @@ export default function EssenceMirrorFlow() {
             <button
               className="em-next-btn"
               onClick={() => goToStep(nextStep)}
-              disabled={selections.length === 0}
             >
-              {selections.length === 0 ? 'Select at least one' : 'Continue'} <span>→</span>
+              {selections.length === 0 ? 'None of these' : 'Continue'} <span>→</span>
             </button>
 
             <button className="em-back-btn" onClick={() => goToStep(prevStep)}>
@@ -395,9 +395,8 @@ export default function EssenceMirrorFlow() {
           <button
             className="em-next-btn"
             onClick={() => goToStep(STEPS.PIXAR)}
-            disabled={visionSelections.length === 0}
           >
-            {visionSelections.length === 0 ? 'Select at least one' : 'Continue'} <span>→</span>
+            {visionSelections.length === 0 ? 'None of these' : 'Continue'} <span>→</span>
           </button>
 
           <button className="em-back-btn" onClick={() => goToStep(STEPS.ROUND_3)}>
