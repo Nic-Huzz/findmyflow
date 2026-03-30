@@ -368,7 +368,9 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/product-suite-map' ||
                         location.pathname === '/essence-identify' ||
                         location.pathname === '/protective-identify' ||
-                        location.pathname === '/matrix-code-deep-dive'
+                        location.pathname === '/matrix-code-deep-dive' ||
+                        location.pathname.startsWith('/zone-diagnosis') ||
+                        location.pathname === '/get-started'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
