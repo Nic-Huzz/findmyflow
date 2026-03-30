@@ -432,7 +432,7 @@ export default function EssenceMirrorFlow() {
                   onClick={() => toggleSelection(visionSelections, setVisionSelections, id)}
                 >
                   {arch.poetic_vision.split(/(?<=[.?!])\s+/).map((sentence, i) => (
-                    <span key={i} style={{ display: 'block', marginTop: i > 0 ? '0.5rem' : 0 }}>{sentence}</span>
+                    <strong key={i} style={{ display: 'block', marginTop: i > 0 ? '0.5rem' : 0 }}>{sentence}</strong>
                   ))}
                 </button>
               )
