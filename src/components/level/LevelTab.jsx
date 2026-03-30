@@ -11,6 +11,7 @@
  */
 
 import { useState, useEffect } from 'react'
+import { supabase } from '../../lib/supabaseClient'
 import { getLevelConfig } from './LevelConfig'
 import SweetSpotGraph from './SweetSpotGraph'
 import DeepDiveCard from './DeepDiveCard'
@@ -32,22 +33,20 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
       setZoneLoaded(true)
       return
     }
-    import('../../lib/supabaseClient').then(({ supabase }) => {
-      supabase
-        .from('user_level_progress')
-        .select('zone_selected, boss_name')
-        .eq('user_id', userId)
-        .eq('level', currentLevel)
-        .maybeSingle()
-        .then(({ data }) => {
-          if (data) {
-            setSelectedZone(data.zone_selected)
-            setBoss(data.boss_name)
-          }
-          setZoneLoaded(true)
-        })
-        .catch(() => setZoneLoaded(true))
-    })
+    supabase
+      .from('user_level_progress')
+      .select('zone_selected, boss_name')
+      .eq('user_id', userId)
+      .eq('level', currentLevel)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) {
+          setSelectedZone(data.zone_selected)
+          setBoss(data.boss_name)
+        }
+        setZoneLoaded(true)
+      })
+      .catch(() => setZoneLoaded(true))
   }, [userId, currentLevel])
 
   const levelQuests = [
