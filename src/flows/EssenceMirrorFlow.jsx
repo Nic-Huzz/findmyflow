@@ -26,8 +26,12 @@ import './EssenceMirrorFlow.css'
 
 const HOOK_SLIDES = [
   {
-    text: 'Take a moment to think about you as a kid.',
-    subtext: 'Think about some of the things you used to love to do.',
+    text: 'Our shadows are the parts of us we suppress most.',
+    subtext: 'What if I told you our most authentic selves are often our biggest shadows?',
+    button: 'Tell me how',
+  },
+  {
+    text: 'Take a moment to think about you as a kid and what you loved to do.',
   },
   {
     text: 'Now how would it have felt if you got teased, made fun or rejected for those things?',
@@ -36,16 +40,15 @@ const HOOK_SLIDES = [
     text: 'Horrible.\nShameful.\nEmbarrassed.',
   },
   {
-    text: 'And we never want to feel that way so what do we do to protect ourselves?',
-    subtext: 'We suppress that part of us.',
+    text: 'We hate feeling that way so what do we do to protect ourselves?',
+    subtext: 'We hide it away.',
   },
   {
-    text: 'Remember a shadow is any part of ourselves we suppress.',
-    subtext: 'But why would we suppress our authentic parts?',
+    text: 'Heartbreakingly our most authentic parts become our deepest shadows.',
   },
   {
-    text: 'Because at some point, someone told us they were too much.',
-    subtext: 'Let\'s find out which parts of you were hidden.',
+    text: 'Ready to reconnect to that version of you?',
+    button: 'Let\'s go',
   },
 ]
 
@@ -297,17 +300,23 @@ export default function EssenceMirrorFlow() {
 
       {/* ── Hook Slides ── */}
       {step === STEPS.HOOK && (
-        <div className="em-hook" onClick={handleHookTap}>
+        <div className="em-hook" onClick={HOOK_SLIDES[hookIndex].button ? undefined : handleHookTap}>
           <div className="em-hook-text">{HOOK_SLIDES[hookIndex].text}</div>
           {HOOK_SLIDES[hookIndex].subtext && (
             <div className="em-hook-subtext">{HOOK_SLIDES[hookIndex].subtext}</div>
+          )}
+          {HOOK_SLIDES[hookIndex].button ? (
+            <button className="em-hook-btn" onClick={handleHookTap}>
+              {HOOK_SLIDES[hookIndex].button} <span>→</span>
+            </button>
+          ) : (
+            <div className="em-hook-tap">TAP TO CONTINUE</div>
           )}
           <div className="em-hook-dots">
             {HOOK_SLIDES.map((_, i) => (
               <div key={i} className={`em-hook-dot ${i === hookIndex ? 'active' : ''}`} />
             ))}
           </div>
-          <div className="em-hook-tap">TAP TO CONTINUE</div>
         </div>
       )}
 

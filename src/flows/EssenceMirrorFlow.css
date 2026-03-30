@@ -61,6 +61,25 @@
   max-width: 420px;
 }
 
+.em-hook-btn {
+  margin-top: 2rem;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  border: none;
+  padding: 0.85rem 2rem;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.em-hook-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.35);
+}
+
 .em-hook-tap {
   color: rgba(255, 255, 255, 0.3);
   font-size: 0.75rem;
