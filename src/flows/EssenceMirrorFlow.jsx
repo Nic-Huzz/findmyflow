@@ -95,6 +95,8 @@ export default function EssenceMirrorFlow() {
   const [step, setStep] = useState(STEPS.HOOK)
   const [hookIndex, setHookIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [hookTransitioning, setHookTransitioning] = useState(false)
+  const [hookEntering, setHookEntering] = useState(true)
 
   // Selections (archetype IDs)
   const [round1, setRound1] = useState([])
@@ -151,8 +153,15 @@ export default function EssenceMirrorFlow() {
   }
 
   const handleHookTap = () => {
+    if (hookTransitioning) return
     if (hookIndex < HOOK_SLIDES.length - 1) {
-      setHookIndex(hookIndex + 1)
+      setHookTransitioning(true)
+      setHookEntering(false)
+      setTimeout(() => {
+        setHookIndex(hookIndex + 1)
+        setHookTransitioning(false)
+        setHookEntering(true)
+      }, 250)
     } else {
       goToStep(STEPS.ROUND_1)
     }
@@ -317,17 +326,19 @@ export default function EssenceMirrorFlow() {
       {/* ── Hook Slides ── */}
       {step === STEPS.HOOK && (
         <div className="em-hook" onClick={HOOK_SLIDES[hookIndex].button ? undefined : handleHookTap}>
-          <div className="em-hook-text">{HOOK_SLIDES[hookIndex].text}</div>
-          {HOOK_SLIDES[hookIndex].subtext && (
-            <div className="em-hook-subtext">{HOOK_SLIDES[hookIndex].subtext}</div>
-          )}
-          {HOOK_SLIDES[hookIndex].button ? (
-            <button className="em-hook-btn" onClick={handleHookTap}>
-              {HOOK_SLIDES[hookIndex].button} <span>→</span>
-            </button>
-          ) : (
-            <div className="em-hook-tap">TAP TO CONTINUE</div>
-          )}
+          <div className={`em-hook-content ${hookTransitioning ? 'em-hook-exit' : ''} ${hookEntering ? 'em-hook-enter' : ''}`}>
+            <div className="em-hook-text">{HOOK_SLIDES[hookIndex].text}</div>
+            {HOOK_SLIDES[hookIndex].subtext && (
+              <div className="em-hook-subtext">{HOOK_SLIDES[hookIndex].subtext}</div>
+            )}
+            {HOOK_SLIDES[hookIndex].button ? (
+              <button className="em-hook-btn" onClick={handleHookTap}>
+                {HOOK_SLIDES[hookIndex].button} <span>→</span>
+              </button>
+            ) : (
+              <div className="em-hook-tap">TAP TO CONTINUE</div>
+            )}
+          </div>
           <div className="em-hook-dots">
             {HOOK_SLIDES.map((_, i) => (
               <div key={i} className={`em-hook-dot ${i === hookIndex ? 'active' : ''}`} />
@@ -368,7 +379,16 @@ export default function EssenceMirrorFlow() {
                     className={`option-btn ${isSelected ? 'selected' : ''}`}
                     onClick={() => toggleSelection(selections, setSelections, id)}
                   >
-                    <strong>{ARCHETYPE_EMOJI[id]} {arch.superpower}</strong>
+                    {(() => {
+                      const firstDot = arch.superpower.indexOf('.')
+                      if (firstDot === -1) return <strong>{ARCHETYPE_EMOJI[id]} {arch.superpower}</strong>
+                      const first = arch.superpower.slice(0, firstDot + 1)
+                      const rest = arch.superpower.slice(firstDot + 1).trim()
+                      return <>
+                        <strong>{ARCHETYPE_EMOJI[id]} {first}</strong>
+                        {rest && <><br />{rest}</>}
+                      </>
+                    })()}
                   </button>
                 )
               })}

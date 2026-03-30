@@ -87,6 +87,30 @@
   box-shadow: 0 6px 24px rgba(233, 162, 59, 0.35);
 }
 
+/* Hook slide transitions */
+.em-hook-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.em-hook-exit {
+  animation: emSlideOut 0.25s ease forwards;
+}
+
+.em-hook-enter {
+  animation: emSlideIn 0.4s ease;
+}
+
+@keyframes emSlideOut {
+  to { opacity: 0; transform: translateX(-30px); }
+}
+
+@keyframes emSlideIn {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 .em-hook-tap {
   color: rgba(255, 255, 255, 0.3);
   font-size: 0.75rem;
