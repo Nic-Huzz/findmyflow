@@ -341,7 +341,7 @@ export default function EssenceMirrorFlow() {
               <p className="em-step-subtitle">Tap all that resonate.</p>
             </div>
 
-            <div className="em-cards">
+            <div className="em-options">
               {roundIds.map(id => {
                 const arch = getArchetype(id)
                 const isSelected = selections.includes(id)
@@ -349,26 +349,26 @@ export default function EssenceMirrorFlow() {
                   <button
                     key={id}
                     type="button"
-                    className={`em-card ${isSelected ? 'selected' : ''}`}
+                    className={`option-btn ${isSelected ? 'selected' : ''}`}
                     onClick={() => toggleSelection(selections, setSelections, id)}
                   >
-                    <div className="em-card-text">{arch.superpower}</div>
-                    {isSelected && <div className="em-card-check">&#10003;</div>}
+                    {arch.superpower}
                   </button>
                 )
               })}
             </div>
 
-            <button
-              className="em-next-btn"
-              onClick={() => goToStep(nextStep)}
-            >
-              {selections.length === 0 ? 'None of these' : 'Continue'} <span>→</span>
-            </button>
-
-            <button className="em-back-btn" onClick={() => goToStep(prevStep)}>
-              ← Back
-            </button>
+            <div className="nav-buttons" style={{ flexDirection: 'column', gap: '8px' }}>
+              <button
+                className="primary-button"
+                onClick={() => goToStep(nextStep)}
+              >
+                {selections.length === 0 ? 'None of these' : 'Continue'} →
+              </button>
+              <button className="secondary-button" onClick={() => goToStep(prevStep)}>
+                ← Back
+              </button>
+            </div>
           </div>
         )
       })}
@@ -382,7 +382,7 @@ export default function EssenceMirrorFlow() {
             <p className="em-step-subtitle">You resonated with these. Which visions make something inside you say yes?</p>
           </div>
 
-          <div className="em-cards">
+          <div className="em-options">
             {getAllSelected().map(id => {
               const arch = getArchetype(id)
               const isSelected = visionSelections.includes(id)
@@ -390,27 +390,27 @@ export default function EssenceMirrorFlow() {
                 <button
                   key={id}
                   type="button"
-                  className={`em-vision-card ${isSelected ? 'selected' : ''}`}
+                  className={`option-btn ${isSelected ? 'selected' : ''}`}
                   onClick={() => toggleSelection(visionSelections, setVisionSelections, id)}
                 >
-                  <div className="em-vision-name">{arch.name}</div>
-                  <div className="em-vision-text">{arch.poetic_vision}</div>
-                  {isSelected && <div className="em-card-check">&#10003;</div>}
+                  <span className="em-vision-label">{arch.name}</span>
+                  {arch.poetic_vision}
                 </button>
               )
             })}
           </div>
 
-          <button
-            className="em-next-btn"
-            onClick={() => goToStep(STEPS.PIXAR)}
-          >
-            {visionSelections.length === 0 ? 'None of these' : 'Continue'} <span>→</span>
-          </button>
-
-          <button className="em-back-btn" onClick={() => goToStep(STEPS.ROUND_3)}>
-            ← Back
-          </button>
+          <div className="nav-buttons" style={{ flexDirection: 'column', gap: '8px' }}>
+            <button
+              className="primary-button"
+              onClick={() => goToStep(STEPS.PIXAR)}
+            >
+              {visionSelections.length === 0 ? 'None of these' : 'Continue'} →
+            </button>
+            <button className="secondary-button" onClick={() => goToStep(STEPS.ROUND_3)}>
+              ← Back
+            </button>
+          </div>
         </div>
       )}
 
@@ -452,17 +452,18 @@ export default function EssenceMirrorFlow() {
             })}
           </div>
 
-          <button
-            className="em-next-btn"
-            onClick={runBlend}
-            disabled={!pixarPick}
-          >
-            {!pixarPick ? 'Pick your essence' : 'Reveal my mirror'} <span>→</span>
-          </button>
-
-          <button className="em-back-btn" onClick={() => goToStep(STEPS.VISION)}>
-            ← Back
-          </button>
+          <div className="nav-buttons" style={{ flexDirection: 'column', gap: '8px' }}>
+            <button
+              className="primary-button"
+              onClick={runBlend}
+              disabled={!pixarPick}
+            >
+              {!pixarPick ? 'Pick your essence' : 'Reveal my mirror'} →
+            </button>
+            <button className="secondary-button" onClick={() => goToStep(STEPS.VISION)}>
+              ← Back
+            </button>
+          </div>
         </div>
       )}
 
@@ -498,8 +499,8 @@ export default function EssenceMirrorFlow() {
             <div className="em-reveal-text">{blendResult.blended_vision}</div>
           </div>
 
-          <button className="em-next-btn" onClick={() => goToStep(STEPS.WOUND)}>
-            Show me why I hid this <span>→</span>
+          <button className="primary-button" onClick={() => goToStep(STEPS.WOUND)}>
+            Show me why I hid this →
           </button>
         </div>
       )}
@@ -528,8 +529,8 @@ export default function EssenceMirrorFlow() {
             </div>
           )}
 
-          <button className="em-next-btn" onClick={() => goToStep(STEPS.AVATAR)}>
-            Reclaim my essence <span>→</span>
+          <button className="primary-button" onClick={() => goToStep(STEPS.AVATAR)}>
+            Reclaim my essence →
           </button>
         </div>
       )}
@@ -556,11 +557,11 @@ export default function EssenceMirrorFlow() {
           </div>
 
           <button
-            className="em-next-btn"
+            className="primary-button"
             onClick={handleSave}
             disabled={saving || !heroName.trim()}
           >
-            {saving ? 'Saving...' : 'This is me'} <span>→</span>
+            {saving ? 'Saving...' : 'This is me'} →
           </button>
         </div>
       )}
