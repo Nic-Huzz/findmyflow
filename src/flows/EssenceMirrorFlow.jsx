@@ -19,6 +19,22 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { ESSENCE_ARCHETYPES, SUPERPOWER_ROUNDS, getArchetype, getArchetypesByIds } from '../data/essenceArchetypes'
+
+// Emoji per archetype for card display
+const ARCHETYPE_EMOJI = {
+  radiant_rebel: '🔥',
+  playful_creator: '🎨',
+  sacred_jester: '🃏',
+  mystic_messenger: '🔮',
+  truth_teller: '⚡',
+  heart_alchemist: '💛',
+  grounded_guardian: '🛡️',
+  heart_holder: '💗',
+  rhythm_architect: '⚙️',
+  wise_sage: '🧭',
+  cosmic_connector: '🌌',
+  compassionate_leader: '👑',
+}
 import '../styles/flow-base.css'
 import './EssenceMirrorFlow.css'
 
@@ -34,17 +50,17 @@ const HOOK_SLIDES = [
     text: 'Take a moment to think about you as a kid and what you loved to do.',
   },
   {
-    text: 'Now how would it have felt if you got teased, made fun or rejected for those things?',
+    text: 'Now how would it have felt if you got teased, made fun of, or rejected for those things?',
   },
   {
     text: 'Horrible.\nShameful.\nEmbarrassed.',
   },
   {
-    text: 'We hate feeling that way so what do we do to protect ourselves?',
+    text: 'We hate feeling that way, so what do we do to protect ourselves?',
     subtext: 'We hide it away.',
   },
   {
-    text: 'Heartbreakingly our most authentic parts become our deepest shadows.',
+    text: 'Heartbreakingly, our most authentic parts become our deepest shadows.',
   },
   {
     text: 'Ready to reconnect to that version of you?',
@@ -352,7 +368,7 @@ export default function EssenceMirrorFlow() {
                     className={`option-btn ${isSelected ? 'selected' : ''}`}
                     onClick={() => toggleSelection(selections, setSelections, id)}
                   >
-                    {arch.superpower}
+                    {ARCHETYPE_EMOJI[id]} {arch.superpower}
                   </button>
                 )
               })}
