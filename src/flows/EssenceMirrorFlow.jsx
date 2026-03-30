@@ -431,7 +431,7 @@ export default function EssenceMirrorFlow() {
                   className={`option-btn ${isSelected ? 'selected' : ''}`}
                   onClick={() => toggleSelection(visionSelections, setVisionSelections, id)}
                 >
-                  <strong>{ARCHETYPE_EMOJI[id]} {arch.poetic_vision.split(/[.?!]\s/)[0]}?</strong>
+                  <strong>{ARCHETYPE_EMOJI[id]} {arch.poetic_vision}</strong>
                 </button>
               )
             })}
