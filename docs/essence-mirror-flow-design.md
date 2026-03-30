@@ -1,6 +1,6 @@
 # Essence Mirror Flow Design
 
-> **Status**: Draft — iterating
+> **Status**: Draft v2 — refined
 > **Route**: `/shadow-work` (replaces current Shadow Work flow)
 > **Level**: 1 (Identity)
 > **Core thesis**: Your shadows are your essence, suppressed. The most authentic parts of yourself are the ones you were told to hide.
@@ -9,11 +9,11 @@
 
 ## The Idea
 
-Instead of 12 fixed archetype boxes, the Essence Mirror uses 12 archetypes as **ingredients** and blends a unique essence profile per user. The AI recommendation engine mixes primary + secondary archetypes based on quiz responses, creating a profile that feels deeply personal rather than generic.
+Instead of 12 fixed archetype boxes, the Essence Mirror uses 12 archetypes as **ingredients** and blends a unique essence profile per user. The primary archetype comes from the user's winning group; the secondary comes from a different group (cross-group blending), creating profiles that feel deeply personal rather than generic.
 
 **Example output:**
-> **Primary**: Heart Alchemist (70%) — *You transform pain into gold*
-> **Secondary**: Radiant Rebel (30%) — *But you do it with fire, not silence*
+> **Primary**: Heart Alchemist (Transmuter) — *You transform pain into gold*
+> **Secondary**: Radiant Rebel (Activator) — *But you do it with fire, not silence*
 >
 > "Your alchemy has teeth. You don't just hold space — you crack it open."
 >
@@ -68,109 +68,247 @@ Each archetype also carries:
 
 ---
 
-## Flow Structure (Draft)
+## Flow Structure (Refined)
 
-### What we already know about the user before they enter
+### What we already know about the user
 
 By the time a user hits this flow, we have:
 - **Wound stage selections** (from onboarding) — which childhood patterns resonate
 - **Zone diagnosis** (from Level 1) — where they sit on the Identity graph (Outcast / Diagonal / Chameleon)
 - **Tension scores** (from HomeFirstTime) — direction, vulnerability, enough, passion
 
-This existing data should **prime** the archetype matching, not be ignored.
-
-### Proposed Steps
-
-**Step 1: The Hook**
-- Brief framing: "The parts of you that feel like shadows? They're actually your essence. Let's find them."
-- No interaction, just emotional priming
-
-**Step 2: Essence Questions (replaces old group assignment)**
-- TBD: What questions to ask
-- Should feel like self-reflection, not a personality quiz
-- Need to map responses to archetype affinity scores
-- Consider: using the wound stage data to skip/weight certain questions
-
-**Step 3: The Mirror**
-- AI blends primary + secondary archetype based on responses
-- Shows the blended profile: poetic_line, superpower, essence_wound
-- "Does this feel like you?" moment
-
-**Step 4: The Wound**
-- Reveals the essence_wound(s) — what you were told about these traits
-- Connects to their zone diagnosis: "This is WHY you're in the [Chameleon/Outcast] zone"
-- The suppression of essence IS the zone imbalance
-
-**Step 5: The Vision**
-- Shows poetic_vision — what life looks like when essence leads
-- Characters who embody this blend
-- vision_in_action
-
-**Step 6: Save + Create Avatar**
-- Save essence profile to DB
-- Transition to hero avatar creation (naming, owning it)
+This existing data feeds into the AI blending step (Step 6).
 
 ---
 
-## Mixing Algorithm (Draft)
+### Step 1: The Hook (swipeable slides, no interaction)
 
-### Option A: Weighted scoring from questions
-Each question response adds weight to specific archetypes. Final scores determine primary (highest) and secondary (second highest). Ratio comes from relative scores.
+Purple background, gold text. Same style as onboarding hook and current Shadow Work intro. Auto-advance or swipe.
 
-### Option B: AI-powered blending
-Send question responses + wound stage data + zone diagnosis to Claude API. Ask it to select primary + secondary from the 12 and generate a blended poetic profile. More expensive but more personal.
-
-### Option C: Hybrid
-Use weighted scoring to narrow to top 3-4 candidates, then use AI to pick the final blend and generate the personalized copy.
-
-**Leaning toward**: Option C — deterministic narrowing + AI personalization
+| Slide | Text |
+|-------|------|
+| 1 | "Take a moment to think about you as a kid." / "Think about some of the things you used to love to do." |
+| 2 | "Now how would it have felt if you got teased, made fun or rejected for those things?" |
+| 3 | "Horrible. Shameful. Embarrassed." |
+| 4 | "And we never want to feel that way so what do we do to protect ourselves?" / "We suppress that part of us." |
+| 5 | "Remember a shadow is any part of ourselves we suppress." / "But why would we suppress our authentic parts?" |
+| 6 | "Because at some point, someone told us they were too much." / "Let's find out which parts of you were hidden." |
 
 ---
 
-## Open Questions
+### Step 2: Group Question 1 — "Which kid were you?"
 
-1. **What questions replace the group assignment?** The old 3 questions (nervous system, sensory threshold, stress response) were very body-focused. Do we want:
-   - More "when do you feel most alive?" style questions?
-   - Scenario-based ("you walk into a room where...")?
-   - Inner child focused ("as a kid, you were the one who...")?
-   - Or use the wound stage selections we already have as primary signal?
+4 Pixar scene images, one per group. Inner child angle. Tap to select.
 
-2. **How many archetypes in the blend?** Primary + secondary, or primary + two secondaries?
+**Prompt**: "Think back to the playground. Which one were you?"
 
-3. **Should the blend generate a unique name?** e.g., "The Fierce Alchemist" (Heart Alchemist + Radiant Rebel) vs just showing the two archetypes with percentages?
+| Option | Scene Description (for Pixar image) | Group |
+|--------|--------------------------------------|-------|
+| A | Kid leading a wild charge, rallying others into action, climbing things they shouldn't | **Activator** |
+| B | Kid sitting quietly watching, feeling everything, making up stories in their head | **Transmuter** |
+| C | Kid organizing the game, making sure everyone has a turn, setting up the rules | **Stabilizer** |
+| D | Kid connecting two friend groups, explaining things, drawing maps of imaginary worlds | **Bridger** |
 
-4. **How does this connect to the protective archetype?** The existing app has protective voices (Performer, Controller, People Pleaser, Perfectionist, Ghost). The zone diagnosis already identifies the Boss. Should the Essence Mirror show the relationship: "Your essence is X, your protector is Y, the wound that created Y was Z"?
+---
 
-5. **Persona survey (Vibe Seeker / Vibe Riser / Movement Maker)**: Keep, remove, or integrate differently? This maps roughly to the tension scores we already capture.
+### Step 3: Group Question 2 — "When you feel most alive..."
 
-6. **Repeatability**: Should users be able to retake this? The current Shadow Work is repeatable weekly. An essence discovery feels more like a one-time reveal with optional retake.
+4 Pixar scene images, different angle. Energy/flow state angle.
+
+**Prompt**: "When do you feel most like yourself?"
+
+| Option | Scene Description (for Pixar image) | Group |
+|--------|--------------------------------------|-------|
+| A | Character mid-leap, full of fire and momentum, sparks flying | **Activator** |
+| B | Character in a quiet deep moment, transforming something painful into something beautiful | **Transmuter** |
+| C | Character building something solid, organized, others feeling safe around them | **Stabilizer** |
+| D | Character connecting dots on a board, seeing the big picture, bridging worlds | **Bridger** |
+
+---
+
+### Step 4: Tiebreaker (conditional — only if Q1 ≠ Q2)
+
+Resolves which group is **primary** and which becomes the **secondary** source.
+
+**Prompt**: "One more. When things get hard, which is closer to you?"
+
+| Option | Scene Description | Group |
+|--------|-------------------|-------|
+| A | Character charging forward through difficulty, refusing to stop | **Activator** |
+| B | Character sitting with the pain, feeling it fully, letting it transform | **Transmuter** |
+| C | Character steadying the ground, holding everything together for others | **Stabilizer** |
+| D | Character stepping back to see the whole picture, finding the pattern | **Bridger** |
+
+**Resolution logic:**
+- If Q1 == Q2: Primary = that group. No tiebreaker shown.
+- If Q1 ≠ Q2, Q3 shown: Primary = Q3 result. Secondary = whichever of Q1/Q2 wasn't Q3.
+- If Q3 matches Q1: Primary = Q1, Secondary = Q2.
+- If Q3 matches Q2: Primary = Q2, Secondary = Q1.
+- If Q3 is a third group: Primary = Q3, Secondary = Q1 (first instinct).
+
+---
+
+### Step 5: Archetype Pick — "In your essence moments..."
+
+Shows 3 archetype options from the **primary group only**. Each option uses the `inner_child_desire` or a one-line essence description. Could use Pixar images or poetic text cards.
+
+**Prompt**: "In those moments you feel most alive, what are you naturally being?"
+
+Example (if primary = Transmuter):
+- "The one who senses what others miss" → Mystic Messenger
+- "The one who says what no one else will" → Truth-Teller
+- "The one who turns pain into gold" → Heart Alchemist
+
+User picks one. This becomes the **primary archetype**.
+
+The **secondary archetype** is selected by the AI in the next step, from the secondary group, based on which archetype best complements the primary + existing user data.
+
+---
+
+### Step 6: The AI Mirror (Haiku API call)
+
+**Input to Haiku:**
+- Primary archetype (full data: poetic_line, superpower, wound, etc.)
+- Secondary group (all 3 archetypes in that group)
+- User's wound stage selections from onboarding
+- User's zone diagnosis (Outcast/Diagonal/Chameleon)
+- User's tension scores
+
+**Haiku's job:**
+1. Pick the best secondary archetype from the secondary group
+2. Generate a blended poetic profile (~3-4 sentences) that weaves both archetypes
+3. Generate a blended essence wound that combines both wounds
+4. Generate a blended superpower statement
+
+**Output displayed:**
+- Dramatic reveal animation (like Boss Reveal in Zone Diagnosis)
+- Primary archetype name + secondary archetype name
+- Blended poetic_line
+- Blended superpower
+- "Does this feel like you?"
+
+**Confidence gate**: If Q1 == Q2 (strong signal), show with confidence. If tiebreaker was needed, add "If this doesn't quite land, you can retake" option.
+
+---
+
+### Step 7: The Wound
+
+Connects the essence_wound to their childhood experience.
+
+**Prompt structure:**
+> "At some point, someone told you: *[blended essence wound]*"
+>
+> "And so you learned to suppress the very thing that makes you powerful."
+>
+> [If zone data exists]: "This is why you're in the **[zone name]**. Your essence was suppressed, and the **[Boss name]** stepped in to protect you."
+
+This is the "I feel so seen" moment. The wound stage data from onboarding makes it personal — the AI can reference their specific childhood pattern.
+
+---
+
+### Step 8: Create Hero Avatar
+
+- Display the blended archetype as their new identity
+- Allow naming/customizing (pre-filled with archetype name, editable)
+- Save to DB (replaces old essence archetype system)
+- Transition back to Level tab or /me page
+
+---
+
+## Cross-Group Blending Algorithm
+
+### How primary + secondary are determined
+
+```
+Q1 → Group A
+Q2 → Group B
+
+If A == B:
+  Primary group = A
+  Secondary group = determined by AI (using wound stages, zone, tension scores)
+
+If A != B:
+  Q3 (tiebreaker) → Group C
+  If C == A: Primary = A, Secondary = B
+  If C == B: Primary = B, Secondary = A
+  If C == neither: Primary = C, Secondary = A (first instinct)
+
+Primary archetype = user picks from 3 options in primary group (Step 5)
+Secondary archetype = AI picks from 3 options in secondary group (Step 6)
+```
+
+### What the AI blends
+
+The AI doesn't invent new archetypes. It:
+1. Takes the full data for both archetypes (poetic_line, superpower, wound, etc.)
+2. Generates a **bridging narrative** that weaves both together
+3. The core archetype data stays intact — the AI adds the connective tissue
+
+---
+
+## Images Needed
+
+| Image | Description | Used In |
+|-------|-------------|---------|
+| Group Q1 - Activator | Kid leading a wild charge on playground | Step 2 |
+| Group Q1 - Transmuter | Kid sitting quietly, feeling everything, storytelling | Step 2 |
+| Group Q1 - Stabilizer | Kid organizing the game, making sure everyone's included | Step 2 |
+| Group Q1 - Bridger | Kid connecting friend groups, drawing maps | Step 2 |
+| Group Q2 - Activator | Character mid-leap, fire and momentum | Step 3 |
+| Group Q2 - Transmuter | Character in deep moment, transforming pain to beauty | Step 3 |
+| Group Q2 - Stabilizer | Character building something solid, others feel safe | Step 3 |
+| Group Q2 - Bridger | Character connecting dots, seeing big picture | Step 3 |
+| Tiebreaker - Activator | Character charging through difficulty | Step 4 |
+| Tiebreaker - Transmuter | Character sitting with pain, letting it transform | Step 4 |
+| Tiebreaker - Stabilizer | Character steadying the ground for others | Step 4 |
+| Tiebreaker - Bridger | Character stepping back to find the pattern | Step 4 |
+
+**Total: 12 Pixar-style images** (4 per question, 3 questions)
+
+Archetype pick (Step 5) could use text cards instead of images to keep scope manageable.
 
 ---
 
 ## Data Storage
 
-### New table or extend existing?
-
-Current `founder_dna_results` stores Play Profile data. Essence Mirror is different enough to warrant its own table:
-
 ```sql
 create table essence_profiles (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) not null,
+  primary_group text not null,
+  secondary_group text,
   primary_archetype text not null,
-  primary_weight numeric(4,2),
-  secondary_archetype text not null,
-  secondary_weight numeric(4,2),
-  blended_name text,
-  blended_poetic_line text,
+  secondary_archetype text,
+  blended_narrative text,
   blended_superpower text,
   blended_wound text,
   question_responses jsonb,
+  wound_stages_at_time jsonb,
   zone_at_time text,
   created_at timestamptz default now(),
   unique(user_id)
 );
 ```
+
+---
+
+## Decisions Made
+
+1. **Hook style**: Swipeable purple/gold text slides (matches onboarding and existing Shadow Work)
+2. **Group questions**: 2 questions with Pixar images + conditional tiebreaker (not the old nervous system questions)
+3. **Cross-group blending**: Primary archetype from winning group, secondary from runner-up group (not same-group)
+4. **AI engine**: Haiku for blending (cheap, fast enough for a reveal moment)
+5. **Archetype pick**: One question, 3 options from primary group only
+6. **Secondary selection**: AI picks from secondary group based on complement + user data
+7. **Replaces**: Old essence archetype system. Hero avatar on /me uses this.
+8. **Ends with**: Create Hero Avatar flow
+
+## Open Questions (Remaining)
+
+1. **Archetype pick presentation**: Text cards with poetic one-liners, or Pixar images for each of the 12 archetypes? (12 more images is a lot)
+2. **Blended name generation**: Should the AI generate a unique name (e.g., "The Fierce Alchemist") or just show "Heart Alchemist + Radiant Rebel"?
+3. **Retake policy**: One-time reveal with optional retake, or fully repeatable?
+4. **Protective connection**: Show the relationship between essence → wound → protective voice → Boss in the wound step?
 
 ---
 
