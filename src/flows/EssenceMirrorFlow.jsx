@@ -454,7 +454,7 @@ export default function EssenceMirrorFlow() {
                 >
                   <img
                     className="em-scene-image"
-                    src={arch.image}
+                    src={arch.visionImage || arch.image}
                     alt={arch.name}
                     onError={(e) => { e.target.style.display = 'none' }}
                   />

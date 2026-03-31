@@ -16,6 +16,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Deadpool', 'Billie Eilish', 'Katniss Everdeen'],
     vision_in_action: 'Turning chaos into clarity, they spark revolutions with nothing but their voice.',
     image: '/images/essence/radiant-rebel.png',
+    visionImage: '/images/essence/vision-radiant-rebel.png',
   },
   {
     id: 'playful_creator',
@@ -33,6 +34,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Spider-Man', 'Robin Williams', 'Willy Wonka'],
     vision_in_action: 'They turn pressure into play and make innovation feel like recess for the soul.',
     image: '/images/essence/playful-creator.png',
+    visionImage: '/images/essence/vision-playful-creator.png',
   },
   {
     id: 'sacred_jester',
@@ -50,6 +52,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Jim Carrey', 'Star-Lord', 'Jack Sparrow'],
     vision_in_action: 'They drop unexpected one-liners that dismantle shame and unzip joy.',
     image: '/images/essence/sacred-jester.png',
+    visionImage: '/images/essence/vision-sacred-jester.png',
   },
   // TRANSMUTER GROUP
   {
@@ -68,6 +71,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Elsa (Frozen)', 'Lorde', 'Neo (Matrix)'],
     vision_in_action: 'Without saying much, their work echoes in the bones of those ready to awaken.',
     image: '/images/essence/mystic-messenger.png',
+    visionImage: '/images/essence/vision-mystic-messenger.png',
   },
   {
     id: 'truth_teller',
@@ -85,6 +89,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Yoda', 'Ricky Gervais', 'Lady Gaga'],
     vision_in_action: 'They speak what no one else will — and somehow, it lands like liberation, not attack.',
     image: '/images/essence/truth-teller.png',
+    visionImage: '/images/essence/vision-truth-teller.png',
   },
   {
     id: 'heart_alchemist',
@@ -102,6 +107,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Tony Stark', 'David Bowie', 'Elizabeth Gilbert'],
     vision_in_action: 'Where others flinch from fire, they dance in it — turning pain into art and rupture into truth.',
     image: '/images/essence/heart-alchemist.png',
+    visionImage: '/images/essence/vision-heart-alchemist.png',
   },
   // STABILIZER GROUP
   {
@@ -120,6 +126,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Samwise Gamgee', 'Michelle Obama', 'Hagrid'],
     vision_in_action: 'They build invisible structures that hold sacred work for generations to come.',
     image: '/images/essence/grounded-guardian.png',
+    visionImage: '/images/essence/vision-grounded-guardian.png',
   },
   {
     id: 'heart_holder',
@@ -137,6 +144,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Ted Lasso', 'Uncle Iroh', 'Samwise Gamgee'],
     vision_in_action: 'In tense moments you become the calm center; the room syncs, hard conversations land, and people leave more regulated than they arrived.',
     image: '/images/essence/heart-holder.png',
+    visionImage: '/images/essence/vision-heart-holder.png',
   },
   {
     id: 'rhythm_architect',
@@ -154,6 +162,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Hermione Granger', 'Spock', 'Shuri'],
     vision_in_action: 'You surface the critical path, publish a simple system, and defects drop while the team\'s confidence rises.',
     image: '/images/essence/rhythm-architect.png',
+    visionImage: '/images/essence/vision-rhythm-architect.png',
   },
   // BRIDGER GROUP
   {
@@ -172,6 +181,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Professor X', 'Nick Fury', 'Abed Nadir'],
     vision_in_action: 'You pull the room onto one page, reduce clarification loops, and handoffs start working with minimal friction.',
     image: '/images/essence/wise-sage.png',
+    visionImage: '/images/essence/vision-wise-sage.png',
   },
   {
     id: 'cosmic_connector',
@@ -189,6 +199,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Doctor Strange', 'Rick Rubin', 'Gandalf'],
     vision_in_action: 'They take quantum truths and translate them into tools, blueprints, and rituals that land.',
     image: '/images/essence/cosmic-connector.png',
+    visionImage: '/images/essence/vision-cosmic-connector.png',
   },
   {
     id: 'compassionate_leader',
@@ -206,6 +217,7 @@ export const ESSENCE_ARCHETYPES = [
     characters: ['Mufasa', 'Captain America', 'Brené Brown'],
     vision_in_action: 'Their grounded presence becomes a gravitational field where others remember their power.',
     image: '/images/essence/compassionate-leader.png',
+    visionImage: '/images/essence/vision-compassionate-leader.png',
   },
 ]
 
