@@ -101,6 +101,7 @@ export default function EssenceMirrorFlow() {
   const [round1, setRound1] = useState([])
   const [round2, setRound2] = useState([])
   const [round3, setRound3] = useState([])
+  const [swipeIndex, setSwipeIndex] = useState(0) // which card within a round
   const [visionSelections, setVisionSelections] = useState([])
   const [pixarPick, setPixarPick] = useState(null)
 
@@ -374,7 +375,7 @@ export default function EssenceMirrorFlow() {
         </div>
       )}
 
-      {/* ── Superpower Rounds 1-3 ── */}
+      {/* ── Superpower Rounds 1-3 (swipeable cards) ── */}
       {[STEPS.ROUND_1, STEPS.ROUND_2, STEPS.ROUND_3].map((roundStep, roundIndex) => {
         if (step !== roundStep) return null
         const roundIds = SUPERPOWER_ROUNDS[roundIndex]
@@ -387,47 +388,78 @@ export default function EssenceMirrorFlow() {
           ? [STEPS.ROUND_1, STEPS.ROUND_2, STEPS.ROUND_3][roundIndex - 1]
           : STEPS.HOOK
 
+        const currentArch = getArchetype(roundIds[swipeIndex])
+        const currentId = roundIds[swipeIndex]
+        const isSelected = selections.includes(currentId)
+        const isLast = swipeIndex === roundIds.length - 1
+        const globalIndex = roundIndex * 4 + swipeIndex
+
+        const advanceSwipe = () => {
+          if (isLast) {
+            setSwipeIndex(0)
+            goToStep(nextStep)
+          } else {
+            setSwipeIndex(swipeIndex + 1)
+          }
+        }
+
+        const goBackSwipe = () => {
+          if (swipeIndex > 0) {
+            setSwipeIndex(swipeIndex - 1)
+          } else if (roundIndex > 0) {
+            setSwipeIndex(3)
+            goToStep(prevStep)
+          } else {
+            goToStep(STEPS.HOOK)
+          }
+        }
+
         return (
-          <div key={roundStep} className="em-step">
+          <div key={roundStep} className="em-step em-swipe-step">
+            {/* Progress dots for all 12 */}
+            <div className="em-swipe-dots">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className={`em-swipe-dot ${i === globalIndex ? 'active' : i < globalIndex ? 'done' : ''}`} />
+              ))}
+            </div>
+
             <div className="em-step-header">
-              <div className="em-step-round">Round {roundIndex + 1} of 3</div>
-              <h1 className="em-step-title">Do any of these sound like you?</h1>
-              <p className="em-step-subtitle">Tap all that resonate.</p>
+              <p className="em-step-subtitle">Does this sound like you?</p>
             </div>
 
-            <div className="em-options">
-              {roundIds.map(id => {
-                const arch = getArchetype(id)
-                const isSelected = selections.includes(id)
-                return (
-                  <button
-                    key={id}
-                    type="button"
-                    className={`option-btn ${isSelected ? 'selected' : ''}`}
-                    onClick={() => toggleSelection(selections, setSelections, id)}
-                  >
-                    {(() => {
-                      const firstDot = arch.superpower.indexOf('.')
-                      if (firstDot === -1) return <strong>{ARCHETYPE_EMOJI[id]} {arch.superpower}</strong>
-                      const rest = arch.superpower.slice(firstDot + 1).trim()
-                      return <strong>{ARCHETYPE_EMOJI[id]} {rest}</strong>
-                    })()}
-                  </button>
-                )
-              })}
+            {/* Swipeable card */}
+            <div
+              className={`em-swipe-card ${isSelected ? 'selected' : ''}`}
+              key={currentId}
+            >
+              <div className="em-swipe-emoji">{ARCHETYPE_EMOJI[currentId]}</div>
+              <div className="em-swipe-text">
+                {currentArch.superpower}
+              </div>
+              {isSelected && <div className="em-swipe-check">&#10003;</div>}
             </div>
 
-            <div className="nav-buttons" style={{ flexDirection: 'column', gap: '8px' }}>
+            <div className="em-swipe-actions">
               <button
-                className="primary-button"
-                onClick={() => goToStep(nextStep)}
+                className="em-swipe-btn yes"
+                onClick={() => {
+                  if (!isSelected) toggleSelection(selections, setSelections, currentId)
+                  advanceSwipe()
+                }}
               >
-                {selections.length === 0 ? 'None of these' : 'Continue'} →
+                That's me
               </button>
-              <button className="secondary-button" onClick={() => goToStep(prevStep)}>
-                ← Back
+              <button
+                className="em-swipe-btn no"
+                onClick={advanceSwipe}
+              >
+                Not me
               </button>
             </div>
+
+            <button className="em-back-btn" onClick={goBackSwipe} style={{ marginTop: '0.5rem', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', cursor: 'pointer', fontFamily: 'inherit' }}>
+              ← Back
+            </button>
           </div>
         )
       })}
@@ -438,7 +470,7 @@ export default function EssenceMirrorFlow() {
           <div className="em-step-header">
             <div className="em-step-badge">Confirmation</div>
             <h1 className="em-step-title">Which of these futures excites you most?</h1>
-            <p className="em-step-subtitle">You resonated with these. Which visions make something inside you say yes?</p>
+            <p className="em-step-subtitle">Tap all that resonate. You can pick multiple.</p>
           </div>
 
           <div className="em-scene-cards">
