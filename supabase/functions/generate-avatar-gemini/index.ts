@@ -74,13 +74,39 @@ async function generateWithGemini(photo_base64: string, photo_mime: string, prom
 // ─── GPT-4o Fallback ────────────────────────────────────────────────────────
 
 async function generateWithGPT4o(photo_base64: string, photo_mime: string, prompt: string): Promise<{ base64: string; mime: string } | null> {
-  if (!OPENAI_API_KEY) return null
+  if (!OPENAI_API_KEY) {
+    console.warn('No OPENAI_API_KEY configured, skipping GPT-4o fallback')
+    return null
+  }
 
   try {
     console.log('Falling back to GPT-4o...')
 
-    // Upload the image as a data URI for GPT-4o
-    const dataUri = `data:${photo_mime};base64,${photo_base64}`
+    // First upload photo to temp storage so we can pass a URL
+    const adminSupabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    )
+
+    const binaryStr = atob(photo_base64)
+    const photoBytes = new Uint8Array(binaryStr.length)
+    for (let i = 0; i < binaryStr.length; i++) {
+      photoBytes[i] = binaryStr.charCodeAt(i)
+    }
+
+    const ext = photo_mime.includes('png') ? 'png' : 'jpg'
+    const tempPath = `temp/avatar-input-${Date.now()}.${ext}`
+
+    await adminSupabase.storage
+      .from('deal-screenshots')
+      .upload(tempPath, photoBytes, { contentType: photo_mime, upsert: true })
+
+    const { data: urlData } = adminSupabase.storage
+      .from('deal-screenshots')
+      .getPublicUrl(tempPath)
+
+    const photoUrl = urlData.publicUrl
+    console.log('Photo uploaded for GPT-4o:', photoUrl)
 
     const response = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
@@ -95,7 +121,7 @@ async function generateWithGPT4o(photo_base64: string, photo_mime: string, promp
             role: 'user',
             content: [
               { type: 'input_text', text: prompt },
-              { type: 'input_image', image_url: dataUri },
+              { type: 'input_image', image_url: photoUrl },
             ],
           },
         ],
