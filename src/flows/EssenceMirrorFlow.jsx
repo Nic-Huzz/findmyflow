@@ -42,27 +42,27 @@ import './EssenceMirrorFlow.css'
 
 const HOOK_SLIDES = [
   {
-    text: 'What if I told you our most authentic selves are often our biggest shadows?',
+    text: 'What if I told you our most authentic selves are often who we hide away the most?',
     button: 'Tell me how',
   },
   {
-    text: 'Take a moment to think about you as a kid and what you loved to do.',
+    text: 'Take a moment to think about you as a kid and all the weird and random things you loved.',
   },
   {
-    text: 'Now how would it have felt if you got teased, made fun of, or rejected for those things?',
+    text: 'Imagine getting teased, made fun of or rejected for these things...',
   },
   {
-    text: 'Horrible.\nShameful.\nEmbarrassed.',
+    text: 'How would you have felt?\nEmbarrassed, ashamed, sad.',
   },
   {
     text: 'We hate feeling that way, so what do we do to protect ourselves?',
     subtext: 'We hide it away.',
   },
   {
-    text: 'Heartbreakingly, our most authentic parts become our deepest shadows.',
+    text: 'Heartbreakingly, our most authentic parts no longer feel safe to share with the world.',
   },
   {
-    text: 'Ready to reconnect to that version of you?',
+    text: 'Ready to reconnect to that version of you and share it with the world?',
     button: 'Let\'s go',
   },
 ]

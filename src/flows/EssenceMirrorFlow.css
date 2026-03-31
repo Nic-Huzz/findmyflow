@@ -290,14 +290,11 @@
 }
 
 .em-scene-desc .em-scene-whatif {
-  font-weight: 700;
-  color: white;
   margin-bottom: 0.25rem;
 }
 
 .em-scene-desc .em-scene-rest {
   margin-top: 0.5rem;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 .em-scene-selected .em-scene-name {
