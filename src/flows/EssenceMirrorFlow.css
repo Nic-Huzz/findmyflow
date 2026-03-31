@@ -547,6 +547,43 @@
   margin-bottom: 1.5rem;
 }
 
+.em-avatar-preview-container {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.em-avatar-preview {
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 1rem;
+}
+
+.em-avatar-preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.em-avatar-error {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin-top: 0.75rem;
+}
+
+.em-avatar-result {
+  width: 220px;
+  height: 220px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 3px solid #E9A23B;
+  box-shadow: 0 8px 32px rgba(233, 162, 59, 0.3);
+  margin: 1rem auto;
+  display: block;
+}
+
 /* ── Responsive ── */
 @media (max-width: 480px) {
   .em-step {

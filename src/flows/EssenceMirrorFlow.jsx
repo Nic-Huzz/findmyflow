@@ -112,6 +112,12 @@ export default function EssenceMirrorFlow() {
   // Avatar
   const [heroName, setHeroName] = useState('')
   const [saving, setSaving] = useState(false)
+  const [avatarPhoto, setAvatarPhoto] = useState(null)
+  const [avatarPreview, setAvatarPreview] = useState(null)
+  const [avatarGenerated, setAvatarGenerated] = useState(null)
+  const [avatarGenerating, setAvatarGenerating] = useState(false)
+  const [avatarError, setAvatarError] = useState(null)
+  const fileInputRef = useRef(null)
 
   // Existing user data for AI context
   const [woundStages, setWoundStages] = useState([])
@@ -316,6 +322,7 @@ export default function EssenceMirrorFlow() {
         user_id: user.id,
         essence_archetype: primary?.name,
         custom_essence_name: heroName,
+        custom_essence_image: avatarGenerated !== 'skip' ? avatarGenerated : null,
         custom_essence_fields: {
           tagline: blendResult?.blended_essence || primary?.essence,
           essence: blendResult?.blended_essence || primary?.poetic_line,
@@ -617,31 +624,132 @@ export default function EssenceMirrorFlow() {
       {/* ── Create Hero Avatar ── */}
       {step === STEPS.AVATAR && (
         <div className="em-step em-avatar">
-          <div className="em-reveal-icon">&#128081;</div>
-          <h1 className="em-step-title">Name your essence</h1>
-          <p className="em-step-subtitle">
-            This becomes your hero identity. You can customize it.
-          </p>
+          {!avatarGenerated ? (
+            <>
+              <div className="em-reveal-icon">&#128247;</div>
+              <h1 className="em-step-title">Create your hero avatar</h1>
+              <p className="em-step-subtitle">
+                Upload a photo that captures your essence. Ideally one of you doing what you love.
+              </p>
 
-          <input
-            className="em-avatar-name-input"
-            type="text"
-            value={heroName}
-            onChange={(e) => setHeroName(e.target.value)}
-            placeholder="Your essence name"
-            maxLength={40}
-          />
-          <div className="em-avatar-hint">
-            Pre-filled with your blended name. Edit it to make it yours.
-          </div>
+              {avatarPreview ? (
+                <div className="em-avatar-preview-container">
+                  <img src={avatarPreview} alt="Your photo" className="em-avatar-preview" />
+                  <div className="em-avatar-preview-actions">
+                    <button
+                      className="primary-button"
+                      onClick={async () => {
+                        setAvatarGenerating(true)
+                        setAvatarError(null)
+                        try {
+                          const reader = new FileReader()
+                          reader.onload = async () => {
+                            const base64 = reader.result.split(',')[1]
+                            const primary = getArchetype(pixarPick)
+                            const prompt = `Transform this photo into a high-quality 3D animated movie character portrait. Keep the person's likeness, features, and energy but render them as a modern animated film character with big expressive eyes, warm cinematic lighting, and purple and gold tones. Their archetype essence is "${primary?.name}": ${primary?.poetic_line}. Their superpower: ${primary?.superpower}. Make them look heroic but approachable. Warm golden ambient light, purple background elements. Square portrait composition.`
 
-          <button
-            className="primary-button"
-            onClick={handleSave}
-            disabled={saving || !heroName.trim()}
-          >
-            {saving ? 'Saving...' : 'This is me'} →
-          </button>
+                            const { data, error } = await supabase.functions.invoke('generate-avatar-gemini', {
+                              body: {
+                                photo_base64: base64,
+                                photo_mime: avatarPhoto.type,
+                                prompt,
+                              },
+                            })
+
+                            if (error || data?.error) {
+                              setAvatarError(data?.message || 'Generation failed. Try a different photo.')
+                              setAvatarGenerating(false)
+                              return
+                            }
+
+                            setAvatarGenerated(data.url)
+                            setAvatarGenerating(false)
+                          }
+                          reader.readAsDataURL(avatarPhoto)
+                        } catch (err) {
+                          console.warn('Avatar generation error:', err)
+                          setAvatarError('Something went wrong. Try again.')
+                          setAvatarGenerating(false)
+                        }
+                      }}
+                      disabled={avatarGenerating}
+                    >
+                      {avatarGenerating ? 'Creating your avatar...' : 'Generate my avatar'} →
+                    </button>
+                    <button
+                      className="secondary-button"
+                      onClick={() => { setAvatarPreview(null); setAvatarPhoto(null) }}
+                      disabled={avatarGenerating}
+                    >
+                      Choose different photo
+                    </button>
+                  </div>
+                  {avatarError && <p className="em-avatar-error">{avatarError}</p>}
+                </div>
+              ) : (
+                <button
+                  className="primary-button"
+                  onClick={() => fileInputRef.current?.click()}
+                  style={{ marginTop: '1.5rem' }}
+                >
+                  Upload photo →
+                </button>
+              )}
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) {
+                    setAvatarPhoto(file)
+                    setAvatarPreview(URL.createObjectURL(file))
+                  }
+                }}
+                style={{ display: 'none' }}
+              />
+
+              <button
+                className="secondary-button"
+                onClick={() => setAvatarGenerated('skip')}
+                style={{ marginTop: '0.5rem' }}
+              >
+                Skip for now
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="em-reveal-icon">&#128081;</div>
+              {avatarGenerated !== 'skip' && (
+                <img src={avatarGenerated} alt="Your hero avatar" className="em-avatar-result" />
+              )}
+              <h1 className="em-step-title">Name your essence</h1>
+              <p className="em-step-subtitle">
+                This becomes your hero identity on your profile.
+              </p>
+
+              <input
+                className="em-avatar-name-input"
+                type="text"
+                value={heroName}
+                onChange={(e) => setHeroName(e.target.value)}
+                placeholder="Your essence name"
+                maxLength={40}
+              />
+              <div className="em-avatar-hint">
+                Pre-filled with your blended name. Edit it to make it yours.
+              </div>
+
+              <button
+                className="primary-button"
+                onClick={handleSave}
+                disabled={saving || !heroName.trim()}
+              >
+                {saving ? 'Saving...' : 'This is me'} →
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>
