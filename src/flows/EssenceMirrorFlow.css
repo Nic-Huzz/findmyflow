@@ -237,6 +237,7 @@
 }
 
 .em-scene-card {
+  position: relative;
   background: rgba(255, 255, 255, 0.06);
   border: 2px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
@@ -258,7 +259,9 @@
 
 .em-scene-selected {
   border-color: #E9A23B;
-  box-shadow: 0 4px 20px rgba(233, 162, 59, 0.25);
+  border-width: 3px;
+  box-shadow: 0 4px 24px rgba(233, 162, 59, 0.4);
+  background: rgba(233, 162, 59, 0.08);
 }
 
 .em-scene-image {
@@ -303,7 +306,25 @@
 }
 
 .em-scene-selected .em-scene-desc {
-  color: rgba(255, 255, 255, 0.8);
+  color: white;
+}
+
+.em-scene-check {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E9A23B, #f0b754);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* ── Pixar Essence Pick ── */

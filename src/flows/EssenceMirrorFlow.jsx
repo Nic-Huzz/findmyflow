@@ -456,6 +456,7 @@ export default function EssenceMirrorFlow() {
                   onClick={() => toggleSelection(visionSelections, setVisionSelections, id)}
                   style={{ animationDelay: `${0.1 + i * 0.1}s` }}
                 >
+                  {isSelected && <div className="em-scene-check">&#10003;</div>}
                   <img
                     className="em-scene-image"
                     src={arch.visionImage || arch.image}
@@ -494,8 +495,8 @@ export default function EssenceMirrorFlow() {
         <div className="em-step">
           <div className="em-step-header">
             <div className="em-step-badge">Your Essence</div>
-            <h1 className="em-step-title">This is who you are</h1>
-            <p className="em-step-subtitle">Which one makes something inside you say yes?</p>
+            <h1 className="em-step-title">Which one makes something inside you say yes?</h1>
+            <p className="em-step-subtitle">Choose one.</p>
           </div>
 
           <div className="em-pixar-cards">
