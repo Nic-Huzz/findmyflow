@@ -110,6 +110,7 @@ export default function EssenceMirrorFlow() {
 
   // Avatar
   const [heroName, setHeroName] = useState('')
+  const [avatarLoadingText, setAvatarLoadingText] = useState('')
   const [saving, setSaving] = useState(false)
   const [avatarPhoto, setAvatarPhoto] = useState(null)
   const [avatarPreview, setAvatarPreview] = useState(null)
@@ -262,7 +263,7 @@ export default function EssenceMirrorFlow() {
         primaryWound: primary.essence_wound,
         secondaryWound: secondary.essence_wound,
       })
-      setHeroName(data.blended_name || `The ${primary.name.split(' ').pop()}`)
+      setHeroName(data.blended_name || data.primaryName || '')
     } catch (err) {
       console.warn('Blend API error:', err)
       // Fallback: use primary data directly
@@ -643,12 +644,32 @@ export default function EssenceMirrorFlow() {
                       onClick={async () => {
                         setAvatarGenerating(true)
                         setAvatarError(null)
+                        setAvatarLoadingText('Analyzing your photo...')
+                        const loadingMessages = [
+                          'Analyzing your photo...',
+                          'Finding your essence...',
+                          'Crafting your avatar...',
+                          'Adding the magic...',
+                          'Almost there...',
+                        ]
+                        let msgIndex = 0
+                        const loadingInterval = setInterval(() => {
+                          msgIndex = Math.min(msgIndex + 1, loadingMessages.length - 1)
+                          setAvatarLoadingText(loadingMessages[msgIndex])
+                        }, 4000)
                         try {
                           const reader = new FileReader()
                           reader.onload = async () => {
                             const base64 = reader.result.split(',')[1]
                             const primary = getArchetype(pixarPick)
-                            const prompt = `Transform this photo into a high-quality 3D animated movie character portrait. Keep the person's likeness, features, and energy but render them as a modern animated film character with big expressive eyes, warm cinematic lighting, and purple and gold tones. Their archetype essence is "${primary?.name}": ${primary?.poetic_line}. Their superpower: ${primary?.superpower}. Make them look heroic but approachable. Warm golden ambient light, purple background elements. Square portrait composition.`
+                            const secondary = getArchetype(getSecondary())
+                            const prompt = `Transform this person into a high-quality 3D animated movie character. Use ONLY their face and facial features as reference for likeness. Create a completely new heroic scene around them based on their archetype essence.
+
+Their essence: "${primary?.name}" - ${primary?.poetic_line}
+Their superpower: ${primary?.superpower}
+Their vision: ${primary?.poetic_vision}
+
+Create a dynamic pose and scene background that embodies this essence. The character should be in action or in their element, not just standing. Use warm cinematic lighting with purple and gold tones. Big expressive animated eyes. Heroic but approachable. Modern 3D animated feature film quality. Square composition.`
 
                             const { data, error } = await supabase.functions.invoke('generate-avatar-gemini', {
                               body: {
@@ -659,16 +680,19 @@ export default function EssenceMirrorFlow() {
                             })
 
                             if (error || data?.error) {
+                              clearInterval(loadingInterval)
                               setAvatarError(data?.message || 'Generation failed. Try a different photo.')
                               setAvatarGenerating(false)
                               return
                             }
 
+                            clearInterval(loadingInterval)
                             setAvatarGenerated(data.url)
                             setAvatarGenerating(false)
                           }
                           reader.readAsDataURL(avatarPhoto)
                         } catch (err) {
+                          clearInterval(loadingInterval)
                           console.warn('Avatar generation error:', err)
                           setAvatarError('Something went wrong. Try again.')
                           setAvatarGenerating(false)
@@ -676,7 +700,7 @@ export default function EssenceMirrorFlow() {
                       }}
                       disabled={avatarGenerating}
                     >
-                      {avatarGenerating ? 'Creating your avatar...' : 'Generate my avatar'} →
+                      {avatarGenerating ? avatarLoadingText : 'Generate my avatar →'}
                     </button>
                     <button
                       className="secondary-button"
