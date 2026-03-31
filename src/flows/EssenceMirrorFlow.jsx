@@ -102,6 +102,7 @@ export default function EssenceMirrorFlow() {
   const [round2, setRound2] = useState([])
   const [round3, setRound3] = useState([])
   const [swipeIndex, setSwipeIndex] = useState(0) // which card within a round
+  const swipeTouchStart = useRef(0)
   const [visionSelections, setVisionSelections] = useState([])
   const [pixarPick, setPixarPick] = useState(null)
 
@@ -427,39 +428,49 @@ export default function EssenceMirrorFlow() {
               <p className="em-step-subtitle">Does this sound like you?</p>
             </div>
 
-            {/* Swipeable card */}
-            <div
-              className={`em-swipe-card ${isSelected ? 'selected' : ''}`}
-              key={currentId}
-            >
-              <div className="em-swipe-emoji">{ARCHETYPE_EMOJI[currentId]}</div>
-              <div className="em-swipe-text">
-                {currentArch.superpower}
-              </div>
-              {isSelected && <div className="em-swipe-check">&#10003;</div>}
-            </div>
-
-            <div className="em-swipe-actions">
-              <button
-                className="em-swipe-btn yes"
-                onClick={() => {
-                  if (!isSelected) toggleSelection(selections, setSelections, currentId)
-                  advanceSwipe()
+            {/* Swipeable card - centered */}
+            <div className="em-swipe-middle">
+              <div
+                className={`em-swipe-card ${isSelected ? 'selected' : ''}`}
+                key={currentId}
+                onTouchStart={(e) => { swipeTouchStart.current = e.changedTouches[0].screenX }}
+                onTouchEnd={(e) => {
+                  const diff = swipeTouchStart.current - e.changedTouches[0].screenX
+                  if (diff > 50) advanceSwipe()
+                  else if (diff < -50) goBackSwipe()
                 }}
               >
-                That's me
-              </button>
-              <button
-                className="em-swipe-btn no"
-                onClick={advanceSwipe}
-              >
-                Not me
-              </button>
+                <div className="em-swipe-emoji">{ARCHETYPE_EMOJI[currentId]}</div>
+                <div className="em-swipe-text">
+                  {currentArch.superpower}
+                </div>
+                {isSelected && <div className="em-swipe-check">&#10003;</div>}
+              </div>
             </div>
 
-            <button className="em-back-btn" onClick={goBackSwipe} style={{ marginTop: '0.5rem', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', cursor: 'pointer', fontFamily: 'inherit' }}>
-              ← Back
-            </button>
+            {/* Buttons pinned to bottom */}
+            <div className="em-swipe-bottom">
+              <div className="em-swipe-actions">
+                <button
+                  className="em-swipe-btn no"
+                  onClick={advanceSwipe}
+                >
+                  Not me
+                </button>
+                <button
+                  className="em-swipe-btn yes"
+                  onClick={() => {
+                    if (!isSelected) toggleSelection(selections, setSelections, currentId)
+                    advanceSwipe()
+                  }}
+                >
+                  That's me
+                </button>
+              </div>
+              <button className="em-back-btn" onClick={goBackSwipe} style={{ marginTop: '0.5rem', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', cursor: 'pointer', fontFamily: 'inherit', width: '100%' }}>
+                ← Back
+              </button>
+            </div>
           </div>
         )
       })}
