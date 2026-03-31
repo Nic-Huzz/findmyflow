@@ -486,6 +486,8 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
         className={`journey-onboarding jo-hook ${transitionClass} ${directionClass}`}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        onClick={handleHookNext}
+        style={{ cursor: 'pointer' }}
       >
         {/* Ambient background */}
         <div className="jo-ambient">
@@ -514,21 +516,19 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
           ))}
         </div>
 
-        {/* Tap to continue */}
-        <button
-          className="jo-hook-continue"
-          onClick={handleHookNext}
-        >
-          {isLastSlide ? (
-            <>
-              <span className="jo-shimmer-layer" />
-              Let's find out
-              <span className="jo-btn-arrow">&#8594;</span>
-            </>
-          ) : (
-            <span className="jo-tap-hint">Tap to continue</span>
-          )}
-        </button>
+        {/* Tap hint or final CTA */}
+        {isLastSlide ? (
+          <button
+            className="jo-hook-continue"
+            onClick={(e) => { e.stopPropagation(); handleHookNext() }}
+          >
+            <span className="jo-shimmer-layer" />
+            Let's find out
+            <span className="jo-btn-arrow">&#8594;</span>
+          </button>
+        ) : (
+          <div className="jo-tap-anywhere-hint">Tap anywhere to continue</div>
+        )}
       </div>
     )
   }

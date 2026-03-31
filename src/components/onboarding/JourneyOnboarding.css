@@ -450,6 +450,15 @@
   color: white;
 }
 
+.jo-tap-anywhere-hint {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.75rem;
+  text-align: center;
+  letter-spacing: 0.5px;
+  padding: 1rem 0;
+  animation: jo-fadeInUp 0.5s ease 0.5s backwards;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    BEAT 2: THE STORY
    ═══════════════════════════════════════════════════════════════════════════ */
