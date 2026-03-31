@@ -463,8 +463,12 @@ export default function EssenceMirrorFlow() {
                     onError={(e) => { e.target.style.display = 'none' }}
                   />
                   <div className="em-scene-pill">
-                    <div className="em-scene-name">{ARCHETYPE_EMOJI[id]} {arch.name}</div>
-                    <div className="em-scene-desc">{arch.poetic_vision}</div>
+                    <div className="em-scene-desc">
+                      {arch.poetic_vision.split(/(?<=[.?!])\s+/).map((s, si) => {
+                        const isWhatIf = s.toLowerCase().startsWith('what if')
+                        return <p key={si} className={isWhatIf ? 'em-scene-whatif' : 'em-scene-rest'}>{s}</p>
+                      })}
+                    </div>
                   </div>
                 </button>
               )
