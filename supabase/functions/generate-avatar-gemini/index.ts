@@ -147,7 +147,7 @@ async function generateWithGPT4o(photo_base64: string, photo_mime: string, promp
       || imageContent?.image_url?.replace(/^data:image\/[a-z]+;base64,/, '')
 
     if (!rawBase64) {
-      console.warn('GPT-4o: no image in response')
+      console.warn('GPT-4o: no image in response. Full output:', JSON.stringify(result).substring(0, 500))
       return null
     }
 
