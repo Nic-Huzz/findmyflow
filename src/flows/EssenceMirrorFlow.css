@@ -281,8 +281,9 @@
 
 .em-scene-desc {
   color: rgba(255, 255, 255, 0.85);
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   line-height: 1.5;
+  font-weight: 700;
 }
 
 .em-scene-desc p {
