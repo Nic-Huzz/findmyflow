@@ -644,19 +644,26 @@ export default function EssenceMirrorFlow() {
                       onClick={async () => {
                         setAvatarGenerating(true)
                         setAvatarError(null)
-                        setAvatarLoadingText('Analyzing your photo...')
                         const loadingMessages = [
                           'Analyzing your photo...',
                           'Finding your essence...',
+                          'Mapping your likeness...',
                           'Crafting your avatar...',
+                          'Building your scene...',
                           'Adding the magic...',
-                          'Almost there...',
+                          'Refining the details...',
+                          'Bringing it to life...',
+                          'Polishing the colours...',
+                          'Nearly there...',
+                          'Just a few more seconds...',
+                          'Worth the wait, promise...',
                         ]
                         let msgIndex = 0
+                        setAvatarLoadingText(loadingMessages[0])
                         const loadingInterval = setInterval(() => {
-                          msgIndex = Math.min(msgIndex + 1, loadingMessages.length - 1)
+                          msgIndex = (msgIndex + 1) % loadingMessages.length
                           setAvatarLoadingText(loadingMessages[msgIndex])
-                        }, 4000)
+                        }, 3000)
                         try {
                           const reader = new FileReader()
                           reader.onload = async () => {
