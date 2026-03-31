@@ -24,7 +24,7 @@ function jsonResponse(data: unknown, status = 200) {
 async function generateWithGemini(photo_base64: string, photo_mime: string, prompt: string): Promise<{ base64: string; mime: string } | null> {
   if (!GEMINI_API_KEY) return null
 
-  const models = ['gemini-3.1-flash-image-preview', 'gemini-2.5-flash-image']
+  const models = ['gemini-3.1-flash-image-preview']
 
   for (const model of models) {
     try {
