@@ -551,23 +551,35 @@ export default function EssenceMirrorFlow() {
             {blendResult.primaryName} + {blendResult.secondaryName}
           </div>
 
-          <div className="em-reveal-section">
+          <div className="em-reveal-card">
             <div className="em-reveal-label">Your Essence</div>
-            <div className="em-reveal-text">{blendResult.blended_essence}</div>
+            <div className="em-reveal-text">
+              {blendResult.blended_essence?.replace(/[—;]/g, ',').split(/(?<=[.?!])\s+/).map((s, i) => (
+                <p key={i}>{s}</p>
+              ))}
+            </div>
           </div>
 
-          <div className="em-reveal-section">
+          <div className="em-reveal-card">
             <div className="em-reveal-label">Your Superpower</div>
-            <div className="em-reveal-text">{blendResult.blended_superpower}</div>
+            <div className="em-reveal-text">
+              {blendResult.blended_superpower?.replace(/[—;]/g, ',').split(/(?<=[.?!])\s+/).map((s, i) => (
+                <p key={i}>{s}</p>
+              ))}
+            </div>
           </div>
 
-          <div className="em-reveal-section">
+          <div className="em-reveal-card">
             <div className="em-reveal-label">Your Vision</div>
-            <div className="em-reveal-text">{blendResult.blended_vision}</div>
+            <div className="em-reveal-text">
+              {blendResult.blended_vision?.replace(/[—;]/g, ',').split(/(?<=[.?!])\s+/).map((s, i) => (
+                <p key={i}>{s}</p>
+              ))}
+            </div>
           </div>
 
-          <button className="primary-button" onClick={() => goToStep(STEPS.WOUND)}>
-            Show me why I hid this →
+          <button className="primary-button" onClick={() => goToStep(STEPS.AVATAR)}>
+            This is me →
           </button>
         </div>
       )}

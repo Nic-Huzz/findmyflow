@@ -211,6 +211,10 @@
   margin-bottom: 1.5rem;
 }
 
+.em-flow .option-btn {
+  font-size: 16px;
+}
+
 /* Vision label inside option-btn */
 .em-flow .em-vision-label {
   display: block;
@@ -426,15 +430,27 @@
   animation: emFadeIn 0.5s ease 0.3s both;
 }
 
-.em-reveal-section {
+.em-reveal-card {
   text-align: left;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
   animation: emFadeIn 0.5s ease 0.4s both;
 }
 
-.em-reveal-section:nth-child(4) { animation-delay: 0.5s; }
-.em-reveal-section:nth-child(5) { animation-delay: 0.6s; }
-.em-reveal-section:nth-child(6) { animation-delay: 0.7s; }
+.em-reveal-card:nth-child(4) { animation-delay: 0.5s; }
+.em-reveal-card:nth-child(5) { animation-delay: 0.6s; }
+.em-reveal-card:nth-child(6) { animation-delay: 0.7s; }
+
+.em-reveal-card p {
+  margin: 0 0 0.5rem;
+}
+
+.em-reveal-card p:last-child {
+  margin-bottom: 0;
+}
 
 .em-reveal-label {
   color: #E9A23B;
