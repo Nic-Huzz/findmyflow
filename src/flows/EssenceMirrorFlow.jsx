@@ -408,12 +408,12 @@ export default function EssenceMirrorFlow() {
                   >
                     {(() => {
                       const firstDot = arch.superpower.indexOf('.')
-                      if (firstDot === -1) return <strong>{ARCHETYPE_EMOJI[id]} {arch.superpower}</strong>
+                      if (firstDot === -1) return <>{ARCHETYPE_EMOJI[id]} {arch.superpower}</>
                       const first = arch.superpower.slice(0, firstDot + 1)
                       const rest = arch.superpower.slice(firstDot + 1).trim()
                       return <>
-                        <strong>{ARCHETYPE_EMOJI[id]} {first}</strong>
-                        {rest && <div style={{ marginTop: '0.5rem' }}>{rest}</div>}
+                        {ARCHETYPE_EMOJI[id]} {first}
+                        {rest && <div style={{ marginTop: '0.5rem', fontWeight: 700 }}>{rest}</div>}
                       </>
                     })()}
                   </button>
