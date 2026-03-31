@@ -42,8 +42,7 @@ import './EssenceMirrorFlow.css'
 
 const HOOK_SLIDES = [
   {
-    text: 'Our shadows are the parts of us we suppress most.',
-    subtext: 'What if I told you our most authentic selves are often our biggest shadows?',
+    text: 'What if I told you our most authentic selves are often our biggest shadows?',
     button: 'Tell me how',
   },
   {
@@ -352,7 +351,12 @@ export default function EssenceMirrorFlow() {
 
       {/* ── Hook Slides ── */}
       {step === STEPS.HOOK && (
-        <div className="em-hook" onClick={HOOK_SLIDES[hookIndex].button ? undefined : handleHookTap}>
+        <div className="em-hook" onClick={handleHookTap}>
+          <div className="em-hook-dots-top">
+            {HOOK_SLIDES.map((_, i) => (
+              <div key={i} className={`em-hook-dot ${i === hookIndex ? 'active' : ''}`} />
+            ))}
+          </div>
           <div className={`em-hook-content ${hookTransitioning ? 'em-hook-exit' : ''} ${hookEntering ? 'em-hook-enter' : ''}`}>
             <div className="em-hook-text">{HOOK_SLIDES[hookIndex].text}</div>
             {HOOK_SLIDES[hookIndex].subtext && (
@@ -360,18 +364,11 @@ export default function EssenceMirrorFlow() {
             )}
           </div>
           <div className="em-hook-bottom">
-            {HOOK_SLIDES[hookIndex].button ? (
-              <button className="em-hook-btn" onClick={handleHookTap}>
+            {HOOK_SLIDES[hookIndex].button && (
+              <button className="em-hook-btn" onClick={(e) => { e.stopPropagation(); handleHookTap() }}>
                 {HOOK_SLIDES[hookIndex].button} <span>→</span>
               </button>
-            ) : (
-              <div className="em-hook-tap">TAP TO CONTINUE</div>
             )}
-            <div className="em-hook-dots">
-              {HOOK_SLIDES.map((_, i) => (
-                <div key={i} className={`em-hook-dot ${i === hookIndex ? 'active' : ''}`} />
-              ))}
-            </div>
           </div>
         </div>
       )}

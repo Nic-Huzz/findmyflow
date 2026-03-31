@@ -141,10 +141,12 @@
   letter-spacing: 1px;
 }
 
-.em-hook-dots {
+.em-hook-dots-top {
   display: flex;
   gap: 6px;
-  margin-top: 1.5rem;
+  justify-content: center;
+  padding-top: 0.5rem;
+  width: 100%;
 }
 
 .em-hook-dot {
