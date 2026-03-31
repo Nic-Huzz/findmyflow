@@ -412,7 +412,7 @@ export default function EssenceMirrorFlow() {
                       const rest = arch.superpower.slice(firstDot + 1).trim()
                       return <>
                         <strong>{ARCHETYPE_EMOJI[id]} {first}</strong>
-                        {rest && <div style={{ marginTop: '0.5rem' }}><strong>{rest}</strong></div>}
+                        {rest && <div style={{ marginTop: '0.5rem' }}>{rest}</div>}
                       </>
                     })()}
                   </button>
