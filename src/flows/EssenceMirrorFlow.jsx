@@ -439,6 +439,13 @@ export default function EssenceMirrorFlow() {
                   if (diff > 50) advanceSwipe()
                   else if (diff < -50) goBackSwipe()
                 }}
+                onMouseDown={(e) => { swipeTouchStart.current = e.screenX }}
+                onMouseUp={(e) => {
+                  const diff = swipeTouchStart.current - e.screenX
+                  if (diff > 50) advanceSwipe()
+                  else if (diff < -50) goBackSwipe()
+                }}
+                style={{ cursor: 'grab' }}
               >
                 <div className="em-swipe-emoji">{ARCHETYPE_EMOJI[currentId]}</div>
                 <div className="em-swipe-text">
