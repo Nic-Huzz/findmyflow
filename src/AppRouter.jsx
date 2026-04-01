@@ -151,7 +151,8 @@ const PlayProfileFlow = lazyRetry(() => import('./flows/PlayProfileFlow'))
 const HealingCompass = lazyRetry(() => import('./flows/HealingCompass'))
 const ZoneDiagnosisFlow = lazyRetry(() => import('./flows/ZoneDiagnosisFlow'))
 const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
-const ShadowWorkFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
+const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
+const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
@@ -370,6 +371,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/protective-identify' ||
                         location.pathname === '/matrix-code-deep-dive' ||
                         location.pathname === '/shadow-work' ||
+                        location.pathname === '/essence-mirror' ||
                         location.pathname.startsWith('/zone-diagnosis') ||
                         location.pathname === '/get-started'
 
@@ -593,6 +595,11 @@ function AppRouter() {
             <Route path="/shadow-work" element={
               <AuthGate>
                 <ShadowWorkFlow />
+              </AuthGate>
+            } />
+            <Route path="/essence-mirror" element={
+              <AuthGate>
+                <EssenceMirrorFlow />
               </AuthGate>
             } />
             <Route path="/nervous-system" element={

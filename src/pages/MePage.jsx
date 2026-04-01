@@ -440,9 +440,15 @@ export default function MePage() {
   const journeyRevealRef = useReveal()
   const questRevealRef = useReveal()
 
-  // First-time onboarding gate — check BEFORE hero loading to avoid unnecessary waits
+  // First-time onboarding gate — redirect to Essence Mirror flow
+  useEffect(() => {
+    if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed)) {
+      navigate('/essence-mirror?returnTo=/me', { replace: true })
+    }
+  }, [stageProgress, navigate])
+
   if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed)) {
-    return <HomeFirstTime onOnboardingComplete={refreshAfterOnboarding} />
+    return null
   }
 
   // Loading (wait for both hero data AND stageProgress to resolve)
@@ -696,7 +702,7 @@ export default function MePage() {
                 Your shadows are the parts of you that were suppressed. Let's find who you really are.
               </p>
               <a
-                href="/shadow-work?returnTo=/me"
+                href="/essence-mirror?returnTo=/me"
                 className="quest-cta"
                 style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
               >

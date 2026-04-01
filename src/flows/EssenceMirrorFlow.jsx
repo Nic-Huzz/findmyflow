@@ -317,6 +317,8 @@ export default function EssenceMirrorFlow() {
         essence_name: heroName,
         essence_archetype: primary?.name,
         vision_in_action: blendResult?.blended_essence || primary?.poetic_line,
+        onboarding_completed: true,
+        onboarding_v2_completed: true,
       }, { onConflict: 'user_id' })
 
       // Update lead_flow_profiles so /me hero section picks it up
