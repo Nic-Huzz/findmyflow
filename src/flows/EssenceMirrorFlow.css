@@ -297,6 +297,14 @@
   box-shadow: 0 4px 24px rgba(233, 162, 59, 0.2);
 }
 
+.em-swipe-image {
+  width: 160px;
+  height: 160px;
+  border-radius: 16px;
+  object-fit: cover;
+  margin-bottom: 1.25rem;
+}
+
 .em-swipe-emoji {
   font-size: 3rem;
   margin-bottom: 1.25rem;

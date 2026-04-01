@@ -17,6 +17,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'Turning chaos into clarity, they spark revolutions with nothing but their voice.',
     image: '/images/essence/radiant-rebel.png',
     visionImage: '/images/essence/vision-radiant-rebel.png',
+    swipeImage: '/images/essence/swipe-radiant-rebel.png',
   },
   {
     id: 'playful_creator',
@@ -35,6 +36,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'They turn pressure into play and make innovation feel like recess for the soul.',
     image: '/images/essence/playful-creator.png',
     visionImage: '/images/essence/vision-playful-creator.png',
+    swipeImage: '/images/essence/swipe-playful-creator.png',
   },
   {
     id: 'sacred_jester',
@@ -53,6 +55,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'They drop unexpected one-liners that dismantle shame and unzip joy.',
     image: '/images/essence/sacred-jester.png',
     visionImage: '/images/essence/vision-sacred-jester.png',
+    swipeImage: '/images/essence/swipe-sacred-jester.png',
   },
   // TRANSMUTER GROUP
   {
@@ -72,6 +75,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'Without saying much, their work echoes in the bones of those ready to awaken.',
     image: '/images/essence/mystic-messenger.png',
     visionImage: '/images/essence/vision-mystic-messenger.png',
+    swipeImage: '/images/essence/swipe-mystic-messenger.png',
   },
   {
     id: 'truth_teller',
@@ -90,6 +94,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'They speak what no one else will — and somehow, it lands like liberation, not attack.',
     image: '/images/essence/truth-teller.png',
     visionImage: '/images/essence/vision-truth-teller.png',
+    swipeImage: '/images/essence/swipe-truth-teller.png',
   },
   {
     id: 'heart_alchemist',
@@ -108,6 +113,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'Where others flinch from fire, they dance in it — turning pain into art and rupture into truth.',
     image: '/images/essence/heart-alchemist.png',
     visionImage: '/images/essence/vision-heart-alchemist.png',
+    swipeImage: '/images/essence/swipe-heart-alchemist.png',
   },
   // STABILIZER GROUP
   {
@@ -127,6 +133,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'They build invisible structures that hold sacred work for generations to come.',
     image: '/images/essence/grounded-guardian.png',
     visionImage: '/images/essence/vision-grounded-guardian.png',
+    swipeImage: '/images/essence/swipe-grounded-guardian.png',
   },
   {
     id: 'heart_holder',
@@ -145,6 +152,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'In tense moments you become the calm center; the room syncs, hard conversations land, and people leave more regulated than they arrived.',
     image: '/images/essence/heart-holder.png',
     visionImage: '/images/essence/vision-heart-holder.png',
+    swipeImage: '/images/essence/swipe-heart-holder.png',
   },
   {
     id: 'rhythm_architect',
@@ -163,6 +171,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'You surface the critical path, publish a simple system, and defects drop while the team\'s confidence rises.',
     image: '/images/essence/rhythm-architect.png',
     visionImage: '/images/essence/vision-rhythm-architect.png',
+    swipeImage: '/images/essence/swipe-rhythm-architect.png',
   },
   // BRIDGER GROUP
   {
@@ -182,6 +191,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'You pull the room onto one page, reduce clarification loops, and handoffs start working with minimal friction.',
     image: '/images/essence/wise-sage.png',
     visionImage: '/images/essence/vision-wise-sage.png',
+    swipeImage: '/images/essence/swipe-wise-sage.png',
   },
   {
     id: 'cosmic_connector',
@@ -200,6 +210,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'They take quantum truths and translate them into tools, blueprints, and rituals that land.',
     image: '/images/essence/cosmic-connector.png',
     visionImage: '/images/essence/vision-cosmic-connector.png',
+    swipeImage: '/images/essence/swipe-cosmic-connector.png',
   },
   {
     id: 'compassionate_leader',
@@ -218,6 +229,7 @@ export const ESSENCE_ARCHETYPES = [
     vision_in_action: 'Their grounded presence becomes a gravitational field where others remember their power.',
     image: '/images/essence/compassionate-leader.png',
     visionImage: '/images/essence/vision-compassionate-leader.png',
+    swipeImage: '/images/essence/swipe-compassionate-leader.png',
   },
 ]
 

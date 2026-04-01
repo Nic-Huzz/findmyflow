@@ -447,7 +447,15 @@ export default function EssenceMirrorFlow() {
                 }}
                 style={{ cursor: 'grab' }}
               >
-                <div className="em-swipe-emoji">{ARCHETYPE_EMOJI[currentId]}</div>
+                {currentArch.swipeImage && (
+                  <img
+                    className="em-swipe-image"
+                    src={currentArch.swipeImage}
+                    alt={currentArch.name}
+                    onError={(e) => { e.target.style.display = 'none' }}
+                  />
+                )}
+                {!currentArch.swipeImage && <div className="em-swipe-emoji">{ARCHETYPE_EMOJI[currentId]}</div>}
                 <div className="em-swipe-text">
                   {currentArch.superpower}
                 </div>
