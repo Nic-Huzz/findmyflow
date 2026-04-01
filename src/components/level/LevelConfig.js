@@ -32,7 +32,7 @@ export const LEVEL_CONFIG = {
       },
       {
         id: 'identify_playlist',
-        name: 'Identify Your Play-list',
+        name: 'Curiosity Compass',
         route: '/mind-space',
         narrative: 'Discover your skills.',
         icon: '🎯',

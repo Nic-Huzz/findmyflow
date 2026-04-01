@@ -12,7 +12,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-import { getLevelConfig } from './LevelConfig'
+import { getLevelConfig, LEVEL_CONFIG } from './LevelConfig'
 import DeepDiveCard from './DeepDiveCard'
 import BossFightCard from './BossFightCard'
 import MilestoneCard from './MilestoneCard'
@@ -59,6 +59,25 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
 
   return (
     <div className="level-tab">
+      {/* Level Selector */}
+      <div className="level-selector">
+        {Object.entries(LEVEL_CONFIG).map(([num, lvl]) => {
+          const n = parseInt(num)
+          const isCurrent = n === currentLevel
+          const isLocked = n > currentLevel
+          return (
+            <button
+              key={n}
+              className={`level-selector-pill ${isCurrent ? 'current' : ''} ${isLocked ? 'locked' : ''}`}
+              onClick={() => !isLocked && setSelectedLevel?.(n)}
+              disabled={isLocked}
+            >
+              {isLocked ? '🔒' : n}
+            </button>
+          )
+        })}
+      </div>
+
       {/* Level Header */}
       <div className="level-header-card">
         <div className="level-header-name">
