@@ -26,12 +26,14 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
   const [selectedZone, setSelectedZone] = useState(null)
   const [boss, setBoss] = useState(null)
   const [zoneLoaded, setZoneLoaded] = useState(false)
+  const [hasEssenceAvatar, setHasEssenceAvatar] = useState(false)
 
   useEffect(() => {
     if (!userId) {
       setZoneLoaded(true)
       return
     }
+    // Load zone data
     supabase
       .from('user_level_progress')
       .select('zone_selected, boss_name')
@@ -46,14 +48,28 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
         setZoneLoaded(true)
       })
       .catch(() => setZoneLoaded(true))
+    // Check if hero avatar already created (from essence mirror)
+    supabase
+      .from('lead_flow_profiles')
+      .select('custom_essence_name, custom_essence_image')
+      .eq('user_id', userId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.custom_essence_name || data?.custom_essence_image) {
+          setHasEssenceAvatar(true)
+        }
+      })
   }, [userId, currentLevel])
 
   const levelQuests = [
-    { label: 'Zone Diagnosis', done: !!selectedZone },
-    { label: config.deepDive?.name || 'Deep Dive', done: false },
-    ...(config.extraQuests || []).map(q => ({ label: q.name, done: false })),
-    { label: 'Boss Fight', done: false },
-    { label: 'Milestone', done: false },
+    ...(config.zones ? [{ label: 'Zone Diagnosis', done: !!selectedZone }] : []),
+    ...(config.deepDive ? [{ label: config.deepDive.name, done: false }] : []),
+    ...(config.extraQuests || []).map(q => ({
+      label: q.name,
+      done: q.id === 'hero_avatar' ? hasEssenceAvatar : false,
+    })),
+    ...(boss ? [{ label: 'Boss Fight', done: false }] : []),
+    ...(config.milestone ? [{ label: 'Milestone', done: false }] : []),
   ]
   const questsCompleted = levelQuests.filter(q => q.done).length
 
@@ -91,8 +107,8 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
         )}
       </div>
 
-      {/* Zone Diagnosis — links to flow */}
-      <div className="level-zone-diagnosis">
+      {/* Zone Diagnosis — links to flow (not for Level 0) */}
+      {config.zones && <div className="level-zone-diagnosis">
         <h3 className="level-section-title">Where are you on this level?</h3>
         {selectedZone ? (
           <div className="level-zone-result">
@@ -119,7 +135,7 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
             Start Zone Diagnosis <span>→</span>
           </a>
         )}
-      </div>
+      </div>}
 
       {/* Deep Dive */}
       <DeepDiveCard deepDive={config.deepDive} isCompleted={false} />
@@ -129,7 +145,7 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
         <DeepDiveCard
           key={quest.id}
           deepDive={quest}
-          isCompleted={false}
+          isCompleted={quest.id === 'hero_avatar' ? hasEssenceAvatar : false}
         />
       ))}
 

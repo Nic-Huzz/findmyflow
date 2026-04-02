@@ -9,6 +9,34 @@
  */
 
 export const LEVEL_CONFIG = {
+  0: {
+    name: 'Getting Set Up',
+    question: 'Let\'s get you ready.',
+    graph: null,
+    yAxis: null,
+    xAxis: null,
+    visibilityLayer: null,
+    deepDive: {
+      id: 'curiosity_compass',
+      name: 'Curiosity Compass',
+      route: '/mind-space',
+      narrative: 'Discover your skills.',
+      icon: '🧭',
+    },
+    extraQuests: [
+      {
+        id: 'hero_avatar',
+        name: 'Create Your Hero Avatar',
+        route: '/essence-mirror',
+        narrative: 'Define who you are.',
+        icon: '🦸',
+      },
+    ],
+    milestone: null,
+    zones: null,
+    essenceQuestion: null,
+    courageCount: null,
+  },
   1: {
     name: 'Identity',
     question: 'Who am I really?',
@@ -22,22 +50,7 @@ export const LEVEL_CONFIG = {
       route: '/shadow-work',
       narrative: 'Meet yourself.',
     },
-    extraQuests: [
-      {
-        id: 'hero_avatar',
-        name: 'Create Your Hero Avatar',
-        route: '/archetypes/essence',
-        narrative: 'Define who you are.',
-        icon: '🦸',
-      },
-      {
-        id: 'identify_playlist',
-        name: 'Curiosity Compass',
-        route: '/mind-space',
-        narrative: 'Discover your skills.',
-        icon: '🎯',
-      },
-    ],
+    extraQuests: [],
     milestone: {
       text: 'Beginning to identify your essence and what to pursue',
       type: 'identity',

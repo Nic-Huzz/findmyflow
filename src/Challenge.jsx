@@ -2066,7 +2066,7 @@ function Challenge() {
 
         {/* Level Tab */}
         {activeCategory === 'Level' && (
-          <LevelTab currentLevel={1} userId={user?.id} />
+          <LevelTab currentLevel={0} userId={user?.id} />
         )}
 
         {/* Bonus Sub-Tabs: Tasks | Content */}
