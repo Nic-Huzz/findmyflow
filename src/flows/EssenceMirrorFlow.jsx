@@ -434,29 +434,33 @@ export default function EssenceMirrorFlow() {
             </div>
 
             {/* Swipeable card - centered */}
-            <div className="em-swipe-middle">
+            <div
+              className="em-swipe-middle"
+              onTouchStart={(e) => { swipeTouchStart.current = e.changedTouches[0].screenX }}
+              onTouchEnd={(e) => {
+                const diff = swipeTouchStart.current - e.changedTouches[0].screenX
+                if (diff > 50) advanceSwipe()
+                else if (diff < -50) goBackSwipe()
+              }}
+              onMouseDown={(e) => { e.preventDefault(); swipeTouchStart.current = e.screenX }}
+              onMouseUp={(e) => {
+                const diff = swipeTouchStart.current - e.screenX
+                if (diff > 50) advanceSwipe()
+                else if (diff < -50) goBackSwipe()
+              }}
+              style={{ cursor: 'grab' }}
+            >
               <div
                 className={`em-swipe-card ${isSelected ? 'selected' : ''}`}
                 key={currentId}
-                onTouchStart={(e) => { swipeTouchStart.current = e.changedTouches[0].screenX }}
-                onTouchEnd={(e) => {
-                  const diff = swipeTouchStart.current - e.changedTouches[0].screenX
-                  if (diff > 50) advanceSwipe()
-                  else if (diff < -50) goBackSwipe()
-                }}
-                onMouseDown={(e) => { swipeTouchStart.current = e.screenX }}
-                onMouseUp={(e) => {
-                  const diff = swipeTouchStart.current - e.screenX
-                  if (diff > 50) advanceSwipe()
-                  else if (diff < -50) goBackSwipe()
-                }}
-                style={{ cursor: 'grab' }}
+                onDragStart={(e) => e.preventDefault()}
               >
                 {currentArch.swipeImage && (
                   <img
                     className="em-swipe-image"
                     src={currentArch.swipeImage}
                     alt={currentArch.name}
+                    draggable={false}
                     onError={(e) => { e.target.style.display = 'none' }}
                   />
                 )}
