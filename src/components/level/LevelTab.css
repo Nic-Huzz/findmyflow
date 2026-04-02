@@ -17,14 +17,14 @@
 /* ── Level Selector ── */
 .level-tab .level-selector {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.3rem;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .level-tab .level-selector-pill {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 2px solid #e9ecef;
   background: white;
