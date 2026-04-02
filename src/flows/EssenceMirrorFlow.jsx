@@ -461,7 +461,9 @@ export default function EssenceMirrorFlow() {
                 )}
                 {!currentArch.swipeImage && <div className="em-swipe-emoji">{ARCHETYPE_EMOJI[currentId]}</div>}
                 <div className="em-swipe-text">
-                  {currentArch.superpower}
+                  {currentArch.superpower.split(/(?<=[.?!])\s+/).map((s, i) => (
+                    <p key={i}>{s}</p>
+                  ))}
                 </div>
                 {isSelected && <div className="em-swipe-check">&#10003;</div>}
               </div>

@@ -327,6 +327,14 @@
   max-width: 320px;
 }
 
+.em-swipe-text p {
+  margin: 0 0 0.5rem;
+}
+
+.em-swipe-text p:last-child {
+  margin-bottom: 0;
+}
+
 .em-swipe-check {
   position: absolute;
   top: 1rem;
