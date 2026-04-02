@@ -825,7 +825,7 @@ Create a dynamic pose and scene background that embodies this essence. The chara
               <input
                 className="em-avatar-name-input"
                 type="text"
-                value={heroName}
+                value={heroName || ''}
                 onChange={(e) => setHeroName(e.target.value)}
                 placeholder="Your essence name"
                 maxLength={40}
