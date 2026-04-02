@@ -89,7 +89,7 @@ export default function EssenceMirrorFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const returnTo = searchParams.get('returnTo') || '/7-day-challenge'
+  const returnTo = searchParams.get('returnTo') || '/me'
 
   // Flow state
   const [step, setStep] = useState(STEPS.HOOK)
