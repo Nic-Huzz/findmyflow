@@ -35,7 +35,8 @@ export const LEVEL_CONFIG = {
     milestone: null,
     zones: null,
     essenceQuestion: null,
-    courageCount: null,
+    courageCount: 0,
+    healingDaysRequired: 1,
   },
   1: {
     name: 'Identity',
