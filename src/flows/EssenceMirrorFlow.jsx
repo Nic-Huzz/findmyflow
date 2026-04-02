@@ -52,14 +52,15 @@ const HOOK_SLIDES = [
     text: 'Imagine getting teased, made fun of or rejected for these things...',
   },
   {
-    text: 'How would you have felt?\nEmbarrassed, ashamed, sad.',
+    text: 'How would you have felt?',
+    subtext: 'Embarrassed, ashamed, sad.',
   },
   {
     text: 'We hate feeling that way, so what do we do to protect ourselves?',
     subtext: 'We hide it away.',
   },
   {
-    text: 'Heartbreakingly, our most authentic parts no longer feel safe to share with the world.',
+    text: 'Heartbreakingly, our most authentic parts no longer feel safe to be seen.',
   },
   {
     text: 'Ready to reconnect to that version of you and share it with the world?',
@@ -369,10 +370,12 @@ export default function EssenceMirrorFlow() {
             )}
           </div>
           <div className="em-hook-bottom">
-            {HOOK_SLIDES[hookIndex].button && (
+            {HOOK_SLIDES[hookIndex].button ? (
               <button className="em-hook-btn" onClick={(e) => { e.stopPropagation(); handleHookTap() }}>
                 {HOOK_SLIDES[hookIndex].button} <span>→</span>
               </button>
+            ) : (
+              <div className="em-hook-tap-hint">Tap anywhere to continue</div>
             )}
           </div>
         </div>
