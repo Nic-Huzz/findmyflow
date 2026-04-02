@@ -103,7 +103,8 @@ export default function EssenceMirrorFlow() {
   const [round2, setRound2] = useState([])
   const [round3, setRound3] = useState([])
   const [swipeIndex, setSwipeIndex] = useState(0) // which card within a round
-  const swipeTouchStart = useRef(0)
+  const swipeTouchStartX = useRef(0)
+  const swipeTouchEndX = useRef(0)
   const [visionSelections, setVisionSelections] = useState([])
   const [pixarPick, setPixarPick] = useState(null)
 
@@ -421,7 +422,17 @@ export default function EssenceMirrorFlow() {
         }
 
         return (
-          <div key={roundStep} className="em-step em-swipe-step">
+          <div
+            key={roundStep}
+            className="em-step em-swipe-step"
+            onTouchStart={(e) => { swipeTouchStartX.current = e.changedTouches[0].screenX }}
+            onTouchEnd={(e) => {
+              swipeTouchEndX.current = e.changedTouches[0].screenX
+              const diff = swipeTouchStartX.current - swipeTouchEndX.current
+              if (diff > 50) advanceSwipe()
+              else if (diff < -50) goBackSwipe()
+            }}
+          >
             {/* Progress dots for all 12 */}
             <div className="em-swipe-dots">
               {Array.from({ length: 12 }).map((_, i) => (
@@ -434,26 +445,10 @@ export default function EssenceMirrorFlow() {
             </div>
 
             {/* Swipeable card - centered */}
-            <div
-              className="em-swipe-middle"
-              onTouchStart={(e) => { swipeTouchStart.current = e.changedTouches[0].screenX }}
-              onTouchEnd={(e) => {
-                const diff = swipeTouchStart.current - e.changedTouches[0].screenX
-                if (diff > 50) advanceSwipe()
-                else if (diff < -50) goBackSwipe()
-              }}
-              onMouseDown={(e) => { e.preventDefault(); swipeTouchStart.current = e.screenX }}
-              onMouseUp={(e) => {
-                const diff = swipeTouchStart.current - e.screenX
-                if (diff > 50) advanceSwipe()
-                else if (diff < -50) goBackSwipe()
-              }}
-              style={{ cursor: 'grab' }}
-            >
+            <div className="em-swipe-middle">
               <div
                 className={`em-swipe-card ${isSelected ? 'selected' : ''}`}
                 key={currentId}
-                onDragStart={(e) => e.preventDefault()}
               >
                 {currentArch.swipeImage && (
                   <img
