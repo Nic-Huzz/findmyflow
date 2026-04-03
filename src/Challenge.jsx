@@ -1729,7 +1729,6 @@ function Challenge() {
               {[
                 { id: 'daily', label: 'Daily', icon: '☀️', color: '#5e17eb' },
                 { id: 'weekly', label: 'Weekly', icon: '📅', color: '#7c3aed' },
-                { id: 'deepdive', label: 'Deep Dive', icon: '🌊', color: '#9b59b6' },
                 { id: 'explainer', label: 'Explainers', icon: '📖', color: '#c27aed' }
               ].map(tab => {
                 const isActive = activeFrequencyFilter === tab.id
