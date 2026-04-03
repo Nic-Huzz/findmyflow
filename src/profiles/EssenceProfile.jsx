@@ -27,7 +27,14 @@ const EssenceProfile = () => {
   const [deeperInsightsOpen, setDeeperInsightsOpen] = useState(true)
 
   // Determine active tab from URL
-  const activeTab = location.pathname.includes('/protective') ? 'protective' : 'essence'
+  const activeTab = 'essence' // Protective archived — each level has its own Boss
+
+  // Redirect /archetypes/protective to /archetypes/essence
+  useEffect(() => {
+    if (location.pathname.includes('/protective')) {
+      navigate('/archetypes/essence', { replace: true })
+    }
+  }, [location.pathname, navigate])
 
   // Modal states
   const [showAvatarModal, setShowAvatarModal] = useState(false)
@@ -220,25 +227,7 @@ const EssenceProfile = () => {
           </div>
         </section>
 
-        {/* Tab Switcher */}
-        <section className="essence-section essence-tabs-section">
-          <div className="archetype-tabs">
-            <button
-              className={`archetype-tab ${activeTab === 'essence' ? 'active' : ''}`}
-              onClick={() => switchTab('essence')}
-            >
-              <span className="tab-icon">✨</span>
-              <span>Essence</span>
-            </button>
-            <button
-              className={`archetype-tab ${activeTab === 'protective' ? 'active' : ''}`}
-              onClick={() => switchTab('protective')}
-            >
-              <span className="tab-icon">🛡️</span>
-              <span>Protective</span>
-            </button>
-          </div>
-        </section>
+        {/* Tab Switcher — Protective archived, each level identifies its own Boss */}
 
         {/* ========== ESSENCE CONTENT ========== */}
         {activeTab === 'essence' && (

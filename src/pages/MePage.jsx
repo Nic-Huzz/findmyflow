@@ -583,103 +583,7 @@ export default function MePage() {
       */}
 
       {/* ============================================================
-         SECTION 2: YOUR FLOW JOURNEY
-         ============================================================ */}
-      <section className="journey-section reveal-fade-up" ref={journeyRevealRef}>
-        <div className="flow-journey">
-          <div className="fj-top">
-            <div className="fj-header">
-              <div className="fj-header-icon">🌊</div>
-              <span className="fj-title">Your Flow Journey</span>
-            </div>
-
-            {/* Project selector */}
-            {projects.length > 0 && (
-              <div className="fj-project-select" ref={projectMenuRef}>
-                <button
-                  className={`fj-project-btn ${projectMenuOpen ? 'open' : ''}`}
-                  onClick={() => setProjectMenuOpen(!projectMenuOpen)}
-                >
-                  <span className="proj-emoji">🎯</span>
-                  <span>{primaryProject?.name || 'My Project'}</span>
-                  {projects.length > 1 && (
-                    <span className="proj-chevron">▾</span>
-                  )}
-                </button>
-                {projects.length > 1 && (
-                  <div className={`fj-project-dropdown ${projectMenuOpen ? 'open' : ''}`}>
-                    {projects.map(p => (
-                      <div
-                        key={p.id}
-                        className={`fj-project-option ${p.id === primaryProject?.id ? 'active' : ''}`}
-                        onClick={() => { setSelectedProject(p); setProjectMenuOpen(false) }}
-                      >
-                        <span>🎯</span>
-                        {p.name}
-                        <span className="opt-stage">Stage {p.stage}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            <p className="fj-sub">
-              {timelineEntries.length > 0
-                ? 'Swipe to explore your river — compass entries and milestones show your journey.'
-                : 'Log your first compass check-in to start building your river.'
-              }
-            </p>
-          </div>
-
-          {/* Ghost river for first-time */}
-          {timelineEntries.length === 0 && (
-            <div style={{ padding: '0 0 8px' }}>
-              <div style={{ height: 160, position: 'relative', padding: '0 24px' }}>
-                <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%' }}>
-                  <path className="ghost-river-glow"
-                    d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60" />
-                  <path className="ghost-river-path"
-                    d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60" />
-                  <circle cx="40" cy="80" r="8" fill="#5e17eb" stroke="white" strokeWidth="2" />
-                  <text x="40" y="80" textAnchor="middle" dominantBaseline="central" fill="white" fontSize="7" fontWeight="800">🚩</text>
-                  <text x="40" y="102" textAnchor="middle" fill="#adb5bd" fontSize="8" fontWeight="700">Start</text>
-                </svg>
-              </div>
-            </div>
-          )}
-
-          {/* Real river */}
-          {timelineEntries.length > 0 && (
-            <>
-              <HorizontalFlowRiver
-                projectId={primaryProject?.id}
-                entries={timelineEntries}
-              />
-              <p className="fj-scroll-hint">← Swipe to explore your flow →</p>
-            </>
-          )}
-
-          {/* Narrative or inline journey mapper */}
-          {narrativeText ? (
-            <>
-              <div className="fj-narrative">
-                <p dangerouslySetInnerHTML={{ __html: narrativeText }} />
-              </div>
-              <button className="fj-link" onClick={() => navigate('/flow-compass')}>
-                Open Flow Compass <span>→</span>
-              </button>
-            </>
-          ) : (
-            <button className="fj-link" onClick={() => navigate('/flow-compass')}>
-              Open Flow Compass <span>→</span>
-            </button>
-          )}
-        </div>
-      </section>
-
-      {/* ============================================================
-         SECTION 3: CURRENT LEVEL / TODAY'S QUEST
+         SECTION 2: CURRENT LEVEL / TODAY'S QUEST
          ============================================================ */}
       <section className="quest-section reveal-fade-up" ref={questRevealRef}>
         <div className="quest-banner">
@@ -778,10 +682,102 @@ export default function MePage() {
       </section>
 
       {/* ============================================================
+         SECTION 3: YOUR FLOW JOURNEY
+         ============================================================ */}
+      <section className="journey-section reveal-fade-up" ref={journeyRevealRef}>
+        <div className="flow-journey">
+          <div className="fj-top">
+            <div className="fj-header">
+              <div className="fj-header-icon">🌊</div>
+              <span className="fj-title">Your Flow Journey</span>
+            </div>
+
+            {projects.length > 0 && (
+              <div className="fj-project-select" ref={projectMenuRef}>
+                <button
+                  className={`fj-project-btn ${projectMenuOpen ? 'open' : ''}`}
+                  onClick={() => setProjectMenuOpen(!projectMenuOpen)}
+                >
+                  <span className="proj-emoji">🎯</span>
+                  <span>{primaryProject?.name || 'My Project'}</span>
+                  {projects.length > 1 && (
+                    <span className="proj-chevron">▾</span>
+                  )}
+                </button>
+                {projects.length > 1 && (
+                  <div className={`fj-project-dropdown ${projectMenuOpen ? 'open' : ''}`}>
+                    {projects.map(p => (
+                      <div
+                        key={p.id}
+                        className={`fj-project-option ${p.id === primaryProject?.id ? 'active' : ''}`}
+                        onClick={() => { setSelectedProject(p); setProjectMenuOpen(false) }}
+                      >
+                        <span>🎯</span>
+                        {p.name}
+                        <span className="opt-stage">Stage {p.stage}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            <p className="fj-sub">
+              {timelineEntries.length > 0
+                ? 'Swipe to explore your river — compass entries and milestones show your journey.'
+                : 'Log your first compass check-in to start building your river.'
+              }
+            </p>
+          </div>
+
+          {timelineEntries.length === 0 && (
+            <div style={{ padding: '0 0 8px' }}>
+              <div style={{ height: 160, position: 'relative', padding: '0 24px' }}>
+                <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%' }}>
+                  <path className="ghost-river-glow"
+                    d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60" />
+                  <path className="ghost-river-path"
+                    d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60" />
+                  <circle cx="40" cy="80" r="8" fill="#5e17eb" stroke="white" strokeWidth="2" />
+                  <text x="40" y="80" textAnchor="middle" dominantBaseline="central" fill="white" fontSize="7" fontWeight="800">🚩</text>
+                  <text x="40" y="102" textAnchor="middle" fill="#adb5bd" fontSize="8" fontWeight="700">Start</text>
+                </svg>
+              </div>
+            </div>
+          )}
+
+          {timelineEntries.length > 0 && (
+            <>
+              <HorizontalFlowRiver
+                projectId={primaryProject?.id}
+                entries={timelineEntries}
+              />
+              <p className="fj-scroll-hint">← Swipe to explore your flow →</p>
+            </>
+          )}
+
+          {narrativeText ? (
+            <>
+              <div className="fj-narrative">
+                <p dangerouslySetInnerHTML={{ __html: narrativeText }} />
+              </div>
+              <button className="fj-link" onClick={() => navigate('/flow-compass')}>
+                Open Flow Compass <span>→</span>
+              </button>
+            </>
+          ) : (
+            <button className="fj-link" onClick={() => navigate('/flow-compass')}>
+              Open Flow Compass <span>→</span>
+            </button>
+          )}
+        </div>
+      </section>
+
+      {/* ============================================================
          SECTION 4: HERO PROFILE
          ============================================================ */}
       <section className="hero-profile-section">
-        <div className="hero-profile-card" onClick={() => navigate('/hero-profile')}>
+        <div className="hero-profile-card" onClick={() => navigate('/archetypes/essence')}>
           <div className="hp-top">
             <div className="hp-avatar">
               <div className="hp-avatar-inner">🎭</div>
@@ -789,7 +785,7 @@ export default function MePage() {
             <div className="hp-identity">
               <div className="hp-name">Your Hero Profile</div>
               <div className="hp-tagline">
-                {archetypes?.essence?.name || 'Essence'} + {archetypes?.protective?.name ? `The ${archetypes.protective.name}` : 'Protective'}
+                {archetypes?.essence?.name || 'Your Essence'}
               </div>
             </div>
             <span className="hp-chevron">›</span>
@@ -830,30 +826,8 @@ export default function MePage() {
             </div>
           </div>
 
-          <div className="hp-divider" />
-
-          {/* Protective */}
-          <div className="hp-protective">
-            <div className="hp-protective-diagram">
-              <svg viewBox="0 0 56 56">
-                <circle className="attempt-circle attempt-1" cx="28" cy="28" r="25" />
-                <circle className="attempt-circle attempt-2" cx="28" cy="28" r="20" />
-                <circle className="attempt-circle attempt-3" cx="28" cy="28" r="15" />
-              </svg>
-              <div className="hp-protective-pct">{hasVoiceData ? `${protectivePct}%` : '--%'}</div>
-            </div>
-            <div className="hp-protective-info">
-              <div className="hp-protective-name">
-                {archetypes?.protective?.name ? `The ${archetypes.protective.name}` : 'Your Protective Voice'}
-              </div>
-              <div className="hp-protective-desc">
-                {archetypes?.protective?.summary || 'Complete the archetype quiz to discover your protective pattern'}
-              </div>
-            </div>
-          </div>
-
           <div className="hp-full-link">
-            View full Hero Profile <span>→</span>
+            View Essence Profile <span>→</span>
           </div>
         </div>
       </section>
