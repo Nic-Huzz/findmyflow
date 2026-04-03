@@ -19,7 +19,7 @@ import MilestoneCard from './MilestoneCard'
 import ProgressBars from './ProgressBars'
 import './LevelTab.css'
 
-export default function LevelTab({ currentLevel = 1, userId = null, onLevelChange = null }) {
+export default function LevelTab({ currentLevel = 1, userId = null, onLevelChange = null, onNavigateTab = null }) {
   const config = getLevelConfig(currentLevel)
 
   // DB-backed zone state (reads from user_level_progress if available)
@@ -28,6 +28,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
   const [zoneLoaded, setZoneLoaded] = useState(false)
   const [hasEssenceAvatar, setHasEssenceAvatar] = useState(false)
   const [hasTensionScores, setHasTensionScores] = useState(false)
+  const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
 
   useEffect(() => {
     if (!userId) {
@@ -71,6 +72,18 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           setHasTensionScores(true)
         }
       })
+    // Check if curiosity compass completed (has skills from curiosity_compass)
+    supabase
+      .from('nikigai_clusters')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('source_flow', 'curiosity_compass')
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) {
+          setHasCuriosityCompass(true)
+        }
+      })
   }, [userId, currentLevel])
 
   const levelQuests = [
@@ -80,6 +93,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       label: q.name,
       done: q.id === 'hero_avatar' ? hasEssenceAvatar
         : q.id === 'tension_assessment' ? hasTensionScores
+        : q.id === 'curiosity_compass' ? hasCuriosityCompass
         : false,
     })),
     ...(boss ? [{ label: 'Boss Fight', done: false }] : []),
@@ -178,17 +192,27 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       <DeepDiveCard deepDive={config.deepDive} isCompleted={false} />
 
       {/* Extra Quests (Level-specific) */}
-      {config.extraQuests?.map(quest => (
-        <DeepDiveCard
-          key={quest.id}
-          deepDive={quest}
-          isCompleted={
-            quest.id === 'hero_avatar' ? hasEssenceAvatar
-            : quest.id === 'tension_assessment' ? hasTensionScores
-            : false
-          }
-        />
-      ))}
+      {config.extraQuests?.map(quest => {
+        const isCompleted =
+          quest.id === 'hero_avatar' ? hasEssenceAvatar
+          : quest.id === 'tension_assessment' ? hasTensionScores
+          : quest.id === 'curiosity_compass' ? hasCuriosityCompass
+          : false
+        const isLocked = quest.lockedUntil === 'curiosity_compass' && !hasCuriosityCompass
+        const questWithRoute = quest.id === 'playlist_challenge' && !isLocked
+          ? { ...quest, route: '#playlist' }
+          : quest.navigateTo
+          ? { ...quest, route: `#${quest.navigateTo}` }
+          : quest
+        return (
+          <DeepDiveCard
+            key={quest.id}
+            deepDive={isLocked ? { ...quest, route: null } : questWithRoute}
+            isCompleted={isCompleted}
+            onNavigate={onNavigateTab}
+          />
+        )
+      })}
 
       {/* Boss Fight */}
       {boss && <BossFightCard boss={boss} isCompleted={false} />}
@@ -199,9 +223,10 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       {/* Progress Bars */}
       <ProgressBars
         levelQuests={levelQuests}
-        courageCount={config.courageCount}
+        courageCount={config.courageCount || 0}
         courageDone={0}
         healingDaysDone={0}
+        healingDaysRequired={config.healingDaysRequired || 14}
         questsCompleted={questsCompleted}
       />
     </div>

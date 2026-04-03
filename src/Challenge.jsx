@@ -2034,7 +2034,7 @@ function Challenge() {
 
         {/* Level Tab */}
         {activeCategory === 'Level' && (
-          <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} userId={user?.id} onLevelChange={setViewingLevel} />
+          <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} userId={user?.id} onLevelChange={setViewingLevel} onNavigateTab={setActiveCategory} />
         )}
 
         {/* Bonus Sub-Tabs: Tasks | Content */}

@@ -11,8 +11,10 @@ export default function ProgressBars({
   courageCount,
   courageDone,
   healingDaysDone,
+  healingDaysRequired = 14,
   questsCompleted,
 }) {
+  const totalQuests = levelQuests.length
   return (
     <div className="level-progress">
       <h3 className="level-section-title">Progress</h3>
@@ -21,12 +23,12 @@ export default function ProgressBars({
       <div className="level-bar-section">
         <div className="level-bar-label">
           <span>Level Quests</span>
-          <span>{questsCompleted}/4</span>
+          <span>{questsCompleted}/{totalQuests}</span>
         </div>
         <div className="level-bar-track">
           <div
             className="level-bar-fill purple"
-            style={{ width: `${(questsCompleted / 4) * 100}%` }}
+            style={{ width: `${totalQuests > 0 ? (questsCompleted / totalQuests) * 100 : 0}%` }}
           />
         </div>
         <div className="level-bar-items">
@@ -38,21 +40,21 @@ export default function ProgressBars({
         </div>
       </div>
 
-      {/* Bar 2: Healing Streak */}
+      {/* Bar 2: Healing Days */}
       <div className="level-bar-section">
         <div className="level-bar-label">
           <span>Healing Days</span>
-          <span>{healingDaysDone}/14</span>
+          <span>{healingDaysDone}/{healingDaysRequired}</span>
         </div>
         <div className="level-bar-dots">
-          {Array.from({ length: 14 }).map((_, i) => (
+          {Array.from({ length: healingDaysRequired }).map((_, i) => (
             <div key={i} className={`level-bar-dot ${i < healingDaysDone ? 'filled' : ''}`} />
           ))}
         </div>
       </div>
 
-      {/* Bar 3: Play-list Courage */}
-      {courageCount && (
+      {/* Bar 3: Play-list Courage (hidden if 0) */}
+      {courageCount > 0 && (
         <div className="level-bar-section">
           <div className="level-bar-label">
             <span>Courage Challenges</span>
