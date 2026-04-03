@@ -56,7 +56,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       .eq('user_id', userId)
       .maybeSingle()
       .then(({ data }) => {
-        if (data?.custom_essence_name || data?.custom_essence_image) {
+        if (data?.custom_essence_image) {
           setHasEssenceAvatar(true)
         }
       })
@@ -86,6 +86,29 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
     ...(config.milestone ? [{ label: 'Milestone', done: false }] : []),
   ]
   const questsCompleted = levelQuests.filter(q => q.done).length
+  const allQuestsDone = levelQuests.length > 0 && questsCompleted === levelQuests.length
+
+  // Auto-graduate to next level when all quests complete
+  useEffect(() => {
+    if (!allQuestsDone || !userId || currentLevel > 7) return
+    supabase
+      .from('user_stage_progress')
+      .select('current_journey_level')
+      .eq('user_id', userId)
+      .maybeSingle()
+      .then(({ data }) => {
+        const dbLevel = data?.current_journey_level || 0
+        if (dbLevel === currentLevel) {
+          supabase
+            .from('user_stage_progress')
+            .update({ current_journey_level: currentLevel + 1 })
+            .eq('user_id', userId)
+            .then(() => {
+              console.log(`Graduated from Level ${currentLevel} to Level ${currentLevel + 1}`)
+            })
+        }
+      })
+  }, [allQuestsDone, userId, currentLevel])
 
   return (
     <div className="level-tab">
