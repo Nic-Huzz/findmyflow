@@ -19,7 +19,7 @@ import MilestoneCard from './MilestoneCard'
 import ProgressBars from './ProgressBars'
 import './LevelTab.css'
 
-export default function LevelTab({ currentLevel = 1, userId = null }) {
+export default function LevelTab({ currentLevel = 1, userId = null, onLevelChange = null }) {
   const config = getLevelConfig(currentLevel)
 
   // DB-backed zone state (reads from user_level_progress if available)
@@ -99,7 +99,7 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
             <button
               key={n}
               className={`level-selector-pill ${isCurrent ? 'current' : ''} ${isLocked ? 'locked' : ''}`}
-              onClick={() => !isLocked && setSelectedLevel?.(n)}
+              onClick={() => !isLocked && onLevelChange?.(n)}
               disabled={isLocked}
             >
               {isLocked ? '🔒' : n}

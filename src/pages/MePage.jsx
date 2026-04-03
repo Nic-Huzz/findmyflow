@@ -103,7 +103,7 @@ export default function MePage() {
 
   useEffect(() => { fetchStageProgress() }, [fetchStageProgress])
 
-  // Fetch level progress data
+  // Fetch journey level first
   useEffect(() => {
     if (!user?.id) return
     supabase
@@ -114,6 +114,11 @@ export default function MePage() {
       .then(({ data }) => {
         setCurrentJourneyLevel(data?.current_journey_level || 0)
       })
+  }, [user?.id])
+
+  // Then fetch level progress using resolved journey level
+  useEffect(() => {
+    if (!user?.id) return
     supabase
       .from('user_level_progress')
       .select('zone_selected, deep_dive_completed, boss_fight_completed, milestone_completed, healing_day_dates, courage_challenge_ids')

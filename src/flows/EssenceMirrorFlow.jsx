@@ -79,7 +79,6 @@ const STEPS = {
   PIXAR: 'pixar',
   LOADING: 'loading',
   REVEAL: 'reveal',
-  WOUND: 'wound',
   AVATAR: 'avatar',
 }
 
@@ -267,7 +266,7 @@ export default function EssenceMirrorFlow() {
         primaryWound: primary.essence_wound,
         secondaryWound: secondary.essence_wound,
       })
-      setHeroName(data.blended_name || data.primaryName || '')
+      setHeroName(data.blended_name || primary.name || '')
     } catch (err) {
       console.warn('Blend API error:', err)
       // Fallback: use primary data directly
@@ -650,36 +649,6 @@ export default function EssenceMirrorFlow() {
 
           <button className="primary-button" onClick={() => goToStep(STEPS.AVATAR)}>
             This is me →
-          </button>
-        </div>
-      )}
-
-      {/* ── The Wound ── */}
-      {step === STEPS.WOUND && blendResult && (
-        <div className="em-step em-wound">
-          <div className="em-reveal-icon">&#128148;</div>
-          <h1 className="em-step-title">The wound that hid your essence</h1>
-
-          <div className="em-wound-quote">
-            "{blendResult.blended_wound}"
-          </div>
-
-          <div className="em-wound-explanation">
-            And so you learned to suppress the very thing that makes you powerful.
-          </div>
-
-          {zoneDiagnosis && zoneDiagnosis !== 'diagonal' && (
-            <div className="em-wound-zone">
-              <div className="em-wound-zone-text">
-                This is why you're in the <strong>{
-                  zoneDiagnosis === 'topLeft' ? 'Outcast Zone' : 'Chameleon Zone'
-                }</strong>. Your essence was suppressed, and a protective voice stepped in to keep you safe.
-              </div>
-            </div>
-          )}
-
-          <button className="primary-button" onClick={() => goToStep(STEPS.AVATAR)}>
-            Reclaim my essence →
           </button>
         </div>
       )}
