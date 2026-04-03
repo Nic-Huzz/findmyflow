@@ -580,6 +580,7 @@
 /* Healing frequency tabs — tighten spacing but keep room for progress line */
 .healing-frequency-tabs .stage-tabs {
   padding: 4px 8px 12px 8px;
+  justify-content: center;
 }
 .healing-frequency-tabs {
   margin-bottom: 8px;
