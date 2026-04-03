@@ -19,7 +19,7 @@ export const LEVEL_CONFIG = {
     deepDive: {
       id: 'curiosity_compass',
       name: 'Curiosity Compass',
-      route: '/mind-space?returnTo=/7-day-challenge',
+      route: '/curiosity-compass?returnTo=/7-day-challenge',
       narrative: 'What did you love doing as a kid?',
       icon: '🧭',
     },

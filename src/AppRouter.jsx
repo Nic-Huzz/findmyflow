@@ -154,6 +154,7 @@ const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewir
 const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
 const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const TensionAssessmentFlow = lazyRetry(() => import('./flows/TensionAssessmentFlow'))
+const CuriosityCompassFlow = lazyRetry(() => import('./flows/CuriosityCompassFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
@@ -374,6 +375,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/shadow-work' ||
                         location.pathname === '/essence-mirror' ||
                         location.pathname === '/tension-assessment' ||
+                        location.pathname === '/curiosity-compass' ||
                         location.pathname.startsWith('/zone-diagnosis') ||
                         location.pathname === '/get-started'
 
@@ -607,6 +609,11 @@ function AppRouter() {
             <Route path="/tension-assessment" element={
               <AuthGate>
                 <TensionAssessmentFlow />
+              </AuthGate>
+            } />
+            <Route path="/curiosity-compass" element={
+              <AuthGate>
+                <CuriosityCompassFlow />
               </AuthGate>
             } />
             <Route path="/nervous-system" element={
