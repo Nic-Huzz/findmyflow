@@ -23,7 +23,7 @@ import { GROAN_VISIBILITY_LAYERS } from '../lib/stageConfig'
 import { useReveal } from '../hooks/useReveal'
 import VibeColorPicker from '../components/VibeColorPicker'
 import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
-import HomeFirstTime from '../components/HomeFirstTime'
+// HomeFirstTime archived — replaced by /essence-mirror redirect
 import SeeYourFlow from '../components/SeeYourFlow'
 import { hasPendingJourneyData, persistJourneyOnboarding } from '../lib/journeyOnboarding'
 import './MePage.css'

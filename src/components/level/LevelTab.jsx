@@ -27,6 +27,7 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
   const [boss, setBoss] = useState(null)
   const [zoneLoaded, setZoneLoaded] = useState(false)
   const [hasEssenceAvatar, setHasEssenceAvatar] = useState(false)
+  const [hasTensionScores, setHasTensionScores] = useState(false)
 
   useEffect(() => {
     if (!userId) {
@@ -59,6 +60,17 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
           setHasEssenceAvatar(true)
         }
       })
+    // Check if tension assessment completed
+    supabase
+      .from('user_stage_progress')
+      .select('tension_discover')
+      .eq('user_id', userId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.tension_discover != null) {
+          setHasTensionScores(true)
+        }
+      })
   }, [userId, currentLevel])
 
   const levelQuests = [
@@ -66,7 +78,9 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
     ...(config.deepDive ? [{ label: config.deepDive.name, done: false }] : []),
     ...(config.extraQuests || []).map(q => ({
       label: q.name,
-      done: q.id === 'hero_avatar' ? hasEssenceAvatar : false,
+      done: q.id === 'hero_avatar' ? hasEssenceAvatar
+        : q.id === 'tension_assessment' ? hasTensionScores
+        : false,
     })),
     ...(boss ? [{ label: 'Boss Fight', done: false }] : []),
     ...(config.milestone ? [{ label: 'Milestone', done: false }] : []),
@@ -145,7 +159,11 @@ export default function LevelTab({ currentLevel = 1, userId = null }) {
         <DeepDiveCard
           key={quest.id}
           deepDive={quest}
-          isCompleted={quest.id === 'hero_avatar' ? hasEssenceAvatar : false}
+          isCompleted={
+            quest.id === 'hero_avatar' ? hasEssenceAvatar
+            : quest.id === 'tension_assessment' ? hasTensionScores
+            : false
+          }
         />
       ))}
 

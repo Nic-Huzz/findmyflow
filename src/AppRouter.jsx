@@ -153,6 +153,7 @@ const ZoneDiagnosisFlow = lazyRetry(() => import('./flows/ZoneDiagnosisFlow'))
 const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
 const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
 const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
+const TensionAssessmentFlow = lazyRetry(() => import('./flows/TensionAssessmentFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
@@ -372,6 +373,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/matrix-code-deep-dive' ||
                         location.pathname === '/shadow-work' ||
                         location.pathname === '/essence-mirror' ||
+                        location.pathname === '/tension-assessment' ||
                         location.pathname.startsWith('/zone-diagnosis') ||
                         location.pathname === '/get-started'
 
@@ -600,6 +602,11 @@ function AppRouter() {
             <Route path="/essence-mirror" element={
               <AuthGate>
                 <EssenceMirrorFlow />
+              </AuthGate>
+            } />
+            <Route path="/tension-assessment" element={
+              <AuthGate>
+                <TensionAssessmentFlow />
               </AuthGate>
             } />
             <Route path="/nervous-system" element={

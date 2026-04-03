@@ -15,7 +15,7 @@ import PortalExplainer from './components/PortalExplainer'
 import ChallengeProjectSelector from './components/ChallengeProjectSelector'
 import ChallengeHeader from './components/ChallengeHeader'
 import ChallengeOnboarding from './components/ChallengeOnboarding'
-import TensionGate from './components/TensionGate'
+// TensionGate moved to Level 0 quest
 import './components/ChallengeFilters.css' // R-type chips + frequency tabs styles (used inline now)
 import './components/ChallengeStageTabs.css' // stage-tab pills for Healing/Play-list/Level sub-tabs
 import QuestCard from './components/QuestCard'
@@ -199,20 +199,6 @@ function Challenge() {
 
   // Healing modal quest (compact row → popup completion)
   const [healingModalQuest, setHealingModalQuest] = useState(null)
-
-  // Tension gate — first-time challenge portal entry
-  const [tensionGateCompleted, setTensionGateCompleted] = useState(null) // null = loading, true/false
-  useEffect(() => {
-    if (!user?.id) return
-    supabase
-      .from('user_stage_progress')
-      .select('tension_discover')
-      .eq('user_id', user.id)
-      .maybeSingle()
-      .then(({ data }) => {
-        setTensionGateCompleted(data?.tension_discover != null)
-      })
-  }, [user?.id])
 
   // Tabs unlock after first "Plan Your Week" is confirmed
   const [hasEverPlannedWeek, setHasEverPlannedWeek] = useState(false)
@@ -1536,11 +1522,6 @@ function Challenge() {
   // ============================================
   // Render: Onboarding (welcome, install-app, enable-notifications)
   // ============================================
-
-  // Tension gate — first time entering challenge portal
-  if (tensionGateCompleted === false) {
-    return <TensionGate onComplete={() => setTensionGateCompleted(true)} />
-  }
 
   if (showIntro) {
     return <ChallengeIntro onComplete={() => setShowIntro(false)} />

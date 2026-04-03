@@ -31,6 +31,13 @@ export const LEVEL_CONFIG = {
         narrative: 'Define who you are.',
         icon: '🦸',
       },
+      {
+        id: 'tension_assessment',
+        name: 'Where Am I Stuck?',
+        route: '/tension-assessment',
+        narrative: 'Identify your starting point.',
+        icon: '🧭',
+      },
     ],
     milestone: null,
     zones: null,
