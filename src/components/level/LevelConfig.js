@@ -33,7 +33,7 @@ export const LEVEL_CONFIG = {
       },
       {
         id: 'tension_assessment',
-        name: 'Where Am I Stuck?',
+        name: 'Where Am I In The Journey?',
         route: '/tension-assessment',
         narrative: 'Identify your starting point.',
         icon: '🧭',
