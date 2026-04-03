@@ -276,5 +276,23 @@ export const LEVEL_CONFIG = {
 export const HEALING_DAYS_REQUIRED = 14
 
 export function getLevelConfig(level) {
-  return LEVEL_CONFIG[level] || LEVEL_CONFIG[1]
+  const config = LEVEL_CONFIG[level] || LEVEL_CONFIG[1]
+  // Auto-add playlist challenge quest for levels 1+ that have courageCount
+  if (level > 0 && config.courageCount > 0 && (!config.extraQuests || !config.extraQuests.find(q => q.id === 'playlist_challenge'))) {
+    return {
+      ...config,
+      extraQuests: [
+        ...(config.extraQuests || []),
+        {
+          id: 'playlist_challenge',
+          name: 'Play-List Challenges',
+          route: null,
+          narrative: `Complete ${config.courageCount} courage challenge${config.courageCount > 1 ? 's' : ''}.`,
+          icon: '🎯',
+          navigateTo: 'Play-list',
+        },
+      ],
+    }
+  }
+  return config
 }

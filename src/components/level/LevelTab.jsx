@@ -199,6 +199,34 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           : quest.id === 'curiosity_compass' ? hasCuriosityCompass
           : false
         const isLocked = quest.lockedUntil === 'curiosity_compass' && !hasCuriosityCompass
+
+        // Play-List Challenge with dot tracking (levels 1+)
+        if (quest.id === 'playlist_challenge' && currentLevel > 0 && config.courageCount > 0) {
+          const courageDone = 0 // TODO: wire to real data from user_level_progress
+          const courageTarget = config.courageCount
+          return (
+            <div key={quest.id} className="level-deep-dive">
+              <div className="level-dd-icon">{quest.icon}</div>
+              <div className="level-dd-info">
+                <div className="level-dd-name">{quest.name}</div>
+                <div className="level-dd-narrative">Complete {courageTarget} courage challenge{courageTarget > 1 ? 's' : ''}</div>
+                <div className="level-bar-dots" style={{ marginTop: '0.5rem' }}>
+                  {Array.from({ length: courageTarget }).map((_, i) => (
+                    <div key={i} className={`level-bar-dot ${i < courageDone ? 'filled' : ''}`} />
+                  ))}
+                </div>
+              </div>
+              <button
+                className="level-dd-status start"
+                onClick={() => onNavigateTab?.('Play-list')}
+                style={{ cursor: 'pointer' }}
+              >
+                {courageDone > 0 ? `${courageDone}/${courageTarget}` : 'Start'}
+              </button>
+            </div>
+          )
+        }
+
         const questWithRoute = quest.id === 'playlist_challenge' && !isLocked
           ? { ...quest, route: '#playlist' }
           : quest.navigateTo
