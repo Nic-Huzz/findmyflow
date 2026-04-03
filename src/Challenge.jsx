@@ -203,6 +203,7 @@ function Challenge() {
   // Dynamic level detection
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
+  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Level']))
   useEffect(() => {
     if (!user?.id) return
     supabase
@@ -1704,7 +1705,7 @@ function Challenge() {
 
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
-          const isLocked = false
+          const isLocked = (currentJourneyLevel ?? 0) === 0 && !unlockedTabs.has(category)
           return (
             <button
               key={category}
@@ -2034,7 +2035,10 @@ function Challenge() {
 
         {/* Level Tab */}
         {activeCategory === 'Level' && (
-          <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} userId={user?.id} onLevelChange={setViewingLevel} onNavigateTab={setActiveCategory} />
+          <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} userId={user?.id} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
+            setUnlockedTabs(prev => new Set([...prev, tab]))
+            setActiveCategory(tab)
+          }} />
         )}
 
         {/* Bonus Sub-Tabs: Tasks | Content */}
