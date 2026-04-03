@@ -22,9 +22,15 @@ import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import '../styles/flow-base.css'
 import './MindSpace.css'
 
-const SKILLS_PROMPT = `Analyze our entire conversation history together. I want you to identify what I'm naturally good at based on everything we've discussed.
+const SKILLS_PROMPT = `Analyze our entire conversation history. I want you to identify the things I naturally light up about, the activities that feel like play not work.
 
-Look for patterns that reveal my skills: what I talk about with confidence, what I seem to do effortlessly, what I keep coming back to, and what energizes me.
+Look for:
+- What I talk about with genuine excitement (not just competence)
+- What I'd do even if nobody paid me
+- What makes me lose track of time
+- What I keep coming back to because I love it, not because I have to
+
+Ignore anything that sounds like obligation, duty, or "should." I only want the things that genuinely energize me.
 
 Extract and organize your findings in this EXACT format:
 
