@@ -274,7 +274,7 @@ function ChallengeOnboarding({
 
             <div className="install-actions">
               <button className="start-challenge-btn" onClick={() => goToNextScreen('install-app')}>
-                I've Added It / Continue
+                I've Added It
               </button>
               <button className="skip-btn" onClick={() => goToNextScreen('install-app')}>
                 Skip for now
