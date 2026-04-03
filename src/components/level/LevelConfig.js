@@ -40,9 +40,9 @@ export const LEVEL_CONFIG = {
       },
       {
         id: 'playlist_challenge',
-        name: 'Play-List Challenge',
+        name: 'Unlock Play-List',
         route: null,
-        narrative: 'Complete your first courage challenge.',
+        narrative: 'Start your first courage challenge.',
         icon: '🎯',
         lockedUntil: 'curiosity_compass',
       },
