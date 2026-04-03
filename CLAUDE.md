@@ -140,7 +140,7 @@ docs/                         # 33+ documentation files
 
 **Fantasy League**: `/league` (overview), `/league/week` (matchups), `/league/matchup` (details), `/league/submit` (content), `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Journey**: `/get-started` (onboarding), `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
+**Journey**: `/get-started` (onboarding), `/essence-mirror` (essence archetype discovery), `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic questions)
 
 **Other Flows**: `/nervous-system`, `/healing-compass`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public)
 
@@ -402,9 +402,20 @@ npm run build     # Production build
 npm run db:push   # Apply migrations
 ```
 
+## Recent Updates (Apr 2026)
+
+- **Essence Mirror Flow**: 9-step essence discovery flow at `/essence-mirror`. Replaces HomeFirstTime as the first-time user experience. Hook slides → 12 swipeable superpower cards (That's me / Not me) → Vision confirmation with Pixar scene cards → Pixar essence pick (single select) → AI Mirror reveal (Haiku blends primary + secondary archetype) → Hero avatar generation (Gemini 3.1 Flash + GPT-4o fallback) → Name hero → Save. Key files: `src/flows/EssenceMirrorFlow.jsx`, `src/data/essenceArchetypes.js`, `supabase/functions/essence-mirror-blend/`, `supabase/functions/generate-avatar-gemini/`.
+- **12 Essence Archetypes**: Radiant Rebel, Playful Creator, Sacred Jester (Activator), Mystic Messenger, Truth-Teller, Heart Alchemist (Transmuter), Grounded Guardian, Heart Holder, Rhythm Architect (Stabilizer), Wise Sage, Cosmic Connector, Compassionate Leader (Bridger). Each has: poetic_line, superpower, north_star, poetic_vision, essence_wound, inner_child_desire, characters, image, visionImage, swipeImage.
+- **36 Pixar-style images**: 12 essence portraits, 12 vision scenes, 12 swipe card portraits. Generated via Gemini 3.1 Flash. Stored in `public/images/essence/`.
+- **Level 0: Getting Set Up**: Pre-level with Curiosity Compass + Create Hero Avatar + Tension Assessment quests. Hero avatar auto-completes if done in Essence Mirror.
+- **Tension Assessment**: Moved from HomeFirstTime pre-entry gate to Level 0 quest at `/tension-assessment`. 3+1 diagnostic questions (identity, vulnerability, enough, conditional passion).
+- **Dynamic Level Detection**: `/me` and Challenge portal read `current_journey_level` from `user_stage_progress`. Progress bars wired to real `user_level_progress` data.
+- **Avatar Generation**: Gemini 3.1 Flash primary, GPT-4o fallback. Edge function `generate-avatar-gemini` takes photo + essence prompt, generates Pixar-style hero avatar, uploads to Supabase Storage.
+- **HomeFirstTime archived**: Replaced by redirect to `/essence-mirror`. Import removed from MePage.
+
 ## Recent Updates (Mar 2026)
 
-- **Journey Progression System (Phases 1-4)**: 8-level progression (Identity → Vulnerability → Direction → Enough → Growth → Execution → Passion-Risk → Play). Each level has: Sweet Spot graph, Zone Diagnosis flow, Deep Dive, Boss Fight, Milestone, 3 progress bars (quests/healing/courage). Key files: `src/components/level/LevelConfig.js` (all 8 levels), `src/components/level/LevelTab.jsx` (template), `src/components/level/SweetSpotGraph.jsx` (brand SVG), `src/flows/ZoneDiagnosisFlow.jsx` (5-step flow at `/zone-diagnosis/:levelNumber`).
+- **Journey Progression System (Phases 1-4)**: 9-level progression (Getting Set Up → Identity → Vulnerability → Direction → Enough → Growth → Execution → Passion-Risk → Play). Each level has: Sweet Spot graph, Zone Diagnosis flow, Deep Dive, Boss Fight, Milestone, 3 progress bars (quests/healing/courage). Key files: `src/components/level/LevelConfig.js` (all 9 levels 0-8), `src/components/level/LevelTab.jsx` (template), `src/components/level/SweetSpotGraph.jsx` (brand SVG), `src/flows/ZoneDiagnosisFlow.jsx` (5-step flow at `/zone-diagnosis/:levelNumber`).
 - **Zone Diagnosis Flow**: Multi-step flow — Graph → Zone Explainer → Zone Pick → Protective Voices (conditional) → Boss Reveal. Saves to `user_level_progress`. Protective voices: topLeft = Performer/Controller/People Pleaser, bottomRight = Perfectionist/Ghost.
 - **Journey Onboarding (Phase 1)**: 4-beat story at `/get-started` — Hook slides → Wound stages (4 stages, 3 Pixar scenes each) → Reframe → Promise with inline signup. Key files: `src/components/onboarding/JourneyOnboarding.jsx`, `src/lib/journeyOnboarding.js`.
 - **Tension Questions (Phase 2)**: 3+1 journey-mapped questions in `HomeFirstTime.jsx` with Pixar images. Data in `public/tension-assessment-v2.json`.
