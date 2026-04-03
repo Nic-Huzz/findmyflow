@@ -200,6 +200,20 @@ function Challenge() {
   // Healing modal quest (compact row → popup completion)
   const [healingModalQuest, setHealingModalQuest] = useState(null)
 
+  // Dynamic level detection
+  const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('user_stage_progress')
+      .select('current_journey_level')
+      .eq('user_id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        setCurrentJourneyLevel(data?.current_journey_level || 0)
+      })
+  }, [user?.id])
+
   // Tabs unlock after first "Plan Your Week" is confirmed
   const [hasEverPlannedWeek, setHasEverPlannedWeek] = useState(false)
   const [weekPlanVersion, setWeekPlanVersion] = useState(0)
@@ -2047,7 +2061,7 @@ function Challenge() {
 
         {/* Level Tab */}
         {activeCategory === 'Level' && (
-          <LevelTab currentLevel={0} userId={user?.id} />
+          <LevelTab currentLevel={currentJourneyLevel ?? 0} userId={user?.id} />
         )}
 
         {/* Bonus Sub-Tabs: Tasks | Content */}

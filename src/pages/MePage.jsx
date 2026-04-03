@@ -17,6 +17,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { useHeroProfile } from '../hooks/useHeroProfile'
 import { getLevel, getLevelNumber, getLevelProgress, getLevelMaxXP } from '../lib/crm/statsService'
 import { getStageDisplayName } from '../lib/stageConfig'
+import { getLevelConfig, HEALING_DAYS_REQUIRED } from '../components/level/LevelConfig'
 import { ONBOARDING_QUEST_IDS, LAYER_RECOMMENDATIONS } from '../hooks/usePriorityTab'
 import { computePriorityLayer, TENSION_LAYER_DISPLAY } from '../lib/onboardingV2'
 import { GROAN_VISIBILITY_LAYERS } from '../lib/stageConfig'
@@ -65,6 +66,8 @@ export default function MePage() {
   const [hasAcceptedChallenge, setHasAcceptedChallenge] = useState(false)
   const [hasCustomPhoto, setHasCustomPhoto] = useState(false)
   const [showInlineMapper, setShowInlineMapper] = useState(null) // null = not determined yet
+  const [dbLevelProgress, setDbLevelProgress] = useState(null)
+  const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const projectMenuRef = useRef(null)
 
   const primaryProject = selectedProject || projects?.[0] || null
@@ -99,6 +102,28 @@ export default function MePage() {
   }, [user?.id])
 
   useEffect(() => { fetchStageProgress() }, [fetchStageProgress])
+
+  // Fetch level progress data
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('user_stage_progress')
+      .select('current_journey_level')
+      .eq('user_id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        setCurrentJourneyLevel(data?.current_journey_level || 0)
+      })
+    supabase
+      .from('user_level_progress')
+      .select('zone_selected, deep_dive_completed, boss_fight_completed, milestone_completed, healing_day_dates, courage_challenge_ids')
+      .eq('user_id', user.id)
+      .eq('level', currentJourneyLevel)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setDbLevelProgress(data)
+      })
+  }, [user?.id, currentJourneyLevel])
 
   // Persist journey onboarding data after first login
   useEffect(() => {
@@ -514,7 +539,7 @@ export default function MePage() {
 
         <div className="xp-progress">
           <div className="xp-labels">
-            <span>Level 1: Identity</span>
+            <span>Level {currentJourneyLevel}: {getLevelConfig(currentJourneyLevel).name}</span>
             <span>{isMaxLevel ? `${totalXP} XP ✦` : `${totalXP} / ${levelMax} XP`}</span>
           </div>
           <div className="xp-bar">
@@ -695,7 +720,7 @@ export default function MePage() {
           ) : !archetypes?.essence?.name || archetypes?.essence?.name === 'Unknown' ? (
             <>
               <div className="quest-eyebrow">
-                <span className="quest-label">Level 1: Identity</span>
+                <span className="quest-label">Level {currentJourneyLevel}: {getLevelConfig(currentJourneyLevel).name}</span>
               </div>
               <h2 className="quest-title">Discover Your Essence</h2>
               <p className="quest-subtitle">
@@ -714,22 +739,42 @@ export default function MePage() {
               <div className="quest-eyebrow">
                 <span className="quest-label">Current Level</span>
               </div>
-              <h2 className="quest-title">Level 1: Identity</h2>
-              <p className="quest-subtitle">Who am I really?</p>
-              <div className="me-level-bars">
-                <div className="me-level-bar-row">
-                  <span className="me-level-bar-label">Level Quests</span>
-                  <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: '0%' }} /></div>
-                </div>
-                <div className="me-level-bar-row">
-                  <span className="me-level-bar-label">Healing Days</span>
-                  <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: '0%' }} /></div>
-                </div>
-                <div className="me-level-bar-row">
-                  <span className="me-level-bar-label">Courage</span>
-                  <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: '0%' }} /></div>
-                </div>
-              </div>
+              {(() => {
+                const lvlConfig = getLevelConfig(currentJourneyLevel)
+                const healingDays = dbLevelProgress?.healing_day_dates?.length || 0
+                const healingTarget = lvlConfig.healingDaysRequired || HEALING_DAYS_REQUIRED
+                const healingPct = Math.min(100, Math.round((healingDays / healingTarget) * 100))
+                const courageTarget = lvlConfig.courageCount || 1
+                const courageDone = dbLevelProgress?.courage_challenge_ids?.length || 0
+                const couragePct = Math.min(100, Math.round((courageDone / courageTarget) * 100))
+                const questsDone = [
+                  dbLevelProgress?.zone_selected,
+                  dbLevelProgress?.deep_dive_completed,
+                  dbLevelProgress?.boss_fight_completed,
+                  dbLevelProgress?.milestone_completed,
+                ].filter(Boolean).length
+                const questsPct = Math.min(100, Math.round((questsDone / 4) * 100))
+                return <>
+                  <h2 className="quest-title">Level {currentJourneyLevel}: {lvlConfig.name}</h2>
+                  <p className="quest-subtitle">{lvlConfig.question}</p>
+                  <div className="me-level-bars">
+                    <div className="me-level-bar-row">
+                      <span className="me-level-bar-label">Level Quests</span>
+                      <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: `${questsPct}%` }} /></div>
+                    </div>
+                    <div className="me-level-bar-row">
+                      <span className="me-level-bar-label">Healing Days</span>
+                      <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: `${healingPct}%` }} /></div>
+                    </div>
+                    {courageTarget > 0 && (
+                      <div className="me-level-bar-row">
+                        <span className="me-level-bar-label">Courage</span>
+                        <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: `${couragePct}%` }} /></div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              })()}
               <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
                 Go to Level Tab <span>→</span>
               </button>
