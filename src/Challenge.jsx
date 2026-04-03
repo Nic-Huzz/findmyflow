@@ -202,6 +202,7 @@ function Challenge() {
 
   // Dynamic level detection
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
+  const [viewingLevel, setViewingLevel] = useState(null)
   useEffect(() => {
     if (!user?.id) return
     supabase
@@ -2061,7 +2062,7 @@ function Challenge() {
 
         {/* Level Tab */}
         {activeCategory === 'Level' && (
-          <LevelTab currentLevel={currentJourneyLevel ?? 0} userId={user?.id} />
+          <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} userId={user?.id} onLevelChange={setViewingLevel} />
         )}
 
         {/* Bonus Sub-Tabs: Tasks | Content */}
