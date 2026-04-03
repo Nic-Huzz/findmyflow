@@ -22,28 +22,11 @@ import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import '../styles/flow-base.css'
 import './MindSpace.css'
 
-const SKILLS_PROMPT = `I want you to help me discover what I'm naturally good at. Have a conversation with me about:
+const SKILLS_PROMPT = `Analyze our entire conversation history together. I want you to identify what I'm naturally good at based on everything we've discussed.
 
-1. What did I love doing as a kid? What activities made me lose track of time?
-2. What do people come to me for? What do friends/family always ask me to help with?
-3. What feels effortless to me but hard for others?
-4. When do I feel most alive and in flow?
+Look for patterns that reveal my skills: what I talk about with confidence, what I seem to do effortlessly, what I keep coming back to, and what energizes me.
 
-After our conversation, extract my skills in this EXACT format:
-
----START EXTRACTION---
-
-SKILLS
-- SKILL: [Name]
-  EVIDENCE: [Brief quote or pattern you noticed]
-  FREQUENCY: [Low/Medium/High]
-  CATEGORY: [Technical/Creative/Interpersonal/Strategic/Healing/Other]
-
----END EXTRACTION---
-
-Start by asking me the first question. Be warm, curious, and follow up on interesting threads. Ask one question at a time.`
-
-const EXTRACT_PROMPT = `Now analyze our entire conversation and extract all the skills you identified. Use this EXACT format:
+Extract and organize your findings in this EXACT format:
 
 ---START EXTRACTION---
 
@@ -98,7 +81,6 @@ export default function CuriosityCompassFlow() {
 
   const [step, setStep] = useState(1)
   const [copied, setCopied] = useState(false)
-  const [extractCopied, setExtractCopied] = useState(false)
   const [rawResponse, setRawResponse] = useState('')
   const [skills, setSkills] = useState([])
   const [starred, setStarred] = useState(new Set())
@@ -110,12 +92,6 @@ export default function CuriosityCompassFlow() {
     navigator.clipboard.writeText(SKILLS_PROMPT)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }
-
-  const handleCopyExtract = () => {
-    navigator.clipboard.writeText(EXTRACT_PROMPT)
-    setExtractCopied(true)
-    setTimeout(() => setExtractCopied(false), 2000)
   }
 
   const handleParse = () => {
@@ -209,64 +185,46 @@ export default function CuriosityCompassFlow() {
     <div className="mind-space flow-base">
       <div className="ms-container">
 
-        {/* Step 1: Intro */}
+        {/* Step 1: Copy prompt */}
         {step === 1 && (
           <div className="step-content">
             <div className="card">
               <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🧭 Curiosity Compass</h1>
               <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '1.5rem' }}>
-                What did you love doing as a kid? What makes you lose track of time?
-                Let's discover your natural skills through a conversation with AI.
+                Paste this prompt into an AI you've been chatting with.
+                It will analyze your conversation history and extract your natural skills.
               </p>
 
-              <div className="prompt-section">
-                <h3 style={{ fontSize: '0.85rem', color: '#E9A23B', marginBottom: '0.75rem' }}>Step 1: Copy this prompt</h3>
-                <div className="prompt-preview" style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  borderRadius: 12,
-                  padding: '1rem',
-                  fontSize: '0.8rem',
-                  color: 'rgba(255,255,255,0.6)',
-                  maxHeight: 120,
-                  overflow: 'hidden',
-                  marginBottom: '0.75rem',
-                }}>
-                  {SKILLS_PROMPT.substring(0, 200)}...
-                </div>
-
-                <button className="primary-button" onClick={handleCopyPrompt} style={{ width: '100%' }}>
-                  {copied ? '✓ Copied!' : 'Copy Prompt'}
-                </button>
-
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', justifyContent: 'center' }}>
-                  <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer"
-                    className="secondary-button" style={{ textDecoration: 'none', textAlign: 'center', flex: 1 }}>
-                    Open ChatGPT
-                  </a>
-                  <a href="https://claude.ai" target="_blank" rel="noopener noreferrer"
-                    className="secondary-button" style={{ textDecoration: 'none', textAlign: 'center', flex: 1 }}>
-                    Open Claude
-                  </a>
-                </div>
-
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', textAlign: 'center', marginTop: '1rem' }}>
-                  Paste the prompt, have a conversation, then come back here.
-                </p>
+              <div className="prompt-preview" style={{
+                background: 'rgba(255,255,255,0.06)',
+                borderRadius: 12,
+                padding: '1rem',
+                fontSize: '0.8rem',
+                color: 'rgba(255,255,255,0.6)',
+                maxHeight: 120,
+                overflow: 'hidden',
+                marginBottom: '0.75rem',
+              }}>
+                {SKILLS_PROMPT.substring(0, 200)}...
               </div>
 
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '1.5rem', paddingTop: '1.5rem' }}>
-                <h3 style={{ fontSize: '0.85rem', color: '#E9A23B', marginBottom: '0.75rem' }}>Step 2: When the conversation feels complete</h3>
-                <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', marginBottom: '0.75rem' }}>
-                  Copy the extraction prompt below and paste it into the same conversation. The AI will extract your skills.
-                </p>
+              <button className="primary-button" onClick={handleCopyPrompt} style={{ width: '100%' }}>
+                {copied ? '✓ Copied!' : 'Copy Prompt'}
+              </button>
 
-                <button className="primary-button" onClick={handleCopyExtract} style={{ width: '100%' }}>
-                  {extractCopied ? '✓ Copied!' : 'Copy Extraction Prompt'}
-                </button>
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', justifyContent: 'center' }}>
+                <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer"
+                  className="secondary-button" style={{ textDecoration: 'none', textAlign: 'center', flex: 1 }}>
+                  Open ChatGPT
+                </a>
+                <a href="https://claude.ai" target="_blank" rel="noopener noreferrer"
+                  className="secondary-button" style={{ textDecoration: 'none', textAlign: 'center', flex: 1 }}>
+                  Open Claude
+                </a>
               </div>
 
               <button className="primary-button" onClick={() => setStep(2)} style={{ width: '100%', marginTop: '1.5rem' }}>
-                I have my extraction ready →
+                I have my results →
               </button>
             </div>
           </div>
