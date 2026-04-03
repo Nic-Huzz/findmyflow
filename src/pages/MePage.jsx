@@ -749,24 +749,13 @@ export default function MePage() {
                 const healingDays = dbLevelProgress?.healing_day_dates?.length || 0
                 const healingTarget = lvlConfig.healingDaysRequired || HEALING_DAYS_REQUIRED
                 const healingPct = Math.min(100, Math.round((healingDays / healingTarget) * 100))
-                const courageTarget = lvlConfig.courageCount || 1
+                const courageTarget = lvlConfig.courageCount || 0
                 const courageDone = dbLevelProgress?.courage_challenge_ids?.length || 0
-                const couragePct = Math.min(100, Math.round((courageDone / courageTarget) * 100))
-                const questsDone = [
-                  dbLevelProgress?.zone_selected,
-                  dbLevelProgress?.deep_dive_completed,
-                  dbLevelProgress?.boss_fight_completed,
-                  dbLevelProgress?.milestone_completed,
-                ].filter(Boolean).length
-                const questsPct = Math.min(100, Math.round((questsDone / 4) * 100))
+                const couragePct = courageTarget > 0 ? Math.min(100, Math.round((courageDone / courageTarget) * 100)) : 0
                 return <>
                   <h2 className="quest-title">Level {currentJourneyLevel}: {lvlConfig.name}</h2>
                   <p className="quest-subtitle">{lvlConfig.question}</p>
                   <div className="me-level-bars">
-                    <div className="me-level-bar-row">
-                      <span className="me-level-bar-label">Level Quests</span>
-                      <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: `${questsPct}%` }} /></div>
-                    </div>
                     <div className="me-level-bar-row">
                       <span className="me-level-bar-label">Healing Days</span>
                       <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: `${healingPct}%` }} /></div>
