@@ -1890,35 +1890,7 @@ function Challenge() {
 
 
         {/* Stage-style sub-tabs for Play-list: Flow Finder | Play-list | Play Profile */}
-        {activeCategory === 'Play-list' && (() => {
-          const playlistTabs = [
-            { key: 'flow-finder', icon: '🧭', label: 'Flow Finder' },
-            { key: 'playlist', icon: '🎯', label: 'Play-list' },
-          ]
-          return (
-            <div className="stage-tabs-container">
-              <div className="stage-tabs" style={{ justifyContent: 'center' }}>
-                {playlistTabs.map(tab => {
-                  const isActive = playlistSubTab === tab.key
-                  const activeStyles = isActive
-                    ? { background: '#5e17eb', borderColor: '#5e17eb', color: 'white' }
-                    : {}
-                  return (
-                    <button
-                      key={tab.key}
-                      className={`stage-tab ${isActive ? 'active' : ''}`}
-                      style={{ '--stage-color': '#5e17eb', ...activeStyles }}
-                      onClick={() => setPlaylistSubTab(tab.key)}
-                    >
-                      <span className="tab-icon">{tab.icon}</span>
-                      <span className="tab-label">{tab.label}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          )
-        })()}
+        {/* Flow Finder sub-tabs archived — skills revealed through levels */}
 
         {/* Play-list Tab — Flow Finder + Courage Matrix + Voice Logging */}
         {activeCategory === 'Play-list' && (
