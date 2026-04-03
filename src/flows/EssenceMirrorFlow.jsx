@@ -323,8 +323,8 @@ export default function EssenceMirrorFlow() {
       }, { onConflict: 'user_id' })
 
       // Update lead_flow_profiles so /me hero section picks it up
-      await supabase.from('lead_flow_profiles').upsert({
-        user_id: user.id,
+      // Try update by user_id first, then by email, then insert
+      const essenceData = {
         essence_archetype: primary?.name,
         custom_essence_name: heroName,
         custom_essence_image: avatarGenerated !== 'skip' ? avatarGenerated : null,
@@ -341,9 +341,32 @@ export default function EssenceMirrorFlow() {
           inner_child: primary?.inner_child_desire,
           characters: primary?.characters?.join(', '),
         },
-      }, { onConflict: 'user_id' })
+      }
+      // Try updating existing row by user_id
+      const { data: updated } = await supabase
+        .from('lead_flow_profiles')
+        .update({ ...essenceData, user_id: user.id })
+        .eq('user_id', user.id)
+        .select('id')
+      if (!updated?.length && user.email) {
+        // Try updating by email if no user_id match
+        const { data: emailUpdated } = await supabase
+          .from('lead_flow_profiles')
+          .update({ ...essenceData, user_id: user.id })
+          .ilike('email', user.email)
+          .select('id')
+        if (!emailUpdated?.length) {
+          // No existing row, insert new
+          await supabase.from('lead_flow_profiles').insert({
+            ...essenceData,
+            user_id: user.id,
+            email: user.email,
+          })
+        }
+      }
+      console.log('Essence Mirror save complete:', { heroName, avatarGenerated: avatarGenerated !== 'skip' ? 'yes' : 'skipped' })
     } catch (err) {
-      console.warn('Save error:', err)
+      console.error('Essence Mirror save error:', err)
     }
 
     setSaving(false)
