@@ -18,32 +18,6 @@ const ProfileHub = () => {
 
   const options = [
     {
-      id: 'hero-profile',
-      icon: '🦸',
-      title: 'Hero Profile',
-      description: 'View your archetypes, projects, and journey progress',
-      path: '/hero-profile',
-      color: '#5e17eb'
-    },
-    {
-      id: 'library',
-      icon: '📚',
-      title: 'Library',
-      description: 'Access your saved answers and completed flows',
-      path: '/library',
-      color: '#E9A23B'
-    },
-    /* ARCHIVED: Fantasy League — re-enable when league is active
-    {
-      id: 'league',
-      icon: '🏆',
-      title: 'Fantasy League',
-      description: 'Compete in head-to-head matchups and climb the standings',
-      path: '/league',
-      color: '#E9A23B'
-    },
-    */
-    {
       id: 'settings',
       icon: '⚙️',
       title: 'User Settings',

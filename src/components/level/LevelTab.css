@@ -506,6 +506,14 @@
   line-height: 1.35;
 }
 
+.level-tab .level-milestone-commitment {
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.35;
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
 .level-tab .level-milestone-btn {
   flex-shrink: 0;
   padding: 0.4rem 0.85rem;

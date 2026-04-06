@@ -541,8 +541,6 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
 
     return (
       <div className={`journey-onboarding jo-story ${transitionClass} ${directionClass}`}>
-        {renderBeatProgress()}
-
         {/* Stage progress */}
         <div className="jo-stage-progress">
           {WOUND_STAGES.map((s, i) => (

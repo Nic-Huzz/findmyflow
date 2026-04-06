@@ -166,10 +166,24 @@ function Challenge() {
     lifetimeScores
   } = useChallengeData()
 
-  // First-visit story intro
-  const [showIntro, setShowIntro] = useState(() =>
-    typeof window !== 'undefined' && !localStorage.getItem('hasSeenChallengeIntro')
-  )
+  // First-visit story intro (persisted in DB)
+  const [showIntro, setShowIntro] = useState(false)
+  const [introChecked, setIntroChecked] = useState(false)
+
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('user_stage_progress')
+      .select('has_seen_challenge_intro')
+      .eq('user_id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data?.has_seen_challenge_intro) {
+          setShowIntro(true)
+        }
+        setIntroChecked(true)
+      })
+  }, [user?.id])
 
   // Subscription status for payment gating
   const { hasSubscription } = useSubscription()
@@ -1540,7 +1554,7 @@ function Challenge() {
   // ============================================
 
   if (showIntro) {
-    return <ChallengeIntro onComplete={() => setShowIntro(false)} />
+    return <ChallengeIntro userId={user?.id} onComplete={() => setShowIntro(false)} />
   }
 
   if (showOnboarding) {

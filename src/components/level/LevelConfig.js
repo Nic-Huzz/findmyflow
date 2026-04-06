@@ -33,7 +33,7 @@ export const LEVEL_CONFIG = {
       },
       {
         id: 'curiosity_compass',
-        name: 'Curiosity Compass',
+        name: 'Create Your Play-list',
         route: '/curiosity-compass?returnTo=/7-day-challenge',
         narrative: 'What did you love doing as a kid?',
         icon: '🔍',
@@ -100,6 +100,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'Who were you before the world told you who to be?',
     courageCount: 1,
+    healingDaysRequired: 7,
   },
   2: {
     name: 'Vulnerability',
@@ -125,6 +126,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What does your essence actually need?',
     courageCount: 2,
+    healingDaysRequired: 8,
   },
   3: {
     name: 'Direction',
@@ -150,6 +152,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What code is blocking your essence from moving?',
     courageCount: 3,
+    healingDaysRequired: 9,
   },
   4: {
     name: 'Enough',
@@ -175,6 +178,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What code is blocking your essence from moving?',
     courageCount: 4,
+    healingDaysRequired: 10,
   },
   5: {
     name: 'Growth',
@@ -200,6 +204,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'Where does your nervous system stop your essence from expanding?',
     courageCount: 5,
+    healingDaysRequired: 11,
   },
   6: {
     name: 'Execution',
@@ -225,6 +230,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What belief makes your essence burn out or stall?',
     courageCount: 6,
+    healingDaysRequired: 12,
   },
   7: {
     name: 'Passion-Risk',
@@ -250,6 +256,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What does your essence actually care about enough to risk it?',
     courageCount: 7,
+    healingDaysRequired: 13,
   },
   8: {
     name: 'Play',
@@ -270,10 +277,11 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'Are you free?',
     courageCount: null, // ongoing
+    healingDaysRequired: 14,
   },
 }
 
-export const HEALING_DAYS_REQUIRED = 14
+export const HEALING_DAYS_REQUIRED = 7
 
 export function getLevelConfig(level) {
   const config = LEVEL_CONFIG[level] || LEVEL_CONFIG[1]

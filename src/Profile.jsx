@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Navigate, Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { essenceProfiles } from './data/essenceProfiles'
@@ -15,7 +15,6 @@ import GraduationModal from './components/GraduationModal'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import FlowMapRiver from './components/FlowMapRiver'
 import SeeYourFlow from './components/SeeYourFlow'
-import HomeFirstTime from './components/HomeFirstTime'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -561,24 +560,8 @@ const Profile = () => {
     )
   }
 
-  // Check if user needs to complete onboarding (first-time experience)
-  // Show HomeFirstTime if:
-  // 1. No stageProgress exists yet
-  // 2. V2 onboarding not completed (ensures all users go through new flow)
-  // This forces old V1 users to complete the tension layer onboarding (4 questions)
-  console.log('🔍 Profile.jsx onboarding check:', {
-    userId: user?.id,
-    email: user?.email,
-    stageProgress: stageProgress ? {
-      id: stageProgress.id,
-      persona: stageProgress.persona,
-      onboarding_v2_completed: stageProgress.onboarding_v2_completed,
-      onboarding_completed: stageProgress.onboarding_completed
-    } : null,
-    willShowHomeFirstTime: !stageProgress || stageProgress.onboarding_v2_completed !== true
-  })
-  if (!stageProgress || stageProgress.onboarding_v2_completed !== true) {
-    return <HomeFirstTime />
+  if (!stageProgress || stageProgress.onboarding_v2_completed !== true || !stageProgress.essence_archetype) {
+    return <Navigate to="/essence-mirror" replace />
   }
 
   // Only show "no profile" error AFTER we've confirmed onboarding is complete

@@ -16,6 +16,8 @@ import { getLevelConfig, LEVEL_CONFIG } from './LevelConfig'
 import DeepDiveCard from './DeepDiveCard'
 import BossFightCard from './BossFightCard'
 import MilestoneCard from './MilestoneCard'
+import MilestoneCommitModal from './MilestoneCommitModal'
+import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import './LevelTab.css'
 
@@ -30,15 +32,21 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
   const [hasTensionScores, setHasTensionScores] = useState(false)
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
 
+  // Milestone state
+  const [milestoneCommitment, setMilestoneCommitment] = useState(null)
+  const [milestoneCompleted, setMilestoneCompleted] = useState(false)
+  const [showCommitModal, setShowCommitModal] = useState(false)
+  const [showReflectModal, setShowReflectModal] = useState(false)
+
   useEffect(() => {
     if (!userId) {
       setZoneLoaded(true)
       return
     }
-    // Load zone data
+    // Load zone + milestone data
     supabase
       .from('user_level_progress')
-      .select('zone_selected, boss_name')
+      .select('zone_selected, boss_name, milestone_commitment, milestone_completed')
       .eq('user_id', userId)
       .eq('level', currentLevel)
       .maybeSingle()
@@ -46,6 +54,11 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
         if (data) {
           setSelectedZone(data.zone_selected)
           setBoss(data.boss_name)
+          setMilestoneCommitment(data.milestone_commitment || null)
+          setMilestoneCompleted(data.milestone_completed || false)
+        } else {
+          setMilestoneCommitment(null)
+          setMilestoneCompleted(false)
         }
         setZoneLoaded(true)
       })
@@ -97,7 +110,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
         : false,
     })),
     ...(boss ? [{ label: 'Boss Fight', done: false }] : []),
-    ...(config.milestone ? [{ label: 'Milestone', done: false }] : []),
+    ...(config.milestone ? [{ label: 'Milestone', done: milestoneCompleted }] : []),
   ]
   const questsCompleted = levelQuests.filter(q => q.done).length
   const allQuestsDone = levelQuests.length > 0 && questsCompleted === levelQuests.length
@@ -246,7 +259,35 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       {boss && <BossFightCard boss={boss} isCompleted={false} />}
 
       {/* Milestone */}
-      <MilestoneCard milestone={config.milestone} isCompleted={false} />
+      <MilestoneCard
+        milestone={config.milestone}
+        isCompleted={milestoneCompleted}
+        commitment={milestoneCommitment}
+        onCommit={() => setShowCommitModal(true)}
+        onDidIt={() => setShowReflectModal(true)}
+      />
+
+      {/* Milestone Modals */}
+      {showCommitModal && config.milestone && (
+        <MilestoneCommitModal
+          level={currentLevel}
+          milestone={config.milestone}
+          diagonal={config.zones?.diagonal}
+          userId={userId}
+          onSave={(text) => setMilestoneCommitment(text)}
+          onClose={() => setShowCommitModal(false)}
+        />
+      )}
+      {showReflectModal && config.milestone && (
+        <MilestoneReflectModal
+          level={currentLevel}
+          milestone={config.milestone}
+          commitment={milestoneCommitment}
+          userId={userId}
+          onComplete={() => setMilestoneCompleted(true)}
+          onClose={() => setShowReflectModal(false)}
+        />
+      )}
 
       {/* Progress Bars */}
       <ProgressBars

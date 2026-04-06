@@ -90,6 +90,23 @@ export default function EssenceMirrorFlow() {
   const [searchParams] = useSearchParams()
   const returnTo = searchParams.get('returnTo') || '/me'
 
+  // Returning user detection
+  const [isReturningUser, setIsReturningUser] = useState(false)
+
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('user_stage_progress')
+      .select('persona, onboarding_completed, onboarding_v2_completed, essence_archetype')
+      .eq('user_id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data && !data.essence_archetype && (data.persona || data.onboarding_completed || data.onboarding_v2_completed)) {
+          setIsReturningUser(true)
+        }
+      })
+  }, [user?.id])
+
   // Flow state
   const [step, setStep] = useState(STEPS.HOOK)
   const [hookIndex, setHookIndex] = useState(0)
@@ -388,13 +405,26 @@ export default function EssenceMirrorFlow() {
             ))}
           </div>
           <div className={`em-hook-content ${hookTransitioning ? 'em-hook-exit' : ''} ${hookEntering ? 'em-hook-enter' : ''}`}>
-            <div className="em-hook-text">{HOOK_SLIDES[hookIndex].text}</div>
-            {HOOK_SLIDES[hookIndex].subtext && (
-              <div className="em-hook-subtext">{HOOK_SLIDES[hookIndex].subtext}</div>
+            {isReturningUser && hookIndex === 0 ? (
+              <>
+                <div className="em-hook-text">Welcome Back</div>
+                <div className="em-hook-subtext">We've built something new for you. Let's discover your essence, it only takes a few minutes.</div>
+              </>
+            ) : (
+              <>
+                <div className="em-hook-text">{HOOK_SLIDES[hookIndex].text}</div>
+                {HOOK_SLIDES[hookIndex].subtext && (
+                  <div className="em-hook-subtext">{HOOK_SLIDES[hookIndex].subtext}</div>
+                )}
+              </>
             )}
           </div>
           <div className="em-hook-bottom">
-            {HOOK_SLIDES[hookIndex].button ? (
+            {(isReturningUser && hookIndex === 0) ? (
+              <button className="em-hook-btn" onClick={(e) => { e.stopPropagation(); handleHookTap() }}>
+                Let's go <span>→</span>
+              </button>
+            ) : HOOK_SLIDES[hookIndex].button ? (
               <button className="em-hook-btn" onClick={(e) => { e.stopPropagation(); handleHookTap() }}>
                 {HOOK_SLIDES[hookIndex].button} <span>→</span>
               </button>

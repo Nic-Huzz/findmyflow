@@ -8,6 +8,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { supabase } from '../lib/supabaseClient'
 import './ChallengeIntro.css'
 
 const SLIDES = [
@@ -29,7 +30,7 @@ const SLIDES = [
   },
 ]
 
-export default function ChallengeIntro({ onComplete }) {
+export default function ChallengeIntro({ userId, onComplete }) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [fading, setFading] = useState(false)
 
@@ -59,7 +60,13 @@ export default function ChallengeIntro({ onComplete }) {
   }
 
   const handleComplete = () => {
-    localStorage.setItem('hasSeenChallengeIntro', 'true')
+    if (userId) {
+      supabase
+        .from('user_stage_progress')
+        .update({ has_seen_challenge_intro: true })
+        .eq('user_id', userId)
+        .then()
+    }
     onComplete()
   }
 
