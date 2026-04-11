@@ -5,52 +5,44 @@
 
 export const SKILLS_SEGMENTS = [
   {
-    id: 'clarifying',
-    keywords: ['explain', 'teach', 'simplify', 'translate', 'communicate', 'make clear', 'break down'],
+    id: 'storytelling',
+    keywords: ['story', 'write', 'narrative', 'memoir', 'content', 'journal', 'blog', 'newsletter', 'meaning'],
   },
   {
-    id: 'analyzing',
-    keywords: ['data', 'patterns', 'logic', 'debug', 'diagnose', 'research', 'investigate', 'numbers', 'spreadsheets'],
+    id: 'teaching',
+    keywords: ['explain', 'teach', 'simplify', 'translate', 'communicate', 'break down', 'clarify', 'framework', 'bridge'],
   },
   {
-    id: 'strategizing',
-    keywords: ['plan', 'strategy', 'prioritize', 'decide', 'roadmap', 'vision', 'direction', 'big picture'],
+    id: 'coaching',
+    keywords: ['coach', 'mentor', 'develop', 'grow', 'support', 'care', 'guide', 'patience', 'nurture', 'hold space'],
   },
   {
-    id: 'organizing',
-    keywords: ['systems', 'processes', 'operations', 'logistics', 'order', 'structure', 'efficiency'],
-  },
-  {
-    id: 'building',
-    keywords: ['make', 'build', 'code', 'engineer', 'create things', 'construct', 'develop', 'prototype'],
-  },
-  {
-    id: 'designing',
-    keywords: ['design', 'UX', 'visual', 'aesthetic', 'experience', 'interface', 'beautiful', 'intuitive'],
+    id: 'performing',
+    keywords: ['perform', 'present', 'speak', 'stage', 'keynote', 'podcast', 'MC', 'show', 'record', 'voice', 'body'],
   },
   {
     id: 'creating',
-    keywords: ['art', 'write', 'ideate', 'invent', 'imagine', 'originate', 'compose', 'creative'],
+    keywords: ['art', 'invent', 'imagine', 'originate', 'compose', 'creative', 'hunch', 'remix', 'new', 'make'],
   },
   {
-    id: 'expressing',
-    keywords: ['story', 'perform', 'present', 'voice', 'speak', 'share', 'articulate', 'storytelling'],
+    id: 'building',
+    keywords: ['build', 'make', 'code', 'engineer', 'prototype', 'ship', 'construct', 'develop', 'craft', 'hardware'],
+  },
+  {
+    id: 'designing',
+    keywords: ['design', 'UX', 'visual', 'aesthetic', 'experience', 'beautiful', 'intuitive', 'taste', 'feel', 'space'],
+  },
+  {
+    id: 'leading',
+    keywords: ['plan', 'strategy', 'prioritize', 'decide', 'vision', 'direction', 'systems', 'operations', 'organize'],
   },
   {
     id: 'connecting',
-    keywords: ['network', 'empathy', 'facilitate', 'collaborate', 'bring together', 'relationships', 'listen'],
+    keywords: ['network', 'empathy', 'facilitate', 'collaborate', 'community', 'relationships', 'host', 'gather'],
   },
   {
-    id: 'influencing',
-    keywords: ['sell', 'persuade', 'convince', 'motivate', 'negotiate', 'advocate', 'inspire'],
-  },
-  {
-    id: 'nurturing',
-    keywords: ['coach', 'mentor', 'develop', 'grow', 'support', 'care', 'guide', 'patience'],
-  },
-  {
-    id: 'synthesizing',
-    keywords: ['integrate', 'wisdom', 'big-picture', 'meaning', 'philosophy', 'connect dots', 'holistic'],
+    id: 'speaking_up',
+    keywords: ['truth', 'courage', 'advocate', 'activism', 'speak up', 'challenge', 'stand', 'justice', 'voice'],
   },
 ];
 

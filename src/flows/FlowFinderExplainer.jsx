@@ -43,7 +43,7 @@ export default function FlowFinderExplainer() {
 
   // Add hue values to segments for wheel rendering
   const skillsWithHue = useMemo(() =>
-    SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
+    SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 36 })),
     []
   )
   const problemsWithHue = useMemo(() =>

@@ -13,7 +13,8 @@ import { useAuth } from '../auth/AuthProvider'
 import { useSteppedForm } from '../hooks/useSteppedForm'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
-import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS } from '../lib/wheelTaxonomy'
+import { supabase } from '../lib/supabaseClient'
+import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS, findSkillSegment } from '../lib/wheelTaxonomy'
 import { StepProgress, IconGrid } from './QuestInputShared'
 import './LetsPlayInput.css'
 
@@ -193,7 +194,6 @@ function LetsPlayInput({ quest, onComplete }) {
         }
 
         // Count past completions for difficulty escalation
-        const { supabase } = await import('../lib/supabaseClient')
         const { count } = await supabase
           .from('quest_completions')
           .select('id', { count: 'exact', head: true })
@@ -225,7 +225,7 @@ function LetsPlayInput({ quest, onComplete }) {
   // Get segment display info - cluster.id is UUID, taxonomy_keys[0] is segment ID
   const getSkillDisplay = (cluster) => {
     const segmentId = cluster.taxonomy_keys?.[0]
-    const segment = SKILLS_SEGMENTS.find(s => s.id === segmentId)
+    const segment = findSkillSegment(segmentId)
     return {
       id: cluster.id,  // UUID - unique key for selection
       name: cluster.cluster_label || segment?.displayName || 'Skill',
@@ -256,7 +256,7 @@ function LetsPlayInput({ quest, onComplete }) {
     const cluster = findSkillById(skillId)
     if (!cluster) return { name: 'your skill', icon: '💡' }
     const segmentId = cluster.taxonomy_keys?.[0]
-    const segment = SKILLS_SEGMENTS.find(s => s.id === segmentId)
+    const segment = findSkillSegment(segmentId)
     return {
       name: cluster.cluster_label || segment?.displayName || 'Skill',
       icon: segment?.icon || '💡'

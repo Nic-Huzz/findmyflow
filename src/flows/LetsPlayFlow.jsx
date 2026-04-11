@@ -13,7 +13,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { useProjectId } from '../hooks/useProjectId'
 import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
-import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS } from '../lib/wheelTaxonomy'
+import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS, findSkillSegment } from '../lib/wheelTaxonomy'
 import { supabase } from '../lib/supabaseClient'
 import '../styles/flow-base.css'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
@@ -199,7 +199,7 @@ export default function LetsPlayFlow() {
   // Get segment display info
   const getSkillDisplay = (cluster) => {
     const segmentId = cluster.taxonomy_keys?.[0]
-    const segment = SKILLS_SEGMENTS.find(s => s.id === segmentId)
+    const segment = findSkillSegment(segmentId)
     return {
       id: cluster.id,
       name: cluster.cluster_label || segment?.displayName || 'Skill',
@@ -226,7 +226,7 @@ export default function LetsPlayFlow() {
     const cluster = skills.find(s => s.id === skillId)
     if (!cluster) return { name: 'your skill', icon: '💡' }
     const segmentId = cluster.taxonomy_keys?.[0]
-    const segment = SKILLS_SEGMENTS.find(s => s.id === segmentId)
+    const segment = findSkillSegment(segmentId)
     return {
       name: cluster.cluster_label || segment?.displayName || 'Skill',
       icon: segment?.icon || '💡'

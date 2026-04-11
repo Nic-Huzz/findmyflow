@@ -22,7 +22,7 @@ import { useAuth } from '../auth/AuthProvider'
 import GoDeeper from '../components/GoDeeper'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { GradientWheel } from '../components/CompetenceWheels'
-import { SKILLS_SEGMENTS, PROFICIENCY_RINGS } from '../lib/wheelTaxonomy'
+import { SKILLS_SEGMENTS, PROFICIENCY_RINGS, resolveSkillId } from '../lib/wheelTaxonomy'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 // Proficiency levels for skill rating
 const PROFICIENCY_LEVELS = [
@@ -74,7 +74,7 @@ export default function PlayListFinderFlow() {
 
   // Add hue values to segments for wheel rendering
   const skillsWithHue = useMemo(() =>
-    SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
+    SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 36 })),
     []
   )
 
@@ -85,35 +85,36 @@ export default function PlayListFinderFlow() {
 
     // Map keywords to segment IDs (not indices)
     const keywordToKeys = {
-      // Clarifying
-      clarifying: ['clarifying'], explaining: ['clarifying'], teaching: ['clarifying'], translating: ['clarifying'],
-      // Analyzing
-      analyzing: ['analyzing'], analysis: ['analyzing'], data: ['analyzing'], patterns: ['analyzing'], research: ['analyzing'],
-      // Strategizing
-      strategizing: ['strategizing'], strategy: ['strategizing'], planning: ['strategizing'], vision: ['strategizing'],
-      // Organizing
-      organizing: ['organizing'], systems: ['organizing'], operations: ['organizing'], processes: ['organizing'],
+      // Storytelling
+      storytelling: ['storytelling'], narrative: ['storytelling'], memoir: ['storytelling'], 'content writing': ['storytelling'],
+      // Teaching
+      teaching: ['teaching'], explaining: ['teaching'], clarifying: ['teaching'], translating: ['teaching'], simplifying: ['teaching'],
+      // Coaching
+      coaching: ['coaching'], mentoring: ['coaching'], nurturing: ['coaching'], supporting: ['coaching'], 'holding space': ['coaching'],
+      // Performing
+      performing: ['performing'], presenting: ['performing'], speaking: ['performing'], stage: ['performing'], keynote: ['performing'],
+      // Creating
+      creating: ['creating'], creative: ['creating'], art: ['creating'], inventing: ['creating'], ideation: ['creating'],
       // Building
-      building: ['building'], making: ['building'], engineering: ['building'], coding: ['building'], developing: ['building'],
+      building: ['building'], making: ['building'], engineering: ['building'], coding: ['building'], developing: ['building'], prototype: ['building'],
       // Designing
       designing: ['designing'], design: ['designing'], ux: ['designing'], visual: ['designing'], aesthetic: ['designing'],
-      // Creating
-      creating: ['creating'], creative: ['creating'], art: ['creating'], writing: ['creating'], ideation: ['creating'],
-      // Expressing
-      expressing: ['expressing'], storytelling: ['expressing'], presenting: ['expressing'], speaking: ['expressing'],
+      // Leading
+      leading: ['leading'], strategy: ['leading'], strategizing: ['leading'], planning: ['leading'], vision: ['leading'], organizing: ['leading'], systems: ['leading'], operations: ['leading'],
       // Connecting
-      connecting: ['connecting'], networking: ['connecting'], collaboration: ['connecting'], facilitating: ['connecting'],
-      // Influencing
-      influencing: ['influencing'], sales: ['influencing'], persuading: ['influencing'], motivating: ['influencing'],
-      // Nurturing
-      nurturing: ['nurturing'], coaching: ['nurturing'], mentoring: ['nurturing'], supporting: ['nurturing'],
-      // Synthesizing
-      synthesizing: ['synthesizing'], integrating: ['synthesizing'], wisdom: ['synthesizing'], 'big picture': ['synthesizing'],
+      connecting: ['connecting'], networking: ['connecting'], collaboration: ['connecting'], facilitating: ['connecting'], community: ['connecting'],
+      // Speaking up
+      'speaking up': ['speaking_up'], advocacy: ['speaking_up'], activism: ['speaking_up'], courage: ['speaking_up'],
+      // Absorbed old terms
+      analyzing: ['teaching'], analysis: ['teaching'], data: ['teaching'], patterns: ['teaching'], research: ['teaching'],
+      influencing: ['performing'], sales: ['performing'], persuading: ['performing'], motivating: ['performing'],
+      synthesizing: ['teaching'], integrating: ['teaching'], wisdom: ['teaching'], 'big picture': ['teaching'],
+      expressing: ['storytelling'], writing: ['storytelling'],
       // Compound terms
-      'problem solving': ['analyzing', 'strategizing'], 'problem-solving': ['analyzing', 'strategizing'],
-      'team building': ['connecting', 'nurturing'], leadership: ['strategizing', 'influencing'],
-      communication: ['clarifying', 'expressing'], 'project management': ['strategizing', 'organizing'],
-      innovation: ['building', 'creating'], entrepreneurship: ['strategizing', 'building', 'influencing'],
+      'problem solving': ['teaching', 'leading'], 'problem-solving': ['teaching', 'leading'],
+      'team building': ['connecting', 'coaching'], leadership: ['leading', 'performing'],
+      communication: ['storytelling', 'performing'], 'project management': ['leading', 'building'],
+      innovation: ['creating', 'building'], entrepreneurship: ['leading', 'building', 'performing'],
     }
 
     // Find matching segment keys
@@ -124,15 +125,16 @@ export default function PlayListFinderFlow() {
       }
     })
 
-    // Default to 'clarifying' if no match
-    return matchedKeys.size > 0 ? Array.from(matchedKeys) : ['clarifying']
+    // Default to 'storytelling' if no match
+    return matchedKeys.size > 0 ? Array.from(matchedKeys) : ['storytelling']
   }
 
   // Convert taxonomy keys to segment indices for wheel rendering
   const getSegmentIndicesFromKeys = (taxonomyKeys) => {
     if (!taxonomyKeys || taxonomyKeys.length === 0) return [0]
 
-    return taxonomyKeys.map(key => {
+    return taxonomyKeys.map(rawKey => {
+      const key = resolveSkillId(rawKey) || rawKey
       const idx = SKILLS_SEGMENTS.findIndex(s => s.id === key)
       return idx >= 0 ? idx : 0
     }).filter((v, i, a) => a.indexOf(v) === i) // dedupe
@@ -142,9 +144,10 @@ export default function PlayListFinderFlow() {
   const getSegmentIndices = (cluster) => {
     if (cluster.taxonomy_keys && cluster.taxonomy_keys.length > 0) {
       // Use saved taxonomy keys - check they still exist in current taxonomy
-      const validKeys = cluster.taxonomy_keys.filter(key =>
-        SKILLS_SEGMENTS.some(s => s.id === key)
-      )
+      const validKeys = cluster.taxonomy_keys.filter(rawKey => {
+        const key = resolveSkillId(rawKey) || rawKey
+        return SKILLS_SEGMENTS.some(s => s.id === key)
+      })
       if (validKeys.length > 0) {
         return getSegmentIndicesFromKeys(validKeys)
       }

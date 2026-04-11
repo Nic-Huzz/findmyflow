@@ -32,7 +32,7 @@ import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import ErrorMessage from '../components/ErrorMessage'
 import { getSkillProductSuggestions, getAmplifierMessages, DIRECT_MAPPINGS, AMPLIFIER_MAPPINGS } from '../lib/skillProductMapping'
-import { SKILLS_SEGMENTS } from '../lib/wheelTaxonomy'
+import { SKILLS_SEGMENTS, findSkillSegment } from '../lib/wheelTaxonomy'
 import './OfferBuilderFlow.css'
 
 const STAGES = {
@@ -2205,7 +2205,7 @@ function OfferBuilderFlow() {
               {/* Skill-based solution prompt - Show when "No, this is new" is selected */}
               {currentSolution.alreadyDelivers === false && nicheLayers.layer3 && (() => {
                 const taxonomyKey = nicheLayers.layer3.taxonomy_keys?.[0]
-                const skillSegment = SKILLS_SEGMENTS.find(s => s.id === taxonomyKey)
+                const skillSegment = findSkillSegment(taxonomyKey)
                 const mapping = DIRECT_MAPPINGS[taxonomyKey] || AMPLIFIER_MAPPINGS[taxonomyKey]
                 const isAmplifier = !!AMPLIFIER_MAPPINGS[taxonomyKey]
 

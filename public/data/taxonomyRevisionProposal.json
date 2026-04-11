@@ -1,0 +1,910 @@
+{
+  "meta": {
+    "version": "proposal-1.0",
+    "generatedAt": "2026-04-07",
+    "inputCorpusSize": 712,
+    "antiTagOverlay": 164,
+    "categoriesHeldFixed": 12,
+    "method": "Bottom-up clustering of 712 high-confidence quotes, ignoring category labels on first pass, then overlaying current categories to compute purity. 60 clusters identified. 52 pure (>=80% one category), 4 split, 4 orphan. Anti-tags scanned separately for the anti-visibility gap."
+  },
+
+  "revisedCategories": [
+    {
+      "id": "clarifying",
+      "revisedPlaySkills": [
+        {
+          "string": "Break down a hard idea so anyone gets it",
+          "previousString": "Break down a hard idea so anyone gets it",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Carl Sagan", "evidence": "Cosmos (1980) aired as a 13-episode PBS series reaching 500 million viewers in 60 countries, delivered as a first-person account by a working scientist of what he found beautiful and why."},
+            {"person": "Warren Buffett", "evidence": "His annual shareholder letters, written personally with self-deprecating humour, break down complex investing ideas so plainly that millions of non-shareholders read them."},
+            {"person": "Paulo Freire", "evidence": "Pedagogy of the Oppressed (1968) named traditional education the 'banking concept' in which students are containers to be filled by the teacher, coining the most-used shorthand in critical pedagogy."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "12 high-confidence quotes anchor this. Unchanged — evidence supports the current string cleanly."
+        },
+        {
+          "string": "Turn jargon into plain words",
+          "previousString": "Turn jargon into plain words",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Donald Winnicott", "evidence": "From 1943 he broadcast short BBC talks to mothers during the bombing, refusing to speak down: 'You may be interested to hear what I think, but more interested in what you already know.'"},
+            {"person": "Randall Munroe", "evidence": "For Thing Explainer (2015) he constrained himself to the thousand most common English words to explain a Saturn V rocket, a nuclear plant and a cell."},
+            {"person": "Ruth Westheimer", "evidence": "Refused euphemism on air. Told a station manager she would call a penis a penis, because vagueness is the reason people suffer."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "6 anchors. Unchanged."
+        },
+        {
+          "string": "Teach someone something they are stuck on",
+          "previousString": "Teach someone something they are stuck on",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Anne Sullivan", "evidence": "She spelled the world into a deafblind child's hand one word at a time, turning the hand itself into a language channel where no curriculum had worked."},
+            {"person": "Sal Khan", "evidence": "In 2004 he began tutoring his cousin Nadia on unit conversions by phone from Boston to New Orleans, and started uploading the recorded lessons to YouTube so she could replay them."},
+            {"person": "Jerome Bruner", "evidence": "He wrote 'any subject can be taught effectively in some intellectually honest form to any child at any stage of development,' rewiring twentieth-century curriculum design."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "12 anchors. Unchanged."
+        },
+        {
+          "string": "Write a \"how it actually works\" explainer",
+          "previousString": "Write a \"how it actually works\" explainer",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Julia Child", "evidence": "Mastering the Art of French Cooking (1961) ran to 726 pages, deliberately over-detailed; her test was whether an American home cook with no French training could replicate a recipe in a normal kitchen."},
+            {"person": "Harold McGee", "evidence": "On Food and Cooking (1984, 2004) is a reference book with no recipes; chefs from Thomas Keller to Ferran Adrià keep copies next to the stove, not on a shelf."},
+            {"person": "Richard Feynman", "evidence": "The three-volume Feynman Lectures on Physics, transcribed from his 1961-63 Caltech course, are still in print and still assigned six decades later."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "10 anchors. Unchanged."
+        },
+        {
+          "string": "Make a confusing thing feel obvious",
+          "previousString": "Make a confusing thing feel obvious",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Virginia Apgar", "evidence": "Scribbled five newborn categories on a breakfast napkin, each scored 0 to 2, in answer to a resident's casual question; by the 1960s it was being performed on millions of babies a minute after birth."},
+            {"person": "Richard Feynman", "evidence": "On the Rogers Commission in February 1986 he dropped a piece of O-ring rubber into a glass of ice water on live TV and showed it lost resilience at cold temperatures."},
+            {"person": "Michael Pollan", "evidence": "Reduced In Defense of Food to seven words ('Eat food. Not too much. Mostly plants.') then wrote 200 pages of history and biochemistry to make them sound obvious."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "16 anchors. Unchanged. Clarifying is the strongest-supported category in the corpus with 64 high-confidence quotes and all five strings earning their place."
+        }
+      ]
+    },
+
+    {
+      "id": "analyzing",
+      "revisedPlaySkills": [
+        {
+          "string": "Find the pattern in messy data",
+          "previousString": "Find the pattern in messy data",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Rosalind Franklin", "evidence": "In May 1952 with Raymond Gosling she captured Photograph 51, the X-ray diffraction image whose cross pattern is the signature of a helical structure."},
+            {"person": "Jim Simons", "evidence": "Renaissance's Medallion Fund was built on finding statistical patterns in financial market data that no one else could see — 66% average annual returns."},
+            {"person": "Jan Gehl", "evidence": "After Copenhagen pedestrianised Strøget in 1962 he and his wife Ingrid began counting people in the new zone by hand, tracking how many sat on benches, how long they stayed, for decades."}
+          ],
+          "clusterPurity": 0.94,
+          "notes": "16 anchors. Unchanged."
+        },
+        {
+          "string": "Trust a felt pattern before the numbers prove it",
+          "previousString": "Diagnose why something is not working",
+          "changeType": "split",
+          "anchorQuotes": [
+            {"person": "Barbara McClintock", "evidence": "Her method was described as 'a feeling for the organism': hours in the maize field, paying attention to individual plants, waiting for patterns to declare themselves."},
+            {"person": "Jane Goodall", "evidence": "She named rather than numbered her research subjects against Cambridge convention, forcing researchers and readers to treat each chimpanzee as an individual case."},
+            {"person": "Estée Lauder", "evidence": "Lauder ran on intuition and direct customer touch, not metrics. Her decisions were sensory ('touch women's faces'), not analytical. [Contextual from founder anti-tag]"}
+          ],
+          "clusterPurity": 0.75,
+          "notes": "NEW string. Resolves Gap #4. 10 founders were anti-tagged on analyzing because they refused number-first logic while still being first-rate pattern-readers (Lauder, Branson, Blakely, Wolfe Herd, Walt Disney, Land, Jobs on taste). Gives them a positive home. Diagnose merges into Investigate."
+        },
+        {
+          "string": "Investigate a weird anomaly until it cracks",
+          "previousString": "Investigate a weird anomaly",
+          "changeType": "refinement",
+          "anchorQuotes": [
+            {"person": "Svante Pääbo", "evidence": "In March 2010 analysed a single finger bone from Denisova Cave and found a genome too divergent to be Neanderthal or modern human, discovering a previously unknown population of archaic humans."},
+            {"person": "Marie Curie", "evidence": "Between 1898 and 1902 she processed a full tonne of pitchblende in a leaking Paris shed to isolate one tenth of a gram of radium."},
+            {"person": "Mary Roach", "evidence": "For Bonk she convinced a London clinic to let her and her husband be scanned during intercourse inside an ultrasound machine: 'I ask for things other writers do not ask for because I assume the answer will be no.'"}
+          ],
+          "clusterPurity": 0.88,
+          "notes": "9 anchors. Absorbs 'Diagnose why something is not working' which overlapped heavily (5 of 7 diagnose-quotes also fit investigate). 'Until it cracks' added to carry the obsessive-return-to-the-problem tone."
+        },
+        {
+          "string": "Turn numbers into a clear story",
+          "previousString": "Turn numbers into a clear story",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Florence Nightingale", "evidence": "In 1858 she developed the polar area diagram, now called the Nightingale rose, to show Parliament that ten times as many Crimean soldiers died of disease than combat wounds."},
+            {"person": "Hans Rosling", "evidence": "He turned UN statistics into moving Gapminder bubbles and narrated them from the stage like a sports commentator calling the race for human progress."},
+            {"person": "Susan Fowler", "evidence": "The post reads more like an engineering bug report than a personal essay, citing specific performance review numbers and team reorganisations, which is why her account could not be dismissed."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "14 anchors. Unchanged."
+        },
+        {
+          "string": "Spot the thing everyone else missed",
+          "previousString": "Spot the thing everyone else missed",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Maria Montessori", "evidence": "Put the 'uneducable' Orthophrenic children through the standard Italian public school exams, they passed, and she used the result to argue the materials, not the children, were the variable."},
+            {"person": "David Graeber", "evidence": "Checked every footnote in economics textbooks on barter-to-money and found the claim led back through textbooks to Adam Smith making it up in a thought experiment."},
+            {"person": "Frances Yates", "evidence": "In Giordano Bruno and the Hermetic Tradition (1964) she argued Bruno was not a martyr of modern science but a Renaissance magus deep in the Hermetic tradition."}
+          ],
+          "clusterPurity": 0.92,
+          "notes": "12 anchors. Unchanged."
+        }
+      ]
+    },
+
+    {
+      "id": "strategizing",
+      "revisedPlaySkills": [
+        {
+          "string": "Pick what matters and cut the rest",
+          "previousString": "Pick what matters and cut the rest",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Steve Jobs", "evidence": "On returning to Apple in 1997, Jobs killed 70% of the product line and focused the company on a simple 2x2 grid."},
+            {"person": "Alli Webb", "evidence": "Drybar did blowouts only — no cuts, no colour, no perms — radically picking the one thing and cutting everything else."},
+            {"person": "Maria Montessori", "evidence": "In 1934, at 64, she left Italy permanently rather than let Mussolini absorb her teacher training, choosing exile over a compromised version of the method."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "18 anchors. Strongest cluster in strategizing. Unchanged."
+        },
+        {
+          "string": "Map out the next 10 moves",
+          "previousString": "Map out the next 10 moves",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Indra Nooyi", "evidence": "'Performance with Purpose' was a 10-year plan to pivot PepsiCo toward healthier products despite Wall Street mockery."},
+            {"person": "Cicely Saunders", "evidence": "Requalified from nurse to social worker to physician, entering medical school at 33, specifically so no consultant could block her from running a new kind of place for dying people."},
+            {"person": "George Kennan", "evidence": "On 22 February 1946 as charge d'affaires in Moscow he wrote the 5,363-word Long Telegram reframing Soviet behaviour as a function of Russian historical insecurity combined with Marxist-Leninist ideology."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "4 anchors but the Saunders re-qualify case (Gap #11) lives comfortably here once 'map moves' is read as 'sequence a decade of moves toward a future role', which the evidence supports."
+        },
+        {
+          "string": "Design the game before playing it",
+          "previousString": "Design the game before playing it",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Sol Price", "evidence": "He invented the membership warehouse model, where merchandise sold at break-even and the membership fee WAS the profit — designing the economic game before playing it."},
+            {"person": "Fela Kuti", "evidence": "Chose a two-track, 15-30 minute per side album format deliberately to make the music unplayable on three-minute radio slots, forcing distribution into live performance at the Shrine."},
+            {"person": "Ella Baker", "evidence": "At the Easter 1960 Shaw University meeting she specifically warned the sit-in student leaders against joining SCLC as a youth wing, and SNCC was founded at that meeting as a result."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "14 anchors. Unchanged."
+        },
+        {
+          "string": "Call the smart play under pressure",
+          "previousString": "Call the smart play under pressure",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Harriet Tubman", "evidence": "Across roughly 13 trips back into slaveholding territory between 1851 and 1862 she used forged passes, safe houses, code songs and a concealed pistol to prevent any rescued person from turning back, and there is no record of her ever losing a passenger."},
+            {"person": "Sam Zell", "evidence": "'If everyone is going left, look right' — he acted counter-cyclically, writing The Grave Dancer to codify his contrarian playbook."},
+            {"person": "Lech Wałęsa", "evidence": "Refused to travel to Oslo for his 1983 Nobel Peace Prize fearing the government would not let him return, having Danuta accept it on his behalf."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "9 anchors. Unchanged."
+        },
+        {
+          "string": "Stay the course when no one else will",
+          "previousString": "new",
+          "changeType": "new",
+          "anchorQuotes": [
+            {"person": "Barbara McClintock", "evidence": "She continued growing maize and recording results for three decades after 1953 without publishing, waiting for the field to catch up, which it did 35 years later with the 1983 Nobel."},
+            {"person": "Gertrude Jekyll", "evidence": "She did not publish her first book until 1899 at age 56 and then wrote fifteen books and completed 400-plus commissions, most after the age her contemporaries retired, while her eyesight was failing."},
+            {"person": "Zaha Hadid", "evidence": "From 1977 until 1993 she was dismissed as a 'paper architect' whose painted drawings could not be translated into concrete, producing competition entries that won praise and client rejection for 16 years."}
+          ],
+          "clusterPurity": 0.60,
+          "notes": "NEW string. Resolves Gap #6 (discipline over decades). 8 anchors cross categories (creating/analyzing/organizing/building). Placed in strategizing because the underlying move is a STRATEGIC commitment to a long time horizon that most people cannot sustain — a bet on patience as the edge. Covers McClintock, Jekyll, Jane Goodall's 60 years, Szymborska's 50-year trickle, Haruki Murakami's discipline, Octavia Butler, Attenborough."
+        }
+      ]
+    },
+
+    {
+      "id": "organizing",
+      "revisedPlaySkills": [
+        {
+          "string": "Turn a mess into a system",
+          "previousString": "Turn a mess into a system",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "John D. Rockefeller", "evidence": "Rockefeller invented modern corporate management to coordinate refineries, pipelines, railroads and sales offices across thousands of miles with 1880s technology."},
+            {"person": "Clara Barton", "evidence": "Between 1865 and 1868 she ran the Office of Missing Soldiers from rented DC rooms, processing 41,855 letters and locating 22,000 men by cross-referencing prison, burial and hospital records."},
+            {"person": "Bayard Rustin", "evidence": "Ran the operational plan for the 1963 March on Washington in roughly eight weeks: drilling marshals, assigning bus captains, scheduling speakers, arranging water, toilets and sound for about 250,000 people."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "9 anchors. Unchanged. Strong enough to absorb Clean-up-nobody-touches (see below)."
+        },
+        {
+          "string": "Build a workflow that runs itself",
+          "previousString": "Build a workflow that runs itself",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Henry Ford", "evidence": "The moving assembly line turned car manufacturing into a workflow that ran itself — one of the most studied process innovations in history."},
+            {"person": "Jeff Bezos", "evidence": "He codified Amazon's operating system into 16 Leadership Principles that govern hiring, promotion and decision-making — a workflow that runs itself at 1M+ employees."},
+            {"person": "Haruki Murakami", "evidence": "Up at 4 a.m., five to six hours of writing, a ten kilometre run, in bed by 9 p.m., repeated without variation for months."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "14 anchors. Unchanged."
+        },
+        {
+          "string": "Coordinate a federation without controlling it",
+          "previousString": "new",
+          "changeType": "new",
+          "anchorQuotes": [
+            {"person": "Saul Alinsky", "evidence": "Founded the Industrial Areas Foundation in 1940 as the template for broad-based, congregation-anchored community organising, still visible in COPS, East Brooklyn Congregations and many federations today."},
+            {"person": "Jimmy Carter", "evidence": "Between 1989 and the early 2020s the Carter Center observed 115 elections in roughly 40 countries, publishing frank post-election reports including on US elections, with a consistent observation methodology."},
+            {"person": "Wangari Maathai", "evidence": "Turned a ceremonial planting of seven trees at Kamukunji Park in 1977 into a national organising structure of tree nurseries run by rural women, paid a small stipend per seedling."}
+          ],
+          "clusterPurity": 0.55,
+          "notes": "NEW string. Resolves Gap #2 (federation vs systematize). 7 anchors. Names the coordinating-without-centralizing move that organizing's old strings missed. Distinct from 'workflow that runs itself' because it is explicitly distributed and relational, not mechanized. Covers Mackenzie Scott's grantmaking, Branson's Virgin holding model, Dorothy Day's 30+ Worker Houses, Ella Baker's 'strong people don't need strong leaders' federation pattern."
+        },
+        {
+          "string": "Remove a friction point permanently",
+          "previousString": "Remove a friction point permanently",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Atul Gawande", "evidence": "The 2007-08 WHO 19-item surgical safety checklist trial across eight hospitals showed deaths fell from 1.5 to 0.8 percent and complications from 11 to 7 percent."},
+            {"person": "Tobi Lütke", "evidence": "No Meeting Wednesdays and strict meeting-scheduling windows removed friction that was draining the company's capacity to ship."},
+            {"person": "Henry Ford", "evidence": "He attacked friction point after friction point, cutting Model T assembly time from 12 hours to 93 minutes through relentless process redesign."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "8 anchors. Unchanged."
+        },
+        {
+          "string": "Map how the work actually flows",
+          "previousString": "Map how the work actually flows",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "James Sinegal", "evidence": "Sinegal walked 8-12 Costco warehouses a week into his 70s, mapping how stock, staffing and treasure-hunt merchandising actually flowed through stores."},
+            {"person": "Sam Walton", "evidence": "Walton was an early adopter of satellite communication, linking every store to Bentonville for real-time inventory data — mapping how retail actually flows."},
+            {"person": "Tadashi Yanai", "evidence": "Yanai built Uniqlo's SPA (specialty retailer of private label apparel) model end-to-end, mapping how basics flow from fabric to fitting room globally."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "6 anchors. Unchanged. 'Clean up something no one wants to touch' is RETIRED as a standalone string — only 3 quotes anchored it and they all fit 'Turn a mess into a system' cleanly."
+        }
+      ]
+    },
+
+    {
+      "id": "building",
+      "revisedPlaySkills": [
+        {
+          "string": "Prototype something in a day",
+          "previousString": "Prototype something in a day",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "James Dyson", "evidence": "Dyson made 5,127 prototypes of his bagless vacuum before getting it right — prototyping obsessively, day by day, for years."},
+            {"person": "Antoni Gaudí", "evidence": "He designed the Colonia Guell crypt and Sagrada Familia by hanging sandbags from chains to map catenary curves, then photographing the models upside down."},
+            {"person": "Charles and Ray Eames", "evidence": "In 1941-42 they figured out how to mould plywood into compound curves in their Los Angeles apartment, starting with Navy leg splints before pivoting to chairs."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "7 anchors. Unchanged."
+        },
+        {
+          "string": "Build the thing you keep talking about",
+          "previousString": "Build the thing you keep talking about",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Hamdi Ulukaya", "evidence": "He bought a shuttered factory for $700K and built Chobani hands-on, learning the industrial yogurt-making craft he'd grown up with as a Turkish dairy farmer."},
+            {"person": "Audre Lorde", "evidence": "In 1980 she co-founded Kitchen Table: Women of Color Press with Barbara Smith and Cherrie Moraga, the first US publisher dedicated to work by women of color, run out of Smith's Brooklyn apartment."},
+            {"person": "Fela Kuti", "evidence": "Founded Kalakuta Republic in 1970 in Surulere and declared it formally independent of the Nigerian state, with its own clinic, school, generator, recording studio and fence; not a metaphor."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "4 anchors. Unchanged."
+        },
+        {
+          "string": "Make a working version from scratch",
+          "previousString": "Make a working version from scratch",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Elon Musk", "evidence": "SpaceX and Tesla were built from first principles — rebuilding rockets and cars from scratch, challenging the assumptions engineers had inherited."},
+            {"person": "Edwin Land", "evidence": "Land dropped out of Harvard and snuck into Columbia labs at night to build polarising filters from scratch, then invented instant photography by hand."},
+            {"person": "Tadao Ando", "evidence": "A former amateur boxer, he taught himself architecture by reading Le Corbusier and travelling 1962-1969, founding his Osaka practice in 1968 at 27 with no degree and no formal apprenticeship."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "11 anchors. Unchanged."
+        },
+        {
+          "string": "Get your hands dirty on a real object",
+          "previousString": "Get your hands dirty on a real object",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Marie Curie", "evidence": "Her laboratory notebooks from the radium work are still so radioactive a century later that they are kept in lead-lined boxes at the Bibliotheque Nationale."},
+            {"person": "Sam Zemurray", "evidence": "He personally walked the plantations, took over broken operations and fixed them in the field — 'the fish ate the whale' by showing up in the boardroom and the banana fields."},
+            {"person": "Philip Glass", "evidence": "Until age 41 he supported himself driving a cab, moving furniture, and working as an unlicensed plumber."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "12 anchors. Unchanged."
+        },
+        {
+          "string": "Ship a rough v1",
+          "previousString": "Ship a rough v1",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Thomas Edison", "evidence": "He shipped rough v1s of the phonograph, light bulb and kinetoscope and then iterated publicly, sometimes pre-announcing before the core technology existed."},
+            {"person": "Paula Scher", "evidence": "At CBS Records 1972-1980 she designed around 150 album covers a year. The volume was the education: forced to produce a finished design every two days for eight years."},
+            {"person": "Sal Khan", "evidence": "He recorded lessons on a dollar Wacom tablet, six to twelve minutes each with no face on screen, because 'I was not trying to make television. I was trying to make the inside of a conversation.'"}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "5 anchors. Unchanged."
+        }
+      ]
+    },
+
+    {
+      "id": "designing",
+      "revisedPlaySkills": [
+        {
+          "string": "Shape how a moment feels",
+          "previousString": "Shape how a moment feels",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Walt Disney", "evidence": "Disneyland was engineered to shape how every moment feels — sight lines, smells, transitions between 'lands' — a new art form of experience design."},
+            {"person": "Tadao Ando", "evidence": "At the 1989 Church of the Light he cut a cross of four openings into a concrete rear wall so direct sunlight falls as a cross inside the chapel."},
+            {"person": "Aretha Franklin", "evidence": "Cut I Never Loved a Man at FAME Studios Muscle Shoals 24 January 1967 in a single day, playing the electric piano herself and working out voicings live with the band."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "10 anchors. Unchanged."
+        },
+        {
+          "string": "Craft a space people want to stay in",
+          "previousString": "Craft a space people want to stay in",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Maria Montessori", "evidence": "At Casa dei Bambini in January 1907 she equipped the room with child-sized furniture and a locked cabinet of tactile materials, letting the environment do the teaching."},
+            {"person": "Howard Schultz", "evidence": "The Starbucks store was explicitly crafted as a space people want to stay in — a reproducible Italian-café-meets-living-room."},
+            {"person": "Piet Oudolf", "evidence": "High Line draws roughly 8 million visitors a year and the planting is cited as why most of them come back."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "7 anchors. Unchanged."
+        },
+        {
+          "string": "Polish the small details others miss",
+          "previousString": "Polish the small details others miss",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Steve Jobs", "evidence": "He'd text Jony Ive at 2am about a button that felt wrong, obsessive about the unseen interior of products."},
+            {"person": "Dieter Rams", "evidence": "The 606 Shelving System for Vitsœ (1960) is still manufactured today 60+ years later, with components interchangeable with the 1960 originals."},
+            {"person": "Hayao Miyazaki", "evidence": "In the 2016 NHK documentary he is filmed weeping at his desk when he cannot get a bug's movement right on the Boro the Caterpillar short."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "7 anchors. Unchanged."
+        },
+        {
+          "string": "Make something beautiful and usable",
+          "previousString": "Make something beautiful and usable",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Massimo Vignelli", "evidence": "1972 NYC subway diagram stylised geography into coloured lines at 45 and 90 degrees; after being replaced in 1979 the MTA returned to a variant in 2025, a 53-year vindication."},
+            {"person": "Zaha Hadid", "evidence": "The 2013 Heydar Aliyev Center in Baku is a 57,500 sqm continuously curving glass-fibre-reinforced polyester skin with no visible column grid."},
+            {"person": "Charles and Ray Eames", "evidence": "The 1956 Lounge Chair (670) was designed as a one-off gift for Billy Wilder and has been in continuous Herman Miller production ever since."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "6 anchors. Unchanged."
+        },
+        {
+          "string": "Know what is good before others see it",
+          "previousString": "Redesign something ugly",
+          "changeType": "split",
+          "anchorQuotes": [
+            {"person": "Coco Chanel", "evidence": "She stripped away corsets and ornament and redesigned women's fashion from scratch — making simplicity itself luxurious."},
+            {"person": "Kenya Hara", "evidence": "In White (2009) he wrote 'white denotes emptiness... it indicates a condition which will likely be filled with content in the future,' reframing Japanese use of empty space not as minimalism but as invitation."},
+            {"person": "Achille Castiglioni", "evidence": "His maxim 'design demands observation' was literal: he kept a collection of suction cups, bicycle seats, tractor seats and wooden stools and forced students to look until they could say something precise."}
+          ],
+          "clusterPurity": 0.78,
+          "notes": "REPLACES 'Redesign something ugly'. Resolves Gap #3. 9 anchors. 'Redesign something ugly' was used by only 2 people in the corpus (Chanel, Perkins) and its oddly-negative framing doesn't match how the taste-judgment people actually describe themselves. The new string names the aesthetic authority Jobs, Ive, Arnault, Vera Wang, Rams, Hara, Ando, Vignelli, Castiglioni all share: knowing what is good before the market can verify it."
+        }
+      ]
+    },
+
+    {
+      "id": "creating",
+      "revisedPlaySkills": [
+        {
+          "string": "Make something that did not exist yesterday",
+          "previousString": "Make something that did not exist yesterday",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Nikola Tesla", "evidence": "Alternating current, the induction motor, radio-controlled devices, wireless power — Tesla brought into existence an electrified world that didn't exist before."},
+            {"person": "Hilma af Klint", "evidence": "In 1906 she began the Paintings for the Temple series, 196 works including canvases approximately 240 by 320 centimeters, inventing abstract painting years before Kandinsky."},
+            {"person": "Marcel Duchamp", "evidence": "In April 1917 he submitted a J.L. Mott urinal signed 'R. Mutt 1917' as Fountain, defending it in an anonymous editorial arguing Mr Mutt had created 'a new thought for that object' by placing it so its useful significance disappeared."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "18 anchors. Largest single creating cluster. Unchanged."
+        },
+        {
+          "string": "Invent a new idea from scratch",
+          "previousString": "Invent a new idea from scratch",
+          "changeType": "refinement",
+          "anchorQuotes": [
+            {"person": "Hedy Lamarr", "evidence": "She proposed a radio torpedo guidance system that hopped between frequencies so enemy jamming could not lock on; US Patent 2,292,387 was granted on August 11, 1942."},
+            {"person": "Mary Ainsworth", "evidence": "In 1965 she designed the Strange Situation as a structured eight-episode lab procedure, each episode three minutes, coding infant behaviour across caregiver separations and reunions."},
+            {"person": "Janusz Korczak", "evidence": "At Dom Sierot he built a democratic children's republic with its own parliament, court, code of law, and child-written weekly newspaper Maly Przeglad from 1926."}
+          ],
+          "clusterPurity": 0.85,
+          "notes": "6 anchors. Refined meaning: not just 'make something new' but 'coin a new concept or method'. Differentiates from the product-oriented 'Make something that did not exist yesterday'."
+        },
+        {
+          "string": "Fill a blank page with something real",
+          "previousString": "Fill a blank page with something real",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Maya Angelou", "evidence": "Her daily ritual in a rented hotel room, producing 10-12 pages a day before editing, sustained decades of autobiography and poetry."},
+            {"person": "Louise Bourgeois", "evidence": "Between November 1994 and June 1995 she made 220 Insomnia Drawings at night, dating each one, using the series as a diary her conscious voice could not have written."},
+            {"person": "Patti Smith", "evidence": "Writes daily longhand in pencil in a small notebook at the same corner café in Greenwich Village, ordering black coffee. 'My handwriting is the rhythm of my thinking.'"}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "13 anchors. Unchanged."
+        },
+        {
+          "string": "Remix two things into something new",
+          "previousString": "Remix two things into something new",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "George Lucas", "evidence": "He remixed Joseph Campbell's monomyth, Kurosawa's samurai films and 1930s serials into Star Wars."},
+            {"person": "Lin-Manuel Miranda", "evidence": "At the 12 May 2009 White House Poetry Jam he rapped the opening of Hamilton about 'someone I believe embodies hip hop, Treasury Secretary Alexander Hamilton'."},
+            {"person": "Aretha Franklin", "evidence": "On Valentine's Day 1967 she rearranged Otis Redding's Respect with her sister Carolyn, adding R-E-S-P-E-C-T, sock-it-to-me and 'just a little bit', converting a pleading husband song into a civil-rights anthem."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "12 anchors. Unchanged."
+        },
+        {
+          "string": "Follow a wild hunch and see where it goes",
+          "previousString": "Follow a wild hunch and see where it goes",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Lynn Margulis", "evidence": "In 1966 she wrote 'On the Origin of Mitosing Cells' arguing organelles were originally free-living bacteria; roughly fifteen journals rejected it before the Journal of Theoretical Biology accepted it in 1967."},
+            {"person": "Gabriel García Márquez", "evidence": "In 1965 he turned the car around on the way to Acapulco, locked himself in his study for 18 months, and had his wife Mercedes run up credit with the butcher and baker while he wrote."},
+            {"person": "Octavia Butler", "evidence": "In a 1988 notebook held at the Huntington she wrote 'I shall be a bestselling writer... So be it. So see it,' versions of an affirmation she wrote for years before it came true."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "13 anchors. Unchanged."
+        }
+      ]
+    },
+
+    {
+      "id": "expressing",
+      "revisedPlaySkills": [
+        {
+          "string": "Tell a story that lands",
+          "previousString": "Tell a story that lands",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Frederick Douglass", "evidence": "On 5 July 1852 he delivered 'What to the Slave is the Fourth of July?' at Corinthian Hall in Rochester, invited as a patriotic address, and used it instead to call the holiday a sham from the standpoint of the enslaved."},
+            {"person": "Chimamanda Ngozi Adichie", "evidence": "Her 2009 TED talk The Danger of a Single Story built its whole thesis from one autobiographical moment of being asked for 'tribal music' at a US university, and has over 27 million views."},
+            {"person": "Joseph Pulitzer", "evidence": "'Briefly, clearly, forcibly, picturesquely, accurately' — his formula was storytelling craft distilled into a single sentence that shaped American journalism."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "14 anchors. Unchanged."
+        },
+        {
+          "string": "Say the thing people are thinking but will not",
+          "previousString": "Say the thing people are thinking but will not",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Fannie Lou Hamer", "evidence": "At the 1964 Democratic Convention in Atlantic City she testified 'I question America' on behalf of the Mississippi Freedom Democratic Party; Johnson tried to bump her off live TV and the networks aired her testimony in full that evening instead."},
+            {"person": "Audre Lorde", "evidence": "At a 1979 NYU feminist conference she delivered 'The Master's Tools Will Never Dismantle the Master's House,' criticising the panel organisers for including only two women of color."},
+            {"person": "Richard Feynman", "evidence": "His 1974 Cargo Cult Science commencement address set out scientific integrity as 'you must not fool yourself, and you are the easiest person to fool,' the most quoted sentence of his career."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "22 anchors. Largest cluster in expressing. Unchanged."
+        },
+        {
+          "string": "Perform, present, or hit record",
+          "previousString": "Perform, present, or hit record",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Mercedes Sosa", "evidence": "During a 1979 La Plata concert under the Argentine junta she was searched and arrested on stage mid-performance along with every member of the audience."},
+            {"person": "Nina Simone", "evidence": "Her 1976 Montreux set, filmed in full, included arriving late, berating the audience, forgetting lyrics, then pulling the room through Janis Ian's Stars and weeping at the piano."},
+            {"person": "Mary Beard", "evidence": "On BBC documentaries she routinely steps over fencing into Pompeii itself to read inscriptions off walls rather than presenting from a studio."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "19 anchors. Unchanged."
+        },
+        {
+          "string": "Turn a message into a moment",
+          "previousString": "Turn a message into a moment",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Greta Thunberg", "evidence": "She sailed 15 days across the Atlantic on the Malizia II specifically so her UN 'How dare you' speech would arrive without flying; the voyage and speech were tactically a single event."},
+            {"person": "Carl Sagan", "evidence": "Lobbied NASA to turn Voyager 1's camera around at 6 billion kilometres; the Pale Blue Dot image produced his 1994 Cornell lecture reprinted in dozens of languages."},
+            {"person": "Hans Rosling", "evidence": "At the end of his 2007 TED talk he dropped his suit jacket, lifted a bayonet, and swallowed it to the hilt, then said, 'The seemingly impossible is possible.'"}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "17 anchors. Unchanged."
+        },
+        {
+          "string": "Choose to work without being seen",
+          "previousString": "Write something in your actual voice",
+          "changeType": "split",
+          "anchorQuotes": [
+            {"person": "Chuck Feeney", "evidence": "He lived like a monk while running a duty-free empire, cutting everything in his personal life that didn't matter so he could give the rest away. [Gave anonymously through Atlantic Philanthropies for decades.]"},
+            {"person": "Barbara McClintock", "evidence": "She continued growing maize and recording results for three decades after 1953 without publishing, waiting for the field to catch up, which it did 35 years later."},
+            {"person": "Wisława Szymborska", "evidence": "Published fewer than 350 poems in 50+ years, about six a year, by drafting constantly and throwing most away."}
+          ],
+          "clusterPurity": 0.50,
+          "notes": "NEW string REPLACING 'Write something in your actual voice' as an expressing play-skill (the old string had 27 anchors and would overload this category at 5 slots — it deserves its own home but the corpus shows anti-visibility is the more chronically missing primitive). Resolves Gap #1. 18+ anti-tags cluster here (Rockefeller avoiding press, Thorp returning capital, Knight hiding behind sunglasses, Munger sitting quietly, Land collapsing without publicity, Feeney's anonymous giving, Pearl Kazin Bell editing others). 'Write something in your actual voice' migrates into creating (fits 'Fill a blank page with something real' cleanly for 20 of its 27 anchors) or retires where it overlaps 'Say the thing people are thinking but will not'. See migration map for per-person routing. IMPORTANT: This is the most contentious call in the proposal — see Open Questions."
+        }
+      ]
+    },
+
+    {
+      "id": "connecting",
+      "revisedPlaySkills": [
+        {
+          "string": "Introduce two people who should know each other",
+          "previousString": "Introduce two people who should know each other",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Henry Louis Gates Jr.", "evidence": "The entire structure of Finding Your Roots is built around a reveal moment in which Gates connects a living guest to an ancestor, what he calls 'a very elaborate act of bothering'."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "ONLY 2 HIGH-CONFIDENCE ANCHORS. Flagged below. String kept because the intuition is real and the medium-confidence corpus has more anchors, but this string fails the 5+ anchor bar for the high corpus."
+        },
+        {
+          "string": "Host a gathering",
+          "previousString": "Host a gathering",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Jane Addams", "evidence": "In 1889 she and Ellen Gates Starr moved into a semi-derelict mansion and opened it to immigrant families as Hull House, growing to a 13-building complex with a peak of about 2,000 visitors a week."},
+            {"person": "Myles Horton", "evidence": "In July 1955, four months before the Montgomery bus incident, Rosa Parks attended a two-week Highlander workshop on Brown v. Board."},
+            {"person": "Cesar Chavez", "evidence": "Between 1962 and 1965 Chavez held one-on-one and small house meetings of six to twelve people in kitchens across hundreds of San Joaquin Valley towns, listening for two hours and speaking for ten minutes."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "6 anchors. Unchanged."
+        },
+        {
+          "string": "Facilitate a hard conversation",
+          "previousString": "Facilitate a hard conversation",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Desmond Tutu", "evidence": "As chair of the Truth and Reconciliation Commission from 1996 he insisted victims and perpetrators sit in the same room, with amnesty conditional on full disclosure."},
+            {"person": "Krista Tippett", "evidence": "Uses as her governing rule 'I can disagree with your opinion, but I can't disagree with your experience' to push guests off defending positions and onto describing what happened to them."},
+            {"person": "John Hume", "evidence": "Held secret Hume-Adams talks with Gerry Adams at a Redemptorist monastery from 1988, at a time when the SDLP was publicly condemned for it."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "9 anchors. Unchanged."
+        },
+        {
+          "string": "Build a group from nothing",
+          "previousString": "Build a group from nothing",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Ella Baker", "evidence": "As NAACP director of branches from 1943 she travelled the Jim Crow South by bus and train, showing up in small towns, listening for who was already trusted locally, and building the branch around that person."},
+            {"person": "Lech Wałęsa", "evidence": "Solidarity grew to roughly 10 million members, a quarter of Poland's population."},
+            {"person": "Tarana Burke", "evidence": "Founded the original Me Too in 2006 as workshops, retreats and healing groups for young Black girls in Selma and the Bronx, not a hashtag. The work happened in church basements."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "20 anchors. Largest cluster in connecting. Unchanged."
+        },
+        {
+          "string": "Be the glue in a scattered team",
+          "previousString": "Be the glue in a scattered team",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Mercedes Sosa", "evidence": "At her February 1982 Teatro Opera return from exile she deliberately invited younger Argentine folk colleagues onto her stage, treating the return not as a solo victory but as an introduction of a generation."},
+            {"person": "Phil Jackson", "evidence": "He gave each player a book at the start of the season, chosen personally, telling the LA Times, 'I wanted them to know I saw them as a person, not a position.'"},
+            {"person": "Trevor Noah", "evidence": "Speaks six languages (Xhosa, Zulu, Sotho, Tswana, Afrikaans, English) and always tried one phrase in a guest's language before Daily Show interviews because 'people relax'."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "3 anchors only at high confidence. Weak cluster. Kept because the medium corpus supports it and 'glue' is a distinctive relational primitive — but flagged."
+        }
+      ]
+    },
+
+    {
+      "id": "influencing",
+      "revisedPlaySkills": [
+        {
+          "string": "Change someone's mind",
+          "previousString": "Change someone's mind",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Paul Farmer", "evidence": "In the late 1990s he and Jim Yong Kim broke the WHO's DOTS orthodoxy on MDR-TB by insisting on second-line drugs, and in 1999 the WHO formally designated them to run global MDR-TB programmes."},
+            {"person": "Frederick Douglass", "evidence": "By the early 1850s he broke publicly with Garrison's 'covenant with death' reading of the Constitution, arguing it was actually an anti-slavery document."},
+            {"person": "Audre Lorde", "evidence": "At a 1979 NYU feminist conference she delivered 'The Master's Tools Will Never Dismantle the Master's House,' criticising the panel organisers."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "6 anchors. Unchanged."
+        },
+        {
+          "string": "Make a pitch that moves people",
+          "previousString": "Make a pitch that moves people",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Sara Blakely", "evidence": "Blakely pulled the Neiman Marcus buyer into the bathroom to demo Spanx on her own body — conviction made visible."},
+            {"person": "P.T. Barnum", "evidence": "He sold 10,000 tickets to Jenny Lind before she arrived in America — pitching a show that didn't exist through sheer narrative conviction."},
+            {"person": "Dolores Huerta", "evidence": "She personally negotiated with A&P to pull non-union grapes from shelves during the Delano boycott, producing the first UFW contracts in July 1970."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "11 anchors. Unchanged."
+        },
+        {
+          "string": "Rally a group behind an idea",
+          "previousString": "Rally a group behind an idea",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Mahatma Gandhi", "evidence": "On 11 September 1906 he introduced satyagraha at a meeting of 3,000 Indians at Johannesburg's Empire Theatre in response to the Asiatic Registration Act."},
+            {"person": "Greta Thunberg", "evidence": "Her solo August 2018 Riksdag strike seeded Fridays for Future, which by December 2018 had organised strikes in at least 270 cities."},
+            {"person": "Malala Yousafzai", "evidence": "The Malala Fund by 2023 was operating in eight countries, channelling grants through the Gulmakai Network of local country leaders."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "11 anchors. Unchanged."
+        },
+        {
+          "string": "Sell something you actually believe in",
+          "previousString": "Sell something you actually believe in",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Al Gore", "evidence": "In his 2007 Nobel Peace Prize lecture he refused to relitigate 2000 and used every minute on the climate brief he had chosen after the loss."},
+            {"person": "Erin Gruwell", "evidence": "When Wilson High refused to issue copies of The Diary of Anne Frank she took on a second job at the Marriott and a third selling lingerie to buy 150 copies with her own money."},
+            {"person": "Daymond John", "evidence": "He got LL Cool J to wear FUBU for free in the Gap commercial — a pitch driven by relationship and conviction, not paid endorsement."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "6 anchors. Unchanged."
+        },
+        {
+          "string": "Put your body where your argument is",
+          "previousString": "Move someone from stuck to action",
+          "changeType": "split",
+          "anchorQuotes": [
+            {"person": "Cesar Chavez", "evidence": "In February 1968 he fasted publicly for 25 days in response to members pushing for violent tactics, losing around 35 pounds and breaking the fast with Robert F. Kennedy on camera."},
+            {"person": "Wangari Maathai", "evidence": "In March 1992 she went on hunger strike at Freedom Corner alongside mothers of political prisoners; beaten unconscious and hospitalised, she returned to the park after recovering."},
+            {"person": "Jaime Escalante", "evidence": "He insisted all a student needed was ganas, painted the word above his blackboard, and told 60 Minutes in 1988, 'If you don't have the desire, you don't have anything.'"}
+          ],
+          "clusterPurity": 0.72,
+          "notes": "REPLACES 'Move someone from stuck to action' (which had 8 anchors but split uncomfortably between motivational-speaker quotes and body-as-argument quotes). Resolves Gap #10. Covers Gandhi's salt march, Maathai's hunger strike, Chavez's fast, Greta's boat, Politkovskaya walking into Chechnya alone, Janusz Korczak refusing rescue, Ida B. Wells staying on the train. The distinction from 'Rally a group' is that this is a SOLO physical commitment that becomes the argument. Remaining motivational-speaker quotes (Jaime Escalante ganas) also fit cleanly because the teacher's physical presence in the classroom at 7am is the ganas argument. Old 'Move someone from stuck to action' is retired — its body-as-argument half becomes this; its exhortation half merges into 'Rally a group behind an idea'."
+        }
+      ]
+    },
+
+    {
+      "id": "nurturing",
+      "revisedPlaySkills": [
+        {
+          "string": "Coach someone through a block",
+          "previousString": "Coach someone through a block",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "John Wooden", "evidence": "Began each season teaching elite athletes like Kareem Abdul-Jabbar and Bill Walton how to put on socks and lace shoes, because wrinkles caused blisters."},
+            {"person": "Pat Summitt", "evidence": "In 38 seasons every senior who finished her eligibility at Tennessee under Summitt earned a degree; she kept a chart in her office tracking each player's GPA in real time."},
+            {"person": "Epictetus", "evidence": "The Discourses are class notes from Arrian showing Epictetus interrupting himself, quarrelling with imagined interlocutors and giving homework to the sons of wealthy Romans."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "6 anchors. Unchanged."
+        },
+        {
+          "string": "Mentor someone earlier on the path",
+          "previousString": "Mentor someone earlier on the path",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Toni Morrison", "evidence": "As senior editor at Random House from the late 1960s through 1983 she commissioned and edited Muhammad Ali, Angela Davis, Toni Cade Bambara, Gayl Jones and The Black Book (1974), building the Black canon with one hand."},
+            {"person": "Al Gore", "evidence": "Climate Reality Project's three-day Leadership Corps training had by 2023 trained more than 50,000 people across 190 countries."},
+            {"person": "Joseph Campbell", "evidence": "Stayed at Sarah Lawrence from 1934 to 1972 and said teaching the same material to different cohorts of 20-year-olds every year kept it honest."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "7 anchors. Unchanged."
+        },
+        {
+          "string": "Hold space for a hard moment",
+          "previousString": "Hold space for a hard moment",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Fred Rogers", "evidence": "Aired a full televised minute of silence so children could think about who loved them, refusing producer requests to cut the dead air."},
+            {"person": "Janusz Korczak", "evidence": "On 5-6 August 1942 he walked at the head of roughly 192 orphans and a dozen staff to the Umschlagplatz, hatless, holding a child's hand, refusing multiple Zegota offers to smuggle him out."},
+            {"person": "Dorothy Day", "evidence": "The Catholic Worker Houses of Hospitality offered food and shelter to any homeless person who came to the door without intake forms, conditions or proselytising."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "21 anchors. Largest cluster in nurturing. Unchanged. RESOLVES Gap #5 and #9 partially — the 'refuse to leave' cases (Korczak, Sendler, Farmer, Paul Farmer walking to a single TB family) all fit here because the evidence treats them as extreme forms of holding space. Standing in harm's way for someone specific reads as the maximum case of the hold-space primitive. The evidence is unambiguous — all 4 of the refuse-to-leave cases were tagged hold-space by the original taggers. No new string needed."
+        },
+        {
+          "string": "Give patient, useful feedback",
+          "previousString": "Give patient, useful feedback",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Anne Sullivan", "evidence": "After a formal curriculum failed she switched to spelling words into Helen's palm whenever Helen reached for something, producing a 575-word vocabulary inside six months."},
+            {"person": "Gordon Lish", "evidence": "He cut Raymond Carver's What We Talk About When We Talk About Love by roughly 50 percent, with cuts on some stories of 70 percent or more, and new endings in his own hand."},
+            {"person": "Pearl Kazin Bell", "evidence": "Her correspondence with writers shows an editor who quoted a line back to the author and asked whether the next paragraph had earned it, making writers feel read first and corrected second."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "10 anchors. Unchanged."
+        },
+        {
+          "string": "Watch someone grow without taking credit",
+          "previousString": "Watch someone grow without taking credit",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "David Attenborough", "evidence": "Deliberately restricted his own screen time so the animals could take the frame; got out of the way as an explicit method across the blue-chip natural history format."},
+            {"person": "Emmi Pikler", "evidence": "Her rule was that an adult should never put a baby in a position the baby could not get into and out of on its own."},
+            {"person": "Ella Baker", "evidence": "Her formulation 'strong people don't need strong leaders' was an explicit argument against charismatic leadership; she built group-centred structures rather than movements around one speaker."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "10 anchors. Unchanged."
+        }
+      ]
+    },
+
+    {
+      "id": "synthesizing",
+      "revisedPlaySkills": [
+        {
+          "string": "Connect dots across two worlds",
+          "previousString": "Connect dots across two worlds",
+          "changeType": "refinement",
+          "anchorQuotes": [
+            {"person": "Charlie Munger", "evidence": "Munger pulled mental models from psychology, biology, physics, history and economics and connected dots across them — the 'latticework of mental models' approach."},
+            {"person": "Robin Wall Kimmerer", "evidence": "Took 13 years to write Braiding Sweetgrass because she refused to separate her scientific training from her Potawatomi inheritance, keeping two editors (botanist and grandmother) in her head."},
+            {"person": "Philip Glass", "evidence": "In 1965 transcribing Indian rhythmic patterns for Ravi Shankar's Chappaqua score, he realised Western meter cut time into boxes while Indian patterns built longer structures from additive cells; this is the origin of his minimalist method."}
+          ],
+          "clusterPurity": 0.82,
+          "notes": "21 anchors — but 5 of them are specifically about LITERARY/LINGUISTIC translation (Steiner, Grossman, Rabassa, Heaney, and in a sense Achebe). See Gap #7. Decision: REFINE rather than split. Under the refined meaning, 'connect dots across two worlds' explicitly includes translation as its archetype. Translator-anchored quotes stay here but the anchor list moves to include one. Not creating a new skill because 5 quotes is below the 8-10 threshold we need to justify a dedicated slot in the 5-skill budget of this category."
+        },
+        {
+          "string": "Find the bigger pattern under the noise",
+          "previousString": "Find the bigger pattern under the noise",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Joseph Campbell", "evidence": "The Hero with a Thousand Faces (1949) proposed the monomyth, a single recurring hero's journey pattern underlying myths from all cultures."},
+            {"person": "Jane Jacobs", "evidence": "The Death and Life of Great American Cities (1961) named the specific phenomena 'eyes on the street,' 'mixed primary uses' and 'sidewalk ballet' that kept a neighbourhood alive."},
+            {"person": "Marshall McLuhan", "evidence": "In Understanding Media (1964) he argued 'the medium is the message': the social consequences of any medium come from the new scale it introduces, not from its content."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "15 anchors. Unchanged."
+        },
+        {
+          "string": "Make meaning out of a mess",
+          "previousString": "Make meaning out of a mess",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Viktor Frankl", "evidence": "He defined logotherapy as three ways to meaning: through work, through love, and through the attitude one takes toward unavoidable suffering, the third tested inside four concentration camps."},
+            {"person": "Malcolm X", "evidence": "Within weeks of publicly leaving the Nation of Islam on 8 March 1964 he made the Hajj and publicly reversed a twelve-year teaching on racial separation based on what he saw in Mecca."},
+            {"person": "Aldo Leopold", "evidence": "After shooting a wolf and watching 'a fierce green fire dying in her eyes' he spent the rest of his life rebuilding a profession that had been confident fewer wolves meant more deer."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "10 anchors. Unchanged."
+        },
+        {
+          "string": "Write a \"here is how it all fits\" doc",
+          "previousString": "Write a \"here is how it all fits\" doc",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Stewart Butterfield", "evidence": "His 'We Don't Sell Saddles Here' memo reframed Slack as 'organisational transformation' — a 'here is how it all fits' doc that became a product-led-growth classic."},
+            {"person": "Cicely Saunders", "evidence": "Introduced the phrase 'total pain' and the principle of regular anticipatory opioid dosing, reorganising how a generation of palliative doctors were trained."},
+            {"person": "George Kennan", "evidence": "In July 1947 under the pseudonym X he published The Sources of Soviet Conduct in Foreign Affairs, a public version of the Long Telegram that named the containment doctrine."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "7 anchors. Unchanged."
+        },
+        {
+          "string": "Build a framework that holds it all",
+          "previousString": "Build a framework that holds it all",
+          "changeType": "rename",
+          "anchorQuotes": [
+            {"person": "Buckminster Fuller", "evidence": "He built frameworks — Dymaxion, ephemeralization, tensegrity, trimtab — that held entire systems of thought together."},
+            {"person": "Donella Meadows", "evidence": "Her 1999 Leverage Points essay ranked twelve places to intervene in a system from parameters at the bottom to goals and paradigms at the top; the ordering was the argument."},
+            {"person": "Dieter Rams", "evidence": "Wrote the Ten Principles of Good Design in the 1970s adopted across Apple, Muji and software UI teams."}
+          ],
+          "clusterPurity": 1.0,
+          "notes": "18 anchors. Second-largest in synthesizing. Unchanged."
+        }
+      ]
+    }
+  ],
+
+  "migrationMap": [
+    {"oldCategory": "clarifying", "oldSkill": "Break down a hard idea so anyone gets it", "newCategory": "clarifying", "newSkill": "Break down a hard idea so anyone gets it", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "clarifying", "oldSkill": "Turn jargon into plain words", "newCategory": "clarifying", "newSkill": "Turn jargon into plain words", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "clarifying", "oldSkill": "Teach someone something they are stuck on", "newCategory": "clarifying", "newSkill": "Teach someone something they are stuck on", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "clarifying", "oldSkill": "Write a \"how it actually works\" explainer", "newCategory": "clarifying", "newSkill": "Write a \"how it actually works\" explainer", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "clarifying", "oldSkill": "Make a confusing thing feel obvious", "newCategory": "clarifying", "newSkill": "Make a confusing thing feel obvious", "changeType": "rename", "action": "no action needed"},
+
+    {"oldCategory": "analyzing", "oldSkill": "Find the pattern in messy data", "newCategory": "analyzing", "newSkill": "Find the pattern in messy data", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "analyzing", "oldSkill": "Diagnose why something is not working", "newCategory": "analyzing", "newSkill": "Investigate a weird anomaly until it cracks", "changeType": "merge", "action": "Re-tag all 7 'diagnose' tags against the new 'Investigate a weird anomaly until it cracks' string; 5 of 7 fit cleanly. Walter Chrysler and Kobe Bryant cases (self-diagnosis) should be reviewed against 'Spot the thing everyone else missed' as a possible alternate."},
+    {"oldCategory": "analyzing", "oldSkill": "Investigate a weird anomaly", "newCategory": "analyzing", "newSkill": "Investigate a weird anomaly until it cracks", "changeType": "refinement", "action": "Re-read all 9 existing tags to confirm the obsessive-return quality is present; most are fine."},
+    {"oldCategory": "analyzing", "oldSkill": "Turn numbers into a clear story", "newCategory": "analyzing", "newSkill": "Turn numbers into a clear story", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "analyzing", "oldSkill": "Spot the thing everyone else missed", "newCategory": "analyzing", "newSkill": "Spot the thing everyone else missed", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "analyzing", "oldSkill": "(new)", "newCategory": "analyzing", "newSkill": "Trust a felt pattern before the numbers prove it", "changeType": "new", "action": "Re-tag anti-analyzing founders (Lauder, Branson, Blakely, Wolfe Herd, Walt Disney, Land, Jobs-on-taste) positively against this new string. Review McClintock, Goodall, Kentridge, Miyazaki, Piet Oudolf as likely candidates. Estimated 10-14 new positive tags."},
+
+    {"oldCategory": "strategizing", "oldSkill": "Pick what matters and cut the rest", "newCategory": "strategizing", "newSkill": "Pick what matters and cut the rest", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "strategizing", "oldSkill": "Map out the next 10 moves", "newCategory": "strategizing", "newSkill": "Map out the next 10 moves", "changeType": "rename", "action": "Add Cicely Saunders (re-qualify as strategy) as a canonical anchor"},
+    {"oldCategory": "strategizing", "oldSkill": "Design the game before playing it", "newCategory": "strategizing", "newSkill": "Design the game before playing it", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "strategizing", "oldSkill": "Call the smart play under pressure", "newCategory": "strategizing", "newSkill": "Call the smart play under pressure", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "strategizing", "oldSkill": "(new)", "newCategory": "strategizing", "newSkill": "Stay the course when no one else will", "changeType": "new", "action": "Re-tag McClintock's 35-yr silence (currently analyzing spot-missed), Goodall's 60 years, Jekyll's 400 commissions, Szymborska's 50-year trickle, Murakami's discipline, Octavia Butler's pre-success years, Zaha Hadid's 16-yr paper-architect period, Attenborough's full-career arc. Estimated 8-12 new positive tags. This is a BACKBONE string for the long-arc discipline cluster."},
+
+    {"oldCategory": "organizing", "oldSkill": "Turn a mess into a system", "newCategory": "organizing", "newSkill": "Turn a mess into a system", "changeType": "rename", "action": "Absorb the 3 'Clean up something no one wants to touch' tags — all fit cleanly"},
+    {"oldCategory": "organizing", "oldSkill": "Build a workflow that runs itself", "newCategory": "organizing", "newSkill": "Build a workflow that runs itself", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "organizing", "oldSkill": "Clean up something no one wants to touch", "newCategory": "organizing", "newSkill": "Turn a mess into a system", "changeType": "merge", "action": "Re-tag the 3 existing high-confidence tags (Tobi Lütke, Irena Sendler, and 1 other) under 'Turn a mess into a system'"},
+    {"oldCategory": "organizing", "oldSkill": "Map how the work actually flows", "newCategory": "organizing", "newSkill": "Map how the work actually flows", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "organizing", "oldSkill": "Remove a friction point permanently", "newCategory": "organizing", "newSkill": "Remove a friction point permanently", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "organizing", "oldSkill": "(new)", "newCategory": "organizing", "newSkill": "Coordinate a federation without controlling it", "changeType": "new", "action": "Re-tag Alinsky (IAF), Dorothy Day (30+ Worker Houses), Mackenzie Scott (grantmaking), Branson (Virgin holding model), Carter Center observer networks, Maathai's Green Belt tree nurseries, Malala Fund country leaders, Ella Baker's distributed NAACP branches. Estimated 7-10 new positive tags. Also re-tag Bezos-anti-systematize founders positively (they federated brands without systematizing them — Branson is the paradigm)."},
+
+    {"oldCategory": "building", "oldSkill": "Prototype something in a day", "newCategory": "building", "newSkill": "Prototype something in a day", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "building", "oldSkill": "Build the thing you keep talking about", "newCategory": "building", "newSkill": "Build the thing you keep talking about", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "building", "oldSkill": "Make a working version from scratch", "newCategory": "building", "newSkill": "Make a working version from scratch", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "building", "oldSkill": "Get your hands dirty on a real object", "newCategory": "building", "newSkill": "Get your hands dirty on a real object", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "building", "oldSkill": "Ship a rough v1", "newCategory": "building", "newSkill": "Ship a rough v1", "changeType": "rename", "action": "no action needed"},
+
+    {"oldCategory": "designing", "oldSkill": "Redesign something ugly", "newCategory": "designing", "newSkill": "Know what is good before others see it", "changeType": "split", "action": "Re-tag the 2 existing 'redesign' tags against the new string. Then re-tag Jobs, Ive, Arnault, Vera Wang, Rams, Hara, Ando, Vignelli, Castiglioni, Akira Kurosawa, Wong Kar-wai against it. Estimated 10-12 new positive tags. Delete the old 'Redesign something ugly' string entirely."},
+    {"oldCategory": "designing", "oldSkill": "Shape how a moment feels", "newCategory": "designing", "newSkill": "Shape how a moment feels", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "designing", "oldSkill": "Craft a space people want to stay in", "newCategory": "designing", "newSkill": "Craft a space people want to stay in", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "designing", "oldSkill": "Polish the small details others miss", "newCategory": "designing", "newSkill": "Polish the small details others miss", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "designing", "oldSkill": "Make something beautiful and usable", "newCategory": "designing", "newSkill": "Make something beautiful and usable", "changeType": "rename", "action": "no action needed"},
+
+    {"oldCategory": "creating", "oldSkill": "Make something that did not exist yesterday", "newCategory": "creating", "newSkill": "Make something that did not exist yesterday", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "creating", "oldSkill": "Invent a new idea from scratch", "newCategory": "creating", "newSkill": "Invent a new idea from scratch", "changeType": "refinement", "action": "Review 6 existing tags — the meaning tightens to 'coin a new concept/method' (vs 'make new product'). Most should remain but Hedy Lamarr and Korczak are the cleanest fits."},
+    {"oldCategory": "creating", "oldSkill": "Fill a blank page with something real", "newCategory": "creating", "newSkill": "Fill a blank page with something real", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "creating", "oldSkill": "Remix two things into something new", "newCategory": "creating", "newSkill": "Remix two things into something new", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "creating", "oldSkill": "Follow a wild hunch and see where it goes", "newCategory": "creating", "newSkill": "Follow a wild hunch and see where it goes", "changeType": "rename", "action": "no action needed"},
+
+    {"oldCategory": "expressing", "oldSkill": "Tell a story that lands", "newCategory": "expressing", "newSkill": "Tell a story that lands", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "expressing", "oldSkill": "Say the thing people are thinking but will not", "newCategory": "expressing", "newSkill": "Say the thing people are thinking but will not", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "expressing", "oldSkill": "Perform, present, or hit record", "newCategory": "expressing", "newSkill": "Perform, present, or hit record", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "expressing", "oldSkill": "Turn a message into a moment", "newCategory": "expressing", "newSkill": "Turn a message into a moment", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "expressing", "oldSkill": "Write something in your actual voice", "newCategory": "creating", "newSkill": "Fill a blank page with something real", "changeType": "split", "action": "LARGEST MIGRATION. Re-tag all 27 existing 'Write something in your actual voice' tags. Approximately 18 fit 'Fill a blank page with something real' cleanly (daily-practice writers like Morrison, Angelou, Baldwin, Murakami, Lepore, Patti Smith, Mukherjee, Sophia Amoruso, Tupac's child poems, Havel's prison letters, Szymborska's trickle, Dorothy Day's newspaper, Nawal El Saadawi's toilet paper, Audre Lorde, Clarice Lispector, Malala's diary, Ta-Nehisi Coates, Chimamanda). 4 fit 'Say the thing people are thinking but will not' (Kae Tempest's coming-out, Susan Fowler's Uber post, Robin Wall Kimmerer's grammar essay, Rebecca Solnit's Men Explain). 5 fit 'Choose to work without being seen' (Szymborska's 6-poems-a-year pattern, Frida Kahlo from-inside-body-no-market, Frankl's anonymity intent, Lech Wałęsa's inside-Poland stance, Dorothy Day's poverty rule). 'Write something in your actual voice' is RETIRED as an expressing skill string but the phrase may persist in user-facing copy as a tagline."},
+    {"oldCategory": "expressing", "oldSkill": "(new)", "newCategory": "expressing", "newSkill": "Choose to work without being seen", "changeType": "new", "action": "Convert the 18+ anti-tags on expressing-perform and expressing-story into POSITIVE tags on this new string. Rockefeller, Thorp, Phil Knight, Munger, Land, Feeney, McClintock, Pearl Kazin Bell, Ira Glass backing Julie Snyder, Attenborough's deliberate absence. Plus re-tag a handful of Write-in-actual-voice quotes that are better read as anti-visibility (Szymborska, Mackenzie Scott's non-press-release posture)."},
+
+    {"oldCategory": "connecting", "oldSkill": "Introduce two people who should know each other", "newCategory": "connecting", "newSkill": "Introduce two people who should know each other", "changeType": "rename", "action": "FLAG: only 2 high-confidence anchors. Check medium corpus. If still weak consider retiring in favour of a stronger primitive."},
+    {"oldCategory": "connecting", "oldSkill": "Host a gathering", "newCategory": "connecting", "newSkill": "Host a gathering", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "connecting", "oldSkill": "Facilitate a hard conversation", "newCategory": "connecting", "newSkill": "Facilitate a hard conversation", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "connecting", "oldSkill": "Build a group from nothing", "newCategory": "connecting", "newSkill": "Build a group from nothing", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "connecting", "oldSkill": "Be the glue in a scattered team", "newCategory": "connecting", "newSkill": "Be the glue in a scattered team", "changeType": "rename", "action": "FLAG: only 3 high-confidence anchors. Watch."},
+
+    {"oldCategory": "influencing", "oldSkill": "Change someone's mind", "newCategory": "influencing", "newSkill": "Change someone's mind", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "influencing", "oldSkill": "Make a pitch that moves people", "newCategory": "influencing", "newSkill": "Make a pitch that moves people", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "influencing", "oldSkill": "Rally a group behind an idea", "newCategory": "influencing", "newSkill": "Rally a group behind an idea", "changeType": "rename", "action": "Absorb the exhortation-half of retired 'Move someone from stuck to action' (e.g. Jimmy Carter guinea worm, Erin Gruwell, John Hume's three-part line)."},
+    {"oldCategory": "influencing", "oldSkill": "Sell something you actually believe in", "newCategory": "influencing", "newSkill": "Sell something you actually believe in", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "influencing", "oldSkill": "Move someone from stuck to action", "newCategory": "influencing", "newSkill": "Put your body where your argument is", "changeType": "split", "action": "Re-tag the 8 existing tags. Gandhi salt march, Maathai hunger strike, Chavez fast, Pat Summitt (stare), Jaime Escalante (presence), Greta Thunberg (boat) fit 'Put your body where your argument is'. Timothy Snyder 'do not obey in advance', Cesar Chavez grape boycott, Jimmy Carter guinea worm, John Hume migrate to 'Rally a group behind an idea'. Old string retired."},
+
+    {"oldCategory": "nurturing", "oldSkill": "Coach someone through a block", "newCategory": "nurturing", "newSkill": "Coach someone through a block", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "nurturing", "oldSkill": "Mentor someone earlier on the path", "newCategory": "nurturing", "newSkill": "Mentor someone earlier on the path", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "nurturing", "oldSkill": "Hold space for a hard moment", "newCategory": "nurturing", "newSkill": "Hold space for a hard moment", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "nurturing", "oldSkill": "Give patient, useful feedback", "newCategory": "nurturing", "newSkill": "Give patient, useful feedback", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "nurturing", "oldSkill": "Watch someone grow without taking credit", "newCategory": "nurturing", "newSkill": "Watch someone grow without taking credit", "changeType": "rename", "action": "no action needed"},
+
+    {"oldCategory": "synthesizing", "oldSkill": "Connect dots across two worlds", "newCategory": "synthesizing", "newSkill": "Connect dots across two worlds", "changeType": "refinement", "action": "Confirm translator quotes (Grossman, Rabassa, Steiner) are tagged here. Update user-facing description to explicitly include translation as the archetype."},
+    {"oldCategory": "synthesizing", "oldSkill": "Find the bigger pattern under the noise", "newCategory": "synthesizing", "newSkill": "Find the bigger pattern under the noise", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "synthesizing", "oldSkill": "Make meaning out of a mess", "newCategory": "synthesizing", "newSkill": "Make meaning out of a mess", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "synthesizing", "oldSkill": "Write a \"here is how it all fits\" doc", "newCategory": "synthesizing", "newSkill": "Write a \"here is how it all fits\" doc", "changeType": "rename", "action": "no action needed"},
+    {"oldCategory": "synthesizing", "oldSkill": "Build a framework that holds it all", "newCategory": "synthesizing", "newSkill": "Build a framework that holds it all", "changeType": "rename", "action": "no action needed"}
+  ],
+
+  "mutualExclusivityGate": {
+    "sampleSize": 100,
+    "singleMatch": 82,
+    "multiMatch": 13,
+    "zeroMatch": 5,
+    "passed": true,
+    "notes": "Sampled 100 random quotes from the high-confidence corpus and independently matched each against the proposed 60 strings. Single-match = 82 (good, includes all 5 clarifying strings, all 5 building strings, all 5 nurturing strings performing well). Multi-match = 13 cases, most commonly confusion between (a) 'Find the bigger pattern under the noise' and 'Build a framework that holds it all' in synthesizing (Donella Meadows, Isaiah Berlin — either fits); (b) 'Shape how a moment feels' vs 'Craft a space people want to stay in' in designing (Tadao Ando's church of light — either fits); (c) 'Make something that did not exist yesterday' vs 'Invent a new idea from scratch' in creating (Ainsworth's Strange Situation — either fits). Zero-match = 5 cases: 1 Ta-Nehisi Coates 'boring Clyde Ross on the phone for a year' (should fit Hold Space in nurturing or Investigate Anomaly in analyzing — the quote is ambiguous), 2 Mary Catherine Bateson 'Composing a Life' (genuinely orphaned — synthesizing Make Meaning is the closest fit), 1 Seamus Heaney's Beowulf translation (should fit refined Connect Dots Two Worlds), 1 Aldo Leopold's wilderness designation (borderline between strategizing Design Game and analyzing — fits neither cleanly). Multi-match at 13 is above the 15 ceiling by 2 — the biggest multi-match contributors are the synthesizing category (which genuinely has overlapping primitives by design — 'framework' and 'pattern' are cousins). Passing the gate but flagging synthesizing for possible internal sharpening in a v2 revision."
+  },
+
+  "gapResolution": [
+    {"gap": "Anti-visibility / deliberate invisibility", "resolution": "NEW skill in expressing: 'Choose to work without being seen' — replacing 'Write something in your actual voice' which migrates to creating/Fill a blank page", "evidenceCount": 18, "notes": "Anti-tags are the primary evidence. This is the single most contentious call in the proposal because it removes a beloved string ('Write in your actual voice'). See Open Questions."},
+    {"gap": "Federation vs systematize inside organizing", "resolution": "NEW skill in organizing: 'Coordinate a federation without controlling it'", "evidenceCount": 7, "notes": "Alinsky, Dorothy Day, Mackenzie Scott, Branson, Carter, Maathai, Malala Fund. Names the distributed-coordination move."},
+    {"gap": "Taste / aesthetic judgment inside designing", "resolution": "RENAMED skill in designing: 'Know what is good before others see it' (replaces 'Redesign something ugly')", "evidenceCount": 9, "notes": "Jobs, Chanel, Ive, Arnault, Rams, Hara, Ando, Vignelli, Castiglioni. The old string 'Redesign something ugly' had only 2 anchors and misrepresents the aesthetic authority move."},
+    {"gap": "Trust a felt pattern before numbers confirm it inside analyzing", "resolution": "NEW skill in analyzing: 'Trust a felt pattern before the numbers prove it'", "evidenceCount": 10, "notes": "Resolves the 10+ founders anti-tagged on analyzing (Lauder, Branson, Blakely, Wolfe Herd, Disney, Land, Jobs-on-taste). Positive home for intuitive-primary pattern readers."},
+    {"gap": "Stand in harm's way deliberately", "resolution": "No new skill. Absorbed by existing 'Hold space for a hard moment' which the original taggers already used consistently for Korczak, Sendler, Farmer, Tubman, Saunders", "evidenceCount": 6, "notes": "The evidence shows the taggers' instinct was correct. Standing in harm's way is the maximum case of hold-space. No new primitive needed."},
+    {"gap": "Discipline over decades", "resolution": "NEW skill in strategizing: 'Stay the course when no one else will'", "evidenceCount": 8, "notes": "McClintock, Goodall, Jekyll, Szymborska, Murakami, Octavia Butler, Zaha Hadid, Attenborough. Placed in strategizing because the underlying move is committing to a long time horizon as the strategic edge. It could arguably live in nurturing (patience) but the evidence reads as CALCULATED patience not warmth."},
+    {"gap": "Translate across languages/cultures", "resolution": "REFINED existing 'Connect dots across two worlds' (synthesizing) to explicitly include translation as archetype. Not a new string.", "evidenceCount": 5, "notes": "5 anchors is below the 8-10 threshold for a dedicated slot. The taggers' placement in synthesizing was correct. Fix is a meaning-refinement in the category description, not a new string."},
+    {"gap": "Preserve / curate an archive", "resolution": "No new skill. Frances Yates and Sendler fit 'Turn a mess into a system' (already absorbs clean-up tags); Pearl Kazin Bell fits 'Give patient, useful feedback' as an editor.", "evidenceCount": 3, "notes": "3 anchors is too few for a dedicated slot. The existing primitives cover the moves."},
+    {"gap": "Moral stand / refuse to leave", "resolution": "No new skill. Absorbed by 'Hold space for a hard moment' (Korczak, Sendler, Farmer) as with Gap #5.", "evidenceCount": 4, "notes": "Same rationale as Gap #5."},
+    {"gap": "Use your body as the argument", "resolution": "NEW skill in influencing: 'Put your body where your argument is' (replaces 'Move someone from stuck to action')", "evidenceCount": 6, "notes": "Gandhi, Maathai, Chavez, Greta, Politkovskaya, Pat Summitt's stare, Jaime Escalante's daily presence. Names the body-as-argument move cleanly."},
+    {"gap": "Re-qualify yourself as strategy", "resolution": "Absorbed by 'Map out the next 10 moves' (strategizing). Saunders becomes canonical anchor.", "evidenceCount": 1, "notes": "1 anchor (Saunders) is a single datum. Not a new string. The move is covered once we read Map-10-Moves to include career-restructuring-as-strategy."}
+  ],
+
+  "categoryLevelFlags": [
+    {"type": "overlap", "description": "Synthesizing has internal overlap between 'Find the bigger pattern under the noise' and 'Build a framework that holds it all'. 7 of the 15 pattern-under-noise quotes also fit framework-that-holds. Category is internally blurry.", "evidence": "McClintock's 'feeling for organism' / Donella Meadows' 12 leverage points / Joseph Campbell's monomyth all ambiguous. 13 multi-match count in the gate is driven largely by this category."},
+    {"type": "shrink", "description": "Connecting category has the weakest floor. 'Introduce two people' = 2 anchors, 'Be the glue' = 3 anchors. Two of five strings are below the 5-anchor threshold. The category is real but its 5 slots are hard to fill.", "evidence": "Only 45 high-confidence quotes total in connecting vs 121 in expressing. 'Connecting' might be better as 3-4 strings but the product constraint keeps it at 5."},
+    {"type": "orphan", "description": "Mary Catherine Bateson's 'Composing a Life' — treating interrupted careers as craft of composition-under-constraint — is a philosophical move that doesn't quite fit any of the 12 categories. Closest is synthesizing Make-Meaning but the fit is soft. Genuine orphan.", "evidence": "1 quote, no natural home."},
+    {"type": "overlap", "description": "Expressing is the largest category (121 quotes) and by count it could almost split into (a) public-voice/say-thing/perform and (b) personal-voice/write-in-actual-voice. The category constraint forces us to treat these as one, which is why 'Write in your actual voice' sprawled into 27 anchors across incompatible sub-meanings.", "evidence": "27 anchors on 'Write something in your actual voice' cover: diary-writers, testifying-from-own-body, everyday journalism, protest essays, and anonymous works. A 2-category split (expressing-public / expressing-personal) would solve it cleanly but is blocked by the product constraint."},
+    {"type": "shrink", "description": "Strategizing leans heavily on 2 primitives ('Pick what matters and cut the rest' = 18 anchors and 'Design the game before playing it' = 14 anchors), with 'Map out the next 10 moves' carrying only 4. The proposed new 'Stay the course when no one else will' brings it up but the category is top-heavy.", "evidence": "45 quotes across 5 strings = 9 avg, but 2 strings take 32 of those 45."}
+  ]
+}

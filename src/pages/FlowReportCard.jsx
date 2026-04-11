@@ -67,25 +67,30 @@ const TIER_DISPLAY = {
 const mapClusterToSegments = (clusterLabel) => {
   const labelLower = clusterLabel.toLowerCase()
   const segmentMappings = {
-    clarifying: [0], explaining: [0], teaching: [0], translating: [0],
+    // 0=storytelling, 1=teaching, 2=coaching, 3=performing, 4=creating, 5=building, 6=designing, 7=leading, 8=connecting, 9=speaking_up
+    storytelling: [0], narrative: [0], memoir: [0], 'content writing': [0],
+    teaching: [1], explaining: [1], clarifying: [1], translating: [1], simplifying: [1],
+    coaching: [2], mentoring: [2], nurturing: [2], supporting: [2], 'holding space': [2],
+    performing: [3], presenting: [3], speaking: [3], stage: [3], keynote: [3],
+    creating: [4], creative: [4], art: [4], inventing: [4], ideation: [4],
+    building: [5], making: [5], engineering: [5], coding: [5], developing: [5], prototype: [5],
+    designing: [6], design: [6], ux: [6], visual: [6], aesthetic: [6],
+    leading: [7], strategy: [7], strategizing: [7], planning: [7], vision: [7], organizing: [7], systems: [7], operations: [7],
+    connecting: [8], networking: [8], collaboration: [8], facilitating: [8], community: [8],
+    'speaking up': [9], advocacy: [9], activism: [9], courage: [9],
+    // Absorbed old terms
     analyzing: [1], analysis: [1], data: [1], patterns: [1], research: [1],
-    strategizing: [2], strategy: [2], planning: [2], vision: [2],
-    organizing: [3], systems: [3], operations: [3], processes: [3],
-    building: [4], making: [4], engineering: [4], coding: [4], developing: [4],
-    designing: [5], design: [5], ux: [5], visual: [5], aesthetic: [5],
-    creating: [6], creative: [6], art: [6], writing: [6], ideation: [6],
-    expressing: [7], storytelling: [7], presenting: [7], speaking: [7],
-    connecting: [8], networking: [8], collaboration: [8], facilitating: [8],
-    influencing: [9], sales: [9], persuading: [9], motivating: [9],
-    nurturing: [10], coaching: [10], mentoring: [10], supporting: [10],
-    synthesizing: [11], integrating: [11], wisdom: [11], 'big picture': [11],
-    'problem solving': [1, 2], 'problem-solving': [1, 2],
-    'team building': [8, 10], leadership: [2, 9],
-    communication: [0, 7], 'project management': [2, 3],
-    innovation: [4, 6], entrepreneurship: [2, 4, 9],
-    learning: [0, 6], experience: [5, 6], engagement: [8, 9],
-    community: [8, 10], healing: [10, 11], growth: [10, 11],
-    playful: [6, 8], interaction: [7, 8], performance: [7, 9],
+    influencing: [3], sales: [3], persuading: [3], motivating: [3],
+    synthesizing: [1], integrating: [1], wisdom: [1], 'big picture': [1],
+    expressing: [0], writing: [0],
+    // Compound terms
+    'problem solving': [1, 7], 'problem-solving': [1, 7],
+    'team building': [8, 2], leadership: [7, 3],
+    communication: [0, 3], 'project management': [7, 5],
+    innovation: [4, 5], entrepreneurship: [7, 5, 3],
+    learning: [1, 4], experience: [6, 4], engagement: [8, 3],
+    healing: [2, 9], growth: [2, 1],
+    playful: [4, 8], interaction: [3, 8], performance: [3, 9],
   }
   const matchedSegments = new Set()
   Object.entries(segmentMappings).forEach(([keyword, indices]) => {
@@ -200,7 +205,7 @@ function FlowReportCard() {
 
   // Add hue values to segments for wheel rendering
   const skillsWithHue = useMemo(() =>
-    SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
+    SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 36 })),
     []
   )
 

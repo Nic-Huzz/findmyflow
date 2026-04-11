@@ -60,7 +60,7 @@ function WheelDemo() {
   // Add hue values to segments for color generation
   const skillsWithHue = SKILLS_SEGMENTS.map((s, i) => ({
     ...s,
-    hue: i * 30, // 12 segments = 30° each
+    hue: i * 36, // 10 segments = 36° each
   }));
 
   const problemsWithHue = PROBLEM_SEGMENTS.map((s, i) => ({

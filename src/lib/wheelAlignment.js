@@ -12,6 +12,8 @@ import {
   PROFICIENCY_RINGS,
   PROBLEMS_PROFICIENCY_RINGS,
   JOURNEY_STAGES,
+  findSkillSegment,
+  resolveSkillId,
 } from './wheelTaxonomy'
 
 // ============================================================================
@@ -28,18 +30,16 @@ import {
  * Logic: "If you have THIS skill, you can help with THESE problems"
  */
 export const SKILLS_TO_PROBLEMS = {
-  clarifying: ['personal_mastery', 'mental_wellbeing', 'human_progress'],
-  analyzing: ['economic_freedom', 'physical_vitality', 'human_progress'],
-  strategizing: ['economic_freedom', 'personal_mastery', 'local_impact'],
-  organizing: ['economic_freedom', 'local_impact', 'service_care'],
+  storytelling: ['creative_expression', 'cultural_movements', 'mental_wellbeing'],
+  teaching: ['personal_mastery', 'mental_wellbeing', 'human_progress'],
+  coaching: ['mental_wellbeing', 'intimate_bonds', 'service_care'],
+  performing: ['creative_expression', 'cultural_movements', 'economic_freedom'],
+  creating: ['creative_expression', 'cultural_movements', 'human_progress'],
   building: ['economic_freedom', 'human_progress', 'creative_expression'],
   designing: ['creative_expression', 'human_progress', 'economic_freedom'],
-  creating: ['creative_expression', 'cultural_movements', 'human_progress'],
-  expressing: ['creative_expression', 'cultural_movements', 'mental_wellbeing'],
+  leading: ['economic_freedom', 'personal_mastery', 'local_impact'],
   connecting: ['intimate_bonds', 'local_impact', 'cultural_movements'],
-  influencing: ['economic_freedom', 'cultural_movements', 'social_justice'],
-  nurturing: ['mental_wellbeing', 'intimate_bonds', 'service_care'],
-  synthesizing: ['personal_mastery', 'mental_wellbeing', 'human_progress'],
+  speaking_up: ['social_justice', 'cultural_movements', 'mental_wellbeing'],
 }
 
 /**
@@ -74,18 +74,16 @@ export const PROBLEMS_TO_PERSONAS = {
  * Logic: "THESE persona types naturally seek out people with THIS skill"
  */
 export const SKILLS_TO_PERSONAS = {
-  clarifying: ['seekers', 'teachers', 'builders'],
-  analyzing: ['achievers', 'builders', 'protectors'],
-  strategizing: ['achievers', 'builders', 'visionaries'],
-  organizing: ['builders', 'protectors', 'achievers'],
+  storytelling: ['creators', 'seekers', 'visionaries'],
+  teaching: ['seekers', 'teachers', 'builders'],
+  coaching: ['healers', 'nurturers', 'seekers'],
+  performing: ['creators', 'challengers', 'achievers'],
+  creating: ['creators', 'explorers', 'visionaries'],
   building: ['builders', 'visionaries', 'creators'],
   designing: ['creators', 'builders', 'visionaries'],
-  creating: ['creators', 'explorers', 'visionaries'],
-  expressing: ['creators', 'challengers', 'visionaries'],
+  leading: ['achievers', 'builders', 'visionaries'],
   connecting: ['connectors', 'seekers', 'nurturers'],
-  influencing: ['achievers', 'challengers', 'visionaries'],
-  nurturing: ['healers', 'nurturers', 'seekers'],
-  synthesizing: ['seekers', 'visionaries', 'teachers'],
+  speaking_up: ['challengers', 'visionaries', 'protectors'],
 }
 
 // ============================================================================
@@ -156,7 +154,8 @@ function calculatePairwiseAlignment(sourceIds, targetIds, mappingTable) {
   let matches = 0
   let totalPossible = 0
 
-  sourceIds.forEach(sourceId => {
+  sourceIds.forEach(rawSourceId => {
+    const sourceId = resolveSkillId(rawSourceId) || rawSourceId
     const expectedTargets = mappingTable[sourceId] || []
     totalPossible += expectedTargets.length
 
@@ -179,8 +178,9 @@ function findStrongAlignments(skills, problems, personas) {
   const alignments = []
 
   skills.forEach(skill => {
-    const relatedProblems = SKILLS_TO_PROBLEMS[skill.segmentId] || []
-    const relatedPersonas = SKILLS_TO_PERSONAS[skill.segmentId] || []
+    const resolvedId = resolveSkillId(skill.segmentId) || skill.segmentId
+    const relatedProblems = SKILLS_TO_PROBLEMS[resolvedId] || []
+    const relatedPersonas = SKILLS_TO_PERSONAS[resolvedId] || []
 
     problems.forEach(problem => {
       if (!relatedProblems.includes(problem.segmentId)) return
@@ -190,7 +190,7 @@ function findStrongAlignments(skills, problems, personas) {
       personas.forEach(persona => {
         if (relatedPersonas.includes(persona.segmentId) && problemPersonas.includes(persona.segmentId)) {
           // Triple alignment found!
-          const skillSegment = SKILLS_SEGMENTS.find(s => s.id === skill.segmentId)
+          const skillSegment = findSkillSegment(skill.segmentId)
           const problemSegment = PROBLEM_SEGMENTS.find(p => p.id === problem.segmentId)
           const personaSegment = PERSONA_SEGMENTS.find(p => p.id === persona.segmentId)
 
@@ -256,12 +256,13 @@ function findMisalignments(skillIds, problemIds, personaIds) {
   const gaps = []
 
   // Skills without matching Problems
-  skillIds.forEach(skillId => {
+  skillIds.forEach(rawSkillId => {
+    const skillId = resolveSkillId(rawSkillId) || rawSkillId
     const expectedProblems = SKILLS_TO_PROBLEMS[skillId] || []
     const hasMatchingProblem = expectedProblems.some(p => problemIds.includes(p))
 
     if (!hasMatchingProblem && expectedProblems.length > 0) {
-      const skill = SKILLS_SEGMENTS.find(s => s.id === skillId)
+      const skill = findSkillSegment(skillId)
       const suggestedProblems = expectedProblems
         .map(pId => PROBLEM_SEGMENTS.find(p => p.id === pId)?.displayName)
         .filter(Boolean)
@@ -296,12 +297,13 @@ function findMisalignments(skillIds, problemIds, personaIds) {
   })
 
   // Skills without matching Personas (direct)
-  skillIds.forEach(skillId => {
+  skillIds.forEach(rawSkillId => {
+    const skillId = resolveSkillId(rawSkillId) || rawSkillId
     const expectedPersonas = SKILLS_TO_PERSONAS[skillId] || []
     const hasMatchingPersona = expectedPersonas.some(p => personaIds.includes(p))
 
     if (!hasMatchingPersona && expectedPersonas.length > 0) {
-      const skill = SKILLS_SEGMENTS.find(s => s.id === skillId)
+      const skill = findSkillSegment(skillId)
       gaps.push({
         type: 'skill_without_persona',
         message: `You have ${skill?.displayName} skills but no natural persona match`,
@@ -527,7 +529,7 @@ export function getWheelSummary(wheelData) {
   const alignment = calculateAlignmentScore(wheelData)
 
   const topSkill = skills.length > 0
-    ? SKILLS_SEGMENTS.find(s => s.id === skills[0].segmentId)?.displayName
+    ? findSkillSegment(skills[0].segmentId)?.displayName
     : null
   const topProblem = problems.length > 0
     ? PROBLEM_SEGMENTS.find(p => p.id === problems[0].segmentId)?.displayName
