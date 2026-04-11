@@ -75,6 +75,12 @@ export default function SwipeCardDeck({
   }
 
   const handleReject = () => {
+    // Actively deselect if previously kept (user changed their mind)
+    if (keptIds.has(currentCard.id)) {
+      const nextKept = new Set(keptIds)
+      nextKept.delete(currentCard.id)
+      setKeptIds(nextKept)
+    }
     onCardRejected?.(currentCard.id)
     advance()
   }

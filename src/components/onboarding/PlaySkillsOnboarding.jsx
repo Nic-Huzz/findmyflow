@@ -141,7 +141,6 @@ export default function PlaySkillsOnboarding() {
   // Path A: external AI
   const [copied, setCopied] = useState(false)
   const [rawResponse, setRawResponse] = useState('')
-  const [parsedItems, setParsedItems] = useState([])
   const [mappedCards, setMappedCards] = useState([]) // from edge function
   const [keptPlacemakes, setKeptPlacemakes] = useState([]) // after swipe
 
@@ -199,6 +198,7 @@ export default function PlaySkillsOnboarding() {
           if (p.selectedPlacemakes) setSelectedPlacemakes(p.selectedPlacemakes)
           if (p.keptPlacemakes) setKeptPlacemakes(p.keptPlacemakes)
           if (p.mappedCards) setMappedCards(p.mappedCards)
+          if (p.rawResponse) setRawResponse(p.rawResponse)
           if (p.userName) setUserName(p.userName)
           if (p.email) setEmail(p.email)
         } else {
@@ -214,10 +214,10 @@ export default function PlaySkillsOnboarding() {
       currentBeat, path, hookSlideIndex,
       selectedCategories, selectedPlacemakes,
       keptPlacemakes, mappedCards,
-      userName, email,
+      rawResponse, userName, email,
       timestamp: Date.now(),
     }))
-  }, [currentBeat, path, hookSlideIndex, selectedCategories, selectedPlacemakes, keptPlacemakes, mappedCards, userName, email])
+  }, [currentBeat, path, hookSlideIndex, selectedCategories, selectedPlacemakes, keptPlacemakes, mappedCards, rawResponse, userName, email])
 
   // ─── Navigation ──────────────────────────────────────────────────────────
 
@@ -287,7 +287,6 @@ export default function PlaySkillsOnboarding() {
       return
     }
 
-    setParsedItems(parsed)
     // Go straight to loading state (no transition animation needed for a spinner)
     setCurrentBeat(BEATS.MAPPING)
 
@@ -384,6 +383,12 @@ export default function PlaySkillsOnboarding() {
     setError(null)
 
     try {
+      // Remove old get_started clusters before inserting new ones
+      await supabase.from('nikigai_clusters')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('source_flow', 'get_started')
+
       // Insert kept placemakes into nikigai_clusters
       const rows = keptPlacemakes.map(item => ({
         user_id: user.id,

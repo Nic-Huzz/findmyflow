@@ -217,7 +217,12 @@ export async function persistPlaySkillsOnboarding(userId) {
   }
 
   try {
-    // 1. Insert placemakes into nikigai_clusters
+    // 1. Remove old get_started clusters, then insert new ones
+    await supabase.from('nikigai_clusters')
+      .delete()
+      .eq('user_id', userId)
+      .eq('source_flow', 'get_started')
+
     const rows = keptPlacemakes.map(item => ({
       user_id: userId,
       cluster_type: 'skills',
