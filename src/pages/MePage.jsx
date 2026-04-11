@@ -18,15 +18,13 @@ import { useHeroProfile } from '../hooks/useHeroProfile'
 import { getLevel, getLevelNumber, getLevelProgress, getLevelMaxXP } from '../lib/crm/statsService'
 import { getStageDisplayName } from '../lib/stageConfig'
 import { getLevelConfig, HEALING_DAYS_REQUIRED } from '../components/level/LevelConfig'
-import { ONBOARDING_QUEST_IDS, LAYER_RECOMMENDATIONS } from '../hooks/usePriorityTab'
-import { computePriorityLayer, TENSION_LAYER_DISPLAY } from '../lib/onboardingV2'
-import { GROAN_VISIBILITY_LAYERS } from '../lib/stageConfig'
+import { ONBOARDING_QUEST_IDS } from '../hooks/usePriorityTab'
 import { useReveal } from '../hooks/useReveal'
 import VibeColorPicker from '../components/VibeColorPicker'
 import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
 // HomeFirstTime archived — replaced by /essence-mirror redirect
 import SeeYourFlow from '../components/SeeYourFlow'
-import { hasPendingJourneyData, persistJourneyOnboarding } from '../lib/journeyOnboarding'
+import { hasPendingJourneyData, persistJourneyOnboarding, hasPendingPlaySkillsData, persistPlaySkillsOnboarding } from '../lib/journeyOnboarding'
 import './MePage.css'
 
 // Stat ring circumference for r=22
@@ -142,6 +140,20 @@ export default function MePage() {
         }
       })
       .catch(err => console.warn('Failed to persist journey onboarding:', err))
+  }, [user?.id])
+
+  // Persist play-skills onboarding data after login/signup
+  useEffect(() => {
+    if (!user?.id) return
+    if (!hasPendingPlaySkillsData()) return
+
+    persistPlaySkillsOnboarding(user.id)
+      .then(result => {
+        if (result.success) {
+          console.log('Play-skills onboarding persisted, count:', result.count)
+        }
+      })
+      .catch(err => console.warn('Failed to persist play-skills onboarding:', err))
   }, [user?.id])
 
   // After onboarding completes, refresh state in-place instead of full page reload
@@ -306,60 +318,6 @@ export default function MePage() {
   const onboardingStepIndex = onboardingStatus.findIndex(done => !done)
   const onboardingDoneCount = onboardingStatus.filter(Boolean).length
   const currentOnboardingStep = onboardingStepIndex >= 0 ? ONBOARDING_STEPS[onboardingStepIndex] : null
-
-  // Derived: priority layer + recommendations
-  const priorityLayer = useMemo(() => {
-    if (stageProgress?.tension_discover == null) return null
-    return computePriorityLayer({
-      discover: stageProgress?.tension_discover,
-      regulate: stageProgress?.tension_regulate,
-      reveal: stageProgress?.tension_reveal,
-      value: stageProgress?.tension_value,
-    })
-  }, [stageProgress?.tension_discover, stageProgress?.tension_regulate, stageProgress?.tension_reveal, stageProgress?.tension_value])
-
-  const layerDisplay = priorityLayer ? TENSION_LAYER_DISPLAY[priorityLayer] : null
-
-  const ME_QUEST_INFO = {
-    flow_finder_skills: { name: 'Flow Finder: Skills', route: '/nikigai/skills', icon: '🎯', desc: 'Discover what you\'re naturally great at' },
-    flow_finder_problems: { name: 'Flow Finder: Problems', route: '/nikigai/problems', icon: '🧩', desc: 'Find the problems you care about solving' },
-    flow_finder_persona: { name: 'Flow Finder: Persona', route: '/nikigai/persona', icon: '👤', desc: 'Identify who you\'re meant to serve' },
-    recognise_nervous_system: { name: 'Map Your Nervous System', route: '/nervous-system', icon: '🧠', desc: 'Find your boundaries around money and visibility' },
-    recognise_limiting_belief_rewire: { name: 'Limiting Belief Rewire', route: '/limiting-belief-rewire', icon: '🔓', desc: 'Trace a limiting belief and rewire it' },
-    release_weekly_big: { name: 'Big Release', route: null, icon: '💜', desc: 'Complete an extended release practice' },
-  }
-
-  const layerRecommendations = useMemo(() => {
-    if (!priorityLayer) return null
-    const config = LAYER_RECOMMENDATIONS[priorityLayer]
-    if (!config) return null
-
-    if (config.type === 'quests') {
-      const allCompletedIds = new Set(questCompletions.map(c => c.quest_id))
-      // Find the first incomplete quest
-      const nextQuestId = config.questIds.find(id => !allCompletedIds.has(id))
-      const nextInfo = nextQuestId ? ME_QUEST_INFO[nextQuestId] : null
-      // Fall back to alwaysRecommend
-      const alwaysId = !nextInfo && config.alwaysRecommend?.length > 0 ? config.alwaysRecommend[0] : null
-      const alwaysInfo = alwaysId ? ME_QUEST_INFO[alwaysId] : null
-      const nextItem = nextInfo
-        ? { ...nextInfo, key: nextQuestId }
-        : alwaysInfo
-          ? { ...alwaysInfo, key: alwaysId }
-          : null
-      return { type: 'quests', nextItem }
-    }
-
-    if (config.type === 'playlist_layers') {
-      const layerObj = GROAN_VISIBILITY_LAYERS.find(l => l.id === config.layers[0])
-      const nextItem = layerObj
-        ? { key: layerObj.id, name: `${layerObj.label} Layer Challenge`, icon: layerObj.icon, desc: layerObj.fear }
-        : null
-      return { type: 'playlist_layers', nextItem }
-    }
-
-    return null
-  }, [priorityLayer, questCompletions, questData])
 
   // Derived: level info
   const level = getLevel(totalXP)

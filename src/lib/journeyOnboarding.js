@@ -166,3 +166,106 @@ export function hasPendingJourneyData() {
     return false
   }
 }
+
+// ─── Play-Skills Onboarding Hydration ─────────────────────────────────────
+
+const PLAYSKILLS_RESULT_KEY = 'playskills_onboarding_result'
+const PLAYSKILLS_PROGRESS_KEY = 'playskills_onboarding_progress'
+
+/**
+ * Check if the user has pending play-skills onboarding data in localStorage.
+ */
+export function hasPendingPlaySkillsData() {
+  try {
+    const saved = localStorage.getItem(PLAYSKILLS_RESULT_KEY)
+    if (!saved) return false
+    const parsed = JSON.parse(saved)
+    return parsed?.keptPlacemakes && parsed.keptPlacemakes.length > 0
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Persist play-skills onboarding data to the database after sign-up.
+ * Called from MePage after the user authenticates.
+ *
+ * Reads 'playskills_onboarding_result' from localStorage:
+ *   { path, keptPlacemakes, userName, completedAt }
+ *
+ * Writes to:
+ *   - nikigai_clusters (source_flow: 'get_started')
+ *   - user_stage_progress (marks onboarding complete)
+ *   - auth.users metadata (display_name, if not already set)
+ */
+export async function persistPlaySkillsOnboarding(userId) {
+  if (!userId) return { success: false, error: 'No user ID' }
+
+  const savedJson = localStorage.getItem(PLAYSKILLS_RESULT_KEY)
+  if (!savedJson) return { success: false, error: 'No play-skills data found' }
+
+  let saved
+  try {
+    saved = JSON.parse(savedJson)
+  } catch {
+    return { success: false, error: 'Invalid play-skills data' }
+  }
+
+  const { keptPlacemakes, userName } = saved
+  if (!keptPlacemakes || keptPlacemakes.length === 0) {
+    return { success: false, error: 'No placemakes found' }
+  }
+
+  try {
+    // 1. Insert placemakes into nikigai_clusters
+    const rows = keptPlacemakes.map(item => ({
+      user_id: userId,
+      cluster_type: 'skills',
+      cluster_label: item.placemake,
+      source_flow: 'get_started',
+      items: [{
+        text: item.placemake,
+        category: item.categoryId,
+        evidence: item.evidence || '',
+        isStarred: true,
+      }],
+    }))
+
+    const { error: insertError } = await supabase
+      .from('nikigai_clusters')
+      .insert(rows)
+
+    if (insertError) {
+      console.error('Error saving play-skills clusters:', insertError)
+      // Continue — don't block on cluster insert failure
+    }
+
+    // 2. Update user_stage_progress
+    const { error: progressError } = await supabase
+      .from('user_stage_progress')
+      .upsert({
+        user_id: userId,
+        onboarding_v2_completed: true,
+      }, { onConflict: 'user_id' })
+
+    if (progressError) {
+      console.error('Error updating stage progress:', progressError)
+    }
+
+    // 3. Set display name if provided
+    if (userName && userName.trim()) {
+      await supabase.auth.updateUser({
+        data: { display_name: userName.trim() }
+      })
+    }
+
+    // 4. Clean up localStorage
+    localStorage.removeItem(PLAYSKILLS_RESULT_KEY)
+    localStorage.removeItem(PLAYSKILLS_PROGRESS_KEY)
+
+    return { success: true, count: keptPlacemakes.length }
+  } catch (err) {
+    console.error('Error persisting play-skills onboarding:', err)
+    return { success: false, error: err.message }
+  }
+}

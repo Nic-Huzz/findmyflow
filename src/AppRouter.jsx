@@ -32,6 +32,7 @@ function lazyRetry(importFn) {
 import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
 import JourneyOnboarding from './components/onboarding/JourneyOnboarding'
+import PlaySkillsOnboarding from './components/onboarding/PlaySkillsOnboarding'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import EssenceIdentify from './pages/EssenceIdentify'
 import ProtectiveIdentify from './pages/ProtectiveIdentify'
@@ -153,7 +154,7 @@ const ZoneDiagnosisFlow = lazyRetry(() => import('./flows/ZoneDiagnosisFlow'))
 const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
 const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
 const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
-const TensionAssessmentFlow = lazyRetry(() => import('./flows/TensionAssessmentFlow'))
+const WoundMapFlow = lazyRetry(() => import('./flows/WoundMapFlow'))
 const CuriosityCompassFlow = lazyRetry(() => import('./flows/CuriosityCompassFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 
@@ -219,6 +220,9 @@ const LibraryOfAnswers = lazyRetry(() => import('./pages/LibraryOfAnswers'))
 const FlowReportCard = lazyRetry(() => import('./pages/FlowReportCard'))
 const FlowCompassPage = lazyRetry(() => import('./pages/FlowCompassPage'))
 const BusinessPage = lazyRetry(() => import('./pages/BusinessPage'))
+const ExperienceCatalog = lazyRetry(() => import('./pages/ExperienceCatalog'))
+const ExperienceCreate = lazyRetry(() => import('./pages/ExperienceCreate'))
+const ExperienceDetail = lazyRetry(() => import('./pages/ExperienceDetail'))
 const SolPage = lazyRetry(() => import('./pages/SolPage'))
 const FlowMapMockups = lazyRetry(() => import('./components/FlowMapMockups'))
 const ValidationFlowsManager = lazyRetry(() => import('./pages/ValidationFlowsManager'))
@@ -244,6 +248,10 @@ const ContentSubmit = lazyRetry(() => import('./pages/league/ContentSubmit'))
 const LeagueAdmin = lazyRetry(() => import('./pages/league/LeagueAdmin'))
 const NewsfeedPage = lazyRetry(() => import('./pages/league/NewsfeedPage'))
 const LeagueGuide = lazyRetry(() => import('./flows/LeagueGuide'))
+
+// Lazy-loaded - Public Play-List Feed
+const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
+const PlaylistFeedAdmin = lazyRetry(() => import('./pages/PlaylistFeedAdmin'))
 
 import './App.css'
 import './PersonaAssessment.css'
@@ -313,6 +321,8 @@ import './pages/league/MatchupDetails.css'
 import './pages/league/ContentSubmit.css'
 import './pages/league/LeagueAdmin.css'
 import './pages/league/NewsfeedPage.css'
+import './pages/PlaylistFeed.css'
+import './pages/PlaylistFeedAdmin.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
@@ -367,6 +377,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/healing-compass-workshop' ||
                         location.pathname === '/why-i-created-this' ||
                         location.pathname.startsWith('/league') ||
+                        location.pathname.startsWith('/play-list-feed') ||
                         location.pathname === '/content-review' ||
                         location.pathname === '/product-suite-map' ||
                         location.pathname === '/essence-identify' ||
@@ -374,7 +385,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/matrix-code-deep-dive' ||
                         location.pathname === '/shadow-work' ||
                         location.pathname === '/essence-mirror' ||
-                        location.pathname === '/tension-assessment' ||
+                        location.pathname === '/wound-map' ||
                         location.pathname === '/curiosity-compass' ||
                         location.pathname.startsWith('/zone-diagnosis') ||
                         location.pathname === '/get-started'
@@ -412,7 +423,7 @@ function AppRouter() {
               <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
 
               {/* Signup/Onboarding */}
-              <Route path="/get-started" element={<JourneyOnboarding />} />
+              <Route path="/get-started" element={<PlaySkillsOnboarding />} />
               <Route path="/essence-identify" element={<EssenceIdentify />} />
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
               <Route path="/log-in" element={<PersonaAssessment />} />
@@ -536,6 +547,16 @@ function AppRouter() {
             {/* Public Validation Flow - No Auth Required */}
             <Route path="/v/:shareToken" element={<PublicValidationFlow />} />
 
+            {/* Public Play-List Feed (anon-readable for 100-day challenge virality) */}
+            <Route path="/play-list-feed" element={<PlaylistFeed />} />
+            <Route path="/play-list-feed/:postId" element={<PlaylistFeed />} />
+            <Route path="/admin/play-list-feed" element={
+              <AuthGate><PlaylistFeedAdmin /></AuthGate>
+            } />
+            <Route path="/admin/playlist-feed" element={
+              <AuthGate><PlaylistFeedAdmin /></AuthGate>
+            } />
+
             {/* Public Lead Magnet Flows - No Auth Required */}
             <Route path="/try/offer/:flowType" element={<PublicMoneyModelFlow />} />
             <Route path="/try/nervous-system" element={<PublicNervousSystemFlow />} />
@@ -606,9 +627,9 @@ function AppRouter() {
                 <EssenceMirrorFlow />
               </AuthGate>
             } />
-            <Route path="/tension-assessment" element={
+            <Route path="/wound-map" element={
               <AuthGate>
-                <TensionAssessmentFlow />
+                <WoundMapFlow />
               </AuthGate>
             } />
             <Route path="/curiosity-compass" element={
@@ -802,8 +823,24 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Business Page */}
+            {/* Business — Experience Creator OS (Phase 1: pre-event checklist) */}
             <Route path="/business" element={
+              <AuthGate>
+                <ExperienceCatalog />
+              </AuthGate>
+            } />
+            <Route path="/business/experience/new" element={
+              <AuthGate>
+                <ExperienceCreate />
+              </AuthGate>
+            } />
+            <Route path="/business/experience/:id" element={
+              <AuthGate>
+                <ExperienceDetail />
+              </AuthGate>
+            } />
+            {/* Legacy Business Page — kept accessible for internal preview */}
+            <Route path="/business/app" element={
               <AuthGate>
                 <BusinessPage />
               </AuthGate>

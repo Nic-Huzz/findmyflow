@@ -1,0 +1,465 @@
+/**
+ * PlaySkillsOnboarding.css
+ *
+ * Styles for the new play-skills onboarding flow.
+ * Shared beat styles (hook, signup, verify) come from JourneyOnboarding.css.
+ * This file covers only the NEW beats: AI gate, copy/paste, mapping,
+ * swipe, wheel picker, and reveal.
+ */
+
+/* ── AI Gate ─────────────────────────────────────────────────────────────── */
+
+.pso-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 2rem 1.5rem;
+}
+
+.pso-gate-content {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  z-index: 1;
+}
+
+.pso-gate-title {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  line-height: 1.3;
+}
+
+.pso-gate-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin: 0 0 2rem;
+  line-height: 1.5;
+}
+
+.pso-gate-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pso-gate-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1.25rem 1rem;
+  cursor: pointer;
+  text-align: left;
+  color: white;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.pso-gate-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pso-gate-btn.pso-gate-primary {
+  border-color: rgba(233, 162, 59, 0.4);
+  background: rgba(233, 162, 59, 0.08);
+}
+
+.pso-gate-btn.pso-gate-primary:hover {
+  background: rgba(233, 162, 59, 0.15);
+  border-color: rgba(233, 162, 59, 0.6);
+}
+
+.pso-gate-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.pso-gate-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.pso-gate-text strong {
+  font-size: 0.95rem;
+}
+
+.pso-gate-text span:not(strong) {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
+
+/* ── Copy Prompt / Paste ─────────────────────────────────────────────────── */
+
+.pso-copy,
+.pso-paste {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 2rem 1.5rem;
+}
+
+.pso-copy-content,
+.pso-paste-content {
+  max-width: 400px;
+  width: 100%;
+  z-index: 1;
+}
+
+.pso-copy-content h2,
+.pso-paste-content h2 {
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.pso-prompt-preview {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-height: 100px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.pso-external-link {
+  flex: 1;
+  text-align: center;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.pso-external-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.pso-textarea {
+  width: 100%;
+  min-height: 180px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+  margin-bottom: 0.75rem;
+}
+
+.pso-textarea:focus {
+  outline: none;
+  border-color: rgba(233, 162, 59, 0.5);
+}
+
+.pso-error {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin: 0.5rem 0;
+}
+
+.pso-back-link {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.75rem;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0.5rem;
+}
+
+.pso-back-link:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Mapping (loading) ───────────────────────────────────────────────────── */
+
+.pso-mapping {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 2rem 1.5rem;
+}
+
+.pso-mapping-content {
+  text-align: center;
+  z-index: 1;
+}
+
+.pso-mapping-content h2 {
+  color: white;
+  font-size: 1.3rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.pso-mapping-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: psoSpin 0.8s linear infinite;
+}
+
+@keyframes psoSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Swipe Deck ──────────────────────────────────────────────────────────── */
+
+.pso-swipe {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding: 1.5rem;
+}
+
+.pso-swipe-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pso-card-badge {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 1rem;
+}
+
+.pso-card-placemake {
+  color: white;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.5;
+  max-width: 300px;
+  text-align: center;
+}
+
+.pso-card-evidence {
+  margin-top: 1rem;
+  color: rgba(233, 162, 59, 0.7);
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.4;
+  max-width: 280px;
+  text-align: center;
+}
+
+/* ── Wheel Picker ────────────────────────────────────────────────────────── */
+
+.pso-wheel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+}
+
+.pso-wheel-content {
+  max-width: 400px;
+  width: 100%;
+  z-index: 1;
+}
+
+.pso-wheel-content h2 {
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.pso-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.pso-category-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 0.85rem 0.75rem;
+  text-align: left;
+  cursor: pointer;
+  color: white;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.pso-category-card.selected {
+  background: rgba(233, 162, 59, 0.18);
+  border: 2px solid rgba(233, 162, 59, 0.6);
+}
+
+.pso-category-card.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pso-cat-icon {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.pso-cat-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.pso-cat-tagline {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+  line-height: 1.3;
+}
+
+/* Placemake sub-picker */
+
+.pso-pm-section {
+  margin-bottom: 1.25rem;
+}
+
+.pso-pm-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pso-pm-icon {
+  font-size: 1.2rem;
+}
+
+.pso-pm-name {
+  font-weight: 600;
+  color: white;
+  font-size: 0.95rem;
+}
+
+.pso-pm-count {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+
+.pso-pm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.pso-pm-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  color: white;
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.pso-pm-btn.selected {
+  background: rgba(233, 162, 59, 0.18);
+  border: 2px solid rgba(233, 162, 59, 0.6);
+}
+
+.pso-pm-btn.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Reveal ──────────────────────────────────────────────────────────────── */
+
+.pso-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 2rem 1.5rem;
+}
+
+.pso-reveal-content {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  z-index: 1;
+}
+
+.pso-reveal-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.pso-reveal-title {
+  color: white;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.pso-reveal-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+.pso-reveal-groups {
+  text-align: left;
+}
+
+.pso-reveal-group {
+  margin-bottom: 1.25rem;
+}
+
+.pso-reveal-cat {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(233, 162, 59, 0.9);
+  margin-bottom: 0.4rem;
+}
+
+.pso-reveal-item {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  color: white;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+}
