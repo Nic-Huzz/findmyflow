@@ -64,7 +64,8 @@ const BEATS = {
   PASTE: 'paste',
   MAPPING: 'mapping',
   SWIPE: 'swipe',
-  // Path B
+  SATISFACTION: 'satisfaction',
+  // Path B / top-up from satisfaction
   WHEEL_CATEGORIES: 'wheel_categories',
   WHEEL_SKILLS: 'wheel_skills',
   // Shared
@@ -143,6 +144,52 @@ function parseSkills(text) {
   }
 
   return skills
+}
+
+// ─── Swipe Card Content (extracted to support useState) ─────────────────────
+
+function SwipeCardContent({ card }) {
+  const [evidenceExpanded, setEvidenceExpanded] = useState(false)
+  const seg = findSkillSegment(card.categoryId)
+  const imgSrc = PLACEMAKE_IMAGES[card.placemake]
+  const famous = CATEGORY_FAMOUS[card.categoryId]
+  const isLong = card.evidence && card.evidence.length > 120
+
+  return (
+    <>
+      <div className="pso-card-badge">
+        {seg?.icon} {seg?.displayName || card.categoryId}
+      </div>
+      {imgSrc && (
+        <img
+          className="pso-card-image"
+          src={imgSrc}
+          alt={card.placemake}
+          draggable={false}
+          onError={(e) => { e.target.style.display = 'none' }}
+        />
+      )}
+      <div className="pso-card-placemake">{card.placemake}</div>
+      {famous && (
+        <div className="pso-card-famous">
+          Think {famous}
+        </div>
+      )}
+      {card.evidence && (
+        <div className={`pso-card-evidence ${!evidenceExpanded && isLong ? 'truncated' : ''}`}>
+          Analysis shows: "{card.evidence}"
+        </div>
+      )}
+      {isLong && !evidenceExpanded && (
+        <button
+          className="pso-card-show-more"
+          onClick={(e) => { e.stopPropagation(); setEvidenceExpanded(true) }}
+        >
+          Show more
+        </button>
+      )}
+    </>
+  )
 }
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -346,9 +393,18 @@ export default function PlaySkillsOnboarding() {
   }
 
   const handleSwipeComplete = (keptIds) => {
-    const kept = mappedCards.filter(c => keptIds.includes(c.id))
-    setKeptPlacemakes(kept)
-    transitionTo(BEATS.REVEAL)
+    const newlyKept = mappedCards.filter(c => keptIds.includes(c.id))
+    if (keptPlacemakes.length > 0) {
+      // Merge with existing (from AI path) — dedupe by placemake text
+      const existingTexts = new Set(keptPlacemakes.map(k => k.placemake))
+      const unique = newlyKept.filter(k => !existingTexts.has(k.placemake))
+      setKeptPlacemakes([...keptPlacemakes, ...unique])
+      transitionTo(BEATS.REVEAL)
+    } else {
+      setKeptPlacemakes(newlyKept)
+      // Path A goes to satisfaction check; Path B first-pass goes straight to reveal
+      transitionTo(path === 'a' ? BEATS.SATISFACTION : BEATS.REVEAL)
+    }
   }
 
   // ─── Path B handlers ──────────────────────────────────────────────────────
@@ -362,14 +418,17 @@ export default function PlaySkillsOnboarding() {
   }
 
   // Build swipe cards from selected categories and transition to swipe deck
+  // Excludes any playskills already kept from Path A swipe
   const handleWheelContinue = () => {
+    const alreadyKept = new Set(keptPlacemakes.map(k => k.placemake))
     const cards = []
     let idx = 0
     for (const catId of selectedCategories) {
       const seg = findSkillSegment(catId)
       for (const pm of (seg?.placemakes || [])) {
+        if (alreadyKept.has(pm)) continue // skip already-kept from AI path
         cards.push({
-          id: `${catId}_${idx++}_${pm.slice(0, 20)}`,
+          id: `wheel_${catId}_${idx++}_${pm.slice(0, 20)}`,
           placemake: pm,
           categoryId: catId,
           evidence: '',
@@ -680,50 +739,55 @@ export default function PlaySkillsOnboarding() {
             cards={mappedCards}
             headerText="Does this sound like you?"
             onComplete={handleSwipeComplete}
-            onBackFromFirst={() => transitionTo(path === 'b' ? BEATS.WHEEL_CATEGORIES : BEATS.PASTE, 'left')}
-            renderCard={(card, { isKept }) => {
-              const seg = findSkillSegment(card.categoryId)
-              const imgSrc = PLACEMAKE_IMAGES[card.placemake]
-              const famous = CATEGORY_FAMOUS[card.categoryId]
-              const [evidenceExpanded, setEvidenceExpanded] = useState(false)
-              const isLong = card.evidence && card.evidence.length > 120
-              return (
-                <>
-                  <div className="pso-card-badge">
-                    {seg?.icon} {seg?.displayName || card.categoryId}
-                  </div>
-                  {imgSrc && (
-                    <img
-                      className="pso-card-image"
-                      src={imgSrc}
-                      alt={card.placemake}
-                      draggable={false}
-                      onError={(e) => { e.target.style.display = 'none' }}
-                    />
-                  )}
-                  <div className="pso-card-placemake">{card.placemake}</div>
-                  {famous && (
-                    <div className="pso-card-famous">
-                      Think {famous}
-                    </div>
-                  )}
-                  {card.evidence && (
-                    <div className={`pso-card-evidence ${!evidenceExpanded && isLong ? 'truncated' : ''}`}>
-                      Analysis shows: "{card.evidence}"
-                    </div>
-                  )}
-                  {isLong && !evidenceExpanded && (
-                    <button
-                      className="pso-card-show-more"
-                      onClick={(e) => { e.stopPropagation(); setEvidenceExpanded(true) }}
-                    >
-                      Show more
-                    </button>
-                  )}
-                </>
-              )
-            }}
+            onBackFromFirst={() => transitionTo(
+              selectedCategories.length > 0 ? BEATS.WHEEL_CATEGORIES : BEATS.PASTE,
+              'left'
+            )}
+            renderCard={(card) => (
+              <SwipeCardContent card={card} />
+            )}
           />
+        </div>
+      </div>
+    )
+  }
+
+  // BEAT: Satisfaction check (Path A only, after swipe)
+  if (currentBeat === BEATS.SATISFACTION) {
+    return (
+      <div className={`journey-onboarding pso-gate ${transitionClass} ${directionClass}`}>
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1 jo-glow-gold" />
+          <div className="jo-glow jo-glow-2 jo-glow-gold" />
+        </div>
+        <div className="pso-gate-content">
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem', textAlign: 'center' }}>✨</div>
+          <h2 className="pso-gate-title">{keptPlacemakes.length} play-skills found</h2>
+          <p className="pso-gate-subtitle">
+            Do these capture what lights you up, or are some missing?
+          </p>
+          <div className="pso-gate-options">
+            <button
+              className="pso-gate-btn pso-gate-primary"
+              onClick={() => transitionTo(BEATS.REVEAL)}
+            >
+              <span className="pso-gate-icon">✅</span>
+              <span className="pso-gate-text">
+                <strong>These capture me</strong>
+                <span>Move on to my results</span>
+              </span>
+            </button>
+            <button
+              className="pso-gate-btn"
+              onClick={() => transitionTo(BEATS.WHEEL_CATEGORIES)}
+            >
+              <span className="pso-gate-icon">🎯</span>
+              <span className="pso-gate-text">
+                <strong>Some are missing</strong>
+                <span>Browse and add more from the menu</span>
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -731,6 +795,10 @@ export default function PlaySkillsOnboarding() {
 
   // BEAT 3b-1: Wheel Categories
   if (currentBeat === BEATS.WHEEL_CATEGORIES) {
+    // Categories already identified from AI path
+    const identifiedCategories = new Set(keptPlacemakes.map(k => k.categoryId))
+    const comingFromSatisfaction = keptPlacemakes.length > 0
+
     return (
       <div className={`journey-onboarding pso-wheel ${transitionClass} ${directionClass}`}>
         <div className="jo-ambient">
@@ -738,21 +806,26 @@ export default function PlaySkillsOnboarding() {
           <div className="jo-glow jo-glow-2" />
         </div>
         <div className="pso-wheel-content">
-          <h2>Which of these sound fun?</h2>
+          <h2>{comingFromSatisfaction ? 'Add more play-skills' : 'Which of these sound fun?'}</h2>
           <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.85rem', marginBottom: '1rem' }}>
-            Pick up to {MAX_CATEGORIES}. ({selectedCategories.length}/{MAX_CATEGORIES})
+            {comingFromSatisfaction
+              ? `Pick up to ${MAX_CATEGORIES} more categories to explore.`
+              : `Pick up to ${MAX_CATEGORIES}. (${selectedCategories.length}/${MAX_CATEGORIES})`
+            }
           </p>
           <div className="pso-category-grid">
             {SKILLS_SEGMENTS.map(seg => {
+              const isIdentified = identifiedCategories.has(seg.id)
               const isSelected = selectedCategories.includes(seg.id)
-              const disabled = !isSelected && selectedCategories.length >= MAX_CATEGORIES
+              const disabled = !isSelected && !isIdentified && selectedCategories.length >= MAX_CATEGORIES
               return (
                 <button
                   key={seg.id}
-                  onClick={() => toggleCategory(seg.id)}
-                  disabled={disabled}
-                  className={`pso-category-card ${isSelected ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
+                  onClick={() => !isIdentified && toggleCategory(seg.id)}
+                  disabled={disabled || isIdentified}
+                  className={`pso-category-card ${isSelected ? 'selected' : ''} ${isIdentified ? 'identified' : ''} ${disabled ? 'disabled' : ''}`}
                 >
+                  {isIdentified && <div className="pso-cat-identified-tag">Identified</div>}
                   <div className="pso-cat-icon">{seg.icon}</div>
                   <div className="pso-cat-name">{seg.displayName}</div>
                   <div className="pso-cat-tagline">{seg.tagline}</div>
@@ -769,7 +842,7 @@ export default function PlaySkillsOnboarding() {
             <span className="jo-shimmer-layer" />
             Continue →
           </button>
-          <button className="pso-back-link" onClick={() => transitionTo(BEATS.AI_GATE, 'left')}>
+          <button className="pso-back-link" onClick={() => transitionTo(comingFromSatisfaction ? BEATS.SATISFACTION : BEATS.AI_GATE, 'left')}>
             ← Back
           </button>
         </div>

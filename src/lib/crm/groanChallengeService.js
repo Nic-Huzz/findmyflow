@@ -111,8 +111,9 @@ export async function createGroanChallenge(challengeData) {
     generationPrompt = null
   } = challengeData
 
-  // Calculate essence zone
-  const essenceZone = calculateEssenceZone(scaryScore, wahooScore)
+  // Calculate essence zone (only if scores provided)
+  const hasScores = scaryScore != null && wahooScore != null
+  const essenceZone = hasScores ? calculateEssenceZone(scaryScore, wahooScore) : null
 
   const { data, error } = await supabase
     .from('groan_challenges')
@@ -126,8 +127,8 @@ export async function createGroanChallenge(challengeData) {
       source_label: sourceLabel,
       scary_score: scaryScore,
       wahoo_score: wahooScore,
-      essence_zone: essenceZone.zone,
-      essence_insight: essenceZone.insight,
+      essence_zone: essenceZone?.zone || null,
+      essence_insight: essenceZone?.insight || null,
       linked_contract_id: linkedContractId,
       generation_prompt: generationPrompt,
       status: GROAN_CHALLENGE_STATUS.GENERATED

@@ -4153,3 +4153,116 @@
   color: #b4b8c4;
   font-weight: 600;
 }
+
+/* ── Play-List Tab: Category Cards ── */
+
+.plt-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.plt-category-card {
+  background: white;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 1rem 0.75rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-family: inherit;
+}
+
+.plt-category-card:hover {
+  border-color: rgba(94, 23, 235, 0.3);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.1);
+}
+
+.plt-category-card.plt-category-locked {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.plt-cat-icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.plt-cat-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #1a1a2e;
+}
+
+.plt-cat-count {
+  font-size: 0.7rem;
+  color: #9a9daa;
+  margin-top: 0.15rem;
+}
+
+.plt-redo-link {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: none;
+  border: none;
+  color: #9a9daa;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-family: inherit;
+}
+
+.plt-redo-link:hover {
+  color: #5e17eb;
+}
+
+/* ── Play-List Tab: Picker Modal ── */
+
+.plt-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.plt-modal-content {
+  background: #f8f9fc;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 1.25rem;
+  position: relative;
+  animation: pltSlideUp 0.25s ease;
+}
+
+@keyframes pltSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.plt-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #9a9daa;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.plt-modal-close:hover {
+  color: #1a1a2e;
+}

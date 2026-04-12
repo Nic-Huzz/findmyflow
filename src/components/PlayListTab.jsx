@@ -1,331 +1,262 @@
 /**
  * PlayListTab.jsx
  *
- * First-class tab for the 7-Day Challenge page with sub-tabs:
- *   Flow Finder — quest cards (skills, problems, persona, integration)
- *   Play-list  — Skills-only Groan Matrix
+ * Play-List tab for the 7-Day Challenge page.
  *
- * Created: 2026-02-26
- * Part of Play-list tab restructure
+ * States:
+ *   1. No playskills → "Find Your Flow First" CTA → /get-started
+ *   2. Has playskills, no topics → "Identify Play-List Topics" CTA → /identify-topics
+ *   3. Has playskills AND topics → Category cards grid
+ *      Tap card → opens MobilePlaylistPicker modal (Topic → Role → Playskill → Challenge → Day)
+ *
+ * Also shows Active Challenges section (from priority_weekly_picks).
  */
 
 import { useMemo, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
-import QuestCard from './QuestCard'
-import GroanMatrix from './GroanMatrix'
+import { findSkillSegment } from '../lib/wheelTaxonomy'
 import GroanCompletionModal from './GroanCompletionModal'
 import MobilePlaylistPicker from './MobilePlaylistPicker'
 
-// Flow Finder quest groupings for the sub-tab
-const FLOW_FINDER_GROUPS = [
-  { label: 'Quick Capture', icon: '⚡', ids: ['mind_space_extraction'], noFilter: true },
-  { label: 'Skills', icon: '🎯', ids: ['play_list_finder', 'flow_finder_skills'] },
-  { label: 'Problems', icon: '🔍', ids: ['flow_finder_problems'] },
-  { label: 'Personas', icon: '👥', ids: ['persona_identifier', 'flow_finder_persona'] },
-]
-
-// Quests rendered as header buttons instead of quest cards
-const EXPLAINER_IDS = new Set(['flow_finder_explainer'])
-
 export default function PlayListTab({
   userId,
-  activeSubTab = 'flow-finder',
-  flowFinderQuests,
-  flowFinderComplete,
-  completions,
   onQuestComplete,
-  onMatrixCellClick,
-  onGenerateChallenge,
-  groanMatrixKey,
-  layerLockStatus,
-  userArchetypes,
-  // QuestCard props
-  questInputs,
-  onInputChange,
-  completingQuestId,
-  expandedLearnMore,
-  onToggleLearnMore,
-  showLockedTooltip,
-  onToggleLockedTooltip,
-  renderDescription,
-  navigate,
-  selectedProject,
-  progress,
-  projectStage,
-  justCompletedQuestId,
-  isQuestCompletedToday,
-  isQuestLocked,
-  getRequiredQuestName,
-  getDailyStreak,
-  getDayLabels,
-  isQuestPlanned,
-  getPlannedDay,
 }) {
-  const [flowFinderFilter, setFlowFinderFilter] = useState('all')
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' && window.innerWidth < 768
-  )
+  const navigate = useNavigate()
+  const [playskills, setPlayskills] = useState([])
+  const [topics, setTopics] = useState([])
+  const [loading, setLoading] = useState(true)
   const [activeChallenges, setActiveChallenges] = useState([])
   const [completingChallenge, setCompletingChallenge] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
+  const [selectedCategory, setSelectedCategory] = useState(null) // opens picker modal
 
+  // Fetch playskills + topics + active challenges
   useEffect(() => {
-    const handler = () => setIsMobile(window.innerWidth < 768)
-    window.addEventListener('resize', handler)
-    return () => window.removeEventListener('resize', handler)
-  }, [])
-
-  // Fetch this week's groan picks and enrich with skill label from groan_challenges
-  const fetchActiveChallenges = async () => {
     if (!userId) return
-    const weekStart = getWeekStartLocal()
-    const { data: picks } = await supabase
+
+    Promise.all([
+      supabase
+        .from('nikigai_clusters')
+        .select('id, cluster_label, cluster_type, items, step_id')
+        .eq('user_id', userId)
+        .in('cluster_type', ['skills', 'problems'])
+        .in('step_id', ['get_started', 'identify_topics']),
+      fetchActiveChallenges(),
+    ]).then(([{ data }]) => {
+      if (data) {
+        setPlayskills(data.filter(d => d.cluster_type === 'skills' && d.step_id === 'get_started'))
+        setTopics(data.filter(d => d.cluster_type === 'problems' && d.step_id === 'identify_topics'))
+      }
+      setLoading(false)
+    })
+  }, [userId])
+
+  const fetchActiveChallenges = async () => {
+    const { data } = await supabase
       .from('priority_weekly_picks')
       .select('*')
       .eq('user_id', userId)
-      .eq('week_start_date', weekStart)
+      .eq('week_start_date', getWeekStartLocal())
       .eq('pick_type', 'groan')
-    if (!picks || picks.length === 0) { setActiveChallenges([]); return }
-    // Fetch source_label + status for each challenge, filter out already-completed ones
-    const refIds = picks.map(p => p.reference_id).filter(Boolean)
-    const { data: challenges } = await supabase
-      .from('groan_challenges')
-      .select('id, source_label, status')
-      .in('id', refIds)
-    const challengeMap = Object.fromEntries((challenges || []).map(c => [c.id, c]))
-    const activePicks = picks.filter(p => {
-      const ch = challengeMap[p.reference_id]
-      return ch && ch.status !== 'completed'
-    })
-    setActiveChallenges(activePicks.map(p => ({ ...p, _source_label: challengeMap[p.reference_id]?.source_label || null })))
+
+    if (data) {
+      // Enrich with source label from groan_challenges
+      const enriched = await Promise.all(data.map(async pick => {
+        const { data: challenge } = await supabase
+          .from('groan_challenges')
+          .select('source_label, status')
+          .eq('id', pick.reference_id)
+          .single()
+        return { ...pick, _source_label: challenge?.source_label, _status: challenge?.status }
+      }))
+      setActiveChallenges(enriched.filter(e => e._status !== 'completed'))
+    }
   }
 
-  useEffect(() => {
-    fetchActiveChallenges()
-  }, [userId, groanMatrixKey])
+  // Group playskills by category
+  const categories = useMemo(() => {
+    const grouped = {}
+    playskills.forEach(ps => {
+      const catId = ps.items?.[0]?.category
+      if (!catId) return
+      if (!grouped[catId]) grouped[catId] = { id: catId, playskills: [] }
+      grouped[catId].playskills.push(ps)
+    })
+    return Object.values(grouped)
+  }, [playskills])
 
-  // Hide bottom toolbar when completion modal is open
-  useEffect(() => {
-    if (completingChallenge) {
-      document.body.classList.add('modal-active')
-      return () => document.body.classList.remove('modal-active')
-    }
-  }, [completingChallenge])
+  // ─── Active Challenges renderer (used in states 2 + 3) ─────────────────────
 
-  // Compute Flow Finder progress from completed quests
-  const flowFinderProgress = useMemo(() => {
-    if (!flowFinderQuests || flowFinderQuests.length === 0) return null
-    const allIds = new Set(flowFinderQuests.map(q => q.id))
-    const totalPoints = flowFinderQuests.reduce((sum, q) => sum + (q.points || 0), 0)
-    const completedPoints = flowFinderQuests.reduce((sum, q) => {
-      // Check if quest is completed (any completion, not just today)
-      const isCompleted = completions?.some(c => c.quest_id === q.id)
-      return sum + (isCompleted ? (q.points || 0) : 0)
-    }, 0)
-    return { currentPoints: completedPoints, totalPoints }
-  }, [flowFinderQuests, completions])
-
-  const renderQuestRow = (quest) => {
-    const completed = isQuestCompletedToday(quest.id, quest)
-    const locked = isQuestLocked ? isQuestLocked(quest) : false
-
+  function renderActiveChallenges() {
     return (
-      <div key={quest.id} className={`ht-item-row ${completed ? 'done' : ''} ${locked ? 'locked' : ''}`}>
-        <span className={`ht-item-check ${completed ? 'done' : ''}`}>
-          {completed ? '✓' : locked ? '🔒' : ''}
-        </span>
-        <div className="ht-item-body">
-          <div className="ht-item-name">{quest.name}</div>
-          <div className="ht-item-meta">
-            <span className="ht-item-type">Flow Finder</span>
-            <span className="ht-item-sep">·</span>
-            <span className="ht-pts">{quest.points}pts</span>
+      <div className="plt-section-card">
+        <div className="plt-section-header">
+          <div className="plt-section-header-left">
+            <span className="plt-section-icon">🎯</span>
+            <span className="plt-section-title">Active Challenges</span>
           </div>
+          <span className="plt-section-count">{activeChallenges.length}</span>
         </div>
-        {completed && quest.flow_route ? (
-          <a
-            href={`${quest.flow_route}?returnTo=/7-day-challenge`}
-            className="ht-item-action reread-action"
-            style={{ textDecoration: 'none', textAlign: 'center' }}
-          >
-            View Results
-          </a>
-        ) : completed ? (
-          <span className="ht-item-action done-action">Done</span>
-        ) : locked ? (
-          <span className="ht-item-action done-action">Locked</span>
-        ) : quest.flow_route ? (
-          <a
-            href={`${quest.flow_route}?returnTo=/7-day-challenge`}
-            className="ht-item-action"
-            style={{ textDecoration: 'none', textAlign: 'center' }}
-          >
-            Start →
-          </a>
-        ) : (
-          <button className="ht-item-action" onClick={() => onQuestComplete(quest)}>
-            Complete
-          </button>
-        )}
+        <div className="plt-section-items">
+          {activeChallenges.map(pick => {
+            const isLoading = loadingChallengeId === pick.reference_id
+            return (
+              <div key={pick.id || pick.reference_id} className="plt-item-row">
+                <span className="plt-item-check"></span>
+                <div className="plt-item-body">
+                  <div className="plt-item-name">{pick.display_name}</div>
+                  <div className="plt-item-meta">{pick._source_label || 'Play-List Task'}</div>
+                </div>
+                <button
+                  className="plt-item-action"
+                  disabled={isLoading}
+                  onClick={async () => {
+                    setLoadingChallengeId(pick.reference_id)
+                    const { data } = await supabase
+                      .from('groan_challenges')
+                      .select('*')
+                      .eq('id', pick.reference_id)
+                      .single()
+                    setLoadingChallengeId(null)
+                    if (data) setCompletingChallenge(data)
+                  }}
+                >
+                  {isLoading ? '...' : 'Complete'}
+                </button>
+              </div>
+            )
+          })}
+        </div>
       </div>
     )
   }
 
+  if (loading) {
+    return <div className="playlist-tab"><div className="loading-state"><div className="spinner" /></div></div>
+  }
+
+  // ─── State 1: No playskills ───────────────────────────────────────────────
+
+  if (playskills.length === 0) {
+    return (
+      <div className="playlist-tab">
+        <div className="plt-section-card" style={{ textAlign: 'center', padding: '2rem 1.5rem' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🧭</div>
+          <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem' }}>Find Your Flow First</h3>
+          <p style={{ color: '#9a9daa', fontSize: '0.85rem', margin: '0 0 1.25rem' }}>
+            Discover your unique play-skills to unlock personalised challenges.
+          </p>
+          <button
+            className="mpp-gold-btn"
+            onClick={() => navigate('/get-started')}
+            style={{ width: '100%' }}
+          >
+            Get Started →
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ─── State 2: Has playskills, no topics ───────────────────────────────────
+
+  if (topics.length === 0) {
+    return (
+      <div className="playlist-tab">
+        {/* Active challenges still show */}
+        {activeChallenges.length > 0 && renderActiveChallenges()}
+
+        <div className="plt-section-card" style={{ textAlign: 'center', padding: '2rem 1.5rem' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🎯</div>
+          <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem' }}>Identify Play-List Topics</h3>
+          <p style={{ color: '#9a9daa', fontSize: '0.85rem', margin: '0 0 1.25rem' }}>
+            Find the problems and topics you care about to create meaningful challenges.
+          </p>
+          <button
+            className="mpp-gold-btn"
+            onClick={() => navigate('/identify-topics')}
+            style={{ width: '100%' }}
+          >
+            Identify Topics →
+          </button>
+        </div>
+
+        {/* Show category cards as preview (non-tappable) */}
+        <div className="plt-categories-grid">
+          {categories.map(cat => {
+            const seg = findSkillSegment(cat.id)
+            return (
+              <div key={cat.id} className="plt-category-card plt-category-locked">
+                <div className="plt-cat-icon">{seg?.icon}</div>
+                <div className="plt-cat-name">{seg?.displayName || cat.id}</div>
+                <div className="plt-cat-count">{cat.playskills.length} play-skills</div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  // ─── State 3: Has playskills AND topics ───────────────────────────────────
+
   return (
     <div className="playlist-tab">
-      {/* ── Flow Finder sub-tab ── */}
-      {/* Matches Healing layout: artifact card → heading + explainer → filter chips → subsection groups */}
-      {activeSubTab === 'flow-finder' && flowFinderQuests && flowFinderQuests.length > 0 && (() => {
-        const groupedIds = new Set(FLOW_FINDER_GROUPS.flatMap(g => g.ids))
-        const ungrouped = flowFinderQuests.filter(q => !groupedIds.has(q.id) && !EXPLAINER_IDS.has(q.id))
+      {/* Active challenges */}
+      {activeChallenges.length > 0 && renderActiveChallenges()}
 
-        let visibleGroups = FLOW_FINDER_GROUPS
-        let showUngrouped = true
-        if (flowFinderFilter !== 'all') {
-          visibleGroups = FLOW_FINDER_GROUPS.filter(g => g.label === flowFinderFilter || g.noFilter)
-          showUngrouped = false
-        }
+      {/* Category cards */}
+      <div className="plt-categories-grid">
+        {categories.map(cat => {
+          const seg = findSkillSegment(cat.id)
+          const matchedTopicCount = topics.filter(t => {
+            const mp = t.items?.[0]?.matchedPlayskills || []
+            return mp.some(ps => (seg?.placemakes || []).includes(ps))
+          }).length
 
-        return (
-          <>
-            {/* 1. Artifact progress card (same position as Healing's) */}
-            {flowFinderProgress && (
-              <div className={`artifact-progress ${flowFinderProgress.currentPoints >= flowFinderProgress.totalPoints ? 'unlocked' : ''}`}>
-                <div className="artifact-header">
-                  <h3>🧭 Flow Finder</h3>
-                  <p className="artifact-description">Discover your skills, problems, and personas to unlock your unique flow.</p>
-                </div>
-                {flowFinderProgress.currentPoints < flowFinderProgress.totalPoints ? (
-                  <div className="artifact-bars">
-                    <div className="progress-bar-container">
-                      <div className="progress-bar-label">
-                        <span>🧭 Progress</span>
-                        <span>{flowFinderProgress.currentPoints}/{flowFinderProgress.totalPoints}</span>
-                      </div>
-                      <div className="progress-bar">
-                        <div
-                          className="progress-bar-fill daily"
-                          style={{ width: `${Math.min((flowFinderProgress.currentPoints / flowFinderProgress.totalPoints) * 100, 100)}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="artifact-unlocked-message">
-                    Flow Formula Unlocked! You've mapped your unique flow.
-                  </div>
-                )}
-              </div>
-            )}
+          return (
+            <button
+              key={cat.id}
+              className="plt-category-card"
+              onClick={() => setSelectedCategory(cat.id)}
+            >
+              <div className="plt-cat-icon">{seg?.icon}</div>
+              <div className="plt-cat-name">{seg?.displayName || cat.id}</div>
+              <div className="plt-cat-count">{matchedTopicCount} topics</div>
+            </button>
+          )
+        })}
+      </div>
 
-            {/* 2. Section heading with Explainer (matches "Healing" h2) */}
-            <div className="quest-section">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                <h2 className="section-title" style={{ margin: 0 }}>Flow Finder</h2>
-                <a
-                  href="/flow-finder-explainer"
-                  className="groan-matrix-explainer-btn"
-                  style={{ background: 'linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%)' }}
-                >
-                  Explainer
-                </a>
-              </div>
+      {/* Redo topics link */}
+      <button
+        className="plt-redo-link"
+        onClick={() => navigate('/identify-topics')}
+      >
+        Re-identify topics
+      </button>
 
-
-              {/* 4. Quest subsections (matches Healing's subsection-title style) */}
-              {visibleGroups.map(group => {
-                const quests = group.ids
-                  .map(id => flowFinderQuests.find(q => q.id === id))
-                  .filter(Boolean)
-                if (quests.length === 0) return null
-                return (
-                  <div key={group.label} className="quest-subsection healing-rows">
-                    <h3 className="subsection-title">{group.label}</h3>
-                    <div className="healing-row-list">
-                      {quests.map(quest => renderQuestRow(quest))}
-                    </div>
-                  </div>
-                )
-              })}
-              {showUngrouped && ungrouped.length > 0 && (
-                <div className="quest-subsection healing-rows">
-                  <h3 className="subsection-title">More</h3>
-                  <div className="healing-row-list">
-                    {ungrouped.map(quest => renderQuestRow(quest))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </>
-        )
-      })()}
-
-      {/* ── Play-list sub-tab: Active Challenges + Courage Matrix ── */}
-      {activeSubTab === 'playlist' && activeChallenges.length > 0 && (
-        <div className="plt-section-card">
-          <div className="plt-section-header">
-            <div className="plt-section-header-left">
-              <span className="plt-section-icon">🎯</span>
-              <span className="plt-section-title">Active Challenges</span>
-            </div>
-            <span className="plt-section-count">{activeChallenges.length}</span>
-          </div>
-          <div className="plt-section-items">
-            {activeChallenges.map(pick => {
-              const isLoading = loadingChallengeId === pick.reference_id
-              return (
-                <div key={pick.id || pick.reference_id} className="plt-item-row">
-                  <span className="plt-item-check"></span>
-                  <div className="plt-item-body">
-                    <div className="plt-item-name">{pick.display_name}</div>
-                    <div className="plt-item-meta">{pick._source_label || 'Play-list Challenge'}</div>
-                  </div>
-                  <button
-                    className="plt-item-action"
-                    disabled={isLoading}
-                    onClick={async () => {
-                      setLoadingChallengeId(pick.reference_id)
-                      const { data } = await supabase
-                        .from('groan_challenges')
-                        .select('*')
-                        .eq('id', pick.reference_id)
-                        .single()
-                      setLoadingChallengeId(null)
-                      if (data) setCompletingChallenge(data)
-                    }}
-                  >
-                    {isLoading ? '...' : 'Complete'}
-                  </button>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
-      {activeSubTab === 'playlist' && (
-        <div className="quest-section">
-          {isMobile ? (
+      {/* Picker modal */}
+      {selectedCategory && (
+        <div className="plt-modal-overlay" onClick={() => setSelectedCategory(null)}>
+          <div className="plt-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="plt-modal-close" onClick={() => setSelectedCategory(null)}>&times;</button>
             <MobilePlaylistPicker
               userId={userId}
-              onChallengeAccepted={fetchActiveChallenges}
-              layerLockStatus={layerLockStatus}
+              categoryId={selectedCategory}
+              onChallengeAccepted={() => {
+                fetchActiveChallenges()
+              }}
+              onClose={() => setSelectedCategory(null)}
             />
-          ) : (
-            <GroanMatrix
-              key={groanMatrixKey}
-              userId={userId}
-              onCellClick={onMatrixCellClick}
-              onGenerateChallenge={onGenerateChallenge}
-              layerLockStatus={layerLockStatus}
-              flowFinderComplete={flowFinderComplete}
-              sourceTypes={['skill']}
-            />
-          )}
+          </div>
         </div>
       )}
 
+      {/* Completion modal */}
       {completingChallenge && (
         <GroanCompletionModal
           challenge={completingChallenge}

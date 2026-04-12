@@ -1,7 +1,7 @@
 /**
  * ProgressBars.jsx
  *
- * 3 progress bars: Level Quests, Healing Streak, Courage Challenges.
+ * 3 progress bars: Level Quests, Healing Streak, Play-List Tasks.
  *
  * Created: 2026-03-27
  */
@@ -57,7 +57,7 @@ export default function ProgressBars({
       {courageCount > 0 && (
         <div className="level-bar-section">
           <div className="level-bar-label">
-            <span>Courage Challenges</span>
+            <span>Play-List Tasks</span>
             <span>{courageDone}/{courageCount}</span>
           </div>
           <div className="level-bar-dots">

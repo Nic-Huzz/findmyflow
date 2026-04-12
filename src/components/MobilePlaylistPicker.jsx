@@ -1,72 +1,109 @@
+/**
+ * MobilePlaylistPicker.jsx
+ *
+ * Challenge creation popup for the Play-List tab.
+ * Steps: Topic → Role → Playskill → Challenge text → Day → Save
+ *
+ * Receives a pre-selected category from PlayListTab.
+ * Topics come from nikigai_clusters (cluster_type: 'problems', step_id: 'identify_topics').
+ * Roles come from wheelTaxonomy exampleJobs.
+ * Playskills come from wheelTaxonomy placemakes.
+ */
+
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { GROAN_VISIBILITY_LAYERS } from '../lib/stageConfig'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../lib/dateUtils'
+import { findSkillSegment } from '../lib/wheelTaxonomy'
 import './MobilePlaylistPicker.css'
+
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 export default function MobilePlaylistPicker({
   userId,
+  categoryId,
   onChallengeAccepted,
-  layerLockStatus,
+  onClose,
 }) {
-  const [step, setStep] = useState('skills') // skills | layer | challenge | day | success
-  const [skills, setSkills] = useState([])
-  const [selectedSkill, setSelectedSkill] = useState(null)
-  const [selectedLayer, setSelectedLayer] = useState(null)
-  const [selectedDay, setSelectedDay] = useState(null)
+  const [step, setStep] = useState('topic') // topic | role | playskill | challenge | day | success
+  const [topics, setTopics] = useState([])
+  const [selectedTopic, setSelectedTopic] = useState(null)
+  const [customTopic, setCustomTopic] = useState('')
+  const [selectedRole, setSelectedRole] = useState(null)
+  const [selectedPlayskill, setSelectedPlayskill] = useState(null)
   const [challengeText, setChallengeText] = useState('')
+  const [selectedDay, setSelectedDay] = useState(null)
   const [saving, setSaving] = useState(false)
-  const [generating, setGenerating] = useState(false)
   const [error, setError] = useState(null)
-  const [showLayerExplainer, setShowLayerExplainer] = useState(false)
   const successTimerRef = useRef(null)
 
-  // Cleanup timeout on unmount
+  const segment = findSkillSegment(categoryId)
+  const roles = segment?.exampleJobs || []
+  const playskills = segment?.placemakes || []
+
   useEffect(() => {
     return () => { if (successTimerRef.current) clearTimeout(successTimerRef.current) }
   }, [])
 
+  // Load user's topics (problems) from DB
   useEffect(() => {
     if (!userId) return
     supabase
       .from('nikigai_clusters')
-      .select('id, cluster_label, cluster_type, proficiency, insight')
+      .select('id, cluster_label, items')
       .eq('user_id', userId)
-      .eq('cluster_type', 'skills')
-      .order('proficiency', { ascending: false })
+      .eq('cluster_type', 'problems')
+      .eq('step_id', 'identify_topics')
       .then(({ data }) => {
-        const map = new Map()
-        for (const item of (data || [])) {
-          if (!map.has(item.cluster_label)) map.set(item.cluster_label, item)
-        }
-        setSkills([...map.values()])
+        if (data) setTopics(data)
       })
   }, [userId])
 
+  // Split topics into matched vs potential for this category's playskills
+  const matched = topics.filter(t => {
+    const mp = t.items?.[0]?.matchedPlayskills || []
+    return mp.some(ps => playskills.includes(ps))
+  })
+  const potential = topics.filter(t => {
+    const mp = t.items?.[0]?.matchedPlayskills || []
+    return !mp.some(ps => playskills.includes(ps))
+  })
+
+  const getTopicLabel = () => {
+    if (selectedTopic) return selectedTopic.cluster_label
+    if (customTopic.trim()) return customTopic.trim()
+    return ''
+  }
+
   const handleSaveChallenge = async () => {
-    if (!challengeText.trim() || !selectedSkill || !selectedLayer || !selectedDay || saving) return
+    const topicLabel = getTopicLabel()
+    if (!challengeText.trim() || !selectedDay || !selectedPlayskill || saving) return
     setSaving(true)
     setError(null)
+
     try {
       const title = `${challengeText.trim()} (${selectedDay})`
+      const description = [
+        topicLabel,
+        selectedRole,
+        selectedPlayskill,
+      ].filter(Boolean).join(' × ')
+
       const { data: dbRecord, error: saveError } = await createGroanChallenge({
         userId,
         title,
-        description: `${selectedSkill.cluster_label} × ${GROAN_VISIBILITY_LAYERS.find(l => l.id === selectedLayer)?.label || selectedLayer}`,
-        visibilityLayer: selectedLayer,
+        description,
+        visibilityLayer: null,
         sourceType: 'skill',
-        sourceId: selectedSkill.id,
-        sourceLabel: selectedSkill.cluster_label,
-        scaryScore: 5,
-        wahooScore: 5,
+        sourceLabel: segment?.displayName || categoryId,
+        scaryScore: null,
+        wahooScore: null,
       })
       if (saveError) throw saveError
 
       const { error: acceptError } = await acceptGroanChallenge(dbRecord.id)
       if (acceptError) throw acceptError
 
-      // Insert into priority_weekly_picks so it shows as active challenge
       const { error: pickError } = await supabase.from('priority_weekly_picks').insert({
         user_id: userId,
         week_start_date: getWeekStartLocal(),
@@ -76,17 +113,11 @@ export default function MobilePlaylistPicker({
       })
       if (pickError) console.warn('Error saving weekly pick:', pickError)
 
-      // Notify parent to refresh active challenges list
       onChallengeAccepted?.()
 
-      // Show success, then reset
       setStep('success')
       successTimerRef.current = setTimeout(() => {
-        setChallengeText('')
-        setSelectedSkill(null)
-        setSelectedLayer(null)
-        setSelectedDay(null)
-        setStep('skills')
+        onClose?.()
       }, 1500)
     } catch (err) {
       console.error('Error saving challenge:', err)
@@ -95,6 +126,8 @@ export default function MobilePlaylistPicker({
       setSaving(false)
     }
   }
+
+  // ─── Success ──────────────────────────────────────────────────────────────
 
   if (step === 'success') {
     return (
@@ -107,106 +140,150 @@ export default function MobilePlaylistPicker({
     )
   }
 
-  if (step === 'skills') {
+  // ─── Step 1: Topic ────────────────────────────────────────────────────────
+
+  if (step === 'topic') {
     return (
       <div className="mpp-container">
         <div className="mpp-section-card">
           <div className="mpp-section-header">
             <div className="mpp-section-header-left">
-              <span className="mpp-section-icon">🎯</span>
-              <span className="mpp-section-title">Choose a skill to challenge</span>
+              <span className="mpp-section-icon">{segment?.icon}</span>
+              <span className="mpp-section-title">What topic will you cover?</span>
             </div>
-            <span className="mpp-section-count">{skills.length}</span>
+          </div>
+
+          {matched.length > 0 && (
+            <>
+              <div className="mpp-subsection-label">Matched</div>
+              <div className="mpp-section-items">
+                {matched.map(t => (
+                  <button key={t.id} className="mpp-item-row"
+                    onClick={() => { setSelectedTopic(t); setStep('role') }}>
+                    <div className="mpp-item-body">
+                      <div className="mpp-item-name">{t.cluster_label}</div>
+                    </div>
+                    <span className="mpp-item-arrow">&rsaquo;</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {potential.length > 0 && (
+            <>
+              <div className="mpp-subsection-label">Potential</div>
+              <div className="mpp-section-items">
+                {potential.map(t => (
+                  <button key={t.id} className="mpp-item-row"
+                    onClick={() => { setSelectedTopic(t); setStep('role') }}>
+                    <div className="mpp-item-body">
+                      <div className="mpp-item-name">{t.cluster_label}</div>
+                    </div>
+                    <span className="mpp-item-arrow">&rsaquo;</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          <div className="mpp-subsection-label">Identify your own</div>
+          <div className="mpp-challenge-form">
+            <input
+              type="text"
+              className="mpp-challenge-input"
+              placeholder="Type a topic..."
+              value={customTopic}
+              onChange={e => setCustomTopic(e.target.value)}
+            />
+            <button
+              className="mpp-gold-btn"
+              disabled={!customTopic.trim()}
+              onClick={() => { setSelectedTopic(null); setStep('role') }}
+            >
+              Continue
+            </button>
+          </div>
+
+          {topics.length === 0 && !customTopic && (
+            <p className="mpp-empty" style={{ marginTop: '0.5rem' }}>
+              No topics identified yet. Type your own above or identify topics from the Play-List tab.
+            </p>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ─── Step 2: Role ─────────────────────────────────────────────────────────
+
+  if (step === 'role') {
+    return (
+      <div className="mpp-container">
+        <button className="mpp-back" onClick={() => setStep('topic')}>
+          &larr; {getTopicLabel()}
+        </button>
+        <div className="mpp-section-card">
+          <div className="mpp-section-header">
+            <div className="mpp-section-header-left">
+              <span className="mpp-section-icon">💼</span>
+              <span className="mpp-section-title">How will you show up?</span>
+            </div>
           </div>
           <div className="mpp-section-items">
-            {skills.map(skill => (
-              <button key={skill.id} className="mpp-item-row"
-                onClick={() => { setSelectedSkill(skill); setStep('layer') }}>
+            {roles.map(role => (
+              <button key={role} className="mpp-item-row"
+                onClick={() => { setSelectedRole(role); setStep('playskill') }}>
                 <div className="mpp-item-body">
-                  <div className="mpp-item-name">{skill.cluster_label}</div>
+                  <div className="mpp-item-name">{role}</div>
                 </div>
                 <span className="mpp-item-arrow">&rsaquo;</span>
               </button>
             ))}
           </div>
         </div>
-        {skills.length === 0 && (
-          <p className="mpp-empty">Complete Flow Finder to discover your skills first.</p>
-        )}
       </div>
     )
   }
 
-  if (step === 'layer') {
+  // ─── Step 3: Playskill ────────────────────────────────────────────────────
+
+  if (step === 'playskill') {
     return (
       <div className="mpp-container">
-        <button className="mpp-back" onClick={() => setStep('skills')}>
-          &larr; {selectedSkill?.cluster_label}
+        <button className="mpp-back" onClick={() => setStep('role')}>
+          &larr; {selectedRole}
         </button>
         <div className="mpp-section-card">
           <div className="mpp-section-header">
             <div className="mpp-section-header-left">
-              <span className="mpp-section-icon">👁</span>
-              <span className="mpp-section-title">Choose visibility level</span>
+              <span className="mpp-section-icon">✨</span>
+              <span className="mpp-section-title">What's the play-skill?</span>
             </div>
-            <button className="mpp-explainer-btn" onClick={() => setShowLayerExplainer(true)}>
-              Explainer
-            </button>
           </div>
           <div className="mpp-section-items">
-            {GROAN_VISIBILITY_LAYERS.map(layer => {
-              const locked = layerLockStatus?.[layer.id]?.locked
-              return (
-                <button key={layer.id}
-                  className={`mpp-item-row ${locked ? 'locked' : ''}`}
-                  disabled={locked}
-                  onClick={() => {
-                    setSelectedLayer(layer.id)
-                    setStep('challenge')
-                  }}>
-                  <div className="mpp-item-body">
-                    <div className="mpp-item-name">{locked ? '🔒' : layer.icon} {layer.label}</div>
-                  </div>
-                  {!locked && <span className="mpp-item-arrow">&rsaquo;</span>}
-                </button>
-              )
-            })}
+            {playskills.map(ps => (
+              <button key={ps} className="mpp-item-row"
+                onClick={() => { setSelectedPlayskill(ps); setStep('challenge') }}>
+                <div className="mpp-item-body">
+                  <div className="mpp-item-name">{ps}</div>
+                </div>
+                <span className="mpp-item-arrow">&rsaquo;</span>
+              </button>
+            ))}
           </div>
         </div>
-
-        {showLayerExplainer && (
-          <div className="mpp-overlay" onClick={() => setShowLayerExplainer(false)}>
-            <div className="mpp-overlay-card" onClick={e => e.stopPropagation()}>
-              <div className="mpp-overlay-header">
-                <h3>Visibility Layers</h3>
-                <button className="mpp-overlay-close" onClick={() => setShowLayerExplainer(false)}>&times;</button>
-              </div>
-              {GROAN_VISIBILITY_LAYERS.map(layer => (
-                <div key={layer.id} className="mpp-explainer-layer">
-                  <div className="mpp-explainer-layer-top">
-                    <span className="mpp-explainer-icon">{layer.icon}</span>
-                    <div>
-                      <div className="mpp-explainer-label">{layer.label}</div>
-                      <div className="mpp-explainer-fear">{layer.fear}</div>
-                    </div>
-                  </div>
-                  <p className="mpp-explainer-desc">{layer.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     )
   }
 
-  // Step 3: enter challenge text
+  // ─── Step 4: Challenge text ───────────────────────────────────────────────
+
   if (step === 'challenge') {
-    const layerObj = GROAN_VISIBILITY_LAYERS.find(l => l.id === selectedLayer)
     return (
       <div className="mpp-container">
-        <button className="mpp-back" onClick={() => setStep('layer')}>
-          &larr; {layerObj?.icon} {layerObj?.label}
+        <button className="mpp-back" onClick={() => setStep('playskill')}>
+          &larr; {selectedPlayskill?.substring(0, 40)}...
         </button>
         <div className="mpp-section-card">
           <div className="mpp-section-header">
@@ -217,7 +294,7 @@ export default function MobilePlaylistPicker({
           </div>
           <div className="mpp-challenge-form">
             <div className="mpp-step-context">
-              {selectedSkill?.cluster_label} × {layerObj?.label}
+              {getTopicLabel()} × {selectedRole} × {selectedPlayskill?.substring(0, 30)}...
             </div>
             <input
               type="text"
@@ -233,41 +310,15 @@ export default function MobilePlaylistPicker({
             >
               Next
             </button>
-            <button
-              className="mpp-ai-btn"
-              disabled={generating}
-              onClick={async () => {
-                setGenerating(true)
-                try {
-                  const { data } = await supabase.functions.invoke('groan-challenge-generator', {
-                    body: {
-                      sourceType: 'skill',
-                      sourceLabel: selectedSkill.cluster_label,
-                      sourceInsight: selectedSkill.insight || '',
-                      visibilityLayer: selectedLayer,
-                    }
-                  })
-                  if (data?.title) setChallengeText(data.title)
-                } catch (err) {
-                  console.error('AI generation error:', err)
-                } finally {
-                  setGenerating(false)
-                }
-              }}
-            >
-              {generating ? 'Generating...' : 'Generate Inspiration with AI'}
-            </button>
           </div>
         </div>
       </div>
     )
   }
 
-  // Step 4: pick a day
-  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  // ─── Step 5: Day ──────────────────────────────────────────────────────────
 
   if (step === 'day') {
-    const layerObj = GROAN_VISIBILITY_LAYERS.find(l => l.id === selectedLayer)
     return (
       <div className="mpp-container">
         <button className="mpp-back" onClick={() => setStep('challenge')}>
@@ -284,7 +335,7 @@ export default function MobilePlaylistPicker({
             {DAYS.map(day => (
               <button key={day} className="mpp-item-row"
                 disabled={saving}
-                onClick={() => { setSelectedDay(day) }}>
+                onClick={() => setSelectedDay(day)}>
                 <div className="mpp-item-body">
                   <div className="mpp-item-name">{day}</div>
                 </div>

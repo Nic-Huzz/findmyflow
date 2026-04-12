@@ -1,0 +1,261 @@
+/**
+ * IdentifyTopicsFlow.css
+ */
+
+.idt-flow {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+}
+
+.idt-flow.idt-swipe-view {
+  padding: 1.5rem;
+  align-items: stretch;
+}
+
+.idt-container {
+  max-width: 440px;
+  width: 100%;
+}
+
+.idt-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.idt-subtitle {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+/* Playskills preview */
+
+.idt-playskills-preview {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.idt-preview-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.idt-playskill-pill {
+  display: inline-block;
+  background: rgba(233, 162, 59, 0.12);
+  border: 1px solid rgba(233, 162, 59, 0.25);
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  color: rgba(233, 162, 59, 0.9);
+  margin: 0.2rem 0.3rem 0.2rem 0;
+}
+
+/* Prompt preview */
+
+.idt-prompt-preview {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-height: 100px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.idt-external-links {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.idt-external-links a {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+}
+
+/* Textarea */
+
+.idt-textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+  margin-bottom: 0.5rem;
+}
+
+.idt-textarea:focus {
+  outline: none;
+  border-color: rgba(233, 162, 59, 0.5);
+}
+
+.idt-error {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin: 0.5rem 0;
+}
+
+/* ── Swipe Card Content ── */
+
+.idt-card-image {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  object-fit: cover;
+  margin-bottom: 0.75rem;
+}
+
+.idt-card-name {
+  color: white;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+.idt-card-tagline {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  text-align: center;
+  line-height: 1.4;
+  max-width: 300px;
+}
+
+.idt-card-extractions {
+  margin-top: 0.75rem;
+  text-align: left;
+  max-width: 300px;
+}
+
+.idt-card-ext-label {
+  font-size: 0.7rem;
+  color: rgba(233, 162, 59, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 0.3rem;
+}
+
+.idt-card-ext-bullet {
+  color: rgba(233, 162, 59, 0.8);
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.4;
+  padding-left: 0.75rem;
+  position: relative;
+  margin-bottom: 0.2rem;
+}
+
+.idt-card-ext-bullet::before {
+  content: '\00B7';
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+/* ── Sub-selection Drawer ── */
+
+.idt-sub-progress {
+  text-align: center;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.idt-sub-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.idt-sub-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(233, 162, 59, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.idt-checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  color: white;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.idt-checkbox-row input[type="checkbox"] {
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+  accent-color: #E9A23B;
+  width: 18px;
+  height: 18px;
+}
+
+.idt-custom-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.idt-custom-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.idt-custom-input:focus {
+  outline: none;
+  border-color: rgba(233, 162, 59, 0.5);
+}
+
+.idt-custom-add {
+  padding: 0.5rem 1rem;
+  background: rgba(233, 162, 59, 0.15);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  border-radius: 10px;
+  color: #E9A23B;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.idt-custom-add:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -33,6 +33,7 @@ import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
 import JourneyOnboarding from './components/onboarding/JourneyOnboarding'
 import PlaySkillsOnboarding from './components/onboarding/PlaySkillsOnboarding'
+import IdentifyTopicsFlow from './flows/IdentifyTopicsFlow'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import EssenceIdentify from './pages/EssenceIdentify'
 import ProtectiveIdentify from './pages/ProtectiveIdentify'
@@ -635,6 +636,11 @@ function AppRouter() {
             <Route path="/curiosity-compass" element={
               <AuthGate>
                 <CuriosityCompassFlow />
+              </AuthGate>
+            } />
+            <Route path="/identify-topics" element={
+              <AuthGate>
+                <IdentifyTopicsFlow />
               </AuthGate>
             } />
             <Route path="/nervous-system" element={

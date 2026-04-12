@@ -3,6 +3,15 @@
 .mpp-back { background: none; border: none; color: #5e17eb; font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 0; margin-bottom: 12px; }
 .mpp-empty { font-size: 14px; color: #9a9daa; text-align: center; padding: 20px; }
 
+.mpp-subsection-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(94, 23, 235, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.75rem 0.75rem 0.25rem;
+}
+
 /* ── Section Card (matches Priority tab design) ── */
 .mpp-section-card {
   background: white;
