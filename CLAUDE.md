@@ -301,6 +301,21 @@ Business stages 1-7 locked behind Stripe payment. Free: Flow Finder, Play-List, 
 
 ## Architecture Patterns
 
+### Taxonomy Lookups (IMPORTANT)
+Always use the compat-aware lookup functions, never raw `.find()`:
+```javascript
+import { findSkillSegment, resolveSkillId, findProblemSegment, resolveProblemId } from '../lib/wheelTaxonomy'
+
+// CORRECT: handles legacy ids from existing user data
+const seg = findSkillSegment(savedCategoryId)
+const prob = findProblemSegment(savedProblemId)
+
+// WRONG: will return undefined for old ids like 'clarifying' or 'physical_vitality'
+const seg = SKILLS_SEGMENTS.find(s => s.id === savedCategoryId)
+```
+Skills field is `placemakes` (not `playSkills`). Use `seg.placemakes || seg.playSkills || []` for backwards compat.
+Skills hue: `i * 36` (10 segments). Problems hue: `i * 30` (12 segments). Personas: `i * 30` (12 segments).
+
 ### Hook Extraction
 ```javascript
 const { loading, progress, handleQuestComplete } = useChallengeData()
@@ -404,6 +419,11 @@ npm run db:push   # Apply migrations
 
 ## Recent Updates (Apr 2026)
 
+- **PlaySkill Taxonomy V2**: Skills wheel overhauled from 12 abstract categories to 10 plain-English role-skills: storytelling, teaching, coaching, performing, creating, building, designing, leading, connecting, speaking_up. Each has 3-5 concrete "placemakes" (felt examples anchored in famous people, e.g. "Holding someone through a hard moment, like Fred Rogers airing a full minute of silence"). Field renamed `playSkills` to `placemakes`. Legacy compat layer (`resolveSkillId`, `findSkillSegment`) handles old saved data. Key files: `src/lib/wheelTaxonomy.js`, `public/data/playSkillTaxonomyV2.json`. Full handoff: `docs/taxonomy-v2-handoff.md`.
+- **Problem Taxonomy V2**: Problems wheel overhauled from 12 abstract categories to 12 felt categories: kids_deserved_better ("Kids who deserved better"), voice_taken ("The voice that got taken"), pain_not_believed ("Pain that nobody takes seriously"), world_losing ("The world we're losing"), life_not_yours ("A life that isn't yours to live"), feeling_stupid ("Feeling stupid when you're not"), locked_out ("Locked out of what you need"), work_treated_nothing ("Your work being treated as nothing"), left_behind ("Being left behind"), forgot_what_for ("Forgetting what it was all for"), stopped_wondering ("People who stopped wondering"), work_hollows ("Work that hollows you out"). Each has 3-5 placemakes. Legacy compat: `resolveProblemId`, `findProblemSegment`. Key files: `src/lib/wheelTaxonomy.js`, `public/data/problemTaxonomyV2.json`.
+- **275-Person Matching Corpus**: 75 founders + 200 non-founders (scientists, artists, activists, athletes, writers, educators) tagged with play-skills and problems. Data: `public/data/founderPlaySkills.json`, `nonFounderPlaySkills.json`, `nonFounderProfiles.json`. Verified at 1.6% error rate. Corpus designed to balance under-represented skill categories (nurturing, clarifying, synthesizing, connecting in old taxonomy).
+- **Taxonomy Code Migration**: 15 source files updated. `wheelAlignment.js` (cross-wheel mappings), `skillProductMapping.js` (product recommendations), 5 keyword-mapping files, hue calculations (skills: i*36 for 10 segments, problems: i*30 for 12). Edge function `classify-response` deployed at v17.
+- **CuriosityCompassFlow Placemake UI**: Step 6 (play-skill picker) now shows enriched cards with "Looks like [famous person]..." examples below each placemake label. Imports from `playSkillTaxonomyV2.json`.
 - **Essence Mirror Flow**: 9-step essence discovery flow at `/essence-mirror`. Replaces HomeFirstTime as the first-time user experience. Hook slides → 12 swipeable superpower cards (That's me / Not me) → Vision confirmation with Pixar scene cards → Pixar essence pick (single select) → AI Mirror reveal (Haiku blends primary + secondary archetype) → Hero avatar generation (Gemini 3.1 Flash + GPT-4o fallback) → Name hero → Save. Key files: `src/flows/EssenceMirrorFlow.jsx`, `src/data/essenceArchetypes.js`, `supabase/functions/essence-mirror-blend/`, `supabase/functions/generate-avatar-gemini/`.
 - **12 Essence Archetypes**: Radiant Rebel, Playful Creator, Sacred Jester (Activator), Mystic Messenger, Truth-Teller, Heart Alchemist (Transmuter), Grounded Guardian, Heart Holder, Rhythm Architect (Stabilizer), Wise Sage, Cosmic Connector, Compassionate Leader (Bridger). Each has: poetic_line, superpower, north_star, poetic_vision, essence_wound, inner_child_desire, characters, image, visionImage, swipeImage.
 - **36 Pixar-style images**: 12 essence portraits, 12 vision scenes, 12 swipe card portraits. Generated via Gemini 3.1 Flash. Stored in `public/images/essence/`.
