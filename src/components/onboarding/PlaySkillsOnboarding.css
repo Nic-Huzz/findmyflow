@@ -249,10 +249,21 @@
   flex-direction: column;
 }
 
-.pso-card-badge {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+.pso-card-image {
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  object-fit: cover;
   margin-bottom: 1rem;
+}
+
+.pso-card-famous {
+  font-size: 0.8rem;
+  color: rgba(233, 162, 59, 0.7);
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-style: italic;
 }
 
 .pso-card-placemake {
@@ -265,13 +276,41 @@
 }
 
 .pso-card-evidence {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   color: rgba(233, 162, 59, 0.7);
   font-size: 0.8rem;
   font-style: italic;
   line-height: 1.4;
   max-width: 280px;
   text-align: center;
+}
+
+.pso-card-evidence.truncated {
+  max-height: 3.6em;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.pso-card-show-more {
+  background: none;
+  border: none;
+  color: rgba(233, 162, 59, 0.9);
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0.25rem 0;
+  margin-top: 0.15rem;
+}
+
+.pso-card-show-more:hover {
+  color: #E9A23B;
+}
+
+.pso-card-badge {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
 }
 
 /* ── Wheel Picker ────────────────────────────────────────────────────────── */

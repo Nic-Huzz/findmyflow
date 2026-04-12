@@ -32,8 +32,29 @@ import './PlaySkillsOnboarding.css'
 const STORAGE_KEY = 'playskills_onboarding_progress'
 const RESULT_KEY = 'playskills_onboarding_result'
 
+// Build placemake → image path lookup from SKILLS_SEGMENTS
+const PLACEMAKE_IMAGES = {}
+SKILLS_SEGMENTS.forEach(seg => {
+  ;(seg.placemakes || []).forEach((pm, i) => {
+    PLACEMAKE_IMAGES[pm] = `/images/placemakes/placemake-${seg.id}-${i + 1}.png`
+  })
+})
+
+// Famous people known for each category
+const CATEGORY_FAMOUS = {
+  storytelling: 'Brené Brown, J.K. Rowling, Ira Glass',
+  teaching: 'Richard Feynman, Sal Khan, Maria Montessori',
+  coaching: 'Phil Jackson, Brené Brown, Tony Robbins',
+  performing: 'Steve Jobs, Oprah Winfrey, Dave Chappelle',
+  creating: 'Frida Kahlo, Nikola Tesla, James Dyson',
+  building: 'Elon Musk, James Dyson, Sara Blakely',
+  designing: 'Jony Ive, Coco Chanel, Dieter Rams',
+  leading: 'Jeff Bezos, Jacinda Ardern, Nelson Mandela',
+  connecting: 'Oprah Winfrey, Keith Ferrazzi, Priya Parker',
+  speaking_up: 'Malala Yousafzai, Greta Thunberg, Martin Luther King Jr.',
+}
+
 const MAX_CATEGORIES = 3
-const MAX_PLACEMAKES_PER_CATEGORY = 3
 
 const BEATS = {
   HOOK: 'hook',
@@ -146,7 +167,6 @@ export default function PlaySkillsOnboarding() {
 
   // Path B: wheel picker
   const [selectedCategories, setSelectedCategories] = useState([])
-  const [selectedPlacemakes, setSelectedPlacemakes] = useState({})
 
   // Auth
   const [userName, setUserName] = useState('')
@@ -190,12 +210,14 @@ export default function PlaySkillsOnboarding() {
           // Don't restore transient loading states — fall back to the input beat
           let beat = p.currentBeat
           if (beat === BEATS.MAPPING) beat = BEATS.PASTE
-          if (beat === BEATS.SWIPE && (!p.mappedCards || p.mappedCards.length === 0)) beat = BEATS.PASTE
+          if (beat === BEATS.WHEEL_SKILLS) beat = BEATS.WHEEL_CATEGORIES
+          if (beat === BEATS.SWIPE && (!p.mappedCards || p.mappedCards.length === 0)) {
+            beat = p.path === 'b' ? BEATS.WHEEL_CATEGORIES : BEATS.PASTE
+          }
           if (beat) setCurrentBeat(beat)
           if (p.path) setPath(p.path)
           if (p.hookSlideIndex !== undefined) setHookSlideIndex(p.hookSlideIndex)
           if (p.selectedCategories) setSelectedCategories(p.selectedCategories)
-          if (p.selectedPlacemakes) setSelectedPlacemakes(p.selectedPlacemakes)
           if (p.keptPlacemakes) setKeptPlacemakes(p.keptPlacemakes)
           if (p.mappedCards) setMappedCards(p.mappedCards)
           if (p.rawResponse) setRawResponse(p.rawResponse)
@@ -212,12 +234,12 @@ export default function PlaySkillsOnboarding() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       currentBeat, path, hookSlideIndex,
-      selectedCategories, selectedPlacemakes,
+      selectedCategories,
       keptPlacemakes, mappedCards,
       rawResponse, userName, email,
       timestamp: Date.now(),
     }))
-  }, [currentBeat, path, hookSlideIndex, selectedCategories, selectedPlacemakes, keptPlacemakes, mappedCards, rawResponse, userName, email])
+  }, [currentBeat, path, hookSlideIndex, selectedCategories, keptPlacemakes, mappedCards, rawResponse, userName, email])
 
   // ─── Navigation ──────────────────────────────────────────────────────────
 
@@ -339,29 +361,14 @@ export default function PlaySkillsOnboarding() {
     })
   }
 
-  const togglePlacemake = (categoryId, placemake) => {
-    setSelectedPlacemakes(prev => {
-      const current = prev[categoryId] || []
-      if (current.includes(placemake)) {
-        return { ...prev, [categoryId]: current.filter(s => s !== placemake) }
-      }
-      if (current.length >= MAX_PLACEMAKES_PER_CATEGORY) return prev
-      return { ...prev, [categoryId]: [...current, placemake] }
-    })
-  }
-
-  const totalWheelPicks = selectedCategories.reduce(
-    (sum, catId) => sum + (selectedPlacemakes[catId]?.length || 0), 0
-  )
-
-  const handleWheelComplete = () => {
-    // Convert wheel picks to the same shape as Path A kept placemakes
-    const kept = []
+  // Build swipe cards from selected categories and transition to swipe deck
+  const handleWheelContinue = () => {
+    const cards = []
     let idx = 0
     for (const catId of selectedCategories) {
       const seg = findSkillSegment(catId)
-      for (const pm of (selectedPlacemakes[catId] || [])) {
-        kept.push({
+      for (const pm of (seg?.placemakes || [])) {
+        cards.push({
           id: `${catId}_${idx++}_${pm.slice(0, 20)}`,
           placemake: pm,
           categoryId: catId,
@@ -370,8 +377,8 @@ export default function PlaySkillsOnboarding() {
         })
       }
     }
-    setKeptPlacemakes(kept)
-    transitionTo(BEATS.REVEAL)
+    setMappedCards(cards)
+    transitionTo(BEATS.SWIPE)
   }
 
   // ─── Save + Auth handlers ──────────────────────────────────────────────────
@@ -387,14 +394,24 @@ export default function PlaySkillsOnboarding() {
       await supabase.from('nikigai_clusters')
         .delete()
         .eq('user_id', user.id)
-        .eq('source_flow', 'get_started')
+        .eq('step_id', 'get_started')
+
+      // Create a flow session for this save
+      const { data: session } = await supabase.from('flow_sessions').insert({
+        user_id: user.id,
+        flow_type: 'get_started_playskills',
+        status: 'completed',
+        completed_at: new Date().toISOString(),
+      }).select('id').single()
 
       // Insert kept placemakes into nikigai_clusters
       const rows = keptPlacemakes.map(item => ({
+        session_id: session.id,
         user_id: user.id,
         cluster_type: 'skills',
         cluster_label: item.placemake,
-        source_flow: 'get_started',
+        cluster_stage: 'final',
+        step_id: 'get_started',
         items: [{
           text: item.placemake,
           category: item.categoryId,
@@ -536,7 +553,7 @@ export default function PlaySkillsOnboarding() {
             >
               <span className="pso-gate-icon">🧠</span>
               <span className="pso-gate-text">
-                <strong>Yes, I journal with AI</strong>
+                <strong>Yes, I use AI frequently</strong>
                 <span>Deeper analysis, best results</span>
               </span>
             </button>
@@ -663,19 +680,45 @@ export default function PlaySkillsOnboarding() {
             cards={mappedCards}
             headerText="Does this sound like you?"
             onComplete={handleSwipeComplete}
-            onBackFromFirst={() => transitionTo(BEATS.PASTE, 'left')}
-            renderCard={(card) => {
+            onBackFromFirst={() => transitionTo(path === 'b' ? BEATS.WHEEL_CATEGORIES : BEATS.PASTE, 'left')}
+            renderCard={(card, { isKept }) => {
               const seg = findSkillSegment(card.categoryId)
+              const imgSrc = PLACEMAKE_IMAGES[card.placemake]
+              const famous = CATEGORY_FAMOUS[card.categoryId]
+              const [evidenceExpanded, setEvidenceExpanded] = useState(false)
+              const isLong = card.evidence && card.evidence.length > 120
               return (
                 <>
                   <div className="pso-card-badge">
                     {seg?.icon} {seg?.displayName || card.categoryId}
                   </div>
+                  {imgSrc && (
+                    <img
+                      className="pso-card-image"
+                      src={imgSrc}
+                      alt={card.placemake}
+                      draggable={false}
+                      onError={(e) => { e.target.style.display = 'none' }}
+                    />
+                  )}
                   <div className="pso-card-placemake">{card.placemake}</div>
-                  {card.evidence && (
-                    <div className="pso-card-evidence">
-                      You said: "{card.evidence}"
+                  {famous && (
+                    <div className="pso-card-famous">
+                      Think {famous}
                     </div>
+                  )}
+                  {card.evidence && (
+                    <div className={`pso-card-evidence ${!evidenceExpanded && isLong ? 'truncated' : ''}`}>
+                      Analysis shows: "{card.evidence}"
+                    </div>
+                  )}
+                  {isLong && !evidenceExpanded && (
+                    <button
+                      className="pso-card-show-more"
+                      onClick={(e) => { e.stopPropagation(); setEvidenceExpanded(true) }}
+                    >
+                      Show more
+                    </button>
                   )}
                 </>
               )
@@ -719,7 +762,7 @@ export default function PlaySkillsOnboarding() {
           </div>
           <button
             className="jo-cta-button"
-            onClick={() => transitionTo(BEATS.WHEEL_SKILLS)}
+            onClick={handleWheelContinue}
             disabled={selectedCategories.length === 0}
             style={{ width: '100%', marginTop: '1rem' }}
           >
@@ -734,67 +777,7 @@ export default function PlaySkillsOnboarding() {
     )
   }
 
-  // BEAT 3b-2: Wheel Placemakes
-  if (currentBeat === BEATS.WHEEL_SKILLS) {
-    return (
-      <div className={`journey-onboarding pso-wheel ${transitionClass} ${directionClass}`}>
-        <div className="jo-ambient">
-          <div className="jo-glow jo-glow-1 jo-glow-gold" />
-          <div className="jo-glow jo-glow-2" />
-        </div>
-        <div className="pso-wheel-content">
-          <h2>Pick what sounds fun to do</h2>
-          <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
-            Up to {MAX_PLACEMAKES_PER_CATEGORY} per category. ({totalWheelPicks} picked)
-          </p>
-          {selectedCategories.map(catId => {
-            const seg = findSkillSegment(catId)
-            if (!seg) return null
-            const picks = selectedPlacemakes[catId] || []
-            return (
-              <div key={catId} className="pso-pm-section">
-                <div className="pso-pm-header">
-                  <span className="pso-pm-icon">{seg.icon}</span>
-                  <span className="pso-pm-name">{seg.displayName}</span>
-                  <span className="pso-pm-count">{picks.length}/{MAX_PLACEMAKES_PER_CATEGORY}</span>
-                </div>
-                <div className="pso-pm-list">
-                  {(seg.placemakes || []).map(pm => {
-                    const isSelected = picks.includes(pm)
-                    const disabled = !isSelected && picks.length >= MAX_PLACEMAKES_PER_CATEGORY
-                    return (
-                      <button
-                        key={pm}
-                        onClick={() => togglePlacemake(catId, pm)}
-                        disabled={disabled}
-                        className={`pso-pm-btn ${isSelected ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
-                      >
-                        {isSelected ? '⭐ ' : ''}{pm}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
-          {error && <p className="pso-error">{error}</p>}
-          <button
-            className="jo-cta-button"
-            onClick={handleWheelComplete}
-            disabled={totalWheelPicks === 0}
-            style={{ width: '100%', marginTop: '1rem' }}
-          >
-            <span className="jo-shimmer-layer" />
-            See my play-skills →
-            <span className="jo-btn-arrow">&#8594;</span>
-          </button>
-          <button className="pso-back-link" onClick={() => transitionTo(BEATS.WHEEL_CATEGORIES, 'left')}>
-            ← Back
-          </button>
-        </div>
-      </div>
-    )
-  }
+  // BEAT 3b-2 removed — Path B now uses the shared SWIPE beat (above)
 
   // BEAT 4: Reveal
   if (currentBeat === BEATS.REVEAL) {

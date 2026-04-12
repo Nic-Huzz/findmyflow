@@ -193,12 +193,22 @@ export default function CuriosityCompassFlow() {
     setIsProcessing(true)
 
     try {
+      // Create a flow session
+      const { data: session } = await supabase.from('flow_sessions').insert({
+        user_id: user.id,
+        flow_type: 'curiosity_compass',
+        status: 'completed',
+        completed_at: new Date().toISOString(),
+      }).select('id').single()
+
       // Save skills as nikigai_clusters
       const skillsToSave = skills.filter(s => s.kept !== false).map((s, i) => ({
+        session_id: session.id,
         user_id: user.id,
-        cluster_type: 'skill',
+        cluster_type: 'skills',
         cluster_label: s.name,
-        source_flow: 'curiosity_compass',
+        cluster_stage: 'final',
+        step_id: 'curiosity_compass',
         items: [{
           text: s.name,
           evidence: s.evidence,
@@ -212,7 +222,7 @@ export default function CuriosityCompassFlow() {
         .from('nikigai_clusters')
         .delete()
         .eq('user_id', user.id)
-        .eq('source_flow', 'curiosity_compass')
+        .eq('step_id', 'curiosity_compass')
 
       // Insert new
       if (skillsToSave.length > 0) {
@@ -243,7 +253,18 @@ export default function CuriosityCompassFlow() {
     const weekStart = getWeekStartLocal()
     let saved = 0
 
+    // Create a flow session for wheel picks
+    let wheelSessionId
+
     try {
+      const { data: wheelSession } = await supabase.from('flow_sessions').insert({
+        user_id: user.id,
+        flow_type: 'curiosity_compass_wheel',
+        status: 'completed',
+        completed_at: new Date().toISOString(),
+      }).select('id').single()
+      wheelSessionId = wheelSession.id
+
       for (const categoryId of selectedCategories) {
         const segment = findSkillSegment(categoryId)
         const picks = selectedPlaySkills[categoryId] || []
@@ -251,10 +272,12 @@ export default function CuriosityCompassFlow() {
         for (const skillText of picks) {
           // 1. Save to nikigai_clusters as a library skill
           const { error: clusterError } = await supabase.from('nikigai_clusters').insert({
+            session_id: wheelSessionId,
             user_id: user.id,
             cluster_type: 'skills',
             cluster_label: skillText,
-            source_flow: 'curiosity_compass_wheel',
+            cluster_stage: 'final',
+            step_id: 'curiosity_compass_wheel',
             items: [{
               text: skillText,
               category: categoryId,
