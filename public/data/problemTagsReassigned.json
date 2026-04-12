@@ -1,6 +1,6 @@
 {
   "meta": {
-    "totalTags": 524,
+    "totalTags": 597,
     "categories": 12,
     "generatedAt": "2026-04-12"
   },
@@ -4196,6 +4196,590 @@
       "confidence": "high",
       "evidence": "Pushed PepsiCo toward healthier products with 'Performance with Purpose' while analysts mocked her. The revenue results eventually vindicated the strategy.",
       "category": "work_hollows"
+    },
+    {
+      "person": "John Gottman",
+      "source": "nonfounder",
+      "problem": "couples destroying each other through patterns neither can see",
+      "confidence": "high",
+      "evidence": "Built the Love Lab to make invisible relationship patterns visible through physiological monitoring, identified the Four Horsemen that predict divorce with 90%+ accuracy",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "John Gottman",
+      "source": "nonfounder",
+      "problem": "children growing up watching their parents' marriage die in slow motion",
+      "confidence": "medium",
+      "evidence": "Research showed that couples' conflict patterns directly shape children's emotional regulation, leading Gottman to develop emotion coaching for parents",
+      "category": "kids_deserved_better"
+    },
+    {
+      "person": "Sue Johnson",
+      "source": "nonfounder",
+      "problem": "adults crying out for love in a language their partner cannot hear",
+      "confidence": "high",
+      "evidence": "Built EFT around the insight that couple arguments are attachment cries disguised as complaints, and that the real questions are 'Are you there for me? Can I count on you?'",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Sue Johnson",
+      "source": "nonfounder",
+      "problem": "therapists treating relationship pain like a communication problem when it is a survival response",
+      "confidence": "high",
+      "evidence": "Showed that couple distress activates the same brain regions as physical pain, and that treating it as a skills deficit misses the neurobiology entirely",
+      "category": "feeling_stupid"
+    },
+    {
+      "person": "Harville Hendrix",
+      "source": "nonfounder",
+      "problem": "repeating your parents' worst patterns with the person you chose to love",
+      "confidence": "high",
+      "evidence": "Developed Imago theory from his own divorce, showing that we unconsciously choose partners who resemble the caregivers who wounded us",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Harville Hendrix",
+      "source": "nonfounder",
+      "problem": "childhood wounds running your adult relationships without your permission",
+      "confidence": "high",
+      "evidence": "Mapped how unmet childhood needs create an 'Imago' template that drives partner selection and conflict patterns in adult relationships",
+      "category": "kids_deserved_better"
+    },
+    {
+      "person": "Terry Real",
+      "source": "nonfounder",
+      "problem": "men drowning in depression they have been trained not to name",
+      "confidence": "high",
+      "evidence": "Identified 'covert depression' in men, showing it manifests as rage, addiction, and workaholism rather than sadness, making it invisible to standard diagnostic criteria",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Terry Real",
+      "source": "nonfounder",
+      "problem": "boys having their emotional range amputated before they are old enough to protest",
+      "confidence": "high",
+      "evidence": "Documented how boys are systematically trained out of vulnerability starting around age five, tracing this to his own father's violence and depression",
+      "category": "voice_taken"
+    },
+    {
+      "person": "Gary Chapman",
+      "source": "nonfounder",
+      "problem": "people who genuinely love each other still feeling completely unloved",
+      "confidence": "high",
+      "evidence": "Observed in decades of pastoral counselling that couples expressing love in mismatched 'languages' feel unloved despite both partners' genuine effort",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Gary Chapman",
+      "source": "nonfounder",
+      "problem": "important emotional knowledge being locked behind therapy fees nobody can afford",
+      "confidence": "medium",
+      "evidence": "Created a five-category framework simple enough to spread through word of mouth and free online quizzes, reaching people who would never see a therapist",
+      "category": "feeling_stupid"
+    },
+    {
+      "person": "Stan Tatkin",
+      "source": "nonfounder",
+      "problem": "your nervous system picking a fight before your mouth opens",
+      "confidence": "high",
+      "evidence": "Built PACT therapy around the insight that couples' bodies enter threat responses before conscious thought, and that the therapist must read physiology, not just words",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Stan Tatkin",
+      "source": "nonfounder",
+      "problem": "attachment science being too clinical for the people who need it most",
+      "confidence": "medium",
+      "evidence": "Translated academic attachment categories into Anchor/Island/Wave language accessible to ordinary couples and simplified neuroscience into Wired for Love",
+      "category": "feeling_stupid"
+    },
+    {
+      "person": "Alain de Botton",
+      "source": "nonfounder",
+      "problem": "the most important things in life being the ones nobody teaches you",
+      "confidence": "high",
+      "evidence": "Founded The School of Life to teach relationships, work, anxiety, and death, subjects that formal education ignores entirely",
+      "category": "forgot_what_for"
+    },
+    {
+      "person": "Alain de Botton",
+      "source": "nonfounder",
+      "problem": "Romanticism teaching people that love should be effortless, then leaving them alone when it is not",
+      "confidence": "high",
+      "evidence": "Argued in The Course of Love that the Romantic myth of effortless love is the primary cause of relationship failure, because it makes difficulty feel like proof of the wrong partner",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Gabor Mate",
+      "source": "nonfounder",
+      "problem": "addicted people being punished for pain nobody ever treated",
+      "confidence": "high",
+      "evidence": "12 years working with Vancouver's most addicted patients, hearing childhood trauma in every history, reframing 'Why the addiction?' as 'Why the pain?'",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Gabor Mate",
+      "source": "nonfounder",
+      "problem": "a society producing epidemics of anxiety and depression and calling itself normal",
+      "confidence": "high",
+      "evidence": "The Myth of Normal argued that Western culture itself is the pathology, treating symptoms while ignoring the conditions that produce them",
+      "category": "left_behind"
+    },
+    {
+      "person": "Johann Hari",
+      "source": "nonfounder",
+      "problem": "a world treating addiction as a chemical problem when it is a loneliness problem",
+      "confidence": "high",
+      "evidence": "Popularised Rat Park experiment showing rats in social environments ignore morphine, and travelled nine countries documenting the connection between isolation and addiction",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Johann Hari",
+      "source": "nonfounder",
+      "problem": "governments putting people in cages for being in pain",
+      "confidence": "high",
+      "evidence": "Traced the war on drugs from Anslinger's 1930s racism through to present-day mass incarceration, documenting Portugal's successful decriminalisation as the counter-example",
+      "category": "life_not_yours"
+    },
+    {
+      "person": "Maia Szalavitz",
+      "source": "nonfounder",
+      "problem": "the addiction field lying to itself about what addiction actually is",
+      "confidence": "high",
+      "evidence": "Challenged both the moral model and the disease model by proposing addiction as a developmental learning disorder, grounded in her own lived experience and neuroscience research",
+      "category": "stopped_wondering"
+    },
+    {
+      "person": "Maia Szalavitz",
+      "source": "nonfounder",
+      "problem": "teenagers being tortured in treatment programmes their parents paid for",
+      "confidence": "high",
+      "evidence": "Help at Any Cost investigated abusive youth treatment facilities, documenting deaths and physical abuse in programmes operating without regulatory oversight",
+      "category": "kids_deserved_better"
+    },
+    {
+      "person": "Carl Hart",
+      "source": "nonfounder",
+      "problem": "an entire field of science built on assumptions nobody bothered to test",
+      "confidence": "high",
+      "evidence": "Ran controlled experiments showing most crack and meth users chose small cash rewards over another hit, directly contradicting the dominant 'irresistibly addictive' narrative",
+      "category": "stopped_wondering"
+    },
+    {
+      "person": "Carl Hart",
+      "source": "nonfounder",
+      "problem": "Black communities being destroyed by a drug war designed to destroy them",
+      "confidence": "high",
+      "evidence": "Grew up in poverty in Miami during the crack era, entered neuroscience to prove the drug-war narrative, then watched his own data dismantle everything he had believed",
+      "category": "life_not_yours"
+    },
+    {
+      "person": "Holly Whitaker",
+      "source": "nonfounder",
+      "problem": "women being sold alcohol as self-care and then shamed when they cannot stop",
+      "confidence": "high",
+      "evidence": "Quit Like a Woman documented how the alcohol industry markets specifically to women as empowerment, while the recovery industry then demands surrender and powerlessness",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Holly Whitaker",
+      "source": "nonfounder",
+      "problem": "recovery programmes designed for 1930s white men being treated as the only option in 2020",
+      "confidence": "high",
+      "evidence": "Found the scientific evidence for AA surprisingly thin, built Tempest as an alternative that replaced surrender-based language with agency-based tools",
+      "category": "left_behind"
+    },
+    {
+      "person": "Russell Brand",
+      "source": "nonfounder",
+      "problem": "recovery being treated as something shameful instead of something heroic",
+      "confidence": "high",
+      "evidence": "Used his global celebrity platform to rewrite the 12 steps in contemporary language and testified before the UK parliament about his own crack and heroin addiction",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Russell Brand",
+      "source": "nonfounder",
+      "problem": "famous people going through the darkest moments of their lives with cameras rolling and nobody helping",
+      "confidence": "medium",
+      "evidence": "Publicly described his own addiction spiralling while maintaining a career in entertainment, then used that visibility to advocate for abstinence-based treatment",
+      "category": "forgot_what_for"
+    },
+    {
+      "person": "Bill Wilson",
+      "source": "nonfounder",
+      "problem": "alcoholics dying alone because nobody believed one drunk could help another",
+      "confidence": "high",
+      "evidence": "Founded AA on the principle that mutual aid between alcoholics was more powerful than any medical or spiritual intervention, grew it to 2 million members in 180 countries",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Bill Wilson",
+      "source": "nonfounder",
+      "problem": "building something that outlives you by removing yourself from it",
+      "confidence": "high",
+      "evidence": "Designed anonymity and anti-personality principles into AA's structure, ensuring the movement survived its founders without a CEO, board, or marketing budget",
+      "category": "forgot_what_for"
+    },
+    {
+      "person": "Louise Aronson",
+      "source": "nonfounder",
+      "problem": "old age being treated as a disease instead of a phase of life",
+      "confidence": "high",
+      "evidence": "Elderhood argued that medicine has no developmental framework for the 30-40 years after 65, and that geriatrics is the least-funded specialty despite serving the fastest-growing demographic",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Louise Aronson",
+      "source": "nonfounder",
+      "problem": "a country with 50 million people over 65 and only 7,000 doctors trained to care for them",
+      "confidence": "high",
+      "evidence": "Documented the geriatrics recruitment crisis, showing that medical students avoid the field because it pays less and carries less prestige",
+      "category": "left_behind"
+    },
+    {
+      "person": "Bill Thomas",
+      "source": "nonfounder",
+      "problem": "old people dying of loneliness in buildings designed for efficiency instead of life",
+      "confidence": "high",
+      "evidence": "Introduced animals, plants, and children to Chase Memorial Nursing Home and saw mortality drop 15%, then built Green House homes to replace institutional care entirely",
+      "category": "left_behind"
+    },
+    {
+      "person": "Bill Thomas",
+      "source": "nonfounder",
+      "problem": "nursing homes warehousing people instead of caring for them",
+      "confidence": "high",
+      "evidence": "Named loneliness, helplessness, and boredom as the 'three plagues' of institutional care and proved through the Eden Alternative that addressing them reduced mortality and drug costs",
+      "category": "pain_not_believed"
+    },
+    {
+      "person": "Ai-jen Poo",
+      "source": "nonfounder",
+      "problem": "the women who care for our parents being paid poverty wages with no protections",
+      "confidence": "high",
+      "evidence": "Won the first Domestic Workers' Bill of Rights in New York State in 2010, covering 200,000 nannies, housekeepers, and elder care workers",
+      "category": "work_hollows"
+    },
+    {
+      "person": "Ai-jen Poo",
+      "source": "nonfounder",
+      "problem": "domestic workers being explicitly excluded from labour protections since the 1930s because of who they were",
+      "confidence": "high",
+      "evidence": "Organised workers excluded from the NLRA and FLSA, exclusions originally designed to deny protections to Black and immigrant workers",
+      "category": "life_not_yours"
+    },
+    {
+      "person": "Ai-jen Poo",
+      "source": "nonfounder",
+      "problem": "a country approaching a caregiving crisis and treating it as a personal family problem instead of infrastructure",
+      "confidence": "high",
+      "evidence": "The Age of Dignity framed elder care as an infrastructure problem on the scale of the interstate highway system, connecting domestic workers' rights to the aging crisis",
+      "category": "left_behind"
+    },
+    {
+      "person": "Marc Freedman",
+      "source": "nonfounder",
+      "problem": "a society warehousing its most experienced people at exactly the age they have the most to give",
+      "confidence": "high",
+      "evidence": "Built Encore.org and Experience Corps to deploy people over 55 as tutors and mentors, with Johns Hopkins research showing health benefits for the volunteers themselves",
+      "category": "left_behind"
+    },
+    {
+      "person": "Marc Freedman",
+      "source": "nonfounder",
+      "problem": "old and young people being segregated into separate worlds that impoverish both",
+      "confidence": "high",
+      "evidence": "How to Live Forever documented the damage of age-segregated housing and championed intergenerational programmes as the repair",
+      "category": "forgot_what_for"
+    },
+    {
+      "person": "Judith Heumann",
+      "source": "nonfounder",
+      "problem": "disabled people being locked out of buildings, schools, and jobs by a world designed without them",
+      "confidence": "high",
+      "evidence": "Sued for the right to teach after being denied a licence because her wheelchair made her 'a fire hazard,' then led the 25-day Section 504 sit-in",
+      "category": "locked_out"
+    },
+    {
+      "person": "Judith Heumann",
+      "source": "nonfounder",
+      "problem": "an entire population's civil rights sitting unsigned on a bureaucrat's desk",
+      "confidence": "high",
+      "evidence": "Led 150 disabled activists in the longest occupation of a federal building in US history to force the signing of Section 504",
+      "category": "life_not_yours"
+    },
+    {
+      "person": "Stella Young",
+      "source": "nonfounder",
+      "problem": "disabled people being used as motivational props for people who can walk",
+      "confidence": "high",
+      "evidence": "Coined 'inspiration porn' in her TEDxSydney talk, calling out images of disabled people doing ordinary things captioned to make non-disabled people feel better",
+      "category": "voice_taken"
+    },
+    {
+      "person": "Stella Young",
+      "source": "nonfounder",
+      "problem": "being given an achievement award for nothing except existing with a disability",
+      "confidence": "high",
+      "evidence": "Nominated for a community achievement award at age 15 for no accomplishment other than attending school while disabled",
+      "category": "locked_out"
+    },
+    {
+      "person": "Haben Girma",
+      "source": "nonfounder",
+      "problem": "every digital system being built as if blind and deaf people do not exist",
+      "confidence": "high",
+      "evidence": "Advocated for website and app accessibility under the ADA, arguing that an inaccessible website is the digital equivalent of stairs at a building entrance",
+      "category": "locked_out"
+    },
+    {
+      "person": "Haben Girma",
+      "source": "nonfounder",
+      "problem": "the world calling disability a limitation when the real limitation is the design",
+      "confidence": "high",
+      "evidence": "Responded to dinner-party sympathy by asking whether the guest 'suffered' from not being able to echolocate like a bat, reframing disability as the presence of barriers, not the absence of ability",
+      "category": "feeling_stupid"
+    },
+    {
+      "person": "Ed Roberts",
+      "source": "nonfounder",
+      "problem": "disabled people being told they are too broken to contribute",
+      "confidence": "high",
+      "evidence": "The Department of Rehabilitation called him 'too severely disabled to ever work.' He later became Director of that same agency.",
+      "category": "life_not_yours"
+    },
+    {
+      "person": "Ed Roberts",
+      "source": "nonfounder",
+      "problem": "disabled people having their lives run by institutions that see patients instead of people",
+      "confidence": "high",
+      "evidence": "Founded the first Centre for Independent Living in 1972, based on the principle that disabled people are the experts on their own lives",
+      "category": "locked_out"
+    },
+    {
+      "person": "Alice Wong",
+      "source": "nonfounder",
+      "problem": "disabled people's stories being told by everyone except disabled people",
+      "confidence": "high",
+      "evidence": "Built the Disability Visibility Project as a StoryCorps partnership to collect first-person disability narratives, then edited an anthology that centred disabled voices exclusively",
+      "category": "voice_taken"
+    },
+    {
+      "person": "Alice Wong",
+      "source": "nonfounder",
+      "problem": "a pandemic treating ventilator users as expendable",
+      "confidence": "high",
+      "evidence": "Dedicated Year of the Tiger to 'all the disabled people who didn't survive the pandemic, not because of COVID but because of ableism'",
+      "category": "left_behind"
+    },
+    {
+      "person": "Muhammad Yunus",
+      "source": "nonfounder",
+      "problem": "the poorest people on earth being denied credit not because they are risky but because they are poor",
+      "confidence": "high",
+      "evidence": "Lent $27 to 42 women making bamboo stools, got every cent back, and built Grameen Bank to over $30 billion in loans with a 98% repayment rate",
+      "category": "locked_out"
+    },
+    {
+      "person": "Muhammad Yunus",
+      "source": "nonfounder",
+      "problem": "women trapped in poverty by moneylenders charging rates that guarantee they stay poor",
+      "confidence": "high",
+      "evidence": "Found women in Jobra earning two cents a day because usurious lending ate all their margins, then built a bank owned by borrowers with 97% women members",
+      "category": "life_not_yours"
+    },
+    {
+      "person": "Tiffany Aliche",
+      "source": "nonfounder",
+      "problem": "financial literacy being taught in a language designed to make ordinary people feel stupid",
+      "confidence": "high",
+      "evidence": "Built The Budgetnista with an editorial rule: 'If my mother wouldn't understand this sentence, I rewrite it.' Over a million women participated in her free Live Richer Challenge",
+      "category": "feeling_stupid"
+    },
+    {
+      "person": "Tiffany Aliche",
+      "source": "nonfounder",
+      "problem": "Black women being invisible to the financial education industry",
+      "confidence": "high",
+      "evidence": "Built a financial education platform specifically for women, especially Black women, after losing her own savings in 2008 and finding no resources that spoke to her experience",
+      "category": "left_behind"
+    },
+    {
+      "person": "Jose Quinonez",
+      "source": "nonfounder",
+      "problem": "millions of people being financially responsible but financially invisible because the system does not recognise how they manage money",
+      "confidence": "high",
+      "evidence": "Formalised lending circles (tandas) by reporting payments to credit bureaus, making an existing practice visible to a system that had always ignored it",
+      "category": "locked_out"
+    },
+    {
+      "person": "Jose Quinonez",
+      "source": "nonfounder",
+      "problem": "growing up without a Social Security number and being unable to open a bank account in the country you call home",
+      "confidence": "high",
+      "evidence": "Crossed the border at age nine undocumented, grew up financially competent but financially invisible, and built Mission Asset Fund from that lived experience",
+      "category": "left_behind"
+    },
+    {
+      "person": "Suze Orman",
+      "source": "nonfounder",
+      "problem": "people pretending to afford a life that is bankrupting them because nobody taught them how money works",
+      "confidence": "high",
+      "evidence": "Ran 'Can I Afford It?' on CNBC for 13 years, telling people to their faces on national television that they could not afford the purchase they wanted to make",
+      "category": "feeling_stupid"
+    },
+    {
+      "person": "Suze Orman",
+      "source": "nonfounder",
+      "problem": "a waitress losing seven years of savings because a broker she trusted did not explain the risk",
+      "confidence": "high",
+      "evidence": "Lost $50,000 to a Merrill Lynch broker who invested her savings in high-risk options without proper disclosure, then built her entire career on the outrage",
+      "category": "locked_out"
+    },
+    {
+      "person": "Dave Ramsey",
+      "source": "nonfounder",
+      "problem": "ordinary families drowning in debt they were told was normal",
+      "confidence": "high",
+      "evidence": "Went bankrupt at 26 from leveraged real estate, rebuilt using total debt elimination, and taught the debt snowball to millions through Financial Peace University",
+      "category": "feeling_stupid"
+    },
+    {
+      "person": "Dave Ramsey",
+      "source": "nonfounder",
+      "problem": "a culture that normalises borrowing money for everything and calls it financial sophistication",
+      "confidence": "high",
+      "evidence": "Built a media empire on the single message that all consumer debt is dangerous, reaching 18 million radio listeners weekly and 10 million Financial Peace University graduates",
+      "category": "stopped_wondering"
+    },
+    {
+      "person": "Suze Orman",
+      "source": "nonfounder",
+      "problem": "women taking care of everyone else's money and neglecting their own",
+      "confidence": "high",
+      "evidence": "Women and Money argued that women's financial neglect of themselves is a specific emotional pattern, not just a knowledge gap",
+      "category": "forgot_what_for"
+    },
+    {
+      "person": "Jose Quinonez",
+      "source": "nonfounder",
+      "problem": "a credit system that defines 'creditworthy' around products that exclude the people who need credit most",
+      "confidence": "high",
+      "evidence": "MacArthur Fellowship citation highlighted his insight that millions of Americans are not financially irresponsible but financially invisible",
+      "category": "locked_out"
+    },
+    {
+      "person": "Gabor Mate",
+      "source": "nonfounder",
+      "problem": "a doctor buying classical CDs compulsively while his patients waited, and recognising the same wound driving both behaviours",
+      "confidence": "high",
+      "evidence": "Disclosed his own compulsive spending in Hungry Ghosts, tracing it to his infancy in Nazi-occupied Budapest when his mother handed him to a stranger to save his life",
+      "category": "kids_deserved_better"
+    },
+    {
+      "person": "Maia Szalavitz",
+      "source": "nonfounder",
+      "problem": "people with lived experience of addiction being dismissed as unreliable witnesses to their own condition",
+      "confidence": "high",
+      "evidence": "Used her own history of cocaine and heroin injection as epistemological authority, arguing she knows when the literature is wrong because the experience does not match",
+      "category": "voice_taken"
+    },
+    {
+      "person": "Carl Hart",
+      "source": "nonfounder",
+      "problem": "a tenured professor having to disclose heroin use to force people to reconcile their assumptions",
+      "confidence": "medium",
+      "evidence": "Disclosed regular heroin use in Drug Use for Grown-Ups to confront the gap between the public image of a Columbia professor and assumptions about who uses drugs",
+      "category": "voice_taken"
+    },
+    {
+      "person": "Judith Heumann",
+      "source": "nonfounder",
+      "problem": "a world that sees wheelchairs as tragedies instead of stairs as the problem",
+      "confidence": "high",
+      "evidence": "Four decades of advocacy consistently argued that disabled people do not need pity, they need access, from teaching in schools to advising the World Bank",
+      "category": "voice_taken"
+    },
+    {
+      "person": "Ed Roberts",
+      "source": "nonfounder",
+      "problem": "disability being created by inaccessible environments, not by the person's body",
+      "confidence": "high",
+      "evidence": "Championed the social model of disability for decades, arguing that the built environment, not the impairment, creates the handicap",
+      "category": "feeling_stupid"
+    },
+    {
+      "person": "Bill Thomas",
+      "source": "nonfounder",
+      "problem": "aging being treated as a problem to solve instead of a stage of life to design for",
+      "confidence": "high",
+      "evidence": "Took his message on a theatrical tour, deliberately choosing non-medical venues to reach audiences who would never attend a geriatrics conference",
+      "category": "forgot_what_for"
+    },
+    {
+      "person": "Marc Freedman",
+      "source": "nonfounder",
+      "problem": "a culture that believes innovation belongs exclusively to the young",
+      "confidence": "high",
+      "evidence": "Created the Purpose Prize to award $100,000 to social innovators over 60, building counter-narratives to the cult of youth in entrepreneurship",
+      "category": "left_behind"
+    },
+    {
+      "person": "Holly Whitaker",
+      "source": "nonfounder",
+      "problem": "sobriety being framed as a confession of failure instead of an act of power",
+      "confidence": "high",
+      "evidence": "Reframed quitting drinking as a feminist act in a culture that sells wine as women's empowerment",
+      "category": "voice_taken"
+    },
+    {
+      "person": "Russell Brand",
+      "source": "nonfounder",
+      "problem": "punishing drug users being treated as policy when it is cruelty",
+      "confidence": "high",
+      "evidence": "Told the UK Home Affairs Select Committee that criminalisation was 'cruel and pointless,' testifying from direct personal experience of crack and heroin addiction",
+      "category": "life_not_yours"
+    },
+    {
+      "person": "Bill Wilson",
+      "source": "nonfounder",
+      "problem": "a drunk in a hotel lobby with no one to call",
+      "confidence": "high",
+      "evidence": "The founding moment of AA was Wilson desperately calling strangers from the Mayflower Hotel in Akron because he needed to talk to another alcoholic to avoid drinking",
+      "category": "left_behind"
+    },
+    {
+      "person": "Tiffany Aliche",
+      "source": "nonfounder",
+      "problem": "a preschool teacher earning $39,000 losing everything to a financial con artist because nobody taught her how to spot one",
+      "confidence": "high",
+      "evidence": "Lost nearly all her savings in 2008, was also laid off, and rebuilt from zero into a platform that has helped participants save and pay off over $250 million",
+      "category": "locked_out"
+    },
+    {
+      "person": "Muhammad Yunus",
+      "source": "nonfounder",
+      "problem": "for-profit imitators turning microfinance into a debt trap",
+      "confidence": "medium",
+      "evidence": "Acknowledged criticism of microfinance but argued the problems came from for-profit companies that abandoned the social mission and borrower-ownership model",
+      "category": "work_hollows"
+    },
+    {
+      "person": "Haben Girma",
+      "source": "nonfounder",
+      "problem": "Harvard being designed for people who can see and hear, and nobody noticing until someone who cannot shows up",
+      "confidence": "high",
+      "evidence": "Navigated Harvard Law by reverse-engineering access from systems built without her in mind, using a braille display and real-time transcription",
+      "category": "locked_out"
+    },
+    {
+      "person": "Dave Ramsey",
+      "source": "nonfounder",
+      "problem": "the humiliation of bankruptcy teaching you things prosperity never could",
+      "confidence": "high",
+      "evidence": "Built a $4 million portfolio on debt by age 26, went bankrupt when the bank called in his notes, and turned the lesson into a 30-year crusade against consumer debt",
+      "category": "forgot_what_for"
     }
   ]
 }
