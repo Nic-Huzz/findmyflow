@@ -48,52 +48,52 @@ export const SKILLS_SEGMENTS = [
 
 export const PROBLEM_SEGMENTS = [
   {
-    id: 'physical_vitality',
-    keywords: ['health', 'fitness', 'energy', 'body', 'sleep', 'nutrition', 'illness', 'longevity', 'chronic'],
+    id: 'kids_deserved_better',
+    keywords: ['children', 'kids', 'parenting', 'education', 'youth', 'childhood', 'school', 'student', 'play', 'development'],
   },
   {
-    id: 'mental_wellbeing',
-    keywords: ['anxiety', 'stress', 'mindset', 'emotions', 'mental health', 'burnout', 'depression', 'overwhelm'],
+    id: 'voice_taken',
+    keywords: ['silence', 'voice', 'suppressed', 'censored', 'erased', 'identity', 'invisible', 'unheard', 'gender', 'expression'],
   },
   {
-    id: 'personal_mastery',
-    keywords: ['skills', 'learning', 'productivity', 'habits', 'growth', 'development', 'discipline', 'potential'],
+    id: 'pain_not_believed',
+    keywords: ['pain', 'health', 'body', 'illness', 'chronic', 'dying', 'sleep', 'burnout', 'exhaustion', 'disability'],
   },
   {
-    id: 'intimate_bonds',
-    keywords: ['relationship', 'marriage', 'dating', 'family', 'parenting', 'love', 'romance', 'partnership'],
+    id: 'world_losing',
+    keywords: ['climate', 'environment', 'sustainability', 'planet', 'nature', 'conservation', 'species', 'ecological', 'green'],
   },
   {
-    id: 'service_care',
-    keywords: ['caregiving', 'elder', 'disability', 'support', 'helping others', 'healthcare', 'childcare'],
+    id: 'life_not_yours',
+    keywords: ['oppression', 'control', 'rights', 'freedom', 'justice', 'discrimination', 'colonialism', 'apartheid', 'slavery'],
   },
   {
-    id: 'creative_expression',
-    keywords: ['art', 'creativity', 'voice', 'identity', 'expression', 'blocked', 'authentic', 'brand'],
+    id: 'feeling_stupid',
+    keywords: ['jargon', 'confusing', 'complicated', 'explain', 'simplify', 'education', 'literacy', 'understand', 'clarity'],
   },
   {
-    id: 'local_impact',
-    keywords: ['team', 'organization', 'community', 'neighborhood', 'local', 'culture', 'workplace'],
+    id: 'locked_out',
+    keywords: ['access', 'cost', 'affordable', 'gatekeeping', 'credentials', 'privilege', 'inequality', 'poverty', 'opportunity'],
   },
   {
-    id: 'cultural_movements',
-    keywords: ['belonging', 'identity', 'culture', 'movement', 'trends', 'subcultures', 'social'],
+    id: 'work_treated_nothing',
+    keywords: ['art', 'creativity', 'dismissed', 'ignored', 'stolen', 'credit', 'recognition', 'invisible', 'craft'],
   },
   {
-    id: 'economic_freedom',
-    keywords: ['money', 'business', 'career', 'job', 'income', 'financial', 'work', 'entrepreneur', 'freedom', '9-5'],
+    id: 'left_behind',
+    keywords: ['abandoned', 'forgotten', 'homeless', 'displaced', 'refugee', 'veteran', 'elderly', 'community', 'mutual aid', 'invisible'],
   },
   {
-    id: 'social_justice',
-    keywords: ['inequality', 'discrimination', 'access', 'rights', 'fairness', 'advocacy', 'diversity'],
+    id: 'forgot_what_for',
+    keywords: ['meaning', 'purpose', 'lost', 'direction', 'existential', 'spiritual', 'soul', 'why', 'emptiness', 'stuck'],
   },
   {
-    id: 'planetary_health',
-    keywords: ['climate', 'environment', 'sustainability', 'planet', 'nature', 'conservation', 'green'],
+    id: 'stopped_wondering',
+    keywords: ['certainty', 'dogma', 'rigid', 'closed', 'questioning', 'curious', 'dialogue', 'bias', 'assumptions', 'critical thinking'],
   },
   {
-    id: 'human_progress',
-    keywords: ['technology', 'innovation', 'knowledge', 'future', 'advancement', 'education', 'breakthrough'],
+    id: 'work_hollows',
+    keywords: ['burnout', 'work', 'job', 'career', 'exploit', 'dignity', 'corporate', 'quit', 'toxic', 'hustle', 'grind'],
   },
 ];
 

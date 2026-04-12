@@ -1,0 +1,501 @@
+{
+  "meta": {
+    "version": "2.0",
+    "generatedAt": "2026-04-12",
+    "totalCategories": 12,
+    "method": "Bottom-up clustering of 524 free-form problem tags, then merge/split/rename to 85%+ confidence per category"
+  },
+  "categories": [
+    {
+      "id": "kids_deserved_better",
+      "displayName": "Kids who deserved better",
+      "tagline": "Children dismissed, labelled, hit, or left to face the worst alone",
+      "turnsInto": "Child development, play therapy, progressive education, parenting coaching, youth advocacy",
+      "previousCluster": "children_not_being_seen",
+      "confidence": 88,
+      "placemakes": [
+        {
+          "id": "kids_whole_people",
+          "label": "Kids being talked at instead of talked to",
+          "example": "Like Fred Rogers airing a full minute of silence on television because he believed children deserved time to think about who loved them",
+          "anchorPerson": "Fred Rogers",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "kids_labelled_uneducable",
+          "label": "Children written off before anyone gives them a real chance",
+          "example": "Like Maria Montessori taking children from asylums labelled uneducable, designing tactile materials, and watching them pass standard Italian public school exams",
+          "anchorPerson": "Maria Montessori",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "kids_darkest_moments",
+          "label": "Children facing the worst moments of history with no adult beside them",
+          "example": "Like Janusz Korczak refusing offers to escape the Warsaw Ghetto, reportedly saying 'You do not leave children at a time like this,' then walking with 192 orphans to the Umschlagplatz",
+          "anchorPerson": "Janusz Korczak",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "kids_nobody_likes_them",
+          "label": "Students not learning because nobody in the building actually likes them",
+          "example": "Like Rita Pierson grounding her whole case on one line: 'No significant learning can occur without a significant relationship'",
+          "anchorPerson": "Rita Pierson",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "kids_forced_identity",
+          "label": "Children being pushed into a life their parents chose for them",
+          "example": "Like Andre Agassi being forced into tennis at age three by his father despite hating the sport, spending years in rebellion before finding his own relationship with the game",
+          "anchorPerson": "Andre Agassi",
+          "anchorSource": "founder"
+        }
+      ]
+    },
+    {
+      "id": "voice_taken",
+      "displayName": "The voice that got taken",
+      "tagline": "People whose voice was taken, suppressed, or erased before they could use it",
+      "turnsInto": "Advocacy, voice coaching, expressive arts, storytelling workshops, memoir facilitation, identity work",
+      "previousCluster": "voices_silenced + identity_stolen",
+      "confidence": 85,
+      "placemakes": [
+        {
+          "id": "voice_trauma_silence",
+          "label": "Childhood trauma stealing your ability to speak",
+          "example": "Like Maya Angelou going mute for nearly five years at age eight after being raped, until a family friend coaxed her out of silence by asking her to read poetry aloud",
+          "anchorPerson": "Maya Angelou",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "voice_silenced_thousands_years",
+          "label": "Women being told to sit down and be quiet for thousands of years",
+          "example": "Like Mary Beard tracing silencing from Homer's Odyssey to Hillary Clinton, quoting Telemachus telling his mother to go and weave: 'That line is 2,800 years old and it still works in 2017'",
+          "anchorPerson": "Mary Beard",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "voice_truth_costs_country",
+          "label": "Speaking the truth and losing your country for it",
+          "example": "Like Miriam Makeba testifying at the UN for an arms embargo on South Africa, then having her citizenship revoked, leaving her stateless for nearly 30 years",
+          "anchorPerson": "Miriam Makeba",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "voice_identity_hidden",
+          "label": "Being forced to hide who you really are just to be accepted",
+          "example": "Like Audre Lorde publishing her self-description 'Black, lesbian, feminist, socialist, mother, warrior, poet' repeatedly, refusing to be listed in a narrower set of identities",
+          "anchorPerson": "Audre Lorde",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "voice_shame_carried_silence",
+          "label": "Carrying shame in silence because nobody models speaking about it",
+          "example": "Like Oprah Winfrey, molested as a child and pregnant at 14, turning that trauma into radical honesty on television and modelling vulnerability for millions",
+          "anchorPerson": "Oprah Winfrey",
+          "anchorSource": "founder"
+        }
+      ]
+    },
+    {
+      "id": "pain_not_believed",
+      "displayName": "Pain that nobody takes seriously",
+      "tagline": "Physical suffering that nobody names, treats, or believes is real",
+      "turnsInto": "Health coaching, chronic illness support, somatic therapy, end-of-life care, pain advocacy",
+      "previousCluster": "bodies_in_pain",
+      "confidence": 87,
+      "placemakes": [
+        {
+          "id": "pain_constant_no_words",
+          "label": "A body in constant pain with no way to tell anyone what it feels like",
+          "example": "Like Frida Kahlo, whose bus accident at 18 broke her spine in three places and her right leg in eleven, painting from a mirror above her hospital bed for the rest of her life",
+          "anchorPerson": "Frida Kahlo",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "pain_dying_wrong_place",
+          "label": "People dying in pain because the building they're in wasn't designed for dying",
+          "example": "Like Cicely Saunders introducing the concept of total pain, arguing opioid dosing had to be anticipatory rather than waiting for the patient to beg, then dying in her own hospice using the protocols she designed",
+          "anchorPerson": "Cicely Saunders",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "pain_not_worth_treating",
+          "label": "Poor people dying of treatable diseases because someone decided they weren't worth treating",
+          "example": "Like Paul Farmer walking eight hours to reach one patient because he argued the rural poor deserved the same treatment standards as patients at Harvard hospitals",
+          "anchorPerson": "Paul Farmer",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "pain_burnout_glorified",
+          "label": "Burnout being treated as a badge of honour until your body forces you to stop",
+          "example": "Like Arianna Huffington collapsing from exhaustion and breaking her cheekbone on her desk, then spending years building Thrive Global to change how the world thinks about burnout",
+          "anchorPerson": "Arianna Huffington",
+          "anchorSource": "founder"
+        }
+      ]
+    },
+    {
+      "id": "world_losing",
+      "displayName": "The world we're losing",
+      "tagline": "Ecological destruction, species loss, and climate crisis happening while most people look away",
+      "turnsInto": "Environmental consulting, sustainability coaching, regenerative design, climate communication",
+      "previousCluster": "planet_breaking",
+      "confidence": 85,
+      "placemakes": [
+        {
+          "id": "world_poisoned_silence",
+          "label": "The natural world being poisoned while governments look the other way",
+          "example": "Like Rachel Carson publishing Silent Spring while dying of cancer she kept secret, exposing DDT bioaccumulation the chemical industry had been hiding since the 1940s",
+          "anchorPerson": "Rachel Carson",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "world_future_problem",
+          "label": "The climate crisis being treated as tomorrow's problem when it's already here",
+          "example": "Like Greta Thunberg saying 'I don't want you to be hopeful. I want you to panic. I want you to feel the fear I feel every day. And then I want you to act'",
+          "anchorPerson": "Greta Thunberg",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "world_business_destroying",
+          "label": "Businesses profiting from nature while destroying it",
+          "example": "Like Yvon Chouinard transferring ownership of Patagonia to fight the climate crisis, saying 'Earth is now our only shareholder'",
+          "anchorPerson": "Yvon Chouinard",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "world_nature_not_alive",
+          "label": "Our language making it impossible to treat the natural world as alive",
+          "example": "Like Robin Wall Kimmerer noting that in Potawatomi 'to be a bay' is a verb, while in English 'we'd never call our grandmother it, yet we do so with every plant, tree, and river we meet'",
+          "anchorPerson": "Robin Wall Kimmerer",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "life_not_yours",
+      "displayName": "A life that isn't yours to live",
+      "tagline": "Systems of control that own, oppress, or decide your life for you",
+      "turnsInto": "Human rights advocacy, community organising, political leadership, legal reform, liberation work",
+      "previousCluster": "power_crushing (renamed + trimmed)",
+      "confidence": 85,
+      "placemakes": [
+        {
+          "id": "life_owned_property",
+          "label": "People being owned as property by other people",
+          "example": "Like Harriet Tubman escaping slavery and returning to the South roughly 13 times to guide approximately 70 enslaved people to freedom, with no record of her ever losing a passenger",
+          "anchorPerson": "Harriet Tubman",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "life_dehumanized_by_law",
+          "label": "An entire population being dehumanized by law based on the colour of their skin",
+          "example": "Like Desmond Tutu spending decades confronting apartheid, from writing warnings to the Prime Minister to chairing the Truth and Reconciliation Commission",
+          "anchorPerson": "Desmond Tutu",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "life_obey_in_advance",
+          "label": "Democracies dying because people obey before they're even asked to",
+          "example": "Like Timothy Snyder noting 'Most of the power of authoritarianism is freely given. The Nazis did not have to demand compliance from most institutions. The institutions offered it'",
+          "anchorPerson": "Timothy Snyder",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "life_no_power",
+          "label": "Ordinary people having no power against the institutions that run their lives",
+          "example": "Like Saul Alinsky building the modern template for community organising rooted in institutions people already belonged to, like parishes and unions, not abstract movements",
+          "anchorPerson": "Saul Alinsky",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "feeling_stupid",
+      "displayName": "Feeling stupid when you're not",
+      "tagline": "Knowledge made unnecessarily hard, wrapped in jargon, or explained so badly you blame yourself",
+      "turnsInto": "Science communication, explainer content, courses, accessible publishing, translation",
+      "previousCluster": "knowledge_locked (complexity half)",
+      "confidence": 86,
+      "placemakes": [
+        {
+          "id": "stupid_jargon_wall",
+          "label": "Important knowledge buried behind jargon nobody can get through",
+          "example": "Like Randall Munroe using only the thousand most common English words to explain a Saturn V rocket, discovering he had to relearn things he thought he already understood",
+          "anchorPerson": "Randall Munroe",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "stupid_wrong_facts",
+          "label": "The whole world being wrong about basic facts and nobody correcting them",
+          "example": "Like Hans Rosling showing audiences at Davos scored worse than random chance on global development questions: 'You are getting less than a chimpanzee. That is actively wrong ideas'",
+          "anchorPerson": "Hans Rosling",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "stupid_maths_killed",
+          "label": "Mathematics being taught so badly that people decide they're not smart enough",
+          "example": "Like Marcus du Sautoy saying 'No one teaches music by making children copy scales for eight years and then asks why no one wants to be a composer. That is how we teach maths'",
+          "anchorPerson": "Marcus du Sautoy",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "stupid_afraid_cook",
+          "label": "Being afraid to cook because nobody taught you the why, only the recipe",
+          "example": "Like Julia Child keeping mistakes in on live television so the viewer at home would believe they could do it too, treating the fear as the enemy, not the roux",
+          "anchorPerson": "Julia Child",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "stupid_enterprise_tools",
+          "label": "Software designed to impress IT departments instead of helping actual humans",
+          "example": "Like Stewart Butterfield building Slack to feel human in a category that was grey and joyless, winning users bottom-up rather than through procurement departments",
+          "anchorPerson": "Stewart Butterfield",
+          "anchorSource": "founder"
+        }
+      ]
+    },
+    {
+      "id": "locked_out",
+      "displayName": "Locked out of what you need",
+      "tagline": "Education, healthcare, opportunity, or basic dignity blocked by cost, credentials, or gatekeeping",
+      "turnsInto": "Open-access platforms, scholarship programs, community education, social enterprise",
+      "previousCluster": "knowledge_locked (access half)",
+      "confidence": 85,
+      "placemakes": [
+        {
+          "id": "locked_cant_afford_education",
+          "label": "Education being out of reach for anyone who can't pay",
+          "example": "Like Sal Khan turning down multi-million-dollar offers and registering Khan Academy as a non-profit because 'I could not tell Nadia her tutoring was free and then charge her daughter'",
+          "anchorPerson": "Sal Khan",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "locked_girls_denied",
+          "label": "Girls being told they cannot go to school on pain of death",
+          "example": "Like Malala Yousafzai blogging for BBC Urdu at age 11 describing life under Taliban rule, then being shot by the Taliban for it at 15",
+          "anchorPerson": "Malala Yousafzai",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "locked_tools_too_complex",
+          "label": "Tools you need being too expensive or complicated for anyone without training",
+          "example": "Like Melanie Perkins pitching 100+ investors who said no, then building Canva to prove that design tools could work for everyone, not just professionals",
+          "anchorPerson": "Melanie Perkins",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "locked_poor_no_resources",
+          "label": "Talented people stuck in poverty because the doors are locked from outside",
+          "example": "Like Andrew Carnegie building 2,509 public libraries because he believed a library had changed his own life and could change anyone's",
+          "anchorPerson": "Andrew Carnegie",
+          "anchorSource": "founder"
+        }
+      ]
+    },
+    {
+      "id": "work_treated_nothing",
+      "displayName": "Your work being treated as nothing",
+      "tagline": "Art, craft, and creative vision being blocked, stolen, ignored, or treated as less than serious",
+      "turnsInto": "Creative coaching, art therapy, design leadership, creative entrepreneurship, artists' advocacy",
+      "previousCluster": "creative_dismissed (renamed)",
+      "confidence": 85,
+      "placemakes": [
+        {
+          "id": "work_woman_ahead",
+          "label": "The world not being ready for what a woman artist already knows",
+          "example": "Like Hilma af Klint producing the first fully abstract paintings in Western art around 1906, years before Kandinsky, then specifying they not be shown until 20 years after her death",
+          "anchorPerson": "Hilma af Klint",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "work_unbuildable",
+          "label": "Being told your designs are impossible when the real issue is who drew them",
+          "example": "Like Zaha Hadid being dismissed as a 'paper architect' for sixteen years until the Vitra Fire Station proved the drawings could become buildings",
+          "anchorPerson": "Zaha Hadid",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "work_integrity_rent",
+          "label": "Choosing between making honest work and paying the rent",
+          "example": "Like Philip Glass driving a taxi and working as an unlicensed plumber until 41 so that his music would not have to pay the rent",
+          "anchorPerson": "Philip Glass",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "work_credit_stolen",
+          "label": "Someone else getting credit for what you built",
+          "example": "Like Nikola Tesla inventing alternating current while Edison took the credit, and Marconi receiving the Nobel for radio using Tesla's own patents",
+          "anchorPerson": "Nikola Tesla",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "work_will_into_existence",
+          "label": "Having to will yourself into existence because nobody makes room for you",
+          "example": "Like Octavia Butler writing in a 1988 notebook 'I shall be a bestselling writer,' working daytime jobs and writing at 2-3am because 'Forget inspiration. Habit is more dependable'",
+          "anchorPerson": "Octavia Butler",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "left_behind",
+      "displayName": "Being left behind",
+      "tagline": "People abandoned by systems built without them, falling through cracks nobody designed a net for",
+      "turnsInto": "Community building, social enterprise, disaster response, mutual aid, neighbourhood work, UX advocacy",
+      "previousCluster": "systems_dont_see + falling_through (merged)",
+      "confidence": 85,
+      "placemakes": [
+        {
+          "id": "left_prove_deserve",
+          "label": "Homeless people being asked to prove they deserve a meal before they get one",
+          "example": "Like Dorothy Day's Houses of Hospitality offering food and shelter without intake forms, conditions or proselytising, with staff living alongside the people they served",
+          "anchorPerson": "Dorothy Day",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "left_abandoned_community",
+          "label": "Communities being abandoned by everyone who could leave",
+          "example": "Like Grace Lee Boggs refusing to relocate from Detroit for 62 years, saying you could not organise a place you did not live in, then founding Detroit Summer at 77",
+          "anchorPerson": "Grace Lee Boggs",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "left_veterans_home",
+          "label": "Veterans suffering not from war but from coming home to a society with no place for them",
+          "example": "Like Sebastian Junger arguing that veterans' suffering is less about combat and more about returning to an individualist society, creating Vets Town Hall where veterans speak and civilians listen",
+          "anchorPerson": "Sebastian Junger",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "left_disaster_hungry",
+          "label": "People going hungry in disasters because the relief system is slower than a kitchen",
+          "example": "Like Jose Andres founding World Central Kitchen, serving over 350 million meals in disaster zones worldwide, proving food could be the fastest first responder",
+          "anchorPerson": "Jose Andres",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "left_cities_not_for_you",
+          "label": "Cities built for cars and planners instead of the people who actually live there",
+          "example": "Like Jane Jacobs attacking the entire mid-century consensus from her apartment, then leading the fight that defeated Robert Moses's ten-lane expressway through Lower Manhattan",
+          "anchorPerson": "Jane Jacobs",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "forgot_what_for",
+      "displayName": "Forgetting what it was all for",
+      "tagline": "The search for purpose, connection, and what makes a life worth living when the old answers stop working",
+      "turnsInto": "Life coaching, spiritual direction, philosophical counselling, retreat facilitation, meaning-making",
+      "previousCluster": "meaning_lost",
+      "confidence": 90,
+      "placemakes": [
+        {
+          "id": "forgot_meaninglessness",
+          "label": "Losing everything and having to choose whether meaning still exists",
+          "example": "Like Viktor Frankl losing his wife, brother, and mother in the camps, then choosing to remain in Vienna and rebuild, applying his own theory of choosing attitude toward unchangeable facts",
+          "anchorPerson": "Viktor Frankl",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "forgot_own_story",
+          "label": "Not being able to see your own life story as something that matters",
+          "example": "Like Joseph Campbell proposing the monomyth, a universal hero's journey underlying all cultures' myths, giving people a framework to understand their own path",
+          "anchorPerson": "Joseph Campbell",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "forgot_mind_enemy",
+          "label": "Your mind being your own worst enemy every morning before you even get out of bed",
+          "example": "Like Marcus Aurelius writing self-talk to get himself out of bed: 'I have to go to work, as a human being,' the earliest surviving written morning practice in Western literature",
+          "anchorPerson": "Marcus Aurelius",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "forgot_winning_character",
+          "label": "Chasing winning so hard you forget to build the character that makes winning worth it",
+          "example": "Like John Wooden building the Pyramid of Success around character traits, not basketball skills, and telling players their career should read as a life first, a game second",
+          "anchorPerson": "John Wooden",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "stopped_wondering",
+      "displayName": "People who stopped wondering",
+      "tagline": "The damage done when people stop questioning and start knowing, in science, politics, or daily life",
+      "turnsInto": "Critical thinking workshops, dialogue design, facilitation, systems thinking, decision advisory",
+      "previousCluster": "certainty_poison (renamed)",
+      "confidence": 85,
+      "placemakes": [
+        {
+          "id": "wonder_certainty_monsters",
+          "label": "Absolute certainty turning people into the worst version of themselves",
+          "example": "Like Jacob Bronowski walking into the ash pond at Auschwitz and saying 'When people believe that they have absolute knowledge, with no test in reality, this is how they behave'",
+          "anchorPerson": "Jacob Bronowski",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "wonder_one_framework",
+          "label": "Smart people making terrible decisions because they only use one lens",
+          "example": "Like Charlie Munger collecting mental models across psychology, physics, biology, and economics, arguing any single-discipline approach was guaranteed to produce blind spots",
+          "anchorPerson": "Charlie Munger",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "wonder_cant_think_together",
+          "label": "Groups that can't think together because everyone is defending their position",
+          "example": "Like David Bohm instructing dialogue participants to notice assumptions, name them, and hold them visible without defending or abandoning them",
+          "anchorPerson": "David Bohm",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "wonder_fooling_yourself",
+          "label": "Fooling yourself and calling it science",
+          "example": "Like Richard Feynman saying 'The first principle is that you must not fool yourself, and you are the easiest person to fool,' defining integrity as leaning over backwards to show how you might be wrong",
+          "anchorPerson": "Richard Feynman",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "work_hollows",
+      "displayName": "Work that hollows you out",
+      "tagline": "Jobs that strip dignity, businesses that exploit, and systems that treat workers as disposable",
+      "turnsInto": "Workplace culture consulting, ethical business coaching, career transition, social entrepreneurship",
+      "previousCluster": "work_breaks",
+      "confidence": 88,
+      "placemakes": [
+        {
+          "id": "hollows_dignity_stripped",
+          "label": "Watching your father come home from work with his dignity gone",
+          "example": "Like Brunello Cucinelli saying 'I saw my father coming home offended, mortified' from the factory, then building a billion-dollar company while paying workers above market and mandating 90-minute lunches",
+          "anchorPerson": "Brunello Cucinelli",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "hollows_bullshit_jobs",
+          "label": "Doing a job that produces nothing and knowing it every single day",
+          "example": "Like David Graeber receiving thousands of emails from people describing their meaningless work: 'I did not intend to write a book. The readers wrote it for me'",
+          "anchorPerson": "David Graeber",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "hollows_wall_street",
+          "label": "Wall Street punishing companies for treating their workers well",
+          "example": "Like James Sinegal telling analysts who called Costco's wages too high: 'Those are our core strengths, not problems,' holding the line on wages and low prices for decades",
+          "anchorPerson": "James Sinegal",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "hollows_disposable_bodies",
+          "label": "Workers being treated as disposable by companies that couldn't function without them",
+          "example": "Like Howard Schultz growing up watching his father injured and uninsured in working-class jobs, then building Starbucks into the company his father never got a chance to work for",
+          "anchorPerson": "Howard Schultz",
+          "anchorSource": "founder"
+        }
+      ]
+    }
+  ]
+}

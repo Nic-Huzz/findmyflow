@@ -105,18 +105,27 @@ const mapClusterToSegments = (clusterLabel) => {
 const mapProblemClusterToSegments = (clusterLabel) => {
   const labelLower = clusterLabel.toLowerCase()
   const segmentMappings = {
-    health: [0], fitness: [0], body: [0], energy: [0], sleep: [0], nutrition: [0],
-    anxiety: [1], stress: [1], mindset: [1], mental: [1], emotions: [1], burnout: [1],
-    skills: [2], productivity: [2], habits: [2], growth: [2], learning: [2],
-    relationship: [3], family: [3], parenting: [3], love: [3], marriage: [3],
-    caregiving: [4], disability: [4], healthcare: [4], support: [4],
-    art: [5], creativity: [5], voice: [5], expression: [5], identity: [5],
-    team: [6], organization: [6], community: [6], workplace: [6], culture: [6],
-    movement: [7], belonging: [7], trends: [7], social: [7],
-    money: [8], business: [8], career: [8], income: [8], financial: [8], freedom: [8],
-    inequality: [9], discrimination: [9], rights: [9], fairness: [9], advocacy: [9],
-    climate: [10], environment: [10], sustainability: [10], planet: [10],
-    technology: [11], innovation: [11], future: [11], education: [11],
+    // 0=kids_deserved_better, 1=voice_taken, 2=pain_not_believed, 3=world_losing,
+    // 4=life_not_yours, 5=feeling_stupid, 6=locked_out, 7=work_treated_nothing,
+    // 8=left_behind, 9=forgot_what_for, 10=stopped_wondering, 11=work_hollows
+    children: [0], kids: [0], parenting: [0], youth: [0], childhood: [0], student: [0], school: [0],
+    silence: [1], voice: [1], suppressed: [1], censored: [1], erased: [1], gender: [1], identity: [1],
+    pain: [2], illness: [2], chronic: [2], dying: [2], body: [2], health: [2], sleep: [2], disability: [2],
+    climate: [3], environment: [3], sustainability: [3], planet: [3], nature: [3], species: [3], ecological: [3],
+    oppression: [4], control: [4], rights: [4], freedom: [4], justice: [4], discrimination: [4], slavery: [4],
+    jargon: [5], confusing: [5], complicated: [5], explain: [5], simplify: [5], literacy: [5],
+    access: [6], cost: [6], affordable: [6], gatekeeping: [6], credentials: [6], poverty: [6], inequality: [6],
+    art: [7], creativity: [7], dismissed: [7], stolen: [7], credit: [7], recognition: [7], craft: [7],
+    abandoned: [8], forgotten: [8], homeless: [8], displaced: [8], refugee: [8], community: [8], veteran: [8],
+    meaning: [9], purpose: [9], lost: [9], existential: [9], spiritual: [9], soul: [9], stuck: [9],
+    certainty: [10], dogma: [10], rigid: [10], questioning: [10], curious: [10], bias: [10],
+    burnout: [11], exploit: [11], dignity: [11], toxic: [11], hustle: [11], grind: [11], career: [11], job: [11],
+    // Absorbed old terms
+    anxiety: [9], stress: [11], mindset: [9], emotions: [9],
+    relationship: [8], family: [0], love: [8],
+    expression: [1, 7], belonging: [8], movement: [1],
+    money: [11], business: [11], financial: [6],
+    technology: [5], innovation: [5], education: [5, 6],
   }
   const matchedSegments = new Set()
   Object.entries(segmentMappings).forEach(([keyword, indices]) => {

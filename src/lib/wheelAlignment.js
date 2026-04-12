@@ -14,6 +14,8 @@ import {
   JOURNEY_STAGES,
   findSkillSegment,
   resolveSkillId,
+  findProblemSegment,
+  resolveProblemId,
 } from './wheelTaxonomy'
 
 // ============================================================================
@@ -30,16 +32,16 @@ import {
  * Logic: "If you have THIS skill, you can help with THESE problems"
  */
 export const SKILLS_TO_PROBLEMS = {
-  storytelling: ['creative_expression', 'cultural_movements', 'mental_wellbeing'],
-  teaching: ['personal_mastery', 'mental_wellbeing', 'human_progress'],
-  coaching: ['mental_wellbeing', 'intimate_bonds', 'service_care'],
-  performing: ['creative_expression', 'cultural_movements', 'economic_freedom'],
-  creating: ['creative_expression', 'cultural_movements', 'human_progress'],
-  building: ['economic_freedom', 'human_progress', 'creative_expression'],
-  designing: ['creative_expression', 'human_progress', 'economic_freedom'],
-  leading: ['economic_freedom', 'personal_mastery', 'local_impact'],
-  connecting: ['intimate_bonds', 'local_impact', 'cultural_movements'],
-  speaking_up: ['social_justice', 'cultural_movements', 'mental_wellbeing'],
+  storytelling: ['voice_taken', 'work_treated_nothing', 'forgot_what_for'],
+  teaching: ['feeling_stupid', 'locked_out', 'kids_deserved_better'],
+  coaching: ['forgot_what_for', 'kids_deserved_better', 'pain_not_believed'],
+  performing: ['voice_taken', 'work_treated_nothing', 'work_hollows'],
+  creating: ['work_treated_nothing', 'voice_taken', 'stopped_wondering'],
+  building: ['locked_out', 'feeling_stupid', 'left_behind'],
+  designing: ['work_treated_nothing', 'left_behind', 'feeling_stupid'],
+  leading: ['work_hollows', 'left_behind', 'life_not_yours'],
+  connecting: ['left_behind', 'forgot_what_for', 'voice_taken'],
+  speaking_up: ['life_not_yours', 'voice_taken', 'world_losing'],
 }
 
 /**
@@ -51,18 +53,18 @@ export const SKILLS_TO_PROBLEMS = {
  * Logic: "People who care about THIS problem are typically THESE persona types"
  */
 export const PROBLEMS_TO_PERSONAS = {
-  physical_vitality: ['achievers', 'protectors', 'nurturers'],
-  mental_wellbeing: ['seekers', 'healers', 'nurturers'],
-  personal_mastery: ['achievers', 'teachers', 'builders'],
-  intimate_bonds: ['nurturers', 'connectors', 'healers'],
-  service_care: ['nurturers', 'protectors', 'healers'],
-  creative_expression: ['creators', 'explorers', 'visionaries'],
-  local_impact: ['connectors', 'builders', 'nurturers'],
-  cultural_movements: ['visionaries', 'challengers', 'connectors'],
-  economic_freedom: ['builders', 'explorers', 'achievers'],
-  social_justice: ['challengers', 'visionaries', 'protectors'],
-  planetary_health: ['protectors', 'visionaries', 'challengers'],
-  human_progress: ['visionaries', 'builders', 'teachers'],
+  kids_deserved_better: ['nurturers', 'teachers', 'protectors'],
+  voice_taken: ['challengers', 'creators', 'seekers'],
+  pain_not_believed: ['healers', 'nurturers', 'protectors'],
+  world_losing: ['protectors', 'visionaries', 'challengers'],
+  life_not_yours: ['challengers', 'visionaries', 'protectors'],
+  feeling_stupid: ['teachers', 'builders', 'seekers'],
+  locked_out: ['builders', 'challengers', 'connectors'],
+  work_treated_nothing: ['creators', 'explorers', 'visionaries'],
+  left_behind: ['connectors', 'nurturers', 'builders'],
+  forgot_what_for: ['seekers', 'healers', 'explorers'],
+  stopped_wondering: ['seekers', 'visionaries', 'teachers'],
+  work_hollows: ['builders', 'explorers', 'achievers'],
 }
 
 /**
@@ -185,13 +187,13 @@ function findStrongAlignments(skills, problems, personas) {
     problems.forEach(problem => {
       if (!relatedProblems.includes(problem.segmentId)) return
 
-      const problemPersonas = PROBLEMS_TO_PERSONAS[problem.segmentId] || []
+      const problemPersonas = PROBLEMS_TO_PERSONAS[resolveProblemId(problem.segmentId)] || []
 
       personas.forEach(persona => {
         if (relatedPersonas.includes(persona.segmentId) && problemPersonas.includes(persona.segmentId)) {
           // Triple alignment found!
           const skillSegment = findSkillSegment(skill.segmentId)
-          const problemSegment = PROBLEM_SEGMENTS.find(p => p.id === problem.segmentId)
+          const problemSegment = findProblemSegment(problem.segmentId)
           const personaSegment = PERSONA_SEGMENTS.find(p => p.id === persona.segmentId)
 
           alignments.push({
@@ -264,7 +266,7 @@ function findMisalignments(skillIds, problemIds, personaIds) {
     if (!hasMatchingProblem && expectedProblems.length > 0) {
       const skill = findSkillSegment(skillId)
       const suggestedProblems = expectedProblems
-        .map(pId => PROBLEM_SEGMENTS.find(p => p.id === pId)?.displayName)
+        .map(pId => findProblemSegment(pId)?.displayName)
         .filter(Boolean)
 
       gaps.push({
@@ -282,7 +284,7 @@ function findMisalignments(skillIds, problemIds, personaIds) {
     const hasMatchingPersona = expectedPersonas.some(p => personaIds.includes(p))
 
     if (!hasMatchingPersona && expectedPersonas.length > 0) {
-      const problem = PROBLEM_SEGMENTS.find(p => p.id === problemId)
+      const problem = findProblemSegment(problemId)
       const suggestedPersonas = expectedPersonas
         .map(pId => PERSONA_SEGMENTS.find(p => p.id === pId)?.displayName)
         .filter(Boolean)
@@ -451,9 +453,9 @@ Encourage them to start with Skills Discovery to uncover their unique abilities.
   // Format problems
   const problemsContext = problems.length > 0
     ? problems.map(p => {
-        const segment = PROBLEM_SEGMENTS.find(seg => seg.id === p.segmentId)
+        const segment = findProblemSegment(p.segmentId)
         const proficiencyRing = PROBLEMS_PROFICIENCY_RINGS.find(r => r.id === p.proficiency)
-        return `- ${segment?.displayName} (${segment?.sphere} sphere): ${proficiencyRing?.label || 'Unknown'} - ${segment?.tagline}`
+        return `- ${segment?.displayName}: ${proficiencyRing?.label || 'Unknown'} - ${segment?.tagline}`
       }).join('\n')
     : '- Not yet discovered'
 
@@ -532,7 +534,7 @@ export function getWheelSummary(wheelData) {
     ? findSkillSegment(skills[0].segmentId)?.displayName
     : null
   const topProblem = problems.length > 0
-    ? PROBLEM_SEGMENTS.find(p => p.id === problems[0].segmentId)?.displayName
+    ? findProblemSegment(problems[0].segmentId)?.displayName
     : null
   const topPersona = personas.length > 0
     ? PERSONA_SEGMENTS.find(p => p.id === personas[0].segmentId)?.displayName
