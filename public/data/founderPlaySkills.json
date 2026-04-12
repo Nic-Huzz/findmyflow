@@ -130,7 +130,7 @@
       {
         "category": "creating",
         "skill": "Make something beautiful and usable",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He refuses to discount and invests in craft so that products have intrinsic, stable value — combining quality with artisanal cashmere production."
       },
       {
@@ -142,7 +142,7 @@
       {
         "category": "coaching",
         "skill": "Watch someone grow without taking credit",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He pays workers above market, works them less, and frames ethical treatment as 'humanistic capitalism' — developing people as the core of the business."
       },
       {
@@ -192,7 +192,7 @@
       {
         "category": "leading",
         "skill": "Pick what matters and cut the rest",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He walked away from more opportunities than he took, only deploying where he had a proven, provable edge."
       }
     ],
@@ -230,7 +230,7 @@
       {
         "category": "leading",
         "skill": "Turn a mess into a system",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "After FedMart, he built Price Club with tighter governance and more radical execution, turning warehouse retail chaos into a disciplined repeatable system."
       }
     ],
@@ -263,7 +263,7 @@
       {
         "category": "building",
         "skill": "Build the thing you keep talking about",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He obsessively iterated on gear for climbers he knew personally, building what he wanted to use rather than what the market asked for."
       },
       {
@@ -405,13 +405,13 @@
       {
         "category": "teaching",
         "skill": "Find the bigger pattern under the noise",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He distilled investing into a handful of principles (circle of competence, moat, margin of safety) that hold across decades and industries."
       },
       {
         "category": "teaching",
         "skill": "Build a framework that holds it all",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He built Berkshire's operating philosophy around trust and long-term ownership — a framework managers run without micromanagement."
       },
       {
@@ -461,7 +461,7 @@
       {
         "category": "teaching",
         "skill": "Turn numbers into a clear story",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He obsessed over incentives ('show me the incentive and I'll show you the outcome'), reading institutions through the lens of behavioural data."
       },
       {
@@ -596,7 +596,7 @@
       {
         "category": "speaking_up",
         "skill": "Sell something you actually believe in",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "His sales approach was to sell features that didn't yet exist — taking belief money from enterprise customers by sheer conviction in Oracle's roadmap."
       },
       {
@@ -677,27 +677,20 @@
     "dominantCategories": [
       "storytelling",
       "performing",
-      "connecting",
       "speaking_up"
     ],
     "playSkills": [
       {
         "category": "storytelling",
         "skill": "Tell a story that lands",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Nike ads rarely show shoe features; they show athletes overcoming. 'Just Do It' became one of the most quoted slogans in history — a story that lands."
       },
       {
         "category": "performing",
         "skill": "Turn a message into a moment",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Knight turned athlete endorsements into brand mythology, making every pair of shoes carry the story of an athlete's struggle."
-      },
-      {
-        "category": "connecting",
-        "skill": "Introduce two people who should know each other",
-        "confidence": "low",
-        "evidence": "Knight's breakthrough was his relationship with Bowerman, then Steve Prefontaine, then Jordan — he introduced brand to athletes who became the story."
       },
       {
         "category": "speaking_up",
@@ -747,7 +740,7 @@
       {
         "category": "building",
         "skill": "Spot the thing everyone else missed",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "His ads show cross-sections and airflow diagrams because he spotted the engineering story everyone else was hiding from consumers."
       },
       {
@@ -793,7 +786,7 @@
       {
         "category": "creating",
         "skill": "Follow a wild hunch and see where it goes",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He followed wild hunches into optics, polarising light, and eventually the Polaroid camera through pure curiosity-driven research."
       },
       {
@@ -915,8 +908,7 @@
   {
     "name": "Andrew Carnegie",
     "dominantCategories": [
-      "leading",
-      "connecting"
+      "leading"
     ],
     "playSkills": [
       {
@@ -928,7 +920,7 @@
       {
         "category": "leading",
         "skill": "Spot the thing everyone else missed",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "'Show me your cost sheets' was his mantra — he spotted inefficiencies in Bessemer steel that let him undercut every competitor."
       },
       {
@@ -936,12 +928,6 @@
         "skill": "Pick what matters and cut the rest",
         "confidence": "medium",
         "evidence": "He invested relentlessly in new Bessemer technology his competitors ignored, picking what mattered and cutting everything that didn't serve steel dominance."
-      },
-      {
-        "category": "connecting",
-        "skill": "Introduce two people who should know each other",
-        "confidence": "low",
-        "evidence": "He used Thomas Scott's railroad network as his patron and cultivated political and industrial allies — the intro-maker turning connections into capital."
       }
     ],
     "antiTags": [
@@ -974,7 +960,7 @@
       {
         "category": "creating",
         "skill": "Make something that did not exist yesterday",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He made Hell's Angels — the most expensive film of its era — and the Spruce Goose, choosing the hardest possible things no one else had done."
       }
     ],
@@ -995,8 +981,8 @@
     "name": "Richard Branson",
     "dominantCategories": [
       "performing",
-      "connecting",
-      "speaking_up"
+      "speaking_up",
+      "connecting"
     ],
     "playSkills": [
       {
@@ -1016,12 +1002,6 @@
         "skill": "Sell something you actually believe in",
         "confidence": "medium",
         "evidence": "'I'm not in the business of running companies. I'm in the business of starting companies and using publicity to make them succeed' — he sells belief in Virgin relentlessly."
-      },
-      {
-        "category": "connecting",
-        "skill": "Host a gathering",
-        "confidence": "low",
-        "evidence": "He hosts famously at Necker Island, bringing together entrepreneurs, celebrities and politicians around Virgin's brand."
       },
       {
         "category": "connecting",
@@ -1064,7 +1044,7 @@
       {
         "category": "leading",
         "skill": "Turn numbers into a clear story",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He brought the same operational intensity to paying down $30B in EMC debt as he had to inventory turns — running the company on cash-flow metrics."
       }
     ],
@@ -1187,13 +1167,13 @@
       {
         "category": "creating",
         "skill": "Fill a blank page with something real",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She filled her fitting room with pins and made entire collections by hand on live models, turning blank cloth into new garments."
       },
       {
         "category": "creating",
         "skill": "Remix two things into something new",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Chanel No. 5 — a synthetic aldehyde fragrance with a number instead of a flower name — remixed perfume into a branded object."
       }
     ],
@@ -1226,7 +1206,7 @@
       {
         "category": "creating",
         "skill": "Remix two things into something new",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "The Hathaway eye patch remixed a model with an unexpected prop into an iconic brand motif — a tiny creative hunch that defined a campaign."
       },
       {
@@ -1278,7 +1258,7 @@
       {
         "category": "speaking_up",
         "skill": "Sell something you actually believe in",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He pioneered free samples and trial offers as sales tools — removing every barrier between 'curious' and 'trying'."
       }
     ],
@@ -1319,7 +1299,7 @@
       {
         "category": "speaking_up",
         "skill": "Sell something you actually believe in",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He sells 'what works' — a workout, a policy, a product — with the logic that keeping it to himself would help no one. Pitch as service."
       },
       {
@@ -1410,7 +1390,7 @@
       {
         "category": "leading",
         "skill": "Build a roadmap for something chaotic",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He built Red Bull's go-to-market around seeding nightclubs and bars first, then extreme sports — a deliberately unconventional roadmap into mainstream retail."
       }
     ],
@@ -1449,7 +1429,7 @@
       {
         "category": "leading",
         "skill": "Build a roadmap for something chaotic",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He kept Cane's company-owned for years, growing slower than possible to maintain quality — a deliberate, patient roadmap instead of franchising."
       },
       {
@@ -1493,13 +1473,13 @@
       {
         "category": "coaching",
         "skill": "Mentor someone earlier on the path",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Mamba Mentality became a methodology he taught younger players, from WNBA stars to his daughter's team — mentoring those earlier on the path."
       },
       {
         "category": "coaching",
         "skill": "Watch someone grow without taking credit",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Post-retirement he produced 'Dear Basketball' and coached kids without claiming credit, helping others grow into their own games."
       }
     ],
@@ -1538,13 +1518,13 @@
       {
         "category": "designing",
         "skill": "Redesign something ugly",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He strips songs down by removing everything blocking them — no overdubs, no tricks — making space breathe."
       },
       {
         "category": "coaching",
         "skill": "Connect dots across two worlds",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He bridges hip-hop, metal, country and rock by listening deeply for the essence of each artist, then cross-pollinating — connecting dots across musical worlds."
       }
     ],
@@ -1582,7 +1562,7 @@
       {
         "category": "leading",
         "skill": "Pick what matters and cut the rest",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He cut deals everyone else missed by focusing on distressed, messy properties the establishment wouldn't touch."
       },
       {
@@ -1639,7 +1619,7 @@
       {
         "category": "creating",
         "skill": "Connect dots across two worlds",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He connected printing, science, politics and civic life into one integrated practice of usefulness — the prototype of the Enlightenment polymath."
       }
     ],
@@ -1776,7 +1756,7 @@
       {
         "category": "building",
         "skill": "Prototype something in a day",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "To make Star Wars he built the tools that didn't exist — motion-control cameras, ILM, pioneering digital effects — prototyping new production machinery."
       }
     ],
@@ -1856,13 +1836,13 @@
       {
         "category": "teaching",
         "skill": "Break down a hard idea so anyone gets it",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He broke down how human voice works mechanically, using Visible Speech phonetic symbols to make the complex simple enough to teach."
       },
       {
         "category": "coaching",
         "skill": "Hold space for a hard moment",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Teaching the deaf — including Helen Keller's mentor — was his deepest calling; he held space for students whose voices others ignored."
       }
     ],
@@ -1900,7 +1880,7 @@
       {
         "category": "building",
         "skill": "Prototype something in a day",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He shipped the first Chrysler with hydraulic brakes, high-compression engines and rubber mounts — rough v1 innovations customers could feel."
       }
     ],
@@ -1923,7 +1903,7 @@
       {
         "category": "speaking_up",
         "skill": "Say the thing people are thinking but will not",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Pulitzer launched crusading campaigns — Nellie Bly's 'Around the World in 72 Days', the Statue of Liberty pedestal fund — saying what his rivals wouldn't."
       },
       {
@@ -1970,7 +1950,7 @@
       {
         "category": "coaching",
         "skill": "Coach someone through a block",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "The Agassi Prep Academy was founded in 2001 to coach Las Vegas kids through their own blocks, built while he was still playing."
       }
     ],
@@ -2216,7 +2196,7 @@
       {
         "category": "leading",
         "skill": "Find the pattern in messy data",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "At DFS, Feeney read Japanese tourist spending patterns, duty-free regulations and airport foot traffic with a market-maker's intuition for patterns."
       },
       {
@@ -2260,13 +2240,13 @@
       {
         "category": "connecting",
         "skill": "Turn numbers into a clear story",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Simons turned market data into coherent trading strategies that produced the best track record in investment history."
       },
       {
         "category": "connecting",
         "skill": "Build a framework that holds it all",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He hired mathematicians, physicists and codebreakers into one team and built a framework where their models held together as a single system."
       },
       {
@@ -2319,7 +2299,7 @@
       {
         "category": "storytelling",
         "skill": "Write something in your actual voice",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She talks openly about failure — her father asking 'what did you fail at today?' became a publicly told story that reframed failure as a badge, in her own voice."
       }
     ],
@@ -2361,7 +2341,7 @@
       {
         "category": "leading",
         "skill": "Design the game before playing it",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She designed Canva's freemium-to-enterprise motion as a deliberate bottom-up adoption strategy — individuals to teams to enterprises."
       }
     ],
@@ -2423,19 +2403,19 @@
       {
         "category": "coaching",
         "skill": "Give patient, useful feedback",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Tata's leadership of the Taj Hotel response after the 2008 Mumbai attacks — personally attending employee funerals and backing the staff who protected guests — was patient care at civilizational scale."
       },
       {
         "category": "leading",
         "skill": "Map out the next 10 moves",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Corus and Jaguar Land Rover acquisitions were contrarian multi-decade bets made during crises, planning 10 moves ahead when critics saw only cost."
       },
       {
         "category": "coaching",
         "skill": "Watch someone grow without taking credit",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He let subsidiary leaders thrive under the Tata brand while quietly enforcing the mandatory retirement age that renewed the company — growing people without taking credit."
       }
     ],
@@ -2476,7 +2456,7 @@
       {
         "category": "connecting",
         "skill": "Build a group from nothing",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He built a global coalition of SMEs, investors and regulators around Alibaba — starting from 18 founders in his apartment to a B2B platform ecosystem."
       }
     ],
@@ -2512,13 +2492,13 @@
       {
         "category": "performing",
         "skill": "Rally a group behind an idea",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She rallied college ambassadors, press and investors around the feminist positioning — selling an ideology, not a matching algorithm."
       },
       {
         "category": "designing",
         "skill": "Shape how a moment feels",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Bumble's women-message-first mechanic was an engineered identity shift — shaping how every match moment feels differently from Tinder."
       }
     ],
@@ -2585,13 +2565,13 @@
       {
         "category": "designing",
         "skill": "Shape how a moment feels",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Drybar's yellow shops, rom-com soundtracks and mirror placement were engineered so every customer walked out feeling a specific way — designing the moment."
       },
       {
         "category": "designing",
         "skill": "Craft a space people want to stay in",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She crafted a salon space women wanted to hang out in — not a traditional beauty chair — that became instantly Instagrammable."
       },
       {
@@ -2626,7 +2606,7 @@
       {
         "category": "coaching",
         "skill": "Give patient, useful feedback",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She gives unrestricted grants to organisations with proven track records, trusting leaders to know what they need — patient, strings-free support."
       },
       {
@@ -2666,13 +2646,13 @@
       {
         "category": "creating",
         "skill": "Make something beautiful and usable",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Uniqlo's HeatTech and AIRism fabrics make basic clothing beautiful and usable — selling technology hidden inside unbranded basics."
       },
       {
         "category": "designing",
         "skill": "Shape how a moment feels",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Uniqlo flagship stores (Ginza, SoHo, Champs-Élysées) are architectural visibility statements, shaping how the brand feels from the first step inside."
       },
       {
@@ -2707,7 +2687,7 @@
       {
         "category": "speaking_up",
         "skill": "Say the thing people are thinking but will not",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He sells futures, not products — pitching himself as the protagonist of technological destiny in grandiose keynotes."
       },
       {
@@ -2734,8 +2714,7 @@
     "name": "Arianna Huffington",
     "dominantCategories": [
       "storytelling",
-      "performing",
-      "connecting"
+      "performing"
     ],
     "playSkills": [
       {
@@ -2753,14 +2732,8 @@
       {
         "category": "storytelling",
         "skill": "Build a framework that holds it all",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Thrive Global is a framework for 'microsteps' that connect sleep, stress, productivity and purpose into one operating system for executives."
-      },
-      {
-        "category": "connecting",
-        "skill": "Introduce two people who should know each other",
-        "confidence": "low",
-        "evidence": "She famously connects people at the top of every field — political, media, business — introducing them at dinners, salons and stages as the HuffPo aggregator of networks."
       }
     ],
     "antiTags": [
@@ -2793,7 +2766,7 @@
       {
         "category": "coaching",
         "skill": "Give patient, useful feedback",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He hires refugees and gave employees ~10% equity — holding space for people most corporations ignore, and developing them into long-term workers."
       },
       {
@@ -2823,19 +2796,19 @@
       {
         "category": "creating",
         "skill": "Make something beautiful and usable",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Her signature Reva flat and preppy-bohemian pieces made 'accessible luxury' beautiful and usable at a price point that captured white space between high-end and mass."
       },
       {
         "category": "designing",
         "skill": "Craft a space people want to stay in",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Her stores were designed to feel like walking into her living room, not a cold boutique — crafting a space customers wanted to stay in."
       },
       {
         "category": "connecting",
         "skill": "Build a group from nothing",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "The Tory Burch Foundation builds networks of women entrepreneurs, connecting grants, capital partners and mentorship into a group from nothing."
       },
       {
@@ -2876,13 +2849,13 @@
       {
         "category": "coaching",
         "skill": "Give patient, useful feedback",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Her method is patient, practical feedback — tested on real women (not models) before any product ships."
       },
       {
         "category": "creating",
         "skill": "Make something beautiful and usable",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Her Jones Road line stays deliberately small — five bestsellers rather than fifty shelf fillers — making makeup that looks like real skin rather than a mask."
       }
     ],
@@ -2957,13 +2930,13 @@
       {
         "category": "leading",
         "skill": "Design the game before playing it",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She embedded environmental standards into every vendor contract and built Worn Wear as operational activism — the roadmap for scaling conviction without dilution."
       },
       {
         "category": "leading",
         "skill": "Turn numbers into a clear story",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She brought 15 years of private equity rigor to Patagonia — using IRR, leverage ratios and exit-quality metrics to prove mission and finance could reinforce each other."
       }
     ],
@@ -3019,13 +2992,13 @@
       {
         "category": "speaking_up",
         "skill": "Sell something you actually believe in",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Marquis Jet was built on relentless cold calls — Itzler sold jet cards by genuinely believing he was selling 'time with your family', not aviation."
       },
       {
         "category": "performing",
         "skill": "Make a pitch that moves people",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He pitches audaciously and turns rejections into sales tools, having originally hustled his way into the music business with the NBA on TNT jingle."
       },
       {
@@ -3037,7 +3010,7 @@
       {
         "category": "creating",
         "skill": "Follow a wild hunch and see where it goes",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He follows wild hunches into new formats — Living With a SEAL, the '29029 Everesting' endurance event, Marquis Jet — each a new experiment in experience entrepreneurship."
       }
     ],
@@ -3067,7 +3040,7 @@
       {
         "category": "coaching",
         "skill": "Move someone from stuck to action",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "'Every sale is a relationship, not a transaction' — on Shark Tank he consistently champions founders who can sell face-to-face, modeling conviction-driven selling."
       },
       {
@@ -3108,13 +3081,13 @@
       {
         "category": "creating",
         "skill": "Make something beautiful and usable",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "The product photography, store layout and Instagram aesthetic made vintage pieces feel beautiful and instantly shareable."
       },
       {
         "category": "creating",
         "skill": "Remix two things into something new",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She remixed thrift-store curation with editorial photography and social-media attitude into a new model for selling clothes online."
       },
       {
@@ -3153,19 +3126,19 @@
       {
         "category": "designing",
         "skill": "Shape how a moment feels",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Her bridal designs shape one of the most emotionally charged moments in a woman's life — she sells how the wedding day feels, not the dress."
       },
       {
         "category": "designing",
         "skill": "Redesign something ugly",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She redesigned something ugly — the traditional frou-frou bridal category — with clean lines and modern silhouettes the industry considered controversial."
       },
       {
         "category": "creating",
         "skill": "Make something that did not exist yesterday",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "She started her own bridal house at 40 with no design training because the dress she wanted didn't exist — inventing a new silhouette for an entire category."
       }
     ],
@@ -3201,13 +3174,13 @@
       {
         "category": "coaching",
         "skill": "Coach someone through a block",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "Hsieh offered every new hire $2,000 to quit — and coached employees through a culture of 'delivering happiness' that put people before process."
       },
       {
         "category": "creating",
         "skill": "Make something beautiful and usable",
-        "confidence": "low",
+        "confidence": "medium",
         "evidence": "He made customer service 'the marketing' — Zappos calls were stories people told each other, because he crafted them as deliberate moments."
       }
     ],

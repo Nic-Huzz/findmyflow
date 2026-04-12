@@ -49,7 +49,7 @@
       "person": "Anne Sullivan",
       "source": "nonfounder",
       "problem": "the isolation of disability when no one adapts to reach you",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Switched from formal curriculum to spelling words into Helen's palm whenever Helen reached for something, building 575 words in six months through patience.",
       "category": "kids_deserved_better"
     },
@@ -169,7 +169,7 @@
       "person": "Virginia Apgar",
       "source": "nonfounder",
       "problem": "birth defects being ignored by medical research",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Became one of the first prominent voices on birth defects research at the March of Dimes, advocating for universal rubella vaccination during the 1964-65 pandemic.",
       "category": "pain_not_believed"
     },
@@ -265,7 +265,7 @@
       "person": "David Attenborough",
       "source": "nonfounder",
       "problem": "ecological collapse happening while most people don't notice",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Since 2019 his documentaries have taken an explicit environmentalist stance, addressing COP26 at 95 about the terrible decline he witnessed in his lifetime.",
       "category": "world_losing"
     },
@@ -377,7 +377,7 @@
       "person": "Joseph Campbell",
       "source": "nonfounder",
       "problem": "confusing bliss with pleasure instead of vocation",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Sometimes wished he had said 'follow your blisters' instead of 'follow your bliss,' meaning the thing that was worth being hurt by.",
       "category": "forgot_what_for"
     },
@@ -417,7 +417,7 @@
       "person": "Claude Lévi-Strauss",
       "source": "nonfounder",
       "problem": "the human mind being assumed to work differently in different cultures",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Spent decades mapping myth-complexes across continents, arguing that structural relations between elements were universal, not culturally contingent.",
       "category": "stopped_wondering"
     },
@@ -825,7 +825,7 @@
       "person": "Mercedes Sosa",
       "source": "nonfounder",
       "problem": "a continent needing songs it can sing together when it cannot agree on anything else",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Performed Gracias a la Vida at nearly every concert for 38 years, becoming the voice of Latin American solidarity.",
       "category": "voice_taken"
     },
@@ -905,7 +905,7 @@
       "person": "Hilma af Klint",
       "source": "nonfounder",
       "problem": "female creative work being dismissed by male authorities",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Showed her Temple paintings to Rudolf Steiner in 1908. He was critical, telling her contemporaries wouldn't understand. She stopped abstract work for four years.",
       "category": "work_treated_nothing"
     },
@@ -921,7 +921,7 @@
       "person": "Louise Bourgeois",
       "source": "nonfounder",
       "problem": "women artists being ignored until they are old enough to be safe",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Her first major retrospective at MoMA came at age 70 after forty years of making sculpture as a peripheral figure. Her most ambitious project arrived in her ninth decade.",
       "category": "work_treated_nothing"
     },
@@ -929,7 +929,7 @@
       "person": "Akira Kurosawa",
       "source": "nonfounder",
       "problem": "artistic vision being constrained by commercial timidity",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Shot Seven Samurai for 148 days at three times budget, refusing to cut the rain battle scene. Studio had to wait on weather and dump hundreds of tons of water.",
       "category": "work_treated_nothing"
     },
@@ -969,7 +969,7 @@
       "person": "Georgia O'Keeffe",
       "source": "nonfounder",
       "problem": "losing the ability to create and refusing to accept it",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Lost most of her central vision at 84 but did not stop working, turning to clay and painting with assistants for fourteen more years.",
       "category": "work_treated_nothing"
     },
@@ -1001,7 +1001,7 @@
       "person": "Clarice Lispector",
       "source": "nonfounder",
       "problem": "the body betraying the writer's instrument",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Nearly lost her writing hand in a fire in 1966. Continued to write afterwards with the damaged hand.",
       "category": "work_treated_nothing"
     },
@@ -1017,7 +1017,7 @@
       "person": "Antoni Gaudí",
       "source": "nonfounder",
       "problem": "conventional mathematics being too limited for organic structural form",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built inverted scale models using weighted strings to calculate structural loads, bypassing mathematics and producing shapes no ruler-and-compass method would have generated.",
       "category": "work_treated_nothing"
     },
@@ -1025,7 +1025,7 @@
       "person": "Charles and Ray Eames",
       "source": "nonfounder",
       "problem": "design treating different media as separate problems instead of one",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Treated a chair, a house, and a film about the universe as the same design problem, working across furniture, film, exhibition and architecture.",
       "category": "stopped_wondering"
     },
@@ -1289,7 +1289,7 @@
       "person": "Frank Lloyd Wright",
       "source": "nonfounder",
       "problem": "affordable housing being treated as beneath great architecture",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Designed Usonian houses as modest, affordable single-family homes costing about $5,500 in 1940, influencing American postwar housing more than his famous buildings.",
       "category": "locked_out"
     },
@@ -1297,7 +1297,7 @@
       "person": "Frank Lloyd Wright",
       "source": "nonfounder",
       "problem": "architectural apprenticeship being replaced by institutional education",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Founded the Taliesin Fellowship as a workshop-style apprenticeship, training 625 people during his lifetime.",
       "category": "locked_out"
     },
@@ -1545,7 +1545,7 @@
       "person": "Mary Roach",
       "source": "nonfounder",
       "problem": "the most important science being locked behind embarrassment",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'The question was embarrassing to ask. That is a reliable signal for me. If the question embarrasses me, the answer is probably a book.'",
       "category": "feeling_stupid"
     },
@@ -1553,7 +1553,7 @@
       "person": "Mary Roach",
       "source": "nonfounder",
       "problem": "researchers doing fascinating work that nobody outside their lab ever hears about",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Asks for things other writers don't because she assumes the answer will be no. 'Half the time it is yes, because no one has asked.'",
       "category": "feeling_stupid"
     },
@@ -1585,7 +1585,7 @@
       "person": "Neil deGrasse Tyson",
       "source": "nonfounder",
       "problem": "curiosity about the universe being killed before it starts",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Answers every audience question at every event because 'I remember what it was like to have a question about the universe and no one to ask.'",
       "category": "feeling_stupid"
     },
@@ -1593,7 +1593,7 @@
       "person": "Neil deGrasse Tyson",
       "source": "nonfounder",
       "problem": "people being allowed to opt out of scientific literacy",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Refused to soften evolution content for religious markets: 'If I let people opt out of one finding, I have to let them opt out of all of them.'",
       "category": "feeling_stupid"
     },
@@ -1657,7 +1657,7 @@
       "person": "Randall Munroe",
       "source": "nonfounder",
       "problem": "people thinking impossible things are impossible because nobody did the math",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Every What If answer has real physics. 'The joke only works if the math is true.'",
       "category": "feeling_stupid"
     },
@@ -1665,7 +1665,7 @@
       "person": "Brian Cox",
       "source": "nonfounder",
       "problem": "physics being taught without wonder",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Revisits Feynman's Lectures before public talks as discipline: 'If I sound convincing on television and I have not done that reading, I have lied.'",
       "category": "feeling_stupid"
     },
@@ -1705,7 +1705,7 @@
       "person": "Jacques Pepin",
       "source": "nonfounder",
       "problem": "cooking being treated as performance instead of conversation",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Insisted on unscripted cooking with Julia Child so viewers would see them disagree and fail. 'Julia wanted the world to see cooking was a conversation, not a performance.'",
       "category": "feeling_stupid"
     },
@@ -1713,7 +1713,7 @@
       "person": "Jacques Pepin",
       "source": "nonfounder",
       "problem": "the gap between high cuisine and feeding thousands being treated as unbridgeable",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Chose Howard Johnson's over the White House kitchen: 'Howard Johnson's taught me how to cook the same thing a thousand times a day and have it be good.'",
       "category": "feeling_stupid"
     },
@@ -1993,7 +1993,7 @@
       "person": "Zadie Smith",
       "source": "nonfounder",
       "problem": "multicultural London needing a literary voice that sounds like it actually sounds",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Returns to the same north-west London corner across multiple novels, going deeper into the same streets, bus routes, and estates.",
       "category": "voice_taken"
     },
@@ -2001,7 +2001,7 @@
       "person": "Zadie Smith",
       "source": "nonfounder",
       "problem": "multicultural communities being written about from outside rather than from the kitchen table",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Returns to the same north-west London streets across multiple novels because 'I know it. I don't know any other place as well.'",
       "category": "voice_taken"
     },
@@ -2065,7 +2065,7 @@
       "person": "Martti Ahtisaari",
       "source": "nonfounder",
       "problem": "mediators needing physical presence and patience that international institutions can't provide",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Held all Aceh sessions face to face in the same building, arguing physical presence forced concessions that shuttle diplomacy would not have produced.",
       "category": "life_not_yours"
     },
@@ -2081,7 +2081,7 @@
       "person": "Tawakkol Karman",
       "source": "nonfounder",
       "problem": "women being excluded from political movements in the Arab world",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "First Arab woman to win the Peace Prize. Addressed the prize to 'the young people of the Arab Spring,' handing recognition back to the movement.",
       "category": "voice_taken"
     },
@@ -2129,7 +2129,7 @@
       "person": "Chimamanda Ngozi Adichie",
       "source": "nonfounder",
       "problem": "feminism needing to be explained as if it were controversial",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'We Should All Be Feminists' was sampled by Beyonce, routing the argument to a pop audience of tens of millions.",
       "category": "voice_taken"
     },
@@ -2161,7 +2161,7 @@
       "person": "Wisława Szymborska",
       "source": "nonfounder",
       "problem": "writers producing volume when restraint would be more honest",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Published fewer than 350 poems in fifty years. 'I have a trash can in my home.' Treated the bin as an editor.",
       "category": "stopped_wondering"
     },
@@ -2193,7 +2193,7 @@
       "person": "Luciano Pavarotti",
       "source": "nonfounder",
       "problem": "concrete crises needing money that purity arguments cannot generate",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Pavarotti and Friends concerts raised millions for refugee relief while purists criticised the crossover as dilution.",
       "category": "locked_out"
     },
@@ -2225,7 +2225,7 @@
       "person": "Lin-Manuel Miranda",
       "source": "nonfounder",
       "problem": "immigrant stories being absent from the stages that define national identity",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "In the Heights was written as a sophomore about his own Washington Heights community. Hamilton cast people of colour as the Founding Fathers.",
       "category": "voice_taken"
     },
@@ -2241,7 +2241,7 @@
       "person": "Ira Glass",
       "source": "nonfounder",
       "problem": "radio treating listeners as passive receivers instead of participants in a story",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Pioneered the anecdote-plus-reflection structure that became the house style of This American Life and a generation of podcasts.",
       "category": "work_treated_nothing"
     },
@@ -2265,7 +2265,7 @@
       "person": "Wong Kar-wai",
       "source": "nonfounder",
       "problem": "films being too planned to capture what humans actually feel",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Begins without completed scripts and lets stories change during 15-month shoots. The method forces the accumulated emotional residue of real duration.",
       "category": "work_treated_nothing"
     },
@@ -2273,7 +2273,7 @@
       "person": "Wong Kar-wai",
       "source": "nonfounder",
       "problem": "cinema prioritising plot over the texture of lived emotional time",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Shot In the Mood for Love across fifteen months without a completed script, letting the accumulated emotional residue of real duration become the film.",
       "category": "work_treated_nothing"
     },
@@ -2313,7 +2313,7 @@
       "person": "Björk",
       "source": "nonfounder",
       "problem": "artistic forms becoming exhausted and needing to be reinvented from scratch",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Decides in public that a mode is exhausted and engineers a replacement, recruiting new collaborators from a different genre for each album.",
       "category": "work_treated_nothing"
     },
@@ -2321,7 +2321,7 @@
       "person": "Björk",
       "source": "nonfounder",
       "problem": "artistic growth requiring the courage to abandon what worked last time",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'I realised I'd come to the end of the extrovert thing.' Engineers a replacement mode for each album by recruiting collaborators from different genres.",
       "category": "work_treated_nothing"
     },
@@ -2385,7 +2385,7 @@
       "person": "Massimo Vignelli",
       "source": "nonfounder",
       "problem": "designers using variety as a substitute for clarity",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Argued a designer really only needs about five typefaces. 'Using a special typeface for every occasion is like being a chef who uses a different plate for every dish.'",
       "category": "left_behind"
     },
@@ -2393,7 +2393,7 @@
       "person": "Tadao Ando",
       "source": "nonfounder",
       "problem": "architecture assuming you need institutional credentials to build",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Never enrolled in architecture school. Self-taught from books and travel. Founded his practice at 27 with no degree. The Pritzker jury cited it explicitly.",
       "category": "locked_out"
     },
@@ -2409,7 +2409,7 @@
       "person": "Paula Scher",
       "source": "nonfounder",
       "problem": "design being taken too seriously to be alive",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'Less is more and more is more. It's the middle that's not a good place.' Treated both extremes as valid.",
       "category": "work_treated_nothing"
     },
@@ -2417,7 +2417,7 @@
       "person": "Paula Scher",
       "source": "nonfounder",
       "problem": "theatre graphics looking like the Metropolitan Opera when they should look like the street",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Made Public Theater posters that looked like the noise of 42nd Street rather than institutional culture.",
       "category": "work_treated_nothing"
     },
@@ -2481,7 +2481,7 @@
       "person": "Malala Yousafzai",
       "source": "nonfounder",
       "problem": "international NGOs building parallel structures instead of funding local women who already do the work",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "The Malala Fund supports 'country leaders,' local women already running girls' education projects, with unrestricted grants rather than building its own schools.",
       "category": "locked_out"
     },
@@ -2553,7 +2553,7 @@
       "person": "Cédric Villani",
       "source": "nonfounder",
       "problem": "mathematics being invisible to the public because mathematicians look invisible",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Wears a spider brooch and lavalière tie as a deliberate strategy to force people to start conversations about his work.",
       "category": "feeling_stupid"
     },
@@ -2617,7 +2617,7 @@
       "person": "Pearl Kazin Bell",
       "source": "nonfounder",
       "problem": "writers needing to be read with precision before they can be corrected",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Would quote a line back to the author and ask whether the next paragraph had earned it. Made writers feel read first and corrected second.",
       "category": "work_treated_nothing"
     },
@@ -2625,7 +2625,7 @@
       "person": "Pearl Kazin Bell",
       "source": "nonfounder",
       "problem": "literary criticism losing the habit of close, patient reading",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Wrote reviews insisting on plain sentences about character, rhythm and moral seriousness, refusing fashionable deconstructive vocabulary.",
       "category": "work_treated_nothing"
     },
@@ -2673,7 +2673,7 @@
       "person": "Rafe Esquith",
       "source": "nonfounder",
       "problem": "moral development being absent from education as if character does not matter",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Taught Kohlberg's six stages of moral development to ten-year-olds, having them name which level they were operating from in any decision.",
       "category": "kids_deserved_better"
     },
@@ -2809,7 +2809,7 @@
       "person": "Gregory Rabassa",
       "source": "nonfounder",
       "problem": "literary works from other languages never reaching readers who need them",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "García Márquez waited three years for Rabassa, who then translated forward without reading ahead, encountering the novel at the reader's pace.",
       "category": "locked_out"
     },
@@ -2833,7 +2833,7 @@
       "person": "Clifford Geertz",
       "source": "nonfounder",
       "problem": "anthropologists pretending they are objective reporters rather than authors",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "In Works and Lives argued anthropologists should be judged as authors with distinct signatures, changing how a generation wrote fieldwork.",
       "category": "stopped_wondering"
     },
@@ -3017,7 +3017,7 @@
       "person": "William Shakespeare",
       "source": "nonfounder",
       "problem": "the interior life needing a public form before an audience can recognise it as their own",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Staged Hamlet's mind working through the question of existence aloud in meter, in front of a paying audience at the Globe.",
       "category": "forgot_what_for"
     },
@@ -3033,7 +3033,7 @@
       "person": "Rumi",
       "source": "nonfounder",
       "problem": "grief closing language down when it should open it up",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "After Shams disappeared, Rumi composed tens of thousands of verses to his missing friend. The loss opened the language instead of closing it.",
       "category": "forgot_what_for"
     },
@@ -3065,7 +3065,7 @@
       "person": "Haruki Murakami",
       "source": "nonfounder",
       "problem": "creative endurance being undervalued compared to creative talent",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'Pain is inevitable. Suffering is optional.' Gets up at 4am, writes five hours, runs 10km, in bed by 9pm, repeated for months.",
       "category": "work_treated_nothing"
     },
@@ -3113,7 +3113,7 @@
       "person": "Philip Glass",
       "source": "nonfounder",
       "problem": "Western music cutting time into boxes when it should be built from additive cells",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Transcribing Indian rhythmic patterns for Ravi Shankar broke his ear and became the origin of his minimalist method.",
       "category": "work_treated_nothing"
     },
@@ -3129,7 +3129,7 @@
       "person": "Anni Albers",
       "source": "nonfounder",
       "problem": "textile art being dismissed as craft rather than respected as a medium",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Became the first textile artist to have a solo exhibition at MoMA in 1949, treating thread with the same seriousness a painter gave pigment.",
       "category": "work_treated_nothing"
     },
@@ -3145,7 +3145,7 @@
       "person": "Andrei Tarkovsky",
       "source": "nonfounder",
       "problem": "art being pressured to justify its existence to censors and committees",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'The artist exists because the world is not perfect.' Written under Soviet censorship where the pressure was not only metaphysical.",
       "category": "work_treated_nothing"
     },
@@ -3161,7 +3161,7 @@
       "person": "Kenya Hara",
       "source": "nonfounder",
       "problem": "Western minimalism being confused with Japanese emptiness when they mean opposite things",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "White in Japanese design is not minimalism but 'a specific invitation for meaning to arrive.' The empty vessel is activated by the viewer.",
       "category": "work_treated_nothing"
     },
@@ -3177,7 +3177,7 @@
       "person": "Kevin Lynch",
       "source": "nonfounder",
       "problem": "city designers planning buildings and roads but not the spaces where life actually happens",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Interviewed residents who drew their cities from memory. The five-element vocabulary came from those hand-drawn maps, not from planning doctrine.",
       "category": "left_behind"
     },
@@ -3209,7 +3209,7 @@
       "person": "Marshall Ganz",
       "source": "nonfounder",
       "problem": "small organisations losing to larger opponents by trying to fight on their terms",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'David prevails not by emulating Goliath, but by wisely using the tools available to him.'",
       "category": "life_not_yours"
     },
@@ -3249,7 +3249,7 @@
       "person": "Steve Jobs",
       "source": "founder",
       "problem": "technology being too complicated for ordinary people to use",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Saved Apple by killing 70% of its product line and building obsessive simplicity. Called the computer 'a bicycle for the mind.'",
       "category": "feeling_stupid"
     },
@@ -3265,7 +3265,7 @@
       "person": "John D. Rockefeller",
       "source": "founder",
       "problem": "inefficiency wasting resources that could serve people",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Found that Standard Oil barrel-sealing used 40 drops of solder when 39 would do. Built a fortune on relentless elimination of tiny inefficiencies.",
       "category": "work_hollows"
     },
@@ -3289,7 +3289,7 @@
       "person": "Brunello Cucinelli",
       "source": "founder",
       "problem": "traditional craft skills dying out because young people have no path to learn them",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Founded the School of Arts and Crafts in Solomeo, training young people in traditional techniques free of charge.",
       "category": "work_hollows"
     },
@@ -3297,7 +3297,7 @@
       "person": "Ed Thorp",
       "source": "founder",
       "problem": "systems being assumed unbeatable when mathematical analysis proves otherwise",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Applied probability theory to blackjack and then to financial markets, proving that what seemed like gambling could be made systematic.",
       "category": "stopped_wondering"
     },
@@ -3305,7 +3305,7 @@
       "person": "Sol Price",
       "source": "founder",
       "problem": "retail customers subsidising unnecessary overhead and markup",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Invented the warehouse club model, stripping away retail extras to pass savings directly to members.",
       "category": "locked_out"
     },
@@ -3313,7 +3313,7 @@
       "person": "Yvon Chouinard",
       "source": "founder",
       "problem": "business growth destroying the natural world it depends on",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built Patagonia around environmental responsibility, eventually giving the company away to fight the climate crisis.",
       "category": "world_losing"
     },
@@ -3329,7 +3329,7 @@
       "person": "Estée Lauder",
       "source": "founder",
       "problem": "women being sold products they could never try first",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Pioneered the free sample and personal demonstration, believing women needed to touch and experience a product before trusting it with their face.",
       "category": "locked_out"
     },
@@ -3337,7 +3337,7 @@
       "person": "Warren Buffett",
       "source": "founder",
       "problem": "investors being driven by speculation rather than understanding what they own",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built Berkshire Hathaway on the principle of buying businesses he understood at fair prices and holding them forever.",
       "category": "stopped_wondering"
     },
@@ -3353,7 +3353,7 @@
       "person": "Charlie Munger",
       "source": "founder",
       "problem": "bad decisions coming from narrow thinking and single-discipline frameworks",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Advocated for mental models from multiple disciplines, arguing that using only one framework guaranteed you would get it wrong.",
       "category": "stopped_wondering"
     },
@@ -3369,7 +3369,7 @@
       "person": "Jeff Bezos",
       "source": "founder",
       "problem": "customer experience being sacrificed for supplier convenience",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built Amazon around the principle that the customer's time and effort mattered more than any internal process.",
       "category": "work_hollows"
     },
@@ -3377,7 +3377,7 @@
       "person": "Bill Gates",
       "source": "founder",
       "problem": "computing power being locked inside institutions instead of on every desk",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Microsoft's mission was 'a computer on every desk and in every home,' democratising access to computing.",
       "category": "locked_out"
     },
@@ -3393,7 +3393,7 @@
       "person": "Larry Ellison",
       "source": "founder",
       "problem": "organizations drowning in data they cannot search or connect",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built Oracle around relational databases that could organise, query, and connect information that had been trapped in incompatible formats.",
       "category": "feeling_stupid"
     },
@@ -3401,7 +3401,7 @@
       "person": "Elon Musk",
       "source": "founder",
       "problem": "humanity being stuck on one planet with no backup",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Founded SpaceX to make humanity multi-planetary, stating that life being confined to one planet is an existential risk.",
       "category": "world_losing"
     },
@@ -3409,7 +3409,7 @@
       "person": "Elon Musk",
       "source": "founder",
       "problem": "the world's dependence on fossil fuels accelerating climate change",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built Tesla to prove electric vehicles could be desirable, not just dutiful.",
       "category": "world_losing"
     },
@@ -3417,7 +3417,7 @@
       "person": "Phil Knight",
       "source": "founder",
       "problem": "running shoes being made by companies that did not run",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Was a distance runner himself and built Nike around the insight that athletes needed shoes designed by people who understood the sport from the inside.",
       "category": "work_treated_nothing"
     },
@@ -3425,7 +3425,7 @@
       "person": "James Dyson",
       "source": "founder",
       "problem": "products being accepted as good enough when better engineering is possible",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built 5,127 prototypes before getting the bagless vacuum cleaner right, refusing to accept that existing designs were the best possible.",
       "category": "work_treated_nothing"
     },
@@ -3441,7 +3441,7 @@
       "person": "Edwin Land",
       "source": "founder",
       "problem": "the gap between seeing a moment and having a photograph of it",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Invented instant photography after his daughter asked why she couldn't see a photo right away.",
       "category": "work_treated_nothing"
     },
@@ -3457,7 +3457,7 @@
       "person": "Walt Disney",
       "source": "founder",
       "problem": "animation being dismissed as trivial entertainment for children",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Created Snow White, the first feature-length animated film, betting his company on proving animation could be serious art.",
       "category": "work_treated_nothing"
     },
@@ -3489,7 +3489,7 @@
       "person": "Andrew Carnegie",
       "source": "founder",
       "problem": "knowledge being locked behind doors that only the rich could open",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built 2,509 public libraries, believing that access to books was the ladder that could lift anyone out of poverty.",
       "category": "locked_out"
     },
@@ -3505,7 +3505,7 @@
       "person": "Richard Branson",
       "source": "founder",
       "problem": "customer experience being treated as an afterthought in industries that have no competition",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Entered complacent industries from music to airlines, betting that treating customers as human beings could disrupt monopolistic incumbents.",
       "category": "work_hollows"
     },
@@ -3513,7 +3513,7 @@
       "person": "Michael Dell",
       "source": "founder",
       "problem": "unnecessary middlemen adding cost without adding value",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built Dell on the direct model, eliminating retail markup by letting customers configure and order computers straight from the manufacturer.",
       "category": "locked_out"
     },
@@ -3521,7 +3521,7 @@
       "person": "Sam Walton",
       "source": "founder",
       "problem": "rural Americans paying more for goods because nobody built stores where they lived",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built Walmart in small towns that larger retailers ignored, driven by the belief that everyone deserved low prices.",
       "category": "left_behind"
     },
@@ -3553,7 +3553,7 @@
       "person": "David Ogilvy",
       "source": "founder",
       "problem": "advertising insulting consumers' intelligence",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'The consumer is not a moron; she is your wife.' Built his agency on the principle that advertising should inform and respect.",
       "category": "feeling_stupid"
     },
@@ -3561,7 +3561,7 @@
       "person": "David Ogilvy",
       "source": "founder",
       "problem": "advertising being based on creativity for its own sake rather than understanding what moves people",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Insisted on research-based advertising: 'We sell, or else.' The consumer was not a moron but a real person who deserved to be informed.",
       "category": "feeling_stupid"
     },
@@ -3569,7 +3569,7 @@
       "person": "Claude Hopkins",
       "source": "founder",
       "problem": "advertisers spending millions without knowing which half works",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Argued every advertising claim should be tested and measured, pioneering the coupon, the trial offer, and the split test.",
       "category": "feeling_stupid"
     },
@@ -3577,7 +3577,7 @@
       "person": "Arnold Schwarzenegger",
       "source": "founder",
       "problem": "people letting their background define what they are allowed to become",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Arrived in America with an accent and a bodybuilder's frame and systematically achieved the top of three separate fields through vision and discipline.",
       "category": "locked_out"
     },
@@ -3585,7 +3585,7 @@
       "person": "P.T. Barnum",
       "source": "founder",
       "problem": "wonder and spectacle being reserved for the cultural elite",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Made entertainment accessible and affordable to the masses, believing everyone deserved the experience of astonishment.",
       "category": "locked_out"
     },
@@ -3593,7 +3593,7 @@
       "person": "Todd Graves",
       "source": "founder",
       "problem": "the business world insisting you need variety when one thing done perfectly is the real competitive advantage",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "His single-item restaurant concept was called the worst business plan his professor had ever seen. He built Raising Cane's into a multi-billion-dollar chain.",
       "category": "stopped_wondering"
     },
@@ -3601,7 +3601,7 @@
       "person": "Kobe Bryant",
       "source": "founder",
       "problem": "natural talent being wasted by people who think hard work is beneath them",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Practiced at 4am, studied every opponent's tendencies, and called his work ethic the Mamba Mentality, treating mastery as an infinite discipline.",
       "category": "work_treated_nothing"
     },
@@ -3609,7 +3609,7 @@
       "person": "Rick Rubin",
       "source": "founder",
       "problem": "music being overproduced until it loses the feeling that made it matter",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Strip away everything that's not essential. His production philosophy is reduction to what the song actually needs.",
       "category": "work_treated_nothing"
     },
@@ -3625,7 +3625,7 @@
       "person": "Sam Zell",
       "source": "founder",
       "problem": "valuable things being thrown away because nobody has the nerve to buy them at the bottom",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built a real estate fortune by buying distressed assets others had abandoned, applying contrarian analysis to see value where others saw risk.",
       "category": "stopped_wondering"
     },
@@ -3633,7 +3633,7 @@
       "person": "Ben Franklin",
       "source": "founder",
       "problem": "civic life lacking the institutions that let ordinary citizens improve themselves",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Founded libraries, fire departments, universities, and mutual improvement societies, building the infrastructure of American civic life.",
       "category": "left_behind"
     },
@@ -3649,7 +3649,7 @@
       "person": "Thomas Edison",
       "source": "founder",
       "problem": "useful inventions dying on the lab bench because nobody builds the system around them",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Didn't just invent the lightbulb. Built the power grid, the meters, the wiring, and the business model to make it useful.",
       "category": "work_treated_nothing"
     },
@@ -3665,7 +3665,7 @@
       "person": "Levi Strauss",
       "source": "founder",
       "problem": "working people needing clothing that lasts and nobody designing for them",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Partnered with Jacob Davis to make riveted denim work pants for Gold Rush labourers, creating the most durable everyday garment in history.",
       "category": "locked_out"
     },
@@ -3673,7 +3673,7 @@
       "person": "George Lucas",
       "source": "founder",
       "problem": "filmmakers losing control of their own stories to studios",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Retained merchandising and sequel rights for Star Wars, proving that creators could control their work.",
       "category": "work_treated_nothing"
     },
@@ -3689,7 +3689,7 @@
       "person": "Bernard Arnault",
       "source": "founder",
       "problem": "luxury brands being mismanaged until they lose the craft that made them valuable",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Acquired and revitalised luxury houses, believing quality craft deserved better stewardship than short-term financial operators provided.",
       "category": "work_treated_nothing"
     },
@@ -3713,7 +3713,7 @@
       "person": "Joseph Pulitzer",
       "source": "founder",
       "problem": "newspapers serving the powerful instead of the public",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built his papers around the principle that journalism should serve ordinary citizens and hold power accountable.",
       "category": "life_not_yours"
     },
@@ -3745,7 +3745,7 @@
       "person": "Buckminster Fuller",
       "source": "founder",
       "problem": "humanity having more than enough resources but distributing them stupidly",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Dedicated his life to doing more with less, believing technology could solve scarcity if designed with the whole planet in mind.",
       "category": "world_losing"
     },
@@ -3761,7 +3761,7 @@
       "person": "Sam Zemurray",
       "source": "founder",
       "problem": "establishments underestimating immigrants and then being outmaneuvered by them",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "A penniless 14-year-old immigrant who built a fruit empire by finding gaps nobody else was looking at, eventually taking over the company that looked down on him.",
       "category": "locked_out"
     },
@@ -3841,7 +3841,7 @@
       "person": "Jim Simons",
       "source": "founder",
       "problem": "financial markets being treated as random when mathematical structure exists",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Applied pure mathematics to detect patterns in market data, building the most successful quantitative fund in history.",
       "category": "stopped_wondering"
     },
@@ -3849,7 +3849,7 @@
       "person": "Sara Blakely",
       "source": "founder",
       "problem": "failure being treated as something to be ashamed of instead of learned from",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Her father asked at dinner not 'What did you succeed at?' but 'What did you fail at today?' She built Spanx with $5,000 and zero fashion experience.",
       "category": "work_hollows"
     },
@@ -3881,7 +3881,7 @@
       "person": "Tobi Lütke",
       "source": "founder",
       "problem": "small businesses being shut out of online selling by complex technology",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'Amazon is trying to build an empire, and Shopify is trying to arm the rebels.' Built Shopify from his own frustration selling snowboards online.",
       "category": "locked_out"
     },
@@ -3897,7 +3897,7 @@
       "person": "Ratan Tata",
       "source": "founder",
       "problem": "corporate feudalism preventing modernization that could serve more people",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Transformed Tata Group from a feudal structure where subsidiary heads resisted centralization into a modern global conglomerate.",
       "category": "work_hollows"
     },
@@ -3913,7 +3913,7 @@
       "person": "Jack Ma",
       "source": "founder",
       "problem": "small businesses in developing countries having no way to reach customers",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built Alibaba as the customer advocate despite zero technical skills, connecting small Chinese businesses to the world.",
       "category": "locked_out"
     },
@@ -3961,7 +3961,7 @@
       "person": "Alli Webb",
       "source": "founder",
       "problem": "talented women losing themselves in domesticity and feeling the restless itch that something more is possible",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Spent years as a stay-at-home mom feeling a gnawing restlessness, then created Drybar by focusing on one thing done perfectly.",
       "category": "work_hollows"
     },
@@ -3977,7 +3977,7 @@
       "person": "Mackenzie Scott",
       "source": "founder",
       "problem": "philanthropy being slow, controlling, and centered on the giver's ego",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Pioneered trust-based philanthropy giving billions with no strings attached, saying 'I want to de-emphasize privileged voices.'",
       "category": "left_behind"
     },
@@ -3993,7 +3993,7 @@
       "person": "Tadashi Yanai",
       "source": "founder",
       "problem": "fashion making people feel they need to reinvent themselves every season",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Built Uniqlo around timeless basics, rejecting the fashion industry's addiction to trends in favour of quality and simplicity.",
       "category": "work_hollows"
     },
@@ -4001,7 +4001,7 @@
       "person": "Masayoshi Son",
       "source": "founder",
       "problem": "visionary companies dying for lack of capital because investors lack conviction",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Made the largest individual venture capital bets in history, funding companies others wouldn't touch because he believed in 30-year timeframes.",
       "category": "locked_out"
     },
@@ -4033,7 +4033,7 @@
       "person": "Hamdi Ulukaya",
       "source": "founder",
       "problem": "factory communities being abandoned when corporations leave town",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Bought a shuttered Kraft factory and hired local workers, then hired refugees, proving a factory could serve a community instead of extracting from it.",
       "category": "left_behind"
     },
@@ -4041,7 +4041,7 @@
       "person": "Tory Burch",
       "source": "founder",
       "problem": "fashionable clothing requiring women to choose between looking good and paying rent",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Saw the gap between luxury and accessible and built a brand in that space, selling $7M on her website's first day.",
       "category": "locked_out"
     },
@@ -4097,7 +4097,7 @@
       "person": "Stewart Butterfield",
       "source": "founder",
       "problem": "enterprise software being designed for procurement departments instead of actual humans",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "'We don't sell saddles here. We're selling organizational transformation.' Made enterprise communication feel human with Slack.",
       "category": "feeling_stupid"
     },
@@ -4113,7 +4113,7 @@
       "person": "Jesse Itzler",
       "source": "founder",
       "problem": "people living safely within their comfort zone and never testing their actual limits",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Ran a 100-mile ultramarathon without proper training. Uses the 40% rule: when you think you're done, you're only 40% done.",
       "category": "forgot_what_for"
     },
@@ -4137,7 +4137,7 @@
       "person": "Sophia Amoruso",
       "source": "founder",
       "problem": "young women being told they need credentials to be taken seriously",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Had no education or professional network but taught herself every skill she needed, letting results speak for her.",
       "category": "locked_out"
     },
@@ -4169,7 +4169,7 @@
       "person": "Tony Hsieh",
       "source": "founder",
       "problem": "companies treating customer service as a cost center instead of the whole point",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Bet everything on Zappos, proving online shoe sales could work through radical customer service including free shipping both ways.",
       "category": "work_hollows"
     },
@@ -4185,7 +4185,7 @@
       "person": "Indra Nooyi",
       "source": "founder",
       "problem": "large corporations being unable to pivot toward healthier products because Wall Street punishes long-term thinking",
-      "confidence": "medium",
+      "confidence": "high",
       "evidence": "Transformed PepsiCo with 'Performance with Purpose' toward healthier products, a strategy critics mocked until revenues proved them wrong.",
       "category": "work_hollows"
     },

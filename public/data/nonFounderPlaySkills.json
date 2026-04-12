@@ -3969,7 +3969,7 @@
         {
           "category": "coaching",
           "skill": "Watch someone grow without taking credit",
-          "confidence": "low",
+          "confidence": "medium",
           "evidence": "Runs a lab and ends each workday writing one sentence about the most interesting thing he learned from an experiment or paper that day."
         }
       ],
@@ -4109,7 +4109,7 @@
         {
           "category": "teaching",
           "skill": "Turn jargon into plain words",
-          "confidence": "low",
+          "confidence": "medium",
           "evidence": "Writes on the Isle of Skye where the Cuillin mountains are always different, saying the left hemisphere 'loses an argument' before he starts writing."
         }
       ],
@@ -4892,7 +4892,7 @@
         {
           "category": "coaching",
           "skill": "Watch someone grow without taking credit",
-          "confidence": "low",
+          "confidence": "medium",
           "evidence": "Studied free for six years with Arrigo Pola in Modena from 1954 and learned every role by ear from a repetiteur at the piano, one phrase at a time, never learning to read music fluently."
         }
       ],
@@ -5408,7 +5408,7 @@
         {
           "category": "teaching",
           "skill": "Break down a hard idea so anyone gets it",
-          "confidence": "low",
+          "confidence": "medium",
           "evidence": "Her self-description 'Less is more and more is more. It's the middle that's not a good place' is a direct teachable rebuttal to the modernist house rule."
         }
       ],
