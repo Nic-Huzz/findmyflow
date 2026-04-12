@@ -177,6 +177,8 @@ Net: 13 - 1 merge (identity into voice) - 1 merge (systems + cracks into left be
 
 **Key decision:** Absorbing "Identity stolen or forced" here rather than keeping it separate. Evidence: Lorde's identity work IS her voice work. Adichie's "single story" IS about who gets to define you. The distinction between "voice taken" and "identity stolen" was conceptual, not felt.
 
+**Anchor swap:** Original placemake "Women being told to sit down and be quiet for thousands of years" (Mary Beard) swapped for "Women's work being stolen by the men beside them" (Rosalind Franklin). Reason: everyone knows the DNA double helix story. Beard is academic-famous. Franklin is textbook-famous. Same flavor (systemic silencing of women) but the anchor carries instantly.
+
 #### 3. Pain that nobody takes seriously
 **Why it exists:** 24 tags about physical suffering being ignored or dismissed. Small but fiercely distinct.
 
@@ -226,6 +228,8 @@ Net: 13 - 1 merge (identity into voice) - 1 merge (systems + cracks into left be
 
 **Key decision:** Merging two clusters that were conceptually distinct (system design vs human consequences) but felt-similar. A user who cares about "systems built without me" also cares about "people falling through the cracks." The merge lost a subtle distinction but gained a stronger, clearer category.
 
+**Anchor swap:** Original placemake "Communities being abandoned by everyone who could leave" (Grace Lee Boggs) swapped for "Refugees being defined by their worst moment instead of their capability" (Hamdi Ulukaya/Chobani). Reason: Chobani is everywhere, Ulukaya is widely known. Boggs is deeply important but niche. The "defined by displacement instead of capability" reframe hits harder and captures a fresh angle of being left behind.
+
 #### 10. Forgetting what it was all for
 **Why it exists:** 31 tags about meaninglessness, purpose-loss, existential emptiness. FindMyFlow's core audience problem.
 
@@ -239,6 +243,8 @@ Net: 13 - 1 merge (identity into voice) - 1 merge (systems + cracks into left be
 **Why this name:** "People who stopped wondering" is gentler than "certainty as poison" (the working name). It frames the problem as a loss (they stopped wondering) rather than an accusation (they're poisonous). More inviting for a user who recognizes this in their own workplace.
 
 **Key decision:** Keeping this as its own category rather than merging into "Feeling stupid when you're not." Both involve knowledge being distorted, but "feeling stupid" is about being excluded BY experts. "Stopped wondering" is about experts who stopped being curious themselves. Different wound, different placemakes.
+
+**Anchor swap:** Original placemake "Groups that can't think together because everyone is defending their position" (David Bohm) swapped for "Trying to control everything instead of learning to dance with it" (Donella Meadows). Reason: Thinking in Systems is a bestseller, Bohm is niche even in physics. "Dancing with systems vs controlling them" is a more felt version of the anti-certainty message than "suspending assumptions in dialogue."
 
 #### 12. Work that hollows you out
 **Why it exists:** 29 tags about labor exploitation, dignity-stripping jobs, and burnout-inducing systems. FindMyFlow's second core audience problem (alongside "Forgetting what it was all for").

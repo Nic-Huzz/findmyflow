@@ -67,10 +67,10 @@
           "anchorSource": "nonfounder"
         },
         {
-          "id": "voice_silenced_thousands_years",
-          "label": "Women being told to sit down and be quiet for thousands of years",
-          "example": "Like Mary Beard tracing silencing from Homer's Odyssey to Hillary Clinton, quoting Telemachus telling his mother to go and weave: 'That line is 2,800 years old and it still works in 2017'",
-          "anchorPerson": "Mary Beard",
+          "id": "voice_work_stolen",
+          "label": "Women's work being stolen by the men beside them",
+          "example": "Like Rosalind Franklin's X-ray crystallography data being used by Watson and Crick to crack DNA's structure without acknowledging her contribution",
+          "anchorPerson": "Rosalind Franklin",
           "anchorSource": "nonfounder"
         },
         {
@@ -354,11 +354,11 @@
           "anchorSource": "nonfounder"
         },
         {
-          "id": "left_abandoned_community",
-          "label": "Communities being abandoned by everyone who could leave",
-          "example": "Like Grace Lee Boggs refusing to relocate from Detroit for 62 years, saying you could not organise a place you did not live in, then founding Detroit Summer at 77",
-          "anchorPerson": "Grace Lee Boggs",
-          "anchorSource": "nonfounder"
+          "id": "left_defined_by_worst_moment",
+          "label": "Refugees being defined by their worst moment instead of their capability",
+          "example": "Like Hamdi Ulukaya buying a shuttered factory to build Chobani and hiring refugees because he saw workers, not charity cases",
+          "anchorPerson": "Hamdi Ulukaya",
+          "anchorSource": "founder"
         },
         {
           "id": "left_veterans_home",
@@ -444,10 +444,10 @@
           "anchorSource": "founder"
         },
         {
-          "id": "wonder_cant_think_together",
-          "label": "Groups that can't think together because everyone is defending their position",
-          "example": "Like David Bohm instructing dialogue participants to notice assumptions, name them, and hold them visible without defending or abandoning them",
-          "anchorPerson": "David Bohm",
+          "id": "wonder_control_vs_dance",
+          "label": "Trying to control everything instead of learning to dance with it",
+          "example": "Like Donella Meadows writing 'mastery has less to do with pushing leverage points than with strategically, profoundly, madly letting go and dancing with the system'",
+          "anchorPerson": "Donella Meadows",
           "anchorSource": "nonfounder"
         },
         {

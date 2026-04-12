@@ -335,7 +335,7 @@ export const PROBLEM_SEGMENTS = [
     icon: '🤐',
     placemakes: [
       'Childhood trauma stealing your ability to speak',
-      'Women being told to sit down and be quiet for thousands of years',
+      'Women\'s work being stolen by the men beside them',
       'Speaking the truth and losing your country for it',
       'Being forced to hide who you really are just to be accepted',
       'Carrying shame in silence because nobody models speaking about it',
@@ -471,7 +471,7 @@ export const PROBLEM_SEGMENTS = [
     icon: '🕳️',
     placemakes: [
       'Homeless people being asked to prove they deserve a meal before they get one',
-      'Communities being abandoned by everyone who could leave',
+      'Refugees being defined by their worst moment instead of their capability',
       'Veterans suffering not from war but from coming home to a society with no place for them',
       'People going hungry in disasters because the relief system is slower than a kitchen',
       'Cities built for cars and planners instead of the people who actually live there',
@@ -511,7 +511,7 @@ export const PROBLEM_SEGMENTS = [
     placemakes: [
       'Absolute certainty turning people into the worst version of themselves',
       'Smart people making terrible decisions because they only use one lens',
-      'Groups that can not think together because everyone is defending their position',
+      'Trying to control everything instead of learning to dance with it',
       'Fooling yourself and calling it science',
     ],
   },
