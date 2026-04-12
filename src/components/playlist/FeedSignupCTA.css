@@ -1,0 +1,53 @@
+/* FeedSignupCTA — inline conversion card for anon viewers */
+
+.pfsc-card {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.4) 0%, rgba(233, 162, 59, 0.3) 100%);
+  border: 1px solid rgba(233, 162, 59, 0.4);
+  border-radius: 20px;
+  padding: 24px 20px;
+  margin-bottom: 16px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.pfsc-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #E9A23B;
+  margin-bottom: 8px;
+}
+
+.pfsc-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 10px;
+  line-height: 1.2;
+}
+
+.pfsc-body {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 16px;
+}
+
+.pfsc-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #E9A23B 0%, #f4b942 100%);
+  color: #1a0b2e;
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.pfsc-btn:active {
+  transform: scale(0.97);
+}

@@ -329,7 +329,6 @@ export const sendAchievementNotification = async ({ title, body, url = '/7-day-c
 // Check if user has achievement notifications enabled
 export const checkAchievementNotificationsEnabled = async (userId) => {
   try {
-    const { supabase } = await import('./supabaseClient')
     const { data } = await supabase
       .from('notification_preferences')
       .select('achievement_celebrations')

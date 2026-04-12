@@ -33,6 +33,16 @@ export default function PlayListTab({
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState(null) // opens picker modal
 
+  // Hide bottom toolbar when modal is open
+  useEffect(() => {
+    if (selectedCategory) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [selectedCategory])
+
   // Fetch playskills + topics + active challenges
   useEffect(() => {
     if (!userId) return
@@ -50,6 +60,9 @@ export default function PlayListTab({
         setPlayskills(data.filter(d => d.cluster_type === 'skills' && d.step_id === 'get_started'))
         setTopics(data.filter(d => d.cluster_type === 'problems' && d.step_id === 'identify_topics'))
       }
+      setLoading(false)
+    }).catch(err => {
+      console.error('PlayListTab fetch error:', err)
       setLoading(false)
     })
   }, [userId])

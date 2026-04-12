@@ -1,0 +1,1122 @@
+{
+  "meta": {
+    "tier": 1,
+    "slice": "a",
+    "count": 40,
+    "generatedAt": "2026-04-07"
+  },
+  "profiles": [
+    {
+      "name": "Fred Rogers",
+      "domain": "children's television / pastoral care",
+      "era": "1928-2003",
+      "region": "US",
+      "bio": "Presbyterian minister and television host who created Mister Rogers' Neighborhood, broadcast nationally from 1968 to 2001.",
+      "oneLiner": "Treated every child as a person worthy of a slow, unhurried reply.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "expressing"],
+      "narratives": [
+        {
+          "title": "The long pause",
+          "content": "Rogers once held a single televised minute of silence so children watching could think about who loved them. Studio producers panicked at the dead air. Rogers refused to cut it, arguing that silence was a legitimate part of how a child learned they mattered. The take aired unedited."
+        },
+        {
+          "title": "Two-page replies to every letter",
+          "content": "For 33 years Rogers personally replied to every child who wrote to him. Biographer Maxwell King documented that his standard response was a handwritten letter that named the child's specific concern, often running two pages. The volume was sustained by a small in-house correspondence team but the language, patterns, and final sign-offs were his."
+        },
+        {
+          "title": "The 1969 Senate testimony",
+          "content": "Facing Senator John Pastore during public broadcasting funding hearings, Rogers spoke for six minutes without notes, quoted a song lyric from his show about anger ('What do you do with the mad that you feel'), and secured the full 20 million dollars. Pastore, known for impatience, publicly said he had goosebumps."
+        },
+        {
+          "title": "Weighing himself daily at 143",
+          "content": "Rogers held his weight at exactly 143 pounds for most of his adult life, calling the number 'I love you' because of the letter count in each word. The ritual is small and would be trivial in another person, but he treated it as a discipline of integrity. It appears in multiple biographies and in his own notes."
+        }
+      ]
+    },
+    {
+      "name": "Maria Montessori",
+      "domain": "early childhood education / pedagogy",
+      "era": "1870-1952",
+      "region": "Italy",
+      "bio": "Italian physician who became the first woman to earn a medical degree from the University of Rome, then turned from medicine to pedagogy. She opened her first Casa dei Bambini in 1907 and spent the next four decades building a method adopted worldwide.",
+      "oneLiner": "Watched children so carefully that the furniture, the tools, and the timetable all eventually bent to what she saw.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "designing"],
+      "narratives": [
+        {
+          "title": "The Orthophrenic School children who passed the public exam",
+          "content": "From 1900 to 1902 Montessori co-directed the Orthophrenic School in Rome, working with children from asylums who had been labelled uneducable. She designed tactile materials, trained 64 teachers in the first intake, and put the children through the standard Italian public school examinations. They passed. She used the result to argue that her materials, not the children, were the variable worth studying, and she took the method to typically developing children next."
+        },
+        {
+          "title": "Casa dei Bambini, January 1907",
+          "content": "On 6 January 1907 she opened the first Casa dei Bambini in a tenement in the San Lorenzo district of Rome with 50 to 60 children aged two to seven. She equipped it with child-sized furniture, a locked cabinet of the Orthophrenic materials, and not much else. Within weeks she was writing down observations she had not expected: children choosing work over toys, repeating a single activity dozens of times in a row, and policing their own order in the room."
+        },
+        {
+          "title": "Writing the method in Italian then watching it travel",
+          "content": "In 1909 she published Il Metodo della Pedagogia Scientifica in Citta di Castello and ran her first teacher training course the same year. By 1913 her first International Training Course in Rome enrolled 83 students, 67 of them from the United States. In December 1913 she toured America with film reels of her classrooms, an early choice to let the recorded behaviour of children argue the case for her."
+        },
+        {
+          "title": "Leaving Italy at 64 rather than let Mussolini annex the method",
+          "content": "Mussolini had initially supported her schools from 1924, but by 1933 Montessori had resigned from Opera Montessori and in 1934 she left Italy permanently after Fascist officials tried to absorb her teacher training into state youth organisations. In 1936 the Italian government closed all Montessori activities. She was in her mid-sixties, and she chose exile over a compromised version of the work she had spent 30 years refining."
+        }
+      ]
+    },
+    {
+      "name": "Anne Sullivan",
+      "domain": "special education / teaching",
+      "era": "1866-1936",
+      "region": "US",
+      "bio": "American teacher, partially blind from childhood trachoma, who began teaching the deafblind Helen Keller in 1887 and remained her companion and instructor for 49 years until her own death.",
+      "oneLiner": "Spelled the world into another person's hand, one word at a time, for almost half a century.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "Arriving in Tuscumbia at 20",
+          "content": "Sullivan arrived at the Keller home in Tuscumbia, Alabama on 3 March 1887. She was 20 years old, newly graduated from the Perkins School for the Blind, and still partially sighted from the trachoma that had taken much of her vision as a child. Within days she had argued with Helen's parents about their former ownership of enslaved people, an early signal that she intended to manage the household as well as the child."
+        },
+        {
+          "title": "Teaching language by the child's own interests",
+          "content": "After early attempts at a formal curriculum failed, Sullivan switched to spelling words into Helen's palm whenever Helen reached for something she wanted to know. Biographers note that within six months Helen had a working vocabulary of 575 words along with multiplication tables and Braille. The method was not new in its components, but the pace and the patience of its application were unusual even among Perkins-trained teachers."
+        },
+        {
+          "title": "49 years at one person's side",
+          "content": "The Keller and Sullivan partnership lasted from 1887 until Sullivan's death in 1936, moving through phases as teacher, then governess, then lecture interpreter, then companion. By 1935 Sullivan had gone completely blind herself. She kept working, letting Helen be her eyes in return, the whole relationship now conducted through touch on both sides."
+        }
+      ]
+    },
+    {
+      "name": "Janusz Korczak",
+      "domain": "pediatrics / orphanage direction",
+      "era": "1878-1942",
+      "region": "Poland",
+      "bio": "Polish-Jewish pediatrician, writer and orphanage director. He opened Dom Sierot in Warsaw in 1912, wrote widely on children's rights, and was murdered at Treblinka in August 1942 after refusing repeated offers of safe passage out of the ghetto.",
+      "oneLiner": "Built a republic of children and then refused to let them walk into the dark alone.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "creating"],
+      "narratives": [
+        {
+          "title": "A court of children running a children's house",
+          "content": "At Dom Sierot, which opened at Krochmalna 92 in Warsaw in 1912, Korczak built a democratic structure where the children governed themselves through a parliament, a court, and a code of law. In 1926 he added Maly Przeglad, a weekly children's newspaper written by the children themselves and distributed inside the Polish-Jewish daily Nasz Przeglad. Adults could be taken to court by any child, and sometimes were."
+        },
+        {
+          "title": "How to Love a Child, 1919",
+          "content": "In Jak kochac dziecko, published in 1919, Korczak laid down three rights he said every child already possessed: the right of today, the right of the child over its own death, and the right of the child to be what it wants to be. On corporal punishment he wrote that it was unthinkable to hit an adult casually and yet considered normal to give a child 'a tap or stinging smack,' a line he returned to in radio broadcasts for the rest of his life."
+        },
+        {
+          "title": "Staging The Post Office two weeks before the deportation",
+          "content": "On 18 July 1942 the children of Dom Sierot staged Rabindranath Tagore's The Post Office inside the Warsaw Ghetto. Korczak chose the play deliberately. Its protagonist is a dying boy who waits patiently for a letter from a king. It was the last theatrical production the orphanage would make. Seventeen days later the Germans came for them."
+        },
+        {
+          "title": "Refusing Zegota's offers",
+          "content": "Multiple times during 1941 and 1942, the Polish underground organisation Zegota offered to smuggle Korczak out of the Warsaw Ghetto. He refused each one. He reportedly said, 'You do not leave a sick child in the night, and you do not leave children at a time like this.' On 5-6 August 1942 he walked at the head of roughly 192 orphans and a dozen staff to the Umschlagplatz. Eyewitness Joshua Perle recorded him walking with his head bent forward, hatless, holding a child's hand. He was almost certainly gassed on arrival at Treblinka."
+        }
+      ]
+    },
+    {
+      "name": "Vivian Gussin Paley",
+      "domain": "kindergarten teaching / classroom research",
+      "era": "1929-2019",
+      "region": "US",
+      "bio": "American kindergarten teacher at the University of Chicago Laboratory Schools who used audio tape and classroom story dictation to build a body of books about how young children think, play and include each other. MacArthur Fellow, 1989.",
+      "oneLiner": "Turned a five-year-old's dictated story into a research method and a moral instrument.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["synthesizing", "clarifying"],
+      "narratives": [
+        {
+          "title": "You Can't Say You Can't Play",
+          "content": "Paley introduced a single rule into her kindergarten classroom and then wrote a 1992 book arguing for it: any child who asks to join another child's play must be allowed to join. She trialled the rule first with older children in the school, asking them whether the rule was fair, recording their objections, and publishing the transcripts alongside her own defence. It became one of the most cited rules in early childhood education."
+        },
+        {
+          "title": "The tape recorder on the floor",
+          "content": "For decades Paley left an audio recorder running in her classroom and transcribed the tapes every evening. The transcripts became the primary data of her books. She said the method stopped her from remembering children the way adults usually do, which is as cartoons. She was tracking the actual sentences four-year-olds said when they were trying to work something out, and then reading them back to herself until she believed them."
+        },
+        {
+          "title": "Story acting as daily ritual",
+          "content": "Paley had each child dictate a story to her while she wrote it down verbatim, then at the end of the day the class acted the stories out on a taped rectangle on the floor. The child whose story it was chose the parts. It was a daily practice, not an event, and over the years it became the spine of her pedagogy: small children getting to hear their own words given body by their friends."
+        },
+        {
+          "title": "Starting again as a writer after 30 years in the classroom",
+          "content": "Paley earned her BA in 1950 and her MA in 1962, but it was only in the 1970s, back in Chicago, that she began publishing. White Teacher came out in 1979, The Boy Who Would Be a Helicopter in 1991, A Child's Work in 2004. In 1989 she received the MacArthur Fellowship, unusual for a classroom teacher. She kept teaching kindergarten alongside writing."
+        }
+      ]
+    },
+    {
+      "name": "T. Berry Brazelton",
+      "domain": "pediatrics / infant development",
+      "era": "1918-2018",
+      "region": "US",
+      "bio": "American pediatrician at Harvard who treated babies as individuals with observable preferences and temperaments from birth. Created the Neonatal Behavioral Assessment Scale and wrote more than 24 books on parenting.",
+      "oneLiner": "Insisted that a newborn already had a point of view, and built a 28-item scale to prove it.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "Building the NBAS",
+          "content": "Brazelton developed the Neonatal Behavioral Assessment Scale as a way of measuring how a newborn up to roughly two months old handled 28 behaviours and 18 reflexes across autonomic, motor, state, and social-interactive systems. It was not a pass-fail instrument. It was designed to produce a 'behavioural portrait,' a profile parents could use to see who their specific baby already was. The scale became standard in pediatric research."
+        },
+        {
+          "title": "Showing parents their own baby",
+          "content": "In clinical work Brazelton would run through the NBAS with the parents watching. He would bring a rattle near the infant, tilt the head, offer a finger, narrate what the baby was doing as it happened. The demonstration doubled as the intervention. Parents reliably told him afterwards that they had just met their child for the first time, which was the point."
+        },
+        {
+          "title": "Testifying for medical leave",
+          "content": "Brazelton spent years testifying before Congress in support of paid parental and medical leave. He appeared repeatedly through the 1980s and early 1990s, arguing from his clinical data that the first months of a baby's life were a developmental window governments could not afford to ignore. He co-founded Parent Action and chaired the Pampers Parenting Institute to keep the policy argument alive outside the clinic."
+        },
+        {
+          "title": "Touchpoints",
+          "content": "His Touchpoints framework, developed into the books Touchpoints: Birth to Three and Touchpoints: Three to Six, identified predictable moments of regression in a child's development and reframed them as useful. A child who suddenly stopped sleeping at nine months was not failing, he argued, but reorganising. He trained pediatricians to use the regressions as openings for deeper conversations with parents, rather than as problems to medicate away."
+        }
+      ]
+    },
+    {
+      "name": "Emmi Pikler",
+      "domain": "pediatrics / infant respect",
+      "era": "1902-1984",
+      "region": "Hungary",
+      "bio": "Hungarian pediatrician who founded the Loczy orphanage in Budapest in 1946 and directed it until 1979. She developed an approach to infant care centred on uninterrupted free movement and a particular quality of adult attention during caregiving routines.",
+      "oneLiner": "Made bathing and nappy-changing into the main classroom.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["designing", "analyzing"],
+      "narratives": [
+        {
+          "title": "Loczy, 1946",
+          "content": "Pikler founded the Loczy orphanage in Budapest in 1946, working with abandoned and malnourished children in the aftermath of the war. She had survived Nazi persecution; her husband had been imprisoned from 1936 to 1945. She directed the house until 1979 and used it as a long running observation site. The central design decision was simple: the babies were not to be positioned. They were placed on their backs on a firm surface and allowed to find rolling, sitting, crawling and standing at their own pace."
+        },
+        {
+          "title": "The caregiving routine as the relationship",
+          "content": "Pikler trained the Loczy caregivers to treat nappy-changing, bathing and feeding as the moments where the infant-adult relationship was actually formed. The caregiver announced each movement before she made it, waited for the baby to participate, and handled the body slowly enough that the baby could predict what was coming. Visitors to Loczy often described the quiet of the nursery as the most striking observation. The babies were not crying because they were being spoken to."
+        },
+        {
+          "title": "Refusing to teach babies to sit",
+          "content": "A recurring Pikler rule, documented in her book with her daughter Anna Tardos, was that an adult should never put a baby in a position the baby could not get into and out of on its own. No propping up with cushions, no standing a baby against a sofa. The rule was counterintuitive enough that it travelled internationally as a signature of the approach, picked up by Resources for Infant Educarers in the US through Magda Gerber, who had trained under her."
+        }
+      ]
+    },
+    {
+      "name": "Mary Ainsworth",
+      "domain": "developmental psychology",
+      "era": "1913-1999",
+      "region": "Canada / US",
+      "bio": "Developmental psychologist who created the Strange Situation procedure and built the empirical foundation for attachment theory through fieldwork in Uganda and Baltimore.",
+      "oneLiner": "Invented an eight-part lab test for something as slippery as a baby's trust.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["analyzing", "synthesizing"],
+      "narratives": [
+        {
+          "title": "Kampala villages, 1954",
+          "content": "Ainsworth spent 1954 conducting longitudinal observations of mothers and infants in villages around Kampala, Uganda, going house to house and interviewing families across six villages. She was specifically curious about the local weaning practice of sending children away to 'forget the breast.' The Uganda data convinced her that the patterns of attachment she was seeing were not cultural artefacts of the West. She had the beginnings of something she would argue was universal."
+        },
+        {
+          "title": "Designing the Strange Situation",
+          "content": "In 1965 Ainsworth designed the Strange Situation as a structured eight-episode lab procedure, each episode lasting three minutes. An infant and caregiver enter a room with toys, a stranger joins, the caregiver leaves, the caregiver returns, and the infant's behaviour across those transitions is coded. Ainsworth used the procedure to classify infants from her 26-child Baltimore sample into secure, anxious-avoidant and anxious-resistant patterns."
+        },
+        {
+          "title": "The 70 per cent finding",
+          "content": "From the Baltimore data Ainsworth reported that roughly 70 per cent of middle-class American babies showed secure attachment: they used the caregiver as a base from which to explore and were comforted on reunion. The remaining minority clustered into avoidant and resistant patterns. The distribution became a foundational empirical result in developmental psychology and converted attachment theory from John Bowlby's clinical hypothesis into a measurable phenomenon."
+        }
+      ]
+    },
+    {
+      "name": "Paul Farmer",
+      "domain": "global health / infectious disease",
+      "era": "1959-2022",
+      "region": "US / Haiti",
+      "bio": "American physician and anthropologist who co-founded Partners In Health in 1987 and spent the rest of his life arguing that the rural poor deserved the same treatment standards as patients at Harvard hospitals. Died of an acute cardiac event in Butaro, Rwanda, in February 2022.",
+      "oneLiner": "Treated walking eight hours to reach one patient as a clinical standard, not a sacrifice.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["synthesizing", "influencing"],
+      "narratives": [
+        {
+          "title": "Cange and the founding of Partners In Health",
+          "content": "Farmer began volunteering in Cange, in Haiti's Central Plateau, after graduating Duke in 1982. In 1987, together with Jim Yong Kim, Ophelia Dahl, Thomas J. White and Todd McCormack, he co-founded Partners In Health. The sister organisation Zanmi Lasante went on to build not just a hospital in Cange but schools, homes, and sanitation systems. By his death in 2022 PIH operated 16 sites across Haiti and employed around 7,000 people."
+        },
+        {
+          "title": "Fighting the DOTS orthodoxy on MDR-TB",
+          "content": "In the late 1990s in the slums of Lima, Peru, Farmer and Jim Yong Kim encountered patients with multidrug-resistant tuberculosis who were dying because the WHO's 'directly observed treatment, short-course' protocol assumed first-line drugs would work. Farmer argued that second-line drugs had to be given even at higher cost. In 1999 the WHO formally designated Farmer and Kim to run global MDR-TB treatment programmes. With a 44.7 million dollar Gates grant they ran drug therapy initiatives in Haiti, Peru and Russia and reported some of the highest cure rates in the world."
+        },
+        {
+          "title": "Walking to the patient",
+          "content": "In Tracy Kidder's Mountains Beyond Mountains, Farmer ends the book by leading a days-long hike on foot to visit a single family with tuberculosis near Casse in the Haitian hills. It was not unusual behaviour for him. Kidder documented a sleep schedule of roughly one to two hours most nights and a travel calendar that routinely sent him from Boston to Haiti to Rwanda to Russia inside a single week. The walking was the argument: a poor patient was worth the same time a wealthy one got."
+        },
+        {
+          "title": "Dying in the clinic he had built",
+          "content": "Farmer died on 21 February 2022 at age 62, from an acute cardiac event, in Butaro, Rwanda. He was there to teach at the Butaro District Hospital and the University of Global Health Equity campus, both institutions PIH had helped build. His death was in the place his life's argument had been trying to equip."
+        }
+      ]
+    },
+    {
+      "name": "Virginia Apgar",
+      "domain": "obstetric anaesthesia",
+      "era": "1909-1974",
+      "region": "US",
+      "bio": "American anaesthesiologist who created the Apgar score for newborn assessment in 1953. Later became vice president for medical affairs at the March of Dimes and one of the first prominent public voices on birth defects research.",
+      "oneLiner": "Answered a resident's casual question by scribbling on a napkin, and the scribble became the standard check every newborn on Earth now gets.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "analyzing"],
+      "narratives": [
+        {
+          "title": "The napkin",
+          "content": "In 1952, at breakfast at Columbia Presbyterian, an obstetrical resident asked Apgar how he should evaluate a newborn. She wrote five categories on a napkin: appearance, pulse, grimace, activity, respiration, each scored 0 to 2. She had been watching newborns as an anaesthesiologist for more than a decade and felt that too many of them were being called 'fine' without any structured look. The napkin version became the Apgar score, formally published in 1953, and by the 1960s it was being performed on millions of babies a minute after birth."
+        },
+        {
+          "title": "First woman to head a specialty at Columbia",
+          "content": "Apgar became the first woman to head a specialty division at Columbia Presbyterian Medical Center in 1938 when she took over the anaesthesia division. From that post she pioneered obstetric anaesthesiology as a subspecialty and published data showing that anaesthetic agents like cyclopropane were harming fetal outcomes. She also discovered that infants born by caesarean under spinal anaesthesia did better than those under general, a finding that changed practice."
+        },
+        {
+          "title": "The March of Dimes years",
+          "content": "From 1959 to 1974 Apgar worked as vice president for medical affairs at the March of Dimes, directing research funding toward birth defects and premature birth. During the 1964 to 1965 rubella pandemic she became one of the loudest American advocates for universal vaccination to prevent congenital rubella syndrome."
+        },
+        {
+          "title": "Making a viola in her spare time",
+          "content": "Apgar played the violin and travelled with it for amateur chamber quartets. In the 1950s, working with a luthier friend, she handcrafted instruments in her home workshop: two violins, a viola and a cello. She also flew small aircraft and kept up fly-fishing. The combination is a useful corrective to the mythology that she was 'all work.' She was a prolific tinkerer across several domains at once."
+        }
+      ]
+    },
+    {
+      "name": "Cicely Saunders",
+      "domain": "palliative medicine",
+      "era": "1918-2005",
+      "region": "UK",
+      "bio": "British nurse, then social worker, then physician, who founded St Christopher's Hospice in Sydenham in 1967 and is generally credited with the modern hospice movement. Introduced the concept of 'total pain.'",
+      "oneLiner": "Kept re-qualifying until nobody in the hospital could tell her she wasn't allowed to sit with the dying.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["synthesizing", "designing"],
+      "narratives": [
+        {
+          "title": "David Tasma's 500 pound window",
+          "content": "In 1948 Saunders, then a young medical social worker at St Thomas's Hospital, fell in love with David Tasma, a dying Polish-Jewish refugee who worked as a waiter. When he died he left her 500 pounds 'to be a window in your home.' She took the gift literally. The entrance of St Christopher's Hospice, when it opened in 1967, included a plain sheet of glass memorialising that donation. Saunders said Tasma's death was the conversation that started the hospice."
+        },
+        {
+          "title": "Nurse, social worker, doctor",
+          "content": "Saunders trained as a nurse at the Nightingale School from 1940 to 1944, was forced out by a back injury, came back through St Anne's College Oxford with a BA in 1945, qualified as a medical social worker in 1947, and then, at age 33, enrolled in medical school at St Thomas's and earned her MBBS in 1957. She had decided that nobody was going to let her run a new kind of place for dying people unless she could match, or out-credential, the consultants who would object. The re-qualifications were tactical as much as vocational."
+        },
+        {
+          "title": "The concept of total pain",
+          "content": "Saunders introduced the phrase 'total pain' to describe the combined physical, emotional, social and spiritual distress of a dying patient. Her clinical argument was that opioid dosing had to be regular and anticipatory rather than waiting for the patient to beg, and her ethical argument was that you could not address the physical pain without also addressing the rest. The phrase reorganised how a generation of palliative doctors were trained."
+        },
+        {
+          "title": "Dying in her own hospice",
+          "content": "Saunders developed breast cancer in later life but continued working at St Christopher's nearly to the end. She died aged 87 in 2005 inside the hospice she had built, in a room that followed the protocols she had designed. The circularity was not sentimental. It was the final proof of concept."
+        }
+      ]
+    },
+    {
+      "name": "Irena Sendler",
+      "domain": "social work / rescue",
+      "era": "1910-2008",
+      "region": "Poland",
+      "bio": "Polish social worker who, as part of the underground network Zegota, helped smuggle Jewish children out of the Warsaw Ghetto during the Second World War. Arrested, tortured and sentenced to death by the Gestapo in 1943, released through a bribe.",
+      "oneLiner": "Kept the list of rescued children in jars under an apple tree so the identities could survive the war even if she didn't.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["connecting", "organizing"],
+      "narratives": [
+        {
+          "title": "The jars under the apple tree",
+          "content": "Sendler and her colleagues at Zegota kept paper lists of the children they had smuggled out of the Warsaw Ghetto, recording each child's original name, new Christian name, and current hiding place, so that after the war the children could be reunited with whichever family members survived. She buried the lists in glass jars under an apple tree in a neighbour's garden in Warsaw. Around 75 per cent of the children went to Catholic convents and institutions, and around 25 per cent to Polish families."
+        },
+        {
+          "title": "Arrest and torture, 18 October 1943",
+          "content": "The Gestapo arrested Sendler at her home on 18 October 1943. As they ransacked the house she managed to throw the current list of children to her friend Janina Grabowska, who hid it in her loose clothing. Sendler was taken to Pawiak prison, beaten so badly that she had permanent damage to her feet, and sentenced to death. On the day of her scheduled execution, Zegota's chief Julian Grobelny organised a bribe through Maria Palester and Sendler's German escorts let her walk away."
+        },
+        {
+          "title": "The contested number",
+          "content": "For decades the standard figure attached to Sendler was that she had helped save 2,500 children. A 1947 assessment put the number much lower, at several dozen. Historians have not resolved the discrepancy and Sendler's own accounts varied. The honest summary is that she ran a register of children whose survival she had midwifed, that the exact count is genuinely unknown, and that she insisted, into her old age, that the number was never the point. The children were."
+        },
+        {
+          "title": "Rediscovery in 2000",
+          "content": "In the late 1990s a group of American high school students in Kansas researched Sendler for a National History Day project and wrote a play called Life in a Jar. The play toured, the story travelled, and by 2003 Poland had awarded her the Order of the White Eagle, its highest civilian honour. She had been Righteous Among the Nations since 1965 but essentially unknown outside Poland until the students picked up the thread."
+        }
+      ]
+    },
+    {
+      "name": "Wangari Maathai",
+      "domain": "environmental organising / forestry",
+      "era": "1940-2011",
+      "region": "Kenya",
+      "bio": "Kenyan environmental and political activist. Founder of the Green Belt Movement in 1977 and the first African woman to win the Nobel Peace Prize, in 2004.",
+      "oneLiner": "Paid rural women a few shillings per seedling and grew a democracy movement sideways out of a tree nursery.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["connecting", "influencing"],
+      "narratives": [
+        {
+          "title": "Seven trees at Kamukunji, 5 June 1977",
+          "content": "On World Environment Day 1977, Maathai, acting through the National Council of Women of Kenya, led a march from the Kenyatta International Conference Centre to Kamukunji Park in Nairobi and planted seven trees in honour of historical community leaders. It was a small ceremonial act that she then turned into an organising structure: tree nurseries run by rural women across the country, paid a small stipend per seedling successfully planted elsewhere."
+        },
+        {
+          "title": "The Uhuru Park hunger strike, March 1992",
+          "content": "On 3 March 1992, Maathai went on hunger strike at Freedom Corner in Uhuru Park, Nairobi, alongside mothers of political prisoners. Police forcibly removed the protesters. Maathai and three others were beaten unconscious and hospitalised. She went back to the park after recovering. The Moi government kept trying to label her as a lone difficult woman; each violent response produced more international coverage, and Maathai kept returning."
+        },
+        {
+          "title": "Karura Forest, January 1999",
+          "content": "On 8 January 1999 Maathai led a group of activists, MPs and foreign environmentalists to Karura Forest outside Nairobi, where land had been allocated for a private golf course and luxury development. They tried to plant trees. Armed men attacked them. Maathai, four MPs, journalists and German environmentalists were injured. Photographs of her bleeding forehead ran internationally and the Kenyan government eventually reversed the land allocation."
+        },
+        {
+          "title": "The Nobel as structural argument",
+          "content": "When Maathai received the Nobel Peace Prize in 2004, she was the first environmentalist to win it and the first African woman to win it. The Nobel committee tied conservation, democracy and peace together in their citation, which was the argument Maathai had been making for 27 years: that unregulated clearing of forests, women's disempowerment and political authoritarianism were the same problem with different names."
+        }
+      ]
+    },
+    {
+      "name": "John Wooden",
+      "domain": "basketball coaching / teaching",
+      "era": "1910-2010",
+      "region": "US",
+      "bio": "American basketball coach who led UCLA to ten NCAA national championships in twelve years, including seven consecutive from 1967 to 1973 and an 88-game winning streak. Former English teacher.",
+      "oneLiner": "Coached the best athletes in college basketball by starting each season teaching them how to put on their socks.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "synthesizing"],
+      "narratives": [
+        {
+          "title": "The sock demonstration",
+          "content": "On the first day of practice each season Wooden had his players, including Kareem Abdul-Jabbar and Bill Walton, sit down and watch him demonstrate how to put on a pair of socks and lace a pair of shoes. He showed them how to smooth the heel, avoid wrinkles and double-tie the laces. The lesson was literal: wrinkles caused blisters, blisters cost minutes, minutes cost games. It was also a statement: nothing at the elite level was beneath attention, and Wooden would be the one deciding what counted as too small."
+        },
+        {
+          "title": "The Pyramid of Success",
+          "content": "Wooden developed the Pyramid of Success, a 15-block diagram of character traits with Industriousness and Enthusiasm as the two base corners and Competitive Greatness at the apex, over decades, starting in his years as an English teacher in the 1930s. He refined it through his UCLA tenure and distributed it to every player. The pyramid did not mention basketball. He told his players their career should read as a life first, a game second."
+        },
+        {
+          "title": "Ten in twelve",
+          "content": "From 1964 to 1975 Wooden led UCLA to ten NCAA men's basketball national championships in a twelve-year window, including seven in a row from 1967 to 1973 and an 88-game winning streak. Four of those were perfect 30-0 seasons. The run has never been matched. He retired after winning the 1975 title, at the age of 64, and later said he would rather stop at a peak than get shoved off one."
+        },
+        {
+          "title": "Letters from Abdul-Jabbar forty years later",
+          "content": "In 2017 Kareem Abdul-Jabbar, who had played for Wooden as Lew Alcindor from 1966 to 1969, published Coach Wooden and Me, a memoir documenting a friendship that had continued for nearly fifty years after college. Bill Walton made similar claims. The repeated witness of former players, decades after the basketball stopped mattering, is a real datum about what Wooden's relationships did."
+        }
+      ]
+    },
+    {
+      "name": "Carl Sagan",
+      "domain": "astronomy / science communication",
+      "era": "1934-1996",
+      "region": "US",
+      "bio": "American astronomer and planetary scientist at Cornell who spent a career translating astronomy and evolutionary time into first-person prose that a general reader could feel. Co-wrote and narrated the 1980 PBS series Cosmos.",
+      "oneLiner": "Took the scale of the universe and kept finding metaphors small enough to fit in a human chest.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "synthesizing"],
+      "narratives": [
+        {
+          "title": "Cosmos, 1980",
+          "content": "Cosmos: A Personal Voyage aired on PBS in 1980 as a 13-episode series that Sagan co-wrote and narrated. It reached an estimated 500 million viewers in 60 countries, won two Emmys and a Peabody, and was the most watched series in American public television history until Ken Burns's Civil War a decade later. Sagan insisted on the 'Personal' in the subtitle. The series is a first-person account by a working scientist of what he finds beautiful and why."
+        },
+        {
+          "title": "Lobbying for the Pale Blue Dot",
+          "content": "As Voyager 1 approached the outer edge of the solar system in 1990, Sagan argued inside NASA for turning the spacecraft's camera around and taking a picture of Earth from roughly 6 billion kilometres away. The engineering case against it was real: it would do nothing for the mission's science. Sagan pushed anyway. The resulting image, Earth as a single pale blue pixel in a sunbeam, produced the 1994 lecture he gave at Cornell that has since been reprinted in dozens of languages."
+        },
+        {
+          "title": "The Voyager Golden Record",
+          "content": "In 1977 Sagan chaired the committee that assembled the Voyager Golden Record, a phonograph record carrying sights and sounds of Earth for any intelligence that might one day find Voyager 1 or 2. The committee included Bach, Beethoven, Chuck Berry, greetings in 55 languages, and a recording of a kiss. Sagan treated the record as an act of conscious authorship on behalf of the species, not a stunt."
+        },
+        {
+          "title": "Baloney detection",
+          "content": "In The Demon-Haunted World (1995) Sagan laid out what he called the 'Baloney Detection Kit,' a set of nine heuristics for critical thinking that included 'encourage substantive debate' and 'try not to get overly attached to a hypothesis just because it's yours.' He taught a Cornell senior seminar on critical thinking using the same material. The section has since been excerpted in high school curricula more than almost anything else he wrote."
+        }
+      ]
+    },
+    {
+      "name": "David Attenborough",
+      "domain": "natural history broadcasting",
+      "era": "1926-present",
+      "region": "UK",
+      "bio": "British broadcaster and naturalist who joined the BBC in 1952 and has since written and presented the majority of BBC natural history landmark series, from Life on Earth in 1979 onward.",
+      "oneLiner": "Got out of the frame so the animals could take it.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "synthesizing"],
+      "narratives": [
+        {
+          "title": "Stepping in at short notice",
+          "content": "In 1954 Attenborough was the producer of Zoo Quest when the intended presenter, Jack Lester, was taken ill. Attenborough took over the presenting role at short notice and kept it. The accident set the template for his entire career: a producer-trained broadcaster who treated the presenter's job as a matter of logistics and restraint rather than star power."
+        },
+        {
+          "title": "Commissioning Monty Python while running BBC Two",
+          "content": "From March 1965 to 1973 Attenborough was Controller of BBC Two, a job he took at the executive level and then left deliberately in 1973 to go back to filmmaking. During his tenure he commissioned Monty Python's Flying Circus and Kenneth Clark's Civilisation, among other series. Leaving the chair at the peak of a broadcasting career was an unusual move. He said afterwards that he could not have made Life on Earth from behind a desk."
+        },
+        {
+          "title": "Life on Earth, 1979",
+          "content": "Life on Earth aired in 1979 as a 13-episode BBC series tracing the evolution of life. It became the template for what is now called the 'blue chip' natural history documentary. Attenborough deliberately restricted his own screen time, letting the subjects hold the frame. The mountain gorilla sequence filmed in Rwanda, where he sat quietly with a habituated troop and they chose to come to him, is one of the most replayed moments of British television."
+        },
+        {
+          "title": "COP26 at age 95",
+          "content": "At COP26 in Glasgow in November 2021, at age 95, Attenborough addressed world leaders with a short speech whose key line was, 'In my lifetime I've witnessed a terrible decline. In yours, you could, and should, witness a wonderful recovery.' Since roughly 2019 his documentaries have taken an explicit environmentalist stance, a shift he made carefully and late in his career after decades of staying out of overt advocacy."
+        }
+      ]
+    },
+    {
+      "name": "Jacob Bronowski",
+      "domain": "mathematics / science history",
+      "era": "1908-1974",
+      "region": "UK / Poland",
+      "bio": "Polish-British mathematician, biologist, poet and broadcaster whose 1973 BBC series The Ascent of Man delivered a 13-part history of human knowledge. Many members of his Jewish extended family were murdered in the Holocaust.",
+      "oneLiner": "Walked into the ash pond at Auschwitz so the camera could hear him refuse absolute certainty.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["synthesizing", "expressing"],
+      "narratives": [
+        {
+          "title": "The Ascent of Man, 1973",
+          "content": "Commissioned by David Attenborough during his time as BBC Two Controller, Bronowski's The Ascent of Man aired in 1973 as a 13-part personal history of scientific discovery told from prehistoric toolmaking through modern physics. The format was deliberately ambitious: one presenter, many locations, no intermediaries. Bronowski spoke from the sites themselves, usually without notes."
+        },
+        {
+          "title": "Walking into the Auschwitz pond",
+          "content": "In the Ascent of Man episode on science and morality, Bronowski walks into the muddy pond at Auschwitz-Birkenau into which the ashes of cremated bodies, including those of his own relatives, were disposed. Without raising his voice he says: 'When people believe that they have absolute knowledge, with no test in reality, this is how they behave. This is what men do when they aspire to the knowledge of gods.' The take is unbroken. It has been replayed at the Royal Institution and in lecture halls since."
+        },
+        {
+          "title": "Polymath on purpose",
+          "content": "Bronowski spent the Second World War doing operations research for the British government, calculating bombing efficacy, and never stopped moving between disciplines afterwards. He wrote on William Blake, lectured on the ethics of science, published on the mathematics of biology, played serious chess, and refused to specialise. He argued that specialisation was the mechanism by which scientists surrendered their moral claims over their own work."
+        }
+      ]
+    },
+    {
+      "name": "Oliver Sacks",
+      "domain": "neurology / clinical writing",
+      "era": "1933-2015",
+      "region": "UK / US",
+      "bio": "British-American neurologist and writer whose books turned individual patients into the subject of narrative essays. Practised at Beth Abraham Hospital, Albert Einstein College of Medicine and finally Columbia.",
+      "oneLiner": "Wrote about his patients the way a novelist writes about characters, because he thought the clinic was cheating them otherwise.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["nurturing", "creating"],
+      "narratives": [
+        {
+          "title": "Awakenings at Beth Abraham, 1969 to 1973",
+          "content": "At Beth Abraham Hospital in the Bronx, Sacks encountered a ward of post-encephalitic patients who had been unable to move or speak, some for decades. In 1969 he began treating them with the then-experimental drug levodopa, and he documented their temporary returns to speech, movement and recognition in Awakenings (1973). The book was later adapted into a 1990 film with Robin Williams playing a fictionalised Sacks. He kept notes on each patient in thick hand-bound casebooks, a practice he continued for the rest of his career."
+        },
+        {
+          "title": "The man who mistook his wife for a hat",
+          "content": "Sacks's 1985 essay collection The Man Who Mistook His Wife for a Hat took its title from the opening case, a Dr P. with visual agnosia whose brain could no longer parse human faces as faces but who compensated by using music. Sacks treated the cases as portraits rather than diagnoses, refusing to reduce the people to symptoms. The book was adapted into an opera by Michael Nyman in 1986, the first time a neurology monograph had reached an opera house."
+        },
+        {
+          "title": "100,000 motorcycle miles",
+          "content": "During his years at UCLA in the early 1960s, Sacks rode a motorcycle across California and Mexico, racking up more than 100,000 leather-clad miles, and trained in competitive weightlifting at Muscle Beach, where he briefly held a California squat record. The physical life, the open road, the body as something to push. He wrote about the period later as the most disinhibited of his life and as the one he was grateful he survived."
+        },
+        {
+          "title": "The February 2015 op-ed",
+          "content": "In February 2015 Sacks published a short op-ed in the New York Times announcing that his ocular melanoma had metastasised to his liver and that he was terminal. He used the piece to thank, specifically, his friends and his readers, and to say that he wanted to use his remaining months to write. He then did: a set of final essays later collected in River of Consciousness (2017). He died in August 2015. The op-ed was itself a piece of clinical writing about himself, which was consistent."
+        }
+      ]
+    },
+    {
+      "name": "Julia Child",
+      "domain": "cookery / food television",
+      "era": "1912-2004",
+      "region": "US / France",
+      "bio": "American cook, author and television presenter who, after a Second World War career in the OSS, co-wrote Mastering the Art of French Cooking in 1961 and launched The French Chef on WGBH in 1963.",
+      "oneLiner": "Kept the mistakes in on live television so the viewer at home would believe they could do it too.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "nurturing"],
+      "narratives": [
+        {
+          "title": "OSS shark repellent",
+          "content": "During the Second World War, Child joined the Office of Strategic Services in 1942 after being deemed too tall at 6 feet 2 inches for the Women's Army Corps. She started as a typist and ended up researching, among other things, a shark repellent the agency needed to coat explosives intended to take out enemy submarines. She cooked various test mixtures in the laboratory. She served in Ceylon and Kunming, China, and received the Meritorious Civilian Service Award. She learned to cook seriously only after the war, in Paris, at Le Cordon Bleu."
+        },
+        {
+          "title": "Mastering the Art, 1961",
+          "content": "Mastering the Art of French Cooking was written with Simone Beck and Louisette Bertholle and published by Knopf in 1961 after years of testing recipes in kitchens across Europe and finally in Cambridge, Massachusetts. The book ran to 726 pages. It was deliberately over-detailed: Child's test for a recipe was whether an American home cook with no French training could replicate it in a normal kitchen. She wrote, edited and re-tested for nearly a decade."
+        },
+        {
+          "title": "The French Chef, live and unedited",
+          "content": "After a 1961 guest appearance on WGBH-TV generated viewer requests for a cooking demo, a pilot of The French Chef aired on 26 July 1962 and the regular series began on 11 February 1963. It was broadcast live and unedited. When Child dropped things, burned things, or got splashed, the tape kept rolling. She and the producers treated the mistakes as the argument: cooking was recoverable, nobody watching needed to be perfect, and the fear was the enemy, not the roux."
+        },
+        {
+          "title": "The 6-foot-2 kitchen",
+          "content": "Child's height, 6 feet 2 inches, shaped her career in ways easy to forget. It ruled her out of military service. It meant that every kitchen she ever worked in was the wrong height for her, including the sets of The French Chef, where her counters were built deliberately high. Her husband Paul, a photographer and cartographer, designed the working kitchen of their Cambridge home to her scale and drew the plans himself. The Smithsonian later installed that exact kitchen as a permanent exhibit."
+        }
+      ]
+    },
+    {
+      "name": "Isaiah Berlin",
+      "domain": "history of ideas",
+      "era": "1909-1997",
+      "region": "UK / Latvia",
+      "bio": "Russian-born British philosopher and historian of ideas, founding president of Wolfson College, Oxford. His work centred on liberty, value pluralism and the intellectual history of the 18th and 19th centuries.",
+      "oneLiner": "Talked his essays out in one long stream at 200 words a minute and let the secretary catch them.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "Two Concepts of Liberty, 1958",
+          "content": "In 1958 Berlin delivered his inaugural lecture as Chichele Professor of Social and Political Theory at Oxford, later published as Two Concepts of Liberty. The lecture drew the distinction that has since structured most English-language writing on freedom: 'negative' liberty as freedom from interference, 'positive' liberty as freedom for self-mastery. Berlin argued that positive liberty, well-intentioned, had historically been the door through which tyrannies entered. The lecture pulled political philosophy back into the analytic mainstream after a period in which it had been given up for dead."
+        },
+        {
+          "title": "The hedgehog and the fox",
+          "content": "Berlin's popular essay The Hedgehog and the Fox, built on an Archilochus fragment, divided thinkers into hedgehogs who see the world through one organising idea and foxes who operate through many. He applied the distinction to Tolstoy and used it to claim Tolstoy was a fox who wanted to be a hedgehog. Berlin said later that he had never meant the essay entirely seriously, calling it 'a kind of enjoyable intellectual game,' but the frame has travelled into management writing, forecasting theory and literary criticism."
+        },
+        {
+          "title": "The night with Akhmatova",
+          "content": "In November 1945, working for the British embassy in Moscow, Berlin travelled to Leningrad and, through a literary contact, met the poet Anna Akhmatova at her apartment in Fountain House. They talked all night. He returned in January 1946 for another long meeting. Stalin's secret police took note. Akhmatova was publicly denounced and her work was banned. She memorialised the meetings in the cycle Cinque and later poems. Berlin treated the hours with her as one of the formative experiences of his intellectual life."
+        },
+        {
+          "title": "The man who talked his books",
+          "content": "Berlin published comparatively little for a major 20th-century intellectual. Most of what bears his name was dictated, in rapid, unpunctuated speech, to a secretary and then transcribed and lightly edited. Maurice Bowra observed that Berlin 'thinks and says a great deal' but wrote little. The torrent in the prose, the asides, the long lists of proper nouns, these are the residue of the dictating voice. He was a conversationalist first and an author by capture."
+        }
+      ]
+    },
+    {
+      "name": "Lynn Margulis",
+      "domain": "evolutionary biology",
+      "era": "1938-2011",
+      "region": "US",
+      "bio": "American evolutionary biologist whose 1967 paper on serial endosymbiosis became one of the foundational arguments in modern cell biology. Distinguished University Professor at the University of Massachusetts Amherst. Former wife of Carl Sagan.",
+      "oneLiner": "Got her paper rejected about fifteen times and won.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["analyzing", "creating"],
+      "narratives": [
+        {
+          "title": "Fifteen rejections",
+          "content": "In 1966, as a junior faculty member at Boston University, Margulis wrote a paper titled 'On the Origin of Mitosing Cells' arguing that mitochondria and chloroplasts had originally been free-living bacteria absorbed into a host cell. She later recalled that roughly fifteen journals rejected the paper before the Journal of Theoretical Biology accepted it in 1967. The orthodoxy held that organelles had evolved inside the host. Margulis kept resubmitting. Twelve years later the genetic evidence arrived and proved her right."
+        },
+        {
+          "title": "Dawkins's admission",
+          "content": "By the early 1980s, comparative genetic studies by Robert Schwartz, Margaret Dayhoff and others had shown that mitochondrial and chloroplast DNA was closer to bacterial DNA than to the host nuclear DNA. In 1995 Richard Dawkins, not generally in her theoretical camp, wrote that he 'greatly admired Lynn Margulis's sheer courage and stamina in sticking by the endosymbiosis theory, and carrying it through from being an unorthodoxy to an orthodoxy.' The acknowledgement is useful because Dawkins had spent much of the period as her intellectual opponent."
+        },
+        {
+          "title": "Marrying Sagan at 19",
+          "content": "Margulis married Carl Sagan in 1957, shortly after finishing her bachelor's at the University of Chicago. They had two sons, including Dorion Sagan, who became her most frequent scientific writing collaborator. The marriage ended in 1964, just before she completed her PhD. She treated the Sagan years afterwards as a cautionary tale about the gravitational pull of a famous male partner on a young woman scientist and said she had had to learn twice to hold her own ground, once in her marriage and once in her field."
+        },
+        {
+          "title": "Late heresies",
+          "content": "In her last years Margulis extended her instinct for heterodoxy in directions the scientific community largely rejected: skepticism about aspects of the modern evolutionary synthesis, public doubts about HIV causing AIDS, sympathy for 9/11 conspiracy theories. The late positions were widely criticised and did damage to her standing. They are part of the record. They also fit a pattern in her life of treating the consensus as the first thing to test, which is the same pattern that had made her right in 1967."
+        }
+      ]
+    },
+    {
+      "name": "E.O. Wilson",
+      "domain": "biology / sociobiology",
+      "era": "1929-2021",
+      "region": "US",
+      "bio": "American biologist, ant specialist and two-time Pulitzer Prize winner. Authored Sociobiology (1975), Biophilia (1984), and co-authored The Ants (1991) with Bert Holldobler.",
+      "oneLiner": "Stared at ants under rotting bark at age nine and never really looked away.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["analyzing", "expressing"],
+      "narratives": [
+        {
+          "title": "The citronella ants at Rock Creek Park",
+          "content": "At age nine, Wilson turned over rotting bark in Rock Creek Park in Washington D.C. and found citronella ants: 'short, fat, brilliant yellow, and emitted a strong lemony odor.' He later described the sight as a vivid and lasting impression. By 18, a wartime shortage of insect pins pushed him from flies to ants, and one of his first published reports was on the arrival of the invasive fire ant near Mobile, Alabama. The career-long specialisation was not a career plan. It was a nine-year-old's preference that he kept honouring."
+        },
+        {
+          "title": "Sociobiology and the water pitcher",
+          "content": "Wilson published Sociobiology: The New Synthesis in 1975. The book tried to describe all social behaviour in animals, including humans, in evolutionary terms. At the 1978 meeting of the American Association for the Advancement of Science, a group from the Sociobiology Study Group walked onto the stage during his talk and poured a pitcher of ice water over his head while chanting accusations of racism and genetic determinism. Wilson dried himself off and finished the talk. He said later that being attacked physically at a scientific meeting clarified for him what was actually at stake in the debate."
+        },
+        {
+          "title": "Two Pulitzers",
+          "content": "Wilson won the Pulitzer Prize for General Nonfiction twice: for On Human Nature in 1979 and for The Ants, co-written with Bert Holldobler, in 1991. The second award was unusual because The Ants is a 732-page encyclopedia of ant biology, heavily technical. The Pulitzer committee gave it the prize anyway, reasoning that the prose was strong enough to reach a general reader. Wilson argued that the distinction between technical and popular writing was damaging to both sides."
+        },
+        {
+          "title": "Half-Earth",
+          "content": "In his later decades Wilson proposed the 'Half-Earth' idea: setting aside 50 per cent of the planet's surface for other species in order to stop the sixth great extinction. He framed it first in journal articles and then in a 2016 book. Critics called it impractical. Wilson answered that the target was a forcing frame rather than a policy, and that it made anything short of it feel clearly like compromise."
+        }
+      ]
+    },
+    {
+      "name": "Joseph Campbell",
+      "domain": "comparative mythology",
+      "era": "1904-1987",
+      "region": "US",
+      "bio": "American writer and professor of comparative mythology at Sarah Lawrence College from 1934 to 1972. Author of The Hero with a Thousand Faces (1949).",
+      "oneLiner": "Found the same story hiding in every culture's mouth and taught it in a single women's college for 38 years.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["clarifying", "expressing"],
+      "narratives": [
+        {
+          "title": "The Hero with a Thousand Faces, 1949",
+          "content": "Campbell's 1949 book proposed the monomyth: a single recurring pattern, the hero's journey, that he argued underlay myths from all cultures. He had developed the argument teaching undergraduates at Sarah Lawrence. The book is still in print, and the pattern has been absorbed into screenwriting manuals, especially through Christopher Vogler's adaptation used at Disney. George Lucas has repeatedly named Campbell as a direct influence on the structure of Star Wars."
+        },
+        {
+          "title": "38 years at Sarah Lawrence",
+          "content": "Campbell accepted a professorship at Sarah Lawrence College in 1934 and stayed until his retirement in 1972. The classroom was his main laboratory. He tested every idea for The Hero with a Thousand Faces and the later Masks of God tetralogy on successive cohorts of undergraduates first. He once said that teaching the same material to a different set of 20-year-olds every year was what kept it honest, because they noticed anything he had stopped believing."
+        },
+        {
+          "title": "Follow your bliss",
+          "content": "Campbell's most quoted line, 'Follow your bliss,' came from the Sanskrit triad sat-chit-ananda, being-consciousness-bliss. Late in life, watching students interpret the phrase as permission to pursue pleasure, he said he sometimes wished he had said 'follow your blisters' instead, meaning the thing that was worth being hurt by. The clarification is useful. He meant vocation, not hedonism."
+        },
+        {
+          "title": "The Power of Myth, posthumous",
+          "content": "Campbell recorded the long-form interviews with Bill Moyers that became the 1988 PBS series The Power of Myth at Skywalker Ranch in 1985 and 1986. He died of oesophageal cancer in October 1987, before the series aired. The broadcast found an audience Campbell had never had in his lifetime, in part because Moyers asked him the slow personal questions that forced him to speak in the first person rather than as a comparativist, and the answers travelled."
+        }
+      ]
+    },
+    {
+      "name": "Susan Sontag",
+      "domain": "literary / cultural criticism",
+      "era": "1933-2004",
+      "region": "US",
+      "bio": "American writer and cultural critic whose essays moved between aesthetics, politics and illness. Author of Notes on Camp (1964), On Photography (1977), Illness as Metaphor (1978) and Regarding the Pain of Others (2003).",
+      "oneLiner": "Directed Waiting for Godot by candlelight in a city under siege.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["expressing", "analyzing"],
+      "narratives": [
+        {
+          "title": "Notes on 'Camp', 1964",
+          "content": "Sontag's 1964 essay Notes on 'Camp,' published in the Partisan Review, took a style of sensibility that had been largely unnamed outside gay subcultures and gave it 58 numbered notes of critical treatment. The essay made her reputation overnight and reframed what a serious critic was allowed to take seriously. It has since been reprinted in almost every anthology of American post-war criticism."
+        },
+        {
+          "title": "Illness as Metaphor, 1978",
+          "content": "Sontag wrote Illness as Metaphor during and after her own breast cancer treatment in the mid-1970s, when she was given a very poor prognosis and survived anyway through aggressive combination therapy. The book is an argument against the metaphors attached to cancer, tuberculosis and, in a later extension, AIDS. She argued that metaphors like 'battle' and 'invasion' damaged patients by loading their illness with shame. She was writing in the first person from inside the ward."
+        },
+        {
+          "title": "Directing Waiting for Godot in besieged Sarajevo, 1993",
+          "content": "In July and August 1993, during the siege of Sarajevo, Sontag flew in and directed Samuel Beckett's Waiting for Godot in a theatre lit by candles because the electricity had been cut for months. The cast were Sarajevan actors who walked to rehearsal through sniper fire. The mayor of Sarajevo made her an honorary citizen. She said later that she had not gone to document the siege but to be useful inside it, and that directing a play was the form her usefulness could take."
+        },
+        {
+          "title": "Regarding the Pain of Others, 2003",
+          "content": "Her final major book, Regarding the Pain of Others, reopened the questions she had raised in On Photography (1977) and answered some of them differently. Where On Photography had worried about the numbing effect of seeing too many war images, Regarding the Pain of Others argued that the problem was not saturation but the privacy of the viewer: what mattered was whether the image forced the viewer into a relationship with what it depicted. She revised her earlier positions publicly, which she treated as a professional obligation rather than a climbdown."
+        }
+      ]
+    },
+    {
+      "name": "Claude Lévi-Strauss",
+      "domain": "structural anthropology",
+      "era": "1908-2009",
+      "region": "France / Brazil",
+      "bio": "French anthropologist who founded structural anthropology. Conducted fieldwork among the Bororo, Nambikwara and Tupi-Kawahib in Brazil in the late 1930s. Published Tristes Tropiques in 1955 and the four-volume Mythologiques between 1964 and 1971.",
+      "oneLiner": "Treated a Nambikwara village and a Parisian kinship chart as the same kind of sentence.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["analyzing"],
+      "narratives": [
+        {
+          "title": "Brazilian fieldwork, 1935 to 1939",
+          "content": "Lévi-Strauss was recruited to the University of São Paulo in 1935 as a visiting professor of sociology. Between 1935 and 1939 he and his then-wife Dina conducted ethnographic fieldwork among the Guaycuru, Bororo, Nambikwara and Tupi-Kawahib peoples of interior Brazil, with a sustained 1938 expedition among the Nambikwara. The raw material for Tristes Tropiques and for much of his later structural work came from those expeditions."
+        },
+        {
+          "title": "Tristes Tropiques, 1955",
+          "content": "Tristes Tropiques, published in 1955, is simultaneously a travel book, a memoir, a philosophical essay and an ethnography of four Amazonian peoples. It opens with the famous sentence 'I hate travelling and explorers,' and then spends 400 pages travelling and explaining. The book was refused the Prix Goncourt on the grounds that it was not fiction; the Goncourt committee issued a statement of regret that they could not find a mechanism for honouring it."
+        },
+        {
+          "title": "Mythologiques, four volumes",
+          "content": "Between 1964 and 1971 Lévi-Strauss published Mythologiques in four volumes, tracing a single myth-complex from the Amazon through Central America to the Arctic Circle and mapping the transformations it underwent as it travelled. The method assumed that what mattered about a myth was not its content but the structural relations between its elements. The four volumes treat hundreds of distinct stories as variations on a transformation grid."
+        },
+        {
+          "title": "100 years old and still publishing",
+          "content": "In 2008 Lévi-Strauss became the first member of the Académie française to reach age 100. His works were collected in the Bibliothèque de la Pléiade, the French equivalent of a living canonisation. He died on 30 October 2009 at age 100. Nicolas Sarkozy called him 'one of the greatest ethnologists of all time.' He had remained intellectually active almost to the end, writing short essays into his final decade."
+        }
+      ]
+    },
+    {
+      "name": "Svante Pääbo",
+      "domain": "paleogenetics",
+      "era": "1955-present",
+      "region": "Sweden / Germany",
+      "bio": "Swedish geneticist who founded the field of paleogenetics. Director of the Department of Genetics at the Max Planck Institute for Evolutionary Anthropology in Leipzig since 1997. Nobel laureate in Physiology or Medicine, 2022.",
+      "oneLiner": "Learned to sequence DNA out of bones older than farming, and found whole branches of humanity nobody had known were there.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["analyzing", "creating"],
+      "narratives": [
+        {
+          "title": "The 2,400-year-old mummy, 1984",
+          "content": "As a graduate student in 1984, Pääbo extracted DNA from a 2,400-year-old Egyptian mummy, working in secret in his supervisor's lab at night because the project was not officially sanctioned. The extraction was crude by later standards and turned out to be partially contaminated, but it was the first sustained attempt at ancient DNA recovery. The 2009 Kistler Prize citation traced his entire career back to that unauthorised experiment."
+        },
+        {
+          "title": "Neanderthal genome, 2010",
+          "content": "In May 2010, Pääbo and his colleagues at Max Planck Leipzig published a draft sequence of the Neanderthal genome in Science, based on over 3 billion base pairs sequenced in collaboration with 454 Life Sciences. The big finding was not just that Neanderthals could be sequenced: it was that between 1 and 4 per cent of the DNA of non-African modern humans was Neanderthal, meaning Homo sapiens and Neanderthals had interbred. The finding rewrote standard accounts of human origins inside a month."
+        },
+        {
+          "title": "Discovering the Denisovans from a finger bone",
+          "content": "In March 2010, just before the Neanderthal paper, the Leipzig group published a DNA analysis of a single finger bone fragment found in Denisova Cave in Siberia. The genome was too divergent to be Neanderthal and too divergent to be modern human. They had found a previously unknown population of archaic humans, now called Denisovans, from one finger. Subsequent work has shown that Denisovan DNA is present today in people from Oceania."
+        },
+        {
+          "title": "The contamination problem",
+          "content": "Pääbo's main technical obsession for three decades has been contamination. Ancient DNA is so degraded that any living human DNA on a bone, from an archaeologist's sneeze to a museum curator's glove, can swamp the authentic signal. His lab pioneered clean room protocols, multiple extraction controls and statistical methods for distinguishing ancient from contaminating sequences. The 2022 Nobel was awarded largely because his methods were why anyone could believe the results."
+        }
+      ]
+    },
+    {
+      "name": "Jane Jacobs",
+      "domain": "urbanism / journalism",
+      "era": "1916-2006",
+      "region": "US / Canada",
+      "bio": "American-Canadian journalist who wrote The Death and Life of Great American Cities in 1961. Led the community opposition that defeated Robert Moses's Lower Manhattan Expressway in the 1960s.",
+      "oneLiner": "Took her eyes on her own Greenwich Village block and turned them into an argument that beat Robert Moses.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["synthesizing", "influencing"],
+      "narratives": [
+        {
+          "title": "The Death and Life of Great American Cities, 1961",
+          "content": "Jacobs wrote The Death and Life of Great American Cities in 1961 from her apartment at 555 Hudson Street in Greenwich Village. She had no planning credentials. The book attacked the entire mid-century consensus of urban renewal, slum clearance, and modernist zoning, and it named the specific phenomena, 'eyes on the street,' 'mixed primary uses,' 'sidewalk ballet,' that she said kept a neighbourhood alive. Lewis Mumford reviewed it savagely. It is still in print and is still the standard text in its field."
+        },
+        {
+          "title": "Beating Robert Moses",
+          "content": "From 1962 to 1968 Jacobs chaired the Joint Committee to Stop the Lower Manhattan Expressway, organising against Robert Moses's proposed ten-lane elevated highway that would have demolished parts of Little Italy, Chinatown and the district now called SoHo. Moses, then the most powerful unelected official in New York, had never lost a highway fight. Jacobs organised petitions, public hearings and press campaigns. The project was shelved in 1969. Moses resigned from his last public post the year before."
+        },
+        {
+          "title": "Arrested at the hearing, 10 April 1968",
+          "content": "On 10 April 1968, at a public hearing on the Lower Manhattan Expressway, the crowd charged the stage and destroyed the stenographer's notes. A plainclothes officer arrested Jacobs, initially for inciting a riot. The charge was eventually reduced to disorderly conduct. She used the arrest in her public communication as evidence that the official process had been functionally closed to residents, which was the point she had been trying to make all along."
+        },
+        {
+          "title": "Moving to Toronto",
+          "content": "Within months of the arrest, Jacobs moved herself, her husband and her two draft-age sons from New York to Toronto, settling at 69 Albany Avenue in the Annex in 1971. She cited opposition to the Vietnam War and fear of her sons being conscripted as the decision. In Toronto she then did the same thing she had done in Manhattan: helped organise the successful fight against the Spadina Expressway. She lived in the Annex until her death in 2006."
+        }
+      ]
+    },
+    {
+      "name": "Ella Baker",
+      "domain": "civil rights organising",
+      "era": "1903-1986",
+      "region": "US",
+      "bio": "American civil rights organiser who worked inside the NAACP from 1940 onward, helped found the Southern Christian Leadership Conference in 1957, and convened the Shaw University meeting in 1960 that produced the Student Nonviolent Coordinating Committee. Advocate of group-centred rather than charismatic leadership.",
+      "oneLiner": "Believed that the moment a movement depended on a single man was the moment it had already lost.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["nurturing", "strategizing"],
+      "narratives": [
+        {
+          "title": "NAACP director of branches, 1943",
+          "content": "Baker joined the NAACP in December 1940 as a secretary and became director of branches in 1943, the highest-ranking woman in the organisation. She spent the following years travelling through the Jim Crow South by bus and train, staying in local homes, recruiting members and organising chapters. Her method was to show up in small towns, listen for who was already trusted on the ground, and build the branch around that person rather than around a visiting organiser."
+        },
+        {
+          "title": "Convening SNCC at Shaw University, Easter 1960",
+          "content": "In the spring of 1960, after the Greensboro sit-ins had begun, Baker persuaded the SCLC to invite the student sit-in leaders to a conference at her alma mater, Shaw University in Raleigh, over Easter weekend. Roughly 200 students attended. Baker specifically warned them against joining the SCLC as a youth wing, arguing that a leader-centred organisation would swallow them. The Student Nonviolent Coordinating Committee was founded at that meeting as a result."
+        },
+        {
+          "title": "Strong people don't need strong leaders",
+          "content": "Baker's most quoted formulation, 'strong people don't need strong leaders,' was a direct argument against the charismatic leadership model of King and the SCLC. She considered that model fragile: a movement shaped around one speaker could be decapitated by assassination, scandal or a single bad decision. Her alternative, group-centred leadership, required the organiser to spend longer in one place developing local people rather than bringing in celebrity from outside."
+        }
+      ]
+    },
+    {
+      "name": "Dorothy Height",
+      "domain": "civil rights / women's rights",
+      "era": "1912-2010",
+      "region": "US",
+      "bio": "American civil rights and women's rights leader. President of the National Council of Negro Women from 1958 to 1990. One of the key but least credited organisers of the 1963 March on Washington.",
+      "oneLiner": "Ran an entire civil rights organisation for 32 years while her male peers took the microphones.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["nurturing", "influencing"],
+      "narratives": [
+        {
+          "title": "32 years running the NCNW",
+          "content": "Height became president of the National Council of Negro Women in 1958 and held the post until 1990, a 32-year tenure. Under her leadership the NCNW became the primary organisational home for Black women in the American civil rights and women's rights movements, running programmes on voter registration, literacy, and economic empowerment while providing the institutional infrastructure behind many initiatives credited to male-led organisations."
+        },
+        {
+          "title": "The March on Washington, 1963",
+          "content": "Height was one of the core organisers of the 1963 March on Washington for Jobs and Freedom. She helped plan logistics and mobilised the NCNW's networks. She was also not invited to speak from the podium. No Black woman was. Height objected at the time, in writing, and kept objecting for decades afterward; her memoir treats the exclusion as one of the formative wrongs of the movement she was trying to build."
+        },
+        {
+          "title": "Wednesdays in Mississippi",
+          "content": "Working with Polly Spiegel Cowan, Height created 'Wednesdays in Mississippi,' a project that flew interracial teams of women from the North into Mississippi on Wednesdays, where they met with local Black and white women to pressure segregated institutions through face-to-face conversation rather than protest. The method traded visibility for access, on the theory that some changes could only be made by women sitting in each other's living rooms."
+        },
+        {
+          "title": "The hats",
+          "content": "Height became publicly identifiable by her wide-brimmed hats. Many of them were made by Vanilla Beane, a Black Washington D.C. milliner. Height treated the hats as a form of self-presentation at a time when Black women were routinely dismissed as staff or help in the same rooms where she was supposed to be the principal. A hat, she told interviewers, made it harder to be overlooked. The USPS eventually put one of the hats on her commemorative stamp."
+        }
+      ]
+    },
+    {
+      "name": "Bayard Rustin",
+      "domain": "civil rights organising",
+      "era": "1912-1987",
+      "region": "US",
+      "bio": "American civil rights organiser, pacifist, and openly gay man in an era when that was dangerous. Chief organiser of the 1963 March on Washington. Trained Martin Luther King Jr. in Gandhian nonviolence during the Montgomery bus boycott.",
+      "oneLiner": "Put 250,000 people on the National Mall in eight weeks and then had to leave the stage before anyone saw him.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["strategizing", "influencing"],
+      "narratives": [
+        {
+          "title": "The March on Washington logistics",
+          "content": "In 1962 A. Philip Randolph recruited Rustin as deputy director of what became the 1963 March on Washington. Rustin ran the operational plan: drilling marshals, assigning bus captains, building a schedule of speakers that fit a single day, arranging water stations, toilets and sound equipment for a crowd none of the organisers were sure would materialise. On 28 August 1963 about a quarter of a million people showed up in Washington. Rustin had essentially eight weeks of serious execution time."
+        },
+        {
+          "title": "Making King put down the gun",
+          "content": "In 1956 Rustin took leave from the War Resisters League and travelled to Montgomery, Alabama, to advise the 27-year-old Martin Luther King Jr. during the bus boycott. King, Rustin recorded, had 'almost nonexistent' familiarity with Gandhian nonviolence at the start, and King's house had armed guards and a pistol on the table. Rustin argued King into removing the gun and sending the guards away. The reframe of the Montgomery boycott as a nonviolent action rather than a defensive one dates in large part from that intervention."
+        },
+        {
+          "title": "Pasadena, 1953",
+          "content": "In January 1953 Rustin was arrested in Pasadena, California, during a sex-crime sting and charged with consensual sexual activity with two men. He pleaded guilty to 'sex perversion' and served 60 days in jail. The conviction forced his resignation from the Fellowship of Reconciliation and followed him for the rest of his career. In 1960, Adam Clayton Powell Jr. threatened to publicly float a false rumour of an affair between Rustin and King, and Rustin was pushed out of the SCLC to protect King. He kept organising anyway, in harder-to-see roles."
+        },
+        {
+          "title": "Gandhi by way of a Quaker grandmother",
+          "content": "Rustin's grandmother, Julia Rustin, was a Quaker and a founding NAACP member. She exposed him to the civil rights movement as a child. Arriving in New York as a young man he joined the Fifteenth Street Meeting of the Religious Society of Friends. In 1948, he travelled to India to learn nonviolent tactics directly from Gandhi's movement, arriving shortly after Gandhi's assassination. The Quaker, Gandhian and pacifist influences together formed the tactical method he imported into the US civil rights movement a decade later."
+        }
+      ]
+    },
+    {
+      "name": "Fannie Lou Hamer",
+      "domain": "voting rights organising",
+      "era": "1917-1977",
+      "region": "US",
+      "bio": "Mississippi sharecropper who became one of the most powerful organisers and orators of the voting rights movement. Founded the Mississippi Freedom Democratic Party and the Freedom Farm Cooperative.",
+      "oneLiner": "Sang hymns in a Winona jail cell with her kidneys failing and came out louder than the governor of Mississippi.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["expressing", "nurturing"],
+      "narratives": [
+        {
+          "title": "The Mississippi appendectomy, 1961",
+          "content": "In 1961, Hamer entered a Mississippi hospital for surgery to remove a uterine tumour. Without her knowledge or consent the surgeon also performed a hysterectomy. The practice was common enough in the state that Hamer herself coined the phrase 'Mississippi appendectomy' to describe the forced sterilisation of poor Black women under the cover of other procedures. It was one of the direct radicalisations of her life."
+        },
+        {
+          "title": "Trying to register to vote",
+          "content": "On 31 August 1962 Hamer travelled with a group of other sharecroppers to the county courthouse in Indianola, Mississippi, to register to vote. The registrar failed her on the literacy test. Her white employer fired her that evening for attempting to register. She retook the test on 4 December 1962 and again on 10 January 1963, when she finally passed. She then discovered the county required poll tax receipts for two consecutive years before she could actually cast a ballot. She kept paying them."
+        },
+        {
+          "title": "Winona jail, 9 June 1963",
+          "content": "On 9 June 1963, returning by bus from a voter registration training in South Carolina, Hamer was arrested in Winona, Mississippi. In the jail she was beaten for hours by police officers using a baton, resulting in permanent kidney damage and a blood clot over her left eye. She spent more than a month recovering. She went back to organising. The beating is the physical backdrop for the speech she gave a year later."
+        },
+        {
+          "title": "The 1964 Democratic Convention testimony",
+          "content": "At the Democratic National Convention in Atlantic City in August 1964, Hamer testified to the Credentials Committee on behalf of the Mississippi Freedom Democratic Party, describing the beating, the fired sharecroppers, the refusal of the state to let Black citizens vote. She said 'I question America.' President Lyndon Johnson tried to bump her testimony off live television by calling an unrelated press conference. The networks aired her testimony in full that evening instead. Her phrase 'sick and tired of being sick and tired' dates from around this period."
+        },
+        {
+          "title": "Freedom Farm, 1969",
+          "content": "In 1969 Hamer founded the Freedom Farm Cooperative in the Mississippi Delta, initially securing 40 acres and running a 'pig bank' that loaned pregnant sows to poor Black families who would raise them, return the original sow, and keep some of the piglets. The cooperative was as concrete as it gets: land, animals, food. Hamer had concluded that voting rights on their own were not enough if Black families in Sunflower County still could not eat."
+        }
+      ]
+    },
+    {
+      "name": "Grace Lee Boggs",
+      "domain": "community organising / philosophy",
+      "era": "1915-2015",
+      "region": "US",
+      "bio": "Chinese-American philosopher and activist. Spent the last 62 years of her life organising in Detroit alongside her husband, the autoworker and activist James Boggs. Co-author of Revolution and Evolution in the Twentieth Century (1974).",
+      "oneLiner": "Kept starting over every decade for 70 years and never ran out of Detroit.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["synthesizing", "nurturing"],
+      "narratives": [
+        {
+          "title": "Detroit, 1953",
+          "content": "Grace Lee married James Boggs, a Black autoworker and writer, in 1953 and moved with him to Detroit that same year. She remained in the same house in Detroit until her death in 2015, 62 years later. Her politics kept evolving across the decades, from Trotskyism through Black Power to a late philosophy of 'revolution as evolution,' but she refused to relocate. She said repeatedly that you could not organise a place you did not live in."
+        },
+        {
+          "title": "Detroit Summer, 1992",
+          "content": "In 1992, at age 77, Boggs founded Detroit Summer, a multiracial intergenerational youth programme that mobilised young people to paint murals, plant urban gardens, and rehabilitate abandoned buildings. The frame was deliberate: instead of treating Detroit's young Black population as a problem to be managed, the programme treated them as the city's main repair crew. Detroit Summer is still operating today."
+        },
+        {
+          "title": "Publishing at 95",
+          "content": "In 2011, at age 95, Boggs published The Next American Revolution with the University of California Press, arguing that civil-rights-based activism alone would not produce the changes American society needed and calling for 'a higher state of human evolution.' She was working on the book in longhand. She kept doing interviews and hosting Sunday study sessions at her house almost to her death at 100 in October 2015. President Obama publicly praised her understanding of community organising when she died."
+        }
+      ]
+    },
+    {
+      "name": "Saul Alinsky",
+      "domain": "community organising",
+      "era": "1909-1972",
+      "region": "US",
+      "bio": "American community organiser from Chicago. Founded the Industrial Areas Foundation in 1940 and wrote Rules for Radicals in 1971. Built the modern template for broad-based, church-rooted community organising in the United States.",
+      "oneLiner": "Taught that power belongs to the people who are willing to be a visible nuisance first.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["influencing", "strategizing"],
+      "narratives": [
+        {
+          "title": "Back of the Yards, 1938",
+          "content": "Starting in 1938, Alinsky worked with park supervisor Joseph Meegan to organise the Back of the Yards neighbourhood, a district of stockyards, meatpacking plants and immigrant Catholic parishes on Chicago's South Side. The Council he built there brought together Polish, Lithuanian, Slovak, Mexican and African American residents through their parishes and unions, and it was strong enough by 1946 to back the packinghouse workers' strike. It became the proof of concept for his entire method: organise the institutions people already belonged to, not individuals in abstract."
+        },
+        {
+          "title": "Industrial Areas Foundation, 1940",
+          "content": "In 1940 Alinsky founded the Industrial Areas Foundation with support from Bishop Bernard James Sheil of Chicago and publisher Marshall Field III. The IAF's premise was that broad-based community organisations, anchored in congregations, could develop local leadership and hold institutional power. It is the template behind organisations including COPS in San Antonio, East Brooklyn Congregations and many of the congregation-based federations that still dominate US community organising."
+        },
+        {
+          "title": "The fart-in at the Rochester Philharmonic",
+          "content": "After the 1964 Rochester race riot, Alinsky helped local Black leaders form FIGHT to pressure Eastman Kodak, the city's dominant employer. One tactic on the drawing board was to buy up tickets to a Rochester Philharmonic performance, feed the ticket holders a large dinner of baked beans beforehand, and stage a 'fart-in' during the concert. The tactic was never fully executed, but the mere threat, combined with a disrupted 1967 Kodak stockholders' meeting, pushed Kodak into formally recognising FIGHT and committing to a Black employment programme."
+        },
+        {
+          "title": "Rules for Radicals, 1971",
+          "content": "Rules for Radicals, published in 1971, was Alinsky's attempt to write down the method before he died. The book's central rules include 'power is not only what you have but what the enemy thinks you have,' 'never go outside the expertise of your people,' and 'a tactic that drags on too long becomes a drag.' He died the following year, on 12 June 1972, in Carmel-by-the-Sea, California. The book has since been assigned reading in both community organising training programmes and conservative counter-organising training programmes, a range of uses he would have enjoyed."
+        }
+      ]
+    },
+    {
+      "name": "Václav Havel",
+      "domain": "dissident theatre / politics",
+      "era": "1936-2011",
+      "region": "Czechoslovakia",
+      "bio": "Czech playwright, dissident, and the first post-Communist president of Czechoslovakia and then the Czech Republic. Co-founded Charter 77 and wrote the 1978 essay The Power of the Powerless.",
+      "oneLiner": "Treated a rock band trial as a constitutional crisis and lived to see the frame win.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["expressing", "influencing"],
+      "narratives": [
+        {
+          "title": "Charter 77 and the Plastic People trial",
+          "content": "Charter 77, drafted in late 1976 and published in January 1977, was in part a direct response to the 1976 state prosecution of the Czech psychedelic rock band the Plastic People of the Universe, whose members were tried for long hair, obscene lyrics and participation in Prague's underground scene. Havel attended the trial and co-wrote the Charter alongside Jan Patocka and Jiri Hajek. He treated the Plastic People's right to make their own music as the same right as the right to publish political dissent."
+        },
+        {
+          "title": "The Power of the Powerless, 1978",
+          "content": "Havel's long 1978 essay The Power of the Powerless described life under late-communist 'post-totalitarianism' as a condition in which citizens were forced to 'live within a lie,' endlessly performing slogans they no longer believed. His famous example was the greengrocer who puts the 'Workers of the World, Unite!' sign in his window not from conviction but from fear. The essay argued that the regime's power depended on this performance, and that it could be broken by individuals refusing to perform it any more."
+        },
+        {
+          "title": "Four years in prison, Letters to Olga",
+          "content": "Havel's longest prison term ran from May 1979 to February 1983. During those years he wrote weekly letters to his wife Olga under strict censorship rules: no politics, no mention of fellow prisoners, no 'humour.' He wrote instead dense philosophical reflections that were later collected as Letters to Olga. The constraint was the form. The letters are a record of a mind that had been given nothing to work with except itself and was determined to work anyway."
+        },
+        {
+          "title": "Elected president by unanimous vote, December 1989",
+          "content": "On 29 December 1989, at the end of the Velvet Revolution, Havel was elected President of Czechoslovakia by unanimous vote of the Federal Assembly. He had been released from his last prison term earlier the same year. He served as the last Czechoslovak president through the 1993 split and then as the first Czech Republic president until 2003. He kept writing plays and essays throughout."
+        }
+      ]
+    },
+    {
+      "name": "Harriet Tubman",
+      "domain": "abolition / rescue",
+      "era": "1822-1913",
+      "region": "US",
+      "bio": "American abolitionist who escaped slavery in 1849 and returned to the South roughly 13 times between 1851 and 1862 to guide approximately 70 enslaved people to freedom. Scout and spy for the Union Army during the Civil War.",
+      "oneLiner": "Went back into the dark thirteen times after she had already gotten out.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["strategizing", "nurturing"],
+      "narratives": [
+        {
+          "title": "The second escape, 1849",
+          "content": "In September 1849 Tubman escaped from slavery in Maryland with two of her brothers, but they turned back and forced her to return with them. In October or November of the same year she fled a second time, alone, travelling roughly 90 miles on foot through Delaware to Philadelphia using the Underground Railroad network. She later said that when she crossed into Pennsylvania, 'I looked at my hands to see if I was the same person.' She was not. She was the person who would now go back."
+        },
+        {
+          "title": "Thirteen missions, approximately seventy people",
+          "content": "Between 1851 and 1862, Tubman made roughly 13 documented trips back into slaveholding territory and guided approximately 70 enslaved people to freedom in the Northern states and Canada, while also giving directions to another 50 to 60 who escaped on their own. The logistics involved forged passes, safe houses, code songs, and a personal willingness to use a concealed pistol to stop any rescued person from turning back and endangering the rest of the group. She was nicknamed 'Moses.' There is no record of her ever losing a passenger."
+        },
+        {
+          "title": "The Combahee Ferry raid, 2 June 1863",
+          "content": "During the Civil War, Tubman served the Union Army as a scout and spy in South Carolina. On 2 June 1863 she helped lead the Combahee Ferry raid, guiding Colonel James Montgomery's Second South Carolina Volunteers up the Combahee River to destroy Confederate supplies and liberate the enslaved people working the rice plantations along its banks. More than 700 people were freed in a single day. Tubman became the first woman in US history to lead an armed military operation."
+        },
+        {
+          "title": "The metal weight and the visions",
+          "content": "As a teenager, still enslaved, Tubman was struck in the head by a two-pound iron weight an overseer had thrown at another person. The blow fractured her skull. She lived with severe headaches, seizures and sudden sleep episodes for the rest of her life, symptoms modern scholars have linked to temporal lobe epilepsy or narcolepsy. After the injury she also began experiencing vivid religious visions. She treated them as guidance from God. Her planning of the rescue routes was partly shaped by these episodes."
+        },
+        {
+          "title": "Auburn, caring for parents and then for the elderly",
+          "content": "In 1859 Tubman purchased land in Auburn, New York, and brought her ageing parents to live there. After the Civil War she settled in Auburn permanently, farming the land and eventually founding the Harriet Tubman Home for the Aged on property next to her own. In her final years she moved into the Home herself as a resident, paying her own fees out of the meagre pension she had finally been granted as a Union veteran. She died there in 1913."
+        }
+      ]
+    },
+    {
+      "name": "Frederick Douglass",
+      "domain": "abolition / oratory",
+      "era": "1818-1895",
+      "region": "US",
+      "bio": "American abolitionist, orator, writer and statesman who escaped slavery in 1838 and spent the next 57 years building the most widely read and most widely quoted Black voice in the nineteenth-century United States.",
+      "oneLiner": "Taught himself to read and then spent a lifetime making white America listen to what he had read.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["expressing", "influencing"],
+      "narratives": [
+        {
+          "title": "Escape, 3 September 1838",
+          "content": "On 3 September 1838 Douglass boarded a northbound train of the Philadelphia, Wilmington and Baltimore Railroad at Baltimore, wearing a sailor's uniform supplied by Anna Murray, a free Black woman he was engaged to. He carried forged protection papers borrowed from a free Black sailor. He reached New York City in less than 24 hours. Anna Murray joined him there, and they married 11 days later, on 15 September 1838, the marriage beginning his legal life as a free person."
+        },
+        {
+          "title": "The 1845 Narrative",
+          "content": "Douglass's Narrative of the Life of Frederick Douglass, an American Slave was published in 1845. He had written it in part because Northern audiences at his speeches had started to disbelieve that a man who spoke so well could actually have been enslaved. The book named his former enslavers, which put him at immediate risk of recapture under the Fugitive Slave Act. He fled to Britain for two years while British supporters raised the money to buy his legal freedom."
+        },
+        {
+          "title": "What to the Slave is the Fourth of July, 1852",
+          "content": "On 5 July 1852 Douglass delivered an address in Corinthian Hall, Rochester, New York, now generally known as 'What to the Slave is the Fourth of July?' The speech was invited by the Rochester Ladies Anti-Slavery Society as a patriotic address. Douglass used it instead to identify the holiday as a mockery from the standpoint of the enslaved. 'To him, your celebration is a sham,' he said. The speech is now taught as one of the foundational documents of American rhetoric."
+        },
+        {
+          "title": "Breaking with Garrison on the Constitution",
+          "content": "Douglass began his public life as a protege of the radical abolitionist William Lloyd Garrison, who regarded the US Constitution as a 'covenant with death' and wanted disunion. By the early 1850s Douglass had moved to a different reading: that the Constitution, properly interpreted, was actually an anti-slavery document and could be used against the slave system. The shift broke his relationship with Garrison and moved him toward political abolitionism, including eventual support for Lincoln. He treated the break as necessary and unavoidable, not as a betrayal."
+        },
+        {
+          "title": "Marrying Helen Pitts, 1884",
+          "content": "After his first wife Anna Murray died in 1882, Douglass married Helen Pitts in 1884. Pitts was a white suffragist about 20 years his junior. The interracial marriage drew public fury, including from some of Douglass's own children. Elizabeth Cady Stanton sent a congratulatory note. Douglass's recorded answer to the controversy was that his first marriage had honoured his mother's race and the second honoured his father's, and he was done apologising for either."
+        }
+      ]
+    },
+    {
+      "name": "Jane Addams",
+      "domain": "settlement house / social work",
+      "era": "1860-1935",
+      "region": "US",
+      "bio": "American social reformer and co-founder of Hull House, the Chicago settlement house opened with Ellen Gates Starr in 1889. First American woman to receive the Nobel Peace Prize, in 1931.",
+      "oneLiner": "Moved into the slum on purpose and kept the door unlocked for 46 years.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["nurturing", "organizing"],
+      "narratives": [
+        {
+          "title": "Opening Hull House, 1889",
+          "content": "In 1889 Addams and Ellen Gates Starr moved into a semi-derelict mansion originally built by Charles Hull in 1856 and opened it to the immigrant families of the surrounding Nineteenth Ward of Chicago as a 'settlement house.' Addams funded early repairs personally. The programme grew from a single building into a 13-building complex with a peak of about 2,000 visitors a week. Activities included a night school for adults, a public kitchen, an art gallery, a gym, a music school, a theatre group, a bathhouse and a book bindery. The point was that a single door could lead to any of it."
+        },
+        {
+          "title": "Sanitary inspector of the Nineteenth Ward",
+          "content": "In 1894 Addams was appointed the first woman sanitary inspector of Chicago's Nineteenth Ward. Working with the Hull House Women's Club she reported more than 1,000 health code violations inside a single year, and she treated garbage removal as a literal life-saving intervention. Documented disease and death rates in the ward dropped. She was among the first Americans to make the direct causal link between municipal services and mortality in a poor neighbourhood, using her own data."
+        },
+        {
+          "title": "The 1915 Hague Congress",
+          "content": "Addams chaired the International Congress of Women at The Hague in April 1915, with almost 1,200 participants from both warring and neutral countries meeting in the middle of the First World War. The Congress produced a set of proposals for ending the war by negotiation. Addams and the other leaders then toured European capitals trying to deliver the proposals to heads of state. The mission failed in its immediate goal. It laid the foundation for her eventual Nobel Peace Prize in 1931, which she shared with Nicholas Murray Butler and gave to the Women's International League for Peace and Freedom."
+        },
+        {
+          "title": "Twenty Years at Hull-House, 1910",
+          "content": "Addams's 1910 memoir Twenty Years at Hull-House was written as both a practical account of settlement house work and an argument for a new kind of American civic life. It became a bestseller and is still in print. She used it to make her case that charity from a distance did not work, and that the volunteer had to move in to the neighbourhood she was trying to change. It was autobiographical method as much as content."
+        }
+      ]
+    },
+    {
+      "name": "Dorothy Day",
+      "domain": "Catholic Worker movement",
+      "era": "1897-1980",
+      "region": "US",
+      "bio": "American journalist and activist who co-founded the Catholic Worker movement in 1933 with Peter Maurin. Combined radical pacifism, Catholic social teaching and direct hospitality for the homeless for nearly 50 years.",
+      "oneLiner": "Sold a newspaper for a penny on Union Square and turned it into houses that fed strangers for the rest of the century.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["nurturing", "expressing"],
+      "narratives": [
+        {
+          "title": "The Catholic Worker, 1 May 1933",
+          "content": "On 1 May 1933, in the depths of the Depression, Day and Peter Maurin brought out the first issue of The Catholic Worker newspaper on Union Square in Manhattan and sold it for one cent. It has been continuously published at one cent per copy ever since. Day wrote much of it herself, by hand, in the margins of the other work she was doing, including running the first of the movement's Houses of Hospitality shortly after."
+        },
+        {
+          "title": "Conversion after Tamar",
+          "content": "In 1925, during her years as a Greenwich Village journalist living with the biologist Forster Batterham, Day became pregnant and on 4 March 1926 gave birth to her daughter Tamar Teresa. Batterham opposed both the pregnancy and organised religion. Day chose, against his wishes, to have Tamar baptised. On 28 December 1927 Day herself received conditional baptism at Our Lady Help of Christians on Staten Island, with a Sister of Charity as her godparent. Her relationship with Batterham ended. The religious turn was a decisive and deliberate break from the bohemian life she had been living."
+        },
+        {
+          "title": "Houses of Hospitality",
+          "content": "From the mid-1930s onward the Catholic Worker movement opened Houses of Hospitality across the United States, offering food and shelter to any homeless person who came to the door, without intake forms, conditions or proselytising. By 1941 there were more than 30 independent Catholic Worker communities. Day insisted on voluntary poverty as a rule for the staff, who lived in the houses alongside the people they were serving rather than going home to separate apartments at night."
+        },
+        {
+          "title": "Arrested at 75 with the farmworkers, 1973",
+          "content": "In June 1973, at age 75, Day joined Cesar Chavez's United Farm Workers picket lines in California and was arrested alongside other supporters, serving ten days in jail. She had also been arrested in 1917 for suffrage picketing and in the mid-1950s for refusing to take part in mandatory civil defence drills in New York City. The consistency across 56 years of arrests, from suffrage to civil defence to farmworkers, is the clearest evidence of her actual politics: whatever was the cause that put poor people against the police, she would be on the picket line."
+        }
+      ]
+    },
+    {
+      "name": "Studs Terkel",
+      "domain": "oral history / radio",
+      "era": "1912-2008",
+      "region": "US",
+      "bio": "American oral historian, broadcaster and writer. Hosted The Studs Terkel Program on Chicago's WFMT radio from 1952 to 1997. Author of Hard Times (1970), Working (1974) and The Good War (1985), which won the Pulitzer Prize for General Nonfiction.",
+      "oneLiner": "Turned the country's anonymous cab drivers, waitresses and steelworkers into the authors of its history.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["expressing", "nurturing"],
+      "narratives": [
+        {
+          "title": "45 years on WFMT",
+          "content": "From 1952 to 1997 Terkel hosted The Studs Terkel Program on WFMT in Chicago, an hour-long weekday broadcast that ran for 45 years. The guest list over the decades included Martin Luther King Jr., Leonard Bernstein, Bob Dylan, James Baldwin, Buster Keaton, and an almost endless supply of people who had never been on the radio before. The show was essentially unscripted. Terkel treated every guest the same way, famous or not, and the mix itself, a steelworker after a novelist after a concert pianist, was the format."
+        },
+        {
+          "title": "Hard Times, 1970",
+          "content": "Terkel's 1970 oral history Hard Times collected interviews with ordinary Americans who had lived through the Great Depression. He interviewed bankers, dustbowl migrants, unemployed autoworkers, former child labourers and bootleggers, and printed their stories with minimal editorial commentary. The book redefined what an oral history could be, and it reset the genre for the next 40 years. He carried a reel-to-reel tape recorder to most of the interviews and transcribed them personally afterwards."
+        },
+        {
+          "title": "Working, 1974",
+          "content": "His next major book, Working: People Talk About What They Do All Day and How They Feel About What They Do, came out in 1974 and interviewed people at almost every job an American could hold: hotel piano player, telephone operator, grave digger, prostitute, steelworker, doorman, film critic. The book was adapted into a Broadway musical in 1978 and a PBS special in 1982. Terkel's thesis in the introduction is that work is 'about a search for daily meaning as well as daily bread,' and the interviews are his evidence."
+        },
+        {
+          "title": "Pulitzer for The Good War, 1985",
+          "content": "The Good War, Terkel's oral history of the Second World War, was published in 1984 and won the 1985 Pulitzer Prize for General Nonfiction. Terkel had placed the title in ironic quotation marks to push back against the sentimental American memory of the conflict. The book lets former soldiers, nurses, Japanese internment camp detainees and war workers contradict each other at length. The committee gave it the prize anyway."
+        }
+      ]
+    },
+    {
+      "name": "Jimmy Carter",
+      "domain": "diplomacy / post-presidency peace work",
+      "era": "1924-2024",
+      "region": "US",
+      "bio": "39th President of the United States, 1977 to 1981. Founded the Carter Center in 1982 and spent the following four decades on election monitoring, disease eradication, and Habitat for Humanity house-building. Awarded the Nobel Peace Prize in 2002.",
+      "oneLiner": "Lost an election and then spent 44 years proving that the post-presidency was the real job.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["nurturing", "influencing"],
+      "narratives": [
+        {
+          "title": "Founding the Carter Center after losing, 1982",
+          "content": "Carter lost his 1980 re-election bid badly to Ronald Reagan. In 1982, a year after leaving the White House, he founded the Carter Center in Atlanta with his wife Rosalynn. The Center was deliberately small and modest in staff, and deliberately specific in mandate: peace negotiations, election monitoring, and the eradication of neglected tropical diseases. It was the opposite of the ceremonial post-presidency that most of his predecessors had chosen."
+        },
+        {
+          "title": "Guinea worm from 3.5 million to 14",
+          "content": "When the Carter Center took on dracunculiasis, or Guinea worm disease, in 1986, there were about 3.5 million annual cases in 20 countries across Africa and Asia. By 2023 the number of reported cases was 14, and the disease remained endemic in only five countries. It is the closest humanity has ever come to eradicating a parasitic disease. Carter followed the programme personally for decades, travelling into affected villages to inspect filtration cloths and water points in his 80s and 90s."
+        },
+        {
+          "title": "Monitoring 115 elections in 40 countries",
+          "content": "Under Carter's direction the Carter Center developed one of the most respected election observation operations in the world. Between 1989 and the early 2020s the Center observed 115 elections in roughly 40 countries. The missions followed a consistent methodology of sending observers in well before voting day and publishing frank post-election reports, including on elections inside the United States. The seriousness of the work derived partly from Carter's own willingness to tell host governments the unwelcome finding in person."
+        },
+        {
+          "title": "Sunday school in Plains",
+          "content": "For decades after leaving the White House, Carter taught Sunday school at Maranatha Baptist Church in Plains, Georgia, most weeks he was home. Tourists from around the country drove through the night to hear the former president teach a Sunday school lesson on, for example, the Book of Ruth. He kept doing it into his 90s. The pattern is the smaller daily twin of the Carter Center's work: the same insistence that the post-presidency was not a ceremonial retirement."
+        },
+        {
+          "title": "Habitat for Humanity hammers",
+          "content": "From 1984 onward, Carter and Rosalynn spent one week each year with Habitat for Humanity's Jimmy and Rosalynn Carter Work Project, personally building homes alongside volunteers at sites in the US and abroad. He was still swinging a hammer on construction sites in his 90s. He died on 29 December 2024 at age 100. The hammer photos from his last decades were used by Habitat as a recruitment tool that proved more effective than any argument about need, because they proved the former president was on the scaffold, and asked why the viewer was not."
+        }
+      ]
+    }
+  ]
+}

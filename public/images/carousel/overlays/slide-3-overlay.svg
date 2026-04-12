@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="black" stop-opacity="0.45"/>
+      <stop offset="40%" stop-color="black" stop-opacity="0.2"/>
+      <stop offset="60%" stop-color="black" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="black" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#g)"/>
+
+  <!-- Tag -->
+  <text x="70" y="880" fill="#E9A23B" font-family="Inter,Helvetica,Arial,sans-serif" font-size="22" font-weight="700" letter-spacing="3">STEP 1 — UNFULFILMENT</text>
+
+  <!-- Headline -->
+  <text x="70" y="930" fill="white" font-family="Inter,Helvetica,Arial,sans-serif" font-size="56" font-weight="900">Busy. Productive.</text>
+  <text x="70" y="992" fill="#E9A23B" font-family="Inter,Helvetica,Arial,sans-serif" font-size="56" font-weight="900">Quietly empty.</text>
+
+  <!-- Body -->
+  <text x="70" y="1040" fill="rgba(255,255,255,0.8)" font-family="Inter,Helvetica,Arial,sans-serif" font-size="22" font-weight="500">High action. Low self-knowledge. Busyness as armour.</text>
+</svg>

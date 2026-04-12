@@ -1,0 +1,557 @@
+{
+  "meta": {
+    "slice": "partD",
+    "range": "profiles[150:200]",
+    "count": 50,
+    "generatedAt": "2026-04-07"
+  },
+  "profiles": [
+    {
+      "name": "Piet Oudolf",
+      "dominantCategories": ["designing", "creating", "organizing"],
+      "playSkills": [
+        {"category": "designing", "skill": "Polish the small details others miss", "confidence": "high", "evidence": "Selects species whose seed heads, stems, and winter silhouettes are as interesting as their flowers; designs the fifth-season look of dead perennials in frost."},
+        {"category": "designing", "skill": "Shape how a moment feels", "confidence": "high", "evidence": "On the High Line he integrated native colonising species with drifts of echinacea, eryngium and miscanthus so the linear park feels like an overgrown railway, not a garden."},
+        {"category": "designing", "skill": "Craft a space people want to stay in", "confidence": "high", "evidence": "High Line draws roughly 8 million visitors a year and the planting is cited as why most of them come back."},
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "Every planting scheme is drawn by hand on paper in coloured pencil as overlapping circles; the act of drawing is the design process itself."},
+        {"category": "organizing", "skill": "Map how the work actually flows", "confidence": "medium", "evidence": "The physical pencil plans travel with the plants to site and are how he communicates with gardeners installing the scheme."}
+      ],
+      "antiTags": [
+        {"category": "building", "skill": "Prototype something in a day", "evidence": "He will not use a plant in a public commission until he has lived with it at Hummelo for several growing seasons and knows how it looks in every month."}
+      ]
+    },
+    {
+      "name": "Malala Yousafzai",
+      "dominantCategories": ["expressing", "influencing", "connecting"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "At age 11 she wrote a weekly BBC Urdu diary as Gul Makai describing Taliban rule in Swat, the only contemporaneous first-person schoolgirl record from inside the occupation."},
+        {"category": "expressing", "skill": "Tell a story that lands", "confidence": "high", "evidence": "In her July 2013 UN speech she said 'weakness, fear and hopelessness died. Strength, power and courage was born,' refusing to demonise the Taliban personally and framing education as a specific right."},
+        {"category": "influencing", "skill": "Rally a group behind an idea", "confidence": "high", "evidence": "The Malala Fund by 2023 was operating in eight countries, channelling grants through the Gulmakai Network of local country leaders."},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "medium", "evidence": "The fund was designed to connect and resource local women already running girls' education projects rather than build a parallel international NGO."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Greta Thunberg",
+      "dominantCategories": ["influencing", "expressing"],
+      "playSkills": [
+        {"category": "influencing", "skill": "Rally a group behind an idea", "confidence": "high", "evidence": "Her solo August 2018 Riksdag strike seeded Fridays for Future, which by December 2018 had organised strikes in at least 270 cities."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "high", "evidence": "At Davos 2019 she told business leaders 'I don't want you to be hopeful. I want you to panic,' deliberately inverting the reassurance script of climate speaking."},
+        {"category": "expressing", "skill": "Turn a message into a moment", "confidence": "high", "evidence": "She sailed 15 days across the Atlantic on the Malizia II specifically so her UN 'How dare you' speech would arrive without flying; the voyage and speech were tactically a single event."},
+        {"category": "influencing", "skill": "Move someone from stuck to action", "confidence": "medium", "evidence": "She framed her autism, OCD and selective mutism as the precondition of her activism, refusing the 'brave despite' script and modelling a new framing for other neurodivergent young activists."}
+      ],
+      "antiTags": [
+        {"category": "connecting", "skill": "Be the glue in a scattered team", "evidence": "Her first three weeks outside the Riksdag she sat alone with leaflets; her power comes from a single chair, not from team glue work."}
+      ]
+    },
+    {
+      "name": "Al Gore",
+      "dominantCategories": ["clarifying", "influencing", "expressing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "After losing the 2000 election he delivered an unpaid climate slideshow thousands of times on road trips; An Inconvenient Truth (2006) is structurally that slideshow filmed."},
+        {"category": "expressing", "skill": "Perform, present, or hit record", "confidence": "high", "evidence": "The film became the first major documentary made inside an Apple Keynote deck and won two Academy Awards; the cinematic object is a middle-aged man advancing his own slides."},
+        {"category": "influencing", "skill": "Sell something you actually believe in", "confidence": "high", "evidence": "In his 2007 Nobel Peace Prize lecture he refused to relitigate 2000 and used every minute on the climate brief he had chosen after the loss."},
+        {"category": "nurturing", "skill": "Mentor someone earlier on the path", "confidence": "high", "evidence": "Climate Reality Project's three-day Leadership Corps training had by 2023 trained more than 50,000 people across 190 countries to deliver the slideshow themselves; Gore personally opens most cohorts."},
+        {"category": "strategizing", "skill": "Pick what matters and cut the rest", "confidence": "medium", "evidence": "He publicly refused to run again, which freed him to become a full-time campaigner on a single issue."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Dolores Huerta",
+      "dominantCategories": ["influencing", "connecting", "organizing"],
+      "playSkills": [
+        {"category": "influencing", "skill": "Make a pitch that moves people", "confidence": "high", "evidence": "She personally negotiated with A&P to pull non-union grapes from shelves during the Delano boycott, producing the first UFW contracts in July 1970 including wage increases and pesticide protections."},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "high", "evidence": "Ran the East Coast end of the Delano grape boycott organising distributors, union members and church groups into a five-year consumer pressure campaign."},
+        {"category": "influencing", "skill": "Rally a group behind an idea", "confidence": "high", "evidence": "Popularised 'Sí, se puede' during a 1972 Arizona hunger strike; the slogan later became the UFW rallying cry and was adopted in English by the 2008 Obama campaign."},
+        {"category": "organizing", "skill": "Turn a mess into a system", "confidence": "medium", "evidence": "The Dolores Huerta Foundation trains community organisers in the Central Valley for school boards, water boards and redistricting, explicitly choosing small races national campaigns ignore."},
+        {"category": "nurturing", "skill": "Mentor someone earlier on the path", "confidence": "medium", "evidence": "Her willingness to return to a picket line after being beaten and having ribs broken at a 1988 SFPD crowd-control incident became a template for younger organisers."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Naomi Klein",
+      "dominantCategories": ["synthesizing", "expressing", "analyzing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "The Shock Doctrine tests a single thesis across Chile 1973, Iraq 2003, Katrina 2005 and Sri Lanka 2004, arguing the pattern had to be named before it could be argued with."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "She repeated the line 'the climate and the economy are the same file' in promotion of This Changes Everything, refusing to let environmentalists and leftists separate ecology from political economy."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "high", "evidence": "Doppelganger (2023) turned being confused with Naomi Wolf online into a book-length analytical frame, winning the 2024 Women's Prize for Non-Fiction."},
+        {"category": "analyzing", "skill": "Investigate a weird anomaly", "confidence": "medium", "evidence": "She visited Nike and Reebok sweatshops in South East Asia and culture-jamming collectives for four years before No Logo."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Cédric Villani",
+      "dominantCategories": ["analyzing", "clarifying", "expressing"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Diagnose why something is not working", "confidence": "high", "evidence": "Birth of a Theorem tracks the two-year collaboration with Clément Mouhot on nonlinear Landau damping including the nights the proof failed twice before stabilising."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "In his 2016 TED talk he reframed mathematics as 'imagination, drawing, the willingness to be bad at something for a long time,' the talk has more than two million views."},
+        {"category": "expressing", "skill": "Turn a message into a moment", "confidence": "high", "evidence": "He explained on Lex Fridman's podcast that the three-piece silk suit, lavalière tie and jewelled spider brooch are a deliberate publicity machine for mathematics, forcing strangers to start conversations."},
+        {"category": "organizing", "skill": "Build a workflow that runs itself", "confidence": "medium", "evidence": "As director of the Institut Henri Poincaré 2009-2017 he said institutional leadership was mostly choosing which mathematicians spend a summer in Paris together and trusting them to work without interference."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Susan Fowler",
+      "dominantCategories": ["analyzing", "expressing", "organizing"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Find the pattern in messy data", "confidence": "high", "evidence": "She kept a private file of every harassment incident at Uber over a year, with dates, reorg details, performance review numbers and HR conversations, which became the blog post."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "On Feb 19, 2017 she published the 3,000-word post 'Reflecting on One Very, Very Strange Year at Uber' alone, without a co-author, and it gained 22,000 Twitter shares within days."},
+        {"category": "analyzing", "skill": "Turn numbers into a clear story", "confidence": "high", "evidence": "The post reads more like an engineering bug report than a personal essay, citing specific performance review numbers and team reorganisations, which is why her account could not be dismissed."},
+        {"category": "organizing", "skill": "Remove a friction point permanently", "confidence": "medium", "evidence": "She petitioned the US Supreme Court on forced arbitration clauses, the same clauses that had nearly stopped her own account from becoming public."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Cathy O'Neil",
+      "dominantCategories": ["analyzing", "clarifying", "influencing"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Spot the thing everyone else missed", "confidence": "high", "evidence": "Weapons of Math Destruction exposed predictive algorithms in hiring, teacher evaluation, policing and credit scoring as hidden discriminatory systems against the populations they claimed to serve."},
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "high", "evidence": "She wrote a popular book aimed at readers who had never taken a statistics course, after the Occupy Alternative Banking Group taught her most citizens had no vocabulary for the mathematics running their lives."},
+        {"category": "analyzing", "skill": "Diagnose why something is not working", "confidence": "high", "evidence": "ORCAA audits specific algorithms for disparate impact, feedback loops and perverse optimisation targets, including NYC's automated hiring review."},
+        {"category": "influencing", "skill": "Change someone's mind", "confidence": "medium", "evidence": "She coined the acronym WMD deliberately to borrow the weight of the Iraq war phrase; the book was adopted on CS programme reading lists that had rarely taught ethics."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Hedy Lamarr",
+      "dominantCategories": ["creating", "building", "analyzing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Invent a new idea from scratch", "confidence": "high", "evidence": "She proposed a radio torpedo guidance system that hopped between frequencies so enemy jamming could not lock on; US Patent 2,292,387 was granted on August 11, 1942."},
+        {"category": "creating", "skill": "Remix two things into something new", "confidence": "high", "evidence": "She combined dinner-table knowledge of munitions from her first marriage with George Antheil's piano-roll synchronisation mechanism from his 1924 Ballet Mécanique."},
+        {"category": "building", "skill": "Prototype something in a day", "confidence": "medium", "evidence": "She set up a drafting table in her trailer and her home and invented a dissolving-tablet soft drink, a new stoplight and the torpedo system between takes, self-taught with no engineering training."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "medium", "evidence": "She told Bombshell (2017) that inventing was what she did instead of smoking, working on the frequency-hopping idea at home while Hollywood typecast her."}
+      ],
+      "antiTags": [
+        {"category": "influencing", "skill": "Sell something you actually believe in", "evidence": "The US Navy rejected the design as impractical and the patent expired in 1959 unused; the working principle was only rediscovered decades later. Selling the invention was not her strength."}
+      ]
+    },
+    {
+      "name": "Pearl Kazin Bell",
+      "dominantCategories": ["nurturing", "clarifying", "organizing"],
+      "playSkills": [
+        {"category": "nurturing", "skill": "Give patient, useful feedback", "confidence": "high", "evidence": "Her correspondence with writers shows an editor who quoted a line back to the author and asked whether the next paragraph had earned it, making writers feel read first and corrected second."},
+        {"category": "analyzing", "skill": "Spot the thing everyone else missed", "confidence": "medium", "evidence": "As a fiction critic for The New Leader, Commentary and Partisan Review for three decades she reviewed Bellow, Roth, Lessing and Singer with attention to character, sentence rhythm and moral seriousness."},
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "medium", "evidence": "She refused the then-fashionable deconstructive vocabulary and insisted on plain sentences in her criticism."},
+        {"category": "organizing", "skill": "Turn a mess into a system", "confidence": "medium", "evidence": "At The New Yorker copy desk she kept correspondence files alphabetised by writer and marked galleys in a small precise hand; the discipline of that room never left her."}
+      ],
+      "antiTags": [
+        {"category": "expressing", "skill": "Perform, present, or hit record", "evidence": "She preserved her Dylan Thomas letters in order but did not publish them in her lifetime and did not write about the affair; her method was private preservation rather than performance."}
+      ]
+    },
+    {
+      "name": "Gordon Lish",
+      "dominantCategories": ["nurturing", "creating", "clarifying"],
+      "playSkills": [
+        {"category": "nurturing", "skill": "Give patient, useful feedback", "confidence": "high", "evidence": "He cut Raymond Carver's What We Talk About When We Talk About Love by roughly 50 percent, with cuts on some stories of 70 percent or more, and new endings in his own hand."},
+        {"category": "nurturing", "skill": "Coach someone through a block", "confidence": "high", "evidence": "In his private workshop he drilled students on 'consecution,' the idea that each sentence had to generate the pressure producing the next, telling them the opening line was an attack not an opening."},
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "medium", "evidence": "From 1987 to 1995 he ran The Quarterly out of Knopf as a venue for writers from his workshops, printing Amy Hempel, Mary Robison and Christine Schutt early in their careers."},
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "medium", "evidence": "In the 2015 Paris Review interview he defended cutting as a form of love rather than violence, reframing a twenty-year controversy in one move."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Herbert Kohl",
+      "dominantCategories": ["nurturing", "clarifying", "expressing"],
+      "playSkills": [
+        {"category": "nurturing", "skill": "Hold space for a hard moment", "confidence": "high", "evidence": "In 36 Children (1967) he taught a Harlem sixth grade with no curriculum he believed in and foregrounded the children's own poems and essays in long blocks beside his journal."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "In I Won't Learn From You (1991) he introduced 'not-learning' as distinct from failure to learn, reframing decades of remedial pedagogy from deficit to resistance."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "medium", "evidence": "His NYRB and Rethinking Schools essays argued teaching could not be separated from structures around the classroom; he kept his ear on a single table while arguing with policy above it."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Rafe Esquith",
+      "dominantCategories": ["nurturing", "organizing", "creating"],
+      "playSkills": [
+        {"category": "nurturing", "skill": "Watch someone grow without taking credit", "confidence": "high", "evidence": "For more than twenty years his fifth-grade Hobart Shakespeareans, almost all English-language learners from immigrant poverty, performed a full unabridged Shakespeare play annually; Sir Ian McKellen called their grasp of the language better than many professionals."},
+        {"category": "organizing", "skill": "Build a workflow that runs itself", "confidence": "high", "evidence": "He opened Room 56 at 6:30 in the morning and kept going long after the official day ended; the banner 'There Are No Shortcuts' was the curriculum, not a slogan."},
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "He taught Kohlberg's six stages of moral development to ten-year-olds, giving them adult vocabulary to name which level they were operating from in any decision."},
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "medium", "evidence": "He documented the rehearsal process in his books line by line, scene by scene, producing Vivaldi performances and unabridged Shakespeare from children given time to actually practise."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Richard Feynman",
+      "dominantCategories": ["clarifying", "expressing", "analyzing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "On the Rogers Commission in February 1986 he dropped a piece of O-ring rubber into a glass of ice water on live TV and showed it lost resilience at cold temperatures, making the Challenger investigation public property."},
+        {"category": "clarifying", "skill": "Write a \"how it actually works\" explainer", "confidence": "high", "evidence": "The three-volume Feynman Lectures on Physics, transcribed from his 1961-63 Caltech course, are still in print and still assigned six decades later."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "high", "evidence": "His 1974 Cargo Cult Science commencement address set out scientific integrity as 'you must not fool yourself, and you are the easiest person to fool,' the most quoted sentence of his career."},
+        {"category": "analyzing", "skill": "Investigate a weird anomaly", "confidence": "medium", "evidence": "At Los Alamos he cracked combination safes holding classified documents and learned that many physicists set their combinations to e or pi, showing the security rested on people not being curious."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jerome Bruner",
+      "dominantCategories": ["clarifying", "synthesizing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Teach someone something they are stuck on", "confidence": "high", "evidence": "In The Process of Education (1960) he wrote 'any subject can be taught effectively in some intellectually honest form to any child at any stage of development,' rewiring twentieth-century curriculum design."},
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "He proposed the spiral curriculum in which a curriculum revisits the same core ideas at every level, replacing the linear textbook model."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "In Actual Minds, Possible Worlds (1986) he divided thought into paradigmatic and narrative modes, founding what is now called narrative psychology."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Harold McGee",
+      "dominantCategories": ["clarifying", "analyzing", "synthesizing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Write a \"how it actually works\" explainer", "confidence": "high", "evidence": "On Food and Cooking (1984, 2004) is a reference book with no recipes; chefs from Thomas Keller to Ferran Adrià keep copies next to the stove, not on a shelf."},
+        {"category": "analyzing", "skill": "Investigate a weird anomaly", "confidence": "high", "evidence": "He asked in a chapter on spices 'if plants are so well endowed with their own natural pesticides, then why isn't the world littered with the corpses of their victims?', treating the plant as a problem to interrogate."},
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "medium", "evidence": "He wrote that 'curiosity and understanding make their own contribution to mastery,' organising the book as invitations to ask what is happening rather than procedures to follow."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "medium", "evidence": "He began the book while writing a Yale PhD on Keats, wondering why no one had written the chemistry of the thing he cooked for dinner."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Marcus Aurelius",
+      "dominantCategories": ["clarifying", "synthesizing", "nurturing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "Book 5 of the Meditations opens with him talking himself out of bed 'to do what I was born for,' the earliest surviving example in Western literature of written self-talk as a morning practice."},
+        {"category": "synthesizing", "skill": "Make meaning out of a mess", "confidence": "high", "evidence": "He practised the 'view from above' in Book 7, deliberately zooming out so the crisis of the hour was seen in the scale of the universe, a core Stoic exercise Pierre Hadot documented."},
+        {"category": "nurturing", "skill": "Coach someone through a block", "confidence": "medium", "evidence": "In Book 2 he rehearses meeting 'the busybody, the ungrateful, arrogant, deceitful,' writing down the sentence so that when the thing happened later he already had the response ready."}
+      ],
+      "antiTags": [
+        {"category": "expressing", "skill": "Perform, present, or hit record", "evidence": "The Meditations was never published by Marcus, has no title, no dedication and no readership in mind; the private form was the point."}
+      ]
+    },
+    {
+      "name": "Epictetus",
+      "dominantCategories": ["clarifying", "nurturing", "synthesizing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "The Enchiridion opens 'Some things are up to us and some are not,' the single division from which the entire Stoic method flows."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "Enchiridion 5 gives students the pocket instrument 'It is not things that disturb us, but our judgements about things,' now the epigraph of most cognitive behavioural therapy textbooks."},
+        {"category": "nurturing", "skill": "Coach someone through a block", "confidence": "high", "evidence": "The Discourses are class notes from Arrian showing Epictetus interrupting himself, quarrelling with imagined interlocutors and giving homework to the sons of wealthy Romans."}
+      ],
+      "antiTags": [
+        {"category": "building", "skill": "Ship a rough v1", "evidence": "He wrote nothing himself; everything we have is his student Arrian's transcription."}
+      ]
+    },
+    {
+      "name": "Tim Gowers",
+      "dominantCategories": ["clarifying", "synthesizing", "connecting"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "In Mathematics: A Very Short Introduction (2002) he wrote that a proof shows conclusions follow from premises, with the validity of premises being an independent matter 'which can safely be left to philosophers.'"},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "high", "evidence": "In January 2009 he posted a problem on his blog and asked whether mathematics could be done collaboratively in an open comment thread; within weeks dozens of mathematicians contributed and produced a new proof published as D. H. J. Polymath."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "medium", "evidence": "He wrote 'although the prime numbers are rigidly determined, they somehow feel like experimental data,' capturing the strange position of a completely fixed object that behaves as if measured."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "George Steiner",
+      "dominantCategories": ["synthesizing", "clarifying", "expressing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "After Babel (1975) collapses its thesis into 'To understand is to decipher. To hear significance is to translate,' treating translation as the central problem of meaning itself."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "In After Babel he argued 'language is the main instrument of man's refusal to accept the world as it is,' defending the conditional tense as a moral instrument."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "Errata: An Examined Life (1997) describes his Parisian childhood in which his mother would begin a sentence in one language and finish it in another, treating multilingualism as the origin of his intellectual stance rather than a biographical accident."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Edith Grossman",
+      "dominantCategories": ["synthesizing", "creating", "expressing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "In Why Translation Matters (2010) she wrote 'fidelity is surely our highest aim, but a translation is not made with tracing paper. It is an act of critical interpretation.'"},
+        {"category": "creating", "skill": "Remix two things into something new", "confidence": "high", "evidence": "She spent two years translating Don Quixote (2003) and refused the antiqued vocabulary of earlier translators, asking how Cervantes would sound if writing in contemporary English."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "medium", "evidence": "She insisted repeatedly that 'what we read in a translation is the translator's writing,' arguing against the industry convention of treating the translator as transparent glass and wanting her name on the cover."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Gregory Rabassa",
+      "dominantCategories": ["synthesizing", "creating", "expressing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "García Márquez waited three years for him to translate Cien Años de Soledad and later told interviewers he preferred Rabassa's English version to his own Spanish original."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "His method was to open a book on page one and translate forward without reading the whole thing first, wanting to encounter the novel at the same pace as a first-time reader."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "If This Be Treason (2005) spends 180 pages demonstrating that every choice is a small betrayal, and that the only dishonest translator is the one who pretends otherwise."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Clifford Geertz",
+      "dominantCategories": ["synthesizing", "analyzing", "expressing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "The Interpretation of Cultures (1973) coined 'thick description' from Gilbert Ryle's wink-versus-twitch distinction, entering the vocabulary of every qualitative social science."},
+        {"category": "analyzing", "skill": "Find the pattern in messy data", "confidence": "high", "evidence": "In Deep Play he built an entire reading of Balinese society from the single event of running with locals during a police raid on an illegal cockfight."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "In Works and Lives (1988) he made the move explicit: anthropologists should be judged as authors and their texts analysed for voice and persuasion the way novels were."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Bruno Latour",
+      "dominantCategories": ["synthesizing", "analyzing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "We Have Never Been Modern (1991) argued the modern constitution officially separated nature and culture while unofficially producing hybrids at an accelerating pace."},
+        {"category": "analyzing", "skill": "Investigate a weird anomaly", "confidence": "high", "evidence": "In 1975 he spent two years inside Roger Guillemin's Salk Institute lab as an anthropologist in a village, showing scientific facts hardened from 'it is possible that' into 'TRH is Pyro-Glu-His-Pro-NH2' through rewriting sentences."},
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "In Reassembling the Social (2005) he pressed actor-network theory to its conclusion, instructing 'if you wish to know what I am talking about, just follow the actors themselves.'"}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Donella Meadows",
+      "dominantCategories": ["synthesizing", "analyzing", "clarifying"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "Her 1999 Leverage Points essay ranked twelve places to intervene in a system from parameters at the bottom to goals and paradigms at the top; the ordering was the argument."},
+        {"category": "analyzing", "skill": "Find the pattern in messy data", "confidence": "high", "evidence": "At 31 she led the team that built World3, a computer model of population, industrial output, pollution and resource use; The Limits to Growth sold 12 million copies in 37 languages."},
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "From 1985 to 2001 she wrote the weekly 750-word Global Citizen column syndicated in small regional papers, explaining a feedback loop using a single local story from her Vermont farm."},
+        {"category": "synthesizing", "skill": "Make meaning out of a mess", "confidence": "medium", "evidence": "Dancing with Systems closed thirty years of her work with the concession 'we can't control systems or figure them out. But we can dance with them,' making humility the real method."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Fritjof Capra",
+      "dominantCategories": ["synthesizing", "clarifying"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "The Tao of Physics (1975) placed a quantum theory passage alongside the Avatamsaka Sutra's net of Indra; the juxtaposition was the book's method."},
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "Sold over a million copies as the first bestselling popular account of modern physics drawing parallels with Eastern mysticism."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "medium", "evidence": "In The Web of Life (1996) he wrote that understanding the living world required shifting from objects to relationships, from parts to patterns."},
+        {"category": "nurturing", "skill": "Mentor someone earlier on the path", "confidence": "medium", "evidence": "From 1995 his Center for Ecoliteracy in Berkeley redesigned California school curricula around systems principles of cycles, flows, feedback and networks."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Mary Catherine Bateson",
+      "dominantCategories": ["synthesizing", "creating", "expressing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Make meaning out of a mess", "confidence": "high", "evidence": "Composing a Life (1989) treated interrupted careers, broken plans and reshaped priorities in five women's lives as 'a high-order craft of composition under constraint,' not a deficit of ambition."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "She argued that 'jazz musicians practice improvisation by the hour,' reframing improvisation as a craft of practice rather than the absence of preparation."},
+        {"category": "expressing", "skill": "Tell a story that lands", "confidence": "medium", "evidence": "In With a Daughter's Eye (1984) she refused to resolve Margaret Mead and Gregory Bateson into a clean narrative and let the contradictions of the household stand as an ethnographic field."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Mircea Eliade",
+      "dominantCategories": ["synthesizing", "clarifying", "analyzing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "In The Sacred and the Profane (1957) he coined 'hierophany' as the act of manifestation of the sacred, and built his entire comparative method of religious history from that single term."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "He argued sacred space was never homogeneous and that a temple, altar, hearth or marked tree was a way of saying 'here is where the world begins,' reading buildings and rituals across cultures without flattening them."},
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "medium", "evidence": "He coined hierophany deliberately because it implied 'no more than is implicit in its etymological content, that something sacred shows itself to us.'"}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "David Bohm",
+      "dominantCategories": ["synthesizing", "clarifying", "connecting"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "Wholeness and the Implicate Order (1980) argued for a deeper level of reality in which everything is enfolded into everything else, positioning fragmentation as a disease of thought."},
+        {"category": "connecting", "skill": "Facilitate a hard conversation", "confidence": "high", "evidence": "His On Dialogue workshops taught participants to notice an assumption, name it, and hold it visible without defending or abandoning it; Peter Senge's MIT work grew out of Bohm Dialogue groups."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "medium", "evidence": "From 1961-1986 his recorded conversations with Krishnamurti at Brockwood Park sat a working physicist with an Indian teacher treating the conversations as a method of inquiry."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Gregory Bateson",
+      "dominantCategories": ["synthesizing", "analyzing", "clarifying"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "Steps to an Ecology of Mind (1972) summarised thirty years of work with 'the major problems in the world are the result of the difference between how nature works and the way people think.'"},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "He pushed Darwin one step with 'the unit of survival is organism plus environment,' seeding ecological psychology and deep ecology in the 1970s."},
+        {"category": "analyzing", "skill": "Diagnose why something is not working", "confidence": "high", "evidence": "With Don Jackson, Jay Haley and John Weakland he developed the double bind theory of schizophrenia, moving diagnosis out of the individual brain and into the pattern of communication in the family."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Frances Yates",
+      "dominantCategories": ["synthesizing", "creating", "analyzing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "The Art of Memory (1966) traced the memory palace technique from Simonides of Ceos through Cicero, Aquinas, Giulio Camillo and Giordano Bruno, becoming the standard text on how premodern people stored knowledge in their heads."},
+        {"category": "analyzing", "skill": "Spot the thing everyone else missed", "confidence": "high", "evidence": "In Giordano Bruno and the Hermetic Tradition (1964) she argued Bruno was not a martyr of modern science but a Renaissance magus deep in the Hermetic tradition, reopening how the scientific revolution was connected to esoteric thought."},
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "medium", "evidence": "Her books recovered whole fields of Renaissance thought that had been lost to standard histories of science."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Martha Nussbaum",
+      "dominantCategories": ["synthesizing", "clarifying", "nurturing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "Upheavals of Thought (2001) defends a cognitive theory of emotion against the older view of emotions as blind impulses, arguing emotions are 'parts, highly complex and messy parts, of this creature's reasoning itself.'"},
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "Creating Capabilities (2011) set out ten central human capabilities developed over twenty years with Amartya Sen, now the backbone of the UN Human Development Index."},
+        {"category": "nurturing", "skill": "Hold space for a hard moment", "confidence": "medium", "evidence": "She reclaimed 'neediness' from negative judgement and shame, calling it one of the essential features of being human rather than something to be argued away."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Myles Horton",
+      "dominantCategories": ["connecting", "nurturing", "clarifying"],
+      "playSkills": [
+        {"category": "connecting", "skill": "Host a gathering", "confidence": "high", "evidence": "In July 1955, four months before the Montgomery bus incident, Rosa Parks attended a two-week Highlander workshop on Brown v. Board; she later said it was the first place in her life she had been in an integrated setting."},
+        {"category": "nurturing", "skill": "Hold space for a hard moment", "confidence": "high", "evidence": "He wrote Highlander had not told Rosa Parks what to do; 'it had given her a week to imagine what she might do,' setting conditions rather than delivering content."},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "high", "evidence": "He co-founded the Highlander Folk School in Tennessee in 1932, which trained 1930s labour organisers, 1950s civil rights activists including Parks and King, and later Appalachian community organisers."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "medium", "evidence": "He wrote that education was not information delivery but the practice of democracy, and that 'nothing will change until we throw off our dependence and act for ourselves.'"}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Paulo Freire",
+      "dominantCategories": ["connecting", "clarifying", "nurturing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "Pedagogy of the Oppressed (1968) named traditional education the 'banking concept' in which students are 'containers to be filled by the teacher,' coining the most-used shorthand in critical pedagogy."},
+        {"category": "connecting", "skill": "Facilitate a hard conversation", "confidence": "high", "evidence": "In his northeast Brazil literacy campaigns peasants learned to read by starting from the words that named their actual work, with teacher and student investigating the world together."},
+        {"category": "nurturing", "skill": "Mentor someone earlier on the path", "confidence": "high", "evidence": "In Letters to Cristina (1996) he wrote that the teacher who truly respects her students is the one who 'becomes their student' while remaining their teacher; the letters form is itself the argument that pedagogy is relationship not delivery."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "William Shakespeare",
+      "dominantCategories": ["expressing", "creating", "clarifying"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Tell a story that lands", "confidence": "high", "evidence": "The 'To be, or not to be' soliloquy from Hamlet Act III has been translated into almost every written language and remains the most quoted passage in English literature."},
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "high", "evidence": "He staged a mind working through the suicide question aloud in meter in front of a paying audience at the Globe, a decision earlier literature had not made."},
+        {"category": "expressing", "skill": "Turn a message into a moment", "confidence": "high", "evidence": "The Saint Crispin's Day speech in Henry V ('we few, we happy few, we band of brothers') is a textbook example of what Marshall Ganz would later call a story of us and story of now."},
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "medium", "evidence": "39 plays and 154 sonnets between 1589 and 1613, working with the Lord Chamberlain's Men at the Globe and Blackfriars theatres."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Rumi",
+      "dominantCategories": ["expressing", "synthesizing", "nurturing"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "high", "evidence": "'Out beyond ideas of wrongdoing and rightdoing, there is a field. I'll meet you there.' The four lines are the most widely quoted Rumi passage in English and appear on more meditation-hall walls than any other passage of Persian poetry."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "The Masnavi opens with the reed cut from the reed bed as the thesis for 25,000 more couplets; longing for origin expressed through loss is his signature move."},
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "When Shams of Tabriz disappeared in 1244 Rumi composed the Divan-e Shams, tens of thousands of verses addressed to his missing friend; the loss seems to have opened the language instead of closing it."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Ursula K. Le Guin",
+      "dominantCategories": ["creating", "clarifying", "nurturing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "Author of the Earthsea cycle, The Left Hand of Darkness, The Dispossessed and multiple essay collections across five decades."},
+        {"category": "nurturing", "skill": "Give patient, useful feedback", "confidence": "high", "evidence": "In Steering the Craft (1998) she wrote 'the chief duty of a narrative sentence is to lead to the next sentence,' the opposite of the beginner-workshop lesson to make each sentence beautiful."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "She gave students the test 'does it sound right?' for every question about grammar, punctuation, usage and rhythm, arguing the ear was the instrument."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "medium", "evidence": "She wrote 'a story is made out of language, and language can and does express delight in itself just as music does,' refusing the utilitarian view of prose as a pipe for plot."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Haruki Murakami",
+      "dominantCategories": ["creating", "organizing", "expressing"],
+      "playSkills": [
+        {"category": "organizing", "skill": "Build a workflow that runs itself", "confidence": "high", "evidence": "Up at 4 a.m., five to six hours of writing, a ten kilometre run, in bed by 9 p.m., repeated without variation for months; the problem with a long novel is whether you can sit at the desk for three or four years."},
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "Author of Norwegian Wood, The Wind-Up Bird Chronicle, Kafka on the Shore and 1Q84 after turning to fiction at 29 following a jazz bar career."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "In Novelist as a Vocation (2022) he argues writing novels is 'physical labour of an almost manual kind,' closer to a long trade apprenticeship than a delicate aesthete."},
+        {"category": "nurturing", "skill": "Coach someone through a block", "confidence": "medium", "evidence": "He adopted 'pain is inevitable, suffering is optional' as a working principle for both running and writing a long novel, teaching the muscle of showing up."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Octavia Butler",
+      "dominantCategories": ["creating", "synthesizing", "organizing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "In a 1988 notebook held at the Huntington she wrote 'I shall be a bestselling writer... So be it. So see it,' versions of an affirmation she wrote for years before it came true."},
+        {"category": "organizing", "skill": "Build a workflow that runs itself", "confidence": "high", "evidence": "Her handwritten rules said 'forget inspiration. Habit is more dependable'; she worked day jobs and got up at 2 or 3 a.m. to write before her shift."},
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "high", "evidence": "Kindred (1979) refuses genre courtesy of protecting the reader from the body; the protagonist loses an arm because Butler wanted the history of slavery physically present to a generation that could not imagine it."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "medium", "evidence": "First science fiction writer to receive a MacArthur Genius Grant; the Patternist, Xenogenesis and Parable series each bridge science fiction with race, power and biological ethics."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Toni Cade Bambara",
+      "dominantCategories": ["creating", "connecting", "expressing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "Author of Gorilla, My Love (1972), The Sea Birds Are Still Alive (1977) and the novel The Salt Eaters (1980); edited The Black Woman: An Anthology (1970)."},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "high", "evidence": "She insisted writing was community work rather than self-expression and moved from Harlem to Atlanta to take up filmmaking with Louis Massiah, treating the camera as a second form of the same practice."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "high", "evidence": "The Salt Eaters opens with a healer asking a woman who has just attempted suicide 'Are you sure, sweetheart, that you want to be well?' The 300 pages are a spiral through personal, political and cosmic trauma."},
+        {"category": "creating", "skill": "Remix two things into something new", "confidence": "medium", "evidence": "She adopted the surname Cade from a sketchbook signature in her great-grandmother's trunk to mark her lineage of Black women she would never meet."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Philip Glass",
+      "dominantCategories": ["creating", "synthesizing", "building"],
+      "playSkills": [
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "Composer of Einstein on the Beach (1976), Akhnaten, Koyaanisqatsi and hundreds of film scores, keeping the Philip Glass Ensemble alive through the 1970s."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "In 1965 transcribing Indian rhythmic patterns for Ravi Shankar's Chappaqua score, he realised Western meter cut time into boxes while Indian patterns built longer structures from additive cells; this is the origin of his minimalist method."},
+        {"category": "building", "skill": "Get your hands dirty on a real object", "confidence": "high", "evidence": "Until age 41 he supported himself driving a cab, moving furniture, and working as an unlicensed plumber; Words Without Music includes a disquisition on fixing cast-iron drains with lead and oakum inside a book about contemporary music."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "medium", "evidence": "He mortgaged the future of the company to rent the hall for Einstein on the Beach at Avignon and the Met; he was driving a cab the week after the premiere while reviews were rapturous."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Anni Albers",
+      "dominantCategories": ["creating", "designing", "nurturing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "high", "evidence": "In 1949 she became the first textile artist to have a solo exhibition at the Museum of Modern Art, treating thread as a medium with the same seriousness a painter gave pigment."},
+        {"category": "designing", "skill": "Polish the small details others miss", "confidence": "high", "evidence": "In On Weaving (1965) she called weaving 'the event of a thread,' meaning a single strand is a line of force and the weave is the record of a decision made at every crossing."},
+        {"category": "nurturing", "skill": "Give patient, useful feedback", "confidence": "high", "evidence": "Running the Black Mountain weaving workshop with almost no equipment, she made students weave grasses and bark before they were allowed near commercial yarn, arguing the constraint was the training."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "medium", "evidence": "She wrote that reducing the range of tactile experience as we reduce 'the necessity to form things ourselves' makes us 'grow lopsided,' framing touch as a faculty that can atrophy."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Andrei Tarkovsky",
+      "dominantCategories": ["creating", "synthesizing", "designing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "high", "evidence": "In Sculpting in Time he gave his method its image: the filmmaker cuts from 'a lump of time made up of an enormous, solid cluster of living facts,' an explicit rebuke to filmmaking as storytelling."},
+        {"category": "designing", "skill": "Shape how a moment feels", "confidence": "high", "evidence": "He argued 'the dominant, all-powerful factor of the film image is rhythm,' holding long takes of five to nine minutes so that time itself registered inside the frame."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "He wrote 'the artist exists because the world is not perfect. Art would be useless if the world were perfect,' a defence of art made under Soviet censorship he lived with for his entire career."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "His Martyrolog diary runs to 400 pages of domestic complaints, budget anxieties, project drafts and religious reflection in the same paragraph."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Kenya Hara",
+      "dominantCategories": ["designing", "synthesizing", "expressing"],
+      "playSkills": [
+        {"category": "designing", "skill": "Craft a space people want to stay in", "confidence": "high", "evidence": "As art director of Muji since 2002 he has built the brand on the 'empty vessel' as governing image, with products deliberately unbranded so the customer's life can be the content."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "In White (2009) he wrote 'white denotes emptiness... it indicates a condition which will likely be filled with content in the future,' reframing Japanese use of empty space not as minimalism but as invitation."},
+        {"category": "designing", "skill": "Shape how a moment feels", "confidence": "high", "evidence": "For the 2003 Muji campaign he sent a photographer to shoot a tiny figure in the Bolivian salt flats with no product and no slogan, making the emptiness itself the product promise."},
+        {"category": "expressing", "skill": "Turn a message into a moment", "confidence": "medium", "evidence": "He writes and lectures using the empty vessel image to explain that 'the mechanism of communication is activated when we look at an empty vessel in terms of its capability to be filled.'"}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Kevin Lynch",
+      "dominantCategories": ["designing", "analyzing", "clarifying"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Find the pattern in messy data", "confidence": "high", "evidence": "He interviewed residents of Boston, Jersey City and Los Angeles asking them to draw their city from memory, deriving the five-element vocabulary of paths, edges, districts, nodes and landmarks from the hand-drawn maps."},
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "high", "evidence": "He defined imageability as 'that quality in a physical object which gives it a high probability of evoking a strong image in any given observer,' giving planners a testable criterion."},
+        {"category": "designing", "skill": "Shape how a moment feels", "confidence": "high", "evidence": "He argued legibility, the ease with which a city's parts could be recognised, was close to a civic right; a city you could not read was a city you could not fully use."},
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "medium", "evidence": "The Image of the City (1960) became the foundational text of urban wayfinding research and shifted urban design toward an empathy-based method."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Achille Castiglioni",
+      "dominantCategories": ["designing", "creating", "analyzing"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Spot the thing everyone else missed", "confidence": "high", "evidence": "His maxim 'design demands observation' was literal: he kept a collection of suction cups, bicycle seats, tractor seats and wooden stools and forced students to look until they could say something precise."},
+        {"category": "creating", "skill": "Remix two things into something new", "confidence": "high", "evidence": "The Mezzadro stool (1957) is literally a farm tractor seat on a single steel stem; the Arco lamp (1962) solved 'ceiling lamp without drilling the ceiling' with a Carrara marble base and a long arching arm."},
+        {"category": "designing", "skill": "Polish the small details others miss", "confidence": "high", "evidence": "The Arco's marble base has a hole not for decoration but so two people could slip a broom handle through and carry the 65-kilogram block across an apartment; he won the Compasso d'Oro nine times."},
+        {"category": "nurturing", "skill": "Coach someone through a block", "confidence": "medium", "evidence": "He told students at Politecnico di Milano 'if you are not curious, forget it. If you are not interested in others, being a designer is not the right job for you.'"}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Marshall Ganz",
+      "dominantCategories": ["influencing", "synthesizing", "connecting"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "His Public Narrative framework of self, us and now has been taught at the Kennedy School since the early 2000s and used by the 2008 Obama Camp Obama training, South African and Irish movements and hundreds of non-profits."},
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "He mapped the three stories directly onto Rabbi Hillel's three questions he had learned as a child, hiding an ancient source inside modern political pedagogy."},
+        {"category": "influencing", "skill": "Rally a group behind an idea", "confidence": "high", "evidence": "In Why David Sometimes Wins (2009) he argued the UFW won 1965-1972 not because it was larger or richer but because it used its tools more strategically: 'David prevails by wisely using the tools available to him.'"},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "medium", "evidence": "He spent 28 years as a front-line UFW organiser before completing his PhD and joining the Harvard Kennedy School."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Marshall McLuhan",
+      "dominantCategories": ["synthesizing", "clarifying", "influencing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "In Understanding Media (1964) he argued 'the medium is the message': the social consequences of any medium come from the new scale it introduces, not from its content."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "He used the example of the electric light bulb, which has no content but still allows human activity to continue after dark, to make the abstract thesis concrete; the example became the most cited in the book."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "The Gutenberg Galaxy (1962), Understanding Media (1964) and The Medium Is the Massage (1967) founded the discipline of media studies."},
+        {"category": "expressing", "skill": "Turn a message into a moment", "confidence": "medium", "evidence": "With Quentin Fiore and Jerome Agel he produced The Medium Is the Massage as a paperback of bold typography and blank spreads that sold nearly a million copies and remains the model for designed non-fiction."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Carl von Clausewitz",
+      "dominantCategories": ["strategizing", "analyzing", "synthesizing"],
+      "playSkills": [
+        {"category": "strategizing", "skill": "Design the game before playing it", "confidence": "high", "evidence": "On War argues 'war is nothing but the continuation of policy with other means,' insisting war never stopped being a political instrument and any general who forgot that was a menace to his own state."},
+        {"category": "analyzing", "skill": "Spot the thing everyone else missed", "confidence": "high", "evidence": "He introduced 'friction' in Book One: 'everything in war is very simple, but the simplest thing is difficult. The difficulties accumulate and end by producing a kind of friction.'"},
+        {"category": "strategizing", "skill": "Call the smart play under pressure", "confidence": "high", "evidence": "He wrote 'many intelligence reports in war are contradictory; even more are false, and most are uncertain,' arguing strategic judgement was the ability to decide well while knowing you might be wrong; this is the 'fog of war.'"},
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "medium", "evidence": "Vom Kriege, edited and published posthumously by his wife Marie in 1832-1834, is the foundational text of modern strategic thought."}
+      ],
+      "antiTags": []
+    }
+  ]
+}

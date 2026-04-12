@@ -194,7 +194,7 @@ export function hasPendingPlaySkillsData() {
  *   { path, keptPlacemakes, userName, completedAt }
  *
  * Writes to:
- *   - nikigai_clusters (cluster_stage: 'get_started')
+ *   - nikigai_clusters (cluster_stage: 'final', step_id: 'get_started')
  *   - user_stage_progress (marks onboarding complete)
  *   - auth.users metadata (display_name, if not already set)
  */
@@ -224,12 +224,13 @@ export async function persistPlaySkillsOnboarding(userId) {
       .eq('step_id', 'get_started')
 
     // Create a flow session
-    const { data: session } = await supabase.from('flow_sessions').insert({
+    const { data: session, error: sessionError } = await supabase.from('flow_sessions').insert({
       user_id: userId,
       flow_type: 'get_started_playskills',
       status: 'completed',
       completed_at: new Date().toISOString(),
     }).select('id').single()
+    if (sessionError || !session) throw sessionError || new Error('Failed to create session')
 
     const rows = keptPlacemakes.map(item => ({
       session_id: session.id,

@@ -16,10 +16,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import usePriorityTab from '../hooks/usePriorityTab'
-import PriorityMiniAssessment from './PriorityMiniAssessment'
-import PriorityLayerCard from './PriorityLayerCard'
 import PriorityOnboardingCard from './PriorityOnboardingCard'
-import PriorityLayerCheckin from './PriorityLayerCheckin'
 import PriorityWeekPicker from './PriorityWeekPicker'
 import GroanCompletionModal from './GroanCompletionModal'
 import HealingCompletionModal from './HealingCompletionModal'
@@ -42,8 +39,6 @@ export default function PriorityTab({
 }) {
   const {
     currentState,
-    priorityLayer,
-    layerDisplay,
     skills,
     problems,
     personas,
@@ -57,15 +52,10 @@ export default function PriorityTab({
     isOnboardingComplete,
     hasAcceptedChallenge,
     essenceProfile,
-    checkinDoneThisWeek,
     nudgeLayer,
     clearNudge,
-    completeCheckin,
-    finalizeCheckin,
     confirmWeek,
     editWeek,
-    startReassess,
-    finishReassess,
     refreshData,
     refreshAcceptedChallenge,
     refreshCustomPhoto,
@@ -101,13 +91,6 @@ export default function PriorityTab({
     })
     return { done, total }
   }, [currentState, weeklyPicks, selectedHealingQuests, isQuestCompletedToday])
-
-  const handleAssessmentComplete = async (computedLayer) => {
-    // Wait for stage progress to update before clearing force state,
-    // otherwise hasTensionScores is still false and we flash back to assessment
-    await onStageProgressUpdate?.()
-    finishReassess()
-  }
 
   const renderHealingRow = (quest) => {
     const completed = isQuestCompletedToday?.(quest.id, quest) || false
@@ -186,45 +169,6 @@ export default function PriorityTab({
     )
   }
 
-  // ── State 1: Assessment ──
-  if (currentState === 'assessment') {
-    return (
-      <div className="priority-tab">
-        <PriorityMiniAssessment
-          userId={userId}
-          onComplete={handleAssessmentComplete}
-        />
-      </div>
-    )
-  }
-
-  // ── Layer Check-in (weekly graduation gate) ──
-  if (currentState === 'layer_checkin') {
-    return (
-      <div className="priority-tab">
-        <PriorityLayerCheckin
-          priorityLayer={priorityLayer}
-          stageProgress={stageProgress}
-          onComplete={async (result) => {
-            const graduation = await completeCheckin(true, result.scores)
-            if (!graduation.layerChanged) {
-              await onStageProgressUpdate?.()
-            }
-            // If layerChanged, stageProgress refresh deferred to onCelebrationDone
-            return graduation
-          }}
-          onNotYet={async () => {
-            await completeCheckin(false)
-          }}
-          onCelebrationDone={async () => {
-            finalizeCheckin()
-            await onStageProgressUpdate?.()
-          }}
-        />
-      </div>
-    )
-  }
-
   // ── State 2: Picker ──
   if (currentState === 'picker') {
     return (
@@ -239,12 +183,6 @@ export default function PriorityTab({
             <button className="pt-nudge-dismiss" onClick={clearNudge}>&times;</button>
           </div>
         )}
-        <PriorityLayerCard
-          layer={priorityLayer}
-          recommendations={recommendations}
-          onReassess={startReassess}
-          userId={userId}
-        />
         <PriorityWeekPicker
           skills={skills}
           userId={userId}
@@ -263,13 +201,6 @@ export default function PriorityTab({
 
   return (
     <div className="priority-tab">
-      <PriorityLayerCard
-        layer={priorityLayer}
-        recommendations={recommendations}
-        onReassess={startReassess}
-        userId={userId}
-      />
-
       <h2 className="pt-weekly-heading">Weekly Intentions</h2>
 
       {/* Progress bar */}

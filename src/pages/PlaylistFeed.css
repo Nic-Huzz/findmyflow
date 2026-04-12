@@ -1,0 +1,88 @@
+/* PlaylistFeed — public Play-List Challenge feed page */
+
+.pf-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1a0b2e 0%, #0f0820 100%);
+  color: #fff;
+  padding-bottom: 80px;
+}
+
+.pf-header {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 48px 20px 32px;
+  text-align: center;
+}
+
+.pf-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #E9A23B;
+  margin-bottom: 10px;
+}
+
+.pf-title {
+  font-size: 38px;
+  font-weight: 800;
+  margin: 0 0 12px;
+  background: linear-gradient(135deg, #ffffff 0%, #E9A23B 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+
+.pf-subtitle {
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 20px;
+}
+
+.pf-cta-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #E9A23B 0%, #f4b942 100%);
+  color: #1a0b2e;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.pf-cta-btn:active {
+  transform: scale(0.97);
+}
+
+.pf-main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.pf-loading,
+.pf-loading-more,
+.pf-empty,
+.pf-end,
+.pf-error {
+  padding: 24px 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+}
+
+.pf-error {
+  color: #ff6b6b;
+}
+
+@media (max-width: 480px) {
+  .pf-header {
+    padding: 32px 16px 24px;
+  }
+  .pf-title {
+    font-size: 30px;
+  }
+}

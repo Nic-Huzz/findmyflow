@@ -105,7 +105,7 @@ export default function SwipeCardDeck({
     if (diff > 50) {
       handleReject()
     } else if (diff < -50) {
-      goBack()
+      handleKeep()
     }
   }
 

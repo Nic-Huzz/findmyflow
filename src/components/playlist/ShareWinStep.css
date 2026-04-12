@@ -1,0 +1,175 @@
+/* ShareWinStep — final celebration share step in GroanCompletionModal */
+
+.sws-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 0;
+}
+
+.sws-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+}
+
+.sws-subtitle {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.sws-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 32px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(233, 162, 59, 0.5);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.sws-picker:hover,
+.sws-picker:active {
+  background: rgba(233, 162, 59, 0.1);
+  border-color: #E9A23B;
+}
+
+.sws-picker-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.sws-picker-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #E9A23B;
+}
+
+.sws-picker-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sws-preview-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+}
+
+.sws-preview {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  display: block;
+}
+
+.sws-replace-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.sws-caption-wrap {
+  position: relative;
+}
+
+.sws-caption {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.sws-caption:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+.sws-caption::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sws-char-count {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+.sws-error {
+  color: #ff6b6b;
+  font-size: 13px;
+  margin: 0;
+  text-align: center;
+}
+
+.sws-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.sws-share-btn {
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #E9A23B 0%, #f4b942 100%);
+  color: #1a0b2e;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.sws-share-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.sws-share-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sws-skip-btn {
+  padding: 12px 20px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sws-skip-btn:hover {
+  color: #fff;
+}

@@ -5,6 +5,7 @@
 .idt-flow {
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem 1.5rem;
@@ -13,6 +14,15 @@
 .idt-flow.idt-swipe-view {
   padding: 1.5rem;
   align-items: stretch;
+}
+
+.idt-flow .card,
+.idt-flow .idt-container .card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 1.5rem;
+  color: white;
 }
 
 .idt-container {

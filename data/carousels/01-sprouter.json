@@ -1,0 +1,110 @@
+{
+  "id": "01-sprouter",
+  "name": "Sprouter Sweet Spot",
+  "template": "graph-series",
+
+  "brand": {
+    "primary": "#5e17eb",
+    "accent": "#E9A23B",
+    "headingFont": "Fraunces",
+    "bodyFont": "Outfit",
+    "handle": "@_huzz",
+    "brandName": "Find My Flow",
+    "tagline": "Get Paid To Have Fun"
+  },
+
+  "diagram": {
+    "title": ["I've observed a pattern on the", "path to finding fulfilment"],
+    "xAxis": "SELF-KNOWLEDGE",
+    "yAxis": "ACTION",
+    "zones": [
+      {
+        "name": "UNFULFILMENT",
+        "subtitle": "Busy but empty",
+        "position": "top-left",
+        "color": "white",
+        "arrow": { "path": "M 200,830 Q 220,540 330,340", "color": "white" }
+      },
+      {
+        "name": "HEAD FULL OF DREAMS",
+        "subtitle": "Aware but stuck",
+        "position": "bottom-right",
+        "color": "white",
+        "arrow": { "path": "M 420,360 Q 580,540 710,720", "color": "white" }
+      },
+      {
+        "name": "SELF-ACTUALISATION",
+        "subtitle": "Action meets self-knowledge",
+        "position": "mid-right-high",
+        "color": "accent",
+        "arrow": { "type": "straight", "x": 760, "y1": 730, "y2": 470, "color": "accent" }
+      }
+    ]
+  },
+
+  "slides": [
+    {
+      "type": "hook",
+      "tag": "Find My Flow",
+      "headline": "Does work feel <accent>heavy</accent> instead of <accent>fun?</accent>",
+      "body": null,
+      "emphasis": null,
+      "image": "slide-1-hook.jpg",
+      "imageScene": "Pixar 3D cinematic style. The character at a crossroads — grey corporate path on the left with suited workers in rain, warm golden creative path on the right with vibrant colors and sunlight. Character standing at the fork, geometric kimono visible."
+    },
+    {
+      "type": "diagram",
+      "image": "slide-2-pattern.jpg",
+      "imageScene": "Pixar 3D cinematic style. Aerial view of a winding journey map through varied landscapes — grey industrial area, foggy library plateau, golden hilltop. Character visible as small figure. Warm to cool color gradient across the terrain."
+    },
+    {
+      "type": "zone",
+      "tag": "Unfulfilment",
+      "headline": "Busy. Productive. <accent>Quietly empty.</accent>",
+      "body": "School teaches us how to work, without ever giving us the self-knowledge to decide what that work is.",
+      "emphasis": null,
+      "bodyStyle": "bold",
+      "image": "slide-2-misguided.jpg",
+      "imageScene": "Pixar 3D cinematic style. The character running on a corporate hamster wheel inside a grey office. Other workers on identical wheels around him. Clocks everywhere. His geometric kimono shirt just barely visible under a grey suit jacket. Cold blue-grey fluorescent lighting."
+    },
+    {
+      "type": "crisis",
+      "tag": "The Crisis",
+      "headline": "Then something <accent>breaks.</accent>",
+      "body": "Burnout. Breakdown. The moment the constructed life stops working.",
+      "emphasis": "Your call to adventure.",
+      "image": "slide-crisis.jpg",
+      "imageScene": "Pixar 3D cinematic style. The character slumped at a corporate desk late at night, exhausted, head in one hand. Thought bubble above showing a magical winding golden path through enchanted hills at sunrise, with a miniature version of himself at the start of the path looking ahead with wonder. Cold office vs warm dream contrast."
+    },
+    {
+      "type": "zone",
+      "tag": "Head Full of Dreams",
+      "headline": "Head full of <accent>dreams.</accent>",
+      "body": "Your vision lights you up. But taking action feels scary.",
+      "emphasis": "You fear judgement, failure, not being good enough.",
+      "image": "slide-3-paralysis.jpg",
+      "imageScene": "Pixar 3D cinematic style. The character frozen in a vast library, surrounded by towering shelves of books and floating course certificates. Dreams and visions swirl above as translucent golden images. He sits cross-legged on the floor, overwhelmed, paralysed by options. Warm dreams above, cold reality below."
+    },
+    {
+      "type": "zone",
+      "tag": "Finding Flow",
+      "headline": "<accent>Self-Actualisation.</accent>",
+      "body": "Your work lights you up. Action comes from excitement, not hustle for a future desire.",
+      "emphasis": "You find yourself in flow.",
+      "image": "slide-finding-flow.jpg",
+      "imageScene": "Pixar 3D cinematic style. The character dancing ecstatically with arms raised, eyes closed in bliss, wearing glowing silent disco headphones. Hundreds of diverse people around him also dancing with colorful glowing headphones. Open outdoor meadow at golden hour sunset, bokeh light particles like fireflies, warm community energy."
+    },
+    {
+      "type": "cta",
+      "tag": "Find My Flow",
+      "headline": "Keen to find your flow and be <accent>paid to have fun?</accent>",
+      "body": "For the next 100 days I\u2019m sharing how",
+      "emphasis": null,
+      "button": "@_huzz",
+      "image": "slide-4-diagonal.jpg",
+      "imageScene": "Pixar 3D cinematic style. The character's hand extended toward the viewer in a warm inviting gesture, golden light behind him, geometric kimono flowing. Sunrise over rolling hills. Welcoming, personal, like an invitation to join the journey."
+    }
+  ],
+
+  "caption": "The pattern I keep seeing on the path from burnout to flow.\n\nMost people are stuck in one of three zones:\n1. Unfulfilment \u2014 busy but building the wrong life\n2. Head Full of Dreams \u2014 aware but paralysed\n3. Finding Flow \u2014 action from excitement, not hustle\n\nWhich zone are you in? Drop 1, 2, or 3 below.\n\nFor the next 100 days I\u2019m sharing the maps that got me out of burnout and into flow. Follow along.\n\n#findmyflow #burnout #flowstate #selfknowledge #careerchange #purposedriven"
+}

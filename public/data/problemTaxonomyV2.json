@@ -93,6 +93,13 @@
           "example": "Like Oprah Winfrey, molested as a child and pregnant at 14, turning that trauma into radical honesty on television and modelling vulnerability for millions",
           "anchorPerson": "Oprah Winfrey",
           "anchorSource": "founder"
+        },
+        {
+          "id": "voice_used_as_prop",
+          "label": "Being used as inspiration for a struggle you didn't choose",
+          "example": "Like Stella Young coining 'inspiration porn' to name the practice of turning disabled people into motivational posters for people who can walk",
+          "anchorPerson": "Stella Young",
+          "anchorSource": "nonfounder"
         }
       ]
     },
@@ -131,6 +138,20 @@
           "example": "Like Arianna Huffington collapsing from exhaustion and breaking her cheekbone on her desk, then spending years building Thrive Global to change how the world thinks about burnout",
           "anchorPerson": "Arianna Huffington",
           "anchorSource": "founder"
+        },
+        {
+          "id": "pain_relationship_invisible",
+          "label": "Crying out for connection in a language the other person can't hear",
+          "example": "Like Sue Johnson discovering that couples fighting about dishes are actually screaming 'Are you there for me?' and building Emotionally Focused Therapy to translate the real conversation",
+          "anchorPerson": "Sue Johnson",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "pain_suffering_no_name",
+          "label": "Suffering from something you've been trained not to name",
+          "example": "Like Terry Real writing I Don't Want to Talk About It, the first book to name male depression as a hidden epidemic that men are socialised to deny",
+          "anchorPerson": "Terry Real",
+          "anchorSource": "nonfounder"
         }
       ]
     },
@@ -207,6 +228,13 @@
           "example": "Like Saul Alinsky building the modern template for community organising rooted in institutions people already belonged to, like parishes and unions, not abstract movements",
           "anchorPerson": "Saul Alinsky",
           "anchorSource": "nonfounder"
+        },
+        {
+          "id": "life_criminalised_pain",
+          "label": "Being punished for being in pain",
+          "example": "Like Johann Hari travelling 30,000 miles across nine countries for Chasing the Scream and concluding that the opposite of addiction is not sobriety but connection",
+          "anchorPerson": "Johann Hari",
+          "anchorSource": "nonfounder"
         }
       ]
     },
@@ -252,6 +280,13 @@
           "example": "Like Stewart Butterfield building Slack to feel human in a category that was grey and joyless, winning users bottom-up rather than through procurement departments",
           "anchorPerson": "Stewart Butterfield",
           "anchorSource": "founder"
+        },
+        {
+          "id": "stupid_money_shame",
+          "label": "Pretending you understand money because nobody taught you and you're too ashamed to ask",
+          "example": "Like Tiffany Aliche losing everything in a financial scam, then building The Budgetnista to teach money in the plain, warm voice she wished someone had used with her",
+          "anchorPerson": "Tiffany Aliche",
+          "anchorSource": "nonfounder"
         }
       ]
     },
@@ -290,6 +325,13 @@
           "example": "Like Andrew Carnegie building 2,509 public libraries because he believed a library had changed his own life and could change anyone's",
           "anchorPerson": "Andrew Carnegie",
           "anchorSource": "founder"
+        },
+        {
+          "id": "locked_world_not_designed",
+          "label": "A world built as if you don't exist",
+          "example": "Like Judith Heumann spending her childhood fighting for the right to attend public school in a wheelchair, then leading the 504 Sit-In that forced the US government to sign disability rights into law",
+          "anchorPerson": "Judith Heumann",
+          "anchorSource": "nonfounder"
         }
       ]
     },
@@ -380,6 +422,20 @@
           "example": "Like Jane Jacobs attacking the entire mid-century consensus from her apartment, then leading the fight that defeated Robert Moses's ten-lane expressway through Lower Manhattan",
           "anchorPerson": "Jane Jacobs",
           "anchorSource": "nonfounder"
+        },
+        {
+          "id": "left_aging_efficiency",
+          "label": "Growing old in a building designed for efficiency instead of life",
+          "example": "Like Bill Thomas replacing fluorescent-lit nursing homes with the Eden Alternative, adding plants, animals, and children because loneliness kills faster than most diseases",
+          "anchorPerson": "Bill Thomas",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "left_recovery_outdated",
+          "label": "The only help available being designed for someone nothing like you",
+          "example": "Like Holly Whitaker building Tempest after realising recovery programmes designed for 1930s white men were the only option for a millennial woman in 2016",
+          "anchorPerson": "Holly Whitaker",
+          "anchorSource": "nonfounder"
         }
       ]
     },
@@ -417,6 +473,13 @@
           "label": "Chasing winning so hard you forget to build the character that makes winning worth it",
           "example": "Like John Wooden building the Pyramid of Success around character traits, not basketball skills, and telling players their career should read as a life first, a game second",
           "anchorPerson": "John Wooden",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "forgot_nobody_teaches",
+          "label": "The most important things in life being the ones nobody teaches you",
+          "example": "Like Alain de Botton founding The School of Life because philosophy, love, work, and death are left out of every curriculum while algebra is mandatory",
+          "anchorPerson": "Alain de Botton",
           "anchorSource": "nonfounder"
         }
       ]

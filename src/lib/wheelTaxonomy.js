@@ -339,6 +339,7 @@ export const PROBLEM_SEGMENTS = [
       'Speaking the truth and losing your country for it',
       'Being forced to hide who you really are just to be accepted',
       'Carrying shame in silence because nobody models speaking about it',
+      'Being used as inspiration for a struggle you didn\'t choose',
     ],
   },
   {
@@ -355,9 +356,11 @@ export const PROBLEM_SEGMENTS = [
     icon: '💔',
     placemakes: [
       'A body in constant pain with no way to tell anyone what it feels like',
-      'People dying in pain because the building they are in was not designed for dying',
-      'Poor people dying of treatable diseases because someone decided they were not worth treating',
+      'People dying in pain because the building they\'re in wasn\'t designed for dying',
+      'Poor people dying of treatable diseases because someone decided they weren\'t worth treating',
       'Burnout being treated as a badge of honour until your body forces you to stop',
+      'Crying out for connection in a language the other person can\'t hear',
+      'Suffering from something you\'ve been trained not to name',
     ],
   },
   {
@@ -374,7 +377,7 @@ export const PROBLEM_SEGMENTS = [
     icon: '🌍',
     placemakes: [
       'The natural world being poisoned while governments look the other way',
-      'The climate crisis being treated as tomorrow\'s problem when it is already here',
+      'The climate crisis being treated as tomorrow\'s problem when it\'s already here',
       'Businesses profiting from nature while destroying it',
       'Our language making it impossible to treat the natural world as alive',
     ],
@@ -396,6 +399,7 @@ export const PROBLEM_SEGMENTS = [
       'An entire population being dehumanized by law based on the colour of their skin',
       'The room getting quieter because everyone stopped pushing back',
       'Ordinary people having no power against the institutions that run their lives',
+      'Being punished for being in pain',
     ],
   },
   {
@@ -413,9 +417,10 @@ export const PROBLEM_SEGMENTS = [
     placemakes: [
       'Important knowledge buried behind jargon nobody can get through',
       'The whole world being wrong about basic facts and nobody correcting them',
-      'Mathematics being taught so badly that people decide they are not smart enough',
+      'Mathematics being taught so badly that people decide they\'re not smart enough',
       'Being afraid to cook because nobody taught you the why, only the recipe',
       'Tools built for the buyer, not the user',
+      'Pretending you understand money because nobody taught you and you\'re too ashamed to ask',
     ],
   },
   {
@@ -431,10 +436,11 @@ export const PROBLEM_SEGMENTS = [
     color: '#4D96FF',
     icon: '🔒',
     placemakes: [
-      'Education being out of reach for anyone who can not pay',
+      'Education being out of reach for anyone who can\'t pay',
       'Being denied the right to learn because of who you are',
       'Tools you need being too expensive or complicated for anyone without training',
       'Talented people stuck in poverty because the doors are locked from outside',
+      'A world built as if you don\'t exist',
     ],
   },
   {
@@ -475,6 +481,8 @@ export const PROBLEM_SEGMENTS = [
       'Belonging nowhere after the thing that gave you purpose ends',
       'People going hungry in disasters because the relief system is slower than a kitchen',
       'Cities built for cars and planners instead of the people who actually live there',
+      'Growing old in a building designed for efficiency instead of life',
+      'The only help available being designed for someone nothing like you',
     ],
   },
   {
@@ -494,6 +502,7 @@ export const PROBLEM_SEGMENTS = [
       'Not being able to see your own life story as something that matters',
       'Your mind being your own worst enemy every morning before you even get out of bed',
       'Chasing winning so hard you forget to build the character that makes winning worth it',
+      'The most important things in life being the ones nobody teaches you',
     ],
   },
   {
@@ -531,7 +540,7 @@ export const PROBLEM_SEGMENTS = [
       'Watching someone you love be broken by their work',
       'Doing a job that produces nothing and knowing it every single day',
       'Being punished for doing the right thing',
-      'Workers being treated as disposable by companies that could not function without them',
+      'Workers being treated as disposable by companies that couldn\'t function without them',
     ],
   },
 ];

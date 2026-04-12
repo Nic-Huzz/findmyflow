@@ -26,16 +26,16 @@ const MAIN_NAV_ITEMS = [
     path: '/7-day-challenge'
   },
   {
-    id: 'business',
-    label: 'Business',
-    icon: '💼',
-    path: '/business'
-  },
-  {
     id: 'profile',
     label: 'Profile',
     icon: '👤',
     path: '/profile-hub'
+  },
+  {
+    id: 'business',
+    label: 'Business',
+    icon: '💼',
+    path: '/business'
   }
 ]
 
@@ -195,6 +195,9 @@ function BottomToolbar() {
       // Execute - exact match
       if (item.id === 'execute') return path === '/crm/execute'
     }
+
+    // Main nav: Business is active on any /business/* path
+    if (item.id === 'business') return path === '/business' || path.startsWith('/business/')
 
     return path === item.path
   }

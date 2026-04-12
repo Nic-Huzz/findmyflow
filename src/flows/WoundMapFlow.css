@@ -1,0 +1,458 @@
+/**
+ * WoundMapFlow.css
+ * Standalone styles for the wound map Level 0 quest.
+ * Ported from JourneyOnboarding.css Beat 2 (jo-story) with wm- prefix.
+ */
+
+/* ═════════════════���═════════════════════════════���═══════════════════════════
+   ROOT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wound-map-flow {
+  --wm-purple: #5e17eb;
+  --wm-purple-dark: #4a0ea8;
+  --wm-gold: #E9A23B;
+  --wm-text: #ffffff;
+  --wm-text-muted: rgba(255, 255, 255, 0.6);
+  --wm-glass: rgba(255, 255, 255, 0.06);
+  --wm-glass-border: rgba(255, 255, 255, 0.1);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--wm-purple-dark) 0%, var(--wm-purple) 50%, #7c3aed 100%);
+  color: var(--wm-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 99999;
+  padding: 24px;
+  padding-top: max(24px, env(safe-area-inset-top));
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+/* ═════════════════════════════════════════════════════���═════════════════════
+   TRANSITIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wm-transitioning .wm-content {
+  animation: wm-slideOut 0.25s ease forwards;
+}
+
+.wm-entering .wm-content {
+  animation: wm-slideIn 0.4s ease;
+}
+
+.wm-slide-right.wm-transitioning .wm-content {
+  animation: wm-slideOutLeft 0.25s ease forwards;
+}
+
+.wm-slide-right.wm-entering .wm-content {
+  animation: wm-slideInRight 0.4s ease;
+}
+
+.wm-slide-left.wm-transitioning .wm-content {
+  animation: wm-slideOutRight 0.25s ease forwards;
+}
+
+.wm-slide-left.wm-entering .wm-content {
+  animation: wm-slideInLeft 0.4s ease;
+}
+
+@keyframes wm-slideOutLeft {
+  to { opacity: 0; transform: translateX(-30px); }
+}
+
+@keyframes wm-slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes wm-slideOutRight {
+  to { opacity: 0; transform: translateX(30px); }
+}
+
+@keyframes wm-slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes wm-slideOut {
+  to { opacity: 0; transform: translateX(-20px); }
+}
+
+@keyframes wm-slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes wm-fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PROGRESS DOTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wound-map-flow .wm-progress {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.wound-map-flow .wm-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.wound-map-flow .wm-dot.active {
+  background: var(--wm-gold);
+  box-shadow: 0 0 10px rgba(233, 162, 59, 0.5);
+  width: 26px;
+  border-radius: 5px;
+}
+
+.wound-map-flow .wm-dot.completed {
+  background: var(--wm-gold);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTENT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wound-map-flow .wm-content {
+  flex: 1;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.wound-map-flow .wm-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.wound-map-flow .wm-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--wm-gold);
+  display: block;
+  margin-bottom: 6px;
+  animation: wm-fadeInUp 0.4s ease backwards;
+}
+
+.wound-map-flow .wm-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: white;
+  letter-spacing: -0.3px;
+  animation: wm-fadeInUp 0.4s ease 0.05s backwards;
+}
+
+.wound-map-flow .wm-prompt {
+  font-size: 0.95rem;
+  color: var(--wm-text-muted);
+  margin: 0;
+  animation: wm-fadeInUp 0.4s ease 0.1s backwards;
+}
+
+/* ═════════════════════════���═════════════════════════════════════════════════
+   SCENE CARDS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wound-map-flow .wm-scenes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.wound-map-flow .wm-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: var(--wm-glass);
+  border: 2px solid var(--wm-glass-border);
+  border-radius: 18px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  animation: wm-fadeInUp 0.4s ease backwards;
+}
+
+.wound-map-flow .wm-card:nth-child(1) { animation-delay: 0.15s; }
+.wound-map-flow .wm-card:nth-child(2) { animation-delay: 0.25s; }
+.wound-map-flow .wm-card:nth-child(3) { animation-delay: 0.35s; }
+
+.wound-map-flow .wm-card:hover {
+  border-color: rgba(233, 162, 59, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.wound-map-flow .wm-card:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.wound-map-flow .wm-card.wm-card-selected {
+  border-color: var(--wm-gold);
+  box-shadow: 0 0 20px rgba(233, 162, 59, 0.2);
+}
+
+/* Selected checkmark */
+.wound-map-flow .wm-card-selected::after {
+  content: '\2713';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  background: var(--wm-gold);
+  border-radius: 50%;
+  line-height: 26px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  box-shadow: 0 2px 8px rgba(233, 162, 59, 0.4);
+  z-index: 2;
+}
+
+/* Scene image */
+.wound-map-flow .wm-card-image {
+  width: 100%;
+  height: 155px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Icon fallback */
+.wound-map-flow .wm-card-icon-fallback {
+  width: 100%;
+  height: 155px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+
+/* Pill (name + description) */
+.wound-map-flow .wm-card-pill {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.wound-map-flow .wm-card-selected .wm-card-pill {
+  background: rgba(233, 162, 59, 0.15);
+  border-color: rgba(233, 162, 59, 0.3);
+}
+
+.wound-map-flow .wm-card-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.wound-map-flow .wm-card-desc {
+  font-size: 0.73rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* ══════════════════════════��════════════════════════════════════════════════
+   BACK BUTTON
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wound-map-flow .wm-back-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 12px 16px;
+  margin-top: auto;
+  transition: color 0.2s ease;
+}
+
+.wound-map-flow .wm-back-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REVEAL STEP
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wound-map-flow.wm-reveal .wm-content {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 24px;
+}
+
+.wm-reveal-header {
+  animation: wm-fadeInUp 0.6s ease;
+}
+
+.wm-reveal-icon {
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+
+.wm-reveal-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 4px;
+}
+
+.wm-reveal-label {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.wm-reveal-desc {
+  font-size: 0.95rem;
+  color: var(--wm-text-muted);
+  line-height: 1.5;
+  max-width: 360px;
+  margin: 0;
+  animation: wm-fadeInUp 0.6s ease 0.1s backwards;
+}
+
+.wm-reveal-stages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
+  animation: wm-fadeInUp 0.6s ease 0.2s backwards;
+}
+
+.wm-reveal-stage-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--wm-glass);
+  border: 1px solid var(--wm-glass-border);
+  border-radius: 12px;
+}
+
+.wm-reveal-stage-label {
+  font-size: 0.8rem;
+  color: var(--wm-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.wm-reveal-stage-scene {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.wm-save-btn {
+  background: var(--wm-gold);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  animation: wm-fadeInUp 0.6s ease 0.3s backwards;
+}
+
+.wm-save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.4);
+}
+
+.wm-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  .wound-map-flow {
+    padding: 16px;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .wound-map-flow .wm-title {
+    font-size: 1.35rem;
+  }
+
+  .wound-map-flow .wm-card-image {
+    height: 130px;
+  }
+
+  .wound-map-flow .wm-card-icon-fallback {
+    height: 130px;
+    font-size: 2rem;
+  }
+
+  .wound-map-flow .wm-card-name {
+    font-size: 0.85rem;
+  }
+
+  .wound-map-flow .wm-card-desc {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-height: 600px) {
+  .wound-map-flow {
+    padding: 12px;
+  }
+
+  .wound-map-flow .wm-card-image {
+    height: 110px;
+  }
+
+  .wound-map-flow .wm-card-icon-fallback {
+    height: 110px;
+  }
+
+  .wound-map-flow .wm-header {
+    margin-bottom: 12px;
+  }
+
+  .wound-map-flow .wm-scenes {
+    gap: 8px;
+  }
+}

@@ -153,7 +153,7 @@ function ChallengeHeader({
           </div>
           */}
           <button className="challenge-journey-btn" onClick={() => setShowGraph(true)}>
-            📊 Journey
+            🧭 Journey
           </button>
           <div className="settings-menu-container" ref={settingsMenuRef}>
             <button

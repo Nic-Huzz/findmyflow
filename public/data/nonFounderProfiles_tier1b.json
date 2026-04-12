@@ -1,0 +1,1130 @@
+{
+  "meta": {
+    "tier": 1,
+    "slice": "b",
+    "count": 40,
+    "generatedAt": "2026-04-07"
+  },
+  "profiles": [
+    {
+      "name": "Desmond Tutu",
+      "domain": "truth and reconciliation",
+      "era": "1931-2021",
+      "region": "South Africa",
+      "bio": "Anglican cleric who became the first Black Archbishop of Cape Town in September 1986 and chaired the post-apartheid Truth and Reconciliation Commission. Nobel Peace Prize 1984.",
+      "oneLiner": "Turned confession and listening into state-level infrastructure for a country that had no playbook for peace.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["nurturing", "expressing"],
+      "narratives": [
+        {
+          "title": "The Vorster warning, six weeks before Soweto",
+          "content": "In May 1976 Tutu wrote an open letter to Prime Minister B.J. Vorster warning that the maintenance of apartheid would trigger racial violence. Six weeks later the Soweto uprising began, killing at least 660 people over ten months, most of them under the age of 24. The letter did not stop the uprising, but after 1976 it was cited repeatedly as proof that the state had been told plainly, by a clergyman, in plain prose, and had chosen not to listen."
+        },
+        {
+          "title": "The 1984 Nobel acceptance, addressed to women at railway stations",
+          "content": "When Tutu accepted the Nobel Peace Prize in 1984 he deliberately diverted the audience away from himself. The speech named, specifically, the mothers who sat waiting at South African railway stations for husbands who had gone off to work in distant mines. 'This award is for mothers, who sit at railway stations... This award is for you.' It is one of the clearest examples in the twentieth century of a public figure using an international podium to redirect attention toward people the world could not see."
+        },
+        {
+          "title": "Chairing the TRC, 1996",
+          "content": "After the 1994 general election Nelson Mandela selected Tutu to chair the Truth and Reconciliation Commission. The TRC sat for public hearings from 1996 onwards, with victims and perpetrators in the same room, and Tutu visibly weeping on camera in the opening days. He insisted that the format included testimony from Black and white victims, and that amnesty be conditional on full disclosure. The procedure is now exported as a template for post-conflict societies from Rwanda to Colombia."
+        },
+        {
+          "title": "August 1980, the Botha meeting",
+          "content": "In August 1980 Tutu organised a meeting of twenty church leaders with Prime Minister P.W. Botha and seven government ministers to urge an end to apartheid. The meeting failed. Tutu recorded the failure as a data point, not a humiliation, and kept meeting state officials for another decade. The pattern, quiet persistence in rooms where nothing shifts, became the spine of his method."
+        }
+      ]
+    },
+    {
+      "name": "Nawal El Saadawi",
+      "domain": "feminist activism / psychiatry",
+      "era": "1931-2021",
+      "region": "Egypt",
+      "bio": "Egyptian physician, psychiatrist and writer who published more than fifty books on the condition of Arab women. Founded the Arab Women's Solidarity Association in 1982.",
+      "oneLiner": "Wrote her way out of a prison cell with eyebrow pencil on toilet paper, and kept writing until she had built a movement.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["expressing", "influencing"],
+      "narratives": [
+        {
+          "title": "The eyebrow pencil and the toilet paper",
+          "content": "In September 1981 President Anwar Sadat ordered El Saadawi imprisoned after she helped publish a feminist magazine called Confrontation. In the Qanatir Women's Prison she was denied pen and paper. She used a stubby black eyebrow pencil and a small roll of old and tattered toilet paper to record her thoughts, which later became Memoirs from the Women's Prison. 'I was arrested because I believed Sadat,' she said later. 'He said there is democracy. So I started criticizing his policy and I landed in jail.'"
+        },
+        {
+          "title": "Founding AWSA from inside the prison",
+          "content": "While still imprisoned at Qanatir, El Saadawi began drafting the charter for what became the Arab Women's Solidarity Association, the first legal and independent feminist group in Egypt. She founded it formally in 1982, one year after release, describing the organisation as 'historical, socialist, and feminist.' The sequence is worth holding onto. She lost three jobs in one year for the book Women and Sex, then used the enforced silence of prison to design the institution that outlasted every employer who had fired her."
+        },
+        {
+          "title": "1972, the price of Women and Sex",
+          "content": "Her 1972 book Women and Sex confronted female circumcision and domestic violence in clinical, first-person prose drawn from her practice as a rural doctor in Kafr Tahla. The consequences were specific and immediate: she was dismissed from her post as Director of the Ministry of Public Health, lost her chief editor role at a health journal, and was removed from the Assistant General Secretary role at the Egyptian Medical Association. Three positions, one book, one year."
+        },
+        {
+          "title": "The rural patient who sent her home",
+          "content": "Early in her medical career she tried to protect a rural woman in her home village of Kafr Tahla from her husband's violence. The intervention was read as insubordination by the authorities and she was summoned back to Cairo. The pattern, of moving a specific patient's specific injury into a public argument, is the spine of every book she wrote afterwards."
+        }
+      ]
+    },
+    {
+      "name": "Toni Morrison",
+      "domain": "fiction / editing",
+      "era": "1931-2019",
+      "region": "US",
+      "bio": "American novelist, Nobel laureate 1993, and the first Black woman senior editor in the fiction department at Random House, where she worked from the late 1960s until 1983.",
+      "oneLiner": "Edited the books that built the Black canon with one hand and wrote the ones that finished it with the other.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["nurturing", "synthesizing"],
+      "narratives": [
+        {
+          "title": "4am with two children asleep upstairs",
+          "content": "Morrison wrote her first novel, The Bluest Eye (1970), by getting up every morning at 4am to work while raising two sons on her own and holding a full-time editorial job at Random House. She finished the manuscript and published the book at age 39. The habit of that hour stayed with her. In later interviews she described the pre-dawn window as the only time she could find a sentence that was hers before the world took back her attention."
+        },
+        {
+          "title": "Acquiring Muhammad Ali and Angela Davis at Random House",
+          "content": "As a senior editor at Random House from the late 1960s through 1983, Morrison commissioned and edited Muhammad Ali's autobiography The Greatest: My Own Story (1975), Angela Davis's autobiography, Toni Cade Bambara's fiction, Gayl Jones's fiction, and The Black Book (1974), an anthology of Black American photographs and documents from slavery through the 1920s. The Black Book project is where she found the true story of Margaret Garner, the enslaved woman who killed her own daughter rather than let her be returned. That fragment became Beloved."
+        },
+        {
+          "title": "Championing Henry Dumas after his death",
+          "content": "Morrison used her Random House platform to champion Henry Dumas, a little-known novelist and poet who had been shot to death by a New York City transit officer in 1968. She kept Dumas in print, wrote introductions, and placed his stories in anthologies. The pattern, of editorial care as a form of literary resurrection, became one of her most quiet and consistent practices."
+        },
+        {
+          "title": "Nobel acceptance, 1993",
+          "content": "In her Nobel Prize acceptance lecture in Stockholm in December 1993, Morrison told a parable about an old blind woman and a bird that may or may not be alive in the hands of a visiting child. The speech ended with a sentence that became one of the most quoted lines in her career: 'We die. That may be the meaning of life. But we do language. That may be the measure of our lives.'"
+        }
+      ]
+    },
+    {
+      "name": "James Baldwin",
+      "domain": "essays / fiction",
+      "era": "1924-1987",
+      "region": "US / France",
+      "bio": "American novelist and essayist who left New York for Paris in November 1948 with forty dollars and a Rosenwald Fellowship, and built a body of essays that reshaped the American conversation about race, sexuality, and self.",
+      "oneLiner": "Translated private humiliation into public argument with the precision of a courtroom stenographer.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["influencing", "synthesizing"],
+      "narratives": [
+        {
+          "title": "November 11, 1948, Paris with forty dollars",
+          "content": "Baldwin left New York for Paris on November 11, 1948, at age 24, with forty dollars in his pocket and a 1,500 dollar Rosenwald Fellowship. He later said the move saved his life. Removed from the daily pressure of American racism and the small lies required to navigate it, he finished Go Tell It on the Mountain, which he had been trying to write since he was fourteen. He submitted the manuscript to Knopf in February 1952; the novel was published in May 1953."
+        },
+        {
+          "title": "Notes of a Native Son, compiled from seven years of essays",
+          "content": "Notes of a Native Son, published in 1955, was not a fresh composition. It was a compiled collection of essays Baldwin had placed, one by one, between 1948 and 1955 in Commentary, The New Leader, Partisan Review, The Reporter, and Harper's. The shape of his public voice came out of seven years of quiet magazine work. For many white American readers in 1955 it was the first time they had read a Black writer arguing in the register of a New England essayist."
+        },
+        {
+          "title": "Cambridge Union, 1965, against Buckley",
+          "content": "In February 1965 Baldwin debated William F. Buckley Jr. at the Cambridge Union on the motion that the American Dream had been achieved at the expense of the American Negro. Student spectators voted overwhelmingly for Baldwin. The footage still circulates. The debate is a case study in how to hold a public argument without raising one's voice, and in how to ground an abstract proposition in a single concrete image. Baldwin talked about the cost of cheap cotton."
+        },
+        {
+          "title": "The 1963 Time cover and the meeting with Kennedy",
+          "content": "Baldwin landed on the cover of Time in May 1963 while The Fire Next Time was on the bestseller list. That same month Attorney General Robert Kennedy asked him to gather a group of Black artists and activists to meet privately in New York to discuss race relations. Baldwin brought Lorraine Hansberry, Harry Belafonte, and a young civil rights field worker whose testimony made Kennedy visibly uncomfortable. The meeting ended badly. Baldwin later treated the day as proof that the distance between the Kennedy administration and the movement it claimed to support was not rhetorical, it was factual."
+        }
+      ]
+    },
+    {
+      "name": "Seamus Heaney",
+      "domain": "poetry",
+      "era": "1939-2013",
+      "region": "Ireland",
+      "bio": "Irish poet, Nobel laureate 1995, born in County Derry. Refused the Poet Laureate position and declined inclusion in The Penguin Book of Contemporary British Poetry (1982) on the grounds that his passport was green.",
+      "oneLiner": "Wrote poems about bog bodies instead of slogans and made the Troubles bearable in print without ever softening them.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["nurturing"],
+      "narratives": [
+        {
+          "title": "Silence-breaking, not rabble-rousing",
+          "content": "When Heaney published Requiem for the Croppies, a poem about rebels from the 1798 uprising, readers read it as a veiled IRA anthem. Heaney refused the framing. 'To read it wasn't to say up the IRA or anything,' he said. 'It was silence-breaking rather than rabble-rousing.' That phrase, silence-breaking rather than rabble-rousing, became a kind of private constitution for his relationship to the Troubles. He held it across four decades, three collections of bog poems, and one Nobel prize."
+        },
+        {
+          "title": "The Penguin letter, 1982",
+          "content": "When the editors of The Penguin Book of Contemporary British Poetry (1982) included his work without asking, Heaney published a verse reply titled An Open Letter. The poem contains the line: 'My passport's green. No glass of ours was ever raised / To toast The Queen.' It is one of the few times in twentieth-century poetry a writer used a formal published poem as the vehicle for a polite refusal of a national category. The Penguin editors removed him from subsequent editions."
+        },
+        {
+          "title": "Beowulf in a Heaney register, 1999",
+          "content": "Heaney's 1999 verse translation of Beowulf won the Whitbread Book of the Year. He did not modernise the poem. He imported the rhythms of the speech of older farmers from his father's generation in County Derry into Anglo-Saxon meter, producing a version in which the poem sounded like it had been overheard in a kitchen. The translation sold in numbers that no academic Beowulf had ever reached, and is now the standard text in most American undergraduate courses."
+        },
+        {
+          "title": "1972, leaving Belfast for Wicklow",
+          "content": "In 1972, with the Troubles intensifying, Heaney left his lectureship at Queen's University Belfast and moved with his family to Glanmore in Wicklow, in the Republic, to write full time. The move was read by some as flight and by others as a vocational commitment. Heaney treated it as the latter. The poems of Field Work (1979) are the direct result of the decision."
+        }
+      ]
+    },
+    {
+      "name": "Mahmoud Darwish",
+      "domain": "poetry",
+      "era": "1941-2008",
+      "region": "Palestine",
+      "bio": "Palestinian poet born in al-Birwa in 1941, whose village was razed by Israeli forces during the 1948 Nakba. Joined the PLO in 1973 and wrote the 1988 Palestinian Declaration of Independence.",
+      "oneLiner": "Put a stateless nation into lines people could memorise and carry in their pockets.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["synthesizing"],
+      "narratives": [
+        {
+          "title": "May 1, 1965, reading Identity Card in Nazareth",
+          "content": "On 1 May 1965 Darwish, then 24 and working for the Arab-language newspaper al-Ittihad, read his poem Identity Card aloud at a public gathering in Nazareth. The poem opens with the line 'Write down: I am an Arab.' Within days it had spread across Israel and throughout the Arab world. He was placed under house arrest and later imprisoned multiple times by Israeli authorities specifically for reciting the poem. It is one of the clearest cases in modern literary history of a single poem being treated by a state as a security risk."
+        },
+        {
+          "title": "Writing the 1988 Declaration of Independence",
+          "content": "In 1988 the PLO asked Darwish to draft the text of the Palestinian Declaration of Independence, which Yasser Arafat read in Algiers on 15 November 1988. Darwish wrote it in literary Arabic, with the cadences of classical poetry rather than the flat register of most twentieth-century independence declarations. The document was translated into over thirty languages and is still taught in Arabic schools as a model of literary political prose."
+        },
+        {
+          "title": "Resigning from the PLO over Oslo, 1993",
+          "content": "In 1993 Darwish resigned from the PLO Executive Committee in protest against the Oslo Accords, saying, 'All I saw in the agreement was an Israeli solution to Israeli problems.' The resignation cost him his political position and some of his friends, but freed him to publish poems more critical of the Palestinian leadership than any other senior cultural figure was willing to write at the time."
+        },
+        {
+          "title": "1996, a four-day permit to bury a friend",
+          "content": "In 1996, more than twenty years after leaving, Darwish was allowed to return to Israel for the first time, on a four-day permit, to attend the funeral of his friend the writer Emile Habibi. He used the visit to walk through what remained of the area around al-Birwa, the village of his birth which had been razed in 1948. He wrote about the visit afterwards in Memory for Forgetfulness, a prose work that treats exile as a repeating act rather than a single event."
+        }
+      ]
+    },
+    {
+      "name": "Audre Lorde",
+      "domain": "poetry / essays",
+      "era": "1934-1992",
+      "region": "US",
+      "bio": "American poet and essayist who described herself as 'Black, lesbian, feminist, socialist, mother, warrior, poet.' New York State Poet Laureate 1991 to 1992.",
+      "oneLiner": "Refused to separate her identities into manageable portions and made that refusal a public method.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["influencing", "nurturing"],
+      "narratives": [
+        {
+          "title": "The Cancer Journals, 1980",
+          "content": "After a mastectomy for breast cancer in 1978, Lorde refused the prosthesis her surgeon pressed on her and refused to be silent about the refusal. She published The Cancer Journals in 1980 as a mixture of essays and journal entries, arguing that the cosmetic performance of recovery was a form of silencing that served hospitals and magazines more than patients. The book won the American Library Association Gay Caucus Book of the Year Award in 1981 and became one of the first widely circulated first-person accounts of cancer treatment that did not hide the scar."
+        },
+        {
+          "title": "The Master's Tools speech, NYU 1979",
+          "content": "At a feminist conference at NYU in 1979, Lorde delivered a short paper titled The Master's Tools Will Never Dismantle the Master's House, criticising the panel organisers for including only two women of color. The essay, later anthologised in Sister Outsider (1984), contains the line: 'Those of us who stand outside the circle of this society's definition of acceptable women... know that survival is not an academic skill.' It has since been cited in thousands of academic papers. It was delivered, originally, to a room of about two hundred people who had not expected to be addressed."
+        },
+        {
+          "title": "Founding Kitchen Table: Women of Color Press, 1980",
+          "content": "In 1980 Lorde co-founded Kitchen Table: Women of Color Press with Barbara Smith and Cherrie Moraga. It was the first U.S. publisher dedicated to work by women of color. The press ran out of Smith's Brooklyn apartment for its first years and published This Bridge Called My Back in its second edition, along with work by Lorde, June Jordan, and others. The name was deliberate: the kitchen table is where the decisions got made."
+        },
+        {
+          "title": "Self-description as practice",
+          "content": "Lorde's published self-description, 'Black, lesbian, feminist, socialist, mother, warrior, poet,' is a six-word manifesto. She used it in print, in introductions, on book jackets, and in lectures. The repetition was the point. She was answering, in advance, every interviewer who would later try to list her in a narrower set of identities."
+        }
+      ]
+    },
+    {
+      "name": "Nina Simone",
+      "domain": "piano / protest song",
+      "era": "1933-2003",
+      "region": "US",
+      "bio": "American singer, pianist, and civil rights activist born Eunice Waymon in Tryon, North Carolina. Applied to the Curtis Institute of Music in 1950 and was rejected. Received an honorary degree from Curtis two days before her death in 2003.",
+      "oneLiner": "Turned a classical conservatory rejection into a protest career that ended with the conservatory apologising on her deathbed.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["influencing", "creating"],
+      "narratives": [
+        {
+          "title": "September 15, 1963, writing Mississippi Goddam",
+          "content": "Simone wrote Mississippi Goddam in less than an hour after hearing the news of the 16th Street Baptist Church bombing in Birmingham on 15 September 1963, which killed four Black girls, and with the June 1963 murder of Medgar Evers still fresh. She performed it the next week at a Greenwich Village club. The song was banned in several Southern states and became, in her own account, the piece that ended her commercial career and began her political one."
+        },
+        {
+          "title": "1950 Curtis rejection, 2003 Curtis apology",
+          "content": "In 1950 Simone, then 17 and still Eunice Waymon, applied to the Curtis Institute of Music in Philadelphia hoping to become the first Black American concert pianist. She was rejected. She believed, until the end of her life, that the rejection was racial, though Curtis denied this. Two days before her death on 21 April 2003 Curtis sent word that she was being awarded an honorary degree. She lived long enough to hear the letter read aloud at her bedside in Carry-le-Rouet, France."
+        },
+        {
+          "title": "The 1976 Montreux set",
+          "content": "Simone's 1976 appearance at the Montreux Jazz Festival, filmed in full, is now one of the most studied live recordings of the twentieth century. She arrived late, berated the audience, forgot lyrics, and then, without warning, pulled the room through a version of Stars by Janis Ian that ended with her weeping at the piano. The film is shown annually in a New York screening and is treated by vocal coaches and performance artists as a primary text on the risks of letting a room in."
+        },
+        {
+          "title": "September 1970, leaving the country",
+          "content": "In September 1970 Simone left the United States after learning of a tax warrant against her for non-payment of taxes she had withheld in protest against the Vietnam War. She went first to Barbados, then to Liberia, then to Switzerland, France, and the Netherlands. She did not live in the United States again. The departure was not a pause, it was a full relocation of a career that had been built on American soil."
+        }
+      ]
+    },
+    {
+      "name": "Mercedes Sosa",
+      "domain": "folk music / protest",
+      "era": "1935-2009",
+      "region": "Argentina",
+      "bio": "Argentine folk singer, central figure in the nuevo cancionero movement. Arrested on stage during a 1979 concert in La Plata and forced into exile in Paris and Madrid, returning to perform at the Teatro Opera in Buenos Aires in February 1982.",
+      "oneLiner": "Gave a continent a set of songs it could sing together when it could not otherwise agree on anything.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["connecting"],
+      "narratives": [
+        {
+          "title": "1979, arrested on stage in La Plata",
+          "content": "During a 1979 concert in La Plata, Argentina, under the military junta, Sosa was searched and arrested on stage mid-performance, along with every member of the audience. International pressure secured their release. The arrest banned her from performing in Argentina. She relocated to Paris and then Madrid for the next three years. It is one of the few documented cases of an entire audience being detained alongside the performer they had come to hear."
+        },
+        {
+          "title": "February 1982, return to Teatro Opera",
+          "content": "In February 1982 Sosa returned from exile and performed a series of concerts at the Teatro Opera in Buenos Aires. She deliberately invited younger colleagues from the Argentine folk scene onto her stage, treating the return not as a solo victory but as an introduction of a generation. The recordings became the double album Mercedes Sosa en Argentina, which became an instant bestseller and is still the entry point for most listeners outside the Southern Cone."
+        },
+        {
+          "title": "Gracias a la Vida, 1971",
+          "content": "In 1971 Sosa recorded a tribute album to the Chilean folk singer Violeta Parra, who had died by suicide in 1967. The closing track was Gracias a la Vida. Sosa's version, slower and heavier than Parra's original, became the definitive recording and one of the most covered Spanish-language songs of the twentieth century. She performed it at nearly every concert for the next 38 years."
+        },
+        {
+          "title": "Sistine Chapel and Carnegie Hall in one decade",
+          "content": "Sosa performed inside the Sistine Chapel in 1994, and in 2002 sold out Carnegie Hall in New York and the Colosseum in Rome in the same year. She treated the reach as a function of the songs, not of herself. 'An artist isn't political in the party political sense,' she said. 'They have a constituency, which is their public. It is the poetry that matters most of all.'"
+        }
+      ]
+    },
+    {
+      "name": "Fela Kuti",
+      "domain": "Afrobeat / political music",
+      "era": "1938-1997",
+      "region": "Nigeria",
+      "bio": "Nigerian musician who invented Afrobeat in the late 1960s by fusing jazz, funk, highlife, and Yoruba percussion, and used it as a political instrument against successive Nigerian military governments. Founded the Kalakuta Republic commune in 1970.",
+      "oneLiner": "Built a song as a political building and dared the army to burn it down, which they did.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["creating", "influencing"],
+      "narratives": [
+        {
+          "title": "1976 Zombie album and the 1977 raid",
+          "content": "Kuti released the album Zombie in 1976. The title track mocked the Nigerian army as unthinking soldiers. In 1977 the government responded by sending around 1,000 soldiers to raid the Kalakuta Republic, his commune in Lagos. The compound was burned. Kuti was severely beaten. His elderly mother, the activist Funmilayo Ransome-Kuti, was thrown from a window and died of her injuries. Kuti's response was to deliver her coffin to the gates of the Dodan Barracks military headquarters and to record the song Coffin for Head of State."
+        },
+        {
+          "title": "1978, marrying 27 women in a single ceremony",
+          "content": "On the first anniversary of the Kalakuta raid, in 1978, Kuti married 27 of the women who lived and worked at the commune in a single ceremony. It was not purely symbolic. He later said the marriages were intended to formalise the relationships so the government could not continue raiding on the pretext of kidnapping. In 1986 he divorced all twelve remaining wives, saying, 'marriage brings jealousy and selfishness.'"
+        },
+        {
+          "title": "Kalakuta Republic as a functioning institution, 1970",
+          "content": "Kuti founded Kalakuta Republic in 1970 in the Surulere district of Lagos and declared it formally independent of the Nigerian state. It was not a metaphor. Kalakuta had its own clinic, school, generator, recording studio, and a fence. Musicians from Ginger Baker to Roy Ayers passed through. For seven years it functioned as the home of Africa 70, and a practical demonstration that a musical movement could run itself as a parallel state before the real state destroyed it."
+        },
+        {
+          "title": "Track lengths that refused radio",
+          "content": "Kuti's standard album format ran two tracks, one per vinyl side, each between fifteen and thirty minutes long. The format was chosen deliberately to make the music unplayable on the three-minute commercial radio slots that were the default distribution channel in Nigeria and the UK. The constraint forced the music into live performance, the Shrine venue in Lagos, and album sales, which he could control."
+        }
+      ]
+    },
+    {
+      "name": "Miriam Makeba",
+      "domain": "South African song / activism",
+      "era": "1932-2008",
+      "region": "South Africa",
+      "bio": "South African singer known as Mama Africa. Testified before the United Nations Special Committee against Apartheid in 1962 and 1964, after which South Africa revoked her citizenship, leaving her stateless.",
+      "oneLiner": "Testified at the UN, lost her country, and sang the next thirty years on nine passports.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["connecting", "influencing"],
+      "narratives": [
+        {
+          "title": "July 1962, UN Special Committee on Apartheid",
+          "content": "In July 1962 Makeba appeared before the UN Special Committee against Apartheid. She asked the committee to impose an arms embargo on South Africa. The South African government responded by banning her music, revoking her citizenship, and cancelling her right to return, rendering her stateless. She held no South African passport from 1963 until after Mandela's release in 1990. In the interval she was granted nine separate passports by nine different African and European countries so she could travel to perform."
+        },
+        {
+          "title": "March 1968, losing America by marrying Stokely",
+          "content": "In March 1968 Makeba married Stokely Carmichael, the Black Panther and former SNCC chairman. Within weeks her US concerts were cancelled, her US recording contract was not renewed, and, while travelling in the Bahamas, her US visa was refused. She and Carmichael relocated to Guinea. She did not perform in the United States again until 1987. The cost of one marriage, measured in booking sheets, was almost the whole of her American career."
+        },
+        {
+          "title": "Pata Pata, the song she called insignificant",
+          "content": "In 1967 Makeba released Pata Pata, a Xhosa-language song she had first recorded in 1957. It became an international hit and her most commercially successful single. She spent much of the rest of her career mildly annoyed about it. 'Pata Pata is one of my most insignificant songs,' she told interviewers repeatedly. She performed it anyway, because audiences asked for it, and the song paid for the tours that carried her anti-apartheid work."
+        },
+        {
+          "title": "November 9, 2008, the last concert",
+          "content": "On 9 November 2008 Makeba performed at a concert in Castel Volturno, Italy, organised in support of the writer Roberto Saviano, who was under police protection for his reporting on the Camorra. She collapsed after singing Pata Pata and died of a heart attack later that night. She was 76. The choice of concert, held in solidarity with a writer hunted by organised crime, was read by her family as a perfect summary of her method: she went where her presence would protect someone."
+        }
+      ]
+    },
+    {
+      "name": "Maya Angelou",
+      "domain": "memoir / poetry",
+      "era": "1928-2014",
+      "region": "US",
+      "bio": "American memoirist and poet whose first autobiography, I Know Why the Caged Bird Sings (1969), was one of the first widely read memoirs by a Black woman in America. Recited On the Pulse of Morning at Bill Clinton's inauguration in 1993.",
+      "oneLiner": "Was mute for almost five years as a child and then became the person American presidents asked to speak on their behalf.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["nurturing", "influencing"],
+      "narratives": [
+        {
+          "title": "Five years of silence after eight",
+          "content": "At age eight, Angelou was raped by her mother's boyfriend, Mr. Freeman. She testified at his trial. He was found beaten to death days after his release. Angelou believed her voice had killed him. For nearly five years afterwards she refused to speak. A family friend named Bertha Flowers eventually coaxed her out of silence by telling her, 'You do not love poetry, not until you speak it,' and asking her to read aloud. The entire arc of her later career, six autobiographies and a presidential inaugural poem, is downstream of that single intervention."
+        },
+        {
+          "title": "January 20, 1993, On the Pulse of Morning",
+          "content": "On 20 January 1993 Angelou recited On the Pulse of Morning at Bill Clinton's presidential inauguration. She was the first poet to read at a presidential inauguration since Robert Frost at Kennedy's in 1961, and the first Black poet and first woman ever to do so. The recording won a Grammy Award for Best Spoken Word Album. Within a week I Know Why the Caged Bird Sings was back on the bestseller list, 24 years after its original publication."
+        },
+        {
+          "title": "The hotel room, the legal pad, the sherry, the thesaurus",
+          "content": "Angelou's writing routine was a fixed ritual. She would check into a hotel room early in the morning, lie down on the bed, and write on yellow legal pads. She kept only a sherry bottle, a deck of solitaire cards, a Roget's Thesaurus, and a Bible in the room. She produced ten to twelve pages a day and edited them to three or four pages by evening, then left by early afternoon. She kept the room booked year-round so she could return whenever a book was active."
+        },
+        {
+          "title": "Malcolm X in Accra, 1964",
+          "content": "Angelou lived in Accra, Ghana from 1962 to 1965 and became close friends with Malcolm X during his 1964 visit. She agreed to return to the United States to help him build the Organization of Afro-American Unity. She was still unpacking her bags in New York when he was assassinated in February 1965. She then worked with Martin Luther King Jr. until his assassination on her 40th birthday in 1968. Both events together moved her from activism into writing. Caged Bird was published the year after King died."
+        }
+      ]
+    },
+    {
+      "name": "Frida Kahlo",
+      "domain": "painting",
+      "era": "1907-1954",
+      "region": "Mexico",
+      "bio": "Mexican painter whose work was almost entirely self-portraiture developed from a hospital bed after a catastrophic bus accident on 17 September 1925. Married to muralist Diego Rivera in 1929.",
+      "oneLiner": "Painted her own body from inside it and made self-portraiture carry the political weight of a mural.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "September 17, 1925, the streetcar",
+          "content": "On 17 September 1925 a Mexico City streetcar collided with the bus Kahlo was riding home from school. She was 18. A steel handrail entered her hip and exited through her pelvis. She fractured her spine in three places, broke her right leg in eleven places, and crushed her right foot. 'The way a sword pierces a bull,' she later wrote. Her medical career, which she had been training for, ended that day. Her painting career began three months later when her mother mounted a mirror above her bed and her father set up an easel so she could work while horizontal."
+        },
+        {
+          "title": "1938, the Julien Levy Gallery show",
+          "content": "In October 1938 Kahlo had her first solo exhibition at the Julien Levy Gallery in New York. She sold 12 of the 25 paintings on display. It was the first time she had earned money from her own work independent of Rivera's reputation. The following year the Louvre acquired a painting called The Frame, making her the first Mexican artist in their collection. She was 32."
+        },
+        {
+          "title": "1953, the stretcher exhibition",
+          "content": "In April 1953 Kahlo had her first solo exhibition in Mexico City, at Lola Alvarez Bravo's Galleria de Arte Contemporaneo. Her doctors told her she was too ill to attend. She arrived by ambulance, was carried in on a stretcher, and had her bed installed in the center of the gallery so she could receive guests from it. She died 13 months later. The stretcher opening is now taught as a case study in how an artist can override the staging conventions of their own medium."
+        },
+        {
+          "title": "The mirror as lifelong studio",
+          "content": "Kahlo painted at least 55 self-portraits out of roughly 143 total paintings, a proportion higher than almost any other major twentieth-century painter. She described the reason plainly: 'I paint myself because I am often alone and I am the subject I know best.' The mirror her mother installed above her bed in 1925 remained, functionally, her primary piece of studio equipment for the rest of her life."
+        }
+      ]
+    },
+    {
+      "name": "Hilma af Klint",
+      "domain": "abstract painting",
+      "era": "1862-1944",
+      "region": "Sweden",
+      "bio": "Swedish painter who produced the first fully abstract paintings in Western art around 1906, several years before Kandinsky, Mondrian, or Malevich. Hid the bulk of her work and specified it should not be shown until 20 years after her death.",
+      "oneLiner": "Invented abstract art in a side room nobody was watching, then locked the door for 40 years.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["synthesizing"],
+      "narratives": [
+        {
+          "title": "The Five, beginning 1896",
+          "content": "Starting in 1896, af Klint met weekly in Stockholm with four other women trained at the Royal Academy of Fine Arts. The group, De Fem (The Five), opened each meeting with a prayer, then a meditation, then a Christian sermon, then analysis of a New Testament text, then a séance. In these sessions they produced automatic drawings. Ten years of this practice preceded her abstract breakthrough. The pattern, of treating a weekly small group as a research method, is a clear example of sustained creative infrastructure built outside any institution."
+        },
+        {
+          "title": "1906, the Paintings for the Temple commission",
+          "content": "In 1906, at age 44, af Klint began the Paintings for the Temple series, which eventually comprised 196 works across multiple sub-series including The Ten Largest, canvases approximately 240 by 320 centimeters depicting the stages of a human life from childhood to old age. She described the commission as having come from an entity she called Amaliel. The first of The Ten Largest predate Kandinsky's first abstract watercolours by around four years."
+        },
+        {
+          "title": "The 1908 Rudolf Steiner meeting",
+          "content": "In 1908 af Klint met the Anthroposophist Rudolf Steiner in Stockholm and showed him the Temple paintings. He was critical. He told her the work was 'inappropriate for a theosophist' and that her contemporaries would not understand it, that it would take another fifty years to decipher. She stopped painting abstract work for four years following the meeting. When she resumed she worked in a more guarded way and began planning the concealment of the work."
+        },
+        {
+          "title": "The 20-year embargo in her will",
+          "content": "Af Klint specified in her will that her abstract work should not be shown publicly until at least 20 years after her death. She left the collection, over 1,200 paintings and 125 notebooks, to her nephew Erik. She died in 1944. The embargo held. When the work finally surfaced in a 1986 exhibition in Los Angeles and then in the Guggenheim's 2018 retrospective, the retrospective drew over 600,000 visitors, the most-visited exhibition in the museum's 60 year history."
+        }
+      ]
+    },
+    {
+      "name": "Louise Bourgeois",
+      "domain": "sculpture",
+      "era": "1911-2010",
+      "region": "France / US",
+      "bio": "French-American sculptor whose work was autobiographical across 70 years of practice. Her breakthrough MoMA retrospective came in 1982, at age 70.",
+      "oneLiner": "Waited until 70 for her retrospective and then worked for another 28 years at full intensity.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "1982 MoMA retrospective at age 70",
+          "content": "Bourgeois's first major retrospective at the Museum of Modern Art in New York opened in 1982. She was 70 and had been making sculpture for over forty years as a peripheral figure. Timed to the show she gave an Artforum interview in which she revealed, for the first time publicly, that her childhood English governess had been her father's mistress and that the imagery in her sculptures, the cages, the figures, the father figures, was wholly autobiographical. A new reading of four decades of work followed the interview."
+        },
+        {
+          "title": "Maman and the naming of a mother",
+          "content": "Bourgeois made the first version of Maman, a steel spider more than 30 feet high, in the late 1990s. It debuted in the inaugural installation of Tate Modern's Turbine Hall in 2000. She explained the dedication directly: 'The Spider is an ode to my mother. She was my best friend. Like a spider, my mother was a weaver.' Her mother had worked in the family tapestry restoration business in France. The sculpture now exists in casts in Bilbao, Ottawa, Tokyo, and Qatar."
+        },
+        {
+          "title": "The Cells series in her eighties",
+          "content": "In her eighties Bourgeois began the Cells series, enclosed installations built from old doors, wire mesh, and found objects. She described them as 'different types of pain; physical, emotional and psychological.' She made more than 60 Cells between 1989 and her death in 2010. The series is evidence that her most sustained and ambitious project arrived in her ninth decade, not her fifth."
+        },
+        {
+          "title": "The Insomnia Drawings, 1994-1995",
+          "content": "Between November 1994 and June 1995, during a period of sleeplessness, Bourgeois made 220 drawings at night in her New York home. She dated each one. The resulting Insomnia Drawings are both an art object and a dated record of 220 nights she could not sleep. She treated the series as a kind of diary her conscious voice could not have written."
+        }
+      ]
+    },
+    {
+      "name": "Akira Kurosawa",
+      "domain": "cinema",
+      "era": "1910-1998",
+      "region": "Japan",
+      "bio": "Japanese film director whose Rashomon (1950) won the Golden Lion at Venice in 1951 and was the first Japanese film to achieve commercial distribution in the West. Directed 30 films across a career of roughly 50 years.",
+      "oneLiner": "Turned every shot into a weather system and every film into a rehearsal for the next one.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["designing", "expressing"],
+      "narratives": [
+        {
+          "title": "August 25, 1950, Rashomon as Western door",
+          "content": "Rashomon premiered in Tokyo on 25 August 1950. Daiei, the studio that had produced it, did not understand it. It took a year before the film was entered, over the studio's objections, at the 1951 Venice Film Festival, where it won the Golden Lion on 10 September 1951. The film went on to earn 35,000 dollars in its first three weeks at a single New York theatre, a figure which changed the international distribution economics for Japanese cinema overnight."
+        },
+        {
+          "title": "Seven Samurai, 148 shooting days, three times the budget",
+          "content": "Seven Samurai, released in April 1954, was shot over 148 days spread across nearly a year, and cost three times its original budget, making it the most expensive Japanese film to that date. Kurosawa refused to cut the final battle scene in the rain, which required the studio to wait on weather and then to dump hundreds of tons of water over the set. The rain in the battle is one of the most studied single shots in cinema history."
+        },
+        {
+          "title": "A Story I Don't Want to Tell",
+          "content": "Kurosawa's older brother Heigo, a silent-film narrator, died by suicide in 1933. Kurosawa did not write about it until fifty years later, when he titled the chapter in his autobiography, Something Like an Autobiography, 'A Story I Don't Want to Tell.' The delay is load-bearing. The book otherwise discusses his craft in detail from childhood onwards, and the silence on Heigo is preserved for exactly one chapter, named for its own withholding."
+        },
+        {
+          "title": "Weather as casting",
+          "content": "Kurosawa treated weather as a character to be cast, not a condition to be tolerated. Throne of Blood (1957) was shot in real fog, which he waited for. The battle scenes of Ran (1985) were shot with the sun in exact positions that required the crew to rebuild sets twice. This discipline, of making a schedule subordinate to weather, was extreme even within Japanese studio filmmaking and is now taught as one of his signature craft decisions."
+        }
+      ]
+    },
+    {
+      "name": "Gabriel García Márquez",
+      "domain": "fiction",
+      "era": "1927-2014",
+      "region": "Colombia",
+      "bio": "Colombian novelist, Nobel laureate 1982, best known for One Hundred Years of Solitude (1967), which sold more than 50 million copies. Began his career as a journalist at El Espectador in 1947.",
+      "oneLiner": "Sold his car to buy eighteen months of writing time and came out of it with the defining novel of magical realism.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing", "synthesizing"],
+      "narratives": [
+        {
+          "title": "Selling the car, 1965",
+          "content": "Garcia Marquez began writing One Hundred Years of Solitude in 1965 after a revelation while driving to Acapulco with his family. He turned the car around, went home, and locked himself in his study for the next 18 months. To pay for the writing time he sold the car. His wife Mercedes asked for credit from the butcher, the baker, and the landlord, and ran up nine months of unpaid rent. When he finished the manuscript they did not have enough money to post it to the publisher in Buenos Aires in one package, so they sent it in halves."
+        },
+        {
+          "title": "The 1955 shipwreck series",
+          "content": "In 1955, working for El Espectador, Garcia Marquez investigated the case of Luis Alejandro Velasco, a Colombian sailor who had survived ten days on a raft after a naval shipwreck. Over fourteen days Garcia Marquez interviewed Velasco for hours at a time and published the account as a 14-part series. The series contradicted the government's version of events by establishing that the ship had been carrying illegal cargo which had shifted in a storm. The Rojas Pinilla government shut the paper down. Garcia Marquez was sent abroad as a foreign correspondent."
+        },
+        {
+          "title": "The first sentence, written and rewritten",
+          "content": "Garcia Marquez said he rewrote the first sentence of One Hundred Years of Solitude many times before he found the register he wanted: 'Many years later, as he faced the firing squad, Colonel Aureliano Buendia was to remember that distant afternoon when his father took him to discover ice.' The sentence contains three tenses and a frame that shifts twice. He said in later interviews that once he had that sentence the remainder of the book came quickly, eight to ten hours a day, for eighteen months."
+        },
+        {
+          "title": "The Nobel lecture, 1982",
+          "content": "In his 1982 Nobel Prize lecture in Stockholm, Garcia Marquez refused to treat magical realism as a formal trick. He argued that the extraordinary history of Latin America, dictators who outlived their own obituaries, plagues that killed whole populations, exiles that lasted lifetimes, was already unrealistic and that European literary categories were the narrow ones. The lecture reframed a decade of critical debate about his work in ten pages."
+        }
+      ]
+    },
+    {
+      "name": "Georgia O'Keeffe",
+      "domain": "painting",
+      "era": "1887-1986",
+      "region": "US",
+      "bio": "American painter who developed a distinctive vocabulary of enlarged flowers, bleached bones, and New Mexico landscapes over a working life of more than 70 years. Married Alfred Stieglitz in 1924 and moved permanently to New Mexico in 1949.",
+      "oneLiner": "Painted one flower at the scale of a mural for fifty years and refused to let anyone call it erotic.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "Early 1916, charcoal drawings through the mail",
+          "content": "In early 1916 O'Keeffe mailed a roll of charcoal drawings to her friend Anita Pollitzer in New York and asked her not to show them to anyone. Pollitzer took them directly to Alfred Stieglitz at his 291 gallery. Stieglitz mounted ten of them in April 1916 without asking O'Keeffe first, calling them 'the purest, finest, sincerest things.' She found out about the exhibition by accident. The confrontation began a correspondence that ended in marriage on 11 December 1924."
+        },
+        {
+          "title": "Rejecting the sexual reading for fifty years",
+          "content": "Almost from the first 1916 exhibition, critics read O'Keeffe's enlarged flowers as sexual imagery. She rejected the reading for the rest of her life. 'When people read erotic symbols into my paintings,' she said, 'they're really talking about their own affairs.' She repeated the correction in essentially identical language in interviews in 1943, 1962, 1977, and 1983. The consistency is striking and is part of the reason the revisionist scholarship of the 1990s onwards began to take the non-sexual readings seriously."
+        },
+        {
+          "title": "Ghost Ranch, 1934-1949",
+          "content": "O'Keeffe first visited Santa Fe and Taos in 1929. She began spending summers at Ghost Ranch, north of Abiquiu, in August 1934. In 1940 she bought property there, in 1945 she bought an abandoned hacienda in Abiquiu, and in 1949, three years after Stieglitz's death, she relocated to New Mexico permanently. The transition from a part of New York's art world to the isolated northern New Mexico high desert took 15 years and was conducted one summer at a time."
+        },
+        {
+          "title": "Losing her sight, 1972",
+          "content": "In 1972, aged 84, O'Keeffe lost most of her central vision to macular degeneration and could no longer paint in oil without assistance. She did not stop working. She began working in clay, then returned to painting with the help of assistants who prepared canvases and described colours for her. She kept working until within a few years of her death in March 1986 at age 98. The fourteen years of work produced after the near-blindness are now part of the late catalogue."
+        }
+      ]
+    },
+    {
+      "name": "Chinua Achebe",
+      "domain": "fiction",
+      "era": "1930-2013",
+      "region": "Nigeria",
+      "bio": "Nigerian novelist whose first book, Things Fall Apart (1958), has sold over 20 million copies and is the most translated African novel in history. Served as an ambassador for Biafra during the Nigerian Civil War.",
+      "oneLiner": "Built an English supple enough to carry Igbo proverbs and then used it to take Joseph Conrad to pieces.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["synthesizing", "expressing"],
+      "narratives": [
+        {
+          "title": "June 17, 1958, Things Fall Apart",
+          "content": "Things Fall Apart was published by Heinemann on 17 June 1958, with a title taken from the second line of Yeats's poem The Second Coming. The novel introduced a register of English that could carry Igbo proverbs and ceremonial speech without translation footnotes. It sold slowly at first and then became the first entry in the Heinemann African Writers Series, eventually establishing the publishing infrastructure for a continent's literary canon."
+        },
+        {
+          "title": "February 18, 1975, the Conrad lecture",
+          "content": "On 18 February 1975 Achebe delivered a lecture at the University of Massachusetts Amherst titled 'An Image of Africa: Racism in Conrad's Heart of Darkness.' In it he argued that Joseph Conrad was 'a bloody racist' and that Heart of Darkness, a book treated as a classic of moral complexity by Western readers, reduced Africans to props in a white psychological drama. The lecture caused an uproar in English departments and is now one of the founding texts of postcolonial literary criticism."
+        },
+        {
+          "title": "Biafra, ambassador with a suitcase",
+          "content": "During the Biafran War (1967-1970) Achebe served as an unofficial ambassador for the breakaway Republic of Biafra, travelling Europe and North America making the case for recognition. He was travelling when his friend and collaborator, the poet Christopher Okigbo, was killed in action. The Citadel Press, which the two men had co-founded in 1966 to publish African children's literature, never resumed operations. Achebe did not write another novel for 21 years."
+        },
+        {
+          "title": "The defense of English as the extended frontier",
+          "content": "Achebe defended his choice to write in English, rather than Igbo, as a pragmatic one for communication across Nigeria's 500 plus languages and for reaching a post-colonial audience. 'The price a world language must be prepared to pay is submission to many different kinds of use,' he wrote. He argued writers should 'extend the frontiers of English' through mastery, not by ignoring it. The position was controversial in African literary circles, particularly against Ngugi wa Thiong'o, who later renounced English, and the debate is still taught in African literature courses."
+        }
+      ]
+    },
+    {
+      "name": "Clarice Lispector",
+      "domain": "fiction",
+      "era": "1920-1977",
+      "region": "Brazil / Ukraine",
+      "bio": "Brazilian novelist born Chaya Pinkhasivna Lispector in Chechelnyk, Podolia (Ukrainian SSR) in December 1920. Her family fled pogroms and arrived in Brazil in 1922. Published Near to the Wild Heart in 1943 at age 23.",
+      "oneLiner": "Wrote in a Portuguese that had no precedent and made the language stretch to fit it.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "December 1943, Near to the Wild Heart",
+          "content": "Lispector was 23 when she published Near to the Wild Heart in December 1943. It won the Graca Aranha Prize in October 1944 and provoked the critic Antonio Candido to write that it was 'the greatest novel a woman has ever written in the Portuguese language.' She had written it in less than a year while working at a news agency in Rio and while her husband Maury Gurgel Valente, a diplomat, was posted abroad. The voice of the novel, interior and non-linear, had no clear precedent in Brazilian fiction."
+        },
+        {
+          "title": "September 14, 1966, the fire",
+          "content": "On 14 September 1966 Lispector fell asleep in bed with a lit cigarette. The fire destroyed her bedroom and nearly cost her her right hand, which she used to write with, and which required multiple surgeries to save. Her legs were permanently scarred. 'I spent three days in hell,' she wrote later. She continued to write afterwards with the damaged hand. The Jornal do Brasil column, which became a major vehicle for her late work, began in August 1967, eleven months after the fire."
+        },
+        {
+          "title": "1967-1973, the Jornal do Brasil chronicles",
+          "content": "From August 1967 until 1973 Lispector wrote a weekly column for Jornal do Brasil. The chronicles are short, often 500 words, and move between domestic anecdote, philosophical reflection, reader letters, and fragments of fiction. She used the column as a laboratory for the voice that eventually shaped The Hour of the Star (1977). The chronicles are the clearest available record of a serious literary novelist using a newspaper slot as a recurring writing practice across six years."
+        },
+        {
+          "title": "The Hour of the Star, finished weeks before her death",
+          "content": "Lispector finished The Hour of the Star in 1977, the year she died of inoperable ovarian cancer. The novel is narrated by a fictional male writer struggling to tell the story of a poor Brazilian girl from the Northeast. Lispector pasted together drafts on bits of paper during her final illness. The book was published in October 1977. She died on 9 December 1977, the eve of her 57th birthday."
+        }
+      ]
+    },
+    {
+      "name": "Antoni Gaudí",
+      "domain": "architecture",
+      "era": "1852-1926",
+      "region": "Catalonia",
+      "bio": "Catalan architect who took charge of the Sagrada Familia project in 1883 and devoted his final decade (1915-1926) entirely to its construction. Died on 10 June 1926 after being struck by a tram three days earlier.",
+      "oneLiner": "Designed buildings by hanging weights from strings and then built them upside down in his head.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["designing", "building"],
+      "narratives": [
+        {
+          "title": "The hanging chain model",
+          "content": "To calculate the structural loads of the Colonia Guell crypt and the Sagrada Familia, Gaudi built inverted scale models using weighted strings. He would hang sandbags from chains to map the catenary curves the structure would need to carry, then photograph the model upside down to see the building right-side up. The method bypassed most of the mathematics that contemporary architects used and produced shapes no ruler-and-compass method would have generated. The models still exist in the Sagrada Familia's workshops."
+        },
+        {
+          "title": "1915-1926, moving into the site",
+          "content": "From 1915 onwards Gaudi devoted himself exclusively to the Sagrada Familia. In his final years he effectively moved into a workshop on the building site and lived there, supervising stonemasons directly. He ceased taking commissions from private clients and subsisted on donations he solicited door to door in Barcelona. The practice, of a celebrated architect literally begging for stonemason wages, is a rare case in the history of the profession."
+        },
+        {
+          "title": "Trencadis, or mosaics from broken tiles",
+          "content": "Gaudi invented the technique now called trencadis, in which broken ceramic fragments from factory waste are assembled into mosaic. He used it across the benches and dragon of Park Guell, the roofs of Casa Batllo, and the Sagrada Familia pinnacles. The practice treats industrial waste as a design medium and predates the contemporary concept of material reuse by roughly a century."
+        },
+        {
+          "title": "June 7, 1926, the tram",
+          "content": "On 7 June 1926 Gaudi was walking to daily mass at the Church of Saint Philip Neri when he was struck by a tram on the Gran Via de les Corts Catalanes. Dressed plainly and carrying no identification, he was mistaken for a vagrant and taken to a pauper's hospital. His identity was only confirmed the following day, when the chaplain of the Sagrada Familia recognised him. He refused to be moved to a better hospital, saying he belonged among the poor. He died on 10 June 1926 at age 73."
+        }
+      ]
+    },
+    {
+      "name": "Charles and Ray Eames",
+      "domain": "furniture / film / exhibition design",
+      "era": "1907-1978 / 1912-1988",
+      "region": "US",
+      "bio": "American designers whose office in Venice, California (1943-1988) produced furniture, films, exhibitions, and architecture. Designed the Eames Lounge Chair (1956), the Eames House (1949), and the short film Powers of Ten (1968/1977).",
+      "oneLiner": "Treated a chair, a house, and a film about the universe as the same design problem.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "1941-1942, plywood leg splints for the Navy",
+          "content": "The Eames furniture career started with a Navy contract. In 1941-1942 Charles and Ray developed bent plywood leg splints for wounded soldiers in the Pacific, having figured out how to mould plywood into compound curves in their Los Angeles apartment. The Navy funding allowed them to transition from splints to furniture mass production. The DCW (Dining Chair Wood) and DCM (Dining Chair Metal) chairs, introduced in 1945-1946, are direct descendants of the splint curve."
+        },
+        {
+          "title": "1949, Case Study House #8",
+          "content": "In 1949 the Eameses completed their own home, Case Study House #8, in Pacific Palisades, California. They assembled it from off-the-shelf industrial steel components ordered from a catalogue. The house is one of the most studied examples in the twentieth century of a building assembled from existing parts rather than custom fabricated. They lived in it for the rest of their working lives. Their studio eventually occupied a former garage at 901 Abbot Kinney Boulevard in Venice from 1943 to 1988."
+        },
+        {
+          "title": "Powers of Ten, 1968/1977",
+          "content": "The Eames Office made Powers of Ten in 1968 and re-released the final version in 1977. The nine-minute film moves the camera in jumps of ten to the power from a picnic in Chicago outward to the edge of the observable universe, then back inward to the quarks inside a hand. It has since been used in high school science curricula worldwide and is now archived by the US Library of Congress. The film is a design object disguised as an educational one. The brief came from IBM."
+        },
+        {
+          "title": "1956 Lounge Chair, a gift",
+          "content": "The Eames Lounge Chair (670) and Ottoman (671) were designed as a gift for the film director Billy Wilder in 1956. They were intended as a single one-off, a leather and moulded plywood chair with the look of a worn baseball glove. Herman Miller put it into production immediately. It has been in continuous production ever since and is one of the few pieces of twentieth-century designer furniture in the permanent collection of MoMA."
+        }
+      ]
+    },
+    {
+      "name": "Gertrude Jekyll",
+      "domain": "garden design",
+      "era": "1843-1932",
+      "region": "UK",
+      "bio": "English garden designer and writer who created more than 400 gardens in the UK, Europe, and North America and published 15 books on planting design, including Colour in the Flower Garden (1908).",
+      "oneLiner": "Treated a flower bed as a piece of music with a start and an end and taught the whole Arts and Crafts movement to read the score.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "The partnership with Lutyens, 1895 onwards",
+          "content": "In 1895 the architect Edwin Lutyens, then 25, designed Munstead Wood in Surrey for Jekyll, then 52. It was the first of their house and garden collaborations, which would eventually span dozens of projects including the British Pavilion at the Paris Exposition in 1900 and the Hestercombe gardens in Somerset. Lutyens designed the hard structure. Jekyll designed the planting in its relationship to the hard structure. The partnership is now treated as one of the foundational collaborations of the Arts and Crafts movement."
+        },
+        {
+          "title": "Colour in the Flower Garden, 1908",
+          "content": "In her 1908 book Colour in the Flower Garden Jekyll treated the herbaceous border as a sequence of colour in time. She specified that a 200-foot border should begin in silver-grey and pale blue, move through pink and cream into the hot oranges and reds at the centre, and then return through yellow and pale blue at the far end. She had arrived at the system by studying Turner's paintings and Impressionist colour theory. The book is still in print and is still used by English gardeners as a planning template."
+        },
+        {
+          "title": "Fifteen books, most written after 56",
+          "content": "Jekyll did not publish her first book, Wood and Garden, until 1899, when she was 56. She wrote fifteen books, and most of her 400 plus garden commissions, after the age at which many of her contemporaries retired. Her eyesight was failing throughout the period. She used a magnifying glass to read and wrote in a large, deliberate hand. The late and sustained output is one of the most documented examples of a career's peak arriving well past 60."
+        },
+        {
+          "title": "Old West Surrey, 1904",
+          "content": "In 1904 Jekyll published Old West Surrey, a record of vanishing rural crafts, furniture, and domestic objects in the Surrey villages around Munstead. She spent years photographing and sketching old wheelwrights, ironwork, and cottage interiors before they disappeared. The book is now used by English folk historians as a primary source on late Victorian rural life. It is evidence that her attention to colour and texture was not confined to the garden."
+        }
+      ]
+    },
+    {
+      "name": "Malcolm X",
+      "domain": "civil rights oratory",
+      "era": "1925-1965",
+      "region": "US",
+      "bio": "American human rights activist who rose through the Nation of Islam in the 1950s, broke from it in March 1964, made the Hajj to Mecca in April 1964, and founded the Organization of Afro-American Unity later that year. Assassinated at the Audubon Ballroom in Harlem on 21 February 1965.",
+      "oneLiner": "Rebuilt his worldview in public, on camera, three times in twenty years.",
+      "primaryCategoryIntent": "influencing",
+      "secondaryCategoryIntents": ["expressing", "connecting"],
+      "narratives": [
+        {
+          "title": "1948, reading the dictionary in prison",
+          "content": "Serving an eight to ten year sentence for larceny at Charlestown State Prison from 1946 onwards, Malcolm Little began a self-education regime that included copying out pages of the dictionary by hand. By his own account he worked through the alphabet letter by letter. The practice was the basis for the later oratorical style: it drew from a larger English vocabulary than the Nation of Islam's speaking tradition used, and it was deliberately constructed inside a prison cell as an instrument for future public argument. He was paroled in August 1952 and began signing his name Malcolm X."
+        },
+        {
+          "title": "April 1964, the Hajj and the worldview reversal",
+          "content": "Within weeks of publicly leaving the Nation of Islam on 8 March 1964, Malcolm X made the Hajj pilgrimage to Mecca in April 1964. He wrote letters home from Saudi Arabia describing Muslims of all races eating and praying in the same space and declaring that the racial separation he had preached for twelve years was not supported by Islam as he now saw it. He returned to the United States and publicly repudiated the idea that all white people were the enemy. The reversal cost him support in both the Nation of Islam and parts of the civil rights movement, and he spoke publicly for only ten more months."
+        },
+        {
+          "title": "The Ballot or the Bullet, April 1964",
+          "content": "On 3 April 1964, less than a month after leaving the Nation of Islam, Malcolm X delivered The Ballot or the Bullet in Cleveland, Ohio. The speech laid out the choice as a stark one: Black Americans could work within the electoral system or could be forced to defend themselves with arms. It was a pragmatic speech, not a call to violence, and it is now considered one of the three or four most important American speeches of the twentieth century. He delivered a version of it only a handful of times before his assassination."
+        },
+        {
+          "title": "March 26, 1964, the one meeting with King",
+          "content": "Malcolm X and Martin Luther King Jr. met exactly once, on 26 March 1964, briefly in Washington DC after a Senate debate over the Civil Rights Act. The meeting lasted about one minute. They exchanged handshakes and a few sentences and posed for a single photograph. That photograph, of the two men standing side by side smiling, is one of the most reproduced images of the civil rights era. The fact that the meeting lasted approximately sixty seconds is usually omitted when the image is printed."
+        }
+      ]
+    },
+    {
+      "name": "Mahatma Gandhi",
+      "domain": "nonviolent resistance",
+      "era": "1869-1948",
+      "region": "India",
+      "bio": "Indian lawyer and political leader who developed satyagraha, a method of nonviolent civil disobedience, first in South Africa (1893-1915) and then in India until independence in August 1947. Assassinated on 30 January 1948.",
+      "oneLiner": "Built a political method out of tiny, repeatable acts and ran it for forty years without revision.",
+      "primaryCategoryIntent": "influencing",
+      "secondaryCategoryIntents": ["strategizing", "nurturing"],
+      "narratives": [
+        {
+          "title": "March 12, 1930, the Salt March",
+          "content": "On 12 March 1930 Gandhi began walking from Sabarmati Ashram in Ahmedabad with 78 companions toward the coastal village of Dandi, 240 miles away, to break the British salt tax by making salt from seawater. The walk took 24 days. By the time he reached the sea on 6 April he had been joined by thousands, and the simple act of picking up a handful of salt from the beach was enough to trigger a national civil disobedience movement that led to around 60,000 arrests. The Salt March is now a template for public symbolic protest."
+        },
+        {
+          "title": "September 11, 1906, Johannesburg",
+          "content": "On 11 September 1906 Gandhi presided over a meeting of about 3,000 Indians at the Empire Theatre in Johannesburg to oppose the Transvaal government's Asiatic Registration Act, which required all Indians to be fingerprinted. At the meeting he formally introduced the concept of satyagraha, which he translated as 'truth force' or 'soul force,' as a method of mass resistance. The eight-year campaign that followed in South Africa was where he tested every technique he later used on the British in India."
+        },
+        {
+          "title": "1917, Champaran and the farmers' files",
+          "content": "In 1917 Gandhi travelled to the Champaran district of Bihar on the invitation of a peasant named Rajkumar Shukla, who had walked across India to find him. The peasants were being forced by British indigo planters to grow indigo on part of their land under exploitative contracts. Gandhi stayed for months, interviewed thousands of peasants, recorded their statements carefully, and submitted them to an official commission. The commission ruled in favour of the peasants. The Champaran campaign is usually cited as the moment at which Gandhi transitioned from a returning diaspora lawyer into an all-India political figure."
+        },
+        {
+          "title": "The daily spinning",
+          "content": "Gandhi spun cotton on a charkha (spinning wheel) for at least an hour every day for decades, and required his ashram residents to do the same. The practice was not symbolic decoration. He argued that daily physical labour for a domestic product was a concrete way of boycotting British textile imports, and that the practice bound the spinner's political commitment into the fabric of their day. He counted the minutes and the yardage in his diary. The wheel appears at the centre of the Indian flag because of this forty-year habit."
+        }
+      ]
+    },
+    {
+      "name": "Gloria Steinem",
+      "domain": "feminist organising / journalism",
+      "era": "1934-present",
+      "region": "US",
+      "bio": "American feminist journalist and organiser. Co-founded Ms. magazine in 1972 and the National Women's Political Caucus in July 1971. Her investigative article on the Playboy Club was published in Show magazine in 1963.",
+      "oneLiner": "Used her own undercover reporting to expose a single club and turned the byline into fifty years of political organising.",
+      "primaryCategoryIntent": "influencing",
+      "secondaryCategoryIntents": ["connecting", "expressing"],
+      "narratives": [
+        {
+          "title": "1963, A Bunny's Tale",
+          "content": "In 1963 Steinem took a job as a Playboy Bunny at the Playboy Club in New York under a false identity and wrote an investigative article, A Bunny's Tale, for Show magazine about the exploitative working conditions, invasive medical exams, and low pay. The article was printed in two parts and made her reputation as a journalist, though she later said it also made her unhireable for serious political reporting for years because editors saw her as 'the Bunny girl.'"
+        },
+        {
+          "title": "1972, the Ms. magazine test issue",
+          "content": "In 1972 Steinem and her co-founders launched Ms. magazine as a test insert in New York Magazine. The full first issue, 300,000 copies with Wonder Woman on the cover, sold out in eight days. Within weeks 26,000 subscription orders had arrived. Before Ms. there was no mass-market feminist periodical in the United States. After Ms. the idea that feminist content could be a commercial proposition, not just a mimeographed newsletter, was settled."
+        },
+        {
+          "title": "July 10, 1971, the NWPC",
+          "content": "On 10 July 1971 Steinem, together with Bella Abzug, Betty Friedan, Shirley Chisholm, and more than 300 women, founded the National Women's Political Caucus in Washington, DC. The Caucus was built not to elect one woman but to push women into state and federal office across the country, with training, funding, and endorsements. It is still operating. Roughly a quarter of all the women who have ever served in the US Congress passed through some part of its pipeline."
+        },
+        {
+          "title": "Talking circles as method",
+          "content": "Across five decades Steinem has run what she calls 'talking circles,' small structured conversations in which participants take turns speaking without interruption. She describes the method as borrowed from Indigenous consensus practices she encountered in the 1970s. She has used the circles in feminist meetings, in her 1986 book Marilyn, in small group trainings, and in her 2015 memoir My Life on the Road, where she argues that the circle is a piece of infrastructure for political movements, not a mood-setting exercise."
+        }
+      ]
+    },
+    {
+      "name": "Cesar Chavez",
+      "domain": "farmworker organising",
+      "era": "1927-1993",
+      "region": "US",
+      "bio": "American labour organiser who co-founded the National Farm Workers Association in September 1962 and led the Delano grape strike and boycott (1965-1970) that secured the first significant contracts for agricultural workers in US history.",
+      "oneLiner": "Built a union out of house meetings and turned a grape into a political question in American supermarkets.",
+      "primaryCategoryIntent": "influencing",
+      "secondaryCategoryIntents": ["nurturing", "connecting"],
+      "narratives": [
+        {
+          "title": "March 1966, the 300-mile walk to Sacramento",
+          "content": "In March 1966 Chavez led a 300-mile march from Delano to Sacramento to publicise the grape strike. About 50 marchers started. They walked for 25 days. By the time they reached the state capitol steps on Easter Sunday 1966, over 8,000 people had gathered to greet them. During the march the Schenley liquor company, the first target of the boycott, agreed to sign a contract with the NFWA, the first recognition contract in the history of American farm labour."
+        },
+        {
+          "title": "February 1968, the 25-day fast",
+          "content": "In February 1968 Chavez began a public fast at the UFW headquarters in Delano as a response to growing pressure from some union members to use violent tactics. He fasted for 25 days, losing around 35 pounds. The fast ended on 10 March 1968 at a public Mass attended by Robert F. Kennedy, who broke bread with Chavez on camera. The event is one of the clearest demonstrations in twentieth-century American labour history of a leader subordinating his own body to hold a tactical line."
+        },
+        {
+          "title": "House meetings in the San Joaquin Valley, 1962-1965",
+          "content": "In the three years between founding the NFWA and the Delano strike, Chavez and his organisers held one-on-one and small group house meetings across hundreds of small agricultural towns in the San Joaquin Valley. A typical meeting had six to twelve people in a kitchen or on a porch. Chavez would listen for two hours and speak for ten minutes. The membership of the union was built at this pace and at this scale, which is why the 1965 strike held when it was called."
+        },
+        {
+          "title": "May 1968, the grape boycott goes national",
+          "content": "In May 1968 Chavez announced on NBC's Today show that the UFW boycott would expand from specific grape growers to all California table grapes. Within a year the boycott was being supported by housewives, clergy, and college students in cities from New York to London. By 1970 over a dozen major grape growers had signed contracts. The boycott is now studied as one of the most successful consumer pressure campaigns in American history, and its mechanics, list building, church organising, supermarket pickets, are still the playbook for contemporary boycott campaigns."
+        }
+      ]
+    },
+    {
+      "name": "Marie Curie",
+      "domain": "physics / chemistry",
+      "era": "1867-1934",
+      "region": "Poland / France",
+      "bio": "Polish-French physicist and chemist, the first person to win Nobel Prizes in two different sciences: Physics (1903, shared with Pierre Curie and Henri Becquerel) and Chemistry (1911, alone). Discovered polonium and radium in 1898.",
+      "oneLiner": "Processed a literal tonne of pitchblende in a leaking shed to isolate a tenth of a gram of radium.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["building", "nurturing"],
+      "narratives": [
+        {
+          "title": "1898-1902, the pitchblende shed",
+          "content": "In July 1898 and December 1898 the Curies announced the discovery of polonium and radium respectively. To isolate the new elements Curie spent the next four years processing pitchblende, a uranium ore, in a leaking shed at the Ecole Superieure de Physique et de Chimie Industrielles in Paris. She worked through one tonne of ore to yield one tenth of a gram of radium chloride by 1902. She ladled boiling sludge with a heavy iron rod nearly her own height. The physical labour is often omitted from the scientific biography and is a closer analogue to heavy industrial work than to laboratory chemistry."
+        },
+        {
+          "title": "Late 1914, the petites Curies",
+          "content": "In late 1914, within weeks of the outbreak of the First World War, Curie realised that X-ray imaging could be used to locate shrapnel in wounded soldiers at the front, but that the army had no mobile units. Within the first year of the war she directed the installation of 20 mobile radiological vehicles, which became known as 'petites Curies,' and over 200 field hospital radiology units. She drove some of the vans herself and trained roughly 150 women as operators. An estimate of over one million wounded soldiers were treated with her X-ray equipment."
+        },
+        {
+          "title": "1911, a second Nobel alone",
+          "content": "In 1911 Curie was awarded the Nobel Prize in Chemistry for the discovery of radium and polonium. It was her second Nobel and the first time anyone had been awarded Nobels in two different sciences. The award came during a public scandal over her affair with the married physicist Paul Langevin, during which the Nobel committee had privately asked her not to attend the ceremony. She attended anyway. The prize lecture she delivered in Stockholm on 11 December 1911 remains in print."
+        },
+        {
+          "title": "The lab notebooks, still radioactive",
+          "content": "Curie's laboratory notebooks from her work on radium are still so radioactive a century later that they are kept in lead-lined boxes at the Bibliotheque Nationale in Paris. Readers who wish to consult them must sign a waiver acknowledging the health risk. The notebooks are a physical record of the cost of the discovery. She died in 1934 of aplastic anaemia caused by long-term radiation exposure at age 66."
+        }
+      ]
+    },
+    {
+      "name": "Rosalind Franklin",
+      "domain": "X-ray crystallography",
+      "era": "1920-1958",
+      "region": "UK",
+      "bio": "English chemist and X-ray crystallographer who produced Photograph 51 at King's College London in May 1952. Died of ovarian cancer on 16 April 1958, age 37, before the Nobel Prize for the structure of DNA was awarded to Watson, Crick, and Wilkins in 1962.",
+      "oneLiner": "Produced the image that unlocked DNA and was written out of its story for thirty years.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["building"],
+      "narratives": [
+        {
+          "title": "May 1952, Photograph 51",
+          "content": "In May 1952 Franklin and her PhD student Raymond Gosling captured Photograph 51, an X-ray diffraction image of the B form of DNA, at King's College London. The cross pattern in the image is the signature of a helical structure. Franklin's own notebook for the period contains the line 'Evidence for spiral [meaning helical] structure.' She did not immediately publish because she was working carefully through the competing A form data. Her colleague Maurice Wilkins showed the photograph to James Watson without her permission in January 1953. Watson and Crick produced their model weeks later."
+        },
+        {
+          "title": "1942-1945, graphitising and non-graphitising carbon",
+          "content": "Franklin's doctoral work, conducted during the Second World War at the British Coal Utilisation Research Association from 1942 to 1945, was on the microstructure of coal. She measured helium density and pore structure to classify coals by how they behaved under heat. She coined the terms 'graphitising and non-graphitising carbon' which are still standard in carbon materials science. The coal work is a clear example of her style: rigorous pattern extraction from noisy experimental data, years of careful measurement before publication."
+        },
+        {
+          "title": "March 7, 1953, a day after the Copenhagen papers",
+          "content": "Franklin sent two papers on A-form DNA to Copenhagen in early March 1953. Watson and Crick completed their double helix model on 7 March 1953, one day after her papers arrived. Franklin had already independently concluded that both A and B forms of DNA were helical. Her papers were published alongside Watson and Crick's in Nature on 25 April 1953, in a format which made it look as though her work was a supporting confirmation of theirs rather than a parallel discovery. The framing held for thirty years."
+        },
+        {
+          "title": "1955, tobacco mosaic virus as a uniform rod",
+          "content": "By 1955, working at Birkbeck College, Franklin was applying the same X-ray technique to the tobacco mosaic virus. She demonstrated that all TMV particles were uniform in length, contradicting the competing theory of Norman Pirie. Her five-foot scale model of the TMV was scheduled for display at Expo 58 in Brussels, which opened on 17 April 1958. She died on 16 April 1958, one day before the opening, of ovarian cancer, aged 37."
+        }
+      ]
+    },
+    {
+      "name": "Barbara McClintock",
+      "domain": "genetics",
+      "era": "1902-1992",
+      "region": "US",
+      "bio": "American cytogeneticist who discovered the phenomenon of genetic transposition ('jumping genes') in maize in 1948 at Cold Spring Harbor Laboratory, and was awarded the unshared Nobel Prize in Physiology or Medicine in 1983, more than 30 years later.",
+      "oneLiner": "Discovered jumping genes in the summer of 1944 and waited 35 years for the field to catch up.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["synthesizing"],
+      "narratives": [
+        {
+          "title": "1948, naming Ac and Ds",
+          "content": "In early 1948 McClintock, working alone on maize seed genetics at Cold Spring Harbor Laboratory, made the observation that two genetic loci she had identified, which she named Dissociation (Ds) and Activator (Ac), could change position on a chromosome. It was the first demonstration that genetic elements could move. The work contradicted the central dogma of genetics at the time, which held that genes were fixed in place. She presented the results at the 1951 Cold Spring Harbor Symposium. The reception was, in her own description, 'puzzlement, even hostility.'"
+        },
+        {
+          "title": "Stopping publication, 1953",
+          "content": "By 1953 McClintock had stopped publishing the details of her work on controlling elements. She did not stop doing the research. She continued to grow maize and record results for the next three decades, but she concluded that the papers were going into the literature unread and she no longer wanted to spend her time writing them up. The decision is extraordinary. A senior geneticist chose to withhold results from the published record of her field because she judged the field was not ready to receive them."
+        },
+        {
+          "title": "1983, the unshared Nobel",
+          "content": "In 1983, 35 years after the original observation, McClintock was awarded the Nobel Prize in Physiology or Medicine. It was unshared, making her the first woman to win an unshared Nobel in that category. She was 81. By the time the prize was awarded, molecular biologists had independently rediscovered transposable elements in bacteria and had begun citing her original maize papers from the 1940s and early 1950s. The 35-year gap between discovery and prize is one of the widest in the history of the Nobel committee."
+        },
+        {
+          "title": "A feeling for the organism",
+          "content": "Evelyn Fox Keller's 1983 biography A Feeling for the Organism was published to coincide with the Nobel. It described McClintock's method of observation: hours in the maize field, paying attention to individual plants, waiting for patterns to declare themselves rather than imposing frameworks on the data. The title phrase, a feeling for the organism, is McClintock's own. It is one of the few explicit articulations in twentieth-century biology of a research method based on patience and sensory attention rather than hypothesis-and-test."
+        }
+      ]
+    },
+    {
+      "name": "Katherine Johnson",
+      "domain": "applied mathematics / orbital mechanics",
+      "era": "1918-2020",
+      "region": "US",
+      "bio": "American mathematician who worked at NASA and its predecessor from June 1953 to 1986. Calculated trajectories for Mercury, Gemini, Apollo, and Space Shuttle missions. Awarded the Presidential Medal of Freedom in 2015.",
+      "oneLiner": "John Glenn said he would not fly until she had checked the machine's numbers by hand.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["building"],
+      "narratives": [
+        {
+          "title": "1962, Get the girl to check the numbers",
+          "content": "Before John Glenn's Friendship 7 orbital flight on 20 February 1962, NASA's new electronic computers had calculated the trajectory. Glenn, on the record, refused to fly until the numbers had been checked by hand. He specifically asked that Katherine Johnson be the one to verify them. 'Get the girl to check the numbers,' he is reported to have said. 'If she says they're good, then I'm ready to go.' Johnson ran the calculations by hand on a desktop mechanical calculator and confirmed them. The flight went ahead."
+        },
+        {
+          "title": "1937, West Virginia State at 18",
+          "content": "Johnson graduated summa cum laude from West Virginia State College in 1937, at age 18, with double degrees in mathematics and French. She had skipped multiple grades as a child and entered college at 15. She went on to become one of three Black students, and the only woman, selected to desegregate West Virginia University's graduate programme in 1939."
+        },
+        {
+          "title": "June 1953, joining NACA",
+          "content": "In June 1953 Johnson accepted a position in the computing section at NACA's Langley Memorial Aeronautical Laboratory in Hampton, Virginia. The section was segregated. Johnson worked alongside Dorothy Vaughan and Mary Jackson in what was called 'West Computing.' Over the next decade the lines between the segregated sections blurred as specific mathematicians, Johnson among them, were requested by name by engineers. Her transfer into the Flight Research Division is one of the first documented cases of a Black woman mathematician being poached from a segregated pool at a major American research agency."
+        },
+        {
+          "title": "Apollo 11, watching from a meeting",
+          "content": "Johnson contributed to the trajectory calculations for the Apollo 11 moon landing in July 1969. She was not at Mission Control during the landing itself. She was attending a meeting in the Pocono Mountains, and watched the moon landing on a small television screen with a few colleagues. She continued at NASA until 1986, working on Space Shuttle missions, and lived to see the 2016 film Hidden Figures released about her career. She died in February 2020 at age 101."
+        }
+      ]
+    },
+    {
+      "name": "Jane Goodall",
+      "domain": "primatology / field ethology",
+      "era": "1934-2025",
+      "region": "UK / Tanzania",
+      "bio": "English primatologist who began field research at Gombe Stream in Tanzania on 14 July 1960, at the invitation of the paleoanthropologist Louis Leakey. Earned her PhD from Cambridge in 1965 without first completing an undergraduate degree.",
+      "oneLiner": "Sat still in a Tanzanian forest for sixty years until the chimpanzees started handing her the truth.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["nurturing", "expressing"],
+      "narratives": [
+        {
+          "title": "1960, David Greybeard and the termite stick",
+          "content": "In 1960, a few months into her fieldwork at Gombe Stream, Goodall observed a chimpanzee she had named David Greybeard repeatedly strip the leaves from grass stalks and push them into termite mounds, then lick the clinging termites off. He was using a tool. She also observed him modify the stick first. This was a tool being made. She wired her findings to Louis Leakey, who replied: 'Now we must redefine tool, redefine Man, or accept chimpanzees as humans.' The observation ended the working definition of Homo sapiens as 'the tool-using animal.'"
+        },
+        {
+          "title": "Naming subjects over numbering them",
+          "content": "Against the conventions of the field, Goodall named rather than numbered her research subjects. David Greybeard, Flo, Fifi, Goliath. Her supervisors at Cambridge told her this was unscientific and that she should use numbers to maintain objectivity. She refused. The naming practice forced researchers and readers to treat the chimpanzees as individuals with persistent identities and histories, and it is now standard in long-term primatology field sites. The fight over that single editorial decision lasted through most of her PhD."
+        },
+        {
+          "title": "July 14, 1960, arrival at Gombe with her mother",
+          "content": "The colonial authorities in Tanganyika in 1960 refused to let Goodall, then 26 and without a degree, work alone at Gombe Stream. Her mother Vanne accompanied her for the first few months to satisfy the regulation. The two women set up camp on the lakeshore on 14 July 1960 with a single pair of binoculars, a notebook, and a local cook. The fieldwork that followed ran continuously, at the same site, for more than sixty years. The initial set-up cost was roughly equivalent to a few hundred British pounds."
+        },
+        {
+          "title": "1986, leaving fieldwork for advocacy",
+          "content": "At a conference in Chicago in 1986 Goodall decided, mid-meeting, that she could no longer continue as a field researcher while the chimpanzee population in Africa was collapsing from habitat destruction and the bushmeat trade. She effectively ended her direct field career that week and began what became roughly 300 days of travel a year on advocacy work. Between 1986 and her death in 2025 she spent almost no complete weeks in one place. The transition from quiet watcher to constantly moving campaigner is one of the sharpest career pivots in the history of field biology."
+        }
+      ]
+    },
+    {
+      "name": "Rachel Carson",
+      "domain": "marine biology / environmental writing",
+      "era": "1907-1964",
+      "region": "US",
+      "bio": "American marine biologist and nature writer. Trained as a zoologist, worked for the US Bureau of Fisheries from 1936, and left government in 1952 to write full-time. Published Silent Spring on 27 September 1962.",
+      "oneLiner": "Wrote a scientific book that started an environmental movement and did it while she was dying.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["clarifying", "influencing"],
+      "narratives": [
+        {
+          "title": "September 27, 1962, Silent Spring",
+          "content": "Silent Spring was published on 27 September 1962 by Houghton Mifflin. The book was a compiled investigation of evidence on the bioaccumulation of DDT and other synthetic pesticides in the food chain, drawn from scientific literature the US government had been ignoring since the 1940s. The chemical industry responded with legal threats from DuPont and Velsicol. One critic, Robert White-Stevens, declared on television: 'If man were to follow the teachings of Miss Carson, we would return to the Dark Ages.' On 3 April 1963 CBS Reports aired The Silent Spring of Rachel Carson, and on 15 May 1963 a presidential science advisory committee report largely vindicated her findings."
+        },
+        {
+          "title": "Writing Silent Spring with cancer",
+          "content": "Carson was diagnosed with breast cancer during the final drafting of Silent Spring. In March 1960 she underwent a mastectomy, described to her as precautionary. In December 1960 she was told the tumour had been malignant and had metastasised. She wrote or revised most of the final text while undergoing radiation treatment and while keeping the diagnosis secret from her publisher, her editor, and the public, so that her credibility could not be attacked on the grounds of illness. She died on 14 April 1964, 18 months after publication, at age 56."
+        },
+        {
+          "title": "1951, The Sea Around Us on the bestseller list for 86 weeks",
+          "content": "Carson's second book, The Sea Around Us (1951), remained on the New York Times bestseller list for 86 weeks and won the 1952 National Book Award. The royalties allowed her to leave her position as chief editor of publications at the US Fish and Wildlife Service in 1952, where she had worked since 1936, and to write full time. The financial runway from a single nonfiction book is a rare case in twentieth-century science writing and is what made Silent Spring possible a decade later."
+        },
+        {
+          "title": "1945, noticing DDT early",
+          "content": "Carson first encountered DDT as a writing subject in 1945, right after the war, when the chemical was being released for civilian use and was being marketed as a miracle pesticide. She pitched an article on its risks to Reader's Digest that year. The magazine turned it down. She waited 15 years before returning to the topic, during which time the evidence of ecological damage accumulated to a level she judged undeniable. The 15-year delay, and the long accumulation of small noted details across it, is the research method of the book."
+        }
+      ]
+    },
+    {
+      "name": "Aldo Leopold",
+      "domain": "ecology",
+      "era": "1887-1948",
+      "region": "US",
+      "bio": "American forester and ecologist. Graduated from Yale Forestry School in 1909 and worked in the US Forest Service in Arizona and New Mexico until 1924. Wrote A Sand County Almanac, published posthumously in 1949.",
+      "oneLiner": "Shot a wolf, watched the fierce green fire die in her eyes, and spent the rest of his life rebuilding his profession around the loss.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["synthesizing", "nurturing"],
+      "narratives": [
+        {
+          "title": "The fierce green fire",
+          "content": "Early in his Forest Service career in the American Southwest, Leopold shot a wolf from a cliff above a river. He and his colleagues climbed down to the dying animal. In A Sand County Almanac he later wrote: 'We reached the old wolf in time to watch a fierce green fire dying in her eyes... I thought that because fewer wolves meant more deer, that no wolves would mean hunters' paradise. But after seeing the green fire die, I sensed that neither the wolf nor the mountain agreed with such a view.' The moment became the origin of his concept of 'thinking like a mountain.'"
+        },
+        {
+          "title": "1924, the Gila Wilderness",
+          "content": "In 1924, acting on a proposal Leopold had been drafting since 1921, the US Forest Service designated 755,000 acres of the Gila National Forest in New Mexico as the Gila Wilderness Area, the first area in the federal system to be formally set aside as wilderness with no roads, no buildings, no cars. Leopold's 1921 paper The Wilderness and Its Place in Forest Recreational Policy is the document that led to the designation, and is the reason the US Wilderness Act of 1964 had a precedent to draw on."
+        },
+        {
+          "title": "The Shack, 1935 onwards",
+          "content": "In 1935 Leopold bought 80 acres of degraded sand country near Baraboo, Wisconsin, around an old chicken coop he and his family refurbished and called The Shack. For the next 13 years he and his family planted thousands of trees by hand, restored the prairie by hand, and recorded phenological observations, the dates of bird arrivals, first blossoms, first snows, in notebooks. A Sand County Almanac is mostly written from those notebooks. The book is, among other things, a 13-year record of ecological restoration on a specific small piece of land."
+        },
+        {
+          "title": "April 21, 1948, a grass fire on a neighbour's farm",
+          "content": "On 21 April 1948 Leopold died of a heart attack while helping to fight a grass fire on a neighbour's farm near the Shack. He was 61. A Sand County Almanac, which he had revised and resubmitted to Oxford University Press a week earlier, was published the following year. It has since sold over two million copies in 15 languages and is the founding text of the American land ethic. The fact that he died running towards a fire on a neighbour's farm is usually cited at the end of the book's introduction."
+        }
+      ]
+    },
+    {
+      "name": "Anna Politkovskaya",
+      "domain": "investigative journalism",
+      "era": "1958-2006",
+      "region": "Russia",
+      "bio": "Russian investigative journalist for Novaya Gazeta from June 1999 until her assassination on 7 October 2006 (Vladimir Putin's birthday). Reported extensively on the Second Chechen War and Russian state abuses.",
+      "oneLiner": "Reported on a war everyone else avoided until she was murdered on Putin's birthday.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "1999-2005, the Chechen reporting",
+          "content": "From June 1999 Politkovskaya covered the Second Chechen War for Novaya Gazeta. She travelled repeatedly into Chechnya, often alone, interviewing civilians in villages Russian federal forces had swept. In early 2001 she was detained by federal forces in the village of Khattuni and held in a pit while being interrogated, an experience she wrote about publicly. Her books A Dirty War (2001) and A Small Corner of Hell (2003) are compiled investigations of specific raids, with names, dates, and casualty counts drawn from her own interviews."
+        },
+        {
+          "title": "September 2004, the poisoned tea",
+          "content": "In September 2004, on her way to negotiate with hostage-takers at the Beslan school siege, Politkovskaya fell unconscious after drinking a cup of tea on an Aeroflot flight to the North Caucasus. She believed she had been poisoned to prevent her participation in the negotiations. She was forced to turn back in Rostov-on-Don and required extended hospitalisation in Moscow. She returned to reporting within weeks. Beslan ended with 334 dead, 186 of them children. She continued to investigate the response of the federal forces."
+        },
+        {
+          "title": "October 7, 2006, in her own elevator",
+          "content": "On 7 October 2006, Vladimir Putin's 54th birthday, Politkovskaya was shot dead in the elevator of her apartment building on Lesnaya Street in Moscow. She was 48. She was carrying groceries. She had been investigating torture in Chechnya. Five men were convicted for the killing in 2014 and two were sentenced to life. The person who commissioned the killing has never been officially identified. Her final article was published in Novaya Gazeta the day after her death."
+        },
+        {
+          "title": "December 2005, Vienna",
+          "content": "In December 2005, at a conference in Vienna, Politkovskaya delivered a warning about the conditions for journalists working in Russia: 'People sometimes pay with their lives for saying aloud what they think.' She repeated versions of the sentence at meetings with Western press organisations and at a US State Department hearing. The warning was on the public record for ten months before it was confirmed by her own murder."
+        }
+      ]
+    },
+    {
+      "name": "Viktor Frankl",
+      "domain": "psychiatry / logotherapy",
+      "era": "1905-1997",
+      "region": "Austria",
+      "bio": "Austrian psychiatrist and Holocaust survivor. Deported from Vienna in 1942 and held in Theresienstadt, Auschwitz, and Kaufering III (a Dachau subsidiary camp) across three years. Founded the psychotherapeutic school of logotherapy and published Man's Search for Meaning in German in 1946.",
+      "oneLiner": "Proved inside four concentration camps that the last human freedom is choosing one's attitude.",
+      "primaryCategoryIntent": "strategizing",
+      "secondaryCategoryIntents": ["synthesizing", "nurturing"],
+      "narratives": [
+        {
+          "title": "1942, the manuscript hidden in a coat",
+          "content": "Frankl had finished a draft of his first book on logotherapy when he was deported from Vienna in 1942. He sewed the manuscript into the lining of his coat. The coat was taken from him on arrival at Auschwitz. He later described the loss as a turning point: the theory he had been trying to write up from a chair was now something he would have to test inside the camp, on himself and on other prisoners, without notes. The book he eventually published in 1946 is the result of that test."
+        },
+        {
+          "title": "Nine days to write Man's Search for Meaning",
+          "content": "Frankl wrote the first part of Man's Search for Meaning, the concentration camp section, in nine days in 1946, the year after his liberation, in his apartment in Vienna. He dictated it. He had intended to publish it anonymously, so the author photograph would not distract from the argument. Friends persuaded him to put his name on the cover at the last moment. The book has since sold over sixteen million copies in more than 50 languages."
+        },
+        {
+          "title": "The three ways to meaning",
+          "content": "Frankl defined logotherapy as the search for meaning as the primary human motivation, and specified three ways in which meaning could be realised: through work (making or doing something), through love (encountering another person), and, crucially, through the attitude one takes toward unavoidable suffering. The third category was not theoretical for him. It was his own testimony. 'He who has a why to live for can bear almost any how,' he wrote, quoting Nietzsche, and attributing the line to prisoners he had observed surviving or failing to survive the camps."
+        },
+        {
+          "title": "1945, the discovery in Vienna",
+          "content": "When Frankl returned to Vienna after liberation in 1945 he discovered that his wife Tilly, his brother, and his mother had all been killed in the camps. Only his sister, who had emigrated to Australia, survived. He could have left Austria permanently. He chose to remain in Vienna, resume psychiatric practice, and rebuild the case records. His decision to stay is often cited as a direct application of his own theory: the attitude taken toward an unchangeable fact as the final instance of strategic freedom."
+        }
+      ]
+    },
+    {
+      "name": "George Kennan",
+      "domain": "US diplomacy / Cold War strategy",
+      "era": "1904-2005",
+      "region": "US",
+      "bio": "American diplomat and historian. Served as Deputy Chief of Mission at the US Embassy in Moscow (1944-1946) and as the first Director of the State Department's Policy Planning Staff (May 1947 to May 1949). Author of the Long Telegram (1946) and the X Article (1947).",
+      "oneLiner": "Wrote a 5,363-word telegram from Moscow that defined forty years of US foreign policy.",
+      "primaryCategoryIntent": "strategizing",
+      "secondaryCategoryIntents": ["synthesizing", "analyzing"],
+      "narratives": [
+        {
+          "title": "February 22, 1946, the Long Telegram",
+          "content": "On 22 February 1946 Kennan, then 41 and acting as charge d'affaires at the US Embassy in Moscow, dispatched a 5,363-word telegram to Secretary of State James Byrnes in response to a routine question about Soviet economic policy. The telegram reframed Soviet behaviour as a function of Russian historical insecurity combined with Marxist-Leninist ideology and argued that the correct US response was 'a long-term, patient but firm and vigilant containment.' It circulated in Washington in mimeograph within days. It is the clearest example in twentieth-century US diplomacy of a single document changing an administration's whole analytical frame."
+        },
+        {
+          "title": "July 1947, the X Article",
+          "content": "In July 1947 Kennan published The Sources of Soviet Conduct in Foreign Affairs under the pseudonym X. It was a public, more polished version of the Long Telegram's argument. The essay gave the containment strategy its name in public discourse. Kennan later objected to the way the doctrine was implemented, particularly the militarisation of containment under NSC-68 in 1950. 'I never meant it to be primarily military,' he said. The reinterpretation happened faster than he could correct it."
+        },
+        {
+          "title": "May 1947, running the Policy Planning Staff",
+          "content": "On 5 May 1947 Secretary of State George Marshall appointed Kennan the first Director of the Policy Planning Staff. Kennan held the position until 31 May 1949. In those two years the staff drafted the early Marshall Plan documents, shaped the US response to the Berlin Blockade, and produced the first framework for West German reintegration into Western Europe. The PPS is still the State Department's in-house strategic planning office. Kennan's working method, small team, no press contact, long memos, is the one it still notionally uses."
+        },
+        {
+          "title": "The 30-year retreat",
+          "content": "Kennan left the State Department in 1953 and spent most of the next 50 years as a historian at the Institute for Advanced Study at Princeton. He wrote a two-volume Memoirs (1967 and 1972) that won the National Book Award and the Pulitzer. He also spent those decades publicly criticising almost every subsequent expansion of the containment doctrine, including Vietnam and the late Cold War. The distance between his 1946 framework and the 1950-1990 implementation became his main subject, and his position on the record was a unique case of an architect disavowing the building that had been put up using his drawings."
+        }
+      ]
+    },
+    {
+      "name": "Frank Lloyd Wright",
+      "domain": "architecture",
+      "era": "1867-1959",
+      "region": "US",
+      "bio": "American architect who designed more than 1,000 structures over a 70-year career. Apprenticed under Louis Sullivan at Adler & Sullivan from 1888 to 1893. Founded the Taliesin Fellowship as an apprenticeship system in 1932.",
+      "oneLiner": "Turned apprenticeship into a commune and the commune into the labour force for Fallingwater and the Guggenheim.",
+      "primaryCategoryIntent": "building",
+      "secondaryCategoryIntents": ["designing", "creating"],
+      "narratives": [
+        {
+          "title": "1937, Fallingwater over the waterfall",
+          "content": "The Kaufmann family, who had commissioned a summer house from Wright in 1935, expected the house to be sited looking at the waterfall on their Mill Run, Pennsylvania property. Wright set it directly over the waterfall, with cantilevered concrete terraces projecting over the falling water. He did not produce the drawings until the day E.J. Kaufmann arrived unannounced at Taliesin to see them, at which point Wright, according to apprentices present, designed the whole house in about two hours while Kaufmann drove the 140 miles from Milwaukee. The house was completed in 1937 and has been one of the most photographed buildings in American architecture ever since."
+        },
+        {
+          "title": "1932, the Taliesin Fellowship as labour force",
+          "content": "In 1932, during the Depression, Wright founded the Taliesin Fellowship, an apprenticeship programme at his Wisconsin home and studio. Apprentices paid tuition and worked on Wright's commissions as unpaid labour. The Fellowship trained 625 people during Wright's lifetime and supplied the workforce for Fallingwater (1937), the Johnson Wax headquarters, and the Guggenheim Museum (1959). The structure, apprentices paying to work on the master's projects, is closer to a medieval workshop than a twentieth-century architectural practice and was controversial for the whole of Wright's late career."
+        },
+        {
+          "title": "1943-1959, the Guggenheim spiral",
+          "content": "The Solomon R. Guggenheim Museum in New York was commissioned in 1943 and opened in October 1959, six months after Wright's death at age 91. The design, a continuous upward spiral ramp inside a concrete cylinder, broke with every convention of American museum architecture. The city building department rejected early versions 32 times. Wright was still revising details on site in the final weeks of his life. The completed building remains the only Wright work on Manhattan and is one of the most-visited museum buildings in the world."
+        },
+        {
+          "title": "The Usonian houses, 1937 onwards",
+          "content": "Starting with the Herbert and Katherine Jacobs First House in Madison, Wisconsin in 1937, Wright designed a sequence of modest, affordable single-family homes that he called Usonian, after an abbreviated form of United States of North America. The Usonian houses had no basements, no attics, carport rather than garage, radiant floor heating, and standard kitchen-as-workspace layouts. The type influenced American postwar tract housing far more than Wright's famous larger buildings did. A typical Usonian cost about 5,500 dollars in 1940 money."
+        }
+      ]
+    },
+    {
+      "name": "Florence Nightingale",
+      "domain": "nursing / hospital reform",
+      "era": "1820-1910",
+      "region": "UK",
+      "bio": "English social reformer and founder of modern nursing. Served as superintendent of nursing at Scutari during the Crimean War (1854-1855). Published Notes on Nursing in 1859 and established the Nightingale Training School at St Thomas' Hospital in 1860.",
+      "oneLiner": "Ran the numbers on dying soldiers and drew a pie chart that changed hospital hygiene forever.",
+      "primaryCategoryIntent": "organizing",
+      "secondaryCategoryIntents": ["analyzing", "nurturing"],
+      "narratives": [
+        {
+          "title": "Winter 1854-55, 4,077 dead at Scutari",
+          "content": "During Nightingale's first winter at the British military hospital at Scutari, near Constantinople, 4,077 British soldiers died under her care. She kept careful records and established that roughly ten times as many soldiers had died of typhus, typhoid, cholera, and dysentery as of combat wounds. The finding shaped her entire subsequent life. The hospital had been receiving wounded men and then killing them faster than the battlefield was. The central organising insight is that a hospital, as it was then configured, was the most dangerous place for a wounded soldier to be."
+        },
+        {
+          "title": "1858, the Nightingale rose diagram",
+          "content": "To communicate her Crimean statistics to a Parliament and a British public that did not read statistical tables, Nightingale developed the polar area diagram, now called the Nightingale rose, in which each month was a wedge scaled by the number of deaths and coloured by cause. The diagram was one of the first widely circulated data visualisations in the English-speaking world and is an early example of a reformer using information design as a political instrument. She used it to push through the reforms of the Royal Commission on the Health of the Army in 1858."
+        },
+        {
+          "title": "1859, Notes on Nursing",
+          "content": "Nightingale published Notes on Nursing: What It Is, and What It Is Not in 1859. It was written for the non-professional, specifically for women running households, and was priced cheaply to reach a mass audience. It sold 15,000 copies in the first month. The book reframed nursing, then considered unskilled domestic labour, as a discipline requiring observation, ventilation, light, cleanliness, and record-keeping. It is the founding text of the profession as it now exists."
+        },
+        {
+          "title": "1860, the school at St Thomas'",
+          "content": "In 1860 Nightingale used the 45,000 pounds raised by the public Nightingale Fund to establish the Nightingale Training School at St Thomas' Hospital in London, the first secular nursing school in the world. The school produced trained nurses who were sent to hospitals across Britain and the British Empire over the following decades. Mortality among soldiers in India declined from 69 to 18 per 1,000 within a decade of the associated reforms. Nightingale ran the school from her bed: she was bedridden from 1857 onwards from an illness now thought to have been chronic brucellosis contracted at Scutari, and she directed the institution through correspondence for over 40 years."
+        }
+      ]
+    },
+    {
+      "name": "Clara Barton",
+      "domain": "battlefield relief / Red Cross",
+      "era": "1821-1912",
+      "region": "US",
+      "bio": "American nurse, teacher, and patent clerk who organised battlefield relief during the American Civil War and founded the American Red Cross on 21 May 1881. Led the Red Cross until her forced resignation in 1904 at age 83.",
+      "oneLiner": "Built the American Red Cross out of her Washington apartment and ran it into the field until she was 79.",
+      "primaryCategoryIntent": "organizing",
+      "secondaryCategoryIntents": ["nurturing", "connecting"],
+      "narratives": [
+        {
+          "title": "April 19, 1861, the Capitol as ward",
+          "content": "On 19 April 1861, when soldiers of the 6th Massachusetts Infantry were attacked by a pro-Confederate mob in Baltimore on their way to defend Washington, Barton, then a clerk at the US Patent Office, organised care for the 40 wounded men at the Capitol building. She used her own money to buy supplies and wrote to families to identify the dead and injured. The Capitol was functioning as a makeshift ward that day. Her role is often cited as the moment at which she moved from government employment into field relief work."
+        },
+        {
+          "title": "1865-1868, the Office of Missing Soldiers",
+          "content": "After the Civil War Barton ran the Office of Missing Soldiers from rented rooms in Washington, DC. With a small staff she processed 41,855 letters from families asking what had happened to their men and located 22,000 of them, dead or alive, by cross-referencing prison records, burial lists, and hospital admissions. The office was self-funded in its first year from her lecture fees. She also personally supervised the identification and burial of 13,000 dead Union prisoners at the Andersonville prison camp in Georgia in 1865. The Andersonville national cemetery is the direct result of that season of work."
+        },
+        {
+          "title": "May 21, 1881, the apartment meeting",
+          "content": "On 21 May 1881 Barton held the first official meeting of the American Red Cross in her apartment in Washington, DC. She was 59. She had spent years lobbying successive US presidents to sign the Geneva Convention, which the United States had refused to join, and to permit the establishment of a national Red Cross society. Chester A. Arthur signed the Geneva Convention in 1882 after the organisation was founded. The first local chapter was established in Dansville, New York on 22 August 1881."
+        },
+        {
+          "title": "1889, the Johnstown Flood",
+          "content": "When the South Fork Dam above Johnstown, Pennsylvania broke on 31 May 1889 and killed 2,209 people in a wave of water and debris, Barton, then 67, led the American Red Cross response personally. She arrived on site within five days with 50 doctors and nurses, set up tent hospitals, and remained for five months distributing relief and supervising the construction of warehouses. The Johnstown response is the first major US disaster relief operation of the kind now considered standard, and it established the Red Cross as the default American civilian disaster agency, a role it still holds."
+        }
+      ]
+    }
+  ]
+}

@@ -47,8 +47,9 @@
   width: 100%;
 }
 
-.journey-graph-svg {
+.journey-graph-image {
   width: 100%;
+  border-radius: 12px;
 }
 
 .journey-graph-caption {

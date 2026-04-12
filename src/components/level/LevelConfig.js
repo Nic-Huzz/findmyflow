@@ -25,26 +25,19 @@ export const LEVEL_CONFIG = {
     },
     extraQuests: [
       {
-        id: 'tension_assessment',
-        name: 'Where Am I In The Journey?',
-        route: '/tension-assessment',
-        narrative: 'Identify your starting point.',
-        icon: '🧭',
-      },
-      {
-        id: 'curiosity_compass',
-        name: 'Create Your Play-list',
-        route: '/curiosity-compass?returnTo=/7-day-challenge',
-        narrative: 'What did you love doing as a kid?',
-        icon: '🔍',
+        id: 'wound_map',
+        name: 'Map Your Origin Story',
+        route: '/wound-map?returnTo=/7-day-challenge',
+        narrative: 'What happened before you arrived here?',
+        icon: '🗺️',
       },
       {
         id: 'playlist_challenge',
         name: 'Unlock Play-List',
         route: null,
-        narrative: 'Start your first courage challenge.',
+        narrative: 'Start your first Play-List task.',
         icon: '🎯',
-        lockedUntil: 'curiosity_compass',
+        navigateTo: 'Play-list',
       },
       {
         id: 'healing_task',

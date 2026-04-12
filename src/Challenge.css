@@ -294,15 +294,18 @@
 
 /* ─── Journey Button ─── */
 .challenge-journey-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
   color: rgba(255, 255, 255, 0.8);
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 0.7rem;
+  padding: 0.625rem 1rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .challenge-journey-btn:hover {

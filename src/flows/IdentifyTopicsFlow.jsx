@@ -23,7 +23,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { PROBLEM_SEGMENTS, findProblemSegment } from '../lib/wheelTaxonomy'
 import SwipeCardDeck from '../components/SwipeCardDeck/SwipeCardDeck'
-import '../styles/flow-base.css'
+import '../components/onboarding/JourneyOnboarding.css'
 import './IdentifyTopicsFlow.css'
 
 // ─── Image lookup ───────────────────────────────────────────────────────────
@@ -158,6 +158,12 @@ export default function IdentifyTopicsFlow() {
   const [selectedItems, setSelectedItems] = useState({}) // { [categoryId]: string[] }
   const [customTopicText, setCustomTopicText] = useState('')
 
+  // Hide bottom toolbar during flow
+  useEffect(() => {
+    document.body.classList.add('onboarding-active')
+    return () => document.body.classList.remove('onboarding-active')
+  }, [])
+
   // Load playskills
   useEffect(() => {
     if (!user?.id) return
@@ -227,8 +233,8 @@ export default function IdentifyTopicsFlow() {
     setSwipeKeptIds(kept)
 
     if (kept.length === 0) {
-      // No categories kept — skip to success
-      setStep('save_success')
+      // No categories kept — show empty message, not success
+      setStep('no_topics')
       return
     }
 
@@ -286,12 +292,13 @@ export default function IdentifyTopicsFlow() {
         .eq('step_id', 'identify_topics')
 
       // Create flow session
-      const { data: session } = await supabase.from('flow_sessions').insert({
+      const { data: session, error: sessionError } = await supabase.from('flow_sessions').insert({
         user_id: user.id,
         flow_type: 'identify_topics',
         status: 'completed',
         completed_at: new Date().toISOString(),
       }).select('id').single()
+      if (sessionError || !session) throw sessionError || new Error('Failed to create session')
 
       // Build rows from selectedItems for kept categories
       const rows = []
@@ -340,7 +347,7 @@ export default function IdentifyTopicsFlow() {
 
   if (loadingPlayskills) {
     return (
-      <div className="idt-flow flow-base">
+      <div className="journey-onboarding idt-flow">
         <div className="idt-container">
           <div className="card" style={{ textAlign: 'center' }}>
             <div className="loading-state"><div className="spinner" /></div>
@@ -352,7 +359,7 @@ export default function IdentifyTopicsFlow() {
 
   if (playskills.length === 0 && user?.id) {
     return (
-      <div className="idt-flow flow-base">
+      <div className="journey-onboarding idt-flow">
         <div className="idt-container">
           <div className="card" style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🧭</div>
@@ -360,7 +367,7 @@ export default function IdentifyTopicsFlow() {
             <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '1.5rem' }}>
               Before identifying topics, you need to discover what lights you up.
             </p>
-            <button className="primary-button" onClick={() => navigate('/get-started')}>
+            <button className="jo-cta-button" onClick={() => navigate('/get-started')}>
               Go to Get Started →
             </button>
           </div>
@@ -373,7 +380,11 @@ export default function IdentifyTopicsFlow() {
 
   if (step === 'copy') {
     return (
-      <div className="idt-flow flow-base">
+      <div className="journey-onboarding idt-flow">
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1" />
+          <div className="jo-glow jo-glow-2" />
+        </div>
         <div className="idt-container">
           <div className="card">
             <h1 className="idt-title">Identify Your Topics</h1>
@@ -381,29 +392,22 @@ export default function IdentifyTopicsFlow() {
               Paste this prompt into the AI you've been chatting with. It will find which problems you naturally care about.
             </p>
 
-            <div className="idt-playskills-preview">
-              <div className="idt-preview-label">Your play-skills:</div>
-              {playskills.map((ps, i) => (
-                <div key={i} className="idt-playskill-pill">{ps}</div>
-              ))}
-            </div>
-
             <div className="idt-prompt-preview">
               {prompt.substring(0, 200)}...
             </div>
 
-            <button className="primary-button" onClick={handleCopyPrompt} style={{ width: '100%' }}>
+            <button className="jo-cta-button" onClick={handleCopyPrompt} style={{ width: '100%' }}>
               {copied ? '✓ Copied!' : 'Copy Prompt'}
             </button>
 
             <div className="idt-external-links">
               <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer"
-                className="secondary-button">Open ChatGPT</a>
+                className="pso-back-link">Open ChatGPT</a>
               <a href="https://claude.ai" target="_blank" rel="noopener noreferrer"
-                className="secondary-button">Open Claude</a>
+                className="pso-back-link">Open Claude</a>
             </div>
 
-            <button className="primary-button" onClick={() => setStep('paste')} style={{ width: '100%', marginTop: '1.5rem' }}>
+            <button className="jo-cta-button" onClick={() => setStep('paste')} style={{ width: '100%', marginTop: '1.5rem' }}>
               I have my results →
             </button>
           </div>
@@ -416,7 +420,11 @@ export default function IdentifyTopicsFlow() {
 
   if (step === 'paste') {
     return (
-      <div className="idt-flow flow-base">
+      <div className="journey-onboarding idt-flow">
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1 jo-glow-gold" />
+          <div className="jo-glow jo-glow-2" />
+        </div>
         <div className="idt-container">
           <div className="card">
             <h2>Paste your AI extraction</h2>
@@ -435,13 +443,13 @@ export default function IdentifyTopicsFlow() {
 
             <div className="nav-buttons" style={{ flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
               <button
-                className="primary-button"
+                className="jo-cta-button"
                 onClick={handleParse}
                 disabled={!rawResponse.trim() || isProcessing}
               >
                 {isProcessing ? 'Processing...' : 'Find My Topics →'}
               </button>
-              <button className="secondary-button" onClick={() => setStep('copy')}>
+              <button className="pso-back-link" onClick={() => setStep('copy')}>
                 ← Back
               </button>
             </div>
@@ -457,7 +465,7 @@ export default function IdentifyTopicsFlow() {
 
   if (step === 'swipe') {
     return (
-      <div className="idt-flow idt-swipe-view">
+      <div className="journey-onboarding idt-flow idt-swipe-view">
         <SwipeCardDeck
           cards={swipeCards}
           headerText="Does this problem pull you in?"
@@ -512,7 +520,7 @@ export default function IdentifyTopicsFlow() {
     )
 
     return (
-      <div className="idt-flow flow-base">
+      <div className="journey-onboarding idt-flow">
         <div className="idt-container">
           <div className="card">
             <div className="idt-sub-progress">
@@ -585,7 +593,7 @@ export default function IdentifyTopicsFlow() {
             ))}
 
             <button
-              className="primary-button"
+              className="jo-cta-button"
               onClick={handleSubSelectionContinue}
               disabled={catItems.length === 0 || isProcessing}
               style={{ width: '100%', marginTop: '1.25rem' }}
@@ -601,6 +609,30 @@ export default function IdentifyTopicsFlow() {
     )
   }
 
+  // ─── No topics selected ────────────────────────────────────────────────────
+
+  if (step === 'no_topics') {
+    return (
+      <div className="journey-onboarding idt-flow">
+        <div className="idt-container">
+          <div className="card" style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '3rem' }}>🤔</div>
+            <h2>No topics selected</h2>
+            <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '1rem' }}>
+              None of the categories resonated this time. You can try again or go back.
+            </p>
+            <button className="jo-cta-button" onClick={() => { setStep('swipe'); setSwipeKeptIds([]) }} style={{ width: '100%', marginBottom: '0.5rem' }}>
+              Try again
+            </button>
+            <button className="pso-back-link" onClick={() => navigate('/7-day-challenge')} style={{ width: '100%' }}>
+              Back to Play-List
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // ─── Step 4: Success ──────────────────────────────────────────────────────
 
   if (step === 'save_success') {
@@ -609,7 +641,7 @@ export default function IdentifyTopicsFlow() {
     )
 
     return (
-      <div className="idt-flow flow-base">
+      <div className="journey-onboarding idt-flow">
         <div className="idt-container">
           <div className="card" style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '3rem' }}>🎯</div>
@@ -617,7 +649,7 @@ export default function IdentifyTopicsFlow() {
             <p style={{ color: 'rgba(255,255,255,0.7)' }}>
               Your Play-List is ready. Choose a category and create your first challenge.
             </p>
-            <button className="primary-button" onClick={() => navigate('/7-day-challenge')} style={{ width: '100%', marginTop: '1rem' }}>
+            <button className="jo-cta-button" onClick={() => navigate('/7-day-challenge')} style={{ width: '100%', marginTop: '1rem' }}>
               Go to Play-List →
             </button>
           </div>

@@ -29,7 +29,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
   const [boss, setBoss] = useState(null)
   const [zoneLoaded, setZoneLoaded] = useState(false)
   const [hasEssenceAvatar, setHasEssenceAvatar] = useState(false)
-  const [hasTensionScores, setHasTensionScores] = useState(false)
+  const [hasWoundMap, setHasWoundMap] = useState(false)
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
 
   // Milestone state
@@ -74,15 +74,14 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           setHasEssenceAvatar(true)
         }
       })
-    // Check if tension assessment completed
+    // Check if wound map completed (4 stage selections)
     supabase
-      .from('user_stage_progress')
-      .select('tension_discover')
+      .from('journey_onboarding_selections')
+      .select('id')
       .eq('user_id', userId)
-      .maybeSingle()
       .then(({ data }) => {
-        if (data?.tension_discover != null) {
-          setHasTensionScores(true)
+        if (data?.length >= 4) {
+          setHasWoundMap(true)
         }
       })
     // Check if curiosity compass completed (has skills from curiosity_compass)
@@ -101,11 +100,11 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
 
   const levelQuests = [
     ...(config.zones ? [{ label: 'Zone Diagnosis', done: !!selectedZone }] : []),
-    ...(config.deepDive ? [{ label: config.deepDive.name, done: false }] : []),
+    ...(config.deepDive ? [{ label: config.deepDive.name, done: config.deepDive.id === 'hero_avatar' ? hasEssenceAvatar : false }] : []),
     ...(config.extraQuests || []).map(q => ({
       label: q.name,
       done: q.id === 'hero_avatar' ? hasEssenceAvatar
-        : q.id === 'tension_assessment' ? hasTensionScores
+        : q.id === 'wound_map' ? hasWoundMap
         : q.id === 'curiosity_compass' ? hasCuriosityCompass
         : false,
     })),
@@ -208,7 +207,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       {config.extraQuests?.map(quest => {
         const isCompleted =
           quest.id === 'hero_avatar' ? hasEssenceAvatar
-          : quest.id === 'tension_assessment' ? hasTensionScores
+          : quest.id === 'wound_map' ? hasWoundMap
           : quest.id === 'curiosity_compass' ? hasCuriosityCompass
           : false
         const isLocked = quest.lockedUntil === 'curiosity_compass' && !hasCuriosityCompass

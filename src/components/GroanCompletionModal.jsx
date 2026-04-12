@@ -4,13 +4,14 @@ import { completeGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getScoringCategory } from '../lib/scoringCategories'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import CompassCheckin from './CompassCheckin'
+import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
 import './GroanCompletionModal.css'
 
 const PLAY_LIST_POINTS = 7
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
-  const [step, setStep] = useState('reflection') // 'reflection' | 'voices' | 'compass'
+  const [step, setStep] = useState('reflection') // 'reflection' | 'voices' | 'compass' | 'share'
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [showExplainer, setShowExplainer] = useState(false)
@@ -166,6 +167,13 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     } catch (err) {
       console.warn('Error saving compass:', err)
     }
+    setStep('share')
+  }
+
+  const handleShareDone = ({ shared } = {}) => {
+    if (shared) {
+      confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 } })
+    }
     onComplete?.()
     onClose()
   }
@@ -273,8 +281,18 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         {step === 'compass' && (
           <CompassCheckin
             onComplete={handleCompassComplete}
-            onSkip={() => { onComplete?.(); onClose() }}
+            onSkip={() => setStep('share')}
             challengeTitle={challenge.title || challenge.source_label}
+          />
+        )}
+
+        {step === 'share' && (
+          <ShareWinStep
+            userId={userId}
+            challenge={challenge}
+            scaryScore={scaryScore}
+            wahooScore={wahooScore}
+            onDone={handleShareDone}
           />
         )}
       </div>

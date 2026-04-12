@@ -456,12 +456,13 @@ export default function PlaySkillsOnboarding() {
         .eq('step_id', 'get_started')
 
       // Create a flow session for this save
-      const { data: session } = await supabase.from('flow_sessions').insert({
+      const { data: session, error: sessionError } = await supabase.from('flow_sessions').insert({
         user_id: user.id,
         flow_type: 'get_started_playskills',
         status: 'completed',
         completed_at: new Date().toISOString(),
       }).select('id').single()
+      if (sessionError || !session) throw sessionError || new Error('Failed to create session')
 
       // Insert kept placemakes into nikigai_clusters
       const rows = keptPlacemakes.map(item => ({
@@ -661,7 +662,7 @@ export default function PlaySkillsOnboarding() {
           <button className="jo-cta-button" onClick={() => transitionTo(BEATS.PASTE)}
             style={{ width: '100%', marginTop: '1.5rem' }}>
             <span className="jo-shimmer-layer" />
-            I have my results →
+            I have my results
             <span className="jo-btn-arrow">&#8594;</span>
           </button>
           <button className="pso-back-link" onClick={() => transitionTo(BEATS.AI_GATE, 'left')}>
@@ -700,7 +701,7 @@ export default function PlaySkillsOnboarding() {
             style={{ width: '100%' }}
           >
             <span className="jo-shimmer-layer" />
-            {isLoading ? 'Processing...' : 'Find my play-skills →'}
+            {isLoading ? 'Processing...' : 'Find my play-skills'}
             {!isLoading && <span className="jo-btn-arrow">&#8594;</span>}
           </button>
           <button className="pso-back-link" onClick={() => transitionTo(BEATS.COPY_PROMPT, 'left')}>
