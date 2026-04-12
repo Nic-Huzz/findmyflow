@@ -335,7 +335,7 @@ export const PROBLEM_SEGMENTS = [
     icon: '🤐',
     placemakes: [
       'Childhood trauma stealing your ability to speak',
-      'Women\'s work being stolen by the men beside them',
+      'Doing the work and someone else getting the credit',
       'Speaking the truth and losing your country for it',
       'Being forced to hide who you really are just to be accepted',
       'Carrying shame in silence because nobody models speaking about it',
@@ -392,9 +392,9 @@ export const PROBLEM_SEGMENTS = [
     color: '#F44336',
     icon: '⛓️',
     placemakes: [
-      'People being owned as property by other people',
+      'Your life being treated as someone else\'s asset',
       'An entire population being dehumanized by law based on the colour of their skin',
-      'Democracies dying because people obey before they are even asked to',
+      'The room getting quieter because everyone stopped pushing back',
       'Ordinary people having no power against the institutions that run their lives',
     ],
   },
@@ -415,7 +415,7 @@ export const PROBLEM_SEGMENTS = [
       'The whole world being wrong about basic facts and nobody correcting them',
       'Mathematics being taught so badly that people decide they are not smart enough',
       'Being afraid to cook because nobody taught you the why, only the recipe',
-      'Software designed to impress IT departments instead of helping actual humans',
+      'Tools built for the buyer, not the user',
     ],
   },
   {
@@ -432,7 +432,7 @@ export const PROBLEM_SEGMENTS = [
     icon: '🔒',
     placemakes: [
       'Education being out of reach for anyone who can not pay',
-      'Girls being told they cannot go to school on pain of death',
+      'Being denied the right to learn because of who you are',
       'Tools you need being too expensive or complicated for anyone without training',
       'Talented people stuck in poverty because the doors are locked from outside',
     ],
@@ -450,7 +450,7 @@ export const PROBLEM_SEGMENTS = [
     color: '#9B59B6',
     icon: '🎭',
     placemakes: [
-      'The world not being ready for what a woman artist already knows',
+      'Being ahead of your time and dismissed for it',
       'Being told your designs are impossible when the real issue is who drew them',
       'Choosing between making honest work and paying the rent',
       'Someone else getting credit for what you built',
@@ -470,9 +470,9 @@ export const PROBLEM_SEGMENTS = [
     color: '#00BCD4',
     icon: '🕳️',
     placemakes: [
-      'Homeless people being asked to prove they deserve a meal before they get one',
-      'Refugees being defined by their worst moment instead of their capability',
-      'Veterans suffering not from war but from coming home to a society with no place for them',
+      'Being asked to prove you deserve the basics',
+      'Being seen as your worst moment instead of your full self',
+      'Belonging nowhere after the thing that gave you purpose ends',
       'People going hungry in disasters because the relief system is slower than a kitchen',
       'Cities built for cars and planners instead of the people who actually live there',
     ],
@@ -528,9 +528,9 @@ export const PROBLEM_SEGMENTS = [
     color: '#6BCB77',
     icon: '🏭',
     placemakes: [
-      'Watching your father come home from work with his dignity gone',
+      'Watching someone you love be broken by their work',
       'Doing a job that produces nothing and knowing it every single day',
-      'Wall Street punishing companies for treating their workers well',
+      'Being punished for doing the right thing',
       'Workers being treated as disposable by companies that could not function without them',
     ],
   },

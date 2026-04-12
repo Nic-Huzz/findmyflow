@@ -68,7 +68,7 @@
         },
         {
           "id": "voice_work_stolen",
-          "label": "Women's work being stolen by the men beside them",
+          "label": "Doing the work and someone else getting the credit",
           "example": "Like Rosalind Franklin's X-ray crystallography data being used by Watson and Crick to crack DNA's structure without acknowledging her contribution",
           "anchorPerson": "Rosalind Franklin",
           "anchorSource": "nonfounder"
@@ -182,7 +182,7 @@
       "placemakes": [
         {
           "id": "life_owned_property",
-          "label": "People being owned as property by other people",
+          "label": "Your life being treated as someone else's asset",
           "example": "Like Harriet Tubman escaping slavery and returning to the South roughly 13 times to guide approximately 70 enslaved people to freedom, with no record of her ever losing a passenger",
           "anchorPerson": "Harriet Tubman",
           "anchorSource": "nonfounder"
@@ -196,7 +196,7 @@
         },
         {
           "id": "life_obey_in_advance",
-          "label": "Democracies dying because people obey before they're even asked to",
+          "label": "The room getting quieter because everyone stopped pushing back",
           "example": "Like Timothy Snyder noting 'Most of the power of authoritarianism is freely given. The Nazis did not have to demand compliance from most institutions. The institutions offered it'",
           "anchorPerson": "Timothy Snyder",
           "anchorSource": "nonfounder"
@@ -248,7 +248,7 @@
         },
         {
           "id": "stupid_enterprise_tools",
-          "label": "Software designed to impress IT departments instead of helping actual humans",
+          "label": "Tools built for the buyer, not the user",
           "example": "Like Stewart Butterfield building Slack to feel human in a category that was grey and joyless, winning users bottom-up rather than through procurement departments",
           "anchorPerson": "Stewart Butterfield",
           "anchorSource": "founder"
@@ -272,7 +272,7 @@
         },
         {
           "id": "locked_girls_denied",
-          "label": "Girls being told they cannot go to school on pain of death",
+          "label": "Being denied the right to learn because of who you are",
           "example": "Like Malala Yousafzai blogging for BBC Urdu at age 11 describing life under Taliban rule, then being shot by the Taliban for it at 15",
           "anchorPerson": "Malala Yousafzai",
           "anchorSource": "nonfounder"
@@ -303,7 +303,7 @@
       "placemakes": [
         {
           "id": "work_woman_ahead",
-          "label": "The world not being ready for what a woman artist already knows",
+          "label": "Being ahead of your time and dismissed for it",
           "example": "Like Hilma af Klint producing the first fully abstract paintings in Western art around 1906, years before Kandinsky, then specifying they not be shown until 20 years after her death",
           "anchorPerson": "Hilma af Klint",
           "anchorSource": "nonfounder"
@@ -348,21 +348,21 @@
       "placemakes": [
         {
           "id": "left_prove_deserve",
-          "label": "Homeless people being asked to prove they deserve a meal before they get one",
+          "label": "Being asked to prove you deserve the basics",
           "example": "Like Dorothy Day's Houses of Hospitality offering food and shelter without intake forms, conditions or proselytising, with staff living alongside the people they served",
           "anchorPerson": "Dorothy Day",
           "anchorSource": "nonfounder"
         },
         {
           "id": "left_defined_by_worst_moment",
-          "label": "Refugees being defined by their worst moment instead of their capability",
+          "label": "Being seen as your worst moment instead of your full self",
           "example": "Like Hamdi Ulukaya buying a shuttered factory to build Chobani and hiring refugees because he saw workers, not charity cases",
           "anchorPerson": "Hamdi Ulukaya",
           "anchorSource": "founder"
         },
         {
           "id": "left_veterans_home",
-          "label": "Veterans suffering not from war but from coming home to a society with no place for them",
+          "label": "Belonging nowhere after the thing that gave you purpose ends",
           "example": "Like Sebastian Junger arguing that veterans' suffering is less about combat and more about returning to an individualist society, creating Vets Town Hall where veterans speak and civilians listen",
           "anchorPerson": "Sebastian Junger",
           "anchorSource": "nonfounder"
@@ -469,7 +469,7 @@
       "placemakes": [
         {
           "id": "hollows_dignity_stripped",
-          "label": "Watching your father come home from work with his dignity gone",
+          "label": "Watching someone you love be broken by their work",
           "example": "Like Brunello Cucinelli saying 'I saw my father coming home offended, mortified' from the factory, then building a billion-dollar company while paying workers above market and mandating 90-minute lunches",
           "anchorPerson": "Brunello Cucinelli",
           "anchorSource": "founder"
@@ -483,7 +483,7 @@
         },
         {
           "id": "hollows_wall_street",
-          "label": "Wall Street punishing companies for treating their workers well",
+          "label": "Being punished for doing the right thing",
           "example": "Like James Sinegal telling analysts who called Costco's wages too high: 'Those are our core strengths, not problems,' holding the line on wages and low prices for decades",
           "anchorPerson": "James Sinegal",
           "anchorSource": "founder"
