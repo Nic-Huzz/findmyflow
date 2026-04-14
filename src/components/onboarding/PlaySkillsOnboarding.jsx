@@ -539,6 +539,57 @@ export default function PlaySkillsOnboarding() {
     try {
       const result = await verifyCode(email.toLowerCase().trim(), verificationCode)
       if (result.success) {
+        // Save playskills immediately after verification (don't rely only on hydration)
+        try {
+          const { data: { user: newUser } } = await supabase.auth.getUser()
+          if (newUser?.id && keptPlacemakes.length > 0) {
+            // Create flow session
+            const { data: session } = await supabase.from('flow_sessions').insert({
+              user_id: newUser.id,
+              flow_type: 'get_started_playskills',
+              status: 'completed',
+              completed_at: new Date().toISOString(),
+            }).select('id').single()
+
+            if (session) {
+              // Delete old + insert new
+              await supabase.from('nikigai_clusters')
+                .delete()
+                .eq('user_id', newUser.id)
+                .eq('step_id', 'get_started')
+
+              const rows = keptPlacemakes.map(item => ({
+                session_id: session.id,
+                user_id: newUser.id,
+                cluster_type: 'skills',
+                cluster_label: item.placemake,
+                cluster_stage: 'final',
+                step_id: 'get_started',
+                items: [{
+                  text: item.placemake,
+                  category: item.categoryId,
+                  evidence: item.evidence || '',
+                  isStarred: true,
+                }],
+              }))
+
+              await supabase.from('nikigai_clusters').insert(rows)
+
+              // Update display name
+              if (userName?.trim()) {
+                await supabase.auth.updateUser({ data: { display_name: userName.trim() } })
+              }
+
+              // Clear localStorage since we saved directly
+              localStorage.removeItem(RESULT_KEY)
+              localStorage.removeItem(STORAGE_KEY)
+            }
+          }
+        } catch (saveErr) {
+          // Don't block navigation — hydration on /me is the fallback
+          console.warn('Direct save after verify failed, hydration will retry:', saveErr)
+        }
+
         navigate('/me')
       } else {
         setAuthError(result.message || 'Invalid code. Please try again.')
