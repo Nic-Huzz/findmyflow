@@ -43,14 +43,26 @@ export default function MePage() {
     refresh: refreshHero,
   } = useHeroProfile(user?.id, user?.email)
 
-  // First-visit welcome card
-  const [showWelcome, setShowWelcome] = useState(() => {
-    if (!user?.id) return false
-    return !localStorage.getItem(`me_page_visited_${user.id}`)
-  })
-  const dismissWelcome = () => {
-    localStorage.setItem(`me_page_visited_${user.id}`, 'true')
+  // First-visit welcome card — persisted in Supabase
+  const [showWelcome, setShowWelcome] = useState(false)
+  useEffect(() => {
+    if (!user?.id) return
+    supabase.from('user_stage_progress')
+      .select('welcome_dismissed')
+      .eq('user_id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data?.welcome_dismissed) setShowWelcome(true)
+      })
+  }, [user?.id])
+  const dismissWelcome = async () => {
     setShowWelcome(false)
+    if (user?.id) {
+      await supabase.from('user_stage_progress').upsert({
+        user_id: user.id,
+        welcome_dismissed: true,
+      }, { onConflict: 'user_id' })
+    }
   }
 
   // Inline state
@@ -511,18 +523,33 @@ export default function MePage() {
         </div>
       </section>
 
-      {/* Welcome card — first visit only */}
+      {/* Welcome card — first visit only, or essence-mirror CTA for returning users */}
       {showWelcome && (
         <section className="welcome-banner">
           <div className="welcome-banner-inner">
-            <div className="welcome-banner-icon">🏠</div>
-            <h2 className="welcome-banner-title">Welcome to your home base</h2>
-            <p className="welcome-banner-text">
-              This is where your whole journey lives — your flow river, quests, hero profile, and progress. Come back here anytime to see how far you've come.
-            </p>
-            <button className="welcome-banner-cta" onClick={dismissWelcome}>
-              Got it, let's go <span>→</span>
-            </button>
+            {!archetypes?.essence?.name || archetypes?.essence?.name === 'Unknown' ? (
+              <>
+                <div className="welcome-banner-icon">✨</div>
+                <h2 className="welcome-banner-title">Discover your essence</h2>
+                <p className="welcome-banner-text">
+                  Find out which archetype drives you. It takes 5 minutes and changes how you see yourself.
+                </p>
+                <button className="welcome-banner-cta" onClick={() => { dismissWelcome(); navigate('/essence-mirror?returnTo=/me') }}>
+                  Start Essence Mirror <span>→</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="welcome-banner-icon">🏠</div>
+                <h2 className="welcome-banner-title">Welcome to your home base</h2>
+                <p className="welcome-banner-text">
+                  This is where your whole journey lives. Your flow river, quests, hero profile, and progress. Come back here anytime to see how far you've come.
+                </p>
+                <button className="welcome-banner-cta" onClick={dismissWelcome}>
+                  Got it, let's go <span>→</span>
+                </button>
+              </>
+            )}
           </div>
         </section>
       )}
