@@ -574,63 +574,64 @@ export default function MePage() {
          ============================================================ */}
       <section className="quest-section reveal-fade-up" ref={questRevealRef}>
         <div className="quest-banner">
-          {!onboardingComplete && currentOnboardingStep ? (
-            <>
-              <div className="quest-eyebrow">
-                <span className="quest-label">Your Next Step</span>
-                <span className="quest-day-badge">
-                  Step {onboardingStepIndex + 1} of 8
-                </span>
-              </div>
-              <h2 className="quest-title">
-                {currentOnboardingStep.name}
-              </h2>
-              <p className="quest-subtitle">
-                {currentOnboardingStep.desc}
-              </p>
-              <div className="quest-dots">
-                {ONBOARDING_STEPS.map((_, i) => (
-                  <div
-                    key={i}
-                    className={`dot ${onboardingStatus[i] ? 'done' : ''} ${i === onboardingStepIndex ? 'active' : ''}`}
-                  />
-                ))}
-              </div>
-              <div className="quest-progress-label">
-                {onboardingDoneCount} of 8 steps complete
-              </div>
-              {currentOnboardingStep.route ? (
-                <a
-                  href={`${currentOnboardingStep.route}?returnTo=/me`}
-                  className="quest-cta"
-                  style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
-                >
-                  Start {currentOnboardingStep.name} <span>→</span>
-                </a>
-              ) : (
-                <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
-                  Continue in Challenge <span>→</span>
-                </button>
-              )}
-            </>
-          ) : !archetypes?.essence?.name || archetypes?.essence?.name === 'Unknown' ? (
-            <>
-              <div className="quest-eyebrow">
-                <span className="quest-label">Level {currentJourneyLevel}: {getLevelConfig(currentJourneyLevel).name}</span>
-              </div>
-              <h2 className="quest-title">Discover Your Essence</h2>
-              <p className="quest-subtitle">
-                Your shadows are the parts of you that were suppressed. Let's find who you really are.
-              </p>
-              <a
-                href="/essence-mirror?returnTo=/me"
-                className="quest-cta"
-                style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
-              >
-                Start Essence Mirror <span>→</span>
-              </a>
-            </>
-          ) : (
+          {(() => {
+            // Build level tasks from LevelConfig
+            const lvlConfig = getLevelConfig(currentJourneyLevel)
+            const allTasks = [
+              lvlConfig.deepDive,
+              ...(lvlConfig.extraQuests || []),
+            ].filter(Boolean)
+            const allCompletedIds = new Set(questCompletions.map(c => c.quest_id))
+            // Also check essence_mirror_completed for hero_avatar task
+            const isTaskDone = (task) => {
+              if (task.id === 'hero_avatar') return essenceMirrorDone
+              return allCompletedIds.has(task.id)
+            }
+            const doneTaskCount = allTasks.filter(isTaskDone).length
+            const nextTask = allTasks.find(t => !isTaskDone(t))
+            const totalTasks = allTasks.length
+
+            if (nextTask) {
+              return (
+                <>
+                  <div className="quest-eyebrow">
+                    <span className="quest-label">Level {currentJourneyLevel}: {lvlConfig.name}</span>
+                    <span className="quest-day-badge">
+                      {doneTaskCount} of {totalTasks}
+                    </span>
+                  </div>
+                  <h2 className="quest-title">{nextTask.name}</h2>
+                  <p className="quest-subtitle">{nextTask.narrative}</p>
+                  <div className="quest-dots">
+                    {allTasks.map((t, i) => (
+                      <div key={t.id} className={`dot ${isTaskDone(t) ? 'done' : ''} ${t.id === nextTask.id ? 'active' : ''}`} />
+                    ))}
+                  </div>
+                  <div className="quest-progress-label">
+                    {doneTaskCount} of {totalTasks} tasks complete
+                  </div>
+                  {nextTask.route ? (
+                    <a
+                      href={`${nextTask.route}${nextTask.route.includes('?') ? '&' : '?'}returnTo=/me`}
+                      className="quest-cta"
+                      style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                    >
+                      Start {nextTask.name} <span>→</span>
+                    </a>
+                  ) : nextTask.navigateTo ? (
+                    <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
+                      Go to {nextTask.navigateTo} <span>→</span>
+                    </button>
+                  ) : (
+                    <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
+                      Continue in Challenge <span>→</span>
+                    </button>
+                  )}
+                </>
+              )
+            }
+            return null
+          })() || (
             <>
               <div className="quest-eyebrow">
                 <span className="quest-label">Current Level</span>

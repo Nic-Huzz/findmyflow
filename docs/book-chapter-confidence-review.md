@@ -5,6 +5,19 @@
 
 ---
 
+## Key Decisions
+
+- **Title:** Find Your Flow
+- **Format:** ~72 one-page chapters, Sivers style, ~75 pages
+- **Images:** Combination of Pixar-style AI (emotional/story chapters) + simple illustrations (framework/model chapters)
+- **Leads to:** FindMyFlow app. The book is Part 1 of the journey. The app is Parts 2 and 3.
+- **Voice:** One voice. One story. Huzz only. No composite characters.
+- **Chapter structure:** Story (opening line) > Lesson (the turn) > One-line framework or reframe (the landing)
+- **Models:** Installation Map, Alignment Equation, Essence Test appear as full-page visual spreads between sections
+- **Test first:** Write 5 chapters before committing (Ch 2, 19, 26, 41, 61)
+
+---
+
 ## Structure Confidence: 92%
 
 The three-section arc is solid. Opening with the earthquake, building through the flood, landing on the diagonal. The callback structure (one sentence in Ch 20, revisited in Ch 79; dome in Ch 62, expanded in Ch 73; speakers in Ch 31, louder in Ch 75) gives it the feeling of a story, not a manual. Opening and closing on the same graph is strong.

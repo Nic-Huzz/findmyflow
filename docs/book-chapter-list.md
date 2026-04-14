@@ -1,7 +1,12 @@
-# Book Chapter List
+# Find Your Flow — Chapter List
 
-*~75 chapters. ~80 pages. One idea per page. Derek Sivers meets picture book.*
+*~72 chapters. ~75 pages. One idea per page. Derek Sivers meets picture book.*
 *Original IP: Huzz Hurrell / FindMyFlow. April 2026.*
+
+**Title:** Find Your Flow
+**Format:** One-page chapters. Pixar-style AI images (story chapters) + simple illustrations (framework chapters).
+**Leads to:** FindMyFlow app (book = Part 1, app = Parts 2 + 3).
+**Voice:** First person. One story. Messy, Australian, spoken not written.
 
 ---
 
