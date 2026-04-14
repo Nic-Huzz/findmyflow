@@ -679,36 +679,6 @@ export default function MePage() {
               <span className="fj-title">Your Flow Journey</span>
             </div>
 
-            {projects.length > 0 && (
-              <div className="fj-project-select" ref={projectMenuRef}>
-                <button
-                  className={`fj-project-btn ${projectMenuOpen ? 'open' : ''}`}
-                  onClick={() => setProjectMenuOpen(!projectMenuOpen)}
-                >
-                  <span className="proj-emoji">🎯</span>
-                  <span>{primaryProject?.name || 'My Project'}</span>
-                  {projects.length > 1 && (
-                    <span className="proj-chevron">▾</span>
-                  )}
-                </button>
-                {projects.length > 1 && (
-                  <div className={`fj-project-dropdown ${projectMenuOpen ? 'open' : ''}`}>
-                    {projects.map(p => (
-                      <div
-                        key={p.id}
-                        className={`fj-project-option ${p.id === primaryProject?.id ? 'active' : ''}`}
-                        onClick={() => { setSelectedProject(p); setProjectMenuOpen(false) }}
-                      >
-                        <span>🎯</span>
-                        {p.name}
-                        <span className="opt-stage">Stage {p.stage}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
             <p className="fj-sub">
               {timelineEntries.length > 0
                 ? 'Swipe to explore your river — compass entries and milestones show your journey.'
@@ -743,19 +713,10 @@ export default function MePage() {
             </>
           )}
 
-          {narrativeText ? (
-            <>
-              <div className="fj-narrative">
-                <p dangerouslySetInnerHTML={{ __html: narrativeText }} />
-              </div>
-              <button className="fj-link" onClick={() => navigate('/flow-compass')}>
-                Open Flow Compass <span>→</span>
-              </button>
-            </>
-          ) : (
-            <button className="fj-link" onClick={() => navigate('/flow-compass')}>
-              Open Flow Compass <span>→</span>
-            </button>
+          {narrativeText && (
+            <div className="fj-narrative">
+              <p dangerouslySetInnerHTML={{ __html: narrativeText }} />
+            </div>
           )}
         </div>
       </section>

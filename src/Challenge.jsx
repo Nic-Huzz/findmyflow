@@ -961,14 +961,7 @@ function Challenge() {
         setPostActionQuest(quest)
       }
 
-      // Trigger Splinter Check-in only after Release healing quest completions
-      if (quest.category === 'Healing' && quest.type?.toLowerCase() === 'release' && quest.healing_checkin && healingCompassId) {
-        loadLatestSplinterState(user.id, healingCompassId).then(splinterState => {
-          if (splinterState) {
-            setSplinterCheckinData({ ...splinterState, questId: quest.id })
-          }
-        })
-      }
+      // Splinter Check-in archived — was triggered after Release healing quests
 
       // Check for tab completion bonus (skip for user-level categories — bonus writes to challenge_progress)
       // Use freshCompletions + updatedProgress to avoid stale closure values
@@ -2660,16 +2653,6 @@ function Challenge() {
         celebration={graduationModal.celebration}
         onClose={() => setGraduationModal({ isOpen: false, celebration: null })}
       />
-
-      {/* Splinter Check-in modal (after Healing quest completion) */}
-      {splinterCheckinData && (
-        <SplinterCheckin
-          userId={user?.id}
-          healingCompassId={splinterCheckinData.healingCompassId}
-          previousSplinter={splinterCheckinData}
-          onClose={() => setSplinterCheckinData(null)}
-        />
-      )}
 
       {/* Level-up celebration modal */}
       {showLevelUp && (

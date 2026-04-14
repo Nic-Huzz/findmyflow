@@ -111,3 +111,107 @@ These are the "I need to send this to someone" pages:
 | **Combined** | **~89%** |
 
 The 11% gap is: story chapters are strong, framework chapters need one more pass to earn each page with a moment rather than an explanation. The Sivers rule applies: if the chapter doesn't make you feel something in one page, it shouldn't be a chapter.
+
+---
+
+## Hormozi Chapter Structure (Reference)
+
+Hormozi follows a consistent pattern in every chapter across all three books:
+
+**Story > Lesson > Framework > Examples > Notes**
+
+1. **Story opening**: Almost always a personal anecdote (gym losing money, telling his wife they had $101K for the first time, a client interaction). He uses a 7-step story structure: Setting > Character > Desire > Struggle > Eureka > Victory > Resolution.
+2. **The lesson**: What that story reveals. The problem or principle.
+3. **The framework**: A visual model or step-by-step system. He prioritises selecting the RIGHT story and the RIGHT visual framework for each chapter.
+4. **Examples**: Plentiful. How the framework applies in practice.
+5. **"Alex Notes"**: End-of-chapter takeaways or key points.
+
+His own words: stories are "heavily ingrained" because he wants to bring "the experience that taught the lesson with it, which gives the context to why the framework is important."
+
+**Key craft decisions:**
+- Table of contents first ("the hardest part"). Once that's done, "it's basically the game plan."
+- Only uses himself. His gym. His wife. His early failures. His portfolio companies. No composite characters. No "meet Sarah." One voice. The universality comes from the framework, not from multiple examples.
+- "I write the way I would like to read."
+
+### How This Applies to FindMyFlow's Book
+
+For the Sivers-format one-page chapters, the Hormozi structure compresses to:
+
+**Story (opening line) > Lesson (the turn) > One-line framework or reframe (the landing)**
+
+Every framework chapter in the current chapter list needs this treatment. The chapter should open with a moment, not a definition. The framework should EMERGE from the story, not precede it.
+
+**Action item: Before drafting, every chapter flagged below 90% confidence needs a specific story or moment assigned to it. If no story exists for that chapter, the chapter should be cut or merged.**
+
+Chapters that currently lack a story anchor:
+- Ch 9-12 (wound stages): Need your personal wound stage woven in, not just third-person descriptions
+- Ch 27-30 (equation variables): Each variable needs a moment where you felt it shift. When did your essence clarity jump? When did your protective strength drop?
+- Ch 38-40 (voice lists): Replace "sounds like" bullets with the actual moment you heard both voices arguing
+- Ch 44-47 (4 R's): Each R needs ONE moment. The time you recognised. The time you released. The specific rewire. The reclaim.
+- Ch 65-70 (five layers): Each layer needs the actual groan you did at that layer. "The first time I posted my face..." "The first time I went live..." "The first time I quoted full price..."
+
+---
+
+## Model Pages as Visual Breaks
+
+The three signature models (Installation Map, Alignment Equation, Essence Test) should appear as **full-page visual spreads**, not inline text within chapters.
+
+Format: Left page = the model, clean, no body text. Right page = blank or single image.
+
+This does three things:
+1. Gives the models room to breathe
+2. Creates natural pauses between sections (like chapter breaks in a graphic novel)
+3. Makes the models the most visually memorable pages (the ones people photograph and share)
+
+The models still get introduced in their respective chapters (Ch 13, Ch 26, Ch 54), but the visual spread appears as a section break immediately after, giving the reader a beat to absorb before moving on.
+
+---
+
+## On the 40-Page Recommendation
+
+### Confidence: 50%
+
+The 40-page version would be a powerful book. But it would be a **different** book. Here's why:
+
+**What 40 pages gains:**
+- Every page is a screenshot page
+- No filler, no padding
+- Reads in 30 minutes, remembered for years
+- Manifesto energy. "This is the book people tattoo quotes from."
+
+**What 40 pages loses:**
+- The JOURNEY feel. This book's promise is "you're somewhere in this story." Rushing the story undermines the premise. The reader needs to SIT in the flood long enough to recognise themselves.
+- The wound stages. Compressing four stages into one chapter means the reader picks from a list instead of sitting with each stage and feeling which one lands.
+- The five protectors. Cutting to one chapter means the Performer gets a paragraph instead of a page. The reader who IS the Ghost might not recognise themselves in a list.
+- Hormozi's books are 200+ pages each. They work BECAUSE they're thorough, not despite it. The one-page-chapter format already achieves Sivers-level punchiness. Adding it to 80 pages gives you both density AND journey. Cutting to 40 sacrifices the journey for density.
+- The picture book format already reads fast. 72 one-page chapters with images is maybe 45 minutes of reading. That's already "one sitting." You don't need fewer pages to achieve that.
+
+**The 72-page version (after merges) is probably the sweet spot.** You get the density of 40 pages (every chapter earns its place, one idea per page) spread across a journey that has room to breathe. The reader sits in the crack, drowns in the flood, and earns the diagonal. They don't skip to the answer.
+
+**When 40 pages WOULD be the right call:**
+- If this were a manifesto or philosophy book (like Sivers)
+- If the audience were executives who need the framework fast
+- If the book were a lead magnet, not a standalone product
+- If you'd already published the full version and wanted a "pocket edition"
+
+For a first book, for this audience (burnt-out professionals in the crack or flood), 72 pages with one-page chapters is the right length. Long enough to feel like a journey. Short enough that every page earns its place.
+
+---
+
+## Revised Confidence Summary (Post-Review)
+
+| | Score | Change |
+|---|---|---|
+| Structure | 92% | — |
+| Chapter themes and topics | 88% | — |
+| Chapter ordering and pacing | 87% | — |
+| After merges (72 chapters) | 90% | — |
+| After adding story anchors to framework chapters | 93% | +3% |
+| After adding model visual spreads | 94% | +1% |
+| **Combined (with all improvements)** | **~92%** | **+3%** |
+
+Sources (Hormozi chapter structure):
+- [Alex Hormozi On Writing - Practicing The Write Stuff](https://practicingthewritestuff.substack.com/p/alex-hormozi-on-writing)
+- [David Perell interview on Hormozi's writing process](https://x.com/david_perell/status/1887188627681075393)
+- [How Alex Hormozi Created a #1 Best Selling Book](https://petermeglis.com/blog/how-alex-hormozi-created-a-1-best-selling-book-with-0-and-no-publisher/)
+- [$100M Offers Summary - SuperSummary](https://www.supersummary.com/100m-offers/summary/)
