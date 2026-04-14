@@ -223,8 +223,12 @@ export function getEssenceFieldValue(profile, field, archetypeData) {
   const customFields = profile?.custom_essence_fields || {}
   const customField = customFields[field]
 
+  // Custom fields can be stored as { value: '...' } or as plain strings
   if (customField?.value) {
     return customField.value
+  }
+  if (typeof customField === 'string' && customField.length > 0) {
+    return customField
   }
 
   // Fall back to default archetype value
