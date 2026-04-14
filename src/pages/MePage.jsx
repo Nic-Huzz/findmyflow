@@ -46,6 +46,7 @@ export default function MePage() {
   // First-visit welcome card — persisted in Supabase
   const [showWelcome, setShowWelcome] = useState(false)
   const [essenceMirrorDone, setEssenceMirrorDone] = useState(true) // default true to avoid flash
+  const [hasWoundMap, setHasWoundMap] = useState(false)
   useEffect(() => {
     if (!user?.id) return
     supabase.from('user_stage_progress')
@@ -55,6 +56,13 @@ export default function MePage() {
       .then(({ data }) => {
         if (!data?.welcome_dismissed) setShowWelcome(true)
         setEssenceMirrorDone(!!data?.essence_mirror_completed)
+      })
+    // Check wound map completion (4+ stage selections)
+    supabase.from('journey_onboarding_selections')
+      .select('id')
+      .eq('user_id', user.id)
+      .then(({ data }) => {
+        if (data?.length >= 4) setHasWoundMap(true)
       })
   }, [user?.id])
   const dismissWelcome = async () => {
@@ -585,6 +593,7 @@ export default function MePage() {
             // Also check essence_mirror_completed for hero_avatar task
             const isTaskDone = (task) => {
               if (task.id === 'hero_avatar') return essenceMirrorDone
+              if (task.id === 'wound_map') return hasWoundMap
               return allCompletedIds.has(task.id)
             }
             const doneTaskCount = allTasks.filter(isTaskDone).length
