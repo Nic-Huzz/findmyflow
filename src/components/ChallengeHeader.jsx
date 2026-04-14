@@ -6,6 +6,8 @@
  * Team matchup banner replaces old rank display.
  */
 import { useState } from 'react'
+import { getLevel, getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS } from '../lib/crm/statsService'
+import { getLevelConfig } from './level/LevelConfig'
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 import JourneyGraphPopup from './JourneyGraphPopup'
@@ -38,6 +40,8 @@ function ChallengeHeader({
   matchupData = null,
   categoryScores = null,
   matchupLoading = false,
+  totalXP = 0,
+  currentJourneyLevel = 0,
 }) {
   const [showGraph, setShowGraph] = useState(false)
 
@@ -122,16 +126,25 @@ function ChallengeHeader({
         </div>
       </div>
 
-      {/* Journey Level Bar */}
-      <div className="challenge-level-bar">
-        <div className="challenge-level-row">
-          <span className="challenge-level-name">Level 1: Identity</span>
-          <span className="challenge-level-xp">0 / 800 XP</span>
-        </div>
-        <div className="challenge-level-track">
-          <div className="challenge-level-fill" style={{ width: '0%' }} />
-        </div>
-      </div>
+      {/* Vibe Rank Bar */}
+      {(() => {
+        const vibeLevel = getLevel(totalXP)
+        const vibeProgress = getLevelProgress(totalXP)
+        const vibeMax = getLevelMaxXP(totalXP)
+        const isMax = getLevelNumber(totalXP) === LEVELS.length
+        const journeyConfig = getLevelConfig(currentJourneyLevel)
+        return (
+          <div className="challenge-level-bar">
+            <div className="challenge-level-row">
+              <span className="challenge-level-name">{vibeLevel.emoji} {vibeLevel.name}</span>
+              <span className="challenge-level-xp">{isMax ? `${totalXP} XP ✦` : `${totalXP} / ${vibeMax} XP`}</span>
+            </div>
+            <div className="challenge-level-track">
+              <div className="challenge-level-fill" style={{ width: `${vibeProgress}%` }} />
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Bottom row: Streak + actions */}
       <div className="challenge-header-top">

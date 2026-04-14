@@ -338,6 +338,20 @@ export default function EssenceMirrorFlow() {
         current_journey_level: 0,
       }, { onConflict: 'user_id' })
 
+      // Award XP for completing hero avatar
+      const { data: existingHero } = await supabase.from('quest_completions')
+        .select('id').eq('user_id', user.id).eq('quest_id', 'hero_avatar').maybeSingle()
+      if (!existingHero) {
+        await supabase.from('quest_completions').insert({
+          user_id: user.id,
+          quest_id: 'hero_avatar',
+          quest_category: 'Groans',
+          quest_type: 'Rewire',
+          points_earned: 10,
+          challenge_day: 0,
+        }).catch(() => {})
+      }
+
       // Update lead_flow_profiles so /me hero section picks it up
       // Try update by user_id first, then by email, then insert
       const essenceData = {

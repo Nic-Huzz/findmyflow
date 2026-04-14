@@ -137,6 +137,20 @@ export default function WoundMapFlow() {
         .upsert(rows, { onConflict: 'user_id,stage_id' })
 
       if (error) console.warn('Failed to save wound map:', error)
+
+      // Award XP for completing wound map
+      const { data: existing } = await supabase.from('quest_completions')
+        .select('id').eq('user_id', user.id).eq('quest_id', 'wound_map').maybeSingle()
+      if (!existing) {
+        await supabase.from('quest_completions').insert({
+          user_id: user.id,
+          quest_id: 'wound_map',
+          quest_category: 'Healing',
+          quest_type: 'Recognise',
+          points_earned: 8,
+          challenge_day: 0,
+        }).catch(() => {})
+      }
     } catch (err) {
       console.warn('Wound map save error:', err)
     }

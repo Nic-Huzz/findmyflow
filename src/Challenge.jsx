@@ -1673,6 +1673,8 @@ function Challenge() {
         matchupData={matchupData}
         categoryScores={categoryScores}
         matchupLoading={matchupLoading}
+        totalXP={progress?.total_points || 0}
+        currentJourneyLevel={currentJourneyLevel}
       />
 
       {/* W/L flip toast */}

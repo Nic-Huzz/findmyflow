@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { useHeroProfile } from '../hooks/useHeroProfile'
-import { getLevel, getLevelNumber, getLevelProgress, getLevelMaxXP } from '../lib/crm/statsService'
+import { getLevel, getLevelNumber, getLevelProgress, getLevelMaxXP, LEVELS } from '../lib/crm/statsService'
 import { getStageDisplayName } from '../lib/stageConfig'
 import { getLevelConfig, HEALING_DAYS_REQUIRED } from '../components/level/LevelConfig'
 import { ONBOARDING_QUEST_IDS } from '../hooks/usePriorityTab'
@@ -346,7 +346,7 @@ export default function MePage() {
   const levelNum = getLevelNumber(totalXP)
   const levelProgress = getLevelProgress(totalXP)
   const levelMax = getLevelMaxXP(totalXP)
-  const isMaxLevel = levelNum === 6 // Vibe Legend
+  const isMaxLevel = levelNum === LEVELS.length // Vibe Legend
 
   // Derived: protective pattern tag (e.g., "Freeze + sympathetic blend")
 
@@ -524,7 +524,7 @@ export default function MePage() {
 
         <div className="xp-progress">
           <div className="xp-labels">
-            <span>Level {currentJourneyLevel}: {getLevelConfig(currentJourneyLevel).name}</span>
+            <span>{level.emoji} {level.name}</span>
             <span>{isMaxLevel ? `${totalXP} XP ✦` : `${totalXP} / ${levelMax} XP`}</span>
           </div>
           <div className="xp-bar">
