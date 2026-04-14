@@ -202,7 +202,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       </div>}
 
       {/* Deep Dive */}
-      <DeepDiveCard deepDive={config.deepDive} isCompleted={false} />
+      <DeepDiveCard deepDive={config.deepDive} isCompleted={config.deepDive?.id === 'hero_avatar' ? hasEssenceAvatar : false} />
 
       {/* Extra Quests (Level-specific) */}
       {config.extraQuests?.map(quest => {

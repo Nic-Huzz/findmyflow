@@ -36,6 +36,10 @@ verify_jwt = false
 [functions.analyze-validation-responses]
 verify_jwt = false
 
+# Called pre-signup from /get-started — no user JWT exists yet.
+[functions.map-to-playskills]
+verify_jwt = false
+
 # Cron-triggered: auto-scores league matchups every 15 minutes.
 # No user JWT — called by pg_cron with service role key.
 [functions.score-league-matchups]

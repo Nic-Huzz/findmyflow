@@ -5,9 +5,10 @@
  * coloring when in an active matchup, or category colors when solo.
  * Team matchup banner replaces old rank display.
  */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../auth/AuthProvider'
 import { getLevel, getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS } from '../lib/crm/statsService'
-import { getLevelConfig } from './level/LevelConfig'
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 import JourneyGraphPopup from './JourneyGraphPopup'
@@ -43,7 +44,23 @@ function ChallengeHeader({
   totalXP = 0,
   currentJourneyLevel = 0,
 }) {
+  const { user } = useAuth()
   const [showGraph, setShowGraph] = useState(false)
+  const [lifetimeXP, setLifetimeXP] = useState(totalXP)
+
+  // Fetch real lifetime XP from user_lifetime_scores (same source as /me)
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('user_lifetime_scores')
+      .select('lifetime_total_score')
+      .eq('user_id', user.id)
+      .is('project_id', null)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.lifetime_total_score) setLifetimeXP(data.lifetime_total_score)
+      })
+  }, [user?.id, totalXP]) // re-fetch when totalXP changes (quest completed)
 
   // Flame size based on streak length
   const getFlameClass = () => {
@@ -128,16 +145,15 @@ function ChallengeHeader({
 
       {/* Vibe Rank Bar */}
       {(() => {
-        const vibeLevel = getLevel(totalXP)
-        const vibeProgress = getLevelProgress(totalXP)
-        const vibeMax = getLevelMaxXP(totalXP)
-        const isMax = getLevelNumber(totalXP) === LEVELS.length
-        const journeyConfig = getLevelConfig(currentJourneyLevel)
+        const vibeLevel = getLevel(lifetimeXP)
+        const vibeProgress = getLevelProgress(lifetimeXP)
+        const vibeMax = getLevelMaxXP(lifetimeXP)
+        const isMax = getLevelNumber(lifetimeXP) === LEVELS.length
         return (
           <div className="challenge-level-bar">
             <div className="challenge-level-row">
               <span className="challenge-level-name">{vibeLevel.emoji} {vibeLevel.name}</span>
-              <span className="challenge-level-xp">{isMax ? `${totalXP} XP ✦` : `${totalXP} / ${vibeMax} XP`}</span>
+              <span className="challenge-level-xp">{isMax ? `${lifetimeXP} XP ✦` : `${lifetimeXP} / ${vibeMax} XP`}</span>
             </div>
             <div className="challenge-level-track">
               <div className="challenge-level-fill" style={{ width: `${vibeProgress}%` }} />
