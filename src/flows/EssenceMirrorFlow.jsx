@@ -372,27 +372,24 @@ export default function EssenceMirrorFlow() {
           characters: primary?.characters?.join(', '),
         },
       }
-      // Try updating existing row by user_id
-      const { data: updated } = await supabase
+      // Upsert lead_flow_profiles: find existing row by user_id or email, then update or insert
+      const { data: existing } = await supabase
         .from('lead_flow_profiles')
-        .update({ ...essenceData, user_id: user.id })
-        .eq('user_id', user.id)
         .select('id')
-      if (!updated?.length && user.email) {
-        // Try updating by email if no user_id match
-        const { data: emailUpdated } = await supabase
+        .or(`user_id.eq.${user.id}${user.email ? `,email.ilike.${user.email}` : ''}`)
+        .order('created_at', { ascending: false })
+        .limit(1)
+      if (existing?.length) {
+        const { error: updateErr } = await supabase
           .from('lead_flow_profiles')
           .update({ ...essenceData, user_id: user.id })
-          .ilike('email', user.email)
-          .select('id')
-        if (!emailUpdated?.length) {
-          // No existing row, insert new
-          await supabase.from('lead_flow_profiles').insert({
-            ...essenceData,
-            user_id: user.id,
-            email: user.email,
-          })
-        }
+          .eq('id', existing[0].id)
+        if (updateErr) console.error('lead_flow_profiles update error:', updateErr)
+      } else {
+        const { error: insertErr } = await supabase
+          .from('lead_flow_profiles')
+          .insert({ ...essenceData, user_id: user.id, email: user.email })
+        if (insertErr) console.error('lead_flow_profiles insert error:', insertErr)
       }
       console.log('Essence Mirror save complete:', { heroName, avatarGenerated: avatarGenerated !== 'skip' ? 'yes' : 'skipped' })
     } catch (err) {

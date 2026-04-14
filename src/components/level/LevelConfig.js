@@ -34,10 +34,9 @@ export const LEVEL_CONFIG = {
       {
         id: 'playlist_challenge',
         name: 'Unlock Play-List',
-        route: null,
-        narrative: 'Start your first Play-List task.',
+        route: '/identify-topics?returnTo=/7-day-challenge',
+        narrative: 'Identify your Play-List topics.',
         icon: '🎯',
-        navigateTo: 'Play-list',
       },
       {
         id: 'healing_task',

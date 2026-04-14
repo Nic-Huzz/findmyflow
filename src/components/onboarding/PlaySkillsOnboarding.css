@@ -198,6 +198,22 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+.pso-help-link {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  text-decoration: none;
+  font-family: inherit;
+  padding: 0.5rem;
+}
+
+.pso-help-link:hover {
+  color: #E9A23B;
+}
+
 /* ── Mapping (loading) ───────────────────────────────────────────────────── */
 
 .pso-mapping {

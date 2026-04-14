@@ -51,7 +51,13 @@
 .jo-transitioning .jo-reframe-content,
 .jo-transitioning .jo-promise-content,
 .jo-transitioning .jo-signup-content,
-.jo-transitioning .jo-verify-content {
+.jo-transitioning .jo-verify-content,
+.jo-transitioning .pso-gate-content,
+.jo-transitioning .pso-copy-content,
+.jo-transitioning .pso-paste-content,
+.jo-transitioning .pso-mapping-content,
+.jo-transitioning .pso-wheel-content,
+.jo-transitioning .pso-reveal-content {
   animation: jo-slideOut 0.25s ease forwards;
 }
 
@@ -60,7 +66,13 @@
 .jo-entering .jo-reframe-content,
 .jo-entering .jo-promise-content,
 .jo-entering .jo-signup-content,
-.jo-entering .jo-verify-content {
+.jo-entering .jo-verify-content,
+.jo-entering .pso-gate-content,
+.jo-entering .pso-copy-content,
+.jo-entering .pso-paste-content,
+.jo-entering .pso-mapping-content,
+.jo-entering .pso-wheel-content,
+.jo-entering .pso-reveal-content {
   animation: jo-slideIn 0.4s ease;
 }
 
@@ -70,7 +82,13 @@
 .jo-slide-right.jo-transitioning .jo-reframe-content,
 .jo-slide-right.jo-transitioning .jo-promise-content,
 .jo-slide-right.jo-transitioning .jo-signup-content,
-.jo-slide-right.jo-transitioning .jo-verify-content {
+.jo-slide-right.jo-transitioning .jo-verify-content,
+.jo-slide-right.jo-transitioning .pso-gate-content,
+.jo-slide-right.jo-transitioning .pso-copy-content,
+.jo-slide-right.jo-transitioning .pso-paste-content,
+.jo-slide-right.jo-transitioning .pso-mapping-content,
+.jo-slide-right.jo-transitioning .pso-wheel-content,
+.jo-slide-right.jo-transitioning .pso-reveal-content {
   animation: jo-slideOutLeft 0.25s ease forwards;
 }
 
@@ -79,7 +97,13 @@
 .jo-slide-right.jo-entering .jo-reframe-content,
 .jo-slide-right.jo-entering .jo-promise-content,
 .jo-slide-right.jo-entering .jo-signup-content,
-.jo-slide-right.jo-entering .jo-verify-content {
+.jo-slide-right.jo-entering .jo-verify-content,
+.jo-slide-right.jo-entering .pso-gate-content,
+.jo-slide-right.jo-entering .pso-copy-content,
+.jo-slide-right.jo-entering .pso-paste-content,
+.jo-slide-right.jo-entering .pso-mapping-content,
+.jo-slide-right.jo-entering .pso-wheel-content,
+.jo-slide-right.jo-entering .pso-reveal-content {
   animation: jo-slideInRight 0.4s ease;
 }
 
@@ -89,7 +113,13 @@
 .jo-slide-left.jo-transitioning .jo-reframe-content,
 .jo-slide-left.jo-transitioning .jo-promise-content,
 .jo-slide-left.jo-transitioning .jo-signup-content,
-.jo-slide-left.jo-transitioning .jo-verify-content {
+.jo-slide-left.jo-transitioning .jo-verify-content,
+.jo-slide-left.jo-transitioning .pso-gate-content,
+.jo-slide-left.jo-transitioning .pso-copy-content,
+.jo-slide-left.jo-transitioning .pso-paste-content,
+.jo-slide-left.jo-transitioning .pso-mapping-content,
+.jo-slide-left.jo-transitioning .pso-wheel-content,
+.jo-slide-left.jo-transitioning .pso-reveal-content {
   animation: jo-slideOutRight 0.25s ease forwards;
 }
 
@@ -98,7 +128,13 @@
 .jo-slide-left.jo-entering .jo-reframe-content,
 .jo-slide-left.jo-entering .jo-promise-content,
 .jo-slide-left.jo-entering .jo-signup-content,
-.jo-slide-left.jo-entering .jo-verify-content {
+.jo-slide-left.jo-entering .jo-verify-content,
+.jo-slide-left.jo-entering .pso-gate-content,
+.jo-slide-left.jo-entering .pso-copy-content,
+.jo-slide-left.jo-entering .pso-paste-content,
+.jo-slide-left.jo-entering .pso-mapping-content,
+.jo-slide-left.jo-entering .pso-wheel-content,
+.jo-slide-left.jo-entering .pso-reveal-content {
   animation: jo-slideInLeft 0.4s ease;
 }
 

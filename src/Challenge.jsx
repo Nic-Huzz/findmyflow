@@ -226,7 +226,23 @@ function Challenge() {
       .eq('user_id', user.id)
       .maybeSingle()
       .then(({ data }) => {
-        setCurrentJourneyLevel(data?.current_journey_level || 0)
+        const level = data?.current_journey_level || 0
+        setCurrentJourneyLevel(level)
+        // Pre-unlock tabs based on DB state for Level 0
+        if (level === 0) {
+          // Unlock Play-list if topic identifier completed
+          supabase.from('quest_completions')
+            .select('id').eq('user_id', user.id).eq('quest_id', 'playlist_challenge').limit(1)
+            .then(({ data: d }) => {
+              if (d?.length > 0) setUnlockedTabs(prev => new Set([...prev, 'Play-list']))
+            })
+          // Unlock Healing if any healing quest completed
+          supabase.from('quest_completions')
+            .select('id').eq('user_id', user.id).eq('quest_category', 'Healing').limit(1)
+            .then(({ data: d }) => {
+              if (d?.length > 0) setUnlockedTabs(prev => new Set([...prev, 'Healing']))
+            })
+        }
       })
   }, [user?.id])
 
@@ -719,6 +735,26 @@ function Challenge() {
         completionData.challenge_instance_id = null
         completionData.project_id = null
         completionData.challenge_day = 0  // NOT NULL constraint requires a value
+
+        // Track healing day for current level progress (non-blocking)
+        const today = new Date().toISOString().slice(0, 10)
+        supabase
+          .from('user_level_progress')
+          .select('healing_day_dates')
+          .eq('user_id', user.id)
+          .eq('current_level', currentJourneyLevel)
+          .maybeSingle()
+          .then(({ data }) => {
+            const dates = data?.healing_day_dates || []
+            if (dates.includes(today)) return
+            const updated = [...dates, today]
+            supabase.from('user_level_progress')
+              .upsert(
+                { user_id: user.id, current_level: currentJourneyLevel, healing_day_dates: updated },
+                { onConflict: 'user_id,current_level' }
+              )
+              .then(() => {})
+          })
       } else if (quest.category === 'Voices') {
         completionData.challenge_instance_id = null
         completionData.challenge_day = 0  // NOT NULL constraint requires a value

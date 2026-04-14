@@ -31,6 +31,9 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
   const [hasEssenceAvatar, setHasEssenceAvatar] = useState(false)
   const [hasWoundMap, setHasWoundMap] = useState(false)
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
+  const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
+  const [hasPlaylistCompletion, setHasPlaylistCompletion] = useState(false)
+  const [healingDaysDone, setHealingDaysDone] = useState(0)
 
   // Milestone state
   const [milestoneCommitment, setMilestoneCommitment] = useState(null)
@@ -46,14 +49,14 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
     // Load zone + milestone data
     supabase
       .from('user_level_progress')
-      .select('zone_selected, boss_name, milestone_commitment, milestone_completed')
+      .select('zone_diagnosis_zone, zone_diagnosis_boss, milestone_commitment, milestone_completed')
       .eq('user_id', userId)
-      .eq('level', currentLevel)
+      .eq('current_level', currentLevel)
       .maybeSingle()
       .then(({ data }) => {
         if (data) {
-          setSelectedZone(data.zone_selected)
-          setBoss(data.boss_name)
+          setSelectedZone(data.zone_diagnosis_zone)
+          setBoss(data.zone_diagnosis_boss)
           setMilestoneCommitment(data.milestone_commitment || null)
           setMilestoneCompleted(data.milestone_completed || false)
         } else {
@@ -63,14 +66,15 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
         setZoneLoaded(true)
       })
       .catch(() => setZoneLoaded(true))
-    // Check if hero avatar already created (from essence mirror)
+    // Check if hero avatar photo exists (from essence mirror)
     supabase
       .from('lead_flow_profiles')
-      .select('custom_essence_name, custom_essence_image')
+      .select('custom_essence_image')
       .eq('user_id', userId)
-      .maybeSingle()
+      .order('created_at', { ascending: false })
+      .limit(1)
       .then(({ data }) => {
-        if (data?.custom_essence_image) {
+        if (data?.[0]?.custom_essence_image) {
           setHasEssenceAvatar(true)
         }
       })
@@ -97,6 +101,40 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           setHasCuriosityCompass(true)
         }
       })
+    // Check if any healing quest has been completed
+    supabase
+      .from('quest_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('quest_category', 'Healing')
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) setHasHealingCompletion(true)
+      })
+    // Load healing day dates for current level
+    supabase
+      .from('user_level_progress')
+      .select('healing_day_dates')
+      .eq('user_id', userId)
+      .eq('current_level', currentLevel)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.healing_day_dates?.length) {
+          setHealingDaysDone(data.healing_day_dates.length)
+        }
+      })
+    // Check if playlist_challenge quest has been completed
+    supabase
+      .from('quest_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('quest_id', 'playlist_challenge')
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) {
+          setHasPlaylistCompletion(true)
+        }
+      })
   }, [userId, currentLevel])
 
   const levelQuests = [
@@ -107,6 +145,8 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       done: q.id === 'hero_avatar' ? hasEssenceAvatar
         : q.id === 'wound_map' ? hasWoundMap
         : q.id === 'curiosity_compass' ? hasCuriosityCompass
+        : q.id === 'healing_task' ? hasHealingCompletion
+        : q.id === 'playlist_challenge' ? hasPlaylistCompletion
         : false,
     })),
     ...(boss ? [{ label: 'Boss Fight', done: false }] : []),
@@ -210,6 +250,8 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           quest.id === 'hero_avatar' ? hasEssenceAvatar
           : quest.id === 'wound_map' ? hasWoundMap
           : quest.id === 'curiosity_compass' ? hasCuriosityCompass
+          : quest.id === 'healing_task' ? hasHealingCompletion
+          : quest.id === 'playlist_challenge' ? hasPlaylistCompletion
           : false
         const isLocked = quest.lockedUntil === 'curiosity_compass' && !hasCuriosityCompass
 
@@ -240,36 +282,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           )
         }
 
-        // Clicking "Start" on playlist_challenge marks it as complete + navigates
-        if (quest.id === 'playlist_challenge' && !isCompleted && !isLocked) {
-          return (
-            <DeepDiveCard
-              key={quest.id}
-              deepDive={{ ...quest, route: '#playlist' }}
-              isCompleted={false}
-              onNavigate={async () => {
-                // Mark as complete (check first to avoid duplicates)
-                const { data: ex } = await supabase.from('quest_completions')
-                  .select('id').eq('user_id', userId).eq('quest_id', 'playlist_challenge').maybeSingle()
-                if (!ex) {
-                  await supabase.from('quest_completions').insert({
-                    user_id: userId,
-                    quest_id: 'playlist_challenge',
-                    quest_category: 'Groans',
-                    quest_type: 'Rewire',
-                    points_earned: 10,
-                    challenge_day: 0,
-                  }).catch(() => {})
-                }
-                onNavigateTab?.('Play-list')
-              }}
-            />
-          )
-        }
-
-        const questWithRoute = quest.id === 'playlist_challenge' && !isLocked
-          ? { ...quest, route: '#playlist' }
-          : quest.navigateTo
+        const questWithRoute = quest.navigateTo
           ? { ...quest, route: `#${quest.navigateTo}` }
           : quest
         return (
@@ -321,7 +334,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
         levelQuests={levelQuests}
         courageCount={config.courageCount || 0}
         courageDone={0}
-        healingDaysDone={0}
+        healingDaysDone={healingDaysDone}
         healingDaysRequired={config.healingDaysRequired || 14}
         questsCompleted={questsCompleted}
       />

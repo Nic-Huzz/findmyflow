@@ -755,6 +755,14 @@ export default function PlaySkillsOnboarding() {
             {isLoading ? 'Processing...' : 'Find my play-skills'}
             {!isLoading && <span className="jo-btn-arrow">&#8594;</span>}
           </button>
+          <a
+            href="https://wa.me/61423220241?text=Hey%20Huzz!%20I'm%20having%20trouble%20with%20the%20AI%20extract%20to%20get%20started%20in%20Find%20My%20Flow"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pso-help-link"
+          >
+            Need help? Message me
+          </a>
           <button className="pso-back-link" onClick={() => transitionTo(BEATS.COPY_PROMPT, 'left')}>
             ← Back
           </button>
