@@ -402,8 +402,8 @@ export default function PlaySkillsOnboarding() {
       transitionTo(BEATS.REVEAL)
     } else {
       setKeptPlacemakes(newlyKept)
-      // Path A goes to satisfaction check; Path B first-pass goes straight to reveal
-      transitionTo(path === 'a' ? BEATS.SATISFACTION : BEATS.REVEAL)
+      // Both paths go to satisfaction check
+      transitionTo(BEATS.SATISFACTION)
     }
   }
 

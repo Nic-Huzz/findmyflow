@@ -17,6 +17,7 @@ import {
   findProblemSegment,
   resolveProblemId,
 } from './wheelTaxonomy'
+import careerModelsData from '../../public/data/careerModels.json'
 
 // ============================================================================
 // CROSS-WHEEL ALIGNMENT MAPPINGS
@@ -444,7 +445,7 @@ Encourage them to start with Skills Discovery to uncover their unique abilities.
   // Format skills
   const skillsContext = skills.length > 0
     ? skills.map(s => {
-        const segment = SKILLS_SEGMENTS.find(seg => seg.id === s.segmentId)
+        const segment = findSkillSegment(s.segmentId)
         const proficiencyRing = PROFICIENCY_RINGS.find(r => r.id === s.proficiency)
         return `- ${segment?.displayName} (${segment?.aspirationalTitle}): ${proficiencyRing?.label || 'Unknown'} - ${segment?.valueCreated}`
       }).join('\n')
@@ -513,6 +514,18 @@ ${gapsContext}
 TOP OPPORTUNITIES:
 ${opportunitiesContext}
 
+PEOPLE WHO BUILT WHAT YOU'RE DREAMING OF:
+${(() => {
+    const skillIds = skills.map(s => s.segmentId)
+    const problemIds = problems.map(p => p.segmentId)
+    const matches = findCareerMatches(skillIds, problemIds, 5)
+    if (matches.length === 0) return '- Complete more assessments to find your career matches'
+    return matches.map(m => {
+      const cm = m.careerModel || {}
+      return `- ${m.name} (${cm.type}): ${cm.trajectory || ''}\n  Lesson: ${cm.lessonsForUser || ''}`
+    }).join('\n')
+  })()}
+
 COACHING GUIDANCE:
 ${alignment.score >= 70 ? '- High alignment! Focus on execution and offer creation.' : ''}
 ${alignment.score >= 40 && alignment.score < 70 ? '- Moderate alignment. Help them identify missing pieces.' : ''}
@@ -521,6 +534,32 @@ ${skills.length === 0 ? '- Encourage starting with Skills Discovery.' : ''}
 ${problems.length === 0 && skills.length > 0 ? '- Ready for Problems Discovery.' : ''}
 ${personas.length === 0 && problems.length > 0 ? '- Ready for Persona Discovery.' : ''}
 `
+}
+
+/**
+ * Find career model matches for a user based on their skill + problem categories
+ */
+export function findCareerMatches(skillIds, problemIds, limit = 5) {
+  if (skillIds.length === 0 && problemIds.length === 0) return []
+
+  const resolvedSkills = new Set(skillIds.map(id => resolveSkillId(id) || id))
+  const resolvedProblems = new Set(problemIds.map(id => resolveProblemId(id) || id))
+
+  const scored = careerModelsData.profiles.map(profile => {
+    const profileSkills = new Set(profile.primarySkills || [])
+    const profileProblem = profile.primaryProblem || ''
+
+    const skillOverlap = [...resolvedSkills].filter(s => profileSkills.has(s)).length
+    const problemMatch = resolvedProblems.has(profileProblem) ? 1 : 0
+
+    return { profile, score: skillOverlap + (problemMatch * 2) }
+  })
+
+  return scored
+    .filter(s => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(s => s.profile)
 }
 
 /**
