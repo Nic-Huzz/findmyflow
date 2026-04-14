@@ -239,6 +239,33 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           )
         }
 
+        // Clicking "Start" on playlist_challenge marks it as complete + navigates
+        if (quest.id === 'playlist_challenge' && !isCompleted && !isLocked) {
+          return (
+            <DeepDiveCard
+              key={quest.id}
+              deepDive={{ ...quest, route: null }}
+              isCompleted={false}
+              onNavigate={async () => {
+                // Mark as complete (check first to avoid duplicates)
+                const { data: ex } = await supabase.from('quest_completions')
+                  .select('id').eq('user_id', userId).eq('quest_id', 'playlist_challenge').maybeSingle()
+                if (!ex) {
+                  await supabase.from('quest_completions').insert({
+                    user_id: userId,
+                    quest_id: 'playlist_challenge',
+                    quest_category: 'Groans',
+                    quest_type: 'Rewire',
+                    points_earned: 10,
+                    challenge_day: 0,
+                  }).catch(() => {})
+                }
+                onNavigateTab?.('Play-list')
+              }}
+            />
+          )
+        }
+
         const questWithRoute = quest.id === 'playlist_challenge' && !isLocked
           ? { ...quest, route: '#playlist' }
           : quest.navigateTo
