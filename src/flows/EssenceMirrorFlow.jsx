@@ -337,6 +337,7 @@ export default function EssenceMirrorFlow() {
         vision_in_action: blendResult?.blended_essence || primary?.poetic_line,
         onboarding_completed: true,
         onboarding_v2_completed: true,
+        essence_mirror_completed: true,
         current_journey_level: 0,
       }, { onConflict: 'user_id' })
 

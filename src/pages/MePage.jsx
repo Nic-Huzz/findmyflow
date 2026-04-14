@@ -45,14 +45,16 @@ export default function MePage() {
 
   // First-visit welcome card — persisted in Supabase
   const [showWelcome, setShowWelcome] = useState(false)
+  const [essenceMirrorDone, setEssenceMirrorDone] = useState(true) // default true to avoid flash
   useEffect(() => {
     if (!user?.id) return
     supabase.from('user_stage_progress')
-      .select('welcome_dismissed')
+      .select('welcome_dismissed, essence_mirror_completed')
       .eq('user_id', user.id)
       .maybeSingle()
       .then(({ data }) => {
         if (!data?.welcome_dismissed) setShowWelcome(true)
+        setEssenceMirrorDone(!!data?.essence_mirror_completed)
       })
   }, [user?.id])
   const dismissWelcome = async () => {
@@ -527,7 +529,7 @@ export default function MePage() {
       {showWelcome && (
         <section className="welcome-banner">
           <div className="welcome-banner-inner">
-            {!archetypes?.essence?.name || archetypes?.essence?.name === 'Unknown' ? (
+            {!essenceMirrorDone ? (
               <>
                 <div className="welcome-banner-icon">✨</div>
                 <h2 className="welcome-banner-title">Discover your essence</h2>
