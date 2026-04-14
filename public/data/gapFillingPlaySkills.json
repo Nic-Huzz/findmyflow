@@ -633,4 +633,229 @@
         }
       ],
       "antiTags": ["performing"]
+    },
+    {
+      "name": "Ed Roberts",
+      "dominantCategories": ["leading", "speaking_up"],
+      "playSkills": [
+        {
+          "category": "leading",
+          "skill": "Building the first one so well that others can copy it without asking permission",
+          "confidence": "high",
+          "evidence": "The Centre for Independent Living in Berkeley became a replicable template. Within a decade, 400+ centres opened across the US, all following the CIL model."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Challenging the institution that wrote you off",
+          "confidence": "high",
+          "evidence": "The Department of Rehabilitation called him 'too severely disabled to ever work.' He later became its Director under Governor Jerry Brown."
+        },
+        {
+          "category": "leading",
+          "skill": "Establishing that the people affected are the experts on their own lives",
+          "confidence": "high",
+          "evidence": "CIL was built on the principle that disabled people, not medical professionals, are the experts on their own needs."
+        },
+        {
+          "category": "connecting",
+          "skill": "Gathering other excluded people into a named collective",
+          "confidence": "medium",
+          "evidence": "His iron lung would not fit in a dorm. By 1967, twelve severely disabled students had followed him to Berkeley, calling themselves the Rolling Quads."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Alice Wong",
+      "dominantCategories": ["connecting", "storytelling"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Building the platform where a community tells its own stories",
+          "confidence": "high",
+          "evidence": "The Disability Visibility Project partnered with StoryCorps to create a permanent archive of first-person disability narratives at the Library of Congress."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Curating an anthology that becomes a movement text",
+          "confidence": "high",
+          "evidence": "Disability Visibility centred 37 disabled writers' own voices, became a bestseller, and was adopted in university disability studies courses."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Making presence itself a political act",
+          "confidence": "high",
+          "evidence": "Attended a White House event via telepresence robot, creating one of the most shared images of the disability rights movement in the 2010s."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Writing at the intersection of ableism, racism, and pandemic politics",
+          "confidence": "medium",
+          "evidence": "Year of the Tiger combined personal essay and cultural criticism as a Chinese American disabled woman ventilator-dependent during a pandemic that treated her as expendable."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Muhammad Yunus",
+      "dominantCategories": ["leading", "connecting"],
+      "playSkills": [
+        {
+          "category": "leading",
+          "skill": "Making borrowers the owners so growth serves the mission",
+          "confidence": "high",
+          "evidence": "Grameen Bank is 97% owned by its borrowers (women), aligning incentives so that growth serves the poor rather than extracting from them."
+        },
+        {
+          "category": "connecting",
+          "skill": "Using group trust to replace collateral",
+          "confidence": "high",
+          "evidence": "Five-member guarantee circles eliminated the need for collateral, making microloans possible anywhere there was poverty and trust."
+        },
+        {
+          "category": "teaching",
+          "skill": "Proving with a $27 experiment that an entire system's assumptions are wrong",
+          "confidence": "high",
+          "evidence": "He lent $27 to 42 women, they repaid every cent, and the experiment proved that the banking system's refusal to lend to the poor was based on prejudice, not risk."
+        },
+        {
+          "category": "leading",
+          "skill": "Proposing a second type of capitalism alongside the profit-maximising kind",
+          "confidence": "medium",
+          "evidence": "Used the Nobel Peace Prize platform to push 'social business,' a company designed to solve social problems rather than maximise shareholder profit."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Tiffany Aliche",
+      "dominantCategories": ["teaching", "connecting"],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Writing about money the way a big sister talks, not the way an advisor lectures",
+          "confidence": "high",
+          "evidence": "Her editorial rule is 'if my mother wouldn't understand this sentence, I rewrite it.' The approach directly addressed why financial literacy programmes fail."
+        },
+        {
+          "category": "connecting",
+          "skill": "Building a free challenge that creates a community before you monetise",
+          "confidence": "high",
+          "evidence": "The Live Richer Challenge attracted 60,000 in its first cohort and over one million women total, collectively saving and paying off $250 million in debt."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turning financial wreckage into the origin story of a movement",
+          "confidence": "high",
+          "evidence": "Lost her savings to a con artist in 2008, was laid off, and started from zero. The Budgetnista was born from rebuilding, not from expertise."
+        },
+        {
+          "category": "teaching",
+          "skill": "Breaking a complex subject into daily micro-steps anyone can follow",
+          "confidence": "high",
+          "evidence": "The 36-day Live Richer Challenge walked participants through budgeting, saving, credit repair, investing, and insurance one day at a time."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jose Quinonez",
+      "dominantCategories": ["leading", "connecting"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Making an invisible financial practice visible to the formal system",
+          "confidence": "high",
+          "evidence": "His innovation was not inventing lending circles but reporting every payment to credit bureaus, turning centuries-old community lending into visible credit history."
+        },
+        {
+          "category": "leading",
+          "skill": "Challenging the system's definition of creditworthy",
+          "confidence": "high",
+          "evidence": "He argued that millions of Americans are not financially irresponsible but financially invisible, saving and repaying through networks the banking system refuses to recognise."
+        },
+        {
+          "category": "building",
+          "skill": "Creating a model simple enough for other non-profits to replicate",
+          "confidence": "high",
+          "evidence": "One local programme in San Francisco's Mission District proved the concept, and the Lending Circles model was simple enough for replication nationally."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Using your own crossing as the reason the organisation exists",
+          "confidence": "medium",
+          "evidence": "He crossed the US-Mexico border undocumented at age nine and has said Mission Asset Fund exists because he knows what it feels like to be financially competent but invisible."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Suze Orman",
+      "dominantCategories": ["performing", "teaching"],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Treating a boring subject as emotionally urgent so people actually listen",
+          "confidence": "high",
+          "evidence": "She treated money as an emotional subject rather than a mathematical one, creating an audience that bland financial experts could never reach."
+        },
+        {
+          "category": "teaching",
+          "skill": "Telling people hard truths about their finances with the energy of someone who loves them",
+          "confidence": "high",
+          "evidence": "The 'Can I Afford It?' segment told callers on national television they could not afford the vacation or the handbag, and they kept tuning in."
+        },
+        {
+          "category": "coaching",
+          "skill": "Making financial competence feel like a form of self-care rather than deprivation",
+          "confidence": "high",
+          "evidence": "Women and Money argued that financial competence is essential, not selfish, reaching women who had been taught to take care of everyone else's money first."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Using your own financial loss as the origin of your authority",
+          "confidence": "high",
+          "evidence": "Lost $50,000 in waitress savings to a Merrill Lynch broker, sued, and the experience became the emotional foundation of her entire career."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Dave Ramsey",
+      "dominantCategories": ["performing", "leading"],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Making personal finance feel like a moral and spiritual practice",
+          "confidence": "high",
+          "evidence": "His evangelical framing turns budgeting into a moral practice. The confrontational radio style makes financial discipline feel urgent, not tedious."
+        },
+        {
+          "category": "teaching",
+          "skill": "Prioritising psychological momentum over mathematical optimisation",
+          "confidence": "high",
+          "evidence": "The debt snowball pays smallest balances first, not highest-interest. He argues personal finance is about behaviour, not maths."
+        },
+        {
+          "category": "leading",
+          "skill": "Distributing through existing communities rather than building your own",
+          "confidence": "high",
+          "evidence": "Financial Peace University runs through churches, using pre-built community and accountability structures that online courses cannot replicate. Over 10 million graduates."
+        },
+        {
+          "category": "building",
+          "skill": "Funding a media empire through product sales with zero advertising",
+          "confidence": "high",
+          "evidence": "Ramsey Solutions grew to 1,000+ employees and 18 million weekly listeners with no ads, funding everything through book sales, courses, and referral fees."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turning bankruptcy into the credibility that makes people listen",
+          "confidence": "medium",
+          "evidence": "Went bankrupt at 26 with a newborn. The experience gave him absolute conviction that all consumer debt is dangerous, and that conviction became the brand."
+        }
+      ],
+      "antiTags": []
     }
+  ]
+}
