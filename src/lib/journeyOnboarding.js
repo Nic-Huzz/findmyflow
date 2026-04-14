@@ -217,6 +217,19 @@ export async function persistPlaySkillsOnboarding(userId) {
   }
 
   try {
+    // Skip if clusters already exist (direct save from verify may have already written them)
+    const { data: existing } = await supabase.from('nikigai_clusters')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('step_id', 'get_started')
+      .limit(1)
+    if (existing?.length > 0) {
+      // Already saved — just clean up localStorage
+      localStorage.removeItem(PLAYSKILLS_RESULT_KEY)
+      localStorage.removeItem(PLAYSKILLS_PROGRESS_KEY)
+      return { success: true, count: existing.length, skipped: true }
+    }
+
     // 1. Remove old get_started clusters, then insert new ones
     await supabase.from('nikigai_clusters')
       .delete()

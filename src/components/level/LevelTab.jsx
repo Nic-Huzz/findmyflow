@@ -84,12 +84,13 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           setHasWoundMap(true)
         }
       })
-    // Check if curiosity compass completed (has skills from curiosity_compass)
+    // Check if playskills exist (from /get-started or curiosity compass)
     supabase
       .from('nikigai_clusters')
       .select('id')
       .eq('user_id', userId)
-      .eq('source_flow', 'curiosity_compass')
+      .eq('cluster_type', 'skills')
+      .in('step_id', ['get_started', 'curiosity_compass'])
       .limit(1)
       .then(({ data }) => {
         if (data?.length > 0) {
