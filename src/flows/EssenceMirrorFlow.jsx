@@ -332,9 +332,6 @@ export default function EssenceMirrorFlow() {
       const primary = getArchetype(pixarPick)
       await supabase.from('user_stage_progress').upsert({
         user_id: user.id,
-        essence_name: heroName,
-        essence_archetype: primary?.name,
-        vision_in_action: blendResult?.blended_essence || primary?.poetic_line,
         onboarding_completed: true,
         onboarding_v2_completed: true,
         essence_mirror_completed: true,
