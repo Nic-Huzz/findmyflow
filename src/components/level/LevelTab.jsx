@@ -245,7 +245,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           return (
             <DeepDiveCard
               key={quest.id}
-              deepDive={{ ...quest, route: null }}
+              deepDive={{ ...quest, route: '#playlist' }}
               isCompleted={false}
               onNavigate={async () => {
                 // Mark as complete (check first to avoid duplicates)
