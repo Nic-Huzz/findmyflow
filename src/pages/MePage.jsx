@@ -472,24 +472,7 @@ export default function MePage() {
     )
   }
 
-  // Safety net: user completed onboarding but has no archetype profile
-  // (e.g. signed up via AuthGate bypass instead of /get-started)
-  if (!archetypes?.essence) {
-    return (
-      <div className="me-page content-enter">
-        <div className="me-hero" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '2rem' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✨</div>
-          <h1 className="hero-name">One more step</h1>
-          <p className="hero-tagline" style={{ marginBottom: '1.5rem', opacity: 0.8 }}>
-            Discover your Essence Archetype to unlock your full hero profile
-          </p>
-          <a href="/get-started" className="primary-button" style={{ textDecoration: 'none' }}>
-            Discover Your Archetype
-          </a>
-        </div>
-      </div>
-    )
-  }
+
 
   return (
     <div className="me-page content-enter">
