@@ -269,14 +269,40 @@ export default function IdentifyTopicsFlow() {
     setCustomTopicText('')
   }
 
+  // Extra categories selected from satisfaction "some are missing" step
+  const [extraCategories, setExtraCategories] = useState([])
+
   const handleSubSelectionContinue = () => {
     if (subSelectionIndex < swipeKeptIds.length - 1) {
       setSubSelectionIndex(subSelectionIndex + 1)
       setCustomTopicText('')
     } else {
-      // All sub-selections done — save
-      handleSave(swipeKeptIds)
+      // All sub-selections done — show satisfaction check
+      setStep('satisfaction')
     }
+  }
+
+  const toggleExtraCategory = (catId) => {
+    setExtraCategories(prev =>
+      prev.includes(catId) ? prev.filter(id => id !== catId) : [...prev, catId]
+    )
+  }
+
+  const handleExtraContinue = () => {
+    if (extraCategories.length === 0) return
+    // Pre-select pre-defined placemakes for extra categories
+    const preSelected = { ...selectedItems }
+    extraCategories.forEach(catId => {
+      if (!preSelected[catId]) preSelected[catId] = []
+    })
+    setSelectedItems(preSelected)
+
+    // Add extra categories to swipeKeptIds and show sub-selections for them
+    const allKept = [...swipeKeptIds, ...extraCategories]
+    setSwipeKeptIds(allKept)
+    setSubSelectionIndex(swipeKeptIds.length) // start from where new ones begin
+    setCustomTopicText('')
+    setStep('sub_select')
   }
 
   const handleSave = async (keptCats) => {
@@ -624,6 +650,105 @@ export default function IdentifyTopicsFlow() {
   }
 
   // ─── No topics selected ────────────────────────────────────────────────────
+
+  // ─── Satisfaction check ──────────────────────────────────────────────────
+
+  if (step === 'satisfaction') {
+    return (
+      <div className="journey-onboarding idt-flow">
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1 jo-glow-gold" />
+          <div className="jo-glow jo-glow-2 jo-glow-gold" />
+        </div>
+        <div className="idt-container">
+          <div className="card" style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>✨</div>
+            <h2>{swipeKeptIds.length} topic areas identified</h2>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+              Do these capture the problems you care about, or are some missing?
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <button
+                className="pso-gate-btn pso-gate-primary"
+                onClick={() => handleSave(swipeKeptIds)}
+                disabled={isProcessing}
+              >
+                <span className="pso-gate-icon">✅</span>
+                <span className="pso-gate-text">
+                  <strong>{isProcessing ? 'Saving...' : 'These capture me'}</strong>
+                  <span>Save and continue</span>
+                </span>
+              </button>
+              <button
+                className="pso-gate-btn"
+                onClick={() => setStep('extra_pick')}
+              >
+                <span className="pso-gate-icon">🎯</span>
+                <span className="pso-gate-text">
+                  <strong>Some are missing</strong>
+                  <span>Browse and add more categories</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ─── Extra category picker ────────────────────────────────────────────────
+
+  if (step === 'extra_pick') {
+    return (
+      <div className="journey-onboarding idt-flow">
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1" />
+          <div className="jo-glow jo-glow-2" />
+        </div>
+        <div className="idt-container">
+          <div className="card">
+            <h2>Add more topic areas</h2>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', marginBottom: '1rem' }}>
+              Select categories you also care about.
+            </p>
+            <div className="pso-category-grid">
+              {PROBLEM_SEGMENTS.map(seg => {
+                const alreadyKept = swipeKeptIds.includes(seg.id)
+                const isExtra = extraCategories.includes(seg.id)
+                return (
+                  <button
+                    key={seg.id}
+                    onClick={() => !alreadyKept && toggleExtraCategory(seg.id)}
+                    disabled={alreadyKept}
+                    className={`pso-category-card ${isExtra ? 'selected' : ''} ${alreadyKept ? 'identified' : ''}`}
+                  >
+                    {alreadyKept && <div className="pso-cat-identified-tag">Identified</div>}
+                    <div className="pso-cat-icon">{seg.icon}</div>
+                    <div className="pso-cat-name">{seg.displayName}</div>
+                    <div className="pso-cat-tagline">{seg.tagline}</div>
+                  </button>
+                )
+              })}
+            </div>
+            <button
+              className="jo-cta-button"
+              onClick={extraCategories.length > 0 ? handleExtraContinue : () => handleSave(swipeKeptIds)}
+              disabled={isProcessing}
+              style={{ width: '100%', marginTop: '1rem' }}
+            >
+              <span className="jo-shimmer-layer" />
+              {isProcessing ? 'Saving...' : extraCategories.length > 0 ? `Continue with ${extraCategories.length} more →` : 'Save as is →'}
+            </button>
+            <button className="pso-back-link" onClick={() => setStep('satisfaction')}>
+              ← Back
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ─── No topics selected ───────────────────────────────────────────────────
 
   if (step === 'no_topics') {
     return (
