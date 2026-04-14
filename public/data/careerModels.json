@@ -40,7 +40,8 @@
         "scaleModel": "Premium products with locked ecosystem creating recurring customers",
         "lessonsForUser": "If you design and care about craft: strip everything to its essence, then build an ecosystem around one perfect product"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "We're here to put a dent in the universe — otherwise why even be here?"
     },
     {
       "name": "John D. Rockefeller",
@@ -64,7 +65,8 @@
         "scaleModel": "Horizontal integration of an entire industry through efficiency and aggressive acquisition",
         "lessonsForUser": "If you lead and care about systems: control the bottleneck in your industry, not the flashy part"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I believe the power to make money is a gift from God — to be developed and used to the best of our ability for the good of mankind."
     },
     {
       "name": "Brunello Cucinelli",
@@ -89,7 +91,8 @@
         "scaleModel": "Ultra-premium pricing with values-driven brand story that justified the markup",
         "lessonsForUser": "If you design and care about dignity: charge premium prices that fund the treatment of people you believe they deserve"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I want to be a guardian of human dignity, combining profit with a gift back to humanity — a humanistic capitalism."
     },
     {
       "name": "Ed Thorp",
@@ -113,7 +116,8 @@
         "scaleModel": "Mathematical edge applied to larger and larger capital pools",
         "lessonsForUser": "If you analyze and care about truth: find where your analytical edge applies to bigger games than the one you're currently playing"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "In this business it's easy to confuse luck with brains."
     },
     {
       "name": "Sol Price",
@@ -136,7 +140,8 @@
         "scaleModel": "Membership model with ultra-low margins that competitors couldn't match",
         "lessonsForUser": "If you lead and care about fairness: build a model where your customers' savings are your competitive moat"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The intelligent loss of sales."
     },
     {
       "name": "Yvon Chouinard",
@@ -161,7 +166,8 @@
         "scaleModel": "Mission-driven brand where environmental activism became the marketing",
         "lessonsForUser": "If you build and care about the planet: let your values kill your sacred cows, and the authenticity becomes your brand"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I never wanted to be a businessman. I started as a craftsman, making climbing gear for my friends and myself."
     },
     {
       "name": "Enzo Ferrari",
@@ -186,7 +192,8 @@
         "scaleModel": "Artificial scarcity and extreme pricing funded by passion for a loss-making activity (racing)",
         "lessonsForUser": "If you build and care about craft: fund the thing you love by selling premium versions of it to people who want the status"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Aerodynamics are for people who can't build engines."
     },
     {
       "name": "Estée Lauder",
@@ -213,7 +220,8 @@
         "scaleModel": "Gift-with-purchase and touch marketing through premium retail channels",
         "lessonsForUser": "If you perform and care about access: let people experience your product for free, then watch them sell it for you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I never dreamed about success. I worked for it."
     },
     {
       "name": "Warren Buffett",
@@ -237,7 +245,8 @@
         "scaleModel": "Insurance float providing permanent capital to compound returns over decades",
         "lessonsForUser": "If you teach and care about patience: find an unfair advantage (like float) and compound it for decades without touching it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I am a better investor because I am a businessman, and a better businessman because I am an investor."
     },
     {
       "name": "Charlie Munger",
@@ -261,7 +270,8 @@
         "scaleModel": "Mental models from multiple disciplines applied to investment decisions",
         "lessonsForUser": "If you teach and care about thinking clearly: collect mental models from every field and apply them to your one big decision"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "All I want to know is where I'm going to die, so I'll never go there."
     },
     {
       "name": "Jeff Bezos",
@@ -286,7 +296,8 @@
         "scaleModel": "Reinvest all profits into infrastructure and new businesses, never optimize for quarterly earnings",
         "lessonsForUser": "If you lead and care about customers: build the infrastructure first, profit second, and let compounding handle the rest"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "If you're not stubborn, you'll give up on experiments too soon — if you're not flexible, you'll pound your head against the wall and won't see a different solution to a problem you're trying to solve."
     },
     {
       "name": "Bill Gates",
@@ -311,7 +322,8 @@
         "scaleModel": "Platform licensing with near-zero marginal cost per unit",
         "lessonsForUser": "If you lead and care about leverage: own the platform others build on, not the hardware it runs on"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "We always overestimate the change that will occur in the next two years and underestimate the change that will occur in the next ten."
     },
     {
       "name": "Larry Ellison",
@@ -337,7 +349,8 @@
         "scaleModel": "Enterprise lock-in through database dependency that made switching nearly impossible",
         "lessonsForUser": "If you perform and care about ambition: bet on the technology everyone dismisses, then make it impossible to leave"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "When you innovate, you've got to be prepared for everyone telling you you're nuts."
     },
     {
       "name": "Elon Musk",
@@ -365,7 +378,8 @@
         "scaleModel": "First-principles engineering to reduce costs by orders of magnitude in established industries",
         "lessonsForUser": "If you build and care about the future: pick industries everyone says are impossible, then outwork every objection"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "When something is important enough, you do it even if the odds are not in your favor."
     },
     {
       "name": "Phil Knight",
@@ -392,7 +406,8 @@
         "scaleModel": "Outsourced manufacturing combined with elite athlete endorsements and storytelling",
         "lessonsForUser": "If you perform and care about storytelling: attach your product to people your customers aspire to be"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The cowards never started and the weak died along the way. That leaves us, ladies and gentlemen. Us."
     },
     {
       "name": "James Dyson",
@@ -417,7 +432,8 @@
         "scaleModel": "Premium pricing justified by engineering superiority, sold direct to maintain margins",
         "lessonsForUser": "If you build and care about getting it right: make 5,000 prototypes if needed, then own the whole product rather than licensing"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I made 5,127 prototypes of my vacuum before I got it right. There were 5,126 failures. But I learned from each one."
     },
     {
       "name": "Edwin Land",
@@ -443,7 +459,8 @@
         "scaleModel": "Razor-and-blade model with cameras as platform and film as recurring revenue",
         "lessonsForUser": "If you create and care about wonder: build the product that answers the naive question everyone else ignores"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Don't undertake a project unless it is manifestly important and nearly impossible."
     },
     {
       "name": "Walt Disney",
@@ -468,7 +485,8 @@
         "scaleModel": "Content IP that compounds across media, parks, merchandise, and experiences",
         "lessonsForUser": "If you create and care about magic: treat animation (or any craft) as serious art, then build an ecosystem that multiplies every piece of IP"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "We don't make movies to make money, we make money to make more movies."
     },
     {
       "name": "Henry Ford",
@@ -493,7 +511,8 @@
         "scaleModel": "Vertical integration and assembly line efficiency making luxury goods affordable",
         "lessonsForUser": "If you build and care about access: figure out how to make the expensive thing cheap, and your market becomes everyone"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Don't find fault, find a remedy — anybody can complain."
     },
     {
       "name": "Andrew Carnegie",
@@ -517,7 +536,8 @@
         "scaleModel": "Vertical integration controlling every input from ore to finished steel",
         "lessonsForUser": "If you lead and care about efficiency: invest in the technology your competitors dismiss, and own every step of the supply chain"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The man who dies rich dies disgraced."
     },
     {
       "name": "Howard Hughes",
@@ -542,7 +562,8 @@
         "scaleModel": "Personal fame and daring as marketing for industrial ventures",
         "lessonsForUser": "If you build and care about pushing limits: use personal performance to prove what your company can do"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I want to be remembered for only one thing: my contribution to aviation."
     },
     {
       "name": "Richard Branson",
@@ -569,7 +590,8 @@
         "scaleModel": "Personal brand as a franchise applied to underserved industries",
         "lessonsForUser": "If you perform and care about the underdog: build a brand people root for, then apply it to every industry where incumbents are lazy"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Screw it, let's do it."
     },
     {
       "name": "Michael Dell",
@@ -593,7 +615,8 @@
         "scaleModel": "Direct sales model eliminating retail markup and enabling customization",
         "lessonsForUser": "If you lead and care about efficiency: cut out the middleman and sell direct, then be willing to go private to rebuild when the model stalls"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Try never to be the smartest person in the room. And if you are, I suggest you invite smarter people or find a different room."
     },
     {
       "name": "Brad Jacobs",
@@ -617,7 +640,8 @@
         "scaleModel": "Repeatable roll-up strategy applied to successive fragmented industries",
         "lessonsForUser": "If you lead and care about scale: find fragmented industries with no dominant player and consolidate them with a repeatable system"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "You can mess up a lot of things in business and still do well as long as you get the big trend right."
     },
     {
       "name": "Sam Walton",
@@ -642,7 +666,8 @@
         "scaleModel": "Cost leadership passed to customers as everyday low prices, funded by supply chain efficiency",
         "lessonsForUser": "If you lead and care about the customer: obsessively reduce costs and pass every saving along, creating loyalty through value"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "There is only one boss — the customer. And he can fire everybody in the company from the chairman on down, simply by spending his money somewhere else."
     },
     {
       "name": "Coco Chanel",
@@ -667,7 +692,8 @@
         "scaleModel": "Personal mythology and cultural revolution turned into an enduring luxury brand",
         "lessonsForUser": "If you create and care about freedom: remove what constrains people, and the absence itself becomes the product"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I don't do fashion, I am fashion."
     },
     {
       "name": "David Ogilvy",
@@ -692,7 +718,8 @@
         "scaleModel": "Big brand clients attracted by research-proven creative methods and a compelling founder story",
         "lessonsForUser": "If you create and care about proof: use research to back your creative instincts, and start your career at any age"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I prefer the discipline of knowledge to the anarchy of ignorance."
     },
     {
       "name": "Claude Hopkins",
@@ -716,7 +743,8 @@
         "scaleModel": "Measurable, repeatable advertising methods that could be taught and scaled",
         "lessonsForUser": "If you perform and care about proof: make everything measurable, then let the data tell you what works"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The only purpose of advertising is to make sales. It is profitable or unprofitable according to its actual sales."
     },
     {
       "name": "Arnold Schwarzenegger",
@@ -744,7 +772,8 @@
         "scaleModel": "Master one domain completely, then transfer the discipline and fame to the next",
         "lessonsForUser": "If you perform and care about stacking skills: master one domain, use the income to fund the next, and never depend on a single career"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "For me life is continuously being hungry. The meaning of life is not simply to exist, to survive, but to move ahead, to go up, to achieve, to conquer."
     },
     {
       "name": "P.T. Barnum",
@@ -768,7 +797,8 @@
         "scaleModel": "Controversy as marketing engine, creating spectacles people felt compelled to see",
         "lessonsForUser": "If you perform and care about attention: turn every controversy into publicity and make your name impossible to ignore"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Every crowd has a silver lining."
     },
     {
       "name": "Dietrich Mateschitz",
@@ -794,7 +824,8 @@
         "scaleModel": "Created a category rather than competing in one, then owned the culture around it through extreme sports",
         "lessonsForUser": "If you lead and care about creating new markets: don't compete in existing categories, create your own and own the culture around it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "It is a must to believe in one's product. If this was just a marketing gimmick, it would never work."
     },
     {
       "name": "Todd Graves",
@@ -818,7 +849,8 @@
         "scaleModel": "Radical simplicity: one product done perfectly, replicated across thousands of locations",
         "lessonsForUser": "If you lead and care about focus: do one thing so well that the simplicity itself becomes your competitive advantage"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "God made me good at chicken fingers to help people."
     },
     {
       "name": "Kobe Bryant",
@@ -843,7 +875,8 @@
         "scaleModel": "Personal brand built on work ethic, then transferred to media and venture investing",
         "lessonsForUser": "If you coach and care about mastery: build a philosophy around your process, then apply that framework to every new domain"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Rest at the end, not in the middle."
     },
     {
       "name": "Rick Rubin",
@@ -868,7 +901,8 @@
         "scaleModel": "Reputation for drawing out the essential truth in any artist, transcending genre",
         "lessonsForUser": "If you coach and care about essence: help people strip away everything that isn't them, and work across genres rather than specializing"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Creativity is not a rare ability. It is not difficult to access. Creativity is a fundamental aspect of being human. It's our birthright."
     },
     {
       "name": "Sam Zell",
@@ -892,7 +926,8 @@
         "scaleModel": "Contrarian timing: buy when fear is highest and hold through recovery",
         "lessonsForUser": "If you lead and care about timing: build cash reserves so you can buy what others abandon in downturns"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "If everyone is going left, look right."
     },
     {
       "name": "Ben Franklin",
@@ -918,7 +953,8 @@
         "scaleModel": "Franchised his print shop model across colonies, earning passive income that funded reinvention",
         "lessonsForUser": "If you create and care about freedom: build a business that runs without you, then use the freedom to become who you actually are"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "An investment in knowledge pays the best interest."
     },
     {
       "name": "Thomas Edison",
@@ -944,7 +980,8 @@
         "scaleModel": "Industrialized invention itself, with teams testing thousands of materials empirically",
         "lessonsForUser": "If you build and care about systematic progress: turn your creative process into a team sport with rigorous testing"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I have not failed. I've just found 10,000 ways that won't work."
     },
     {
       "name": "Levi Strauss",
@@ -968,7 +1005,8 @@
         "scaleModel": "One iconic product that became a cultural symbol, replicated at massive scale",
         "lessonsForUser": "If you lead and care about durability: escape commodity business by making one product so good it becomes a cultural symbol"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The way to do a great deal is to keep on doing a little."
     },
     {
       "name": "George Lucas",
@@ -993,7 +1031,8 @@
         "scaleModel": "IP ownership with licensing across every possible consumer product and experience",
         "lessonsForUser": "If you create and care about ownership: negotiate to own the intellectual property, not the salary"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Learning to make films is very easy. Learning what to make films about is very hard."
     },
     {
       "name": "Bernard Arnault",
@@ -1019,7 +1058,8 @@
         "scaleModel": "Acquire heritage luxury brands, install professional management, and let them operate semi-independently",
         "lessonsForUser": "If you lead and care about excellence: acquire great brands rather than building from scratch, and protect their heritage while professionalizing operations"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Luxury goods are the only area in which it is possible to make luxury margins."
     },
     {
       "name": "Alexander Graham Bell",
@@ -1044,7 +1084,8 @@
         "scaleModel": "Patent monopoly on the most important communication invention of the 19th century",
         "lessonsForUser": "If you teach and care about connection: solve the problem closest to your heart, and defend your creation fiercely"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "When one door closes another door opens; but we so often look so long and so regretfully upon the closed door that we do not see the one which has opened for us."
     },
     {
       "name": "Walter Chrysler",
@@ -1067,7 +1108,8 @@
         "scaleModel": "Engineering excellence combined with affordable pricing to compete with Ford and GM",
         "lessonsForUser": "If you build and care about the future: leave the stable industry for the chaotic one when you can see what's coming"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The real secret of success is enthusiasm."
     },
     {
       "name": "Joseph Pulitzer",
@@ -1092,7 +1134,8 @@
         "scaleModel": "Populist spectacle that attracted mass readership, funding serious investigative journalism",
         "lessonsForUser": "If you speak up and care about truth: use entertainment to attract the audience, then use the audience to fund the journalism"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Put it before them briefly so they will read it, clearly so they will understand it, forcibly so they will appreciate it, picturesquely so they will remember it, and above all, accurately so they will be guided by its light."
     },
     {
       "name": "Andre Agassi",
@@ -1119,7 +1162,8 @@
         "scaleModel": "Personal comeback story as the foundation for a school and charitable platform",
         "lessonsForUser": "If you speak up and care about reinvention: your comeback story becomes the credibility to help others who are stuck"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I play tennis for a living even though I hate tennis, hate it with a dark and secret passion and always have."
     },
     {
       "name": "Buckminster Fuller",
@@ -1145,7 +1189,8 @@
         "scaleModel": "Doing more with less (ephemeralization) as a design principle that attracted followers and institutions",
         "lessonsForUser": "If you build and care about possibility: treat your life as an experiment, and let the results attract the resources"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "You never change things by fighting the existing reality. To change something, build a new model that makes the existing model obsolete."
     },
     {
       "name": "Sam Zemurray",
@@ -1170,7 +1215,8 @@
         "scaleModel": "Hands-on operational knowledge that outcompeted bureaucratic management",
         "lessonsForUser": "If you lead and care about doing the work yourself: operational knowledge beats boardroom theory every time"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "You've been f***ing up this business long enough. I'm going to straighten it out."
     },
     {
       "name": "Oprah Winfrey",
@@ -1199,7 +1245,8 @@
         "scaleModel": "Personal authenticity as the brand, scaled through media ownership and book club influence",
         "lessonsForUser": "If you connect and care about honesty: own the platform, not just the content, and let your vulnerability be your strength"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The biggest adventure you can take is to live the life of your dreams."
     },
     {
       "name": "Howard Schultz",
@@ -1225,7 +1272,8 @@
         "scaleModel": "Third place experience replicated globally through company-owned stores rather than franchising",
         "lessonsForUser": "If you design and care about experience: when the boss says no to your vision, prove it yourself, then come back and buy the company"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I wanted to build the kind of company my father never got a chance to work for."
     },
     {
       "name": "Nikola Tesla",
@@ -1250,7 +1298,8 @@
         "scaleModel": "Superior technology that won on merit despite massive opposition from Edison",
         "lessonsForUser": "If you create and care about truth: let the technology speak for itself, but also protect your financial interests"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The present is theirs; the future, for which I really worked, is mine."
     },
     {
       "name": "Chuck Feeney",
@@ -1273,7 +1322,8 @@
         "scaleModel": "Built wealth through airport retail monopoly, then deployed it as strategic philanthropy",
         "lessonsForUser": "If you lead and care about impact: giving while living lets you see the results and improve your approach"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I had one idea that never changed in my mind — that you should use your wealth to help people."
     },
     {
       "name": "Jim Simons",
@@ -1296,7 +1346,8 @@
         "scaleModel": "Mathematical pattern recognition applied to markets, with extreme secrecy and talent density",
         "lessonsForUser": "If you connect people and care about patterns: hire from outside your industry and let outsider thinking be your edge"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I did a lot of math. I made a lot of money, and I gave almost all of it away. That's the story of my life."
     },
     {
       "name": "Sara Blakely",
@@ -1323,7 +1374,8 @@
         "scaleModel": "One product, one clear problem, word-of-mouth marketing, no outside funding",
         "lessonsForUser": "If you perform and care about solving a simple problem: bootstrap with your own savings, own 100%, and let the product market itself"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I think failure is nothing more than life's way of nudging you that you are off course."
     },
     {
       "name": "Melanie Perkins",
@@ -1350,7 +1402,8 @@
         "scaleModel": "Freemium model making professional design accessible to non-designers at scale",
         "lessonsForUser": "If you design and care about access: make the professional tool simple enough for everyone, and prove it with users before investors believe"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I want to empower everyone in the world to design anything and publish anywhere."
     },
     {
       "name": "Tobi Lütke",
@@ -1375,7 +1428,8 @@
         "scaleModel": "Platform powering millions of merchants, earning from each transaction",
         "lessonsForUser": "If you build and care about solving your own problem: the tool you build for yourself might be the product millions need"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Amazon is trying to build an empire, and Shopify is trying to arm the rebels."
     },
     {
       "name": "Ratan Tata",
@@ -1401,7 +1455,8 @@
         "scaleModel": "Modernization and global acquisition strategy while maintaining founding values of social responsibility",
         "lessonsForUser": "If you coach and care about modernization: sometimes the hardest leadership is reforming the institution you inherited"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "None can destroy iron, but its own rust can. Likewise, none can destroy a person but his own mindset can."
     },
     {
       "name": "Jack Ma",
@@ -1427,7 +1482,8 @@
         "scaleModel": "Platform connecting millions of small businesses to buyers, with ecosystem of payment, logistics, and cloud",
         "lessonsForUser": "If you perform and care about small businesses: you don't need to be technical to build a tech platform if you deeply understand the customer"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Today is hard, tomorrow will be worse, but the day after tomorrow will be sunshine."
     },
     {
       "name": "Whitney Wolfe Herd",
@@ -1453,7 +1509,8 @@
         "scaleModel": "One clear differentiator (women message first) that created a new dating culture",
         "lessonsForUser": "If you speak up and care about safety: your worst experience might be the founding insight for a product millions need"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The biggest lesson I've learned is that hurt people hurt people, and kindness is just as contagious."
     },
     {
       "name": "James Sinegal",
@@ -1477,7 +1534,8 @@
         "scaleModel": "Membership model with ultra-low margins and high employee wages creating loyalty on both sides",
         "lessonsForUser": "If you lead and care about doing right: treat employees and customers well even when Wall Street disagrees, and let the results prove it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "When you hire good people, and you provide good jobs and good wages and a career, good things are going to happen."
     },
     {
       "name": "Alli Webb",
@@ -1501,7 +1559,8 @@
         "scaleModel": "Radical single-service focus creating a predictable, replicable customer experience",
         "lessonsForUser": "If you design and care about experience: do one thing so well that customers never think to ask for more"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Focus on one thing and be the best at it."
     },
     {
       "name": "Mackenzie Scott",
@@ -1525,7 +1584,8 @@
         "scaleModel": "Rapid, trust-based deployment of capital to organizations already doing the work",
         "lessonsForUser": "If you coach and care about trust: sometimes the most powerful thing is to give resources without conditions"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I want to de-emphasize privileged voices and cede focus to others."
     },
     {
       "name": "Tadashi Yanai",
@@ -1550,7 +1610,8 @@
         "scaleModel": "Technology-driven fabrics at mass-market prices, with minimalist branding",
         "lessonsForUser": "If you create and care about basics: master the fundamentals everyone else rushes past, and let quality speak"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I might look successful but I've made many mistakes. People take their failures too seriously. You have to be positive and believe you will find success next time."
     },
     {
       "name": "Masayoshi Son",
@@ -1575,7 +1636,8 @@
         "scaleModel": "Massive conviction-driven bets on companies that could dominate entire categories",
         "lessonsForUser": "If you perform and care about vision: make a few massive bets based on conviction rather than many safe ones based on consensus"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Think big; think disruptive. Execute with full passion."
     },
     {
       "name": "Arianna Huffington",
@@ -1602,7 +1664,8 @@
         "scaleModel": "Personal brand and thought leadership monetized through media, then corporate consulting",
         "lessonsForUser": "If you connect and care about sustainability: your burnout story might be the most valuable thing you have to share"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Burnout is not the price we have to pay for success."
     },
     {
       "name": "Hamdi Ulukaya",
@@ -1626,7 +1689,8 @@
         "scaleModel": "Superior product in an underserved category, scaled through existing retail distribution",
         "lessonsForUser": "If you build and care about quality: buy what big companies abandon and make it better than they ever could"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The minute a refugee gets a job is the minute they stop being a refugee."
     },
     {
       "name": "Tory Burch",
@@ -1653,7 +1717,8 @@
         "scaleModel": "Accessible luxury positioning with strong e-commerce and social media from day one",
         "lessonsForUser": "If you create and care about taste: find the price point gap that nobody is serving and position yourself precisely there"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "When I started my company, I saw a void in the market for chic, beautifully made pieces that didn't cost a fortune."
     },
     {
       "name": "Bobbi Brown",
@@ -1679,7 +1744,8 @@
         "scaleModel": "Authentic philosophy that attracted loyal customers, then scaled through prestige retail acquisition",
         "lessonsForUser": "If you teach and care about authenticity: build a brand around helping people be more themselves, not someone else"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I believe that all women are pretty without makeup — but with the right makeup can be pretty powerful."
     },
     {
       "name": "Jose Andres",
@@ -1706,7 +1772,8 @@
         "scaleModel": "Restaurant supply chain expertise repurposed for disaster relief at unprecedented speed",
         "lessonsForUser": "If you connect and care about feeding people: the operational skills from one domain might solve a completely different problem at global scale"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "The business of feeding people is the most amazing business in the world."
     },
     {
       "name": "Patagonia's Rose Marcario",
@@ -1730,7 +1797,8 @@
         "scaleModel": "Financial rigor applied to a mission-driven company, proving environmental activism supercharges revenue",
         "lessonsForUser": "If you lead and care about the environment: financial discipline makes activism more credible, not less"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Profit is important, but profit isn't the only measure of success."
     },
     {
       "name": "Stewart Butterfield",
@@ -1752,7 +1820,8 @@
         "scaleModel": "Internal tool discovered during failed project, then scaled as standalone SaaS product",
         "lessonsForUser": "If you design and care about how teams work: pay attention to the tools you build for yourself along the way, they might be the real product"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "We don't sell saddles here. What we are selling is organizational transformation."
     },
     {
       "name": "Jesse Itzler",
@@ -1779,7 +1848,8 @@
         "scaleModel": "Personal energy and sales ability applied to whatever industry seemed interesting",
         "lessonsForUser": "If you perform and care about variety: sales skills transfer to any industry, so follow your curiosity and sell your way in"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "I don't believe in resumes in the traditional sense. I believe in life resumes. Building experiences, creating memories, and doing more."
     },
     {
       "name": "Daymond John",
@@ -1807,7 +1877,8 @@
         "scaleModel": "Cultural credibility through organic celebrity adoption, not paid endorsement",
         "lessonsForUser": "If you speak up and care about culture: get one tastemaker to authentically use your product rather than paying for advertising"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "It doesn't matter how many times you fail. It doesn't matter how many times you almost get it right. No one is going to know or care about your failures, and neither should you."
     },
     {
       "name": "Sophia Amoruso",
@@ -1833,7 +1904,8 @@
         "scaleModel": "Social media storytelling creating a community around a curated brand identity",
         "lessonsForUser": "If you create and care about curation: your taste and voice can be the brand, but you also need operational skills to scale it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "A #GIRLBOSS is someone who's in charge of her own life. She gets what she wants because she works for it."
     },
     {
       "name": "Vera Wang",
@@ -1858,7 +1930,8 @@
         "scaleModel": "Celebrity bridal clients created aspirational demand that cascaded to broader market through licensing",
         "lessonsForUser": "If you create and care about beauty: two rejections might just be redirecting you to the field you were meant to own"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "When I decided to get married at 40, I couldn't find a dress with the modernity or sophistication I wanted. That's when I saw the opportunity for a wedding gown business."
     },
     {
       "name": "Tony Hsieh",
@@ -1884,7 +1957,8 @@
         "scaleModel": "Customer happiness as the product, with shoes as the delivery mechanism",
         "lessonsForUser": "If you connect and care about customer experience: remove every risk the customer faces, and they'll become your marketing team"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Chase the vision, not the money — the money will end up following you."
     },
     {
       "name": "Indra Nooyi",
@@ -1907,7 +1981,8 @@
         "scaleModel": "Mission-driven transformation of a legacy company, proving health and profit align long-term",
         "lessonsForUser": "If you lead and care about health: transform the existing institution from within rather than starting from scratch"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Whatever anybody says or does, assume positive intent. You will be amazed at how your whole approach to a person or problem becomes very different."
     },
     {
       "name": "Fred Rogers",
@@ -1934,7 +2009,8 @@
         "scaleModel": "One unchanging show broadcast nationally for decades, reaching generations through repetition and trust",
         "lessonsForUser": "If you coach and care about children: choose depth over scale, and let decades of consistency be your growth strategy"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated every child as a person worthy of a slow, unhurried reply."
     },
     {
       "name": "Maria Montessori",
@@ -1961,7 +2037,8 @@
         "scaleModel": "Trained teachers who opened their own schools, spreading the method organically worldwide",
         "lessonsForUser": "If you design and care about education: create a replicable method, train others to teach it, and let them carry it further than you could alone"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Watched children so carefully that the furniture, the tools, and the timetable all eventually bent to what she saw."
     },
     {
       "name": "Anne Sullivan",
@@ -1984,7 +2061,8 @@
         "scaleModel": "One student, 49 years of devotion, proving that the deepest teaching defies efficiency",
         "lessonsForUser": "If you coach and care about unlocking potential: sometimes your life's work is one person, and that is enough"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Spelled the world into another person's hand, one word at a time, for almost half a century."
     },
     {
       "name": "Janusz Korczak",
@@ -2011,7 +2089,8 @@
         "scaleModel": "One orphanage run as a model of children's self-governance, with writing that influenced global child rights",
         "lessonsForUser": "If you create and care about children's dignity: build one institution that proves your principles, and write about it so the idea outlasts you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built a republic of children and then refused to let them walk into the dark alone."
     },
     {
       "name": "Vivian Gussin Paley",
@@ -2036,7 +2115,8 @@
         "scaleModel": "Decades of classroom observation published as narrative research that influenced teaching worldwide",
         "lessonsForUser": "If you coach and care about listening: record and study your own practice, and the insights will become books that change your field"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Turned a five-year-old's dictated story into a research method and a moral instrument."
     },
     {
       "name": "T. Berry Brazelton",
@@ -2061,7 +2141,8 @@
         "scaleModel": "Clinical assessment tool (NBAS) adopted worldwide, with books and TV translating the science for parents",
         "lessonsForUser": "If you teach and care about seeing individuals: create a tool that makes your insight systematic, then write and broadcast to spread it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Insisted that a newborn already had a point of view, and built a 28-item scale to prove it."
     },
     {
       "name": "Emmi Pikler",
@@ -2085,7 +2166,8 @@
         "scaleModel": "One model institution whose methods were documented and adopted by childcare centers worldwide",
         "lessonsForUser": "If you design and care about respect: build one institution that proves your philosophy, and document everything so others can replicate it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Made bathing and nappy-changing into the main classroom."
     },
     {
       "name": "Mary Ainsworth",
@@ -2108,7 +2190,8 @@
         "scaleModel": "One experimental procedure that became the standard assessment tool for an entire field of psychology",
         "lessonsForUser": "If you create and care about proof: invent one procedure that makes your theory testable, and it will outlive every book you write"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Invented an eight-part lab test for something as slippery as a baby's trust."
     },
     {
       "name": "Paul Farmer",
@@ -2135,7 +2218,8 @@
         "scaleModel": "Prove it works in one community, then use the evidence to change global health policy",
         "lessonsForUser": "If you speak up and care about equity: prove your highest standard works in the hardest setting, then use the proof to change the system"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated walking eight hours to reach one patient as a clinical standard, not a sacrifice."
     },
     {
       "name": "Virginia Apgar",
@@ -2160,7 +2244,8 @@
         "scaleModel": "One simple scoring tool adopted universally, saving millions of lives through early intervention",
         "lessonsForUser": "If you teach and care about saving lives: create one simple tool that anyone can use, and its simplicity will be its power"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Answered a resident's casual question by scribbling on a napkin, and the scribble became the standard check every newborn on Earth now gets."
     },
     {
       "name": "Cicely Saunders",
@@ -2186,7 +2271,8 @@
         "scaleModel": "One model hospice that proved the concept, then inspired thousands of hospices worldwide",
         "lessonsForUser": "If you coach and care about dignity: get the credentials you need to be taken seriously, then build one institution that proves everything"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Kept re-qualifying until nobody in the hospital could tell her she wasn't allowed to sit with the dying."
     },
     {
       "name": "Irena Sendler",
@@ -2209,7 +2295,8 @@
         "scaleModel": "Professional access combined with underground networks to save approximately 2,500 children",
         "lessonsForUser": "If you lead and care about justice: use whatever legitimate access you have as a doorway for the work that matters"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Kept the list of rescued children in jars under an apple tree so the identities could survive the war even if she didn't."
     },
     {
       "name": "Wangari Maathai",
@@ -2235,7 +2322,8 @@
         "scaleModel": "Community-based tree planting that simultaneously addressed deforestation, poverty, and women's agency",
         "lessonsForUser": "If you perform and care about the environment: tie your environmental work to the economic empowerment of the people doing it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Paid rural women a few shillings per seedling and grew a democracy movement sideways out of a tree nursery."
     },
     {
       "name": "John Wooden",
@@ -2259,7 +2347,8 @@
         "scaleModel": "A teaching philosophy (Pyramid of Success) that produced results and became a self-reinforcing brand",
         "lessonsForUser": "If you coach and care about character: focus on preparation and process, and the wins take care of themselves"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Coached the best athletes in college basketball by starting each season teaching them how to put on their socks."
     },
     {
       "name": "Carl Sagan",
@@ -2286,7 +2375,8 @@
         "scaleModel": "Television series that reached hundreds of millions, combined with bestselling books",
         "lessonsForUser": "If you teach and care about wonder: use the medium with the widest reach, even if your peers disapprove"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Took the scale of the universe and kept finding metaphors small enough to fit in a human chest."
     },
     {
       "name": "David Attenborough",
@@ -2313,7 +2403,8 @@
         "scaleModel": "Partnership with one institution (BBC) for 70+ years, building a body of work no competitor can match",
         "lessonsForUser": "If you perform and care about the natural world: choose the work over the title, and let longevity be your competitive advantage"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Got out of the frame so the animals could take it."
     },
     {
       "name": "Jacob Bronowski",
@@ -2338,7 +2429,8 @@
         "scaleModel": "One landmark television series that redefined how science could be presented to the public",
         "lessonsForUser": "If you speak up and care about knowledge: frame science as a human story, not a set of facts, and people will listen"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Walked into the ash pond at Auschwitz so the camera could hear him refuse absolute certainty."
     },
     {
       "name": "Oliver Sacks",
@@ -2366,7 +2458,8 @@
         "scaleModel": "Clinical case studies written as narrative literature that reached millions of general readers",
         "lessonsForUser": "If you create and care about patients: write about the people you serve with the depth they deserve, and the world will read it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote about his patients the way a novelist writes about characters, because he thought the clinic was cheating them otherwise."
     },
     {
       "name": "Julia Child",
@@ -2392,7 +2485,8 @@
         "scaleModel": "Television personality making the intimidating feel accessible through warmth and humor",
         "lessonsForUser": "If you coach and care about demystifying: start your real career at any age, and use humor to make the intimidating feel approachable"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Kept the mistakes in on live television so the viewer at home would believe they could do it too."
     },
     {
       "name": "Isaiah Berlin",
@@ -2417,7 +2511,8 @@
         "scaleModel": "BBC lectures and essays that made complex philosophical ideas accessible to educated general audiences",
         "lessonsForUser": "If you connect and care about ideas: follow your intellectual curiosity even when it takes you away from your field's mainstream"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Talked his essays out in one long stream at 200 words a minute and let the secretary catch them."
     },
     {
       "name": "Lynn Margulis",
@@ -2441,7 +2536,8 @@
         "scaleModel": "One paradigm-shifting paper that rewrote cell biology, vindicated over decades",
         "lessonsForUser": "If you create and care about truth: persist through rejection when the evidence is on your side, because paradigm shifts take decades"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Got her paper rejected about fifteen times and won."
     },
     {
       "name": "E.O. Wilson",
@@ -2466,7 +2562,8 @@
         "scaleModel": "Controversial academic work that attracted attention, then popular books that built a conservation movement",
         "lessonsForUser": "If you lead and care about nature: publish the truth even when it's controversial, then use the attention to build a conservation movement"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Stared at ants under rotting bark at age nine and never really looked away."
     },
     {
       "name": "Joseph Campbell",
@@ -2492,7 +2589,8 @@
         "scaleModel": "Decades of teaching crystallized into books, then a PBS series at 83 that reached millions",
         "lessonsForUser": "If you coach and care about meaning: invest years in deep reading before you try to teach, and fame may come late but it will come"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Found the same story hiding in every culture's mouth and taught it in a single women's college for 38 years."
     },
     {
       "name": "Susan Sontag",
@@ -2518,7 +2616,8 @@
         "scaleModel": "Magazine essays that set the terms of cultural debate, backed by prestige books",
         "lessonsForUser": "If you speak up and care about culture: write the essay that reframes how people see something they already know"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Directed Waiting for Godot by candlelight in a city under siege."
     },
     {
       "name": "Claude Lévi-Strauss",
@@ -2541,7 +2640,8 @@
         "scaleModel": "One theoretical framework that reorganized how anthropology was done worldwide",
         "lessonsForUser": "If you create and care about pattern: borrow a method from another field and apply it to yours, and you might create a new discipline"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated a Nambikwara village and a Parisian kinship chart as the same kind of sentence."
     },
     {
       "name": "Svante Pääbo",
@@ -2565,7 +2665,8 @@
         "scaleModel": "Created a new scientific field (paleogenetics) by developing techniques no one thought were possible",
         "lessonsForUser": "If you create and care about the past: pursue the impossible technique, because founding a new field is the ultimate career security"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Learned to sequence DNA out of bones older than farming, and found whole branches of humanity nobody had known were there."
     },
     {
       "name": "Jane Jacobs",
@@ -2591,7 +2692,8 @@
         "scaleModel": "One book that changed a profession, written by an outsider who observed what the experts missed",
         "lessonsForUser": "If you speak up and care about cities: you don't need credentials to see what experts miss, just observation and courage"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Took her eyes on her own Greenwich Village block and turned them into an argument that beat Robert Moses."
     },
     {
       "name": "Ella Baker",
@@ -2615,7 +2717,8 @@
         "scaleModel": "Train leaders who train leaders, creating a self-replicating movement",
         "lessonsForUser": "If you connect and care about justice: train other leaders rather than building your own platform, and your impact will multiply"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Believed that the moment a movement depended on a single man was the moment it had already lost."
     },
     {
       "name": "Dorothy Height",
@@ -2640,7 +2743,8 @@
         "scaleModel": "Institutional leadership that outlasted any single campaign, building infrastructure for decades of work",
         "lessonsForUser": "If you connect and care about equality: build the institution, not just the campaign, and let the work speak"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Ran an entire civil rights organisation for 32 years while her male peers took the microphones."
     },
     {
       "name": "Bayard Rustin",
@@ -2664,7 +2768,8 @@
         "scaleModel": "Operational genius behind the scenes, organizing the logistics that made historic moments possible",
         "lessonsForUser": "If you lead and care about justice: do the essential work even when you can't take credit for it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Put 250,000 people on the National Mall in eight weeks and then had to leave the stage before anyone saw him."
     },
     {
       "name": "Fannie Lou Hamer",
@@ -2690,7 +2795,8 @@
         "scaleModel": "Personal testimony so powerful it changed national politics, combined with practical economic alternatives",
         "lessonsForUser": "If you speak up and care about freedom: tell your own story so powerfully that it becomes impossible to ignore, then build something practical"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Sang hymns in a Winona jail cell with her kidneys failing and came out louder than the governor of Mississippi."
     },
     {
       "name": "Grace Lee Boggs",
@@ -2715,7 +2821,8 @@
         "scaleModel": "Rootedness in one place for decades, allowing deep community transformation",
         "lessonsForUser": "If you connect and care about community: stay in one place long enough to see real change, because depth beats breadth"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Kept starting over every decade for 70 years and never ran out of Detroit."
     },
     {
       "name": "Saul Alinsky",
@@ -2741,7 +2848,8 @@
         "scaleModel": "Created a replicable organizing methodology trained through institutions that outlived him",
         "lessonsForUser": "If you lead and care about power: codify your method so others can use it without you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Taught that power belongs to the people who are willing to be a visible nuisance first."
     },
     {
       "name": "Václav Havel",
@@ -2766,7 +2874,8 @@
         "scaleModel": "Artistic integrity as political resistance, building moral authority that became political power",
         "lessonsForUser": "If you connect and care about truth: living honestly is a political act, and moral authority can become real power when the moment comes"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated a rock band trial as a constitutional crisis and lived to see the frame win."
     },
     {
       "name": "Harriet Tubman",
@@ -2791,7 +2900,8 @@
         "scaleModel": "Personal courage combined with meticulous operational planning, creating a network others could use",
         "lessonsForUser": "If you lead and care about freedom: go back for the people still trapped, and build a system that works even in danger"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Went back into the dark thirteen times after she had already gotten out."
     },
     {
       "name": "Frederick Douglass",
@@ -2816,7 +2926,8 @@
         "scaleModel": "Personal testimony amplified through speaking tours, newspaper, and books across decades",
         "lessonsForUser": "If you speak up and care about freedom: tell your own story publicly even when it's dangerous, because authentic testimony is the most powerful tool"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Taught himself to read and then spent a lifetime making white America listen to what he had read."
     },
     {
       "name": "Jane Addams",
@@ -2841,7 +2952,8 @@
         "scaleModel": "One settlement house that became the model for social services nationwide",
         "lessonsForUser": "If you connect and care about community: move in rather than commute in, and let proximity be your method"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Moved into the slum on purpose and kept the door unlocked for 46 years."
     },
     {
       "name": "Dorothy Day",
@@ -2867,7 +2979,8 @@
         "scaleModel": "Catholic Worker houses replicated independently across cities, each self-governing",
         "lessonsForUser": "If you coach and care about the poor: serve people directly every day while also challenging the system, and let others replicate the model freely"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Sold a newspaper for a penny on Union Square and turned it into houses that fed strangers for the rest of the century."
     },
     {
       "name": "Studs Terkel",
@@ -2893,7 +3006,8 @@
         "scaleModel": "Radio show as daily practice that fed book-length oral histories, each capturing an era",
         "lessonsForUser": "If you coach and care about stories: make listening your craft, and the books will write themselves from what people tell you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Turned the country's anonymous cab drivers, waitresses and steelworkers into the authors of its history."
     },
     {
       "name": "Jimmy Carter",
@@ -2919,7 +3033,8 @@
         "scaleModel": "Institutional platform (Carter Center) for election monitoring, disease eradication, and peacebuilding",
         "lessonsForUser": "If you coach and care about service: your second act can be bigger than your first if you build an institution around it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Lost an election and then spent 44 years proving that the post-presidency was the real job."
     },
     {
       "name": "Desmond Tutu",
@@ -2946,7 +3061,8 @@
         "scaleModel": "Moral authority from religious leadership applied to political transformation",
         "lessonsForUser": "If you connect and care about healing: sometimes the most radical act is choosing forgiveness over punishment as a national strategy"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Turned confession and listening into state-level infrastructure for a country that had no playbook for peace."
     },
     {
       "name": "Nawal El Saadawi",
@@ -2973,7 +3089,8 @@
         "scaleModel": "Prolific publishing (50+ books) that built an unavoidable body of evidence across decades",
         "lessonsForUser": "If you speak up and care about women's freedom: keep writing even when they imprison you, because volume makes the message impossible to suppress"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote her way out of a prison cell with eyebrow pencil on toilet paper, and kept writing until she had built a movement."
     },
     {
       "name": "Toni Morrison",
@@ -2999,7 +3116,8 @@
         "scaleModel": "Literary fiction that became essential American reading, sustained by teaching and prizes",
         "lessonsForUser": "If you coach and care about representation: write what's missing from the culture, and edit others who are doing the same"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Edited the books that built the Black canon with one hand and wrote the ones that finished it with the other."
     },
     {
       "name": "James Baldwin",
@@ -3024,7 +3142,8 @@
         "scaleModel": "Exile as creative strategy, writing essays that reshaped the American conversation",
         "lessonsForUser": "If you speak up and care about truth: sometimes you need to leave to see clearly, and the distance makes the writing sharper"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Translated private humiliation into public argument with the precision of a courtroom stenographer."
     },
     {
       "name": "Seamus Heaney",
@@ -3050,7 +3169,8 @@
         "scaleModel": "Steady publication of poetry collections over decades, amplified by university positions and Nobel Prize",
         "lessonsForUser": "If you lead and care about identity: refuse to be categorized by others, and let your work define where you belong"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote poems about bog bodies instead of slogans and made the Troubles bearable in print without ever softening them."
     },
     {
       "name": "Mahmoud Darwish",
@@ -3076,7 +3196,8 @@
         "scaleModel": "Poetry that became a national identity, making the poet inseparable from the cause",
         "lessonsForUser": "If you perform and care about justice: art can carry a cause further than politics when it speaks to the heart"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Put a stateless nation into lines people could memorise and carry in their pockets."
     },
     {
       "name": "Audre Lorde",
@@ -3102,7 +3223,8 @@
         "scaleModel": "Essays and poetry that articulated what entire movements were trying to say",
         "lessonsForUser": "If you speak up and care about wholeness: refuse to pick one identity, and articulate the intersection others can't yet name"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Refused to separate her identities into manageable portions and made that refusal a public method."
     },
     {
       "name": "Nina Simone",
@@ -3127,7 +3249,8 @@
         "scaleModel": "Live performance and recordings that became more valuable with each decade, especially posthumously",
         "lessonsForUser": "If you perform and care about justice: channel your rage into art, because protest music outlives protest marches"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Turned a classical conservatory rejection into a protest career that ended with the conservatory apologising on her deathbed."
     },
     {
       "name": "Mercedes Sosa",
@@ -3151,7 +3274,8 @@
         "scaleModel": "Voice of a continent's conscience, returning from exile to fill the largest stadiums in South America",
         "lessonsForUser": "If you perform and care about your people: exile can be a chapter, not an ending, and your return will be more powerful than your departure"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Gave a continent a set of songs it could sing together when it could not otherwise agree on anything."
     },
     {
       "name": "Fela Kuti",
@@ -3177,7 +3301,8 @@
         "scaleModel": "Created a genre, a nightclub (the Shrine), and a commune, making his life the art form",
         "lessonsForUser": "If you create and care about resistance: invent the form that carries your message, because borrowed genres won't hold your truth"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built a song as a political building and dared the army to burn it down, which they did."
     },
     {
       "name": "Miriam Makeba",
@@ -3202,7 +3327,8 @@
         "scaleModel": "Music as cultural diplomacy, using international fame to keep apartheid in global consciousness",
         "lessonsForUser": "If you speak up and care about your country: use your art to keep the world watching, even when it costs you everything"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Testified at the UN, lost her country, and sang the next thirty years on nine passports."
     },
     {
       "name": "Maya Angelou",
@@ -3229,7 +3355,8 @@
         "scaleModel": "Personal testimony as literature, building a career from vulnerability that became universal",
         "lessonsForUser": "If you perform and care about truth: your hardest story is the one that will reach the most people, so tell it fully"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Was mute for almost five years as a child and then became the person American presidents asked to speak on their behalf."
     },
     {
       "name": "Frida Kahlo",
@@ -3253,7 +3380,8 @@
         "scaleModel": "Autobiographical art that became more valuable with each decade after death, fueled by feminist rediscovery",
         "lessonsForUser": "If you create and care about honesty: paint your own pain, because authentic self-expression compounds in value over time"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Painted her own body from inside it and made self-portraiture carry the political weight of a mural."
     },
     {
       "name": "Hilma af Klint",
@@ -3276,7 +3404,8 @@
         "scaleModel": "Posthumous recognition after deliberate concealment, proving some work is ahead of its time",
         "lessonsForUser": "If you create and care about the work itself: make the art the world isn't ready for, and trust that the future will catch up"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Invented abstract art in a side room nobody was watching, then locked the door for 40 years."
     },
     {
       "name": "Louise Bourgeois",
@@ -3301,7 +3430,8 @@
         "scaleModel": "Seven decades of consistent work that compounded in recognition, with the breakthrough coming at 70",
         "lessonsForUser": "If you create and care about persistence: keep making the work for decades, because your breakthrough might come at 70"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Waited until 70 for her retrospective and then worked for another 28 years at full intensity."
     },
     {
       "name": "Akira Kurosawa",
@@ -3326,7 +3456,8 @@
         "scaleModel": "One breakthrough film that opened an entire national cinema to international audiences",
         "lessonsForUser": "If you design and care about craft: enter the international competition, because one film can open the door for an entire culture"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Turned every shot into a weather system and every film into a rehearsal for the next one."
     },
     {
       "name": "Gabriel García Márquez",
@@ -3351,7 +3482,8 @@
         "scaleModel": "One novel that sold 50 million copies and defined an entire literary movement",
         "lessonsForUser": "If you create and care about place: write the story only you can tell about where you're from, and the world will recognize it as universal"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Sold his car to buy eighteen months of writing time and came out of it with the defining novel of magical realism."
     },
     {
       "name": "Georgia O'Keeffe",
@@ -3376,7 +3508,8 @@
         "scaleModel": "One distinctive visual language maintained for 70 years, becoming synonymous with American art",
         "lessonsForUser": "If you create and care about place: commit to one landscape and let it become your entire visual language"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Painted one flower at the scale of a mural for fifty years and refused to let anyone call it erotic."
     },
     {
       "name": "Chinua Achebe",
@@ -3403,7 +3536,8 @@
         "scaleModel": "One debut novel that single-handedly created African literature as a global category",
         "lessonsForUser": "If you create and care about your culture: write in the colonizer's language to reach the widest audience, and redefine what that language can say"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built an English supple enough to carry Igbo proverbs and then used it to take Joseph Conrad to pieces."
     },
     {
       "name": "Clarice Lispector",
@@ -3427,7 +3561,8 @@
         "scaleModel": "Prolific output in one language that grew in international reputation over decades",
         "lessonsForUser": "If you create and care about interior life: write from the inside out, and trust that the specific becomes universal"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote in a Portuguese that had no precedent and made the language stretch to fit it."
     },
     {
       "name": "Antoni Gaudí",
@@ -3451,7 +3586,8 @@
         "scaleModel": "One unfinished building that became the most visited monument in Spain, funded by tourists and donations for 140+ years",
         "lessonsForUser": "If you build and care about transcendence: commit to the work that will outlive you, even if you never see it finished"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Designed buildings by hanging weights from strings and then built them upside down in his head."
     },
     {
       "name": "Charles and Ray Eames",
@@ -3476,7 +3612,8 @@
         "scaleModel": "One design studio producing work across all media, with furniture royalties providing stable income",
         "lessonsForUser": "If you build and care about design: don't pick one medium, let all your interests feed each other, and let one product fund the exploration"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated a chair, a house, and a film about the universe as the same design problem."
     },
     {
       "name": "Gertrude Jekyll",
@@ -3500,7 +3637,8 @@
         "scaleModel": "400+ garden commissions combined with 15 books that taught the method to generations of designers",
         "lessonsForUser": "If you design and care about beauty: when one medium fails you, transfer your skills to another, and write about it so others can follow"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated a flower bed as a piece of music with a start and an end and taught the whole Arts and Crafts movement to read the score."
     },
     {
       "name": "Malcolm X",
@@ -3524,7 +3662,8 @@
         "scaleModel": "Oratorical power combined with autobiography that became one of the most influential books of the 20th century",
         "lessonsForUser": "If you speak up and care about growth: be willing to publicly revise your views when you learn new truth, even at great personal cost"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Rebuilt his worldview in public, on camera, three times in twenty years."
     },
     {
       "name": "Mahatma Gandhi",
@@ -3548,7 +3687,8 @@
         "scaleModel": "A replicable method of nonviolent resistance that could be taught and adopted by millions",
         "lessonsForUser": "If you lead and care about justice: develop a method, not just a movement, so it can be used anywhere by anyone"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built a political method out of tiny, repeatable acts and ran it for forty years without revision."
     },
     {
       "name": "Gloria Steinem",
@@ -3574,7 +3714,8 @@
         "scaleModel": "Magazine as movement platform, with speaking and books amplifying the message",
         "lessonsForUser": "If you connect and care about women's rights: build a media platform that sustains the movement financially"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Used her own undercover reporting to expose a single club and turned the byline into fifty years of political organising."
     },
     {
       "name": "Cesar Chavez",
@@ -3600,7 +3741,8 @@
         "scaleModel": "Consumer boycotts that gave powerless workers the economic leverage of millions of sympathetic shoppers",
         "lessonsForUser": "If you connect and care about workers: connect the people with no power to the people with purchasing power"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built a union out of house meetings and turned a grape into a political question in American supermarkets."
     },
     {
       "name": "Marie Curie",
@@ -3624,7 +3766,8 @@
         "scaleModel": "Open science combined with relentless lab work that produced discoveries no one else could have made",
         "lessonsForUser": "If you lead and care about discovery: share your methods freely, because your edge is your persistence, not your secrets"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Processed a literal tonne of pitchblende in a leaking shed to isolate a tenth of a gram of radium."
     },
     {
       "name": "Rosalind Franklin",
@@ -3647,7 +3790,8 @@
         "scaleModel": "Meticulous experimental work that provided the foundation for one of the greatest discoveries in science",
         "lessonsForUser": "If you teach and care about rigor: do the careful work even when others are racing ahead, and protect your data"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Produced the image that unlocked DNA and was written out of its story for thirty years."
     },
     {
       "name": "Barbara McClintock",
@@ -3669,7 +3813,8 @@
         "scaleModel": "Solitary research at one institution for decades, vindicated when the field finally caught up",
         "lessonsForUser": "If you teach and care about truth: keep doing the work even when nobody listens, because vindication may take 30 years"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Discovered jumping genes in the summer of 1944 and waited 35 years for the field to catch up."
     },
     {
       "name": "Katherine Johnson",
@@ -3691,7 +3836,8 @@
         "scaleModel": "Essential contributions from within a large institution, recognized decades later through the film Hidden Figures",
         "lessonsForUser": "If you build and care about precision: do the work so well that the astronauts insist on you by name, even when the institution doesn't see you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "John Glenn said he would not fly until she had checked the machine's numbers by hand."
     },
     {
       "name": "Jane Goodall",
@@ -3716,7 +3862,8 @@
         "scaleModel": "60 years of field research amplified by books and a conservation institute (JGI) with offices in 30+ countries",
         "lessonsForUser": "If you perform and care about observation: go to the field with patience rather than credentials, and let decades of consistency build your authority"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Sat still in a Tanzanian forest for sixty years until the chimpanzees started handing her the truth."
     },
     {
       "name": "Rachel Carson",
@@ -3741,7 +3888,8 @@
         "scaleModel": "One book that changed national policy, written by a government scientist who saw what industry was hiding",
         "lessonsForUser": "If you teach and care about the environment: write the book the industry doesn't want published, because one book can change policy"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote a scientific book that started an environmental movement and did it while she was dying."
     },
     {
       "name": "Aldo Leopold",
@@ -3766,7 +3914,8 @@
         "scaleModel": "One posthumously published book that became the ethical foundation for modern environmentalism",
         "lessonsForUser": "If you build and care about land: write the ethical framework your movement needs, even if it's published after you're gone"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Shot a wolf, watched the fierce green fire die in her eyes, and spent the rest of his life rebuilding his profession around the loss."
     },
     {
       "name": "Anna Politkovskaya",
@@ -3791,7 +3940,8 @@
         "scaleModel": "Fearless reporting from one newspaper that held power accountable until it cost her life",
         "lessonsForUser": "If you speak up and care about truth: some work is worth your life, but also build networks to protect other journalists after you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Reported on a war everyone else avoided until she was murdered on Putin's birthday."
     },
     {
       "name": "Viktor Frankl",
@@ -3816,7 +3966,8 @@
         "scaleModel": "One book that sold 16+ million copies, combined with a therapeutic school taught worldwide",
         "lessonsForUser": "If you coach and care about meaning: transform your worst experience into a framework that helps others find purpose in their suffering"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Proved inside four concentration camps that the last human freedom is choosing one's attitude."
     },
     {
       "name": "George Kennan",
@@ -3839,7 +3990,8 @@
         "scaleModel": "One document that shaped 50 years of foreign policy, written from within the government",
         "lessonsForUser": "If you lead and care about strategy: one clear document written at the right moment can shape decades of policy"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote a 5,363-word telegram from Moscow that defined forty years of US foreign policy."
     },
     {
       "name": "Frank Lloyd Wright",
@@ -3866,7 +4018,8 @@
         "scaleModel": "Apprenticeship model where students paid to learn while contributing to projects, sustaining the practice for decades",
         "lessonsForUser": "If you design and care about legacy: create an apprenticeship that trains the next generation while funding your practice"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Turned apprenticeship into a commune and the commune into the labour force for Fallingwater and the Guggenheim."
     },
     {
       "name": "Florence Nightingale",
@@ -3891,7 +4044,8 @@
         "scaleModel": "Data-driven advocacy that changed policy, combined with a training school that professionalized nursing",
         "lessonsForUser": "If you lead and care about health: use data to make your argument undeniable, then build the school that trains people in your method"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Ran the numbers on dying soldiers and drew a pie chart that changed hospital hygiene forever."
     },
     {
       "name": "Clara Barton",
@@ -3916,7 +4070,8 @@
         "scaleModel": "National disaster relief organization with local chapters, scaling one person's impulse into an institution",
         "lessonsForUser": "If you lead and care about crisis response: build the institution that can respond at scale, not just the individual effort"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built the American Red Cross out of her Washington apartment and ran it into the field until she was 79."
     },
     {
       "name": "Jaime Escalante",
@@ -3939,7 +4094,8 @@
         "scaleModel": "One classroom that proved poor students could excel at advanced math, inspiring the film Stand and Deliver",
         "lessonsForUser": "If you coach and care about potential: believe in students nobody else believes in, and the results will speak for themselves"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Taught calculus to kids nobody expected to sit the exam, by the sheer arithmetic of how many hours he was willing to stay in the room."
     },
     {
       "name": "Marva Collins",
@@ -3964,7 +4120,8 @@
         "scaleModel": "One school that proved the method, with speaking and books spreading the philosophy",
         "lessonsForUser": "If you coach and care about expectations: bet your own money on your method, then let the results silence the critics"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Believed a four-year-old could discuss Plato if an adult had the patience to ask the question properly."
     },
     {
       "name": "Rita Pierson",
@@ -3989,7 +4146,8 @@
         "scaleModel": "One viral TED talk that crystallized a 40-year teaching career into a message seen by millions",
         "lessonsForUser": "If you coach and care about connection: your philosophy can reach millions through one talk if you've lived it for decades first"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Put her whole philosophy of teaching inside the single word champion and refused to apologise for it."
     },
     {
       "name": "James Stigler",
@@ -4013,7 +4171,8 @@
         "scaleModel": "Comparative video research that changed how education researchers study teaching",
         "lessonsForUser": "If you teach and care about improvement: study what great practitioners actually do, not what they say they do"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Took cameras into ordinary classrooms and changed how educators talk about what good teaching looks like second by second."
     },
     {
       "name": "Dan Hughes",
@@ -4038,7 +4197,8 @@
         "scaleModel": "Clinical method trained through workshops worldwide, with books making the theory accessible",
         "lessonsForUser": "If you coach and care about healing: create a named method for the specific problem nobody else is treating, then train others to use it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built a therapy around staying curious about a raging child long enough that the child could stop raging."
     },
     {
       "name": "Donald Winnicott",
@@ -4065,7 +4225,8 @@
         "scaleModel": "Clinical practice feeding BBC broadcasts that reached millions of parents with usable concepts",
         "lessonsForUser": "If you coach and care about parenting: translate clinical wisdom into plain language for the public, because parents need it most and get it least"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Spoke to anxious parents on the radio in a voice that suggested they were already doing better than they feared."
     },
     {
       "name": "Tenzin Palmo",
@@ -4092,7 +4253,8 @@
         "scaleModel": "Extreme depth through retreat, then institutional building (nunnery) and global teaching",
         "lessonsForUser": "If you coach and care about depth: invest years in solitary practice before trying to teach, and the authority will be unmistakable"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Lived twelve years alone in a Himalayan cave, then came down to build a school because she thought that was the harder job."
     },
     {
       "name": "Joyce Banda",
@@ -4117,7 +4279,8 @@
         "scaleModel": "Grassroots women's organizations as the foundation for political power",
         "lessonsForUser": "If you coach and care about empowerment: build the organizations first, then the political power follows naturally"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Ran women's literacy circles in Malawian villages for twenty years, then used the same cohort method to run a country."
     },
     {
       "name": "Phil Jackson",
@@ -4141,7 +4304,8 @@
         "scaleModel": "Spiritual framework applied to elite athletics, attracting the most talented players in the world",
         "lessonsForUser": "If you coach and care about presence: bring your spiritual practice into your professional work, because integration beats compartmentalization"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built championship teams by sitting in silence with them until they stopped performing for him."
     },
     {
       "name": "Pat Summitt",
@@ -4167,7 +4331,8 @@
         "scaleModel": "100% graduation rate alongside the most wins in NCAA history, proving you don't have to choose",
         "lessonsForUser": "If you coach and care about the whole person: refuse to accept the trade-off between excellence and integrity"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Held eye contact until you knew exactly what you owed her."
     },
     {
       "name": "Erin Gruwell",
@@ -4195,7 +4360,8 @@
         "scaleModel": "One classroom story that became a book and film, then a foundation replicating the method",
         "lessonsForUser": "If you coach and care about 'unteachable' kids: give them mirrors (books) and journals, and their stories become the curriculum"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Gave 150 kids a composition book each and let what they wrote in it become the curriculum."
     },
     {
       "name": "Sebastian Junger",
@@ -4221,7 +4387,8 @@
         "scaleModel": "Books and documentaries that built credibility, then institutional work (Vets Town Hall) addressing the root problem",
         "lessonsForUser": "If you connect and care about belonging: use storytelling to build credibility, then create the institution that solves the real problem"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Believes most veterans are not suffering from war but from coming home alone, and designed a town hall ritual around that."
     },
     {
       "name": "Hans Rosling",
@@ -4249,7 +4416,8 @@
         "scaleModel": "Free data tools (Gapminder) plus viral presentations that changed how millions understand the world",
         "lessonsForUser": "If you teach and care about truth: make data beautiful and entertaining, because facts only travel when they're fun to watch"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Turned UN statistics into moving bubbles and stood in front of them like a sports commentator calling the race for human progress."
     },
     {
       "name": "Mary Roach",
@@ -4274,7 +4442,8 @@
         "scaleModel": "One deeply immersive book every few years on taboo or overlooked science topics, building a loyal readership",
         "lessonsForUser": "If you teach and care about curiosity: go experience the thing yourself, because firsthand immersion makes better writing than interviews"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Sticks her head inside whatever lab no one else wants to enter, then makes the reader laugh without making the scientist look silly."
     },
     {
       "name": "Atul Gawande",
@@ -4301,7 +4470,8 @@
         "scaleModel": "Clinical practice feeding journalism that feeds policy change, each reinforcing the others",
         "lessonsForUser": "If you lead and care about systems: find the simple intervention everyone overlooks, then write about it so compellingly that institutions adopt it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Took the hospital checklist that pilots take for granted and spent a decade proving it halved deaths in operating rooms around the world."
     },
     {
       "name": "Neil deGrasse Tyson",
@@ -4329,7 +4499,8 @@
         "scaleModel": "Institutional platform (Hayden) plus media presence across TV, podcast, and social media",
         "lessonsForUser": "If you teach and care about excitement: choose the public-facing role even when peers value the lab, and use every medium available"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treats every question about the universe as a chance to show someone their own curiosity looks like everyone else's."
     },
     {
       "name": "Steven Pinker",
@@ -4353,7 +4524,8 @@
         "scaleModel": "Big-idea books at 3-5 year intervals that shape public debate, backed by academic credibility",
         "lessonsForUser": "If you teach and care about progress: use data to challenge popular pessimism, and write books big enough to shift the conversation"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Writes academic books like popular books and popular books like academic books, and insists that is the point."
     },
     {
       "name": "Sal Khan",
@@ -4379,7 +4551,8 @@
         "scaleModel": "Free content at massive scale, funded by philanthropy from Gates Foundation and others",
         "lessonsForUser": "If you teach and care about access: build free content first, prove demand, then fund via philanthropy"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Recorded lessons for his cousin on a dollar Wacom tablet and refused to sell the result when offered millions for it."
     },
     {
       "name": "Marcus du Sautoy",
@@ -4405,7 +4578,8 @@
         "scaleModel": "University chair specifically for public engagement, combined with books and television",
         "lessonsForUser": "If you teach and care about mystery: make the abstract beautiful, and seek the institutional role that supports public engagement"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Talks about prime numbers the way a cellist talks about Bach, and teaches mathematicians to do the same."
     },
     {
       "name": "Randall Munroe",
@@ -4431,7 +4605,8 @@
         "scaleModel": "Free webcomic building audience, monetized through books and merchandise",
         "lessonsForUser": "If you teach and care about fun: give the content away free, build an audience through consistency, then sell books to the fans who love you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Takes ridiculous questions seriously and serious questions ridiculously, until both yield physics you can draw as a stick figure."
     },
     {
       "name": "Brian Cox",
@@ -4457,7 +4632,8 @@
         "scaleModel": "BBC partnership combining academic credibility with showmanship, plus live arena tours",
         "lessonsForUser": "If you teach and care about wonder: bring your previous career's performance skills into science communication"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Points at a desert horizon on camera as if it were proof of the universe and then does the maths to show it is."
     },
     {
       "name": "Ruth Westheimer",
@@ -4484,7 +4660,8 @@
         "scaleModel": "Taboo topic + warm personality + media consistency = category of one",
         "lessonsForUser": "If you teach and care about taboo topics: be the person willing to say what everyone is thinking, and warmth makes it safe"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Spoke about sex in a grandmotherly German accent until an entire country agreed it was a normal thing adults could talk about."
     },
     {
       "name": "Henry Louis Gates Jr.",
@@ -4511,7 +4688,8 @@
         "scaleModel": "Academic credibility powering a PBS franchise that makes history personal through genealogy",
         "lessonsForUser": "If you teach and care about history: make it personal through individual stories, because people watch their own history"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treats DNA tests and slave ship manifests as instruments a living person can use to walk back into their own family."
     },
     {
       "name": "Jacques Pepin",
@@ -4538,7 +4716,8 @@
         "scaleModel": "Systematic documentation of technique through books and TV that created a curriculum anyone could follow",
         "lessonsForUser": "If you teach and care about craft: document your technique so precisely that anyone can learn it, then teach it across every medium"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Chops an onion on television the way a violinist plays an open string, not to impress but to show the next cook it can be done slowly."
     },
     {
       "name": "Samin Nosrat",
@@ -4563,7 +4742,8 @@
         "scaleModel": "One framework (4 elements) that organized an entire discipline, made visual through Netflix",
         "lessonsForUser": "If you teach and care about simplicity: reduce your complex discipline to its essential elements, then illustrate them beautifully"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Walked into Chez Panisse as a nineteen-year-old customer and did not leave the restaurant world until she had a framework that could teach home cooks without a recipe."
     },
     {
       "name": "Ha-Joon Chang",
@@ -4587,7 +4767,8 @@
         "scaleModel": "Academic credibility plus accessible writing that challenged economic orthodoxy for millions of readers",
         "lessonsForUser": "If you teach and care about fairness: translate your field's hidden assumptions into language ordinary people can understand and challenge"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Walks readers through the actual history of rich countries to show they did the opposite of what they now recommend to poor ones."
     },
     {
       "name": "Eugenia Cheng",
@@ -4611,7 +4792,8 @@
         "scaleModel": "Popular books that use cooking metaphors to make the most abstract math feel approachable",
         "lessonsForUser": "If you teach and care about abstraction: find the everyday metaphor that makes your expertise feel like common sense"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Explains category theory by making a lasagna and insists the lasagna is not a metaphor."
     },
     {
       "name": "Matthew Walker",
@@ -4637,7 +4819,8 @@
         "scaleModel": "One bestselling book that created a cultural shift in how people value sleep",
         "lessonsForUser": "If you teach and care about health: write the one book that makes people feel the urgency of your research personally"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote a book on sleep that people refused to put down until morning, which he found darkly funny."
     },
     {
       "name": "Siddhartha Mukherjee",
@@ -4663,7 +4846,8 @@
         "scaleModel": "Medical practice feeding literary science writing that wins Pulitzers and reaches millions",
         "lessonsForUser": "If you teach and care about disease: write the biography of the thing you're fighting, because narrative reaches further than data"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Writes about cancer as a biography, the gene as a family story, and the cell as a building to be walked through room by room."
     },
     {
       "name": "Mary Beard",
@@ -4690,7 +4874,8 @@
         "scaleModel": "Academic authority combined with accessible BBC presentation and social media engagement",
         "lessonsForUser": "If you perform and care about the past: bring your expertise to the public through every medium, and don't let online abuse silence you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Shows up at Pompeii in a comfortable cardigan and argues with the audience about what a Roman slave actually thought about their emperor."
     },
     {
       "name": "Trevor Noah",
@@ -4718,7 +4903,8 @@
         "scaleModel": "Personal identity as cultural bridge, scaled through late-night TV, books, and touring",
         "lessonsForUser": "If you connect and care about bridging cultures: your in-between identity is the content, not a handicap to overcome"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Grew up in multiple languages on the wrong side of apartheid law and turned that into a comedy voice American cable had never had."
     },
     {
       "name": "Iain McGilchrist",
@@ -4741,7 +4927,8 @@
         "scaleModel": "Paradigm-level books that bridge neuroscience and philosophy, building a following across disciplines",
         "lessonsForUser": "If you teach and care about integration: retrain in another field entirely, then write the book that bridges both"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Convinced that the left hemisphere is a brilliant assistant that has begun to act like the boss, and wrote two enormous books to say so slowly."
     },
     {
       "name": "Karen Armstrong",
@@ -4767,7 +4954,8 @@
         "scaleModel": "Prolific writing on religion that crossed faith boundaries, amplified by TED platform",
         "lessonsForUser": "If you connect and care about compassion: write across faith traditions rather than from within one, and use prizes as platforms for movements"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Spent seven years in a convent, left without faith, and then spent forty more writing every major religion back into speaking terms with itself."
     },
     {
       "name": "Robin Wall Kimmerer",
@@ -4793,7 +4981,8 @@
         "scaleModel": "Word-of-mouth bestseller that grew slowly for years then exploded, driven by genuine reader love",
         "lessonsForUser": "If you speak up and care about the land: combine your traditions instead of choosing between them, and trust word-of-mouth to find your audience"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Writes about plants in the grammar that lets a sugar maple be a someone rather than a something."
     },
     {
       "name": "Jill Lepore",
@@ -4818,7 +5007,8 @@
         "scaleModel": "Dual academic/journalism career that feeds both audiences and gives each credibility",
         "lessonsForUser": "If you create and care about history: write for both the academy and the public, because each audience makes the other trust you more"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Writes American history the way a reporter writes a feature, down to the colour of the wallpaper, because she thinks the wallpaper tells you what the country was afraid of."
     },
     {
       "name": "Yuval Noah Harari",
@@ -4842,7 +5032,8 @@
         "scaleModel": "One breakthrough book that sold 25+ million copies, then leveraged into a platform and media company",
         "lessonsForUser": "If you teach and care about the big picture: synthesize existing knowledge into a compelling narrative, because most people need the story, not the footnotes"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Thinks 200,000 years of human history fit into 400 pages because silence has taught him to skip everything that was only opinion."
     },
     {
       "name": "Michael Pollan",
@@ -4867,7 +5058,8 @@
         "scaleModel": "Cultural-moment books at 3-4 year intervals, each reframing a major topic (food, cooking, psychedelics)",
         "lessonsForUser": "If you teach and care about food systems: distill complex systems into memorable maxims that change daily behavior"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Follows a meal backward from the plate to the field and forward from the seed to the mind."
     },
     {
       "name": "Rebecca Solnit",
@@ -4894,7 +5086,8 @@
         "scaleModel": "Essays that name unnamed experiences, creating vocabulary that enters the culture",
         "lessonsForUser": "If you speak up and care about naming: give language to the experience everyone recognizes but nobody has words for"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Writes long essays that wander like walks, then deliver a single sentence you end up repeating to yourself for a decade."
     },
     {
       "name": "Timothy Snyder",
@@ -4919,7 +5112,8 @@
         "scaleModel": "Academic expertise made pocket-sized and actionable at the moment the public needed it most",
         "lessonsForUser": "If you lead and care about democracy: distill your expertise into the smallest possible format at the moment of greatest need"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Writes about tyranny the way a doctor writes discharge instructions: 20 lessons, each short, each testable at home."
     },
     {
       "name": "David Graeber",
@@ -4943,7 +5137,8 @@
         "scaleModel": "Academic books that became cultural touchstones by questioning assumptions everyone else accepts",
         "lessonsForUser": "If you create and care about questioning: challenge the most basic assumptions in your field, because the books that rewrite fundamentals reach the widest audience"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Asked whether the thing everyone said was obviously true had ever actually been true, and then wrote the 500 pages it took to answer no."
     },
     {
       "name": "Elaine Pagels",
@@ -4967,7 +5162,8 @@
         "scaleModel": "Academic reframing of familiar material (Christianity) that reached a massive popular audience",
         "lessonsForUser": "If you teach and care about hidden stories: take the dismissed texts seriously, because reframing the familiar is more powerful than discovering the new"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Reads suppressed documents alongside the official ones and asks why the church needed the suppression."
     },
     {
       "name": "Zadie Smith",
@@ -4993,7 +5189,8 @@
         "scaleModel": "Early breakthrough novel combined with sustained literary output and prestigious university position",
         "lessonsForUser": "If you create and care about depth: if fame comes early, slow down and develop your craft rather than rushing to capitalize"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Writes the same postcode from fifteen angles until one of them sounds like a novel."
     },
     {
       "name": "Lech Wałęsa",
@@ -5019,7 +5216,8 @@
         "scaleModel": "Trade union as democracy movement, proving workers' organizing could topple a political system",
         "lessonsForUser": "If you connect and care about freedom: organizing at work can become political revolution when the moment is right"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Climbed a fence and turned a local wage strike into a ten-million-member political instrument."
     },
     {
       "name": "Krista Tippett",
@@ -5046,7 +5244,8 @@
         "scaleModel": "Long-form interview show that grew from radio to one of the most downloaded podcasts through depth, not trending topics",
         "lessonsForUser": "If you connect and care about meaning: create the show nobody else is making, and let depth be your differentiator in an attention economy"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Asks one more question than most interviewers think they are allowed to, and then waits."
     },
     {
       "name": "John Hume",
@@ -5073,7 +5272,8 @@
         "scaleModel": "Back-channel diplomacy and persistent dialogue across enemy lines over decades",
         "lessonsForUser": "If you connect and care about peace: talk to the people your allies tell you not to, because peace requires everyone at the table"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Held the same three sentences about non-violence for thirty years until the other side agreed to use them too."
     },
     {
       "name": "Martti Ahtisaari",
@@ -5099,7 +5299,8 @@
         "scaleModel": "Government career building expertise, then a foundation that continued the work independently",
         "lessonsForUser": "If you lead and care about peace: build the institution that continues your work after you leave office"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated peace negotiations as a professional craft with a schedule and a room, not a moral occasion."
     },
     {
       "name": "Tawakkol Karman",
@@ -5125,7 +5326,8 @@
         "scaleModel": "Journalism as activism, amplified by international recognition that provided protection",
         "lessonsForUser": "If you perform and care about freedom: use journalism as your shield and your weapon simultaneously"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Ran the same weekly sit-in for three years before a revolution arrived to join her."
     },
     {
       "name": "Tarana Burke",
@@ -5151,7 +5353,8 @@
         "scaleModel": "Grassroots movement that went viral through cultural moment, requiring its founder to reclaim and redirect it",
         "lessonsForUser": "If you coach and care about survivors: start the work in your own community first, and if it goes viral, fight to keep its original purpose"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built a support practice in Alabama basements for a decade before the hashtag found it."
     },
     {
       "name": "Ta-Nehisi Coates",
@@ -5177,7 +5380,8 @@
         "scaleModel": "Long-form journalism that shifted national conversation, amplified by a personal letter format (Between the World and Me)",
         "lessonsForUser": "If you teach and care about justice: write the essay that reopens the debate everyone thought was settled"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Writes sentences the way a boxer throws combinations, with the footwork done in the research."
     },
     {
       "name": "Chimamanda Ngozi Adichie",
@@ -5202,7 +5406,8 @@
         "scaleModel": "Literary fiction amplified by TED talks that reach a completely different audience",
         "lessonsForUser": "If you speak up and care about representation: give a TED talk that crystallizes your novels' themes, because it will reach people who never read literary fiction"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Insists that the smallest unit of a story is not a country, it is one specific woman at a kitchen table."
     },
     {
       "name": "Patti Smith",
@@ -5229,7 +5434,8 @@
         "scaleModel": "Authenticity sustained over 50 years, with memoir writing adding a second career in her 60s",
         "lessonsForUser": "If you create and care about merging forms: combine the two things you love even when both communities resist, and write the memoir when you're ready"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treats a stage, a notebook, and a Polaroid camera as the same tool."
     },
     {
       "name": "Wisława Szymborska",
@@ -5254,7 +5460,8 @@
         "scaleModel": "Extreme selectivity that made each poem precious, validated by Nobel Prize",
         "lessonsForUser": "If you create and care about craft: publish less, not more, and let each piece carry the weight of your standards"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote one good poem a year for fifty years and threw out the rest."
     },
     {
       "name": "Aretha Franklin",
@@ -5280,7 +5487,8 @@
         "scaleModel": "Unmatched vocal talent combined with songs that became cultural anthems, generating income for 50+ years",
         "lessonsForUser": "If you create and care about authenticity: find the collaborator who lets you be yourself, because constraint was hiding your genius"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Took other people's songs and rebuilt them from the piano bench up until they belonged to her."
     },
     {
       "name": "Luciano Pavarotti",
@@ -5308,7 +5516,8 @@
         "scaleModel": "Elite craft made popular through accessible venues (stadiums, TV), massively expanding the audience",
         "lessonsForUser": "If you perform and care about access: take your high art to the biggest venues possible, because the people deserve to hear it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Never learned to read music and became the most famous tenor of the twentieth century."
     },
     {
       "name": "Tupac Shakur",
@@ -5335,7 +5544,8 @@
         "scaleModel": "Prolific recording created a massive catalog that generated revenue for decades after death",
         "lessonsForUser": "If you lead and care about legacy: create volume alongside quality, because you never know how much time you have"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote like a prison correspondent and recorded like a man running a clock he could see."
     },
     {
       "name": "Lin-Manuel Miranda",
@@ -5362,7 +5572,8 @@
         "scaleModel": "One cultural phenomenon (Hamilton) that generated billions across Broadway, touring, film, and licensing",
         "lessonsForUser": "If you create and care about untold stories: use the genre nobody expects to tell the story everybody knows, and the collision creates something new"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Turns biography into counterpoint, three voices at a time."
     },
     {
       "name": "Ira Glass",
@@ -5389,7 +5600,8 @@
         "scaleModel": "One show that invented a genre (narrative podcast), then spawned an entire industry",
         "lessonsForUser": "If you teach and care about stories: spend a decade or more learning your craft before launching your own platform, and the mastery will show"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Turned a specific editing rule, get in the story fast and quote the person in scene, into a whole public radio house style."
     },
     {
       "name": "Kae Tempest",
@@ -5417,7 +5629,8 @@
         "scaleModel": "Multi-genre practice where each form feeds the others, with live performance as the anchor",
         "lessonsForUser": "If you perform and care about expression: refuse to pick one medium, because the energy between forms is where your originality lives"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Walks on stage and reads the room back to itself until it stops being separate rooms."
     },
     {
       "name": "Wong Kar-wai",
@@ -5442,7 +5655,8 @@
         "scaleModel": "Auteur filmmaking where the process creates the art, valued by international festival and art-house circuits",
         "lessonsForUser": "If you create and care about emotion: trust the process over the plan, because the best work often emerges from uncertainty"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Shoots until the actors forget they are acting, then edits until one year fits into one glance."
     },
     {
       "name": "Hayao Miyazaki",
@@ -5468,7 +5682,8 @@
         "scaleModel": "Independent studio producing one masterpiece at a time, each hand-drawn, never compromising on craft",
         "lessonsForUser": "If you create and care about children: build your own studio where you control quality, and never automate what should be handmade"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Draws the next frame by hand until he knows what the story is, and then draws it again."
     },
     {
       "name": "Yayoi Kusama",
@@ -5494,7 +5709,8 @@
         "scaleModel": "Immersive installations (Infinity Rooms) that generate social media virality and massive museum attendance",
         "lessonsForUser": "If you create and care about obsession: let your condition become your art form, because what makes you different is your competitive advantage"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treats the repeated mark as a survival technology and the repetition is the piece."
     },
     {
       "name": "Björk",
@@ -5520,7 +5736,8 @@
         "scaleModel": "Constant reinvention that keeps a cult audience engaged for 30+ years, with multimedia expanding revenue",
         "lessonsForUser": "If you create and care about evolution: reinvent yourself completely with each project, and the audience that stays is the one worth keeping"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Arrives at each album with a new set of instruments she has commissioned from other specialists."
     },
     {
       "name": "William Kentridge",
@@ -5546,7 +5763,8 @@
         "scaleModel": "Invented a unique medium that embodies his political themes, making the form inseparable from the content",
         "lessonsForUser": "If you create and care about history: invent the medium that makes your message physical, not just verbal"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Erases most of a drawing back into its own smudge, and treats the smudge as memory."
     },
     {
       "name": "Marcel Duchamp",
@@ -5570,7 +5788,8 @@
         "scaleModel": "One provocative gesture that redefined an entire field, generating more discussion than any painting could",
         "lessonsForUser": "If you create and care about ideas: one gesture that reframes the question is worth more than a lifetime of answers"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Proved that deciding is an art form by submitting a urinal and signing it R. Mutt."
     },
     {
       "name": "Dieter Rams",
@@ -5596,7 +5815,8 @@
         "scaleModel": "One design philosophy codified as principles, with products that stay in production for 60+ years",
         "lessonsForUser": "If you design and care about simplicity: codify your principles so clearly that they guide others for generations"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Refused to make a product until he could answer the question, is it still useful in twenty years."
     },
     {
       "name": "Massimo Vignelli",
@@ -5622,7 +5842,8 @@
         "scaleModel": "Consistent modernist philosophy applied to the world's biggest brands, creating a unified body of work",
         "lessonsForUser": "If you lead and care about consistency: limit your toolkit drastically and let the constraints produce stronger work"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Believed a designer's job is to refuse nine typefaces and use the tenth for forty years."
     },
     {
       "name": "Tadao Ando",
@@ -5648,7 +5869,8 @@
         "scaleModel": "Self-taught mastery expressed through a signature material (concrete), attracting global commissions",
         "lessonsForUser": "If you design and care about self-education: you don't need the degree if you master your material through obsessive study"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Pours a concrete wall smooth enough that sunlight draws the floor plan."
     },
     {
       "name": "Paula Scher",
@@ -5675,7 +5897,8 @@
         "scaleModel": "Partnership model (Pentagram) that provides infrastructure while allowing individual creative autonomy",
         "lessonsForUser": "If you create and care about speed: invest decades in practice so that the right answer comes instantly when it matters"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treats typefaces as physical tools and is not shy about how much paint she wants on the brush."
     },
     {
       "name": "Zaha Hadid",
@@ -5700,7 +5923,8 @@
         "scaleModel": "Visionary designs that built reputation through exhibitions and competitions before being built, creating demand for the 'impossible'",
         "lessonsForUser": "If you create and care about vision: share your ideas publicly even before they're built, because reputation precedes realization"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Drew buildings the profession considered unbuildable until the profession built them."
     },
     {
       "name": "Jan Gehl",
@@ -5726,7 +5950,8 @@
         "scaleModel": "One area of deep expertise turned into a global consulting practice that transforms cities",
         "lessonsForUser": "If you design and care about people: study one question for your whole career, and cities will eventually come to you for answers"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Counts people on a street the same way an ornithologist counts birds in a marsh."
     },
     {
       "name": "Piet Oudolf",
@@ -5752,7 +5977,8 @@
         "scaleModel": "Signature approach (perennial plantings that are beautiful in every season) applied to the world's most prominent public spaces",
         "lessonsForUser": "If you design and care about beauty in all seasons: redefine what beauty means in your field, and the most prestigious commissions will follow"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Designs for how a plant looks when it is dying as well as for how it looks in flower."
     },
     {
       "name": "Malala Yousafzai",
@@ -5779,7 +6005,8 @@
         "scaleModel": "Personal story of courage amplified by Nobel Prize and Malala Fund that invests in girls' education globally",
         "lessonsForUser": "If you speak up and care about education: your personal story of risk becomes the most powerful fundraising tool"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Took the bullet that was meant to silence her and turned her recovery into a global fund."
     },
     {
       "name": "Greta Thunberg",
@@ -5804,7 +6031,8 @@
         "scaleModel": "One repeatable action (school strike) that anyone anywhere could copy, creating a leaderless global movement",
         "lessonsForUser": "If you speak up and care about the planet: design an action so simple that anyone can copy it, and consistency makes it impossible to ignore"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Sat down outside the Swedish parliament alone and refused to leave until everyone else was also sitting down."
     },
     {
       "name": "Al Gore",
@@ -5832,7 +6060,8 @@
         "scaleModel": "Documentary as persuasion at scale, combined with climate-focused investment fund",
         "lessonsForUser": "If you teach and care about the climate: your biggest defeat can redirect you to your most important work"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Took a losing presidential campaign and rebuilt his life around a single PowerPoint deck."
     },
     {
       "name": "Dolores Huerta",
@@ -5859,7 +6088,8 @@
         "scaleModel": "Complementary partnership where one partner campaigns publicly while the other negotiates the wins",
         "lessonsForUser": "If you perform and care about workers: be the negotiator, not just the campaigner, because the contract is where change happens"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Negotiated grape contracts for farmworkers in rooms where nobody expected a Mexican-American woman to sit at the table."
     },
     {
       "name": "Naomi Klein",
@@ -5884,7 +6114,8 @@
         "scaleModel": "Big-idea books at 5-year intervals that name movements and provide frameworks for activism",
         "lessonsForUser": "If you speak up and care about power: write the book that gives the movement its vocabulary"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Reads a crisis in the same week it is happening and files a book about it four years later."
     },
     {
       "name": "Cédric Villani",
@@ -5910,7 +6141,8 @@
         "scaleModel": "Academic fame leveraged into political influence and public engagement",
         "lessonsForUser": "If you teach and care about public life: use your expertise as a platform for civic engagement, not just academic publishing"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treats a theorem as a piece of long-distance emotional weather that has to be survived collaboratively."
     },
     {
       "name": "Susan Fowler",
@@ -5935,7 +6167,8 @@
         "scaleModel": "One blog post that catalyzed corporate accountability, combined with a personal platform that grew from the courage",
         "lessonsForUser": "If you lead and care about accountability: one honest blog post can change an entire industry if you document everything carefully"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote a 3,000-word blog post that toppled a CEO from her own living room."
     },
     {
       "name": "Cathy O'Neil",
@@ -5959,7 +6192,8 @@
         "scaleModel": "Book that named a problem (algorithmic bias), then a consulting firm that solves it",
         "lessonsForUser": "If you teach and care about fairness: name the problem your industry creates, then build the business that fixes it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Left a hedge fund to teach the public how to sue algorithms."
     },
     {
       "name": "Hedy Lamarr",
@@ -5982,7 +6216,8 @@
         "scaleModel": "Invention ahead of its time, recognized posthumously as foundational to modern wireless technology",
         "lessonsForUser": "If you create and care about contribution: protect your inventions legally, because ideas ahead of their time may be worth billions decades later"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Patented the working principle of modern wireless on a kitchen table between film takes."
     },
     {
       "name": "Pearl Kazin Bell",
@@ -6006,7 +6241,8 @@
         "scaleModel": "Curatorial influence across multiple prestigious publications over decades",
         "lessonsForUser": "If you coach and care about literature: shaping other people's work can be your life's art form"
       },
-      "confidence": "low"
+      "confidence": "low",
+      "oneLiner": "Read fiction the way a watchmaker listens to a movement, then wrote down exactly what she heard."
     },
     {
       "name": "Gordon Lish",
@@ -6031,7 +6267,8 @@
         "scaleModel": "Editorial power that shaped an entire literary movement (minimalism) through aggressive curation and editing",
         "lessonsForUser": "If you coach and care about craft: great editing can be as creative as great writing, but always credit the artist"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Taught a generation that the sentence was the unit of attention and that the next sentence had to earn the right to exist."
     },
     {
       "name": "Herbert Kohl",
@@ -6056,7 +6293,8 @@
         "scaleModel": "One classroom memoir that launched a movement, sustained by decades of writing and advocacy",
         "lessonsForUser": "If you coach and care about honesty in education: write truthfully about your classroom, and the book becomes the manifesto"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote down what the children in Harlem actually said and let those sentences argue for a better school."
     },
     {
       "name": "Rafe Esquith",
@@ -6083,7 +6321,8 @@
         "scaleModel": "One extraordinary classroom that attracted donations, book deals, and media attention for decades",
         "lessonsForUser": "If you coach and care about raising the bar: set expectations absurdly high for students everyone has written off, and the results will speak"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Ran a classroom at 6:30 in the morning where ten-year-olds rehearsed Macbeth and meant every word of it."
     },
     {
       "name": "Richard Feynman",
@@ -6108,7 +6347,8 @@
         "scaleModel": "Teaching as performance art that made physics accessible, amplified by books and one legendary investigation (Challenger O-ring demo)",
         "lessonsForUser": "If you teach and care about play: treat your expertise as a game to be shared, not a credential to be guarded"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Insisted that the first principle of science was that you must not fool yourself, and made the joke of physics feel like the point of it."
     },
     {
       "name": "Jerome Bruner",
@@ -6131,7 +6371,8 @@
         "scaleModel": "One idea (spiral curriculum) that restructured education worldwide, backed by 70 years of academic credibility",
         "lessonsForUser": "If you teach and care about how people learn: find the one structural idea that reorganizes your field, then spend your career proving it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Argued that any subject could be taught to any child at any stage, if you were honest about what the subject really was."
     },
     {
       "name": "Harold McGee",
@@ -6154,7 +6395,8 @@
         "scaleModel": "One reference book so thorough that it became essential for an entire profession",
         "lessonsForUser": "If you teach and care about being definitive: write the reference book your field doesn't have yet, and revise it as knowledge grows"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Proved that a kitchen was the best-equipped laboratory most people would ever own, and wrote the manual for it."
     },
     {
       "name": "Marcus Aurelius",
@@ -6177,7 +6419,8 @@
         "scaleModel": "Private journaling that became one of history's most enduring philosophical texts precisely because it was never meant for an audience",
         "lessonsForUser": "If you teach and care about self-improvement: write for yourself first, because the most honest writing finds its audience centuries later"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote a journal to himself on the northern frontier and accidentally left a manual for how to run a human being."
     },
     {
       "name": "Epictetus",
@@ -6200,7 +6443,8 @@
         "scaleModel": "Oral teaching recorded by students that has endured for 2,000 years",
         "lessonsForUser": "If you teach and care about wisdom: focus on the teaching, not the writing, and trust that someone will preserve what matters"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Divided the world into what is yours and what is not, and refused to let his students confuse the two."
     },
     {
       "name": "Tim Gowers",
@@ -6224,7 +6468,8 @@
         "scaleModel": "Open collaboration model that proved mathematics could be done collectively online",
         "lessonsForUser": "If you connect and care about collaboration: apply open-source principles to your field, because collective intelligence outperforms solo genius"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Opened his own thinking in public and invited any mathematician in the world to step in beside him."
     },
     {
       "name": "George Steiner",
@@ -6247,7 +6492,8 @@
         "scaleModel": "Cross-cultural literary criticism that connected traditions most scholars treated separately",
         "lessonsForUser": "If you connect and care about language: your multilingual or multicultural background is your intellectual edge, not a distraction"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Argued that every act of understanding was already a translation, and that multilingual life was the only honest condition."
     },
     {
       "name": "Edith Grossman",
@@ -6271,7 +6517,8 @@
         "scaleModel": "Definitive translations of major literary works that generate royalties for decades",
         "lessonsForUser": "If you create and care about bridge-building: translation is creation, and the definitive version of a classic is a life's work"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Held that fidelity in translation meant writing the second book, not tracing the first."
     },
     {
       "name": "Gregory Rabassa",
@@ -6295,7 +6542,8 @@
         "scaleModel": "Essential intermediary for a literary movement, making each author's work accessible to an English-speaking audience of millions",
         "lessonsForUser": "If you create and care about connection: be the bridge between two worlds, because both need you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Was paid in the original author's astonishment when García Márquez said the English was better than the Spanish."
     },
     {
       "name": "Clifford Geertz",
@@ -6317,7 +6565,8 @@
         "scaleModel": "One methodological concept that reorganized an entire discipline",
         "lessonsForUser": "If you connect and care about understanding: name your method, because a named method travels further than unnamed practice"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Renamed his discipline a branch of literature by insisting that what an anthropologist did was write thick description."
     },
     {
       "name": "Bruno Latour",
@@ -6339,7 +6588,8 @@
         "scaleModel": "Methodological provocation that created an entirely new field (science and technology studies)",
         "lessonsForUser": "If you teach and care about hidden assumptions: study the powerful the way anthropologists study others, and the insights will create a new field"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated scientists, microbes, doorknobs and courts as equally worthy of ethnographic attention."
     },
     {
       "name": "Donella Meadows",
@@ -6364,7 +6614,8 @@
         "scaleModel": "One report that changed global environmental conversation, followed by teaching materials that taught the method",
         "lessonsForUser": "If you teach and care about systems: model the system so people can see where it's heading, because visualization is more persuasive than argument"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote the gentlest manual for how to notice a feedback loop, and then insisted the point was to dance with it, not control it."
     },
     {
       "name": "Fritjof Capra",
@@ -6389,7 +6640,8 @@
         "scaleModel": "Bridging two seemingly unrelated fields in one bestselling book, then building institutions around the synthesis",
         "lessonsForUser": "If you teach and care about connection: find the unexpected parallel between two fields, because the bridge itself becomes your career"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Held that the universe modern physics was uncovering looked more like the one the mystics described than the one Newton drew."
     },
     {
       "name": "Mary Catherine Bateson",
@@ -6413,7 +6665,8 @@
         "scaleModel": "One book that reframed how women (and men) think about non-linear careers",
         "lessonsForUser": "If you connect and care about interrupted careers: your zigzag path is a creative composition, not a failure to plan"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Said that composing a life was improvisation, and that improvisation was a craft that took hours of practice like any other."
     },
     {
       "name": "Mircea Eliade",
@@ -6435,7 +6688,8 @@
         "scaleModel": "Comprehensive framework for understanding sacred experience across all cultures",
         "lessonsForUser": "If you teach and care about patterns: build the framework that applies across all cases, not just the ones you know best"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Argued that the sacred showed itself in ordinary objects, and built a method for noticing the moment it did."
     },
     {
       "name": "David Bohm",
@@ -6457,7 +6711,8 @@
         "scaleModel": "Theoretical physics combined with practical dialogue method used by organizations worldwide",
         "lessonsForUser": "If you connect and care about collective thinking: develop a structured practice for group dialogue, because conversations need design as much as buildings do"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Proposed that reality was a wholeness being continually unfolded, and taught groups to sit together and suspend their assumptions until they could feel it."
     },
     {
       "name": "Gregory Bateson",
@@ -6480,7 +6735,8 @@
         "scaleModel": "Cross-disciplinary thinking collected in one essay volume that became essential reading across multiple fields",
         "lessonsForUser": "If you teach and care about systems: refuse to pick one discipline, and let the connections between fields be your contribution"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Held that the major problems of the world came from the gap between how nature worked and how people thought."
     },
     {
       "name": "Frances Yates",
@@ -6502,7 +6758,8 @@
         "scaleModel": "Deep scholarship on overlooked traditions that reframed how scholars understand the Renaissance",
         "lessonsForUser": "If you create and care about hidden knowledge: study the traditions your field dismisses, because they might be the key to understanding the whole picture"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Rebuilt the mental palaces of Renaissance mnemonists so that twentieth-century readers could walk through them."
     },
     {
       "name": "Martha Nussbaum",
@@ -6526,7 +6783,8 @@
         "scaleModel": "Philosophical framework adopted by UN and development agencies, proving philosophy can shape policy",
         "lessonsForUser": "If you coach and care about human development: make your philosophy practical enough for policy makers to use"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Argued that emotions were not the opposite of reason but a form of it, and rebuilt moral philosophy from that observation."
     },
     {
       "name": "Myles Horton",
@@ -6551,7 +6809,8 @@
         "scaleModel": "One training center that produced leaders for every major social movement of the 20th century",
         "lessonsForUser": "If you connect and care about education: build the training center that serves every movement, not just one"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Ran a school whose first principle was that poor people already knew the answers and just needed a place to hear each other."
     },
     {
       "name": "Paulo Freire",
@@ -6576,7 +6835,8 @@
         "scaleModel": "One book written in exile that became the most cited education text in history, applied in every country",
         "lessonsForUser": "If you teach and care about liberation: exile can give you the distance to write the work that changes everything"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Refused to teach adults to read by depositing words into them, and built a method that began instead with what they already knew."
     },
     {
       "name": "William Shakespeare",
@@ -6602,7 +6862,8 @@
         "scaleModel": "Ownership stake in the theater company that performed his work, aligning creation with financial upside",
         "lessonsForUser": "If you create and care about ownership: take equity in the platform that distributes your work, not just a fee for creating it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote the soliloquy that everyone recognises in every language, and the love sonnet that every other love sonnet has to answer to."
     },
     {
       "name": "Rumi",
@@ -6627,7 +6888,8 @@
         "scaleModel": "Poetry so universal that 800 years later Rumi is the bestselling poet in America",
         "lessonsForUser": "If you speak up and care about transformation: let the encounter that destroys your old self become the source of your life's work"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote that there is a field out beyond right and wrong, and said he would meet you there."
     },
     {
       "name": "Ursula K. Le Guin",
@@ -6653,7 +6915,8 @@
         "scaleModel": "Genre fiction as vehicle for radical ideas, building a readership that expected intellectual depth in fantasy",
         "lessonsForUser": "If you create and care about ideas: use genre fiction to explore the questions serious literature ignores, because the imagined world reveals the real one"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated the sentence as a piece of music and the story as a sea voyage, and would not let her students forget either."
     },
     {
       "name": "Haruki Murakami",
@@ -6679,7 +6942,8 @@
         "scaleModel": "Consistent daily writing practice sustained by physical discipline, producing novels translated into 50+ languages",
         "lessonsForUser": "If you lead and care about discipline: find a physical practice (running, swimming, walking) that sustains your creative practice"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Ran an hour a day, wrote a thousand words a day, and said the two practices were the same practice."
     },
     {
       "name": "Octavia Butler",
@@ -6704,7 +6968,8 @@
         "scaleModel": "Pioneering representation in genre fiction that created a new readership and inspired a generation of writers",
         "lessonsForUser": "If you create and care about representation: put your community at the center of the genre that excluded them"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote on the inside of a notebook in 1988 that she would be a bestselling writer, then spent the next eighteen years quietly making it true."
     },
     {
       "name": "Toni Cade Bambara",
@@ -6731,7 +6996,8 @@
         "scaleModel": "Literary reputation combined with community organizing, using each to fuel the other",
         "lessonsForUser": "If you create and care about community: move toward the grassroots, not the prestige, and let your art serve the neighborhood"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated the writer as a cultural worker and the story as a rescue mission for a community's memory."
     },
     {
       "name": "Philip Glass",
@@ -6757,7 +7023,8 @@
         "scaleModel": "Day jobs funding art until the art could sustain itself, then prolific output across concert halls and film",
         "lessonsForUser": "If you create and care about independence: keep the day job that funds your art without draining it, and quantity enables quality"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Drove a taxi and fixed sinks until he was 41 so that the music he wrote would not have to pay the rent."
     },
     {
       "name": "Anni Albers",
@@ -6784,7 +7051,8 @@
         "scaleModel": "One medium (weaving) elevated from craft to art through decades of practice and one definitive book",
         "lessonsForUser": "If you create and care about craft: elevate your medium by doing it better than anyone and writing the definitive book about it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Treated thread as a medium with the same seriousness a painter gave to pigment, and asked her readers to remember how to touch."
     },
     {
       "name": "Andrei Tarkovsky",
@@ -6809,7 +7077,8 @@
         "scaleModel": "Seven films that became canonical in world cinema, each so distinctive it attracted a devoted global following",
         "lessonsForUser": "If you create and care about time: never compromise your vision for the institution, even if it costs you your country"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Said a film was not shot from a script but carved from a lump of time, and defended the long take as a moral act."
     },
     {
       "name": "Kenya Hara",
@@ -6835,7 +7104,8 @@
         "scaleModel": "One design philosophy applied to a global brand, with books that explained the thinking to the world",
         "lessonsForUser": "If you design and care about emptiness: absence and restraint can be the most powerful brand identity"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Designed the brand most associated with emptiness by treating white as a noun rather than a colour."
     },
     {
       "name": "Kevin Lynch",
@@ -6859,7 +7129,8 @@
         "scaleModel": "One foundational text that created the vocabulary urban designers use worldwide",
         "lessonsForUser": "If you teach and care about how people navigate: create the vocabulary your field doesn't have yet, and it will be used for 60+ years"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Proved that the city lived inside the heads of the people who walked through it, and gave designers a vocabulary for what they saw there."
     },
     {
       "name": "Achille Castiglioni",
@@ -6884,7 +7155,8 @@
         "scaleModel": "Designs so clever and playful they stayed in production for decades, generating royalties",
         "lessonsForUser": "If you create and care about everyday things: look at common objects with fresh eyes, because the best design starts with what already exists"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Said design required observation, and spent fifty years pointing at ordinary things his students had stopped seeing."
     },
     {
       "name": "Marshall Ganz",
@@ -6910,7 +7182,8 @@
         "scaleModel": "Practitioner who codified his methods into a teachable curriculum used to train organizers worldwide",
         "lessonsForUser": "If you teach and care about leadership: spend decades in practice first, then codify and teach what you learned"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Taught organisers that leadership is the work of translating values into action by telling three stories."
     },
     {
       "name": "Marshall McLuhan",
@@ -6935,7 +7208,8 @@
         "scaleModel": "Aphorisms and concepts that entered common language, making his ideas immortal even when his books went out of fashion",
         "lessonsForUser": "If you teach and care about technology: coin the phrase that captures the change, because the right metaphor outlives any research paper"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Argued that the shape of a medium did more to us than anything it carried, and spent a career making us see what we were swimming in."
     },
     {
       "name": "Carl von Clausewitz",
@@ -6956,7 +7230,8 @@
         "scaleModel": "One unfinished book published posthumously that became required reading at every military academy in the world for 200 years",
         "lessonsForUser": "If you lead and care about strategy: write the comprehensive theory of your field, even if you can't finish it, because the framework will outlive you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Wrote that war was simple in its parts and nearly impossible in practice, and named the reason friction."
     },
     {
       "name": "John Gottman",
@@ -6982,7 +7257,8 @@
         "scaleModel": "Academic research gave credibility, then a certification programme trained thousands of therapists to deliver the method without Gottman in the room",
         "lessonsForUser": "If you teach and care about relationships: spend years building the evidence first, then create a certification that lets others deliver your method"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Watched thousands of couples fight and discovered that contempt, not anger, kills a marriage."
     },
     {
       "name": "Sue Johnson",
@@ -7008,7 +7284,8 @@
         "scaleModel": "Rigorous research created institutional trust, then a book (Hold Me Tight) and structured workshops let the method spread through both professional and consumer channels",
         "lessonsForUser": "If you coach and care about evidence: build the outcome data first, then write the book that translates the clinical method for ordinary people"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Showed therapists that the couple fighting about dishes is actually fighting about whether anyone will be there when they call."
     },
     {
       "name": "Harville Hendrix",
@@ -7035,7 +7312,8 @@
         "scaleModel": "One bestselling book plus massive media exposure created demand, then a certification programme met it by training therapists worldwide",
         "lessonsForUser": "If you coach and tell stories: your biggest failure might be the research question that produces your life's work, and one media hit can create a decade of demand"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Proved that the person who drives you crazy is the exact person your psyche picked for the job."
     },
     {
       "name": "Terry Real",
@@ -7063,7 +7341,8 @@
         "scaleModel": "Provocative clinical style made for compelling training videos and books, building demand for a training institute that teaches the method to other therapists",
         "lessonsForUser": "If you coach and speak up: being willing to say the uncomfortable thing in the room can become your entire brand, if you back it with genuine skill"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Told men the truth about what patriarchy costs them personally, not just the women around them."
     },
     {
       "name": "Gary Chapman",
@@ -7089,7 +7368,8 @@
         "scaleModel": "One hyper-simple framework with a free assessment tool that went viral through word of mouth, spawning dozens of derivative editions for different audiences",
         "lessonsForUser": "If you teach and care about relationships: make the framework so simple that people can explain it to a friend in 30 seconds, then let the quiz do the marketing"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Gave millions of couples a shared vocabulary for why they keep missing each other."
     },
     {
       "name": "Stan Tatkin",
@@ -7115,7 +7395,8 @@
         "scaleModel": "A clinically distinctive method (reading physiology, not just words) created a training programme that felt genuinely different from competing certifications",
         "lessonsForUser": "If you teach and care about the body: combine two fields that don't usually talk to each other, and the synthesis becomes your competitive advantage"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Taught couples that their bodies are already in the argument before their mouths open."
     },
     {
       "name": "Alain de Botton",
@@ -7142,7 +7423,8 @@
         "scaleModel": "Free YouTube content (8M subscribers) drives awareness, physical locations and products capture revenue, books provide credibility",
         "lessonsForUser": "If you tell stories and teach: start with the book, build the institution, then let free content on YouTube become your biggest classroom"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built a global school for the emotions that philosophy departments forgot to teach."
     },
     {
       "name": "Gabor Mate",
@@ -7169,7 +7451,8 @@
         "scaleModel": "Clinical frontline experience gave moral authority, books gave reach, speaking gave revenue, each reinforcing the others",
         "lessonsForUser": "If you coach and tell stories: the years you spend in the hardest rooms build an authority that nothing else can replicate, and the books write themselves from what you witnessed"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Worked with the most addicted people in North America and said the question is never 'Why the addiction?' but always 'Why the pain?'"
     },
     {
       "name": "Johann Hari",
@@ -7195,7 +7478,8 @@
         "scaleModel": "One TED talk distilled the book's core argument ('the opposite of addiction is connection') into a sentence that travelled further than the book itself",
         "lessonsForUser": "If you tell stories and speak up: one sentence that captures a genuine insight can reach further than a career of columns, especially if you earned it by going to the places nobody else went"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Told a world obsessed with chemical hooks that the real hook is loneliness."
     },
     {
       "name": "Maia Szalavitz",
@@ -7220,7 +7504,8 @@
         "scaleModel": "Rigorous science journalism with personal authority created a niche: the writer who could read the papers AND had the needle marks to challenge them",
         "lessonsForUser": "If you tell stories and speak up: your worst experience might be the credential that gives your reporting an authority no degree can match"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Used her own needle marks as credentials to demand that addiction science stop lying to itself."
     },
     {
       "name": "Carl Hart",
@@ -7246,7 +7531,8 @@
         "scaleModel": "Tenure provided a platform safe enough to say what others could not, and personal disclosure made the academic argument impossible to ignore",
         "lessonsForUser": "If you teach and speak up: build the institutional safety net first (tenure), then use it to say the thing everyone is afraid to say"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Gave people drugs in a lab, measured what happened, and told the world most of what it believes about addiction is wrong."
     },
     {
       "name": "Holly Whitaker",
@@ -7272,7 +7558,8 @@
         "scaleModel": "Blog built audience, online programme captured revenue, book created mass awareness. The model worked for growth but not for financial sustainability",
         "lessonsForUser": "If you build and tell stories: reframing an old problem with a new identity (sobriety as feminism, not failure) can create explosive growth, but the business model needs to be as strong as the story"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Looked at the rooms of AA and asked why a programme designed by men in 1935 was still the only option on the table."
     },
     {
       "name": "Russell Brand",
@@ -7300,7 +7587,8 @@
         "scaleModel": "Entertainment career provided the megaphone, authenticity of lived experience provided the credibility, and the 12-step rewrite provided a product others could use",
         "lessonsForUser": "If you perform and tell stories: the platform you built for entertainment can become the distribution channel for advocacy, if the personal story is real enough to survive scrutiny"
       },
-      "confidence": "medium"
+      "confidence": "medium",
+      "oneLiner": "Took the language of the rooms to the biggest stages in the world and made recovery look like something other than defeat."
     },
     {
       "name": "Bill Wilson",
@@ -7325,7 +7613,8 @@
         "scaleModel": "Peer-to-peer mutual aid with zero marketing budget, no paid staff at the group level, and a book as the only product. The structure is the scale model: anyone can start a meeting, anywhere, for free",
         "lessonsForUser": "If you connect people and lead: the most scalable thing you can build might be the one you remove yourself from, letting the structure replicate without needing you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "A failed stockbroker who discovered that one drunk talking to another drunk was more powerful than any doctor or preacher."
     },
     {
       "name": "Louise Aronson",
@@ -7352,7 +7641,8 @@
         "scaleModel": "Academic position gave credibility and security, a trade book gave reach, and the Pulitzer nomination gave media access to argue for systemic change",
         "lessonsForUser": "If you tell stories and teach: weaving patient narratives into medical argument makes people feel what data alone cannot convey"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Told medicine that treating old age as a disease is the disease."
     },
     {
       "name": "Bill Thomas",
@@ -7379,7 +7669,8 @@
         "scaleModel": "Pilot project proved the concept, foundation funding scaled it, licensing let others build it, and a theatrical tour made the public case",
         "lessonsForUser": "If you design and lead: start with the smallest possible proof that your redesign works (dogs in one nursing home), then let the data justify rebuilding the entire model"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Put dogs, cats, birds, and children into a nursing home and watched the death rate drop."
     },
     {
       "name": "Ai-jen Poo",
@@ -7406,7 +7697,8 @@
         "scaleModel": "Organised isolated workers through community networks, passed state-level legislation as proof of concept, then went national. The aging angle gave the cause bipartisan appeal",
         "lessonsForUser": "If you lead and connect: link the fight of the people nobody sees to the problem everyone fears, and the coalition builds itself"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Organised the workforce that America depends on but refuses to protect: the women who care for our parents."
     },
     {
       "name": "Marc Freedman",
@@ -7433,7 +7725,8 @@
         "scaleModel": "Built programmes (Experience Corps) that produced research, used research to drive policy, used prizes (Purpose Prize) to create media narratives, used books to shape public imagination",
         "lessonsForUser": "If you lead and connect: sometimes the most powerful thing you can do is give a nameless experience a name that people want to claim"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Looked at a country warehousing its most experienced people and asked what would happen if they were deployed instead."
     },
     {
       "name": "Judith Heumann",
@@ -7460,7 +7753,8 @@
         "scaleModel": "Direct action created public pressure, government roles created policy change, a memoir and documentary created cultural memory. Each phase built on the last",
         "lessonsForUser": "If you speak up and lead: the same fight can be fought from the outside and then from the inside, and doing both in sequence is more powerful than either alone"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Told a world that saw wheelchairs as tragedies that the real tragedy was the stairs."
     },
     {
       "name": "Stella Young",
@@ -7486,7 +7780,8 @@
         "scaleModel": "One TED talk ('I'm Not Your Inspiration, Thank You Very Much') became a permanent cultural reference point, and a media platform (Ramp Up) centred disabled writers",
         "lessonsForUser": "If you speak up and perform: making people laugh while telling them an uncomfortable truth gets past defences that earnest advocacy cannot"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Told the world that being disabled does not make you brave, and that calling it brave is the problem."
     },
     {
       "name": "Haben Girma",
@@ -7512,7 +7807,8 @@
         "scaleModel": "Harvard credential opened doors, legal cases set precedents, the memoir humanised the argument, and corporate consulting provided revenue while advancing the cause",
         "lessonsForUser": "If you speak up and teach: framing a rights issue as a design problem makes it solvable, and making the business case alongside the moral case gets you into rooms that moral arguments alone cannot open"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Graduated from Harvard Law without hearing or seeing the lectures, then turned around and sued the institutions that made it harder than it needed to be."
     },
     {
       "name": "Ed Roberts",
@@ -7538,7 +7834,8 @@
         "scaleModel": "One centre in Berkeley became a replicable template: within a decade, 400+ independent living centres opened across the US, all following the CIL model",
         "lessonsForUser": "If you lead and speak up: build the first one so well that others can copy it without asking permission, and the movement scales itself"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Lived in an iron lung and still became the person who redesigned how an entire country thinks about disability."
     },
     {
       "name": "Alice Wong",
@@ -7565,7 +7862,8 @@
         "scaleModel": "A StoryCorps partnership built the archive, an anthology curated the best voices, a memoir personalised the politics, and Twitter became the daily distribution channel",
         "lessonsForUser": "If you connect and tell stories: sometimes the most powerful act is not telling your own story but building the platform where a community tells theirs"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Built a megaphone for the stories that the disability rights movement had always told but that the mainstream had always ignored."
     },
     {
       "name": "Muhammad Yunus",
@@ -7592,7 +7890,8 @@
         "scaleModel": "Group lending (five-member guarantee circles) eliminated the need for collateral, making the model replicable anywhere there was poverty and trust. Replicated in 100+ countries",
         "lessonsForUser": "If you lead and teach: the simplest financial innovation (lending $27 with no collateral) can become the most scalable if the ownership structure protects the mission"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Lent $27 to a village and proved that poor people pay back loans more reliably than rich ones."
     },
     {
       "name": "Tiffany Aliche",
@@ -7620,7 +7919,8 @@
         "scaleModel": "Free challenge built trust and audience, social media created community, book captured mainstream credibility, paid courses captured revenue. The editorial rule ('if my mother wouldn't understand it, rewrite it') kept the language accessible",
         "lessonsForUser": "If you teach and connect: give away the most valuable thing for free first, build the community around it, and the community will buy whatever you make next because they already trust you"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Lost everything in 2008 and turned the wreckage into a financial education movement for the women nobody else was teaching."
     },
     {
       "name": "Jose Quinonez",
@@ -7647,7 +7947,8 @@
         "scaleModel": "One local programme in San Francisco's Mission District proved the concept, the MacArthur Fellowship gave national visibility, and the model was simple enough for other non-profits to replicate",
         "lessonsForUser": "If you lead and connect: the most powerful innovation is sometimes not building something new but making something that already works visible to the system that ignores it"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Did not invent lending circles. He just made the credit bureaus notice they existed."
     },
     {
       "name": "Suze Orman",
@@ -7675,7 +7976,8 @@
         "scaleModel": "Oprah provided the initial distribution, CNBC provided weekly access to millions, books provided depth, and the confrontational 'Can I Afford It?' format created appointment television",
         "lessonsForUser": "If you perform and teach: treating a 'boring' subject as emotionally urgent creates an audience that bland experts can never reach"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Told millions of Americans they could not afford the life they were pretending to live, and they kept tuning in because she said it like she cared."
     },
     {
       "name": "Dave Ramsey",
@@ -7703,7 +8005,8 @@
         "scaleModel": "Free radio/podcast content builds trust, church-based course distribution provides community and accountability, referral network monetises the trust. Never accepted advertising, funding everything through product sales",
         "lessonsForUser": "If you perform and lead: distributing your programme through existing communities (churches, workplaces) gives you accountability infrastructure that no app can replicate"
       },
-      "confidence": "high"
+      "confidence": "high",
+      "oneLiner": "Went bankrupt, clawed back to zero, and spent the next 30 years screaming at Americans to cut up their credit cards."
     }
   ]
 }
