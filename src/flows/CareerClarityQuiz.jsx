@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
-import './CareerClarityQuiz.css';
+import { useAuth } from '../auth/AuthProvider';
 
 const CareerClarityQuiz = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [stage, setStage] = useState('intro');
   const [currentNeed, setCurrentNeed] = useState(0);
@@ -14,16 +15,10 @@ const CareerClarityQuiz = () => {
   const [expandedNeeds, setExpandedNeeds] = useState({});
   const [email, setEmail] = useState('');
   const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [showEmailCapture, setShowEmailCapture] = useState(false);
   const [quizResultId, setQuizResultId] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [sessionId, setSessionId] = useState(null);
 
-  // Generate session ID on mount
-  useEffect(() => {
-    setSessionId(`career-quiz-${crypto.randomUUID()}`);
-  }, []);
-
-  // The 6 Core Needs with Accomplish <-> Connect spectrum
+  // The 6 Core Needs with Accomplish ↔ Connect spectrum
   const needs = [
     {
       id: 'growth',
@@ -313,7 +308,7 @@ const CareerClarityQuiz = () => {
     {
       id: 'structure',
       name: 'Structure Preference',
-      question: 'How do you experience organisational rules and processes?',
+      question: 'How do you experience organizational rules and processes?',
       icon: '🏛️',
       optionA: {
         label: 'Helpful scaffolding',
@@ -396,7 +391,7 @@ const CareerClarityQuiz = () => {
 
   const canProceedNeed = () => {
     const current = needs[currentNeed];
-    return needAnswers[current.id]?.selection !== undefined &&
+    return needAnswers[current.id]?.selection !== undefined && 
            needAnswers[current.id]?.met !== undefined;
   };
 
@@ -417,12 +412,36 @@ const CareerClarityQuiz = () => {
     }, 300);
   };
 
+  const saveToSupabase = async (results) => {
+    try {
+      const { data, error } = await supabase
+        .from('quiz_results')
+        .insert({
+          user_id: user?.id || null,
+          need_answers: needAnswers,
+          structural_answers: structuralAnswers,
+          path_result: results.path,
+          unmet_needs: results.unmetNeeds.map(n => n.id),
+          accomplish_score: results.accomplishCount,
+          employment_score: results.employmentSignals,
+        })
+        .select('id')
+        .single();
+      if (data) setQuizResultId(data.id);
+    } catch (err) {
+      console.error('Failed to save quiz results:', err);
+    }
+  };
+
   const nextStructural = () => {
     setAnimating(true);
     setTimeout(() => {
       if (currentStructural < structuralQuestions.length - 1) {
         setCurrentStructural(prev => prev + 1);
       } else {
+        // Save results then show them
+        const results = calculateResults();
+        saveToSupabase(results);
         setStage('results');
       }
       setAnimating(false);
@@ -459,70 +478,31 @@ const CareerClarityQuiz = () => {
     }));
   };
 
-  const saveResults = async (results) => {
-    try {
-      const { data, error } = await supabase
-        .from('career_clarity_leads')
-        .insert({
-          session_id: sessionId,
-          need_answers: needAnswers,
-          structural_answers: structuralAnswers,
-          path_result: results.path,
-          orientation: results.isAccomplishOriented ? 'accomplish' : results.isConnectOriented ? 'connect' : 'blend',
-          unmet_needs: results.unmetNeeds.map(n => n.id),
-          accomplish_score: results.accomplishCount,
-          employment_score: results.employmentSignals
-        })
-        .select()
-        .single();
-
-      if (data) {
-        setQuizResultId(data.id);
-      }
-      if (error) {
-        console.error('Error saving results:', error);
-      }
-      return data;
-    } catch (err) {
-      console.error('Error saving results:', err);
-      return null;
-    }
-  };
-
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    if (email && !isSubmitting) {
-      setIsSubmitting(true);
+    if (email) {
       try {
+        await supabase.from('email_captures').insert({
+          email,
+          quiz_result_id: quizResultId,
+          source: 'career-clarity-quiz',
+        });
         if (quizResultId) {
-          await supabase
-            .from('career_clarity_leads')
-            .update({ email: email })
-            .eq('id', quizResultId);
+          await supabase.from('quiz_results').update({ email }).eq('id', quizResultId);
         }
-
-        // Notify lead capture (fire-and-forget)
-        supabase.functions.invoke('notify-lead-capture', {
-          body: {
-            email: email,
-            source: 'Career Clarity Quiz'
-          }
-        }).catch(() => {});
-
-        setEmailSubmitted(true);
       } catch (err) {
-        console.error('Error saving email:', err);
+        console.error('Email capture failed:', err);
       }
-      setIsSubmitting(false);
+      setEmailSubmitted(true);
     }
   };
 
   const calculateResults = () => {
     const needResults = needs.map(need => {
       const answer = needAnswers[need.id] || {};
-      const selection = answer.selection;
+      const selection = answer.selection; // 'left', 'both', or 'right'
       const met = answer.met;
-
+      
       const isAccomplish = selection === 'left';
       const isConnect = selection === 'right';
       const isBlend = selection === 'both';
@@ -539,11 +519,13 @@ const CareerClarityQuiz = () => {
       };
     });
 
+    // Calculate accomplish vs connect orientation (for 2x2 matrix)
     const accomplishCount = needResults.filter(n => n.isAccomplish).length;
     const connectCount = needResults.filter(n => n.isConnect).length;
     const isAccomplishOriented = accomplishCount > connectCount;
     const isConnectOriented = connectCount > accomplishCount;
 
+    // Calculate employment vs independence orientation
     const structuralResults = structuralQuestions.map(q => {
       const answer = structuralAnswers[q.id];
       const pointsToEmployment = answer === q.employmentSignal;
@@ -555,9 +537,13 @@ const CareerClarityQuiz = () => {
     const isEmploymentOriented = employmentSignals >= 3;
     const isIndependenceOriented = independenceSignals >= 3;
 
+    // Determine path: Job vs Own Thing
     const path = isIndependenceOriented ? 'own-thing' : 'job';
+
+    // Get unmet needs
     const unmetNeeds = needResults.filter(n => n.isUnmet);
 
+    // Determine quadrant
     let quadrant;
     if (isIndependenceOriented && isAccomplishOriented) quadrant = 'independence-accomplish';
     else if (isIndependenceOriented && isConnectOriented) quadrant = 'independence-connect';
@@ -566,7 +552,7 @@ const CareerClarityQuiz = () => {
     else if (isEmploymentOriented && isConnectOriented) quadrant = 'employment-connect';
     else quadrant = 'employment-blend';
 
-    const results = {
+    return {
       needs: needResults,
       structural: structuralResults,
       accomplishCount,
@@ -581,20 +567,15 @@ const CareerClarityQuiz = () => {
       quadrant,
       unmetNeeds
     };
-
-    // Save results to Supabase
-    saveResults(results);
-
-    return results;
   };
 
   const getPathContent = (results) => {
-    const { path, isAccomplishOriented, isConnectOriented, unmetNeeds } = results;
+    const { path, quadrant, isAccomplishOriented, isConnectOriented, unmetNeeds } = results;
 
     if (path === 'own-thing') {
       return {
         headline: "Your Path: Build Your Own Thing",
-        subhead: isAccomplishOriented
+        subhead: isAccomplishOriented 
           ? "You want to win — and you want to do it on your own terms"
           : isConnectOriented
           ? "You want meaning and impact — and you need to own it"
@@ -607,7 +588,7 @@ const CareerClarityQuiz = () => {
           "You're energized by ownership, not just participation",
           "Your work is an expression of who you are"
         ],
-        clarityMessage: unmetNeeds.length > 0
+        clarityMessage: unmetNeeds.length > 0 
           ? `You have ${unmetNeeds.length} unmet need${unmetNeeds.length > 1 ? 's' : ''} right now. Here's why building your own thing is likely to solve ${unmetNeeds.length > 1 ? 'them' : 'it'}:`
           : "Your needs are mostly met, but your structural profile still points to ownership. You might be in a good situation now, but you'll likely feel the pull toward building your own thing eventually.",
         ctaHeadline: "Ready to figure out what to build?",
@@ -621,8 +602,8 @@ const CareerClarityQuiz = () => {
         subhead: isAccomplishOriented
           ? "You want mastery, growth, and recognition — inside a structure that supports you"
           : isConnectOriented
-          ? "You want meaning, connection, and impact — inside an organisation that shares your values"
-          : "You want fulfilment — and the right job can absolutely provide it",
+          ? "You want meaning, connection, and impact — inside an organization that shares your values"
+          : "You want fulfillment — and the right job can absolutely provide it",
         seenMessage: `You don't need to burn it all down. You don't need to "escape the matrix." You need a job that actually delivers what you value. The good news: that job exists. The challenge is knowing exactly what to look for — and now you do.`,
         validationPoints: [
           "You appreciate external feedback and recognition systems",
@@ -637,46 +618,44 @@ const CareerClarityQuiz = () => {
         ctaHeadline: "Ready to find roles that fit?",
         ctaBody: "The Flow Finder helps you identify career opportunities that match your specific needs — based on your skills, the problems you want to solve, and the impact you want to have.",
         ctaButton: "Start Flow Finder",
-        ctaLink: "/nikigai/skills"
+        ctaLink: "/curiosity-compass"
       };
     }
   };
 
-  // Progress Dots Component
-  const ProgressDots = ({ total, current }) => (
-    <div className="ccq-progress-dots">
-      {Array.from({ length: total }).map((_, i) => (
-        <div
-          key={i}
-          className={`ccq-progress-dot ${
-            i < current ? 'completed' : i === current ? 'active' : ''
-          }`}
-        />
-      ))}
-    </div>
-  );
-
-  // Three-button value selector
+  // Three-button value selector (replaces slider)
   const ValueSelector = ({ value, onChange, leftOption, rightOption }) => {
     return (
-      <div className="ccq-value-selector">
+      <div className="flex gap-3">
         <button
           onClick={() => onChange('left')}
-          className={`ccq-value-btn ${value === 'left' ? 'selected-purple' : ''}`}
+          className={`flex-1 p-4 rounded-xl transition-all duration-300 border-2 text-center ${
+            value === 'left'
+              ? 'bg-rose-500/20 border-rose-500 text-rose-300'
+              : 'bg-stone-800/30 border-stone-700/50 text-stone-400 hover:border-stone-600 hover:bg-stone-800/50'
+          }`}
         >
-          <div className="ccq-value-label">{leftOption}</div>
+          <div className="font-semibold">{leftOption}</div>
         </button>
         <button
           onClick={() => onChange('both')}
-          className={`ccq-value-btn ${value === 'both' ? 'selected-gold' : ''}`}
+          className={`flex-1 p-4 rounded-xl transition-all duration-300 border-2 text-center ${
+            value === 'both'
+              ? 'bg-amber-500/20 border-amber-500 text-amber-300'
+              : 'bg-stone-800/30 border-stone-700/50 text-stone-400 hover:border-stone-600 hover:bg-stone-800/50'
+          }`}
         >
-          <div className="ccq-value-label">Both</div>
+          <div className="font-semibold">Both</div>
         </button>
         <button
           onClick={() => onChange('right')}
-          className={`ccq-value-btn ${value === 'right' ? 'selected-purple' : ''}`}
+          className={`flex-1 p-4 rounded-xl transition-all duration-300 border-2 text-center ${
+            value === 'right'
+              ? 'bg-sky-500/20 border-sky-500 text-sky-300'
+              : 'bg-stone-800/30 border-stone-700/50 text-stone-400 hover:border-stone-600 hover:bg-stone-800/50'
+          }`}
         >
-          <div className="ccq-value-label">{rightOption}</div>
+          <div className="font-semibold">{rightOption}</div>
         </button>
       </div>
     );
@@ -685,7 +664,15 @@ const CareerClarityQuiz = () => {
   const MetButton = ({ selected, value, onClick, children }) => (
     <button
       onClick={() => onClick(value)}
-      className={`ccq-met-btn ${selected ? `selected-${value}` : ''}`}
+      className={`flex-1 p-4 rounded-xl transition-all duration-300 border-2 ${
+        selected
+          ? value === 'yes' 
+            ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
+            : value === 'partial'
+            ? 'bg-amber-500/20 border-amber-500 text-amber-300'
+            : 'bg-rose-500/20 border-rose-500 text-rose-300'
+          : 'bg-stone-800/30 border-stone-700/50 text-stone-400 hover:border-stone-600'
+      }`}
     >
       {children}
     </button>
@@ -694,154 +681,186 @@ const CareerClarityQuiz = () => {
   const StructuralOption = ({ option, selected, onClick }) => (
     <button
       onClick={onClick}
-      className={`ccq-structural-option ${selected ? 'selected' : ''}`}
+      className={`w-full p-5 rounded-xl text-left transition-all border-2 ${
+        selected
+          ? 'bg-amber-500/10 border-amber-500/50'
+          : 'bg-stone-800/30 border-stone-700/50 hover:border-stone-600'
+      }`}
     >
-      <div className={`ccq-structural-label ${selected ? 'selected' : ''}`}>
+      <div className={`font-semibold mb-1 ${selected ? 'text-amber-300' : 'text-stone-200'}`}>
         {option.label}
       </div>
-      <div className="ccq-structural-desc">{option.description}</div>
+      <div className="text-sm text-stone-400">{option.description}</div>
     </button>
   );
 
   // ============ SCREENS ============
 
-  // INTRO SCREEN
+  // INTRO
   if (stage === 'intro') {
     return (
-      <div className="ccq-container">
-        <div className="ccq-content ccq-intro">
-          <div className="ccq-intro-header">
-            <div className="ccq-badge">Career Clarity Quiz</div>
-            <h1 className="ccq-headline">
-              Should You Find a{' '}
-              <span className="ccq-gold-text">Different Job</span>
-              {' '}or{' '}
-              <span className="ccq-gold-text">Build Your Own Thing</span>?
+      <div className="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 text-stone-100 p-6 flex items-center justify-center">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-stone-800/50 rounded-full text-sm text-stone-300 mb-6 border border-stone-700/50">
+              <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+              Career Clarity Quiz
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+              <span className="text-stone-100">Should You Find a</span>
+              <br />
+              <span className="bg-gradient-to-r from-rose-400 via-amber-400 to-sky-400 bg-clip-text text-transparent">Different Job or Build Your Own Thing?</span>
             </h1>
-            <p className="ccq-subheadline">
+            <p className="text-stone-400 text-lg mt-4">
               4 minutes to clarity. No fluff. Just answers.
             </p>
           </div>
 
-          <div className="ccq-info-card">
-            <h3 className="ccq-info-title">
-              <span>⚖️</span> Before You Start
-            </h3>
-            <p className="ccq-info-text">
+          <div className="bg-gradient-to-br from-stone-800/50 to-stone-800/30 rounded-2xl p-6 mb-8 border border-stone-700/50">
+            <h3 className="font-semibold text-stone-200 mb-3">⚖️ Before You Start</h3>
+            <p className="text-stone-400 mb-4">
               There are no right answers. Some people thrive in employment. Some people need to build their own thing. Neither is better — they're just different.
             </p>
-            <p className="ccq-info-bold">
-              Your job is to answer honestly about what you actually want.
+            <p className="text-stone-300 font-medium">
+              Your job is to answer honestly about what you actually want — not what sounds more impressive or "evolved."
             </p>
           </div>
 
-          <div className="ccq-parts-list">
-            <div className="ccq-part-card">
-              <span className="ccq-part-icon">🔍</span>
+          <div className="space-y-3 mb-10">
+            <div className="bg-stone-800/30 rounded-xl p-4 border border-stone-700/50 flex items-start gap-3">
+              <span className="text-xl">🔍</span>
               <div>
-                <div className="ccq-part-title">Part 1: Your Core Needs</div>
-                <div className="ccq-part-desc">What do you value, and is your work delivering it?</div>
+                <h3 className="font-medium text-stone-200">Part 1: Your Core Needs</h3>
+                <p className="text-stone-500 text-sm">What do you actually value, and is your work delivering it?</p>
               </div>
             </div>
-            <div className="ccq-part-card">
-              <span className="ccq-part-icon">🏗️</span>
+            <div className="bg-stone-800/30 rounded-xl p-4 border border-stone-700/50 flex items-start gap-3">
+              <span className="text-xl">🏗️</span>
               <div>
-                <div className="ccq-part-title">Part 2: Your Working Style</div>
-                <div className="ccq-part-desc">Are you wired for employment or independence?</div>
+                <h3 className="font-medium text-stone-200">Part 2: Your Working Style</h3>
+                <p className="text-stone-500 text-sm">Are you wired for employment or independence?</p>
+              </div>
+            </div>
+            <div className="bg-stone-800/30 rounded-xl p-4 border border-stone-700/50 flex items-start gap-3">
+              <span className="text-xl">🎯</span>
+              <div>
+                <h3 className="font-medium text-stone-200">Your Path</h3>
+                <p className="text-stone-500 text-sm">A clear recommendation: different job, or build your own thing</p>
               </div>
             </div>
           </div>
 
-          <button
-            onClick={() => setStage('needs')}
-            className="ccq-primary-btn"
-          >
-            Start the Quiz →
-          </button>
-          <p className="ccq-note">
-            11 questions • ~4 minutes
-          </p>
+          <div className="text-center">
+            <button
+              onClick={() => setStage('needs')}
+              className="px-8 py-4 bg-gradient-to-r from-rose-500 via-amber-500 to-sky-500 rounded-xl font-semibold text-lg hover:opacity-90 transition-all shadow-lg hover:scale-105"
+            >
+              Start the Quiz
+            </button>
+            <p className="mt-4 text-sm text-stone-600">11 questions • ~4 minutes</p>
+          </div>
         </div>
       </div>
     );
   }
 
-  // NEEDS ASSESSMENT SCREEN
+  // NEEDS ASSESSMENT
   if (stage === 'needs') {
     const current = needs[currentNeed];
     const answer = needAnswers[current.id] || {};
+    const progress = ((currentNeed + 1) / needs.length) * 100;
     const selection = answer.selection;
     const isAccomplish = selection === 'left';
     const isConnect = selection === 'right';
+    const isBlend = selection === 'both';
 
     return (
-      <div className="ccq-container">
-        <div className="ccq-content">
-          <ProgressDots total={needs.length} current={currentNeed} />
+      <div className="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 text-stone-100 p-6">
+        <div className="max-w-xl mx-auto">
+          <div className="mb-6">
+            <div className="flex justify-between text-sm text-stone-500 mb-2">
+              <span>Part 1: Core Needs</span>
+              <span>{currentNeed + 1} / {needs.length}</span>
+            </div>
+            <div className="h-1 bg-stone-800 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-rose-500 via-amber-500 to-sky-500 transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
 
-          <div className="ccq-section-label">Part 1: Core Needs</div>
-
-          <div className={`ccq-question-content ${animating ? 'animating' : ''}`}>
-            <div className="ccq-need-header">
-              <span className="ccq-need-icon">{current.icon}</span>
-              <h2 className="ccq-need-name">{current.name}</h2>
+          <div className={`transition-all duration-300 ${animating ? 'opacity-0 translate-x-4' : 'opacity-100'}`}>
+            <div className="text-center mb-6">
+              <span className="text-5xl mb-3 block">{current.icon}</span>
+              <h2 className="text-2xl font-bold">{current.name}</h2>
             </div>
 
-            {/* Two option descriptions */}
-            <div className="ccq-options-preview">
-              <div className={`ccq-option-preview ${isAccomplish ? 'selected' : ''}`}>
-                <div className="ccq-option-name">{current.accomplish.name}</div>
-                <div className="ccq-option-vibe">"{current.accomplish.vibe}"</div>
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className={`p-4 rounded-xl border-2 transition-all ${
+                isAccomplish ? 'bg-rose-500/10 border-rose-500/50' : 'bg-stone-800/30 border-stone-700/50'
+              }`}>
+                <div className={`font-semibold text-sm mb-1 ${isAccomplish ? 'text-rose-400' : 'text-stone-400'}`}>
+                  {current.accomplish.name}
+                </div>
+                <div className="text-stone-400 text-xs mb-2">{current.accomplish.description}</div>
+                <div className="text-amber-400 text-xs italic">"{current.accomplish.vibe}"</div>
               </div>
-              <div className={`ccq-option-preview ${isConnect ? 'selected' : ''}`}>
-                <div className="ccq-option-name">{current.connect.name}</div>
-                <div className="ccq-option-vibe">"{current.connect.vibe}"</div>
+              <div className={`p-4 rounded-xl border-2 transition-all ${
+                isConnect ? 'bg-sky-500/10 border-sky-500/50' : 'bg-stone-800/30 border-stone-700/50'
+              }`}>
+                <div className={`font-semibold text-sm mb-1 ${isConnect ? 'text-sky-400' : 'text-stone-400'}`}>
+                  {current.connect.name}
+                </div>
+                <div className="text-stone-400 text-xs mb-2">{current.connect.description}</div>
+                <div className="text-amber-400 text-xs italic">"{current.connect.vibe}"</div>
               </div>
             </div>
 
-            {/* Value selector */}
-            <div className="ccq-question-card">
-              <p className="ccq-question-text">{current.question}</p>
+            <div className="bg-stone-800/40 rounded-xl p-5 mb-5 border border-stone-700/50">
+              <p className="text-stone-200 mb-5 text-center text-sm">{current.question}</p>
               <ValueSelector
-                value={selection}
+                value={answer.selection}
                 onChange={(val) => handleNeedAnswer(current.id, 'selection', val)}
                 leftOption={current.accomplish.name.split(' ')[0]}
                 rightOption={current.connect.name.split(' ')[0]}
               />
             </div>
 
-            {/* Met buttons */}
-            <div className="ccq-question-card">
-              <p className="ccq-question-text">Is this need being met in your current work?</p>
-              <div className="ccq-met-buttons">
+            <div className="bg-stone-800/40 rounded-xl p-5 mb-6 border border-stone-700/50">
+              <p className="text-stone-200 mb-4 text-center text-sm">Is this need being met in your current work?</p>
+              <div className="flex gap-3">
                 <MetButton selected={answer.met === 'yes'} value="yes" onClick={(val) => handleNeedAnswer(current.id, 'met', val)}>
-                  <div className="ccq-met-symbol">✓</div>
-                  <div className="ccq-met-label">Yes</div>
+                  <div className="text-lg mb-1">✓</div>
+                  <div className="text-sm">Yes</div>
                 </MetButton>
                 <MetButton selected={answer.met === 'partial'} value="partial" onClick={(val) => handleNeedAnswer(current.id, 'met', val)}>
-                  <div className="ccq-met-symbol">◐</div>
-                  <div className="ccq-met-label">Partially</div>
+                  <div className="text-lg mb-1">◐</div>
+                  <div className="text-sm">Partially</div>
                 </MetButton>
                 <MetButton selected={answer.met === 'no'} value="no" onClick={(val) => handleNeedAnswer(current.id, 'met', val)}>
-                  <div className="ccq-met-symbol">✗</div>
-                  <div className="ccq-met-label">No</div>
+                  <div className="text-lg mb-1">✗</div>
+                  <div className="text-sm">No</div>
                 </MetButton>
               </div>
             </div>
 
-            {/* Navigation */}
-            <div className="ccq-nav-buttons">
+            <div className="flex gap-3">
               {currentNeed > 0 && (
-                <button onClick={prevNeed} className="ccq-back-btn">
+                <button onClick={prevNeed} className="px-6 py-3 bg-stone-800 rounded-xl text-stone-300 hover:bg-stone-700">
                   Back
                 </button>
               )}
               <button
                 onClick={nextNeed}
                 disabled={!canProceedNeed()}
-                className={`ccq-next-btn ${canProceedNeed() ? '' : 'disabled'}`}
+                className={`flex-1 px-6 py-3 rounded-xl font-medium transition-all ${
+                  canProceedNeed()
+                    ? 'bg-gradient-to-r from-rose-500 via-amber-500 to-sky-500 hover:opacity-90 shadow-lg'
+                    : 'bg-stone-800 text-stone-600 cursor-not-allowed'
+                }`}
               >
-                {currentNeed === needs.length - 1 ? 'Next Section →' : 'Next →'}
+                {currentNeed === needs.length - 1 ? 'Next Section' : 'Next'}
               </button>
             </div>
           </div>
@@ -850,26 +869,36 @@ const CareerClarityQuiz = () => {
     );
   }
 
-  // STRUCTURAL QUESTIONS SCREEN
+  // STRUCTURAL QUESTIONS
   if (stage === 'structural') {
     const current = structuralQuestions[currentStructural];
     const answer = structuralAnswers[current.id];
+    const progress = ((currentStructural + 1) / structuralQuestions.length) * 100;
 
     return (
-      <div className="ccq-container">
-        <div className="ccq-content">
-          <ProgressDots total={structuralQuestions.length} current={currentStructural} />
+      <div className="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 text-stone-100 p-6">
+        <div className="max-w-xl mx-auto">
+          <div className="mb-6">
+            <div className="flex justify-between text-sm text-stone-500 mb-2">
+              <span>Part 2: Working Style</span>
+              <span>{currentStructural + 1} / {structuralQuestions.length}</span>
+            </div>
+            <div className="h-1 bg-stone-800 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
 
-          <div className="ccq-section-label">Part 2: Working Style</div>
-
-          <div className={`ccq-question-content ${animating ? 'animating' : ''}`}>
-            <div className="ccq-need-header">
-              <span className="ccq-need-icon">{current.icon}</span>
-              <h2 className="ccq-need-name">{current.name}</h2>
-              <p className="ccq-structural-question">{current.question}</p>
+          <div className={`transition-all duration-300 ${animating ? 'opacity-0 translate-x-4' : 'opacity-100'}`}>
+            <div className="text-center mb-8">
+              <span className="text-5xl mb-4 block">{current.icon}</span>
+              <h2 className="text-xl font-bold mb-2">{current.name}</h2>
+              <p className="text-stone-300">{current.question}</p>
             </div>
 
-            <div className="ccq-structural-options">
+            <div className="space-y-4 mb-8">
               <StructuralOption
                 option={current.optionA}
                 selected={answer === current.optionA.value}
@@ -882,16 +911,20 @@ const CareerClarityQuiz = () => {
               />
             </div>
 
-            <div className="ccq-nav-buttons">
-              <button onClick={prevStructural} className="ccq-back-btn">
+            <div className="flex gap-3">
+              <button onClick={prevStructural} className="px-6 py-3 bg-stone-800 rounded-xl text-stone-300 hover:bg-stone-700">
                 Back
               </button>
               <button
                 onClick={nextStructural}
                 disabled={!canProceedStructural()}
-                className={`ccq-next-btn ${canProceedStructural() ? '' : 'disabled'}`}
+                className={`flex-1 px-6 py-3 rounded-xl font-medium transition-all ${
+                  canProceedStructural()
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-90 shadow-lg'
+                    : 'bg-stone-800 text-stone-600 cursor-not-allowed'
+                }`}
               >
-                {currentStructural === structuralQuestions.length - 1 ? 'See My Results →' : 'Next →'}
+                {currentStructural === structuralQuestions.length - 1 ? 'See My Results' : 'Next'}
               </button>
             </div>
           </div>
@@ -900,59 +933,63 @@ const CareerClarityQuiz = () => {
     );
   }
 
-  // RESULTS SCREEN
+  // RESULTS
   if (stage === 'results') {
     const results = calculateResults();
     const pathContent = getPathContent(results);
-    const { path, unmetNeeds } = results;
+    const { path, unmetNeeds, needs: needResults } = results;
 
     return (
-      <div className="ccq-container">
-        <div className="ccq-content ccq-results">
-
+      <div className="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 text-stone-100 p-6">
+        <div className="max-w-2xl mx-auto">
+          
           {/* PATH HEADLINE */}
-          <div className="ccq-results-header">
-            <div className={`ccq-path-badge ${path === 'own-thing' ? 'independence' : 'employment'}`}>
+          <div className="text-center pt-6 mb-8">
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-4 ${
+              path === 'own-thing' 
+                ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' 
+                : 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
+            }`}>
               {path === 'own-thing' ? '🚀 Independence Path' : '🏢 Employment Path'}
             </div>
-            <h1 className="ccq-results-headline">
-              <span className="ccq-gold-text">
-                {pathContent.headline.replace('Your Path: ', '')}
-              </span>
-            </h1>
-            <p className="ccq-results-subhead">{pathContent.subhead}</p>
+            <h1 className="text-3xl md:text-4xl font-bold mb-3">{pathContent.headline}</h1>
+            <p className="text-xl text-stone-400">{pathContent.subhead}</p>
           </div>
 
           {/* SEEN MESSAGE */}
-          <div className={`ccq-seen-card ${path === 'own-thing' ? 'independence' : 'employment'}`}>
-            <h3 className="ccq-seen-title">
+          <div className={`rounded-2xl p-6 mb-8 border ${
+            path === 'own-thing'
+              ? 'bg-purple-500/5 border-purple-500/20'
+              : 'bg-sky-500/5 border-sky-500/20'
+          }`}>
+            <h3 className="font-semibold text-stone-200 mb-3 flex items-center gap-2">
               <span>💡</span> Here's Why You're Feeling This Way
             </h3>
-            <p className="ccq-seen-text">{pathContent.seenMessage}</p>
+            <p className="text-stone-300 leading-relaxed">{pathContent.seenMessage}</p>
           </div>
 
           {/* VALIDATION POINTS */}
-          <div className="ccq-validation-card">
-            <h3 className="ccq-validation-title">Your profile suggests:</h3>
-            <div className="ccq-validation-list">
+          <div className="bg-stone-800/30 rounded-2xl p-6 mb-8 border border-stone-700/50">
+            <h3 className="font-semibold text-stone-200 mb-4">Your profile suggests:</h3>
+            <ul className="space-y-3">
               {pathContent.validationPoints.map((point, i) => (
-                <div key={i} className="ccq-validation-item">
-                  <span className="ccq-validation-check">✓</span>
-                  <span>{point}</span>
-                </div>
+                <li key={i} className="flex items-start gap-3">
+                  <span className="text-emerald-400 mt-0.5">✓</span>
+                  <span className="text-stone-400">{point}</span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           {/* CLARITY MESSAGE */}
-          <div className="ccq-clarity-section">
-            <h2 className="ccq-clarity-title">What Needs to Change</h2>
-            <p className="ccq-clarity-text">{pathContent.clarityMessage}</p>
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-stone-100 mb-2">What Needs to Change</h2>
+            <p className="text-stone-400">{pathContent.clarityMessage}</p>
           </div>
 
           {/* UNMET NEEDS - EXPANDABLE */}
           {unmetNeeds.length > 0 && (
-            <div className="ccq-unmet-needs">
+            <div className="space-y-3 mb-8">
               {unmetNeeds.map(need => {
                 const isExpanded = expandedNeeds[need.id];
                 const isAccomplish = need.isAccomplish;
@@ -961,56 +998,72 @@ const CareerClarityQuiz = () => {
                 const fixData = path === 'own-thing' ? unmetData.ownThingFix : unmetData.jobFix;
 
                 return (
-                  <div key={need.id} className="ccq-unmet-card">
+                  <div key={need.id} className="bg-stone-800/40 rounded-xl border border-stone-700/50 overflow-hidden">
+                    {/* Header - Always visible */}
                     <button
                       onClick={() => toggleNeedExpanded(need.id)}
-                      className="ccq-unmet-header"
+                      className="w-full p-4 flex items-center gap-3 text-left hover:bg-stone-800/60 transition-colors"
                     >
-                      <span className="ccq-unmet-icon">{need.icon}</span>
-                      <div className="ccq-unmet-info">
-                        <div className="ccq-unmet-name">{need.name}</div>
-                        <div className="ccq-unmet-meta">
-                          {isAccomplish ? need.accomplish.name : isConnect ? need.connect.name : 'Blend'} •
-                          <span className="ccq-unmet-status">Unmet</span>
+                      <span className="text-2xl">{need.icon}</span>
+                      <div className="flex-1">
+                        <div className="font-medium text-stone-200">{need.name}</div>
+                        <div className="text-xs text-stone-500">
+                          {isAccomplish ? need.accomplish.name : isConnect ? need.connect.name : 'Blend'} • 
+                          <span className="text-rose-400 ml-1">Unmet</span>
                         </div>
                       </div>
-                      <span className={`ccq-unmet-arrow ${isExpanded ? 'expanded' : ''}`}>▼</span>
+                      <span className={`text-stone-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
+                        ▼
+                      </span>
                     </button>
 
+                    {/* Expanded content */}
                     {isExpanded && (
-                      <div className="ccq-unmet-content">
-                        <div className="ccq-unmet-seen">
-                          <p>{unmetData.seen}</p>
+                      <div className="px-4 pb-4 space-y-4">
+                        {/* Seen */}
+                        <div className="bg-stone-900/50 rounded-lg p-4">
+                          <p className="text-stone-300 text-sm leading-relaxed">{unmetData.seen}</p>
                         </div>
 
                         {path === 'job' ? (
                           <>
-                            <div className="ccq-fix-section">
-                              <h4 className="ccq-fix-title gold">What You Need</h4>
-                              <p className="ccq-fix-text">{fixData.what}</p>
+                            {/* What */}
+                            <div>
+                              <h4 className="text-xs font-semibold text-amber-400 uppercase tracking-wide mb-2">What You Need</h4>
+                              <p className="text-stone-300 text-sm">{fixData.what}</p>
                             </div>
-                            <div className="ccq-fix-section">
-                              <h4 className="ccq-fix-title gold">How to Get It</h4>
-                              <ul className="ccq-fix-list">
+
+                            {/* How */}
+                            <div>
+                              <h4 className="text-xs font-semibold text-amber-400 uppercase tracking-wide mb-2">How to Get It</h4>
+                              <ul className="space-y-2">
                                 {fixData.how.map((item, i) => (
-                                  <li key={i}>{item}</li>
+                                  <li key={i} className="flex items-start gap-2 text-sm text-stone-400">
+                                    <span className="text-stone-600">•</span>
+                                    {item}
+                                  </li>
                                 ))}
                               </ul>
                             </div>
-                            <div className="ccq-fix-section">
-                              <h4 className="ccq-fix-title gold">Where to Find It</h4>
-                              <p className="ccq-fix-text">{fixData.where}</p>
+
+                            {/* Where */}
+                            <div>
+                              <h4 className="text-xs font-semibold text-amber-400 uppercase tracking-wide mb-2">Where to Find It</h4>
+                              <p className="text-stone-400 text-sm">{fixData.where}</p>
                             </div>
                           </>
                         ) : (
                           <>
-                            <div className="ccq-fix-section">
-                              <h4 className="ccq-fix-title purple">Why Employment Won't Fix This</h4>
-                              <p className="ccq-fix-text">{fixData.why}</p>
+                            {/* Why ownership */}
+                            <div>
+                              <h4 className="text-xs font-semibold text-purple-400 uppercase tracking-wide mb-2">Why Employment Won't Fix This</h4>
+                              <p className="text-stone-400 text-sm">{fixData.why}</p>
                             </div>
-                            <div className="ccq-fix-section">
-                              <h4 className="ccq-fix-title purple">What Building Your Own Thing Unlocks</h4>
-                              <p className="ccq-fix-text">{fixData.unlock}</p>
+
+                            {/* What ownership unlocks */}
+                            <div>
+                              <h4 className="text-xs font-semibold text-purple-400 uppercase tracking-wide mb-2">What Building Your Own Thing Unlocks</h4>
+                              <p className="text-stone-300 text-sm">{fixData.unlock}</p>
                             </div>
                           </>
                         )}
@@ -1024,22 +1077,22 @@ const CareerClarityQuiz = () => {
 
           {/* CHECKLIST - Job Path Only */}
           {path === 'job' && unmetNeeds.length > 0 && (
-            <div className="ccq-checklist-card">
-              <h3 className="ccq-checklist-title">
+            <div className="bg-gradient-to-br from-sky-500/10 to-blue-500/10 rounded-2xl p-6 mb-8 border border-sky-500/20">
+              <h3 className="font-semibold text-sky-400 mb-4 flex items-center gap-2">
                 <span>📋</span> Your Next Role Checklist
               </h3>
-              <p className="ccq-checklist-intro">Based on your unmet needs, your next job should have:</p>
-              <ul className="ccq-checklist-items">
+              <p className="text-stone-400 text-sm mb-4">Based on your unmet needs, your next job should have:</p>
+              <ul className="space-y-3">
                 {unmetNeeds.map(need => {
-                  const checklistItem = need.isAccomplish
-                    ? need.accomplishUnmet.checklistItem
-                    : need.isConnect
-                    ? need.connectUnmet.checklistItem
+                  const checklistItem = need.isAccomplish 
+                    ? need.accomplishUnmet.checklistItem 
+                    : need.isConnect 
+                    ? need.connectUnmet.checklistItem 
                     : need.accomplishUnmet.checklistItem;
                   return (
-                    <li key={need.id} className="ccq-checklist-item">
-                      <span className="ccq-checklist-box">☐</span>
-                      <span>{checklistItem}</span>
+                    <li key={need.id} className="flex items-start gap-3 bg-stone-900/30 rounded-lg p-3">
+                      <span className="text-sky-400 mt-0.5">☐</span>
+                      <span className="text-stone-300 text-sm">{checklistItem}</span>
                     </li>
                   );
                 })}
@@ -1048,56 +1101,63 @@ const CareerClarityQuiz = () => {
           )}
 
           {/* EMAIL CAPTURE */}
-          <div className="ccq-email-card">
+          <div className="bg-stone-800/50 rounded-2xl p-6 mb-8 border border-stone-700/50">
             {!emailSubmitted ? (
               <>
-                <h3 className="ccq-email-title">
+                <h3 className="font-semibold text-stone-200 mb-2 flex items-center gap-2">
                   <span>📧</span> Save Your Results
                 </h3>
-                <p className="ccq-email-text">
+                <p className="text-stone-400 text-sm mb-4">
                   Get a copy of your full analysis sent to your inbox — plus actionable next steps.
                 </p>
-                <form onSubmit={handleEmailSubmit} className="ccq-email-form">
+                <form onSubmit={handleEmailSubmit} className="flex gap-3">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your@email.com"
-                    className="ccq-email-input"
+                    className="flex-1 px-4 py-3 bg-stone-900/50 border border-stone-700 rounded-xl text-stone-200 placeholder-stone-600 focus:outline-none focus:border-amber-500/50"
                     required
                   />
                   <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className="ccq-email-submit"
+                    className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-stone-900 font-medium rounded-xl transition-colors"
                   >
-                    {isSubmitting ? '...' : 'Send'}
+                    Send
                   </button>
                 </form>
               </>
             ) : (
-              <div className="ccq-email-success">
-                <span className="ccq-email-success-icon">✉️</span>
-                <p className="ccq-email-success-text">Results sent to {email}</p>
-                <p className="ccq-email-success-note">Check your inbox for your full analysis</p>
+              <div className="text-center py-2">
+                <span className="text-2xl mb-2 block">✉️</span>
+                <p className="text-emerald-400 font-medium">Results sent to {email}</p>
+                <p className="text-stone-500 text-sm mt-1">Check your inbox for your full analysis</p>
               </div>
             )}
           </div>
 
           {/* CTA */}
-          <div className={`ccq-cta-card ${path === 'own-thing' ? 'independence' : 'employment'}`}>
-            <h3 className="ccq-cta-headline">{pathContent.ctaHeadline}</h3>
-            <p className="ccq-cta-body">{pathContent.ctaBody}</p>
+          <div className={`rounded-2xl p-8 text-center border ${
+            path === 'own-thing'
+              ? 'bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20'
+              : 'bg-gradient-to-br from-sky-500/10 to-blue-500/10 border-sky-500/20'
+          }`}>
+            <h3 className="text-2xl font-bold text-stone-100 mb-3">{pathContent.ctaHeadline}</h3>
+            <p className="text-stone-400 mb-6 max-w-md mx-auto">{pathContent.ctaBody}</p>
             <button
               onClick={() => navigate(pathContent.ctaLink)}
-              className="ccq-cta-btn"
+              className={`px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 shadow-lg ${
+                path === 'own-thing'
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400'
+                  : 'bg-gradient-to-r from-sky-500 to-blue-500 hover:from-sky-400 hover:to-blue-400'
+              }`}
             >
-              {pathContent.ctaButton} <span>→</span>
+              {pathContent.ctaButton} →
             </button>
           </div>
 
           {/* RESET */}
-          <div className="ccq-reset">
+          <div className="text-center mt-8 mb-6">
             <button
               onClick={() => {
                 setStage('intro');
@@ -1108,9 +1168,8 @@ const CareerClarityQuiz = () => {
                 setExpandedNeeds({});
                 setEmail('');
                 setEmailSubmitted(false);
-                setQuizResultId(null);
               }}
-              className="ccq-reset-btn"
+              className="text-stone-600 hover:text-stone-400 text-sm transition-colors"
             >
               ← Start Over
             </button>
