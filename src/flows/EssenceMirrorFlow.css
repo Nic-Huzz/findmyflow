@@ -763,6 +763,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.em-avatar-preview-actions .primary-button,
+.em-avatar-preview-actions .secondary-button {
+  width: 100%;
 }
 
 .em-avatar-error {

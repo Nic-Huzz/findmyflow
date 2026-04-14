@@ -591,14 +591,15 @@ export default function EssenceMirrorFlow() {
             })}
           </div>
 
-          <div className="nav-buttons" style={{ flexDirection: 'column', gap: '8px' }}>
+          <div className="nav-buttons" style={{ flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '400px', margin: '24px auto 0' }}>
             <button
               className="primary-button"
               onClick={() => goToStep(STEPS.PIXAR)}
+              style={{ width: '100%' }}
             >
               {visionSelections.length === 0 ? 'None of these' : 'Continue'} →
             </button>
-            <button className="secondary-button" onClick={() => goToStep(STEPS.ROUND_3)}>
+            <button className="secondary-button" onClick={() => goToStep(STEPS.ROUND_3)} style={{ width: '100%' }}>
               ← Back
             </button>
           </div>
@@ -643,15 +644,16 @@ export default function EssenceMirrorFlow() {
             })}
           </div>
 
-          <div className="nav-buttons" style={{ flexDirection: 'column', gap: '8px' }}>
+          <div className="nav-buttons" style={{ flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '400px', margin: '24px auto 0' }}>
             <button
               className="primary-button"
               onClick={runBlend}
               disabled={!pixarPick}
+              style={{ width: '100%' }}
             >
               {!pixarPick ? 'Pick your essence' : 'Reveal my mirror'} →
             </button>
-            <button className="secondary-button" onClick={() => goToStep(STEPS.VISION)}>
+            <button className="secondary-button" onClick={() => goToStep(STEPS.VISION)} style={{ width: '100%' }}>
               ← Back
             </button>
           </div>
@@ -807,7 +809,7 @@ Create a dynamic pose and scene background that embodies this essence. The chara
                 <button
                   className="primary-button"
                   onClick={() => fileInputRef.current?.click()}
-                  style={{ marginTop: '1.5rem' }}
+                  style={{ marginTop: '1.5rem', width: '100%', maxWidth: '400px' }}
                 >
                   Upload photo →
                 </button>
@@ -830,7 +832,7 @@ Create a dynamic pose and scene background that embodies this essence. The chara
               <button
                 className="secondary-button"
                 onClick={() => setAvatarGenerated('skip')}
-                style={{ marginTop: '0.5rem' }}
+                style={{ marginTop: '1rem', width: '100%', maxWidth: '400px' }}
               >
                 Skip for now
               </button>
