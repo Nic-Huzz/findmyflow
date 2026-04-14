@@ -109,6 +109,12 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
         const primary = projectsWithPoints.find(p => p.is_primary)
         setSelectedId(primary?.id || projectsWithPoints[0].id)
       }
+
+      // Auto-confirm if there's exactly one project (skip selector entirely)
+      if (projectsWithPoints.length === 1 && onSelect) {
+        onSelect(projectsWithPoints[0])
+        return
+      }
     } catch (err) {
       console.error('Error loading projects:', err)
     } finally {
