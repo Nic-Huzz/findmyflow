@@ -372,25 +372,12 @@ export default function EssenceMirrorFlow() {
           characters: primary?.characters?.join(', '),
         },
       }
-      // Upsert lead_flow_profiles: find existing row by user_id or email, then update or insert
-      const { data: existing } = await supabase
+      // Save to lead_flow_profiles — always insert a new row.
+      // Read side uses order(created_at desc).limit(1) so latest row wins.
+      const { error: profileErr } = await supabase
         .from('lead_flow_profiles')
-        .select('id')
-        .or(`user_id.eq.${user.id}${user.email ? `,email.ilike.${user.email}` : ''}`)
-        .order('created_at', { ascending: false })
-        .limit(1)
-      if (existing?.length) {
-        const { error: updateErr } = await supabase
-          .from('lead_flow_profiles')
-          .update({ ...essenceData, user_id: user.id })
-          .eq('id', existing[0].id)
-        if (updateErr) console.error('lead_flow_profiles update error:', updateErr)
-      } else {
-        const { error: insertErr } = await supabase
-          .from('lead_flow_profiles')
-          .insert({ ...essenceData, user_id: user.id, email: user.email })
-        if (insertErr) console.error('lead_flow_profiles insert error:', insertErr)
-      }
+        .insert({ ...essenceData, user_id: user.id, email: user.email })
+      if (profileErr) console.error('lead_flow_profiles insert error:', profileErr)
       // Auto-create a Discovery Project so /7-day-challenge doesn't show empty state
       const { data: existingProject } = await supabase
         .from('user_projects')
