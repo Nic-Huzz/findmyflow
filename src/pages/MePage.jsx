@@ -536,7 +536,7 @@ export default function MePage() {
                 <p className="welcome-banner-text">
                   Find out which archetype drives you. It takes 5 minutes and changes how you see yourself.
                 </p>
-                <button className="welcome-banner-cta" onClick={() => { dismissWelcome(); navigate('/essence-mirror?returnTo=/me') }}>
+                <button className="welcome-banner-cta" onClick={() => navigate('/essence-mirror?returnTo=/me')}>
                   Start Essence Mirror <span>→</span>
                 </button>
               </>
