@@ -391,6 +391,27 @@ export default function EssenceMirrorFlow() {
           .insert({ ...essenceData, user_id: user.id, email: user.email })
         if (insertErr) console.error('lead_flow_profiles insert error:', insertErr)
       }
+      // Auto-create a Discovery Project so /7-day-challenge doesn't show empty state
+      const { data: existingProject } = await supabase
+        .from('user_projects')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .limit(1)
+        .maybeSingle()
+      if (!existingProject) {
+        await supabase.from('user_projects').insert({
+          user_id: user.id,
+          name: 'Discovery Project',
+          description: 'Your flow discovery journey.',
+          source_flow: 'essence_mirror',
+          status: 'active',
+          current_stage: 0,
+          total_points: 0,
+          is_primary: true,
+        }).catch(err => console.error('Auto-create project error:', err))
+      }
+
       console.log('Essence Mirror save complete:', { heroName, avatarGenerated: avatarGenerated !== 'skip' ? 'yes' : 'skipped' })
     } catch (err) {
       console.error('Essence Mirror save error:', err)
