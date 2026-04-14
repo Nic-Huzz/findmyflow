@@ -429,13 +429,16 @@ export default function MePage() {
   const questRevealRef = useReveal()
 
   // First-time onboarding gate — redirect to Essence Mirror flow
+  // Skip redirect if playskills data is pending hydration (user just signed up via /get-started)
   useEffect(() => {
     if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed)) {
-      navigate('/essence-mirror?returnTo=/me', { replace: true })
+      if (!hasPendingPlaySkillsData()) {
+        navigate('/essence-mirror?returnTo=/me', { replace: true })
+      }
     }
   }, [stageProgress, navigate])
 
-  if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed)) {
+  if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed) && !hasPendingPlaySkillsData()) {
     return null
   }
 
