@@ -1,0 +1,291 @@
+/**
+ * PeopleMatching.css — /people
+ * People who play like you
+ */
+
+/* === ROOT === */
+.people-matching {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(94, 23, 235, 0.04) 0%,
+    #fafafa 25%,
+    #fafafa 75%,
+    rgba(233, 162, 59, 0.04) 100%
+  );
+  padding: 24px 20px;
+  padding-top: 80px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* === LOADING STATE === */
+.people-matching .pm-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
+
+.people-matching .pm-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e9ecef;
+  border-top-color: var(--brand-purple);
+  border-radius: 50%;
+  animation: pmSpin 0.8s linear infinite;
+}
+
+@keyframes pmSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* === TOOLBAR === */
+.people-matching .pm-toolbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.people-matching .pm-back {
+  background: none;
+  border: none;
+  font-size: 20px;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.people-matching .pm-toolbar-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+/* === HERO === */
+.people-matching .pm-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 100%);
+  border-radius: 20px;
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.people-matching .pm-hero-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  opacity: 0.7;
+}
+
+.people-matching .pm-hero-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 8px 0 6px;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.people-matching .pm-hero-sub {
+  font-size: 13px;
+  opacity: 0.75;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* === MATCH CARD === */
+.people-matching .pm-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+  position: relative;
+}
+
+.people-matching .pm-card:active {
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.12);
+}
+
+.people-matching .pm-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.people-matching .pm-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.people-matching .pm-card-domain {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 2px 0 0;
+}
+
+.people-matching .pm-save-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.4;
+  transition: opacity 0.15s ease;
+}
+
+.people-matching .pm-save-btn.saved {
+  opacity: 1;
+}
+
+.people-matching .pm-card-oneliner {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 12px;
+  font-style: italic;
+}
+
+.people-matching .pm-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.people-matching .pm-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: rgba(94, 23, 235, 0.08);
+  color: var(--brand-purple);
+}
+
+.people-matching .pm-tag.problem {
+  background: rgba(233, 162, 59, 0.1);
+  color: #b87a1e;
+}
+
+.people-matching .pm-card-trajectory {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* === EXPANDED CARD === */
+.people-matching .pm-expanded {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.people-matching .pm-expanded-row {
+  margin-bottom: 12px;
+}
+
+.people-matching .pm-expanded-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin: 0 0 4px;
+}
+
+.people-matching .pm-expanded-text {
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.people-matching .pm-lesson {
+  background: rgba(233, 162, 59, 0.06);
+  border-left: 3px solid var(--brand-gold);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 14px;
+  margin-top: 12px;
+}
+
+.people-matching .pm-lesson-text {
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* === EMPTY STATE === */
+.people-matching .pm-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.people-matching .pm-empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.people-matching .pm-empty-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.people-matching .pm-empty-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+.people-matching .pm-cta {
+  background: var(--brand-gold);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* === SAVED SECTION === */
+.people-matching .pm-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin: 24px 0 12px;
+}

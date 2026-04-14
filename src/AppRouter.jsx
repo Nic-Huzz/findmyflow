@@ -250,6 +250,9 @@ const LeagueAdmin = lazyRetry(() => import('./pages/league/LeagueAdmin'))
 const NewsfeedPage = lazyRetry(() => import('./pages/league/NewsfeedPage'))
 const LeagueGuide = lazyRetry(() => import('./flows/LeagueGuide'))
 
+// Lazy-loaded - People Matching
+const PeopleMatching = lazyRetry(() => import('./pages/PeopleMatching'))
+
 // Lazy-loaded - Public Play-List Feed
 const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
 const PlaylistFeedAdmin = lazyRetry(() => import('./pages/PlaylistFeedAdmin'))
@@ -741,6 +744,11 @@ function AppRouter() {
             <Route path="/play-profile" element={
               <AuthGate>
                 <PlayProfileFlow />
+              </AuthGate>
+            } />
+            <Route path="/people" element={
+              <AuthGate>
+                <PeopleMatching />
               </AuthGate>
             } />
             <Route path="/flow-finder-explainer" element={
