@@ -26,11 +26,11 @@ const REWIRE_QUEST_IDS = [
 
 // Protective voices
 const PROTECTIVE_VOICES = [
-  { id: 'People Pleaser', label: 'People Pleaser', icon: '😊' },
-  { id: 'Performer', label: 'Performer', icon: '🎭' },
-  { id: 'Controller', label: 'Controller', icon: '🎯' },
-  { id: 'Perfectionist', label: 'Perfectionist', icon: '✨' },
-  { id: 'Ghost', label: 'Ghost', icon: '👻' }
+  { id: 'Controller', label: 'Controller', icon: '🎮' },
+  { id: 'Ghost', label: 'Ghost', icon: '👻' },
+  { id: 'Perfectionist', label: 'Perfectionist', icon: '🎭' },
+  { id: 'Auto-Pilot', label: 'Auto-Pilot', icon: '🛋️' },
+  { id: 'People Pleaser', label: 'People Pleaser', icon: '🪞' }
 ]
 
 // Vulnerability layers

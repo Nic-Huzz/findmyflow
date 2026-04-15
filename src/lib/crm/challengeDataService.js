@@ -351,8 +351,8 @@ function calculateRecommendedTone(groanPatterns, nervousSystem) {
     return 'gentle'
   }
 
-  // Performer or controller archetype = more assertive tone
-  if (topArchetype === 'performer' || topArchetype === 'controller') {
+  // Controller archetype = more assertive tone
+  if (topArchetype === 'controller') {
     return 'assertive'
   }
 

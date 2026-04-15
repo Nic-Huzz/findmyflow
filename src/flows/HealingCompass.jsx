@@ -135,11 +135,11 @@ const NEEDS = [
 ]
 
 const PATTERNS = [
-  { key: 'ghost', label: 'The Ghost', emoji: '👻', description: 'You disappear. Pull back. Go quiet. If they can\'t see you, they can\'t hurt you.' },
-  { key: 'performer', label: 'The Performer', emoji: '🎭', description: 'You become what others need. Shapeshifting to earn love and avoid rejection.' },
-  { key: 'controller', label: 'The Controller', emoji: '🎮', description: 'You grip tight. Micromanage. If everything is under control, nothing can go wrong.' },
-  { key: 'perfectionist', label: 'The Perfectionist', emoji: '✨', description: 'Nothing is ever ready. You polish endlessly because imperfect means vulnerable.' },
-  { key: 'people_pleaser', label: 'The People Pleaser', emoji: '🙏', description: 'You say yes to everything. Put everyone first. Your needs always come last.' },
+  { key: 'controller', label: 'The Controller', emoji: '🎮', description: 'You grip tight. Manage everything. Leaving it to chance isn\'t an option.' },
+  { key: 'ghost', label: 'The Ghost', emoji: '👻', description: 'You pull back. Withdraw. You don\'t feel comfortable sharing.' },
+  { key: 'perfectionist', label: 'The Perfectionist', emoji: '🎭', description: 'Nothing is ever ready. Gas and brake at the same time.' },
+  { key: 'auto_pilot', label: 'The Auto-Pilot', emoji: '🛋️', description: 'You go through the motions. Checked out. "I\'m fine, just tired."' },
+  { key: 'people_pleaser', label: 'The People Pleaser', emoji: '🪞', description: 'You say yes to everything. As long as everyone\'s happy, you\'re safe.' },
 ]
 
 const SHAPES = [

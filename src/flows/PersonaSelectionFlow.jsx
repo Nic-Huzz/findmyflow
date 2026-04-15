@@ -38,9 +38,9 @@ const VISIBILITY_LAYERS = [
 const PROTECTIVE_VOICES = [
   { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'My idea isn\'t ready for feedback yet' },
   { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother anyone' },
-  { id: 'controller', icon: '🎛️', label: 'Controller', description: 'I can\'t control what they\'ll say' },
-  { id: 'performer', icon: '🎪', label: 'Performer', description: 'I need to have more figured out first' },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: 'I\'d rather stay quiet than risk rejection' }
+  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
+  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
+  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
 ]
 
 // Contextual essence messages based on voice + layer
@@ -55,9 +55,9 @@ const getEssenceMessage = (voice, layer) => {
     'controller_screen': 'Your Controller can\'t predict the response. But the unknown holds possibility, not just danger.',
     'controller_vulnerable': 'Your Controller wants certainty before sharing. But validation IS how you gain certainty.',
     'controller_live': 'Your Controller fears conversations you can\'t script. But the best insights come from unscripted moments.',
-    'performer_screen': 'Your Performer wants more credentials first. But you already know enough to ask good questions.',
-    'performer_vulnerable': 'Your Performer feels unqualified to ask. But curiosity doesn\'t require a resume.',
-    'performer_live': 'Your Performer wants to prove expertise first. But listening IS the expertise here.',
+    'auto_pilot_screen': 'Your Auto-Pilot says it doesn\'t matter. But your curiosity deserves to be followed.',
+    'auto_pilot_vulnerable': 'Your Auto-Pilot has stopped caring. But that numbness is protection, not truth.',
+    'auto_pilot_live': 'Your Auto-Pilot can\'t find the energy. But one conversation can reignite something.',
     'ghost_screen': 'Your Ghost wants to stay invisible. But your idea deserves to be seen — and so do you.',
     'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
     'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters, even in small conversations.'
