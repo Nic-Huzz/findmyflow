@@ -112,23 +112,65 @@ const ESSENCE_PROFILES: Record<string, any> = {
 // ── Protective Profiles (5) ────────────────────────────────────────────────
 
 const PROTECTIVE_PROFILES: Record<string, any> = {
+  "Controller": {
+    summary: "This archetype developed to protect you from chaos, unpredictability, and being seen as not enough.",
+    coreNarrative: "Leaving it to chance isn't an option.",
+    emotionalWound: { fear: "Chaos, unpredictability, conditional approval, or being seen as not enough.", learned: "If I don't manage everything and control how people see me, I will get hurt." },
+    behavioralStrategy: "Micro-managing, overplanning, overworking, impressing, image-managing, inability to rest.",
+    avoidancePattern: "Avoid letting others lead, avoid trusting, avoid rest, avoid vulnerability without performance.",
+    nervousSystemPattern: "Sympathetic fight — energised but unsafe. Control and performance as safety.",
+    somaticExpression: "Clenched jaw, stiff posture, fast talking, chest forward, rigid shoulders, eye intensity.",
+    rewiringOpportunity: { affirmations: ["I am safe when I loosen my grip.", "My worth exists without performance.", "Life supports me when I soften."] },
+    detailed: {
+      howItShowsUp: "It insists: 'Leaving it to chance isn't an option.' So you manage, you perform, you stay on top of everything. But control and performance become exhaustion in disguise.",
+      breakingFree: "Release the need to control. Trust the process. You are enough even when still."
+    }
+  },
+  "Ghost": {
+    summary: "This archetype developed to protect you from being seen, judged, or overwhelmed.",
+    coreNarrative: "I don't feel comfortable sharing.",
+    emotionalWound: { fear: "Overwhelm, emotional intensity, being seen, unsafe closeness.", learned: "Disappearing keeps me safe." },
+    behavioralStrategy: "Withdraw, avoid visibility, leave before things get intense, stay in the shadows.",
+    avoidancePattern: "Avoid connection, avoid sharing, avoid vulnerability, avoid standing out.",
+    nervousSystemPattern: "Sympathetic flight — energised but directed away. Withdrawal is active.",
+    somaticExpression: "Restless energy, eyes scanning for exits, shallow breath, pulling inward.",
+    rewiringOpportunity: { affirmations: ["Connection feels grounding.", "I can stay and still feel safe."] },
+    detailed: {
+      howItShowsUp: "It whispers: 'I don't feel comfortable sharing.' So you withdraw, you hide, you leave before things get too real. But hiding keeps you from the very connection you crave.",
+      breakingFree: "Showing up is brave. Your presence matters, even when it feels risky."
+    }
+  },
   "Perfectionist": {
     summary: "This archetype developed to protect you from criticism and failure.",
-    coreNarrative: "If I get it perfect, I can avoid shame.",
+    coreNarrative: "I'm not ready yet.",
     emotionalWound: { fear: 'Shame around "not good enough."', learned: "Mistakes = humiliation." },
-    behavioralStrategy: "Overdetail, overcontrol, procrastination (fear of imperfect action).",
+    behavioralStrategy: "Overdetail, overcontrol, procrastination disguised as preparation.",
     avoidancePattern: "Avoid starting, avoid failing, avoid being seen in progress.",
-    nervousSystemPattern: "Freeze + sympathetic blend — high-focus freeze.",
+    nervousSystemPattern: "Dorsal freeze (toward) — gas and brake pressed simultaneously. High-focus freeze.",
     somaticExpression: "Stillness, tension in forehead, precise movements, shallow breath.",
     rewiringOpportunity: { affirmations: ["Progress is safe.", "Being seen imperfectly builds trust."] },
     detailed: {
-      howItShowsUp: "It whispers: 'If I can just get it perfect, then I'll be safe from judgment.' But perfectionism often becomes procrastination in disguise — keeping you stuck in endless prep mode. Exhausting, isn't it?",
-      breakingFree: "Remember: done is better than perfect. Progress over perfection. Your essence is waiting to emerge."
+      howItShowsUp: "It whispers: 'I'm not ready yet.' Gas and brake at the same time. But perfectionism often becomes procrastination in disguise, keeping you stuck in endless prep mode.",
+      breakingFree: "Done is better than perfect. Progress over perfection. Your essence is waiting to emerge."
+    }
+  },
+  "Auto-Pilot": {
+    summary: "This archetype developed to protect you from sustained overwhelm by checking out.",
+    coreNarrative: "I'm fine, just tired.",
+    emotionalWound: { fear: "Sustained overwhelm, emotional exhaustion, meaninglessness.", learned: "If I stop feeling, I stop hurting." },
+    behavioralStrategy: "Numbing, scrolling, going through the motions, routine without presence.",
+    avoidancePattern: "Avoid desire, avoid feeling, avoid the question 'What do I actually want?'",
+    nervousSystemPattern: "Dorsal collapse (away) — 'safe' because checked out. Going through the motions.",
+    somaticExpression: "Low energy, slumped posture, flat voice, glazed eyes, heavy limbs.",
+    rewiringOpportunity: { affirmations: ["I am allowed to want things.", "Feeling is not dangerous."] },
+    detailed: {
+      howItShowsUp: "It says nothing. That's the point. Just: 'I'm fine, just tired.' Going through the motions so you never have to face what you're avoiding.",
+      breakingFree: "Presence is the antidote. Ask yourself: 'What do I actually want right now?' and sit with whatever comes up."
     }
   },
   "People Pleaser": {
     summary: "This archetype developed to protect you from rejection and conflict.",
-    coreNarrative: "If I make others happy, I'll be safe and wanted.",
+    coreNarrative: "As long as everyone's happy, I'm safe.",
     emotionalWound: { fear: 'Fear of rejection, abandonment, or being "too much."', learned: "Love is kept by not being a burden." },
     behavioralStrategy: "Avoid conflict, over-accommodate, always soften edges.",
     avoidancePattern: "Avoid stating needs, avoid boundaries, avoid emotional truth.",
@@ -136,50 +178,23 @@ const PROTECTIVE_PROFILES: Record<string, any> = {
     somaticExpression: "Tight chest, forced smile, soft or high-pitched voice, shallow breath.",
     rewiringOpportunity: { affirmations: ["Connection grows when I show my truth.", "My needs are safe and worthy."] },
     detailed: {
-      howItShowsUp: "It says: 'If I can just make everyone happy, then I'll be safe from abandonment.' But people-pleasing often becomes self-abandonment in disguise.",
+      howItShowsUp: "It says: 'As long as everyone's happy, I'm safe.' But people-pleasing often becomes self-abandonment in disguise.",
       breakingFree: "Your worth isn't determined by others' approval. Set boundaries with love."
     }
   },
-  "Controller": {
-    summary: "This archetype developed to protect you from chaos and unpredictability.",
-    coreNarrative: "Safety comes from controlling outcomes.",
-    emotionalWound: { fear: "Chaos, unpredictability, or emotional volatility.", learned: "If I don't manage everything, I will get hurt." },
-    behavioralStrategy: "Micro-managing, overplanning, dominating decisions.",
-    avoidancePattern: "Avoid letting others lead, avoid trusting, avoid surrender.",
-    nervousSystemPattern: "Sympathetic fight — control as safety.",
-    somaticExpression: "Clenched jaw, stiff posture, narrow eyes, rigid shoulders.",
-    rewiringOpportunity: { affirmations: ["I am safe when I loosen my grip.", "Life supports me when I soften."] },
-    detailed: {
-      howItShowsUp: "It insists: 'If I can just control everything, then I'll be safe from disappointment.' But control often becomes chaos in disguise.",
-      breakingFree: "Release the need to control. Trust the process and your own resilience."
-    }
-  },
+  // Legacy alias — existing links/data may reference "Performer"
   "Performer": {
-    summary: "This archetype developed to protect you from being unliked or rejected.",
-    coreNarrative: "If I do more, I'll be enough.",
-    emotionalWound: { fear: "Wound around worth = achievement.", learned: "I must earn approval to deserve love." },
-    behavioralStrategy: "Overworking, impressing, achieving, striving.",
-    avoidancePattern: "Avoid rest, avoid stillness, avoid vulnerability without performance.",
-    nervousSystemPattern: "Sympathetic flight/fight — hustle, drive, overexertion.",
-    somaticExpression: "Fast talking, chest forward, jaw tension, eye intensity.",
-    rewiringOpportunity: { affirmations: ["My worth exists without performance.", "I am enough even when still."] },
+    summary: "This archetype developed to protect you from chaos, unpredictability, and being seen as not enough.",
+    coreNarrative: "Leaving it to chance isn't an option.",
+    emotionalWound: { fear: "Chaos, unpredictability, conditional approval, or being seen as not enough.", learned: "If I don't manage everything and control how people see me, I will get hurt." },
+    behavioralStrategy: "Micro-managing, overplanning, overworking, impressing, image-managing, inability to rest.",
+    avoidancePattern: "Avoid letting others lead, avoid trusting, avoid rest, avoid vulnerability without performance.",
+    nervousSystemPattern: "Sympathetic fight — energised but unsafe. Control and performance as safety.",
+    somaticExpression: "Clenched jaw, stiff posture, fast talking, chest forward, rigid shoulders, eye intensity.",
+    rewiringOpportunity: { affirmations: ["I am safe when I loosen my grip.", "My worth exists without performance.", "Life supports me when I soften."] },
     detailed: {
-      howItShowsUp: "It performs: 'If I can just be what others want, then I'll be safe from rejection.' But performing often becomes self-abandonment in disguise.",
-      breakingFree: "Your authentic self is enough. You don't need to perform for love."
-    }
-  },
-  "Ghost": {
-    summary: "This archetype developed to protect you from being hurt or disappointed.",
-    coreNarrative: "Being seen is dangerous. Being hidden is safer.",
-    emotionalWound: { fear: "Overwhelm, emotional intensity, unsafe closeness.", learned: "Disappearing keeps me safe." },
-    behavioralStrategy: "Avoid relationships, disappear, numbness, isolation.",
-    avoidancePattern: "Avoid connection, avoid emotion, avoid vulnerability, avoid standing-out.",
-    nervousSystemPattern: "Dorsal vagal freeze — collapse / withdrawal.",
-    somaticExpression: "Low energy, slumped posture, slow speaking or none.",
-    rewiringOpportunity: { affirmations: ["Connection feels grounding.", "I can stay and still feel safe."] },
-    detailed: {
-      howItShowsUp: "It whispers: 'If I can just stay invisible, then I'll be safe from pain.' But hiding often becomes isolation in disguise.",
-      breakingFree: "Showing up is brave. Your presence matters, even when it feels risky."
+      howItShowsUp: "It insists: 'Leaving it to chance isn't an option.' So you manage, you perform, you stay on top of everything. But control and performance become exhaustion in disguise.",
+      breakingFree: "Release the need to control. Trust the process. You are enough even when still."
     }
   }
 }

@@ -51,12 +51,14 @@ const ESSENCE_ARCHETYPES = {
   mystical_dreamer: 'Intuitive visionary that sees possibilities others miss'
 }
 
-const PROTECTIVE_ARCHETYPES = {
-  ghost: 'Tends to disappear, avoid visibility, stay hidden',
+const PROTECTIVE_ARCHETYPES: Record<string, string> = {
+  controller: 'Manages everything, controls outcomes and image, can\'t let go or rest',
+  ghost: 'Withdraws, avoids sharing, leaves before things get intense',
+  perfectionist: 'Delays due to fear of imperfection, gas and brake at the same time',
+  auto_pilot: 'Goes through the motions, checked out, numb to desire',
   people_pleaser: 'Seeks approval, struggles to set boundaries, over-gives',
-  perfectionist: 'Delays due to fear of imperfection, over-prepares',
-  performer: 'Shows a polished mask, fears authentic vulnerability',
-  controller: 'Micromanages, struggles to delegate or trust'
+  // Legacy alias
+  performer: 'Manages everything, controls outcomes and image, can\'t let go or rest',
 }
 
 const CHALLENGE_GENERATION_PROMPT = `
