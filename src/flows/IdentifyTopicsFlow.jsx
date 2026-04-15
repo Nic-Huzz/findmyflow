@@ -86,7 +86,7 @@ function parseExtraction(rawText, userPlayskills) {
 
   for (const block of blocks) {
     const rawCategory = block.match(/CATEGORY\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
-    const rawProblem = block.match(/PROBLEM\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+    const rawProblem = block.match(/(?:PROBLEM|PLACEMAKE)\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
     const rawEvidence = block.match(/EVIDENCE\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
     const rawMatched = block.match(/MATCHED PLAY-SKILLS\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
 
