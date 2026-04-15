@@ -1,10 +1,12 @@
 // Map of protective archetype descriptions
 const protectiveProfiles = {
-  "Perfectionist": `Ah, the Perfectionist. \n\nThis archetype developed to protect you from criticism and failure.\n\nIt whispers: "If I can just get it perfect, then I'll be safe from judgment." \n\nBut perfectionism often becomes procrastination in disguise — keeping you stuck in endless prep mode. \n\nExhausting, isn't it?`,
-  "People Pleaser": `Ah, the People Pleaser. \n\nThis archetype learned that keeping everyone happy meant staying safe from conflict and rejection. \n\nIt says: "If I'm helpful and agreeable, people will like me and I'll be safe." \n\nBut people-pleasing often leads to burnout and losing yourself in others' needs. Sound familiar?`,
-  "Controller": `Ah, the Controller. \n\nThis archetype believes: "If I can manage everything, I can prevent bad outcomes." \n\nBut it's exhausting trying to control every variable, and often it creates the very chaos you're trying to prevent. Does this resonate?`,
-  "Performer": `Ah, the Performer. \n\nThis archetype learned that being admired meant safety from rejection. \n\nIt says: "If I'm impressive enough, people will value me and I'll be safe." \n\nBut performance mode is exhausting — creating a fear of being seen as "not enough" when you're not performing. Ring any bells?`,
-  "Ghost": `Ah, the Ghost. \n\nThis archetype learned that staying invisible meant avoiding pain and rejection. \n\nIt whispers: "If I don't show up fully, I can't be hurt." \n\nBut hiding keeps you from the very connection and opportunities you crave — creating the isolation you're trying to avoid. Does this feel true?`
+  "Controller": `Ah, the Controller. \n\nThis archetype developed to protect you from chaos, unpredictability, and being seen as not enough.\n\nIt insists: "Leaving it to chance isn't an option." So you manage, you perform, you stay on top of everything.\n\nBut control and performance become exhaustion in disguise. Does this resonate?`,
+  "Ghost": `Ah, the Ghost. \n\nThis archetype developed to protect you from being seen, judged, or overwhelmed.\n\nIt whispers: "I don't feel comfortable sharing." So you withdraw, you hide, you leave before things get too real.\n\nBut hiding keeps you from the very connection and opportunities you crave. Sound familiar?`,
+  "Perfectionist": `Ah, the Perfectionist. \n\nThis archetype developed to protect you from criticism and failure.\n\nIt whispers: "I'm not ready yet." Gas and brake pressed at the same time.\n\nBut perfectionism often becomes procrastination in disguise, keeping you stuck in endless prep mode. Exhausting, isn't it?`,
+  "Auto-Pilot": `Ah, the Auto-Pilot. \n\nThis archetype developed to protect you from sustained overwhelm by checking out.\n\nIt says nothing. That's the point. Just: "I'm fine, just tired." Going through the motions so you never have to face what you're avoiding.\n\nBut numbness is not peace. It's protection from feeling anything at all. Does this feel true?`,
+  "People Pleaser": `Ah, the People Pleaser. \n\nThis archetype learned that keeping everyone happy meant staying safe from conflict and rejection.\n\nIt says: "As long as everyone's happy, I'm safe."\n\nBut people-pleasing often leads to burnout and losing yourself in others' needs. Sound familiar?`,
+  // Legacy alias
+  "Performer": `Ah, the Controller. \n\nThis archetype developed to protect you from chaos, unpredictability, and being seen as not enough.\n\nIt insists: "Leaving it to chance isn't an option." So you manage, you perform, you stay on top of everything.\n\nBut control and performance become exhaustion in disguise. Does this resonate?`
 }
 
 /**
@@ -22,4 +24,3 @@ export function renderProtectiveMirror(key) {
   // Return the formatted string for the selected protective archetype
   return d
 }
-
