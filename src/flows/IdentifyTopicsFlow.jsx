@@ -139,6 +139,55 @@ function parseExtraction(rawText, userPlayskills) {
   return results
 }
 
+// ─── Swipe Card Content ─────────────────────────────────────────────────────
+
+function TopicCardContent({ card }) {
+  const [evidenceExpanded, setEvidenceExpanded] = useState(false)
+  const imgSrc = PROBLEM_IMAGES[card.categoryId]
+  const aiExtractions = card.aiExtractions || []
+  const firstEvidence = aiExtractions[0]?.evidence || ''
+  const isLong = firstEvidence.length > 120
+
+  return (
+    <>
+      {imgSrc && (
+        <img
+          className="idt-card-image"
+          src={imgSrc}
+          alt={card.displayName}
+          draggable={false}
+          onError={(e) => { e.target.style.display = 'none' }}
+        />
+      )}
+      <div className="idt-card-name">{card.displayName}</div>
+      <div className="idt-card-tagline">{card.tagline}</div>
+      {aiExtractions.length > 0 && (
+        <div className="idt-card-extractions">
+          <div className="idt-card-ext-label">Analysis found:</div>
+          {aiExtractions.map((ext, i) => (
+            <div key={i} className="idt-card-ext-bullet">
+              {ext.problem}
+            </div>
+          ))}
+        </div>
+      )}
+      {firstEvidence && (
+        <div className={`pso-card-evidence ${!evidenceExpanded && isLong ? 'truncated' : ''}`}>
+          Analysis shows: &ldquo;{firstEvidence}&rdquo;
+        </div>
+      )}
+      {isLong && !evidenceExpanded && (
+        <button
+          className="pso-card-show-more"
+          onClick={(e) => { e.stopPropagation(); setEvidenceExpanded(true) }}
+        >
+          Show more
+        </button>
+      )}
+    </>
+  )
+}
+
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export default function IdentifyTopicsFlow() {
@@ -519,35 +568,9 @@ export default function IdentifyTopicsFlow() {
           headerText="Does this problem pull you in?"
           onComplete={handleSwipeComplete}
           onBackFromFirst={() => setStep('paste')}
-          renderCard={(card) => {
-            const imgSrc = PROBLEM_IMAGES[card.categoryId]
-            const aiExtractions = card.aiExtractions || []
-            return (
-              <>
-                {imgSrc && (
-                  <img
-                    className="idt-card-image"
-                    src={imgSrc}
-                    alt={card.displayName}
-                    draggable={false}
-                    onError={(e) => { e.target.style.display = 'none' }}
-                  />
-                )}
-                <div className="idt-card-name">{card.displayName}</div>
-                <div className="idt-card-tagline">{card.tagline}</div>
-                {aiExtractions.length > 0 && (
-                  <div className="idt-card-extractions">
-                    <div className="idt-card-ext-label">Analysis found:</div>
-                    {aiExtractions.map((ext, i) => (
-                      <div key={i} className="idt-card-ext-bullet">
-                        {ext.problem}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
-            )
-          }}
+          renderCard={(card) => (
+            <TopicCardContent card={card} />
+          )}
         />
       </div>
     )
