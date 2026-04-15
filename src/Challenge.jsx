@@ -2053,6 +2053,9 @@ function Challenge() {
           <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} userId={user?.id} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
             setUnlockedTabs(prev => new Set([...prev, tab]))
             setActiveCategory(tab)
+          }} onGraduate={(newLevel) => {
+            setCurrentJourneyLevel(newLevel)
+            setViewingLevel(newLevel)
           }} />
         )}
 

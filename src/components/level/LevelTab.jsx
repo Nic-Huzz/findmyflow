@@ -21,7 +21,7 @@ import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import './LevelTab.css'
 
-export default function LevelTab({ currentLevel = 1, userId = null, onLevelChange = null, onNavigateTab = null }) {
+export default function LevelTab({ currentLevel = 1, userId = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
   const config = getLevelConfig(currentLevel)
 
   // DB-backed zone state (reads from user_level_progress if available)
@@ -172,6 +172,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
             .eq('user_id', userId)
             .then(() => {
               console.log(`Graduated from Level ${currentLevel} to Level ${currentLevel + 1}`)
+              onGraduate?.(currentLevel + 1)
             })
         }
       })
