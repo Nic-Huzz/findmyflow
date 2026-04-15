@@ -153,6 +153,24 @@ export default function MobilePlaylistPicker({
             </div>
           </div>
 
+          <div className="mpp-subsection-label">Identify your own</div>
+          <div className="mpp-challenge-form">
+            <input
+              type="text"
+              className="mpp-challenge-input"
+              placeholder="Type a topic..."
+              value={customTopic}
+              onChange={e => setCustomTopic(e.target.value)}
+            />
+            <button
+              className="mpp-gold-btn"
+              disabled={!customTopic.trim()}
+              onClick={() => { setSelectedTopic(null); setStep('role') }}
+            >
+              Continue
+            </button>
+          </div>
+
           {matched.length > 0 && (
             <>
               <div className="mpp-subsection-label">Matched</div>
@@ -186,24 +204,6 @@ export default function MobilePlaylistPicker({
               </div>
             </>
           )}
-
-          <div className="mpp-subsection-label">Identify your own</div>
-          <div className="mpp-challenge-form">
-            <input
-              type="text"
-              className="mpp-challenge-input"
-              placeholder="Type a topic..."
-              value={customTopic}
-              onChange={e => setCustomTopic(e.target.value)}
-            />
-            <button
-              className="mpp-gold-btn"
-              disabled={!customTopic.trim()}
-              onClick={() => { setSelectedTopic(null); setStep('role') }}
-            >
-              Continue
-            </button>
-          </div>
 
           {topics.length === 0 && !customTopic && (
             <p className="mpp-empty" style={{ marginTop: '0.5rem' }}>
