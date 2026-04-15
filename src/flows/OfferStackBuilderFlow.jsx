@@ -55,9 +55,9 @@ const VISIBILITY_LAYERS = [
 const PROTECTIVE_VOICES = [
   { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect before I can share it' },
   { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother or burden anyone' },
-  { id: 'controller', icon: '🎛️', label: 'Controller', description: 'I can\'t control how they\'ll respond' },
-  { id: 'performer', icon: '🎪', label: 'Performer', description: 'I need to have more figured out first' },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: 'I\'d rather stay quiet than risk rejection' }
+  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
+  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
+  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
 ]
 
 // Contextual essence messages based on voice + layer
@@ -78,10 +78,10 @@ const getEssenceMessage = (voice, layer) => {
     'controller_vulnerable': 'Your Controller wants certainty first. But action creates the certainty you\'re seeking.',
     'controller_money': 'Your Controller fears rejection. But every "no" brings you closer to the right "yes."',
     'controller_authority': 'Your Controller wants guaranteed results. But real authority is built through taking action.',
-    'performer_screen': 'Your Performer wants a bigger following first. But every audience starts with one person.',
-    'performer_live': 'Your Performer wants to prove expertise first. But doing the work IS how you build expertise.',
-    'performer_vulnerable': 'Your Performer feels unqualified. But action builds the confidence you\'re waiting for.',
-    'performer_money': 'Your Performer wants more success stories first. But you have to start somewhere.',
+    'auto_pilot_screen': 'Your Auto-Pilot says it doesn\'t matter. But your ideas deserve to exist in the world.',
+    'auto_pilot_live': 'Your Auto-Pilot can\'t find the energy. But presence returns with one small action.',
+    'auto_pilot_vulnerable': 'Your Auto-Pilot has stopped caring. But that numbness is protection, not truth.',
+    'auto_pilot_money': 'Your Auto-Pilot says "what\'s the point?" But wanting something is the first step back.',
     'performer_authority': 'Your Performer needs more validation. But the validation comes from taking action.',
     'ghost_screen': 'Your Ghost wants to stay invisible. But your offer deserves to be seen — and so do you.',
     'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters, even in small conversations.',

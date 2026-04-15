@@ -48,9 +48,9 @@ const VISIBILITY_LAYERS = [
 const PROTECTIVE_VOICES = [
   { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect before I can share it' },
   { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother or burden anyone' },
-  { id: 'controller', icon: '🎛️', label: 'Controller', description: 'I can\'t control how they\'ll respond' },
-  { id: 'performer', icon: '🎪', label: 'Performer', description: 'I need to have more figured out first' },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: 'I\'d rather stay quiet than risk rejection' }
+  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
+  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
+  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
 ]
 
 // Contextual essence messages based on voice + layer
@@ -71,10 +71,10 @@ const getEssenceMessage = (voice, layer) => {
     'controller_vulnerable': 'Your Controller wants certainty first. But launching creates the data you need.',
     'controller_money': 'Your Controller fears rejection. But every "no" brings you closer to "yes."',
     'controller_authority': 'Your Controller wants guaranteed results. But authority is built through action.',
-    'performer_screen': 'Your Performer wants a bigger audience first. But every funnel starts somewhere.',
-    'performer_live': 'Your Performer wants to prove expertise first. But running funnels IS building expertise.',
-    'performer_vulnerable': 'Your Performer feels unqualified. But action builds confidence.',
-    'performer_money': 'Your Performer wants more success stories first. But you have to start somewhere.',
+    'auto_pilot_screen': 'Your Auto-Pilot says it doesn\'t matter. But your ideas deserve to exist in the world.',
+    'auto_pilot_live': 'Your Auto-Pilot can\'t find the energy. But presence returns with one small action.',
+    'auto_pilot_vulnerable': 'Your Auto-Pilot has stopped caring. But that numbness is protection, not truth.',
+    'auto_pilot_money': 'Your Auto-Pilot says "what\'s the point?" But wanting something is the first step back.',
     'performer_authority': 'Your Performer needs more validation. But validation comes from launching.',
     'ghost_screen': 'Your Ghost wants to stay invisible. But your funnel deserves to be seen.',
     'ghost_live': 'Your Ghost prefers safety. But your voice matters.',

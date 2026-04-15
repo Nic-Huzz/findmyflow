@@ -215,7 +215,7 @@ Every time you're yourself and still loved, the lie loses power.`,
   },
 
   // ============================================
-  // THE CONTROLLER
+  // THE CONTROLLER (absorbs The Performer)
   // ============================================
   {
     id: 'voice_controller',
@@ -231,191 +231,195 @@ Every time you're yourself and still loved, the lie loses power.`,
     content: {
       origin: {
         title: 'The Origin',
-        body: `Before the Matrix taught you that uncertainty was dangerous, you embraced the unknown.
+        body: `Before the Matrix taught you that uncertainty was dangerous and worth was earned, you embraced the unknown freely.
 
-Maybe it was a childhood where things fell apart without warning. A loss that came from nowhere and shattered your world. A series of disappointments that taught you hope was a setup for pain. Or perhaps it was subtler—an environment of chaos where the only safety was in what you could predict and control.
+Maybe it was a childhood where things fell apart without warning. A home where love seemed proportional to achievement. A culture that celebrated "hustle" and shamed rest. Or perhaps it was subtler—an environment where the only safety was in what you could predict, control, and perform.
 
-The Controller emerged to protect you. If you can see all the variables, nothing surprises you. If you have a backup plan for the backup plan, you're never caught off guard. If you never start what you can't guarantee, you never experience unexpected failure.
+The Controller emerged to protect you. If you can see all the variables, nothing surprises you. If you're always achieving, you're always worthy. If you manage every outcome and control how people see you, you're never caught off guard and never "not enough."
 
-And it worked. You became prepared. Thorough. Someone who "thinks things through."
+And it worked. You became prepared, driven, accomplished. Someone who "thinks things through" and "gets things done."
 
-But protection became prison.`,
+But protection became prison—and exhaustion.`,
       },
 
       lie: {
         title: 'The Lie It Tells',
-        quote: "If you can't control the outcome, don't try. Wait until you have certainty.",
-        body: `The Controller speaks in logical tones:
+        quote: "Leaving it to chance isn't an option.",
+        body: `The Controller speaks in logical and motivational tones:
 
 - *"You need more information before you can decide."*
-- *"What's your exit strategy if this doesn't work?"*
+- *"You're falling behind. Everyone else is doing more."*
 - *"There are too many unknowns. It's not responsible to proceed."*
-- *"Let's just do a bit more research first."*
+- *"Rest is for people who've earned it. You haven't yet."*
+- *"I can't let them see me struggle."*
 
-The cruelest part? It uses your intelligence against you. It knows you're capable of seeing risks, and it weaponizes that capability into paralysis.`,
+The cruelest part? It uses your intelligence and drive against you. It knows you're capable of seeing risks and achieving goals, and it weaponizes both into relentless control and performance.`,
       },
 
       protection: {
         title: 'How It Protected You',
-        body: `The Controller kept you safe by keeping you prepared. In environments where chaos meant pain, over-planning was a shield.
+        body: `The Controller kept you safe by keeping you prepared and productive. In environments where chaos meant pain and worth was conditional, control and achievement were survival.
 
 **It served you when:**
 - Unexpected events led to suffering
-- You experienced loss you couldn't prevent
+- Your value felt tied to what you produced
 - Chaos in your environment felt dangerous
-- Control was the only source of safety
+- Achievement was the only reliable source of approval
+- Rest was criticized or shamed
 
-*Thank the Controller for its service. It gave you stability when stability was survival.*`,
+*Thank the Controller for its service. It gave you stability and worth when both felt fragile.*`,
       },
 
       blocking: {
         title: "Why It's Blocking Your Flow Now",
-        body: `Your unique gift requires surrendering to uncertainty.
+        body: `Your unique gift requires surrendering to uncertainty and knowing you're already enough.
 
-Flow, by definition, can't be controlled. The serendipity that leads to breakthroughs? It lives in the unplanned. The opportunities that transform your path? They require saying yes before you know the full picture.
+Flow, by definition, can't be controlled. The sustainable service you're building? It requires energy you're currently burning on managing every outcome and proving yourself.
 
 **The Controller's cost:**
 - You over-plan and under-act
-- Opportunities pass while you "gather more data"
-- You mistake preparation for progress
-- Life feels like a series of risk assessments
+- Burnout cycles from never stopping
+- Inability to enjoy any win—there's always the next risk to manage
+- Rest feels like laziness, spontaneity feels reckless
+- Life feels like a series of risk assessments and performance reviews
 
-The tragedy: seeking certainty, you get stagnation. The controlled path leads nowhere new. All growth requires steps into the unknown.`,
+The tragedy: seeking certainty and enoughness, you get stagnation and exhaustion. You were already enough before you achieved anything.`,
       },
 
       kryptonite: {
         title: 'The Kryptonite',
-        body: `**Taking action without guaranteed results. Surrendering to flow.**
+        body: `**Letting go. Resting without guilt. Trusting others to handle it.**
 
-Not recklessly—but trustingly. The Controller dissolves when you prove that good things can happen without being engineered.
+Not recklessly—but trustingly. The Controller dissolves when you prove that good things can happen without being engineered, and that you're worthy without performing.
 
 **Playground challenges that weaken The Controller:**
 - Start something without knowing all the steps
-- Say yes to an opportunity before you feel ready
-- Make a decision with incomplete information
+- Take a full day off and tell someone about it
 - Let someone else lead while you follow
+- Celebrate a small win instead of optimizing
 - Do something spontaneous with no backup plan
 
-Every time you surrender control and things work out, the lie weakens.`,
+Every time you surrender control and things work out—every moment you exist without producing and find you're still worthy—the lie weakens.`,
       },
 
       rewiring: {
         title: 'The Rewiring',
-        quote: 'I can handle whatever comes. Uncertainty is where possibility lives.',
-        body: `The wound of chaos becomes the gift of adaptability. You know what it costs to over-control—which makes you passionate about helping others trust the process.
+        quote: 'I can handle whatever comes. My worth is not my work. Uncertainty is where possibility lives.',
+        body: `The wound of chaos and conditional worth becomes the gift of adaptability and presence. You know what it costs to over-control and over-perform—which makes you passionate about helping others trust the process and know they're enough.
 
 **Affirmation:**
-*"Thank you for protecting me from chaos. I can handle uncertainty now. I don't need to see the whole path to take the next step. Flow requires surrender, and surrender is safe."*`,
+*"Thank you for protecting me from chaos and rejection. I can handle uncertainty now. I am enough even when still. Flow requires surrender, and surrender is safe."*`,
       },
 
       heroes: {
         title: 'Heroes Who Faced The Controller',
-        body: `*"I had a 47-page business plan. Every contingency mapped. Three years later, I still hadn't started. The day I launched with a one-page 'let's see what happens' approach, my actual business began. It looked nothing like the plan—and it was better."* — James, The Cosmic Connector
+        body: `*"I had a 47-page business plan. Every contingency mapped. Three years later, I still hadn't started. The day I launched with a one-page 'let's see what happens' approach, my actual business began."* — James, The Cosmic Connector
 
-*"My Controller needed to know the ROI before trying anything. I calculated myself into inaction. The first time I invested in something with no guaranteed return—just because it felt right—everything changed. Flow doesn't have an ROI spreadsheet."* — Nina, The Wild Alchemist`,
+*"I hit every goal I set—and felt nothing. The day I took a week off with no 'productive' purpose was the hardest thing I'd ever done. Halfway through, I realized I'd been running from stillness my whole life."* — Chris, The Rhythm Architect`,
       },
     },
   },
 
   // ============================================
-  // THE PERFORMER
+  // THE AUTO-PILOT
   // ============================================
   {
-    id: 'voice_performer',
+    id: 'voice_auto_pilot',
     category: 'voiceArchives',
-    title: 'The Performer',
-    icon: '🏃',
+    title: 'The Auto-Pilot',
+    icon: '🛋️',
     order: 4,
     unlockTrigger: UNLOCK_TRIGGERS.VOICE_IDENTIFIED,
-    unlockValue: 'performer',
+    unlockValue: 'auto-pilot',
     altUnlockTrigger: UNLOCK_TRIGGERS.VOICE_FACED,
-    altUnlockValue: 'performer',
+    altUnlockValue: 'auto-pilot',
 
     content: {
       origin: {
         title: 'The Origin',
-        body: `Before the Matrix taught you that your worth was earned through output, you existed freely.
+        body: `Before the Matrix wore you down, you wanted things.
 
-Maybe it was a home where love seemed proportional to achievement. A school where your value was your grades. A culture that celebrated "hustle" and shamed rest. Or perhaps it was subtler—an absence of unconditional acceptance that taught you approval must be earned.
+Maybe it was years of sustained stress with no resolution. A career that looked successful but felt hollow. A relationship where you stopped asking for what you needed because it never came. Or perhaps it was subtler—a slow accumulation of small surrenders until "I'm fine" became your autopilot response to everything.
 
-The Performer emerged to protect you. If you're always achieving, you're always worthy. If you're busy enough, you don't have to feel the emptiness. If you never stop producing, no one can call you lazy or worthless.
+The Auto-Pilot emerged to protect you. If you stop feeling, you stop hurting. If you go through the motions, you don't have to face the gap between what you have and what you want. If you check out, the weight of it all becomes bearable.
 
-And it worked. You became accomplished. Driven. Someone who "gets things done."
+And it worked. You survived. You kept going. You held it together.
 
-But protection became exhaustion.`,
+But protection became numbness.`,
       },
 
       lie: {
         title: 'The Lie It Tells',
-        quote: "Do more. Be more. Then—and only then—you'll finally be enough.",
-        body: `The Performer speaks in motivational tones:
+        quote: "I'm fine, just tired.",
+        body: `The Auto-Pilot barely speaks. That's the point:
 
-- *"You're falling behind. Everyone else is doing more."*
-- *"Rest is for people who've earned it. You haven't yet."*
-- *"That win doesn't count. It was too easy. Do something harder."*
-- *"You can celebrate when you've really accomplished something."*
+- *"It's not that bad. Other people have it worse."*
+- *"I don't really want anything. I'm content."*
+- *"I'm just tired. I'll feel different after some rest."*
+- *"There's no point thinking about it. This is just how it is."*
 
-The cruelest part? It moves the goalposts. It knows every achievement eventually feels normal, so it always demands the next one. Enough is always just out of reach.`,
+The cruelest part? It feels like peace. It disguises collapse as contentment, numbness as acceptance, and checking out as "being chill." You don't even know you're in it until someone asks what you actually want and you draw a blank.`,
       },
 
       protection: {
         title: 'How It Protected You',
-        body: `The Performer kept you safe by keeping you productive. In environments where worth was conditional, achievement was the currency of love.
+        body: `The Auto-Pilot kept you safe by keeping you numb. In environments where feeling things fully was too dangerous or exhausting, checking out was survival.
 
 **It served you when:**
-- Your value felt tied to what you produced
-- Rest was criticized or shamed
-- Stillness felt dangerous or empty
-- Achievement was the only reliable source of approval
+- Sustained overwhelm had no resolution
+- Wanting things led to disappointment
+- You were burning out but couldn't stop
+- Feeling the full weight of your situation would have broken you
 
-*Thank the Performer for its service. It helped you survive in systems that measured humans by output.*`,
+*Thank the Auto-Pilot for its service. It kept you going when going was all you could do.*`,
       },
 
       blocking: {
         title: "Why It's Blocking Your Flow Now",
-        body: `Your unique gift requires knowing you're already enough.
+        body: `Your unique gift requires presence. Flow is the opposite of autopilot.
 
-Flow comes from alignment, not effort. The sustainable service you're building? It requires energy you're currently burning on proving yourself. The creative insights that want to emerge? They need spaciousness you're filling with busyness.
+The creative breakthroughs, the genuine connections, the moments of alignment—they all require you to be HERE. Checked in. Feeling things. The service you're meant to provide? It needs the part of you that cares, not the part that's going through the motions.
 
-**The Performer's cost:**
-- Burnout cycles that steal years of your life
-- Inability to enjoy any win—there's always the next one
-- Rest that feels like failure instead of fuel
-- A life of achievement but no fulfillment
+**The Auto-Pilot's cost:**
+- Days blur together with no memorable moments
+- You scroll instead of create, numb instead of feel
+- Opportunities pass unnoticed because you're not really looking
+- Relationships stay surface-level because depth requires presence
+- You say "I'm fine" so often you believe it
 
-The tragedy: seeking enoughness through doing, you never feel it. The destination keeps moving because there is no destination. You were already enough before you achieved anything.`,
+The tragedy: seeking relief from pain, you lose access to joy. You can't selectively numb. When you check out from the hard stuff, you check out from the good stuff too.`,
       },
 
       kryptonite: {
         title: 'The Kryptonite',
-        body: `**Resting without guilt. Being without doing. Accepting you're already enough.**
+        body: `**Asking yourself "What do I actually want?" and sitting with the answer.**
 
-Not laziness—intentional presence. The Performer dissolves when you prove that your worth isn't contingent on your productivity.
+Not doing anything about it yet. Just letting yourself want something. The Auto-Pilot dissolves when you prove that desire doesn't have to lead to disappointment.
 
-**Playground challenges that weaken The Performer:**
-- Take a full day off and tell someone about it
-- Celebrate a small win as if it were big
-- Rest before you've "earned" it
-- Let something be good enough instead of optimizing
-- Sit with stillness for 20 minutes
+**Playground challenges that weaken The Auto-Pilot:**
+- Put your phone down for an hour and notice what you feel
+- Write down three things you want (not need—want)
+- Do something that requires your full attention
+- Tell someone how you actually feel when they ask
+- Try something new that has no practical purpose
 
-Every moment you exist without producing—and find you're still worthy—the lie weakens.`,
+Every moment of genuine presence is evidence that feeling things is safe.`,
       },
 
       rewiring: {
         title: 'The Rewiring',
-        quote: 'I am enough, right now, before I achieve anything else. My worth is not my work.',
-        body: `The wound of conditional worth becomes the gift of unconditional presence. You know what it costs to chase enoughness—which makes you passionate about helping others remember they're already worthy.
+        quote: 'I am allowed to want things. Feeling is not dangerous. Presence is the antidote.',
+        body: `The wound of overwhelm becomes the gift of compassion. You know what it's like to be so exhausted you check out—which makes you passionate about creating environments where people can come back to themselves gently.
 
 **Affirmation:**
-*"Thank you for protecting me from worthlessness. I am enough now. My value isn't determined by my output. Rest is fuel, not failure. I can celebrate this moment instead of always reaching for the next."*`,
+*"Thank you for protecting me from overwhelm. I can feel things now. My desires are valid. I don't have to go through the motions anymore. I choose to be here—present, imperfect, alive."*`,
       },
 
       heroes: {
-        title: 'Heroes Who Faced The Performer',
-        body: `*"I hit every goal I set—and felt nothing. The day I took a week off with no 'productive' purpose was the hardest thing I'd ever done. Halfway through, I realized I'd been running from stillness my whole life. The stillness was where the peace was hiding."* — Chris, The Rhythm Architect
+        title: 'Heroes Who Faced The Auto-Pilot',
+        body: `*"Someone asked me what I wanted for dinner and I couldn't answer. Not because I didn't care—because I'd stopped letting myself want anything. That tiny moment cracked something open. I started with dinner. Then bigger things."* — Kai, The Grounded Guardian
 
-*"My Performer kept me achieving for decades. Then I burned out completely. In the forced rest, I finally understood: I was hustling to avoid feeling unworthy, not to create value. The work I do now comes from abundance, not desperation. It's completely different."* — Maya, The Heart Holder`,
+*"I spent five years 'fine.' Great job, nice apartment, solid routine. One morning I realized I couldn't remember the last time I felt excited about anything. The Auto-Pilot had kept me safe—and completely disconnected from my own life."* — Elena, The Mystic Messenger`,
       },
     },
   },

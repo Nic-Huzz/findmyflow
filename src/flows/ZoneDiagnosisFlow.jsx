@@ -29,13 +29,14 @@ import './ZoneDiagnosisFlow.css'
 // Protective voices per side
 const PROTECTIVE_VOICES = {
   topLeft: [
-    { id: 'performer', name: 'The Performer', description: 'Works harder, louder, faster. Proves worth through output.' },
-    { id: 'controller', name: 'The Controller', description: 'Manages everything. If they can control it, it can\'t hurt them.' },
+    { id: 'controller', name: 'The Controller', description: 'Manages everything. Controls outcomes and image. Leaving it to chance isn\'t an option.' },
+    { id: 'ghost', name: 'The Ghost', description: 'Withdraws. Disappears. Doesn\'t feel comfortable sharing.' },
     { id: 'people_pleaser', name: 'The People Pleaser', description: 'Says yes to everything. Earns love by being useful.' },
   ],
   bottomRight: [
-    { id: 'perfectionist', name: 'The Perfectionist', description: 'Nothing is ever ready. Uses "not good enough" as a reason to never ship.' },
-    { id: 'ghost', name: 'The Ghost', description: 'Disappears. Withdraws. Becomes invisible to stay safe.' },
+    { id: 'perfectionist', name: 'The Perfectionist', description: 'Nothing is ever ready. Gas and brake at the same time.' },
+    { id: 'auto_pilot', name: 'The Auto-Pilot', description: 'Goes through the motions. Checked out. "I\'m fine, just tired."' },
+    { id: 'people_pleaser', name: 'The People Pleaser', description: 'Says yes to everything. Earns love by being useful.' },
   ],
 }
 

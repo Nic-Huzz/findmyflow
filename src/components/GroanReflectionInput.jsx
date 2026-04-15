@@ -15,42 +15,42 @@
 import { useState } from 'react'
 import './GroanReflectionInput.css'
 
-// Protective archetypes with descriptions
+// Protective archetypes with descriptions (4 + People Pleaser)
 const ARCHETYPES = [
+  {
+    id: 'controller',
+    name: 'The Controller',
+    icon: '🎮',
+    description: "Leaving it to chance isn't an option",
+    color: '#3b82f6'
+  },
   {
     id: 'ghost',
     name: 'The Ghost',
     icon: '👻',
-    description: 'Wants to disappear, avoid being seen',
+    description: "I don't feel comfortable sharing",
     color: '#6b7280'
-  },
-  {
-    id: 'people_pleaser',
-    name: 'The People Pleaser',
-    icon: '🎭',
-    description: 'Worried about what others will think',
-    color: '#ec4899'
   },
   {
     id: 'perfectionist',
     name: 'The Perfectionist',
-    icon: '✨',
-    description: "It's not good enough yet",
+    icon: '🎭',
+    description: "I'm not ready yet",
     color: '#8b5cf6'
   },
   {
-    id: 'performer',
-    name: 'The Performer',
-    icon: '🎪',
-    description: 'Only shows the polished version',
+    id: 'auto_pilot',
+    name: 'The Auto-Pilot',
+    icon: '🛋️',
+    description: "I'm fine, just tired",
     color: '#f59e0b'
   },
   {
-    id: 'controller',
-    name: 'The Controller',
-    icon: '🎯',
-    description: "Can't let go, needs certainty",
-    color: '#3b82f6'
+    id: 'people_pleaser',
+    name: 'The People Pleaser',
+    icon: '🪞',
+    description: "As long as everyone's happy, I'm safe",
+    color: '#ec4899'
   }
 ]
 

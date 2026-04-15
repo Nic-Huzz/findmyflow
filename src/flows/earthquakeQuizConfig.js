@@ -27,9 +27,9 @@ export const QUESTIONS = [
     options: [
       { id: 'perfectionist', label: "It's not ready yet. I need to prepare more." },
       { id: 'people_pleaser', label: 'What will people think of me?' },
-      { id: 'controller', label: "What if things go wrong and I fail?" },
-      { id: 'performer', label: "How do I know what to do?" },
-      { id: 'ghost', label: "I'd rather stay invisible and save myself from the judgement." },
+      { id: 'controller', label: "I need to figure out every detail before I start." },
+      { id: 'ghost', label: "I don't feel comfortable putting myself out there." },
+      { id: 'auto_pilot', label: "Honestly, I can't seem to care enough to start." },
     ],
   },
   {
@@ -39,9 +39,9 @@ export const QUESTIONS = [
     options: [
       { id: 'perfectionist', label: 'I endlessly prepare, revise, and polish — but rarely ship' },
       { id: 'people_pleaser', label: 'I say yes to everything and hide what I really think' },
-      { id: 'controller', label: 'I need a plan for the plan before I can start' },
-      { id: 'performer', label: "I'm always busy but never feel like it's enough" },
-      { id: 'ghost', label: 'I have great work that nobody knows about' },
+      { id: 'controller', label: "I need to control every detail and can't stop working" },
+      { id: 'ghost', label: 'I have great work but I pull back from sharing it' },
+      { id: 'auto_pilot', label: "I go through the motions but nothing excites me anymore" },
     ],
   },
 
@@ -64,9 +64,9 @@ export const QUESTIONS = [
     options: [
       { id: 'perfectionist', label: "Just post it. It doesn't have to be perfect." },
       { id: 'people_pleaser', label: 'Tell them what you really think.' },
-      { id: 'controller', label: 'Start before you have a plan.' },
-      { id: 'performer', label: "Take a day off. You've done enough." },
-      { id: 'ghost', label: 'Go live on camera right now.' },
+      { id: 'controller', label: "Let go. Stop managing everything." },
+      { id: 'ghost', label: 'Share something personal right now.' },
+      { id: 'auto_pilot', label: "What do you actually want?" },
     ],
   },
   {
@@ -127,10 +127,10 @@ export const QUESTIONS = [
 /**
  * Compute voice scores from answers.
  * Q2: 3pts, Q3: 2pts, Q4: 1pt (mapped via voice field), Q5: 2pts.
- * Returns { perfectionist, people_pleaser, controller, performer, ghost }
+ * Returns { perfectionist, people_pleaser, controller, ghost, auto_pilot }
  */
 export function computeVoiceScores(answers) {
-  const scores = { perfectionist: 0, people_pleaser: 0, controller: 0, performer: 0, ghost: 0 }
+  const scores = { perfectionist: 0, people_pleaser: 0, controller: 0, ghost: 0, auto_pilot: 0 }
 
   // Q2 — first reaction (3 pts each, multi-select)
   const q2 = answers.q2_first_reaction || []
@@ -221,7 +221,7 @@ export function getPrimaryBlock(answers, primaryVoice) {
       people_pleaser: 'visibility',
       controller: 'money',
       perfectionist: 'action',
-      performer: 'action',
+      auto_pilot: 'action',
     }
     block = voiceBlockMap[primaryVoice] || 'action'
   }
@@ -277,21 +277,21 @@ export const VOICE_CONTENT = {
   },
   controller: {
     name: 'The Controller',
-    icon: '\uD83C\uDFAF',
-    theLie: "If you can't control the outcome, don't try.",
-    howItProtected: 'Prevented chaos and unexpected pain. Gave you the illusion of safety.',
-    howItBlocks: "Analysis paralysis. You need a plan for the plan. You can't start without certainty — which never comes.",
-    kryptonite: 'Taking one action without knowing the outcome.',
+    icon: '\uD83C\uDFAE',
+    theLie: "Leaving it to chance isn't an option.",
+    howItProtected: 'Prevented chaos and rejection. Kept you safe through control and performance.',
+    howItBlocks: "You can't let go, can't rest, can't delegate. You manage every outcome and control how people see you until you burn out.",
+    kryptonite: 'Letting go. Resting without guilt. Trusting others to handle it.',
     stat: 'Controller-dominant users spend 3x longer planning than executing.',
   },
-  performer: {
-    name: 'The Performer',
-    icon: '\uD83C\uDFAD',
-    theLie: "Do more. Be more. Then you'll finally be enough.",
-    howItProtected: "Kept your worth tied to output, so you always had \"proof\" you mattered.",
-    howItBlocks: "Burnout cycles. Can't rest without guilt. You're busy with the wrong things because stopping feels like dying.",
-    kryptonite: "Resting without guilt. Recognizing you're already enough.",
-    stat: 'Performer types report the highest burnout rates but the lowest satisfaction scores.',
+  auto_pilot: {
+    name: 'The Auto-Pilot',
+    icon: '\uD83D\uDECB\uFE0F',
+    theLie: "I'm fine, just tired.",
+    howItProtected: 'Kept you functioning by checking out. When feeling everything was too much, numbness became survival.',
+    howItBlocks: "You go through the motions but nothing excites you. You can't remember the last time you felt genuinely alive. Days blur together.",
+    kryptonite: 'Asking yourself "What do I actually want?" and sitting with the answer.',
+    stat: 'Auto-Pilot types are the hardest to reach because they don\'t know they\'re stuck.',
   },
   people_pleaser: {
     name: 'The People Pleaser',

@@ -42,9 +42,9 @@ const VISIBILITY_LAYERS = [
 const PROTECTIVE_VOICES = [
   { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect before I can share it' },
   { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother or burden anyone' },
-  { id: 'controller', icon: '🎛️', label: 'Controller', description: 'I can\'t control how they\'ll respond' },
-  { id: 'performer', icon: '🎪', label: 'Performer', description: 'I need to have more figured out first' },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: 'I\'d rather stay quiet than risk rejection' }
+  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
+  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
+  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
 ]
 
 // Essence messages based on voice + layer
@@ -65,11 +65,11 @@ const getEssenceMessage = (voice, layer) => {
     'controller_authority': 'Your Controller wants guaranteed results. But authority is built through action.',
     'controller_vulnerable': 'Your Controller wants certainty first. But writing creates clarity.',
     'controller_live': 'Your Controller wants to script every outcome. But real insights come from real responses.',
-    'performer_screen': 'Your Performer wants a bigger audience first. But great copy works at any scale.',
-    'performer_money': 'Your Performer wants more success stories. But you start with one.',
-    'performer_authority': 'Your Performer needs more validation. But validation comes from shipping.',
-    'performer_vulnerable': 'Your Performer feels unqualified. But writing builds confidence.',
-    'performer_live': 'Your Performer wants to prove expertise first. But writing IS proving expertise.',
+    'auto_pilot_screen': 'Your Auto-Pilot says it doesn\'t matter. But your ideas deserve to exist in the world.',
+    'auto_pilot_money': 'Your Auto-Pilot says "what\'s the point?" But wanting something is the first step back.',
+    'auto_pilot_authority': 'Your Auto-Pilot has checked out. But you still have something worth sharing.',
+    'auto_pilot_vulnerable': 'Your Auto-Pilot has stopped caring. But that numbness is protection, not truth.',
+    'auto_pilot_live': 'Your Auto-Pilot can\'t find the energy. But presence returns with one small action.',
     'ghost_screen': 'Your Ghost wants to stay invisible. But your offer deserves to be seen.',
     'ghost_money': 'Your Ghost avoids asking for money. But fair exchange is claiming your worth.',
     'ghost_authority': 'Your Ghost shrinks from claiming expertise. But quiet authority is still authority.',
