@@ -113,6 +113,8 @@ export const PROTECTIVE_VOICES = {
  */
 export const resolveVoiceId = (id) => {
   if (id === 'performer') return 'controller'
+  if (id === 'auto_pilot') return 'auto-pilot'
+  if (id === 'people_pleaser') return 'people-pleaser'
   return id
 }
 
