@@ -12,6 +12,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import confetti from 'canvas-confetti'
 import { getLevelConfig, LEVEL_CONFIG } from './LevelConfig'
 import DeepDiveCard from './DeepDiveCard'
 import BossFightCard from './BossFightCard'
@@ -40,6 +41,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
   const [milestoneCompleted, setMilestoneCompleted] = useState(false)
   const [showCommitModal, setShowCommitModal] = useState(false)
   const [showReflectModal, setShowReflectModal] = useState(false)
+  const [graduatedTo, setGraduatedTo] = useState(null)
 
   useEffect(() => {
     if (!userId) {
@@ -171,8 +173,12 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
             .update({ current_journey_level: currentLevel + 1 })
             .eq('user_id', userId)
             .then(() => {
-              console.log(`Graduated from Level ${currentLevel} to Level ${currentLevel + 1}`)
-              onGraduate?.(currentLevel + 1)
+              const nextLevel = currentLevel + 1
+              console.log(`Graduated from Level ${currentLevel} to Level ${nextLevel}`)
+              setGraduatedTo(nextLevel)
+              confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } })
+              setTimeout(() => confetti({ particleCount: 60, spread: 100, origin: { y: 0.5 } }), 300)
+              onGraduate?.(nextLevel)
             })
         }
       })
@@ -339,6 +345,25 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
         healingDaysRequired={config.healingDaysRequired || 14}
         questsCompleted={questsCompleted}
       />
+
+      {/* Graduation overlay */}
+      {graduatedTo !== null && (
+        <div className="level-graduation-overlay" onClick={() => setGraduatedTo(null)}>
+          <div className="level-graduation-card" onClick={e => e.stopPropagation()}>
+            <div className="level-graduation-emoji">🎓</div>
+            <h2 className="level-graduation-title">Level {graduatedTo} Unlocked!</h2>
+            <p className="level-graduation-subtitle">
+              You completed Level {graduatedTo - 1}. Time for the next chapter.
+            </p>
+            <button className="level-graduation-btn" onClick={() => {
+              setGraduatedTo(null)
+              onLevelChange?.(graduatedTo)
+            }}>
+              Go to Level {graduatedTo}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

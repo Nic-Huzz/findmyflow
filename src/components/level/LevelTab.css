@@ -645,3 +645,70 @@
     height: 16px;
   }
 }
+
+/* ── Graduation Overlay ── */
+.level-graduation-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 24px;
+  animation: gradFadeIn 0.3s ease;
+}
+
+@keyframes gradFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.level-graduation-card {
+  background: white;
+  border-radius: 22px;
+  max-width: 340px;
+  width: 100%;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 12px 48px rgba(94, 23, 235, 0.25);
+  animation: gradSlideUp 0.4s ease;
+}
+
+@keyframes gradSlideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.level-graduation-emoji {
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+
+.level-graduation-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 8px;
+}
+
+.level-graduation-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.level-graduation-btn {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);
+  color: #1a1a2e;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(233, 162, 59, 0.28);
+}
