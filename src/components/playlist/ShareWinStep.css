@@ -173,3 +173,25 @@
 .sws-skip-btn:hover {
   color: #fff;
 }
+
+.sws-done-btn {
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #E9A23B 0%, #f4b942 100%);
+  color: #1a0b2e;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(233,162,59,0.28);
+  transition: transform 0.15s ease;
+}
+
+.sws-done-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.sws-done-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

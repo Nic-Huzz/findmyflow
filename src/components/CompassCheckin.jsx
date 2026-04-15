@@ -13,6 +13,7 @@
 
 import { useState } from 'react'
 import './FlowCompassInput.css'
+import './GroanCompletionModal.css'
 
 export default function CompassCheckin({ onComplete, onSkip, challengeTitle }) {
   const [selectedEnergy, setSelectedEnergy] = useState(null)
@@ -58,92 +59,82 @@ export default function CompassCheckin({ onComplete, onSkip, challengeTitle }) {
   }
 
   return (
-    <div className="flow-compass-input compass-checkin-modal">
-      <div className="groan-modal-header">
-        <span className="groan-modal-layer groan-modal-layer-compass">ENERGY CHECK</span>
-        <h2>How are you feeling after that challenge?</h2>
-      </div>
+    <div className="compass-checkin-modal">
+      <h2 className="gcm-title">Compass Check-in</h2>
+      <p className="gcm-subtitle">How are you feeling after that challenge?</p>
 
-      <div className="checkin-view">
+      <div className="gcm-form">
         {/* Energy Question */}
-        <div className="question-group">
-          <h4 className="question-heading">Are you feeling excited or tired?</h4>
-          <div className="button-row">
+        <div>
+          <label>Are you feeling excited or tired?</label>
+          <div className="gcm-toggle-row" style={{ marginTop: 6 }}>
             <button
-              className={`energy-btn energy-excited ${selectedEnergy === 'excited' ? 'selected' : ''}`}
+              className={`gcm-toggle ${selectedEnergy === 'excited' ? 'active yes' : ''}`}
               onClick={() => setSelectedEnergy('excited')}
             >
-              <span className="option-emoji">🔥</span>
-              <span>Excited</span>
+              🔥 Excited
             </button>
             <button
-              className={`energy-btn energy-tired ${selectedEnergy === 'tired' ? 'selected' : ''}`}
+              className={`gcm-toggle ${selectedEnergy === 'tired' ? 'active no' : ''}`}
               onClick={() => setSelectedEnergy('tired')}
             >
-              <span className="option-emoji">😴</span>
-              <span>Tired</span>
+              😴 Tired
             </button>
           </div>
         </div>
 
         {/* Flow Question */}
-        <div className="question-group">
-          <h4 className="question-heading">How did it flow?</h4>
-          <div className="button-row">
+        <div>
+          <label>How did it flow?</label>
+          <div className="gcm-toggle-row" style={{ marginTop: 6 }}>
             <button
-              className={`flow-btn flow-great ${selectedFlow === 'ease' ? 'selected' : ''}`}
+              className={`gcm-toggle ${selectedFlow === 'ease' ? 'active yes' : ''}`}
               onClick={() => setSelectedFlow('ease')}
             >
-              <span className="option-emoji">✨</span>
-              <span>Great</span>
+              ✨ Great
             </button>
             <button
-              className={`flow-btn flow-resistance ${selectedFlow === 'resistance' ? 'selected' : ''}`}
+              className={`gcm-toggle ${selectedFlow === 'resistance' ? 'active no' : ''}`}
               onClick={() => setSelectedFlow('resistance')}
             >
-              <span className="option-emoji">🧗</span>
-              <span>Resistance</span>
+              🧗 Resistance
             </button>
           </div>
         </div>
 
         {/* Direction Preview */}
         {selectedEnergy && selectedFlow && (
-          <div className={`direction-preview direction-${getDirection()}`}>
-            <span className="direction-emoji">{getDirectionEmoji()}</span>
-            <span className="direction-label">{getDirectionLabel()}</span>
+          <div className="flow-compass-input" style={{ padding: 0, margin: 0 }}>
+            <div className={`direction-preview direction-${getDirection()}`}>
+              <span className="direction-emoji">{getDirectionEmoji()}</span>
+              <span className="direction-label">{getDirectionLabel()}</span>
+            </div>
           </div>
         )}
 
         {/* Optional Comment */}
-        <div className="input-group">
+        <div>
           <label>Reflection (optional)</label>
           <textarea
+            className="gcm-textarea"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="How did the challenge make you feel?"
-            rows="2"
-            className="comment-textarea"
+            rows={2}
           />
         </div>
-
-        {/* Actions */}
-        <div className="compass-checkin-actions">
-          <button
-            className="groan-btn groan-btn-complete"
-            onClick={handleSubmit}
-            disabled={!selectedEnergy || !selectedFlow}
-          >
-            Save Compass Check-in
-          </button>
-          <button
-            className="groan-btn groan-btn-skip"
-            onClick={onSkip}
-          >
-            Skip
-          </button>
-        </div>
       </div>
+
+      <button
+        className="gcm-gold-btn"
+        onClick={handleSubmit}
+        disabled={!selectedEnergy || !selectedFlow}
+      >
+        Save Compass Check-in
+      </button>
+      <button className="gcm-skip-btn" onClick={onSkip}>
+        Skip
+      </button>
     </div>
   )
 }

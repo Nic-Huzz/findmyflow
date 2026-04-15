@@ -150,21 +150,23 @@ export default function ShareWinStep({
       {error && <p className="sws-error">{error}</p>}
 
       <div className="sws-actions">
+        {file && (
+          <button
+            type="button"
+            className="sws-share-btn"
+            onClick={handleShare}
+            disabled={sharing}
+          >
+            {sharing ? 'Sharing...' : 'Share Win'}
+          </button>
+        )}
         <button
           type="button"
-          className="sws-share-btn"
-          onClick={handleShare}
-          disabled={!file || sharing}
-        >
-          {sharing ? 'Sharing...' : 'Share Win'}
-        </button>
-        <button
-          type="button"
-          className="sws-skip-btn"
+          className="sws-done-btn"
           onClick={handleSkip}
           disabled={sharing}
         >
-          Skip
+          {file ? 'Skip sharing' : 'Complete without photo'}
         </button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { completeGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getScoringCategory } from '../lib/scoringCategories'
@@ -12,6 +12,12 @@ const PLAY_LIST_POINTS = 7
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
   const [step, setStep] = useState('reflection') // 'reflection' | 'voices' | 'compass' | 'share'
+
+  // Hide bottom toolbar while modal is open
+  useEffect(() => {
+    document.body.classList.add('modal-active')
+    return () => document.body.classList.remove('modal-active')
+  }, [])
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [showExplainer, setShowExplainer] = useState(false)
