@@ -39,29 +39,29 @@ export const EMOTIONAL_NEEDS = [
 
 export const PROTECTIVE_PATTERNS = [
   {
-    key: 'ghost',
-    name: 'The Ghost',
-    description: "Disappears. Withdraws. Becomes invisible to avoid being hurt."
-  },
-  {
     key: 'controller',
     name: 'The Controller',
-    description: "Takes charge of everything. If I control it, it can't hurt me."
+    description: "Manages everything. Controls outcomes and image. Leaving it to chance isn't an option."
   },
   {
-    key: 'performer',
-    name: 'The Performer',
-    description: "Becomes whoever you need me to be. Earns love through achievement."
+    key: 'ghost',
+    name: 'The Ghost',
+    description: "Withdraws. Disappears. Doesn't feel comfortable sharing."
   },
   {
     key: 'perfectionist',
     name: 'The Perfectionist',
-    description: "If I'm perfect, I can't be criticised. Delays and overthinks."
+    description: "Gas and brake at the same time. Not ready yet. Delays and overthinks."
+  },
+  {
+    key: 'auto-pilot',
+    name: 'The Auto-Pilot',
+    description: "Goes through the motions. Checked out. Fine, just tired."
   },
   {
     key: 'people-pleaser',
     name: 'The People Pleaser',
-    description: "Says yes to everything. Puts everyone else first to stay safe."
+    description: "Says yes to everything. As long as everyone's happy, they're safe."
   },
 ]
 

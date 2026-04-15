@@ -50,7 +50,7 @@ export const BEHAVIOR_MAP = {
   success_status: {
     prompt: 'When chasing success, what behavior feels most familiar?',
     options: [
-      { emoji: '\u{1F3AD}', label: "Picking the path that sounds bold or successful, even if it's not what you truly want.", archetype: 'Performer' },
+      { emoji: '\u{1F3AD}', label: "Picking the path that sounds bold or successful, even if it's not what you truly want.", archetype: 'Controller' },
       { emoji: '\u{1F91D}', label: "Leaning toward options you believe others will support or admire.", archetype: 'People Pleaser' },
       { emoji: '\u{1F6E1}\u{FE0F}', label: "Choosing the thing that feels most predictable or manageable, avoiding uncertainty.", archetype: 'Controller' },
       { emoji: '\u{2728}', label: "Avoiding choosing until you feel 100% clear, prepared, or educated, often delaying for weeks.", archetype: 'Perfectionist' },
@@ -60,7 +60,7 @@ export const BEHAVIOR_MAP = {
   safety_sameness: {
     prompt: 'When it comes to being fully yourself in public, which pattern feels most familiar?',
     options: [
-      { emoji: '\u{1F3AD}', label: "I blend in by following what's respected or approved, even if it's not me.", archetype: 'Performer' },
+      { emoji: '\u{1F3AD}', label: "I blend in by following what's respected or approved, even if it's not me.", archetype: 'Controller' },
       { emoji: '\u{1F91D}', label: "I adjust who I am to match the room. I don't want to make others uncomfortable.", archetype: 'People Pleaser' },
       { emoji: '\u{1F6E1}\u{FE0F}', label: "I filter my truth to stay in control. Unpredictability feels dangerous.", archetype: 'Controller' },
       { emoji: '\u{2728}', label: "I wait until I have the perfect words or full clarity before showing who I am.", archetype: 'Perfectionist' },
@@ -70,7 +70,7 @@ export const BEHAVIOR_MAP = {
   worth_productivity: {
     prompt: 'When it comes to your productivity or feeling valuable, which behavior feels most familiar?',
     options: [
-      { emoji: '\u{1F3AD}', label: "I tie my worth to output. If I'm not producing, I feel like I'm falling behind or not enough.", archetype: 'Performer' },
+      { emoji: '\u{1F3AD}', label: "I tie my worth to output. If I'm not producing, I feel like I'm falling behind or not enough.", archetype: 'Controller' },
       { emoji: '\u{1F91D}', label: "I say yes even when I'm stretched. I give more than asked, and find it hard to stop helping.", archetype: 'People Pleaser' },
       { emoji: '\u{1F6E1}\u{FE0F}', label: "I try to run everything solo. It feels safer if I'm in control of the outcome.", archetype: 'Controller' },
       { emoji: '\u{2728}', label: "I burn out chasing 'perfect.' Even when it's good enough, I find myself continuing to refine.", archetype: 'Perfectionist' },
@@ -80,7 +80,7 @@ export const BEHAVIOR_MAP = {
   emotions_unsafe: {
     prompt: "When you're struggling emotionally, what do you tend to do?",
     options: [
-      { emoji: '\u{1F3AD}', label: "I keep showing up like I'm fine. I'd rather hold the mask than risk the drama of being seen.", archetype: 'Performer' },
+      { emoji: '\u{1F3AD}', label: "I keep showing up like I'm fine. I'd rather hold the mask than risk the drama of being seen.", archetype: 'Controller' },
       { emoji: '\u{1F91D}', label: "I filter how I feel to keep things comfortable. I don't want to be seen as a burden.", archetype: 'People Pleaser' },
       { emoji: '\u{1F6E1}\u{FE0F}', label: "I shift into doing mode. Instead of feeling what's happening, I try to fix it, structure it, or move through it fast.", archetype: 'Controller' },
       { emoji: '\u{2728}', label: "I turn it inward. If I'm struggling, I assume I've failed somehow. I feel like I should have figured this out by now.", archetype: 'Perfectionist' },
@@ -90,7 +90,7 @@ export const BEHAVIOR_MAP = {
   visibility_risk: {
     prompt: "When it's time to show up, to post, speak, or be seen, what feels most familiar?",
     options: [
-      { emoji: '\u{1F3AD}', label: "I only share once things look polished or powerful. People see the win, not the wobble that came before it.", archetype: 'Performer' },
+      { emoji: '\u{1F3AD}', label: "I only share once things look polished or powerful. People see the win, not the wobble that came before it.", archetype: 'Controller' },
       { emoji: '\u{1F91D}', label: "I hold back unless I know it'll be received well. I don't want to lose connection or approval.", archetype: 'People Pleaser' },
       { emoji: '\u{1F6E1}\u{FE0F}', label: "I prefer to share when I've had time to shape the message.", archetype: 'Controller' },
       { emoji: '\u{2728}', label: "I wait until every piece is perfect, the visuals, the words, the vibe, before sharing or showing up.", archetype: 'Perfectionist' },
