@@ -64,11 +64,14 @@ Extract in this EXACT format:
 
 PROBLEMS
 - CATEGORY: [Category name from the 12 above]
-  PROBLEM: [Your own short description of MY specific version of this problem, under 15 words]
-  EVIDENCE: [Specific quote or pattern from our conversations]
+  ITEMS:
+  * PROBLEM: [A specific version of this problem you see in ME, under 15 words]
+    EVIDENCE: [Specific quote or pattern from our conversations]
+  * PROBLEM: [Another specific version you see in me]
+    EVIDENCE: [Different quote or pattern]
   MATCHED PLAY-SKILLS: [List the exact play-skill phrases that fit, separated by semicolons]
 
-(only include categories where you have real evidence, aim for 4-7)
+List 2-4 specific PROBLEM items per category. Each should be a distinct angle on how I personally relate to this problem, backed by different evidence. Only include categories where you have real evidence, aim for 4-7 categories.
 
 ---END EXTRACTION---`
 }
@@ -86,8 +89,6 @@ function parseExtraction(rawText, userPlayskills) {
 
   for (const block of blocks) {
     const rawCategory = block.match(/CATEGORY\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
-    const rawProblem = block.match(/(?:PROBLEM|PLACEMAKE)\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
-    const rawEvidence = block.match(/EVIDENCE\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
     const rawMatched = block.match(/MATCHED PLAY-SKILLS\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
 
     if (!rawCategory) continue
@@ -118,20 +119,45 @@ function parseExtraction(rawText, userPlayskills) {
       })
       .filter(Boolean)
 
-    // Group by category (multiple extractions per category possible)
-    const existing = results.find(r => r.categoryId === seg.id)
-    const extraction = {
-      problem: rawProblem,
-      evidence: rawEvidence,
-      matchedPlayskills: [...new Set(matched)],
+    // Extract multiple PROBLEM/EVIDENCE pairs per category
+    // Split on PROBLEM: or PLACEMAKE: to find each item
+    const itemBlocks = block.split(/(?=[*•-]?\s*(?:PROBLEM|PLACEMAKE)\s*:)/i).filter(b => /(?:PROBLEM|PLACEMAKE)\s*:/i.test(b))
+
+    const extractions = []
+    for (const itemBlock of itemBlocks) {
+      const rawProblem = itemBlock.match(/(?:PROBLEM|PLACEMAKE)\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+      const rawEvidence = itemBlock.match(/EVIDENCE\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+      if (rawProblem) {
+        extractions.push({
+          problem: rawProblem,
+          evidence: rawEvidence,
+          matchedPlayskills: [...new Set(matched)],
+        })
+      }
     }
 
+    // Fallback: if no item blocks found, try single PROBLEM/EVIDENCE at category level
+    if (extractions.length === 0) {
+      const rawProblem = block.match(/(?:PROBLEM|PLACEMAKE)\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+      const rawEvidence = block.match(/EVIDENCE\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+      if (rawProblem) {
+        extractions.push({
+          problem: rawProblem,
+          evidence: rawEvidence,
+          matchedPlayskills: [...new Set(matched)],
+        })
+      }
+    }
+
+    if (extractions.length === 0) continue
+
+    const existing = results.find(r => r.categoryId === seg.id)
     if (existing) {
-      existing.extractions.push(extraction)
+      existing.extractions.push(...extractions)
     } else {
       results.push({
         categoryId: seg.id,
-        extractions: [extraction],
+        extractions,
       })
     }
   }
