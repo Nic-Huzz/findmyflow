@@ -17,9 +17,9 @@ export default function MilestoneCommitModal({ level, milestone, diagonal, userI
         .from('user_level_progress')
         .upsert({
           user_id: userId,
-          level: level,
+          current_level: level,
           milestone_commitment: commitment.trim(),
-        }, { onConflict: 'user_id,level' })
+        }, { onConflict: 'user_id,current_level' })
 
       if (dbError) throw dbError
       onSave?.(commitment.trim())

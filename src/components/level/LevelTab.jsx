@@ -35,6 +35,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
   const [hasPlaylistCompletion, setHasPlaylistCompletion] = useState(false)
   const [healingDaysDone, setHealingDaysDone] = useState(0)
+  const [courageDone, setCourageDone] = useState(0)
 
   // Milestone state
   const [milestoneCommitment, setMilestoneCommitment] = useState(null)
@@ -113,16 +114,19 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       .then(({ data }) => {
         if (data?.length > 0) setHasHealingCompletion(true)
       })
-    // Load healing day dates for current level
+    // Load healing day dates + courage challenge progress for current level
     supabase
       .from('user_level_progress')
-      .select('healing_day_dates')
+      .select('healing_day_dates, courage_challenge_ids')
       .eq('user_id', userId)
       .eq('current_level', currentLevel)
       .maybeSingle()
       .then(({ data }) => {
         if (data?.healing_day_dates?.length) {
           setHealingDaysDone(data.healing_day_dates.length)
+        }
+        if (data?.courage_challenge_ids?.length) {
+          setCourageDone(data.courage_challenge_ids.length)
         }
       })
     // Check if topic identifier has been completed (nikigai_clusters with identify_topics)
@@ -264,7 +268,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
 
         // Play-List Challenge with dot tracking (levels 1+)
         if (quest.id === 'playlist_challenge' && currentLevel > 0 && config.courageCount > 0) {
-          const courageDone = 0 // TODO: wire to real data from user_level_progress
+          // courageDone loaded from user_level_progress.courage_challenge_ids
           const courageTarget = config.courageCount
           return (
             <div key={quest.id} className="level-deep-dive">
@@ -340,7 +344,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       <ProgressBars
         levelQuests={levelQuests}
         courageCount={config.courageCount || 0}
-        courageDone={0}
+        courageDone={courageDone}
         healingDaysDone={healingDaysDone}
         healingDaysRequired={config.healingDaysRequired || 14}
         questsCompleted={questsCompleted}

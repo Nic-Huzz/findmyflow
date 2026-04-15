@@ -143,7 +143,7 @@ export default function MePage() {
       .from('user_level_progress')
       .select('zone_selected, deep_dive_completed, boss_fight_completed, milestone_completed, healing_day_dates, courage_challenge_ids')
       .eq('user_id', user.id)
-      .eq('level', currentJourneyLevel)
+      .eq('current_level', currentJourneyLevel)
       .maybeSingle()
       .then(({ data }) => {
         if (data) setDbLevelProgress(data)

@@ -23,6 +23,7 @@ import MobilePlaylistPicker from './MobilePlaylistPicker'
 export default function PlayListTab({
   userId,
   onQuestComplete,
+  onRefreshPoints,
 }) {
   const navigate = useNavigate()
   const [playskills, setPlayskills] = useState([])
@@ -277,6 +278,7 @@ export default function PlayListTab({
           onComplete={() => {
             setCompletingChallenge(null)
             fetchActiveChallenges()
+            onRefreshPoints?.()
           }}
           onClose={() => setCompletingChallenge(null)}
         />

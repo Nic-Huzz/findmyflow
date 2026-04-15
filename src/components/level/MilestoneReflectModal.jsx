@@ -21,11 +21,11 @@ export default function MilestoneReflectModal({ level, milestone, commitment, us
         .from('user_level_progress')
         .upsert({
           user_id: userId,
-          level: level,
+          current_level: level,
           milestone_completed: true,
           milestone_reflection: reflection.trim(),
           milestone_diagonal_score: diagonalScore,
-        }, { onConflict: 'user_id,level' })
+        }, { onConflict: 'user_id,current_level' })
 
       if (dbError) throw dbError
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })

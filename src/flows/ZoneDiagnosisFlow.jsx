@@ -116,11 +116,11 @@ export default function ZoneDiagnosisFlow() {
         .from('user_level_progress')
         .upsert({
           user_id: user.id,
-          level: level,
+          current_level: level,
           zone_selected: selectedZone,
           boss_name: boss,
           zone_completed_at: new Date().toISOString(),
-        }, { onConflict: 'user_id,level' })
+        }, { onConflict: 'user_id,current_level' })
 
       if (error) {
         console.warn('Failed to save zone diagnosis:', error)

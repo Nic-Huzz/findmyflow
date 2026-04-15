@@ -1942,6 +1942,7 @@ function Challenge() {
           <PlayListTab
             userId={user?.id}
             onQuestComplete={handleQuestComplete}
+            onRefreshPoints={loadStageProgress}
           />
         )}
 

@@ -155,7 +155,7 @@ export default function EssenceMirrorFlow() {
         .from('user_level_progress')
         .select('zone_selected')
         .eq('user_id', user.id)
-        .eq('level', 1)
+        .eq('current_level', 1)
         .maybeSingle(),
     ]).then(([woundRes, zoneRes]) => {
       if (woundRes.data) {
