@@ -571,9 +571,13 @@ export default function IdentifyTopicsFlow() {
   if (step === 'sub_select' && swipeKeptIds.length > 0) {
     const catId = swipeKeptIds[subSelectionIndex]
     const seg = findProblemSegment(catId)
-    const aiItems = (categoryExtractions[catId] || []).map(e => e.problem)
+    const aiExtractions = categoryExtractions[catId] || []
+    const aiItems = aiExtractions.map(e => e.problem)
     const preDefinedItems = seg?.placemakes || []
     const catItems = selectedItems[catId] || []
+
+    // Pre-defined items excluding any that match AI extracted (avoid duplicates)
+    const filteredPreDefined = preDefinedItems.filter(item => !aiItems.includes(item))
 
     // Custom items (not in AI or pre-defined lists)
     const customItems = catItems.filter(item =>
@@ -595,24 +599,31 @@ export default function IdentifyTopicsFlow() {
               Tick the specific problems that light you up.
             </p>
 
-            {aiItems.length > 0 && (
+            {aiExtractions.length > 0 && (
               <>
-                <div className="idt-sub-label">AI Extracted</div>
-                {aiItems.map((item, i) => (
+                <div className="idt-sub-label">From Your Conversations</div>
+                {aiExtractions.map((ext, i) => (
                   <label key={`ai-${i}`} className="idt-checkbox-row">
                     <input
                       type="checkbox"
-                      checked={catItems.includes(item)}
-                      onChange={() => toggleItem(catId, item)}
+                      checked={catItems.includes(ext.problem)}
+                      onChange={() => toggleItem(catId, ext.problem)}
                     />
-                    <span>{item}</span>
+                    <span>
+                      {ext.problem}
+                      {ext.evidence && (
+                        <span style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', marginTop: '0.25rem', fontStyle: 'italic' }}>
+                          {ext.evidence.length > 100 ? ext.evidence.slice(0, 100) + '...' : ext.evidence}
+                        </span>
+                      )}
+                    </span>
                   </label>
                 ))}
               </>
             )}
 
             <div className="idt-sub-label">Pre-Defined</div>
-            {preDefinedItems.map((item, i) => (
+            {filteredPreDefined.map((item, i) => (
               <label key={`pd-${i}`} className="idt-checkbox-row">
                 <input
                   type="checkbox"

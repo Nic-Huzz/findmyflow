@@ -336,7 +336,7 @@ export const PROBLEM_SEGMENTS = [
     placemakes: [
       'Childhood trauma stealing your ability to speak',
       'Doing the work and someone else getting the credit',
-      'Speaking the truth and losing your country for it',
+      'Speaking the truth and losing your community for it',
       'Being forced to hide who you really are just to be accepted',
       'Carrying shame in silence because nobody models speaking about it',
       'Being used as inspiration for a struggle you didn\'t choose',
