@@ -161,16 +161,6 @@ function TopicCardContent({ card }) {
       )}
       <div className="idt-card-name">{card.displayName}</div>
       <div className="idt-card-tagline">{card.tagline}</div>
-      {aiExtractions.length > 0 && (
-        <div className="idt-card-extractions">
-          <div className="idt-card-ext-label">Analysis found:</div>
-          {aiExtractions.map((ext, i) => (
-            <div key={i} className="idt-card-ext-bullet">
-              {ext.problem}
-            </div>
-          ))}
-        </div>
-      )}
       {firstEvidence && (
         <div className={`pso-card-evidence ${!evidenceExpanded && isLong ? 'truncated' : ''}`}>
           Analysis shows: &ldquo;{firstEvidence}&rdquo;
