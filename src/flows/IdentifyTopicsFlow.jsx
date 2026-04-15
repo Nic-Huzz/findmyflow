@@ -77,22 +77,24 @@ PROBLEMS
 
 function parseExtraction(text, userPlayskills) {
   const results = []
-  const catMatches = [...text.matchAll(/CATEGORY:\s*(.+?)(?:\n|$)/gi)]
-  const probMatches = [...text.matchAll(/PROBLEM:\s*(.+?)(?:\n|$)/gi)]
-  const evidenceMatches = [...text.matchAll(/EVIDENCE:\s*(.+?)(?:\n|$)/gi)]
-  const matchedMatches = [...text.matchAll(/MATCHED PLAY-SKILLS:\s*(.+?)(?:\n|$)/gi)]
 
-  for (let i = 0; i < catMatches.length; i++) {
-    const rawCategory = catMatches[i][1].trim()
-    const rawProblem = probMatches[i]?.[1]?.trim() || ''
-    const rawEvidence = evidenceMatches[i]?.[1]?.trim() || ''
-    const rawMatched = matchedMatches[i]?.[1]?.trim() || ''
+  // Split into per-entry blocks by CATEGORY keyword (robust against field reordering)
+  const blocks = text.split(/(?=[-•*]?\s*CATEGORY\s*:)/i).filter(b => /CATEGORY\s*:/i.test(b))
+
+  for (const block of blocks) {
+    const rawCategory = block.match(/CATEGORY\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+    const rawProblem = block.match(/PROBLEM\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+    const rawEvidence = block.match(/EVIDENCE\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+    const rawMatched = block.match(/MATCHED PLAY-SKILLS\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+
+    if (!rawCategory) continue
 
     // Match category name to segment id
-    const seg = PROBLEM_SEGMENTS.find(s =>
-      s.displayName.toLowerCase() === rawCategory.toLowerCase() ||
-      rawCategory.toLowerCase().includes(s.displayName.toLowerCase().slice(0, 20))
-    )
+    const categoryLower = rawCategory.toLowerCase().replace(/[.*"]/g, '')
+    const seg = PROBLEM_SEGMENTS.find(s => {
+      const dn = s.displayName.toLowerCase()
+      return dn === categoryLower || categoryLower.includes(dn.slice(0, 20)) || dn.includes(categoryLower.slice(0, 20))
+    })
     if (!seg) continue
 
     // Parse matched playskills
