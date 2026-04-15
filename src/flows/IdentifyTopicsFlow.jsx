@@ -75,8 +75,11 @@ PROBLEMS
 
 // ─── Parser ─────────────────────────────────────────────────────────────────
 
-function parseExtraction(text, userPlayskills) {
+function parseExtraction(rawText, userPlayskills) {
   const results = []
+
+  // Strip markdown bold/italic markers so **PROBLEM:** becomes PROBLEM:
+  const text = rawText.replace(/\*{1,2}/g, '')
 
   // Split into per-entry blocks by CATEGORY keyword (robust against field reordering)
   const blocks = text.split(/(?=[-•*]?\s*CATEGORY\s*:)/i).filter(b => /CATEGORY\s*:/i.test(b))
