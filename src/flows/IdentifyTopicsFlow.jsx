@@ -366,21 +366,24 @@ export default function IdentifyTopicsFlow() {
         if (insertError) throw insertError
       }
 
-      // Mark playlist_challenge quest as complete
-      const { data: existing } = await supabase.from('quest_completions')
+      // Mark playlist_challenge quest as complete (fire and forget)
+      supabase.from('quest_completions')
         .select('id').eq('user_id', user.id).eq('quest_id', 'playlist_challenge').maybeSingle()
-      if (!existing) {
-        await supabase.from('quest_completions').insert({
-          user_id: user.id,
-          quest_id: 'playlist_challenge',
-          quest_category: 'Groans',
-          quest_type: 'Rewire',
-          points_earned: 10,
-          challenge_day: 0,
+        .then(({ data: existing }) => {
+          if (!existing) {
+            supabase.from('quest_completions').insert({
+              user_id: user.id,
+              quest_id: 'playlist_challenge',
+              quest_category: 'Groans',
+              quest_type: 'Rewire',
+              points_earned: 10,
+              challenge_day: 0,
+            }).catch(() => {})
+          }
         }).catch(() => {})
-      }
 
-      setStep('save_success')
+      // Navigate straight back
+      navigate('/7-day-challenge')
     } catch (err) {
       console.error('Save error:', err)
       setError('Failed to save. Please try again.')
