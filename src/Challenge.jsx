@@ -231,8 +231,8 @@ function Challenge() {
         // Pre-unlock tabs based on DB state for Level 0
         if (level === 0) {
           // Unlock Play-list if topic identifier completed
-          supabase.from('quest_completions')
-            .select('id').eq('user_id', user.id).eq('quest_id', 'playlist_challenge').limit(1)
+          supabase.from('nikigai_clusters')
+            .select('id').eq('user_id', user.id).eq('step_id', 'identify_topics').limit(1)
             .then(({ data: d }) => {
               if (d?.length > 0) setUnlockedTabs(prev => new Set([...prev, 'Play-list']))
             })

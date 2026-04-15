@@ -123,12 +123,12 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           setHealingDaysDone(data.healing_day_dates.length)
         }
       })
-    // Check if playlist_challenge quest has been completed
+    // Check if topic identifier has been completed (nikigai_clusters with identify_topics)
     supabase
-      .from('quest_completions')
+      .from('nikigai_clusters')
       .select('id')
       .eq('user_id', userId)
-      .eq('quest_id', 'playlist_challenge')
+      .eq('step_id', 'identify_topics')
       .limit(1)
       .then(({ data }) => {
         if (data?.length > 0) {
