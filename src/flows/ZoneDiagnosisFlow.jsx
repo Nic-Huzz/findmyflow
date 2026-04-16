@@ -117,9 +117,8 @@ export default function ZoneDiagnosisFlow() {
         .upsert({
           user_id: user.id,
           current_level: level,
-          zone_selected: selectedZone,
-          boss_name: boss,
-          zone_completed_at: new Date().toISOString(),
+          zone_diagnosis_zone: selectedZone,
+          zone_diagnosis_boss: boss,
         }, { onConflict: 'user_id,current_level' })
 
       if (error) {
