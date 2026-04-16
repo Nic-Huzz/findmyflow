@@ -12,6 +12,7 @@ import { getLevel, getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS } fro
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 import JourneyGraphPopup from './JourneyGraphPopup'
+import confetti from 'canvas-confetti'
 
 // Week type display info
 const WEEK_TYPES = {
@@ -47,6 +48,7 @@ function ChallengeHeader({
   const { user } = useAuth()
   const [showGraph, setShowGraph] = useState(false)
   const [lifetimeXP, setLifetimeXP] = useState(totalXP)
+  const [tierUpName, setTierUpName] = useState(null)
 
   // Fetch real lifetime XP from user_lifetime_scores (same source as /me)
   useEffect(() => {
@@ -58,7 +60,18 @@ function ChallengeHeader({
       .is('project_id', null)
       .maybeSingle()
       .then(({ data }) => {
-        if (data?.lifetime_total_score) setLifetimeXP(data.lifetime_total_score)
+        if (data?.lifetime_total_score) {
+          const newXP = data.lifetime_total_score
+          // Detect tier-up
+          if (lifetimeXP > 0 && getLevelNumber(newXP) > getLevelNumber(lifetimeXP)) {
+            const newLevel = getLevel(newXP)
+            setTierUpName(`${newLevel.emoji} ${newLevel.name}`)
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
+            setTimeout(() => confetti({ particleCount: 60, spread: 90, origin: { y: 0.5 } }), 250)
+            setTimeout(() => setTierUpName(null), 4000)
+          }
+          setLifetimeXP(newXP)
+        }
       })
   }, [user?.id, totalXP]) // re-fetch when totalXP changes (quest completed)
 
@@ -161,6 +174,13 @@ function ChallengeHeader({
           </div>
         )
       })()}
+
+      {/* Tier-up toast */}
+      {tierUpName && (
+        <div className="challenge-tierup-toast">
+          Ranked up to {tierUpName}!
+        </div>
+      )}
 
       {/* Bottom row: Streak + actions */}
       <div className="challenge-header-top">

@@ -292,6 +292,29 @@
 }
 
 
+/* ─── Tier-Up Toast ─── */
+.challenge-tierup-toast {
+  text-align: center;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 100%);
+  color: #1a0b2e;
+  font-weight: 800;
+  font-size: 14px;
+  border-radius: 12px;
+  margin: 8px 0 4px;
+  animation: tierUpPop 0.4s ease, tierUpFade 0.5s ease 3.5s forwards;
+}
+
+@keyframes tierUpPop {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes tierUpFade {
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
 /* ─── Journey Button ─── */
 .challenge-journey-btn {
   background: rgba(255, 255, 255, 0.2);
