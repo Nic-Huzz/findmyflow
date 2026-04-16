@@ -5,7 +5,7 @@
  * coloring when in an active matchup, or category colors when solo.
  * Team matchup banner replaces old rank display.
  */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { getLevel, getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS } from '../lib/crm/statsService'
@@ -49,6 +49,7 @@ function ChallengeHeader({
   const [showGraph, setShowGraph] = useState(false)
   const [lifetimeXP, setLifetimeXP] = useState(totalXP)
   const [tierUpName, setTierUpName] = useState(null)
+  const hasLoadedXP = useRef(false)
 
   // Fetch real lifetime XP from user_lifetime_scores (same source as /me)
   useEffect(() => {
@@ -60,16 +61,17 @@ function ChallengeHeader({
       .is('project_id', null)
       .maybeSingle()
       .then(({ data }) => {
-        if (data?.lifetime_total_score) {
+        if (data?.lifetime_total_score != null) {
           const newXP = data.lifetime_total_score
-          // Detect tier-up
-          if (lifetimeXP > 0 && getLevelNumber(newXP) > getLevelNumber(lifetimeXP)) {
+          // Only detect tier-up after initial load (not the first fetch)
+          if (hasLoadedXP.current && getLevelNumber(newXP) > getLevelNumber(lifetimeXP)) {
             const newLevel = getLevel(newXP)
             setTierUpName(`${newLevel.emoji} ${newLevel.name}`)
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
             setTimeout(() => confetti({ particleCount: 60, spread: 90, origin: { y: 0.5 } }), 250)
             setTimeout(() => setTierUpName(null), 4000)
           }
+          hasLoadedXP.current = true
           setLifetimeXP(newXP)
         }
       })

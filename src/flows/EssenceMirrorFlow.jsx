@@ -153,7 +153,7 @@ export default function EssenceMirrorFlow() {
         .eq('user_id', user.id),
       supabase
         .from('user_level_progress')
-        .select('zone_selected')
+        .select('zone_diagnosis_zone')
         .eq('user_id', user.id)
         .eq('current_level', 1)
         .maybeSingle(),
@@ -161,8 +161,8 @@ export default function EssenceMirrorFlow() {
       if (woundRes.data) {
         setWoundStages(woundRes.data.map(w => w.scene_id))
       }
-      if (zoneRes.data?.zone_selected) {
-        setZoneDiagnosis(zoneRes.data.zone_selected)
+      if (zoneRes.data?.zone_diagnosis_zone) {
+        setZoneDiagnosis(zoneRes.data.zone_diagnosis_zone)
       }
     })
   }, [user?.id])

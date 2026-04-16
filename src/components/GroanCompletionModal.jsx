@@ -107,6 +107,36 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('Error removing weekly pick:', e)
       }
 
+      // 5. Append challenge id to user_level_progress.courage_challenge_ids for current level
+      try {
+        const { data: stage } = await supabase
+          .from('user_stage_progress')
+          .select('current_journey_level')
+          .eq('user_id', userId)
+          .maybeSingle()
+        const currentLevel = stage?.current_journey_level ?? 0
+        if (currentLevel > 0) {
+          const { data: progress } = await supabase
+            .from('user_level_progress')
+            .select('courage_challenge_ids')
+            .eq('user_id', userId)
+            .eq('current_level', currentLevel)
+            .maybeSingle()
+          const existing = progress?.courage_challenge_ids || []
+          if (!existing.includes(challenge.id)) {
+            await supabase
+              .from('user_level_progress')
+              .upsert({
+                user_id: userId,
+                current_level: currentLevel,
+                courage_challenge_ids: [...existing, challenge.id],
+              }, { onConflict: 'user_id,current_level' })
+          }
+        }
+      } catch (e) {
+        console.warn('Error updating level courage progress:', e)
+      }
+
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
       setStep('voices')
     } catch (err) {
