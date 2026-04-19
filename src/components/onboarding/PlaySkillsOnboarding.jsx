@@ -29,6 +29,7 @@ import { SKILLS_SEGMENTS, findSkillSegment } from '../../lib/wheelTaxonomy'
 import SwipeCardDeck from '../SwipeCardDeck/SwipeCardDeck'
 import './JourneyOnboarding.css'
 import './PlaySkillsOnboarding.css'
+import '../../flows/IdentifyTopicsFlow.css'
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -489,6 +490,10 @@ export default function PlaySkillsOnboarding() {
 
     // Get unique category IDs from kept cards
     const catIds = [...new Set(newlyKept.map(c => c.categoryId))]
+    if (catIds.length === 0) {
+      transitionTo(BEATS.SATISFACTION)
+      return
+    }
     setSubSelectCatIds(catIds)
     setSubSelectIndex(0)
 
