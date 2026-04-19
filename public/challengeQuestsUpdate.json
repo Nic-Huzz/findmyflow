@@ -723,6 +723,22 @@
       "archived_reason": "Daily flow updates capture the same info - Dec 2024"
     },
     {
+      "id": "life_map",
+      "category": "Business",
+      "type": "Flow Finder",
+      "frequency": "anytime",
+      "name": "Life Map",
+      "description": "Discover your skills, problems, and personas through your life story",
+      "points": 15,
+      "inputType": "flow",
+      "flow_id": "life_map",
+      "flow_route": "/life-map",
+      "stage_required": 0,
+      "counts_toward_graduation": false,
+      "learnMore": "Walk through 5 periods of your life and discover what your story has been telling you all along.",
+      "isPrimary": true
+    },
+    {
       "id": "flow_finder_skills",
       "category": "Business",
       "type": "Flow Finder",

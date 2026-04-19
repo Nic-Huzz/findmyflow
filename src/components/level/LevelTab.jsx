@@ -22,7 +22,9 @@ import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import './LevelTab.css'
 
-export default function LevelTab({ currentLevel = 1, userId = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
+export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
+  // maxUnlockedLevel is the user's actual journey level from DB. currentLevel is which level they're viewing.
+  const unlockedLevel = maxUnlockedLevel ?? currentLevel
   const config = getLevelConfig(currentLevel)
 
   // DB-backed zone state (reads from user_level_progress if available)
@@ -30,6 +32,11 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
   const [boss, setBoss] = useState(null)
   const [zoneLoaded, setZoneLoaded] = useState(false)
   const [hasEssenceAvatar, setHasEssenceAvatar] = useState(false)
+  const [hasLifeMap, setHasLifeMap] = useState(false)
+  const [hasCareerClarity, setHasCareerClarity] = useState(false)
+  const [hasPeopleMatching, setHasPeopleMatching] = useState(false)
+  const [hasHealingCompass, setHasHealingCompass] = useState(false)
+  const [hasFlowDeepDive, setHasFlowDeepDive] = useState({}) // generic tracker for flow-based deep dives
   const [hasWoundMap, setHasWoundMap] = useState(false)
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
@@ -79,6 +86,53 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       .then(({ data }) => {
         if (data?.[0]?.custom_essence_image) {
           setHasEssenceAvatar(true)
+        }
+      })
+    // Check if life map completed
+    supabase
+      .from('flow_sessions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('flow_type', 'life_map')
+      .eq('status', 'completed')
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) setHasLifeMap(true)
+      })
+    // Check if career clarity quiz completed
+    supabase
+      .from('quiz_results')
+      .select('id')
+      .eq('user_id', userId)
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) setHasCareerClarity(true)
+      })
+    // Check if people matching completed (saved favourites in localStorage)
+    try {
+      const savedPeople = localStorage.getItem('findmyflow_saved_people')
+      if (savedPeople && JSON.parse(savedPeople).length > 0) setHasPeopleMatching(true)
+    } catch (e) { /* ignore parse errors */ }
+    // Check if healing compass completed
+    supabase
+      .from('healing_compass_responses')
+      .select('id')
+      .eq('user_id', userId)
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) setHasHealingCompass(true)
+      })
+    // Check flow-based deep dives (matrix_codes, nervous_system, limiting_belief_rewire)
+    supabase
+      .from('quest_completions')
+      .select('quest_id')
+      .eq('user_id', userId)
+      .in('quest_id', ['recognise_shadow_work', 'nervous_system_map', 'limiting_belief_rewire'])
+      .then(({ data }) => {
+        if (data) {
+          const completed = {}
+          data.forEach(d => { completed[d.quest_id] = true })
+          setHasFlowDeepDive(completed)
         }
       })
     // Check if wound map completed (4 stage selections)
@@ -153,6 +207,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
         : q.id === 'curiosity_compass' ? hasCuriosityCompass
         : q.id === 'healing_task' ? hasHealingCompletion
         : q.id === 'playlist_challenge' ? hasPlaylistCompletion
+        : q.id === 'people_matching' ? hasPeopleMatching
         : false,
     })),
     ...(boss ? [{ label: 'Boss Fight', done: false }] : []),
@@ -195,7 +250,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
         {Object.entries(LEVEL_CONFIG).map(([num, lvl]) => {
           const n = parseInt(num)
           const isCurrent = n === currentLevel
-          const isLocked = n > currentLevel
+          const isLocked = n > unlockedLevel
           return (
             <button
               key={n}
@@ -253,7 +308,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
       </div>}
 
       {/* Deep Dive */}
-      <DeepDiveCard deepDive={config.deepDive} isCompleted={config.deepDive?.id === 'hero_avatar' ? hasEssenceAvatar : false} />
+      <DeepDiveCard deepDive={config.deepDive} isCompleted={config.deepDive?.id === 'hero_avatar' ? hasEssenceAvatar : config.deepDive?.id === 'life_map' ? hasLifeMap : config.deepDive?.id === 'career_clarity' ? hasCareerClarity : config.deepDive?.id === 'healing_compass' ? hasHealingCompass : config.deepDive?.id === 'matrix_codes' ? !!hasFlowDeepDive['recognise_shadow_work'] : config.deepDive?.id === 'nervous_system' ? !!hasFlowDeepDive['nervous_system_map'] : config.deepDive?.id === 'limiting_belief_rewire' ? !!hasFlowDeepDive['limiting_belief_rewire'] : false} />
 
       {/* Extra Quests (Level-specific) */}
       {config.extraQuests?.map(quest => {
@@ -263,6 +318,7 @@ export default function LevelTab({ currentLevel = 1, userId = null, onLevelChang
           : quest.id === 'curiosity_compass' ? hasCuriosityCompass
           : quest.id === 'healing_task' ? hasHealingCompletion
           : quest.id === 'playlist_challenge' ? hasPlaylistCompletion
+          : quest.id === 'people_matching' ? hasPeopleMatching
           : false
         const isLocked = quest.lockedUntil === 'curiosity_compass' && !hasCuriosityCompass
 

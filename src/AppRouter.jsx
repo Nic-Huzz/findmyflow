@@ -154,6 +154,7 @@ const HealingCompass = lazyRetry(() => import('./flows/HealingCompass'))
 const ZoneDiagnosisFlow = lazyRetry(() => import('./flows/ZoneDiagnosisFlow'))
 const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
 const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
+const LifeMapFlow = lazyRetry(() => import('./flows/LifeMapFlow'))
 const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const WoundMapFlow = lazyRetry(() => import('./flows/WoundMapFlow'))
 const CuriosityCompassFlow = lazyRetry(() => import('./flows/CuriosityCompassFlow'))
@@ -389,6 +390,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/protective-identify' ||
                         location.pathname === '/matrix-code-deep-dive' ||
                         location.pathname === '/shadow-work' ||
+                        location.pathname === '/life-map' ||
                         location.pathname === '/essence-mirror' ||
                         location.pathname === '/wound-map' ||
                         location.pathname === '/curiosity-compass' ||
@@ -568,6 +570,7 @@ function AppRouter() {
             <Route path="/try/flow-audit" element={<PublicOfferAuditFlow />} />
             <Route path="/try/earthquake" element={<EarthquakeQuiz />} />
             <Route path="/try/play-profile" element={<TryPlayProfile />} />
+            <Route path="/try/career-clarity" element={<CareerClarityQuiz />} />
 
             {/* Fantasy League Landing Page - Public */}
             <Route path="/fantasy" element={<FantasyLeagueLanding />} />
@@ -622,11 +625,12 @@ function AppRouter() {
                 <LimitingBeliefRewire />
               </AuthGate>
             } />
-            <Route path="/shadow-work" element={
+            <Route path="/life-map" element={
               <AuthGate>
-                <ShadowWorkFlow />
+                <LifeMapFlow />
               </AuthGate>
             } />
+            <Route path="/shadow-work" element={<Navigate to="/life-map" replace />} />
             <Route path="/essence-mirror" element={
               <AuthGate>
                 <EssenceMirrorFlow />
@@ -687,21 +691,9 @@ function AppRouter() {
                 <Feedback />
               </AuthGate>
             } />
-            <Route path="/nikigai/skills" element={
-              <AuthGate>
-                <FlowFinderSkills />
-              </AuthGate>
-            } />
-            <Route path="/nikigai/problems" element={
-              <AuthGate>
-                <FlowFinderProblems />
-              </AuthGate>
-            } />
-            <Route path="/nikigai/persona" element={
-              <AuthGate>
-                <FlowFinderPersona />
-              </AuthGate>
-            } />
+            <Route path="/nikigai/skills" element={<Navigate to="/life-map" replace />} />
+            <Route path="/nikigai/problems" element={<Navigate to="/life-map" replace />} />
+            <Route path="/nikigai/persona" element={<Navigate to="/life-map" replace />} />
             <Route path="/nikigai/integration" element={
               <AuthGate>
                 <FlowFinderIntegration />

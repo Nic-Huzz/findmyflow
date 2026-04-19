@@ -23,14 +23,21 @@ All three routes lead to the same place — the wound. The tool meets them where
 
 ## The Archetypes
 
-Four primary archetypes map directly to Polyvagal nervous system states. People Pleaser is a relational mask, not a primary state (see Theoretical Foundations).
+Four primary archetypes map to a 2x2 matrix of nervous system activation (Sympathetic vs Dorsal) and behavioural direction (Toward vs Away). People Pleaser is a relational mask, not a primary state (see Theoretical Foundations).
+
+| | Sympathetic (energised) | Dorsal (shutdown) |
+|---|---|---|
+| **Toward** | 🧱 **Controller** (fight) | 🎯 **Perfectionist** (freeze) |
+| **Away** | 👻 **Ghost** (flight) | 🤖 **Auto-Pilot** (collapse) |
+
++ 🤝 **People Pleaser** (fawn) — mask layered on any of the four.
 
 | Archetype | Polyvagal State | Core Pattern |
 |-----------|----------------|-------------|
-| 🎭 **Performer** | Sympathetic (Fight) | Overwork, overachieve, worth = output |
-| 🧱 **Controller** | Sympathetic (Fight) | Micro-manage, tighten up, stopping feels like losing grip |
-| 🎯 **Perfectionist** | Dorsal Vagal (Freeze) | Self-critical, paralysed, never ready |
-| 👻 **Ghost** | Dorsal Vagal (Collapse) | Withdraw, numb, vanish, avoids the arena entirely |
+| 🧱 **Controller** | Sympathetic (Fight) | Overwork, overachieve, micro-manage, tighten up. Worth = output. Performing is controlling what people think of you. Stopping feels like losing grip. |
+| 👻 **Ghost** | Sympathetic (Flight) | Withdraw, avoid, disappear with energy. Leaves rooms, quits jobs, exits before being seen. Active withdrawal, not numbness. |
+| 🎯 **Perfectionist** | Freeze (Sympathetic + Dorsal blend) | Self-critical, paralysed, never ready. Wants to engage but can't move. Gas and brake both pressed. |
+| 🤖 **Auto-Pilot** | Dorsal Vagal (Collapse) | Going through the motions. Functional but disconnected. Looks fine from outside, nobody home. "I'm fine, just tired." |
 | 🤝 **People Pleaser** | Fawn (mask) | Over-accommodate, dissolves to stay close — layered on top of any primary state |
 
 **Key principle:** Each archetype has a *home domain* where it was originally formed — then bleeds into others as the nervous system generalises the threat. The archetype starts local. Then colonises.
@@ -98,9 +105,9 @@ The sequence ordered by the repair and build journey: Crack → Grief → Identi
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Misguided Zone** *(top left)* | High action, low self-knowledge. Busy but unfulfilled. Building the wrong life faster. | Performer, Controller |
+| **Misguided Zone** *(top left)* | High action, low self-knowledge. Busy but unfulfilled. Building the wrong life faster. | Controller, Ghost |
 | **Self-Actualisation** *(diagonal)* | Action proportional to self-knowledge. Moving in alignment. | — |
-| **Paralysis Zone** *(bottom right)* | High self-knowledge, low action. Head full of dreams, body won't move. | Ghost, Perfectionist |
+| **Paralysis Zone** *(bottom right)* | High self-knowledge, low action. Head full of dreams, body won't move. | Perfectionist, Auto-Pilot |
 
 **People Pleaser note:** Takes action in service of others' self-knowledge, not their own. High on Y axis but the X axis isn't theirs. Knows everyone else deeply but remains a mystery to themselves.
 
@@ -149,9 +156,9 @@ The sequence ordered by the repair and build journey: Crack → Grief → Identi
 
 | Zone | Name | Description | Primary Archetypes |
 |------|------|-------------|-------------------|
-| **Top left** | **The Self-Punisher** | Full acknowledgement, zero self-compassion. Can see the misalignment clearly — and uses it to attack themselves. "I wasted my life. I'm an idiot. How did I not see this?" The pain becomes a weapon turned inward. Sympathetic activation — fight directed at the self. | Performer, Controller |
+| **Top left** | **The Self-Punisher** | Full acknowledgement, zero self-compassion. Can see the misalignment clearly — and uses it to attack themselves. "I wasted my life. I'm an idiot. How did I not see this?" The pain becomes a weapon turned inward. Sympathetic activation — fight directed at the self. | Controller, Ghost |
 | **Diagonal** | **Grieving with Grace** | Acknowledgement and self-compassion move together. Can see what was lost AND hold themselves with kindness through seeing it. The crossing that makes Identity work possible. | — |
-| **Bottom right** | **The Denier** | Support and resources present but acknowledgement avoided. "It's not that bad. Everyone does this. I just need to try harder." The constructed self reasserts. Reversion dressed as resilience. | Ghost, Perfectionist |
+| **Bottom right** | **The Denier** | Support and resources present but acknowledgement avoided. "It's not that bad. Everyone does this. I just need to try harder." The constructed self reasserts. Reversion dressed as resilience. | Perfectionist, Auto-Pilot |
 
 **Why Grief comes before Identity:** You cannot do Identity work — "who am I really?" — if you haven't yet fully acknowledged that the identity you've been living was misaligned. Identity work requires seeing the gap. But seeing the gap requires sitting with what the gap cost you. Without this stage, Identity work stays conceptual — "I know intellectually that I've been performing" rather than "I can feel what it cost me to perform for 20 years." The grief has to move first. Then the new identity has a real foundation to build from.
 
@@ -164,7 +171,7 @@ The sequence ordered by the repair and build journey: Crack → Grief → Identi
 **Y axis — Acknowledgement**
 | Pattern | Description | Zone |
 |---------|-------------|------|
-| Weaponized acknowledgement | Sees the truth clearly but turns it into self-attack. The acknowledgement itself becomes a Performer move — "I'll beat myself up harder than anyone else can." | Self-Punisher |
+| Weaponized acknowledgement | Sees the truth clearly but turns it into self-attack. The acknowledgement itself becomes a Controller move — "I'll beat myself up harder than anyone else can." | Self-Punisher |
 | Minimization | Knows something is off but dilutes it. "It wasn't that bad." Keeps the pain at intellectual distance rather than felt reality. | Denier |
 
 **X axis — Self-Compassion**
@@ -207,9 +214,9 @@ NO → Still in Grief Sweet Spot work.
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Chameleon Zone** *(top left)* | Fully belonging but self-erased. Accepted — but not as yourself. High connection, zero authenticity. Performing the version of self that maintains belonging. Sympathetic activation directed at self-editing to stay accepted. | Performer, Controller |
+| **Chameleon Zone** *(top left)* | Fully belonging but self-erased. Accepted — but not as yourself. High connection, zero authenticity. Performing the version of self that maintains belonging. Sympathetic activation directed at self-editing to stay accepted. | Controller, Ghost |
 | **Identity Sweet Spot** *(diagonal)* | Authentic expression and belonging move together. Accepted as yourself. | — |
-| **Outcast Zone** *(bottom right)* | Fully authentic but excluded. True self expressed, belonging lost. Authentic but isolated — withdrew from the social game rather than edit themselves. | Ghost, Perfectionist |
+| **Outcast Zone** *(bottom right)* | Fully authentic but excluded. True self expressed, belonging lost. Authentic but isolated — withdrew from the social game rather than edit themselves. | Perfectionist, Auto-Pilot |
 
 **Why Identity comes first after the crack:** The crack ruptures the constructed identity. The first question is existential — "who am I if not this?" Without a thread of authentic self visible, Vulnerability has no self to be honest about, and Enough has no foundation — permission to do what, exactly?
 
@@ -226,7 +233,7 @@ NO → Still in Grief Sweet Spot work.
 **X axis — Authenticity**
 | Pattern | Description | Zone |
 |---------|-------------|------|
-| Performance | Expressing a curated version of self rather than the real one. Authentic enough to feel honest, edited enough to stay safe. The constructed self wearing an authenticity costume. | Chameleon Zone |
+| Controlled expression | Expressing a curated version of self rather than the real one. Authentic enough to feel honest, edited enough to stay safe. The constructed self wearing an authenticity costume. | Chameleon Zone |
 | Exile | Full authentic expression available but no context that receives it. The self is known but not witnessed. Authentic in isolation. | Outcast Zone |
 
 **Cultural wound:** The Harmony-At-All-Costs family + School — both install the belief that authenticity and belonging are mutually exclusive. You can be yourself or you can be loved. Not both.
@@ -239,7 +246,7 @@ NO → Still in Grief Sweet Spot work.
 
 The essence archetype IS the authentic self at 0,0 — who the user was before any wounds were installed. Each of the 12 essence archetypes has an `inner_child_desire` (what they wanted before wounds) and an `essence_wound` (what pain made them suppress it). This is already built into the data model.
 
-**The protective archetype shifts per stage** (it's a response to each wound — Performer at Stage 2, Perfectionist at Stage 3, etc.). **The essence is the constant underneath all of them.** It's the thread that was there before any wound was installed.
+**The protective archetype shifts per stage** (it's a response to each wound — Controller at Stage 2, Perfectionist at Stage 3, etc.). **The essence is the constant underneath all of them.** It's the thread that was there before any wound was installed.
 
 **The journey design:**
 
@@ -278,13 +285,12 @@ The existing `EssenceVsProtectiveTracker` already tracks the essence vs protecti
 
 | Zone | Archetype | Reasoning |
 |------|-----------|-----------|
-| **Burden Zone** *(top left — sharer)* | Performer | Vulnerability as performance tool — relatability strategy, not genuine connection |
+| **Burden Zone** *(top left — sharer)* | Controller | Vulnerability as performance tool — relatability strategy, not genuine connection |
 | **Burden Zone** *(top left — receiver)* | People Pleaser mask | Can't say no to others' oversharing. Over-absorbs. Attracts oversharing because they never signal a boundary |
 | **Vulnerability Sweet Spot** *(diagonal)* | — | What you share matches how ready the relationship is |
-| **Shallow Zone** *(bottom right)* | Ghost, Perfectionist | Ghost disappears when it gets real. Perfectionist only shares what passes the inner critic |
-| **Anywhere** | Controller | Mirrors environment — sharing is social calibration not genuine readiness. Not binary. |
+| **Shallow Zone** *(bottom right)* | Ghost, Perfectionist, Auto-Pilot | Ghost disappears when it gets real. Perfectionist only shares what passes the inner critic. Auto-Pilot is present but checked out, nothing lands. |
 
-**Note on Wounded Healer pattern:** Sharing past vulnerability as a shield against present vulnerability. Sub-pattern of Performer.
+**Note on Wounded Healer pattern:** Sharing past vulnerability as a shield against present vulnerability. Sub-pattern of Controller.
 
 #### Axis Protective Patterns
 
@@ -312,9 +318,9 @@ The existing `EssenceVsProtectiveTracker` already tracks the essence vs protecti
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **The Navel-Gazer** *(top left)* | High essence expression, low service orientation. Mobilized energy all directed at self-expression. Done all the healing work, knows their archetype, journals beautifully, posts about their growth — but it's all self-focused. Spiritual narcissism. The healing journey performed for an audience of one. Sympathetic fight energy aimed at self-display rather than outward connection. | Performer, Controller |
+| **The Navel-Gazer** *(top left)* | High essence expression, low service orientation. Mobilized energy all directed at self-expression. Done all the healing work, knows their archetype, journals beautifully, posts about their growth — but it's all self-focused. Spiritual narcissism. The healing journey performed for an audience of one. Sympathetic fight energy aimed at self-display rather than outward connection. | Controller, Ghost |
 | **Nikigai** *(diagonal)* | Essence AND service move together. Your authentic gifts directed at real people with real problems. Work and life blur because the work IS the essence in action. The Nikigai intersection — skills × problems × personas from the authentic self. Phase 3. | — |
-| **The Martyr** *(bottom right)* | High service, low essence. Helping everyone from the constructed self. The Ghost who serves from the shadows — helps in the background where they don't have to be seen as themselves. Service is SAFE because it doesn't require the exposure of expressing essence. They're not just ghosting the world — they're ghosting their own essence, hiding behind the service. The Perfectionist who serves in the approved, sanitized way — quality is high but nothing real of them is in it. Dorsal collapse into helping as avoidance. | Ghost, Perfectionist |
+| **The Martyr** *(bottom right)* | High service, low essence. Helping everyone from the constructed self. The Auto-Pilot who serves from the motions — helps in the background where they don't have to be present as themselves. Service is SAFE because it doesn't require the exposure of expressing essence. They're not just checked out from the world — they're checked out from their own essence, hiding behind the service. The Perfectionist who serves in the approved, sanitized way — quality is high but nothing real of them is in it. Dorsal collapse into helping as avoidance. | Perfectionist, Auto-Pilot |
 
 **People Pleaser note:** Layers onto the Martyr zone — fawn response serving to maintain connection, not from essence. Over-accommodates in service to avoid the vulnerability of being seen as themselves.
 
@@ -332,13 +338,13 @@ The existing `EssenceVsProtectiveTracker` already tracks the essence vs protecti
 | Pattern | Description | Zone |
 |---------|-------------|------|
 | Essence as performance | Performing authenticity as a brand. "Look at my healing journey." Expression as content rather than service. | Navel-Gazer |
-| Essence suppression in service | Helps in the approved way. Nothing messy, nothing real, nothing that could be rejected. Service sanitized of the self. Ghosting their own essence behind the work. | Martyr |
+| Essence suppression in service | Helps in the approved way. Nothing messy, nothing real, nothing that could be rejected. Service sanitized of the self. Checked out from their own essence behind the work. | Martyr |
 
 **X axis — Service of Others**
 | Pattern | Description | Zone |
 |---------|-------------|------|
 | Service avoidance | "I need to work on myself more before I can help anyone." Perpetual self-development as avoidance of outward engagement. | Navel-Gazer |
-| Service as hiding | Volunteering, supporting, helping — all from behind the scenes. Service becomes the socially acceptable way to stay invisible. The Ghost who serves precisely because service doesn't require being seen. | Martyr |
+| Service as hiding | Volunteering, supporting, helping — all from behind the scenes. Service becomes the socially acceptable way to stay invisible. The Auto-Pilot who serves precisely because service doesn't require being present. | Martyr |
 
 **Cultural wounds:**
 - Navel-Gazer → Achievement Factory repackaged as healing. The person who was taught "optimize yourself" now optimizes their spiritual journey. Self-expression without service is the same Outside In pattern wearing Inside Out clothes.
@@ -374,9 +380,9 @@ NO → Still in Direction Sweet Spot work.
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Perfectionist Zone** *(top left)* | High effort, quality bar keeps rising. Never finish. | Perfectionist, Controller |
+| **Perfectionist Zone** *(top left)* | High effort, quality bar keeps rising. Never finish. | Controller, Perfectionist |
 | **Good Enough Sweet Spot** *(diagonal)* | Effort matches quality standard. Ship, learn, iterate. | — |
-| **Procrastinator Zone** *(bottom right)* | Quality bar feels impossibly high so effort never starts. Never begin. | Ghost, Perfectionist |
+| **Procrastinator Zone** *(bottom right)* | Quality bar feels impossibly high so effort never starts. Never begin. | Perfectionist, Auto-Pilot |
 
 **Key insight:** Perfectionist appears in both failure zones — unique to this graph. Same archetype, two different nervous system responses to the same threat.
 - Perfectionist in top left → starts but can't stop. Endlessly refining.
@@ -422,9 +428,9 @@ NO → Still in Direction Sweet Spot work.
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Failure Zone** *(top left)* | Challenge exceeds ability. Lose confidence. | Performer, Controller |
+| **Failure Zone** *(top left)* | Challenge exceeds ability. Lose confidence. | Controller, Ghost |
 | **Groan Zone** *(diagonal)* | Challenge matches ability. Growth happens here. | — |
-| **Safe Zone** *(bottom right)* | Ability exceeds challenge. Growth stagnates. | Perfectionist, Ghost |
+| **Safe Zone** *(bottom right)* | Ability exceeds challenge. Growth stagnates. | Perfectionist, Auto-Pilot |
 
 **People Pleaser:** Absent — Growth is a self-directed domain with no relational dynamic to manage.
 
@@ -458,9 +464,9 @@ NO → Still in Direction Sweet Spot work.
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Ruthless Discipline** *(top left)* | High output, low wellbeing. Burnout zone. | Performer, Controller |
+| **Ruthless Discipline** *(top left)* | High output, low wellbeing. Burnout zone. | Controller, Ghost |
 | **Living Zone** *(diagonal)* | Output matches emotional resource. Sustainable. | — |
-| **Rely on Motivation** *(bottom right)* | Wellbeing present but output low. Waiting to feel ready. Unfulfilled zone. | Ghost, Perfectionist |
+| **Rely on Motivation** *(bottom right)* | Wellbeing present but output low. Waiting to feel ready. Unfulfilled zone. | Perfectionist, Auto-Pilot |
 
 **People Pleaser note:** May appear in the Living Zone on paper but be completely emotionally depleted underneath — producing for others' needs, not their own. A hidden Ruthless Discipline.
 
@@ -508,9 +514,9 @@ This isn't a personal failing — it's a cultural download. FindMyFlow's job is 
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Reckless Zone** *(top left)* | High risk, low passion. Taking big swings without genuine care. Adrenaline, ego, or proving something. | Performer, Controller |
+| **Reckless Zone** *(top left)* | High risk, low passion. Taking big swings without genuine care. Adrenaline, ego, or proving something. | Controller, Ghost |
 | **Project Sweet Spot** *(diagonal)* | Risk scales with passion. The more it matters, the more you're willing to bet. Courageous not reckless. | — |
-| **Secure Zone** *(bottom right)* | High passion potential, insufficient inspiration to move. Not scared — just not lit up enough. Dreams stay dreams. | Ghost, Perfectionist |
+| **Secure Zone** *(bottom right)* | High passion potential, insufficient inspiration to move. Not scared — just not lit up enough. Dreams stay dreams. | Perfectionist, Auto-Pilot |
 
 **The unique insight:** This graph is about **fuel**, not calibration. The Secure Zone isn't a fear problem or a courage problem — it's an inspiration problem. If passion isn't burning hot enough, risk doesn't feel worth it.
 
@@ -553,9 +559,9 @@ This isn't a personal failing — it's a cultural download. FindMyFlow's job is 
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Future Trapped** *(top left)* | High intention, low alignment. Pushing toward goals that don't fit who you are. Always chasing, never arriving. | Performer, Controller |
+| **Future Trapped** *(top left)* | High intention, low alignment. Pushing toward goals that don't fit who you are. Always chasing, never arriving. | Controller, Ghost |
 | **Flow Sweet Spot** *(diagonal)* | Intention flows from alignment. Direction emerges from self-knowledge. Moving toward something while inhabiting the journey. | — |
-| **Drift Zone** *(bottom right)* | High alignment, no intention. Knows who they are but hasn't given that self anywhere to go. | Ghost |
+| **Drift Zone** *(bottom right)* | High alignment, no intention. Knows who they are but hasn't given that self anywhere to go. | Auto-Pilot |
 
 #### Axis Protective Patterns
 
@@ -596,9 +602,9 @@ This isn't a personal failing — it's a cultural download. FindMyFlow's job is 
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Reckless Zone** *(top left)* | High freedom, low safety. Ungrounded expression. Proving freedom rather than feeling it. | Performer |
+| **Reckless Zone** *(top left)* | High freedom, low safety. Ungrounded expression. Proving freedom rather than feeling it. | Controller |
 | **Play Sweet Spot** *(diagonal)* | Freedom matched with safety. Genuine play — present, unselfconscious, alive. | — |
-| **Caged Zone** *(bottom right)* | Safety present but freedom suppressed. Secure but small. Comfortable captivity. | Ghost, People Pleaser mask |
+| **Caged Zone** *(bottom right)* | Safety present but freedom suppressed. Secure but small. Comfortable captivity. | Auto-Pilot, People Pleaser mask |
 
 **The fundamental truth:**
 - Safety without Freedom = a beautiful prison
@@ -644,9 +650,9 @@ This isn't a personal failing — it's a cultural download. FindMyFlow's job is 
 
 | Zone | Name | Description | Primary Archetypes |
 |------|------|-------------|-------------------|
-| **Top left** | **The Monk** | Massive transformation, essence lost. Became the serious healer. Deep, purposeful, introspective — and quietly dead inside. Traded the party cage for the healing cage. More aligned but less alive. The healing journey performed as a project: disciplined, intense, humourless. Sympathetic activation now aimed at "achieving" healing instead of achieving status. Same engine, different cargo. | Performer, Controller |
+| **Top left** | **The Monk** | Massive transformation, essence lost. Became the serious healer. Deep, purposeful, introspective — and quietly dead inside. Traded the party cage for the healing cage. More aligned but less alive. The healing journey performed as a project: disciplined, intense, humourless. Sympathetic activation now aimed at "achieving" healing instead of achieving status. Same engine, different cargo. | Controller, Ghost |
 | **Diagonal** | **Healing Sweet Spot** | Transformation AND aliveness move together. The healing makes you MORE playful, not less. Each layer cleared returns more of the original spark. You change AND you stay alive. The journey feels like coming home, not like going to work. | — |
-| **Top right** | **The Bypasser** | Aliveness preserved but no real transformation underneath. "I'm fine, I'm still fun, nothing needs to change." Uses positivity, lightness, and play to avoid the actual work. The sparkle is real but it's sitting on top of unprocessed pain. The numbness masked as fun. Dorsal freeze underneath the surface animation. | Ghost, Perfectionist |
+| **Top right** | **The Bypasser** | Aliveness preserved but no real transformation underneath. "I'm fine, I'm still fun, nothing needs to change." Uses positivity, lightness, and play to avoid the actual work. The sparkle is real but it's sitting on top of unprocessed pain. The numbness masked as fun. Dorsal freeze underneath the surface animation. | Perfectionist, Auto-Pilot |
 
 **The question this graph asks at every stage:**
 *"Is my healing making me more alive or less?"*
@@ -688,9 +694,9 @@ Every other graph addresses a specific domain or threshold. This one monitors HO
 | **Execution** | Sustainable output that's joyless. Wellbeing as fuel... for more seriousness. | Output inconsistent because only produces when it feels good. |
 
 **Polyvagal mechanism:**
-The Monk is Sympathetic activation redirected at healing. The same driven, doing, achieving energy that built the constructed life now builds the healing life. The nervous system hasn't actually shifted — it's just pointed at a different target. This is why breathwork, somatic work, and play are mechanically necessary at every stage. They're not decorative. They're the mechanism that prevents transformation from becoming another Sympathetic project.
+The Monk is Sympathetic activation redirected at healing. The same driven, doing, achieving energy that built the constructed life now builds the healing life. Controller energy aimed at a different target. The nervous system hasn't actually shifted — it's just pointed at a different target. This is why breathwork, somatic work, and play are mechanically necessary at every stage. They're not decorative. They're the mechanism that prevents transformation from becoming another Sympathetic project.
 
-The Bypasser is Dorsal avoidance wearing a smile. Looks animated on the surface, frozen underneath. The lightness is real but it's sitting on top of unmet pain. Like a pond that's warm on the surface with ice underneath.
+The Bypasser is Dorsal avoidance wearing a smile. Auto-Pilot underneath the surface animation. Looks animated on the surface, frozen underneath. The lightness is real but it's sitting on top of unmet pain. Like a pond that's warm on the surface with ice underneath.
 
 **The "Healing But Fun" implication:**
 This graph IS the brand thesis made diagnostic. "Healing But Fun" isn't two things happening simultaneously. It's the claim that healing done right PRODUCES fun — and that fun disappearing is the signal something has gone wrong. The Healing Sweet Spot diagonal is what "Healing But Fun" actually looks like in practice.
@@ -713,9 +719,9 @@ Zarlo monitors this graph continuously. At every stage, it tracks whether the us
 
 | Zone | Name | Description | Primary Archetypes |
 |------|------|-------------|-------------------|
-| **Top left** | **The Dependent** | High external belief received, low self-belief. Someone else believes in you deeply but you can't hold it yourself. Every session with the coach feels transformative, but between sessions the doubt returns. The container is doing all the work. Progress is real but fragile — remove the container and it collapses. Sympathetic: activated by others' belief, can't generate their own fuel. | Performer, Controller |
+| **Top left** | **The Dependent** | High external belief received, low self-belief. Someone else believes in you deeply but you can't hold it yourself. Every session with the coach feels transformative, but between sessions the doubt returns. The container is doing all the work. Progress is real but fragile — remove the container and it collapses. Sympathetic: activated by others' belief, can't generate their own fuel. | Controller, Ghost |
 | **Diagonal** | **Co-Regulation Sweet Spot** | External belief AND self-belief move together. The container gradually transfers permission to the person. Each external deposit builds internal capacity. The coach believes in you AND you're starting to believe it too. The handoff is happening. | — |
-| **Bottom right** | **The Isolator** | Low external belief received, self-belief attempting to build alone. "I should be able to do this myself." Refuses the container. Either hasn't found one, or has one but can't receive from it. The person doing healing from books and podcasts alone, never letting another human witness or hold them. Dorsal: collapsed inward, receiving feels too vulnerable. | Ghost, Perfectionist |
+| **Bottom right** | **The Isolator** | Low external belief received, self-belief attempting to build alone. "I should be able to do this myself." Refuses the container. Either hasn't found one, or has one but can't receive from it. The person doing healing from books and podcasts alone, never letting another human witness or hold them. Dorsal: collapsed inward, receiving feels too vulnerable. | Perfectionist, Auto-Pilot |
 
 **The Polyvagal mechanism at the heart of this graph:**
 Permission was installed relationally (the wound installation happened through caregivers, school, peers) and it can only be reset relationally. A dysregulated nervous system cannot self-regulate into a state it has never experienced. It needs a regulated nervous system to co-regulate WITH — to show it what the new state feels like in the body before it can hold that state alone.
@@ -807,9 +813,9 @@ See full analysis in **Fun — The Throughline of the Entire Journey** section.
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Performing Zone** *(top left)* | High joy expression, low actual presence. Performing fun rather than feeling it. Generates joy for others but can't receive it. | Performer |
+| **Performing Zone** *(top left)* | High joy expression, low actual presence. Performing fun rather than feeling it. Generates joy for others but can't receive it. | Controller |
 | **Fun Sweet Spot** *(diagonal)* | Genuine joy arising from genuine presence. Unselfconscious aliveness. | — |
-| **Numb Zone** *(bottom right)* | Present but joy suppressed. Going through motions. Here but can't feel it. | Ghost, Perfectionist |
+| **Numb Zone** *(bottom right)* | Present but joy suppressed. Going through motions. Here but can't feel it. | Perfectionist, Auto-Pilot |
 
 **Unique position:** Appears twice in the journey — early as a compass pointing toward passion, late as confirmation that Play is genuinely inhabited. You cannot fake genuine fun. That's what makes it the most honest signal in the entire framework.
 
@@ -962,11 +968,11 @@ Protective Archetypes aren't personality types. They're **cultural downloads.** 
 
 | Environment | Produces | Core Wound | Cultural Examples |
 |-------------|----------|------------|-------------------|
-| **The Achievement Factory** | Performer | Worth conditional on output. *"I am what I produce."* | Tiger parenting, elite schooling, sports academies, immigrant family pressure, corporate family culture |
-| **The Unpredictable Home** | Controller | Safety never guaranteed. *"If I manage every variable, nothing bad will happen."* | Alcoholic/addicted parent, volatile household, financial instability, divorce chaos |
+| **The Achievement Factory** | Controller | Worth conditional on output. *"I am what I produce."* Performing is controlling what people think of you. | Tiger parenting, elite schooling, sports academies, immigrant family pressure, corporate family culture |
+| **The Unpredictable Home** | Ghost | Safety never guaranteed. *"I need to get out of here."* Flight response — withdrawing, avoiding, disappearing to stay safe. | Alcoholic/addicted parent, volatile household, financial instability, divorce chaos |
 | **The Harmony-At-All-Costs Family** | People Pleaser mask | Conflict forbidden. *"My feelings are a burden. Shrink to stay safe."* | Religious households, enmeshed families, emotionally immature parents, rigid social hierarchy |
 | **The Never Enough Standard** | Perfectionist | Effort never sufficient. *"I must be flawless before I'm worthy of being seen."* | Academic pressure, competitive siblings, highly critical parent, high-achieving peer groups |
-| **The Emotionally Unsafe Environment** | Ghost | Visibility was dangerous. *"If I'm not seen, I can't be hurt."* | Bullying, emotional neglect, scapegoating, trauma without safe repair |
+| **The Emotionally Unsafe Environment** | Auto-Pilot | Visibility was dangerous. Checked out to survive. *"I'm fine, just tired."* | Bullying, emotional neglect, scapegoating, trauma without safe repair |
 
 **Key diagnostic principle:** Show someone their zone first. Then reveal the environment that likely shaped it. The map reveals the territory — recognition hits harder when earned through self-discovery rather than direct questioning.
 
@@ -1003,10 +1009,11 @@ Stephen Porges' Polyvagal Theory identifies three neural circuits activated in h
 | Polyvagal State | Zone | Archetypes | Description |
 |----------------|------|------------|-------------|
 | **Ventral Vagal** | Sweet Spot diagonal | — | Safe and social. Connection, play, creativity, genuine expression. |
-| **Sympathetic** | Overactivation (top left) | Performer, Controller | Mobilisation. Fight/flight. Too much threat → activate, push, control, perform. |
-| **Dorsal Vagal** | Underactivation (bottom right) | Ghost, Perfectionist | Immobilisation. Freeze, collapse, shutdown, disappear. |
+| **Sympathetic** | Overactivation (top left) | Controller (fight), Ghost (flight) | Mobilisation. Fight/flight. Too much threat → activate, push, control, flee. |
+| **Freeze** (Sympathetic + Dorsal blend) | Either zone | Perfectionist | Gas and brake both pressed. Wants to engage but can't move. |
+| **Dorsal Vagal** | Underactivation (bottom right) | Perfectionist, Auto-Pilot | Immobilisation. Collapse, shutdown, checked out. |
 
-**The nervous system only has two threat responses. This framework mapped all of them across every life domain.**
+**The nervous system has a limited set of threat responses. This framework mapped all of them across every life domain.**
 
 ---
 
@@ -1018,10 +1025,10 @@ Fawn isn't in Polyvagal Theory's original three states. It was added by Pete Wal
 
 | Archetype | Polyvagal State | When they fawn |
 |-----------|----------------|----------------|
-| Performer | Sympathetic | Uses people pleasing to maintain their audience |
-| Controller | Sympathetic | Uses people pleasing to manage others' behaviour |
-| Ghost | Dorsal Vagal | Uses people pleasing to avoid conflict that might increase visibility |
-| Perfectionist | Dorsal Vagal | Uses people pleasing to pre-empt criticism |
+| Controller | Sympathetic (Fight) | Uses people pleasing to maintain their audience and manage others' behaviour |
+| Ghost | Sympathetic (Flight) | Uses people pleasing to avoid conflict that might increase visibility |
+| Perfectionist | Freeze (Sympathetic + Dorsal) | Uses people pleasing to pre-empt criticism |
+| Auto-Pilot | Dorsal Vagal (Collapse) | Uses people pleasing on auto-pilot — agrees to everything because resistance requires energy they don't have |
 
 **Implication for FindMyFlow:** People Pleaser may not be a standalone archetype but a secondary layer — the mask the nervous system puts on when the primary response isn't socially acceptable. Worth exploring whether the diagnostic should identify primary state first, then surface the fawn mask as a secondary pattern.
 
@@ -1034,7 +1041,7 @@ Not all nervous system wounding is trauma. There are five distinct causes, each 
 | Cause | Tends Toward | Mechanism | Notes |
 |-------|-------------|-----------|-------|
 | **Acute trauma** | Dorsal Vagal | Single overwhelming event. Nervous system collapses into freeze/shutdown as the only available response. | Shock, assault, sudden loss, humiliation. The system shuts down when fight/flight isn't possible or doesn't work. |
-| **Chronic relational environment** | Sympathetic | Not one event — thousands of small ones. Low-grade ongoing threat activates persistent Sympathetic arousal. | The nervous system learns over years that this is what the world feels like. Produces Controller and Performer patterns. |
+| **Chronic relational environment** | Sympathetic | Not one event — thousands of small ones. Low-grade ongoing threat activates persistent Sympathetic arousal. | The nervous system learns over years that this is what the world feels like. Produces Controller and Ghost patterns. |
 | **Lack of co-regulation** | Either — defaults to whatever is modelled | The nervous system co-regulates with caregivers. A dysregulated parent produces a dysregulated child — not through events but through nervous system inheritance. | A calm, regulated parent trains Ventral Vagal as default. Anxious or absent caregiver does the opposite. Not trauma — just absence of the conditions for regulation to develop. |
 | **Biological baseline (sensitivity)** | Amplifies whichever state is active | Some nervous systems are born more reactive. Lower threshold for activation, faster response. | The orchid vs dandelion distinction. Orchids are more sensitive to environment but capable of extraordinary flourishing when conditions are right. Amplifier, not cause. |
 | **Positive peak experiences** | Ventral Vagal | Repeated experiences of genuine safety, joy, connection, and play build Ventral Vagal capacity. | This is why workshops work. You're not just healing — you're building Ventral Vagal capacity through repeated positive nervous system experiences. |
@@ -1049,9 +1056,9 @@ Not all nervous system wounding is trauma. There are five distinct causes, each 
 
 **What this means practically:**
 
-Ghost and Perfectionist patterns (Dorsal) often have an acute or overwhelming event at their root — something that happened that was too much to integrate.
+Perfectionist and Auto-Pilot patterns (Dorsal) often have an acute or overwhelming event at their root — something that happened that was too much to integrate.
 
-Performer and Controller patterns (Sympathetic) often have a chronic environment at their root — a world that required constant activation to survive.
+Controller and Ghost patterns (Sympathetic) often have a chronic environment at their root — a world that required constant activation to survive.
 
 This is why the same 4 R's process feels different depending on the archetype. Dorsal patterns need **titrated activation** — gentle movement toward feeling rather than direct confrontation. Sympathetic patterns need **discharge and deceleration** — releasing the stored mobilisation energy before new wiring is possible.
 
@@ -1090,13 +1097,13 @@ You can't rewire from a dysregulated state. The body has to come first. This is 
 
 | Environment | Produces | Spiral Stage | Core Belief |
 |-------------|----------|-------------|-------------|
-| **The Achievement Factory** | Performer | 🟠 Orange — Achievement, competition, meritocracy | "You earn your place through performance" |
-| **The Unpredictable Home** | Controller | 🔴 Red — Power, dominance, survival of the fittest | "The world is dangerous, dominate or be dominated" |
+| **The Achievement Factory** | Controller | 🟠 Orange — Achievement, competition, meritocracy | "You earn your place through performance" |
+| **The Unpredictable Home** | Ghost | 🔴 Red — Power, dominance, survival of the fittest | "The world is dangerous, get out before it gets you" |
 | **The Harmony-At-All-Costs Family** | People Pleaser mask | 🔵 Blue — Order, conformity, sacrifice self for group | "Your needs are less important than harmony" |
 | **The Never Enough Standard** | Perfectionist | 🔵🟠 Blue/Orange boundary | "There is a right way and you haven't found it yet" |
-| **The Emotionally Unsafe Environment** | Ghost | 🟤 Beige/Purple — Survival, tribal belonging | "Being seen is dangerous" |
+| **The Emotionally Unsafe Environment** | Auto-Pilot | 🟤 Beige/Purple — Survival, tribal belonging | "Being seen is dangerous" |
 
-**Key insight:** Most people run the values of one stage while longing for the next. The Performer runs Orange but starves for Green (connection, meaning, authenticity). The Controller runs Red but longs for Blue (safety, structure, predictability).
+**Key insight:** Most people run the values of one stage while longing for the next. The Controller runs Orange but starves for Green (connection, meaning, authenticity). The Ghost runs Red but longs for Blue (safety, structure, predictability).
 
 **FindMyFlow accelerates the spiral.** It doesn't just heal wounds — it facilitates stage transitions.
 
@@ -1401,11 +1408,11 @@ Each cause tends strongly toward one nervous system state, but with important ex
 | **Positive peak experiences** | → Ventral Vagal | Safety, joy, connection build capacity | Cumulative — requires repetition to take hold |
 
 **Acute Trauma → Dorsal Vagal**
-When threat is inescapable and overwhelming, fight/flight isn't an option. The nervous system's last resort is collapse — freeze, dissociate, shut down. Most reliably produces Ghost and Perfectionist patterns.
+When threat is inescapable and overwhelming, fight/flight isn't an option. The nervous system's last resort is collapse — freeze, dissociate, shut down. Most reliably produces Perfectionist and Auto-Pilot patterns.
 
 **Chronic Relational Environment → Sympathetic**
-When threat is ongoing but manageable through action, the nervous system mobilises and never fully demobilises. Stays on. Produces Controller and Performer — perpetually activated because stopping feels like dying.
-*Exception:* If chronic environment involved complete helplessness — where no amount of action changed anything — the system eventually collapses into Dorsal. Learned helplessness. The Ghost who grew up in chronic chaos rather than acute trauma.
+When threat is ongoing but manageable through action, the nervous system mobilises and never fully demobilises. Stays on. Produces Controller and Ghost — perpetually activated because stopping feels like dying.
+*Exception:* If chronic environment involved complete helplessness — where no amount of action changed anything — the system eventually collapses into Dorsal. Learned helplessness. The Auto-Pilot who grew up in chronic chaos rather than acute trauma.
 
 **Lack of Co-regulation → Mirrors Caregiver**
 No directional lean. Entirely determined by the nervous system of the primary caregiver.
@@ -1421,9 +1428,9 @@ The only cause that builds toward Ventral Vagal rather than away from it. Cumula
 
 ### Clinical Implication for FindMyFlow
 
-Dorsal-dominant archetypes (Ghost, Perfectionist) need **titrated activation** — gentle, incremental movement toward feeling. Direct confrontation collapses them further.
+Dorsal-dominant archetypes (Perfectionist, Auto-Pilot) need **titrated activation** — gentle, incremental movement toward feeling. Direct confrontation collapses them further.
 
-Sympathetic-dominant archetypes (Performer, Controller) need **discharge and deceleration** — releasing stored mobilisation energy before new wiring is possible. They need to move, shake, breathe — get the activation out of the body before they can settle.
+Sympathetic-dominant archetypes (Controller, Ghost) need **discharge and deceleration** — releasing stored mobilisation energy before new wiring is possible. They need to move, shake, breathe — get the activation out of the body before they can settle.
 
 Same diagnostic. Different therapeutic direction. **Zarlo needs to know which it's dealing with.**
 
@@ -1616,7 +1623,7 @@ The direction you approach from is completely different depending on state.
 
 ---
 
-### For Sympathetic Dominance (Performer, Controller)
+### For Sympathetic Dominance (Controller, Ghost)
 *Nervous system is overcharged. Too much activation. Work is to discharge and decelerate.*
 
 | Technique | Mechanism | Notes |
@@ -1630,7 +1637,7 @@ The direction you approach from is completely different depending on state.
 
 ---
 
-### For Dorsal Vagal Dominance (Ghost, Perfectionist)
+### For Dorsal Vagal Dominance (Perfectionist, Auto-Pilot)
 *Nervous system is undercharged. Collapsed, flat, disconnected. Work is to titrate activation upward gently.*
 
 | Technique | Mechanism | Notes |
@@ -1666,8 +1673,8 @@ The direction you approach from is completely different depending on state.
 
 The archetype diagnostic could become the front door to the right healing modality — not just self-knowledge, but a precise prescription.
 
-- **Performer/Controller identified** → routed toward discharge-first practices (shaking, vigorous movement, extended exhale)
-- **Ghost/Perfectionist identified** → routed toward gentle activation and social engagement first (orienting, coherence breathing, rhythmic movement)
+- **Controller/Ghost identified** → routed toward discharge-first practices (shaking, vigorous movement, extended exhale)
+- **Perfectionist/Auto-Pilot identified** → routed toward gentle activation and social engagement first (orienting, coherence breathing, rhythmic movement)
 
 The silent discos, breathwork, shaking meditation, and workshop design already intuitively hit the right mechanisms for both states simultaneously — which is why they work for diverse groups. The next level is personalising the modality recommendation based on archetype.
 
@@ -1763,9 +1770,9 @@ X axis: Acceptance (how much you accept yourself as you are right now)
 
 | Zone | Description |
 |------|-------------|
-| **Performance Zone** *(top left)* | High expression, low self-acceptance. Showing up loudly but from a place of proving rather than being. Expression as compensation for not feeling enough. Classic post-healing trap — the Performer archetype wearing spiritual growth as the new performance. |
+| **Performance Zone** *(top left)* | High expression, low self-acceptance. Showing up loudly but from a place of proving rather than being. Expression as compensation for not feeling enough. Classic post-healing trap — the Controller archetype wearing spiritual growth as the new performance. |
 | **Reconnect Sweet Spot** *(diagonal)* | Expression flows from self-acceptance. You show up as yourself because you're at home in yourself. |
-| **Hiding Zone** *(bottom right)* | High self-acceptance, low expression. Comfortable within yourself but not bringing it into the world. The gift stays private. The Ghost who's healed internally but still invisible externally. |
+| **Hiding Zone** *(bottom right)* | High self-acceptance, low expression. Comfortable within yourself but not bringing it into the world. The gift stays private. The Auto-Pilot who's healed internally but still checked out from expressing it externally. |
 
 **Why Expression/Acceptance over Expression/Receptivity:**
 Expression/Receptivity describes a relational dynamic — how you give and receive with others. That's Vulnerability or Relationship graph territory. Expression/Acceptance describes something more fundamental — the relationship with yourself as the foundation for reconnecting with the world. Reconnect isn't just about reconnecting with others — it's reconnecting with your authentic self first, then bringing that self into contact with the world.
@@ -1781,7 +1788,7 @@ The Reconnect graph is the **mechanism** that produces the Play state. Do the in
 Y axis: Recovery (how much you actually restore — nervous system, body, identity)
 X axis: Safety (how safe it feels to stop — internally and environmentally)
 
-The X axis is Safety rather than Permission. The reason people can't rest isn't primarily intellectual permission — it's that stopping doesn't feel safe. For Performers and Controllers, stillness triggers threat responses: identity collapse, loss of control, fear of falling behind. Permission is the cognitive layer. Safety is the nervous system layer underneath it. You can give yourself permission to rest and still be unable to — because the body doesn't believe it's safe to stop.
+The X axis is Safety rather than Permission. The reason people can't rest isn't primarily intellectual permission — it's that stopping doesn't feel safe. For Controllers and Ghosts, stillness triggers threat responses: identity collapse, loss of control, fear of falling behind. Permission is the cognitive layer. Safety is the nervous system layer underneath it. You can give yourself permission to rest and still be unable to — because the body doesn't believe it's safe to stop.
 
 - High recovery need, low safety → Forced Rest Zone (burnout — the body stops you because you wouldn't stop yourself. Collapse rather than choice.)
 - High safety, low recovery → Avoidance Zone (using rest as escape rather than restoration — numbing, dissociation, hiding. Safe to stop but not actually restoring.)
@@ -2409,15 +2416,15 @@ The crack is not a single moment — it's a decision point. A bifurcation. Some 
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Reversion Zone** *(top left)* | High support, low openness. Resources available — the community, the coach, the safety net — but the constructed self doubles down. "I'm fine. Just a blip." Back to business. Has everything needed to cross but won't let the crack land. Sympathetic activation defending the status quo. | Performer, Controller |
+| **Reversion Zone** *(top left)* | High support, low openness. Resources available — the community, the coach, the safety net — but the constructed self doubles down. "I'm fine. Just a blip." Back to business. Has everything needed to cross but won't let the crack land. Sympathetic activation defending the status quo. | Controller, Ghost |
 | **The Crossing** *(diagonal)* | Support matched with openness. The crack becomes the portal. Progress toward Head Full of Dreams. | — |
-| **Collapse Zone** *(bottom right)* | Low support, high openness. The crack blows them open but there's nothing to hold them. No container. Retraumatisation. Often leads to regression — back into the constructed life harder than before, because the uncontained opening was too much. | Ghost, Perfectionist |
+| **Collapse Zone** *(bottom right)* | Low support, high openness. The crack blows them open but there's nothing to hold them. No container. Retraumatisation. Often leads to regression — back into the constructed life harder than before, because the uncontained opening was too much. | Perfectionist, Auto-Pilot |
 
-**The Reversion Zone is the most common outcome.** Most people revert. The pain is real but not quite unbearable enough, or the Performer/Controller says "fix it and keep moving." They have the support but won't use it for this.
+**The Reversion Zone is the most common outcome.** Most people revert. The pain is real but not quite unbearable enough, or the Controller says "fix it and keep moving." They have the support but won't use it for this.
 
 **What determines which zone someone lands in:**
-- Reversion → Performer and Controller dominant. Too much invested in the constructed life to risk it. Support is present but openness is refused.
-- Collapse → Ghost and Perfectionist dominant. No container to hold the opening. Openness is forced but support is absent.
+- Reversion → Controller and Ghost dominant. Too much invested in the constructed life to risk it. Support is present but openness is refused.
+- Collapse → Perfectionist and Auto-Pilot dominant. No container to hold the opening. Openness is forced but support is absent.
 - The Crossing → enough Ventral Vagal capacity + at least one person or resource that makes the unknown feel survivable.
 
 **Polyvagal mechanism:** The Crossing requires enough Ventral Vagal activation to tolerate the disorientation of the crack without collapsing (Dorsal) or closing (Sympathetic). This is why community, facilitation, and somatic safety are not optional at this stage — they are the mechanism of progress.
@@ -2450,7 +2457,7 @@ The crack is not a single moment — it's a decision point. A bifurcation. Some 
 
 | Zone | Name | Description |
 |------|------|-------------|
-| **Top left** | The adapted self | Love present but only for the edited version. Suppress authentic expression to maintain connection. Foundation of Performer, People Pleaser — performing is safer than being. |
+| **Top left** | The adapted self | Love present but only for the edited version. Suppress authentic expression to maintain connection. Foundation of Controller, People Pleaser — performing is safer than being. |
 | **Diagonal** | Unconditional belonging | Authentic expression met with love. No editing required to be received. The self and love move together. |
 | **Bottom right** | The rejected self | Full authentic expression but love withdrawn as a result. Learns that being yourself costs connection. Foundation of Ghost — disappearing is safer than being seen. |
 
@@ -2480,7 +2487,7 @@ The crack is not a single moment — it's a decision point. A bifurcation. Some 
 
 | Zone | Name | Description |
 |------|------|-------------|
-| **Top left** | The achiever | Maximising external validation with no internal compass. Builds fast, efficiently, impressively — in the wrong direction. Performer and Controller in full operation. The cage is completely invisible. The blueprint feels right. |
+| **Top left** | The achiever | Maximising external validation with no internal compass. Builds fast, efficiently, impressively — in the wrong direction. Controller in full operation. The cage is completely invisible. The blueprint feels right. |
 | **Top left (deeper)** | The suppressor | Signals are arriving — Sunday night dread, post-win flatness, the quiet voice asking "is this it?" — but being actively buried. Doubles down on external validation to drown out the growing awareness. "I've come too far to question this now." The "I'll be happy when..." escalation (bigger promotion, better house, next milestone) IS the suppression mechanism. The cage is flickering in and out of visibility and they keep looking away. |
 | **Diagonal** | The intentional builder | External success aligned with internal truth. Rare at this stage — requires having survived stages 1-4 with X axis intact. Building with eyes open. |
 | **Bottom right** | The dropout | High internal alignment but refuses to engage with the external world. Rejects the game entirely. Authentic but isolated. Passion without traction. Ghost in operation. Can hear the truth but withdrew rather than rebuilt. |
@@ -2734,8 +2741,8 @@ Adaptable to: half-day workshop, Day 1 of retreat, weekly online sessions broken
 **Release — Targeted Discharge (30 min)**
 *Goal: Move the stored charge of the identified wound.*
 - Calibrated by Level + Stage coordinate:
-  - Sympathetic dominance (Performer/Controller) → vigorous breath, sound, movement
-  - Dorsal dominance (Ghost/Perfectionist) → gentle breath, humming, slow rocking
+  - Sympathetic dominance (Controller/Ghost) → vigorous breath, sound, movement
+  - Dorsal dominance (Perfectionist/Auto-Pilot) → gentle breath, humming, slow rocking
 - Facilitator gives permission: "Whatever wants to move — let it move. Sound. Tears. Shaking. It's all welcome here."
 - Closes with stillness and hand on heart
 *Polyvagal mechanism: Titrated discharge targeted at identified nervous system state*
@@ -3069,11 +3076,11 @@ Fun occupies a unique role in the framework. Unlike every other graph it operate
 
 | Zone | Description | Primary Archetypes |
 |------|-------------|-------------------|
-| **Performing zone** *(top left)* | High joy expression, low actual presence. Performing fun rather than feeling it. The life of the party who goes home feeling empty. Generating joy in others but unable to receive it themselves. | Performer |
+| **Performing zone** *(top left)* | High joy expression, low actual presence. Performing fun rather than feeling it. The life of the party who goes home feeling empty. Generating joy in others but unable to receive it themselves. | Controller |
 | **Fun Sweet Spot** *(diagonal)* | Genuine joy arising from genuine presence. Unselfconscious aliveness. Not manufactured. Not pursued. Just here. | — |
-| **Numb zone** *(bottom right)* | Present but joy suppressed. Going through motions. Arrived — but can't feel it. The arrival fallacy's end state. | Ghost, Perfectionist |
+| **Numb zone** *(bottom right)* | Present but joy suppressed. Going through motions. Arrived — but can't feel it. The arrival fallacy's end state. | Perfectionist, Auto-Pilot |
 
-**The Performing zone is the Performer archetype's most painful pattern.** Fun is supposed to be where they live — and they've never actually been there. They generate it for others. They cannot receive it themselves.
+**The Performing zone is the Controller archetype's most painful pattern.** Fun is supposed to be where they live — and they've never actually been there. They generate it for others. They cannot receive it themselves.
 
 **The Numb zone repairs the arrival fallacy directly.** You got there. You're here. But the capacity for joy was suppressed so long it doesn't activate. Presence without aliveness.
 
@@ -3212,7 +3219,7 @@ The nervous system state, archetype, and wall are already consistent and determi
 The only variable the coordinate matrix adds is **which installation stage wound is most active at each graph.** The same archetype working on different graphs will have different wound stages most active — and that specificity changes the intervention.
 
 **Example:**
-A Performer (Sympathetic, top left wall) working on:
+A Controller (Sympathetic, top left wall) working on:
 - Graph 1 (Identity) → Stage 5 wound most active (performance as constructed identity)
 - Graph 4 (Enough) → Stage 3 wound most active (school: effort = worth)
 - Graph 6 (Execution) → Stage 6 wound most active (hollow achievement as operating system)
@@ -3225,4 +3232,101 @@ Same archetype. Same nervous system state. Same wall. Different wound stage. Dif
 Once Zarlo knows the graph and the wall, it already knows the archetype and nervous system state. The coordinate matrix gives it the final piece — the likely wound stage — which tells it how to frame the intervention with historical and developmental precision.
 
 *Full matrix to be developed when ready. Requires alignment on all graph sequences and wound stage mappings first.*
+
+---
+
+## Updates (Apr 2026) — Archetype Restructure (PROVISIONAL)
+
+*These changes originate from "Find Your Flow" book development. Applied to this document on 2026-04-19. NOT yet applied to the app codebase. Recorded here as the rationale for the restructure.*
+
+### The Change: 5 Archetypes → 4 + 1 Mask
+
+**Previous model (used throughout this document):**
+
+| Archetype | Polyvagal State | Response |
+|---|---|---|
+| Performer | Sympathetic (Fight) | Overwork, overachieve, worth = output |
+| Controller | Sympathetic (Fight) | Micro-manage, tighten up |
+| Perfectionist | Dorsal (Freeze) | Self-critical, paralysed, never ready |
+| Ghost | Dorsal (Collapse) | Withdraw, numb, vanish |
+| People Pleaser | Fawn (mask) | Over-accommodate, dissolve to stay close |
+
+**Proposed model:**
+
+| | Sympathetic (energised) | Dorsal (shutdown) |
+|---|---|---|
+| **Toward** | Controller (fight) | Perfectionist (freeze) |
+| **Away** | Ghost (flight) | Auto-Pilot (collapse) |
+
++ People Pleaser (fawn) — mask layered on any of the four.
+
+### Rationale for Each Change
+
+**1. Performer merged into Controller.**
+Performing is controlling what people think of you. Both are fight responses. The Performer controls perceived worth through output. The Controller controls the environment through management. Same mechanism (if I do enough, I'll be safe), different target (self vs environment). One archetype covers both.
+
+**2. Ghost moved from Dorsal to Sympathetic (Flight).**
+Withdrawal is an active response. The Ghost has energy — it's directed away from the threat. Flight, not freeze. The body is activated (heart rate up, restless, avoidant). This is behaviourally and neurologically distinct from dorsal shutdown.
+
+The previous model conflated two different experiences under "Ghost":
+- Active withdrawal (flight, sympathetic) — leaves rooms, quits jobs, avoids, disappears with energy
+- Numbness/collapse (dorsal) — flat, checked out, "not really here"
+
+The revised model separates these: Ghost = active flight, Auto-Pilot = dorsal collapse.
+
+**3. Auto-Pilot is new (Dorsal Collapse).**
+Going through the motions. Functional but disconnected. "Safe" because checked out. Looks fine from the outside — goes to work, pays bills, smiles at dinner. Nobody home.
+
+This is where many users ARE at The Crack. Not in crisis. In absence. Calling it "fine" for years.
+
+One-liner: "I'm fine, just tired."
+
+**4. Perfectionist redefined as freeze (blend state).**
+In clinical polyvagal, freeze is a blend: sympathetic AND dorsal active simultaneously (gas and brake both pressed). High arousal but can't move. This IS the Perfectionist experience: they WANT to engage (sympathetic, oriented toward the thing) but CAN'T (dorsal, immobilised).
+
+The previous model noted Perfectionist "straddling both zones" on the Enough graph. The revision resolves this: the "can't start" expression = freeze (stays with Perfectionist). The "can't stop refining" expression = Controller energy (fight, toward, managing the output).
+
+### Nervous System Graph
+
+**Y axis:** Energised (how energised you feel)
+**X axis:** Safe (how safe your body feels)
+
+- **Top-left (Sympathetic):** Energised but unsafe. Lots of energy because the body doesn't feel safe. Controller fights, Ghost flees.
+- **Diagonal (Ventral):** Energised AND safe. Flow. Play. The destination.
+- **Bottom-right (Dorsal):** "Safe" but dead inside. Perfectionist frozen, Auto-Pilot checked out. The absence of risk, not the presence of safety.
+
+Key insight: "You don't have to choose between being safe and being energised."
+
+### Archetype One-Liners
+
+| Archetype | Response | Line |
+|---|---|---|
+| Controller | Fight (toward + activated) | "If I do enough, I'll be safe." |
+| Ghost | Flight (away + activated) | "I need to get out of here." |
+| Perfectionist | Freeze (toward + stuck) | "I'm not ready." |
+| Auto-Pilot | Collapse (away + shutdown) | "I'm fine, just tired." |
+| People Pleaser | Fawn (mask on any primary) | "As long as everyone's happy, I'm safe." |
+
+### Accuracy Note
+
+~75% accurate to strict polyvagal theory. The 2x2 is a behavioural response model informed by polyvagal (Porges) + trauma response research (Pete Walker), not a direct neural mapping. Fight and flight are both sympathetic activation (same circuit, different behavioural direction). Freeze is a blend state (sympathetic + dorsal). The framework is "informed by" polyvagal theory, not "based on" it.
+
+### Impact on This Document (Applied 2026-04-19)
+
+All changes from the 4+1 archetype restructure have been applied throughout this document in a single dedicated pass:
+- **The Archetypes table** (line ~26): Updated to 4+1 model (Controller, Ghost, Perfectionist, Auto-Pilot + People Pleaser mask)
+- **All graph zone descriptions**: Updated. Top-left (Sympathetic) zones now reference Controller and/or Ghost. Bottom-right (Dorsal) zones now reference Perfectionist and/or Auto-Pilot. Performer references replaced with Controller throughout.
+- **Polyvagal Theory Mapping**: Updated to reflect Ghost as Sympathetic (Flight) and Auto-Pilot as Dorsal (Collapse)
+- **People Pleaser Reframe**: No change needed (already treats it as a mask on any primary state)
+- **Polyvagal Causes**: Updated archetype references (acute trauma produces Perfectionist/Auto-Pilot; chronic environment produces Controller/Ghost)
+- **Clinical Implication**: Updated to "Perfectionist, Auto-Pilot" for dorsal-dominant and "Controller, Ghost" for sympathetic-dominant
+- **Cultural Wound Environments**: Updated (Achievement Factory = Controller, Unpredictable Home = Ghost, Emotionally Unsafe = Auto-Pilot)
+- **Fun Sweet Spot (Throughline section)**: Performing zone = Controller, Numb zone = Perfectionist, Auto-Pilot
+- **Reconnect Sweet Spot (4 R's)**: Performance Zone = Controller, Hiding Zone = Auto-Pilot
+- **Rest Sweet Spot (5th R)**: Updated "Performers and Controllers" to "Controllers and Ghosts"
+- **Wound Installation Sequence**: Updated archetype references (Adapted Self = Controller, Rejected Self = Ghost)
+- **Coordinate Matrix example**: Updated from Performer to Controller
+- **Crack Graph**: Updated "Performer/Controller" to "Controller"
+
+The "Previous model" and "Proposed model" sections above are preserved for historical reference.
 

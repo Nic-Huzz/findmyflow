@@ -234,6 +234,7 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'offer_creation_explainer': 'offer_creation_explainer',
       'campaign_explainer': 'campaign_explainer',
       'launch_explainer': 'launch_explainer',
+      'life_map': 'life_map',  // Life Map (replaces Flow Finder + Shadow Work)
       'mind_space': 'mind_space_extraction',  // Matches JSON quest ID
       'milestone_read_money_model': 'milestone_read_money_model',  // Money Model Guide explainer
       'product_suite_map': 'product_suite_map',  // Product Suite Map builder
@@ -274,6 +275,7 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
 
     // Points per quest (must match public/challengeQuestsUpdate.json)
     const questPoints = {
+      'life_map': 15,
       'flow_finder_skills': 5,
       'flow_finder_problems': 5,
       'flow_finder_persona': 4,

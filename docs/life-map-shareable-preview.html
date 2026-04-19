@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Life Map — FindMyFlow</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, sans-serif;
+    padding: 40px;
+  }
+
+  .card {
+    width: 1080px;
+    height: 1350px;
+    background: linear-gradient(165deg, #1a0536 0%, #2d0a6e 25%, #4a0ea8 50%, #3b0d8a 75%, #1a0536 100%);
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 44px 40px;
+  }
+
+  /* Subtle noise/glow overlays */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(94, 23, 235, 0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(233, 162, 59, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ---- TOP SECTION ---- */
+  .top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .title-block {}
+
+  .title {
+    font-size: 38px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #E9A23B 0%, #fbbf24 40%, #fde68a 70%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+
+  .user-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: white;
+    margin-top: 6px;
+    letter-spacing: 0.2px;
+  }
+
+  .watermark {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+  }
+
+  /* ---- COLUMNS SECTION ---- */
+  .columns-section {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    position: relative;
+    z-index: 1;
+    margin-top: 8px;
+  }
+
+  .period-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .period-header {
+    text-align: center;
+    padding: 12px 6px 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+  }
+
+  .period-emoji {
+    font-size: 22px;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .period-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.3px;
+  }
+
+  .period-sub {
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* ---- STICKY NOTES ---- */
+  .sticky {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.35;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.15);
+    position: relative;
+    transition: transform 0.2s;
+  }
+
+  /* Fold effect */
+  .sticky::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 0 0 6px 0;
+  }
+
+  .sticky-gold {
+    background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
+    color: #78350f;
+  }
+  .sticky-gold::after {
+    background: linear-gradient(135deg, transparent 50%, #e8a817 50%);
+    opacity: 0.3;
+  }
+
+  .sticky-purple {
+    background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+    color: #3b0764;
+  }
+  .sticky-purple::after {
+    background: linear-gradient(135deg, transparent 50%, #a78bfa 50%);
+    opacity: 0.3;
+  }
+
+  .sticky-green {
+    background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
+    color: #064e3b;
+  }
+  .sticky-green::after {
+    background: linear-gradient(135deg, transparent 50%, #4ade80 50%);
+    opacity: 0.3;
+  }
+
+  /* Rotation classes */
+  .rot-n2 { transform: rotate(-2deg); }
+  .rot-n1 { transform: rotate(-1deg); }
+  .rot-0 { transform: rotate(0deg); }
+  .rot-p1 { transform: rotate(1deg); }
+  .rot-p2 { transform: rotate(1.5deg); }
+  .rot-p3 { transform: rotate(-1.5deg); }
+
+  /* ---- BOTTOM: CLUSTER SUMMARY ---- */
+  .cluster-section {
+    position: relative;
+    z-index: 1;
+    margin-top: 18px;
+  }
+
+  .cluster-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .cluster-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .cluster-box {
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cluster-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+
+  .cluster-box.gold::before { background: linear-gradient(90deg, #E9A23B, #fbbf24); }
+  .cluster-box.purple::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .cluster-box.green::before { background: linear-gradient(90deg, #10b981, #6ee7b7); }
+
+  .cluster-type {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+
+  .cluster-box.gold .cluster-type { color: #fbbf24; }
+  .cluster-box.purple .cluster-type { color: #a78bfa; }
+  .cluster-box.green .cluster-type { color: #6ee7b7; }
+
+  .cluster-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.3;
+  }
+
+  /* ---- LEGEND ---- */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-top: 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  .legend-dot.gold { background: #fbbf24; }
+  .legend-dot.purple { background: #c4b5fd; }
+  .legend-dot.green { background: #6ee7b7; }
+
+  .legend-text {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  /* Small decorative stars */
+  .star {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .star:nth-child(1) { top: 80px; right: 120px; width: 3px; height: 3px; }
+  .star:nth-child(2) { top: 200px; right: 60px; width: 5px; height: 5px; opacity: 0.1; }
+  .star:nth-child(3) { top: 400px; left: 30px; width: 4px; height: 4px; }
+  .star:nth-child(4) { bottom: 300px; right: 40px; width: 3px; height: 3px; opacity: 0.2; }
+  .star:nth-child(5) { top: 600px; left: 80px; width: 5px; height: 5px; opacity: 0.08; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <!-- Decorative dots -->
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+
+  <!-- TOP -->
+  <div class="top-section">
+    <div class="title-block">
+      <div class="title">My Life Map</div>
+      <div class="user-name">Nic Hurrell</div>
+    </div>
+    <div class="watermark">findmyflow.nichuzz.com</div>
+  </div>
+
+  <!-- 5 COLUMNS -->
+  <div class="columns-section">
+
+    <!-- CHILDHOOD -->
+    <div class="period-column">
+      <div class="period-header">
+        <span class="period-emoji">&#x1F476;</span>
+        <div class="period-name">Childhood</div>
+        <div class="period-sub">Pre-school + Primary</div>
+      </div>
+      <div class="sticky sticky-gold rot-n1">Building things with Lego</div>
+      <div class="sticky sticky-gold rot-p2">Playing tip at recess</div>
+      <div class="sticky sticky-purple rot-p1">Moving schools, starting over</div>
+      <div class="sticky sticky-green rot-n2">Spider-Man</div>
+    </div>
+
+    <!-- TEENS -->
+    <div class="period-column">
+      <div class="period-header">
+        <span class="period-emoji">&#x1F3B8;</span>
+        <div class="period-name">Teens</div>
+        <div class="period-sub">High School</div>
+      </div>
+      <div class="sticky sticky-gold rot-p1">Guitar + making music</div>
+      <div class="sticky sticky-gold rot-n2">Rugby, coaching younger kids</div>
+      <div class="sticky sticky-purple rot-p2">Not fitting into any group</div>
+      <div class="sticky sticky-green rot-n1">Steve Jobs</div>
+    </div>
+
+    <!-- YOUNG ADULT -->
+    <div class="period-column">
+      <div class="period-header">
+        <span class="period-emoji">&#x1F680;</span>
+        <div class="period-name">Young Adult</div>
+        <div class="period-sub">18 &ndash; 25</div>
+      </div>
+      <div class="sticky sticky-gold rot-n1">Started coaching business</div>
+      <div class="sticky sticky-gold rot-p2">Ran community events</div>
+      <div class="sticky sticky-purple rot-p1">Burnout at 24</div>
+      <div class="sticky sticky-purple rot-n2">Realised corporate wasn't it</div>
+      <div class="sticky sticky-green rot-p3">Bren&eacute; Brown</div>
+    </div>
+
+    <!-- CAREER -->
+    <div class="period-column">
+      <div class="period-header">
+        <span class="period-emoji">&#x1F3AF;</span>
+        <div class="period-name">Career</div>
+        <div class="period-sub">25+</div>
+      </div>
+      <div class="sticky sticky-gold rot-p2">Leading workshops</div>
+      <div class="sticky sticky-gold rot-n1">Designing experiences</div>
+      <div class="sticky sticky-purple rot-n2">People playing small</div>
+      <div class="sticky sticky-purple rot-p1">Talented people stuck</div>
+      <div class="sticky sticky-green rot-p3">Lost junior team members</div>
+    </div>
+
+    <!-- NOW + FUTURE -->
+    <div class="period-column">
+      <div class="period-header">
+        <span class="period-emoji">&#x2728;</span>
+        <div class="period-name">Now + Future</div>
+        <div class="period-sub">Where it's all going</div>
+      </div>
+      <div class="sticky sticky-gold rot-n2">Building this app</div>
+      <div class="sticky sticky-gold rot-p1">Making videos</div>
+      <div class="sticky sticky-purple rot-p2">Unfulfilling careers</div>
+      <div class="sticky sticky-purple rot-n1">Mental health treatment</div>
+      <div class="sticky sticky-green rot-p3">25yo me burnt out in VC</div>
+      <div class="sticky sticky-green rot-n2">Anyone in Head Full of Dreams</div>
+    </div>
+
+  </div>
+
+  <!-- CLUSTER SUMMARY -->
+  <div class="cluster-section">
+    <div class="cluster-label">Where it all points</div>
+    <div class="cluster-row">
+      <div class="cluster-box gold">
+        <div class="cluster-type">Skills Cluster</div>
+        <div class="cluster-value">Experience Designer</div>
+      </div>
+      <div class="cluster-box purple">
+        <div class="cluster-type">Problems Cluster</div>
+        <div class="cluster-value">The Unfulfilled Potential</div>
+      </div>
+      <div class="cluster-box green">
+        <div class="cluster-type">Personas Cluster</div>
+        <div class="cluster-value">The Awakening Professional</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot gold"></div>
+      <span class="legend-text">Skills</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot purple"></div>
+      <span class="legend-text">Problems</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot green"></div>
+      <span class="legend-text">Personas</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

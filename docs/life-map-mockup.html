@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Map Flow — Screen Mockups v3</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    min-height: 100vh;
+  }
+
+  /* ===== BRAND TOKENS (from flow-base.css + NervousSystemHealingCompass.css) ===== */
+  :root {
+    /* Backgrounds — flows use this purple gradient */
+    --flow-bg: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    /* Gold gradient for titles & CTAs */
+    --gold-text: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+    --gold-cta: linear-gradient(135deg, #E9A23B, #f5c55a);
+    --gold-cta-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+    /* Purple button */
+    --purple-btn: linear-gradient(135deg, #5e17eb, #7c3aed);
+    --purple-btn-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+    /* Text */
+    --text-bright: #ffffff;
+    --text-body: rgba(255, 255, 255, 0.85);
+    --text-sub: rgba(255, 255, 255, 0.6);
+    --text-muted: rgba(255, 255, 255, 0.4);
+    --text-faint: rgba(255, 255, 255, 0.2);
+    /* Highlight */
+    --highlight: #fbbf24;
+    /* Cards on purple bg */
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --card-border: rgba(255, 255, 255, 0.15);
+    /* Input on purple bg */
+    --input-bg: rgba(255, 255, 255, 0.08);
+    --input-border: rgba(255, 255, 255, 0.15);
+    --input-focus-border: rgba(251, 191, 36, 0.4);
+    /* Category accents */
+    --skills-accent: #fbbf24;
+    --problems-accent: #c4b5fd;
+    --personas-accent: #6ee7b7;
+    /* Sticky note colors */
+    --sticky-skills: linear-gradient(135deg, #fbbf24, #f5c842);
+    --sticky-problems: linear-gradient(135deg, #c4a7fa, #d4b8ff);
+    --sticky-personas: linear-gradient(135deg, #6ee7b7, #86efac);
+    /* Progress dots */
+    --dot-inactive: rgba(255, 255, 255, 0.2);
+    --dot-active: #fbbf24;
+    --dot-done: #fbbf24;
+  }
+
+  /* ===== Phone frame ===== */
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    margin: 20px auto;
+    border-radius: 40px;
+    border: 3px solid #333;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .phone-content {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .phone-content::-webkit-scrollbar { display: none; }
+
+  /* ===== Navigation ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    padding: 12px 20px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+    border-top: 1px solid #222;
+  }
+  .nav-bar button {
+    padding: 10px 24px; border-radius: 12px; border: none;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .nav-prev { background: #222; color: #aaa; }
+  .nav-prev:hover { background: #333; color: #fff; }
+  .nav-next { background: #5e17eb; color: #fff; }
+  .nav-next:hover { background: #7c3aed; }
+  .slide-counter { color: #666; font-size: 13px; min-width: 80px; text-align: center; }
+
+  .slide-label {
+    position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+    background: rgba(94, 23, 235, 0.25); border: 1px solid rgba(94, 23, 235, 0.35);
+    padding: 6px 16px; border-radius: 20px; font-size: 12px;
+    color: #c4b5fd; z-index: 100; white-space: nowrap;
+  }
+
+  /* ===== Screen base ===== */
+  .screen { display: none; min-height: 100%; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ===== All screens get the brand purple gradient bg ===== */
+  .flow-screen {
+    background: var(--flow-bg);
+    min-height: 100%;
+  }
+
+  /* ===== Gold gradient text helper ===== */
+  .gold-text {
+    background: var(--gold-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===== WELCOME ===== */
+  .welcome-screen {
+    padding: 60px 28px 40px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+  }
+
+  .welcome-icon { font-size: 64px; margin-bottom: 8px; }
+
+  .welcome-title {
+    font-size: 32px; font-weight: 700; line-height: 1.2;
+  }
+
+  .welcome-subtitle {
+    font-size: 16px; color: var(--text-body); line-height: 1.6; max-width: 320px;
+  }
+
+  .welcome-insight {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .welcome-insight h4 {
+    color: var(--highlight);
+    font-size: 12px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+
+  .welcome-insight p {
+    color: var(--text-body);
+    font-size: 14px; line-height: 1.6;
+  }
+
+  .cta-gold {
+    background: var(--gold-cta);
+    color: #1a1a2e;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 14px;
+    font-size: 16px; font-weight: 800;
+    cursor: pointer;
+    width: 100%; max-width: 320px;
+    box-shadow: var(--gold-cta-shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4); }
+
+  .cta-purple {
+    background: var(--purple-btn);
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: var(--purple-btn-shadow);
+    transition: transform 0.2s;
+  }
+
+  .time-note { color: var(--text-muted); font-size: 13px; }
+
+  /* ===== RESUME ===== */
+  .resume-screen {
+    justify-content: center; align-items: center;
+    text-align: center; padding: 40px 28px; gap: 24px;
+  }
+
+  .resume-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px; width: 100%;
+  }
+  .resume-card h3 {
+    font-size: 20px; font-weight: 700; color: var(--highlight); margin-bottom: 8px;
+  }
+  .resume-card p {
+    color: var(--text-body); font-size: 15px; line-height: 1.6; margin-bottom: 20px;
+  }
+  .resume-buttons { display: flex; gap: 12px; }
+  .resume-buttons button {
+    flex: 1; padding: 12px; border-radius: 12px; border: none;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  .btn-resume { background: var(--gold-cta); color: #1a1a2e; }
+  .btn-fresh {
+    background: transparent; color: var(--text-sub);
+    border: 2px solid rgba(255,255,255,0.3) !important;
+  }
+
+  /* ===== PERIOD SCREENS ===== */
+  .period-screen { padding: 0; }
+
+  .period-header { padding: 48px 24px 16px; text-align: center; }
+
+  .period-era-badge {
+    display: inline-block; padding: 5px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 12px;
+    background: rgba(255,255,255,0.1); color: var(--text-sub);
+  }
+
+  .period-title { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+  .period-age { color: var(--text-muted); font-size: 13px; }
+
+  /* Progress dots — gold active/done (brand) */
+  .progress-dots {
+    display: flex; justify-content: center; gap: 12px; padding: 0 24px 20px;
+  }
+  .progress-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--dot-inactive); transition: all 0.3s;
+  }
+  .progress-dot.active {
+    background: var(--dot-active);
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+    transform: scale(1.2);
+  }
+  .progress-dot.done { background: var(--dot-done); }
+
+  /* Question cards */
+  .questions-area {
+    flex: 1; padding: 0 20px 120px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+
+  .question-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 18px;
+    position: relative;
+  }
+
+  .question-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 12px; bottom: 12px; width: 4px; border-radius: 2px;
+  }
+  .question-card.skills::before { background: var(--skills-accent); }
+  .question-card.problems::before { background: var(--problems-accent); }
+  .question-card.personas::before { background: var(--personas-accent); }
+
+  .question-label {
+    font-size: 15px; font-weight: 700; color: var(--text-bright);
+    margin-bottom: 4px; padding-left: 14px;
+  }
+
+  .question-hint {
+    font-size: 12px; color: var(--text-muted);
+    margin-bottom: 12px; padding-left: 14px;
+  }
+
+  .input-list {
+    display: flex; flex-direction: column; gap: 8px; padding-left: 14px;
+  }
+
+  .mock-input {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text-muted); font-size: 13px; font-style: italic;
+  }
+  .mock-input.filled {
+    color: var(--text-body); font-style: normal;
+    border-color: var(--input-focus-border);
+    background: rgba(255,255,255,0.12);
+  }
+
+  .add-more {
+    color: var(--highlight); font-size: 13px; font-weight: 600;
+    padding: 6px 0 0 14px; cursor: pointer;
+  }
+
+  .period-cta {
+    padding: 20px; position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, #5a15d4 40%);
+    padding-top: 40px;
+  }
+
+  /* ===== PROCESSING ===== */
+  .processing-screen {
+    justify-content: center; align-items: center;
+    text-align: center; padding: 40px 28px; gap: 32px;
+  }
+
+  .processing-spinner {
+    width: 80px; height: 80px; border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.15);
+    border-top-color: var(--highlight);
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .processing-title { font-size: 24px; font-weight: 700; }
+
+  .processing-steps {
+    width: 100%; display: flex; flex-direction: column; gap: 12px; text-align: left;
+  }
+
+  .processing-step {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    background: var(--card-bg); border-radius: 12px; border: 1px solid var(--card-border);
+  }
+
+  .step-icon-wrap {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+
+  .step-done .step-icon-wrap { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+  .step-active .step-icon-wrap { background: rgba(251, 191, 36, 0.15); }
+  .step-active .step-icon-wrap::after {
+    content: ''; width: 10px; height: 10px; border-radius: 50%;
+    background: var(--highlight); animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .step-pending .step-icon-wrap { background: rgba(255,255,255,0.05); }
+  .step-pending .step-icon-wrap::after {
+    content: ''; width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15);
+  }
+
+  .step-label { font-size: 14px; color: var(--text-body); }
+  .step-pending .step-label { color: var(--text-muted); }
+  .step-active .step-label { color: var(--text-bright); font-weight: 600; }
+
+  /* ===== LIFE MAP (Sticky Notes) ===== */
+  .lifemap-screen {
+    padding: 48px 0 100px; gap: 16px; align-items: center;
+  }
+
+  .lifemap-title { font-size: 32px; font-weight: 700; text-align: center; padding: 0 20px; }
+  .lifemap-subtitle {
+    font-size: 14px; color: var(--text-sub); text-align: center;
+    padding: 0 20px; margin-top: -4px;
+  }
+
+  .timeline-legend {
+    display: flex; gap: 16px; justify-content: center; padding: 4px 0;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sub);
+  }
+  .legend-swatch {
+    width: 14px; height: 10px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .legend-swatch.gold-sw { background: #fbbf24; }
+  .legend-swatch.purple-sw { background: #c4a7fa; }
+  .legend-swatch.green-sw { background: #6ee7b7; }
+
+  .lifemap-scroll {
+    width: 100%; overflow-x: auto; scrollbar-width: none;
+    padding: 12px 0; scroll-snap-type: x mandatory;
+  }
+  .lifemap-scroll::-webkit-scrollbar { display: none; }
+
+  .lifemap-track {
+    display: flex; gap: 0; min-width: max-content; position: relative;
+  }
+
+  .lifemap-period {
+    min-width: 310px; padding: 0 16px; scroll-snap-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+
+  .lifemap-period-header {
+    text-align: center; padding-bottom: 8px;
+    border-bottom: 2px solid var(--highlight);
+    width: 100%; margin-bottom: 4px;
+  }
+  .lifemap-period-header h3 {
+    font-size: 16px; font-weight: 700; color: var(--highlight); margin-bottom: 2px;
+  }
+  .lifemap-period-header .age-range { font-size: 11px; color: var(--text-muted); }
+
+  .sticky-notes-grid {
+    display: flex; flex-direction: column; gap: 8px; width: 100%;
+  }
+
+  .sticky-note {
+    padding: 10px 14px; border-radius: 3px;
+    font-size: 12px; line-height: 1.3; font-weight: 500;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.25);
+    transform: rotate(var(--rot, 0deg));
+  }
+  .sticky-note.skills { background: var(--sticky-skills); color: #4a3000; }
+  .sticky-note.problems { background: var(--sticky-problems); color: #2d1a5e; }
+  .sticky-note.personas { background: var(--sticky-personas); color: #064e3b; }
+
+  .swipe-dots { display: flex; gap: 8px; justify-content: center; padding: 8px 0; }
+  .swipe-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--dot-inactive); transition: all 0.3s;
+  }
+  .swipe-dot.active-dot { background: var(--dot-active); width: 20px; border-radius: 4px; }
+
+  /* ===== REVEAL SCREENS ===== */
+  .reveal-screen {
+    padding: 48px 20px 100px; gap: 24px; align-items: center;
+  }
+
+  .reveal-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 16px; border-radius: 20px;
+    font-size: 11px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1.5px;
+  }
+  .reveal-badge.skills { background: rgba(251, 191, 36, 0.15); color: var(--skills-accent); }
+  .reveal-badge.problems { background: rgba(196, 181, 253, 0.15); color: var(--problems-accent); }
+  .reveal-badge.personas { background: rgba(110, 231, 183, 0.15); color: var(--personas-accent); }
+
+  .reveal-title { font-size: 28px; font-weight: 700; text-align: center; line-height: 1.2; }
+
+  .reveal-subtitle {
+    font-size: 15px; color: var(--text-body); text-align: center;
+    margin-top: -8px; line-height: 1.5; max-width: 320px;
+  }
+
+  .cluster-cards { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+
+  .cluster-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 20px; text-align: left;
+  }
+
+  .cluster-name {
+    font-size: 20px; font-weight: 700; margin-bottom: 8px;
+  }
+  .cluster-name.skills-name { color: var(--skills-accent); }
+  .cluster-name.problems-name { color: var(--problems-accent); }
+  .cluster-name.personas-name { color: var(--personas-accent); }
+
+  .cluster-insight {
+    font-size: 14px; color: var(--text-body); line-height: 1.5; margin-bottom: 14px;
+  }
+
+  .cluster-items { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cluster-item-pill {
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.08); border-radius: 8px;
+    font-size: 12px; color: var(--text-sub);
+  }
+
+  /* ===== COMPLETION ===== */
+  .completion-screen {
+    padding: 60px 24px 100px; gap: 24px; align-items: center; text-align: center;
+  }
+
+  .completion-checkmark {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(52, 211, 153, 0.15);
+    display: flex; align-items: center; justify-content: center; font-size: 40px;
+    color: #34d399;
+  }
+
+  .completion-title { font-size: 28px; font-weight: 700; }
+  .completion-message {
+    color: var(--text-body); font-size: 16px; line-height: 1.6; max-width: 320px;
+  }
+
+  .xp-card {
+    background: var(--card-bg); border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 16px; padding: 24px; width: 100%;
+  }
+  .xp-amount { font-size: 36px; font-weight: 700; color: var(--highlight); }
+  .xp-label { font-size: 14px; color: var(--text-sub); margin-top: 4px; }
+
+  .what-next { width: 100%; text-align: left; }
+  .what-next h4 {
+    color: var(--text-muted); font-size: 11px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;
+  }
+  .next-items { display: flex; flex-direction: column; gap: 8px; }
+  .next-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; color: var(--text-body);
+  }
+  .next-item-icon { font-size: 20px; flex-shrink: 0; }
+
+  /* ===== CONNECTING THE DOTS ===== */
+  .dots-screen {
+    padding: 48px 24px 100px; gap: 28px;
+    align-items: center; text-align: center;
+  }
+
+  .dots-narrative {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 28px 24px;
+    width: 100%; text-align: left;
+    position: relative;
+  }
+  .dots-narrative::before {
+    content: '"'; position: absolute;
+    top: 8px; left: 16px;
+    font-size: 48px; color: var(--highlight); opacity: 0.3;
+    font-family: Georgia, serif; line-height: 1;
+  }
+  .dots-narrative p {
+    font-size: 16px; line-height: 1.7; color: var(--text-body);
+    padding-left: 8px;
+  }
+  .dots-narrative p + p { margin-top: 12px; }
+  .dots-narrative strong { color: var(--highlight); font-weight: 700; }
+
+  /* ===== ESSENCE CONNECTION (on personas reveal) ===== */
+  .essence-connection {
+    background: linear-gradient(135deg, rgba(110, 231, 183, 0.08), rgba(251, 191, 36, 0.08));
+    border: 1px solid rgba(110, 231, 183, 0.2);
+    border-radius: 16px; padding: 20px;
+    width: 100%; display: flex; gap: 16px; align-items: flex-start;
+  }
+  .essence-avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, #6ee7b7, #34d399);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; flex-shrink: 0;
+  }
+  .essence-connection-text { flex: 1; }
+  .essence-connection-text .essence-label {
+    font-size: 11px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--personas-accent); margin-bottom: 6px;
+  }
+  .essence-connection-text .essence-name-inline {
+    font-size: 16px; font-weight: 700; color: var(--highlight); margin-bottom: 6px;
+  }
+  .essence-connection-text p {
+    font-size: 13px; color: var(--text-body); line-height: 1.5;
+  }
+
+  /* ===== LIVING DOCUMENT RETURN ===== */
+  .return-screen {
+    justify-content: center; align-items: center;
+    text-align: center; padding: 40px 24px; gap: 20px;
+  }
+  .return-options { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+  .return-option {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 20px;
+    text-align: left; display: flex; align-items: center; gap: 16px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .return-option:hover { border-color: var(--highlight); }
+  .return-option-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .return-option-icon.view { background: rgba(251, 191, 36, 0.15); }
+  .return-option-icon.add { background: rgba(110, 231, 183, 0.15); }
+  .return-option-icon.fresh { background: rgba(255, 255, 255, 0.08); }
+  .return-option-text h4 { font-size: 15px; font-weight: 700; color: var(--text-bright); margin-bottom: 3px; }
+  .return-option-text p { font-size: 12px; color: var(--text-sub); line-height: 1.4; }
+
+  /* ===== SHAREABLE PREVIEW ===== */
+  .shareable-preview {
+    width: 100%;
+    background: linear-gradient(160deg, #1a0536 0%, #2d0b6e 50%, #4a0ea8 100%);
+    border-radius: 16px; padding: 20px;
+    position: relative; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .shareable-preview .sp-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+  .shareable-preview .sp-title { font-size: 14px; font-weight: 700; color: var(--highlight); }
+  .shareable-preview .sp-name { font-size: 11px; color: var(--text-sub); }
+  .shareable-preview .sp-periods {
+    display: flex; gap: 4px; margin-bottom: 12px;
+  }
+  .shareable-preview .sp-period-col {
+    flex: 1; display: flex; flex-direction: column; gap: 3px;
+  }
+  .shareable-preview .sp-period-label {
+    font-size: 7px; color: var(--text-muted); text-align: center;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;
+    margin-bottom: 2px;
+  }
+  .shareable-preview .sp-mini-sticky {
+    padding: 3px 4px; border-radius: 2px;
+    font-size: 6px; line-height: 1.2;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  }
+  .sp-mini-sticky.sk { background: #fbbf24; color: #4a3000; }
+  .sp-mini-sticky.pr { background: #c4a7fa; color: #2d1a5e; }
+  .sp-mini-sticky.pe { background: #6ee7b7; color: #064e3b; }
+  .shareable-preview .sp-clusters {
+    display: flex; gap: 6px; margin-top: 8px;
+  }
+  .shareable-preview .sp-cluster {
+    flex: 1; padding: 6px; border-radius: 8px;
+    background: rgba(255,255,255,0.06); text-align: center;
+  }
+  .sp-cluster .sp-cluster-label {
+    font-size: 7px; font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .sp-cluster .sp-cluster-name { font-size: 8px; color: var(--text-body); }
+  .sp-cluster.sk-cl .sp-cluster-label { color: var(--skills-accent); }
+  .sp-cluster.pr-cl .sp-cluster-label { color: var(--problems-accent); }
+  .sp-cluster.pe-cl .sp-cluster-label { color: var(--personas-accent); }
+
+  .share-buttons { display: flex; gap: 10px; width: 100%; }
+  .share-btn {
+    flex: 1; padding: 12px; border-radius: 12px; border: none;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .share-btn.download { background: var(--gold-cta); color: #1a1a2e; }
+  .share-btn.copy { background: var(--card-bg); color: var(--text-body); border: 1px solid var(--card-border); }
+
+  /* ===== Fade-in animation (brand) ===== */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .screen.active .questions-area,
+  .screen.active .cluster-cards,
+  .screen.active .lifemap-scroll,
+  .screen.active .dots-narrative,
+  .screen.active .essence-connection {
+    animation: fadeIn 0.5s ease;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-label" id="slideLabel">Screen 1: Resume Prompt</div>
+
+<div class="phone-frame">
+  <div class="phone-content">
+
+    <!-- 1. LIVING DOCUMENT RETURN (completed users) -->
+    <div class="screen active flow-screen return-screen" data-label="Living Document (completed users)">
+      <div style="font-size: 48px;">🗺️</div>
+      <h2 class="gold-text" style="font-size: 24px; font-weight: 700;">Your Life Map</h2>
+      <p style="color: var(--text-sub); font-size: 14px;">Last updated 3 days ago</p>
+      <div class="return-options">
+        <div class="return-option">
+          <div class="return-option-icon view">🗺️</div>
+          <div class="return-option-text">
+            <h4>View My Life Map</h4>
+            <p>See your sticky note timeline and cluster reveals</p>
+          </div>
+        </div>
+        <div class="return-option">
+          <div class="return-option-icon add">+</div>
+          <div class="return-option-text">
+            <h4>Add to My Map</h4>
+            <p>New memories surfaced? Add them and re-analyze</p>
+          </div>
+        </div>
+        <div class="return-option">
+          <div class="return-option-icon fresh">🔄</div>
+          <div class="return-option-text">
+            <h4>Start Fresh</h4>
+            <p>Clear everything and redo from scratch</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. RESUME (in-progress users) -->
+    <div class="screen flow-screen resume-screen" data-label="Resume Prompt (in-progress users)">
+      <div style="font-size: 48px;">🗺️</div>
+      <h2 class="gold-text" style="font-size: 22px; font-weight: 700;">Welcome Back</h2>
+      <div class="resume-card">
+        <h3>Continue your Life Map?</h3>
+        <p>You made it to <strong style="color: #fff;">Young Adult</strong> last time. Pick up where you left off?</p>
+        <div class="resume-buttons">
+          <button class="btn-fresh">Start Fresh</button>
+          <button class="btn-resume">Continue</button>
+        </div>
+      </div>
+      <p class="time-note">Your previous answers are saved</p>
+    </div>
+
+    <!-- 2. WELCOME -->
+    <div class="screen flow-screen welcome-screen" data-label="Welcome">
+      <div class="welcome-icon">🗺️</div>
+      <h1 class="welcome-title gold-text">Your Life Story<br>Holds the Answers</h1>
+      <p class="welcome-subtitle">We're going to walk through 5 periods of your life. Just reflect honestly. No right or wrong answers.</p>
+      <div class="welcome-insight">
+        <h4>How this works</h4>
+        <p>For each period of your life, you'll answer 3 simple questions about what you loved, what was hard, and who inspired you. At the end, we'll show you what your life has been pointing toward all along.</p>
+      </div>
+      <p class="time-note">Takes about 15 minutes</p>
+      <button class="cta-gold">Let's Go</button>
+    </div>
+
+    <!-- 3. CHILDHOOD -->
+    <div class="screen flow-screen period-screen" data-label="Period 1: Childhood">
+      <div class="period-header">
+        <span class="period-era-badge">Period 1 of 5</span>
+        <h2 class="period-title gold-text">Childhood</h2>
+        <p class="period-age">Pre-school + Primary School</p>
+      </div>
+      <div class="progress-dots">
+        <div class="progress-dot active"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+      </div>
+      <div class="questions-area">
+        <div class="question-card skills">
+          <div class="question-label">What did you love doing?</div>
+          <div class="question-hint">Hobbies, free-time, what you naturally gravitated toward</div>
+          <div class="input-list">
+            <div class="mock-input filled">Building things with Lego</div>
+            <div class="mock-input filled">Playing tip with friends at recess</div>
+            <div class="mock-input">e.g. Drawing, climbing trees, making up games...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card problems">
+          <div class="question-label">What was hard or made you feel different?</div>
+          <div class="question-hint">Challenges, struggles, things that set you apart</div>
+          <div class="input-list">
+            <div class="mock-input filled">Moving schools and having to start over</div>
+            <div class="mock-input">e.g. Feeling like the odd one out, parents splitting...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card personas">
+          <div class="question-label">Who were your heroes?</div>
+          <div class="question-hint">Characters from movies, TV, books you absolutely loved</div>
+          <div class="input-list">
+            <div class="mock-input filled">Spider-Man</div>
+            <div class="mock-input">e.g. Harry Potter, a teacher, an older cousin...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+      </div>
+      <div class="period-cta"><button class="cta-purple">Continue to Teens →</button></div>
+    </div>
+
+    <!-- 4. TEENS -->
+    <div class="screen flow-screen period-screen" data-label="Period 2: Teens">
+      <div class="period-header">
+        <span class="period-era-badge">Period 2 of 5</span>
+        <h2 class="period-title gold-text">Teens</h2>
+        <p class="period-age">High School</p>
+      </div>
+      <div class="progress-dots">
+        <div class="progress-dot done"></div>
+        <div class="progress-dot active"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+      </div>
+      <div class="questions-area">
+        <div class="question-card skills">
+          <div class="question-label">What were you into?</div>
+          <div class="question-hint">Activities, subjects, how you spent your time</div>
+          <div class="input-list">
+            <div class="mock-input filled">Playing guitar and making music</div>
+            <div class="mock-input filled">Rugby and coaching younger kids</div>
+            <div class="mock-input">e.g. Drama, coding, skateboarding...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card problems">
+          <div class="question-label">What were the biggest challenges you faced?</div>
+          <div class="question-hint">What you overcame, what pushed you</div>
+          <div class="input-list">
+            <div class="mock-input filled">Not fitting into any one group</div>
+            <div class="mock-input">e.g. Academic pressure, bullying, family stuff...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card personas">
+          <div class="question-label">Who inspired you?</div>
+          <div class="question-hint">Role models, characters, people you looked up to</div>
+          <div class="input-list">
+            <div class="mock-input filled">Steve Jobs (Think Different)</div>
+            <div class="mock-input">e.g. A coach, a fictional character, a musician...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+      </div>
+      <div class="period-cta"><button class="cta-purple">Continue to Young Adult →</button></div>
+    </div>
+
+    <!-- 5. YOUNG ADULT -->
+    <div class="screen flow-screen period-screen" data-label="Period 3: Young Adult">
+      <div class="period-header">
+        <span class="period-era-badge">Period 3 of 5</span>
+        <h2 class="period-title gold-text">Young Adult</h2>
+        <p class="period-age">18 – 25</p>
+      </div>
+      <div class="progress-dots">
+        <div class="progress-dot done"></div>
+        <div class="progress-dot done"></div>
+        <div class="progress-dot active"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+      </div>
+      <div class="questions-area">
+        <div class="question-card skills">
+          <div class="question-label">What did you spend your energy on?</div>
+          <div class="question-hint">Projects, studies, creative outlets, side hustles</div>
+          <div class="input-list">
+            <div class="mock-input">e.g. Started a blog, studied psychology, travelled...</div>
+            <div class="mock-input">e.g. Built an app, ran events, freelanced...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card problems">
+          <div class="question-label">What shaped you most?</div>
+          <div class="question-hint">Struggles, pivots, or moments that changed your direction</div>
+          <div class="input-list">
+            <div class="mock-input">e.g. Dropping out, a breakup, realising I hated my degree...</div>
+            <div class="mock-input">e.g. Burnout, losing someone, hitting rock bottom...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card personas">
+          <div class="question-label">Who did you admire?</div>
+          <div class="question-hint">What about them resonated with you?</div>
+          <div class="input-list">
+            <div class="mock-input">e.g. Bren&eacute; Brown (vulnerability as strength)...</div>
+            <div class="mock-input">e.g. A mentor at work, Naval Ravikant...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+      </div>
+      <div class="period-cta"><button class="cta-purple">Continue to Career →</button></div>
+    </div>
+
+    <!-- 6. CAREER -->
+    <div class="screen flow-screen period-screen" data-label="Period 4: Career">
+      <div class="period-header">
+        <span class="period-era-badge">Period 4 of 5</span>
+        <h2 class="period-title gold-text">Career</h2>
+        <p class="period-age">25+</p>
+      </div>
+      <div class="progress-dots">
+        <div class="progress-dot done"></div>
+        <div class="progress-dot done"></div>
+        <div class="progress-dot done"></div>
+        <div class="progress-dot active"></div>
+        <div class="progress-dot"></div>
+      </div>
+      <div class="questions-area">
+        <div class="question-card skills">
+          <div class="question-label">What energized you at work?</div>
+          <div class="question-hint">Tasks, roles, projects where you felt alive</div>
+          <div class="input-list">
+            <div class="mock-input">e.g. Leading workshops, solving complex problems...</div>
+            <div class="mock-input">e.g. Designing experiences, coaching team members...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card problems">
+          <div class="question-label">What frustrated you or drove you?</div>
+          <div class="question-hint">Problems you wanted to solve, injustices that fired you up</div>
+          <div class="input-list">
+            <div class="mock-input">e.g. People stuck in jobs they hate, broken systems...</div>
+            <div class="mock-input">e.g. Watching talented people play small...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card personas">
+          <div class="question-label">Who do you wish you could help?</div>
+          <div class="question-hint">Who did you see struggling? Who needed what you know?</div>
+          <div class="input-list">
+            <div class="mock-input">e.g. Junior team members who felt lost...</div>
+            <div class="mock-input">e.g. Friends burnt out in corporate...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+      </div>
+      <div class="period-cta"><button class="cta-purple">Continue to Now →</button></div>
+    </div>
+
+    <!-- 7. NOW + FUTURE -->
+    <div class="screen flow-screen period-screen" data-label="Period 5: Now + Future">
+      <div class="period-header">
+        <span class="period-era-badge">Period 5 of 5</span>
+        <h2 class="period-title gold-text">Now + Future</h2>
+        <p class="period-age">Where you are and where you're going</p>
+      </div>
+      <div class="progress-dots">
+        <div class="progress-dot done"></div>
+        <div class="progress-dot done"></div>
+        <div class="progress-dot done"></div>
+        <div class="progress-dot done"></div>
+        <div class="progress-dot active"></div>
+      </div>
+      <div class="questions-area">
+        <div class="question-card skills">
+          <div class="question-label">What lights you up right now?</div>
+          <div class="question-hint">What would you do even if no one paid you?</div>
+          <div class="input-list">
+            <div class="mock-input">e.g. Building this app, writing, coaching friends...</div>
+            <div class="mock-input">e.g. Making videos, designing experiences...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card problems">
+          <div class="question-label">What do you want to change?</div>
+          <div class="question-hint">In your life, in others' lives, in the world</div>
+          <div class="input-list">
+            <div class="mock-input">e.g. People wasting their lives in unfulfilling careers...</div>
+            <div class="mock-input">e.g. The way mental health is treated...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+        <div class="question-card personas">
+          <div class="question-label">Who needs what you've learned?</div>
+          <div class="question-hint">If you could go back and help a younger version of someone, who?</div>
+          <div class="input-list">
+            <div class="mock-input">e.g. The 25-year-old me who was burnt out in VC...</div>
+            <div class="mock-input">e.g. Anyone stuck in "Head Full of Dreams"...</div>
+          </div>
+          <div class="add-more">+ Add more</div>
+        </div>
+      </div>
+      <div class="period-cta"><button class="cta-gold" style="width: 100%; border-radius: 14px; padding: 16px; font-size: 16px; font-weight: 800;">Reveal My Life Map ✨</button></div>
+    </div>
+
+    <!-- 8. PROCESSING -->
+    <div class="screen flow-screen processing-screen" data-label="AI Processing">
+      <div class="processing-spinner"></div>
+      <h2 class="processing-title gold-text">Reading your life story...</h2>
+      <p style="color: var(--text-muted); font-size: 14px;">This takes about 30 seconds</p>
+      <div class="processing-steps">
+        <div class="processing-step step-done">
+          <div class="step-icon-wrap">✓</div>
+          <div class="step-label">Discovering your natural skills</div>
+        </div>
+        <div class="processing-step step-active">
+          <div class="step-icon-wrap"></div>
+          <div class="step-label">Mapping problems you care about</div>
+        </div>
+        <div class="processing-step step-pending">
+          <div class="step-icon-wrap"></div>
+          <div class="step-label">Revealing who you're meant to serve</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. CONNECTING THE DOTS -->
+    <div class="screen flow-screen dots-screen" data-label="Connecting the Dots (AI narrative)">
+      <div style="font-size: 48px;">✨</div>
+      <h2 class="gold-text" style="font-size: 28px; font-weight: 700; line-height: 1.2;">Here's what your life<br>has been telling you</h2>
+      <div class="dots-narrative">
+        <p>From building Lego as a kid to running community events at university to designing experiences today, you've always been <strong>creating worlds for other people to step into</strong>.</p>
+        <p>The kid who kept moving schools and never quite fit in grew into the adult who sees people playing small and can't look away. That's not a coincidence.</p>
+        <p>Your <strong>Radiant Rebel</strong> has been here all along. It was there when you chose Spider-Man as your hero. It was there when you quit VC at 26. It's here now, building something that helps people stop living someone else's life.</p>
+        <p>Your skills, your struggles, and your heroes all point the same direction. Let's show you.</p>
+      </div>
+      <button class="cta-gold" style="width: 100%;">See Your Life Map →</button>
+    </div>
+
+    <!-- 11. LIFE MAP (Compact All-at-Once View) -->
+    <div class="screen flow-screen lifemap-screen" data-label="Your Life Map (all periods at once)">
+      <h1 class="lifemap-title gold-text">Your Life Map</h1>
+      <p class="lifemap-subtitle">Your whole life, one view</p>
+      <div class="timeline-legend">
+        <div class="legend-item"><div class="legend-swatch gold-sw"></div>What you loved</div>
+        <div class="legend-item"><div class="legend-swatch purple-sw"></div>What was hard</div>
+        <div class="legend-item"><div class="legend-swatch green-sw"></div>Who inspired you</div>
+      </div>
+
+      <!-- Compact 5-column grid -->
+      <div style="display: flex; gap: 4px; padding: 0 12px; width: 100%;">
+        <!-- Childhood -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+          <div style="text-align: center; padding-bottom: 6px; border-bottom: 2px solid #7c3aed; margin-bottom: 4px;">
+            <div style="font-size: 11px; font-weight: 700; color: #a78bfa;">Childhood</div>
+            <div style="font-size: 8px; color: var(--text-muted);">Pre-school</div>
+          </div>
+          <div class="sticky-note skills" style="--rot: -1.2deg; font-size: 9px; padding: 6px 8px;">Building Lego</div>
+          <div class="sticky-note skills" style="--rot: 0.8deg; font-size: 9px; padding: 6px 8px;">Playing tip</div>
+          <div class="sticky-note problems" style="--rot: -0.5deg; font-size: 9px; padding: 6px 8px;">Moving schools</div>
+          <div class="sticky-note personas" style="--rot: 1.0deg; font-size: 9px; padding: 6px 8px;">Spider-Man</div>
+        </div>
+        <!-- Teens -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+          <div style="text-align: center; padding-bottom: 6px; border-bottom: 2px solid #9b3ed7; margin-bottom: 4px;">
+            <div style="font-size: 11px; font-weight: 700; color: #c084fc;">Teens</div>
+            <div style="font-size: 8px; color: var(--text-muted);">High School</div>
+          </div>
+          <div class="sticky-note skills" style="--rot: 0.6deg; font-size: 9px; padding: 6px 8px;">Guitar</div>
+          <div class="sticky-note skills" style="--rot: -1.5deg; font-size: 9px; padding: 6px 8px;">Rugby</div>
+          <div class="sticky-note problems" style="--rot: 0.4deg; font-size: 9px; padding: 6px 8px;">Not fitting in</div>
+          <div class="sticky-note personas" style="--rot: -0.8deg; font-size: 9px; padding: 6px 8px;">Steve Jobs</div>
+        </div>
+        <!-- Young Adult -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+          <div style="text-align: center; padding-bottom: 6px; border-bottom: 2px solid #c77a2b; margin-bottom: 4px;">
+            <div style="font-size: 11px; font-weight: 700; color: #e9a23b;">18 – 25</div>
+            <div style="font-size: 8px; color: var(--text-muted);">Young Adult</div>
+          </div>
+          <div class="sticky-note skills" style="--rot: -0.7deg; font-size: 9px; padding: 6px 8px;">Coaching</div>
+          <div class="sticky-note skills" style="--rot: 1.3deg; font-size: 9px; padding: 6px 8px;">Events</div>
+          <div class="sticky-note problems" style="--rot: -1.0deg; font-size: 9px; padding: 6px 8px;">Burnout</div>
+          <div class="sticky-note problems" style="--rot: 0.3deg; font-size: 9px; padding: 6px 8px;">Corporate</div>
+          <div class="sticky-note personas" style="--rot: -0.4deg; font-size: 9px; padding: 6px 8px;">Bren&eacute; Brown</div>
+        </div>
+        <!-- Career -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+          <div style="text-align: center; padding-bottom: 6px; border-bottom: 2px solid #E9A23B; margin-bottom: 4px;">
+            <div style="font-size: 11px; font-weight: 700; color: #fbbf24;">Career</div>
+            <div style="font-size: 8px; color: var(--text-muted);">25+</div>
+          </div>
+          <div class="sticky-note skills" style="--rot: 0.5deg; font-size: 9px; padding: 6px 8px;">Workshops</div>
+          <div class="sticky-note skills" style="--rot: -1.1deg; font-size: 9px; padding: 6px 8px;">Designing</div>
+          <div class="sticky-note problems" style="--rot: 0.9deg; font-size: 9px; padding: 6px 8px;">Playing small</div>
+          <div class="sticky-note problems" style="--rot: -0.5deg; font-size: 9px; padding: 6px 8px;">Stuck people</div>
+          <div class="sticky-note personas" style="--rot: 0.7deg; font-size: 9px; padding: 6px 8px;">Lost juniors</div>
+        </div>
+        <!-- Now -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+          <div style="text-align: center; padding-bottom: 6px; border-bottom: 2px solid #fbbf24; margin-bottom: 4px;">
+            <div style="font-size: 11px; font-weight: 700; color: #fbbf24;">Now</div>
+            <div style="font-size: 8px; color: var(--text-muted);">+ Future</div>
+          </div>
+          <div class="sticky-note skills" style="--rot: -0.3deg; font-size: 9px; padding: 6px 8px;">Building app</div>
+          <div class="sticky-note skills" style="--rot: 1.4deg; font-size: 9px; padding: 6px 8px;">Videos</div>
+          <div class="sticky-note problems" style="--rot: -0.9deg; font-size: 9px; padding: 6px 8px;">Careers</div>
+          <div class="sticky-note problems" style="--rot: 0.6deg; font-size: 9px; padding: 6px 8px;">Mental health</div>
+          <div class="sticky-note personas" style="--rot: -0.5deg; font-size: 9px; padding: 6px 8px;">25yo me</div>
+          <div class="sticky-note personas" style="--rot: 1.1deg; font-size: 9px; padding: 6px 8px;">Head Full of Dreams</div>
+        </div>
+      </div>
+
+      <div style="padding: 0 20px; width: 100%; margin-top: 12px;">
+        <button class="cta-gold" style="width: 100%;">See What This Means →</button>
+      </div>
+    </div>
+
+    <!-- 10. SKILLS REVEAL -->
+    <div class="screen flow-screen reveal-screen" data-label="Reveal 1: Your Skills">
+      <span class="reveal-badge skills">Your Natural Skills</span>
+      <h2 class="reveal-title gold-text">What You've Always<br>Been Good At</h2>
+      <p class="reveal-subtitle">Patterns from what you loved doing across every period of your life</p>
+      <div class="cluster-cards">
+        <div class="cluster-card">
+          <div class="cluster-name skills-name">Experience Designer</div>
+          <div class="cluster-insight">From building Lego to running events to designing apps. You've always been creating experiences for others.</div>
+          <div class="cluster-items">
+            <span class="cluster-item-pill">Building Lego</span>
+            <span class="cluster-item-pill">Ran events</span>
+            <span class="cluster-item-pill">Workshops</span>
+            <span class="cluster-item-pill">Building this app</span>
+          </div>
+        </div>
+        <div class="cluster-card">
+          <div class="cluster-name skills-name">Community Catalyst</div>
+          <div class="cluster-insight">Playing tip, coaching kids, leading workshops. You draw people together and bring energy to groups.</div>
+          <div class="cluster-items">
+            <span class="cluster-item-pill">Playing tip</span>
+            <span class="cluster-item-pill">Coaching kids</span>
+            <span class="cluster-item-pill">Community events</span>
+          </div>
+        </div>
+      </div>
+      <button class="cta-purple" style="margin-top: 8px;">Next: Your Problems →</button>
+    </div>
+
+    <!-- 11. PROBLEMS REVEAL -->
+    <div class="screen flow-screen reveal-screen" data-label="Reveal 2: Your Problems">
+      <span class="reveal-badge problems">Problems You Care About</span>
+      <h2 class="reveal-title gold-text">What You've Always<br>Cared About Fixing</h2>
+      <p class="reveal-subtitle">The struggles that shaped you are the same ones you're meant to solve for others</p>
+      <div class="cluster-cards">
+        <div class="cluster-card">
+          <div class="cluster-name problems-name">The Unfulfilled Potential</div>
+          <div class="cluster-insight">You keep seeing people stuck, playing small, burnt out in lives they didn't choose. This is your message.</div>
+          <div class="cluster-items">
+            <span class="cluster-item-pill">Not fitting in</span>
+            <span class="cluster-item-pill">Burnout at 24</span>
+            <span class="cluster-item-pill">People playing small</span>
+            <span class="cluster-item-pill">Unfulfilling careers</span>
+          </div>
+        </div>
+        <div class="cluster-card">
+          <div class="cluster-name problems-name">The Belonging Crisis</div>
+          <div class="cluster-insight">From moving schools to not fitting in to realising corporate wasn't you. You understand what it feels like to search for where you belong.</div>
+          <div class="cluster-items">
+            <span class="cluster-item-pill">Moving schools</span>
+            <span class="cluster-item-pill">No one group</span>
+            <span class="cluster-item-pill">Corporate wasn't it</span>
+          </div>
+        </div>
+      </div>
+      <button class="cta-purple" style="margin-top: 8px;">Next: Your People →</button>
+    </div>
+
+    <!-- 12. PERSONAS REVEAL -->
+    <div class="screen flow-screen reveal-screen" data-label="Reveal 3: Your People">
+      <span class="reveal-badge personas">Who You're Meant to Serve</span>
+      <h2 class="reveal-title gold-text">The People Who<br>Need What You Know</h2>
+      <p class="reveal-subtitle">Your heroes across life reveal who you understand deeply enough to help</p>
+      <div class="cluster-cards">
+        <div class="cluster-card">
+          <div class="cluster-name personas-name">The Awakening Professional</div>
+          <div class="cluster-insight">You were the 25-year-old who realised the path wasn't yours. That's exactly who you're meant to serve.</div>
+          <div class="cluster-items">
+            <span class="cluster-item-pill">Steve Jobs</span>
+            <span class="cluster-item-pill">Lost juniors</span>
+            <span class="cluster-item-pill">25yo me in VC</span>
+            <span class="cluster-item-pill">Head Full of Dreams</span>
+          </div>
+        </div>
+        <div class="cluster-card">
+          <div class="cluster-name personas-name">The Hidden Creative</div>
+          <div class="cluster-insight">From Spider-Man to Brené Brown. You're drawn to people who show up authentically despite the cost.</div>
+          <div class="cluster-items">
+            <span class="cluster-item-pill">Spider-Man</span>
+            <span class="cluster-item-pill">Bren&eacute; Brown</span>
+          </div>
+        </div>
+      </div>
+      <!-- Essence Archetype Connection -->
+      <div class="essence-connection">
+        <div class="essence-avatar">🦸</div>
+        <div class="essence-connection-text">
+          <div class="essence-label">Your Essence Archetype</div>
+          <div class="essence-name-inline">Radiant Rebel</div>
+          <p>Your Radiant Rebel has been present in every hero you've chosen. Spider-Man, Steve Jobs, Bren&eacute; Brown. They all share your essence: showing up authentically and challenging the status quo, no matter the cost. The people you're meant to serve are the ones still searching for permission to do the same.</p>
+        </div>
+      </div>
+
+      <button class="cta-gold" style="width: 100%; margin-top: 8px;">Complete Life Map ✨</button>
+    </div>
+
+    <!-- 15. COMPLETION -->
+    <div class="screen flow-screen completion-screen" data-label="Completion">
+      <div class="completion-checkmark">✓</div>
+      <h1 class="completion-title gold-text">Life Map Complete</h1>
+      <p class="completion-message">Your life has been building toward this. Your skills, your struggles, your heroes. They all point the same direction.</p>
+      <div class="xp-card">
+        <div class="xp-amount">+15 XP</div>
+        <div class="xp-label">Life Map Complete</div>
+      </div>
+      <!-- Shareable Preview -->
+      <div class="shareable-preview">
+        <div class="sp-header">
+          <div class="sp-title">🗺️ My Life Map</div>
+          <div class="sp-name">Nic Hurrell</div>
+        </div>
+        <div class="sp-periods">
+          <div class="sp-period-col">
+            <div class="sp-period-label">Childhood</div>
+            <div class="sp-mini-sticky sk">Lego</div>
+            <div class="sp-mini-sticky sk">Playing tip</div>
+            <div class="sp-mini-sticky pr">Moving schools</div>
+            <div class="sp-mini-sticky pe">Spider-Man</div>
+          </div>
+          <div class="sp-period-col">
+            <div class="sp-period-label">Teens</div>
+            <div class="sp-mini-sticky sk">Guitar</div>
+            <div class="sp-mini-sticky sk">Rugby</div>
+            <div class="sp-mini-sticky pr">Not fitting in</div>
+            <div class="sp-mini-sticky pe">Steve Jobs</div>
+          </div>
+          <div class="sp-period-col">
+            <div class="sp-period-label">Young Adult</div>
+            <div class="sp-mini-sticky sk">Coaching</div>
+            <div class="sp-mini-sticky sk">Events</div>
+            <div class="sp-mini-sticky pr">Burnout</div>
+            <div class="sp-mini-sticky pe">Bren&eacute; Brown</div>
+          </div>
+          <div class="sp-period-col">
+            <div class="sp-period-label">Career</div>
+            <div class="sp-mini-sticky sk">Workshops</div>
+            <div class="sp-mini-sticky sk">Designing</div>
+            <div class="sp-mini-sticky pr">Playing small</div>
+            <div class="sp-mini-sticky pe">Lost juniors</div>
+          </div>
+          <div class="sp-period-col">
+            <div class="sp-period-label">Now</div>
+            <div class="sp-mini-sticky sk">Building app</div>
+            <div class="sp-mini-sticky sk">Videos</div>
+            <div class="sp-mini-sticky pr">Careers</div>
+            <div class="sp-mini-sticky pe">25yo me</div>
+          </div>
+        </div>
+        <div class="sp-clusters">
+          <div class="sp-cluster sk-cl">
+            <div class="sp-cluster-label">SKILL</div>
+            <div class="sp-cluster-name">Experience Designer</div>
+          </div>
+          <div class="sp-cluster pr-cl">
+            <div class="sp-cluster-label">PROBLEM</div>
+            <div class="sp-cluster-name">Unfulfilled Potential</div>
+          </div>
+          <div class="sp-cluster pe-cl">
+            <div class="sp-cluster-label">PERSONA</div>
+            <div class="sp-cluster-name">Awakening Pro</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="share-buttons">
+        <button class="share-btn download">📥 Save Image</button>
+        <button class="share-btn copy">📋 Copy Link</button>
+      </div>
+
+      <div class="what-next">
+        <h4>What's next</h4>
+        <div class="next-items">
+          <div class="next-item"><span class="next-item-icon">🎯</span><span>View your Skills, Problems & Personas wheels</span></div>
+          <div class="next-item"><span class="next-item-icon">🎮</span><span>Get your first Play-List challenge</span></div>
+          <div class="next-item"><span class="next-item-icon">🏠</span><span>Back to Home</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-prev" onclick="prevSlide()">← Back</button>
+  <span class="slide-counter" id="counter">1 / 15</span>
+  <button class="nav-next" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+  const screens = document.querySelectorAll('.screen');
+  let current = 0;
+  function showSlide(n) {
+    screens.forEach(s => s.classList.remove('active'));
+    screens[n].classList.add('active');
+    document.getElementById('counter').textContent = `${n + 1} / ${screens.length}`;
+    document.getElementById('slideLabel').textContent = `Screen ${n + 1}: ${screens[n].dataset.label}`;
+    document.querySelector('.phone-content').scrollTop = 0;
+  }
+  function nextSlide() { if (current < screens.length - 1) { current++; showSlide(current); } }
+  function prevSlide() { if (current > 0) { current--; showSlide(current); } }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+  const scrollEl = document.querySelector('.lifemap-scroll');
+  if (scrollEl) {
+    scrollEl.addEventListener('scroll', () => {
+      const dots = document.querySelectorAll('.swipe-dot');
+      const idx = Math.round(scrollEl.scrollLeft / 310);
+      dots.forEach((d, i) => d.classList.toggle('active-dot', i === idx));
+    });
+  }
+</script>
+
+</body>
+</html>

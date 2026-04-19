@@ -957,7 +957,47 @@ Full details in `docs/CSS_CONVENTIONS.md` and `docs/CSS-SCOPING-GUIDELINES.md`.
 
 ---
 
-## 7. CHECKLISTS
+## 7. PIXAR IMAGE GENERATION STYLE
+
+All AI-generated images in FindMyFlow use a consistent Pixar 3D cinematic animation style via Gemini 3.1 Flash.
+
+### Style Requirements (include in ALL image generation prompts)
+
+```
+Pixar 3D cinematic animation style — the EXACT rendering quality of
+Pixar's Inside Out 2, Soul, and Coco. Smooth subsurface-scattering skin,
+large expressive eyes with visible iris detail and specular highlights,
+slightly exaggerated proportions (larger head-to-body ratio for children,
+stylized hands), volumetric atmospheric lighting with visible light rays,
+depth of field with subtle bokeh.
+```
+
+### Critical rules
+- **MUST be 3D rendered**, not 2D illustration, watercolor, or flat
+- Subsurface scattering on skin (the translucent glow Pixar characters have)
+- Volumetric lighting with visible light rays
+- Large expressive eyes with specular highlights
+- End prompts with: `"No text or words anywhere in the image."`
+- Brand color integration: purple (#5e17eb) → gold (#E9A23B) gradients in skies/lighting where appropriate
+
+### API Pattern
+- Model: `gemini-3.1-flash-image-preview`
+- Endpoint: `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent`
+- Config: `{ responseModalities: ["TEXT", "IMAGE"] }`
+- API key: `GOOGLE_API_KEY` from `.env.local` or Supabase secrets
+- Edge function pattern: see `supabase/functions/generate-avatar-gemini/`
+- Script pattern: see `scripts/generate-crisis-image.py`
+
+### Where Pixar images are used
+- Essence Mirror hero avatars (`/essence-mirror`)
+- Journey Onboarding Pixar scenes (`src/components/onboarding/`)
+- Tension Assessment images (`public/tension-assessment-v2.json`)
+- Carousel slide backgrounds (`scripts/generate-crisis-image.py`)
+- Life Map shareable mural (`scripts/test-life-map-mural.py`)
+
+---
+
+## 8. CHECKLISTS
 
 ### New Page
 

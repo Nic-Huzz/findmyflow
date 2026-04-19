@@ -372,6 +372,18 @@ const { celebrateTaskComplete, celebrateLevelUp } = useCelebrations()
 
 - **Never use em dashes** (`—` or `--`) in user-facing copy. Use commas, full stops, or rephrase instead. Em dashes are a tell-tale sign of AI-generated text.
 
+## Pixar Image Generation Style
+
+All AI-generated images use Pixar 3D cinematic animation style via Gemini 3.1 Flash. Include this in ALL image prompts:
+
+```
+Pixar 3D cinematic animation style — the EXACT rendering quality of Pixar's Inside Out 2, Soul, and Coco.
+Smooth subsurface-scattering skin, large expressive eyes with visible iris detail and specular highlights,
+slightly exaggerated proportions, volumetric atmospheric lighting with visible light rays, depth of field with subtle bokeh.
+```
+
+Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhere in the image."` Use purple→gold brand gradients in skies/lighting. See `docs/page-component-design-guide.md` section 7 for full API pattern and usage list.
+
 ## Database Schema
 
 ### Core Tables

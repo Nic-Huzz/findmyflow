@@ -56,15 +56,15 @@ export default function SweetSpotGraph({ title, yAxis, xAxis, zones, width = '10
         </text>
       )}
 
-      {/* Diagonal zone (gold) */}
+      {/* Diagonal zone label (offset below the line for readability) */}
       <text
-        x="230"
-        y="205"
-        fill="#E9A23B"
-        fontSize="14"
+        x="245"
+        y="230"
+        fill="white"
+        fontSize="13"
         fontWeight="800"
         textAnchor="middle"
-        transform="rotate(-45, 230, 205)"
+        transform="rotate(-45, 245, 230)"
       >
         {zones.diagonal.name.toUpperCase()}
       </text>
