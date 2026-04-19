@@ -175,8 +175,6 @@ export default function IdentifyTopicsFlow() {
 
   // Cluster state
   const [clusters, setClusters] = useState([])
-  const [selectedCluster, setSelectedCluster] = useState(null)
-  const [exploredClusterIndices, setExploredClusterIndices] = useState(new Set())
 
   // Sub-selection state
   const [keptCategoryIds, setKeptCategoryIds] = useState([])
@@ -242,22 +240,18 @@ export default function IdentifyTopicsFlow() {
   }
 
   // User selects a cluster → enter sub-select for its categories
-  const handleClusterSelect = (cluster) => {
-    setSelectedCluster(cluster)
-    const catIds = cluster.categoryIds
-    setKeptCategoryIds(catIds)
+  // Continue from cluster overview → sub-select ALL categories sequentially
+  const handleClusterContinue = () => {
+    const allCatIds = clusters.flatMap(c => c.categoryIds)
+    setKeptCategoryIds(allCatIds)
 
-    // Pre-select AI items for categories in this cluster (preserve existing selections from other clusters)
-    setSelectedItems(prev => {
-      const updated = { ...prev }
-      catIds.forEach(catId => {
-        if (!updated[catId]) {
-          const aiItems = (categoryExtractions[catId] || []).map(e => e.problem)
-          updated[catId] = [...aiItems]
-        }
-      })
-      return updated
+    // Pre-select AI items for all categories
+    const preSelected = {}
+    allCatIds.forEach(catId => {
+      const aiItems = (categoryExtractions[catId] || []).map(e => e.problem)
+      preSelected[catId] = [...aiItems]
     })
+    setSelectedItems(preSelected)
     setSubSelectionIndex(0)
     setStep('sub_select')
   }
@@ -287,17 +281,7 @@ export default function IdentifyTopicsFlow() {
       setSubSelectionIndex(subSelectionIndex + 1)
       setCustomTopicText('')
     } else {
-      // Mark this cluster as explored (user committed by finishing all categories)
-      const clusterIdx = clusters.indexOf(selectedCluster)
-      const newExplored = new Set([...exploredClusterIndices, clusterIdx])
-      setExploredClusterIndices(newExplored)
-
-      const unexploredClusters = clusters.filter((_, i) => !newExplored.has(i))
-      if (unexploredClusters.length > 0) {
-        setStep('clusters')
-      } else {
-        setStep('satisfaction')
-      }
+      setStep('satisfaction')
     }
   }
 
@@ -525,46 +509,34 @@ export default function IdentifyTopicsFlow() {
           <div className="card" style={{ background: 'none', boxShadow: 'none', padding: '0' }}>
             <h1 className="idt-title">Your Problem Spaces</h1>
             <p className="idt-subtitle">
-              We found {clusters.length} themes in what you care about. Pick one to explore.
+              We found {clusters.length} themes in what you care about. Review them, then we'll walk through each one.
             </p>
 
-            {clusters.map((cluster, i) => {
-              const isExplored = exploredClusterIndices.has(i)
-              return (
-                <div
-                  key={i}
-                  className={`idt-cluster-card ${isExplored ? 'explored' : ''}`}
-                  onClick={() => handleClusterSelect(cluster)}
-                >
-                  <div className="idt-cluster-name">
-                    {cluster.label}
-                    {isExplored && <span className="idt-cluster-done">✓</span>}
-                  </div>
-                  <div className="idt-cluster-insight">{cluster.insight}</div>
-                  <div className="idt-cluster-tags">
-                    {cluster.categoryIds.map(catId => {
-                      const seg = findProblemSegment(catId)
-                      return (
-                        <span key={catId} className="idt-cluster-tag">
-                          {seg?.icon} {seg?.displayName}
-                        </span>
-                      )
-                    })}
-                  </div>
+            {clusters.map((cluster, i) => (
+              <div key={i} className="idt-cluster-card" style={{ cursor: 'default' }}>
+                <div className="idt-cluster-name">{cluster.label}</div>
+                <div className="idt-cluster-insight">{cluster.insight}</div>
+                <div className="idt-cluster-tags">
+                  {cluster.categoryIds.map(catId => {
+                    const seg = findProblemSegment(catId)
+                    return (
+                      <span key={catId} className="idt-cluster-tag">
+                        {seg?.icon} {seg?.displayName}
+                      </span>
+                    )
+                  })}
                 </div>
-              )
-            })}
+              </div>
+            ))}
 
-            {exploredClusterIndices.size > 0 && (
-              <button
-                className="jo-cta-button"
-                onClick={() => setStep('satisfaction')}
-                style={{ width: '100%', marginTop: '0.5rem' }}
-              >
-                <span className="jo-shimmer-layer" />
-                Done exploring →
-              </button>
-            )}
+            <button
+              className="jo-cta-button"
+              onClick={handleClusterContinue}
+              style={{ width: '100%', marginTop: '0.5rem' }}
+            >
+              <span className="jo-shimmer-layer" />
+              Review my topics →
+            </button>
 
             <button className="pso-back-link" onClick={() => setStep('paste')}>
               ← Back to paste
@@ -597,9 +569,6 @@ export default function IdentifyTopicsFlow() {
       <div className="journey-onboarding idt-flow">
         <div className="idt-container">
           <div className="card">
-            {selectedCluster && (
-              <div className="idt-cluster-breadcrumb">{selectedCluster.label}</div>
-            )}
             <div className="idt-sub-progress">
               {subSelectionIndex + 1} of {keptCategoryIds.length}
             </div>
