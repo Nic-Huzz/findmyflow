@@ -159,8 +159,6 @@ export default function IdentifyTopicsFlow() {
 
   // Steps: copy | paste | clustering | clusters | sub_select | satisfaction | extra_pick | no_topics
   const [step, setStep] = useState('copy')
-  const [playskills, setPlayskills] = useState([])
-  const [loadingPlayskills, setLoadingPlayskills] = useState(true)
   const [copied, setCopied] = useState(false)
   const [rawResponse, setRawResponse] = useState('')
   const [error, setError] = useState(null)
@@ -168,11 +166,11 @@ export default function IdentifyTopicsFlow() {
 
   // Parsed AI extractions grouped by category
   const [categoryExtractions, setCategoryExtractions] = useState({})
-  const [parsedCategoryIds, setParsedCategoryIds] = useState([])
 
   // Cluster state
   const [clusters, setClusters] = useState([])
   const [selectedCluster, setSelectedCluster] = useState(null)
+  const [exploredClusterIndices, setExploredClusterIndices] = useState(new Set())
 
   // Sub-selection state
   const [keptCategoryIds, setKeptCategoryIds] = useState([])
@@ -188,22 +186,6 @@ export default function IdentifyTopicsFlow() {
     document.body.classList.add('onboarding-active')
     return () => document.body.classList.remove('onboarding-active')
   }, [])
-
-  // Load playskills (still needed for the gate check)
-  useEffect(() => {
-    if (!user?.id) return
-    supabase
-      .from('nikigai_clusters')
-      .select('cluster_label')
-      .eq('user_id', user.id)
-      .eq('cluster_type', 'skills')
-      .eq('step_id', 'get_started')
-      .then(({ data }) => {
-        if (data?.length > 0) setPlayskills(data.map(d => d.cluster_label))
-        setLoadingPlayskills(false)
-      })
-      .catch(() => setLoadingPlayskills(false))
-  }, [user?.id])
 
   const prompt = buildPrompt()
 
@@ -231,7 +213,6 @@ export default function IdentifyTopicsFlow() {
     const extractionMap = {}
     results.forEach(r => { extractionMap[r.categoryId] = r.extractions })
     setCategoryExtractions(extractionMap)
-    setParsedCategoryIds(results.map(r => r.categoryId))
 
     // Show clustering loading
     setStep('clustering')
@@ -300,16 +281,13 @@ export default function IdentifyTopicsFlow() {
       setSubSelectionIndex(subSelectionIndex + 1)
       setCustomTopicText('')
     } else {
-      // Check if there are more clusters to explore
-      const exploredClusters = clusters.filter(c =>
-        c.categoryIds.some(id => keptCategoryIds.includes(id))
-      )
-      const unexploredClusters = clusters.filter(c =>
-        !c.categoryIds.some(id => keptCategoryIds.includes(id))
-      )
+      // Mark this cluster as explored (user committed by finishing all categories)
+      const clusterIdx = clusters.indexOf(selectedCluster)
+      const newExplored = new Set([...exploredClusterIndices, clusterIdx])
+      setExploredClusterIndices(newExplored)
 
+      const unexploredClusters = clusters.filter((_, i) => !newExplored.has(i))
       if (unexploredClusters.length > 0) {
-        // Go back to cluster selection to explore remaining clusters
         setStep('clusters')
       } else {
         setStep('satisfaction')
@@ -426,39 +404,6 @@ export default function IdentifyTopicsFlow() {
     setIsProcessing(false)
   }
 
-  // ─── Loading ──────────────────────────────────────────────────────────────
-
-  if (loadingPlayskills) {
-    return (
-      <div className="journey-onboarding idt-flow">
-        <div className="idt-container">
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div className="loading-state"><div className="spinner" /></div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (playskills.length === 0 && user?.id) {
-    return (
-      <div className="journey-onboarding idt-flow">
-        <div className="idt-container">
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🧭</div>
-            <h2>Identify your play-skills first</h2>
-            <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '1.5rem' }}>
-              Before identifying topics, you need to discover what lights you up.
-            </p>
-            <button className="jo-cta-button" onClick={() => navigate('/get-started')}>
-              Go to Get Started →
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   // ─── Step 1: Copy prompt ──────────────────────────────────────────────────
 
   if (step === 'copy') {
@@ -564,9 +509,6 @@ export default function IdentifyTopicsFlow() {
   // ─── Step 4: Cluster selection ────────────────────────────────────────────
 
   if (step === 'clusters') {
-    // Track which clusters have been explored
-    const exploredCatIds = new Set(Object.keys(selectedItems).filter(id => (selectedItems[id] || []).length > 0))
-
     return (
       <div className="journey-onboarding idt-flow">
         <div className="jo-ambient">
@@ -581,7 +523,7 @@ export default function IdentifyTopicsFlow() {
             </p>
 
             {clusters.map((cluster, i) => {
-              const isExplored = cluster.categoryIds.some(id => exploredCatIds.has(id))
+              const isExplored = exploredClusterIndices.has(i)
               return (
                 <div
                   key={i}
@@ -607,7 +549,7 @@ export default function IdentifyTopicsFlow() {
               )
             })}
 
-            {exploredCatIds.size > 0 && (
+            {exploredClusterIndices.size > 0 && (
               <button
                 className="jo-cta-button"
                 onClick={() => setStep('satisfaction')}
