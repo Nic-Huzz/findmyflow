@@ -30,6 +30,8 @@ export default function PlayListTab({
   const [topics, setTopics] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeChallenges, setActiveChallenges] = useState([])
+  const [challengeCounts, setChallengeCounts] = useState({})
+  const [showAllCategories, setShowAllCategories] = useState(false)
   const [completingChallenge, setCompletingChallenge] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState(null) // opens picker modal
@@ -56,10 +58,24 @@ export default function PlayListTab({
         .in('cluster_type', ['skills', 'problems'])
         .in('step_id', ['get_started', 'identify_topics']),
       fetchActiveChallenges(),
-    ]).then(([{ data }]) => {
+      supabase
+        .from('groan_challenges')
+        .select('source_label, status')
+        .eq('user_id', userId)
+        .eq('status', 'completed'),
+    ]).then(([{ data }, , { data: completedChallenges }]) => {
       if (data) {
         setPlayskills(data.filter(d => d.cluster_type === 'skills' && d.step_id === 'get_started'))
         setTopics(data.filter(d => d.cluster_type === 'problems' && d.step_id === 'identify_topics'))
+      }
+      // Count completed challenges per skill category
+      if (completedChallenges) {
+        const counts = {}
+        completedChallenges.forEach(c => {
+          const catId = c.source_label
+          if (catId) counts[catId] = (counts[catId] || 0) + 1
+        })
+        setChallengeCounts(counts)
       }
       setLoading(false)
     }).catch(err => {
@@ -222,14 +238,11 @@ export default function PlayListTab({
       {/* Active challenges */}
       {activeChallenges.length > 0 && renderActiveChallenges()}
 
-      {/* Category cards */}
+      {/* Category cards — matched categories first */}
       <div className="plt-categories-grid">
         {categories.map(cat => {
           const seg = findSkillSegment(cat.id)
-          const matchedTopicCount = topics.filter(t => {
-            const mp = t.items?.[0]?.matchedPlayskills || []
-            return mp.some(ps => (seg?.placemakes || []).includes(ps))
-          }).length
+          const completedCount = challengeCounts[cat.id] || 0
 
           return (
             <button
@@ -239,7 +252,7 @@ export default function PlayListTab({
             >
               <div className="plt-cat-icon">{seg?.icon}</div>
               <div className="plt-cat-name">{seg?.displayName || cat.id}</div>
-              <div className="plt-cat-count">{matchedTopicCount} topics</div>
+              <div className="plt-cat-count">{completedCount} completed</div>
             </button>
           )
         })}
@@ -261,6 +274,7 @@ export default function PlayListTab({
             <MobilePlaylistPicker
               userId={userId}
               categoryId={selectedCategory}
+              userPlayskills={playskills.filter(ps => ps.items?.[0]?.category === selectedCategory).map(ps => ps.cluster_label)}
               onChallengeAccepted={() => {
                 fetchActiveChallenges()
               }}

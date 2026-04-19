@@ -22,6 +22,7 @@ const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 export default function MobilePlaylistPicker({
   userId,
   categoryId,
+  userPlayskills = [],
   onChallengeAccepted,
   onClose,
 }) {
@@ -39,7 +40,7 @@ export default function MobilePlaylistPicker({
 
   const segment = findSkillSegment(categoryId)
   const roles = segment?.exampleJobs || []
-  const playskills = segment?.placemakes || []
+  const playskills = userPlayskills.length > 0 ? userPlayskills : (segment?.placemakes || [])
 
   useEffect(() => {
     return () => { if (successTimerRef.current) clearTimeout(successTimerRef.current) }
