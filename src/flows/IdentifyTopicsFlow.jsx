@@ -4,94 +4,69 @@
  * Topic/problem identification flow for the Play-List tab.
  *
  * Steps:
- *   1. Copy prompt (playskills + 12 problem categories baked in)
+ *   1. Copy prompt (12 category names, no placemakes)
  *   2. Paste AI response
- *   3. Parse (maps extractions to problem categories)
- *   4. Swipe 12 category cards with AI-extracted preview bullets
- *      → "That's me" pauses swipe → sub-selection drawer
- *        (AI extracted + pre-defined placemakes + identify your own)
- *      → Continue → next card
- *   5. Save to DB
- *   6. Success
+ *   3. Parse → extract personal problems mapped to categories
+ *   4. Cluster → send category names to nikigai-conversation for thematic grouping
+ *   5. Cluster selection → user picks a cluster to explore
+ *   6. Sub-select → per-category checkboxes (AI extracted + pre-defined + custom)
+ *   7. Satisfaction check → save or add more
+ *   8. Save to DB
  *
  * Route: /identify-topics
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { PROBLEM_SEGMENTS, findProblemSegment } from '../lib/wheelTaxonomy'
-import SwipeCardDeck from '../components/SwipeCardDeck/SwipeCardDeck'
 import '../components/onboarding/JourneyOnboarding.css'
 import './IdentifyTopicsFlow.css'
 
-// ─── Image lookup ───────────────────────────────────────────────────────────
-
-const PROBLEM_IMAGES = {}
-PROBLEM_SEGMENTS.forEach(seg => {
-  PROBLEM_IMAGES[seg.id] = `/images/problems/problem-${seg.id}.png`
-})
-
 // ─── Prompt builder ─────────────────────────────────────────────────────────
 
-function buildPrompt(playskills) {
-  const skillList = playskills.map(ps => `- ${ps}`).join('\n')
+function buildPrompt() {
+  const categoryList = PROBLEM_SEGMENTS.map((seg, i) =>
+    `${i + 1}. ${seg.displayName}`
+  ).join('\n')
 
-  const categoryList = PROBLEM_SEGMENTS.map((seg, i) => {
-    const pms = (seg.placemakes || []).map(pm => `   - ${pm}`).join('\n')
-    return `${i + 1}. ${seg.displayName.toUpperCase()}\n${pms}`
-  }).join('\n\n')
+  return `Analyze our entire conversation history and identify the specific problems I care about and gravitate toward.
 
-  return `Analyze our entire conversation history. I want you to identify which of these 12 problem categories I naturally gravitate toward.
-
-For each category, I've listed specific examples of what the problem looks like. Only flag a category if you can cite specific evidence from our conversations.
-
-THE 12 PROBLEMS:
+For each problem you identify, write it in MY voice based on what I've actually said and shown. Then map it to one of these 12 categories:
 
 ${categoryList}
-
----
-
-For each category I connect with, also note which of my play-skills would naturally apply:
-
-MY PLAY-SKILLS:
-${skillList}
 
 Extract in this EXACT format:
 
 ---START EXTRACTION---
 
-PROBLEMS
-- CATEGORY: [Category name from the 12 above]
-  ITEMS:
-  * PROBLEM: [A specific version of this problem you see in ME, under 15 words]
-    EVIDENCE: [Specific quote or pattern from our conversations]
-  * PROBLEM: [Another specific version you see in me]
-    EVIDENCE: [Different quote or pattern]
-  MATCHED PLAY-SKILLS: [List the exact play-skill phrases that fit, separated by semicolons]
+- PROBLEM: [The specific problem in my own words, under 20 words]
+  CATEGORY: [Exact category name from the 12 above]
+  EVIDENCE: [Specific quote or pattern from our conversations]
 
-List 2-4 specific PROBLEM items per category. Each should be a distinct angle on how I personally relate to this problem, backed by different evidence. Only include categories where you have real evidence, aim for 4-7 categories.
+(List 1-3 problems per category. Only add a second or third if the evidence genuinely supports a distinct angle. Only include categories where you have real evidence. Aim for 4-7 categories.)
 
 ---END EXTRACTION---`
 }
 
 // ─── Parser ─────────────────────────────────────────────────────────────────
 
-function parseExtraction(rawText, userPlayskills) {
+function parseExtraction(rawText) {
   const results = []
 
-  // Strip markdown bold/italic markers so **PROBLEM:** becomes PROBLEM:
+  // Strip markdown bold/italic markers
   const text = rawText.replace(/\*{1,2}/g, '')
 
-  // Split into per-entry blocks by CATEGORY keyword (robust against field reordering)
-  const blocks = text.split(/(?=[-•*]?\s*CATEGORY\s*:)/i).filter(b => /CATEGORY\s*:/i.test(b))
+  // Split on PROBLEM: at the start of each item (allowing optional bullet prefix)
+  const blocks = text.split(/(?=[-•*]?\s*(?:PROBLEM|PLACEMAKE)\s*:)/i).filter(b => /(?:PROBLEM|PLACEMAKE)\s*:/i.test(b))
 
   for (const block of blocks) {
+    const rawProblem = block.match(/(?:PROBLEM|PLACEMAKE)\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
     const rawCategory = block.match(/CATEGORY\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
-    const rawMatched = block.match(/MATCHED PLAY-SKILLS\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+    const rawEvidence = block.match(/EVIDENCE\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
 
-    if (!rawCategory) continue
+    if (!rawProblem || !rawCategory) continue
 
     // Match category name to segment id
     const categoryLower = rawCategory.toLowerCase().replace(/[.*"]/g, '')
@@ -101,63 +76,19 @@ function parseExtraction(rawText, userPlayskills) {
     })
     if (!seg) continue
 
-    // Parse matched playskills
-    const parsedSkills = rawMatched
-      .split(/[;,]/)
-      .map(s => s.trim().replace(/^["']|["']$/g, ''))
-      .filter(s => s.length > 10)
-
-    const matched = parsedSkills
-      .map(parsed => {
-        const exact = userPlayskills.find(ps => ps === parsed)
-        if (exact) return exact
-        const partial = userPlayskills.find(ps =>
-          parsed.toLowerCase().includes(ps.toLowerCase().slice(0, 30)) ||
-          ps.toLowerCase().includes(parsed.toLowerCase().slice(0, 30))
-        )
-        return partial || null
-      })
-      .filter(Boolean)
-
-    // Extract multiple PROBLEM/EVIDENCE pairs per category
-    // Split on PROBLEM: or PLACEMAKE: to find each item
-    const itemBlocks = block.split(/(?=[*•-]?\s*(?:PROBLEM|PLACEMAKE)\s*:)/i).filter(b => /(?:PROBLEM|PLACEMAKE)\s*:/i.test(b))
-
-    const extractions = []
-    for (const itemBlock of itemBlocks) {
-      const rawProblem = itemBlock.match(/(?:PROBLEM|PLACEMAKE)\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
-      const rawEvidence = itemBlock.match(/EVIDENCE\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
-      if (rawProblem) {
-        extractions.push({
-          problem: rawProblem,
-          evidence: rawEvidence,
-          matchedPlayskills: [...new Set(matched)],
-        })
-      }
+    const extraction = {
+      problem: rawProblem,
+      evidence: rawEvidence,
+      matchedPlayskills: [],
     }
-
-    // Fallback: if no item blocks found, try single PROBLEM/EVIDENCE at category level
-    if (extractions.length === 0) {
-      const rawProblem = block.match(/(?:PROBLEM|PLACEMAKE)\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
-      const rawEvidence = block.match(/EVIDENCE\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
-      if (rawProblem) {
-        extractions.push({
-          problem: rawProblem,
-          evidence: rawEvidence,
-          matchedPlayskills: [...new Set(matched)],
-        })
-      }
-    }
-
-    if (extractions.length === 0) continue
 
     const existing = results.find(r => r.categoryId === seg.id)
     if (existing) {
-      existing.extractions.push(...extractions)
+      existing.extractions.push(extraction)
     } else {
       results.push({
         categoryId: seg.id,
-        extractions,
+        extractions: [extraction],
       })
     }
   }
@@ -165,43 +96,59 @@ function parseExtraction(rawText, userPlayskills) {
   return results
 }
 
-// ─── Swipe Card Content ─────────────────────────────────────────────────────
+// ─── Cluster categories via nikigai-conversation ────────────────────────────
 
-function TopicCardContent({ card }) {
-  const [evidenceExpanded, setEvidenceExpanded] = useState(false)
-  const imgSrc = PROBLEM_IMAGES[card.categoryId]
-  const aiExtractions = card.aiExtractions || []
-  const firstEvidence = aiExtractions[0]?.evidence || ''
-  const isLong = firstEvidence.length > 120
+async function clusterCategories(categoryResults) {
+  // Build input: category names with context for nikigai
+  const lines = categoryResults.map((r, i) => {
+    const seg = findProblemSegment(r.categoryId)
+    const problemSummaries = r.extractions.map(e => e.problem).join('. ')
+    return `${i + 1}. ${seg?.displayName || r.categoryId} (context: ${problemSummaries})`
+  }).join('\n')
 
-  return (
-    <>
-      {imgSrc && (
-        <img
-          className="idt-card-image"
-          src={imgSrc}
-          alt={card.displayName}
-          draggable={false}
-          onError={(e) => { e.target.style.display = 'none' }}
-        />
-      )}
-      <div className="idt-card-name">{card.displayName}</div>
-      <div className="idt-card-tagline">{card.tagline}</div>
-      {firstEvidence && (
-        <div className={`pso-card-evidence ${!evidenceExpanded && isLong ? 'truncated' : ''}`}>
-          Analysis shows: &ldquo;{firstEvidence}&rdquo;
-        </div>
-      )}
-      {isLong && !evidenceExpanded && (
-        <button
-          className="pso-card-show-more"
-          onClick={(e) => { e.stopPropagation(); setEvidenceExpanded(true) }}
-        >
-          Show more
-        </button>
-      )}
-    </>
-  )
+  const { data, error } = await supabase.functions.invoke('nikigai-conversation', {
+    body: {
+      currentStep: {
+        id: 'problems_final',
+        assistant_prompt: 'Group these problem category labels into 2-4 thematic clusters. Use ONLY the exact category names as items in your clusters array. The context after each label is for your understanding only.',
+      },
+      userResponse: 'Group my problem categories',
+      shouldCluster: true,
+      clusterType: 'problems',
+      clusterSources: ['problems_all'],
+      allResponses: [{
+        user_id: 'clustering',
+        response_raw: lines,
+        store_as: 'problems_all',
+      }],
+      conversationHistory: [],
+    },
+  })
+
+  if (error) throw error
+
+  // Parse clusters and match category names back to segment IDs
+  const clusters = (data?.clusters || []).map(cluster => {
+    const categoryIds = cluster.items
+      .map(item => {
+        // Extract category name — item may be "Category Name — context..." or just "Category Name"
+        const cleanItem = item.split('—')[0].split('(context')[0].replace(/^\d+\.\s*/, '').trim().toLowerCase().replace(/[.*"]/g, '')
+        const seg = PROBLEM_SEGMENTS.find(s => {
+          const dn = s.displayName.toLowerCase()
+          return dn === cleanItem || cleanItem.includes(dn.slice(0, 20)) || dn.includes(cleanItem.slice(0, 20))
+        })
+        return seg?.id || null
+      })
+      .filter(Boolean)
+
+    return {
+      label: cluster.label,
+      insight: cluster.insight,
+      categoryIds,
+    }
+  }).filter(c => c.categoryIds.length > 0)
+
+  return clusters
 }
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -210,7 +157,8 @@ export default function IdentifyTopicsFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  const [step, setStep] = useState('copy') // copy | paste | swipe | save_success
+  // Steps: copy | paste | clustering | clusters | sub_select | satisfaction | extra_pick | no_topics
+  const [step, setStep] = useState('copy')
   const [playskills, setPlayskills] = useState([])
   const [loadingPlayskills, setLoadingPlayskills] = useState(true)
   const [copied, setCopied] = useState(false)
@@ -219,14 +167,21 @@ export default function IdentifyTopicsFlow() {
   const [isProcessing, setIsProcessing] = useState(false)
 
   // Parsed AI extractions grouped by category
-  const [categoryExtractions, setCategoryExtractions] = useState({}) // { [categoryId]: [{ problem, evidence, matchedPlayskills }] }
+  const [categoryExtractions, setCategoryExtractions] = useState({})
+  const [parsedCategoryIds, setParsedCategoryIds] = useState([])
 
-  // Swipe state
-  const [swipeCards, setSwipeCards] = useState([])
+  // Cluster state
+  const [clusters, setClusters] = useState([])
+  const [selectedCluster, setSelectedCluster] = useState(null)
 
   // Sub-selection state
-  const [selectedItems, setSelectedItems] = useState({}) // { [categoryId]: string[] }
+  const [keptCategoryIds, setKeptCategoryIds] = useState([])
+  const [subSelectionIndex, setSubSelectionIndex] = useState(0)
+  const [selectedItems, setSelectedItems] = useState({})
   const [customTopicText, setCustomTopicText] = useState('')
+
+  // Extra categories from satisfaction "some are missing"
+  const [extraCategories, setExtraCategories] = useState([])
 
   // Hide bottom toolbar during flow
   useEffect(() => {
@@ -234,7 +189,7 @@ export default function IdentifyTopicsFlow() {
     return () => document.body.classList.remove('onboarding-active')
   }, [])
 
-  // Load playskills
+  // Load playskills (still needed for the gate check)
   useEffect(() => {
     if (!user?.id) return
     supabase
@@ -250,7 +205,7 @@ export default function IdentifyTopicsFlow() {
       .catch(() => setLoadingPlayskills(false))
   }, [user?.id])
 
-  const prompt = buildPrompt(playskills)
+  const prompt = buildPrompt()
 
   const handleCopyPrompt = () => {
     navigator.clipboard.writeText(prompt)
@@ -258,63 +213,64 @@ export default function IdentifyTopicsFlow() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const handleParse = () => {
+  // Parse extraction → cluster via nikigai
+  const handleParse = async () => {
     if (!rawResponse.trim()) return
     setIsProcessing(true)
     setError(null)
 
-    const results = parseExtraction(rawResponse, playskills)
+    const results = parseExtraction(rawResponse)
 
-    // Build extraction map
-    const extractionMap = {}
-    results.forEach(r => { extractionMap[r.categoryId] = r.extractions })
-    setCategoryExtractions(extractionMap)
-
-    // Build swipe cards only for categories that had AI matches
-    const matchedCatIds = results.map(r => r.categoryId)
-    const cards = PROBLEM_SEGMENTS
-      .filter(seg => matchedCatIds.includes(seg.id))
-      .map(seg => ({
-        id: seg.id,
-        categoryId: seg.id,
-        displayName: seg.displayName,
-        tagline: seg.tagline,
-        icon: seg.icon,
-        aiExtractions: extractionMap[seg.id] || [],
-      }))
-
-    if (cards.length === 0) {
+    if (results.length === 0) {
       setError("Couldn't match any problem categories. Make sure you copied the full extraction output.")
       setIsProcessing(false)
       return
     }
 
-    setSwipeCards(cards)
-    setStep('swipe')
+    // Store extractions
+    const extractionMap = {}
+    results.forEach(r => { extractionMap[r.categoryId] = r.extractions })
+    setCategoryExtractions(extractionMap)
+    setParsedCategoryIds(results.map(r => r.categoryId))
+
+    // Show clustering loading
+    setStep('clustering')
+
+    // Call nikigai-conversation to cluster categories
+    try {
+      const clusterResult = await clusterCategories(results)
+
+      if (clusterResult.length === 0) {
+        throw new Error('No clusters returned')
+      }
+
+      setClusters(clusterResult)
+      setStep('clusters')
+    } catch (err) {
+      console.error('Clustering error:', err)
+      setError('Failed to analyse your problem spaces. Please try again.')
+      setStep('paste')
+    }
     setIsProcessing(false)
   }
 
-  // Swipe complete — collect kept category IDs, then show sub-selections
-  const [swipeKeptIds, setSwipeKeptIds] = useState([]) // category IDs from swipe
-  const [subSelectionIndex, setSubSelectionIndex] = useState(0) // which kept category we're drilling into
+  // User selects a cluster → enter sub-select for its categories
+  const handleClusterSelect = (cluster) => {
+    setSelectedCluster(cluster)
+    const catIds = cluster.categoryIds
+    setKeptCategoryIds(catIds)
 
-  const handleSwipeComplete = (keptIds) => {
-    const kept = keptIds.filter(id => swipeCards.some(c => c.id === id))
-    setSwipeKeptIds(kept)
-
-    if (kept.length === 0) {
-      // No categories kept — show empty message, not success
-      setStep('no_topics')
-      return
-    }
-
-    // Pre-select AI items for all kept categories
-    const preSelected = {}
-    kept.forEach(catId => {
-      const aiItems = (categoryExtractions[catId] || []).map(e => e.problem)
-      preSelected[catId] = [...aiItems]
+    // Pre-select AI items for categories in this cluster (preserve existing selections from other clusters)
+    setSelectedItems(prev => {
+      const updated = { ...prev }
+      catIds.forEach(catId => {
+        if (!updated[catId]) {
+          const aiItems = (categoryExtractions[catId] || []).map(e => e.problem)
+          updated[catId] = [...aiItems]
+        }
+      })
+      return updated
     })
-    setSelectedItems(preSelected)
     setSubSelectionIndex(0)
     setStep('sub_select')
   }
@@ -330,7 +286,7 @@ export default function IdentifyTopicsFlow() {
   }
 
   const handleAddCustom = () => {
-    const catId = swipeKeptIds[subSelectionIndex]
+    const catId = keptCategoryIds[subSelectionIndex]
     if (!customTopicText.trim() || !catId) return
     setSelectedItems(prev => ({
       ...prev,
@@ -339,16 +295,25 @@ export default function IdentifyTopicsFlow() {
     setCustomTopicText('')
   }
 
-  // Extra categories selected from satisfaction "some are missing" step
-  const [extraCategories, setExtraCategories] = useState([])
-
   const handleSubSelectionContinue = () => {
-    if (subSelectionIndex < swipeKeptIds.length - 1) {
+    if (subSelectionIndex < keptCategoryIds.length - 1) {
       setSubSelectionIndex(subSelectionIndex + 1)
       setCustomTopicText('')
     } else {
-      // All sub-selections done — show satisfaction check
-      setStep('satisfaction')
+      // Check if there are more clusters to explore
+      const exploredClusters = clusters.filter(c =>
+        c.categoryIds.some(id => keptCategoryIds.includes(id))
+      )
+      const unexploredClusters = clusters.filter(c =>
+        !c.categoryIds.some(id => keptCategoryIds.includes(id))
+      )
+
+      if (unexploredClusters.length > 0) {
+        // Go back to cluster selection to explore remaining clusters
+        setStep('clusters')
+      } else {
+        setStep('satisfaction')
+      }
     }
   }
 
@@ -360,25 +325,32 @@ export default function IdentifyTopicsFlow() {
 
   const handleExtraContinue = () => {
     if (extraCategories.length === 0) return
-    // Pre-select pre-defined placemakes for extra categories
     const preSelected = { ...selectedItems }
     extraCategories.forEach(catId => {
       if (!preSelected[catId]) preSelected[catId] = []
     })
     setSelectedItems(preSelected)
 
-    // Add extra categories to swipeKeptIds and show sub-selections for them
-    const allKept = [...swipeKeptIds, ...extraCategories]
-    setSwipeKeptIds(allKept)
-    setSubSelectionIndex(swipeKeptIds.length) // start from where new ones begin
+    const allKept = [...keptCategoryIds, ...extraCategories]
+    setKeptCategoryIds(allKept)
+    setSubSelectionIndex(keptCategoryIds.length)
     setCustomTopicText('')
     setStep('sub_select')
   }
 
-  const handleSave = async (keptCats) => {
+  // Get all category IDs that have been sub-selected (across all explored clusters)
+  const getAllKeptCategoryIds = () => {
+    return Object.keys(selectedItems).filter(catId =>
+      (selectedItems[catId] || []).length > 0
+    )
+  }
+
+  const handleSave = async () => {
     if (!user?.id) return
     setIsProcessing(true)
     setError(null)
+
+    const allKept = getAllKeptCategoryIds()
 
     try {
       // Delete old identify_topics clusters
@@ -396,14 +368,13 @@ export default function IdentifyTopicsFlow() {
       }).select('id').single()
       if (sessionError || !session) throw sessionError || new Error('Failed to create session')
 
-      // Build rows from selectedItems for kept categories
+      // Build rows from selectedItems
       const rows = []
-      for (const catId of keptCats) {
+      for (const catId of allKept) {
         const items = selectedItems[catId] || []
         const aiExtractions = categoryExtractions[catId] || []
 
         for (const itemText of items) {
-          // Find matching AI extraction for this item (if any)
           const aiMatch = aiExtractions.find(e => e.problem === itemText)
           const seg = findProblemSegment(catId)
 
@@ -447,7 +418,6 @@ export default function IdentifyTopicsFlow() {
           }
         }).catch(() => {})
 
-      // Navigate straight back
       navigate('/7-day-challenge')
     } catch (err) {
       console.error('Save error:', err)
@@ -572,30 +542,95 @@ export default function IdentifyTopicsFlow() {
     )
   }
 
-  // ─── Step 3: Swipe + Sub-selection ────────────────────────────────────────
+  // ─── Step 3: Clustering loading ───────────────────────────────────────────
 
-  // ─── Step 3: Swipe ─────────────────────────────────────────────────────────
-
-  if (step === 'swipe') {
+  if (step === 'clustering') {
     return (
-      <div className="journey-onboarding idt-flow idt-swipe-view">
-        <SwipeCardDeck
-          cards={swipeCards}
-          headerText="Does this problem pull you in?"
-          onComplete={handleSwipeComplete}
-          onBackFromFirst={() => setStep('paste')}
-          renderCard={(card) => (
-            <TopicCardContent card={card} />
-          )}
-        />
+      <div className="journey-onboarding idt-flow">
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1 jo-glow-gold" />
+          <div className="jo-glow jo-glow-2" />
+        </div>
+        <div className="idt-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+          <div className="loading-state"><div className="spinner" /></div>
+          <p style={{ color: 'rgba(255,255,255,0.5)', marginTop: '1.5rem', fontStyle: 'italic' }}>
+            Analysing your problem spaces...
+          </p>
+        </div>
       </div>
     )
   }
 
-  // ─── Step 3b: Sub-selections (sequential, one per kept category) ────────
+  // ─── Step 4: Cluster selection ────────────────────────────────────────────
 
-  if (step === 'sub_select' && swipeKeptIds.length > 0) {
-    const catId = swipeKeptIds[subSelectionIndex]
+  if (step === 'clusters') {
+    // Track which clusters have been explored
+    const exploredCatIds = new Set(Object.keys(selectedItems).filter(id => (selectedItems[id] || []).length > 0))
+
+    return (
+      <div className="journey-onboarding idt-flow">
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1" />
+          <div className="jo-glow jo-glow-2 jo-glow-gold" />
+        </div>
+        <div className="idt-container">
+          <div className="card" style={{ background: 'none', boxShadow: 'none', padding: '0' }}>
+            <h1 className="idt-title">Your Problem Spaces</h1>
+            <p className="idt-subtitle">
+              We found {clusters.length} themes in what you care about. Pick one to explore.
+            </p>
+
+            {clusters.map((cluster, i) => {
+              const isExplored = cluster.categoryIds.some(id => exploredCatIds.has(id))
+              return (
+                <div
+                  key={i}
+                  className={`idt-cluster-card ${isExplored ? 'explored' : ''}`}
+                  onClick={() => handleClusterSelect(cluster)}
+                >
+                  <div className="idt-cluster-name">
+                    {cluster.label}
+                    {isExplored && <span className="idt-cluster-done">✓</span>}
+                  </div>
+                  <div className="idt-cluster-insight">{cluster.insight}</div>
+                  <div className="idt-cluster-tags">
+                    {cluster.categoryIds.map(catId => {
+                      const seg = findProblemSegment(catId)
+                      return (
+                        <span key={catId} className="idt-cluster-tag">
+                          {seg?.icon} {seg?.displayName}
+                        </span>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })}
+
+            {exploredCatIds.size > 0 && (
+              <button
+                className="jo-cta-button"
+                onClick={() => setStep('satisfaction')}
+                style={{ width: '100%', marginTop: '0.5rem' }}
+              >
+                <span className="jo-shimmer-layer" />
+                Done exploring →
+              </button>
+            )}
+
+            <button className="pso-back-link" onClick={() => setStep('paste')}>
+              ← Back to paste
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ─── Step 5: Sub-selections ───────────────────────────────────────────────
+
+  if (step === 'sub_select' && keptCategoryIds.length > 0) {
+    const catId = keptCategoryIds[subSelectionIndex]
     const seg = findProblemSegment(catId)
     const aiExtractions = categoryExtractions[catId] || []
     const aiItems = aiExtractions.map(e => e.problem)
@@ -614,8 +649,11 @@ export default function IdentifyTopicsFlow() {
       <div className="journey-onboarding idt-flow">
         <div className="idt-container">
           <div className="card">
+            {selectedCluster && (
+              <div className="idt-cluster-breadcrumb">{selectedCluster.label}</div>
+            )}
             <div className="idt-sub-progress">
-              {subSelectionIndex + 1} of {swipeKeptIds.length}
+              {subSelectionIndex + 1} of {keptCategoryIds.length}
             </div>
             <div className="idt-sub-header">
               <span style={{ fontSize: '1.4rem' }}>{seg?.icon}</span>
@@ -693,13 +731,22 @@ export default function IdentifyTopicsFlow() {
             <button
               className="jo-cta-button"
               onClick={handleSubSelectionContinue}
-              disabled={catItems.length === 0 || isProcessing}
+              disabled={catItems.length === 0}
               style={{ width: '100%', marginTop: '1.25rem' }}
             >
-              {isProcessing ? 'Saving...' : subSelectionIndex < swipeKeptIds.length - 1
+              {subSelectionIndex < keptCategoryIds.length - 1
                 ? `Continue (${catItems.length} selected) →`
-                : `Save ${catItems.length} topics →`
+                : `Done (${catItems.length} selected) →`
               }
+            </button>
+            <button className="pso-back-link" onClick={() => {
+              if (subSelectionIndex > 0) {
+                setSubSelectionIndex(subSelectionIndex - 1)
+              } else {
+                setStep('clusters')
+              }
+            }}>
+              ← Back
             </button>
           </div>
         </div>
@@ -707,11 +754,12 @@ export default function IdentifyTopicsFlow() {
     )
   }
 
-  // ─── No topics selected ────────────────────────────────────────────────────
-
   // ─── Satisfaction check ──────────────────────────────────────────────────
 
   if (step === 'satisfaction') {
+    const allKept = getAllKeptCategoryIds()
+    const totalItems = allKept.reduce((sum, catId) => sum + (selectedItems[catId]?.length || 0), 0)
+
     return (
       <div className="journey-onboarding idt-flow">
         <div className="jo-ambient">
@@ -721,14 +769,14 @@ export default function IdentifyTopicsFlow() {
         <div className="idt-container">
           <div className="card" style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>✨</div>
-            <h2>{swipeKeptIds.length} topic areas identified</h2>
+            <h2>{allKept.length} topic areas, {totalItems} problems identified</h2>
             <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
               Do these capture the problems you care about, or are some missing?
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <button
                 className="pso-gate-btn pso-gate-primary"
-                onClick={() => handleSave(swipeKeptIds)}
+                onClick={handleSave}
                 disabled={isProcessing}
               >
                 <span className="pso-gate-icon">✅</span>
@@ -748,6 +796,7 @@ export default function IdentifyTopicsFlow() {
                 </span>
               </button>
             </div>
+            {error && <p className="idt-error" style={{ marginTop: '1rem' }}>{error}</p>}
           </div>
         </div>
       </div>
@@ -757,6 +806,8 @@ export default function IdentifyTopicsFlow() {
   // ─── Extra category picker ────────────────────────────────────────────────
 
   if (step === 'extra_pick') {
+    const allKept = getAllKeptCategoryIds()
+
     return (
       <div className="journey-onboarding idt-flow">
         <div className="jo-ambient">
@@ -771,7 +822,7 @@ export default function IdentifyTopicsFlow() {
             </p>
             <div className="pso-category-grid">
               {PROBLEM_SEGMENTS.map(seg => {
-                const alreadyKept = swipeKeptIds.includes(seg.id)
+                const alreadyKept = allKept.includes(seg.id)
                 const isExtra = extraCategories.includes(seg.id)
                 return (
                   <button
@@ -790,7 +841,7 @@ export default function IdentifyTopicsFlow() {
             </div>
             <button
               className="jo-cta-button"
-              onClick={extraCategories.length > 0 ? handleExtraContinue : () => handleSave(swipeKeptIds)}
+              onClick={extraCategories.length > 0 ? handleExtraContinue : handleSave}
               disabled={isProcessing}
               style={{ width: '100%', marginTop: '1rem' }}
             >
@@ -806,7 +857,7 @@ export default function IdentifyTopicsFlow() {
     )
   }
 
-  // ─── No topics selected ───────────────────────────────────────────────────
+  // ─── No topics ────────────────────────────────────────────────────────────
 
   if (step === 'no_topics') {
     return (
@@ -818,36 +869,11 @@ export default function IdentifyTopicsFlow() {
             <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '1rem' }}>
               None of the categories resonated this time. You can try again or go back.
             </p>
-            <button className="jo-cta-button" onClick={() => { setStep('swipe'); setSwipeKeptIds([]) }} style={{ width: '100%', marginBottom: '0.5rem' }}>
+            <button className="jo-cta-button" onClick={() => setStep('paste')} style={{ width: '100%', marginBottom: '0.5rem' }}>
               Try again
             </button>
             <button className="pso-back-link" onClick={() => navigate('/7-day-challenge')} style={{ width: '100%' }}>
               Back to Play-List
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ─── Step 4: Success ──────────────────────────────────────────────────────
-
-  if (step === 'save_success') {
-    const totalItems = swipeKeptIds.reduce(
-      (sum, catId) => sum + (selectedItems[catId]?.length || 0), 0
-    )
-
-    return (
-      <div className="journey-onboarding idt-flow">
-        <div className="idt-container">
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem' }}>🎯</div>
-            <h2>{swipeKeptIds.length} categories, {totalItems} topics saved!</h2>
-            <p style={{ color: 'rgba(255,255,255,0.7)' }}>
-              Your Play-List is ready. Choose a category and create your first challenge.
-            </p>
-            <button className="jo-cta-button" onClick={() => navigate('/7-day-challenge')} style={{ width: '100%', marginTop: '1rem' }}>
-              Go to Play-List →
             </button>
           </div>
         </div>
