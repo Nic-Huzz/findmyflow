@@ -114,7 +114,13 @@ Extract in this EXACT format:
 
 function parseSkillExtraction(rawText) {
   const results = []
-  const text = rawText.replace(/\*{1,2}/g, '')
+  // Strip everything outside extraction markers if present
+  let cleaned = rawText
+  const startMatch = cleaned.match(/---\s*START EXTRACTION\s*---/i)
+  const endMatch = cleaned.match(/---\s*END EXTRACTION\s*---/i)
+  if (startMatch) cleaned = cleaned.slice(startMatch.index + startMatch[0].length)
+  if (endMatch) cleaned = cleaned.slice(0, cleaned.lastIndexOf(endMatch[0]))
+  const text = cleaned.replace(/\*{1,2}/g, '')
   const blocks = text.split(/(?=[-•*]?\s*SKILL\s*:)/i).filter(b => /SKILL\s*:/i.test(b))
 
   for (const block of blocks) {

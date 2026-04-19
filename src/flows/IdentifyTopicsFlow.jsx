@@ -55,8 +55,14 @@ Extract in this EXACT format:
 function parseExtraction(rawText) {
   const results = []
 
+  // Strip everything outside extraction markers if present
+  let cleaned = rawText
+  const startMatch = cleaned.match(/---\s*START EXTRACTION\s*---/i)
+  const endMatch = cleaned.match(/---\s*END EXTRACTION\s*---/i)
+  if (startMatch) cleaned = cleaned.slice(startMatch.index + startMatch[0].length)
+  if (endMatch) cleaned = cleaned.slice(0, cleaned.lastIndexOf(endMatch[0]))
   // Strip markdown bold/italic markers
-  const text = rawText.replace(/\*{1,2}/g, '')
+  const text = cleaned.replace(/\*{1,2}/g, '')
 
   // Split on PROBLEM: at the start of each item (allowing optional bullet prefix)
   const blocks = text.split(/(?=[-•*]?\s*(?:PROBLEM|PLACEMAKE)\s*:)/i).filter(b => /(?:PROBLEM|PLACEMAKE)\s*:/i.test(b))
