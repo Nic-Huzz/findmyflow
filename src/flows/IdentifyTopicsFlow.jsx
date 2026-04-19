@@ -179,6 +179,7 @@ export default function IdentifyTopicsFlow() {
   // Sub-selection state
   const [keptCategoryIds, setKeptCategoryIds] = useState([])
   const [subSelectionIndex, setSubSelectionIndex] = useState(0)
+  const [subSelectionStartIndex, setSubSelectionStartIndex] = useState(0)
   const [selectedItems, setSelectedItems] = useState({})
   const [customTopicText, setCustomTopicText] = useState('')
 
@@ -253,6 +254,7 @@ export default function IdentifyTopicsFlow() {
     })
     setSelectedItems(preSelected)
     setSubSelectionIndex(0)
+    setSubSelectionStartIndex(0)
     setStep('sub_select')
   }
 
@@ -299,9 +301,11 @@ export default function IdentifyTopicsFlow() {
     })
     setSelectedItems(preSelected)
 
+    const startIdx = keptCategoryIds.length
     const allKept = [...keptCategoryIds, ...extraCategories]
     setKeptCategoryIds(allKept)
-    setSubSelectionIndex(keptCategoryIds.length)
+    setSubSelectionIndex(startIdx)
+    setSubSelectionStartIndex(startIdx)
     setCustomTopicText('')
     setStep('sub_select')
   }
@@ -657,8 +661,10 @@ export default function IdentifyTopicsFlow() {
               }
             </button>
             <button className="pso-back-link" onClick={() => {
-              if (subSelectionIndex > 0) {
+              if (subSelectionIndex > subSelectionStartIndex) {
                 setSubSelectionIndex(subSelectionIndex - 1)
+              } else if (subSelectionStartIndex > 0) {
+                setStep('satisfaction')
               } else {
                 setStep('clusters')
               }
