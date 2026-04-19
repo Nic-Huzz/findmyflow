@@ -4245,6 +4245,31 @@
   color: #5e17eb;
 }
 
+.plt-other-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: none;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+  color: #9a9daa;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.plt-other-toggle:hover {
+  color: #5e17eb;
+  border-color: rgba(94, 23, 235, 0.2);
+}
+
+.plt-category-unmatched {
+  opacity: 0.5;
+}
+
 /* ── Play-List Tab: Picker Modal ── */
 
 .plt-modal-overlay {

@@ -16,7 +16,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
-import { findSkillSegment } from '../lib/wheelTaxonomy'
+import { SKILLS_SEGMENTS, findSkillSegment } from '../lib/wheelTaxonomy'
 import GroanCompletionModal from './GroanCompletionModal'
 import MobilePlaylistPicker from './MobilePlaylistPicker'
 
@@ -257,6 +257,39 @@ export default function PlayListTab({
           )
         })}
       </div>
+
+      {/* Unmatched categories — collapsible */}
+      {(() => {
+        const matchedIds = new Set(categories.map(c => c.id))
+        const unmatched = SKILLS_SEGMENTS.filter(seg => !matchedIds.has(seg.id))
+        if (unmatched.length === 0) return null
+        return (
+          <>
+            <button
+              className="plt-other-toggle"
+              onClick={() => setShowAllCategories(!showAllCategories)}
+            >
+              {showAllCategories ? 'Hide' : 'Show'} {unmatched.length} other categor{unmatched.length === 1 ? 'y' : 'ies'}
+              <span style={{ marginLeft: '0.4rem' }}>{showAllCategories ? '▲' : '▼'}</span>
+            </button>
+            {showAllCategories && (
+              <div className="plt-categories-grid">
+                {unmatched.map(seg => (
+                  <button
+                    key={seg.id}
+                    className="plt-category-card plt-category-unmatched"
+                    onClick={() => setSelectedCategory(seg.id)}
+                  >
+                    <div className="plt-cat-icon">{seg.icon}</div>
+                    <div className="plt-cat-name">{seg.displayName}</div>
+                    <div className="plt-cat-count">0 completed</div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        )
+      })()}
 
       {/* Redo topics link */}
       <button
