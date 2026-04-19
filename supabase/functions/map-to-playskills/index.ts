@@ -157,8 +157,8 @@ serve(async (req) => {
       )
     }
 
-    // Cap at 15 items to stay within Haiku's reliable output window
-    const cappedItems = items.slice(0, 15)
+    // Cap at 25 items to stay within Sonnet's reliable output window
+    const cappedItems = items.slice(0, 25)
 
     // Build item list for the prompt
     const itemLines = cappedItems.map((item: any, i: number) =>

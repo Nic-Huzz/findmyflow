@@ -1,21 +1,24 @@
 /**
  * PlaySkillsOnboarding.jsx
  *
- * New /get-started flow. Replaces JourneyOnboarding.
+ * /get-started flow for discovering play-skills.
  *
  * Beats:
- *   1. Hook slides (ported from JourneyOnboarding)
- *   2. AI-usage gate ("Have you been journaling with AI?")
- *   3a. Path A: Copy prompt → paste AI response → parse → map-to-playskills edge fn → swipe deck
- *   3b. Path B: Wheel self-selection (10 categories → placemakes)
- *   4. Reveal (simple: kept placemakes grouped by category)
- *   5. Signup (name + email → OTP)
+ *   1. Hook slides (childhood → remember → where did they go)
+ *   2. AI-usage gate ("Do you use ChatGPT or Claude?")
+ *   3a. Path A (AI):
+ *       Copy prompt → Paste → Parse → map-to-playskills (images) →
+ *       nikigai-conversation (clusters) → Cluster overview →
+ *       Swipe ALL cards sequentially → Sub-select per category →
+ *       Satisfaction → Reveal → Signup/Save
+ *   3b. Path B (Manual): Wheel category picker → Swipe placemakes → Reveal → Signup/Save
+ *   4. Reveal (kept skills grouped by category)
+ *   5. Signup (name + email → OTP) or direct save if authenticated
  *   6. Verify (6-digit code)
  *
- * All pre-auth state stored in localStorage. Hydrated to DB after signup
- * via 'playskills_onboarding_result' key (read by /me page).
+ * Pre-auth state stored in localStorage. Hydrated to DB after signup.
  *
- * Created: 2026-04-11
+ * Created: 2026-04-11 | Rebuilt: 2026-04-19
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -32,7 +35,7 @@ import './PlaySkillsOnboarding.css'
 const STORAGE_KEY = 'playskills_onboarding_progress'
 const RESULT_KEY = 'playskills_onboarding_result'
 
-// Build placemake → image path lookup from SKILLS_SEGMENTS
+// Build placemake → image path lookup
 const PLACEMAKE_IMAGES = {}
 SKILLS_SEGMENTS.forEach(seg => {
   ;(seg.placemakes || []).forEach((pm, i) => {
@@ -40,7 +43,6 @@ SKILLS_SEGMENTS.forEach(seg => {
   })
 })
 
-// Famous people known for each category
 const CATEGORY_FAMOUS = {
   storytelling: 'Brené Brown, J.K. Rowling, Ira Glass',
   teaching: 'Richard Feynman, Sal Khan, Maria Montessori',
@@ -62,12 +64,13 @@ const BEATS = {
   // Path A
   COPY_PROMPT: 'copy_prompt',
   PASTE: 'paste',
-  MAPPING: 'mapping',
-  SWIPE: 'swipe',
+  MAPPING: 'mapping',       // loading: parse + map-to-playskills + nikigai
+  CLUSTERS: 'clusters',     // cluster overview (read-only)
+  SWIPE: 'swipe',           // swipe ALL cards sequentially
+  SUB_SELECT: 'sub_select', // per-category checkboxes
   SATISFACTION: 'satisfaction',
-  // Path B / top-up from satisfaction
+  // Path B
   WHEEL_CATEGORIES: 'wheel_categories',
-  WHEEL_SKILLS: 'wheel_skills',
   // Shared
   REVEAL: 'reveal',
   SIGNUP: 'signup',
@@ -75,84 +78,134 @@ const BEATS = {
 }
 
 const HOOK_SLIDES = [
-  {
-    id: 'childhood',
-    text: 'Take a moment to think about you as a kid.',
-    subtext: 'How playful you were. How full of love. How care-free.',
-  },
-  {
-    id: 'remember',
-    text: 'Remember that?',
-    subtext: null,
-  },
-  {
-    id: 'question',
-    text: 'So where did they go?',
-    subtext: null,
-  },
+  { id: 'childhood', text: 'Take a moment to think about you as a kid.', subtext: 'How playful you were. How full of love. How care-free.' },
+  { id: 'remember', text: 'Remember that?', subtext: null },
+  { id: 'question', text: 'So where did they go?', subtext: null },
 ]
 
-const SKILLS_PROMPT = `Analyze our entire conversation history. I want you to identify the things I naturally light up about, the activities that feel like play not work.
+// ─── Prompt ─────────────────────────────────────────────────────────────────
 
-Look for:
-- What I talk about with genuine excitement (not just competence)
-- What I'd do even if nobody paid me
-- What makes me lose track of time
-- What I keep coming back to because I love it, not because I have to
+function buildPrompt() {
+  const categoryList = SKILLS_SEGMENTS.map((seg, i) =>
+    `${i + 1}. ${seg.displayName}`
+  ).join('\n')
 
-Ignore anything that sounds like obligation, duty, or "should." I only want the things that genuinely energize me.
+  return `Analyze our entire conversation history and identify the specific skills I naturally use and gravitate toward.
 
-Extract and organize your findings in this EXACT format:
+For each skill you identify, write it in MY voice based on what I've actually said and shown. Then map it to one of these 10 categories:
+
+${categoryList}
+
+Extract in this EXACT format:
 
 ---START EXTRACTION---
 
-SKILLS
-- SKILL: [Name]
-  EVIDENCE: [Brief quote or pattern you noticed]
-  FREQUENCY: [Low/Medium/High]
-  CATEGORY: [Technical/Creative/Interpersonal/Strategic/Healing/Other]
+- SKILL: [The specific skill in my own words, under 15 words]
+  CATEGORY: [Exact category name from the 10 above]
+  EVIDENCE: [Specific quote or pattern from our conversations]
 
-(list ALL skills you identified, aim for 5-10)
+(List 1-3 skills per category. Only add a second or third if the evidence genuinely supports a distinct angle. Only include categories where you have real evidence.)
 
 ---END EXTRACTION---`
+}
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+// ─── Parser ─────────────────────────────────────────────────────────────────
 
-function parseSkills(text) {
-  const skills = []
-  const skillMatches = [...text.matchAll(/SKILL:\s*(.+?)(?:\n|$)/gi)]
-  const evidenceMatches = [...text.matchAll(/EVIDENCE:\s*(.+?)(?:\n|$)/gi)]
-  const categoryMatches = [...text.matchAll(/CATEGORY:\s*(.+?)(?:\n|$)/gi)]
+function parseSkillExtraction(rawText) {
+  const results = []
+  const text = rawText.replace(/\*{1,2}/g, '')
+  const blocks = text.split(/(?=[-•*]?\s*SKILL\s*:)/i).filter(b => /SKILL\s*:/i.test(b))
 
-  for (let i = 0; i < skillMatches.length; i++) {
-    skills.push({
-      name: skillMatches[i][1].trim(),
-      evidence: evidenceMatches[i]?.[1]?.trim() || '',
-      category: categoryMatches[i]?.[1]?.trim() || 'Other',
+  for (const block of blocks) {
+    const rawSkill = block.match(/SKILL\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+    const rawCategory = block.match(/CATEGORY\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+    const rawEvidence = block.match(/EVIDENCE\s*:\s*(.+?)(?:\n|$)/i)?.[1]?.trim() || ''
+
+    if (!rawSkill) continue
+
+    results.push({
+      name: rawSkill,
+      evidence: rawEvidence,
+      category: rawCategory || 'Other',
     })
   }
 
-  // Fallback: line-by-line
-  if (skills.length === 0) {
+  // Fallback: line-by-line if structured parse fails
+  if (results.length === 0) {
     const lines = text.split('\n').filter(l => l.trim().startsWith('-') || l.trim().startsWith('•'))
     lines.forEach(line => {
       const cleaned = line.replace(/^[-•*]\s*/, '').trim()
       if (cleaned.length > 2 && cleaned.length < 100) {
-        skills.push({ name: cleaned, evidence: '', category: 'Other' })
+        results.push({ name: cleaned, evidence: '', category: 'Other' })
       }
     })
   }
 
-  return skills
+  return results
 }
 
-// ─── Swipe Card Content (extracted to support useState) ─────────────────────
+// ─── Cluster categories via nikigai-conversation ────────────────────────────
+
+async function clusterSkillCategories(mappedItems) {
+  // Group by category, build context from personal skill names
+  const catMap = {}
+  mappedItems.forEach(item => {
+    if (!catMap[item.categoryId]) catMap[item.categoryId] = []
+    catMap[item.categoryId].push(item.originalName)
+  })
+
+  const lines = Object.entries(catMap).map(([catId, skills], i) => {
+    const seg = findSkillSegment(catId)
+    return `${i + 1}. ${seg?.displayName || catId} (context: ${skills.join('; ')})`
+  }).join('\n')
+
+  const { data, error } = await supabase.functions.invoke('nikigai-conversation', {
+    body: {
+      currentStep: {
+        id: 'skills_final',
+        assistant_prompt: 'Group these skill category labels into 2-4 thematic clusters. Use ONLY the exact category names as items in your clusters array. The context after each label is for your understanding only.',
+      },
+      userResponse: 'Group my skill categories',
+      shouldCluster: true,
+      clusterType: 'skills',
+      clusterSources: ['skills_all'],
+      allResponses: [{
+        user_id: 'clustering',
+        response_raw: lines,
+        store_as: 'skills_all',
+      }],
+      conversationHistory: [],
+    },
+  })
+
+  if (error) throw error
+
+  const clusters = (data?.clusters || []).map(cluster => {
+    const categoryIds = cluster.items
+      .map(item => {
+        const cleanItem = item.split('—')[0].split('(context')[0].replace(/^\d+\.\s*/, '').trim().toLowerCase().replace(/[.*"]/g, '')
+        const seg = SKILLS_SEGMENTS.find(s => {
+          const dn = s.displayName.toLowerCase()
+          return dn === cleanItem || cleanItem.includes(dn.slice(0, 15)) || dn.includes(cleanItem.slice(0, 15))
+        })
+        return seg?.id || null
+      })
+      .filter(Boolean)
+    return { label: cluster.label, insight: cluster.insight, categoryIds }
+  }).filter(c => c.categoryIds.length > 0)
+
+  return clusters
+}
+
+// ─── Swipe Card Content ─────────────────────────────────────────────────────
 
 function SwipeCardContent({ card }) {
   const [evidenceExpanded, setEvidenceExpanded] = useState(false)
   const seg = findSkillSegment(card.categoryId)
   const imgSrc = PLACEMAKE_IMAGES[card.placemake]
   const famous = CATEGORY_FAMOUS[card.categoryId]
+  // Show personal skill name as headline, not the generic placemake
+  const headline = card.originalName || card.placemake
   const isLong = card.evidence && card.evidence.length > 120
 
   return (
@@ -169,7 +222,7 @@ function SwipeCardContent({ card }) {
           onError={(e) => { e.target.style.display = 'none' }}
         />
       )}
-      <div className="pso-card-placemake">{card.placemake}</div>
+      <div className="pso-card-placemake">{headline}</div>
       {famous && (
         <div className="pso-card-famous">
           Think {famous}
@@ -177,7 +230,7 @@ function SwipeCardContent({ card }) {
       )}
       {card.evidence && (
         <div className={`pso-card-evidence ${!evidenceExpanded && isLong ? 'truncated' : ''}`}>
-          Analysis shows: "{card.evidence}"
+          Analysis shows: &ldquo;{card.evidence}&rdquo;
         </div>
       )}
       {isLong && !evidenceExpanded && (
@@ -201,7 +254,7 @@ export default function PlaySkillsOnboarding() {
 
   // Beat state
   const [currentBeat, setCurrentBeat] = useState(BEATS.HOOK)
-  const [path, setPath] = useState(null) // 'a' or 'b'
+  const [path, setPath] = useState(null)
 
   // Hook
   const [hookSlideIndex, setHookSlideIndex] = useState(0)
@@ -209,8 +262,17 @@ export default function PlaySkillsOnboarding() {
   // Path A: external AI
   const [copied, setCopied] = useState(false)
   const [rawResponse, setRawResponse] = useState('')
-  const [mappedCards, setMappedCards] = useState([]) // from edge function
-  const [keptPlacemakes, setKeptPlacemakes] = useState([]) // after swipe
+  const [mappedCards, setMappedCards] = useState([])
+  const [keptPlacemakes, setKeptPlacemakes] = useState([])
+  const [clusters, setClusters] = useState([])
+
+  // Path A: sub-select state
+  const [subSelectCatIds, setSubSelectCatIds] = useState([])
+  const [subSelectIndex, setSubSelectIndex] = useState(0)
+  const [selectedItems, setSelectedItems] = useState({})
+  const [customText, setCustomText] = useState('')
+  // categoryExtractions: { [categoryId]: [{ skill, evidence, placemake }] }
+  const [categoryExtractions, setCategoryExtractions] = useState({})
 
   // Path B: wheel picker
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -254,10 +316,9 @@ export default function PlaySkillsOnboarding() {
       if (saved) {
         const p = JSON.parse(saved)
         if (Date.now() - p.timestamp < 24 * 60 * 60 * 1000) {
-          // Don't restore transient loading states — fall back to the input beat
           let beat = p.currentBeat
+          // Don't restore transient loading states
           if (beat === BEATS.MAPPING) beat = BEATS.PASTE
-          if (beat === BEATS.WHEEL_SKILLS) beat = BEATS.WHEEL_CATEGORIES
           if (beat === BEATS.SWIPE && (!p.mappedCards || p.mappedCards.length === 0)) {
             beat = p.path === 'b' ? BEATS.WHEEL_CATEGORIES : BEATS.PASTE
           }
@@ -270,6 +331,9 @@ export default function PlaySkillsOnboarding() {
           if (p.rawResponse) setRawResponse(p.rawResponse)
           if (p.userName) setUserName(p.userName)
           if (p.email) setEmail(p.email)
+          if (p.clusters) setClusters(p.clusters)
+          if (p.categoryExtractions) setCategoryExtractions(p.categoryExtractions)
+          if (p.selectedItems) setSelectedItems(p.selectedItems)
         } else {
           localStorage.removeItem(STORAGE_KEY)
         }
@@ -281,12 +345,12 @@ export default function PlaySkillsOnboarding() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       currentBeat, path, hookSlideIndex,
-      selectedCategories,
-      keptPlacemakes, mappedCards,
+      selectedCategories, keptPlacemakes, mappedCards,
       rawResponse, userName, email,
+      clusters, categoryExtractions, selectedItems,
       timestamp: Date.now(),
     }))
-  }, [currentBeat, path, hookSlideIndex, selectedCategories, keptPlacemakes, mappedCards, rawResponse, userName, email])
+  }, [currentBeat, path, hookSlideIndex, selectedCategories, keptPlacemakes, mappedCards, rawResponse, userName, email, clusters, categoryExtractions, selectedItems])
 
   // ─── Navigation ──────────────────────────────────────────────────────────
 
@@ -321,25 +385,20 @@ export default function PlaySkillsOnboarding() {
     }
   }
 
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.changedTouches[0].screenX
-  }
-
+  const handleTouchStart = (e) => { touchStartX.current = e.changedTouches[0].screenX }
   const handleTouchEnd = (e) => {
     const diff = touchStartX.current - e.changedTouches[0].screenX
     if (currentBeat === BEATS.HOOK) {
-      if (diff > 50 && hookSlideIndex < HOOK_SLIDES.length - 1) {
-        handleHookTap()
-      } else if (diff > 50 && hookSlideIndex === HOOK_SLIDES.length - 1) {
-        transitionTo(BEATS.AI_GATE)
-      }
+      if (diff > 50) handleHookTap()
     }
   }
 
   // ─── Path A handlers ──────────────────────────────────────────────────────
 
+  const prompt = buildPrompt()
+
   const handleCopyPrompt = () => {
-    navigator.clipboard.writeText(SKILLS_PROMPT)
+    navigator.clipboard.writeText(prompt)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -349,25 +408,23 @@ export default function PlaySkillsOnboarding() {
     setIsLoading(true)
     setError(null)
 
-    const parsed = parseSkills(rawResponse)
+    const parsed = parseSkillExtraction(rawResponse)
     if (parsed.length === 0) {
       setError("Couldn't find any skills. Make sure you copied the full extraction output.")
       setIsLoading(false)
       return
     }
 
-    // Go straight to loading state (no transition animation needed for a spinner)
     setCurrentBeat(BEATS.MAPPING)
 
-    // Call edge function
     try {
-      const { data, error: fnError } = await supabase.functions.invoke('map-to-playskills', {
+      // Step 1: map-to-playskills → get placemake matches + images
+      const { data: mapData, error: mapError } = await supabase.functions.invoke('map-to-playskills', {
         body: { items: parsed },
       })
+      if (mapError) throw mapError
 
-      if (fnError) throw fnError
-
-      const mapped = (data?.mappedItems || []).map((item, i) => ({
+      const mapped = (mapData?.mappedItems || []).map((item, i) => ({
         id: `${item.categoryId}_${i}_${item.placemake.slice(0, 20)}`,
         placemake: item.placemake,
         categoryId: item.categoryId,
@@ -383,26 +440,92 @@ export default function PlaySkillsOnboarding() {
       }
 
       setMappedCards(mapped)
-      transitionTo(BEATS.SWIPE)
+
+      // Build category extractions for sub-select
+      const extMap = {}
+      mapped.forEach(item => {
+        if (!extMap[item.categoryId]) extMap[item.categoryId] = []
+        extMap[item.categoryId].push({
+          skill: item.originalName,
+          evidence: item.evidence,
+          placemake: item.placemake,
+        })
+      })
+      setCategoryExtractions(extMap)
+
+      // Step 2: nikigai cluster the categories
+      const clusterResult = await clusterSkillCategories(mapped)
+
+      if (clusterResult.length > 0) {
+        setClusters(clusterResult)
+        transitionTo(BEATS.CLUSTERS)
+      } else {
+        // Fallback: skip clusters, go straight to swipe
+        transitionTo(BEATS.SWIPE)
+      }
     } catch (err) {
-      console.error('Mapping error:', err)
-      setError('Something went wrong mapping your skills. Please try again.')
+      console.error('Processing error:', err)
+      setError('Something went wrong. Please try again.')
       transitionTo(BEATS.PASTE, 'left')
     }
     setIsLoading(false)
   }
 
+  // After swipe: enter sub-select for all kept categories
   const handleSwipeComplete = (keptIds) => {
     const newlyKept = mappedCards.filter(c => keptIds.includes(c.id))
-    if (keptPlacemakes.length > 0) {
-      // Merge with existing (from AI path) — dedupe by placemake text
+
+    if (path === 'b' || keptPlacemakes.length > 0) {
+      // Path B or wheel top-up: merge and go to reveal
       const existingTexts = new Set(keptPlacemakes.map(k => k.placemake))
       const unique = newlyKept.filter(k => !existingTexts.has(k.placemake))
       setKeptPlacemakes([...keptPlacemakes, ...unique])
       transitionTo(BEATS.REVEAL)
+      return
+    }
+
+    // Path A: enter sub-select
+    setKeptPlacemakes(newlyKept)
+
+    // Get unique category IDs from kept cards
+    const catIds = [...new Set(newlyKept.map(c => c.categoryId))]
+    setSubSelectCatIds(catIds)
+    setSubSelectIndex(0)
+
+    // Pre-select AI items
+    const preSelected = {}
+    catIds.forEach(catId => {
+      const aiItems = newlyKept.filter(c => c.categoryId === catId).map(c => c.originalName)
+      preSelected[catId] = [...aiItems]
+    })
+    setSelectedItems(preSelected)
+    transitionTo(BEATS.SUB_SELECT)
+  }
+
+  // Sub-select handlers
+  const toggleItem = (categoryId, item) => {
+    setSelectedItems(prev => {
+      const current = prev[categoryId] || []
+      if (current.includes(item)) return { ...prev, [categoryId]: current.filter(i => i !== item) }
+      return { ...prev, [categoryId]: [...current, item] }
+    })
+  }
+
+  const handleAddCustom = () => {
+    const catId = subSelectCatIds[subSelectIndex]
+    if (!customText.trim() || !catId) return
+    setSelectedItems(prev => ({
+      ...prev,
+      [catId]: [...(prev[catId] || []), customText.trim()],
+    }))
+    setCustomText('')
+  }
+
+  const handleSubSelectContinue = () => {
+    if (subSelectIndex < subSelectCatIds.length - 1) {
+      setSubSelectIndex(subSelectIndex + 1)
+      setCustomText('')
     } else {
-      setKeptPlacemakes(newlyKept)
-      // Both paths go to satisfaction check
       transitionTo(BEATS.SATISFACTION)
     }
   }
@@ -417,8 +540,6 @@ export default function PlaySkillsOnboarding() {
     })
   }
 
-  // Build swipe cards from selected categories and transition to swipe deck
-  // Excludes any playskills already kept from Path A swipe
   const handleWheelContinue = () => {
     const alreadyKept = new Set(keptPlacemakes.map(k => k.placemake))
     const cards = []
@@ -426,13 +547,13 @@ export default function PlaySkillsOnboarding() {
     for (const catId of selectedCategories) {
       const seg = findSkillSegment(catId)
       for (const pm of (seg?.placemakes || [])) {
-        if (alreadyKept.has(pm)) continue // skip already-kept from AI path
+        if (alreadyKept.has(pm)) continue
         cards.push({
           id: `wheel_${catId}_${idx++}_${pm.slice(0, 20)}`,
           placemake: pm,
           categoryId: catId,
           evidence: '',
-          originalName: seg?.displayName || catId,
+          originalName: '',
         })
       }
     }
@@ -440,55 +561,75 @@ export default function PlaySkillsOnboarding() {
     transitionTo(BEATS.SWIPE)
   }
 
-  // ─── Save + Auth handlers ──────────────────────────────────────────────────
+  // ─── Save + Auth ──────────────────────────────────────────────────────────
 
-  // Save directly to DB (authenticated users)
+  const getFinalKeptItems = () => {
+    // For Path A with sub-select: build from selectedItems
+    if (path === 'a' && Object.keys(selectedItems).length > 0) {
+      const items = []
+      Object.entries(selectedItems).forEach(([catId, skills]) => {
+        skills.forEach(skillName => {
+          // Find matching mapped card for placemake/evidence
+          const match = mappedCards.find(c => c.categoryId === catId && c.originalName === skillName)
+          items.push({
+            placemake: match?.placemake || skillName,
+            categoryId: catId,
+            evidence: match?.evidence || '',
+            originalName: skillName,
+          })
+        })
+      })
+      return items
+    }
+    return keptPlacemakes
+  }
+
+  const saveToDb = async (userId) => {
+    const finalItems = getFinalKeptItems()
+    if (finalItems.length === 0) return
+
+    await supabase.from('nikigai_clusters')
+      .delete().eq('user_id', userId).eq('step_id', 'get_started')
+
+    const { data: session, error: sessionError } = await supabase.from('flow_sessions').insert({
+      user_id: userId,
+      flow_type: 'get_started_playskills',
+      status: 'completed',
+      completed_at: new Date().toISOString(),
+    }).select('id').single()
+    if (sessionError || !session) throw sessionError || new Error('Failed to create session')
+
+    const rows = finalItems.map(item => ({
+      session_id: session.id,
+      user_id: userId,
+      cluster_type: 'skills',
+      cluster_label: item.originalName || item.placemake,
+      cluster_stage: 'final',
+      step_id: 'get_started',
+      items: [{
+        text: item.originalName || item.placemake,
+        placemake: item.placemake,
+        category: item.categoryId,
+        evidence: item.evidence || '',
+        isStarred: true,
+      }],
+    }))
+
+    const { error: insertError } = await supabase.from('nikigai_clusters').insert(rows)
+    if (insertError) throw insertError
+
+    await supabase.from('user_stage_progress').upsert({
+      user_id: userId,
+      onboarding_v2_completed: true,
+    }, { onConflict: 'user_id' })
+  }
+
   const handleAuthenticatedSave = async () => {
-    if (!user?.id || keptPlacemakes.length === 0) return
+    if (!user?.id) return
     setIsLoading(true)
     setError(null)
-
     try {
-      // Remove old get_started clusters before inserting new ones
-      await supabase.from('nikigai_clusters')
-        .delete()
-        .eq('user_id', user.id)
-        .eq('step_id', 'get_started')
-
-      // Create a flow session for this save
-      const { data: session, error: sessionError } = await supabase.from('flow_sessions').insert({
-        user_id: user.id,
-        flow_type: 'get_started_playskills',
-        status: 'completed',
-        completed_at: new Date().toISOString(),
-      }).select('id').single()
-      if (sessionError || !session) throw sessionError || new Error('Failed to create session')
-
-      // Insert kept placemakes into nikigai_clusters
-      const rows = keptPlacemakes.map(item => ({
-        session_id: session.id,
-        user_id: user.id,
-        cluster_type: 'skills',
-        cluster_label: item.placemake,
-        cluster_stage: 'final',
-        step_id: 'get_started',
-        items: [{
-          text: item.placemake,
-          category: item.categoryId,
-          evidence: item.evidence || '',
-          isStarred: true,
-        }],
-      }))
-
-      const { error: insertError } = await supabase.from('nikigai_clusters').insert(rows)
-      if (insertError) throw insertError
-
-      // Mark onboarding complete
-      await supabase.from('user_stage_progress').upsert({
-        user_id: user.id,
-        onboarding_v2_completed: true,
-      }, { onConflict: 'user_id' })
-
+      await saveToDb(user.id)
       localStorage.removeItem(STORAGE_KEY)
       navigate('/me')
     } catch (err) {
@@ -498,11 +639,11 @@ export default function PlaySkillsOnboarding() {
     setIsLoading(false)
   }
 
-  // Save to localStorage for post-auth hydration (unauthenticated users)
   const handleSignUp = () => {
+    const finalItems = getFinalKeptItems()
     localStorage.setItem(RESULT_KEY, JSON.stringify({
       path,
-      keptPlacemakes,
+      keptPlacemakes: finalItems,
       userName,
       completedAt: new Date().toISOString(),
     }))
@@ -515,7 +656,6 @@ export default function PlaySkillsOnboarding() {
     if (!email || isLoading) return
     setIsLoading(true)
     setAuthError(null)
-
     try {
       const result = await signInWithCode(email.toLowerCase().trim())
       if (result.success) {
@@ -535,61 +675,22 @@ export default function PlaySkillsOnboarding() {
     if (!verificationCode || isLoading) return
     setIsLoading(true)
     setAuthError(null)
-
     try {
       const result = await verifyCode(email.toLowerCase().trim(), verificationCode)
       if (result.success) {
-        // Save playskills immediately after verification (don't rely only on hydration)
         try {
           const { data: { user: newUser } } = await supabase.auth.getUser()
-          if (newUser?.id && keptPlacemakes.length > 0) {
-            // Create flow session
-            const { data: session } = await supabase.from('flow_sessions').insert({
-              user_id: newUser.id,
-              flow_type: 'get_started_playskills',
-              status: 'completed',
-              completed_at: new Date().toISOString(),
-            }).select('id').single()
-
-            if (session) {
-              // Delete old + insert new
-              await supabase.from('nikigai_clusters')
-                .delete()
-                .eq('user_id', newUser.id)
-                .eq('step_id', 'get_started')
-
-              const rows = keptPlacemakes.map(item => ({
-                session_id: session.id,
-                user_id: newUser.id,
-                cluster_type: 'skills',
-                cluster_label: item.placemake,
-                cluster_stage: 'final',
-                step_id: 'get_started',
-                items: [{
-                  text: item.placemake,
-                  category: item.categoryId,
-                  evidence: item.evidence || '',
-                  isStarred: true,
-                }],
-              }))
-
-              await supabase.from('nikigai_clusters').insert(rows)
-
-              // Update display name
-              if (userName?.trim()) {
-                await supabase.auth.updateUser({ data: { display_name: userName.trim() } })
-              }
-
-              // Clear localStorage since we saved directly
-              localStorage.removeItem(RESULT_KEY)
-              localStorage.removeItem(STORAGE_KEY)
+          if (newUser?.id) {
+            await saveToDb(newUser.id)
+            if (userName?.trim()) {
+              await supabase.auth.updateUser({ data: { display_name: userName.trim() } })
             }
+            localStorage.removeItem(RESULT_KEY)
+            localStorage.removeItem(STORAGE_KEY)
           }
         } catch (saveErr) {
-          // Don't block navigation — hydration on /me is the fallback
           console.warn('Direct save after verify failed, hydration will retry:', saveErr)
         }
-
         navigate('/me')
       } else {
         setAuthError(result.message || 'Invalid code. Please try again.')
@@ -658,20 +759,14 @@ export default function PlaySkillsOnboarding() {
             If you have conversation history with an AI, we can mine it for patterns you can't see yourself.
           </p>
           <div className="pso-gate-options">
-            <button
-              className="pso-gate-btn pso-gate-primary"
-              onClick={() => { setPath('a'); transitionTo(BEATS.COPY_PROMPT) }}
-            >
+            <button className="pso-gate-btn pso-gate-primary" onClick={() => { setPath('a'); transitionTo(BEATS.COPY_PROMPT) }}>
               <span className="pso-gate-icon">🧠</span>
               <span className="pso-gate-text">
                 <strong>Yes, I use AI frequently</strong>
                 <span>Deeper analysis, best results</span>
               </span>
             </button>
-            <button
-              className="pso-gate-btn"
-              onClick={() => { setPath('b'); transitionTo(BEATS.WHEEL_CATEGORIES) }}
-            >
+            <button className="pso-gate-btn" onClick={() => { setPath('b'); transitionTo(BEATS.WHEEL_CATEGORIES) }}>
               <span className="pso-gate-icon">🎯</span>
               <span className="pso-gate-text">
                 <strong>No, or only a little</strong>
@@ -697,28 +792,21 @@ export default function PlaySkillsOnboarding() {
           <p style={{ color: 'rgba(255,255,255,0.65)', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
             Paste it into the AI you've been chatting with. It will analyze your conversation and find what lights you up.
           </p>
-          <div className="pso-prompt-preview">
-            {SKILLS_PROMPT.substring(0, 180)}...
-          </div>
+          <div className="pso-prompt-preview">{prompt.substring(0, 180)}...</div>
           <button className="jo-cta-button" onClick={handleCopyPrompt} style={{ width: '100%' }}>
             <span className="jo-shimmer-layer" />
             {copied ? '✓ Copied!' : 'Copy Prompt'}
           </button>
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
-            <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer"
-              className="pso-external-link">Open ChatGPT</a>
-            <a href="https://claude.ai" target="_blank" rel="noopener noreferrer"
-              className="pso-external-link">Open Claude</a>
+            <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" className="pso-external-link">Open ChatGPT</a>
+            <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="pso-external-link">Open Claude</a>
           </div>
-          <button className="jo-cta-button" onClick={() => transitionTo(BEATS.PASTE)}
-            style={{ width: '100%', marginTop: '1.5rem' }}>
+          <button className="jo-cta-button" onClick={() => transitionTo(BEATS.PASTE)} style={{ width: '100%', marginTop: '1.5rem' }}>
             <span className="jo-shimmer-layer" />
             I have my results
             <span className="jo-btn-arrow">&#8594;</span>
           </button>
-          <button className="pso-back-link" onClick={() => transitionTo(BEATS.AI_GATE, 'left')}>
-            ← Back
-          </button>
+          <button className="pso-back-link" onClick={() => transitionTo(BEATS.AI_GATE, 'left')}>← Back</button>
         </div>
       </div>
     )
@@ -737,41 +825,23 @@ export default function PlaySkillsOnboarding() {
           <p style={{ color: 'rgba(255,255,255,0.65)', marginBottom: '1rem', fontSize: '0.9rem' }}>
             Paste the skills extraction from your AI conversation below.
           </p>
-          <textarea
-            ref={textareaRef}
-            value={rawResponse}
-            onChange={(e) => setRawResponse(e.target.value)}
-            placeholder="Paste the extraction here..."
-            className="pso-textarea"
-          />
+          <textarea ref={textareaRef} value={rawResponse} onChange={(e) => setRawResponse(e.target.value)}
+            placeholder="Paste the extraction here..." className="pso-textarea" />
           {error && <p className="pso-error">{error}</p>}
-          <button
-            className="jo-cta-button"
-            onClick={handleParse}
-            disabled={!rawResponse.trim() || isLoading}
-            style={{ width: '100%' }}
-          >
+          <button className="jo-cta-button" onClick={handleParse} disabled={!rawResponse.trim() || isLoading} style={{ width: '100%' }}>
             <span className="jo-shimmer-layer" />
             {isLoading ? 'Processing...' : 'Find my play-skills'}
             {!isLoading && <span className="jo-btn-arrow">&#8594;</span>}
           </button>
-          <a
-            href="https://wa.me/61423220241?text=Hey%20Huzz!%20I'm%20having%20trouble%20with%20the%20AI%20extract%20to%20get%20started%20in%20Find%20My%20Flow"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="pso-help-link"
-          >
-            Need help? Message me
-          </a>
-          <button className="pso-back-link" onClick={() => transitionTo(BEATS.COPY_PROMPT, 'left')}>
-            ← Back
-          </button>
+          <a href="https://wa.me/61423220241?text=Hey%20Huzz!%20I'm%20having%20trouble%20with%20the%20AI%20extract%20to%20get%20started%20in%20Find%20My%20Flow"
+            target="_blank" rel="noopener noreferrer" className="pso-help-link">Need help? Message me</a>
+          <button className="pso-back-link" onClick={() => transitionTo(BEATS.COPY_PROMPT, 'left')}>← Back</button>
         </div>
       </div>
     )
   }
 
-  // BEAT 3a-3: Mapping (loading state)
+  // BEAT 3a-3: Loading (mapping + clustering)
   if (currentBeat === BEATS.MAPPING) {
     return (
       <div className={`journey-onboarding pso-mapping ${transitionClass} ${directionClass}`}>
@@ -781,7 +851,7 @@ export default function PlaySkillsOnboarding() {
         </div>
         <div className="pso-mapping-content">
           <div className="pso-mapping-spinner" />
-          <h2>Listening for your play-skills...</h2>
+          <h2>Analysing your skills...</h2>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>
             Finding patterns in what lights you up
           </p>
@@ -790,30 +860,157 @@ export default function PlaySkillsOnboarding() {
     )
   }
 
-  // BEAT 3a-4: Swipe Deck
+  // BEAT 3a-4: Cluster Overview (read-only, then continue to swipe all)
+  if (currentBeat === BEATS.CLUSTERS) {
+    return (
+      <div className={`journey-onboarding pso-gate ${transitionClass} ${directionClass}`}>
+        <div className="jo-ambient">
+          <div className="jo-glow jo-glow-1" />
+          <div className="jo-glow jo-glow-2 jo-glow-gold" />
+        </div>
+        <div className="pso-gate-content" style={{ textAlign: 'left' }}>
+          <h2 className="pso-gate-title" style={{ textAlign: 'center' }}>Your Skill Spaces</h2>
+          <p className="pso-gate-subtitle" style={{ textAlign: 'center' }}>
+            We found {clusters.length} themes in how you show up. Review them, then we'll walk through each skill.
+          </p>
+
+          {clusters.map((cluster, i) => {
+            const skillCount = cluster.categoryIds.reduce((sum, catId) =>
+              sum + mappedCards.filter(c => c.categoryId === catId).length, 0)
+            return (
+              <div key={i} className="idt-cluster-card">
+                <div className="idt-cluster-name">{cluster.label}</div>
+                <div className="idt-cluster-insight">{cluster.insight}</div>
+                <div className="idt-cluster-tags">
+                  {cluster.categoryIds.map(catId => {
+                    const seg = findSkillSegment(catId)
+                    return <span key={catId} className="idt-cluster-tag">{seg?.icon} {seg?.displayName}</span>
+                  })}
+                </div>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', marginTop: '0.5rem' }}>
+                  {skillCount} skill{skillCount !== 1 ? 's' : ''} identified
+                </div>
+              </div>
+            )
+          })}
+
+          <button className="jo-cta-button" onClick={() => transitionTo(BEATS.SWIPE)} style={{ width: '100%', marginTop: '0.5rem' }}>
+            <span className="jo-shimmer-layer" />
+            Review my skills →
+          </button>
+          <button className="pso-back-link" onClick={() => transitionTo(BEATS.PASTE, 'left')}>← Back to paste</button>
+        </div>
+      </div>
+    )
+  }
+
+  // BEAT 3a-5 / 3b: Swipe Deck (all cards)
   if (currentBeat === BEATS.SWIPE && mappedCards.length > 0) {
     return (
       <div className={`journey-onboarding pso-swipe ${transitionClass} ${directionClass}`}>
         <div className="pso-swipe-container">
           <SwipeCardDeck
             cards={mappedCards}
-            headerText="Does this sound like you?"
+            headerText="Does this skill sound like you?"
             onComplete={handleSwipeComplete}
             onBackFromFirst={() => transitionTo(
+              clusters.length > 0 ? BEATS.CLUSTERS :
               selectedCategories.length > 0 ? BEATS.WHEEL_CATEGORIES : BEATS.PASTE,
               'left'
             )}
-            renderCard={(card) => (
-              <SwipeCardContent card={card} />
-            )}
+            renderCard={(card) => <SwipeCardContent card={card} />}
           />
         </div>
       </div>
     )
   }
 
-  // BEAT: Satisfaction check (Path A only, after swipe)
+  // BEAT 3a-6: Sub-select (per category)
+  if (currentBeat === BEATS.SUB_SELECT && subSelectCatIds.length > 0) {
+    const catId = subSelectCatIds[subSelectIndex]
+    const seg = findSkillSegment(catId)
+    const aiExtractions = categoryExtractions[catId] || []
+    const aiSkillNames = aiExtractions.map(e => e.skill)
+    const preDefinedItems = (seg?.placemakes || []).filter(pm => !aiSkillNames.includes(pm))
+    const catItems = selectedItems[catId] || []
+    const customItems = catItems.filter(item => !aiSkillNames.includes(item) && !(seg?.placemakes || []).includes(item))
+
+    return (
+      <div className={`journey-onboarding pso-gate ${transitionClass} ${directionClass}`}>
+        <div className="pso-gate-content" style={{ textAlign: 'left' }}>
+          <div style={{ textAlign: 'center', fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '0.75rem' }}>
+            {subSelectIndex + 1} of {subSelectCatIds.length}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
+            <span style={{ fontSize: '1.3rem' }}>{seg?.icon}</span>
+            <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{seg?.displayName || catId}</h2>
+          </div>
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', marginBottom: '1rem' }}>
+            Tick the skills that light you up.
+          </p>
+
+          {aiExtractions.length > 0 && (
+            <>
+              <div className="idt-sub-label" style={{ color: 'rgba(233,162,59,0.7)' }}>From Your Conversations</div>
+              {aiExtractions.map((ext, i) => (
+                <label key={`ai-${i}`} className="idt-checkbox-row">
+                  <input type="checkbox" checked={catItems.includes(ext.skill)} onChange={() => toggleItem(catId, ext.skill)} />
+                  <span>
+                    {ext.skill}
+                    {ext.evidence && (
+                      <span style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', marginTop: '0.25rem', fontStyle: 'italic' }}>
+                        {ext.evidence.length > 100 ? ext.evidence.slice(0, 100) + '...' : ext.evidence}
+                      </span>
+                    )}
+                  </span>
+                </label>
+              ))}
+            </>
+          )}
+
+          <div className="idt-sub-label" style={{ color: 'rgba(255,255,255,0.3)' }}>Pre-Defined</div>
+          {preDefinedItems.map((item, i) => (
+            <label key={`pd-${i}`} className="idt-checkbox-row">
+              <input type="checkbox" checked={catItems.includes(item)} onChange={() => toggleItem(catId, item)} />
+              <span>{item}</span>
+            </label>
+          ))}
+
+          <div className="idt-sub-label" style={{ color: 'rgba(255,255,255,0.3)' }}>Identify your own</div>
+          <div className="idt-custom-row">
+            <input type="text" className="idt-custom-input" placeholder="Type a skill..."
+              value={customText} onChange={e => setCustomText(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleAddCustom()} />
+            <button className="idt-custom-add" disabled={!customText.trim()} onClick={handleAddCustom}>Add</button>
+          </div>
+
+          {customItems.map((item, i) => (
+            <label key={`custom-${i}`} className="idt-checkbox-row">
+              <input type="checkbox" checked={true} onChange={() => toggleItem(catId, item)} />
+              <span>{item} <em style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.7rem' }}>(custom)</em></span>
+            </label>
+          ))}
+
+          <button className="jo-cta-button" onClick={handleSubSelectContinue} disabled={catItems.length === 0}
+            style={{ width: '100%', marginTop: '1.25rem' }}>
+            {subSelectIndex < subSelectCatIds.length - 1
+              ? `Continue (${catItems.length} selected) →`
+              : `Done (${catItems.length} selected) →`}
+          </button>
+          <button className="pso-back-link" onClick={() => {
+            if (subSelectIndex > 0) setSubSelectIndex(subSelectIndex - 1)
+            else transitionTo(BEATS.SWIPE, 'left')
+          }}>← Back</button>
+        </div>
+      </div>
+    )
+  }
+
+  // BEAT: Satisfaction
   if (currentBeat === BEATS.SATISFACTION) {
+    const allKept = Object.keys(selectedItems).filter(catId => (selectedItems[catId] || []).length > 0)
+    const totalItems = allKept.reduce((sum, catId) => sum + (selectedItems[catId]?.length || 0), 0)
+
     return (
       <div className={`journey-onboarding pso-gate ${transitionClass} ${directionClass}`}>
         <div className="jo-ambient">
@@ -822,25 +1019,17 @@ export default function PlaySkillsOnboarding() {
         </div>
         <div className="pso-gate-content">
           <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem', textAlign: 'center' }}>✨</div>
-          <h2 className="pso-gate-title">{keptPlacemakes.length} play-skills found</h2>
-          <p className="pso-gate-subtitle">
-            Do these capture what lights you up, or are some missing?
-          </p>
+          <h2 className="pso-gate-title">{allKept.length} categories, {totalItems} play-skills found</h2>
+          <p className="pso-gate-subtitle">Do these capture what lights you up, or are some missing?</p>
           <div className="pso-gate-options">
-            <button
-              className="pso-gate-btn pso-gate-primary"
-              onClick={() => transitionTo(BEATS.REVEAL)}
-            >
+            <button className="pso-gate-btn pso-gate-primary" onClick={() => transitionTo(BEATS.REVEAL)}>
               <span className="pso-gate-icon">✅</span>
               <span className="pso-gate-text">
                 <strong>These capture me</strong>
                 <span>Move on to my results</span>
               </span>
             </button>
-            <button
-              className="pso-gate-btn"
-              onClick={() => transitionTo(BEATS.WHEEL_CATEGORIES)}
-            >
+            <button className="pso-gate-btn" onClick={() => transitionTo(BEATS.WHEEL_CATEGORIES)}>
               <span className="pso-gate-icon">🎯</span>
               <span className="pso-gate-text">
                 <strong>Some are missing</strong>
@@ -855,7 +1044,6 @@ export default function PlaySkillsOnboarding() {
 
   // BEAT 3b-1: Wheel Categories
   if (currentBeat === BEATS.WHEEL_CATEGORIES) {
-    // Categories already identified from AI path
     const identifiedCategories = new Set(keptPlacemakes.map(k => k.categoryId))
     const comingFromSatisfaction = keptPlacemakes.length > 0
 
@@ -870,8 +1058,7 @@ export default function PlaySkillsOnboarding() {
           <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.85rem', marginBottom: '1rem' }}>
             {comingFromSatisfaction
               ? `Pick up to ${MAX_CATEGORIES} more categories to explore.`
-              : `Pick up to ${MAX_CATEGORIES}. (${selectedCategories.length}/${MAX_CATEGORIES})`
-            }
+              : `Pick up to ${MAX_CATEGORIES}. (${selectedCategories.length}/${MAX_CATEGORIES})`}
           </p>
           <div className="pso-category-grid">
             {SKILLS_SEGMENTS.map(seg => {
@@ -879,12 +1066,9 @@ export default function PlaySkillsOnboarding() {
               const isSelected = selectedCategories.includes(seg.id)
               const disabled = !isSelected && !isIdentified && selectedCategories.length >= MAX_CATEGORIES
               return (
-                <button
-                  key={seg.id}
-                  onClick={() => !isIdentified && toggleCategory(seg.id)}
+                <button key={seg.id} onClick={() => !isIdentified && toggleCategory(seg.id)}
                   disabled={disabled || isIdentified}
-                  className={`pso-category-card ${isSelected ? 'selected' : ''} ${isIdentified ? 'identified' : ''} ${disabled ? 'disabled' : ''}`}
-                >
+                  className={`pso-category-card ${isSelected ? 'selected' : ''} ${isIdentified ? 'identified' : ''} ${disabled ? 'disabled' : ''}`}>
                   {isIdentified && <div className="pso-cat-identified-tag">Identified</div>}
                   <div className="pso-cat-icon">{seg.icon}</div>
                   <div className="pso-cat-name">{seg.displayName}</div>
@@ -893,30 +1077,21 @@ export default function PlaySkillsOnboarding() {
               )
             })}
           </div>
-          <button
-            className="jo-cta-button"
-            onClick={handleWheelContinue}
-            disabled={selectedCategories.length === 0}
-            style={{ width: '100%', marginTop: '1rem' }}
-          >
-            <span className="jo-shimmer-layer" />
-            Continue →
+          <button className="jo-cta-button" onClick={handleWheelContinue} disabled={selectedCategories.length === 0}
+            style={{ width: '100%', marginTop: '1rem' }}>
+            <span className="jo-shimmer-layer" />Continue →
           </button>
-          <button className="pso-back-link" onClick={() => transitionTo(comingFromSatisfaction ? BEATS.SATISFACTION : BEATS.AI_GATE, 'left')}>
-            ← Back
-          </button>
+          <button className="pso-back-link" onClick={() => transitionTo(comingFromSatisfaction ? BEATS.SATISFACTION : BEATS.AI_GATE, 'left')}>← Back</button>
         </div>
       </div>
     )
   }
 
-  // BEAT 3b-2 removed — Path B now uses the shared SWIPE beat (above)
-
   // BEAT 4: Reveal
   if (currentBeat === BEATS.REVEAL) {
-    // Group kept placemakes by category
+    const finalItems = getFinalKeptItems()
     const grouped = {}
-    keptPlacemakes.forEach(item => {
+    finalItems.forEach(item => {
       if (!grouped[item.categoryId]) grouped[item.categoryId] = []
       grouped[item.categoryId].push(item)
     })
@@ -940,24 +1115,16 @@ export default function PlaySkillsOnboarding() {
               const seg = findSkillSegment(catId)
               return (
                 <div key={catId} className="pso-reveal-group">
-                  <div className="pso-reveal-cat">
-                    {seg?.icon} {seg?.displayName || catId}
-                  </div>
+                  <div className="pso-reveal-cat">{seg?.icon} {seg?.displayName || catId}</div>
                   {items.map((item, i) => (
-                    <div key={i} className="pso-reveal-item">
-                      {item.placemake}
-                    </div>
+                    <div key={i} className="pso-reveal-item">{item.originalName || item.placemake}</div>
                   ))}
                 </div>
               )
             })}
           </div>
-          <button
-            className="jo-cta-button"
-            onClick={isAuthenticated ? handleAuthenticatedSave : handleSignUp}
-            disabled={isLoading}
-            style={{ width: '100%', marginTop: '1.5rem' }}
-          >
+          <button className="jo-cta-button" onClick={isAuthenticated ? handleAuthenticatedSave : handleSignUp}
+            disabled={isLoading} style={{ width: '100%', marginTop: '1.5rem' }}>
             <span className="jo-shimmer-layer" />
             {isLoading ? 'Saving...' : isAuthenticated ? 'Add to my Play-List' : 'Save my play-skills'}
             {!isLoading && <span className="jo-btn-arrow">&#8594;</span>}
@@ -983,34 +1150,13 @@ export default function PlaySkillsOnboarding() {
             e.preventDefault()
             if (userName.trim() && email.trim()) handleEmailSubmit(e)
           }}>
-            <input
-              type="text"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              placeholder="Your first name"
-              className="jo-signup-input"
-              autoFocus
-            />
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              className="jo-signup-input"
-            />
-            <button
-              type="submit"
-              className="jo-cta-button"
-              disabled={isLoading || !userName.trim() || !email.trim()}
-            >
-              {isLoading ? (
-                <span>Sending code...</span>
-              ) : (
-                <>
-                  <span className="jo-shimmer-layer" />
-                  Send Verification Code
-                  <span className="jo-btn-arrow">&#8594;</span>
-                </>
+            <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)}
+              placeholder="Your first name" className="jo-signup-input" autoFocus />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com" className="jo-signup-input" />
+            <button type="submit" className="jo-cta-button" disabled={isLoading || !userName.trim() || !email.trim()}>
+              {isLoading ? <span>Sending code...</span> : (
+                <><span className="jo-shimmer-layer" />Send Verification Code<span className="jo-btn-arrow">&#8594;</span></>
               )}
             </button>
           </form>
@@ -1030,34 +1176,15 @@ export default function PlaySkillsOnboarding() {
         </div>
         <div className="jo-verify-content">
           <h2 className="jo-verify-heading">Check your email</h2>
-          <p className="jo-verify-subtext">
-            We sent a code to <strong>{email}</strong>
-          </p>
+          <p className="jo-verify-subtext">We sent a code to <strong>{email}</strong></p>
           <form className="jo-verify-form" onSubmit={handleCodeVerify}>
-            <input
-              type="text"
-              value={verificationCode}
+            <input type="text" value={verificationCode}
               onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-              placeholder="Enter 6-digit code"
-              className="jo-signup-input jo-code-input"
-              maxLength={6}
-              autoFocus
-              inputMode="numeric"
-              autoComplete="one-time-code"
-            />
-            <button
-              type="submit"
-              className="jo-cta-button"
-              disabled={isLoading || verificationCode.length !== 6}
-            >
-              {isLoading ? (
-                <span>Verifying...</span>
-              ) : (
-                <>
-                  <span className="jo-shimmer-layer" />
-                  Verify &amp; Start
-                  <span className="jo-btn-arrow">&#8594;</span>
-                </>
+              placeholder="Enter 6-digit code" className="jo-signup-input jo-code-input"
+              maxLength={6} autoFocus inputMode="numeric" autoComplete="one-time-code" />
+            <button type="submit" className="jo-cta-button" disabled={isLoading || verificationCode.length !== 6}>
+              {isLoading ? <span>Verifying...</span> : (
+                <><span className="jo-shimmer-layer" />Verify &amp; Start<span className="jo-btn-arrow">&#8594;</span></>
               )}
             </button>
           </form>
@@ -1066,9 +1193,7 @@ export default function PlaySkillsOnboarding() {
             setVerificationCode('')
             setAuthError(null)
             handleEmailSubmit({ preventDefault: () => {} })
-          }}>
-            Resend code
-          </button>
+          }}>Resend code</button>
         </div>
       </div>
     )
