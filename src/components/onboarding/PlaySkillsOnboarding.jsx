@@ -491,26 +491,9 @@ export default function PlaySkillsOnboarding() {
       return
     }
 
-    // Path A: enter sub-select
+    // Path A: skip sub-select, go straight to satisfaction
     setKeptPlacemakes(newlyKept)
-
-    // Get unique category IDs from kept cards
-    const catIds = [...new Set(newlyKept.map(c => c.categoryId))]
-    if (catIds.length === 0) {
-      transitionTo(BEATS.SATISFACTION)
-      return
-    }
-    setSubSelectCatIds(catIds)
-    setSubSelectIndex(0)
-
-    // Pre-select AI items
-    const preSelected = {}
-    catIds.forEach(catId => {
-      const aiItems = newlyKept.filter(c => c.categoryId === catId).map(c => c.originalName)
-      preSelected[catId] = [...aiItems]
-    })
-    setSelectedItems(preSelected)
-    transitionTo(BEATS.SUB_SELECT)
+    transitionTo(BEATS.SATISFACTION)
   }
 
   // Sub-select handlers
@@ -574,26 +557,7 @@ export default function PlaySkillsOnboarding() {
 
   // ─── Save + Auth ──────────────────────────────────────────────────────────
 
-  const getFinalKeptItems = () => {
-    // For Path A with sub-select: build from selectedItems
-    if (path === 'a' && Object.keys(selectedItems).length > 0) {
-      const items = []
-      Object.entries(selectedItems).forEach(([catId, skills]) => {
-        skills.forEach(skillName => {
-          // Find matching mapped card for placemake/evidence
-          const match = mappedCards.find(c => c.categoryId === catId && c.originalName === skillName)
-          items.push({
-            placemake: match?.placemake || skillName,
-            categoryId: catId,
-            evidence: match?.evidence || '',
-            originalName: skillName,
-          })
-        })
-      })
-      return items
-    }
-    return keptPlacemakes
-  }
+  const getFinalKeptItems = () => keptPlacemakes
 
   const saveToDb = async (userId) => {
     const finalItems = getFinalKeptItems()
