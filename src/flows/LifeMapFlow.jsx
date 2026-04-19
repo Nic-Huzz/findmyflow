@@ -588,7 +588,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             </button>
           ) : (
             <button
-              className="lm-cta-purple"
+              className="lm-cta-gold"
               disabled={!valid}
               onClick={() => {
                 hapticLight()
@@ -775,7 +775,10 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               {connectingDotsNarrative ? (
                 connectingDotsNarrative.split('\n\n').filter(Boolean).map((para, i) => {
                   // Sanitize: strip all HTML tags except <strong> and </strong>
-                  const sanitized = para.replace(/<\/?(?!strong\b)[a-z][^>]*>/gi, '')
+                  const sanitized = para
+                    .replace(/<\/?(?!strong\b)[a-z][^>]*>/gi, '')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*\*/g, '')
                   return <p key={i} dangerouslySetInnerHTML={{ __html: sanitized }} />
                 })
               ) : (
@@ -944,10 +947,25 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
 
   // Complete
   if (currentScreen === 'complete') {
-    const handleDownloadMural = () => {
+    const handleDownloadMural = async () => {
       if (!muralUrl) return
-      // Open in new tab (avoids CORS issues with Supabase Storage CDN)
-      window.open(muralUrl, '_blank')
+      try {
+        // Use the Web Share API on mobile (saves to camera roll)
+        if (navigator.share && navigator.canShare) {
+          const res = await fetch(muralUrl)
+          const blob = await res.blob()
+          const file = new File([blob], 'my-life-map-mural.png', { type: 'image/png' })
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: 'My Life Map Mural' })
+            return
+          }
+        }
+        // Fallback: open in new tab (user can long-press to save)
+        window.open(muralUrl, '_blank')
+      } catch (err) {
+        // Fallback on any error
+        window.open(muralUrl, '_blank')
+      }
     }
 
     const handleCopyLink = () => {
@@ -1041,23 +1059,9 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               </button>
             </div>
 
-            <div className="lm-what-next">
-              <h4>What's next</h4>
-              <div className="lm-next-items">
-                <div className="lm-next-item" onClick={() => navigate('/library')}>
-                  <span className="lm-next-item-icon">🎯</span>
-                  <span>View your Skills, Problems & Personas wheels</span>
-                </div>
-                <div className="lm-next-item" onClick={() => navigate('/7-day-challenge')}>
-                  <span className="lm-next-item-icon">🎮</span>
-                  <span>Get your first Play-List challenge</span>
-                </div>
-                <div className="lm-next-item" onClick={() => navigate('/me')}>
-                  <span className="lm-next-item-icon">🏠</span>
-                  <span>Back to Home</span>
-                </div>
-              </div>
-            </div>
+            <button className="lm-cta-gold" onClick={() => navigate('/7-day-challenge')} style={{ marginTop: 8 }}>
+              Return Home
+            </button>
           </div>
         </div>
       </div>
