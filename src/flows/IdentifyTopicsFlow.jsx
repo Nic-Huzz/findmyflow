@@ -510,7 +510,7 @@ export default function IdentifyTopicsFlow() {
           <div className="jo-glow jo-glow-2 jo-glow-gold" />
         </div>
         <div className="idt-container">
-          <div className="card" style={{ background: 'none', boxShadow: 'none', padding: '0' }}>
+          <div className="card" style={{ background: 'none', boxShadow: 'none', padding: '0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h1 className="idt-title">Your Problem Spaces</h1>
             <p className="idt-subtitle">
               We found {clusters.length} themes in what you care about. Review them, then we'll walk through each one.
