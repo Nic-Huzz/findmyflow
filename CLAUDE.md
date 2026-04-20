@@ -47,7 +47,7 @@ React 18 + Vite + React Router v7 | Supabase (PostgreSQL, Auth, Edge Functions) 
 
 ```
 src/
-├── flows/                    # 34 flow components
+├── flows/                    # 69 flow components
 │   ├── MoneyModelFlowBase.jsx      # Shared base (6 flows use this)
 │   ├── moneyModelConfigs.js        # Money Model configurations
 │   ├── FlowFinder*.jsx             # Skills, Problems, Persona, Integration
@@ -65,7 +65,7 @@ src/
 │   └── useAutoSave.js, useSteppedForm.js
 │
 ├── components/
-│   ├── crm/                  # 42 CRM components
+│   ├── crm/                  # 41 CRM components
 │   │   ├── CRMLayout.jsx           # Wrapper with nudge engine
 │   │   ├── Content*.jsx            # Generator, Planning, Checklist, etc.
 │   │   ├── Weekly*.jsx             # Planning, Reflection, etc.
@@ -89,7 +89,7 @@ src/
 │   ├── FlowMapRiver.jsx      # River visualization
 │   └── SeeYourFlow.jsx       # Journey mapping
 │
-├── pages/crm/                # 34 CRM pages
+├── pages/crm/                # 33 CRM pages
 │   ├── Dashboard.jsx         # Command center with DailyActions, EcosystemWidget
 │   ├── Attract.jsx, Nurture.jsx, Tools.jsx  # Tower hubs
 │   ├── Content*.jsx          # Create, Queue, History
@@ -132,7 +132,7 @@ docs/                         # 33+ documentation files
 
 **Archetypes**: `/archetypes`, `/archetypes/essence`, `/archetypes/protective`
 
-**Flow Finder**: `/nikigai/skills`, `/nikigai/problems`, `/nikigai/persona`, `/nikigai/integration`
+**Flow Finder**: `/life-map` (LifeMapFlow, replaces individual Flow Finder steps + Shadow Work) | `/nikigai/skills`, `/nikigai/problems`, `/nikigai/persona` (all redirect to `/life-map`) | `/nikigai/integration`
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/lead-magnet-selection`, `/product-selection`, `/funnel-builder`, `/funnel-calculator`
 
@@ -140,11 +140,11 @@ docs/                         # 33+ documentation files
 
 **Fantasy League**: `/league` (overview), `/league/week` (matchups), `/league/matchup` (details), `/league/submit` (content), `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Journey**: `/get-started` (onboarding), `/essence-mirror` (essence archetype discovery), `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic questions)
+**Journey**: `/get-started` (PlaySkillsOnboarding), `/essence-mirror` (essence archetype discovery), `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
-**Other Flows**: `/nervous-system`, `/healing-compass`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public)
+**Other Flows**: `/nervous-system`, `/healing-compass`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public) | `/curiosity-compass`, `/wound-map`, `/limiting-belief-rewire`, `/playlist-update`, `/identify-topics` | `/career-clarity` (public Career Clarity Quiz), `/breathwork`, `/healing-compass-workshop` (public landing pages) | `/people` (people matching), `/play-list-feed` (public playlist feed), `/newsfeed`
 
-**CRM** (`/crm/*`): Dashboard, Attract, Nurture, Tools (tower hubs) | content/create, content/queue, content/history | marketing, pages, sales, sales/scripts, contacts, email-sequences, warm-outreach | execute, analytics, performance, reports | calculators, calculators/ltv, calculators/cac, calculators/ptuf | import, tools/systems | ascension, objections, implementations, assets, autonomous, alerts
+**CRM** (`/crm/*`): Dashboard, Attract, Nurture, Tools (tower hubs) | content/create, content/queue, content/history | marketing, pages, sales, sales/scripts, contacts, email-sequences, warm-outreach | execute, analytics, performance, reports | calculators, calculators/ltv, calculators/cac, calculators/ptuf | import, tools/systems, tools/expenses | ascension, objections, implementations, assets, autonomous, alerts | scripts, sales-playbook
 
 ## Key Features
 
@@ -233,7 +233,7 @@ All use purple gradient background; gold for selection.
 
 ### 10. First-Time Onboarding
 
-`HomeFirstTime.jsx`: Universal path for all personas — Welcome → Q1 (Journey Stage) → Q2 (Wealth Ladder) → Q3 (Primary Goal) → Persona Reveal → Mind Space → `/me`. No branching by persona type.
+New users go to `/essence-mirror` (EssenceMirrorFlow) for essence discovery, then `/me`. `/get-started` provides `PlaySkillsOnboarding` for topic and cluster selection. `HomeFirstTime.jsx` is archived and no longer used.
 
 ### 11. Journey Mapping (SeeYourFlow)
 
@@ -387,13 +387,13 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 ## Database Schema
 
 ### Core Tables
-`user_stage_progress` (persona, onboarding) | `user_projects` (stage, points) | `flow_sessions` (completions) | `flow_entries` (compass) | `milestone_completions` | `quest_completions` | `challenge_instances` | `groan_reflections`
+`user_stage_progress` (persona, onboarding) | `user_projects` (stage, points) | `flow_sessions` (completions; includes `response_data JSONB` for Life Map living doc) | `flow_entries` (compass) | `milestone_completions` | `quest_completions` | `challenge_instances` | `groan_reflections`
 
 ### Flow Data
 `nikigai_clusters` | `nikigai_responses` | `nikigai_key_outcomes` | `persona_profiles` | `nervous_system_responses` | `healing_compass_responses` | `lead_flow_profiles`
 
 ### Assessments
-`attraction_offer_assessments` | `upsell_assessments` | `downsell_assessments` | `continuity_assessments` | `leads_assessments` | `lead_magnet_assessments` | `offer_builder_assessments` | `funnel_metrics` | `zarlo_conversations`
+`attraction_offer_assessments` | `upsell_assessments` | `downsell_assessments` | `continuity_assessments` | `leads_assessments` | `lead_magnet_assessments` | `offer_builder_assessments` | `funnel_metrics` | `zarlo_conversations` | `quiz_results` (Career Clarity path/need scores) | `email_captures` (quiz email capture)
 
 ### CRM Tables
 `crm_pages` | `crm_contacts` (includes outreach columns: outreach_status, platform, engagement_type, priority, temperature, last_message, outreach_status_entered_at) | `crm_email_sequences` | `crm_email_steps` | `sales_deals` | `sales_scripts` | `script_usage_log` | `content_history` | `ecosystem_system_progress` | `offer_implementations`
@@ -415,6 +415,12 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 
 ENUMs: `groan_visibility_layer` (screen/live/money/vulnerable/authority), `groan_source_type` (skill/problem/persona), `groan_challenge_status` (active/completed/skipped), `groan_outcome_type`
 
+### Play-List Feed
+`playlist_100_enrollments` (user_id, started_at, goal_days, timezone) | `playlist_feed_posts` (media_url, caption, day_number, visibility, moderation_status, reaction_counts) | `playlist_feed_reactions` (post_id, user_id, reaction_type)
+
+### Experience Checklist
+`experiences` (name, experience_date, status, previous_experience_id, reflection notes) | `experience_checklist_items` (experience_id, phase pre/post, section, label, completed)
+
 ## Environment Variables
 
 **`.env.local`**: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `ANTHROPIC_API_KEY`, `VITE_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_EMAIL`
@@ -430,6 +436,15 @@ npm run db:push   # Apply migrations
 ```
 
 ## Recent Updates (Apr 2026)
+
+- **Life Map Flow**: `/life-map` (LifeMapFlow) replaces individual Flow Finder steps (`/nikigai/skills`, `/nikigai/problems`, `/nikigai/persona`) and Shadow Work. Old FlowFinder routes now redirect to `/life-map`. Key file: `src/flows/LifeMapFlow.jsx`.
+- **4+1 Archetype Model**: Protective archetypes simplified from 5 to 4+1. `performer` remapped to `controller` in `groan_reflections` and `healing_compass_responses`. `auto_pilot` added as new value to `protective_archetype` enum. Migration: `20260415000000_archetype_4_model.sql`.
+- **Career Clarity Quiz**: Native route at `/career-clarity` (public, no auth). Determines whether user should find a different job or build their own thing. DB tables: `quiz_results`, `email_captures`. Migration: `20260414000000_career_clarity_quiz.sql`.
+- **Breathwork Page**: `/breathwork` landing page for post-session somatic capture. CSS aligned with `HealingCompassLanding`.
+- **Play-List Feed**: Public virality feed at `/play-list-feed` for groan challenge wins with photos. Powers 100-day Play-List Challenge loop. DB tables: `playlist_100_enrollments`, `playlist_feed_posts`, `playlist_feed_reactions`. Reaction count trigger keeps post counts in sync. Migration: `20260408010000_playlist_feed.sql`.
+- **Experience Checklist System**: `/business` becomes an OS for experience creators. Pre/post-event checklists per experience. DB tables: `experiences`, `experience_checklist_items`. Migration: `20260408000000_experience_checklist.sql`.
+- **flow_sessions.response_data**: New `JSONB` column on `flow_sessions` stores raw user responses for Life Map living document (reload on return visits). Migration: `20260419000000_flow_sessions_response_data.sql`.
+- **PlaySkills Onboarding at /get-started**: `/get-started` now renders `PlaySkillsOnboarding` (topic cluster selection flow) instead of `JourneyOnboarding`.
 
 - **PlaySkill Taxonomy V2**: Skills wheel overhauled from 12 abstract categories to 10 plain-English role-skills: storytelling, teaching, coaching, performing, creating, building, designing, leading, connecting, speaking_up. Each has 3-5 concrete "placemakes" (felt examples anchored in famous people, e.g. "Holding someone through a hard moment, like Fred Rogers airing a full minute of silence"). Field renamed `playSkills` to `placemakes`. Legacy compat layer (`resolveSkillId`, `findSkillSegment`) handles old saved data. Key files: `src/lib/wheelTaxonomy.js`, `public/data/playSkillTaxonomyV2.json`. Full handoff: `docs/taxonomy-v2-handoff.md`.
 - **Problem Taxonomy V2**: Problems wheel overhauled from 12 abstract categories to 12 felt categories: kids_deserved_better ("Kids who deserved better"), voice_taken ("The voice that got taken"), pain_not_believed ("Pain that nobody takes seriously"), world_losing ("The world we're losing"), life_not_yours ("A life that isn't yours to live"), feeling_stupid ("Feeling stupid when you're not"), locked_out ("Locked out of what you need"), work_treated_nothing ("Your work being treated as nothing"), left_behind ("Being left behind"), forgot_what_for ("Forgetting what it was all for"), stopped_wondering ("People who stopped wondering"), work_hollows ("Work that hollows you out"). Each has 3-5 placemakes. Legacy compat: `resolveProblemId`, `findProblemSegment`. Key files: `src/lib/wheelTaxonomy.js`, `public/data/problemTaxonomyV2.json`.
