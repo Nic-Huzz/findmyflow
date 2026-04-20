@@ -155,6 +155,7 @@ const ZoneDiagnosisFlow = lazyRetry(() => import('./flows/ZoneDiagnosisFlow'))
 const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
 const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
 const LifeMapFlow = lazyRetry(() => import('./flows/LifeMapFlow'))
+const PlayListUpdateFlow = lazyRetry(() => import('./flows/PlayListUpdateFlow'))
 const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const WoundMapFlow = lazyRetry(() => import('./flows/WoundMapFlow'))
 const CuriosityCompassFlow = lazyRetry(() => import('./flows/CuriosityCompassFlow'))
@@ -170,6 +171,7 @@ const TryPlayProfile = lazyRetry(() => import('./flows/TryPlayProfile'))
 const OldLandingPage = lazyRetry(() => import('./pages/OldLandingPage'))
 const FantasyLeagueLanding = lazyRetry(() => import('./pages/FantasyLeagueLanding'))
 const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLanding'))
+const BreathworkLanding = lazyRetry(() => import('./pages/BreathworkLanding'))
 const WhyICreatedThis = lazyRetry(() => import('./pages/WhyICreatedThis'))
 
 // Lazy-loaded flows - Setup & Training
@@ -341,13 +343,14 @@ function ConditionalZarlo() {
   const isCareerClarity = location.pathname === '/career-clarity'
   const isFantasyLP = location.pathname === '/fantasy'
   const isHealingWorkshopLP = location.pathname === '/healing-compass-workshop'
+  const isBreathworkLP = location.pathname === '/breathwork'
   const isWhyPage = location.pathname === '/why-i-created-this'
 
   const isEssenceIdentify = location.pathname === '/essence-identify'
   const isProtectiveIdentify = location.pathname === '/protective-identify'
   const isMatrixCodeDeepDive = location.pathname === '/matrix-code-deep-dive'
 
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isWhyPage || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive) return null
   return <ZarloWidget />
 }
 
@@ -381,6 +384,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/play-list-explainer' ||
                         location.pathname === '/fantasy' ||
                         location.pathname === '/healing-compass-workshop' ||
+                        location.pathname === '/breathwork' ||
                         location.pathname === '/why-i-created-this' ||
                         location.pathname.startsWith('/league') ||
                         location.pathname.startsWith('/play-list-feed') ||
@@ -391,6 +395,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/matrix-code-deep-dive' ||
                         location.pathname === '/shadow-work' ||
                         location.pathname === '/life-map' ||
+                        location.pathname === '/playlist-update' ||
                         location.pathname === '/essence-mirror' ||
                         location.pathname === '/wound-map' ||
                         location.pathname === '/curiosity-compass' ||
@@ -578,6 +583,9 @@ function AppRouter() {
             {/* Healing Compass Workshop Landing - Public */}
             <Route path="/healing-compass-workshop" element={<HealingCompassLanding />} />
 
+            {/* Breathwork Session Landing - Public */}
+            <Route path="/breathwork" element={<BreathworkLanding />} />
+
             {/* Why I Created This - Public explainer slides */}
             <Route path="/why-i-created-this" element={<WhyICreatedThis />} />
 
@@ -628,6 +636,11 @@ function AppRouter() {
             <Route path="/life-map" element={
               <AuthGate>
                 <LifeMapFlow />
+              </AuthGate>
+            } />
+            <Route path="/playlist-update" element={
+              <AuthGate>
+                <PlayListUpdateFlow />
               </AuthGate>
             } />
             <Route path="/shadow-work" element={<Navigate to="/life-map" replace />} />
