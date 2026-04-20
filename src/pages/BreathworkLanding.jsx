@@ -242,14 +242,14 @@ export default function BreathworkLanding() {
             <span className="hcl-tap-hint">Tap all that apply</span>
           </p>
 
-          <div className="hcl-needs-grid reveal-fade-up">
+          <div className="hcl-needs-pair reveal-fade-up">
             {BODY_AREAS.map(area => (
               <button
                 key={area.key}
-                className={`hcl-need-card ${bodyAreas.includes(area.key) ? 'selected' : ''}`}
+                className={`hcl-card hcl-need-card ${bodyAreas.includes(area.key) ? 'hcl-card--selected' : ''}`}
                 onClick={() => toggleBodyArea(area.key)}
               >
-                <span className="hcl-need-icon">{area.icon}</span>
+                <span style={{ fontSize: '1.5rem', marginBottom: '0.25rem', display: 'block' }}>{area.icon}</span>
                 <span className="hcl-need-name">{area.label}</span>
               </button>
             ))}
@@ -285,7 +285,7 @@ export default function BreathworkLanding() {
           <div className="hcl-action-input-wrap reveal-fade-up">
             <textarea
               className="hcl-action-input"
-              placeholder='e.g. "You''re not good enough" or "Nobody actually cares" or "You have to do it all yourself"'
+              placeholder={'e.g. "You\'re not good enough" or "Nobody actually cares" or "You have to do it all yourself"'}
               value={voiceSaid}
               onChange={e => setVoiceSaid(e.target.value)}
               rows={3}
@@ -333,7 +333,7 @@ export default function BreathworkLanding() {
           <div className="hcl-action-input-wrap reveal-fade-up">
             <textarea
               className="hcl-action-input"
-              placeholder='e.g. "You are safe now. I''ve got you. You don''t have to carry this alone anymore."'
+              placeholder={'e.g. "You are safe now. I\'ve got you. You don\'t have to carry this alone anymore."'}
               value={yourResponse}
               onChange={e => setYourResponse(e.target.value)}
               rows={3}
@@ -356,14 +356,14 @@ export default function BreathworkLanding() {
             <span className="hcl-tap-hint">Tap all that apply</span>
           </p>
 
-          <div className="hcl-needs-grid reveal-fade-up">
+          <div className="hcl-needs-pair reveal-fade-up">
             {EMOTIONS.map(emotion => (
               <button
                 key={emotion.key}
-                className={`hcl-need-card ${emotions.includes(emotion.key) ? 'selected' : ''}`}
+                className={`hcl-card hcl-need-card ${emotions.includes(emotion.key) ? 'hcl-card--selected' : ''}`}
                 onClick={() => toggleEmotion(emotion.key)}
               >
-                <span className="hcl-need-icon">{emotion.icon}</span>
+                <span style={{ fontSize: '1.5rem', marginBottom: '0.25rem', display: 'block' }}>{emotion.icon}</span>
                 <span className="hcl-need-name">{emotion.label}</span>
               </button>
             ))}
@@ -437,7 +437,7 @@ export default function BreathworkLanding() {
             </>
           ) : (
             <div className="hcl-success reveal-scale">
-              <span className="hcl-success-icon">✨</span>
+              <span style={{ fontSize: '3rem', display: 'block', marginBottom: '0.5rem' }}>✨</span>
               <h2 className="hcl-section-heading hcl-section-heading--dark">Saved</h2>
               <p className="hcl-section-desc hcl-section-desc--dark">
                 Your breathwork experience has been captured. Thank you for showing up today.
