@@ -203,6 +203,20 @@
       "healing_checkin": true
     },
     {
+      "id": "session_with_huzz",
+      "category": "Healing",
+      "type": "Reconnect",
+      "frequency": "weekly",
+      "name": "Session with Huzz",
+      "description": "Complete your Healing Compass worksheet after a live session with Huzz.",
+      "points": 10,
+      "inputType": "flow",
+      "flow_id": "session_with_huzz",
+      "flow_route": "/healing-compass-workshop",
+      "learnMore": "After a live breathwork or Healing Compass workshop with Huzz, complete your worksheet to capture your emotional need, protective pattern, essence archetype, and write a letter to your younger self.\n\nYour answers will be saved to your profile and emailed to you as a keepsake.",
+      "healing_checkin": true
+    },
+    {
       "id": "rewire_3_percent_better",
       "category": "Business",
       "type": "Tracking",

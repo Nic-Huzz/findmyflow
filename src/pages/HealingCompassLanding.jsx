@@ -31,6 +31,7 @@ export default function HealingCompassLanding() {
   })
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -178,6 +179,7 @@ export default function HealingCompassLanding() {
           body: JSON.stringify({
             name: name.trim(),
             email: email.trim(),
+            whatsapp: whatsapp.trim() || null,
             emotionalNeed: answers.emotionalNeed,
             action: answers.action.trim(),
             protectivePattern: answers.protectivePattern,
@@ -598,6 +600,15 @@ export default function HealingCompassLanding() {
                   placeholder="your@email.com"
                   value={email}
                   onChange={e => { setEmail(e.target.value); setError('') }}
+                  onFocus={() => setInputFocused(true)}
+                  onBlur={() => setInputFocused(false)}
+                />
+                <input
+                  type="tel"
+                  className="hcl-email-input"
+                  placeholder="WhatsApp number (incl. area code, e.g. +61...)"
+                  value={whatsapp}
+                  onChange={e => { setWhatsapp(e.target.value); setError('') }}
                   onFocus={() => setInputFocused(true)}
                   onBlur={() => setInputFocused(false)}
                 />

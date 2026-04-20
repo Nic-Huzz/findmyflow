@@ -392,7 +392,7 @@ function buildWorkshopEmail(
 
 // ── Notification email ──────────────────────────────────────────────────────
 
-function buildNotificationEmail(email: string, name: string, need: string, pattern: string, archetype: string): string {
+function buildNotificationEmail(email: string, name: string, need: string, pattern: string, archetype: string, whatsappNum?: string): string {
   const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })
   return `
   <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
@@ -407,6 +407,7 @@ function buildNotificationEmail(email: string, name: string, need: string, patte
         <p style="margin:6px 0;color:#374151;font-size:14px;">Need: <strong>${need}</strong></p>
         <p style="margin:6px 0;color:#374151;font-size:14px;">Pattern: <strong>${pattern}</strong></p>
         <p style="margin:6px 0;color:#374151;font-size:14px;">Archetype: <strong>${archetype}</strong></p>
+        ${whatsappNum ? `<p style="margin:6px 0;color:#374151;font-size:14px;">WhatsApp: <strong><a href="https://wa.me/${whatsappNum.replace(/[^0-9]/g, '')}">${whatsappNum}</a></strong></p>` : ''}
       </div>
       <p style="font-size:12px;color:#9ca3af;margin:0;text-align:right;">${timestamp} AEST</p>
     </div>
@@ -421,7 +422,7 @@ serve(async (req) => {
   }
 
   try {
-    const { name, email, emotionalNeed, action, protectivePattern, essenceArchetype, newBelief, letterPhotoUrl } = await req.json()
+    const { name, email, whatsapp, emotionalNeed, action, protectivePattern, essenceArchetype, newBelief, letterPhotoUrl } = await req.json()
 
     if (!name || !email || !emotionalNeed || !protectivePattern || !essenceArchetype) {
       return new Response(
@@ -459,6 +460,7 @@ serve(async (req) => {
         body: JSON.stringify({
           name,
           email,
+          whatsapp: whatsapp || null,
           emotional_need: emotionalNeed,
           action_commitment: action || null,
           protective_pattern: protectivePattern,
@@ -544,7 +546,7 @@ serve(async (req) => {
           from: 'FindMyFlow <notifications@findmyflow.nichuzz.com>',
           to: NOTIFY_EMAIL,
           subject: `Workshop: ${name} — ${essenceArchetype}`,
-          html: buildNotificationEmail(email, name, emotionalNeed, protectivePattern, essenceArchetype),
+          html: buildNotificationEmail(email, name, emotionalNeed, protectivePattern, essenceArchetype, whatsapp),
         }),
       }).catch(err => console.error('Notification send error:', err))
     } else {
