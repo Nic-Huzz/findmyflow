@@ -36,6 +36,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasCareerClarity, setHasCareerClarity] = useState(false)
   const [hasPeopleMatching, setHasPeopleMatching] = useState(false)
   const [hasHealingCompass, setHasHealingCompass] = useState(false)
+  const [hasPlaylistUpdate, setHasPlaylistUpdate] = useState(false)
   const [hasFlowDeepDive, setHasFlowDeepDive] = useState({}) // generic tracker for flow-based deep dives
   const [hasWoundMap, setHasWoundMap] = useState(false)
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
@@ -113,6 +114,16 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       const savedPeople = localStorage.getItem('findmyflow_saved_people')
       if (savedPeople && JSON.parse(savedPeople).length > 0) setHasPeopleMatching(true)
     } catch (e) { /* ignore parse errors */ }
+    // Check if playlist update completed (has identify_topics rows from life_map source)
+    supabase
+      .from('nikigai_clusters')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('step_id', 'identify_topics')
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) setHasPlaylistUpdate(true)
+      })
     // Check if healing compass completed
     supabase
       .from('healing_compass_responses')
@@ -319,6 +330,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           : quest.id === 'healing_task' ? hasHealingCompletion
           : quest.id === 'playlist_challenge' ? hasPlaylistCompletion
           : quest.id === 'people_matching' ? hasPeopleMatching
+          : quest.id === 'playlist_update' ? hasPlaylistUpdate
           : false
         const isLocked = quest.lockedUntil === 'curiosity_compass' && !hasCuriosityCompass
 

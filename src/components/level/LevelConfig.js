@@ -67,7 +67,15 @@ export const LEVEL_CONFIG = {
       route: '/life-map',
       narrative: 'Your life story holds the answers.',
     },
-    extraQuests: [],
+    extraQuests: [
+      {
+        id: 'playlist_update',
+        name: 'Set Up Your Play-List',
+        route: '/playlist-update',
+        narrative: 'Choose which problems to work on.',
+        icon: '🎯',
+      },
+    ],
     milestone: {
       text: 'Beginning to identify your essence and what to pursue',
       type: 'identity',
