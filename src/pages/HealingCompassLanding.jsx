@@ -191,6 +191,31 @@ export default function HealingCompassLanding() {
       )
       if (!res.ok) throw new Error('Failed to send')
       setSubmitted(true)
+
+      // If user is authenticated, mark quest complete
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user?.id) {
+          const { data: existing } = await supabase.from('quest_completions')
+            .select('id').eq('user_id', user.id).eq('quest_id', 'session_with_huzz').maybeSingle()
+          if (!existing) {
+            await supabase.from('quest_completions').insert({
+              user_id: user.id,
+              quest_id: 'session_with_huzz',
+              quest_category: 'Healing',
+              quest_type: 'Reconnect',
+              points_earned: 10,
+              challenge_day: 0,
+            }).catch(() => {})
+          }
+          // Link workshop submission to user
+          await supabase.from('workshop_submissions')
+            .update({ user_id: user.id })
+            .ilike('email', email.trim())
+            .is('user_id', null)
+            .catch(() => {})
+        }
+      } catch {} // Non-blocking
     } catch (err) {
       setError('Something went wrong. Please try again.')
     } finally {
