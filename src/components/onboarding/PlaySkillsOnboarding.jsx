@@ -287,6 +287,7 @@ export default function PlaySkillsOnboarding() {
   // Auth
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
   const [verificationCode, setVerificationCode] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [authError, setAuthError] = useState(null)
@@ -338,6 +339,7 @@ export default function PlaySkillsOnboarding() {
           if (p.rawResponse) setRawResponse(p.rawResponse)
           if (p.userName) setUserName(p.userName)
           if (p.email) setEmail(p.email)
+          if (p.whatsapp) setWhatsapp(p.whatsapp)
           if (p.clusters) setClusters(p.clusters)
           if (p.categoryExtractions) setCategoryExtractions(p.categoryExtractions)
           if (p.selectedItems) setSelectedItems(p.selectedItems)
@@ -353,11 +355,11 @@ export default function PlaySkillsOnboarding() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       currentBeat, path, hookSlideIndex,
       selectedCategories, keptPlacemakes, mappedCards,
-      rawResponse, userName, email,
+      rawResponse, userName, email, whatsapp,
       clusters, categoryExtractions, selectedItems,
       timestamp: Date.now(),
     }))
-  }, [currentBeat, path, hookSlideIndex, selectedCategories, keptPlacemakes, mappedCards, rawResponse, userName, email, clusters, categoryExtractions, selectedItems])
+  }, [currentBeat, path, hookSlideIndex, selectedCategories, keptPlacemakes, mappedCards, rawResponse, userName, email, whatsapp, clusters, categoryExtractions, selectedItems])
 
   // ─── Navigation ──────────────────────────────────────────────────────────
 
@@ -620,6 +622,7 @@ export default function PlaySkillsOnboarding() {
       path,
       keptPlacemakes: finalItems,
       userName,
+      whatsapp,
       completedAt: new Date().toISOString(),
     }))
     localStorage.removeItem(STORAGE_KEY)
@@ -658,7 +661,7 @@ export default function PlaySkillsOnboarding() {
           if (newUser?.id) {
             await saveToDb(newUser.id)
             if (userName?.trim()) {
-              await supabase.auth.updateUser({ data: { display_name: userName.trim() } })
+              await supabase.auth.updateUser({ data: { display_name: userName.trim(), whatsapp: whatsapp.trim() } })
             }
             localStorage.removeItem(RESULT_KEY)
             localStorage.removeItem(STORAGE_KEY)
@@ -1123,13 +1126,15 @@ export default function PlaySkillsOnboarding() {
           <p className="jo-signup-subtext">Create your account to start your journey</p>
           <form className="jo-signup-form" onSubmit={(e) => {
             e.preventDefault()
-            if (userName.trim() && email.trim()) handleEmailSubmit(e)
+            if (userName.trim() && email.trim() && whatsapp.trim()) handleEmailSubmit(e)
           }}>
             <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)}
               placeholder="Your first name" className="jo-signup-input" autoFocus />
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com" className="jo-signup-input" />
-            <button type="submit" className="jo-cta-button" disabled={isLoading || !userName.trim() || !email.trim()}>
+            <input type="tel" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)}
+              placeholder="WhatsApp number (incl. area code, e.g. +61...)" className="jo-signup-input" />
+            <button type="submit" className="jo-cta-button" disabled={isLoading || !userName.trim() || !email.trim() || !whatsapp.trim()}>
               {isLoading ? <span>Sending code...</span> : (
                 <><span className="jo-shimmer-layer" />Send Verification Code<span className="jo-btn-arrow">&#8594;</span></>
               )}
