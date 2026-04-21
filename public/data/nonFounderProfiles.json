@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "totalProfiles": 228,
+    "totalProfiles": 243,
     "generatedAt": "2026-04-07",
     "categoryDistribution": {
       "nurturing": 30,
@@ -6798,6 +6798,355 @@
         {
           "title": "The Ramsey Solutions empire",
           "content": "What started as a local radio show in Nashville in 1992 grew into Ramsey Solutions, a company with over 1,000 employees, multiple bestselling authors on staff (including Rachel Cruze and Christy Wright), a daily radio show reaching over 18 million listeners weekly, and a real estate referral network. The business model is content-driven: free radio and podcast content builds trust, which drives book sales, course enrolments, and referral fees. Ramsey has never accepted advertising on his show, funding it entirely through product sales."
+        }
+      ]
+    },
+    {
+      "name": "Brené Brown",
+      "domain": "vulnerability research / leadership development",
+      "era": "1965-present",
+      "region": "US",
+      "bio": "Research professor at the University of Houston who spent two decades studying courage, vulnerability, shame, and empathy. Her 2010 TEDx Houston talk has been viewed over 60 million times, and she became the first researcher to have a Netflix special with The Call to Courage in 2019.",
+      "oneLiner": "Turned the thing everyone hides from into the thing everyone needs.",
+      "primaryCategoryIntent": "speaking_up",
+      "secondaryCategoryIntents": [
+        "teaching",
+        "storytelling"
+      ],
+      "narratives": [
+        {
+          "title": "The breakdown that became the breakthrough",
+          "content": "In 2006, after six years of qualitative research on shame, Brown had what she calls a spiritual awakening (her therapist called it a breakdown). She had discovered that the people who lived wholeheartedly all had one thing in common: they believed they were worthy of love and belonging. The finding terrified her because it meant she had to change her own life."
+        },
+        {
+          "title": "TEDx Houston, June 2010",
+          "content": "Brown gave a 20-minute talk at TEDx Houston to 500 people, expecting it to disappear into the internet. Within six months it had 6 million views. She described the aftermath as a vulnerability hangover so severe she didn't leave her house for three days."
+        },
+        {
+          "title": "Dare to Lead at scale",
+          "content": "In 2018, Brown launched the Dare to Lead program, training facilitators to deliver her courage-building curriculum inside organisations. By 2023, over 300 certified facilitators operated across 14 countries, and companies including Shell, Uber, and the Gates Foundation had run full cohorts."
+        }
+      ]
+    },
+    {
+      "name": "Tony Robbins",
+      "domain": "peak performance / live transformation events",
+      "era": "1960-present",
+      "region": "US",
+      "bio": "Self-taught performance coach who began running seminars at age 17 and built a live events empire. His flagship event Unleash the Power Within draws 10,000+ attendees per weekend, and Date with Destiny is a 6-day intensive costing $5,000 to $75,000 per ticket.",
+      "oneLiner": "Built a cathedral of transformation you walk through in four days and leave different.",
+      "primaryCategoryIntent": "performing",
+      "secondaryCategoryIntents": [
+        "coaching",
+        "leading"
+      ],
+      "narratives": [
+        {
+          "title": "The firewalk that built the business",
+          "content": "In 1983, at age 23, Robbins introduced firewalking into his seminars after learning the technique from Tolly Burkan. He charged $50 per attendee and ran events in hotel ballrooms with 20-foot beds of hot coals. By 1988 he was filling arenas."
+        },
+        {
+          "title": "The intervention format",
+          "content": "At Date with Destiny in December 2017, filmed for the Netflix documentary I Am Not Your Guru, Robbins pulled a woman from the audience of 2,500 and did a live intervention lasting 22 minutes. The format turns private pain into public catharsis."
+        }
+      ]
+    },
+    {
+      "name": "Marie Forleo",
+      "domain": "online business education / creative entrepreneurship",
+      "era": "1975-present",
+      "region": "US",
+      "bio": "Former Nike fitness trainer and hip-hop dancer who launched MarieTV in 2009 and built B-School into one of the highest-grossing online business courses. Oprah named her a thought leader for the next generation.",
+      "oneLiner": "Made business school feel like a conversation with your funniest, smartest friend.",
+      "primaryCategoryIntent": "teaching",
+      "secondaryCategoryIntents": [
+        "coaching",
+        "performing"
+      ],
+      "narratives": [
+        {
+          "title": "Building B-School from a newsletter",
+          "content": "In 2010, Forleo launched the first cohort of B-School with a $2,000 price tag and 200 students. By 2024, over 80,000 students from 195 countries had enrolled. She opens registration once per year for two weeks, creating artificial scarcity."
+        },
+        {
+          "title": "The multi-passionate philosophy",
+          "content": "Forleo coined the term multipassionate entrepreneur after years of being told she needed to pick one thing. At 23 she was simultaneously bartending, doing freelance writing, working as a personal trainer at Nike, and building a life coaching practice."
+        }
+      ]
+    },
+    {
+      "name": "Wim Hof",
+      "domain": "breathwork / cold exposure / human performance",
+      "era": "1959-present",
+      "region": "Netherlands",
+      "bio": "Dutch extreme athlete who holds 21 Guinness World Records including longest ice bath. After his wife's suicide in 1995, he turned to cold water and breathwork as survival tools. The Wim Hof Method has been validated in peer-reviewed studies at Radboud University.",
+      "oneLiner": "Proved that a freezing river can teach you more about yourself than ten years of therapy.",
+      "primaryCategoryIntent": "coaching",
+      "secondaryCategoryIntents": [
+        "performing",
+        "speaking_up"
+      ],
+      "narratives": [
+        {
+          "title": "The Radboud University experiment",
+          "content": "In 2014, researchers at Radboud University injected Wim Hof and 12 people he had trained with E. coli endotoxin. The trained group showed 50% fewer symptoms and produced significantly more anti-inflammatory markers. The study, published in PNAS, was the first evidence that the autonomic nervous system could be voluntarily influenced."
+        },
+        {
+          "title": "The grief origin",
+          "content": "In 1995, Hof's wife Olaya jumped from the 8th floor of a building in Spain, leaving him to raise four children alone. Jumping into frozen canals in Amsterdam was the only thing that made the grief bearable. He describes cold water as the mirror that doesn't lie."
+        }
+      ]
+    },
+    {
+      "name": "Adriene Mishler",
+      "domain": "yoga / online wellness",
+      "era": "1984-present",
+      "region": "US",
+      "bio": "Austin-based yoga teacher whose YouTube channel Yoga With Adriene has over 12 million subscribers and 1.4 billion views. Her annual 30 Days of Yoga series functions as a free cohort that millions join simultaneously.",
+      "oneLiner": "Made the yoga mat feel like the safest place in your house.",
+      "primaryCategoryIntent": "coaching",
+      "secondaryCategoryIntents": [
+        "connecting",
+        "performing"
+      ],
+      "narratives": [
+        {
+          "title": "30 Days of Yoga, January 2015",
+          "content": "Mishler launched her first 30 Days of Yoga challenge on January 1, 2015, publishing a new video daily for 30 consecutive days. She filmed them in her living room with her dog Benji sleeping nearby. Over 4 million people completed the challenge that month."
+        },
+        {
+          "title": "The anti-fitness approach",
+          "content": "Unlike most fitness YouTubers, Mishler never shows progression photos or weight loss results. Her signature phrase Find What Feels Good became her company name. In 2020, during COVID lockdowns, her channel gained 4 million new subscribers in a single year."
+        }
+      ]
+    },
+    {
+      "name": "James Clear",
+      "domain": "behavioural psychology / habit formation",
+      "era": "1986-present",
+      "region": "US",
+      "bio": "Author of Atomic Habits, which has sold over 20 million copies since 2018. He built an email list of over 2 million subscribers through weekly articles before writing the book.",
+      "oneLiner": "Made the boring act of showing up every day feel like the most powerful thing you could do.",
+      "primaryCategoryIntent": "teaching",
+      "secondaryCategoryIntents": [
+        "storytelling",
+        "building"
+      ],
+      "narratives": [
+        {
+          "title": "The baseball bat that changed everything",
+          "content": "On May 9, 2002, Clear was hit in the face with a baseball bat during a high school game. The impact shattered both eye sockets, broke his nose, and caused brain swelling. He later credited the recovery process, rebuilding through tiny daily improvements, as the origin of the systems he would teach 15 years later."
+        },
+        {
+          "title": "The 2 million subscriber list",
+          "content": "From 2012 to 2018, Clear published a free article every Monday and Thursday. He grew his email list from zero to over 1 million before Atomic Habits was published. The book sold 1 million copies in its first year, powered almost entirely by the newsletter."
+        }
+      ]
+    },
+    {
+      "name": "Esther Perel",
+      "domain": "relational intelligence / couples therapy",
+      "era": "1958-present",
+      "region": "Belgium/US",
+      "bio": "Belgian psychotherapist whose podcast Where Should We Begin made real therapy sessions public for the first time, with over 100 million downloads. Her 2006 book Mating in Captivity sold over 2 million copies. She speaks nine languages.",
+      "oneLiner": "Made the mess of relationships into something you could finally talk about without shame.",
+      "primaryCategoryIntent": "coaching",
+      "secondaryCategoryIntents": [
+        "storytelling",
+        "speaking_up"
+      ],
+      "narratives": [
+        {
+          "title": "Where Should We Begin, 2017",
+          "content": "In 2017, Perel launched a podcast featuring real, unscripted couples therapy sessions with anonymous clients. No therapist had done this before at scale. The podcast reached 100 million downloads by 2023 and created an entirely new genre."
+        },
+        {
+          "title": "The Antwerp childhood",
+          "content": "Perel grew up in a Flemish-speaking community of Holocaust survivors in Antwerp. Her parents were the only survivors from their respective families. Her entire framework about eroticism and the tension between security and freedom traces back to watching survivors split into those who didn't die and those who came back to life."
+        }
+      ]
+    },
+    {
+      "name": "Priya Parker",
+      "domain": "gathering design / facilitation",
+      "era": "1980-present",
+      "region": "US",
+      "bio": "Strategic facilitator and author of The Art of Gathering (2018), translated into 24 languages. She founded Thrive Labs at age 24, facilitating conversations for the World Economic Forum, MoMA, and political organisations across six continents.",
+      "oneLiner": "Proved that how you gather people is itself an act of leadership.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": [
+        "designing",
+        "leading"
+      ],
+      "narratives": [
+        {
+          "title": "The Art of Gathering's central argument",
+          "content": "Parker's 2018 book opens with a provocation: most gatherings fail because the host has not decided why the gathering exists. She tells the story of facilitating a dinner where she banned small talk and instead asked everyone to share what they were in the middle of. The dinner lasted five hours."
+        },
+        {
+          "title": "Together Apart, March 2020",
+          "content": "When COVID made physical gathering impossible, Parker launched a newsletter and NYT column within two weeks. She ran free virtual workshops teaching people how to make Zoom gatherings meaningful. Over 70,000 people attended her sessions in the first month."
+        }
+      ]
+    },
+    {
+      "name": "Jay Shetty",
+      "domain": "mindfulness / purpose coaching / media",
+      "era": "1987-present",
+      "region": "UK/US",
+      "bio": "Former monk who lived in an ashram in Mumbai for three years before becoming a social media phenomenon. His videos reached over 4 billion views by 2019. His coaching certification has trained thousands of life coaches worldwide.",
+      "oneLiner": "Translated ancient monastic wisdom into content a scrolling generation would actually stop for.",
+      "primaryCategoryIntent": "teaching",
+      "secondaryCategoryIntents": [
+        "coaching",
+        "storytelling"
+      ],
+      "narratives": [
+        {
+          "title": "Three years as a monk",
+          "content": "From 2010 to 2013, Shetty lived as a Vedic monk in an ashram in Mumbai, waking at 4am, meditating for hours, and sleeping on the floor. He left after his teacher told him he could serve more people outside the monastery than inside it."
+        },
+        {
+          "title": "The viral video machine",
+          "content": "Between 2016 and 2018, Shetty produced short-form videos for Facebook and YouTube that accumulated over 4 billion views. His format was specific: 3-5 minute monologues filmed close-up, sharing one monastic principle reframed for modern life."
+        }
+      ]
+    },
+    {
+      "name": "Elizabeth Gilbert",
+      "domain": "creative writing / creative courage",
+      "era": "1969-present",
+      "region": "US",
+      "bio": "Author of Eat, Pray, Love (15 million copies) and Big Magic, which became a manifesto for anyone afraid to make creative work. She spent decades as a working journalist before her memoir made her famous.",
+      "oneLiner": "Gave permission to be creative without waiting to be good enough first.",
+      "primaryCategoryIntent": "storytelling",
+      "secondaryCategoryIntents": [
+        "coaching",
+        "speaking_up"
+      ],
+      "narratives": [
+        {
+          "title": "The letter to fear",
+          "content": "In Big Magic, Gilbert describes a practice she does before every creative project: she writes a letter to Fear, acknowledging its presence but refusing to let it drive. The metaphor became one of the most shared creative frameworks of the decade."
+        },
+        {
+          "title": "The GQ years before fame",
+          "content": "Before Eat, Pray, Love, Gilbert spent a decade as a bartender, ranch hand, and diner cook while publishing in GQ and the New York Times Magazine. She was 37 before her breakout, and has spoken extensively about how the decade of obscurity taught her that creative work must be its own reward."
+        }
+      ]
+    },
+    {
+      "name": "Simon Sinek",
+      "domain": "leadership / organisational purpose",
+      "era": "1973-present",
+      "region": "UK/US",
+      "bio": "British-American author whose 2009 TED talk How Great Leaders Inspire Action is the third most-watched TED talk with over 65 million views. He introduced the Golden Circle framework and built The Optimism Company.",
+      "oneLiner": "Asked one question so simple that entire companies reorganised around the answer.",
+      "primaryCategoryIntent": "teaching",
+      "secondaryCategoryIntents": [
+        "leading",
+        "speaking_up"
+      ],
+      "narratives": [
+        {
+          "title": "The TED talk that built a company",
+          "content": "In September 2009, Sinek gave an 18-minute TED talk explaining his Golden Circle theory with a whiteboard marker. Before the talk he was broke and sleeping on friends' couches. Within two years he had a book deal, a consultancy, and Fortune 500 clients."
+        },
+        {
+          "title": "Working with the U.S. military",
+          "content": "After Start With Why, Sinek was invited to work with the U.S. Marine Corps and Air Force on leadership development. The title of his 2014 book Leaders Eat Last comes from a Marine tradition where officers eat after their troops."
+        }
+      ]
+    },
+    {
+      "name": "Ali Abdaal",
+      "domain": "productivity / creator economy education",
+      "era": "1994-present",
+      "region": "UK",
+      "bio": "Former NHS doctor turned YouTuber and course creator with over 5 million YouTube subscribers. He left medicine in 2022 after his Part-Time YouTuber Academy generated over $5 million in revenue.",
+      "oneLiner": "Proved you could build a business bigger than your medical salary by being curious on camera.",
+      "primaryCategoryIntent": "teaching",
+      "secondaryCategoryIntents": [
+        "building",
+        "creating"
+      ],
+      "narratives": [
+        {
+          "title": "Part-Time YouTuber Academy",
+          "content": "In 2021, Abdaal launched the Part-Time YouTuber Academy, a cohort-based course priced between $1,000 and $5,000. The first cohort enrolled 450 students. By the third cohort, the programme had generated over $5 million in total revenue."
+        },
+        {
+          "title": "Quitting medicine publicly",
+          "content": "In August 2022, Abdaal publicly resigned from his NHS position after his YouTube and course income exceeded ten times his doctor's salary. He was 28, had been a doctor for 5 years, and had spent 6 years in medical school."
+        }
+      ]
+    },
+    {
+      "name": "Tara Brach",
+      "domain": "meditation / Buddhist psychology / mindfulness",
+      "era": "1953-present",
+      "region": "US",
+      "bio": "Clinical psychologist and meditation teacher who founded the Insight Meditation Community of Washington, D.C. in 1998. Her weekly meditation podcast has been downloaded over 200 million times. She developed the RAIN method for working with difficult emotions.",
+      "oneLiner": "Made sitting still with your own pain feel like the bravest thing you could do.",
+      "primaryCategoryIntent": "coaching",
+      "secondaryCategoryIntents": [
+        "teaching",
+        "connecting"
+      ],
+      "narratives": [
+        {
+          "title": "The RAIN method",
+          "content": "Brach adapted and popularised the RAIN acronym (Recognize, Allow, Investigate, Nurture) as a step-by-step framework for meeting difficult emotions. By 2020, RAIN had been adopted by thousands of therapists, school counsellors, and corporate wellness programs."
+        },
+        {
+          "title": "200 million podcast downloads",
+          "content": "Since 2002, Brach has recorded and freely shared a weekly dharma talk and guided meditation. She never gated the content or ran ads. By 2024 the podcast had surpassed 200 million downloads, growing entirely through word of mouth and therapist recommendations."
+        }
+      ]
+    },
+    {
+      "name": "Glennon Doyle",
+      "domain": "memoir / community building / activism",
+      "era": "1976-present",
+      "region": "US",
+      "bio": "Memoirist and activist who started the blog Momastery in 2009. Her 2020 book Untamed sold over 5 million copies. She founded Together Rising, a nonprofit that has raised over $30 million in micro-donations for families in crisis.",
+      "oneLiner": "Built a movement by saying the things mothers were not supposed to say out loud.",
+      "primaryCategoryIntent": "speaking_up",
+      "secondaryCategoryIntents": [
+        "storytelling",
+        "connecting"
+      ],
+      "narratives": [
+        {
+          "title": "The blog post that went viral",
+          "content": "In January 2012, Doyle published Don't Carpe Diem on Momastery, arguing that mothers didn't need to treasure every moment. The post was shared 1.2 million times on Facebook within a week. It gave language to millions of women who felt ashamed for not enjoying motherhood constantly."
+        },
+        {
+          "title": "Together Live tour",
+          "content": "From 2017 to 2019, Doyle ran the Together Live tour, filling theatres with 1,500 to 3,000 women per night. The shows featured speakers in a format she designed to feel like a church service for people who'd left church."
+        }
+      ]
+    },
+    {
+      "name": "Gabby Bernstein",
+      "domain": "spiritual development / manifestation / sobriety",
+      "era": "1979-present",
+      "region": "US",
+      "bio": "New York Times bestselling author of 10 books who built a spiritual teaching empire from a Manhattan living room in 2008. She got sober at 25 and began teaching A Course in Miracles to small groups. Named a new thought leader by Oprah.",
+      "oneLiner": "Made spirituality accessible to the woman who still drinks oat milk lattes and checks her phone.",
+      "primaryCategoryIntent": "coaching",
+      "secondaryCategoryIntents": [
+        "teaching",
+        "performing"
+      ],
+      "narratives": [
+        {
+          "title": "The living room lectures, 2008",
+          "content": "In 2008, at age 29, Bernstein started hosting free Monday night lectures on A Course in Miracles in her small Manhattan apartment. Within months, 100 people were cramming into her living room. A literary agent attended one session and offered her a book deal on the spot."
+        },
+        {
+          "title": "Spirit Junkie Masterclass",
+          "content": "In 2016, Bernstein launched Spirit Junkie Masterclass, a year-long training for aspiring spiritual coaches priced between $3,000 and $7,000. By 2023, over 5,000 graduates had completed the programme and many launched their own coaching practices."
         }
       ]
     }

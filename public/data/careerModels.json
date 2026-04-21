@@ -12,7 +12,7 @@
       "founder": 75,
       "nonfounder": 200
     },
-    "totalPeople": 303
+    "totalPeople": 318
   },
   "profiles": [
     {
@@ -8007,6 +8007,429 @@
       },
       "confidence": "high",
       "oneLiner": "Went bankrupt, clawed back to zero, and spent the next 30 years screaming at Americans to cut up their credit cards."
+    },
+    {
+      "name": "Brené Brown",
+      "source": "non-founder",
+      "domain": "vulnerability research / leadership development",
+      "oneLiner": "Turned the thing everyone hides from into the thing everyone needs.",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "speaking_up",
+        "teaching",
+        "storytelling"
+      ],
+      "careerModel": {
+        "type": "researcher_turned_experience_creator",
+        "primaryRevenue": "Licensed facilitator training and corporate workshops",
+        "revenueStreams": [
+          "books",
+          "certified facilitator licensing",
+          "corporate keynotes",
+          "Netflix special",
+          "podcast",
+          "online courses"
+        ],
+        "trajectory": "Academic researcher for 15 years, viral TED talk at 45, NYT bestselling author, Netflix special, facilitator certification empire by 55.",
+        "keyDecision": "Chose to make academic research accessible to general audiences rather than staying in the ivory tower.",
+        "scaleModel": "Licensed 300+ certified facilitators to deliver her methodology inside organisations worldwide.",
+        "lessonsForUser": "If your research makes people feel seen, package the transformation into a certified training others can deliver. You become the IP holder, not the bottleneck."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Tony Robbins",
+      "source": "non-founder",
+      "domain": "peak performance / live transformation events",
+      "oneLiner": "Built a cathedral of transformation you walk through in four days and leave different.",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "performing",
+        "coaching",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "live_events_empire",
+        "primaryRevenue": "High-ticket live transformation events",
+        "revenueStreams": [
+          "live events",
+          "coaching certifications",
+          "books",
+          "investment portfolio",
+          "supplements",
+          "resort ownership"
+        ],
+        "trajectory": "Running NLP seminars by 20, infomercial star by 28, arena-scale events by 30, diversified into a $7 billion portfolio by 55.",
+        "keyDecision": "Chose live events over one-on-one coaching, betting that transformation at scale would compound into a movement.",
+        "scaleModel": "Industrialised the peak experience into a repeatable 4-day container running multiple times per year across three continents.",
+        "lessonsForUser": "If you perform and coach: design one transformative container, make it repeatable, and let the live energy itself be the product."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Marie Forleo",
+      "source": "non-founder",
+      "domain": "online business education / creative entrepreneurship",
+      "oneLiner": "Made business school feel like a conversation with your funniest, smartest friend.",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "teaching",
+        "coaching",
+        "performing"
+      ],
+      "careerModel": {
+        "type": "cohort_course_empire",
+        "primaryRevenue": "Annual B-School enrollment (8-figure launch, once per year)",
+        "revenueStreams": [
+          "online course (B-School)",
+          "book sales",
+          "podcast/YouTube",
+          "Time Genius program"
+        ],
+        "trajectory": "Bartender and fitness trainer at 23, started coaching at 25, launched MarieTV at 34, B-School at 35, NYT bestseller at 44.",
+        "keyDecision": "Limited B-School enrollment to once per year, choosing scarcity and launch energy over always-open access.",
+        "scaleModel": "Free weekly content builds trust for 50 weeks, then a 2-week annual launch converts into cohort enrollment.",
+        "lessonsForUser": "Give generously for free through one consistent content channel, then open one premium offer annually. The constraint creates event energy."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Wim Hof",
+      "source": "non-founder",
+      "domain": "breathwork / cold exposure / human performance",
+      "oneLiner": "Proved that a freezing river can teach you more about yourself than ten years of therapy.",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": [
+        "coaching",
+        "performing",
+        "speaking_up"
+      ],
+      "careerModel": {
+        "type": "method_certification_empire",
+        "primaryRevenue": "Instructor certification and branded retreats",
+        "revenueStreams": [
+          "instructor certification",
+          "mobile app subscriptions",
+          "branded retreats",
+          "corporate workshops",
+          "online courses",
+          "book royalties"
+        ],
+        "trajectory": "Grieving father using cold as medicine at 36, broke first world record at 40, academic validation at 55, 1500+ certified instructors by 64.",
+        "keyDecision": "Submitted himself to rigorous scientific testing, trading spectacle credibility for peer-reviewed credibility.",
+        "scaleModel": "Personal world records built fame, science built trust, then certified instructors delivered worldwide without him present.",
+        "lessonsForUser": "If your method works on your body first: get scientific validation, then certify others to teach it. The science turns personal practice into scalable business."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Adriene Mishler",
+      "source": "non-founder",
+      "domain": "yoga / online wellness",
+      "oneLiner": "Made the yoga mat feel like the safest place in your house.",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": [
+        "coaching",
+        "connecting",
+        "performing"
+      ],
+      "careerModel": {
+        "type": "free_content_to_membership",
+        "primaryRevenue": "Membership platform (FWFG) and YouTube ad revenue",
+        "revenueStreams": [
+          "membership subscriptions",
+          "YouTube ad revenue",
+          "brand partnerships",
+          "merchandise"
+        ],
+        "trajectory": "Actress and yoga teacher at 28, first YouTube video in 2012, 30 Days of Yoga breakthrough at 30, 12M subscribers by 38, all from her living room.",
+        "keyDecision": "Kept yoga free on YouTube and optimised for accessibility over exclusivity.",
+        "scaleModel": "Free daily content builds massive trust, annual January challenges create cohort energy, low-cost membership captures the most engaged fraction.",
+        "lessonsForUser": "Be radically consistent, optimise for the person who feels too intimidated to start, and let free volume build the trust that converts into recurring revenue."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "James Clear",
+      "source": "non-founder",
+      "domain": "behavioural psychology / habit formation",
+      "oneLiner": "Made the boring act of showing up every day feel like the most powerful thing you could do.",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "teaching",
+        "storytelling",
+        "building"
+      ],
+      "careerModel": {
+        "type": "book_and_newsletter_empire",
+        "primaryRevenue": "Book royalties and high-fee keynote speaking",
+        "revenueStreams": [
+          "book royalties",
+          "keynote speaking ($100K+)",
+          "newsletter sponsorships",
+          "Atomic Habits journal/workbook"
+        ],
+        "trajectory": "Photography entrepreneur in his 20s, started writing about habits at 26, built a 2M email list by 32, 20M copies sold by 38, deliberately kept the business tiny.",
+        "keyDecision": "Wrote free articles twice weekly for six years before publishing a book, building the audience before the product.",
+        "scaleModel": "One book that sells itself through word of mouth, a massive newsletter, and selective high-fee speaking.",
+        "lessonsForUser": "Publish freely and consistently for years, let the audience tell you what your book should be, then keep the business radically simple."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Esther Perel",
+      "source": "non-founder",
+      "domain": "relational intelligence / couples therapy",
+      "oneLiner": "Made the mess of relationships into something you could finally talk about without shame.",
+      "primaryProblem": "left_behind",
+      "primarySkills": [
+        "coaching",
+        "storytelling",
+        "speaking_up"
+      ],
+      "careerModel": {
+        "type": "expertise_media_empire",
+        "primaryRevenue": "Podcast, live events, and therapist training platform",
+        "revenueStreams": [
+          "podcast revenue",
+          "live speaking and events",
+          "therapist training (Sessions)",
+          "book royalties",
+          "card game product",
+          "corporate workshops"
+        ],
+        "trajectory": "Private practice therapist for 20 years, first book at 48, viral TED talks at 55, podcast launch at 59, training platform at 64.",
+        "keyDecision": "Made private therapy sessions public through podcast, breaking the profession's unspoken rule.",
+        "scaleModel": "Deep expertise from decades of practice, then multiple formats (audio, live, training, product) serving different engagement depths.",
+        "lessonsForUser": "Record the work (with permission), let people witness transformation, then train others in your methodology. The witnessing is the product."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Priya Parker",
+      "source": "non-founder",
+      "domain": "gathering design / facilitation",
+      "oneLiner": "Proved that how you gather people is itself an act of leadership.",
+      "primaryProblem": "left_behind",
+      "primarySkills": [
+        "connecting",
+        "designing",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "facilitation_consultancy_and_book",
+        "primaryRevenue": "High-fee facilitation for organisations and private clients",
+        "revenueStreams": [
+          "facilitation consulting",
+          "book royalties",
+          "keynote speaking",
+          "workshops and trainings",
+          "podcast"
+        ],
+        "trajectory": "Conflict facilitator at 24, founded Thrive Labs, worked with WEF and MoMA, published The Art of Gathering at 38.",
+        "keyDecision": "Wrote a book codifying her facilitation principles for everyone, not just elite clients.",
+        "scaleModel": "High-fee private facilitation funds the work, the book democratises the method, workshops spread the ideas.",
+        "lessonsForUser": "Codify your invisible principles into a book or framework, then charge premium fees for live facilitation while the book builds your reputation."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Jay Shetty",
+      "source": "non-founder",
+      "domain": "mindfulness / purpose coaching / media",
+      "oneLiner": "Translated ancient monastic wisdom into content a scrolling generation would actually stop for.",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "teaching",
+        "coaching",
+        "storytelling"
+      ],
+      "careerModel": {
+        "type": "media_to_certification_pipeline",
+        "primaryRevenue": "Coaching certification school and podcast revenue",
+        "revenueStreams": [
+          "coaching certification",
+          "podcast (On Purpose)",
+          "book royalties",
+          "keynote speaking",
+          "brand partnerships"
+        ],
+        "trajectory": "Monk at 23, corporate job at 26, viral video creator at 29, 4 billion views by 31, NYT bestseller at 33, coaching school by 35.",
+        "keyDecision": "Left the monastery to translate wisdom for a mass audience rather than teaching a select few.",
+        "scaleModel": "Free short-form content builds massive audience, podcast deepens trust, certification captures people who want to teach the methodology.",
+        "lessonsForUser": "Build audience with free short-form wisdom first, go deep with long-form, then certify others to teach your method."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Elizabeth Gilbert",
+      "source": "non-founder",
+      "domain": "creative writing / creative courage",
+      "oneLiner": "Gave permission to be creative without waiting to be good enough first.",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "storytelling",
+        "coaching",
+        "speaking_up"
+      ],
+      "careerModel": {
+        "type": "author_and_creative_mentor",
+        "primaryRevenue": "Book royalties and keynote speaking",
+        "revenueStreams": [
+          "book royalties",
+          "keynote speaking",
+          "workshops",
+          "podcast (Magic Lessons)",
+          "film adaptation rights"
+        ],
+        "trajectory": "Working journalist for a decade, first book at 28, Eat Pray Love at 37 (15M copies), Big Magic at 46, patron saint of creative courage.",
+        "keyDecision": "After the crushing pressure of following up a mega-bestseller, chose to write about creative courage rather than chasing another memoir hit.",
+        "scaleModel": "One massive book creates permanent cultural permission, then speaking and mentorship serve that community.",
+        "lessonsForUser": "Externalize the pressure, separate your identity from the outcome, and remember that a decade of invisible work is not wasted."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Simon Sinek",
+      "source": "non-founder",
+      "domain": "leadership / organisational purpose",
+      "oneLiner": "Asked one question so simple that entire companies reorganised around the answer.",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "teaching",
+        "leading",
+        "speaking_up"
+      ],
+      "careerModel": {
+        "type": "thought_leadership_consultancy",
+        "primaryRevenue": "Corporate consulting and keynote speaking",
+        "revenueStreams": [
+          "corporate consulting (The Optimism Company)",
+          "keynote speaking",
+          "book royalties",
+          "online classes",
+          "YouTube content"
+        ],
+        "trajectory": "Struggling ad man at 35, TED talk went viral at 36, bestselling author at 37, consultancy serving military and Fortune 500 by 45.",
+        "keyDecision": "Chose to build a boutique consultancy rather than scale through mass certification.",
+        "scaleModel": "One viral idea becomes multiple books, books attract enterprise clients, a small team delivers high-fee consulting.",
+        "lessonsForUser": "Codify one powerful question into a framework, let a viral moment build your reputation, then serve enterprise clients at premium fees."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Ali Abdaal",
+      "source": "non-founder",
+      "domain": "productivity / creator economy education",
+      "oneLiner": "Proved you could build a business bigger than your medical salary by being curious on camera.",
+      "primaryProblem": "work_hollows",
+      "primarySkills": [
+        "teaching",
+        "building",
+        "creating"
+      ],
+      "careerModel": {
+        "type": "creator_educator",
+        "primaryRevenue": "Cohort-based courses (PTYA) and YouTube ad revenue",
+        "revenueStreams": [
+          "cohort courses",
+          "YouTube ad revenue",
+          "book royalties",
+          "sponsorships",
+          "digital products",
+          "podcast"
+        ],
+        "trajectory": "Medical student making study videos at 22, NHS doctor with a growing channel at 24, $5M course revenue at 27, quit medicine at 28, NYT bestseller at 29.",
+        "keyDecision": "Built a YouTube audience while still employed as a doctor, proving the part-time model before teaching it.",
+        "scaleModel": "Weekly YouTube videos build authority, cohort courses convert the most engaged viewers, alumni promote organically.",
+        "lessonsForUser": "Start creating content alongside your day job, let the audience grow while you have financial safety, then launch a cohort course teaching what you demonstrated."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Tara Brach",
+      "source": "non-founder",
+      "domain": "meditation / Buddhist psychology / mindfulness",
+      "oneLiner": "Made sitting still with your own pain feel like the bravest thing you could do.",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": [
+        "coaching",
+        "teaching",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "teacher_certification_and_community",
+        "primaryRevenue": "Teacher certification programme and retreats",
+        "revenueStreams": [
+          "meditation teacher certification",
+          "retreats",
+          "book royalties",
+          "online courses",
+          "community donations"
+        ],
+        "trajectory": "Clinical psychologist, founded meditation community at 45, first book at 50, free podcast to 200M downloads by 70, certification training thousands of teachers.",
+        "keyDecision": "Kept the weekly teachings permanently free, trusting that generosity would build a community large enough to sustain paid offerings.",
+        "scaleModel": "Free weekly content builds global community, retreats deepen practice, 2-year teacher certification creates a lineage of practitioners.",
+        "lessonsForUser": "Give freely and consistently for decades, train teachers to carry the method, and trust that depth builds the audience."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Glennon Doyle",
+      "source": "non-founder",
+      "domain": "memoir / community building / activism",
+      "oneLiner": "Built a movement by saying the things mothers were not supposed to say out loud.",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "speaking_up",
+        "storytelling",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "author_activist_community_builder",
+        "primaryRevenue": "Book sales and live tour events",
+        "revenueStreams": [
+          "book royalties",
+          "live tour (Together Live)",
+          "podcast (We Can Do Hard Things)",
+          "nonprofit (Together Rising)",
+          "keynote speaking"
+        ],
+        "trajectory": "Recovering addict blogging from home at 33, viral post at 36, nonprofit raising $30M, Untamed (5M copies) at 44, podcast with 300M downloads by 47.",
+        "keyDecision": "Built a nonprofit alongside her personal brand, making activism inseparable from storytelling.",
+        "scaleModel": "Radical honesty builds fierce community, community funds activism, live tours create belonging, each book deepens the movement.",
+        "lessonsForUser": "Let your personal truth be the foundation, give the community a way to act on shared values, and trust that radical honesty is itself the marketing."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Gabby Bernstein",
+      "source": "non-founder",
+      "domain": "spiritual development / manifestation / sobriety",
+      "oneLiner": "Made spirituality accessible to the woman who still drinks oat milk lattes and checks her phone.",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "coaching",
+        "teaching",
+        "performing"
+      ],
+      "careerModel": {
+        "type": "spiritual_teacher_certification_empire",
+        "primaryRevenue": "Spirit Junkie Masterclass and live workshops/retreats",
+        "revenueStreams": [
+          "coaching certification (Spirit Junkie Masterclass)",
+          "book royalties",
+          "live events and retreats",
+          "online courses",
+          "keynote speaking",
+          "card decks"
+        ],
+        "trajectory": "Got sober at 25, living room lectures at 29, first book at 32, Oprah endorsement at 35, 10 NYT bestsellers and 5000+ certified coaches by 44.",
+        "keyDecision": "Started teaching in her living room before having any credentials, trusting that personal transformation was qualification enough.",
+        "scaleModel": "Books build mainstream credibility, live events create peak experiences, masterclass certification creates a lineage of teachers.",
+        "lessonsForUser": "Start teaching in the smallest room available, let your transformation be the curriculum, then certify others to carry it."
+      },
+      "confidence": "high"
     }
   ]
 }

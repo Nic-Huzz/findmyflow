@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "totalProfiles": 200,
+    "totalProfiles": 243,
     "totalTags": 787,
     "totalAntiTags": 44,
     "generatedAt": "2026-04-07",
@@ -8121,6 +8121,426 @@
         }
       ],
       "antiTags": []
+    },
+    {
+      "name": "Brené Brown",
+      "dominantCategories": [
+        "speaking_up",
+        "teaching",
+        "storytelling"
+      ],
+      "playSkills": [
+        {
+          "category": "speaking_up",
+          "skill": "Name what everyone is feeling but won't say",
+          "confidence": "high",
+          "evidence": "Built entire career on naming shame and vulnerability as universal human experiences"
+        },
+        {
+          "category": "teaching",
+          "skill": "Turn research into transformation",
+          "confidence": "high",
+          "evidence": "300+ certified Dare to Lead facilitators delivering her curriculum in 14 countries"
+        },
+        {
+          "category": "storytelling",
+          "skill": "Use your own breakdown as the teaching",
+          "confidence": "high",
+          "evidence": "TEDx talk about her own vulnerability hangover viewed over 60 million times"
+        }
+      ]
+    },
+    {
+      "name": "Tony Robbins",
+      "dominantCategories": [
+        "performing",
+        "coaching",
+        "leading"
+      ],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Command a room of 10,000",
+          "confidence": "high",
+          "evidence": "UPW events fill arenas with 10,000+ attendees for 4-day transformations"
+        },
+        {
+          "category": "coaching",
+          "skill": "Diagnose someone in real time on stage",
+          "confidence": "high",
+          "evidence": "22-minute live intervention at Date with Destiny filmed for Netflix documentary"
+        },
+        {
+          "category": "leading",
+          "skill": "Build an empire from one format",
+          "confidence": "high",
+          "evidence": "$7 billion portfolio built from the foundation of live events"
+        }
+      ]
+    },
+    {
+      "name": "Marie Forleo",
+      "dominantCategories": [
+        "teaching",
+        "coaching",
+        "performing"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Make business education feel like friendship",
+          "confidence": "high",
+          "evidence": "80,000 B-School students across 195 countries from a team of 30"
+        },
+        {
+          "category": "coaching",
+          "skill": "Give permission to be multi-passionate",
+          "confidence": "high",
+          "evidence": "Coined multipassionate entrepreneur, validating people who refuse to choose one path"
+        },
+        {
+          "category": "performing",
+          "skill": "Be funny and smart at the same time",
+          "confidence": "high",
+          "evidence": "800+ episodes of MarieTV with celebrity interviews and comedy"
+        }
+      ]
+    },
+    {
+      "name": "Wim Hof",
+      "dominantCategories": [
+        "coaching",
+        "performing",
+        "speaking_up"
+      ],
+      "playSkills": [
+        {
+          "category": "coaching",
+          "skill": "Teach through the body, not the mind",
+          "confidence": "high",
+          "evidence": "Wim Hof Method certified by 1,500+ instructors in 45 countries"
+        },
+        {
+          "category": "performing",
+          "skill": "Use your own body as proof",
+          "confidence": "high",
+          "evidence": "21 Guinness World Records including 1hr 52min ice bath"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Challenge scientific orthodoxy from lived experience",
+          "confidence": "high",
+          "evidence": "PNAS-published study proved voluntary influence over autonomic nervous system"
+        }
+      ]
+    },
+    {
+      "name": "Adriene Mishler",
+      "dominantCategories": [
+        "coaching",
+        "connecting",
+        "performing"
+      ],
+      "playSkills": [
+        {
+          "category": "coaching",
+          "skill": "Make beginners feel safe",
+          "confidence": "high",
+          "evidence": "12M subscribers built by optimising for safety, not aspiration"
+        },
+        {
+          "category": "connecting",
+          "skill": "Create community from a camera",
+          "confidence": "high",
+          "evidence": "4 million people completed 30 Days of Yoga together in January 2015"
+        },
+        {
+          "category": "performing",
+          "skill": "Be warm and real on screen every day",
+          "confidence": "high",
+          "evidence": "Daily uploads from her living room with her dog Benji for over a decade"
+        }
+      ]
+    },
+    {
+      "name": "James Clear",
+      "dominantCategories": [
+        "teaching",
+        "storytelling",
+        "building"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Make complex psychology simple",
+          "confidence": "high",
+          "evidence": "Atomic Habits sold 20M copies by distilling decades of behavioural research into 4 laws"
+        },
+        {
+          "category": "storytelling",
+          "skill": "Use personal trauma as origin story",
+          "confidence": "high",
+          "evidence": "Baseball bat injury story grounds the habits framework in lived experience"
+        },
+        {
+          "category": "building",
+          "skill": "Build audience before product",
+          "confidence": "high",
+          "evidence": "2M email subscribers from 6 years of free articles before writing the book"
+        }
+      ]
+    },
+    {
+      "name": "Esther Perel",
+      "dominantCategories": [
+        "coaching",
+        "storytelling",
+        "speaking_up"
+      ],
+      "playSkills": [
+        {
+          "category": "coaching",
+          "skill": "Hold space for the unspeakable",
+          "confidence": "high",
+          "evidence": "Where Should We Begin podcast: 100M downloads of real unscripted therapy sessions"
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turn private pain into public healing",
+          "confidence": "high",
+          "evidence": "Made anonymous couples therapy sessions into the most downloaded relationship podcast"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Break professional taboos",
+          "confidence": "high",
+          "evidence": "First therapist to make real therapy sessions public at scale"
+        }
+      ]
+    },
+    {
+      "name": "Priya Parker",
+      "dominantCategories": [
+        "connecting",
+        "designing",
+        "leading"
+      ],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Design a room so people actually connect",
+          "confidence": "high",
+          "evidence": "The Art of Gathering translated into 24 languages, adopted by event designers worldwide"
+        },
+        {
+          "category": "designing",
+          "skill": "See invisible structure in how people meet",
+          "confidence": "high",
+          "evidence": "70,000 people attended her free virtual gathering workshops in March 2020"
+        },
+        {
+          "category": "leading",
+          "skill": "Facilitate across conflict lines",
+          "confidence": "high",
+          "evidence": "Facilitated dialogue between Israeli and Palestinian students at Princeton"
+        }
+      ]
+    },
+    {
+      "name": "Jay Shetty",
+      "dominantCategories": [
+        "teaching",
+        "coaching",
+        "storytelling"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Translate ancient wisdom for modern ears",
+          "confidence": "high",
+          "evidence": "4 billion video views reframing monastic principles for social media audiences"
+        },
+        {
+          "category": "coaching",
+          "skill": "Certify others to carry your method",
+          "confidence": "high",
+          "evidence": "Thousands of coaches graduated from Jay Shetty Certification School"
+        },
+        {
+          "category": "storytelling",
+          "skill": "Make 3 minutes feel like a conversation",
+          "confidence": "high",
+          "evidence": "Signature 3-5 minute close-up monologues that stop the scroll"
+        }
+      ]
+    },
+    {
+      "name": "Elizabeth Gilbert",
+      "dominantCategories": [
+        "storytelling",
+        "coaching",
+        "speaking_up"
+      ],
+      "playSkills": [
+        {
+          "category": "storytelling",
+          "skill": "Turn your mess into a movement",
+          "confidence": "high",
+          "evidence": "Eat, Pray, Love sold 15M copies by being radically honest about her own breakdown"
+        },
+        {
+          "category": "coaching",
+          "skill": "Give creative permission",
+          "confidence": "high",
+          "evidence": "Big Magic became the manifesto for people afraid to make creative work"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Externalize genius so creators survive",
+          "confidence": "high",
+          "evidence": "TED talk on creative genius (20M views) reframed the relationship between artist and inspiration"
+        }
+      ]
+    },
+    {
+      "name": "Simon Sinek",
+      "dominantCategories": [
+        "teaching",
+        "leading",
+        "speaking_up"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Reduce complex theory to one question",
+          "confidence": "high",
+          "evidence": "Golden Circle (Why, How, What) reorganised entire companies around purpose"
+        },
+        {
+          "category": "leading",
+          "skill": "Earn trust from military and Fortune 500",
+          "confidence": "high",
+          "evidence": "The Optimism Company consults for U.S. Marine Corps, Air Force, and the UN"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Say the obvious thing nobody said yet",
+          "confidence": "high",
+          "evidence": "Third most-watched TED talk of all time with 65M views"
+        }
+      ]
+    },
+    {
+      "name": "Ali Abdaal",
+      "dominantCategories": [
+        "teaching",
+        "building",
+        "creating"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Teach by showing your own journey",
+          "confidence": "high",
+          "evidence": "Documented the entire path from NHS doctor to full-time creator in real time"
+        },
+        {
+          "category": "building",
+          "skill": "Build while employed",
+          "confidence": "high",
+          "evidence": "Part-Time YouTuber Academy earned $5M while he was still an NHS doctor"
+        },
+        {
+          "category": "creating",
+          "skill": "Turn curiosity into consistent content",
+          "confidence": "high",
+          "evidence": "5M YouTube subscribers from weekly videos on productivity and learning"
+        }
+      ]
+    },
+    {
+      "name": "Tara Brach",
+      "dominantCategories": [
+        "coaching",
+        "teaching",
+        "connecting"
+      ],
+      "playSkills": [
+        {
+          "category": "coaching",
+          "skill": "Hold space for decades without burning out",
+          "confidence": "high",
+          "evidence": "Weekly free dharma talks since 2002, 200M podcast downloads, never gated content"
+        },
+        {
+          "category": "teaching",
+          "skill": "Codify a practice into a teachable method",
+          "confidence": "high",
+          "evidence": "RAIN method adopted by thousands of therapists and school counsellors worldwide"
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Founded Insight Meditation Community of Washington D.C. in 1998, still teaching there"
+        }
+      ]
+    },
+    {
+      "name": "Glennon Doyle",
+      "dominantCategories": [
+        "speaking_up",
+        "storytelling",
+        "connecting"
+      ],
+      "playSkills": [
+        {
+          "category": "speaking_up",
+          "skill": "Say the unsayable about motherhood",
+          "confidence": "high",
+          "evidence": "Don't Carpe Diem post shared 1.2M times on Facebook, broke cultural silence"
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turn personal crisis into collective awakening",
+          "confidence": "high",
+          "evidence": "Untamed sold 5M copies by writing about leaving her husband, coming out, and marrying Abby Wambach"
+        },
+        {
+          "category": "connecting",
+          "skill": "Turn readers into a movement",
+          "confidence": "high",
+          "evidence": "Together Rising raised $30M in micro-donations from her community"
+        }
+      ]
+    },
+    {
+      "name": "Gabby Bernstein",
+      "dominantCategories": [
+        "coaching",
+        "teaching",
+        "performing"
+      ],
+      "playSkills": [
+        {
+          "category": "coaching",
+          "skill": "Start a lineage from a living room",
+          "confidence": "high",
+          "evidence": "Free Monday night lectures in her apartment grew into 5,000+ Spirit Junkie Masterclass graduates"
+        },
+        {
+          "category": "teaching",
+          "skill": "Make ancient texts feel modern",
+          "confidence": "high",
+          "evidence": "Translated A Course in Miracles into accessible modern language for a millennial audience"
+        },
+        {
+          "category": "performing",
+          "skill": "Channel spiritual energy on stage",
+          "confidence": "high",
+          "evidence": "10 NYT bestsellers and sold-out live events and retreats worldwide"
+        }
+      ]
     }
   ]
 }

@@ -315,9 +315,9 @@
 }
 
 .ccq-value-btn.selected-purple {
-  background: rgba(147, 51, 234, 0.35);
-  border-color: rgba(147, 51, 234, 0.7);
-  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  background: rgba(233, 162, 59, 0.25);
+  border-color: rgba(233, 162, 59, 0.7);
+  box-shadow: 0 0 20px rgba(233, 162, 59, 0.3);
 }
 
 .ccq-value-btn.selected-gold {
@@ -332,7 +332,7 @@
 }
 
 .ccq-value-btn.selected-purple .ccq-value-label {
-  color: #c4b5fd;
+  color: #fcd34d;
 }
 
 .ccq-value-btn.selected-gold .ccq-value-label {
@@ -566,9 +566,9 @@
 /* ============ VALIDATION CARD ============ */
 
 .ccq-validation-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 24px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -593,12 +593,12 @@
 }
 
 .ccq-validation-check {
-  color: #10b981;
+  color: #6ee7b7;
   font-size: 1.125rem;
 }
 
 .ccq-validation-item span:last-child {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* ============ CLARITY SECTION ============ */
