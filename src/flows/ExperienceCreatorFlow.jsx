@@ -223,7 +223,7 @@ export default function ExperienceCreatorFlow() {
       })
       if (error) throw error
       hapticSuccess()
-      navigate('/7-day-challenge')
+      navigate('/create')
     } catch (err) {
       console.error('Error saving:', err)
     } finally {
