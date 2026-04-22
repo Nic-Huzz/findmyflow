@@ -1,9 +1,11 @@
 # Feature Brief: Experience Creator Matching
 
 Date: 2026-04-21
-Status: Data complete, UI not started
-Route: `/experience-creators`
-Level: Standalone flow (user decides where it's accessed from)
+Status: **COMPLETE (all 3 phases shipped 2026-04-22)**
+Route: `/experience-creators` (public, no auth required)
+Level: Standalone flow, accessed from Career Clarity Quiz "build" fork
+
+> **Full handoff doc:** `docs/2026-04-22-experience-creator-matching-handoff.md` — contains complete file map, schema, archetype definitions, offer templates, and all design decisions.
 
 ## What it is
 
@@ -180,29 +182,21 @@ create table experience_creator_selections (
 4. People Matching completion = saving at least one favourite
 5. Per-layer "hell yes" validation, not whole-model validation
 6. Categories present ALL people (including historical), not just curated modern 10
-7. Pixar images only for modern recognisable creators (~15), historical get emoji/initials
+7. All 59 experience creators have Pixar portraits (not just modern ones)
+8. 3-layer model (attraction/core/continuity), not 4. Scale is optional for workshop/cohort only.
+9. Public route as lead magnet (no AuthGate). Anonymous → "Sign Up to Save My Model" → /get-started
+10. Career Clarity Quiz forks "build" path: "experiences" → /experience-creators, "product/company" → /get-started
+11. Attraction vs continuity rule: big audience before product = continuity, product built audience = attraction
 
-## Image generation
+## Implementation
 
-Pixar-style portraits generated via Gemini 3.1 Flash (`gemini-3.1-flash-image-preview`). Text-to-image, no photo input needed.
+**All complete.** See `docs/2026-04-22-experience-creator-matching-handoff.md` for full file map, schema, and technical details.
 
-Prompt pattern that works best (from Brené Brown test):
-- Focus on EMOTION and SETTING, not physical appearance
-- Describe the person doing their signature thing
-- Include specific environmental details (podium, audience, stage lighting)
-- End with: "The style should match modern Pixar films: warm, expressive, emotionally rich. Square format."
-
-3 test images generated and approved:
-- `public/images/creators/wim-hof.png` (781KB)
-- `public/images/creators/tony-robbins.png` (841KB)
-- `public/images/creators/bren-brown.png` (672KB)
-
-Remaining ~12 to generate for modern recognisable creators.
-
-## Files to modify for implementation
-
-1. **New**: `src/flows/ExperienceCreatorFlow.jsx` + `.css` — the main flow component
-2. **New**: `src/lib/experienceCreatorMatching.js` — archetype logic, offer suite merging
-3. **Modify**: `src/AppRouter.jsx` — add `/experience-creators` route
-4. **New**: `supabase/migrations/XXXXXXXX_experience_creator_selections.sql` — DB table
-5. **Modify**: `src/lib/zarlo/zarloEngine.js` — feed selected archetype into Zarlo context
+Key files:
+- `src/flows/ExperienceCreatorFlow.jsx` + `.css` — main flow component
+- `src/AppRouter.jsx` — public route at `/experience-creators`
+- `src/lib/zarlo/zarloEngine.js` — context wiring
+- `supabase/migrations/20260422000000_experience_creator_selections.sql` — DB table (applied)
+- `public/images/creators/` — 59 Pixar portraits
+- `public/data/experienceCreatorDNA.json` — 247 DNA profiles
+- `public/data/experienceCreatorOfferMap.json` — 59 per-person offer maps
