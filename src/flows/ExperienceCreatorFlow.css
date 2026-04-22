@@ -584,3 +584,30 @@
 }
 
 @keyframes ecfSpin { to { transform: rotate(360deg); } }
+
+/* Try route email capture */
+.ecf-try-capture {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.ecf-try-email {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  font-size: 16px;
+  font-family: inherit;
+  text-align: center;
+}
+.ecf-try-email::placeholder { color: rgba(255,255,255,0.4); }
+.ecf-try-email:focus { outline: none; border-color: #E9A23B; }
+.ecf-try-saved-text {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+.ecf-try-saved-text strong { color: #E9A23B; }

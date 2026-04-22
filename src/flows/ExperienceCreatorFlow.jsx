@@ -136,12 +136,16 @@ function buildCreatorData() {
 export default function ExperienceCreatorFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const isTryRoute = window.location.pathname.startsWith('/try/')
   const [screen, setScreen] = useState('browse') // 'browse' | 'result'
   const [selected, setSelected] = useState(new Set())
   const [loading, setLoading] = useState(false)
   const [layerStatus, setLayerStatus] = useState({}) // 'confirmed' | 'skipped'
   const [showAlts, setShowAlts] = useState({}) // which layers have alternatives expanded
   const [layerOverrides, setLayerOverrides] = useState({}) // swapped layer content { slot: { name, desc, from } }
+  const [tryEmail, setTryEmail] = useState('')
+  const [trySaving, setTrySaving] = useState(false)
+  const [trySaved, setTrySaved] = useState(false)
 
   const confirmLayer = (slot) => {
     hapticLight()
@@ -220,10 +224,33 @@ export default function ExperienceCreatorFlow() {
     window.scrollTo(0, 0)
   }
 
-  // Save to Supabase (or navigate to signup for anonymous users)
+  // Save email + model for try route (anonymous users)
+  const saveTryEmail = async () => {
+    if (!tryEmail.trim() || trySaving) return
+    setTrySaving(true)
+    try {
+      const baseOffers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
+      await supabase.from('experience_creator_leads').insert({
+        email: tryEmail.trim().toLowerCase(),
+        selected_creators: [...selected],
+        dominant_archetype: dominantArchetype,
+        product_suite: {
+          attraction: (layerOverrides.attraction || baseOffers.attraction)?.name,
+          core: (layerOverrides.core || baseOffers.core)?.name,
+          continuity: (layerOverrides.continuity || baseOffers.continuity)?.name,
+        },
+      })
+      setTrySaved(true)
+      hapticSuccess()
+    } catch (err) {
+      console.error('Error saving lead:', err)
+    }
+    setTrySaving(false)
+  }
+
+  // Save to Supabase and navigate
   const saveModel = async () => {
     if (!user?.id) {
-      // Anonymous user — redirect to signup
       navigate('/get-started')
       return
     }
@@ -458,9 +485,35 @@ export default function ExperienceCreatorFlow() {
           <div className="ecf-first-step">
             <h3>Your First Step</h3>
             <p>{firstStep}</p>
-            <button className="ecf-save-btn" onClick={saveModel} disabled={loading}>
-              {loading ? 'Saving...' : user?.id ? 'Save My Model' : 'Sign Up to Save My Model'}
-            </button>
+
+            {isTryRoute ? (
+              trySaved ? (
+                <div className="ecf-try-saved">
+                  <p className="ecf-try-saved-text">Your model has been sent to <strong>{tryEmail}</strong></p>
+                  <button className="ecf-save-btn" onClick={() => navigate('/get-started')}>
+                    Click Here For Support Bringing It To Life
+                  </button>
+                </div>
+              ) : (
+                <div className="ecf-try-capture">
+                  <input
+                    type="email"
+                    value={tryEmail}
+                    onChange={(e) => setTryEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    className="ecf-try-email"
+                    onKeyDown={(e) => e.key === 'Enter' && saveTryEmail()}
+                  />
+                  <button className="ecf-save-btn" onClick={saveTryEmail} disabled={trySaving || !tryEmail.trim()}>
+                    {trySaving ? 'Sending...' : 'Send Me My Model'}
+                  </button>
+                </div>
+              )
+            ) : (
+              <button className="ecf-save-btn" onClick={saveModel} disabled={loading}>
+                {loading ? 'Saving...' : 'Save My Model'}
+              </button>
+            )}
           </div>
         </div>
       </div>
