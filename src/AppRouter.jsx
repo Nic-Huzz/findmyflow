@@ -226,6 +226,7 @@ const FlowReportCard = lazyRetry(() => import('./pages/FlowReportCard'))
 const FlowCompassPage = lazyRetry(() => import('./pages/FlowCompassPage'))
 const BusinessPage = lazyRetry(() => import('./pages/BusinessPage'))
 const ExperienceCatalog = lazyRetry(() => import('./pages/ExperienceCatalog'))
+const CreatorHome = lazyRetry(() => import('./components/CreatorHome/CreatorHome'))
 const ExperienceCreate = lazyRetry(() => import('./pages/ExperienceCreate'))
 const ExperienceDetail = lazyRetry(() => import('./pages/ExperienceDetail'))
 const SolPage = lazyRetry(() => import('./pages/SolPage'))
@@ -855,10 +856,10 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Create — Experience Creator OS (Shift Architecture) */}
+            {/* Create — Experience Creator Portal (Head Full of Dreams → Self-Actualisation) */}
             <Route path="/create" element={
               <AuthGate>
-                <ExperienceCatalog />
+                <CreatorHome />
               </AuthGate>
             } />
             <Route path="/create/experience/new" element={

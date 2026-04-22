@@ -9,6 +9,11 @@
   --surface: #ffffff;
   --green: #10b981;
   --red: #ef4444;
+
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 0 1.25rem;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
 }
 
 /* ═══ LOADING ═══ */

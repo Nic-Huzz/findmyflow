@@ -39,8 +39,8 @@ const TAB_TO_CATEGORY = {
   'priority': 'Level',
   'level': 'Level',
   'quests': 'Level',         // backward compat
-  'business': 'Create',      // backward compat — Business renamed to Create
-  'create': 'Create',
+  'business': 'Level',       // backward compat — Business now at /create route
+  'create': 'Level',         // backward compat — Create now at /create route
   'groans': 'Play-list',     // backward compat — Groans absorbed into Play-list
   'healing': 'Healing',
   'tracker': 'Play-list',    // backward compat — Tracker tab removed
@@ -133,7 +133,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Level', 'Play-list', 'Create', 'Healing', 'Bonus']
+  const categories = ['Level', 'Play-list', 'Healing', 'Bonus']
   const BONUS_PERCENTAGE = 5
 
   // ============================================

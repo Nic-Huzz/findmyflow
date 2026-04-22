@@ -1,19 +1,21 @@
 /**
  * CreatorHome.jsx
  *
- * The Creator Portal home page. Three tabs:
+ * The Creator Portal home page. Standalone route at /create.
+ * Three tabs:
  *   My Business — Product suite, 4-layer assessment, Scope Map position
  *   Experiences — Active experience card + challenges, past experiences with 3% chain
  *   Dashboard — KPIs, 4-layer progress, 3% chain, CRM quick links
  *
- * Renders inside the Create tab in Challenge.jsx.
- * First-time users without a Scope Map result see ScopeMapFlow via ExperienceCatalog.
+ * Head Full of Dreams → Self-Actualisation (the Build phase).
+ * /7-day-challenge handles Repair phase (Unfulfilment → Head Full of Dreams).
  *
  * Design: V2 minimal (white header, underline tabs, borderless cards, purple accents)
  */
 
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
 import { useExperienceList, daysUntil, formatExperienceDate } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
@@ -39,7 +41,9 @@ function countdownLabel(dateStr) {
 
 // ─── Component ─────────────────────────────────────────────────────────────
 
-export default function CreatorHome({ userId }) {
+export default function CreatorHome() {
+  const { user } = useAuth()
+  const userId = user?.id
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('experiences')
   const [scopeResult, setScopeResult] = useState(null)
@@ -50,7 +54,7 @@ export default function CreatorHome({ userId }) {
   const [editingAssessment, setEditingAssessment] = useState(false)
   const [assessmentDraft, setAssessmentDraft] = useState(null)
   const [savingAssessment, setSavingAssessment] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const { experiences, loading: expLoading } = useExperienceList()
 
@@ -222,10 +226,30 @@ export default function CreatorHome({ userId }) {
     .map((e, i) => ({ num: i + 1, note: e.three_percent_note, name: e.name }))
     .reverse()
 
+  // Gate: redirect to Experience Creator Matching if not completed
+  useEffect(() => {
+    if (!loading && !expLoading && !creatorSelection && userId) {
+      navigate('/experience-creators', { replace: true })
+    }
+  }, [loading, expLoading, creatorSelection, userId, navigate])
+
   if (loading || expLoading) {
     return (
-      <div className="ch-loading">
-        <div className="ch-spinner" />
+      <div className="creator-home">
+        <div className="ch-loading">
+          <div className="ch-spinner" />
+        </div>
+      </div>
+    )
+  }
+
+  // Still waiting for redirect
+  if (!creatorSelection) {
+    return (
+      <div className="creator-home">
+        <div className="ch-loading">
+          <div className="ch-spinner" />
+        </div>
       </div>
     )
   }

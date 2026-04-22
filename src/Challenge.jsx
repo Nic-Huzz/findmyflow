@@ -39,7 +39,7 @@ import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
 import ChallengeIntro from './components/ChallengeIntro'
 import LevelTab from './components/level/LevelTab'
-import CreatorHome from './components/CreatorHome/CreatorHome'
+// CreatorHome moved to standalone /create route
 import { preloadChallengeFlows } from './lib/preloadRoutes'
 import { useSubscription } from './hooks/useSubscription'
 import { isPaidQuest, createCheckoutSession } from './lib/subscriptionService'
@@ -1751,7 +1751,7 @@ function Challenge() {
 
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
-          const isLocked = category !== 'Create' && (currentJourneyLevel ?? 0) === 0 && !unlockedTabs.has(category)
+          const isLocked = (currentJourneyLevel ?? 0) === 0 && !unlockedTabs.has(category)
           return (
             <button
               key={category}
@@ -2059,11 +2059,6 @@ function Challenge() {
             setCurrentJourneyLevel(newLevel)
             setViewingLevel(newLevel)
           }} />
-        )}
-
-        {/* Create Tab — Creator Portal Home */}
-        {activeCategory === 'Create' && (
-          <CreatorHome userId={user?.id} />
         )}
 
         {/* Bonus Sub-Tabs: Tasks | Content */}
