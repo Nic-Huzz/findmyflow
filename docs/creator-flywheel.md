@@ -168,17 +168,23 @@ Not part of the core flywheel. Offered when:
 | Component | Status |
 |---|---|
 | Experience Creator Matching | Built (other agent) |
-| Play Profile DNA | Built (needs "2-slider quick version" for creator context) |
+| Play Profile DNA | Built (full quiz exists, linked from My Business tab) |
 | Scope Map Diagnostic | Built (ScopeMapFlow.jsx) |
-| Creator Home (3 tabs) | Built (Phase 1 complete) |
+| Creator Home (3 tabs) | Built (Phase 1) |
 | Create Experience + Checklist | Built (ExperienceCreate + experienceChecklistTemplate) |
-| Checklist → Play-List bridge [⚡] | **Phase 2: building next** |
-| Group call intention flow | Phase 3 |
-| Dashboard KPIs (real data) | Phase 4 |
-| CRM alias layer | Phase 4 |
-| Mid-cycle push notification | Phase 4 |
-| DNA personalization of challenges | Optional enhancement |
+| Checklist → Play-List bridge [⚡] | Built (Phase 2) |
+| 4-Layer Assessment | Built (Phase 3, editable card in My Business) |
+| Screenshot Attendee Upload | Built (Phase 4, AI extraction → CRM) |
+| Cost Logger | Built (Phase 4, line items per experience) |
+| Dashboard KPIs (real data) | Built (Phase 4, attendees + repeat rate + 3% chain) |
+| Post-Event Tab (follow-up + reflection) | Built (Phase 4, unlocked) |
+| DNA personalization of challenges | Built (reads from founder_dna_results, personalizes framing) |
 | Shift Architecture Blueprint | Built (upsell, separate from core loop) |
+| Group call intention flow | **Not built yet** |
+| CRM alias layer (display labels) | **Not built yet** |
+| Mid-cycle push notification (day 7) | **Not built yet** |
+| Experience-specific content triggers | **Not built yet** |
+| Pre-built email sequence templates | **Not built yet** |
 
 ---
 

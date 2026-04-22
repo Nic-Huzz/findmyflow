@@ -65,8 +65,7 @@ export default function CreatorHome({ userId }) {
 
   const activeExp = upcoming[0] || null
   const completedCount = past.length
-  const totalAttendees = '—' // Phase 4: wire to CRM
-  const repeatRate = '—' // Phase 4: wire to CRM
+  const [dashboardKPIs, setDashboardKPIs] = useState({ totalAttendees: 0, repeatRate: 0, totalCosts: 0, totalRevenue: 0 })
 
   useEffect(() => {
     if (!userId) return
@@ -80,6 +79,47 @@ export default function CreatorHome({ userId }) {
       setActiveChallenges(data || [])
     })
   }, [userId, activeExp?.id])
+
+  // Load dashboard KPIs
+  useEffect(() => {
+    if (!userId) return
+    loadDashboardKPIs()
+  }, [userId, completedCount])
+
+  const loadDashboardKPIs = async () => {
+    try {
+      // Fetch all attendance records, compute unique + repeat from one query
+      const { data: attendanceData } = await supabase
+        .from('experience_attendees')
+        .select('contact_id, experience_id')
+        .eq('user_id', userId)
+
+      let uniqueAttendees = 0
+      let repeatCount = 0
+      if (attendanceData?.length) {
+        const contactCounts = {}
+        attendanceData.forEach(a => {
+          contactCounts[a.contact_id] = (contactCounts[a.contact_id] || 0) + 1
+        })
+        uniqueAttendees = Object.keys(contactCounts).length
+        repeatCount = Object.values(contactCounts).filter(c => c >= 2).length
+      }
+
+      const repeatRate = uniqueAttendees > 0 ? Math.round((repeatCount / uniqueAttendees) * 100) : 0
+
+      // Total costs
+      const { data: costsData } = await supabase
+        .from('experience_costs')
+        .select('amount')
+        .eq('user_id', userId)
+
+      const totalCosts = (costsData || []).reduce((sum, c) => sum + (parseFloat(c.amount) || 0), 0)
+
+      setDashboardKPIs({ totalAttendees: uniqueAttendees, repeatRate, totalCosts, totalRevenue: 0 })
+    } catch (err) {
+      console.error('Dashboard KPIs error:', err)
+    }
+  }
 
   const loadCreatorData = async () => {
     setLoading(true)
@@ -209,11 +249,11 @@ export default function CreatorHome({ userId }) {
             <span className="ch-stat-label">experiences</span>
           </div>
           <div className="ch-stat">
-            <span className="ch-stat-val">{totalAttendees}</span>
+            <span className="ch-stat-val">{dashboardKPIs.totalAttendees || '—'}</span>
             <span className="ch-stat-label">attendees</span>
           </div>
           <div className="ch-stat">
-            <span className="ch-stat-val">{repeatRate}</span>
+            <span className="ch-stat-val">{dashboardKPIs.repeatRate ? `${dashboardKPIs.repeatRate}%` : '—'}</span>
             <span className="ch-stat-label">repeat</span>
           </div>
           <div className="ch-stat">
@@ -483,11 +523,11 @@ export default function CreatorHome({ userId }) {
             </div>
             <div className="ch-kpi-grid">
               <div className="ch-kpi">
-                <div className="ch-kpi-val">{totalAttendees}</div>
+                <div className="ch-kpi-val">{dashboardKPIs.totalAttendees || 0}</div>
                 <div className="ch-kpi-label">Total Attendees</div>
               </div>
               <div className="ch-kpi">
-                <div className="ch-kpi-val">{repeatRate}</div>
+                <div className="ch-kpi-val">{dashboardKPIs.repeatRate}%</div>
                 <div className="ch-kpi-label">Repeat Rate</div>
               </div>
               <div className="ch-kpi">
@@ -501,28 +541,29 @@ export default function CreatorHome({ userId }) {
             </div>
           </div>
 
-          {/* 4-Layer Progress - placeholder until assessment exists */}
+          {/* 4-Layer Progress */}
           <div className="ch-card">
             <div className="ch-card-head">
               <span className="ch-card-title">4-Layer Progress</span>
             </div>
             <div className="ch-lp-rows">
-              {[
-                { name: 'Attraction', color: '#8b5cf6', pct: 0 },
-                { name: 'Core', color: '#E9A23B', pct: 0 },
-                { name: 'Scale', color: '#10b981', pct: 0 },
-                { name: 'Continuity', color: '#3b82f6', pct: 0 },
-              ].map(layer => (
-                <div key={layer.name} className="ch-lp-row">
-                  <span className="ch-lp-name">{layer.name}</span>
-                  <div className="ch-lp-bar">
-                    <div className="ch-lp-fill" style={{ width: `${layer.pct}%`, background: layer.color }} />
+              {LAYERS.map(layer => {
+                const status = assessment?.[`${layer.key}_status`]
+                const pct = status === 'have' ? 100 : status === 'inconsistent' ? 50 : 0
+                return (
+                  <div key={layer.key} className="ch-lp-row">
+                    <span className="ch-lp-name">{layer.label}</span>
+                    <div className="ch-lp-bar">
+                      <div className="ch-lp-fill" style={{ width: `${pct}%`, background: layer.color }} />
+                    </div>
+                    <span className="ch-lp-pct">{pct}%</span>
                   </div>
-                  <span className="ch-lp-pct">{layer.pct}%</span>
-                </div>
-              ))}
+                )
+              })}
             </div>
-            <p className="ch-empty-text" style={{ marginTop: '0.5rem' }}>Complete your 4-layer assessment to track progress.</p>
+            {!assessment && (
+              <p className="ch-empty-text" style={{ marginTop: '0.5rem' }}>Complete your 4-layer assessment to track progress.</p>
+            )}
           </div>
 
           {/* 3% Chain */}
@@ -548,7 +589,7 @@ export default function CreatorHome({ userId }) {
                 { icon: '👥', label: 'Attendees', route: '/crm/contacts' },
                 { icon: '📧', label: 'Follow-up Sequences', route: '/crm/email-sequences' },
                 { icon: '📣', label: 'Marketing Assets', route: '/crm/content/create' },
-                { icon: '🔔', label: 'Facilitator Nudges', route: '/crm/smart-alerts' },
+                { icon: '🔔', label: 'Facilitator Nudges', route: '/crm/alerts' },
               ].map(link => (
                 <div key={link.route} className="ch-crm-link" onClick={() => navigate(link.route)}>
                   <div className="ch-crm-left">

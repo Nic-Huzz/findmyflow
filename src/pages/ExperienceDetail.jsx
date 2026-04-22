@@ -17,6 +17,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
+import { supabase } from '../lib/supabaseClient'
 import { useExperience, daysUntil, formatExperienceDate } from '../hooks/useExperienceData'
 import { SECTION_META, PHASE_META } from '../lib/experienceChecklistTemplate'
 import { CONVERTIBLE_SECTIONS, convertChecklistToChallenge, fetchDNASliders, fetchCreatorChallenges } from '../lib/checklistChallengeService'
@@ -216,15 +217,47 @@ export default function ExperienceDetail() {
         )}
 
         {activePhase === 'post' && (
-          <div className="exp-phase-placeholder">
-            <div className="exp-phase-placeholder-icon">🔒</div>
-            <h2>Post-event coming soon</h2>
-            <p>
-              The follow-up checklist, attendee upload, and 3% reflection
-              unlock after your event. Come back on or after your date to
-              close the loop and set up compounding wins for the next one.
-            </p>
-          </div>
+          <>
+            {/* Attendee Upload */}
+            <AttendeeUpload experienceId={id} userId={user?.id} />
+
+            {/* Follow-up checklist */}
+            <ChecklistSection
+              section="followup"
+              items={grouped.post.followup || []}
+              showHidden={showHidden}
+              onToggle={handleToggle}
+              onHide={hideItem}
+              onUnhide={unhideItem}
+              onAdd={(label) => addCustomItem({ phase: 'post', section: 'followup', label })}
+              onDelete={deleteCustomItem}
+              convertible
+              convertedIds={convertedIds}
+              convertingItemId={convertingItemId}
+              showDeadlinePicker={showDeadlinePicker}
+              deadlineDate={deadlineDate}
+              onShowDeadline={(itemId) => setShowDeadlinePicker(itemId)}
+              onDeadlineChange={setDeadlineDate}
+              onConvert={handleConvertToChallenge}
+              onCancelDeadline={() => { setShowDeadlinePicker(null); setDeadlineDate('') }}
+              hasDna={dnaLoaded && dnaSliders?.knowledgeStyle != null}
+            />
+
+            {/* Costs */}
+            <CostLogger experienceId={id} userId={user?.id} />
+
+            {/* Reflection */}
+            <ChecklistSection
+              section="reflection"
+              items={grouped.post.reflection || []}
+              showHidden={showHidden}
+              onToggle={handleToggle}
+              onHide={hideItem}
+              onUnhide={unhideItem}
+              onAdd={(label) => addCustomItem({ phase: 'post', section: 'reflection', label })}
+              onDelete={deleteCustomItem}
+            />
+          </>
         )}
 
         {/* Show hidden toggle */}
@@ -462,6 +495,320 @@ function ProgressRing({ pct, completed, total }) {
       <div className="exp-ring-label">
         <div className="exp-ring-pct">{pct}%</div>
         <div className="exp-ring-count">{completed}/{total}</div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * AttendeeUpload — Screenshot → AI extraction → CRM insertion
+ */
+function AttendeeUpload({ experienceId, userId }) {
+  const [uploading, setUploading] = useState(false)
+  const [extracted, setExtracted] = useState(null)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState(null)
+  const [attendeeCount, setAttendeeCount] = useState(0)
+
+  // Load existing attendee count
+  useEffect(() => {
+    if (!experienceId) return
+    supabase
+      .from('experience_attendees')
+      .select('id', { count: 'exact', head: true })
+      .eq('experience_id', experienceId)
+      .then(({ count }) => setAttendeeCount(count || 0))
+  }, [experienceId, saved])
+
+  const handleUpload = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    setError(null)
+    setExtracted(null)
+
+    try {
+      const reader = new FileReader()
+      const base64 = await new Promise((resolve, reject) => {
+        reader.onload = () => resolve(reader.result.split(',')[1])
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
+
+      const { data, error: fnErr } = await supabase.functions.invoke('extract-attendees', {
+        body: { imageBase64: base64, mimeType: file.type },
+      })
+
+      if (fnErr) throw fnErr
+      if (!data?.success) throw new Error(data?.error || 'Extraction failed')
+
+      setExtracted(data)
+    } catch (err) {
+      console.error('Attendee extraction error:', err)
+      setError('Could not extract attendees. Try a clearer screenshot.')
+    }
+    setUploading(false)
+  }
+
+  const handleRemoveAttendee = (index) => {
+    setExtracted(prev => ({
+      ...prev,
+      attendees: prev.attendees.filter((_, i) => i !== index),
+      total_found: prev.total_found - 1,
+    }))
+  }
+
+  const handleSaveAll = async () => {
+    if (!extracted?.attendees?.length || !userId || !experienceId) return
+    setSaving(true)
+    setError(null)
+
+    try {
+      let added = 0
+      let returning = 0
+
+      for (const att of extracted.attendees) {
+        // Find or create contact
+        const { data: existing } = await supabase
+          .from('crm_contacts')
+          .select('id')
+          .eq('user_id', userId)
+          .ilike('name', att.name)
+          .limit(1)
+          .maybeSingle()
+
+        let contactId = existing?.id
+
+        if (!contactId) {
+          const { data: created, error: createErr } = await supabase
+            .from('crm_contacts')
+            .insert({
+              user_id: userId,
+              name: att.name,
+              email: att.email || null,
+              phone: att.phone || null,
+              lifecycle_stage: 'customer',
+              source: 'experience',
+            })
+            .select('id')
+            .single()
+          if (createErr) {
+            console.error('Failed to create contact:', att.name, createErr)
+            continue
+          }
+          contactId = created?.id
+        } else {
+          returning++
+        }
+
+        if (contactId) {
+          await supabase
+            .from('experience_attendees')
+            .upsert({
+              experience_id: experienceId,
+              contact_id: contactId,
+              user_id: userId,
+              source: 'screenshot',
+            }, { onConflict: 'experience_id,contact_id' })
+          added++
+        }
+      }
+
+      setSaved(true)
+      setExtracted(null)
+      hapticSuccess()
+    } catch (err) {
+      console.error('Save attendees error:', err)
+      setError('Failed to save some attendees. Try again.')
+    }
+    setSaving(false)
+  }
+
+  return (
+    <div className="exp-section-card">
+      <div className="exp-section-accent" />
+      <div className="exp-section-head">
+        <div className="exp-section-icon">👥</div>
+        <div className="exp-section-titleblock">
+          <h2 className="exp-section-title">Attendees</h2>
+          <div className="exp-section-subtitle">
+            {attendeeCount > 0 ? `${attendeeCount} recorded` : 'Upload a screenshot to add'}
+          </div>
+        </div>
+      </div>
+
+      {error && <p className="exp-upload-error">{error}</p>}
+
+      {/* Upload button */}
+      {!extracted && !saved && (
+        <label className="exp-upload-btn">
+          <input type="file" accept="image/*" capture="environment" onChange={handleUpload} style={{ display: 'none' }} />
+          {uploading ? 'Extracting...' : '📸 Upload Screenshot'}
+        </label>
+      )}
+
+      {/* Extraction preview */}
+      {extracted && extracted.attendees?.length > 0 && (
+        <div className="exp-attendee-preview">
+          <div className="exp-attendee-count">
+            Found {extracted.total_found} attendee{extracted.total_found !== 1 ? 's' : ''}
+            {extracted.notes && <span className="exp-attendee-notes"> from {extracted.source_type}</span>}
+          </div>
+          <ul className="exp-attendee-list">
+            {extracted.attendees.map((att, i) => (
+              <li key={i} className="exp-attendee-row">
+                <span className="exp-attendee-name">{att.name}</span>
+                {att.email && <span className="exp-attendee-email">{att.email}</span>}
+                <button className="exp-attendee-remove" onClick={() => handleRemoveAttendee(i)}>✕</button>
+              </li>
+            ))}
+          </ul>
+          <button className="exp-upload-save" onClick={handleSaveAll} disabled={saving}>
+            {saving ? 'Adding...' : `Add All ${extracted.attendees.length} Attendees`}
+          </button>
+        </div>
+      )}
+
+      {extracted && extracted.attendees?.length === 0 && (
+        <p className="exp-upload-empty">No attendees found in this screenshot. Try a clearer image.</p>
+      )}
+
+      {saved && (
+        <div className="exp-upload-done">
+          <span>&#10003; Attendees added</span>
+          <button className="exp-upload-more" onClick={() => setSaved(false)}>Upload more</button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/**
+ * CostLogger — Line items for experience costs
+ */
+function CostLogger({ experienceId, userId }) {
+  const [costs, setCosts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [adding, setAdding] = useState(false)
+  const [newCategory, setNewCategory] = useState('venue')
+  const [newLabel, setNewLabel] = useState('')
+  const [newAmount, setNewAmount] = useState('')
+
+  const CATEGORIES = [
+    { id: 'venue', label: 'Venue', icon: '🏠' },
+    { id: 'marketing', label: 'Marketing', icon: '📣' },
+    { id: 'materials', label: 'Materials', icon: '📦' },
+    { id: 'staff', label: 'Staff', icon: '🤝' },
+    { id: 'other', label: 'Other', icon: '📋' },
+  ]
+
+  useEffect(() => {
+    if (!experienceId) return
+    supabase
+      .from('experience_costs')
+      .select('*')
+      .eq('experience_id', experienceId)
+      .order('created_at', { ascending: true })
+      .then(({ data }) => {
+        setCosts(data || [])
+        setLoading(false)
+      })
+  }, [experienceId])
+
+  const handleAdd = async () => {
+    if (!newLabel.trim() || !newAmount || !userId) return
+    setAdding(true)
+    const { data, error } = await supabase
+      .from('experience_costs')
+      .insert({
+        experience_id: experienceId,
+        user_id: userId,
+        category: newCategory,
+        label: newLabel.trim(),
+        amount: parseFloat(newAmount) || 0,
+      })
+      .select()
+      .single()
+
+    if (data) {
+      setCosts(prev => [...prev, data])
+      hapticSuccess()
+      setNewLabel('')
+      setNewAmount('')
+    }
+    setAdding(false)
+  }
+
+  const handleDelete = async (costId) => {
+    await supabase.from('experience_costs').delete().eq('id', costId)
+    setCosts(prev => prev.filter(c => c.id !== costId))
+  }
+
+  const total = costs.reduce((sum, c) => sum + (parseFloat(c.amount) || 0), 0)
+
+  if (loading) return null
+
+  return (
+    <div className="exp-section-card">
+      <div className="exp-section-accent" />
+      <div className="exp-section-head">
+        <div className="exp-section-icon">💰</div>
+        <div className="exp-section-titleblock">
+          <h2 className="exp-section-title">Costs</h2>
+          <div className="exp-section-subtitle">
+            {total > 0 ? `$${total.toFixed(0)} total` : 'Track your expenses'}
+          </div>
+        </div>
+      </div>
+
+      {costs.length > 0 && (
+        <ul className="exp-cost-list">
+          {costs.map(cost => {
+            const cat = CATEGORIES.find(c => c.id === cost.category)
+            return (
+              <li key={cost.id} className="exp-cost-row">
+                <span className="exp-cost-icon">{cat?.icon || '📋'}</span>
+                <span className="exp-cost-label">{cost.label}</span>
+                <span className="exp-cost-amount">${parseFloat(cost.amount).toFixed(0)}</span>
+                <button className="exp-cost-delete" onClick={() => handleDelete(cost.id)}>✕</button>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+
+      <div className="exp-cost-add">
+        <select
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+          className="exp-cost-cat-select"
+        >
+          {CATEGORIES.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.icon} {cat.label}</option>
+          ))}
+        </select>
+        <input
+          type="text"
+          value={newLabel}
+          onChange={(e) => setNewLabel(e.target.value)}
+          placeholder="Description"
+          className="exp-cost-label-input"
+        />
+        <input
+          type="number"
+          value={newAmount}
+          onChange={(e) => setNewAmount(e.target.value)}
+          placeholder="$"
+          className="exp-cost-amount-input"
+        />
+        <button
+          className="exp-cost-add-btn"
+          onClick={handleAdd}
+          disabled={adding || !newLabel.trim() || !newAmount}
+        >
+          {adding ? '...' : '+'}
+        </button>
       </div>
     </div>
   )
