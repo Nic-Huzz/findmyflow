@@ -71,7 +71,7 @@ export default function ExperienceCreate() {
         previous_experience_id: previousExperience?.id || null,
       })
       hapticSuccess()
-      navigate(`/business/experience/${exp.id}`)
+      navigate(`/create/experience/${exp.id}`)
     } catch {
       // error state already set in the hook
     }
@@ -87,7 +87,7 @@ export default function ExperienceCreate() {
       <div className="exp-create-container">
         <button
           className="exp-back"
-          onClick={() => navigate('/business')}
+          onClick={() => navigate('/create')}
           type="button"
         >
           ← Back

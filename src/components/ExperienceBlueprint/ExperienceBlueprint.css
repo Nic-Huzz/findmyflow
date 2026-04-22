@@ -1,0 +1,481 @@
+/* ExperienceBlueprint — Shift Architecture Blueprint */
+
+/* Loading */
+.eb-loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+.eb-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(94, 23, 235, 0.15);
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: eb-spin 0.7s linear infinite;
+}
+@keyframes eb-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.eb-empty {
+  text-align: center;
+  padding: 2.5rem 1.25rem;
+}
+.eb-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+.eb-empty h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.5rem;
+}
+.eb-empty p {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-width: 340px;
+  margin: 0 auto 1.25rem;
+}
+
+/* CTA buttons */
+.eb-cta {
+  background: linear-gradient(135deg, #E9A23B, #F59E0B);
+  color: #1a1a2e;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.eb-cta:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.35);
+}
+.eb-cta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.eb-cta-secondary {
+  background: rgba(94, 23, 235, 0.08);
+  color: #5e17eb;
+  border: 1px solid rgba(94, 23, 235, 0.15);
+  padding: 0.65rem 1.25rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.eb-cta-secondary:hover {
+  background: rgba(94, 23, 235, 0.12);
+}
+
+/* Progress dots */
+.eb-progress {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-top: 0.5rem;
+}
+.eb-progress-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(94, 23, 235, 0.08);
+  transition: all 0.2s;
+}
+.eb-progress-dot.active {
+  background: #5e17eb;
+}
+.eb-progress-dot.current {
+  background: #E9A23B;
+  box-shadow: 0 0 12px rgba(233, 162, 59, 0.4);
+}
+.eb-progress-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #999;
+}
+.eb-progress-dot.active .eb-progress-num,
+.eb-progress-dot.current .eb-progress-num {
+  color: #fff;
+}
+
+/* Step title */
+.eb-step-title {
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.25rem;
+}
+
+/* Step container */
+.eb-step {
+  padding: 0.75rem 0;
+}
+.eb-step-desc {
+  color: #666;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+  text-align: center;
+}
+
+/* Suggest button */
+.eb-suggest-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.06), rgba(94, 23, 235, 0.12));
+  border: 1px dashed rgba(94, 23, 235, 0.25);
+  border-radius: 12px;
+  color: #5e17eb;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background 0.15s;
+}
+.eb-suggest-btn:hover:not(:disabled) {
+  background: rgba(94, 23, 235, 0.12);
+}
+.eb-suggest-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Suggestions */
+.eb-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.eb-suggestion-card {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.eb-suggestion-card:hover {
+  border-color: rgba(94, 23, 235, 0.3);
+}
+.eb-suggestion-card.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.04);
+}
+.eb-suggestion-card strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #1a1a2e;
+  margin-bottom: 0.25rem;
+}
+.eb-suggestion-card span {
+  font-size: 0.82rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Fields */
+.eb-field {
+  margin-bottom: 1rem;
+}
+.eb-field label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.35rem;
+}
+.eb-field input,
+.eb-field textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #1a1a2e;
+  background: #fff;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+.eb-field input:focus,
+.eb-field textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+.eb-field textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* Pattern cards */
+.eb-patterns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.eb-pattern-card {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.eb-pattern-card:hover {
+  border-color: rgba(94, 23, 235, 0.25);
+}
+.eb-pattern-card.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.04);
+}
+.eb-pattern-card strong {
+  display: block;
+  font-size: 0.92rem;
+  color: #1a1a2e;
+  margin-bottom: 0.15rem;
+}
+.eb-pattern-card span {
+  font-size: 0.82rem;
+  color: #666;
+}
+
+/* Arc phases */
+.eb-arc-phases {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.eb-arc-phase {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+.eb-arc-phase-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+.eb-arc-phase-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #5e17eb;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.eb-arc-phase-header strong {
+  font-size: 0.9rem;
+  color: #1a1a2e;
+}
+.eb-arc-phase-hint {
+  font-size: 0.78rem;
+  color: #888;
+  line-height: 1.4;
+  margin: 0 0 0.5rem;
+}
+.eb-arc-phase textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #1a1a2e;
+  background: rgba(94, 23, 235, 0.02);
+  resize: vertical;
+  min-height: 60px;
+  box-sizing: border-box;
+}
+.eb-arc-phase textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+/* Navigation */
+.eb-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+}
+.eb-back {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.88rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+.eb-back:hover {
+  color: #5e17eb;
+}
+
+/* Error */
+.eb-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+/* Experience type grid */
+.eb-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.5rem;
+}
+.eb-type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.65rem 0.5rem;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: #555;
+  transition: border-color 0.15s;
+}
+.eb-type-btn:hover {
+  border-color: rgba(94, 23, 235, 0.25);
+}
+.eb-type-btn.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.06);
+  color: #1a1a2e;
+  font-weight: 600;
+}
+.eb-type-btn span:first-child {
+  font-size: 1.3rem;
+}
+
+/* Review card */
+.eb-review-card {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.03), rgba(233, 162, 59, 0.03));
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  border-radius: 14px;
+  padding: 1.1rem 1rem;
+  margin-bottom: 1.25rem;
+}
+.eb-review-card h4 {
+  font-size: 1.05rem;
+  color: #1a1a2e;
+  margin: 0 0 0.35rem;
+}
+.eb-review-card > p {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 0.75rem;
+}
+.eb-review-encoding {
+  font-size: 0.85rem;
+  color: #5e17eb;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(94, 23, 235, 0.04);
+  border-radius: 8px;
+}
+.eb-review-arc {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.eb-review-phase strong {
+  font-size: 0.82rem;
+  color: #5e17eb;
+}
+.eb-review-phase p {
+  font-size: 0.82rem;
+  color: #555;
+  margin: 0.15rem 0 0;
+  line-height: 1.4;
+}
+
+/* Complete state */
+.eb-complete {
+  padding: 0.5rem 0;
+}
+.eb-summary-card {
+  background: #fff;
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  border-radius: 14px;
+  padding: 1.1rem 1rem;
+  margin-bottom: 0.75rem;
+}
+.eb-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.35rem;
+}
+.eb-summary-header h3 {
+  font-size: 1.05rem;
+  color: #1a1a2e;
+  margin: 0;
+}
+.eb-type-badge {
+  font-size: 0.75rem;
+  color: #888;
+  white-space: nowrap;
+}
+.eb-summary-desc {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 0.65rem;
+  line-height: 1.4;
+}
+.eb-summary-encoding {
+  font-size: 0.82rem;
+  color: #5e17eb;
+  margin-bottom: 0.75rem;
+}
+.eb-summary-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.eb-new-experience {
+  display: block;
+  width: 100%;
+  padding: 0.65rem;
+  background: none;
+  border: 1px dashed rgba(94, 23, 235, 0.2);
+  border-radius: 10px;
+  color: #5e17eb;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.eb-new-experience:hover {
+  background: rgba(94, 23, 235, 0.04);
+}

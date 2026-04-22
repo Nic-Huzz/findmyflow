@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Creator Home — V3 (Dark Premium)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f1a;
+    color: #e4e4ed;
+    min-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+  }
+
+  /* ═══ HEADER — Gradient banner ═══ */
+  .header {
+    background: linear-gradient(160deg, #1a1035 0%, #2d1a5e 40%, #1a1035 100%);
+    padding: 1.5rem 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(94,23,235,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(233,162,59,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 30%, #E9A23B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #10b981;
+    background: rgba(16,185,129,0.1);
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    border: 1px solid rgba(16,185,129,0.15);
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+    position: relative;
+    z-index: 1;
+  }
+  .stat-pill {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 0.5rem 0.4rem;
+    text-align: center;
+  }
+  .stat-val {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .stat-label {
+    font-size: 0.55rem;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+  }
+
+  /* ═══ TABS — Pill style ═══ */
+  .tabs {
+    display: flex;
+    gap: 0.35rem;
+    padding: 0.85rem 1rem;
+    background: #0f0f1a;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+  }
+  .tab {
+    flex: 1;
+    padding: 0.6rem 0.25rem;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .tab.active {
+    background: rgba(94,23,235,0.15);
+    border-color: rgba(94,23,235,0.3);
+    color: #fff;
+  }
+
+  /* ═══ CONTENT ═══ */
+  .content { padding: 0 1rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ═══ CARDS ═══ */
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 1.1rem;
+    margin-bottom: 0.6rem;
+  }
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.65rem;
+  }
+  .card-title { font-size: 0.9rem; font-weight: 800; color: #fff; }
+  .badge {
+    font-size: 0.62rem; padding: 0.15rem 0.5rem;
+    border-radius: 6px; font-weight: 700;
+    border: 1px solid;
+  }
+  .badge-green { background: rgba(16,185,129,0.08); color: #10b981; border-color: rgba(16,185,129,0.15); }
+  .badge-gold { background: rgba(233,162,59,0.08); color: #E9A23B; border-color: rgba(233,162,59,0.15); }
+  .badge-purple { background: rgba(94,23,235,0.08); color: #a78bfa; border-color: rgba(94,23,235,0.15); }
+
+  /* Suite */
+  .suite-layers { display: flex; flex-direction: column; gap: 0.35rem; }
+  .suite-layer {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.55rem 0.65rem;
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+    border-left: 3px solid;
+  }
+  .layer-att { border-color: #8b5cf6; }
+  .layer-core { border-color: #E9A23B; }
+  .layer-scale { border-color: #10b981; }
+  .layer-cont { border-color: #3b82f6; }
+  .suite-name { font-size: 0.68rem; color: rgba(255,255,255,0.3); min-width: 62px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+  .suite-value { font-size: 0.8rem; color: rgba(255,255,255,0.7); flex: 1; }
+  .suite-status { font-size: 0.6rem; padding: 0.12rem 0.4rem; border-radius: 4px; font-weight: 700; }
+  .s-have { background: rgba(16,185,129,0.1); color: #34d399; }
+  .s-working { background: rgba(233,162,59,0.1); color: #fbbf24; }
+  .s-missing { background: rgba(239,68,68,0.08); color: #f87171; }
+
+  .edit-btn {
+    display: block; width: 100%; margin-top: 0.6rem; padding: 0.5rem;
+    background: none; border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; color: rgba(255,255,255,0.3);
+    font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .edit-btn:hover { border-color: rgba(94,23,235,0.3); color: #a78bfa; }
+
+  .rr-row { display: flex; align-items: center; gap: 0.65rem; }
+  .rr-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.12);
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  }
+  .rr-name { font-size: 0.82rem; font-weight: 800; color: #34d399; }
+  .rr-desc { font-size: 0.72rem; color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+  /* Experience */
+  .exp-accent { border-left: 3px solid #E9A23B; }
+  .exp-meta { display: flex; gap: 0.6rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
+  .exp-meta span { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+  .exp-meta strong { color: #E9A23B; }
+
+  .prog-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.85rem; }
+  .prog-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+  .prog-fill { height: 100%; background: linear-gradient(90deg, #5e17eb, #E9A23B); border-radius: 2px; }
+  .prog-pct { font-size: 0.7rem; color: rgba(255,255,255,0.3); font-weight: 700; }
+
+  .ch-label { font-size: 0.65rem; font-weight: 700; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem; }
+  .ch-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0; }
+  .ch-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .ch-done { background: #10b981; }
+  .ch-pending { background: #ef4444; }
+  .ch-text { flex: 1; font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+  .ch-text.struck { text-decoration: line-through; color: rgba(255,255,255,0.2); }
+  .ch-due { font-size: 0.68rem; color: rgba(255,255,255,0.25); font-weight: 600; }
+  .ch-due.urgent { color: #f87171; }
+
+  .exp-btns { display: flex; gap: 0.4rem; margin-top: 0.65rem; }
+  .btn-gold {
+    flex: 1; padding: 0.6rem;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e; border: none; border-radius: 10px;
+    font-size: 0.8rem; font-weight: 800; cursor: pointer; font-family: inherit;
+    box-shadow: 0 4px 16px rgba(233,162,59,0.2);
+  }
+  .btn-ghost {
+    flex: 1; padding: 0.6rem;
+    background: none; color: #a78bfa;
+    border: 1px solid rgba(94,23,235,0.2); border-radius: 10px;
+    font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+
+  .past-item { display: flex; gap: 0.5rem; padding: 0.55rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+  .past-item:last-child { border-bottom: none; }
+  .past-chk { color: #10b981; font-size: 0.85rem; }
+  .past-name { font-size: 0.82rem; font-weight: 700; color: rgba(255,255,255,0.8); }
+  .past-date { font-size: 0.68rem; color: rgba(255,255,255,0.25); }
+  .past-3pct { font-size: 0.72rem; color: #E9A23B; font-style: italic; margin-top: 2px; line-height: 1.4; }
+
+  .new-btn {
+    display: block; width: 100%; padding: 0.65rem;
+    background: rgba(233,162,59,0.06); border: 1px solid rgba(233,162,59,0.15);
+    border-radius: 10px; color: #E9A23B; font-size: 0.82rem;
+    font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+
+  /* Dashboard */
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+  .kpi { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 0.75rem; text-align: center; }
+  .kpi-val { font-size: 1.35rem; font-weight: 800; color: #fff; }
+  .kpi-label { font-size: 0.55rem; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+  .kpi-trend { font-size: 0.65rem; color: #34d399; font-weight: 700; margin-top: 0.15rem; }
+
+  .lp-rows { display: flex; flex-direction: column; gap: 0.5rem; }
+  .lp-row { display: flex; align-items: center; gap: 0.5rem; }
+  .lp-name { font-size: 0.65rem; color: rgba(255,255,255,0.25); min-width: 62px; font-weight: 700; text-transform: uppercase; }
+  .lp-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden; }
+  .lp-fill { height: 100%; border-radius: 3px; }
+  .f-att { background: #8b5cf6; } .f-core { background: #E9A23B; }
+  .f-scale { background: #10b981; } .f-cont { background: #3b82f6; }
+  .lp-pct { font-size: 0.68rem; color: rgba(255,255,255,0.25); min-width: 28px; text-align: right; font-weight: 700; }
+
+  .chain-accent { border-left: 3px solid #E9A23B; }
+  .chain-title { font-size: 0.82rem; font-weight: 800; color: #E9A23B; margin-bottom: 0.5rem; }
+  .chain-item { display: flex; gap: 0.4rem; font-size: 0.72rem; color: rgba(255,255,255,0.4); line-height: 1.5; padding: 0.15rem 0; }
+  .chain-num { color: #E9A23B; font-weight: 800; }
+
+  .crm-links { display: flex; flex-direction: column; gap: 0.3rem; }
+  .crm-link { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 10px; cursor: pointer; }
+  .crm-link:hover { background: rgba(255,255,255,0.04); }
+  .crm-left { display: flex; align-items: center; gap: 0.5rem; }
+  .crm-icon { font-size: 0.9rem; }
+  .crm-label { font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.7); }
+  .crm-count { font-size: 0.7rem; color: rgba(255,255,255,0.2); }
+  .crm-arrow { color: rgba(255,255,255,0.1); }
+
+  /* Bottom */
+  .bottom { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #0f0f1a; border-top: 1px solid rgba(255,255,255,0.06); display: flex; padding: 0.4rem 0 env(safe-area-inset-bottom,0.5rem); z-index: 100; }
+  .bot-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.1rem; padding: 0.25rem 0; font-size: 0.6rem; font-weight: 600; color: rgba(255,255,255,0.25); cursor: pointer; }
+  .bot-item.active { color: #E9A23B; }
+  .bot-icon { font-size: 1.15rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-row">
+    <h1>Create</h1>
+    <span class="header-badge">🌱 The Root</span>
+  </div>
+  <div class="stats-row">
+    <div class="stat-pill"><div class="stat-val">47</div><div class="stat-label">Attendees</div></div>
+    <div class="stat-pill"><div class="stat-val">23%</div><div class="stat-label">Repeat</div></div>
+    <div class="stat-pill"><div class="stat-val">3</div><div class="stat-label">Events</div></div>
+    <div class="stat-pill"><div class="stat-val">5/5</div><div class="stat-label">3%</div></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('business')">My Business</button>
+  <button class="tab" onclick="show('experiences')">Experiences</button>
+  <button class="tab" onclick="show('dashboard')">Dashboard</button>
+</div>
+
+<div class="content">
+
+<div id="s-business" class="section active">
+  <div class="card">
+    <div class="card-head"><span class="card-title">Product Suite</span><span class="badge badge-purple">Workshops & Training</span></div>
+    <div class="suite-layers">
+      <div class="suite-layer layer-att"><span class="suite-name">Attraction</span><span class="suite-value">Instagram + word of mouth</span><span class="suite-status s-working">Inconsistent</span></div>
+      <div class="suite-layer layer-core"><span class="suite-name">Core</span><span class="suite-value">Shaking Breathwork ($25/pp)</span><span class="suite-status s-have">Have it</span></div>
+      <div class="suite-layer layer-scale"><span class="suite-name">Scale</span><span class="suite-value">Not yet</span><span class="suite-status s-missing">Missing</span></div>
+      <div class="suite-layer layer-cont"><span class="suite-name">Continuity</span><span class="suite-value">Exploring online content</span><span class="suite-status s-working">Working on it</span></div>
+    </div>
+    <button class="edit-btn">Update Assessment</button>
+  </div>
+  <div class="card">
+    <div class="card-head"><span class="card-title">Your Position</span></div>
+    <div class="rr-row"><div class="rr-icon">🌱</div><div><div class="rr-name">The Root</div><div class="rr-desc">One specific experience, specific audience, it works. Now build the system around it.</div></div></div>
+  </div>
+</div>
+
+<div id="s-experiences" class="section">
+  <div class="card exp-accent">
+    <div class="card-head"><span class="card-title">Shaking Breathwork</span><span class="badge badge-gold">May 3</span></div>
+    <div class="exp-meta"><span>The Space</span><span><strong>12 days</strong> away</span><span>🎪 Workshop</span></div>
+    <div class="prog-row"><div class="prog-bar"><div class="prog-fill" style="width:38%"></div></div><span class="prog-pct">38%</span></div>
+    <div class="ch-label">This Fortnight's Challenges · 1/3</div>
+    <div class="ch-item"><div class="ch-dot ch-done"></div><span class="ch-text struck">Post 3 teaser pieces on social</span><span class="ch-due">done</span></div>
+    <div class="ch-item"><div class="ch-dot ch-pending"></div><span class="ch-text">DM 10 warm leads with invite</span><span class="ch-due urgent">3 days</span></div>
+    <div class="ch-item"><div class="ch-dot ch-pending"></div><span class="ch-text">Book photographer for session</span><span class="ch-due">5 days</span></div>
+    <div class="exp-btns"><button class="btn-gold">View Checklist</button><button class="btn-ghost">+ Add Challenge</button></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><span class="card-title">Past Experiences</span></div>
+    <div class="past-item"><span class="past-chk">&#10003;</span><div><div class="past-name">Shaking Breathwork</div><div class="past-date">Apr 19 · The Space · 14 attendees</div><div class="past-3pct">3%: "Start shaking 2 min earlier"</div></div></div>
+    <div class="past-item"><span class="past-chk">&#10003;</span><div><div class="past-name">Shaking Breathwork</div><div class="past-date">Apr 5 · The Istana · 22 attendees</div><div class="past-3pct">3%: "Dim lights earlier during lying phase"</div></div></div>
+    <div class="past-item"><span class="past-chk">&#10003;</span><div><div class="past-name">Rewiring Limiting Beliefs</div><div class="past-date">Mar 22 · The Space · 11 attendees</div><div class="past-3pct">3%: "More time in ridiculous voice exercise"</div></div></div>
+  </div>
+  <button class="new-btn">+ New Experience</button>
+</div>
+
+<div id="s-dashboard" class="section">
+  <div class="card">
+    <div class="card-head"><span class="card-title">Key Metrics</span><span style="font-size:0.65rem;color:rgba(255,255,255,0.2)">Last 90 days</span></div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-val">47</div><div class="kpi-label">Total Attendees</div><div class="kpi-trend">+12</div></div>
+      <div class="kpi"><div class="kpi-val">23%</div><div class="kpi-label">Repeat Rate</div><div class="kpi-trend">+8%</div></div>
+      <div class="kpi"><div class="kpi-val">3</div><div class="kpi-label">Experiences Run</div><div class="kpi-trend">+1</div></div>
+      <div class="kpi"><div class="kpi-val">5/5</div><div class="kpi-label">3% Implemented</div><div class="kpi-trend">100%</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><span class="card-title">4-Layer Progress</span></div>
+    <div class="lp-rows">
+      <div class="lp-row"><span class="lp-name">Attraction</span><div class="lp-bar"><div class="lp-fill f-att" style="width:45%"></div></div><span class="lp-pct">45%</span></div>
+      <div class="lp-row"><span class="lp-name">Core</span><div class="lp-bar"><div class="lp-fill f-core" style="width:80%"></div></div><span class="lp-pct">80%</span></div>
+      <div class="lp-row"><span class="lp-name">Scale</span><div class="lp-bar"><div class="lp-fill f-scale" style="width:10%"></div></div><span class="lp-pct">10%</span></div>
+      <div class="lp-row"><span class="lp-name">Continuity</span><div class="lp-bar"><div class="lp-fill f-cont" style="width:25%"></div></div><span class="lp-pct">25%</span></div>
+    </div>
+  </div>
+  <div class="card chain-accent">
+    <div class="chain-title">3% Improvement Chain</div>
+    <div class="chain-item"><span class="chain-num">5.</span><span>Start shaking 2 min earlier</span></div>
+    <div class="chain-item"><span class="chain-num">4.</span><span>Dim lights earlier during lying phase</span></div>
+    <div class="chain-item"><span class="chain-num">3.</span><span>More time in ridiculous voice exercise</span></div>
+    <div class="chain-item"><span class="chain-num">2.</span><span>Use cinematic music for intro walk</span></div>
+    <div class="chain-item"><span class="chain-num">1.</span><span>Add eye contact stage to opening movement</span></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><span class="card-title">Quick Access</span></div>
+    <div class="crm-links">
+      <div class="crm-link"><div class="crm-left"><span class="crm-icon">👥</span><span class="crm-label">Attendees</span></div><span class="crm-count">47</span><span class="crm-arrow">›</span></div>
+      <div class="crm-link"><div class="crm-left"><span class="crm-icon">📧</span><span class="crm-label">Follow-up Sequences</span></div><span class="crm-count">2</span><span class="crm-arrow">›</span></div>
+      <div class="crm-link"><div class="crm-left"><span class="crm-icon">📣</span><span class="crm-label">Marketing Assets</span></div><span class="crm-count">8</span><span class="crm-arrow">›</span></div>
+      <div class="crm-link"><div class="crm-left"><span class="crm-icon">🔔</span><span class="crm-label">Facilitator Nudges</span></div><span class="crm-count">3</span><span class="crm-arrow">›</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="bottom">
+  <div class="bot-item"><span class="bot-icon">🏠</span>Home</div>
+  <div class="bot-item"><span class="bot-icon">🎯</span>Challenge</div>
+  <div class="bot-item active"><span class="bot-icon">✨</span>Create</div>
+  <div class="bot-item"><span class="bot-icon">👤</span>Profile</div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('s-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

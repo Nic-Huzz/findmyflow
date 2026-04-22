@@ -88,7 +88,7 @@ export default function ExperienceDetail() {
         <div className="exp-detail-container">
           <div className="exp-state exp-error">
             <p>{error || 'Experience not found'}</p>
-            <button className="exp-back" onClick={() => navigate('/business')}>← Back</button>
+            <button className="exp-back" onClick={() => navigate('/create')}>← Back</button>
           </div>
         </div>
       </div>
@@ -103,7 +103,7 @@ export default function ExperienceDetail() {
       <div className="exp-orb exp-orb-2" />
 
       <div className="exp-detail-container">
-        <button className="exp-back" onClick={() => navigate('/business')}>← All Experiences</button>
+        <button className="exp-back" onClick={() => navigate('/create')}>← All Experiences</button>
 
         {/* Header */}
         <header className="exp-detail-header">
