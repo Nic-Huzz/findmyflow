@@ -35,6 +35,71 @@ const ARCHETYPE_INFO = {
   retreats: { name: 'Retreats & Immersive', desc: 'You design deep, contained experiences that people enter one way and leave another.' },
 }
 
+// ── Per-archetype offer layer templates ──
+const ARCHETYPE_OFFERS = {
+  workshop: {
+    attraction: { name: 'Free content that demonstrates your method', desc: 'Books, podcast, talks, or free workshops that let people experience your approach before they pay.' },
+    core: { name: 'Live workshop or training ($500-$5K)', desc: 'A structured transformation you deliver live. This is what people come to you for.' },
+    continuity: { name: 'Online courses + digital products', desc: 'Recorded versions, workbooks, or membership content that earns while you teach.' },
+  },
+  performance: {
+    attraction: { name: 'Free performances or content', desc: 'Social media clips, free shows, or viral moments that build your audience.' },
+    core: { name: 'Live performance or event ($50-$5K)', desc: 'The live experience you deliver. Concerts, shows, speaking, or immersive events.' },
+    continuity: { name: 'Recordings, merch, or licensing', desc: 'Albums, video content, merchandise, or licensing deals that earn between shows.' },
+  },
+  cohort: {
+    attraction: { name: 'Free content that builds trust weekly', desc: 'YouTube, podcast, newsletter, or social content that gives value 50 weeks a year.' },
+    core: { name: 'Cohort-based programme ($1K-$5K)', desc: 'A structured group programme with a start date, end date, and community.' },
+    continuity: { name: 'Digital products + brand partnerships', desc: 'Templates, tools, sponsorships, or alumni community that generates recurring revenue.' },
+  },
+  books_media: {
+    attraction: { name: 'Newsletter or podcast (free, consistent)', desc: 'Weekly content that builds a direct relationship with your audience over years.' },
+    core: { name: 'Book, keynote, or consulting', desc: 'Your main authority product. Could be a book that sells itself, or high-fee speaking and consulting.' },
+    continuity: { name: 'Royalties, products, or online classes', desc: 'Book royalties, workbooks, card games, or online courses that earn passively.' },
+  },
+  facilitation: {
+    attraction: { name: 'Published framework or free gatherings', desc: 'A book, article, or free event that shows how you think about bringing people together.' },
+    core: { name: 'Facilitated experience ($500-$10K)', desc: 'Premium facilitation for organisations, private groups, or communities. You design the room.' },
+    continuity: { name: 'Retainer clients or ongoing community', desc: 'Recurring facilitation relationships, community membership, or programme licensing.' },
+  },
+  retreats: {
+    attraction: { name: 'Free talks, app, or content', desc: 'Meditation recordings, YouTube, podcasts, or free workshops that let people taste the experience.' },
+    core: { name: 'Retreat or immersive experience ($500-$5K)', desc: 'A contained, multi-day experience that people enter one way and leave another.' },
+    continuity: { name: 'Online courses, app, or membership', desc: 'Digital practice tools, subscription content, or ongoing community that sustains between retreats.' },
+  },
+}
+
+// ── Build proof quotes from selected creators ──
+function buildProof(selectedNames, slot) {
+  const cmMap = {}
+  careerModelsData.profiles.forEach(p => { cmMap[p.name] = p })
+  const proofs = []
+
+  for (const name of selectedNames) {
+    const cm = cmMap[name]
+    if (!cm?.careerModel) continue
+    const offers = offerMapData.creators?.[name]
+    if (!offers) continue
+
+    const streams = offers[slot] || []
+    if (streams.length === 0) continue
+
+    // Pick the most interesting proof from scaleModel, trajectory, or lessonsForUser
+    if (slot === 'attraction' && cm.careerModel.trajectory) {
+      proofs.push({ name, text: cm.careerModel.trajectory })
+    } else if (slot === 'core' && cm.careerModel.scaleModel) {
+      proofs.push({ name, text: cm.careerModel.scaleModel })
+    } else if (slot === 'continuity' && cm.careerModel.lessonsForUser) {
+      proofs.push({ name, text: cm.careerModel.lessonsForUser })
+    } else if (cm.careerModel.lessonsForUser) {
+      proofs.push({ name, text: cm.careerModel.lessonsForUser })
+    }
+  }
+
+  // Return top 2 proofs
+  return proofs.slice(0, 2)
+}
+
 // ── First steps per archetype ──
 const FIRST_STEPS = {
   workshop: 'Run one free workshop on your topic this month. Every person you selected started the same way: teaching for free in the smallest room available.',
@@ -74,6 +139,12 @@ export default function ExperienceCreatorFlow() {
   const [screen, setScreen] = useState('browse') // 'browse' | 'result'
   const [selected, setSelected] = useState(new Set())
   const [loading, setLoading] = useState(false)
+  const [layerStatus, setLayerStatus] = useState({})
+
+  const confirmLayer = (slot) => {
+    hapticLight()
+    setLayerStatus(prev => ({ ...prev, [slot]: 'confirmed' }))
+  }
 
   const allCreators = useMemo(() => buildCreatorData(), [])
 
@@ -133,10 +204,17 @@ export default function ExperienceCreatorFlow() {
     if (!user?.id) return
     setLoading(true)
     try {
+      const offers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
       await supabase.from('experience_creator_selections').insert({
         user_id: user.id,
         selected_creators: [...selected],
         dominant_archetype: dominantArchetype,
+        product_suite: {
+          attraction: offers.attraction?.name,
+          core: offers.core?.name,
+          continuity: offers.continuity?.name,
+        },
+        layer_validations: layerStatus,
       })
       hapticSuccess()
       navigate('/7-day-challenge')
@@ -219,6 +297,14 @@ export default function ExperienceCreatorFlow() {
   // ── RESULT SCREEN ──
   const archetype = ARCHETYPE_INFO[dominantArchetype] || ARCHETYPE_INFO.workshop
   const firstStep = FIRST_STEPS[dominantArchetype] || FIRST_STEPS.workshop
+  const offers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
+  const selectedNames = [...selected]
+
+  const LAYERS = [
+    { slot: 'attraction', dotClass: 'attraction', label: 'Attraction' },
+    { slot: 'core', dotClass: 'core', label: 'Core Offer' },
+    { slot: 'continuity', dotClass: 'continuity', label: 'Continuity' },
+  ]
 
   return (
     <div className="ecf">
@@ -243,48 +329,72 @@ export default function ExperienceCreatorFlow() {
             ))}
           </div>
 
-          {/* Offer layers — Phase 2 will populate from data */}
-          <div className="ecf-offer-card">
-            <div className="ecf-offer-top">
-              <div className="ecf-offer-dot attraction" />
-              <div>
-                <div className="ecf-offer-label">Attraction</div>
-                <div className="ecf-offer-name">How people discover you</div>
-              </div>
-            </div>
-            <div className="ecf-offer-desc">Free content that lets people experience your approach before paying.</div>
-            <div className="ecf-offer-actions">
-              <button className="ecf-offer-btn yes">Coming in Phase 2</button>
-            </div>
-          </div>
+          {/* Offer layers with real data */}
+          {LAYERS.map(({ slot, dotClass, label }) => {
+            const offer = offers[slot]
+            const proofs = buildProof(selectedNames, slot)
+            const status = layerStatus[slot]
 
-          <div className="ecf-offer-card">
-            <div className="ecf-offer-top">
-              <div className="ecf-offer-dot core" />
-              <div>
-                <div className="ecf-offer-label">Core Offer</div>
-                <div className="ecf-offer-name">Your main paid experience</div>
+            return (
+              <div key={slot} className={`ecf-offer-card ${status === 'confirmed' ? 'confirmed' : ''}`}>
+                <div className="ecf-offer-top">
+                  <div className={`ecf-offer-dot ${dotClass}`} />
+                  <div>
+                    <div className="ecf-offer-label">{label}</div>
+                    <div className="ecf-offer-name">{offer.name}</div>
+                  </div>
+                </div>
+                <div className="ecf-offer-desc">{offer.desc}</div>
+                {proofs.length > 0 && (
+                  <div className="ecf-offer-proof">
+                    {proofs.map((p, i) => (
+                      <span key={i}>{i > 0 ? ' ' : ''}{p.name}: "{p.text}"</span>
+                    ))}
+                  </div>
+                )}
+                <div className="ecf-offer-actions">
+                  {status === 'confirmed' ? (
+                    <button className="ecf-offer-btn confirmed" style={{ flex: 1 }}>✓ Confirmed</button>
+                  ) : (
+                    <button className="ecf-offer-btn yes" onClick={() => confirmLayer(slot)}>
+                      Hell Yes
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="ecf-offer-desc">The structured transformation you deliver. Your bread and butter.</div>
-            <div className="ecf-offer-actions">
-              <button className="ecf-offer-btn yes">Coming in Phase 2</button>
-            </div>
-          </div>
+            )
+          })}
 
-          <div className="ecf-offer-card">
-            <div className="ecf-offer-top">
-              <div className="ecf-offer-dot continuity" />
-              <div>
-                <div className="ecf-offer-label">Continuity</div>
-                <div className="ecf-offer-name">Recurring revenue</div>
+          {/* Scale — optional, shown separately */}
+          {(dominantArchetype === 'workshop' || dominantArchetype === 'cohort') && (
+            <div className={`ecf-offer-card ${layerStatus.scale === 'confirmed' ? 'confirmed' : ''}`}>
+              <div className="ecf-offer-top">
+                <div className="ecf-offer-dot" style={{ background: '#E9A23B' }} />
+                <div>
+                  <div className="ecf-offer-label">Scale (optional)</div>
+                  <div className="ecf-offer-name">Certify others to teach your method</div>
+                </div>
+              </div>
+              <div className="ecf-offer-desc">When you're ready to multiply: train practitioners to deliver without you in the room. You own the IP, not the calendar.</div>
+              {buildProof(selectedNames, 'scale').length > 0 && (
+                <div className="ecf-offer-proof">
+                  {buildProof(selectedNames, 'scale').map((p, i) => (
+                    <span key={i}>{i > 0 ? ' ' : ''}{p.name}: "{p.text}"</span>
+                  ))}
+                </div>
+              )}
+              <div className="ecf-offer-actions">
+                {layerStatus.scale === 'confirmed' ? (
+                  <button className="ecf-offer-btn confirmed" style={{ flex: 1 }}>✓ Confirmed</button>
+                ) : (
+                  <>
+                    <button className="ecf-offer-btn yes" onClick={() => confirmLayer('scale')}>Hell Yes</button>
+                    <button className="ecf-offer-btn no" onClick={() => setLayerStatus(prev => ({ ...prev, scale: 'skipped' }))}>Not yet</button>
+                  </>
+                )}
               </div>
             </div>
-            <div className="ecf-offer-desc">Revenue that flows while you sleep. Books, memberships, products.</div>
-            <div className="ecf-offer-actions">
-              <button className="ecf-offer-btn yes">Coming in Phase 2</button>
-            </div>
-          </div>
+          )}
 
           {/* First Step */}
           <div className="ecf-first-step">
