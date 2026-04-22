@@ -14,10 +14,12 @@
  *  - Show hidden items toggle (so nothing feels permanently gone)
  */
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useAuth } from '../auth/AuthProvider'
 import { useExperience, daysUntil, formatExperienceDate } from '../hooks/useExperienceData'
 import { SECTION_META, PHASE_META } from '../lib/experienceChecklistTemplate'
+import { CONVERTIBLE_SECTIONS, convertChecklistToChallenge, fetchDNASliders, fetchCreatorChallenges } from '../lib/checklistChallengeService'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './ExperienceDetail.css'
 
@@ -36,6 +38,7 @@ function countdownLabel(dateStr) {
 export default function ExperienceDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { user } = useAuth()
   const {
     experience,
     items,
@@ -50,6 +53,52 @@ export default function ExperienceDetail() {
 
   const [activePhase, setActivePhase] = useState('pre')
   const [showHidden, setShowHidden] = useState(false)
+  const [dnaSliders, setDnaSliders] = useState(null)
+  const [dnaLoaded, setDnaLoaded] = useState(false)
+  const [convertingItemId, setConvertingItemId] = useState(null)
+  const [convertedIds, setConvertedIds] = useState(new Set())
+  const [showDeadlinePicker, setShowDeadlinePicker] = useState(null)
+  const [deadlineDate, setDeadlineDate] = useState('')
+
+  // Load DNA sliders + already-converted items
+  useEffect(() => {
+    if (!user?.id) return
+    fetchDNASliders(user.id).then(sliders => {
+      setDnaSliders(sliders)
+      setDnaLoaded(true)
+    })
+  }, [user?.id])
+
+  useEffect(() => {
+    if (!user?.id || !id) return
+    fetchCreatorChallenges(user.id, id).then(({ data }) => {
+      const ids = new Set(data.filter(c => c.checklist_item_id).map(c => c.checklist_item_id))
+      setConvertedIds(ids)
+    })
+  }, [user?.id, id])
+
+  const handleConvertToChallenge = useCallback(async (item) => {
+    if (!user?.id || !experience) return
+    setConvertingItemId(item.id)
+    try {
+      const { error: convErr } = await convertChecklistToChallenge({
+        userId: user.id,
+        checklistItem: item,
+        experience,
+        deadline: deadlineDate || null,
+        knowledgeStyle: dnaSliders?.knowledgeStyle || null,
+      })
+      if (!convErr) {
+        hapticSuccess()
+        setConvertedIds(prev => new Set([...prev, item.id]))
+      }
+    } catch (err) {
+      console.error('Convert to challenge error:', err)
+    }
+    setConvertingItemId(null)
+    setShowDeadlinePicker(null)
+    setDeadlineDate('')
+  }, [user?.id, experience, deadlineDate, dnaSliders])
 
   // Bucket items by phase → section
   const grouped = useMemo(() => {
@@ -142,6 +191,16 @@ export default function ExperienceDetail() {
               onUnhide={unhideItem}
               onAdd={(label) => addCustomItem({ phase: 'pre', section: 'marketing', label })}
               onDelete={deleteCustomItem}
+              convertible
+              convertedIds={convertedIds}
+              convertingItemId={convertingItemId}
+              showDeadlinePicker={showDeadlinePicker}
+              deadlineDate={deadlineDate}
+              onShowDeadline={(itemId) => setShowDeadlinePicker(itemId)}
+              onDeadlineChange={setDeadlineDate}
+              onConvert={handleConvertToChallenge}
+              onCancelDeadline={() => { setShowDeadlinePicker(null); setDeadlineDate('') }}
+              hasDna={dnaLoaded && dnaSliders?.knowledgeStyle != null}
             />
             <ChecklistSection
               section="organisation"
@@ -186,7 +245,11 @@ export default function ExperienceDetail() {
  * ChecklistSection — renders a single section card with progress ring,
  * items list, add-custom input, and hide/unhide controls.
  */
-function ChecklistSection({ section, items, showHidden, onToggle, onHide, onUnhide, onAdd, onDelete }) {
+function ChecklistSection({
+  section, items, showHidden, onToggle, onHide, onUnhide, onAdd, onDelete,
+  convertible = false, convertedIds, convertingItemId, showDeadlinePicker,
+  deadlineDate, onShowDeadline, onDeadlineChange, onConvert, onCancelDeadline, hasDna,
+}) {
   const meta = SECTION_META[section]
   const [addInputOpen, setAddInputOpen] = useState(false)
   const [newLabel, setNewLabel] = useState('')
@@ -228,14 +291,25 @@ function ChecklistSection({ section, items, showHidden, onToggle, onHide, onUnhi
 
       <ul className="exp-item-list">
         {visible.map(item => (
-          <ChecklistItem
-            key={item.id}
-            item={item}
-            onToggle={onToggle}
-            onHide={onHide}
-            onUnhide={onUnhide}
-            onDelete={onDelete}
-          />
+          <li key={item.id}>
+            <ChecklistItem
+              item={item}
+              onToggle={onToggle}
+              onHide={onHide}
+              onUnhide={onUnhide}
+              onDelete={onDelete}
+              convertible={convertible && !item.completed && !item.is_hidden}
+              isConverted={convertedIds?.has(item.id)}
+              isConverting={convertingItemId === item.id}
+              showDeadline={showDeadlinePicker === item.id}
+              deadlineDate={deadlineDate}
+              onShowDeadline={onShowDeadline}
+              onDeadlineChange={onDeadlineChange}
+              onConvert={onConvert}
+              onCancelDeadline={onCancelDeadline}
+              hasDna={hasDna}
+            />
+          </li>
         ))}
       </ul>
 
@@ -272,9 +346,13 @@ function ChecklistSection({ section, items, showHidden, onToggle, onHide, onUnhi
 /**
  * ChecklistItem — single row with checkbox, label, and actions menu
  */
-function ChecklistItem({ item, onToggle, onHide, onUnhide, onDelete }) {
+function ChecklistItem({
+  item, onToggle, onHide, onUnhide, onDelete,
+  convertible, isConverted, isConverting, showDeadline,
+  deadlineDate, onShowDeadline, onDeadlineChange, onConvert, onCancelDeadline, hasDna,
+}) {
   return (
-    <li className={`exp-item ${item.completed ? 'exp-item-done' : ''} ${item.is_hidden ? 'exp-item-hidden' : ''}`}>
+    <div className={`exp-item ${item.completed ? 'exp-item-done' : ''} ${item.is_hidden ? 'exp-item-hidden' : ''}`}>
       <button
         className="exp-item-check"
         onClick={() => onToggle(item.id)}
@@ -286,33 +364,57 @@ function ChecklistItem({ item, onToggle, onHide, onUnhide, onDelete }) {
       <span className="exp-item-label">{item.label}</span>
 
       <div className="exp-item-actions">
-        {item.is_custom ? (
+        {/* Lightning bolt: convert to challenge */}
+        {convertible && !isConverted && (
           <button
-            className="exp-item-action"
-            onClick={() => onDelete(item.id)}
-            title="Delete"
+            className="exp-item-action exp-item-bolt"
+            onClick={() => onShowDeadline(item.id)}
+            disabled={isConverting}
+            title="Make this a challenge"
           >
-            ✕
-          </button>
-        ) : item.is_hidden ? (
-          <button
-            className="exp-item-action"
-            onClick={() => onUnhide(item.id)}
-            title="Restore"
-          >
-            ↺
-          </button>
-        ) : (
-          <button
-            className="exp-item-action"
-            onClick={() => onHide(item.id)}
-            title="Skip"
-          >
-            ⊘
+            {isConverting ? '...' : '⚡'}
           </button>
         )}
+        {isConverted && (
+          <span className="exp-item-converted" title="Active challenge">🎯</span>
+        )}
+
+        {item.is_custom ? (
+          <button className="exp-item-action" onClick={() => onDelete(item.id)} title="Delete">✕</button>
+        ) : item.is_hidden ? (
+          <button className="exp-item-action" onClick={() => onUnhide(item.id)} title="Restore">↺</button>
+        ) : (
+          <button className="exp-item-action" onClick={() => onHide(item.id)} title="Skip">⊘</button>
+        )}
       </div>
-    </li>
+
+      {/* Deadline picker (shown when lightning bolt tapped) */}
+      {showDeadline && (
+        <div className="exp-deadline-picker">
+          {!hasDna && (
+            <p className="exp-deadline-dna-hint">
+              Want personalized challenges? <a href="/play-profile">Complete your Play Profile</a>
+            </p>
+          )}
+          <div className="exp-deadline-row">
+            <input
+              type="date"
+              value={deadlineDate}
+              onChange={(e) => onDeadlineChange(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
+              className="exp-deadline-input"
+            />
+            <button
+              className="exp-deadline-go"
+              onClick={() => onConvert(item)}
+            >
+              {isConverting ? '...' : 'Create Challenge'}
+            </button>
+            <button className="exp-deadline-cancel" onClick={onCancelDeadline}>✕</button>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 

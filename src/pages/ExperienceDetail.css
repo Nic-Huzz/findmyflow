@@ -503,3 +503,76 @@
 @keyframes exp-spin-d {
   to { transform: rotate(360deg); }
 }
+
+/* ═══ Lightning Bolt (Challenge Conversion) ═══ */
+
+.exp-item-bolt {
+  color: #E9A23B !important;
+  font-size: 1rem !important;
+  transition: transform 0.15s;
+}
+.exp-item-bolt:hover:not(:disabled) {
+  transform: scale(1.2);
+}
+.exp-item-bolt:disabled {
+  opacity: 0.4;
+}
+
+.exp-item-converted {
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+/* Deadline picker */
+.exp-deadline-picker {
+  padding: 0.6rem 0 0.25rem 2.25rem;
+}
+.exp-deadline-dna-hint {
+  font-size: 0.72rem;
+  color: #6c757d;
+  margin: 0 0 0.4rem;
+  line-height: 1.4;
+}
+.exp-deadline-dna-hint a {
+  color: #5e17eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+.exp-deadline-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.exp-deadline-input {
+  flex: 1;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  color: #1a1a2e;
+}
+.exp-deadline-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+.exp-deadline-go {
+  padding: 0.45rem 0.75rem;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.exp-deadline-cancel {
+  padding: 0.4rem;
+  background: none;
+  border: none;
+  color: #adb5bd;
+  font-size: 0.85rem;
+  cursor: pointer;
+}

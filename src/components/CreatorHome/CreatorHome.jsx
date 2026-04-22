@@ -16,6 +16,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
 import { useExperienceList, daysUntil, formatExperienceDate } from '../../hooks/useExperienceData'
+import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import './CreatorHome.css'
 
 // ─── Stage metadata ────────────────────────────────────────────────────────
@@ -43,6 +44,8 @@ export default function CreatorHome({ userId }) {
   const [activeTab, setActiveTab] = useState('experiences')
   const [scopeResult, setScopeResult] = useState(null)
   const [creatorSelection, setCreatorSelection] = useState(null)
+  const [dnaResult, setDnaResult] = useState(null)
+  const [activeChallenges, setActiveChallenges] = useState([])
   const [loading, setLoading] = useState(false)
 
   const { experiences, loading: expLoading } = useExperienceList()
@@ -66,10 +69,18 @@ export default function CreatorHome({ userId }) {
     loadCreatorData()
   }, [userId])
 
+  // Load active challenges
+  useEffect(() => {
+    if (!userId) return
+    fetchCreatorChallenges(userId, activeExp?.id || null).then(({ data }) => {
+      setActiveChallenges(data || [])
+    })
+  }, [userId, activeExp?.id])
+
   const loadCreatorData = async () => {
     setLoading(true)
     try {
-      const [{ data: scope }, { data: selection }] = await Promise.all([
+      const [{ data: scope }, { data: selection }, { data: dna }] = await Promise.all([
         supabase
           .from('scope_map_results')
           .select('*')
@@ -84,10 +95,18 @@ export default function CreatorHome({ userId }) {
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle(),
+        supabase
+          .from('founder_dna_results')
+          .select('dna_code, archetype, matched_founder')
+          .eq('user_id', userId)
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
       ])
 
       setScopeResult(scope || null)
       setCreatorSelection(selection || null)
+      setDnaResult(dna || null)
     } catch (err) {
       console.error('CreatorHome loadCreatorData error:', err)
     } finally {
@@ -223,6 +242,30 @@ export default function CreatorHome({ userId }) {
               <p className="ch-empty-text">Complete the Scope Map diagnostic to see where you are.</p>
             </div>
           )}
+
+          {/* Play Profile */}
+          <div className="ch-card">
+            <div className="ch-card-head">
+              <span className="ch-card-title">Work Style</span>
+              {dnaResult && <span className="ch-badge ch-badge-purple">{dnaResult.archetype}</span>}
+            </div>
+            {dnaResult ? (
+              <div className="ch-dna-card">
+                <div className="ch-dna-icon">🧬</div>
+                <div>
+                  <div className="ch-dna-name">{dnaResult.matched_founder || dnaResult.archetype}</div>
+                  <div className="ch-dna-desc">Your work style personalizes how challenges are framed.</div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <p className="ch-empty-text">Discover your work style to get personalized challenges.</p>
+                <button className="ch-dna-cta" onClick={() => navigate('/play-profile')}>
+                  Discover Your Work Style
+                </button>
+              </>
+            )}
+          </div>
         </div>
       )}
 
@@ -247,10 +290,38 @@ export default function CreatorHome({ userId }) {
                 )}
               </div>
 
-              {/* Placeholder for challenges - Phase 2 */}
+              {/* Active challenges */}
+              {activeChallenges.length > 0 && (
+                <>
+                  <div className="ch-challenges-header">
+                    <span>This Fortnight's Challenges</span>
+                    <span style={{ color: '#E9A23B' }}>
+                      {activeChallenges.filter(c => c.status === 'completed').length}/{activeChallenges.length}
+                    </span>
+                  </div>
+                  {activeChallenges.slice(0, 5).map(ch => {
+                    const isDone = ch.status === 'completed'
+                    const isUrgent = ch.deadline && new Date(ch.deadline) - new Date() < 3 * 24 * 60 * 60 * 1000
+                    const daysLeft = ch.deadline ? Math.ceil((new Date(ch.deadline) - new Date()) / (24 * 60 * 60 * 1000)) : null
+                    return (
+                      <div key={ch.id} className="ch-challenge-item">
+                        <div className={`ch-challenge-dot ${isDone ? 'ch-dot-done' : 'ch-dot-pending'}`} />
+                        <span className={`ch-challenge-text ${isDone ? 'ch-struck' : ''}`}>{ch.title}</span>
+                        <span className={`ch-challenge-due ${isUrgent ? 'ch-due-urgent' : ''}`}>
+                          {isDone ? 'done' : daysLeft != null ? `${daysLeft}d` : ''}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </>
+              )}
+
               <div className="ch-exp-btns">
                 <button className="ch-btn-primary" onClick={() => navigate(`/create/experience/${activeExp.id}`)}>
                   View Checklist
+                </button>
+                <button className="ch-btn-secondary" onClick={() => navigate(`/create/experience/${activeExp.id}`)}>
+                  + Add Challenge
                 </button>
               </div>
             </div>
