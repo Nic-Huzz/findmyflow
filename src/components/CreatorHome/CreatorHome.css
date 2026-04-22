@@ -389,3 +389,68 @@
   font-family: inherit;
 }
 .ch-dna-cta:hover { background: rgba(94,23,235,0.1); }
+
+/* ═══ ASSESSMENT EDIT ═══ */
+.ch-assessment-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.ch-assess-layer {
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid #f1f3f5;
+}
+.ch-assess-layer:last-of-type { border-bottom: none; }
+.ch-assess-layer-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+.ch-assess-layer-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.ch-assess-radios {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0.35rem;
+}
+.ch-assess-radio {
+  flex: 1;
+  padding: 0.4rem 0.25rem;
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.15s;
+}
+.ch-assess-radio input { display: none; }
+.ch-assess-radio.active {
+  border-color: var(--brand-purple);
+  background: rgba(94,23,235,0.04);
+  color: var(--brand-purple);
+}
+.ch-assess-detail {
+  width: 100%;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-family: inherit;
+  color: var(--text-primary);
+}
+.ch-assess-detail:focus {
+  outline: none;
+  border-color: var(--brand-purple);
+}
+.ch-assess-detail::placeholder { color: var(--text-muted); }
+.ch-assess-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}

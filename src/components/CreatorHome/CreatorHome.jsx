@@ -46,6 +46,10 @@ export default function CreatorHome({ userId }) {
   const [creatorSelection, setCreatorSelection] = useState(null)
   const [dnaResult, setDnaResult] = useState(null)
   const [activeChallenges, setActiveChallenges] = useState([])
+  const [assessment, setAssessment] = useState(null)
+  const [editingAssessment, setEditingAssessment] = useState(false)
+  const [assessmentDraft, setAssessmentDraft] = useState(null)
+  const [savingAssessment, setSavingAssessment] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const { experiences, loading: expLoading } = useExperienceList()
@@ -80,7 +84,7 @@ export default function CreatorHome({ userId }) {
   const loadCreatorData = async () => {
     setLoading(true)
     try {
-      const [{ data: scope }, { data: selection }, { data: dna }] = await Promise.all([
+      const [{ data: scope }, { data: selection }, { data: dna }, { data: assess }] = await Promise.all([
         supabase
           .from('scope_map_results')
           .select('*')
@@ -102,11 +106,19 @@ export default function CreatorHome({ userId }) {
           .order('completed_at', { ascending: false })
           .limit(1)
           .maybeSingle(),
+        supabase
+          .from('creator_assessments')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
       ])
 
       setScopeResult(scope || null)
       setCreatorSelection(selection || null)
       setDnaResult(dna || null)
+      setAssessment(assess || null)
     } catch (err) {
       console.error('CreatorHome loadCreatorData error:', err)
     } finally {
@@ -116,6 +128,53 @@ export default function CreatorHome({ userId }) {
 
   const stage = STAGES[scopeResult?.stage] || null
   const archetype = creatorSelection?.dominant_archetype || null
+
+  const LAYERS = [
+    { key: 'attraction', label: 'Attraction', color: '#8b5cf6' },
+    { key: 'core', label: 'Core', color: '#E9A23B' },
+    { key: 'scale', label: 'Scale', color: '#10b981' },
+    { key: 'continuity', label: 'Continuity', color: '#3b82f6' },
+  ]
+
+  const STATUS_LABELS = { have: 'Have it', inconsistent: 'Inconsistent', missing: 'Missing' }
+  const STATUS_CLASSES = { have: 'ch-s-have', inconsistent: 'ch-s-working', missing: 'ch-s-missing' }
+
+  const startEditAssessment = () => {
+    setAssessmentDraft({
+      attraction_status: assessment?.attraction_status || 'missing',
+      attraction_detail: assessment?.attraction_detail || '',
+      core_status: assessment?.core_status || 'missing',
+      core_detail: assessment?.core_detail || '',
+      scale_status: assessment?.scale_status || 'missing',
+      scale_detail: assessment?.scale_detail || '',
+      continuity_status: assessment?.continuity_status || 'missing',
+      continuity_detail: assessment?.continuity_detail || '',
+    })
+    setEditingAssessment(true)
+  }
+
+  const updateDraft = (field, value) => {
+    setAssessmentDraft(prev => ({ ...prev, [field]: value }))
+  }
+
+  const saveAssessment = async () => {
+    if (!userId || !assessmentDraft) return
+    setSavingAssessment(true)
+    try {
+      const { error: err } = await supabase
+        .from('creator_assessments')
+        .insert({ user_id: userId, ...assessmentDraft })
+
+      if (!err) {
+        setAssessment({ ...assessmentDraft, user_id: userId })
+        setEditingAssessment(false)
+        setAssessmentDraft(null)
+      }
+    } catch (err) {
+      console.error('Save assessment error:', err)
+    }
+    setSavingAssessment(false)
+  }
 
   // 3% chain from past experiences
   const threePercentChain = past
@@ -183,39 +242,84 @@ export default function CreatorHome({ userId }) {
       {/* ═══ MY BUSINESS ═══ */}
       {activeTab === 'my-business' && (
         <div className="ch-section">
-          {/* Product Suite */}
+          {/* 4-Layer Assessment */}
           <div className="ch-card">
             <div className="ch-card-head">
               <span className="ch-card-title">Product Suite</span>
               {archetype && <span className="ch-badge ch-badge-purple">{archetype}</span>}
             </div>
-            <div className="ch-suite-layers">
-              <div className="ch-suite-layer">
-                <div className="ch-suite-dot" style={{ background: '#8b5cf6' }} />
-                <span className="ch-suite-name">Attraction</span>
-                <span className="ch-suite-value">—</span>
-                <span className="ch-suite-status ch-s-missing">Not set</span>
+
+            {editingAssessment && assessmentDraft ? (
+              /* ── EDIT MODE ── */
+              <div className="ch-assessment-edit">
+                {LAYERS.map(layer => {
+                  const statusKey = `${layer.key}_status`
+                  const detailKey = `${layer.key}_detail`
+                  return (
+                    <div key={layer.key} className="ch-assess-layer">
+                      <div className="ch-assess-layer-head">
+                        <div className="ch-suite-dot" style={{ background: layer.color }} />
+                        <span className="ch-assess-layer-name">{layer.label}</span>
+                      </div>
+                      <div className="ch-assess-radios">
+                        {['have', 'inconsistent', 'missing'].map(status => (
+                          <label key={status} className={`ch-assess-radio ${assessmentDraft[statusKey] === status ? 'active' : ''}`}>
+                            <input
+                              type="radio"
+                              name={statusKey}
+                              value={status}
+                              checked={assessmentDraft[statusKey] === status}
+                              onChange={() => updateDraft(statusKey, status)}
+                            />
+                            {STATUS_LABELS[status]}
+                          </label>
+                        ))}
+                      </div>
+                      {assessmentDraft[statusKey] !== 'missing' && (
+                        <input
+                          type="text"
+                          className="ch-assess-detail"
+                          value={assessmentDraft[detailKey] || ''}
+                          onChange={(e) => updateDraft(detailKey, e.target.value)}
+                          placeholder={`What do you have for ${layer.label.toLowerCase()}?`}
+                        />
+                      )}
+                    </div>
+                  )
+                })}
+                <div className="ch-assess-actions">
+                  <button className="ch-btn-primary" onClick={saveAssessment} disabled={savingAssessment}>
+                    {savingAssessment ? 'Saving...' : 'Save Assessment'}
+                  </button>
+                  <button className="ch-btn-secondary" onClick={() => { setEditingAssessment(false); setAssessmentDraft(null) }}>
+                    Cancel
+                  </button>
+                </div>
               </div>
-              <div className="ch-suite-layer">
-                <div className="ch-suite-dot" style={{ background: '#E9A23B' }} />
-                <span className="ch-suite-name">Core</span>
-                <span className="ch-suite-value">—</span>
-                <span className="ch-suite-status ch-s-missing">Not set</span>
-              </div>
-              <div className="ch-suite-layer">
-                <div className="ch-suite-dot" style={{ background: '#10b981' }} />
-                <span className="ch-suite-name">Scale</span>
-                <span className="ch-suite-value">—</span>
-                <span className="ch-suite-status ch-s-missing">Not set</span>
-              </div>
-              <div className="ch-suite-layer">
-                <div className="ch-suite-dot" style={{ background: '#3b82f6' }} />
-                <span className="ch-suite-name">Continuity</span>
-                <span className="ch-suite-value">—</span>
-                <span className="ch-suite-status ch-s-missing">Not set</span>
-              </div>
-            </div>
-            <button className="ch-edit-btn">Set Up Assessment</button>
+            ) : (
+              /* ── DISPLAY MODE ── */
+              <>
+                <div className="ch-suite-layers">
+                  {LAYERS.map(layer => {
+                    const status = assessment?.[`${layer.key}_status`] || 'missing'
+                    const detail = assessment?.[`${layer.key}_detail`] || '—'
+                    return (
+                      <div key={layer.key} className="ch-suite-layer">
+                        <div className="ch-suite-dot" style={{ background: layer.color }} />
+                        <span className="ch-suite-name">{layer.label}</span>
+                        <span className="ch-suite-value">{status === 'missing' ? '—' : detail}</span>
+                        <span className={`ch-suite-status ${STATUS_CLASSES[status]}`}>
+                          {STATUS_LABELS[status]}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+                <button className="ch-edit-btn" onClick={startEditAssessment}>
+                  {assessment ? 'Update Assessment' : 'Set Up Assessment'}
+                </button>
+              </>
+            )}
           </div>
 
           {/* Scope Map Position */}
