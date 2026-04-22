@@ -50,7 +50,7 @@ function getTimeGreeting() {
 
 // Get next best action based on user context (now wheel-aware)
 function getNextBestAction(userContext) {
-  const { hasCompletedNS, hasCompletedFlowFinder, groanCount, currentStage, wheelSummary, gapAnalysis } = userContext
+  const { hasCompletedNS, hasCompletedFlowFinder, groanCount, currentStage, wheelSummary, gapAnalysis, experienceCreatorArchetype } = userContext
 
   // Priority 1: Nervous System Map - the core differentiator
   if (!hasCompletedNS) {

@@ -405,6 +405,7 @@ export async function getUserContext(userId) {
       { data: groanData },
       { data: compassData },
       { data: stageData },
+      { data: ecData },
       wheelData
     ] = await Promise.all([
       supabase.from('nervous_system_responses').select('id').eq('user_id', userId).limit(1),
@@ -412,6 +413,7 @@ export async function getUserContext(userId) {
       supabase.from('quest_completions').select('id, quest_category').eq('user_id', userId).in('quest_category', ['Recognise', 'Rewire', 'Reconnect']),
       supabase.from('flow_entries').select('direction, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(5),
       supabase.from('user_stage_progress').select('*').eq('user_id', userId).single(),
+      supabase.from('experience_creator_selections').select('dominant_archetype, product_suite, selected_creators').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
       loadWheelData(userId)
     ])
 
@@ -438,6 +440,10 @@ export async function getUserContext(userId) {
       wheelContext,
       wheelSummary,
       gapAnalysis,
+      // Experience creator matching
+      experienceCreatorArchetype: ecData?.dominant_archetype || null,
+      experienceCreatorSuite: ecData?.product_suite || null,
+      experienceCreatorPicks: ecData?.selected_creators || null,
     }
   } catch (err) {
     console.error('Error getting user context:', err)

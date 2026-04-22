@@ -139,11 +139,31 @@ export default function ExperienceCreatorFlow() {
   const [screen, setScreen] = useState('browse') // 'browse' | 'result'
   const [selected, setSelected] = useState(new Set())
   const [loading, setLoading] = useState(false)
-  const [layerStatus, setLayerStatus] = useState({})
+  const [layerStatus, setLayerStatus] = useState({}) // 'confirmed' | 'skipped'
+  const [showAlts, setShowAlts] = useState({}) // which layers have alternatives expanded
+  const [layerOverrides, setLayerOverrides] = useState({}) // swapped layer content { slot: { name, desc, from } }
 
   const confirmLayer = (slot) => {
     hapticLight()
     setLayerStatus(prev => ({ ...prev, [slot]: 'confirmed' }))
+    setShowAlts(prev => ({ ...prev, [slot]: false }))
+  }
+
+  const toggleAlts = (slot) => {
+    hapticLight()
+    setShowAlts(prev => ({ ...prev, [slot]: !prev[slot] }))
+  }
+
+  const pickAlternative = (slot, altArchetypeId) => {
+    hapticLight()
+    const altOffers = ARCHETYPE_OFFERS[altArchetypeId]
+    if (!altOffers?.[slot]) return
+    setLayerOverrides(prev => ({
+      ...prev,
+      [slot]: { ...altOffers[slot], from: ARCHETYPE_INFO[altArchetypeId]?.name || altArchetypeId }
+    }))
+    setLayerStatus(prev => ({ ...prev, [slot]: 'confirmed' }))
+    setShowAlts(prev => ({ ...prev, [slot]: false }))
   }
 
   const allCreators = useMemo(() => buildCreatorData(), [])
@@ -209,15 +229,15 @@ export default function ExperienceCreatorFlow() {
     }
     setLoading(true)
     try {
-      const offers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
+      const baseOffers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
       const { error } = await supabase.from('experience_creator_selections').insert({
         user_id: user.id,
         selected_creators: [...selected],
         dominant_archetype: dominantArchetype,
         product_suite: {
-          attraction: offers.attraction?.name,
-          core: offers.core?.name,
-          continuity: offers.continuity?.name,
+          attraction: (layerOverrides.attraction || baseOffers.attraction)?.name,
+          core: (layerOverrides.core || baseOffers.core)?.name,
+          continuity: (layerOverrides.continuity || baseOffers.continuity)?.name,
         },
         layer_validations: layerStatus,
       })
@@ -343,23 +363,28 @@ export default function ExperienceCreatorFlow() {
             ))}
           </div>
 
-          {/* Offer layers with real data */}
+          {/* Offer layers with real data + alternatives */}
           {LAYERS.map(({ slot, dotClass, label }) => {
-            const offer = offers[slot]
+            const override = layerOverrides[slot]
+            const offer = override || offers[slot]
             const proofs = allProofs[slot] || []
             const status = layerStatus[slot]
+            const altsOpen = showAlts[slot]
+            const otherArchetypes = Object.entries(ARCHETYPE_OFFERS)
+              .filter(([id]) => id !== dominantArchetype)
+              .filter(([, o]) => o[slot])
 
             return (
               <div key={slot} className={`ecf-offer-card ${status === 'confirmed' ? 'confirmed' : ''}`}>
                 <div className="ecf-offer-top">
                   <div className={`ecf-offer-dot ${dotClass}`} />
                   <div>
-                    <div className="ecf-offer-label">{label}</div>
+                    <div className="ecf-offer-label">{label}{override ? ` · from ${override.from}` : ''}</div>
                     <div className="ecf-offer-name">{offer.name}</div>
                   </div>
                 </div>
                 <div className="ecf-offer-desc">{offer.desc}</div>
-                {proofs.length > 0 && (
+                {!override && proofs.length > 0 && (
                   <div className="ecf-offer-proof">
                     {proofs.map((p, i) => (
                       <span key={i}>{i > 0 ? ' ' : ''}{p.name}: "{p.text}"</span>
@@ -370,11 +395,30 @@ export default function ExperienceCreatorFlow() {
                   {status === 'confirmed' ? (
                     <button className="ecf-offer-btn confirmed" style={{ flex: 1 }}>✓ Confirmed</button>
                   ) : (
-                    <button className="ecf-offer-btn yes" onClick={() => confirmLayer(slot)}>
-                      Hell Yes
-                    </button>
+                    <>
+                      <button className="ecf-offer-btn yes" onClick={() => confirmLayer(slot)}>Hell Yes</button>
+                      <button className="ecf-offer-btn no" onClick={() => toggleAlts(slot)}>Other options</button>
+                    </>
                   )}
                 </div>
+                {altsOpen && (
+                  <div className="ecf-alternatives">
+                    <div className="ecf-alternatives-title">Other approaches</div>
+                    {otherArchetypes.map(([altId, altOffers]) => (
+                      <div
+                        key={altId}
+                        className="ecf-alt-option"
+                        onClick={() => pickAlternative(slot, altId)}
+                      >
+                        <div className="ecf-alt-emoji">{CATEGORIES.find(c => c.id === altId)?.emoji || '💡'}</div>
+                        <div>
+                          <div className="ecf-alt-name">{altOffers[slot].name}</div>
+                          <div className="ecf-alt-source">{ARCHETYPE_INFO[altId]?.name}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )
           })}

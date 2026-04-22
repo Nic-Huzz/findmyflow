@@ -455,6 +455,73 @@
 .ecf-offer-btn.no { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.15); }
 .ecf-offer-btn.confirmed { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.4); }
 
+/* === ALTERNATIVES === */
+.ecf-alternatives {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  animation: ecfFadeIn 0.25s ease;
+}
+
+@keyframes ecfFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.ecf-alternatives-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.5rem;
+}
+
+.ecf-alt-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ecf-alt-option:last-child {
+  margin-bottom: 0;
+}
+
+.ecf-alt-option:hover {
+  border-color: rgba(233,162,59,0.4);
+  background: rgba(233,162,59,0.06);
+}
+
+.ecf-alt-option:active {
+  transform: scale(0.98);
+}
+
+.ecf-alt-emoji {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ecf-alt-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.ecf-alt-source {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.4);
+}
+
 /* === FIRST STEP === */
 .ecf-first-step {
   background: rgba(233,162,59,0.1);
