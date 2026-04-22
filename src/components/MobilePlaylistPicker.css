@@ -222,6 +222,76 @@
 .mpp-ai-btn:hover { background: #5e17eb; color: white; }
 .mpp-ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ── Day Pills ── */
+.mpp-day-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.mpp-day-pill {
+  padding: 8px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 20px;
+  background: white;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: #1a1a2e;
+}
+
+.mpp-day-pill:hover { border-color: #5e17eb; }
+
+.mpp-day-pill.selected {
+  background: #5e17eb;
+  color: white;
+  border-color: #5e17eb;
+}
+
+/* ── Play-skill Toggle ── */
+.mpp-playskill-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #9a9daa;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 8px 0;
+  margin-top: 8px;
+}
+
+.mpp-playskill-toggle:hover { color: #5e17eb; }
+
+.mpp-playskill-list {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 6px 12px;
+  margin-top: 4px;
+}
+
+.mpp-playskill-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  font-size: 13px;
+  color: #6b7280;
+  padding: 8px 0;
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1.4;
+}
+
+.mpp-playskill-item:last-child { border-bottom: none; }
+.mpp-playskill-item:hover { color: #5e17eb; }
+
 /* ── Success State ── */
 .mpp-success-card { text-align: center; padding: 2rem; }
 .mpp-success-icon { font-size: 2rem; }
