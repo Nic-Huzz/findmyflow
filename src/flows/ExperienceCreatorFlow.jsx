@@ -3,7 +3,7 @@
  * Browse experience creators by business model archetype,
  * select who resonates, get a product suite recommendation.
  */
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
@@ -70,13 +70,15 @@ const ARCHETYPE_OFFERS = {
 }
 
 // ── Build proof quotes from selected creators ──
+// Pre-build career model map once (not per render)
+const CM_MAP = {}
+careerModelsData.profiles.forEach(p => { CM_MAP[p.name] = p })
+
 function buildProof(selectedNames, slot) {
-  const cmMap = {}
-  careerModelsData.profiles.forEach(p => { cmMap[p.name] = p })
   const proofs = []
 
   for (const name of selectedNames) {
-    const cm = cmMap[name]
+    const cm = CM_MAP[name]
     if (!cm?.careerModel) continue
     const offers = offerMapData.creators?.[name]
     if (!offers) continue
@@ -84,7 +86,6 @@ function buildProof(selectedNames, slot) {
     const streams = offers[slot] || []
     if (streams.length === 0) continue
 
-    // Pick the most interesting proof from scaleModel, trajectory, or lessonsForUser
     if (slot === 'attraction' && cm.careerModel.trajectory) {
       proofs.push({ name, text: cm.careerModel.trajectory })
     } else if (slot === 'core' && cm.careerModel.scaleModel) {
@@ -96,7 +97,6 @@ function buildProof(selectedNames, slot) {
     }
   }
 
-  // Return top 2 proofs
   return proofs.slice(0, 2)
 }
 
@@ -188,6 +188,7 @@ export default function ExperienceCreatorFlow() {
 
   // Show result
   const showResult = () => {
+    if (selected.size === 0) return
     hapticSuccess()
     setScreen('result')
     window.scrollTo(0, 0)
@@ -199,13 +200,17 @@ export default function ExperienceCreatorFlow() {
     window.scrollTo(0, 0)
   }
 
-  // Save to Supabase
+  // Save to Supabase (or navigate to signup for anonymous users)
   const saveModel = async () => {
-    if (!user?.id) return
+    if (!user?.id) {
+      // Anonymous user — redirect to signup
+      navigate('/get-started')
+      return
+    }
     setLoading(true)
     try {
       const offers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
-      await supabase.from('experience_creator_selections').insert({
+      const { error } = await supabase.from('experience_creator_selections').insert({
         user_id: user.id,
         selected_creators: [...selected],
         dominant_archetype: dominantArchetype,
@@ -216,6 +221,7 @@ export default function ExperienceCreatorFlow() {
         },
         layer_validations: layerStatus,
       })
+      if (error) throw error
       hapticSuccess()
       navigate('/7-day-challenge')
     } catch (err) {
@@ -257,7 +263,7 @@ export default function ExperienceCreatorFlow() {
                         src={creator.image}
                         alt={creator.name}
                         loading="lazy"
-                        onError={(e) => { e.target.style.background = 'linear-gradient(135deg, #5e17eb, #7c3aed)' }}
+                        onError={(e) => { e.target.style.display = 'none' }}
                       />
                       <div className="ecf-person-card-body">
                         <div className="ecf-person-card-name">{creator.name}</div>
@@ -300,6 +306,14 @@ export default function ExperienceCreatorFlow() {
   const offers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
   const selectedNames = [...selected]
 
+  // Memoize proof quotes (avoid rebuilding on every render)
+  const allProofs = useMemo(() => ({
+    attraction: buildProof(selectedNames, 'attraction'),
+    core: buildProof(selectedNames, 'core'),
+    continuity: buildProof(selectedNames, 'continuity'),
+    scale: buildProof(selectedNames, 'scale'),
+  }), [selectedNames.join(',')])
+
   const LAYERS = [
     { slot: 'attraction', dotClass: 'attraction', label: 'Attraction' },
     { slot: 'core', dotClass: 'core', label: 'Core Offer' },
@@ -332,7 +346,7 @@ export default function ExperienceCreatorFlow() {
           {/* Offer layers with real data */}
           {LAYERS.map(({ slot, dotClass, label }) => {
             const offer = offers[slot]
-            const proofs = buildProof(selectedNames, slot)
+            const proofs = allProofs[slot] || []
             const status = layerStatus[slot]
 
             return (
@@ -376,9 +390,9 @@ export default function ExperienceCreatorFlow() {
                 </div>
               </div>
               <div className="ecf-offer-desc">When you're ready to multiply: train practitioners to deliver without you in the room. You own the IP, not the calendar.</div>
-              {buildProof(selectedNames, 'scale').length > 0 && (
+              {allProofs.scale.length > 0 && (
                 <div className="ecf-offer-proof">
-                  {buildProof(selectedNames, 'scale').map((p, i) => (
+                  {allProofs.scale.map((p, i) => (
                     <span key={i}>{i > 0 ? ' ' : ''}{p.name}: "{p.text}"</span>
                   ))}
                 </div>
@@ -401,7 +415,7 @@ export default function ExperienceCreatorFlow() {
             <h3>Your First Step</h3>
             <p>{firstStep}</p>
             <button className="ecf-save-btn" onClick={saveModel} disabled={loading}>
-              {loading ? 'Saving...' : 'Save My Model'}
+              {loading ? 'Saving...' : user?.id ? 'Save My Model' : 'Sign Up to Save My Model'}
             </button>
           </div>
         </div>

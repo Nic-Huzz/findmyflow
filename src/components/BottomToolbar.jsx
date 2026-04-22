@@ -3,7 +3,7 @@
  *
  * Context-aware bottom navigation that changes based on app section.
  *
- * Main App: Home (/me) → Challenge (/7-day-challenge) → Business (/business) → Profile (/profile-hub)
+ * Main App: Home (/me) → Challenge (/7-day-challenge) → Create (/create) → Profile (/profile-hub)
  * CRM Section: Sales (/crm/sales) → Marketing (/crm/marketing) → Analytics (/crm/analytics) → Portal (back to challenge)
  */
 
@@ -32,10 +32,10 @@ const MAIN_NAV_ITEMS = [
     path: '/profile-hub'
   },
   {
-    id: 'business',
-    label: 'Business',
-    icon: '💼',
-    path: '/business'
+    id: 'create',
+    label: 'Create',
+    icon: '✨',
+    path: '/create'
   }
 ]
 
@@ -112,7 +112,9 @@ const HIDDEN_ROUTES = [
   '/archetypes/', // Essence and Shadow deep dive pages
   '/crm/import', // CSV import wizard has bottom action buttons
   '/money-model-guide', // Money Model explainer slides
-  '/sol' // Sol AI co-founder onboarding + dashboard
+  '/sol', // Sol AI co-founder onboarding + dashboard
+  '/shift-scorecard', // Public Shift Architecture audit scorecard
+  '/experience-creators' // Experience Creator Matching (public lead magnet)
 ]
 
 function BottomToolbar() {
@@ -196,8 +198,8 @@ function BottomToolbar() {
       if (item.id === 'execute') return path === '/crm/execute'
     }
 
-    // Main nav: Business is active on any /business/* path
-    if (item.id === 'business') return path === '/business' || path.startsWith('/business/')
+    // Main nav: Create is active on any /create/* path
+    if (item.id === 'create') return path === '/create' || path.startsWith('/create/')
 
     return path === item.path
   }

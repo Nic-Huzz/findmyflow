@@ -352,8 +352,9 @@ function ConditionalZarlo() {
   const isEssenceIdentify = location.pathname === '/essence-identify'
   const isProtectiveIdentify = location.pathname === '/protective-identify'
   const isMatrixCodeDeepDive = location.pathname === '/matrix-code-deep-dive'
+  const isExperienceCreators = location.pathname === '/experience-creators'
 
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators) return null
   return <ZarloWidget />
 }
 
@@ -767,11 +768,7 @@ function AppRouter() {
                 <PeopleMatching />
               </AuthGate>
             } />
-            <Route path="/experience-creators" element={
-              <AuthGate>
-                <ExperienceCreatorFlow />
-              </AuthGate>
-            } />
+            <Route path="/experience-creators" element={<ExperienceCreatorFlow />} />
             <Route path="/flow-finder-explainer" element={
               <AuthGate>
                 <FlowFinderExplainer />
