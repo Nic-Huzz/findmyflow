@@ -251,6 +251,25 @@ export default function ExperienceCreatorFlow() {
     }
   }
 
+  // Pre-compute result screen data (must be before early returns to satisfy hooks rules)
+  const archetype = ARCHETYPE_INFO[dominantArchetype] || ARCHETYPE_INFO.workshop
+  const firstStep = FIRST_STEPS[dominantArchetype] || FIRST_STEPS.workshop
+  const offers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
+  const selectedNames = [...selected]
+
+  const allProofs = useMemo(() => ({
+    attraction: buildProof(selectedNames, 'attraction'),
+    core: buildProof(selectedNames, 'core'),
+    continuity: buildProof(selectedNames, 'continuity'),
+    scale: buildProof(selectedNames, 'scale'),
+  }), [selectedNames.join(',')])
+
+  const LAYERS = [
+    { slot: 'attraction', dotClass: 'attraction', label: 'Attraction' },
+    { slot: 'core', dotClass: 'core', label: 'Core Offer' },
+    { slot: 'continuity', dotClass: 'continuity', label: 'Continuity' },
+  ]
+
   // ── BROWSE SCREEN ──
   if (screen === 'browse') {
     return (
@@ -321,25 +340,6 @@ export default function ExperienceCreatorFlow() {
   }
 
   // ── RESULT SCREEN ──
-  const archetype = ARCHETYPE_INFO[dominantArchetype] || ARCHETYPE_INFO.workshop
-  const firstStep = FIRST_STEPS[dominantArchetype] || FIRST_STEPS.workshop
-  const offers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
-  const selectedNames = [...selected]
-
-  // Memoize proof quotes (avoid rebuilding on every render)
-  const allProofs = useMemo(() => ({
-    attraction: buildProof(selectedNames, 'attraction'),
-    core: buildProof(selectedNames, 'core'),
-    continuity: buildProof(selectedNames, 'continuity'),
-    scale: buildProof(selectedNames, 'scale'),
-  }), [selectedNames.join(',')])
-
-  const LAYERS = [
-    { slot: 'attraction', dotClass: 'attraction', label: 'Attraction' },
-    { slot: 'core', dotClass: 'core', label: 'Core Offer' },
-    { slot: 'continuity', dotClass: 'continuity', label: 'Continuity' },
-  ]
-
   return (
     <div className="ecf">
       <div className="ecf-container">
