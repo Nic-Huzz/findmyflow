@@ -1061,13 +1061,35 @@ const CareerClarityQuiz = () => {
           </div>
 
           {/* CTA */}
-          <div className={`ccq-cta-card ${pathClass}`}>
-            <h3 className="ccq-cta-headline">{pathContent.ctaHeadline}</h3>
-            <p className="ccq-cta-body">{pathContent.ctaBody}</p>
-            <button onClick={() => navigate(pathContent.ctaLink)} className="ccq-cta-btn">
-              {pathContent.ctaButton} →
-            </button>
-          </div>
+          {path === 'own-thing' ? (
+            <>
+              <div className="ccq-clarity-section" style={{ marginBottom: '0.75rem' }}>
+                <h2 className="ccq-clarity-title">What kind of thing do you want to build?</h2>
+              </div>
+              <div className={`ccq-cta-card ${pathClass}`} style={{ marginBottom: '0.75rem' }}>
+                <h3 className="ccq-cta-headline">Create experiences people come to</h3>
+                <p className="ccq-cta-body">Workshops, retreats, cohorts, performances, facilitation. You ARE the product.</p>
+                <button onClick={() => navigate('/experience-creators')} className="ccq-cta-btn">
+                  Find My Model →
+                </button>
+              </div>
+              <div className={`ccq-cta-card ${pathClass}`}>
+                <h3 className="ccq-cta-headline">Build a product or company</h3>
+                <p className="ccq-cta-body">Software, physical products, content, services. Build something that scales beyond you.</p>
+                <button onClick={() => navigate('/get-started')} className="ccq-cta-btn">
+                  Start Find My Flow →
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className={`ccq-cta-card ${pathClass}`}>
+              <h3 className="ccq-cta-headline">{pathContent.ctaHeadline}</h3>
+              <p className="ccq-cta-body">{pathContent.ctaBody}</p>
+              <button onClick={() => navigate(pathContent.ctaLink)} className="ccq-cta-btn">
+                {pathContent.ctaButton} →
+              </button>
+            </div>
+          )}
 
           {/* RESET */}
           <div className="ccq-reset">

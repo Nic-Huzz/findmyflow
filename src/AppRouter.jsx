@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useNavigationType } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useNavigationType, useParams } from 'react-router-dom'
 
 // Retry wrapper for lazy imports — handles stale chunks after deploys
 // When Vite rebuilds, old chunk hashes are invalidated. A full page reload
@@ -168,6 +168,7 @@ const PublicOfferAuditFlow = lazyRetry(() => import('./flows/PublicOfferAuditFlo
 const CareerClarityQuiz = lazyRetry(() => import('./flows/CareerClarityQuiz'))
 const EarthquakeQuiz = lazyRetry(() => import('./flows/EarthquakeQuiz'))
 const TryPlayProfile = lazyRetry(() => import('./flows/TryPlayProfile'))
+const ShiftScorecard = lazyRetry(() => import('./flows/ShiftScorecard'))
 const OldLandingPage = lazyRetry(() => import('./pages/OldLandingPage'))
 const FantasyLeagueLanding = lazyRetry(() => import('./pages/FantasyLeagueLanding'))
 const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLanding'))
@@ -253,8 +254,9 @@ const LeagueAdmin = lazyRetry(() => import('./pages/league/LeagueAdmin'))
 const NewsfeedPage = lazyRetry(() => import('./pages/league/NewsfeedPage'))
 const LeagueGuide = lazyRetry(() => import('./flows/LeagueGuide'))
 
-// Lazy-loaded - People Matching
+// Lazy-loaded - People Matching + Experience Creator
 const PeopleMatching = lazyRetry(() => import('./pages/PeopleMatching'))
+const ExperienceCreatorFlow = lazyRetry(() => import('./flows/ExperienceCreatorFlow'))
 
 
 // Lazy-loaded - Public Play-List Feed
@@ -345,12 +347,13 @@ function ConditionalZarlo() {
   const isHealingWorkshopLP = location.pathname === '/healing-compass-workshop'
   const isBreathworkLP = location.pathname === '/breathwork'
   const isWhyPage = location.pathname === '/why-i-created-this'
+  const isShiftScorecard = location.pathname === '/shift-scorecard'
 
   const isEssenceIdentify = location.pathname === '/essence-identify'
   const isProtectiveIdentify = location.pathname === '/protective-identify'
   const isMatrixCodeDeepDive = location.pathname === '/matrix-code-deep-dive'
 
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive) return null
   return <ZarloWidget />
 }
 
@@ -400,7 +403,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/wound-map' ||
                         location.pathname === '/curiosity-compass' ||
                         location.pathname.startsWith('/zone-diagnosis') ||
-                        location.pathname === '/get-started'
+                        location.pathname === '/get-started' ||
+                        location.pathname === '/shift-scorecard'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -417,6 +421,11 @@ function SuspenseRoutes({ children }) {
       {children}
     </Suspense>
   )
+}
+
+function RedirectWithParam({ to }) {
+  const { id } = useParams()
+  return <Navigate to={`${to}/${id}`} replace />
 }
 
 function AppRouter() {
@@ -576,6 +585,7 @@ function AppRouter() {
             <Route path="/try/earthquake" element={<EarthquakeQuiz />} />
             <Route path="/try/play-profile" element={<TryPlayProfile />} />
             <Route path="/try/career-clarity" element={<CareerClarityQuiz />} />
+            <Route path="/shift-scorecard" element={<ShiftScorecard />} />
 
             {/* Fantasy League Landing Page - Public */}
             <Route path="/fantasy" element={<FantasyLeagueLanding />} />
@@ -757,6 +767,11 @@ function AppRouter() {
                 <PeopleMatching />
               </AuthGate>
             } />
+            <Route path="/experience-creators" element={
+              <AuthGate>
+                <ExperienceCreatorFlow />
+              </AuthGate>
+            } />
             <Route path="/flow-finder-explainer" element={
               <AuthGate>
                 <FlowFinderExplainer />
@@ -843,23 +858,26 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Business — Experience Creator OS (Phase 1: pre-event checklist) */}
-            <Route path="/business" element={
+            {/* Create — Experience Creator OS (Shift Architecture) */}
+            <Route path="/create" element={
               <AuthGate>
                 <ExperienceCatalog />
               </AuthGate>
             } />
-            <Route path="/business/experience/new" element={
+            <Route path="/create/experience/new" element={
               <AuthGate>
                 <ExperienceCreate />
               </AuthGate>
             } />
-            <Route path="/business/experience/:id" element={
+            <Route path="/create/experience/:id" element={
               <AuthGate>
                 <ExperienceDetail />
               </AuthGate>
             } />
-            {/* Legacy Business Page — kept accessible for internal preview */}
+            {/* Backward compat — /business redirects to /create */}
+            <Route path="/business" element={<Navigate to="/create" replace />} />
+            <Route path="/business/experience/new" element={<Navigate to="/create/experience/new" replace />} />
+            <Route path="/business/experience/:id" element={<RedirectWithParam to="/create/experience" />} />
             <Route path="/business/app" element={
               <AuthGate>
                 <BusinessPage />
