@@ -146,7 +146,7 @@ const AuthGate = ({ children }) => {
               )}
 
               {message === 'no_account' && (
-                <div className="auth-message" style={{ background: 'rgba(94, 23, 235, 0.1)', border: '1px solid rgba(94, 23, 235, 0.3)', color: '#e0d0ff' }}>
+                <div className="auth-message" style={{ background: 'rgba(94, 23, 235, 0.08)', border: '1px solid rgba(94, 23, 235, 0.2)', color: '#1a1a2e' }}>
                   <p style={{ margin: '0 0 0.5rem 0' }}>No account found for <strong>{email}</strong></p>
                   <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.9 }}>
                     New here? <a href="/get-started" style={{ color: '#E9A23B', fontWeight: 600 }}>Start your journey</a> to discover your archetype and create your account.

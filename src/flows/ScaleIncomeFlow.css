@@ -1,0 +1,529 @@
+/**
+ * ScaleIncomeFlow.css — /create/scale-income
+ * 3-layer business model builder (attraction / core / continuity)
+ * Prefix: sif-
+ */
+
+/* === ROOT === */
+.sif {
+  background: #0f0a1e;
+  color: white;
+  min-height: 100vh;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.sif-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* === SCREEN TRANSITION === */
+.sif-screen {
+  animation: sifFadeIn 0.4s ease;
+}
+
+@keyframes sifFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === INTRO SCREEN === */
+.sif-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.sif-badge {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  background: rgba(233,162,59,0.12);
+  border: 1px solid rgba(233,162,59,0.3);
+  border-radius: 100px;
+  color: #E9A23B;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.sif-intro h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+.sif-gold {
+  color: #E9A23B;
+}
+
+.sif-intro p {
+  color: rgba(255,255,255,0.65);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 0.5rem;
+  max-width: 380px;
+}
+
+.sif-archetype-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: rgba(94,23,235,0.15);
+  border: 1px solid rgba(94,23,235,0.3);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.sif-cta {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 1.125rem;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(233,162,59,0.3);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sif-cta:active {
+  transform: scale(0.98);
+}
+
+.sif-cta:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* === LAYER SCREEN === */
+.sif-layer-screen {
+  padding: 2rem 0 3rem;
+}
+
+.sif-layer-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.sif-layer-dot.attraction { background: #8b5cf6; }
+.sif-layer-dot.core { background: #E9A23B; }
+.sif-layer-dot.continuity { background: #3b82f6; }
+
+.sif-layer-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 0.75rem;
+}
+
+.sif-heading {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 1.25rem;
+}
+
+/* === OFFER CARD (primary) === */
+.sif-offer-card {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.sif-offer-card.sif-confirmed {
+  border-color: #22c55e;
+  background: rgba(34,197,94,0.06);
+}
+
+.sif-offer-name {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  color: #fff;
+}
+
+.sif-offer-desc {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+}
+
+/* === CONFIRM / OTHER BUTTONS === */
+.sif-action-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.sif-hell-yes {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sif-hell-yes:active {
+  transform: scale(0.98);
+}
+
+.sif-other-btn {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sif-other-btn:hover {
+  border-color: rgba(255,255,255,0.25);
+}
+
+.sif-confirmed-btn {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  background: rgba(34,197,94,0.12);
+  border: 1.5px solid #22c55e;
+  border-radius: 12px;
+  color: #22c55e;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* === ALTERNATIVES === */
+.sif-alternatives {
+  animation: sifFadeIn 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.sif-alt-heading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.6rem;
+}
+
+.sif-alt-card {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sif-alt-card:hover {
+  border-color: rgba(233,162,59,0.3);
+  background: rgba(255,255,255,0.06);
+}
+
+.sif-alt-card:active {
+  transform: scale(0.99);
+}
+
+.sif-alt-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.sif-alt-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sif-alt-emoji {
+  font-size: 1.1rem;
+}
+
+.sif-alt-archetype {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+}
+
+.sif-alt-offer-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 0.25rem;
+}
+
+.sif-alt-offer-desc {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+.sif-alt-pick {
+  padding: 0.3rem 0.7rem;
+  background: rgba(233,162,59,0.12);
+  border: 1px solid rgba(233,162,59,0.3);
+  border-radius: 8px;
+  color: #E9A23B;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* === NEXT BUTTON === */
+.sif-next-row {
+  margin-top: 1rem;
+}
+
+.sif-next-btn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(233,162,59,0.3);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sif-next-btn:active {
+  transform: scale(0.98);
+}
+
+.sif-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sif-back-btn:hover {
+  color: rgba(255,255,255,0.8);
+}
+
+/* === SUMMARY SCREEN === */
+.sif-summary {
+  padding: 2rem 0 3rem;
+}
+
+.sif-summary-heading {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 1.5rem;
+}
+
+.sif-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.sif-stack-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 1.1rem 1.25rem;
+  border-left: 4px solid transparent;
+}
+
+.sif-stack-card.attraction { border-left-color: #8b5cf6; }
+.sif-stack-card.core { border-left-color: #E9A23B; }
+.sif-stack-card.continuity { border-left-color: #3b82f6; }
+
+.sif-stack-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.35rem;
+}
+
+.sif-stack-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.2rem;
+}
+
+.sif-stack-source {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  background: rgba(94,23,235,0.12);
+  border-radius: 6px;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.5);
+  margin-top: 0.25rem;
+}
+
+.sif-save-btn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 1.125rem;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(233,162,59,0.3);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sif-save-btn:active {
+  transform: scale(0.98);
+}
+
+.sif-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* === EMPTY STATE === */
+.sif-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: 1rem;
+}
+
+.sif-empty-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.sif-empty p {
+  color: rgba(255,255,255,0.6);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.sif-empty-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: rgba(233,162,59,0.15);
+  border: 1px solid rgba(233,162,59,0.3);
+  border-radius: 12px;
+  color: #E9A23B;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  margin-top: 0.5rem;
+}
+
+.sif-empty-link:hover {
+  background: rgba(233,162,59,0.25);
+}
+
+/* === LOADING === */
+.sif-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.sif-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  animation: sifSpin 0.8s linear infinite;
+}
+
+@keyframes sifSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* === PROGRESS DOTS === */
+.sif-progress {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.sif-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  transition: background 0.3s;
+}
+
+.sif-progress-dot.active {
+  background: #E9A23B;
+}
+
+.sif-progress-dot.done {
+  background: #22c55e;
+}

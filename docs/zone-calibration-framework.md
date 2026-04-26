@@ -69,6 +69,7 @@ All original IP — Huzz Hurrell / FindMyFlow.
 |---|-------|--------|--------|---------------|
 | 5 | Growth Sweet Spot | Challenge | Ability | Calibrated challenge from authentic self |
 | 6 | Execution Sweet Spot | Output | Emotional Wellbeing | Sustainable movement from authentic fuel |
+| 10 | Marketing Sweet Spot | Attention | Trust | External visibility from authentic remarkability |
 
 **Threshold Graphs** *(not repairs — prerequisites for repair to begin)*
 | Graph | Y axis | X axis | Role |

@@ -258,6 +258,10 @@ const LeagueGuide = lazyRetry(() => import('./flows/LeagueGuide'))
 // Lazy-loaded - People Matching + Experience Creator
 const PeopleMatching = lazyRetry(() => import('./pages/PeopleMatching'))
 const ExperienceCreatorFlow = lazyRetry(() => import('./flows/ExperienceCreatorFlow'))
+const PayRentFlow = lazyRetry(() => import('./flows/PayRentFlow'))
+const RemarkableFlow = lazyRetry(() => import('./flows/RemarkableFlow'))
+const ScaleIncomeFlow = lazyRetry(() => import('./flows/ScaleIncomeFlow'))
+const ScopeMapFlow = lazyRetry(() => import('./flows/ScopeMapFlow'))
 
 
 // Lazy-loaded - Public Play-List Feed
@@ -334,6 +338,8 @@ import './pages/league/LeagueAdmin.css'
 import './pages/league/NewsfeedPage.css'
 import './pages/PlaylistFeed.css'
 import './pages/PlaylistFeedAdmin.css'
+import './flows/PayRentFlow.css'
+import './flows/ScaleIncomeFlow.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
@@ -354,8 +360,10 @@ function ConditionalZarlo() {
   const isProtectiveIdentify = location.pathname === '/protective-identify'
   const isMatrixCodeDeepDive = location.pathname === '/matrix-code-deep-dive'
   const isExperienceCreators = location.pathname === '/experience-creators' || location.pathname === '/try/experience-creators'
+  const isScopeMap = location.pathname === '/scope-map'
+  const isCreatePortal = location.pathname.startsWith('/create')
 
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isCreatePortal) return null
   return <ZarloWidget />
 }
 
@@ -861,6 +869,13 @@ function AppRouter() {
               </AuthGate>
             } />
 
+            {/* Scope Map diagnostic — standalone route */}
+            <Route path="/scope-map" element={
+              <AuthGate>
+                <ScopeMapFlow onComplete={() => {}} />
+              </AuthGate>
+            } />
+
             {/* Create — Experience Creator Portal (Head Full of Dreams → Self-Actualisation) */}
             <Route path="/create" element={
               <AuthGate>
@@ -875,6 +890,21 @@ function AppRouter() {
             <Route path="/create/experience/:id" element={
               <AuthGate>
                 <ExperienceDetail />
+              </AuthGate>
+            } />
+            <Route path="/create/pay-rent" element={
+              <AuthGate>
+                <PayRentFlow />
+              </AuthGate>
+            } />
+            <Route path="/create/remarkable" element={
+              <AuthGate>
+                <RemarkableFlow />
+              </AuthGate>
+            } />
+            <Route path="/create/scale-income" element={
+              <AuthGate>
+                <ScaleIncomeFlow />
               </AuthGate>
             } />
             {/* Backward compat — /business redirects to /create */}

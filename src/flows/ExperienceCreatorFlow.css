@@ -260,7 +260,7 @@
   color: rgba(255,255,255,0.55);
   line-height: 1.4;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -275,6 +275,9 @@
   color: rgba(233,162,59,0.85);
   padding: 0.2rem 0.6rem;
   border-radius: 100px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* === DIVIDER === */
@@ -473,31 +476,21 @@
   margin-bottom: 0.5rem;
 }
 
-.ecf-alt-option {
+.ecf-alt-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  animation: ecfFadeIn 0.25s ease;
+}
+.ecf-alt-card:last-child { margin-bottom: 0; }
+
+.ecf-alt-card-top {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 0.75rem;
   margin-bottom: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.ecf-alt-option:last-child {
-  margin-bottom: 0;
-}
-
-.ecf-alt-option:hover {
-  border-color: rgba(233,162,59,0.4);
-  background: rgba(233,162,59,0.06);
-}
-
-.ecf-alt-option:active {
-  transform: scale(0.98);
 }
 
 .ecf-alt-emoji {
@@ -513,13 +506,259 @@
 }
 
 .ecf-alt-name {
-  font-weight: 600;
-  font-size: 0.85rem;
+  font-weight: 700;
+  font-size: 0.88rem;
 }
 
 .ecf-alt-source {
   font-size: 0.7rem;
   color: rgba(255,255,255,0.4);
+}
+
+.ecf-alt-desc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.45;
+  margin-bottom: 0.6rem;
+}
+
+.ecf-alt-people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.ecf-alt-person-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(233,162,59,0.1);
+  border: 1px solid rgba(233,162,59,0.2);
+  border-radius: 100px;
+  padding: 0.15rem 0.5rem 0.15rem 0.15rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(233,162,59,0.85);
+}
+
+.ecf-alt-person-tag img {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ecf-alt-pick-btn {
+  width: 100%;
+  padding: 0.6rem;
+  background: rgba(233,162,59,0.15);
+  border: 1px solid rgba(233,162,59,0.3);
+  border-radius: 10px;
+  color: #E9A23B;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+.ecf-alt-pick-btn:hover {
+  background: rgba(233,162,59,0.25);
+}
+
+/* === PLAY-LIST REVEAL === */
+.ecf-reveal-card {
+  background: rgba(233,162,59,0.08);
+  border: 1px solid rgba(233,162,59,0.2);
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+.ecf-reveal-bridge {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.9);
+  margin: 0;
+}
+.ecf-reveal-bridge strong {
+  color: #E9A23B;
+}
+
+.ecf-reveal-archetype {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+}
+.ecf-reveal-archetype strong {
+  color: rgba(255,255,255,0.9);
+}
+
+.ecf-evidence-cards {
+  margin-bottom: 1.25rem;
+}
+.ecf-evidence-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.75rem;
+}
+.ecf-evidence-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+}
+.ecf-evidence-card:last-child { margin-bottom: 0; }
+.ecf-evidence-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.ecf-evidence-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.ecf-evidence-card-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #E9A23B;
+  flex: 1;
+}
+.ecf-evidence-tag {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.5);
+  flex-shrink: 0;
+}
+.ecf-evidence-card-text {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.7);
+}
+
+/* === SKILL TAGS === */
+.ecf-skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+.ecf-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(233,162,59,0.12);
+  border: 1px solid rgba(233,162,59,0.25);
+  border-radius: 100px;
+  color: #E9A23B;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.ecf-skill-tag-count {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(233,162,59,0.6);
+}
+
+/* === BUSINESS MODEL PICKER === */
+.ecf-model-pick {
+  margin-bottom: 1.5rem;
+}
+.ecf-model-pick-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 0.75rem;
+}
+.ecf-model-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ecf-model-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.ecf-model-option:hover {
+  border-color: rgba(233,162,59,0.3);
+  background: rgba(255,255,255,0.08);
+}
+.ecf-model-chosen {
+  border-color: #E9A23B;
+  background: rgba(233,162,59,0.1);
+}
+.ecf-model-emoji {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.ecf-model-name {
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin-bottom: 0.15rem;
+}
+.ecf-model-desc {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.4;
+}
+.ecf-model-chosen .ecf-model-name {
+  color: #E9A23B;
+}
+
+/* === STREAM EXAMPLES === */
+.ecf-stream-examples {
+  margin-top: 0.6rem;
+  margin-bottom: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+}
+.ecf-stream-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 0.4rem;
+}
+.ecf-stream-row {
+  display: flex;
+  gap: 0.4rem;
+  align-items: baseline;
+  margin-bottom: 0.25rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+.ecf-stream-row:last-child { margin-bottom: 0; }
+.ecf-stream-name {
+  font-weight: 700;
+  color: rgba(233,162,59,0.85);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ecf-stream-items {
+  color: rgba(255,255,255,0.6);
 }
 
 /* === FIRST STEP === */

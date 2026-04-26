@@ -81,8 +81,6 @@ export default function ExperienceCreate() {
 
   return (
     <div className="exp-create">
-      <div className="exp-orb exp-orb-1" />
-      <div className="exp-orb exp-orb-2" />
 
       <div className="exp-create-container">
         <button

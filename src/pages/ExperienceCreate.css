@@ -1,123 +1,91 @@
 /* ============================================
-   ExperienceCreate — /business/experience/new
-   Reuses tokens from ExperienceCatalog.css naming
+   ExperienceCreate — /create/experience/new
+   V2 Minimal design matching CreatorHome
    ============================================ */
 
 .exp-create {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --surface: #ffffff;
+
   min-height: 100vh;
-  background: linear-gradient(180deg, #0a0618 0%, #1a0b3d 50%, #2d1260 100%);
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-  padding: 40px 20px 140px;
-}
-
-.exp-create .exp-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.exp-create .exp-orb-1 {
-  width: 380px;
-  height: 380px;
-  background: #5e17eb;
-  opacity: 0.45;
-  top: -100px;
-  left: -100px;
-}
-
-.exp-create .exp-orb-2 {
-  width: 460px;
-  height: 460px;
-  background: #E9A23B;
-  opacity: 0.22;
-  bottom: -160px;
-  right: -160px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: var(--text-primary);
+  padding: 0 1.25rem;
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
 }
 
 .exp-create-container {
-  position: relative;
-  z-index: 1;
-  max-width: 560px;
+  max-width: 480px;
   margin: 0 auto;
+  padding-top: 1rem;
 }
 
 /* ─── Back link ─── */
 .exp-back {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.85);
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-size: 14px;
+  background: transparent;
+  border: none;
+  color: var(--brand-purple);
+  padding: 0.75rem 0;
+  font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
-  margin-bottom: 32px;
-  backdrop-filter: blur(10px);
-  transition: background 0.2s ease;
-}
-
-.exp-back:hover {
-  background: rgba(255, 255, 255, 0.14);
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 /* ─── Header ─── */
 .exp-create-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 2rem;
 }
 
 .exp-create .exp-badge {
   display: inline-block;
-  padding: 6px 16px;
-  background: rgba(233, 162, 59, 0.15);
-  border: 1px solid rgba(233, 162, 59, 0.4);
+  padding: 0.3rem 0.85rem;
+  background: rgba(94, 23, 235, 0.08);
+  border: 1px solid rgba(94, 23, 235, 0.15);
   border-radius: 999px;
-  color: #E9A23B;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  color: var(--brand-purple);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .exp-create-title {
-  font-size: clamp(34px, 6vw, 52px);
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
   font-weight: 800;
-  line-height: 1.08;
-  margin: 0 0 14px;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 0.75rem;
+  color: var(--text-primary);
 }
 
 .exp-create .exp-gradient-text {
-  background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--brand-gold);
 }
 
 .exp-create-sub {
-  font-size: 16px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.7);
-  max-width: 460px;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 400px;
   margin: 0 auto;
 }
 
-/* ─── Previous reflection card (shared look) ─── */
+/* ─── Previous reflection card ─── */
 .exp-create .exp-reflection-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(233, 162, 59, 0.35);
-  border-radius: 20px;
-  padding: 22px 26px;
-  margin-bottom: 32px;
-  backdrop-filter: blur(12px);
+  background: var(--surface);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.5rem;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .exp-create .exp-reflection-card::before {
@@ -126,132 +94,127 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 4px;
-  background: linear-gradient(180deg, #5e17eb 0%, #E9A23B 100%);
+  width: 3px;
+  background: linear-gradient(180deg, var(--brand-purple) 0%, var(--brand-gold) 100%);
 }
 
 .exp-create .exp-reflection-header {
   display: flex;
-  gap: 14px;
+  gap: 0.75rem;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 0.6rem;
 }
 
-.exp-create .exp-reflection-icon {
-  font-size: 26px;
-}
+.exp-create .exp-reflection-icon { font-size: 1.4rem; }
 
 .exp-create .exp-reflection-eyebrow {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.65rem;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 600;
 }
 
 .exp-create .exp-reflection-name {
-  font-size: 15px;
-  color: #E9A23B;
+  font-size: 0.88rem;
+  color: var(--brand-gold);
   font-weight: 700;
-  margin-top: 2px;
+  margin-top: 0.1rem;
 }
 
 .exp-create .exp-reflection-body {
-  font-size: 15px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
   margin: 0;
   font-style: italic;
 }
 
 /* ─── Form ─── */
 .exp-form {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 22px;
-  padding: 32px 28px;
-  backdrop-filter: blur(12px);
+  background: var(--surface);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 1.5rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .exp-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.4rem;
 }
 
 .exp-field-label {
-  font-size: 13px;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .exp-field input {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #fff;
-  padding: 14px 16px;
-  border-radius: 12px;
-  font-size: 16px;
+  background: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--text-primary);
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .exp-field input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: #adb5bd;
 }
 
 .exp-field input:focus {
-  border-color: rgba(233, 162, 59, 0.6);
-  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--brand-purple);
 }
 
 .exp-field-hint {
-  font-size: 13px;
-  color: rgba(233, 162, 59, 0.85);
+  font-size: 0.78rem;
+  color: var(--brand-gold);
   font-weight: 600;
-  margin-top: 2px;
+  margin-top: 0.15rem;
 }
 
 .exp-field-hint-warn {
-  color: #ffb4b4;
+  color: #ef4444;
 }
 
 .exp-form-error {
-  padding: 12px 16px;
-  background: rgba(255, 107, 107, 0.12);
-  border: 1px solid rgba(255, 107, 107, 0.35);
-  border-radius: 12px;
-  color: #ffb4b4;
-  font-size: 14px;
+  padding: 0.75rem 1rem;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: 10px;
+  color: #ef4444;
+  font-size: 0.85rem;
 }
 
 .exp-create .exp-cta {
-  padding: 18px 28px;
-  background: linear-gradient(135deg, #E9A23B 0%, #f5b849 100%);
-  color: #1a0b3d;
+  padding: 1rem;
+  background: var(--brand-purple);
+  color: #fff;
   border: none;
-  border-radius: 14px;
-  font-size: 16px;
+  border-radius: 12px;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 10px 36px rgba(233, 162, 59, 0.35);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-top: 8px;
+  transition: opacity 0.2s ease;
+  margin-top: 0.25rem;
 }
 
 .exp-create .exp-cta:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 46px rgba(233, 162, 59, 0.5);
+  opacity: 0.9;
 }
 
 .exp-create .exp-cta:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: wait;
 }

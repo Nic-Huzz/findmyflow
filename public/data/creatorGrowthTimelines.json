@@ -1,0 +1,262 @@
+{
+  "meta": {
+    "generated": "2026-04-25",
+    "source": "Web research (Wikipedia, TED, Forbes, Social Blade, primary sources)",
+    "count": 16,
+    "note": "Growth timelines for top experience creators. Behavior = what they did. Inflection = when growth happened. Triggers = which of the 5 remarkable triggers apply."
+  },
+  "remarkable_triggers": {
+    "unexpected_combination": "Two things that don't belong together, together",
+    "extreme_degree": "Normal thing taken absurdly far",
+    "rule_broken": "Did what the field says you shouldn't, and it worked",
+    "impossible_result": "Evidence that defies what people believe is possible",
+    "stupid_simplicity": "Answer so simple it feels insulting, and it works"
+  },
+  "creators": {
+    "Brené Brown": {
+      "timeline": [
+        { "year": "2002", "event": "PhD in social work, University of Houston", "audience": "academic peers only", "behavior": "Studying shame in clinical settings" },
+        { "year": "2002-2010", "event": "8 years of academic research on shame and vulnerability", "audience": "academic community, local talks", "behavior": "Publishing papers, giving small conference talks" },
+        { "year": "2010", "event": "TEDxHouston talk on vulnerability", "audience": "~400 in room", "behavior": "Shared personal breakdown on stage" },
+        { "year": "2010-2012", "event": "TED talk goes viral, 60M+ views eventually", "audience": "millions", "behavior": "Published The Gifts of Imperfection (2010), Daring Greatly (2012)" },
+        { "year": "2019", "event": "Netflix special The Call to Courage", "audience": "global mainstream", "behavior": "First researcher with a filmed lecture on Netflix" },
+        { "year": "2020+", "event": "Podcasts on Spotify, HBO series Atlas of the Heart", "audience": "millions of followers", "behavior": "Licensed 300+ facilitators in her methodology" }
+      ],
+      "trust_years": 8,
+      "trust_behavior": "Published academic research on shame for 8 years before anyone outside academia noticed",
+      "inflection": "TEDxHouston 2010. One 20-minute talk after 8 years of research.",
+      "remarkable_triggers": ["unexpected_combination", "extreme_degree"],
+      "remarkable_behavior": "A shame researcher who spent 8 years studying the thing everyone hides from, then got on stage and shared her own."
+    },
+    "Tony Robbins": {
+      "timeline": [
+        { "year": "1977", "event": "Started promoting Jim Rohn's seminars at age 17", "audience": "seminar attendees", "behavior": "Learning NLP and seminar mechanics" },
+        { "year": "1983", "event": "Began holding own seminars with fire walking", "audience": "small hotel conference rooms", "behavior": "Running NLP seminars in hotels" },
+        { "year": "1986", "event": "First millionaire at 24", "audience": "growing regional following", "behavior": "Scaling seminars, adding fire walking" },
+        { "year": "1988", "event": "Personal Power infomercial launched", "audience": "tens of millions via TV", "behavior": "Infomercials reaching mass market" },
+        { "year": "1991", "event": "Awaken the Giant Within published", "audience": "national bestseller", "behavior": "Books + infomercials + live events" },
+        { "year": "2000+", "event": "Arena-scale events (UPW, Date With Destiny)", "audience": "10,000+ per event", "behavior": "6-day immersive events, thousands of dollars per seat" }
+      ],
+      "trust_years": 6,
+      "trust_behavior": "Ran small NLP seminars in hotel conference rooms for 6 years before the infomercial changed everything",
+      "inflection": "Personal Power infomercial 1988. TV distribution of his seminar energy.",
+      "remarkable_triggers": ["extreme_degree", "unexpected_combination"],
+      "remarkable_behavior": "A janitor's son who figured out how to do therapy with 10,000 people at once by making them walk on fire."
+    },
+    "Wim Hof": {
+      "timeline": [
+        { "year": "1976", "event": "First urge to jump in freezing canal at age 17", "audience": "nobody", "behavior": "Solo cold water immersion" },
+        { "year": "1995", "event": "Wife's death. Cold became coping mechanism", "audience": "nobody", "behavior": "Daily cold exposure, alone" },
+        { "year": "2000", "event": "First Guinness World Record (57.5m swim under ice)", "audience": "niche extreme sports", "behavior": "Breaking cold exposure records" },
+        { "year": "2007", "event": "Barefoot half-marathon on ice/snow world record", "audience": "niche media coverage", "behavior": "Escalating world record attempts" },
+        { "year": "2011", "event": "First Radboud University scientific study", "audience": "scientific community", "behavior": "Submitting to laboratory testing" },
+        { "year": "2013", "event": "Wim Hof Academy launched, instructor certification begins", "audience": "growing community", "behavior": "Training instructors" },
+        { "year": "2014", "event": "PNAS study: WHM practitioners control immune response", "audience": "mainstream science + media", "behavior": "Replicable scientific evidence published" },
+        { "year": "2020+", "event": "1,200+ certified instructors, app, global following", "audience": "millions of followers", "behavior": "Certifying instructors worldwide" }
+      ],
+      "trust_years": 24,
+      "trust_behavior": "Practiced cold exposure alone for 24 years (1976-2000) before his first world record",
+      "inflection": "Radboud University studies 2011-2014. Science validated what looked like mysticism.",
+      "remarkable_triggers": ["impossible_result", "extreme_degree"],
+      "remarkable_behavior": "A grieving father who sat in freezing water every day for decades until scientists proved his breathing could control the immune system."
+    },
+    "Ali Abdaal": {
+      "timeline": [
+        { "year": "2017", "event": "Started YouTube channel, final year at Cambridge", "audience": "0 subscribers", "behavior": "Making study technique videos" },
+        { "year": "2017", "event": "52 videos in 6 months", "audience": "1,000 subscribers", "behavior": "Filming himself studying" },
+        { "year": "2018", "event": "Working as junior doctor, channel keeps growing", "audience": "100,000 subscribers", "behavior": "1-3 videos per week while working full-time as doctor" },
+        { "year": "2020", "event": "Hit 1M subscribers, $1M revenue", "audience": "1,000,000 subscribers", "behavior": "Part-time creator, full-time doctor" },
+        { "year": "2021", "event": "Launched Part-Time YouTuber Academy", "audience": "2M+ subscribers", "behavior": "Teaching others his system" },
+        { "year": "2023", "event": "Feel-Good Productivity published, NYT bestseller", "audience": "5M+ subscribers", "behavior": "Author + course creator + YouTuber" },
+        { "year": "2026", "event": "Channel at 6M subscribers, $5.8M annual revenue", "audience": "6,000,000 subscribers", "behavior": "Full media company" }
+      ],
+      "trust_years": 3,
+      "trust_behavior": "Published 1-3 YouTube videos per week for 3 years while working full-time as an NHS doctor",
+      "inflection": "Pandemic 2020. Study/productivity content met massive demand from people stuck at home.",
+      "remarkable_triggers": ["unexpected_combination"],
+      "remarkable_behavior": "A working NHS doctor who made more money teaching productivity on YouTube than saving lives in hospital."
+    },
+    "Marie Forleo": {
+      "timeline": [
+        { "year": "2001", "event": "Working as bartender + fitness instructor in NYC", "audience": "coaching clients on the side", "behavior": "Life coaching while bartending" },
+        { "year": "2005", "event": "Started blog and email newsletter", "audience": "small email list", "behavior": "Weekly business advice emails" },
+        { "year": "2009", "event": "Founded Marie Forleo International, launched MarieTV", "audience": "growing online following", "behavior": "Weekly web TV show" },
+        { "year": "2011", "event": "Launched B-School online course", "audience": "first cohort", "behavior": "Annual cohort program with scarcity model" },
+        { "year": "2014", "event": "Named by Oprah as thought leader for next generation", "audience": "mainstream recognition", "behavior": "500+ MarieTV episodes" },
+        { "year": "2019", "event": "Everything Is Figureoutable published, NYT #1 bestseller", "audience": "global", "behavior": "Book + B-School + speaking" },
+        { "year": "2025", "event": "B-School: 80,000 students, $100M+ estimated revenue", "audience": "650+ industries, global", "behavior": "14 years of annual cohorts" }
+      ],
+      "trust_years": 8,
+      "trust_behavior": "Wrote weekly blog posts and email newsletters for 8 years while working multiple jobs before B-School launched",
+      "inflection": "B-School launch 2011. Annual scarcity-based cohort model created recurring revenue.",
+      "remarkable_triggers": ["unexpected_combination", "rule_broken"],
+      "remarkable_behavior": "A bartender who taught business to 80,000 people without a business degree, from her laptop."
+    },
+    "James Clear": {
+      "timeline": [
+        { "year": "2012", "event": "Website launched, committed to writing every Mon + Thu", "audience": "0 subscribers", "behavior": "Writing articles twice per week" },
+        { "year": "2013", "event": "First year of consistent publishing", "audience": "30,000 email subscribers", "behavior": "Never missed a publishing day" },
+        { "year": "2017", "event": "5 years of consistent writing", "audience": "450,000 email subscribers", "behavior": "Same schedule, twice per week, 5 years" },
+        { "year": "2018", "event": "Atomic Habits published", "audience": "mainstream bestseller", "behavior": "Book distilled 5 years of articles" },
+        { "year": "2019", "event": "Launched 3-2-1 Newsletter (short-form pivot)", "audience": "1.5M+ subscribers", "behavior": "Weekly newsletter instead of long articles" },
+        { "year": "2025", "event": "25M+ copies sold, 3M+ newsletter subscribers", "audience": "global mainstream", "behavior": "Weekly newsletter" }
+      ],
+      "trust_years": 6,
+      "trust_behavior": "Published a new article every Monday and Thursday for 3 years straight, then maintained weekly publishing for 6 years total before the book",
+      "inflection": "Atomic Habits 2018. 6 years of articles compressed into one book.",
+      "remarkable_triggers": ["stupid_simplicity", "extreme_degree"],
+      "remarkable_behavior": "A guy who wrote the same article about habits twice a week for 6 years, then compressed it into one book that sold 25 million copies."
+    },
+    "Simon Sinek": {
+      "timeline": [
+        { "year": "2002-2009", "event": "Working in advertising, struggling", "audience": "ad industry peers", "behavior": "Developing the Golden Circle concept" },
+        { "year": "2009", "event": "TEDxPugetSound talk 'How Great Leaders Inspire Action'", "audience": "~100 in room", "behavior": "18-minute talk about one question: Why" },
+        { "year": "2009", "event": "Start with Why book published", "audience": "growing via TED", "behavior": "Book expanded on the talk" },
+        { "year": "2014", "event": "Second TED talk, 'Why Good Leaders Make You Feel Safe'", "audience": "18M+ views", "behavior": "Consulting for military + Fortune 500" },
+        { "year": "2020+", "event": "TED talks: 100M+ combined views, multiple bestsellers", "audience": "global", "behavior": "Speaking, consulting, writing" }
+      ],
+      "trust_years": 7,
+      "trust_behavior": "Spent 7 years developing the Golden Circle concept while working in advertising before the TED talk",
+      "inflection": "TEDxPugetSound 2009. One question ('Why?') in 18 minutes. Third most-watched TED talk ever.",
+      "remarkable_triggers": ["stupid_simplicity"],
+      "remarkable_behavior": "A struggling ad man who asked one question so simple that entire companies reorganized around the answer."
+    },
+    "Esther Perel": {
+      "timeline": [
+        { "year": "1983-2006", "event": "Private therapy practice in NYC, 23 years", "audience": "private clients", "behavior": "Couples therapy, cross-cultural focus" },
+        { "year": "2006", "event": "Mating in Captivity published", "audience": "therapy community + mainstream", "behavior": "Writing about desire in long-term relationships" },
+        { "year": "2013", "event": "First TED talk, 5M views in first year", "audience": "millions", "behavior": "Talking about sex and relationships publicly" },
+        { "year": "2017", "event": "Where Should We Begin? podcast launched", "audience": "podcast mainstream", "behavior": "Recording real therapy sessions and publishing them" },
+        { "year": "2020+", "event": "Named 'most important game changer on sexuality since Dr. Ruth' by NYT", "audience": "global", "behavior": "Podcasts, MasterClass, card games, speaking" }
+      ],
+      "trust_years": 23,
+      "trust_behavior": "Ran a private therapy practice for 23 years before publishing her first book",
+      "inflection": "Where Should We Begin? podcast 2017. Real therapy sessions made public.",
+      "remarkable_triggers": ["rule_broken", "unexpected_combination"],
+      "remarkable_behavior": "A therapist who recorded real couples therapy sessions and published them as a podcast for millions to hear."
+    },
+    "Adriene Mishler": {
+      "timeline": [
+        { "year": "2012", "event": "YouTube channel launched", "audience": "0 subscribers", "behavior": "Filming yoga in her living room" },
+        { "year": "2013", "event": "REBOOT series, passed 150K subscribers", "audience": "150,000 subscribers", "behavior": "Weekly videos, never correcting form" },
+        { "year": "2014", "event": "First 30-day yoga series, 100K new subscribers in January", "audience": "250,000+ subscribers", "behavior": "Annual January challenge" },
+        { "year": "2018", "event": "Channel hits 4M subscribers", "audience": "4,000,000 subscribers", "behavior": "Consistent weekly uploads from living room" },
+        { "year": "2020", "event": "Pandemic drives massive growth", "audience": "10M+ subscribers", "behavior": "Free yoga when studios closed" },
+        { "year": "2026", "event": "13M subscribers, Find What Feels Good membership app", "audience": "13,000,000 subscribers", "behavior": "Weekly YouTube + paid app" }
+      ],
+      "trust_years": 6,
+      "trust_behavior": "Posted weekly yoga videos from her living room for 6 years before mainstream recognition",
+      "inflection": "Pandemic 2020. Free living-room yoga when every studio closed.",
+      "remarkable_triggers": ["rule_broken", "stupid_simplicity"],
+      "remarkable_behavior": "A yoga teacher who never corrected anyone's form, filmed from her living room, and became bigger than every yoga studio combined."
+    },
+    "Gabor Mate": {
+      "timeline": [
+        { "year": "1977-1997", "event": "Family physician in East Vancouver, 20 years", "audience": "patients", "behavior": "Family medicine practice" },
+        { "year": "1997-2009", "event": "12 years in Vancouver's Downtown Eastside with addicts", "audience": "patients + medical community", "behavior": "Working with the most addicted population in North America" },
+        { "year": "1999", "event": "First book: Scattered Minds (ADHD)", "audience": "niche readership", "behavior": "Writing books from clinical observations" },
+        { "year": "2008", "event": "In the Realm of Hungry Ghosts published", "audience": "growing recognition", "behavior": "Connecting addiction to childhood trauma" },
+        { "year": "2021", "event": "The Wisdom of Trauma documentary, 2M views in 6 days", "audience": "mainstream viral", "behavior": "Documentary premiered free online" },
+        { "year": "2022", "event": "The Myth of Normal published, global bestseller", "audience": "5M Instagram followers", "behavior": "Global speaking tours + social media" }
+      ],
+      "trust_years": 32,
+      "trust_behavior": "Practiced medicine for 32 years (20 as family doctor, 12 with addicts) before mainstream fame arrived",
+      "inflection": "The Wisdom of Trauma 2021. Free documentary went viral during pandemic mental health crisis.",
+      "remarkable_triggers": ["extreme_degree", "stupid_simplicity"],
+      "remarkable_behavior": "A doctor who spent 12 years with the most hopeless addicts in North America and said the question is never 'why the addiction' but always 'why the pain.'"
+    },
+    "Glennon Doyle": {
+      "timeline": [
+        { "year": "2009", "event": "Started Momastery blog", "audience": "small blog readership", "behavior": "Raw, honest posts about motherhood and recovery" },
+        { "year": "2013", "event": "Carry On, Warrior published", "audience": "blog audience + book readers", "behavior": "Compiling blog essays into book" },
+        { "year": "2014", "event": "Named 'Best All-Around' at Parents Social Media Awards", "audience": "mommy blog mainstream", "behavior": "Consistent blogging" },
+        { "year": "2016", "event": "Love Warrior published, Oprah's Book Club", "audience": "Oprah audience", "behavior": "Writing about marriage betrayal and healing" },
+        { "year": "2020", "event": "Untamed published, 3M+ copies sold", "audience": "global mainstream", "behavior": "Came out, left husband, kept audience" },
+        { "year": "2021", "event": "We Can Do Hard Things podcast launched", "audience": "podcast mainstream", "behavior": "Weekly podcast with wife Abby Wambach" }
+      ],
+      "trust_years": 7,
+      "trust_behavior": "Published raw, honest blog posts about motherhood and recovery consistently for 7 years before mainstream recognition",
+      "inflection": "Untamed 2020. Left husband for Abby Wambach, wrote about it, audience grew instead of shrinking.",
+      "remarkable_triggers": ["rule_broken"],
+      "remarkable_behavior": "A Christian mommy blogger who left her husband for a woman, wrote about it, and her audience tripled instead of disappearing."
+    },
+    "Phil Jackson": {
+      "timeline": [
+        { "year": "1967-1980", "event": "NBA player with Knicks and Nets", "audience": "basketball fans", "behavior": "Playing while studying Zen Buddhism and Native American spirituality" },
+        { "year": "1980-1987", "event": "Minor league coaching, CBA", "audience": "small-town basketball", "behavior": "Integrating meditation into coaching practice" },
+        { "year": "1987", "event": "Hired as Bulls assistant coach", "audience": "NBA", "behavior": "Introducing mindfulness to professional athletes" },
+        { "year": "1989", "event": "Promoted to Bulls head coach", "audience": "national sports media", "behavior": "Group meditation, Lakota warrior items in locker room" },
+        { "year": "1991-1998", "event": "6 championships with Bulls", "audience": "global sports", "behavior": "Zen coaching with Jordan, Pippen, Rodman" },
+        { "year": "1999-2011", "event": "5 championships with Lakers, 11 total", "audience": "most decorated coach in NBA history", "behavior": "Same Zen approach with Kobe, Shaq" }
+      ],
+      "trust_years": 9,
+      "trust_behavior": "Coached in minor leagues for 7 years and as assistant for 2 years while developing his Zen coaching philosophy before getting the Bulls job",
+      "inflection": "First Bulls championship 1991. Zen Buddhism + Michael Jordan = proof the method worked.",
+      "remarkable_triggers": ["unexpected_combination"],
+      "remarkable_behavior": "A Zen Buddhist who coached the NBA's biggest egos by making them sit in silence, and won more championships than anyone in history."
+    },
+    "Jay Shetty": {
+      "timeline": [
+        { "year": "2010-2013", "event": "Lived as Hindu monk in India and UK", "audience": "monastic community", "behavior": "Waking at 4am, meditation, minimalist living" },
+        { "year": "2013", "event": "Left monastery, joined Accenture", "audience": "corporate", "behavior": "Digital strategy consulting" },
+        { "year": "2016", "event": "Left Accenture, began making videos independently", "audience": "early social following", "behavior": "Translating monastic wisdom into social content" },
+        { "year": "2017", "event": "Huffington Post videos, then independent", "audience": "growing Facebook following", "behavior": "Short wisdom videos for social media" },
+        { "year": "2018", "event": "Ellen DeGeneres Show, Red Table Talk, Will Smith's spiritual adviser", "audience": "mainstream TV", "behavior": "Celebrity connections" },
+        { "year": "2019", "event": "On Purpose podcast launched, 64M downloads in year 1, 1M YouTube subscribers, 20M Facebook followers", "audience": "massive multi-platform", "behavior": "Podcast + social content" },
+        { "year": "2020", "event": "Think Like a Monk published", "audience": "65M+ across platforms", "behavior": "Book + podcast + speaking" }
+      ],
+      "trust_years": 3,
+      "trust_behavior": "Lived as a monk for 3 years studying ancient wisdom traditions before translating them into content",
+      "inflection": "2018 celebrity connections (Ellen, Will Smith). Monastic credibility met celebrity distribution.",
+      "remarkable_triggers": ["unexpected_combination"],
+      "remarkable_behavior": "A former monk who became Will Smith's spiritual adviser and translated ancient monastic wisdom into content a scrolling generation actually stopped for."
+    },
+    "John Gottman": {
+      "timeline": [
+        { "year": "1972", "event": "Started research on couples", "audience": "academic", "behavior": "Observing couples in clinical settings" },
+        { "year": "1975", "event": "Teamed with Robert Levenson, added physiological measurement", "audience": "research community", "behavior": "Measuring heart rate, skin conductance during arguments" },
+        { "year": "1986", "event": "Built apartment 'Love Lab' at University of Washington", "audience": "academic + media interest", "behavior": "Watching couples live in a lab apartment" },
+        { "year": "1994", "event": "Why Marriages Succeed or Fail published", "audience": "mainstream readers", "behavior": "Publishing findings as accessible book" },
+        { "year": "1996", "event": "Co-founded The Gottman Institute with wife Julie", "audience": "therapists + public", "behavior": "Training therapists in the method" },
+        { "year": "1998", "event": "Published divorce prediction study (90% accuracy claim)", "audience": "global media", "behavior": "The number '90%' became the story" },
+        { "year": "2000+", "event": "12 studies, 3,000+ couples observed", "audience": "mainstream relationship science", "behavior": "Continued research + therapist training" }
+      ],
+      "trust_years": 22,
+      "trust_behavior": "Researched couples for 22 years (1972-1994) before publishing his first mainstream book",
+      "inflection": "The '90% accuracy' claim. One number made decades of research into a headline.",
+      "remarkable_triggers": ["impossible_result", "stupid_simplicity"],
+      "remarkable_behavior": "A mathematician who watched couples fight in a lab and could predict divorce with 90% accuracy. The answer was contempt, not anger."
+    },
+    "Elizabeth Gilbert": {
+      "timeline": [
+        { "year": "1993", "event": "First short story published in Esquire (first unpublished writer since Norman Mailer)", "audience": "literary world", "behavior": "Writing short fiction and journalism" },
+        { "year": "1993-2006", "event": "13 years of journalism for GQ, NYT Magazine, Spin", "audience": "magazine readers", "behavior": "Consistent journalism and essay writing" },
+        { "year": "2006", "event": "Eat Pray Love published", "audience": "mainstream bestseller, 12M copies", "behavior": "Memoir about leaving everything to find herself" },
+        { "year": "2009", "event": "TED talk 'Your Elusive Creative Genius', 21M+ views", "audience": "TED global", "behavior": "Reframing creativity as external genius, not internal pressure" },
+        { "year": "2010", "event": "Eat Pray Love film with Julia Roberts", "audience": "global mainstream", "behavior": "Hollywood adaptation" },
+        { "year": "2015", "event": "Big Magic: Creative Living Beyond Fear published", "audience": "creative community", "behavior": "Giving permission to create without being good" }
+      ],
+      "trust_years": 13,
+      "trust_behavior": "Wrote journalism and short fiction for 13 years before Eat Pray Love",
+      "inflection": "Eat Pray Love 2006. A journalist who left everything and wrote about it.",
+      "remarkable_triggers": ["rule_broken"],
+      "remarkable_behavior": "A bestselling author who told millions of people they should create badly rather than wait to be good enough."
+    },
+    "Dave Ramsey": {
+      "timeline": [
+        { "year": "1986", "event": "$4M real estate portfolio by age 26", "audience": "local real estate", "behavior": "Buying and flipping property" },
+        { "year": "1988", "event": "Filed for Chapter 7 bankruptcy", "audience": "nobody", "behavior": "Lost everything" },
+        { "year": "1991", "event": "Started financial counseling at his church", "audience": "church members", "behavior": "Teaching small groups about debt" },
+        { "year": "1992", "event": "Self-published Financial Peace, started radio show", "audience": "local Nashville radio", "behavior": "Call-in financial advice, 3 hours daily" },
+        { "year": "1994", "event": "Launched Financial Peace University (9-lesson course)", "audience": "churches nationwide", "behavior": "Teaching FPU in churches for small fees" },
+        { "year": "2003", "event": "The Total Money Makeover published, NYT bestseller", "audience": "national mainstream", "behavior": "Books + radio + FPU" },
+        { "year": "2015", "event": "Inducted into National Radio Hall of Fame", "audience": "17M weekly listeners", "behavior": "22 books, 10 podcasts, daily radio" }
+      ],
+      "trust_years": 11,
+      "trust_behavior": "Taught Financial Peace University in churches for 11 years (1994-2005) before mainstream media recognition",
+      "inflection": "The Total Money Makeover 2003. His bankruptcy story became his credential.",
+      "remarkable_triggers": ["unexpected_combination", "extreme_degree"],
+      "remarkable_behavior": "A bankrupt real estate guy who spent 30 years screaming at Americans to cut up their credit cards like a preacher at a tent revival."
+    }
+  }
+}

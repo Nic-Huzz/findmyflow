@@ -3,7 +3,7 @@
  * Browse experience creators by business model archetype,
  * select who resonates, get a product suite recommendation.
  */
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
@@ -13,7 +13,8 @@ import './ExperienceCreatorFlow.css'
 // ── Data imports ──
 import dnaData from '../../public/data/experienceCreatorDNA.json'
 import careerModelsData from '../../public/data/careerModels.json'
-import offerMapData from '../../public/data/experienceCreatorOfferMap.json'
+import growthData from '../../public/data/experienceCreatorGrowthStrategies.json'
+import playSkillData from '../../public/data/nonFounderPlaySkills.json'
 
 // ── Category definitions ──
 const CATEGORIES = [
@@ -69,35 +70,82 @@ const ARCHETYPE_OFFERS = {
   },
 }
 
-// ── Build proof quotes from selected creators ──
-// Pre-build career model map once (not per render)
-const CM_MAP = {}
-careerModelsData.profiles.forEach(p => { CM_MAP[p.name] = p })
+// ── Play-skill matching ──
+// Build a map of creator name → dominantCategories (play-skills)
+const CREATOR_SKILLS = {}
+playSkillData.profiles.forEach(p => {
+  if (p.dominantCategories?.length) CREATOR_SKILLS[p.name] = p.dominantCategories
+})
 
-function buildProof(selectedNames, slot) {
-  const proofs = []
+// Growth category → pattern statement templates
+const PATTERN_STATEMENTS = {
+  free_content: "started by creating content nobody asked for. Blogs, videos, newsletters. Not because it paid. Because they had something to say.",
+  free_events: "started by gathering people in rooms. Free workshops, community events, open classes. Not because it was a business. Because they couldn't stop bringing people together.",
+  academic: "started by going deep. Research, clinical work, years of study. Not because the market rewarded it. Because understanding the thing mattered more than selling it.",
+  grassroots: "started by organising. Local communities, activism, word of mouth. Not because it scaled. Because the cause was louder than the career plan.",
+  one_project: "started with one project that broke through. One book, one talk, one piece of work that couldn't be ignored.",
+  apprenticeship: "started by learning under someone else. Institutions, mentors, long apprenticeships. Not because it was fast. Because mastery required it.",
+  clinical: "started with one person at a time. Clients, patients, 1:1 work. Not because it scaled. Because the transformation happened in the room.",
+}
 
-  for (const name of selectedNames) {
-    const cm = CM_MAP[name]
-    if (!cm?.careerModel) continue
-    const offers = offerMapData.creators?.[name]
-    if (!offers) continue
+// Play-skill display names
+const SKILL_DISPLAY = {
+  storytelling: 'storytelling', teaching: 'teaching', coaching: 'coaching',
+  performing: 'performing', creating: 'creating', building: 'building',
+  designing: 'designing', leading: 'leading', connecting: 'connecting',
+  speaking_up: 'speaking up',
+}
 
-    const streams = offers[slot] || []
-    if (streams.length === 0) continue
 
-    if (slot === 'attraction' && cm.careerModel.trajectory) {
-      proofs.push({ name, text: cm.careerModel.trajectory })
-    } else if (slot === 'core' && cm.careerModel.scaleModel) {
-      proofs.push({ name, text: cm.careerModel.scaleModel })
-    } else if (slot === 'continuity' && cm.careerModel.lessonsForUser) {
-      proofs.push({ name, text: cm.careerModel.lessonsForUser })
-    } else if (cm.careerModel.lessonsForUser) {
-      proofs.push({ name, text: cm.careerModel.lessonsForUser })
+// Find the shared play-skill between user's skills and selected creators
+function findPlaySkillMatch(userSkills, selectedNames) {
+  if (!userSkills?.length) return null
+
+  // Count how many selected creators share each of the user's skills
+  const skillOverlap = {}
+  for (const skill of userSkills) {
+    skillOverlap[skill] = 0
+    for (const name of selectedNames) {
+      const creatorSkills = CREATOR_SKILLS[name] || []
+      if (creatorSkills.includes(skill)) skillOverlap[skill]++
     }
   }
 
-  return proofs.slice(0, 2)
+  // Find the skill with the most overlap
+  const best = Object.entries(skillOverlap).sort((a, b) => b[1] - a[1])[0]
+  if (!best || best[1] === 0) return null
+  return { skill: best[0], matchCount: best[1] }
+}
+
+// Build cross-creator pattern from growth strategies
+function buildPattern(creatorNames) {
+  const categoryCounts = {}
+  for (const name of creatorNames) {
+    const gs = growthData.creators?.[name]
+    if (!gs?.growth_category) continue
+    categoryCounts[gs.growth_category] = (categoryCounts[gs.growth_category] || 0) + 1
+  }
+  if (Object.keys(categoryCounts).length === 0) return null
+  const [topCategory, topCount] = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])[0]
+  return {
+    category: topCategory,
+    count: topCount,
+    total: creatorNames.length,
+    statement: PATTERN_STATEMENTS[topCategory] || PATTERN_STATEMENTS.free_events,
+  }
+}
+
+// Find all creators in corpus who share a play-skill
+function findCreatorsWithSkill(skill, excludeNames = []) {
+  const excludeSet = new Set(excludeNames)
+  const matches = []
+  for (const [name, skills] of Object.entries(CREATOR_SKILLS)) {
+    if (skills.includes(skill) && !excludeSet.has(name)) {
+      const gs = growthData.creators?.[name]
+      if (gs) matches.push({ name, ...gs })
+    }
+  }
+  return matches.slice(0, 5)
 }
 
 // ── First steps per archetype ──
@@ -140,43 +188,56 @@ export default function ExperienceCreatorFlow() {
   const [screen, setScreen] = useState('browse') // 'browse' | 'result'
   const [selected, setSelected] = useState(new Set())
   const [loading, setLoading] = useState(false)
-  const [layerStatus, setLayerStatus] = useState({}) // 'confirmed' | 'skipped'
-  const [showAlts, setShowAlts] = useState({}) // which layers have alternatives expanded
-  const [layerOverrides, setLayerOverrides] = useState({}) // swapped layer content { slot: { name, desc, from } }
   const [tryEmail, setTryEmail] = useState('')
   const [trySaving, setTrySaving] = useState(false)
   const [trySaved, setTrySaved] = useState(false)
+  const [userSkills, setUserSkills] = useState([])
+  const [chosenArchetype, setChosenArchetype] = useState(null)
 
-  const confirmLayer = (slot) => {
-    hapticLight()
-    setLayerStatus(prev => ({ ...prev, [slot]: 'confirmed' }))
-    setShowAlts(prev => ({ ...prev, [slot]: false }))
-  }
+  // Fetch user's play-skill categories from onboarding (stored in nikigai_clusters.items[].category)
+  useEffect(() => {
+    if (!user) return
+    ;(async () => {
+      const { data } = await supabase
+        .from('nikigai_clusters')
+        .select('items')
+        .eq('user_id', user.id)
+        .eq('cluster_type', 'skills')
+      if (!data?.length) return
+      // Extract unique category IDs from items arrays
+      const categories = new Set()
+      for (const row of data) {
+        const items = row.items || []
+        for (const item of items) {
+          if (item.category) categories.add(item.category)
+        }
+      }
+      if (categories.size > 0) setUserSkills([...categories])
+    })()
+  }, [user])
 
-  const toggleAlts = (slot) => {
-    hapticLight()
-    setShowAlts(prev => ({ ...prev, [slot]: !prev[slot] }))
-  }
-
-  const pickAlternative = (slot, altArchetypeId) => {
-    hapticLight()
-    const altOffers = ARCHETYPE_OFFERS[altArchetypeId]
-    if (!altOffers?.[slot]) return
-    setLayerOverrides(prev => ({
-      ...prev,
-      [slot]: { ...altOffers[slot], from: ARCHETYPE_INFO[altArchetypeId]?.name || altArchetypeId }
-    }))
-    setLayerStatus(prev => ({ ...prev, [slot]: 'confirmed' }))
-    setShowAlts(prev => ({ ...prev, [slot]: false }))
-  }
 
   const allCreators = useMemo(() => buildCreatorData(), [])
 
-  // Group creators by category
+  // Group creators by category, famous names first
   const grouped = useMemo(() => {
+    const FEATURED = new Set([
+      'Brené Brown', 'Wim Hof', 'Tony Robbins', 'Glennon Doyle',
+      'Marie Forleo', 'Ali Abdaal', 'James Clear', 'Simon Sinek',
+      'Esther Perel', 'Elizabeth Gilbert', 'Priya Parker', 'Gloria Steinem',
+      'Gabor Mate', 'Adriene Mishler', 'Walt Disney', 'Jay Shetty',
+      'Lin-Manuel Miranda', 'Nina Simone', 'Dave Ramsey', 'Tara Brach',
+      'Joseph Campbell', 'Gabby Bernstein',
+    ])
     const groups = {}
     for (const cat of CATEGORIES) {
-      groups[cat.id] = allCreators.filter(c => c.categoryId === cat.id)
+      const catCreators = allCreators.filter(c => c.categoryId === cat.id)
+      catCreators.sort((a, b) => {
+        const aFeat = FEATURED.has(a.name) ? 0 : 1
+        const bFeat = FEATURED.has(b.name) ? 0 : 1
+        return aFeat - bFeat
+      })
+      groups[cat.id] = catCreators
     }
     return groups
   }, [allCreators])
@@ -229,15 +290,16 @@ export default function ExperienceCreatorFlow() {
     if (!tryEmail.trim() || trySaving) return
     setTrySaving(true)
     try {
-      const baseOffers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
+      const archId = chosenArchetype || dominantArchetype || 'workshop'
+      const baseOffers = ARCHETYPE_OFFERS[archId] || ARCHETYPE_OFFERS.workshop
       await supabase.from('experience_creator_leads').insert({
         email: tryEmail.trim().toLowerCase(),
         selected_creators: [...selected],
-        dominant_archetype: dominantArchetype,
+        dominant_archetype: archId,
         product_suite: {
-          attraction: (layerOverrides.attraction || baseOffers.attraction)?.name,
-          core: (layerOverrides.core || baseOffers.core)?.name,
-          continuity: (layerOverrides.continuity || baseOffers.continuity)?.name,
+          attraction: baseOffers.attraction?.name,
+          core: baseOffers.core?.name,
+          continuity: baseOffers.continuity?.name,
         },
       })
       setTrySaved(true)
@@ -256,17 +318,17 @@ export default function ExperienceCreatorFlow() {
     }
     setLoading(true)
     try {
-      const baseOffers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
+      const archId = chosenArchetype || dominantArchetype || 'workshop'
+      const baseOffers = ARCHETYPE_OFFERS[archId] || ARCHETYPE_OFFERS.workshop
       const { error } = await supabase.from('experience_creator_selections').insert({
         user_id: user.id,
         selected_creators: [...selected],
-        dominant_archetype: dominantArchetype,
+        dominant_archetype: archId,
         product_suite: {
-          attraction: (layerOverrides.attraction || baseOffers.attraction)?.name,
-          core: (layerOverrides.core || baseOffers.core)?.name,
-          continuity: (layerOverrides.continuity || baseOffers.continuity)?.name,
+          attraction: baseOffers.attraction?.name,
+          core: baseOffers.core?.name,
+          continuity: baseOffers.continuity?.name,
         },
-        layer_validations: layerStatus,
       })
       if (error) throw error
       hapticSuccess()
@@ -281,21 +343,48 @@ export default function ExperienceCreatorFlow() {
   // Pre-compute result screen data (must be before early returns to satisfy hooks rules)
   const archetype = ARCHETYPE_INFO[dominantArchetype] || ARCHETYPE_INFO.workshop
   const firstStep = FIRST_STEPS[dominantArchetype] || FIRST_STEPS.workshop
-  const offers = ARCHETYPE_OFFERS[dominantArchetype] || ARCHETYPE_OFFERS.workshop
   const selectedNames = [...selected]
 
-  const allProofs = useMemo(() => ({
-    attraction: buildProof(selectedNames, 'attraction'),
-    core: buildProof(selectedNames, 'core'),
-    continuity: buildProof(selectedNames, 'continuity'),
-    scale: buildProof(selectedNames, 'scale'),
-  }), [selectedNames.join(',')])
 
-  const LAYERS = [
-    { slot: 'attraction', dotClass: 'attraction', label: 'Attraction' },
-    { slot: 'core', dotClass: 'core', label: 'Core Offer' },
-    { slot: 'continuity', dotClass: 'continuity', label: 'Continuity' },
-  ]
+  // ── Play-List reveal data ──
+  const playListReveal = useMemo(() => {
+    if (selected.size === 0) return null
+    const names = [...selected]
+
+    // Find ALL overlapping skills (not just the top one)
+    const allOverlaps = []
+    if (userSkills.length > 0) {
+      for (const skill of userSkills) {
+        let count = 0
+        for (const name of names) {
+          const creatorSkills = CREATOR_SKILLS[name] || []
+          if (creatorSkills.includes(skill)) count++
+        }
+        if (count > 0) allOverlaps.push({ skill, display: SKILL_DISPLAY[skill] || skill, count })
+      }
+      allOverlaps.sort((a, b) => b.count - a.count)
+    }
+
+    // Get first step from growth data
+    const firstStepFromData = names.map(name => growthData.creators?.[name]?.first_step).find(Boolean)
+
+    // Determine which archetype categories the selections span
+    const archetypeCounts = {}
+    for (const name of names) {
+      const creator = allCreators.find(c => c.name === name)
+      if (creator) archetypeCounts[creator.categoryId] = (archetypeCounts[creator.categoryId] || 0) + 1
+    }
+    const archetypesPresent = Object.entries(archetypeCounts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([id]) => ({ id, ...ARCHETYPE_INFO[id], emoji: CATEGORIES.find(c => c.id === id)?.emoji || '✨' }))
+
+    return {
+      hasOverlap: allOverlaps.length > 0,
+      sharedSkills: allOverlaps.slice(0, 4),
+      archetypesPresent,
+      firstStep: firstStepFromData || FIRST_STEPS[dominantArchetype],
+    }
+  }, [selected, userSkills, dominantArchetype, allCreators])
 
   // ── BROWSE SCREEN ──
   if (screen === 'browse') {
@@ -304,8 +393,8 @@ export default function ExperienceCreatorFlow() {
         {/* Hero */}
         <div className="ecf-hero">
           <div className="ecf-hero-badge">Experience Creator Matching</div>
-          <h1>Who would you love<br />to <span className="ecf-hero-gold">build like?</span></h1>
-          <p>Scroll through real people who built careers from experiences. Tap anyone who inspires you.</p>
+          <h1>Who <span className="ecf-hero-gold">inspires</span> you?</h1>
+          <p>Scroll through real people who built careers from experiences. Pick 3-5 who inspire you.</p>
         </div>
 
         <div className="ecf-container">
@@ -367,6 +456,7 @@ export default function ExperienceCreatorFlow() {
   }
 
   // ── RESULT SCREEN ──
+  const reveal = playListReveal
   return (
     <div className="ecf">
       <div className="ecf-container">
@@ -375,116 +465,61 @@ export default function ExperienceCreatorFlow() {
             ← Back to browsing
           </button>
 
+          {/* ═══ SECTION 1: Bridge + Play-skill tags ═══ */}
           <div className="ecf-result-header">
-            <div className="ecf-result-badge">Your Model</div>
-            <h1>{archetype.name}</h1>
-            <p>{archetype.desc}</p>
+            <div className="ecf-result-badge">Their Play-List</div>
+            <h1>What They Couldn't <span className="ecf-hero-gold">Stop</span></h1>
           </div>
 
-          <div className="ecf-selected-chips">
-            {selectedCreators.map(c => (
-              <div key={c.name} className="ecf-chip">
-                <img src={c.image} alt={c.name} />
-                {c.name}
-              </div>
-            ))}
-          </div>
-
-          {/* Offer layers with real data + alternatives */}
-          {LAYERS.map(({ slot, dotClass, label }) => {
-            const override = layerOverrides[slot]
-            const offer = override || offers[slot]
-            const proofs = allProofs[slot] || []
-            const status = layerStatus[slot]
-            const altsOpen = showAlts[slot]
-            const otherArchetypes = Object.entries(ARCHETYPE_OFFERS)
-              .filter(([id]) => id !== dominantArchetype)
-              .filter(([, o]) => o[slot])
-
-            return (
-              <div key={slot} className={`ecf-offer-card ${status === 'confirmed' ? 'confirmed' : ''}`}>
-                <div className="ecf-offer-top">
-                  <div className={`ecf-offer-dot ${dotClass}`} />
-                  <div>
-                    <div className="ecf-offer-label">{label}{override ? ` · from ${override.from}` : ''}</div>
-                    <div className="ecf-offer-name">{offer.name}</div>
-                  </div>
-                </div>
-                <div className="ecf-offer-desc">{offer.desc}</div>
-                {!override && proofs.length > 0 && (
-                  <div className="ecf-offer-proof">
-                    {proofs.map((p, i) => (
-                      <span key={i}>{i > 0 ? ' ' : ''}{p.name}: "{p.text}"</span>
-                    ))}
-                  </div>
-                )}
-                <div className="ecf-offer-actions">
-                  {status === 'confirmed' ? (
-                    <button className="ecf-offer-btn confirmed" style={{ flex: 1 }}>✓ Confirmed</button>
-                  ) : (
-                    <>
-                      <button className="ecf-offer-btn yes" onClick={() => confirmLayer(slot)}>Hell Yes</button>
-                      <button className="ecf-offer-btn no" onClick={() => toggleAlts(slot)}>Other options</button>
-                    </>
-                  )}
-                </div>
-                {altsOpen && (
-                  <div className="ecf-alternatives">
-                    <div className="ecf-alternatives-title">Other approaches</div>
-                    {otherArchetypes.map(([altId, altOffers]) => (
-                      <div
-                        key={altId}
-                        className="ecf-alt-option"
-                        onClick={() => pickAlternative(slot, altId)}
-                      >
-                        <div className="ecf-alt-emoji">{CATEGORIES.find(c => c.id === altId)?.emoji || '💡'}</div>
-                        <div>
-                          <div className="ecf-alt-name">{altOffers[slot].name}</div>
-                          <div className="ecf-alt-source">{ARCHETYPE_INFO[altId]?.name}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )
-          })}
-
-          {/* Scale — optional, shown separately */}
-          {(dominantArchetype === 'workshop' || dominantArchetype === 'cohort') && (
-            <div className={`ecf-offer-card ${layerStatus.scale === 'confirmed' ? 'confirmed' : ''}`}>
-              <div className="ecf-offer-top">
-                <div className="ecf-offer-dot" style={{ background: '#E9A23B' }} />
-                <div>
-                  <div className="ecf-offer-label">Scale (optional)</div>
-                  <div className="ecf-offer-name">Certify others to teach your method</div>
-                </div>
-              </div>
-              <div className="ecf-offer-desc">When you're ready to multiply: train practitioners to deliver without you in the room. You own the IP, not the calendar.</div>
-              {allProofs.scale.length > 0 && (
-                <div className="ecf-offer-proof">
-                  {allProofs.scale.map((p, i) => (
-                    <span key={i}>{i > 0 ? ' ' : ''}{p.name}: "{p.text}"</span>
+          <div className="ecf-reveal-card">
+            {reveal?.hasOverlap ? (
+              <>
+                <p className="ecf-reveal-bridge">
+                  You didn't pick these people randomly. You share similar play-lists.
+                </p>
+                <div className="ecf-skill-tags">
+                  {reveal.sharedSkills.map(s => (
+                    <span key={s.skill} className="ecf-skill-tag">
+                      {s.display}
+                      <span className="ecf-skill-tag-count">{s.count} picks</span>
+                    </span>
                   ))}
                 </div>
-              )}
-              <div className="ecf-offer-actions">
-                {layerStatus.scale === 'confirmed' ? (
-                  <button className="ecf-offer-btn confirmed" style={{ flex: 1 }}>✓ Confirmed</button>
-                ) : (
-                  <>
-                    <button className="ecf-offer-btn yes" onClick={() => confirmLayer('scale')}>Hell Yes</button>
-                    <button className="ecf-offer-btn no" onClick={() => setLayerStatus(prev => ({ ...prev, scale: 'skipped' }))}>Not yet</button>
-                  </>
-                )}
+              </>
+            ) : (
+              <p className="ecf-reveal-bridge">
+                Here's what your picks all did before anyone noticed.
+              </p>
+            )}
+          </div>
+
+
+          {/* ═══ SECTION 3: Which business model sounds most exciting? ═══ */}
+          {reveal?.archetypesPresent?.length > 0 && (
+            <div className="ecf-model-pick">
+              <div className="ecf-model-pick-title">Which of these sounds most exciting to you?</div>
+              <div className="ecf-model-options">
+                {reveal.archetypesPresent.map(arch => (
+                  <button
+                    key={arch.id}
+                    className={`ecf-model-option ${chosenArchetype === arch.id ? 'ecf-model-chosen' : ''}`}
+                    onClick={() => { hapticLight(); setChosenArchetype(arch.id) }}
+                  >
+                    <span className="ecf-model-emoji">{arch.emoji}</span>
+                    <div>
+                      <div className="ecf-model-name">{arch.name}</div>
+                      <div className="ecf-model-desc">{arch.desc}</div>
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
           )}
 
-          {/* First Step */}
+          {/* ═══ SECTION 4: First Step + Save ═══ */}
           <div className="ecf-first-step">
             <h3>Your First Step</h3>
-            <p>{firstStep}</p>
+            <p>{chosenArchetype ? (FIRST_STEPS[chosenArchetype] || firstStep) : (reveal?.firstStep || firstStep)}</p>
 
             {isTryRoute ? (
               trySaved ? (
@@ -510,7 +545,7 @@ export default function ExperienceCreatorFlow() {
                 </div>
               )
             ) : (
-              <button className="ecf-save-btn" onClick={saveModel} disabled={loading}>
+              <button className="ecf-save-btn" onClick={saveModel} disabled={loading || !chosenArchetype}>
                 {loading ? 'Saving...' : 'Save My Model'}
               </button>
             )}

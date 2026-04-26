@@ -1,0 +1,343 @@
+/* ============================================
+   ScopeMapFlow — Diagnostic flow for /create
+   Scoped to .scope-flow per project convention
+   ============================================ */
+
+.scope-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1.25rem;
+  background: linear-gradient(180deg, #0a0618 0%, #1a0b3d 50%, #2d1260 100%);
+  box-sizing: border-box;
+}
+
+.scope-flow .scope-flow-card {
+  width: 100%;
+  max-width: 480px;
+  animation: scope-flow-fade-in 0.4s ease;
+}
+
+@keyframes scope-flow-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.scope-flow .scope-flow-center {
+  text-align: center;
+}
+
+/* ─── Step indicator ─── */
+.scope-flow .scope-flow-step {
+  display: inline-block;
+  padding: 4px 14px;
+  background: rgba(233, 162, 59, 0.15);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  border-radius: 999px;
+  color: #E9A23B;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+/* ─── Typography ─── */
+.scope-flow .scope-flow-heading {
+  font-size: clamp(24px, 5vw, 32px);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  color: #fff;
+}
+
+.scope-flow .scope-flow-gold {
+  color: #E9A23B;
+}
+
+.scope-flow .scope-flow-sub {
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 32px;
+}
+
+.scope-flow .scope-flow-prompt {
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 20px;
+  font-style: italic;
+}
+
+/* ─── Textarea ─── */
+.scope-flow .scope-flow-textarea {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.5;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.scope-flow .scope-flow-textarea:focus {
+  outline: none;
+  border-color: rgba(233, 162, 59, 0.5);
+}
+
+.scope-flow .scope-flow-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ─── Buttons ─── */
+.scope-flow .scope-flow-cta {
+  display: inline-block;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #E9A23B 0%, #f5b849 100%);
+  color: #1a0b3d;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(233, 162, 59, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.scope-flow .scope-flow-cta:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(233, 162, 59, 0.45);
+}
+
+.scope-flow .scope-flow-cta:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.scope-flow .scope-flow-secondary {
+  display: inline-block;
+  padding: 14px 24px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.scope-flow .scope-flow-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.scope-flow .scope-flow-back {
+  padding: 14px 20px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.scope-flow .scope-flow-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.scope-flow .scope-flow-nav .scope-flow-cta {
+  flex: 1;
+  margin-top: 0;
+}
+
+/* ─── Loading ─── */
+.scope-flow .scope-flow-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(233, 162, 59, 0.2);
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: scope-flow-spin 0.8s linear infinite;
+}
+
+@keyframes scope-flow-spin {
+  to { transform: rotate(360deg); }
+}
+
+.scope-flow .scope-flow-loading-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  font-style: italic;
+}
+
+/* ─── Hook heading ─── */
+.scope-flow .scope-flow-hook-heading {
+  font-size: clamp(28px, 7vw, 40px);
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+/* ─── Reveal visual ─── */
+.scope-flow .scope-flow-reveal-visual {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 28px;
+  animation: scope-flow-reveal-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scope-flow .scope-flow-reveal-visual-emoji {
+  font-size: 52px;
+}
+
+@keyframes scope-flow-reveal-pop {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.scope-flow .scope-flow-reveal-emoji {
+  font-size: 32px;
+}
+
+.scope-flow .scope-flow-reveal-scaling {
+  font-size: 14px;
+  color: #E9A23B;
+  margin: 0 0 20px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+.scope-flow .scope-flow-reveal-scaling strong {
+  color: #f5c462;
+}
+
+.scope-flow .scope-flow-reveal-desc {
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 28px;
+}
+
+.scope-flow .scope-flow-reveal-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.scope-flow .scope-flow-reveal-actions .scope-flow-cta {
+  margin-top: 0;
+}
+
+/* ─── Confirm (manual select) ─── */
+.scope-flow .scope-flow-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.scope-flow .scope-flow-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+
+.scope-flow .scope-flow-option:hover {
+  border-color: rgba(233, 162, 59, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.scope-flow .scope-flow-option-suggested {
+  border-color: rgba(233, 162, 59, 0.35);
+  background: rgba(233, 162, 59, 0.08);
+}
+
+.scope-flow .scope-flow-option-emoji {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.scope-flow .scope-flow-option-label {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.scope-flow .scope-flow-option-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.4;
+}
+
+.scope-flow .scope-flow-option-badge {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  padding: 2px 10px;
+  background: rgba(233, 162, 59, 0.2);
+  border-radius: 999px;
+  color: #E9A23B;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Prescription ─── */
+.scope-flow .scope-flow-rx-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.scope-flow .scope-flow-rx-stage {
+  padding: 4px 14px;
+  background: rgba(233, 162, 59, 0.15);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  border-radius: 999px;
+  color: #E9A23B;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.scope-flow .scope-flow-rx-body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 8px;
+}
+
+/* ─── Error ─── */
+.scope-flow .scope-flow-error {
+  color: #ff9b9b;
+  font-size: 14px;
+  margin-top: 12px;
+}

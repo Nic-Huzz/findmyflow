@@ -454,7 +454,7 @@
           "category": "designing",
           "skill": "Craft a space people want to stay in",
           "confidence": "medium",
-          "evidence": "When St Christopher's opened in 1967 the entrance included a plain sheet of glass memorialising David Tasma's £500 bequest, the physical space embodying the founding conversation."
+          "evidence": "When St Christopher's opened in 1967 the entrance included a plain sheet of glass memorialising David Tasma's \u00a3500 bequest, the physical space embodying the founding conversation."
         }
       ],
       "antiTags": []
@@ -863,9 +863,8 @@
     {
       "name": "Joseph Campbell",
       "dominantCategories": [
-        "coaching",
         "teaching",
-        "performing"
+        "storytelling"
       ],
       "playSkills": [
         {
@@ -931,7 +930,7 @@
       "antiTags": []
     },
     {
-      "name": "Claude Lévi-Strauss",
+      "name": "Claude L\u00e9vi-Strauss",
       "dominantCategories": [
         "creating"
       ],
@@ -964,7 +963,7 @@
       "antiTags": []
     },
     {
-      "name": "Svante Pääbo",
+      "name": "Svante P\u00e4\u00e4bo",
       "dominantCategories": [
         "creating"
       ],
@@ -1035,8 +1034,8 @@
       "name": "Ella Baker",
       "dominantCategories": [
         "connecting",
-        "coaching",
-        "leading"
+        "leading",
+        "speaking_up"
       ],
       "playSkills": [
         {
@@ -1182,7 +1181,7 @@
       "dominantCategories": [
         "connecting",
         "storytelling",
-        "coaching"
+        "leading"
       ],
       "playSkills": [
         {
@@ -1254,10 +1253,10 @@
       ]
     },
     {
-      "name": "Václav Havel",
+      "name": "V\u00e1clav Havel",
       "dominantCategories": [
         "storytelling",
-        "coaching"
+        "speaking_up"
       ],
       "playSkills": [
         {
@@ -1754,6 +1753,7 @@
       "name": "Nina Simone",
       "dominantCategories": [
         "performing",
+        "speaking_up",
         "creating"
       ],
       "playSkills": [
@@ -1821,10 +1821,9 @@
     {
       "name": "Fela Kuti",
       "dominantCategories": [
+        "performing",
         "creating",
-        "building",
-        "speaking_up",
-        "leading"
+        "speaking_up"
       ],
       "playSkills": [
         {
@@ -2013,7 +2012,7 @@
           "category": "creating",
           "skill": "Follow a wild hunch and see where it goes",
           "confidence": "high",
-          "evidence": "Starting 1896 she met weekly with four other women as De Fem, working with prayer, meditation, séance, and automatic drawings for ten years before the Temple commission."
+          "evidence": "Starting 1896 she met weekly with four other women as De Fem, working with prayer, meditation, s\u00e9ance, and automatic drawings for ten years before the Temple commission."
         },
         {
           "category": "leading",
@@ -2112,7 +2111,7 @@
       ]
     },
     {
-      "name": "Gabriel García Márquez",
+      "name": "Gabriel Garc\u00eda M\u00e1rquez",
       "dominantCategories": [
         "creating",
         "storytelling"
@@ -2263,7 +2262,7 @@
       "antiTags": []
     },
     {
-      "name": "Antoni Gaudí",
+      "name": "Antoni Gaud\u00ed",
       "dominantCategories": [
         "building",
         "creating",
@@ -3022,9 +3021,9 @@
     {
       "name": "Marva Collins",
       "dominantCategories": [
+        "teaching",
         "coaching",
-        "speaking_up",
-        "leading"
+        "speaking_up"
       ],
       "playSkills": [
         {
@@ -3057,7 +3056,7 @@
     {
       "name": "Rita Pierson",
       "dominantCategories": [
-        "coaching",
+        "teaching",
         "storytelling",
         "performing"
       ],
@@ -3197,9 +3196,8 @@
     {
       "name": "Tenzin Palmo",
       "dominantCategories": [
-        "coaching",
         "building",
-        "storytelling",
+        "teaching",
         "speaking_up"
       ],
       "playSkills": [
@@ -3337,10 +3335,9 @@
     {
       "name": "Erin Gruwell",
       "dominantCategories": [
+        "teaching",
         "coaching",
-        "speaking_up",
-        "connecting",
-        "performing"
+        "speaking_up"
       ],
       "playSkills": [
         {
@@ -4472,7 +4469,7 @@
       "antiTags": []
     },
     {
-      "name": "Lech Wałęsa",
+      "name": "Lech Wa\u0142\u0119sa",
       "dominantCategories": [
         "connecting",
         "performing",
@@ -4489,7 +4486,7 @@
           "category": "performing",
           "skill": "Rally a group behind an idea",
           "confidence": "high",
-          "evidence": "Signed the Gdańsk Agreement on 31 August 1980 with an oversized souvenir pen, legalising the first independent trade union in the Eastern Bloc."
+          "evidence": "Signed the Gda\u0144sk Agreement on 31 August 1980 with an oversized souvenir pen, legalising the first independent trade union in the Eastern Bloc."
         },
         {
           "category": "leading",
@@ -4582,8 +4579,7 @@
       "name": "Martti Ahtisaari",
       "dominantCategories": [
         "leading",
-        "connecting",
-        "coaching"
+        "connecting"
       ],
       "playSkills": [
         {
@@ -4651,9 +4647,8 @@
     {
       "name": "Tarana Burke",
       "dominantCategories": [
-        "coaching",
-        "connecting",
-        "speaking_up"
+        "speaking_up",
+        "connecting"
       ],
       "playSkills": [
         {
@@ -4734,7 +4729,7 @@
           "category": "speaking_up",
           "skill": "Change someone's mind",
           "confidence": "high",
-          "evidence": "We Should All Be Feminists was sampled by Beyoncé in Flawless a year after delivery, routing a feminist argument into a pop audience of tens of millions."
+          "evidence": "We Should All Be Feminists was sampled by Beyonc\u00e9 in Flawless a year after delivery, routing a feminist argument into a pop audience of tens of millions."
         },
         {
           "category": "storytelling",
@@ -4769,7 +4764,7 @@
           "category": "creating",
           "skill": "Fill a blank page with something real",
           "confidence": "high",
-          "evidence": "Writes daily longhand in pencil in a small notebook at the same corner café in Greenwich Village, ordering black coffee. 'My handwriting is the rhythm of my thinking.'"
+          "evidence": "Writes daily longhand in pencil in a small notebook at the same corner caf\u00e9 in Greenwich Village, ordering black coffee. 'My handwriting is the rhythm of my thinking.'"
         },
         {
           "category": "storytelling",
@@ -4787,7 +4782,7 @@
       "antiTags": []
     },
     {
-      "name": "Wisława Szymborska",
+      "name": "Wis\u0142awa Szymborska",
       "dominantCategories": [
         "creating",
         "storytelling",
@@ -4866,9 +4861,7 @@
       "name": "Luciano Pavarotti",
       "dominantCategories": [
         "performing",
-        "connecting",
-        "speaking_up",
-        "coaching"
+        "connecting"
       ],
       "playSkills": [
         {
@@ -4881,7 +4874,7 @@
           "category": "connecting",
           "skill": "Host a gathering",
           "confidence": "high",
-          "evidence": "From 1992 to 2003 organised the annual Pavarotti and Friends benefit in Modena with Bono, Sting, Céline Dion, Clapton and Queen, raising millions for War Child and Bosnia, Kosovo, Afghanistan and Iraq relief."
+          "evidence": "From 1992 to 2003 organised the annual Pavarotti and Friends benefit in Modena with Bono, Sting, C\u00e9line Dion, Clapton and Queen, raising millions for War Child and Bosnia, Kosovo, Afghanistan and Iraq relief."
         },
         {
           "category": "speaking_up",
@@ -5165,7 +5158,7 @@
       "antiTags": []
     },
     {
-      "name": "Björk",
+      "name": "Bj\u00f6rk",
       "dominantCategories": [
         "creating",
         "storytelling"
@@ -5193,7 +5186,7 @@
           "category": "creating",
           "skill": "Connect dots across two worlds",
           "confidence": "medium",
-          "evidence": "Trained at Reykjavík's Barnamúsíkskóli from age 6 on classical piano and flute, then released a children's album at 11, arriving at punk and electronic music with 'absolute theory already installed'."
+          "evidence": "Trained at Reykjav\u00edk's Barnam\u00fas\u00edksk\u00f3li from age 6 on classical piano and flute, then released a children's album at 11, arriving at punk and electronic music with 'absolute theory already installed'."
         }
       ],
       "antiTags": []
@@ -5256,7 +5249,7 @@
           "category": "creating",
           "skill": "Follow a wild hunch and see where it goes",
           "confidence": "high",
-          "evidence": "Secretly built Étant donnés in his New York studio 1946-1966 while publicly claiming he had retired to chess. Not revealed until after his 1968 death, installed at Philadelphia per his detailed instructions."
+          "evidence": "Secretly built \u00c9tant donn\u00e9s in his New York studio 1946-1966 while publicly claiming he had retired to chess. Not revealed until after his 1968 death, installed at Philadelphia per his detailed instructions."
         },
         {
           "category": "leading",
@@ -5303,7 +5296,7 @@
           "category": "designing",
           "skill": "Polish the small details others miss",
           "confidence": "high",
-          "evidence": "The 606 Shelving System for Vitsœ (1960) is still manufactured today 60+ years later, with components interchangeable with the 1960 originals. A customer can still order a part to expand a shelf their grandfather bought."
+          "evidence": "The 606 Shelving System for Vits\u0153 (1960) is still manufactured today 60+ years later, with components interchangeable with the 1960 originals. A customer can still order a part to expand a shelf their grandfather bought."
         }
       ],
       "antiTags": []
@@ -5460,7 +5453,7 @@
           "category": "designing",
           "skill": "Find the pattern in messy data",
           "confidence": "high",
-          "evidence": "After Copenhagen pedestrianised Strøget on 17 November 1962 he and his wife Ingrid began counting people in the new zone by hand, tracking how many sat on benches, how long they stayed, for decades. 'The street is the data set.'"
+          "evidence": "After Copenhagen pedestrianised Str\u00f8get on 17 November 1962 he and his wife Ingrid began counting people in the new zone by hand, tracking how many sat on benches, how long they stayed, for decades. 'The street is the data set.'"
         },
         {
           "category": "designing",
@@ -5673,7 +5666,7 @@
           "category": "performing",
           "skill": "Rally a group behind an idea",
           "confidence": "high",
-          "evidence": "Popularised 'Sí, se puede' during a 1972 Arizona hunger strike; the slogan later became the UFW rallying cry and was adopted in English by the 2008 Obama campaign."
+          "evidence": "Popularised 'S\u00ed, se puede' during a 1972 Arizona hunger strike; the slogan later became the UFW rallying cry and was adopted in English by the 2008 Obama campaign."
         },
         {
           "category": "leading",
@@ -5725,7 +5718,7 @@
       "antiTags": []
     },
     {
-      "name": "Cédric Villani",
+      "name": "C\u00e9dric Villani",
       "dominantCategories": [
         "teaching",
         "performing",
@@ -5736,7 +5729,7 @@
           "category": "teaching",
           "skill": "Diagnose why something is not working",
           "confidence": "high",
-          "evidence": "Birth of a Theorem tracks the two-year collaboration with Clément Mouhot on nonlinear Landau damping including the nights the proof failed twice before stabilising."
+          "evidence": "Birth of a Theorem tracks the two-year collaboration with Cl\u00e9ment Mouhot on nonlinear Landau damping including the nights the proof failed twice before stabilising."
         },
         {
           "category": "teaching",
@@ -5748,13 +5741,13 @@
           "category": "performing",
           "skill": "Turn a message into a moment",
           "confidence": "high",
-          "evidence": "He explained on Lex Fridman's podcast that the three-piece silk suit, lavalière tie and jewelled spider brooch are a deliberate publicity machine for mathematics, forcing strangers to start conversations."
+          "evidence": "He explained on Lex Fridman's podcast that the three-piece silk suit, lavali\u00e8re tie and jewelled spider brooch are a deliberate publicity machine for mathematics, forcing strangers to start conversations."
         },
         {
           "category": "leading",
           "skill": "Build a workflow that runs itself",
           "confidence": "medium",
-          "evidence": "As director of the Institut Henri Poincaré 2009-2017 he said institutional leadership was mostly choosing which mathematicians spend a summer in Paris together and trusting them to work without interference."
+          "evidence": "As director of the Institut Henri Poincar\u00e9 2009-2017 he said institutional leadership was mostly choosing which mathematicians spend a summer in Paris together and trusting them to work without interference."
         }
       ],
       "antiTags": []
@@ -5844,7 +5837,7 @@
           "category": "creating",
           "skill": "Remix two things into something new",
           "confidence": "high",
-          "evidence": "She combined dinner-table knowledge of munitions from her first marriage with George Antheil's piano-roll synchronisation mechanism from his 1924 Ballet Mécanique."
+          "evidence": "She combined dinner-table knowledge of munitions from her first marriage with George Antheil's piano-roll synchronisation mechanism from his 1924 Ballet M\u00e9canique."
         },
         {
           "category": "building",
@@ -6079,7 +6072,7 @@
           "category": "teaching",
           "skill": "Write a \"how it actually works\" explainer",
           "confidence": "high",
-          "evidence": "On Food and Cooking (1984, 2004) is a reference book with no recipes; chefs from Thomas Keller to Ferran Adrià keep copies next to the stove, not on a shelf."
+          "evidence": "On Food and Cooking (1984, 2004) is a reference book with no recipes; chefs from Thomas Keller to Ferran Adri\u00e0 keep copies next to the stove, not on a shelf."
         },
         {
           "category": "teaching",
@@ -6265,7 +6258,7 @@
           "category": "creating",
           "skill": "Connect dots across two worlds",
           "confidence": "high",
-          "evidence": "García Márquez waited three years for him to translate Cien Años de Soledad and later told interviewers he preferred Rabassa's English version to his own Spanish original."
+          "evidence": "Garc\u00eda M\u00e1rquez waited three years for him to translate Cien A\u00f1os de Soledad and later told interviewers he preferred Rabassa's English version to his own Spanish original."
         },
         {
           "category": "creating",
@@ -6462,7 +6455,8 @@
     {
       "name": "David Bohm",
       "dominantCategories": [
-        "connecting"
+        "connecting",
+        "teaching"
       ],
       "playSkills": [
         {
@@ -6571,7 +6565,6 @@
       "name": "Myles Horton",
       "dominantCategories": [
         "connecting",
-        "coaching",
         "teaching"
       ],
       "playSkills": [
@@ -6606,8 +6599,7 @@
       "name": "Paulo Freire",
       "dominantCategories": [
         "teaching",
-        "connecting",
-        "coaching"
+        "connecting"
       ],
       "playSkills": [
         {
@@ -7047,8 +7039,8 @@
       "name": "Marshall Ganz",
       "dominantCategories": [
         "teaching",
-        "performing",
-        "connecting"
+        "connecting",
+        "leading"
       ],
       "playSkills": [
         {
@@ -8123,7 +8115,7 @@
       "antiTags": []
     },
     {
-      "name": "Brené Brown",
+      "name": "Bren\u00e9 Brown",
       "dominantCategories": [
         "speaking_up",
         "teaching",
@@ -8209,9 +8201,8 @@
     {
       "name": "Wim Hof",
       "dominantCategories": [
-        "coaching",
         "performing",
-        "speaking_up"
+        "teaching"
       ],
       "playSkills": [
         {
@@ -8378,7 +8369,6 @@
       "name": "Elizabeth Gilbert",
       "dominantCategories": [
         "storytelling",
-        "coaching",
         "speaking_up"
       ],
       "playSkills": [
@@ -8539,6 +8529,70 @@
           "skill": "Channel spiritual energy on stage",
           "confidence": "high",
           "evidence": "10 NYT bestsellers and sold-out live events and retreats worldwide"
+        }
+      ]
+    },
+    {
+      "name": "Jesse Itzler",
+      "dominantCategories": [
+        "performing",
+        "leading",
+        "storytelling"
+      ],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Turn every day into an event",
+          "confidence": "high",
+          "evidence": "Built Marquis Jet, ran ultramarathons, invited a Navy SEAL to live with him for 31 days"
+        }
+      ]
+    },
+    {
+      "name": "Jose Andres",
+      "dominantCategories": [
+        "connecting",
+        "leading",
+        "building"
+      ],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Feed people in a crisis",
+          "confidence": "high",
+          "evidence": "World Central Kitchen serves millions of meals in disaster zones worldwide"
+        }
+      ]
+    },
+    {
+      "name": "P.T. Barnum",
+      "dominantCategories": [
+        "performing",
+        "storytelling",
+        "connecting"
+      ],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Turn spectacle into a business",
+          "confidence": "high",
+          "evidence": "Created the modern circus and pioneered entertainment marketing"
+        }
+      ]
+    },
+    {
+      "name": "Walt Disney",
+      "dominantCategories": [
+        "creating",
+        "building",
+        "storytelling"
+      ],
+      "playSkills": [
+        {
+          "category": "creating",
+          "skill": "Build worlds people want to live in",
+          "confidence": "high",
+          "evidence": "Created animation studios, theme parks, and an entertainment empire from drawings"
         }
       ]
     }

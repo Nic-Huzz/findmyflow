@@ -260,12 +260,7 @@ export default function CreatorHome() {
       {/* ═══ HEADER ═══ */}
       <div className="ch-header">
         <div className="ch-header-row">
-          <h2 className="ch-title">Create</h2>
-          {stage && (
-            <span className="ch-stage-badge" style={{ color: stage.color, background: `${stage.color}12` }}>
-              {stage.icon} {stage.name}
-            </span>
-          )}
+          <h2 className="ch-title">Creator Portal</h2>
         </div>
         <div className="ch-stats-row">
           <div className="ch-stat">
@@ -306,92 +301,18 @@ export default function CreatorHome() {
       {/* ═══ MY BUSINESS ═══ */}
       {activeTab === 'my-business' && (
         <div className="ch-section">
-          {/* 4-Layer Assessment */}
+
+          {/* ── 1. Where am I on my journey? ── */}
           <div className="ch-card">
             <div className="ch-card-head">
-              <span className="ch-card-title">Product Suite</span>
-              {archetype && <span className="ch-badge ch-badge-purple">{archetype}</span>}
-            </div>
-
-            {editingAssessment && assessmentDraft ? (
-              /* ── EDIT MODE ── */
-              <div className="ch-assessment-edit">
-                {LAYERS.map(layer => {
-                  const statusKey = `${layer.key}_status`
-                  const detailKey = `${layer.key}_detail`
-                  return (
-                    <div key={layer.key} className="ch-assess-layer">
-                      <div className="ch-assess-layer-head">
-                        <div className="ch-suite-dot" style={{ background: layer.color }} />
-                        <span className="ch-assess-layer-name">{layer.label}</span>
-                      </div>
-                      <div className="ch-assess-radios">
-                        {['have', 'inconsistent', 'missing'].map(status => (
-                          <label key={status} className={`ch-assess-radio ${assessmentDraft[statusKey] === status ? 'active' : ''}`}>
-                            <input
-                              type="radio"
-                              name={statusKey}
-                              value={status}
-                              checked={assessmentDraft[statusKey] === status}
-                              onChange={() => updateDraft(statusKey, status)}
-                            />
-                            {STATUS_LABELS[status]}
-                          </label>
-                        ))}
-                      </div>
-                      {assessmentDraft[statusKey] !== 'missing' && (
-                        <input
-                          type="text"
-                          className="ch-assess-detail"
-                          value={assessmentDraft[detailKey] || ''}
-                          onChange={(e) => updateDraft(detailKey, e.target.value)}
-                          placeholder={`What do you have for ${layer.label.toLowerCase()}?`}
-                        />
-                      )}
-                    </div>
-                  )
-                })}
-                <div className="ch-assess-actions">
-                  <button className="ch-btn-primary" onClick={saveAssessment} disabled={savingAssessment}>
-                    {savingAssessment ? 'Saving...' : 'Save Assessment'}
-                  </button>
-                  <button className="ch-btn-secondary" onClick={() => { setEditingAssessment(false); setAssessmentDraft(null) }}>
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            ) : (
-              /* ── DISPLAY MODE ── */
-              <>
-                <div className="ch-suite-layers">
-                  {LAYERS.map(layer => {
-                    const status = assessment?.[`${layer.key}_status`] || 'missing'
-                    const detail = assessment?.[`${layer.key}_detail`] || '—'
-                    return (
-                      <div key={layer.key} className="ch-suite-layer">
-                        <div className="ch-suite-dot" style={{ background: layer.color }} />
-                        <span className="ch-suite-name">{layer.label}</span>
-                        <span className="ch-suite-value">{status === 'missing' ? '—' : detail}</span>
-                        <span className={`ch-suite-status ${STATUS_CLASSES[status]}`}>
-                          {STATUS_LABELS[status]}
-                        </span>
-                      </div>
-                    )
-                  })}
-                </div>
-                <button className="ch-edit-btn" onClick={startEditAssessment}>
-                  {assessment ? 'Update Assessment' : 'Set Up Assessment'}
+              <span className="ch-card-title">Where am I on my journey?</span>
+              {stage && (
+                <button className="ch-retake-btn" onClick={() => navigate('/scope-map')}>
+                  Retake
                 </button>
-              </>
-            )}
-          </div>
-
-          {/* Scope Map Position */}
-          {stage && (
-            <div className="ch-card">
-              <div className="ch-card-head">
-                <span className="ch-card-title">Your Position</span>
-              </div>
+              )}
+            </div>
+            {stage ? (
               <div className="ch-rr-row">
                 <div className="ch-rr-icon" style={{ background: `${stage.color}10` }}>{stage.icon}</div>
                 <div>
@@ -399,37 +320,87 @@ export default function CreatorHome() {
                   <div className="ch-rr-desc">{stage.description}</div>
                 </div>
               </div>
-            </div>
-          )}
+            ) : (
+              <>
+                <p className="ch-empty-text">A 3-question diagnostic to figure out where you are and what to do next.</p>
+                <button className="ch-dna-cta" onClick={() => navigate('/scope-map')}>
+                  Find Out
+                </button>
+              </>
+            )}
+          </div>
 
-          {!stage && (
-            <div className="ch-card">
-              <div className="ch-card-head">
-                <span className="ch-card-title">Your Position</span>
-              </div>
-              <p className="ch-empty-text">Complete the Scope Map diagnostic to see where you are.</p>
+          {/* ── 2. How to Pay Rent Now ── */}
+          <div className="ch-card" onClick={() => navigate('/create/pay-rent')} style={{ cursor: 'pointer' }}>
+            <div className="ch-card-head">
+              <span className="ch-card-title">💼 How to Pay Rent Now</span>
             </div>
-          )}
+            <p className="ch-muted-text">How your favourite creators actually funded the early days.</p>
+          </div>
 
-          {/* Play Profile */}
+          {/* ── 3. How to Blow Up Your Brand ── */}
+          <div className="ch-card" onClick={() => navigate('/create/remarkable')} style={{ cursor: 'pointer' }}>
+            <div className="ch-card-head">
+              <span className="ch-card-title">🔥 How to Blow Up Your Brand</span>
+            </div>
+            <p className="ch-muted-text">Find your remarkable angle. The thing that makes people talk.</p>
+          </div>
+
+          {/* ── 4. How to Scale Your Income ── */}
+          <div className="ch-card" onClick={() => navigate('/create/scale-income')} style={{ cursor: 'pointer' }}>
+            <div className="ch-card-head">
+              <span className="ch-card-title">📈 How to Scale Your Income</span>
+            </div>
+            <p className="ch-muted-text">Build your 3-layer business model: attraction, core, continuity.</p>
+          </div>
+
+          {/* ── 5. How do I work best? ── */}
           <div className="ch-card">
             <div className="ch-card-head">
-              <span className="ch-card-title">Work Style</span>
+              <span className="ch-card-title">How do I work best?</span>
               {dnaResult && <span className="ch-badge ch-badge-purple">{dnaResult.archetype}</span>}
             </div>
             {dnaResult ? (
-              <div className="ch-dna-card">
-                <div className="ch-dna-icon">🧬</div>
-                <div>
-                  <div className="ch-dna-name">{dnaResult.matched_founder || dnaResult.archetype}</div>
-                  <div className="ch-dna-desc">Your work style personalizes how challenges are framed.</div>
+              <>
+                <div className="ch-dna-card">
+                  <div className="ch-dna-icon">🧬</div>
+                  <div>
+                    <div className="ch-dna-name">{dnaResult.matched_founder || dnaResult.archetype}</div>
+                    <div className="ch-dna-desc">Your work style personalizes how challenges are framed.</div>
+                  </div>
                 </div>
-              </div>
+
+                {/* Focus this week */}
+                <div className="ch-focus-section">
+                  <div className="ch-focus-title">Focus this week</div>
+                  {activeChallenges.length > 0 ? (
+                    <div className="ch-focus-list">
+                      {activeChallenges.slice(0, 3).map(ch => {
+                        const isDone = ch.status === 'completed'
+                        const daysLeft = ch.deadline ? Math.ceil((new Date(ch.deadline) - new Date()) / (24 * 60 * 60 * 1000)) : null
+                        return (
+                          <div key={ch.id} className="ch-focus-item">
+                            <div className={`ch-challenge-dot ${isDone ? 'ch-dot-done' : 'ch-dot-pending'}`} />
+                            <span className={`ch-focus-text ${isDone ? 'ch-struck' : ''}`}>{ch.title}</span>
+                            {!isDone && daysLeft != null && (
+                              <span className={`ch-challenge-due ${daysLeft <= 3 ? 'ch-due-urgent' : ''}`}>{daysLeft}d</span>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <p className="ch-empty-text" style={{ fontSize: '0.82rem' }}>
+                      No active challenges. Convert checklist items with the lightning bolt to set your focus.
+                    </p>
+                  )}
+                </div>
+              </>
             ) : (
               <>
-                <p className="ch-empty-text">Discover your work style to get personalized challenges.</p>
+                <p className="ch-empty-text">Discover how you operate so we can personalize your challenges.</p>
                 <button className="ch-dna-cta" onClick={() => navigate('/play-profile')}>
-                  Discover Your Work Style
+                  Find Out
                 </button>
               </>
             )}
@@ -484,14 +455,9 @@ export default function CreatorHome() {
                 </>
               )}
 
-              <div className="ch-exp-btns">
-                <button className="ch-btn-primary" onClick={() => navigate(`/create/experience/${activeExp.id}`)}>
-                  View Checklist
-                </button>
-                <button className="ch-btn-secondary" onClick={() => navigate(`/create/experience/${activeExp.id}`)}>
-                  + Add Challenge
-                </button>
-              </div>
+              <button className="ch-btn-sm" onClick={() => navigate(`/create/experience/${activeExp.id}`)}>
+                View Checklist →
+              </button>
             </div>
           )}
 

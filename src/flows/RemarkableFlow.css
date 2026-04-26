@@ -1,0 +1,445 @@
+/* RemarkableFlow — /create/remarkable */
+
+.rmk {
+  background: #0f0a1e;
+  color: white;
+  min-height: 100vh;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+}
+
+.rmk-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.rmk-screen { animation: rmkFadeIn 0.4s ease; }
+@keyframes rmkFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rmk-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  gap: 1rem;
+}
+
+/* ── Badge ── */
+.rmk-badge {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  background: rgba(233,162,59,0.12);
+  border: 1px solid rgba(233,162,59,0.3);
+  border-radius: 100px;
+  color: #E9A23B;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.rmk-step-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Typography ── */
+.rmk-gold {
+  color: #E9A23B;
+}
+
+.rmk-intro {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 75vh;
+}
+
+.rmk-intro h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+.rmk-intro p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.65);
+  margin: 0 0 0.5rem;
+  max-width: 380px;
+}
+
+.rmk-intro-sub {
+  color: rgba(233,162,59,0.8) !important;
+  font-weight: 600;
+  margin-bottom: 2rem !important;
+}
+
+.rmk-heading {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+.rmk-prompt {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.55);
+  margin: 0 0 1rem;
+}
+
+/* ── Education cards ── */
+.rmk-edu-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.rmk-edu-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+}
+.rmk-edu-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+.rmk-edu-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.rmk-edu-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #E9A23B;
+}
+.rmk-edu-text {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.7);
+}
+
+/* ── Trigger proof ── */
+.rmk-trigger-proof {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.rmk-trigger-creator {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 1rem;
+}
+.rmk-trigger-creator-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.rmk-trigger-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.rmk-trigger-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.rmk-trigger-icon {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  margin-top: 0.1rem;
+}
+.rmk-trigger-hit .rmk-trigger-icon { color: #E9A23B; }
+.rmk-trigger-miss .rmk-trigger-icon { color: rgba(255,255,255,0.2); }
+.rmk-trigger-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 0.1rem;
+}
+.rmk-trigger-hit .rmk-trigger-name { color: rgba(255,255,255,0.7); }
+.rmk-trigger-evidence {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: rgba(255,255,255,0.6);
+}
+
+/* ── Problem list ── */
+.rmk-problem-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.rmk-problem-btn {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: inherit;
+}
+
+.rmk-problem-btn:hover {
+  border-color: rgba(233,162,59,0.3);
+}
+
+.rmk-problem-selected {
+  border-color: #E9A23B;
+  background: rgba(233,162,59,0.08);
+  color: #E9A23B;
+}
+
+/* ── Skills hint ── */
+.rmk-skills-hint {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.rmk-skills-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.5rem;
+}
+
+.rmk-skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.rmk-skill-tag {
+  padding: 0.25rem 0.6rem;
+  background: rgba(94,23,235,0.15);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* ── Textarea ── */
+.rmk-textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.rmk-textarea:focus {
+  outline: none;
+  border-color: rgba(233,162,59,0.4);
+}
+
+.rmk-textarea::placeholder {
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── Navigation ── */
+.rmk-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.rmk-nav .rmk-cta { flex: 1; }
+
+.rmk-back {
+  padding: 0.85rem 1rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.rmk-cta {
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(233,162,59,0.3);
+  font-family: inherit;
+}
+
+.rmk-cta:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Summary checklist ── */
+.rmk-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.rmk-check-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  align-items: flex-start;
+}
+
+.rmk-check-done {
+  background: rgba(233,162,59,0.06);
+  border: 1px solid rgba(233,162,59,0.15);
+}
+
+.rmk-check-pending {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.rmk-check-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.rmk-check-done .rmk-check-icon { color: #E9A23B; }
+.rmk-check-pending .rmk-check-icon { color: rgba(255,255,255,0.25); }
+
+.rmk-check-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 0.2rem;
+}
+
+.rmk-check-value {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.85);
+}
+
+.rmk-check-future {
+  color: rgba(255,255,255,0.3);
+  font-style: italic;
+}
+
+/* ── Output cards ── */
+.rmk-output-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.rmk-output-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 1.1rem 1.25rem;
+}
+
+.rmk-output-tribe {
+  background: rgba(233,162,59,0.06);
+  border-color: rgba(233,162,59,0.15);
+}
+
+.rmk-output-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.4rem;
+}
+
+.rmk-output-text {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.85);
+  margin: 0;
+}
+
+.rmk-output-tribe .rmk-output-text {
+  color: #E9A23B;
+  font-weight: 600;
+}
+
+/* ── Error ── */
+.rmk-error {
+  color: #ff9b9b;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+/* ── Spinner ── */
+.rmk-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  animation: rmkSpin 0.8s linear infinite;
+}
+@keyframes rmkSpin { to { transform: rotate(360deg); } }
+
+.rmk-loading-text {
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+}
