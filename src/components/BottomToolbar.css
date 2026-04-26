@@ -98,6 +98,11 @@ body.project-selector-active .bottom-toolbar {
   letter-spacing: 0.3px;
 }
 
+.toolbar-item.locked-item {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
 /* Remove the top indicator line - use background highlight instead */
 .toolbar-item.active::after {
   display: none;

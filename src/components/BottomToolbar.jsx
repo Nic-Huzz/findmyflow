@@ -34,8 +34,9 @@ const MAIN_NAV_ITEMS = [
   {
     id: 'create',
     label: 'Create',
-    icon: '✨',
-    path: '/create'
+    icon: '🔒',
+    path: '/create',
+    locked: true
   }
 ]
 
@@ -114,7 +115,9 @@ const HIDDEN_ROUTES = [
   '/money-model-guide', // Money Model explainer slides
   '/sol', // Sol AI co-founder onboarding + dashboard
   '/shift-scorecard', // Public Shift Architecture audit scorecard
-  '/experience-creators' // Experience Creator Matching (public lead magnet)
+  '/experience-creators', // Experience Creator Matching (public lead magnet)
+  '/create', // Creator Portal (standalone full-screen)
+  '/scope-map' // Scope Map diagnostic flow
 ]
 
 function BottomToolbar() {
@@ -212,10 +215,11 @@ function BottomToolbar() {
         // Plain links force a full browser navigation that always works.
         <a
           key={item.id}
-          href={item.path}
-          className={`toolbar-item ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''} ${item.isLaunch ? 'launch-item' : ''}`}
+          href={item.locked ? undefined : item.path}
+          className={`toolbar-item ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''} ${item.isLaunch ? 'launch-item' : ''} ${item.locked ? 'locked-item' : ''}`}
           aria-label={item.label}
           aria-current={isActive(item) ? 'page' : undefined}
+          onClick={item.locked ? (e) => e.preventDefault() : undefined}
         >
           <span className="toolbar-icon">{item.icon}</span>
           <span className="toolbar-label">{item.label}</span>
