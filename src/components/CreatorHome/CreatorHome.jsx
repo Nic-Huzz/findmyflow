@@ -51,6 +51,7 @@ export default function CreatorHome() {
   const [dnaResult, setDnaResult] = useState(null)
   const [activeChallenges, setActiveChallenges] = useState([])
   const [assessment, setAssessment] = useState(null)
+  const [payRentModel, setPayRentModel] = useState(null)
   const [editingAssessment, setEditingAssessment] = useState(false)
   const [assessmentDraft, setAssessmentDraft] = useState(null)
   const [savingAssessment, setSavingAssessment] = useState(false)
@@ -128,7 +129,7 @@ export default function CreatorHome() {
   const loadCreatorData = async () => {
     setLoading(true)
     try {
-      const [{ data: scope }, { data: selection }, { data: dna }, { data: assess }] = await Promise.all([
+      const [{ data: scope }, { data: selection }, { data: dna }, { data: assess }, { data: stageProgress }] = await Promise.all([
         supabase
           .from('scope_map_results')
           .select('*')
@@ -157,12 +158,18 @@ export default function CreatorHome() {
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle(),
+        supabase
+          .from('user_stage_progress')
+          .select('pay_rent_model')
+          .eq('user_id', userId)
+          .maybeSingle(),
       ])
 
       setScopeResult(scope || null)
       setCreatorSelection(selection || null)
       setDnaResult(dna || null)
       setAssessment(assess || null)
+      setPayRentModel(stageProgress?.pay_rent_model || null)
     } catch (err) {
       console.error('CreatorHome loadCreatorData error:', err)
     } finally {
@@ -334,8 +341,23 @@ export default function CreatorHome() {
           <div className="ch-card" onClick={() => navigate('/create/pay-rent')} style={{ cursor: 'pointer' }}>
             <div className="ch-card-head">
               <span className="ch-card-title">💼 How to Pay Rent Now</span>
+              {payRentModel && <span className="ch-badge ch-badge-gold">Done</span>}
             </div>
-            <p className="ch-muted-text">How your favourite creators actually funded the early days.</p>
+            {payRentModel ? (
+              <div className="ch-rr-row">
+                <div className="ch-rr-icon" style={{ background: 'rgba(233,162,59,0.1)' }}>
+                  {payRentModel === 'day_job_side_project' ? '💼' : payRentModel === 'one_on_one_service' ? '🤝' : payRentModel === 'free_events_paid_elsewhere' ? '🎁' : payRentModel === 'small_group_paid' ? '🎪' : '🏛️'}
+                </div>
+                <div>
+                  <div className="ch-rr-name" style={{ color: '#E9A23B' }}>
+                    {payRentModel === 'day_job_side_project' ? 'Day Job + Side Project' : payRentModel === 'one_on_one_service' ? '1:1 Service' : payRentModel === 'free_events_paid_elsewhere' ? 'Free Events, Paid Elsewhere' : payRentModel === 'small_group_paid' ? 'Small Group Paid Events' : 'Institutional Salary'}
+                  </div>
+                  <div className="ch-rr-desc">Your early revenue model</div>
+                </div>
+              </div>
+            ) : (
+              <p className="ch-muted-text">How your favourite creators actually funded the early days.</p>
+            )}
           </div>
 
           {/* ── 3. How to Blow Up Your Brand ── */}

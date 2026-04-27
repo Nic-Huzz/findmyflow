@@ -300,52 +300,59 @@ export default function LifeMapFlow() {
 
       // Call 1: Skills
       const skillsItems = aggregateByCategory('skills', currentResponses)
-      const skillsResult = await supabase.functions.invoke('nikigai-conversation', {
-        body: {
-          currentStep: { id: 'life_map_skills', assistant_prompt: 'Life Map skills clustering' },
-          userResponse: 'Ready to analyze skills from life map',
+      const skillsCl = await clusterWithRetry(
+        'life_map_skills', 'Life Map skills clustering', 'roles',
+        ['life_map_skills'], skillsItems
+      )
+      setSkillsClusters(skillsCl)
+
+      // Helper: call clustering with one retry on empty/error result
+      const clusterWithRetry = async (stepId, prompt, type, sources, items) => {
+        if (items.length === 0) return []
+        const body = {
+          currentStep: { id: stepId, assistant_prompt: prompt },
+          userResponse: `Ready to analyze ${type} from life map`,
           shouldCluster: true,
-          clusterType: 'roles',
-          clusterSources: ['life_map_skills'],
-          allResponses: [{ user_id: user.id, response_raw: skillsItems.join('\n'), store_as: 'life_map_skills' }],
+          clusterType: type,
+          clusterSources: sources,
+          allResponses: [{ user_id: user.id, response_raw: items.join('\n'), store_as: sources[0] }],
           conversationHistory: [],
         }
-      })
-      const skillsCl = skillsResult.data?.clusters || []
-      setSkillsClusters(skillsCl)
+        const result = await supabase.functions.invoke('nikigai-conversation', { body })
+        // Check for error response (edge function returned 500)
+        if (result.error || result.data?.error) {
+          console.warn(`Life Map: ${type} clustering failed:`, result.error || result.data?.error, 'Retrying...')
+          const retry = await supabase.functions.invoke('nikigai-conversation', { body })
+          if (retry.error || retry.data?.error) {
+            console.error(`Life Map: ${type} clustering failed on retry:`, retry.error || retry.data?.error)
+            return []
+          }
+          return retry.data?.clusters || []
+        }
+        const clusters = result.data?.clusters || []
+        if (clusters.length > 0) return clusters
+        // Retry once if we had input but got empty output (AI returned no clusters)
+        console.warn(`Life Map: ${type} clustering returned empty with ${items.length} items. Retrying...`)
+        const retry = await supabase.functions.invoke('nikigai-conversation', { body })
+        return retry.data?.clusters || []
+      }
 
       // Call 2: Problems
       setProcessingStep(1)
       const problemsItems = aggregateByCategory('problems', currentResponses)
-      const problemsResult = await supabase.functions.invoke('nikigai-conversation', {
-        body: {
-          currentStep: { id: 'life_map_problems', assistant_prompt: 'Life Map problems clustering' },
-          userResponse: 'Ready to analyze problems from life map',
-          shouldCluster: true,
-          clusterType: 'problems',
-          clusterSources: ['life_map_problems'],
-          allResponses: [{ user_id: user.id, response_raw: problemsItems.join('\n'), store_as: 'life_map_problems' }],
-          conversationHistory: [],
-        }
-      })
-      const problemsCl = problemsResult.data?.clusters || []
+      const problemsCl = await clusterWithRetry(
+        'life_map_problems', 'Life Map problems clustering', 'problems',
+        ['life_map_problems'], problemsItems
+      )
       setProblemsClusters(problemsCl)
 
       // Call 3: Personas
       setProcessingStep(2)
       const personasItems = aggregateByCategory('personas', currentResponses)
-      const personasResult = await supabase.functions.invoke('nikigai-conversation', {
-        body: {
-          currentStep: { id: 'life_map_personas', assistant_prompt: 'Life Map personas clustering' },
-          userResponse: 'Ready to analyze personas from life map',
-          shouldCluster: true,
-          clusterType: 'persona',
-          clusterSources: ['life_map_personas'],
-          allResponses: [{ user_id: user.id, response_raw: personasItems.join('\n'), store_as: 'life_map_personas' }],
-          conversationHistory: [],
-        }
-      })
-      const personasCl = personasResult.data?.clusters || []
+      const personasCl = await clusterWithRetry(
+        'life_map_personas', 'Life Map personas clustering', 'persona',
+        ['life_map_personas'], personasItems
+      )
       setPersonasClusters(personasCl)
 
       // Call 4: Connecting the Dots narrative
@@ -380,6 +387,15 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
         }
       })
       setConnectingDotsNarrative(dotsResult.data?.message || '')
+
+      // Warn if any category came back empty despite having input
+      const emptyCategories = []
+      if (skillsCl.length === 0 && aggregateByCategory('skills', currentResponses).length > 0) emptyCategories.push('skills')
+      if (problemsCl.length === 0 && problemsItems.length > 0) emptyCategories.push('problems')
+      if (personasCl.length === 0 && personasItems.length > 0) emptyCategories.push('personas')
+      if (emptyCategories.length > 0) {
+        console.error('Life Map: Empty clusters despite having input for:', emptyCategories.join(', '))
+      }
 
       // Save clusters to DB
       const allClusters = [

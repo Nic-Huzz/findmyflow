@@ -527,3 +527,23 @@
 .sif-progress-dot.done {
   background: #22c55e;
 }
+
+/* === MOBILE === */
+@media (max-width: 480px) {
+  .sif-container { padding: 0 1rem; }
+  .sif-intro h1 { font-size: 1.5rem; }
+  .sif-heading { font-size: 1.2rem; }
+  .sif-cta { padding: 0.85rem 1.5rem; font-size: 0.95rem; min-height: 44px; }
+  .sif-back-btn { min-height: 44px; }
+  .sif-hell-yes, .sif-other-btn, .sif-confirmed-btn { min-height: 44px; font-size: 0.88rem; }
+  .sif-next-btn { min-height: 44px; font-size: 0.95rem; }
+  .sif-offer-name { font-size: 0.92rem; }
+  .sif-offer-desc { font-size: 0.82rem; }
+  .sif-alt-offer-name { font-size: 0.82rem; }
+  .sif-alt-offer-desc { font-size: 0.75rem; }
+  .sif-alt-pick { font-size: 0.7rem; }
+  .sif-stack-name { font-size: 0.88rem; }
+  .sif-stack-label { font-size: 0.65rem; }
+  .sif-save-btn { min-height: 44px; font-size: 1rem; }
+  .sif-summary-heading { font-size: 1.2rem; }
+}

@@ -445,3 +445,23 @@
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
   margin: 0 0 2rem;
 }
+
+/* === MOBILE === */
+@media (max-width: 480px) {
+  .prf-container { padding: 0 1rem; }
+  .prf-intro h1 { font-size: 1.6rem; }
+  .prf-intro p { font-size: 0.95rem; }
+  .prf-hero h1 { font-size: 1.4rem; }
+  .prf-hero p { font-size: 0.85rem; }
+  .prf-cta-btn { padding: 0.85rem 2rem; font-size: 1rem; min-height: 44px; }
+  .prf-group-label { font-size: 0.65rem; }
+  .prf-creator-name { font-size: 0.82rem; }
+  .prf-creator-desc { font-size: 0.78rem; }
+  .prf-model-question { font-size: 0.92rem; }
+  .prf-model-btn { padding: 0.85rem; font-size: 0.85rem; min-height: 44px; }
+  .prf-confirm-model-name { font-size: 1.25rem; }
+  .prf-confirm-model-desc { font-size: 0.85rem; }
+  .prf-action-text { font-size: 0.92rem; }
+  .prf-save-btn { padding: 0.85rem; font-size: 1rem; min-height: 44px; }
+  .prf-confirm-back { min-height: 44px; }
+}

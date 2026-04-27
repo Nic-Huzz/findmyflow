@@ -443,3 +443,24 @@
   color: rgba(255,255,255,0.5);
   font-style: italic;
 }
+
+/* === MOBILE === */
+@media (max-width: 480px) {
+  .rmk-container { padding: 1.5rem 1rem; }
+  .rmk-intro h1 { font-size: 1.5rem; }
+  .rmk-intro p { font-size: 0.92rem; }
+  .rmk-heading { font-size: 1.2rem; }
+  .rmk-prompt { font-size: 0.85rem; }
+  .rmk-cta { padding: 0.85rem 1.5rem; font-size: 0.95rem; min-height: 44px; }
+  .rmk-back { min-height: 44px; }
+  .rmk-problem-btn { padding: 0.7rem 0.85rem; font-size: 0.82rem; min-height: 44px; }
+  .rmk-textarea { font-size: 0.9rem; padding: 0.75rem 0.85rem; }
+  .rmk-skill-tag { font-size: 0.68rem; }
+  .rmk-edu-name { font-size: 0.82rem; }
+  .rmk-edu-text { font-size: 0.78rem; }
+  .rmk-trigger-name { font-size: 0.68rem; }
+  .rmk-trigger-evidence { font-size: 0.75rem; }
+  .rmk-check-value { font-size: 0.82rem; }
+  .rmk-check-label { font-size: 0.68rem; }
+  .rmk-output-text { font-size: 0.88rem; }
+}
