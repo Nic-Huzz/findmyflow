@@ -343,7 +343,7 @@ export default function RemarkableFlow() {
           )}
 
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.TRIGGERS)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(educationData ? STEPS.TRIGGERS : STEPS.INTRO)}>Back</button>
             <button
               className="rmk-cta"
               disabled={!woundProblem}
