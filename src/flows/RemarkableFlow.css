@@ -10,7 +10,7 @@
 .rmk-container {
   max-width: 480px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 2rem 1.5rem calc(5rem + env(safe-area-inset-bottom, 0px));
 }
 
 .rmk-screen { animation: rmkFadeIn 0.4s ease; }
@@ -266,9 +266,6 @@
   list-style: none;
   padding: 0;
   margin: 0 0 0.5rem;
-  max-height: 55vh;
-  overflow-y: auto;
-  padding-right: 0.25rem;
 }
 
 .rmk-problem-btn {
@@ -360,9 +357,17 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-top: auto;
-  padding-top: 2rem;
   width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(transparent, rgba(74,18,196,1) 40%);
+  max-width: 480px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  z-index: 10;
 }
 
 .rmk-nav .rmk-cta { flex: 1; }

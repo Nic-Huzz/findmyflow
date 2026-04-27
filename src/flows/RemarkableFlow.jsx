@@ -440,22 +440,9 @@ export default function RemarkableFlow() {
             <button
               className="rmk-cta"
               disabled={yourSolution.trim().length < 5}
-              onClick={async () => {
+              onClick={() => {
                 hapticLight()
-                // Generate tagline suggestions from the contrast
-                try {
-                  const { data } = await supabase.functions.invoke('generate-remarkable-angle', {
-                    body: {
-                      wound_problem: woundProblem,
-                      rule_identified: `Current: ${currentSolution} | Wrong: ${whatsWrong} | Mine: ${yourSolution}`,
-                      combination_insight: '',
-                      extreme_action_plan: '',
-                      generate_taglines: true,
-                    },
-                  })
-                  if (data?.taglines) setAiTaglineSuggestions(data.taglines)
-                } catch (e) { console.error('Tagline generation error:', e) }
-                setStep(STEPS.TAGLINE)
+                setStep(STEPS.COMBINATION)
               }}
             >
               Next
@@ -543,7 +530,7 @@ export default function RemarkableFlow() {
           />
 
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_BREAK)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_YOURS)}>Back</button>
             <button
               className="rmk-cta"
               disabled={combinationInsight.trim().length < 10}

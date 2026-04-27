@@ -116,7 +116,7 @@ const HIDDEN_ROUTES = [
   '/sol', // Sol AI co-founder onboarding + dashboard
   '/shift-scorecard', // Public Shift Architecture audit scorecard
   '/experience-creators', // Experience Creator Matching (public lead magnet)
-  '/create', // Creator Portal (standalone full-screen)
+  '/create/', // Creator Portal sub-pages (flows, experience detail)
   '/scope-map' // Scope Map diagnostic flow
 ]
 

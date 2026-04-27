@@ -582,31 +582,6 @@ export default function CreatorHome() {
             </div>
           </div>
 
-          {/* 4-Layer Progress */}
-          <div className="ch-card">
-            <div className="ch-card-head">
-              <span className="ch-card-title">4-Layer Progress</span>
-            </div>
-            <div className="ch-lp-rows">
-              {LAYERS.map(layer => {
-                const status = assessment?.[`${layer.key}_status`]
-                const pct = status === 'have' ? 100 : status === 'inconsistent' ? 50 : 0
-                return (
-                  <div key={layer.key} className="ch-lp-row">
-                    <span className="ch-lp-name">{layer.label}</span>
-                    <div className="ch-lp-bar">
-                      <div className="ch-lp-fill" style={{ width: `${pct}%`, background: layer.color }} />
-                    </div>
-                    <span className="ch-lp-pct">{pct}%</span>
-                  </div>
-                )
-              })}
-            </div>
-            {!assessment && (
-              <p className="ch-empty-text" style={{ marginTop: '0.5rem' }}>Complete your 4-layer assessment to track progress.</p>
-            )}
-          </div>
-
           {/* 3% Chain */}
           {threePercentChain.length > 0 && (
             <div className="ch-card ch-chain-card">
@@ -620,19 +595,20 @@ export default function CreatorHome() {
             </div>
           )}
 
-          {/* Quick Access */}
-          <div className="ch-card">
+          {/* Quick Access — locked for now */}
+          <div className="ch-card" style={{ opacity: 0.5, pointerEvents: 'none' }}>
             <div className="ch-card-head">
               <span className="ch-card-title">Quick Access</span>
+              <span style={{ fontSize: '0.7rem', color: '#999', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coming soon</span>
             </div>
             <div className="ch-crm-links">
               {[
-                { icon: '👥', label: 'Attendees', route: '/crm/contacts' },
-                { icon: '📧', label: 'Follow-up Sequences', route: '/crm/email-sequences' },
-                { icon: '📣', label: 'Marketing Assets', route: '/crm/content/create' },
-                { icon: '🔔', label: 'Facilitator Nudges', route: '/crm/alerts' },
+                { icon: '👥', label: 'Attendees' },
+                { icon: '📧', label: 'Follow-up Sequences' },
+                { icon: '📣', label: 'Marketing Assets' },
+                { icon: '🔔', label: 'Facilitator Nudges' },
               ].map(link => (
-                <div key={link.route} className="ch-crm-link" onClick={() => navigate(link.route)}>
+                <div key={link.label} className="ch-crm-link">
                   <div className="ch-crm-left">
                     <span className="ch-crm-icon">{link.icon}</span>
                     <span className="ch-crm-label">{link.label}</span>
