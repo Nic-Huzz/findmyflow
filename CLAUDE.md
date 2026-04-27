@@ -47,7 +47,7 @@ React 18 + Vite + React Router v7 | Supabase (PostgreSQL, Auth, Edge Functions) 
 
 ```
 src/
-├── flows/                    # 34 flow components
+├── flows/                    # 71 flow components
 │   ├── MoneyModelFlowBase.jsx      # Shared base (6 flows use this)
 │   ├── moneyModelConfigs.js        # Money Model configurations
 │   ├── FlowFinder*.jsx             # Skills, Problems, Persona, Integration
@@ -65,7 +65,7 @@ src/
 │   └── useAutoSave.js, useSteppedForm.js
 │
 ├── components/
-│   ├── crm/                  # 42 CRM components
+│   ├── crm/                  # 41 CRM components
 │   │   ├── CRMLayout.jsx           # Wrapper with nudge engine
 │   │   ├── Content*.jsx            # Generator, Planning, Checklist, etc.
 │   │   ├── Weekly*.jsx             # Planning, Reflection, etc.
@@ -89,7 +89,7 @@ src/
 │   ├── FlowMapRiver.jsx      # River visualization
 │   └── SeeYourFlow.jsx       # Journey mapping
 │
-├── pages/crm/                # 34 CRM pages
+├── pages/crm/                # 33 CRM pages
 │   ├── Dashboard.jsx         # Command center with DailyActions, EcosystemWidget
 │   ├── Attract.jsx, Nurture.jsx, Tools.jsx  # Tower hubs
 │   ├── Content*.jsx          # Create, Queue, History
@@ -132,7 +132,7 @@ docs/                         # 33+ documentation files
 
 **Archetypes**: `/archetypes`, `/archetypes/essence`, `/archetypes/protective`
 
-**Flow Finder**: `/nikigai/skills`, `/nikigai/problems`, `/nikigai/persona`, `/nikigai/integration`
+**Flow Finder**: `/life-map` (consolidated flow; `/nikigai/skills`, `/nikigai/problems`, `/nikigai/persona` redirect here), `/nikigai/integration`
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/lead-magnet-selection`, `/product-selection`, `/funnel-builder`, `/funnel-calculator`
 
@@ -140,7 +140,9 @@ docs/                         # 33+ documentation files
 
 **Fantasy League**: `/league` (overview), `/league/week` (matchups), `/league/matchup` (details), `/league/submit` (content), `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Journey**: `/get-started` (onboarding), `/essence-mirror` (essence archetype discovery), `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic questions)
+**Journey**: `/get-started` (onboarding), `/essence-mirror` (essence archetype discovery), `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
+
+**Creator Portal**: `/create` (Creator Home with Shift Architecture), `/create/experience/new` (new experience), `/create/experience/:id` (edit experience); `/business` redirects to `/create`
 
 **Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching)
 
@@ -389,7 +391,7 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 ## Database Schema
 
 ### Core Tables
-`user_stage_progress` (persona, onboarding) | `user_projects` (stage, points) | `flow_sessions` (completions) | `flow_entries` (compass) | `milestone_completions` | `quest_completions` | `challenge_instances` | `groan_reflections`
+`user_stage_progress` (persona, onboarding; cols include: hero_avatar_url, journey_onboarding_completed, has_seen_challenge_intro, current_journey_level default 0) | `user_projects` (stage, points) | `flow_sessions` (completions) | `flow_entries` (compass) | `milestone_completions` | `quest_completions` | `challenge_instances` | `groan_reflections` | `journey_onboarding_selections` (wound stage scene picks from onboarding flow)
 
 ### Flow Data
 `nikigai_clusters` | `nikigai_responses` | `nikigai_key_outcomes` | `persona_profiles` | `nervous_system_responses` | `healing_compass_responses` | `lead_flow_profiles`
@@ -412,6 +414,9 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 ### Notifications
 `push_subscriptions` (endpoint, keys) | `notification_preferences` (quest_reminders, achievement_celebrations, timezone)
 
+### Journey Level Progress
+`user_level_progress` (per-user-per-level row: zone_diagnosis_zone, boss, deep_dive/boss_fight/milestone flags, healing_day_dates, courage_challenge_ids, graduated_at) | `boss_fight_sessions` (pre/post questions, wound age, tension scores, body location, child need, challenge text)
+
 ### Groan Matrix
 `groan_challenges` (scary/wahoo scores, visibility layer) | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
 
@@ -433,6 +438,7 @@ npm run db:push   # Apply migrations
 
 ## Recent Updates (Apr 2026)
 
+- **Creator Portal** (`/create`): Standalone route for experience business builders (replaces `/business`). CreatorHome with Shift Architecture hub, 4-phase build (Phase 1: checklist-to-challenge bridge + Play Profile, Phase 2: offer wiring into result screen, Phase 3: 4-layer assessment card with inline editing, Phase 4: attendee upload, cost logger, real dashboard KPIs, post-event tab). `/try/experience-creators` is the public lead magnet; `/experience-creators` is now AuthGate'd. Bottom toolbar Create tab locked. Key file: `src/pages/create/`.
 - **Experience Creator Matching** (`/experience-creators`): New flow where users browse 59 experience creators (workshop leaders, retreat hosts, cohort builders, performers, facilitators) organized by 6 business model archetypes, select who they resonate with, and receive a per-layer product suite recommendation (attraction/core/scale/continuity) with "hell yes or not quite" validation at each layer. 318-person corpus (75 founders + 243 non-founders including 15 modern creators: Brené Brown, Tony Robbins, Marie Forleo, Wim Hof, etc.). All non-founders have 5 DNA sliders (workRhythm, fuelType, knowledgeStyle + 2 employee-specific: impactStyle, growthMode). Pixar-style portraits via Gemini 3.1 Flash. Full brief: `docs/feature-brief-experience-creator-matching.md`. Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/data/experienceCreatorOfferMap.json` (per-person revenue stream → offer slot mapping), `public/images/creators/` (Pixar portraits).
 - **Career Clarity Quiz Restyled** (`/career-clarity`): Converted from Tailwind dark theme to FindMyFlow purple gradient design system using `ccq-` scoped CSS classes. Gold selection buttons, glass morphism cards, progress dots. LocalStorage persistence across all stages including results. Both CTA paths (own-thing + job) now route to `/get-started`.
 - **Level 3: Direction Updated**: Deep dive changed from Flow Finder Problems (redundant, problems tagged at Level 0) to Career Clarity Quiz. People Matching (`/people`) added as extra quest. Completion checks wired: `quiz_results` table for career clarity, `findmyflow_saved_people` localStorage for people matching.
@@ -462,7 +468,7 @@ npm run db:push   # Apply migrations
 - **Image Focal Points**: All 28 Pixar onboarding images have `focalPoint` data for mobile cropping (`objectPosition` CSS). Applied in JourneyOnboarding.jsx, HomeFirstTime.jsx, tension-assessment-v2.json.
 - **Level Tab in Challenge Portal (Phase 3-4)**: Priority tab renamed to "Level". XP bar in ChallengeHeader.jsx. `JourneyGraphPopup.jsx` for journey visualization. LevelTab wired into Challenge.jsx with userId prop for DB reads.
 - **/me Page Current Level Card**: Quest section shows Current Level card (level name, question, 3 mini progress bars, CTA) for post-onboarding users. XP bar shows "Level 1: Identity".
-- **DB Tables (NOT YET APPLIED)**: `user_level_progress` and `boss_fight_sessions` in `supabase/migrations/20260329000000_level_progress.sql`. Run `supabase db push` to apply.
+- **DB Tables**: `user_level_progress` and `boss_fight_sessions` in `supabase/migrations/20260329000000_level_progress.sql` (applied).
 - **Priority Tab Onboarding System**: 7-step onboarding sequence in the Priority tab (Mind Space, What is Healing, Healing Compass, Play-List Finder, Nervous System, Check Alignment, Set Play-list Task). Each step unlocks progressively. After onboarding, priority layer recommendations show quests or playlist layers based on tension scores. Key files: `usePriorityTab.js` (ONBOARDING_QUEST_IDS, LAYER_RECOMMENDATIONS, computePriorityLayer), `PriorityTab.jsx`, `PriorityTab.css`.
 - **/me Page Dynamic Quest Section**: Replaced static "Today's Quest" with 3-state display. Onboarding incomplete: shows step progress with next step CTA. Onboarding complete + tension scores: shows layer-based recommended challenges. Complete + no scores: shows "Set Your Priority" prompt. Imports shared constants from `usePriorityTab.js`.
 - **Play-List Tab Active Challenges**: New section card at top of Play-list tab showing active groan challenges from `priority_weekly_picks` (current week, `pick_type = 'groan'`). Clicking "Complete" opens `GroanCompletionModal`.
