@@ -1,7 +1,7 @@
 /* RemarkableFlow — /create/remarkable */
 
 .rmk {
-  background: #0f0a1e;
+  background: linear-gradient(180deg, #5e17eb 0%, #4a12c4 100%);
   color: white;
   min-height: 100vh;
   padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
@@ -26,6 +26,15 @@
   justify-content: center;
   min-height: 80vh;
   gap: 1rem;
+}
+
+.rmk-centered-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 70px);
+  text-align: center;
 }
 
 /* ── Badge ── */
@@ -67,8 +76,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 75vh;
+  min-height: calc(100vh - 70px);
+  padding-top: 20vh;
+}
+.rmk-intro .rmk-cta {
+  margin-top: auto;
+  width: 100%;
 }
 
 .rmk-intro h1 {
@@ -104,6 +117,13 @@
   line-height: 1.5;
   color: rgba(255,255,255,0.55);
   margin: 0 0 1rem;
+}
+
+.rmk-prompt-lg {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.75);
+  margin: 0 0 1.25rem;
 }
 
 /* ── Education cards ── */
@@ -198,26 +218,30 @@
 
 /* ── Problem list ── */
 .rmk-problem-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 0.5rem;
-  max-height: 300px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem;
+  max-height: 55vh;
   overflow-y: auto;
+  padding-right: 0.25rem;
 }
 
 .rmk-problem-btn {
   text-align: left;
-  padding: 0.75rem 1rem;
-  background: rgba(255,255,255,0.04);
-  border: 1.5px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  color: rgba(255,255,255,0.8);
-  font-size: 0.85rem;
-  line-height: 1.4;
+  padding: 0.85rem 1.1rem;
+  background: rgba(255,255,255,0.08) !important;
+  border: 2px solid rgba(255,255,255,0.2) !important;
+  border-radius: 14px !important;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+  line-height: 1.45;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
   font-family: inherit;
+  display: block;
+  width: 100%;
+  margin-bottom: 0.65rem;
+  box-sizing: border-box;
 }
 
 .rmk-problem-btn:hover {
@@ -291,7 +315,9 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 1.5rem;
+  margin-top: auto;
+  padding-top: 2rem;
+  width: 100%;
 }
 
 .rmk-nav .rmk-cta { flex: 1; }
@@ -446,21 +472,21 @@
 
 /* === MOBILE === */
 @media (max-width: 480px) {
-  .rmk-container { padding: 1.5rem 1rem; }
-  .rmk-intro h1 { font-size: 1.5rem; }
-  .rmk-intro p { font-size: 0.92rem; }
-  .rmk-heading { font-size: 1.2rem; }
-  .rmk-prompt { font-size: 0.85rem; }
-  .rmk-cta { padding: 0.85rem 1.5rem; font-size: 0.95rem; min-height: 44px; }
-  .rmk-back { min-height: 44px; }
-  .rmk-problem-btn { padding: 0.7rem 0.85rem; font-size: 0.82rem; min-height: 44px; }
-  .rmk-textarea { font-size: 0.9rem; padding: 0.75rem 0.85rem; }
-  .rmk-skill-tag { font-size: 0.68rem; }
-  .rmk-edu-name { font-size: 0.82rem; }
-  .rmk-edu-text { font-size: 0.78rem; }
-  .rmk-trigger-name { font-size: 0.68rem; }
-  .rmk-trigger-evidence { font-size: 0.75rem; }
-  .rmk-check-value { font-size: 0.82rem; }
-  .rmk-check-label { font-size: 0.68rem; }
-  .rmk-output-text { font-size: 0.88rem; }
+  .rmk-container { padding: 1.5rem 1.25rem; }
+  .rmk-intro h1 { font-size: 1.75rem; }
+  .rmk-intro p { font-size: 1.05rem; line-height: 1.6; }
+  .rmk-heading { font-size: 1.5rem; }
+  .rmk-prompt { font-size: 1rem; line-height: 1.6; }
+  .rmk-cta { padding: 1rem 1.5rem; font-size: 1rem; min-height: 48px; width: 100%; }
+  .rmk-back { min-height: 48px; font-size: 0.95rem; }
+  .rmk-problem-btn { padding: 0.85rem 1rem; font-size: 0.92rem; min-height: 48px; }
+  .rmk-textarea { font-size: 1rem; padding: 0.85rem 1rem; }
+  .rmk-skill-tag { font-size: 0.75rem; }
+  .rmk-edu-name { font-size: 0.92rem; }
+  .rmk-edu-text { font-size: 0.88rem; }
+  .rmk-trigger-name { font-size: 0.72rem; }
+  .rmk-trigger-evidence { font-size: 0.82rem; line-height: 1.5; }
+  .rmk-check-value { font-size: 0.92rem; }
+  .rmk-check-label { font-size: 0.72rem; }
+  .rmk-output-text { font-size: 1rem; }
 }

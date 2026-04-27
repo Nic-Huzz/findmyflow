@@ -52,6 +52,7 @@ export default function CreatorHome() {
   const [activeChallenges, setActiveChallenges] = useState([])
   const [assessment, setAssessment] = useState(null)
   const [payRentModel, setPayRentModel] = useState(null)
+  const [remarkableAngle, setRemarkableAngle] = useState(null)
   const [editingAssessment, setEditingAssessment] = useState(false)
   const [assessmentDraft, setAssessmentDraft] = useState(null)
   const [savingAssessment, setSavingAssessment] = useState(false)
@@ -129,7 +130,7 @@ export default function CreatorHome() {
   const loadCreatorData = async () => {
     setLoading(true)
     try {
-      const [{ data: scope }, { data: selection }, { data: dna }, { data: assess }, { data: stageProgress }] = await Promise.all([
+      const [{ data: scope }, { data: selection }, { data: dna }, { data: assess }, { data: stageProgress }, { data: remarkData }] = await Promise.all([
         supabase
           .from('scope_map_results')
           .select('*')
@@ -163,6 +164,13 @@ export default function CreatorHome() {
           .select('pay_rent_model')
           .eq('user_id', userId)
           .maybeSingle(),
+        supabase
+          .from('remarkable_angles')
+          .select('ai_rule_statement, ai_tribe_statement')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
       ])
 
       setScopeResult(scope || null)
@@ -170,6 +178,7 @@ export default function CreatorHome() {
       setDnaResult(dna || null)
       setAssessment(assess || null)
       setPayRentModel(stageProgress?.pay_rent_model || null)
+      setRemarkableAngle(remarkData || null)
     } catch (err) {
       console.error('CreatorHome loadCreatorData error:', err)
     } finally {
@@ -265,10 +274,8 @@ export default function CreatorHome() {
     <div className="creator-home">
 
       {/* ═══ HEADER ═══ */}
-      <div className="ch-header">
-        <div className="ch-header-row">
-          <h2 className="ch-title">Creator Portal</h2>
-        </div>
+      <div className="ch-header ch-header-branded">
+        <h2 className="ch-title">Creator Portal</h2>
         <div className="ch-stats-row">
           <div className="ch-stat">
             <span className="ch-stat-val">{completedCount}</span>
@@ -340,7 +347,7 @@ export default function CreatorHome() {
           {/* ── 2. How to Pay Rent Now ── */}
           <div className="ch-card" onClick={() => navigate('/create/pay-rent')} style={{ cursor: 'pointer' }}>
             <div className="ch-card-head">
-              <span className="ch-card-title">💼 How to Pay Rent Now</span>
+              <span className="ch-card-title"><span className="ch-card-emoji">💼</span> How to Pay Rent Now</span>
               {payRentModel && <span className="ch-badge ch-badge-gold">Done</span>}
             </div>
             {payRentModel ? (
@@ -363,17 +370,39 @@ export default function CreatorHome() {
           {/* ── 3. How to Blow Up Your Brand ── */}
           <div className="ch-card" onClick={() => navigate('/create/remarkable')} style={{ cursor: 'pointer' }}>
             <div className="ch-card-head">
-              <span className="ch-card-title">🔥 How to Blow Up Your Brand</span>
+              <span className="ch-card-title"><span className="ch-card-emoji">🔥</span> How to Blow Up Your Brand</span>
+              {remarkableAngle && <span className="ch-badge ch-badge-gold">Done</span>}
             </div>
-            <p className="ch-muted-text">Find your remarkable angle. The thing that makes people talk.</p>
+            {remarkableAngle ? (
+              <>
+                <div className="ch-rr-row">
+                  <div className="ch-rr-icon" style={{ background: 'rgba(233,162,59,0.1)' }}>🔥</div>
+                  <div>
+                    <div className="ch-rr-name" style={{ color: '#E9A23B' }}>{remarkableAngle.ai_rule_statement}</div>
+                    <div className="ch-rr-desc">{remarkableAngle.ai_tribe_statement}</div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <p className="ch-muted-text">Find your remarkable angle. The thing that makes people talk.</p>
+            )}
           </div>
 
           {/* ── 4. How to Scale Your Income ── */}
           <div className="ch-card" onClick={() => navigate('/create/scale-income')} style={{ cursor: 'pointer' }}>
             <div className="ch-card-head">
-              <span className="ch-card-title">📈 How to Scale Your Income</span>
+              <span className="ch-card-title"><span className="ch-card-emoji">📈</span> How to Scale Your Income</span>
+              {assessment && <span className="ch-badge ch-badge-gold">Done</span>}
             </div>
-            <p className="ch-muted-text">Build your 3-layer business model: attraction, core, continuity.</p>
+            {assessment ? (
+              <div style={{ fontSize: '0.82rem', color: '#6c757d', lineHeight: 1.5 }}>
+                <div><strong style={{ color: '#8b5cf6' }}>Attraction:</strong> {assessment.attraction_detail || 'Not set'}</div>
+                <div><strong style={{ color: '#E9A23B' }}>Core:</strong> {assessment.core_detail || 'Not set'}</div>
+                <div><strong style={{ color: '#10b981' }}>Continuity:</strong> {assessment.continuity_detail || 'Not set'}</div>
+              </div>
+            ) : (
+              <p className="ch-muted-text">Build your 3-layer business model: attraction, core, continuity.</p>
+            )}
           </div>
 
           {/* ── 5. How do I work best? ── */}

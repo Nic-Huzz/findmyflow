@@ -9,6 +9,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import revenueData from '../../public/data/creatorEarlyRevenueModels.json'
+import growthData from '../../public/data/experienceCreatorGrowthStrategies.json'
 import './PayRentFlow.css'
 
 // ── Revenue model definitions ──
@@ -45,7 +46,7 @@ function creatorSlug(name) {
 export default function PayRentFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const [screen, setScreen] = useState('intro') // 'intro' | 'models' | 'confirm'
+  const [screen, setScreen] = useState('intro') // 'intro' | 'timeline' | 'models' | 'confirm'
   const [selectedCreators, setSelectedCreators] = useState(null) // array of names
   const [chosenModel, setChosenModel] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -102,6 +103,20 @@ export default function PayRentFlow() {
     const order = ['day_job_side_project', 'one_on_one_service', 'free_events_paid_elsewhere', 'small_group_paid', 'institutional_salary']
     return order.filter(m => groupedByModel[m]?.length > 0)
   }, [groupedByModel])
+
+  // Build timeline data from selected creators
+  const timelineEntries = useMemo(() => {
+    if (!selectedCreators?.length) return []
+    return selectedCreators.map(name => {
+      const gs = growthData.creators?.[name]
+      if (!gs) return null
+      return {
+        name,
+        slug: creatorSlug(name),
+        earlyGrowth: gs.early_growth,
+      }
+    }).filter(Boolean)
+  }, [selectedCreators])
 
   // Save chosen model
   const handleSave = async () => {
@@ -163,14 +178,56 @@ export default function PayRentFlow() {
           <div className="prf-screen prf-intro">
             <div className="prf-intro-badge">Revenue Reality</div>
             <h1>How They <span className="prf-gold">Paid Rent</span></h1>
-            <p>The people you picked didn't start with a business model. They started with a way to pay rent.</p>
+            <p>The people who inspire you didn't blow up overnight. In fact, here's how long it took each of them.</p>
             <button
               className="prf-cta-btn"
-              onClick={() => { hapticLight(); setScreen('models') }}
+              onClick={() => { hapticLight(); setScreen('timeline') }}
             >
               Show me
             </button>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 2: TIMELINE ──
+  if (screen === 'timeline') {
+    return (
+      <div className="prf">
+        <div className="prf-hero">
+          <div className="prf-hero-badge">The Reality</div>
+          <h1>It took <span className="prf-gold">years</span></h1>
+          <p>Here's what each of your picks was doing before anyone noticed.</p>
+        </div>
+
+        <div className="prf-container prf-screen">
+          {timelineEntries.map(entry => (
+            <div key={entry.name} className="prf-creator-card">
+              <div className="prf-creator-top">
+                <img
+                  src={`/images/creators/${entry.slug}.png`}
+                  alt={entry.name}
+                  className="prf-creator-avatar"
+                  onError={(e) => { e.target.style.display = 'none' }}
+                />
+                <span className="prf-creator-name">{entry.name}</span>
+              </div>
+              <div className="prf-creator-desc">{entry.earlyGrowth}</div>
+            </div>
+          ))}
+
+          <div className="prf-transition-text">
+            In the meantime, they all had to pay rent. Here's what they did.
+          </div>
+
+          <button
+            className="prf-cta-btn"
+            style={{ width: '100%' }}
+            onClick={() => { hapticLight(); setScreen('models'); window.scrollTo(0, 0) }}
+          >
+            Show me how they paid rent
+          </button>
         </div>
       </div>
     )

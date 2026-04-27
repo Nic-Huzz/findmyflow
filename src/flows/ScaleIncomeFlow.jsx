@@ -4,11 +4,12 @@
  * User confirms or swaps each layer (attraction / core / continuity)
  * for their chosen experience-creator archetype.
  */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import offerMapData from '../../public/data/experienceCreatorOfferMap.json'
 import './ScaleIncomeFlow.css'
 
 // ── Archetype offer definitions ──
@@ -54,6 +55,16 @@ const ARCHETYPE_INFO = {
   retreats: { name: 'Retreats & Immersive', emoji: '🏔️' },
 }
 
+// Per-layer skill mappings derived from 59 creator corpus analysis
+const LAYER_SKILLS = {
+  workshop:     { attraction: ['teaching', 'coaching'],     core: ['teaching', 'coaching'],     continuity: ['coaching', 'teaching'] },
+  performance:  { attraction: ['storytelling', 'performing'], core: ['performing', 'speaking_up'], continuity: ['performing', 'creating'] },
+  cohort:       { attraction: ['teaching', 'performing'],   core: ['teaching', 'leading'],      continuity: ['teaching'] },
+  books_media:  { attraction: ['speaking_up', 'storytelling'], core: ['speaking_up', 'storytelling'], continuity: ['speaking_up', 'storytelling'] },
+  facilitation: { attraction: ['connecting', 'leading'],    core: ['connecting', 'leading'],    continuity: ['connecting', 'leading'] },
+  retreats:     { attraction: ['building', 'storytelling'], core: ['storytelling', 'building'],  continuity: ['storytelling', 'coaching'] },
+}
+
 const LAYERS = ['attraction', 'core', 'continuity']
 
 const LAYER_META = {
@@ -66,8 +77,10 @@ export default function ScaleIncomeFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  const [screen, setScreen] = useState('intro') // intro | attraction | core | continuity | summary
+  const [screen, setScreen] = useState('intro') // intro | examples | attraction | core | continuity | summary
   const [archetype, setArchetype] = useState(null)
+  const [selectedCreatorNames, setSelectedCreatorNames] = useState([])
+  const [userSkills, setUserSkills] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
@@ -88,14 +101,31 @@ export default function ScaleIncomeFlow() {
       try {
         const { data, error } = await supabase
           .from('experience_creator_selections')
-          .select('dominant_archetype')
+          .select('dominant_archetype, selected_creators')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(1)
 
         if (error) throw error
-        if (data?.length && data[0].dominant_archetype) {
-          setArchetype(data[0].dominant_archetype)
+        if (data?.length) {
+          if (data[0].dominant_archetype) setArchetype(data[0].dominant_archetype)
+          if (data[0].selected_creators) setSelectedCreatorNames(data[0].selected_creators)
+        }
+
+        // Fetch user's play-skill categories
+        const { data: skillData } = await supabase
+          .from('nikigai_clusters')
+          .select('items')
+          .eq('user_id', user.id)
+          .eq('cluster_type', 'skills')
+        if (skillData?.length) {
+          const cats = new Set()
+          for (const row of skillData) {
+            for (const item of (row.items || [])) {
+              if (item.category) cats.add(item.category)
+            }
+          }
+          setUserSkills([...cats])
         }
       } catch (err) {
         console.error('Error fetching archetype:', err)
@@ -104,6 +134,22 @@ export default function ScaleIncomeFlow() {
       }
     })()
   }, [user])
+
+  // Build creator revenue examples
+  const creatorExamples = useMemo(() => {
+    return selectedCreatorNames.map(name => {
+      const streams = offerMapData.creators?.[name]
+      if (!streams) return null
+      const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
+      return {
+        name,
+        slug,
+        attraction: (streams.attraction || []).map(s => s.charAt(0).toLowerCase() + s.slice(1)),
+        core: (streams.core || []).map(s => s.charAt(0).toLowerCase() + s.slice(1)),
+        continuity: (streams.continuity || []).map(s => s.charAt(0).toLowerCase() + s.slice(1)),
+      }
+    }).filter(Boolean).filter(c => c.attraction.length || c.core.length || c.continuity.length)
+  }, [selectedCreatorNames])
 
   const confirmChoice = (layer, offerName, offerDesc, sourceArchetype) => {
     hapticLight()
@@ -209,9 +255,63 @@ export default function ScaleIncomeFlow() {
             </div>
             <button
               className="sif-cta"
-              onClick={() => goToLayer('attraction')}
+              onClick={() => { hapticLight(); setScreen('examples'); window.scrollTo(0, 0) }}
             >
               Let's build it
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── EXAMPLES SCREEN ──
+  if (screen === 'examples') {
+    return (
+      <div className="sif">
+        <div className="sif-container">
+          <div className="sif-screen">
+            <button className="sif-back-btn" onClick={() => { setScreen('intro'); window.scrollTo(0, 0) }}>
+              ← Back
+            </button>
+
+            <div className="sif-badge" style={{ display: 'block', textAlign: 'center' }}>How Your Picks Do It</div>
+            <h2 className="sif-heading" style={{ textAlign: 'center' }}>Here's how the people you chose actually make money</h2>
+
+            {creatorExamples.map(creator => (
+              <div key={creator.name} className="sif-example-card">
+                <div className="sif-example-top">
+                  <img className="sif-example-avatar" src={`/images/creators/${creator.slug}.png`} alt={creator.name} onError={e => { e.target.style.display = 'none' }} />
+                  <span className="sif-example-name">{creator.name}</span>
+                </div>
+                {creator.attraction.length > 0 && (
+                  <div className="sif-example-layer">
+                    <span className="sif-example-dot attraction" />
+                    <span className="sif-example-label">Attraction:</span>
+                    <span className="sif-example-streams">{creator.attraction.join(', ')}</span>
+                  </div>
+                )}
+                {creator.core.length > 0 && (
+                  <div className="sif-example-layer">
+                    <span className="sif-example-dot core" />
+                    <span className="sif-example-label">Core:</span>
+                    <span className="sif-example-streams">{creator.core.join(', ')}</span>
+                  </div>
+                )}
+                {creator.continuity.length > 0 && (
+                  <div className="sif-example-layer">
+                    <span className="sif-example-dot continuity" />
+                    <span className="sif-example-label">Continuity:</span>
+                    <span className="sif-example-streams">{creator.continuity.join(', ')}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+
+            <p className="sif-transition-text">Now let's build yours.</p>
+
+            <button className="sif-cta" style={{ width: '100%' }} onClick={() => goToLayer('attraction')}>
+              Build my model
             </button>
           </div>
         </div>
@@ -276,6 +376,16 @@ export default function ScaleIncomeFlow() {
             <div className={`sif-offer-card ${isConfirmed ? 'sif-confirmed' : ''}`}>
               <div className="sif-offer-name">{displayOffer.name}</div>
               <p className="sif-offer-desc">{displayOffer.desc}</p>
+              {LAYER_SKILLS[displayOffer.sourceArchetype]?.[layer] && (
+                <div className="sif-skill-tags">
+                  {LAYER_SKILLS[displayOffer.sourceArchetype][layer].map(s => (
+                    <span key={s} className={`sif-skill-tag ${userSkills.includes(s) ? 'sif-skill-match' : 'sif-skill-dim'}`}>
+                      {s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')}
+                      {userSkills.includes(s) && ' ✓'}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Action buttons */}
@@ -324,6 +434,16 @@ export default function ScaleIncomeFlow() {
                     </div>
                     <div className="sif-alt-offer-name">{alt.offer.name}</div>
                     <p className="sif-alt-offer-desc">{alt.offer.desc}</p>
+                    {LAYER_SKILLS[alt.archetypeKey]?.[layer] && (
+                      <div className="sif-skill-tags">
+                        {LAYER_SKILLS[alt.archetypeKey][layer].map(s => (
+                          <span key={s} className={`sif-skill-tag ${userSkills.includes(s) ? 'sif-skill-match' : 'sif-skill-dim'}`}>
+                            {s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')}
+                            {userSkills.includes(s) && ' ✓'}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

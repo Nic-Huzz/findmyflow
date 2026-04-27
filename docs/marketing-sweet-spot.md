@@ -162,11 +162,11 @@ The original 7 categories were discovered through clustering. The refined model 
 
 ### The 5 Triggers
 
-1. **Rule Broken** (95% of creators) — Challenged a cultural standard or norm. The most universal trigger.
-2. **Unexpected Combination** (77%) — Two domains brought together that the field hasn't seen combined.
-3. **Extreme Action** (53%) — A specific visible behavior so far beyond normal it becomes the thing people talk about. NOT the same as extreme commitment (which is the trust axis).
-4. **Stupid Simplicity** (77%) — A conclusion so simple it feels insulting, arrived at through years of depth.
-5. **Impossible Result** (67%) — Evidence that defies what the field believed was possible.
+1. **Rule Broken** (96%) — Challenged a cultural standard or norm. Nearly universal.
+2. **Impossible Result** (95%) — Evidence that defied what the field believed was possible.
+3. **Stupid Simplicity** (93%) — A conclusion so simple it feels insulting, arrived at through years of depth.
+4. **Unexpected Combination** (91%) — Two domains brought together that the field hasn't seen combined.
+5. **Extreme Action** (82%) — A specific visible behavior so far beyond normal it becomes the thing people talk about. NOT the same as extreme commitment (which is the trust axis).
 
 ### Key distinction: Extreme Commitment vs Extreme Action
 

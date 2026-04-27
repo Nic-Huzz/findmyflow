@@ -37,6 +37,16 @@
 .ch-header {
   padding: 0.25rem 0 0.5rem;
 }
+.ch-header-branded {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  margin: 0 -1.25rem;
+  padding: 1.5rem 1.25rem 1rem;
+  border-radius: 0 0 20px 20px;
+  color: white;
+}
+.ch-header-branded .ch-title { color: white; }
+.ch-header-branded .ch-stat-val { color: white; }
+.ch-header-branded .ch-stat-label { color: rgba(255,255,255,0.6); }
 .ch-header-row {
   display: flex;
   justify-content: space-between;
@@ -49,8 +59,11 @@
   font-weight: 800;
   letter-spacing: -0.5px;
   color: var(--text-primary);
-  margin: 0;
+  margin: 0 0 0.25rem;
   min-width: 0;
+}
+.ch-card-emoji {
+  margin-right: 0.35rem;
 }
 .ch-stage-badge {
   font-size: 0.72rem;

@@ -5,7 +5,7 @@
 
 /* === ROOT === */
 .prf {
-  background: #0f0a1e;
+  background: linear-gradient(180deg, #5e17eb 0%, #4a12c4 100%);
   color: white;
   min-height: 100vh;
   padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
@@ -33,10 +33,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 80vh;
+  min-height: calc(100vh - 70px);
   text-align: center;
-  padding: 2rem 0;
+  padding: 20vh 0 2rem;
+}
+.prf-intro .prf-cta-btn {
+  margin-top: auto;
+  width: 100%;
 }
 
 .prf-intro-badge {
@@ -212,6 +215,26 @@
   font-size: 0.82rem;
   line-height: 1.5;
   color: rgba(255,255,255,0.7);
+}
+
+/* === TIMELINE SCALING MOVE === */
+.prf-creator-scaling {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(233,162,59,0.75);
+  font-style: italic;
+  margin-top: 0.3rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.prf-transition-text {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  margin: 2rem 0 1.5rem;
+  line-height: 1.5;
 }
 
 /* === MODEL SELECTION === */

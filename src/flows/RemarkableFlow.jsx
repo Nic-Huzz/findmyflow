@@ -175,18 +175,18 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── INTRO ──
+  // ── SLIDE 1: INTRO ──
   if (step === STEPS.INTRO) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
           <div className="rmk-intro">
-            <div className="rmk-badge">Your Remarkable Angle</div>
-            <h1>What makes you <span className="rmk-gold">impossible to ignore</span>?</h1>
-            <p>The people you admire didn't become known by being better. They became known by breaking a rule nobody questioned.</p>
-            <p className="rmk-intro-sub">You already have 3 of the 5 ingredients. Let's find them.</p>
+            <div className="rmk-badge">How They Blew Up</div>
+            <h1>How did these people become <span className="rmk-gold">known globally</span>?</h1>
+            <p>There are two ingredients to becoming known: Trust and Attention.</p>
+            <p className="rmk-intro-sub">Let us show you how the people you picked nailed both.</p>
             <button className="rmk-cta" onClick={() => { hapticLight(); setStep(educationData ? STEPS.TRUST : STEPS.RULE_BREAK) }}>
-              Let's go
+              Show me
             </button>
           </div>
         </div>
@@ -194,14 +194,14 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── EDUCATION: TRUST ──
+  // ── SLIDE 2: TRUST ──
   if (step === STEPS.TRUST) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-badge">The Secret</div>
-          <h2 className="rmk-heading">Trust takes <span className="rmk-gold">time</span></h2>
-          <p className="rmk-prompt">Every person you picked spent years doing the work before anyone noticed. Repetition builds trust. Results build credibility. There are no shortcuts.</p>
+          <div className="rmk-badge">Ingredient 1</div>
+          <h2 className="rmk-heading"><span className="rmk-gold">Trust</span></h2>
+          <p className="rmk-prompt">Each of your picks built trust through repetition. Showing up week after week after week for years. And results. Becoming so good at what they do that their results became undeniable.</p>
 
           {educationData?.trustEntries?.length > 0 && (
             <div className="rmk-edu-cards">
@@ -220,7 +220,7 @@ export default function RemarkableFlow() {
           <div className="rmk-nav">
             <button className="rmk-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
             <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.ATTENTION) }}>
-              Next
+              What about attention?
             </button>
           </div>
         </div>
@@ -228,21 +228,23 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── EDUCATION: ATTENTION ──
+  // ── SLIDE 3: ATTENTION ──
   if (step === STEPS.ATTENTION) {
     return (
       <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-badge">The Secret</div>
-          <h2 className="rmk-heading">Attention comes from being <span className="rmk-gold">remarkable</span></h2>
-          <p className="rmk-prompt">Word of mouth is the best marketing in the world. What creates word of mouth? Being remarkable. Literally: worth re-marking about.</p>
-          <p className="rmk-prompt">When someone hears about you, would they tell a friend? If not, you're not remarkable yet. If yes, you don't need a marketing budget.</p>
-          <p className="rmk-prompt" style={{ color: 'rgba(233,162,59,0.8)', fontWeight: 600 }}>Trust gets you believed. Remarkability gets you noticed. You need both.</p>
+        <div className="rmk-container rmk-screen rmk-centered-screen">
+          <div className="rmk-badge">Ingredient 2</div>
+          <h2 className="rmk-heading"><span className="rmk-gold">Attention</span></h2>
+          <p className="rmk-prompt-lg">They gained attention through being remarkable.</p>
+          <p className="rmk-prompt-lg">Word of mouth is the best marketing in the world.</p>
+          <p className="rmk-prompt-lg">What creates word of mouth? Being remarkable.</p>
+          <p className="rmk-prompt-lg">It literally means to be <strong>re-marked</strong>.</p>
+          <p className="rmk-prompt-lg">Something so interesting that people remark about it to their friends.</p>
 
           <div className="rmk-nav">
             <button className="rmk-back" onClick={() => setStep(STEPS.TRUST)}>Back</button>
             <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.TRIGGERS) }}>
-              So what makes someone remarkable?
+              So how do I become remarkable?
             </button>
           </div>
         </div>
@@ -255,8 +257,9 @@ export default function RemarkableFlow() {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-badge">The 5 Triggers</div>
-          <h2 className="rmk-heading">Every person you picked hit at least <span className="rmk-gold">4 of these 5</span></h2>
+          <div className="rmk-badge">The Formula</div>
+          <h2 className="rmk-heading">We've found a <span className="rmk-gold">formula</span> to help what you do be seen as remarkable</h2>
+          <p className="rmk-prompt">We analysed 57 experience creators. Over 90% hit all 5 of these triggers. Here's how your picks did it.</p>
 
           {educationData?.triggerEntries?.length > 0 && (
             <div className="rmk-trigger-proof">
