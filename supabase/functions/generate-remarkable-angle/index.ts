@@ -21,8 +21,52 @@ serve(async (req) => {
   }
 
   try {
-    const body: RemarkableRequest = await req.json()
-    const { wound_problem, rule_identified, combination_insight, extreme_action_plan, user_name } = body
+    const body: any = await req.json()
+    const { wound_problem, rule_identified, combination_insight, extreme_action_plan, user_name, generate_taglines } = body
+
+    // Tagline-only mode
+    if (generate_taglines && rule_identified) {
+      const taglinePrompt = `Generate 4 short taglines (2-4 words each) that capture this rule break.
+
+The problem: "${wound_problem}"
+The contrast: "${rule_identified}"
+
+Examples of great taglines: "Healing but Fun", "Start with Why", "Atomic Habits", "Find What Feels Good"
+
+Rules:
+- Each tagline should be 2-4 words
+- No em dashes, semicolons, or double hyphens
+- Should feel like a brand name or movement name
+- Should capture the CONTRAST (the opposite of how the world currently does it)
+
+Return ONLY valid JSON: {"taglines": ["...", "...", "...", "..."]}`
+
+      const taglineResponse = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY!,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 200,
+          messages: [{ role: 'user', content: taglinePrompt }],
+        }),
+      })
+      const taglineData = await taglineResponse.json()
+      const taglineText = taglineData.content?.[0]?.text || '{"taglines":[]}'
+      try {
+        const parsed = JSON.parse(taglineText.replace(/```json\n?|\n?```/g, '').trim())
+        return new Response(JSON.stringify(parsed), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
+      } catch {
+        return new Response(JSON.stringify({ taglines: [] }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
+      }
+    }
 
     if (!rule_identified || !combination_insight || !extreme_action_plan) {
       throw new Error('All three inputs are required')

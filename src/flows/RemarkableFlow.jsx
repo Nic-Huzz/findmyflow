@@ -18,7 +18,11 @@ const STEPS = {
   TRUST: 'trust',
   ATTENTION: 'attention',
   TRIGGERS: 'triggers',
-  RULE_BREAK: 'rule_break',
+  RULE_PICK: 'rule_pick',
+  RULE_CURRENT: 'rule_current',
+  RULE_WRONG: 'rule_wrong',
+  RULE_YOURS: 'rule_yours',
+  TAGLINE: 'tagline',
   COMBINATION: 'combination',
   EXTREME_ACTION: 'extreme_action',
   GENERATING: 'generating',
@@ -44,7 +48,11 @@ export default function RemarkableFlow() {
 
   // User inputs
   const [woundProblem, setWoundProblem] = useState('')
-  const [ruleIdentified, setRuleIdentified] = useState('')
+  const [currentSolution, setCurrentSolution] = useState('')
+  const [whatsWrong, setWhatsWrong] = useState('')
+  const [yourSolution, setYourSolution] = useState('')
+  const [tagline, setTagline] = useState('')
+  const [aiTaglineSuggestions, setAiTaglineSuggestions] = useState([])
   const [combinationInsight, setCombinationInsight] = useState('')
   const [extremeAction, setExtremeAction] = useState('')
 
@@ -125,7 +133,7 @@ export default function RemarkableFlow() {
       const { data, error: fnError } = await supabase.functions.invoke('generate-remarkable-angle', {
         body: {
           wound_problem: woundProblem,
-          rule_identified: ruleIdentified,
+          rule_identified: `Current solution: ${currentSolution}. What's wrong: ${whatsWrong}. My solution: ${yourSolution}`,
           combination_insight: combinationInsight,
           extreme_action_plan: extremeAction,
         },
@@ -149,7 +157,7 @@ export default function RemarkableFlow() {
       await supabase.from('remarkable_angles').insert({
         user_id: user.id,
         wound_problem: woundProblem,
-        rule_identified: ruleIdentified,
+        rule_identified: `Current: ${currentSolution} | Wrong: ${whatsWrong} | Mine: ${yourSolution}`,
         combination_insight: combinationInsight,
         extreme_action_plan: extremeAction,
         ai_rule_statement: aiResult?.rule_statement || null,
@@ -185,7 +193,7 @@ export default function RemarkableFlow() {
             <h1>How did these people become <span className="rmk-gold">known globally</span>?</h1>
             <p>There are two ingredients to becoming known: Trust and Attention.</p>
             <p className="rmk-intro-sub">Let us show you how the people you picked nailed both.</p>
-            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(educationData ? STEPS.TRUST : STEPS.RULE_BREAK) }}>
+            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(educationData ? STEPS.TRUST : STEPS.RULE_PICK) }}>
               Show me
             </button>
           </div>
@@ -292,7 +300,7 @@ export default function RemarkableFlow() {
 
           <div className="rmk-nav">
             <button className="rmk-back" onClick={() => setStep(STEPS.ATTENTION)}>Back</button>
-            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.RULE_BREAK) }}>
+            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.RULE_PICK) }}>
               Find my remarkable angle
             </button>
           </div>
@@ -301,14 +309,14 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── STEP 1: RULE BREAK ──
-  if (step === STEPS.RULE_BREAK) {
+  // ── STEP 1a: PICK THE PROBLEM ──
+  if (step === STEPS.RULE_PICK) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
           <div className="rmk-step-badge">1 of 3</div>
-          <h2 className="rmk-heading">What rule are you here to break?</h2>
-          <p className="rmk-prompt">First, pick the problem that feels most personal. The one that still makes you angry when you think about it.</p>
+          <h2 className="rmk-heading">Pick the problem that makes you <span className="rmk-gold">angriest</span></h2>
+          <p className="rmk-prompt">The one that still fires you up when you think about it.</p>
 
           {problems.length > 0 && (
             <div className="rmk-problem-list">
@@ -334,25 +342,167 @@ export default function RemarkableFlow() {
             />
           )}
 
-          {woundProblem && (
-            <>
-              <p className="rmk-prompt" style={{ marginTop: '1.5rem' }}>Now name the rule. What standard or norm caused this problem?</p>
-              <textarea
-                className="rmk-textarea"
-                value={ruleIdentified}
-                onChange={e => setRuleIdentified(e.target.value)}
-                placeholder="e.g. Healing is only for people who can afford therapists"
-                rows={2}
-                autoFocus
-              />
-            </>
-          )}
-
           <div className="rmk-nav">
             <button className="rmk-back" onClick={() => setStep(STEPS.TRIGGERS)}>Back</button>
             <button
               className="rmk-cta"
-              disabled={!woundProblem || ruleIdentified.trim().length < 10}
+              disabled={!woundProblem}
+              onClick={() => { hapticLight(); setStep(STEPS.RULE_CURRENT) }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── STEP 1b: HOW DOES THE WORLD CURRENTLY SOLVE THIS? ──
+  if (step === STEPS.RULE_CURRENT) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">1 of 3</div>
+          <div className="rmk-context-card">{woundProblem}</div>
+          <h2 className="rmk-heading">How does the world currently <span className="rmk-gold">solve</span> this?</h2>
+          <textarea
+            className="rmk-textarea"
+            value={currentSolution}
+            onChange={e => setCurrentSolution(e.target.value)}
+            placeholder="e.g. Therapy. One-on-one. Private. Serious. Expensive."
+            rows={3}
+            autoFocus
+          />
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_PICK)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={currentSolution.trim().length < 5}
+              onClick={() => { hapticLight(); setStep(STEPS.RULE_WRONG) }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── STEP 1c: WHAT'S WRONG WITH THAT? ──
+  if (step === STEPS.RULE_WRONG) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">1 of 3</div>
+          <div className="rmk-context-card">{currentSolution}</div>
+          <h2 className="rmk-heading">What's <span className="rmk-gold">wrong</span> with that?</h2>
+          <textarea
+            className="rmk-textarea"
+            value={whatsWrong}
+            onChange={e => setWhatsWrong(e.target.value)}
+            placeholder="e.g. It's isolating. People got wounded in groups but heal alone. And most people can't afford it."
+            rows={3}
+            autoFocus
+          />
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_CURRENT)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={whatsWrong.trim().length < 5}
+              onClick={() => { hapticLight(); setStep(STEPS.RULE_YOURS) }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── STEP 1d: HOW DO YOU SOLVE IT? ──
+  if (step === STEPS.RULE_YOURS) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">1 of 3</div>
+          <div className="rmk-context-card">{whatsWrong}</div>
+          <h2 className="rmk-heading">How do <span className="rmk-gold">you</span> solve it?</h2>
+          <textarea
+            className="rmk-textarea"
+            value={yourSolution}
+            onChange={e => setYourSolution(e.target.value)}
+            placeholder="e.g. Dancing with strangers at sunrise. Community. Play. Fun."
+            rows={3}
+            autoFocus
+          />
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_WRONG)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={yourSolution.trim().length < 5}
+              onClick={async () => {
+                hapticLight()
+                // Generate tagline suggestions from the contrast
+                try {
+                  const { data } = await supabase.functions.invoke('generate-remarkable-angle', {
+                    body: {
+                      wound_problem: woundProblem,
+                      rule_identified: `Current: ${currentSolution} | Wrong: ${whatsWrong} | Mine: ${yourSolution}`,
+                      combination_insight: '',
+                      extreme_action_plan: '',
+                      generate_taglines: true,
+                    },
+                  })
+                  if (data?.taglines) setAiTaglineSuggestions(data.taglines)
+                } catch (e) { console.error('Tagline generation error:', e) }
+                setStep(STEPS.TAGLINE)
+              }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── STEP 1e: YOUR TAGLINE ──
+  if (step === STEPS.TAGLINE) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">1 of 3</div>
+          <h2 className="rmk-heading">What's your <span className="rmk-gold">tagline</span>?</h2>
+          <p className="rmk-prompt">Distill your rule break into 2-4 words. This is what goes on your bio, your events, your brand.</p>
+
+          {aiTaglineSuggestions.length > 0 && (
+            <div className="rmk-tagline-suggestions">
+              <div className="rmk-tagline-label">AI suggestions (tap to use):</div>
+              {aiTaglineSuggestions.map((suggestion, i) => (
+                <button
+                  key={i}
+                  className={`rmk-tagline-btn ${tagline === suggestion ? 'rmk-tagline-selected' : ''}`}
+                  onClick={() => { hapticLight(); setTagline(suggestion) }}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <textarea
+            className="rmk-textarea"
+            value={tagline}
+            onChange={e => setTagline(e.target.value)}
+            placeholder="e.g. Healing but Fun"
+            rows={2}
+          />
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_YOURS)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={tagline.trim().length < 2}
               onClick={() => { hapticLight(); setStep(STEPS.COMBINATION) }}
             >
               Next

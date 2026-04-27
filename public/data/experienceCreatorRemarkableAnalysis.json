@@ -40,7 +40,7 @@
     "Wim Hof": {
       "rule_broken": {
         "present": "yes",
-        "evidence": "Medical science says you cannot voluntarily control your autonomous nervous system. He proved otherwise.",
+        "evidence": "He climbed Everest in nothing but shorts and swam 57 metres under Arctic ice.",
         "pattern": "additive",
         "confidence": 95
       },
@@ -190,7 +190,7 @@
     "James Clear": {
       "rule_broken": {
         "present": "partial",
-        "evidence": "Content creators chase trends. He wrote about habits twice a week for 6 years and never changed topics.",
+        "evidence": "A guy who survived a traumatic brain injury from a baseball bat wrote the exact same blog post about habits twice a week for six years straight.",
         "pattern": "subtractive",
         "confidence": 72
       },
@@ -220,7 +220,7 @@
     "Gabor Mate": {
       "rule_broken": {
         "present": "yes",
-        "evidence": "Addiction medicine says treat the addiction. He said treat the childhood trauma that caused it.",
+        "evidence": "A doctor spent 12 years working with heroin addicts in Vancouver's worst neighbourhood and asked every patient 'why the pain?' instead of 'why the addiction?'",
         "pattern": "reframing",
         "confidence": 95
       },
@@ -370,7 +370,7 @@
     "Simon Sinek": {
       "rule_broken": {
         "present": "partial",
-        "evidence": "Business strategy starts with What or How. He said start with Why.",
+        "evidence": "A struggling ad man who nearly went bankrupt gave one TED talk with a hand-drawn circle and it became the third most-watched TED talk in history.",
         "pattern": "reframing",
         "confidence": 60
       },
@@ -430,7 +430,7 @@
     "Myles Horton": {
       "rule_broken": {
         "present": "yes",
-        "evidence": "Education says teacher teaches. He said poor people already know the answers.",
+        "evidence": "He ran an integrated school in Jim Crow Tennessee for 58 years. The government shut it down and he reopened it the same year.",
         "pattern": "subtractive",
         "confidence": 95
       },
@@ -460,7 +460,7 @@
     "Priya Parker": {
       "rule_broken": {
         "present": "yes",
-        "evidence": "Gatherings focus on content. She said HOW you gather matters more than WHAT.",
+        "evidence": "A conflict mediator from war zones started telling corporate executives that their meetings were more dysfunctional than peace negotiations.",
         "pattern": "reframing",
         "confidence": 82
       },
@@ -550,7 +550,7 @@
     "Elizabeth Gilbert": {
       "rule_broken": {
         "present": "yes",
-        "evidence": "Creative culture says suffer for your art, wait for permission. She said create badly, don't wait.",
+        "evidence": "She left everything to travel alone for a year through Italy, India, and Indonesia, then wrote a memoir about it that sold 12 million copies.",
         "pattern": "subtractive",
         "confidence": 85
       },
@@ -580,7 +580,7 @@
     "Jay Shetty": {
       "rule_broken": {
         "present": "yes",
-        "evidence": "Wisdom comes from age. He became a public wisdom teacher at 29 with 3 years monastic experience.",
+        "evidence": "A 22-year-old from North London lived as a Hindu monk in India for three years, then came back and became Will Smith's spiritual adviser.",
         "pattern": "additive",
         "confidence": 78
       },
@@ -611,7 +611,7 @@
       "name": "Alain de Botton",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Rejected the academic rule that philosophy must be esoteric, founded The School of Life to deliver philosophy as emotional education",
+        "evidence": "He dropped out of a Harvard PhD at 23 to write a novel about getting dumped on an airplane, and it became a bestseller.",
         "pattern": "reframing",
         "confidence": 95
       },
@@ -671,7 +671,7 @@
       "name": "Bill Wilson",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Rejected medical establishment's rule that addiction requires professional treatment, built peer-led recovery",
+        "evidence": "A bankrupt stockbroker had a white-light experience in a hospital bed, then showed up at a stranger's door in Akron and said 'I need to talk to another drunk.'",
         "pattern": "subtractive",
         "confidence": 95
       },
@@ -701,7 +701,7 @@
       "name": "Dan Hughes",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Rejected standard behavioral approach to traumatized children, insisted on playfulness, acceptance, curiosity, empathy",
+        "evidence": "He told foster parents to stop punishing traumatized kids and start being playful and curious about them, and it became the default approach across the UK.",
         "pattern": "reframing",
         "confidence": 88
       },
@@ -731,7 +731,7 @@
       "name": "David Bohm",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Challenged Copenhagen interpretation, then broke from physics to argue fragmented thinking was humanity's core problem",
+        "evidence": "A quantum physicist got blacklisted during McCarthyism, fled the country, and spent 30 years having private dialogues with Krishnamurti about the nature of thought.",
         "pattern": "reframing",
         "confidence": 93
       },
@@ -761,7 +761,7 @@
       "name": "Ella Baker",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Rejected charismatic-leader model, insisted students not ministers should direct their own organizations",
+        "evidence": "While working as MLK's executive secretary, she organized a student conference behind SCLC's back and deliberately steered it away from King's control.",
         "pattern": "subtractive",
         "confidence": 96
       },
@@ -821,7 +821,7 @@
       "name": "Fela Kuti",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Created Afrobeat by fusing Yoruba rhythms with jazz and funk, sung in pidgin English for everyday Nigerians",
+        "evidence": "He declared his Lagos commune an independent republic, married 27 women in a single ceremony, and kept making music after the military killed his mother.",
         "pattern": "additive",
         "confidence": 95
       },
@@ -942,7 +942,7 @@
       "name": "Grace Lee Boggs",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Rejected rule that revolution means seizing state power. Called for shift from revolution to evolution",
+        "evidence": "A Chinese American philosophy PhD married into the Detroit Black Power Movement and stayed in Detroit for 62 years while everyone else left, planting gardens in abandoned lots.",
         "pattern": "reframing",
         "confidence": 92
       },
@@ -972,7 +972,7 @@
       "name": "Harville Hendrix",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Rejected rule that couples need individual analysis, argued the relationship itself is the patient",
+        "evidence": "The morning after getting his own divorce papers, he walked into his class and told the students he had no answers. Then he rebuilt couples therapy from scratch.",
         "pattern": "reframing",
         "confidence": 92
       },
@@ -1032,7 +1032,7 @@
       "name": "Jose Andres",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Redefined celebrity chef role, treating disaster zones as kitchens",
+        "evidence": "A Michelin-starred chef flew to Puerto Rico after Hurricane Maria and personally cooked 3.7 million meals with 19,000 volunteers.",
         "pattern": "reframing",
         "confidence": 95
       },
@@ -1062,7 +1062,7 @@
       "name": "Joseph Campbell",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Broke rule that myths should be studied separately, argued all share one universal structure",
+        "evidence": "He taught the same introductory mythology class for 38 years and George Lucas used his book as the blueprint for Star Wars.",
         "pattern": "reframing",
         "confidence": 94
       },
@@ -1092,7 +1092,7 @@
       "name": "Kae Tempest",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Refused to separate poetry from hip-hop, performing spoken word epics at music festivals",
+        "evidence": "A 16-year-old from South London started winning rap battles and poetry slams in the same week, then won Britain's most prestigious poetry prize by rapping about Greek myths on council estates.",
         "pattern": "additive",
         "confidence": 90
       },
@@ -1152,7 +1152,7 @@
       "name": "Marc Freedman",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Challenged assumption that retirement means withdrawal, reframed older adults as largest untapped resource",
+        "evidence": "He started sending retirees into failing schools to tutor kids, and the kids' reading improved 60% while the retirees' own health got better.",
         "pattern": "reframing",
         "confidence": 93
       },
@@ -1212,7 +1212,7 @@
       "name": "Martti Ahtisaari",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Inserted himself into world's most violent conflicts from a small neutral Nordic country",
+        "evidence": "A Finnish schoolteacher spent 14 years negotiating Namibian independence, then brokered peace in a 30-year Indonesian war.",
         "pattern": "reframing",
         "confidence": 90
       },
@@ -1273,7 +1273,7 @@
       "name": "Mercedes Sosa",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Used folk music as open political resistance during Argentina's military dictatorship",
+        "evidence": "She was arrested on stage mid-concert along with 200 audience members just for listening to folk music under a military dictatorship.",
         "pattern": "subtractive",
         "confidence": 95
       },
@@ -1303,7 +1303,7 @@
       "name": "Nina Simone",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Rejected by Curtis Institute (attributed to racism), refused to choose between classical training and Black identity",
+        "evidence": "A classically trained pianist got rejected from conservatory because she was Black, so she wrote 'Mississippi Goddam' and performed it at Carnegie Hall to a white audience's face.",
         "pattern": "additive",
         "confidence": 95
       },
@@ -1363,7 +1363,7 @@
       "name": "Paulo Freire",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Rejected banking model of education, insisted learners must be co-creators of knowledge",
+        "evidence": "He taught 300 illiterate sugarcane workers to read in 45 days, and the government was so threatened they jailed him and exiled him for 16 years.",
         "pattern": "reframing",
         "confidence": 97
       },
@@ -1453,7 +1453,7 @@
       "name": "Sue Johnson",
       "rule_broken": {
         "present": "yes",
-        "evidence": "In 1980s behavioral couples therapy, broke field by saying romantic love is hardwired attachment bond, same as child reaching for parent",
+        "evidence": "She told fighting couples that every argument they've ever had is actually the same argument: 'Are you there for me?' and built the most validated couples therapy on earth around that one question.",
         "pattern": "reframing",
         "confidence": 95
       },
@@ -1483,7 +1483,7 @@
       "name": "Tarana Burke",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Centered survivors' healing, especially Black girls in rural South, instead of legal prosecution and punishment",
+        "evidence": "A youth worker in Selma handed sticky notes to middle school girls and asked them to write 'me too' if they'd experienced sexual violence. 75% of the room wrote it.",
         "pattern": "reframing",
         "confidence": 92
       },
@@ -1543,7 +1543,7 @@
       "name": "Tiffany Aliche",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Former preschool teacher broke frame by teaching budgeting the way she taught 4-year-olds",
+        "evidence": "A preschool teacher who lost all her savings in the 2008 crash started teaching budgeting to grown women like they were five-year-olds, and 2 million of them saved $200 million.",
         "pattern": "reframing",
         "confidence": 93
       },
@@ -1573,7 +1573,7 @@
       "name": "V\u00e1clav Havel",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Proposed living in truth as daily defiance, arguing a greengrocer removing a propaganda sign was as powerful as any army",
+        "evidence": "A banned playwright got arrested for laying flowers at a memorial. Ten months later, parliament unanimously elected him president.",
         "pattern": "reframing",
         "confidence": 96
       },
@@ -1693,7 +1693,7 @@
       "name": "Tara Brach",
       "rule_broken": {
         "present": "yes",
-        "evidence": "Held PhD in clinical psychology and Buddhist lay ordination simultaneously when the two disciplines had mutual suspicion",
+        "evidence": "A psychologist quit her career to live in an ashram for ten years, then came back and built a podcast downloaded 3 million times a month by teaching people to stop fighting their own feelings.",
         "pattern": "additive",
         "confidence": 92
       },

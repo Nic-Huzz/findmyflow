@@ -216,6 +216,51 @@
   color: rgba(255,255,255,0.6);
 }
 
+/* ── Tagline suggestions ── */
+.rmk-tagline-suggestions {
+  margin-bottom: 1rem;
+}
+.rmk-tagline-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.5rem;
+}
+.rmk-tagline-btn {
+  display: inline-block;
+  margin: 0 0.35rem 0.35rem 0;
+  padding: 0.5rem 1rem;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
+}
+.rmk-tagline-btn:hover { border-color: rgba(233,162,59,0.3); }
+.rmk-tagline-selected {
+  border-color: #E9A23B;
+  background: rgba(233,162,59,0.1);
+  color: #E9A23B;
+}
+
+/* ── Context card (shows previous answer) ── */
+.rmk-context-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.6);
+  font-style: italic;
+  margin-bottom: 1.25rem;
+}
+
 /* ── Problem list ── */
 .rmk-problem-list {
   list-style: none;
