@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience Creator Matching — V1 Swipe Cards</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .container { max-width: 440px; margin: 0 auto; padding: 1.5rem; min-height: 100vh; }
+
+  /* ===== STEP INDICATOR ===== */
+  .step-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 1.5rem; }
+  .step-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+  .step-dot.active { background: #E9A23B; transform: scale(1.3); box-shadow: 0 0 12px rgba(233,162,59,0.5); }
+  .step-dot.done { background: #E9A23B; }
+
+  /* ===== INTRO SCREEN ===== */
+  .intro { display: flex; flex-direction: column; justify-content: center; min-height: calc(100vh - 3rem); text-align: center; }
+  .intro-badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1.25rem; border-radius: 100px; font-size: 0.875rem; margin-bottom: 1.5rem; }
+  .intro h1 { font-size: 1.75rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.75rem; }
+  .intro h1 span { background: linear-gradient(135deg, #ffdd27, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .intro p { color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 2rem; }
+  .gold-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; font-weight: 700; font-size: 1.125rem; border: none; border-radius: 14px; cursor: pointer; box-shadow: 0 8px 24px rgba(233,162,59,0.35); }
+  .gold-btn:hover { transform: translateY(-2px); }
+
+  /* ===== CATEGORY SELECT ===== */
+  .category-screen { padding-top: 1rem; }
+  .category-screen h2 { font-size: 1.25rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
+  .category-screen p { font-size: 0.875rem; color: rgba(255,255,255,0.6); text-align: center; margin-bottom: 1.5rem; }
+  .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .category-card {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  .category-card:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); }
+  .category-card.selected { border-color: #E9A23B; background: rgba(233,162,59,0.12); box-shadow: 0 4px 20px rgba(233,162,59,0.2); }
+  .category-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+  .category-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .category-count { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+
+  /* ===== SWIPE CARDS ===== */
+  .swipe-screen { padding-top: 1rem; }
+  .swipe-header { text-align: center; margin-bottom: 1rem; }
+  .swipe-header h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; }
+  .swipe-header h2 { font-size: 1.25rem; font-weight: 700; }
+  .swipe-progress { display: flex; justify-content: center; gap: 6px; margin-bottom: 1.25rem; }
+  .swipe-pip { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+  .swipe-pip.active { background: #E9A23B; transform: scale(1.3); }
+  .swipe-pip.done { background: #E9A23B; }
+  .swipe-pip.selected { background: #10b981; }
+
+  .swipe-card {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 24px;
+    padding: 1.5rem;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .swipe-card.selected { border-color: #E9A23B; background: rgba(233,162,59,0.1); box-shadow: 0 4px 24px rgba(233,162,59,0.2); }
+  .swipe-card img {
+    width: 200px; height: 200px;
+    border-radius: 16px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+  .swipe-name { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .swipe-oneliner { font-size: 0.875rem; color: rgba(255,255,255,0.7); line-height: 1.5; font-style: italic; }
+
+  .swipe-actions { display: flex; gap: 1rem; margin-top: 1.25rem; justify-content: center; }
+  .swipe-btn {
+    padding: 0.875rem 2rem;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .swipe-btn.skip { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+  .swipe-btn.pick { background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; box-shadow: 0 4px 16px rgba(233,162,59,0.3); }
+
+  /* ===== RESULT SCREEN ===== */
+  .result-screen { padding-top: 1rem; }
+  .result-header { text-align: center; margin-bottom: 1.5rem; }
+  .result-badge { display: inline-block; background: rgba(233,162,59,0.2); border: 1px solid rgba(233,162,59,0.4); color: #fcd34d; padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+  .result-header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .result-header p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+
+  .offer-layer {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .offer-layer-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .offer-layer-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+  .offer-layer-icon.attraction { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+  .offer-layer-icon.core { background: linear-gradient(135deg, #5e17eb, #7c3aed); }
+  .offer-layer-icon.scale { background: linear-gradient(135deg, #E9A23B, #f59e0b); }
+  .offer-layer-icon.continuity { background: linear-gradient(135deg, #10b981, #059669); }
+  .offer-layer-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); }
+  .offer-layer-name { font-weight: 700; font-size: 1rem; }
+  .offer-layer-desc { font-size: 0.875rem; color: rgba(255,255,255,0.75); line-height: 1.5; margin-bottom: 1rem; }
+  .offer-layer-proof { font-size: 0.8rem; color: rgba(233,162,59,0.9); font-style: italic; margin-bottom: 1rem; padding-left: 0.75rem; border-left: 2px solid rgba(233,162,59,0.3); }
+
+  .hell-yes-btns { display: flex; gap: 0.75rem; }
+  .hell-yes-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none;
+    cursor: pointer;
+  }
+  .hell-yes-btn.yes { background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; }
+  .hell-yes-btn.no { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2); }
+  .hell-yes-btn.confirmed { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.4); }
+
+  .selected-people { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; justify-content: center; }
+  .selected-pill { display: flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.35rem 0.75rem; border-radius: 100px; font-size: 0.8rem; }
+  .selected-pill img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+
+  .first-step {
+    background: rgba(233,162,59,0.12);
+    border: 1px solid rgba(233,162,59,0.3);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+  .first-step h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #fcd34d; margin-bottom: 0.5rem; }
+  .first-step p { font-size: 1rem; font-weight: 600; line-height: 1.5; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+  /* Hide all screens by default */
+  .screen { display: none; }
+  .screen.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- STEP DOTS -->
+  <div class="step-dots" id="stepDots">
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <!-- SCREEN 1: INTRO -->
+  <div class="screen active" id="screen-intro">
+    <div class="intro">
+      <div class="intro-badge">Experience Creator Matching</div>
+      <h1>What kind of experience<br><span>would you love to create?</span></h1>
+      <p>See real people who built careers from workshops, retreats, courses, and performances. Pick who resonates. Get your product suite.</p>
+      <button class="gold-btn" onclick="goTo('categories')">Find Your Model</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: CATEGORY SELECT -->
+  <div class="screen" id="screen-categories">
+    <div class="category-screen">
+      <h2>What draws you?</h2>
+      <p>Pick a category to browse people inside it</p>
+      <div class="category-grid">
+        <div class="category-card" onclick="goTo('swipe')">
+          <div class="category-emoji">🎓</div>
+          <div class="category-name">Workshops & Training</div>
+          <div class="category-count">16 people</div>
+        </div>
+        <div class="category-card" onclick="goTo('swipe')">
+          <div class="category-emoji">👥</div>
+          <div class="category-name">Cohorts & Courses</div>
+          <div class="category-count">7 people</div>
+        </div>
+        <div class="category-card" onclick="goTo('swipe')">
+          <div class="category-emoji">🎭</div>
+          <div class="category-name">Live Events</div>
+          <div class="category-count">9 people</div>
+        </div>
+        <div class="category-card" onclick="goTo('swipe')">
+          <div class="category-emoji">📚</div>
+          <div class="category-name">Books & Media</div>
+          <div class="category-count">5 people</div>
+        </div>
+        <div class="category-card" onclick="goTo('swipe')">
+          <div class="category-emoji">🤝</div>
+          <div class="category-name">Facilitation</div>
+          <div class="category-count">12 people</div>
+        </div>
+        <div class="category-card" onclick="goTo('swipe')">
+          <div class="category-emoji">🏔️</div>
+          <div class="category-name">Retreats & Immersive</div>
+          <div class="category-count">8 people</div>
+        </div>
+      </div>
+      <div style="margin-top: 1.5rem;">
+        <button class="gold-btn" onclick="goTo('result')" style="opacity: 0.4;" id="browseNext">Continue with 0 selected</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: SWIPE CARDS (demo of one category) -->
+  <div class="screen" id="screen-swipe">
+    <div class="swipe-screen">
+      <div class="swipe-header">
+        <h3>Workshops & Training</h3>
+        <h2>Who resonates with you?</h2>
+      </div>
+      <div class="swipe-progress">
+        <div class="swipe-pip active"></div>
+        <div class="swipe-pip"></div>
+        <div class="swipe-pip"></div>
+        <div class="swipe-pip"></div>
+        <div class="swipe-pip"></div>
+      </div>
+
+      <div class="swipe-card">
+        <img src="../public/images/creators/bren-brown.png" alt="Brené Brown" onerror="this.style.display='none'">
+        <div class="swipe-name">Brené Brown</div>
+        <div class="swipe-oneliner">"Turned the thing everyone hides from into the thing everyone needs."</div>
+      </div>
+
+      <div class="swipe-actions">
+        <button class="swipe-btn skip" onclick="goTo('result')">Skip</button>
+        <button class="swipe-btn pick" onclick="goTo('result')">That's me</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="result-screen">
+      <div class="result-header">
+        <div class="result-badge">Your Model</div>
+        <h1>Certification Empire</h1>
+        <p>You build deep expertise, codify it into a method, then train others to deliver it.</p>
+      </div>
+
+      <div class="selected-people">
+        <div class="selected-pill"><img src="../public/images/creators/bren-brown.png" onerror="this.style.display='none'"> Brené Brown</div>
+        <div class="selected-pill"><img src="../public/images/creators/wim-hof.png" onerror="this.style.display='none'"> Wim Hof</div>
+        <div class="selected-pill"><img src="../public/images/creators/tara-brach.png" onerror="this.style.display='none'"> Tara Brach</div>
+      </div>
+
+      <!-- ATTRACTION -->
+      <div class="offer-layer">
+        <div class="offer-layer-header">
+          <div class="offer-layer-icon attraction">🧲</div>
+          <div>
+            <div class="offer-layer-label">Attraction</div>
+            <div class="offer-layer-name">Free content that demonstrates your method</div>
+          </div>
+        </div>
+        <div class="offer-layer-desc">Podcast, YouTube, TED talks, or free workshops that let people experience your approach before they pay.</div>
+        <div class="offer-layer-proof">"Brené Brown's TED talk has 60M views. Tara Brach's free podcast hit 200M downloads. Neither charged a cent."</div>
+        <div class="hell-yes-btns">
+          <button class="hell-yes-btn yes">Hell Yes</button>
+          <button class="hell-yes-btn no">Show me other options</button>
+        </div>
+      </div>
+
+      <!-- CORE -->
+      <div class="offer-layer">
+        <div class="offer-layer-header">
+          <div class="offer-layer-icon core">💎</div>
+          <div>
+            <div class="offer-layer-label">Core Offer</div>
+            <div class="offer-layer-name">Live workshop or course ($500-$5K)</div>
+          </div>
+        </div>
+        <div class="offer-layer-desc">A structured transformation experience you deliver live. This is what you're known for selling.</div>
+        <div class="offer-layer-proof">"Wim Hof runs branded retreats in Poland and Spain. Brené Brown's Dare to Lead runs inside Shell, Uber, and the Gates Foundation."</div>
+        <div class="hell-yes-btns">
+          <button class="hell-yes-btn confirmed">Confirmed</button>
+          <button class="hell-yes-btn no" style="opacity:0.5">Show me other options</button>
+        </div>
+      </div>
+
+      <!-- SCALE -->
+      <div class="offer-layer">
+        <div class="offer-layer-header">
+          <div class="offer-layer-icon scale">🚀</div>
+          <div>
+            <div class="offer-layer-label">Scale</div>
+            <div class="offer-layer-name">Certify others to teach your method</div>
+          </div>
+        </div>
+        <div class="offer-layer-desc">Train practitioners to deliver your methodology without you in the room. You become the IP holder, not the bottleneck.</div>
+        <div class="offer-layer-proof">"Wim Hof has 1,500 certified instructors in 45 countries. Brené Brown has 300 Dare to Lead facilitators across 14 countries."</div>
+        <div class="hell-yes-btns">
+          <button class="hell-yes-btn yes">Hell Yes</button>
+          <button class="hell-yes-btn no">Show me other options</button>
+        </div>
+      </div>
+
+      <!-- CONTINUITY -->
+      <div class="offer-layer">
+        <div class="offer-layer-header">
+          <div class="offer-layer-icon continuity">🔄</div>
+          <div>
+            <div class="offer-layer-label">Continuity</div>
+            <div class="offer-layer-name">Online courses + app subscriptions</div>
+          </div>
+        </div>
+        <div class="offer-layer-desc">Recurring or passive revenue that keeps flowing without active delivery.</div>
+        <div class="offer-layer-proof">"Wim Hof's app has 2M+ downloads at subscription pricing. Tara Brach's online courses run year-round."</div>
+        <div class="hell-yes-btns">
+          <button class="hell-yes-btn yes">Hell Yes</button>
+          <button class="hell-yes-btn no">Show me other options</button>
+        </div>
+      </div>
+
+      <!-- FIRST STEP -->
+      <div class="first-step">
+        <h3>Your First Step</h3>
+        <p>Run one free workshop on your topic this month. The people you resonate with all started the same way: teaching for free in the smallest room available.</p>
+      </div>
+
+      <button class="gold-btn" style="margin-top: 1.5rem;">Save My Model</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function goTo(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  const dots = document.querySelectorAll('.step-dot');
+  const idx = { intro: 0, categories: 1, swipe: 2, result: 3 }[screen];
+  dots.forEach((d, i) => { d.className = 'step-dot' + (i < idx ? ' done' : '') + (i === idx ? ' active' : ''); });
+  window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>

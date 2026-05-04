@@ -181,10 +181,10 @@ function buildCreatorData() {
   })
 }
 
-export default function ExperienceCreatorFlow() {
+export default function ExperienceCreatorFlow({ embedded = false, onComplete }) {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const isTryRoute = window.location.pathname.startsWith('/try/')
+  const isTryRoute = embedded || window.location.pathname.startsWith('/try/')
   const [screen, setScreen] = useState('browse') // 'browse' | 'result'
   const [selected, setSelected] = useState(new Set())
   const [loading, setLoading] = useState(false)
@@ -276,13 +276,13 @@ export default function ExperienceCreatorFlow() {
     if (selected.size === 0) return
     hapticSuccess()
     setScreen('result')
-    window.scrollTo(0, 0)
+    if (!embedded) window.scrollTo(0, 0)
   }
 
   // Back to browse
   const showBrowse = () => {
     setScreen('browse')
-    window.scrollTo(0, 0)
+    if (!embedded) window.scrollTo(0, 0)
   }
 
   // Save email + model for try route (anonymous users)
@@ -304,6 +304,7 @@ export default function ExperienceCreatorFlow() {
       })
       setTrySaved(true)
       hapticSuccess()
+      onComplete?.()
     } catch (err) {
       console.error('Error saving lead:', err)
     }

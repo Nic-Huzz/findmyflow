@@ -49,6 +49,10 @@ Users arrive at FindMyFlow at **The Crack** or after sitting in **Head Full of D
 
 **FindMyFlow's value proposition**: We build your X axis so your Y axis stops wasting your life.
 
+**Core Offer (Hormozi Grand Slam)**: "I'll teach you to design experiences that create lasting shifts, fill the room every time, and make a living doing what you love. You get the method (Shift Architecture), the tools (FindMyFlow), the community (weekly group), and the equipment (headsets). No one else offers all four."
+
+**App segmentation**: `/7-day-challenge` is for everyone. `/create` is specifically for experience creators. Vibe Seekers still use the app; if their flow turns out to be experience creation, they naturally enter the creator track.
+
 See `docs/zone-calibration-framework.md` for the full theoretical framework (Original IP: Huzz Hurrell).
 
 ## Tech Stack
@@ -371,6 +375,18 @@ npm run dev       # Dev server
 npm run build     # Production build
 npm run db:push   # Apply migrations
 ```
+
+## Obsidian Brain (Quick Reference)
+
+When working on features, strategy, or content, read the relevant section of the Obsidian vault MOC:
+`/Users/nichuzz/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian/Huzz/MOC.md`
+
+| Task | MOC Section to Read |
+|------|-------------------|
+| New feature design | "Designing a New Feature" |
+| Content/marketing | "Writing Content or Marketing" |
+| Strategic decision | "Making a Strategic Decision" |
+| Workshop/experience | "Designing Experiences / Workshops" |
 
 ## Key Documentation
 

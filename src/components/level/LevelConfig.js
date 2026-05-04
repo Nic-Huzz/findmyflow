@@ -32,14 +32,6 @@ export const LEVEL_CONFIG = {
         icon: '🗺️',
       },
       {
-        id: 'playlist_challenge',
-        name: 'Unlock Play-List',
-        route: null,
-        narrative: 'Identify your Play-List topics.',
-        icon: '🎯',
-        navigateTo: 'Play-list',
-      },
-      {
         id: 'healing_task',
         name: 'Healing Task',
         route: null,
@@ -100,7 +92,7 @@ export const LEVEL_CONFIG = {
       },
     },
     essenceQuestion: 'Who were you before the world told you who to be?',
-    courageCount: 1,
+    courageCount: 0, // Play-list coming soon — archived courage requirement
     healingDaysRequired: 7,
   },
   2: {
@@ -126,7 +118,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Shallow Zone', description: 'Walls up even when it is safe', boss: 'Perfectionist / Auto-Pilot' },
     },
     essenceQuestion: 'What does your essence actually need?',
-    courageCount: 2,
+    courageCount: 0, // Play-list coming soon — archived courage requirement
     healingDaysRequired: 8,
   },
   3: {
@@ -162,7 +154,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Navel-Gazer Zone', description: 'Self-focused, no service', boss: 'Perfectionist / Auto-Pilot (self-absorbed)' },
     },
     essenceQuestion: 'What code is blocking your essence from moving?',
-    courageCount: 3,
+    courageCount: 0, // Play-list coming soon — archived courage requirement
     healingDaysRequired: 9,
   },
   4: {
@@ -188,7 +180,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Procrastinator Zone', description: 'Quality bar too high to start', boss: 'Perfectionist / Auto-Pilot (never start)' },
     },
     essenceQuestion: 'What code is blocking your essence from moving?',
-    courageCount: 4,
+    courageCount: 0, // Play-list coming soon — archived courage requirement
     healingDaysRequired: 10,
   },
   5: {
@@ -214,7 +206,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Safe Zone', description: 'Ability exceeds challenge. Growth stagnates.', boss: 'Perfectionist / Auto-Pilot (comfort zone)' },
     },
     essenceQuestion: 'Where does your nervous system stop your essence from expanding?',
-    courageCount: 5,
+    courageCount: 0, // Play-list coming soon — archived courage requirement
     healingDaysRequired: 11,
   },
   6: {
@@ -240,7 +232,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Rely on Motivation', description: 'Wellbeing present but output low. Waiting.', boss: 'Perfectionist / Auto-Pilot (stall)' },
     },
     essenceQuestion: 'What belief makes your essence burn out or stall?',
-    courageCount: 6,
+    courageCount: 0, // Play-list coming soon — archived courage requirement
     healingDaysRequired: 12,
   },
   7: {
@@ -266,7 +258,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Secure Zone', description: 'High passion potential, insufficient inspiration', boss: 'Perfectionist / Auto-Pilot (uninspired)' },
     },
     essenceQuestion: 'What does your essence actually care about enough to risk it?',
-    courageCount: 7,
+    courageCount: 0, // Play-list coming soon — archived courage requirement
     healingDaysRequired: 13,
   },
   8: {

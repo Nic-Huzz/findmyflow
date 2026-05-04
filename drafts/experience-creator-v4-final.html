@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience Creator Matching — V4 Final</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: #0f0a1e;
+    color: white;
+    min-height: 100vh;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  }
+  .container { max-width: 440px; margin: 0 auto; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+    border-radius: 0 0 32px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -20px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+    animation: heroGlow 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes heroGlow { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.8rem; margin-bottom: 1rem; position: relative; z-index: 1; }
+  .hero h1 { font-size: 1.75rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.75rem; position: relative; z-index: 1; }
+  .hero h1 span { background: linear-gradient(135deg, #ffdd27, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { color: rgba(255,255,255,0.65); font-size: 0.9rem; position: relative; z-index: 1; }
+
+  /* ===== STICKY SELECTION BAR (from V2) ===== */
+  .selection-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(15,10,30,0.97);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 0.65rem 1.5rem;
+    padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+  .selection-bar.visible { transform: translateY(0); }
+  .selection-bar-inner {
+    max-width: 440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .selection-bar-left { display: flex; align-items: center; gap: 0.75rem; }
+  .selected-avatars { display: flex; }
+  .selected-avatars img {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #0f0a1e;
+    margin-left: -8px;
+    transition: all 0.2s ease;
+  }
+  .selected-avatars img:first-child { margin-left: 0; }
+  .selection-count { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+  .selection-count strong { color: #fcd34d; font-weight: 700; }
+  .see-results-btn {
+    padding: 0.6rem 1.15rem;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(233,162,59,0.3);
+    transition: transform 0.2s ease;
+  }
+  .see-results-btn:hover { transform: translateY(-1px); }
+
+  /* ===== CATEGORY SECTIONS (from V3) ===== */
+  .category-section { padding: 2rem 1.5rem 0.5rem; }
+  .category-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem; }
+  .category-emoji { font-size: 1.5rem; }
+  .category-title { font-size: 1.125rem; font-weight: 800; }
+  .category-subtitle { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 1.25rem; margin-left: 2.25rem; }
+
+  /* ===== HORIZONTAL SCROLL ROW (from V3) ===== */
+  .people-row {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    margin: 0 -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .people-row::-webkit-scrollbar { display: none; }
+
+  .person-card {
+    flex-shrink: 0;
+    width: 240px;
+    scroll-snap-align: start;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+  .person-card:active { transform: scale(0.98); }
+  .person-card.selected {
+    border-color: #E9A23B;
+    background: rgba(233,162,59,0.08);
+    box-shadow: 0 4px 20px rgba(233,162,59,0.15);
+  }
+  .person-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 26px; height: 26px;
+    background: #E9A23B;
+    color: #1a1a2e;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .person-card img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .person-card-body { padding: 0.875rem; }
+  .person-card-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .person-card-oneliner {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .person-card-model {
+    margin-top: 0.5rem;
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: rgba(233,162,59,0.12);
+    border: 1px solid rgba(233,162,59,0.25);
+    color: rgba(233,162,59,0.85);
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+  }
+
+  /* ===== SECTION DIVIDER ===== */
+  .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); margin: 0 1.5rem; }
+
+  /* ===== BROWSE VIEW ===== */
+  .browse-view { transition: opacity 0.3s ease; }
+  .browse-view.hidden { display: none; }
+
+  /* ===== RESULT SECTION ===== */
+  .result-section {
+    background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    padding: 2rem 1.5rem 3rem;
+    border-radius: 32px 32px 0 0;
+    display: none;
+    animation: slideUp 0.4s ease;
+  }
+  .result-section.active { display: block; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+  .result-header { text-align: center; margin-bottom: 1.5rem; }
+  .result-badge { display: inline-block; background: rgba(233,162,59,0.2); border: 1px solid rgba(233,162,59,0.4); color: #fcd34d; padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+  .result-header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .result-header p { color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.5; }
+
+  .selected-people-row { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5rem; }
+  .selected-person-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 4px 10px 4px 4px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+  }
+  .selected-person-chip img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
+
+  /* ===== OFFER CARDS ===== */
+  .offer-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+  }
+  .offer-card.confirmed {
+    border-color: rgba(16,185,129,0.4);
+    background: rgba(16,185,129,0.08);
+  }
+  .offer-card-top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .offer-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .offer-dot.attraction { background: #3b82f6; }
+  .offer-dot.core { background: #7c3aed; }
+  .offer-dot.scale { background: #E9A23B; }
+  .offer-dot.continuity { background: #10b981; }
+  .offer-card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); }
+  .offer-card-name { font-weight: 700; font-size: 0.95rem; }
+  .offer-card-desc { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.5; margin-bottom: 0.75rem; }
+  .offer-card-proof { font-size: 0.78rem; color: rgba(233,162,59,0.85); font-style: italic; padding-left: 0.75rem; border-left: 2px solid rgba(233,162,59,0.3); margin-bottom: 1rem; line-height: 1.5; }
+
+  .offer-actions { display: flex; gap: 0.5rem; }
+  .offer-btn {
+    flex: 1;
+    padding: 0.7rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .offer-btn:active { transform: scale(0.97); }
+  .offer-btn.yes { background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; box-shadow: 0 4px 12px rgba(233,162,59,0.25); }
+  .offer-btn.no { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.15); }
+  .offer-btn.confirmed { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.4); }
+
+  /* ===== ALTERNATIVES (shown on "other options") ===== */
+  .alternatives {
+    display: none;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .alternatives.visible { display: block; animation: fadeIn 0.3s ease; }
+  .alternatives-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+  .alt-option {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .alt-option:hover { border-color: rgba(233,162,59,0.4); background: rgba(233,162,59,0.06); }
+  .alt-option img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+  .alt-option-name { font-weight: 600; font-size: 0.85rem; }
+  .alt-option-desc { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+
+  /* ===== NEXT STEP ===== */
+  .next-step-card {
+    background: rgba(233,162,59,0.1);
+    border: 1px solid rgba(233,162,59,0.25);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  .next-step-card h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #fcd34d; margin-bottom: 0.75rem; }
+  .next-step-card p { font-size: 1rem; font-weight: 600; line-height: 1.5; margin-bottom: 1.25rem; }
+  .save-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e;
+    font-weight: 700;
+    font-size: 1.125rem;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(233,162,59,0.3);
+    transition: transform 0.2s ease;
+  }
+  .save-btn:hover { transform: translateY(-2px); }
+
+  /* ===== BACK BUTTON ===== */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: color 0.2s ease;
+  }
+  .back-link:hover { color: rgba(255,255,255,0.8); }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<!-- ===== BROWSE VIEW ===== -->
+<div class="browse-view" id="browseView">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">Experience Creator Matching</div>
+    <h1>Who would you love<br>to <span>build like?</span></h1>
+    <p>Scroll through real people who built careers from experiences. Tap anyone who inspires you.</p>
+  </div>
+
+  <div class="container">
+
+    <!-- WORKSHOPS & TRAINING -->
+    <div class="category-section">
+      <div class="category-header">
+        <span class="category-emoji">🎓</span>
+        <span class="category-title">Workshops & Training</span>
+      </div>
+      <div class="category-subtitle">Build expertise, teach it live, certify others</div>
+      <div class="people-row">
+        <div class="person-card selected" onclick="toggleCard(this)">
+          <img src="../public/images/creators/bren-brown.png" alt="Brené Brown">
+          <div class="person-card-body">
+            <div class="person-card-name">Brené Brown</div>
+            <div class="person-card-oneliner">Turned the thing everyone hides from into the thing everyone needs</div>
+            <div class="person-card-model">Certification Empire</div>
+          </div>
+        </div>
+        <div class="person-card selected" onclick="toggleCard(this)">
+          <img src="../public/images/creators/wim-hof.png" alt="Wim Hof">
+          <div class="person-card-body">
+            <div class="person-card-name">Wim Hof</div>
+            <div class="person-card-oneliner">Proved a freezing river can teach you more than ten years of therapy</div>
+            <div class="person-card-model">Method Certification</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/john-gottman.png" alt="John Gottman">
+          <div class="person-card-body">
+            <div class="person-card-name">John Gottman</div>
+            <div class="person-card-oneliner">Measured love with heart rate monitors and predicted divorce at 94%</div>
+            <div class="person-card-model">Research to Workshops</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/sue-johnson.png" alt="Sue Johnson">
+          <div class="person-card-body">
+            <div class="person-card-name">Sue Johnson</div>
+            <div class="person-card-oneliner">Taught couples to reach for each other instead of reaching for the exit</div>
+            <div class="person-card-model">Therapist Certification</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/marva-collins.png" alt="Marva Collins">
+          <div class="person-card-body">
+            <div class="person-card-name">Marva Collins</div>
+            <div class="person-card-oneliner">Taught Plato to four-year-olds everyone else called unteachable</div>
+            <div class="person-card-model">One Classroom</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- LIVE EVENTS & PERFORMANCE -->
+    <div class="category-section">
+      <div class="category-header">
+        <span class="category-emoji">🎭</span>
+        <span class="category-title">Live Events & Performance</span>
+      </div>
+      <div class="category-subtitle">Fill rooms with transformation, art, or catharsis</div>
+      <div class="people-row">
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/tony-robbins.png" alt="Tony Robbins">
+          <div class="person-card-body">
+            <div class="person-card-name">Tony Robbins</div>
+            <div class="person-card-oneliner">Built a cathedral of transformation you walk through in four days</div>
+            <div class="person-card-model">Live Events Empire</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/nina-simone.png" alt="Nina Simone">
+          <div class="person-card-body">
+            <div class="person-card-name">Nina Simone</div>
+            <div class="person-card-oneliner">Channeled rage into beauty at the piano, one audience at a time</div>
+            <div class="person-card-model">Live Performance</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/glennon-doyle.png" alt="Glennon Doyle">
+          <div class="person-card-body">
+            <div class="person-card-name">Glennon Doyle</div>
+            <div class="person-card-oneliner">Built a movement by saying what mothers weren't supposed to say</div>
+            <div class="person-card-model">Community + Tour</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/lin-manuel-miranda.png" alt="Lin-Manuel Miranda">
+          <div class="person-card-body">
+            <div class="person-card-name">Lin-Manuel Miranda</div>
+            <div class="person-card-oneliner">Made hip-hop the language of the founding fathers</div>
+            <div class="person-card-model">Theatre + Licensing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- COHORTS & COURSES -->
+    <div class="category-section">
+      <div class="category-header">
+        <span class="category-emoji">👥</span>
+        <span class="category-title">Cohorts & Courses</span>
+      </div>
+      <div class="category-subtitle">Structured group programmes with start and end dates</div>
+      <div class="people-row">
+        <div class="person-card selected" onclick="toggleCard(this)">
+          <img src="../public/images/creators/marie-forleo.png" alt="Marie Forleo">
+          <div class="person-card-body">
+            <div class="person-card-name">Marie Forleo</div>
+            <div class="person-card-oneliner">Made business school feel like talking to your smartest friend</div>
+            <div class="person-card-model">Annual Cohort</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/ali-abdaal.png" alt="Ali Abdaal">
+          <div class="person-card-body">
+            <div class="person-card-name">Ali Abdaal</div>
+            <div class="person-card-oneliner">Built a bigger business than his medical salary by being curious on camera</div>
+            <div class="person-card-model">Creator Educator</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/jay-shetty.png" alt="Jay Shetty">
+          <div class="person-card-body">
+            <div class="person-card-name">Jay Shetty</div>
+            <div class="person-card-oneliner">Translated monastic wisdom into content a scrolling generation stopped for</div>
+            <div class="person-card-model">Media to Certification</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/gabby-bernstein.png" alt="Gabby Bernstein">
+          <div class="person-card-body">
+            <div class="person-card-name">Gabby Bernstein</div>
+            <div class="person-card-oneliner">Made spirituality accessible to the oat milk latte generation</div>
+            <div class="person-card-model">Spiritual Certification</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- BOOKS & MEDIA -->
+    <div class="category-section">
+      <div class="category-header">
+        <span class="category-emoji">📚</span>
+        <span class="category-title">Books, Content & Media</span>
+      </div>
+      <div class="category-subtitle">Build audience through content, monetize through authority</div>
+      <div class="people-row">
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/james-clear.png" alt="James Clear">
+          <div class="person-card-body">
+            <div class="person-card-name">James Clear</div>
+            <div class="person-card-oneliner">Made showing up every day feel like the most powerful thing you could do</div>
+            <div class="person-card-model">Book + Newsletter</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/esther-perel.png" alt="Esther Perel">
+          <div class="person-card-body">
+            <div class="person-card-name">Esther Perel</div>
+            <div class="person-card-oneliner">Made the mess of relationships something you could finally talk about</div>
+            <div class="person-card-model">Expertise to Media</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/elizabeth-gilbert.png" alt="Elizabeth Gilbert">
+          <div class="person-card-body">
+            <div class="person-card-name">Elizabeth Gilbert</div>
+            <div class="person-card-oneliner">Gave permission to be creative without waiting to be good enough</div>
+            <div class="person-card-model">Author + Mentor</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/simon-sinek.png" alt="Simon Sinek">
+          <div class="person-card-body">
+            <div class="person-card-name">Simon Sinek</div>
+            <div class="person-card-oneliner">Asked one question so simple that entire companies reorganised</div>
+            <div class="person-card-model">Thought Leadership</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- FACILITATION & COMMUNITY -->
+    <div class="category-section">
+      <div class="category-header">
+        <span class="category-emoji">🤝</span>
+        <span class="category-title">Facilitation & Community</span>
+      </div>
+      <div class="category-subtitle">Gather people and hold space for what needs to happen</div>
+      <div class="people-row">
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/priya-parker.png" alt="Priya Parker">
+          <div class="person-card-body">
+            <div class="person-card-name">Priya Parker</div>
+            <div class="person-card-oneliner">Proved that how you gather people is itself an act of leadership</div>
+            <div class="person-card-model">Facilitation Consultancy</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/phil-jackson.png" alt="Phil Jackson">
+          <div class="person-card-body">
+            <div class="person-card-name">Phil Jackson</div>
+            <div class="person-card-oneliner">Brought Zen meditation to the Chicago Bulls and won 11 championships</div>
+            <div class="person-card-model">Team Facilitator</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/paulo-freire.png" alt="Paulo Freire">
+          <div class="person-card-body">
+            <div class="person-card-name">Paulo Freire</div>
+            <div class="person-card-oneliner">Taught literacy by asking learners what they already knew</div>
+            <div class="person-card-model">Liberation Pedagogy</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/tarana-burke.png" alt="Tarana Burke">
+          <div class="person-card-body">
+            <div class="person-card-name">Tarana Burke</div>
+            <div class="person-card-oneliner">Started Me Too in a basement, not a hashtag</div>
+            <div class="person-card-model">Grassroots Movement</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- RETREATS & IMMERSIVE -->
+    <div class="category-section">
+      <div class="category-header">
+        <span class="category-emoji">🏔️</span>
+        <span class="category-title">Retreats & Immersive</span>
+      </div>
+      <div class="category-subtitle">Design deep, contained experiences that transform</div>
+      <div class="people-row">
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/gabor-mate.png" alt="Gabor Mate">
+          <div class="person-card-body">
+            <div class="person-card-name">Gabor Mate</div>
+            <div class="person-card-oneliner">Asked "not why the addiction, but why the pain" and changed medicine</div>
+            <div class="person-card-model">Books + Retreats</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/tara-brach.png" alt="Tara Brach">
+          <div class="person-card-body">
+            <div class="person-card-name">Tara Brach</div>
+            <div class="person-card-oneliner">Made sitting still with your own pain feel like the bravest thing</div>
+            <div class="person-card-model">Teacher Certification</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/tenzin-palmo.png" alt="Tenzin Palmo">
+          <div class="person-card-body">
+            <div class="person-card-name">Tenzin Palmo</div>
+            <div class="person-card-oneliner">Spent 12 years meditating in a Himalayan cave then built a nunnery</div>
+            <div class="person-card-model">Contemplative Training</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/adriene-mishler.png" alt="Adriene Mishler">
+          <div class="person-card-body">
+            <div class="person-card-name">Adriene Mishler</div>
+            <div class="person-card-oneliner">Made the yoga mat feel like the safest place in your house</div>
+            <div class="person-card-model">Free to Membership</div>
+          </div>
+        </div>
+        <div class="person-card" onclick="toggleCard(this)">
+          <img src="../public/images/creators/yayoi-kusama.png" alt="Yayoi Kusama">
+          <div class="person-card-body">
+            <div class="person-card-name">Yayoi Kusama</div>
+            <div class="person-card-oneliner">Made infinity visible in a room full of polka dots</div>
+            <div class="person-card-model">Immersive Art</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== STICKY SELECTION BAR ===== -->
+<div class="selection-bar" id="selectionBar">
+  <div class="selection-bar-inner">
+    <div class="selection-bar-left">
+      <div class="selected-avatars" id="selectedAvatars"></div>
+      <div class="selection-count"><strong id="selectedCount">0</strong> selected</div>
+    </div>
+    <button class="see-results-btn" onclick="showResult()">See My Model →</button>
+  </div>
+</div>
+
+<!-- ===== RESULT SECTION ===== -->
+<div class="result-section" id="resultSection">
+  <div class="back-link" onclick="showBrowse()">← Back to browsing</div>
+
+  <div class="result-header">
+    <div class="result-badge">Your Model</div>
+    <h1>Certification Empire</h1>
+    <p>You build deep expertise, codify it into a method, then train others to deliver it.</p>
+  </div>
+
+  <div class="selected-people-row" id="resultPeople"></div>
+
+  <!-- ATTRACTION -->
+  <div class="offer-card" id="offer-attraction">
+    <div class="offer-card-top">
+      <div class="offer-dot attraction"></div>
+      <div>
+        <div class="offer-card-label">Attraction</div>
+        <div class="offer-card-name">Free content that demonstrates your method</div>
+      </div>
+    </div>
+    <div class="offer-card-desc">Podcast, YouTube, TED talks, or free workshops that let people experience your approach before paying.</div>
+    <div class="offer-card-proof">"Brené's TED talk: 60M views. Tara Brach's free podcast: 200M downloads. Neither charged a cent."</div>
+    <div class="offer-actions">
+      <button class="offer-btn yes" onclick="confirmLayer(this)">Hell Yes</button>
+      <button class="offer-btn no" onclick="showAlts(this)">Other options</button>
+    </div>
+    <div class="alternatives">
+      <div class="alternatives-title">Other attraction models</div>
+      <div class="alt-option" onclick="pickAlt(this, 'attraction')">
+        <img src="../public/images/creators/adriene-mishler.png" alt="">
+        <div>
+          <div class="alt-option-name">Free YouTube (Adriene Mishler)</div>
+          <div class="alt-option-desc">Daily free videos, 12M subscribers, no paid ads ever</div>
+        </div>
+      </div>
+      <div class="alt-option" onclick="pickAlt(this, 'attraction')">
+        <img src="../public/images/creators/james-clear.png" alt="">
+        <div>
+          <div class="alt-option-name">Newsletter (James Clear)</div>
+          <div class="alt-option-desc">Twice-weekly articles for 6 years, 2M subscribers before the book</div>
+        </div>
+      </div>
+      <div class="alt-option" onclick="pickAlt(this, 'attraction')">
+        <img src="../public/images/creators/gabby-bernstein.png" alt="">
+        <div>
+          <div class="alt-option-name">Free workshops (Gabby Bernstein)</div>
+          <div class="alt-option-desc">Monday night living room lectures, 100 people cramming in</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE -->
+  <div class="offer-card" id="offer-core">
+    <div class="offer-card-top">
+      <div class="offer-dot core"></div>
+      <div>
+        <div class="offer-card-label">Core Offer</div>
+        <div class="offer-card-name">Live workshop or course ($500-$5K)</div>
+      </div>
+    </div>
+    <div class="offer-card-desc">A structured transformation experience you deliver live. This is what you're known for selling.</div>
+    <div class="offer-card-proof">"Wim Hof runs branded retreats in Poland and Spain. Marie Forleo's B-School: 80,000 students across 195 countries."</div>
+    <div class="offer-actions">
+      <button class="offer-btn yes" onclick="confirmLayer(this)">Hell Yes</button>
+      <button class="offer-btn no" onclick="showAlts(this)">Other options</button>
+    </div>
+    <div class="alternatives">
+      <div class="alternatives-title">Other core offer models</div>
+      <div class="alt-option" onclick="pickAlt(this, 'core')">
+        <img src="../public/images/creators/tony-robbins.png" alt="">
+        <div>
+          <div class="alt-option-name">Arena events (Tony Robbins)</div>
+          <div class="alt-option-desc">10,000+ attendees, $5K-$75K tickets, 4-day transformation</div>
+        </div>
+      </div>
+      <div class="alt-option" onclick="pickAlt(this, 'core')">
+        <img src="../public/images/creators/esther-perel.png" alt="">
+        <div>
+          <div class="alt-option-name">Premium speaking + media (Esther Perel)</div>
+          <div class="alt-option-desc">Podcast as product, live events, corporate workshops</div>
+        </div>
+      </div>
+      <div class="alt-option" onclick="pickAlt(this, 'core')">
+        <img src="../public/images/creators/ali-abdaal.png" alt="">
+        <div>
+          <div class="alt-option-name">Cohort course (Ali Abdaal)</div>
+          <div class="alt-option-desc">Part-Time YouTuber Academy: 450 students, $5M in 3 cohorts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCALE -->
+  <div class="offer-card" id="offer-scale">
+    <div class="offer-card-top">
+      <div class="offer-dot scale"></div>
+      <div>
+        <div class="offer-card-label">Scale</div>
+        <div class="offer-card-name">Certify others to teach your method</div>
+      </div>
+    </div>
+    <div class="offer-card-desc">Train practitioners to deliver your methodology without you in the room. You own the IP, not the calendar.</div>
+    <div class="offer-card-proof">"Wim Hof: 1,500 instructors in 45 countries. Brené Brown: 300 Dare to Lead facilitators across 14 countries."</div>
+    <div class="offer-actions">
+      <button class="offer-btn yes" onclick="confirmLayer(this)">Hell Yes</button>
+      <button class="offer-btn no" onclick="showAlts(this)">Other options</button>
+    </div>
+    <div class="alternatives">
+      <div class="alternatives-title">Other scale models</div>
+      <div class="alt-option" onclick="pickAlt(this, 'scale')">
+        <img src="../public/images/creators/simon-sinek.png" alt="">
+        <div>
+          <div class="alt-option-name">Boutique consultancy (Simon Sinek)</div>
+          <div class="alt-option-desc">Small team, high-fee enterprise clients, no mass certification</div>
+        </div>
+      </div>
+      <div class="alt-option" onclick="pickAlt(this, 'scale')">
+        <img src="../public/images/creators/glennon-doyle.png" alt="">
+        <div>
+          <div class="alt-option-name">Community/nonprofit (Glennon Doyle)</div>
+          <div class="alt-option-desc">Together Rising: $30M raised through community micro-donations</div>
+        </div>
+      </div>
+      <div class="alt-option" onclick="pickAlt(this, 'scale')">
+        <img src="../public/images/creators/priya-parker.png" alt="">
+        <div>
+          <div class="alt-option-name">Stay solo, charge premium (Priya Parker)</div>
+          <div class="alt-option-desc">High-fee facilitation for WEF, MoMA, private clients. No certification.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTINUITY -->
+  <div class="offer-card" id="offer-continuity">
+    <div class="offer-card-top">
+      <div class="offer-dot continuity"></div>
+      <div>
+        <div class="offer-card-label">Continuity</div>
+        <div class="offer-card-name">Online courses + app subscriptions</div>
+      </div>
+    </div>
+    <div class="offer-card-desc">Recurring revenue that flows while you sleep.</div>
+    <div class="offer-card-proof">"Wim Hof app: 2M downloads. Brené Brown: Netflix special + Audible exclusives."</div>
+    <div class="offer-actions">
+      <button class="offer-btn yes" onclick="confirmLayer(this)">Hell Yes</button>
+      <button class="offer-btn no" onclick="showAlts(this)">Other options</button>
+    </div>
+    <div class="alternatives">
+      <div class="alternatives-title">Other continuity models</div>
+      <div class="alt-option" onclick="pickAlt(this, 'continuity')">
+        <img src="../public/images/creators/adriene-mishler.png" alt="">
+        <div>
+          <div class="alt-option-name">Low-cost membership (Adriene Mishler)</div>
+          <div class="alt-option-desc">$9.99/mo FWFG membership alongside free YouTube</div>
+        </div>
+      </div>
+      <div class="alt-option" onclick="pickAlt(this, 'continuity')">
+        <img src="../public/images/creators/esther-perel.png" alt="">
+        <div>
+          <div class="alt-option-name">Physical products (Esther Perel)</div>
+          <div class="alt-option-desc">Where Should We Begin card game: 500,000+ copies sold</div>
+        </div>
+      </div>
+      <div class="alt-option" onclick="pickAlt(this, 'continuity')">
+        <img src="../public/images/creators/elizabeth-gilbert.png" alt="">
+        <div>
+          <div class="alt-option-name">Book royalties (Elizabeth Gilbert)</div>
+          <div class="alt-option-desc">Eat Pray Love: 15M copies, still selling 20 years later</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIRST STEP -->
+  <div class="next-step-card">
+    <h3>Your First Step</h3>
+    <p>Run one free workshop on your topic this month. Every person you selected started the same way: teaching for free in the smallest room available.</p>
+    <button class="save-btn">Save My Model</button>
+  </div>
+</div>
+
+<script>
+// Track selections
+let selectedCount = 0;
+
+function toggleCard(card) {
+  card.classList.toggle('selected');
+  updateSelectionBar();
+}
+
+function updateSelectionBar() {
+  const selected = document.querySelectorAll('.person-card.selected');
+  selectedCount = selected.length;
+
+  const bar = document.getElementById('selectionBar');
+  const countEl = document.getElementById('selectedCount');
+  const avatarsEl = document.getElementById('selectedAvatars');
+
+  countEl.textContent = selectedCount;
+
+  // Update avatars
+  avatarsEl.innerHTML = '';
+  selected.forEach((card, i) => {
+    if (i < 5) {
+      const img = card.querySelector('img');
+      if (img) {
+        const avatar = document.createElement('img');
+        avatar.src = img.src;
+        avatar.alt = '';
+        avatarsEl.appendChild(avatar);
+      }
+    }
+  });
+
+  // Show/hide bar
+  if (selectedCount > 0) {
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+  }
+}
+
+function showResult() {
+  document.getElementById('browseView').classList.add('hidden');
+  document.getElementById('selectionBar').classList.remove('visible');
+  document.getElementById('resultSection').classList.add('active');
+
+  // Populate result people chips
+  const selected = document.querySelectorAll('.person-card.selected');
+  const resultPeople = document.getElementById('resultPeople');
+  resultPeople.innerHTML = '';
+  selected.forEach(card => {
+    const name = card.querySelector('.person-card-name').textContent;
+    const img = card.querySelector('img');
+    const chip = document.createElement('div');
+    chip.className = 'selected-person-chip';
+    chip.innerHTML = `<img src="${img?.src || ''}" alt=""> ${name}`;
+    resultPeople.appendChild(chip);
+  });
+
+  window.scrollTo(0, 0);
+}
+
+function showBrowse() {
+  document.getElementById('browseView').classList.remove('hidden');
+  document.getElementById('resultSection').classList.remove('active');
+  updateSelectionBar();
+  window.scrollTo(0, 0);
+}
+
+function confirmLayer(btn) {
+  const card = btn.closest('.offer-card');
+  card.classList.add('confirmed');
+  const actions = btn.parentElement;
+  actions.innerHTML = '<button class="offer-btn confirmed" style="flex:1">✓ Confirmed</button>';
+  // Hide alternatives if open
+  const alts = card.querySelector('.alternatives');
+  if (alts) alts.classList.remove('visible');
+}
+
+function showAlts(btn) {
+  const card = btn.closest('.offer-card');
+  const alts = card.querySelector('.alternatives');
+  if (alts) alts.classList.toggle('visible');
+}
+
+function pickAlt(option, layer) {
+  const card = option.closest('.offer-card');
+  const nameEl = card.querySelector('.offer-card-name');
+  const name = option.querySelector('.alt-option-name').textContent;
+  nameEl.textContent = name;
+
+  // Hide alternatives and confirm
+  const alts = card.querySelector('.alternatives');
+  alts.classList.remove('visible');
+  card.classList.add('confirmed');
+  const actions = card.querySelector('.offer-actions');
+  actions.innerHTML = '<button class="offer-btn confirmed" style="flex:1">✓ ' + name.split('(')[0].trim() + '</button>';
+}
+
+// Initialize
+updateSelectionBar();
+</script>
+
+</body>
+</html>

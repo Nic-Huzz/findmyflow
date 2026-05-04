@@ -7,27 +7,27 @@
       "workRhythm": {
         "min": 1,
         "max": 5,
-        "label": "Marathon ↔ Sprinter"
+        "label": "Marathon \u2194 Sprinter"
       },
       "fuelType": {
         "min": 1,
         "max": 5,
-        "label": "Clean Fuel ↔ Dirty Fuel"
+        "label": "Clean Fuel \u2194 Dirty Fuel"
       },
       "knowledgeStyle": {
         "min": 1,
         "max": 5,
-        "label": "Analytical ↔ Intuitive"
+        "label": "Analytical \u2194 Intuitive"
       },
       "impactStyle": {
         "min": 1,
         "max": 5,
-        "label": "Direct ↔ Systemic"
+        "label": "Direct \u2194 Systemic"
       },
       "growthMode": {
         "min": 1,
         "max": 5,
-        "label": "Deep Expertise ↔ Broad Leadership"
+        "label": "Deep Expertise \u2194 Broad Leadership"
       }
     },
     "notes": "All non-founder DNA profiles. impactStyle and growthMode replace orientation and scaleApproach for the employee path."
@@ -254,6 +254,16 @@
       "confidence": 90
     },
     {
+      "name": "Tony Robbins",
+      "experienceType": "live_events",
+      "workRhythm": 5,
+      "fuelType": 3,
+      "knowledgeStyle": 4,
+      "impactStyle": 1,
+      "growthMode": 5,
+      "confidence": 92
+    },
+    {
       "name": "William Shakespeare",
       "experienceType": "performance",
       "workRhythm": 1,
@@ -264,7 +274,7 @@
       "confidence": 80
     },
     {
-      "name": "Václav Havel",
+      "name": "V\u00e1clav Havel",
       "experienceType": "performance",
       "workRhythm": 1,
       "fuelType": 1,
@@ -474,7 +484,7 @@
       "confidence": 85
     },
     {
-      "name": "Brené Brown",
+      "name": "Bren\u00e9 Brown",
       "experienceType": "certification",
       "workRhythm": 2,
       "fuelType": 1,
@@ -482,16 +492,6 @@
       "impactStyle": 4,
       "growthMode": 3,
       "confidence": 90
-    },
-    {
-      "name": "Tony Robbins",
-      "experienceType": "live_events",
-      "workRhythm": 5,
-      "fuelType": 3,
-      "knowledgeStyle": 4,
-      "impactStyle": 1,
-      "growthMode": 5,
-      "confidence": 92
     },
     {
       "name": "Marie Forleo",
@@ -831,7 +831,7 @@
       "confidence": 85
     },
     {
-      "name": "Claude Lévi-Strauss",
+      "name": "Claude L\u00e9vi-Strauss",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 1,
@@ -840,7 +840,7 @@
       "confidence": 90
     },
     {
-      "name": "Svante Pääbo",
+      "name": "Svante P\u00e4\u00e4bo",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 1,
@@ -1056,7 +1056,7 @@
       "confidence": 90
     },
     {
-      "name": "Gabriel García Márquez",
+      "name": "Gabriel Garc\u00eda M\u00e1rquez",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 5,
@@ -1092,7 +1092,7 @@
       "confidence": 88
     },
     {
-      "name": "Antoni Gaudí",
+      "name": "Antoni Gaud\u00ed",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 5,
@@ -1596,7 +1596,7 @@
       "confidence": 88
     },
     {
-      "name": "Lech Wałęsa",
+      "name": "Lech Wa\u0142\u0119sa",
       "workRhythm": 4,
       "fuelType": 3,
       "knowledgeStyle": 5,
@@ -1659,7 +1659,7 @@
       "confidence": 88
     },
     {
-      "name": "Wisława Szymborska",
+      "name": "Wis\u0142awa Szymborska",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 5,
@@ -1713,7 +1713,7 @@
       "confidence": 92
     },
     {
-      "name": "Björk",
+      "name": "Bj\u00f6rk",
       "workRhythm": 4,
       "fuelType": 2,
       "knowledgeStyle": 5,
@@ -1848,7 +1848,7 @@
       "confidence": 85
     },
     {
-      "name": "Cédric Villani",
+      "name": "C\u00e9dric Villani",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 1,

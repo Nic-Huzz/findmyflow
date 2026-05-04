@@ -13,7 +13,7 @@
 - **Leads to:** FindMyFlow app. The book is Part 1 of the journey. The app is Parts 2 and 3.
 - **Voice:** One voice. One story. Huzz only. No composite characters.
 - **Chapter structure:** Story (opening line) > Lesson (the turn) > One-line framework or reframe (the landing)
-- **Models:** Installation Map, Alignment Equation, Essence Test appear as full-page visual spreads between sections
+- **Models:** Installation Map, Belief Graph, Essence Test appear as full-page visual spreads between sections
 - **Test first:** Write 5 chapters before committing (Ch 2, 19, 26, 41, 61)
 
 ---
@@ -36,7 +36,7 @@ The one structural question: Section 2 is 28 chapters vs Section 1's 22 and Sect
 | **5-8** | Before the Crack, Essence, Direction, Then Something Happened | 90% | The transition from "my story" to "the framework underneath my story." Clean. Ch 8 ("You didn't wake up today and decide...") is one of the strongest lines in the book. |
 | **9-12** | Wound Stages (Arrive, Learn, School, Friends) | 82% | Each stage is rich enough for a chapter. But four stages in four chapters might feel like a list. Could benefit from weaving your personal wound stage into one of them so it's not all third-person. |
 | **13** | The Installation Map (signature model reveal) | 95% | Perfectly placed after the wound stages. The three-box diagram is the "aha" moment of Section 1. |
-| **14-18** | Five Protectors (Performer, Controller, Perfectionist, Ghost, People Pleaser) | 88% | Each archetype deserves its page. Ch 15 ("bodyguard who doesn't know the war is over") is a standout line. Ch 16 (Performer) is autobiographical and strong. Ch 17-18 (Ghost, Perfectionist) are good but written from outside. Could be stronger with "You might be this if..." or a brief "I know someone who..." to ground them. |
+| **14-18b** | Four Responses + Auto-Pilot (Controller, Ghost, Perfectionist, Auto-Pilot, People Pleaser as mask) | 90% | PROVISIONAL restructure (Apr 2026). Performer merged into Controller (performing is controlling what people think of you). Auto-Pilot is new (collapse/shutdown). Nervous system 2x2: Aliveness (Y) x Safety (X). Controller=fight, Ghost=flight, Perfectionist=freeze (gas+brake), Auto-Pilot=collapse. Ch 15 ("bodyguard who doesn't know the war is over") is a standout. Ch 18b (Auto-Pilot) is new and untested but "I'm fine, just tired" will resonate with target audience. |
 | **19** | Software, Not Identity | 95% | Core reframe of the entire book. "The receipt, not the purchase." This is a page people will photograph. |
 | **20-22** | One Sentence, Essence Still There, What Comes Next Is Worse | 90% | Strong section close. Ch 22 is a perfect cliffhanger into Section 2. |
 
@@ -45,7 +45,7 @@ The one structural question: Section 2 is 28 chapters vs Section 1's 22 and Sect
 | Chapters | Theme | Confidence | Notes |
 |---|---|---|---|
 | **23-25** | Flood, Knowledge Trap, Head Full of Dreams | 93% | Most autobiographical material. $30K/52 courses is concrete and relatable. "Head Full of Dreams" as a named zone is instantly recognisable to the target reader. |
-| **26-31** | Alignment Equation + four variables + "you don't need a zero" | 85% | The model itself is strong. Six chapters to explain four variables plus the equation plus the punchline might be one too many. Ch 31 could fold into Ch 26 (the "you don't need a zero" insight IS the equation's punchline, not a separate chapter). |
+| **26-31** | Belief Graph + zones + "most beliefs have never been tested" | 88% | Stronger than the old Alignment Equation. Two independent axes (Belief x Capability), three zones (Hubris, Empowering, Limiting), maps cleanly to protective archetypes. Ch 26 reveals the graph. Ch 27-29 can cover the three zones with stories. Ch 30-31 (equation variable chapters) should be replaced with: one chapter on "your beliefs have never been tested" and one on "the diagonal moves as you grow." |
 | **32-37** | Skills, The Kid, Problems, Wound=Credential, People, Intersection | 90% | Flow Finder content translated into story. Ch 35 ("Your wound is your credential") is a standout. Ch 33 ("Go back to age seven") is strong because it's actionable in one second. Ch 37 ties it together. |
 | **38-40** | Essence vs Protective voice ("sounds like" lists) | 80% | Weakest stretch in Section 2. "Sounds like" lists risk feeling like a self-help book rather than a story. Could be stronger as a single chapter with both voices side by side, or woven into a story moment where you heard both voices simultaneously. |
 | **41-43** | Performer Flood, Ghost Flood, Healing Trap | 93% | The chapters that will make people uncomfortable in a good way. "Still performing. Just performing healing now." and "You're not healing. You're hiding." These hit. |
@@ -78,7 +78,7 @@ The one structural question: Section 2 is 28 chapters vs Section 1's 22 and Sect
 | Current | Recommendation | Reason |
 |---|---|---|
 | Ch 38-40 (essence/protective "sounds like") | Merge into **1 chapter** with both voices side by side | Three pages of lists feels like a workbook. One page with contrast is punchy. |
-| Ch 26 + 31 (equation + "you don't need a zero") | Merge into **1 chapter** | The "you don't need a zero" insight is the equation's punchline, not a separate idea. |
+| Ch 27-31 (old equation variable chapters) | Replace with **3 chapters**: Hubris zone (story), Limiting zone (story), "most beliefs have never been tested" (punchline) | Graph replaces equation. Three zones replace four variables. Each zone needs a story anchor, not a definition. |
 | Ch 57-58 (comfort zone + not aligned) | Merge into **1 chapter**: "the other two quadrants" | Neither is thick enough for its own page. Together they contrast with the two that matter (essence + protective). |
 | Ch 62-63 (dome + expanding dome) | Merge into **1 chapter** | The metaphor and its application land on one page. |
 | Ch 65-70 (five fear layers) | Trim from **6 to 4 chapters**: overview, then 2-3 story-driven layers, remaining layers woven in | Six consecutive "here's another fear" chapters reads as a list. Give your personal layer a story chapter. Others can share a page. |
@@ -158,7 +158,7 @@ Every framework chapter in the current chapter list needs this treatment. The ch
 
 Chapters that currently lack a story anchor:
 - Ch 9-12 (wound stages): Need your personal wound stage woven in, not just third-person descriptions
-- Ch 27-30 (equation variables): Each variable needs a moment where you felt it shift. When did your essence clarity jump? When did your protective strength drop?
+- Ch 27-29 (Belief Graph zones): Each zone needs a story. When were you in hubris (Performer building fast, ignoring the crack)? When were you in limiting belief (capable but frozen)? When did you hit the diagonal (belief matched reality for the first time)?
 - Ch 38-40 (voice lists): Replace "sounds like" bullets with the actual moment you heard both voices arguing
 - Ch 44-47 (4 R's): Each R needs ONE moment. The time you recognised. The time you released. The specific rewire. The reclaim.
 - Ch 65-70 (five layers): Each layer needs the actual groan you did at that layer. "The first time I posted my face..." "The first time I went live..." "The first time I quoted full price..."
@@ -167,7 +167,7 @@ Chapters that currently lack a story anchor:
 
 ## Model Pages as Visual Breaks
 
-The three signature models (Installation Map, Alignment Equation, Essence Test) should appear as **full-page visual spreads**, not inline text within chapters.
+The three signature models (Installation Map, Belief Graph, Essence Test) should appear as **full-page visual spreads**, not inline text within chapters.
 
 Format: Left page = the model, clean, no body text. Right page = blank or single image.
 

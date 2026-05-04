@@ -240,6 +240,18 @@
   background: #fb923c;
 }
 
+.healing-summary .voice-item.rest {
+  background: rgba(147, 197, 253, 0.25);
+}
+
+.healing-summary .voice-item.rest .voice-percent {
+  color: #93c5fd;
+}
+
+.healing-summary .voice-bar.rest {
+  background: #93c5fd;
+}
+
 /* Flow Data Display */
 .healing-summary .flow-data {
   display: flex;

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience Creator Matching — V2 Grid Browse</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    color: white;
+    min-height: 100vh;
+  }
+  .container { max-width: 440px; margin: 0 auto; padding: 1.5rem; }
+
+  /* ===== TABS ===== */
+  .tabs { display: flex; overflow-x: auto; gap: 0.5rem; padding-bottom: 1rem; -webkit-overflow-scrolling: touch; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0;
+    padding: 0.6rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: all 0.2s ease;
+  }
+  .tab.active { background: rgba(233,162,59,0.2); border-color: #E9A23B; color: #fcd34d; }
+  .tab .tab-count { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-left: 4px; }
+  .tab.active .tab-count { color: rgba(233,162,59,0.7); }
+
+  /* ===== HEADER ===== */
+  .header { text-align: center; margin-bottom: 1.25rem; padding-top: 0.5rem; }
+  .header-badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.8rem; margin-bottom: 1rem; }
+  .header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .header h1 span { background: linear-gradient(135deg, #ffdd27, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header p { color: rgba(255,255,255,0.6); font-size: 0.875rem; }
+
+  /* ===== SELECTION BAR ===== */
+  .selection-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(94,23,235,0.95);
+    backdrop-filter: blur(20px);
+    padding: 0.75rem 0;
+    margin: 0 -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .selection-bar-inner { display: flex; align-items: center; justify-content: space-between; }
+  .selected-avatars { display: flex; gap: -8px; }
+  .selected-avatars img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 2px solid #5e17eb; margin-left: -8px; }
+  .selected-avatars img:first-child { margin-left: 0; }
+  .selection-count { font-size: 0.8rem; color: rgba(255,255,255,0.6); }
+  .selection-count strong { color: #fcd34d; }
+  .see-results-btn {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e;
+    font-weight: 700;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  /* ===== PEOPLE GRID ===== */
+  .people-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; padding-bottom: 2rem; }
+  .person-tile {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+  .person-tile:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+  .person-tile.selected { border-color: #E9A23B; background: rgba(233,162,59,0.1); }
+  .person-tile.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 22px; height: 22px;
+    background: #E9A23B;
+    color: #1a1a2e;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .person-tile { position: relative; }
+  .person-tile img { width: 100%; aspect-ratio: 1; border-radius: 12px; object-fit: cover; margin-bottom: 0.5rem; }
+  .person-tile-name { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; }
+  .person-tile-desc { font-size: 0.7rem; color: rgba(255,255,255,0.5); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  /* ===== RESULT (same as V1) ===== */
+  .result-screen { padding-top: 0.5rem; display: none; }
+  .result-screen.active { display: block; }
+  .result-header { text-align: center; margin-bottom: 1.5rem; }
+  .result-badge { display: inline-block; background: rgba(233,162,59,0.2); border: 1px solid rgba(233,162,59,0.4); color: #fcd34d; padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+  .result-header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .result-header p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+
+  .offer-layer {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .offer-layer-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .offer-layer-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+  .offer-layer-icon.attraction { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+  .offer-layer-icon.core { background: linear-gradient(135deg, #5e17eb, #7c3aed); }
+  .offer-layer-icon.scale { background: linear-gradient(135deg, #E9A23B, #f59e0b); }
+  .offer-layer-icon.continuity { background: linear-gradient(135deg, #10b981, #059669); }
+  .offer-layer-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); }
+  .offer-layer-name { font-weight: 700; font-size: 1rem; }
+  .offer-layer-desc { font-size: 0.875rem; color: rgba(255,255,255,0.75); line-height: 1.5; margin-bottom: 1rem; }
+  .offer-layer-proof { font-size: 0.8rem; color: rgba(233,162,59,0.9); font-style: italic; margin-bottom: 1rem; padding-left: 0.75rem; border-left: 2px solid rgba(233,162,59,0.3); }
+  .hell-yes-btns { display: flex; gap: 0.75rem; }
+  .hell-yes-btn { flex: 1; padding: 0.75rem; border-radius: 12px; font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; }
+  .hell-yes-btn.yes { background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; }
+  .hell-yes-btn.no { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2); }
+
+  .first-step { background: rgba(233,162,59,0.12); border: 1px solid rgba(233,162,59,0.3); border-radius: 20px; padding: 1.25rem; margin-top: 1.5rem; text-align: center; }
+  .first-step h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #fcd34d; margin-bottom: 0.5rem; }
+  .first-step p { font-size: 1rem; font-weight: 600; line-height: 1.5; }
+  .gold-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; font-weight: 700; font-size: 1.125rem; border: none; border-radius: 14px; cursor: pointer; }
+
+  .browse-view { }
+  .browse-view.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- BROWSE VIEW -->
+  <div class="browse-view" id="browseView">
+    <div class="header">
+      <div class="header-badge">Experience Creator Matching</div>
+      <h1>Who do you <span>resonate with?</span></h1>
+      <p>Browse by model type. Tick anyone who inspires you.</p>
+    </div>
+
+    <!-- STICKY SELECTION BAR -->
+    <div class="selection-bar">
+      <div class="selection-bar-inner">
+        <div style="display:flex; align-items: center; gap: 0.75rem;">
+          <div class="selected-avatars">
+            <img src="../public/images/creators/bren-brown.png" onerror="this.style.display='none'">
+            <img src="../public/images/creators/wim-hof.png" onerror="this.style.display='none'">
+            <img src="../public/images/creators/tara-brach.png" onerror="this.style.display='none'">
+          </div>
+          <div class="selection-count"><strong>3</strong> selected</div>
+        </div>
+        <button class="see-results-btn" onclick="showResult()">See My Model →</button>
+      </div>
+    </div>
+
+    <!-- CATEGORY TABS -->
+    <div class="tabs" style="margin-top: 1rem;">
+      <div class="tab active">🎓 Workshops <span class="tab-count">16</span></div>
+      <div class="tab">👥 Cohorts <span class="tab-count">7</span></div>
+      <div class="tab">🎭 Live Events <span class="tab-count">9</span></div>
+      <div class="tab">📚 Books & Media <span class="tab-count">5</span></div>
+      <div class="tab">🤝 Facilitation <span class="tab-count">12</span></div>
+      <div class="tab">🏔️ Retreats <span class="tab-count">8</span></div>
+    </div>
+
+    <!-- PEOPLE GRID -->
+    <div class="people-grid">
+      <div class="person-tile selected" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/bren-brown.png" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%235e17eb%22 width=%22200%22 height=%22200%22/></svg>'">
+        <div class="person-tile-name">Brené Brown</div>
+        <div class="person-tile-desc">Turned the thing everyone hides from into the thing everyone needs</div>
+      </div>
+      <div class="person-tile selected" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/wim-hof.png" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%235e17eb%22 width=%22200%22 height=%22200%22/></svg>'">
+        <div class="person-tile-name">Wim Hof</div>
+        <div class="person-tile-desc">Proved a freezing river can teach you more than ten years of therapy</div>
+      </div>
+      <div class="person-tile" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/john-gottman.png" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%235e17eb%22 width=%22200%22 height=%22200%22/></svg>'">
+        <div class="person-tile-name">John Gottman</div>
+        <div class="person-tile-desc">Measured love with heart rate monitors and predicted divorce with 94% accuracy</div>
+      </div>
+      <div class="person-tile" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/marshall-ganz.png" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%235e17eb%22 width=%22200%22 height=%22200%22/></svg>'">
+        <div class="person-tile-name">Marshall Ganz</div>
+        <div class="person-tile-desc">Trained Obama's organizing army with one framework: Story of Self, Us, Now</div>
+      </div>
+      <div class="person-tile selected" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/tara-brach.png" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%235e17eb%22 width=%22200%22 height=%22200%22/></svg>'">
+        <div class="person-tile-name">Tara Brach</div>
+        <div class="person-tile-desc">Made sitting still with your own pain feel like the bravest thing you could do</div>
+      </div>
+      <div class="person-tile" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/marva-collins.png" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%235e17eb%22 width=%22200%22 height=%22200%22/></svg>'">
+        <div class="person-tile-name">Marva Collins</div>
+        <div class="person-tile-desc">Taught Plato to four-year-olds everyone else called unteachable</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT VIEW -->
+  <div class="result-screen" id="resultView">
+    <div class="result-header">
+      <div class="result-badge">Your Model</div>
+      <h1>Certification Empire</h1>
+      <p>You build deep expertise, codify it into a method, then train others to deliver it.</p>
+    </div>
+
+    <div class="offer-layer">
+      <div class="offer-layer-header">
+        <div class="offer-layer-icon attraction">🧲</div>
+        <div>
+          <div class="offer-layer-label">Attraction</div>
+          <div class="offer-layer-name">Free content that demonstrates your method</div>
+        </div>
+      </div>
+      <div class="offer-layer-desc">Podcast, YouTube, TED talks, or free workshops that let people experience your approach before they pay.</div>
+      <div class="offer-layer-proof">"Tara Brach's free podcast hit 200M downloads. Brené Brown's TED talk has 60M views."</div>
+      <div class="hell-yes-btns">
+        <button class="hell-yes-btn yes">Hell Yes</button>
+        <button class="hell-yes-btn no">Show me other options</button>
+      </div>
+    </div>
+
+    <div class="offer-layer">
+      <div class="offer-layer-header">
+        <div class="offer-layer-icon core">💎</div>
+        <div>
+          <div class="offer-layer-label">Core Offer</div>
+          <div class="offer-layer-name">Live workshop or retreat ($500-$5K)</div>
+        </div>
+      </div>
+      <div class="offer-layer-desc">A structured transformation experience you deliver live.</div>
+      <div class="offer-layer-proof">"Wim Hof runs branded retreats in Poland and Spain. Brené Brown's Dare to Lead runs inside Fortune 500 companies."</div>
+      <div class="hell-yes-btns">
+        <button class="hell-yes-btn yes">Hell Yes</button>
+        <button class="hell-yes-btn no">Show me other options</button>
+      </div>
+    </div>
+
+    <div class="offer-layer">
+      <div class="offer-layer-header">
+        <div class="offer-layer-icon scale">🚀</div>
+        <div>
+          <div class="offer-layer-label">Scale</div>
+          <div class="offer-layer-name">Certify others to teach your method</div>
+        </div>
+      </div>
+      <div class="offer-layer-desc">Train practitioners to deliver your methodology without you in the room.</div>
+      <div class="offer-layer-proof">"Wim Hof: 1,500 certified instructors in 45 countries. Tara Brach: 2-year teacher certification with thousands of graduates."</div>
+      <div class="hell-yes-btns">
+        <button class="hell-yes-btn yes">Hell Yes</button>
+        <button class="hell-yes-btn no">Show me other options</button>
+      </div>
+    </div>
+
+    <div class="offer-layer">
+      <div class="offer-layer-header">
+        <div class="offer-layer-icon continuity">🔄</div>
+        <div>
+          <div class="offer-layer-label">Continuity</div>
+          <div class="offer-layer-name">Online courses + app subscriptions</div>
+        </div>
+      </div>
+      <div class="offer-layer-desc">Recurring or passive revenue that flows without active delivery.</div>
+      <div class="offer-layer-proof">"Wim Hof's app has 2M+ downloads. Tara Brach's online courses run year-round."</div>
+      <div class="hell-yes-btns">
+        <button class="hell-yes-btn yes">Hell Yes</button>
+        <button class="hell-yes-btn no">Show me other options</button>
+      </div>
+    </div>
+
+    <div class="first-step">
+      <h3>Your First Step</h3>
+      <p>Run one free workshop on your topic this month. Every person you selected started the same way.</p>
+    </div>
+
+    <button class="gold-btn" style="margin-top: 1.5rem;">Save My Model</button>
+  </div>
+
+</div>
+
+<script>
+function showResult() {
+  document.getElementById('browseView').classList.add('hidden');
+  document.getElementById('resultView').classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>

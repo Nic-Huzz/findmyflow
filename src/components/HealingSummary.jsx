@@ -19,7 +19,7 @@ function HealingSummary({ onBack, progress }) {
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
     totalCompleted: 0,
-    byType: { Recognise: 0, Release: 0, Rewire: 0, Reconnect: 0 },
+    byType: { Recognise: 0, Release: 0, Rewire: 0, Reconnect: 0, Rest: 0 },
     emotions: {},
     triggerPatterns: {},
     releaseMethods: {},
@@ -86,7 +86,7 @@ function HealingSummary({ onBack, progress }) {
         // Process the data
         const processed = {
           totalCompleted: uniqueCompletions?.length || 0,
-          byType: { Recognise: 0, Release: 0, Rewire: 0, Reconnect: 0 },
+          byType: { Recognise: 0, Release: 0, Rewire: 0, Reconnect: 0, Rest: 0 },
           emotions: {},
           triggerPatterns: {},
           releaseMethods: {},
@@ -106,6 +106,8 @@ function HealingSummary({ onBack, progress }) {
             processed.byType.Rewire++
           } else if (questType === 'Reconnect' || completion.quest_id?.startsWith('reconnect_')) {
             processed.byType.Reconnect++
+          } else if (questType === 'Rest' || completion.quest_id?.startsWith('rest_')) {
+            processed.byType.Rest++
           }
 
           // Add points
@@ -174,12 +176,13 @@ function HealingSummary({ onBack, progress }) {
   }, [user])
 
   // Calculate percentages for all 4 types
-  const totalByType = stats.byType.Recognise + stats.byType.Release + stats.byType.Rewire + stats.byType.Reconnect
+  const totalByType = stats.byType.Recognise + stats.byType.Release + stats.byType.Rewire + stats.byType.Reconnect + stats.byType.Rest
   const typePercentages = {
     Recognise: totalByType > 0 ? Math.round((stats.byType.Recognise / totalByType) * 100) : 0,
     Release: totalByType > 0 ? Math.round((stats.byType.Release / totalByType) * 100) : 0,
     Rewire: totalByType > 0 ? Math.round((stats.byType.Rewire / totalByType) * 100) : 0,
-    Reconnect: totalByType > 0 ? Math.round((stats.byType.Reconnect / totalByType) * 100) : 0
+    Reconnect: totalByType > 0 ? Math.round((stats.byType.Reconnect / totalByType) * 100) : 0,
+    Rest: totalByType > 0 ? Math.round((stats.byType.Rest / totalByType) * 100) : 0
   }
   // Legacy aliases for insight logic
   const recognisePercentage = typePercentages.Recognise
@@ -295,12 +298,18 @@ function HealingSummary({ onBack, progress }) {
                   <span className="voice-label">Reconnect</span>
                   <span className="voice-percent">{typePercentages.Reconnect}%</span>
                 </div>
+                <div className="voice-item rest">
+                  <span className="voice-icon">😴</span>
+                  <span className="voice-label">Rest</span>
+                  <span className="voice-percent">{typePercentages.Rest}%</span>
+                </div>
               </div>
               <div className="voice-bar-container">
                 <div className="voice-bar recognise" style={{ width: `${typePercentages.Recognise}%` }} />
                 <div className="voice-bar release" style={{ width: `${typePercentages.Release}%` }} />
                 <div className="voice-bar rewire" style={{ width: `${typePercentages.Rewire}%` }} />
                 <div className="voice-bar reconnect" style={{ width: `${typePercentages.Reconnect}%` }} />
+                <div className="voice-bar rest" style={{ width: `${typePercentages.Rest}%` }} />
               </div>
             </div>
           ) : (

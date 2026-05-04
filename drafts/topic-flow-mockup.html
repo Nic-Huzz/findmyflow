@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FindMyFlow — Topic Identifier</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#5e17eb;--purple-deep:#1a0540;--purple-mid:#2d0b6e;
+  --gold:#E9A23B;--gold-soft:rgba(233,162,59,.15);--gold-glow:rgba(233,162,59,.25);
+  --text:#f0eef5;--text-dim:rgba(255,255,255,.55);--text-faint:rgba(255,255,255,.3);
+  --radius:16px;--radius-sm:10px;
+}
+html{font-size:16px}
+body{
+  font-family:'DM Sans',sans-serif;color:var(--text);
+  background:var(--purple-deep);min-height:100dvh;
+  display:flex;justify-content:center;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Shell ──────────────────────────────────────── */
+.shell{
+  width:100%;max-width:420px;min-height:100dvh;position:relative;overflow:hidden;
+  background:linear-gradient(165deg,var(--purple-mid) 0%,var(--purple-deep) 55%,#0d021f 100%);
+}
+
+/* Ambient glow */
+.glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;opacity:.45}
+.glow-1{width:280px;height:280px;background:var(--purple);top:-60px;left:-80px}
+.glow-2{width:200px;height:200px;background:var(--gold);bottom:80px;right:-90px;opacity:.18}
+
+/* ── Steps ──────────────────────────────────────── */
+.step{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:3rem 1.5rem 2rem;overflow-y:auto;
+  opacity:0;transform:translateY(24px);pointer-events:none;
+  transition:opacity .4s ease,transform .4s ease;
+}
+.step.active{opacity:1;transform:translateY(0);pointer-events:auto}
+.step.exit{opacity:0;transform:translateY(-16px)}
+
+/* ── Typography ─────────────────────────────────── */
+h1{font-family:'Playfair Display',serif;font-size:1.65rem;line-height:1.25;margin-bottom:.5rem}
+h2{font-family:'Playfair Display',serif;font-size:1.3rem;line-height:1.3;margin-bottom:.4rem}
+.subtitle{color:var(--text-dim);font-size:.88rem;line-height:1.55;margin-bottom:1.5rem}
+
+/* ── Buttons ────────────────────────────────────── */
+.btn-gold{
+  width:100%;padding:.95rem 1.2rem;border:none;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--gold),#d4891f);color:#1a0540;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:.92rem;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .15s,box-shadow .25s;
+}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(233,162,59,.3)}
+.btn-gold:active{transform:scale(.98)}
+.btn-gold .shimmer{
+  position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+  animation:shimmer 3s infinite;
+}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+
+.btn-secondary{
+  width:100%;padding:.85rem 1.2rem;border:1.5px solid rgba(255,255,255,.12);
+  border-radius:var(--radius-sm);background:rgba(255,255,255,.04);
+  color:var(--text);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;
+  cursor:pointer;transition:border-color .2s,background .2s;
+}
+.btn-secondary:hover{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.07)}
+
+.back-link{
+  display:block;text-align:center;margin-top:.75rem;
+  background:none;border:none;color:var(--text-faint);
+  font-size:.8rem;cursor:pointer;font-family:inherit;padding:.5rem;
+}
+.back-link:hover{color:var(--text-dim)}
+
+/* ── Step 1: Paste ──────────────────────────────── */
+.paste-area{
+  width:100%;min-height:140px;padding:1rem;
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-sm);color:var(--text);font-family:inherit;
+  font-size:.88rem;line-height:1.5;resize:vertical;
+  transition:border-color .2s;
+}
+.paste-area::placeholder{color:var(--text-faint)}
+.paste-area:focus{outline:none;border-color:var(--gold)}
+
+/* ── Step 2: Loading ────────────────────────────── */
+.loader-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.spinner-ring{
+  width:52px;height:52px;border:3px solid rgba(255,255,255,.08);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{color:var(--text-dim);font-size:.9rem;font-style:italic}
+
+/* ── Step 3: Clusters ───────────────────────────── */
+.cluster-card{
+  background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.08);
+  border-left:3px solid var(--gold);
+  border-radius:var(--radius);
+  padding:1.25rem 1.15rem;margin-bottom:1rem;
+  cursor:pointer;transition:border-color .2s,background .2s,transform .15s;
+}
+.cluster-card:hover{
+  background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.15);
+  border-left-color:var(--gold);transform:translateY(-1px);
+}
+.cluster-card:active{transform:scale(.985)}
+.cluster-name{font-weight:700;font-size:1.05rem;margin-bottom:.55rem;color:var(--text)}
+.cluster-insight{
+  font-size:.82rem;line-height:1.6;color:var(--text-dim);
+  font-style:italic;margin-bottom:.85rem;
+}
+.cluster-tags{display:flex;flex-wrap:wrap;gap:6px}
+.cluster-tag{
+  font-size:.68rem;padding:3px 9px;border-radius:20px;
+  background:rgba(233,162,59,.1);color:var(--gold);
+  border:1px solid rgba(233,162,59,.18);font-weight:500;
+}
+
+/* stagger entrance */
+.cluster-card{opacity:0;animation:fadeUp .5s ease forwards}
+.cluster-card:nth-child(1){animation-delay:.1s}
+.cluster-card:nth-child(2){animation-delay:.25s}
+.cluster-card:nth-child(3){animation-delay:.4s}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* ── Step 4: Sub-select ─────────────────────────── */
+.progress-tag{
+  text-align:center;font-size:.72rem;color:var(--text-faint);
+  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:1rem;
+}
+.cat-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem}
+.cat-icon{font-size:1.3rem}
+
+.section-label{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--gold);
+  margin:1.25rem 0 .65rem;padding-bottom:.35rem;
+  border-bottom:1px solid rgba(233,162,59,.12);
+}
+
+.check-row{
+  display:flex;align-items:flex-start;gap:.7rem;
+  padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.04);
+  cursor:pointer;
+}
+.check-row:last-child{border-bottom:none}
+.check-box{
+  width:22px;height:22px;border:2px solid rgba(255,255,255,.18);
+  border-radius:6px;flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,border-color .15s;
+}
+.check-row.checked .check-box{background:var(--gold);border-color:var(--gold)}
+.check-row.checked .check-box::after{content:'✓';color:#1a0540;font-size:.7rem;font-weight:700}
+.check-label{font-size:.88rem;line-height:1.45;flex:1}
+.check-evidence{
+  display:block;font-size:.73rem;line-height:1.5;
+  color:var(--text-faint);font-style:italic;margin-top:.2rem;
+}
+
+/* Custom input row */
+.custom-row{display:flex;gap:.5rem;margin-top:.25rem}
+.custom-input{
+  flex:1;padding:.6rem .8rem;background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);
+  color:var(--text);font-family:inherit;font-size:.85rem;
+}
+.custom-input::placeholder{color:var(--text-faint)}
+.custom-input:focus{outline:none;border-color:var(--gold)}
+.custom-add{
+  padding:.6rem .9rem;border:none;border-radius:var(--radius-sm);
+  background:rgba(233,162,59,.15);color:var(--gold);
+  font-weight:600;font-size:.82rem;cursor:pointer;font-family:inherit;
+  transition:background .15s;
+}
+.custom-add:hover{background:rgba(233,162,59,.25)}
+
+/* ── Step 5: Satisfaction ───────────────────────── */
+.sat-icon{font-size:2.8rem;text-align:center;margin-bottom:.75rem}
+.sat-title{text-align:center;margin-bottom:.35rem}
+.sat-sub{text-align:center;color:var(--text-dim);font-size:.88rem;margin-bottom:1.75rem}
+.sat-btns{display:flex;flex-direction:column;gap:.75rem}
+.sat-btn{
+  display:flex;align-items:center;gap:.85rem;
+  padding:1rem 1.1rem;border:1.5px solid rgba(255,255,255,.08);
+  border-radius:var(--radius);background:rgba(255,255,255,.04);
+  cursor:pointer;transition:border-color .2s,background .2s;text-align:left;
+}
+.sat-btn:first-child{background:linear-gradient(135deg,var(--gold),#d4891f);border:none;color:#1a0540}
+.sat-btn:first-child .sat-btn-sub{color:rgba(26,5,64,.6)}
+.sat-btn:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.065)}
+.sat-btn:first-child:hover{opacity:.92}
+.sat-btn-icon{font-size:1.5rem;flex-shrink:0}
+.sat-btn-text{display:flex;flex-direction:column;gap:2px}
+.sat-btn-title{font-weight:700;font-size:.9rem}
+.sat-btn-sub{font-size:.78rem;color:var(--text-dim)}
+
+/* ── Scroll ─────────────────────────────────────── */
+.step::-webkit-scrollbar{width:3px}
+.step::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:4px}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <!-- STEP 1: Paste -->
+  <div class="step active" id="s-paste">
+    <h1>Identify Your Topics</h1>
+    <p class="subtitle">Paste the extraction from your AI conversation below.</p>
+    <textarea class="paste-area" placeholder="Paste the extraction here..." rows="6">PROBLEM: Kids leaving school with armour and masks...
+CATEGORY: The voice that got taken
+EVIDENCE: You wrote: "Young people leaving school..."</textarea>
+    <div style="height:1.25rem"></div>
+    <button class="btn-gold" onclick="goTo('s-loading')">
+      <span class="shimmer"></span>
+      Find My Topics →
+    </button>
+    <button class="back-link">← Back</button>
+  </div>
+
+  <!-- STEP 2: Loading -->
+  <div class="step" id="s-loading">
+    <div class="loader-wrap">
+      <div class="spinner-ring"></div>
+      <div class="loader-text">Analysing your problems...</div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Clusters -->
+  <div class="step" id="s-clusters">
+    <h1>Your Problem Spaces</h1>
+    <p class="subtitle">We found 3 themes in what you care about. Pick one to explore.</p>
+
+    <div class="cluster-card" onclick="goTo('s-subselect')">
+      <div class="cluster-name">The Authenticity Crisis</div>
+      <div class="cluster-insight">This cluster reveals your deep concern for people who've lost touch with their true selves — those who've traded authenticity for belonging, security, or external validation. You see how systems can hollow people out.</div>
+      <div class="cluster-tags">
+        <span class="cluster-tag">The voice that got taken</span>
+        <span class="cluster-tag">A life that isn't yours to live</span>
+        <span class="cluster-tag">Work that hollows you out</span>
+      </div>
+    </div>
+
+    <div class="cluster-card" onclick="goTo('s-subselect')">
+      <div class="cluster-name">The Awakening Gap</div>
+      <div class="cluster-insight">Your frustration with how knowledge gets gatekept through jargon, how curiosity dies through conditioning, and how people achieve everything yet feel empty. You care about people waking up to what truly matters.</div>
+      <div class="cluster-tags">
+        <span class="cluster-tag">Feeling stupid when you're not</span>
+        <span class="cluster-tag">People who stopped wondering</span>
+        <span class="cluster-tag">Forgetting what it was all for</span>
+      </div>
+    </div>
+
+    <div class="cluster-card" onclick="goTo('s-subselect')">
+      <div class="cluster-name">Access & Transformation Barriers</div>
+      <div class="cluster-insight">The systemic inequity piece — how healing tools, transformation resources, and pathways forward are gated behind money and privilege, keeping people stuck even when they're ready to change.</div>
+      <div class="cluster-tags">
+        <span class="cluster-tag">Locked out of what you need</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: Sub-select -->
+  <div class="step" id="s-subselect">
+    <div class="progress-tag">1 of 3</div>
+    <div class="cat-header">
+      <span class="cat-icon">😤</span>
+      <h2>The voice that got taken</h2>
+    </div>
+    <p class="subtitle" style="margin-bottom:1rem">Tick the specific problems that light you up.</p>
+
+    <div class="section-label">From Your Conversations</div>
+
+    <div class="check-row checked" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">
+        Kids leaving school with armour and masks because they were never taught who they are
+        <span class="check-evidence">You wrote: "Young people leaving school with armor and masks — students who've been shut down, never taught self-knowledge..."</span>
+      </div>
+    </div>
+
+    <div class="check-row checked" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">
+        People forced to trade authenticity for belonging and never taught how to come back
+        <span class="check-evidence">Your five Protective Archetypes — Performer, People Pleaser, Controller, Perfectionist, Ghost — are all survival strategies...</span>
+      </div>
+    </div>
+
+    <div class="section-label">Pre-Defined</div>
+
+    <div class="check-row" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">Childhood trauma stealing your ability to speak</div>
+    </div>
+
+    <div class="check-row" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">Doing the work and someone else getting the credit</div>
+    </div>
+
+    <div class="check-row" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">Speaking the truth and losing your community for it</div>
+    </div>
+
+    <div class="check-row" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">Carrying shame in silence because nobody models speaking about it</div>
+    </div>
+
+    <div class="section-label">Identify Your Own</div>
+    <div class="custom-row">
+      <input class="custom-input" type="text" placeholder="Type a topic...">
+      <button class="custom-add">Add</button>
+    </div>
+
+    <div style="height:1.5rem"></div>
+    <button class="btn-gold" onclick="goTo('s-satisfaction')">
+      <span class="shimmer"></span>
+      Continue (2 selected) →
+    </button>
+    <button class="back-link" onclick="goTo('s-clusters')">← Back</button>
+  </div>
+
+  <!-- STEP 5: Satisfaction -->
+  <div class="step" id="s-satisfaction">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <div class="sat-icon">✨</div>
+      <h1 class="sat-title">7 topic areas identified</h1>
+      <p class="sat-sub">Do these capture the problems you care about, or are some missing?</p>
+      <div class="sat-btns">
+        <div class="sat-btn" onclick="alert('Saved! Redirecting to Play-List...')">
+          <span class="sat-btn-icon">✅</span>
+          <div class="sat-btn-text">
+            <span class="sat-btn-title">These capture me</span>
+            <span class="sat-btn-sub">Save and continue</span>
+          </div>
+        </div>
+        <div class="sat-btn">
+          <span class="sat-btn-icon">🎯</span>
+          <div class="sat-btn-text">
+            <span class="sat-btn-title">Some are missing</span>
+            <span class="sat-btn-sub">Browse and add more categories</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function goTo(id){
+  const active=document.querySelector('.step.active');
+  if(active){
+    active.classList.add('exit');
+    active.classList.remove('active');
+  }
+  // Auto-advance from loading
+  const delay=id==='s-loading'?0:0;
+  setTimeout(()=>{
+    const next=document.getElementById(id);
+    if(active)active.classList.remove('exit');
+    next.classList.add('active');
+    next.scrollTop=0;
+    // Auto-advance loading after 1.5s
+    if(id==='s-loading'){
+      setTimeout(()=>goTo('s-clusters'),1500);
+    }
+  },id==='s-loading'?50:350);
+}
+</script>
+</body>
+</html>

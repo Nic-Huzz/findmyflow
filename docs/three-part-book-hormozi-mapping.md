@@ -36,10 +36,10 @@ Each part has one signature model. Each is napkin-drawable. Each answers one que
 | Part | Model | Format | Core Question |
 |---|---|---|---|
 | **1: The Crack** | **The Installation Map** | Timeline (3 boxes + arrows) | "What happened to me, and what did it install?" |
-| **2: The Flood** | **The Alignment Equation** | Fraction (4 variables) | "How aligned am I, and what do I work on next?" |
-| **3: The Diagonal** | **The Essence Test** | 2x2 matrix (Fear x Excitement) | "Is this action coming from my essence or my protection?" |
+| **2: The Flood** | **The Belief Graph** | Graph (Belief x Capability) | "Are the beliefs running my life real or installed?" |
+| **3: The Diagonal** | **The Essence Test** | Graph (Fear x Excitement) | "Is this action coming from my essence or my protection?" |
 
-Together they tell the complete story: something was installed (Part 1), here's how to measure the recovery (Part 2), here's how to know every action is coming from the right place (Part 3).
+Together they tell the complete story: something was installed (Part 1), here's how to test whether your beliefs about yourself are real (Part 2), here's how to know every action is coming from the right place (Part 3).
 
 ---
 
@@ -59,7 +59,7 @@ You arrived with two things. Life installed two things over the top.
 - **A Wound**: The thing that happened. The moment the world said "not like that." It could be one event or a thousand paper cuts.
 - **A Protective Voice**: The archetype that formed to guard the wound. Performer, Controller, Perfectionist, Ghost, People Pleaser. It wasn't chosen. It was the smartest thing your nervous system could do at the time.
 
-The protective voice has one job: make sure the wound never gets triggered again. And it does that by obscuring your essence and hijacking your direction. The Performer builds someone else's dream. The Ghost disappears from the arena. The Perfectionist waits until it's safe, which never arrives.
+The protective voice has one job: make sure the wound never gets triggered again. And it does that by obscuring your essence and hijacking your direction. The Controller builds someone else's dream. The Ghost disappears from the arena. The Perfectionist waits until it's safe, which never arrives. The Auto-Pilot stops caring entirely.
 
 ### Signature Model: The Installation Map
 
@@ -118,55 +118,75 @@ And you still can't move.
 
 This is not a bug. This is the flood. Self-knowledge has to arrive before action can be aligned. The problem is that most people stay here.
 
-### Signature Model: The Alignment Equation
+### Signature Model: The Belief Graph
 
-**Question it answers:** "How aligned am I, and what do I work on next?"
+**Question it answers:** "Are the beliefs running my life real or installed?"
 
-**Format:** Fraction with four variables.
+**Format:** Graph with two axes.
 
-```
-                What was always yours
-Alignment = ─────────────────────────────
-                What was installed
-```
-
-Expanded:
+**Y axis:** Belief (what you believe about yourself)
+**X axis:** Capability (what the evidence actually shows)
 
 ```
-         Essence Clarity  x  Direction Clarity
-    A = ───────────────────────────────────────
-          Wound Load  x  Protective Strength
+                    Low Capability          High Capability
+                  ┌─────────────────────┬─────────────────────┐
+                  │                     │                     │
+  High Belief     │       HUBRIS        │    EMPOWERING       │
+                  │                     │     BELIEF          │
+                  │  Belief exceeds     │  Belief matches     │
+                  │  capability.        │  capability.        │
+                  │  "I don't need      │  Grounded           │
+                  │  help."             │  confidence.        │
+                  │  Performer.         │                     │
+                  │  Controller.        │  THE DIAGONAL       │
+                  │                     │                     │
+                  ├─────────────────────┼─────────────────────┤
+                  │                     │                     │
+  Low Belief      │     STUCK           │   LIMITING BELIEF   │
+                  │                     │                     │
+                  │  Low belief AND     │  Capability exceeds │
+                  │  low capability.    │  belief.            │
+                  │  Early in the       │  "I'm not ready."   │
+                  │  journey.           │  "Who am I to       │
+                  │                     │   do this?"         │
+                  │                     │  Ghost.             │
+                  │                     │  Perfectionist.     │
+                  └─────────────────────┴─────────────────────┘
 ```
 
-**Numerator (recover what's yours):**
-- **Essence Clarity**: How much of who you actually are can you see and name? Was always there. Buried, not broken.
-- **Direction Clarity**: How clearly can you see what you'd build if nothing was in the way? Was always there. Hijacked, not absent.
+### The Three Zones
 
-**Denominator (name what was installed):**
-- **Wound Load**: How much unprocessed material is the protective voice guarding? Not yours. Was installed by events.
-- **Protective Strength**: How loud is the voice, and how automatically does it run? Not yours. Was the smartest adaptation your nervous system could make at the time.
+- **Hubris** (top-left): Belief exceeds capability. The Performer who takes on everything. The Controller who thinks they can manage it all. Overestimate to avoid feeling inadequate.
+- **Empowering Belief** (diagonal): Belief matches capability. Grounded confidence. "I know what I can do, I know what I can't, and I'm growing."
+- **Limiting Belief** (bottom-right): Capability exceeds belief. "I'm not ready." "Who am I to do this?" The Ghost who could do it but won't try. The Perfectionist who IS good enough but doesn't believe it.
 
 ### How It Works
 
-Each variable scored 1-10. The score tells you:
-- Which variable is your bottleneck
-- Which tools to use next
-- Whether you need more self-knowledge work or you're ready for action
+Almost everyone arriving at FindMyFlow is **bottom-right**. They're more capable than they believe. The limiting beliefs are installed, not earned. The work isn't to become more capable. It's to let their belief catch up to their reality.
 
-**The critical insight:** You don't need a zero denominator to move. You need the numerator to be louder than the denominator. A person with clear essence and clear direction who still carries wound load can build beautifully, as long as they can hear their own voice over the protective one.
+The protective archetypes map to the zones:
 
-That's what alignment means. Not "fully healed." Just "essence louder than protection."
-
-### Tools That Move Each Variable
-
-| Variable | Tools | Direction |
+| Zone | Archetype | Pattern |
 |---|---|---|
-| **Essence Clarity** (increase) | Essence Mirror, Curiosity Compass, Archetypes (essence), Hero Avatar | Recovering who you were before the edit |
-| **Direction Clarity** (increase) | Flow Finder (Skills, Problems, Personas), Mind Space combination | Recovering what you'd naturally build |
-| **Wound Load** (decrease) | Wound Map, Healing Compass, 4 R's (Recognise, Release, Rewire, Reclaim), Levels 1-4 | Naming and processing what was installed |
-| **Protective Strength** (decrease) | Tension Assessment, Protective Archetype naming, Groan Matrix, Play-List courage challenges | Acting despite the voice until it quiets |
+| **Hubris** (top-left) | Performer, Controller | Overestimate to avoid inadequacy |
+| **Limiting** (bottom-right) | Ghost, Perfectionist | Underestimate to avoid failure |
+| **Diagonal** | Empowering belief | Belief proportional to capability |
 
-The Groan Matrix is especially interesting here. Every completed courage challenge directly reduces Protective Strength, not by healing the wound, but by proving to the nervous system that the thing it's guarding against is survivable.
+The groan challenges move you toward the diagonal from BOTH sides:
+- Bottom-right: Challenge proves you're more capable than you believed. Belief rises to match capability.
+- Top-left: Challenge gives honest reality feedback. Belief adjusts to match actual capability.
+
+The diagonal moves as you grow. As capability increases through action, belief should increase proportionally through evidence. That's not a fixed line.
+
+**The critical insight:** Most of the beliefs running your life have never been tested. That's not conviction. That's software.
+
+### Tools That Move You Toward the Diagonal
+
+| Direction | Tools | What They Do |
+|---|---|---|
+| **Raise belief** (bottom-right → diagonal) | Groan Matrix, Play-List courage challenges, Essence Mirror, Curiosity Compass | Test limiting beliefs with action. Prove to your nervous system that you can survive what it's protecting you from. |
+| **Ground belief** (top-left → diagonal) | Tension Assessment, Healing Compass, 4 R's, Wound Map | Get honest about what's real vs. what's performed. Name the hubris pattern. |
+| **Increase capability** (move right on X-axis) | Flow Finder, Mind Space, Business stages, Validation | Build real skills, real direction, real evidence of capability. |
 
 ### Part 2 Output
 
@@ -354,8 +374,6 @@ The diagonal is the result.
 
 1. **Part name: "The Flood"** is the weakest of the three names. The Crack and The Diagonal are strong. The Flood communicates "overwhelm" but might not feel aspirational enough for the part where the real self-knowledge work happens. Alternatives to consider: The Mirror, The Seeing, The Unburying.
 
-2. **Alignment Equation denominator**: Wound Load and Protective Strength are deeply coupled (the wound IS why the protection exists). Might they collapse into one variable? Or does the distinction matter because you work on them differently (healing vs. courage challenges)?
+2. **Essence Test vs. existing Essence Zone**: The Essence Test is already implemented in the app as `calculateEssenceZone()` in the Groan Matrix scoring. It's been treated as a feature mechanic, not a signature framework. Elevating it to signature model status means it needs to be presented with the same weight and clarity as the other two models.
 
-3. **Essence Test vs. existing Essence Zone**: The Essence Test is already implemented in the app as `calculateEssenceZone()` in the Groan Matrix scoring. It's been treated as a feature mechanic, not a signature framework. Elevating it to signature model status means it needs to be presented with the same weight and clarity as the other two models.
-
-4. **Part 1 substance**: Part 1 has the fewest tools (Wound Map, Essence Mirror, Hero Avatar). It might function better as a prologue than a full third of the book. Or the Installation Map model is powerful enough that Part 1 is more about the conceptual framework than the toolset.
+3. **Part 1 substance**: Part 1 has the fewest tools (Wound Map, Essence Mirror, Hero Avatar). It might function better as a prologue than a full third of the book. Or the Installation Map model is powerful enough that Part 1 is more about the conceptual framework than the toolset.

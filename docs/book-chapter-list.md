@@ -141,17 +141,15 @@ By the time you're done, three things have happened:
 
 ---
 
-### 14. The Five Protectors
+### 14. The Four Responses
 
-Your nervous system is brilliant. It built exactly the right guard for exactly the right wound.
+Your nervous system only had two options: activate or shut down. And within each, two directions: toward or away.
 
-The Performer: Worth equals output. Stop producing and you disappear.
-The Controller: If I manage everything, nothing can go wrong again.
-The Perfectionist: If it's not perfect, it's proof I'm not enough.
-The Ghost: If I disappear, I can't be rejected.
-The People Pleaser: If everyone is happy, I'm safe.
+The Controller fights. The Ghost flees. The Perfectionist freezes. The Auto-Pilot shuts down.
 
-*[Image: Five figures standing in front of a locked door, each in a different posture]*
+Four responses. One job: keep the wound buried.
+
+*[Image: The nervous system 2x2. Energised (Y) x Safety (X). Four archetypes in their quadrants. Ventral diagonal glowing.]*
 
 ---
 
@@ -165,33 +163,45 @@ It's not your enemy. It's your bodyguard who doesn't know the war is over.
 
 ---
 
-### 16. The Performer Builds Someone Else's Dream
+### 16. The Controller
 
-I know this one. My protective voice was the Performer. I worked harder, achieved more, climbed higher. Not because it lit me up. Because stopping felt like dying.
+I know this one. My protective voice was the Controller. I worked harder, achieved more, managed everything. Not because it lit me up. Because stopping felt like dying.
 
-The Performer doesn't build YOUR dream. It builds the most impressive thing it can find. To prove you're enough.
+The Controller doesn't build YOUR dream. It builds the most impressive thing it can find. To prove you're enough. Performing is just controlling what people think of you.
 
 *[Image: A trophy shelf, full. Person in front of it, empty.]*
 
 ---
 
-### 17. The Ghost Disappears from the Arena
+### 17. The Ghost
 
-If the Performer moves too fast, the Ghost doesn't move at all. High self-knowledge, low action. Sees everything clearly from the audience. Never steps onto the stage.
+The Ghost doesn't fight. It flees. Withdraws, avoids, disappears. There's energy in the disappearing. The Ghost isn't frozen. It's running. It just looks passive from the outside because the direction is away.
 
 Disappearing is the safest possible strategy. You can't be rejected if you're not there.
 
-*[Image: An empty stage, spotlight on. One figure watching from the back row.]*
+*[Image: An empty stage, spotlight on. One figure leaving through the back door.]*
 
 ---
 
-### 18. The Perfectionist Waits Until It's Safe
+### 18. The Perfectionist
 
-The Perfectionist has a beautiful story: "I just want to get it right." But "right" never arrives. The bar moves every time you approach it.
+The Perfectionist is the gas and brake pressed at the same time. High standards are the gas. Paralysis is the brake. They WANT to move. They can't.
 
-It's not about quality. It's about never having to face the possibility that your best wasn't good enough.
+"I just want to get it right." But "right" never arrives. The bar moves every time you approach it. It's not about quality. It's about never having to face the possibility that your best wasn't good enough.
 
-*[Image: A person polishing something already gleaming, oblivious to the open door behind them]*
+*[Image: A person at a starting line, muscles tense, feet locked to the ground.]*
+
+---
+
+### 18b. The Auto-Pilot
+
+The Auto-Pilot is the one nobody notices. Not fighting. Not fleeing. Not even stuck. Just... going through the motions.
+
+Goes to work. Pays bills. Smiles at dinner. Nobody home.
+
+This is where most people are when The Crack happens. They're not in crisis. They're in absence. And they've been calling it "fine" for years.
+
+*[Image: A person at a dinner table, smiling. Eyes completely empty. Everyone else animated.]*
 
 ---
 
@@ -277,77 +287,69 @@ This is not laziness. This is your nervous system doing exactly what it was inst
 
 ---
 
-### 26. The Alignment Equation
+### 26. The Belief Graph
 
-There's a way to measure this. Four variables. Two you're recovering. Two you're reducing.
+There's a way to see this. Two axes. What you believe about yourself. And what the evidence actually shows.
 
-What was always yours, divided by what was installed.
-
-*[Image: The equation. Clean. One page. Nothing else.]*
-
-```
-         Essence Clarity  x  Direction Clarity
-    A = ───────────────────────────────────────
-          Wound Load  x  Protective Strength
-```
+*[Image: The Belief Graph. Clean. Full page. Belief (Y) x Capability (X). Three zones: Hubris, Empowering Belief, Limiting Belief.]*
 
 ---
 
-### 27. Essence Clarity
+### 27. Hubris
 
-How much of who you actually are can you see and name?
+Top-left of the graph. Belief exceeds capability. The Performer who takes on everything. The Controller who thinks they can manage it all.
 
-This was always there. Not built from courses. Recovered from underneath the installation. The more of it you can see, the higher your numerator.
+This was me in year two of the VC job. Working harder than anyone. Believing I could outrun the emptiness if I just achieved more. My belief in what I was building was sky-high. My actual capability to build something aligned was zero.
 
-Score yourself 1-10. Most people arriving at the crack are a 2.
+Hubris isn't confidence. It's the Performer's anaesthetic.
 
-*[Image: A mirror clearing slowly. The reflection is becoming sharper but isn't complete yet.]*
-
----
-
-### 28. Direction Clarity
-
-How clearly can you see what you'd build if nothing was in the way?
-
-Not a business plan. A felt direction. The skills that feel like play, the problems that make you angry, the people you can't stop thinking about.
-
-This was also always there. Hijacked by the installation. Not absent.
-
-*[Image: A compass clearing from fog. The needle is starting to settle.]*
+*[Image: A person sprinting on a treadmill, sweating, going nowhere. Speedometer maxed out.]*
 
 ---
 
-### 29. Wound Load
+### 28. Limiting Belief
 
-How much unprocessed material is the protective voice guarding?
+Bottom-right of the graph. Capability exceeds belief. This is where most people reading this book live.
 
-This is not yours. It was installed by events. Every unprocessed wound is weight on the denominator. The heavier it is, the louder the protective voice needs to be.
+You're more capable than you believe. The beliefs holding you back are installed, not earned. "I'm not ready" was installed when you were twelve. "Who am I to do this" was installed when someone laughed at your first attempt.
 
-*[Image: A backpack full of stones. Each stone has a date scratched into it.]*
+You don't need more capability. You need your belief to catch up to your reality.
 
----
-
-### 30. Protective Strength
-
-How loud is the voice, and how automatically does it run?
-
-At first, the protective voice is invisible. You think its thoughts are your thoughts. Its fears are your fears. Its decisions are your decisions.
-
-The first step to reducing it is hearing it as separate from you.
-
-*[Image: A radio playing static. A hand reaching for the volume dial.]*
+*[Image: A person standing at the edge of a pool. The water is shallow. They think it's deep.]*
 
 ---
 
-### 31. You Don't Need a Zero
+### 29. The Diagonal
 
-Here's what everyone gets wrong: you don't need to heal everything before you move.
+Belief proportional to capability. Grounded confidence. Not arrogant, not crippled. You know what you can do. You know what you can't. And you're growing.
 
-You don't need a zero denominator. You need the numerator to be louder than the denominator. Essence louder than protection.
+The diagonal moves. As your capability increases through action, your belief should increase through evidence. Not hope. Not affirmation. Evidence.
 
-That's alignment. Not "fully healed." Just "I can hear my own voice."
+*[Image: A person walking steadily along a path. Not sprinting. Not frozen. Each step slightly more assured than the last.]*
 
-*[Image: Two speakers. One labelled "Essence" slightly louder than the one labelled "Protection." A person leaning toward the louder one.]*
+---
+
+### 30. Never Been Tested
+
+Here's the thing about limiting beliefs: most of them have never been tested.
+
+"People will judge me." Have you checked? "I'm not good enough." Compared to what? "Nobody will pay for this." Have you asked?
+
+Believed for twenty years. Tested zero times. That's not conviction. That's software.
+
+*[Image: A wall covered in sticky notes. Each one says a fear. At the bottom, in small text: "Times tested: 0"]*
+
+---
+
+### 31. One Test Changes Everything
+
+You don't need to dismantle the belief. You need to test it once.
+
+Post your face online. Quote your real price. Share the unfinished thing. One data point is worth more than twenty years of assumption.
+
+Most beliefs dissolve on first contact with evidence.
+
+*[Image: A single sticky note falling off the wall from Chapter 30. Behind it, clean wall.]*
 
 ---
 
@@ -448,11 +450,11 @@ Learning to tell the difference is the entire game. Everything else is just tool
 
 ---
 
-### 41. The Performer Says "More"
+### 41. The Controller Says "More"
 
-The Performer's version of the flood: turn self-knowledge into another achievement. Do the healing perfectly. Complete every assessment. Optimise the self-knowledge process.
+The Controller's version of the flood: turn self-knowledge into another achievement. Do the healing perfectly. Complete every assessment. Optimise the self-knowledge process.
 
-Still performing. Just performing healing now.
+Still controlling. Just controlling healing now.
 
 *[Image: A gold star sticker on a therapy journal]*
 
@@ -462,7 +464,7 @@ Still performing. Just performing healing now.
 
 The Ghost's version: consume everything, share nothing. Read every book. Complete every quiz. Build the most detailed internal map of yourself that nobody will ever see.
 
-Still hiding. Just hiding behind self-knowledge now.
+Still fleeing. Just fleeing into self-knowledge now.
 
 *[Image: A beautiful map locked in a drawer]*
 
@@ -547,17 +549,13 @@ The equation doesn't care which side you work on. It only cares that the ratio i
 
 ---
 
-### 50. The Highest Score in the Room
+### 50. Bottom Right
 
-I scored my alignment at the peak of the flood. Essence clarity: 8. Direction clarity: 7. Wound load: 6. Protective strength: 8.
+At the peak of the flood, I could have plotted myself on the Belief Graph. High capability (I had skills, ideas, clarity). Rock-bottom belief ("but who am I to do this?").
 
-(8 x 7) / (6 x 8) = 56/48 = 1.17
+I was as far bottom-right as you can get. Maximum capability. Minimum belief. The most qualified person in the room who was convinced he had no right to be there.
 
-Barely above 1. I knew more about myself than I ever had. And my protective voice was almost exactly as loud as my essence.
-
-No wonder I couldn't move.
-
-*[Image: A scoreboard showing a score just barely tipping past 1.0]*
+*[Image: The Belief Graph with a single dot in the extreme bottom-right corner. Far from the diagonal.]*
 
 ---
 

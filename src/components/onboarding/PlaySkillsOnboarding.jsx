@@ -79,9 +79,10 @@ const BEATS = {
 }
 
 const HOOK_SLIDES = [
-  { id: 'childhood', text: 'Take a moment to think about you as a kid.', subtext: 'How playful you were. How full of love. How care-free.' },
-  { id: 'remember', text: 'Remember that?', subtext: null },
-  { id: 'question', text: 'So where did they go?', subtext: null },
+  { id: 'childhood', text: 'Think about you as a kid.', subtext: 'How playful you were. How full of love. How care-free.\n\nSo where did they go?' },
+  { id: 'splinters', text: 'Somewhere along the way, we collect emotional splinters.', subtext: 'Experiences that made being ourselves feel unsafe.\n\nOur nervous system = our safety system.\n\nSo to stop this from happening again, protective patterns were created.' },
+  { id: 'story', text: 'At 14 I was a playful, dancing, rainbow.', subtext: 'I wore fluro pinks, blues, oranges, purples and uploaded videos of me dancing on Facebook.\n\nThen I got teased for it.\n\nSo for the next TWELVE YEARS I never wore rainbow clothes or danced sober again. Basically the things that make me feel most like me.' },
+  { id: 'cta', text: 'This is what breaks my heart about emotional splinters.', subtext: 'They leave us scared to be ourselves.\n\nAnd this suppression causes depression.\n\nReady to reconnect to your essence and express again?' },
 ]
 
 // ─── Prompt ─────────────────────────────────────────────────────────────────
@@ -317,32 +318,19 @@ export default function PlaySkillsOnboarding() {
     }
   }, [isEntering, currentBeat, hookSlideIndex])
 
-  // Load saved progress
+  // Load saved progress — only restore hook/signup/verify beats (play-skills beats moved to /play-skills-identifier)
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) {
         const p = JSON.parse(saved)
-        if (Date.now() - p.timestamp < 24 * 60 * 60 * 1000) {
-          let beat = p.currentBeat
-          // Don't restore transient loading states
-          if (beat === BEATS.MAPPING) beat = BEATS.PASTE
-          if (beat === BEATS.SWIPE && (!p.mappedCards || p.mappedCards.length === 0)) {
-            beat = p.path === 'b' ? BEATS.WHEEL_CATEGORIES : BEATS.PASTE
-          }
-          if (beat) setCurrentBeat(beat)
-          if (p.path) setPath(p.path)
+        const validBeats = [BEATS.HOOK, BEATS.SIGNUP, BEATS.VERIFY]
+        if (Date.now() - p.timestamp < 24 * 60 * 60 * 1000 && validBeats.includes(p.currentBeat)) {
+          if (p.currentBeat) setCurrentBeat(p.currentBeat)
           if (p.hookSlideIndex !== undefined) setHookSlideIndex(p.hookSlideIndex)
-          if (p.selectedCategories) setSelectedCategories(p.selectedCategories)
-          if (p.keptPlacemakes) setKeptPlacemakes(p.keptPlacemakes)
-          if (p.mappedCards) setMappedCards(p.mappedCards)
-          if (p.rawResponse) setRawResponse(p.rawResponse)
           if (p.userName) setUserName(p.userName)
           if (p.email) setEmail(p.email)
           if (p.whatsapp) setWhatsapp(p.whatsapp)
-          if (p.clusters) setClusters(p.clusters)
-          if (p.categoryExtractions) setCategoryExtractions(p.categoryExtractions)
-          if (p.selectedItems) setSelectedItems(p.selectedItems)
         } else {
           localStorage.removeItem(STORAGE_KEY)
         }
@@ -390,7 +378,7 @@ export default function PlaySkillsOnboarding() {
         setIsEntering(true)
       }, 250)
     } else {
-      transitionTo(BEATS.AI_GATE)
+      transitionTo(BEATS.SIGNUP)
     }
   }
 
@@ -702,7 +690,7 @@ export default function PlaySkillsOnboarding() {
         <div className="jo-hook-content">
           <div className="jo-hook-text-container">
             <h1 className="jo-hook-text" key={slide.id}>{slide.text}</h1>
-            {slide.subtext && <p className="jo-hook-subtext">{slide.subtext}</p>}
+            {slide.subtext && <div className="jo-hook-subtext">{slide.subtext.split('\n\n').map((para, i) => <p key={i} style={{ marginBottom: i < slide.subtext.split('\n\n').length - 1 ? '1rem' : 0 }}>{para}</p>)}</div>}
           </div>
         </div>
         <div className="jo-slide-dots">
@@ -711,11 +699,16 @@ export default function PlaySkillsOnboarding() {
           ))}
         </div>
         {isLast ? (
-          <button className="jo-hook-continue" onClick={(e) => { e.stopPropagation(); handleHookTap() }}>
-            <span className="jo-shimmer-layer" />
-            Let's find out
-            <span className="jo-btn-arrow">&#8594;</span>
-          </button>
+          <>
+            <button className="jo-hook-continue" onClick={(e) => { e.stopPropagation(); transitionTo(BEATS.SIGNUP) }}>
+              <span className="jo-shimmer-layer" />
+              Let's go
+              <span className="jo-btn-arrow">&#8594;</span>
+            </button>
+            <button className="pso-back-link" onClick={(e) => { e.stopPropagation(); navigate('/log-in') }} style={{ marginTop: '0.75rem' }}>
+              Already have an account? Log in
+            </button>
+          </>
         ) : (
           <div className="jo-tap-anywhere-hint">Tap anywhere to continue</div>
         )}
@@ -1122,7 +1115,7 @@ export default function PlaySkillsOnboarding() {
           <div className="jo-glow jo-glow-2" />
         </div>
         <div className="jo-signup-content">
-          <h2 className="jo-signup-heading">Save your play-skills</h2>
+          <h2 className="jo-signup-heading">Let's begin</h2>
           <p className="jo-signup-subtext">Create your account to start your journey</p>
           <form className="jo-signup-form" onSubmit={(e) => {
             e.preventDefault()

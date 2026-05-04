@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FindMyFlow — Play-List Picker Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#5e17eb;--gold:#E9A23B;
+  --text:#1a1a2e;--text-dim:#6b7280;--text-faint:#9ca3af;
+  --bg:#ffffff;--bg-card:#f8f9fa;--border:#e5e7eb;
+  --radius:16px;--radius-sm:10px;
+}
+body{
+  font-family:'DM Sans',sans-serif;color:var(--text);
+  background:#f0f0f5;min-height:100dvh;
+  display:flex;justify-content:center;align-items:flex-end;
+  -webkit-font-smoothing:antialiased;
+}
+/* Modal shell */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,.4);
+  display:flex;align-items:flex-end;justify-content:center;
+}
+.modal{
+  width:100%;max-width:420px;max-height:85dvh;
+  background:var(--bg);border-radius:20px 20px 0 0;
+  overflow-y:auto;padding:0 0 2rem;
+  animation:slideUp .3s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* Header */
+.mpp-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 1.25rem .75rem;position:sticky;top:0;
+  background:var(--bg);z-index:2;border-bottom:1px solid var(--border);
+}
+.mpp-back{
+  background:none;border:none;color:var(--purple);font-size:.85rem;
+  font-weight:600;cursor:pointer;font-family:inherit;padding:0;
+}
+.mpp-close{
+  background:none;border:none;color:var(--text-faint);font-size:1.4rem;
+  cursor:pointer;line-height:1;
+}
+.mpp-step-label{
+  font-size:.7rem;color:var(--text-faint);text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+/* Section card */
+.mpp-section{padding:1.25rem}
+.mpp-section-head{
+  display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem;
+}
+.mpp-section-icon{font-size:1.3rem}
+.mpp-section-title{font-size:1rem;font-weight:700}
+.mpp-section-sub{color:var(--text-dim);font-size:.82rem;margin-bottom:1rem;line-height:1.5}
+
+/* Item rows */
+.mpp-items{display:flex;flex-direction:column}
+.mpp-item{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.75rem .1rem;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:background .15s;
+}
+.mpp-item:last-child{border-bottom:none}
+.mpp-item:hover{background:rgba(94,23,235,.03)}
+.mpp-item:active{background:rgba(94,23,235,.06)}
+.mpp-item-text{flex:1;font-size:.88rem;line-height:1.4}
+.mpp-item-meta{font-size:.72rem;color:var(--text-faint);margin-top:.15rem}
+.mpp-item-arrow{color:var(--text-faint);font-size:1.1rem;flex-shrink:0}
+
+/* Subsection label */
+.mpp-label{
+  font-size:.68rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.2px;color:var(--gold);
+  margin:1rem 0 .4rem;padding-bottom:.3rem;
+  border-bottom:1px solid rgba(233,162,59,.15);
+}
+.mpp-label.dim{color:var(--text-faint);border-bottom-color:var(--border)}
+
+/* Challenge form */
+.mpp-form{display:flex;flex-direction:column;gap:.75rem}
+.mpp-input{
+  width:100%;padding:.75rem;background:var(--bg-card);
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-family:inherit;font-size:.88rem;color:var(--text);
+}
+.mpp-input:focus{outline:none;border-color:var(--purple)}
+.mpp-input::placeholder{color:var(--text-faint)}
+
+.mpp-context{
+  background:rgba(94,23,235,.04);border-radius:var(--radius-sm);
+  padding:.65rem .85rem;font-size:.78rem;color:var(--purple);
+  line-height:1.5;
+}
+.mpp-context strong{font-weight:600}
+
+/* Gold button */
+.mpp-gold{
+  width:100%;padding:.85rem;border:none;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--gold),#d4891f);color:#fff;
+  font-family:inherit;font-weight:700;font-size:.9rem;
+  cursor:pointer;transition:transform .15s,box-shadow .2s;
+}
+.mpp-gold:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(233,162,59,.25)}
+.mpp-gold:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Day pills */
+.mpp-days{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem}
+.mpp-day{
+  padding:.5rem .85rem;border:1.5px solid var(--border);
+  border-radius:20px;background:var(--bg);font-size:.82rem;
+  font-family:inherit;cursor:pointer;transition:all .15s;
+  color:var(--text);
+}
+.mpp-day:hover{border-color:var(--purple)}
+.mpp-day.selected{background:var(--purple);color:white;border-color:var(--purple)}
+
+/* Collapsible help */
+.mpp-help-toggle{
+  display:flex;align-items:center;gap:.4rem;
+  background:none;border:none;color:var(--text-faint);
+  font-size:.78rem;cursor:pointer;font-family:inherit;
+  padding:.5rem 0;margin-top:.5rem;
+}
+.mpp-help-toggle:hover{color:var(--purple)}
+.mpp-help-items{
+  background:var(--bg-card);border-radius:var(--radius-sm);
+  padding:.5rem .75rem;margin-top:.25rem;
+}
+.mpp-help-item{
+  font-size:.8rem;color:var(--text-dim);padding:.35rem 0;
+  border-bottom:1px solid rgba(0,0,0,.04);cursor:pointer;
+}
+.mpp-help-item:last-child{border-bottom:none}
+.mpp-help-item:hover{color:var(--purple)}
+
+/* Steps container */
+.step{display:none}
+.step.active{display:block}
+
+/* Success */
+.mpp-success{text-align:center;padding:3rem 1.5rem}
+.mpp-success-icon{font-size:3rem;margin-bottom:.5rem}
+.mpp-success-text{font-size:1.1rem;font-weight:600;color:var(--text)}
+</style>
+</head>
+<body>
+<div class="modal-bg">
+<div class="modal">
+
+  <!-- ═══ STEP 1: ROLE ═══ -->
+  <div class="step active" id="step-role">
+    <div class="mpp-header">
+      <span class="mpp-step-label">🎓 Teaching</span>
+      <button class="mpp-close" onclick="alert('Close modal')">&times;</button>
+    </div>
+    <div class="mpp-section">
+      <div class="mpp-section-head">
+        <span class="mpp-section-icon">💼</span>
+        <span class="mpp-section-title">How do you want to show up?</span>
+      </div>
+      <p class="mpp-section-sub">Pick the role that fits this challenge.</p>
+
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-topic')">
+          <div class="mpp-item-text">Course Creator</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-topic')">
+          <div class="mpp-item-text">Workshop Leader</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-topic')">
+          <div class="mpp-item-text">YouTube Educator</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-topic')">
+          <div class="mpp-item-text">Author</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-topic')">
+          <div class="mpp-item-text">Framework Designer</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 2: TOPIC ═══ -->
+  <div class="step" id="step-topic">
+    <div class="mpp-header">
+      <button class="mpp-back" onclick="goTo('step-role')">&larr; Workshop Leader</button>
+      <button class="mpp-close" onclick="alert('Close modal')">&times;</button>
+    </div>
+    <div class="mpp-section">
+      <div class="mpp-section-head">
+        <span class="mpp-section-icon">🎯</span>
+        <span class="mpp-section-title">What problem will you tackle?</span>
+      </div>
+      <p class="mpp-section-sub">Pick a topic or write your own.</p>
+
+      <!-- Feeling stupid when you're not -->
+      <div class="mpp-label">😵‍💫 Feeling stupid when you're not</div>
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Life-changing science is trapped inside clinical jargon and academic papers where normal people never find it.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Serious or woo-woo framing makes people cringe and never start the work — including me, five years ago.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+
+      <!-- Forgetting what it was all for -->
+      <div class="mpp-label">🌑 Forgetting what it was all for</div>
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">You achieve everything you were told to want, and somewhere underneath it is a quiet, confusing flatness.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">The crack happens when the body forces the question: what was the output in service of?</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Not being able to see your own life story as something that matters</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+
+      <!-- Kids who deserved better -->
+      <div class="mpp-label">👶 Kids who deserved better</div>
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Kids walk out of thirteen years of school with armor and masks already welded on, and nobody ever taught them self-knowledge.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+
+      <!-- A life that isn't yours to live -->
+      <div class="mpp-label">🎭 A life that isn't yours to live</div>
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">People design a whole life from a self that was constructed to be acceptable — then wonder why it feels empty.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Living a fear-driven, externally-validated existence instead of a love-driven, internally-grounded one.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+
+      <!-- Locked out of what you need -->
+      <div class="mpp-label">🔒 Locked out of what you need</div>
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Real transformation is paywalled — thousands for therapy, tens of thousands for retreats, Robbins events for the people who already made it.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Wellness apps either have game mechanics without depth, or depth without any play — nothing integrates the body.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+
+      <!-- People who stopped wondering -->
+      <div class="mpp-label">🤔 People who stopped wondering</div>
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">The healing industry diagnoses instead of explores — hands you answers when what you needed was a better question.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">People stop wondering — they pick one lens (logic, hustle, productivity) and stop noticing the body is also trying to speak.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Trying to control everything instead of learning to dance with it</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+
+      <!-- The voice that got taken -->
+      <div class="mpp-label">😤 The voice that got taken</div>
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Teenage years shut down authentic expression — banter and teasing as micro-traumas — and most people never get it back.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+
+      <!-- Work that hollows you out -->
+      <div class="mpp-label">😔 Work that hollows you out</div>
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Burning out not from the hours but from the meaninglessness — high performance, low aliveness.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Business owners trapped as the system itself — nervous systems so wired they literally can't stop.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+
+      <!-- Your work being treated as nothing -->
+      <div class="mpp-label">💔 Your work being treated as nothing</div>
+      <div class="mpp-items">
+        <div class="mpp-item" onclick="goTo('step-challenge')">
+          <div class="mpp-item-text">Conscious leaders under-earn and play small — brilliant facilitators with no architecture to scale beyond 1:1.</div>
+          <span class="mpp-item-arrow">&rsaquo;</span>
+        </div>
+      </div>
+
+      <div class="mpp-label dim">Write your own</div>
+      <div class="mpp-form">
+        <input class="mpp-input" type="text" placeholder="Type a topic...">
+        <button class="mpp-gold" disabled onclick="goTo('step-challenge')">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 3: CHALLENGE + DAY ═══ -->
+  <div class="step" id="step-challenge">
+    <div class="mpp-header">
+      <button class="mpp-back" onclick="goTo('step-topic')">&larr; Back</button>
+      <button class="mpp-close" onclick="alert('Close modal')">&times;</button>
+    </div>
+    <div class="mpp-section">
+      <div class="mpp-section-head">
+        <span class="mpp-section-icon">✏️</span>
+        <span class="mpp-section-title">Create your challenge</span>
+      </div>
+
+      <div class="mpp-context" style="margin-bottom:1rem">
+        <strong>Workshop Leader</strong> tackling<br>
+        <em>"Life-changing science is trapped inside clinical jargon..."</em>
+      </div>
+
+      <div class="mpp-form">
+        <input class="mpp-input" type="text" placeholder="What will you do this week?" value="Run a 15-min breathwork demo at the Canggu co-working space">
+
+        <div class="mpp-label" style="margin-top:.5rem">Pick a day</div>
+        <div class="mpp-days">
+          <button class="mpp-day">Mon</button>
+          <button class="mpp-day">Tue</button>
+          <button class="mpp-day selected">Wed</button>
+          <button class="mpp-day">Thu</button>
+          <button class="mpp-day">Fri</button>
+          <button class="mpp-day">Sat</button>
+          <button class="mpp-day">Sun</button>
+        </div>
+
+        <!-- Collapsible play-skill inspiration -->
+        <button class="mpp-help-toggle" onclick="toggleHelp()">
+          <span id="help-arrow">▶</span> Need inspiration? See your play-skills
+        </button>
+        <div class="mpp-help-items" id="help-panel" style="display:none">
+          <div class="mpp-help-item" onclick="document.querySelector('.mpp-input[type=text]:last-of-type').value='Translate polyvagal theory into a 5-slide carousel for Instagram'">
+            Translating clinical healing science into language a Bali tourist can feel in their body
+          </div>
+          <div class="mpp-help-item" onclick="document.querySelector('.mpp-input[type=text]:last-of-type').value='Create a LEGO castle walkthrough for my next product feature'">
+            Using the LEGO castle analogy to make tech concepts click for beginners
+          </div>
+          <div class="mpp-help-item" onclick="document.querySelector('.mpp-input[type=text]:last-of-type').value='Build a framework for somatic breathwork that someone can run without me'">
+            Building a framework others can use without you
+          </div>
+          <div class="mpp-help-item" onclick="document.querySelector('.mpp-input[type=text]:last-of-type').value='Record a 3-min explainer that makes ACT therapy click'">
+            Creating the moment something finally clicks
+          </div>
+          <div class="mpp-help-item" onclick="document.querySelector('.mpp-input[type=text]:last-of-type').value='Simplify the Zone Calibration Framework into one page anyone can follow'">
+            Making the complex simple enough that anyone can hold it
+          </div>
+        </div>
+
+        <button class="mpp-gold" onclick="goTo('step-success')" style="margin-top:1rem">
+          Accept Challenge
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SUCCESS ═══ -->
+  <div class="step" id="step-success">
+    <div class="mpp-success">
+      <div class="mpp-success-icon">✅</div>
+      <div class="mpp-success-text">Challenge confirmed!</div>
+      <p style="color:var(--text-dim);font-size:.85rem;margin-top:.5rem">
+        Workshop Leader × Wednesday
+      </p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+function goTo(id){
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function toggleHelp(){
+  const panel = document.getElementById('help-panel');
+  const arrow = document.getElementById('help-arrow');
+  if(panel.style.display === 'none'){
+    panel.style.display = 'block';
+    arrow.textContent = '▼';
+  } else {
+    panel.style.display = 'none';
+    arrow.textContent = '▶';
+  }
+}
+document.querySelectorAll('.mpp-day').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mpp-day').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  });
+});
+</script>
+</body>
+</html>

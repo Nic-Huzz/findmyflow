@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movement XP - V2 Ring</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f0f0; display: flex; justify-content: center; padding: 20px; }
+  .phone { width: 390px; min-height: 600px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 40px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+    padding: 24px 20px 20px;
+    border-radius: 0 0 20px 20px;
+    color: white;
+  }
+
+  /* V2: Ring — circular XP progress with level, stats below */
+  .header-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .header-title { font-size: 18px; font-weight: 800; }
+
+  .xp-ring-container {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .xp-ring {
+    width: 52px; height: 52px; position: relative;
+  }
+  .xp-ring svg { transform: rotate(-90deg); }
+  .xp-ring-bg { fill: none; stroke: rgba(255,255,255,0.15); stroke-width: 4; }
+  .xp-ring-fill { fill: none; stroke: #E9A23B; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 138.2; stroke-dashoffset: 48.4; transition: stroke-dashoffset 0.5s ease; }
+  .xp-ring-center {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .xp-ring-val { font-size: 14px; font-weight: 800; color: #E9A23B; line-height: 1; }
+  .xp-ring-label { font-size: 7px; font-weight: 700; text-transform: uppercase; opacity: 0.6; letter-spacing: 0.05em; }
+
+  .xp-ring-meta { text-align: right; }
+  .xp-ring-level { font-size: 13px; font-weight: 700; }
+  .xp-ring-next { font-size: 10px; opacity: 0.5; }
+
+  .stats-row {
+    display: flex; gap: 2px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px; padding: 8px 4px;
+  }
+  .stat { text-align: center; flex: 1; }
+  .stat-val { font-size: 17px; font-weight: 800; }
+  .stat-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.5; }
+
+  /* Content */
+  .content { padding: 16px 20px; }
+  .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 16px; }
+  .tab { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 10px 6px; text-align: center; cursor: pointer; }
+  .tab.active { background: linear-gradient(135deg, #5e17eb, #7c3aed); color: white; border-color: transparent; }
+  .tab-title { font-size: 12px; font-weight: 700; }
+  .tab-sub { font-size: 9px; opacity: 0.6; margin-top: 2px; }
+
+  .card { background: white; border: 1px solid #e9ecef; border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+  .card-title { font-size: 14px; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; color: #6c757d; }
+  .label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #adb5bd; letter-spacing: 0.04em; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="header">
+    <div class="header-top">
+      <div class="header-title">Creator Portal</div>
+      <div class="xp-ring-container">
+        <div class="xp-ring-meta">
+          <div class="xp-ring-level">Level 3</div>
+          <div class="xp-ring-next">75 XP to next</div>
+        </div>
+        <div class="xp-ring">
+          <svg viewBox="0 0 48 48" width="52" height="52">
+            <circle class="xp-ring-bg" cx="24" cy="24" r="22" />
+            <circle class="xp-ring-fill" cx="24" cy="24" r="22" />
+          </svg>
+          <div class="xp-ring-center">
+            <div class="xp-ring-val">145</div>
+            <div class="xp-ring-label">XP</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-val">3</div>
+        <div class="stat-label">experiences</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">47</div>
+        <div class="stat-label">attendees</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">23%</div>
+        <div class="stat-label">repeat</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">3/3</div>
+        <div class="stat-label">3%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="tabs">
+      <div class="tab"><div class="tab-title">My Business</div><div class="tab-sub">Your setup</div></div>
+      <div class="tab active"><div class="tab-title">Experiences</div><div class="tab-sub">Your events</div></div>
+      <div class="tab"><div class="tab-title">Dashboard</div><div class="tab-sub">Your data</div></div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #E9A23B;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div class="card-title">Breathwork for Burnout Recovery</div>
+          <div class="card-sub"><span style="color: #E9A23B; font-weight: 700;">10 days</span> away &nbsp; 🎪 workshop</div>
+        </div>
+        <div style="font-size: 12px; color: #E9A23B; font-weight: 600; background: rgba(233,162,59,0.1); padding: 4px 10px; border-radius: 99px;">Sun, May 10</div>
+      </div>
+      <div style="margin-top: 10px;">
+        <a href="#" style="font-size: 13px; color: #5e17eb; font-weight: 700; text-decoration: none;">View Checklist →</a>
+      </div>
+      <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #f1f3f5;">
+        <div class="label">Active Strikes</div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 6px 0;">
+          <span style="font-size: 14px;">🔥</span>
+          <span style="flex: 1; font-size: 13px; font-weight: 600; color: #1a1a2e;">Post a reel challenging "healing needs to be serious"</span>
+          <span style="font-size: 11px; font-weight: 700; color: #E9A23B;">5d</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid #f8f9fa;">
+          <span style="font-size: 14px;">⚡</span>
+          <span style="flex: 1; font-size: 13px; font-weight: 600; color: #1a1a2e; text-decoration: line-through; opacity: 0.5;">DM 10 people about why play heals faster</span>
+          <span style="font-size: 11px; font-weight: 700; color: #10b981;">done</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

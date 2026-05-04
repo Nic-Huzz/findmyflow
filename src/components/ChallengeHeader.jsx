@@ -75,7 +75,7 @@ function ChallengeHeader({
           setLifetimeXP(newXP)
         }
       })
-  }, [user?.id, totalXP]) // re-fetch when totalXP changes (quest completed)
+  }, [user?.id, totalXP, lifetimeXP]) // re-fetch when totalXP changes (quest completed)
 
   // Flame size based on streak length
   const getFlameClass = () => {
@@ -187,12 +187,10 @@ function ChallengeHeader({
       {/* Bottom row: Streak + actions */}
       <div className="challenge-header-top">
         <div className="challenge-header-badges">
-          {/* ARCHIVED: Streak badge — re-enable when streak tracking is active
           <div className="streak-badge">
             <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
             <span className="streak-badge-num">{streakDays}</span>
           </div>
-          */}
           {/* ARCHIVED: Leaderboard button — re-enable when league is active
           <div
             className="challenge-day archetype-badge"

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience Creator Matching — V3 Story Scroll</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: #0f0a1e;
+    color: white;
+    min-height: 100vh;
+  }
+  .container { max-width: 440px; margin: 0 auto; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    padding: 3rem 1.5rem 2rem;
+    text-align: center;
+    border-radius: 0 0 32px 32px;
+  }
+  .hero-badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.8rem; margin-bottom: 1rem; }
+  .hero h1 { font-size: 1.75rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.75rem; }
+  .hero h1 span { background: linear-gradient(135deg, #ffdd27, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { color: rgba(255,255,255,0.65); font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+  .selected-float {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(15,10,30,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 0.75rem 1.5rem;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  }
+  .selected-float-inner { max-width: 440px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  .selected-float-avatars { display: flex; }
+  .selected-float-avatars img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #0f0a1e; margin-left: -10px; }
+  .selected-float-avatars img:first-child { margin-left: 0; }
+  .selected-float-text { font-size: 0.8rem; color: rgba(255,255,255,0.6); }
+  .selected-float-text strong { color: #fcd34d; }
+  .selected-float-btn { padding: 0.65rem 1.25rem; background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; font-weight: 700; font-size: 0.85rem; border: none; border-radius: 12px; cursor: pointer; }
+
+  /* ===== CATEGORY SECTIONS ===== */
+  .category-section { padding: 2rem 1.5rem 1rem; }
+  .category-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem; }
+  .category-emoji { font-size: 1.5rem; }
+  .category-title { font-size: 1.125rem; font-weight: 800; }
+  .category-subtitle { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 1.25rem; margin-left: 2.25rem; }
+
+  /* Horizontal scroll row */
+  .people-row {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    margin: 0 -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .people-row::-webkit-scrollbar { display: none; }
+
+  .person-card {
+    flex-shrink: 0;
+    width: 260px;
+    scroll-snap-align: start;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .person-card:hover { border-color: rgba(255,255,255,0.2); }
+  .person-card.selected { border-color: #E9A23B; background: rgba(233,162,59,0.08); }
+  .person-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 28px; height: 28px;
+    background: #E9A23B;
+    color: #1a1a2e;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .person-card img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+  .person-card-body { padding: 1rem; }
+  .person-card-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+  .person-card-oneliner { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.4; }
+  .person-card-model { margin-top: 0.5rem; display: inline-block; font-size: 0.7rem; background: rgba(233,162,59,0.15); border: 1px solid rgba(233,162,59,0.3); color: #fcd34d; padding: 0.2rem 0.6rem; border-radius: 100px; }
+
+  /* ===== DIVIDER ===== */
+  .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); margin: 0 1.5rem; }
+
+  /* ===== RESULT ===== */
+  .result-section {
+    background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    padding: 2rem 1.5rem 3rem;
+    margin-top: 1rem;
+    border-radius: 32px 32px 0 0;
+    display: none;
+  }
+  .result-section.active { display: block; }
+  .result-header { text-align: center; margin-bottom: 1.5rem; }
+  .result-badge { display: inline-block; background: rgba(233,162,59,0.2); border: 1px solid rgba(233,162,59,0.4); color: #fcd34d; padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+  .result-header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .result-header p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+
+  .selected-people-row { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5rem; }
+  .selected-person-chip { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 4px 10px 4px 4px; border-radius: 100px; font-size: 0.8rem; }
+  .selected-person-chip img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
+
+  .offer-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .offer-card-top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .offer-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .offer-dot.attraction { background: #3b82f6; }
+  .offer-dot.core { background: #7c3aed; }
+  .offer-dot.scale { background: #E9A23B; }
+  .offer-dot.continuity { background: #10b981; }
+  .offer-card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); }
+  .offer-card-name { font-weight: 700; font-size: 0.95rem; }
+  .offer-card-desc { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.5; margin-bottom: 0.75rem; }
+  .offer-card-proof { font-size: 0.78rem; color: rgba(233,162,59,0.85); font-style: italic; padding-left: 0.75rem; border-left: 2px solid rgba(233,162,59,0.3); margin-bottom: 1rem; }
+
+  .offer-actions { display: flex; gap: 0.5rem; }
+  .offer-btn {
+    flex: 1;
+    padding: 0.7rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .offer-btn.yes { background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; }
+  .offer-btn.no { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.15); }
+
+  .next-step-card {
+    background: rgba(233,162,59,0.1);
+    border: 1px solid rgba(233,162,59,0.25);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  .next-step-card h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #fcd34d; margin-bottom: 0.75rem; }
+  .next-step-card p { font-size: 1rem; font-weight: 600; line-height: 1.5; margin-bottom: 1.25rem; }
+  .save-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; font-weight: 700; font-size: 1.125rem; border: none; border-radius: 14px; cursor: pointer; box-shadow: 0 8px 24px rgba(233,162,59,0.3); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Experience Creator Matching</div>
+  <h1>Who would you love<br>to <span>build like?</span></h1>
+  <p>Scroll through real people who built careers from experiences. Tap anyone who inspires you.</p>
+</div>
+
+<div class="container">
+
+  <!-- CATEGORY 1: Workshops -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-emoji">🎓</span>
+      <span class="category-title">Workshops & Training</span>
+    </div>
+    <div class="category-subtitle">Build expertise, teach it live, certify others</div>
+    <div class="people-row">
+      <div class="person-card selected" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/bren-brown.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Brené Brown</div>
+          <div class="person-card-oneliner">Turned the thing everyone hides from into the thing everyone needs</div>
+          <div class="person-card-model">Certification Empire</div>
+        </div>
+      </div>
+      <div class="person-card selected" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/wim-hof.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Wim Hof</div>
+          <div class="person-card-oneliner">Proved a freezing river can teach you more than ten years of therapy</div>
+          <div class="person-card-model">Method Certification</div>
+        </div>
+      </div>
+      <div class="person-card" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/john-gottman.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">John Gottman</div>
+          <div class="person-card-oneliner">Measured love with heart rate monitors and predicted divorce at 94%</div>
+          <div class="person-card-model">Research to Workshops</div>
+        </div>
+      </div>
+      <div class="person-card" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/marva-collins.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Marva Collins</div>
+          <div class="person-card-oneliner">Taught Plato to four-year-olds everyone else called unteachable</div>
+          <div class="person-card-model">One Classroom</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- CATEGORY 2: Live Events -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-emoji">🎭</span>
+      <span class="category-title">Live Events & Performance</span>
+    </div>
+    <div class="category-subtitle">Fill rooms with transformation, art, or catharsis</div>
+    <div class="people-row">
+      <div class="person-card" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/tony-robbins.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Tony Robbins</div>
+          <div class="person-card-oneliner">Built a cathedral of transformation you walk through in four days</div>
+          <div class="person-card-model">Live Events Empire</div>
+        </div>
+      </div>
+      <div class="person-card" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/nina-simone.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Nina Simone</div>
+          <div class="person-card-oneliner">Channeled rage into beauty at the piano, one audience at a time</div>
+          <div class="person-card-model">Live Performance</div>
+        </div>
+      </div>
+      <div class="person-card" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/glennon-doyle.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Glennon Doyle</div>
+          <div class="person-card-oneliner">Built a movement by saying what mothers weren't supposed to say</div>
+          <div class="person-card-model">Community + Tour</div>
+        </div>
+      </div>
+      <div class="person-card" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/lin-manuel-miranda.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Lin-Manuel Miranda</div>
+          <div class="person-card-oneliner">Made hip-hop the language of the founding fathers</div>
+          <div class="person-card-model">Theatre + Licensing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- CATEGORY 3: Cohorts -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-emoji">👥</span>
+      <span class="category-title">Cohorts & Courses</span>
+    </div>
+    <div class="category-subtitle">Structured group programmes with start and end dates</div>
+    <div class="people-row">
+      <div class="person-card selected" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/marie-forleo.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Marie Forleo</div>
+          <div class="person-card-oneliner">Made business school feel like talking to your smartest friend</div>
+          <div class="person-card-model">Annual Cohort</div>
+        </div>
+      </div>
+      <div class="person-card" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/ali-abdaal.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Ali Abdaal</div>
+          <div class="person-card-oneliner">Built a bigger business than his medical salary by being curious on camera</div>
+          <div class="person-card-model">Creator Educator</div>
+        </div>
+      </div>
+      <div class="person-card" onclick="this.classList.toggle('selected')">
+        <img src="../public/images/creators/jay-shetty.png" onerror="this.parentElement.style.display='none'">
+        <div class="person-card-body">
+          <div class="person-card-name">Jay Shetty</div>
+          <div class="person-card-oneliner">Translated monastic wisdom into content a scrolling generation stopped for</div>
+          <div class="person-card-model">Media to Certification</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FLOATING SELECTION BAR -->
+<div class="selected-float">
+  <div class="selected-float-inner">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <div class="selected-float-avatars">
+        <img src="../public/images/creators/bren-brown.png" onerror="this.style.display='none'">
+        <img src="../public/images/creators/wim-hof.png" onerror="this.style.display='none'">
+        <img src="../public/images/creators/marie-forleo.png" onerror="this.style.display='none'">
+      </div>
+      <div class="selected-float-text"><strong>3</strong> selected</div>
+    </div>
+    <button class="selected-float-btn" onclick="showResult()">See My Model →</button>
+  </div>
+</div>
+
+<!-- RESULT SECTION (slides up from bottom) -->
+<div class="result-section" id="resultSection">
+  <div class="result-header">
+    <div class="result-badge">Your Model</div>
+    <h1>Certification Empire</h1>
+    <p>You build deep expertise, codify it into a method, then train others to deliver it.</p>
+  </div>
+
+  <div class="selected-people-row">
+    <div class="selected-person-chip"><img src="../public/images/creators/bren-brown.png" onerror="this.style.display='none'"> Brené Brown</div>
+    <div class="selected-person-chip"><img src="../public/images/creators/wim-hof.png" onerror="this.style.display='none'"> Wim Hof</div>
+    <div class="selected-person-chip"><img src="../public/images/creators/marie-forleo.png" onerror="this.style.display='none'"> Marie Forleo</div>
+  </div>
+
+  <div class="offer-card">
+    <div class="offer-card-top">
+      <div class="offer-dot attraction"></div>
+      <div>
+        <div class="offer-card-label">Attraction</div>
+        <div class="offer-card-name">Free content that demonstrates your method</div>
+      </div>
+    </div>
+    <div class="offer-card-desc">Podcast, YouTube, or free workshops that let people experience your approach before paying.</div>
+    <div class="offer-card-proof">"Brené's TED talk: 60M views. Tara Brach's free podcast: 200M downloads."</div>
+    <div class="offer-actions">
+      <button class="offer-btn yes">Hell Yes</button>
+      <button class="offer-btn no">Other options</button>
+    </div>
+  </div>
+
+  <div class="offer-card">
+    <div class="offer-card-top">
+      <div class="offer-dot core"></div>
+      <div>
+        <div class="offer-card-label">Core Offer</div>
+        <div class="offer-card-name">Live workshop or course ($500-$5K)</div>
+      </div>
+    </div>
+    <div class="offer-card-desc">A structured transformation experience you deliver live. Your bread and butter.</div>
+    <div class="offer-card-proof">"Marie Forleo's B-School: 80,000 students, 195 countries, 8-figure annual launch."</div>
+    <div class="offer-actions">
+      <button class="offer-btn yes">Hell Yes</button>
+      <button class="offer-btn no">Other options</button>
+    </div>
+  </div>
+
+  <div class="offer-card">
+    <div class="offer-card-top">
+      <div class="offer-dot scale"></div>
+      <div>
+        <div class="offer-card-label">Scale</div>
+        <div class="offer-card-name">Certify others to teach your method</div>
+      </div>
+    </div>
+    <div class="offer-card-desc">Train practitioners to deliver without you in the room. You own the IP, not the calendar.</div>
+    <div class="offer-card-proof">"Wim Hof: 1,500 instructors in 45 countries. All from a frozen canal in Amsterdam."</div>
+    <div class="offer-actions">
+      <button class="offer-btn yes">Hell Yes</button>
+      <button class="offer-btn no">Other options</button>
+    </div>
+  </div>
+
+  <div class="offer-card">
+    <div class="offer-card-top">
+      <div class="offer-dot continuity"></div>
+      <div>
+        <div class="offer-card-label">Continuity</div>
+        <div class="offer-card-name">Online courses + app subscriptions</div>
+      </div>
+    </div>
+    <div class="offer-card-desc">Recurring revenue that flows while you sleep.</div>
+    <div class="offer-card-proof">"Wim Hof app: 2M downloads. Brené Brown: Netflix special + Audible exclusives."</div>
+    <div class="offer-actions">
+      <button class="offer-btn yes">Hell Yes</button>
+      <button class="offer-btn no">Other options</button>
+    </div>
+  </div>
+
+  <div class="next-step-card">
+    <h3>Your First Step</h3>
+    <p>Run one free workshop on your topic this month. Every person you selected started the same way: teaching for free in the smallest room available.</p>
+    <button class="save-btn">Save My Model</button>
+  </div>
+</div>
+
+<script>
+function showResult() {
+  document.querySelector('.selected-float').style.display = 'none';
+  document.getElementById('resultSection').classList.add('active');
+  document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

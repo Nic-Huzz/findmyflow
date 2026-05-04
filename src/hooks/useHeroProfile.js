@@ -165,7 +165,7 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         .from('quest_completions')
         .select('quest_id, quest_type, quest_category, completed_at')
         .eq('user_id', userId)
-        .or('quest_category.eq.Healing,quest_type.in.(Recognise,Release,Rewire,Reconnect)')
+        .or('quest_category.eq.Healing,quest_type.in.(Recognise,Release,Rewire,Reconnect,Rest)')
 
       const nervousSystemPromise = supabase
         .from('nervous_system_responses')
@@ -343,6 +343,7 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
           release: healingCompletions.filter(c => c.quest_id?.startsWith('release_') || c.quest_type === 'Release').length,
           rewire: healingCompletions.filter(c => c.quest_id?.startsWith('rewire_') || c.quest_type === 'Rewire').length,
           reconnect: healingCompletions.filter(c => c.quest_id?.startsWith('reconnect_') || c.quest_type === 'Reconnect').length,
+          rest: healingCompletions.filter(c => c.quest_id?.startsWith('rest_') || c.quest_type === 'Rest').length,
         },
         totalHealingCompleted: healingCompletions.length,
       }

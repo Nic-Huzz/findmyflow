@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FindMyFlow — Updated Skills Flow Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#5e17eb;--purple-deep:#1a0540;--purple-mid:#2d0b6e;
+  --gold:#E9A23B;--gold-soft:rgba(233,162,59,.15);
+  --text:#f0eef5;--text-dim:rgba(255,255,255,.55);--text-faint:rgba(255,255,255,.3);
+  --green:#10b981;
+  --radius:16px;--radius-sm:10px;
+}
+html{font-size:16px}
+body{
+  font-family:'DM Sans',sans-serif;color:var(--text);
+  background:var(--purple-deep);min-height:100dvh;
+  display:flex;justify-content:center;
+  -webkit-font-smoothing:antialiased;
+}
+.shell{
+  width:100%;max-width:420px;min-height:100dvh;position:relative;overflow:hidden;
+  background:linear-gradient(165deg,var(--purple-mid) 0%,var(--purple-deep) 55%,#0d021f 100%);
+}
+.glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;opacity:.4}
+.glow-1{width:280px;height:280px;background:var(--purple);top:-60px;left:-80px}
+.glow-2{width:200px;height:200px;background:var(--gold);bottom:80px;right:-90px;opacity:.16}
+
+/* Steps */
+.step{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:2.5rem 1.5rem 2rem;overflow-y:auto;
+  opacity:0;transform:translateY(24px);pointer-events:none;
+  transition:opacity .4s ease,transform .4s ease;
+}
+.step.active{opacity:1;transform:translateY(0);pointer-events:auto}
+
+/* Step indicator */
+.step-indicator{
+  display:flex;justify-content:center;gap:6px;margin-bottom:1.5rem;
+}
+.step-dot{
+  width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.1);
+  transition:all .3s;
+}
+.step-dot.active{background:var(--gold);width:24px}
+.step-dot.done{background:var(--green)}
+
+/* Typography */
+h1{font-family:'Playfair Display',serif;font-size:1.55rem;line-height:1.25;margin-bottom:.4rem}
+h2{font-family:'Playfair Display',serif;font-size:1.25rem;line-height:1.3;margin-bottom:.35rem}
+.subtitle{color:var(--text-dim);font-size:.85rem;line-height:1.55;margin-bottom:1.25rem}
+
+/* Buttons */
+.btn-gold{
+  width:100%;padding:.9rem 1.1rem;border:none;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--gold),#d4891f);color:#1a0540;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .15s,box-shadow .25s;
+}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(233,162,59,.28)}
+.btn-gold .shimmer{
+  position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
+  animation:shimmer 3s infinite;
+}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+
+.btn-secondary{
+  width:100%;padding:.8rem 1rem;border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-sm);background:rgba(255,255,255,.04);
+  color:var(--text);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.85rem;
+  cursor:pointer;transition:border-color .2s,background .2s;
+}
+.btn-secondary:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.07)}
+
+.back-link{
+  display:block;text-align:center;margin-top:.65rem;
+  background:none;border:none;color:var(--text-faint);
+  font-size:.78rem;cursor:pointer;font-family:inherit;padding:.4rem;
+}
+
+/* Paste area */
+.paste-area{
+  width:100%;min-height:130px;padding:1rem;
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-sm);color:var(--text);font-family:inherit;
+  font-size:.85rem;line-height:1.5;resize:vertical;
+}
+.paste-area::placeholder{color:var(--text-faint)}
+.paste-area:focus{outline:none;border-color:var(--gold)}
+
+/* Prompt preview */
+.prompt-preview{
+  background:rgba(255,255,255,.05);border-radius:10px;padding:.85rem;
+  font-size:.72rem;color:var(--text-faint);max-height:90px;overflow:hidden;
+  line-height:1.4;margin-bottom:1rem;
+}
+
+/* External links */
+.ext-links{display:flex;gap:.5rem;margin-top:.6rem}
+.ext-links a{
+  flex:1;text-align:center;text-decoration:none;
+  color:var(--text-faint);font-size:.75rem;padding:.4rem;
+}
+.ext-links a:hover{color:var(--text-dim)}
+
+/* Loading */
+.loader-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.25rem}
+.spinner-ring{
+  width:48px;height:48px;border:3px solid rgba(255,255,255,.08);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{color:var(--text-dim);font-size:.85rem;font-style:italic}
+.loader-steps{display:flex;flex-direction:column;gap:.5rem;margin-top:1rem;width:100%;max-width:260px}
+.loader-step{
+  display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--text-faint);
+}
+.loader-step.done{color:var(--green)}
+.loader-step.active{color:var(--gold)}
+.loader-check{width:16px;text-align:center}
+
+/* Cluster cards */
+.cluster-card{
+  background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.08);
+  border-left:3px solid var(--gold);
+  border-radius:var(--radius);
+  padding:1.15rem 1.1rem;margin-bottom:.85rem;
+  cursor:pointer;transition:border-color .2s,background .2s,transform .15s;
+}
+.cluster-card:hover{
+  background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);
+  border-left-color:var(--gold);transform:translateY(-1px);
+}
+.cluster-card.explored{border-left-color:var(--green);opacity:.7}
+.cluster-name{font-weight:700;font-size:.98rem;margin-bottom:.45rem;display:flex;align-items:center;gap:.4rem}
+.cluster-done{color:var(--green);font-size:.8rem}
+.cluster-insight{font-size:.8rem;line-height:1.55;color:var(--text-dim);font-style:italic;margin-bottom:.7rem}
+.cluster-tags{display:flex;flex-wrap:wrap;gap:5px}
+.cluster-tag{
+  font-size:.65rem;padding:2px 8px;border-radius:20px;
+  background:rgba(233,162,59,.1);color:var(--gold);
+  border:1px solid rgba(233,162,59,.18);font-weight:500;
+}
+
+/* Swipe card */
+.swipe-container{flex:1;display:flex;flex-direction:column}
+.swipe-header{text-align:center;margin-bottom:.75rem}
+.swipe-header h2{font-size:1.05rem}
+.swipe-breadcrumb{
+  font-size:.65rem;color:var(--gold);opacity:.6;
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:.3rem;
+}
+.swipe-card{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--radius);padding:1.5rem 1.25rem;
+  margin-bottom:.75rem;
+}
+.swipe-image{
+  width:180px;height:180px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(94,23,235,.3),rgba(233,162,59,.2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:3.5rem;margin-bottom:1rem;
+}
+.swipe-badge{
+  display:inline-block;font-size:.65rem;padding:3px 10px;border-radius:20px;
+  background:rgba(255,255,255,.08);color:var(--text-dim);
+  margin-bottom:.6rem;font-weight:600;
+}
+.swipe-skill-name{font-size:.95rem;font-weight:600;line-height:1.4;margin-bottom:.5rem}
+.swipe-evidence{
+  font-size:.75rem;color:var(--text-faint);font-style:italic;
+  line-height:1.5;max-width:300px;
+}
+.swipe-evidence.truncated{
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.show-more{
+  background:none;border:none;color:var(--gold);font-size:.72rem;
+  cursor:pointer;font-family:inherit;margin-top:.2rem;opacity:.7;
+}
+.swipe-actions{display:flex;gap:1rem;justify-content:center;margin-top:.5rem}
+.swipe-btn{
+  width:56px;height:56px;border-radius:50%;border:2px solid;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;cursor:pointer;background:rgba(255,255,255,.04);
+  transition:transform .15s,box-shadow .2s;
+}
+.swipe-btn:hover{transform:scale(1.08)}
+.swipe-no{border-color:rgba(239,68,68,.35);color:#ef4444}
+.swipe-yes{border-color:rgba(16,185,129,.35);color:var(--green)}
+.swipe-dots{display:flex;gap:4px;justify-content:center;margin-top:.5rem}
+.swipe-dot{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.1)}
+.swipe-dot.active{background:var(--gold);width:18px}
+.swipe-dot.done{background:var(--green)}
+
+/* Sub-select */
+.progress-tag{
+  text-align:center;font-size:.65rem;color:var(--text-faint);
+  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.75rem;
+}
+.cat-header{display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem}
+.section-label{
+  font-size:.65rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.5px;margin:1rem 0 .5rem;
+  padding-bottom:.3rem;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.section-label.gold{color:var(--gold);border-bottom-color:rgba(233,162,59,.12)}
+.section-label.dim{color:var(--text-faint)}
+.check-row{
+  display:flex;align-items:flex-start;gap:.6rem;
+  padding:.5rem 0;cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.check-box{
+  width:20px;height:20px;border:2px solid rgba(255,255,255,.18);
+  border-radius:5px;flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,border-color .15s;
+}
+.check-row.checked .check-box{background:var(--gold);border-color:var(--gold)}
+.check-row.checked .check-box::after{content:'✓';color:#1a0540;font-size:.65rem;font-weight:700}
+.check-label{font-size:.82rem;line-height:1.4;flex:1}
+.check-evidence{
+  display:block;font-size:.7rem;line-height:1.45;
+  color:var(--text-faint);font-style:italic;margin-top:.15rem;
+}
+.custom-row{display:flex;gap:.5rem;margin-top:.25rem}
+.custom-input{
+  flex:1;padding:.5rem .75rem;background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);
+  color:var(--text);font-family:inherit;font-size:.82rem;
+}
+.custom-input::placeholder{color:var(--text-faint)}
+.custom-input:focus{outline:none;border-color:var(--gold)}
+.custom-add{
+  padding:.5rem .85rem;background:rgba(233,162,59,.12);
+  border:1px solid rgba(233,162,59,.25);border-radius:var(--radius-sm);
+  color:var(--gold);font-weight:600;font-size:.8rem;cursor:pointer;font-family:inherit;
+}
+
+/* Satisfaction */
+.sat-btns{display:flex;flex-direction:column;gap:.7rem}
+.sat-btn{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.9rem 1rem;border:1.5px solid rgba(255,255,255,.08);
+  border-radius:var(--radius);background:rgba(255,255,255,.04);
+  cursor:pointer;transition:border-color .2s;text-align:left;
+}
+.sat-btn.primary{background:linear-gradient(135deg,var(--gold),#d4891f);border:none;color:#1a0540}
+.sat-btn.primary .sat-sub{color:rgba(26,5,64,.55)}
+.sat-btn-icon{font-size:1.4rem;flex-shrink:0}
+.sat-btn-text{display:flex;flex-direction:column;gap:1px}
+.sat-btn-title{font-weight:700;font-size:.88rem}
+.sat-sub{font-size:.75rem;color:var(--text-dim)}
+
+/* Scroll */
+.step::-webkit-scrollbar{width:3px}
+.step::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:4px}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <!-- ═══ STEP 1: Copy Prompt ═══ -->
+  <div class="step active" id="s1">
+    <div class="step-indicator">
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+    <h1>Identify Your Skills</h1>
+    <p class="subtitle">Paste this prompt into the AI you've been chatting with. It will find which skills you naturally use.</p>
+    <div class="prompt-preview">
+      Analyze our entire conversation history and identify the specific skills I naturally use and gravitate toward. For each skill you identify, write it in MY voice...
+    </div>
+    <button class="btn-gold" onclick="goTo('s2')">
+      <span class="shimmer"></span>
+      Copy Prompt
+    </button>
+    <div class="ext-links">
+      <a href="#">Open ChatGPT</a>
+      <a href="#">Open Claude</a>
+    </div>
+    <button class="btn-gold" onclick="goTo('s2')" style="margin-top:1.25rem">
+      <span class="shimmer"></span>
+      I have my results →
+    </button>
+  </div>
+
+  <!-- ═══ STEP 2: Paste ═══ -->
+  <div class="step" id="s2">
+    <div class="step-indicator">
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+    <h2>Paste your AI extraction</h2>
+    <p class="subtitle">Paste the skills extraction from your AI conversation below.</p>
+    <textarea class="paste-area" placeholder="Paste the extraction here...">SKILL: Walking in with energy and turning audiences into participants
+CATEGORY: Performing
+EVIDENCE: Your 20-min shaking breathwork intro...</textarea>
+    <div style="height:1rem"></div>
+    <button class="btn-gold" onclick="goTo('s3')">
+      <span class="shimmer"></span>
+      Find My Skills →
+    </button>
+    <button class="back-link" onclick="goTo('s1')">← Back</button>
+  </div>
+
+  <!-- ═══ STEP 3: Loading (3-phase) ═══ -->
+  <div class="step" id="s3">
+    <div class="loader-wrap">
+      <div class="spinner-ring"></div>
+      <div class="loader-text">Analysing your skills...</div>
+      <div class="loader-steps">
+        <div class="loader-step done">
+          <span class="loader-check">✓</span> Parsing extraction
+        </div>
+        <div class="loader-step active">
+          <span class="loader-check">◌</span> Matching skill images
+        </div>
+        <div class="loader-step">
+          <span class="loader-check">◌</span> Finding your themes
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 4: Cluster Selection ═══ -->
+  <div class="step" id="s4">
+    <div class="step-indicator">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+    <h1>Your Skill Spaces</h1>
+    <p class="subtitle">We found 3 themes in how you show up. Pick one to explore.</p>
+
+    <div class="cluster-card" onclick="goTo('s5')">
+      <div class="cluster-name">Experience Architect</div>
+      <div class="cluster-insight">You shape moments and experiences that move people. Whether walking into a room with infectious energy, designing gamified flows, or inventing frameworks that stick, you orchestrate journeys that make transformation feel tangible.</div>
+      <div class="cluster-tags">
+        <span class="cluster-tag">🎭 Performing</span>
+        <span class="cluster-tag">🎨 Creating</span>
+        <span class="cluster-tag">✨ Designing</span>
+      </div>
+    </div>
+
+    <div class="cluster-card" onclick="goTo('s5')">
+      <div class="cluster-name">Empower & Equip</div>
+      <div class="cluster-insight">You enable others to transform independently. You translate complex science into accessible language, read stuck points instantly, and build systems others can use without you. Lasting capability, not just moments.</div>
+      <div class="cluster-tags">
+        <span class="cluster-tag">🎓 Teaching</span>
+        <span class="cluster-tag">🧭 Coaching</span>
+        <span class="cluster-tag">🔨 Building</span>
+      </div>
+    </div>
+
+    <div class="cluster-card" onclick="goTo('s5')">
+      <div class="cluster-name">Authentic Leadership</div>
+      <div class="cluster-insight">Your moral core in action. You build genuine community containers where vulnerability is safe, and you name what's true even when it challenges industry norms.</div>
+      <div class="cluster-tags">
+        <span class="cluster-tag">🤝 Connecting</span>
+        <span class="cluster-tag">📢 Speaking up</span>
+      </div>
+    </div>
+
+    <button class="back-link" onclick="goTo('s2')">← Back to paste</button>
+  </div>
+
+  <!-- ═══ STEP 5: Swipe Cards (within cluster) ═══ -->
+  <div class="step" id="s5">
+    <div class="swipe-container">
+      <div class="swipe-header">
+        <div class="swipe-breadcrumb">Experience Architect</div>
+        <h2>Does this skill sound like you?</h2>
+      </div>
+
+      <div class="swipe-card">
+        <div class="swipe-image">🎭</div>
+        <div class="swipe-badge">🎭 Performing</div>
+        <div class="swipe-skill-name">Walking in with energy and turning audiences into participants within minutes</div>
+        <div class="swipe-evidence truncated">
+          Your 20-min shaking breathwork intro opens with "You walk in with ENERGY... PAUSE. Eye contact around the room... Why are you HERE?" — forcing people to actually answer out loud.
+        </div>
+        <button class="show-more">Show more</button>
+      </div>
+
+      <div class="swipe-actions">
+        <div class="swipe-btn swipe-no">✗</div>
+        <div class="swipe-btn swipe-yes" onclick="goTo('s6')">✓</div>
+      </div>
+
+      <div class="swipe-dots">
+        <div class="swipe-dot active"></div>
+        <div class="swipe-dot"></div>
+        <div class="swipe-dot"></div>
+        <div class="swipe-dot"></div>
+        <div class="swipe-dot"></div>
+        <div class="swipe-dot"></div>
+        <div class="swipe-dot"></div>
+      </div>
+
+      <button class="back-link" onclick="goTo('s4')">← Back to clusters</button>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 6: Sub-select ═══ -->
+  <div class="step" id="s6">
+    <div class="step-indicator">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+    <div class="swipe-breadcrumb" style="text-align:center;margin-bottom:.25rem">Experience Architect</div>
+    <div class="progress-tag">Performing — 1 of 3 categories</div>
+    <div class="cat-header">
+      <span style="font-size:1.2rem">🎭</span>
+      <h2 style="margin:0;font-size:1rem">Performing</h2>
+    </div>
+    <p class="subtitle" style="margin-bottom:.75rem">Tick the skills that light you up.</p>
+
+    <div class="section-label gold">From Your Conversations</div>
+
+    <div class="check-row checked" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">
+        Walking in with energy and turning audiences into participants
+        <span class="check-evidence">Matched: Getting a room to lean forward</span>
+      </div>
+    </div>
+
+    <div class="check-row checked" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">
+        Compressing a flow journey into a 3-min talent show performance
+        <span class="check-evidence">Matched: Making the moment itself the message</span>
+      </div>
+    </div>
+
+    <div class="check-row checked" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">
+        Signature Pipe Cleaner at landmarks worldwide
+        <span class="check-evidence">Matched: Putting yourself on record</span>
+      </div>
+    </div>
+
+    <div class="section-label dim">Pre-Defined</div>
+
+    <div class="check-row" onclick="this.classList.toggle('checked')">
+      <div class="check-box"></div>
+      <div class="check-label">Performing with nothing but your body and voice</div>
+    </div>
+
+    <div class="section-label dim">Identify your own</div>
+    <div class="custom-row">
+      <input class="custom-input" type="text" placeholder="Type a skill...">
+      <button class="custom-add">Add</button>
+    </div>
+
+    <div style="height:1.25rem"></div>
+    <button class="btn-gold" onclick="goTo('s7')">
+      <span class="shimmer"></span>
+      Continue (3 selected) →
+    </button>
+    <button class="back-link" onclick="goTo('s5')">← Back</button>
+  </div>
+
+  <!-- ═══ STEP 7: Satisfaction ═══ -->
+  <div class="step" id="s7">
+    <div class="step-indicator">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <div style="text-align:center;font-size:2.5rem;margin-bottom:.6rem">✨</div>
+      <h1 style="text-align:center">8 categories, 18 skills identified</h1>
+      <p class="subtitle" style="text-align:center">Do these capture how you show up, or are some missing?</p>
+      <div class="sat-btns">
+        <div class="sat-btn primary" onclick="goTo('s8')">
+          <span class="sat-btn-icon">✅</span>
+          <div class="sat-btn-text">
+            <span class="sat-btn-title">These capture me</span>
+            <span class="sat-sub">Save and continue</span>
+          </div>
+        </div>
+        <div class="sat-btn">
+          <span class="sat-btn-icon">🎯</span>
+          <div class="sat-btn-text">
+            <span class="sat-btn-title">Some are missing</span>
+            <span class="sat-sub">Browse and add more categories</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 8: Signup ═══ -->
+  <div class="step" id="s8">
+    <div class="step-indicator">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <div style="text-align:center;font-size:2.5rem;margin-bottom:.6rem">🎯</div>
+      <h1 style="text-align:center">Your skills are locked in</h1>
+      <p class="subtitle" style="text-align:center">Create your account to save your results and continue your journey.</p>
+      <input class="custom-input" type="text" placeholder="Your name" style="margin-bottom:.6rem;padding:.75rem">
+      <input class="custom-input" type="email" placeholder="Email address" style="margin-bottom:1rem;padding:.75rem">
+      <button class="btn-gold" onclick="alert('Saved! Redirecting to /me...')">
+        <span class="shimmer"></span>
+        Create Account →
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+function goTo(id){
+  const active=document.querySelector('.step.active');
+  if(active)active.classList.remove('active');
+  const next=document.getElementById(id);
+  next.classList.add('active');
+  next.scrollTop=0;
+  if(id==='s3'){
+    setTimeout(()=>{
+      document.querySelector('.loader-step.active').classList.remove('active');
+      document.querySelector('.loader-step.active')?.classList.add('done');
+    },800);
+    setTimeout(()=>goTo('s4'),2200);
+  }
+}
+</script>
+</body>
+</html>

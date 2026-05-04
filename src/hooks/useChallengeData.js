@@ -134,6 +134,7 @@ export function useChallengeData() {
 
   // Constants
   const categories = ['Level', 'Play-list', 'Healing', 'Bonus']
+  const lockedCategories = new Set(['Play-list']) // Coming soon tabs
   const BONUS_PERCENTAGE = 5
 
   // ============================================
@@ -294,7 +295,7 @@ export function useChallengeData() {
           .select('*')
           .eq('user_id', user.id)
           .is('challenge_instance_id', null)
-          .or(`project_id.is.null,project_id.eq.${selectedProject?.id || '00000000-0000-0000-0000-000000000000'}`)
+          .or(`project_id.is.null,project_id.eq.${projectData?.id || '00000000-0000-0000-0000-000000000000'}`)
       ])
 
       const { data: challengeCompletions, error: completionsError } = challengeCompletionsResult
@@ -1584,7 +1585,8 @@ export function useChallengeData() {
       'Recognise': '🗺️',
       'Release': '⚓',
       'Rewire': '🧢',
-      'Reconnect': '⛵'
+      'Reconnect': '⛵',
+      'Rest': '😴'
     }
     return emojiMap[category] || '✨'
   }
@@ -1597,7 +1599,7 @@ export function useChallengeData() {
     const completionDates = new Set()
     completions.forEach(c => {
       const date = new Date(c.completed_at)
-      const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+      const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
       completionDates.add(dateKey)
     })
 
@@ -1607,14 +1609,14 @@ export function useChallengeData() {
     let checkDate = new Date(today)
 
     for (let i = 0; i < 30; i++) {
-      const dateKey = `${checkDate.getFullYear()}-${checkDate.getMonth()}-${checkDate.getDate()}`
+      const dateKey = `${checkDate.getFullYear()}-${checkDate.getMonth() + 1}-${checkDate.getDate()}`
       if (completionDates.has(dateKey)) {
         streak++
         checkDate.setDate(checkDate.getDate() - 1)
       } else if (i === 0) {
         // If no completions today, check if yesterday started the streak
         checkDate.setDate(checkDate.getDate() - 1)
-        const yesterdayKey = `${checkDate.getFullYear()}-${checkDate.getMonth()}-${checkDate.getDate()}`
+        const yesterdayKey = `${checkDate.getFullYear()}-${checkDate.getMonth() + 1}-${checkDate.getDate()}`
         if (completionDates.has(yesterdayKey)) {
           streak++
           checkDate.setDate(checkDate.getDate() - 1)
@@ -1868,6 +1870,7 @@ export function useChallengeData() {
 
     // Constants
     categories,
+    lockedCategories,
     BONUS_PERCENTAGE,
 
     // Data Loading

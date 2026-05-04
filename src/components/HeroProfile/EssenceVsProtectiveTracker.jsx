@@ -8,6 +8,7 @@ const HEALING_TYPES = [
   { id: 'release', label: 'Release', icon: '🌊' },
   { id: 'rewire', label: 'Rewire', icon: '🔄' },
   { id: 'reconnect', label: 'Reconnect', icon: '🌱' },
+  { id: 'rest', label: 'Rest', icon: '😴' },
 ]
 
 const DEFAULT_CONTRACTS_SHOWN = 3
@@ -237,7 +238,7 @@ function EssenceVsProtectiveTracker({ voiceTracker, archetypes, nervousSystemArc
 
         {!hasHealingData && (
           <p className="healing-empty-text">
-            Healing quests (Recognise, Release, Rewire, Reconnect) will track your inner growth journey.{' '}
+            Healing quests (Recognise, Release, Rewire, Reconnect, Rest) will track your inner growth journey.{' '}
             <span className="coming-soon-tag">Coming soon</span>
           </p>
         )}

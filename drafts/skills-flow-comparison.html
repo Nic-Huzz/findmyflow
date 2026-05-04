@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FindMyFlow — Skills Flow: Current vs Proposed</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#5e17eb;--purple-deep:#1a0540;--purple-mid:#2d0b6e;
+  --gold:#E9A23B;--gold-soft:rgba(233,162,59,.15);
+  --text:#f0eef5;--text-dim:rgba(255,255,255,.55);--text-faint:rgba(255,255,255,.3);
+  --radius:16px;--radius-sm:10px;
+}
+html{font-size:16px}
+body{
+  font-family:'DM Sans',sans-serif;color:var(--text);
+  background:#0a0118;min-height:100dvh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Layout: Side by Side ──────────────────────── */
+.comparison{
+  display:flex;gap:2rem;padding:2rem;max-width:960px;margin:0 auto;
+  flex-wrap:wrap;justify-content:center;
+}
+.panel{
+  flex:1;min-width:340px;max-width:420px;
+  border-radius:20px;overflow:hidden;position:relative;
+}
+.panel-current{border:2px solid rgba(255,255,255,.08)}
+.panel-proposed{border:2px solid rgba(233,162,59,.3)}
+
+.panel-label{
+  text-align:center;padding:.6rem;font-size:.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:2px;
+}
+.panel-current .panel-label{background:rgba(255,255,255,.05);color:var(--text-faint)}
+.panel-proposed .panel-label{background:rgba(233,162,59,.12);color:var(--gold)}
+
+.shell{
+  min-height:680px;position:relative;overflow:hidden;
+  background:linear-gradient(165deg,var(--purple-mid) 0%,var(--purple-deep) 55%,#0d021f 100%);
+}
+.glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;opacity:.35}
+.glow-1{width:250px;height:250px;background:var(--purple);top:-50px;left:-70px}
+.glow-2{width:180px;height:180px;background:var(--gold);bottom:60px;right:-80px;opacity:.15}
+
+/* ── Steps ──────────────────────────────────────── */
+.step{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:2rem 1.25rem 1.5rem;overflow-y:auto;
+  opacity:0;transform:translateY(20px);pointer-events:none;
+  transition:opacity .35s ease,transform .35s ease;
+}
+.step.active{opacity:1;transform:translateY(0);pointer-events:auto}
+
+/* ── Typography ─────────────────────────────────── */
+h2{font-family:'Playfair Display',serif;font-size:1.2rem;line-height:1.3;margin-bottom:.35rem}
+.subtitle{color:var(--text-dim);font-size:.82rem;line-height:1.5;margin-bottom:1.25rem}
+
+/* ── Buttons ────────────────────────────────────── */
+.btn-gold{
+  width:100%;padding:.85rem 1rem;border:none;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--gold),#d4891f);color:#1a0540;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:.85rem;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .15s,box-shadow .25s;
+}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(233,162,59,.25)}
+
+.back-link{
+  display:block;text-align:center;margin-top:.6rem;
+  background:none;border:none;color:var(--text-faint);
+  font-size:.75rem;cursor:pointer;font-family:inherit;padding:.4rem;
+}
+
+/* ── Swipe Card (Current) ───────────────────────── */
+.swipe-card{
+  background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--radius);padding:1.5rem;text-align:center;
+  margin-bottom:.75rem;
+}
+.swipe-badge{
+  display:inline-block;font-size:.65rem;padding:3px 10px;border-radius:20px;
+  background:rgba(255,255,255,.08);color:var(--text-dim);margin-bottom:.75rem;
+  font-weight:600;
+}
+.swipe-placemake{font-size:.95rem;font-weight:600;line-height:1.4;margin-bottom:.5rem}
+.swipe-famous{font-size:.75rem;color:var(--text-faint);font-style:italic}
+.swipe-actions{display:flex;gap:.75rem;margin-top:1rem;justify-content:center}
+.swipe-btn{
+  width:50px;height:50px;border-radius:50%;border:2px solid;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;cursor:pointer;background:rgba(255,255,255,.04);
+  transition:transform .15s;
+}
+.swipe-btn:hover{transform:scale(1.08)}
+.swipe-no{border-color:rgba(239,68,68,.4);color:#ef4444}
+.swipe-yes{border-color:rgba(16,185,129,.4);color:#10b981}
+.swipe-dots{display:flex;gap:4px;justify-content:center;margin-top:.75rem}
+.swipe-dot{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.12)}
+.swipe-dot.active{background:var(--gold);width:16px}
+
+/* ── Cluster Card (Proposed) ────────────────────── */
+.cluster-card{
+  background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.08);
+  border-left:3px solid var(--gold);
+  border-radius:var(--radius);
+  padding:1.1rem 1rem;margin-bottom:.85rem;
+  cursor:pointer;transition:border-color .2s,background .2s,transform .15s;
+}
+.cluster-card:hover{
+  background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.15);
+  border-left-color:var(--gold);transform:translateY(-1px);
+}
+.cluster-name{font-weight:700;font-size:.95rem;margin-bottom:.45rem}
+.cluster-insight{
+  font-size:.78rem;line-height:1.55;color:var(--text-dim);
+  font-style:italic;margin-bottom:.7rem;
+}
+.cluster-tags{display:flex;flex-wrap:wrap;gap:5px}
+.cluster-tag{
+  font-size:.63rem;padding:2px 8px;border-radius:20px;
+  background:rgba(233,162,59,.1);color:var(--gold);
+  border:1px solid rgba(233,162,59,.18);font-weight:500;
+}
+
+/* ── Sub-select ─────────────────────────────────── */
+.section-label{
+  font-size:.65rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.5px;margin:1rem 0 .5rem;
+  padding-bottom:.3rem;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.section-label.gold{color:var(--gold);border-bottom-color:rgba(233,162,59,.12)}
+.section-label.dim{color:var(--text-faint)}
+
+.check-row{
+  display:flex;align-items:flex-start;gap:.6rem;
+  padding:.5rem 0;cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.check-box{
+  width:20px;height:20px;border:2px solid rgba(255,255,255,.18);
+  border-radius:5px;flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,border-color .15s;
+}
+.check-row.checked .check-box{background:var(--gold);border-color:var(--gold)}
+.check-row.checked .check-box::after{content:'✓';color:#1a0540;font-size:.65rem;font-weight:700}
+.check-label{font-size:.82rem;line-height:1.4;flex:1}
+.check-evidence{
+  display:block;font-size:.7rem;line-height:1.45;
+  color:var(--text-faint);font-style:italic;margin-top:.15rem;
+}
+.check-generic{color:var(--text-dim)}
+
+/* ── Header badge ───────────────────────────────── */
+.cat-header{display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem}
+.progress-tag{
+  text-align:center;font-size:.65rem;color:var(--text-faint);
+  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.75rem;
+}
+
+/* ── Comparison header ──────────────────────────── */
+.page-title{
+  text-align:center;padding:2.5rem 1rem 0;
+  font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--text);
+}
+.page-sub{
+  text-align:center;padding:.5rem 1rem 1rem;
+  color:var(--text-dim);font-size:.85rem;
+}
+
+/* ── Scroll ─────────────────────────────────────── */
+.step::-webkit-scrollbar{width:3px}
+.step::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:4px}
+
+/* ── Highlight diff ─────────────────────────────── */
+.diff-callout{
+  background:rgba(233,162,59,.06);border:1px solid rgba(233,162,59,.15);
+  border-radius:10px;padding:.65rem .75rem;margin:.75rem 0;
+  font-size:.72rem;color:var(--gold);line-height:1.5;
+}
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Skills Flow: Current vs Proposed</h1>
+<p class="page-sub">Left: what users see now. Right: applying the problems flow pattern.</p>
+
+<div class="comparison">
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- CURRENT FLOW -->
+  <!-- ════════════════════════════════════════════════ -->
+  <div class="panel panel-current">
+    <div class="panel-label">Current Flow</div>
+    <div class="shell">
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+
+      <!-- Current: Swipe cards (generic placemakes) -->
+      <div class="step active" id="c-swipe">
+        <div class="progress-tag">Swipe Cards</div>
+        <h2>Does this sound like you?</h2>
+        <p class="subtitle">Swipe right to keep, left to skip.</p>
+
+        <div class="swipe-card">
+          <div class="swipe-badge">🎨 Creating</div>
+          <div class="swipe-placemake">Remixing two things nobody thought to combine</div>
+          <div class="swipe-famous">Think Virgil Abloh, Brian Eno</div>
+          <div class="swipe-actions">
+            <div class="swipe-btn swipe-no">✗</div>
+            <div class="swipe-btn swipe-yes" onclick="goTo('c-sub')">✓</div>
+          </div>
+        </div>
+        <div class="swipe-dots">
+          <div class="swipe-dot"></div>
+          <div class="swipe-dot"></div>
+          <div class="swipe-dot active"></div>
+          <div class="swipe-dot"></div>
+          <div class="swipe-dot"></div>
+          <div class="swipe-dot"></div>
+          <div class="swipe-dot"></div>
+          <div class="swipe-dot"></div>
+          <div class="swipe-dot"></div>
+        </div>
+
+        <div class="diff-callout">
+          Generic placemake text from taxonomy. Same for every user. No personal context.
+        </div>
+      </div>
+
+      <!-- Current: Sub-select (no personal items) -->
+      <div class="step" id="c-sub">
+        <div class="progress-tag">Sub-select</div>
+        <h2>No "From Your Conversations" section</h2>
+        <p class="subtitle">Only pre-defined placemakes available.</p>
+
+        <div class="section-label dim">Pre-Defined</div>
+
+        <div class="check-row checked" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label check-generic">Remixing two things nobody thought to combine</div>
+        </div>
+        <div class="check-row" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label check-generic">Making something that didn't exist before</div>
+        </div>
+        <div class="check-row" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label check-generic">Following a hunch everyone said was wrong</div>
+        </div>
+        <div class="check-row" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label check-generic">Making something with your hands every single day</div>
+        </div>
+
+        <div class="diff-callout">
+          All items are generic taxonomy text. Nothing personal. No evidence. The AI extraction mapped the user's words INTO these placemakes, losing the original language.
+        </div>
+
+        <button class="btn-gold" onclick="goTo('c-swipe')">← Back to swipe</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- PROPOSED FLOW -->
+  <!-- ════════════════════════════════════════════════ -->
+  <div class="panel panel-proposed">
+    <div class="panel-label">Proposed Flow</div>
+    <div class="shell">
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+
+      <!-- Proposed: Cluster selection -->
+      <div class="step active" id="p-clusters">
+        <h2>Your Skill Spaces</h2>
+        <p class="subtitle">We found 3 themes in how you show up. Pick one to explore.</p>
+
+        <div class="cluster-card" onclick="goTo('p-sub')">
+          <div class="cluster-name">The Translator</div>
+          <div class="cluster-insight">You take complex ideas from one world and rebuild them so a completely different world can use them. Polyvagal theory becomes a game. Business frameworks become somatic experiences. You bridge what shouldn't fit.</div>
+          <div class="cluster-tags">
+            <span class="cluster-tag">🎓 Teaching</span>
+            <span class="cluster-tag">🎨 Creating</span>
+            <span class="cluster-tag">🔨 Building</span>
+          </div>
+        </div>
+
+        <div class="cluster-card" onclick="goTo('p-sub')">
+          <div class="cluster-name">The Space-Maker</div>
+          <div class="cluster-insight">You design moments that change people. Whether it's a workshop, a product, or a room, you shape how it feels to be in the space you've created. The experience IS the message.</div>
+          <div class="cluster-tags">
+            <span class="cluster-tag">🎭 Performing</span>
+            <span class="cluster-tag">✨ Designing</span>
+            <span class="cluster-tag">🤝 Connecting</span>
+          </div>
+        </div>
+
+        <div class="cluster-card" onclick="goTo('p-sub')">
+          <div class="cluster-name">The Framework Builder</div>
+          <div class="cluster-insight">You see patterns across disciplines nobody else connects. Then you build systems that let other people use those patterns without needing you in the room.</div>
+          <div class="cluster-tags">
+            <span class="cluster-tag">🎓 Teaching</span>
+            <span class="cluster-tag">🏗️ Leading</span>
+          </div>
+        </div>
+
+        <div class="diff-callout">
+          "I feel seen" moment. Personal insight paragraphs based on the user's actual conversations. Categories shown as tags underneath.
+        </div>
+      </div>
+
+      <!-- Proposed: Sub-select (personal + pre-defined) -->
+      <div class="step" id="p-sub">
+        <div class="progress-tag">1 of 3</div>
+        <div class="cat-header">
+          <span style="font-size:1.2rem">🎓</span>
+          <h2 style="margin:0;font-size:1rem">Teaching</h2>
+        </div>
+        <p class="subtitle" style="margin-bottom:.75rem">Tick the skills that light you up.</p>
+
+        <div class="section-label gold">From Your Conversations</div>
+
+        <div class="check-row checked" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label">
+            Turning polyvagal theory into games people actually play
+            <span class="check-evidence">You rebuilt ACT, Maslow, Spiral Dynamics as somatic experiences and archetypes...</span>
+          </div>
+        </div>
+
+        <div class="check-row checked" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label">
+            Teaching complex frameworks through felt experience, not slides
+            <span class="check-evidence">Your facilitation philosophy: "Never lecture — create participation. Ask provocative questions."</span>
+          </div>
+        </div>
+
+        <div class="section-label dim">Pre-Defined</div>
+
+        <div class="check-row" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label check-generic">Making the complex simple enough that anyone can hold it</div>
+        </div>
+        <div class="check-row" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label check-generic">Creating the moment something finally clicks</div>
+        </div>
+        <div class="check-row" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label check-generic">Building a framework others can use without you</div>
+        </div>
+        <div class="check-row" onclick="this.classList.toggle('checked')">
+          <div class="check-box"></div>
+          <div class="check-label check-generic">Bridging two worlds that don't know they need each other</div>
+        </div>
+
+        <div class="diff-callout">
+          Personal AI items on top with evidence. Pre-defined below. User's own language preserved, not mapped away.
+        </div>
+
+        <button class="btn-gold" onclick="goTo('p-clusters')">← Back to clusters</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function goTo(id){
+  const panel = document.getElementById(id).closest('.shell');
+  const active = panel.querySelector('.step.active');
+  if(active) active.classList.remove('active');
+  document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>

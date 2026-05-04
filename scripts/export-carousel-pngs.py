@@ -13,10 +13,10 @@ import asyncio
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-INPUT_HTML = ROOT / "public" / "images" / "carousel" / "carousel-v2.html"
-OUTPUT_DIR = ROOT / "public" / "images" / "carousel" / "export"
+INPUT_HTML = ROOT / "public" / "images" / "carousel" / "work-explained-draft.html"
+OUTPUT_DIR = ROOT / "public" / "images" / "carousel" / "export-work-explained"
 
-TOTAL_SLIDES = 7
+TOTAL_SLIDES = 6
 
 VIEW_W = 420
 VIEW_H = 525
