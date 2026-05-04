@@ -19,8 +19,8 @@ const MAX_CAPTION = 140
 export default function ShareWinStep({
   userId,
   challenge,
-  scaryScore,
-  wahooScore,
+  beforeState,
+  afterState,
   onDone, // called whether shared or skipped
 }) {
   const fileInputRef = useRef(null)
@@ -71,8 +71,8 @@ export default function ShareWinStep({
         groanChallengeId: challenge?.id,
         challengeTitle: challenge?.title || challenge?.source_label || null,
         visibilityLayer: challenge?.visibility_layer || null,
-        scaryScore,
-        wahooScore,
+        beforeState,
+        afterState,
         mediaUrl: publicUrl,
         mediaWidth: dimensions.w,
         mediaHeight: dimensions.h,
@@ -126,7 +126,6 @@ export default function ShareWinStep({
         ref={fileInputRef}
         type="file"
         accept="image/*"
-        capture="environment"
         onChange={handleFilePick}
         style={{ display: 'none' }}
       />

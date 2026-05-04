@@ -35,6 +35,7 @@ const RECOGNISE_QUEST_IDS = [
   'recognise_negative_frequency',
   'recognise_positive_frequency',
   'recognise_trigger_pattern',
+  'recognise_body_listen',
   'playlist_essence_voice',
   'playlist_protective_voice'
 ]

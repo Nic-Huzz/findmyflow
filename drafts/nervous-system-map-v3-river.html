@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nervous System Map - V3 River Flow</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+    padding: 20px;
+    padding-top: 80px;
+    padding-bottom: 140px;
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .hero-card {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+    border-radius: 24px;
+    padding: 28px 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(16,185,129,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-card h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .hero-card .subtitle { font-size: 13px; opacity: 0.7; margin-bottom: 16px; }
+
+  /* Pulse indicator */
+  .pulse-row {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .pulse-ring {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    background: rgba(16,185,129,0.2);
+    border: 2px solid rgba(16,185,129,0.5);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.3); }
+    50% { box-shadow: 0 0 0 12px rgba(16,185,129,0); }
+  }
+  .pulse-info { flex: 1; }
+  .pulse-state { font-size: 18px; font-weight: 800; }
+  .pulse-detail { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+
+  .card {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  }
+  .card-title { font-size: 18px; font-weight: 800; color: #1a1a2e; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .card-subtitle { font-size: 13px; color: #6c757d; margin-bottom: 16px; }
+  .eyebrow { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #adb5bd; margin-bottom: 8px; }
+
+  /* River SVG visualization */
+  .river-wrap {
+    position: relative;
+    margin: 0 -24px;
+    padding: 0 24px;
+  }
+  .river-svg {
+    width: 100%;
+    height: 200px;
+  }
+  .river-labels {
+    display: flex; justify-content: space-between;
+    padding: 8px 0 0;
+  }
+  .river-label { font-size: 10px; font-weight: 700; color: #adb5bd; }
+  .zone-labels {
+    position: absolute; left: 4px; top: 0; bottom: 30px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .zone-label {
+    font-size: 10px; font-weight: 700; color: #adb5bd;
+    writing-mode: vertical-lr; transform: rotate(180deg);
+  }
+
+  /* Milestone cards */
+  .milestones {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .milestone {
+    display: flex; align-items: center; gap: 12px;
+    background: #f8f8fa; border-radius: 14px; padding: 14px;
+  }
+  .milestone.gold {
+    background: linear-gradient(135deg, rgba(233,162,59,0.1), rgba(233,162,59,0.05));
+    border: 1px solid rgba(233,162,59,0.3);
+  }
+  .ms-icon { font-size: 24px; flex-shrink: 0; }
+  .ms-content { flex: 1; }
+  .ms-title { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .ms-desc { font-size: 12px; color: #6c757d; margin-top: 2px; }
+  .ms-date { font-size: 10px; font-weight: 700; color: #adb5bd; flex-shrink: 0; }
+
+  /* Today's check-in prompt */
+  .checkin-prompt {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+    border-radius: 16px; padding: 20px;
+    color: white; text-align: center;
+  }
+  .checkin-prompt h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .checkin-prompt p { font-size: 13px; opacity: 0.7; margin-bottom: 14px; }
+  .checkin-states {
+    display: flex; gap: 8px; justify-content: center;
+  }
+  .checkin-btn {
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    transition: all 0.15s;
+  }
+  .checkin-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.4); }
+  .checkin-btn .cb-emoji { font-size: 24px; }
+  .checkin-btn .cb-label { font-size: 10px; font-weight: 700; }
+
+  /* Healing vs Courage split */
+  .split-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .split-card {
+    background: #f8f8fa; border-radius: 16px; padding: 16px;
+  }
+  .split-title { font-size: 12px; font-weight: 700; color: #6c757d; margin-bottom: 8px; }
+  .split-bar { height: 8px; border-radius: 4px; overflow: hidden; display: flex; margin-bottom: 6px; }
+  .split-bar .seg { height: 100%; }
+  .split-stat { font-size: 11px; font-weight: 600; color: #1a1a2e; }
+</style>
+</head>
+<body>
+
+  <!-- Hero with pulse -->
+  <div class="hero-card">
+    <h1>Your Nervous System Map</h1>
+    <p class="subtitle">47 check-ins over 6 weeks</p>
+    <div class="pulse-row">
+      <div class="pulse-ring">😊</div>
+      <div class="pulse-info">
+        <div class="pulse-state">Ventral dominant</div>
+        <div class="pulse-detail">Your baseline shifted from sympathetic 3 weeks ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- River visualization -->
+  <div class="card">
+    <div class="card-title">Your river</div>
+    <p class="card-subtitle">The flow of your nervous system over time</p>
+    <div class="river-wrap">
+      <svg class="river-svg" viewBox="0 0 400 200" preserveAspectRatio="none">
+        <!-- Background zones -->
+        <rect x="0" y="0" width="400" height="67" fill="#f0fdf4" opacity="0.5"/>
+        <rect x="0" y="67" width="400" height="66" fill="#fffbeb" opacity="0.5"/>
+        <rect x="0" y="133" width="400" height="67" fill="#fef2f2" opacity="0.5"/>
+        <!-- Zone dividers -->
+        <line x1="0" y1="67" x2="400" y2="67" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4"/>
+        <line x1="0" y1="133" x2="400" y2="133" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4"/>
+
+        <!-- The river path — starts low (sympathetic/dorsal), rises to ventral -->
+        <!-- Ventral area (fill) -->
+        <path d="M 0,120 C 30,130 60,140 80,135 C 100,125 120,110 140,100 C 160,90 180,80 200,75 C 220,65 240,55 260,45 C 280,40 300,35 320,30 C 340,28 360,25 380,22 L 400,20 L 400,200 L 0,200 Z" fill="url(#riverGrad)" opacity="0.3"/>
+        <!-- Main line -->
+        <path d="M 0,120 C 30,130 60,140 80,135 C 100,125 120,110 140,100 C 160,90 180,80 200,75 C 220,65 240,55 260,45 C 280,40 300,35 320,30 C 340,28 360,25 380,22 L 400,20" fill="none" stroke="#10b981" stroke-width="3"/>
+
+        <!-- Check-in dots on the line -->
+        <circle cx="0" cy="120" r="4" fill="#f59e0b"/>
+        <circle cx="30" cy="135" r="4" fill="#ef4444"/>
+        <circle cx="60" cy="140" r="4" fill="#ef4444"/>
+        <circle cx="90" cy="130" r="4" fill="#f59e0b"/>
+        <circle cx="120" cy="110" r="4" fill="#f59e0b"/>
+        <circle cx="150" cy="95" r="4" fill="#f59e0b"/>
+        <circle cx="180" cy="80" r="4" fill="#10b981"/>
+        <circle cx="210" cy="70" r="4" fill="#10b981"/>
+        <circle cx="240" cy="55" r="4" fill="#10b981"/>
+        <circle cx="260" cy="50" r="4" fill="#f59e0b"/>
+        <circle cx="290" cy="38" r="4" fill="#10b981"/>
+        <circle cx="320" cy="30" r="4" fill="#10b981"/>
+        <circle cx="350" cy="25" r="4" fill="#10b981"/>
+        <circle cx="380" cy="22" r="4" fill="#10b981"/>
+        <circle cx="400" cy="20" r="5" fill="#10b981" stroke="white" stroke-width="2"/>
+
+        <!-- Zone labels -->
+        <text x="8" y="40" font-size="10" fill="#10b981" font-weight="700" opacity="0.6">😊 Ventral</text>
+        <text x="8" y="105" font-size="10" fill="#f59e0b" font-weight="700" opacity="0.6">😬 Sympathetic</text>
+        <text x="8" y="170" font-size="10" fill="#ef4444" font-weight="700" opacity="0.6">😶 Dorsal</text>
+
+        <defs>
+          <linearGradient id="riverGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#10b981" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#10b981" stop-opacity="0.05"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="river-labels">
+        <span class="river-label">Week 1</span>
+        <span class="river-label">Week 3</span>
+        <span class="river-label">Week 6</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Healing vs Courage comparison -->
+  <div class="card">
+    <div class="card-title">What works for you</div>
+    <p class="card-subtitle">Which challenges shift your state most</p>
+    <div class="split-row">
+      <div class="split-card">
+        <div class="split-title">Healing quests</div>
+        <div class="split-bar">
+          <div class="seg" style="width: 75%; background: #10b981;"></div>
+          <div class="seg" style="width: 20%; background: #f59e0b;"></div>
+          <div class="seg" style="width: 5%; background: #ef4444;"></div>
+        </div>
+        <div class="split-stat">75% end in ventral</div>
+      </div>
+      <div class="split-card">
+        <div class="split-title">Play-List challenges</div>
+        <div class="split-bar">
+          <div class="seg" style="width: 60%; background: #10b981;"></div>
+          <div class="seg" style="width: 35%; background: #f59e0b;"></div>
+          <div class="seg" style="width: 5%; background: #ef4444;"></div>
+        </div>
+        <div class="split-stat">60% end in ventral</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestones -->
+  <div class="card">
+    <div class="card-title">Milestones</div>
+    <p class="card-subtitle">Key moments in your nervous system journey</p>
+    <div class="milestones">
+      <div class="milestone gold">
+        <span class="ms-icon">🏆</span>
+        <div class="ms-content">
+          <div class="ms-title">First ventral-dominant week</div>
+          <div class="ms-desc">More than 50% of check-ins were ventral</div>
+        </div>
+        <span class="ms-date">Week 4</span>
+      </div>
+      <div class="milestone">
+        <span class="ms-icon">📉</span>
+        <div class="ms-content">
+          <div class="ms-title">Dorsal disappeared</div>
+          <div class="ms-desc">No dorsal check-ins for 10 consecutive days</div>
+        </div>
+        <span class="ms-date">Week 5</span>
+      </div>
+      <div class="milestone">
+        <span class="ms-icon">🎮</span>
+        <div class="ms-content">
+          <div class="ms-title">Named your voice</div>
+          <div class="ms-desc">"Unsure" dropped to 0. You know who's driving.</div>
+        </div>
+        <span class="ms-date">Week 3</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick check-in CTA -->
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div class="checkin-prompt">
+      <h3>How are you right now?</h3>
+      <p>Quick check-in outside of a challenge</p>
+      <div class="checkin-states">
+        <button class="checkin-btn">
+          <span class="cb-emoji">😊</span>
+          <span class="cb-label">Present</span>
+        </button>
+        <button class="checkin-btn">
+          <span class="cb-emoji">😬</span>
+          <span class="cb-label">On edge</span>
+        </button>
+        <button class="checkin-btn">
+          <span class="cb-emoji">😶</span>
+          <span class="cb-label">Shut down</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

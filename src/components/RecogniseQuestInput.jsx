@@ -103,6 +103,7 @@ const STEP_CONFIGS = {
   recognise_negative_frequency: { totalSteps: 3, stepTitles: ['Frequency', 'Details', 'Review'] },
   recognise_positive_frequency: { totalSteps: 3, stepTitles: ['Frequency', 'Details', 'Review'] },
   recognise_trigger_pattern: { totalSteps: 3, stepTitles: ['Trigger Type', 'Details', 'Review'] },
+  recognise_body_listen: { totalSteps: 4, stepTitles: ['Decision', 'Yes or No', 'How Did You Know', 'Review'] },
   // Stage-specific voice quests (simplified flows)
   voice_essence: { totalSteps: 2, stepTitles: ['Reflect', 'Review'] },
   voice_protective: { totalSteps: 3, stepTitles: ['Fears', 'Situation', 'Review'] }
@@ -132,6 +133,10 @@ const INITIAL_FORM_DATA = {
   frequency: '',
   area_of_life: null,
   frequency_intensity: null,
+  // Body Listen fields
+  decision: '',
+  body_response: null,
+  body_message: '',
   // Trigger Pattern fields
   trigger_type: ''
 }
@@ -200,6 +205,14 @@ function RecogniseQuestInput({ quest, onComplete }) {
         case 3: return true
         default: return false
       }
+    } else if (quest.id === 'recognise_body_listen') {
+      switch (currentStep) {
+        case 1: return data.decision.trim().length >= 10
+        case 2: return data.body_response !== null
+        case 3: return data.body_message.trim().length >= 10
+        case 4: return true
+        default: return false
+      }
     }
     return false
   }, [quest.id, quest.voiceType])
@@ -260,6 +273,12 @@ function RecogniseQuestInput({ quest, onComplete }) {
         area_of_life: data.area_of_life,
         intensity: data.frequency_intensity,
         situation: data.situation
+      }
+    } else if (quest.id === 'recognise_body_listen') {
+      return {
+        decision: data.decision,
+        body_response: data.body_response,
+        body_message: data.body_message
       }
     }
     return data
@@ -959,6 +978,129 @@ function RecogniseQuestInput({ quest, onComplete }) {
               <div className="summary-item">
                 <span className="summary-label">Situation:</span>
                 <span className="summary-value">{formData.situation}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ============ TRIGGER PATTERN QUEST ============
+  // ============ BODY LISTEN QUEST ============
+  if (quest.id === 'recognise_body_listen') {
+    return (
+      <div className="recognise-input stepped">
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
+
+        {/* Step 1: Decision */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🫀</span>
+              <h4>What decision are you sitting with?</h4>
+            </div>
+            <p className="step-description">Something you need to decide but haven't committed to yet.</p>
+            <textarea
+              className="recognise-textarea"
+              placeholder="Describe the decision you're facing..."
+              value={formData.decision}
+              onChange={(e) => setFormData(prev => ({ ...prev, decision: e.target.value }))}
+              rows={3}
+            />
+            <p className={`char-hint ${formData.decision.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.decision.trim().length}/10 characters minimum
+            </p>
+          </div>
+        )}
+
+        {/* Step 2: Yes or No */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🧭</span>
+              <h4>Was it a yes or a no?</h4>
+            </div>
+            <p className="step-description">When you sit with this decision, what does your body say?</p>
+            <div className="gcm-toggle-row" style={{ marginTop: 12 }}>
+              <button
+                type="button"
+                className={`gcm-toggle ${formData.body_response === 'yes' ? 'active yes' : ''}`}
+                onClick={() => setFormData(prev => ({ ...prev, body_response: 'yes' }))}
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+                className={`gcm-toggle ${formData.body_response === 'no' ? 'active no' : ''}`}
+                onClick={() => setFormData(prev => ({ ...prev, body_response: 'no' }))}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: How did you know */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">💬</span>
+              <h4>How did you know?</h4>
+            </div>
+            <p className="step-description">What did your body do? Where did you feel it? What signal told you?</p>
+            <textarea
+              className="recognise-textarea"
+              placeholder="My chest felt tight... My shoulders dropped... I felt a wave of relief..."
+              value={formData.body_message}
+              onChange={(e) => setFormData(prev => ({ ...prev, body_message: e.target.value }))}
+              rows={3}
+            />
+            <p className={`char-hint ${formData.body_message.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.body_message.trim().length}/10 characters minimum
+            </p>
+          </div>
+        )}
+
+        {/* Step 4: Review */}
+        {step === 4 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Decision:</span>
+                <span className="summary-value">{formData.decision}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Body said:</span>
+                <span className="summary-value">{formData.body_response === 'yes' ? '✅ Yes' : '❌ No'}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">How you knew:</span>
+                <span className="summary-value">{formData.body_message}</span>
               </div>
             </div>
           </div>

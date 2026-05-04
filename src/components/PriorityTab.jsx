@@ -323,6 +323,7 @@ export default function PriorityTab({
       {healingModalQuest && (
         <HealingCompletionModal
           quest={healingModalQuest}
+          userId={userId}
           onComplete={(quest, textInput) => {
             const inputValue = quest.inputType === 'checkbox' ? 'completed' : textInput
             onQuestComplete(quest, inputValue)

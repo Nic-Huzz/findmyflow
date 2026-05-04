@@ -304,6 +304,39 @@
       "healing_checkin": true
     },
     {
+      "id": "rest_nap",
+      "category": "Healing",
+      "type": "Rest",
+      "frequency": "daily",
+      "name": "Nap",
+      "description": "Give your nervous system permission to power down. Even 20 minutes counts.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true
+    },
+    {
+      "id": "rest_massage",
+      "category": "Healing",
+      "type": "Rest",
+      "frequency": "daily",
+      "name": "Massage",
+      "description": "Let someone else move the tension your body is holding. Book it, show up, receive.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true
+    },
+    {
+      "id": "rest_sauna",
+      "category": "Healing",
+      "type": "Rest",
+      "frequency": "daily",
+      "name": "Sauna",
+      "description": "Sit in the heat. Let your body do the work. Nothing to think about, nothing to fix.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true
+    },
+    {
       "id": "reconnect_weekly_task",
       "category": "Healing",
       "type": "Reconnect",
@@ -528,6 +561,19 @@
       "inputType": "text",
       "placeholder": "What patterns did you notice in your triggers this week?",
       "learnMore": "Our triggers are consistent \u2014 the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions.",
+      "healing_checkin": true
+    },
+    {
+      "id": "recognise_body_listen",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "daily",
+      "name": "Listen To Your Body",
+      "description": "Tune into how your body responds to a decision you're facing. Your nervous system knows before your mind does.",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What decision are you sitting with?",
+      "learnMore": "Your body holds wisdom your conscious mind often overrides. When facing a decision, your gut tightens, your chest opens, your shoulders drop or rise.\n\nThis practice trains you to notice those signals before your protective voice rationalises them away. Over time, you build trust in your body's yes and no.",
       "healing_checkin": true
     },
     {

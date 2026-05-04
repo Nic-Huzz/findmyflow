@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nervous System Map - V1 Stacked Frequency</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+    padding: 20px;
+    padding-top: 80px;
+    padding-bottom: 140px;
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* Hero card */
+  .hero-card {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+    border-radius: 24px;
+    padding: 28px 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-card h1 {
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.3px; margin-bottom: 4px;
+  }
+  .hero-card .subtitle {
+    font-size: 13px; opacity: 0.7; margin-bottom: 20px;
+  }
+
+  /* Current state indicator */
+  .current-state {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 14px 16px;
+  }
+  .current-state .emoji { font-size: 32px; }
+  .current-state .state-info { flex: 1; }
+  .current-state .state-label { font-size: 15px; font-weight: 700; }
+  .current-state .state-desc { font-size: 11px; opacity: 0.7; }
+  .current-state .state-badge {
+    background: rgba(233,162,59,0.3); color: #E9A23B;
+    padding: 4px 10px; border-radius: 8px;
+    font-size: 11px; font-weight: 700;
+  }
+
+  /* Section card */
+  .card {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  }
+  .card-title {
+    font-size: 18px; font-weight: 800;
+    color: #1a1a2e; letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .card-subtitle {
+    font-size: 13px; color: #6c757d;
+    margin-bottom: 16px;
+  }
+  .eyebrow {
+    font-size: 11px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    color: #adb5bd; margin-bottom: 12px;
+  }
+
+  /* Stacked frequency bar */
+  .frequency-bar {
+    height: 48px; border-radius: 14px;
+    display: flex; overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .freq-segment {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: white;
+    transition: width 0.6s ease;
+  }
+  .freq-ventral { background: linear-gradient(135deg, #10b981, #059669); }
+  .freq-sympathetic { background: linear-gradient(135deg, #f59e0b, #d97706); }
+  .freq-dorsal { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+  /* Legend */
+  .freq-legend {
+    display: flex; gap: 16px; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; color: #6c757d;
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .legend-dot.ventral { background: #10b981; }
+  .legend-dot.sympathetic { background: #f59e0b; }
+  .legend-dot.dorsal { background: #ef4444; }
+
+  /* Timeline rows */
+  .timeline {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .timeline-row {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .timeline-label {
+    font-size: 11px; font-weight: 700; color: #adb5bd;
+    width: 50px; text-align: right; flex-shrink: 0;
+  }
+  .timeline-bar {
+    flex: 1; height: 28px; border-radius: 8px;
+    display: flex; overflow: hidden;
+  }
+  .timeline-bar .freq-segment { font-size: 10px; }
+
+  /* Shift cards */
+  .shift-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .shift-card {
+    background: #f8f8fa; border-radius: 16px;
+    padding: 16px; text-align: center;
+  }
+  .shift-emoji { font-size: 28px; margin-bottom: 6px; }
+  .shift-count { font-size: 24px; font-weight: 800; color: #1a1a2e; }
+  .shift-label { font-size: 11px; font-weight: 600; color: #6c757d; margin-top: 2px; }
+
+  /* Archetype breakdown */
+  .archetype-list {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .archetype-row {
+    display: flex; align-items: center; gap: 12px;
+    background: #f8f8fa; border-radius: 12px; padding: 12px 14px;
+  }
+  .archetype-icon { font-size: 22px; }
+  .archetype-name { flex: 1; font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .archetype-count { font-size: 14px; font-weight: 800; color: #5e17eb; }
+  .archetype-bar-wrap {
+    width: 60px; height: 6px; background: #eef0f3; border-radius: 3px; overflow: hidden;
+  }
+  .archetype-bar-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, #5e17eb, #7c3aed);
+  }
+
+  /* Stat row */
+  .stat-row {
+    display: flex; justify-content: space-around; text-align: center;
+    padding: 16px 0;
+  }
+  .stat-value { font-size: 28px; font-weight: 800; color: #1a1a2e; }
+  .stat-label { font-size: 11px; font-weight: 700; color: #adb5bd; text-transform: uppercase; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+
+  <!-- Hero Card -->
+  <div class="hero-card">
+    <h1>Your Nervous System Map</h1>
+    <p class="subtitle">Based on 47 check-ins over 6 weeks</p>
+    <div class="current-state">
+      <span class="emoji">😊</span>
+      <div class="state-info">
+        <div class="state-label">Mostly Ventral</div>
+        <div class="state-desc">Your baseline has shifted from sympathetic</div>
+      </div>
+      <span class="state-badge">+32%</span>
+    </div>
+  </div>
+
+  <!-- Overall Stats -->
+  <div class="card">
+    <div class="stat-row">
+      <div><div class="stat-value">47</div><div class="stat-label">Check-ins</div></div>
+      <div><div class="stat-value">6</div><div class="stat-label">Weeks</div></div>
+      <div><div class="stat-value">62%</div><div class="stat-label">Ventral</div></div>
+    </div>
+  </div>
+
+  <!-- Frequency Distribution -->
+  <div class="card">
+    <div class="card-title">Where you live</div>
+    <p class="card-subtitle">Your nervous system frequency distribution</p>
+
+    <div class="frequency-bar">
+      <div class="freq-segment freq-ventral" style="width: 62%">62%</div>
+      <div class="freq-segment freq-sympathetic" style="width: 30%">30%</div>
+      <div class="freq-segment freq-dorsal" style="width: 8%">8%</div>
+    </div>
+
+    <div class="freq-legend">
+      <div class="legend-item"><span class="legend-dot ventral"></span> Ventral</div>
+      <div class="legend-item"><span class="legend-dot sympathetic"></span> Sympathetic</div>
+      <div class="legend-item"><span class="legend-dot dorsal"></span> Dorsal</div>
+    </div>
+
+    <div class="eyebrow">Over Time</div>
+    <div class="timeline">
+      <div class="timeline-row">
+        <span class="timeline-label">Week 1</span>
+        <div class="timeline-bar">
+          <div class="freq-segment freq-ventral" style="width: 20%"></div>
+          <div class="freq-segment freq-sympathetic" style="width: 50%"></div>
+          <div class="freq-segment freq-dorsal" style="width: 30%"></div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <span class="timeline-label">Week 2</span>
+        <div class="timeline-bar">
+          <div class="freq-segment freq-ventral" style="width: 30%"></div>
+          <div class="freq-segment freq-sympathetic" style="width: 45%"></div>
+          <div class="freq-segment freq-dorsal" style="width: 25%"></div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <span class="timeline-label">Week 3</span>
+        <div class="timeline-bar">
+          <div class="freq-segment freq-ventral" style="width: 35%"></div>
+          <div class="freq-segment freq-sympathetic" style="width: 45%"></div>
+          <div class="freq-segment freq-dorsal" style="width: 20%"></div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <span class="timeline-label">Week 4</span>
+        <div class="timeline-bar">
+          <div class="freq-segment freq-ventral" style="width: 45%"></div>
+          <div class="freq-segment freq-sympathetic" style="width: 40%"></div>
+          <div class="freq-segment freq-dorsal" style="width: 15%"></div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <span class="timeline-label">Week 5</span>
+        <div class="timeline-bar">
+          <div class="freq-segment freq-ventral" style="width: 55%"></div>
+          <div class="freq-segment freq-sympathetic" style="width: 35%"></div>
+          <div class="freq-segment freq-dorsal" style="width: 10%"></div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <span class="timeline-label">Week 6</span>
+        <div class="timeline-bar">
+          <div class="freq-segment freq-ventral" style="width: 62%"></div>
+          <div class="freq-segment freq-sympathetic" style="width: 30%"></div>
+          <div class="freq-segment freq-dorsal" style="width: 8%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shift Patterns -->
+  <div class="card">
+    <div class="card-title">What's shifting</div>
+    <p class="card-subtitle">Before vs after your challenges</p>
+    <div class="shift-grid">
+      <div class="shift-card">
+        <div class="shift-emoji">😶 &#8594; 😊</div>
+        <div class="shift-count">12</div>
+        <div class="shift-label">Breakthroughs</div>
+      </div>
+      <div class="shift-card">
+        <div class="shift-emoji">😬 &#8594; 😊</div>
+        <div class="shift-count">18</div>
+        <div class="shift-label">Regulated</div>
+      </div>
+      <div class="shift-card">
+        <div class="shift-emoji">😊 &#8594; 😊</div>
+        <div class="shift-count">11</div>
+        <div class="shift-label">Maintained</div>
+      </div>
+      <div class="shift-card">
+        <div class="shift-emoji">😬 &#8594; 😬</div>
+        <div class="shift-count">4</div>
+        <div class="shift-label">Held ground</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Archetype Breakdown -->
+  <div class="card">
+    <div class="card-title">Your protective voices</div>
+    <p class="card-subtitle">Which voices show up when you're activated or shut down</p>
+    <div class="archetype-list">
+      <div class="archetype-row">
+        <span class="archetype-icon">🎮</span>
+        <span class="archetype-name">Controller</span>
+        <span class="archetype-count">14</span>
+        <div class="archetype-bar-wrap"><div class="archetype-bar-fill" style="width: 70%"></div></div>
+      </div>
+      <div class="archetype-row">
+        <span class="archetype-icon">👻</span>
+        <span class="archetype-name">Ghost</span>
+        <span class="archetype-count">8</span>
+        <div class="archetype-bar-wrap"><div class="archetype-bar-fill" style="width: 40%"></div></div>
+      </div>
+      <div class="archetype-row">
+        <span class="archetype-icon">🎭</span>
+        <span class="archetype-name">Perfectionist</span>
+        <span class="archetype-count">5</span>
+        <div class="archetype-bar-wrap"><div class="archetype-bar-fill" style="width: 25%"></div></div>
+      </div>
+      <div class="archetype-row">
+        <span class="archetype-icon">🤷</span>
+        <span class="archetype-name">Unsure</span>
+        <span class="archetype-count">3</span>
+        <div class="archetype-bar-wrap"><div class="archetype-bar-fill" style="width: 15%"></div></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

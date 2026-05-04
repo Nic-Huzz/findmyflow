@@ -1,0 +1,213 @@
+/* NervousSystemMap — scoped under .nsm- prefix */
+
+.nsm-page {
+  padding: 20px;
+  padding-top: 80px;
+  padding-bottom: 140px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Loading & Empty ── */
+
+.nsm-loading, .nsm-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+.nsm-loading .spinner {
+  width: 32px; height: 32px;
+  border: 3px solid #eef0f3;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: nsm-spin 0.6s linear infinite;
+  margin: 0 auto 12px;
+}
+@keyframes nsm-spin { to { transform: rotate(360deg); } }
+.nsm-empty-emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+.nsm-empty h2 { font-size: 18px; font-weight: 800; color: #1a1a2e; margin-bottom: 6px; }
+.nsm-empty p { font-size: 14px; line-height: 1.5; }
+.nsm-back-btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border-radius: 14px;
+  border: 2px solid #5e17eb;
+  background: none;
+  color: #5e17eb;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ── Hero Card ── */
+
+.nsm-hero {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #9333ea 100%);
+  border-radius: 24px;
+  padding: 28px 24px 24px;
+  color: white;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+}
+.nsm-hero h1 {
+  font-size: 22px; font-weight: 800;
+  letter-spacing: -0.3px; margin-bottom: 4px;
+}
+.nsm-hero-sub {
+  font-size: 13px; opacity: 0.7; margin-bottom: 20px;
+}
+.nsm-state-trio {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+}
+.nsm-state-card {
+  background: rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 14px 8px 12px;
+  text-align: center;
+  border: 2px solid transparent;
+}
+.nsm-state-card.active {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.35);
+}
+.nsm-sc-emoji { font-size: 26px; display: block; margin-bottom: 4px; }
+.nsm-sc-pct { font-size: 22px; font-weight: 800; display: block; }
+.nsm-sc-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  opacity: 0.7; display: block; margin-top: 2px;
+}
+
+/* ── White Cards ── */
+
+.nsm-card {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+}
+.nsm-card-title {
+  font-size: 18px; font-weight: 800;
+  color: #1a1a2e; letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+.nsm-card-sub {
+  font-size: 13px; color: #6c757d;
+  margin-bottom: 16px; line-height: 1.4;
+}
+.nsm-eyebrow {
+  font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: #adb5bd; margin-bottom: 12px; display: block;
+}
+
+/* ── Frequency Bar ── */
+
+.nsm-freq-bar {
+  height: 44px; border-radius: 12px;
+  display: flex; overflow: hidden;
+  margin-bottom: 12px;
+}
+.nsm-freq-seg {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: white;
+  min-width: 24px;
+}
+.nsm-freq-seg.nsm-ventral, .nsm-seg.nsm-ventral, .nsm-dot.nsm-ventral { background: #10b981; }
+.nsm-freq-seg.nsm-sympathetic, .nsm-seg.nsm-sympathetic, .nsm-dot.nsm-sympathetic { background: #E9A23B; }
+.nsm-freq-seg.nsm-dorsal, .nsm-seg.nsm-dorsal, .nsm-dot.nsm-dorsal { background: #ef4444; }
+
+/* ── Legend ── */
+
+.nsm-legend {
+  display: flex; gap: 16px; justify-content: center;
+  margin-bottom: 20px;
+}
+.nsm-legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; color: #6c757d;
+}
+.nsm-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  display: inline-block;
+}
+
+/* ── Timeline ── */
+
+.nsm-timeline { display: flex; flex-direction: column; gap: 8px; }
+.nsm-timeline-row { display: flex; align-items: center; gap: 10px; }
+.nsm-timeline-label {
+  font-size: 12px; font-weight: 600; color: #6c757d;
+  width: 52px; text-align: right; flex-shrink: 0;
+}
+.nsm-timeline-bar {
+  flex: 1; height: 28px; border-radius: 8px;
+  display: flex; overflow: hidden;
+}
+.nsm-timeline-bar .nsm-freq-seg { font-size: 0; }
+
+/* ── Before vs After ── */
+
+.nsm-comparison {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 10px; align-items: center;
+}
+.nsm-comp-side {
+  background: #f8f8fa; border-radius: 16px;
+  padding: 16px 14px; text-align: center;
+}
+.nsm-comp-label {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  color: #adb5bd; display: block; margin-bottom: 10px;
+}
+.nsm-comp-bar {
+  height: 10px; border-radius: 5px;
+  display: flex; overflow: hidden;
+  margin-bottom: 10px;
+}
+.nsm-seg { height: 100%; }
+.nsm-comp-pct {
+  font-size: 13px; font-weight: 600; color: #1a1a2e;
+}
+.nsm-comp-arrow {
+  font-size: 22px; color: #E9A23B; font-weight: 800;
+}
+
+/* ── Shift Grid ── */
+
+.nsm-shift-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.nsm-shift-card {
+  background: #f8f8fa; border-radius: 16px;
+  padding: 16px; text-align: center;
+}
+.nsm-shift-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+.nsm-shift-count { font-size: 24px; font-weight: 800; color: #1a1a2e; display: block; }
+.nsm-shift-label {
+  font-size: 11px; font-weight: 600; color: #6c757d;
+  display: block; margin-top: 2px;
+}
+
+/* ── Archetype List ── */
+
+.nsm-archetype-list { display: flex; flex-direction: column; gap: 8px; }
+.nsm-arch-row {
+  display: flex; align-items: center; gap: 12px;
+  background: #f8f8fa; border-radius: 14px;
+  padding: 14px 16px;
+}
+.nsm-arch-icon { font-size: 22px; flex-shrink: 0; }
+.nsm-arch-name { flex: 1; font-size: 15px; font-weight: 600; color: #1a1a2e; }
+.nsm-arch-count { font-size: 16px; font-weight: 800; color: #5e17eb; margin-right: 8px; }
+.nsm-arch-bar-wrap {
+  width: 64px; height: 8px;
+  background: #eef0f3; border-radius: 4px;
+  overflow: hidden; flex-shrink: 0;
+}
+.nsm-arch-bar-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, #5e17eb, #7c3aed);
+}

@@ -1,0 +1,155 @@
+/* NervousSystemCheckin — scoped under .nsci- prefix */
+
+.nsci-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.nsci-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+/* ── State columns ── */
+
+.nsci-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nsci-columns.nsci-side-by-side {
+  flex-direction: row;
+  gap: 12px;
+}
+
+.nsci-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nsci-column-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nsci-state-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nsci-state-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 2px solid #eef0f3;
+  border-radius: 14px;
+  background: #f8f8fa;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.nsci-state-btn:hover {
+  border-color: #d1d5db;
+}
+
+.nsci-state-btn.active {
+  background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  border-color: #5e17eb;
+}
+
+.nsci-emoji {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.nsci-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+/* ── Archetype grid ── */
+
+.nsci-archetype-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nsci-archetype-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.nsci-archetype-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.nsci-archetype-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  background: #f8f8fa;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.nsci-archetype-btn:hover {
+  border-color: #d1d5db;
+}
+
+.nsci-archetype-btn.active {
+  background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  border-color: #5e17eb;
+}
+
+.nsci-arch-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.nsci-arch-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+/* ── Continue button ── */
+
+.nsci-continue-btn {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);
+  color: #1a1a2e;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 4px 18px rgba(233, 162, 59, 0.28);
+}
+
+.nsci-continue-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
