@@ -405,14 +405,22 @@ export async function fetchRecentWins(userId, limit = 3) {
  * Includes: persona (FlowFinder), validation surveys, both offer builders, voice insights
  */
 export async function gatherContentContext(userId, projectId = null) {
-  const [persona, validation, offerV2, offerV1, voice, marketing, deals] = await Promise.all([
+  const [persona, validation, offerV2, offerV1, voice, marketing, deals, movementRow] = await Promise.all([
     fetchPersonaData(userId),
     fetchValidationInsights(userId, projectId),
     fetchOfferDetails(userId, projectId),
     fetchOfferBuilderV1(userId),
     fetchVoiceInsights(userId),
     fetchTopPerformingContent(userId, 5),
-    fetchRecentWins(userId, 3)
+    fetchRecentWins(userId, 3),
+    supabase
+      .from('remarkable_angles')
+      .select('wound_problem, rule_identified, ai_rule_statement, ai_tribe_statement')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(r => { if (r.error) console.error('Movement data fetch:', r.error.message); return r.data }),
   ])
 
   // Combine V1 and V2 offer data (V2 takes precedence where both exist)
@@ -442,15 +450,24 @@ export async function gatherContentContext(userId, projectId = null) {
     hasV2: !!offerV2
   } : null
 
+  // Parse movement data
+  const movement = movementRow ? {
+    woundProblem: movementRow.wound_problem,
+    ruleIdentified: movementRow.rule_identified,
+    ruleStatement: movementRow.ai_rule_statement,
+    tribeStatement: movementRow.ai_tribe_statement,
+  } : null
+
   return {
     persona,
     validation,
     offer,
     voice,
+    movement,
     marketing,
     deals,
     hasFullContext: !!(persona && validation && offer && voice),
-    hasPartialContext: !!(persona || validation || offer || voice),
+    hasPartialContext: !!(persona || validation || offer || voice || movement),
     contextSources: {
       persona: !!persona,
       validation: !!validation,
@@ -458,6 +475,7 @@ export async function gatherContentContext(userId, projectId = null) {
       offerV1: !!offerV1,
       offerV2: !!offerV2,
       voice: !!voice,
+      movement: !!movement,
       marketing: !!marketing,
       deals: !!deals
     }
@@ -568,6 +586,29 @@ OFFER DETAILS:
     }
 
     parts.push(offerSection.trim())
+  }
+
+  if (context.movement) {
+    const mv = context.movement
+    // Parse "Current: X | Wrong: Y | Mine: Z"
+    const mvParts = (mv.ruleIdentified || '').split('|').map(s => s.trim())
+    const current = mvParts.find(p => p.startsWith('Current:'))?.replace('Current:', '').trim()
+    const wrong = mvParts.find(p => p.startsWith('Wrong:'))?.replace('Wrong:', '').trim()
+    const mine = mvParts.find(p => p.startsWith('Mine:'))?.replace('Mine:', '').trim()
+
+    let movementSection = `
+MOVEMENT (from Remarkable Flow):
+- Rule Statement: ${mv.ruleStatement || 'Not specified'}
+- Tribe: ${mv.tribeStatement || 'Not specified'}`
+    if (current) movementSection += `\n- The world currently solves this with: ${current}`
+    if (wrong) movementSection += `\n- What's wrong with that: ${wrong}`
+    if (mine) movementSection += `\n- How this creator solves it: ${mine}`
+    if (current && wrong && mine) {
+      movementSection += `\n- DAM Statement: You think you need ${current.toLowerCase().replace(/\.$/, '')}. But ${wrong.charAt(0).toLowerCase() + wrong.slice(1).replace(/\.$/, '')}. What you actually need is ${mine.toLowerCase().replace(/\.$/, '')}.`
+    }
+    movementSection += `\n\nIMPORTANT: All content should educate the audience about this movement. Shift from promotional ("come to my thing") to educational ("here's why the old way doesn't work, and here's the new way").`
+
+    parts.push(movementSection.trim())
   }
 
   if (context.marketing) {

@@ -3,7 +3,8 @@ import { supabase } from '../lib/supabaseClient'
 import { completeGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getScoringCategory } from '../lib/scoringCategories'
 import { getWeekStartLocal } from '../lib/dateUtils'
-import CompassCheckin from './CompassCheckin'
+import { awardMovementXP } from '../lib/movementXP'
+import NervousSystemCheckin from './NervousSystemCheckin'
 import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
 import './GroanCompletionModal.css'
@@ -11,7 +12,7 @@ import './GroanCompletionModal.css'
 const PLAY_LIST_POINTS = 7
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
-  const [step, setStep] = useState('reflection') // 'reflection' | 'voices' | 'compass' | 'share'
+  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'three_percent' | 'share'
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
@@ -22,16 +23,13 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [error, setError] = useState(null)
   const [showExplainer, setShowExplainer] = useState(false)
 
-  // Reflection state
-  const [scaryScore, setScaryScore] = useState(5)
-  const [wahooScore, setWahooScore] = useState(5)
-  const [reflection, setReflection] = useState('')
+  // Nervous system state
+  const [beforeState, setBeforeState] = useState(null)
+  const [afterState, setAfterState] = useState(null)
+  const [protectiveArchetype, setProtectiveArchetype] = useState(null)
 
-  // Voices state
-  const [essenceShowedUp, setEssenceShowedUp] = useState(null)
-  const [essenceHow, setEssenceHow] = useState('')
-  const [protectiveShowedUp, setProtectiveShowedUp] = useState(null)
-  const [protectiveHow, setProtectiveHow] = useState('')
+  // 3% reflection
+  const [reflection, setReflection] = useState('')
 
   // Guard: if challenge is already completed, show message
   if (challenge?.status === 'completed') {
@@ -55,8 +53,8 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       const reflectionText = reflection
       const { error: groanError } = await completeGroanChallenge(challenge.id, {
         reflectionText,
-        scaryScoreAfter: scaryScore,
-        wahooScoreAfter: wahooScore,
+        scaryScoreAfter: null,
+        wahooScoreAfter: null,
       })
       if (groanError) throw groanError
 
@@ -75,14 +73,30 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           challenge_id: challenge.id,
           source_label: challenge.source_label,
           visibility_layer: challenge.visibility_layer,
-          scary_score: scaryScore,
-          wahoo_score: wahooScore,
+          before_state: beforeState,
+          after_state: afterState,
+          protective_archetype: protectiveArchetype,
           reflection,
         }),
       })
       if (questError) console.warn('Quest completion insert error:', questError)
 
-      // 3. Update scores
+      // 3. Insert nervous system check-in
+      try {
+        await supabase.from('nervous_system_checkins').insert({
+          user_id: userId,
+          before_state: beforeState,
+          after_state: afterState,
+          protective_archetype: protectiveArchetype,
+          checkin_type: 'playlist',
+          source_quest_id: questId,
+          source_challenge_id: challenge.id,
+        })
+      } catch (e) {
+        console.warn('NS check-in insert error:', e)
+      }
+
+      // 4. Update scores
       try {
         await supabase.rpc('increment_scores', {
           p_user_id: userId,
@@ -95,7 +109,12 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('Score increment error:', e)
       }
 
-      // 4. Remove from priority_weekly_picks so it no longer shows as active
+      // 4b. Award Movement XP for Strike completion
+      if (challenge.challenge_source === 'strike') {
+        awardMovementXP(userId, 'strike_complete', challenge.title)
+      }
+
+      // 5. Remove from priority_weekly_picks so it no longer shows as active
       try {
         await supabase
           .from('priority_weekly_picks')
@@ -107,7 +126,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('Error removing weekly pick:', e)
       }
 
-      // 5. Append challenge id to user_level_progress.courage_challenge_ids for current level
+      // 6. Append challenge id to user_level_progress.courage_challenge_ids for current level
       try {
         const { data: stage } = await supabase
           .from('user_stage_progress')
@@ -138,72 +157,13 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       }
 
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
-      setStep('voices')
+      setStep('share')
     } catch (err) {
       console.error('Error completing challenge:', err)
       setError('Failed to complete challenge. Please try again.')
     } finally {
       setSaving(false)
     }
-  }
-
-  const handleVoicesContinue = async () => {
-    const voiceEntries = []
-    if (essenceShowedUp !== null) {
-      voiceEntries.push({
-        user_id: userId,
-        challenge_instance_id: null,
-        quest_id: 'playlist_essence_voice',
-        quest_category: 'Voices',
-        quest_type: 'recognise',
-        points_earned: 3,
-        challenge_day: 0,
-        project_id: null,
-        reflection_text: JSON.stringify({
-          showed_up: essenceShowedUp,
-          how: essenceHow || null,
-          from_challenge: challenge.id,
-        }),
-      })
-    }
-    if (protectiveShowedUp !== null) {
-      voiceEntries.push({
-        user_id: userId,
-        challenge_instance_id: null,
-        quest_id: 'playlist_protective_voice',
-        quest_category: 'Voices',
-        quest_type: 'recognise',
-        points_earned: 3,
-        challenge_day: 0,
-        project_id: null,
-        reflection_text: JSON.stringify({
-          showed_up: protectiveShowedUp,
-          how: protectiveHow || null,
-          from_challenge: challenge.id,
-        }),
-      })
-    }
-    if (voiceEntries.length > 0) {
-      const { error } = await supabase.from('quest_completions').insert(voiceEntries)
-      if (error) console.warn('Error saving voice data:', error)
-    }
-    setStep('compass')
-  }
-
-  const handleCompassComplete = async (compassData) => {
-    try {
-      await supabase.from('flow_entries').insert({
-        user_id: userId,
-        direction: compassData.direction,
-        internal_state: compassData.internal_state,
-        external_state: compassData.external_state,
-        note: compassData.reasoning || null,
-        project_id: null,
-      })
-    } catch (err) {
-      console.warn('Error saving compass:', err)
-    }
-    setStep('share')
   }
 
   const handleShareDone = ({ shared } = {}) => {
@@ -220,24 +180,29 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       <div className="gcm-modal" onClick={(e) => e.stopPropagation()}>
         <button className="gcm-close" onClick={onClose}>&times;</button>
 
-        {step === 'reflection' && (
+        {step === 'state_checkin' && (
           <>
             <h2 className="gcm-title">I Did It!</h2>
             <p className="gcm-subtitle">{challenge.title || challenge.source_label}</p>
 
+            <NervousSystemCheckin
+              mode="both"
+              beforeState={beforeState}
+              afterState={afterState}
+              onBeforeChange={setBeforeState}
+              onAfterChange={setAfterState}
+              protectiveArchetype={protectiveArchetype}
+              onArchetypeChange={setProtectiveArchetype}
+              onComplete={() => setStep('three_percent')}
+            />
+          </>
+        )}
+
+        {step === 'three_percent' && (
+          <>
+            <h2 className="gcm-title">3% Better</h2>
+
             <div className="gcm-form">
-              <div className="gcm-slider-group">
-                <label>How scary was it? <span className="gcm-score">{scaryScore}/10</span></label>
-                <input type="range" min="1" max="10" value={scaryScore}
-                  onChange={(e) => setScaryScore(parseInt(e.target.value))} />
-              </div>
-
-              <div className="gcm-slider-group">
-                <label>How exciting was it? <span className="gcm-score">{wahooScore}/10</span></label>
-                <input type="range" min="1" max="10" value={wahooScore}
-                  onChange={(e) => setWahooScore(parseInt(e.target.value))} />
-              </div>
-
               <div className="gcm-textarea-group">
                 <div className="gcm-label-row">
                   <label>How can you make this 3% better next time?</label>
@@ -275,59 +240,12 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           </>
         )}
 
-        {step === 'voices' && (
-          <>
-            <h2 className="gcm-title">Voice Check-in</h2>
-
-            <div className="gcm-form">
-              <div className="gcm-voice-group">
-                <label>Did your Essence voice show up?</label>
-                <div className="gcm-toggle-row">
-                  <button className={`gcm-toggle ${essenceShowedUp === true ? 'active yes' : ''}`}
-                    onClick={() => setEssenceShowedUp(true)}>Yes</button>
-                  <button className={`gcm-toggle ${essenceShowedUp === false ? 'active no' : ''}`}
-                    onClick={() => { setEssenceShowedUp(false); setEssenceHow('') }}>No</button>
-                </div>
-                {essenceShowedUp && (
-                  <textarea placeholder="How did your Essence show up?"
-                    value={essenceHow} onChange={(e) => setEssenceHow(e.target.value)} rows={2} />
-                )}
-              </div>
-
-              <div className="gcm-voice-group">
-                <label>Did your Protective voice show up?</label>
-                <div className="gcm-toggle-row">
-                  <button className={`gcm-toggle ${protectiveShowedUp === true ? 'active yes' : ''}`}
-                    onClick={() => setProtectiveShowedUp(true)}>Yes</button>
-                  <button className={`gcm-toggle ${protectiveShowedUp === false ? 'active no' : ''}`}
-                    onClick={() => { setProtectiveShowedUp(false); setProtectiveHow('') }}>No</button>
-                </div>
-                {protectiveShowedUp && (
-                  <textarea placeholder="How did your Protective voice try to hold you back?"
-                    value={protectiveHow} onChange={(e) => setProtectiveHow(e.target.value)} rows={2} />
-                )}
-              </div>
-            </div>
-
-            <button className="gcm-gold-btn" onClick={handleVoicesContinue}>Continue</button>
-            <button className="gcm-skip-btn" onClick={() => setStep('compass')}>Skip</button>
-          </>
-        )}
-
-        {step === 'compass' && (
-          <CompassCheckin
-            onComplete={handleCompassComplete}
-            onSkip={() => setStep('share')}
-            challengeTitle={challenge.title || challenge.source_label}
-          />
-        )}
-
         {step === 'share' && (
           <ShareWinStep
             userId={userId}
             challenge={challenge}
-            scaryScore={scaryScore}
-            wahooScore={wahooScore}
+            beforeState={beforeState}
+            afterState={afterState}
             onDone={handleShareDone}
           />
         )}

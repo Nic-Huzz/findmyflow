@@ -9,6 +9,7 @@
  */
 
 import { supabase } from './supabaseClient'
+import { awardMovementXP } from './movementXP'
 
 // Sections where [lightning bolt] conversion is available
 export const CONVERTIBLE_SECTIONS = ['marketing', 'followup']
@@ -156,6 +157,9 @@ export async function convertChecklistToChallenge({
     return { data: null, error }
   }
 
+  // Award 3 XP for converting checklist item to challenge
+  awardMovementXP(userId, 'checklist_to_challenge', checklistItem.label)
+
   return { data, error: null }
 }
 
@@ -223,7 +227,7 @@ export async function fetchCreatorChallenges(userId, experienceId = null) {
     .from('groan_challenges')
     .select('*')
     .eq('user_id', userId)
-    .in('challenge_source', ['checklist', 'intention'])
+    .in('challenge_source', ['checklist', 'intention', 'strike'])
     .eq('status', 'active')
     .order('created_at', { ascending: false })
 

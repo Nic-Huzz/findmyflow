@@ -146,18 +146,38 @@ export default function ScopeMapFlow({ onComplete }) {
     }
   }
 
-  const saveResult = async (finalStage) => {
+  // Generate positioning: "I help [audience] with [problem] because [source]"
+  const buildPositioning = () => {
+    if (!q1 || !q2 || !q3) return null
+    const audience = q3.split(/[.!?]/)[0].trim()
+    const problem = q1.split(/[.!?]/)[0].trim()
+    const source = q2.split(/[.!?]/)[0].trim()
+    if (!audience || !problem || !source) return null
+    return `I help ${audience.charAt(0).toLowerCase() + audience.slice(1)} with ${problem.charAt(0).toLowerCase() + problem.slice(1)} because ${source.charAt(0).toLowerCase() + source.slice(1)}.`
+  }
+
+  const saveResult = async (finalStage, reasoningOverride) => {
     if (!user) return
     try {
-      await supabase.from('scope_map_results').insert({
+      const base = {
         user_id: user.id,
         stage: finalStage,
         response_problem: q1,
         response_source: q2,
         response_audience: q3,
-        ai_reasoning: result?.reasoning || null,
+        ai_reasoning: reasoningOverride || result?.reasoning || null,
         problem_spread: existingData?.problemSpread ?? null,
+      }
+      const positioning = buildPositioning()
+      // Try with positioning_statement (column added by migration 20260429000000)
+      const { error } = await supabase.from('scope_map_results').insert({
+        ...base,
+        ...(positioning ? { positioning_statement: positioning } : {}),
       })
+      // If column doesn't exist yet, retry without it
+      if (error?.code === '42703') {
+        await supabase.from('scope_map_results').insert(base)
+      }
     } catch (err) {
       console.error('Failed to save scope map result:', err)
     }
@@ -176,8 +196,9 @@ export default function ScopeMapFlow({ onComplete }) {
 
   const handleManualSelect = async (stage) => {
     hapticMedium()
-    setResult({ ...result, stage, reasoning: 'User self-selected' })
-    await saveResult(stage)
+    const updated = { ...result, stage, reasoning: 'User self-selected' }
+    setResult(updated)
+    await saveResult(stage, 'User self-selected')
     setStep(STEPS.PRESCRIPTION)
   }
 
@@ -188,7 +209,7 @@ export default function ScopeMapFlow({ onComplete }) {
 
     switch (result.stage) {
       case 'stream':
-        navigate('/nikigai/skills')
+        navigate('/life-map')
         break
       case 'lake':
       case 'waterfall':
@@ -418,6 +439,15 @@ export default function ScopeMapFlow({ onComplete }) {
           </div>
           <h2 className="scope-flow-heading">{rx.title}</h2>
           <p className="scope-flow-rx-body">{rx.body}</p>
+          {(() => {
+            const pos = buildPositioning()
+            return pos && (
+              <div className="scope-flow-positioning">
+                <div className="scope-flow-pos-label">Your positioning</div>
+                <div className="scope-flow-pos-text">{pos}</div>
+              </div>
+            )
+          })()}
           <button className="scope-flow-cta" onClick={handlePrescriptionAction}>
             {rx.cta}
           </button>

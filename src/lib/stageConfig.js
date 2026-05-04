@@ -374,10 +374,17 @@ export function getVisibilityLayersByDifficulty() {
  * @param {number} highestStage - Highest current_stage across user's projects
  * @returns {Object} Map of layerId → { locked: boolean, message: string }
  */
-export function getLayerLockStatus() {
+export function getLayerLockStatus(flowFinderComplete, highestStage) {
   const status = {}
   for (const layer of GROAN_VISIBILITY_LAYERS) {
-    status[layer.id] = { locked: false }
+    const unlock = layer.unlock
+    if (unlock.type === 'flow_finder') {
+      status[layer.id] = { locked: !flowFinderComplete, message: unlock.label }
+    } else if (unlock.type === 'stage') {
+      status[layer.id] = { locked: (highestStage ?? 0) < unlock.requiredStage, message: unlock.label }
+    } else {
+      status[layer.id] = { locked: false }
+    }
   }
   return status
 }
@@ -449,6 +456,7 @@ export const GROAN_SOURCE_TYPES = {
   SKILL: 'skill',
   PROBLEM: 'problem',
   PERSONA: 'persona',
+  MOVEMENT: 'movement', // Movement-connected challenges (Lightning Strikes)
   MANUAL: 'manual' // User-created custom groan
 }
 

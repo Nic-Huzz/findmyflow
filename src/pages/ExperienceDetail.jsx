@@ -19,9 +19,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { useExperience, daysUntil, formatExperienceDate } from '../hooks/useExperienceData'
-import { SECTION_META, PHASE_META } from '../lib/experienceChecklistTemplate'
+import { SECTION_META, PHASE_META, NOTABLE_KEYS } from '../lib/experienceChecklistTemplate'
 import { CONVERTIBLE_SECTIONS, convertChecklistToChallenge, fetchDNASliders, fetchCreatorChallenges } from '../lib/checklistChallengeService'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { awardMovementXP } from '../lib/movementXP'
+import ExperienceHealthCard from '../components/ExperienceHealthCard'
 import './ExperienceDetail.css'
 
 const formatDate = (d) => formatExperienceDate(d, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
@@ -50,9 +52,11 @@ export default function ExperienceDetail() {
     unhideItem,
     addCustomItem,
     deleteCustomItem,
+    updateChecklistNote,
+    updateExperience,
   } = useExperience(id)
 
-  const [activePhase, setActivePhase] = useState('pre')
+  const [activePhase, setActivePhase] = useState('details')
   const [showHidden, setShowHidden] = useState(false)
   const [dnaSliders, setDnaSliders] = useState(null)
   const [dnaLoaded, setDnaLoaded] = useState(false)
@@ -60,6 +64,31 @@ export default function ExperienceDetail() {
   const [convertedIds, setConvertedIds] = useState(new Set())
   const [showDeadlinePicker, setShowDeadlinePicker] = useState(null)
   const [deadlineDate, setDeadlineDate] = useState('')
+
+  // Details tab state
+  const [detailsDraft, setDetailsDraft] = useState(null)
+  const [savingDetails, setSavingDetails] = useState(false)
+  const [detailsError, setDetailsError] = useState(null)
+  const [valueStackItems, setValueStackItems] = useState([])
+  const [newStackLabel, setNewStackLabel] = useState('')
+  const [newStackValue, setNewStackValue] = useState('')
+
+  // Initialize details tab from experience data
+  useEffect(() => {
+    if (!experience) return
+    setDetailsDraft({
+      one_line_promise: experience.one_line_promise || '',
+      booking_url: experience.booking_url || '',
+      venue: experience.venue || '',
+      description: experience.description || '',
+      ticket_price: experience.ticket_price != null ? String(experience.ticket_price) : '',
+      early_bird_price: experience.early_bird_price != null ? String(experience.early_bird_price) : '',
+      standard_price: experience.standard_price != null ? String(experience.standard_price) : '',
+      currency: experience.currency || 'IDR',
+      pricing_percentage: experience.pricing_percentage != null ? String(experience.pricing_percentage) : '15',
+    })
+    setValueStackItems(experience.value_stack || [])
+  }, [experience?.id])
 
   // Load DNA sliders + already-converted items
   useEffect(() => {
@@ -100,6 +129,64 @@ export default function ExperienceDetail() {
     setShowDeadlinePicker(null)
     setDeadlineDate('')
   }, [user?.id, experience, deadlineDate, dnaSliders])
+
+  // Save details tab
+  const saveDetails = async () => {
+    if (!detailsDraft || savingDetails) return
+    setSavingDetails(true)
+    setDetailsError(null)
+    try {
+      const updates = {
+        one_line_promise: detailsDraft.one_line_promise || null,
+        booking_url: detailsDraft.booking_url || null,
+        venue: detailsDraft.venue || null,
+        description: detailsDraft.description || null,
+        ticket_price: detailsDraft.ticket_price ? parseFloat(detailsDraft.ticket_price) : null,
+        early_bird_price: detailsDraft.early_bird_price ? parseFloat(detailsDraft.early_bird_price) : null,
+        standard_price: detailsDraft.standard_price ? parseFloat(detailsDraft.standard_price) : null,
+        currency: detailsDraft.currency || 'IDR',
+        pricing_percentage: detailsDraft.pricing_percentage ? parseFloat(detailsDraft.pricing_percentage) : null,
+        value_stack: valueStackItems.length > 0 ? valueStackItems.map(({ label, value }) => ({ label, value })) : null,
+      }
+      await updateExperience(updates)
+      hapticSuccess()
+
+      // Award XP for newly filled fields (compare against experience before save)
+      if (user?.id) {
+        const fields = ['one_line_promise', 'booking_url', 'venue', 'description']
+        for (const f of fields) {
+          if (updates[f] && !experience[f]) {
+            awardMovementXP(user.id, 'details_field', f)
+          }
+        }
+        if (valueStackItems.length > 0 && !experience.value_stack?.length) {
+          awardMovementXP(user.id, 'value_stack', 'pricing set')
+        }
+      }
+    } catch (err) {
+      console.error('Save details error:', err)
+      setDetailsError('Failed to save. Please try again.')
+    }
+    setSavingDetails(false)
+  }
+
+  const addStackItem = () => {
+    if (!newStackLabel.trim()) return
+    setValueStackItems(prev => [...prev, {
+      id: Date.now(),
+      label: newStackLabel.trim(),
+      value: parseFloat(newStackValue) || 0,
+    }])
+    setNewStackLabel('')
+    setNewStackValue('')
+    hapticLight()
+  }
+
+  const removeStackItem = (idx) => {
+    setValueStackItems(prev => prev.filter((_, i) => i !== idx))
+  }
+
+  const totalStackValue = valueStackItems.reduce((sum, item) => sum + (item.value || 0), 0)
 
   // Bucket items by phase → section
   const grouped = useMemo(() => {
@@ -163,24 +250,270 @@ export default function ExperienceDetail() {
             {countdown && (
               <span className="exp-detail-countdown">{countdown}</span>
             )}
+            {experience.ticket_price != null && (() => {
+              const price = Number(experience.ticket_price)
+              if (isNaN(price)) return null
+              return <span className="exp-detail-price">${price.toFixed(price % 1 === 0 ? 0 : 2)}</span>
+            })()}
           </div>
         </header>
 
+        {/* Health Card (completed/archived experiences only) */}
+        {experience && (experience.status === 'completed' || experience.status === 'archived') && (
+          <ExperienceHealthCard
+            experienceId={id}
+            userId={user?.id}
+            previousExperienceId={experience.previous_experience_id}
+            ticketPrice={experience.ticket_price}
+          />
+        )}
+
         {/* Phase tabs */}
-        <div className="exp-phase-tabs">
-          {(['pre', 'post']).map(phase => (
+        <div className="exp-phase-tabs exp-phase-tabs-3">
+          {[
+            { id: 'details', title: 'Details', sub: 'Your experience' },
+            { id: 'pre', title: 'Pre-Event', sub: 'Set up to win' },
+            { id: 'post', title: 'Post-Event', sub: 'Close the loop' },
+          ].map(tab => (
             <button
-              key={phase}
-              className={`exp-phase-tab ${activePhase === phase ? 'active' : ''}`}
-              onClick={() => setActivePhase(phase)}
+              key={tab.id}
+              className={`exp-phase-tab ${activePhase === tab.id ? 'active' : ''}`}
+              onClick={() => setActivePhase(tab.id)}
             >
-              <div className="exp-phase-tab-title">{PHASE_META[phase].title}</div>
-              <div className="exp-phase-tab-sub">{PHASE_META[phase].subtitle}</div>
+              <div className="exp-phase-tab-title">{tab.title}</div>
+              <div className="exp-phase-tab-sub">{tab.sub}</div>
             </button>
           ))}
         </div>
 
-        {/* Sections for the active phase */}
+        {/* ═══ DETAILS TAB ═══ */}
+        {activePhase === 'details' && !detailsDraft && !loading && (
+          <p style={{ textAlign: 'center', color: '#adb5bd', fontSize: '0.82rem', padding: '2rem 0' }}>Loading details...</p>
+        )}
+        {activePhase === 'details' && detailsDraft && (
+          <div className="exp-details-tab">
+            {/* One-line promise */}
+            <div className="exp-det-section">
+              <label className="exp-det-label">One-line promise</label>
+              <input
+                type="text"
+                className="exp-det-input"
+                value={detailsDraft.one_line_promise}
+                onChange={e => setDetailsDraft(d => ({ ...d, one_line_promise: e.target.value }))}
+                placeholder="What transformation do attendees get?"
+                maxLength={200}
+              />
+            </div>
+
+            {/* Booking link */}
+            <div className="exp-det-section">
+              <label className="exp-det-label">Booking / sales page</label>
+              <input
+                type="url"
+                className="exp-det-input"
+                value={detailsDraft.booking_url}
+                onChange={e => setDetailsDraft(d => ({ ...d, booking_url: e.target.value }))}
+                placeholder="https://..."
+              />
+            </div>
+
+            {/* Venue */}
+            <div className="exp-det-section">
+              <label className="exp-det-label">Venue / location</label>
+              <input
+                type="text"
+                className="exp-det-input"
+                value={detailsDraft.venue}
+                onChange={e => setDetailsDraft(d => ({ ...d, venue: e.target.value }))}
+                placeholder="e.g. The Istana, Bali"
+              />
+            </div>
+
+            {/* Description */}
+            <div className="exp-det-section">
+              <label className="exp-det-label">Description</label>
+              <textarea
+                className="exp-det-textarea"
+                value={detailsDraft.description}
+                onChange={e => setDetailsDraft(d => ({ ...d, description: e.target.value }))}
+                placeholder="What is this experience about?"
+                rows={3}
+              />
+            </div>
+
+            {/* ── VALUE STACK PRICING ── */}
+            <div className="exp-det-pricing-header">
+              <h3 className="exp-det-pricing-title">Value Stack Pricing</h3>
+              <p className="exp-det-pricing-sub">List everything included. What would each be worth if someone bought it separately?</p>
+            </div>
+
+            {/* Stack items */}
+            {valueStackItems.length > 0 && (
+              <div className="exp-vs-list">
+                {valueStackItems.map((item, i) => (
+                  <div key={item.id || i} className="exp-vs-item">
+                    <span className="exp-vs-item-label">{item.label}</span>
+                    <span className="exp-vs-item-value">
+                      {detailsDraft.currency === 'IDR'
+                        ? `${(item.value || 0).toLocaleString()} IDR`
+                        : `$${(item.value || 0).toLocaleString()}`
+                      }
+                    </span>
+                    <button className="exp-vs-item-remove" onClick={() => removeStackItem(i)}>x</button>
+                  </div>
+                ))}
+                <div className="exp-vs-total">
+                  <span>Total value</span>
+                  <span className="exp-vs-total-val">
+                    {detailsDraft.currency === 'IDR'
+                      ? `${totalStackValue.toLocaleString()} IDR`
+                      : `$${totalStackValue.toLocaleString()}`
+                    }
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Add stack item */}
+            <div className="exp-vs-add">
+              <input
+                type="text"
+                className="exp-vs-add-label"
+                value={newStackLabel}
+                onChange={e => setNewStackLabel(e.target.value)}
+                placeholder="e.g. Breathwork session"
+                onKeyDown={e => e.key === 'Enter' && addStackItem()}
+              />
+              <input
+                type="number"
+                className="exp-vs-add-value"
+                value={newStackValue}
+                onChange={e => setNewStackValue(e.target.value)}
+                placeholder="Value"
+                min="0"
+                onKeyDown={e => e.key === 'Enter' && addStackItem()}
+              />
+              <button className="exp-vs-add-btn" onClick={addStackItem} disabled={!newStackLabel.trim()}>+</button>
+            </div>
+
+            {/* Currency toggle */}
+            <div className="exp-det-section exp-det-row">
+              <label className="exp-det-label">Currency</label>
+              <select
+                className="exp-det-select"
+                value={detailsDraft.currency}
+                onChange={e => setDetailsDraft(d => ({ ...d, currency: e.target.value }))}
+              >
+                <option value="IDR">IDR</option>
+                <option value="USD">USD</option>
+                <option value="AUD">AUD</option>
+                <option value="GBP">GBP</option>
+                <option value="EUR">EUR</option>
+              </select>
+            </div>
+
+            {/* Pricing percentage + calculated prices */}
+            {totalStackValue > 0 && (
+              <div className="exp-vs-pricing">
+                <div className="exp-vs-slider-row">
+                  <label className="exp-det-label">
+                    Price at <span className="exp-vs-pct">{detailsDraft.pricing_percentage || 15}%</span> of value
+                  </label>
+                  <input
+                    type="range"
+                    min="8"
+                    max="30"
+                    step="1"
+                    value={detailsDraft.pricing_percentage || 15}
+                    onChange={e => {
+                      const pct = Number(e.target.value)
+                      const ebPct = Math.max(5, pct - 3)
+                      const eb = Math.round(totalStackValue * ebPct / 100)
+                      const std = Math.round(totalStackValue * pct / 100)
+                      setDetailsDraft(d => ({
+                        ...d,
+                        pricing_percentage: String(pct),
+                        early_bird_price: String(eb),
+                        standard_price: String(std),
+                        ticket_price: String(std),
+                      }))
+                    }}
+                    className="exp-vs-slider"
+                  />
+                </div>
+
+                <div className="exp-vs-tiers">
+                  <div className="exp-vs-tier">
+                    <div className="exp-vs-tier-label">Early Bird ({Math.max(5, Number(detailsDraft.pricing_percentage || 15) - 3)}%)</div>
+                    <div className="exp-vs-tier-price">
+                      {detailsDraft.currency === 'IDR'
+                        ? `${Number(detailsDraft.early_bird_price || 0).toLocaleString()} IDR`
+                        : `$${Number(detailsDraft.early_bird_price || 0).toLocaleString()}`
+                      }
+                    </div>
+                  </div>
+                  <div className="exp-vs-tier exp-vs-tier-highlight">
+                    <div className="exp-vs-tier-label">Standard ({detailsDraft.pricing_percentage || 15}%)</div>
+                    <div className="exp-vs-tier-price">
+                      {detailsDraft.currency === 'IDR'
+                        ? `${Number(detailsDraft.standard_price || 0).toLocaleString()} IDR`
+                        : `$${Number(detailsDraft.standard_price || 0).toLocaleString()}`
+                      }
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tier guide */}
+                <div className="exp-vs-guide">
+                  <div className={Number(detailsDraft.pricing_percentage) <= 10 ? 'exp-vs-guide-active' : ''}>8-10% Room Filler</div>
+                  <div className={Number(detailsDraft.pricing_percentage) > 10 && Number(detailsDraft.pricing_percentage) <= 15 ? 'exp-vs-guide-active' : ''}>12-15% Sweet Spot</div>
+                  <div className={Number(detailsDraft.pricing_percentage) > 15 && Number(detailsDraft.pricing_percentage) <= 20 ? 'exp-vs-guide-active' : ''}>18-20% Premium</div>
+                  <div className={Number(detailsDraft.pricing_percentage) > 20 ? 'exp-vs-guide-active' : ''}>22-25% Top Tier</div>
+                </div>
+              </div>
+            )}
+
+            {/* Manual price override */}
+            {!totalStackValue && (
+              <div className="exp-det-section">
+                <label className="exp-det-label">Ticket price (manual)</label>
+                <div className="exp-det-row">
+                  <input
+                    type="number"
+                    className="exp-det-input"
+                    value={detailsDraft.ticket_price}
+                    onChange={e => setDetailsDraft(d => ({ ...d, ticket_price: e.target.value }))}
+                    placeholder="0"
+                    min="0"
+                  />
+                  <select
+                    className="exp-det-select"
+                    value={detailsDraft.currency}
+                    onChange={e => setDetailsDraft(d => ({ ...d, currency: e.target.value }))}
+                  >
+                    <option value="IDR">IDR</option>
+                    <option value="USD">USD</option>
+                    <option value="AUD">AUD</option>
+                    <option value="GBP">GBP</option>
+                    <option value="EUR">EUR</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
+            {/* Save button */}
+            {detailsError && <p style={{ color: '#ef4444', fontSize: '0.82rem', textAlign: 'center' }}>{detailsError}</p>}
+            <button
+              className="exp-det-save"
+              onClick={saveDetails}
+              disabled={savingDetails}
+            >
+              {savingDetails ? 'Saving...' : 'Save Details'}
+            </button>
+          </div>
+        )}
+
+        {/* ═══ PRE-EVENT TAB ═══ */}
         {activePhase === 'pre' && (
           <>
             <ChecklistSection
@@ -202,6 +535,7 @@ export default function ExperienceDetail() {
               onConvert={handleConvertToChallenge}
               onCancelDeadline={() => { setShowDeadlinePicker(null); setDeadlineDate('') }}
               hasDna={dnaLoaded && dnaSliders?.knowledgeStyle != null}
+              onUpdateNote={updateChecklistNote}
             />
             <ChecklistSection
               section="organisation"
@@ -212,6 +546,7 @@ export default function ExperienceDetail() {
               onUnhide={unhideItem}
               onAdd={(label) => addCustomItem({ phase: 'pre', section: 'organisation', label })}
               onDelete={deleteCustomItem}
+              onUpdateNote={updateChecklistNote}
             />
           </>
         )}
@@ -241,6 +576,7 @@ export default function ExperienceDetail() {
               onConvert={handleConvertToChallenge}
               onCancelDeadline={() => { setShowDeadlinePicker(null); setDeadlineDate('') }}
               hasDna={dnaLoaded && dnaSliders?.knowledgeStyle != null}
+              onUpdateNote={updateChecklistNote}
             />
 
             {/* Costs */}
@@ -256,6 +592,7 @@ export default function ExperienceDetail() {
               onUnhide={unhideItem}
               onAdd={(label) => addCustomItem({ phase: 'post', section: 'reflection', label })}
               onDelete={deleteCustomItem}
+              onUpdateNote={updateChecklistNote}
             />
           </>
         )}
@@ -282,6 +619,7 @@ function ChecklistSection({
   section, items, showHidden, onToggle, onHide, onUnhide, onAdd, onDelete,
   convertible = false, convertedIds, convertingItemId, showDeadlinePicker,
   deadlineDate, onShowDeadline, onDeadlineChange, onConvert, onCancelDeadline, hasDna,
+  onUpdateNote,
 }) {
   const meta = SECTION_META[section]
   const [addInputOpen, setAddInputOpen] = useState(false)
@@ -341,6 +679,8 @@ function ChecklistSection({
               onConvert={onConvert}
               onCancelDeadline={onCancelDeadline}
               hasDna={hasDna}
+              showNotes={NOTABLE_KEYS.includes(item.template_item_key)}
+              onUpdateNote={onUpdateNote}
             />
           </li>
         ))}
@@ -383,7 +723,14 @@ function ChecklistItem({
   item, onToggle, onHide, onUnhide, onDelete,
   convertible, isConverted, isConverting, showDeadline,
   deadlineDate, onShowDeadline, onDeadlineChange, onConvert, onCancelDeadline, hasDna,
+  showNotes, onUpdateNote,
 }) {
+  const [noteOpen, setNoteOpen] = useState(false)
+  const [noteVal, setNoteVal] = useState(item.notes || '')
+
+  // Re-sync noteVal when item.notes changes (e.g. after carry-forward or refetch)
+  useEffect(() => { setNoteVal(item.notes || '') }, [item.notes])
+
   return (
     <div className={`exp-item ${item.completed ? 'exp-item-done' : ''} ${item.is_hidden ? 'exp-item-hidden' : ''}`}>
       <button
@@ -394,7 +741,23 @@ function ChecklistItem({
         {item.completed && <span className="exp-item-check-tick">✓</span>}
       </button>
 
-      <span className="exp-item-label">{item.label}</span>
+      <div className="exp-item-content">
+        <span className="exp-item-label" onClick={showNotes ? () => setNoteOpen(!noteOpen) : undefined} style={showNotes ? { cursor: 'pointer' } : undefined}>{item.label}</span>
+        {showNotes && item.notes && !noteOpen && (
+          <div className="exp-item-note-preview" onClick={() => setNoteOpen(true)}>{item.notes}</div>
+        )}
+        {showNotes && noteOpen && (
+          <textarea
+            className="exp-item-note-input"
+            value={noteVal}
+            onChange={(e) => setNoteVal(e.target.value)}
+            onBlur={() => { if (noteVal !== (item.notes || '')) onUpdateNote(item.id, noteVal); setNoteOpen(false) }}
+            placeholder="Your answer..."
+            rows={2}
+            autoFocus
+          />
+        )}
+      </div>
 
       <div className="exp-item-actions">
         {/* Lightning bolt: convert to challenge */}
@@ -618,6 +981,8 @@ function AttendeeUpload({ experienceId, userId }) {
       setSaved(true)
       setExtracted(null)
       hapticSuccess()
+      // Award 5 XP for uploading attendees
+      if (userId) awardMovementXP(userId, 'attendee_upload', `${added} attendees`)
     } catch (err) {
       console.error('Save attendees error:', err)
       setError('Failed to save some attendees. Try again.')

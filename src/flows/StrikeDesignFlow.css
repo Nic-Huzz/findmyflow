@@ -1,0 +1,215 @@
+/* StrikeDesignFlow — /create/strike */
+
+.stk {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #5e17eb 0%, #4a12c4 100%);
+  color: #fff;
+  padding: 0 1.25rem;
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+.stk-center { display: flex; justify-content: center; padding: 3rem 0; }
+.stk-spinner {
+  width: 28px; height: 28px; border: 3px solid rgba(255,255,255,0.15);
+  border-top-color: #E9A23B; border-radius: 50%;
+  animation: stkSpin 0.8s linear infinite;
+}
+@keyframes stkSpin { to { transform: rotate(360deg); } }
+
+.stk-container { max-width: 480px; margin: 0 auto; padding: 2rem 0.25rem calc(6rem + env(safe-area-inset-bottom, 0px)); }
+.stk-screen { animation: stkFadeIn 0.4s ease; }
+@keyframes stkFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.stk-centered-screen {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; min-height: calc(100vh - 70px); text-align: center;
+}
+
+.stk-step-label {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4);
+  text-align: center; margin-bottom: 0.75rem;
+  letter-spacing: 0.04em;
+}
+.stk-badge {
+  display: inline-block; padding: 4px 12px;
+  background: rgba(233,162,59,0.15); border: 1px solid rgba(233,162,59,0.3);
+  border-radius: 999px; color: #E9A23B; font-size: 12px; font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+.stk-heading {
+  font-size: 22px; font-weight: 800; line-height: 1.3; margin: 0 0 1rem;
+  color: #fff;
+}
+.stk-gold { color: #E9A23B; }
+.stk-prompt { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.6; margin: 0 0 1.5rem; }
+
+/* Options (Outcome + Type cards) */
+.stk-options { display: flex; flex-direction: column; gap: 0.6rem; }
+.stk-option {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.75rem; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  cursor: pointer; text-align: left; color: #fff; position: relative;
+}
+.stk-option:active { background: rgba(255,255,255,0.08); }
+.stk-option-selected {
+  border-color: #E9A23B; background: rgba(233,162,59,0.08);
+}
+.stk-option-suggested { border-color: rgba(94,23,235,0.3); }
+.stk-option-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+.stk-option-label { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.stk-option-desc { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.4; }
+.stk-option-best { font-size: 11px; color: #E9A23B; margin-top: 4px; line-height: 1.3; }
+.stk-suggested-badge {
+  position: absolute; top: 8px; right: 8px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  color: #5e17eb; background: rgba(94,23,235,0.15); padding: 2px 6px; border-radius: 4px;
+}
+
+/* Scarcity checkbox */
+.stk-scarcity-check {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 0.75rem; cursor: pointer;
+}
+.stk-scarcity-check input[type="checkbox"] { accent-color: #E9A23B; }
+
+/* Fuel cards */
+.stk-fuel-card {
+  padding: 0.75rem; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  margin-bottom: 0.6rem;
+}
+.stk-fuel-archetype { border-color: rgba(94,23,235,0.3); }
+.stk-fuel-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: #E9A23B; margin-bottom: 0.3rem;
+}
+.stk-fuel-text { font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.5; font-style: italic; }
+.stk-fuel-sub { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.4; margin-top: 0.3rem; }
+
+/* Generating state */
+.stk-generating {
+  display: flex; align-items: center; gap: 0.6rem; padding: 1rem;
+  color: rgba(255,255,255,0.6); font-size: 14px;
+}
+.stk-error { color: #ff9b9b; font-size: 14px; }
+.stk-retry {
+  background: transparent; border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; padding: 0.4rem 0.8rem; border-radius: 8px; cursor: pointer;
+  font-size: 13px; margin-top: 0.5rem;
+}
+
+/* AI suggestions */
+.stk-suggestions { display: flex; flex-direction: column; gap: 0.5rem; }
+.stk-suggestion {
+  padding: 0.75rem; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  cursor: pointer; text-align: left; color: #fff;
+}
+.stk-suggestion:active { background: rgba(255,255,255,0.08); }
+.stk-suggestion-selected { border-color: #E9A23B; background: rgba(233,162,59,0.08); }
+.stk-suggestion-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.stk-suggestion-desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.4; }
+.stk-suggestion-hook {
+  font-size: 12px; color: #E9A23B; margin-top: 6px; font-style: italic;
+}
+
+/* Textarea */
+.stk-textarea {
+  width: 100%; padding: 0.75rem; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 12px;
+  color: #fff; font-size: 15px; font-family: inherit; resize: none;
+  line-height: 1.5; margin-bottom: 0.6rem; box-sizing: border-box;
+}
+.stk-textarea:focus { outline: none; border-color: #E9A23B; }
+.stk-textarea-secondary { font-size: 13px; color: rgba(255,255,255,0.7); }
+.stk-textarea::placeholder { color: rgba(255,255,255,0.3); }
+
+/* Fields */
+.stk-field { margin-bottom: 0.75rem; }
+.stk-field-label {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.04em; color: rgba(255,255,255,0.5); margin-bottom: 0.3rem;
+}
+.stk-select, .stk-date {
+  width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 8px;
+  color: #fff; font-size: 14px; font-family: inherit; box-sizing: border-box;
+}
+.stk-select:focus, .stk-date:focus { outline: none; border-color: #E9A23B; }
+.stk-select option { background: #1a0b3d; color: #fff; }
+
+/* Strike preview */
+.stk-strike-preview {
+  padding: 0.75rem; background: rgba(233,162,59,0.08);
+  border: 1px solid rgba(233,162,59,0.2); border-radius: 12px;
+  margin-bottom: 1rem;
+}
+.stk-strike-preview-title { font-size: 15px; font-weight: 700; color: #E9A23B; }
+
+/* Sliders */
+.stk-slider-group { margin-bottom: 0.75rem; }
+.stk-slider-label {
+  font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8);
+  display: flex; justify-content: space-between; margin-bottom: 0.3rem;
+}
+.stk-slider-val { color: #E9A23B; font-weight: 800; }
+.stk-slider {
+  width: 100%; -webkit-appearance: none; appearance: none;
+  height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; outline: none;
+}
+.stk-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #E9A23B; cursor: pointer;
+}
+
+/* Essence zone indicator */
+.stk-zone {
+  padding: 0.6rem 0.75rem; border-radius: 10px; font-size: 13px;
+  line-height: 1.4; margin-bottom: 1rem;
+}
+.stk-zone-essence { background: rgba(236,72,153,0.12); color: #ec4899; border: 1px solid rgba(236,72,153,0.25); }
+.stk-zone-growth { background: rgba(59,130,246,0.1); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+.stk-zone-comfort { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.2); }
+.stk-zone-protective { background: rgba(107,114,128,0.1); color: #9ca3af; border: 1px solid rgba(107,114,128,0.2); }
+.stk-zone-neutral { background: rgba(107,114,128,0.08); color: #6b7280; border: 1px solid rgba(107,114,128,0.15); }
+
+/* 3-Pillar Check */
+.stk-pillars {
+  padding: 0.75rem; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  margin-bottom: 1rem;
+}
+.stk-pillar-title {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.04em; color: #E9A23B; margin-bottom: 0.5rem;
+}
+.stk-pillar {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 13px; color: rgba(255,255,255,0.8); padding: 0.25rem 0; cursor: pointer;
+}
+.stk-pillar input[type="checkbox"] { accent-color: #E9A23B; }
+
+/* Navigation — sticky bottom */
+.stk-nav {
+  display: flex; gap: 0.5rem;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  padding: 0.75rem 1.25rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(0deg, rgba(74,18,196,0.95) 0%, rgba(74,18,196,0.8) 80%, transparent 100%);
+  z-index: 10; max-width: 100%;
+}
+.stk-back-btn {
+  padding: 0.7rem 1rem; background: transparent;
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 12px;
+  color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.stk-cta {
+  flex: 1; padding: 0.7rem 1rem;
+  background: #E9A23B;
+  border: none; border-radius: 12px;
+  color: #1a0440; font-size: 15px; font-weight: 700; cursor: pointer;
+}
+.stk-cta:disabled { opacity: 0.4; cursor: not-allowed; }
+.stk-cta:active:not(:disabled) { transform: scale(0.98); }

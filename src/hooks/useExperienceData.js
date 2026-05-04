@@ -10,6 +10,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { buildChecklistRows } from '../lib/experienceChecklistTemplate'
+import { awardMovementXP } from '../lib/movementXP'
 
 /**
  * List hook — for ExperienceCatalog
@@ -58,7 +59,7 @@ export function useCreateExperience() {
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState(null)
 
-  const createExperience = async ({ name, experience_date, previous_experience_id = null }) => {
+  const createExperience = async ({ name, experience_date, previous_experience_id = null, ticket_price = null, experience_type = null, runAgainFromId = null }) => {
     setCreating(true)
     setError(null)
     try {
@@ -66,15 +67,19 @@ export function useCreateExperience() {
       if (!user) throw new Error('Not signed in')
 
       // 1. Insert the experience
-      const { data: experience, error: createErr } = await supabase
+      const insertPayload = {
+        user_id: user.id,
+        name: name.trim(),
+        experience_date: experience_date || null,
+        previous_experience_id: previous_experience_id || runAgainFromId || null,
+        status: 'upcoming',
+      }
+      if (ticket_price != null) insertPayload.ticket_price = ticket_price
+      if (experience_type) insertPayload.experience_type = experience_type
+
+      let { data: experience, error: createErr } = await supabase
         .from('experiences')
-        .insert({
-          user_id: user.id,
-          name: name.trim(),
-          experience_date: experience_date || null,
-          previous_experience_id,
-          status: 'upcoming',
-        })
+        .insert(insertPayload)
         .select()
         .single()
 
@@ -82,14 +87,73 @@ export function useCreateExperience() {
 
       // 2. Seed the checklist from template
       const rows = buildChecklistRows(experience.id, user.id)
-      const { error: seedErr } = await supabase
+      let { error: seedErr } = await supabase
         .from('experience_checklist_items')
         .insert(rows)
 
+      // If template_item_key column doesn't exist yet, retry without it
+      if (seedErr?.code === '42703') {
+        const rowsWithoutKey = rows.map(({ template_item_key, ...rest }) => rest)
+        const retry = await supabase.from('experience_checklist_items').insert(rowsWithoutKey)
+        seedErr = retry.error
+      }
+
       if (seedErr) {
-        // Rollback the experience if seeding fails
         await supabase.from('experiences').delete().eq('id', experience.id)
         throw seedErr
+      }
+
+      // 3. Carry forward data from previous experience (Run Again)
+      if (runAgainFromId) {
+        try {
+          // Carry forward checklist notes
+          const { data: prevItems } = await supabase
+            .from('experience_checklist_items')
+            .select('template_item_key, notes')
+            .eq('experience_id', runAgainFromId)
+            .not('template_item_key', 'is', null)
+            .not('notes', 'is', null)
+          if (prevItems?.length) {
+            const { data: newItems } = await supabase
+              .from('experience_checklist_items')
+              .select('id, template_item_key')
+              .eq('experience_id', experience.id)
+              .not('template_item_key', 'is', null)
+            const updates = prevItems
+              .map(prev => {
+                const match = newItems?.find(n => n.template_item_key === prev.template_item_key)
+                return match && prev.notes ? supabase.from('experience_checklist_items').update({ notes: prev.notes }).eq('id', match.id) : null
+              })
+              .filter(Boolean)
+            if (updates.length) await Promise.all(updates)
+          }
+
+          // Carry forward Details tab fields (one-liner, booking URL, venue, value stack, pricing)
+          const { data: srcExp } = await supabase
+            .from('experiences')
+            .select('one_line_promise, booking_url, venue, description, value_stack, early_bird_price, standard_price, currency, pricing_percentage')
+            .eq('id', runAgainFromId)
+            .maybeSingle()
+          if (srcExp) {
+            const detailsUpdate = {}
+            if (srcExp.one_line_promise) detailsUpdate.one_line_promise = srcExp.one_line_promise
+            if (srcExp.booking_url) detailsUpdate.booking_url = srcExp.booking_url
+            if (srcExp.venue) detailsUpdate.venue = srcExp.venue
+            if (srcExp.description) detailsUpdate.description = srcExp.description
+            if (srcExp.value_stack) detailsUpdate.value_stack = srcExp.value_stack
+            if (srcExp.early_bird_price != null) detailsUpdate.early_bird_price = srcExp.early_bird_price
+            if (srcExp.standard_price != null) detailsUpdate.standard_price = srcExp.standard_price
+            if (srcExp.currency) detailsUpdate.currency = srcExp.currency
+            if (srcExp.pricing_percentage != null) detailsUpdate.pricing_percentage = srcExp.pricing_percentage
+            if (Object.keys(detailsUpdate).length) {
+              await supabase.from('experiences').update(detailsUpdate).eq('id', experience.id)
+            }
+          }
+          // Award 10 XP for Run Again
+          awardMovementXP(user.id, 'run_again', name.trim())
+        } catch (err) {
+          console.error('Run Again carry-forward failed (non-blocking):', err)
+        }
       }
 
       return experience
@@ -183,6 +247,11 @@ export function useExperience(experienceId) {
       setItems(prev => prev.map(i =>
         i.id === itemId ? { ...i, completed: item.completed, completed_at: item.completed_at } : i
       ))
+    } else if (nextCompleted) {
+      // Award 2 XP for completing a checklist item
+      const session = await supabase.auth.getSession()
+      const uid = session?.data?.session?.user?.id
+      if (uid) awardMovementXP(uid, 'checklist_item', item.label)
     }
   }
 
@@ -270,13 +339,40 @@ export function useExperience(experienceId) {
 
   // Update experience fields (name, date, status, reflection notes)
   const updateExperience = async (updates) => {
-    setExperience(prev => ({ ...prev, ...updates }))
+    const prev = experience
+    setExperience(p => ({ ...p, ...updates }))
     const { error: err } = await supabase
       .from('experiences')
       .update(updates)
       .eq('id', experienceId)
     if (err) {
       console.error('[useExperience] update failed:', err)
+      await fetchExperience()
+      throw err
+    }
+
+    // Award Movement XP for key milestones
+    const session = await supabase.auth.getSession()
+    const uid = session?.data?.session?.user?.id
+    if (uid) {
+      if (updates.status === 'completed' && prev?.status !== 'completed') {
+        awardMovementXP(uid, 'experience_complete', prev?.name || '')
+      }
+      if (updates.three_percent_note && !prev?.three_percent_note) {
+        awardMovementXP(uid, 'three_percent', updates.three_percent_note)
+      }
+    }
+  }
+
+  // Update notes on a checklist item (for Run Again carry-forward)
+  const updateChecklistNote = async (itemId, notes) => {
+    setItems(prev => prev.map(i => i.id === itemId ? { ...i, notes } : i))
+    const { error: err } = await supabase
+      .from('experience_checklist_items')
+      .update({ notes: notes || null })
+      .eq('id', itemId)
+    if (err) {
+      console.error('[useExperience] updateNote failed:', err)
       await fetchExperience()
     }
   }
@@ -293,6 +389,7 @@ export function useExperience(experienceId) {
     addCustomItem,
     deleteCustomItem,
     updateExperience,
+    updateChecklistNote,
   }
 }
 

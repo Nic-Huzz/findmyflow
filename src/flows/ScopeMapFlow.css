@@ -335,6 +335,29 @@
   margin: 0 0 8px;
 }
 
+/* ─── Positioning Statement ─── */
+.scope-flow .scope-flow-positioning {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 12px 0 16px;
+}
+.scope-flow .scope-flow-pos-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(233, 162, 59, 0.8);
+  margin-bottom: 6px;
+}
+.scope-flow .scope-flow-pos-text {
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.95);
+  font-style: italic;
+}
+
 /* ─── Error ─── */
 .scope-flow .scope-flow-error {
   color: #ff9b9b;

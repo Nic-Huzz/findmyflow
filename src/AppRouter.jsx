@@ -33,6 +33,7 @@ import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
 import JourneyOnboarding from './components/onboarding/JourneyOnboarding'
 import PlaySkillsOnboarding from './components/onboarding/PlaySkillsOnboarding'
+const PlaySkillsIdentifier = lazy(() => import('./flows/PlaySkillsIdentifier'))
 import IdentifyTopicsFlow from './flows/IdentifyTopicsFlow'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import EssenceIdentify from './pages/EssenceIdentify'
@@ -44,6 +45,7 @@ const Challenge = lazyRetry(() => import('./Challenge'))
 
 import { preloadMePage, preloadChallenge, preloadFlowCompass, preloadProfileHub } from './lib/preloadRoutes'
 import AuthGate from './AuthGate'
+import CreateGate from './components/CreateGate'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
 import BottomToolbar from './components/BottomToolbar'
@@ -160,6 +162,7 @@ const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const WoundMapFlow = lazyRetry(() => import('./flows/WoundMapFlow'))
 const CuriosityCompassFlow = lazyRetry(() => import('./flows/CuriosityCompassFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
+const NervousSystemMap = lazyRetry(() => import('./pages/NervousSystemMap'))
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
 const PublicMoneyModelFlow = lazyRetry(() => import('./flows/PublicMoneyModelFlow'))
@@ -255,11 +258,13 @@ const LeagueAdmin = lazyRetry(() => import('./pages/league/LeagueAdmin'))
 const NewsfeedPage = lazyRetry(() => import('./pages/league/NewsfeedPage'))
 const LeagueGuide = lazyRetry(() => import('./flows/LeagueGuide'))
 
-// Lazy-loaded - People Matching + Experience Creator
+// Lazy-loaded - People Matching + Experience Creator + Movement Makers
 const PeopleMatching = lazyRetry(() => import('./pages/PeopleMatching'))
+const MovementMakers = lazyRetry(() => import('./pages/MovementMakers'))
 const ExperienceCreatorFlow = lazyRetry(() => import('./flows/ExperienceCreatorFlow'))
 const PayRentFlow = lazyRetry(() => import('./flows/PayRentFlow'))
 const RemarkableFlow = lazyRetry(() => import('./flows/RemarkableFlow'))
+const StrikeDesignFlow = lazyRetry(() => import('./flows/StrikeDesignFlow'))
 const ScaleIncomeFlow = lazyRetry(() => import('./flows/ScaleIncomeFlow'))
 const ScopeMapFlow = lazyRetry(() => import('./flows/ScopeMapFlow'))
 
@@ -359,7 +364,7 @@ function ConditionalZarlo() {
   const isEssenceIdentify = location.pathname === '/essence-identify'
   const isProtectiveIdentify = location.pathname === '/protective-identify'
   const isMatrixCodeDeepDive = location.pathname === '/matrix-code-deep-dive'
-  const isExperienceCreators = location.pathname === '/experience-creators' || location.pathname === '/try/experience-creators'
+  const isExperienceCreators = location.pathname === '/experience-creators' || location.pathname === '/try/experience-creators' || location.pathname === '/movement-makers'
   const isScopeMap = location.pathname === '/scope-map'
   const isCreatePortal = location.pathname.startsWith('/create')
 
@@ -414,7 +419,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/curiosity-compass' ||
                         location.pathname.startsWith('/zone-diagnosis') ||
                         location.pathname === '/get-started' ||
-                        location.pathname === '/shift-scorecard'
+                        location.pathname === '/shift-scorecard' ||
+                        location.pathname === '/movement-makers'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -458,6 +464,9 @@ function AppRouter() {
               <Route path="/essence-identify" element={<EssenceIdentify />} />
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
               <Route path="/log-in" element={<PersonaAssessment />} />
+
+              {/* Play-Skills Identifier - Standalone */}
+              <Route path="/play-skills-identifier" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PlaySkillsIdentifier /></Suspense></AuthGate>} />
 
               {/* Career Clarity Quiz - Public */}
               <Route path="/career-clarity" element={<CareerClarityQuiz />} />
@@ -689,6 +698,11 @@ function AppRouter() {
                 <NervousSystemFlow />
               </AuthGate>
             } />
+            <Route path="/nervous-system-map" element={
+              <AuthGate>
+                <NervousSystemMap />
+              </AuthGate>
+            } />
             <Route path="/matrix-code-deep-dive" element={
               <AuthGate>
                 <MatrixCodeDeepDive />
@@ -783,6 +797,7 @@ function AppRouter() {
               </AuthGate>
             } />
             <Route path="/try/experience-creators" element={<ExperienceCreatorFlow />} />
+            <Route path="/movement-makers" element={<MovementMakers />} />
             <Route path="/flow-finder-explainer" element={
               <AuthGate>
                 <FlowFinderExplainer />
@@ -878,34 +893,53 @@ function AppRouter() {
 
             {/* Create — Experience Creator Portal (Head Full of Dreams → Self-Actualisation) */}
             <Route path="/create" element={
-              <AuthGate>
-                <CreatorHome />
-              </AuthGate>
+              <CreateGate>
+                <AuthGate>
+                  <CreatorHome />
+                </AuthGate>
+              </CreateGate>
             } />
             <Route path="/create/experience/new" element={
-              <AuthGate>
-                <ExperienceCreate />
-              </AuthGate>
+              <CreateGate>
+                <AuthGate>
+                  <ExperienceCreate />
+                </AuthGate>
+              </CreateGate>
             } />
             <Route path="/create/experience/:id" element={
-              <AuthGate>
-                <ExperienceDetail />
-              </AuthGate>
+              <CreateGate>
+                <AuthGate>
+                  <ExperienceDetail />
+                </AuthGate>
+              </CreateGate>
             } />
             <Route path="/create/pay-rent" element={
-              <AuthGate>
-                <PayRentFlow />
-              </AuthGate>
+              <CreateGate>
+                <AuthGate>
+                  <PayRentFlow />
+                </AuthGate>
+              </CreateGate>
             } />
             <Route path="/create/remarkable" element={
-              <AuthGate>
-                <RemarkableFlow />
-              </AuthGate>
+              <CreateGate>
+                <AuthGate>
+                  <RemarkableFlow />
+                </AuthGate>
+              </CreateGate>
             } />
             <Route path="/create/scale-income" element={
-              <AuthGate>
-                <ScaleIncomeFlow />
-              </AuthGate>
+              <CreateGate>
+                <AuthGate>
+                  <ScaleIncomeFlow />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/strike" element={
+              <CreateGate>
+                <AuthGate>
+                  <StrikeDesignFlow />
+                </AuthGate>
+              </CreateGate>
             } />
             {/* Backward compat — /business redirects to /create */}
             <Route path="/business" element={<Navigate to="/create" replace />} />

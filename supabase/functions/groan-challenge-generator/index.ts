@@ -224,8 +224,9 @@ serve(async (req) => {
       personaInsight
     } = requestBody
 
-    // Check if this is a Skill × Problem matrix request
-    const isSkillProblemRequest = sourceType === 'skill_x_problem' || (skillLabel && problemLabel)
+    // Check request type
+    const isMovementRequest = sourceType === 'movement'
+    const isSkillProblemRequest = !isMovementRequest && (sourceType === 'skill_x_problem' || (skillLabel && problemLabel))
 
     console.log('Received request:', {
       sourceType,
@@ -237,7 +238,15 @@ serve(async (req) => {
     })
 
     // Validate required fields based on request type
-    if (isSkillProblemRequest) {
+    if (isMovementRequest) {
+      // Movement/Strike requests only need movement data
+      if (!requestBody.movementData) {
+        return new Response(
+          JSON.stringify({ error: 'Missing required field: movementData' }),
+          { status: 400, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+        )
+      }
+    } else if (isSkillProblemRequest) {
       if (!skillLabel || !problemLabel) {
         return new Response(
           JSON.stringify({ error: 'Missing required fields for Skill × Problem: skillLabel, problemLabel' }),
@@ -306,8 +315,52 @@ serve(async (req) => {
 
     // Build the prompt based on request type
     let prompt: string
+    let useModel = 'claude-haiku-4-5-20251001'
 
-    if (isSkillProblemRequest) {
+    if (isMovementRequest) {
+      // Movement/Strike request — generate 2-3 Strike ideas using Sonnet
+      useModel = 'claude-sonnet-4-20250514'
+      const md = requestBody.movementData
+      const strikeType = requestBody.strikeType || 'any'
+      const outcome = requestBody.outcome || 'fill_room'
+      const archetype = requestBody.essenceArchetype || ''
+      const experienceName = requestBody.experienceName || ''
+
+      prompt = `You generate Lightning Strike ideas for experience creators (workshop/retreat facilitators). A Lightning Strike is a bold, public action designed to make the market come to them.
+
+THE CREATOR'S MOVEMENT:
+- Problem they solve: ${md.woundProblem || 'Not specified'}
+- Old category (how the world currently solves it): ${md.current || 'Not specified'}
+- What's wrong with that: ${md.wrong || 'Not specified'}
+- Their solution: ${md.mine || 'Not specified'}
+- Movement statement: ${md.ruleStatement || 'Not specified'}
+${experienceName ? `- Next experience: "${experienceName}"` : ''}
+
+STRIKE TYPE CHOSEN: ${strikeType}
+${strikeType === 'fight' ? '(Name what\'s wrong with the old way publicly. Force the market to pick a side.)' : ''}
+${strikeType === 'stunt' ? '(Do something in public that makes people say "wait, what?")' : ''}
+${strikeType === 'functional' ? '(Prove the method works in real time. Let people experience the shift.)' : ''}
+${strikeType === 'culture_creating' ? '(Create a ritual, phrase, or moment that attendees take home and spread.)' : ''}
+
+OUTCOME GOAL: ${outcome === 'fill_room' ? 'Fill the room for their next experience' : outcome === 'go_public' ? 'Declare their movement publicly for the first time' : 'Cement their position as the leader in this space'}
+
+${archetype ? `ESSENCE ARCHETYPE: ${archetype} (their natural energy and how they show up)` : ''}
+
+Generate exactly 3 Lightning Strike ideas. Each should be:
+- Doable within 2 weeks with zero budget
+- Specific enough to execute (not vague advice)
+- Scary enough to be a real groan (courage challenge)
+- Connected to their movement (educates the market about why the old way doesn't work)
+
+Return ONLY valid JSON:
+{
+  "strikes": [
+    { "title": "Short punchy title (3-6 words)", "description": "2-3 sentences explaining what to do", "hook": "One sentence explaining why this would make people talk" }
+  ]
+}`
+
+      console.log('Generating Strike ideas:', { strikeType, outcome, archetype })
+    } else if (isSkillProblemRequest) {
       // Skill × Problem matrix prompt
       prompt = SKILL_PROBLEM_PROMPT
         .replace('{{skillLabel}}', skillLabel)
@@ -362,8 +415,8 @@ serve(async (req) => {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 512,
+        model: useModel,
+        max_tokens: isMovementRequest ? 1024 : 512,
         messages: [{
           role: 'user',
           content: prompt
@@ -392,6 +445,19 @@ serve(async (req) => {
     } catch (parseError) {
       console.error('Failed to parse Claude response:', extractedText)
       throw new Error('Invalid JSON response from Claude')
+    }
+
+    // Movement requests return array of strikes, not a single challenge
+    if (isMovementRequest) {
+      const strikes = (result.strikes || [result]).map((s: any) => ({
+        title: s.title || 'Lightning Strike',
+        description: s.description || '',
+        hook: s.hook || '',
+      }))
+      return new Response(
+        JSON.stringify({ strikes, generatedAt: new Date().toISOString(), model: useModel }),
+        { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+      )
     }
 
     // Ensure proper structure and clamp scores

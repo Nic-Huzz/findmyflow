@@ -1,0 +1,45 @@
+/* ExperienceHealthCard */
+.ehc-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-left: 3px solid #E9A23B;
+}
+.ehc-title {
+  font-size: 0.82rem; font-weight: 800; color: #E9A23B;
+  margin-bottom: 0.6rem;
+}
+.ehc-kpi-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;
+}
+.ehc-kpi {
+  background: #fafafa; border-radius: 10px; padding: 0.5rem;
+  text-align: center; position: relative;
+}
+.ehc-kpi-val { font-size: 1.2rem; font-weight: 800; color: #1a1a2e; }
+.ehc-kpi-label {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.04em; color: #adb5bd; margin-top: 0.1rem;
+}
+.ehc-delta {
+  font-size: 0.6rem; font-weight: 700; display: block; margin-top: 0.15rem;
+}
+.ehc-delta-good { color: #10b981; }
+.ehc-delta-bad { color: #ef4444; }
+.ehc-delta-flat { color: #adb5bd; }
+
+.ehc-strike {
+  display: flex; align-items: center; gap: 0.4rem;
+  margin-top: 0.6rem; padding-top: 0.6rem;
+  border-top: 1px solid #f1f3f5;
+}
+.ehc-strike-icon { font-size: 0.9rem; }
+.ehc-strike-title { flex: 1; font-size: 0.8rem; font-weight: 600; color: #1a1a2e; }
+.ehc-strike-badge {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 4px;
+}
+.ehc-strike-active { background: rgba(94,23,235,0.1); color: #5e17eb; }
+.ehc-strike-completed { background: rgba(16,185,129,0.1); color: #10b981; }

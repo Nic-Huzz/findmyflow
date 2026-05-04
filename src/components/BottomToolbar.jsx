@@ -34,9 +34,8 @@ const MAIN_NAV_ITEMS = [
   {
     id: 'create',
     label: 'Create',
-    icon: '🔒',
-    path: '/create',
-    locked: true
+    icon: '🏠',
+    path: '/create'
   }
 ]
 
@@ -88,6 +87,7 @@ const HIDDEN_ROUTES = [
   '/what-is-healing-explainer', // Healing explainer
   '/emotional-splinter-explainer', // Emotional splinter explainer
   '/how-do-we-heal-explainer', // How do we heal explainer
+  '/play-skills-identifier', // Standalone play-skills identification
   '/play-list-finder', // Quick skills discovery
   '/persona-identifier', // Quick persona discovery
   '/mind-space', // Mind space extraction
@@ -117,7 +117,8 @@ const HIDDEN_ROUTES = [
   '/shift-scorecard', // Public Shift Architecture audit scorecard
   '/experience-creators', // Experience Creator Matching (public lead magnet)
   '/create/', // Creator Portal sub-pages (flows, experience detail)
-  '/scope-map' // Scope Map diagnostic flow
+  '/scope-map', // Scope Map diagnostic flow
+  '/movement-makers' // Movement Makers landing page
 ]
 
 function BottomToolbar() {

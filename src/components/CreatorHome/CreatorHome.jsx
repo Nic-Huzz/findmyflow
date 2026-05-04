@@ -19,6 +19,10 @@ import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
 import { useExperienceList, daysUntil, formatExperienceDate } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
+import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
+import { LEVEL_CONFIG } from '../level/LevelConfig'
+import MovementHealthDashboard from './MovementHealthDashboard'
+import './MovementHealthDashboard.css'
 import './CreatorHome.css'
 
 // ─── Stage metadata ────────────────────────────────────────────────────────
@@ -28,6 +32,21 @@ const STAGES = {
   lake: { name: 'The Lake', icon: '🌊', color: '#3b82f6', description: "Self-knowledge is flooding in but hasn't found its edge. Pick one problem. Run one experience." },
   waterfall: { name: 'The Waterfall', icon: '🌊', color: '#10b981', description: "You found your specific thing. Build the evidence base. Stay here longer than you want to." },
   river: { name: 'The River', icon: '🏞️', color: '#E9A23B', description: "Earned breadth. Your specificity became a platform." },
+}
+
+// Parse "Current: X | Wrong: Y | Mine: Z" into { current, wrong, mine }
+function parseMovement(ruleIdentified) {
+  if (!ruleIdentified) return null
+  const parts = ruleIdentified.split('|').map(s => s.trim())
+  const extract = (prefix) => {
+    const part = parts.find(p => p.startsWith(prefix))
+    return part ? part.replace(prefix, '').trim() : ''
+  }
+  const current = extract('Current:')
+  const wrong = extract('Wrong:')
+  const mine = extract('Mine:')
+  if (!current || !wrong || !mine) return null
+  return { current, wrong, mine }
 }
 
 function countdownLabel(dateStr) {
@@ -53,6 +72,16 @@ export default function CreatorHome() {
   const [assessment, setAssessment] = useState(null)
   const [payRentModel, setPayRentModel] = useState(null)
   const [remarkableAngle, setRemarkableAngle] = useState(null)
+  const [topFans, setTopFans] = useState([])
+  const [essenceAvatar, setEssenceAvatar] = useState(null)
+  const [movementXP, setMovementXP] = useState(0)
+  const [currentLevel, setCurrentLevel] = useState(0)
+  const [editingRule, setEditingRule] = useState(false)
+  const [editingTribe, setEditingTribe] = useState(false)
+  const [ruleEdit, setRuleEdit] = useState('')
+  const [tribeEdit, setTribeEdit] = useState('')
+  const [regenerating, setRegenerating] = useState(false)
+  const [damExpanded, setDamExpanded] = useState(false)
   const [editingAssessment, setEditingAssessment] = useState(false)
   const [assessmentDraft, setAssessmentDraft] = useState(null)
   const [savingAssessment, setSavingAssessment] = useState(false)
@@ -130,7 +159,7 @@ export default function CreatorHome() {
   const loadCreatorData = async () => {
     setLoading(true)
     try {
-      const [{ data: scope }, { data: selection }, { data: dna }, { data: assess }, { data: stageProgress }, { data: remarkData }] = await Promise.all([
+      const [{ data: scope }, { data: selection }, { data: dna }, { data: assess }, { data: stageProgress }, { data: remarkData }, { data: attendeeRows }, { data: essenceProfile }, { data: xpData }] = await Promise.all([
         supabase
           .from('scope_map_results')
           .select('*')
@@ -161,16 +190,32 @@ export default function CreatorHome() {
           .maybeSingle(),
         supabase
           .from('user_stage_progress')
-          .select('pay_rent_model')
+          .select('pay_rent_model, current_journey_level')
           .eq('user_id', userId)
           .maybeSingle(),
         supabase
           .from('remarkable_angles')
-          .select('ai_rule_statement, ai_tribe_statement')
+          .select('id, wound_problem, rule_identified, combination_insight, extreme_action_plan, ai_rule_statement, ai_remarkable_bio, ai_tribe_statement')
           .eq('user_id', userId)
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle(),
+        supabase
+          .from('experience_attendees')
+          .select('contact_id, experience_id')
+          .eq('user_id', userId),
+        supabase
+          .from('lead_flow_profiles')
+          .select('essence_archetype, custom_essence_image')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('quest_completions')
+          .select('points_earned')
+          .eq('user_id', userId)
+          .eq('quest_category', 'Movement'),
       ])
 
       setScopeResult(scope || null)
@@ -178,12 +223,90 @@ export default function CreatorHome() {
       setDnaResult(dna || null)
       setAssessment(assess || null)
       setPayRentModel(stageProgress?.pay_rent_model || null)
+      setCurrentLevel(stageProgress?.current_journey_level || 0)
       setRemarkableAngle(remarkData || null)
+      setMovementXP((xpData || []).reduce((sum, row) => sum + (row.points_earned || 0), 0))
+
+      // Resolve essence archetype avatar
+      if (essenceProfile?.essence_archetype) {
+        const arch = ESSENCE_ARCHETYPES.find(a => a.name === essenceProfile.essence_archetype)
+        if (arch) {
+          setEssenceAvatar({
+            name: arch.name,
+            image: essenceProfile.custom_essence_image || arch.image,
+          })
+        }
+      }
+
+      // Compute top fans (contacts attending 2+ experiences)
+      if (attendeeRows?.length) {
+        const counts = {}
+        attendeeRows.forEach(a => {
+          if (a.contact_id) counts[a.contact_id] = (counts[a.contact_id] || 0) + 1
+        })
+        const repeatContactIds = Object.entries(counts)
+          .filter(([, c]) => c >= 2)
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 5)
+          .map(([id, count]) => ({ id, count }))
+        if (repeatContactIds.length) {
+          const { data: contactNames, error: fanErr } = await supabase
+            .from('crm_contacts')
+            .select('id, name, email')
+            .in('id', repeatContactIds.map(r => r.id))
+          if (fanErr) console.error('Top fans lookup failed:', fanErr)
+          const fans = repeatContactIds.map(r => {
+            const contact = contactNames?.find(c => c.id === r.id)
+            return { id: r.id, name: contact?.name || contact?.email || 'Unknown', count: r.count }
+          }).filter(f => f.name !== 'Unknown')
+          setTopFans(fans)
+        }
+      }
     } catch (err) {
       console.error('CreatorHome loadCreatorData error:', err)
     } finally {
       setLoading(false)
     }
+  }
+
+  // Save edited AI distillation
+  const saveAiField = async (field, value) => {
+    if (!remarkableAngle || !userId) return
+    try {
+      await supabase.from('remarkable_angles')
+        .update({ [field]: value })
+        .eq('id', remarkableAngle.id || '')
+        .eq('user_id', userId)
+      setRemarkableAngle(prev => ({ ...prev, [field]: value }))
+    } catch (err) {
+      console.error('Save AI field error:', err)
+    }
+  }
+
+  // Regenerate AI distillations
+  const regenerateAi = async () => {
+    if (!remarkableAngle || regenerating) return
+    setRegenerating(true)
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-remarkable-angle', {
+        body: {
+          wound_problem: remarkableAngle.wound_problem,
+          rule_identified: remarkableAngle.rule_identified,
+          combination_insight: remarkableAngle.combination_insight || '',
+          extreme_action_plan: remarkableAngle.extreme_action_plan || '',
+        },
+      })
+      if (error) throw error
+      if (data?.rule_statement) {
+        await saveAiField('ai_rule_statement', data.rule_statement)
+      }
+      if (data?.tribe_statement) {
+        await saveAiField('ai_tribe_statement', data.tribe_statement)
+      }
+    } catch (err) {
+      console.error('Regenerate error:', err)
+    }
+    setRegenerating(false)
   }
 
   const stage = STAGES[scopeResult?.stage] || null
@@ -275,7 +398,17 @@ export default function CreatorHome() {
 
       {/* ═══ HEADER ═══ */}
       <div className="ch-header ch-header-branded">
-        <h2 className="ch-title">Creator Portal</h2>
+        <div className="ch-header-top">
+          <h2 className="ch-title">Movement Maker</h2>
+          {essenceAvatar && (
+            <img
+              className="ch-essence-avatar"
+              src={essenceAvatar.image}
+              alt={essenceAvatar.name}
+              onError={e => { e.target.style.display = 'none' }}
+            />
+          )}
+        </div>
         <div className="ch-stats-row">
           <div className="ch-stat">
             <span className="ch-stat-val">{completedCount}</span>
@@ -290,9 +423,13 @@ export default function CreatorHome() {
             <span className="ch-stat-label">repeat</span>
           </div>
           <div className="ch-stat">
-            <span className="ch-stat-val">{threePercentChain.length}/{completedCount || 0}</span>
-            <span className="ch-stat-label">3%</span>
+            <span className="ch-stat-val ch-stat-gold">{movementXP}</span>
+            <span className="ch-stat-label">movement xp</span>
           </div>
+        </div>
+        <div className="ch-xp-meta">
+          <span>Level {currentLevel}: {LEVEL_CONFIG[currentLevel]?.name || 'Getting Set Up'}</span>
+          <span>{movementXP} total XP</span>
         </div>
       </div>
 
@@ -327,13 +464,21 @@ export default function CreatorHome() {
               )}
             </div>
             {stage ? (
-              <div className="ch-rr-row">
-                <div className="ch-rr-icon" style={{ background: `${stage.color}10` }}>{stage.icon}</div>
-                <div>
-                  <div className="ch-rr-name" style={{ color: stage.color }}>{stage.name}</div>
-                  <div className="ch-rr-desc">{stage.description}</div>
+              <>
+                <div className="ch-rr-row">
+                  <div className="ch-rr-icon" style={{ background: `${stage.color}10` }}>{stage.icon}</div>
+                  <div>
+                    <div className="ch-rr-name" style={{ color: stage.color }}>{stage.name}</div>
+                    <div className="ch-rr-desc">{stage.description}</div>
+                  </div>
                 </div>
-              </div>
+                {scopeResult?.positioning_statement && (
+                  <div className="ch-positioning">
+                    <div className="ch-positioning-label">Your positioning</div>
+                    <div className="ch-positioning-text">{scopeResult.positioning_statement}</div>
+                  </div>
+                )}
+              </>
             ) : (
               <>
                 <p className="ch-empty-text">A 3-question diagnostic to figure out where you are and what to do next.</p>
@@ -367,26 +512,122 @@ export default function CreatorHome() {
             )}
           </div>
 
-          {/* ── 3. How to Blow Up Your Brand ── */}
-          <div className="ch-card" onClick={() => navigate('/create/remarkable')} style={{ cursor: 'pointer' }}>
-            <div className="ch-card-head">
-              <span className="ch-card-title"><span className="ch-card-emoji">🔥</span> How to Blow Up Your Brand</span>
-              {remarkableAngle && <span className="ch-badge ch-badge-gold">Done</span>}
-            </div>
-            {remarkableAngle ? (
-              <>
-                <div className="ch-rr-row">
-                  <div className="ch-rr-icon" style={{ background: 'rgba(233,162,59,0.1)' }}>🔥</div>
-                  <div>
-                    <div className="ch-rr-name" style={{ color: '#E9A23B' }}>{remarkableAngle.ai_rule_statement}</div>
-                    <div className="ch-rr-desc">{remarkableAngle.ai_tribe_statement}</div>
-                  </div>
+          {/* ── 3. How to Blow Up Your Brand / My Movement ── */}
+          {remarkableAngle && parseMovement(remarkableAngle.rule_identified) ? (() => {
+            const mv = parseMovement(remarkableAngle.rule_identified)
+            return (
+              <div className="ch-card ch-movement-card">
+                <div className="ch-card-head">
+                  <span className="ch-card-title"><span className="ch-card-emoji">🔥</span> How to Blow Up Your Brand</span>
+                  <button className="ch-retake-btn" onClick={() => navigate('/create/remarkable')}>Refine</button>
                 </div>
-              </>
-            ) : (
+                <div className="ch-mv-subheading">My Movement</div>
+
+                {/* One-liner — always visible */}
+                {remarkableAngle.ai_rule_statement && (
+                  <div className="ch-mv-oneliner">
+                    <div className="ch-mv-dam-label-row">
+                      <span className="ch-mv-dam-label">Your one-liner</span>
+                      {!editingRule && (
+                        <button className="ch-mv-inline-btn" onClick={() => { setRuleEdit(remarkableAngle.ai_rule_statement); setEditingRule(true) }}>edit</button>
+                      )}
+                    </div>
+                    {editingRule ? (
+                      <div className="ch-mv-edit-row">
+                        <textarea
+                          className="ch-mv-edit-input"
+                          value={ruleEdit}
+                          onChange={e => setRuleEdit(e.target.value)}
+                          rows={2}
+                          autoFocus
+                        />
+                        <div className="ch-mv-edit-actions">
+                          <button className="ch-mv-edit-save" onClick={async () => { await saveAiField('ai_rule_statement', ruleEdit); setEditingRule(false) }}>Save</button>
+                          <button className="ch-mv-edit-cancel" onClick={() => setEditingRule(false)}>Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="ch-mv-ai-rule">{remarkableAngle.ai_rule_statement}</div>
+                    )}
+                  </div>
+                )}
+
+                {/* Collapsible: Q1/Q2/Q3 + pitch + tribe */}
+                <button className="ch-mv-expand-btn" onClick={() => setDamExpanded(!damExpanded)}>
+                  {damExpanded ? 'Less' : 'See more'} {damExpanded ? '▴' : '▾'}
+                </button>
+
+                {damExpanded && (
+                  <div className="ch-mv-expanded">
+                    <div className="ch-mv-section">
+                      <div className="ch-mv-label">The world solves this with</div>
+                      <div className="ch-mv-answer">{mv.current}</div>
+                    </div>
+                    <div className="ch-mv-section">
+                      <div className="ch-mv-label">What's wrong with that</div>
+                      <div className="ch-mv-answer">{mv.wrong}</div>
+                    </div>
+                    <div className="ch-mv-section">
+                      <div className="ch-mv-label">How I solve it</div>
+                      <div className="ch-mv-answer ch-mv-mine">{mv.mine}</div>
+                    </div>
+
+                    <div className="ch-mv-section">
+                      <div className="ch-mv-dam-label">Your pitch</div>
+                      <div className="ch-mv-dam-text">
+                        You think you need {mv.current.toLowerCase().endsWith('.') ? mv.current.slice(0, -1).toLowerCase() : mv.current.toLowerCase()}. But {mv.wrong.charAt(0).toLowerCase() + mv.wrong.slice(1).replace(/\.$/, '')}. What you actually need is {mv.mine.toLowerCase().replace(/\.$/, '')}.
+                      </div>
+                    </div>
+
+                    {remarkableAngle.ai_tribe_statement && (
+                      <div className="ch-mv-section">
+                        <div className="ch-mv-dam-label-row">
+                          <span className="ch-mv-tribe-label">Your tribe</span>
+                          {!editingTribe && (
+                            <button className="ch-mv-inline-btn" onClick={() => { setTribeEdit(remarkableAngle.ai_tribe_statement); setEditingTribe(true) }}>edit</button>
+                          )}
+                        </div>
+                        {editingTribe ? (
+                          <div className="ch-mv-edit-row">
+                            <textarea
+                              className="ch-mv-edit-input"
+                              value={tribeEdit}
+                              onChange={e => setTribeEdit(e.target.value)}
+                              rows={2}
+                              autoFocus
+                            />
+                            <div className="ch-mv-edit-actions">
+                              <button className="ch-mv-edit-save" onClick={async () => { await saveAiField('ai_tribe_statement', tribeEdit); setEditingTribe(false) }}>Save</button>
+                              <button className="ch-mv-edit-cancel" onClick={() => setEditingTribe(false)}>Cancel</button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="ch-mv-ai-tribe">{remarkableAngle.ai_tribe_statement}</div>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="ch-mv-dam-actions">
+                      <button
+                        className="ch-mv-action-btn ch-mv-action-regen"
+                        onClick={regenerateAi}
+                        disabled={regenerating}
+                      >
+                        {regenerating ? 'Regenerating...' : 'Regenerate both'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })() : (
+            <div className="ch-card" onClick={() => navigate('/create/remarkable')} style={{ cursor: 'pointer' }}>
+              <div className="ch-card-head">
+                <span className="ch-card-title"><span className="ch-card-emoji">🔥</span> How to Blow Up Your Brand</span>
+              </div>
               <p className="ch-muted-text">Find your remarkable angle. The thing that makes people talk.</p>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* ── 4. How to Scale Your Income ── */}
           <div className="ch-card" onClick={() => navigate('/create/scale-income')} style={{ cursor: 'pointer' }}>
@@ -398,7 +639,7 @@ export default function CreatorHome() {
               <div style={{ fontSize: '0.82rem', color: '#6c757d', lineHeight: 1.5 }}>
                 <div><strong style={{ color: '#8b5cf6' }}>Attraction:</strong> {assessment.attraction_detail || 'Not set'}</div>
                 <div><strong style={{ color: '#E9A23B' }}>Core:</strong> {assessment.core_detail || 'Not set'}</div>
-                <div><strong style={{ color: '#10b981' }}>Continuity:</strong> {assessment.continuity_detail || 'Not set'}</div>
+                <div><strong style={{ color: '#3b82f6' }}>Continuity:</strong> {assessment.continuity_detail || 'Not set'}</div>
               </div>
             ) : (
               <p className="ch-muted-text">Build your 3-layer business model: attraction, core, continuity.</p>
@@ -509,6 +750,26 @@ export default function CreatorHome() {
               <button className="ch-btn-sm" onClick={() => navigate(`/create/experience/${activeExp.id}`)}>
                 View Checklist →
               </button>
+
+              {/* Strikes linked to this experience */}
+              {activeChallenges.filter(c => c.challenge_source === 'strike' && c.experience_id === activeExp.id).length > 0 && (
+                <div className="ch-strikes-section">
+                  <div className="ch-strikes-label">Active Strikes</div>
+                  {activeChallenges.filter(c => c.challenge_source === 'strike' && c.experience_id === activeExp.id).map(ch => {
+                    const isDone = ch.status === 'completed'
+                    const daysLeft = ch.deadline ? Math.ceil((new Date(ch.deadline) - new Date()) / (24 * 60 * 60 * 1000)) : null
+                    return (
+                      <div key={ch.id} className="ch-strike-item">
+                        <span className="ch-strike-icon">{isDone ? '✓' : '🔥'}</span>
+                        <span className={`ch-strike-text ${isDone ? 'ch-struck' : ''}`}>{ch.title}</span>
+                        <span className={`ch-strike-due ${isDone ? 'ch-strike-done' : ''}`}>
+                          {isDone ? 'done' : daysLeft != null ? `${daysLeft}d` : ''}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -519,6 +780,22 @@ export default function CreatorHome() {
             </div>
           )}
 
+          {/* Design a Strike */}
+          {remarkableAngle && (
+            <button className="ch-strike-cta" onClick={() => navigate('/create/strike')}>
+              ⚡ Design a Play-List Task
+            </button>
+          )}
+
+          {/* Group Call — Coming Soon */}
+          <div className="ch-card" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+            <div className="ch-card-head">
+              <span className="ch-card-title">Group Call</span>
+              <span style={{ fontSize: '0.7rem', color: '#999', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coming soon</span>
+            </div>
+            <p className="ch-muted-text" style={{ marginBottom: 0 }}>Fortnightly call with your cohort. Design Strikes, set commitments, debrief what worked.</p>
+          </div>
+
           {/* Past experiences */}
           {past.length > 0 && (
             <div className="ch-card">
@@ -526,22 +803,29 @@ export default function CreatorHome() {
                 <span className="ch-card-title">Past Experiences</span>
               </div>
               {past.slice(0, 5).map(exp => (
-                <div
-                  key={exp.id}
-                  className="ch-past-item"
-                  onClick={() => navigate(`/create/experience/${exp.id}`)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <span className="ch-past-chk">&#10003;</span>
-                  <div>
-                    <div className="ch-past-name">{exp.name}</div>
-                    <div className="ch-past-date">
-                      {formatExperienceDate(exp.experience_date)}
+                <div key={exp.id} className="ch-past-item">
+                  <div
+                    className="ch-past-main"
+                    onClick={() => navigate(`/create/experience/${exp.id}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <span className="ch-past-chk">&#10003;</span>
+                    <div>
+                      <div className="ch-past-name">{exp.name}</div>
+                      <div className="ch-past-date">
+                        {formatExperienceDate(exp.experience_date)}
+                      </div>
+                      {exp.three_percent_note && (
+                        <div className="ch-past-3pct">3%: "{exp.three_percent_note}"</div>
+                      )}
                     </div>
-                    {exp.three_percent_note && (
-                      <div className="ch-past-3pct">3%: "{exp.three_percent_note}"</div>
-                    )}
                   </div>
+                  <button
+                    className="ch-run-again-btn"
+                    onClick={(e) => { e.stopPropagation(); navigate(`/create/experience/new?from=${exp.id}`) }}
+                  >
+                    Run Again
+                  </button>
                 </div>
               ))}
             </div>
@@ -594,6 +878,33 @@ export default function CreatorHome() {
               ))}
             </div>
           )}
+
+          {/* Top Fans (Superconsumers) */}
+          {topFans.length > 0 && (
+            <div className="ch-card">
+              <div className="ch-card-head">
+                <span className="ch-card-title">Your Top Fans</span>
+                <span className="ch-muted-text">{topFans.length} repeat{topFans.length !== 1 ? 's' : ''}</span>
+              </div>
+              <p className="ch-fan-intro">These people keep coming back. Design your next experience for them.</p>
+              {topFans.map(fan => (
+                <div key={fan.id} className="ch-fan-row">
+                  <div className="ch-fan-avatar">{fan.name.charAt(0).toUpperCase()}</div>
+                  <div className="ch-fan-info">
+                    <div className="ch-fan-name">{fan.name}</div>
+                    <div className="ch-fan-count">{fan.count} experiences attended</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Movement Health / Trajectory */}
+          <MovementHealthDashboard
+            userId={userId}
+            completedExperiences={past}
+            dashboardKPIs={dashboardKPIs}
+          />
 
           {/* Quick Access — locked for now */}
           <div className="ch-card" style={{ opacity: 0.5, pointerEvents: 'none' }}>

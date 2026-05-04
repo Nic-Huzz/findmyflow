@@ -1,0 +1,132 @@
+/* CreateGate — password-protected landing page */
+.cg-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #5e17eb 0%, #3b0a9e 50%, #1a0440 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 2.5rem 1.5rem calc(100px + env(safe-area-inset-bottom, 0px));
+  color: #fff;
+}
+.cg-container {
+  max-width: 400px; width: 100%;
+  text-align: center;
+  animation: cgFadeIn 0.6s ease;
+}
+@keyframes cgFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cg-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: rgba(233,162,59,0.12);
+  border: 1px solid rgba(233,162,59,0.25);
+  border-radius: 100px;
+  color: #E9A23B;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.75rem;
+}
+
+.cg-headline {
+  font-size: 34px; font-weight: 800;
+  line-height: 1.15; margin: 0 0 1rem;
+  color: #fff;
+}
+.cg-gradient {
+  background: linear-gradient(135deg, #E9A23B 0%, #f5c842 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cg-sub {
+  font-size: 14px; color: rgba(255,255,255,0.55);
+  line-height: 1.6; margin: 0 0 2.5rem;
+}
+
+/* Features — glass cards */
+.cg-features {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  text-align: left; margin-bottom: 2.5rem;
+}
+.cg-feature {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.7rem 0.8rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+}
+.cg-feature-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+.cg-feature-title {
+  font-size: 14px; font-weight: 700; color: #fff;
+  margin-bottom: 2px;
+}
+.cg-feature-desc {
+  font-size: 12px; color: rgba(255,255,255,0.5);
+  line-height: 1.4;
+}
+
+/* Gate section */
+.cg-gate-section {
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.cg-gate-label {
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: rgba(255,255,255,0.35);
+  margin-bottom: 0.6rem;
+}
+
+.cg-form {
+  display: flex; gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.cg-input {
+  flex: 1; padding: 0.8rem 1rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: #fff; font-size: 15px; font-family: inherit;
+  box-sizing: border-box;
+}
+.cg-input::placeholder { color: rgba(255,255,255,0.25); }
+.cg-input:focus {
+  outline: none; border-color: #E9A23B;
+  box-shadow: 0 0 0 2px rgba(233,162,59,0.15);
+}
+
+.cg-cta {
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(135deg, #E9A23B 0%, #f5c842 100%);
+  border: none; border-radius: 12px;
+  color: #1a0440; font-size: 15px; font-weight: 700;
+  cursor: pointer; flex-shrink: 0;
+}
+.cg-cta:disabled { opacity: 0.25; cursor: not-allowed; }
+.cg-cta:active:not(:disabled) { transform: scale(0.97); }
+
+.cg-error {
+  color: #ff9b9b; font-size: 13px; margin: 0 0 0.25rem;
+}
+
+.cg-footer {
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  margin: 0;
+}
+
+.cg-interest-btn {
+  display: block; width: 100%; margin-top: 0.75rem;
+  background: transparent; border: 1px solid rgba(233,162,59,0.35);
+  border-radius: 12px; padding: 0.75rem;
+  color: #E9A23B; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+}
+.cg-interest-btn:active { background: rgba(233,162,59,0.06); }
+
+.cg-expressed {
+  text-align: center; margin-top: 0.5rem;
+  font-size: 13px; font-weight: 600; color: #E9A23B;
+}

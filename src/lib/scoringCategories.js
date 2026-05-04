@@ -19,7 +19,10 @@ export const SCORING_CATEGORIES = {
   'Weekly': 'healing',
 
   // Courage score
-  'Groans': 'courage'
+  'Groans': 'courage',
+
+  // Movement score (Creator Portal actions)
+  'Movement': 'movement'
 }
 
 /**
@@ -46,6 +49,12 @@ export const CATEGORY_DISPLAY = {
     icon: '🦁',
     color: '#E9A23B',  // Brand gold
     description: 'Visibility challenges and facing fears'
+  },
+  movement: {
+    name: 'Movement',
+    icon: '🔥',
+    color: '#5e17eb',  // Brand purple
+    description: 'Creator Portal actions and Lightning Strikes'
   }
 }
 

@@ -26,19 +26,37 @@ export async function getContentContext(userId) {
     const challengeData = await fetchAllChallengeData(userId)
 
     // Also fetch persona profile directly (may have different data)
-    const { data: personaProfile } = await supabase
-      .from('persona_profiles')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
+    const [{ data: personaProfile }, { data: movementData }] = await Promise.all([
+      supabase
+        .from('persona_profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('remarkable_angles')
+        .select('wound_problem, rule_identified, ai_rule_statement, ai_tribe_statement')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+    ])
 
-    // Fetch validation responses count
-    const { count: validationCount } = await supabase
-      .from('validation_responses')
-      .select('id', { count: 'exact', head: true })
+    // Fetch validation responses count (via validation_flows, since responses don't have user_id)
+    const { data: userFlows } = await supabase
+      .from('validation_flows')
+      .select('id')
       .eq('user_id', userId)
+    const flowIds = (userFlows || []).map(f => f.id)
+    let validationCount = 0
+    if (flowIds.length > 0) {
+      const { count } = await supabase
+        .from('validation_responses')
+        .select('id', { count: 'exact', head: true })
+        .in('flow_id', flowIds)
+      validationCount = count || 0
+    }
 
     // Build normalized context
     const context = {
@@ -98,6 +116,14 @@ export async function getContentContext(userId) {
         readinessGrade: challengeData?.launch?.readinessGrade
       },
 
+      // Movement / DAM statement (from Remarkable Flow)
+      movement: movementData ? {
+        woundProblem: movementData.wound_problem,
+        ruleIdentified: movementData.rule_identified,
+        ruleStatement: movementData.ai_rule_statement,
+        tribeStatement: movementData.ai_tribe_statement,
+      } : null,
+
       // Voice (placeholder - could be fetched from brand voice assessment)
       voice: null,
 
@@ -123,6 +149,7 @@ export async function getContentContext(userId) {
       validation: null,
       proof: null,
       launch: null,
+      movement: null,
       voice: null,
       products: [],
       attractionOffer: null,

@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useCreateExperience, daysUntil } from '../hooks/useExperienceData'
 import { hapticSuccess, hapticLight } from '../lib/haptics'
@@ -17,16 +17,21 @@ import './ExperienceCreate.css'
 
 export default function ExperienceCreate() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const runAgainFromId = searchParams.get('from')
   const { createExperience, creating, error } = useCreateExperience()
 
   const [name, setName] = useState('')
   const [dateStr, setDateStr] = useState('')
+  const [ticketPrice, setTicketPrice] = useState('')
   const [previousExperience, setPreviousExperience] = useState(null)
+  const [runAgainSource, setRunAgainSource] = useState(null)
+  const [prevStats, setPrevStats] = useState(null)
   const [validationError, setValidationError] = useState('')
 
   useEffect(() => {
-    document.title = 'New Experience'
-  }, [])
+    document.title = runAgainFromId ? 'Run Again' : 'New Experience'
+  }, [runAgainFromId])
 
   // Fetch the most recent completed experience to surface its 3% note
   useEffect(() => {
@@ -50,6 +55,37 @@ export default function ExperienceCreate() {
     return () => { cancelled = true }
   }, [])
 
+  // Run Again: pre-fill from source experience
+  useEffect(() => {
+    if (!runAgainFromId) return
+    let cancelled = false
+    ;(async () => {
+      const { data: { user: authUser } } = await supabase.auth.getUser()
+      if (cancelled || !authUser) return
+      const { data: src } = await supabase
+        .from('experiences')
+        .select('id, name, ticket_price, experience_type, three_percent_note, one_line_promise, booking_url, venue, description, value_stack, early_bird_price, standard_price, currency, pricing_percentage')
+        .eq('id', runAgainFromId)
+        .eq('user_id', authUser.id)
+        .maybeSingle()
+      if (cancelled || !src) return
+      setRunAgainSource(src)
+      setName(src.name || '')
+      if (src.ticket_price != null) setTicketPrice(String(src.ticket_price))
+
+      // Fetch previous stats
+      const [{ count: attendeeCount }, { data: costsData }] = await Promise.all([
+        supabase.from('experience_attendees').select('id', { count: 'exact', head: true }).eq('experience_id', runAgainFromId),
+        supabase.from('experience_costs').select('amount').eq('experience_id', runAgainFromId),
+      ])
+      if (!cancelled) {
+        const totalCosts = (costsData || []).reduce((s, c) => s + (parseFloat(c.amount) || 0), 0)
+        setPrevStats({ attendees: attendeeCount || 0, costs: totalCosts })
+      }
+    })()
+    return () => { cancelled = true }
+  }, [runAgainFromId])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setValidationError('')
@@ -68,7 +104,10 @@ export default function ExperienceCreate() {
       const exp = await createExperience({
         name,
         experience_date: dateStr || null,
-        previous_experience_id: previousExperience?.id || null,
+        previous_experience_id: runAgainFromId || null,
+        ticket_price: ticketPrice ? parseFloat(ticketPrice) : null,
+        experience_type: runAgainSource?.experience_type || null,
+        runAgainFromId: runAgainFromId || null,
       })
       hapticSuccess()
       navigate(`/create/experience/${exp.id}`)
@@ -101,6 +140,37 @@ export default function ExperienceCreate() {
             room and another to run it smoothly.
           </p>
         </header>
+
+        {runAgainSource && (
+          <div className="exp-run-again-badge">
+            <span className="exp-run-again-icon">🔄</span>
+            <div>
+              <div className="exp-run-again-label">Running again from</div>
+              <div className="exp-run-again-name">{runAgainSource.name}</div>
+            </div>
+          </div>
+        )}
+
+        {prevStats && (
+          <div className="exp-prev-stats">
+            <div className="exp-prev-stat">
+              <span className="exp-prev-val">{prevStats.attendees}</span>
+              <span className="exp-prev-label">attendees last time</span>
+            </div>
+            {runAgainSource?.ticket_price != null && (
+              <div className="exp-prev-stat">
+                <span className="exp-prev-val">${Number(runAgainSource.ticket_price).toFixed(0)}</span>
+                <span className="exp-prev-label">ticket price</span>
+              </div>
+            )}
+            {prevStats.costs > 0 && (
+              <div className="exp-prev-stat">
+                <span className="exp-prev-val">${prevStats.costs.toFixed(0)}</span>
+                <span className="exp-prev-label">total costs</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {previousExperience && (
           <div className="exp-reflection-card">
@@ -146,6 +216,30 @@ export default function ExperienceCreate() {
               </span>
             )}
           </label>
+
+          <label className="exp-field">
+            <span className="exp-field-label">Ticket price (optional)</span>
+            <div className="exp-price-row">
+              <span className="exp-price-currency">$</span>
+              <input
+                type="number"
+                value={ticketPrice}
+                onChange={(e) => setTicketPrice(e.target.value)}
+                placeholder="0"
+                min="0"
+                step="0.01"
+              />
+              <button
+                type="button"
+                className="exp-price-free"
+                onClick={() => setTicketPrice('0')}
+              >
+                Free
+              </button>
+            </div>
+          </label>
+
+          <p className="exp-pricing-hint">Set your full pricing in the Details tab after creating.</p>
 
           {(validationError || error) && (
             <div className="exp-form-error">{validationError || error}</div>

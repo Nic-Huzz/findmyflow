@@ -92,6 +92,16 @@
   letter-spacing: 0.02em;
 }
 
+.exp-detail-price {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
 /* ─── Phase tabs ─── */
 .exp-phase-tabs {
   display: grid;
@@ -99,6 +109,12 @@
   gap: 10px;
   margin-bottom: 28px;
 }
+.exp-phase-tabs-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+.exp-phase-tabs-3 .exp-phase-tab-title { font-size: 13px; }
+.exp-phase-tabs-3 .exp-phase-tab-sub { font-size: 10px; }
 
 .exp-phase-tab {
   background: #ffffff;
@@ -286,7 +302,6 @@
 }
 
 .exp-item-label {
-  flex: 1;
   font-size: 15px;
   color: #1a0b3d;
   line-height: 1.4;
@@ -303,12 +318,154 @@
   font-style: italic;
 }
 
+.exp-item-content {
+  flex: 1; min-width: 0;
+}
+.exp-item-note-preview {
+  font-size: 12px; color: #6c757d; margin-top: 2px;
+  line-height: 1.3; cursor: pointer;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.exp-item-note-input {
+  width: 100%; margin-top: 4px; padding: 6px 8px;
+  border: 1px solid #dee2e6; border-radius: 6px;
+  font-size: 13px; font-family: inherit; resize: none;
+  line-height: 1.4; color: #1a0b3d; background: #fafafa;
+  box-sizing: border-box;
+}
+.exp-item-note-input:focus {
+  outline: none; border-color: #5e17eb;
+  box-shadow: 0 0 0 2px rgba(94,23,235,0.1);
+}
+
 .exp-item-actions {
   display: flex;
   gap: 4px;
   opacity: 0;
   transition: opacity 0.15s ease;
 }
+
+/* ─── Details tab ─── */
+.exp-details-tab { margin-bottom: 2rem; }
+.exp-det-section { margin-bottom: 0.75rem; }
+.exp-det-label {
+  display: block; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: #6c757d; margin-bottom: 4px;
+}
+.exp-det-input, .exp-det-textarea, .exp-det-select {
+  width: 100%; padding: 10px 12px; border: 1px solid #dee2e6;
+  border-radius: 10px; font-size: 14px; font-family: inherit;
+  color: #1a0b3d; background: #fff; box-sizing: border-box;
+}
+.exp-det-textarea { resize: none; line-height: 1.5; }
+.exp-det-input:focus, .exp-det-textarea:focus, .exp-det-select:focus {
+  outline: none; border-color: #5e17eb;
+  box-shadow: 0 0 0 2px rgba(94,23,235,0.1);
+}
+.exp-det-row { display: flex; gap: 0.5rem; align-items: center; }
+.exp-det-row .exp-det-input { flex: 1; }
+.exp-det-row .exp-det-select { width: auto; min-width: 80px; }
+
+/* Value stack */
+.exp-det-pricing-header { margin: 1.5rem 0 0.75rem; }
+.exp-det-pricing-title {
+  font-size: 16px; font-weight: 800; color: #1a0b3d; margin: 0 0 4px;
+}
+.exp-det-pricing-sub {
+  font-size: 13px; color: #6c757d; line-height: 1.4; margin: 0;
+}
+
+.exp-vs-list {
+  background: #fafafa; border-radius: 12px; padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.exp-vs-item {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.4rem 0.5rem; font-size: 14px;
+}
+.exp-vs-item + .exp-vs-item { border-top: 1px solid #f1f3f5; }
+.exp-vs-item-label { flex: 1; color: #1a0b3d; }
+.exp-vs-item-value { font-weight: 700; color: #5e17eb; white-space: nowrap; }
+.exp-vs-item-remove {
+  background: transparent; border: none; color: #adb5bd;
+  font-size: 14px; cursor: pointer; padding: 0 4px;
+}
+.exp-vs-total {
+  display: flex; justify-content: space-between;
+  padding: 0.5rem; border-top: 2px solid #e9ecef;
+  font-size: 14px; font-weight: 800; color: #1a0b3d;
+}
+.exp-vs-total-val { color: #E9A23B; }
+
+.exp-vs-add {
+  display: flex; gap: 0.4rem; margin-bottom: 0.75rem;
+}
+.exp-vs-add-label {
+  flex: 1; padding: 8px 10px; border: 1px solid #dee2e6;
+  border-radius: 8px; font-size: 13px; font-family: inherit;
+}
+.exp-vs-add-value {
+  width: 90px; padding: 8px 10px; border: 1px solid #dee2e6;
+  border-radius: 8px; font-size: 13px; font-family: inherit;
+}
+.exp-vs-add-btn {
+  padding: 8px 14px; background: #5e17eb; color: #fff;
+  border: none; border-radius: 8px; font-size: 16px; font-weight: 700;
+  cursor: pointer;
+}
+.exp-vs-add-btn:disabled { opacity: 0.3; }
+.exp-vs-add-label:focus, .exp-vs-add-value:focus {
+  outline: none; border-color: #5e17eb;
+}
+
+/* Pricing slider + tiers */
+.exp-vs-pricing { margin: 1rem 0; }
+.exp-vs-slider-row { margin-bottom: 0.6rem; }
+.exp-vs-pct { color: #E9A23B; font-weight: 800; }
+.exp-vs-slider {
+  width: 100%; -webkit-appearance: none; appearance: none;
+  height: 6px; background: #e9ecef; border-radius: 3px; outline: none;
+}
+.exp-vs-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B); cursor: pointer;
+}
+.exp-vs-tiers {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+.exp-vs-tier {
+  padding: 0.6rem; background: #fafafa; border-radius: 10px;
+  text-align: center;
+}
+.exp-vs-tier-highlight {
+  background: rgba(233,162,59,0.08);
+  border: 1px solid rgba(233,162,59,0.2);
+}
+.exp-vs-tier-label { font-size: 11px; font-weight: 700; color: #6c757d; text-transform: uppercase; }
+.exp-vs-tier-price { font-size: 18px; font-weight: 800; color: #1a0b3d; margin-top: 2px; }
+.exp-vs-tier-highlight .exp-vs-tier-price { color: #E9A23B; }
+
+.exp-vs-guide {
+  display: flex; gap: 2px; font-size: 10px; font-weight: 600;
+  text-transform: uppercase; color: #adb5bd;
+}
+.exp-vs-guide > div {
+  flex: 1; text-align: center; padding: 4px 2px;
+  background: #f8f9fa; border-radius: 4px;
+}
+.exp-vs-guide-active { background: rgba(233,162,59,0.12) !important; color: #E9A23B !important; }
+
+/* Save button */
+.exp-det-save {
+  width: 100%; padding: 12px; margin-top: 1rem;
+  background: #5e17eb;
+  border: none; border-radius: 12px;
+  color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+}
+.exp-det-save:disabled { opacity: 0.4; cursor: not-allowed; }
 
 @media (max-width: 640px) {
   .exp-item-actions {
@@ -411,9 +568,9 @@
   display: block;
   margin: 24px auto 0;
   padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: #6c757d;
   font-size: 13px;
   font-weight: 600;
   border-radius: 999px;
@@ -422,8 +579,8 @@
 }
 
 .exp-show-hidden:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: rgba(94, 23, 235, 0.06);
+  color: #5e17eb;
 }
 
 /* ─── Post-event placeholder ─── */
