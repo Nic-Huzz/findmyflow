@@ -28,10 +28,10 @@ const OUTCOMES = [
 ]
 
 const STRIKE_TYPES = [
-  { id: 'fight', label: 'Challenge the Norm', desc: 'Say what nobody in your field is saying. Make the market pick a side.', icon: '🔥' },
-  { id: 'stunt', label: 'Make Them Look Twice', desc: 'Do something in public that makes people say "wait, what?"', icon: '⚡' },
-  { id: 'functional', label: 'Let Them Feel It', desc: 'Prove your method works in real time. Give them a taste of the shift.', icon: '💎' },
-  { id: 'culture_creating', label: 'Start a Ritual', desc: 'Create something your attendees take home and spread without you.', icon: '🌀' },
+  { id: 'fight', label: 'Challenge the Norm', desc: 'Say what nobody in your field is saying. Make the market pick a side.', tag: 'Builds attention', icon: '🔥' },
+  { id: 'stunt', label: 'Make Them Look Twice', desc: 'Do something in public that makes people say "wait, what?"', tag: 'Builds attention', icon: '⚡' },
+  { id: 'functional', label: 'Let Them Feel It', desc: 'Prove your method works in real time. Give them a taste of the shift.', tag: 'Builds trust', icon: '💎' },
+  { id: 'culture_creating', label: 'Start a Ritual', desc: 'Create something your attendees take home and spread without you.', tag: 'Builds both', icon: '🌀' },
 ]
 
 // Shared parsing logic — must match CreatorHome's parseMovement
@@ -57,7 +57,6 @@ export default function StrikeDesignFlow() {
   // User selections
   const [outcome, setOutcome] = useState(null)
   const [strikeType, setStrikeType] = useState(null)
-  const [addScarcity, setAddScarcity] = useState(false)
   const [selectedSuggestion, setSelectedSuggestion] = useState(null)
   const [strikeTitle, setStrikeTitle] = useState('')
   const [strikeDescription, setStrikeDescription] = useState('')
@@ -286,14 +285,11 @@ export default function StrikeDesignFlow() {
                 <div>
                   <div className="stk-option-label">{t.label}</div>
                   <div className="stk-option-desc">{t.desc}</div>
+                  <span className={`stk-option-tag ${t.tag === 'Builds trust' ? 'stk-tag-trust' : t.tag === 'Builds both' ? 'stk-tag-both' : 'stk-tag-attention'}`}>{t.tag}</span>
                 </div>
               </button>
             ))}
           </div>
-          <label className="stk-scarcity-check">
-            <input type="checkbox" checked={addScarcity} onChange={(e) => setAddScarcity(e.target.checked)} />
-            <span>Add scarcity layer ("limited spots, no waitlist")</span>
-          </label>
           <div className="stk-nav">
             <button className="stk-back-btn" onClick={() => setStep(STEPS.OUTCOME)}>Back</button>
             <button className="stk-cta" disabled={!strikeType} onClick={() => { hapticLight(); setStep(STEPS.FUEL); generateSuggestions() }}>

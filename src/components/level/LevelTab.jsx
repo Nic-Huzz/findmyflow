@@ -210,7 +210,13 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
   const levelQuests = [
     ...(config.zones ? [{ label: 'Zone Diagnosis', done: !!selectedZone }] : []),
-    ...(config.deepDive ? [{ label: config.deepDive.name, done: config.deepDive.id === 'hero_avatar' ? hasEssenceAvatar : false }] : []),
+    ...(config.deepDive ? [{ label: config.deepDive.name, done:
+      config.deepDive.id === 'hero_avatar' ? hasEssenceAvatar
+      : config.deepDive.id === 'life_map' ? hasLifeMap
+      : config.deepDive.id === 'healing_compass' ? hasHealingCompass
+      : config.deepDive.id === 'career_clarity' ? hasCareerClarity
+      : hasFlowDeepDive[config.deepDive.id] || false
+    }] : []),
     ...(config.extraQuests || []).map(q => ({
       label: q.name,
       done: q.id === 'hero_avatar' ? hasEssenceAvatar

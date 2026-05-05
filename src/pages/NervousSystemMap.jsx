@@ -48,6 +48,9 @@ export default function NervousSystemMap() {
   return (
     <div className="nsm-page">
 
+      {/* Back button */}
+      <button className="nsm-back-btn" onClick={() => navigate(-1)} style={{ alignSelf: 'flex-start', marginBottom: '0.5rem' }}>← Back</button>
+
       {/* Hero */}
       <div className="nsm-hero">
         <h1>Your Nervous System Map</h1>
