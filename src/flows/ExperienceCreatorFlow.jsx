@@ -466,33 +466,37 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
             ← Back to browsing
           </button>
 
-          {/* ═══ SECTION 1: Bridge + Play-skill tags ═══ */}
-          <div className="ecf-result-header">
-            <div className="ecf-result-badge">Their Play-List</div>
-            <h1>What They Couldn't <span className="ecf-hero-gold">Stop</span></h1>
-          </div>
+          {/* ═══ SECTION 1: Bridge + Play-skill tags (hidden on try/embedded) ═══ */}
+          {!isTryRoute && (
+            <>
+              <div className="ecf-result-header">
+                <div className="ecf-result-badge">Their Play-List</div>
+                <h1>What They Couldn't <span className="ecf-hero-gold">Stop</span></h1>
+              </div>
 
-          <div className="ecf-reveal-card">
-            {reveal?.hasOverlap ? (
-              <>
-                <p className="ecf-reveal-bridge">
-                  You didn't pick these people randomly. You share similar play-lists.
-                </p>
-                <div className="ecf-skill-tags">
-                  {reveal.sharedSkills.map(s => (
-                    <span key={s.skill} className="ecf-skill-tag">
-                      {s.display}
-                      <span className="ecf-skill-tag-count">{s.count} picks</span>
-                    </span>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <p className="ecf-reveal-bridge">
-                Here's what your picks all did before anyone noticed.
-              </p>
-            )}
-          </div>
+              <div className="ecf-reveal-card">
+                {reveal?.hasOverlap ? (
+                  <>
+                    <p className="ecf-reveal-bridge">
+                      You didn't pick these people randomly. You share similar play-lists.
+                    </p>
+                    <div className="ecf-skill-tags">
+                      {reveal.sharedSkills.map(s => (
+                        <span key={s.skill} className="ecf-skill-tag">
+                          {s.display}
+                          <span className="ecf-skill-tag-count">{s.count} picks</span>
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p className="ecf-reveal-bridge">
+                    Here's what your picks all did before anyone noticed.
+                  </p>
+                )}
+              </div>
+            </>
+          )}
 
 
           {/* ═══ SECTION 3: Which business model sounds most exciting? ═══ */}
@@ -519,8 +523,12 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
 
           {/* ═══ SECTION 4: First Step + Save ═══ */}
           <div className="ecf-first-step">
-            <h3>Your First Step</h3>
-            <p>{chosenArchetype ? (FIRST_STEPS[chosenArchetype] || firstStep) : (reveal?.firstStep || firstStep)}</p>
+            {!isTryRoute && (
+              <>
+                <h3>Your First Step</h3>
+                <p>{chosenArchetype ? (FIRST_STEPS[chosenArchetype] || firstStep) : (reveal?.firstStep || firstStep)}</p>
+              </>
+            )}
 
             {isTryRoute ? (
               trySaved ? (
@@ -532,6 +540,9 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
                 </div>
               ) : (
                 <div className="ecf-try-capture">
+                  <p className="ecf-try-cta-text">
+                    Keen to explore how the best experience creators built their world-renowned {(chosenArchetype ? ARCHETYPE_INFO[chosenArchetype]?.name : archetype?.name)?.toLowerCase() || 'experiences'}?
+                  </p>
                   <input
                     type="email"
                     value={tryEmail}
