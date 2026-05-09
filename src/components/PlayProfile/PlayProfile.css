@@ -390,10 +390,14 @@
   animation: ppPulseGlow 3s ease-in-out infinite;
 }
 
-.play-profile-quiz .pp-founder-icon {
-  font-size: 52px;
+.play-profile-quiz .pp-founder-portrait {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
   margin-bottom: 12px;
-  filter: drop-shadow(0 4px 12px rgba(233, 162, 59, 0.3));
+  border: 3px solid #E9A23B;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
 }
 
 .play-profile-quiz .pp-founder-label {
@@ -494,8 +498,12 @@
   box-shadow: 0 2px 12px rgba(233, 162, 59, 0.2);
 }
 
-.play-profile-quiz .pp-chip-icon {
-  font-size: 24px;
+.play-profile-quiz .pp-chip-portrait {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #E9A23B;
 }
 .play-profile-quiz .pp-chip-name {
   font-size: 13px;

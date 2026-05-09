@@ -1,36 +1,36 @@
 {
   "meta": {
-    "version": "1.0",
-    "generatedAt": "2026-04-21",
-    "totalProfiles": 221,
+    "version": "2.0",
+    "generatedAt": "2026-05-09",
+    "totalProfiles": 33,
     "sliders": {
       "workRhythm": {
         "min": 1,
         "max": 5,
-        "label": "Marathon ↔ Sprinter"
+        "label": "Marathon ↔ Sprints"
       },
       "fuelType": {
         "min": 1,
         "max": 5,
-        "label": "Clean Fuel ↔ Dirty Fuel"
+        "label": "Fire ↔ Purpose"
+      },
+      "orientation": {
+        "min": 1,
+        "max": 5,
+        "label": "Solo/Deep ↔ Social/Enterprising"
       },
       "knowledgeStyle": {
         "min": 1,
         "max": 5,
         "label": "Analytical ↔ Intuitive"
       },
-      "impactStyle": {
+      "scaleApproach": {
         "min": 1,
         "max": 5,
-        "label": "Direct ↔ Systemic"
-      },
-      "growthMode": {
-        "min": 1,
-        "max": 5,
-        "label": "Deep Expertise ↔ Broad Leadership"
+        "label": "Craft ↔ Empire"
       }
     },
-    "notes": "All non-founder DNA profiles. impactStyle and growthMode replace orientation and scaleApproach for the employee path."
+    "notes": "33 live experience creators. Sliders match the Play Profile quiz output (workRhythm, fuelType from user sliders; orientation, knowledgeStyle inferred from games; scaleApproach from user slider). Full 221-profile archive at public/data/archived/experienceCreatorDNA-221-full.json"
   },
   "profiles": [
     {
@@ -38,29 +38,19 @@
       "experienceType": "facilitation",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 3,
       "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 2,
+      "scaleApproach": 3,
       "confidence": 88
-    },
-    {
-      "name": "Tony Robbins",
-      "experienceType": "live_events",
-      "workRhythm": 5,
-      "fuelType": 3,
-      "knowledgeStyle": 4,
-      "impactStyle": 1,
-      "growthMode": 5,
-      "confidence": 92
     },
     {
       "name": "Tenzin Palmo",
       "experienceType": "retreat",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 1,
       "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
+      "scaleApproach": 2,
       "confidence": 90
     },
     {
@@ -68,9 +58,9 @@
       "experienceType": "certification",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 2,
       "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
+      "scaleApproach": 3,
       "confidence": 88
     },
     {
@@ -78,19 +68,29 @@
       "experienceType": "book_newsletter",
       "workRhythm": 2,
       "fuelType": 1,
+      "orientation": 2,
       "knowledgeStyle": 3,
-      "impactStyle": 4,
-      "growthMode": 3,
+      "scaleApproach": 4,
       "confidence": 90
+    },
+    {
+      "name": "Tony Robbins",
+      "experienceType": "live_events",
+      "workRhythm": 5,
+      "fuelType": 3,
+      "orientation": 5,
+      "knowledgeStyle": 4,
+      "scaleApproach": 5,
+      "confidence": 92
     },
     {
       "name": "Wim Hof",
       "experienceType": "certification",
       "workRhythm": 2,
       "fuelType": 1,
+      "orientation": 2,
       "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 2,
+      "scaleApproach": 4,
       "confidence": 90
     },
     {
@@ -98,9 +98,9 @@
       "experienceType": "media_training",
       "workRhythm": 2,
       "fuelType": 1,
+      "orientation": 3,
       "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 2,
+      "scaleApproach": 3,
       "confidence": 90
     },
     {
@@ -108,9 +108,9 @@
       "experienceType": "facilitation",
       "workRhythm": 2,
       "fuelType": 1,
+      "orientation": 4,
       "knowledgeStyle": 3,
-      "impactStyle": 3,
-      "growthMode": 2,
+      "scaleApproach": 2,
       "confidence": 88
     },
     {
@@ -118,9 +118,9 @@
       "experienceType": "certification",
       "workRhythm": 2,
       "fuelType": 2,
+      "orientation": 4,
       "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
+      "scaleApproach": 5,
       "confidence": 85
     },
     {
@@ -128,1701 +128,9 @@
       "experienceType": "certification",
       "workRhythm": 4,
       "fuelType": 1,
+      "orientation": 4,
       "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Fred Rogers",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Maria Montessori",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 92
-    },
-    {
-      "name": "Anne Sullivan",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Janusz Korczak",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Vivian Gussin Paley",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "T. Berry Brazelton",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 3,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Emmi Pikler",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 3,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Mary Ainsworth",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 3,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Paul Farmer",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 3,
-      "growthMode": 5,
-      "confidence": 88
-    },
-    {
-      "name": "Virginia Apgar",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Cicely Saunders",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 90
-    },
-    {
-      "name": "Irena Sendler",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Wangari Maathai",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 90
-    },
-    {
-      "name": "John Wooden",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Carl Sagan",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "David Attenborough",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 92
-    },
-    {
-      "name": "Jacob Bronowski",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 88
-    },
-    {
-      "name": "Oliver Sacks",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Julia Child",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Isaiah Berlin",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Lynn Margulis",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "E.O. Wilson",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Susan Sontag",
-      "workRhythm": 3,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 85
-    },
-    {
-      "name": "Claude Lévi-Strauss",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Svante Pääbo",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 4,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Jane Jacobs",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Dorothy Height",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Bayard Rustin",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Fannie Lou Hamer",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Saul Alinsky",
-      "workRhythm": 1,
-      "fuelType": 4,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 85
-    },
-    {
-      "name": "Harriet Tubman",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Frederick Douglass",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 88
-    },
-    {
-      "name": "Dorothy Day",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Studs Terkel",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Jimmy Carter",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 90
-    },
-    {
-      "name": "Desmond Tutu",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 90
-    },
-    {
-      "name": "Nawal El Saadawi",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 85
-    },
-    {
-      "name": "Toni Morrison",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 92
-    },
-    {
-      "name": "James Baldwin",
-      "workRhythm": 4,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Seamus Heaney",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Mahmoud Darwish",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Audre Lorde",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Miriam Makeba",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Maya Angelou",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 5,
-      "confidence": 90
-    },
-    {
-      "name": "Frida Kahlo",
-      "workRhythm": 4,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Hilma af Klint",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 85
-    },
-    {
-      "name": "Louise Bourgeois",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Akira Kurosawa",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Gabriel García Márquez",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Georgia O'Keeffe",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Chinua Achebe",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Clarice Lispector",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Antoni Gaudí",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Charles and Ray Eames",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 88
-    },
-    {
-      "name": "Gertrude Jekyll",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 85
-    },
-    {
-      "name": "Malcolm X",
-      "workRhythm": 4,
-      "fuelType": 4,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Mahatma Gandhi",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 92
-    },
-    {
-      "name": "Cesar Chavez",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Marie Curie",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 92
-    },
-    {
-      "name": "Rosalind Franklin",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 4,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Barbara McClintock",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 3,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Katherine Johnson",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 5,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Jane Goodall",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 92
-    },
-    {
-      "name": "Rachel Carson",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 92
-    },
-    {
-      "name": "Aldo Leopold",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Anna Politkovskaya",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Viktor Frankl",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 90
-    },
-    {
-      "name": "George Kennan",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Frank Lloyd Wright",
-      "workRhythm": 1,
-      "fuelType": 4,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Florence Nightingale",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 92
-    },
-    {
-      "name": "Clara Barton",
-      "workRhythm": 4,
-      "fuelType": 2,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 4,
-      "confidence": 85
-    },
-    {
-      "name": "Jaime Escalante",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "James Stigler",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 4,
-      "growthMode": 1,
-      "confidence": 85
-    },
-    {
-      "name": "Donald Winnicott",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Joyce Banda",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
-      "name": "Pat Summitt",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 4,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Sebastian Junger",
-      "workRhythm": 4,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 3,
-      "confidence": 82
-    },
-    {
-      "name": "Hans Rosling",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Mary Roach",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 3,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Atul Gawande",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 90
-    },
-    {
-      "name": "Richard Feynman",
-      "workRhythm": 3,
-      "fuelType": 3,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 90
-    },
-    {
-      "name": "Neil deGrasse Tyson",
-      "workRhythm": 2,
-      "fuelType": 2,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Steven Pinker",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Sal Khan",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Marcus du Sautoy",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Randall Munroe",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 3,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Brian Cox",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Ruth Westheimer",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Henry Louis Gates Jr.",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
-      "name": "Jacques Pepin",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Samin Nosrat",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 3,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Ha-Joon Chang",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Eugenia Cheng",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 3,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Matthew Walker",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Siddhartha Mukherjee",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Mary Beard",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Trevor Noah",
-      "workRhythm": 3,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
-      "name": "Iain McGilchrist",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Karen Armstrong",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Robin Wall Kimmerer",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Jill Lepore",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Yuval Noah Harari",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Michael Pollan",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Rebecca Solnit",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Timothy Snyder",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "David Graeber",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Elaine Pagels",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 4,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Zadie Smith",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Lech Wałęsa",
-      "workRhythm": 4,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 82
-    },
-    {
-      "name": "Krista Tippett",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "John Hume",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Tawakkol Karman",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 82
-    },
-    {
-      "name": "Ta-Nehisi Coates",
-      "workRhythm": 3,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Chimamanda Ngozi Adichie",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Patti Smith",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Wisława Szymborska",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Aretha Franklin",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Tupac Shakur",
-      "workRhythm": 5,
-      "fuelType": 4,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Ira Glass",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Wong Kar-wai",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Hayao Miyazaki",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Björk",
-      "workRhythm": 4,
-      "fuelType": 2,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "William Kentridge",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Marcel Duchamp",
-      "workRhythm": 4,
-      "fuelType": 3,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Dieter Rams",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 5,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Massimo Vignelli",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Tadao Ando",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Paula Scher",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Zaha Hadid",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Jan Gehl",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Piet Oudolf",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Malala Yousafzai",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Greta Thunberg",
-      "workRhythm": 4,
-      "fuelType": 3,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Al Gore",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
-      "name": "Dolores Huerta",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Naomi Klein",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Cédric Villani",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Susan Fowler",
-      "workRhythm": 4,
-      "fuelType": 3,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 80
-    },
-    {
-      "name": "Cathy O'Neil",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 1,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Hedy Lamarr",
-      "workRhythm": 3,
-      "fuelType": 3,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 75
-    },
-    {
-      "name": "Pearl Kazin Bell",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 72
-    },
-    {
-      "name": "Herbert Kohl",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Rafe Esquith",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Jerome Bruner",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Harold McGee",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 3,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Marcus Aurelius",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
-      "name": "Epictetus",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 80
-    },
-    {
-      "name": "Tim Gowers",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 1,
-      "impactStyle": 3,
-      "growthMode": 2,
-      "confidence": 82
-    },
-    {
-      "name": "George Steiner",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Edith Grossman",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 85
-    },
-    {
-      "name": "Gregory Rabassa",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 85
-    },
-    {
-      "name": "Clifford Geertz",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Bruno Latour",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Donella Meadows",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Fritjof Capra",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 82
-    },
-    {
-      "name": "Mary Catherine Bateson",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 82
-    },
-    {
-      "name": "Mircea Eliade",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 78
-    },
-    {
-      "name": "Gregory Bateson",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
-      "name": "Frances Yates",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 4,
-      "growthMode": 1,
-      "confidence": 85
-    },
-    {
-      "name": "Martha Nussbaum",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Rumi",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 85
-    },
-    {
-      "name": "Ursula K. Le Guin",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 90
-    },
-    {
-      "name": "Haruki Murakami",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Octavia Butler",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Toni Cade Bambara",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 3,
-      "confidence": 82
-    },
-    {
-      "name": "Philip Glass",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 88
-    },
-    {
-      "name": "Anni Albers",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Andrei Tarkovsky",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 90
-    },
-    {
-      "name": "Kenya Hara",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Kevin Lynch",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Achille Castiglioni",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 85
-    },
-    {
-      "name": "Marshall McLuhan",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Carl von Clausewitz",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Gary Chapman",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Johann Hari",
-      "workRhythm": 3,
-      "fuelType": 3,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 78
-    },
-    {
-      "name": "Maia Szalavitz",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 2,
-      "confidence": 82
-    },
-    {
-      "name": "Carl Hart",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Russell Brand",
-      "workRhythm": 4,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 5,
-      "confidence": 72
-    },
-    {
-      "name": "Louise Aronson",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Ai-jen Poo",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 85
-    },
-    {
-      "name": "Judith Heumann",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Stella Young",
-      "workRhythm": 3,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 3,
-      "confidence": 80
-    },
-    {
-      "name": "Haben Girma",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 82
-    },
-    {
-      "name": "Ed Roberts",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
-      "name": "Alice Wong",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 82
-    },
-    {
-      "name": "Muhammad Yunus",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 90
-    },
-    {
-      "name": "Jose Quinonez",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 80
-    },
-    {
-      "name": "Suze Orman",
-      "workRhythm": 1,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 5,
+      "scaleApproach": 4,
       "confidence": 85
     },
     {
@@ -1830,9 +138,9 @@
       "experienceType": "book_newsletter",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 1,
       "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 3,
+      "scaleApproach": 2,
       "confidence": 92
     },
     {
@@ -1840,9 +148,9 @@
       "experienceType": "certification",
       "workRhythm": 4,
       "fuelType": 3,
+      "orientation": 3,
       "knowledgeStyle": 3,
-      "impactStyle": 5,
-      "growthMode": 5,
+      "scaleApproach": 5,
       "confidence": 90
     },
     {
@@ -1850,9 +158,9 @@
       "experienceType": "retreat",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 3,
       "knowledgeStyle": 3,
-      "impactStyle": 3,
-      "growthMode": 4,
+      "scaleApproach": 3,
       "confidence": 90
     },
     {
@@ -1860,9 +168,9 @@
       "experienceType": "book_newsletter",
       "workRhythm": 2,
       "fuelType": 2,
+      "orientation": 1,
       "knowledgeStyle": 1,
-      "impactStyle": 5,
-      "growthMode": 3,
+      "scaleApproach": 3,
       "confidence": 90
     },
     {
@@ -1870,9 +178,9 @@
       "experienceType": "retreat",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 3,
       "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
+      "scaleApproach": 4,
       "confidence": 92
     },
     {
@@ -1880,9 +188,9 @@
       "experienceType": "retreat",
       "workRhythm": 2,
       "fuelType": 3,
+      "orientation": 4,
       "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
+      "scaleApproach": 2,
       "confidence": 90
     },
     {
@@ -1890,9 +198,9 @@
       "experienceType": "retreat",
       "workRhythm": 3,
       "fuelType": 2,
+      "orientation": 3,
       "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 5,
+      "scaleApproach": 5,
       "confidence": 90
     },
     {
@@ -1900,9 +208,9 @@
       "experienceType": "cohort",
       "workRhythm": 4,
       "fuelType": 4,
+      "orientation": 4,
       "knowledgeStyle": 3,
-      "impactStyle": 4,
-      "growthMode": 5,
+      "scaleApproach": 4,
       "confidence": 90
     },
     {
@@ -1910,9 +218,9 @@
       "experienceType": "book_newsletter",
       "workRhythm": 1,
       "fuelType": 3,
+      "orientation": 2,
       "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 4,
+      "scaleApproach": 2,
       "confidence": 90
     },
     {
@@ -1920,9 +228,9 @@
       "experienceType": "certification",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 3,
       "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
+      "scaleApproach": 5,
       "confidence": 92
     },
     {
@@ -1930,9 +238,9 @@
       "experienceType": "live_events",
       "workRhythm": 2,
       "fuelType": 3,
+      "orientation": 4,
       "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
+      "scaleApproach": 4,
       "confidence": 90
     },
     {
@@ -1940,9 +248,9 @@
       "experienceType": "retreat",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 2,
       "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 3,
+      "scaleApproach": 2,
       "confidence": 88
     },
     {
@@ -1950,9 +258,9 @@
       "experienceType": "book_newsletter",
       "workRhythm": 2,
       "fuelType": 1,
+      "orientation": 1,
       "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 4,
+      "scaleApproach": 3,
       "confidence": 90
     },
     {
@@ -1960,9 +268,9 @@
       "experienceType": "certification",
       "workRhythm": 4,
       "fuelType": 3,
+      "orientation": 4,
       "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 5,
+      "scaleApproach": 4,
       "confidence": 90
     },
     {
@@ -1970,9 +278,9 @@
       "experienceType": "certification",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 3,
       "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 5,
+      "scaleApproach": 5,
       "confidence": 92
     },
     {
@@ -1980,9 +288,9 @@
       "experienceType": "cohort",
       "workRhythm": 4,
       "fuelType": 3,
+      "orientation": 5,
       "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
+      "scaleApproach": 5,
       "confidence": 88
     },
     {
@@ -1990,9 +298,9 @@
       "experienceType": "book_newsletter",
       "workRhythm": 1,
       "fuelType": 1,
+      "orientation": 1,
       "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 1,
+      "scaleApproach": 1,
       "confidence": 90
     },
     {
@@ -2000,9 +308,9 @@
       "experienceType": "live_events",
       "workRhythm": 2,
       "fuelType": 3,
+      "orientation": 4,
       "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 3,
+      "scaleApproach": 3,
       "confidence": 87
     },
     {
@@ -2010,9 +318,9 @@
       "experienceType": "live_events",
       "workRhythm": 4,
       "fuelType": 3,
+      "orientation": 5,
       "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 4,
+      "scaleApproach": 4,
       "confidence": 85
     },
     {
@@ -2020,9 +328,9 @@
       "experienceType": "live_events",
       "workRhythm": 2,
       "fuelType": 1,
+      "orientation": 3,
       "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
+      "scaleApproach": 2,
       "confidence": 82
     },
     {
@@ -2030,9 +338,9 @@
       "experienceType": "live_events",
       "workRhythm": 4,
       "fuelType": 1,
+      "orientation": 4,
       "knowledgeStyle": 3,
-      "impactStyle": 4,
-      "growthMode": 5,
+      "scaleApproach": 4,
       "confidence": 85
     },
     {
@@ -2040,9 +348,9 @@
       "experienceType": "facilitation",
       "workRhythm": 2,
       "fuelType": 3,
+      "orientation": 3,
       "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 2,
+      "scaleApproach": 3,
       "confidence": 90
     },
     {
@@ -2050,9 +358,9 @@
       "experienceType": "facilitation",
       "workRhythm": 2,
       "fuelType": 3,
+      "orientation": 4,
       "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 4,
+      "scaleApproach": 4,
       "confidence": 88
     }
   ]

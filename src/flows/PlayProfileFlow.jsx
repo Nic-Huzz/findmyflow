@@ -50,7 +50,7 @@ export default function PlayProfileFlow() {
 
     async function init() {
       const [foundersRes, resultRes] = await Promise.all([
-        fetch('/data/founderDnaFounders.json').then(r => r.json()).catch(() => null),
+        fetch('/data/experienceCreatorDNA.json').then(r => r.json()).then(d => d.profiles).catch(() => null),
         supabase
           .from('founder_dna_results')
           .select('*')

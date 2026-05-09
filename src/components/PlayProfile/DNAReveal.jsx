@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react'
 
+function creatorSlug(name) {
+  return name.toLowerCase().replace(/[''é]/g, '').replace(/\s+/g, '-')
+}
+
 const factorNames = ['Work Rhythm', 'Fuel Type', 'Orientation', 'Knowledge Style', 'Scale Approach']
 
 const factorLabels = {
@@ -15,6 +19,20 @@ function getFactorDescription(idx, value) {
   if (value <= 2) return low
   if (value >= 4) return high
   return 'Balanced'
+}
+
+const EXPERIENCE_TYPE_LABELS = {
+  facilitation: 'Facilitation',
+  retreat: 'Retreats',
+  certification: 'Certification & Training',
+  book_newsletter: 'Books & Media',
+  live_events: 'Live Events',
+  media_training: 'Media & Training',
+  cohort: 'Cohort Programs',
+}
+
+function getDisplayCompany(founder) {
+  return founder.company || EXPERIENCE_TYPE_LABELS[founder.experienceType] || founder.experienceType || ''
 }
 
 function getBusinessSummary(founder) {
@@ -57,7 +75,7 @@ export default function DNAReveal({ profile, match, onContinue, onFounderChange,
 
   const handleShare = async () => {
     const url = shareUrl || 'findmyflow.nichuzz.com'
-    const text = `My Founder DNA: ${profile.code} \u2014 ${match.archetype}\nI think like ${selected.founder.name} (${selected.founder.company})\n\nDiscover yours at ${url}`
+    const text = `My Founder DNA: ${profile.code} \u2014 ${match.archetype}\nI think like ${selected.founder.name}\n\nDiscover yours at ${url}`
     if (navigator.share) {
       try {
         await navigator.share({ text })
@@ -122,12 +140,15 @@ export default function DNAReveal({ profile, match, onContinue, onFounderChange,
         <>
           {/* Top match - large card */}
           <div className="pp-glass-card pp-founder-card pp-fade-in-up">
-            <div className="pp-founder-icon">
-              {selected.founder.fuelType >= 4 ? '\u2728' : '\ud83d\udd25'}
-            </div>
+            <img
+              className="pp-founder-portrait"
+              src={`/images/creators/${creatorSlug(selected.founder.name)}.png`}
+              alt={selected.founder.name}
+              onError={(e) => { e.target.style.display = 'none' }}
+            />
             <div className="pp-founder-label">You think like</div>
             <div className="pp-founder-name">{selected.founder.name}</div>
-            <div className="pp-founder-company">{selected.founder.company}</div>
+            <div className="pp-founder-company">{getDisplayCompany(selected.founder)}</div>
 
             {selected.founder.oneLiner && (
               <div className="pp-founder-quote">
@@ -165,11 +186,14 @@ export default function DNAReveal({ profile, match, onContinue, onFounderChange,
                     className={`pp-founder-chip${i === selectedIdx ? ' pp-chip-selected' : ''}`}
                     onClick={() => handleSelectFounder(i)}
                   >
-                    <span className="pp-chip-icon">
-                      {m.founder.fuelType >= 4 ? '\u2728' : '\ud83d\udd25'}
-                    </span>
+                    <img
+                      className="pp-chip-portrait"
+                      src={`/images/creators/${creatorSlug(m.founder.name)}.png`}
+                      alt={m.founder.name}
+                      onError={(e) => { e.target.style.display = 'none' }}
+                    />
                     <span className="pp-chip-name">{m.founder.name}</span>
-                    <span className="pp-chip-company">{m.founder.company}</span>
+                    <span className="pp-chip-company">{getDisplayCompany(m.founder)}</span>
                     {i === 0 && <span className="pp-chip-badge">Best</span>}
                   </button>
                 ))}

@@ -12,7 +12,7 @@ import './PlayProfile.css'
 // Strip large stageStories from founder objects before saving to localStorage
 function stripForStorage(s) {
   if (!s.matchResult) return s
-  const stripFounder = (f) => f ? { name: f.name, company: f.company, fuelType: f.fuelType } : f
+  const stripFounder = (f) => f ? { name: f.name, company: f.company, experienceType: f.experienceType, fuelType: f.fuelType } : f
   return {
     ...s,
     matchResult: {
@@ -79,7 +79,7 @@ export default function PlayProfileQuiz({ userId, onQuizComplete, founders: exte
       const [foundersRes, existingRes] = await Promise.all([
         externalFounders
           ? Promise.resolve(externalFounders)
-          : fetch('/data/founderDnaFounders.json').then(r => r.json()).catch(() => null),
+          : fetch('/data/experienceCreatorDNA.json').then(r => r.json()).then(d => d.profiles).catch(() => null),
         (!skipExistingCheck && userId)
           ? supabase
               .from('founder_dna_results')

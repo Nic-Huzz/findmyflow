@@ -560,7 +560,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'FindMyFlow <notifications@findmyflow.nichuzz.com>',
+          from: 'FindMyFlow <notifications@nichuzz.com>',
           to: email,
           subject,
           html: profileHtml,
@@ -586,7 +586,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'FindMyFlow <notifications@findmyflow.nichuzz.com>',
+          from: 'FindMyFlow <notifications@nichuzz.com>',
           to: NOTIFY_EMAIL,
           subject: `LinkTree lead: ${name || email} — ${archetype_name} (${type})`,
           html: buildNotificationEmail(email, name || '', archetype_name, type),

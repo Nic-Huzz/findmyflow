@@ -54,9 +54,9 @@ export default function TryPlayProfile() {
 
   // Load founders data
   useEffect(() => {
-    fetch('/data/founderDnaFounders.json')
+    fetch('/data/experienceCreatorDNA.json')
       .then(r => r.json())
-      .then(setFounders)
+      .then(d => setFounders(d.profiles))
       .catch(() => {})
   }, [])
 
