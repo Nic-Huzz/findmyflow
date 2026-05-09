@@ -2,7 +2,7 @@
   "meta": {
     "generated": "2026-04-23",
     "model": "claude-opus-4-20250514",
-    "count": 47,
+    "count": 33,
     "remarkable_extracted": "2026-04-24",
     "remarkable_v2_extracted": "2026-04-24",
     "remarkable_categories": [
@@ -69,34 +69,6 @@
     "remarkable_v3_extracted": "2026-04-25"
   },
   "creators": {
-    "Alain de Botton": {
-      "name": "Alain de Botton",
-      "early_growth": "Wrote essays and philosophy books for general audiences while teaching. Published How Proust Can Change Your Life in 1997 as an accessible philosophy book.",
-      "scaling_move": "Founded The School of Life as a physical location in London, then pivoted to YouTube as the primary distribution channel.",
-      "current_model": "YouTube channel with 8M subscribers drives awareness for School of Life courses, products, and books.",
-      "growth_category": "one_project",
-      "first_step": "Write one essay that makes a philosophical idea practical for everyday life and submit it to online publications.",
-      "remarkable_thing": "A philosopher who opened an actual school for feelings in the age of online everything.",
-      "trust_behavior": "Wrote accessible philosophy books for general audiences for over a decade.",
-      "remarkable_category": "opposite_method",
-      "remarkable_type": "physical in digital",
-      "remarkable_trigger": "unexpected_combination",
-      "remarkable_behavior": "A philosopher who opened an actual school for feelings in a London shopfront."
-    },
-    "Ali Abdaal": {
-      "name": "Ali Abdaal",
-      "early_growth": "Made study technique videos on YouTube while in medical school, sharing his own learning methods. Posted weekly videos about productivity and studying while working as a junior doctor.",
-      "scaling_move": "Launched his first cohort-based course (Part-Time YouTuber Academy) teaching others his content creation system.",
-      "current_model": "Weekly YouTube videos feed into high-ticket cohort courses, with book deals and sponsorships as additional revenue.",
-      "growth_category": "free_content",
-      "first_step": "Start a YouTube channel about your current learning journey and commit to one video per week.",
-      "remarkable_thing": "A working doctor who made more money teaching productivity on YouTube than saving lives in the NHS.",
-      "trust_behavior": "Posted weekly productivity videos while working full-time as a junior doctor.",
-      "remarkable_category": "contrast",
-      "remarkable_type": "profitable contradiction",
-      "remarkable_trigger": "unexpected_combination",
-      "remarkable_behavior": "A working doctor who built a YouTube empire bigger than his medical salary by filming himself studying."
-    },
     "Brené Brown": {
       "name": "Brené Brown",
       "early_growth": "Spent 15 years as an academic researcher studying shame and vulnerability, publishing in academic journals. Gave talks at academic conferences and small local events.",
@@ -110,48 +82,6 @@
       "remarkable_type": "living the research",
       "remarkable_trigger": "unexpected_combination",
       "remarkable_behavior": "An academic who spent 15 years studying shame then got on stage and shared her own."
-    },
-    "Dan Hughes": {
-      "name": "Dan Hughes",
-      "early_growth": "Worked as a clinical psychologist treating children with attachment disorders in his private practice. Developed Dyadic Developmental Psychotherapy through direct client work.",
-      "scaling_move": "Published Building the Bonds of Attachment, making his clinical method accessible to therapists worldwide.",
-      "current_model": "Trains therapists in DDP through workshops while maintaining clinical practice and writing books.",
-      "growth_category": "clinical",
-      "first_step": "Document one unique intervention you use with clients and present it at a local professional meetup.",
-      "remarkable_thing": "A therapist who stayed playful with raging children when everyone else gave up.",
-      "trust_behavior": "Treated children with attachment disorders in private practice for decades.",
-      "remarkable_category": "opposite_method",
-      "remarkable_type": "opposite response",
-      "remarkable_trigger": "stupid_simplicity",
-      "remarkable_behavior": "A therapist who discovered that staying curious about a raging child works better than discipline."
-    },
-    "David Bohm": {
-      "name": "David Bohm",
-      "early_growth": "Published academic physics papers and taught at universities in Brazil, Israel, and the UK. Developed his dialogue method through small experimental groups.",
-      "scaling_move": "Published Wholeness and the Implicate Order, bridging quantum physics and human communication.",
-      "current_model": "His dialogue method is practiced in organizations worldwide through trained facilitators.",
-      "growth_category": "academic",
-      "first_step": "Convene a small dialogue group of 6-8 people to practice suspending assumptions together.",
-      "remarkable_thing": "A quantum physicist who taught people to think together by suspending their thoughts.",
-      "trust_behavior": "Taught physics at universities for 40 years while developing dialogue methods.",
-      "remarkable_category": "opposite_method",
-      "remarkable_type": "paradox method",
-      "remarkable_trigger": "unexpected_combination",
-      "remarkable_behavior": "A quantum physicist who taught groups to suspend their assumptions until reality could unfold between them."
-    },
-    "Elizabeth Gilbert": {
-      "name": "Elizabeth Gilbert",
-      "early_growth": "Worked as a magazine journalist for a decade, writing for GQ, Spin, and The New York Times. Published short story collections and her first novel while freelancing.",
-      "scaling_move": "Eat Pray Love became a global phenomenon, selling 15 million copies and establishing her as a household name.",
-      "current_model": "Leverages book royalties and gives keynote speeches about creativity and courage.",
-      "growth_category": "one_project",
-      "first_step": "Pitch one personal essay to an online publication about a transformative experience you had.",
-      "remarkable_thing": "A mega-bestselling author who taught creativity to people terrified of being bad at it.",
-      "trust_behavior": "Worked as a magazine journalist for a decade before publishing her first book.",
-      "remarkable_category": "defiance",
-      "remarkable_type": "permission giver",
-      "remarkable_trigger": "rule_broken",
-      "remarkable_behavior": "A mega-bestselling author who told everyone they should create badly rather than wait to be good."
     },
     "Esther Perel": {
       "name": "Esther Perel",
@@ -195,48 +125,6 @@
       "remarkable_trigger": "stupid_simplicity",
       "remarkable_behavior": "A doctor who spent 12 years with the most addicted patients asking 'Why the pain?' instead of 'Why the addiction?'"
     },
-    "Glennon Doyle": {
-      "name": "Glennon Doyle",
-      "early_growth": "Started blogging as Momastery while in recovery, writing honest posts about motherhood and addiction. Built readership through raw vulnerability and consistent posting.",
-      "scaling_move": "Her blog post about her marriage went viral, leading to her first book deal and national attention.",
-      "current_model": "Bestselling books, sold-out live tours, and a top-ranked podcast with millions of downloads.",
-      "growth_category": "free_content",
-      "first_step": "Start a blog writing honestly about one struggle you're facing and post twice a week.",
-      "remarkable_thing": "A Christian mommy blogger who left her husband for a woman and kept her audience.",
-      "trust_behavior": "Posted honest blog posts about motherhood and recovery consistently for years.",
-      "remarkable_category": "breaking_boundaries",
-      "remarkable_type": "identity reversal",
-      "remarkable_trigger": "rule_broken",
-      "remarkable_behavior": "A Christian mommy blogger who wrote about being a recovering addict and wanting to leave her marriage."
-    },
-    "James Clear": {
-      "name": "James Clear",
-      "early_growth": "Started writing free articles about habits twice per week on his website. Built an email list by offering a free habits guide, growing to 2 million subscribers over 6 years.",
-      "scaling_move": "Published Atomic Habits after building a massive email list, selling 20 million copies through word of mouth.",
-      "current_model": "Book royalties and high-fee keynote speaking with a deliberately small business structure.",
-      "growth_category": "free_content",
-      "first_step": "Write and publish one article per week about a topic you're experimenting with personally.",
-      "remarkable_thing": "A blogger who made habit formation feel more important than achieving goals.",
-      "trust_behavior": "Wrote free articles twice weekly for six years before publishing a book.",
-      "remarkable_category": "opposite_method",
-      "remarkable_type": "process over outcome",
-      "remarkable_trigger": "stupid_simplicity",
-      "remarkable_behavior": "A blogger who made showing up every day sound more powerful than being talented."
-    },
-    "Jane Addams": {
-      "name": "Jane Addams",
-      "early_growth": "Used her inheritance to co-found Hull House settlement in Chicago's poor immigrant neighborhood. Moved in and offered free classes, childcare, and services to neighbors.",
-      "scaling_move": "Hull House became the model for settlement houses nationwide, establishing social work as a profession.",
-      "current_model": "Ran Hull House through donations and government contracts while writing and speaking nationally.",
-      "growth_category": "free_events",
-      "first_step": "Offer free tutoring or childcare to families in an underserved neighborhood near you.",
-      "remarkable_thing": "A wealthy woman who moved into the slums and stayed there for 46 years.",
-      "trust_behavior": "Lived in Hull House providing daily services to immigrant neighbors for decades.",
-      "remarkable_category": "invisible_impact",
-      "remarkable_type": "class betrayal",
-      "remarkable_trigger": "extreme_degree",
-      "remarkable_behavior": "A wealthy woman who moved into a Chicago slum and kept the door open for 46 years."
-    },
     "Jay Shetty": {
       "name": "Jay Shetty",
       "early_growth": "After leaving monastic life, started making short wisdom videos for Facebook and Instagram. Posted daily bite-sized spiritual content optimized for social media sharing.",
@@ -250,34 +138,6 @@
       "remarkable_type": "sacred to viral",
       "remarkable_trigger": "unexpected_combination",
       "remarkable_behavior": "A former monk who became a social media guru translating ancient wisdom into viral videos."
-    },
-    "John Gottman": {
-      "name": "John Gottman",
-      "early_growth": "Conducted academic research on couples at the University of Washington for 20 years, publishing in academic journals. Observed thousands of couples in his 'Love Lab' using scientific methods.",
-      "scaling_move": "Founded the Gottman Institute with his wife, packaging research into trainable methods for therapists.",
-      "current_model": "Certifies therapists worldwide in Gottman Method while running couples workshops and selling books.",
-      "growth_category": "academic",
-      "first_step": "Observe and document patterns in 10 couples' interactions using a simple coding system.",
-      "remarkable_thing": "A mathematician who could predict divorce with 90% accuracy by watching couples argue.",
-      "trust_behavior": "Observed thousands of couples in his lab for 20 years at the University of Washington.",
-      "remarkable_category": "impossible_proof",
-      "remarkable_type": "quantified intimacy",
-      "remarkable_trigger": "impossible_result",
-      "remarkable_behavior": "A mathematician who watched couples fight in a lab and could predict divorce with 90% accuracy."
-    },
-    "Joseph Campbell": {
-      "name": "Joseph Campbell",
-      "early_growth": "Spent 5 years reading independently in a cabin during the Great Depression with no job. Taught at Sarah Lawrence College for 38 years, developing his ideas through teaching.",
-      "scaling_move": "Published The Hero with a Thousand Faces, introducing the monomyth concept that influenced countless creators.",
-      "current_model": "Books and PBS series royalties continue posthumously while his ideas permeate global culture.",
-      "growth_category": "academic",
-      "first_step": "Spend 3 months reading deeply in one subject area and document the patterns you find.",
-      "remarkable_thing": "An unemployed scholar who read in a shack for five years and found the world's hidden story.",
-      "trust_behavior": "Taught the same hero's journey concept at Sarah Lawrence for 38 years.",
-      "remarkable_category": "commitment_as_art",
-      "remarkable_type": "pattern finder",
-      "remarkable_trigger": "extreme_degree",
-      "remarkable_behavior": "A broke academic who spent 5 years reading in a shack during the Depression then found the same story in every culture."
     },
     "Phil Jackson": {
       "name": "Phil Jackson",
@@ -307,34 +167,6 @@
       "remarkable_trigger": "stupid_simplicity",
       "remarkable_behavior": "A facilitator who proved that how you gather people is more important than what you gather them for."
     },
-    "Rita Pierson": {
-      "name": "Rita Pierson",
-      "early_growth": "Taught in public schools for 40 years, focusing on building relationships with students. Shared her methods with other teachers through district training sessions.",
-      "scaling_move": "Her TED talk 'Every Kid Needs a Champion' crystallized her philosophy and went viral.",
-      "current_model": "The TED talk continues spreading her message posthumously to millions of educators.",
-      "growth_category": "clinical",
-      "first_step": "Choose three struggling students and commit to being their champion this month.",
-      "remarkable_thing": "A teacher who spent 40 years insisting that kids don't learn from people they don't like.",
-      "trust_behavior": "Taught in public schools for 40 years focusing on relationships over test scores.",
-      "remarkable_category": "commitment_as_art",
-      "remarkable_type": "obvious truth",
-      "remarkable_trigger": "extreme_degree",
-      "remarkable_behavior": "A teacher who spent 40 years calling every student her champion and refusing to apologize for it."
-    },
-    "Simon Sinek": {
-      "name": "Simon Sinek",
-      "early_growth": "Worked in advertising and struggled with his own purpose, developing his ideas through small talks. Gave free presentations about 'Start With Why' to anyone who would listen.",
-      "scaling_move": "His TEDx talk about the Golden Circle went viral, establishing him as a thought leader.",
-      "current_model": "Runs boutique consultancy serving Fortune 500 companies while writing books and speaking.",
-      "growth_category": "free_events",
-      "first_step": "Give a free 20-minute talk about one powerful idea at a local business meetup.",
-      "remarkable_thing": "A failed ad man who asked one question that reorganized how companies think.",
-      "trust_behavior": "Gave free presentations about his ideas to anyone who would listen before going viral.",
-      "remarkable_category": "first",
-      "remarkable_type": "simple profound",
-      "remarkable_trigger": "stupid_simplicity",
-      "remarkable_behavior": "An ad man who asked one question so simple that Fortune 500 companies reorganized around the answer."
-    },
     "Tenzin Palmo": {
       "name": "Tenzin Palmo",
       "early_growth": "Worked as a librarian in London while studying Buddhism. Traveled to India and was ordained as one of the first Western Tibetan Buddhist nuns.",
@@ -349,20 +181,6 @@
       "remarkable_trigger": "extreme_degree",
       "remarkable_behavior": "A British librarian who lived 12 years alone in a Himalayan cave then said building a school was harder."
     },
-    "Tiffany Aliche": {
-      "name": "Tiffany Aliche",
-      "early_growth": "Started The Budgetnista blog after losing her job and savings, sharing her financial recovery journey. Posted free financial advice consistently while rebuilding her own finances.",
-      "scaling_move": "Created the free Live Richer Challenge on social media, growing to over 1 million participants.",
-      "current_model": "Books, courses, and partnerships monetize the massive audience built through free challenges.",
-      "growth_category": "free_content",
-      "first_step": "Start a blog documenting your journey learning any skill and post twice weekly.",
-      "remarkable_thing": "A preschool teacher who lost everything to fraud and taught a million women to get it back.",
-      "trust_behavior": "Posted free financial advice consistently while rebuilding her own finances.",
-      "remarkable_category": "authority_paradox",
-      "remarkable_type": "failure to authority",
-      "remarkable_trigger": "extreme_degree",
-      "remarkable_behavior": "A preschool teacher who lost everything to fraud then taught a million women to budget through social media challenges."
-    },
     "Tony Robbins": {
       "name": "Tony Robbins",
       "early_growth": "Started running NLP seminars in his late teens after training with NLP founders. Promoted events through direct sales and small hotel conference rooms.",
@@ -376,20 +194,6 @@
       "remarkable_type": "mass intimacy",
       "remarkable_trigger": "extreme_degree",
       "remarkable_behavior": "A teenager who started running therapy seminars and built them into stadium-sized transformation events."
-    },
-    "Walt Disney": {
-      "name": "Walt Disney",
-      "early_growth": "Created animated shorts with his brother in a garage studio, distributing to local theaters. Lost rights to his first successful character and started over with Mickey Mouse.",
-      "scaling_move": "Bet everything on Snow White as the first feature-length animated film despite industry skepticism.",
-      "current_model": "Built integrated entertainment empire with films feeding theme parks and merchandise.",
-      "growth_category": "one_project",
-      "first_step": "Create one short animated video using free software and share it online.",
-      "remarkable_thing": "An animator who bet his entire company on a feature-length cartoon everyone called folly.",
-      "trust_behavior": "Created animated shorts in a garage studio for years before Snow White.",
-      "remarkable_category": "first",
-      "remarkable_type": "all-in gamble",
-      "remarkable_trigger": "extreme_degree",
-      "remarkable_behavior": "An animator who bet everything on a feature-length cartoon when everyone called it Disney's Folly."
     },
     "Wim Hof": {
       "name": "Wim Hof",

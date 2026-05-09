@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "totalProfiles": 235,
+    "totalProfiles": 221,
     "totalTags": 787,
     "totalAntiTags": 44,
     "generatedAt": "2026-04-07",
@@ -861,40 +861,6 @@
       ]
     },
     {
-      "name": "Joseph Campbell",
-      "dominantCategories": [
-        "teaching",
-        "storytelling"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Find the bigger pattern under the noise",
-          "confidence": "high",
-          "evidence": "The Hero with a Thousand Faces (1949) proposed the monomyth, a single recurring hero's journey pattern underlying myths from all cultures, developed teaching undergraduates at Sarah Lawrence."
-        },
-        {
-          "category": "coaching",
-          "skill": "Mentor someone earlier on the path",
-          "confidence": "high",
-          "evidence": "Stayed at Sarah Lawrence from 1934 to 1972 and said teaching the same material to different cohorts of 20-year-olds every year kept it honest, because they noticed anything he had stopped believing."
-        },
-        {
-          "category": "teaching",
-          "skill": "Turn jargon into plain words",
-          "confidence": "medium",
-          "evidence": "'Follow your bliss' came from the Sanskrit sat-chit-ananda; late in life he said he sometimes wished he had said 'follow your blisters' to correct the misread toward hedonism."
-        },
-        {
-          "category": "performing",
-          "skill": "Turn a message into a moment",
-          "confidence": "medium",
-          "evidence": "The Power of Myth interviews with Bill Moyers, recorded at Skywalker Ranch in 1985-86, found an audience after his death that he had never had in his lifetime because Moyers forced him into first person."
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Susan Sontag",
       "dominantCategories": [
         "storytelling",
@@ -1241,40 +1207,6 @@
           "skill": "Say the thing people are thinking but will not",
           "confidence": "medium",
           "evidence": "When his 1884 interracial marriage to Helen Pitts drew public fury including from his own children, his answer was that his first marriage honoured his mother's race and the second honoured his father's, and he was done apologising."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Jane Addams",
-      "dominantCategories": [
-        "connecting",
-        "leading"
-      ],
-      "playSkills": [
-        {
-          "category": "connecting",
-          "skill": "Host a gathering",
-          "confidence": "high",
-          "evidence": "In 1889 she and Ellen Gates Starr moved into a semi-derelict mansion and opened it to immigrant families as Hull House, growing to a 13-building complex with a peak of about 2,000 visitors a week."
-        },
-        {
-          "category": "leading",
-          "skill": "Remove a friction point permanently",
-          "confidence": "high",
-          "evidence": "As the first woman sanitary inspector of Chicago's Nineteenth Ward in 1894 she reported more than 1,000 health code violations inside a single year, using her own data to link municipal services to mortality."
-        },
-        {
-          "category": "connecting",
-          "skill": "Facilitate a hard conversation",
-          "confidence": "high",
-          "evidence": "Chaired the 1915 International Congress of Women at The Hague with almost 1,200 participants from both warring and neutral countries in the middle of the First World War."
-        },
-        {
-          "category": "connecting",
-          "skill": "Write a \"here is how it all fits\" doc",
-          "confidence": "medium",
-          "evidence": "Twenty Years at Hull-House (1910) was both a practical account of settlement work and an argument for a new kind of American civic life, arguing charity from a distance did not work."
         }
       ],
       "antiTags": []
@@ -2764,41 +2696,6 @@
       "antiTags": []
     },
     {
-      "name": "Rita Pierson",
-      "dominantCategories": [
-        "teaching",
-        "storytelling",
-        "performing"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Hold space for a hard moment",
-          "confidence": "high",
-          "evidence": "She gave a student who answered two out of twenty questions correctly a paper marked '+2' with a smiley face, telling him, 'Because you're on a roll. You got two right, you didn't get them all wrong.'"
-        },
-        {
-          "category": "storytelling",
-          "skill": "Tell a story that lands",
-          "confidence": "high",
-          "evidence": "In her TED 2013 talk she grounded her case on James Comer's line, 'No significant learning can occur without a significant relationship,' then added, 'Kids don't learn from people they don't like.'"
-        },
-        {
-          "category": "coaching",
-          "skill": "Coach someone through a block",
-          "confidence": "medium",
-          "evidence": "She apologised to a class for a bad lesson in the TED talk: 'Guys, the way I taught this lesson, it stunk, and I'm sorry, and we're going to do it over.'"
-        },
-        {
-          "category": "performing",
-          "skill": "Rally a group behind an idea",
-          "confidence": "medium",
-          "evidence": "She closed the TED talk with her grandmother's line about the hardest job being showing up for somebody else's child as if they were your own: 'We're educators. We're born to make a difference.'"
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "James Stigler",
       "dominantCategories": [
         "teaching",
@@ -2828,41 +2725,6 @@
           "skill": "Give patient, useful feedback",
           "confidence": "medium",
           "evidence": "His UCLA lab meetings insist on watching entire classroom clips together rather than coded summaries, and he calls this 'teaching ourselves to see the way the teacher sees.'"
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Dan Hughes",
-      "dominantCategories": [
-        "coaching",
-        "teaching",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Hold space for a hard moment",
-          "confidence": "high",
-          "evidence": "He coined PACE (Playful, Accepting, Curious, Empathic) and told a 2018 DDP training, 'It's a way of being in the room so that the child's nervous system can settle enough to think. If you're not curious, you're fixing.'"
-        },
-        {
-          "category": "coaching",
-          "skill": "Give patient, useful feedback",
-          "confidence": "high",
-          "evidence": "In a 2019 Psychotherapy.net interview he defined parenting traumatised children as 'almost entirely repair. The question is whether you can come back to the child within an hour, put a hand on their shoulder, and say, I was too loud.'"
-        },
-        {
-          "category": "teaching",
-          "skill": "Break down a hard idea so anyone gets it",
-          "confidence": "high",
-          "evidence": "He wrote Building the Bonds of Attachment as a novelised case study of a composite girl Katie because 'I could not get trainees to understand what two years of daily repair looks like from a manual.'"
-        },
-        {
-          "category": "connecting",
-          "skill": "Facilitate a hard conversation",
-          "confidence": "medium",
-          "evidence": "In DDP he teaches therapists to wonder aloud, demonstrating, 'I wonder if when you pushed your sister, some part of you was worried I was going to like her more than you.'"
         }
       ],
       "antiTags": []
@@ -5879,34 +5741,6 @@
       "antiTags": []
     },
     {
-      "name": "David Bohm",
-      "dominantCategories": [
-        "connecting",
-        "teaching"
-      ],
-      "playSkills": [
-        {
-          "category": "connecting",
-          "skill": "Find the bigger pattern under the noise",
-          "confidence": "high",
-          "evidence": "Wholeness and the Implicate Order (1980) argued for a deeper level of reality in which everything is enfolded into everything else, positioning fragmentation as a disease of thought."
-        },
-        {
-          "category": "connecting",
-          "skill": "Facilitate a hard conversation",
-          "confidence": "high",
-          "evidence": "His On Dialogue workshops taught participants to notice an assumption, name it, and hold it visible without defending or abandoning it; Peter Senge's MIT work grew out of Bohm Dialogue groups."
-        },
-        {
-          "category": "connecting",
-          "skill": "Connect dots across two worlds",
-          "confidence": "medium",
-          "evidence": "From 1961-1986 his recorded conversations with Krishnamurti at Brockwood Park sat a working physicist with an Indian teacher treating the conversations as a method of inquiry."
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Gregory Bateson",
       "dominantCategories": [
         "teaching"
@@ -6432,42 +6266,6 @@
       "antiTags": []
     },
     {
-      "name": "John Gottman",
-      "dominantCategories": [
-        "teaching",
-        "coaching"
-      ],
-      "playSkills": [
-        {
-          "category": "teaching",
-          "skill": "Building a framework others can use without you",
-          "confidence": "high",
-          "evidence": "The Four Horsemen and 5:1 ratio became tools therapists worldwide use without Gottman in the room."
-        },
-        {
-          "category": "teaching",
-          "skill": "Turning research data into a number people can aim for",
-          "confidence": "high",
-          "evidence": "The 5:1 ratio gave therapists a concrete target rather than vague advice about being nicer."
-        },
-        {
-          "category": "coaching",
-          "skill": "Training other practitioners to deliver your method",
-          "confidence": "high",
-          "evidence": "The Gottman Institute certifies thousands of therapists internationally to deliver his couples interventions."
-        },
-        {
-          "category": "teaching",
-          "skill": "Reframing relationship health as micro-moments, not grand gestures",
-          "confidence": "high",
-          "evidence": "His 'bids for connection' research showed that turning toward small moments predicted marriage survival six years later."
-        }
-      ],
-      "antiTags": [
-        "performing"
-      ]
-    },
-    {
       "name": "Gary Chapman",
       "dominantCategories": [
         "teaching",
@@ -6497,46 +6295,6 @@
         "performing",
         "speaking_up"
       ]
-    },
-    {
-      "name": "Alain de Botton",
-      "dominantCategories": [
-        "storytelling",
-        "teaching"
-      ],
-      "playSkills": [
-        {
-          "category": "storytelling",
-          "skill": "Making philosophy feel personal rather than academic",
-          "confidence": "high",
-          "evidence": "The Consolations of Philosophy matched six philosophers to common human problems. Academic philosophers called it oversimplified. It sold over two million copies."
-        },
-        {
-          "category": "teaching",
-          "skill": "Building an institution for things nobody teaches",
-          "confidence": "high",
-          "evidence": "The School of Life opened in a London shopfront to teach the subjects formal education ignores: relationships, work, anxiety, death."
-        },
-        {
-          "category": "creating",
-          "skill": "Designing branded products that carry ideas into daily life",
-          "confidence": "medium",
-          "evidence": "The School of Life sells journals, cards, and kits alongside classes and YouTube content, embedding philosophy into physical objects."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Giving language to a feeling millions carry but never name",
-          "confidence": "high",
-          "evidence": "Status Anxiety named the insight that meritocracy intensifies suffering because failure now feels deserved."
-        },
-        {
-          "category": "teaching",
-          "skill": "Using free video content as a classroom that scales beyond the shopfront",
-          "confidence": "high",
-          "evidence": "The School of Life YouTube channel amassed 8 million subscribers, becoming the primary distribution channel when the audience outgrew the physical school."
-        }
-      ],
-      "antiTags": []
     },
     {
       "name": "Gabor Mate",
@@ -6985,40 +6743,6 @@
       ]
     },
     {
-      "name": "Tiffany Aliche",
-      "dominantCategories": [
-        "teaching",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "teaching",
-          "skill": "Writing about money the way a big sister talks, not the way an advisor lectures",
-          "confidence": "high",
-          "evidence": "Her editorial rule is 'if my mother wouldn't understand this sentence, I rewrite it.' The approach directly addressed why financial literacy programmes fail."
-        },
-        {
-          "category": "connecting",
-          "skill": "Building a free challenge that creates a community before you monetise",
-          "confidence": "high",
-          "evidence": "The Live Richer Challenge attracted 60,000 in its first cohort and over one million women total, collectively saving and paying off $250 million in debt."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Turning financial wreckage into the origin story of a movement",
-          "confidence": "high",
-          "evidence": "Lost her savings to a con artist in 2008, was laid off, and started from zero. The Budgetnista was born from rebuilding, not from expertise."
-        },
-        {
-          "category": "teaching",
-          "skill": "Breaking a complex subject into daily micro-steps anyone can follow",
-          "confidence": "high",
-          "evidence": "The 36-day Live Richer Challenge walked participants through budgeting, saving, credit repair, investing, and insurance one day at a time."
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Jose Quinonez",
       "dominantCategories": [
         "leading",
@@ -7172,34 +6896,6 @@
       ]
     },
     {
-      "name": "James Clear",
-      "dominantCategories": [
-        "teaching",
-        "storytelling",
-        "building"
-      ],
-      "playSkills": [
-        {
-          "category": "teaching",
-          "skill": "Make complex psychology simple",
-          "confidence": "high",
-          "evidence": "Atomic Habits sold 20M copies by distilling decades of behavioural research into 4 laws"
-        },
-        {
-          "category": "storytelling",
-          "skill": "Use personal trauma as origin story",
-          "confidence": "high",
-          "evidence": "Baseball bat injury story grounds the habits framework in lived experience"
-        },
-        {
-          "category": "building",
-          "skill": "Build audience before product",
-          "confidence": "high",
-          "evidence": "2M email subscribers from 6 years of free articles before writing the book"
-        }
-      ]
-    },
-    {
       "name": "Esther Perel",
       "dominantCategories": [
         "coaching",
@@ -7284,117 +6980,6 @@
       ]
     },
     {
-      "name": "Elizabeth Gilbert",
-      "dominantCategories": [
-        "storytelling",
-        "speaking_up"
-      ],
-      "playSkills": [
-        {
-          "category": "storytelling",
-          "skill": "Turn your mess into a movement",
-          "confidence": "high",
-          "evidence": "Eat, Pray, Love sold 15M copies by being radically honest about her own breakdown"
-        },
-        {
-          "category": "coaching",
-          "skill": "Give creative permission",
-          "confidence": "high",
-          "evidence": "Big Magic became the manifesto for people afraid to make creative work"
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Externalize genius so creators survive",
-          "confidence": "high",
-          "evidence": "TED talk on creative genius (20M views) reframed the relationship between artist and inspiration"
-        }
-      ]
-    },
-    {
-      "name": "Simon Sinek",
-      "dominantCategories": [
-        "teaching",
-        "leading",
-        "speaking_up"
-      ],
-      "playSkills": [
-        {
-          "category": "teaching",
-          "skill": "Reduce complex theory to one question",
-          "confidence": "high",
-          "evidence": "Golden Circle (Why, How, What) reorganised entire companies around purpose"
-        },
-        {
-          "category": "leading",
-          "skill": "Earn trust from military and Fortune 500",
-          "confidence": "high",
-          "evidence": "The Optimism Company consults for U.S. Marine Corps, Air Force, and the UN"
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Say the obvious thing nobody said yet",
-          "confidence": "high",
-          "evidence": "Third most-watched TED talk of all time with 65M views"
-        }
-      ]
-    },
-    {
-      "name": "Ali Abdaal",
-      "dominantCategories": [
-        "teaching",
-        "building",
-        "creating"
-      ],
-      "playSkills": [
-        {
-          "category": "teaching",
-          "skill": "Teach by showing your own journey",
-          "confidence": "high",
-          "evidence": "Documented the entire path from NHS doctor to full-time creator in real time"
-        },
-        {
-          "category": "building",
-          "skill": "Build while employed",
-          "confidence": "high",
-          "evidence": "Part-Time YouTuber Academy earned $5M while he was still an NHS doctor"
-        },
-        {
-          "category": "creating",
-          "skill": "Turn curiosity into consistent content",
-          "confidence": "high",
-          "evidence": "5M YouTube subscribers from weekly videos on productivity and learning"
-        }
-      ]
-    },
-    {
-      "name": "Glennon Doyle",
-      "dominantCategories": [
-        "speaking_up",
-        "storytelling",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "speaking_up",
-          "skill": "Say the unsayable about motherhood",
-          "confidence": "high",
-          "evidence": "Don't Carpe Diem post shared 1.2M times on Facebook, broke cultural silence"
-        },
-        {
-          "category": "storytelling",
-          "skill": "Turn personal crisis into collective awakening",
-          "confidence": "high",
-          "evidence": "Untamed sold 5M copies by writing about leaving her husband, coming out, and marrying Abby Wambach"
-        },
-        {
-          "category": "connecting",
-          "skill": "Turn readers into a movement",
-          "confidence": "high",
-          "evidence": "Together Rising raised $30M in micro-donations from her community"
-        }
-      ]
-    },
-    {
       "name": "Gabby Bernstein",
       "dominantCategories": [
         "coaching",
@@ -7419,22 +7004,6 @@
           "skill": "Channel spiritual energy on stage",
           "confidence": "high",
           "evidence": "10 NYT bestsellers and sold-out live events and retreats worldwide"
-        }
-      ]
-    },
-    {
-      "name": "Walt Disney",
-      "dominantCategories": [
-        "creating",
-        "building",
-        "storytelling"
-      ],
-      "playSkills": [
-        {
-          "category": "creating",
-          "skill": "Build worlds people want to live in",
-          "confidence": "high",
-          "evidence": "Created animation studios, theme parks, and an entertainment empire from drawings"
         }
       ]
     },

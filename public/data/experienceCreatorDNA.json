@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "generatedAt": "2026-04-21",
-    "totalProfiles": 235,
+    "totalProfiles": 221,
     "sliders": {
       "workRhythm": {
         "min": 1,
@@ -34,56 +34,6 @@
   },
   "profiles": [
     {
-      "name": "John Gottman",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 92
-    },
-    {
-      "name": "Dan Hughes",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Rita Pierson",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "David Bohm",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 85
-    },
-    {
-      "name": "Jane Addams",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 5,
-      "confidence": 90
-    },
-    {
       "name": "Phil Jackson",
       "experienceType": "facilitation",
       "workRhythm": 1,
@@ -102,26 +52,6 @@
       "impactStyle": 1,
       "growthMode": 5,
       "confidence": 92
-    },
-    {
-      "name": "Alain de Botton",
-      "experienceType": "cohort",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Tiffany Aliche",
-      "experienceType": "cohort",
-      "workRhythm": 4,
-      "fuelType": 2,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 4,
-      "confidence": 85
     },
     {
       "name": "Tenzin Palmo",
@@ -144,26 +74,6 @@
       "confidence": 88
     },
     {
-      "name": "Walt Disney",
-      "experienceType": "immersive",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 90
-    },
-    {
-      "name": "Joseph Campbell",
-      "experienceType": "education",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
       "name": "Brené Brown",
       "experienceType": "book_newsletter",
       "workRhythm": 2,
@@ -182,16 +92,6 @@
       "impactStyle": 3,
       "growthMode": 2,
       "confidence": 90
-    },
-    {
-      "name": "James Clear",
-      "experienceType": "book_newsletter",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 4,
-      "growthMode": 1,
-      "confidence": 92
     },
     {
       "name": "Esther Perel",
@@ -222,46 +122,6 @@
       "impactStyle": 4,
       "growthMode": 4,
       "confidence": 85
-    },
-    {
-      "name": "Elizabeth Gilbert",
-      "experienceType": "author_mentor",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Simon Sinek",
-      "experienceType": "consultancy",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 3,
-      "confidence": 88
-    },
-    {
-      "name": "Ali Abdaal",
-      "experienceType": "cohort",
-      "workRhythm": 2,
-      "fuelType": 2,
-      "knowledgeStyle": 2,
-      "impactStyle": 3,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Glennon Doyle",
-      "experienceType": "live_tour",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 3,
-      "growthMode": 3,
-      "confidence": 88
     },
     {
       "name": "Gabby Bernstein",

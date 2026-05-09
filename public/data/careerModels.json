@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "generatedAt": "2026-04-07",
-    "totalProfiles": 306,
+    "totalProfiles": 292,
     "confidenceDistribution": {
       "high": 296,
       "medium": 1,
@@ -12,7 +12,7 @@
       "founder": 72,
       "nonfounder": 226
     },
-    "totalPeople": 306
+    "totalPeople": 292
   },
   "profiles": [
     {
@@ -461,32 +461,6 @@
       },
       "confidence": "high",
       "oneLiner": "Don't undertake a project unless it is manifestly important and nearly impossible."
-    },
-    {
-      "name": "Walt Disney",
-      "source": "founder",
-      "domain": "entertainment",
-      "primaryProblem": "work_treated_nothing",
-      "primarySkills": [
-        "creating",
-        "designing"
-      ],
-      "careerModel": {
-        "type": "media_empire",
-        "primaryRevenue": "Animated films, theme parks, and merchandise licensing",
-        "revenueStreams": [
-          "film distribution",
-          "theme parks",
-          "merchandise licensing",
-          "television"
-        ],
-        "trajectory": "Failed first animation studio -> created Mickey Mouse -> bet everything on Snow White -> built theme parks -> media empire",
-        "keyDecision": "Bet everything on Snow White as a feature-length animated film when everyone called it 'Disney's Folly'",
-        "scaleModel": "Content IP that compounds across media, parks, merchandise, and experiences",
-        "lessonsForUser": "If you create and care about magic: treat animation (or any craft) as serious art, then build an ecosystem that multiplies every piece of IP"
-      },
-      "confidence": "high",
-      "oneLiner": "We don't make movies to make money, we make money to make more movies."
     },
     {
       "name": "Henry Ford",
@@ -2485,33 +2459,6 @@
       "oneLiner": "Stared at ants under rotting bark at age nine and never really looked away."
     },
     {
-      "name": "Joseph Campbell",
-      "source": "nonfounder",
-      "domain": "comparative mythology",
-      "primaryProblem": "forgot_what_for",
-      "primarySkills": [
-        "coaching",
-        "teaching",
-        "performing"
-      ],
-      "careerModel": {
-        "type": "academic",
-        "primaryRevenue": "Sarah Lawrence teaching salary, books, and later PBS series",
-        "revenueStreams": [
-          "teaching salary",
-          "books",
-          "PBS royalties",
-          "speaking fees"
-        ],
-        "trajectory": "Lived in a shack during the Depression reading for 5 years -> professor at Sarah Lawrence for 38 years -> The Hero with a Thousand Faces -> PBS Power of Myth series with Bill Moyers made him famous at 83",
-        "keyDecision": "Spent 5 years in self-directed reading during the Depression, building the knowledge base for his life's work",
-        "scaleModel": "Decades of teaching crystallized into books, then a PBS series at 83 that reached millions",
-        "lessonsForUser": "If you coach and care about meaning: invest years in deep reading before you try to teach, and fame may come late but it will come"
-      },
-      "confidence": "high",
-      "oneLiner": "Found the same story hiding in every culture and taught it for 38 years."
-    },
-    {
       "name": "Susan Sontag",
       "source": "nonfounder",
       "domain": "literary and cultural criticism",
@@ -2770,32 +2717,6 @@
       },
       "confidence": "high",
       "oneLiner": "Taught himself to read and then spent a lifetime making white America listen to what he had read."
-    },
-    {
-      "name": "Jane Addams",
-      "source": "nonfounder",
-      "domain": "settlement house and social work",
-      "primaryProblem": "locked_out",
-      "primarySkills": [
-        "connecting",
-        "leading"
-      ],
-      "careerModel": {
-        "type": "nonprofit_platform",
-        "primaryRevenue": "Donations, government funding, and personal wealth",
-        "revenueStreams": [
-          "donations",
-          "government contracts",
-          "books",
-          "speaking fees"
-        ],
-        "trajectory": "Wealthy woman searching for purpose -> co-founded Hull House in 1889 -> created the model for social work -> first American woman Nobel Peace Prize",
-        "keyDecision": "Moved into an immigrant neighborhood and lived there, rather than serving from a distance",
-        "scaleModel": "One settlement house that became the model for social services nationwide",
-        "lessonsForUser": "If you connect and care about community: move in rather than commute in, and let proximity be your method"
-      },
-      "confidence": "high",
-      "oneLiner": "Moved into the slum on purpose and kept the door unlocked for 46 years."
     },
     {
       "name": "Dorothy Day",
@@ -3835,32 +3756,6 @@
       "oneLiner": "Taught calculus to kids nobody expected to sit the exam, by the sheer arithmetic of how many hours he was willing to stay in the room."
     },
     {
-      "name": "Rita Pierson",
-      "source": "nonfounder",
-      "domain": "education and teacher training",
-      "primaryProblem": "kids_deserved_better",
-      "primarySkills": [
-        "coaching",
-        "storytelling",
-        "performing"
-      ],
-      "careerModel": {
-        "type": "educator",
-        "primaryRevenue": "Teaching salary and teacher training consulting",
-        "revenueStreams": [
-          "teaching salary",
-          "consulting",
-          "speaking fees"
-        ],
-        "trajectory": "40-year classroom teacher -> teacher trainer -> 2013 TED talk 'Every Kid Needs a Champion' went viral months before her death",
-        "keyDecision": "Spent her career building relationships with students rather than optimizing test scores",
-        "scaleModel": "One viral TED talk that crystallized a 40-year teaching career into a message seen by millions",
-        "lessonsForUser": "If you coach and care about connection: your philosophy can reach millions through one talk if you've lived it for decades first"
-      },
-      "confidence": "high",
-      "oneLiner": "Put her whole philosophy of teaching inside the single word champion and refused to apologise for it."
-    },
-    {
       "name": "James Stigler",
       "source": "nonfounder",
       "domain": "learning science",
@@ -3884,32 +3779,6 @@
       },
       "confidence": "high",
       "oneLiner": "Took cameras into ordinary classrooms and changed how educators talk about what good teaching looks like second by second."
-    },
-    {
-      "name": "Dan Hughes",
-      "source": "nonfounder",
-      "domain": "child therapy and attachment",
-      "primaryProblem": "kids_deserved_better",
-      "primarySkills": [
-        "coaching",
-        "teaching",
-        "connecting"
-      ],
-      "careerModel": {
-        "type": "clinical_practice",
-        "primaryRevenue": "Clinical practice, training workshops, and book royalties",
-        "revenueStreams": [
-          "clinical practice",
-          "training workshops",
-          "books"
-        ],
-        "trajectory": "Clinical psychologist -> developed Dyadic Developmental Psychotherapy for children with complex trauma -> trained therapists worldwide -> Building the Bonds of Attachment",
-        "keyDecision": "Created a specific therapeutic method (DDP) for children with disrupted attachment, filling a gap no existing therapy addressed",
-        "scaleModel": "Clinical method trained through workshops worldwide, with books making the theory accessible",
-        "lessonsForUser": "If you coach and care about healing: create a named method for the specific problem nobody else is treating, then train others to use it"
-      },
-      "confidence": "high",
-      "oneLiner": "Built a therapy around staying curious about a raging child long enough for them to stop."
     },
     {
       "name": "Donald Winnicott",
@@ -6181,29 +6050,6 @@
       "oneLiner": "Argued that the sacred showed itself in ordinary objects, and built a method for noticing the moment it did."
     },
     {
-      "name": "David Bohm",
-      "source": "nonfounder",
-      "domain": "quantum physics and dialogue",
-      "primaryProblem": "stopped_wondering",
-      "primarySkills": [
-        "connecting"
-      ],
-      "careerModel": {
-        "type": "academic",
-        "primaryRevenue": "Academic positions (Brazil, Israel, UK)",
-        "revenueStreams": [
-          "university salary",
-          "books"
-        ],
-        "trajectory": "Oppenheimer student -> blacklisted during McCarthy era -> worked in Brazil, Israel, then Birkbeck College London -> Wholeness and the Implicate Order -> developed Bohmian dialogue practice",
-        "keyDecision": "Developed dialogue practice as a method for collective thinking, bridging physics and human communication",
-        "scaleModel": "Theoretical physics combined with practical dialogue method used by organizations worldwide",
-        "lessonsForUser": "If you connect and care about collective thinking: develop a structured practice for group dialogue, because conversations need design as much as buildings do"
-      },
-      "confidence": "high",
-      "oneLiner": "Taught groups to sit together and suspend their assumptions until they could feel reality unfolding."
-    },
-    {
       "name": "Gregory Bateson",
       "source": "nonfounder",
       "domain": "anthropology and systems",
@@ -6617,33 +6463,6 @@
       "oneLiner": "Wrote that war was simple in its parts and nearly impossible in practice, and named the reason friction."
     },
     {
-      "name": "John Gottman",
-      "source": "nonfounder",
-      "domain": "couples research",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "teaching",
-        "coaching"
-      ],
-      "careerModel": {
-        "type": "academic_to_institute",
-        "primaryRevenue": "Gottman Institute workshops, therapist training certification, books",
-        "revenueStreams": [
-          "university salary",
-          "workshops",
-          "books",
-          "therapist training certification",
-          "online courses"
-        ],
-        "trajectory": "MIT math PhD -> clinical psychology researcher -> Love Lab at University of Washington -> Gottman Institute with wife Julie Schwartz Gottman -> global therapist certification empire",
-        "keyDecision": "Turned 20 years of academic research into a couples training methodology that therapists worldwide now certify in",
-        "scaleModel": "Academic research gave credibility, then a certification programme trained thousands of therapists to deliver the method without Gottman in the room",
-        "lessonsForUser": "If you teach and care about relationships: spend years building the evidence first, then create a certification that lets others deliver your method"
-      },
-      "confidence": "high",
-      "oneLiner": "Watched thousands of couples fight and discovered that contempt, not anger, kills a marriage."
-    },
-    {
       "name": "Gary Chapman",
       "source": "nonfounder",
       "domain": "relationship counselling",
@@ -6669,34 +6488,6 @@
       },
       "confidence": "high",
       "oneLiner": "Gave millions of couples a shared vocabulary for why they keep missing each other."
-    },
-    {
-      "name": "Alain de Botton",
-      "source": "nonfounder",
-      "domain": "philosophy / emotional education",
-      "primaryProblem": "forgot_what_for",
-      "primarySkills": [
-        "storytelling",
-        "teaching",
-        "creating"
-      ],
-      "careerModel": {
-        "type": "author_to_institution",
-        "primaryRevenue": "Books, The School of Life locations, YouTube ad revenue, branded products",
-        "revenueStreams": [
-          "books",
-          "YouTube channel (8M+ subscribers)",
-          "School of Life classes",
-          "branded products (journals, cards, kits)",
-          "speaking"
-        ],
-        "trajectory": "Essays on How Proust Can Change Your Life (1997) -> bestselling philosophy books -> founded The School of Life (2008) -> YouTube channel became primary distribution -> global School of Life network",
-        "keyDecision": "Opened a physical school for emotional intelligence, then pivoted to YouTube as the primary channel when the audience outgrew the shopfront",
-        "scaleModel": "Free YouTube content (8M subscribers) drives awareness, physical locations and products capture revenue, books provide credibility",
-        "lessonsForUser": "If you tell stories and teach: start with the book, build the institution, then let free content on YouTube become your biggest classroom"
-      },
-      "confidence": "high",
-      "oneLiner": "Built a global school for the emotions that philosophy departments forgot to teach."
     },
     {
       "name": "Gabor Mate",
@@ -7057,35 +6848,6 @@
       "oneLiner": "Lent $27 to a village and proved that poor people pay back loans more reliably than rich ones."
     },
     {
-      "name": "Tiffany Aliche",
-      "source": "nonfounder",
-      "domain": "personal finance / financial education",
-      "primaryProblem": "feeling_stupid",
-      "primarySkills": [
-        "teaching",
-        "connecting",
-        "storytelling"
-      ],
-      "careerModel": {
-        "type": "content_creator_to_educator",
-        "primaryRevenue": "Books, courses, Live Richer Challenge, speaking",
-        "revenueStreams": [
-          "books",
-          "online courses",
-          "Live Richer Challenge",
-          "speaking",
-          "brand partnerships",
-          "newsletter"
-        ],
-        "trajectory": "Preschool teacher earning $39K -> lost savings to financial fraud in 2008 -> laid off -> started The Budgetnista blog -> Live Richer Challenge (60K first cohort, 1M+ total) -> Get Good with Money NYT bestseller (2021)",
-        "keyDecision": "Made the Live Richer Challenge free and social-media-native, building an audience of over a million before monetising with a book and paid courses",
-        "scaleModel": "Free challenge built trust and audience, social media created community, book captured mainstream credibility, paid courses captured revenue. The editorial rule ('if my mother wouldn't understand it, rewrite it') kept the language accessible",
-        "lessonsForUser": "If you teach and connect: give away the most valuable thing for free first, build the community around it, and the community will buy whatever you make next because they already trust you"
-      },
-      "confidence": "high",
-      "oneLiner": "Lost everything in 2008 and turned the wreckage into financial education for overlooked women."
-    },
-    {
       "name": "Jose Quinonez",
       "source": "nonfounder",
       "domain": "financial inclusion",
@@ -7230,33 +6992,6 @@
       "confidence": "high"
     },
     {
-      "name": "James Clear",
-      "source": "non-founder",
-      "domain": "behavioural psychology / habit formation",
-      "oneLiner": "Made the boring act of showing up every day feel like the most powerful thing you could do.",
-      "primaryProblem": "forgot_what_for",
-      "primarySkills": [
-        "teaching",
-        "storytelling",
-        "building"
-      ],
-      "careerModel": {
-        "type": "book_and_newsletter_empire",
-        "primaryRevenue": "Book royalties and high-fee keynote speaking",
-        "revenueStreams": [
-          "book royalties",
-          "keynote speaking ($100K+)",
-          "newsletter sponsorships",
-          "Atomic Habits journal/workbook"
-        ],
-        "trajectory": "Photography entrepreneur in his 20s, started writing about habits at 26, built a 2M email list by 32, 20M copies sold by 38, deliberately kept the business tiny.",
-        "keyDecision": "Wrote free articles twice weekly for six years before publishing a book, building the audience before the product.",
-        "scaleModel": "One book that sells itself through word of mouth, a massive newsletter, and selective high-fee speaking.",
-        "lessonsForUser": "Publish freely and consistently for years, let the audience tell you what your book should be, then keep the business radically simple."
-      },
-      "confidence": "high"
-    },
-    {
       "name": "Esther Perel",
       "source": "non-founder",
       "domain": "relational intelligence / couples therapy",
@@ -7338,119 +7073,6 @@
         "keyDecision": "Left the monastery to translate wisdom for a mass audience rather than teaching a select few.",
         "scaleModel": "Free short-form content builds massive audience, podcast deepens trust, certification captures people who want to teach the methodology.",
         "lessonsForUser": "Build audience with free short-form wisdom first, go deep with long-form, then certify others to teach your method."
-      },
-      "confidence": "high"
-    },
-    {
-      "name": "Elizabeth Gilbert",
-      "source": "non-founder",
-      "domain": "creative writing / creative courage",
-      "oneLiner": "Gave permission to be creative without waiting to be good enough first.",
-      "primaryProblem": "life_not_yours",
-      "primarySkills": [
-        "storytelling",
-        "coaching",
-        "speaking_up"
-      ],
-      "careerModel": {
-        "type": "author_and_creative_mentor",
-        "primaryRevenue": "Book royalties and keynote speaking",
-        "revenueStreams": [
-          "book royalties",
-          "keynote speaking",
-          "workshops",
-          "podcast (Magic Lessons)",
-          "film adaptation rights"
-        ],
-        "trajectory": "Working journalist for a decade, first book at 28, Eat Pray Love at 37 (15M copies), Big Magic at 46, patron saint of creative courage.",
-        "keyDecision": "After the crushing pressure of following up a mega-bestseller, chose to write about creative courage rather than chasing another memoir hit.",
-        "scaleModel": "One massive book creates permanent cultural permission, then speaking and mentorship serve that community.",
-        "lessonsForUser": "Externalize the pressure, separate your identity from the outcome, and remember that a decade of invisible work is not wasted."
-      },
-      "confidence": "high"
-    },
-    {
-      "name": "Simon Sinek",
-      "source": "non-founder",
-      "domain": "leadership / organisational purpose",
-      "oneLiner": "Asked one question so simple that entire companies reorganised around the answer.",
-      "primaryProblem": "forgot_what_for",
-      "primarySkills": [
-        "teaching",
-        "leading",
-        "speaking_up"
-      ],
-      "careerModel": {
-        "type": "thought_leadership_consultancy",
-        "primaryRevenue": "Corporate consulting and keynote speaking",
-        "revenueStreams": [
-          "corporate consulting (The Optimism Company)",
-          "keynote speaking",
-          "book royalties",
-          "online classes",
-          "YouTube content"
-        ],
-        "trajectory": "Struggling ad man at 35, TED talk went viral at 36, bestselling author at 37, consultancy serving military and Fortune 500 by 45.",
-        "keyDecision": "Chose to build a boutique consultancy rather than scale through mass certification.",
-        "scaleModel": "One viral idea becomes multiple books, books attract enterprise clients, a small team delivers high-fee consulting.",
-        "lessonsForUser": "Codify one powerful question into a framework, let a viral moment build your reputation, then serve enterprise clients at premium fees."
-      },
-      "confidence": "high"
-    },
-    {
-      "name": "Ali Abdaal",
-      "source": "non-founder",
-      "domain": "productivity / creator economy education",
-      "oneLiner": "Proved you could build a business bigger than your medical salary by being curious on camera.",
-      "primaryProblem": "work_hollows",
-      "primarySkills": [
-        "teaching",
-        "building",
-        "creating"
-      ],
-      "careerModel": {
-        "type": "creator_educator",
-        "primaryRevenue": "Cohort-based courses (PTYA) and YouTube ad revenue",
-        "revenueStreams": [
-          "cohort courses",
-          "YouTube ad revenue",
-          "book royalties",
-          "sponsorships",
-          "digital products",
-          "podcast"
-        ],
-        "trajectory": "Medical student making study videos at 22, NHS doctor with a growing channel at 24, $5M course revenue at 27, quit medicine at 28, NYT bestseller at 29.",
-        "keyDecision": "Built a YouTube audience while still employed as a doctor, proving the part-time model before teaching it.",
-        "scaleModel": "Weekly YouTube videos build authority, cohort courses convert the most engaged viewers, alumni promote organically.",
-        "lessonsForUser": "Start creating content alongside your day job, let the audience grow while you have financial safety, then launch a cohort course teaching what you demonstrated."
-      },
-      "confidence": "high"
-    },
-    {
-      "name": "Glennon Doyle",
-      "source": "non-founder",
-      "domain": "memoir / community building / activism",
-      "oneLiner": "Built a movement by saying the things mothers were not supposed to say out loud.",
-      "primaryProblem": "life_not_yours",
-      "primarySkills": [
-        "speaking_up",
-        "storytelling",
-        "connecting"
-      ],
-      "careerModel": {
-        "type": "author_activist_community_builder",
-        "primaryRevenue": "Book sales and live tour events",
-        "revenueStreams": [
-          "book royalties",
-          "live tour (Together Live)",
-          "podcast (We Can Do Hard Things)",
-          "nonprofit (Together Rising)",
-          "keynote speaking"
-        ],
-        "trajectory": "Recovering addict blogging from home at 33, viral post at 36, nonprofit raising $30M, Untamed (5M copies) at 44, podcast with 300M downloads by 47.",
-        "keyDecision": "Built a nonprofit alongside her personal brand, making activism inseparable from storytelling.",
-        "scaleModel": "Radical honesty builds fierce community, community funds activism, live tours create belonging, each book deepens the movement.",
-        "lessonsForUser": "Let your personal truth be the foundation, give the community a way to act on shared values, and trust that radical honesty is itself the marketing."
       },
       "confidence": "high"
     },

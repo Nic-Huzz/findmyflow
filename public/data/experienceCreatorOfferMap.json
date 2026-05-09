@@ -1,7 +1,7 @@
 {
   "meta": {
     "generatedAt": "2026-04-21",
-    "totalCreators": 47,
+    "totalCreators": 33,
     "slots": {
       "attraction": "Free or near-free, builds audience and trust",
       "core": "Main paid product, bread and butter",
@@ -11,68 +11,6 @@
     "notes": "Per-person contextual mapping. Same stream can be different slots for different people."
   },
   "creators": {
-    "John Gottman": {
-      "attraction": [
-        "books"
-      ],
-      "core": [
-        "workshops",
-        "university salary"
-      ],
-      "scale": [
-        "therapist training certification"
-      ],
-      "continuity": [
-        "online courses"
-      ]
-    },
-    "Dan Hughes": {
-      "attraction": [
-        "books"
-      ],
-      "core": [
-        "clinical practice"
-      ],
-      "scale": [
-        "training workshops"
-      ],
-      "continuity": []
-    },
-    "Rita Pierson": {
-      "attraction": [
-        "speaking fees"
-      ],
-      "core": [
-        "teaching salary"
-      ],
-      "scale": [
-        "consulting"
-      ],
-      "continuity": []
-    },
-    "David Bohm": {
-      "attraction": [
-        "books"
-      ],
-      "core": [
-        "university salary"
-      ],
-      "scale": [],
-      "continuity": []
-    },
-    "Jane Addams": {
-      "attraction": [
-        "books"
-      ],
-      "core": [
-        "donations",
-        "government contracts"
-      ],
-      "scale": [
-        "speaking fees"
-      ],
-      "continuity": []
-    },
     "Phil Jackson": {
       "attraction": [
         "books"
@@ -84,36 +22,6 @@
         "consulting"
       ],
       "continuity": []
-    },
-    "Alain de Botton": {
-      "attraction": [
-        "books",
-        "YouTube channel (8M+ subscribers)",
-        "speaking"
-      ],
-      "core": [
-        "School of Life classes"
-      ],
-      "scale": [],
-      "continuity": [
-        "branded products (journals, cards, kits)"
-      ]
-    },
-    "Tiffany Aliche": {
-      "attraction": [
-        "Live Richer Challenge",
-        "books",
-        "newsletter"
-      ],
-      "core": [
-        "online courses"
-      ],
-      "scale": [
-        "speaking"
-      ],
-      "continuity": [
-        "brand partnerships"
-      ]
     },
     "Tenzin Palmo": {
       "attraction": [
@@ -139,32 +47,6 @@
       "scale": [],
       "continuity": [
         "online courses"
-      ]
-    },
-    "Walt Disney": {
-      "attraction": [],
-      "core": [
-        "film distribution"
-      ],
-      "scale": [
-        "theme parks"
-      ],
-      "continuity": [
-        "merchandise licensing",
-        "television"
-      ]
-    },
-    "Joseph Campbell": {
-      "attraction": [],
-      "core": [
-        "teaching salary",
-        "books"
-      ],
-      "scale": [
-        "speaking fees"
-      ],
-      "continuity": [
-        "PBS royalties"
       ]
     },
     "Brené Brown": {
@@ -214,18 +96,6 @@
         "online courses"
       ]
     },
-    "James Clear": {
-      "attraction": [],
-      "core": [],
-      "scale": [
-        "keynote speaking ($100K+)"
-      ],
-      "continuity": [
-        "newsletter sponsorships",
-        "Atomic Habits journal/workbook",
-        "book royalties"
-      ]
-    },
     "Esther Perel": {
       "attraction": [],
       "core": [
@@ -268,65 +138,6 @@
       "continuity": [
         "book royalties",
         "brand partnerships"
-      ]
-    },
-    "Elizabeth Gilbert": {
-      "attraction": [
-        "podcast (Magic Lessons)"
-      ],
-      "core": [
-        "book royalties",
-        "workshops"
-      ],
-      "scale": [
-        "keynote speaking"
-      ],
-      "continuity": [
-        "film adaptation rights"
-      ]
-    },
-    "Simon Sinek": {
-      "attraction": [
-        "YouTube content"
-      ],
-      "core": [
-        "corporate consulting (The Optimism Company)",
-        "keynote speaking"
-      ],
-      "scale": [],
-      "continuity": [
-        "book royalties",
-        "online classes"
-      ]
-    },
-    "Ali Abdaal": {
-      "attraction": [
-        "podcast"
-      ],
-      "core": [
-        "cohort courses"
-      ],
-      "scale": [],
-      "continuity": [
-        "YouTube ad revenue",
-        "sponsorships",
-        "digital products",
-        "book royalties"
-      ]
-    },
-    "Glennon Doyle": {
-      "attraction": [
-        "podcast (We Can Do Hard Things)",
-        "nonprofit (Together Rising)"
-      ],
-      "core": [
-        "live tour (Together Live)"
-      ],
-      "scale": [
-        "keynote speaking"
-      ],
-      "continuity": [
-        "book royalties"
       ]
     },
     "Gabby Bernstein": {
