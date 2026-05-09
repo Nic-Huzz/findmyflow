@@ -319,12 +319,12 @@ Original spec was L1=1, L2=2, ... L7=7 (total 28). Infrastructure is fully built
 
 | # | Change | Effort | Notes |
 |---|--------|--------|-------|
-| 1 | Capacity Score calculation + display | Medium | Scoring model designed (state-based -2 to +2). Needs hook + display. Data flowing from all tabs |
-| 2 | Drain Audit feature | Large | Denominator of equation. Periodic life audit in Tune tab. 2-option state check (Activated/Shutdown) |
-| 3 | State trend visualization | Medium | NS Map has 4-state support. Compact card on Level tab showing weekly % Vibe Rise |
-| 4 | Forgiving streak design | Small | Allow 1 day miss without reset. "Something > nothing" |
-| 5 | Apply DB migrations | Small | 3 migrations pending: vibe_rise state, daily checkin type, tune tab schema |
-| 6 | Connection layer (community) | Large | Fantasy League reactivation, friend connections, event integration. Biggest remaining gap |
+| 1 | Capacity Score calculation + display | ✅ DONE | `useCapacityScore` hook + `CapacityCard` on Level tab. Score 0-100, trend vs last week, state distribution |
+| 2 | Forgiving streak | ✅ DONE | 1 day grace period. `getConsecutiveStreakDays` + `checkStreakBreak` updated |
+| 3 | Apply DB migrations | ✅ DONE | 3 migrations applied to production via MCP |
+| 4 | State trend visualization | ✅ COVERED | Two layers already built: (a) CapacityCard on Level tab shows weekly score + trend + state %, (b) NS Map page (`/nervous-system-map`) shows full 4-state weekly timeline, frequency bars, shift patterns, and "% Vibe Rise" summary. No additional visualization needed. |
+| 5 | Drain Audit feature | PLANNED | Denominator of the Maintenance Equation. Periodic logging in Tune tab. 2-option state check (Activated/Shutdown). Each drain saved to `nervous_system_checkins` with `checkin_type: 'drain'`, automatically pulls Capacity Score down |
+| 6 | Connection layer (community) | FUTURE | Fantasy League reactivation, friend connections, event integration. Biggest remaining gap |
 
 ---
 
