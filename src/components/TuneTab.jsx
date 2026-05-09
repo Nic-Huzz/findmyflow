@@ -268,7 +268,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         <div className="ht-item-body">
           <div className="ht-item-name">{quest.name}</div>
           <div className="ht-item-meta">
-            <span className="ht-pts">{quest.points} RP</span>
+            <span className="ht-item-type">{quest.type}</span>
+            <span className="ht-item-sep">·</span>
+            <span className="ht-pts">{quest.points}pts</span>
           </div>
           {streak && dayLabels && (
             <div className="ht-streak-dots">

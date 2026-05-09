@@ -78,6 +78,7 @@ src/
 │
 ├── hooks/
 │   ├── useChallengeData.js   # Challenge state management
+│   ├── useCapacityScore.js   # Weekly Capacity Score (0-100, state-based)
 │   ├── useLeagueData.js      # Fantasy league state management
 │   ├── useMatchupData.js     # Live matchup scoring + opponent fetch
 │   ├── useNewsfeed.js        # League activity feed + reactions
@@ -100,14 +101,18 @@ src/
 │   ├── onboarding/QuickCapture/    # 5-step business capture
 │   ├── Zarlo/                      # AI Co-Founder widget
 │   ├── Celebrations/               # Confetti, FloatingPoints, etc.
-│   ├── level/                      # LevelConfig, LevelTab, SweetSpotGraph
+│   ├── level/                      # LevelConfig, LevelTab, SweetSpotGraph, CapacityCard
 │   │
 │   ├── league/               # LeagueLeaderboard.jsx
 │   ├── PlayProfile/          # Quiz, Dashboard, DNA, AI Diagnostic, Challenge
 │   ├── BusinessSetup.jsx     # Stage 0.9 setup wizard
 │   ├── Challenge*.jsx        # Header, Filters, etc.
 │   ├── *QuestInput.jsx       # Groan, Recognise, Rewire, Release, etc.
-│   ├── GroanMatrix.jsx       # 2D courage challenge matrix
+│   ├── GroanMatrix.jsx       # Wahoo Map (2D courage challenge matrix)
+│   ├── WahooCreator.jsx      # Two-path Wahoo creation (free text or browse)
+│   ├── PlaySkillPicker.jsx   # Level 0 play-skill category picker
+│   ├── TuneTab.jsx           # Tune tab (daily practices + drains)
+│   ├── DailyCheckin.jsx      # Daily 4-state check-in overlay
 │   ├── QuestCard.jsx         # Unified quest rendering
 │   ├── FlowMapRiver.jsx      # River visualization
 │   └── SeeYourFlow.jsx       # Journey mapping
@@ -223,21 +228,37 @@ Users browse 59 experience creators organized by 6 business model archetypes, se
 
 Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/data/experienceCreatorOfferMap.json`, `public/images/creators/`. Brief: `docs/feature-brief-experience-creator-matching.md`.
 
-### 6. 7-Day Challenge System
+### 6. 7-Day Challenge System (Vibe Rise Maintenance Engine)
 
-Category tabs: Play-List, Business, Healing, Bonus. Layout: Header (matchup banner → score pills → streak/leaderboard/settings) → Category tabs → Stage tabs (Business only) → Artifact progress → Sub-tabs (Tasks | Deep Dive) → Quest cards.
+**Tabs**: Level → Tune → Play-list → Healing. Layout: Header (streak + Wahoo Counter ⚡ + score pills + Rise bar) → Category tabs → Tab content.
 
-**Play-List tab**: Flow Finder quests, Skills-only Groan Matrix, Voice logging. Active challenges from `priority_weekly_picks`.
+**Vibe Rise Equation**: `Sustained Vibe Rise = (Practices + Wahoos + Healing) ÷ (Drains)`. All state data flows through `nervous_system_checkins` table. Capacity Score (0-100) displayed on Level tab.
 
-**Level tab** (formerly Priority): 7-step onboarding sequence, then layer-based challenge recommendations. Key hook: `usePriorityTab.js`.
+**Level tab**: Journey progression (9 levels), zone diagnosis, boss fights, milestones, CapacityCard. Courage counts re-enabled (L1=1...L7=3, total 15 Wahoos). PlaySkillPicker at Level 0.
 
-Key files: `Challenge.jsx`, `useChallengeData.js`, `QuestCard.jsx`, `ChallengeHeader.jsx`
+**Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 4 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown).
 
-### 7. Groan Matrix
+**Play-list tab** (`PlayListTab.jsx`): WahooCreator (two-path: "I know" free text or "Help me find one" browse categories) + Active Wahoos + Wahoo Map link.
 
-2D matrix: User skills × 5 visibility layers (Screen→Live→Money→Vulnerable→Authority). Essence zone scoring: scary_score + wahoo_score → essence zone / protective voice / comfort zone.
+**Healing tab**: Recognise, Release, Rewire only (blockage clearing). After-only 4-state check-in (before step removed).
 
-Workflow: generated → accepted → completed (with proof) or skipped. Post-completion: "I Did It!" → Reflection (scary/wahoo, 3% improvement) → Voice Check-in (essence + protective) → Compass Check-in (N/E/S/W) → Confetti. Completed cells show "Done ×N" badge.
+**Scoring**: Points are RP (Rise Points). Header pills: ☀️ Tune (green) | 🔥 Wahoos (gold) | 💜 Healing (purple). State values: dorsal=-2, sympathetic=-1, ventral=+1, vibe_rise=+2.
+
+**Daily check-in**: 4-state overlay on page load (Vibe Rise/Safe/Activated/Shutdown). Once per day, skippable.
+
+**"Was that a Wahoo?"**: Post-Wahoo classification: Hell yes (vibe_rise, gold confetti) / Felt alive (vibe_rise) / Just did it (ventral). User self-report replaces AI scores.
+
+**Forgiving streak**: 1 day miss allowed without breaking streak.
+
+Key files: `Challenge.jsx`, `useChallengeData.js`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`
+
+Key docs: `docs/vibe-rise-ecosystem-architecture.md`, `docs/vibe-rise-challenge-alignment.md`
+
+### 7. Wahoo Map (formerly Groan Matrix)
+
+2D matrix: User skills × 5 visibility layers (Screen→Live→Money→Vulnerable→Authority). User-facing name: "Wahoo Map". Internal code: `GroanMatrix.jsx`.
+
+Workflow: generated → accepted → completed. Post-completion: "I Did It!" → 4-state NS check-in → "Was that a Wahoo?" (3 options) → 3% reflection → Share. Completed cells show "Done ×N" badge.
 
 ### 8. Play Profile (Founder DNA)
 
@@ -245,7 +266,7 @@ AI-powered founder assessment: quiz → DNA match → stuck point → AI diagnos
 
 **Employee DNA**: Non-founders get `impactStyle` (Direct ↔ Systemic) and `growthMode` (Deep Expertise ↔ Broad Leadership) instead of business sliders.
 
-DB: `founder_dna_results`, `founder_dna_sessions`. Scoring: +10 XP to Play-List on completion.
+DB: `founder_dna_results`, `founder_dna_sessions`. Scoring: +10 RP to Play-List on completion.
 
 ### 9. PlaySkill & Problem Taxonomies (V2)
 
@@ -257,7 +278,7 @@ Legacy compat: `resolveSkillId`, `findSkillSegment`, `resolveProblemId`, `findPr
 
 ### 10. Fantasy League
 
-Solo-player competitive league with 4-week seasons. 3 scoring categories: Play-List (Groans), Healing (Healing/Daily/Weekly), Bonus (Bonus/Tracker + content submissions). WIN = 3pts, DRAW = 1pt, LOSS = 0pts.
+Solo-player competitive league with 4-week seasons. 3 scoring categories: Play-List (Wahoos/Courage), Healing (Healing/Daily/Weekly), Tune (daily practices). WIN = 3pts, DRAW = 1pt, LOSS = 0pts. Bonus tab archived, exercises move to Fantasy League when reactivated.
 
 Content Submissions: 10 types (2-10pts each), admin-approved. Edge function `score-league-matchups` auto-scores every 15 min.
 
@@ -278,7 +299,7 @@ Key services: `src/lib/crm/` (contentContext, promptTemplates, towerStats, csvIm
 - **Flow Compass** (`/flow-compass`): Energy tracking (N=Flow, E=Redirect, S=Rest, W=Honour). Purple gradient design.
 - **Funnel Calculator** (`/funnel-calculator`): Actual + Planner modes. 8-stage pipeline tracking.
 - **Library of Answers** (`/library`): Three GradientWheel visualizations from Flow Finder completions.
-- **/me Page**: Hero Profile (archetype, level, XP), Flow Journey (HorizontalFlowRiver), Dynamic Quest Section.
+- **/me Page**: Hero Profile (archetype, level, RP), Flow Journey (HorizontalFlowRiver), Dynamic Quest Section.
 - **Hero Profile** (`/hero-profile`): Project-specific hero profile with identity triad.
 - **Archetypes** (`/archetypes/essence`): Essence archetype profile, strengths, shadow aspects.
 - **Weekly Planning**: 4-phase cycle (Push, Flow, Rest, Launch). Purple gradient; gold selection.
