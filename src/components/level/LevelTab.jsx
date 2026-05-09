@@ -21,6 +21,7 @@ import MilestoneCommitModal from './MilestoneCommitModal'
 import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import PlaySkillPicker from '../PlaySkillPicker'
+import CapacityCard from './CapacityCard'
 import './LevelTab.css'
 
 export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
@@ -284,6 +285,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           )
         })}
       </div>
+
+      {/* Capacity Score */}
+      <CapacityCard userId={userId} />
 
       {/* Level Header */}
       <div className="level-header-card">

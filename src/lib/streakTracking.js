@@ -177,7 +177,9 @@ export const checkStreakBreak = async (userId, challengeInstanceId) => {
     const lastActiveDate = formatLocalDate(new Date(progress.last_active_date));
     const today = getTodayDate();
     const yesterday = getYesterdayDate();
-    const dayBeforeYesterday = formatLocalDate(new Date(new Date().setDate(new Date().getDate() - 2)));
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const dayBeforeYesterday = formatLocalDate(twoDaysAgo);
 
     // Forgiving streak: allow 1 day gap (today, yesterday, or day before yesterday)
     if (lastActiveDate === today || lastActiveDate === yesterday || lastActiveDate === dayBeforeYesterday) {
