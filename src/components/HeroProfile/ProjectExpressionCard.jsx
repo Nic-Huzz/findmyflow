@@ -71,7 +71,7 @@ function ProjectExpressionCard({ project, visibilityProgress, onClick }) {
       <div className="project-header">
         <div className="project-icon">{STAGE_ICONS[stage] || '🌱'}</div>
         <h3 className="project-name">{name}</h3>
-        <span className="project-xp">⚡ {xp.toLocaleString()} XP</span>
+        <span className="project-xp">⚡ {xp.toLocaleString()} RP</span>
       </div>
 
       {/* Identity Triad: Gift / Cause / Tribe */}

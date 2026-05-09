@@ -966,7 +966,7 @@ const Profile = () => {
             <div className="progress-strip-bottom">
               <div className="progress-stat">
                 <span className="progress-stat-value">{challengePoints || 0}</span>
-                <span className="progress-stat-label">XP</span>
+                <span className="progress-stat-label">RP</span>
               </div>
 
               <div className="progress-stage-tag">

@@ -136,7 +136,7 @@ function HeroCommandCenter() {
         </div>
         <div className="header-right-group">
           <div className="header-xp">
-            ⚡ {totalXP.toLocaleString()} XP
+            ⚡ {totalXP.toLocaleString()} RP
           </div>
           <VibeColorPicker />
         </div>

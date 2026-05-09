@@ -1013,14 +1013,14 @@ function Challenge() {
       const categoryArtifact = challengeData?.artifacts?.find(a => a.category === quest.category)
       const artifactUnlocked = categoryArtifact && checkArtifactUnlock(quest.category, newTotalPoints, frequencyKey)
 
-      let successMessage = `Quest complete! +${quest.points} XP`
+      let successMessage = `Quest complete! +${quest.points} RP`
 
       if (quest.counts_toward_graduation) {
         successMessage += '\nProgress toward graduation!'
       }
 
       if (artifactUnlocked && categoryArtifact) {
-        successMessage = `Quest complete! +${quest.points} XP\n\nYou unlocked the ${categoryArtifact.name}!`
+        successMessage = `Quest complete! +${quest.points} RP\n\nYou unlocked the ${categoryArtifact.name}!`
       }
 
       triggerConfetti(event)
@@ -1945,7 +1945,7 @@ function Challenge() {
                   const tabStatus = getTabCompletionStatus(activeCategory)
                   if (tabStatus.totalQuests === 0) return null
                   if (tabStatus.bonusAwarded) {
-                    return <p className="tab-bonus-text earned">+{tabStatus.bonusPoints} XP bonus earned!</p>
+                    return <p className="tab-bonus-text earned">+{tabStatus.bonusPoints} RP bonus earned!</p>
                   }
                   return null
                 })()}

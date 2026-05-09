@@ -35,7 +35,7 @@ function PlayListProgress({ visibilityProgress, groanChallenges = [] }) {
       <div className="playlist-header">
         <h3 className="playlist-title">Play-List Mastery</h3>
         {visibilityXP > 0 && (
-          <span className="playlist-xp">Total: {visibilityXP} XP</span>
+          <span className="playlist-xp">Total: {visibilityXP} RP</span>
         )}
       </div>
 

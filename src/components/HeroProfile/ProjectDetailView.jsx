@@ -42,7 +42,7 @@ function ProjectDetailView({ archetypes, project, groanChallenges, visibilityPro
         <button className="back-button" onClick={() => navigate('/hero-profile')}>
           ← Back to Profile
         </button>
-        <span className="detail-xp">⚡ {(project.xp || 0).toLocaleString()} XP</span>
+        <span className="detail-xp">⚡ {(project.xp || 0).toLocaleString()} RP</span>
       </div>
 
       <h2 className="detail-project-name">{project.name}</h2>
@@ -78,7 +78,7 @@ function ProjectDetailView({ archetypes, project, groanChallenges, visibilityPro
                       {challenge.visibility_layer?.toUpperCase()}
                     </span>
                     {challenge.xp_reward && (
-                      <span className="playlist-item-xp">+{challenge.xp_reward} XP</span>
+                      <span className="playlist-item-xp">+{challenge.xp_reward} RP</span>
                     )}
                   </div>
                 </div>

@@ -254,7 +254,7 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
 
                 <div className="points-badge">
                   <span className="points-value">{project.challenge_points || 0}</span>
-                  <span className="points-label">XP</span>
+                  <span className="points-label">RP</span>
                 </div>
               </div>
 

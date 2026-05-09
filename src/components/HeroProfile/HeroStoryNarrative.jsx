@@ -84,7 +84,7 @@ function HeroStoryNarrative({ archetypes, project }) {
         {/* Progress */}
         <p className="story-paragraph">
           You are currently at <strong>{stageName}</strong>.
-          {xp > 0 && ` Your score is ${xp.toLocaleString()} XP.`}
+          {xp > 0 && ` Your score is ${xp.toLocaleString()} RP.`}
         </p>
 
         {/* Closing */}
