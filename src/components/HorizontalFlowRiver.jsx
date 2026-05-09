@@ -367,7 +367,7 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries, 
                   </div>
                   {selectedEntry.points && (
                     <div className="fp-popup-points">
-                      <span>⚡</span> +{selectedEntry.points} XP earned
+                      <span>⚡</span> +{selectedEntry.points} RP earned
                     </div>
                   )}
                 </>

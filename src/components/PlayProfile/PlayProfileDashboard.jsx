@@ -111,7 +111,7 @@ export default function PlayProfileDashboard({ userId }) {
         const activeSession = activeSessions[safeIdx]
         return (
           <div className="pp-active-challenge pp-fade-in-up">
-            <div className="pp-points-pill">+10 XP</div>
+            <div className="pp-points-pill">+10 RP</div>
             <div className="pp-active-label">Active Challenge</div>
             {activeSession.challenge_name && (
               <div className="pp-challenge-name">{activeSession.challenge_name}</div>

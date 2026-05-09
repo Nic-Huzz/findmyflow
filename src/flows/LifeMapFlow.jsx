@@ -1009,7 +1009,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               Your life has been building toward this. Your skills, your struggles, your heroes. They all point the same direction.
             </p>
             <div className="lm-xp-card">
-              <p className="lm-xp-amount">+15 XP</p>
+              <p className="lm-xp-amount">+15 RP</p>
               <p className="lm-xp-label">Life Map Complete</p>
             </div>
 

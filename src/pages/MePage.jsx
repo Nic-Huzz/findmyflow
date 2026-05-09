@@ -486,7 +486,7 @@ export default function MePage() {
             <VibeColorPicker />
             <div className="xp-pill">
               <span>⚡</span>
-              <span>{totalXP} XP</span>
+              <span>{totalXP} RP</span>
             </div>
           </div>
         </div>
@@ -508,7 +508,7 @@ export default function MePage() {
         <div className="xp-progress">
           <div className="xp-labels">
             <span>{level.emoji} {level.name}</span>
-            <span>{isMaxLevel ? `${totalXP} XP ✦` : `${totalXP} / ${levelMax} XP`}</span>
+            <span>{isMaxLevel ? `${totalXP} RP ✦` : `${totalXP} / ${levelMax} RP`}</span>
           </div>
           <div className="xp-bar">
             <div className="xp-fill" style={{ width: `${levelProgress}%` }} />

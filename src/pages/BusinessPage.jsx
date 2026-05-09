@@ -338,7 +338,7 @@ export default function BusinessPage() {
       setJustCompletedQuestId(quest.id)
       setTimeout(() => setJustCompletedQuestId(null), 3000)
 
-      alert(`Quest complete! +${quest.points} XP`)
+      alert(`Quest complete! +${quest.points} RP`)
 
       refreshData()
     } catch (error) {

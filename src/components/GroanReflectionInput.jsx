@@ -372,7 +372,7 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
             onClick={handleSubmit}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} XP)`}
+            {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} RP)`}
           </button>
         )}
       </div>

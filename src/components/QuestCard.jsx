@@ -147,7 +147,7 @@ function QuestCard({
             background: getCategoryColor(quest.category),
             color: getCategoryColor(quest.category) === '#E9A23B' ? '#212529' : undefined
           } : undefined}
-        >+{quest.points} XP</span>
+        >+{quest.points} RP</span>
       </div>
 
       {/* Daily streak bubbles */}
@@ -656,7 +656,7 @@ function QuestCard({
             {completedBadgeText}
           </div>
           {justCompleted && (
-            <div className="points-fly-up">+{quest.points} XP</div>
+            <div className="points-fly-up">+{quest.points} RP</div>
           )}
           {quest.flow_route && (
             <a

@@ -428,7 +428,7 @@ export default function CreatorHome() {
         </div>
         <div className="ch-xp-meta">
           <span>Level {currentLevel}: {LEVEL_CONFIG[currentLevel]?.name || 'Getting Set Up'}</span>
-          <span>{movementXP} total XP</span>
+          <span>{movementXP} total RP</span>
         </div>
       </div>
 

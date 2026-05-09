@@ -225,7 +225,7 @@ function FlowCompassInput({ quest, onComplete }) {
           onClick={handleSubmit}
           disabled={!canSubmit()}
         >
-          Complete Quest (+{quest.points} XP)
+          Complete Quest (+{quest.points} RP)
         </button>
       </div>
     </div>
