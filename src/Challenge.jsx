@@ -749,7 +749,7 @@ function Challenge() {
       }
 
       // Guard: non-Healing/Voices quests require an active challenge instance
-      const isUserLevelCategory = quest.category === 'Healing' || quest.category === 'Voices'
+      const isUserLevelCategory = quest.category === 'Healing' || quest.category === 'Voices' || quest.category === 'Tune'
       if (!isUserLevelCategory && !progress?.challenge_instance_id) {
         alert('No active challenge found. Please start a challenge first.')
         return
@@ -1695,21 +1695,8 @@ function Challenge() {
   // Render: Error State
   // ============================================
 
-  if (!progress) {
-    return (
-      <div className="challenge-container">
-        <div className="challenge-error">
-          <p>Unable to load challenge progress. Please try refreshing the page.</p>
-          <div style={{ marginTop: '1rem' }}>
-            <WhatsAppErrorButton
-              errorMessage="Unable to load challenge progress"
-              component="Challenge"
-            />
-          </div>
-        </div>
-      </div>
-    )
-  }
+  // Note: Level, Tune, and Play-list tabs work without progress (self-contained).
+  // Only Healing tab needs progress for quest tracking. Don't block the whole page.
 
   const categoryPoints = getCategoryPoints(activeCategory)
   const artifactProgress = getArtifactProgress(activeCategory, null)
