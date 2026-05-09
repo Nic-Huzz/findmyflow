@@ -4,6 +4,7 @@
  */
 
 export const NERVOUS_SYSTEM_STATES = [
+  { id: 'vibe_rise', label: 'Alive, activated, safe, fully here', emoji: '⚡' },
   { id: 'ventral', label: 'Alive, connected, present', emoji: '😊' },
   { id: 'sympathetic', label: 'Activated, buzzing, on edge', emoji: '😬' },
   { id: 'dorsal', label: 'Heavy, numb, shut down', emoji: '😶' },

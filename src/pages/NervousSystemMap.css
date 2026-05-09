@@ -56,8 +56,8 @@
 .nsm-hero-sub {
   font-size: 13px; opacity: 0.7; margin-bottom: 20px;
 }
-.nsm-state-trio {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+.nsm-state-quad {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
 }
 .nsm-state-card {
   background: rgba(255,255,255,0.12);
@@ -69,6 +69,10 @@
 .nsm-state-card.active {
   background: rgba(255,255,255,0.2);
   border-color: rgba(255,255,255,0.35);
+}
+.nsm-state-card.nsm-vibe-rise-card.active {
+  background: rgba(233, 162, 59, 0.25);
+  border-color: #E9A23B;
 }
 .nsm-sc-emoji { font-size: 26px; display: block; margin-bottom: 4px; }
 .nsm-sc-pct { font-size: 22px; font-weight: 800; display: block; }
@@ -114,14 +118,15 @@
   font-size: 14px; font-weight: 700; color: white;
   min-width: 24px;
 }
+.nsm-freq-seg.nsm-vibe-rise, .nsm-seg.nsm-vibe-rise, .nsm-dot.nsm-vibe-rise { background: linear-gradient(135deg, #E9A23B, #f0b94e); }
 .nsm-freq-seg.nsm-ventral, .nsm-seg.nsm-ventral, .nsm-dot.nsm-ventral { background: #10b981; }
-.nsm-freq-seg.nsm-sympathetic, .nsm-seg.nsm-sympathetic, .nsm-dot.nsm-sympathetic { background: #E9A23B; }
+.nsm-freq-seg.nsm-sympathetic, .nsm-seg.nsm-sympathetic, .nsm-dot.nsm-sympathetic { background: #f97316; }
 .nsm-freq-seg.nsm-dorsal, .nsm-seg.nsm-dorsal, .nsm-dot.nsm-dorsal { background: #ef4444; }
 
 /* ── Legend ── */
 
 .nsm-legend {
-  display: flex; gap: 16px; justify-content: center;
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
   margin-bottom: 20px;
 }
 .nsm-legend-item {

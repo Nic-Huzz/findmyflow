@@ -59,7 +59,7 @@ export default function NervousSystemCheckin({
           <button
             key={state.id}
             type="button"
-            className={`nsci-state-btn ${value === state.id ? 'active' : ''}`}
+            className={`nsci-state-btn ${value === state.id ? 'active' : ''} ${state.id === 'vibe_rise' ? 'nsci-vibe-rise' : ''}`}
             onClick={() => onChange(state.id)}
           >
             <span className="nsci-emoji">{state.emoji}</span>

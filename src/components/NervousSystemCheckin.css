@@ -68,6 +68,12 @@
   border-color: #5e17eb;
 }
 
+.nsci-state-btn.nsci-vibe-rise.active {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #E9A23B;
+  box-shadow: 0 0 16px rgba(233, 162, 59, 0.25);
+}
+
 .nsci-emoji {
   font-size: 24px;
   line-height: 1;

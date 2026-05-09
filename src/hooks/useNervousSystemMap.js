@@ -39,9 +39,9 @@ export default function useNervousSystemMap(userId) {
       const totalWeeks = Math.max(1, Math.ceil((now - startDate) / (7 * 24 * 60 * 60 * 1000)))
 
       // Overall distribution
-      const totals = { ventral: 0, sympathetic: 0, dorsal: 0 }
-      const beforeTotals = { ventral: 0, sympathetic: 0, dorsal: 0 }
-      const afterTotals = { ventral: 0, sympathetic: 0, dorsal: 0 }
+      const totals = { vibe_rise: 0, ventral: 0, sympathetic: 0, dorsal: 0 }
+      const beforeTotals = { vibe_rise: 0, ventral: 0, sympathetic: 0, dorsal: 0 }
+      const afterTotals = { vibe_rise: 0, ventral: 0, sympathetic: 0, dorsal: 0 }
       const archetypeCounts = {}
       const shifts = {}
 
@@ -73,21 +73,22 @@ export default function useNervousSystemMap(userId) {
 
         // Weekly buckets (based on before_state)
         const week = getWeekNumber(c.created_at, startDate)
-        if (!weeklyBuckets[week]) weeklyBuckets[week] = { ventral: 0, sympathetic: 0, dorsal: 0 }
+        if (!weeklyBuckets[week]) weeklyBuckets[week] = { vibe_rise: 0, ventral: 0, sympathetic: 0, dorsal: 0 }
         if (c.before_state) weeklyBuckets[week][c.before_state]++
       })
 
-      const total = totals.ventral + totals.sympathetic + totals.dorsal
-      const beforeTotal = beforeTotals.ventral + beforeTotals.sympathetic + beforeTotals.dorsal
-      const afterTotal = afterTotals.ventral + afterTotals.sympathetic + afterTotals.dorsal
+      const total = totals.vibe_rise + totals.ventral + totals.sympathetic + totals.dorsal
+      const beforeTotal = beforeTotals.vibe_rise + beforeTotals.ventral + beforeTotals.sympathetic + beforeTotals.dorsal
+      const afterTotal = afterTotals.vibe_rise + afterTotals.ventral + afterTotals.sympathetic + afterTotals.dorsal
 
-      // Safe percentage that ensures triplet sums to 100
-      const pctTriple = (v, s, d, t) => {
-        if (t === 0) return { ventral: 0, sympathetic: 0, dorsal: 0 }
-        const vp = Math.round((v / t) * 100)
-        const sp = Math.round((s / t) * 100)
-        const dp = 100 - vp - sp
-        return { ventral: vp, sympathetic: sp, dorsal: Math.max(0, dp) }
+      // Safe percentage that ensures quad sums to 100
+      const pctQuad = (counts, t) => {
+        if (t === 0) return { vibe_rise: 0, ventral: 0, sympathetic: 0, dorsal: 0 }
+        const vr = Math.round((counts.vibe_rise / t) * 100)
+        const ve = Math.round((counts.ventral / t) * 100)
+        const sy = Math.round((counts.sympathetic / t) * 100)
+        const dr = 100 - vr - ve - sy
+        return { vibe_rise: vr, ventral: ve, sympathetic: sy, dorsal: Math.max(0, dr) }
       }
 
       // Build weekly timeline (fill gaps)
@@ -96,9 +97,9 @@ export default function useNervousSystemMap(userId) {
         : totalWeeks
       const weeklyTimeline = []
       for (let w = 1; w <= Math.max(totalWeeks, maxWeekFromData); w++) {
-        const bucket = weeklyBuckets[w] || { ventral: 0, sympathetic: 0, dorsal: 0 }
-        const weekTotal = bucket.ventral + bucket.sympathetic + bucket.dorsal
-        const wp = pctTriple(bucket.ventral, bucket.sympathetic, bucket.dorsal, weekTotal)
+        const bucket = weeklyBuckets[w] || { vibe_rise: 0, ventral: 0, sympathetic: 0, dorsal: 0 }
+        const weekTotal = bucket.vibe_rise + bucket.ventral + bucket.sympathetic + bucket.dorsal
+        const wp = pctQuad(bucket, weekTotal)
         weeklyTimeline.push({
           week: w,
           ...wp,
@@ -108,10 +109,12 @@ export default function useNervousSystemMap(userId) {
 
       // Named shift patterns
       const shiftPatterns = [
+        { key: 'ventral_vibe_rise', emoji: '😊 → ⚡', label: 'Vibe Rise', count: shifts.ventral_vibe_rise || 0 },
+        { key: 'sympathetic_vibe_rise', emoji: '😬 → ⚡', label: 'Activated safe', count: shifts.sympathetic_vibe_rise || 0 },
+        { key: 'vibe_rise_vibe_rise', emoji: '⚡ → ⚡', label: 'Sustained', count: shifts.vibe_rise_vibe_rise || 0 },
         { key: 'dorsal_ventral', emoji: '😶 → 😊', label: 'Breakthroughs', count: shifts.dorsal_ventral || 0 },
         { key: 'sympathetic_ventral', emoji: '😬 → 😊', label: 'Regulated', count: shifts.sympathetic_ventral || 0 },
         { key: 'ventral_ventral', emoji: '😊 → 😊', label: 'Maintained', count: shifts.ventral_ventral || 0 },
-        { key: 'sympathetic_sympathetic', emoji: '😬 → 😬', label: 'Held ground', count: shifts.sympathetic_sympathetic || 0 },
       ]
 
       // Archetype list sorted by count
@@ -122,18 +125,22 @@ export default function useNervousSystemMap(userId) {
       const maxArchCount = archetypeList.length > 0 ? archetypeList[0].count : 1
 
       // Determine dominant state
-      const dominant = totals.ventral >= totals.sympathetic && totals.ventral >= totals.dorsal
-        ? 'ventral'
-        : totals.sympathetic >= totals.dorsal ? 'sympathetic' : 'dorsal'
+      const stateEntries = [
+        ['vibe_rise', totals.vibe_rise],
+        ['ventral', totals.ventral],
+        ['sympathetic', totals.sympathetic],
+        ['dorsal', totals.dorsal],
+      ]
+      const dominant = stateEntries.reduce((a, b) => b[1] > a[1] ? b : a)[0]
 
       if (cancelled) return
       setData({
         totalCheckins: checkins.length,
         totalWeeks,
         dominant,
-        overall: pctTriple(totals.ventral, totals.sympathetic, totals.dorsal, total),
-        before: pctTriple(beforeTotals.ventral, beforeTotals.sympathetic, beforeTotals.dorsal, beforeTotal),
-        after: pctTriple(afterTotals.ventral, afterTotals.sympathetic, afterTotals.dorsal, afterTotal),
+        overall: pctQuad(totals, total),
+        before: pctQuad(beforeTotals, beforeTotal),
+        after: pctQuad(afterTotals, afterTotal),
         weeklyTimeline,
         shiftPatterns,
         archetypeList,

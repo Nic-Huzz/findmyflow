@@ -12,7 +12,8 @@ const ARCHETYPE_ICONS = {
   unsure: '🤷',
 }
 
-const STATE_EMOJI = { ventral: '😊', sympathetic: '😬', dorsal: '😶' }
+const STATE_EMOJI = { vibe_rise: '⚡', ventral: '😊', sympathetic: '😬', dorsal: '😶' }
+const STATE_LABEL = { vibe_rise: 'Vibe Rise', ventral: 'Ventral', sympathetic: 'Sympathetic', dorsal: 'Dorsal' }
 
 export default function NervousSystemMap() {
   const navigate = useNavigate()
@@ -55,12 +56,12 @@ export default function NervousSystemMap() {
       <div className="nsm-hero">
         <h1>Your Nervous System Map</h1>
         <p className="nsm-hero-sub">{totalCheckins} check-in{totalCheckins !== 1 ? 's' : ''} across {totalWeeks} week{totalWeeks !== 1 ? 's' : ''}</p>
-        <div className="nsm-state-trio">
-          {['ventral', 'sympathetic', 'dorsal'].map((s) => (
-            <div key={s} className={`nsm-state-card ${dominant === s ? 'active' : ''}`}>
+        <div className="nsm-state-quad">
+          {['vibe_rise', 'ventral', 'sympathetic', 'dorsal'].map((s) => (
+            <div key={s} className={`nsm-state-card ${dominant === s ? 'active' : ''} ${s === 'vibe_rise' ? 'nsm-vibe-rise-card' : ''}`}>
               <span className="nsm-sc-emoji">{STATE_EMOJI[s]}</span>
               <span className="nsm-sc-pct">{overall[s]}%</span>
-              <span className="nsm-sc-label">{s.charAt(0).toUpperCase() + s.slice(1)}</span>
+              <span className="nsm-sc-label">{STATE_LABEL[s]}</span>
             </div>
           ))}
         </div>
@@ -72,12 +73,14 @@ export default function NervousSystemMap() {
         <p className="nsm-card-sub">Your nervous system frequency distribution</p>
 
         <div className="nsm-freq-bar">
+          {overall.vibe_rise > 0 && <div className="nsm-freq-seg nsm-vibe-rise" style={{ width: `${overall.vibe_rise}%` }}>{overall.vibe_rise}%</div>}
           {overall.ventral > 0 && <div className="nsm-freq-seg nsm-ventral" style={{ width: `${overall.ventral}%` }}>{overall.ventral}%</div>}
           {overall.sympathetic > 0 && <div className="nsm-freq-seg nsm-sympathetic" style={{ width: `${overall.sympathetic}%` }}>{overall.sympathetic}%</div>}
           {overall.dorsal > 0 && <div className="nsm-freq-seg nsm-dorsal" style={{ width: `${overall.dorsal}%` }}>{overall.dorsal}%</div>}
         </div>
 
         <div className="nsm-legend">
+          <span className="nsm-legend-item"><span className="nsm-dot nsm-vibe-rise" /> Vibe Rise</span>
           <span className="nsm-legend-item"><span className="nsm-dot nsm-ventral" /> Ventral</span>
           <span className="nsm-legend-item"><span className="nsm-dot nsm-sympathetic" /> Sympathetic</span>
           <span className="nsm-legend-item"><span className="nsm-dot nsm-dorsal" /> Dorsal</span>
@@ -91,6 +94,7 @@ export default function NervousSystemMap() {
                 <div key={w.week} className="nsm-timeline-row">
                   <span className="nsm-timeline-label">Week {w.week}</span>
                   <div className="nsm-timeline-bar">
+                    {w.vibe_rise > 0 && <div className="nsm-freq-seg nsm-vibe-rise" style={{ width: `${w.vibe_rise}%` }} />}
                     {w.ventral > 0 && <div className="nsm-freq-seg nsm-ventral" style={{ width: `${w.ventral}%` }} />}
                     {w.sympathetic > 0 && <div className="nsm-freq-seg nsm-sympathetic" style={{ width: `${w.sympathetic}%` }} />}
                     {w.dorsal > 0 && <div className="nsm-freq-seg nsm-dorsal" style={{ width: `${w.dorsal}%` }} />}
@@ -110,21 +114,23 @@ export default function NervousSystemMap() {
           <div className="nsm-comp-side">
             <span className="nsm-comp-label">Before</span>
             <div className="nsm-comp-bar">
+              {before.vibe_rise > 0 && <div className="nsm-seg nsm-vibe-rise" style={{ width: `${before.vibe_rise}%` }} />}
               {before.ventral > 0 && <div className="nsm-seg nsm-ventral" style={{ width: `${before.ventral}%` }} />}
               {before.sympathetic > 0 && <div className="nsm-seg nsm-sympathetic" style={{ width: `${before.sympathetic}%` }} />}
               {before.dorsal > 0 && <div className="nsm-seg nsm-dorsal" style={{ width: `${before.dorsal}%` }} />}
             </div>
-            <span className="nsm-comp-pct">{before.ventral}% ventral</span>
+            <span className="nsm-comp-pct">{before.vibe_rise}% Vibe Rise</span>
           </div>
           <span className="nsm-comp-arrow">&#8594;</span>
           <div className="nsm-comp-side">
             <span className="nsm-comp-label">After</span>
             <div className="nsm-comp-bar">
+              {after.vibe_rise > 0 && <div className="nsm-seg nsm-vibe-rise" style={{ width: `${after.vibe_rise}%` }} />}
               {after.ventral > 0 && <div className="nsm-seg nsm-ventral" style={{ width: `${after.ventral}%` }} />}
               {after.sympathetic > 0 && <div className="nsm-seg nsm-sympathetic" style={{ width: `${after.sympathetic}%` }} />}
               {after.dorsal > 0 && <div className="nsm-seg nsm-dorsal" style={{ width: `${after.dorsal}%` }} />}
             </div>
-            <span className="nsm-comp-pct">{after.ventral}% ventral</span>
+            <span className="nsm-comp-pct">{after.vibe_rise}% Vibe Rise</span>
           </div>
         </div>
       </div>
