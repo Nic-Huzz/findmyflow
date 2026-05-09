@@ -67,17 +67,9 @@ export const LEVEL_CONFIG = {
       route: '/life-map',
       narrative: 'Your life story holds the answers.',
     },
-    extraQuests: [
-      {
-        id: 'playlist_update',
-        name: 'Set Up Your Play-List',
-        route: '/playlist-update',
-        narrative: 'Choose which problems to work on.',
-        icon: '🎯',
-      },
-    ],
+    extraQuests: [],
     milestone: {
-      text: 'Beginning to identify your essence and what to pursue',
+      text: 'Express who you are where someone can see it',
       type: 'identity',
     },
     zones: {
@@ -100,7 +92,7 @@ export const LEVEL_CONFIG = {
       },
     },
     essenceQuestion: 'Who were you before the world told you who to be?',
-    courageCount: 0, // Play-list coming soon — archived courage requirement
+    courageCount: 1,
     healingDaysRequired: 7,
   },
   2: {
@@ -114,7 +106,7 @@ export const LEVEL_CONFIG = {
       id: 'healing_compass',
       name: 'Healing Compass',
       route: '/healing-compass',
-      narrative: 'What are they hungry for?',
+      narrative: 'What does safety look like for you?',
     },
     milestone: {
       text: 'Share with 2 vibe tribe support pillars',
@@ -126,7 +118,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Shallow Zone', description: 'Walls up even when it is safe', boss: 'Perfectionist / Auto-Pilot' },
     },
     essenceQuestion: 'What does your essence actually need?',
-    courageCount: 0, // Play-list coming soon — archived courage requirement
+    courageCount: 1,
     healingDaysRequired: 8,
   },
   3: {
@@ -153,7 +145,7 @@ export const LEVEL_CONFIG = {
       },
     ],
     milestone: {
-      text: 'Know who you serve and what problems you solve from your essence',
+      text: 'Help one person with your essence this week',
       type: 'direction',
     },
     zones: {
@@ -162,7 +154,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Navel-Gazer Zone', description: 'Self-focused, no service', boss: 'Perfectionist / Auto-Pilot (self-absorbed)' },
     },
     essenceQuestion: 'What code is blocking your essence from moving?',
-    courageCount: 0, // Play-list coming soon — archived courage requirement
+    courageCount: 2,
     healingDaysRequired: 9,
   },
   4: {
@@ -176,10 +168,10 @@ export const LEVEL_CONFIG = {
       id: 'matrix_codes',
       name: 'Matrix Codes',
       route: '/matrix-code-deep-dive',
-      narrative: 'What code is keeping them caged?',
+      narrative: 'What permission are you missing?',
     },
     milestone: {
-      text: 'Deliver on your play-list for the first time',
+      text: 'Ask for what you\'re worth without apologising',
       type: 'enough',
     },
     zones: {
@@ -188,7 +180,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Procrastinator Zone', description: 'Quality bar too high to start', boss: 'Perfectionist / Auto-Pilot (never start)' },
     },
     essenceQuestion: 'What code is blocking your essence from moving?',
-    courageCount: 0, // Play-list coming soon — archived courage requirement
+    courageCount: 2,
     healingDaysRequired: 10,
   },
   5: {
@@ -202,7 +194,7 @@ export const LEVEL_CONFIG = {
       id: 'nervous_system',
       name: 'Map Nervous System Boundaries',
       route: '/nervous-system',
-      narrative: 'Where are they allowed to roam?',
+      narrative: 'Where does your nervous system say stop?',
     },
     milestone: {
       text: 'How can you make it 3% better?',
@@ -214,7 +206,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Safe Zone', description: 'Ability exceeds challenge. Growth stagnates.', boss: 'Perfectionist / Auto-Pilot (comfort zone)' },
     },
     essenceQuestion: 'Where does your nervous system stop your essence from expanding?',
-    courageCount: 0, // Play-list coming soon — archived courage requirement
+    courageCount: 3,
     healingDaysRequired: 11,
   },
   6: {
@@ -228,10 +220,10 @@ export const LEVEL_CONFIG = {
       id: 'limiting_belief_rewire',
       name: 'Limiting Belief Rewire',
       route: '/limiting-belief-rewire',
-      narrative: 'What story built the cage?',
+      narrative: 'What belief makes you burn out or stall?',
     },
     milestone: {
-      text: 'Identify a sustainable system of output to continue growing',
+      text: 'Sustain your output for 2 weeks without burning out',
       type: 'execution',
     },
     zones: {
@@ -240,7 +232,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Rely on Motivation', description: 'Wellbeing present but output low. Waiting.', boss: 'Perfectionist / Auto-Pilot (stall)' },
     },
     essenceQuestion: 'What belief makes your essence burn out or stall?',
-    courageCount: 0, // Play-list coming soon — archived courage requirement
+    courageCount: 3,
     healingDaysRequired: 12,
   },
   7: {
@@ -254,7 +246,7 @@ export const LEVEL_CONFIG = {
       id: 'passion_excavation',
       name: 'Passion Excavation',
       route: null, // NEW, not built yet
-      narrative: 'What would they chase if the cage was open?',
+      narrative: 'What would you risk everything for?',
     },
     milestone: {
       text: 'Turn down something safe because it doesn\'t light you up',
@@ -266,7 +258,7 @@ export const LEVEL_CONFIG = {
       bottomRight: { name: 'Secure Zone', description: 'High passion potential, insufficient inspiration', boss: 'Perfectionist / Auto-Pilot (uninspired)' },
     },
     essenceQuestion: 'What does your essence actually care about enough to risk it?',
-    courageCount: 0, // Play-list coming soon — archived courage requirement
+    courageCount: 3,
     healingDaysRequired: 13,
   },
   8: {
@@ -304,10 +296,12 @@ export function getLevelConfig(level) {
         ...(config.extraQuests || []),
         {
           id: 'playlist_challenge',
-          name: 'Play-List Challenges',
+          name: config.courageCount === 1 ? 'Your First Wahoo' : 'Wahoo Challenges',
           route: null,
-          narrative: `Complete ${config.courageCount} courage challenge${config.courageCount > 1 ? 's' : ''}.`,
-          icon: '🎯',
+          narrative: config.courageCount === 1
+            ? 'Complete your first Wahoo.'
+            : `Complete ${config.courageCount} Wahoos.`,
+          icon: '🔥',
           navigateTo: 'Play-list',
         },
       ],

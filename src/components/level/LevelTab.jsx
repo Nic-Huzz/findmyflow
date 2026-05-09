@@ -227,7 +227,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         : q.id === 'curiosity_compass' ? hasCuriosityCompass
         : q.id === 'play_skills' ? (hasCuriosityCompass || hasPlaySkills)
         : q.id === 'healing_task' ? hasHealingCompletion
-        : q.id === 'playlist_challenge' ? hasPlaylistCompletion
+        : q.id === 'playlist_challenge' ? (config.courageCount > 0 ? courageDone >= config.courageCount : hasPlaylistCompletion)
         : q.id === 'people_matching' ? hasPeopleMatching
         : false,
     })),

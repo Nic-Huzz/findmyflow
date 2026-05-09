@@ -32,23 +32,28 @@
 
 | Aspect | Current | Proposed | Status |
 |--------|---------|----------|--------|
-| NS states | 3 states: ventral ("Alive, connected, present"), sympathetic ("Activated, buzzing, on edge"), dorsal ("Heavy, numb, shut down") | Add 4th state: Vibe Rise ("Alive, activated, safe, fully here") | PLANNED |
+| NS states | 4 states: vibe_rise ("Alive, activated, safe, fully here" ⚡), ventral ("Alive, connected, present" 😊), sympathetic ("Activated, buzzing, on edge" 😬), dorsal ("Heavy, numb, shut down" 😶) | Vibe Rise added as first state in array (goal state, top of list) | DONE |
 | State names | Clinical: ventral / sympathetic / dorsal | Accessible: Safe (ventral), Activated (sympathetic), Shutdown (dorsal), Vibe Rise (the goal) | PLANNED |
 | Check-in trigger | Fires only after quest completion (reactive, inside `GroanCompletionModal` and `HealingCompletionModal`) | Daily check-in on page load (proactive): "How are you right now?" | PLANNED |
-| State visualization | No trend visualization | Weekly/monthly state distribution chart showing % time in each of 4 states | PLANNED |
-| Archetype prompt | Shows protective archetype selector when sympathetic or dorsal selected | Same behavior, extended to include Vibe Rise logic (no archetype needed for Vibe Rise) | PLANNED |
+| State visualization | NS Map page updated: 2x2 state grid, 4-state frequency bars, "% Vibe Rise" summary, 6 shift patterns (3 Vibe Rise + 3 legacy) | Weekly/monthly state distribution chart showing % time in each of 4 states | DONE |
+| Archetype prompt | Shows protective archetype selector when sympathetic or dorsal selected. Vibe Rise excluded (goal state). | No change needed, existing logic naturally excludes vibe_rise | DONE |
+| Check-in styling | Purple active state for all buttons | Vibe Rise button glows gold when selected (brand gradient), others remain purple | DONE |
+| NS Map colors | Vibe Rise = gold (#E9A23B gradient), ventral = green (#10b981), sympathetic = orange (#f97316), dorsal = red (#ef4444) | Sympathetic shifted from gold to orange to avoid collision with Vibe Rise gold | DONE |
+| DB schema | CHECK constraints updated to include 'vibe_rise' via migration `20260509000000_add_vibe_rise_state.sql` | Migration created, needs `npm run db:push` to apply | DONE |
 
-**Key files:**
-- `src/lib/nervousSystemConstants.js` - `NERVOUS_SYSTEM_STATES` array (add 4th state here)
-- `src/components/NervousSystemCheckin.jsx` - universal check-in component
-- `src/components/GroanCompletionModal.jsx` - Play-list completion flow (uses NS check-in)
-- `src/components/HealingCompletionModal.jsx` - Healing completion flow (uses NS check-in)
-- `supabase/migrations/20260429200000_nervous_system_checkins.sql` - check-in table schema
+**Key files (changed):**
+- `src/lib/nervousSystemConstants.js` - `NERVOUS_SYSTEM_STATES` array (4th state added, first in array)
+- `src/components/NervousSystemCheckin.jsx` - gold `.nsci-vibe-rise` class on Vibe Rise button
+- `src/components/NervousSystemCheckin.css` - gold active variant for Vibe Rise
+- `src/hooks/useNervousSystemMap.js` - 4-state aggregation (`pctQuad`), 6 shift patterns, 4-state dominant logic
+- `src/pages/NervousSystemMap.jsx` - 2x2 state grid, 4-state bars/legend/timeline/comparison, "% Vibe Rise" summary
+- `src/pages/NervousSystemMap.css` - `.nsm-vibe-rise` gold color, `.nsm-state-quad` 2x2 grid, sympathetic recolored to orange
+- `supabase/migrations/20260509000000_add_vibe_rise_state.sql` - CHECK constraint update
 
-**Implementation notes:**
-- `nervousSystemConstants.js` currently exports a 3-element array. Adding the 4th state is a single-file change.
-- `needsArchetype()` function needs updating: Vibe Rise state should NOT trigger archetype selector (it's the goal state).
-- New DB column or value needed in `nervous_system_checkins.before_state` / `after_state` enum.
+**Files NOT changed (verified safe):**
+- `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `ReleaseQuestInput.jsx`, `ReconnectQuestInput.jsx` - pass state values through dynamically, no hard-coded state names
+- `Challenge.jsx` - uses `needsArchetype()` which naturally excludes vibe_rise
+- `JourneyOnboarding.jsx`, `journeyOnboarding.js`, `woundStages.js` - wound/archetype mapping for onboarding scenes, Vibe Rise doesn't apply here
 
 ---
 
@@ -233,15 +238,40 @@ Original spec was L1=1, L2=2, ... L7=7 (total 28). Infrastructure is fully built
 | Courage challenge IDs | `user_level_progress.courage_challenge_ids` | DB column exists |
 | Level tab rendering | `src/components/level/LevelTab.jsx` | Reads config |
 
-**All levels currently have `courageCount: 0` with comment "Play-list coming soon -- archived courage requirement". Proposed revised counts TBD.**
+**Courage counts re-enabled (2026-05-09). Total: 15 Wahoos across the journey.**
+
+| Level | Courage Count | Visibility Layer | Wahoo Quest Name |
+|-------|---------------|------------------|-----------------|
+| 0 | 0 | — | None (setup only) |
+| 1 | 1 | screen | Your First Wahoo |
+| 2 | 1 | live | Your First Wahoo |
+| 3 | 2 | live | Wahoo Challenges |
+| 4 | 2 | money | Wahoo Challenges |
+| 5 | 3 | vulnerable | Wahoo Challenges |
+| 6 | 3 | authority | Wahoo Challenges |
+| 7 | 3 | all layers | Wahoo Challenges |
+| 8 | ongoing | all layers | None (endgame) |
+
+**Milestones updated to action-oriented Vibe Rise language:**
+- L1: "Express who you are where someone can see it"
+- L3: "Help one person with your essence this week"
+- L4: "Ask for what you're worth without apologising"
+- L6: "Sustain your output for 2 weeks without burning out"
+
+**Deep dive narratives updated:**
+- L2: "What does safety look like for you?"
+- L4: "What permission are you missing?"
+- L5: "Where does your nervous system say stop?"
+- L6: "What belief makes you burn out or stall?"
+- L7: "What would you risk everything for?"
 
 ### Wahoo Identification Flow
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| `MobilePlaylistPicker` (Flow B: Role -> Topic -> write challenge) | ARCHIVED | Still in codebase but not actively used |
-| `PlaySkillPicker` (10 taxonomy categories + custom input) | BUILT | Created 2026-05-09, saves to `nikigai_clusters` |
-| WahooCreator (two-path) | PLANNED | Path A: "I know what I want to try" -> free text -> AI generates challenge. Path B: "Help me find one" -> browse categories -> AI suggests 2-3 options |
+| `MobilePlaylistPicker` (Flow B: Role -> Topic -> write challenge) | ARCHIVED | Still in codebase, removed from PlayListTab |
+| `PlaySkillPicker` (10 taxonomy categories + custom input) | BUILT | Wired into Level 0 + PlayListTab State 1 |
+| `WahooCreator` (two-path) | BUILT | Path A: free text -> AI generates. Path B: browse categories -> AI suggests. Wired into PlayListTab State 2 |
 | Groan Matrix visualization | DONE | Stays as the Wahoo Map (visualization/map view). Code stays as `GroanMatrix.jsx` |
 
 ### What's Already Well-Aligned (No Changes Needed)
@@ -285,6 +315,7 @@ Original spec was L1=1, L2=2, ... L7=7 (total 28). Infrastructure is fully built
 | `src/components/ChallengeHeader.jsx` | Header with scores, streak, Vibe Rank |
 | `src/components/GroanMatrix.jsx` | 2D courage challenge matrix |
 | `src/components/PlaySkillPicker.jsx` | Level 0 play-skill category picker |
+| `src/components/WahooCreator.jsx` | Two-path Wahoo creation (replaces MobilePlaylistPicker) |
 | `src/components/level/LevelConfig.js` | 9-level journey config |
 | `src/components/level/LevelTab.jsx` | Level tab rendering |
 | `src/Challenge.jsx` | Main challenge page (tabs, quests, scoring) |
