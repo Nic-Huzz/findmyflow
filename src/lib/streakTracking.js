@@ -173,13 +173,14 @@ export const checkStreakBreak = async (userId, challengeInstanceId) => {
       return { success: true, streak_broken: false };
     }
 
-    // Check if last active date was yesterday (streak continues) or today (already active)
+    // Check if last active date is within grace period (forgiving streak: 1 day miss allowed)
     const lastActiveDate = formatLocalDate(new Date(progress.last_active_date));
     const today = getTodayDate();
     const yesterday = getYesterdayDate();
+    const dayBeforeYesterday = formatLocalDate(new Date(new Date().setDate(new Date().getDate() - 2)));
 
-    // If last active was today or yesterday, streak is intact
-    if (lastActiveDate === today || lastActiveDate === yesterday) {
+    // Forgiving streak: allow 1 day gap (today, yesterday, or day before yesterday)
+    if (lastActiveDate === today || lastActiveDate === yesterday || lastActiveDate === dayBeforeYesterday) {
       return { success: true, streak_broken: false };
     }
 

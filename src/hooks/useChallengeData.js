@@ -1604,9 +1604,11 @@ export function useChallengeData() {
       completionDates.add(dateKey)
     })
 
-    // Count consecutive days from today backwards
+    // Count consecutive days from today backwards (forgiving: allow 1 day gap)
     const today = new Date()
     let streak = 0
+    let missesUsed = 0
+    const MAX_MISSES = 1 // forgiving streak: 1 day grace period
     let checkDate = new Date(today)
 
     for (let i = 0; i < 30; i++) {
@@ -1615,15 +1617,12 @@ export function useChallengeData() {
         streak++
         checkDate.setDate(checkDate.getDate() - 1)
       } else if (i === 0) {
-        // If no completions today, check if yesterday started the streak
+        // If no completions today, skip to yesterday (today doesn't count as a miss yet)
         checkDate.setDate(checkDate.getDate() - 1)
-        const yesterdayKey = `${checkDate.getFullYear()}-${checkDate.getMonth() + 1}-${checkDate.getDate()}`
-        if (completionDates.has(yesterdayKey)) {
-          streak++
-          checkDate.setDate(checkDate.getDate() - 1)
-        } else {
-          break
-        }
+      } else if (missesUsed < MAX_MISSES) {
+        // Forgiving: skip this gap day, keep checking
+        missesUsed++
+        checkDate.setDate(checkDate.getDate() - 1)
       } else {
         break
       }
