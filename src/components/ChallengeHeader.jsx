@@ -44,6 +44,7 @@ function ChallengeHeader({
   matchupLoading = false,
   totalXP = 0,
   currentJourneyLevel = 0,
+  wahooCount = 0,
 }) {
   const { user } = useAuth()
   const [showGraph, setShowGraph] = useState(false)
@@ -168,7 +169,7 @@ function ChallengeHeader({
           <div className="challenge-level-bar">
             <div className="challenge-level-row">
               <span className="challenge-level-name">{vibeLevel.emoji} {vibeLevel.name}</span>
-              <span className="challenge-level-xp">{isMax ? `${lifetimeXP} XP ✦` : `${lifetimeXP} / ${vibeMax} XP`}</span>
+              <span className="challenge-level-xp">{isMax ? `${lifetimeXP} RP ✦` : `${lifetimeXP} / ${vibeMax} RP`}</span>
             </div>
             <div className="challenge-level-track">
               <div className="challenge-level-fill" style={{ width: `${vibeProgress}%` }} />
@@ -190,6 +191,10 @@ function ChallengeHeader({
           <div className="streak-badge">
             <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
             <span className="streak-badge-num">{streakDays}</span>
+          </div>
+          <div className="streak-badge wahoo-badge">
+            <span className="wahoo-badge-icon">⚡</span>
+            <span className="streak-badge-num">{wahooCount}</span>
           </div>
           {/* ARCHIVED: Leaderboard button — re-enable when league is active
           <div

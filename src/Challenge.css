@@ -352,6 +352,14 @@
   font-weight: 800;
 }
 
+.wahoo-badge .streak-badge-num {
+  color: #E9A23B;
+}
+
+.wahoo-badge-icon {
+  font-size: 1rem;
+}
+
 /* Flame animations (kept from old hero-streak) */
 .hero-streak-flame {
   font-size: 1rem;

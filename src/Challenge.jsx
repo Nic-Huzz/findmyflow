@@ -40,6 +40,7 @@ import ContentChallenges from './components/ContentChallenges'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
 import ChallengeIntro from './components/ChallengeIntro'
+import DailyCheckin from './components/DailyCheckin'
 import LevelTab from './components/level/LevelTab'
 import { getLevelConfig } from './components/level/LevelConfig'
 // CreatorHome moved to standalone /create route
@@ -187,6 +188,24 @@ function Challenge() {
           setShowIntro(true)
         }
         setIntroChecked(true)
+      })
+  }, [user?.id])
+
+  // Daily nervous system check-in (proactive, once per day)
+  const [showDailyCheckin, setShowDailyCheckin] = useState(false)
+
+  useEffect(() => {
+    if (!user?.id) return
+    const today = new Date().toISOString().slice(0, 10)
+    supabase
+      .from('nervous_system_checkins')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('checkin_type', 'daily')
+      .gte('created_at', today)
+      .limit(1)
+      .then(({ data }) => {
+        if (!data?.length) setShowDailyCheckin(true)
       })
   }, [user?.id])
 
@@ -1680,6 +1699,7 @@ function Challenge() {
   return (
     <div className="challenge-container content-enter">
       {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
+      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => setShowDailyCheckin(false)} />}
       <NotificationPrompt />
       <ChallengeHeader
         navigate={navigate}
@@ -1695,6 +1715,7 @@ function Challenge() {
         matchupLoading={matchupLoading}
         totalXP={progress?.total_points || 0}
         currentJourneyLevel={currentJourneyLevel}
+        wahooCount={Math.floor((categoryScores?.play_list || 0) / 7)}
       />
 
       {/* W/L flip toast */}

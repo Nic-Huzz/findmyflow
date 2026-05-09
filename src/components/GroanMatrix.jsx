@@ -367,7 +367,7 @@ function GroanMatrix({
       {/* Header */}
       <div className="groan-matrix-header">
         <div className="groan-matrix-title-row">
-          <h2 className="section-title" style={{ margin: 0 }}>Play-list Matrix</h2>
+          <h2 className="section-title" style={{ margin: 0 }}>Wahoo Map</h2>
           <a href="/play-list-explainer" className="groan-matrix-explainer-btn">Explainer</a>
         </div>
 
