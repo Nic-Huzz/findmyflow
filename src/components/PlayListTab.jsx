@@ -33,7 +33,7 @@ export default function PlayListTab({
   const [completingChallenge, setCompletingChallenge] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [showPlaySkillPicker, setShowPlaySkillPicker] = useState(false)
-  const [showWahooCreator, setShowWahooCreator] = useState(false)
+  const [wahooCreatorKey, setWahooCreatorKey] = useState(0)
 
   // Fetch playskills + active challenges
   useEffect(() => {
@@ -203,8 +203,9 @@ export default function PlayListTab({
       {/* Active Wahoos */}
       {activeChallenges.length > 0 && renderActiveWahoos()}
 
-      {/* WahooCreator — always visible inline */}
+      {/* WahooCreator — always visible inline, key resets after success */}
       <WahooCreator
+        key={wahooCreatorKey}
         userId={userId}
         categories={categoryIds}
         currentVisibilityLayer={currentVisibilityLayer}
@@ -213,8 +214,8 @@ export default function PlayListTab({
           onRefreshPoints?.()
         }}
         onClose={() => {
-          // WahooCreator auto-closes after success, refresh state
           fetchActiveChallenges()
+          setWahooCreatorKey(k => k + 1)
         }}
       />
 

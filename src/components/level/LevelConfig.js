@@ -108,6 +108,7 @@ export const LEVEL_CONFIG = {
       route: '/healing-compass',
       narrative: 'What does safety look like for you?',
     },
+    extraQuests: [],
     milestone: {
       text: 'Share with 2 vibe tribe support pillars',
       type: 'vulnerability',
