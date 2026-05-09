@@ -90,6 +90,12 @@ export default function CreatorHomeV2() {
   const [topFans, setTopFans] = useState([])
   const [movementXP, setMovementXP] = useState(0)
 
+  // Set dark theme on body for BottomToolbar styling, clean up on unmount
+  useEffect(() => {
+    document.body.setAttribute('data-theme', 'dark')
+    return () => document.body.removeAttribute('data-theme')
+  }, [])
+
   const { experiences, loading: expLoading } = useExperienceList()
 
   const upcoming = experiences.filter(e => e.status === 'upcoming')
@@ -106,20 +112,18 @@ export default function CreatorHomeV2() {
     loadData()
   }, [userId])
 
-  useEffect(() => {
-    if (!userId) return
-    loadKPIs()
-  }, [userId, past.length])
+  // KPIs computed inside loadData from the same attendeeRows fetch
 
   // Fetch checklist progress for upcoming experiences
   const upcomingIds = upcoming.map(e => e.id).join(',')
   useEffect(() => {
-    if (!upcomingIds) return
+    if (!upcomingIds || !userId) return
     const ids = upcomingIds.split(',')
     ;(async () => {
       const { data } = await supabase
         .from('experience_checklist_items')
         .select('experience_id, section, completed')
+        .eq('user_id', userId)
         .in('experience_id', ids)
       if (!data) return
       const counts = {}
@@ -178,10 +182,15 @@ export default function CreatorHomeV2() {
         }
       }
 
-      // Top fans
+      // KPIs + Top fans from the same attendeeRows fetch
       if (attendeeRows?.length) {
         const counts = {}
         attendeeRows.forEach(a => { if (a.contact_id) counts[a.contact_id] = (counts[a.contact_id] || 0) + 1 })
+        const totalAttendees = Object.keys(counts).length
+        const repeats = Object.values(counts).filter(c => c >= 2).length
+        const repeatRate = totalAttendees > 0 ? Math.round((repeats / totalAttendees) * 100) : 0
+        setDashboardKPIs({ totalAttendees, repeatRate })
+
         const repeatIds = Object.entries(counts).filter(([, c]) => c >= 2).sort(([, a], [, b]) => b - a).slice(0, 5).map(([id, count]) => ({ id, count }))
         if (repeatIds.length) {
           const { data: contacts } = await supabase.from('crm_contacts').select('id, name, email').in('id', repeatIds.map(r => r.id))
@@ -198,22 +207,6 @@ export default function CreatorHomeV2() {
     }
   }
 
-  async function loadKPIs() {
-    try {
-      const { data: attendanceData } = await supabase.from('experience_attendees').select('contact_id').eq('user_id', userId)
-      let totalAttendees = 0, repeatRate = 0
-      if (attendanceData?.length) {
-        const counts = {}
-        attendanceData.forEach(a => { counts[a.contact_id] = (counts[a.contact_id] || 0) + 1 })
-        totalAttendees = Object.keys(counts).length
-        const repeats = Object.values(counts).filter(c => c >= 2).length
-        repeatRate = totalAttendees > 0 ? Math.round((repeats / totalAttendees) * 100) : 0
-      }
-      setDashboardKPIs({ totalAttendees, repeatRate })
-    } catch (err) {
-      console.error('KPI error:', err)
-    }
-  }
 
   // ── Derived ────────────────────────────────────────────────────────────
   const archetype = creatorSelection?.dominant_archetype || null
