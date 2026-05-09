@@ -249,7 +249,7 @@ export default function CreatorHomeV2() {
             <div className="ch2-header-name">Movement Maker</div>
             <div className="ch2-header-sub">{archetypeLabel}</div>
           </div>
-          <div className="ch2-header-xp">{movementXP} XP</div>
+          <div className="ch2-header-xp">{movementXP} RP</div>
         </div>
         <div className="ch2-tabs">
           {['identity', 'experiences', 'growth'].map(tab => (
