@@ -64,6 +64,7 @@ export default function ExperienceInspiration() {
           .filter(p => dnaMap[p.name])
           .map(p => ({
             name: p.name,
+            displayName: p.displayName || p.name,
             domain: p.domain || '',
             primarySkills: p.primarySkills || [],
             experienceType: dnaMap[p.name]?.experienceType || 'workshop',
@@ -356,7 +357,7 @@ export default function ExperienceInspiration() {
                     onClick={() => toggleCreator(c.name)}
                   >
                     <div className="ei-avatar">{getInitials(c.name)}</div>
-                    <div className="ei-creator-name">{c.name}</div>
+                    <div className="ei-creator-name">{c.displayName}</div>
                     <div className="ei-creator-type">{c.experienceType.replace(/_/g, ' ')}</div>
                   </div>
                 ))}

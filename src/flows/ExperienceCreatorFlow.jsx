@@ -171,6 +171,7 @@ function buildCreatorData() {
 
     return {
       name: dna.name,
+      displayName: cm.displayName || dna.name,
       slug,
       oneLiner: cm.oneLiner || '',
       experienceType: dna.experienceType,
@@ -422,7 +423,7 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
                         onError={(e) => { e.target.style.display = 'none' }}
                       />
                       <div className="ecf-person-card-body">
-                        <div className="ecf-person-card-name">{creator.name}</div>
+                        <div className="ecf-person-card-name">{creator.displayName}</div>
                         <div className="ecf-person-card-oneliner">{creator.oneLiner}</div>
                         <div className="ecf-person-card-model">{creator.modelTag}</div>
                       </div>

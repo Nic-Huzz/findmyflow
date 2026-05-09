@@ -7568,7 +7568,8 @@
         "scaleModel": "Free masterclasses build audience, subscription Quests create recurring revenue, certified coaches extend the brand, festivals build community loyalty.",
         "lessonsForUser": "If you teach and care about personal growth: build a platform that curates other teachers, not just your own content. You become the stage, not the act."
       },
-      "confidence": "high"
+      "confidence": "high",
+      "displayName": "Mindvalley: Vishen Lakhiani"
     },
     {
       "name": "Michael Singer",
@@ -7653,7 +7654,8 @@
         "scaleModel": "City-by-city licensing model where local leaders host Daybreaker events under the brand, allowing global expansion without centralised operations.",
         "lessonsForUser": "If you connect and care about community: start one unforgettable event in one city, make it so good people beg to bring it to theirs, then license the format."
       },
-      "confidence": "high"
+      "confidence": "high",
+      "displayName": "Daybreaker: Radha Agrawal"
     },
     {
       "name": "Meghan Pappenheim",
@@ -7681,7 +7683,8 @@
         "scaleModel": "Physical community hub (Yoga Barn with 25+ daily classes) anchors a festival that draws 7,000 people annually, creating a self-sustaining wellness ecosystem.",
         "lessonsForUser": "If you connect and care about community: build the daily gathering place first, then the festival becomes a celebration of what already exists."
       },
-      "confidence": "high"
+      "confidence": "high",
+      "displayName": "BaliSpirit Festival: Meghan Pappenheim"
     },
     {
       "name": "Jeff Krasno",
@@ -7709,7 +7712,8 @@
         "scaleModel": "Live festival brand built global awareness, then pivoted to online platform with expert-led courses, weekly newsletter to 1M+ readers, and a physical retreat lab.",
         "lessonsForUser": "If you build events and care about wellness: use festivals to learn what your community actually needs, then build the daily product they will use between events."
       },
-      "confidence": "high"
+      "confidence": "high",
+      "displayName": "Wanderlust: Jeff Krasno"
     },
     {
       "name": "Gabrielle Roth",
@@ -7737,7 +7741,8 @@
         "scaleModel": "Created a codified method, trained teachers through rigorous 2-year certification, and produced her own music through Raven Recording to soundtrack the practice worldwide.",
         "lessonsForUser": "If you create movement practices and care about healing: codify the structure so others can teach it, then produce the soundtrack so the experience stays consistent everywhere."
       },
-      "confidence": "high"
+      "confidence": "high",
+      "displayName": "5Rhythms: Gabrielle Roth"
     },
     {
       "name": "Larry Harvey",
@@ -7764,7 +7769,8 @@
         "scaleModel": "A single annual gathering built cultural identity, the 10 Principles codified it, regional burns replicated it in 34 countries, and nonprofit status ensured it would outlive the founder.",
         "lessonsForUser": "If you lead and care about culture: build the gathering first, then write the principles so the culture can spread without needing you in the room."
       },
-      "confidence": "high"
+      "confidence": "high",
+      "displayName": "Burning Man: Larry Harvey"
     }
   ]
 }
