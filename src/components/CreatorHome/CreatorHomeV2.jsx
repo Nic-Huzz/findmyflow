@@ -112,10 +112,11 @@ export default function CreatorHomeV2() {
   }, [userId, past.length])
 
   // Fetch checklist progress for upcoming experiences
+  const upcomingIds = upcoming.map(e => e.id).join(',')
   useEffect(() => {
-    if (!upcoming.length) return
+    if (!upcomingIds) return
+    const ids = upcomingIds.split(',')
     ;(async () => {
-      const ids = upcoming.map(e => e.id)
       const { data } = await supabase
         .from('experience_checklist_items')
         .select('experience_id, section, completed')
@@ -130,7 +131,7 @@ export default function CreatorHomeV2() {
       })
       setChecklistCounts(counts)
     })()
-  }, [upcoming.length])
+  }, [upcomingIds])
 
   async function loadData() {
     setLoading(true)
@@ -483,14 +484,14 @@ export default function CreatorHomeV2() {
                           <div className="ch2-exp-progress">
                             <div className="ch2-exp-p-icon">📣</div>
                             <div className="ch2-exp-p-info"><div className="ch2-exp-p-name">Marketing</div><div className="ch2-exp-p-count">{marketingItems.done} of {marketingItems.total}</div></div>
-                            <div className="ch2-exp-p-bar"><div className="ch2-progress-track"><div className="ch2-progress-fill" style={{ width: `${(marketingItems.done / marketingItems.total * 100)}%` }} /></div></div>
+                            <div className="ch2-exp-p-bar"><div className="ch2-progress-track"><div className="ch2-progress-fill" style={{ width: `${(marketingItems.total ? marketingItems.done / marketingItems.total * 100 : 0)}%` }} /></div></div>
                           </div>
                         )}
                         {orgItems.total > 0 && (
                           <div className="ch2-exp-progress">
                             <div className="ch2-exp-p-icon">🗂️</div>
                             <div className="ch2-exp-p-info"><div className="ch2-exp-p-name">Organisation</div><div className="ch2-exp-p-count">{orgItems.done} of {orgItems.total}</div></div>
-                            <div className="ch2-exp-p-bar"><div className="ch2-progress-track"><div className="ch2-progress-fill" style={{ width: `${(orgItems.done / orgItems.total * 100)}%` }} /></div></div>
+                            <div className="ch2-exp-p-bar"><div className="ch2-progress-track"><div className="ch2-progress-fill" style={{ width: `${(orgItems.total ? orgItems.done / orgItems.total * 100 : 0)}%` }} /></div></div>
                           </div>
                         )}
                       </div>
@@ -624,6 +625,31 @@ export default function CreatorHomeV2() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* ═══ EDIT IDENTITY PANEL ═══ */}
+        <div className={`ch2-tab-panel${activeTab === 'edit-identity' ? ' active' : ''}`}>
+          <div className="ch2-label" style={{ marginBottom: 12 }}>Edit Your Identity</div>
+          {[
+            { label: 'Your Skills', sub: 'Retake Play-Skills onboarding', path: '/get-started' },
+            { label: 'North Stars', sub: 'Redo Experience Creator Matching', path: '/experience-creators' },
+            { label: 'Your Position', sub: 'Retake Scope Map diagnostic', path: '/create/scope-map' },
+            { label: 'Blow Up Brand', sub: 'Redo the Remarkable flow', path: '/create/remarkable' },
+            { label: 'Pay Rent', sub: 'Explore how creators pay rent', path: '/create/pay-rent' },
+            { label: 'Scale Income', sub: 'Redo attraction / core / continuity', path: '/create/scale-income' },
+            { label: 'Play Profile', sub: 'Retake the DNA quiz', path: '/play-profile?mode=retake' },
+          ].map(item => (
+            <div key={item.path} className="ch2-biz-row" style={{ cursor: 'pointer', marginBottom: 6 }} onClick={() => navigate(item.path)}>
+              <div className="ch2-biz-info">
+                <div className="ch2-biz-val">{item.label}</div>
+                <div className="ch2-biz-label">{item.sub}</div>
+              </div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', fontWeight: 600 }}>→</div>
+            </div>
+          ))}
+          <button className="ch2-btn-outline" onClick={() => setActiveTab('identity')} style={{ marginTop: 8 }}>
+            ← Back to Identity
+          </button>
         </div>
       </div>
     </div>

@@ -19,6 +19,24 @@
   padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
 }
 
+/* Override BottomToolbar to match dark theme when inside /create */
+.ch2 ~ .bottom-toolbar,
+body:has(.ch2) .bottom-toolbar {
+  --toolbar-bg: #0d0d1a;
+  --toolbar-border: rgba(255,255,255,0.06);
+  --toolbar-shadow: 0 -2px 12px rgba(0,0,0,0.3);
+}
+body:has(.ch2) .bottom-toolbar .toolbar-label {
+  color: rgba(255,255,255,0.35);
+}
+body:has(.ch2) .bottom-toolbar .toolbar-icon {
+  color: rgba(255,255,255,0.4);
+}
+body:has(.ch2) .bottom-toolbar .toolbar-item.active .toolbar-label,
+body:has(.ch2) .bottom-toolbar .toolbar-item.active .toolbar-icon {
+  color: #E9A23B;
+}
+
 /* ═══ LOADING ═══ */
 .ch2-loading {
   display: flex; justify-content: center; padding: 3rem 0;
