@@ -323,7 +323,7 @@ Original spec was L1=1, L2=2, ... L7=7 (total 28). Infrastructure is fully built
 | 2 | Forgiving streak | ✅ DONE | 1 day grace period. `getConsecutiveStreakDays` + `checkStreakBreak` updated |
 | 3 | Apply DB migrations | ✅ DONE | 3 migrations applied to production via MCP |
 | 4 | State trend visualization | ✅ COVERED | Two layers already built: (a) CapacityCard on Level tab shows weekly score + trend + state %, (b) NS Map page (`/nervous-system-map`) shows full 4-state weekly timeline, frequency bars, shift patterns, and "% Vibe Rise" summary. No additional visualization needed. |
-| 5 | Drain Audit feature | PLANNED | Denominator of the Maintenance Equation. Periodic logging in Tune tab. 2-option state check (Activated/Shutdown). Each drain saved to `nervous_system_checkins` with `checkin_type: 'drain'`, automatically pulls Capacity Score down |
+| 5 | Drain Audit feature | ✅ DONE | Section 4 in Tune tab. 5 categories (Work/People/Environment/Content/Commitment) + note + 2-option state (Activated/Shutdown). Saves to `nervous_system_checkins` with `checkin_type: 'drain'`. Automatically pulls Capacity Score down. Migration applied. |
 | 6 | Connection layer (community) | FUTURE | Fantasy League reactivation, friend connections, event integration. Biggest remaining gap |
 
 ---
