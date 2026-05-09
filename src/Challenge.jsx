@@ -20,6 +20,7 @@ import './components/ChallengeFilters.css' // R-type chips + frequency tabs styl
 import './components/ChallengeStageTabs.css' // stage-tab pills for Healing/Play-list/Level sub-tabs
 import QuestCard from './components/QuestCard'
 import PlayListTab from './components/PlayListTab'
+import TuneTab from './components/TuneTab'
 import PriorityTab from './components/PriorityTab'
 import CompassCheckin from './components/CompassCheckin'
 import NervousSystemCheckin from './components/NervousSystemCheckin'
@@ -36,7 +37,7 @@ import { useLeagueData } from './hooks/useLeagueData'
 import { useMatchupData } from './hooks/useMatchupData'
 import { GROAN_VISIBILITY_LAYERS, getLayerLockStatus } from './lib/stageConfig'
 import { getScoringCategory } from './lib/scoringCategories'
-import ContentChallenges from './components/ContentChallenges'
+// ContentChallenges archived — moves to Fantasy League when reactivated
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
 import ChallengeIntro from './components/ChallengeIntro'
@@ -126,8 +127,6 @@ function Challenge() {
     setProjectStage,
     healingSubTab,
     setHealingSubTab,
-    bonusSubTab,
-    setBonusSubTab,
     playlistSubTab,
     setPlaylistSubTab,
     userArchetypes,
@@ -247,7 +246,7 @@ function Challenge() {
   // Dynamic level detection
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
-  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Level']))
+  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Level', 'Tune']))
   useEffect(() => {
     if (!user?.id) return
     supabase
@@ -1567,8 +1566,9 @@ function Challenge() {
   // Filter quests by the active category tab (exclude archived quests)
   let filteredQuests = challengeData?.quests?.filter(q => {
     if (q.archived) return false
-    // Play-list tab handles its own content via PlayListTab component
+    // Play-list and Tune tabs handle their own content via standalone components
     if (activeCategory === 'Play-list') return false
+    if (activeCategory === 'Tune') return false
     return q.category === activeCategory
   }) || []
 
@@ -1966,7 +1966,16 @@ function Challenge() {
         {/* Stage-style sub-tabs for Play-list: Flow Finder | Play-list | Play Profile */}
         {/* Flow Finder sub-tabs archived — skills revealed through levels */}
 
-        {/* Play-list Tab — Flow Finder + Courage Matrix + Voice Logging */}
+        {/* Tune Tab — Daily maintenance deposits */}
+        {activeCategory === 'Tune' && (
+          <TuneTab
+            userId={user?.id}
+            onQuestComplete={handleQuestComplete}
+            onRefreshPoints={loadStageProgress}
+          />
+        )}
+
+        {/* Play-list Tab — Wahoo challenges */}
         {activeCategory === 'Play-list' && (
           <PlayListTab
             userId={user?.id}
@@ -1997,7 +2006,7 @@ function Challenge() {
                 </button>
               )}
             </div>
-            {['Recognise', 'Release', 'Rewire', 'Reconnect', 'Rest'].filter(rType =>
+            {['Recognise', 'Release', 'Rewire'].filter(rType =>
               activeRTypeFilter === 'All' || activeRTypeFilter === rType
             ).map(rType => {
               const rTypeQuests = displayQuests
@@ -2090,104 +2099,7 @@ function Challenge() {
           }} />
         )}
 
-        {/* Bonus Sub-Tabs: Tasks | Content */}
-        {activeCategory === 'Bonus' && (
-          <div className="stage-tabs-wrapper">
-            <div className="stage-tabs-container">
-              <div className="stage-tabs" style={{ justifyContent: 'center' }}>
-                {[
-                  { key: 'tasks', icon: '✅', label: 'Tasks', color: '#5e17eb' },
-                  { key: 'content', icon: '📝', label: 'Content', color: '#E9A23B' },
-                ].map(tab => {
-                  const isActive = bonusSubTab === tab.key
-                  const activeStyles = isActive ? {
-                    background: tab.color,
-                    borderColor: tab.color,
-                    color: 'white'
-                  } : {}
-                  return (
-                    <button
-                      key={tab.key}
-                      className={`stage-tab available ${isActive ? 'active' : ''}`}
-                      onClick={() => setBonusSubTab(tab.key)}
-                      style={{ '--stage-color': tab.color, ...activeStyles }}
-                    >
-                      <span className="tab-icon">{tab.icon}</span>
-                      <span className="tab-label">{tab.label}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Bonus Quests — Tasks sub-tab */}
-        {activeCategory === 'Bonus' && bonusSubTab === 'tasks' && filteredQuests.length > 0 && (
-          <div className="quest-section healing-rows">
-            <h2 className="section-title">Bonus Quests</h2>
-            <div className="healing-row-list">
-              {filteredQuests.map(quest => {
-                const completed = isQuestCompletedToday(quest.id, quest)
-                const isCompleting = completingQuestId === quest.id
-                const isFlow = quest.inputType === 'flow'
-
-                return (
-                  <div key={quest.id} className={`ht-item-row ${completed ? 'done' : ''}`}>
-                    <span className={`ht-item-check ${completed ? 'done' : ''}`}>
-                      {completed ? '✓' : ''}
-                    </span>
-                    <div className="ht-item-body">
-                      <div className="ht-item-name">{quest.name}</div>
-                      <div className="ht-item-meta">
-                        <span className="ht-item-type">Bonus</span>
-                        <span className="ht-item-sep">·</span>
-                        <span className="ht-pts">{quest.points}pts</span>
-                      </div>
-                    </div>
-                    {completed ? (
-                      <span className="ht-item-action done-action">Done</span>
-                    ) : isFlow && quest.flow_route ? (
-                      <a
-                        href={`${quest.flow_route}?returnTo=/7-day-challenge`}
-                        className="ht-item-action"
-                        style={{ textDecoration: 'none', textAlign: 'center' }}
-                      >
-                        Start →
-                      </a>
-                    ) : (
-                      <button
-                        className="ht-item-action"
-                        disabled={isCompleting}
-                        onClick={() => setHealingModalQuest(quest)}
-                      >
-                        {isCompleting ? '...' : 'Complete'}
-                      </button>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Bonus — Content sub-tab */}
-        {activeCategory === 'Bonus' && bonusSubTab === 'content' && (
-          <ContentChallenges
-            leagueId={league?.id}
-            userId={user?.id}
-            teamId={userTeam?.id}
-            weekNumber={getCurrentWeek?.()}
-            leagueStatus={league?.status}
-            isOnTeam={isOnTeam}
-            teams={teams}
-            contentSubmissions={contentSubmissions}
-            onSubmitted={reloadContent}
-            standings={standings}
-            userTeam={userTeam}
-            userData={userData}
-          />
-        )}
+        {/* Bonus tab archived — exercises move to Fantasy League when reactivated */}
 
         {/* Tracker tab removed — content moved to Play-list tab and /me page */}
       </>

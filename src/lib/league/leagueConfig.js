@@ -92,13 +92,13 @@ export const FANTASY_CATEGORIES = {
     dbFilter: ['Healing', 'Daily', 'Weekly'],
     scoringType: 'raw',
   },
-  bonus: {
-    key: 'bonus',
-    label: 'Bonus',
-    icon: '⭐',
-    color: '#E9A23B',
-    dbFilter: ['Bonus'],
-    scoringType: 'raw', // Raw SUM(points) + approved content submissions
+  tune: {
+    key: 'tune',
+    label: 'Tune',
+    icon: '☀️',
+    color: '#10b981',
+    dbFilter: ['Tune'],
+    scoringType: 'raw',
   },
 }
 

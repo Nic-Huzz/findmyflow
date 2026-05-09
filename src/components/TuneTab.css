@@ -1,0 +1,155 @@
+/**
+ * TuneTab.css
+ * Daily maintenance tab styles.
+ * Reuses ht- (healing tab) row styles from Challenge.css.
+ * New styles prefixed with tt-.
+ * Created: 2026-05-09
+ */
+
+/* === CONTAINER === */
+.tune-tab {
+  padding: 0 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* === SECTION === */
+.tt-section {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.tt-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.tt-section-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tt-section-icon {
+  font-size: 1.2rem;
+}
+
+.tt-section-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5e17eb;
+}
+
+.tt-section-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.tt-section-sub {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+/* === QUEST LIST === */
+.tt-quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* === INLINE STATE PICKER === */
+.tt-state-picker {
+  margin-top: 8px;
+  padding: 10px 0 4px;
+}
+
+.tt-state-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6c757d;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.tt-state-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.tt-state-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tt-state-btn:hover:not(:disabled) {
+  border-color: rgba(94, 23, 235, 0.3);
+}
+
+.tt-state-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tt-state-safe {
+  color: #10b981;
+}
+
+.tt-state-safe:hover:not(:disabled) {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.tt-state-vibe {
+  color: #E9A23B;
+}
+
+.tt-state-vibe:hover:not(:disabled) {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.04);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 380px) {
+  .tune-tab {
+    padding: 0 0.75rem 2rem;
+  }
+
+  .tt-section {
+    padding: 16px;
+  }
+
+  .tt-state-btn {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  .tt-state-btn {
+    transition-duration: 0.01ms !important;
+  }
+}

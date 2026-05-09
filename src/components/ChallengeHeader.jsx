@@ -24,9 +24,9 @@ const WEEK_TYPES = {
 
 // Lighter variants for category score text in solo mode
 const CATEGORY_TEXT_COLORS = {
+  tune: '#10b981',
   play_list: '#E9A23B',
-  healing: '#34d399',
-  bonus: '#93c5fd',
+  healing: '#8b5cf6',
 }
 
 function ChallengeHeader({
@@ -94,7 +94,7 @@ function ChallengeHeader({
   const animatedWeeklyPoints = useScoreAnimation({ pts: weeklyPoints })
 
   // Display only Healing, Play-list, Bonus (in that order)
-  const DISPLAY_KEYS = ['healing', 'play_list', 'bonus']
+  const DISPLAY_KEYS = ['tune', 'play_list', 'healing']
 
   // Build score data for display
   const bars = DISPLAY_KEYS.map(key => {

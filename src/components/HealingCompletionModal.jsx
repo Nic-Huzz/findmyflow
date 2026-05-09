@@ -8,15 +8,12 @@ import NervousSystemCheckin from './NervousSystemCheckin'
 import './GroanCompletionModal.css'
 
 export default function HealingCompletionModal({ quest, userId, onComplete, onClose }) {
-  const [phase, setPhase] = useState('before_checkin') // 'before_checkin' | 'after_checkin' | 'quest_input'
+  const [phase, setPhase] = useState('after_checkin') // 'after_checkin' | 'quest_input'
   const [textInput, setTextInput] = useState('')
 
-  // Nervous system state
-  const [beforeState, setBeforeState] = useState(null)
+  // Nervous system state (after only)
   const [afterState, setAfterState] = useState(null)
-  const [beforeArchetype, setBeforeArchetype] = useState(null)
   const [afterArchetype, setAfterArchetype] = useState(null)
-
 
   const handleQuestDone = (q, data) => {
     onComplete(q, data)
@@ -24,14 +21,14 @@ export default function HealingCompletionModal({ quest, userId, onComplete, onCl
   }
 
   const handleAfterComplete = async () => {
-    // Insert nervous system check-in
-    if (userId && beforeState) {
+    // Insert nervous system check-in (after-only, before_state = null)
+    if (userId && afterState) {
       try {
         await supabase.from('nervous_system_checkins').insert({
           user_id: userId,
-          before_state: beforeState,
+          before_state: null,
           after_state: afterState,
-          protective_archetype: beforeArchetype || afterArchetype,
+          protective_archetype: afterArchetype,
           checkin_type: 'healing',
           source_quest_id: quest.id || null,
         })
@@ -104,17 +101,17 @@ export default function HealingCompletionModal({ quest, userId, onComplete, onCl
       <div className="gcm-modal gcm-modal-wide" onClick={(e) => e.stopPropagation()}>
         <button className="gcm-close" onClick={onClose}>&times;</button>
 
-        {phase === 'before_checkin' && (
+        {phase === 'after_checkin' && (
           <>
-            <h2 className="gcm-title">{quest.name}</h2>
-            {quest.description && <p className="gcm-desc">{quest.description}</p>}
+            <h2 className="gcm-title">How are you feeling?</h2>
+            <p className="gcm-subtitle">{quest.name}</p>
             <NervousSystemCheckin
-              mode="before"
-              beforeState={beforeState}
-              onBeforeChange={setBeforeState}
-              protectiveArchetype={beforeArchetype}
-              onArchetypeChange={setBeforeArchetype}
-              onComplete={() => setPhase('after_checkin')}
+              mode="after"
+              afterState={afterState}
+              onAfterChange={setAfterState}
+              protectiveArchetype={afterArchetype}
+              onArchetypeChange={setAfterArchetype}
+              onComplete={handleAfterComplete}
             />
           </>
         )}
@@ -126,20 +123,6 @@ export default function HealingCompletionModal({ quest, userId, onComplete, onCl
             <div className="gcm-quest-input">
               {renderInput()}
             </div>
-          </>
-        )}
-
-        {phase === 'after_checkin' && (
-          <>
-            <h2 className="gcm-title">How are you feeling now?</h2>
-            <NervousSystemCheckin
-              mode="after"
-              afterState={afterState}
-              onAfterChange={setAfterState}
-              protectiveArchetype={afterArchetype}
-              onArchetypeChange={setAfterArchetype}
-              onComplete={handleAfterComplete}
-            />
           </>
         )}
       </div>

@@ -18,6 +18,9 @@ export const SCORING_CATEGORIES = {
   'Daily': 'healing',
   'Weekly': 'healing',
 
+  // Tune score (maps to healing RPC bucket — client-side separates display)
+  'Tune': 'healing',
+
   // Courage score
   'Groans': 'courage',
 

@@ -204,7 +204,7 @@
     },
     {
       "id": "session_with_huzz",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Reconnect",
       "frequency": "weekly",
       "name": "Session with Huzz",
@@ -246,8 +246,52 @@
       "archived_reason": "Superseded by stage-specific Stage Groan quests in Voices sub-tab - Jan 2025"
     },
     {
+      "id": "practice_cold_exposure",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Cold Exposure",
+      "description": "Even 30 seconds at end of shower. Trains activation tolerance with safety intact.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true
+    },
+    {
+      "id": "practice_voice_work",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Voice Work",
+      "description": "Humming, singing, sounding. Direct vagal stimulation, free, instant.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true
+    },
+    {
+      "id": "practice_sleep",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Sleep (7+ hrs)",
+      "description": "Vibe Rise is impossible on insufficient sleep. Recovery is the foundation.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true
+    },
+    {
+      "id": "practice_sunlight",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Morning Sunlight",
+      "description": "Circadian regulation, dopamine baseline. First 30 mins after waking.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true
+    },
+    {
       "id": "reconnect_morning_meditation",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Meditation",
@@ -258,7 +302,7 @@
     },
     {
       "id": "reconnect_morning_dance",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Rise & Vibe Dance",
@@ -269,7 +313,7 @@
     },
     {
       "id": "reconnect_morning_breathwork",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Breathwork",
@@ -280,7 +324,7 @@
     },
     {
       "id": "reconnect_self_identified",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Self-Identified Activity",
@@ -292,7 +336,7 @@
     },
     {
       "id": "reconnect_daily_prayer",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Daily Prayer",
@@ -305,7 +349,7 @@
     },
     {
       "id": "rest_nap",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Rest",
       "frequency": "daily",
       "name": "Nap",
@@ -316,7 +360,7 @@
     },
     {
       "id": "rest_massage",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Rest",
       "frequency": "daily",
       "name": "Massage",
@@ -327,7 +371,7 @@
     },
     {
       "id": "rest_sauna",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Rest",
       "frequency": "daily",
       "name": "Sauna",
@@ -338,7 +382,7 @@
     },
     {
       "id": "reconnect_weekly_task",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Reconnect",
       "frequency": "weekly",
       "name": "Weekly Self-Identified Task",
@@ -350,7 +394,7 @@
     },
     {
       "id": "reconnect_remove_negative",
-      "category": "Healing",
+      "category": "Tune",
       "type": "Reconnect",
       "frequency": "weekly",
       "name": "Environment Hygiene",

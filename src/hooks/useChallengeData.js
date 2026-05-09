@@ -44,7 +44,8 @@ const TAB_TO_CATEGORY = {
   'groans': 'Play-list',     // backward compat — Groans absorbed into Play-list
   'healing': 'Healing',
   'tracker': 'Play-list',    // backward compat — Tracker tab removed
-  'bonus': 'Bonus',
+  'tune': 'Tune',
+  'bonus': 'Tune',           // backward compat — Bonus archived, redirects to Tune
   'leaderboard': 'Leaderboard',
   'summary': 'GroansSummary',
   'healing-summary': 'HealingSummary'
@@ -114,7 +115,7 @@ export function useChallengeData() {
 
   // Sub-Tab State (for Healing and Bonus tabs)
   const [healingSubTab, setHealingSubTab] = useState('daily') // 'daily' | 'weekly'
-  const [bonusSubTab, setBonusSubTab] = useState('tasks') // 'tasks' | 'content'
+  // bonusSubTab archived — Bonus tab replaced by Tune
   const [playlistSubTab, setPlaylistSubTab] = useState('playlist') // 'flow-finder' | 'playlist' | 'play-profile'
 
   // User Archetypes (for personalized voice quests)
@@ -133,9 +134,9 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Level', 'Play-list', 'Healing', 'Bonus']
-  const lockedCategories = new Set(['Play-list']) // Coming soon tabs
-  const BONUS_PERCENTAGE = 5
+  const categories = ['Level', 'Tune', 'Play-list', 'Healing']
+  const lockedCategories = new Set([]) // All tabs unlocked
+  const BONUS_PERCENTAGE = 5 // kept for legacy tab completion bonus logic
 
   // ============================================
   // Data Loading Functions
@@ -1852,11 +1853,9 @@ export function useChallengeData() {
     projectStage,
     setProjectStage,
 
-    // Sub-Tabs (Healing and Bonus)
+    // Sub-Tabs
     healingSubTab,
     setHealingSubTab,
-    bonusSubTab,
-    setBonusSubTab,
     playlistSubTab,
     setPlaylistSubTab,
 
