@@ -1,0 +1,129 @@
+/* DailyCheckin — scoped under .daily-checkin- prefix */
+
+.daily-checkin-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: daily-checkin-fade-in 0.25s ease;
+}
+
+@keyframes daily-checkin-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.daily-checkin-card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px 24px 24px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+  animation: daily-checkin-slide-up 0.3s ease;
+}
+
+@keyframes daily-checkin-slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.daily-checkin-skip {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #adb5bd;
+  cursor: pointer;
+}
+
+.daily-checkin-emoji {
+  font-size: 36px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.daily-checkin-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 4px;
+}
+
+.daily-checkin-sub {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 20px;
+}
+
+.daily-checkin-states {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.daily-checkin-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 2px solid #eef0f3;
+  border-radius: 16px;
+  background: #f8f8fa;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.daily-checkin-btn:hover {
+  border-color: #d1d5db;
+}
+
+.daily-checkin-btn.selected {
+  background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  border-color: #5e17eb;
+  transform: scale(0.97);
+}
+
+.daily-checkin-btn.daily-checkin-vibe-rise.selected {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #E9A23B;
+  box-shadow: 0 0 16px rgba(233, 162, 59, 0.25);
+}
+
+.daily-checkin-btn:disabled {
+  cursor: default;
+}
+
+.daily-checkin-btn-emoji {
+  font-size: 26px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.daily-checkin-btn-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.daily-checkin-btn-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.daily-checkin-btn-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}

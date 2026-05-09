@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import useNervousSystemMap from '../hooks/useNervousSystemMap'
+import { NERVOUS_SYSTEM_STATES } from '../lib/nervousSystemConstants'
 import './NervousSystemMap.css'
 
 const ARCHETYPE_ICONS = {
@@ -12,8 +13,7 @@ const ARCHETYPE_ICONS = {
   unsure: '🤷',
 }
 
-const STATE_EMOJI = { vibe_rise: '⚡', ventral: '😊', sympathetic: '😬', dorsal: '😶' }
-const STATE_LABEL = { vibe_rise: 'Vibe Rise', ventral: 'Ventral', sympathetic: 'Sympathetic', dorsal: 'Dorsal' }
+const STATE_MAP = Object.fromEntries(NERVOUS_SYSTEM_STATES.map(s => [s.id, s]))
 
 export default function NervousSystemMap() {
   const navigate = useNavigate()
@@ -59,9 +59,9 @@ export default function NervousSystemMap() {
         <div className="nsm-state-quad">
           {['vibe_rise', 'ventral', 'sympathetic', 'dorsal'].map((s) => (
             <div key={s} className={`nsm-state-card ${dominant === s ? 'active' : ''} ${s === 'vibe_rise' ? 'nsm-vibe-rise-card' : ''}`}>
-              <span className="nsm-sc-emoji">{STATE_EMOJI[s]}</span>
+              <span className="nsm-sc-emoji">{STATE_MAP[s].emoji}</span>
               <span className="nsm-sc-pct">{overall[s]}%</span>
-              <span className="nsm-sc-label">{STATE_LABEL[s]}</span>
+              <span className="nsm-sc-label">{STATE_MAP[s].name}</span>
             </div>
           ))}
         </div>
@@ -80,10 +80,9 @@ export default function NervousSystemMap() {
         </div>
 
         <div className="nsm-legend">
-          <span className="nsm-legend-item"><span className="nsm-dot nsm-vibe-rise" /> Vibe Rise</span>
-          <span className="nsm-legend-item"><span className="nsm-dot nsm-ventral" /> Ventral</span>
-          <span className="nsm-legend-item"><span className="nsm-dot nsm-sympathetic" /> Sympathetic</span>
-          <span className="nsm-legend-item"><span className="nsm-dot nsm-dorsal" /> Dorsal</span>
+          {['vibe_rise', 'ventral', 'sympathetic', 'dorsal'].map((s) => (
+            <span key={s} className="nsm-legend-item"><span className={`nsm-dot nsm-${s.replace('_', '-')}`} /> {STATE_MAP[s].name}</span>
+          ))}
         </div>
 
         {weeklyTimeline.length > 1 && (
