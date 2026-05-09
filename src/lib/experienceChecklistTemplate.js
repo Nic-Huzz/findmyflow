@@ -203,4 +203,16 @@ export function buildChecklistRows(experienceId, userId, experienceType) {
  * Keys for checklist items that support text notes (shown as inline text input).
  * Only these items get a notes textarea in ExperienceDetail.
  */
-export const NOTABLE_KEYS = ['one_line_promise', 'booking_page', 'run_sheet', 'energy_arc', 'opening_ritual']
+export const NOTABLE_KEYS = [
+  'one_line_promise', 'booking_page',
+  // Workshop / shared
+  'run_sheet', 'energy_arc', 'opening_ritual',
+  // Retreat
+  'multi_session_arc', 'opening_ceremony', 'closing_ceremony',
+  // Circle
+  'container_agreements', 'sharing_protocol', 'prompt_questions',
+  // 1:1
+  'session_script', 'calibration_notes', 'integration_homework',
+  // Course
+  'module_structure', 'drip_schedule',
+]

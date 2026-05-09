@@ -27,6 +27,7 @@ export default function ExperienceCreate() {
   const [previousExperience, setPreviousExperience] = useState(null)
   const [runAgainSource, setRunAgainSource] = useState(null)
   const [prevStats, setPrevStats] = useState(null)
+  const [experienceType, setExperienceType] = useState('workshop')
   const [validationError, setValidationError] = useState('')
 
   useEffect(() => {
@@ -72,6 +73,7 @@ export default function ExperienceCreate() {
       setRunAgainSource(src)
       setName(src.name || '')
       if (src.ticket_price != null) setTicketPrice(String(src.ticket_price))
+      if (src.experience_type) setExperienceType(src.experience_type)
 
       // Fetch previous stats
       const [{ count: attendeeCount }, { data: costsData }] = await Promise.all([
@@ -106,7 +108,7 @@ export default function ExperienceCreate() {
         experience_date: dateStr || null,
         previous_experience_id: runAgainFromId || null,
         ticket_price: ticketPrice ? parseFloat(ticketPrice) : null,
-        experience_type: runAgainSource?.experience_type || null,
+        experience_type: experienceType,
         runAgainFromId: runAgainFromId || null,
       })
       hapticSuccess()
@@ -230,6 +232,22 @@ export default function ExperienceCreate() {
                 This date is in the past
               </span>
             )}
+          </label>
+
+          <label className="exp-field">
+            <span className="exp-field-label">Experience type</span>
+            <select
+              value={experienceType}
+              onChange={(e) => setExperienceType(e.target.value)}
+            >
+              <option value="workshop">Workshop</option>
+              <option value="retreat">Retreat</option>
+              <option value="circle">Circle / Gathering</option>
+              <option value="online">Online Session</option>
+              <option value="one_on_one">1:1 Session</option>
+              <option value="popup">Pop-up Event</option>
+              <option value="course">Course</option>
+            </select>
           </label>
 
           <label className="exp-field">
