@@ -11,8 +11,15 @@ import './GroanCompletionModal.css'
 
 const PLAY_LIST_POINTS = 7
 
+// Wahoo classification → scary/wahoo score mapping
+const WAHOO_SCORES = {
+  wahoo: { scary: 8, wahoo: 9 },       // Hell yes — edge crossing
+  vibe_rise: { scary: 3, wahoo: 8 },   // Felt alive — capacity grew
+  routine: { scary: 3, wahoo: 3 },      // Just did it — routine
+}
+
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
-  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'three_percent' | 'share'
+  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'three_percent' | 'share'
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
@@ -27,6 +34,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [beforeState, setBeforeState] = useState(null)
   const [afterState, setAfterState] = useState(null)
   const [protectiveArchetype, setProtectiveArchetype] = useState(null)
+
+  // Wahoo classification
+  const [wahooClassification, setWahooClassification] = useState(null) // 'wahoo' | 'vibe_rise' | 'routine'
 
   // 3% reflection
   const [reflection, setReflection] = useState('')
@@ -49,14 +59,21 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     setSaving(true)
     setError(null)
     try {
-      // 1. Mark groan challenge as completed
+      // 1. Mark groan challenge as completed with user-reported scores
       const reflectionText = reflection
+      const scores = WAHOO_SCORES[wahooClassification] || WAHOO_SCORES.routine
       const { error: groanError } = await completeGroanChallenge(challenge.id, {
         reflectionText,
-        scaryScoreAfter: null,
-        wahooScoreAfter: null,
+        scaryScoreAfter: scores.scary,
+        wahooScoreAfter: scores.wahoo,
       })
       if (groanError) throw groanError
+
+      // Update scary/wahoo scores on the challenge record (user self-report replaces AI prediction)
+      await supabase
+        .from('groan_challenges')
+        .update({ scary_score: scores.scary, wahoo_score: scores.wahoo })
+        .eq('id', challenge.id)
 
       // 2. Insert quest_completions record
       const questId = `play_list_challenge_${challenge.id}`
@@ -156,7 +173,13 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('Error updating level courage progress:', e)
       }
 
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
+      // Celebration based on classification
+      if (wahooClassification === 'wahoo') {
+        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#E9A23B', '#f5c55a', '#fbbf24'] })
+        setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { y: 0.5 }, colors: ['#E9A23B', '#f5c55a'] }), 300)
+      } else {
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } })
+      }
       setStep('share')
     } catch (err) {
       console.error('Error completing challenge:', err)
@@ -193,8 +216,47 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               onAfterChange={setAfterState}
               protectiveArchetype={protectiveArchetype}
               onArchetypeChange={setProtectiveArchetype}
-              onComplete={() => setStep('three_percent')}
+              onComplete={() => setStep('wahoo_check')}
             />
+          </>
+        )}
+
+        {step === 'wahoo_check' && (
+          <>
+            <h2 className="gcm-title">Was that a Wahoo?</h2>
+            <div className="gcm-wahoo-options">
+              <button
+                className={`gcm-wahoo-btn gcm-wahoo-hell-yes ${wahooClassification === 'wahoo' ? 'selected' : ''}`}
+                onClick={() => setWahooClassification('wahoo')}
+              >
+                <span className="gcm-wahoo-emoji">🔥</span>
+                <span className="gcm-wahoo-label">Hell yes</span>
+                <span className="gcm-wahoo-desc">Scared AND alive</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn gcm-wahoo-alive ${wahooClassification === 'vibe_rise' ? 'selected' : ''}`}
+                onClick={() => setWahooClassification('vibe_rise')}
+              >
+                <span className="gcm-wahoo-emoji">⚡</span>
+                <span className="gcm-wahoo-label">Felt alive but not scary</span>
+                <span className="gcm-wahoo-desc">This is becoming your baseline</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn gcm-wahoo-routine ${wahooClassification === 'routine' ? 'selected' : ''}`}
+                onClick={() => setWahooClassification('routine')}
+              >
+                <span className="gcm-wahoo-emoji">😐</span>
+                <span className="gcm-wahoo-label">Just did it</span>
+                <span className="gcm-wahoo-desc">Neither scary nor alive</span>
+              </button>
+            </div>
+            <button
+              className="gcm-gold-btn"
+              disabled={!wahooClassification}
+              onClick={() => setStep('three_percent')}
+            >
+              Continue
+            </button>
           </>
         )}
 

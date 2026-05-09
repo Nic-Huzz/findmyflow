@@ -43,6 +43,7 @@ import ChallengeIntro from './components/ChallengeIntro'
 import DailyCheckin from './components/DailyCheckin'
 import LevelTab from './components/level/LevelTab'
 import { getLevelConfig } from './components/level/LevelConfig'
+import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
 import { preloadChallengeFlows } from './lib/preloadRoutes'
 import { useSubscription } from './hooks/useSubscription'
@@ -196,13 +197,15 @@ function Challenge() {
 
   useEffect(() => {
     if (!user?.id) return
-    const today = new Date().toISOString().slice(0, 10)
+    // Use local date to avoid timezone issues (e.g. Bali UTC+8)
+    const now = new Date()
+    const todayLocal = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
     supabase
       .from('nervous_system_checkins')
       .select('id')
       .eq('user_id', user.id)
       .eq('checkin_type', 'daily')
-      .gte('created_at', today)
+      .gte('created_at', todayLocal)
       .limit(1)
       .then(({ data }) => {
         if (!data?.length) setShowDailyCheckin(true)
@@ -238,6 +241,9 @@ function Challenge() {
   // Healing modal quest (compact row → popup completion)
   const [healingModalQuest, setHealingModalQuest] = useState(null)
 
+  // Wahoo count this week (challenges completed with scary >= 7 AND wahoo >= 7)
+  const [wahooCountThisWeek, setWahooCountThisWeek] = useState(0)
+
   // Dynamic level detection
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
@@ -269,6 +275,22 @@ function Challenge() {
         }
       })
   }, [user?.id])
+
+  // Wahoo count: completed challenges this week with user-reported high scary + wahoo
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('groan_challenges')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('status', 'completed')
+      .gte('scary_score', 7)
+      .gte('wahoo_score', 7)
+      .gte('completed_at', getWeekStartLocal())
+      .then(({ data }) => {
+        setWahooCountThisWeek(data?.length || 0)
+      })
+  }, [user?.id, progress]) // re-fetch when progress changes (quest completed)
 
   // Tabs unlock after first "Plan Your Week" is confirmed
   const [hasEverPlannedWeek, setHasEverPlannedWeek] = useState(false)
@@ -1715,7 +1737,7 @@ function Challenge() {
         matchupLoading={matchupLoading}
         totalXP={progress?.total_points || 0}
         currentJourneyLevel={currentJourneyLevel}
-        wahooCount={Math.floor((categoryScores?.play_list || 0) / 7)}
+        wahooCount={wahooCountThisWeek}
       />
 
       {/* W/L flip toast */}
