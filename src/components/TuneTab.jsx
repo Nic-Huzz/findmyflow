@@ -22,6 +22,15 @@ import './TuneTab.css'
 // Quest IDs that render inline (Practice + Rest checkboxes)
 const INLINE_TYPES = ['Practice', 'Rest']
 
+// Drain categories from the ecosystem doc
+const DRAIN_CATEGORIES = [
+  { id: 'drain_work', label: 'Work', icon: '💼' },
+  { id: 'drain_people', label: 'People', icon: '👤' },
+  { id: 'drain_environment', label: 'Environment', icon: '🏠' },
+  { id: 'drain_content', label: 'Content', icon: '📱' },
+  { id: 'drain_commitment', label: 'Commitment', icon: '📋' },
+]
+
 // Daily practice IDs to show in Section 1 (includes breathwork from Reconnect)
 const DAILY_PRACTICE_IDS = [
   'reconnect_morning_breathwork',
@@ -40,6 +49,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   const [statePickerQuestId, setStatePickerQuestId] = useState(null) // which quest shows inline state picker
   const [healingModalQuest, setHealingModalQuest] = useState(null) // for Reconnect multi-step
 
+  // Drain logging state
+  const [showDrainForm, setShowDrainForm] = useState(false)
+  const [drainCategory, setDrainCategory] = useState(null)
+  const [drainNote, setDrainNote] = useState('')
+  const [drainState, setDrainState] = useState(null) // 'sympathetic' | 'dorsal'
+  const [savingDrain, setSavingDrain] = useState(false)
+  const [recentDrains, setRecentDrains] = useState([])
+
   // Load quests from static JSON + completions from DB
   useEffect(() => {
     if (!userId) return
@@ -52,10 +69,19 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         .eq('user_id', userId)
         .in('quest_category', ['Tune', 'Healing']) // include historical Healing completions for Reconnect/Rest
         .gte('completed_at', getWeekStartLocal()),
-    ]).then(([questData, { data: completionData }]) => {
+      // Load this week's drains
+      supabase
+        .from('nervous_system_checkins')
+        .select('source_quest_id, after_state, drain_note, created_at')
+        .eq('user_id', userId)
+        .eq('checkin_type', 'drain')
+        .gte('created_at', getWeekStartLocal())
+        .order('created_at', { ascending: false }),
+    ]).then(([questData, { data: completionData }, { data: drainData }]) => {
       const tuneQuests = (questData.quests || []).filter(q => q.category === 'Tune' && !q.archived)
       setAllQuests(tuneQuests)
       setCompletions(completionData || [])
+      setRecentDrains(drainData || [])
       setLoading(false)
     }).catch(err => {
       console.error('TuneTab load error:', err)
@@ -182,6 +208,48 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         if (rows) setCompletions(rows)
       })
     onRefreshPoints?.()
+  }
+
+  // Save a drain log
+  const handleSaveDrain = async () => {
+    if (!drainCategory || !drainState || savingDrain) return
+    setSavingDrain(true)
+
+    try {
+      const { error } = await supabase.from('nervous_system_checkins').insert({
+        user_id: userId,
+        before_state: null,
+        after_state: drainState,
+        checkin_type: 'drain',
+        source_quest_id: drainCategory,
+        drain_note: drainNote.trim() || null,
+      })
+
+      if (error) throw error
+
+      hapticSuccess()
+      // Reset form
+      setDrainCategory(null)
+      setDrainNote('')
+      setDrainState(null)
+      setShowDrainForm(false)
+
+      // Refresh recent drains
+      const { data } = await supabase
+        .from('nervous_system_checkins')
+        .select('source_quest_id, after_state, drain_note, created_at')
+        .eq('user_id', userId)
+        .eq('checkin_type', 'drain')
+        .gte('created_at', getWeekStartLocal())
+        .order('created_at', { ascending: false })
+      if (data) setRecentDrains(data)
+
+      onRefreshPoints?.()
+    } catch (err) {
+      console.error('Drain save error:', err)
+    } finally {
+      setSavingDrain(false)
+    }
   }
 
   // Render a quest row (reuses healing tab ht- pattern)
@@ -313,6 +381,114 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           </div>
         </div>
       )}
+
+      {/* Section 4: Drains */}
+      <div className="tt-section">
+        <div className="tt-section-header">
+          <div className="tt-section-header-left">
+            <span className="tt-section-icon">⚡</span>
+            <span className="tt-section-title">Drains</span>
+          </div>
+          {recentDrains.length > 0 && (
+            <span className="tt-section-count tt-drain-count">{recentDrains.length} this week</span>
+          )}
+        </div>
+
+        {!showDrainForm ? (
+          <button
+            className="tt-drain-log-btn"
+            onClick={() => { hapticLight(); setShowDrainForm(true) }}
+          >
+            + Log a drain
+          </button>
+        ) : (
+          <div className="tt-drain-form">
+            {/* Step 1: Category */}
+            <div className="tt-drain-categories">
+              {DRAIN_CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  className={`tt-drain-cat-btn ${drainCategory === cat.id ? 'selected' : ''}`}
+                  onClick={() => { hapticLight(); setDrainCategory(cat.id) }}
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Step 2: Note (optional) */}
+            {drainCategory && (
+              <input
+                type="text"
+                className="tt-drain-note"
+                placeholder="What drained you? (optional)"
+                value={drainNote}
+                onChange={e => setDrainNote(e.target.value)}
+              />
+            )}
+
+            {/* Step 3: State check */}
+            {drainCategory && (
+              <div className="tt-drain-state">
+                <span className="tt-state-label">How did it leave you?</span>
+                <div className="tt-state-buttons">
+                  <button
+                    className={`tt-state-btn tt-state-activated ${drainState === 'sympathetic' ? 'selected' : ''}`}
+                    onClick={() => setDrainState('sympathetic')}
+                  >
+                    😬 Activated
+                  </button>
+                  <button
+                    className={`tt-state-btn tt-state-shutdown ${drainState === 'dorsal' ? 'selected' : ''}`}
+                    onClick={() => setDrainState('dorsal')}
+                  >
+                    😶 Shutdown
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="tt-drain-actions">
+              <button
+                className="tt-drain-save"
+                disabled={!drainCategory || !drainState || savingDrain}
+                onClick={handleSaveDrain}
+              >
+                {savingDrain ? 'Saving...' : 'Log Drain'}
+              </button>
+              <button
+                className="tt-drain-cancel"
+                onClick={() => { setShowDrainForm(false); setDrainCategory(null); setDrainNote(''); setDrainState(null) }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Recent drains list */}
+        {recentDrains.length > 0 && (
+          <div className="tt-drain-list">
+            {recentDrains.slice(0, 5).map((drain, i) => {
+              const cat = DRAIN_CATEGORIES.find(c => c.id === drain.source_quest_id)
+              return (
+                <div key={i} className="tt-drain-item">
+                  <span className="tt-drain-item-icon">{cat?.icon || '⚡'}</span>
+                  <div className="tt-drain-item-body">
+                    <span className="tt-drain-item-cat">{cat?.label || 'Drain'}</span>
+                    {drain.drain_note && <span className="tt-drain-item-note">{drain.drain_note}</span>}
+                  </div>
+                  <span className={`tt-drain-item-state ${drain.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
+                    {drain.after_state === 'dorsal' ? '😶' : '😬'}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Reconnect Completion Modal */}
       {healingModalQuest && (

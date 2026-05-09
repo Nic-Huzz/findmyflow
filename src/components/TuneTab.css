@@ -147,9 +147,243 @@
   }
 }
 
+/* === DRAIN SECTION === */
+.tt-drain-count {
+  color: #f97316;
+}
+
+.tt-drain-log-btn {
+  width: 100%;
+  padding: 12px;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #6c757d;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.tt-drain-log-btn:hover {
+  border-color: #f97316;
+  color: #f97316;
+  background: rgba(249, 115, 22, 0.04);
+}
+
+/* Drain form */
+.tt-drain-form {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tt-drain-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tt-drain-cat-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6c757d;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.tt-drain-cat-btn:hover {
+  border-color: #f97316;
+}
+
+.tt-drain-cat-btn.selected {
+  border-color: #f97316;
+  background: rgba(249, 115, 22, 0.06);
+  color: #f97316;
+}
+
+.tt-drain-note {
+  width: 100%;
+  padding: 12px 14px;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  color: #1a1a2e;
+  transition: all 0.2s;
+}
+
+.tt-drain-note:focus {
+  outline: none;
+  border-color: #f97316;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+}
+
+.tt-drain-note::placeholder {
+  color: #adb5bd;
+}
+
+.tt-drain-state {
+  margin-top: 4px;
+}
+
+.tt-state-activated {
+  color: #f97316;
+}
+
+.tt-state-activated:hover:not(:disabled),
+.tt-state-activated.selected {
+  border-color: #f97316;
+  background: rgba(249, 115, 22, 0.04);
+}
+
+.tt-state-shutdown {
+  color: #ef4444;
+}
+
+.tt-state-shutdown:hover:not(:disabled),
+.tt-state-shutdown.selected {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.tt-drain-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.tt-drain-save {
+  flex: 1;
+  padding: 12px;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.tt-drain-save:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.tt-drain-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.tt-drain-cancel {
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Drain list */
+.tt-drain-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tt-drain-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #fafafa;
+  border-radius: 10px;
+}
+
+.tt-drain-item-icon {
+  font-size: 1.1rem;
+}
+
+.tt-drain-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.tt-drain-item-cat {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+  display: block;
+}
+
+.tt-drain-item-note {
+  font-size: 12px;
+  color: #6c757d;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tt-drain-item-state {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.tt-activated { color: #f97316; }
+.tt-shutdown { color: #ef4444; }
+
+/* === RESPONSIVE === */
+@media (max-width: 380px) {
+  .tune-tab {
+    padding: 0 0.75rem 2rem;
+  }
+
+  .tt-section {
+    padding: 16px;
+  }
+
+  .tt-state-btn {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .tt-drain-categories {
+    gap: 6px;
+  }
+
+  .tt-drain-cat-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
 /* === REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
-  .tt-state-btn {
+  .tt-state-btn,
+  .tt-drain-log-btn,
+  .tt-drain-cat-btn,
+  .tt-drain-save,
+  .tt-drain-note {
     transition-duration: 0.01ms !important;
   }
 }
