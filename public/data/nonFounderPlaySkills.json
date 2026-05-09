@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "totalProfiles": 227,
+    "totalProfiles": 235,
     "totalTags": 787,
     "totalAntiTags": 44,
     "generatedAt": "2026-04-07",
@@ -8081,6 +8081,339 @@
           "category": "creating",
           "skill": "Make something that did not exist yesterday",
           "evidence": "Positions himself as a channel for ancient Vedic wisdom, not an original creator. Authority comes from transmission, not innovation."
+        }
+      ]
+    },
+    {
+      "name": "Vishen Lakhiani",
+      "dominantCategories": [
+        "leading",
+        "teaching",
+        "building"
+      ],
+      "playSkills": [
+        {
+          "category": "leading",
+          "skill": "Build a stage for other people's genius",
+          "confidence": "high",
+          "evidence": "Curated 100+ Quests from world-class teachers on Mindvalley's platform, reaching 20M+ students globally"
+        },
+        {
+          "category": "teaching",
+          "skill": "Turn ancient practices into modern cohorts",
+          "confidence": "high",
+          "evidence": "Created the Quest format, 35-day structured learning journeys that made meditation and consciousness work feel like a course"
+        },
+        {
+          "category": "building",
+          "skill": "Bootstrap a movement without outside money",
+          "confidence": "high",
+          "evidence": "Grew Mindvalley from $700 to $100M revenue with zero venture capital over two decades"
+        },
+        {
+          "category": "performing",
+          "skill": "Command a room of 10,000",
+          "confidence": "high",
+          "evidence": "Keynote speaker at major stages worldwide, hosts Mindvalley events with thousands of live attendees"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "coaching",
+          "skill": "Work deeply with individual clients",
+          "evidence": "Operates at platform scale, not 1:1"
+        }
+      ]
+    },
+    {
+      "name": "Michael Singer",
+      "dominantCategories": [
+        "teaching",
+        "storytelling"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Reduce complex theory to one question",
+          "confidence": "high",
+          "evidence": "Distilled decades of meditation into 'Who is the one noticing?', reaching 5M+ readers"
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turn your life into the textbook",
+          "confidence": "high",
+          "evidence": "The Surrender Experiment used his accidental billion-dollar career as the case study for spiritual surrender"
+        },
+        {
+          "category": "coaching",
+          "skill": "Hold space for decades without burning out",
+          "confidence": "high",
+          "evidence": "Has led free weekly meditation at Temple of the Universe since 1975, over 50 years"
+        },
+        {
+          "category": "teaching",
+          "skill": "Make sitting still feel like the bravest act",
+          "confidence": "high",
+          "evidence": "Convinced millions that doing nothing with their thoughts was harder and more rewarding than any achievement"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "performing",
+          "skill": "Command a room of 10,000",
+          "evidence": "Avoids large-scale performances and media. Teaches in small settings by design."
+        }
+      ]
+    },
+    {
+      "name": "Michael Beckwith",
+      "dominantCategories": [
+        "coaching",
+        "performing",
+        "leading"
+      ],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Channel spiritual energy on stage",
+          "confidence": "high",
+          "evidence": "Delivers weekly sermons to 9,000+ congregation at Agape and speaks at global events including TED"
+        },
+        {
+          "category": "coaching",
+          "skill": "Codify a practice into a teachable method",
+          "confidence": "high",
+          "evidence": "Created the Life Visioning Process, now taught on Mindvalley and through Agape's Practitioner Programme"
+        },
+        {
+          "category": "leading",
+          "skill": "Build a congregation from nothing",
+          "confidence": "high",
+          "evidence": "Grew Agape from a living room prayer group in 1986 to 9,000+ weekly attendees"
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Co-founded the Association for Global New Thought, co-chaired the Season for Nonviolence"
+        },
+        {
+          "category": "teaching",
+          "skill": "Translate ancient wisdom for modern ears",
+          "confidence": "high",
+          "evidence": "Three Nautilus Award-winning books bridging Eastern and Western spiritual traditions"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "building",
+          "skill": "Build technology or digital products",
+          "evidence": "Does not build tech. Licenses his method to platforms like Mindvalley."
+        }
+      ]
+    },
+    {
+      "name": "Radha Agrawal",
+      "dominantCategories": [
+        "connecting",
+        "creating",
+        "leading"
+      ],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Turn strangers into a tribe before breakfast",
+          "confidence": "high",
+          "evidence": "Daybreaker morning dance events have brought together 1M+ people across 30+ cities on seven continents"
+        },
+        {
+          "category": "creating",
+          "skill": "Design an experience so good people license it",
+          "confidence": "high",
+          "evidence": "Daybreaker's format was licensed city-by-city to local hosts, scaling globally"
+        },
+        {
+          "category": "leading",
+          "skill": "Rally a group behind an idea",
+          "confidence": "high",
+          "evidence": "Led sold-out Oprah Winfrey arena tour, moving 155,000 people through dance and motivation"
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turn personal crisis into collective awakening",
+          "confidence": "high",
+          "evidence": "Lost Super Sprowtz to a hostile takeover, then channelled the grief into founding Daybreaker and writing Belong"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "teaching",
+          "skill": "Teach through courses or certifications",
+          "evidence": "Does not teach through curricula. Builds experiences, not courses."
+        }
+      ]
+    },
+    {
+      "name": "Meghan Pappenheim",
+      "dominantCategories": [
+        "connecting",
+        "building",
+        "leading"
+      ],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Grew The Yoga Barn from 4 classes a day in 2007 to 25+ daily classes"
+        },
+        {
+          "category": "building",
+          "skill": "Build the village before the festival",
+          "confidence": "high",
+          "evidence": "Created BaliSpirit directory, Yoga Barn, cafes, and galleries before launching the festival"
+        },
+        {
+          "category": "leading",
+          "skill": "Rally a group behind an idea",
+          "confidence": "high",
+          "evidence": "Pulled together the first BaliSpirit Festival in just three months"
+        },
+        {
+          "category": "connecting",
+          "skill": "Turn a place into a pilgrimage",
+          "confidence": "high",
+          "evidence": "Made Ubud a global wellness destination drawing 7,000 festival attendees from 50+ countries"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "performing",
+          "skill": "Command a room of 10,000",
+          "evidence": "Builds platforms for others to shine, not herself. She calls herself 'Chief Manifestation Officer,' not headliner."
+        }
+      ]
+    },
+    {
+      "name": "Jeff Krasno",
+      "dominantCategories": [
+        "building",
+        "connecting",
+        "leading"
+      ],
+      "playSkills": [
+        {
+          "category": "building",
+          "skill": "Cross-pollinate two industries into one",
+          "confidence": "high",
+          "evidence": "Combined music event production with yoga to create Wanderlust, 68 events in 20 countries"
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Writes Commusings, a personal weekly essay, to over 1 million subscribers every Sunday"
+        },
+        {
+          "category": "leading",
+          "skill": "Know when to exit and rebuild",
+          "confidence": "high",
+          "evidence": "Left Wanderlust at its peak in 2018 to co-found Commune, pivoting from festivals to daily digital practice"
+        },
+        {
+          "category": "connecting",
+          "skill": "Turn curiosity into consistent content",
+          "confidence": "high",
+          "evidence": "Hosts the Commune podcast weekly, interviewing scientists, spiritual leaders, and storytellers"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "coaching",
+          "skill": "Coach someone through a block",
+          "evidence": "Krasno is a producer and platform builder, not a practitioner. He curates experts to teach."
+        }
+      ]
+    },
+    {
+      "name": "Gabrielle Roth",
+      "dominantCategories": [
+        "performing",
+        "creating",
+        "teaching"
+      ],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Teach through the body, not the mind",
+          "confidence": "high",
+          "evidence": "Created 5Rhythms as a body-first path to stillness, now practiced in 50+ countries"
+        },
+        {
+          "category": "creating",
+          "skill": "Codify a practice into a teachable method",
+          "confidence": "high",
+          "evidence": "Mapped free-form dance onto a repeatable 5-stage Wave, enabling a 2-year certification producing 300+ teachers"
+        },
+        {
+          "category": "teaching",
+          "skill": "Certify others to carry your method",
+          "confidence": "high",
+          "evidence": "Built rigorous teacher training selecting 40-50 dancers per cycle, growing to 396 certified teachers"
+        },
+        {
+          "category": "performing",
+          "skill": "Turn personal crisis into collective awakening",
+          "confidence": "high",
+          "evidence": "Transformed a career-ending knee injury into the origin of 5Rhythms"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "teaching",
+          "skill": "Break down a hard idea so anyone gets it",
+          "evidence": "Deliberately refused to intellectualise her method. She taught through sweat, not explanation."
+        }
+      ]
+    },
+    {
+      "name": "Larry Harvey",
+      "dominantCategories": [
+        "leading",
+        "designing",
+        "connecting"
+      ],
+      "playSkills": [
+        {
+          "category": "leading",
+          "skill": "Write the rules so the culture can travel",
+          "confidence": "high",
+          "evidence": "Authored the 10 Principles in 2004, enabling 235+ regional contacts to replicate the culture across 34 countries"
+        },
+        {
+          "category": "designing",
+          "skill": "Design a container, not a programme",
+          "confidence": "high",
+          "evidence": "Created Black Rock City as a blank canvas where 80,000 participants build their own experience"
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Burned the Man every single year from 1986 until his death in 2018, 32 consecutive years"
+        },
+        {
+          "category": "leading",
+          "skill": "Build something that outlives you",
+          "confidence": "high",
+          "evidence": "Transitioned Burning Man to nonprofit in 2013, designing for a hundred-year movement"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "teaching",
+          "skill": "Codify a practice into a teachable method",
+          "evidence": "Deliberately refused to create curriculum or training. The 10 Principles are values, not instructions."
         }
       ]
     }

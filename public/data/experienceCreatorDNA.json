@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "generatedAt": "2026-04-21",
-    "totalProfiles": 227,
+    "totalProfiles": 235,
     "sliders": {
       "workRhythm": {
         "min": 1,
@@ -135,7 +135,7 @@
     },
     {
       "name": "Gabor Mate",
-      "experienceType": "retreat",
+      "experienceType": "certification",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 4,
@@ -165,7 +165,7 @@
     },
     {
       "name": "Brené Brown",
-      "experienceType": "certification",
+      "experienceType": "book_newsletter",
       "workRhythm": 2,
       "fuelType": 1,
       "knowledgeStyle": 3,
@@ -1967,7 +1967,7 @@
     },
     {
       "name": "Eckhart Tolle",
-      "experienceType": "retreat",
+      "experienceType": "book_newsletter",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 5,
@@ -1977,7 +1977,7 @@
     },
     {
       "name": "Deepak Chopra",
-      "experienceType": "retreat",
+      "experienceType": "certification",
       "workRhythm": 4,
       "fuelType": 3,
       "knowledgeStyle": 3,
@@ -1997,7 +1997,7 @@
     },
     {
       "name": "Sam Harris",
-      "experienceType": "membership",
+      "experienceType": "book_newsletter",
       "workRhythm": 2,
       "fuelType": 2,
       "knowledgeStyle": 1,
@@ -2037,7 +2037,7 @@
     },
     {
       "name": "Aubrey Marcus",
-      "experienceType": "immersive",
+      "experienceType": "cohort",
       "workRhythm": 4,
       "fuelType": 4,
       "knowledgeStyle": 3,
@@ -2114,6 +2114,86 @@
       "impactStyle": 5,
       "growthMode": 5,
       "confidence": 92
+    },
+    {
+      "name": "Vishen Lakhiani",
+      "experienceType": "cohort",
+      "workRhythm": 4,
+      "fuelType": 3,
+      "knowledgeStyle": 4,
+      "impactStyle": 5,
+      "growthMode": 5,
+      "confidence": 88
+    },
+    {
+      "name": "Michael Singer",
+      "experienceType": "book_newsletter",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "knowledgeStyle": 4,
+      "impactStyle": 2,
+      "growthMode": 1,
+      "confidence": 90
+    },
+    {
+      "name": "Michael Beckwith",
+      "experienceType": "live_events",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "knowledgeStyle": 5,
+      "impactStyle": 4,
+      "growthMode": 3,
+      "confidence": 87
+    },
+    {
+      "name": "Radha Agrawal",
+      "experienceType": "live_events",
+      "workRhythm": 4,
+      "fuelType": 3,
+      "knowledgeStyle": 5,
+      "impactStyle": 4,
+      "growthMode": 4,
+      "confidence": 85
+    },
+    {
+      "name": "Meghan Pappenheim",
+      "experienceType": "live_events",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "knowledgeStyle": 4,
+      "impactStyle": 4,
+      "growthMode": 4,
+      "confidence": 82
+    },
+    {
+      "name": "Jeff Krasno",
+      "experienceType": "live_events",
+      "workRhythm": 4,
+      "fuelType": 1,
+      "knowledgeStyle": 3,
+      "impactStyle": 4,
+      "growthMode": 5,
+      "confidence": 85
+    },
+    {
+      "name": "Gabrielle Roth",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "knowledgeStyle": 5,
+      "impactStyle": 3,
+      "growthMode": 2,
+      "confidence": 90
+    },
+    {
+      "name": "Larry Harvey",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "knowledgeStyle": 5,
+      "impactStyle": 5,
+      "growthMode": 4,
+      "confidence": 88
     }
   ]
 }

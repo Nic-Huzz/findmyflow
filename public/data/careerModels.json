@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "generatedAt": "2026-04-07",
-    "totalProfiles": 298,
+    "totalProfiles": 306,
     "confidenceDistribution": {
       "high": 296,
       "medium": 1,
@@ -12,7 +12,7 @@
       "founder": 72,
       "nonfounder": 226
     },
-    "totalPeople": 298
+    "totalPeople": 306
   },
   "profiles": [
     {
@@ -7917,6 +7917,232 @@
       },
       "confidence": "high",
       "oneLiner": "Built a volunteer-run breathing class across 180 countries with one technique and no marketing budget."
+    },
+    {
+      "name": "Vishen Lakhiani",
+      "source": "non-founder",
+      "domain": "personal growth / consciousness education / edtech",
+      "oneLiner": "Built a $100M personal growth university from a $700 laptop in a Starbucks, without ever taking a dollar of venture capital.",
+      "primaryProblem": "feeling_stupid",
+      "primarySkills": [
+        "leading",
+        "teaching",
+        "building"
+      ],
+      "careerModel": {
+        "type": "edtech_platform_empire",
+        "primaryRevenue": "Membership subscriptions and cohort-based Quests",
+        "revenueStreams": [
+          "membership subscriptions",
+          "cohort-based Quests",
+          "coaching certifications",
+          "live festivals (A-Fest)",
+          "books",
+          "premium coaching",
+          "Mindvalley University"
+        ],
+        "trajectory": "Computer engineering grad moved to Silicon Valley at 25, started Mindvalley with $700 at 26, bootstrapped for 14 years, first book at 40 exploded revenue, scaled to $100M and 20M students by 49.",
+        "keyDecision": "Refused venture capital entirely, bootstrapping to $100M so he could keep Mindvalley's mission pure.",
+        "scaleModel": "Free masterclasses build audience, subscription Quests create recurring revenue, certified coaches extend the brand, festivals build community loyalty.",
+        "lessonsForUser": "If you teach and care about personal growth: build a platform that curates other teachers, not just your own content. You become the stage, not the act."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Michael Singer",
+      "source": "non-founder",
+      "domain": "meditation / surrender philosophy / inner freedom",
+      "oneLiner": "A PhD dropout who built a billion-dollar software company by accident while trying to sit quietly in the woods.",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "teaching",
+        "building",
+        "storytelling"
+      ],
+      "careerModel": {
+        "type": "author_teacher_community",
+        "primaryRevenue": "Book royalties and online courses",
+        "revenueStreams": [
+          "book royalties",
+          "online courses",
+          "podcast",
+          "community donations",
+          "speaking engagements"
+        ],
+        "trajectory": "Spiritual awakening during economics PhD at 24, founded Temple of the Universe at 28, accidentally built Medical Manager software in his 30s, company acquired for $5B at 55, first book The Untethered Soul at 60, Oprah appearance at 65, 5M+ copies sold by 79.",
+        "keyDecision": "Followed the principle of surrender so completely that he said yes to building a software company he never planned, then walked away from the wealth to keep teaching meditation.",
+        "scaleModel": "Books create global reach, the podcast extends teachings weekly, Temple of the Universe provides the anchor community.",
+        "lessonsForUser": "If you teach and care about inner freedom: write one book that says the thing clearly, then spend the rest of your life being the proof."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Michael Beckwith",
+      "source": "non-founder",
+      "domain": "spiritual leadership / visioning / New Thought ministry",
+      "oneLiner": "Grew a living room prayer group into a 9,000-person weekly congregation that Oprah called her spiritual home.",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "coaching",
+        "performing",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "spiritual_community_and_training",
+        "primaryRevenue": "Agape community offerings and Life Visioning courses",
+        "revenueStreams": [
+          "community tithes and donations",
+          "Life Visioning courses",
+          "book royalties",
+          "speaking engagements",
+          "online courses",
+          "practitioner training programme"
+        ],
+        "trajectory": "Inner vision at 27, founded Agape in a living room at 30, grew to 9,000 weekly members, featured in The Secret at 50, TED talk at 58, Life Visioning on Mindvalley reaching millions by 69.",
+        "keyDecision": "Kept Agape trans-denominational from day one, refusing to affiliate with any single religion.",
+        "scaleModel": "Weekly services build a loyal congregation, The Secret gave global visibility, licensed courses on Mindvalley extend reach, 365 trained practitioners deliver healing without him present.",
+        "lessonsForUser": "If you lead and care about spiritual growth: build a physical community first, develop your signature process, then license it to platforms that already have the audience."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Radha Agrawal",
+      "source": "non-founder",
+      "domain": "community building / sober movement / belonging",
+      "oneLiner": "Proved that the most radical party you can throw starts at 6am, sober, with a thousand strangers dancing together.",
+      "primaryProblem": "left_behind",
+      "primarySkills": [
+        "connecting",
+        "creating",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "community_movement_and_licensing",
+        "primaryRevenue": "Daybreaker event tickets and brand partnerships",
+        "revenueStreams": [
+          "event tickets",
+          "brand partnerships",
+          "book royalties",
+          "speaking engagements",
+          "city licensing"
+        ],
+        "trajectory": "Investment banking analyst at 22, left finance for creative directing at 23, co-founded THINX at 29, launched first Daybreaker at 34, grew to 1M+ community across 30+ cities by 47, sold-out Oprah arena tour at 41.",
+        "keyDecision": "After losing one company to a hostile takeover, chose to build Daybreaker as a community-first movement rather than a venture-backed startup.",
+        "scaleModel": "City-by-city licensing model where local leaders host Daybreaker events under the brand, allowing global expansion without centralised operations.",
+        "lessonsForUser": "If you connect and care about community: start one unforgettable event in one city, make it so good people beg to bring it to theirs, then license the format."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Meghan Pappenheim",
+      "source": "non-founder",
+      "domain": "wellness festivals / yoga community / social entrepreneurship",
+      "oneLiner": "Built the world's most beloved yoga festival by treating Bali like a village that needed a town square, not a brand.",
+      "primaryProblem": "left_behind",
+      "primarySkills": [
+        "connecting",
+        "building",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "community_ecosystem_builder",
+        "primaryRevenue": "Festival ticket sales and Yoga Barn class fees",
+        "revenueStreams": [
+          "festival ticket sales",
+          "yoga studio class fees",
+          "wellness retreats",
+          "restaurant revenue",
+          "community directory listings"
+        ],
+        "trajectory": "First business selling seedlings at 9, first yoga class at 13 in NYC, moved to Bali at 20, launched BaliSpirit online directory at 31, opened The Yoga Barn at 35, pulled together the first BaliSpirit Festival in 3 months at 36, grew it to 7,000 attendees across 50 countries.",
+        "keyDecision": "Built the community infrastructure first (directory, yoga studio, cafes) so the festival had a village to grow from, not just an audience to sell to.",
+        "scaleModel": "Physical community hub (Yoga Barn with 25+ daily classes) anchors a festival that draws 7,000 people annually, creating a self-sustaining wellness ecosystem.",
+        "lessonsForUser": "If you connect and care about community: build the daily gathering place first, then the festival becomes a celebration of what already exists."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Jeff Krasno",
+      "source": "non-founder",
+      "domain": "wellness events / online learning / mindful living",
+      "oneLiner": "Took everything he knew about filling music venues and pointed it at yoga mats instead.",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "building",
+        "connecting",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "events_to_platform_pivot",
+        "primaryRevenue": "Commune online membership and retreat centre",
+        "revenueStreams": [
+          "festival ticket sales",
+          "online course subscriptions",
+          "retreat centre bookings",
+          "podcast sponsorships",
+          "book royalties"
+        ],
+        "trajectory": "Columbia grad at 23, co-founded Velour record label at 29, built Wanderlust yoga festival at 39 to 68 events in 20 countries, exited at 48, co-founded Commune online platform at 48, grew newsletter to 1M+ subscribers, built 10-acre Topanga retreat centre.",
+        "keyDecision": "Exited Wanderlust at its peak to build Commune, betting that the future of wellness was daily digital practice, not annual festival peaks.",
+        "scaleModel": "Live festival brand built global awareness, then pivoted to online platform with expert-led courses, weekly newsletter to 1M+ readers, and a physical retreat lab.",
+        "lessonsForUser": "If you build events and care about wellness: use festivals to learn what your community actually needs, then build the daily product they will use between events."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Gabrielle Roth",
+      "source": "non-founder",
+      "domain": "conscious dance / movement as meditation / ecstatic dance",
+      "oneLiner": "Proved that the fastest way to stillness is to dance until your ego gives up.",
+      "primaryProblem": "voice_taken",
+      "primarySkills": [
+        "performing",
+        "creating",
+        "teaching"
+      ],
+      "careerModel": {
+        "type": "method_certification_empire",
+        "primaryRevenue": "Teacher certification and workshop fees",
+        "revenueStreams": [
+          "teacher certification programme",
+          "workshop fees",
+          "book royalties",
+          "music album sales (Raven Recording)",
+          "retreat fees"
+        ],
+        "trajectory": "Told she would never dance again after a knee injury, healed through movement at Esalen, Fritz Perls asked her to teach dance at 26, designed the 5Rhythms Wave in the late 1970s, founded The Moving Center in NYC at 36, certified 300+ teachers in 50+ countries by her death at 71.",
+        "keyDecision": "Mapped dance onto a repeatable five-stage structure so anyone could facilitate it, not just gifted dancers.",
+        "scaleModel": "Created a codified method, trained teachers through rigorous 2-year certification, and produced her own music through Raven Recording to soundtrack the practice worldwide.",
+        "lessonsForUser": "If you create movement practices and care about healing: codify the structure so others can teach it, then produce the soundtrack so the experience stays consistent everywhere."
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Larry Harvey",
+      "source": "non-founder",
+      "domain": "participatory art / counter-culture community / radical self-expression",
+      "oneLiner": "Burned a wooden man on a beach and accidentally started a civilisation.",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "leading",
+        "designing",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "community_to_nonprofit_movement",
+        "primaryRevenue": "Event ticket sales (Black Rock City)",
+        "revenueStreams": [
+          "festival ticket sales",
+          "art grants programme",
+          "regional event licensing",
+          "merchandise"
+        ],
+        "trajectory": "Failed landscaper in Portland, burned an 8-foot effigy on Baker Beach with a friend at 38, grew the gathering from 20 people to 800 in four years, moved to Black Rock Desert at 42, wrote the 10 Principles at 56, transitioned to nonprofit at 65, 80,000 participants and regional burns in 34 countries by his death at 70.",
+        "keyDecision": "Wrote 10 Principles in 2004 as guidelines for regional burns, giving the culture a codified value system that could replicate without him.",
+        "scaleModel": "A single annual gathering built cultural identity, the 10 Principles codified it, regional burns replicated it in 34 countries, and nonprofit status ensured it would outlive the founder.",
+        "lessonsForUser": "If you lead and care about culture: build the gathering first, then write the principles so the culture can spread without needing you in the room."
+      },
+      "confidence": "high"
     }
   ]
 }

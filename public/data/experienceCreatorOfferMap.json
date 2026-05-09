@@ -1,7 +1,7 @@
 {
   "meta": {
     "generatedAt": "2026-04-21",
-    "totalCreators": 39,
+    "totalCreators": 47,
     "slots": {
       "attraction": "Free or near-free, builds audience and trust",
       "core": "Main paid product, bread and butter",
@@ -630,6 +630,144 @@
         "retreat centre ongoing programs",
         "book royalties",
         "course fees across 180 countries"
+      ]
+    },
+    "Vishen Lakhiani": {
+      "attraction": [
+        "free masterclasses",
+        "books"
+      ],
+      "core": [
+        "membership subscriptions",
+        "cohort-based Quests"
+      ],
+      "scale": [
+        "coaching certifications",
+        "live festivals (A-Fest, Mindvalley University)"
+      ],
+      "continuity": [
+        "premium coaching",
+        "app subscriptions"
+      ]
+    },
+    "Michael Singer": {
+      "attraction": [
+        "podcast",
+        "free Temple of the Universe talks"
+      ],
+      "core": [
+        "book royalties"
+      ],
+      "scale": [
+        "online courses",
+        "speaking engagements"
+      ],
+      "continuity": [
+        "podcast",
+        "community donations"
+      ]
+    },
+    "Michael Beckwith": {
+      "attraction": [
+        "book royalties",
+        "free weekly livestreams"
+      ],
+      "core": [
+        "weekly Agape services",
+        "speaking engagements"
+      ],
+      "scale": [
+        "Life Visioning courses (Mindvalley, Shift Network)",
+        "practitioner training programme"
+      ],
+      "continuity": [
+        "online courses",
+        "community tithes and donations"
+      ]
+    },
+    "Radha Agrawal": {
+      "attraction": [
+        "book royalties (Belong)",
+        "free community events"
+      ],
+      "core": [
+        "Daybreaker event tickets",
+        "brand partnerships"
+      ],
+      "scale": [
+        "city licensing/expansion",
+        "speaking engagements"
+      ],
+      "continuity": [
+        "Daybreaker membership community"
+      ]
+    },
+    "Meghan Pappenheim": {
+      "attraction": [
+        "community directory listings",
+        "nonprofit outreach programs"
+      ],
+      "core": [
+        "festival ticket sales",
+        "yoga studio class fees"
+      ],
+      "scale": [
+        "Portugal Spirit Festival expansion",
+        "wellness retreat programming"
+      ],
+      "continuity": [
+        "restaurant revenue",
+        "Yoga Barn memberships"
+      ]
+    },
+    "Jeff Krasno": {
+      "attraction": [
+        "book royalties",
+        "weekly newsletter (Commusings)"
+      ],
+      "core": [
+        "Commune online course subscriptions",
+        "Topanga retreat bookings"
+      ],
+      "scale": [
+        "Wanderlust festival events"
+      ],
+      "continuity": [
+        "podcast sponsorships",
+        "Commune membership"
+      ]
+    },
+    "Gabrielle Roth": {
+      "attraction": [
+        "book royalties",
+        "music album sales (Raven Recording)"
+      ],
+      "core": [
+        "workshop fees",
+        "retreat fees"
+      ],
+      "scale": [
+        "teacher certification programme"
+      ],
+      "continuity": [
+        "music catalogue royalties (16 albums)",
+        "ongoing teacher certification renewals"
+      ]
+    },
+    "Larry Harvey": {
+      "attraction": [
+        "regional burns (34 countries)"
+      ],
+      "core": [
+        "Black Rock City ticket sales"
+      ],
+      "scale": [
+        "10 Principles framework licensing to regional network",
+        "art grants programme"
+      ],
+      "continuity": [
+        "Burning Man Project nonprofit donations",
+        "merchandise"
       ]
     }
   }
