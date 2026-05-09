@@ -41,6 +41,7 @@ import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
 import ChallengeIntro from './components/ChallengeIntro'
 import LevelTab from './components/level/LevelTab'
+import { getLevelConfig } from './components/level/LevelConfig'
 // CreatorHome moved to standalone /create route
 import { preloadChallengeFlows } from './lib/preloadRoutes'
 import { useSubscription } from './hooks/useSubscription'
@@ -1926,6 +1927,7 @@ function Challenge() {
         {activeCategory === 'Play-list' && (
           <PlayListTab
             userId={user?.id}
+            currentVisibilityLayer={getLevelConfig(currentJourneyLevel)?.visibilityLayer || 'screen'}
             onQuestComplete={handleQuestComplete}
             onRefreshPoints={loadStageProgress}
           />

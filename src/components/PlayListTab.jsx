@@ -4,49 +4,38 @@
  * Play-List tab for the 7-Day Challenge page.
  *
  * States:
- *   1. No playskills → "Find Your Flow First" CTA → /get-started
- *   2. Has playskills, no topics → "Identify Play-List Topics" CTA → /identify-topics
- *   3. Has playskills AND topics → Category cards grid
- *      Tap card → opens MobilePlaylistPicker modal (Topic → Role → Playskill → Challenge → Day)
+ *   1. No playskills → "Find Your Play-Skills" CTA
+ *   2. Has playskills → WahooCreator (two-path: free text or browse categories)
  *
- * Also shows Active Challenges section (from priority_weekly_picks).
+ * Also shows Active Wahoos section (from priority_weekly_picks)
+ * and a link to the Wahoo Map (Groan Matrix).
  */
 
 import { useMemo, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
-import { SKILLS_SEGMENTS, findSkillSegment } from '../lib/wheelTaxonomy'
+import { findSkillSegment } from '../lib/wheelTaxonomy'
 import GroanCompletionModal from './GroanCompletionModal'
-import MobilePlaylistPicker from './MobilePlaylistPicker'
+import WahooCreator from './WahooCreator'
+import PlaySkillPicker from './PlaySkillPicker'
 
 export default function PlayListTab({
   userId,
+  currentVisibilityLayer = 'screen',
   onQuestComplete,
   onRefreshPoints,
 }) {
   const navigate = useNavigate()
   const [playskills, setPlayskills] = useState([])
-  const [topics, setTopics] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeChallenges, setActiveChallenges] = useState([])
-  const [challengeCounts, setChallengeCounts] = useState({})
-  const [showAllCategories, setShowAllCategories] = useState(false)
   const [completingChallenge, setCompletingChallenge] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
-  const [selectedCategory, setSelectedCategory] = useState(null) // opens picker modal
+  const [showPlaySkillPicker, setShowPlaySkillPicker] = useState(false)
+  const [showWahooCreator, setShowWahooCreator] = useState(false)
 
-  // Hide bottom toolbar when modal is open
-  useEffect(() => {
-    if (selectedCategory) {
-      document.body.classList.add('modal-active')
-    } else {
-      document.body.classList.remove('modal-active')
-    }
-    return () => document.body.classList.remove('modal-active')
-  }, [selectedCategory])
-
-  // Fetch playskills + topics + active challenges
+  // Fetch playskills + active challenges
   useEffect(() => {
     if (!userId) return
 
@@ -55,28 +44,11 @@ export default function PlayListTab({
         .from('nikigai_clusters')
         .select('id, cluster_label, cluster_type, items, step_id')
         .eq('user_id', userId)
-        .in('cluster_type', ['skills', 'problems'])
-        .in('step_id', ['get_started', 'identify_topics']),
+        .eq('cluster_type', 'skills')
+        .eq('step_id', 'get_started'),
       fetchActiveChallenges(),
-      supabase
-        .from('groan_challenges')
-        .select('source_label, status')
-        .eq('user_id', userId)
-        .eq('status', 'completed'),
-    ]).then(([{ data }, , { data: completedChallenges }]) => {
-      if (data) {
-        setPlayskills(data.filter(d => d.cluster_type === 'skills' && d.step_id === 'get_started'))
-        setTopics(data.filter(d => d.cluster_type === 'problems' && d.step_id === 'identify_topics'))
-      }
-      // Count completed challenges per skill category
-      if (completedChallenges) {
-        const counts = {}
-        completedChallenges.forEach(c => {
-          const catId = c.source_label
-          if (catId) counts[catId] = (counts[catId] || 0) + 1
-        })
-        setChallengeCounts(counts)
-      }
+    ]).then(([{ data }]) => {
+      if (data) setPlayskills(data)
       setLoading(false)
     }).catch(err => {
       console.error('PlayListTab fetch error:', err)
@@ -106,27 +78,25 @@ export default function PlayListTab({
     }
   }
 
-  // Group playskills by category
-  const categories = useMemo(() => {
-    const grouped = {}
+  // Extract category ids from playskills
+  const categoryIds = useMemo(() => {
+    const ids = new Set()
     playskills.forEach(ps => {
       const catId = ps.items?.[0]?.category
-      if (!catId) return
-      if (!grouped[catId]) grouped[catId] = { id: catId, playskills: [] }
-      grouped[catId].playskills.push(ps)
+      if (catId) ids.add(catId)
     })
-    return Object.values(grouped)
+    return [...ids]
   }, [playskills])
 
-  // ─── Active Challenges renderer (used in states 2 + 3) ─────────────────────
+  // ─── Active Wahoos renderer ─────────────────────────────────────────────────
 
-  function renderActiveChallenges() {
+  function renderActiveWahoos() {
     return (
       <div className="plt-section-card">
         <div className="plt-section-header">
           <div className="plt-section-header-left">
-            <span className="plt-section-icon">🎯</span>
-            <span className="plt-section-title">Active Challenges</span>
+            <span className="plt-section-icon">🔥</span>
+            <span className="plt-section-title">Active Wahoos</span>
           </div>
           <span className="plt-section-count">{activeChallenges.length}</span>
         </div>
@@ -138,7 +108,7 @@ export default function PlayListTab({
                 <span className="plt-item-check"></span>
                 <div className="plt-item-body">
                   <div className="plt-item-name">{pick.display_name}</div>
-                  <div className="plt-item-meta">{pick._source_label || 'Play-List Task'}</div>
+                  <div className="plt-item-meta">{pick._source_label || 'Wahoo'}</div>
                 </div>
                 <button
                   className="plt-item-action"
@@ -154,7 +124,7 @@ export default function PlayListTab({
                     if (data) setCompletingChallenge(data)
                   }}
                 >
-                  {isLoading ? '...' : 'Complete'}
+                  {isLoading ? '...' : 'I Did It!'}
                 </button>
               </div>
             )
@@ -173,149 +143,80 @@ export default function PlayListTab({
   if (playskills.length === 0) {
     return (
       <div className="playlist-tab">
+        {activeChallenges.length > 0 && renderActiveWahoos()}
+
         <div className="plt-section-card" style={{ textAlign: 'center', padding: '2rem 1.5rem' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🧭</div>
-          <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem' }}>Find Your Flow First</h3>
-          <p style={{ color: '#9a9daa', fontSize: '0.85rem', margin: '0 0 1.25rem' }}>
-            Discover your unique play-skills to unlock personalised challenges.
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🔥</div>
+          <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem', fontWeight: 800 }}>Find Your Play-Skills First</h3>
+          <p style={{ color: '#6c757d', fontSize: '0.85rem', margin: '0 0 1.25rem', lineHeight: 1.5 }}>
+            Pick what lights you up so we can generate Wahoos that fit you.
           </p>
           <button
             className="mpp-gold-btn"
-            onClick={() => navigate('/get-started')}
+            onClick={() => setShowPlaySkillPicker(true)}
             style={{ width: '100%' }}
           >
-            Get Started →
+            Find My Play-Skills
           </button>
         </div>
+
+        {showPlaySkillPicker && (
+          <PlaySkillPicker
+            userId={userId}
+            onComplete={() => {
+              setShowPlaySkillPicker(false)
+              // Reload playskills
+              supabase
+                .from('nikigai_clusters')
+                .select('id, cluster_label, cluster_type, items, step_id')
+                .eq('user_id', userId)
+                .eq('cluster_type', 'skills')
+                .eq('step_id', 'get_started')
+                .then(({ data }) => {
+                  if (data) setPlayskills(data)
+                })
+            }}
+            onClose={() => setShowPlaySkillPicker(false)}
+          />
+        )}
+
+        {completingChallenge && (
+          <GroanCompletionModal
+            challenge={completingChallenge}
+            userId={userId}
+            onComplete={() => {
+              setCompletingChallenge(null)
+              fetchActiveChallenges()
+              onRefreshPoints?.()
+            }}
+            onClose={() => setCompletingChallenge(null)}
+          />
+        )}
       </div>
     )
   }
 
-  // ─── State 2: Has playskills, no topics ───────────────────────────────────
-
-  if (topics.length === 0) {
-    return (
-      <div className="playlist-tab">
-        {/* Active challenges still show */}
-        {activeChallenges.length > 0 && renderActiveChallenges()}
-
-        <div className="plt-section-card" style={{ textAlign: 'center', padding: '2rem 1.5rem' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🎯</div>
-          <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem' }}>Identify Play-List Topics</h3>
-          <p style={{ color: '#9a9daa', fontSize: '0.85rem', margin: '0 0 1.25rem' }}>
-            Find the problems and topics you care about to create meaningful challenges.
-          </p>
-          <button
-            className="mpp-gold-btn"
-            onClick={() => navigate('/identify-topics')}
-            style={{ width: '100%' }}
-          >
-            Identify Topics →
-          </button>
-        </div>
-
-        {/* Show category cards as preview (non-tappable) */}
-        <div className="plt-categories-grid">
-          {categories.map(cat => {
-            const seg = findSkillSegment(cat.id)
-            return (
-              <div key={cat.id} className="plt-category-card plt-category-locked">
-                <div className="plt-cat-icon">{seg?.icon}</div>
-                <div className="plt-cat-name">{seg?.displayName || cat.id}</div>
-                <div className="plt-cat-count">{cat.playskills.length} play-skills</div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    )
-  }
-
-  // ─── State 3: Has playskills AND topics ───────────────────────────────────
+  // ─── State 2: Has playskills → WahooCreator ──────────────────────────────
 
   return (
     <div className="playlist-tab">
-      {/* Active challenges */}
-      {activeChallenges.length > 0 && renderActiveChallenges()}
+      {/* Active Wahoos */}
+      {activeChallenges.length > 0 && renderActiveWahoos()}
 
-      {/* Category cards — matched categories first */}
-      <div className="plt-categories-grid">
-        {categories.map(cat => {
-          const seg = findSkillSegment(cat.id)
-          const completedCount = challengeCounts[cat.id] || 0
-
-          return (
-            <button
-              key={cat.id}
-              className="plt-category-card"
-              onClick={() => setSelectedCategory(cat.id)}
-            >
-              <div className="plt-cat-icon">{seg?.icon}</div>
-              <div className="plt-cat-name">{seg?.displayName || cat.id}</div>
-              <div className="plt-cat-count">{completedCount} completed</div>
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Unmatched categories — collapsible */}
-      {(() => {
-        const matchedIds = new Set(categories.map(c => c.id))
-        const unmatched = SKILLS_SEGMENTS.filter(seg => !matchedIds.has(seg.id))
-        if (unmatched.length === 0) return null
-        return (
-          <>
-            <button
-              className="plt-other-toggle"
-              onClick={() => setShowAllCategories(!showAllCategories)}
-            >
-              {showAllCategories ? 'Hide' : 'Show'} {unmatched.length} other categor{unmatched.length === 1 ? 'y' : 'ies'}
-              <span style={{ marginLeft: '0.4rem' }}>{showAllCategories ? '▲' : '▼'}</span>
-            </button>
-            {showAllCategories && (
-              <div className="plt-categories-grid">
-                {unmatched.map(seg => (
-                  <button
-                    key={seg.id}
-                    className="plt-category-card plt-category-unmatched"
-                    onClick={() => setSelectedCategory(seg.id)}
-                  >
-                    <div className="plt-cat-icon">{seg.icon}</div>
-                    <div className="plt-cat-name">{seg.displayName}</div>
-                    <div className="plt-cat-count">0 completed</div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </>
-        )
-      })()}
-
-      {/* Redo topics link */}
-      <button
-        className="plt-redo-link"
-        onClick={() => navigate('/identify-topics')}
-      >
-        Re-identify topics
-      </button>
-
-      {/* Picker modal */}
-      {selectedCategory && (
-        <div className="plt-modal-overlay" onClick={() => setSelectedCategory(null)}>
-          <div className="plt-modal-content" onClick={e => e.stopPropagation()}>
-            <button className="plt-modal-close" onClick={() => setSelectedCategory(null)}>&times;</button>
-            <MobilePlaylistPicker
-              userId={userId}
-              categoryId={selectedCategory}
-              userPlayskills={playskills.filter(ps => ps.items?.[0]?.category === selectedCategory).map(ps => ps.cluster_label)}
-              onChallengeAccepted={() => {
-                fetchActiveChallenges()
-              }}
-              onClose={() => setSelectedCategory(null)}
-            />
-          </div>
-        </div>
-      )}
+      {/* WahooCreator — always visible inline */}
+      <WahooCreator
+        userId={userId}
+        categories={categoryIds}
+        currentVisibilityLayer={currentVisibilityLayer}
+        onWahooAccepted={() => {
+          fetchActiveChallenges()
+          onRefreshPoints?.()
+        }}
+        onClose={() => {
+          // WahooCreator auto-closes after success, refresh state
+          fetchActiveChallenges()
+        }}
+      />
 
       {/* Completion modal */}
       {completingChallenge && (

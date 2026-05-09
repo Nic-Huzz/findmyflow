@@ -11,7 +11,7 @@
 export const LEVEL_CONFIG = {
   0: {
     name: 'Getting Set Up',
-    question: 'Let\'s get you ready.',
+    question: 'What does your aliveness look like?',
     graph: null,
     yAxis: null,
     xAxis: null,
@@ -24,6 +24,14 @@ export const LEVEL_CONFIG = {
       icon: '🦸',
     },
     extraQuests: [
+      {
+        id: 'play_skills',
+        name: 'Find Your Play-Skills',
+        route: null,
+        narrative: 'Pick what lights you up.',
+        icon: '🔥',
+        action: 'openPlaySkillPicker',
+      },
       {
         id: 'wound_map',
         name: 'Map Your Origin Story',

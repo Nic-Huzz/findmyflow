@@ -20,6 +20,7 @@ import MilestoneCard from './MilestoneCard'
 import MilestoneCommitModal from './MilestoneCommitModal'
 import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
+import PlaySkillPicker from '../PlaySkillPicker'
 import './LevelTab.css'
 
 export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
@@ -42,6 +43,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
   const [hasPlaylistCompletion, setHasPlaylistCompletion] = useState(false)
+  const [hasPlaySkills, setHasPlaySkills] = useState(false)
+  const [showPlaySkillPicker, setShowPlaySkillPicker] = useState(false)
   const [healingDaysDone, setHealingDaysDone] = useState(0)
   const [courageDone, setCourageDone] = useState(0)
 
@@ -156,17 +159,17 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           setHasWoundMap(true)
         }
       })
-    // Check if playskills exist (from /get-started or curiosity compass)
+    // Check if playskills exist (from /get-started, curiosity compass, or PlaySkillPicker)
     supabase
       .from('nikigai_clusters')
-      .select('id')
+      .select('id, step_id')
       .eq('user_id', userId)
       .eq('cluster_type', 'skills')
       .in('step_id', ['get_started', 'curiosity_compass'])
-      .limit(1)
       .then(({ data }) => {
         if (data?.length > 0) {
-          setHasCuriosityCompass(true)
+          if (data.some(d => d.step_id === 'get_started')) setHasPlaySkills(true)
+          if (data.some(d => d.step_id === 'curiosity_compass')) setHasCuriosityCompass(true)
         }
       })
     // Check if any healing quest has been completed
@@ -222,6 +225,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       done: q.id === 'hero_avatar' ? hasEssenceAvatar
         : q.id === 'wound_map' ? hasWoundMap
         : q.id === 'curiosity_compass' ? hasCuriosityCompass
+        : q.id === 'play_skills' ? (hasCuriosityCompass || hasPlaySkills)
         : q.id === 'healing_task' ? hasHealingCompletion
         : q.id === 'playlist_challenge' ? hasPlaylistCompletion
         : q.id === 'people_matching' ? hasPeopleMatching
@@ -333,12 +337,43 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           quest.id === 'hero_avatar' ? hasEssenceAvatar
           : quest.id === 'wound_map' ? hasWoundMap
           : quest.id === 'curiosity_compass' ? hasCuriosityCompass
+          : quest.id === 'play_skills' ? (hasCuriosityCompass || hasPlaySkills)
           : quest.id === 'healing_task' ? hasHealingCompletion
           : quest.id === 'playlist_challenge' ? hasPlaylistCompletion
           : quest.id === 'people_matching' ? hasPeopleMatching
           : quest.id === 'playlist_update' ? hasPlaylistUpdate
           : false
         const isLocked = quest.lockedUntil === 'curiosity_compass' && !hasCuriosityCompass
+
+        // Play-Skills picker (Level 0)
+        if (quest.id === 'play_skills') {
+          return (
+            <div key={quest.id} className={`level-deep-dive ${isCompleted ? 'completed' : ''}`}>
+              <div className="level-dd-icon">{isCompleted ? '✅' : quest.icon}</div>
+              <div className="level-dd-info">
+                <div className="level-dd-name">{quest.name}</div>
+                <div className="level-dd-narrative">{quest.narrative}</div>
+              </div>
+              {isCompleted ? (
+                <button
+                  className="level-dd-status start"
+                  onClick={() => setShowPlaySkillPicker(true)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  Edit
+                </button>
+              ) : (
+                <button
+                  className="level-dd-status start"
+                  onClick={() => setShowPlaySkillPicker(true)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  Start
+                </button>
+              )}
+            </div>
+          )
+        }
 
         // Play-List Challenge with dot tracking (levels 1+)
         if (quest.id === 'playlist_challenge' && currentLevel > 0 && config.courageCount > 0) {
@@ -423,6 +458,18 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         healingDaysRequired={config.healingDaysRequired || 14}
         questsCompleted={questsCompleted}
       />
+
+      {/* Play-Skill Picker modal */}
+      {showPlaySkillPicker && (
+        <PlaySkillPicker
+          userId={userId}
+          onComplete={() => {
+            setShowPlaySkillPicker(false)
+            setHasPlaySkills(true)
+          }}
+          onClose={() => setShowPlaySkillPicker(false)}
+        />
+      )}
 
       {/* Graduation overlay */}
       {graduatedTo !== null && (
