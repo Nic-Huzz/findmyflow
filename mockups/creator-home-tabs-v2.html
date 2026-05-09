@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Creator Home — 3 Tabs as Stories</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #1a1a2e;
+    min-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+    padding: 20px 16px 0;
+    color: white;
+    border-radius: 0 0 20px 20px;
+  }
+  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .header-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); display: flex; align-items: center;
+    justify-content: center; font-size: 20px;
+  }
+  .header-info { flex: 1; }
+  .header-name { font-size: 18px; font-weight: 800; }
+  .header-sub { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+  .header-xp {
+    padding: 4px 10px; background: rgba(233,162,59,0.2); border-radius: 8px;
+    font-size: 11px; font-weight: 700; color: #E9A23B;
+  }
+
+  /* ─── Tabs ─── */
+  .tabs {
+    display: flex; padding: 0 8px;
+  }
+  .tab {
+    flex: 1; padding: 12px 0 10px; text-align: center;
+    font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.4);
+    border-bottom: 2px solid transparent; cursor: pointer;
+    background: none; border-top: none; border-left: none; border-right: none;
+    font-family: inherit;
+  }
+  .tab.active { color: white; border-bottom-color: #E9A23B; }
+
+  /* ─── Content ─── */
+  .tab-content { display: none; padding: 16px; padding-bottom: 40px; }
+  .tab-content.active { display: block; }
+
+  /* ─── Cards ─── */
+  .card {
+    background: white; border-radius: 16px; padding: 16px;
+    margin-bottom: 12px; border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .card-eyebrow {
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: #5e17eb; margin-bottom: 6px;
+  }
+  .card-title { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+  .card-sub { font-size: 13px; color: #6c757d; line-height: 1.5; }
+
+  .card-gradient {
+    background: linear-gradient(135deg, #5e17eb 0%, #4c1d95 100%);
+    color: white; position: relative; overflow: hidden;
+  }
+  .card-gradient::before {
+    content: ''; position: absolute; top: -30px; right: -10px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+  }
+  .card-gradient .card-eyebrow { color: rgba(255,255,255,0.45); }
+  .card-gradient .card-sub { color: rgba(255,255,255,0.65); }
+
+  .btn-primary {
+    display: block; width: 100%; padding: 14px; margin-top: 12px;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e; border: none; border-radius: 12px;
+    font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit;
+  }
+  .btn-secondary {
+    display: block; width: 100%; padding: 12px; margin-top: 8px;
+    background: rgba(94,23,235,0.06); border: none; border-radius: 12px;
+    font-size: 13px; font-weight: 700; color: #5e17eb; cursor: pointer; font-family: inherit;
+  }
+
+  /* ─── Progress ─── */
+  .progress-track { height: 4px; background: #e9ecef; border-radius: 2px; margin: 8px 0; }
+  .progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #5e17eb, #E9A23B); }
+
+  /* ─── Identity specific ─── */
+  .identity-section { margin-bottom: 16px; }
+  .identity-label {
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1px; color: #adb5bd; margin-bottom: 6px;
+  }
+
+  .archetype-badge {
+    display: inline-block; padding: 6px 14px; border-radius: 20px;
+    background: rgba(94,23,235,0.08); border: 1px solid rgba(94,23,235,0.15);
+    font-size: 13px; font-weight: 700; color: #5e17eb;
+  }
+
+  .scope-position {
+    display: flex; align-items: center; gap: 10px; padding: 12px 0;
+  }
+  .scope-icon { font-size: 28px; }
+  .scope-stage { font-size: 15px; font-weight: 800; }
+  .scope-desc { font-size: 12px; color: #6c757d; line-height: 1.4; margin-top: 2px; }
+
+  .remarkable-card {
+    background: linear-gradient(135deg, rgba(94,23,235,0.04) 0%, rgba(233,162,59,0.04) 100%);
+    border: 1px solid rgba(94,23,235,0.1); border-radius: 14px; padding: 14px;
+  }
+  .remarkable-label {
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1px; color: #E9A23B; margin-bottom: 8px;
+  }
+  .remarkable-text { font-size: 14px; font-weight: 600; line-height: 1.5; color: #1a1a2e; }
+
+  .layer-row {
+    display: flex; align-items: center; gap: 10px; padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5;
+  }
+  .layer-row:last-child { border-bottom: none; }
+  .layer-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .layer-name { font-size: 13px; font-weight: 700; flex: 1; }
+  .layer-status {
+    font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 6px;
+  }
+  .layer-have { background: rgba(16,185,129,0.1); color: #10b981; }
+  .layer-working { background: rgba(233,162,59,0.1); color: #E9A23B; }
+  .layer-missing { background: rgba(239,68,68,0.08); color: #ef4444; }
+
+  /* ─── Experiences specific ─── */
+  .exp-active {
+    border-left: 3px solid #5e17eb;
+  }
+  .exp-name { font-size: 16px; font-weight: 800; }
+  .exp-meta { font-size: 11px; color: #6c757d; margin-top: 2px; }
+  .exp-countdown {
+    display: inline-block; padding: 2px 8px; border-radius: 6px;
+    font-size: 11px; font-weight: 700; margin-left: 4px;
+    background: rgba(233,162,59,0.1); color: #E9A23B;
+  }
+
+  .section-progress {
+    display: flex; align-items: center; gap: 10px; padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5;
+  }
+  .section-progress:last-child { border-bottom: none; }
+  .section-icon { font-size: 16px; flex-shrink: 0; }
+  .section-info { flex: 1; }
+  .section-name { font-size: 13px; font-weight: 700; }
+  .section-count { font-size: 11px; color: #6c757d; }
+  .section-bar { flex: 0 0 80px; }
+
+  .checklist-item {
+    display: flex; align-items: center; gap: 8px; padding: 7px 0;
+    border-bottom: 1px solid #f8f9fa; font-size: 13px;
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #dee2e6; flex-shrink: 0; }
+  .check.done { background: #10b981; border-color: #10b981; }
+  .cl-label { color: #495057; flex: 1; }
+  .cl-label.done { color: #adb5bd; text-decoration: line-through; }
+  .cl-bolt { font-size: 14px; cursor: pointer; }
+
+  .past-exp {
+    display: flex; align-items: center; gap: 10px; padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5;
+  }
+  .past-exp:last-child { border-bottom: none; }
+  .past-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; flex-shrink: 0; }
+  .past-info { flex: 1; }
+  .past-name { font-size: 13px; font-weight: 700; }
+  .past-meta { font-size: 11px; color: #6c757d; }
+  .past-3pct { font-size: 11px; color: #10b981; font-weight: 600; text-align: right; max-width: 120px; }
+
+  /* ─── Growth specific ─── */
+  .kpi-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+  }
+  .kpi-card {
+    background: white; border-radius: 14px; padding: 14px; text-align: center;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .kpi-val { font-size: 24px; font-weight: 800; }
+  .kpi-label { font-size: 10px; color: #6c757d; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+  .kpi-trend { font-size: 11px; font-weight: 600; margin-top: 4px; }
+  .kpi-up { color: #10b981; }
+  .kpi-neutral { color: #6c757d; }
+
+  .three-pct-chain { margin-bottom: 12px; }
+  .chain-item {
+    display: flex; gap: 10px; padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5;
+  }
+  .chain-item:last-child { border-bottom: none; }
+  .chain-dot {
+    width: 24px; height: 24px; border-radius: 50%; background: rgba(16,185,129,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #10b981; flex-shrink: 0; margin-top: 2px;
+  }
+  .chain-exp { font-size: 13px; font-weight: 700; }
+  .chain-note { font-size: 12px; color: #6c757d; line-height: 1.4; margin-top: 2px; }
+  .chain-meta { font-size: 11px; color: #adb5bd; margin-top: 3px; }
+
+  .fan-row {
+    display: flex; align-items: center; gap: 10px; padding: 8px 0;
+    border-bottom: 1px solid #f1f3f5;
+  }
+  .fan-row:last-child { border-bottom: none; }
+  .fan-avatar {
+    width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: white; font-weight: 700;
+  }
+  .fan-name { font-size: 13px; font-weight: 600; flex: 1; }
+  .fan-count { font-size: 12px; color: #E9A23B; font-weight: 700; }
+
+  /* ─── Empty states ─── */
+  .empty-state {
+    text-align: center; padding: 32px 16px;
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .empty-sub { font-size: 13px; color: #6c757d; line-height: 1.5; margin-bottom: 16px; }
+
+  /* ─── No experience state ─── */
+  .no-exp-cta {
+    display: flex; gap: 8px;
+  }
+  .no-exp-option {
+    flex: 1; background: white; border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px; padding: 16px 12px; text-align: center; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .no-exp-option:active { border-color: #5e17eb; }
+  .no-exp-icon { font-size: 24px; margin-bottom: 6px; }
+  .no-exp-label { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+  .no-exp-sub { font-size: 11px; color: #6c757d; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+  <div class="header-top">
+    <div class="header-avatar">🔥</div>
+    <div class="header-info">
+      <div class="header-name">Your Movement</div>
+      <div class="header-sub">Workshop Creator &middot; The Waterfall</div>
+    </div>
+    <div class="header-xp">420 XP</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('identity')">Identity</button>
+    <button class="tab" onclick="switchTab('experiences')">Experiences</button>
+    <button class="tab" onclick="switchTab('growth')">Growth</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 1: IDENTITY
+     "Who am I as a creator and what makes me different?"
+     5-stage progressive story:
+     Skills → Tribe → Position → Edge → Model
+     ═══════════════════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-identity">
+
+  <!-- Stage progress bar -->
+  <div class="card" style="padding: 12px 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <div style="font-size: 11px; font-weight: 700; color: #6c757d;">YOUR CREATOR IDENTITY</div>
+      <div style="font-size: 11px; font-weight: 700; color: #5e17eb;">4 of 5 complete</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" style="width: 80%;"></div></div>
+  </div>
+
+  <!-- ─── STAGE 1: YOUR SKILLS (Complete) ─── -->
+  <div class="card" style="border-left: 3px solid #10b981;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <div style="width: 22px; height: 22px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0;">&#10003;</div>
+      <div class="card-eyebrow" style="margin: 0;">STAGE 1: YOUR SKILLS</div>
+    </div>
+    <div style="font-size: 12px; color: #6c757d; margin-bottom: 8px;">What do I love doing?</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+      <div class="archetype-badge" style="font-size: 11px; padding: 4px 10px;">Coaching</div>
+      <div class="archetype-badge" style="font-size: 11px; padding: 4px 10px;">Performing</div>
+      <div class="archetype-badge" style="font-size: 11px; padding: 4px 10px;">Teaching</div>
+      <div class="archetype-badge" style="font-size: 11px; padding: 4px 10px;">Connecting</div>
+    </div>
+    <div style="margin-top: 8px; font-size: 11px; color: #adb5bd;">
+      "I hold space for hard moments" &middot; "I teach through the body, not the mind"
+    </div>
+  </div>
+
+  <!-- ─── STAGE 2: YOUR TRIBE (Complete) ─── -->
+  <div class="card" style="border-left: 3px solid #10b981;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <div style="width: 22px; height: 22px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0;">&#10003;</div>
+      <div class="card-eyebrow" style="margin: 0;">STAGE 2: YOUR TRIBE</div>
+    </div>
+    <div style="font-size: 12px; color: #6c757d; margin-bottom: 8px;">Who inspires me and who do I serve?</div>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+      <div class="archetype-badge">Workshop Creator</div>
+    </div>
+    <div class="card-sub" style="font-size: 12px;">You build deep expertise, codify it into a method, then teach it live.</div>
+    <div style="margin-top: 8px; font-size: 11px; color: #adb5bd;">
+      North Stars: Wim Hof, Gabby Bernstein, Seane Corn
+    </div>
+  </div>
+
+  <!-- ─── STAGE 3: YOUR POSITION (Complete) ─── -->
+  <div class="card" style="border-left: 3px solid #10b981;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <div style="width: 22px; height: 22px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0;">&#10003;</div>
+      <div class="card-eyebrow" style="margin: 0;">STAGE 3: YOUR POSITION</div>
+    </div>
+    <div style="font-size: 12px; color: #6c757d; margin-bottom: 8px;">Where am I on the creator journey?</div>
+    <div class="scope-position" style="padding: 4px 0;">
+      <div class="scope-icon">🌊</div>
+      <div>
+        <div class="scope-stage">The Waterfall</div>
+        <div class="scope-desc">You found your specific thing. Build the evidence base. Stay here longer than you want to.</div>
+      </div>
+    </div>
+    <button class="btn-secondary" style="margin-top: 4px; font-size: 12px; padding: 8px;">Retake Diagnostic →</button>
+  </div>
+
+  <!-- ─── STAGE 4: YOUR EDGE (Complete) ─── -->
+  <div class="card" style="border-left: 3px solid #10b981;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <div style="width: 22px; height: 22px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0;">&#10003;</div>
+      <div class="card-eyebrow" style="margin: 0;">STAGE 4: YOUR EDGE</div>
+    </div>
+    <div style="font-size: 12px; color: #6c757d; margin-bottom: 10px;">What makes me different from everyone else?</div>
+    <div class="remarkable-card">
+      <div class="remarkable-label">THE RULE YOU BREAK</div>
+      <div class="remarkable-text" style="font-size: 13px;">
+        "Most breathwork teachers ask you to close your eyes and go inward. You ask them to open their eyes, face a stranger, and breathe together until the walls come down."
+      </div>
+      <div style="margin-top: 8px; font-size: 11px; color: #6c757d;">
+        Breathwork is private → Breathwork is witnessed
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STAGE 5: YOUR MODEL (Incomplete) ─── -->
+  <div class="card" style="border-left: 3px solid #5e17eb;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <div style="width: 22px; height: 22px; border-radius: 50%; background: #5e17eb; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0;">5</div>
+      <div class="card-eyebrow" style="margin: 0; color: #5e17eb;">STAGE 5: YOUR MODEL</div>
+    </div>
+    <div style="font-size: 12px; color: #6c757d; margin-bottom: 10px;">How do I build a business from this?</div>
+
+    <div class="layer-row">
+      <div class="layer-dot" style="background: #8b5cf6;"></div>
+      <div class="layer-name">Attraction</div>
+      <div class="layer-status layer-have">Have it</div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-dot" style="background: #E9A23B;"></div>
+      <div class="layer-name">Core</div>
+      <div class="layer-status layer-have">Have it</div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-dot" style="background: #10b981;"></div>
+      <div class="layer-name">Scale</div>
+      <div class="layer-status layer-working">Inconsistent</div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-dot" style="background: #3b82f6;"></div>
+      <div class="layer-name">Continuity</div>
+      <div class="layer-status layer-missing">Missing</div>
+    </div>
+
+    <button class="btn-primary">Complete Your Model →</button>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 2: EXPERIENCES
+     "What am I building right now and what do I need to do?"
+     Arc: Active experience journey → checklist → past chain
+     ═══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-experiences">
+
+  <!-- Active Experience -->
+  <div class="card exp-active">
+    <div class="card-eyebrow">UPCOMING</div>
+    <div class="exp-name">Somatic Fire</div>
+    <div class="exp-meta">Workshop &middot; May 24 <span class="exp-countdown">15 days</span></div>
+
+    <!-- Section progress overview -->
+    <div style="margin-top: 14px;">
+      <div class="section-progress">
+        <div class="section-icon">📣</div>
+        <div class="section-info">
+          <div class="section-name">Marketing</div>
+          <div class="section-count">5 of 9 done</div>
+        </div>
+        <div class="section-bar">
+          <div class="progress-track"><div class="progress-fill" style="width: 56%;"></div></div>
+        </div>
+      </div>
+      <div class="section-progress">
+        <div class="section-icon">🗂️</div>
+        <div class="section-info">
+          <div class="section-name">Organisation</div>
+          <div class="section-count">3 of 12 done</div>
+        </div>
+        <div class="section-bar">
+          <div class="progress-track"><div class="progress-fill" style="width: 25%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary">Open Checklist →</button>
+  </div>
+
+  <!-- Next unchecked items preview -->
+  <div class="card">
+    <div class="card-eyebrow">NEXT UP</div>
+    <div class="checklist-item">
+      <div class="check"></div>
+      <span class="cl-label">Share 1 testimonial from a past experience</span>
+      <span class="cl-bolt">⚡</span>
+    </div>
+    <div class="checklist-item">
+      <div class="check"></div>
+      <span class="cl-label">Post behind-the-scenes content</span>
+      <span class="cl-bolt">⚡</span>
+    </div>
+    <div class="checklist-item">
+      <div class="check"></div>
+      <span class="cl-label">Send "last chance" reminder 48h before</span>
+      <span class="cl-bolt">⚡</span>
+    </div>
+  </div>
+
+  <!-- Create new -->
+  <div class="no-exp-cta" style="margin-bottom: 12px;">
+    <div class="no-exp-option" onclick="">
+      <div class="no-exp-icon">✨</div>
+      <div class="no-exp-label">Find Inspiration</div>
+      <div class="no-exp-sub">From creators you admire</div>
+    </div>
+    <div class="no-exp-option" onclick="">
+      <div class="no-exp-icon">➕</div>
+      <div class="no-exp-label">New Experience</div>
+      <div class="no-exp-sub">I know what I want</div>
+    </div>
+  </div>
+
+  <!-- Past experiences -->
+  <div class="card">
+    <div class="card-eyebrow">PAST EXPERIENCES</div>
+    <div class="past-exp">
+      <div class="past-dot"></div>
+      <div class="past-info">
+        <div class="past-name">Breathwork Circle</div>
+        <div class="past-meta">Apr 10 &middot; 18 attendees &middot; Circle</div>
+      </div>
+      <div class="past-3pct">3%: Slow the opening ritual</div>
+    </div>
+    <div class="past-exp">
+      <div class="past-dot"></div>
+      <div class="past-info">
+        <div class="past-name">Shaking Medicine</div>
+        <div class="past-meta">Mar 22 &middot; 14 attendees &middot; Workshop</div>
+      </div>
+      <div class="past-3pct">3%: Louder music in discharge</div>
+    </div>
+    <div class="past-exp">
+      <div class="past-dot"></div>
+      <div class="past-info">
+        <div class="past-name">Morning Reset</div>
+        <div class="past-meta">Feb 15 &middot; 8 attendees &middot; Workshop</div>
+      </div>
+      <div class="past-3pct">3%: Start with shaking not talking</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 3: GROWTH
+     "Is my movement compounding?"
+     Arc: KPIs → 3% improvement chain → top fans → trajectory
+     ═══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-growth">
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-val">47</div>
+      <div class="kpi-label">Total Attendees</div>
+      <div class="kpi-trend kpi-up">↑ 12 this month</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">12%</div>
+      <div class="kpi-label">Repeat Rate</div>
+      <div class="kpi-trend kpi-up">↑ from 8%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">4</div>
+      <div class="kpi-label">Experiences Run</div>
+      <div class="kpi-trend kpi-neutral">1 upcoming</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val" style="font-size: 18px;">14 → 18</div>
+      <div class="kpi-label">Avg. Attendance</div>
+      <div class="kpi-trend kpi-up">↑ growing</div>
+    </div>
+  </div>
+
+  <!-- 3% Chain -->
+  <div class="card">
+    <div class="card-eyebrow">YOUR 3% IMPROVEMENT CHAIN</div>
+    <div class="card-sub" style="margin-bottom: 12px;">Each experience builds on the last. This is how you compound.</div>
+
+    <div class="chain-item">
+      <div class="chain-dot">3</div>
+      <div>
+        <div class="chain-exp">Breathwork Circle</div>
+        <div class="chain-note">"Slow the opening ritual. People need 5 more minutes to land before we go deep."</div>
+        <div class="chain-meta">Apr 10 &middot; 18 attendees &middot; Applied ✓</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot">2</div>
+      <div>
+        <div class="chain-exp">Shaking Medicine</div>
+        <div class="chain-note">"The discharge music needs to be louder. People hold back when they can hear each other."</div>
+        <div class="chain-meta">Mar 22 &middot; 14 attendees &middot; Applied ✓</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot">1</div>
+      <div>
+        <div class="chain-exp">Morning Reset</div>
+        <div class="chain-note">"Start with shaking, not talking. The body needs to move before the mind can listen."</div>
+        <div class="chain-meta">Feb 15 &middot; 8 attendees</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Fans -->
+  <div class="card">
+    <div class="card-eyebrow">YOUR TOP FANS</div>
+    <div class="card-sub" style="margin-bottom: 10px;">People who keep coming back.</div>
+    <div class="fan-row">
+      <div class="fan-avatar">SL</div>
+      <div class="fan-name">Sarah L.</div>
+      <div class="fan-count">3 experiences</div>
+    </div>
+    <div class="fan-row">
+      <div class="fan-avatar">MK</div>
+      <div class="fan-name">Marcus K.</div>
+      <div class="fan-count">2 experiences</div>
+    </div>
+    <div class="fan-row">
+      <div class="fan-avatar">JR</div>
+      <div class="fan-name">Jess R.</div>
+      <div class="fan-count">2 experiences</div>
+    </div>
+  </div>
+
+  <!-- Scope trajectory -->
+  <div class="card-gradient card" style="position: relative; z-index: 1;">
+    <div class="card-eyebrow">YOUR TRAJECTORY</div>
+    <div class="card-title">Lake → Waterfall</div>
+    <div class="card-sub">
+      You started broad and unsure. Three experiences in, you've found your specific thing:
+      witnessed breathwork in small rooms. Stay here. Build the evidence.
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Creator Home Journey — 3 Mockups</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #1a1a2e;
+    color: #f8f9fa;
+    padding: 20px;
+  }
+
+  .mockup-selector {
+    display: flex; gap: 8px; justify-content: center; margin-bottom: 24px;
+    position: sticky; top: 0; z-index: 100; background: #1a1a2e; padding: 12px 0;
+  }
+  .mockup-btn {
+    padding: 10px 20px; border-radius: 10px; border: 2px solid #333;
+    background: transparent; color: #adb5bd; font-weight: 700; font-size: 13px;
+    cursor: pointer; font-family: inherit;
+  }
+  .mockup-btn.active { border-color: #E9A23B; color: #E9A23B; background: rgba(233,162,59,0.08); }
+
+  .mockup { display: none; }
+  .mockup.active { display: block; }
+
+  .phone {
+    max-width: 390px; margin: 0 auto;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #1a1a2e; border-radius: 24px;
+    min-height: 750px; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    padding-bottom: 30px;
+  }
+
+  /* ─── Shared styles ─── */
+  .header-branded {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+    padding: 20px 16px 16px; color: white;
+    border-radius: 0 0 20px 20px;
+  }
+  .header-title { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+  .header-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .header-stats { display: flex; gap: 16px; margin-top: 12px; }
+  .stat-val { font-size: 20px; font-weight: 800; }
+  .stat-label { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .content { padding: 16px; }
+
+  .card {
+    background: white; border-radius: 16px; padding: 16px;
+    margin-bottom: 12px; border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .card-eyebrow {
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: #5e17eb; margin-bottom: 6px;
+  }
+  .card-title { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+  .card-sub { font-size: 13px; color: #6c757d; line-height: 1.4; }
+
+  .btn-primary {
+    display: block; width: 100%; padding: 14px; margin-top: 12px;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit;
+  }
+  .btn-outline {
+    display: block; width: 100%; padding: 12px; margin-top: 8px;
+    background: transparent; border: 1px solid #dee2e6; border-radius: 12px;
+    font-size: 13px; font-weight: 600; color: #6c757d; cursor: pointer; font-family: inherit;
+  }
+
+  .step-indicator {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+  }
+  .step-number {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; flex-shrink: 0;
+  }
+  .step-number.done { background: #10b981; color: white; }
+  .step-number.current { background: #5e17eb; color: white; }
+  .step-number.upcoming { background: #e9ecef; color: #adb5bd; }
+  .step-label { font-size: 11px; font-weight: 700; color: #6c757d; }
+  .step-label.current { color: #5e17eb; }
+
+  /* Progress bar */
+  .progress-track { height: 4px; background: #e9ecef; border-radius: 2px; margin: 12px 0; }
+  .progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #5e17eb, #E9A23B); }
+
+  /* Checklist preview */
+  .checklist-item {
+    display: flex; align-items: center; gap: 8px; padding: 8px 0;
+    border-bottom: 1px solid #f1f3f5; font-size: 13px;
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #dee2e6; flex-shrink: 0; }
+  .check.done { background: #10b981; border-color: #10b981; }
+  .checklist-label { color: #495057; }
+  .checklist-label.done { color: #adb5bd; text-decoration: line-through; }
+
+  /* Experience card */
+  .exp-card {
+    background: white; border-radius: 16px; padding: 16px;
+    margin-bottom: 12px; border-left: 3px solid #5e17eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .exp-name { font-size: 15px; font-weight: 800; }
+  .exp-meta { font-size: 11px; color: #6c757d; margin-top: 2px; }
+  .exp-countdown {
+    display: inline-block; padding: 2px 8px; border-radius: 6px;
+    font-size: 11px; font-weight: 700; margin-left: 6px;
+  }
+  .exp-countdown.soon { background: rgba(233,162,59,0.1); color: #E9A23B; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; padding: 0 16px; margin-bottom: 0; }
+  .tab {
+    padding: 10px 16px; font-size: 13px; font-weight: 600;
+    color: #adb5bd; border-bottom: 2px solid transparent;
+    cursor: pointer; background: none; border-top: none; border-left: none; border-right: none;
+    font-family: inherit;
+  }
+  .tab.active { color: #5e17eb; border-bottom-color: #5e17eb; }
+
+  /* Journey path */
+  .journey-path { position: relative; padding-left: 28px; }
+  .journey-line {
+    position: absolute; left: 11px; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(180deg, #10b981 0%, #5e17eb 40%, #e9ecef 60%);
+  }
+  .journey-step { position: relative; margin-bottom: 16px; }
+  .journey-dot {
+    position: absolute; left: -22px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;
+    box-shadow: 0 0 0 2px;
+  }
+  .journey-dot.done { background: #10b981; color: #10b981; }
+  .journey-dot.current { background: #5e17eb; color: #5e17eb; box-shadow: 0 0 0 2px #5e17eb, 0 0 8px rgba(94,23,235,0.3); }
+  .journey-dot.upcoming { background: #e9ecef; color: #e9ecef; }
+
+  .mockup-label {
+    text-align: center; margin-bottom: 16px;
+    font-size: 14px; font-weight: 700; color: #E9A23B;
+  }
+  .mockup-desc {
+    text-align: center; margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto;
+    font-size: 13px; color: #adb5bd; line-height: 1.5;
+  }
+
+  /* Next action card */
+  .next-action {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+    border-radius: 16px; padding: 16px; color: white; margin-bottom: 12px;
+    position: relative; overflow: hidden;
+  }
+  .next-action::before {
+    content: ''; position: absolute; top: -20px; right: -10px;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+  }
+  .next-action .card-eyebrow { color: rgba(255,255,255,0.5); }
+  .next-action .card-title { color: white; }
+  .next-action .card-sub { color: rgba(255,255,255,0.7); }
+</style>
+</head>
+<body>
+
+<div class="mockup-selector">
+  <button class="mockup-btn active" onclick="showMockup('a')">V1: Journey Path</button>
+  <button class="mockup-btn" onclick="showMockup('b')">V2: Next Action</button>
+  <button class="mockup-btn" onclick="showMockup('c')">V3: Hybrid</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     V1: JOURNEY PATH
+     Single vertical path showing where you are in the flywheel.
+     Every step visible. Current step expanded with CTA.
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="mockup active" id="mockup-a">
+  <div class="mockup-label">V1: Journey Path</div>
+  <div class="mockup-desc">
+    A single vertical timeline showing every step. The current step is expanded
+    with the action. Completed steps are collapsed. Future steps are dimmed.
+    The user always knows where they are and what's next.
+  </div>
+  <div class="phone">
+    <div class="header-branded">
+      <div class="header-title">Your Movement</div>
+      <div class="header-sub">Workshop Creator &middot; The Waterfall</div>
+      <div class="header-stats">
+        <div><div class="stat-val">3</div><div class="stat-label">Experiences</div></div>
+        <div><div class="stat-val">47</div><div class="stat-label">Attendees</div></div>
+        <div><div class="stat-val">12%</div><div class="stat-label">Repeat</div></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="journey-path">
+        <div class="journey-line"></div>
+
+        <!-- Step 1: Done -->
+        <div class="journey-step">
+          <div class="journey-dot done"></div>
+          <div class="card" style="opacity: 0.7; padding: 12px;">
+            <div class="step-indicator">
+              <div class="step-number done">&#10003;</div>
+              <div class="step-label">Your Creator DNA</div>
+            </div>
+            <div style="font-size: 12px; color: #6c757d; margin-top: 4px;">
+              Workshop Creator &middot; Wim Hof + Gabby Bernstein blend
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Done -->
+        <div class="journey-step">
+          <div class="journey-dot done"></div>
+          <div class="card" style="opacity: 0.7; padding: 12px;">
+            <div class="step-indicator">
+              <div class="step-number done">&#10003;</div>
+              <div class="step-label">Design Your Experience</div>
+            </div>
+            <div style="font-size: 12px; color: #6c757d; margin-top: 4px;">
+              "Somatic Fire" &middot; Workshop &middot; May 24
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Current -->
+        <div class="journey-step">
+          <div class="journey-dot current"></div>
+          <div class="card" style="border-left: 3px solid #5e17eb;">
+            <div class="step-indicator">
+              <div class="step-number current">3</div>
+              <div class="step-label current">Fill The Room</div>
+            </div>
+            <div class="card-title" style="margin-top: 8px;">5 of 9 marketing tasks done</div>
+            <div class="progress-track"><div class="progress-fill" style="width: 56%;"></div></div>
+
+            <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">Write the one-line promise</span></div>
+            <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">Create the booking page</span></div>
+            <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">Post 3 teaser pieces</span></div>
+            <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">DM 10 warm leads</span></div>
+            <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">Confirmation email</span></div>
+            <div class="checklist-item"><div class="check"></div><span class="checklist-label">Share 1 testimonial</span></div>
+            <div class="checklist-item"><div class="check"></div><span class="checklist-label">Behind-the-scenes content</span></div>
+            <div class="checklist-item"><div class="check"></div><span class="checklist-label">Send "last chance" reminder</span></div>
+
+            <button class="btn-primary">Open Full Checklist →</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Upcoming -->
+        <div class="journey-step">
+          <div class="journey-dot upcoming"></div>
+          <div class="card" style="opacity: 0.4; padding: 12px;">
+            <div class="step-indicator">
+              <div class="step-number upcoming">4</div>
+              <div class="step-label">Deliver + Close the Loop</div>
+            </div>
+            <div style="font-size: 12px; color: #adb5bd; margin-top: 4px;">
+              Post-event follow-up, attendee upload, reflection
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Upcoming -->
+        <div class="journey-step">
+          <div class="journey-dot upcoming"></div>
+          <div class="card" style="opacity: 0.4; padding: 12px;">
+            <div class="step-indicator">
+              <div class="step-number upcoming">5</div>
+              <div class="step-label">Compound + Run Again</div>
+            </div>
+            <div style="font-size: 12px; color: #adb5bd; margin-top: 4px;">
+              3% improvement, dashboard review, next experience
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     V2: NEXT ACTION
+     Minimal. One bold card showing THE thing to do right now.
+     Past context collapsed below. Future hidden entirely.
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="mockup" id="mockup-b">
+  <div class="mockup-label">V2: Next Action</div>
+  <div class="mockup-desc">
+    One hero card showing exactly what to do RIGHT NOW.
+    No timeline, no future steps. Just the next action.
+    Past experiences collapsed below for reference.
+  </div>
+  <div class="phone">
+    <div class="header-branded">
+      <div class="header-title">Your Movement</div>
+      <div class="header-sub">Workshop Creator &middot; The Waterfall</div>
+      <div class="header-stats">
+        <div><div class="stat-val">3</div><div class="stat-label">Experiences</div></div>
+        <div><div class="stat-val">47</div><div class="stat-label">Attendees</div></div>
+        <div><div class="stat-val">12%</div><div class="stat-label">Repeat</div></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Active experience context -->
+      <div class="exp-card">
+        <div class="exp-name">Somatic Fire</div>
+        <div class="exp-meta">Workshop &middot; May 24 <span class="exp-countdown soon">15 days</span></div>
+      </div>
+
+      <!-- THE next action -->
+      <div class="next-action">
+        <div class="card-eyebrow">YOUR NEXT MOVE</div>
+        <div class="card-title">Share 1 testimonial from a past experience</div>
+        <div class="card-sub" style="margin-top: 6px;">
+          5 of 9 marketing tasks done. 4 remaining before your event.
+        </div>
+        <div class="progress-track" style="background: rgba(255,255,255,0.15);">
+          <div class="progress-fill" style="width: 56%; background: #E9A23B;"></div>
+        </div>
+        <button class="btn-primary" style="margin-top: 16px;">Mark Done ✓</button>
+        <button class="btn-outline" style="color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.2); margin-top: 8px;">Open Full Checklist →</button>
+      </div>
+
+      <!-- Quick actions -->
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <div class="card" style="flex: 1; text-align: center; padding: 14px 8px; cursor: pointer;">
+          <div style="font-size: 20px; margin-bottom: 4px;">✨</div>
+          <div style="font-size: 11px; font-weight: 700; color: #5e17eb;">New Experience</div>
+        </div>
+        <div class="card" style="flex: 1; text-align: center; padding: 14px 8px; cursor: pointer;">
+          <div style="font-size: 20px; margin-bottom: 4px;">📊</div>
+          <div style="font-size: 11px; font-weight: 700; color: #5e17eb;">Dashboard</div>
+        </div>
+        <div class="card" style="flex: 1; text-align: center; padding: 14px 8px; cursor: pointer;">
+          <div style="font-size: 20px; margin-bottom: 4px;">🔄</div>
+          <div style="font-size: 11px; font-weight: 700; color: #5e17eb;">Run Again</div>
+        </div>
+      </div>
+
+      <!-- Past experiences -->
+      <div class="card-eyebrow" style="padding: 0 4px; margin-bottom: 8px;">Past Experiences</div>
+      <div class="card" style="padding: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 13px; font-weight: 700;">Breathwork Circle</div>
+            <div style="font-size: 11px; color: #6c757d;">Apr 10 &middot; 18 attendees</div>
+          </div>
+          <div style="font-size: 11px; color: #10b981; font-weight: 700;">3%: Slow the opening</div>
+        </div>
+      </div>
+      <div class="card" style="padding: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 13px; font-weight: 700;">Shaking Medicine</div>
+            <div style="font-size: 11px; color: #6c757d;">Mar 22 &middot; 14 attendees</div>
+          </div>
+          <div style="font-size: 11px; color: #10b981; font-weight: 700;">3%: Louder music</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     V3: HYBRID
+     Compact journey progress at top, expanded current step below.
+     Best of both: user sees where they are AND gets a clear CTA.
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="mockup" id="mockup-c">
+  <div class="mockup-label">V3: Hybrid</div>
+  <div class="mockup-desc">
+    Compact horizontal journey bar at the top (where am I?).
+    Expanded current step below (what do I do now?).
+    Past experiences and dashboard accessible but not in the way.
+  </div>
+  <div class="phone">
+    <div class="header-branded">
+      <div class="header-title">Your Movement</div>
+      <div class="header-sub">Workshop Creator &middot; The Waterfall</div>
+
+      <!-- Compact journey bar -->
+      <div style="display: flex; align-items: center; gap: 4px; margin-top: 14px;">
+        <div style="display: flex; align-items: center; gap: 4px; flex: 1;">
+          <div style="width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">&#10003;</div>
+          <div style="flex: 1; height: 3px; background: rgba(255,255,255,0.3); border-radius: 2px;"></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px; flex: 1;">
+          <div style="width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">&#10003;</div>
+          <div style="flex: 1; height: 3px; background: rgba(255,255,255,0.3); border-radius: 2px;"></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px; flex: 1;">
+          <div style="width: 20px; height: 20px; border-radius: 50%; background: white; color: #5e17eb; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">3</div>
+          <div style="flex: 1; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px;"></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px; flex: 1;">
+          <div style="width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.3);">4</div>
+          <div style="flex: 1; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px;"></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0;">
+          <div style="width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.3);">5</div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 9px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px;">
+        <span>DNA</span>
+        <span>Design</span>
+        <span style="color: white; font-weight: 700;">Fill</span>
+        <span>Deliver</span>
+        <span>Compound</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Active experience -->
+      <div class="exp-card">
+        <div class="exp-name">Somatic Fire</div>
+        <div class="exp-meta">Workshop &middot; May 24 <span class="exp-countdown soon">15 days</span></div>
+      </div>
+
+      <!-- Current step: Fill the Room -->
+      <div class="card" style="border-left: 3px solid #5e17eb;">
+        <div class="card-eyebrow">STEP 3: FILL THE ROOM</div>
+        <div class="card-title">5 of 9 marketing tasks done</div>
+        <div class="progress-track"><div class="progress-fill" style="width: 56%;"></div></div>
+
+        <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">Write the one-line promise</span></div>
+        <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">Create the booking page</span></div>
+        <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">Post 3 teaser pieces</span></div>
+        <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">DM 10 warm leads</span></div>
+        <div class="checklist-item"><div class="check done"></div><span class="checklist-label done">Confirmation email</span></div>
+        <div class="checklist-item"><div class="check"></div><span class="checklist-label"><strong>Share 1 testimonial</strong></span></div>
+        <div class="checklist-item"><div class="check"></div><span class="checklist-label">Behind-the-scenes content</span></div>
+        <div class="checklist-item"><div class="check"></div><span class="checklist-label">Send "last chance" reminder</span></div>
+
+        <button class="btn-primary">Open Full Checklist →</button>
+      </div>
+
+      <!-- Organisation preview -->
+      <div class="card">
+        <div class="card-eyebrow">ORGANISATION</div>
+        <div class="card-title" style="font-size: 14px;">3 of 12 tasks done</div>
+        <div class="progress-track"><div class="progress-fill" style="width: 25%;"></div></div>
+        <button class="btn-outline">View Organisation Tasks →</button>
+      </div>
+
+      <!-- Past experiences -->
+      <div class="card-eyebrow" style="padding: 0 4px; margin-top: 8px; margin-bottom: 8px;">PAST EXPERIENCES</div>
+      <div class="card" style="padding: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 13px; font-weight: 700;">Breathwork Circle</div>
+            <div style="font-size: 11px; color: #6c757d;">Apr 10 &middot; 18 attendees</div>
+          </div>
+          <div style="font-size: 11px; color: #10b981; font-weight: 700;">3%: Slow the opening</div>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div style="display: flex; gap: 8px; margin-top: 8px;">
+        <div class="card" style="flex: 1; text-align: center; padding: 12px;">
+          <div style="font-size: 18px; font-weight: 800;">47</div>
+          <div style="font-size: 10px; color: #6c757d; text-transform: uppercase;">Attendees</div>
+        </div>
+        <div class="card" style="flex: 1; text-align: center; padding: 12px;">
+          <div style="font-size: 18px; font-weight: 800;">12%</div>
+          <div style="font-size: 10px; color: #6c757d; text-transform: uppercase;">Repeat</div>
+        </div>
+        <div class="card" style="flex: 1; text-align: center; padding: 12px;">
+          <div style="font-size: 18px; font-weight: 800;">3</div>
+          <div style="font-size: 10px; color: #6c757d; text-transform: uppercase;">Experiences</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showMockup(id) {
+  document.querySelectorAll('.mockup').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.mockup-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mockup-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

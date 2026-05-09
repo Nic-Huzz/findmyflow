@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Creator Identity Card — Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0a12;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+
+  .state-toggle {
+    display: flex; gap: 6px; margin-bottom: 20px;
+    position: sticky; top: 0; z-index: 100; background: #0a0a12; padding: 10px 0;
+  }
+  .toggle-btn {
+    padding: 8px 16px; border-radius: 8px; border: 2px solid #222;
+    background: transparent; color: #666; font-weight: 700; font-size: 12px;
+    cursor: pointer; font-family: inherit;
+  }
+  .toggle-btn.active { border-color: #E9A23B; color: #E9A23B; background: rgba(233,162,59,0.06); }
+
+  .state { display: none; }
+  .state.active { display: block; }
+
+  .state-label { text-align: center; font-size: 13px; font-weight: 700; color: #E9A23B; margin-bottom: 6px; }
+  .state-desc { text-align: center; font-size: 12px; color: #555; margin-bottom: 20px; max-width: 380px; line-height: 1.5; }
+
+  /* ═══════════════════════════════════════════
+     THE CARD
+     ═══════════════════════════════════════════ */
+  .card-container {
+    width: 360px;
+    perspective: 1000px;
+  }
+
+  .creator-card {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #0d0d1a;
+    box-shadow:
+      0 0 0 1px rgba(233,162,59,0.15),
+      0 4px 20px rgba(0,0,0,0.5),
+      0 0 60px rgba(94,23,235,0.08);
+  }
+
+  /* Holographic border shimmer */
+  .creator-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    background: conic-gradient(
+      from 0deg,
+      #5e17eb, #E9A23B, #10b981, #5e17eb, #E9A23B, #5e17eb
+    );
+    z-index: -1;
+    animation: borderShimmer 6s linear infinite;
+  }
+  @keyframes borderShimmer {
+    to { filter: hue-rotate(360deg); }
+  }
+
+  /* Inner card (sits on top of holographic border) */
+  .card-inner {
+    background: #0d0d1a;
+    border-radius: 19px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Atmospheric glow */
+  .card-inner::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -20px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(94,23,235,0.2) 0%, transparent 70%);
+    pointer-events: none; z-index: 1;
+  }
+  .card-inner::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: -30px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(233,162,59,0.12) 0%, transparent 70%);
+    pointer-events: none; z-index: 1;
+  }
+
+  /* ─── Hero section (avatar + identity) ─── */
+  .card-hero {
+    position: relative;
+    padding: 24px 20px 16px;
+    z-index: 2;
+  }
+
+  .card-hero-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 120px;
+    background: linear-gradient(180deg, rgba(94,23,235,0.15) 0%, transparent 100%);
+    z-index: 0;
+  }
+
+  .hero-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-avatar {
+    width: 80px; height: 80px;
+    border-radius: 16px;
+    border: 2px solid rgba(233,162,59,0.4);
+    box-shadow: 0 0 24px rgba(94,23,235,0.25), 0 0 48px rgba(233,162,59,0.1);
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    flex-shrink: 0;
+  }
+  .hero-avatar img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  .hero-info {
+    flex: 1;
+    padding-top: 4px;
+  }
+
+  .hero-archetype {
+    font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.5px; color: #E9A23B; margin-bottom: 4px;
+  }
+
+  .hero-name {
+    font-size: 22px; font-weight: 900; color: white;
+    letter-spacing: -0.5px; line-height: 1.1;
+    background: linear-gradient(135deg, #ffffff 40%, #E9A23B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-position {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 6px; padding: 3px 10px;
+    background: rgba(255,255,255,0.06); border-radius: 8px;
+    font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5);
+  }
+  .hero-position-icon { font-size: 12px; }
+
+  /* ─── Stats row ─── */
+  .card-stats {
+    display: flex;
+    gap: 1px;
+    margin: 0 20px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative; z-index: 2;
+  }
+  .stat {
+    flex: 1; text-align: center; padding: 10px 4px;
+    background: rgba(13,13,26,0.8);
+  }
+  .stat:first-child { border-radius: 12px 0 0 12px; }
+  .stat:last-child { border-radius: 0 12px 12px 0; }
+  .stat-val {
+    font-size: 18px; font-weight: 900; color: white;
+  }
+  .stat-label {
+    font-size: 8px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: rgba(255,255,255,0.3); margin-top: 2px;
+  }
+
+  /* ─── Skills ─── */
+  .card-skills {
+    padding: 14px 20px 0;
+    position: relative; z-index: 2;
+  }
+  .skills-row {
+    display: flex; flex-wrap: wrap; gap: 5px;
+  }
+  .skill-tag {
+    padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;
+    background: rgba(94,23,235,0.12); border: 1px solid rgba(94,23,235,0.2);
+    color: rgba(255,255,255,0.65);
+  }
+
+  /* ─── Edge quote ─── */
+  .card-edge {
+    padding: 14px 20px;
+    position: relative; z-index: 2;
+  }
+  .edge-block {
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid #E9A23B;
+    border-radius: 0 10px 10px 0;
+  }
+  .edge-label {
+    font-size: 8px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: #E9A23B; margin-bottom: 5px;
+  }
+  .edge-text {
+    font-size: 12px; line-height: 1.55; color: rgba(255,255,255,0.55);
+    font-style: italic;
+  }
+
+  /* ─── North Stars ─── */
+  .card-stars {
+    padding: 0 20px 14px;
+    position: relative; z-index: 2;
+  }
+  .stars-label {
+    font-size: 8px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: rgba(255,255,255,0.2); margin-bottom: 8px;
+  }
+  .stars-row {
+    display: flex; gap: 6px;
+  }
+  .star-chip {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px 4px 4px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+  }
+  .star-avatar {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+  .star-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .star-name { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.4); }
+
+  /* ─── Business layers ─── */
+  .card-layers {
+    padding: 0 20px 20px;
+    position: relative; z-index: 2;
+  }
+  .layers-row {
+    display: flex; gap: 4px;
+  }
+  .layer {
+    flex: 1; text-align: center; padding: 8px 2px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .layer-bar {
+    width: 3px; height: 16px; border-radius: 2px; margin: 0 auto 4px;
+  }
+  .layer-name {
+    font-size: 7px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.05em; color: rgba(255,255,255,0.2);
+  }
+  .layer-val {
+    font-size: 10px; font-weight: 800; margin-top: 2px;
+  }
+  .layer-have { color: #10b981; }
+  .layer-wip { color: #E9A23B; }
+  .layer-miss { color: rgba(255,255,255,0.15); }
+
+  /* ─── Card footer ─── */
+  .card-footer {
+    padding: 0 20px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; z-index: 2;
+  }
+  .card-brand {
+    font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.15);
+    letter-spacing: 0.08em;
+  }
+  .card-watermark {
+    font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.1);
+  }
+
+  /* ═══════════════════════════════════════════
+     INCOMPLETE STATE
+     ═══════════════════════════════════════════ */
+  .incomplete .hero-avatar {
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: none;
+  }
+  .incomplete .hero-avatar-placeholder {
+    width: 80px; height: 80px; border-radius: 16px;
+    border: 2px dashed rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .incomplete .hero-avatar-placeholder span {
+    font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.2);
+    text-align: center; line-height: 1.3;
+  }
+
+  .locked-section {
+    position: relative;
+    padding: 14px 20px;
+    z-index: 2;
+  }
+  .locked-card {
+    padding: 14px;
+    background: rgba(255,255,255,0.02);
+    border: 1px dashed rgba(255,255,255,0.08);
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .locked-card:active { background: rgba(255,255,255,0.04); }
+  .locked-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.25);
+    margin-bottom: 6px;
+  }
+  .locked-title {
+    font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.3);
+  }
+  .locked-sub {
+    font-size: 10px; color: rgba(255,255,255,0.15); margin-top: 2px;
+  }
+  .locked-cta {
+    display: inline-block; margin-top: 8px;
+    padding: 5px 14px; border-radius: 8px;
+    background: rgba(94,23,235,0.15); border: 1px solid rgba(94,23,235,0.25);
+    font-size: 10px; font-weight: 700; color: #5e17eb;
+  }
+
+  /* ═══════════════════════════════════════════
+     BELOW CARD — STORY + ACTIONS
+     ═══════════════════════════════════════════ */
+  .below-card {
+    width: 360px; margin-top: 16px;
+  }
+  .story-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+  .story-label {
+    font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: #5e17eb; margin-bottom: 10px;
+  }
+  .story-text {
+    font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.5);
+  }
+  .story-text strong { color: rgba(255,255,255,0.85); font-weight: 700; }
+  .story-text em { color: #E9A23B; font-style: normal; font-weight: 700; }
+
+  .action-row {
+    display: flex; gap: 8px;
+  }
+  .action-btn {
+    flex: 1; padding: 13px; border-radius: 12px; text-align: center;
+    font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit;
+    border: none;
+  }
+  .action-primary {
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e;
+  }
+  .action-secondary {
+    background: rgba(94,23,235,0.1);
+    border: 1px solid rgba(94,23,235,0.2);
+    color: #5e17eb;
+  }
+
+  /* ═══════════════════════════════════════════
+     PHONE WRAPPER
+     ═══════════════════════════════════════════ */
+  .phone-wrap {
+    max-width: 390px; margin: 0 auto;
+    background: #0a0a12;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    padding-bottom: 30px;
+  }
+  .phone-header {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+    padding: 18px 16px 12px; color: white;
+    border-radius: 0 0 20px 20px;
+  }
+  .phone-tabs {
+    display: flex; padding: 0 8px; margin-top: 10px;
+  }
+  .phone-tab {
+    flex: 1; padding: 10px 0; text-align: center;
+    font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.3);
+    border-bottom: 2px solid transparent;
+  }
+  .phone-tab.active { color: white; border-bottom-color: #E9A23B; }
+  .phone-content { padding: 16px; }
+</style>
+</head>
+<body>
+
+<div class="state-toggle">
+  <button class="toggle-btn active" onclick="showState('complete')">Complete Card</button>
+  <button class="toggle-btn" onclick="showState('incomplete')">Incomplete (3/5)</button>
+  <button class="toggle-btn" onclick="showState('in-app')">In-App Context</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     COMPLETE CARD (standalone, shareable)
+     ═══════════════════════════════════════════ -->
+<div class="state active" id="state-complete">
+  <div class="state-label">Complete Creator Card</div>
+  <div class="state-desc">All 5 stages done. Screenshottable, shareable. The holographic border shimmers.</div>
+
+  <div class="card-container">
+    <div class="creator-card">
+      <div class="card-inner">
+        <div class="card-hero-bg"></div>
+
+        <div class="card-hero">
+          <div class="hero-row">
+            <div class="hero-avatar">
+              <div style="width:100%;height:100%;background:linear-gradient(135deg,#5e17eb,#E9A23B);display:flex;align-items:center;justify-content:center;font-size:36px;">🔥</div>
+            </div>
+            <div class="hero-info">
+              <div class="hero-archetype">Workshop Creator</div>
+              <div class="hero-name">Witnessed<br>Breathwork</div>
+              <div class="hero-position">
+                <span class="hero-position-icon">🌊</span>
+                The Waterfall
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-stats">
+          <div class="stat">
+            <div class="stat-val">4</div>
+            <div class="stat-label">Experiences</div>
+          </div>
+          <div class="stat">
+            <div class="stat-val">47</div>
+            <div class="stat-label">Attendees</div>
+          </div>
+          <div class="stat">
+            <div class="stat-val">12%</div>
+            <div class="stat-label">Repeat</div>
+          </div>
+          <div class="stat">
+            <div class="stat-val">420</div>
+            <div class="stat-label">XP</div>
+          </div>
+        </div>
+
+        <div class="card-skills">
+          <div class="skills-row">
+            <span class="skill-tag">Coaching</span>
+            <span class="skill-tag">Performing</span>
+            <span class="skill-tag">Teaching</span>
+            <span class="skill-tag">Connecting</span>
+          </div>
+        </div>
+
+        <div class="card-edge">
+          <div class="edge-block">
+            <div class="edge-label">Your Edge</div>
+            <div class="edge-text">
+              "Most breathwork teachers ask you to close your eyes. You ask them to open their eyes, face a stranger, and breathe together until the walls come down."
+            </div>
+          </div>
+        </div>
+
+        <div class="card-stars">
+          <div class="stars-label">North Stars</div>
+          <div class="stars-row">
+            <div class="star-chip">
+              <div class="star-avatar"><div style="width:100%;height:100%;background:linear-gradient(135deg,#5e17eb,#E9A23B);"></div></div>
+              <div class="star-name">Wim Hof</div>
+            </div>
+            <div class="star-chip">
+              <div class="star-avatar"><div style="width:100%;height:100%;background:linear-gradient(135deg,#E9A23B,#5e17eb);"></div></div>
+              <div class="star-name">Gabby Bernstein</div>
+            </div>
+            <div class="star-chip">
+              <div class="star-avatar"><div style="width:100%;height:100%;background:linear-gradient(135deg,#10b981,#5e17eb);"></div></div>
+              <div class="star-name">Seane Corn</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-layers">
+          <div class="layers-row">
+            <div class="layer">
+              <div class="layer-bar" style="background:#8b5cf6;"></div>
+              <div class="layer-name">Attract</div>
+              <div class="layer-val layer-have">&#10003;</div>
+            </div>
+            <div class="layer">
+              <div class="layer-bar" style="background:#E9A23B;"></div>
+              <div class="layer-name">Core</div>
+              <div class="layer-val layer-have">&#10003;</div>
+            </div>
+            <div class="layer">
+              <div class="layer-bar" style="background:#10b981;opacity:0.4;"></div>
+              <div class="layer-name">Scale</div>
+              <div class="layer-val layer-wip">~</div>
+            </div>
+            <div class="layer">
+              <div class="layer-bar" style="background:#3b82f6;opacity:0.2;"></div>
+              <div class="layer-name">Continuity</div>
+              <div class="layer-val layer-miss">-</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-brand">FINDMYFLOW</div>
+          <div class="card-watermark">findmyflow.nichuzz.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Below card: story + actions -->
+  <div class="below-card">
+    <div class="story-card">
+      <div class="story-label">Your Creator Origin Story</div>
+      <div class="story-text">
+        You're a <strong>witnessed-breathwork facilitator</strong> who learned from <em>Wim Hof's</em> science and <em>Gabby Bernstein's</em> stage energy. Three experiences in, you've found your thing at <strong>The Waterfall</strong>: small rooms where strangers breathe together with their eyes open until something breaks through. Your rooms are filling (14 → 18 attendees) and people are coming back (12% repeat). Your next edge: <em>build the continuity layer</em> so your tribe doesn't reset between events.
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn action-primary">Share My Card</button>
+      <button class="action-btn action-secondary">Edit Identity</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     INCOMPLETE CARD (3 of 5 stages done)
+     ═══════════════════════════════════════════ -->
+<div class="state" id="state-incomplete">
+  <div class="state-label">Incomplete Card (3 of 5)</div>
+  <div class="state-desc">Stages 1-3 complete. Edge and Model locked. Avatar placeholder. Dashed borders for missing sections. Tap to complete.</div>
+
+  <div class="card-container">
+    <div class="creator-card incomplete" style="box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.5);">
+      <div class="card-inner">
+        <div class="card-hero-bg" style="background: linear-gradient(180deg, rgba(94,23,235,0.08) 0%, transparent 100%);"></div>
+
+        <div class="card-hero">
+          <div class="hero-row">
+            <div class="hero-avatar-placeholder">
+              <span>Complete<br>Essence<br>Mirror</span>
+            </div>
+            <div class="hero-info">
+              <div class="hero-archetype">Workshop Creator</div>
+              <div class="hero-name" style="background: linear-gradient(135deg, rgba(255,255,255,0.6) 40%, rgba(255,255,255,0.2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Your<br>Identity</div>
+              <div class="hero-position">
+                <span class="hero-position-icon">🌊</span>
+                The Waterfall
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats: partial -->
+        <div class="card-stats" style="opacity: 0.5;">
+          <div class="stat">
+            <div class="stat-val">-</div>
+            <div class="stat-label">Experiences</div>
+          </div>
+          <div class="stat">
+            <div class="stat-val">-</div>
+            <div class="stat-label">Attendees</div>
+          </div>
+          <div class="stat">
+            <div class="stat-val">-</div>
+            <div class="stat-label">Repeat</div>
+          </div>
+          <div class="stat">
+            <div class="stat-val">0</div>
+            <div class="stat-label">XP</div>
+          </div>
+        </div>
+
+        <!-- Skills: present (stage 1 done) -->
+        <div class="card-skills">
+          <div class="skills-row">
+            <span class="skill-tag">Coaching</span>
+            <span class="skill-tag">Performing</span>
+            <span class="skill-tag">Teaching</span>
+            <span class="skill-tag">Connecting</span>
+          </div>
+        </div>
+
+        <!-- Stars: present (stage 2 done) -->
+        <div class="card-stars" style="padding-top: 14px;">
+          <div class="stars-label">North Stars</div>
+          <div class="stars-row">
+            <div class="star-chip">
+              <div class="star-avatar"><div style="width:100%;height:100%;background:linear-gradient(135deg,#5e17eb,#E9A23B);"></div></div>
+              <div class="star-name">Wim Hof</div>
+            </div>
+            <div class="star-chip">
+              <div class="star-avatar"><div style="width:100%;height:100%;background:linear-gradient(135deg,#E9A23B,#5e17eb);"></div></div>
+              <div class="star-name">Gabby Bernstein</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edge: LOCKED (stage 4) -->
+        <div class="locked-section">
+          <div class="locked-card">
+            <div class="locked-num">4</div>
+            <div class="locked-title">Your Edge</div>
+            <div class="locked-sub">What makes you different from everyone else?</div>
+            <div class="locked-cta">Discover Your Edge →</div>
+          </div>
+        </div>
+
+        <!-- Model: LOCKED (stage 5) -->
+        <div class="locked-section" style="padding-top: 0;">
+          <div class="locked-card">
+            <div class="locked-num">5</div>
+            <div class="locked-title">Your Model</div>
+            <div class="locked-sub">How do you build a business from this?</div>
+            <div class="locked-cta">Build Your Model →</div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-brand">FINDMYFLOW</div>
+          <div class="card-watermark" style="color: rgba(255,255,255,0.08);">3 of 5 stages</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress below -->
+  <div class="below-card">
+    <div class="story-card">
+      <div class="story-label">Complete your card</div>
+      <div class="story-text">
+        Your skills and tribe are set. Your position is <strong>The Waterfall</strong>. Two stages remain: discover <em>your edge</em> (what makes you remarkable) and build <em>your model</em> (how you make money from this). Complete them to unlock your full Creator Card and shareable origin story.
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn action-primary" style="flex: 2;">Discover Your Edge →</button>
+      <button class="action-btn action-secondary">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     IN-APP CONTEXT (inside the phone, Identity tab)
+     ═══════════════════════════════════════════ -->
+<div class="state" id="state-in-app">
+  <div class="state-label">In-App Context</div>
+  <div class="state-desc">How the card sits inside the Identity tab of CreatorHome. Card at top, story below, within the app shell.</div>
+
+  <div class="phone-wrap">
+    <div class="phone-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:16px;">🔥</div>
+        <div style="flex:1;">
+          <div style="font-size:16px;font-weight:800;">Your Movement</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.45);">Workshop Creator</div>
+        </div>
+        <div style="padding:3px 10px;background:rgba(233,162,59,0.2);border-radius:8px;font-size:11px;font-weight:700;color:#E9A23B;">420 XP</div>
+      </div>
+      <div class="phone-tabs">
+        <div class="phone-tab active">Identity</div>
+        <div class="phone-tab">Experiences</div>
+        <div class="phone-tab">Growth</div>
+      </div>
+    </div>
+
+    <div class="phone-content">
+      <!-- The card, embedded -->
+      <div style="margin: 0 -4px;">
+        <div class="creator-card" style="box-shadow: 0 0 0 1px rgba(233,162,59,0.12), 0 4px 16px rgba(0,0,0,0.3);">
+          <div class="card-inner">
+            <div class="card-hero-bg"></div>
+            <div class="card-hero" style="padding: 18px 16px 12px;">
+              <div class="hero-row">
+                <div class="hero-avatar" style="width:64px;height:64px;border-radius:14px;">
+                  <div style="width:100%;height:100%;background:linear-gradient(135deg,#5e17eb,#E9A23B);display:flex;align-items:center;justify-content:center;font-size:28px;">🔥</div>
+                </div>
+                <div class="hero-info">
+                  <div class="hero-archetype" style="font-size:8px;">Workshop Creator</div>
+                  <div class="hero-name" style="font-size:18px;">Witnessed<br>Breathwork</div>
+                  <div class="hero-position" style="font-size:10px;">
+                    <span class="hero-position-icon">🌊</span> The Waterfall
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-stats" style="margin: 0 16px;">
+              <div class="stat" style="padding:8px 4px;">
+                <div class="stat-val" style="font-size:16px;">4</div>
+                <div class="stat-label">Exp</div>
+              </div>
+              <div class="stat" style="padding:8px 4px;">
+                <div class="stat-val" style="font-size:16px;">47</div>
+                <div class="stat-label">People</div>
+              </div>
+              <div class="stat" style="padding:8px 4px;">
+                <div class="stat-val" style="font-size:16px;">12%</div>
+                <div class="stat-label">Repeat</div>
+              </div>
+              <div class="stat" style="padding:8px 4px;">
+                <div class="stat-val" style="font-size:16px;">420</div>
+                <div class="stat-label">XP</div>
+              </div>
+            </div>
+
+            <div class="card-skills" style="padding: 10px 16px 0;">
+              <div class="skills-row">
+                <span class="skill-tag" style="font-size:9px;padding:3px 8px;">Coaching</span>
+                <span class="skill-tag" style="font-size:9px;padding:3px 8px;">Performing</span>
+                <span class="skill-tag" style="font-size:9px;padding:3px 8px;">Teaching</span>
+                <span class="skill-tag" style="font-size:9px;padding:3px 8px;">Connecting</span>
+              </div>
+            </div>
+
+            <div class="card-edge" style="padding: 10px 16px;">
+              <div class="edge-block" style="padding:10px 12px;">
+                <div class="edge-label">Your Edge</div>
+                <div class="edge-text" style="font-size:11px;">"Most breathwork teachers go inward. You go outward. Eyes open, facing a stranger, until the walls come down."</div>
+              </div>
+            </div>
+
+            <div class="card-stars" style="padding: 0 16px 10px;">
+              <div class="stars-label">North Stars</div>
+              <div class="stars-row">
+                <div class="star-chip"><div class="star-avatar"><div style="width:100%;height:100%;background:linear-gradient(135deg,#5e17eb,#E9A23B);"></div></div><div class="star-name">Wim Hof</div></div>
+                <div class="star-chip"><div class="star-avatar"><div style="width:100%;height:100%;background:linear-gradient(135deg,#E9A23B,#5e17eb);"></div></div><div class="star-name">Gabby B.</div></div>
+                <div class="star-chip"><div class="star-avatar"><div style="width:100%;height:100%;background:linear-gradient(135deg,#10b981,#5e17eb);"></div></div><div class="star-name">Seane Corn</div></div>
+              </div>
+            </div>
+
+            <div class="card-layers" style="padding: 0 16px 14px;">
+              <div class="layers-row">
+                <div class="layer"><div class="layer-bar" style="background:#8b5cf6;"></div><div class="layer-name">Attract</div><div class="layer-val layer-have">&#10003;</div></div>
+                <div class="layer"><div class="layer-bar" style="background:#E9A23B;"></div><div class="layer-name">Core</div><div class="layer-val layer-have">&#10003;</div></div>
+                <div class="layer"><div class="layer-bar" style="background:#10b981;opacity:0.4;"></div><div class="layer-name">Scale</div><div class="layer-val layer-wip">~</div></div>
+                <div class="layer"><div class="layer-bar" style="background:#3b82f6;opacity:0.2;"></div><div class="layer-name">Cont.</div><div class="layer-val layer-miss">-</div></div>
+              </div>
+            </div>
+
+            <div class="card-footer" style="padding: 0 16px 12px;">
+              <div class="card-brand">FINDMYFLOW</div>
+              <div class="card-watermark">findmyflow.nichuzz.com</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Story below -->
+      <div style="margin-top: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 14px;">
+        <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:#5e17eb;margin-bottom:8px;">YOUR ORIGIN STORY</div>
+        <div style="font-size:12px;line-height:1.7;color:rgba(255,255,255,0.45);">
+          You're a <strong style="color:rgba(255,255,255,0.8);">witnessed-breathwork facilitator</strong> who learned from <span style="color:#E9A23B;font-weight:700;">Wim Hof's</span> science and <span style="color:#E9A23B;font-weight:700;">Gabby's</span> energy. You're at <strong style="color:rgba(255,255,255,0.8);">The Waterfall</strong>, three experiences deep. Your next move: <span style="color:#E9A23B;font-weight:700;">build the continuity layer</span>.
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="action-btn action-primary" style="font-size:12px;padding:11px;">Share Card</button>
+        <button class="action-btn action-secondary" style="font-size:12px;padding:11px;">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showState(id) {
+  document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('state-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

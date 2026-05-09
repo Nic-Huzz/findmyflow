@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Creator Home — Dark Theme (3 Tabs)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0a12;
+    min-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+  }
+
+  /* ═══ HEADER ═══ */
+  .app-header {
+    background: linear-gradient(135deg, #5e17eb 0%, #3b0d99 100%);
+    padding: 18px 16px 0; color: white;
+    border-radius: 0 0 20px 20px;
+    position: relative; overflow: hidden;
+  }
+  .app-header::after {
+    content: ''; position: absolute; top: -30px; right: -20px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(233,162,59,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hdr-top { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
+  .hdr-avatar {
+    width: 38px; height: 38px; border-radius: 12px;
+    border: 2px solid rgba(233,162,59,0.3);
+    overflow: hidden; background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .hdr-name { font-size: 16px; font-weight: 800; }
+  .hdr-sub { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+  .hdr-xp {
+    margin-left: auto;
+    padding: 3px 10px; background: rgba(233,162,59,0.2); border-radius: 8px;
+    font-size: 10px; font-weight: 700; color: #E9A23B;
+  }
+
+  /* Tabs */
+  .tabs { display: flex; padding: 0 4px; margin-top: 12px; position: relative; z-index: 1; }
+  .tab {
+    flex: 1; padding: 11px 0; text-align: center;
+    font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.3);
+    border-bottom: 2px solid transparent; cursor: pointer;
+    background: none; border-top: none; border-left: none; border-right: none;
+    font-family: inherit;
+  }
+  .tab.active { color: white; border-bottom-color: #E9A23B; }
+
+  /* ═══ CONTENT ═══ */
+  .tab-content { display: none; padding: 16px; padding-bottom: 40px; }
+  .tab-content.active { display: block; }
+
+  /* ═══ SHARED COMPONENTS ═══ */
+  .section { padding: 0 0 14px; position: relative; }
+  .section-label {
+    font-size: 7px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: rgba(255,255,255,0.18); margin-bottom: 6px;
+  }
+  .divider {
+    height: 1px; margin: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  }
+  .card-dark {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px; padding: 14px; margin-bottom: 10px;
+  }
+  .btn-gold {
+    display: block; width: 100%; padding: 13px;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e; border: none; border-radius: 12px;
+    font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit;
+  }
+  .btn-outline-dark {
+    display: block; width: 100%; padding: 11px;
+    background: transparent; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+    font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.35); cursor: pointer; font-family: inherit;
+    margin-top: 8px;
+  }
+  .progress-track { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; }
+  .progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #5e17eb, #E9A23B); }
+
+  /* ═══ IDENTITY TAB — THE CARD ═══ */
+  .id-card {
+    position: relative; border-radius: 20px; overflow: hidden; background: #0d0d1a; margin-bottom: 10px;
+  }
+  .id-card::before {
+    content: ''; position: absolute; inset: -1px; border-radius: 21px;
+    background: conic-gradient(from 0deg, #5e17eb, #E9A23B, #10b981, #5e17eb, #E9A23B, #5e17eb);
+    z-index: 0; animation: holo 6s linear infinite;
+  }
+  @keyframes holo { to { filter: hue-rotate(360deg); } }
+  .id-inner {
+    position: relative; background: #0d0d1a; border-radius: 19px; overflow: hidden; z-index: 1;
+  }
+  .id-inner::before {
+    content: ''; position: absolute; top: -50px; left: -30px; width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(94,23,235,0.18) 0%, transparent 70%); pointer-events: none;
+  }
+  .id-inner::after {
+    content: ''; position: absolute; bottom: -30px; right: -30px; width: 150px; height: 150px;
+    background: radial-gradient(circle, rgba(233,162,59,0.1) 0%, transparent 70%); pointer-events: none;
+  }
+  .id-section { padding: 0 20px 14px; position: relative; z-index: 2; }
+
+  .id-hero { display: flex; align-items: flex-start; gap: 16px; padding: 22px 20px 14px; position: relative; z-index: 2; }
+  .id-avatar {
+    width: 76px; height: 76px; border-radius: 16px;
+    border: 2px solid rgba(233,162,59,0.35);
+    box-shadow: 0 0 20px rgba(94,23,235,0.2); overflow: hidden; flex-shrink: 0;
+    background: rgba(255,255,255,0.03);
+    display: flex; align-items: center; justify-content: center; font-size: 34px;
+  }
+  .id-type { font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #E9A23B; margin-bottom: 3px; }
+  .id-name {
+    font-size: 20px; font-weight: 900; line-height: 1.1; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 30%, #E9A23B 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .id-focus {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; padding: 3px 9px;
+    background: rgba(255,255,255,0.05); border-radius: 7px;
+    font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.4);
+  }
+
+  .id-skills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .id-skill {
+    padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;
+    background: rgba(94,23,235,0.1); border: 1px solid rgba(94,23,235,0.18); color: rgba(255,255,255,0.6);
+  }
+
+  .id-stars { display: flex; gap: 5px; flex-wrap: wrap; }
+  .id-star {
+    display: flex; align-items: center; gap: 5px; padding: 3px 9px 3px 3px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px;
+  }
+  .id-star-img { width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+  .id-star-name { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.35); }
+
+  .id-biz-row {
+    display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 10px;
+    margin-bottom: 4px;
+  }
+  .id-biz-icon { font-size: 14px; flex-shrink: 0; }
+  .id-biz-info { flex: 1; }
+  .id-biz-label { font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.25); }
+  .id-biz-val { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.55); margin-top: 1px; }
+  .id-biz-status { font-size: 10px; font-weight: 700; flex-shrink: 0; }
+  .st-done { color: #10b981; }
+  .st-wip { color: #E9A23B; }
+  .st-todo { color: rgba(255,255,255,0.12); }
+
+  .id-divider { height: 1px; margin: 0 20px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
+  .id-footer {
+    padding: 0 20px 14px; display: flex; justify-content: space-between; position: relative; z-index: 2;
+  }
+  .id-brand { font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.1); letter-spacing: 0.1em; }
+
+  /* ═══ EXPERIENCES TAB ═══ */
+  .exp-active-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-left: 3px solid #5e17eb; border-radius: 14px; padding: 16px; margin-bottom: 12px;
+  }
+  .exp-name { font-size: 16px; font-weight: 900; color: white; }
+  .exp-meta { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 3px; }
+  .exp-countdown {
+    display: inline-block; padding: 2px 8px; border-radius: 6px; margin-left: 4px;
+    font-size: 10px; font-weight: 700; background: rgba(233,162,59,0.12); color: #E9A23B;
+  }
+
+  .exp-progress-row {
+    display: flex; align-items: center; gap: 10px; padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .exp-progress-row:last-child { border-bottom: none; }
+  .exp-p-icon { font-size: 14px; flex-shrink: 0; }
+  .exp-p-info { flex: 1; }
+  .exp-p-name { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.6); }
+  .exp-p-count { font-size: 10px; color: rgba(255,255,255,0.25); }
+  .exp-p-bar { flex: 0 0 70px; }
+
+  .exp-next-item {
+    display: flex; align-items: center; gap: 8px; padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 12px;
+  }
+  .exp-next-item:last-child { border-bottom: none; }
+  .exp-check {
+    width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.12); flex-shrink: 0;
+  }
+  .exp-check.done { background: #10b981; border-color: #10b981; }
+  .exp-item-label { color: rgba(255,255,255,0.45); flex: 1; }
+  .exp-item-label.done { color: rgba(255,255,255,0.2); text-decoration: line-through; }
+  .exp-bolt { font-size: 12px; cursor: pointer; }
+
+  .exp-create-options { display: flex; gap: 8px; margin-bottom: 12px; }
+  .exp-create-opt {
+    flex: 1; padding: 14px 8px; text-align: center; cursor: pointer;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+  }
+  .exp-create-opt:active { border-color: rgba(94,23,235,0.3); }
+  .exp-opt-icon { font-size: 20px; margin-bottom: 4px; }
+  .exp-opt-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.6); }
+  .exp-opt-sub { font-size: 9px; color: rgba(255,255,255,0.2); margin-top: 2px; }
+
+  .exp-past-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .exp-past-item:last-child { border-bottom: none; }
+  .exp-past-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; flex-shrink: 0; }
+  .exp-past-info { flex: 1; }
+  .exp-past-name { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .exp-past-meta { font-size: 10px; color: rgba(255,255,255,0.2); }
+  .exp-past-3pct { font-size: 10px; color: #10b981; font-weight: 600; text-align: right; max-width: 110px; }
+
+  /* ═══ GROWTH TAB ═══ */
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .kpi-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px; padding: 14px; text-align: center;
+  }
+  .kpi-val { font-size: 24px; font-weight: 900; color: white; }
+  .kpi-label { font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+  .kpi-trend { font-size: 10px; font-weight: 600; margin-top: 4px; }
+  .kpi-up { color: #10b981; }
+  .kpi-neutral { color: rgba(255,255,255,0.25); }
+
+  .chain-item {
+    display: flex; gap: 10px; padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .chain-item:last-child { border-bottom: none; }
+  .chain-dot {
+    width: 22px; height: 22px; border-radius: 50%; background: rgba(16,185,129,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; color: #10b981; flex-shrink: 0; margin-top: 2px;
+  }
+  .chain-exp { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .chain-note { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.4; margin-top: 2px; }
+  .chain-meta { font-size: 10px; color: rgba(255,255,255,0.15); margin-top: 3px; }
+
+  .fan-row {
+    display: flex; align-items: center; gap: 10px; padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .fan-row:last-child { border-bottom: none; }
+  .fan-avatar {
+    width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    display: flex; align-items: center; justify-content: center; font-size: 11px; color: white; font-weight: 700;
+  }
+  .fan-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); flex: 1; }
+  .fan-count { font-size: 11px; color: #E9A23B; font-weight: 700; }
+
+  .trajectory-card {
+    background: linear-gradient(135deg, rgba(94,23,235,0.1) 0%, rgba(233,162,59,0.05) 100%);
+    border: 1px solid rgba(94,23,235,0.15); border-radius: 14px; padding: 16px;
+  }
+  .traj-label { font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; color: #5e17eb; margin-bottom: 6px; }
+  .traj-title { font-size: 16px; font-weight: 900; color: white; margin-bottom: 4px; }
+  .traj-desc { font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.35); }
+  .traj-desc em { color: #E9A23B; font-style: normal; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ═══ APP HEADER ═══ -->
+<div class="app-header">
+  <div class="hdr-top">
+    <div class="hdr-avatar">🔥</div>
+    <div>
+      <div class="hdr-name">Movement Maker</div>
+      <div class="hdr-sub">Workshop Creator</div>
+    </div>
+    <div class="hdr-xp">420 XP</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('identity')">Identity</button>
+    <button class="tab" onclick="switchTab('experiences')">Experiences</button>
+    <button class="tab" onclick="switchTab('growth')">Growth</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 1: IDENTITY — The Creator Card
+     ═══════════════════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-identity">
+  <div class="id-card">
+    <div class="id-inner">
+      <div class="id-hero">
+        <div class="id-avatar">🔥</div>
+        <div>
+          <div class="id-type">Workshop Creator</div>
+          <div class="id-name">Healing<br>But Fun</div>
+          <div class="id-focus">🎯 Focus: Build evidence, stay specific</div>
+        </div>
+      </div>
+
+      <div class="id-section">
+        <div class="section-label">Your Skills</div>
+        <div class="id-skills">
+          <span class="id-skill">Coaching</span>
+          <span class="id-skill">Performing</span>
+          <span class="id-skill">Teaching</span>
+          <span class="id-skill">Connecting</span>
+        </div>
+      </div>
+
+      <div class="id-section">
+        <div class="section-label">North Stars</div>
+        <div class="id-stars">
+          <div class="id-star"><div class="id-star-img"></div><div class="id-star-name">Wim Hof</div></div>
+          <div class="id-star"><div class="id-star-img"></div><div class="id-star-name">Gabby Bernstein</div></div>
+          <div class="id-star"><div class="id-star-img"></div><div class="id-star-name">Seane Corn</div></div>
+        </div>
+      </div>
+
+      <div class="id-divider"></div>
+
+      <div class="id-section" style="padding-top:14px;">
+        <div class="section-label">Blow Up Brand</div>
+        <div style="font-size:15px;font-weight:900;color:rgba(255,255,255,0.8);margin-bottom:8px;letter-spacing:-0.3px;">Healing But Fun</div>
+        <div class="id-biz-row"><div class="id-biz-icon">🔥</div><div class="id-biz-info"><div class="id-biz-label">Rule Break</div><div class="id-biz-val">Breathwork is private → Breathwork is witnessed</div></div></div>
+        <div class="id-biz-row"><div class="id-biz-icon">🔀</div><div class="id-biz-info"><div class="id-biz-label">Unexpected Combo</div><div class="id-biz-val">VC thinking + breathwork + comedy performance</div></div></div>
+        <div class="id-biz-row"><div class="id-biz-icon">⚡</div><div class="id-biz-info"><div class="id-biz-label">Extreme Action</div><div class="id-biz-val">100-person eyes-open breathwork at sunset on the beach</div></div></div>
+      </div>
+
+      <div class="id-divider"></div>
+
+      <div class="id-section" style="padding-top:14px;">
+        <div class="section-label">Your Model</div>
+        <div class="id-biz-row"><div class="id-biz-icon">💼</div><div class="id-biz-info"><div class="id-biz-label">Pay Rent</div><div class="id-biz-val">1:1 coaching sessions + side project income</div></div><div class="id-biz-status st-done">✓</div></div>
+        <div class="id-biz-row"><div style="width:6px;height:6px;border-radius:50%;background:#8b5cf6;flex-shrink:0;"></div><div class="id-biz-info"><div class="id-biz-label">Attraction</div><div class="id-biz-val">Free weekly breathwork on the beach</div></div><div class="id-biz-status st-done">✓</div></div>
+        <div class="id-biz-row"><div style="width:6px;height:6px;border-radius:50%;background:#E9A23B;flex-shrink:0;"></div><div class="id-biz-info"><div class="id-biz-label">Core</div><div class="id-biz-val">90-min witnessed breathwork workshop ($25)</div></div><div class="id-biz-status st-done">✓</div></div>
+        <div class="id-biz-row"><div style="width:6px;height:6px;border-radius:50%;background:#3b82f6;flex-shrink:0;"></div><div class="id-biz-info"><div class="id-biz-label">Continuity</div><div class="id-biz-val">Not set yet</div></div><div class="id-biz-status st-todo">—</div></div>
+      </div>
+
+      <div class="id-divider"></div>
+
+      <div class="id-section" style="padding-top:14px;">
+        <div class="section-label">Play Profile</div>
+        <div class="id-biz-row" style="cursor:pointer;">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#5e17eb,#E9A23B);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:white;font-weight:700;">WH</div>
+          <div class="id-biz-info"><div class="id-biz-label">You work like</div><div class="id-biz-val">Wim Hof</div></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.2);font-weight:600;">See more ›</div>
+        </div>
+      </div>
+
+      <div class="id-footer">
+        <div class="id-brand">FINDMYFLOW</div>
+        <div class="id-brand">findmyflow.nichuzz.com</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;">
+    <button class="btn-gold" style="flex:1;">Share My Card</button>
+    <button class="btn-outline-dark" style="flex:1;margin-top:0;">Edit Identity</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 2: EXPERIENCES
+     "What am I building right now?"
+     ═══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-experiences">
+
+  <!-- Upcoming Experiences -->
+  <div class="section-label" style="margin-bottom:8px;">Upcoming</div>
+
+  <div class="exp-active-card" style="cursor:pointer;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div class="exp-name">Somatic Fire</div>
+        <div class="exp-meta">Workshop · May 24 <span class="exp-countdown">15 days</span></div>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:#5e17eb;">Open →</div>
+    </div>
+    <div style="margin-top:10px;">
+      <div class="exp-progress-row">
+        <div class="exp-p-icon">📣</div>
+        <div class="exp-p-info"><div class="exp-p-name">Marketing</div><div class="exp-p-count">5 of 9</div></div>
+        <div class="exp-p-bar"><div class="progress-track"><div class="progress-fill" style="width:56%;"></div></div></div>
+      </div>
+      <div class="exp-progress-row">
+        <div class="exp-p-icon">🗂️</div>
+        <div class="exp-p-info"><div class="exp-p-name">Organisation</div><div class="exp-p-count">3 of 12</div></div>
+        <div class="exp-p-bar"><div class="progress-track"><div class="progress-fill" style="width:25%;"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exp-active-card" style="cursor:pointer;border-left-color:#E9A23B;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div class="exp-name">Breathwork Circle</div>
+        <div class="exp-meta">Circle · Jun 8 <span class="exp-countdown">30 days</span></div>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:#5e17eb;">Open →</div>
+    </div>
+    <div style="margin-top:10px;">
+      <div class="exp-progress-row">
+        <div class="exp-p-icon">📣</div>
+        <div class="exp-p-info"><div class="exp-p-name">Marketing</div><div class="exp-p-count">1 of 9</div></div>
+        <div class="exp-p-bar"><div class="progress-track"><div class="progress-fill" style="width:11%;"></div></div></div>
+      </div>
+      <div class="exp-progress-row">
+        <div class="exp-p-icon">🗂️</div>
+        <div class="exp-p-info"><div class="exp-p-name">Organisation</div><div class="exp-p-count">0 of 9</div></div>
+        <div class="exp-p-bar"><div class="progress-track"><div class="progress-fill" style="width:0%;"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create New -->
+  <div class="exp-create-options">
+    <div class="exp-create-opt">
+      <div class="exp-opt-icon">✨</div>
+      <div class="exp-opt-label">Find Inspiration</div>
+      <div class="exp-opt-sub">From creators you admire</div>
+    </div>
+    <div class="exp-create-opt">
+      <div class="exp-opt-icon">➕</div>
+      <div class="exp-opt-label">New Experience</div>
+      <div class="exp-opt-sub">I know what I want</div>
+    </div>
+  </div>
+
+  <!-- Past Experiences -->
+  <div class="card-dark">
+    <div class="section-label">Past Experiences</div>
+    <div class="exp-past-item">
+      <div class="exp-past-dot"></div>
+      <div class="exp-past-info"><div class="exp-past-name">Breathwork Circle</div><div class="exp-past-meta">Apr 10 · 18 attendees · Circle</div></div>
+      <div class="exp-past-3pct">3%: Slow the opening</div>
+    </div>
+    <div class="exp-past-item">
+      <div class="exp-past-dot"></div>
+      <div class="exp-past-info"><div class="exp-past-name">Shaking Medicine</div><div class="exp-past-meta">Mar 22 · 14 attendees · Workshop</div></div>
+      <div class="exp-past-3pct">3%: Louder music</div>
+    </div>
+    <div class="exp-past-item">
+      <div class="exp-past-dot"></div>
+      <div class="exp-past-info"><div class="exp-past-name">Morning Reset</div><div class="exp-past-meta">Feb 15 · 8 attendees · Workshop</div></div>
+      <div class="exp-past-3pct">3%: Start with shaking</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 3: GROWTH
+     "Is my movement compounding?"
+     ═══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-growth">
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-val">47</div>
+      <div class="kpi-label">Total Attendees</div>
+      <div class="kpi-trend kpi-up">↑ 12 this month</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">12%</div>
+      <div class="kpi-label">Repeat Rate</div>
+      <div class="kpi-trend kpi-up">↑ from 8%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">4</div>
+      <div class="kpi-label">Experiences Run</div>
+      <div class="kpi-trend kpi-neutral">1 upcoming</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val" style="font-size:18px;">14 → 18</div>
+      <div class="kpi-label">Avg. Attendance</div>
+      <div class="kpi-trend kpi-up">↑ growing</div>
+    </div>
+  </div>
+
+  <!-- 3% Chain -->
+  <div class="card-dark">
+    <div class="section-label">3% Improvement Chain</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.2);margin-bottom:10px;">Each experience builds on the last.</div>
+
+    <div class="chain-item">
+      <div class="chain-dot">3</div>
+      <div>
+        <div class="chain-exp">Breathwork Circle</div>
+        <div class="chain-note">"Slow the opening ritual. People need 5 more minutes to land before we go deep."</div>
+        <div class="chain-meta">Apr 10 · 18 attendees · Applied ✓</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot">2</div>
+      <div>
+        <div class="chain-exp">Shaking Medicine</div>
+        <div class="chain-note">"The discharge music needs to be louder. People hold back when they can hear each other."</div>
+        <div class="chain-meta">Mar 22 · 14 attendees · Applied ✓</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot">1</div>
+      <div>
+        <div class="chain-exp">Morning Reset</div>
+        <div class="chain-note">"Start with shaking, not talking. The body needs to move before the mind can listen."</div>
+        <div class="chain-meta">Feb 15 · 8 attendees</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Fans -->
+  <div class="card-dark">
+    <div class="section-label">Your Top Fans</div>
+    <div style="font-size:10px;color:rgba(255,255,255,0.15);margin-bottom:8px;">People who keep coming back.</div>
+    <div class="fan-row"><div class="fan-avatar">SL</div><div class="fan-name">Sarah L.</div><div class="fan-count">3 experiences</div></div>
+    <div class="fan-row"><div class="fan-avatar">MK</div><div class="fan-name">Marcus K.</div><div class="fan-count">2 experiences</div></div>
+    <div class="fan-row"><div class="fan-avatar">JR</div><div class="fan-name">Jess R.</div><div class="fan-count">2 experiences</div></div>
+  </div>
+
+  <!-- Trajectory -->
+  <div class="trajectory-card">
+    <div class="traj-label">Your Trajectory</div>
+    <div class="traj-title">Lake → Waterfall</div>
+    <div class="traj-desc">
+      You started broad and unsure. Three experiences in, you've found your thing: <em>witnessed breathwork in small rooms</em>. Stay here. Build the evidence. The compounding has started.
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

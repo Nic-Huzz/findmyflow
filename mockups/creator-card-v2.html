@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Creator Identity Card V2</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0a12;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+
+  .toggle {
+    display: flex; gap: 6px; margin-bottom: 16px;
+    position: sticky; top: 0; z-index: 100; background: #0a0a12; padding: 10px 0;
+  }
+  .toggle-btn {
+    padding: 8px 14px; border-radius: 8px; border: 2px solid #222;
+    background: transparent; color: #666; font-weight: 700; font-size: 11px;
+    cursor: pointer; font-family: inherit;
+  }
+  .toggle-btn.active { border-color: #E9A23B; color: #E9A23B; background: rgba(233,162,59,0.06); }
+
+  .view { display: none; width: 100%; max-width: 380px; }
+  .view.active { display: block; }
+
+  .view-label { text-align: center; font-size: 12px; font-weight: 700; color: #E9A23B; margin-bottom: 4px; }
+  .view-desc { text-align: center; font-size: 11px; color: #444; margin-bottom: 16px; line-height: 1.5; }
+
+  /* ═══════════════════════════════════════════
+     THE CARD
+     Inspired by: Valorant (cinematic), Pokemon (holo border),
+     Spotify Wrapped (constraint), Genshin (character art hero)
+     ═══════════════════════════════════════════ */
+
+  .card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #0d0d1a;
+  }
+
+  /* Holographic animated border (Pokemon) */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    background: conic-gradient(from 0deg, #5e17eb, #E9A23B, #10b981, #5e17eb, #E9A23B, #5e17eb);
+    z-index: 0;
+    animation: holo 6s linear infinite;
+  }
+  @keyframes holo { to { filter: hue-rotate(360deg); } }
+
+  .card-inner {
+    position: relative;
+    background: #0d0d1a;
+    border-radius: 19px;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  /* Atmospheric glows (Valorant) */
+  .card-inner::before {
+    content: '';
+    position: absolute; top: -50px; left: -30px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(94,23,235,0.18) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  .card-inner::after {
+    content: '';
+    position: absolute; bottom: -30px; right: -30px;
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, rgba(233,162,59,0.1) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ─── Hero: Avatar + Identity (Genshin split) ─── */
+  .hero {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 22px 20px 14px;
+    position: relative; z-index: 2;
+  }
+  .hero-avatar {
+    width: 76px; height: 76px; border-radius: 16px;
+    border: 2px solid rgba(233,162,59,0.35);
+    box-shadow: 0 0 20px rgba(94,23,235,0.2), 0 0 40px rgba(233,162,59,0.08);
+    overflow: hidden; flex-shrink: 0;
+    background: rgba(255,255,255,0.03);
+  }
+  .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .hero-avatar-placeholder {
+    width: 76px; height: 76px; border-radius: 16px;
+    border: 2px dashed rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .hero-avatar-placeholder span {
+    font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.15);
+    text-align: center; line-height: 1.3;
+  }
+
+  .hero-type {
+    font-size: 8px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.5px; color: #E9A23B; margin-bottom: 3px;
+  }
+  /* Gradient on type (Spotify Wrapped) */
+  .hero-name {
+    font-size: 20px; font-weight: 900; line-height: 1.1;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 30%, #E9A23B 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-position {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 6px; padding: 3px 9px;
+    background: rgba(255,255,255,0.05); border-radius: 7px;
+    font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.4);
+  }
+
+  /* ─── Section styling ─── */
+  .section {
+    padding: 0 20px 14px;
+    position: relative; z-index: 2;
+  }
+  .section-label {
+    font-size: 7px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: rgba(255,255,255,0.18); margin-bottom: 6px;
+  }
+
+  /* ─── Skills (tags) ─── */
+  .skills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .skill {
+    padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;
+    background: rgba(94,23,235,0.1); border: 1px solid rgba(94,23,235,0.18);
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* ─── Edge (quote block) ─── */
+  .edge {
+    padding: 11px 13px;
+    background: rgba(255,255,255,0.02);
+    border-left: 2px solid #E9A23B;
+    border-radius: 0 10px 10px 0;
+  }
+  .edge-label {
+    font-size: 7px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: #E9A23B; margin-bottom: 4px;
+  }
+  .edge-text {
+    font-size: 11px; line-height: 1.55; color: rgba(255,255,255,0.5);
+    font-style: italic;
+  }
+
+  /* ─── North Stars ─── */
+  .stars { display: flex; gap: 5px; flex-wrap: wrap; }
+  .star {
+    display: flex; align-items: center; gap: 5px;
+    padding: 3px 9px 3px 3px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 20px;
+  }
+  .star-img {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(255,255,255,0.06); overflow: hidden;
+  }
+  .star-img img { width: 100%; height: 100%; object-fit: cover; }
+  .star-name { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.35); }
+
+  /* ─── Play Profile DNA (radar/bars) ─── */
+  .dna-grid {
+    display: flex; gap: 4px;
+  }
+  .dna-item {
+    flex: 1; text-align: center; padding: 7px 2px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 8px;
+  }
+  .dna-bar-track {
+    width: 3px; height: 20px; background: rgba(255,255,255,0.06);
+    border-radius: 2px; margin: 0 auto 4px;
+    position: relative;
+  }
+  .dna-bar-fill {
+    position: absolute; bottom: 0; width: 100%; border-radius: 2px;
+    background: linear-gradient(180deg, #5e17eb, #E9A23B);
+  }
+  .dna-label {
+    font-size: 7px; font-weight: 700; color: rgba(255,255,255,0.2);
+    text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .dna-val {
+    font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+
+  /* ─── Business Model (Pay Rent / Blow Up / Scale) ─── */
+  .biz-grid {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .biz-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 10px;
+  }
+  .biz-icon { font-size: 14px; flex-shrink: 0; }
+  .biz-info { flex: 1; }
+  .biz-label {
+    font-size: 8px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.08em; color: rgba(255,255,255,0.25);
+  }
+  .biz-val { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.55); margin-top: 1px; }
+  .biz-status { font-size: 10px; font-weight: 700; flex-shrink: 0; }
+  .biz-done { color: #10b981; }
+  .biz-wip { color: #E9A23B; }
+  .biz-todo { color: rgba(255,255,255,0.12); }
+
+  /* ─── Footer ─── */
+  .card-footer {
+    padding: 0 20px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; z-index: 2;
+  }
+  .card-brand {
+    font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.1);
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── Locked stage ─── */
+  .locked {
+    padding: 12px;
+    background: rgba(255,255,255,0.015);
+    border: 1px dashed rgba(255,255,255,0.07);
+    border-radius: 10px;
+    text-align: center; cursor: pointer;
+  }
+  .locked:active { background: rgba(255,255,255,0.03); }
+  .locked-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.25); }
+  .locked-sub { font-size: 9px; color: rgba(255,255,255,0.12); margin-top: 2px; }
+  .locked-cta {
+    display: inline-block; margin-top: 6px;
+    padding: 4px 12px; border-radius: 6px;
+    background: rgba(94,23,235,0.12); border: 1px solid rgba(94,23,235,0.2);
+    font-size: 9px; font-weight: 700; color: #5e17eb;
+  }
+
+  /* ─── Origin Story ─── */
+  .story {
+    margin-top: 14px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 16px;
+  }
+  .story-label {
+    font-size: 8px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: #5e17eb; margin-bottom: 8px;
+  }
+  .story p {
+    font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.4);
+  }
+  .story strong { color: rgba(255,255,255,0.75); }
+  .story em { color: #E9A23B; font-style: normal; font-weight: 700; }
+
+  .actions {
+    display: flex; gap: 8px; margin-top: 12px;
+  }
+  .act-btn {
+    flex: 1; padding: 12px; border-radius: 11px; text-align: center;
+    font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; border: none;
+  }
+  .act-gold { background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; }
+  .act-purple { background: rgba(94,23,235,0.1); border: 1px solid rgba(94,23,235,0.2); color: #5e17eb; }
+
+  /* Divider line */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    margin: 0 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="toggle">
+  <button class="toggle-btn active" onclick="show('complete')">Complete</button>
+  <button class="toggle-btn" onclick="show('partial')">Partial (4/7)</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     COMPLETE CARD — All 7 sections filled
+     ═══════════════════════════════════════════ -->
+<div class="view active" id="view-complete">
+  <div class="view-label">Complete Creator Card</div>
+  <div class="view-desc">All identity stages done. Shareable.</div>
+
+  <div class="card">
+    <div class="card-inner">
+
+      <!-- 1. Hero: Avatar + Archetype + Business Focus -->
+      <div class="hero">
+        <div class="hero-avatar">
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,#5e17eb,#E9A23B);display:flex;align-items:center;justify-content:center;font-size:34px;">🔥</div>
+        </div>
+        <div>
+          <div class="hero-type">Workshop Creator</div>
+          <div class="hero-name">Healing<br>But Fun</div>
+          <div class="hero-position">
+            🎯 Focus: Build evidence, stay specific
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Your Skills (Stage 1) -->
+      <div class="section">
+        <div class="section-label">Your Skills</div>
+        <div class="skills">
+          <span class="skill">Coaching</span>
+          <span class="skill">Performing</span>
+          <span class="skill">Teaching</span>
+          <span class="skill">Connecting</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 3. North Stars (Stage 2) -->
+      <div class="section">
+        <div class="section-label">North Stars</div>
+        <div class="stars">
+          <div class="star">
+            <div class="star-img"><div style="width:100%;height:100%;background:linear-gradient(135deg,#5e17eb,#E9A23B);"></div></div>
+            <div class="star-name">Wim Hof</div>
+          </div>
+          <div class="star">
+            <div class="star-img"><div style="width:100%;height:100%;background:linear-gradient(135deg,#E9A23B,#5e17eb);"></div></div>
+            <div class="star-name">Gabby Bernstein</div>
+          </div>
+          <div class="star">
+            <div class="star-img"><div style="width:100%;height:100%;background:linear-gradient(135deg,#10b981,#5e17eb);"></div></div>
+            <div class="star-name">Seane Corn</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 5. Blow Up Brand (tagline + 3 inputs) -->
+      <div class="section" style="padding-top: 14px;">
+        <div class="section-label">Blow Up Brand</div>
+        <div style="font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.8); margin-bottom: 10px; letter-spacing: -0.3px;">Healing But Fun</div>
+        <div class="biz-grid">
+          <div class="biz-row">
+            <div class="biz-icon">🔥</div>
+            <div class="biz-info">
+              <div class="biz-label">Rule Break</div>
+              <div class="biz-val">Breathwork is private → Breathwork is witnessed</div>
+            </div>
+          </div>
+          <div class="biz-row">
+            <div class="biz-icon">🔀</div>
+            <div class="biz-info">
+              <div class="biz-label">Unexpected Combo</div>
+              <div class="biz-val">VC analytical thinking + breathwork + comedy performance</div>
+            </div>
+          </div>
+          <div class="biz-row">
+            <div class="biz-icon">⚡</div>
+            <div class="biz-info">
+              <div class="biz-label">Extreme Action</div>
+              <div class="biz-val">Run a 100-person eyes-open breathwork at sunset on the beach</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 6. Your Model: Pay Rent + Scale Income (attraction/core/continuity) -->
+      <div class="section" style="padding-top: 14px;">
+        <div class="section-label">Your Model</div>
+        <div class="biz-grid">
+          <div class="biz-row">
+            <div class="biz-icon">💼</div>
+            <div class="biz-info">
+              <div class="biz-label">Pay Rent</div>
+              <div class="biz-val">1:1 coaching sessions + side project income</div>
+            </div>
+            <div class="biz-status biz-done">&#10003;</div>
+          </div>
+          <div class="biz-row" style="border-color: rgba(139,92,246,0.15);">
+            <div style="width:6px;height:6px;border-radius:50%;background:#8b5cf6;flex-shrink:0;"></div>
+            <div class="biz-info">
+              <div class="biz-label">Attraction</div>
+              <div class="biz-val">Free weekly breathwork on the beach</div>
+            </div>
+            <div class="biz-status biz-done">&#10003;</div>
+          </div>
+          <div class="biz-row" style="border-color: rgba(233,162,59,0.15);">
+            <div style="width:6px;height:6px;border-radius:50%;background:#E9A23B;flex-shrink:0;"></div>
+            <div class="biz-info">
+              <div class="biz-label">Core</div>
+              <div class="biz-val">90-min witnessed breathwork workshop ($25)</div>
+            </div>
+            <div class="biz-status biz-done">&#10003;</div>
+          </div>
+          <div class="biz-row" style="border-color: rgba(59,130,246,0.15);">
+            <div style="width:6px;height:6px;border-radius:50%;background:#3b82f6;flex-shrink:0;"></div>
+            <div class="biz-info">
+              <div class="biz-label">Continuity</div>
+              <div class="biz-val">Not set yet</div>
+            </div>
+            <div class="biz-status biz-todo">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 7. Play Profile: matched founder + see more -->
+      <div class="section" style="padding-top: 14px;">
+        <div class="section-label">Play Profile</div>
+        <div class="biz-row" style="cursor: pointer;">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#5e17eb,#E9A23B);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;">WH</div>
+          <div class="biz-info">
+            <div class="biz-label">You work like</div>
+            <div class="biz-val">Wim Hof</div>
+          </div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.2);font-weight:600;">See more ›</div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="card-brand">FINDMYFLOW</div>
+        <div class="card-brand">findmyflow.nichuzz.com</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions" style="margin-top: 14px;">
+    <button class="act-btn act-gold">Share My Card</button>
+    <button class="act-btn act-purple">Edit Identity</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PARTIAL CARD — 4 of 7 done, 3 locked
+     ═══════════════════════════════════════════ -->
+<div class="view" id="view-partial">
+  <div class="view-label">Partial Card (4 of 7)</div>
+  <div class="view-desc">Skills, Tribe, Position, Edge done. Play Profile, Pay Rent, Scale locked.</div>
+
+  <div class="card" style="box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 4px 20px rgba(0,0,0,0.4);">
+    <div class="card-inner">
+
+      <!-- Hero: no avatar yet -->
+      <div class="hero">
+        <div class="hero-avatar-placeholder">
+          <span>Complete<br>Essence<br>Mirror</span>
+        </div>
+        <div>
+          <div class="hero-type">Workshop Creator</div>
+          <div class="hero-name" style="background: linear-gradient(135deg, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Your<br>Identity</div>
+          <div class="hero-position">
+            🎯 Focus: Build evidence, stay specific
+          </div>
+        </div>
+      </div>
+
+      <!-- Skills: done -->
+      <div class="section">
+        <div class="section-label">Your Skills</div>
+        <div class="skills">
+          <span class="skill">Coaching</span>
+          <span class="skill">Performing</span>
+          <span class="skill">Teaching</span>
+          <span class="skill">Connecting</span>
+        </div>
+      </div>
+
+      <!-- North Stars: done -->
+      <div class="section">
+        <div class="section-label">North Stars</div>
+        <div class="stars">
+          <div class="star">
+            <div class="star-img"><div style="width:100%;height:100%;background:linear-gradient(135deg,#5e17eb,#E9A23B);"></div></div>
+            <div class="star-name">Wim Hof</div>
+          </div>
+          <div class="star">
+            <div class="star-img"><div style="width:100%;height:100%;background:linear-gradient(135deg,#E9A23B,#5e17eb);"></div></div>
+            <div class="star-name">Gabby Bernstein</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Blow Up Brand: LOCKED -->
+      <div class="section" style="padding-top: 14px;">
+        <div class="locked">
+          <div class="locked-title">Blow Up Brand</div>
+          <div class="locked-sub">What rule do you break? What's your unexpected combo?</div>
+          <div class="locked-cta">Find Your Edge →</div>
+        </div>
+      </div>
+
+      <!-- Your Model: LOCKED -->
+      <div class="section">
+        <div class="locked">
+          <div class="locked-title">Your Model</div>
+          <div class="locked-sub">How do you pay rent, and what's your attraction / core / continuity?</div>
+          <div class="locked-cta">Build Your Model →</div>
+        </div>
+      </div>
+
+      <!-- Play Profile: LOCKED -->
+      <div class="section">
+        <div class="locked">
+          <div class="locked-title">Play Profile</div>
+          <div class="locked-sub">How are you wired? Marathon or sprints? Fire or purpose?</div>
+          <div class="locked-cta">Take the Quiz →</div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="card-brand">FINDMYFLOW</div>
+        <div class="card-brand" style="color: rgba(255,255,255,0.06);">4 of 7 stages</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions" style="margin-top: 14px;">
+    <button class="act-btn act-gold" style="flex: 2;">Find Your Edge →</button>
+    <button class="act-btn act-purple">Skip</button>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

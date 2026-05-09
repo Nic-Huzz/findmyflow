@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Identity Tab — 20% / 100% / 1,000,000%</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #111;
+    color: #f8f9fa;
+    padding: 16px;
+  }
+
+  .level-selector {
+    display: flex; gap: 6px; justify-content: center; margin-bottom: 20px;
+    position: sticky; top: 0; z-index: 100; background: #111; padding: 10px 0;
+  }
+  .level-btn {
+    padding: 8px 14px; border-radius: 8px; border: 2px solid #333;
+    background: transparent; color: #888; font-weight: 700; font-size: 12px;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+  }
+  .level-btn.active { border-color: #E9A23B; color: #E9A23B; background: rgba(233,162,59,0.06); }
+
+  .level { display: none; }
+  .level.active { display: block; }
+
+  .level-label { text-align: center; font-size: 13px; font-weight: 700; color: #E9A23B; margin-bottom: 6px; }
+  .level-desc { text-align: center; font-size: 12px; color: #666; margin-bottom: 20px; max-width: 380px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+
+  .phone {
+    max-width: 390px; margin: 0 auto;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #1a1a2e; border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    padding-bottom: 30px;
+  }
+
+  /* ─── Shared header ─── */
+  .header {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+    padding: 20px 16px 14px; color: white;
+    border-radius: 0 0 20px 20px;
+  }
+  .header-top { display: flex; align-items: center; gap: 12px; }
+  .header-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); display: flex; align-items: center;
+    justify-content: center; font-size: 18px; overflow: hidden;
+  }
+  .header-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .header-name { font-size: 17px; font-weight: 800; }
+  .header-sub { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+  .header-xp {
+    margin-left: auto;
+    padding: 3px 10px; background: rgba(233,162,59,0.2); border-radius: 8px;
+    font-size: 11px; font-weight: 700; color: #E9A23B;
+  }
+
+  .tabs {
+    display: flex; padding: 0 8px; margin-top: 10px;
+  }
+  .tab {
+    flex: 1; padding: 10px 0; text-align: center;
+    font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.35);
+    border-bottom: 2px solid transparent;
+  }
+  .tab.active { color: white; border-bottom-color: #E9A23B; }
+
+  .content { padding: 16px; }
+
+  /* ─── Shared elements ─── */
+  .card {
+    background: white; border-radius: 14px; padding: 14px;
+    margin-bottom: 10px; border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 700;
+  }
+  .badge-purple { background: rgba(94,23,235,0.08); color: #5e17eb; border: 1px solid rgba(94,23,235,0.12); }
+  .badge-green { background: rgba(16,185,129,0.08); color: #10b981; }
+  .badge-gold { background: rgba(233,162,59,0.1); color: #E9A23B; }
+
+  .btn-gold {
+    display: block; width: 100%; padding: 13px; margin-top: 10px;
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a2e; border: none; border-radius: 12px;
+    font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit;
+  }
+  .btn-outline {
+    display: block; width: 100%; padding: 10px; margin-top: 8px;
+    background: transparent; border: 1px solid #e9ecef; border-radius: 10px;
+    font-size: 12px; font-weight: 600; color: #5e17eb; cursor: pointer; font-family: inherit;
+  }
+
+  .progress-track { height: 4px; background: #e9ecef; border-radius: 2px; }
+  .progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #5e17eb, #E9A23B); }
+
+  .eyebrow {
+    font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; margin-bottom: 5px;
+  }
+
+  /* ═══════════════════════════════════════════
+     20% SPECIFIC STYLES
+     ═══════════════════════════════════════════ */
+  .s20-stage-done {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: white; border-radius: 12px;
+    margin-bottom: 6px; border: 1px solid rgba(0,0,0,0.04);
+    cursor: pointer;
+  }
+  .s20-stage-done:active { background: #f8f9fa; }
+  .s20-check {
+    width: 20px; height: 20px; border-radius: 50%; background: #10b981;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: white; font-weight: 800; flex-shrink: 0;
+  }
+  .s20-stage-label { font-size: 12px; font-weight: 700; color: #495057; flex: 1; }
+  .s20-stage-value { font-size: 11px; color: #adb5bd; text-align: right; max-width: 140px; }
+  .s20-expand { font-size: 12px; color: #dee2e6; }
+
+  .s20-current {
+    background: white; border-radius: 14px; padding: 16px;
+    margin-bottom: 10px; border-left: 3px solid #5e17eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .s20-num {
+    width: 22px; height: 22px; border-radius: 50%; background: #5e17eb;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: white; font-weight: 800; flex-shrink: 0;
+  }
+  .s20-locked {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: #f8f9fa; border-radius: 12px;
+    margin-bottom: 6px; opacity: 0.5;
+  }
+  .s20-lock-icon {
+    width: 20px; height: 20px; border-radius: 50%; background: #e9ecef;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #adb5bd; flex-shrink: 0;
+  }
+
+  .s20-creators {
+    display: flex; gap: -4px; margin-top: 6px;
+  }
+  .s20-creator-img {
+    width: 28px; height: 28px; border-radius: 50%; border: 2px solid white;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    margin-left: -6px;
+  }
+  .s20-creator-img:first-child { margin-left: 0; }
+
+  /* ═══════════════════════════════════════════
+     100% SPECIFIC STYLES
+     ═══════════════════════════════════════════ */
+  .s100-identity-card {
+    background: linear-gradient(135deg, #5e17eb 0%, #4c1d95 100%);
+    border-radius: 20px; padding: 20px; color: white;
+    margin-bottom: 14px; position: relative; overflow: hidden;
+  }
+  .s100-identity-card::before {
+    content: ''; position: absolute; top: -40px; right: -20px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(233,162,59,0.15) 0%, transparent 70%);
+  }
+  .s100-avatar-row {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+    position: relative; z-index: 1;
+  }
+  .s100-avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 3px solid rgba(233,162,59,0.4);
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; overflow: hidden;
+  }
+  .s100-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .s100-name { font-size: 18px; font-weight: 800; }
+  .s100-archetype { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+  .s100-skills {
+    display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px;
+    position: relative; z-index: 1;
+  }
+  .s100-skill {
+    padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.7);
+  }
+
+  .s100-position {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; background: rgba(255,255,255,0.08); border-radius: 10px;
+    margin-bottom: 12px; position: relative; z-index: 1;
+  }
+  .s100-position-icon { font-size: 16px; }
+  .s100-position-name { font-size: 12px; font-weight: 700; }
+
+  .s100-north-stars {
+    display: flex; gap: 6px; position: relative; z-index: 1;
+  }
+  .s100-star {
+    display: flex; align-items: center; gap: 5px;
+    padding: 3px 8px 3px 3px; background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+  }
+  .s100-star-img {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+  .s100-star-name { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.6); }
+
+  .s100-narrative {
+    background: white; border-radius: 14px; padding: 16px; margin-bottom: 12px;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .s100-narrative p {
+    font-size: 14px; line-height: 1.65; color: #495057;
+  }
+  .s100-narrative strong { color: #1a1a2e; font-weight: 700; }
+  .s100-narrative em { color: #5e17eb; font-style: normal; font-weight: 700; }
+
+  .s100-layers {
+    display: flex; gap: 6px; margin-bottom: 10px;
+  }
+  .s100-layer {
+    flex: 1; text-align: center; padding: 10px 4px;
+    background: white; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05);
+  }
+  .s100-layer-bar {
+    width: 4px; height: 24px; border-radius: 2px; margin: 0 auto 6px;
+  }
+  .s100-layer-name { font-size: 9px; font-weight: 700; color: #6c757d; text-transform: uppercase; letter-spacing: 0.03em; }
+  .s100-layer-status { font-size: 10px; font-weight: 700; margin-top: 2px; }
+
+  /* ═══════════════════════════════════════════
+     1000000% SPECIFIC STYLES
+     ═══════════════════════════════════════════ */
+  .mega-card-outer {
+    perspective: 800px; margin-bottom: 16px;
+  }
+  .mega-card {
+    background: linear-gradient(145deg, #1a1a2e 0%, #2d1b69 40%, #1a1a2e 100%);
+    border-radius: 20px; padding: 24px 20px; color: white;
+    position: relative; overflow: hidden;
+    border: 1px solid rgba(233,162,59,0.2);
+    box-shadow: 0 8px 32px rgba(94,23,235,0.2), 0 0 0 1px rgba(233,162,59,0.1);
+  }
+  .mega-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(94,23,235,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(233,162,59,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .mega-card::after {
+    content: ''; position: absolute; top: -1px; left: 20%; right: 20%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(233,162,59,0.5), transparent);
+  }
+
+  .mega-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 18px; position: relative; z-index: 1;
+  }
+  .mega-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    border: 3px solid rgba(233,162,59,0.4);
+    box-shadow: 0 0 20px rgba(94,23,235,0.3), 0 0 40px rgba(233,162,59,0.1);
+    overflow: hidden; background: rgba(255,255,255,0.05);
+    display: flex; align-items: center; justify-content: center; font-size: 32px;
+  }
+  .mega-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .mega-title { font-size: 20px; font-weight: 900; letter-spacing: -0.3px; }
+  .mega-type {
+    font-size: 11px; font-weight: 700; color: #E9A23B; margin-top: 2px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .mega-position {
+    font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 4px;
+  }
+
+  .mega-skills {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .mega-skill {
+    padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    background: rgba(94,23,235,0.15); border: 1px solid rgba(94,23,235,0.25);
+    color: rgba(255,255,255,0.75);
+  }
+
+  .mega-quote {
+    position: relative; z-index: 1;
+    padding: 14px 16px; margin-bottom: 16px;
+    background: rgba(255,255,255,0.03); border-radius: 12px;
+    border-left: 2px solid #E9A23B;
+  }
+  .mega-quote-label {
+    font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: #E9A23B; margin-bottom: 6px;
+  }
+  .mega-quote-text {
+    font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.7);
+    font-style: italic;
+  }
+
+  .mega-stars {
+    display: flex; gap: 8px; margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .mega-star-label {
+    font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.25);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;
+  }
+  .mega-star-chip {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px 4px 4px; background: rgba(255,255,255,0.06);
+    border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
+  }
+  .mega-star-avatar {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+  }
+  .mega-star-name { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.5); }
+
+  .mega-layers {
+    display: flex; gap: 4px; position: relative; z-index: 1;
+  }
+  .mega-layer {
+    flex: 1; text-align: center; padding: 8px 2px;
+    border-radius: 8px; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .mega-layer-dot {
+    width: 6px; height: 6px; border-radius: 50%; margin: 0 auto 4px;
+  }
+  .mega-layer-name { font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.03em; }
+  .mega-layer-val { font-size: 10px; font-weight: 700; margin-top: 2px; }
+  .mega-layer-have { color: #10b981; }
+  .mega-layer-wip { color: #E9A23B; }
+  .mega-layer-miss { color: rgba(255,255,255,0.2); }
+
+  .mega-story {
+    background: white; border-radius: 14px; padding: 16px; margin-bottom: 12px;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .mega-story-label {
+    font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.2px; color: #5e17eb; margin-bottom: 8px;
+  }
+  .mega-story p {
+    font-size: 14px; line-height: 1.7; color: #495057;
+  }
+  .mega-story strong { color: #1a1a2e; }
+  .mega-story em { color: #5e17eb; font-style: normal; font-weight: 700; }
+
+  .mega-share {
+    display: flex; gap: 8px;
+  }
+  .mega-share-btn {
+    flex: 1; padding: 12px; border-radius: 12px; text-align: center;
+    font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+    border: none;
+  }
+  .mega-share-primary { background: linear-gradient(135deg, #E9A23B, #f5c55a); color: #1a1a2e; }
+  .mega-share-secondary { background: rgba(94,23,235,0.06); color: #5e17eb; }
+</style>
+</head>
+<body>
+
+<div class="level-selector">
+  <button class="level-btn active" onclick="showLevel('20')">20% Polish</button>
+  <button class="level-btn" onclick="showLevel('100')">100% Rethink</button>
+  <button class="level-btn" onclick="showLevel('mega')">1,000,000%</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     20% — POLISH
+     Same structure, collapsed completed stages, dominant current,
+     creator portraits, flatter hierarchy
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="level active" id="level-20">
+  <div class="level-label">20% — Polish What's There</div>
+  <div class="level-desc">Collapsed completed stages, dominant current stage, creator portraits, progress in header, locked future stages.</div>
+  <div class="phone">
+    <div class="header">
+      <div class="header-top">
+        <div class="header-avatar">🔥</div>
+        <div>
+          <div class="header-name">Your Movement</div>
+          <div class="header-sub">4 of 5 stages complete</div>
+        </div>
+        <div class="header-xp">420 XP</div>
+      </div>
+      <div style="margin-top: 8px;">
+        <div class="progress-track" style="background: rgba(255,255,255,0.12);"><div class="progress-fill" style="width: 80%;"></div></div>
+      </div>
+      <div class="tabs">
+        <div class="tab active">Identity</div>
+        <div class="tab">Experiences</div>
+        <div class="tab">Growth</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Completed: collapsed single-line -->
+      <div class="s20-stage-done">
+        <div class="s20-check">&#10003;</div>
+        <div class="s20-stage-label">Your Skills</div>
+        <div class="s20-stage-value">Coaching, Performing, Teaching</div>
+        <div class="s20-expand">&#8250;</div>
+      </div>
+
+      <div class="s20-stage-done">
+        <div class="s20-check">&#10003;</div>
+        <div class="s20-stage-label">Your Tribe</div>
+        <div style="display: flex; align-items: center; gap: 4px; margin-left: auto;">
+          <div class="s20-creator-img"></div>
+          <div class="s20-creator-img"></div>
+          <div class="s20-creator-img"></div>
+          <div style="font-size: 11px; color: #adb5bd; margin-left: 4px;">Workshop</div>
+        </div>
+        <div class="s20-expand">&#8250;</div>
+      </div>
+
+      <div class="s20-stage-done">
+        <div class="s20-check">&#10003;</div>
+        <div class="s20-stage-label">Your Position</div>
+        <div class="s20-stage-value">🌊 The Waterfall</div>
+        <div class="s20-expand">&#8250;</div>
+      </div>
+
+      <div class="s20-stage-done">
+        <div class="s20-check">&#10003;</div>
+        <div class="s20-stage-label">Your Edge</div>
+        <div class="s20-stage-value" style="font-style: italic;">"Breathwork is witnessed"</div>
+        <div class="s20-expand">&#8250;</div>
+      </div>
+
+      <!-- Current: expanded -->
+      <div class="s20-current">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+          <div class="s20-num">5</div>
+          <div>
+            <div style="font-size: 14px; font-weight: 800; color: #5e17eb;">Your Model</div>
+            <div style="font-size: 11px; color: #6c757d;">How do I build a business from this?</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <div style="flex: 1; padding: 8px; background: rgba(16,185,129,0.06); border-radius: 8px; text-align: center;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: #8b5cf6; margin: 0 auto 4px;"></div>
+            <div style="font-size: 9px; font-weight: 700; color: #6c757d;">ATTRACT</div>
+            <div style="font-size: 11px; font-weight: 700; color: #10b981; margin-top: 2px;">Have it</div>
+          </div>
+          <div style="flex: 1; padding: 8px; background: rgba(16,185,129,0.06); border-radius: 8px; text-align: center;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: #E9A23B; margin: 0 auto 4px;"></div>
+            <div style="font-size: 9px; font-weight: 700; color: #6c757d;">CORE</div>
+            <div style="font-size: 11px; font-weight: 700; color: #10b981; margin-top: 2px;">Have it</div>
+          </div>
+          <div style="flex: 1; padding: 8px; background: rgba(233,162,59,0.06); border-radius: 8px; text-align: center;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; margin: 0 auto 4px;"></div>
+            <div style="font-size: 9px; font-weight: 700; color: #6c757d;">SCALE</div>
+            <div style="font-size: 11px; font-weight: 700; color: #E9A23B; margin-top: 2px;">Working</div>
+          </div>
+          <div style="flex: 1; padding: 8px; background: rgba(239,68,68,0.04); border-radius: 8px; text-align: center;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: #3b82f6; margin: 0 auto 4px;"></div>
+            <div style="font-size: 9px; font-weight: 700; color: #6c757d;">CONT.</div>
+            <div style="font-size: 11px; font-weight: 700; color: #ef4444; margin-top: 2px;">Missing</div>
+          </div>
+        </div>
+
+        <button class="btn-gold">Complete Your Model →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     100% — RETHINK
+     Living identity card at top that assembles as stages complete.
+     Below: single narrative paragraph using the data.
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="level" id="level-100">
+  <div class="level-label">100% — Rethink the Pattern</div>
+  <div class="level-desc">A living identity card builds up as stages complete. Below it, a single narrative paragraph tells your creator story using the data.</div>
+  <div class="phone">
+    <div class="header">
+      <div class="header-top">
+        <div class="header-avatar">🔥</div>
+        <div>
+          <div class="header-name">Your Movement</div>
+          <div class="header-sub">4 of 5 identity stages complete</div>
+        </div>
+        <div class="header-xp">420 XP</div>
+      </div>
+      <div class="tabs" style="margin-top: 10px;">
+        <div class="tab active">Identity</div>
+        <div class="tab">Experiences</div>
+        <div class="tab">Growth</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Living identity card -->
+      <div class="s100-identity-card">
+        <div class="s100-avatar-row">
+          <div class="s100-avatar">🔥</div>
+          <div>
+            <div class="s100-name">Workshop Creator</div>
+            <div class="s100-archetype">🌊 The Waterfall</div>
+          </div>
+        </div>
+
+        <!-- Skills (from stage 1) -->
+        <div class="s100-skills">
+          <div class="s100-skill">Coaching</div>
+          <div class="s100-skill">Performing</div>
+          <div class="s100-skill">Teaching</div>
+          <div class="s100-skill">Connecting</div>
+        </div>
+
+        <!-- Position (from stage 3) -->
+        <div class="s100-position">
+          <div class="s100-position-icon">🌊</div>
+          <div class="s100-position-name">The Waterfall — you found your specific thing</div>
+        </div>
+
+        <!-- North stars (from stage 2) -->
+        <div style="position: relative; z-index: 1;">
+          <div style="font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">YOUR NORTH STARS</div>
+          <div class="s100-north-stars">
+            <div class="s100-star">
+              <div class="s100-star-img"></div>
+              <div class="s100-star-name">Wim Hof</div>
+            </div>
+            <div class="s100-star">
+              <div class="s100-star-img"></div>
+              <div class="s100-star-name">Gabby Bernstein</div>
+            </div>
+            <div class="s100-star">
+              <div class="s100-star-img"></div>
+              <div class="s100-star-name">Seane Corn</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Narrative paragraph -->
+      <div class="s100-narrative">
+        <div class="eyebrow" style="color: #5e17eb;">YOUR STORY</div>
+        <p>
+          You're a <strong>coach and performer</strong> who creates <em>workshops</em> from <strong>The Waterfall</strong>. You found your specific thing: <em>witnessed breathwork in small rooms</em>. What makes you different is that most breathwork teachers go inward. You go outward. Your attraction and core offers are solid. Your next move: <em>build the continuity layer</em> so your community doesn't reset between events.
+        </p>
+      </div>
+
+      <!-- Business layers (stage 5 - current) -->
+      <div class="card" style="border-left: 3px solid #5e17eb;">
+        <div class="eyebrow" style="color: #5e17eb;">STAGE 5: YOUR MODEL</div>
+        <div style="font-size: 13px; color: #6c757d; margin-bottom: 10px;">The last piece of your identity.</div>
+        <div class="s100-layers">
+          <div class="s100-layer">
+            <div class="s100-layer-bar" style="background: #8b5cf6;"></div>
+            <div class="s100-layer-name">Attract</div>
+            <div class="s100-layer-status" style="color: #10b981;">&#10003;</div>
+          </div>
+          <div class="s100-layer">
+            <div class="s100-layer-bar" style="background: #E9A23B;"></div>
+            <div class="s100-layer-name">Core</div>
+            <div class="s100-layer-status" style="color: #10b981;">&#10003;</div>
+          </div>
+          <div class="s100-layer">
+            <div class="s100-layer-bar" style="background: #10b981; opacity: 0.4;"></div>
+            <div class="s100-layer-name">Scale</div>
+            <div class="s100-layer-status" style="color: #E9A23B;">~</div>
+          </div>
+          <div class="s100-layer">
+            <div class="s100-layer-bar" style="background: #3b82f6; opacity: 0.2;"></div>
+            <div class="s100-layer-name">Cont.</div>
+            <div class="s100-layer-status" style="color: #adb5bd;">—</div>
+          </div>
+        </div>
+        <button class="btn-gold">Complete Your Model →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     1,000,000% — THE CREATOR CARD
+     A shareable trading card. AI-generated story. Living identity.
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="level" id="level-mega">
+  <div class="level-label">1,000,000% — The Creator Card</div>
+  <div class="level-desc">A shareable, screenshottable identity card. AI-generated origin story. The card assembles as you complete stages and evolves as you run experiences.</div>
+  <div class="phone" style="background: linear-gradient(180deg, #f0eef5 0%, #e9ecef 100%);">
+    <div class="header" style="border-radius: 0 0 20px 20px;">
+      <div class="header-top">
+        <div class="header-avatar">🔥</div>
+        <div>
+          <div class="header-name">Your Movement</div>
+          <div class="header-sub">Identity complete</div>
+        </div>
+        <div class="header-xp">420 XP</div>
+      </div>
+      <div class="tabs" style="margin-top: 10px;">
+        <div class="tab active">Identity</div>
+        <div class="tab">Experiences</div>
+        <div class="tab">Growth</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- THE CARD -->
+      <div class="mega-card-outer">
+        <div class="mega-card">
+          <!-- Header -->
+          <div class="mega-header">
+            <div class="mega-avatar">🔥</div>
+            <div>
+              <div class="mega-title">Workshop Creator</div>
+              <div class="mega-type">Witnessed Breathwork</div>
+              <div class="mega-position">🌊 The Waterfall &middot; 3 experiences &middot; 47 attendees</div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="mega-skills">
+            <div class="mega-skill">Coaching</div>
+            <div class="mega-skill">Performing</div>
+            <div class="mega-skill">Teaching</div>
+            <div class="mega-skill">Connecting</div>
+          </div>
+
+          <!-- Edge quote -->
+          <div class="mega-quote">
+            <div class="mega-quote-label">YOUR EDGE</div>
+            <div class="mega-quote-text">
+              "Most breathwork teachers ask you to close your eyes. You ask them to open their eyes, face a stranger, and breathe together until the walls come down."
+            </div>
+          </div>
+
+          <!-- North Stars -->
+          <div style="position: relative; z-index: 1; margin-bottom: 14px;">
+            <div class="mega-star-label">NORTH STARS</div>
+            <div class="mega-stars">
+              <div class="mega-star-chip">
+                <div class="mega-star-avatar"></div>
+                <div class="mega-star-name">Wim Hof</div>
+              </div>
+              <div class="mega-star-chip">
+                <div class="mega-star-avatar"></div>
+                <div class="mega-star-name">Gabby Bernstein</div>
+              </div>
+              <div class="mega-star-chip">
+                <div class="mega-star-avatar"></div>
+                <div class="mega-star-name">Seane Corn</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Business layers -->
+          <div class="mega-layers">
+            <div class="mega-layer">
+              <div class="mega-layer-dot" style="background: #8b5cf6;"></div>
+              <div class="mega-layer-name">Attract</div>
+              <div class="mega-layer-val mega-layer-have">&#10003;</div>
+            </div>
+            <div class="mega-layer">
+              <div class="mega-layer-dot" style="background: #E9A23B;"></div>
+              <div class="mega-layer-name">Core</div>
+              <div class="mega-layer-val mega-layer-have">&#10003;</div>
+            </div>
+            <div class="mega-layer">
+              <div class="mega-layer-dot" style="background: #10b981;"></div>
+              <div class="mega-layer-name">Scale</div>
+              <div class="mega-layer-val mega-layer-wip">~</div>
+            </div>
+            <div class="mega-layer">
+              <div class="mega-layer-dot" style="background: #3b82f6;"></div>
+              <div class="mega-layer-name">Cont.</div>
+              <div class="mega-layer-val mega-layer-miss">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI-generated story -->
+      <div class="mega-story">
+        <div class="mega-story-label">YOUR CREATOR ORIGIN STORY</div>
+        <p>
+          You're a <strong>witnessed-breathwork facilitator</strong> who learned from <em>Wim Hof's</em> science and <em>Gabby Bernstein's</em> stage energy. Three experiences in, you've found your thing at <strong>The Waterfall</strong>: small rooms where strangers breathe together with their eyes open until something breaks through. Your rooms are filling (14 → 18 → 18 attendees) and people are coming back (12% repeat rate). Your next edge: build the continuity layer so your tribe doesn't reset between events. The method compounds. The people compound. You compound.
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="mega-share">
+        <button class="mega-share-btn mega-share-primary">Share My Card</button>
+        <button class="mega-share-btn mega-share-secondary">Edit Identity</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showLevel(id) {
+  document.querySelectorAll('.level').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('level-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
