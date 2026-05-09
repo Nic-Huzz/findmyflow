@@ -63,7 +63,10 @@ export default function NervousSystemCheckin({
             onClick={() => onChange(state.id)}
           >
             <span className="nsci-emoji">{state.emoji}</span>
-            <span className="nsci-label">{state.label}</span>
+            <span className="nsci-text">
+              <span className="nsci-name">{state.name}</span>
+              <span className="nsci-label">{state.label}</span>
+            </span>
           </button>
         ))}
       </div>

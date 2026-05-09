@@ -79,10 +79,22 @@
   line-height: 1;
 }
 
-.nsci-label {
+.nsci-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.nsci-name {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 800;
   color: #1a1a2e;
+}
+
+.nsci-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
 }
 
 /* ── Archetype grid ── */
