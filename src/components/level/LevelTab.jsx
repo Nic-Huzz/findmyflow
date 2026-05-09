@@ -24,7 +24,7 @@ import PlaySkillPicker from '../PlaySkillPicker'
 import CapacityCard from './CapacityCard'
 import './LevelTab.css'
 
-export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
+export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
   // maxUnlockedLevel is the user's actual journey level from DB. currentLevel is which level they're viewing.
   const unlockedLevel = maxUnlockedLevel ?? currentLevel
   const config = getLevelConfig(currentLevel)
@@ -287,7 +287,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       </div>
 
       {/* Capacity Score */}
-      <CapacityCard userId={userId} />
+      <CapacityCard userId={userId} refreshTrigger={capacityRefresh} />
 
       {/* Level Header */}
       <div className="level-header-card">

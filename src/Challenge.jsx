@@ -193,6 +193,7 @@ function Challenge() {
 
   // Daily nervous system check-in (proactive, once per day)
   const [showDailyCheckin, setShowDailyCheckin] = useState(false)
+  const [capacityRefresh, setCapacityRefresh] = useState(0)
 
   useEffect(() => {
     if (!user?.id) return
@@ -1708,7 +1709,7 @@ function Challenge() {
   return (
     <div className="challenge-container content-enter">
       {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
-      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => setShowDailyCheckin(false)} />}
+      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => { setShowDailyCheckin(false); setCapacityRefresh(n => n + 1) }} />}
       <NotificationPrompt />
       <ChallengeHeader
         navigate={navigate}
@@ -2077,7 +2078,7 @@ function Challenge() {
 
         {/* Level Tab */}
         {activeCategory === 'Level' && (
-          <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
+          <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} capacityRefresh={capacityRefresh} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
             setUnlockedTabs(prev => new Set([...prev, tab]))
             setActiveCategory(tab)
           }} onGraduate={(newLevel) => {
