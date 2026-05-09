@@ -268,7 +268,7 @@ export default function ExperienceInspiration() {
       // Seed checklist
       try {
         const { buildChecklistRows } = await import('../lib/experienceChecklistTemplate')
-        const rows = buildChecklistRows(exp.id, user.id)
+        const rows = buildChecklistRows(exp.id, user.id, expType)
         if (rows.length) {
           await supabase.from('experience_checklist_items').insert(rows)
         }

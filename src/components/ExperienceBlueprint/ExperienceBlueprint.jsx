@@ -297,10 +297,10 @@ export default function ExperienceBlueprint({ userId }) {
           .eq('id', blueprintId)
       }
 
-      // 4. Seed checklist (using existing template for now, type-keyed in task #5)
+      // 4. Seed checklist (type-keyed)
       if (experience?.id) {
         const { buildChecklistRows } = await import('../../lib/experienceChecklistTemplate')
-        const rows = buildChecklistRows(experience.id, userId)
+        const rows = buildChecklistRows(experience.id, userId, experience.experience_type)
         await supabase.from('experience_checklist_items').insert(rows)
       }
 

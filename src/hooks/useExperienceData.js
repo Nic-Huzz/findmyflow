@@ -85,8 +85,8 @@ export function useCreateExperience() {
 
       if (createErr) throw createErr
 
-      // 2. Seed the checklist from template
-      const rows = buildChecklistRows(experience.id, user.id)
+      // 2. Seed the checklist from template (type-keyed)
+      const rows = buildChecklistRows(experience.id, user.id, experience.experience_type)
       let { error: seedErr } = await supabase
         .from('experience_checklist_items')
         .insert(rows)
