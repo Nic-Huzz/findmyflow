@@ -72,6 +72,7 @@ export default function ExperienceDetail() {
   const [valueStackItems, setValueStackItems] = useState([])
   const [newStackLabel, setNewStackLabel] = useState('')
   const [newStackValue, setNewStackValue] = useState('')
+  const [newModality, setNewModality] = useState('')
 
   // Initialize details tab from experience data
   useEffect(() => {
@@ -86,6 +87,8 @@ export default function ExperienceDetail() {
       standard_price: experience.standard_price != null ? String(experience.standard_price) : '',
       currency: experience.currency || 'IDR',
       pricing_percentage: experience.pricing_percentage != null ? String(experience.pricing_percentage) : '15',
+      modalities: experience.modalities || [],
+      word_of_mouth: experience.word_of_mouth || '',
     })
     setValueStackItems(experience.value_stack || [])
   }, [experience?.id])
@@ -147,25 +150,33 @@ export default function ExperienceDetail() {
         currency: detailsDraft.currency || 'IDR',
         pricing_percentage: detailsDraft.pricing_percentage ? parseFloat(detailsDraft.pricing_percentage) : null,
         value_stack: valueStackItems.length > 0 ? valueStackItems.map(({ label, value }) => ({ label, value })) : null,
+        modalities: detailsDraft.modalities?.length > 0 ? detailsDraft.modalities : null,
+        word_of_mouth: detailsDraft.word_of_mouth || null,
       }
+      const prevExp = { ...experience }
+      console.log('[saveDetails] saving:', JSON.stringify(updates).slice(0, 200))
       await updateExperience(updates)
+      console.log('[saveDetails] saved successfully')
       hapticSuccess()
 
       // Award XP for newly filled fields (compare against experience before save)
       if (user?.id) {
         const fields = ['one_line_promise', 'booking_url', 'venue', 'description']
         for (const f of fields) {
-          if (updates[f] && !experience[f]) {
+          if (updates[f] && !prevExp[f]) {
             awardMovementXP(user.id, 'details_field', f)
           }
         }
-        if (valueStackItems.length > 0 && !experience.value_stack?.length) {
+        if (valueStackItems.length > 0 && !prevExp.value_stack?.length) {
           awardMovementXP(user.id, 'value_stack', 'pricing set')
         }
       }
+      setSavingDetails(false)
+      navigate('/create')
+      return
     } catch (err) {
-      console.error('Save details error:', err)
-      setDetailsError('Failed to save. Please try again.')
+      console.error('Save details error:', err, JSON.stringify(err))
+      setDetailsError(`Failed to save: ${err?.message || err?.code || 'unknown error'}`)
     }
     setSavingDetails(false)
   }
@@ -339,6 +350,80 @@ export default function ExperienceDetail() {
                 placeholder="What is this experience about?"
                 rows={3}
               />
+            </div>
+
+            {/* Word of mouth */}
+            <div className="exp-det-section">
+              <label className="exp-det-label">What will people say?</label>
+              <p className="exp-det-hint">"You have to come because..."</p>
+              <textarea
+                className="exp-det-textarea"
+                value={detailsDraft.word_of_mouth}
+                onChange={e => setDetailsDraft(d => ({ ...d, word_of_mouth: e.target.value }))}
+                placeholder={"e.g. It's like therapy but you're dancing and it actually works"}
+                rows={2}
+              />
+              <div className="exp-wom-patterns">
+                {[
+                  { label: 'The contrast', eg: "It's therapy but you're dancing the whole time" },
+                  { label: 'The specific', eg: "You don't talk. You just breathe and move and everything shifts." },
+                  { label: 'The scale', eg: "100 people. One sunrise. Headphones on." },
+                  { label: 'The absurd', eg: "You'll dance, cry, and laugh in 90 minutes. In that order." },
+                  { label: 'The exclusive', eg: "12 spots. No waitlist. If it's full, it's full." },
+                  { label: 'The mystery', eg: "I can't tell you what happens. Just come." },
+                ].map(p => (
+                  <button
+                    key={p.label}
+                    type="button"
+                    className="exp-wom-pattern"
+                    onClick={() => setDetailsDraft(d => ({ ...d, word_of_mouth: p.eg }))}
+                  >
+                    <span className="exp-wom-pattern-label">{p.label}</span>
+                    <span className="exp-wom-pattern-eg">"{p.eg}"</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Modalities */}
+            <div className="exp-det-section">
+              <label className="exp-det-label">What you facilitate</label>
+              {detailsDraft.modalities?.length > 0 && (
+                <div className="exp-mod-tags">
+                  {detailsDraft.modalities.map((mod, i) => (
+                    <span key={i} className="exp-mod-tag">
+                      {mod}
+                      <button className="exp-mod-remove" onClick={() => setDetailsDraft(d => ({ ...d, modalities: d.modalities.filter((_, j) => j !== i) }))}>x</button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="exp-mod-input-row">
+                <input
+                  type="text"
+                  className="exp-det-input"
+                  value={newModality}
+                  onChange={e => setNewModality(e.target.value)}
+                  placeholder="e.g. breathwork, somatic dance, coaching..."
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && newModality.trim()) {
+                      e.preventDefault()
+                      setDetailsDraft(d => ({ ...d, modalities: [...(d.modalities || []), newModality.trim()] }))
+                      setNewModality('')
+                    }
+                  }}
+                />
+                <button
+                  className="exp-mod-add"
+                  disabled={!newModality.trim()}
+                  onClick={() => {
+                    if (newModality.trim()) {
+                      setDetailsDraft(d => ({ ...d, modalities: [...(d.modalities || []), newModality.trim()] }))
+                      setNewModality('')
+                    }
+                  }}
+                >+</button>
+              </div>
             </div>
 
             {/* ── VALUE STACK PRICING ── */}

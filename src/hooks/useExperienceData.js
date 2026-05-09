@@ -131,7 +131,7 @@ export function useCreateExperience() {
           // Carry forward Details tab fields (one-liner, booking URL, venue, value stack, pricing)
           const { data: srcExp } = await supabase
             .from('experiences')
-            .select('one_line_promise, booking_url, venue, description, value_stack, early_bird_price, standard_price, currency, pricing_percentage')
+            .select('one_line_promise, booking_url, venue, description, value_stack, early_bird_price, standard_price, currency, pricing_percentage, modalities, word_of_mouth')
             .eq('id', runAgainFromId)
             .maybeSingle()
           if (srcExp) {
@@ -145,6 +145,8 @@ export function useCreateExperience() {
             if (srcExp.standard_price != null) detailsUpdate.standard_price = srcExp.standard_price
             if (srcExp.currency) detailsUpdate.currency = srcExp.currency
             if (srcExp.pricing_percentage != null) detailsUpdate.pricing_percentage = srcExp.pricing_percentage
+            if (srcExp.modalities?.length) detailsUpdate.modalities = srcExp.modalities
+            if (srcExp.word_of_mouth) detailsUpdate.word_of_mouth = srcExp.word_of_mouth
             if (Object.keys(detailsUpdate).length) {
               await supabase.from('experiences').update(detailsUpdate).eq('id', experience.id)
             }

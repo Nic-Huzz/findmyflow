@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "totalProfiles": 243,
+    "totalProfiles": 227,
     "totalTags": 787,
     "totalAntiTags": 44,
     "generatedAt": "2026-04-07",
@@ -454,7 +454,7 @@
           "category": "designing",
           "skill": "Craft a space people want to stay in",
           "confidence": "medium",
-          "evidence": "When St Christopher's opened in 1967 the entrance included a plain sheet of glass memorialising David Tasma's \u00a3500 bequest, the physical space embodying the founding conversation."
+          "evidence": "When St Christopher's opened in 1967 the entrance included a plain sheet of glass memorialising David Tasma's £500 bequest, the physical space embodying the founding conversation."
         }
       ],
       "antiTags": []
@@ -930,7 +930,7 @@
       "antiTags": []
     },
     {
-      "name": "Claude L\u00e9vi-Strauss",
+      "name": "Claude Lévi-Strauss",
       "dominantCategories": [
         "creating"
       ],
@@ -963,7 +963,7 @@
       "antiTags": []
     },
     {
-      "name": "Svante P\u00e4\u00e4bo",
+      "name": "Svante Pääbo",
       "dominantCategories": [
         "creating"
       ],
@@ -1029,47 +1029,6 @@
         }
       ],
       "antiTags": []
-    },
-    {
-      "name": "Ella Baker",
-      "dominantCategories": [
-        "connecting",
-        "leading",
-        "speaking_up"
-      ],
-      "playSkills": [
-        {
-          "category": "connecting",
-          "skill": "Build a group from nothing",
-          "confidence": "high",
-          "evidence": "As NAACP director of branches from 1943 she travelled the Jim Crow South by bus and train, showing up in small towns, listening for who was already trusted locally, and building the branch around that person."
-        },
-        {
-          "category": "coaching",
-          "skill": "Watch someone grow without taking credit",
-          "confidence": "high",
-          "evidence": "Her formulation 'strong people don't need strong leaders' was an explicit argument against charismatic leadership; she built group-centred structures rather than movements around one speaker."
-        },
-        {
-          "category": "leading",
-          "skill": "Design the game before playing it",
-          "confidence": "high",
-          "evidence": "At the Easter 1960 Shaw University meeting she specifically warned the sit-in student leaders against joining SCLC as a youth wing, and SNCC was founded at that meeting as a result."
-        },
-        {
-          "category": "connecting",
-          "skill": "Facilitate a hard conversation",
-          "confidence": "medium",
-          "evidence": "Her method required spending longer in one place developing local people rather than bringing in celebrity organisers from outside, a deliberate alternative to King's model."
-        }
-      ],
-      "antiTags": [
-        {
-          "category": "performing",
-          "skill": "Perform, present, or hit record",
-          "evidence": "She explicitly rejected the charismatic public-speaker model of King and SCLC, considering it fragile, and built her career in rooms without microphones."
-        }
-      ]
     },
     {
       "name": "Dorothy Height",
@@ -1177,41 +1136,6 @@
       "antiTags": []
     },
     {
-      "name": "Grace Lee Boggs",
-      "dominantCategories": [
-        "connecting",
-        "storytelling",
-        "leading"
-      ],
-      "playSkills": [
-        {
-          "category": "storytelling",
-          "skill": "Make meaning out of a mess",
-          "confidence": "high",
-          "evidence": "Her politics evolved for 70 years from Trotskyism through Black Power to 'revolution as evolution,' kept rebuilding the frame from the same Detroit house, and published The Next American Revolution at 95."
-        },
-        {
-          "category": "connecting",
-          "skill": "Build a group from nothing",
-          "confidence": "high",
-          "evidence": "In 1992 at age 77 she founded Detroit Summer, a multiracial intergenerational youth programme mobilising young people to paint murals, plant urban gardens and rehabilitate abandoned buildings."
-        },
-        {
-          "category": "coaching",
-          "skill": "Mentor someone earlier on the path",
-          "confidence": "medium",
-          "evidence": "Kept doing interviews and hosting Sunday study sessions at her house almost to her death at 100, writing The Next American Revolution in longhand at 95."
-        },
-        {
-          "category": "connecting",
-          "skill": "Connect dots across two worlds",
-          "confidence": "medium",
-          "evidence": "Remained in the same Detroit house for 62 years, saying repeatedly that you could not organise a place you did not live in, fusing Chinese-American, Black, philosophical and local civic worlds."
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Saul Alinsky",
       "dominantCategories": [
         "leading",
@@ -1251,40 +1175,6 @@
           "evidence": "His method was to be a 'visible nuisance' first, deliberately abrasive and confrontational rather than holding emotional space."
         }
       ]
-    },
-    {
-      "name": "V\u00e1clav Havel",
-      "dominantCategories": [
-        "storytelling",
-        "speaking_up"
-      ],
-      "playSkills": [
-        {
-          "category": "storytelling",
-          "skill": "Make meaning out of a mess",
-          "confidence": "high",
-          "evidence": "The Power of the Powerless (1978) described late-communist post-totalitarianism as 'living within a lie,' with the greengrocer's Workers-of-the-World sign as evidence that the regime's power depended on performance."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Write something in your actual voice",
-          "confidence": "high",
-          "evidence": "During his longest prison term (1979-1983) he wrote weekly philosophical letters to Olga under strict censorship rules forbidding politics, fellow prisoners and humour, later collected as Letters to Olga."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Connect dots across two worlds",
-          "confidence": "high",
-          "evidence": "Treated the 1976 trial of the Plastic People of the Universe as a constitutional crisis, co-drafting Charter 77 and arguing the right to make rock music was the same right as political dissent."
-        },
-        {
-          "category": "coaching",
-          "skill": "Move someone from stuck to action",
-          "confidence": "medium",
-          "evidence": "On 29 December 1989 he was elected President of Czechoslovakia by unanimous vote of the Federal Assembly, having been released from his last prison term earlier the same year."
-        }
-      ],
-      "antiTags": []
     },
     {
       "name": "Harriet Tubman",
@@ -1750,116 +1640,6 @@
       "antiTags": []
     },
     {
-      "name": "Nina Simone",
-      "dominantCategories": [
-        "performing",
-        "speaking_up",
-        "creating"
-      ],
-      "playSkills": [
-        {
-          "category": "creating",
-          "skill": "Make something that did not exist yesterday",
-          "confidence": "high",
-          "evidence": "Wrote Mississippi Goddam in less than an hour after the 16th Street Baptist Church bombing on 15 September 1963, performed it the next week, and by her own account the song ended her commercial career and began her political one."
-        },
-        {
-          "category": "performing",
-          "skill": "Perform, present, or hit record",
-          "confidence": "high",
-          "evidence": "Her 1976 Montreux set, filmed in full, included arriving late, berating the audience, forgetting lyrics, then pulling the room through Janis Ian's Stars and weeping at the piano; now a primary text on the risks of letting a room in."
-        },
-        {
-          "category": "performing",
-          "skill": "Turn a message into a moment",
-          "confidence": "medium",
-          "evidence": "In September 1970 she left the US entirely over a tax warrant tied to Vietnam War tax withholding, relocating to Barbados, Liberia, Switzerland, France and the Netherlands; not a pause, a full relocation."
-        },
-        {
-          "category": "performing",
-          "skill": "Rally a group behind an idea",
-          "confidence": "medium",
-          "evidence": "Treated her 1950 Curtis rejection as a racial wound and built a protest career around it that ended with Curtis awarding an honorary degree two days before her death in 2003."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Mercedes Sosa",
-      "dominantCategories": [
-        "performing",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "performing",
-          "skill": "Perform, present, or hit record",
-          "confidence": "high",
-          "evidence": "During a 1979 La Plata concert under the Argentine junta she was searched and arrested on stage mid-performance along with every member of the audience, one of the few documented cases of an entire audience being detained with a performer."
-        },
-        {
-          "category": "connecting",
-          "skill": "Be the glue in a scattered team",
-          "confidence": "high",
-          "evidence": "At her February 1982 Teatro Opera return from exile she deliberately invited younger Argentine folk colleagues onto her stage, treating the return not as a solo victory but as an introduction of a generation."
-        },
-        {
-          "category": "performing",
-          "skill": "Turn a message into a moment",
-          "confidence": "high",
-          "evidence": "Her slower, heavier 1971 recording of Gracias a la Vida became the definitive version and one of the most covered Spanish-language songs of the twentieth century; she performed it at nearly every concert for 38 years."
-        },
-        {
-          "category": "connecting",
-          "skill": "Host a gathering",
-          "confidence": "medium",
-          "evidence": "She said 'an artist isn't political in the party political sense, they have a constituency, which is their public. It is the poetry that matters most of all,' treating her audience as the constituency across Sistine Chapel and Carnegie Hall in one decade."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Fela Kuti",
-      "dominantCategories": [
-        "performing",
-        "creating",
-        "speaking_up"
-      ],
-      "playSkills": [
-        {
-          "category": "creating",
-          "skill": "Make something that did not exist yesterday",
-          "confidence": "high",
-          "evidence": "Invented Afrobeat in the late 1960s by fusing jazz, funk, highlife and Yoruba percussion, and ran the Shrine venue in Lagos as the main live home of the sound."
-        },
-        {
-          "category": "building",
-          "skill": "Build the thing you keep talking about",
-          "confidence": "high",
-          "evidence": "Founded Kalakuta Republic in 1970 in Surulere and declared it formally independent of the Nigerian state, with its own clinic, school, generator, recording studio and fence; not a metaphor."
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Say the thing people are thinking but will not",
-          "confidence": "high",
-          "evidence": "Released Zombie in 1976 mocking the Nigerian army; after 1,000 soldiers raided Kalakuta in 1977 and his mother Funmilayo Ransome-Kuti died of her injuries, he delivered her coffin to the Dodan Barracks and recorded Coffin for Head of State."
-        },
-        {
-          "category": "leading",
-          "skill": "Design the game before playing it",
-          "confidence": "high",
-          "evidence": "Chose a two-track, 15-30 minute per side album format deliberately to make the music unplayable on three-minute radio slots, forcing distribution into live performance at the Shrine and album sales he could control."
-        }
-      ],
-      "antiTags": [
-        {
-          "category": "coaching",
-          "skill": "Give patient, useful feedback",
-          "evidence": "Married 27 women in a single 1978 ceremony and divorced all twelve remaining wives in 1986 saying 'marriage brings jealousy and selfishness'; his relational mode was grand statement, not patient care."
-        }
-      ]
-    },
-    {
       "name": "Miriam Makeba",
       "dominantCategories": [
         "speaking_up",
@@ -2012,7 +1792,7 @@
           "category": "creating",
           "skill": "Follow a wild hunch and see where it goes",
           "confidence": "high",
-          "evidence": "Starting 1896 she met weekly with four other women as De Fem, working with prayer, meditation, s\u00e9ance, and automatic drawings for ten years before the Temple commission."
+          "evidence": "Starting 1896 she met weekly with four other women as De Fem, working with prayer, meditation, séance, and automatic drawings for ten years before the Temple commission."
         },
         {
           "category": "leading",
@@ -2111,7 +1891,7 @@
       ]
     },
     {
-      "name": "Gabriel Garc\u00eda M\u00e1rquez",
+      "name": "Gabriel García Márquez",
       "dominantCategories": [
         "creating",
         "storytelling"
@@ -2262,7 +2042,7 @@
       "antiTags": []
     },
     {
-      "name": "Antoni Gaud\u00ed",
+      "name": "Antoni Gaudí",
       "dominantCategories": [
         "building",
         "creating",
@@ -2440,41 +2220,6 @@
           "skill": "Find the pattern in messy data",
           "confidence": "medium",
           "evidence": "In Champaran in 1917 he interviewed thousands of peasants and recorded their grievances in files that became the evidence for the colonial inquiry."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Gloria Steinem",
-      "dominantCategories": [
-        "connecting",
-        "speaking_up",
-        "building"
-      ],
-      "playSkills": [
-        {
-          "category": "connecting",
-          "skill": "Facilitate a hard conversation",
-          "confidence": "high",
-          "evidence": "For five decades she has run 'talking circles,' structured conversations in which participants take turns speaking without interruption, borrowed from Indigenous consensus practices."
-        },
-        {
-          "category": "connecting",
-          "skill": "Build a group from nothing",
-          "confidence": "high",
-          "evidence": "On 10 July 1971 with Abzug, Friedan, Chisholm and 300 women she co-founded the National Women's Political Caucus, still operating today."
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Say the thing people are thinking but will not",
-          "confidence": "high",
-          "evidence": "In 1963 she went undercover as a Playboy Bunny and published A Bunny's Tale in Show magazine, exposing invasive medical exams, low pay and exploitative conditions."
-        },
-        {
-          "category": "building",
-          "skill": "Ship a rough v1",
-          "confidence": "medium",
-          "evidence": "The 1972 Ms. magazine test issue with Wonder Woman on the cover sold 300,000 copies in eight days and drew 26,000 subscription orders within weeks."
         }
       ],
       "antiTags": []
@@ -3019,41 +2764,6 @@
       "antiTags": []
     },
     {
-      "name": "Marva Collins",
-      "dominantCategories": [
-        "teaching",
-        "coaching",
-        "speaking_up"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Give patient, useful feedback",
-          "confidence": "high",
-          "evidence": "Her 1982 book recorded full Socratic dialogues with four-year-olds about Aesop's fables; she never restated a child's answer in better English, she asked them to restate it themselves."
-        },
-        {
-          "category": "coaching",
-          "skill": "Watch someone grow without taking credit",
-          "confidence": "high",
-          "evidence": "She handwrote a personal comment on every piece of work, never a grade; one student recalled the note 'You are too brilliant to be this lazy, and I am watching.'"
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Say the thing people are thinking but will not",
-          "confidence": "high",
-          "evidence": "On 60 Minutes in 1979 she said, 'I have discovered few learning disabled students in my three decades of teaching. I have, however, discovered many, many victims of teaching inabilities.'"
-        },
-        {
-          "category": "leading",
-          "skill": "Pick what matters and cut the rest",
-          "confidence": "high",
-          "evidence": "In 1980 she declined Reagan's offer to become Secretary of Education, telling the Chicago Tribune, 'I can't leave my babies. The work is the classroom, not Washington.'"
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Rita Pierson",
       "dominantCategories": [
         "teaching",
@@ -3328,41 +3038,6 @@
           "skill": "Call the smart play under pressure",
           "confidence": "medium",
           "evidence": "In 1990 while in labour on a flight home from a Pennsylvania recruiting visit she asked the pilot to land in Knoxville so her son could be born in Tennessee."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Erin Gruwell",
-      "dominantCategories": [
-        "teaching",
-        "coaching",
-        "speaking_up"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Hold space for a hard moment",
-          "confidence": "high",
-          "evidence": "She gave each student a marble composition book and told them they could write anything, that she would only read it if they left it on her desk, and held the rule as total."
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Sell something you actually believe in",
-          "confidence": "high",
-          "evidence": "When Wilson High refused to issue copies of The Diary of Anne Frank she took on a second job at the Marriott and a third selling lingerie to buy 150 copies with her own money."
-        },
-        {
-          "category": "connecting",
-          "skill": "Build a group from nothing",
-          "confidence": "high",
-          "evidence": "Over four years she organised dinners, author visits including Miep Gies, and a Washington DC trip; all 150 students graduated and the group founded the Freedom Writers Foundation in 1997."
-        },
-        {
-          "category": "performing",
-          "skill": "Turn a message into a moment",
-          "confidence": "medium",
-          "evidence": "She intercepted a racial caricature sketch in her first months and told the class, 'This is how the Holocaust started. With a drawing,' using it to introduce a history several students had never heard."
         }
       ],
       "antiTags": []
@@ -4469,7 +4144,7 @@
       "antiTags": []
     },
     {
-      "name": "Lech Wa\u0142\u0119sa",
+      "name": "Lech Wałęsa",
       "dominantCategories": [
         "connecting",
         "performing",
@@ -4486,7 +4161,7 @@
           "category": "performing",
           "skill": "Rally a group behind an idea",
           "confidence": "high",
-          "evidence": "Signed the Gda\u0144sk Agreement on 31 August 1980 with an oversized souvenir pen, legalising the first independent trade union in the Eastern Bloc."
+          "evidence": "Signed the Gdańsk Agreement on 31 August 1980 with an oversized souvenir pen, legalising the first independent trade union in the Eastern Bloc."
         },
         {
           "category": "leading",
@@ -4576,40 +4251,6 @@
       "antiTags": []
     },
     {
-      "name": "Martti Ahtisaari",
-      "dominantCategories": [
-        "leading",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "leading",
-          "skill": "Design the game before playing it",
-          "confidence": "high",
-          "evidence": "For the 2005 Helsinki Accord on Aceh he insisted all five rounds of talks happen face to face in the same building rather than by shuttle diplomacy, so physical presence forced concessions."
-        },
-        {
-          "category": "connecting",
-          "skill": "Facilitate a hard conversation",
-          "confidence": "high",
-          "evidence": "Oversaw Namibian independence in 1989 after being appointed UN Commissioner in 1977, twelve years of apparently stalled work. 'Most mediation is waiting with a file.'"
-        },
-        {
-          "category": "leading",
-          "skill": "Build a workflow that runs itself",
-          "confidence": "high",
-          "evidence": "Founded Crisis Management Initiative in 2000 as a small independent professional office doing the quiet mediation work no single UN department was structured to do."
-        },
-        {
-          "category": "coaching",
-          "skill": "Move someone from stuck to action",
-          "confidence": "medium",
-          "evidence": "In his 2008 Nobel lecture he said 'Peace is a question of will. All conflicts can be settled, and there are no excuses for allowing them to become eternal' as a professional self-instruction."
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Tawakkol Karman",
       "dominantCategories": [
         "performing",
@@ -4640,40 +4281,6 @@
           "skill": "Hold space for a hard moment",
           "confidence": "medium",
           "evidence": "Lived in a tent in Change Square through 2011, mediating between factions inside the square and refusing to leave while protests continued."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Tarana Burke",
-      "dominantCategories": [
-        "speaking_up",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Hold space for a hard moment",
-          "confidence": "high",
-          "evidence": "Founded the original Me Too in 2006 as workshops, retreats and healing groups for young Black girls in Selma and the Bronx, not a hashtag. The work happened in church basements."
-        },
-        {
-          "category": "connecting",
-          "skill": "Build a group from nothing",
-          "confidence": "high",
-          "evidence": "Built Just Be Inc. (2003) and the Me Too programme for eleven years as a grassroots peer-support practice, with survivors saying the phrase to each other across circles of chairs."
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Say the thing people are thinking but will not",
-          "confidence": "high",
-          "evidence": "Traces the whole project to a 1997 moment with a 13-year-old girl she calls Heaven, when she could not say me too, and spent the next decades finding the words she could not say in that cabin."
-        },
-        {
-          "category": "coaching",
-          "skill": "Build a framework that holds it all",
-          "confidence": "medium",
-          "evidence": "Her self-definition 'empowerment through empathy' shapes programme design toward healing circles and long-term survivor relationships, not punishment of abusers."
         }
       ],
       "antiTags": []
@@ -4729,7 +4336,7 @@
           "category": "speaking_up",
           "skill": "Change someone's mind",
           "confidence": "high",
-          "evidence": "We Should All Be Feminists was sampled by Beyonc\u00e9 in Flawless a year after delivery, routing a feminist argument into a pop audience of tens of millions."
+          "evidence": "We Should All Be Feminists was sampled by Beyoncé in Flawless a year after delivery, routing a feminist argument into a pop audience of tens of millions."
         },
         {
           "category": "storytelling",
@@ -4764,7 +4371,7 @@
           "category": "creating",
           "skill": "Fill a blank page with something real",
           "confidence": "high",
-          "evidence": "Writes daily longhand in pencil in a small notebook at the same corner caf\u00e9 in Greenwich Village, ordering black coffee. 'My handwriting is the rhythm of my thinking.'"
+          "evidence": "Writes daily longhand in pencil in a small notebook at the same corner café in Greenwich Village, ordering black coffee. 'My handwriting is the rhythm of my thinking.'"
         },
         {
           "category": "storytelling",
@@ -4782,7 +4389,7 @@
       "antiTags": []
     },
     {
-      "name": "Wis\u0142awa Szymborska",
+      "name": "Wisława Szymborska",
       "dominantCategories": [
         "creating",
         "storytelling",
@@ -4858,46 +4465,6 @@
       "antiTags": []
     },
     {
-      "name": "Luciano Pavarotti",
-      "dominantCategories": [
-        "performing",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "performing",
-          "skill": "Perform, present, or hit record",
-          "confidence": "high",
-          "evidence": "On 17 February 1972 at the Met he delivered all nine high Cs of 'Ah, mes amis' cleanly and received seventeen curtain calls, earning the nickname King of the High Cs."
-        },
-        {
-          "category": "connecting",
-          "skill": "Host a gathering",
-          "confidence": "high",
-          "evidence": "From 1992 to 2003 organised the annual Pavarotti and Friends benefit in Modena with Bono, Sting, C\u00e9line Dion, Clapton and Queen, raising millions for War Child and Bosnia, Kosovo, Afghanistan and Iraq relief."
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Sell something you actually believe in",
-          "confidence": "medium",
-          "evidence": "Defended crossover against classical purists by saying the concerts delivered concrete sums to specific crises and the purity argument was a luxury for people with other platforms."
-        },
-        {
-          "category": "coaching",
-          "skill": "Watch someone grow without taking credit",
-          "confidence": "medium",
-          "evidence": "Studied free for six years with Arrigo Pola in Modena from 1954 and learned every role by ear from a repetiteur at the piano, one phrase at a time, never learning to read music fluently."
-        }
-      ],
-      "antiTags": [
-        {
-          "category": "storytelling",
-          "skill": "Find the pattern in messy data",
-          "evidence": "He never learned to read music with real fluency and worked entirely by ear, a non-analytic method."
-        }
-      ]
-    },
-    {
       "name": "Tupac Shakur",
       "dominantCategories": [
         "storytelling",
@@ -4934,41 +4501,6 @@
       "antiTags": []
     },
     {
-      "name": "Lin-Manuel Miranda",
-      "dominantCategories": [
-        "creating",
-        "performing",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "creating",
-          "skill": "Remix two things into something new",
-          "confidence": "high",
-          "evidence": "At the 12 May 2009 White House Poetry Jam he rapped the opening of Hamilton about 'someone I believe embodies hip hop, Treasury Secretary Alexander Hamilton', combining biography and counterpoint six years before Broadway."
-        },
-        {
-          "category": "performing",
-          "skill": "Turn a message into a moment",
-          "confidence": "high",
-          "evidence": "Spent roughly a year rewriting My Shot so every verse was consistent with what a young intellectually hungry Hamilton would say; the whole show went through that editing density."
-        },
-        {
-          "category": "creating",
-          "skill": "Follow a wild hunch and see where it goes",
-          "confidence": "high",
-          "evidence": "Wrote the first draft of In the Heights as a Wesleyan sophomore at 19 and rewrote it continuously for nine years to Broadway in 2008."
-        },
-        {
-          "category": "connecting",
-          "skill": "Be the glue in a scattered team",
-          "confidence": "medium",
-          "evidence": "Tests every ensemble number (We Don't Talk About Bruno, five vocal lines in counterpoint) with the rule: can every character sing their own truth simultaneously and still be intelligible?"
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Ira Glass",
       "dominantCategories": [
         "teaching",
@@ -5000,42 +4532,6 @@
           "skill": "Watch someone grow without taking credit",
           "confidence": "high",
           "evidence": "In 2014 he backed Julie Snyder as host of Serial rather than taking the chair himself, following his producer instinct to hand the microphone to whoever will be best at holding it."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Kae Tempest",
-      "dominantCategories": [
-        "performing",
-        "creating",
-        "speaking_up",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "performing",
-          "skill": "Perform, present, or hit record",
-          "confidence": "high",
-          "evidence": "Brand New Ancients, staged at Battersea Arts Centre in 2012 as an hour of single-voice narration with live music, reintroduced an epic oral form to British theatre audiences and won the Ted Hughes Award in 2013 at age 27."
-        },
-        {
-          "category": "creating",
-          "skill": "Remix two things into something new",
-          "confidence": "high",
-          "evidence": "Let Them Eat Chaos (2016) was released simultaneously as a Picador poetry book and a Fiction Records album, engineered to be both literature and a record with neither secondary."
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Say the thing people are thinking but will not",
-          "confidence": "high",
-          "evidence": "Came out publicly as non-binary (2020) and as a trans man (2025) via short written statements, framing it as the same work as the poems: describing one's experience accurately in public."
-        },
-        {
-          "category": "connecting",
-          "skill": "Build a group from nothing",
-          "confidence": "medium",
-          "evidence": "Wrote On Connection during 2020 lockdown arguing creative work exists to break the 'culture of distraction', a manifesto for why live audiences matter written when live audiences were unavailable."
         }
       ],
       "antiTags": []
@@ -5123,42 +4619,7 @@
       ]
     },
     {
-      "name": "Yayoi Kusama",
-      "dominantCategories": [
-        "creating",
-        "designing",
-        "storytelling"
-      ],
-      "playSkills": [
-        {
-          "category": "creating",
-          "skill": "Fill a blank page with something real",
-          "confidence": "high",
-          "evidence": "From around age 10 she drew compulsively to survive hallucinations of dots and flowers covering her mother's body. The famous dot pattern is a direct visual record of those childhood episodes."
-        },
-        {
-          "category": "creating",
-          "skill": "Make something that did not exist yesterday",
-          "confidence": "high",
-          "evidence": "In New York 1958-1972 she produced Infinity Net paintings in single obsessive sessions, sewed phallic protrusions onto boats and ladders, and staged Naked Happenings at the MoMA sculpture garden in 1969, working across new media at factory-scale output."
-        },
-        {
-          "category": "designing",
-          "skill": "Craft a space people want to stay in",
-          "confidence": "high",
-          "evidence": "Began Infinity Mirror Rooms in 1965 with Phalli's Field; the format became the canonical Instagram artwork of the 2010s with hours-long queues for 30-second slots."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Write something in your actual voice",
-          "confidence": "medium",
-          "evidence": "Has lived voluntarily in Seiwa Hospital since 1977 and walks daily to her studio, saying the only method that relieves her illness is to keep creating art."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Bj\u00f6rk",
+      "name": "Björk",
       "dominantCategories": [
         "creating",
         "storytelling"
@@ -5186,7 +4647,7 @@
           "category": "creating",
           "skill": "Connect dots across two worlds",
           "confidence": "medium",
-          "evidence": "Trained at Reykjav\u00edk's Barnam\u00fas\u00edksk\u00f3li from age 6 on classical piano and flute, then released a children's album at 11, arriving at punk and electronic music with 'absolute theory already installed'."
+          "evidence": "Trained at Reykjavík's Barnamúsíkskóli from age 6 on classical piano and flute, then released a children's album at 11, arriving at punk and electronic music with 'absolute theory already installed'."
         }
       ],
       "antiTags": []
@@ -5249,7 +4710,7 @@
           "category": "creating",
           "skill": "Follow a wild hunch and see where it goes",
           "confidence": "high",
-          "evidence": "Secretly built \u00c9tant donn\u00e9s in his New York studio 1946-1966 while publicly claiming he had retired to chess. Not revealed until after his 1968 death, installed at Philadelphia per his detailed instructions."
+          "evidence": "Secretly built Étant donnés in his New York studio 1946-1966 while publicly claiming he had retired to chess. Not revealed until after his 1968 death, installed at Philadelphia per his detailed instructions."
         },
         {
           "category": "leading",
@@ -5296,7 +4757,7 @@
           "category": "designing",
           "skill": "Polish the small details others miss",
           "confidence": "high",
-          "evidence": "The 606 Shelving System for Vits\u0153 (1960) is still manufactured today 60+ years later, with components interchangeable with the 1960 originals. A customer can still order a part to expand a shelf their grandfather bought."
+          "evidence": "The 606 Shelving System for Vitsœ (1960) is still manufactured today 60+ years later, with components interchangeable with the 1960 originals. A customer can still order a part to expand a shelf their grandfather bought."
         }
       ],
       "antiTags": []
@@ -5453,7 +4914,7 @@
           "category": "designing",
           "skill": "Find the pattern in messy data",
           "confidence": "high",
-          "evidence": "After Copenhagen pedestrianised Str\u00f8get on 17 November 1962 he and his wife Ingrid began counting people in the new zone by hand, tracking how many sat on benches, how long they stayed, for decades. 'The street is the data set.'"
+          "evidence": "After Copenhagen pedestrianised Strøget on 17 November 1962 he and his wife Ingrid began counting people in the new zone by hand, tracking how many sat on benches, how long they stayed, for decades. 'The street is the data set.'"
         },
         {
           "category": "designing",
@@ -5666,7 +5127,7 @@
           "category": "performing",
           "skill": "Rally a group behind an idea",
           "confidence": "high",
-          "evidence": "Popularised 'S\u00ed, se puede' during a 1972 Arizona hunger strike; the slogan later became the UFW rallying cry and was adopted in English by the 2008 Obama campaign."
+          "evidence": "Popularised 'Sí, se puede' during a 1972 Arizona hunger strike; the slogan later became the UFW rallying cry and was adopted in English by the 2008 Obama campaign."
         },
         {
           "category": "leading",
@@ -5718,7 +5179,7 @@
       "antiTags": []
     },
     {
-      "name": "C\u00e9dric Villani",
+      "name": "Cédric Villani",
       "dominantCategories": [
         "teaching",
         "performing",
@@ -5729,7 +5190,7 @@
           "category": "teaching",
           "skill": "Diagnose why something is not working",
           "confidence": "high",
-          "evidence": "Birth of a Theorem tracks the two-year collaboration with Cl\u00e9ment Mouhot on nonlinear Landau damping including the nights the proof failed twice before stabilising."
+          "evidence": "Birth of a Theorem tracks the two-year collaboration with Clément Mouhot on nonlinear Landau damping including the nights the proof failed twice before stabilising."
         },
         {
           "category": "teaching",
@@ -5741,13 +5202,13 @@
           "category": "performing",
           "skill": "Turn a message into a moment",
           "confidence": "high",
-          "evidence": "He explained on Lex Fridman's podcast that the three-piece silk suit, lavali\u00e8re tie and jewelled spider brooch are a deliberate publicity machine for mathematics, forcing strangers to start conversations."
+          "evidence": "He explained on Lex Fridman's podcast that the three-piece silk suit, lavalière tie and jewelled spider brooch are a deliberate publicity machine for mathematics, forcing strangers to start conversations."
         },
         {
           "category": "leading",
           "skill": "Build a workflow that runs itself",
           "confidence": "medium",
-          "evidence": "As director of the Institut Henri Poincar\u00e9 2009-2017 he said institutional leadership was mostly choosing which mathematicians spend a summer in Paris together and trusting them to work without interference."
+          "evidence": "As director of the Institut Henri Poincaré 2009-2017 he said institutional leadership was mostly choosing which mathematicians spend a summer in Paris together and trusting them to work without interference."
         }
       ],
       "antiTags": []
@@ -5837,7 +5298,7 @@
           "category": "creating",
           "skill": "Remix two things into something new",
           "confidence": "high",
-          "evidence": "She combined dinner-table knowledge of munitions from her first marriage with George Antheil's piano-roll synchronisation mechanism from his 1924 Ballet M\u00e9canique."
+          "evidence": "She combined dinner-table knowledge of munitions from her first marriage with George Antheil's piano-roll synchronisation mechanism from his 1924 Ballet Mécanique."
         },
         {
           "category": "building",
@@ -5900,41 +5361,6 @@
           "evidence": "She preserved her Dylan Thomas letters in order but did not publish them in her lifetime and did not write about the affair; her method was private preservation rather than performance."
         }
       ]
-    },
-    {
-      "name": "Gordon Lish",
-      "dominantCategories": [
-        "coaching",
-        "creating",
-        "teaching"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Give patient, useful feedback",
-          "confidence": "high",
-          "evidence": "He cut Raymond Carver's What We Talk About When We Talk About Love by roughly 50 percent, with cuts on some stories of 70 percent or more, and new endings in his own hand."
-        },
-        {
-          "category": "coaching",
-          "skill": "Coach someone through a block",
-          "confidence": "high",
-          "evidence": "In his private workshop he drilled students on 'consecution,' the idea that each sentence had to generate the pressure producing the next, telling them the opening line was an attack not an opening."
-        },
-        {
-          "category": "creating",
-          "skill": "Make something that did not exist yesterday",
-          "confidence": "medium",
-          "evidence": "From 1987 to 1995 he ran The Quarterly out of Knopf as a venue for writers from his workshops, printing Amy Hempel, Mary Robison and Christine Schutt early in their careers."
-        },
-        {
-          "category": "teaching",
-          "skill": "Break down a hard idea so anyone gets it",
-          "confidence": "medium",
-          "evidence": "In the 2015 Paris Review interview he defended cutting as a form of love rather than violence, reframing a twenty-year controversy in one move."
-        }
-      ],
-      "antiTags": []
     },
     {
       "name": "Herbert Kohl",
@@ -6072,7 +5498,7 @@
           "category": "teaching",
           "skill": "Write a \"how it actually works\" explainer",
           "confidence": "high",
-          "evidence": "On Food and Cooking (1984, 2004) is a reference book with no recipes; chefs from Thomas Keller to Ferran Adri\u00e0 keep copies next to the stove, not on a shelf."
+          "evidence": "On Food and Cooking (1984, 2004) is a reference book with no recipes; chefs from Thomas Keller to Ferran Adrià keep copies next to the stove, not on a shelf."
         },
         {
           "category": "teaching",
@@ -6258,7 +5684,7 @@
           "category": "creating",
           "skill": "Connect dots across two worlds",
           "confidence": "high",
-          "evidence": "Garc\u00eda M\u00e1rquez waited three years for him to translate Cien A\u00f1os de Soledad and later told interviewers he preferred Rabassa's English version to his own Spanish original."
+          "evidence": "García Márquez waited three years for him to translate Cien Años de Soledad and later told interviewers he preferred Rabassa's English version to his own Spanish original."
         },
         {
           "category": "creating",
@@ -6557,103 +5983,6 @@
           "skill": "Hold space for a hard moment",
           "confidence": "medium",
           "evidence": "She reclaimed 'neediness' from negative judgement and shame, calling it one of the essential features of being human rather than something to be argued away."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Myles Horton",
-      "dominantCategories": [
-        "connecting",
-        "teaching"
-      ],
-      "playSkills": [
-        {
-          "category": "connecting",
-          "skill": "Host a gathering",
-          "confidence": "high",
-          "evidence": "In July 1955, four months before the Montgomery bus incident, Rosa Parks attended a two-week Highlander workshop on Brown v. Board; she later said it was the first place in her life she had been in an integrated setting."
-        },
-        {
-          "category": "coaching",
-          "skill": "Hold space for a hard moment",
-          "confidence": "high",
-          "evidence": "He wrote Highlander had not told Rosa Parks what to do; 'it had given her a week to imagine what she might do,' setting conditions rather than delivering content."
-        },
-        {
-          "category": "connecting",
-          "skill": "Build a group from nothing",
-          "confidence": "high",
-          "evidence": "He co-founded the Highlander Folk School in Tennessee in 1932, which trained 1930s labour organisers, 1950s civil rights activists including Parks and King, and later Appalachian community organisers."
-        },
-        {
-          "category": "teaching",
-          "skill": "Make a confusing thing feel obvious",
-          "confidence": "medium",
-          "evidence": "He wrote that education was not information delivery but the practice of democracy, and that 'nothing will change until we throw off our dependence and act for ourselves.'"
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Paulo Freire",
-      "dominantCategories": [
-        "teaching",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "teaching",
-          "skill": "Break down a hard idea so anyone gets it",
-          "confidence": "high",
-          "evidence": "Pedagogy of the Oppressed (1968) named traditional education the 'banking concept' in which students are 'containers to be filled by the teacher,' coining the most-used shorthand in critical pedagogy."
-        },
-        {
-          "category": "connecting",
-          "skill": "Facilitate a hard conversation",
-          "confidence": "high",
-          "evidence": "In his northeast Brazil literacy campaigns peasants learned to read by starting from the words that named their actual work, with teacher and student investigating the world together."
-        },
-        {
-          "category": "coaching",
-          "skill": "Mentor someone earlier on the path",
-          "confidence": "high",
-          "evidence": "In Letters to Cristina (1996) he wrote that the teacher who truly respects her students is the one who 'becomes their student' while remaining their teacher; the letters form is itself the argument that pedagogy is relationship not delivery."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "William Shakespeare",
-      "dominantCategories": [
-        "creating",
-        "storytelling",
-        "performing"
-      ],
-      "playSkills": [
-        {
-          "category": "storytelling",
-          "skill": "Tell a story that lands",
-          "confidence": "high",
-          "evidence": "The 'To be, or not to be' soliloquy from Hamlet Act III has been translated into almost every written language and remains the most quoted passage in English literature."
-        },
-        {
-          "category": "creating",
-          "skill": "Make something that did not exist yesterday",
-          "confidence": "high",
-          "evidence": "He staged a mind working through the suicide question aloud in meter in front of a paying audience at the Globe, a decision earlier literature had not made."
-        },
-        {
-          "category": "performing",
-          "skill": "Turn a message into a moment",
-          "confidence": "high",
-          "evidence": "The Saint Crispin's Day speech in Henry V ('we few, we happy few, we band of brothers') is a textbook example of what Marshall Ganz would later call a story of us and story of now."
-        },
-        {
-          "category": "creating",
-          "skill": "Fill a blank page with something real",
-          "confidence": "medium",
-          "evidence": "39 plays and 154 sonnets between 1589 and 1613, working with the Lord Chamberlain's Men at the Globe and Blackfriars theatres."
         }
       ],
       "antiTags": []
@@ -7036,41 +6365,6 @@
       "antiTags": []
     },
     {
-      "name": "Marshall Ganz",
-      "dominantCategories": [
-        "teaching",
-        "connecting",
-        "leading"
-      ],
-      "playSkills": [
-        {
-          "category": "teaching",
-          "skill": "Build a framework that holds it all",
-          "confidence": "high",
-          "evidence": "His Public Narrative framework of self, us and now has been taught at the Kennedy School since the early 2000s and used by the 2008 Obama Camp Obama training, South African and Irish movements and hundreds of non-profits."
-        },
-        {
-          "category": "teaching",
-          "skill": "Break down a hard idea so anyone gets it",
-          "confidence": "high",
-          "evidence": "He mapped the three stories directly onto Rabbi Hillel's three questions he had learned as a child, hiding an ancient source inside modern political pedagogy."
-        },
-        {
-          "category": "performing",
-          "skill": "Rally a group behind an idea",
-          "confidence": "high",
-          "evidence": "In Why David Sometimes Wins (2009) he argued the UFW won 1965-1972 not because it was larger or richer but because it used its tools more strategically: 'David prevails by wisely using the tools available to him.'"
-        },
-        {
-          "category": "connecting",
-          "skill": "Build a group from nothing",
-          "confidence": "medium",
-          "evidence": "He spent 28 years as a front-line UFW organiser before completing his PhD and joining the Harvard Kennedy School."
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Marshall McLuhan",
       "dominantCategories": [
         "teaching",
@@ -7174,110 +6468,6 @@
       ]
     },
     {
-      "name": "Sue Johnson",
-      "dominantCategories": [
-        "coaching",
-        "teaching"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Holding couples through attachment pain",
-          "confidence": "high",
-          "evidence": "EFT is built on the insight that couple distress is an attachment problem, and Johnson coaches couples through unmet attachment needs."
-        },
-        {
-          "category": "teaching",
-          "skill": "Translating clinical therapy into language ordinary people can use",
-          "confidence": "high",
-          "evidence": "Hold Me Tight restructured EFT into seven conversations accessible enough for non-therapists, selling hundreds of thousands of copies."
-        },
-        {
-          "category": "teaching",
-          "skill": "Building an evidence base that gives a method institutional credibility",
-          "confidence": "high",
-          "evidence": "EFT accumulated more clinical outcome research than almost any other couples therapy model, with 70-75% recovery rates."
-        },
-        {
-          "category": "coaching",
-          "skill": "Adapting a therapeutic method to trauma populations",
-          "confidence": "medium",
-          "evidence": "Took EFT to military couples dealing with PTSD, showing relationship therapy could help even when individual trauma was untreated."
-        }
-      ],
-      "antiTags": [
-        "performing"
-      ]
-    },
-    {
-      "name": "Harville Hendrix",
-      "dominantCategories": [
-        "coaching",
-        "storytelling"
-      ],
-      "playSkills": [
-        {
-          "category": "storytelling",
-          "skill": "Turning personal failure into the origin of a theory",
-          "confidence": "high",
-          "evidence": "His divorce became the research question that produced Imago therapy. He noticed his ex-wife shared traits with childhood caregivers and mapped the pattern across patients."
-        },
-        {
-          "category": "coaching",
-          "skill": "Creating a structured dialogue technique others can teach",
-          "confidence": "high",
-          "evidence": "The Imago Dialogue (mirror, validate, empathize) spread into schools, corporate training, and conflict resolution worldwide."
-        },
-        {
-          "category": "teaching",
-          "skill": "Making a therapeutic insight feel personal rather than clinical",
-          "confidence": "high",
-          "evidence": "Getting the Love You Want reached millions through Oprah because it made the idea that we choose partners who activate childhood wounds feel true, not academic."
-        },
-        {
-          "category": "connecting",
-          "skill": "Using a media platform to create demand for a certification",
-          "confidence": "medium",
-          "evidence": "18 Oprah appearances turned Imago from a niche practice into a household name, creating demand met by a global training network."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Terry Real",
-      "dominantCategories": [
-        "coaching",
-        "speaking_up"
-      ],
-      "playSkills": [
-        {
-          "category": "speaking_up",
-          "skill": "Saying the uncomfortable truth in the room",
-          "confidence": "high",
-          "evidence": "He interrupts clients mid-session, names grandiosity in real time, and tells husbands what their behaviour looks like from the outside."
-        },
-        {
-          "category": "coaching",
-          "skill": "Naming the habitual losing strategy and teaching the alternative",
-          "confidence": "high",
-          "evidence": "His clinical framework identifies each person's default relational move under stress (one-up or one-down) and replaces it with vulnerability."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Using personal pain as the spine of a professional argument",
-          "confidence": "high",
-          "evidence": "I Don't Want to Talk About It drew on his own father's violence and depression to name covert male depression."
-        },
-        {
-          "category": "teaching",
-          "skill": "Creating a distinctive therapeutic brand through confrontation",
-          "confidence": "medium",
-          "evidence": "The Relational Life Institute trains therapists in a notably more confrontational style than the field's default neutrality."
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Gary Chapman",
       "dominantCategories": [
         "teaching",
@@ -7306,42 +6496,6 @@
       "antiTags": [
         "performing",
         "speaking_up"
-      ]
-    },
-    {
-      "name": "Stan Tatkin",
-      "dominantCategories": [
-        "teaching",
-        "coaching"
-      ],
-      "playSkills": [
-        {
-          "category": "teaching",
-          "skill": "Bridging two fields that don't usually talk to each other",
-          "confidence": "high",
-          "evidence": "PACT blends attachment theory with developmental neuroscience, creating a clinically distinctive synthesis."
-        },
-        {
-          "category": "coaching",
-          "skill": "Teaching therapists to read bodies, not just words",
-          "confidence": "high",
-          "evidence": "PACT trains therapists to watch faces, breathing, and posture to spot the threat response before it becomes an argument."
-        },
-        {
-          "category": "teaching",
-          "skill": "Simplifying attachment styles into accessible language",
-          "confidence": "high",
-          "evidence": "Anchor/Island/Wave replaced clinical attachment labels with terms designed to be less clinical and easier to spot in session."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Translating brain science into plain-language relationship advice",
-          "confidence": "medium",
-          "evidence": "Wired for Love brought neuroscience concepts like the 'couple bubble' and amygdala hijack into language couples could use."
-        }
-      ],
-      "antiTags": [
-        "performing"
       ]
     },
     {
@@ -7517,40 +6671,6 @@
       ]
     },
     {
-      "name": "Holly Whitaker",
-      "dominantCategories": [
-        "building",
-        "storytelling"
-      ],
-      "playSkills": [
-        {
-          "category": "building",
-          "skill": "Creating an alternative to a broken institution",
-          "confidence": "high",
-          "evidence": "Tempest replaced AA meetings with meditation, nutrition, movement, therapy, and community for people who found 12-step alienating."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Reframing an old problem with a new identity",
-          "confidence": "high",
-          "evidence": "Quit Like a Woman positioned sobriety as feminist empowerment rather than shame-based confession, creating a brand that resonated with women who would never go to AA."
-        },
-        {
-          "category": "speaking_up",
-          "skill": "Challenging the evidence base of a culturally sacred institution",
-          "confidence": "high",
-          "evidence": "She researched and publicised that the scientific evidence for AA's effectiveness was surprisingly thin, questioning its outsized cultural authority."
-        },
-        {
-          "category": "building",
-          "skill": "Growing an audience through free content before monetising",
-          "confidence": "medium",
-          "evidence": "The Hip Sobriety blog built an audience, the online programme captured revenue, and the book created mass awareness."
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Russell Brand",
       "dominantCategories": [
         "performing",
@@ -7584,42 +6704,6 @@
       ],
       "antiTags": [
         "building"
-      ]
-    },
-    {
-      "name": "Bill Wilson",
-      "dominantCategories": [
-        "connecting",
-        "leading"
-      ],
-      "playSkills": [
-        {
-          "category": "connecting",
-          "skill": "Discovering that one person reaching out to another is more powerful than any professional",
-          "confidence": "high",
-          "evidence": "The founding moment of AA was Wilson calling strangers from the Mayflower Hotel to find another alcoholic. Their six-hour conversation became the template for peer support."
-        },
-        {
-          "category": "leading",
-          "skill": "Building a structure designed to survive without its founder",
-          "confidence": "high",
-          "evidence": "Built anonymity and anti-personality principles into AA's 12 Traditions, ensuring the movement could not be owned or corrupted by any individual."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Writing the foundational text that holds a movement together",
-          "confidence": "high",
-          "evidence": "Drafted the Big Book in bed in Brooklyn. It has sold over 10 million copies and spawned 200+ derivative programmes worldwide."
-        },
-        {
-          "category": "connecting",
-          "skill": "Creating a replicable meeting format anyone can start anywhere for free",
-          "confidence": "high",
-          "evidence": "AA scaled to 2 million members in 180 countries with no CEO, no board, no marketing budget. Anyone can start a meeting."
-        }
-      ],
-      "antiTags": [
-        "designing"
       ]
     },
     {
@@ -7659,40 +6743,6 @@
       ]
     },
     {
-      "name": "Bill Thomas",
-      "dominantCategories": [
-        "designing",
-        "leading"
-      ],
-      "playSkills": [
-        {
-          "category": "designing",
-          "skill": "Redesigning an institution from the ground up rather than reforming it",
-          "confidence": "high",
-          "evidence": "Green Houses replaced 100-bed nursing homes with 10-person homes, with private rooms, shared kitchens, and self-managed care teams."
-        },
-        {
-          "category": "leading",
-          "skill": "Starting with the smallest possible proof that a redesign works",
-          "confidence": "high",
-          "evidence": "The Eden Alternative at Chase Memorial (dogs, cats, birds, children) reduced mortality by 15% and drug costs by 38%, proving the concept before scaling."
-        },
-        {
-          "category": "creating",
-          "skill": "Using theatre to carry an argument beyond the conference room",
-          "confidence": "medium",
-          "evidence": "The Age of Disruption Tour was a one-man theatrical show in venues across the US, reaching audiences who would never attend a geriatrics conference."
-        },
-        {
-          "category": "designing",
-          "skill": "Naming the root cause as loneliness, helplessness, and boredom rather than medical conditions",
-          "confidence": "high",
-          "evidence": "He identified the 'three plagues' of institutional care and designed environments to eliminate them, treating the social illness rather than the medical symptoms."
-        }
-      ],
-      "antiTags": []
-    },
-    {
       "name": "Ai-jen Poo",
       "dominantCategories": [
         "leading",
@@ -7726,42 +6776,6 @@
       ],
       "antiTags": [
         "creating"
-      ]
-    },
-    {
-      "name": "Marc Freedman",
-      "dominantCategories": [
-        "leading",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "connecting",
-          "skill": "Building bridges between generations that society has segregated",
-          "confidence": "high",
-          "evidence": "How to Live Forever documented experiments in cohousing, shared-site programmes, and intergenerational schools to rebuild multigenerational connection."
-        },
-        {
-          "category": "leading",
-          "skill": "Giving a nameless experience a name people want to claim",
-          "confidence": "high",
-          "evidence": "Reframed 'retirement' as 'encore,' signalling that the second act could be as significant as the first."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Using prizes to create counter-narratives in culture",
-          "confidence": "medium",
-          "evidence": "The Purpose Prize awarded $100,000 to social innovators over 60, creating media stories that contradicted the assumption that innovation belongs only to the young."
-        },
-        {
-          "category": "connecting",
-          "skill": "Building programmes that produce research, then using research to drive policy",
-          "confidence": "high",
-          "evidence": "Experience Corps placed older volunteers in schools, then a Johns Hopkins study proved the children improved in reading and the volunteers improved in health."
-        }
-      ],
-      "antiTags": [
-        "performing"
       ]
     },
     {
@@ -8075,47 +7089,7 @@
       "antiTags": []
     },
     {
-      "name": "Dave Ramsey",
-      "dominantCategories": [
-        "performing",
-        "leading"
-      ],
-      "playSkills": [
-        {
-          "category": "performing",
-          "skill": "Making personal finance feel like a moral and spiritual practice",
-          "confidence": "high",
-          "evidence": "His evangelical framing turns budgeting into a moral practice. The confrontational radio style makes financial discipline feel urgent, not tedious."
-        },
-        {
-          "category": "teaching",
-          "skill": "Prioritising psychological momentum over mathematical optimisation",
-          "confidence": "high",
-          "evidence": "The debt snowball pays smallest balances first, not highest-interest. He argues personal finance is about behaviour, not maths."
-        },
-        {
-          "category": "leading",
-          "skill": "Distributing through existing communities rather than building your own",
-          "confidence": "high",
-          "evidence": "Financial Peace University runs through churches, using pre-built community and accountability structures that online courses cannot replicate. Over 10 million graduates."
-        },
-        {
-          "category": "building",
-          "skill": "Funding a media empire through product sales with zero advertising",
-          "confidence": "high",
-          "evidence": "Ramsey Solutions grew to 1,000+ employees and 18 million weekly listeners with no ads, funding everything through book sales, courses, and referral fees."
-        },
-        {
-          "category": "storytelling",
-          "skill": "Turning bankruptcy into the credibility that makes people listen",
-          "confidence": "medium",
-          "evidence": "Went bankrupt at 26 with a newborn. The experience gave him absolute conviction that all consumer debt is dangerous, and that conviction became the brand."
-        }
-      ],
-      "antiTags": []
-    },
-    {
-      "name": "Bren\u00e9 Brown",
+      "name": "Brené Brown",
       "dominantCategories": [
         "speaking_up",
         "teaching",
@@ -8171,34 +7145,6 @@
       ]
     },
     {
-      "name": "Marie Forleo",
-      "dominantCategories": [
-        "teaching",
-        "coaching",
-        "performing"
-      ],
-      "playSkills": [
-        {
-          "category": "teaching",
-          "skill": "Make business education feel like friendship",
-          "confidence": "high",
-          "evidence": "80,000 B-School students across 195 countries from a team of 30"
-        },
-        {
-          "category": "coaching",
-          "skill": "Give permission to be multi-passionate",
-          "confidence": "high",
-          "evidence": "Coined multipassionate entrepreneur, validating people who refuse to choose one path"
-        },
-        {
-          "category": "performing",
-          "skill": "Be funny and smart at the same time",
-          "confidence": "high",
-          "evidence": "800+ episodes of MarieTV with celebrity interviews and comedy"
-        }
-      ]
-    },
-    {
       "name": "Wim Hof",
       "dominantCategories": [
         "performing",
@@ -8222,34 +7168,6 @@
           "skill": "Challenge scientific orthodoxy from lived experience",
           "confidence": "high",
           "evidence": "PNAS-published study proved voluntary influence over autonomic nervous system"
-        }
-      ]
-    },
-    {
-      "name": "Adriene Mishler",
-      "dominantCategories": [
-        "coaching",
-        "connecting",
-        "performing"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Make beginners feel safe",
-          "confidence": "high",
-          "evidence": "12M subscribers built by optimising for safety, not aspiration"
-        },
-        {
-          "category": "connecting",
-          "skill": "Create community from a camera",
-          "confidence": "high",
-          "evidence": "4 million people completed 30 Days of Yoga together in January 2015"
-        },
-        {
-          "category": "performing",
-          "skill": "Be warm and real on screen every day",
-          "confidence": "high",
-          "evidence": "Daily uploads from her living room with her dog Benji for over a decade"
         }
       ]
     },
@@ -8449,34 +7367,6 @@
       ]
     },
     {
-      "name": "Tara Brach",
-      "dominantCategories": [
-        "coaching",
-        "teaching",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "coaching",
-          "skill": "Hold space for decades without burning out",
-          "confidence": "high",
-          "evidence": "Weekly free dharma talks since 2002, 200M podcast downloads, never gated content"
-        },
-        {
-          "category": "teaching",
-          "skill": "Codify a practice into a teachable method",
-          "confidence": "high",
-          "evidence": "RAIN method adopted by thousands of therapists and school counsellors worldwide"
-        },
-        {
-          "category": "connecting",
-          "skill": "Build community through consistency",
-          "confidence": "high",
-          "evidence": "Founded Insight Meditation Community of Washington D.C. in 1998, still teaching there"
-        }
-      ]
-    },
-    {
       "name": "Glennon Doyle",
       "dominantCategories": [
         "speaking_up",
@@ -8533,54 +7423,6 @@
       ]
     },
     {
-      "name": "Jesse Itzler",
-      "dominantCategories": [
-        "performing",
-        "leading",
-        "storytelling"
-      ],
-      "playSkills": [
-        {
-          "category": "performing",
-          "skill": "Turn every day into an event",
-          "confidence": "high",
-          "evidence": "Built Marquis Jet, ran ultramarathons, invited a Navy SEAL to live with him for 31 days"
-        }
-      ]
-    },
-    {
-      "name": "Jose Andres",
-      "dominantCategories": [
-        "connecting",
-        "leading",
-        "building"
-      ],
-      "playSkills": [
-        {
-          "category": "connecting",
-          "skill": "Feed people in a crisis",
-          "confidence": "high",
-          "evidence": "World Central Kitchen serves millions of meals in disaster zones worldwide"
-        }
-      ]
-    },
-    {
-      "name": "P.T. Barnum",
-      "dominantCategories": [
-        "performing",
-        "storytelling",
-        "connecting"
-      ],
-      "playSkills": [
-        {
-          "category": "performing",
-          "skill": "Turn spectacle into a business",
-          "confidence": "high",
-          "evidence": "Created the modern circus and pioneered entertainment marketing"
-        }
-      ]
-    },
-    {
       "name": "Walt Disney",
       "dominantCategories": [
         "creating",
@@ -8593,6 +7435,652 @@
           "skill": "Build worlds people want to live in",
           "confidence": "high",
           "evidence": "Created animation studios, theme parks, and an entertainment empire from drawings"
+        }
+      ]
+    },
+    {
+      "name": "Eckhart Tolle",
+      "dominantCategories": [
+        "teaching",
+        "coaching"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Reduce complex theory to one question",
+          "confidence": "high",
+          "evidence": "Distilled all spiritual teaching into one question, 'Are you present?', reaching 50M+ book sales in 50+ languages"
+        },
+        {
+          "category": "coaching",
+          "skill": "Hold space for decades without burning out",
+          "confidence": "high",
+          "evidence": "Has taught the same core message since 1997 without diluting it, now 78 and still leading retreats"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Name what everyone is feeling but won't say",
+          "confidence": "high",
+          "evidence": "The Power of Now articulated the universal experience of mental suffering in language that resonated across cultures and religions"
+        },
+        {
+          "category": "teaching",
+          "skill": "Make silence feel like the answer",
+          "confidence": "high",
+          "evidence": "Famous for long pauses in talks and retreats, making stillness itself the teaching rather than words about stillness"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "performing",
+          "skill": "Command attention through energy and charisma",
+          "evidence": "Deliberately avoids performance energy. The quieter he gets, the more powerful the room becomes."
+        },
+        {
+          "category": "building",
+          "skill": "Build operational systems and organizations",
+          "evidence": "Never built a certification empire or scaled through instructors. His presence is the product, not a method others deliver."
+        }
+      ]
+    },
+    {
+      "name": "Deepak Chopra",
+      "dominantCategories": [
+        "teaching",
+        "leading"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Translate ancient wisdom for modern ears",
+          "confidence": "high",
+          "evidence": "Repackaged 5,000 years of Ayurveda into 90+ books translated into 43 languages"
+        },
+        {
+          "category": "leading",
+          "skill": "Certify others to carry your method",
+          "confidence": "high",
+          "evidence": "Built Chopra Global certification spanning coaching, health, meditation, and yoga, creating thousands of branded practitioners"
+        },
+        {
+          "category": "coaching",
+          "skill": "Connect dots across two worlds",
+          "confidence": "high",
+          "evidence": "Combined endocrinology credentials with Maharishi's TM teachings, bridging Western medicine and Eastern wisdom"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Challenge scientific orthodoxy from lived experience",
+          "confidence": "high",
+          "evidence": "Left chief of staff role to publicly advocate that consciousness shapes biology"
+        },
+        {
+          "category": "performing",
+          "skill": "Command a room of 10,000",
+          "confidence": "high",
+          "evidence": "Keynotes at global conferences, Oprah appearances, and sold-out events for 30+ years"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "creating",
+          "skill": "Make something that did not exist yesterday",
+          "evidence": "His power is volume and consistency, not one defining creative masterpiece."
+        }
+      ]
+    },
+    {
+      "name": "Jack Kornfield",
+      "dominantCategories": [
+        "teaching",
+        "connecting"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Make ancient texts feel modern",
+          "confidence": "high",
+          "evidence": "A Path with Heart and The Wise Heart translated 2,500 years of Buddhist psychology into practical guides for Western seekers"
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Co-founded IMS (1975) and Spirit Rock (1987), two institutions anchoring American Buddhism for 50 years"
+        },
+        {
+          "category": "coaching",
+          "skill": "Hold space for decades without burning out",
+          "confidence": "high",
+          "evidence": "Has taught meditation continuously since 1974, over 50 years, while raising a family and earning a PhD"
+        },
+        {
+          "category": "teaching",
+          "skill": "Codify a practice into a teachable method",
+          "confidence": "high",
+          "evidence": "2-year Mindfulness Meditation Teacher Certification (with Tara Brach) has trained thousands of certified teachers"
+        },
+        {
+          "category": "coaching",
+          "skill": "Make beginners feel safe",
+          "confidence": "high",
+          "evidence": "Known for warmth and humour that makes meditation feel accessible. Spirit Rock deliberately designed to welcome newcomers."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "performing",
+          "skill": "Command attention through energy and charisma",
+          "evidence": "Never uses spectacle or showmanship. His teaching power comes from gentleness, not intensity."
+        }
+      ]
+    },
+    {
+      "name": "Sam Harris",
+      "dominantCategories": [
+        "teaching",
+        "speaking_up"
+      ],
+      "playSkills": [
+        {
+          "category": "speaking_up",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "The End of Faith directly challenged religious faith post-9/11, spending 33 weeks on the NYT bestseller list"
+        },
+        {
+          "category": "teaching",
+          "skill": "Make complex psychology simple",
+          "confidence": "high",
+          "evidence": "Waking Up app distils 30+ years of contemplative practice and a neuroscience PhD into 10-minute daily guided meditations"
+        },
+        {
+          "category": "teaching",
+          "skill": "Reduce complex theory to one question",
+          "confidence": "high",
+          "evidence": "Centres his entire meditation teaching around one question: 'Can you find the one who is looking?'"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Challenge scientific orthodoxy from lived experience",
+          "confidence": "high",
+          "evidence": "As a neuroscientist, publicly argued that consciousness is the hard problem science can't solve, based on contemplative experience"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "performing",
+          "skill": "Channel spiritual energy on stage",
+          "evidence": "Never uses charisma or emotional performance. His power is in the argument, not the delivery."
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "evidence": "Deliberately avoids community-building or sangha. The app is individual practice, not group belonging."
+        }
+      ]
+    },
+    {
+      "name": "Thich Nhat Hanh",
+      "dominantCategories": [
+        "teaching",
+        "connecting"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Make a confusing thing feel obvious",
+          "confidence": "high",
+          "evidence": "Turned Buddhist philosophy into instructions anyone can follow: 'Wash the dishes to wash the dishes.' 100+ books in language a child could understand."
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Founded 11 monasteries, 1,000+ local sanghas across 40 countries, and the Order of Interbeing"
+        },
+        {
+          "category": "coaching",
+          "skill": "Hold space for the unspeakable",
+          "confidence": "high",
+          "evidence": "Guided veterans, refugees, and trauma survivors through mindfulness retreats for decades"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Turn personal crisis into collective awakening",
+          "confidence": "high",
+          "evidence": "Transformed exile from Vietnam into a global peace movement. MLK nominated him for the Nobel Peace Prize."
+        },
+        {
+          "category": "teaching",
+          "skill": "Make beginners feel safe",
+          "confidence": "high",
+          "evidence": "The Miracle of Mindfulness was written as a manual for burned-out social workers, designed to be practised by anyone under any conditions"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "performing",
+          "skill": "Command attention through energy and charisma",
+          "evidence": "Never performed or entertained. His public presence was indistinguishable from his private practice."
+        },
+        {
+          "category": "building",
+          "skill": "Build operational systems and organizations",
+          "evidence": "Everything runs on dana (generosity) and monastic labour, not commercial systems."
+        }
+      ]
+    },
+    {
+      "name": "Seane Corn",
+      "dominantCategories": [
+        "coaching",
+        "speaking_up"
+      ],
+      "playSkills": [
+        {
+          "category": "coaching",
+          "skill": "Hold space for the unspeakable",
+          "confidence": "high",
+          "evidence": "Created yoga programs at Children of the Night shelter for adolescent sex workers, taught in brothels across India, Cambodia, and Africa"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Turn private pain into public healing",
+          "confidence": "high",
+          "evidence": "Built Off the Mat, Into the World from personal trauma work, training 1000+ activist leaders and raising $3.5M"
+        },
+        {
+          "category": "teaching",
+          "skill": "Teach through the body, not the mind",
+          "confidence": "high",
+          "evidence": "30+ years of vinyasa teaching integrating trauma awareness, emotional processing, and somatic release"
+        },
+        {
+          "category": "leading",
+          "skill": "Rally a group behind an idea",
+          "confidence": "high",
+          "evidence": "Global Seva Challenge mobilized thousands of yoga practitioners into fundraising campaigns across multiple countries"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "building",
+          "skill": "Build a system from scratch",
+          "evidence": "Her work is relational and embodied, not systems-oriented. She builds movements through personal connection."
+        }
+      ]
+    },
+    {
+      "name": "Joe Dispenza",
+      "dominantCategories": [
+        "teaching",
+        "coaching"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Turn research into transformation",
+          "confidence": "high",
+          "evidence": "Partnered with UC San Diego to research meditation effects (published in Communications Biology), translating findings into practical retreat protocols"
+        },
+        {
+          "category": "coaching",
+          "skill": "Codify a practice into a teachable method",
+          "confidence": "high",
+          "evidence": "Built a tiered system (progressive to advanced retreats) with 200+ certified NeuroChangeSolutions consultants"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Use your own body as proof",
+          "confidence": "high",
+          "evidence": "Healed 6 crushed vertebrae without surgery at age 24, uses this story as the foundation of all his teaching"
+        },
+        {
+          "category": "teaching",
+          "skill": "Make complex psychology simple",
+          "confidence": "high",
+          "evidence": "3 NYT bestsellers translating neuroscience into accessible daily meditation practices"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "performing",
+          "skill": "Channel spiritual energy on stage",
+          "evidence": "His style is methodical and structured, not improvisational. Retreats follow precise protocols rather than spontaneous energy."
+        }
+      ]
+    },
+    {
+      "name": "Aubrey Marcus",
+      "dominantCategories": [
+        "storytelling",
+        "connecting"
+      ],
+      "playSkills": [
+        {
+          "category": "storytelling",
+          "skill": "Use your own breakdown as the teaching",
+          "confidence": "high",
+          "evidence": "Publicly shared relationship breakdowns, psychedelic experiences, and personal struggles across 500+ podcast episodes"
+        },
+        {
+          "category": "connecting",
+          "skill": "Facilitate a hard conversation",
+          "confidence": "high",
+          "evidence": "Fit for Service fellowship integrates plant medicine ceremony with group coaching, creating deep vulnerability among participants"
+        },
+        {
+          "category": "coaching",
+          "skill": "Move someone from stuck to action",
+          "confidence": "high",
+          "evidence": "Own the Day, Own Your Life became a NYT bestseller by turning daily optimisation into actionable protocols"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "First mainstream voice for psychedelic medicine in 2011, years before the psychedelic renaissance became culturally acceptable"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "building",
+          "skill": "Build a system from scratch",
+          "evidence": "Post-Onnit, his work is relational and experiential rather than product-based. He intentionally moved toward holding space."
+        }
+      ]
+    },
+    {
+      "name": "Ram Dass",
+      "dominantCategories": [
+        "teaching",
+        "storytelling"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Translate ancient wisdom for modern ears",
+          "confidence": "high",
+          "evidence": "Be Here Now sold 2M+ copies translating Hindu devotional practice into language American counterculture could absorb"
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turn personal crisis into collective awakening",
+          "confidence": "high",
+          "evidence": "Transformed his 1997 stroke into the teaching Still Here, reframing disability as spiritual practice for millions"
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Gave lectures and retreats continuously from 1968 to 2019, over 50 years, even after stroke left him in a wheelchair"
+        },
+        {
+          "category": "coaching",
+          "skill": "Hold space for decades without burning out",
+          "confidence": "high",
+          "evidence": "Co-founded Seva Foundation (restored sight to millions) and Hanuman Foundation, sustaining service across five decades"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "building",
+          "skill": "Build a system from scratch",
+          "evidence": "Deliberately avoided building systems around himself. Founded organisations then handed them to others."
+        },
+        {
+          "category": "leading",
+          "skill": "Pick what matters and cut the rest",
+          "evidence": "His leadership model was anti-hierarchical by design. He preferred to fund and empower others rather than direct."
+        }
+      ]
+    },
+    {
+      "name": "Sadhguru",
+      "dominantCategories": [
+        "teaching",
+        "leading"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Reduce complex theory to one question",
+          "confidence": "high",
+          "evidence": "Inner Engineering distils yoga science into a single 21-minute kriya practice that millions perform daily"
+        },
+        {
+          "category": "leading",
+          "skill": "Rally a group behind an idea",
+          "confidence": "high",
+          "evidence": "Rally for Rivers campaign drove a 30-day, 9,300km solo motorcycle journey across India, reaching 162M pledges of support"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Challenge scientific orthodoxy from lived experience",
+          "confidence": "high",
+          "evidence": "Consecrated Dhyanalinga through a 3-year energy process that has no scientific framework, yet draws millions of visitors"
+        },
+        {
+          "category": "performing",
+          "skill": "Command a room of 10,000",
+          "confidence": "high",
+          "evidence": "Fills stadiums worldwide, addressed UN General Assembly, World Economic Forum, received India's Padma Vibhushan"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "creating",
+          "skill": "Make something that did not exist yesterday",
+          "evidence": "Transmits ancient yogic traditions rather than creating new art. His innovation is in delivery and scale, not originating new practices."
+        }
+      ]
+    },
+    {
+      "name": "Marianne Williamson",
+      "dominantCategories": [
+        "teaching",
+        "speaking_up",
+        "coaching"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Make ancient texts feel modern",
+          "confidence": "high",
+          "evidence": "Translated A Course in Miracles into accessible language, selling 3M+ books across 17 titles with 4 reaching #1 NYT"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "Ran for president twice on a platform of love and reparations, bringing spiritual language into prime-time political debate"
+        },
+        {
+          "category": "coaching",
+          "skill": "Hold space for the unspeakable",
+          "confidence": "high",
+          "evidence": "Founded Project Angel Food in 1989, delivering 400 meals daily to homebound AIDS patients when most organisations refused"
+        },
+        {
+          "category": "performing",
+          "skill": "Channel spiritual energy on stage",
+          "confidence": "high",
+          "evidence": "Packed weekly lectures in LA churches for decades with a voluntary donation model"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "building",
+          "skill": "Build a system from scratch",
+          "evidence": "Chose the lecture circuit and writing life over building an organisation. Presidential campaigns notable for lack of traditional infrastructure."
+        }
+      ]
+    },
+    {
+      "name": "Mooji",
+      "dominantCategories": [
+        "coaching",
+        "teaching"
+      ],
+      "playSkills": [
+        {
+          "category": "coaching",
+          "skill": "Hold space for decades without burning out",
+          "confidence": "high",
+          "evidence": "Has given satsang continuously since 1999, regularly drawing 1000+ people from 50+ nationalities"
+        },
+        {
+          "category": "teaching",
+          "skill": "Reduce complex theory to one question",
+          "confidence": "high",
+          "evidence": "Distilled Advaita Vedanta into a single repeated inquiry, 'Who am I?', accessible to complete beginners"
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Built Monte Sahaja ashram in Portugal with 40-60 full-time residents and a global network of sangha groups"
+        },
+        {
+          "category": "performing",
+          "skill": "Be warm and real on screen every day",
+          "confidence": "high",
+          "evidence": "828K YouTube subscribers with satsang videos regularly reaching hundreds of thousands of views"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "building",
+          "skill": "Build a system from scratch",
+          "evidence": "Monte Sahaja runs on volunteer labour and donations. Mooji rejects corporate structure and has no marketing team."
+        },
+        {
+          "category": "creating",
+          "skill": "Make something that did not exist yesterday",
+          "evidence": "His teaching is the absence of adding. He points to what already exists rather than building new frameworks."
+        }
+      ]
+    },
+    {
+      "name": "Yung Pueblo",
+      "dominantCategories": [
+        "storytelling",
+        "creating"
+      ],
+      "playSkills": [
+        {
+          "category": "storytelling",
+          "skill": "Turn private pain into public healing",
+          "confidence": "high",
+          "evidence": "5 books selling nearly 2M copies worldwide, all drawn directly from his own healing journey through Vipassana meditation"
+        },
+        {
+          "category": "creating",
+          "skill": "Turn curiosity into consistent content",
+          "confidence": "high",
+          "evidence": "Built 3M+ Instagram following (4.5M across platforms) and a Substack by writing daily about what he was learning in real time"
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Named TIME100 Creator in 2025, cofounded Wisdom Ventures ($77.7M Fund II) and built Ready relationship app from his audience"
+        },
+        {
+          "category": "teaching",
+          "skill": "Make complex psychology simple",
+          "confidence": "high",
+          "evidence": "Translated Vipassana concepts like impermanence, equanimity, and emotional maturity into plain-language poetry in 25+ languages"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "performing",
+          "skill": "Rally a group behind an idea",
+          "evidence": "Despite activism background, explicitly moved toward inward focus. His message is that outer change follows inner healing."
+        }
+      ]
+    },
+    {
+      "name": "Sahara Rose",
+      "dominantCategories": [
+        "teaching",
+        "coaching",
+        "connecting"
+      ],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Translate ancient wisdom for modern ears",
+          "confidence": "high",
+          "evidence": "Turned Ayurveda and Vedic philosophy into bestselling books with Deepak Chopra forewords, reaching a millennial audience"
+        },
+        {
+          "category": "coaching",
+          "skill": "Certify others to carry your method",
+          "confidence": "high",
+          "evidence": "Founded Highest Self Institute (formerly Dharma Coaching Institute), training 2000+ certified dharma and spiritual life coaches"
+        },
+        {
+          "category": "connecting",
+          "skill": "Create community from a camera",
+          "confidence": "high",
+          "evidence": "Built Rose Gold Goddesses to 2000+ members and Highest Self Podcast to 25M+ downloads through consistent solo episodes"
+        },
+        {
+          "category": "performing",
+          "skill": "Channel spiritual energy on stage",
+          "confidence": "high",
+          "evidence": "Hosts channelled solocasts, sacred feminine workshops, and embodiment events blending spirituality with movement"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "building",
+          "skill": "Build a system from scratch",
+          "evidence": "Has cycled through multiple business models rather than systematizing one. Her energy is creative expansion, not operational efficiency."
+        }
+      ]
+    },
+    {
+      "name": "Sri Sri Ravi Shankar",
+      "dominantCategories": [
+        "leading",
+        "teaching",
+        "connecting"
+      ],
+      "playSkills": [
+        {
+          "category": "leading",
+          "skill": "Rally a group behind an idea",
+          "confidence": "high",
+          "evidence": "Built Art of Living into a volunteer-run movement across 180 countries with 11,000+ certified teachers"
+        },
+        {
+          "category": "teaching",
+          "skill": "Teach through the body, not the mind",
+          "confidence": "high",
+          "evidence": "Sudarshan Kriya breathing technique is the core of all courses, taught physically before any philosophy"
+        },
+        {
+          "category": "connecting",
+          "skill": "Build community through consistency",
+          "confidence": "high",
+          "evidence": "Art of Living has maintained continuous operations since 1981, 45 years of unbroken teaching"
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Facilitate a hard conversation",
+          "confidence": "high",
+          "evidence": "Mediated conflict in Colombia, Iraq, and Sri Lanka, and runs prison rehabilitation programmes in dozens of countries"
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "creating",
+          "skill": "Make something that did not exist yesterday",
+          "evidence": "Positions himself as a channel for ancient Vedic wisdom, not an original creator. Authority comes from transmission, not innovation."
         }
       ]
     }

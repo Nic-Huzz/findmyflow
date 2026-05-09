@@ -141,6 +141,21 @@ export default function ExperienceCreate() {
           </p>
         </header>
 
+        {!runAgainFromId && (
+          <button
+            type="button"
+            className="exp-inspiration-cta"
+            onClick={() => navigate('/create/inspiration')}
+          >
+            <span className="exp-inspiration-icon">✨</span>
+            <div>
+              <div className="exp-inspiration-label">Not sure what to create?</div>
+              <div className="exp-inspiration-sub">Find Inspiration from creators you admire</div>
+            </div>
+            <span className="exp-inspiration-arrow">→</span>
+          </button>
+        )}
+
         {runAgainSource && (
           <div className="exp-run-again-badge">
             <span className="exp-run-again-icon">🔄</span>

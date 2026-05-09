@@ -99,7 +99,7 @@ export default function StrikeDesignFlow() {
           .select('essence_archetype').eq('user_id', user.id)
           .order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('experiences')
-          .select('id, name, experience_date').eq('user_id', user.id).eq('status', 'upcoming')
+          .select('id, name, experience_date, modalities').eq('user_id', user.id).eq('status', 'upcoming')
           .order('experience_date', { ascending: true }),
       ])
 
@@ -160,7 +160,9 @@ export default function StrikeDesignFlow() {
           strikeType: strikeType,
           outcome: outcome,
           essenceArchetype: essenceArchetype?.name || '',
+          essenceSuperpower: essenceArchetype?.superpower || '',
           experienceName: upcomingExperiences.find(e => e.id === selectedExperienceId)?.name || '',
+          modalities: upcomingExperiences.find(e => e.id === selectedExperienceId)?.modalities || [],
         },
       })
       if (error) throw error

@@ -2,17 +2,17 @@
   "meta": {
     "version": "1.0",
     "generatedAt": "2026-04-07",
-    "totalProfiles": 275,
+    "totalProfiles": 298,
     "confidenceDistribution": {
-      "high": 214,
-      "medium": 60,
+      "high": 296,
+      "medium": 1,
       "low": 1
     },
     "sourceDistribution": {
-      "founder": 75,
-      "nonfounder": 200
+      "founder": 72,
+      "nonfounder": 226
     },
-    "totalPeople": 318
+    "totalPeople": 298
   },
   "profiles": [
     {
@@ -774,31 +774,6 @@
       },
       "confidence": "high",
       "oneLiner": "For me life is continuously being hungry. The meaning of life is not simply to exist, to survive, but to move ahead, to go up, to achieve, to conquer."
-    },
-    {
-      "name": "P.T. Barnum",
-      "source": "founder",
-      "domain": "entertainment",
-      "primaryProblem": "locked_out",
-      "primarySkills": [
-        "performing"
-      ],
-      "careerModel": {
-        "type": "media",
-        "primaryRevenue": "Ticket sales for live entertainment spectacles",
-        "revenueStreams": [
-          "ticket sales",
-          "touring revenue",
-          "museum admissions",
-          "merchandise"
-        ],
-        "trajectory": "Grocery store clerk -> newspaper publisher -> Barnum's American Museum -> circus impresario -> invented modern entertainment marketing",
-        "keyDecision": "Turned every scandal and controversy into free publicity, making his name the brand",
-        "scaleModel": "Controversy as marketing engine, creating spectacles people felt compelled to see",
-        "lessonsForUser": "If you perform and care about attention: turn every controversy into publicity and make your name impossible to ignore"
-      },
-      "confidence": "high",
-      "oneLiner": "Every crowd has a silver lining."
     },
     {
       "name": "Dietrich Mateschitz",
@@ -1748,34 +1723,6 @@
       "oneLiner": "I believe that all women are pretty without makeup — but with the right makeup can be pretty powerful."
     },
     {
-      "name": "Jose Andres",
-      "source": "founder",
-      "domain": "restaurants and disaster relief",
-      "primaryProblem": "left_behind",
-      "primarySkills": [
-        "connecting",
-        "building",
-        "coaching"
-      ],
-      "careerModel": {
-        "type": "hybrid",
-        "primaryRevenue": "Restaurant group revenue and philanthropic donations for World Central Kitchen",
-        "revenueStreams": [
-          "restaurant revenue",
-          "donations",
-          "books",
-          "speaking fees",
-          "media"
-        ],
-        "trajectory": "Spanish chef -> 30+ restaurant empire in US -> founded World Central Kitchen -> served 350+ million meals in disasters worldwide",
-        "keyDecision": "Founded World Central Kitchen, turning restaurant logistics expertise into the world's fastest disaster relief organization",
-        "scaleModel": "Restaurant supply chain expertise repurposed for disaster relief at unprecedented speed",
-        "lessonsForUser": "If you connect and care about feeding people: the operational skills from one domain might solve a completely different problem at global scale"
-      },
-      "confidence": "high",
-      "oneLiner": "The business of feeding people is the most amazing business in the world."
-    },
-    {
       "name": "Patagonia's Rose Marcario",
       "source": "founder",
       "domain": "outdoor apparel (CEO)",
@@ -1822,34 +1769,6 @@
       },
       "confidence": "high",
       "oneLiner": "We don't sell saddles here. What we are selling is organizational transformation."
-    },
-    {
-      "name": "Jesse Itzler",
-      "source": "founder",
-      "domain": "aviation, beverages, fitness",
-      "primaryProblem": "forgot_what_for",
-      "primarySkills": [
-        "performing",
-        "speaking_up",
-        "creating"
-      ],
-      "careerModel": {
-        "type": "serial_entrepreneur",
-        "primaryRevenue": "Built and sold multiple businesses across unrelated industries",
-        "revenueStreams": [
-          "jet card sales",
-          "beverage sales",
-          "events",
-          "speaking",
-          "books"
-        ],
-        "trajectory": "Aspiring rapper -> jingle writer -> founded Marquis Jet through cold-calling -> Zico coconut water -> ultramarathon running -> serial entrepreneur and speaker",
-        "keyDecision": "Built Marquis Jet to $1B in revenue with zero aviation experience purely through relentless cold-calling",
-        "scaleModel": "Personal energy and sales ability applied to whatever industry seemed interesting",
-        "lessonsForUser": "If you perform and care about variety: sales skills transfer to any industry, so follow your curiosity and sell your way in"
-      },
-      "confidence": "high",
-      "oneLiner": "Built a life around collecting experiences, not credentials. Life resumes over paper ones."
     },
     {
       "name": "Daymond John",
@@ -2696,31 +2615,6 @@
       "oneLiner": "Took her eyes on her own Greenwich Village block and turned them into an argument that beat Robert Moses."
     },
     {
-      "name": "Ella Baker",
-      "source": "nonfounder",
-      "domain": "civil rights organizing",
-      "primaryProblem": "life_not_yours",
-      "primarySkills": [
-        "connecting",
-        "coaching",
-        "leading"
-      ],
-      "careerModel": {
-        "type": "activist",
-        "primaryRevenue": "Organizing salary from NAACP and SCLC",
-        "revenueStreams": [
-          "organizing salary",
-          "speaking fees"
-        ],
-        "trajectory": "NAACP field organizer -> helped found SCLC -> convened the meeting that created SNCC -> trained a generation of civil rights leaders -> chose to stay behind the scenes",
-        "keyDecision": "Chose grassroots leadership development over personal fame, training others to lead rather than leading herself",
-        "scaleModel": "Train leaders who train leaders, creating a self-replicating movement",
-        "lessonsForUser": "If you connect and care about justice: train other leaders rather than building your own platform, and your impact will multiply"
-      },
-      "confidence": "high",
-      "oneLiner": "Believed that the moment a movement depended on a single man was the moment it had already lost."
-    },
-    {
       "name": "Dorothy Height",
       "source": "nonfounder",
       "domain": "civil rights and women's rights",
@@ -2799,32 +2693,6 @@
       "oneLiner": "Sang hymns in a Winona jail cell with her kidneys failing and came out louder than the governor of Mississippi."
     },
     {
-      "name": "Grace Lee Boggs",
-      "source": "nonfounder",
-      "domain": "community organizing and philosophy",
-      "primaryProblem": "left_behind",
-      "primarySkills": [
-        "connecting",
-        "storytelling",
-        "coaching"
-      ],
-      "careerModel": {
-        "type": "activist",
-        "primaryRevenue": "Organizing, writing, and speaking",
-        "revenueStreams": [
-          "books",
-          "speaking fees",
-          "grants"
-        ],
-        "trajectory": "Chinese-American philosopher -> moved to Detroit -> 62 years of community organizing -> co-author of Revolution and Evolution -> living through every major social movement of the 20th century",
-        "keyDecision": "Committed to one city (Detroit) for 62 years rather than chasing movements across the country",
-        "scaleModel": "Rootedness in one place for decades, allowing deep community transformation",
-        "lessonsForUser": "If you connect and care about community: stay in one place long enough to see real change, because depth beats breadth"
-      },
-      "confidence": "high",
-      "oneLiner": "Kept starting over every decade for 70 years and never ran out of Detroit."
-    },
-    {
       "name": "Saul Alinsky",
       "source": "nonfounder",
       "domain": "community organizing",
@@ -2850,32 +2718,6 @@
       },
       "confidence": "high",
       "oneLiner": "Taught that power belongs to the people who are willing to be a visible nuisance first."
-    },
-    {
-      "name": "Václav Havel",
-      "source": "nonfounder",
-      "domain": "dissident theater and politics",
-      "primaryProblem": "voice_taken",
-      "primarySkills": [
-        "storytelling",
-        "coaching"
-      ],
-      "careerModel": {
-        "type": "hybrid",
-        "primaryRevenue": "Playwriting, then presidential salary",
-        "revenueStreams": [
-          "plays",
-          "essays",
-          "presidential salary",
-          "speaking fees"
-        ],
-        "trajectory": "Playwright -> dissident -> co-founded Charter 77 -> wrote The Power of the Powerless -> imprisoned -> became first post-Communist president of Czechoslovakia",
-        "keyDecision": "Wrote The Power of the Powerless, arguing that 'living in truth' was itself a political act against totalitarianism",
-        "scaleModel": "Artistic integrity as political resistance, building moral authority that became political power",
-        "lessonsForUser": "If you connect and care about truth: living honestly is a political act, and moral authority can become real power when the moment comes"
-      },
-      "confidence": "high",
-      "oneLiner": "Treated a rock band trial as a constitutional crisis and lived to see the frame win."
     },
     {
       "name": "Harriet Tubman",
@@ -3225,84 +3067,6 @@
       },
       "confidence": "high",
       "oneLiner": "Refused to separate her identities into manageable portions and made that refusal a public method."
-    },
-    {
-      "name": "Nina Simone",
-      "source": "nonfounder",
-      "domain": "piano and protest song",
-      "primaryProblem": "voice_taken",
-      "primarySkills": [
-        "performing",
-        "creating"
-      ],
-      "careerModel": {
-        "type": "performer",
-        "primaryRevenue": "Live performance, recordings, and licensing",
-        "revenueStreams": [
-          "concert revenue",
-          "recordings",
-          "licensing",
-          "royalties"
-        ],
-        "trajectory": "Classical piano prodigy -> rejected by Curtis Institute -> became nightclub singer -> 'Mississippi Goddam' made her a protest icon -> exile in Europe -> legacy grew after death",
-        "keyDecision": "Turned her rage at Curtis Institute's rejection and racial violence into protest music that defined an era",
-        "scaleModel": "Live performance and recordings that became more valuable with each decade, especially posthumously",
-        "lessonsForUser": "If you perform and care about justice: channel your rage into art, because protest music outlives protest marches"
-      },
-      "confidence": "high",
-      "oneLiner": "Turned a conservatory rejection into a protest career that changed what music could say."
-    },
-    {
-      "name": "Mercedes Sosa",
-      "source": "nonfounder",
-      "domain": "folk music and protest",
-      "primaryProblem": "voice_taken",
-      "primarySkills": [
-        "performing",
-        "connecting"
-      ],
-      "careerModel": {
-        "type": "performer",
-        "primaryRevenue": "Concert performances and album sales",
-        "revenueStreams": [
-          "concert revenue",
-          "albums",
-          "royalties"
-        ],
-        "trajectory": "Argentine folk singer -> central to nuevo cancionero movement -> arrested on stage in 1979 -> exile in Paris and Madrid -> triumphant return",
-        "keyDecision": "Continued performing protest music despite arrest and forced exile, never compromising her art",
-        "scaleModel": "Voice of a continent's conscience, returning from exile to fill the largest stadiums in South America",
-        "lessonsForUser": "If you perform and care about your people: exile can be a chapter, not an ending, and your return will be more powerful than your departure"
-      },
-      "confidence": "high",
-      "oneLiner": "Gave a continent songs it could sing together when it couldn't otherwise agree on anything."
-    },
-    {
-      "name": "Fela Kuti",
-      "source": "nonfounder",
-      "domain": "Afrobeat and political music",
-      "primaryProblem": "voice_taken",
-      "primarySkills": [
-        "creating",
-        "building",
-        "speaking_up",
-        "leading"
-      ],
-      "careerModel": {
-        "type": "performer",
-        "primaryRevenue": "Live performances and album sales",
-        "revenueStreams": [
-          "concert revenue",
-          "albums",
-          "nightclub (Shrine)"
-        ],
-        "trajectory": "Nigerian musician -> studied in London -> created Afrobeat by fusing jazz, funk, highlife, and Yoruba percussion -> used music as political weapon against military governments",
-        "keyDecision": "Invented an entirely new genre (Afrobeat) to carry his political message, making the medium the movement",
-        "scaleModel": "Created a genre, a nightclub (the Shrine), and a commune, making his life the art form",
-        "lessonsForUser": "If you create and care about resistance: invent the form that carries your message, because borrowed genres won't hold your truth"
-      },
-      "confidence": "high",
-      "oneLiner": "Built a song as a political building and dared the army to burn it down, which they did."
     },
     {
       "name": "Miriam Makeba",
@@ -3691,33 +3455,6 @@
       "oneLiner": "Built a political method out of tiny, repeatable acts and ran it for forty years without revision."
     },
     {
-      "name": "Gloria Steinem",
-      "source": "nonfounder",
-      "domain": "feminist organizing and journalism",
-      "primaryProblem": "voice_taken",
-      "primarySkills": [
-        "connecting",
-        "speaking_up",
-        "building"
-      ],
-      "careerModel": {
-        "type": "media",
-        "primaryRevenue": "Magazine publishing, books, and speaking",
-        "revenueStreams": [
-          "Ms. magazine",
-          "books",
-          "speaking fees",
-          "consulting"
-        ],
-        "trajectory": "Journalist -> undercover at Playboy Club -> co-founded Ms. magazine in 1972 -> co-founded National Women's Political Caucus -> lifelong feminist organizer and speaker",
-        "keyDecision": "Co-founded Ms. magazine, creating a self-sustaining platform for feminist journalism",
-        "scaleModel": "Magazine as movement platform, with speaking and books amplifying the message",
-        "lessonsForUser": "If you connect and care about women's rights: build a media platform that sustains the movement financially"
-      },
-      "confidence": "high",
-      "oneLiner": "Went undercover to expose a single club and turned the byline into fifty years of organising."
-    },
-    {
       "name": "Cesar Chavez",
       "source": "nonfounder",
       "domain": "farmworker organizing",
@@ -4098,32 +3835,6 @@
       "oneLiner": "Taught calculus to kids nobody expected to sit the exam, by the sheer arithmetic of how many hours he was willing to stay in the room."
     },
     {
-      "name": "Marva Collins",
-      "source": "nonfounder",
-      "domain": "elementary education",
-      "primaryProblem": "kids_deserved_better",
-      "primarySkills": [
-        "coaching",
-        "speaking_up",
-        "leading"
-      ],
-      "careerModel": {
-        "type": "educator",
-        "primaryRevenue": "Private school tuition and speaking fees",
-        "revenueStreams": [
-          "school tuition",
-          "speaking fees",
-          "books"
-        ],
-        "trajectory": "Chicago public school teacher -> used $5,000 of her pension to open Westside Prep in her brownstone in 1975 -> taught Shakespeare and Plato to children from poverty -> turned down Secretary of Education position twice",
-        "keyDecision": "Used her own pension to start a school rather than waiting for institutional support",
-        "scaleModel": "One school that proved the method, with speaking and books spreading the philosophy",
-        "lessonsForUser": "If you coach and care about expectations: bet your own money on your method, then let the results silence the critics"
-      },
-      "confidence": "high",
-      "oneLiner": "Believed a four-year-old could discuss Plato if an adult had the patience to ask."
-    },
-    {
       "name": "Rita Pierson",
       "source": "nonfounder",
       "domain": "education and teacher training",
@@ -4333,35 +4044,6 @@
       },
       "confidence": "high",
       "oneLiner": "Held eye contact until you knew exactly what you owed her."
-    },
-    {
-      "name": "Erin Gruwell",
-      "source": "nonfounder",
-      "domain": "high-school English teaching",
-      "primaryProblem": "kids_deserved_better",
-      "primarySkills": [
-        "coaching",
-        "speaking_up",
-        "connecting",
-        "performing"
-      ],
-      "careerModel": {
-        "type": "educator",
-        "primaryRevenue": "Teaching salary, then Freedom Writers Foundation and books",
-        "revenueStreams": [
-          "teaching salary",
-          "book royalties",
-          "foundation revenue",
-          "speaking fees",
-          "film rights"
-        ],
-        "trajectory": "Assigned 150 'unteachable' 14-year-olds -> had them read Anne Frank and write daily journals -> 100% graduated -> Freedom Writers Foundation -> film",
-        "keyDecision": "Had her students read Anne Frank and write their own stories, treating their lives as literature",
-        "scaleModel": "One classroom story that became a book and film, then a foundation replicating the method",
-        "lessonsForUser": "If you coach and care about 'unteachable' kids: give them mirrors (books) and journals, and their stories become the curriculum"
-      },
-      "confidence": "high",
-      "oneLiner": "Gave 150 kids a composition book each and let what they wrote in it become the curriculum."
     },
     {
       "name": "Sebastian Junger",
@@ -5276,33 +4958,6 @@
       "oneLiner": "Held the same three sentences about non-violence for thirty years until the other side agreed to use them too."
     },
     {
-      "name": "Martti Ahtisaari",
-      "source": "nonfounder",
-      "domain": "international mediation",
-      "primaryProblem": "life_not_yours",
-      "primarySkills": [
-        "leading",
-        "connecting",
-        "coaching"
-      ],
-      "careerModel": {
-        "type": "diplomatic_service",
-        "primaryRevenue": "Government salary and UN positions, then CMI foundation",
-        "revenueStreams": [
-          "government salary",
-          "UN positions",
-          "foundation",
-          "Nobel Prize"
-        ],
-        "trajectory": "Finnish diplomat -> oversaw Namibian independence -> mediated Kosovo -> brokered Helsinki Accord ending Aceh insurgency -> founded Crisis Management Initiative -> Nobel Peace Prize 2008",
-        "keyDecision": "Founded Crisis Management Initiative after leaving office, institutionalizing his mediation expertise",
-        "scaleModel": "Government career building expertise, then a foundation that continued the work independently",
-        "lessonsForUser": "If you lead and care about peace: build the institution that continues your work after you leave office"
-      },
-      "confidence": "high",
-      "oneLiner": "Treated peace negotiations as a professional craft with a schedule and a room, not a moral occasion."
-    },
-    {
       "name": "Tawakkol Karman",
       "source": "nonfounder",
       "domain": "journalism and peace activism",
@@ -5328,33 +4983,6 @@
       },
       "confidence": "high",
       "oneLiner": "Ran the same weekly sit-in for three years before a revolution arrived to join her."
-    },
-    {
-      "name": "Tarana Burke",
-      "source": "nonfounder",
-      "domain": "survivor advocacy",
-      "primaryProblem": "voice_taken",
-      "primarySkills": [
-        "coaching",
-        "connecting",
-        "speaking_up"
-      ],
-      "careerModel": {
-        "type": "nonprofit_platform",
-        "primaryRevenue": "Nonprofit organizations and speaking fees",
-        "revenueStreams": [
-          "nonprofit work",
-          "speaking fees",
-          "books",
-          "consulting"
-        ],
-        "trajectory": "Bronx activist -> founded Just Be Inc. in 2003 -> created Me Too in 2006 for young Black women survivors -> phrase went viral globally in 2017 -> navigated movement she started being credited to others",
-        "keyDecision": "Created Me Too as a grassroots program for Black women survivors 11 years before it went viral",
-        "scaleModel": "Grassroots movement that went viral through cultural moment, requiring its founder to reclaim and redirect it",
-        "lessonsForUser": "If you coach and care about survivors: start the work in your own community first, and if it goes viral, fight to keep its original purpose"
-      },
-      "confidence": "high",
-      "oneLiner": "Built a support practice in Alabama basements for a decade before the hashtag found it."
     },
     {
       "name": "Ta-Nehisi Coates",
@@ -5491,35 +5119,6 @@
       "oneLiner": "Took other people's songs and rebuilt them from the piano bench up until they belonged to her."
     },
     {
-      "name": "Luciano Pavarotti",
-      "source": "nonfounder",
-      "domain": "opera",
-      "primaryProblem": "locked_out",
-      "primarySkills": [
-        "performing",
-        "connecting",
-        "speaking_up",
-        "coaching"
-      ],
-      "careerModel": {
-        "type": "performer",
-        "primaryRevenue": "Opera performances, recordings, and concerts",
-        "revenueStreams": [
-          "opera fees",
-          "recordings",
-          "stadium concerts",
-          "Three Tenors",
-          "charity concerts"
-        ],
-        "trajectory": "Elementary school teacher who studied voice -> operatic debut at 26 -> nine high Cs -> Three Tenors -> made opera mainstream through stadium concerts and TV",
-        "keyDecision": "Performed in stadiums and on TV, bringing opera to millions who would never enter an opera house",
-        "scaleModel": "Elite craft made popular through accessible venues (stadiums, TV), massively expanding the audience",
-        "lessonsForUser": "If you perform and care about access: take your high art to the biggest venues possible, because the people deserve to hear it"
-      },
-      "confidence": "high",
-      "oneLiner": "Never learned to read music and became the most famous tenor of the twentieth century."
-    },
-    {
       "name": "Tupac Shakur",
       "source": "nonfounder",
       "domain": "hip hop",
@@ -5548,34 +5147,6 @@
       "oneLiner": "Wrote like a prison correspondent and recorded like a man running a clock he could see."
     },
     {
-      "name": "Lin-Manuel Miranda",
-      "source": "nonfounder",
-      "domain": "musical theater",
-      "primaryProblem": "voice_taken",
-      "primarySkills": [
-        "creating",
-        "performing",
-        "connecting"
-      ],
-      "careerModel": {
-        "type": "performer",
-        "primaryRevenue": "Broadway production, film, and licensing revenue",
-        "revenueStreams": [
-          "Broadway revenue",
-          "film rights",
-          "licensing",
-          "Disney work",
-          "producing"
-        ],
-        "trajectory": "Wrote In the Heights as a college sophomore -> Broadway -> Hamilton -> Disney's Moana and Encanto -> most influential musical theater creator of his generation",
-        "keyDecision": "Told the story of Alexander Hamilton through hip-hop, making the founding fathers feel contemporary",
-        "scaleModel": "One cultural phenomenon (Hamilton) that generated billions across Broadway, touring, film, and licensing",
-        "lessonsForUser": "If you create and care about untold stories: use the genre nobody expects to tell the story everybody knows, and the collision creates something new"
-      },
-      "confidence": "high",
-      "oneLiner": "Turns biography into counterpoint, three voices at a time."
-    },
-    {
       "name": "Ira Glass",
       "source": "nonfounder",
       "domain": "radio and storytelling",
@@ -5602,35 +5173,6 @@
       },
       "confidence": "high",
       "oneLiner": "Turned a specific editing rule, get in the story fast and quote the person in scene, into a whole public radio house style."
-    },
-    {
-      "name": "Kae Tempest",
-      "source": "nonfounder",
-      "domain": "performance poetry",
-      "primaryProblem": "forgot_what_for",
-      "primarySkills": [
-        "performing",
-        "creating",
-        "speaking_up",
-        "connecting"
-      ],
-      "careerModel": {
-        "type": "performer",
-        "primaryRevenue": "Live performance, albums, and books",
-        "revenueStreams": [
-          "live performance",
-          "albums",
-          "books",
-          "playwriting",
-          "speaking"
-        ],
-        "trajectory": "South-east London spoken word performer -> youngest Ted Hughes Award winner -> Mercury Prize nominated albums -> novels and plays -> cross-genre artist",
-        "keyDecision": "Refused to choose between poetry, music, novels, and playwriting, making the refusal itself the artistic statement",
-        "scaleModel": "Multi-genre practice where each form feeds the others, with live performance as the anchor",
-        "lessonsForUser": "If you perform and care about expression: refuse to pick one medium, because the energy between forms is where your originality lives"
-      },
-      "confidence": "high",
-      "oneLiner": "Walks on stage and reads the room back to itself until it stops being separate rooms."
     },
     {
       "name": "Wong Kar-wai",
@@ -5684,33 +5226,6 @@
       },
       "confidence": "high",
       "oneLiner": "Draws the next frame by hand until he knows what the story is, and then draws it again."
-    },
-    {
-      "name": "Yayoi Kusama",
-      "source": "nonfounder",
-      "domain": "installation and painting",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "creating",
-        "designing",
-        "storytelling"
-      ],
-      "careerModel": {
-        "type": "artist",
-        "primaryRevenue": "Gallery sales, museum exhibitions, and commissions",
-        "revenueStreams": [
-          "gallery sales",
-          "museum commissions",
-          "merchandise",
-          "immersive experiences"
-        ],
-        "trajectory": "Japanese artist -> New York happenings scene 1958-1972 -> returned to Japan -> voluntarily lives in mental hospital since 1977 -> became one of the world's most popular living artists in her 80s and 90s",
-        "keyDecision": "Voluntarily checked into a mental hospital and continued creating art from there for 50+ years",
-        "scaleModel": "Immersive installations (Infinity Rooms) that generate social media virality and massive museum attendance",
-        "lessonsForUser": "If you create and care about obsession: let your condition become your art form, because what makes you different is your competitive advantage"
-      },
-      "confidence": "high",
-      "oneLiner": "Treats the repeated mark as a survival technology and the repetition is the piece."
     },
     {
       "name": "Björk",
@@ -6245,32 +5760,6 @@
       "oneLiner": "Read fiction the way a watchmaker listens to a movement, then wrote down exactly what she heard."
     },
     {
-      "name": "Gordon Lish",
-      "source": "nonfounder",
-      "domain": "fiction editing",
-      "primaryProblem": "work_treated_nothing",
-      "primarySkills": [
-        "coaching",
-        "creating",
-        "teaching"
-      ],
-      "careerModel": {
-        "type": "editorial",
-        "primaryRevenue": "Editor positions at Esquire and Knopf, plus teaching",
-        "revenueStreams": [
-          "editorial salary",
-          "teaching workshops",
-          "publishing (The Quarterly)"
-        ],
-        "trajectory": "Fiction editor at Esquire -> editor at Knopf -> published Raymond Carver, Don DeLillo, Barry Hannah -> legendary writing workshops -> controversial for how heavily he edited Carver",
-        "keyDecision": "Edited Raymond Carver's stories so extensively that he essentially co-authored them, creating 'minimalism'",
-        "scaleModel": "Editorial power that shaped an entire literary movement (minimalism) through aggressive curation and editing",
-        "lessonsForUser": "If you coach and care about craft: great editing can be as creative as great writing, but always credit the artist"
-      },
-      "confidence": "high",
-      "oneLiner": "Taught writers that every sentence must earn the right to exist. The next one especially."
-    },
-    {
       "name": "Herbert Kohl",
       "source": "nonfounder",
       "domain": "progressive education",
@@ -6787,85 +6276,6 @@
       "oneLiner": "Argued that emotions were not the opposite of reason but a form of it, and rebuilt moral philosophy from that observation."
     },
     {
-      "name": "Myles Horton",
-      "source": "nonfounder",
-      "domain": "popular education",
-      "primaryProblem": "locked_out",
-      "primarySkills": [
-        "connecting",
-        "coaching",
-        "teaching"
-      ],
-      "careerModel": {
-        "type": "institutional_leadership",
-        "primaryRevenue": "Highlander Folk School grants and donations",
-        "revenueStreams": [
-          "foundation grants",
-          "donations",
-          "books"
-        ],
-        "trajectory": "Founded Highlander Folk School in 1932 -> trained labor organizers in the 1930s-40s -> trained civil rights leaders (Rosa Parks, MLK) in the 1950s-60s -> Citizenship Schools",
-        "keyDecision": "Created Citizenship Schools that taught literacy as voter registration, connecting education to political power",
-        "scaleModel": "One training center that produced leaders for every major social movement of the 20th century",
-        "lessonsForUser": "If you connect and care about education: build the training center that serves every movement, not just one"
-      },
-      "confidence": "high",
-      "oneLiner": "Ran a school where the first principle was that poor people already knew the answers."
-    },
-    {
-      "name": "Paulo Freire",
-      "source": "nonfounder",
-      "domain": "critical pedagogy",
-      "primaryProblem": "locked_out",
-      "primarySkills": [
-        "teaching",
-        "connecting",
-        "coaching"
-      ],
-      "careerModel": {
-        "type": "academic",
-        "primaryRevenue": "University positions and book royalties",
-        "revenueStreams": [
-          "university salary",
-          "books",
-          "consulting"
-        ],
-        "trajectory": "Brazilian educator -> exiled after 1964 coup -> wrote Pedagogy of the Oppressed in Chile -> 1 million+ copies -> returned to Brazil as Secretary of Education of Sao Paulo -> most cited education book in the world",
-        "keyDecision": "Wrote Pedagogy of the Oppressed in exile, turning his expulsion into the time needed for his most important work",
-        "scaleModel": "One book written in exile that became the most cited education text in history, applied in every country",
-        "lessonsForUser": "If you teach and care about liberation: exile can give you the distance to write the work that changes everything"
-      },
-      "confidence": "high",
-      "oneLiner": "Refused to teach by depositing words. Built a method that began with what people already knew."
-    },
-    {
-      "name": "William Shakespeare",
-      "source": "nonfounder",
-      "domain": "poetry and drama",
-      "primaryProblem": "forgot_what_for",
-      "primarySkills": [
-        "creating",
-        "storytelling",
-        "performing"
-      ],
-      "careerModel": {
-        "type": "performer",
-        "primaryRevenue": "Theater company shareholder and playwright",
-        "revenueStreams": [
-          "theater shares",
-          "playwriting commissions",
-          "acting income",
-          "patronage"
-        ],
-        "trajectory": "Stratford glover's son -> actor and playwright in London -> shareholder in Lord Chamberlain's Men/King's Men -> built the Globe -> 39 plays and 154 sonnets -> retired to Stratford wealthy",
-        "keyDecision": "Became a shareholder in his theater company rather than just a writer-for-hire, owning equity in his own work",
-        "scaleModel": "Ownership stake in the theater company that performed his work, aligning creation with financial upside",
-        "lessonsForUser": "If you create and care about ownership: take equity in the platform that distributes your work, not just a fee for creating it"
-      },
-      "confidence": "high",
-      "oneLiner": "Wrote the soliloquy everyone recognises and the love sonnet every other has to answer to."
-    },
-    {
       "name": "Rumi",
       "source": "nonfounder",
       "domain": "Sufi poetry",
@@ -7159,33 +6569,6 @@
       "oneLiner": "Said design required observation, and spent fifty years pointing at ordinary things his students had stopped seeing."
     },
     {
-      "name": "Marshall Ganz",
-      "source": "nonfounder",
-      "domain": "organizing and public narrative",
-      "primaryProblem": "life_not_yours",
-      "primarySkills": [
-        "teaching",
-        "performing",
-        "connecting"
-      ],
-      "careerModel": {
-        "type": "academic",
-        "primaryRevenue": "Harvard Kennedy School professorship and organizing training",
-        "revenueStreams": [
-          "university salary",
-          "training programs",
-          "consulting",
-          "books"
-        ],
-        "trajectory": "Joined United Farm Workers with Chavez at 22 -> 28 years as organizer -> completed PhD and joined Harvard Kennedy School -> developed Public Narrative method -> trained Obama's 2008 organizers",
-        "keyDecision": "Left organizing after 28 years to get a PhD and codify organizing methodology at Harvard",
-        "scaleModel": "Practitioner who codified his methods into a teachable curriculum used to train organizers worldwide",
-        "lessonsForUser": "If you teach and care about leadership: spend decades in practice first, then codify and teach what you learned"
-      },
-      "confidence": "high",
-      "oneLiner": "Taught organisers that leadership is translating values into action by telling three stories."
-    },
-    {
       "name": "Marshall McLuhan",
       "source": "nonfounder",
       "domain": "media theory",
@@ -7261,90 +6644,6 @@
       "oneLiner": "Watched thousands of couples fight and discovered that contempt, not anger, kills a marriage."
     },
     {
-      "name": "Sue Johnson",
-      "source": "nonfounder",
-      "domain": "couples therapy",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "coaching",
-        "teaching"
-      ],
-      "careerModel": {
-        "type": "academic_to_training_model",
-        "primaryRevenue": "EFT therapist training and certification, books, workshops",
-        "revenueStreams": [
-          "university position",
-          "therapist certification",
-          "books",
-          "Hold Me Tight workshops",
-          "clinical training intensives"
-        ],
-        "trajectory": "Clinical psychology PhD at UBC -> developed EFT in the 1980s -> outcome research built credibility -> International Centre for Excellence in EFT -> Hold Me Tight workshops worldwide",
-        "keyDecision": "Published outcome studies that made EFT one of the few empirically validated couples therapy models, giving it an evidence edge over competitors",
-        "scaleModel": "Rigorous research created institutional trust, then a book (Hold Me Tight) and structured workshops let the method spread through both professional and consumer channels",
-        "lessonsForUser": "If you coach and care about evidence: build the outcome data first, then write the book that translates the clinical method for ordinary people"
-      },
-      "confidence": "high",
-      "oneLiner": "Showed therapists that the couple fighting about dishes is really fighting about being there."
-    },
-    {
-      "name": "Harville Hendrix",
-      "source": "nonfounder",
-      "domain": "couples therapy",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "coaching",
-        "teaching",
-        "storytelling"
-      ],
-      "careerModel": {
-        "type": "practitioner_to_media_brand",
-        "primaryRevenue": "Books, Imago therapist training certification, workshops",
-        "revenueStreams": [
-          "books",
-          "Imago certification",
-          "couples workshops",
-          "speaking",
-          "online courses"
-        ],
-        "trajectory": "Pastoral counsellor -> divorced -> developed Imago theory from personal failure -> Getting the Love You Want -> 18 appearances on Oprah -> global Imago training network",
-        "keyDecision": "Used Oprah as the distribution channel that turned a niche therapy into a household name",
-        "scaleModel": "One bestselling book plus massive media exposure created demand, then a certification programme met it by training therapists worldwide",
-        "lessonsForUser": "If you coach and tell stories: your biggest failure might be the research question that produces your life's work, and one media hit can create a decade of demand"
-      },
-      "confidence": "high",
-      "oneLiner": "Proved that the person who drives you crazy is the exact person your psyche picked for the job."
-    },
-    {
-      "name": "Terry Real",
-      "source": "nonfounder",
-      "domain": "men's mental health / couples therapy",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "coaching",
-        "speaking_up",
-        "storytelling"
-      ],
-      "careerModel": {
-        "type": "practitioner_to_training_institute",
-        "primaryRevenue": "Relational Life Institute training, books, clinical practice",
-        "revenueStreams": [
-          "clinical practice",
-          "books",
-          "therapist training",
-          "speaking",
-          "online courses",
-          "intensives"
-        ],
-        "trajectory": "Family therapy training -> I Don't Want to Talk About It (1997) named male depression -> built Relational Life Institute -> became go-to voice on men and relationships",
-        "keyDecision": "Positioned himself as the therapist willing to confront men directly in session, creating a distinctive brand in a field that defaults to neutrality",
-        "scaleModel": "Provocative clinical style made for compelling training videos and books, building demand for a training institute that teaches the method to other therapists",
-        "lessonsForUser": "If you coach and speak up: being willing to say the uncomfortable thing in the room can become your entire brand, if you back it with genuine skill"
-      },
-      "confidence": "high",
-      "oneLiner": "Told men the truth about what patriarchy costs them personally, not just the women around them."
-    },
-    {
       "name": "Gary Chapman",
       "source": "nonfounder",
       "domain": "relationship counselling",
@@ -7370,33 +6669,6 @@
       },
       "confidence": "high",
       "oneLiner": "Gave millions of couples a shared vocabulary for why they keep missing each other."
-    },
-    {
-      "name": "Stan Tatkin",
-      "source": "nonfounder",
-      "domain": "couples therapy / neuroscience",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "teaching",
-        "coaching"
-      ],
-      "careerModel": {
-        "type": "academic_clinician_to_training_model",
-        "primaryRevenue": "PACT therapist training and certification, books",
-        "revenueStreams": [
-          "PACT certification training",
-          "books",
-          "clinical practice",
-          "online courses",
-          "speaking"
-        ],
-        "trajectory": "Clinical training at UCLA -> developed PACT model combining attachment and neuroscience -> Wired for Love (2012) -> PACT Institute trains therapists internationally",
-        "keyDecision": "Blended neuroscience with attachment theory to create a method that therapists could learn through body-reading skills, not just talk therapy techniques",
-        "scaleModel": "A clinically distinctive method (reading physiology, not just words) created a training programme that felt genuinely different from competing certifications",
-        "lessonsForUser": "If you teach and care about the body: combine two fields that don't usually talk to each other, and the synthesis becomes your competitive advantage"
-      },
-      "confidence": "high",
-      "oneLiner": "Taught couples that their bodies are already in the argument before their mouths open."
     },
     {
       "name": "Alain de Botton",
@@ -7535,33 +6807,6 @@
       "oneLiner": "Gave people drugs in a lab, measured what happened, and told the world most of what it believes about addiction is wrong."
     },
     {
-      "name": "Holly Whitaker",
-      "source": "nonfounder",
-      "domain": "sobriety / wellness entrepreneurship",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "building",
-        "storytelling",
-        "speaking_up"
-      ],
-      "careerModel": {
-        "type": "startup_founder",
-        "primaryRevenue": "Online recovery programme subscriptions, book",
-        "revenueStreams": [
-          "Tempest programme subscriptions",
-          "book sales",
-          "speaking",
-          "brand partnerships"
-        ],
-        "trajectory": "Director at health startup -> addiction crisis -> tried AA, found it alienating -> researched alternatives -> launched Hip Sobriety School (2014) -> rebranded to Tempest -> Quit Like a Woman bestseller (2019) -> Tempest closed (2022)",
-        "keyDecision": "Positioned sobriety as feminist empowerment rather than shame-based confession, creating a brand identity that resonated with women who would never go to AA",
-        "scaleModel": "Blog built audience, online programme captured revenue, book created mass awareness. The model worked for growth but not for financial sustainability",
-        "lessonsForUser": "If you build and tell stories: reframing an old problem with a new identity (sobriety as feminism, not failure) can create explosive growth, but the business model needs to be as strong as the story"
-      },
-      "confidence": "high",
-      "oneLiner": "Asked why a programme designed by men in 1935 was still the only option for recovery."
-    },
-    {
       "name": "Russell Brand",
       "source": "nonfounder",
       "domain": "entertainment / addiction advocacy",
@@ -7589,32 +6834,6 @@
       },
       "confidence": "medium",
       "oneLiner": "Took the language of the rooms to the biggest stages in the world and made recovery look like something other than defeat."
-    },
-    {
-      "name": "Bill Wilson",
-      "source": "nonfounder",
-      "domain": "recovery / mutual aid",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "connecting",
-        "storytelling",
-        "leading"
-      ],
-      "careerModel": {
-        "type": "movement_founder",
-        "primaryRevenue": "Book royalties (Big Book), speaking (declined salary from AA)",
-        "revenueStreams": [
-          "Big Book royalties",
-          "speaking",
-          "writing"
-        ],
-        "trajectory": "Failed stockbroker -> chronic alcoholism -> hospital spiritual experience (1934) -> met Dr. Bob Smith in Akron (1935) -> co-founded AA -> wrote Big Book (1939) -> built global movement -> died 1971",
-        "keyDecision": "Built anonymity and anti-personality principles into AA's structure, ensuring the movement could not be owned, marketed, or corrupted by any individual's ego",
-        "scaleModel": "Peer-to-peer mutual aid with zero marketing budget, no paid staff at the group level, and a book as the only product. The structure is the scale model: anyone can start a meeting, anywhere, for free",
-        "lessonsForUser": "If you connect people and lead: the most scalable thing you can build might be the one you remove yourself from, letting the structure replicate without needing you"
-      },
-      "confidence": "high",
-      "oneLiner": "Discovered that one drunk talking to another was more powerful than any doctor or preacher."
     },
     {
       "name": "Louise Aronson",
@@ -7645,34 +6864,6 @@
       "oneLiner": "Told medicine that treating old age as a disease is the disease."
     },
     {
-      "name": "Bill Thomas",
-      "source": "nonfounder",
-      "domain": "elder care redesign",
-      "primaryProblem": "left_behind",
-      "primarySkills": [
-        "designing",
-        "leading",
-        "creating"
-      ],
-      "careerModel": {
-        "type": "social_entrepreneur",
-        "primaryRevenue": "Consulting, Green House Project licensing, speaking, books",
-        "revenueStreams": [
-          "Eden Alternative consulting and certification",
-          "Green House Project licensing",
-          "books",
-          "speaking",
-          "theatrical touring"
-        ],
-        "trajectory": "Rural geriatrician in New York -> Eden Alternative at Chase Memorial (1991) -> Green House Project (2003, Robert Wood Johnson Foundation) -> Age of Disruption tour -> elder care thought leader",
-        "keyDecision": "Moved from animals-in-nursing-homes to redesigning the nursing home itself, replacing 100-bed institutions with 10-person Green Houses",
-        "scaleModel": "Pilot project proved the concept, foundation funding scaled it, licensing let others build it, and a theatrical tour made the public case",
-        "lessonsForUser": "If you design and lead: start with the smallest possible proof that your redesign works (dogs in one nursing home), then let the data justify rebuilding the entire model"
-      },
-      "confidence": "high",
-      "oneLiner": "Put dogs, cats, birds, and children into a nursing home and watched the death rate drop."
-    },
-    {
       "name": "Ai-jen Poo",
       "source": "nonfounder",
       "domain": "domestic workers' rights / elder care",
@@ -7699,34 +6890,6 @@
       },
       "confidence": "high",
       "oneLiner": "Organised the workforce that America depends on but refuses to protect: the women who care for our parents."
-    },
-    {
-      "name": "Marc Freedman",
-      "source": "nonfounder",
-      "domain": "encore careers / intergenerational community",
-      "primaryProblem": "left_behind",
-      "primarySkills": [
-        "leading",
-        "connecting",
-        "storytelling"
-      ],
-      "careerModel": {
-        "type": "social_entrepreneur",
-        "primaryRevenue": "Non-profit grants, books, speaking, Purpose Prize partnerships",
-        "revenueStreams": [
-          "Encore.org grants and philanthropy",
-          "books",
-          "speaking",
-          "Purpose Prize partnerships",
-          "Experience Corps programme funding"
-        ],
-        "trajectory": "Social sector background -> developed Experience Corps with AARP -> founded Civic Ventures (later Encore.org, now CoGenerate) -> Purpose Prize -> How to Live Forever (2018) -> rebranded around intergenerational connection",
-        "keyDecision": "Reframed 'retirement' as the wrong frame entirely, replacing it with 'encore' to signal that the second act could be as significant as the first",
-        "scaleModel": "Built programmes (Experience Corps) that produced research, used research to drive policy, used prizes (Purpose Prize) to create media narratives, used books to shape public imagination",
-        "lessonsForUser": "If you lead and connect: sometimes the most powerful thing you can do is give a nameless experience a name that people want to claim"
-      },
-      "confidence": "high",
-      "oneLiner": "Asked what would happen if we deployed our most experienced people instead of warehousing them."
     },
     {
       "name": "Judith Heumann",
@@ -7980,35 +7143,6 @@
       "oneLiner": "Told millions of Americans they could not afford the life they were pretending to live, and they kept tuning in because she said it like she cared."
     },
     {
-      "name": "Dave Ramsey",
-      "source": "nonfounder",
-      "domain": "personal finance / media / publishing",
-      "primaryProblem": "feeling_stupid",
-      "primarySkills": [
-        "performing",
-        "teaching",
-        "leading"
-      ],
-      "careerModel": {
-        "type": "media_empire",
-        "primaryRevenue": "Books, Financial Peace University course, radio show, referral network",
-        "revenueStreams": [
-          "books",
-          "Financial Peace University enrolments",
-          "radio show (product sales, not ads)",
-          "Endorsed Local Provider referral fees",
-          "live events",
-          "Ramsey Solutions subsidiary authors"
-        ],
-        "trajectory": "Built $4M real estate portfolio on debt -> bankrupt at 26 -> local radio show in Nashville (1992) -> Financial Peace University (1994) -> grew to 1,000+ employees, 18M weekly listeners, 10M+ FPU graduates",
-        "keyDecision": "Distributed Financial Peace University through churches, using pre-built community and accountability structures that online courses lack",
-        "scaleModel": "Free radio/podcast content builds trust, church-based course distribution provides community and accountability, referral network monetises the trust. Never accepted advertising, funding everything through product sales",
-        "lessonsForUser": "If you perform and lead: distributing your programme through existing communities (churches, workplaces) gives you accountability infrastructure that no app can replicate"
-      },
-      "confidence": "high",
-      "oneLiner": "Went bankrupt, clawed back, and spent 30 years screaming at Americans to cut up their credit cards."
-    },
-    {
       "name": "Brené Brown",
       "source": "non-founder",
       "domain": "vulnerability research / leadership development",
@@ -8067,33 +7201,6 @@
       "confidence": "high"
     },
     {
-      "name": "Marie Forleo",
-      "source": "non-founder",
-      "domain": "online business education / creative entrepreneurship",
-      "oneLiner": "Made business school feel like a conversation with your funniest, smartest friend.",
-      "primaryProblem": "life_not_yours",
-      "primarySkills": [
-        "teaching",
-        "coaching",
-        "performing"
-      ],
-      "careerModel": {
-        "type": "cohort_course_empire",
-        "primaryRevenue": "Annual B-School enrollment (8-figure launch, once per year)",
-        "revenueStreams": [
-          "online course (B-School)",
-          "book sales",
-          "podcast/YouTube",
-          "Time Genius program"
-        ],
-        "trajectory": "Bartender and fitness trainer at 23, started coaching at 25, launched MarieTV at 34, B-School at 35, NYT bestseller at 44.",
-        "keyDecision": "Limited B-School enrollment to once per year, choosing scarcity and launch energy over always-open access.",
-        "scaleModel": "Free weekly content builds trust for 50 weeks, then a 2-week annual launch converts into cohort enrollment.",
-        "lessonsForUser": "Give generously for free through one consistent content channel, then open one premium offer annually. The constraint creates event energy."
-      },
-      "confidence": "high"
-    },
-    {
       "name": "Wim Hof",
       "source": "non-founder",
       "domain": "breathwork / cold exposure / human performance",
@@ -8119,33 +7226,6 @@
         "keyDecision": "Submitted himself to rigorous scientific testing, trading spectacle credibility for peer-reviewed credibility.",
         "scaleModel": "Personal world records built fame, science built trust, then certified instructors delivered worldwide without him present.",
         "lessonsForUser": "If your method works on your body first: get scientific validation, then certify others to teach it. The science turns personal practice into scalable business."
-      },
-      "confidence": "high"
-    },
-    {
-      "name": "Adriene Mishler",
-      "source": "non-founder",
-      "domain": "yoga / online wellness",
-      "oneLiner": "Made the yoga mat feel like the safest place in your house.",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "coaching",
-        "connecting",
-        "performing"
-      ],
-      "careerModel": {
-        "type": "free_content_to_membership",
-        "primaryRevenue": "Membership platform (FWFG) and YouTube ad revenue",
-        "revenueStreams": [
-          "membership subscriptions",
-          "YouTube ad revenue",
-          "brand partnerships",
-          "merchandise"
-        ],
-        "trajectory": "Actress and yoga teacher at 28, first YouTube video in 2012, 30 Days of Yoga breakthrough at 30, 12M subscribers by 38, all from her living room.",
-        "keyDecision": "Kept yoga free on YouTube and optimised for accessibility over exclusivity.",
-        "scaleModel": "Free daily content builds massive trust, annual January challenges create cohort energy, low-cost membership captures the most engaged fraction.",
-        "lessonsForUser": "Be radically consistent, optimise for the person who feels too intimidated to start, and let free volume build the trust that converts into recurring revenue."
       },
       "confidence": "high"
     },
@@ -8347,34 +7427,6 @@
       "confidence": "high"
     },
     {
-      "name": "Tara Brach",
-      "source": "non-founder",
-      "domain": "meditation / Buddhist psychology / mindfulness",
-      "oneLiner": "Made sitting still with your own pain feel like the bravest thing you could do.",
-      "primaryProblem": "pain_not_believed",
-      "primarySkills": [
-        "coaching",
-        "teaching",
-        "connecting"
-      ],
-      "careerModel": {
-        "type": "teacher_certification_and_community",
-        "primaryRevenue": "Teacher certification programme and retreats",
-        "revenueStreams": [
-          "meditation teacher certification",
-          "retreats",
-          "book royalties",
-          "online courses",
-          "community donations"
-        ],
-        "trajectory": "Clinical psychologist, founded meditation community at 45, first book at 50, free podcast to 200M downloads by 70, certification training thousands of teachers.",
-        "keyDecision": "Kept the weekly teachings permanently free, trusting that generosity would build a community large enough to sustain paid offerings.",
-        "scaleModel": "Free weekly content builds global community, retreats deepen practice, 2-year teacher certification creates a lineage of practitioners.",
-        "lessonsForUser": "Give freely and consistently for decades, train teachers to carry the method, and trust that depth builds the audience."
-      },
-      "confidence": "high"
-    },
-    {
       "name": "Glennon Doyle",
       "source": "non-founder",
       "domain": "memoir / community building / activism",
@@ -8430,6 +7482,441 @@
         "lessonsForUser": "Start teaching in the smallest room available, let your transformation be the curriculum, then certify others to carry it."
       },
       "confidence": "high"
+    },
+    {
+      "name": "Eckhart Tolle",
+      "source": "nonfounder",
+      "domain": "presence-based spiritual teaching",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "teaching",
+        "storytelling",
+        "coaching"
+      ],
+      "careerModel": {
+        "type": "author_to_movement",
+        "primaryRevenue": "Book royalties from The Power of Now and A New Earth, plus retreats and Eckhart Tolle TV subscriptions",
+        "revenueStreams": [
+          "book royalties",
+          "retreat fees",
+          "Eckhart Tolle TV subscriptions",
+          "online courses",
+          "YouTube ad revenue"
+        ],
+        "trajectory": "Born in Germany in 1948, suffered severe depression until a spontaneous awakening at 29. Spent years in obscurity, teaching small groups. Self-published The Power of Now in 1997. Oprah's endorsement propelled it to global bestseller. A New Earth selected for Oprah's Book Club in 2008, reaching 35 million viewers in a 10-week online class.",
+        "keyDecision": "Self-publishing The Power of Now through a small publisher, letting it grow organically through word of mouth until Oprah discovered it.",
+        "scaleModel": "Digital platform (Eckhart Tolle TV) for subscription teachings, large-scale retreats that are livestreamed, and YouTube as a free-to-paid funnel.",
+        "lessonsForUser": "If you teach and care about spiritual growth: write one book that captures your core insight with absolute clarity, let it find its audience organically, then build a subscription platform around the ongoing teaching."
+      },
+      "confidence": "high",
+      "oneLiner": "Turned a suicidal breakdown into the world's most accessible teaching on presence."
+    },
+    {
+      "name": "Deepak Chopra",
+      "source": "nonfounder",
+      "domain": "integrative mind-body wellness",
+      "primaryProblem": "stopped_wondering",
+      "primarySkills": [
+        "teaching",
+        "storytelling",
+        "leading",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "wellness_media_empire",
+        "primaryRevenue": "Book royalties, speaking fees, and Chopra Global licensing",
+        "revenueStreams": [
+          "book royalties",
+          "speaking engagements",
+          "Chopra Global licensing",
+          "wellness product lines",
+          "corporate wellness programs",
+          "online meditation experiences",
+          "retreats"
+        ],
+        "trajectory": "Trained as an endocrinologist in India, moved to the US in 1968. Met Maharishi Mahesh Yogi in 1985 and pivoted from conventional medicine. Left the TM movement in 1993. Published 90+ books, 22 NYT bestsellers. Co-created the 21-Day Meditation Experience with Oprah. Sold Chopra Global to The Healing Company in 2023.",
+        "keyDecision": "Leaving conventional medicine and the TM movement to build his own brand of integrative wellness, combining Ayurveda with Western science.",
+        "scaleModel": "Licensed his brand and methodology to streaming platforms, corporate wellness programs, and product partnerships, creating a media conglomerate model.",
+        "lessonsForUser": "If you connect ideas and care about wellness: bridge two worlds that don't usually talk to each other, build credibility in both, then license your methodology everywhere."
+      },
+      "confidence": "high",
+      "oneLiner": "The doctor who walked out of the hospital and built a bridge between Western medicine and ancient wisdom."
+    },
+    {
+      "name": "Jack Kornfield",
+      "source": "nonfounder",
+      "domain": "mindfulness meditation / Buddhist psychology",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "teaching",
+        "coaching",
+        "storytelling",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "institution_builder",
+        "primaryRevenue": "Teacher training programs, retreat fees, and book royalties",
+        "revenueStreams": [
+          "retreat and workshop fees",
+          "book royalties",
+          "online courses (Sounds True)",
+          "teacher training certification",
+          "speaking engagements"
+        ],
+        "trajectory": "Graduated from Dartmouth in 1967, joined the Peace Corps in Thailand and ordained as a monk under Ajahn Chah. Earned a PhD in clinical psychology. Co-founded Insight Meditation Society in 1975 with Sharon Salzberg and Joseph Goldstein. Founded Spirit Rock Meditation Center in 1987. Published 16 books selling 2M+ copies.",
+        "keyDecision": "Integrating clinical psychology with Buddhist practice rather than keeping them separate, creating a uniquely Western approach to ancient meditation.",
+        "scaleModel": "Co-founded two major meditation centers that train the next generation of teachers, created online teacher training with Tara Brach reaching hundreds of thousands.",
+        "lessonsForUser": "If you teach and care about inner work: train in the original tradition deeply, translate it through the lens of your own culture, then build institutions that train others to teach what you teach."
+      },
+      "confidence": "high",
+      "oneLiner": "A forest monk who came home and made meditation feel as normal as going to therapy."
+    },
+    {
+      "name": "Sam Harris",
+      "source": "nonfounder",
+      "domain": "secular mindfulness / rational spirituality",
+      "primaryProblem": "feeling_stupid",
+      "primarySkills": [
+        "teaching",
+        "storytelling",
+        "speaking_up",
+        "creating"
+      ],
+      "careerModel": {
+        "type": "author_to_app",
+        "primaryRevenue": "Waking Up app subscriptions and Making Sense podcast subscriptions",
+        "revenueStreams": [
+          "Waking Up app subscriptions",
+          "Making Sense podcast subscriptions",
+          "book royalties",
+          "speaking engagements"
+        ],
+        "trajectory": "Studied philosophy at Stanford, dropped out to study meditation in India and Nepal for over a decade. PhD in cognitive neuroscience from UCLA in 2009. Published The End of Faith in 2004, becoming one of the 'New Atheists.' Published Waking Up in 2014, pivoting to meditation. Launched the Waking Up app in 2018.",
+        "keyDecision": "Building the Waking Up app in 2018 rather than continuing as primarily a public intellectual, creating a product that embodied his unique position at the intersection of neuroscience and contemplative practice.",
+        "scaleModel": "Subscription app delivering daily meditations and courses. The podcast drives new users to the app. Free subscriptions available to anyone who can't afford it.",
+        "lessonsForUser": "If you speak up and care about clear thinking: build credibility through rigorous intellectual work first, then channel that authority into a product that solves a personal problem you deeply understand."
+      },
+      "confidence": "high",
+      "oneLiner": "Made meditation credible for people who would never set foot in an ashram."
+    },
+    {
+      "name": "Thich Nhat Hanh",
+      "source": "nonfounder",
+      "domain": "engaged Buddhism / mindful living",
+      "primaryProblem": "world_losing",
+      "primarySkills": [
+        "teaching",
+        "storytelling",
+        "leading",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "monastic_movement_builder",
+        "primaryRevenue": "Plum Village retreat fees, book royalties from 100+ titles, and community donations",
+        "revenueStreams": [
+          "book royalties",
+          "Plum Village retreat fees",
+          "donations",
+          "Plum Village app",
+          "online courses"
+        ],
+        "trajectory": "Ordained at 16 in Vietnam in 1942. Founded the School of Youth for Social Service with 10,000 volunteers. Coined 'engaged Buddhism.' Met Martin Luther King Jr. in 1966, who nominated him for the Nobel Peace Prize. Exiled from Vietnam. Founded Plum Village in France in 1982. Published 100+ books. Built a global community of 700+ monastics at 11 monasteries. Passed away in 2022.",
+        "keyDecision": "Choosing to engage with the world through peace activism and accessible teaching rather than remaining in traditional monastic seclusion.",
+        "scaleModel": "Built a monastic community of 700+ disciples across 11 monasteries who carry the teachings forward. Created the Order of Interbeing. The movement continues after his passing.",
+        "lessonsForUser": "If you lead and care about making the world better: build a community and a practice so clear and transferable it outlives you, and write in language so simple it crosses every cultural barrier."
+      },
+      "confidence": "high",
+      "oneLiner": "An exiled monk who turned losing his country into a global movement for peace by making mindfulness feel like breathing."
+    },
+    {
+      "name": "Seane Corn",
+      "source": "nonfounder",
+      "domain": "yoga and social activism",
+      "primaryProblem": "voice_taken",
+      "primarySkills": [
+        "teaching",
+        "performing",
+        "speaking_up",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "yoga_activism",
+        "primaryRevenue": "International yoga workshops, teacher trainings, and speaking engagements",
+        "revenueStreams": [
+          "live workshops and retreats",
+          "speaking engagements",
+          "online programs",
+          "book sales (Revolution of the Soul)",
+          "Sounds True courses"
+        ],
+        "trajectory": "Nightclub worker and waitress in 1980s NYC, discovered yoga through Life Cafe in the East Village, rode the LA yoga wave in the early 90s, became internationally known yoga teacher, co-founded Off the Mat Into the World in 2007, raised over $3.5M through the Global Seva Challenge for social justice.",
+        "keyDecision": "Co-founding Off the Mat Into the World, choosing to bridge yoga practice with frontline activism rather than staying in the wellness bubble.",
+        "scaleModel": "Training leaders of activism through Off the Mat programs while maintaining a global teaching schedule and online courses.",
+        "lessonsForUser": "If you teach and care about justice: use your practice as the foundation, then build a bridge from the mat to the world so your community becomes activists, not just practitioners."
+      },
+      "confidence": "high",
+      "oneLiner": "A nightclub kid who proved that yoga without action in the world is just stretching."
+    },
+    {
+      "name": "Joe Dispenza",
+      "source": "nonfounder",
+      "domain": "meditation and neuroscience",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": [
+        "teaching",
+        "storytelling",
+        "coaching",
+        "speaking_up"
+      ],
+      "careerModel": {
+        "type": "method_certification",
+        "primaryRevenue": "Week-long meditation retreats attracting thousands of participants",
+        "revenueStreams": [
+          "meditation retreats",
+          "NYT bestselling books",
+          "online progressive courses",
+          "guided meditation products",
+          "corporate consulting (NeuroChangeSolutions)",
+          "certified trainer program"
+        ],
+        "trajectory": "Biochemistry student turned chiropractor. Near-fatal cycling accident in 1986 left him with 6 compressed vertebrae. Refused surgery and was walking again in 10 weeks through meditation. Wrote Evolve Your Brain. NYT bestselling author with Breaking the Habit of Being Yourself and You Are the Placebo. Built global retreat empire.",
+        "keyDecision": "Refusing spinal surgery after his 1986 accident and instead healing through meditation, which gave him both the origin story and conviction to build his career around.",
+        "scaleModel": "Certified corporate trainers through NeuroChangeSolutions to deliver his methodology without his presence, while retreats scale through massive venue sizes.",
+        "lessonsForUser": "If you teach and care about healing: your personal transformation story IS your method, so document it rigorously, wrap it in science, and build a certification layer so others can deliver it."
+      },
+      "confidence": "high",
+      "oneLiner": "Broke his back, refused surgery, healed through meditation, then proved thousands of others could do the same."
+    },
+    {
+      "name": "Aubrey Marcus",
+      "source": "nonfounder",
+      "domain": "human optimization and conscious leadership",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "leading",
+        "storytelling",
+        "connecting",
+        "coaching"
+      ],
+      "careerModel": {
+        "type": "portfolio_entrepreneur",
+        "primaryRevenue": "Onnit exit to Unilever (2021), now donation-based coaching and podcast",
+        "revenueStreams": [
+          "Onnit exit",
+          "Aubrey Marcus Podcast",
+          "Fit For Service coaching (donation-based)",
+          "book sales (Own the Day, Own Your Life)",
+          "Arkadia festival",
+          "speaking engagements"
+        ],
+        "trajectory": "Marketing company in his 20s, founded Onnit in 2010 around 'Total Human Optimization,' grew it to 250+ products, sold to Unilever in 2021, pivoted to donation-based conscious leadership through Fit For Service, hosts Arkadia festival.",
+        "keyDecision": "Selling Onnit to Unilever and pivoting from profit-driven optimization to donation-based conscious service.",
+        "scaleModel": "Built a supplement empire through podcast-driven brand ambassador model, then after exit, scaled impact through donation-based coaching and transformational festivals.",
+        "lessonsForUser": "If you lead and care about consciousness: build the profitable thing first, exit well, then use your freedom and credibility to do the purpose-driven work on your own terms."
+      },
+      "confidence": "high",
+      "oneLiner": "Built and sold a supplement empire, then made his most important work free."
+    },
+    {
+      "name": "Ram Dass",
+      "source": "nonfounder",
+      "domain": "spirituality and consciousness",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "storytelling",
+        "teaching",
+        "speaking_up",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "spiritual_teacher",
+        "primaryRevenue": "Speaking engagements and foundation donations (all book profits donated)",
+        "revenueStreams": [
+          "book sales (Be Here Now, 2M+ copies)",
+          "speaking engagements",
+          "foundation donations",
+          "posthumous digital content"
+        ],
+        "trajectory": "Harvard psychology professor, co-ran Harvard Psilocybin Project with Timothy Leary, fired from Harvard in 1963, traveled to India, met guru Neem Karoli Baba, became Ram Dass, published Be Here Now in 1971 (donated all profits), co-founded Seva Foundation and Hanuman Foundation, suffered massive stroke in 1997, taught from wheelchair until death in 2019.",
+        "keyDecision": "Donating all profits from Be Here Now and choosing service over the commercial guru route, which gave him unimpeachable moral authority.",
+        "scaleModel": "Gave away everything and used his fame to fund and launch other teachers (Sharon Salzberg, Jack Kornfield, Joseph Goldstein), multiplying impact through people rather than products.",
+        "lessonsForUser": "If you teach and care about consciousness: give your best work away, fund others who can carry the torch, and let your generosity become your brand."
+      },
+      "confidence": "high",
+      "oneLiner": "Got fired from Harvard, went to India, came back renamed, and gave away everything he wrote."
+    },
+    {
+      "name": "Sadhguru",
+      "source": "nonfounder",
+      "domain": "yoga and spiritual education",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "teaching",
+        "leading",
+        "storytelling",
+        "speaking_up"
+      ],
+      "careerModel": {
+        "type": "spiritual_institution",
+        "primaryRevenue": "Program fees from Inner Engineering and advanced yoga programs, supported by donations and volunteer labor",
+        "revenueStreams": [
+          "Inner Engineering programs",
+          "advanced yoga retreats",
+          "corporate leadership programs",
+          "book sales (Inner Engineering NYT bestseller)",
+          "YouTube content (11M+ subscribers)",
+          "donations"
+        ],
+        "trajectory": "Born Jaggi Vasudev, ran businesses in his 20s, had spontaneous spiritual experience at 25 on Chamundi Hill, founded Isha Foundation in 1992, built ashram in Coimbatore, created Inner Engineering program, NYT bestselling author, 12M+ YouTube subscribers, led Save Soil campaign across 27 nations on motorcycle at age 64.",
+        "keyDecision": "Creating Inner Engineering as a structured, scalable program that could be taught by trained volunteers worldwide without his personal presence.",
+        "scaleModel": "Millions of volunteers run centers across 100+ countries delivering standardized programs, making the foundation a spiritual franchise operated through donated labor.",
+        "lessonsForUser": "If you teach and care about transformation: design your method so trained volunteers can deliver it without you, then use your personal energy for campaigns and content no one else can do."
+      },
+      "confidence": "high",
+      "oneLiner": "A businessman who became a mystic and built a volunteer army that teaches yoga across 100+ countries."
+    },
+    {
+      "name": "Marianne Williamson",
+      "source": "nonfounder",
+      "domain": "spiritual teaching / A Course in Miracles",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "storytelling",
+        "teaching",
+        "speaking_up",
+        "coaching"
+      ],
+      "careerModel": {
+        "type": "spiritual_author_to_movement",
+        "primaryRevenue": "Book royalties and speaking fees from global lecture tours",
+        "revenueStreams": [
+          "book royalties",
+          "speaking engagements",
+          "digital courses",
+          "lecture series"
+        ],
+        "trajectory": "College dropout, cabaret singer, decade of wandering, discovered A Course in Miracles, began LA lectures with celebrity following, A Return to Love bestseller (1992, Oprah-endorsed), founded Project Angel Food for AIDS patients, 14+ books, 4 NYT bestsellers, two presidential campaigns (2020, 2024).",
+        "keyDecision": "Moving to LA to lecture on A Course in Miracles at the Philosophical Research Society, trusting that translating spiritual texts into plain emotional language was a career.",
+        "scaleModel": "Books and lectures made the teachings portable, celebrity endorsement (Oprah) created mass distribution, digital courses extended reach beyond live events.",
+        "lessonsForUser": "If you teach and care about spiritual growth: translate dense spiritual texts into emotional language people already feel, and let one powerful endorsement do more than years of hustle."
+      },
+      "confidence": "high",
+      "oneLiner": "A cabaret singer who made a 1,200-page channeled text feel like the most obvious thing you ever read."
+    },
+    {
+      "name": "Mooji",
+      "source": "nonfounder",
+      "domain": "Advaita Vedanta / self-inquiry",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "coaching",
+        "teaching",
+        "speaking_up"
+      ],
+      "careerModel": {
+        "type": "ashram_satsang_model",
+        "primaryRevenue": "Retreat fees and donations from global satsang community",
+        "revenueStreams": [
+          "retreat fees",
+          "Sahaja Express subscription platform",
+          "book sales",
+          "donations"
+        ],
+        "trajectory": "Jamaican immigrant to UK, street artist doing charcoal portraits, art teacher, met Papaji in India in 1993, began giving satsangs in London in 1999, YouTube following grew to 800K+, purchased property in Portugal, built Monte Sahaja ashram, retreats attract 800+ people from 50+ nationalities.",
+        "keyDecision": "Quitting art teaching to travel to India and attend Papaji's satsangs, then committing fully to giving satsangs when students appeared.",
+        "scaleModel": "YouTube as free gateway to paid retreats and subscription platform, Monte Sahaja ashram as permanent base with volunteer-run operations.",
+        "lessonsForUser": "If you coach and care about awakening: give your teaching away free on video, let the depth of presence draw people to in-person experiences they will pay for."
+      },
+      "confidence": "high",
+      "oneLiner": "A street artist from Jamaica who built an ashram in Portugal by sitting in a chair and asking people who they really are."
+    },
+    {
+      "name": "Yung Pueblo",
+      "source": "nonfounder",
+      "domain": "inner work poetry / self-healing",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "creating",
+        "storytelling",
+        "connecting",
+        "teaching"
+      ],
+      "careerModel": {
+        "type": "poet_to_movement",
+        "primaryRevenue": "Book sales from NYT bestselling poetry collections",
+        "revenueStreams": [
+          "book royalties",
+          "speaking fees",
+          "Substack newsletter",
+          "venture capital (Wisdom Ventures)"
+        ],
+        "trajectory": "Ecuadorian immigrant in Boston, youth activist, drug and alcohol struggles, 10-day Vipassana retreat in 2012 transformed him, began posting black-text-on-white poems on Instagram in 2013, published Inward through Andrews McMeel in 2018, grew to 3M+ Instagram followers (4.5M across platforms), Lighter debuted #1 NYT in 2022.",
+        "keyDecision": "Posting raw, undesigned poetry as plain black text on white background on Instagram, trusting that the words themselves would be enough without any visual branding.",
+        "scaleModel": "Instagram as free distribution for bite-sized wisdom, converting followers to book buyers, venture fund extending impact beyond personal content.",
+        "lessonsForUser": "If you create and care about inner growth: strip your message to its simplest form, post consistently, and let the words do the work without hiding behind design."
+      },
+      "confidence": "high",
+      "oneLiner": "An addict who got clean through silence and became a bestselling poet by posting the most boring-looking content on Instagram."
+    },
+    {
+      "name": "Sahara Rose",
+      "source": "nonfounder",
+      "domain": "Ayurveda / dharma coaching / sacred feminine",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "teaching",
+        "creating",
+        "coaching",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "wellness_media_to_certification",
+        "primaryRevenue": "Dharma Coaching Institute certifications and digital courses",
+        "revenueStreams": [
+          "coaching certification (Dharma Coaching Institute)",
+          "books",
+          "Highest Self Podcast sponsorships",
+          "Rose Gold Goddesses membership",
+          "digital courses",
+          "speaking engagements"
+        ],
+        "trajectory": "Struggled with health issues at 21, discovered Ayurveda, wrote Idiot's Guide to Ayurveda at 26 (Deepak Chopra wrote the foreword), launched Highest Self Podcast (60M+ downloads), built Rose Gold Goddesses membership, founded Dharma Coaching Institute.",
+        "keyDecision": "Pivoting from pure Ayurveda content to the broader concept of 'dharma' (soul's purpose), which unlocked a much larger audience beyond the wellness niche.",
+        "scaleModel": "Podcast as free distribution, certification program multiplies her through trained coaches, membership community creates recurring revenue.",
+        "lessonsForUser": "If you teach and care about ancient wisdom: modernize the language, build a certification so others can teach your method, and let a strategic mentor's endorsement open doors."
+      },
+      "confidence": "high",
+      "oneLiner": "Cold-emailed Deepak Chopra at 23 and turned a health crisis into the world's first dharma coaching certification."
+    },
+    {
+      "name": "Sri Sri Ravi Shankar",
+      "source": "nonfounder",
+      "domain": "breathwork / meditation / peace-building",
+      "primaryProblem": "world_losing",
+      "primarySkills": [
+        "leading",
+        "teaching",
+        "connecting",
+        "coaching"
+      ],
+      "careerModel": {
+        "type": "breathwork_institution",
+        "primaryRevenue": "Course fees from Art of Living programs delivered by volunteer instructors worldwide",
+        "revenueStreams": [
+          "Happiness Program course fees",
+          "advanced course fees",
+          "teacher training",
+          "retreat centre fees",
+          "donations",
+          "book sales"
+        ],
+        "trajectory": "Born in Tamil Nadu, studied Vedic literature under Pandit Sudhakar Chaturvedi, BSc in physics from St. Joseph's College by 17, developed Sudarshan Kriya during silence in the early 1980s, founded Art of Living Foundation in 1981, grew to 180 countries, Padma Vibhushan in 2016, peace-building work in Colombia (awarded Simon Bolivar Order), Sri Lanka, and Iraq.",
+        "keyDecision": "Making Sudarshan Kriya the single anchor technique and building a volunteer-run organization around teaching it, rather than positioning himself as a personal guru.",
+        "scaleModel": "Volunteer-based instructor network delivering standardized programs worldwide, the technique scales independently of the founder's presence.",
+        "lessonsForUser": "If you lead and care about global impact: create one teachable technique, train volunteers to deliver it, and let the method travel without you."
+      },
+      "confidence": "high",
+      "oneLiner": "Built a volunteer-run breathing class across 180 countries with one technique and no marketing budget."
     }
   ]
 }

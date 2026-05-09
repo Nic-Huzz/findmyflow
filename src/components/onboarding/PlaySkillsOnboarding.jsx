@@ -82,7 +82,7 @@ const HOOK_SLIDES = [
   { id: 'childhood', text: 'Think about you as a kid.', subtext: 'How playful you were. How full of love. How care-free.\n\nSo where did they go?' },
   { id: 'splinters', text: 'Somewhere along the way, we collect emotional splinters.', subtext: 'Experiences that made being ourselves feel unsafe.\n\nOur nervous system = our safety system.\n\nSo to stop this from happening again, protective patterns were created.' },
   { id: 'story', text: 'At 14 I was a playful, dancing, rainbow.', subtext: 'I wore fluro pinks, blues, oranges, purples and uploaded videos of me dancing on Facebook.\n\nThen I got teased for it.\n\nSo for the next TWELVE YEARS I never wore rainbow clothes or danced sober again. Basically the things that make me feel most like me.' },
-  { id: 'cta', text: 'This is what breaks my heart about emotional splinters.', subtext: 'They leave us scared to be ourselves.\n\nAnd this suppression causes depression.\n\nReady to reconnect to your essence and express again?' },
+  { id: 'cta', text: 'This is what breaks my heart about emotional splinters.', subtext: 'They leave us scared to be ourselves.\n\nAnd this suppression dims the aliveness we were born with.\n\nReady to find what lights you up again?' },
 ]
 
 // ─── Prompt ─────────────────────────────────────────────────────────────────

@@ -130,6 +130,52 @@
   font-style: italic;
 }
 
+/* ─── Inspiration CTA ─── */
+.exp-inspiration-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: linear-gradient(135deg, rgba(94,23,235,0.06) 0%, rgba(233,162,59,0.06) 100%);
+  border: 1px solid rgba(94,23,235,0.12);
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  margin-bottom: 1.25rem;
+  transition: border-color 0.2s;
+}
+
+.exp-inspiration-cta:active {
+  border-color: var(--brand-purple);
+}
+
+.exp-inspiration-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.exp-inspiration-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.exp-inspiration-sub {
+  font-size: 0.75rem;
+  color: var(--brand-purple);
+  font-weight: 500;
+  margin-top: 0.1rem;
+}
+
+.exp-inspiration-arrow {
+  margin-left: auto;
+  font-size: 1.1rem;
+  color: var(--brand-purple);
+  font-weight: 600;
+}
+
 /* ─── Form ─── */
 .exp-form {
   background: var(--surface);

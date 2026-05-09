@@ -13,17 +13,17 @@ import './ChallengeIntro.css'
 
 const SLIDES = [
   {
-    heading: 'You were built to play.',
-    body: 'Somewhere along the way, you were told to be serious, be safe, be realistic.',
+    heading: 'You know that feeling.',
+    body: 'When fear turns into aliveness. When you do the scary thing and everything lights up instead of falling apart.',
     duration: 7000,
   },
   {
-    heading: 'This game changes that.',
-    body: 'Every quest is designed to reconnect you with your curiosity, remove the fear blocking your path, and get you paid to do what you love.',
+    heading: 'That feeling is trainable.',
+    body: 'Every challenge here is designed to build your capacity for it. Remove what blocks it. Practice what creates it. Track what sustains it.',
     duration: 8000,
   },
   {
-    heading: 'Ready to turn life into a game?',
+    heading: 'Ready to find your flow?',
     body: null,
     duration: null, // waits for button
     hasButton: true,

@@ -324,38 +324,55 @@ serve(async (req) => {
       const strikeType = requestBody.strikeType || 'any'
       const outcome = requestBody.outcome || 'fill_room'
       const archetype = requestBody.essenceArchetype || ''
+      const superpower = requestBody.essenceSuperpower || ''
       const experienceName = requestBody.experienceName || ''
+      const modalities = (requestBody.modalities || []).join(', ')
 
-      prompt = `You generate Lightning Strike ideas for experience creators (workshop/retreat facilitators). A Lightning Strike is a bold, public action designed to make the market come to them.
+      prompt = `You help experience creators design bold, public actions that make the market come to them. Think: a dare from a friend who knows you well, not advice from a marketing consultant.
 
-THE CREATOR'S MOVEMENT:
-- Problem they solve: ${md.woundProblem || 'Not specified'}
-- Old category (how the world currently solves it): ${md.current || 'Not specified'}
-- What's wrong with that: ${md.wrong || 'Not specified'}
-- Their solution: ${md.mine || 'Not specified'}
-- Movement statement: ${md.ruleStatement || 'Not specified'}
-${experienceName ? `- Next experience: "${experienceName}"` : ''}
+THIS CREATOR:
+- What they believe: ${md.ruleStatement || md.mine || 'Not specified'}
+- The old way people solve this: ${md.current || 'Not specified'}
+- What's wrong with the old way: ${md.wrong || 'Not specified'}
+- How they solve it differently: ${md.mine || 'Not specified'}
+- The deeper problem they care about: ${md.woundProblem || 'Not specified'}
+${modalities ? `- What they facilitate: ${modalities}` : ''}
+${experienceName ? `- Their next experience: "${experienceName}"` : ''}
+${archetype ? `- Their essence: ${archetype}` : ''}
+${superpower ? `- Their superpower: ${superpower}` : ''}
 
-STRIKE TYPE CHOSEN: ${strikeType}
-${strikeType === 'fight' ? '(Name what\'s wrong with the old way publicly. Force the market to pick a side.)' : ''}
-${strikeType === 'stunt' ? '(Do something in public that makes people say "wait, what?")' : ''}
-${strikeType === 'functional' ? '(Prove the method works in real time. Let people experience the shift.)' : ''}
-${strikeType === 'culture_creating' ? '(Create a ritual, phrase, or moment that attendees take home and spread.)' : ''}
+WHAT KIND OF ACTION:
+${strikeType === 'fight' ? 'CHALLENGE THE NORM — They need to say something publicly that their field won\'t say. Name a specific belief that\'s wrong. Make people pick a side. The statement should feel like "finally someone said it" to the right people and uncomfortable to the wrong people. This can be a post, a video, a sign, or a public statement. The content IS the action.' : ''}
+${strikeType === 'stunt' ? 'MAKE THEM LOOK TWICE — Two creative directions: (1) Do their ACTUAL CRAFT in an unexpected public place where nobody expects it (their modality in a market, a park, a co-working space), or (2) Create a VISUAL METAPHOR that makes the point without words (e.g. staging a funeral for a therapy couch, burying self-help books, holding a "free hugs but make it weird" sign). The stunt should be filmable and shareable. NOT random wellness activities in random locations.' : ''}
+${strikeType === 'functional' ? 'LET THEM FEEL IT — They need to give strangers a micro-experience of the shift their method creates using their ACTUAL MODALITY. No explaining, no pitching, just let them FEEL it. The proof becomes the marketing. Keep it to their real skills, not made-up activities.' : ''}
+${strikeType === 'culture_creating' ? 'START A RITUAL — They need to create something specific (a phrase, gesture, challenge, or practice) that attendees take home and naturally repeat or share. The ritual should be directly connected to their modality and movement, not generic. It should travel without the creator pushing it.' : ''}
 
-OUTCOME GOAL: ${outcome === 'fill_room' ? 'Fill the room for their next experience' : outcome === 'go_public' ? 'Declare their movement publicly for the first time' : 'Cement their position as the leader in this space'}
+CREATIVE CONSTRAINTS:
+- ONLY use the modalities listed above (${modalities || 'their method'}). Do NOT invent modalities they don't do.
+- Physical actions should either be (a) their real craft done somewhere unexpected, or (b) a visual metaphor that makes their movement's point without words.
+- No generic wellness cliches. Every idea must be specific to THIS creator's movement and modality.
 
-${archetype ? `ESSENCE ARCHETYPE: ${archetype} (their natural energy and how they show up)` : ''}
+CREATIVE PATTERNS TO CONSIDER (pick the best fit, don't force all):
+- Could this use a vulnerability or personal failure as the hook? The embarrassment IS the marketing.
+- What happens if this goes wrong? If both outcomes make a good story, it's a great idea.
+- Could this happen on someone else's stage, audience, or platform? Borrowing an existing crowd is easier than building one.
+- Is the preparation itself filmable? The nervousness before, the doubt, the setup. That's content too.
+- What does someone DO after they see this? Every idea needs a clear next step (the experience, a link, a DM).
 
-Generate exactly 3 Lightning Strike ideas. Each should be:
-- Doable within 2 weeks with zero budget
-- Specific enough to execute (not vague advice)
-- Scary enough to be a real groan (courage challenge)
-- Connected to their movement (educates the market about why the old way doesn't work)
+GOAL: ${outcome === 'fill_room' ? 'Get more people to their next experience. Every idea should have a clear path from "someone sees this" to "they sign up."' : outcome === 'go_public' ? 'Announce what they stand for to people who don\'t know them yet. First impression of the movement.' : 'They\'re already known. Cement their position as THE person for this. Make it feel inevitable.'}
+
+Generate exactly 3 ideas. Each one should:
+- Use their specific modality (${modalities || 'their method'}), not generic marketing
+- Be doable this week with zero budget
+- Make the creator think "oh god" (scary) and then "but that would be amazing" (exciting)
+- Be specific enough to execute today, not vague advice
+- Sound like a dare from a friend, not a suggestion from a consultant
+- Come from a place of LOVE and SERVICE, not confrontation. The creator genuinely wants to help people. The boldness comes from caring so much that they're willing to be uncomfortable, not from wanting to provoke. Think "I love people too much to let them keep suffering the old way" not "I'm going to attack the old way."
 
 Return ONLY valid JSON:
 {
   "strikes": [
-    { "title": "Short punchy title (3-6 words)", "description": "2-3 sentences explaining what to do", "hook": "One sentence explaining why this would make people talk" }
+    { "title": "Short punchy dare (3-6 words)", "description": "2-3 sentences. What exactly to do, where, and when.", "hook": "Why this would make people talk about them" }
   ]
 }`
 

@@ -98,7 +98,6 @@ export default function CreatorHome() {
       return new Date(db || 0) - new Date(da || 0)
     })
 
-  const activeExp = upcoming[0] || null
   const completedCount = past.length
   const [dashboardKPIs, setDashboardKPIs] = useState({ totalAttendees: 0, repeatRate: 0, totalCosts: 0, totalRevenue: 0 })
 
@@ -110,10 +109,10 @@ export default function CreatorHome() {
   // Load active challenges
   useEffect(() => {
     if (!userId) return
-    fetchCreatorChallenges(userId, activeExp?.id || null).then(({ data }) => {
+    fetchCreatorChallenges(userId, null).then(({ data }) => {
       setActiveChallenges(data || [])
     })
-  }, [userId, activeExp?.id])
+  }, [userId])
 
   // Load dashboard KPIs
   useEffect(() => {
@@ -703,34 +702,34 @@ export default function CreatorHome() {
       {/* ═══ EXPERIENCES ═══ */}
       {activeTab === 'experiences' && (
         <div className="ch-section">
-          {/* Active experience */}
-          {activeExp && (
-            <div className="ch-card ch-exp-card">
+          {/* Upcoming experiences */}
+          {upcoming.length > 0 ? upcoming.map(exp => (
+            <div key={exp.id} className="ch-card ch-exp-card">
               <div className="ch-card-head">
-                <span className="ch-card-title">{activeExp.name}</span>
-                {activeExp.experience_date && (
+                <span className="ch-card-title">{exp.name}</span>
+                {exp.experience_date && (
                   <span className="ch-badge ch-badge-gold">
-                    {formatExperienceDate(activeExp.experience_date)}
+                    {formatExperienceDate(exp.experience_date)}
                   </span>
                 )}
               </div>
               <div className="ch-exp-meta">
-                {(() => { const cd = countdownLabel(activeExp.experience_date); return cd && <span><strong>{cd}</strong> away</span> })()}
-                {activeExp.experience_type && (
-                  <span>🎪 {activeExp.experience_type}</span>
+                {(() => { const cd = countdownLabel(exp.experience_date); return cd && <span><strong>{cd}</strong> away</span> })()}
+                {exp.experience_type && (
+                  <span>🎪 {exp.experience_type}</span>
                 )}
               </div>
 
-              {/* Active challenges */}
-              {activeChallenges.length > 0 && (
+              {/* Active challenges for this experience */}
+              {activeChallenges.filter(c => c.experience_id === exp.id).length > 0 && (
                 <>
                   <div className="ch-challenges-header">
                     <span>This Fortnight's Challenges</span>
                     <span style={{ color: '#E9A23B' }}>
-                      {activeChallenges.filter(c => c.status === 'completed').length}/{activeChallenges.length}
+                      {activeChallenges.filter(c => c.experience_id === exp.id && c.status === 'completed').length}/{activeChallenges.filter(c => c.experience_id === exp.id).length}
                     </span>
                   </div>
-                  {activeChallenges.slice(0, 5).map(ch => {
+                  {activeChallenges.filter(c => c.experience_id === exp.id).slice(0, 5).map(ch => {
                     const isDone = ch.status === 'completed'
                     const isUrgent = ch.deadline && new Date(ch.deadline) - new Date() < 3 * 24 * 60 * 60 * 1000
                     const daysLeft = ch.deadline ? Math.ceil((new Date(ch.deadline) - new Date()) / (24 * 60 * 60 * 1000)) : null
@@ -747,15 +746,15 @@ export default function CreatorHome() {
                 </>
               )}
 
-              <button className="ch-btn-sm" onClick={() => navigate(`/create/experience/${activeExp.id}`)}>
+              <button className="ch-btn-sm" onClick={() => navigate(`/create/experience/${exp.id}`)}>
                 View Checklist →
               </button>
 
               {/* Strikes linked to this experience */}
-              {activeChallenges.filter(c => c.challenge_source === 'strike' && c.experience_id === activeExp.id).length > 0 && (
+              {activeChallenges.filter(c => c.challenge_source === 'strike' && c.experience_id === exp.id).length > 0 && (
                 <div className="ch-strikes-section">
                   <div className="ch-strikes-label">Active Strikes</div>
-                  {activeChallenges.filter(c => c.challenge_source === 'strike' && c.experience_id === activeExp.id).map(ch => {
+                  {activeChallenges.filter(c => c.challenge_source === 'strike' && c.experience_id === exp.id).map(ch => {
                     const isDone = ch.status === 'completed'
                     const daysLeft = ch.deadline ? Math.ceil((new Date(ch.deadline) - new Date()) / (24 * 60 * 60 * 1000)) : null
                     return (
@@ -771,10 +770,7 @@ export default function CreatorHome() {
                 </div>
               )}
             </div>
-          )}
-
-          {/* No active experience */}
-          {!activeExp && (
+          )) : (
             <div className="ch-card">
               <div className="ch-empty-text">No upcoming experience. Create one to get started.</div>
             </div>

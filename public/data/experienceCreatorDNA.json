@@ -2,67 +2,37 @@
   "meta": {
     "version": "1.0",
     "generatedAt": "2026-04-21",
-    "totalProfiles": 247,
+    "totalProfiles": 227,
     "sliders": {
       "workRhythm": {
         "min": 1,
         "max": 5,
-        "label": "Marathon \u2194 Sprinter"
+        "label": "Marathon ↔ Sprinter"
       },
       "fuelType": {
         "min": 1,
         "max": 5,
-        "label": "Clean Fuel \u2194 Dirty Fuel"
+        "label": "Clean Fuel ↔ Dirty Fuel"
       },
       "knowledgeStyle": {
         "min": 1,
         "max": 5,
-        "label": "Analytical \u2194 Intuitive"
+        "label": "Analytical ↔ Intuitive"
       },
       "impactStyle": {
         "min": 1,
         "max": 5,
-        "label": "Direct \u2194 Systemic"
+        "label": "Direct ↔ Systemic"
       },
       "growthMode": {
         "min": 1,
         "max": 5,
-        "label": "Deep Expertise \u2194 Broad Leadership"
+        "label": "Deep Expertise ↔ Broad Leadership"
       }
     },
     "notes": "All non-founder DNA profiles. impactStyle and growthMode replace orientation and scaleApproach for the employee path."
   },
   "profiles": [
-    {
-      "name": "Myles Horton",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Gordon Lish",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 4,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Marshall Ganz",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 90
-    },
     {
       "name": "John Gottman",
       "experienceType": "workshop",
@@ -72,46 +42,6 @@
       "impactStyle": 4,
       "growthMode": 2,
       "confidence": 92
-    },
-    {
-      "name": "Sue Johnson",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Harville Hendrix",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Stan Tatkin",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Terry Real",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 2,
-      "confidence": 88
     },
     {
       "name": "Dan Hughes",
@@ -134,26 +64,6 @@
       "confidence": 90
     },
     {
-      "name": "Marva Collins",
-      "experienceType": "workshop",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 1,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "Gloria Steinem",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
       "name": "David Bohm",
       "experienceType": "facilitation",
       "workRhythm": 1,
@@ -162,36 +72,6 @@
       "impactStyle": 4,
       "growthMode": 4,
       "confidence": 85
-    },
-    {
-      "name": "Tarana Burke",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 4,
-      "confidence": 82
-    },
-    {
-      "name": "Ella Baker",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Paulo Freire",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 90
     },
     {
       "name": "Jane Addams",
@@ -204,16 +84,6 @@
       "confidence": 90
     },
     {
-      "name": "Grace Lee Boggs",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 4,
-      "confidence": 85
-    },
-    {
       "name": "Phil Jackson",
       "experienceType": "facilitation",
       "workRhythm": 1,
@@ -224,36 +94,6 @@
       "confidence": 88
     },
     {
-      "name": "Bill Wilson",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 5,
-      "impactStyle": 5,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
-      "name": "Marc Freedman",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 82
-    },
-    {
-      "name": "Martti Ahtisaari",
-      "experienceType": "facilitation",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 2,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 90
-    },
-    {
       "name": "Tony Robbins",
       "experienceType": "live_events",
       "workRhythm": 5,
@@ -261,86 +101,6 @@
       "knowledgeStyle": 4,
       "impactStyle": 1,
       "growthMode": 5,
-      "confidence": 92
-    },
-    {
-      "name": "William Shakespeare",
-      "experienceType": "performance",
-      "workRhythm": 1,
-      "fuelType": 2,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 4,
-      "confidence": 80
-    },
-    {
-      "name": "V\u00e1clav Havel",
-      "experienceType": "performance",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 5,
-      "growthMode": 5,
-      "confidence": 88
-    },
-    {
-      "name": "Lin-Manuel Miranda",
-      "experienceType": "performance",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 4,
-      "confidence": 85
-    },
-    {
-      "name": "Kae Tempest",
-      "experienceType": "performance",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 4,
-      "confidence": 85
-    },
-    {
-      "name": "Fela Kuti",
-      "experienceType": "performance",
-      "workRhythm": 4,
-      "fuelType": 4,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 85
-    },
-    {
-      "name": "Nina Simone",
-      "experienceType": "performance",
-      "workRhythm": 4,
-      "fuelType": 4,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Mercedes Sosa",
-      "experienceType": "performance",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
-      "confidence": 88
-    },
-    {
-      "name": "Luciano Pavarotti",
-      "experienceType": "performance",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 2,
       "confidence": 92
     },
     {
@@ -364,26 +124,6 @@
       "confidence": 85
     },
     {
-      "name": "Dave Ramsey",
-      "experienceType": "cohort",
-      "workRhythm": 1,
-      "fuelType": 4,
-      "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 90
-    },
-    {
-      "name": "Jesse Itzler",
-      "experienceType": "cohort",
-      "workRhythm": 4,
-      "fuelType": 3,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
       "name": "Tenzin Palmo",
       "experienceType": "retreat",
       "workRhythm": 1,
@@ -404,36 +144,6 @@
       "confidence": 88
     },
     {
-      "name": "Holly Whitaker",
-      "experienceType": "retreat",
-      "workRhythm": 4,
-      "fuelType": 2,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 82
-    },
-    {
-      "name": "Yayoi Kusama",
-      "experienceType": "immersive",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 2,
-      "growthMode": 1,
-      "confidence": 92
-    },
-    {
-      "name": "P.T. Barnum",
-      "experienceType": "immersive",
-      "workRhythm": 3,
-      "fuelType": 2,
-      "knowledgeStyle": 5,
-      "impactStyle": 4,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
       "name": "Walt Disney",
       "experienceType": "immersive",
       "workRhythm": 1,
@@ -442,26 +152,6 @@
       "impactStyle": 5,
       "growthMode": 5,
       "confidence": 90
-    },
-    {
-      "name": "Bill Thomas",
-      "experienceType": "immersive",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 4,
-      "confidence": 85
-    },
-    {
-      "name": "Erin Gruwell",
-      "experienceType": "education",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 4,
-      "confidence": 85
     },
     {
       "name": "Joseph Campbell",
@@ -474,17 +164,7 @@
       "confidence": 88
     },
     {
-      "name": "Jose Andres",
-      "experienceType": "food",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 4,
-      "growthMode": 5,
-      "confidence": 85
-    },
-    {
-      "name": "Bren\u00e9 Brown",
+      "name": "Brené Brown",
       "experienceType": "certification",
       "workRhythm": 2,
       "fuelType": 1,
@@ -494,16 +174,6 @@
       "confidence": 90
     },
     {
-      "name": "Marie Forleo",
-      "experienceType": "cohort",
-      "workRhythm": 4,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 2,
-      "growthMode": 4,
-      "confidence": 88
-    },
-    {
       "name": "Wim Hof",
       "experienceType": "certification",
       "workRhythm": 2,
@@ -511,16 +181,6 @@
       "knowledgeStyle": 5,
       "impactStyle": 3,
       "growthMode": 2,
-      "confidence": 90
-    },
-    {
-      "name": "Adriene Mishler",
-      "experienceType": "membership",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "knowledgeStyle": 5,
-      "impactStyle": 1,
-      "growthMode": 1,
       "confidence": 90
     },
     {
@@ -592,16 +252,6 @@
       "impactStyle": 3,
       "growthMode": 4,
       "confidence": 88
-    },
-    {
-      "name": "Tara Brach",
-      "experienceType": "certification",
-      "workRhythm": 1,
-      "fuelType": 1,
-      "knowledgeStyle": 4,
-      "impactStyle": 3,
-      "growthMode": 1,
-      "confidence": 92
     },
     {
       "name": "Glennon Doyle",
@@ -831,7 +481,7 @@
       "confidence": 85
     },
     {
-      "name": "Claude L\u00e9vi-Strauss",
+      "name": "Claude Lévi-Strauss",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 1,
@@ -840,7 +490,7 @@
       "confidence": 90
     },
     {
-      "name": "Svante P\u00e4\u00e4bo",
+      "name": "Svante Pääbo",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 1,
@@ -1056,7 +706,7 @@
       "confidence": 90
     },
     {
-      "name": "Gabriel Garc\u00eda M\u00e1rquez",
+      "name": "Gabriel García Márquez",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 5,
@@ -1092,7 +742,7 @@
       "confidence": 88
     },
     {
-      "name": "Antoni Gaud\u00ed",
+      "name": "Antoni Gaudí",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 5,
@@ -1596,7 +1246,7 @@
       "confidence": 88
     },
     {
-      "name": "Lech Wa\u0142\u0119sa",
+      "name": "Lech Wałęsa",
       "workRhythm": 4,
       "fuelType": 3,
       "knowledgeStyle": 5,
@@ -1659,7 +1309,7 @@
       "confidence": 88
     },
     {
-      "name": "Wis\u0142awa Szymborska",
+      "name": "Wisława Szymborska",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 5,
@@ -1713,7 +1363,7 @@
       "confidence": 92
     },
     {
-      "name": "Bj\u00f6rk",
+      "name": "Björk",
       "workRhythm": 4,
       "fuelType": 2,
       "knowledgeStyle": 5,
@@ -1848,7 +1498,7 @@
       "confidence": 85
     },
     {
-      "name": "C\u00e9dric Villani",
+      "name": "Cédric Villani",
       "workRhythm": 1,
       "fuelType": 1,
       "knowledgeStyle": 1,
@@ -2314,6 +1964,156 @@
       "impactStyle": 5,
       "growthMode": 5,
       "confidence": 85
+    },
+    {
+      "name": "Eckhart Tolle",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "knowledgeStyle": 5,
+      "impactStyle": 5,
+      "growthMode": 3,
+      "confidence": 92
+    },
+    {
+      "name": "Deepak Chopra",
+      "experienceType": "retreat",
+      "workRhythm": 4,
+      "fuelType": 3,
+      "knowledgeStyle": 3,
+      "impactStyle": 5,
+      "growthMode": 5,
+      "confidence": 90
+    },
+    {
+      "name": "Jack Kornfield",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "knowledgeStyle": 3,
+      "impactStyle": 3,
+      "growthMode": 4,
+      "confidence": 90
+    },
+    {
+      "name": "Sam Harris",
+      "experienceType": "membership",
+      "workRhythm": 2,
+      "fuelType": 2,
+      "knowledgeStyle": 1,
+      "impactStyle": 5,
+      "growthMode": 3,
+      "confidence": 90
+    },
+    {
+      "name": "Thich Nhat Hanh",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "knowledgeStyle": 4,
+      "impactStyle": 5,
+      "growthMode": 5,
+      "confidence": 92
+    },
+    {
+      "name": "Seane Corn",
+      "experienceType": "retreat",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "knowledgeStyle": 4,
+      "impactStyle": 4,
+      "growthMode": 4,
+      "confidence": 90
+    },
+    {
+      "name": "Joe Dispenza",
+      "experienceType": "retreat",
+      "workRhythm": 3,
+      "fuelType": 2,
+      "knowledgeStyle": 2,
+      "impactStyle": 5,
+      "growthMode": 5,
+      "confidence": 90
+    },
+    {
+      "name": "Aubrey Marcus",
+      "experienceType": "immersive",
+      "workRhythm": 4,
+      "fuelType": 4,
+      "knowledgeStyle": 3,
+      "impactStyle": 4,
+      "growthMode": 5,
+      "confidence": 90
+    },
+    {
+      "name": "Ram Dass",
+      "experienceType": "book_newsletter",
+      "workRhythm": 1,
+      "fuelType": 3,
+      "knowledgeStyle": 5,
+      "impactStyle": 5,
+      "growthMode": 4,
+      "confidence": 90
+    },
+    {
+      "name": "Sadhguru",
+      "experienceType": "certification",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "knowledgeStyle": 4,
+      "impactStyle": 5,
+      "growthMode": 5,
+      "confidence": 92
+    },
+    {
+      "name": "Marianne Williamson",
+      "experienceType": "live_events",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "knowledgeStyle": 4,
+      "impactStyle": 5,
+      "growthMode": 5,
+      "confidence": 90
+    },
+    {
+      "name": "Mooji",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "knowledgeStyle": 5,
+      "impactStyle": 2,
+      "growthMode": 3,
+      "confidence": 88
+    },
+    {
+      "name": "Yung Pueblo",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "knowledgeStyle": 4,
+      "impactStyle": 5,
+      "growthMode": 4,
+      "confidence": 90
+    },
+    {
+      "name": "Sahara Rose",
+      "experienceType": "certification",
+      "workRhythm": 4,
+      "fuelType": 3,
+      "knowledgeStyle": 4,
+      "impactStyle": 4,
+      "growthMode": 5,
+      "confidence": 90
+    },
+    {
+      "name": "Sri Sri Ravi Shankar",
+      "experienceType": "certification",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "knowledgeStyle": 5,
+      "impactStyle": 5,
+      "growthMode": 5,
+      "confidence": 92
     }
   ]
 }

@@ -267,6 +267,7 @@ const RemarkableFlow = lazyRetry(() => import('./flows/RemarkableFlow'))
 const StrikeDesignFlow = lazyRetry(() => import('./flows/StrikeDesignFlow'))
 const ScaleIncomeFlow = lazyRetry(() => import('./flows/ScaleIncomeFlow'))
 const ScopeMapFlow = lazyRetry(() => import('./flows/ScopeMapFlow'))
+const ExperienceInspiration = lazyRetry(() => import('./flows/ExperienceInspiration'))
 
 
 // Lazy-loaded - Public Play-List Feed
@@ -896,6 +897,13 @@ function AppRouter() {
               <CreateGate>
                 <AuthGate>
                   <CreatorHome />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/inspiration" element={
+              <CreateGate>
+                <AuthGate>
+                  <ExperienceInspiration />
                 </AuthGate>
               </CreateGate>
             } />

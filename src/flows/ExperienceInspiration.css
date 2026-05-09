@@ -1,0 +1,611 @@
+/* ─── Experience Inspiration Flow ─── */
+/* All classes prefixed ei- to prevent leakage */
+
+.ei-container {
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding-bottom: 40px;
+}
+
+/* ─── Toolbar ─── */
+.ei-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.ei-back {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  margin-right: 8px;
+  line-height: 1;
+}
+
+.ei-toolbar-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+/* ─── Content area ─── */
+.ei-content {
+  padding: 20px 16px;
+}
+
+/* ─── Progress dots ─── */
+.ei-progress {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.ei-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #dee2e6;
+  transition: all 0.2s;
+}
+
+.ei-dot.active {
+  background: #5e17eb;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.ei-dot.done {
+  background: #5e17eb;
+}
+
+/* ─── Step headers ─── */
+.ei-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5e17eb;
+  margin-bottom: 8px;
+}
+
+.ei-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+
+.ei-sub {
+  font-size: 14px;
+  color: #6c757d;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* ─── Creator picker (Step 1) ─── */
+.ei-search {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  margin-bottom: 12px;
+  background: #f8f9fa;
+}
+
+.ei-search:focus {
+  outline: none;
+  border-color: #5e17eb;
+  background: #fff;
+}
+
+.ei-type-filters {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ei-type-pill {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+  font-family: inherit;
+  text-transform: capitalize;
+}
+
+.ei-type-pill.active {
+  background: #5e17eb;
+  border-color: #5e17eb;
+  color: #fff;
+}
+
+.ei-selected-count {
+  text-align: center;
+  font-size: 13px;
+  color: #6c757d;
+  margin-bottom: 12px;
+}
+
+.ei-selected-count strong {
+  color: #E9A23B;
+}
+
+.ei-creator-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.ei-creator-card {
+  position: relative;
+  background: #fff;
+  border: 2px solid #e9ecef;
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ei-creator-card:active {
+  transform: scale(0.96);
+}
+
+.ei-creator-card.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.04);
+}
+
+.ei-creator-card.selected::after {
+  content: '\2713';
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: #E9A23B;
+  color: #fff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ei-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin: 0 auto 6px;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.ei-creator-name {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.ei-creator-type {
+  font-size: 9px;
+  color: #adb5bd;
+  margin-top: 2px;
+  text-transform: capitalize;
+}
+
+.ei-empty {
+  text-align: center;
+  padding: 32px 16px;
+  color: #adb5bd;
+  font-size: 14px;
+}
+
+/* ─── Blend card (Step 2) ─── */
+.ei-blend-card {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 20px;
+  padding: 24px 20px;
+  color: #fff;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.25);
+}
+
+.ei-blend-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -20px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.ei-blend-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.ei-blend-creators {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.ei-blend-chip {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ei-blend-shared {
+  position: relative;
+  z-index: 1;
+}
+
+.ei-blend-shared-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #E9A23B;
+  margin-bottom: 8px;
+}
+
+.ei-blend-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ei-blend-tag {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ei-blend-unique {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Idea cards (Step 3) ─── */
+.ei-idea-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.ei-idea-card:active {
+  transform: scale(0.98);
+}
+
+.ei-idea-card.selected {
+  border-color: #E9A23B;
+  border-width: 2px;
+}
+
+.ei-idea-card.selected::after {
+  content: '\2713';
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: #E9A23B;
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ei-idea-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.ei-idea-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #5e17eb;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ei-idea-name {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.ei-idea-meta {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ei-idea-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6c757d;
+  background: #f8f9fa;
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+
+.ei-idea-desc {
+  font-size: 14px;
+  color: #6c757d;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.ei-idea-inspired {
+  font-size: 11px;
+  color: #adb5bd;
+  font-style: italic;
+}
+
+.ei-or-divider {
+  text-align: center;
+  font-size: 12px;
+  color: #adb5bd;
+  margin: 16px 0;
+  position: relative;
+}
+
+.ei-or-divider::before,
+.ei-or-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #e9ecef;
+}
+
+.ei-or-divider::before { left: 0; }
+.ei-or-divider::after { right: 0; }
+
+.ei-own-idea-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: none;
+  border: 1px dashed #dee2e6;
+  border-radius: 14px;
+  color: #6c757d;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-bottom: 20px;
+}
+
+.ei-own-idea-btn:active {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+/* ─── Create form (Step 4) ─── */
+.ei-inspired-by {
+  background: rgba(94, 23, 235, 0.04);
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #5e17eb;
+}
+
+.ei-inspired-by strong {
+  font-weight: 700;
+}
+
+.ei-field {
+  margin-bottom: 16px;
+}
+
+.ei-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.ei-field input,
+.ei-field select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  background: #f8f9fa;
+}
+
+.ei-field input:focus,
+.ei-field select:focus {
+  outline: none;
+  border-color: #5e17eb;
+  background: #fff;
+}
+
+/* ─── Buttons ─── */
+.ei-btn-primary {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  transition: transform 0.2s;
+}
+
+.ei-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.ei-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ei-btn-secondary {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: rgba(94, 23, 235, 0.06);
+  color: #5e17eb;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 10px;
+}
+
+/* ─── Loading ─── */
+.ei-loading {
+  text-align: center;
+  padding: 48px 0;
+}
+
+.ei-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e9ecef;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: ei-spin 0.8s linear infinite;
+  margin: 0 auto 12px;
+}
+
+@keyframes ei-spin {
+  to { transform: rotate(360deg); }
+}
+
+.ei-loading-text {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* ─── Error ─── */
+.ei-error {
+  text-align: center;
+  padding: 24px;
+  color: #dc3545;
+  font-size: 14px;
+}
+
+.ei-retry-btn {
+  margin-top: 12px;
+  padding: 10px 24px;
+  background: #5e17eb;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 380px) {
+  .ei-creator-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ei-title {
+    font-size: 18px;
+  }
+
+  .ei-idea-name {
+    font-size: 14px;
+  }
+
+  .ei-blend-card {
+    padding: 18px 14px;
+  }
+}

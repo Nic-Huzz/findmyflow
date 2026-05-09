@@ -440,7 +440,7 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
             <div className="ecf-selection-bar-left">
               <div className="ecf-selected-avatars">
                 {selectedCreators.slice(0, 5).map(c => (
-                  <img key={c.name} src={c.image} alt={c.name} />
+                  <img key={c.name} src={c.image} alt={c.name} onError={(e) => { e.target.style.display = 'none' }} />
                 ))}
               </div>
               <div className="ecf-selection-count">

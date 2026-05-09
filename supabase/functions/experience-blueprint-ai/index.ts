@@ -338,6 +338,85 @@ serve(async (req) => {
       )
     }
 
+    // ── Action 4: Generate Experience Ideas (Inspiration Flow) ──────
+
+    if (action === 'generate_experience_ideas') {
+      const { creators, userPlaySkills } = body
+
+      if (!creators?.length || creators.length < 2) {
+        return new Response(
+          JSON.stringify({ error: 'Select at least 2 creators', blend: null, ideas: [] }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+
+      const creatorBlock = creators.map((c: any) =>
+        `${c.name}:
+  Domain: ${c.domain}
+  Primary skills: ${(c.primarySkills || []).join(', ')}
+  Experience type: ${c.experienceType}
+  One-liner: ${c.oneLiner}
+  Scale model: ${c.scaleModel}
+  Key decision: ${c.keyDecision}
+  Lessons: ${c.lessonsForUser}`
+      ).join('\n\n')
+
+      const userSkillsBlock = userPlaySkills?.length
+        ? `\nThe user's own play-skills are: ${userPlaySkills.join(', ')}`
+        : ''
+
+      const prompt = `You help experience creators design their next experience by finding the intersection between creators they admire.
+
+THE SELECTED CREATORS:
+${creatorBlock}
+${userSkillsBlock}
+
+Your task:
+1. Find what these creators SHARE (overlapping skills, approaches, domains, philosophies)
+2. Find what makes THIS SPECIFIC COMBINATION unique (what happens when you blend their different strengths)
+3. Generate 3 experience concepts that sit at the intersection
+
+For each experience concept:
+- Give it an evocative name (not generic like "Breathwork Workshop")
+- Suggest a format (workshop, retreat, circle, event, online) and duration
+- Write 2-3 sentences describing what participants experience and what they walk away with
+- Explain which elements from which creators inspired it
+
+Return ONLY valid JSON:
+{
+  "blend": {
+    "shared": ["list of 4-6 things they genuinely share based on the data"],
+    "unique": "1-2 sentences about what makes this specific combination special"
+  },
+  "ideas": [
+    {
+      "name": "Evocative experience name",
+      "format": "workshop|retreat|circle|event|online",
+      "duration": "e.g. 90 min",
+      "description": "2-3 sentences about participant experience and transformation",
+      "inspiredBy": "Which creator elements and why"
+    }
+  ]
+}
+
+Return exactly 3 ideas.`
+
+      const responseText = await callClaude(
+        'You find the creative intersection between experience creators and generate specific, actionable experience concepts. Return only valid JSON.',
+        prompt
+      )
+
+      const parsed = parseJSON(responseText)
+
+      return new Response(
+        JSON.stringify({
+          blend: parsed.blend || { shared: [], unique: '' },
+          ideas: (parsed.ideas || []).slice(0, 3),
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     // ── Unknown action ────────────────────────────────────────────────
 
     return new Response(
