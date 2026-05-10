@@ -210,17 +210,17 @@
 .challenge-category-pills {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
 }
 
 .challenge-pill {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 20px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.7rem;
   font-weight: 600;
 }
 

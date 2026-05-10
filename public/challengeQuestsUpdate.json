@@ -272,7 +272,7 @@
       "category": "Tune",
       "type": "Practice",
       "frequency": "daily",
-      "name": "Sleep (7+ hrs)",
+      "name": "Sleep (8+ hrs)",
       "description": "Vibe Rise is impossible on insufficient sleep. Recovery is the foundation.",
       "points": 3,
       "inputType": "checkbox",
@@ -288,6 +288,19 @@
       "points": 3,
       "inputType": "checkbox",
       "healing_checkin": true
+    },
+    {
+      "id": "practice_healthy_meal",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Eat a Healthy Meal",
+      "description": "Log breakfast, lunch, or dinner. Fuel the nervous system with real food.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true,
+      "maxCompletions": 3,
+      "maxPerDay": 3
     },
     {
       "id": "reconnect_morning_meditation",

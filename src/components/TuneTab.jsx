@@ -39,6 +39,7 @@ const DAILY_PRACTICE_IDS = [
   'reconnect_morning_dance',
   'practice_sleep',
   'practice_sunlight',
+  'practice_healthy_meal',
 ]
 
 export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
@@ -143,7 +144,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
 
     try {
       // 1. Save quest completion
-      await supabase.from('quest_completions').insert({
+      const { error: questError } = await supabase.from('quest_completions').insert({
         user_id: userId,
         quest_id: quest.id,
         quest_category: 'Tune',
@@ -153,24 +154,30 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         challenge_day: 0,
         project_id: null,
       })
+      if (questError) {
+        console.error('Tune quest completion error:', questError)
+        throw questError
+      }
 
       // 2. Save state check-in
-      await supabase.from('nervous_system_checkins').insert({
+      const { error: checkinError } = await supabase.from('nervous_system_checkins').insert({
         user_id: userId,
         before_state: null,
         after_state: afterState,
         checkin_type: 'tune',
         source_quest_id: quest.id,
       })
+      if (checkinError) console.warn('Tune NS check-in error:', checkinError)
 
       // 3. Increment scores
-      await supabase.rpc('increment_scores', {
+      const { error: scoreError } = await supabase.rpc('increment_scores', {
         p_user_id: userId,
         p_project_id: null,
         p_category: getScoringCategory('Tune'),
         p_points: quest.points,
         p_week_start: getWeekStartLocal(),
       })
+      if (scoreError) console.warn('Tune score increment error:', scoreError)
 
       hapticSuccess()
       setStatePickerQuestId(null)
