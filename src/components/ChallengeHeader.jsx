@@ -26,7 +26,7 @@ const WEEK_TYPES = {
 const CATEGORY_TEXT_COLORS = {
   tune: '#10b981',
   play_list: '#E9A23B',
-  healing: '#8b5cf6',
+  healing: '#34d399',
 }
 
 function ChallengeHeader({
