@@ -138,7 +138,7 @@ export default function CreatorHomeV2() {
       })
       setChecklistCounts(counts)
     })()
-  }, [upcomingIds])
+  }, [upcomingIds, userId])
 
   async function loadData() {
     setLoading(true)
@@ -499,20 +499,17 @@ export default function CreatorHomeV2() {
                       return (
                         <div style={{ marginTop: 10, borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: 8 }} onClick={e => e.stopPropagation()}>
                           <div className="ch2-label">Active Plays</div>
-                          {expPlays.map(play => {
-                            const isDone = play.status === 'completed'
-                            return (
-                              <div key={play.id} className="ch2-play-item">
-                                <span className="ch2-play-icon">{isDone ? '✓' : '🎯'}</span>
-                                <span className={`ch2-play-text${isDone ? ' ch2-play-done' : ''}`}>{play.title}</span>
-                                {play.deadline && (
-                                  <span className={`ch2-play-due${isDone ? ' ch2-play-due-done' : ''}`}>
-                                    {new Date(play.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                                  </span>
-                                )}
-                              </div>
-                            )
-                          })}
+                          {expPlays.map(play => (
+                            <div key={play.id} className="ch2-play-item">
+                              <span className="ch2-play-icon">🎯</span>
+                              <span className="ch2-play-text">{play.title}</span>
+                              {play.deadline && (
+                                <span className="ch2-play-due">
+                                  {new Date(play.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                                </span>
+                              )}
+                            </div>
+                          ))}
                         </div>
                       )
                     })()}
