@@ -511,7 +511,7 @@ export default function RemarkableFlow() {
 
           {skills.length > 0 && (
             <div className="rmk-skills-hint">
-              <div className="rmk-skills-label">Your skills from your Life Map:</div>
+              <div className="rmk-skills-label">Your play-skills:</div>
               <div className="rmk-skills-tags">
                 {skills.slice(0, 8).map((skill, i) => (
                   <span key={i} className="rmk-skill-tag">{skill}</span>
