@@ -48,19 +48,20 @@ export default function CapacityCard({ userId, refreshTrigger = 0 }) {
           />
         </div>
       </div>
+      <p className="cc-explainer">How much of your week you spent feeling alive, based on your check-ins.</p>
       {stateDistribution && (
         <div className="cc-distribution">
           {stateDistribution.vibe_rise > 0 && (
-            <span className="cc-dist-item cc-dist-vibe">⚡ {stateDistribution.vibe_rise}%</span>
+            <span className="cc-dist-item cc-dist-vibe">⚡&nbsp;{stateDistribution.vibe_rise}%</span>
           )}
           {stateDistribution.ventral > 0 && (
-            <span className="cc-dist-item cc-dist-safe">😊 {stateDistribution.ventral}%</span>
+            <span className="cc-dist-item cc-dist-safe">😊&nbsp;{stateDistribution.ventral}%</span>
           )}
           {stateDistribution.sympathetic > 0 && (
-            <span className="cc-dist-item cc-dist-activated">😬 {stateDistribution.sympathetic}%</span>
+            <span className="cc-dist-item cc-dist-activated">😬&nbsp;{stateDistribution.sympathetic}%</span>
           )}
           {stateDistribution.dorsal > 0 && (
-            <span className="cc-dist-item cc-dist-shutdown">😶 {stateDistribution.dorsal}%</span>
+            <span className="cc-dist-item cc-dist-shutdown">😶&nbsp;{stateDistribution.dorsal}%</span>
           )}
         </div>
       )}

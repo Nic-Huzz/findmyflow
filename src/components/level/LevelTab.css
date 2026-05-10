@@ -795,10 +795,17 @@
   transition: width 0.6s ease;
 }
 
+.cc-explainer {
+  font-size: 12px;
+  color: #6c757d;
+  margin: 4px 0 8px;
+  line-height: 1.4;
+}
+
 .cc-distribution {
   display: flex;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 12px;
+  margin-top: 0;
   flex-wrap: wrap;
 }
 
