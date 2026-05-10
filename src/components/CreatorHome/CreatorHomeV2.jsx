@@ -676,7 +676,7 @@ export default function CreatorHomeV2() {
         <div className={`ch2-tab-panel${activeTab === 'edit-identity' ? ' active' : ''}`}>
           <div className="ch2-label" style={{ marginBottom: 12 }}>Edit Your Identity</div>
           {[
-            { label: 'Your Skills', sub: 'Retake Play-Skills onboarding', path: '/get-started' },
+            { label: 'Your Skills', sub: 'Retake Play-Skills flow', path: '/play-skills-identifier' },
             { label: 'North Stars', sub: 'Redo Experience Creator Matching', path: '/experience-creators' },
             { label: 'Your Position', sub: 'Retake Scope Map diagnostic', path: '/create/scope-map' },
             { label: 'Blow Up Brand', sub: 'Redo the Remarkable flow', path: '/create/remarkable' },
