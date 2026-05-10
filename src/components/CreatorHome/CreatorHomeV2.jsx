@@ -88,6 +88,7 @@ export default function CreatorHomeV2() {
   const [essenceAvatar, setEssenceAvatar] = useState(null)
   const [essenceName, setEssenceName] = useState(null)
   const [userSkills, setUserSkills] = useState([])
+  const [userProblems, setUserProblems] = useState([])
   const [topFans, setTopFans] = useState([])
   const [movementXP, setMovementXP] = useState(0)
 
@@ -154,6 +155,7 @@ export default function CreatorHomeV2() {
         { data: essenceProfile },
         { data: xpData },
         { data: skillsData },
+        { data: problemsData },
       ] = await Promise.all([
         supabase.from('scope_map_results').select('stage').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('experience_creator_selections').select('dominant_archetype, product_suite, selected_creators').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
@@ -164,7 +166,8 @@ export default function CreatorHomeV2() {
         supabase.from('experience_attendees').select('contact_id, experience_id').eq('user_id', userId),
         supabase.from('lead_flow_profiles').select('essence_archetype, custom_essence_image').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('quest_completions').select('points_earned').eq('user_id', userId).eq('quest_category', 'Movement'),
-        supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', userId).eq('flow_type', 'skills'),
+        supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', userId).eq('cluster_type', 'skills'),
+        supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', userId).eq('cluster_type', 'problems'),
       ])
 
       setScopeResult(scope || null)
@@ -175,6 +178,7 @@ export default function CreatorHomeV2() {
       setRemarkableAngle(remarkData || null)
       setMovementXP((xpData || []).reduce((sum, r) => sum + (r.points_earned || 0), 0))
       setUserSkills((skillsData || []).map(s => s.cluster_label))
+      setUserProblems((problemsData || []).map(p => p.cluster_label))
 
       // Essence avatar + name
       if (essenceProfile?.essence_archetype) {
@@ -294,6 +298,23 @@ export default function CreatorHomeV2() {
                   <div className="ch2-skills">
                     {userSkills.map(s => <span key={s} className="ch2-skill">{s}</span>)}
                   </div>
+                </div>
+              )}
+
+              {/* Problems */}
+              {userProblems.length > 0 ? (
+                <div className="ch2-id-section">
+                  <div className="ch2-label">Problems You're Passionate About</div>
+                  <div className="ch2-skills">
+                    {userProblems.map(p => <span key={p} className="ch2-skill">{p}</span>)}
+                  </div>
+                </div>
+              ) : (
+                <div className="ch2-id-section">
+                  <div className="ch2-label">Problems You're Passionate About</div>
+                  <button className="ch2-btn-outline" onClick={() => navigate('/life-map')} style={{ marginTop: 4, fontSize: 12, padding: '8px 14px' }}>
+                    Complete your Life Map to discover these
+                  </button>
                 </div>
               )}
 

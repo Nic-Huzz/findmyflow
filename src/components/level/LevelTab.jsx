@@ -166,7 +166,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       .select('id, step_id')
       .eq('user_id', userId)
       .eq('cluster_type', 'skills')
-      .in('step_id', ['get_started', 'curiosity_compass'])
+      // No step_id filter — picks up skills from PlaySkillPicker, Life Map, etc.
       .then(({ data }) => {
         if (data?.length > 0) {
           if (data.some(d => d.step_id === 'get_started')) setHasPlaySkills(true)

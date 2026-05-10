@@ -44,8 +44,7 @@ export default function PlayListTab({
         .from('nikigai_clusters')
         .select('id, cluster_label, cluster_type, items, step_id')
         .eq('user_id', userId)
-        .eq('cluster_type', 'skills')
-        .in('step_id', ['get_started', 'curiosity_compass']),
+        .eq('cluster_type', 'skills'),
       fetchActiveChallenges(),
     ]).then(([{ data }]) => {
       if (data) setPlayskills(data)
@@ -171,7 +170,6 @@ export default function PlayListTab({
                 .select('id, cluster_label, cluster_type, items, step_id')
                 .eq('user_id', userId)
                 .eq('cluster_type', 'skills')
-                .in('step_id', ['get_started', 'curiosity_compass'])
                 .then(({ data }) => {
                   if (data) setPlayskills(data)
                 })
