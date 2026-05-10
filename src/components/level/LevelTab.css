@@ -716,7 +716,7 @@
 /* ============================================================
    CAPACITY CARD (cc- prefix)
    ============================================================ */
-.level-tab .cc-card {
+.cc-card {
   background: #ffffff;
   border: 1px solid #e9ecef;
   border-radius: 16px;
@@ -724,24 +724,24 @@
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
 }
 
-.level-tab .cc-empty {
+.cc-empty {
   text-align: center;
 }
 
-.level-tab .cc-empty-text {
+.cc-empty-text {
   font-size: 13px;
   color: #adb5bd;
   margin: 4px 0 0;
 }
 
-.level-tab .cc-header {
+.cc-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
 
-.level-tab .cc-label {
+.cc-label {
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
@@ -749,30 +749,30 @@
   color: #5e17eb;
 }
 
-.level-tab .cc-trend {
+.cc-trend {
   font-size: 13px;
   font-weight: 700;
 }
 
-.level-tab .cc-trend-up {
+.cc-trend-up {
   color: #10b981;
 }
 
-.level-tab .cc-trend-down {
+.cc-trend-down {
   color: #ef4444;
 }
 
-.level-tab .cc-trend-flat {
+.cc-trend-flat {
   color: #adb5bd;
 }
 
-.level-tab .cc-score-row {
+.cc-score-row {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.level-tab .cc-score {
+.cc-score {
   font-size: 28px;
   font-weight: 800;
   color: #1a1a2e;
@@ -780,7 +780,7 @@
   min-width: 42px;
 }
 
-.level-tab .cc-bar-track {
+.cc-bar-track {
   flex: 1;
   height: 8px;
   background: #e9ecef;
@@ -788,26 +788,26 @@
   overflow: hidden;
 }
 
-.level-tab .cc-bar-fill {
+.cc-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, #5e17eb, #E9A23B);
   border-radius: 4px;
   transition: width 0.6s ease;
 }
 
-.level-tab .cc-distribution {
+.cc-distribution {
   display: flex;
   gap: 10px;
   margin-top: 8px;
   flex-wrap: wrap;
 }
 
-.level-tab .cc-dist-item {
+.cc-dist-item {
   font-size: 12px;
   font-weight: 700;
 }
 
-.level-tab .cc-dist-vibe { color: #E9A23B; }
-.level-tab .cc-dist-safe { color: #10b981; }
-.level-tab .cc-dist-activated { color: #f97316; }
-.level-tab .cc-dist-shutdown { color: #ef4444; }
+.cc-dist-vibe { color: #E9A23B; }
+.cc-dist-safe { color: #10b981; }
+.cc-dist-activated { color: #f97316; }
+.cc-dist-shutdown { color: #ef4444; }

@@ -286,8 +286,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         })}
       </div>
 
-      {/* Capacity Score */}
-      <CapacityCard userId={userId} refreshTrigger={capacityRefresh} />
+      {/* Capacity Score moved to Tune tab */}
 
       {/* Level Header */}
       <div className="level-header-card">

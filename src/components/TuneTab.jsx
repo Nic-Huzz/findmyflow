@@ -17,6 +17,7 @@ import { getScoringCategory } from '../lib/scoringCategories'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import HealingCompletionModal from './HealingCompletionModal'
+import CapacityCard from './level/CapacityCard'
 import './TuneTab.css'
 
 // Quest IDs that render inline (Practice + Rest checkboxes)
@@ -49,6 +50,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   const [completingQuestId, setCompletingQuestId] = useState(null)
   const [statePickerQuestId, setStatePickerQuestId] = useState(null) // which quest shows inline state picker
   const [healingModalQuest, setHealingModalQuest] = useState(null) // for Reconnect multi-step
+
+  // Capacity score refresh
+  const [capacityRefresh, setCapacityRefresh] = useState(0)
 
   // Drain logging state
   const [showDrainForm, setShowDrainForm] = useState(false)
@@ -181,6 +185,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
 
       hapticSuccess()
       setStatePickerQuestId(null)
+      setCapacityRefresh(n => n + 1)
 
       // Refresh completions
       const { data } = await supabase
@@ -235,6 +240,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       if (error) throw error
 
       hapticSuccess()
+      setCapacityRefresh(n => n + 1)
       // Reset form
       setDrainCategory(null)
       setDrainNote('')
@@ -346,6 +352,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
 
   return (
     <div className="tune-tab">
+      {/* Capacity Score */}
+      <CapacityCard userId={userId} refreshTrigger={capacityRefresh} />
+
       {/* Section 1: Daily Practices */}
       <div className="tt-section">
         <div className="tt-section-header">
