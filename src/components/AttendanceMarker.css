@@ -1,0 +1,192 @@
+/* AttendanceMarker — scoped under .am- prefix */
+
+.am-container {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 12px;
+}
+
+.am-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 18px;
+  background: white;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.am-header-left { display: flex; align-items: center; gap: 12px; }
+.am-header-right { display: flex; align-items: center; gap: 10px; }
+.am-icon { font-size: 22px; flex-shrink: 0; }
+.am-title { display: block; font-size: 15px; font-weight: 700; color: #1a1a2e; }
+.am-count { display: block; font-size: 12px; font-weight: 500; color: #6b7280; margin-top: 1px; }
+
+.am-vs {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.am-vs-up { color: #10b981; background: #ecfdf5; }
+.am-vs-down { color: #ef4444; background: #fef2f2; }
+.am-vs-neutral { color: #6b7280; background: #f3f4f6; }
+
+.am-rate {
+  font-size: 14px;
+  font-weight: 800;
+  color: #10b981;
+}
+
+.am-chevron {
+  font-size: 20px; font-weight: 700; color: #adb5bd;
+  transition: transform 0.2s;
+}
+.am-chevron.open { transform: rotate(90deg); }
+
+/* ── Body ── */
+
+.am-body {
+  padding: 0 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.am-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  background: #f8f8fa;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.am-row:hover { border-color: #d1d5db; }
+
+.am-row.attended {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-color: #10b981;
+}
+
+.am-check {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 2px solid #d1d5db;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: white;
+  flex-shrink: 0;
+}
+
+.am-row.attended .am-check {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.am-row-info {
+  display: flex; flex-direction: column; gap: 1px;
+  flex: 1; min-width: 0;
+}
+
+.am-row-name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+
+.am-row-sub {
+  font-size: 12px; color: #6b7280;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.am-status {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.am-status.yes { color: #10b981; }
+.am-status.no { color: #adb5bd; }
+
+/* ── Walk-in ── */
+
+.am-walkin-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  background: none;
+  color: #5e17eb;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.am-walkin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.am-walkin-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #1a1a2e;
+  background: #f8f8fa;
+  outline: none;
+}
+
+.am-walkin-input:focus { border-color: #5e17eb; }
+
+.am-walkin-actions { display: flex; gap: 8px; }
+
+.am-walkin-save {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: #5e17eb;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.am-walkin-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.am-walkin-cancel {
+  padding: 10px 16px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  background: none;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.am-full-house {
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #10b981;
+  background: #ecfdf5;
+  border-radius: 12px;
+  margin-top: 4px;
+}

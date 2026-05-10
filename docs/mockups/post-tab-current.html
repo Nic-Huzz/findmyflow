@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post-Event Tab — Current State</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .page { max-width: 420px; width: 100%; }
+
+  /* ── Phase tabs ── */
+  .phase-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .phase-tab {
+    padding: 12px 8px;
+    border-radius: 14px;
+    background: white;
+    border: 2px solid #eef0f3;
+    text-align: center;
+    cursor: pointer;
+  }
+  .phase-tab.active {
+    border-color: #5e17eb;
+    background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  }
+  .phase-tab-title { font-size: 14px; font-weight: 700; color: #1a1a2e; display: block; }
+  .phase-tab-sub { font-size: 11px; color: #6b7280; display: block; margin-top: 2px; }
+
+  /* ── Cards (shared style for all collapsible sections) ── */
+  .card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 12px;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+  }
+  .card-header-left { display: flex; align-items: center; gap: 12px; }
+  .card-icon { font-size: 22px; }
+  .card-title { font-size: 15px; font-weight: 700; color: #1a1a2e; display: block; }
+  .card-sub { font-size: 12px; font-weight: 500; color: #6b7280; margin-top: 1px; display: block; }
+  .card-chevron { font-size: 20px; font-weight: 700; color: #adb5bd; }
+  .card-chevron.open { transform: rotate(90deg); }
+  .card-body { padding: 0 18px 16px; }
+
+  /* ── New components (Attendance + Revenue) ── */
+  .new-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 800;
+    color: white;
+    background: #10b981;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* Attendance rows */
+  .att-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 2px solid #eef0f3;
+    border-radius: 12px;
+    background: #f8f8fa;
+    margin-bottom: 4px;
+  }
+  .att-row.attended {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-color: #10b981;
+  }
+  .att-check {
+    width: 22px; height: 22px; border-radius: 6px;
+    border: 2px solid #d1d5db;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: white;
+  }
+  .att-row.attended .att-check { background: #10b981; border-color: #10b981; }
+  .att-name { font-size: 14px; font-weight: 600; color: #1a1a2e; flex: 1; }
+  .att-status { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .att-status.yes { color: #10b981; }
+  .att-status.no { color: #adb5bd; }
+  .att-rate { font-size: 14px; font-weight: 800; color: #10b981; }
+
+  /* Revenue */
+  .rev-input-row {
+    display: flex; align-items: center; gap: 8px;
+    border: 2px solid #eef0f3; border-radius: 14px;
+    background: #f8f8fa; padding: 4px 14px;
+  }
+  .rev-currency { font-size: 14px; font-weight: 700; color: #6b7280; }
+  .rev-amount { flex: 1; border: none; background: none; font-size: 20px; font-weight: 800; color: #1a1a2e; padding: 10px 0; outline: none; }
+  .rev-notes { width: 100%; padding: 10px 14px; border: 2px solid #eef0f3; border-radius: 12px; font-size: 13px; color: #1a1a2e; background: #f8f8fa; margin-top: 8px; }
+  .rev-save { width: 100%; padding: 12px; border: none; border-radius: 12px; background: #10b981; color: white; font-size: 15px; font-weight: 700; margin-top: 8px; cursor: pointer; }
+
+  /* Checklist items */
+  .checklist-section { margin-bottom: 16px; }
+  .checklist-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .checklist-ring {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 3px solid #eef0f3;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #5e17eb;
+    position: relative;
+  }
+  .checklist-ring.partial { border-color: #E9A23B; }
+  .checklist-ring.done { border-color: #10b981; }
+  .checklist-title { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+  .checklist-sub { font-size: 12px; color: #6b7280; }
+
+  .checklist-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px;
+    border: 2px solid #eef0f3;
+    border-radius: 12px;
+    background: #f8f8fa;
+    margin-bottom: 4px;
+    font-size: 14px; color: #1a1a2e; line-height: 1.4;
+  }
+  .checklist-item.done { opacity: 0.5; text-decoration: line-through; }
+  .ci-check {
+    width: 20px; height: 20px; border-radius: 6px;
+    border: 2px solid #d1d5db;
+    flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: white;
+  }
+  .checklist-item.done .ci-check { background: #10b981; border-color: #10b981; }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 2px dashed #d1d5db;
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 14px;
+  }
+  .upload-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+
+  /* Costs */
+  .cost-row {
+    display: flex; justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eef0f3;
+    font-size: 14px; color: #1a1a2e;
+  }
+  .cost-add { color: #5e17eb; font-weight: 600; font-size: 14px; padding: 10px 0; cursor: pointer; border: none; background: none; }
+
+  /* Annotations */
+  .label {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .label-new { background: #ecfdf5; color: #10b981; }
+  .label-existing { background: #eef0f3; color: #6b7280; }
+  .label-v2 { background: #fef3c7; color: #92400e; }
+
+  .divider {
+    height: 1px;
+    background: #eef0f3;
+    margin: 20px 0;
+  }
+  .section-note {
+    font-size: 12px;
+    color: #adb5bd;
+    text-align: center;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Phase tabs -->
+  <div class="phase-tabs">
+    <div class="phase-tab">
+      <span class="phase-tab-title">Details</span>
+      <span class="phase-tab-sub">Your experience</span>
+    </div>
+    <div class="phase-tab">
+      <span class="phase-tab-title">Pre-Event</span>
+      <span class="phase-tab-sub">Set up to win</span>
+    </div>
+    <div class="phase-tab active">
+      <span class="phase-tab-title">Post-Event</span>
+      <span class="phase-tab-sub">Close the loop</span>
+    </div>
+  </div>
+
+  <!-- ═══ NEW: Attendance Marker ═══ -->
+  <span class="label label-new">NEW</span>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-left">
+        <span class="card-icon">✅</span>
+        <div>
+          <span class="card-title">Who showed up?</span>
+          <span class="card-sub">11/14 attended</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="att-rate">79%</span>
+        <span class="card-chevron open">›</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="att-row attended">
+        <span class="att-check">✓</span>
+        <span class="att-name">Sarah Chen</span>
+        <span class="att-status yes">Attended</span>
+      </div>
+      <div class="att-row attended">
+        <span class="att-check">✓</span>
+        <span class="att-name">Adi Putra</span>
+        <span class="att-status yes">Attended</span>
+      </div>
+      <div class="att-row attended">
+        <span class="att-check">✓</span>
+        <span class="att-name">Maya Johnson</span>
+        <span class="att-status yes">Attended</span>
+      </div>
+      <div class="att-row">
+        <span class="att-check"></span>
+        <span class="att-name">Tom Baker</span>
+        <span class="att-status no">No show</span>
+      </div>
+      <div class="att-row">
+        <span class="att-check"></span>
+        <span class="att-name">Yuki Tanaka</span>
+        <span class="att-status no">No show</span>
+      </div>
+      <div style="border:2px dashed #d1d5db;border-radius:12px;padding:10px;text-align:center;color:#5e17eb;font-weight:600;font-size:14px;margin-top:4px;cursor:pointer;">
+        + Add walk-in
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ NEW: Revenue Logger ═══ -->
+  <span class="label label-new">NEW</span>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-left">
+        <span class="card-icon">💰</span>
+        <div>
+          <span class="card-title">Revenue</span>
+          <span class="card-sub">Not logged yet</span>
+        </div>
+      </div>
+      <span class="card-chevron open">›</span>
+    </div>
+    <div class="card-body">
+      <div class="rev-input-row">
+        <span class="rev-currency">IDR</span>
+        <input class="rev-amount" type="text" placeholder="0" value="">
+      </div>
+      <input class="rev-notes" type="text" placeholder="Notes (optional, e.g. 12 tickets + 3 walk-ins)">
+      <button class="rev-save">Save Revenue</button>
+    </div>
+  </div>
+
+  <!-- ═══ EXISTING: Attendee Upload (screenshot AI extraction) ═══ -->
+  <span class="label label-existing">EXISTING</span>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-left">
+        <span class="card-icon">📸</span>
+        <div>
+          <span class="card-title">Upload Attendees</span>
+          <span class="card-sub">0 attendees uploaded</span>
+        </div>
+      </div>
+      <span class="card-chevron">›</span>
+    </div>
+  </div>
+
+  <!-- ═══ EXISTING: Follow-up Checklist ═══ -->
+  <span class="label label-existing">EXISTING</span>
+  <div class="card">
+    <div class="card-body" style="padding-top:16px;">
+      <div class="checklist-header">
+        <div class="checklist-ring partial">2/6</div>
+        <div>
+          <div class="checklist-title">💌 Follow-up</div>
+          <div class="checklist-sub">Set up for success</div>
+        </div>
+      </div>
+      <div class="checklist-item done">
+        <span class="ci-check">✓</span>
+        Upload attendee contact data
+      </div>
+      <div class="checklist-item done">
+        <span class="ci-check">✓</span>
+        Send thank-you email within 24 hours
+      </div>
+      <div class="checklist-item">
+        <span class="ci-check"></span>
+        Send feedback / review request within 48 hours
+      </div>
+      <div class="checklist-item">
+        <span class="ci-check"></span>
+        Send upsell or next-experience invite within 7 days
+      </div>
+      <div class="checklist-item">
+        <span class="ci-check"></span>
+        Collect written testimonials from 3+ attendees
+      </div>
+      <div class="checklist-item">
+        <span class="ci-check"></span>
+        Upload photos / highlights reel
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ EXISTING: Cost Logger ═══ -->
+  <span class="label label-existing">EXISTING</span>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-left">
+        <span class="card-icon">📊</span>
+        <div>
+          <span class="card-title">Costs</span>
+          <span class="card-sub">Track your expenses</span>
+        </div>
+      </div>
+      <span class="card-chevron">›</span>
+    </div>
+  </div>
+
+  <!-- ═══ EXISTING: Reflection Checklist ═══ -->
+  <span class="label label-existing">EXISTING</span>
+  <div class="card">
+    <div class="card-body" style="padding-top:16px;">
+      <div class="checklist-header">
+        <div class="checklist-ring">0/4</div>
+        <div>
+          <div class="checklist-title">🪞 Reflection</div>
+          <div class="checklist-sub">Compound your gains</div>
+        </div>
+      </div>
+      <div class="checklist-item">
+        <span class="ci-check"></span>
+        What worked? (wahoo moments)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-check"></span>
+        What drained energy? (scary / friction moments)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-check"></span>
+        What one 3% improvement will you make next time?
+      </div>
+      <div class="checklist-item">
+        <span class="ci-check"></span>
+        Archive this experience
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══ V2: How'd It Go summary ═══ -->
+  <span class="label label-v2">V2 — REFLECT</span>
+  <div class="section-note">Appears after attendance + revenue are logged</div>
+
+  <div class="card" style="opacity:0.6; border: 2px dashed #E9A23B;">
+    <div style="background:linear-gradient(135deg,#5e17eb,#9333ea);padding:20px;color:white;text-align:center;">
+      <div style="font-size:18px;font-weight:800;">How'd It Go?</div>
+      <div style="font-size:12px;opacity:0.7;">Summary card with vs-last comparisons</div>
+    </div>
+    <div style="padding:16px;text-align:center;color:#6b7280;font-size:13px;">
+      Attended / Show Rate / Revenue / Repeat Attendees<br>
+      + "Your Regulars" list + 3% note<br>
+      + "Run It Again" button<br><br>
+      <em>See how-did-it-go.html mockup</em>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

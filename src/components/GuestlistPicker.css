@@ -1,0 +1,237 @@
+/* GuestlistPicker — scoped under .gl- prefix */
+
+.gl-container {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 12px;
+}
+
+.gl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 18px;
+  background: white;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.gl-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gl-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.gl-title {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.gl-count {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-top: 1px;
+}
+
+.gl-chevron {
+  font-size: 20px;
+  font-weight: 700;
+  color: #adb5bd;
+  transition: transform 0.2s;
+}
+
+.gl-chevron.open {
+  transform: rotate(90deg);
+}
+
+/* ── Body ── */
+
+.gl-body {
+  padding: 0 18px 16px;
+}
+
+.gl-loading {
+  font-size: 13px;
+  color: #adb5bd;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.gl-search {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #1a1a2e;
+  background: #f8f8fa;
+  margin-bottom: 10px;
+  outline: none;
+}
+
+.gl-search:focus {
+  border-color: #5e17eb;
+}
+
+/* ── Contact list ── */
+
+.gl-list {
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.gl-contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  background: #f8f8fa;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.gl-contact:hover {
+  border-color: #d1d5db;
+}
+
+.gl-contact.selected {
+  background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  border-color: #5e17eb;
+}
+
+.gl-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+.gl-contact.selected .gl-check {
+  background: #5e17eb;
+  border-color: #5e17eb;
+}
+
+.gl-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.gl-contact-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.gl-contact-sub {
+  font-size: 12px;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-empty {
+  font-size: 13px;
+  color: #adb5bd;
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* ── Add new ── */
+
+.gl-add-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  background: none;
+  color: #5e17eb;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gl-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gl-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #1a1a2e;
+  background: #f8f8fa;
+  outline: none;
+}
+
+.gl-input:focus {
+  border-color: #5e17eb;
+}
+
+.gl-add-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.gl-save-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: #5e17eb;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gl-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gl-cancel-btn {
+  padding: 10px 16px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  background: none;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

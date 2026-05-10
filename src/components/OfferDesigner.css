@@ -1,0 +1,186 @@
+/* OfferDesigner — shared CSS for UpsellDesigner + DownsellDesigner */
+/* Scoped under .od- prefix */
+
+.od-container {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 12px;
+}
+
+.od-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 18px;
+  background: white;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.od-header-left { display: flex; align-items: center; gap: 12px; }
+.od-icon { font-size: 22px; flex-shrink: 0; }
+.od-title { display: block; font-size: 15px; font-weight: 700; color: #1a1a2e; }
+.od-count { display: block; font-size: 12px; font-weight: 500; color: #6b7280; margin-top: 1px; }
+
+.od-chevron {
+  font-size: 20px; font-weight: 700; color: #adb5bd;
+  transition: transform 0.2s;
+}
+.od-chevron.open { transform: rotate(90deg); }
+
+/* ── Body ── */
+
+.od-body { padding: 0 18px 18px; }
+
+/* ── Questions ── */
+
+.od-question { margin-bottom: 16px; }
+
+.od-q-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 10px;
+}
+
+.od-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.od-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #eef0f3;
+  border-radius: 14px;
+  background: #f8f8fa;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.od-option:hover { border-color: #d1d5db; }
+
+.od-option.selected {
+  background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  border-color: #5e17eb;
+}
+
+.od-option-icon { font-size: 20px; flex-shrink: 0; }
+
+.od-option-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+/* ── Result ── */
+
+.od-result {
+  background: linear-gradient(135deg, #fafafa 0%, #f3f0ff 100%);
+  border: 2px solid #ede9fe;
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.od-result-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.od-result-emoji { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+
+.od-result-name {
+  display: block;
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.od-result-desc {
+  display: block;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+/* ── Examples ── */
+
+.od-examples {
+  margin-bottom: 14px;
+}
+
+.od-examples-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #5e17eb;
+  margin-bottom: 8px;
+}
+
+.od-example {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.od-example-bullet {
+  color: #E9A23B;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Actions ── */
+
+.od-save {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 100%);
+  color: #1a1a2e;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.25);
+}
+
+.od-saved-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.od-saved-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.od-retake {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}

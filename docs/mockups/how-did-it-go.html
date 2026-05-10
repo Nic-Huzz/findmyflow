@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How'd It Go? — Mockup</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .page { max-width: 420px; width: 100%; }
+  .page-title { font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+
+  /* ── Summary Card ── */
+  .hd-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    margin-bottom: 16px;
+  }
+
+  /* Hero banner */
+  .hd-hero {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #9333ea 100%);
+    padding: 24px 22px 20px;
+    color: white;
+    text-align: center;
+  }
+  .hd-hero-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+  .hd-hero-event { font-size: 13px; opacity: 0.7; }
+
+  /* Stat grid */
+  .hd-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #eef0f3;
+  }
+  .hd-stat {
+    background: white;
+    padding: 18px 16px;
+    text-align: center;
+  }
+  .hd-stat-value { font-size: 26px; font-weight: 800; color: #1a1a2e; display: block; }
+  .hd-stat-label { font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; display: block; }
+  .hd-stat-sub { font-size: 12px; color: #adb5bd; margin-top: 4px; display: block; }
+
+  /* Improvement badge */
+  .hd-stat-change { font-size: 12px; font-weight: 700; margin-top: 4px; display: inline-block; padding: 2px 8px; border-radius: 8px; }
+  .hd-stat-change.up { color: #10b981; background: #ecfdf5; }
+  .hd-stat-change.down { color: #ef4444; background: #fef2f2; }
+  .hd-stat-change.new { color: #6b7280; background: #f3f4f6; }
+
+  /* Repeat attendees section */
+  .hd-section {
+    padding: 18px 22px;
+    border-top: 1px solid #eef0f3;
+  }
+  .hd-section-title { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 10px; }
+  .hd-repeat-list { display: flex; flex-direction: column; gap: 6px; }
+  .hd-repeat-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    background: #f8f8fa; border-radius: 10px;
+  }
+  .hd-repeat-badge {
+    font-size: 10px; font-weight: 800; color: #E9A23B;
+    background: rgba(233,162,59,0.1); padding: 3px 8px; border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .hd-repeat-name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .hd-repeat-count { font-size: 12px; color: #6b7280; margin-left: auto; flex-shrink: 0; }
+
+  .hd-empty { font-size: 13px; color: #adb5bd; text-align: center; padding: 8px 0; }
+
+  /* 3% reflection */
+  .hd-reflection {
+    padding: 18px 22px;
+    border-top: 1px solid #eef0f3;
+  }
+  .hd-reflection-label { font-size: 11px; font-weight: 700; color: #E9A23B; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+  .hd-reflection-text { font-size: 14px; color: #374151; line-height: 1.5; font-style: italic; }
+
+  /* Next action */
+  .hd-next {
+    padding: 16px 22px 20px;
+    border-top: 1px solid #eef0f3;
+    text-align: center;
+  }
+  .hd-next-btn {
+    display: inline-block;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 100%);
+    color: #1a1a2e;
+    border: none; border-radius: 14px;
+    font-size: 15px; font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(233,162,59,0.25);
+  }
+
+  /* ── Annotation ── */
+  .annotation {
+    margin-top: 32px;
+    padding: 20px;
+    background: #1a1a2e;
+    border-radius: 16px;
+    color: #adb5bd;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .annotation h3 { color: white; font-size: 15px; margin-bottom: 8px; }
+  .annotation ul { padding-left: 18px; }
+  .annotation li { margin-bottom: 6px; }
+  .annotation code { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-title">Post-Event Summary</div>
+
+  <div class="hd-card">
+    <!-- Hero -->
+    <div class="hd-hero">
+      <div class="hd-hero-title">How'd It Go?</div>
+      <div class="hd-hero-event">Breathwork + Sound Healing — May 3, 2026</div>
+    </div>
+
+    <!-- 4-stat grid -->
+    <div class="hd-stats">
+      <div class="hd-stat">
+        <span class="hd-stat-value">14</span>
+        <span class="hd-stat-label">Attended</span>
+        <span class="hd-stat-sub">of 18 invited</span>
+        <span class="hd-stat-change up">+3 vs last</span>
+      </div>
+      <div class="hd-stat">
+        <span class="hd-stat-value">78%</span>
+        <span class="hd-stat-label">Show Rate</span>
+        <span class="hd-stat-sub">&nbsp;</span>
+        <span class="hd-stat-change up">+8% vs last</span>
+      </div>
+      <div class="hd-stat">
+        <span class="hd-stat-value">IDR 4.2M</span>
+        <span class="hd-stat-label">Revenue</span>
+        <span class="hd-stat-sub">IDR 300K / person</span>
+        <span class="hd-stat-change up">+15% vs last</span>
+      </div>
+      <div class="hd-stat">
+        <span class="hd-stat-value">5</span>
+        <span class="hd-stat-label">Repeat</span>
+        <span class="hd-stat-sub">36% return rate</span>
+        <span class="hd-stat-change new">1st event: n/a</span>
+      </div>
+    </div>
+
+    <!-- Repeat attendees -->
+    <div class="hd-section">
+      <div class="hd-section-title">Your Regulars</div>
+      <div class="hd-repeat-list">
+        <div class="hd-repeat-row">
+          <span class="hd-repeat-badge">3x</span>
+          <span class="hd-repeat-name">Sarah Chen</span>
+          <span class="hd-repeat-count">Every event</span>
+        </div>
+        <div class="hd-repeat-row">
+          <span class="hd-repeat-badge">2x</span>
+          <span class="hd-repeat-name">Adi Putra</span>
+          <span class="hd-repeat-count">2 of 3</span>
+        </div>
+        <div class="hd-repeat-row">
+          <span class="hd-repeat-badge">2x</span>
+          <span class="hd-repeat-name">Maya Johnson</span>
+          <span class="hd-repeat-count">2 of 3</span>
+        </div>
+        <div class="hd-repeat-row">
+          <span class="hd-repeat-badge">2x</span>
+          <span class="hd-repeat-name">Ravi Kumar</span>
+          <span class="hd-repeat-count">Last 2</span>
+        </div>
+        <div class="hd-repeat-row">
+          <span class="hd-repeat-badge">2x</span>
+          <span class="hd-repeat-name">Lisa Park</span>
+          <span class="hd-repeat-count">Last 2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3% reflection -->
+    <div class="hd-reflection">
+      <div class="hd-reflection-label">Your 3% Improvement</div>
+      <div class="hd-reflection-text">"Start the breathwork 10 minutes earlier so there's more time for integration sharing at the end."</div>
+    </div>
+
+    <!-- CTA -->
+    <div class="hd-next">
+      <button class="hd-next-btn">Run It Again</button>
+    </div>
+  </div>
+
+  <!-- ── Design notes ── -->
+  <div class="annotation">
+    <h3>Implementation Notes</h3>
+    <ul>
+      <li><strong>Data sources:</strong> All from existing tables. <code>experience_attendees.attended</code>, <code>experiences.total_revenue</code>, <code>experiences.three_percent_note</code>. Repeat count = cross-experience join.</li>
+      <li><strong>"vs last" comparisons:</strong> Query previous experience via <code>previous_experience_id</code> FK. If null (first event), show "1st event" badge instead.</li>
+      <li><strong>Repeat attendees:</strong> <code>SELECT contact_id, COUNT(*) FROM experience_attendees WHERE user_id = X AND attended = true GROUP BY contact_id HAVING COUNT(*) > 1</code></li>
+      <li><strong>Revenue per person:</strong> <code>total_revenue / attended_count</code></li>
+      <li><strong>"Run It Again" button:</strong> Already exists in ExperienceCreate as "Run Again" flow with pre-filled data.</li>
+      <li><strong>Show condition:</strong> Only appears after attendance + revenue are both logged. Before that, Post tab shows the input tools (AttendanceMarker, RevenueLogger).</li>
+      <li><strong>First event:</strong> No "vs last" data. Change badges show "1st event" in neutral gray. Repeat section shows "No repeat attendees yet. Run another event to see who comes back."</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>

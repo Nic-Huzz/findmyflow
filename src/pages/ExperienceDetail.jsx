@@ -24,6 +24,13 @@ import { CONVERTIBLE_SECTIONS, convertChecklistToChallenge, fetchDNASliders, fet
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { awardMovementXP } from '../lib/movementXP'
 import ExperienceHealthCard from '../components/ExperienceHealthCard'
+import GuestlistPicker from '../components/GuestlistPicker'
+import DMTracker from '../components/DMTracker'
+import AttendanceMarker from '../components/AttendanceMarker'
+import RevenueLogger from '../components/RevenueLogger'
+import ScaleIncomeCard from '../components/ScaleIncomeCard'
+import UpsellDesigner from '../components/UpsellDesigner'
+import DownsellDesigner from '../components/DownsellDesigner'
 import './ExperienceDetail.css'
 
 const formatDate = (d) => formatExperienceDate(d, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
@@ -57,6 +64,7 @@ export default function ExperienceDetail() {
   } = useExperience(id)
 
   const [activePhase, setActivePhase] = useState('details')
+  const [guestlistVersion, setGuestlistVersion] = useState(0)
   const [showHidden, setShowHidden] = useState(false)
   const [dnaSliders, setDnaSliders] = useState(null)
   const [dnaLoaded, setDnaLoaded] = useState(false)
@@ -586,6 +594,15 @@ export default function ExperienceDetail() {
               </div>
             )}
 
+            {/* Scale Income + Offer Strategy */}
+            <ScaleIncomeCard experienceId={id} userId={user?.id} ticketPrice={experience?.ticket_price} />
+            {experience?.ticket_price > 0 && (
+              <>
+                <UpsellDesigner experienceId={id} experienceType={experience?.experience_type} ticketPrice={experience?.ticket_price} />
+                <DownsellDesigner experienceId={id} experienceType={experience?.experience_type} ticketPrice={experience?.ticket_price} />
+              </>
+            )}
+
             {/* Save button */}
             {detailsError && <p style={{ color: '#ef4444', fontSize: '0.82rem', textAlign: 'center' }}>{detailsError}</p>}
             <button
@@ -639,6 +656,10 @@ export default function ExperienceDetail() {
               hasDna={dnaLoaded && dnaSliders?.knowledgeStyle != null}
               onUpdateNote={updateChecklistNote}
             />
+            {/* Guestlist + DM Tracker (inline contact tools) */}
+            <GuestlistPicker experienceId={id} userId={user?.id} onGuestlistChange={() => setGuestlistVersion(v => v + 1)} />
+            <DMTracker experienceId={id} userId={user?.id} refreshKey={guestlistVersion} />
+
             <ChecklistSection
               section="organisation"
               items={grouped.pre.organisation || []}
@@ -655,7 +676,11 @@ export default function ExperienceDetail() {
 
         {activePhase === 'post' && (
           <>
-            {/* Attendee Upload */}
+            {/* Attendance + Revenue */}
+            <AttendanceMarker experienceId={id} userId={user?.id} previousExperienceId={experience?.previous_experience_id} />
+            <RevenueLogger experienceId={id} userId={user?.id} currency={experience?.currency || 'IDR'} previousExperienceId={experience?.previous_experience_id} />
+
+            {/* Attendee Upload (screenshot AI extraction - legacy) */}
             <AttendeeUpload experienceId={id} userId={user?.id} />
 
             {/* Follow-up checklist */}
