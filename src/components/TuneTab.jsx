@@ -32,7 +32,7 @@ const DRAIN_CATEGORIES = [
   { id: 'drain_commitment', label: 'Commitment', icon: '📋' },
 ]
 
-// Daily practice IDs to show in Section 1 (includes breathwork from Reconnect)
+// Daily practice IDs — all daily Tune quests merged (Practice + Reconnect)
 const DAILY_PRACTICE_IDS = [
   'reconnect_morning_breathwork',
   'practice_cold_exposure',
@@ -41,6 +41,9 @@ const DAILY_PRACTICE_IDS = [
   'practice_sleep',
   'practice_sunlight',
   'practice_healthy_meal',
+  'reconnect_morning_meditation',
+  'reconnect_daily_prayer',
+  'reconnect_self_identified',
 ]
 
 export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
@@ -140,8 +143,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
     [allDailyPractices]
   )
 
-  const reconnectQuests = useMemo(() =>
-    allQuests.filter(q => q.type === 'Reconnect' && !DAILY_PRACTICE_IDS.includes(q.id)),
+  // Weekly quests (split by capacityType)
+  const weeklySafety = useMemo(() =>
+    allQuests.filter(q => q.frequency === 'weekly' && q.capacityType === 'safety'),
+    [allQuests]
+  )
+
+  const weeklyActivation = useMemo(() =>
+    allQuests.filter(q => q.frequency === 'weekly' && q.capacityType === 'activation'),
     [allQuests]
   )
 
@@ -387,7 +396,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
             <span className="tt-subsection-count">{safetyDone}/{safetyPractices.length}</span>
           </div>
           <div className="tt-quest-list">
-            {safetyPractices.map(q => renderQuestRow(q, true))}
+            {safetyPractices.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
           </div>
         </div>
 
@@ -399,23 +408,45 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
             <span className="tt-subsection-count">{activationDone}/{activationPractices.length}</span>
           </div>
           <div className="tt-quest-list">
-            {activationPractices.map(q => renderQuestRow(q, true))}
+            {activationPractices.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
           </div>
         </div>
       </div>
 
-      {/* Section 2: Reconnect */}
-      {reconnectQuests.length > 0 && (
+      {/* Section 2: Weekly */}
+      {(weeklySafety.length > 0 || weeklyActivation.length > 0) && (
         <div className="tt-section">
           <div className="tt-section-header">
             <div className="tt-section-header-left">
-              <span className="tt-section-icon">🔄</span>
-              <span className="tt-section-title">Reconnect</span>
+              <span className="tt-section-icon">📅</span>
+              <span className="tt-section-title">Weekly</span>
             </div>
           </div>
-          <div className="tt-quest-list">
-            {reconnectQuests.map(q => renderQuestRow(q, false))}
-          </div>
+          <p className="tt-section-sub">At least once a week, go deeper.</p>
+
+          {weeklySafety.length > 0 && (
+            <div className="tt-subsection">
+              <div className="tt-subsection-header">
+                <span className="tt-subsection-icon">🛡️</span>
+                <span className="tt-subsection-label tt-label-safety">Safety</span>
+              </div>
+              <div className="tt-quest-list">
+                {weeklySafety.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+              </div>
+            </div>
+          )}
+
+          {weeklyActivation.length > 0 && (
+            <div className="tt-subsection">
+              <div className="tt-subsection-header">
+                <span className="tt-subsection-icon">🔥</span>
+                <span className="tt-subsection-label tt-label-activation">Activation</span>
+              </div>
+              <div className="tt-quest-list">
+                {weeklyActivation.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
