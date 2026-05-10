@@ -124,10 +124,20 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
     return labels
   }
 
-  // Section data
-  const dailyPractices = useMemo(() =>
+  // Section data — split by capacityType
+  const allDailyPractices = useMemo(() =>
     DAILY_PRACTICE_IDS.map(id => allQuests.find(q => q.id === id)).filter(Boolean),
     [allQuests]
+  )
+
+  const safetyPractices = useMemo(() =>
+    allDailyPractices.filter(q => q.capacityType === 'safety'),
+    [allDailyPractices]
+  )
+
+  const activationPractices = useMemo(() =>
+    allDailyPractices.filter(q => q.capacityType === 'activation'),
+    [allDailyPractices]
   )
 
   const reconnectQuests = useMemo(() =>
@@ -348,7 +358,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   }
 
   // Count today's completed practices
-  const todayPracticeCount = dailyPractices.filter(q => isCompletedToday(q.id)).length
+  const safetyDone = safetyPractices.filter(q => isCompletedToday(q.id)).length
+  const activationDone = activationPractices.filter(q => isCompletedToday(q.id)).length
+  const totalDone = safetyDone + activationDone
+  const totalPractices = safetyPractices.length + activationPractices.length
 
   return (
     <div className="tune-tab">
@@ -362,11 +375,32 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
             <span className="tt-section-icon">☀️</span>
             <span className="tt-section-title">Daily Practices</span>
           </div>
-          <span className="tt-section-count">{todayPracticeCount}/{dailyPractices.length}</span>
+          <span className="tt-section-count">{totalDone}/{totalPractices}</span>
         </div>
-        <p className="tt-section-sub">Your daily deposits. 30-45 min total, massive returns.</p>
-        <div className="tt-quest-list">
-          {dailyPractices.map(q => renderQuestRow(q, true))}
+        <p className="tt-section-sub">Building your capacity to hold Vibe Rise. Safety builds the container, activation expands it.</p>
+
+        {/* Safety sub-section */}
+        <div className="tt-subsection">
+          <div className="tt-subsection-header">
+            <span className="tt-subsection-icon">🛡️</span>
+            <span className="tt-subsection-label tt-label-safety">Safety</span>
+            <span className="tt-subsection-count">{safetyDone}/{safetyPractices.length}</span>
+          </div>
+          <div className="tt-quest-list">
+            {safetyPractices.map(q => renderQuestRow(q, true))}
+          </div>
+        </div>
+
+        {/* Activation sub-section */}
+        <div className="tt-subsection">
+          <div className="tt-subsection-header">
+            <span className="tt-subsection-icon">🔥</span>
+            <span className="tt-subsection-label tt-label-activation">Activation</span>
+            <span className="tt-subsection-count">{activationDone}/{activationPractices.length}</span>
+          </div>
+          <div className="tt-quest-list">
+            {activationPractices.map(q => renderQuestRow(q, true))}
+          </div>
         </div>
       </div>
 

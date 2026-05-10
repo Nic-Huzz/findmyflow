@@ -69,6 +69,49 @@
   gap: 2px;
 }
 
+/* === SUB-SECTIONS (Safety / Activation) === */
+.tt-subsection {
+  margin-top: 12px;
+}
+
+.tt-subsection:first-of-type {
+  margin-top: 8px;
+}
+
+.tt-subsection-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.tt-subsection-icon {
+  font-size: 0.85rem;
+}
+
+.tt-subsection-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.tt-label-safety {
+  color: #10b981;
+}
+
+.tt-label-activation {
+  color: #E9A23B;
+}
+
+.tt-subsection-count {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: #adb5bd;
+}
+
 /* === INLINE STATE PICKER === */
 .tt-state-picker {
   margin-top: 8px;

@@ -254,7 +254,8 @@
       "description": "Even 30 seconds at end of shower. Trains activation tolerance with safety intact.",
       "points": 3,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "activation"
     },
     {
       "id": "practice_voice_work",
@@ -265,7 +266,8 @@
       "description": "Humming, singing, sounding. Direct vagal stimulation, free, instant.",
       "points": 3,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "practice_sleep",
@@ -276,7 +278,8 @@
       "description": "Vibe Rise is impossible on insufficient sleep. Recovery is the foundation.",
       "points": 3,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "practice_sunlight",
@@ -287,7 +290,8 @@
       "description": "Circadian regulation, dopamine baseline. First 30 mins after waking.",
       "points": 3,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "practice_healthy_meal",
@@ -300,7 +304,8 @@
       "inputType": "checkbox",
       "healing_checkin": true,
       "maxCompletions": 3,
-      "maxPerDay": 3
+      "maxPerDay": 3,
+      "capacityType": "safety"
     },
     {
       "id": "reconnect_morning_meditation",
@@ -311,7 +316,8 @@
       "description": "Establish connection with your essence voice and drop into a meditation",
       "points": 5,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "reconnect_morning_dance",
@@ -322,7 +328,8 @@
       "description": "Play one of your favourite bangers and get your dance on. Rate how you feel out of 10 before and after.",
       "points": 3,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "activation"
     },
     {
       "id": "reconnect_morning_breathwork",
@@ -333,7 +340,8 @@
       "description": "Complete breathwork and breath life into your essence voice",
       "points": 5,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "reconnect_self_identified",
@@ -345,7 +353,8 @@
       "points": 3,
       "inputType": "text",
       "placeholder": "What will you do to reconnect today?",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "reconnect_daily_prayer",
@@ -358,7 +367,8 @@
       "inputType": "text",
       "placeholder": "What did you pray for or express gratitude about today?",
       "learnMore": "Whether you believe in prayer or not, what I've found is when you do pray and ask for things, every opportunity or serendipity that follows has a sense of magic.\n\nIt leads you to ask \"Is this an answer to my prayer?\". I've found it leads me to remain open to any or all experiences and ensures I don't simply dismiss something prematurely.",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "rest_nap",
@@ -369,7 +379,8 @@
       "description": "Give your nervous system permission to power down. Even 20 minutes counts.",
       "points": 3,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "rest_massage",
@@ -380,7 +391,8 @@
       "description": "Let someone else move the tension your body is holding. Book it, show up, receive.",
       "points": 3,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "rest_sauna",
@@ -391,7 +403,8 @@
       "description": "Sit in the heat. Let your body do the work. Nothing to think about, nothing to fix.",
       "points": 3,
       "inputType": "checkbox",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "activation"
     },
     {
       "id": "reconnect_weekly_task",
@@ -403,7 +416,8 @@
       "points": 4,
       "inputType": "text",
       "placeholder": "What will your reconnection practice be this week?",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "reconnect_remove_negative",
@@ -416,7 +430,8 @@
       "inputType": "text",
       "placeholder": "What negative environment did you address?",
       "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish\u2014it's essential.",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "capacityType": "safety"
     },
     {
       "id": "groan_challenge",
