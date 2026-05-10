@@ -93,7 +93,7 @@ function ChallengeHeader({
   const animatedCategoryScores = useScoreAnimation(categoryScores)
   const animatedWeeklyPoints = useScoreAnimation({ pts: weeklyPoints })
 
-  // Display only Healing, Play-list, Bonus (in that order)
+  // Display: Tune, Play-list (Wahoos), Healing
   const DISPLAY_KEYS = ['tune', 'play_list', 'healing']
 
   // Build score data for display

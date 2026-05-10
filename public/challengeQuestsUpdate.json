@@ -204,8 +204,8 @@
     },
     {
       "id": "session_with_huzz",
-      "category": "Tune",
-      "type": "Reconnect",
+      "category": "Healing",
+      "type": "Rewire",
       "frequency": "weekly",
       "name": "Session with Huzz",
       "description": "Complete your Healing Compass worksheet after a live session with Huzz.",
