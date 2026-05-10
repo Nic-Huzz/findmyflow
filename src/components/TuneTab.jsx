@@ -154,10 +154,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
     [allQuests]
   )
 
-  const restQuests = useMemo(() =>
-    allQuests.filter(q => q.type === 'Rest'),
-    [allQuests]
-  )
+  // Rest moved to Healing tab
 
   // Inline completion: tap Complete → show state picker → save
   const handleInlineComplete = async (quest, afterState) => {
@@ -450,22 +447,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         </div>
       )}
 
-      {/* Section 3: Rest */}
-      {restQuests.length > 0 && (
-        <div className="tt-section">
-          <div className="tt-section-header">
-            <div className="tt-section-header-left">
-              <span className="tt-section-icon">🌙</span>
-              <span className="tt-section-title">Rest</span>
-            </div>
-          </div>
-          <div className="tt-quest-list">
-            {restQuests.map(q => renderQuestRow(q, true))}
-          </div>
-        </div>
-      )}
-
-      {/* Section 4: Drains */}
+      {/* Section 3: Drains */}
       <div className="tt-section">
         <div className="tt-section-header">
           <div className="tt-section-header-left">

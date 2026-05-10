@@ -1994,7 +1994,7 @@ function Challenge() {
                 </button>
               )}
             </div>
-            {['Recognise', 'Release', 'Rewire'].filter(rType =>
+            {['Recognise', 'Release', 'Rewire', 'Rest'].filter(rType =>
               activeRTypeFilter === 'All' || activeRTypeFilter === rType
             ).map(rType => {
               const rTypeQuests = displayQuests

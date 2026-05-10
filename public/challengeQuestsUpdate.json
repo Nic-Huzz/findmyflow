@@ -372,7 +372,7 @@
     },
     {
       "id": "rest_nap",
-      "category": "Tune",
+      "category": "Healing",
       "type": "Rest",
       "frequency": "daily",
       "name": "Nap",
@@ -384,7 +384,7 @@
     },
     {
       "id": "rest_massage",
-      "category": "Tune",
+      "category": "Healing",
       "type": "Rest",
       "frequency": "daily",
       "name": "Massage",
@@ -396,7 +396,7 @@
     },
     {
       "id": "rest_sauna",
-      "category": "Tune",
+      "category": "Healing",
       "type": "Rest",
       "frequency": "daily",
       "name": "Sauna",
