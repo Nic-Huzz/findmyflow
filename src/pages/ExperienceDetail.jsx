@@ -595,6 +595,23 @@ export default function ExperienceDetail() {
             >
               {savingDetails ? 'Saving...' : 'Save Details'}
             </button>
+            <button
+              className="exp-det-delete"
+              onClick={async () => {
+                if (!window.confirm('Are you sure you want to delete this experience? This cannot be undone.')) return
+                try {
+                  // Delete the experience (related data cascades via ON DELETE CASCADE)
+                  const { error: delError } = await supabase.from('experiences').delete().eq('id', id)
+                  if (delError) throw delError
+                  navigate('/create')
+                } catch (err) {
+                  console.error('Delete experience error:', err)
+                  alert('Failed to delete. Please try again.')
+                }
+              }}
+            >
+              Delete Experience
+            </button>
           </div>
         )}
 

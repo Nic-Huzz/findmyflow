@@ -513,6 +513,15 @@
 }
 .exp-det-save:disabled { opacity: 0.4; cursor: not-allowed; }
 
+.exp-det-delete {
+  width: 100%; padding: 12px; margin-top: 0.75rem;
+  background: #fef2f2;
+  border: 2px solid #fecaca; border-radius: 12px;
+  color: #dc2626; font-size: 14px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: all 0.2s;
+}
+.exp-det-delete:hover { background: #fee2e2; border-color: #f87171; }
+
 @media (max-width: 640px) {
   .exp-item-actions {
     opacity: 0.5;
