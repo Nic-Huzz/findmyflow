@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
 import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
+import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import './CreatorHomeV2.css'
 
@@ -105,11 +106,13 @@ export default function CreatorHomeV2() {
 
   const [dashboardKPIs, setDashboardKPIs] = useState({ totalAttendees: 0, repeatRate: 0 })
   const [checklistCounts, setChecklistCounts] = useState({})
+  const [activePlays, setActivePlays] = useState([])
 
   // ── Load all data ──────────────────────────────────────────────────────
   useEffect(() => {
     if (!userId) return
     loadData()
+    fetchCreatorChallenges(userId, null).then(({ data }) => setActivePlays(data || []))
   }, [userId])
 
   // KPIs computed inside loadData from the same attendeeRows fetch
@@ -489,6 +492,30 @@ export default function CreatorHomeV2() {
                         )}
                       </div>
                     )}
+                    {/* Plays linked to this experience */}
+                    {(() => {
+                      const expPlays = activePlays.filter(c => c.experience_id === exp.id)
+                      if (!expPlays.length) return null
+                      return (
+                        <div style={{ marginTop: 10, borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: 8 }} onClick={e => e.stopPropagation()}>
+                          <div className="ch2-label">Active Plays</div>
+                          {expPlays.map(play => {
+                            const isDone = play.status === 'completed'
+                            return (
+                              <div key={play.id} className="ch2-play-item">
+                                <span className="ch2-play-icon">{isDone ? '✓' : '🎯'}</span>
+                                <span className={`ch2-play-text${isDone ? ' ch2-play-done' : ''}`}>{play.title}</span>
+                                {play.deadline && (
+                                  <span className={`ch2-play-due${isDone ? ' ch2-play-due-done' : ''}`}>
+                                    {new Date(play.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                                  </span>
+                                )}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )
+                    })()}
                   </div>
                 )
               })}
@@ -518,6 +545,13 @@ export default function CreatorHomeV2() {
               <div className="ch2-create-label">New Experience</div>
               <div className="ch2-create-sub">I know what I want</div>
             </div>
+          </div>
+
+          {/* New Play CTA */}
+          <div className="ch2-card" style={{ cursor: 'pointer', textAlign: 'center' }} onClick={() => navigate('/create/plays')}>
+            <div style={{ fontSize: 16, marginBottom: 4 }}>🎯</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>Design a New Play</div>
+            <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>Set a courage challenge with a deadline</div>
           </div>
 
           {/* Past */}

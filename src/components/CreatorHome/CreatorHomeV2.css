@@ -376,6 +376,17 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
 .ch2-empty-title { font-size: 14px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
 .ch2-empty-sub { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; }
 
+/* ═══ PLAYS ═══ */
+.ch2-play-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 0; font-size: 12px;
+}
+.ch2-play-icon { flex-shrink: 0; font-size: 12px; }
+.ch2-play-text { flex: 1; color: var(--text-primary); font-weight: 600; }
+.ch2-play-text.ch2-play-done { color: var(--text-muted); text-decoration: line-through; }
+.ch2-play-due { font-size: 10px; font-weight: 700; color: var(--gold); flex-shrink: 0; }
+.ch2-play-due.ch2-play-due-done { color: var(--green); }
+
 /* ═══ MOBILE OPTIMIZATIONS ═══ */
 
 /* Touch action — prevent 300ms tap delay on interactive elements */

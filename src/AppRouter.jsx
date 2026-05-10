@@ -942,13 +942,15 @@ function AppRouter() {
                 </AuthGate>
               </CreateGate>
             } />
-            <Route path="/create/strike" element={
+            <Route path="/create/plays" element={
               <CreateGate>
                 <AuthGate>
                   <StrikeDesignFlow />
                 </AuthGate>
               </CreateGate>
             } />
+            {/* Backward compat */}
+            <Route path="/create/strike" element={<Navigate to="/create/plays" replace />} />
             {/* Backward compat — /business redirects to /create */}
             <Route path="/business" element={<Navigate to="/create" replace />} />
             <Route path="/business/experience/new" element={<Navigate to="/create/experience/new" replace />} />
