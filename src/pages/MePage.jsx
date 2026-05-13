@@ -187,6 +187,13 @@ export default function MePage() {
     }
   }, [fetchStageProgress, refreshHero])
 
+  // Refresh hero data when returning to this page (e.g. after retaking Essence Mirror)
+  useEffect(() => {
+    const handleFocus = () => refreshHero()
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [refreshHero])
+
   // Fetch quest completions (used for quest progress + river direction)
   useEffect(() => {
     if (!user?.id) return

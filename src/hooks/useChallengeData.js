@@ -211,15 +211,13 @@ export function useChallengeData() {
         const isMobile = isIOS || isAndroid
 
         if (anyPrevious) {
-          // Returning user - check if they're in browser on mobile (not installed)
+          // Returning user — go straight to challenge tabs (Level, Tune, Wahoo work without a project)
+          // They can pick a project from settings if needed
           if (isMobile && !isStandalone) {
-            // Show install-app screen to encourage PWA installation
             setOnboardingScreen('install-app')
             setShowOnboarding(true)
-          } else {
-            // Already installed or on desktop - skip to project selector
-            setShowProjectSelector(true)
           }
+          // Otherwise just load the page with no project selected
         } else {
           // First-time user - show appropriate onboarding screen
           if (isMobile && !isStandalone) {
