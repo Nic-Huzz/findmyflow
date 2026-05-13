@@ -139,17 +139,16 @@
     },
     {
       "id": "rewire_behavior_change",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Rewire",
       "frequency": "daily",
       "name": "Embody Your Essence",
-      "description": "What's a moment where you were on auto-pilot and consciously tapped into your essence voice to show-up consciously?",
+      "description": "What's a moment where you were on auto-pilot and consciously tapped into your essence voice to show up consciously?",
       "points": 5,
       "inputType": "text",
       "maxPerDay": 3,
       "placeholder": "What did you do?",
-      "archived": true,
-      "archived_reason": "Consolidated into other Rewire quests - Dec 2024"
+      "healing_checkin": true
     },
     {
       "id": "rewire_dopamine_diet",
