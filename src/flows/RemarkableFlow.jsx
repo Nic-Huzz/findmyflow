@@ -74,7 +74,7 @@ export default function RemarkableFlow() {
       const [{ data: probData }, { data: skillData }, { data: selData }] = await Promise.all([
         supabase
           .from('nikigai_clusters')
-          .select('cluster_label')
+          .select('cluster_label, is_favourite')
           .eq('user_id', user.id)
           .eq('cluster_type', 'problems'),
         supabase
@@ -89,7 +89,8 @@ export default function RemarkableFlow() {
           .order('created_at', { ascending: false })
           .limit(1),
       ])
-      setProblems(probData?.map(p => p.cluster_label) || [])
+      const sorted = (probData || []).sort((a, b) => (b.is_favourite ? 1 : 0) - (a.is_favourite ? 1 : 0))
+      setProblems(sorted.map(p => p.cluster_label))
       setSkills(skillData?.map(s => s.cluster_label) || [])
       setSelectedCreatorNames(selData?.[0]?.selected_creators || [])
       setLoading(false)

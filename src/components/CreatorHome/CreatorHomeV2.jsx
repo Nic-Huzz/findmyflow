@@ -166,8 +166,8 @@ export default function CreatorHomeV2() {
         supabase.from('experience_attendees').select('contact_id, experience_id').eq('user_id', userId),
         supabase.from('lead_flow_profiles').select('essence_archetype, custom_essence_image').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('quest_completions').select('points_earned').eq('user_id', userId).eq('quest_category', 'Movement'),
-        supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', userId).eq('cluster_type', 'skills'),
-        supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', userId).eq('cluster_type', 'problems'),
+        supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'skills'),
+        supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'problems'),
       ])
 
       setScopeResult(scope || null)
@@ -177,8 +177,12 @@ export default function CreatorHomeV2() {
       setPayRentModel(stageProgress?.pay_rent_model || null)
       setRemarkableAngle(remarkData || null)
       setMovementXP((xpData || []).reduce((sum, r) => sum + (r.points_earned || 0), 0))
-      setUserSkills((skillsData || []).map(s => s.cluster_label))
-      setUserProblems((problemsData || []).map(p => p.cluster_label))
+      const allSkills = (skillsData || []).map(s => ({ label: s.cluster_label, fav: s.is_favourite }))
+      const allProblems = (problemsData || []).map(p => ({ label: p.cluster_label, fav: p.is_favourite }))
+      const hasFavSkills = allSkills.some(s => s.fav)
+      const hasFavProblems = allProblems.some(p => p.fav)
+      setUserSkills(hasFavSkills ? allSkills.filter(s => s.fav).map(s => s.label) : allSkills.map(s => s.label))
+      setUserProblems(hasFavProblems ? allProblems.filter(p => p.fav).map(p => p.label) : allProblems.map(p => p.label))
 
       // Essence avatar + name
       if (essenceProfile?.essence_archetype) {

@@ -57,6 +57,7 @@ const SCREEN_ORDER = [
   'period_childhood', 'period_teens', 'period_young_adult', 'period_career', 'period_now',
   'processing', 'connecting_dots', 'life_map',
   'reveal_skills', 'reveal_problems', 'reveal_personas',
+  'curate_skills', 'curate_problems',
   'complete',
 ]
 
@@ -98,6 +99,10 @@ export default function LifeMapFlow() {
   // Living document
   const [hasCompletedBefore, setHasCompletedBefore] = useState(false)
   const [savedSession, setSavedSession] = useState(null)
+
+  // Favourites curation
+  const [favouriteSkillIds, setFavouriteSkillIds] = useState(new Set())
+  const [favouriteProblemIds, setFavouriteProblemIds] = useState(new Set())
 
   // Mural
   const [muralUrl, setMuralUrl] = useState(null)
@@ -426,7 +431,17 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       }))
 
       if (clustersToSave.length > 0) {
-        await supabase.from('nikigai_clusters').insert(clustersToSave)
+        const { data: inserted } = await supabase.from('nikigai_clusters').insert(clustersToSave).select('id, cluster_type, cluster_label')
+        // Attach DB ids to in-memory cluster state for favouriting
+        if (inserted) {
+          const attachId = (clusters, type) => clusters.map(c => {
+            const row = inserted.find(r => r.cluster_type === type && r.cluster_label === c.label)
+            return { ...c, id: row?.id || null }
+          })
+          setSkillsClusters(prev => attachId(prev, 'skills'))
+          setProblemsClusters(prev => attachId(prev, 'problems'))
+          setPersonasClusters(prev => attachId(prev, 'persona'))
+        }
       }
 
       // Sync with challenge system
@@ -489,9 +504,15 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       .order('created_at', { ascending: false })
 
     if (clusters) {
-      setSkillsClusters(clusters.filter(c => c.cluster_type === 'skills').map(c => ({ label: c.cluster_label, insight: c.insight, items: (c.items || []).map(i => i.text || i) })))
-      setProblemsClusters(clusters.filter(c => c.cluster_type === 'problems').map(c => ({ label: c.cluster_label, insight: c.insight, items: (c.items || []).map(i => i.text || i) })))
-      setPersonasClusters(clusters.filter(c => c.cluster_type === 'persona').map(c => ({ label: c.cluster_label, insight: c.insight, items: (c.items || []).map(i => i.text || i) })))
+      const mapCluster = c => ({ id: c.id, label: c.cluster_label, insight: c.insight, items: (c.items || []).map(i => i.text || i) })
+      setSkillsClusters(clusters.filter(c => c.cluster_type === 'skills').map(mapCluster))
+      setProblemsClusters(clusters.filter(c => c.cluster_type === 'problems').map(mapCluster))
+      setPersonasClusters(clusters.filter(c => c.cluster_type === 'persona').map(mapCluster))
+      // Restore favourite selections
+      const favSkills = new Set(clusters.filter(c => c.cluster_type === 'skills' && c.is_favourite).map(c => c.id))
+      const favProblems = new Set(clusters.filter(c => c.cluster_type === 'problems' && c.is_favourite).map(c => c.id))
+      setFavouriteSkillIds(favSkills)
+      setFavouriteProblemIds(favProblems)
     }
     goToScreen('life_map')
   }
@@ -954,7 +975,104 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               </div>
             )}
 
-            <button className="lm-cta-gold" onClick={() => goToScreen('complete')}>Complete Life Map ✨</button>
+            <button className="lm-cta-gold" onClick={() => goToScreen('curate_skills')}>Pick Your Top Skills →</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Curate Skills ──
+  if (currentScreen === 'curate_skills') {
+    const toggleSkill = (id) => {
+      if (!id) return
+      setFavouriteSkillIds(prev => {
+        const next = new Set(prev)
+        if (next.has(id)) { next.delete(id) } else if (next.size < 5) { next.add(id); hapticLight() }
+        return next
+      })
+    }
+    const saveSkillFavourites = async () => {
+      const ids = [...favouriteSkillIds].filter(Boolean)
+      if (ids.length > 0) {
+        await supabase.from('nikigai_clusters').update({ is_favourite: false }).eq('user_id', user.id).eq('cluster_type', 'skills')
+        await supabase.from('nikigai_clusters').update({ is_favourite: true }).eq('user_id', user.id).eq('cluster_type', 'skills').in('id', ids)
+      }
+      goToScreen('curate_problems')
+    }
+    return (
+      <div className="life-map-app">
+        <div className="lm-container">
+          <div className="lm-reveal">
+            <span className="lm-reveal-badge skills">Curate Your Skills</span>
+            <h2 className="lm-reveal-title lm-gold-text">Which of these feel<br/>most like you?</h2>
+            <p className="lm-reveal-subtitle">Pick up to 5 that feel most alive right now</p>
+            <div className="lm-curate-counter">{favouriteSkillIds.size}/5 selected</div>
+            <div className="lm-curate-grid">
+              {skillsClusters.map((cluster) => (
+                <button
+                  key={cluster.id || cluster.label}
+                  className={`lm-curate-pill ${favouriteSkillIds.has(cluster.id) ? 'lm-curate-selected' : ''}`}
+                  onClick={() => toggleSkill(cluster.id)}
+                >
+                  {cluster.label}
+                </button>
+              ))}
+            </div>
+            <div className="lm-curate-actions">
+              <button className="lm-cta-gold" onClick={saveSkillFavourites}>
+                {favouriteSkillIds.size > 0 ? 'Next: Pick Problems →' : 'Skip for now →'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Curate Problems ──
+  if (currentScreen === 'curate_problems') {
+    const toggleProblem = (id) => {
+      if (!id) return
+      setFavouriteProblemIds(prev => {
+        const next = new Set(prev)
+        if (next.has(id)) { next.delete(id) } else if (next.size < 5) { next.add(id); hapticLight() }
+        return next
+      })
+    }
+    const saveProblemFavourites = async () => {
+      const ids = [...favouriteProblemIds].filter(Boolean)
+      if (ids.length > 0) {
+        await supabase.from('nikigai_clusters').update({ is_favourite: false }).eq('user_id', user.id).eq('cluster_type', 'problems')
+        await supabase.from('nikigai_clusters').update({ is_favourite: true }).eq('user_id', user.id).eq('cluster_type', 'problems').in('id', ids)
+      }
+      hapticSuccess()
+      goToScreen('complete')
+    }
+    return (
+      <div className="life-map-app">
+        <div className="lm-container">
+          <div className="lm-reveal">
+            <span className="lm-reveal-badge problems">Curate Your Problems</span>
+            <h2 className="lm-reveal-title lm-gold-text">Which of these<br/>fire you up most?</h2>
+            <p className="lm-reveal-subtitle">Pick up to 5 that make you want to do something about it</p>
+            <div className="lm-curate-counter">{favouriteProblemIds.size}/5 selected</div>
+            <div className="lm-curate-grid">
+              {problemsClusters.map((cluster) => (
+                <button
+                  key={cluster.id || cluster.label}
+                  className={`lm-curate-pill ${favouriteProblemIds.has(cluster.id) ? 'lm-curate-selected' : ''}`}
+                  onClick={() => toggleProblem(cluster.id)}
+                >
+                  {cluster.label}
+                </button>
+              ))}
+            </div>
+            <div className="lm-curate-actions">
+              <button className="lm-cta-gold" onClick={saveProblemFavourites}>
+                {favouriteProblemIds.size > 0 ? 'Complete Life Map ✨' : 'Skip for now ✨'}
+              </button>
+            </div>
           </div>
         </div>
       </div>

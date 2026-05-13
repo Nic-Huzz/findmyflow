@@ -51,7 +51,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   const [completions, setCompletions] = useState([])
   const [loading, setLoading] = useState(true)
   const [completingQuestId, setCompletingQuestId] = useState(null)
-  const [statePickerQuestId, setStatePickerQuestId] = useState(null) // which quest shows inline state picker
   const [healingModalQuest, setHealingModalQuest] = useState(null) // for Reconnect multi-step
 
   // Capacity score refresh
@@ -157,12 +156,16 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   // Rest moved to Healing tab
 
   // Inline completion: tap Complete → show state picker → save
-  const handleInlineComplete = async (quest, afterState) => {
+  const handleInlineComplete = async (quest) => {
     if (completingQuestId) return
     setCompletingQuestId(quest.id)
     hapticLight()
 
+    const optimisticTs = new Date().toISOString()
     try {
+      // Optimistic update — mark as done immediately so button can't be double-tapped
+      setCompletions(prev => [...prev, { quest_id: quest.id, completed_at: optimisticTs }])
+
       // 1. Save quest completion
       const { error: questError } = await supabase.from('quest_completions').insert({
         user_id: userId,
@@ -176,20 +179,11 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       })
       if (questError) {
         console.error('Tune quest completion error:', questError)
+        setCompletions(prev => prev.filter(c => c.completed_at !== optimisticTs))
         throw questError
       }
 
-      // 2. Save state check-in
-      const { error: checkinError } = await supabase.from('nervous_system_checkins').insert({
-        user_id: userId,
-        before_state: null,
-        after_state: afterState,
-        checkin_type: 'tune',
-        source_quest_id: quest.id,
-      })
-      if (checkinError) console.warn('Tune NS check-in error:', checkinError)
-
-      // 3. Increment scores
+      // 2. Increment scores
       const { error: scoreError } = await supabase.rpc('increment_scores', {
         p_user_id: userId,
         p_project_id: null,
@@ -282,11 +276,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   }
 
   // Render a quest row (reuses healing tab ht- pattern)
-  function renderQuestRow(quest, useInlineStateCheck = true) {
+  function renderQuestRow(quest, useInlineComplete = true) {
     const completed = isCompletedToday(quest.id)
     const streak = quest.frequency === 'daily' ? getStreak(quest.id) : null
     const dayLabels = quest.frequency === 'daily' ? getDayLabels() : null
-    const showStatePicker = statePickerQuestId === quest.id
     const isCompleting = completingQuestId === quest.id
 
     return (
@@ -311,41 +304,16 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
               ))}
             </div>
           )}
-          {/* Inline state picker (expands below quest name) */}
-          {showStatePicker && (
-            <div className="tt-state-picker">
-              <span className="tt-state-label">How do you feel?</span>
-              <div className="tt-state-buttons">
-                <button
-                  className="tt-state-btn tt-state-safe"
-                  onClick={() => handleInlineComplete(quest, 'ventral')}
-                  disabled={isCompleting}
-                >
-                  😊 Safe
-                </button>
-                <button
-                  className="tt-state-btn tt-state-vibe"
-                  onClick={() => handleInlineComplete(quest, 'vibe_rise')}
-                  disabled={isCompleting}
-                >
-                  ⚡ Vibe Rise
-                </button>
-              </div>
-            </div>
-          )}
         </div>
         {completed ? (
           <span className="ht-item-action done-action">Done</span>
-        ) : useInlineStateCheck ? (
+        ) : useInlineComplete ? (
           <button
             className="ht-item-action"
             disabled={isCompleting}
-            onClick={() => {
-              hapticLight()
-              setStatePickerQuestId(showStatePicker ? null : quest.id)
-            }}
+            onClick={() => handleInlineComplete(quest)}
           >
-            {isCompleting ? '...' : showStatePicker ? 'Cancel' : 'Complete'}
+            {isCompleting ? '...' : 'Complete'}
           </button>
         ) : (
           <button

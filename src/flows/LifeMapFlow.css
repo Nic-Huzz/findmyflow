@@ -824,6 +824,48 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* ===== Curation Step ===== */
+.lm-curate-counter {
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+}
+
+.lm-curate-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.lm-curate-pill {
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lm-curate-pill:active {
+  transform: scale(0.96);
+}
+
+.lm-curate-pill.lm-curate-selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.12);
+  color: #E9A23B;
+  box-shadow: 0 0 12px rgba(233, 162, 59, 0.2);
+}
+
+.lm-curate-actions {
+  text-align: center;
+}
+
 /* ===== Essence Connection ===== */
 .lm-essence-card {
   background: linear-gradient(135deg, rgba(110, 231, 183, 0.08), rgba(251, 191, 36, 0.08));

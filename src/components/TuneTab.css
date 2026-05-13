@@ -112,69 +112,6 @@
   color: #adb5bd;
 }
 
-/* === INLINE STATE PICKER === */
-.tt-state-picker {
-  margin-top: 8px;
-  padding: 10px 0 4px;
-}
-
-.tt-state-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #6c757d;
-  display: block;
-  margin-bottom: 6px;
-}
-
-.tt-state-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.tt-state-btn {
-  flex: 1;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 2px solid #e9ecef;
-  background: #ffffff;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.tt-state-btn:hover:not(:disabled) {
-  border-color: rgba(94, 23, 235, 0.3);
-}
-
-.tt-state-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.tt-state-safe {
-  color: #10b981;
-}
-
-.tt-state-safe:hover:not(:disabled) {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.04);
-}
-
-.tt-state-vibe {
-  color: #E9A23B;
-}
-
-.tt-state-vibe:hover:not(:disabled) {
-  border-color: #E9A23B;
-  background: rgba(233, 162, 59, 0.04);
-}
-
 /* === RESPONSIVE === */
 @media (max-width: 380px) {
   .tune-tab {
@@ -183,11 +120,6 @@
 
   .tt-section {
     padding: 16px;
-  }
-
-  .tt-state-btn {
-    font-size: 13px;
-    padding: 8px 10px;
   }
 }
 
@@ -282,6 +214,32 @@
 
 .tt-drain-state {
   margin-top: 4px;
+}
+
+.tt-state-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tt-state-btn:hover:not(:disabled) {
+  border-color: rgba(94, 23, 235, 0.3);
+}
+
+.tt-state-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .tt-state-activated {
