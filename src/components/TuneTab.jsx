@@ -32,6 +32,15 @@ const DRAIN_CATEGORIES = [
   { id: 'drain_commitment', label: 'Commitment', icon: '📋' },
 ]
 
+// Stall categories — moments where the protective voice won
+const STALL_CATEGORIES = [
+  { id: 'stall_voice', label: 'Didn\'t speak up', icon: '🫣' },
+  { id: 'stall_avoidance', label: 'Avoided it', icon: '🚪' },
+  { id: 'stall_comfort', label: 'Chose comfort', icon: '🛋️' },
+  { id: 'stall_performing', label: 'People-pleased', icon: '🎭' },
+  { id: 'stall_overthinking', label: 'Overthought it', icon: '🌀' },
+]
+
 // Daily practice IDs — all daily Tune quests merged (Practice + Reconnect)
 const DAILY_PRACTICE_IDS = [
   'reconnect_morning_breathwork',
@@ -64,6 +73,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   const [savingDrain, setSavingDrain] = useState(false)
   const [recentDrains, setRecentDrains] = useState([])
 
+  // Stall logging state
+  const [showStallForm, setShowStallForm] = useState(false)
+  const [stallCategory, setStallCategory] = useState(null)
+  const [stallNote, setStallNote] = useState('')
+  const [stallState, setStallState] = useState(null) // 'sympathetic' | 'dorsal'
+  const [savingStall, setSavingStall] = useState(false)
+  const [recentStalls, setRecentStalls] = useState([])
+
   // Load quests from static JSON + completions from DB
   useEffect(() => {
     if (!userId) return
@@ -84,11 +101,20 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         .eq('checkin_type', 'drain')
         .gte('created_at', getWeekStartLocal())
         .order('created_at', { ascending: false }),
-    ]).then(([questData, { data: completionData }, { data: drainData }]) => {
+      // Load this week's stalls
+      supabase
+        .from('nervous_system_checkins')
+        .select('source_quest_id, after_state, drain_note, created_at')
+        .eq('user_id', userId)
+        .eq('checkin_type', 'stall')
+        .gte('created_at', getWeekStartLocal())
+        .order('created_at', { ascending: false }),
+    ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }]) => {
       const tuneQuests = (questData.quests || []).filter(q => q.category === 'Tune' && !q.archived)
       setAllQuests(tuneQuests)
       setCompletions(completionData || [])
       setRecentDrains(drainData || [])
+      setRecentStalls(stallData || [])
       setLoading(false)
     }).catch(err => {
       console.error('TuneTab load error:', err)
@@ -280,6 +306,47 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       console.error('Drain save error:', err)
     } finally {
       setSavingDrain(false)
+    }
+  }
+
+  // Save a stall log
+  const handleSaveStall = async () => {
+    if (!stallCategory || !stallState || savingStall) return
+    setSavingStall(true)
+
+    try {
+      const { error } = await supabase.from('nervous_system_checkins').insert({
+        user_id: userId,
+        before_state: null,
+        after_state: stallState,
+        checkin_type: 'stall',
+        source_quest_id: stallCategory,
+        drain_note: stallNote.trim() || null,
+      })
+
+      if (error) throw error
+
+      hapticSuccess()
+      setCapacityRefresh(n => n + 1)
+      setStallCategory(null)
+      setStallNote('')
+      setStallState(null)
+      setShowStallForm(false)
+
+      const { data } = await supabase
+        .from('nervous_system_checkins')
+        .select('source_quest_id, after_state, drain_note, created_at')
+        .eq('user_id', userId)
+        .eq('checkin_type', 'stall')
+        .gte('created_at', getWeekStartLocal())
+        .order('created_at', { ascending: false })
+      if (data) setRecentStalls(data)
+
+      onRefreshPoints?.()
+    } catch (err) {
+      console.error('Stall save error:', err)
+    } finally {
+      setSavingStall(false)
     }
   }
 
@@ -523,6 +590,109 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
                   </div>
                   <span className={`tt-drain-item-state ${drain.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
                     {drain.after_state === 'dorsal' ? '😶' : '😬'}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Section 4: Stalls */}
+      <div className="tt-section">
+        <div className="tt-section-header">
+          <div className="tt-section-header-left">
+            <span className="tt-section-icon">🧊</span>
+            <span className="tt-section-title">Stalls</span>
+          </div>
+          {recentStalls.length > 0 && (
+            <span className="tt-section-count tt-stall-count">{recentStalls.length} this week</span>
+          )}
+        </div>
+
+        {!showStallForm ? (
+          <button
+            className="tt-drain-log-btn tt-stall-log-btn"
+            onClick={() => { hapticLight(); setShowStallForm(true) }}
+          >
+            + Log a stall
+          </button>
+        ) : (
+          <div className="tt-drain-form">
+            <div className="tt-drain-categories">
+              {STALL_CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  className={`tt-drain-cat-btn ${stallCategory === cat.id ? 'selected' : ''}`}
+                  onClick={() => { hapticLight(); setStallCategory(cat.id) }}
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {stallCategory && (
+              <input
+                type="text"
+                className="tt-drain-note"
+                placeholder="What happened? (optional)"
+                value={stallNote}
+                onChange={e => setStallNote(e.target.value)}
+              />
+            )}
+
+            {stallCategory && (
+              <div className="tt-drain-state">
+                <span className="tt-state-label">How did it leave you?</span>
+                <div className="tt-state-buttons">
+                  <button
+                    className={`tt-state-btn tt-state-activated ${stallState === 'sympathetic' ? 'selected' : ''}`}
+                    onClick={() => setStallState('sympathetic')}
+                  >
+                    😬 Activated
+                  </button>
+                  <button
+                    className={`tt-state-btn tt-state-shutdown ${stallState === 'dorsal' ? 'selected' : ''}`}
+                    onClick={() => setStallState('dorsal')}
+                  >
+                    😶 Shutdown
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className="tt-drain-actions">
+              <button
+                className="tt-drain-save tt-stall-save"
+                disabled={!stallCategory || !stallState || savingStall}
+                onClick={handleSaveStall}
+              >
+                {savingStall ? 'Saving...' : 'Log Stall'}
+              </button>
+              <button
+                className="tt-drain-cancel"
+                onClick={() => { setShowStallForm(false); setStallCategory(null); setStallNote(''); setStallState(null) }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {recentStalls.length > 0 && (
+          <div className="tt-drain-list">
+            {recentStalls.slice(0, 5).map((stall, i) => {
+              const cat = STALL_CATEGORIES.find(c => c.id === stall.source_quest_id)
+              return (
+                <div key={i} className="tt-drain-item">
+                  <span className="tt-drain-item-icon">{cat?.icon || '🧊'}</span>
+                  <div className="tt-drain-item-body">
+                    <span className="tt-drain-item-cat">{cat?.label || 'Stall'}</span>
+                    {stall.drain_note && <span className="tt-drain-item-note">{stall.drain_note}</span>}
+                  </div>
+                  <span className={`tt-drain-item-state ${stall.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
+                    {stall.after_state === 'dorsal' ? '😶' : '😬'}
                   </span>
                 </div>
               )

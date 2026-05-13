@@ -354,6 +354,27 @@
 .tt-activated { color: #f97316; }
 .tt-shutdown { color: #ef4444; }
 
+/* Stall overrides (reuses tt-drain-* layout, different accent) */
+.tt-stall-count { color: #8b5cf6; }
+
+.tt-stall-log-btn {
+  border-color: rgba(139, 92, 246, 0.2);
+  color: #8b5cf6;
+}
+
+.tt-stall-log-btn:hover {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.04);
+}
+
+.tt-stall-save {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+}
+
+.tt-stall-save:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 380px) {
   .tune-tab {
