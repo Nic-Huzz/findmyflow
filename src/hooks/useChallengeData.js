@@ -34,16 +34,17 @@ const DEFAULT_GROUP_ID = 'aaaaaaaa-0000-0000-0000-000000000001'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
-  'play-list': 'Play-list',
-  'playlist': 'Play-list',
+  'play-list': 'Wahoo',
+  'playlist': 'Wahoo',
+  'wahoo': 'Wahoo',
   'priority': 'Level',
   'level': 'Level',
   'quests': 'Level',         // backward compat
   'business': 'Level',       // backward compat — Business now at /create route
   'create': 'Level',         // backward compat — Create now at /create route
-  'groans': 'Play-list',     // backward compat — Groans absorbed into Play-list
+  'groans': 'Wahoo',         // backward compat — Groans absorbed into Wahoo
   'healing': 'Healing',
-  'tracker': 'Play-list',    // backward compat — Tracker tab removed
+  'tracker': 'Wahoo',        // backward compat — Tracker tab removed
   'tune': 'Tune',
   'bonus': 'Tune',           // backward compat — Bonus archived, redirects to Tune
   'leaderboard': 'Leaderboard',
@@ -134,7 +135,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Level', 'Tune', 'Play-list', 'Healing']
+  const categories = ['Level', 'Tune', 'Wahoo', 'Healing']
   const lockedCategories = new Set([]) // All tabs unlocked
   const BONUS_PERCENTAGE = 5 // kept for legacy tab completion bonus logic
 
@@ -1193,7 +1194,7 @@ export function useChallengeData() {
   const getRequiredQuestName = (questId, forQuestId) => {
     // Dynamic lock names for review quests
     if (forQuestId === 'lets_play_review') return 'Let\'s Play Peer-Trial'
-    if (forQuestId === 'self_test_review') return 'Play-list Self-Trial'
+    if (forQuestId === 'self_test_review') return 'Wahoo Self-Trial'
 
     // Dynamic lock message for analysis quest
     if (forQuestId === 'milestone_validation_responses_analysis') {

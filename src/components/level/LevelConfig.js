@@ -303,7 +303,7 @@ export function getLevelConfig(level) {
             ? 'Complete your first Wahoo.'
             : `Complete ${config.courageCount} Wahoos.`,
           icon: '🔥',
-          navigateTo: 'Play-list',
+          navigateTo: 'Wahoo',
         },
       ],
     }

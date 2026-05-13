@@ -13,7 +13,7 @@ export default function DeepDiveCard({ deepDive, isCompleted, onNavigate }) {
   const handleClick = () => {
     if (deepDive.route?.startsWith('#') && onNavigate) {
       const tab = deepDive.route.slice(1)
-      onNavigate(tab === 'playlist' ? 'Play-list' : tab)
+      onNavigate(tab === 'playlist' ? 'Wahoo' : tab)
     }
   }
 

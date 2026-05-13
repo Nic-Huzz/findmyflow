@@ -47,15 +47,15 @@ export const STAGE_CONFIG = {
   },
   [STAGES.GROANS]: {
     id: 0.5,
-    name: 'Play-list',
-    shortName: 'Play-list',
+    name: 'Wahoo',
+    shortName: 'Wahoo',
     description: 'Challenges that push you past your comfort zone to grow',
     icon: '🎮',
     color: '#6d26d7', // purple→gold ombre
     requiredFlows: [],
     milestones: [],
     groanChallenge: null,
-    tabLabel: 'Play-list',
+    tabLabel: 'Wahoo',
     upsellPrompt: null,
     externalLink: null,
     isUserLevel: true,

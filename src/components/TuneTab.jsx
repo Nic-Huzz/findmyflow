@@ -417,6 +417,24 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       {/* Capacity Score */}
       <CapacityCard userId={userId} refreshTrigger={capacityRefresh} />
 
+      {/* Equation Explainer */}
+      <div className="tt-explainer">
+        <div className="tt-explainer-equation">Safety × Activation = Vibe Rise</div>
+        <div className="tt-explainer-map">
+          <div className="tt-explainer-row">
+            <span className="tt-explainer-plus">+</span>
+            <span className="tt-explainer-item">🛡️ Safety practices</span>
+            <span className="tt-explainer-item">🔥 Activation practices</span>
+          </div>
+          <div className="tt-explainer-row">
+            <span className="tt-explainer-minus">−</span>
+            <span className="tt-explainer-item">⚡ Drains</span>
+            <span className="tt-explainer-item">🧊 Stalls</span>
+          </div>
+        </div>
+        <p className="tt-explainer-sub">Practices build capacity. Drains deplete energy. Stalls erode safety. Your Capacity Score tracks the balance.</p>
+      </div>
+
       {/* Section 1: Daily Practices */}
       <div className="tt-section">
         <div className="tt-section-header">

@@ -396,7 +396,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               </div>
               <button
                 className="level-dd-status start"
-                onClick={() => onNavigateTab?.('Play-list')}
+                onClick={() => onNavigateTab?.('Wahoo')}
                 style={{ cursor: 'pointer' }}
               >
                 {courageDone > 0 ? `${courageDone}/${courageTarget}` : 'Start'}
