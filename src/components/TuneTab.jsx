@@ -32,16 +32,18 @@ const DRAIN_CATEGORIES = [
   { id: 'drain_commitment', label: 'Commitment', icon: '📋' },
 ]
 
-// Voices by state — activated = doing too much, shutdown = doing nothing
+// Voices by state — mapped from zone-calibration-framework.md
+// Sympathetic: Controller (fight), Ghost (flight). Dorsal: Auto-Pilot (collapse), Perfectionist (freeze).
+// People Pleaser (fawn) layers on any state.
 const VOICES_BY_STATE = {
   sympathetic: [
-    { id: 'controller', name: 'Controller', icon: '🎮' },
-    { id: 'auto-pilot', name: 'Auto-Pilot', icon: '🛋️' },
+    { id: 'controller', name: 'Controller', icon: '🧱' },
+    { id: 'ghost', name: 'Ghost', icon: '👻' },
     { id: 'people-pleaser', name: 'People Pleaser', icon: '🪞' },
   ],
   dorsal: [
-    { id: 'ghost', name: 'Ghost', icon: '👻' },
-    { id: 'perfectionist', name: 'Perfectionist', icon: '🎭' },
+    { id: 'auto-pilot', name: 'Auto-Pilot', icon: '🤖' },
+    { id: 'perfectionist', name: 'Perfectionist', icon: '🎯' },
     { id: 'people-pleaser', name: 'People Pleaser', icon: '🪞' },
   ],
 }
