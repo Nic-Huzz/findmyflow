@@ -2022,7 +2022,7 @@ function Challenge() {
                             {completed ? '✓' : ''}
                           </span>
                           <div className="ht-item-body">
-                            <div className="ht-item-name">{quest.name}</div>
+                            <div className="ht-item-name">{quest.id === 'rewire_behavior_change' && userArchetypes.essence ? `Embody Your Essence: ${userArchetypes.essence}` : quest.name}</div>
                             <div className="ht-item-meta">
                               <span className="ht-item-type">{quest.type}</span>
                               <span className="ht-item-sep">·</span>
