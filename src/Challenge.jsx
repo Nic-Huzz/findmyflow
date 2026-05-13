@@ -1846,8 +1846,8 @@ function Challenge() {
 
           // Healing: per-frequency title and description
           const healingFreqMeta = {
-            daily: { name: '☀️ Daily Healing', desc: 'Small daily practices to build awareness and release tension.' },
-            weekly: { name: '📅 Weekly Healing', desc: 'Deeper weekly practices to process patterns and triggers.' },
+            daily: { name: '☀️ Daily Healing', desc: 'Clear what blocks your Vibe Rise. Small daily reps that add up.' },
+            weekly: { name: '📅 Weekly Healing', desc: 'Go deeper. Process the patterns your protective voice built.' },
             deepdive: { name: '🌊 Deep Dive', desc: 'One-time flows to map your nervous system and find the wound.' },
             explainer: { name: '📖 Explainers', desc: 'Understand the foundations of healing, emotional splinters, and the Four R\'s.' },
             all: { name: '🧘 Healing Mastery', desc: 'Your combined healing progress across all practices.' }
@@ -1970,6 +1970,7 @@ function Challenge() {
             currentVisibilityLayer={getLevelConfig(currentJourneyLevel)?.visibilityLayer || 'screen'}
             onQuestComplete={handleQuestComplete}
             onRefreshPoints={loadStageProgress}
+            wahooCount={wahooCountThisWeek}
           />
         )}
 
@@ -1977,23 +1978,6 @@ function Challenge() {
         {activeCategory === 'Healing' && displayQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Healing</h2>
-            <div className="quest-search">
-              <input
-                type="text"
-                className="quest-search-input"
-                placeholder="Search challenges..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchQuery && (
-                <button
-                  className="quest-search-clear"
-                  onClick={() => setSearchQuery('')}
-                >
-                  ×
-                </button>
-              )}
-            </div>
             {['Recognise', 'Release', 'Rewire', 'Rest'].filter(rType =>
               activeRTypeFilter === 'All' || activeRTypeFilter === rType
             ).map(rType => {

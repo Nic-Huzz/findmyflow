@@ -14,79 +14,6 @@
   gap: 16px;
 }
 
-/* === EQUATION EXPLAINER === */
-.tt-explainer {
-  background: linear-gradient(135deg, rgba(94, 23, 235, 0.06), rgba(233, 162, 59, 0.06));
-  border: 1px solid rgba(94, 23, 235, 0.12);
-  border-radius: 16px;
-  padding: 16px;
-  margin: 0 4px;
-  text-align: center;
-}
-
-.tt-explainer-equation {
-  font-size: 15px;
-  font-weight: 800;
-  background: linear-gradient(90deg, #5e17eb, #E9A23B);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 12px;
-}
-
-.tt-explainer-map {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.tt-explainer-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
-}
-
-.tt-explainer-plus,
-.tt-explainer-minus {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 800;
-  flex-shrink: 0;
-}
-
-.tt-explainer-plus {
-  background: rgba(16, 185, 129, 0.12);
-  color: #10b981;
-}
-
-.tt-explainer-minus {
-  background: rgba(239, 68, 68, 0.12);
-  color: #ef4444;
-}
-
-.tt-explainer-item {
-  font-size: 12px;
-  font-weight: 600;
-  color: #495057;
-  background: rgba(255, 255, 255, 0.6);
-  padding: 4px 10px;
-  border-radius: 8px;
-}
-
-.tt-explainer-sub {
-  font-size: 11px;
-  color: #6c757d;
-  line-height: 1.4;
-  margin: 0;
-}
-
 /* === SECTION === */
 .tt-section {
   background: #ffffff;
@@ -289,6 +216,19 @@
   margin-top: 4px;
 }
 
+.tt-state-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6c757d;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.tt-state-buttons {
+  display: flex;
+  gap: 8px;
+}
+
 .tt-state-btn {
   flex: 1;
   padding: 10px 12px;
@@ -343,7 +283,7 @@
 .tt-drain-save {
   flex: 1;
   padding: 12px;
-  background: linear-gradient(135deg, #f97316, #fb923c);
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
   color: #ffffff;
   border: none;
   border-radius: 12px;
@@ -356,7 +296,7 @@
 
 .tt-drain-save:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
 .tt-drain-save:disabled {
@@ -438,14 +378,6 @@
 .tt-stall-log-btn:hover {
   border-color: #8b5cf6;
   background: rgba(139, 92, 246, 0.04);
-}
-
-.tt-stall-save {
-  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
-}
-
-.tt-stall-save:hover:not(:disabled) {
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
 /* === RESPONSIVE === */

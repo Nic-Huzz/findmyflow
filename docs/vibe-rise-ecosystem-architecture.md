@@ -902,7 +902,9 @@ The Vibe Rise advantage is teaching both. Healing But Fun does Layer A. The meth
 
 ### The Maintenance Equation
 
-> **Sustained Vibe Rise = (Daily Practices + Life Structure + State Reps + Meaning) ÷ (Drains + Disconnect from Self)**
+> **Sustained Vibe Rise = (Daily Practices + Life Structure + State Reps + Meaning) ÷ (Drains + Stalls)**
+
+Drains deplete activation (energy withdrawals). Stalls erode safety (moments where the protective voice wins — you wanted to act but froze, avoided, people-pleased, or overthought). Previously called "Disconnect from Self" in early drafts.
 
 If numerator exceeds denominator: state is maintained, capacity grows.
 If denominator exceeds numerator: crash is inevitable, regardless of practice quality.

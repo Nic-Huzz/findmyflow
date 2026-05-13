@@ -218,8 +218,8 @@ export default function WahooCreator({
     return (
       <div className="wc-container">
         <div className="wc-header">
-          <h3 className="wc-title">What's your Wahoo?</h3>
-          <p className="wc-subtitle">Something that scares you a little and lights you up a lot.</p>
+          <h3 className="wc-title">Choose Your Wahoo:</h3>
+          <p className="wc-explainer">Every Wahoo is a rep. The more you practise activation with safety, the more Vibe Rise your nervous system can hold.</p>
         </div>
 
         <button className="wc-path-card" onClick={() => { hapticLight(); setStep('freetext') }}>

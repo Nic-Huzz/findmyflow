@@ -32,13 +32,13 @@ const DRAIN_CATEGORIES = [
   { id: 'drain_commitment', label: 'Commitment', icon: '📋' },
 ]
 
-// Stall categories — moments where the protective voice won
+// Stall categories — same areas as drains, but tracking where you froze
 const STALL_CATEGORIES = [
-  { id: 'stall_voice', label: 'Didn\'t speak up', icon: '🫣' },
-  { id: 'stall_avoidance', label: 'Avoided it', icon: '🚪' },
-  { id: 'stall_comfort', label: 'Chose comfort', icon: '🛋️' },
-  { id: 'stall_performing', label: 'People-pleased', icon: '🎭' },
-  { id: 'stall_overthinking', label: 'Overthought it', icon: '🌀' },
+  { id: 'stall_work', label: 'Work', icon: '💼' },
+  { id: 'stall_people', label: 'People', icon: '👤' },
+  { id: 'stall_environment', label: 'Environment', icon: '🏠' },
+  { id: 'stall_content', label: 'Content', icon: '📱' },
+  { id: 'stall_commitment', label: 'Commitment', icon: '📋' },
 ]
 
 // Daily practice IDs — all daily Tune quests merged (Practice + Reconnect)
@@ -417,24 +417,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       {/* Capacity Score */}
       <CapacityCard userId={userId} refreshTrigger={capacityRefresh} />
 
-      {/* Equation Explainer */}
-      <div className="tt-explainer">
-        <div className="tt-explainer-equation">Safety × Activation = Vibe Rise</div>
-        <div className="tt-explainer-map">
-          <div className="tt-explainer-row">
-            <span className="tt-explainer-plus">+</span>
-            <span className="tt-explainer-item">🛡️ Safety practices</span>
-            <span className="tt-explainer-item">🔥 Activation practices</span>
-          </div>
-          <div className="tt-explainer-row">
-            <span className="tt-explainer-minus">−</span>
-            <span className="tt-explainer-item">⚡ Drains</span>
-            <span className="tt-explainer-item">🧊 Stalls</span>
-          </div>
-        </div>
-        <p className="tt-explainer-sub">Practices build capacity. Drains deplete energy. Stalls erode safety. Your Capacity Score tracks the balance.</p>
-      </div>
-
       {/* Section 1: Daily Practices */}
       <div className="tt-section">
         <div className="tt-section-header">
@@ -519,6 +501,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
             <span className="tt-section-count tt-drain-count">{recentDrains.length} this week</span>
           )}
         </div>
+        <p className="tt-section-sub">What's depleting your energy? Drains pull you out of activation faster than practices can refill it.</p>
 
         {!showDrainForm ? (
           <button
@@ -563,13 +546,13 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
                     className={`tt-state-btn tt-state-activated ${drainState === 'sympathetic' ? 'selected' : ''}`}
                     onClick={() => setDrainState('sympathetic')}
                   >
-                    😬 Activated
+                    <span>😬</span> Activated
                   </button>
                   <button
                     className={`tt-state-btn tt-state-shutdown ${drainState === 'dorsal' ? 'selected' : ''}`}
                     onClick={() => setDrainState('dorsal')}
                   >
-                    😶 Shutdown
+                    <span>😶</span> Shutdown
                   </button>
                 </div>
               </div>
@@ -627,6 +610,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
             <span className="tt-section-count tt-stall-count">{recentStalls.length} this week</span>
           )}
         </div>
+        <p className="tt-section-sub">Where did your protective voice win? Stalls erode safety and keep you stuck in the smaller version of yourself.</p>
 
         {!showStallForm ? (
           <button
@@ -668,13 +652,13 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
                     className={`tt-state-btn tt-state-activated ${stallState === 'sympathetic' ? 'selected' : ''}`}
                     onClick={() => setStallState('sympathetic')}
                   >
-                    😬 Activated
+                    <span>😬</span> Activated
                   </button>
                   <button
                     className={`tt-state-btn tt-state-shutdown ${stallState === 'dorsal' ? 'selected' : ''}`}
                     onClick={() => setStallState('dorsal')}
                   >
-                    😶 Shutdown
+                    <span>😶</span> Shutdown
                   </button>
                 </div>
               </div>

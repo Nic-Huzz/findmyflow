@@ -25,6 +25,7 @@ export default function PlayListTab({
   currentVisibilityLayer = 'screen',
   onQuestComplete,
   onRefreshPoints,
+  wahooCount = 0,
 }) {
   const navigate = useNavigate()
   const [playskills, setPlayskills] = useState([])
@@ -34,6 +35,7 @@ export default function PlayListTab({
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [showPlaySkillPicker, setShowPlaySkillPicker] = useState(false)
   const [wahooCreatorKey, setWahooCreatorKey] = useState(0)
+  const [allTimeWahoos, setAllTimeWahoos] = useState(0)
 
   // Fetch playskills + active challenges
   useEffect(() => {
@@ -46,8 +48,16 @@ export default function PlayListTab({
         .eq('user_id', userId)
         .eq('cluster_type', 'skills'),
       fetchActiveChallenges(),
-    ]).then(([{ data }]) => {
+      supabase
+        .from('groan_challenges')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('status', 'completed')
+        .gte('scary_score', 7)
+        .gte('wahoo_score', 7),
+    ]).then(([{ data }, , { count }]) => {
       if (data) setPlayskills(data)
+      setAllTimeWahoos(count || 0)
       setLoading(false)
     }).catch(err => {
       console.error('PlayListTab fetch error:', err)
@@ -198,6 +208,17 @@ export default function PlayListTab({
 
   return (
     <div className="playlist-tab">
+      {/* Wahoo Counter */}
+      <div className="plt-counter-card">
+        <div className="plt-counter-main">
+          <div className="plt-counter-num">{allTimeWahoos}</div>
+          <div className="plt-counter-label">Wahoos</div>
+        </div>
+        <div className="plt-counter-meta">
+          <span className="plt-counter-tagline">Every rep expands your capacity</span>
+        </div>
+      </div>
+
       {/* Active Wahoos */}
       {activeChallenges.length > 0 && renderActiveWahoos()}
 

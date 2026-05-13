@@ -3863,10 +3863,69 @@
   border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; width: 100%;
 }
 
-/* ── Play-list Tab ── */
+/* ── Wahoo Tab ── */
 .playlist-tab {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  padding: 0 0 2rem;
+}
+
+.plt-counter-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.plt-counter-main {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.plt-counter-num {
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: #E9A23B;
+}
+
+.plt-counter-label {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.plt-counter-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plt-counter-week {
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.plt-counter-week-num {
+  color: #E9A23B;
+  font-weight: 800;
+}
+
+.plt-counter-dot {
+  color: #dde0e5;
+  font-size: 12px;
+}
+
+.plt-counter-tagline {
+  font-size: 12px;
+  color: #adb5bd;
+  font-style: italic;
 }
 
 /* ── Active Challenges Section Card (mirrors PriorityTab design) ── */
