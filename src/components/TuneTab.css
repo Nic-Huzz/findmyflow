@@ -370,6 +370,38 @@
 /* Stall overrides (reuses tt-drain-* layout, different accent) */
 .tt-stall-count { color: #8b5cf6; }
 
+.tt-stall-voice {
+  margin-top: 8px;
+}
+
+.tt-voice-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tt-voice-btn {
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tt-voice-btn.selected {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.06);
+  color: #8b5cf6;
+}
+
 .tt-stall-log-btn {
   border-color: rgba(139, 92, 246, 0.2);
   color: #8b5cf6;

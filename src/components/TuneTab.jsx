@@ -32,6 +32,20 @@ const DRAIN_CATEGORIES = [
   { id: 'drain_commitment', label: 'Commitment', icon: '📋' },
 ]
 
+// Voices by state — activated = doing too much, shutdown = doing nothing
+const VOICES_BY_STATE = {
+  sympathetic: [
+    { id: 'controller', name: 'Controller', icon: '🎮' },
+    { id: 'auto-pilot', name: 'Auto-Pilot', icon: '🛋️' },
+    { id: 'people-pleaser', name: 'People Pleaser', icon: '🪞' },
+  ],
+  dorsal: [
+    { id: 'ghost', name: 'Ghost', icon: '👻' },
+    { id: 'perfectionist', name: 'Perfectionist', icon: '🎭' },
+    { id: 'people-pleaser', name: 'People Pleaser', icon: '🪞' },
+  ],
+}
+
 // Stall categories — same areas as drains, but tracking where you froze
 const STALL_CATEGORIES = [
   { id: 'stall_work', label: 'Work', icon: '💼' },
@@ -78,6 +92,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   const [stallCategory, setStallCategory] = useState(null)
   const [stallNote, setStallNote] = useState('')
   const [stallState, setStallState] = useState(null) // 'sympathetic' | 'dorsal'
+  const [stallVoice, setStallVoice] = useState(null)
   const [savingStall, setSavingStall] = useState(false)
   const [recentStalls, setRecentStalls] = useState([])
 
@@ -104,7 +119,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       // Load this week's stalls
       supabase
         .from('nervous_system_checkins')
-        .select('source_quest_id, after_state, drain_note, created_at')
+        .select('source_quest_id, after_state, drain_note, protective_voice, created_at')
         .eq('user_id', userId)
         .eq('checkin_type', 'stall')
         .gte('created_at', getWeekStartLocal())
@@ -311,7 +326,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
 
   // Save a stall log
   const handleSaveStall = async () => {
-    if (!stallCategory || !stallState || savingStall) return
+    if (!stallCategory || !stallState || !stallVoice || savingStall) return
     setSavingStall(true)
 
     try {
@@ -322,6 +337,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         checkin_type: 'stall',
         source_quest_id: stallCategory,
         drain_note: stallNote.trim() || null,
+        protective_voice: stallVoice,
       })
 
       if (error) throw error
@@ -331,11 +347,12 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       setStallCategory(null)
       setStallNote('')
       setStallState(null)
+      setStallVoice(null)
       setShowStallForm(false)
 
       const { data } = await supabase
         .from('nervous_system_checkins')
-        .select('source_quest_id, after_state, drain_note, created_at')
+        .select('source_quest_id, after_state, drain_note, protective_voice, created_at')
         .eq('user_id', userId)
         .eq('checkin_type', 'stall')
         .gte('created_at', getWeekStartLocal())
@@ -650,13 +667,13 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
                 <div className="tt-state-buttons">
                   <button
                     className={`tt-state-btn tt-state-activated ${stallState === 'sympathetic' ? 'selected' : ''}`}
-                    onClick={() => setStallState('sympathetic')}
+                    onClick={() => { setStallState('sympathetic'); setStallVoice(null) }}
                   >
                     <span>😬</span> Activated
                   </button>
                   <button
                     className={`tt-state-btn tt-state-shutdown ${stallState === 'dorsal' ? 'selected' : ''}`}
-                    onClick={() => setStallState('dorsal')}
+                    onClick={() => { setStallState('dorsal'); setStallVoice(null) }}
                   >
                     <span>😶</span> Shutdown
                   </button>
@@ -664,17 +681,35 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
               </div>
             )}
 
+            {/* Voice picker — shows after state selection */}
+            {stallState && (
+              <div className="tt-stall-voice">
+                <span className="tt-state-label">Which voice showed up?</span>
+                <div className="tt-voice-buttons">
+                  {VOICES_BY_STATE[stallState].map(v => (
+                    <button
+                      key={v.id}
+                      className={`tt-voice-btn ${stallVoice === v.id ? 'selected' : ''}`}
+                      onClick={() => { hapticLight(); setStallVoice(v.id) }}
+                    >
+                      <span>{v.icon}</span> {v.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="tt-drain-actions">
               <button
                 className="tt-drain-save tt-stall-save"
-                disabled={!stallCategory || !stallState || savingStall}
+                disabled={!stallCategory || !stallState || !stallVoice || savingStall}
                 onClick={handleSaveStall}
               >
                 {savingStall ? 'Saving...' : 'Log Stall'}
               </button>
               <button
                 className="tt-drain-cancel"
-                onClick={() => { setShowStallForm(false); setStallCategory(null); setStallNote(''); setStallState(null) }}
+                onClick={() => { setShowStallForm(false); setStallCategory(null); setStallNote(''); setStallState(null); setStallVoice(null) }}
               >
                 Cancel
               </button>
@@ -690,7 +725,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
                 <div key={i} className="tt-drain-item">
                   <span className="tt-drain-item-icon">{cat?.icon || '🧊'}</span>
                   <div className="tt-drain-item-body">
-                    <span className="tt-drain-item-cat">{cat?.label || 'Stall'}</span>
+                    <span className="tt-drain-item-cat">{cat?.label || 'Stall'}{stall.protective_voice ? ` · ${stall.protective_voice}` : ''}</span>
                     {stall.drain_note && <span className="tt-drain-item-note">{stall.drain_note}</span>}
                   </div>
                   <span className={`tt-drain-item-state ${stall.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
