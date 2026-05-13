@@ -155,7 +155,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
 
   // Rest moved to Healing tab
 
-  // Inline completion: tap Complete → show state picker → save
+  // Inline completion: tap Complete → save + auto-log ventral for capacity
   const handleInlineComplete = async (quest) => {
     if (completingQuestId) return
     setCompletingQuestId(quest.id)
@@ -183,7 +183,16 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         throw questError
       }
 
-      // 2. Increment scores
+      // 2. Log ventral state for capacity score
+      await supabase.from('nervous_system_checkins').insert({
+        user_id: userId,
+        before_state: null,
+        after_state: 'ventral',
+        checkin_type: 'tune',
+        source_quest_id: quest.id,
+      })
+
+      // 3. Increment scores
       const { error: scoreError } = await supabase.rpc('increment_scores', {
         p_user_id: userId,
         p_project_id: null,
@@ -194,7 +203,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       if (scoreError) console.warn('Tune score increment error:', scoreError)
 
       hapticSuccess()
-      setStatePickerQuestId(null)
       setCapacityRefresh(n => n + 1)
 
       // Refresh completions
