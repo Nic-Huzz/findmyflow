@@ -243,10 +243,12 @@ export default function ExperienceCreate() {
               <option value="workshop">Workshop</option>
               <option value="retreat">Retreat</option>
               <option value="circle">Circle / Gathering</option>
+              <option value="cohort">Cohort / Course</option>
+              <option value="performance">Live Event / Performance</option>
+              <option value="content">Content Launch</option>
               <option value="online">Online Session</option>
               <option value="one_on_one">1:1 Session</option>
               <option value="popup">Pop-up Event</option>
-              <option value="course">Course</option>
             </select>
           </label>
 
