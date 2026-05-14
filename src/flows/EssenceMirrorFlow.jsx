@@ -744,6 +744,11 @@ export default function EssenceMirrorFlow() {
                     <button
                       className="primary-button"
                       onClick={async () => {
+                        // Check file size before sending (max 4MB)
+                        if (avatarPhoto && avatarPhoto.size > 4 * 1024 * 1024) {
+                          setAvatarError(`Photo is too large (${(avatarPhoto.size / 1024 / 1024).toFixed(1)}MB). Please use a photo under 4MB.`)
+                          return
+                        }
                         setAvatarGenerating(true)
                         setAvatarError(null)
                         const loadingMessages = [
@@ -790,7 +795,10 @@ Create a dynamic pose and scene background that embodies this essence. The chara
 
                             if (error || data?.error) {
                               clearInterval(loadingInterval)
-                              setAvatarError(data?.message || 'Generation failed. Try a different photo.')
+                              const msg = data?.error === 'content_policy'
+                                ? 'The AI couldn\'t transform this photo. Try a clearer headshot with good lighting.'
+                                : data?.message || 'Generation failed. Try a different photo.'
+                              setAvatarError(msg)
                               setAvatarGenerating(false)
                               return
                             }
