@@ -7,7 +7,7 @@
 
 ## The Master Equation
 
-> **Safety × Activation = Vibe Rise**
+> **Safety × Expression = Vibe Rise**
 
 This is the unifying principle every product, event, and experience in the ecosystem embodies. Multiplication, not addition — both ingredients are required. Either one at zero produces nothing.
 
@@ -232,7 +232,7 @@ The methodology that removes blockages to safety and activation. The trauma-info
 Healing But Fun does the clearing. Vibe Rise is what's possible once cleared.
 
 ### Layer 3: The Vehicles — Products & Experiences
-Every offering embodies the Vibe Rise Method (Safety × Activation) through a specific delivery mechanism. Different vehicles, same destination.
+Every offering embodies the Vibe Rise Method (Safety × Expression) through a specific delivery mechanism. Different vehicles, same destination.
 
 ### The Brand Stack At A Glance
 
@@ -244,7 +244,7 @@ For quick reference, the complete naming architecture:
 | **Vibe Rise** | The outcome / state / movement name | The promise. The destination. The activated-safety state every product delivers. |
 | **The Wahoo** | The felt name / experiential language | Visceral, accessible language for the state. Recruitment and storytelling. |
 | **Hyperlucid** | The technical / scientific name | Credibility contexts. Research conversations. Newberg's term for peak Vibe Rise. |
-| **The Vibe Rise Method** | The principle | Safety × Activation. The unifying equation behind all vehicles. |
+| **The Vibe Rise Method** | The principle | Safety × Expression. The unifying equation behind all vehicles. |
 | **FindMyFlow** | The maintenance engine | Daily practice tool. The app that holds people in Vibe Rise between events. |
 | **Zarlo** | The AI coach (inside FindMyFlow) | Personalized guidance, pattern recognition, ongoing coaching. |
 
@@ -387,7 +387,7 @@ Healing But Fun is the company's voice, methodology, and brand promise. Vibe Ris
 **Brand stack:**
 - **Healing But Fun** — the company / philosophy / how
 - **Vibe Rise** — the outcome / state / what
-- **The Vibe Rise Method** — the principle (Safety × Activation)
+- **The Vibe Rise Method** — the principle (Safety × Expression)
 - **Each product** — a specific vehicle / where & when
 
 ---
@@ -484,7 +484,7 @@ Nobody combines:
 
 Each existing player owns one or two of these. Nobody integrates all seven into a single coherent ecosystem.
 
-**Vibe Rise is the integration.** Safety × Activation, delivered through multiple vehicles, accessible at every price point, building toward daily baseline access of the state humans evolved to inhabit but rarely reach.
+**Vibe Rise is the integration.** Safety × Expression, delivered through multiple vehicles, accessible at every price point, building toward daily baseline access of the state humans evolved to inhabit but rarely reach.
 
 ### The Positioning Statement
 

@@ -445,7 +445,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           </div>
           <span className="tt-section-count">{totalDone}/{totalPractices}</span>
         </div>
-        <p className="tt-section-sub">Building your capacity to hold Vibe Rise. Safety builds the container, activation expands it.</p>
+        <p className="tt-section-sub">Building your capacity to hold Vibe Rise. Safety builds the container, expression expands it.</p>
 
         {/* Safety sub-section */}
         <div className="tt-subsection">
@@ -463,7 +463,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         <div className="tt-subsection">
           <div className="tt-subsection-header">
             <span className="tt-subsection-icon">🔥</span>
-            <span className="tt-subsection-label tt-label-activation">Activation</span>
+            <span className="tt-subsection-label tt-label-activation">Expression</span>
             <span className="tt-subsection-count">{activationDone}/{activationPractices.length}</span>
           </div>
           <div className="tt-quest-list">
@@ -499,7 +499,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
             <div className="tt-subsection">
               <div className="tt-subsection-header">
                 <span className="tt-subsection-icon">🔥</span>
-                <span className="tt-subsection-label tt-label-activation">Activation</span>
+                <span className="tt-subsection-label tt-label-activation">Expression</span>
               </div>
               <div className="tt-quest-list">
                 {weeklyActivation.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
@@ -520,7 +520,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
             <span className="tt-section-count tt-drain-count">{recentDrains.length} this week</span>
           )}
         </div>
-        <p className="tt-section-sub">What's depleting your energy? Drains pull you out of activation faster than practices can refill it.</p>
+        <p className="tt-section-sub">What's depleting your energy? Drains pull you out of expression faster than practices can refill it.</p>
 
         {!showDrainForm ? (
           <button
