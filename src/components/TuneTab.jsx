@@ -57,18 +57,25 @@ const STALL_CATEGORIES = [
   { id: 'stall_commitment', label: 'Commitment', icon: '📋' },
 ]
 
-// Daily practice IDs — all daily Tune quests merged (Practice + Reconnect)
+// All daily Tune quest IDs (used for filtering from JSON)
 const DAILY_PRACTICE_IDS = [
-  'reconnect_morning_breathwork',
-  'practice_cold_exposure',
-  'practice_voice_work',
-  'reconnect_morning_dance',
+  // Maintenance
   'practice_sleep',
+  'practice_exercise',
   'practice_sunlight',
   'practice_healthy_meal',
+  // Safety
+  'reconnect_morning_breathwork',
   'reconnect_morning_meditation',
   'reconnect_daily_prayer',
-  'reconnect_self_identified',
+  'practice_connect_friend',
+  'practice_feel_emotions',
+  // Expression
+  'reconnect_morning_dance',
+  'practice_voice_work',
+  'practice_own_style',
+  'practice_social_media',
+  'practice_honour_values',
 ]
 
 export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
@@ -169,10 +176,15 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
     return labels
   }
 
-  // Section data — split by capacityType
+  // Section data — split by capacityType (maintenance / safety / expression)
   const allDailyPractices = useMemo(() =>
     DAILY_PRACTICE_IDS.map(id => allQuests.find(q => q.id === id)).filter(Boolean),
     [allQuests]
+  )
+
+  const maintenancePractices = useMemo(() =>
+    allDailyPractices.filter(q => q.capacityType === 'maintenance'),
+    [allDailyPractices]
   )
 
   const safetyPractices = useMemo(() =>
@@ -180,8 +192,8 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
     [allDailyPractices]
   )
 
-  const activationPractices = useMemo(() =>
-    allDailyPractices.filter(q => q.capacityType === 'activation'),
+  const expressionPractices = useMemo(() =>
+    allDailyPractices.filter(q => q.capacityType === 'expression'),
     [allDailyPractices]
   )
 
@@ -191,12 +203,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
     [allQuests]
   )
 
-  const weeklyActivation = useMemo(() =>
-    allQuests.filter(q => q.frequency === 'weekly' && q.capacityType === 'activation'),
+  const weeklyExpression = useMemo(() =>
+    allQuests.filter(q => q.frequency === 'weekly' && (q.capacityType === 'expression' || q.capacityType === 'activation')),
     [allQuests]
   )
-
-  // Rest moved to Healing tab
 
   // Inline completion: tap Complete → save + auto-log ventral for capacity
   const handleInlineComplete = async (quest) => {
@@ -426,10 +436,11 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   }
 
   // Count today's completed practices
+  const maintenanceDone = maintenancePractices.filter(q => isCompletedToday(q.id)).length
   const safetyDone = safetyPractices.filter(q => isCompletedToday(q.id)).length
-  const activationDone = activationPractices.filter(q => isCompletedToday(q.id)).length
-  const totalDone = safetyDone + activationDone
-  const totalPractices = safetyPractices.length + activationPractices.length
+  const expressionDone = expressionPractices.filter(q => isCompletedToday(q.id)).length
+  const totalDone = maintenanceDone + safetyDone + expressionDone
+  const totalPractices = maintenancePractices.length + safetyPractices.length + expressionPractices.length
 
   return (
     <div className="tune-tab">
@@ -445,7 +456,19 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           </div>
           <span className="tt-section-count">{totalDone}/{totalPractices}</span>
         </div>
-        <p className="tt-section-sub">Building your capacity to hold Vibe Rise. Safety builds the container, expression expands it.</p>
+        <p className="tt-section-sub">Safety builds the container, expression expands it. Maintenance keeps it all running.</p>
+
+        {/* Maintenance sub-section */}
+        <div className="tt-subsection">
+          <div className="tt-subsection-header">
+            <span className="tt-subsection-icon">⚙️</span>
+            <span className="tt-subsection-label tt-label-maintenance">Maintenance</span>
+            <span className="tt-subsection-count">{maintenanceDone}/{maintenancePractices.length}</span>
+          </div>
+          <div className="tt-quest-list">
+            {maintenancePractices.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+          </div>
+        </div>
 
         {/* Safety sub-section */}
         <div className="tt-subsection">
@@ -459,21 +482,21 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           </div>
         </div>
 
-        {/* Activation sub-section */}
+        {/* Expression sub-section */}
         <div className="tt-subsection">
           <div className="tt-subsection-header">
             <span className="tt-subsection-icon">🔥</span>
             <span className="tt-subsection-label tt-label-activation">Expression</span>
-            <span className="tt-subsection-count">{activationDone}/{activationPractices.length}</span>
+            <span className="tt-subsection-count">{expressionDone}/{expressionPractices.length}</span>
           </div>
           <div className="tt-quest-list">
-            {activationPractices.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+            {expressionPractices.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
           </div>
         </div>
       </div>
 
       {/* Section 2: Weekly */}
-      {(weeklySafety.length > 0 || weeklyActivation.length > 0) && (
+      {(weeklySafety.length > 0 || weeklyExpression.length > 0) && (
         <div className="tt-section">
           <div className="tt-section-header">
             <div className="tt-section-header-left">
@@ -495,14 +518,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
             </div>
           )}
 
-          {weeklyActivation.length > 0 && (
+          {weeklyExpression.length > 0 && (
             <div className="tt-subsection">
               <div className="tt-subsection-header">
                 <span className="tt-subsection-icon">🔥</span>
                 <span className="tt-subsection-label tt-label-activation">Expression</span>
               </div>
               <div className="tt-quest-list">
-                {weeklyActivation.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+                {weeklyExpression.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
               </div>
             </div>
           )}

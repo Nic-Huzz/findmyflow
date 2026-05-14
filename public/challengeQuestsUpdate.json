@@ -254,7 +254,9 @@
       "points": 3,
       "inputType": "checkbox",
       "healing_checkin": true,
-      "capacityType": "activation"
+      "capacityType": "expression",
+      "archived": true,
+      "archived_reason": "Dropped from daily practices — high barrier, not accessible daily for most users"
     },
     {
       "id": "practice_voice_work",
@@ -262,11 +264,11 @@
       "type": "Practice",
       "frequency": "daily",
       "name": "Voice Work",
-      "description": "Humming, singing, sounding. Direct vagal stimulation, free, instant.",
+      "description": "Humming, singing, sounding. Express with your voice and stimulate the vagus nerve.",
       "points": 3,
       "inputType": "checkbox",
       "healing_checkin": true,
-      "capacityType": "safety"
+      "capacityType": "expression"
     },
     {
       "id": "practice_sleep",
@@ -278,7 +280,19 @@
       "points": 3,
       "inputType": "checkbox",
       "healing_checkin": true,
-      "capacityType": "safety"
+      "capacityType": "maintenance"
+    },
+    {
+      "id": "practice_exercise",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Exercise",
+      "description": "Move your body. Walk, gym, swim, sport. Physical movement is nervous system medicine.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true,
+      "capacityType": "maintenance"
     },
     {
       "id": "practice_sunlight",
@@ -290,21 +304,19 @@
       "points": 3,
       "inputType": "checkbox",
       "healing_checkin": true,
-      "capacityType": "safety"
+      "capacityType": "maintenance"
     },
     {
       "id": "practice_healthy_meal",
       "category": "Tune",
       "type": "Practice",
       "frequency": "daily",
-      "name": "Eat a Healthy Meal",
-      "description": "Log breakfast, lunch, or dinner. Fuel the nervous system with real food.",
+      "name": "Healthy Eating",
+      "description": "Fuel the nervous system with real food. At least one proper meal today.",
       "points": 3,
       "inputType": "checkbox",
       "healing_checkin": true,
-      "maxCompletions": 3,
-      "maxPerDay": 3,
-      "capacityType": "safety"
+      "capacityType": "maintenance"
     },
     {
       "id": "reconnect_morning_meditation",
@@ -312,7 +324,7 @@
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Meditation",
-      "description": "Establish connection with your essence voice and drop into a meditation",
+      "description": "Drop in and connect with your essence voice.",
       "points": 5,
       "inputType": "checkbox",
       "healing_checkin": true,
@@ -323,12 +335,12 @@
       "category": "Tune",
       "type": "Reconnect",
       "frequency": "daily",
-      "name": "Rise & Vibe Dance",
-      "description": "Play one of your favourite bangers and get your dance on. Rate how you feel out of 10 before and after.",
+      "name": "Dance / Movement",
+      "description": "Play your favourite song and move. Full embodied expression.",
       "points": 3,
       "inputType": "checkbox",
       "healing_checkin": true,
-      "capacityType": "activation"
+      "capacityType": "expression"
     },
     {
       "id": "reconnect_morning_breathwork",
@@ -336,11 +348,71 @@
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Breathwork",
-      "description": "Complete breathwork and breath life into your essence voice",
+      "description": "Breathe life into your essence voice. Build vagal tone.",
       "points": 5,
       "inputType": "checkbox",
       "healing_checkin": true,
       "capacityType": "safety"
+    },
+    {
+      "id": "practice_connect_friend",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Connect with a Friend",
+      "description": "A real conversation with someone safe. Co-regulation is the deepest safety builder.",
+      "points": 4,
+      "inputType": "checkbox",
+      "healing_checkin": true,
+      "capacityType": "safety"
+    },
+    {
+      "id": "practice_feel_emotions",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Feel Your Emotions",
+      "description": "Sit with what's there instead of numbing. Prove to your nervous system that emotions are survivable.",
+      "points": 4,
+      "inputType": "checkbox",
+      "healing_checkin": true,
+      "capacityType": "safety"
+    },
+    {
+      "id": "practice_own_style",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Own Your Style",
+      "description": "Dress as your essence, not your protective voice. Show the world who you are before you speak.",
+      "points": 3,
+      "inputType": "checkbox",
+      "healing_checkin": true,
+      "capacityType": "expression"
+    },
+    {
+      "id": "practice_social_media",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Show Up on Social Media",
+      "description": "Post, comment, share. Be visible. The Ghost's nightmare, your essence's playground.",
+      "points": 4,
+      "inputType": "checkbox",
+      "healing_checkin": true,
+      "capacityType": "expression"
+    },
+    {
+      "id": "practice_honour_values",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "Honour Your Values",
+      "description": "Did you act from your values today? Your values are an extension of your expression.",
+      "points": 4,
+      "inputType": "checkbox",
+      "healing_checkin": true,
+      "capacityType": "expression"
     },
     {
       "id": "reconnect_self_identified",
@@ -353,19 +425,19 @@
       "inputType": "text",
       "placeholder": "What will you do to reconnect today?",
       "healing_checkin": true,
-      "capacityType": "safety"
+      "capacityType": "safety",
+      "archived": true,
+      "archived_reason": "Replaced by specific safety practices — Connect with a Friend, Feel Your Emotions"
     },
     {
       "id": "reconnect_daily_prayer",
       "category": "Tune",
       "type": "Reconnect",
       "frequency": "daily",
-      "name": "Daily Prayer",
-      "description": "Pray, share gratitude, set intentions, make asks of whatever greater being you believe is present",
+      "name": "Prayer",
+      "description": "Pray, share gratitude, set intentions. Connect to something bigger than yourself.",
       "points": 4,
-      "inputType": "text",
-      "placeholder": "What did you pray for or express gratitude about today?",
-      "learnMore": "Whether you believe in prayer or not, what I've found is when you do pray and ask for things, every opportunity or serendipity that follows has a sense of magic.\n\nIt leads you to ask \"Is this an answer to my prayer?\". I've found it leads me to remain open to any or all experiences and ensures I don't simply dismiss something prematurely.",
+      "inputType": "checkbox",
       "healing_checkin": true,
       "capacityType": "safety"
     },

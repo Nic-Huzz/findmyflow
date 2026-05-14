@@ -1,70 +1,109 @@
 /**
  * CapacityCard.jsx
  *
- * Compact card showing the weekly Capacity Score.
- * Renders at the top of the Level tab.
+ * Capacity Score = Safety × Expression, displayed as:
+ *   1. Equation row with trend arrows
+ *   2. Zone bar (Stuck / Wired / Grounded / Vibe Rise)
+ *   3. Maintenance rolling 7-day % with streak dots
  *
- * Score: 0-100 normalized from state check-in data.
- * Shows: score number, fill bar, trend arrow vs last week.
- *
- * CSS prefix: cc- (scoped under .level-tab)
- * Created: 2026-05-09
+ * CSS prefix: cc- (scoped under .tune-tab or .level-tab)
+ * Rewritten: 2026-05-14
  */
 
 import useCapacityScore from '../../hooks/useCapacityScore'
+import './CapacityCard.css'
+
+const ZONE_LABELS = [
+  { id: 'stuck', label: 'Stuck' },
+  { id: 'wired', label: 'Wired' },
+  { id: 'grounded', label: 'Grounded' },
+  { id: 'vibe-rise', label: 'Vibe Rise' },
+]
+
+const TREND_ARROWS = { up: '↑', down: '↓', flat: '→' }
 
 export default function CapacityCard({ userId, refreshTrigger = 0 }) {
-  const { score, trend, stateDistribution, dataPoints, loading } = useCapacityScore(userId, refreshTrigger)
+  const {
+    safety, expression, capacity, zone,
+    trend, safetyTrend, expressionTrend,
+    maintenancePct, maintenanceDays,
+    dataPoints, loading,
+  } = useCapacityScore(userId, refreshTrigger)
 
   if (loading) return null
-  if (score === null || dataPoints === 0) {
+  if (capacity === null || dataPoints === 0) {
     return (
       <div className="cc-card cc-empty">
         <div className="cc-header">
-          <span className="cc-label">Capacity Score</span>
+          <span className="cc-title">Capacity Score</span>
         </div>
-        <p className="cc-empty-text">Complete a daily check-in to start tracking</p>
+        <p className="cc-empty-text">Complete a daily practice to start tracking</p>
       </div>
     )
   }
 
-  const trendText = trend > 0 ? `+${trend}` : trend < 0 ? `${trend}` : '—'
+  const trendText = trend > 0 ? `+${trend}` : trend < 0 ? `${trend}` : ''
   const trendClass = trend > 0 ? 'cc-trend-up' : trend < 0 ? 'cc-trend-down' : 'cc-trend-flat'
 
   return (
     <div className="cc-card">
+      {/* Header */}
       <div className="cc-header">
-        <span className="cc-label">Capacity Score</span>
-        <span className={`cc-trend ${trendClass}`}>
-          {trend > 0 ? '↑' : trend < 0 ? '↓' : ''} {trendText}
+        <span className="cc-title">Capacity Score</span>
+        {trend !== 0 && (
+          <span className={`cc-trend ${trendClass}`}>
+            {trend > 0 ? '↑' : '↓'} {trendText}
+          </span>
+        )}
+      </div>
+
+      {/* Equation: Safety × Expression = Score */}
+      <div className="cc-equation">
+        <span className="cc-eq-pill cc-eq-safety">
+          🛡️ Safety {safety}
+          {safetyTrend && <span className={`cc-eq-arrow cc-eq-arrow-${safetyTrend}`}>{TREND_ARROWS[safetyTrend]}</span>}
         </span>
+        <span className="cc-eq-op">×</span>
+        <span className="cc-eq-pill cc-eq-expression">
+          🔥 Expression {expression}
+          {expressionTrend && <span className={`cc-eq-arrow cc-eq-arrow-${expressionTrend}`}>{TREND_ARROWS[expressionTrend]}</span>}
+        </span>
+        <span className="cc-eq-op">=</span>
+        <span className={`cc-eq-result cc-zone-${zone}`}>{capacity}</span>
       </div>
-      <div className="cc-score-row">
-        <span className="cc-score">{score}</span>
+
+      {/* Zone bar */}
+      <div className="cc-bar-wrap">
         <div className="cc-bar-track">
-          <div
-            className="cc-bar-fill"
-            style={{ width: `${Math.min(100, score)}%` }}
-          />
+          {ZONE_LABELS.map(z => (
+            <div key={z.id} className={`cc-bar-zone cc-bz-${z.id} ${zone === z.id ? 'active' : ''}`} />
+          ))}
+        </div>
+        <div className="cc-marker" style={{ left: `${Math.min(99, Math.max(1, capacity))}%` }} />
+      </div>
+      <div className="cc-zone-labels">
+        {ZONE_LABELS.map(z => (
+          <span key={z.id} className={`cc-zone-label ${zone === z.id ? `active cc-zl-${z.id}` : ''}`}>
+            {z.label}
+          </span>
+        ))}
+      </div>
+
+      {/* Maintenance */}
+      <div className="cc-maint">
+        <div className="cc-maint-header">
+          <span className="cc-maint-label">Maintenance</span>
+          <span className="cc-maint-pct">{maintenancePct}%</span>
+        </div>
+        <div className="cc-maint-dots">
+          {maintenanceDays.map((day, i) => (
+            <div key={i} className="cc-maint-day">
+              <div className={`cc-maint-dot cc-maint-${day.status}`} />
+              <span className="cc-maint-day-label">{day.label}</span>
+            </div>
+          ))}
         </div>
       </div>
-      <p className="cc-explainer">How much of your week you spent feeling alive, based on your check-ins.</p>
-      {stateDistribution && (
-        <div className="cc-distribution">
-          {stateDistribution.vibe_rise > 0 && (
-            <span className="cc-dist-item cc-dist-vibe">⚡&nbsp;{stateDistribution.vibe_rise}%</span>
-          )}
-          {stateDistribution.ventral > 0 && (
-            <span className="cc-dist-item cc-dist-safe">😊&nbsp;{stateDistribution.ventral}%</span>
-          )}
-          {stateDistribution.sympathetic > 0 && (
-            <span className="cc-dist-item cc-dist-activated">😬&nbsp;{stateDistribution.sympathetic}%</span>
-          )}
-          {stateDistribution.dorsal > 0 && (
-            <span className="cc-dist-item cc-dist-shutdown">😶&nbsp;{stateDistribution.dorsal}%</span>
-          )}
-        </div>
-      )}
     </div>
   )
 }

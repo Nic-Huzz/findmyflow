@@ -97,8 +97,12 @@
   letter-spacing: 0.5px;
 }
 
+.tt-label-maintenance {
+  color: #6c757d;
+}
+
 .tt-label-safety {
-  color: #10b981;
+  color: #5e17eb;
 }
 
 .tt-label-activation {

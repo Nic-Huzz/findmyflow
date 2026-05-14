@@ -1,0 +1,210 @@
+/**
+ * CapacityCard.css
+ * Capacity Score card: equation + zone bar + maintenance dots.
+ * CSS prefix: cc-
+ * Created: 2026-05-14
+ */
+
+/* === CARD === */
+.cc-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+}
+
+.cc-empty { text-align: center; }
+.cc-empty-text { font-size: 13px; color: #adb5bd; margin: 4px 0 0; }
+
+/* === HEADER === */
+.cc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cc-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.cc-trend { font-size: 12px; font-weight: 700; }
+.cc-trend-up { color: #10b981; }
+.cc-trend-down { color: #ef4444; }
+.cc-trend-flat { color: #adb5bd; }
+
+/* === EQUATION ROW === */
+.cc-equation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.cc-eq-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cc-eq-safety {
+  background: rgba(94, 23, 235, 0.08);
+  color: #5e17eb;
+}
+
+.cc-eq-expression {
+  background: rgba(233, 162, 59, 0.08);
+  color: #c88520;
+}
+
+.cc-eq-arrow {
+  font-size: 10px;
+  margin-left: 2px;
+}
+.cc-eq-arrow-up { color: #10b981; }
+.cc-eq-arrow-down { color: #ef4444; }
+.cc-eq-arrow-flat { color: #adb5bd; }
+
+.cc-eq-op {
+  font-size: 13px;
+  font-weight: 800;
+  color: #adb5bd;
+}
+
+.cc-eq-result {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #1a1a2e;
+}
+
+.cc-zone-stuck { color: #ef4444; }
+.cc-zone-wired { color: #f97316; }
+.cc-zone-grounded { color: #5e17eb; }
+.cc-zone-vibe-rise { color: #E9A23B; }
+
+/* === ZONE BAR === */
+.cc-bar-wrap {
+  position: relative;
+  margin-bottom: 6px;
+}
+
+.cc-bar-track {
+  display: flex;
+  height: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cc-bar-zone { flex: 1; }
+.cc-bar-zone:first-child { border-radius: 12px 0 0 12px; }
+.cc-bar-zone:last-child { border-radius: 0 12px 12px 0; }
+
+.cc-bz-stuck { background: rgba(239, 68, 68, 0.12); }
+.cc-bz-wired { background: rgba(249, 115, 22, 0.10); }
+.cc-bz-grounded { background: rgba(94, 23, 235, 0.08); }
+.cc-bz-vibe-rise { background: rgba(233, 162, 59, 0.10); }
+
+.cc-bz-stuck.active { background: rgba(239, 68, 68, 0.25); }
+.cc-bz-wired.active { background: rgba(249, 115, 22, 0.20); }
+.cc-bz-grounded.active { background: rgba(94, 23, 235, 0.18); }
+.cc-bz-vibe-rise.active { background: rgba(233, 162, 59, 0.22); }
+
+.cc-marker {
+  position: absolute;
+  top: -2px;
+  width: 4px;
+  height: 28px;
+  border-radius: 2px;
+  background: #1a1a2e;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  transform: translateX(-50%);
+  transition: left 0.6s ease;
+}
+
+/* === ZONE LABELS === */
+.cc-zone-labels {
+  display: flex;
+  margin-bottom: 14px;
+}
+
+.cc-zone-label {
+  flex: 1;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #ccc;
+}
+
+.cc-zone-label.active { font-weight: 800; }
+.cc-zl-stuck { color: #ef4444; }
+.cc-zl-wired { color: #f97316; }
+.cc-zl-grounded { color: #5e17eb; }
+.cc-zl-vibe-rise { color: #E9A23B; }
+
+/* === MAINTENANCE === */
+.cc-maint {
+  border-top: 1px solid #f0f0f5;
+  padding-top: 12px;
+}
+
+.cc-maint-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.cc-maint-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6c757d;
+}
+
+.cc-maint-pct {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.cc-maint-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.cc-maint-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+}
+
+.cc-maint-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e9ecef;
+}
+
+.cc-maint-filled { background: #10b981; }
+.cc-maint-partial { background: #fbbf24; }
+.cc-maint-low { background: #ef4444; }
+.cc-maint-empty { background: #e9ecef; }
+
+.cc-maint-day-label {
+  font-size: 9px;
+  color: #bbb;
+  font-weight: 600;
+}
