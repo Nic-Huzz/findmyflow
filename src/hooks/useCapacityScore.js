@@ -137,19 +137,19 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
     const lastWeekStart = getWeekStartDate(1)
 
     Promise.all([
-      // This week's quest completions (Tune + Healing)
+      // This week's quest completions (Tune + Healing + Groans for Embody Your Essence)
       supabase
         .from('quest_completions')
         .select('quest_id, quest_category, completed_at')
         .eq('user_id', userId)
-        .in('quest_category', ['Tune', 'Healing'])
+        .in('quest_category', ['Tune', 'Healing', 'Groans'])
         .gte('completed_at', thisWeekStart),
       // Last week's quest completions
       supabase
         .from('quest_completions')
         .select('quest_id, quest_category, completed_at')
         .eq('user_id', userId)
-        .in('quest_category', ['Tune', 'Healing'])
+        .in('quest_category', ['Tune', 'Healing', 'Groans'])
         .gte('completed_at', lastWeekStart)
         .lt('completed_at', thisWeekStart),
       // This week's NS checkins (drains + stalls)
@@ -167,12 +167,14 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
         .in('checkin_type', ['drain', 'stall'])
         .gte('created_at', lastWeekStart)
         .lt('created_at', thisWeekStart),
-      // This week's wahoos
+      // This week's wahoos (real edge-crossing: scary >= 7 AND wahoo >= 7)
       supabase
         .from('groan_challenges')
         .select('id')
         .eq('user_id', userId)
         .eq('status', 'completed')
+        .gte('scary_score', 7)
+        .gte('wahoo_score', 7)
         .gte('completed_at', thisWeekStart),
       // Last week's wahoos
       supabase
@@ -180,6 +182,8 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
         .select('id')
         .eq('user_id', userId)
         .eq('status', 'completed')
+        .gte('scary_score', 7)
+        .gte('wahoo_score', 7)
         .gte('completed_at', lastWeekStart)
         .lt('completed_at', thisWeekStart),
     ]).then(([
