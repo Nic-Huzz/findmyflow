@@ -1,48 +1,51 @@
 /**
  * useCapacityScore.js
  *
- * Capacity Score = Safety × Expression (both 0-10, product mapped to 0-100).
+ * Capacity = Safety × Expression (each 0-10, product 0-100).
  *
- * Safety (container): how held is your nervous system?
- *   + safety practices (breathwork, meditation, prayer, connect, feel emotions)
- *   + healing quests
- *   - stalls (protective voice won)
+ * Everything measured in Wahoo-equivalents:
+ *   practice = 1pt, daily healing = 1pt, weekly healing = 3pt,
+ *   wahoo = 5pt, stall = -1pt, drain = -1pt
  *
- * Expression (expansion): how much are you showing up as your essence?
- *   + wahoos (completed courage challenges)
- *   + expression practices (dance, voice, style, social, values)
- *   + embody your essence quest
- *   - drains (energy depleted)
+ * Score = min(10, BASELINE + net_points / DIVISOR)
+ * Baseline 3 = "you're a human with a nervous system, that's not zero"
+ * Divisor 5 = calibrated so beginners ≈ 25 (Wired), month 2 ≈ 85+ (Vibe Rise)
+ *
+ * Display multiplier: points shown in app are ×2 for bigger dopamine.
+ * Internal math uses ×1. Displayed via DISPLAY_MULTIPLIER constant.
+ *
+ * Zones: 0-25 Stuck, 25-50 Wired, 50-75 Grounded, 75-100 Vibe Rise
+ * Rolling 7-day window. First 7 days: projected by days elapsed.
  *
  * Maintenance: separate rolling 7-day % (sleep, exercise, eating, sunlight)
  *
- * Zone mapping: 0-25 Stuck, 25-50 Wired, 50-75 Grounded, 75-100 Vibe Rise
- *
- * Created: 2026-05-09, Rewritten: 2026-05-14
+ * Rewritten: 2026-05-14
  */
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal, formatLocalDate } from '../lib/dateUtils'
 
+// Display multiplier — points shown in UI are ×2
+export const DISPLAY_MULTIPLIER = 2
+
+// Internal point values (×1)
+const POINTS = {
+  practice: 1,
+  dailyHealing: 1,
+  weeklyHealing: 3,
+  wahoo: 5,
+  stall: -1,
+  drain: -1,
+}
+
+const BASELINE = 3
+const DIVISOR = 5
+
 // Quest IDs by category
 const MAINTENANCE_IDS = ['practice_sleep', 'practice_exercise', 'practice_sunlight', 'practice_healthy_meal']
 const SAFETY_IDS = ['reconnect_morning_breathwork', 'reconnect_morning_meditation', 'reconnect_daily_prayer', 'practice_connect_friend', 'practice_feel_emotions']
 const EXPRESSION_IDS = ['reconnect_morning_dance', 'practice_voice_work', 'practice_own_style', 'practice_social_media', 'practice_honour_values']
-
-// Scoring targets (weekly)
-const SAFETY_PRACTICE_TARGET = 20   // ~4 safety practices/day × 5 days
-const SAFETY_HEALING_TARGET = 4     // ~4 healing quests/week
-const EXPRESSION_PRACTICE_TARGET = 15 // ~3 expression practices/day × 5 days
-const EXPRESSION_WAHOO_TARGET = 2    // 2 wahoos/week
-
-function getWeekStartDate(weeksAgo = 0) {
-  const start = getWeekStartLocal()
-  if (weeksAgo === 0) return start
-  const d = new Date(start + 'T00:00:00')
-  d.setDate(d.getDate() - weeksAgo * 7)
-  return formatLocalDate(d)
-}
 
 function getZone(score) {
   if (score >= 75) return 'vibe-rise'
@@ -51,36 +54,68 @@ function getZone(score) {
   return 'stuck'
 }
 
-function computeAxes(completions, checkins, wahoos) {
-  // --- Safety Score ---
+function getDaysInWindow(completions, checkins, wahoos) {
+  const dates = new Set()
+  ;[...completions, ...checkins].forEach(c => {
+    const d = (c.completed_at || c.created_at)?.substring(0, 10)
+    if (d) dates.add(d)
+  })
+  wahoos.forEach(w => {
+    const d = w.completed_at?.substring(0, 10)
+    if (d) dates.add(d)
+  })
+  return Math.max(1, dates.size)
+}
+
+function computeAxes(completions, checkins, wahoos, daysElapsed) {
+  // --- Count inputs ---
   const safetyPractices = completions.filter(c => SAFETY_IDS.includes(c.quest_id)).length
-  const healingQuests = completions.filter(c => c.quest_category === 'Healing').length
-  const stalls = checkins.filter(c => c.checkin_type === 'stall').length
+  const exprPractices = completions.filter(c => EXPRESSION_IDS.includes(c.quest_id)).length
 
-  const safetyFromPractices = Math.min(1, safetyPractices / SAFETY_PRACTICE_TARGET) * 4
-  const safetyFromHealing = Math.min(1, healingQuests / SAFETY_HEALING_TARGET) * 3
-  const safetyPenalty = stalls * 0.8
-  const safetyRaw = Math.max(0, Math.min(10, 1 + safetyFromPractices + safetyFromHealing - safetyPenalty))
+  const dailyHealing = completions.filter(c =>
+    c.quest_category === 'Healing' && !c.quest_id?.startsWith('reconnect_weekly')
+    && c.quest_id !== 'reconnect_remove_negative' && c.quest_id !== 'session_with_huzz'
+  ).length
+  const weeklyHealing = completions.filter(c =>
+    c.quest_category === 'Healing' && (
+      c.quest_id?.startsWith('reconnect_weekly') ||
+      c.quest_id === 'reconnect_remove_negative' ||
+      c.quest_id === 'session_with_huzz'
+    )
+  ).length
 
-  // --- Expression Score ---
-  const expressionPractices = completions.filter(c => EXPRESSION_IDS.includes(c.quest_id)).length
   const embodyEssence = completions.filter(c => c.quest_id === 'rewire_behavior_change').length
   const wahooCount = wahoos.length
+  const stalls = checkins.filter(c => c.checkin_type === 'stall').length
   const drains = checkins.filter(c => c.checkin_type === 'drain').length
 
-  const exprFromWahoos = Math.min(1, wahooCount / EXPRESSION_WAHOO_TARGET) * 4
-  const exprFromPractices = Math.min(1, expressionPractices / EXPRESSION_PRACTICE_TARGET) * 3
-  const exprFromEmbody = Math.min(1, embodyEssence) * 1
-  const exprPenalty = drains * 0.8
-  const expressionRaw = Math.max(0, Math.min(10, 1 + exprFromWahoos + exprFromPractices + exprFromEmbody - exprPenalty))
+  // --- Safety score ---
+  const safetyPositive = safetyPractices * POINTS.practice
+    + dailyHealing * POINTS.dailyHealing
+    + weeklyHealing * POINTS.weeklyHealing
+  const safetyNegative = stalls * Math.abs(POINTS.stall)
+  const safetyNet = safetyPositive - safetyNegative
 
-  // --- Capacity ---
-  const safety = Math.round(safetyRaw * 10) / 10
-  const expression = Math.round(expressionRaw * 10) / 10
-  const capacity = Math.round((safety * expression / 10) * 10)
+  // --- Expression score ---
+  const exprPositive = exprPractices * POINTS.practice
+    + wahooCount * POINTS.wahoo
+    + embodyEssence * POINTS.practice
+  const exprNegative = drains * Math.abs(POINTS.drain)
+  const exprNet = exprPositive - exprNegative
+
+  // --- Project to 7 days if in first week ---
+  const projectionFactor = daysElapsed < 7 ? (7 / daysElapsed) : 1
+  const safetyProjected = safetyNet * projectionFactor
+  const exprProjected = exprNet * projectionFactor
+
+  // --- Compute scores ---
+  const safety = Math.min(10, Math.max(0, BASELINE + safetyProjected / DIVISOR))
+  const expression = Math.min(10, Math.max(0, BASELINE + exprProjected / DIVISOR))
+  const safetyRounded = Math.round(safety * 10) / 10
+  const expressionRounded = Math.round(expression * 10) / 10
+  const capacity = Math.round(safetyRounded * expressionRounded)
 
   // --- Maintenance ---
-  // Count maintenance completions per day over the 7-day window
   const maintenanceCompletions = completions.filter(c => MAINTENANCE_IDS.includes(c.quest_id))
   const dayMap = {}
   maintenanceCompletions.forEach(c => {
@@ -91,7 +126,6 @@ function computeAxes(completions, checkins, wahoos) {
     }
   })
 
-  // Build 7-day dot data
   const maintenanceDays = []
   for (let i = 6; i >= 0; i--) {
     const d = new Date()
@@ -107,12 +141,18 @@ function computeAxes(completions, checkins, wahoos) {
     })
   }
 
-  // Rolling 7-day maintenance %
   const totalMaintPossible = MAINTENANCE_IDS.length * 7
   const totalMaintDone = maintenanceDays.reduce((sum, d) => sum + d.done, 0)
   const maintenancePct = totalMaintPossible > 0 ? Math.round((totalMaintDone / totalMaintPossible) * 100) : 0
 
-  return { safety, expression, capacity, zone: getZone(capacity), maintenancePct, maintenanceDays }
+  return {
+    safety: safetyRounded,
+    expression: expressionRounded,
+    capacity,
+    zone: getZone(capacity),
+    maintenancePct,
+    maintenanceDays,
+  }
 }
 
 export function useCapacityScore(userId, refreshTrigger = 0) {
@@ -122,7 +162,7 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
     capacity: null,
     zone: null,
     trend: 0,
-    safetyTrend: null,   // 'up' | 'down' | 'flat'
+    safetyTrend: null,
     expressionTrend: null,
     maintenancePct: 0,
     maintenanceDays: [],
@@ -133,59 +173,67 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
   useEffect(() => {
     if (!userId) return
 
-    const thisWeekStart = getWeekStartDate(0)
-    const lastWeekStart = getWeekStartDate(1)
+    // Rolling 7-day window: last 7 days from today
+    const now = new Date()
+    const sevenDaysAgo = new Date(now)
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+    const fourteenDaysAgo = new Date(now)
+    fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14)
+
+    const thisStart = formatLocalDate(sevenDaysAgo)
+    const lastStart = formatLocalDate(fourteenDaysAgo)
+    const thisEnd = formatLocalDate(now)
 
     Promise.all([
-      // This week's quest completions (Tune + Healing + Groans for Embody Your Essence)
+      // This week completions
       supabase
         .from('quest_completions')
         .select('quest_id, quest_category, completed_at')
         .eq('user_id', userId)
         .in('quest_category', ['Tune', 'Healing', 'Groans'])
-        .gte('completed_at', thisWeekStart),
-      // Last week's quest completions
+        .gte('completed_at', thisStart),
+      // Last week completions
       supabase
         .from('quest_completions')
         .select('quest_id, quest_category, completed_at')
         .eq('user_id', userId)
         .in('quest_category', ['Tune', 'Healing', 'Groans'])
-        .gte('completed_at', lastWeekStart)
-        .lt('completed_at', thisWeekStart),
-      // This week's NS checkins (drains + stalls)
+        .gte('completed_at', lastStart)
+        .lt('completed_at', thisStart),
+      // This week checkins (stalls + drains)
       supabase
         .from('nervous_system_checkins')
         .select('checkin_type, created_at')
         .eq('user_id', userId)
         .in('checkin_type', ['drain', 'stall'])
-        .gte('created_at', thisWeekStart),
-      // Last week's NS checkins
+        .gte('created_at', thisStart),
+      // Last week checkins
       supabase
         .from('nervous_system_checkins')
         .select('checkin_type, created_at')
         .eq('user_id', userId)
         .in('checkin_type', ['drain', 'stall'])
-        .gte('created_at', lastWeekStart)
-        .lt('created_at', thisWeekStart),
-      // This week's wahoos (real edge-crossing: scary >= 7 AND wahoo >= 7)
+        .gte('created_at', lastStart)
+        .lt('created_at', thisStart),
+      // This week wahoos
       supabase
         .from('groan_challenges')
-        .select('id')
+        .select('id, completed_at')
         .eq('user_id', userId)
         .eq('status', 'completed')
         .gte('scary_score', 7)
         .gte('wahoo_score', 7)
-        .gte('completed_at', thisWeekStart),
-      // Last week's wahoos
+        .gte('completed_at', thisStart),
+      // Last week wahoos
       supabase
         .from('groan_challenges')
-        .select('id')
+        .select('id, completed_at')
         .eq('user_id', userId)
         .eq('status', 'completed')
         .gte('scary_score', 7)
         .gte('wahoo_score', 7)
-        .gte('completed_at', lastWeekStart)
-        .lt('completed_at', thisWeekStart),
+        .gte('completed_at', lastStart)
+        .lt('completed_at', thisStart),
     ]).then(([
       { data: thisCompletions },
       { data: lastCompletions },
@@ -194,22 +242,28 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
       { data: thisWahoos },
       { data: lastWahoos },
     ]) => {
-      const thisWeek = computeAxes(thisCompletions || [], thisCheckins || [], thisWahoos || [])
-      const lastWeek = computeAxes(lastCompletions || [], lastCheckins || [], lastWahoos || [])
+      const tc = thisCompletions || []
+      const lc = lastCompletions || []
+      const tch = thisCheckins || []
+      const lch = lastCheckins || []
+      const tw = thisWahoos || []
+      const lw = lastWahoos || []
+
+      const daysElapsed = getDaysInWindow(tc, tch, tw)
+      const thisWeek = computeAxes(tc, tch, tw, daysElapsed)
+      const lastWeek = computeAxes(lc, lch, lw, 7)
 
       const trend = thisWeek.capacity !== null && lastWeek.capacity !== null
-        ? thisWeek.capacity - lastWeek.capacity
-        : 0
+        ? thisWeek.capacity - lastWeek.capacity : 0
 
       const getTrend = (curr, prev) => {
         if (curr === null || prev === null) return 'flat'
-        const diff = curr - prev
-        if (diff > 0.3) return 'up'
-        if (diff < -0.3) return 'down'
+        if (curr - prev > 0.3) return 'up'
+        if (curr - prev < -0.3) return 'down'
         return 'flat'
       }
 
-      const totalInputs = (thisCompletions?.length || 0) + (thisCheckins?.length || 0) + (thisWahoos?.length || 0)
+      const totalInputs = tc.length + tch.length + tw.length
 
       setData({
         safety: thisWeek.safety,
