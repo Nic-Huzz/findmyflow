@@ -6,9 +6,9 @@ import { supabase } from '../supabaseClient'
 
 // Level configuration
 export const LEVELS = [
-  { min: 0, name: 'Stuck', emoji: '🌑' },
-  { min: 100, name: 'Wired', emoji: '⚡' },
-  { min: 500, name: 'Grounded', emoji: '🌿' },
+  { min: 0, name: 'Just Getting Started', emoji: '🌱' },
+  { min: 100, name: 'Building Habits', emoji: '🧱' },
+  { min: 500, name: 'Strong Foundation', emoji: '🌿' },
   { min: 1500, name: 'Vibe Rise', emoji: '🔥' },
   { min: 3500, name: 'Vibe Master', emoji: '⚔️' },
   { min: 7000, name: 'Vibe Legend', emoji: '👑' },
