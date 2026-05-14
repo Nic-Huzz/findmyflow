@@ -6,12 +6,12 @@ import { supabase } from '../supabaseClient'
 
 // Level configuration
 export const LEVELS = [
-  { min: 0, name: 'Just Getting Started', emoji: '🌱' },
-  { min: 100, name: 'Building Habits', emoji: '🧱' },
+  { min: 0, name: 'Getting Started', emoji: '🌱' },
+  { min: 100, name: 'Habit Builder', emoji: '🧱' },
   { min: 500, name: 'Strong Foundation', emoji: '🌿' },
   { min: 1500, name: 'Vibe Rise', emoji: '🔥' },
   { min: 3500, name: 'Vibe Master', emoji: '⚔️' },
-  { min: 7000, name: 'Vibe Legend', emoji: '👑' },
+  { min: 7000, name: 'Movement Maker', emoji: '👑' },
 ]
 
 // Get current level based on points
