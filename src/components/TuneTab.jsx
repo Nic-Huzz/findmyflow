@@ -304,7 +304,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         quest_id: mealId,
         quest_category: 'Tune',
         quest_type: 'Practice',
-        points_earned: mealType === 'healthy' ? 3 : mealType === 'cheat' ? 1 : 0,
+        points_earned: mealType === 'healthy' ? 1 : 0,
         challenge_instance_id: null,
         challenge_day: 0,
         project_id: null,
