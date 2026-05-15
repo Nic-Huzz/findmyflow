@@ -1959,7 +1959,7 @@ function Challenge() {
           <TuneTab
             userId={user?.id}
             onQuestComplete={handleQuestComplete}
-            onRefreshPoints={loadStageProgress}
+            onRefreshPoints={() => { loadStageProgress(); loadUserScores() }}
           />
         )}
 
@@ -1969,7 +1969,7 @@ function Challenge() {
             userId={user?.id}
             currentVisibilityLayer={getLevelConfig(currentJourneyLevel)?.visibilityLayer || 'screen'}
             onQuestComplete={handleQuestComplete}
-            onRefreshPoints={loadStageProgress}
+            onRefreshPoints={() => { loadStageProgress(); loadUserScores() }}
             wahooCount={wahooCountThisWeek}
           />
         )}
