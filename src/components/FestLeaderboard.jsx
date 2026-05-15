@@ -77,7 +77,10 @@ export default function FestLeaderboard({ userId, onClose }) {
 
     const { error } = await supabase
       .from('user_stage_progress')
-      .upsert({ user_id: userId, fest_participant: true }, { onConflict: 'user_id' })
+      .update({ fest_participant: true })
+      .eq('user_id', userId)
+
+    if (error) console.error('Fest join error:', error)
 
     if (!error) {
       hapticSuccess()
