@@ -2,7 +2,7 @@
  * WahooCreator.jsx
  *
  * Two-path Wahoo creation flow for the Play-list tab.
- * Path A: "I know what I want to try" → free text → AI generates challenge
+ * Path A: "I know what I want to do" → free text → AI generates challenge
  * Path B: "Help me find one" → browse play-skill categories → AI suggests 2-3 options
  *
  * Both paths save via createGroanChallenge + acceptGroanChallenge (same data model).
@@ -228,7 +228,7 @@ export default function WahooCreator({
         <button className="wc-path-card" onClick={() => { hapticLight(); setStep('freetext') }}>
           <div className="wc-path-icon">🎯</div>
           <div className="wc-path-body">
-            <div className="wc-path-name">I know what I want to try</div>
+            <div className="wc-path-name">I know what I want to do</div>
             <div className="wc-path-desc">Type it in, we'll build your challenge from it</div>
           </div>
           <span className="wc-path-arrow">›</span>
