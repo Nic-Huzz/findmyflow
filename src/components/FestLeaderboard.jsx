@@ -2,7 +2,8 @@
  * FestLeaderboard.jsx
  *
  * Simple RP leaderboard for Vibe Rise Fest.
- * Join prompt → ranked list of participants by lifetime RP.
+ * Join = insert into challenge_participants with FEST_GROUP_ID.
+ * Leaderboard = all participants ranked by lifetime RP.
  *
  * CSS prefix: fl-
  */
@@ -13,6 +14,9 @@ import { getLevel } from '../lib/crm/statsService'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './FestLeaderboard.css'
 
+// Fixed group ID for Vibe Rise Fest
+const FEST_GROUP_ID = 'bbbbbbbb-0000-0000-0000-000000000001'
+
 const RANK_MEDALS = ['🥇', '🥈', '🥉']
 
 export default function FestLeaderboard({ userId, onClose }) {
@@ -20,32 +24,29 @@ export default function FestLeaderboard({ userId, onClose }) {
   const [joining, setJoining] = useState(false)
   const [leaderboard, setLeaderboard] = useState([])
   const [loading, setLoading] = useState(true)
-  const [userName, setUserName] = useState('')
 
-  // Check if user has joined + load leaderboard
   useEffect(() => {
     if (!userId) return
 
     Promise.all([
       supabase
-        .from('user_stage_progress')
-        .select('fest_participant, user_name')
+        .from('challenge_participants')
+        .select('user_id')
+        .eq('group_id', FEST_GROUP_ID)
         .eq('user_id', userId)
         .maybeSingle(),
       loadLeaderboard(),
     ]).then(([{ data }]) => {
-      setJoined(data?.fest_participant || false)
-      setUserName(data?.user_name || '')
+      setJoined(!!data)
       setLoading(false)
     }).catch(() => setLoading(false))
   }, [userId])
 
   const loadLeaderboard = async () => {
-    // Get all fest participants with their lifetime scores
     const { data: participants } = await supabase
-      .from('user_stage_progress')
-      .select('user_id, user_name, hero_avatar_url')
-      .eq('fest_participant', true)
+      .from('challenge_participants')
+      .select('user_id')
+      .eq('group_id', FEST_GROUP_ID)
 
     if (!participants?.length) {
       setLeaderboard([])
@@ -53,18 +54,30 @@ export default function FestLeaderboard({ userId, onClose }) {
     }
 
     const userIds = participants.map(p => p.user_id)
-    const { data: scores } = await supabase
-      .from('user_lifetime_scores')
-      .select('user_id, lifetime_total_score')
-      .in('user_id', userIds)
-      .is('project_id', null)
 
-    const ranked = participants.map(p => {
-      const score = scores?.find(s => s.user_id === p.user_id)
+    const [{ data: scores }, { data: profiles }] = await Promise.all([
+      supabase
+        .from('user_lifetime_scores')
+        .select('user_id, lifetime_total_score')
+        .in('user_id', userIds)
+        .is('project_id', null),
+      supabase
+        .from('lead_flow_profiles')
+        .select('user_id, custom_essence_image, custom_essence_name')
+        .in('user_id', userIds)
+        .order('created_at', { ascending: false }),
+    ])
+
+    const ranked = userIds.map(uid => {
+      const score = scores?.find(s => s.user_id === uid)
+      const profile = profiles?.find(p => p.user_id === uid)
+      const rp = score?.lifetime_total_score || 0
       return {
-        ...p,
-        rp: score?.lifetime_total_score || 0,
-        level: getLevel(score?.lifetime_total_score || 0),
+        user_id: uid,
+        name: profile?.custom_essence_name || 'Anonymous',
+        avatar: profile?.custom_essence_image || null,
+        rp,
+        level: getLevel(rp),
       }
     }).sort((a, b) => b.rp - a.rp)
 
@@ -76,13 +89,17 @@ export default function FestLeaderboard({ userId, onClose }) {
     hapticLight()
 
     const { error } = await supabase
-      .from('user_stage_progress')
-      .update({ fest_participant: true })
-      .eq('user_id', userId)
+      .from('challenge_participants')
+      .insert({ group_id: FEST_GROUP_ID, user_id: userId })
 
-    if (error) console.error('Fest join error:', error)
-
-    if (!error) {
+    if (error) {
+      console.error('Fest join error:', error)
+      // Might already be joined (unique constraint)
+      if (error.code === '23505') {
+        setJoined(true)
+        await loadLeaderboard()
+      }
+    } else {
       hapticSuccess()
       setJoined(true)
       await loadLeaderboard()
@@ -135,14 +152,14 @@ export default function FestLeaderboard({ userId, onClose }) {
               <div key={p.user_id} className={`fl-row ${isMe ? 'fl-row-me' : ''}`}>
                 <span className="fl-rank">{RANK_MEDALS[i] || `#${i + 1}`}</span>
                 <div className="fl-avatar">
-                  {p.hero_avatar_url ? (
-                    <img src={p.hero_avatar_url} alt="" />
+                  {p.avatar ? (
+                    <img src={p.avatar} alt="" />
                   ) : (
-                    <span className="fl-avatar-placeholder">{(p.user_name || '?')[0]}</span>
+                    <span className="fl-avatar-placeholder">{(p.name || '?')[0]}</span>
                   )}
                 </div>
                 <div className="fl-info">
-                  <span className="fl-name">{p.user_name || 'Anonymous'}{isMe ? ' (you)' : ''}</span>
+                  <span className="fl-name">{p.name}{isMe ? ' (you)' : ''}</span>
                   <span className="fl-level">{p.level.emoji} {p.level.name}</span>
                 </div>
                 <span className="fl-rp">{p.rp} RP</span>
