@@ -312,6 +312,18 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       })
       if (error) throw error
 
+      // Increment scores for RP
+      const pts = mealType === 'healthy' ? 1 : 0
+      if (pts > 0) {
+        await supabase.rpc('increment_scores', {
+          p_user_id: userId,
+          p_project_id: null,
+          p_category: getScoringCategory('Tune'),
+          p_points: pts,
+          p_week_start: getWeekStartLocal(),
+        })
+      }
+
       hapticSuccess()
       setCompletions(prev => [...prev, { quest_id: mealId, completed_at: new Date().toISOString() }])
       setCapacityRefresh(n => n + 1)

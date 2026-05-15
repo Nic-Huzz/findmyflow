@@ -26,10 +26,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal, formatLocalDate } from '../lib/dateUtils'
 
-// Display multiplier — points shown in UI are ×2
-export const DISPLAY_MULTIPLIER = 2
-
-// Internal point values (×1)
+// Internal point values for capacity scoring (wahoo = reference unit)
 const POINTS = {
   practice: 1,
   dailyHealing: 1,
