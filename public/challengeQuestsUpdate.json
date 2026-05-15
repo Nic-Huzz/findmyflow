@@ -312,9 +312,9 @@
       "type": "Practice",
       "frequency": "daily",
       "name": "Healthy Eating",
-      "description": "Fuel the nervous system with real food. At least one proper meal today.",
+      "description": "Track your 3 meals. Fuel the nervous system with real food.",
       "points": 3,
-      "inputType": "checkbox",
+      "inputType": "meal_tracker",
       "healing_checkin": true,
       "capacityType": "maintenance"
     },

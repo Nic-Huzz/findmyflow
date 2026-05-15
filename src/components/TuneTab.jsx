@@ -88,6 +88,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   // Capacity score refresh
   const [capacityRefresh, setCapacityRefresh] = useState(0)
 
+  // Meal tracking state
+  const [mealExpanded, setMealExpanded] = useState(false)
+  const [savingMeal, setSavingMeal] = useState(null) // 'breakfast' | 'lunch' | 'dinner'
+
   // Drain logging state
   const [showDrainForm, setShowDrainForm] = useState(false)
   const [drainCategory, setDrainCategory] = useState(null)
@@ -275,6 +279,50 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
     }
   }
 
+  // Meal tracking
+  const MEALS = [
+    { id: 'meal_breakfast', label: 'Breakfast' },
+    { id: 'meal_lunch', label: 'Lunch' },
+    { id: 'meal_dinner', label: 'Dinner' },
+  ]
+  const MEAL_OPTIONS = [
+    { value: 'healthy', label: 'Healthy', color: '#10b981' },
+    { value: 'cheat', label: 'Cheat Meal', color: '#f59e0b' },
+    { value: 'skipped', label: 'Skipped', color: '#ef4444' },
+  ]
+
+  const isMealLogged = (mealId) => completions.some(c => c.quest_id === mealId && c.completed_at?.startsWith(new Date().toLocaleDateString('en-CA')))
+
+  const handleMealLog = async (mealId, mealType) => {
+    if (savingMeal) return
+    setSavingMeal(mealId)
+    hapticLight()
+
+    try {
+      const { error } = await supabase.from('quest_completions').insert({
+        user_id: userId,
+        quest_id: mealId,
+        quest_category: 'Tune',
+        quest_type: 'Practice',
+        points_earned: mealType === 'healthy' ? 3 : mealType === 'cheat' ? 1 : 0,
+        challenge_instance_id: null,
+        challenge_day: 0,
+        project_id: null,
+        reflection_text: mealType,
+      })
+      if (error) throw error
+
+      hapticSuccess()
+      setCompletions(prev => [...prev, { quest_id: mealId, completed_at: new Date().toISOString() }])
+      setCapacityRefresh(n => n + 1)
+      onRefreshPoints?.()
+    } catch (err) {
+      console.error('Meal log error:', err)
+    } finally {
+      setSavingMeal(null)
+    }
+  }
+
   // Reconnect quest completed via HealingCompletionModal
   const handleReconnectComplete = (q, data) => {
     setHealingModalQuest(null)
@@ -436,7 +484,8 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   }
 
   // Count today's completed practices
-  const maintenanceDone = maintenancePractices.filter(q => isCompletedToday(q.id)).length
+  const mealsLoggedToday = MEALS.filter(m => isMealLogged(m.id)).length
+  const maintenanceDone = maintenancePractices.filter(q => q.inputType !== 'meal_tracker' && isCompletedToday(q.id)).length + (mealsLoggedToday === 3 ? 1 : 0)
   const safetyDone = safetyPractices.filter(q => isCompletedToday(q.id)).length
   const expressionDone = expressionPractices.filter(q => isCompletedToday(q.id)).length
   const totalDone = maintenanceDone + safetyDone + expressionDone
@@ -466,7 +515,67 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
             <span className="tt-subsection-count">{maintenanceDone}/{maintenancePractices.length}</span>
           </div>
           <div className="tt-quest-list">
-            {maintenancePractices.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+            {maintenancePractices.map(q => {
+              if (q.inputType === 'meal_tracker') {
+                const allMealsLogged = MEALS.every(m => isMealLogged(m.id))
+                return (
+                  <div key={q.id} className={`ht-item-row ${allMealsLogged ? 'done' : ''}`}>
+                    <span className={`ht-item-check ${allMealsLogged ? 'done' : ''}`}>
+                      {allMealsLogged ? '✓' : ''}
+                    </span>
+                    <div className="ht-item-body">
+                      <div className="ht-item-name">{q.name}</div>
+                      <div className="ht-item-meta">
+                        <span className="ht-item-type">{q.type}</span>
+                        <span className="ht-item-sep">·</span>
+                        <span className="ht-pts">{MEALS.filter(m => isMealLogged(m.id)).length}/3 meals</span>
+                      </div>
+                      {mealExpanded && (
+                        <div className="tt-meal-grid">
+                          {MEALS.map(meal => {
+                            const logged = isMealLogged(meal.id)
+                            const isSaving = savingMeal === meal.id
+                            return (
+                              <div key={meal.id} className="tt-meal-row">
+                                <span className="tt-meal-label">{meal.label}</span>
+                                {logged ? (
+                                  <span className="tt-meal-done">✓</span>
+                                ) : (
+                                  <div className="tt-meal-options">
+                                    {MEAL_OPTIONS.map(opt => (
+                                      <button
+                                        key={opt.value}
+                                        className="tt-meal-btn"
+                                        style={{ color: opt.color }}
+                                        disabled={isSaving}
+                                        onClick={() => handleMealLog(meal.id, opt.value)}
+                                      >
+                                        {isSaving ? '...' : opt.label}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                    {allMealsLogged ? (
+                      <span className="ht-item-action done-action">Done</span>
+                    ) : (
+                      <button
+                        className="ht-item-action"
+                        onClick={() => { hapticLight(); setMealExpanded(!mealExpanded) }}
+                      >
+                        {mealExpanded ? 'Close' : 'Log'}
+                      </button>
+                    )}
+                  </div>
+                )
+              }
+              return renderQuestRow(q, q.inputType === 'checkbox')
+            })}
           </div>
         </div>
 

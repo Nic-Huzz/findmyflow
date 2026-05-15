@@ -43,7 +43,7 @@ const BASELINE = 3
 const DIVISOR = 5
 
 // Quest IDs by category
-const MAINTENANCE_IDS = ['practice_sleep', 'practice_exercise', 'practice_sunlight', 'practice_healthy_meal']
+const MAINTENANCE_IDS = ['practice_sleep', 'practice_exercise', 'practice_sunlight', 'meal_breakfast', 'meal_lunch', 'meal_dinner']
 const SAFETY_IDS = ['reconnect_morning_breathwork', 'reconnect_morning_meditation', 'reconnect_daily_prayer', 'practice_connect_friend', 'practice_feel_emotions']
 const EXPRESSION_IDS = ['reconnect_morning_dance', 'practice_voice_work', 'practice_own_style', 'practice_social_media', 'practice_honour_values']
 
