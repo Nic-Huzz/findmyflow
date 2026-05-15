@@ -12,6 +12,7 @@ import { getLevel, getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS } fro
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 import JourneyGraphPopup from './JourneyGraphPopup'
+import FestLeaderboard from './FestLeaderboard'
 import confetti from 'canvas-confetti'
 
 // Week type display info
@@ -48,6 +49,7 @@ function ChallengeHeader({
 }) {
   const { user } = useAuth()
   const [showGraph, setShowGraph] = useState(false)
+  const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [lifetimeXP, setLifetimeXP] = useState(totalXP)
   const [tierUpName, setTierUpName] = useState(null)
   const hasLoadedXP = useRef(false)
@@ -192,22 +194,11 @@ function ChallengeHeader({
             <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
             <span className="streak-badge-num">{streakDays}</span>
           </div>
-          <div className="streak-badge wahoo-badge">
-            <span className="wahoo-badge-icon">⚡</span>
-            <span className="streak-badge-num">{wahooCount}</span>
-          </div>
-          {/* ARCHIVED: Leaderboard button — re-enable when league is active
-          <div
-            className="challenge-day archetype-badge"
-            title="View leaderboard"
-            onClick={onLeaderboardClick}
-            style={{ cursor: 'pointer' }}
+          <button
+            className="challenge-journey-btn"
+            onClick={() => setShowLeaderboard(true)}
           >
             🏆 Leaderboard
-          </div>
-          */}
-          <button className="challenge-journey-btn" onClick={() => setShowGraph(true)}>
-            🧭 Journey
           </button>
           <div className="settings-menu-container" ref={settingsMenuRef}>
             <button
@@ -275,6 +266,13 @@ function ChallengeHeader({
         onClose={() => setShowGraph(false)}
         currentLevel={1}
       />
+
+      {showLeaderboard && (
+        <FestLeaderboard
+          userId={user?.id}
+          onClose={() => setShowLeaderboard(false)}
+        />
+      )}
     </header>
   )
 }

@@ -22,6 +22,7 @@ import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import PlaySkillPicker from '../PlaySkillPicker'
 import CapacityCard from './CapacityCard'
+import JourneyGraphPopup from '../JourneyGraphPopup'
 import './LevelTab.css'
 
 export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
@@ -36,6 +37,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasEssenceAvatar, setHasEssenceAvatar] = useState(false)
   const [hasLifeMap, setHasLifeMap] = useState(false)
   const [hasCareerClarity, setHasCareerClarity] = useState(false)
+  const [showJourney, setShowJourney] = useState(false)
   const [hasPeopleMatching, setHasPeopleMatching] = useState(false)
   const [hasHealingCompass, setHasHealingCompass] = useState(false)
   const [hasPlaylistUpdate, setHasPlaylistUpdate] = useState(false)
@@ -294,6 +296,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           Level {currentLevel}: {config.name}
         </div>
         <div className="level-header-question">{config.question}</div>
+        <button className="level-journey-btn" onClick={() => setShowJourney(true)}>🧭 Journey</button>
         {boss && (
           <div className="level-header-boss">
             &#9876;&#65039; Fighting: {boss}
@@ -491,6 +494,14 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             </button>
           </div>
         </div>
+      )}
+
+      {showJourney && (
+        <JourneyGraphPopup
+          isOpen={showJourney}
+          onClose={() => setShowJourney(false)}
+          currentLevel={currentLevel}
+        />
       )}
     </div>
   )
