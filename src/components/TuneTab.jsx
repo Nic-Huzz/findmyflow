@@ -240,16 +240,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
         throw questError
       }
 
-      // 2. Log ventral state for capacity score
-      await supabase.from('nervous_system_checkins').insert({
-        user_id: userId,
-        before_state: null,
-        after_state: 'ventral',
-        checkin_type: 'tune',
-        source_quest_id: quest.id,
-      })
-
-      // 3. Increment scores
+      // 2. Increment scores
       const { error: scoreError } = await supabase.rpc('increment_scores', {
         p_user_id: userId,
         p_project_id: null,
