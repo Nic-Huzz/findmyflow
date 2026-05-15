@@ -33,7 +33,6 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   // Nervous system state
   const [beforeState, setBeforeState] = useState(null)
   const [afterState, setAfterState] = useState(null)
-  const [protectiveArchetype, setProtectiveArchetype] = useState(null)
 
   // Wahoo classification
   const [wahooClassification, setWahooClassification] = useState(null) // 'wahoo' | 'vibe_rise' | 'routine'
@@ -92,11 +91,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           visibility_layer: challenge.visibility_layer,
           before_state: beforeState,
           after_state: afterState,
-          protective_archetype: protectiveArchetype,
           reflection,
         }),
       })
-      if (questError) console.warn('Quest completion insert error:', questError)
+      if (questError) throw questError
 
       // 3. Insert nervous system check-in
       try {
@@ -104,7 +102,6 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           user_id: userId,
           before_state: beforeState,
           after_state: afterState,
-          protective_archetype: protectiveArchetype,
           checkin_type: 'playlist',
           source_quest_id: questId,
           source_challenge_id: challenge.id,
@@ -214,8 +211,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               afterState={afterState}
               onBeforeChange={setBeforeState}
               onAfterChange={setAfterState}
-              protectiveArchetype={protectiveArchetype}
-              onArchetypeChange={setProtectiveArchetype}
+              skipArchetype
               onComplete={() => setStep('wahoo_check')}
             />
           </>

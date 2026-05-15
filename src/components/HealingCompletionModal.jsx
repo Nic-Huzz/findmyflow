@@ -15,8 +15,8 @@ export default function HealingCompletionModal({ quest, userId, onComplete, onCl
   const [afterState, setAfterState] = useState(null)
   const [afterArchetype, setAfterArchetype] = useState(null)
 
-  const handleQuestDone = (q, data) => {
-    onComplete(q, data)
+  const handleQuestDone = async (q, data) => {
+    await onComplete(q, data)
     onClose()
   }
 

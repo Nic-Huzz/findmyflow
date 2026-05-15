@@ -32,6 +32,9 @@ export default function WahooCreator({
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [generating, setGenerating] = useState(false)
   const [generatedChallenge, setGeneratedChallenge] = useState(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedTitle, setEditedTitle] = useState('')
+  const [editedDescription, setEditedDescription] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [error, setError] = useState(null)
   const successTimerRef = useRef(null)
@@ -339,39 +342,85 @@ export default function WahooCreator({
 
         <div className="wc-preview-card">
           <div className="wc-preview-label">Your Wahoo</div>
-          <h3 className="wc-preview-title">{generatedChallenge.title}</h3>
-          <p className="wc-preview-desc">{generatedChallenge.description}</p>
 
-          {generatedChallenge.completionCriteria && (
-            <div className="wc-preview-criteria">
-              <span className="wc-preview-criteria-label">Done when:</span>
-              <span>{generatedChallenge.completionCriteria}</span>
+          {isEditing ? (
+            <div className="wc-edit-form">
+              <input
+                className="wc-edit-input"
+                value={editedTitle}
+                onChange={e => setEditedTitle(e.target.value)}
+                placeholder="Wahoo title"
+              />
+              <textarea
+                className="wc-edit-textarea"
+                value={editedDescription}
+                onChange={e => setEditedDescription(e.target.value)}
+                placeholder="Description"
+                rows={3}
+              />
+              <div className="wc-edit-actions">
+                <button
+                  className="wc-cta"
+                  onClick={() => {
+                    setGeneratedChallenge(prev => ({ ...prev, title: editedTitle.trim(), description: editedDescription.trim() }))
+                    setIsEditing(false)
+                  }}
+                  disabled={!editedTitle.trim()}
+                >
+                  Save Changes
+                </button>
+                <button className="wc-secondary" onClick={() => setIsEditing(false)}>Cancel</button>
+              </div>
             </div>
+          ) : (
+            <>
+              <h3 className="wc-preview-title">{generatedChallenge.title}</h3>
+              <p className="wc-preview-desc">{generatedChallenge.description}</p>
+
+              {generatedChallenge.completionCriteria && (
+                <div className="wc-preview-criteria">
+                  <span className="wc-preview-criteria-label">Done when:</span>
+                  <span>{generatedChallenge.completionCriteria}</span>
+                </div>
+              )}
+
+              {generatedChallenge.alternativeVersion && (
+                <div className="wc-preview-alt">
+                  <span className="wc-preview-alt-label">Easier version:</span>
+                  <span>{generatedChallenge.alternativeVersion}</span>
+                </div>
+              )}
+            </>
           )}
 
-          {generatedChallenge.alternativeVersion && (
-            <div className="wc-preview-alt">
-              <span className="wc-preview-alt-label">Easier version:</span>
-              <span>{generatedChallenge.alternativeVersion}</span>
+          {!isEditing && (
+            <div className="wc-preview-actions">
+              <button
+                className="wc-cta"
+                onClick={() => acceptChallenge(generatedChallenge)}
+                disabled={generating}
+              >
+                {generating ? 'Saving...' : 'Accept this Wahoo'}
+              </button>
+              <button
+                className="wc-secondary"
+                onClick={() => {
+                  setEditedTitle(generatedChallenge.title)
+                  setEditedDescription(generatedChallenge.description)
+                  setIsEditing(true)
+                }}
+              >
+                Edit
+              </button>
+              <button
+                className="wc-secondary"
+                onClick={generateFromFreeText}
+                disabled={generating}
+              >
+                Regenerate
+              </button>
             </div>
           )}
-
-          <div className="wc-preview-actions">
-            <button
-              className="wc-cta"
-              onClick={() => acceptChallenge(generatedChallenge)}
-              disabled={generating}
-            >
-              {generating ? 'Saving...' : 'Accept this Wahoo'}
-            </button>
-            <button
-              className="wc-secondary"
-              onClick={generateFromFreeText}
-              disabled={generating}
-            >
-              Regenerate
-            </button>
-          </div>
 
           {error && <p className="wc-error">{error}</p>}
         </div>

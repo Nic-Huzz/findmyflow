@@ -184,70 +184,40 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
     const lastStart = formatLocalDate(fourteenDaysAgo)
     const thisEnd = formatLocalDate(now)
 
+    // 3 queries covering 14 days, split client-side (halves API calls)
     Promise.all([
-      // This week completions
-      supabase
-        .from('quest_completions')
+      supabase.from('quest_completions')
         .select('quest_id, quest_category, completed_at')
         .eq('user_id', userId)
         .in('quest_category', ['Tune', 'Healing', 'Groans'])
-        .gte('completed_at', thisStart),
-      // Last week completions
-      supabase
-        .from('quest_completions')
-        .select('quest_id, quest_category, completed_at')
-        .eq('user_id', userId)
-        .in('quest_category', ['Tune', 'Healing', 'Groans'])
-        .gte('completed_at', lastStart)
-        .lt('completed_at', thisStart),
-      // This week checkins (stalls + drains)
-      supabase
-        .from('nervous_system_checkins')
+        .gte('completed_at', lastStart),
+      supabase.from('nervous_system_checkins')
         .select('checkin_type, created_at')
         .eq('user_id', userId)
         .in('checkin_type', ['drain', 'stall'])
-        .gte('created_at', thisStart),
-      // Last week checkins
-      supabase
-        .from('nervous_system_checkins')
-        .select('checkin_type, created_at')
-        .eq('user_id', userId)
-        .in('checkin_type', ['drain', 'stall'])
-        .gte('created_at', lastStart)
-        .lt('created_at', thisStart),
-      // This week wahoos
-      supabase
-        .from('groan_challenges')
+        .gte('created_at', lastStart),
+      supabase.from('groan_challenges')
         .select('id, completed_at')
         .eq('user_id', userId)
         .eq('status', 'completed')
         .gte('scary_score', 7)
         .gte('wahoo_score', 7)
-        .gte('completed_at', thisStart),
-      // Last week wahoos
-      supabase
-        .from('groan_challenges')
-        .select('id, completed_at')
-        .eq('user_id', userId)
-        .eq('status', 'completed')
-        .gte('scary_score', 7)
-        .gte('wahoo_score', 7)
-        .gte('completed_at', lastStart)
-        .lt('completed_at', thisStart),
+        .gte('completed_at', lastStart),
     ]).then(([
-      { data: thisCompletions },
-      { data: lastCompletions },
-      { data: thisCheckins },
-      { data: lastCheckins },
-      { data: thisWahoos },
-      { data: lastWahoos },
+      { data: allCompletions },
+      { data: allCheckins },
+      { data: allWahoos },
     ]) => {
-      const tc = thisCompletions || []
-      const lc = lastCompletions || []
-      const tch = thisCheckins || []
-      const lch = lastCheckins || []
-      const tw = thisWahoos || []
-      const lw = lastWahoos || []
+      const completions = allCompletions || []
+      const checkins = allCheckins || []
+      const wahoos = allWahoos || []
+
+      const tc = completions.filter(c => c.completed_at >= thisStart)
+      const lc = completions.filter(c => c.completed_at < thisStart)
+      const tch = checkins.filter(c => c.created_at >= thisStart)
+      const lch = checkins.filter(c => c.created_at < thisStart)
+      const tw = wahoos.filter(w => w.completed_at >= thisStart)
+      const lw = wahoos.filter(w => w.completed_at < thisStart)
 
       const daysElapsed = getDaysInWindow(tc, tch, tw)
       const thisWeek = computeAxes(tc, tch, tw, daysElapsed)

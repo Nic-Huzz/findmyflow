@@ -27,10 +27,11 @@ export default function NervousSystemCheckin({
   onComplete,
   title,
   hideButton = false,
+  skipArchetype = false,
 }) {
   const activeBefore = mode !== 'after' ? beforeState : null
   const activeAfter = mode !== 'before' ? afterState : null
-  const showArchetype = needsArchetype(activeBefore, activeAfter)
+  const showArchetype = !skipArchetype && needsArchetype(activeBefore, activeAfter)
 
   // Pick archetypes based on which state triggered the prompt
   const activeState = (activeBefore === 'sympathetic' || activeBefore === 'dorsal')

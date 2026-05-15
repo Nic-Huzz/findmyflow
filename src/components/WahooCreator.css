@@ -375,6 +375,59 @@
   border-color: rgba(255, 255, 255, 0.3);
 }
 
+/* === EDIT FORM (inside preview card) === */
+.wc-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.wc-edit-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+.wc-edit-input::placeholder,
+.wc-edit-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.wc-edit-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.wc-edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.wc-edit-actions .wc-cta {
+  flex: 1;
+}
+
+.wc-edit-actions .wc-secondary {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 /* === SUGGESTIONS LIST (Path B results) === */
 .wc-suggestions-list {
   display: flex;
