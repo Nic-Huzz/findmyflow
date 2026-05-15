@@ -208,6 +208,32 @@ export default function ExperienceDetail() {
   const totalStackValue = valueStackItems.reduce((sum, item) => sum + (item.value || 0), 0)
 
   // Bucket items by phase → section
+  // Load pitch-next-offer state + next offer label for dynamic checklist item
+  const [pitchOfferLabel, setPitchOfferLabel] = useState(null)
+
+  useEffect(() => {
+    if (!user?.id || !experience?.pitch_next_offer) return
+    supabase
+      .from('creator_assessments')
+      .select('attraction_detail, core_detail, continuity_detail')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data) return
+        // Detect current layer and find next offer
+        const price = experience?.ticket_price || 0
+        const currentLayer = price === 0 ? 'attraction' : 'core'
+        const order = ['attraction', 'core', 'continuity']
+        const nextIdx = order.indexOf(currentLayer) + 1
+        if (nextIdx < order.length) {
+          const nextKey = `${order[nextIdx]}_detail`
+          if (data[nextKey]) setPitchOfferLabel(data[nextKey])
+        }
+      })
+  }, [user?.id, experience?.pitch_next_offer, experience?.ticket_price])
+
   const grouped = useMemo(() => {
     const buckets = { pre: { marketing: [], organisation: [] }, post: { followup: [], reflection: [] } }
     for (const item of items) {
@@ -215,10 +241,28 @@ export default function ExperienceDetail() {
       if (!buckets[item.phase][item.section]) buckets[item.phase][item.section] = []
       buckets[item.phase][item.section].push(item)
     }
+
+    // Inject dynamic pitch item if toggle is on
+    if (experience?.pitch_next_offer && pitchOfferLabel) {
+      buckets.post.followup.push({
+        id: 'dynamic_pitch_next',
+        phase: 'post',
+        section: 'followup',
+        sort_order: 3.5, // between "Send thank-you" and "Send feedback"
+        label: `Pitch your next offer: "${pitchOfferLabel}"`,
+        completed: false,
+        is_custom: false,
+        is_hidden: false,
+        _dynamic: true, // flag so we don't try to toggle it in DB
+      })
+      buckets.post.followup.sort((a, b) => a.sort_order - b.sort_order)
+    }
+
     return buckets
-  }, [items])
+  }, [items, experience?.pitch_next_offer, pitchOfferLabel])
 
   const handleToggle = async (itemId) => {
+    if (itemId === 'dynamic_pitch_next') return // dynamic items aren't in DB
     hapticLight()
     await toggleItem(itemId)
   }

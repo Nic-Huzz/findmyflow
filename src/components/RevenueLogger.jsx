@@ -10,10 +10,13 @@ import './RevenueLogger.css'
 
 export default function RevenueLogger({ experienceId, userId, currency = 'IDR', previousExperienceId }) {
   const [expanded, setExpanded] = useState(false)
+  const [mode, setMode] = useState(null) // null | 'manual' | 'screenshot'
   const [amount, setAmount] = useState('')
   const [notes, setNotes] = useState('')
   const [saved, setSaved] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [extractedAmount, setExtractedAmount] = useState(null)
   const [prevRevenue, setPrevRevenue] = useState(null)
 
   // Load existing revenue + previous experience revenue
@@ -59,6 +62,38 @@ export default function RevenueLogger({ experienceId, userId, currency = 'IDR', 
     setSaving(false)
   }
 
+  const handleScreenshot = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    setExtractedAmount(null)
+
+    try {
+      const reader = new FileReader()
+      const base64 = await new Promise((resolve, reject) => {
+        reader.onload = () => resolve(reader.result.split(',')[1])
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
+
+      const { data, error } = await supabase.functions.invoke('extract-revenue', {
+        body: { imageBase64: base64, mimeType: file.type },
+      })
+
+      if (!error && data?.amount) {
+        setExtractedAmount(data.amount)
+        setAmount(String(data.amount))
+        if (data.notes) setNotes(data.notes)
+        setMode('manual') // show form with extracted values
+      } else {
+        setMode('manual')
+      }
+    } catch {
+      setMode('manual')
+    }
+    setUploading(false)
+  }
+
   const displayAmount = amount ? parseFloat(amount).toLocaleString() : '0'
   const currentNum = amount ? parseFloat(amount) : 0
 
@@ -89,7 +124,52 @@ export default function RevenueLogger({ experienceId, userId, currency = 'IDR', 
 
       {expanded && (
         <div className="rl-body">
+          {/* Mode picker — only when no saved data and no mode selected */}
+          {!mode && !saved && (
+            <div className="rl-mode-picker">
+              <button className="rl-mode-btn" onClick={() => setMode('screenshot')}>
+                <span className="rl-mode-icon">📸</span>
+                <div>
+                  <span className="rl-mode-label">Upload Screenshot</span>
+                  <span className="rl-mode-sub">Payment app, bank transfer, etc.</span>
+                </div>
+              </button>
+              <button className="rl-mode-btn" onClick={() => setMode('manual')}>
+                <span className="rl-mode-icon">✏️</span>
+                <div>
+                  <span className="rl-mode-label">Enter Manually</span>
+                  <span className="rl-mode-sub">Type the total amount</span>
+                </div>
+              </button>
+            </div>
+          )}
+
+          {/* Screenshot upload */}
+          {mode === 'screenshot' && !extractedAmount && (
+            <div className="rl-upload-zone">
+              {uploading ? (
+                <div className="rl-uploading">
+                  <div className="rl-spinner" />
+                  <span>Extracting amount...</span>
+                </div>
+              ) : (
+                <>
+                  <label className="rl-upload-label">
+                    <span className="rl-upload-icon">📸</span>
+                    <span>Tap to upload payment screenshot</span>
+                    <input type="file" accept="image/*" capture="environment" onChange={handleScreenshot} style={{ display: 'none' }} />
+                  </label>
+                  <button className="rl-switch-mode" onClick={() => setMode('manual')}>Or enter manually</button>
+                </>
+              )}
+            </div>
+          )}
+          {/* Manual form (also shows after screenshot extraction) */}
+          {(mode === 'manual' || extractedAmount || saved) && (
           <div className="rl-form">
+            {extractedAmount && !saved && (
+              <div className="rl-extracted">Extracted: {currency} {parseFloat(extractedAmount).toLocaleString()}</div>
+            )}
             <div className="rl-input-row">
               <span className="rl-currency">{currency}</span>
               <input
@@ -116,6 +196,7 @@ export default function RevenueLogger({ experienceId, userId, currency = 'IDR', 
               <div className="rl-saved">Saved</div>
             )}
           </div>
+          )}
         </div>
       )}
     </div>

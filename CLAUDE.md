@@ -262,9 +262,11 @@ Workflow: generated → accepted → completed. Post-completion: "I Did It!" →
 
 ### 8. Play Profile (Founder DNA)
 
-AI-powered founder assessment: quiz → DNA match → stuck point → AI diagnostic → custom challenge. Modes: default (dashboard), `?mode=retake`, `?mode=unstuck`, `?mode=rate`.
+AI-powered assessment: quiz → DNA match → stuck point → AI diagnostic → custom challenge. Modes: default (dashboard), `?mode=retake`, `?mode=unstuck`, `?mode=rate`.
 
-**Employee DNA**: Non-founders get `impactStyle` (Direct ↔ Systemic) and `growthMode` (Deep Expertise ↔ Broad Leadership) instead of business sliders.
+**33 experience creators** matched via 5D Euclidean distance. Sliders: `workRhythm` (Marathon↔Sprints), `fuelType` (Fire↔Purpose), `orientation` (Solo/Deep↔Social/Enterprising, inferred from games), `knowledgeStyle` (Analytical↔Intuitive, inferred from games), `scaleApproach` (Craft↔Empire). DNAReveal shows Pixar creator portraits.
+
+Key data: `public/data/experienceCreatorDNA.json` (33 profiles, v2.0). Old 75-founder dataset at `public/data/founderDnaFounders.json` (unused). Old 221-profile dataset at `public/data/archived/experienceCreatorDNA-221-full.json`.
 
 DB: `founder_dna_results`, `founder_dna_sessions`. Scoring: +10 RP to Play-List on completion.
 
