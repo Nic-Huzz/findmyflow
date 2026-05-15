@@ -484,6 +484,7 @@ function OfferChecklist() {
           linked_upsell_product_id: category === 'upsell' && selectedUpsellProduct !== 'skip' ? selectedUpsellProduct : null
         }
       })
+      await supabase.rpc('increment_scores', { p_user_id: user.id, p_project_id: projectId || null, p_category: 'business', p_points: 15, p_week_start: new Date().toISOString().slice(0, 10) }).catch(() => {})
 
       // Create compass entry in flow_entries
       if (compass) {

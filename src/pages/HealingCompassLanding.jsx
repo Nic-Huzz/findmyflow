@@ -207,6 +207,7 @@ export default function HealingCompassLanding() {
               points_earned: 10,
               challenge_day: 0,
             }).catch(() => {})
+            await supabase.rpc('increment_scores', { p_user_id: user.id, p_project_id: null, p_category: 'healing', p_points: 10, p_week_start: new Date().toISOString().slice(0, 10) }).catch(() => {})
           }
           // Link workshop submission to user
           await supabase.from('workshop_submissions')

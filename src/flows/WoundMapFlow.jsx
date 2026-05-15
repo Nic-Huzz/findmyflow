@@ -150,6 +150,7 @@ export default function WoundMapFlow() {
           points_earned: 8,
           challenge_day: 0,
         }).catch(() => {})
+        await supabase.rpc('increment_scores', { p_user_id: user.id, p_project_id: null, p_category: 'healing', p_points: 8, p_week_start: new Date().toISOString().slice(0, 10) }).catch(() => {})
       }
     } catch (err) {
       console.warn('Wound map save error:', err)

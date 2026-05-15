@@ -386,6 +386,8 @@ export default function IdentifyTopicsFlow() {
               quest_type: 'Rewire',
               points_earned: 10,
               challenge_day: 0,
+            }).then(() => {
+              supabase.rpc('increment_scores', { p_user_id: user.id, p_project_id: null, p_category: 'play_list', p_points: 10, p_week_start: new Date().toISOString().slice(0, 10) }).catch(() => {})
             }).catch(() => {})
           }
         }).catch(() => {})
