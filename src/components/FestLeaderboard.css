@@ -175,9 +175,11 @@
   display: block;
 }
 
-.fl-level {
+.fl-essence {
   font-size: 11px;
-  color: #6c757d;
+  color: #8b5cf6;
+  font-weight: 600;
+  display: block;
 }
 
 .fl-rp {

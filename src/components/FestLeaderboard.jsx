@@ -63,7 +63,7 @@ export default function FestLeaderboard({ userId, onClose }) {
         .is('project_id', null),
       supabase
         .from('lead_flow_profiles')
-        .select('user_id, custom_essence_image, custom_essence_name')
+        .select('user_id, user_name, custom_essence_image, custom_essence_name')
         .in('user_id', userIds)
         .order('created_at', { ascending: false }),
     ])
@@ -74,7 +74,8 @@ export default function FestLeaderboard({ userId, onClose }) {
       const rp = score?.lifetime_total_score || 0
       return {
         user_id: uid,
-        name: profile?.custom_essence_name || 'Anonymous',
+        firstName: profile?.user_name || 'Anonymous',
+        essenceName: profile?.custom_essence_name || null,
         avatar: profile?.custom_essence_image || null,
         rp,
         level: getLevel(rp),
@@ -155,12 +156,12 @@ export default function FestLeaderboard({ userId, onClose }) {
                   {p.avatar ? (
                     <img src={p.avatar} alt="" />
                   ) : (
-                    <span className="fl-avatar-placeholder">{(p.name || '?')[0]}</span>
+                    <span className="fl-avatar-placeholder">{(p.firstName || '?')[0]}</span>
                   )}
                 </div>
                 <div className="fl-info">
-                  <span className="fl-name">{p.name}{isMe ? ' (you)' : ''}</span>
-                  <span className="fl-level">{p.level.emoji} {p.level.name}</span>
+                  <span className="fl-name">{p.firstName}{isMe ? ' (you)' : ''}</span>
+                  {p.essenceName && <span className="fl-essence">{p.essenceName}</span>}
                 </div>
                 <span className="fl-rp">{p.rp} RP</span>
               </div>
