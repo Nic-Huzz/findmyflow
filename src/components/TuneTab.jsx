@@ -16,6 +16,7 @@ import { supabase } from '../lib/supabaseClient'
 import { getScoringCategory } from '../lib/scoringCategories'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import confetti from 'canvas-confetti'
 import HealingCompletionModal from './HealingCompletionModal'
 import CapacityCard from './level/CapacityCard'
 import './TuneTab.css'
@@ -251,6 +252,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       if (scoreError) console.warn('Tune score increment error:', scoreError)
 
       hapticSuccess()
+      confetti({ particleCount: 50, spread: 45, origin: { y: 0.7 }, ticks: 100, gravity: 1.4, scalar: 0.8 })
       setCapacityRefresh(n => n + 1)
 
       // Refresh completions
@@ -316,6 +318,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       }
 
       hapticSuccess()
+      confetti({ particleCount: 50, spread: 45, origin: { y: 0.7 }, ticks: 100, gravity: 1.4, scalar: 0.8 })
       setCompletions(prev => [...prev, { quest_id: mealId, completed_at: new Date().toISOString() }])
       setCapacityRefresh(n => n + 1)
       onRefreshPoints?.()
