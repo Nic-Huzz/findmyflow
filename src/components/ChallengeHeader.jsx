@@ -78,7 +78,7 @@ function ChallengeHeader({
           setLifetimeXP(newXP)
         }
       })
-  }, [user?.id, totalXP, lifetimeXP]) // re-fetch when totalXP changes (quest completed)
+  }, [user?.id, totalXP]) // re-fetch when totalXP changes (quest completed)
 
   // Flame size based on streak length
   const getFlameClass = () => {

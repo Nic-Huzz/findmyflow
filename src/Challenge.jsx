@@ -1723,7 +1723,7 @@ function Challenge() {
         matchupData={matchupData}
         categoryScores={categoryScores}
         matchupLoading={matchupLoading}
-        totalXP={progress?.total_points || 0}
+        totalXP={lifetimeScores?.lifetime_total_score || 0}
         currentJourneyLevel={currentJourneyLevel}
         wahooCount={wahooCountThisWeek}
       />
