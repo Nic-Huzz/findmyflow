@@ -6,6 +6,7 @@
  * Team matchup banner replaces old rank display.
  */
 import { useState, useEffect, useRef } from 'react'
+import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { getLevel, getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS } from '../lib/crm/statsService'
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
@@ -50,23 +51,45 @@ function ChallengeHeader({
   const [showGraph, setShowGraph] = useState(false)
   const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [tierUpName, setTierUpName] = useState(null)
-  const prevXPRef = useRef(totalXP)
+  const [fetchedXP, setFetchedXP] = useState(null)
+  const prevXPRef = useRef(0)
 
-  // Use totalXP prop directly (sourced from lifetimeScores in parent)
-  const lifetimeXP = totalXP
+  // Primary: use prop from parent. Fallback: use self-fetched value.
+  const lifetimeXP = totalXP > 0 ? totalXP : (fetchedXP || 0)
 
-  // Detect tier-up when totalXP prop changes
+  // Backup fetch — runs once on mount to guarantee RP shows even if parent is slow
   useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('user_lifetime_scores')
+      .select('lifetime_total_score')
+      .eq('user_id', user.id)
+      .is('project_id', null)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('ChallengeHeader: RP backup fetch error:', error)
+          return
+        }
+        if (data?.lifetime_total_score != null) {
+          setFetchedXP(data.lifetime_total_score)
+        }
+      })
+  }, [user?.id])
+
+  // Sync from prop when parent catches up (and detect tier-ups)
+  useEffect(() => {
+    const best = totalXP > 0 ? totalXP : (fetchedXP || 0)
     const oldXP = prevXPRef.current
-    if (oldXP > 0 && totalXP > oldXP && getLevelNumber(totalXP) > getLevelNumber(oldXP)) {
-      const newLevel = getLevel(totalXP)
+    if (oldXP > 0 && best > oldXP && getLevelNumber(best) > getLevelNumber(oldXP)) {
+      const newLevel = getLevel(best)
       setTierUpName(`${newLevel.emoji} ${newLevel.name}`)
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
       setTimeout(() => confetti({ particleCount: 60, spread: 90, origin: { y: 0.5 } }), 250)
       setTimeout(() => setTierUpName(null), 4000)
     }
-    prevXPRef.current = totalXP
-  }, [totalXP])
+    prevXPRef.current = best
+  }, [totalXP, fetchedXP])
 
   // Flame size based on streak length
   const getFlameClass = () => {
