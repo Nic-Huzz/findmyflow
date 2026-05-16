@@ -270,9 +270,16 @@ export default function WahooCreator({
           <button
             className="wc-cta"
             disabled={!freeText.trim() || generating}
-            onClick={generateFromFreeText}
+            onClick={() => acceptChallenge({
+              title: freeText.trim(),
+              description: freeText.trim(),
+              visibilityLayer: currentVisibilityLayer || 'screen',
+              sourceLabel: 'Free text',
+              scaryScore: 7,
+              wahooScore: 7,
+            })}
           >
-            Generate my Wahoo
+            {generating ? 'Saving...' : 'Submit'}
           </button>
         </div>
       </div>
