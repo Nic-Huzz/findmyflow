@@ -480,6 +480,15 @@
   box-shadow: 0 8px 30px rgba(233, 162, 59, 0.5);
 }
 
+.jo-hook .jo-login-link {
+  display: block;
+  margin-top: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  text-align: center;
+  text-decoration: none;
+}
+
 .jo-hook .jo-tap-hint {
   font-weight: 500;
   font-size: 1rem;
