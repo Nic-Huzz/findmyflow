@@ -418,7 +418,8 @@
   gap: 8px;
 }
 
-.wc-edit-actions .wc-cta {
+.wc-edit-actions .wc-cta,
+.wc-edit-actions .wc-secondary {
   flex: 1;
 }
 
