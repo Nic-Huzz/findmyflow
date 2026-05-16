@@ -215,37 +215,39 @@ export default function PlaySkillsOnboarding() {
           <div className="jo-glow jo-glow-2" />
         </div>
         <div className="jo-hook-content">
-          <h1 className="jo-hook-heading">{slide.text}</h1>
-          {slide.subtext && (
-            <p className="jo-hook-subtext">
-              {slide.subtext.split('\n\n').map((para, i) => (
-                <span key={i}>{para}{i < slide.subtext.split('\n\n').length - 1 && <><br /><br /></>}</span>
-              ))}
-            </p>
-          )}
-          <div className="jo-hook-dots">
-            {HOOK_SLIDES.map((_, i) => (
-              <span key={i} className={`jo-hook-dot ${i <= hookSlideIndex ? 'active' : ''}`} />
-            ))}
+          <div className="jo-hook-text-container">
+            <h1 className="jo-hook-text" key={slide.id}>{slide.text}</h1>
+            {slide.subtext && (
+              <p className="jo-hook-subtext">
+                {slide.subtext.split('\n\n').map((para, i) => (
+                  <span key={i}>{para}{i < slide.subtext.split('\n\n').length - 1 && <><br /><br /></>}</span>
+                ))}
+              </p>
+            )}
           </div>
-          {isLast ? (
-            <>
-              <button className="jo-hook-continue" onClick={(e) => { e.stopPropagation(); transitionTo(BEATS.SIGNUP) }}>
-                <span className="jo-shimmer-layer" />
-                Let's go
-              </button>
-              <a
-                href="/log-in"
-                className="jo-login-link"
-                onClick={(e) => e.stopPropagation()}
-              >
-                Already have an account? Log in
-              </a>
-            </>
-          ) : (
-            <p className="jo-hook-tap-hint">Tap to continue</p>
-          )}
         </div>
+        <div className="jo-slide-dots">
+          {HOOK_SLIDES.map((_, i) => (
+            <span key={i} className={`jo-slide-dot ${i <= hookSlideIndex ? 'active' : ''}`} />
+          ))}
+        </div>
+        {isLast ? (
+          <>
+            <button className="jo-hook-continue" onClick={(e) => { e.stopPropagation(); transitionTo(BEATS.SIGNUP) }}>
+              <span className="jo-shimmer-layer" />
+              Let's go
+            </button>
+            <a
+              href="/log-in"
+              className="jo-login-link"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Already have an account? Log in
+            </a>
+          </>
+        ) : (
+          <div className="jo-tap-anywhere-hint">Tap to continue</div>
+        )}
       </div>
     )
   }
