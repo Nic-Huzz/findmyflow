@@ -376,20 +376,6 @@ export default function WahooCreator({
             <>
               <h3 className="wc-preview-title">{generatedChallenge.title}</h3>
               <p className="wc-preview-desc">{generatedChallenge.description}</p>
-
-              {generatedChallenge.completionCriteria && (
-                <div className="wc-preview-criteria">
-                  <span className="wc-preview-criteria-label">Done when:</span>
-                  <span>{generatedChallenge.completionCriteria}</span>
-                </div>
-              )}
-
-              {generatedChallenge.alternativeVersion && (
-                <div className="wc-preview-alt">
-                  <span className="wc-preview-alt-label">Easier version:</span>
-                  <span>{generatedChallenge.alternativeVersion}</span>
-                </div>
-              )}
             </>
           )}
 
