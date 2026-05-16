@@ -57,9 +57,16 @@ function ChallengeHeader({
   // Primary: use prop from parent. Fallback: use self-fetched value.
   const lifetimeXP = totalXP > 0 ? totalXP : (fetchedXP || 0)
 
+  // Debug: log RP values on every render
+  console.log('[RP DEBUG] totalXP prop:', totalXP, '| fetchedXP:', fetchedXP, '| lifetimeXP:', lifetimeXP, '| user:', user?.id?.slice(0, 8))
+
   // Backup fetch — runs once on mount to guarantee RP shows even if parent is slow
   useEffect(() => {
-    if (!user?.id) return
+    console.log('[RP DEBUG] Backup fetch effect running, user?.id:', user?.id?.slice(0, 8))
+    if (!user?.id) {
+      console.warn('[RP DEBUG] No user.id — skipping backup fetch')
+      return
+    }
     supabase
       .from('user_lifetime_scores')
       .select('lifetime_total_score')
@@ -67,14 +74,15 @@ function ChallengeHeader({
       .is('project_id', null)
       .maybeSingle()
       .then(({ data, error }) => {
-        if (error) {
-          console.error('ChallengeHeader: RP backup fetch error:', error)
-          return
-        }
+        console.log('[RP DEBUG] Backup fetch result — data:', JSON.stringify(data), '| error:', JSON.stringify(error))
+        if (error) return
         if (data?.lifetime_total_score != null) {
           setFetchedXP(data.lifetime_total_score)
+        } else {
+          console.warn('[RP DEBUG] Backup fetch returned null data — no row found')
         }
       })
+      .catch(err => console.error('[RP DEBUG] Backup fetch exception:', err))
   }, [user?.id])
 
   // Sync from prop when parent catches up (and detect tier-ups)
