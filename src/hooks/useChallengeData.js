@@ -441,6 +441,27 @@ export function useChallengeData() {
     }
   }
 
+  // Reload completions from DB (called after TuneTab/PlayListTab inline completions)
+  const reloadCompletions = async () => {
+    if (!user?.id) return
+    try {
+      const [challengeResult, userLevelResult] = await Promise.all([
+        progress?.challenge_instance_id
+          ? supabase.from('quest_completions').select('*').eq('user_id', user.id).eq('challenge_instance_id', progress.challenge_instance_id)
+          : Promise.resolve({ data: [] }),
+        supabase.from('quest_completions').select('*').eq('user_id', user.id).is('challenge_instance_id', null)
+          .or(`project_id.is.null,project_id.eq.${selectedProject?.id || '00000000-0000-0000-0000-000000000000'}`)
+      ])
+      if (!challengeResult.error && !userLevelResult.error) {
+        setCompletions([
+          ...(userLevelResult.data || []),
+          ...(challengeResult.data || [])
+        ])
+      }
+    } catch (error) {
+      console.error('Error reloading completions:', error)
+    }
+  }
 
   // Stubs — old weekly plan helpers (still referenced by QuestCard props downstream)
   const isQuestPlanned = () => false
@@ -1831,6 +1852,7 @@ export function useChallengeData() {
     weeklyScores,
     lifetimeScores,
     loadUserScores,
+    reloadCompletions,
 
     // Prerequisites
     nervousSystemComplete,

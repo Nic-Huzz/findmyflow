@@ -111,6 +111,7 @@ function Challenge() {
     setLeaderboardView,
     currentWeeklyPoints,
     loadUserScores,
+    reloadCompletions,
     nervousSystemComplete,
     safetyContracts,
     healingCompassComplete,
@@ -1959,7 +1960,7 @@ function Challenge() {
           <TuneTab
             userId={user?.id}
             onQuestComplete={handleQuestComplete}
-            onRefreshPoints={() => { loadStageProgress(); loadUserScores() }}
+            onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }}
           />
         )}
 
@@ -1969,7 +1970,7 @@ function Challenge() {
             userId={user?.id}
             currentVisibilityLayer={getLevelConfig(currentJourneyLevel)?.visibilityLayer || 'screen'}
             onQuestComplete={handleQuestComplete}
-            onRefreshPoints={() => { loadStageProgress(); loadUserScores() }}
+            onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }}
             wahooCount={wahooCountThisWeek}
           />
         )}
