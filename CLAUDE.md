@@ -160,11 +160,11 @@ docs/                         # Documentation files
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
 **Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`
 
-**Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching)
+**Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching), `/movement-makers` (Movement Makers)
 
 **Archetypes**: `/archetypes`, `/archetypes/essence`, `/archetypes/protective`
 
@@ -176,7 +176,9 @@ docs/                         # Documentation files
 
 **Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
+**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`, `/shift-scorecard` (public Shift Scorecard)
+
+**Landing Pages**: `/healing-compass-workshop`, `/breathwork`, `/why-i-created-this`
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`
 
@@ -230,15 +232,15 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 ### 6. 7-Day Challenge System (Vibe Rise Maintenance Engine)
 
-**Tabs**: Level → Tune → Play-list → Healing. Layout: Header (streak + Wahoo Counter ⚡ + score pills + Rise bar) → Category tabs → Tab content.
+**Tabs**: Level → Tune → Wahoo → Healing. Layout: Header (streak + Wahoo Counter ⚡ + score pills + Rise bar) → Category tabs → Tab content.
 
 **Vibe Rise Equation**: `Sustained Vibe Rise = (Practices + Wahoos + Healing) ÷ (Drains)`. All state data flows through `nervous_system_checkins` table. Capacity Score (0-100) displayed on Level tab.
 
 **Level tab**: Journey progression (9 levels), zone diagnosis, boss fights, milestones, CapacityCard. Courage counts re-enabled (L1=1...L7=3, total 15 Wahoos). PlaySkillPicker at Level 0.
 
-**Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 4 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown).
+**Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 4 sections: (1) Daily Practices — Maintenance subsection (3-meal tracker: healthy=1pt, cheat/skipped=0), Safety subsection, Expression subsection. (2) Weekly — Safety + Expression deeper practices. (3) Drains (5 categories + note + 2-option: Activated/Shutdown). (4) Stalls — log protective voice moments that eroded safety (category + state + voice picker).
 
-**Play-list tab** (`PlayListTab.jsx`): WahooCreator (two-path: "I know" free text or "Help me find one" browse categories) + Active Wahoos + Wahoo Map link.
+**Wahoo tab** (`PlayListTab.jsx`): WahooCreator (two-path: "I know" free text or "Help me find one" browse categories) + Active Wahoos + Wahoo Map link.
 
 **Healing tab**: Recognise, Release, Rewire only (blockage clearing). After-only 4-state check-in (before step removed).
 
@@ -250,7 +252,9 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Forgiving streak**: 1 day miss allowed without breaking streak.
 
-Key files: `Challenge.jsx`, `useChallengeData.js`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`
+**Vibe Rise Fest**: Opt-in event leaderboard (popup in ChallengeHeader). Opt-in stored as `fest_participant` on `user_stage_progress`. Component: `FestLeaderboard.jsx`.
+
+Key files: `Challenge.jsx`, `useChallengeData.js`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `ChallengeHeader.jsx`, `FestLeaderboard.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`
 
 Key docs: `docs/vibe-rise-ecosystem-architecture.md`, `docs/vibe-rise-challenge-alignment.md`
 
@@ -366,7 +370,7 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 ## Database Schema
 
 ### Core Tables
-`user_stage_progress` (persona, onboarding, current_journey_level) | `user_projects` (stage, points) | `flow_sessions` | `flow_entries` (compass) | `milestone_completions` | `quest_completions` | `challenge_instances` | `groan_reflections` | `user_level_progress` | `boss_fight_sessions`
+`user_stage_progress` (persona, onboarding, current_journey_level, fest_participant) | `user_projects` (stage, points) | `flow_sessions` | `flow_entries` (compass) | `milestone_completions` | `quest_completions` | `challenge_instances` | `groan_reflections` | `user_level_progress` | `boss_fight_sessions` | `nervous_system_checkins` (checkin_type: playlist/healing/daily/tune/drain/stall)
 
 ### Flow & Assessment Data
 `nikigai_clusters` | `nikigai_responses` | `nikigai_key_outcomes` | `persona_profiles` | `nervous_system_responses` | `healing_compass_responses` | `lead_flow_profiles` | `scope_map_results` | `quiz_results` | `attraction_offer_assessments` | `upsell_assessments` | `downsell_assessments` | `continuity_assessments` | `leads_assessments` | `lead_magnet_assessments` | `offer_builder_assessments` | `funnel_metrics` | `zarlo_conversations`
