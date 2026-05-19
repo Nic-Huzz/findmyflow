@@ -29,11 +29,14 @@ async function generateWithGemini(photo_base64: string, photo_mime: string, prom
   for (const model of models) {
     try {
       console.log(`Trying Gemini model: ${model}...`)
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 60000) // 60s timeout
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
           body: JSON.stringify({
             contents: [{
               parts: [
@@ -45,6 +48,7 @@ async function generateWithGemini(photo_base64: string, photo_mime: string, prom
           }),
         }
       )
+      clearTimeout(timeout)
 
       if (!response.ok) {
         const errText = await response.text()
@@ -108,12 +112,15 @@ async function generateWithGPT4o(photo_base64: string, photo_mime: string, promp
     const photoUrl = urlData.publicUrl
     console.log('Photo uploaded for GPT-4o:', photoUrl)
 
+    const gptController = new AbortController()
+    const gptTimeout = setTimeout(() => gptController.abort(), 60000) // 60s timeout
     const response = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENAI_API_KEY}`,
         'Content-Type': 'application/json',
       },
+      signal: gptController.signal,
       body: JSON.stringify({
         model: 'gpt-4o',
         input: [
@@ -130,6 +137,7 @@ async function generateWithGPT4o(photo_base64: string, photo_mime: string, promp
         ],
       }),
     })
+    clearTimeout(gptTimeout)
 
     if (!response.ok) {
       const errText = await response.text()
