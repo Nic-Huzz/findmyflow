@@ -509,7 +509,7 @@ export default function MePage() {
           </div>
         </div>
 
-        <h1 className="hero-name">{archetypes?.essence?.name || 'Hero'}</h1>
+        <h1 className="hero-name">{archetypes?.essence?.customName || archetypes?.essence?.name || 'Hero'}</h1>
         <p className="hero-tagline">{archetypes?.essence?.tagline || archetypes?.essence?.visionInAction || 'Discovering your flow'}</p>
 
         <div className="xp-progress">
