@@ -773,12 +773,31 @@ export default function EssenceMirrorFlow() {
                           setAvatarLoadingText(loadingMessages[msgIndex])
                         }, 3000)
                         try {
-                          const reader = new FileReader()
-                          reader.onload = async () => {
-                            const base64 = reader.result.split(',')[1]
-                            const primary = getArchetype(pixarPick)
-                            const secondary = getArchetype(getSecondary())
-                            const prompt = `Transform this person into a high-quality 3D animated movie character. Use ONLY their face and facial features as reference for likeness. Create a completely new heroic scene around them based on their archetype essence.
+                          // Compress photo to max 1024px before sending
+                          const compressPhoto = (file) => new Promise((resolve) => {
+                            const img = new Image()
+                            img.onload = () => {
+                              const MAX = 1024
+                              let w = img.width, h = img.height
+                              if (w > MAX || h > MAX) {
+                                const ratio = Math.min(MAX / w, MAX / h)
+                                w = Math.round(w * ratio)
+                                h = Math.round(h * ratio)
+                              }
+                              const canvas = document.createElement('canvas')
+                              canvas.width = w
+                              canvas.height = h
+                              canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+                              const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
+                              resolve(dataUrl.split(',')[1])
+                            }
+                            img.src = URL.createObjectURL(file)
+                          })
+
+                          const base64 = await compressPhoto(avatarPhoto)
+                          const primary = getArchetype(pixarPick)
+                          const secondary = getArchetype(getSecondary())
+                          const prompt = `Transform this person into a high-quality 3D animated movie character. Use ONLY their face and facial features as reference for likeness. Create a completely new heroic scene around them based on their archetype essence.
 
 Their essence: "${primary?.name}" - ${primary?.poetic_line}
 Their superpower: ${primary?.superpower}
@@ -786,29 +805,27 @@ Their vision: ${primary?.poetic_vision}
 
 Create a dynamic pose and scene background that embodies this essence. The character should be in action or in their element, not just standing. Use warm cinematic lighting with purple and gold tones. Big expressive animated eyes. Heroic but approachable. Modern 3D animated feature film quality. Square composition.`
 
-                            const { data, error } = await supabase.functions.invoke('generate-avatar-gemini', {
-                              body: {
-                                photo_base64: base64,
-                                photo_mime: avatarPhoto.type,
-                                prompt,
-                              },
-                            })
+                          const { data, error } = await supabase.functions.invoke('generate-avatar-gemini', {
+                            body: {
+                              photo_base64: base64,
+                              photo_mime: 'image/jpeg',
+                              prompt,
+                            },
+                          })
 
-                            if (error || data?.error) {
-                              clearInterval(loadingInterval)
-                              const msg = data?.error === 'content_policy'
-                                ? 'The AI couldn\'t transform this photo. Try a clearer headshot with good lighting.'
-                                : data?.message || 'Generation failed. Try a different photo.'
-                              setAvatarError(msg)
-                              setAvatarGenerating(false)
-                              return
-                            }
-
+                          if (error || data?.error) {
                             clearInterval(loadingInterval)
-                            setAvatarGenerated(data.url)
+                            const msg = data?.error === 'content_policy'
+                              ? 'The AI couldn\'t transform this photo. Try a clearer headshot with good lighting.'
+                              : data?.message || 'Generation failed. Try a different photo.'
+                            setAvatarError(msg)
                             setAvatarGenerating(false)
+                            return
                           }
-                          reader.readAsDataURL(avatarPhoto)
+
+                          clearInterval(loadingInterval)
+                          setAvatarGenerated(data.url)
+                          setAvatarGenerating(false)
                         } catch (err) {
                           clearInterval(loadingInterval)
                           console.warn('Avatar generation error:', err)
