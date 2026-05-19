@@ -1102,6 +1102,41 @@ function AttendeeUpload({ experienceId, userId }) {
     setUploading(false)
   }
 
+  const handleCSVUpload = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    setError(null)
+    setExtracted(null)
+
+    try {
+      const text = await file.text()
+      const lines = text.split(/\r?\n/).filter(l => l.trim())
+      if (lines.length < 2) throw new Error('CSV has no data rows')
+
+      const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/['"]/g, ''))
+      const nameCol = headers.findIndex(h => h === 'name' || h === 'full name' || h === 'full_name')
+      const emailCol = headers.findIndex(h => h === 'email' || h === 'email address')
+      const phoneCol = headers.findIndex(h => h === 'phone' || h === 'phone number')
+
+      if (nameCol === -1 && emailCol === -1) throw new Error('CSV needs a Name or Email column')
+
+      const attendees = []
+      for (let i = 1; i < lines.length; i++) {
+        const cols = lines[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)?.map(c => c.trim().replace(/^"|"$/g, '')) || lines[i].split(',').map(c => c.trim())
+        const name = nameCol >= 0 ? (cols[nameCol] || '').trim() : ''
+        const email = emailCol >= 0 ? (cols[emailCol] || '').trim() : ''
+        if (name || email) attendees.push({ name: name || email.split('@')[0], email: email || null, phone: phoneCol >= 0 ? (cols[phoneCol] || '').trim() || null : null })
+      }
+
+      setExtracted({ success: true, attendees, total_found: attendees.length, source_type: 'CSV', notes: file.name })
+    } catch (err) {
+      console.error('CSV parse error:', err)
+      setError(err.message || 'Could not parse CSV. Check the format.')
+    }
+    setUploading(false)
+  }
+
   const handleRemoveAttendee = (index) => {
     setExtracted(prev => ({
       ...prev,
@@ -1160,7 +1195,7 @@ function AttendeeUpload({ experienceId, userId }) {
               experience_id: experienceId,
               contact_id: contactId,
               user_id: userId,
-              source: 'screenshot',
+              source: extracted?.source_type === 'CSV' ? 'csv' : 'screenshot',
             }, { onConflict: 'experience_id,contact_id' })
           added++
         }
@@ -1186,19 +1221,25 @@ function AttendeeUpload({ experienceId, userId }) {
         <div className="exp-section-titleblock">
           <h2 className="exp-section-title">Attendees</h2>
           <div className="exp-section-subtitle">
-            {attendeeCount > 0 ? `${attendeeCount} recorded` : 'Upload a screenshot to add'}
+            {attendeeCount > 0 ? `${attendeeCount} recorded` : 'Upload a screenshot or CSV to add'}
           </div>
         </div>
       </div>
 
       {error && <p className="exp-upload-error">{error}</p>}
 
-      {/* Upload button */}
+      {/* Upload buttons */}
       {!extracted && !saved && (
-        <label className="exp-upload-btn">
-          <input type="file" accept="image/*" capture="environment" onChange={handleUpload} style={{ display: 'none' }} />
-          {uploading ? 'Extracting...' : '📸 Upload Screenshot'}
-        </label>
+        <div className="exp-upload-buttons" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <label className="exp-upload-btn">
+            <input type="file" accept="image/*" capture="environment" onChange={handleUpload} style={{ display: 'none' }} />
+            {uploading ? 'Processing...' : '📸 Upload Screenshot'}
+          </label>
+          <label className="exp-upload-btn" style={{ background: '#10b981' }}>
+            <input type="file" accept=".csv,.xlsx,.xls" onChange={handleCSVUpload} style={{ display: 'none' }} />
+            {uploading ? 'Processing...' : '📄 Upload CSV'}
+          </label>
+        </div>
       )}
 
       {/* Extraction preview */}
