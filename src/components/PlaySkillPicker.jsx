@@ -142,7 +142,7 @@ export default function PlaySkillPicker({ userId, onComplete, onClose }) {
     <div className="psp-overlay" onClick={onClose}>
       <div className="psp-sheet" onClick={e => e.stopPropagation()}>
         <div className="psp-header">
-          <h3 className="psp-title">What lights you up?</h3>
+          <h3 className="psp-title">Find Your Wahoos</h3>
           <button className="psp-close" onClick={onClose}>&times;</button>
         </div>
 

@@ -26,7 +26,7 @@ export const LEVEL_CONFIG = {
     extraQuests: [
       {
         id: 'play_skills',
-        name: 'Find Your Play-Skills',
+        name: 'Find Your Wahoos',
         route: null,
         narrative: 'Pick what lights you up.',
         icon: '🔥',
