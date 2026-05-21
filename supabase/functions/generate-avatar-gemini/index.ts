@@ -214,15 +214,18 @@ serve(async (req) => {
 
     // Try Gemini first, then GPT-4o
     let imageResult = await generateWithGemini(photo_base64, photo_mime, prompt)
+    let failReason = imageResult ? null : 'gemini_failed'
 
     if (!imageResult) {
       imageResult = await generateWithGPT4o(photo_base64, photo_mime, prompt)
+      if (!imageResult) failReason = 'both_failed'
     }
 
     if (!imageResult) {
+      console.error(`Avatar generation failed: ${failReason}`)
       return jsonResponse({
-        error: 'content_policy',
-        message: "Generation couldn't complete. Try a different photo or try again in a moment.",
+        error: 'generation_failed',
+        message: "Avatar generation failed. Please try again in a moment.",
       })
     }
 

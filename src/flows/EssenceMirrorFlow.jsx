@@ -815,10 +815,7 @@ Create a dynamic pose and scene background that embodies this essence. The chara
 
                           if (error || data?.error) {
                             clearInterval(loadingInterval)
-                            const msg = data?.error === 'content_policy'
-                              ? 'The AI couldn\'t transform this photo. Try a clearer headshot with good lighting.'
-                              : data?.message || 'Generation failed. Try a different photo.'
-                            setAvatarError(msg)
+                            setAvatarError(data?.message || 'Generation failed. Please try again.')
                             setAvatarGenerating(false)
                             return
                           }
