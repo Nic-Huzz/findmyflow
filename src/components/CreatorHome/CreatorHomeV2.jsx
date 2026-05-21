@@ -166,8 +166,8 @@ export default function CreatorHomeV2() {
         supabase.from('experience_attendees').select('contact_id, experience_id').eq('user_id', userId),
         supabase.from('lead_flow_profiles').select('essence_archetype, custom_essence_image, custom_essence_name').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('quest_completions').select('points_earned').eq('user_id', userId).eq('quest_category', 'Movement'),
-        supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'skills'),
-        supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'problems'),
+        supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'skills').eq('cluster_stage', 'final'),
+        supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'problems').eq('cluster_stage', 'final'),
       ])
 
       setScopeResult(scope || null)
