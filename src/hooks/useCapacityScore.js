@@ -1,7 +1,7 @@
 /**
  * useCapacityScore.js
  *
- * Capacity = Safety × Expression (each 0-10, product 0-100).
+ * Vibe Rise Score = Safety × Expression (each 0-10, product 0-100).
  *
  * Everything measured in Wahoo-equivalents:
  *   practice = 1pt, daily healing = 1pt, weekly healing = 3pt,

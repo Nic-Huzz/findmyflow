@@ -1,7 +1,7 @@
 /**
  * CapacityCard.jsx
  *
- * Capacity Score = Safety × Expression, displayed as:
+ * Vibe Rise Score = Safety × Expression, displayed as:
  *   1. Equation row with trend arrows
  *   2. Zone bar (Stuck / Wired / Grounded / Vibe Rise)
  *   3. Maintenance rolling 7-day % with streak dots
@@ -22,20 +22,21 @@ const ZONE_LABELS = [
 
 const TREND_ARROWS = { up: '↑', down: '↓', flat: '→' }
 
-export default function CapacityCard({ userId, refreshTrigger = 0 }) {
+export default function CapacityCard({ userId, refreshTrigger = 0, scoreData }) {
+  const hookData = useCapacityScore(scoreData ? null : userId, refreshTrigger)
   const {
     safety, expression, capacity, zone,
     trend, safetyTrend, expressionTrend,
     maintenancePct, maintenanceDays,
     dataPoints, loading,
-  } = useCapacityScore(userId, refreshTrigger)
+  } = scoreData || hookData
 
   if (loading) return null
   if (capacity === null || dataPoints === 0) {
     return (
       <div className="cc-card cc-empty">
         <div className="cc-header">
-          <span className="cc-title">Capacity Score</span>
+          <span className="cc-title">Vibe Rise Score</span>
         </div>
         <p className="cc-empty-text">Complete a daily practice to start tracking</p>
       </div>
@@ -49,7 +50,7 @@ export default function CapacityCard({ userId, refreshTrigger = 0 }) {
     <div className="cc-card">
       {/* Header */}
       <div className="cc-header">
-        <span className="cc-title">Capacity Score</span>
+        <span className="cc-title">Vibe Rise Score</span>
         {trend !== 0 && (
           <span className={`cc-trend ${trendClass}`}>
             {trend > 0 ? '↑' : '↓'} {trendText}

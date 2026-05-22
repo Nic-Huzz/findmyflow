@@ -77,7 +77,7 @@ Generate a blended profile. The blend should feel like ONE person, not two arche
 Rules:
 - Write in second person ("You are...")
 - Keep each field to 2-3 short sentences max. Each sentence should stand alone as its own thought.
-- The blended_name should be a unique 2-3 word name that captures both essences (e.g., "The Fierce Alchemist", "The Rebel Healer")
+- The blended_name should be a unique 2-3 word name that captures both essences (e.g., "Fierce Alchemist", "Rebel Healer"). Do NOT start with "The".
 - The wound should combine both wounds into one painful truth
 - NEVER use em dashes (—), semicolons (;), or double hyphens (--)
 - Use commas, full stops, or rephrase instead
@@ -85,7 +85,7 @@ Rules:
 
 Return ONLY valid JSON:
 {
-  "blended_name": "The [Name]",
+  "blended_name": "[Name]",
   "blended_essence": "A poetic one-line essence statement blending both archetypes",
   "blended_superpower": "What they uniquely do that no single archetype captures",
   "blended_wound": "The combined wound — what they were told that made them suppress both parts",
@@ -116,7 +116,7 @@ Return ONLY valid JSON:
       result = JSON.parse(text.replace(/```json\n?|\n?```/g, '').trim())
     } catch {
       result = {
-        blended_name: `The ${primary.name.split(' ').pop()} ${secondary.name.split(' ').pop()}`,
+        blended_name: `${primary.name.split(' ').pop()} ${secondary.name.split(' ').pop()}`,
         blended_essence: `${primary.poetic_line} ${secondary.poetic_line}`,
         blended_superpower: `${primary.superpower}`,
         blended_wound: `${primary.essence_wound}`,

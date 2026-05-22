@@ -283,7 +283,7 @@ export default function EssenceMirrorFlow() {
         primaryWound: primary.essence_wound,
         secondaryWound: secondary.essence_wound,
       })
-      setHeroName(data.blended_name || primary.name || '')
+      setHeroName((data.blended_name || primary.name || '').replace(/^The\s+/i, ''))
     } catch (err) {
       console.warn('Blend API error:', err)
       // Fallback: use primary data directly
@@ -573,7 +573,7 @@ export default function EssenceMirrorFlow() {
           <div className="em-step-header">
             <div className="em-step-badge">Confirmation</div>
             <h1 className="em-step-title">Which of these futures excites you most?</h1>
-            <p className="em-step-subtitle">Tap all that resonate. You can pick multiple.</p>
+            <p className="em-step-subtitle">Tap all that resonate. <strong style={{ color: 'white' }}>You can pick multiple.</strong></p>
           </div>
 
           <div className="em-scene-cards">

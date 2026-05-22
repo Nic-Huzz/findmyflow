@@ -19,6 +19,7 @@ import { hapticLight, hapticSuccess } from '../lib/haptics'
 import confetti from 'canvas-confetti'
 import HealingCompletionModal from './HealingCompletionModal'
 import CapacityCard from './level/CapacityCard'
+import useCapacityScore from '../hooks/useCapacityScore'
 import './TuneTab.css'
 
 // Quest IDs that render inline (Practice + Rest checkboxes)
@@ -86,8 +87,13 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
   const [completingQuestId, setCompletingQuestId] = useState(null)
   const [healingModalQuest, setHealingModalQuest] = useState(null) // for Reconnect multi-step
 
-  // Capacity score refresh
+  // Capacity / Vibe Rise score (single hook call, shared with CapacityCard)
   const [capacityRefresh, setCapacityRefresh] = useState(0)
+  const scoreData = useCapacityScore(userId, capacityRefresh)
+  const { safety, expression, maintenancePct } = scoreData
+
+  // Practice info pop-up
+  const [infoQuest, setInfoQuest] = useState(null)
 
   // Meal tracking state
   const [mealExpanded, setMealExpanded] = useState(false)
@@ -446,7 +452,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           {completed ? '✓' : ''}
         </span>
         <div className="ht-item-body">
-          <div className="ht-item-name">{quest.name}</div>
+          <div className="ht-item-name" onClick={() => quest.description && setInfoQuest(quest)} style={quest.description ? { cursor: 'pointer' } : undefined}>
+            {quest.name}
+            {quest.description && <span className="tt-info-icon">ⓘ</span>}
+          </div>
           <div className="ht-item-meta">
             <span className="ht-item-type">{quest.type}</span>
             <span className="ht-item-sep">·</span>
@@ -499,8 +508,8 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
 
   return (
     <div className="tune-tab">
-      {/* Capacity Score */}
-      <CapacityCard userId={userId} refreshTrigger={capacityRefresh} />
+      {/* Vibe Rise Score */}
+      <CapacityCard userId={userId} refreshTrigger={capacityRefresh} scoreData={scoreData} />
 
       {/* Section 1: Daily Practices */}
       <div className="tt-section">
@@ -518,6 +527,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           <div className="tt-subsection-header">
             <span className="tt-subsection-icon">⚙️</span>
             <span className="tt-subsection-label tt-label-maintenance">Maintenance</span>
+            {maintenancePct > 0 && <span className="tt-score-badge tt-score-maintenance">{maintenancePct}%</span>}
             <span className="tt-subsection-count">{maintenanceDone}/{maintenancePractices.length}</span>
           </div>
           <div className="tt-quest-list">
@@ -530,7 +540,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
                       {allMealsLogged ? '✓' : ''}
                     </span>
                     <div className="ht-item-body">
-                      <div className="ht-item-name">{q.name}</div>
+                      <div className="ht-item-name" onClick={() => q.description && !mealExpanded && setInfoQuest(q)} style={q.description && !mealExpanded ? { cursor: 'pointer' } : undefined}>
+                        {q.name}
+                        {q.description && !mealExpanded && <span className="tt-info-icon">ⓘ</span>}
+                      </div>
                       <div className="ht-item-meta">
                         <span className="ht-item-type">{q.type}</span>
                         <span className="ht-item-sep">·</span>
@@ -571,7 +584,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
                       <span className="ht-item-action done-action">Done</span>
                     ) : (
                       <button
-                        className="ht-item-action"
+                        className={`ht-item-action ${mealExpanded ? 'tt-meal-action-top' : ''}`}
                         onClick={() => { hapticLight(); setMealExpanded(!mealExpanded) }}
                       >
                         {mealExpanded ? 'Close' : 'Log'}
@@ -590,6 +603,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           <div className="tt-subsection-header">
             <span className="tt-subsection-icon">🛡️</span>
             <span className="tt-subsection-label tt-label-safety">Safety</span>
+            {safety !== null && <span className="tt-score-badge tt-score-safety">{safety}/10</span>}
             <span className="tt-subsection-count">{safetyDone}/{safetyPractices.length}</span>
           </div>
           <div className="tt-quest-list">
@@ -602,6 +616,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           <div className="tt-subsection-header">
             <span className="tt-subsection-icon">🔥</span>
             <span className="tt-subsection-label tt-label-activation">Expression</span>
+            {expression !== null && <span className="tt-score-badge tt-score-expression">{expression}/10</span>}
             <span className="tt-subsection-count">{expressionDone}/{expressionPractices.length}</span>
           </div>
           <div className="tt-quest-list">
@@ -653,6 +668,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           <div className="tt-section-header-left">
             <span className="tt-section-icon">⚡</span>
             <span className="tt-section-title">Drains</span>
+            {expression !== null && <span className="tt-score-badge tt-score-expression">🔥 {expression}/10</span>}
           </div>
           {recentDrains.length > 0 && (
             <span className="tt-section-count tt-drain-count">{recentDrains.length} this week</span>
@@ -762,6 +778,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           <div className="tt-section-header-left">
             <span className="tt-section-icon">🧊</span>
             <span className="tt-section-title">Stalls</span>
+            {safety !== null && <span className="tt-score-badge tt-score-safety">🛡️ {safety}/10</span>}
           </div>
           {recentStalls.length > 0 && (
             <span className="tt-section-count tt-stall-count">{recentStalls.length} this week</span>
@@ -877,6 +894,17 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
           </div>
         )}
       </div>
+
+      {/* Practice Info Pop-up */}
+      {infoQuest && (
+        <div className="tt-info-overlay" onClick={() => setInfoQuest(null)}>
+          <div className="tt-info-modal" onClick={e => e.stopPropagation()}>
+            <div className="tt-info-modal-name">{infoQuest.name}</div>
+            <div className="tt-info-modal-desc">{infoQuest.description}</div>
+            <button className="tt-info-modal-close" onClick={() => setInfoQuest(null)}>Got it</button>
+          </div>
+        </div>
+      )}
 
       {/* Reconnect Completion Modal */}
       {healingModalQuest && (
