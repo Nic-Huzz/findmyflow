@@ -378,9 +378,6 @@ export default function CreatorHomeV2() {
                       </div>
                     </div>
                   )}
-                  <button className="ch2-btn-outline" onClick={() => navigate('/create/remarkable')} style={{ marginTop: 10, fontSize: 12, padding: '8px 14px' }}>
-                    Retake
-                  </button>
                 </div>
               ) : (
                 <div className="ch2-id-section" style={{ paddingTop: 14 }}>
