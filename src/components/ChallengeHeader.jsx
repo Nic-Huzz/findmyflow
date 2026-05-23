@@ -8,12 +8,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
-import { getLevel, getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS } from '../lib/crm/statsService'
+import { getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS, getLevel } from '../lib/crm/statsService'
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 import JourneyGraphPopup from './JourneyGraphPopup'
 import FestLeaderboard from './FestLeaderboard'
-import confetti from 'canvas-confetti'
 
 // Week type display info
 const WEEK_TYPES = {
@@ -50,7 +49,6 @@ function ChallengeHeader({
   const { user } = useAuth()
   const [showGraph, setShowGraph] = useState(false)
   const [showLeaderboard, setShowLeaderboard] = useState(false)
-  const [tierUpName, setTierUpName] = useState(null)
   const [fetchedXP, setFetchedXP] = useState(null)
   const prevXPRef = useRef(0)
 
@@ -73,17 +71,9 @@ function ChallengeHeader({
       })
   }, [user?.id])
 
-  // Sync from prop when parent catches up (and detect tier-ups)
+  // Sync XP ref from prop (level-up celebration handled by LevelUpModal in parent)
   useEffect(() => {
     const best = totalXP > 0 ? totalXP : (fetchedXP || 0)
-    const oldXP = prevXPRef.current
-    if (oldXP > 0 && best > oldXP && getLevelNumber(best) > getLevelNumber(oldXP)) {
-      const newLevel = getLevel(best)
-      setTierUpName(`${newLevel.emoji} ${newLevel.name}`)
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
-      setTimeout(() => confetti({ particleCount: 60, spread: 90, origin: { y: 0.5 } }), 250)
-      setTimeout(() => setTierUpName(null), 4000)
-    }
     prevXPRef.current = best
   }, [totalXP, fetchedXP])
 
@@ -186,13 +176,6 @@ function ChallengeHeader({
           </div>
         )
       })()}
-
-      {/* Tier-up toast */}
-      {tierUpName && (
-        <div className="challenge-tierup-toast">
-          Ranked up to {tierUpName}!
-        </div>
-      )}
 
       {/* Bottom row: Streak + actions */}
       <div className="challenge-header-top">

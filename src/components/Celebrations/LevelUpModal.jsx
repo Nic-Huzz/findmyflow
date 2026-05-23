@@ -19,7 +19,7 @@ export default function LevelUpModal({ level, onClose }) {
 
   // level can be a number (legacy) or a level object
   const levelInfo = typeof level === 'number'
-    ? LEVELS[level - 1] || LEVELS[0]
+    ? (LEVELS[level - 1] || LEVELS[LEVELS.length - 1])
     : level
 
   return (

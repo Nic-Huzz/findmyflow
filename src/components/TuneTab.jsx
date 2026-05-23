@@ -282,8 +282,8 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       confetti({ particleCount: 50, spread: 45, origin: { y: 0.7 }, ticks: 100, gravity: 1.4, scalar: 0.8 })
       setCapacityRefresh(n => n + 1)
 
-      // Check for RP level-up
-      checkLevelUp(quest.points)
+      // Check for RP level-up (only if scoring succeeded)
+      if (!scoreError) checkLevelUp(quest.points)
 
       // Refresh completions
       const { data } = await supabase
