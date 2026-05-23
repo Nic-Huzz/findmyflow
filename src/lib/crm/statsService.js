@@ -6,12 +6,12 @@ import { supabase } from '../supabaseClient'
 
 // Level configuration
 export const LEVELS = [
-  { min: 0, name: 'Getting Started', emoji: '🌱' },
-  { min: 100, name: 'Habit Builder', emoji: '🧱' },
-  { min: 500, name: 'Strong Foundation', emoji: '🌿' },
-  { min: 1500, name: 'Vibe Rise', emoji: '🔥' },
-  { min: 3500, name: 'Vibe Master', emoji: '⚔️' },
-  { min: 7000, name: 'Movement Maker', emoji: '👑' },
+  { min: 0, name: 'Getting Started', emoji: '🌱', description: 'You showed up. That takes more courage than most people realise. Everything starts here.' },
+  { min: 100, name: 'Habit Builder', emoji: '🧱', description: 'You are building the daily rituals that rewire your nervous system. Consistency is becoming your superpower.' },
+  { min: 500, name: 'Strong Foundation', emoji: '🌿', description: 'Your practices are rooted. Safety is building, expression is growing. The foundation holds.' },
+  { min: 1500, name: 'Vibe Rise', emoji: '🔥', description: 'You are in Vibe Rise. Your safety and expression are working together. This is what alignment feels like.' },
+  { min: 3500, name: 'Vibe Master', emoji: '⚔️', description: 'You have mastered the daily practice of rising. Your nervous system trusts you. Now you lead by example.' },
+  { min: 7000, name: 'Movement Maker', emoji: '👑', description: 'You are the proof that this works. Your rise creates a ripple. Others rise because you did.' },
 ]
 
 // Get current level based on points

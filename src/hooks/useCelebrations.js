@@ -65,8 +65,9 @@ export function useCelebrations() {
     }
 
     // Send achievement notification
+    const levelName = typeof newLevel === 'object' ? newLevel.name : `Level ${newLevel}`
     sendAchievementNotification({
-      title: `🎉 Level ${newLevel} Unlocked!`,
+      title: `🎉 ${levelName} Unlocked!`,
       body: 'Keep up the amazing work on your journey!'
     })
   }, [])

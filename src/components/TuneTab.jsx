@@ -17,6 +17,7 @@ import { getScoringCategory } from '../lib/scoringCategories'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import confetti from 'canvas-confetti'
+import { getLevel, getLevelNumber } from '../lib/crm/statsService'
 import HealingCompletionModal from './HealingCompletionModal'
 import CapacityCard from './level/CapacityCard'
 import useCapacityScore from '../hooks/useCapacityScore'
@@ -80,7 +81,7 @@ const DAILY_PRACTICE_IDS = [
   'practice_honour_values',
 ]
 
-export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
+export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLevelUp }) {
   const [allQuests, setAllQuests] = useState([])
   const [completions, setCompletions] = useState([])
   const [loading, setLoading] = useState(true)
@@ -219,6 +220,26 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
     [allQuests]
   )
 
+  // Check for RP level-up after scoring
+  const checkLevelUp = async (pointsAdded) => {
+    if (!onLevelUp || !pointsAdded) return
+    try {
+      const { data } = await supabase
+        .from('user_lifetime_scores')
+        .select('lifetime_total_score')
+        .eq('user_id', userId)
+        .is('project_id', null)
+        .maybeSingle()
+      const newXP = data?.lifetime_total_score || 0
+      const oldXP = newXP - pointsAdded
+      if (oldXP > 0 && getLevelNumber(newXP) > getLevelNumber(oldXP)) {
+        onLevelUp(getLevel(newXP))
+      }
+    } catch (err) {
+      // Non-fatal
+    }
+  }
+
   // Inline completion: tap Complete → save + auto-log ventral for capacity
   const handleInlineComplete = async (quest) => {
     if (completingQuestId) return
@@ -260,6 +281,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       hapticSuccess()
       confetti({ particleCount: 50, spread: 45, origin: { y: 0.7 }, ticks: 100, gravity: 1.4, scalar: 0.8 })
       setCapacityRefresh(n => n + 1)
+
+      // Check for RP level-up
+      checkLevelUp(quest.points)
 
       // Refresh completions
       const { data } = await supabase
@@ -327,6 +351,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints }) {
       confetti({ particleCount: 50, spread: 45, origin: { y: 0.7 }, ticks: 100, gravity: 1.4, scalar: 0.8 })
       setCompletions(prev => [...prev, { quest_id: mealId, completed_at: new Date().toISOString() }])
       setCapacityRefresh(n => n + 1)
+      if (pts > 0) checkLevelUp(pts)
       onRefreshPoints?.()
     } catch (err) {
       console.error('Meal log error:', err)

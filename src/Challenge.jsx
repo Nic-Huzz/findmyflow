@@ -7,7 +7,7 @@ import confetti from 'canvas-confetti'
 import { triggerSideCannons, MicroToast } from './components/Celebrations'
 import LevelUpModal from './components/Celebrations/LevelUpModal'
 import { useCelebrations } from './hooks/useCelebrations'
-import { getLevelNumber } from './lib/crm/statsService'
+import { getLevel, getLevelNumber } from './lib/crm/statsService'
 import WeeklyRecapCard from './components/WeeklyRecapCard'
 import GraduationModal from './components/GraduationModal'
 import NotificationPrompt from './components/NotificationPrompt'
@@ -904,7 +904,7 @@ function Challenge() {
 
         // Trigger level-up celebration if level changed
         if (newLevel > oldLevel) {
-          setTimeout(() => celebrateLevelUp(newLevel), 800)
+          setTimeout(() => celebrateLevelUp(getLevel(newXP)), 800)
         }
       } catch (scoreError) {
         console.error('Error updating scores:', scoreError)
@@ -1961,6 +1961,7 @@ function Challenge() {
             userId={user?.id}
             onQuestComplete={handleQuestComplete}
             onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }}
+            onLevelUp={(level) => celebrateLevelUp(level)}
           />
         )}
 

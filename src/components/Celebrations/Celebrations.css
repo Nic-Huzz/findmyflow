@@ -168,6 +168,21 @@
   margin: 8px 0 16px;
 }
 
+.level-up-modal .level-up-name {
+  color: #E9A23B;
+  font-size: 22px;
+  font-weight: 800;
+  margin: 4px 0 12px;
+  letter-spacing: 0.5px;
+}
+
+.level-up-modal .level-up-desc {
+  margin: 0 0 24px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
 .level-up-modal p {
   margin: 0 0 24px;
   color: rgba(255, 255, 255, 0.7);
