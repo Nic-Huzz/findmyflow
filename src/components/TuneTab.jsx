@@ -232,7 +232,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .maybeSingle()
       const newXP = data?.lifetime_total_score || 0
       const oldXP = newXP - pointsAdded
-      if (oldXP > 0 && getLevelNumber(newXP) > getLevelNumber(oldXP)) {
+      if (getLevelNumber(newXP) > getLevelNumber(oldXP)) {
         onLevelUp(getLevel(newXP))
       }
     } catch (err) {

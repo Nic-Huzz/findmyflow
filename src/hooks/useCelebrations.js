@@ -15,6 +15,7 @@ import { sendAchievementNotification } from '../lib/notifications'
  */
 export function useCelebrations() {
   const [showLevelUp, setShowLevelUp] = useState(null)
+  const [levelUpKey, setLevelUpKey] = useState(0)
   const [floatingPoints, setFloatingPoints] = useState([])
   const [toast, setToast] = useState(null)
 
@@ -57,6 +58,7 @@ export function useCelebrations() {
    */
   const celebrateLevelUp = useCallback((newLevel) => {
     setShowLevelUp(newLevel)
+    setLevelUpKey(k => k + 1)
     // Confetti handled in LevelUpModal
 
     // Long haptic
@@ -142,6 +144,7 @@ export function useCelebrations() {
   return {
     // State
     showLevelUp,
+    levelUpKey,
     floatingPoints,
     toast,
 

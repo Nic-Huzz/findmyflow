@@ -217,7 +217,7 @@ function Challenge() {
   const { hasSubscription } = useSubscription()
 
   // Celebrations (level-up modal)
-  const { showLevelUp, celebrateLevelUp, closeLevelUp } = useCelebrations()
+  const { showLevelUp, levelUpKey, celebrateLevelUp, closeLevelUp } = useCelebrations()
 
   // League data for nudge banner + content challenges
   const {
@@ -893,19 +893,21 @@ function Challenge() {
           p_points: quest.points,
           p_week_start: getWeekStart() // Pass client's week start for timezone consistency
         })
-        // Check for level-up before refreshing scores (closure has old value)
-        const oldXP = lifetimeScores?.lifetime_total_score || 0
-        const newXP = oldXP + quest.points
-        const oldLevel = getLevelNumber(oldXP)
-        const newLevel = getLevelNumber(newXP)
+        // Read fresh XP from DB after increment to detect level-up reliably
+        const { data: freshScores } = await supabase
+          .from('user_lifetime_scores')
+          .select('lifetime_total_score')
+          .eq('user_id', user.id)
+          .is('project_id', null)
+          .maybeSingle()
+        const freshXP = freshScores?.lifetime_total_score || 0
+        const priorXP = freshXP - quest.points
+        if (getLevelNumber(freshXP) > getLevelNumber(priorXP)) {
+          setTimeout(() => celebrateLevelUp(getLevel(freshXP)), 800)
+        }
 
         // Refresh user's scores from new tables
         await loadUserScores()
-
-        // Trigger level-up celebration if level changed
-        if (newLevel > oldLevel) {
-          setTimeout(() => celebrateLevelUp(getLevel(newXP)), 800)
-        }
       } catch (scoreError) {
         console.error('Error updating scores:', scoreError)
         // Non-fatal - continue with quest completion
@@ -2457,7 +2459,7 @@ function Challenge() {
 
       {/* Level-up celebration modal */}
       {showLevelUp && (
-        <LevelUpModal level={showLevelUp} onClose={closeLevelUp} />
+        <LevelUpModal key={levelUpKey} level={showLevelUp} onClose={closeLevelUp} />
       )}
 
       {/* Healing completion modal (compact row design) */}

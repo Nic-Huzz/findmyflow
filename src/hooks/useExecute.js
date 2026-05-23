@@ -41,6 +41,7 @@ export function useExecute(userId, projectId) {
     celebrateAllTasksComplete,
     celebrateLevelUp,
     showLevelUp,
+    levelUpKey,
     floatingPoints,
     toast,
     closeLevelUp,
@@ -293,6 +294,7 @@ export function useExecute(userId, projectId) {
 
     // Celebration state (for rendering overlays)
     showLevelUp,
+    levelUpKey,
     floatingPoints,
     toast,
     closeLevelUp,

@@ -61,6 +61,7 @@ export default function Execute() {
     implTasks,
     completeImplTask,
     showLevelUp,
+    levelUpKey,
     floatingPoints,
     toast,
     closeLevelUp,
@@ -650,6 +651,7 @@ export default function Execute() {
 
       {showLevelUp && (
         <LevelUpModal
+          key={levelUpKey}
           level={showLevelUp}
           onClose={closeLevelUp}
         />
