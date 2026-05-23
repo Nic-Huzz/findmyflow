@@ -241,8 +241,14 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const allQuestsDone = levelQuests.length > 0 && questsCompleted === levelQuests.length
 
   // Auto-graduate to next level when all quests complete
+  // Guard: wait for zone data to load before evaluating (prevents race condition on level change)
   useEffect(() => {
-    if (!allQuestsDone || !userId || currentLevel > 7) return
+    if (!allQuestsDone || !userId || currentLevel > 7 || !zoneLoaded) return
+    // Extra guard: if level has zones, require selectedZone to be set
+    if (config.zones && !selectedZone) return
+    // Extra guard: if level has deepDive, ensure it's checked
+    if (config.deepDive && levelQuests.find(q => q.label === config.deepDive.name && !q.done)) return
+
     supabase
       .from('user_stage_progress')
       .select('current_journey_level')
@@ -265,7 +271,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             })
         }
       })
-  }, [allQuestsDone, userId, currentLevel])
+  }, [allQuestsDone, userId, currentLevel, zoneLoaded])
 
   return (
     <div className="level-tab">
