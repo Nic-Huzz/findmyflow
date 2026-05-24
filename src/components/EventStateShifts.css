@@ -1,0 +1,78 @@
+/* EventStateShifts.css — prefix: ess- */
+.ess-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.ess-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.ess-header-left { display: flex; align-items: center; gap: 8px; }
+.ess-icon { font-size: 1.2rem; }
+.ess-title { font-size: 14px; font-weight: 800; color: #1a1a2e; }
+.ess-checkin-count { font-size: 12px; color: #6c757d; font-weight: 600; }
+
+/* QR Section */
+.ess-qr-section {
+  background: #f8f9fa; border-radius: 10px; padding: 12px; margin-bottom: 14px;
+}
+.ess-qr-label { font-size: 12px; color: #6c757d; margin: 0 0 8px; }
+.ess-qr-row { display: flex; gap: 6px; }
+.ess-qr-input {
+  flex: 1; padding: 8px 10px; background: #fff; border: 1px solid #dee2e6;
+  border-radius: 8px; font-size: 12px; color: #1a1a2e; font-family: monospace;
+}
+.ess-copy-btn {
+  padding: 8px 14px; background: #5e17eb; border: none; border-radius: 8px;
+  color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+}
+
+/* Loading / Empty */
+.ess-loading { font-size: 13px; color: #adb5bd; text-align: center; }
+.ess-empty { text-align: center; padding: 12px 0; }
+.ess-empty p { font-size: 13px; color: #6c757d; margin: 0 0 4px; }
+.ess-empty-sub { font-size: 11px; color: #adb5bd; }
+
+/* Stats */
+.ess-stat-row { display: flex; gap: 12px; margin-bottom: 16px; }
+.ess-stat {
+  flex: 1; text-align: center; padding: 12px;
+  background: #f8f9fa; border-radius: 10px;
+}
+.ess-stat-value { font-size: 24px; font-weight: 900; color: #1a1a2e; }
+.ess-stat-label { font-size: 11px; color: #6c757d; font-weight: 600; margin-top: 2px; }
+
+/* Distribution */
+.ess-dist { display: flex; gap: 16px; margin-bottom: 16px; }
+.ess-dist-col { flex: 1; }
+.ess-dist-label {
+  font-size: 11px; font-weight: 700; color: #6c757d;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;
+}
+.ess-dist-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.ess-dist-emoji { font-size: 14px; width: 20px; text-align: center; }
+.ess-dist-bar-track {
+  flex: 1; height: 8px; background: #f0f0f5; border-radius: 4px; overflow: hidden;
+}
+.ess-dist-bar-fill {
+  height: 100%; border-radius: 4px; transition: width 0.6s ease;
+}
+.ess-dist-pct { font-size: 11px; font-weight: 700; color: #6c757d; width: 28px; text-align: right; }
+
+/* Individual Shifts */
+.ess-shifts { border-top: 1px solid #f0f0f5; padding-top: 12px; }
+.ess-shifts-label {
+  font-size: 11px; font-weight: 700; color: #6c757d;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;
+}
+.ess-shift-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 0; font-size: 13px;
+}
+.ess-shifted { color: #10b981; }
+.ess-shift-before { color: #6c757d; }
+.ess-shift-arrow { color: #adb5bd; }
+.ess-shift-after { font-weight: 700; }

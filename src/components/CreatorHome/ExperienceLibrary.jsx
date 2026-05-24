@@ -6,8 +6,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
-import { fetchTemplates, createTemplate, archiveTemplate } from '../../lib/experienceTemplateService'
+import { fetchTemplates, createTemplate, archiveTemplate, updateTemplate } from '../../lib/experienceTemplateService'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
+import JourneyDesigner from './JourneyDesigner'
+import './JourneyDesigner.css'
 
 const EXPERIENCE_TYPES = [
   { id: 'workshop', label: 'Workshops & Training', emoji: '🎓' },
@@ -30,6 +32,7 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
   const [newType, setNewType] = useState('workshop')
   const [newDuration, setNewDuration] = useState('')
   const [creating, setCreating] = useState(false)
+  const [designerOpen, setDesignerOpen] = useState(null) // template ID
 
   useEffect(() => {
     if (!user) return
@@ -164,10 +167,23 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
               >
                 Run This →
               </button>
-              <button className="el-edit-btn" onClick={() => navigate(`/create/template/${t.id}`)}>
-                Edit
+              <button
+                className="el-edit-btn"
+                onClick={() => { hapticLight(); setDesignerOpen(designerOpen === t.id ? null : t.id) }}
+              >
+                {designerOpen === t.id ? 'Close' : '🤖 Design'}
               </button>
             </div>
+
+            {designerOpen === t.id && (
+              <JourneyDesigner
+                templateId={t.id}
+                onSaved={(runsheet) => {
+                  setTemplates(prev => prev.map(tp => tp.id === t.id ? { ...tp, runsheet, duration_minutes: runsheet.reduce((s, p) => s + (p.duration || 0), 0) } : tp))
+                  setDesignerOpen(null)
+                }}
+              />
+            )}
           </div>
         ))}
       </div>

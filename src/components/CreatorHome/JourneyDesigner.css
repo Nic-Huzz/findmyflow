@@ -1,0 +1,117 @@
+/* JourneyDesigner.css — prefix: jd- */
+.jd-designer {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 16px;
+}
+.jd-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+}
+.jd-header-icon { font-size: 1.3rem; }
+.jd-header-title { font-size: 15px; font-weight: 800; color: #fff; }
+
+/* Fields */
+.jd-field { margin-bottom: 14px; }
+.jd-label {
+  display: block; font-size: 11px; font-weight: 700;
+  color: rgba(255,255,255,0.5); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 8px;
+}
+
+/* Chips */
+.jd-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.jd-chip {
+  padding: 7px 12px; border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: all 0.15s;
+}
+.jd-chip:hover { border-color: rgba(255,255,255,0.2); }
+.jd-chip.selected {
+  background: rgba(94,23,235,0.15);
+  border-color: #5e17eb;
+  color: #fff;
+}
+
+.jd-input {
+  width: 100%; margin-top: 8px; padding: 10px 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; color: #fff; font-size: 13px;
+  font-family: inherit; box-sizing: border-box;
+}
+.jd-input::placeholder { color: rgba(255,255,255,0.25); }
+.jd-input:focus { outline: none; border-color: #5e17eb; }
+
+/* Generate button */
+.jd-generate {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none; border-radius: 12px;
+  color: #fff; font-size: 14px; font-weight: 800;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 4px 16px rgba(94,23,235,0.3);
+}
+.jd-generate:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.jd-error { color: #ff9b9b; font-size: 12px; margin: 8px 0 0; text-align: center; }
+
+/* Result */
+.jd-result { margin-bottom: 14px; }
+.jd-result-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+  font-size: 13px; font-weight: 700; color: #E9A23B;
+}
+.jd-retry {
+  padding: 4px 10px; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+  color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+}
+
+/* Phases */
+.jd-phase {
+  padding: 10px 12px; margin-bottom: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+}
+.jd-phase-top {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+}
+.jd-phase-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(94,23,235,0.2); color: #a78bfa;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; flex-shrink: 0;
+}
+.jd-phase-name {
+  font-size: 13px; font-weight: 700; color: #fff;
+  text-transform: capitalize; flex: 1;
+}
+.jd-phase-dur {
+  font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600;
+}
+.jd-phase-notes {
+  font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5;
+  margin: 4px 0 0;
+}
+.jd-phase-music {
+  font-size: 11px; color: rgba(233,162,59,0.7); margin: 4px 0 0;
+  font-style: italic;
+}
+
+/* Save */
+.jd-save {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #E9A23B, #f5c842);
+  border: none; border-radius: 12px;
+  color: #1a0440; font-size: 14px; font-weight: 800;
+  cursor: pointer; font-family: inherit;
+}
+.jd-save:disabled { opacity: 0.3; }

@@ -24,6 +24,8 @@ import { CONVERTIBLE_SECTIONS, convertChecklistToChallenge, fetchDNASliders, fet
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { awardMovementXP } from '../lib/movementXP'
 import ExperienceHealthCard from '../components/ExperienceHealthCard'
+import EventStateShifts from '../components/EventStateShifts'
+import '../components/EventStateShifts.css'
 import GuestlistPicker from '../components/GuestlistPicker'
 import DMTracker from '../components/DMTracker'
 import AttendanceMarker from '../components/AttendanceMarker'
@@ -745,6 +747,9 @@ export default function ExperienceDetail() {
 
         {activePhase === 'post' && (
           <>
+            {/* Attendee State Shifts */}
+            <EventStateShifts experienceId={id} />
+
             {/* Attendance + Revenue */}
             <AttendanceMarker experienceId={id} userId={user?.id} previousExperienceId={experience?.previous_experience_id} />
             <RevenueLogger experienceId={id} userId={user?.id} currency={experience?.currency || 'IDR'} previousExperienceId={experience?.previous_experience_id} />
