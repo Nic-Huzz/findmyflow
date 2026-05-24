@@ -14,6 +14,8 @@ import { supabase } from '../../lib/supabaseClient'
 import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
+import ExperienceLibrary from './ExperienceLibrary'
+import './ExperienceLibrary.css'
 import './CreatorHomeV2.css'
 
 // ─── Constants ─────────────────────────────────────────────────────────────
@@ -554,6 +556,9 @@ export default function CreatorHomeV2() {
               </div>
             </div>
           )}
+
+          {/* Experience Library */}
+          <ExperienceLibrary onCreateFromTemplate={(t) => navigate(`/create/experience/new?templateId=${t.id}&type=${t.experience_type}`)} />
 
           {/* Create New */}
           <div className="ch2-create-options">

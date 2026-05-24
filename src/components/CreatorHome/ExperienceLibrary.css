@@ -1,0 +1,208 @@
+/* ExperienceLibrary.css — prefix: el- */
+
+.el-library {
+  margin-bottom: 24px;
+}
+
+.el-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.el-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.el-add-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(233, 162, 59, 0.15);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  color: #E9A23B;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.el-add-btn:active { background: rgba(233, 162, 59, 0.25); }
+
+/* Create form */
+.el-create-form {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.el-create-row {
+  display: flex;
+  gap: 8px;
+}
+.el-input {
+  flex: 1;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+}
+.el-input::placeholder { color: rgba(255,255,255,0.3); }
+.el-input:focus { outline: none; border-color: #E9A23B; }
+.el-input-sm { max-width: 120px; }
+.el-select {
+  flex: 1;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  appearance: none;
+}
+.el-select option { background: #1a1a2e; color: #fff; }
+.el-create-btn {
+  padding: 10px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.el-create-btn:disabled { opacity: 0.4; }
+
+/* Empty state */
+.el-empty {
+  text-align: center;
+  padding: 24px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: 12px;
+}
+.el-empty-icon { font-size: 2rem; margin-bottom: 8px; }
+.el-empty-text { font-size: 13px; color: rgba(255,255,255,0.4); margin: 0 0 12px; }
+.el-empty-cta {
+  padding: 8px 16px;
+  background: rgba(233,162,59,0.12);
+  border: 1px solid rgba(233,162,59,0.25);
+  border-radius: 8px;
+  color: #E9A23B;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Grid */
+.el-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Card */
+.el-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 14px;
+  transition: border-color 0.2s;
+}
+.el-card:hover { border-color: rgba(233,162,59,0.25); }
+
+.el-card-top {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.el-card-emoji { font-size: 1.5rem; flex-shrink: 0; }
+.el-card-info { flex: 1; }
+.el-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.el-card-meta {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+}
+
+/* Runsheet preview */
+.el-runsheet-preview {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 10px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.el-phase-dot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.el-phase-bar {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, rgba(94,23,235,0.3), rgba(233,162,59,0.3));
+}
+.el-phase-name {
+  font-size: 9px;
+  color: rgba(255,255,255,0.4);
+  text-transform: capitalize;
+  font-weight: 600;
+}
+.el-phase-dur {
+  font-size: 8px;
+  color: rgba(255,255,255,0.25);
+}
+
+/* Actions */
+.el-card-actions {
+  display: flex;
+  gap: 8px;
+}
+.el-run-btn {
+  flex: 1;
+  padding: 8px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.el-edit-btn {
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.el-edit-btn:hover { border-color: rgba(255,255,255,0.2); }

@@ -262,6 +262,7 @@ const LeagueGuide = lazyRetry(() => import('./flows/LeagueGuide'))
 const PeopleMatching = lazyRetry(() => import('./pages/PeopleMatching'))
 const MovementMakers = lazyRetry(() => import('./pages/MovementMakers'))
 const ExperienceCreatorFlow = lazyRetry(() => import('./flows/ExperienceCreatorFlow'))
+const EventCheckin = lazyRetry(() => import('./pages/EventCheckin'))
 const PayRentFlow = lazyRetry(() => import('./flows/PayRentFlow'))
 const RemarkableFlow = lazyRetry(() => import('./flows/RemarkableFlow'))
 const StrikeDesignFlow = lazyRetry(() => import('./flows/StrikeDesignFlow'))
@@ -799,6 +800,11 @@ function AppRouter() {
             } />
             <Route path="/try/experience-creators" element={<ExperienceCreatorFlow />} />
             <Route path="/movement-makers" element={<MovementMakers />} />
+            <Route path="/event/:experienceId/checkin" element={
+              <AuthGate>
+                <EventCheckin />
+              </AuthGate>
+            } />
             <Route path="/flow-finder-explainer" element={
               <AuthGate>
                 <FlowFinderExplainer />
