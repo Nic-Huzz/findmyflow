@@ -57,7 +57,7 @@ export default function ProgressBars({
       {courageCount > 0 && (
         <div className="level-bar-section">
           <div className="level-bar-label">
-            <span>Play-List Tasks</span>
+            <span>Wahoo Tasks</span>
             <span>{courageDone}/{courageCount}</span>
           </div>
           <div className="level-bar-dots">

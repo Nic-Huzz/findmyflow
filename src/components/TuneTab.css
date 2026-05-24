@@ -201,12 +201,16 @@
 }
 
 /* === PRACTICE INFO POP-UP === */
+.ht-item-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .tt-info-icon {
-  display: inline-block;
-  margin-left: 5px;
-  font-size: 12px;
+  font-size: 11px;
   color: #adb5bd;
-  vertical-align: middle;
+  flex-shrink: 0;
 }
 
 .tt-info-overlay {
