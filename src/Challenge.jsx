@@ -21,6 +21,7 @@ import './components/ChallengeStageTabs.css' // stage-tab pills for Healing/Play
 import QuestCard from './components/QuestCard'
 import PlayListTab from './components/PlayListTab'
 import TuneTab from './components/TuneTab'
+import './components/TuneTab.css'
 import PriorityTab from './components/PriorityTab'
 import CompassCheckin from './components/CompassCheckin'
 import NervousSystemCheckin from './components/NervousSystemCheckin'
@@ -241,6 +242,8 @@ function Challenge() {
 
   // Healing modal quest (compact row → popup completion)
   const [healingModalQuest, setHealingModalQuest] = useState(null)
+  // Healing info pop-up (quest description)
+  const [healingInfoQuest, setHealingInfoQuest] = useState(null)
 
   // Wahoo count this week (challenges completed with scary >= 7 AND wahoo >= 7)
   const [wahooCountThisWeek, setWahooCountThisWeek] = useState(0)
@@ -2010,7 +2013,10 @@ function Challenge() {
                             {completed ? '✓' : ''}
                           </span>
                           <div className="ht-item-body">
-                            <div className="ht-item-name">{quest.id === 'rewire_behavior_change' && userArchetypes.essence ? `Embody Your Essence: ${userArchetypes.essence}` : quest.name}</div>
+                            <div className="ht-item-name" onClick={() => quest.description && setHealingInfoQuest(quest)} style={quest.description ? { cursor: 'pointer' } : undefined}>
+                              {quest.id === 'rewire_behavior_change' && userArchetypes.essence ? `Embody Your Essence: ${userArchetypes.essence}` : quest.name}
+                              {quest.description && <span className="tt-info-icon">ⓘ</span>}
+                            </div>
                             <div className="ht-item-meta">
                               <span className="ht-item-type">{quest.type}</span>
                               <span className="ht-item-sep">·</span>
@@ -2460,6 +2466,17 @@ function Challenge() {
       {/* Level-up celebration modal */}
       {showLevelUp && (
         <LevelUpModal key={levelUpKey} level={showLevelUp} onClose={closeLevelUp} />
+      )}
+
+      {/* Healing quest info pop-up */}
+      {healingInfoQuest && (
+        <div className="tt-info-overlay" onClick={() => setHealingInfoQuest(null)}>
+          <div className="tt-info-modal" onClick={e => e.stopPropagation()}>
+            <div className="tt-info-modal-name">{healingInfoQuest.name}</div>
+            <div className="tt-info-modal-desc">{healingInfoQuest.description}</div>
+            <button className="tt-info-modal-close" onClick={() => setHealingInfoQuest(null)}>Got it</button>
+          </div>
+        </div>
       )}
 
       {/* Healing completion modal (compact row design) */}
