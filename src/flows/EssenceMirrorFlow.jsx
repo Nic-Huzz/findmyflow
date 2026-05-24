@@ -375,9 +375,10 @@ export default function EssenceMirrorFlow() {
       }
       // Save to lead_flow_profiles — always insert a new row.
       // Read side uses order(created_at desc).limit(1) so latest row wins.
+      const displayName = user.user_metadata?.display_name || user.user_metadata?.name || null
       const { error: profileErr } = await supabase
         .from('lead_flow_profiles')
-        .insert({ ...essenceData, user_id: user.id, email: user.email })
+        .insert({ ...essenceData, user_id: user.id, email: user.email, user_name: displayName })
       if (profileErr) console.error('lead_flow_profiles insert error:', profileErr)
       // Auto-create a Discovery Project so /7-day-challenge doesn't show empty state
       const { data: existingProject } = await supabase

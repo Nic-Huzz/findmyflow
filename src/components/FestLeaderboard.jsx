@@ -55,7 +55,7 @@ export default function FestLeaderboard({ userId, onClose }) {
 
     const userIds = participants.map(p => p.user_id)
 
-    const [{ data: scores }, { data: profiles }] = await Promise.all([
+    const [{ data: scores }, { data: profiles }, { data: authNames }] = await Promise.all([
       supabase
         .from('user_lifetime_scores')
         .select('user_id, lifetime_total_score')
@@ -66,15 +66,17 @@ export default function FestLeaderboard({ userId, onClose }) {
         .select('user_id, user_name, custom_essence_image, custom_essence_name')
         .in('user_id', userIds)
         .order('created_at', { ascending: false }),
+      supabase.rpc('get_leaderboard_names', { p_user_ids: userIds }),
     ])
 
     const ranked = userIds.map(uid => {
       const score = scores?.find(s => s.user_id === uid)
       const profile = profiles?.find(p => p.user_id === uid)
+      const authName = authNames?.find(a => a.user_id === uid)
       const rp = score?.lifetime_total_score || 0
       return {
         user_id: uid,
-        firstName: profile?.user_name || 'Anonymous',
+        firstName: profile?.user_name || authName?.display_name || 'Anonymous',
         essenceName: profile?.custom_essence_name || null,
         avatar: profile?.custom_essence_image || null,
         rp,
