@@ -34,7 +34,7 @@ const MAIN_NAV_ITEMS = [
   {
     id: 'create',
     label: 'Create',
-    icon: '🏠',
+    icon: '🌞',
     path: '/create'
   }
 ]
