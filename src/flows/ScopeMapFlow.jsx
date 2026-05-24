@@ -38,28 +38,28 @@ const STEPS = {
 
 const STAGE_INFO = {
   stream: {
-    label: 'The Stream',
+    label: "Someone Else's Channel",
     emoji: '🏞️',
     description: "You're talented and you know it. But right now you're scaling someone else's thing. The skills are real, the direction isn't yours yet. Until you find your own channel, speed just takes you further from where you actually want to go.",
     scaling: "Believe that you're good enough to do this for yourself, not just for someone else",
     color: '#6B9FFF',
   },
   lake: {
-    label: 'The Lake',
+    label: 'Full but Scattered',
     emoji: '🌊',
     description: "You care about everything, and that's genuine. But caring about everything means nothing goes deep enough to sell. People can't find you because you haven't picked the one problem that's truly yours. Depth, not breadth, is what people pay for.",
     scaling: "Being more focused will ensure your message resonates and sells better",
     color: '#9B7FE6',
   },
   waterfall: {
-    label: 'The Waterfall',
+    label: 'Found Your Edge',
     emoji: '💧',
     description: "You found your edge. You know your problem, your people, and why it's personal. The thing that will stop you scaling is the temptation to broaden before you've built the proof. Stay narrow. Build evidence. The breadth comes later.",
     scaling: "Continue to obsess over this problem, resist shiny-object syndrome",
     color: '#E9A23B',
   },
   river: {
-    label: 'The River',
+    label: 'Earned Your Breadth',
     emoji: '🌅',
     description: "Your specificity became a platform. You've earned this breadth because it grew from something real. The thing that will stop you scaling is forgetting the waterfall that got you here. Keep one foot in the specific.",
     scaling: "Continue to serve your raving fans, don't divide your focus",
@@ -68,10 +68,10 @@ const STAGE_INFO = {
 }
 
 const CONFIRM_OPTIONS = [
-  { stage: 'stream', label: 'The Stream', short: "I'm scaling someone else's thing. The direction isn't mine yet." },
-  { stage: 'lake', label: 'The Lake', short: "I care about too much. Nothing goes deep enough to sell." },
-  { stage: 'waterfall', label: 'The Waterfall', short: "I found my edge. I need to build the proof before I broaden." },
-  { stage: 'river', label: 'The River', short: "I earned my breadth. I need to stay connected to what started it." },
+  { stage: 'stream', label: "Someone Else's Channel", short: "I'm scaling someone else's thing. The direction isn't mine yet." },
+  { stage: 'lake', label: 'Full but Scattered', short: "I care about too much. Nothing goes deep enough to sell." },
+  { stage: 'waterfall', label: 'Found Your Edge', short: "I found my edge. I need to build the proof before I broaden." },
+  { stage: 'river', label: 'Earned Your Breadth', short: "I earned my breadth. I need to stay connected to what started it." },
 ]
 
 export default function ScopeMapFlow({ onComplete }) {

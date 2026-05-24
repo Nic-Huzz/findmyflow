@@ -14,10 +14,10 @@
 import { useState, useEffect } from 'react'
 
 const STAGES = {
-  stream:    { label: 'The Stream',    x: 145, y: 295, desc: "Someone else's channel" },
-  lake:      { label: 'The Lake',      x: 145, y: 145, desc: 'Full but still' },
-  waterfall: { label: 'The Waterfall', x: 295, y: 295, desc: 'Your edge found' },
-  river:     { label: 'The River',     x: 295, y: 145, desc: 'Earned breadth' },
+  stream:    { label: "Someone Else's",  x: 145, y: 295, desc: 'Channel' },
+  lake:      { label: 'Full but',        x: 145, y: 145, desc: 'Scattered' },
+  waterfall: { label: 'Found Your',      x: 295, y: 295, desc: 'Edge' },
+  river:     { label: 'Earned Your',     x: 295, y: 145, desc: 'Breadth' },
 }
 
 // Journey arrows: stream → lake → waterfall → river

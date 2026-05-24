@@ -144,7 +144,7 @@ Return ONLY valid JSON:
         stage: 'lake',
         confidence: 0.5,
         reasoning: 'Classification could not be completed. Defaulting to Lake as the most common starting stage.',
-        reframe: 'We could not determine your exact stage. Most people exploring this for the first time are in The Lake, full of possibility but still finding their specific edge.',
+        reframe: 'We could not determine your exact stage. Most people exploring this for the first time are Full but Scattered, full of possibility but still finding their specific edge.',
       }
     }
 
