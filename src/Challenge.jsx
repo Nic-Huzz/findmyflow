@@ -2055,7 +2055,7 @@ function Challenge() {
                             <button
                               className="ht-item-action"
                               disabled={isCompleting}
-                              onClick={() => setHealingModalQuest(quest)}
+                              onClick={() => { setHealingInfoQuest(null); setHealingModalQuest(quest) }}
                             >
                               {isCompleting ? '...' : 'Complete'}
                             </button>
@@ -2472,7 +2472,7 @@ function Challenge() {
       {healingInfoQuest && (
         <div className="tt-info-overlay" onClick={() => setHealingInfoQuest(null)}>
           <div className="tt-info-modal" onClick={e => e.stopPropagation()}>
-            <div className="tt-info-modal-name">{healingInfoQuest.name}</div>
+            <div className="tt-info-modal-name">{healingInfoQuest.id === 'rewire_behavior_change' && userArchetypes.essence ? `Embody Your Essence: ${userArchetypes.essence}` : healingInfoQuest.name}</div>
             <div className="tt-info-modal-desc">{healingInfoQuest.description}</div>
             <button className="tt-info-modal-close" onClick={() => setHealingInfoQuest(null)}>Got it</button>
           </div>
