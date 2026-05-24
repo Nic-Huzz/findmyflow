@@ -14,6 +14,8 @@ import './ExperienceCreatorFlow.css'
 import dnaData from '../../public/data/experienceCreatorDNA.json'
 import careerModelsData from '../../public/data/careerModels.json'
 import growthData from '../../public/data/experienceCreatorGrowthStrategies.json'
+import remarkableData from '../../public/data/experienceCreatorRemarkableAnalysis.json'
+import offerMapData from '../../public/data/experienceCreatorOfferMap.json'
 import playSkillData from '../../public/data/nonFounderPlaySkills.json'
 
 // ── Category definitions ──
@@ -458,7 +460,17 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
   }
 
   // ── RESULT SCREEN ──
-  const reveal = playListReveal
+  const remarkableCreators = remarkableData?.creators || {}
+  const offerCreators = offerMapData?.creators || {}
+  const growthCreators = growthData?.creators || {}
+
+  // Helper for blurred text
+  const BlurredText = ({ width = 120 }) => (
+    <span className="ecf-blurred" style={{ width }}>
+      <span className="ecf-blurred-inner">Hidden answer revealed on signup</span>
+    </span>
+  )
+
   return (
     <div className="ecf">
       <div className="ecf-container">
@@ -467,83 +479,96 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
             ← Back to browsing
           </button>
 
-          {/* ═══ SECTION 1: Bridge + Play-skill tags (hidden on try/embedded) ═══ */}
-          {!isTryRoute && (
-            <>
-              <div className="ecf-result-header">
-                <div className="ecf-result-badge">Their Play-List</div>
-                <h1>What They Couldn't <span className="ecf-hero-gold">Stop</span></h1>
-              </div>
+          <div className="ecf-result-header">
+            <h1>Your <span className="ecf-hero-gold">Picks</span></h1>
+            <p className="ecf-result-sub">Here's what we know about the creators you chose. Sign up to unlock the full breakdown.</p>
+          </div>
 
-              <div className="ecf-reveal-card">
-                {reveal?.hasOverlap ? (
-                  <>
-                    <p className="ecf-reveal-bridge">
-                      You didn't pick these people randomly. You share similar play-lists.
-                    </p>
-                    <div className="ecf-skill-tags">
-                      {reveal.sharedSkills.map(s => (
-                        <span key={s.skill} className="ecf-skill-tag">
-                          {s.display}
-                          <span className="ecf-skill-tag-count">{s.count} picks</span>
-                        </span>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <p className="ecf-reveal-bridge">
-                    Here's what your picks all did before anyone noticed.
-                  </p>
-                )}
-              </div>
-            </>
-          )}
-
-
-          {/* ═══ SECTION 3: Which business model sounds most exciting? ═══ */}
-          {reveal?.archetypesPresent?.length > 0 && (
-            <div className="ecf-model-pick">
-              <div className="ecf-model-pick-title">Which of these sounds most exciting to you?</div>
-              <div className="ecf-model-options">
-                {reveal.archetypesPresent.map(arch => (
-                  <button
-                    key={arch.id}
-                    className={`ecf-model-option ${chosenArchetype === arch.id ? 'ecf-model-chosen' : ''}`}
-                    onClick={() => { hapticLight(); setChosenArchetype(arch.id) }}
-                  >
-                    <span className="ecf-model-emoji">{arch.emoji}</span>
-                    <div>
-                      <div className="ecf-model-name">{arch.name}</div>
-                      <div className="ecf-model-desc">{arch.desc}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
+          {/* ═══ SECTION 1: How Did They Pay Rent? ═══ */}
+          <div className="ecf-teaser-section">
+            <div className="ecf-teaser-header">
+              <span className="ecf-teaser-num">01</span>
+              <h2 className="ecf-teaser-title">How Did They Pay Rent?</h2>
             </div>
-          )}
+            <p className="ecf-teaser-sub">Before they blew up, they had to survive. Here's how.</p>
+            {selectedCreators.map(c => (
+              <div key={c.name} className="ecf-creator-row">
+                <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
+                <div className="ecf-creator-info">
+                  <div className="ecf-creator-name">{c.name}</div>
+                  <BlurredText width={160} />
+                </div>
+              </div>
+            ))}
+          </div>
 
-          {/* ═══ SECTION 4: First Step + Save ═══ */}
-          <div className="ecf-first-step">
-            {!isTryRoute && (
-              <>
-                <h3>Your First Step</h3>
-                <p>{chosenArchetype ? (FIRST_STEPS[chosenArchetype] || firstStep) : (reveal?.firstStep || firstStep)}</p>
-              </>
-            )}
+          {/* ═══ SECTION 2: How Did They Blow Up Their Brand? ═══ */}
+          <div className="ecf-teaser-section">
+            <div className="ecf-teaser-header">
+              <span className="ecf-teaser-num">02</span>
+              <h2 className="ecf-teaser-title">How Did They Blow Up Their Brand?</h2>
+            </div>
+            <p className="ecf-teaser-sub">The triggers that made the world pay attention.</p>
+            {selectedCreators.map(c => {
+              const r = remarkableCreators[c.name]
+              return (
+                <div key={c.name} className="ecf-creator-row">
+                  <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
+                  <div className="ecf-creator-info">
+                    <div className="ecf-creator-name">{c.name}</div>
+                    <div className="ecf-trigger-tags">
+                      {r?.rule_broken?.present === 'yes' && <span className="ecf-trigger-tag">Rule Break <BlurredText width={70} /></span>}
+                      {r?.unexpected_combination?.present === 'yes' && <span className="ecf-trigger-tag">Unexpected Combo <BlurredText width={70} /></span>}
+                      {r?.extreme_action?.present !== 'no' && <span className="ecf-trigger-tag">Extreme Action <BlurredText width={70} /></span>}
+                      {r?.stupid_simplicity?.present === 'yes' && <span className="ecf-trigger-tag">Extreme Simplicity <BlurredText width={70} /></span>}
+                      {!r && (
+                        <>
+                          <span className="ecf-trigger-tag">Rule Break <BlurredText width={70} /></span>
+                          <span className="ecf-trigger-tag">Unexpected Combo <BlurredText width={70} /></span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
 
+          {/* ═══ SECTION 3: How Did They Scale Their Income? ═══ */}
+          <div className="ecf-teaser-section">
+            <div className="ecf-teaser-header">
+              <span className="ecf-teaser-num">03</span>
+              <h2 className="ecf-teaser-title">How Did They Scale Their Income?</h2>
+            </div>
+            <p className="ecf-teaser-sub">The three layers every experience creator needs.</p>
+            {selectedCreators.map(c => (
+              <div key={c.name} className="ecf-creator-row">
+                <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
+                <div className="ecf-creator-info">
+                  <div className="ecf-creator-name">{c.name}</div>
+                  <div className="ecf-trigger-tags">
+                    <span className="ecf-trigger-tag">Attraction <BlurredText width={80} /></span>
+                    <span className="ecf-trigger-tag">Core <BlurredText width={80} /></span>
+                    <span className="ecf-trigger-tag">Continuity <BlurredText width={80} /></span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ═══ CTA ═══ */}
+          <div className="ecf-gate-cta">
             {isTryRoute ? (
               trySaved ? (
                 <div className="ecf-try-saved">
-                  <p className="ecf-try-saved-text">Your model has been sent to <strong>{tryEmail}</strong></p>
+                  <p className="ecf-try-saved-text">You're on the list! We'll send you access soon.</p>
                   <button className="ecf-save-btn" onClick={() => navigate('/get-started')}>
-                    Click Here For Support Bringing It To Life
+                    Get Started →
                   </button>
                 </div>
               ) : (
-                <div className="ecf-try-capture">
-                  <p className="ecf-try-cta-text">
-                    Keen to explore how the best experience creators built their world-renowned {(chosenArchetype ? ARCHETYPE_INFO[chosenArchetype]?.name : archetype?.name)?.toLowerCase() || 'experiences'}?
-                  </p>
+                <>
+                  <p className="ecf-gate-text">Sign up to see exactly how your picks paid rent, blew up their brands, and scaled their income.</p>
                   <input
                     type="email"
                     value={tryEmail}
@@ -553,14 +578,17 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
                     onKeyDown={(e) => e.key === 'Enter' && saveTryEmail()}
                   />
                   <button className="ecf-save-btn" onClick={saveTryEmail} disabled={trySaving || !tryEmail.trim()}>
-                    {trySaving ? 'Sending...' : 'Send Me My Model'}
+                    {trySaving ? 'Sending...' : 'Sign Up to Unlock'}
                   </button>
-                </div>
+                </>
               )
             ) : (
-              <button className="ecf-save-btn" onClick={saveModel} disabled={loading || !chosenArchetype}>
-                {loading ? 'Saving...' : 'Save My Model'}
-              </button>
+              <>
+                <p className="ecf-gate-text">Sign up for the Creator Portal to unlock the full breakdown of how your picks built their careers.</p>
+                <button className="ecf-save-btn" onClick={() => navigate('/create')}>
+                  Unlock the Answers →
+                </button>
+              </>
             )}
           </div>
         </div>
