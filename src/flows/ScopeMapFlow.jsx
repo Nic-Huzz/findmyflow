@@ -362,7 +362,11 @@ export default function ScopeMapFlow({ onComplete }) {
             You're at <span className="scope-flow-gold">{info.label}</span>
           </h2>
           <p className="scope-flow-reveal-scaling">To scale: <strong>{info.scaling}</strong></p>
-          <p className="scope-flow-reveal-desc">{result.reframe || info.description}</p>
+          <div className="scope-flow-reveal-desc">
+            {(result.reframe || info.description).split(/(?<=[.!?])\s+/).map((sentence, i) => (
+              <p key={i}>{sentence}</p>
+            ))}
+          </div>
           <div className="scope-flow-reveal-actions">
             <button className="scope-flow-cta" onClick={() => handleConfirm(true)}>
               That's me
@@ -438,7 +442,11 @@ export default function ScopeMapFlow({ onComplete }) {
             <span className="scope-flow-rx-stage">{info.label}</span>
           </div>
           <h2 className="scope-flow-heading">{rx.title}</h2>
-          <p className="scope-flow-rx-body">{rx.body}</p>
+          <div className="scope-flow-rx-body">
+            {rx.body.split(/(?<=[.!?])\s+/).map((sentence, i) => (
+              <p key={i}>{sentence}</p>
+            ))}
+          </div>
           {(() => {
             const pos = buildPositioning()
             return pos && (

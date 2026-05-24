@@ -9,7 +9,7 @@
   justify-content: center;
   min-height: 100vh;
   padding: 2rem 1.25rem;
-  background: linear-gradient(180deg, #0a0618 0%, #1a0b3d 50%, #2d1260 100%);
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   box-sizing: border-box;
 }
 
@@ -237,6 +237,14 @@
   margin: 0 0 28px;
 }
 
+.scope-flow .scope-flow-reveal-desc p {
+  margin: 0 0 12px;
+}
+
+.scope-flow .scope-flow-reveal-desc p:last-child {
+  margin-bottom: 0;
+}
+
 .scope-flow .scope-flow-reveal-actions {
   display: flex;
   flex-direction: column;
@@ -333,6 +341,14 @@
   line-height: 1.65;
   color: rgba(255, 255, 255, 0.8);
   margin: 0 0 8px;
+}
+
+.scope-flow .scope-flow-rx-body p {
+  margin: 0 0 12px;
+}
+
+.scope-flow .scope-flow-rx-body p:last-child {
+  margin-bottom: 0;
 }
 
 /* ─── Positioning Statement ─── */
