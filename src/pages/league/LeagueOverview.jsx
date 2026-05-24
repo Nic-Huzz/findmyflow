@@ -216,14 +216,6 @@ export default function LeagueOverview() {
             <button className="lo-cta" onClick={() => { hapticLight(); setShowSoloModal(true) }}>
               Join Solo <span>→</span>
             </button>
-            <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
-              <button className="lo-ghost-btn" onClick={() => { hapticLight(); setShowCreateModal(true) }}>
-                Create Team
-              </button>
-              <button className="lo-ghost-btn" onClick={() => { hapticLight(); setShowJoinModal(true) }}>
-                Join Team
-              </button>
-            </div>
           </div>
         ) : isOnTeam && (
           <div className="lo-my-team-badge">
