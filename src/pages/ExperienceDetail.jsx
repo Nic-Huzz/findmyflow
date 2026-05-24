@@ -29,6 +29,7 @@ import DMTracker from '../components/DMTracker'
 import AttendanceMarker from '../components/AttendanceMarker'
 import RevenueLogger from '../components/RevenueLogger'
 import ScaleIncomeCard from '../components/ScaleIncomeCard'
+import DnaInsightCard from '../components/DnaInsightCard'
 import UpsellDesigner from '../components/UpsellDesigner'
 import DownsellDesigner from '../components/DownsellDesigner'
 import './ExperienceDetail.css'
@@ -337,6 +338,13 @@ export default function ExperienceDetail() {
             })()}
           </div>
         </header>
+
+        {/* DNA Insight — contextual guidance based on Play Profile + lifecycle phase */}
+        <DnaInsightCard
+          userId={user?.id}
+          experience={experience}
+          checklistProgress={items.length > 0 ? Math.round(items.filter(i => i.completed).length / items.filter(i => !i.hidden).length * 100) : 0}
+        />
 
         {/* Health Card (completed/archived experiences only) */}
         {experience && (experience.status === 'completed' || experience.status === 'archived') && (

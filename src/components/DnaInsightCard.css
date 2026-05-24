@@ -1,0 +1,71 @@
+/**
+ * DnaInsightCard.css
+ * Contextual DNA guidance for experience lifecycle
+ * CSS prefix: dna-
+ */
+
+.dna-card {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.06), rgba(233, 162, 59, 0.06));
+  border: 1px solid rgba(94, 23, 235, 0.12);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.dna-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.dna-phase {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #5e17eb;
+}
+
+.dna-dismiss {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #adb5bd;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.dna-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+}
+
+.dna-body {
+  font-size: 13px;
+  color: #495057;
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+
+.dna-action {
+  display: inline-block;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin-bottom: 8px;
+}
+
+.dna-meta {
+  font-size: 11px;
+  color: #adb5bd;
+  font-style: italic;
+}
