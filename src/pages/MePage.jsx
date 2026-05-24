@@ -24,6 +24,7 @@ import VibeColorPicker from '../components/VibeColorPicker'
 import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
 // HomeFirstTime archived — replaced by /essence-mirror redirect
 import SeeYourFlow from '../components/SeeYourFlow'
+import CapacityCard from '../components/level/CapacityCard'
 import { hasPendingJourneyData, persistJourneyOnboarding, hasPendingPlaySkillsData, persistPlaySkillsOnboarding } from '../lib/journeyOnboarding'
 import './MePage.css'
 
@@ -568,109 +569,27 @@ export default function MePage() {
       */}
 
       {/* ============================================================
-         SECTION 2: CURRENT LEVEL / TODAY'S QUEST
+         SECTION 2: VIBE RISE SCORE
          ============================================================ */}
       <section className="quest-section reveal-fade-up" ref={questRevealRef}>
-        <div className="quest-banner">
-          {(() => {
-            // Build level tasks from LevelConfig
-            const lvlConfig = getLevelConfig(currentJourneyLevel)
-            const allTasks = [
-              lvlConfig.deepDive,
-              ...(lvlConfig.extraQuests || []),
-            ].filter(Boolean)
-            const allCompletedIds = new Set(questCompletions.map(c => c.quest_id))
-            // Also check essence_mirror_completed for hero_avatar task
-            const isTaskDone = (task) => {
-              if (task.id === 'hero_avatar') return essenceMirrorDone
-              if (task.id === 'wound_map') return hasWoundMap
-              return allCompletedIds.has(task.id)
-            }
-            const doneTaskCount = allTasks.filter(isTaskDone).length
-            const nextTask = allTasks.find(t => !isTaskDone(t))
-            const totalTasks = allTasks.length
-
-            if (nextTask) {
-              return (
-                <>
-                  <div className="quest-eyebrow">
-                    <span className="quest-label">Level {currentJourneyLevel}: {lvlConfig.name}</span>
-                    <span className="quest-day-badge">
-                      {doneTaskCount} of {totalTasks}
-                    </span>
-                  </div>
-                  <h2 className="quest-title">{nextTask.name}</h2>
-                  <p className="quest-subtitle">{nextTask.narrative}</p>
-                  <div className="quest-dots">
-                    {allTasks.map((t, i) => (
-                      <div key={t.id} className={`dot ${isTaskDone(t) ? 'done' : ''} ${t.id === nextTask.id ? 'active' : ''}`} />
-                    ))}
-                  </div>
-                  <div className="quest-progress-label">
-                    {doneTaskCount} of {totalTasks} tasks complete
-                  </div>
-                  {nextTask.route ? (
-                    <a
-                      href={`${nextTask.route}${nextTask.route.includes('?') ? '&' : '?'}returnTo=/me`}
-                      className="quest-cta"
-                      style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
-                    >
-                      Start {nextTask.name} <span>→</span>
-                    </a>
-                  ) : nextTask.navigateTo ? (
-                    <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
-                      Go to {nextTask.navigateTo} <span>→</span>
-                    </button>
-                  ) : (
-                    <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
-                      Continue in Challenge <span>→</span>
-                    </button>
-                  )}
-                </>
-              )
-            }
-            return null
-          })() || (
-            <>
-              <div className="quest-eyebrow">
-                <span className="quest-label">Current Level</span>
-              </div>
-              {(() => {
-                const lvlConfig = getLevelConfig(currentJourneyLevel)
-                const healingDays = dbLevelProgress?.healing_day_dates?.length || 0
-                const healingTarget = lvlConfig.healingDaysRequired || HEALING_DAYS_REQUIRED
-                const healingPct = Math.min(100, Math.round((healingDays / healingTarget) * 100))
-                const courageTarget = lvlConfig.courageCount || 0
-                const courageDone = dbLevelProgress?.courage_challenge_ids?.length || 0
-                const couragePct = courageTarget > 0 ? Math.min(100, Math.round((courageDone / courageTarget) * 100)) : 0
-                return <>
-                  <h2 className="quest-title">Level {currentJourneyLevel}: {lvlConfig.name}</h2>
-                  <p className="quest-subtitle">{lvlConfig.question}</p>
-                  <div className="me-level-bars">
-                    <div className="me-level-bar-row">
-                      <span className="me-level-bar-label">Healing Days</span>
-                      <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: `${healingPct}%` }} /></div>
-                    </div>
-                    {courageTarget > 0 && (
-                      <div className="me-level-bar-row">
-                        <span className="me-level-bar-label">Courage</span>
-                        <div className="me-level-bar-track"><div className="me-level-bar-fill" style={{ width: `${couragePct}%` }} /></div>
-                      </div>
-                    )}
-                  </div>
-                </>
-              })()}
-              <button className="quest-cta" onClick={() => navigate('/7-day-challenge')}>
-                Go to Level Tab <span>→</span>
-              </button>
-            </>
-          )}
-        </div>
+        <CapacityCard userId={user?.id} onNavigate={() => navigate('/7-day-challenge')} hideMaintenance />
       </section>
 
       {/* ============================================================
-         SECTION 3: YOUR FLOW JOURNEY
+         SECTION 3: FANTASY LEAGUE
          ============================================================ */}
+      <section className="league-promo-section">
+        <a href="/league" className="league-promo-card">
+          <span className="league-promo-icon">🏆</span>
+          <div className="league-promo-text">
+            <span className="league-promo-title">Join the Fantasy League</span>
+            <span className="league-promo-sub">Compete head-to-head across Wahoos, Healing, and Tune</span>
+          </div>
+          <span className="league-promo-arrow">→</span>
+        </a>
+      </section>
+
+      {/* ARCHIVED: Flow Journey — re-enable if needed
       <section className="journey-section reveal-fade-up" ref={journeyRevealRef}>
         <div className="flow-journey">
           <div className="fj-top">
@@ -678,7 +597,6 @@ export default function MePage() {
               <div className="fj-header-icon">🌊</div>
               <span className="fj-title">Your Flow Journey</span>
             </div>
-
             <p className="fj-sub">
               {timelineEntries.length > 0
                 ? 'Swipe to explore your river — compass entries and milestones show your journey.'
@@ -686,23 +604,6 @@ export default function MePage() {
               }
             </p>
           </div>
-
-          {timelineEntries.length === 0 && (
-            <div style={{ padding: '0 0 8px' }}>
-              <div style={{ height: 160, position: 'relative', padding: '0 24px' }}>
-                <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%' }}>
-                  <path className="ghost-river-glow"
-                    d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60" />
-                  <path className="ghost-river-path"
-                    d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60" />
-                  <circle cx="40" cy="80" r="8" fill="#5e17eb" stroke="white" strokeWidth="2" />
-                  <text x="40" y="80" textAnchor="middle" dominantBaseline="central" fill="white" fontSize="7" fontWeight="800">🚩</text>
-                  <text x="40" y="102" textAnchor="middle" fill="#adb5bd" fontSize="8" fontWeight="700">Start</text>
-                </svg>
-              </div>
-            </div>
-          )}
-
           {timelineEntries.length > 0 && (
             <>
               <HorizontalFlowRiver
@@ -712,7 +613,6 @@ export default function MePage() {
               <p className="fj-scroll-hint">← Swipe to explore your flow →</p>
             </>
           )}
-
           {narrativeText && (
             <div className="fj-narrative">
               <p dangerouslySetInnerHTML={{ __html: narrativeText }} />
@@ -720,6 +620,7 @@ export default function MePage() {
           )}
         </div>
       </section>
+      */}
 
       {/* ============================================================
          SECTION 4: HERO PROFILE

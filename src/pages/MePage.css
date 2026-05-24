@@ -768,7 +768,8 @@
    SECTION 3: TODAY'S QUEST
    ============================================================ */
 .me-page .quest-section {
-  padding: 0 20px 32px;
+  padding: 0 20px 8px;
+  margin-bottom: 16px;
 }
 
 .me-page .quest-banner {

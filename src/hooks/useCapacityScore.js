@@ -110,7 +110,7 @@ function computeAxes(completions, checkins, wahoos, daysElapsed) {
   const expression = Math.min(10, Math.max(0, BASELINE + exprProjected / DIVISOR))
   const safetyRounded = Math.round(safety * 10) / 10
   const expressionRounded = Math.round(expression * 10) / 10
-  const capacity = Math.round(safetyRounded * expressionRounded)
+  const rawCapacity = Math.round(safetyRounded * expressionRounded)
 
   // --- Maintenance ---
   const maintenanceCompletions = completions.filter(c => MAINTENANCE_IDS.includes(c.quest_id))
@@ -141,6 +141,12 @@ function computeAxes(completions, checkins, wahoos, daysElapsed) {
   const totalMaintPossible = MAINTENANCE_IDS.length * 7
   const totalMaintDone = maintenanceDays.reduce((sum, d) => sum + d.done, 0)
   const maintenancePct = totalMaintPossible > 0 ? Math.round((totalMaintDone / totalMaintPossible) * 100) : 0
+
+  // --- Apply maintenance as dampened multiplier ---
+  // (Safety × Expression) × (0.5 + Maintenance% × 0.5)
+  // 100% maintenance = full score, 0% maintenance = half score
+  const maintMultiplier = 0.5 + (maintenancePct / 100) * 0.5
+  const capacity = Math.round(rawCapacity * maintMultiplier)
 
   return {
     safety: safetyRounded,
@@ -197,8 +203,6 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
         .select('id, completed_at')
         .eq('user_id', userId)
         .eq('status', 'completed')
-        .gte('scary_score', 7)
-        .gte('wahoo_score', 7)
         .gte('completed_at', lastStart),
     ]).then(([
       { data: allCompletions },

@@ -12,7 +12,7 @@ import { getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS, getLevel } fro
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 import JourneyGraphPopup from './JourneyGraphPopup'
-import FestLeaderboard from './FestLeaderboard'
+import { calculateLeagueStandings } from '../lib/league/leagueScoring'
 
 // Week type display info
 const WEEK_TYPES = {

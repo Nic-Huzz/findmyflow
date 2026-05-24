@@ -78,8 +78,8 @@ export const CONTENT_POINT_VALUES = {
 export const FANTASY_CATEGORIES = {
   play_list: {
     key: 'play_list',
-    label: 'Play-List',
-    icon: '🎮',
+    label: 'Wahoos',
+    icon: '🔥',
     color: '#E9A23B',
     dbFilter: ['Groans'],
     scoringType: 'raw', // Raw SUM(points)

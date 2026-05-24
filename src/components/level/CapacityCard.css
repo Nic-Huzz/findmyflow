@@ -208,3 +208,28 @@
   color: #bbb;
   font-weight: 600;
 }
+
+/* === CTA BUTTON === */
+.cc-cta {
+  width: 100%;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.cc-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(94, 23, 235, 0.4);
+}

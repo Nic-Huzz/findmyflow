@@ -21,9 +21,9 @@ const STALE_MS = 15 * 60 * 1000 // 15 minutes — match the cron interval
 
 // Fantasy scoring categories — mirrors leagueConfig.js (3 categories)
 const FANTASY_CATEGORIES: Record<string, { key: string; label: string; dbFilter: string[]; scoringType: string }> = {
-  play_list: { key: 'play_list', label: 'Play-List', dbFilter: ['Groans'], scoringType: 'raw' },
+  play_list: { key: 'play_list', label: 'Wahoos', dbFilter: ['Groans'], scoringType: 'raw' },
   healing: { key: 'healing', label: 'Healing', dbFilter: ['Healing', 'Daily', 'Weekly'], scoringType: 'raw' },
-  bonus: { key: 'bonus', label: 'Bonus', dbFilter: ['Bonus', 'Tracker'], scoringType: 'raw' },
+  tune: { key: 'tune', label: 'Tune', dbFilter: ['Tune'], scoringType: 'raw' },
 }
 
 const CATEGORY_KEYS = Object.keys(FANTASY_CATEGORIES)
@@ -237,9 +237,6 @@ async function calculateUserScores(
     if (!catEntry) continue
     scores[catEntry.key] += (c.points_earned || 0)
   }
-
-  // Add content submission bonus
-  scores.bonus += approvedContentPoints
 
   return scores
 }

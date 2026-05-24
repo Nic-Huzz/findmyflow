@@ -22,7 +22,7 @@ const ZONE_LABELS = [
 
 const TREND_ARROWS = { up: '↑', down: '↓', flat: '→' }
 
-export default function CapacityCard({ userId, refreshTrigger = 0, scoreData }) {
+export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, onNavigate, hideMaintenance }) {
   const hookData = useCapacityScore(scoreData ? null : userId, refreshTrigger)
   const {
     safety, expression, capacity, zone,
@@ -39,6 +39,7 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData }) 
           <span className="cc-title">Vibe Rise Score</span>
         </div>
         <p className="cc-empty-text">Complete a daily practice to start tracking</p>
+        {onNavigate && <button className="cc-cta" onClick={onNavigate}>Continue in Challenge <span>→</span></button>}
       </div>
     )
   }
@@ -70,7 +71,6 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData }) 
           {expressionTrend && <span className={`cc-eq-arrow cc-eq-arrow-${expressionTrend}`}>{TREND_ARROWS[expressionTrend]}</span>}
         </span>
         <span className="cc-eq-op">=</span>
-        <span className={`cc-eq-result cc-zone-${zone}`}>{capacity}</span>
       </div>
 
       {/* Zone bar */}
@@ -91,20 +91,24 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData }) 
       </div>
 
       {/* Maintenance */}
-      <div className="cc-maint">
-        <div className="cc-maint-header">
-          <span className="cc-maint-label">Maintenance</span>
-          <span className="cc-maint-pct">{maintenancePct}%</span>
+      {!hideMaintenance && (
+        <div className="cc-maint">
+          <div className="cc-maint-header">
+            <span className="cc-maint-label">Maintenance</span>
+            <span className="cc-maint-pct">{maintenancePct}%</span>
+          </div>
+          <div className="cc-maint-dots">
+            {maintenanceDays.map((day, i) => (
+              <div key={i} className="cc-maint-day">
+                <div className={`cc-maint-dot cc-maint-${day.status}`} />
+                <span className="cc-maint-day-label">{day.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="cc-maint-dots">
-          {maintenanceDays.map((day, i) => (
-            <div key={i} className="cc-maint-day">
-              <div className={`cc-maint-dot cc-maint-${day.status}`} />
-              <span className="cc-maint-day-label">{day.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
+
+      {onNavigate && <button className="cc-cta" onClick={onNavigate}>Continue in Challenge <span>→</span></button>}
     </div>
   )
 }

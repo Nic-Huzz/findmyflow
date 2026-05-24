@@ -2,7 +2,7 @@
  * leagueScoring.js — Fantasy League scoring engine
  *
  * Queries quest_completions for 3 fantasy categories:
- * Play-List, Healing, Bonus. Win 2 of 3 to take the week.
+ * Wahoos, Healing, Tune. Win 2 of 3 to take the week.
  */
 import { supabase } from '../supabaseClient'
 import { FANTASY_CATEGORIES, CATEGORY_KEYS, MATCH_POINTS } from './leagueConfig'
@@ -43,9 +43,6 @@ export async function calculateUserCategoryScores(userId, startDate, endDate, ap
     )
     scores[key] = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
   }
-
-  // Add approved content points to Bonus
-  scores.bonus = (scores.bonus || 0) + approvedContentPoints
 
   return scores
 }
