@@ -113,15 +113,14 @@ export default function PlaySkillPicker({ userId, onComplete, onClose }) {
 
       const allRows = [...taxonomyRows, ...customRows]
 
-      // Delete existing get_started skills and re-insert
-      const { error: deleteError } = await supabase
+      // Archive old get_started skills (mark as superseded, keep for history)
+      await supabase
         .from('nikigai_clusters')
-        .delete()
+        .update({ cluster_stage: 'archived' })
         .eq('user_id', userId)
         .eq('cluster_type', 'skills')
         .eq('step_id', 'get_started')
-
-      if (deleteError) throw deleteError
+        .eq('cluster_stage', 'final')
 
       const { error } = await supabase
         .from('nikigai_clusters')

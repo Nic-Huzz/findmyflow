@@ -409,10 +409,10 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
         ...personasCl.map(c => ({ ...c, cluster_type: 'persona' })),
       ]
 
-      // Delete old Life Map clusters only (scoped to null step_id to avoid wiping Curiosity Compass clusters)
+      // Archive old Life Map clusters (keep for history, scoped to null step_id to avoid wiping Curiosity Compass clusters)
       await supabase
         .from('nikigai_clusters')
-        .delete()
+        .update({ cluster_stage: 'archived' })
         .eq('user_id', user.id)
         .eq('cluster_stage', 'final')
         .in('cluster_type', ['skills', 'problems', 'persona'])
