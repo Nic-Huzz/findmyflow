@@ -163,9 +163,7 @@ const EssenceProfile = () => {
           </svg>
         </button>
         <div className="header-center">
-          <span className="header-icon">✦</span>
           <h1 className="header-title">{activeTab === 'essence' ? 'Essence Deep Dive' : 'Protective Deep Dive'}</h1>
-          <span className="header-icon">✦</span>
         </div>
         <div className="header-spacer" />
       </div>
