@@ -30,7 +30,15 @@ export default function DailyCheckin({ userId, onComplete }) {
   return (
     <div className="daily-checkin-overlay">
       <div className="daily-checkin-card">
-        <button className="daily-checkin-skip" onClick={() => onComplete(null)}>
+        <button className="daily-checkin-skip" onClick={() => {
+          // Mark as skipped so it doesn't show again today
+          supabase.from('nervous_system_checkins').insert({
+            user_id: userId,
+            before_state: null,
+            checkin_type: 'daily',
+          }).then(() => {})
+          onComplete(null)
+        }}>
           Skip
         </button>
         <span className="daily-checkin-emoji">🧠</span>
