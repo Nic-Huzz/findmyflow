@@ -682,7 +682,7 @@ export default function CreatorHomeV2() {
           {[
             { label: 'Your Skills', sub: 'Retake Play-Skills flow', path: '/play-skills-identifier' },
             { label: 'North Stars', sub: 'Redo Experience Creator Matching', path: '/experience-creators' },
-            { label: 'Your Position', sub: 'Retake Scope Map diagnostic', path: '/create/scope-map' },
+            { label: 'Your Position', sub: 'Retake Scope Map diagnostic', path: '/scope-map' },
             { label: 'Blow Up Brand', sub: 'Redo the Remarkable flow', path: '/create/remarkable' },
             { label: 'Pay Rent', sub: 'Explore how creators pay rent', path: '/create/pay-rent' },
             { label: 'Scale Income', sub: 'Redo attraction / core / continuity', path: '/create/scale-income' },
