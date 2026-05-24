@@ -9,10 +9,16 @@ import { useAuth } from '../../auth/AuthProvider'
 import { fetchTemplates, createTemplate, archiveTemplate } from '../../lib/experienceTemplateService'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 
-const TYPE_EMOJI = {
-  workshop: '🎓', retreat: '🏔️', circle: '🤝', cohort: '👥',
-  performance: '🎭', content: '📚', online: '💻', one_on_one: '🤝', popup: '⚡',
-}
+const EXPERIENCE_TYPES = [
+  { id: 'workshop', label: 'Workshops & Training', emoji: '🎓' },
+  { id: 'performance', label: 'Live Events & Performance', emoji: '🎭' },
+  { id: 'cohort', label: 'Cohorts & Courses', emoji: '👥' },
+  { id: 'books_media', label: 'Books, Content & Media', emoji: '📚' },
+  { id: 'facilitation', label: 'Facilitation & Community', emoji: '🤝' },
+  { id: 'retreats', label: 'Retreats & Immersive', emoji: '🏔️' },
+]
+
+const TYPE_EMOJI = Object.fromEntries(EXPERIENCE_TYPES.map(t => [t.id, t.emoji]))
 
 export default function ExperienceLibrary({ onCreateFromTemplate }) {
   const { user } = useAuth()
@@ -87,14 +93,9 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
           />
           <div className="el-create-row">
             <select className="el-select" value={newType} onChange={e => setNewType(e.target.value)}>
-              <option value="workshop">Workshop</option>
-              <option value="retreat">Retreat</option>
-              <option value="circle">Circle</option>
-              <option value="cohort">Cohort</option>
-              <option value="performance">Live Event</option>
-              <option value="popup">Pop-up</option>
-              <option value="online">Online</option>
-              <option value="one_on_one">1:1 Session</option>
+              {EXPERIENCE_TYPES.map(t => (
+                <option key={t.id} value={t.id}>{t.emoji} {t.label}</option>
+              ))}
             </select>
             <input
               className="el-input el-input-sm"
