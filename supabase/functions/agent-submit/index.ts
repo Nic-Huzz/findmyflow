@@ -61,7 +61,7 @@ serve(async (req: Request) => {
 
     // 6. Fetch offers JSON from the app
     const flowConfig = FLOW_CONFIG[flow_id]
-    const siteUrl = Deno.env.get('SITE_URL') || 'https://findmyflow.nichuzz.com'
+    const siteUrl = Deno.env.get('SITE_URL') || 'https://viberise.nichuzz.com'
     const encodedPath = flowConfig.offersPath.split('/').map(encodeURIComponent).join('/')
     const offersUrl = `${siteUrl}${encodedPath}`
 
@@ -155,7 +155,7 @@ serve(async (req: Request) => {
           disqualified: s.isDisqualified,
           disqualification_reasons: s.disqualificationReasons,
         })),
-        message: `Assessment saved. Result: ${topOffer.offer.name} (${Math.round(topOffer.confidence * 100)}% confidence). View at https://findmyflow.nichuzz.com`,
+        message: `Assessment saved. Result: ${topOffer.offer.name} (${Math.round(topOffer.confidence * 100)}% confidence). View at https://viberise.nichuzz.com`,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )

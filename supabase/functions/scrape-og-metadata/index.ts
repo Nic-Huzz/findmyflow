@@ -67,7 +67,7 @@ async function scrapeMetadata(url: string): Promise<{
       }
 
       const res = await fetch(oembedUrl, {
-        headers: { 'User-Agent': 'FindMyFlow/1.0' },
+        headers: { 'User-Agent': 'Vibe Rise/1.0' },
         signal: AbortSignal.timeout(8000),
       })
 
@@ -103,7 +103,7 @@ async function scrapeHtmlMeta(url: string): Promise<{
   try {
     const res = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; FindMyFlow/1.0; +https://findmyflow.nichuzz.com)',
+        'User-Agent': 'Mozilla/5.0 (compatible; Vibe Rise/1.0; +https://viberise.nichuzz.com)',
         'Accept': 'text/html',
       },
       redirect: 'follow',

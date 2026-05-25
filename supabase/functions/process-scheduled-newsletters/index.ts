@@ -16,7 +16,7 @@ const corsHeaders = {
 }
 
 const BATCH_LIMIT = 100
-const FROM_ADDRESS = 'Huzz <huzz@findmyflow.nichuzz.com>'
+const FROM_ADDRESS = 'Huzz <huzz@viberise.nichuzz.com>'
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {

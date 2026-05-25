@@ -14,7 +14,7 @@ const corsHeaders = {
 async function suggestBucket(context: any) {
   const prompt = `Analyze this user data and determine which transformation bucket (wealth, health, or relationships) their offer should fall into.
 
-User's skills from FindMyFlow: ${JSON.stringify(context.skills || [])}
+User's skills from Vibe Rise: ${JSON.stringify(context.skills || [])}
 Problems they solve: ${JSON.stringify(context.problems || [])}
 Target persona: ${JSON.stringify(context.persona || {})}
 Validation survey responses: ${JSON.stringify(context.validationData || {})}
@@ -179,7 +179,7 @@ async function generateVersions(context: any) {
 CONTEXT:
 Dream Outcome: ${context.dreamOutcome}
 Bucket: ${context.bucket}
-User's skills from FindMyFlow: ${JSON.stringify(context.skills || [])}
+User's skills from Vibe Rise: ${JSON.stringify(context.skills || [])}
 Target persona: ${JSON.stringify(context.persona || {})}
 Validation data:
 - Price sensitivity/budget: ${context.validationData?.budget || 'Not specified'}

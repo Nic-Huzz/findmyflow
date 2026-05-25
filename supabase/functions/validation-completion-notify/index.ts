@@ -130,7 +130,7 @@ serve(async (req) => {
             <p style="margin: 8px 0; color: #374151;"><strong>Completion Rate:</strong> ${completionRate}%</p>
           </div>
 
-          <a href="https://findmyflow.nichuzz.com/validation-flows"
+          <a href="https://viberise.nichuzz.com/validation-flows"
              style="display: inline-block; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; padding: 14px 28px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px;">
             View All Responses →
           </a>
@@ -141,7 +141,7 @@ serve(async (req) => {
         </div>
 
         <p style="text-align: center; font-size: 12px; color: #9ca3af; margin-top: 20px;">
-          Powered by FindMyFlow
+          Powered by Vibe Rise
         </p>
       </div>
     `
@@ -155,7 +155,7 @@ serve(async (req) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          from: 'FindMyFlow <notifications@findmyflow.nichuzz.com>',
+          from: 'Vibe Rise <notifications@viberise.nichuzz.com>',
           to: creatorEmail,
           subject: `🎉 New response: ${surveyName}`,
           html: emailHtml

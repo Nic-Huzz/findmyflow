@@ -70,7 +70,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'FindMyFlow <notifications@findmyflow.nichuzz.com>',
+          from: 'Vibe Rise <notifications@viberise.nichuzz.com>',
           to: NOTIFY_EMAIL,
           subject: `New lead: ${name || email} — ${source}`,
           html: emailHtml,

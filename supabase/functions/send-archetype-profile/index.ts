@@ -14,7 +14,7 @@ const corsHeaders = {
 }
 
 const NOTIFY_EMAIL = 'huzz@nichuzz.com'
-const CTA_URL = 'https://findmyflow.nichuzz.com/get-started'
+const CTA_URL = 'https://viberise.nichuzz.com/get-started'
 
 // ── Essence Profiles (8 used in LinkTree) ──────────────────────────────────
 
@@ -200,7 +200,7 @@ const PROTECTIVE_PROFILES: Record<string, any> = {
 }
 
 // ── Brand tokens ─────────────────────────────────────────────────────────
-// Style A — Light & Clean. Matches FindMyFlow :root vars from src/index.css
+// Style A — Light & Clean. Matches Vibe Rise :root vars from src/index.css
 
 const B = {
   purple: '#5e17eb',
@@ -268,10 +268,10 @@ const footer = `
       <span style="color:${B.gold};font-size:18px;letter-spacing:12px;">&#10022;</span>
     </td></tr>
     <tr><td align="center" style="padding:0 0 6px;color:${B.mutedGray};font-size:12px;font-family:${B.font};">
-      FindMyFlow &mdash; On a mission to make healing fun
+      Vibe Rise &mdash; On a mission to make healing fun
     </td></tr>
     <tr><td align="center" style="padding:0 0 24px;">
-      <a href="${CTA_URL}" style="color:${B.purple};text-decoration:none;font-size:12px;font-family:${B.font};">findmyflow.nichuzz.com</a>
+      <a href="${CTA_URL}" style="color:${B.purple};text-decoration:none;font-size:12px;font-family:${B.font};">viberise.nichuzz.com</a>
     </td></tr>
   </table>`
 
@@ -281,7 +281,7 @@ function emailShell(content: string): string {
   <!DOCTYPE html>
   <html lang="en">
   <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>FindMyFlow</title>
+  <title>Vibe Rise</title>
   <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
   </head>
   <body style="margin:0;padding:0;background-color:${B.softGray};-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
@@ -560,7 +560,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'FindMyFlow <notifications@nichuzz.com>',
+          from: 'Vibe Rise <notifications@nichuzz.com>',
           to: email,
           subject,
           html: profileHtml,
@@ -586,7 +586,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'FindMyFlow <notifications@nichuzz.com>',
+          from: 'Vibe Rise <notifications@nichuzz.com>',
           to: NOTIFY_EMAIL,
           subject: `LinkTree lead: ${name || email} — ${archetype_name} (${type})`,
           html: buildNotificationEmail(email, name || '', archetype_name, type),

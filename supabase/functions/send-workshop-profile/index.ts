@@ -14,7 +14,7 @@ const corsHeaders = {
 }
 
 const NOTIFY_EMAIL = 'huzz@nichuzz.com'
-const CTA_URL = 'https://findmyflow.nichuzz.com'
+const CTA_URL = 'https://viberise.nichuzz.com'
 
 // ── Workshop content (canonical source: src/data/workshopContent.js) ────────
 
@@ -361,14 +361,14 @@ function buildWorkshopEmail(
       <!-- CTA -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr><td align="center" style="padding:0 20px 8px;color:${B.textGray};font-size:15px;line-height:1.6;font-family:${B.font};">
-          Ready to go deeper? FindMyFlow has tools<br>to help you live from your essence every day.
+          Ready to go deeper? Vibe Rise has tools<br>to help you live from your essence every day.
         </td></tr>
       </table>
 
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 24px;">
         <tr><td align="center">
           <a href="${CTA_URL}" style="display:inline-block;padding:16px 44px;background:${B.gold};color:${B.white};font-size:16px;font-weight:700;text-decoration:none;border-radius:32px;font-family:${B.font};letter-spacing:0.3px;">
-            Explore FindMyFlow &rarr;
+            Explore Vibe Rise &rarr;
           </a>
         </td></tr>
       </table>
@@ -379,10 +379,10 @@ function buildWorkshopEmail(
           <span style="color:${B.gold};font-size:18px;letter-spacing:12px;">&#10022;</span>
         </td></tr>
         <tr><td align="center" style="padding:0 0 6px;color:${B.mutedGray};font-size:12px;font-family:${B.font};">
-          FindMyFlow &mdash; Healing Compass Workshop
+          Vibe Rise &mdash; Healing Compass Workshop
         </td></tr>
         <tr><td align="center" style="padding:0 0 24px;">
-          <a href="${CTA_URL}" style="color:${B.purple};text-decoration:none;font-size:12px;font-family:${B.font};">findmyflow.nichuzz.com</a>
+          <a href="${CTA_URL}" style="color:${B.purple};text-decoration:none;font-size:12px;font-family:${B.font};">viberise.nichuzz.com</a>
         </td></tr>
       </table>
 
@@ -506,7 +506,7 @@ serve(async (req) => {
       }
 
       const emailPayload: any = {
-        from: 'FindMyFlow <notifications@findmyflow.nichuzz.com>',
+        from: 'Vibe Rise <notifications@viberise.nichuzz.com>',
         to: email,
         subject,
         html: profileHtml,
@@ -543,7 +543,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'FindMyFlow <notifications@findmyflow.nichuzz.com>',
+          from: 'Vibe Rise <notifications@viberise.nichuzz.com>',
           to: NOTIFY_EMAIL,
           subject: `Workshop: ${name} — ${essenceArchetype}`,
           html: buildNotificationEmail(email, name, emotionalNeed, protectivePattern, essenceArchetype, whatsapp),

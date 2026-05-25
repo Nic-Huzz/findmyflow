@@ -1,5 +1,5 @@
 // supabase/functions/mcp-server/index.ts
-// MCP server for FindMyFlow — implements MCP Streamable HTTP (JSON-RPC 2.0) directly.
+// MCP server for Vibe Rise — implements MCP Streamable HTTP (JSON-RPC 2.0) directly.
 // No SDK dependency. Each request is fully independent (stateless).
 
 import { FLOW_CONFIG, VALID_FLOW_IDS } from '../_shared/flowConfig.ts'
@@ -8,8 +8,8 @@ import { authenticateRequest, corsHeaders, type AuthResult } from '../_shared/au
 
 // --- Constants ---
 const MCP_PROTOCOL_VERSION = '2025-03-26'
-const SERVER_INFO = { name: 'findmyflow', version: '1.1.0' }
-const SITE_URL = Deno.env.get('SITE_URL') || 'https://findmyflow.nichuzz.com'
+const SERVER_INFO = { name: 'viberise', version: '1.1.0' }
+const SITE_URL = Deno.env.get('SITE_URL') || 'https://viberise.nichuzz.com'
 
 // Quest catalog URL — served as static JSON from the app
 const QUEST_CATALOG_URL = `${SITE_URL}/challengeQuestsUpdate.json`
@@ -68,7 +68,7 @@ const SCORING_CATEGORIES: Record<string, string> = {
 const TOOL_DEFINITIONS = [
   {
     name: 'list_flows',
-    description: 'List all available FindMyFlow business assessments (Money Model flows). Returns flow IDs, names, descriptions, and question counts.',
+    description: 'List all available Vibe Rise business assessments (Money Model flows). Returns flow IDs, names, descriptions, and question counts.',
     inputSchema: {
       type: 'object' as const,
       properties: {},

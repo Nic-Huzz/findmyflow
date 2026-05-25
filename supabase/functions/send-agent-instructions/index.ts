@@ -13,10 +13,10 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const FROM_ADDRESS = 'FindMyFlow <notifications@findmyflow.nichuzz.com>'
+const FROM_ADDRESS = 'Vibe Rise <notifications@viberise.nichuzz.com>'
 const MCP_SERVER_URL = 'https://qlwfcfypnoptsocdpxuv.supabase.co/functions/v1/mcp-server'
-const AGENT_ACCESS_URL = 'https://findmyflow.nichuzz.com/agent-access'
-const LLMS_FULL_URL = 'https://findmyflow.nichuzz.com/llms-full.txt'
+const AGENT_ACCESS_URL = 'https://viberise.nichuzz.com/agent-access'
+const LLMS_FULL_URL = 'https://viberise.nichuzz.com/llms-full.txt'
 
 // Brand tokens
 const B = {
@@ -46,7 +46,7 @@ function buildInstructionsEmail(keyPrefix: string | null): string {
   const step1Code = 'export FINDMYFLOW_API_KEY="fmf_k1_your_key_here"'
   const step2Code = `echo '{
   "mcpServers": {
-    "findmyflow": {
+    "viberise": {
       "type": "http",
       "url": "${MCP_SERVER_URL}",
       "headers": {
@@ -60,7 +60,7 @@ function buildInstructionsEmail(keyPrefix: string | null): string {
   <!DOCTYPE html>
   <html lang="en">
   <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>FindMyFlow Agent Setup</title>
+  <title>Vibe Rise Agent Setup</title>
   </head>
   <body style="margin:0;padding:0;background-color:${B.softGray};-webkit-text-size-adjust:100%;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:${B.softGray};">
@@ -84,7 +84,7 @@ function buildInstructionsEmail(keyPrefix: string | null): string {
         <tr><td style="padding:28px 28px 0;">
 
           <p style="margin:0 0 20px;color:${B.textGray};font-size:15px;line-height:1.6;font-family:${B.font};">
-            Follow these three steps to connect your AI agent (Claude Code, etc.) to FindMyFlow. Your agent will be able to run business assessments and the results will appear in the app.
+            Follow these three steps to connect your AI agent (Claude Code, etc.) to Vibe Rise. Your agent will be able to run business assessments and the results will appear in the app.
           </p>
 
           <!-- Step 1 -->
@@ -188,10 +188,10 @@ function buildInstructionsEmail(keyPrefix: string | null): string {
               <span style="color:${B.gold};font-size:18px;letter-spacing:12px;">&#10022;</span>
             </td></tr>
             <tr><td align="center" style="padding:0 0 6px;color:${B.mutedGray};font-size:12px;font-family:${B.font};">
-              FindMyFlow &mdash; On a mission to make healing fun
+              Vibe Rise &mdash; On a mission to make healing fun
             </td></tr>
             <tr><td align="center" style="padding:0 0 24px;">
-              <a href="https://findmyflow.nichuzz.com" style="color:${B.purple};text-decoration:none;font-size:12px;font-family:${B.font};">findmyflow.nichuzz.com</a>
+              <a href="https://viberise.nichuzz.com" style="color:${B.purple};text-decoration:none;font-size:12px;font-family:${B.font};">viberise.nichuzz.com</a>
             </td></tr>
           </table>
 
@@ -255,7 +255,7 @@ serve(async (req) => {
         body: JSON.stringify({
           from: FROM_ADDRESS,
           to: email,
-          subject: 'Your FindMyFlow Agent Setup Instructions',
+          subject: 'Your Vibe Rise Agent Setup Instructions',
           html,
         }),
       })
