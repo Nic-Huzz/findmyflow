@@ -489,7 +489,7 @@ export default function MePage() {
          ============================================================ */}
       <section className="hero-section">
         <div className="hero-top-bar">
-          <div className="brand">FindMyFlow</div>
+          <div className="brand">Vibe Rise</div>
           <div className="hero-top-right">
             <VibeColorPicker />
             <div className="xp-pill">

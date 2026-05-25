@@ -197,7 +197,7 @@ function NotificationSettings() {
           <div className="notification-install-required">
             <h2 className="settings-title">📱 Install Required</h2>
             <p className="install-explanation">
-              Push notifications are only available when Find My Flow is installed
+              Push notifications are only available when Vibe Rise is installed
               as an app on your home screen.
             </p>
 

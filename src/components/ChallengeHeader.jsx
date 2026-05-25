@@ -136,7 +136,7 @@ function ChallengeHeader({
         </div>
       )}
 
-      <h1 className="challenge-app-title">Find My Flow</h1>
+      <h1 className="challenge-app-title">Vibe Rise</h1>
 
       {/* Score block: total left, category pills right */}
       <div className={`challenge-score-block${matchupLoading ? ' loading' : ''}`}>

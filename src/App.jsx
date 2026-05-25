@@ -640,8 +640,8 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>Find My Flow</h1>
-        <p>Live Your Ambitions Quicker</p>
+        <h1>Vibe Rise</h1>
+        <p>The App That Gamifies Courage</p>
       </header>
 
       <main className="app-chat">

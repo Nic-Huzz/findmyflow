@@ -700,7 +700,7 @@ const Profile = () => {
       {/* Mobile Top Bar */}
       <div className="mobile-topbar">
         <div className="topbar-content">
-          <div className="topbar-logo">FindMyFlow</div>
+          <div className="topbar-logo">Vibe Rise</div>
           <button className="hamburger-btn" onClick={toggleSidebar}>
             ☰
           </button>
@@ -714,7 +714,7 @@ const Profile = () => {
 
       {/* Sidebar */}
       <div className={`sidebar ${sidebarOpen ? '' : 'mobile-hidden'}`}>
-        <div className="logo">FindMyFlow</div>
+        <div className="logo">Vibe Rise</div>
 
         <div className="user-profile">
           <div className="user-avatar">{userData?.user_name?.substring(0, 2).toUpperCase() || getUserInitials(user?.email)}</div>
@@ -1016,7 +1016,7 @@ const Profile = () => {
           </button>
           <a
             className="action-btn support"
-            href="https://wa.me/61423220241?text=Hi%20Nic!%20I%20need%20some%20help%20with%20FindMyFlow"
+            href="https://wa.me/61423220241?text=Hi%20Nic!%20I%20need%20some%20help%20with%20Vibe%20Rise"
             target="_blank"
             rel="noopener noreferrer"
           >
