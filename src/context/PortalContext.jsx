@@ -148,11 +148,11 @@ async function fetchPipelineData(userId) {
   const followupDone = followupItems.filter(i => i.completed).length
   const followupPct = followupTotal > 0 ? Math.round((followupDone / followupTotal) * 100) : 100
 
-  // Onboard: ecosystem progress
+  // Onboard: ecosystem progress (default to 100 if no items — absence ≠ blocked)
   const ecoItems = ecosystemRes.data || []
   const ecoTotal = ecoItems.length
   const ecoDone = ecoItems.filter(i => i.completed).length
-  const ecoPct = ecoTotal > 0 ? Math.round((ecoDone / ecoTotal) * 100) : 0
+  const ecoPct = ecoTotal > 0 ? Math.round((ecoDone / ecoTotal) * 100) : 100
 
   // ─── Build node objects ───────────────────────────────────────────────
 

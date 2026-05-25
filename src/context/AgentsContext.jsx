@@ -46,6 +46,8 @@ export function AgentsProvider({ children }) {
   const [isStreaming, setIsStreaming] = useState(false)
   const [loading, setLoading] = useState(true)
   const abortRef = useRef(null)
+  const conversationsRef = useRef(conversations)
+  useEffect(() => { conversationsRef.current = conversations }, [conversations])
 
   const activeAgent = AGENTS[activeAgentId]
 
@@ -100,7 +102,7 @@ export function AgentsProvider({ children }) {
 
     const agentId = activeAgentId
     const agent = AGENTS[agentId]
-    const prevMessages = conversations[agentId] || []
+    const prevMessages = conversationsRef.current[agentId] || []
 
     // Add user message
     const userMsg = { role: 'user', content: text.trim(), timestamp: Date.now() }
@@ -192,10 +194,10 @@ export function AgentsProvider({ children }) {
 
     } catch (err) {
       if (err.name === 'AbortError') {
-        // Clean up empty assistant placeholder if abort happened before any content
+        // Always remove partial/empty assistant turn to prevent malformed history on next send
         setConversations(prev => {
           const msgs = [...(prev[agentId] || [])]
-          if (msgs.length > 0 && msgs[msgs.length - 1].role === 'assistant' && !msgs[msgs.length - 1].content) {
+          if (msgs.length > 0 && msgs[msgs.length - 1].role === 'assistant') {
             msgs.pop()
           }
           return { ...prev, [agentId]: msgs }
@@ -216,7 +218,7 @@ export function AgentsProvider({ children }) {
       setIsStreaming(false)
       abortRef.current = null
     }
-  }, [userId, activeAgentId, conversations, isStreaming, saveConversation])
+  }, [userId, activeAgentId, isStreaming, saveConversation])
 
   const stopStreaming = useCallback(() => {
     if (abortRef.current) abortRef.current.abort()
