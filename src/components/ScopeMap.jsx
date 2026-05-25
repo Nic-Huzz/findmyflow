@@ -1,7 +1,7 @@
 /**
  * ScopeMap.jsx
  *
- * 2x2 SVG graph for the River System (Find My Flow).
+ * 2x2 SVG graph for the River System (Vibe Rise).
  * Shows four stages: Stream, Lake, Waterfall, River.
  * Brand purple (#5e17eb) background, gold (#E9A23B) accents, white labels.
  *
@@ -42,7 +42,7 @@ export default function ScopeMap({ stage = null, animated = false, width = '100%
 
       {/* Title */}
       <text x="220" y="46" textAnchor="middle" fill="white" fontSize="22" fontWeight="800" fontStyle="italic">
-        Find My Flow
+        Vibe Rise
       </text>
 
       {/* Quadrant backgrounds (subtle) */}

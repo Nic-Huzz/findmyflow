@@ -1,7 +1,7 @@
 /**
  * Knowledge Graph
  * A foundational mind map of human experience - how concepts interconnect
- * This underpins the entire FindMyFlow philosophy
+ * This underpins the entire Vibe Rise philosophy
  */
 
 export const KNOWLEDGE_GRAPH = {

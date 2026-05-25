@@ -126,7 +126,7 @@ function ShareableArchetypeCard({ essence, protective, imagePath, onClose }) {
     // Footer branding
     ctx.font = '12px -apple-system, BlinkMacSystemFont, sans-serif'
     ctx.fillStyle = 'rgba(255,255,255,0.35)'
-    ctx.fillText('findmyflow.nichuzz.com', CARD_WIDTH / 2, CARD_HEIGHT - 30)
+    ctx.fillText('viberise.nichuzz.com', CARD_WIDTH / 2, CARD_HEIGHT - 30)
 
     try {
       setImageDataUrl(canvas.toDataURL('image/png'))
@@ -144,7 +144,7 @@ function ShareableArchetypeCard({ essence, protective, imagePath, onClose }) {
       ctx.fillText(essence?.name || 'Unknown', CARD_WIDTH / 2, 290)
       ctx.font = '12px -apple-system, BlinkMacSystemFont, sans-serif'
       ctx.fillStyle = 'rgba(255,255,255,0.35)'
-      ctx.fillText('findmyflow.nichuzz.com', CARD_WIDTH / 2, CARD_HEIGHT - 30)
+      ctx.fillText('viberise.nichuzz.com', CARD_WIDTH / 2, CARD_HEIGHT - 30)
       setImageDataUrl(canvas.toDataURL('image/png'))
     }
   }
@@ -160,7 +160,7 @@ function ShareableArchetypeCard({ essence, protective, imagePath, onClose }) {
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
         await navigator.share({
           title: `I'm a ${essence?.name || 'Hero'}`,
-          text: essence?.poeticLine || 'Discover your archetype at FindMyFlow',
+          text: essence?.poeticLine || 'Discover your archetype at Vibe Rise',
           files: [file]
         })
       } else {

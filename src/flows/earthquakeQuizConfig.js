@@ -264,7 +264,7 @@ export const VOICE_CONTENT = {
     howItProtected: 'This voice developed to protect you from the pain of being seen. It kept you safe when showing up meant getting hurt.',
     howItBlocks: 'Nobody knows about your gifts. Your work is invisible. You have ideas that could help people but they never see the light.',
     kryptonite: 'Being seen anyway. One post. One video. One conversation where you show up as yourself.',
-    stat: '73% of FindMyFlow users with The Ghost as primary voice say visibility is their #1 block.',
+    stat: '73% of Vibe Rise users with The Ghost as primary voice say visibility is their #1 block.',
   },
   perfectionist: {
     name: 'The Perfectionist',
@@ -345,7 +345,7 @@ export const BLOCK_CONTENT = {
 export const DAM_COPY = {
   books: "You've got the language. Now you need the system.",
   courses: "You don't need more information. You need integration.",
-  therapy: 'Therapy heals the past. FindMyFlow builds the future. You need both.',
+  therapy: 'Therapy heals the past. Vibe Rise builds the future. You need both.',
   quizzes: 'Quizzes give labels. You need daily action that expands what feels safe.',
   nothing: "Good — you're starting fresh. No bad habits to unlearn.",
 }

@@ -399,7 +399,7 @@ function AuditWheel({ categoryLevels }) {
   )
 }
 
-// How Find My Flow helps with each gap
+// How Vibe Rise helps with each gap
 const GAP_TO_HELP = {
   no_attraction: {
     feature: 'Attraction Offer Builder',
@@ -871,7 +871,7 @@ export default function PublicOfferAuditFlow() {
     return `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 40px; min-height: 100vh;">
         <div style="text-align: center; border-bottom: 2px solid rgba(251, 191, 36, 0.3); padding-bottom: 24px; margin-bottom: 32px;">
-          <div style="font-size: 28px; font-weight: 700; color: #fbbf24;">Find My Flow</div>
+          <div style="font-size: 28px; font-weight: 700; color: #fbbf24;">Vibe Rise</div>
           <div style="font-size: 14px; color: rgba(255, 255, 255, 0.6);">Offer Audit Results</div>
         </div>
 
@@ -909,7 +909,7 @@ export default function PublicOfferAuditFlow() {
 
         <div style="text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); font-size: 12px;">
           <p>Ready to build your complete offer stack?</p>
-          <p style="margin-top: 24px;">© ${new Date().getFullYear()} Find My Flow | findmyflow.nichuzz.com</p>
+          <p style="margin-top: 24px;">© ${new Date().getFullYear()} Vibe Rise | viberise.nichuzz.com</p>
         </div>
       </div>
     `
@@ -1191,7 +1191,7 @@ export default function PublicOfferAuditFlow() {
                 printWindow.document.write(`
                   <!DOCTYPE html>
                   <html>
-                  <head><title>Journey Assessment - Find My Flow</title></head>
+                  <head><title>Journey Assessment - Vibe Rise</title></head>
                   <body style="margin: 0;">
                     ${pdfContent}
                     <script>window.onload = function() { setTimeout(function() { window.print(); }, 500); };</script>
@@ -1264,10 +1264,10 @@ export default function PublicOfferAuditFlow() {
             </div>
           )}
 
-          {/* How Find My Flow Will Help Section */}
+          {/* How Vibe Rise Will Help Section */}
           {helpItems.length > 0 && (
             <div className="help-section">
-              <h3 className="help-title">How Find My Flow Will Help</h3>
+              <h3 className="help-title">How Vibe Rise Will Help</h3>
               <p className="help-subtitle">Based on your answers, here's how we can support you:</p>
               {helpItems.map((item, index) => (
                 <div key={index} className="help-item">
@@ -1294,7 +1294,7 @@ export default function PublicOfferAuditFlow() {
               printWindow.document.write(`
                 <!DOCTYPE html>
                 <html>
-                <head><title>Offer Audit Results - Find My Flow</title></head>
+                <head><title>Offer Audit Results - Vibe Rise</title></head>
                 <body style="margin: 0;">
                   ${pdfContent}
                   <script>window.onload = function() { setTimeout(function() { window.print(); }, 500); };</script>

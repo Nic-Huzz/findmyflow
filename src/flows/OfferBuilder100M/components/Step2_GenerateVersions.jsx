@@ -104,7 +104,7 @@ function Step2_GenerateVersions({ bucket, dreamOutcome, contextData, onComplete,
 
           <div className="progress-steps">
             <div className={`progress-step ${generationProgress.analyzing ? 'active' : ''}`}>
-              {generationProgress.analyzing ? '✓' : '○'} Analyzing your skills (from FindMyFlow)
+              {generationProgress.analyzing ? '✓' : '○'} Analyzing your skills (from Vibe Rise)
             </div>
             {hasV1CoreProducts && (
               <div className={`progress-step ${generationProgress.analyzing ? 'active' : ''}`}>

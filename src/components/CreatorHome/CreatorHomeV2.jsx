@@ -462,8 +462,8 @@ export default function CreatorHomeV2() {
               )}
 
               <div className="ch2-id-footer">
-                <div className="ch2-id-brand">FINDMYFLOW</div>
-                <div className="ch2-id-brand">findmyflow.nichuzz.com</div>
+                <div className="ch2-id-brand">VIBE RISE</div>
+                <div className="ch2-id-brand">viberise.nichuzz.com</div>
               </div>
             </div>
           </div>

@@ -199,7 +199,7 @@ export default function Reports() {
 
   function handleExportCSV() {
     const rows = [
-      ['FindMyFlow CRM Report'],
+      ['Vibe Rise CRM Report'],
       ['Period', periodRange.label],
       ['Generated', new Date().toLocaleString()],
       [''],

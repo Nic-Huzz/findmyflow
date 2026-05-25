@@ -74,7 +74,7 @@ export default function DNAReveal({ profile, match, onContinue, onFounderChange,
   }
 
   const handleShare = async () => {
-    const url = shareUrl || 'findmyflow.nichuzz.com'
+    const url = shareUrl || 'viberise.nichuzz.com'
     const text = `My Founder DNA: ${profile.code} \u2014 ${match.archetype}\nI think like ${selected.founder.name}\n\nDiscover yours at ${url}`
     if (navigator.share) {
       try {

@@ -1,7 +1,7 @@
 /**
  * Ancient Wisdom - Timeless traditions that validate your path
  *
- * These entries connect FindMyFlow concepts to ancient wisdom traditions,
+ * These entries connect Vibe Rise concepts to ancient wisdom traditions,
  * showing that this isn't new-age invention but rediscovery of eternal truths.
  */
 
@@ -42,10 +42,10 @@ The Okinawans didn't have a word for retirement because their work and their mea
       },
 
       translation: {
-        title: 'The FindMyFlow Translation',
+        title: 'The Vibe Rise Translation',
         body: `The Flow Equation is Ikigai with different labels:
 
-| Ikigai | FindMyFlow |
+| Ikigai | Vibe Rise |
 |--------|------------|
 | What you love | Problems that light you up |
 | What you're good at | Skills that come naturally |
@@ -109,7 +109,7 @@ The worst fate, according to this tradition, isn't failure on your own path—it
       },
 
       translation: {
-        title: 'The FindMyFlow Translation',
+        title: 'The Vibe Rise Translation',
         body: `Svadharma is what we call your **unique Flow**.
 
 The Matrix told you to follow the prescribed path: school → job → retirement. That's someone else's dharma—a generic template that ignores your specific nature.
@@ -118,7 +118,7 @@ Your Flow—the intersection of your skills, the problems that call to you, and 
 
 **The parallel:**
 
-| Svadharma Teaching | FindMyFlow Principle |
+| Svadharma Teaching | Vibe Rise Principle |
 |-------------------|---------------------|
 | Living another's dharma perfectly still fails | Success in the wrong career is still misalignment |
 | Your dharma emerges from within | Your Flow is discovered, not assigned |
@@ -179,14 +179,14 @@ The Taoists observed that most human suffering comes from fighting our Te: tryin
       },
 
       translation: {
-        title: 'The FindMyFlow Translation',
+        title: 'The Vibe Rise Translation',
         body: `Te is what we mean when we say "in Flow."
 
 Flow isn't about working harder. It's about aligning so completely with your nature that work stops feeling like work. That's Te in action.
 
 **The parallel:**
 
-| Taoist Te | FindMyFlow Concept |
+| Taoist Te | Vibe Rise Concept |
 |-----------|-------------------|
 | Act from your inherent nature | Work from your unique Skills/Problems/People |
 | Wu wei (effortless action) | The Flow state |
@@ -258,15 +258,15 @@ Campbell's insight: this isn't just a storytelling formula. It's a map of psycho
       },
 
       translation: {
-        title: 'The FindMyFlow Translation',
-        body: `You are living the Hero's Journey. FindMyFlow is your map.
+        title: 'The Vibe Rise Translation',
+        body: `You are living the Hero's Journey. Vibe Rise is your map.
 
-| Hero's Journey Stage | Your FindMyFlow Experience |
+| Hero's Journey Stage | Your Vibe Rise Experience |
 |---------------------|---------------------------|
 | Ordinary World | Life in the Matrix (before the earthquake) |
 | Call to Adventure | The earthquake—sensing something is wrong |
 | Refusal of the Call | Protective Voices activating: "Stay safe" |
-| Meeting the Mentor | Finding FindMyFlow, Zarlo, community |
+| Meeting the Mentor | Finding Vibe Rise, Zarlo, community |
 | Crossing the Threshold | Committing to the journey |
 | Tests, Allies, Enemies | The Playground, facing fears, Movement Makers |
 | The Ordeal | Your deepest Groan—the challenge that transforms |

@@ -1,7 +1,7 @@
 /**
  * OfferBuilder100M - $100M Offer Builder Styles
  *
- * Uses FindMyFlow CSS variables and patterns.
+ * Uses Vibe Rise CSS variables and patterns.
  * Scoped to .offer-builder-100m to prevent conflicts.
  */
 
@@ -164,7 +164,7 @@
    FINDMYFLOW CONTEXT PANELS (Shared)
    ========================================== */
 
-/* FindMyFlow Context Panel (Step 1A) */
+/* Vibe Rise Context Panel (Step 1A) */
 .offer-builder-100m .findmyflow-context {
   background: rgba(251, 191, 36, 0.1);
   border: 1px solid rgba(251, 191, 36, 0.3);

@@ -131,7 +131,7 @@ const buildSupportMessage = ({
   userEmail
 }) => {
   const lines = [
-    `Hi Nic! I need help with FindMyFlow.`,
+    `Hi Nic! I need help with Vibe Rise.`,
     ``,
     `*Error in:* ${component}${action ? ` (${action})` : ''}`,
     `*What happened:* ${errorMessage}`,

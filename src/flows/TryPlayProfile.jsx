@@ -206,7 +206,7 @@ export default function TryPlayProfile() {
             match={state.matchResult}
             onContinue={handleContinue}
             continueLabel="Go deeper — find your stuck point"
-            shareUrl="findmyflow.nichuzz.com/try/play-profile"
+            shareUrl="viberise.nichuzz.com/try/play-profile"
             onFounderChange={(selectedMatch) => {
               setState(prev => ({
                 ...prev,

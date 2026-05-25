@@ -45,7 +45,7 @@ For now, just let this sink in.
 Talk soon,
 Huzz
 
-P.S. If you want to dive deeper right away, you can explore the full FindMyFlow platform here: https://findmyflow.nichuzz.com
+P.S. If you want to dive deeper right away, you can explore the full Vibe Rise platform here: https://viberise.nichuzz.com
     `.trim()
   },
 
@@ -77,7 +77,7 @@ Not because you lack capability. Not because you need more information.
 
 Because expansion feels dangerous to your nervous system.
 
-This is why I built FindMyFlow differently.
+This is why I built Vibe Rise differently.
 
 We don't just give you strategy. We help you expand your capacity to actually USE that strategy.
 
@@ -85,7 +85,7 @@ More on this tomorrow.
 
 Huzz
 
-P.S. Curious where your nervous system boundary is? Try the Nervous System Map: https://findmyflow.nichuzz.com/try/nervous-system
+P.S. Curious where your nervous system boundary is? Try the Nervous System Map: https://viberise.nichuzz.com/try/nervous-system
     `.trim()
   },
 
@@ -129,7 +129,7 @@ Building what works for YOU.
 
 Huzz
 
-P.S. Ready to design your version? The full platform walks you through it step by step: https://findmyflow.nichuzz.com
+P.S. Ready to design your version? The full platform walks you through it step by step: https://viberise.nichuzz.com
     `.trim()
   },
 
@@ -155,7 +155,7 @@ Where your skills meet real problems people will pay to solve.
 
 When you nail this intersection, selling becomes easy. Because you're not convincing anyone of anything — you're just offering the obvious solution to a problem they already have.
 
-Inside FindMyFlow, we use something called the Flow Finder to map this intersection:
+Inside Vibe Rise, we use something called the Flow Finder to map this intersection:
 
 1. **Skills Discovery** — What you're actually good at (not what you think you should be good at)
 2. **Problems Discovery** — What problems you naturally notice and want to solve
@@ -171,7 +171,7 @@ Worth exploring if you're ready to go deeper.
 
 Huzz
 
-https://findmyflow.nichuzz.com
+https://viberise.nichuzz.com
     `.trim()
   },
 
@@ -189,7 +189,7 @@ If not, that's okay. Most people don't.
 
 Not because they don't want to. But because knowing what to do and actually doing it are very different things.
 
-That's exactly why I built the 7-Day Challenge inside FindMyFlow.
+That's exactly why I built the 7-Day Challenge inside Vibe Rise.
 
 It's a gamified system that:
 - Breaks your strategy into daily micro-actions
@@ -209,7 +209,7 @@ The question is: are you ready to actually build it?
 
 If yes, come on in:
 
-https://findmyflow.nichuzz.com
+https://viberise.nichuzz.com
 
 See you inside (or not — no pressure),
 
@@ -259,7 +259,7 @@ For now, just sit with this awareness. Notice when your pattern shows up this we
 Talk soon,
 Huzz
 
-P.S. Your full profile and expansion practices are inside FindMyFlow: https://findmyflow.nichuzz.com
+P.S. Your full profile and expansion practices are inside Vibe Rise: https://viberise.nichuzz.com
     `.trim()
   },
 
@@ -291,7 +291,7 @@ Two things:
 
 2. **Graduated exposure** — Small, safe expansions beyond your current edge. Not giant leaps that overwhelm your system. Tiny steps that build new neural pathways.
 
-This is why FindMyFlow includes both strategy AND healing work.
+This is why Vibe Rise includes both strategy AND healing work.
 
 Because you can have the perfect business plan... but if your nervous system vetoes it, you won't execute.
 
@@ -327,7 +327,7 @@ Here's what works for people with your pattern:
 4. **Repair When Needed**
    Some days you'll contract. That's normal. Have a practice ready — breathing, journaling, movement — that brings you back to baseline.
 
-Inside FindMyFlow, we've gamified this with the 7-Day Challenge.
+Inside Vibe Rise, we've gamified this with the 7-Day Challenge.
 
 You get points for expansions. You track your "groans" (those moments of uncomfortable growth). You see your progress over time.
 
@@ -335,7 +335,7 @@ Makes the work actually... kinda fun.
 
 Huzz
 
-P.S. Ready to start expanding? https://findmyflow.nichuzz.com
+P.S. Ready to start expanding? https://viberise.nichuzz.com
     `.trim()
   },
 
@@ -369,13 +369,13 @@ This doesn't mean staying small forever.
 
 It means starting where your nervous system can SUSTAIN the action... then expanding from there.
 
-Inside FindMyFlow, after you complete the Nervous System Map, we recommend specific offer strategies that match your pattern.
+Inside Vibe Rise, after you complete the Nervous System Map, we recommend specific offer strategies that match your pattern.
 
 Your {{edge_earning}}/year edge doesn't mean you're capped there. It means we start there and build up.
 
 Huzz
 
-https://findmyflow.nichuzz.com
+https://viberise.nichuzz.com
     `.trim()
   },
 
@@ -395,7 +395,7 @@ Option 1: Nothing. Awareness is valuable on its own. Maybe just knowing your pat
 
 Option 2: Start expanding.
 
-If you choose Option 2, here's what's waiting for you inside FindMyFlow:
+If you choose Option 2, here's what's waiting for you inside Vibe Rise:
 
 **The 7-Day Challenge**
 - Daily "groan" practices that expand your edge
@@ -419,7 +419,7 @@ Your edge is currently {{edge_earning}}/year.
 
 Where do you want it to be?
 
-https://findmyflow.nichuzz.com
+https://viberise.nichuzz.com
 
 See you inside (or not — your choice),
 

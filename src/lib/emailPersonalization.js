@@ -152,7 +152,7 @@ export function extractNervousSystemTokens(email, responses, reflection) {
  */
 export function generateEmailSubject(sequenceType, emailKey, tokens) {
   const template = SUBJECT_TEMPLATES[sequenceType]?.[emailKey]
-  if (!template) return 'Your FindMyFlow results'
+  if (!template) return 'Your Vibe Rise results'
 
   // Replace tokens in template
   let subject = template

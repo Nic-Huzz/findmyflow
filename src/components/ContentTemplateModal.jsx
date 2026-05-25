@@ -28,7 +28,7 @@ export default function ContentTemplateModal({ templateType, onClose, data = {} 
         backgroundColor: null,
       })
       const link = document.createElement('a')
-      link.download = `findmyflow-${templateType}.png`
+      link.download = `viberise-${templateType}.png`
       link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {
@@ -54,8 +54,8 @@ export default function ContentTemplateModal({ templateType, onClose, data = {} 
         backgroundColor: null,
       })
       const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
-      const file = new File([blob], `findmyflow-${templateType}.png`, { type: 'image/png' })
-      await navigator.share({ files: [file], title: 'FindMyFlow' })
+      const file = new File([blob], `viberise-${templateType}.png`, { type: 'image/png' })
+      await navigator.share({ files: [file], title: 'Vibe Rise' })
     } catch (err) {
       if (err.name !== 'AbortError') {
         console.error('Share failed:', err)
@@ -109,7 +109,7 @@ function LeaderboardCard({ data }) {
   return (
     <div className="tpl-leaderboard">
       <div className="tpl-lb-eyebrow">Fantasy League Standings</div>
-      <div className="tpl-lb-title">FindMyFlow League S1</div>
+      <div className="tpl-lb-title">Vibe Rise League S1</div>
       <div className="tpl-lb-week">After Week {weekNumber}</div>
       <div className="tpl-lb-teams">
         {displayStandings.map((team, i) => (
@@ -124,8 +124,8 @@ function LeaderboardCard({ data }) {
         ))}
       </div>
       <div className="tpl-footer">
-        <span className="tpl-brand">FINDMYFLOW</span>
-        <span className="tpl-cta">findmyflow.nichuzz.com</span>
+        <span className="tpl-brand">VIBE RISE</span>
+        <span className="tpl-cta">viberise.nichuzz.com</span>
       </div>
     </div>
   )
@@ -184,7 +184,7 @@ function HeroCard({ data }) {
         </div>
       )}
       <div className="tpl-footer">
-        <span className="tpl-brand">FINDMYFLOW</span>
+        <span className="tpl-brand">VIBE RISE</span>
         <span className="tpl-cta">What's your archetype?</span>
       </div>
     </div>
@@ -232,7 +232,7 @@ function ScorecardCard({ data }) {
         })}
       </div>
       <div className="tpl-footer">
-        <span className="tpl-brand">FINDMYFLOW</span>
+        <span className="tpl-brand">VIBE RISE</span>
         <span className="tpl-cta">Fantasy League S1</span>
       </div>
     </div>
@@ -270,7 +270,7 @@ function IntentionsCard({ data }) {
         ))}
       </div>
       <div className="tpl-footer">
-        <span className="tpl-brand">FINDMYFLOW</span>
+        <span className="tpl-brand">VIBE RISE</span>
         <span className="tpl-cta">🏆 {teamName}</span>
       </div>
     </div>
@@ -305,7 +305,7 @@ function CourageCard({ data }) {
       </div>
       <div className="tpl-cg-quote">"The things that scare you AND excite you are where growth lives"</div>
       <div className="tpl-footer">
-        <span className="tpl-brand">FINDMYFLOW</span>
+        <span className="tpl-brand">VIBE RISE</span>
         <span className="tpl-cta">Play-List 🎭</span>
       </div>
     </div>

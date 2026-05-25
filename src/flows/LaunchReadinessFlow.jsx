@@ -736,7 +736,7 @@ function LaunchReadinessFlow() {
           {salesData.hasPage === 'no' && (
             <div className="lr-info-box warning">
               <strong>You'll need a way to collect payment.</strong>
-              <p>Options: FindMyFlow CRM (includes checkout pages), a direct checkout link, booking page, or a full sales page.</p>
+              <p>Options: Vibe Rise CRM (includes checkout pages), a direct checkout link, booking page, or a full sales page.</p>
             </div>
           )}
 

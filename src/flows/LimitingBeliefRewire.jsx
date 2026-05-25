@@ -359,7 +359,7 @@ export default function LimitingBeliefRewire() {
     <div className="container welcome-container">
       <h1 className="welcome-greeting">Where This Fits</h1>
       <div className="welcome-message animated-text">
-        <p><strong>In the Find My Flow journey...</strong></p>
+        <p><strong>In the Vibe Rise journey...</strong></p>
         <p className="highlight-box">
           <span className="highlight-word">Nervous System Map</span> revealed <em>what</em> beliefs are holding you back.<br /><br />
           <span className="highlight-word">Limiting Belief Rewire</span> helps you <em>heal</em> the root cause of those beliefs.

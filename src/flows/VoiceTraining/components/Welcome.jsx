@@ -27,7 +27,7 @@ export default function Welcome({ hasExisting, onContinue, onEdit, onBack }) {
         <div className="vt-feature">
           <span className="vt-feature-icon">🎯</span>
           <span className="vt-feature-text">
-            <strong>Context + Voice</strong> - Combines with your FindMyFlow data for best results
+            <strong>Context + Voice</strong> - Combines with your Vibe Rise data for best results
           </span>
         </div>
         <div className="vt-feature">

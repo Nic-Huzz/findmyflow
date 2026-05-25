@@ -471,7 +471,7 @@ export default function PublicMoneyModelFlow() {
                   confidence: Math.round(s.confidence * 100)
                 }))
               })
-              downloadResultsPdf(pdfContent, `${config.name} Results - Find My Flow`)
+              downloadResultsPdf(pdfContent, `${config.name} Results - Vibe Rise`)
             }}
           />
 

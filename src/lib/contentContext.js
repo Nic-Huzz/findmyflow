@@ -3,7 +3,7 @@
  * Gathers all user data for AI-powered content generation
  *
  * Data Sources:
- * 1. FindMyFlow persona (nikigai_clusters)
+ * 1. Vibe Rise persona (nikigai_clusters)
  * 2. Validation survey insights (validation_responses)
  * 3. Offer Builder details (offer_creations)
  * 4. Past marketing performance (marketing_tasks)
@@ -12,7 +12,7 @@
 import { supabase } from './supabaseClient'
 
 /**
- * Fetch user's persona data from FindMyFlow
+ * Fetch user's persona data from Vibe Rise
  */
 export async function fetchPersonaData(userId) {
   try {

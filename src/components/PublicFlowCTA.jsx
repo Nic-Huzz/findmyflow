@@ -181,12 +181,12 @@ export default function PublicFlowCTA({ email, flowType, flowResults, answers = 
             onClick={handleLaunchNotify}
             disabled={launchNotifySubmitting}
           >
-            {launchNotifySubmitting ? 'Saving...' : 'Keen to learn more about scaling your business and be notified when Find My Flow launches?'}
+            {launchNotifySubmitting ? 'Saving...' : 'Keen to learn more about scaling your business and be notified when Vibe Rise launches?'}
           </button>
         ) : (
           <div className="launch-notify-success">
             <span className="launch-notify-icon">🎉</span>
-            <p>You're on the list! We'll let you know when Find My Flow is ready.</p>
+            <p>You're on the list! We'll let you know when Vibe Rise is ready.</p>
           </div>
         )}
       </div>

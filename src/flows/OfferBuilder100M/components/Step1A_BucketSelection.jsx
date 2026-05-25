@@ -164,7 +164,7 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
           </div>
 
           <p className="suggestion-text">
-            Based on your FindMyFlow results, we think your offer is in the{' '}
+            Based on your Vibe Rise results, we think your offer is in the{' '}
             <strong>{bucket.title} {bucket.emoji}</strong> bucket.
           </p>
 
@@ -193,7 +193,7 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
     )
   }
 
-  // Check if we have FindMyFlow data to display
+  // Check if we have Vibe Rise data to display
   const hasFlowData = contextData.skills?.length > 0 || contextData.problems?.length > 0
 
   // Check if we have V1 Offer Builder data
@@ -211,7 +211,7 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
         </p>
       </div>
 
-      {/* FindMyFlow Context Panel */}
+      {/* Vibe Rise Context Panel */}
       {hasFlowData && (
         <div className="findmyflow-context">
           <div className="context-header">
@@ -247,7 +247,7 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
               <div className="context-section">
                 <strong>Ideal customer:</strong>
                 <span className="context-persona">
-                  {contextData.persona.name || contextData.persona.description || 'Defined in FindMyFlow'}
+                  {contextData.persona.name || contextData.persona.description || 'Defined in Vibe Rise'}
                 </span>
               </div>
             )}

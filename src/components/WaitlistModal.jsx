@@ -132,7 +132,7 @@ export default function WaitlistModal({ isOpen, onClose }) {
           <>
             <div className="waitlist-header">
               <h2>Join the Waiting List</h2>
-              <p>Be first to access Find My Flow</p>
+              <p>Be first to access Vibe Rise</p>
             </div>
 
             <div className="waitlist-progress">

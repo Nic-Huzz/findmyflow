@@ -8,8 +8,8 @@ export const updateManifestForCurrentPage = () => {
 
   // Create dynamic manifest with absolute URLs
   const manifest = {
-    name: "Find My Flow",
-    short_name: "FindMyFlow",
+    name: "Vibe Rise",
+    short_name: "Vibe Rise",
     description: "Complete your 7-Day Challenge and unlock your flow state",
     start_url: `${origin}${currentPath || "/"}`,
     scope: `${origin}/`,

@@ -1,5 +1,5 @@
 /**
- * Flow Scrolls - Core teachings of the FindMyFlow philosophy
+ * Flow Scrolls - Core teachings of the Vibe Rise philosophy
  *
  * These scrolls contain the essential wisdom that unlocks as users progress.
  * Each scroll explains a core concept in narrative form.

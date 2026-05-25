@@ -143,7 +143,7 @@ export default function EarthquakeResults({ results, answers, email, onRetake })
           <div className="bridge-item"><span className="bridge-icon">&#10004;</span><span>Turn your gifts into service — through play, not force</span></div>
         </div>
 
-        <p className="bridge-pitch">FindMyFlow is the training program for exactly this.</p>
+        <p className="bridge-pitch">Vibe Rise is the training program for exactly this.</p>
 
         <div className="bridge-cta">
           <button className="primary-button glow-button" onClick={handleSignup}>

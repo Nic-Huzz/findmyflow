@@ -17,7 +17,7 @@ const SOURCE_OPTIONS = [
 ]
 
 const PROJECT_TAGS = [
-  { id: 'findmyflow', label: 'Find My Flow' },
+  { id: 'findmyflow', label: 'Vibe Rise' },
   { id: 'buildwithai', label: 'BuildwithAI' },
   { id: 'beyourbest', label: 'BeYourBest' },
   { id: 'headset-rental', label: 'Headset Rental' },
