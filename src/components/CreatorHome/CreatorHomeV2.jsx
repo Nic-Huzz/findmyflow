@@ -15,6 +15,7 @@ import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import ExperienceLibrary from './ExperienceLibrary'
+import AIPortal from '../portal/AIPortal'
 import './CreatorHomeV2.css'
 
 // ─── Constants ─────────────────────────────────────────────────────────────
@@ -78,6 +79,7 @@ export default function CreatorHomeV2() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('identity')
   const [loading, setLoading] = useState(true)
+  const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
 
   // Data
   const [scopeResult, setScopeResult] = useState(null)
@@ -264,9 +266,9 @@ export default function CreatorHomeV2() {
           <div className="ch2-header-xp">{movementXP} RP</div>
         </div>
         <div className="ch2-tabs">
-          {['identity', 'experiences', 'growth'].map(tab => (
+          {['identity', 'experiences', 'growth', ...(isElectron ? ['ai-portal'] : [])].map(tab => (
             <button key={tab} className={`ch2-tab${activeTab === tab ? ' active' : ''}`} onClick={() => setActiveTab(tab)}>
-              {tab === 'identity' ? 'Identity' : tab === 'experiences' ? 'Experiences' : 'Growth'}
+              {tab === 'identity' ? 'Identity' : tab === 'experiences' ? 'Experiences' : tab === 'growth' ? 'Growth' : '⚡ AI Portal'}
             </button>
           ))}
         </div>
@@ -704,6 +706,13 @@ export default function CreatorHomeV2() {
             ← Back to Identity
           </button>
         </div>
+
+        {/* ═══ AI PORTAL TAB (desktop-only) ═══ */}
+        {isElectron && (
+          <div className={`ch2-tab-panel${activeTab === 'ai-portal' ? ' active' : ''}`}>
+            <AIPortal />
+          </div>
+        )}
       </div>
     </div>
   )
