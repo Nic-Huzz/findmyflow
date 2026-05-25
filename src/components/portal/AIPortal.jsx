@@ -12,6 +12,8 @@
 
 import { useState } from 'react'
 import GrowthDashboard from './GrowthDashboard'
+import AppBuildMode from './AppBuildMode'
+import AgentsMode from './AgentsMode'
 import './portal.css'
 
 const MODES = [
@@ -41,9 +43,9 @@ export default function AIPortal() {
 
       <div className="portal-mode-content">
         {activeMode === 'growth' && <GrowthDashboard />}
-        {activeMode === 'build' && <PlaceholderMode label="App Build" description="Health scanner, terminal, and preview panel. Coming soon." />}
-        {activeMode === 'documents' && <PlaceholderMode label="Documents" description="Document processing and output panel. Coming soon." />}
-        {activeMode === 'agents' && <PlaceholderMode label="Agents" description="Zarlo and Perry AI chat. Coming soon." />}
+        {activeMode === 'build' && <AppBuildMode />}
+        {activeMode === 'documents' && <PlaceholderMode label="Documents" description="Process decks, copy, proposals, and session guides. Coming with the desktop app." />}
+        {activeMode === 'agents' && <AgentsMode />}
       </div>
     </div>
   )
