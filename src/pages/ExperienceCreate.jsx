@@ -19,6 +19,8 @@ export default function ExperienceCreate() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const runAgainFromId = searchParams.get('from')
+  const templateId = searchParams.get('templateId')
+  const templateType = searchParams.get('type')
   const { createExperience, creating, error } = useCreateExperience()
 
   const [name, setName] = useState('')
@@ -27,12 +29,32 @@ export default function ExperienceCreate() {
   const [previousExperience, setPreviousExperience] = useState(null)
   const [runAgainSource, setRunAgainSource] = useState(null)
   const [prevStats, setPrevStats] = useState(null)
-  const [experienceType, setExperienceType] = useState('workshop')
+  const [experienceType, setExperienceType] = useState(templateType || 'workshop')
   const [validationError, setValidationError] = useState('')
+  const [templateSource, setTemplateSource] = useState(null)
 
   useEffect(() => {
-    document.title = runAgainFromId ? 'Run Again' : 'New Experience'
-  }, [runAgainFromId])
+    document.title = runAgainFromId ? 'Run Again' : templateId ? 'Run from Template' : 'New Experience'
+  }, [runAgainFromId, templateId])
+
+  // Template pre-fill
+  useEffect(() => {
+    if (!templateId) return
+    let cancelled = false
+    ;(async () => {
+      const { data } = await supabase
+        .from('experience_templates')
+        .select('*')
+        .eq('id', templateId)
+        .maybeSingle()
+      if (cancelled || !data) return
+      setTemplateSource(data)
+      setName(data.name || '')
+      if (data.experience_type) setExperienceType(data.experience_type)
+      if (data.default_ticket_price) setTicketPrice(String(data.default_ticket_price))
+    })()
+    return () => { cancelled = true }
+  }, [templateId])
 
   // Fetch the most recent completed experience to surface its 3% note
   useEffect(() => {
@@ -109,6 +131,7 @@ export default function ExperienceCreate() {
         previous_experience_id: runAgainFromId || null,
         ticket_price: ticketPrice ? parseFloat(ticketPrice) : null,
         experience_type: experienceType,
+        template_id: templateId || null,
         runAgainFromId: runAgainFromId || null,
       })
       hapticSuccess()

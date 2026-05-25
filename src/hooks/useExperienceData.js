@@ -59,7 +59,7 @@ export function useCreateExperience() {
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState(null)
 
-  const createExperience = async ({ name, experience_date, previous_experience_id = null, ticket_price = null, experience_type = null, runAgainFromId = null }) => {
+  const createExperience = async ({ name, experience_date, previous_experience_id = null, ticket_price = null, experience_type = null, template_id = null, runAgainFromId = null }) => {
     setCreating(true)
     setError(null)
     try {
@@ -76,6 +76,7 @@ export function useCreateExperience() {
       }
       if (ticket_price != null) insertPayload.ticket_price = ticket_price
       if (experience_type) insertPayload.experience_type = experience_type
+      if (template_id) insertPayload.template_id = template_id
 
       let { data: experience, error: createErr } = await supabase
         .from('experiences')

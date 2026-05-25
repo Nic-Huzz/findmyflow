@@ -72,13 +72,25 @@ export default function JourneyDesigner({ templateId, onSaved }) {
 
       if (fnError) throw fnError
 
-      // Parse the AI response into runsheet phases
-      const arc = data?.arc || data?.phases || []
-      const runsheet = arc.map(phase => ({
-        phase: phase.id || phase.phase || phase.name?.toLowerCase() || 'phase',
-        duration: phase.duration || Math.round(parseInt(duration) / arc.length),
-        notes: phase.facilitatorScript || phase.script || phase.description || phase.facilitatorGuide || '',
-        musicNotes: phase.musicSuggestion || phase.music || '',
+      // The edge function returns { phases: [{ content, somaticTool }] }
+      // Phase names are implied by order: Safety, Activation, Mismatch, Discharge, Integration, Verification
+      const PHASE_NAMES = ['safety', 'activation', 'mismatch', 'discharge', 'integration', 'verification']
+      const phases = data?.phases || []
+      const totalDur = parseInt(duration)
+      const phaseDurations = [
+        Math.round(totalDur * 0.12), // safety
+        Math.round(totalDur * 0.15), // activation
+        Math.round(totalDur * 0.25), // mismatch (longest)
+        Math.round(totalDur * 0.18), // discharge
+        Math.round(totalDur * 0.18), // integration
+        Math.round(totalDur * 0.12), // verification
+      ]
+
+      const runsheet = phases.map((phase, i) => ({
+        phase: PHASE_NAMES[i] || `phase_${i + 1}`,
+        duration: phaseDurations[i] || Math.round(totalDur / 6),
+        notes: phase.content || '',
+        musicNotes: phase.somaticTool ? `Somatic tool: ${phase.somaticTool}` : '',
       }))
 
       setResult(runsheet.length > 0 ? runsheet : null)
