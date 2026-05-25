@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capacity Score — Bar Mockup v2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0f0f5;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .label { font-size: 14px; color: #999; text-align: center; margin-bottom: -16px; font-style: italic; }
+
+  /* === CARD === */
+  .cc-card {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 380px;
+  }
+
+  /* === CAPACITY HEADER === */
+  .cc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .cc-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #1a1a2e;
+  }
+  .cc-trend {
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .cc-trend.up { color: #10b981; }
+  .cc-trend.down { color: #ef4444; }
+
+  /* === BAR === */
+  .cc-bar-wrap {
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .cc-bar-track {
+    display: flex;
+    height: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .cc-bar-zone {
+    flex: 1;
+    position: relative;
+  }
+  .cc-bar-zone:first-child { border-radius: 12px 0 0 12px; }
+  .cc-bar-zone:last-child { border-radius: 0 12px 12px 0; }
+  .z-shutdown { background: rgba(239, 68, 68, 0.12); }
+  .z-activated { background: rgba(249, 115, 22, 0.10); }
+  .z-safe { background: rgba(94, 23, 235, 0.08); }
+  .z-vibe { background: rgba(233, 162, 59, 0.10); }
+
+  /* Active zone highlight */
+  .z-shutdown.active { background: rgba(239, 68, 68, 0.25); }
+  .z-activated.active { background: rgba(249, 115, 22, 0.20); }
+  .z-safe.active { background: rgba(94, 23, 235, 0.18); }
+  .z-vibe.active { background: rgba(233, 162, 59, 0.22); }
+
+  /* Marker */
+  .cc-marker {
+    position: absolute;
+    top: -2px;
+    width: 4px;
+    height: 28px;
+    border-radius: 2px;
+    background: #1a1a2e;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    transform: translateX(-50%);
+  }
+
+  /* Zone labels */
+  .cc-zones {
+    display: flex;
+    margin-bottom: 16px;
+  }
+  .cc-zone-label {
+    flex: 1;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: #bbb;
+  }
+  .cc-zone-label.active { font-weight: 800; }
+  .cc-zone-label.active.shutdown { color: #ef4444; }
+  .cc-zone-label.active.activated { color: #f97316; }
+  .cc-zone-label.active.safe { color: #5e17eb; }
+  .cc-zone-label.active.vibe-rise { color: #E9A23B; }
+
+  /* === EQUATION ROW === */
+  .cc-equation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .cc-eq-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .cc-eq-arrow {
+    font-size: 10px;
+    margin-left: 1px;
+  }
+  .cc-eq-arrow.up { color: #10b981; }
+  .cc-eq-arrow.down { color: #ef4444; }
+  .cc-eq-arrow.flat { color: #adb5bd; }
+  .cc-eq-pill.safety {
+    background: rgba(94, 23, 235, 0.08);
+    color: #5e17eb;
+  }
+  .cc-eq-pill.expression {
+    background: rgba(233, 162, 59, 0.08);
+    color: #c88520;
+  }
+  .cc-eq-op {
+    font-size: 13px;
+    font-weight: 800;
+    color: #adb5bd;
+  }
+  .cc-eq-result {
+    font-size: 22px;
+    font-weight: 900;
+    color: #1a1a2e;
+    letter-spacing: -0.5px;
+  }
+  .cc-eq-result.shutdown { color: #ef4444; }
+  .cc-eq-result.activated { color: #f97316; }
+  .cc-eq-result.safe { color: #5e17eb; }
+  .cc-eq-result.vibe-rise { color: #E9A23B; }
+
+  /* === INSIGHT === */
+  .cc-insight {
+    font-size: 12px;
+    color: #6c757d;
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+  .cc-insight strong { color: #1a1a2e; }
+
+  /* === MAINTENANCE (below capacity) === */
+  .cc-maint {
+    border-top: 1px solid #f0f0f5;
+    padding-top: 14px;
+  }
+  .cc-maint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .cc-maint-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6c757d;
+  }
+  .cc-maint-pct {
+    font-size: 14px;
+    font-weight: 800;
+    color: #1a1a2e;
+  }
+
+  /* 7-day streak dots */
+  .cc-maint-dots {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+  .cc-maint-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex: 1;
+  }
+  .cc-maint-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e9ecef;
+  }
+  .cc-maint-dot.filled { background: #10b981; }
+  .cc-maint-dot.partial { background: #fbbf24; }
+  .cc-maint-day-label {
+    font-size: 9px;
+    color: #bbb;
+    font-weight: 600;
+  }
+
+  /* Maintenance items row */
+  .cc-maint-items {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .cc-maint-item {
+    font-size: 10px;
+    color: #adb5bd;
+    font-weight: 500;
+  }
+  .cc-maint-item.done { color: #10b981; }
+</style>
+</head>
+<body>
+
+<!-- ====== CARD 1: Score 18 — Shutdown ====== -->
+<div class="cc-card">
+  <div class="cc-header">
+    <span class="cc-title">Capacity Score</span>
+    <span class="cc-trend down">↓ -3</span>
+  </div>
+
+  <div class="cc-equation">
+    <span class="cc-eq-pill safety">🛡️ Safety 3.2 <span class="cc-eq-arrow down">↓</span></span>
+    <span class="cc-eq-op">×</span>
+    <span class="cc-eq-pill expression">🔥 Expression 2.1 <span class="cc-eq-arrow down">↓</span></span>
+    <span class="cc-eq-op">=</span>
+    <span class="cc-eq-result shutdown">18</span>
+  </div>
+
+  <div class="cc-bar-wrap">
+    <div class="cc-bar-track">
+      <div class="cc-bar-zone z-shutdown active"></div>
+      <div class="cc-bar-zone z-activated"></div>
+      <div class="cc-bar-zone z-safe"></div>
+      <div class="cc-bar-zone z-vibe"></div>
+    </div>
+    <div class="cc-marker" style="left: 18%;"></div>
+  </div>
+  <div class="cc-zones">
+    <span class="cc-zone-label active shutdown">Stuck</span>
+    <span class="cc-zone-label">Wired</span>
+    <span class="cc-zone-label">Grounded</span>
+    <span class="cc-zone-label">Vibe Rise</span>
+  </div>
+
+
+  <!-- Maintenance -->
+  <div class="cc-maint">
+    <div class="cc-maint-header">
+      <span class="cc-maint-label">Maintenance</span>
+      <span class="cc-maint-pct">32%</span>
+    </div>
+    <div class="cc-maint-dots">
+      <div class="cc-maint-day"><div class="cc-maint-dot partial"></div><span class="cc-maint-day-label">M</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot"></div><span class="cc-maint-day-label">T</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot partial"></div><span class="cc-maint-day-label">W</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot"></div><span class="cc-maint-day-label">T</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot"></div><span class="cc-maint-day-label">F</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot"></div><span class="cc-maint-day-label">S</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot"></div><span class="cc-maint-day-label">S</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ====== CARD 2: Score 47 — Activated ====== -->
+<div class="cc-card">
+  <div class="cc-header">
+    <span class="cc-title">Capacity Score</span>
+    <span class="cc-trend up">↑ +4</span>
+  </div>
+
+  <div class="cc-equation">
+    <span class="cc-eq-pill safety">🛡️ Safety 7.5 <span class="cc-eq-arrow up">↑</span></span>
+    <span class="cc-eq-op">×</span>
+    <span class="cc-eq-pill expression">🔥 Expression 5.5 <span class="cc-eq-arrow flat">→</span></span>
+    <span class="cc-eq-op">=</span>
+    <span class="cc-eq-result activated">47</span>
+  </div>
+
+  <div class="cc-bar-wrap">
+    <div class="cc-bar-track">
+      <div class="cc-bar-zone z-shutdown"></div>
+      <div class="cc-bar-zone z-activated active"></div>
+      <div class="cc-bar-zone z-safe"></div>
+      <div class="cc-bar-zone z-vibe"></div>
+    </div>
+    <div class="cc-marker" style="left: 47%;"></div>
+  </div>
+  <div class="cc-zones">
+    <span class="cc-zone-label">Stuck</span>
+    <span class="cc-zone-label active activated">Wired</span>
+    <span class="cc-zone-label">Grounded</span>
+    <span class="cc-zone-label">Vibe Rise</span>
+  </div>
+
+
+  <div class="cc-maint">
+    <div class="cc-maint-header">
+      <span class="cc-maint-label">Maintenance</span>
+      <span class="cc-maint-pct">71%</span>
+    </div>
+    <div class="cc-maint-dots">
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">M</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">T</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot partial"></div><span class="cc-maint-day-label">W</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">T</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot partial"></div><span class="cc-maint-day-label">F</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">S</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">S</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ====== CARD 3: Score 82 — Vibe Rise ====== -->
+<div class="cc-card">
+  <div class="cc-header">
+    <span class="cc-title">Capacity Score</span>
+    <span class="cc-trend up">↑ +12</span>
+  </div>
+
+  <div class="cc-equation">
+    <span class="cc-eq-pill safety">🛡️ Safety 9.2 <span class="cc-eq-arrow up">↑</span></span>
+    <span class="cc-eq-op">×</span>
+    <span class="cc-eq-pill expression">🔥 Expression 8.8 <span class="cc-eq-arrow up">↑</span></span>
+    <span class="cc-eq-op">=</span>
+    <span class="cc-eq-result vibe-rise">82</span>
+  </div>
+
+  <div class="cc-bar-wrap">
+    <div class="cc-bar-track">
+      <div class="cc-bar-zone z-shutdown"></div>
+      <div class="cc-bar-zone z-activated"></div>
+      <div class="cc-bar-zone z-safe"></div>
+      <div class="cc-bar-zone z-vibe active"></div>
+    </div>
+    <div class="cc-marker" style="left: 82%;"></div>
+  </div>
+  <div class="cc-zones">
+    <span class="cc-zone-label">Stuck</span>
+    <span class="cc-zone-label">Wired</span>
+    <span class="cc-zone-label">Grounded</span>
+    <span class="cc-zone-label active vibe-rise">Vibe Rise</span>
+  </div>
+
+
+  <div class="cc-maint">
+    <div class="cc-maint-header">
+      <span class="cc-maint-label">Maintenance</span>
+      <span class="cc-maint-pct">96%</span>
+    </div>
+    <div class="cc-maint-dots">
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">M</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">T</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">W</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">T</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">F</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot filled"></div><span class="cc-maint-day-label">S</span></div>
+      <div class="cc-maint-day"><div class="cc-maint-dot partial"></div><span class="cc-maint-day-label">S</span></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

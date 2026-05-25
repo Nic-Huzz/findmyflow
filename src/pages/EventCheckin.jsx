@@ -82,6 +82,16 @@ export default function EventCheckin() {
 
   if (loading) return <div className="ec-page"><div className="ec-container"><div className="ec-loading">Loading...</div></div></div>
 
+  if (!experience) return (
+    <div className="ec-page">
+      <div className="ec-container">
+        <div className="ec-icon">❌</div>
+        <h1 className="ec-title">Experience not found</h1>
+        <p className="ec-sub">This check-in link may be invalid or the experience may have been removed.</p>
+      </div>
+    </div>
+  )
+
   // Both check-ins complete — show shift result
   if (checkinType === 'done' || (saved && checkinType === 'after')) {
     const beforeState = STATES.find(s => s.id === existing.before)

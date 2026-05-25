@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capacity Score 2x2 — Mockups</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0f0f5;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 20px;
+    color: #1a1a2e;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .scenario-label {
+    font-size: 13px;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+
+  /* === CAPACITY CARD === */
+  .cc-card {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .cc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .cc-label {
+    font-size: 15px;
+    font-weight: 800;
+    color: #1a1a2e;
+  }
+
+  .cc-score-badge {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -1px;
+  }
+  .cc-score-badge.low { color: #ef4444; }
+  .cc-score-badge.mid { color: #f59e0b; }
+  .cc-score-badge.high { color: #E9A23B; }
+  .cc-score-badge.vibe {
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cc-trend {
+    font-size: 12px;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+  .cc-trend-up { color: #10b981; }
+  .cc-trend-down { color: #ef4444; }
+  .cc-trend-flat { color: #adb5bd; }
+
+  /* === THE 2x2 GRID === */
+  .cc-grid-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 320px;
+    margin: 0 auto 16px;
+  }
+
+  .cc-grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+  }
+
+  .cc-quadrant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px;
+    position: relative;
+  }
+
+  /* Top-left: Ventral (safe, low expression) */
+  .cc-q-ventral {
+    background: linear-gradient(135deg, rgba(94, 23, 235, 0.04), rgba(94, 23, 235, 0.08));
+    border-right: 1px solid rgba(94, 23, 235, 0.08);
+    border-bottom: 1px solid rgba(94, 23, 235, 0.08);
+  }
+
+  /* Top-right: Vibe Rise (safe + expressing) */
+  .cc-q-vibe {
+    background: linear-gradient(135deg, rgba(233, 162, 59, 0.06), rgba(94, 23, 235, 0.06));
+    border-bottom: 1px solid rgba(233, 162, 59, 0.08);
+  }
+
+  /* Bottom-left: Dorsal (shutdown) */
+  .cc-q-dorsal {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.03), rgba(239, 68, 68, 0.06));
+    border-right: 1px solid rgba(239, 68, 68, 0.06);
+  }
+
+  /* Bottom-right: Sympathetic (expressing without safety) */
+  .cc-q-sympathetic {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.04), rgba(249, 115, 22, 0.08));
+  }
+
+  .cc-q-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+  .cc-q-ventral .cc-q-label { color: #5e17eb; }
+  .cc-q-vibe .cc-q-label { color: #E9A23B; }
+  .cc-q-dorsal .cc-q-label { color: #ef4444; }
+  .cc-q-sympathetic .cc-q-label { color: #f97316; }
+
+  .cc-q-sublabel {
+    font-size: 10px;
+    color: #adb5bd;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* Axis labels */
+  .cc-axis-y {
+    position: absolute;
+    left: -28px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 10px;
+    font-weight: 700;
+    color: #adb5bd;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .cc-axis-x {
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 700;
+    color: #adb5bd;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* The position dot */
+  .cc-dot {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.05);
+    z-index: 10;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .cc-dot.vibe-rise {
+    background: linear-gradient(135deg, #E9A23B, #5e17eb);
+    box-shadow: 0 2px 8px rgba(233, 162, 59, 0.4), 0 0 12px rgba(233, 162, 59, 0.2);
+  }
+  .cc-dot.ventral { background: #5e17eb; }
+  .cc-dot.sympathetic { background: #f97316; }
+  .cc-dot.dorsal { background: #ef4444; }
+
+  /* Trail dots (previous weeks) */
+  .cc-trail {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #dde0e5;
+    opacity: 0.5;
+    z-index: 5;
+  }
+  .cc-trail.week-1 { opacity: 0.4; }
+  .cc-trail.week-2 { opacity: 0.25; }
+  .cc-trail.week-3 { opacity: 0.15; }
+
+  /* Trail line connecting dots */
+  .cc-trail-line {
+    position: absolute;
+    z-index: 4;
+    stroke: #dde0e5;
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  /* === AXIS SCORES === */
+  .cc-axes {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .cc-axis-card {
+    flex: 1;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cc-axis-icon {
+    font-size: 1.2rem;
+  }
+
+  .cc-axis-info {
+    flex: 1;
+  }
+
+  .cc-axis-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .cc-axis-bar {
+    height: 4px;
+    background: #e9ecef;
+    border-radius: 2px;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+
+  .cc-axis-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+  .cc-axis-fill.safety { background: #5e17eb; }
+  .cc-axis-fill.expression { background: #E9A23B; }
+
+  .cc-axis-num {
+    font-size: 18px;
+    font-weight: 900;
+    color: #1a1a2e;
+    min-width: 24px;
+    text-align: right;
+  }
+
+  /* === INSIGHT LINE === */
+  .cc-insight {
+    font-size: 12px;
+    color: #6c757d;
+    text-align: center;
+    line-height: 1.4;
+    padding: 10px 8px 0;
+    border-top: 1px solid #f0f0f5;
+  }
+
+  .cc-insight strong {
+    color: #1a1a2e;
+  }
+
+  /* === VOICE INDICATOR === */
+  .cc-voice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: #8b5cf6;
+    font-weight: 600;
+  }
+
+  /* === SCORING MATRIX SECTION === */
+  .matrix-section {
+    max-width: 600px;
+    width: 100%;
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid #e9ecef;
+  }
+  .matrix-section h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #1a1a2e;
+  }
+  .matrix-section h3 {
+    font-size: 13px;
+    margin: 16px 0 8px;
+    color: #5e17eb;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .matrix-table th {
+    text-align: left;
+    padding: 6px 8px;
+    background: #f8f9fa;
+    font-weight: 700;
+    color: #1a1a2e;
+    border-bottom: 1px solid #e9ecef;
+  }
+  .matrix-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #f0f0f5;
+    color: #495057;
+  }
+  .matrix-table .positive { color: #10b981; font-weight: 700; }
+  .matrix-table .negative { color: #ef4444; font-weight: 700; }
+  .matrix-note {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+  .matrix-equation {
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    padding: 12px;
+    margin: 12px 0;
+    background: linear-gradient(135deg, rgba(94,23,235,0.04), rgba(233,162,59,0.04));
+    border-radius: 12px;
+    color: #1a1a2e;
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== MOCKUP 1: Top-left — Safe but flat ====== -->
+<h1>Mockup 1: Safe But Flat</h1>
+<p class="scenario-label">User does practices daily, no Wahoos. Safety high, expression low.</p>
+
+<div class="cc-card">
+  <div class="cc-header">
+    <span class="cc-label">Capacity Score</span>
+    <div>
+      <span class="cc-score-badge mid">24</span>
+      <span class="cc-trend cc-trend-up">↑ +4</span>
+    </div>
+  </div>
+
+  <div class="cc-grid-container" style="margin-left: 28px;">
+    <span class="cc-axis-y">SAFETY</span>
+    <span class="cc-axis-x">EXPRESSION</span>
+    <div class="cc-grid">
+      <div class="cc-quadrant cc-q-ventral">
+        <span class="cc-q-label">Ventral</span>
+        <span class="cc-q-sublabel">Safe but flat</span>
+      </div>
+      <div class="cc-quadrant cc-q-vibe">
+        <span class="cc-q-label">Vibe Rise</span>
+        <span class="cc-q-sublabel">The goal</span>
+      </div>
+      <div class="cc-quadrant cc-q-dorsal">
+        <span class="cc-q-label">Dorsal</span>
+        <span class="cc-q-sublabel">Shutdown</span>
+      </div>
+      <div class="cc-quadrant cc-q-sympathetic">
+        <span class="cc-q-label">Sympathetic</span>
+        <span class="cc-q-sublabel">Anxious hustle</span>
+      </div>
+    </div>
+    <!-- Dot: Safety 8/10 = 80% from top, Expression 3/10 = 30% from left -->
+    <!-- Grid is Y-inverted: high safety = top, so top% = (10 - safety)/10 * 100 -->
+    <div class="cc-trail week-3" style="top: 30%; left: 18%;"></div>
+    <div class="cc-trail week-2" style="top: 25%; left: 22%;"></div>
+    <div class="cc-trail week-1" style="top: 22%; left: 26%;"></div>
+    <div class="cc-dot ventral" style="top: 18%; left: 28%;"></div>
+  </div>
+
+  <div class="cc-axes">
+    <div class="cc-axis-card">
+      <span class="cc-axis-icon">🛡️</span>
+      <div class="cc-axis-info">
+        <div class="cc-axis-name">Safety</div>
+        <div class="cc-axis-bar"><div class="cc-axis-fill safety" style="width: 80%;"></div></div>
+      </div>
+      <span class="cc-axis-num">8</span>
+    </div>
+    <div class="cc-axis-card">
+      <span class="cc-axis-icon">🔥</span>
+      <div class="cc-axis-info">
+        <div class="cc-axis-name">Expression</div>
+        <div class="cc-axis-bar"><div class="cc-axis-fill expression" style="width: 30%;"></div></div>
+      </div>
+      <span class="cc-axis-num">3</span>
+    </div>
+  </div>
+
+  <div class="cc-insight">
+    Your safety container is strong. <strong>Try a Wahoo this week</strong> to move toward Vibe Rise.
+  </div>
+</div>
+
+
+<!-- ====== MOCKUP 2: Bottom-right — Anxious hustle ====== -->
+<h1>Mockup 2: Anxious Hustle</h1>
+<p class="scenario-label">User does lots of Wahoos but doesn't do practices or healing. Drains accumulating.</p>
+
+<div class="cc-card">
+  <div class="cc-header">
+    <span class="cc-label">Capacity Score</span>
+    <div>
+      <span class="cc-score-badge low">21</span>
+      <span class="cc-trend cc-trend-down">↓ -8</span>
+    </div>
+  </div>
+
+  <div class="cc-grid-container" style="margin-left: 28px;">
+    <span class="cc-axis-y">SAFETY</span>
+    <span class="cc-axis-x">EXPRESSION</span>
+    <div class="cc-grid">
+      <div class="cc-quadrant cc-q-ventral">
+        <span class="cc-q-label">Ventral</span>
+        <span class="cc-q-sublabel">Safe but flat</span>
+      </div>
+      <div class="cc-quadrant cc-q-vibe">
+        <span class="cc-q-label">Vibe Rise</span>
+        <span class="cc-q-sublabel">The goal</span>
+      </div>
+      <div class="cc-quadrant cc-q-dorsal">
+        <span class="cc-q-label">Dorsal</span>
+        <span class="cc-q-sublabel">Shutdown</span>
+      </div>
+      <div class="cc-quadrant cc-q-sympathetic">
+        <span class="cc-q-label">Sympathetic</span>
+        <span class="cc-q-sublabel">Anxious hustle</span>
+      </div>
+    </div>
+    <!-- Safety 3/10, Expression 7/10 -->
+    <div class="cc-trail week-3" style="top: 38%; left: 60%;"></div>
+    <div class="cc-trail week-2" style="top: 50%; left: 62%;"></div>
+    <div class="cc-trail week-1" style="top: 60%; left: 66%;"></div>
+    <div class="cc-dot sympathetic" style="top: 68%; left: 68%;"></div>
+  </div>
+
+  <div class="cc-axes">
+    <div class="cc-axis-card">
+      <span class="cc-axis-icon">🛡️</span>
+      <div class="cc-axis-info">
+        <div class="cc-axis-name">Safety</div>
+        <div class="cc-axis-bar"><div class="cc-axis-fill safety" style="width: 30%;"></div></div>
+      </div>
+      <span class="cc-axis-num">3</span>
+    </div>
+    <div class="cc-axis-card">
+      <span class="cc-axis-icon">🔥</span>
+      <div class="cc-axis-info">
+        <div class="cc-axis-name">Expression</div>
+        <div class="cc-axis-bar"><div class="cc-axis-fill expression" style="width: 70%;"></div></div>
+      </div>
+      <span class="cc-axis-num">7</span>
+    </div>
+  </div>
+
+  <div class="cc-insight">
+    You're expressing but your container is leaking. <strong>Slow down, do your practices, log your stalls.</strong>
+  </div>
+  <div class="cc-voice">🧱 Controller has been showing up 3x this week</div>
+</div>
+
+
+<!-- ====== MOCKUP 3: Top-right — Vibe Rise ====== -->
+<h1>Mockup 3: Vibe Rise</h1>
+<p class="scenario-label">User does practices, Wahoos, and healing. Low drains and stalls. The goal.</p>
+
+<div class="cc-card">
+  <div class="cc-header">
+    <span class="cc-label">Capacity Score</span>
+    <div>
+      <span class="cc-score-badge vibe">72</span>
+      <span class="cc-trend cc-trend-up">↑ +12</span>
+    </div>
+  </div>
+
+  <div class="cc-grid-container" style="margin-left: 28px;">
+    <span class="cc-axis-y">SAFETY</span>
+    <span class="cc-axis-x">EXPRESSION</span>
+    <div class="cc-grid">
+      <div class="cc-quadrant cc-q-ventral">
+        <span class="cc-q-label">Ventral</span>
+        <span class="cc-q-sublabel">Safe but flat</span>
+      </div>
+      <div class="cc-quadrant cc-q-vibe">
+        <span class="cc-q-label">Vibe Rise</span>
+        <span class="cc-q-sublabel">The goal</span>
+      </div>
+      <div class="cc-quadrant cc-q-dorsal">
+        <span class="cc-q-label">Dorsal</span>
+        <span class="cc-q-sublabel">Shutdown</span>
+      </div>
+      <div class="cc-quadrant cc-q-sympathetic">
+        <span class="cc-q-label">Sympathetic</span>
+        <span class="cc-q-sublabel">Anxious hustle</span>
+      </div>
+    </div>
+    <!-- Safety 9/10, Expression 8/10 -->
+    <div class="cc-trail week-3" style="top: 45%; left: 40%;"></div>
+    <div class="cc-trail week-2" style="top: 35%; left: 55%;"></div>
+    <div class="cc-trail week-1" style="top: 22%; left: 68%;"></div>
+    <div class="cc-dot vibe-rise" style="top: 12%; left: 78%;"></div>
+  </div>
+
+  <div class="cc-axes">
+    <div class="cc-axis-card">
+      <span class="cc-axis-icon">🛡️</span>
+      <div class="cc-axis-info">
+        <div class="cc-axis-name">Safety</div>
+        <div class="cc-axis-bar"><div class="cc-axis-fill safety" style="width: 90%;"></div></div>
+      </div>
+      <span class="cc-axis-num">9</span>
+    </div>
+    <div class="cc-axis-card">
+      <span class="cc-axis-icon">🔥</span>
+      <div class="cc-axis-info">
+        <div class="cc-axis-name">Expression</div>
+        <div class="cc-axis-bar"><div class="cc-axis-fill expression" style="width: 80%;"></div></div>
+      </div>
+      <span class="cc-axis-num">8</span>
+    </div>
+  </div>
+
+  <div class="cc-insight">
+    You're in Vibe Rise. <strong>This is what it looks like to be fully alive.</strong>
+  </div>
+</div>
+
+
+<!-- ====== SCORING MATRIX ====== -->
+<div class="matrix-section">
+  <h2>Scoring Matrix</h2>
+
+  <div class="matrix-equation">
+    Capacity = (Safety / 10) x (Expression / 10) x 100
+  </div>
+
+  <h3>🛡️ Safety Score (0-10)</h3>
+  <table class="matrix-table">
+    <tr><th>Input</th><th>Points</th><th>Max/Week</th><th>Source</th></tr>
+    <tr><td>Safety practice completed</td><td class="positive">+0.5</td><td>~3.5 (7 days)</td><td>quest_completions (Practice, capacityType=safety)</td></tr>
+    <tr><td>Healing quest completed</td><td class="positive">+1.0</td><td>~5</td><td>quest_completions (Healing category)</td></tr>
+    <tr><td>Daily check-in: ventral or vibe_rise</td><td class="positive">+0.3</td><td>~2.1 (7 days)</td><td>nervous_system_checkins (daily, before_state)</td></tr>
+    <tr><td>Stall logged</td><td class="negative">-1.0</td><td>uncapped</td><td>nervous_system_checkins (stall)</td></tr>
+    <tr><td>Daily check-in: sympathetic or dorsal</td><td class="negative">-0.3</td><td>-2.1</td><td>nervous_system_checkins (daily, before_state)</td></tr>
+  </table>
+  <p class="matrix-note">
+    <strong>Baseline: 3.</strong> An inactive week scores 3, not 0. This prevents new users from seeing a discouraging zero.
+    Maximum theoretical: ~13.6, clamped to 10. Typical active week: 6-8.
+  </p>
+
+  <h3>🔥 Expression Score (0-10)</h3>
+  <table class="matrix-table">
+    <tr><th>Input</th><th>Points</th><th>Max/Week</th><th>Source</th></tr>
+    <tr><td>Wahoo completed</td><td class="positive">+2.0</td><td>~6 (3 wahoos)</td><td>groan_challenges (completed, scary>=7, wahoo>=7)</td></tr>
+    <tr><td>Wahoo completed (any)</td><td class="positive">+1.0</td><td>~5</td><td>groan_challenges (completed, below thresholds)</td></tr>
+    <tr><td>Expression practice completed</td><td class="positive">+0.5</td><td>~3.5 (7 days)</td><td>quest_completions (Practice, capacityType=activation)</td></tr>
+    <tr><td>Embody Your Essence quest</td><td class="positive">+1.0</td><td>~7</td><td>quest_completions (rewire_behavior_change)</td></tr>
+    <tr><td>Drain logged</td><td class="negative">-1.0</td><td>uncapped</td><td>nervous_system_checkins (drain)</td></tr>
+  </table>
+  <p class="matrix-note">
+    <strong>Baseline: 2.</strong> Expression starts lower than safety because it requires deliberate action.
+    Maximum theoretical: ~13.5, clamped to 10. Typical active week: 4-7.
+  </p>
+
+  <h3>Capacity Score (0-100)</h3>
+  <p class="matrix-note">
+    <strong>Capacity = (Safety / 10) x (Expression / 10) x 100</strong><br><br>
+    Examples:<br>
+    &bull; Safety 8, Expression 3 = <strong>24</strong> — "Safe but flat. Try a Wahoo."<br>
+    &bull; Safety 3, Expression 7 = <strong>21</strong> — "Anxious hustle. Do your practices."<br>
+    &bull; Safety 9, Expression 8 = <strong>72</strong> — "Vibe Rise. You're fully alive."<br>
+    &bull; Safety 5, Expression 5 = <strong>25</strong> — "Balanced but moderate. Push both axes."<br><br>
+    The multiplication means <strong>both axes must be high for a high score.</strong>
+    Safety 10, Expression 0 = 0. This is by design: safety without expression is not Vibe Rise.
+  </p>
+
+  <h3>Dot Position on 2x2</h3>
+  <p class="matrix-note">
+    <strong>X position</strong> = Expression / 10 (0% = left edge, 100% = right edge)<br>
+    <strong>Y position</strong> = (10 - Safety) / 10 (0% = top edge, 100% = bottom edge)<br><br>
+    Trail dots show previous 3 weeks. The trajectory is often more meaningful than the current position.
+    A dot moving from bottom-left to top-right across weeks shows real nervous system capacity growth.
+  </p>
+
+  <h3>Insight Logic</h3>
+  <table class="matrix-table">
+    <tr><th>Quadrant</th><th>Condition</th><th>Insight</th></tr>
+    <tr><td>Top-right (Vibe Rise)</td><td>Safety >= 7 AND Expression >= 7</td><td>"You're in Vibe Rise. This is what it looks like to be fully alive."</td></tr>
+    <tr><td>Top-left (Ventral)</td><td>Safety >= 7 AND Expression < 5</td><td>"Your safety container is strong. Try a Wahoo this week."</td></tr>
+    <tr><td>Bottom-right (Sympathetic)</td><td>Safety < 5 AND Expression >= 5</td><td>"You're expressing but your container is leaking. Slow down, do your practices."</td></tr>
+    <tr><td>Bottom-left (Dorsal)</td><td>Safety < 5 AND Expression < 5</td><td>"Start small. One practice, one check-in. Build from there."</td></tr>
+    <tr><td>Center</td><td>Both 5-7</td><td>"Building steadily. Keep showing up."</td></tr>
+  </table>
+
+  <h3>Voice Indicator (from Stalls)</h3>
+  <p class="matrix-note">
+    If user has logged 2+ stalls this week with the same protective_voice, show:
+    "🧱 Controller has been showing up 3x this week"<br><br>
+    This connects the score to the archetype system and makes the protective voice pattern visible.
+    Data source: nervous_system_checkins WHERE checkin_type='stall' GROUP BY protective_voice.
+  </p>
+</div>
+
+</body>
+</html>

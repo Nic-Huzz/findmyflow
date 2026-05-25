@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420">
+<title>Vibe Rise Carousel — @_huzz</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  background: #1a1a2e;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* ── IG Frame ── */
+.ig-frame { width:420px; background:#fff; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden; }
+.ig-header { display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid #eee; }
+.ig-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#5e17eb,#E9A23B); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; font-weight:700; }
+.ig-handle { font-size:13px; font-weight:600; color:#1a1a2e; }
+.ig-handle-sub { font-size:11px; color:#8e8e8e; }
+.carousel-viewport { width:420px; aspect-ratio:4/5; overflow:hidden; position:relative; cursor:grab; }
+.carousel-track { display:flex; height:100%; transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+.slide { width:420px; height:525px; flex-shrink:0; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+.ig-dots { display:flex; justify-content:center; gap:4px; padding:12px 0; }
+.ig-dot { width:6px; height:6px; border-radius:50%; background:#ddd; transition:background 0.3s; }
+.ig-dot.active { background:#5e17eb; }
+.ig-actions { display:flex; align-items:center; padding:8px 14px; gap:16px; }
+.ig-actions svg { width:24px; height:24px; }
+.ig-actions .spacer { flex:1; }
+.ig-caption { padding:4px 14px 14px; font-size:12px; color:#262626; line-height:1.4; }
+.ig-caption strong { font-weight:600; }
+.ig-caption .time { display:block; margin-top:6px; font-size:10px; color:#8e8e8e; text-transform:uppercase; }
+
+/* ── Progress bar + arrow ── */
+.progress-bar { position:absolute; bottom:0; left:0; right:0; padding:16px 28px 20px; z-index:10; display:flex; align-items:center; gap:10px; }
+.progress-track { flex:1; height:3px; border-radius:2px; overflow:hidden; }
+.progress-fill { height:100%; border-radius:2px; }
+.progress-label { font-size:11px; font-weight:500; }
+.dark-progress .progress-track { background:rgba(255,255,255,0.12); }
+.dark-progress .progress-fill { background:#fff; }
+.dark-progress .progress-label { color:rgba(255,255,255,0.4); }
+.swipe-arrow { position:absolute; right:0; top:0; bottom:0; width:48px; z-index:9; display:flex; align-items:center; justify-content:center; }
+.arrow-dark { background:linear-gradient(to right,transparent,rgba(255,255,255,0.06)); }
+
+/* ── Tag ── */
+.tag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; }
+
+/* ── Phone frame for app screenshots ── */
+.phone-wrap { display:flex; justify-content:center; align-items:center; flex:1; padding:0 30px; position:relative; z-index:1; }
+.phone { width:300px; border:2px solid rgba(255,255,255,0.12); border-radius:28px; overflow:hidden; background:#fafafa; }
+.phone-notch { height:24px; background:#fafafa; display:flex; align-items:center; justify-content:center; }
+.phone-notch-pill { width:80px; height:5px; background:#e0e0e0; border-radius:3px; }
+.phone-screen { padding:0; }
+
+/* ── SLIDE 1 ── */
+.slide-1 { background:linear-gradient(165deg,#080613 0%,#120E24 40%,#3b0d99 100%); justify-content:center; align-items:center; text-align:center; padding:36px; }
+.slide-1::before { content:''; position:absolute; top:-80px; right:-60px; width:300px; height:300px; background:radial-gradient(circle,rgba(94,23,235,0.15) 0%,transparent 70%); }
+.slide-1::after { content:''; position:absolute; bottom:-100px; left:-40px; width:250px; height:250px; background:radial-gradient(circle,rgba(233,162,59,0.08) 0%,transparent 70%); }
+.slide-1 h1 { font-size:36px; font-weight:700; color:rgba(255,255,255,0.92); line-height:1.1; letter-spacing:-0.5px; position:relative; z-index:1; }
+.slide-1 h1 span { background:linear-gradient(90deg,#E9A23B,#f5c55a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.slide-1 .subtitle { margin-top:16px; font-size:14px; color:rgba(255,255,255,0.5); position:relative; z-index:1; }
+
+/* ── SLIDE 2 ── */
+.slide-2 { background:#0D0B1A; justify-content:center; padding:36px; }
+.slide-2 p { font-size:20px; font-weight:500; color:rgba(255,255,255,0.92); line-height:1.4; margin-bottom:20px; position:relative; z-index:1; }
+.slide-2 .crossed { text-decoration:line-through; color:rgba(255,255,255,0.35); text-decoration-color:#ef4444; text-decoration-thickness:2px; }
+.slide-2 .gold { color:#E9A23B; font-weight:700; }
+
+/* ── SLIDE 3 ── */
+.slide-3 { background:linear-gradient(165deg,#3b0d99 0%,#5e17eb 50%,#8b5cf6 100%); justify-content:center; align-items:center; padding:36px; text-align:center; }
+.equation-label { font-size:22px; font-weight:700; color:#fff; margin-bottom:24px; letter-spacing:-0.3px; position:relative; z-index:1; }
+.equation-label .gold { color:#f5c55a; }
+.quad-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; width:300px; position:relative; z-index:1; }
+.quad-cell { padding:16px 12px; border-radius:14px; text-align:center; }
+.quad-cell .qe { font-size:22px; display:block; margin-bottom:4px; }
+.quad-cell .qn { font-size:12px; font-weight:700; display:block; margin-bottom:2px; }
+.quad-cell .qd { font-size:9px; display:block; opacity:0.7; }
+.q-anxiety { background:rgba(249,115,22,0.2); border:1px solid rgba(249,115,22,0.3); color:#fb923c; }
+.q-shutdown { background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.3); color:#f87171; }
+.q-calm { background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.3); color:#34d399; }
+.q-vibe { background:linear-gradient(135deg,rgba(233,162,59,0.25),rgba(233,162,59,0.15)); border:2px solid rgba(233,162,59,0.6); color:#f5c55a; box-shadow:0 0 30px rgba(233,162,59,0.2); }
+.axis-label { font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.35); position:relative; z-index:1; }
+
+/* ── SLIDES 4-7: Dark bg with phone ── */
+.slide-dark { background:#0D0B1A; padding:24px 0 0; flex-direction:column; }
+.slide-dark .slide-heading { text-align:center; padding:0 30px; margin-bottom:12px; position:relative; z-index:1; }
+.slide-dark .slide-heading h2 { font-size:18px; font-weight:700; color:rgba(255,255,255,0.92); line-height:1.3; letter-spacing:-0.3px; }
+.slide-dark .slide-heading h2 .gold { color:#E9A23B; }
+.slide-dark .slide-heading p { font-size:12px; color:rgba(255,255,255,0.45); margin-top:4px; }
+
+/* ── Real app CSS (copied from actual components) ── */
+
+/* Healing tab rows */
+.ht-item-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #f0f1f3; }
+.ht-item-row:last-child { border-bottom:none; }
+.ht-item-check { width:28px; height:28px; border-radius:50%; border:2px solid #dee2e6; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+.ht-item-check.done { background:#34d399; border-color:#34d399; color:white; }
+.ht-item-body { flex:1; min-width:0; }
+.ht-item-name { font-size:14px; font-weight:700; color:#1a1a2e; }
+.ht-item-meta { display:flex; align-items:center; gap:5px; margin-top:2px; }
+.ht-item-type { font-size:11px; color:#5e17eb; font-weight:600; }
+.ht-item-sep { color:#ccc; font-size:10px; }
+.ht-pts { font-size:11px; color:#9a9daa; }
+.ht-item-action { font-size:12px; font-weight:700; padding:7px 14px; border-radius:20px; border:none; background:linear-gradient(135deg,#E9A23B,#f5c55a); color:#1a1a2e; cursor:pointer; font-family:inherit; box-shadow:0 2px 8px rgba(233,162,59,0.25); }
+.ht-streak-dots { display:flex; gap:5px; margin-top:5px; }
+.ht-streak-day { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.ht-streak-dot { width:8px; height:8px; border-radius:50%; background:#e9ecef; }
+.ht-streak-dot.filled { background:#34d399; }
+.ht-streak-label { font-size:8px; color:#b4b8c4; font-weight:600; }
+
+/* Tune tab sections */
+.tt-section { background:#ffffff; border:1px solid #e9ecef; border-radius:20px; padding:14px 16px; box-shadow:0 2px 12px rgba(0,0,0,0.04); margin:0 12px; }
+.tt-section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+.tt-section-header-left { display:flex; align-items:center; gap:6px; }
+.tt-section-icon { font-size:1rem; }
+.tt-section-title { font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:#5e17eb; }
+.tt-section-count { font-size:12px; font-weight:700; color:#10b981; }
+.tt-section-sub { font-size:11px; color:#6c757d; margin:0 0 8px; line-height:1.4; }
+
+/* Tune state picker */
+.tt-state-picker { margin-top:6px; padding:6px 0 2px; }
+.tt-state-label { font-size:10px; font-weight:700; color:#6c757d; display:block; margin-bottom:4px; }
+.tt-state-buttons { display:flex; gap:6px; }
+.tt-state-btn { flex:1; padding:8px 8px; border-radius:10px; border:2px solid #e9ecef; background:#fff; font-size:12px; font-weight:700; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:4px; }
+.tt-state-safe { color:#10b981; }
+.tt-state-vibe { color:#E9A23B; }
+
+/* Drain section */
+.tt-drain-categories { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.tt-drain-cat-btn { display:flex; align-items:center; gap:4px; padding:6px 10px; border-radius:100px; font-size:11px; font-weight:700; background:#fff; border:1.5px solid rgba(249,115,22,0.25); color:#fb923c; font-family:inherit; }
+.tt-drain-cat-btn.selected { border-color:#f97316; background:rgba(249,115,22,0.06); }
+.tt-state-activated { color:#f97316; border-color:#f97316; background:rgba(249,115,22,0.04); }
+.tt-state-shutdown { color:#ef4444; border-color:#ef4444; background:rgba(239,68,68,0.04); }
+
+/* Wahoo buttons */
+.gcm-wahoo-options { display:flex; flex-direction:column; gap:8px; margin:0 12px; }
+.gcm-wahoo-btn { width:100%; display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:14px; font-family:inherit; }
+.gcm-wahoo-emoji { font-size:1.3rem; flex-shrink:0; }
+.gcm-wahoo-label { font-size:14px; font-weight:800; color:#1a1a2e; display:block; }
+.gcm-wahoo-desc { font-size:10px; color:#6c757d; margin-left:auto; }
+.gcm-wahoo-hell-yes { background:rgba(233,162,59,0.08); border:2px solid rgba(233,162,59,0.4); }
+.gcm-wahoo-hell-yes .gcm-wahoo-label { color:#E9A23B; }
+.gcm-wahoo-alive { background:rgba(94,23,235,0.06); border:2px solid rgba(94,23,235,0.2); }
+.gcm-wahoo-alive .gcm-wahoo-label { color:#5e17eb; }
+.gcm-wahoo-routine { background:rgba(0,0,0,0.02); border:2px solid rgba(0,0,0,0.08); }
+.gcm-wahoo-routine .gcm-wahoo-label { color:#6c757d; }
+
+/* Capacity Card */
+.cc-card { background:#fff; border:1px solid #e9ecef; border-radius:16px; padding:14px 16px; box-shadow:0 2px 12px rgba(0,0,0,0.04); margin:0 12px; }
+.cc-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.cc-label { font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:#5e17eb; }
+.cc-trend { font-size:12px; font-weight:700; color:#10b981; }
+.cc-score-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.cc-score { font-size:32px; font-weight:800; color:#1a1a2e; letter-spacing:-0.5px; line-height:1; }
+.cc-bar-track { flex:1; height:7px; background:#e9ecef; border-radius:4px; overflow:hidden; }
+.cc-bar-fill { height:100%; width:72%; background:linear-gradient(90deg,#5e17eb,#E9A23B); border-radius:4px; }
+.cc-dist { display:flex; gap:8px; flex-wrap:wrap; }
+.cc-dist span { font-size:11px; font-weight:700; }
+
+/* Tab pills (for slide 4) */
+.tab-bar { display:flex; gap:4px; justify-content:center; padding:8px 12px; background:#fafafa; }
+.tab-pill { padding:6px 12px; border-radius:100px; font-size:11px; font-weight:700; border:1.5px solid #e0e0e0; color:#999; background:#fff; font-family:inherit; }
+.tab-pill.active { background:#5e17eb; border-color:#5e17eb; color:#fff; }
+
+/* ── SLIDE 8: CTA ── */
+.slide-8 { background:linear-gradient(165deg,#3b0d99 0%,#5e17eb 50%,#8b5cf6 100%); justify-content:center; align-items:center; text-align:center; padding:36px; }
+.slide-8::before { content:''; position:absolute; top:-60px; right:-40px; width:250px; height:250px; background:radial-gradient(circle,rgba(233,162,59,0.2) 0%,transparent 70%); pointer-events:none; }
+.slide-8 .logo-circle { width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; color:#fff; margin-bottom:20px; position:relative; z-index:1; }
+.slide-8 h1 { font-size:34px; font-weight:700; color:#fff; letter-spacing:-0.5px; position:relative; z-index:1; }
+.slide-8 .tagline { font-size:16px; color:rgba(255,255,255,0.7); margin-top:8px; margin-bottom:32px; position:relative; z-index:1; }
+.slide-8 .cta-btn { display:inline-flex; align-items:center; gap:8px; padding:14px 32px; background:rgba(255,255,255,0.95); color:#3b0d99; font-weight:700; font-size:14px; border-radius:28px; position:relative; z-index:1; }
+.slide-8 .handle { margin-top:20px; font-size:13px; color:rgba(255,255,255,0.4); position:relative; z-index:1; }
+</style>
+</head>
+<body>
+<div class="ig-frame">
+  <div class="ig-header">
+    <div class="ig-avatar">H</div>
+    <div><div class="ig-handle">_huzz</div><div class="ig-handle-sub">FindMyFlow</div></div>
+  </div>
+
+  <div class="carousel-viewport">
+    <div class="carousel-track" id="track">
+
+      <!-- SLIDE 1: Hook -->
+      <div class="slide slide-1">
+        <span class="tag" style="color:rgba(255,255,255,0.5); position:relative; z-index:1;">FINDMYFLOW</span>
+        <h1>I rebuilt my<br>entire app around<br><span>one equation.</span></h1>
+        <p class="subtitle">Here's what changed and why.</p>
+        <div class="progress-bar dark-progress"><div class="progress-track"><div class="progress-fill" style="width:12.5%"></div></div><span class="progress-label">1/8</span></div>
+        <div class="swipe-arrow arrow-dark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+
+      <!-- SLIDE 2: Problem -->
+      <div class="slide slide-2">
+        <span class="tag" style="color:#8b5cf6; position:relative; z-index:1;">THE PROBLEM</span>
+        <p>I realised we were building a <span class="crossed">wellness app</span>.</p>
+        <p>Wellness apps make people <span class="crossed">calm</span>.</p>
+        <p>Calm isn't the goal.</p>
+        <p>Feeling <span class="gold">fully alive</span> is.</p>
+        <div class="progress-bar dark-progress"><div class="progress-track"><div class="progress-fill" style="width:25%"></div></div><span class="progress-label">2/8</span></div>
+        <div class="swipe-arrow arrow-dark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+
+      <!-- SLIDE 3: Equation -->
+      <div class="slide slide-3">
+        <span class="tag" style="color:rgba(255,255,255,0.5); position:relative; z-index:1;">THE EQUATION</span>
+        <div class="equation-label">Safety <span style="opacity:0.5">&times;</span> Activation <span style="opacity:0.5">=</span> <span class="gold">Vibe Rise</span></div>
+        <div class="axis-label" style="margin-bottom:6px;">&uarr; ACTIVATION</div>
+        <div class="quad-grid">
+          <div class="quad-cell q-anxiety"><span class="qe">😬</span><span class="qn">Anxiety</span><span class="qd">Activation without safety</span></div>
+          <div class="quad-cell q-vibe"><span class="qe">⚡</span><span class="qn">VIBE RISE</span><span class="qd">Both. Full aliveness.</span></div>
+          <div class="quad-cell q-shutdown"><span class="qe">😶</span><span class="qn">Shutdown</span><span class="qd">Neither. Collapsed.</span></div>
+          <div class="quad-cell q-calm"><span class="qe">😊</span><span class="qn">Calm</span><span class="qd">Safety without activation</span></div>
+        </div>
+        <div class="axis-label" style="margin-top:6px;">SAFETY &rarr;</div>
+        <div class="progress-bar dark-progress"><div class="progress-track"><div class="progress-fill" style="width:37.5%"></div></div><span class="progress-label">3/8</span></div>
+        <div class="swipe-arrow arrow-dark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+
+      <!-- SLIDE 4: Tabs — REAL APP UI -->
+      <div class="slide slide-dark">
+        <div class="slide-heading">
+          <span class="tag" style="color:#8b5cf6;">WHAT WE BUILT</span>
+          <h2>Every tab serves<br>the equation</h2>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+            <div class="phone-screen">
+              <!-- Real tab bar -->
+              <div class="tab-bar">
+                <span class="tab-pill">Level</span>
+                <span class="tab-pill active">Tune</span>
+                <span class="tab-pill">Play-list</span>
+                <span class="tab-pill">Healing</span>
+              </div>
+              <!-- Real TuneTab section -->
+              <div style="padding:10px 0;">
+                <div class="tt-section" style="margin-bottom:10px;">
+                  <div class="tt-section-header">
+                    <div class="tt-section-header-left"><span class="tt-section-icon">☀️</span><span class="tt-section-title">Daily Practices</span></div>
+                    <span class="tt-section-count">2/6</span>
+                  </div>
+                  <div>
+                    <div class="ht-item-row" style="border-bottom:1px solid #f0f1f3;">
+                      <span class="ht-item-check done">✓</span>
+                      <div class="ht-item-body">
+                        <div class="ht-item-name">Breathwork</div>
+                        <div class="ht-item-meta"><span class="ht-item-type">Practice</span><span class="ht-item-sep">·</span><span class="ht-pts">5pts</span></div>
+                        <div class="ht-streak-dots"><div class="ht-streak-day"><span class="ht-streak-dot filled"></span><span class="ht-streak-label">M</span></div><div class="ht-streak-day"><span class="ht-streak-dot filled"></span><span class="ht-streak-label">T</span></div><div class="ht-streak-day"><span class="ht-streak-dot"></span><span class="ht-streak-label">W</span></div><div class="ht-streak-day"><span class="ht-streak-dot filled"></span><span class="ht-streak-label">T</span></div><div class="ht-streak-day"><span class="ht-streak-dot"></span><span class="ht-streak-label">F</span></div><div class="ht-streak-day"><span class="ht-streak-dot"></span><span class="ht-streak-label">S</span></div><div class="ht-streak-day"><span class="ht-streak-dot"></span><span class="ht-streak-label">S</span></div></div>
+                      </div>
+                      <span class="ht-item-action" style="background:#f0f1f3; color:#b8bbc6; box-shadow:none;">Done</span>
+                    </div>
+                    <div class="ht-item-row" style="border-bottom:1px solid #f0f1f3;">
+                      <span class="ht-item-check"></span>
+                      <div class="ht-item-body">
+                        <div class="ht-item-name">Cold Exposure</div>
+                        <div class="ht-item-meta"><span class="ht-item-type">Practice</span><span class="ht-item-sep">·</span><span class="ht-pts">3pts</span></div>
+                      </div>
+                      <span class="ht-item-action">Complete</span>
+                    </div>
+                    <div class="ht-item-row">
+                      <span class="ht-item-check done">✓</span>
+                      <div class="ht-item-body">
+                        <div class="ht-item-name">Morning Sunlight</div>
+                        <div class="ht-item-meta"><span class="ht-item-type">Practice</span><span class="ht-item-sep">·</span><span class="ht-pts">3pts</span></div>
+                      </div>
+                      <span class="ht-item-action" style="background:#f0f1f3; color:#b8bbc6; box-shadow:none;">Done</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar dark-progress"><div class="progress-track"><div class="progress-fill" style="width:50%"></div></div><span class="progress-label">4/8</span></div>
+        <div class="swipe-arrow arrow-dark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+
+      <!-- SLIDE 5: Wahoo — REAL APP UI -->
+      <div class="slide slide-dark">
+        <div class="slide-heading">
+          <span class="tag" style="color:#E9A23B;">THE METRIC THAT MATTERS</span>
+          <h2>We don't ask "did you<br>complete the task."<br><br>We ask <span class="gold">"did fear turn<br>into aliveness?"</span></h2>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+            <div class="phone-screen" style="padding:12px 0;">
+              <!-- Real Wahoo buttons -->
+              <div class="gcm-wahoo-options">
+                <div class="gcm-wahoo-btn gcm-wahoo-hell-yes">
+                  <span class="gcm-wahoo-emoji">🔥</span>
+                  <div><span class="gcm-wahoo-label">Hell yes</span></div>
+                  <span class="gcm-wahoo-desc">Scared AND alive</span>
+                </div>
+                <div class="gcm-wahoo-btn gcm-wahoo-alive">
+                  <span class="gcm-wahoo-emoji">⚡</span>
+                  <div><span class="gcm-wahoo-label">Felt alive but not scary</span></div>
+                  <span class="gcm-wahoo-desc">Becoming baseline</span>
+                </div>
+                <div class="gcm-wahoo-btn gcm-wahoo-routine">
+                  <span class="gcm-wahoo-emoji">😐</span>
+                  <div><span class="gcm-wahoo-label">Just did it</span></div>
+                  <span class="gcm-wahoo-desc">Neither</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar dark-progress"><div class="progress-track"><div class="progress-fill" style="width:62.5%"></div></div><span class="progress-label">5/8</span></div>
+        <div class="swipe-arrow arrow-dark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+
+      <!-- SLIDE 6: Capacity Score — REAL APP UI -->
+      <div class="slide slide-dark">
+        <div class="slide-heading">
+          <span class="tag" style="color:#8b5cf6;">YOUR WEEKLY SCORE</span>
+          <h2>One number. How much of<br>your week you spent<br><span class="gold">fully alive.</span></h2>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+            <div class="phone-screen" style="padding:12px 0;">
+              <!-- Real CapacityCard -->
+              <div class="cc-card">
+                <div class="cc-header">
+                  <span class="cc-label">Capacity Score</span>
+                  <span class="cc-trend">&uarr; +8</span>
+                </div>
+                <div class="cc-score-row">
+                  <span class="cc-score">72</span>
+                  <div class="cc-bar-track"><div class="cc-bar-fill"></div></div>
+                </div>
+                <div class="cc-dist">
+                  <span style="color:#E9A23B;">⚡ 45%</span>
+                  <span style="color:#10b981;">😊 30%</span>
+                  <span style="color:#fb923c;">😬 15%</span>
+                  <span style="color:#f87171;">😶 10%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar dark-progress"><div class="progress-track"><div class="progress-fill" style="width:75%"></div></div><span class="progress-label">6/8</span></div>
+        <div class="swipe-arrow arrow-dark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+
+      <!-- SLIDE 7: Drains — REAL APP UI -->
+      <div class="slide slide-dark">
+        <div class="slide-heading">
+          <span class="tag" style="color:#fb923c;">TRACK THE WITHDRAWALS</span>
+          <h2>What pulls you out?</h2>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+            <div class="phone-screen" style="padding:12px 0;">
+              <!-- Real drain section -->
+              <div class="tt-section" style="margin:0 0;">
+                <div class="tt-section-header">
+                  <div class="tt-section-header-left"><span class="tt-section-icon">⚡</span><span class="tt-section-title">Drains</span></div>
+                  <span class="tt-section-count" style="color:#f97316;">2 this week</span>
+                </div>
+                <div class="tt-drain-categories">
+                  <span class="tt-drain-cat-btn selected">💼 Work</span>
+                  <span class="tt-drain-cat-btn">👤 People</span>
+                  <span class="tt-drain-cat-btn">🏠 Environment</span>
+                  <span class="tt-drain-cat-btn">📱 Content</span>
+                  <span class="tt-drain-cat-btn">📋 Commitment</span>
+                </div>
+                <div style="margin-top:10px;">
+                  <div class="tt-state-buttons">
+                    <div class="tt-state-btn tt-state-activated" style="border-color:#f97316; background:rgba(249,115,22,0.04);">😬 Activated</div>
+                    <div class="tt-state-btn tt-state-shutdown">😶 Shutdown</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; padding:12px 36px 0; position:relative; z-index:1;">
+          <p style="font-size:13px; font-style:italic; color:rgba(255,255,255,0.45); line-height:1.5;">"You can't meditate your way out of a life that's incompatible with aliveness."</p>
+        </div>
+        <div class="progress-bar dark-progress"><div class="progress-track"><div class="progress-fill" style="width:87.5%"></div></div><span class="progress-label">7/8</span></div>
+        <div class="swipe-arrow arrow-dark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+
+      <!-- SLIDE 8: CTA -->
+      <div class="slide slide-8">
+        <div class="logo-circle">F</div>
+        <h1>FindMyFlow</h1>
+        <p class="tagline">The maintenance engine<br>for feeling alive.</p>
+        <div class="cta-btn">Link in bio &rarr;</div>
+        <p class="handle">@_huzz</p>
+        <div class="progress-bar dark-progress"><div class="progress-track"><div class="progress-fill" style="width:100%"></div></div><span class="progress-label">8/8</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="ig-dots" id="dots">
+    <span class="ig-dot active"></span><span class="ig-dot"></span><span class="ig-dot"></span><span class="ig-dot"></span>
+    <span class="ig-dot"></span><span class="ig-dot"></span><span class="ig-dot"></span><span class="ig-dot"></span>
+  </div>
+  <div class="ig-actions">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#262626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#262626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#262626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="spacer"></span>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke="#262626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="ig-caption">
+    <strong>_huzz</strong> I rebuilt my entire app around one equation. Safety &times; Activation = Vibe Rise. Here's what changed.
+    <span class="time">2 hours ago</span>
+  </div>
+</div>
+
+<script>
+const track=document.getElementById('track'),dots=document.querySelectorAll('.ig-dot'),vp=document.querySelector('.carousel-viewport');
+let cur=0,total=8,startX=0,drag=false;
+function goTo(i){cur=Math.max(0,Math.min(total-1,i));track.style.transform=`translateX(${-cur*420}px)`;dots.forEach((d,j)=>d.classList.toggle('active',j===cur));}
+vp.addEventListener('pointerdown',e=>{startX=e.clientX;drag=true;vp.setPointerCapture(e.pointerId);});
+vp.addEventListener('pointerup',e=>{if(!drag)return;drag=false;const d=e.clientX-startX;if(Math.abs(d)>40)goTo(cur+(d<0?1:-1));});
+</script>
+</body>
+</html>

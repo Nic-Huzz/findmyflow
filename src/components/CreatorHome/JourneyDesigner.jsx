@@ -104,6 +104,7 @@ export default function JourneyDesigner({ templateId, onSaved }) {
       onSaved?.(result)
     } catch (err) {
       console.error('Save error:', err)
+      setError('Failed to save. Please try again.')
     }
     setSaving(false)
   }

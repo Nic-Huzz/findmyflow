@@ -9,6 +9,7 @@ import { useAuth } from '../../auth/AuthProvider'
 import { fetchTemplates, createTemplate, archiveTemplate, updateTemplate } from '../../lib/experienceTemplateService'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import JourneyDesigner from './JourneyDesigner'
+import './ExperienceLibrary.css'
 import './JourneyDesigner.css'
 
 const EXPERIENCE_TYPES = [

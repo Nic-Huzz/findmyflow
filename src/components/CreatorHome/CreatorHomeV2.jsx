@@ -15,7 +15,6 @@ import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import ExperienceLibrary from './ExperienceLibrary'
-import './ExperienceLibrary.css'
 import './CreatorHomeV2.css'
 
 // ─── Constants ─────────────────────────────────────────────────────────────
