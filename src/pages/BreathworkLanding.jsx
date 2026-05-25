@@ -444,7 +444,7 @@ export default function BreathworkLanding() {
                 Your breathwork experience has been captured. Thank you for showing up today.
               </p>
               <a href="/get-started" className="hcl-cta-gold" style={{ display: 'inline-block', marginTop: '1rem', textDecoration: 'none' }}>
-                Continue to Find My Flow →
+                Continue to Vibe Rise →
               </a>
             </div>
           )}

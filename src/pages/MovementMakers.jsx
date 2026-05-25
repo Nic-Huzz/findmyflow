@@ -16,7 +16,7 @@ import './MovementMakers.css'
 const ExperienceCreatorFlow = lazy(() => import('../flows/ExperienceCreatorFlow'))
 
 const FAQS = [
-  { q: "What if I'm just starting out?", a: "Movement Makers is for facilitators who already run experiences. If you're still figuring out what you want to create, start with the free FindMyFlow app. It'll help you discover your play-skills and build courage. When you're ready to build a business from them, Movement Makers is here." },
+  { q: "What if I'm just starting out?", a: "Movement Makers is for facilitators who already run experiences. If you're still figuring out what you want to create, start with the free Vibe Rise app. It'll help you discover your play-skills and build courage. When you're ready to build a business from them, Movement Makers is here." },
   { q: "How is this different from a course?", a: "Courses dump information. Movement Makers gives you a system and a group that holds you accountable to USE it. The app tracks your checklists, your challenges, your 3% improvements. The weekly check-ins make sure you actually do the work. You're not learning. You're building." },
   { q: "What happens on the check-ins?", a: "Weekly: accountability check (the app shows green/red on your commitments), debrief from anyone who ran an experience, and intention setting for the next week. No fluff." },
   { q: "Can I cancel anytime?", a: "Yes. Monthly. No lock-in. First month is fully refundable if it's not for you." },

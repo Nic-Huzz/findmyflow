@@ -72,7 +72,7 @@ export default function FantasyLeagueLanding() {
         <div className="flp-container flp-nav-inner">
           <div className="flp-logo" onClick={() => navigate('/')}>
             <span className="flp-logo-dot" />
-            FindMyFlow
+            Vibe Rise
           </div>
           <button className="flp-nav-btn" onClick={() => navigate('/log-in')}>Log in</button>
         </div>
@@ -214,7 +214,7 @@ export default function FantasyLeagueLanding() {
             {[
               { emoji: '\u{1F4C5}', label: 'Duration', value: '4 weeks' },
               { emoji: '\u{1F465}', label: 'Players', value: '12 (4 teams of 3)' },
-              { emoji: '\u{1F4F1}', label: 'Platform', value: 'Find My Flow app' },
+              { emoji: '\u{1F4F1}', label: 'Platform', value: 'Vibe Rise app' },
               { emoji: '\u{1F3C6}', label: 'Prize', value: 'Bragging rights' },
             ].map((item, i) => (
               <div key={item.label} className="flp-detail reveal-fade-up" style={{ transitionDelay: `${i * 80}ms` }}>
@@ -340,7 +340,7 @@ export default function FantasyLeagueLanding() {
           <div className="flp-preview reveal-blur-up" style={{ transitionDelay: '200ms' }}>
             <img
               src="/images/app-preview.png"
-              alt="Find My Flow app showing gamified challenge dashboard with leaderboard, categories, and quest progress"
+              alt="Vibe Rise app showing gamified challenge dashboard with leaderboard, categories, and quest progress"
               className="flp-preview-img"
               loading="lazy"
               width={393}
@@ -378,7 +378,7 @@ export default function FantasyLeagueLanding() {
       {/* FOOTER */}
       <footer className="flp-footer">
         <div className="flp-container">
-          <p className="flp-footer-text">FindMyFlow &middot; Built by Huzz</p>
+          <p className="flp-footer-text">Vibe Rise &middot; Built by Huzz</p>
         </div>
       </footer>
 
