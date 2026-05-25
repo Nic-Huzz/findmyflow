@@ -143,43 +143,44 @@ export function AgentsProvider({ children }) {
         throw new Error(`Agent chat failed: ${response.status}`)
       }
 
-      // Stream response
+      // Stream response with proper SSE buffering
       const reader = response.body.getReader()
       const decoder = new TextDecoder()
       let fullText = ''
+      let sseBuffer = ''
+      let streamDone = false
 
-      while (true) {
+      while (!streamDone) {
         const { done, value } = await reader.read()
         if (done) break
 
-        const chunk = decoder.decode(value, { stream: true })
-        // Parse SSE lines
-        const lines = chunk.split('\n')
+        sseBuffer += decoder.decode(value, { stream: true })
+        const lines = sseBuffer.split('\n')
+        sseBuffer = lines.pop() // keep incomplete last line in buffer
+
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = line.slice(6)
-            if (data === '[DONE]') break
-            try {
-              const parsed = JSON.parse(data)
-              if (parsed.delta) {
-                fullText += parsed.delta
-                setConversations(prev => {
-                  const msgs = [...(prev[agentId] || [])]
-                  const lastIdx = msgs.length - 1
-                  if (lastIdx >= 0 && msgs[lastIdx].role === 'assistant') {
-                    msgs[lastIdx] = { ...msgs[lastIdx], content: fullText }
-                  }
-                  return { ...prev, [agentId]: msgs }
-                })
-              }
-              if (parsed.error) {
-                throw new Error(parsed.error)
-              }
-            } catch (e) {
-              if (e.message !== 'Unexpected end of JSON input') {
-                console.warn('Stream parse error:', e.message)
-              }
+          if (!line.startsWith('data: ')) continue
+          const data = line.slice(6).trim()
+          if (data === '[DONE]') { streamDone = true; break }
+          try {
+            const parsed = JSON.parse(data)
+            if (parsed.delta) {
+              fullText += parsed.delta
+              setConversations(prev => {
+                const msgs = [...(prev[agentId] || [])]
+                const lastIdx = msgs.length - 1
+                if (lastIdx >= 0 && msgs[lastIdx].role === 'assistant') {
+                  msgs[lastIdx] = { ...msgs[lastIdx], content: fullText }
+                }
+                return { ...prev, [agentId]: msgs }
+              })
             }
+            if (parsed.error) {
+              throw new Error(parsed.error)
+            }
+          } catch (e) {
+            // Re-throw intentional errors (from parsed.error above)
+            if (e.message && !e.message.includes('JSON')) throw e
           }
         }
       }
@@ -190,7 +191,17 @@ export function AgentsProvider({ children }) {
       await saveConversation(agentId, finalMessages)
 
     } catch (err) {
-      if (err.name === 'AbortError') return
+      if (err.name === 'AbortError') {
+        // Clean up empty assistant placeholder if abort happened before any content
+        setConversations(prev => {
+          const msgs = [...(prev[agentId] || [])]
+          if (msgs.length > 0 && msgs[msgs.length - 1].role === 'assistant' && !msgs[msgs.length - 1].content) {
+            msgs.pop()
+          }
+          return { ...prev, [agentId]: msgs }
+        })
+        return
+      }
       console.warn('Agent chat error:', err.message)
       // Update placeholder with error
       setConversations(prev => {

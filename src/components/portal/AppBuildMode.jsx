@@ -10,13 +10,14 @@
 
 import { useState, useEffect, useCallback } from 'react'
 
-const EXPRESS_PORT = typeof window !== 'undefined' && window.electronAPI?.expressPort
-
-function apiUrl(path) {
-  return EXPRESS_PORT ? `http://localhost:${EXPRESS_PORT}${path}` : null
-}
-
 export default function AppBuildMode() {
+  const [expressPort] = useState(() =>
+    typeof window !== 'undefined' ? window.electronAPI?.expressPort ?? null : null
+  )
+  const apiUrl = useCallback((path) =>
+    expressPort ? `http://localhost:${expressPort}${path}` : null
+  , [expressPort])
+
   const [projectPath, setProjectPath] = useState('')
   const [checks, setChecks] = useState([])
   const [loading, setLoading] = useState(false)
@@ -25,7 +26,7 @@ export default function AppBuildMode() {
 
   // Check if Express server is available
   useEffect(() => {
-    if (!EXPRESS_PORT) return
+    if (!expressPort) return
     fetch(apiUrl('/api/health-scan?projectPath=test'), { signal: AbortSignal.timeout(2000) })
       .then(() => setConnected(true))
       .catch(() => setConnected(false))
@@ -70,7 +71,7 @@ export default function AppBuildMode() {
     }
   }, [])
 
-  if (!EXPRESS_PORT) {
+  if (!expressPort) {
     return (
       <div className="portal-empty">
         <div className="portal-empty-title">Desktop Required</div>

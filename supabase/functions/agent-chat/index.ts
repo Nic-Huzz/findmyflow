@@ -1,9 +1,10 @@
 /**
  * Edge Function: agent-chat
  * Streams Claude responses for AI agents (Zarlo + Perry).
- * Uses SSE format: data: {"delta": "..."} per chunk, data: [DONE] at end.
+ * Requires authenticated user. Uses SSE format.
  */
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import Anthropic from 'npm:@anthropic-ai/sdk@0.24.3'
 
 const corsHeaders = {
@@ -17,6 +18,28 @@ serve(async (req) => {
   }
 
   try {
+    // Verify auth
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
+      { global: { headers: { Authorization: authHeader } } }
+    )
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
     const { systemPrompt, messages } = await req.json()
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
@@ -32,13 +55,13 @@ serve(async (req) => {
       model: 'claude-sonnet-4-20250514',
       max_tokens: 2048,
       system: systemPrompt || 'You are a helpful assistant.',
-      messages: messages.map(m => ({
+      messages: messages.map((m: { role: string; content: string }) => ({
         role: m.role,
         content: m.content,
       })),
     })
 
-    // Create SSE response
+    // Create SSE response with cancel support
     const encoder = new TextEncoder()
     const readableStream = new ReadableStream({
       async start(controller) {
@@ -56,6 +79,10 @@ serve(async (req) => {
           controller.enqueue(encoder.encode(`data: ${data}\n\n`))
           controller.close()
         }
+      },
+      cancel() {
+        // Stop consuming Claude tokens when client disconnects
+        try { stream.abort() } catch {}
       },
     })
 
