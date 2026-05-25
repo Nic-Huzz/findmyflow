@@ -1,13 +1,16 @@
 {
   "name": "viberise",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
+    "electron:dev": "vite build && electron .",
+    "electron:build": "vite build && electron-builder --config electron/builder.config.cjs",
     "db:push": "supabase db push",
     "db:pull": "supabase db pull",
     "db:diff": "supabase db diff -f",
@@ -39,9 +42,16 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.9.4",
     "remark-gfm": "^4.0.1",
-    "remotion": "^4.0.419"
+    "remotion": "^4.0.419",
+    "express": "^4.21.0",
+    "ws": "^8.18.0"
+  },
+  "optionalDependencies": {
+    "node-pty": "^1.2.0-beta.11"
   },
   "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^26.0.0",
     "@tailwindcss/vite": "^4.2.2",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
