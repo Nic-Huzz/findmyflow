@@ -1,4 +1,4 @@
-# FindMyFlow - Claude Guide
+# Vibe Rise - Claude Guide
 
 ## Maintaining This File
 
@@ -32,7 +32,7 @@ Personal development web app helping burnt-out professionals discover their idea
 
 **The Journey Story (Zone Calibration Framework):**
 
-Users arrive at FindMyFlow at **The Crack** or after sitting in **Head Full of Dreams** too long. The app's job is to move them along the Sprouter diagonal toward **Self-Actualisation** (self-knowledge + action moving together).
+Users arrive at Vibe Rise at **The Crack** or after sitting in **Head Full of Dreams** too long. The app's job is to move them along the Sprouter diagonal toward **Self-Actualisation** (self-knowledge + action moving together).
 
 - **0,0 → Unfulfilment → The Crack**: This happened before the app. The user's constructed life stopped working. Burnout, breakdown, or a moment of honest self-confrontation brought them here.
 - **Head Full of Dreams (Paralysis Zone)**: Where most users ARE when they sign up. Self-knowledge is emerging but action hasn't caught up. They can see what they want but can't move toward it.
@@ -47,9 +47,9 @@ Users arrive at FindMyFlow at **The Crack** or after sitting in **Head Full of D
 2. "Now I have words for it" — the framework language is a gift, not a lecture. Users leave with vocabulary they've never had for their experience
 3. "This is the coolest thing I've ever seen" — the visual experience is so premium they're genuinely excited
 
-**FindMyFlow's value proposition**: We build your X axis so your Y axis stops wasting your life.
+**Vibe Rise's value proposition**: We build your X axis so your Y axis stops wasting your life.
 
-**Core Offer (Hormozi Grand Slam)**: "I'll teach you to design experiences that create lasting shifts, fill the room every time, and make a living doing what you love. You get the method (Shift Architecture), the tools (FindMyFlow), the community (weekly group), and the equipment (headsets). No one else offers all four."
+**Core Offer (Hormozi Grand Slam)**: "I'll teach you to design experiences that create lasting shifts, fill the room every time, and make a living doing what you love. You get the method (Shift Architecture), the tools (Vibe Rise), the community (weekly group), and the equipment (headsets). No one else offers all four."
 
 **App segmentation**: `/7-day-challenge` is for everyone. `/create` is specifically for experience creators. Vibe Seekers still use the app; if their flow turns out to be experience creation, they naturally enter the creator track.
 
@@ -68,7 +68,7 @@ src/
 ├── flows/                    # Flow components
 │   ├── MoneyModelFlowBase.jsx      # Shared base (6 flows use this)
 │   ├── moneyModelConfigs.js        # Money Model configurations
-│   ├── ScopeMapFlow.jsx            # Find My Flow river diagnostic
+│   ├── ScopeMapFlow.jsx            # Vibe Rise river diagnostic
 │   ├── EssenceMirrorFlow.jsx       # Essence archetype discovery
 │   ├── ExperienceCreatorFlow.jsx   # Experience creator matching
 │   ├── ZoneDiagnosisFlow.jsx       # Level zone diagnosis
@@ -216,7 +216,7 @@ Key files: `src/components/level/LevelConfig.js`, `LevelTab.jsx`, `SweetSpotGrap
 
 Key files: `src/flows/EssenceMirrorFlow.jsx`, `src/data/essenceArchetypes.js`, edge functions `essence-mirror-blend/`, `generate-avatar-gemini/`
 
-### 4. Scope Map Diagnostic (Find My Flow / River System)
+### 4. Scope Map Diagnostic (Vibe Rise / River System)
 
 3-question diagnostic at `/create` classifying users into: The Stream (specific + low self-knowledge), The Lake (broad + low), The Waterfall (specific + high), The River (broad + high). AI classification via Haiku edge function `classify-scope-map`. Stage-specific prescriptions route differently (Stream → Flow Finder, Lake/Waterfall/River → ExperienceCreate).
 
@@ -415,7 +415,7 @@ When working on features, strategy, or content, read the relevant section of the
 
 - `docs/DEVELOPMENT_PATTERNS.md` - **Required reading for flow/challenge work**
 - `docs/page-component-design-guide.md` - **Required before creating/modifying UI**
-- `docs/root-and-reach-framework.md` - **Find My Flow / River System** (Original IP)
+- `docs/root-and-reach-framework.md` - **Vibe Rise / River System** (Original IP)
 - `docs/root-and-reach-overview-prompt.md` - Shareable framework overview
 - `docs/feature-brief-experience-creator-matching.md` - Experience Creator Matching brief
 - `docs/crm-status.md` - CRM feature status and audit
@@ -426,6 +426,6 @@ When working on features, strategy, or content, read the relevant section of the
 
 ## Links
 
-- **Live**: https://findmyflow.nichuzz.com
+- **Live**: https://viberise.nichuzz.com
 - **Repo**: https://github.com/Nic-Huzz/findmyflow
 - **Supabase**: https://supabase.com/dashboard/project/qlwfcfypnoptsocdpxuv

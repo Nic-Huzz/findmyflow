@@ -1,8 +1,8 @@
-# FindMyFlow - Project Summary
+# Vibe Rise - Project Summary
 
-## What is FindMyFlow?
+## What is Vibe Rise?
 
-FindMyFlow is a personal development web application designed for burnt-out professionals seeking career clarity and entrepreneurial direction. The app guides users through AI-powered discovery flows to identify their natural strengths, the problems they're uniquely positioned to solve, and their ideal customer personas.
+Vibe Rise is a personal development web application designed for burnt-out professionals seeking career clarity and entrepreneurial direction. The app guides users through AI-powered discovery flows to identify their natural strengths, the problems they're uniquely positioned to solve, and their ideal customer personas.
 
 ## Core Concept: Nikigai Framework
 
@@ -86,7 +86,7 @@ public/
 
 ## URLs
 
-- **Production**: https://findmyflow.nichuzz.com
+- **Production**: https://viberise.nichuzz.com
 - **Repository**: https://github.com/Nic-Huzz/findmyflow
 
 ## Documentation
