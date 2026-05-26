@@ -63,6 +63,7 @@ export default function useExperiencePipeline(experienceId) {
   const fetchPipeline = useCallback(async () => {
     if (!userId || !experienceId) { setLoading(false); return }
 
+    try {
     const [
       expRes, contentRes, contactsRes, attendeesRes, dealsRes,
       checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes,
@@ -79,7 +80,7 @@ export default function useExperiencePipeline(experienceId) {
         .eq('experience_id', experienceId).eq('user_id', userId),
       // Convert: attendees
       supabase.from('experience_attendees')
-        .select('id, contact_id', { count: 'exact' })
+        .select('id', { count: 'exact', head: true })
         .eq('experience_id', experienceId),
       // Convert: revenue
       supabase.from('sales_deals')
@@ -113,6 +114,10 @@ export default function useExperiencePipeline(experienceId) {
         .eq('experience_id', experienceId)
         .limit(1),
     ])
+
+    // Log any query errors
+    ;[expRes, contentRes, contactsRes, attendeesRes, dealsRes, checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes]
+      .forEach((res, i) => { if (res.error) console.warn(`Pipeline query ${i} failed:`, res.error.message) })
 
     const exp = expRes.data
     setExperience(exp)
@@ -215,7 +220,11 @@ export default function useExperiencePipeline(experienceId) {
       },
     ])
 
-    setLoading(false)
+    } catch (err) {
+      console.warn('Pipeline fetch failed:', err.message)
+    } finally {
+      setLoading(false)
+    }
   }, [userId, experienceId])
 
   useEffect(() => {
@@ -224,9 +233,9 @@ export default function useExperiencePipeline(experienceId) {
   }, [fetchPipeline])
 
   // Check if a specific module is complete
-  function isModuleComplete(moduleKey) {
-    return MODULE_CHECKS[moduleKey]?.(moduleData) || false
-  }
+  const isModuleComplete = useCallback((moduleKey) => {
+    return MODULE_CHECKS[moduleKey]?.(moduleData) ?? false
+  }, [moduleData])
 
   return {
     nodes,

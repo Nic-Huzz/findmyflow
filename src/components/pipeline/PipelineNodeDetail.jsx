@@ -5,7 +5,7 @@
  * Tools, and Checklists. Adapts content per node key.
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 
@@ -203,18 +203,17 @@ function CollapsibleSection({ title, defaultOpen = false, children }) {
 
 function ChecklistItems({ experienceId, section }) {
   const [items, setItems] = useState([])
-  const [loaded, setLoaded] = useState(false)
 
-  // Lazy load checklist items on first render
-  if (!loaded) {
-    setLoaded(true)
+  useEffect(() => {
+    let cancelled = false
     supabase.from('experience_checklist_items')
       .select('id, label, completed')
       .eq('experience_id', experienceId)
       .eq('section', section)
       .order('sort_order')
-      .then(({ data }) => { if (data) setItems(data) })
-  }
+      .then(({ data }) => { if (!cancelled && data) setItems(data) })
+    return () => { cancelled = true }
+  }, [experienceId, section])
 
   return items.map(item => (
     <div key={item.id} className={`pl-ck${item.completed ? ' done' : ''}`}>
