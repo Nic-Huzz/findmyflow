@@ -656,12 +656,13 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
 
         // Link contact to experience if selected
         if (form.experience_id) {
-          await supabase.from('contact_experiences').upsert({
+          const { error: expError } = await supabase.from('contact_experiences').upsert({
             contact_id: savedData.id,
             experience_id: form.experience_id,
             user_id: userId,
             role: 'lead',
           }, { onConflict: 'contact_id,experience_id' })
+          if (expError) console.warn('Failed to link contact to experience:', expError.message)
         }
       }
 
@@ -680,6 +681,7 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
           value: 0,
           status: dealStage,
           probability: stageInfo?.probability || 10,
+          experience_id: form.experience_id || null,
         })
 
         // Schedule follow-up if date set
