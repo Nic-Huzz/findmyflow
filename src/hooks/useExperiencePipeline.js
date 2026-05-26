@@ -81,7 +81,8 @@ export default function useExperiencePipeline(experienceId) {
       // Convert: attendees
       supabase.from('experience_attendees')
         .select('id', { count: 'exact', head: true })
-        .eq('experience_id', experienceId),
+        .eq('experience_id', experienceId)
+        .eq('user_id', userId),
       // Convert: revenue
       supabase.from('sales_deals')
         .select('value, status')
@@ -89,7 +90,8 @@ export default function useExperiencePipeline(experienceId) {
       // Checklists
       supabase.from('experience_checklist_items')
         .select('section, completed')
-        .eq('experience_id', experienceId),
+        .eq('experience_id', experienceId)
+        .eq('user_id', userId),
       // Wahoos (courage challenges linked to experience)
       supabase.from('groan_challenges')
         .select('*')
@@ -121,6 +123,7 @@ export default function useExperiencePipeline(experienceId) {
 
     const exp = expRes.data
     setExperience(exp)
+    if (!exp || expRes.error) { setLoading(false); return }
 
     // Module check data
     const mData = {

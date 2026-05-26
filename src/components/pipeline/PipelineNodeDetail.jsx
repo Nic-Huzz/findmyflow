@@ -179,7 +179,7 @@ export default function PipelineNodeDetail({ node, experience, checklists, wahoo
         {/* Checklist */}
         {checklist && checklist.total > 0 && (
           <CollapsibleSection title={`${checklistSection.charAt(0).toUpperCase() + checklistSection.slice(1)} Checklist · ${checklist.done}/${checklist.total}`}>
-            <ChecklistItems experienceId={experience.id} section={checklistSection} />
+            <ChecklistItems experienceId={experience.id} section={checklistSection} userId={experience.user_id} />
           </CollapsibleSection>
         )}
       </div>
@@ -201,7 +201,7 @@ function CollapsibleSection({ title, defaultOpen = false, children }) {
   )
 }
 
-function ChecklistItems({ experienceId, section }) {
+function ChecklistItems({ experienceId, section, userId }) {
   const [items, setItems] = useState([])
 
   useEffect(() => {
@@ -210,6 +210,7 @@ function ChecklistItems({ experienceId, section }) {
       .select('id, label, completed')
       .eq('experience_id', experienceId)
       .eq('section', section)
+      .eq('user_id', userId)
       .order('sort_order')
       .then(({ data }) => { if (!cancelled && data) setItems(data) })
     return () => { cancelled = true }

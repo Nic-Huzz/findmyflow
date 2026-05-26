@@ -270,7 +270,7 @@ export default function CreatorHomeV2() {
         </div>
         <div className="ch2-tabs">
           {['identity', 'experiences', 'growth', ...(isElectron ? ['ai-portal'] : [])].map(tab => (
-            <button key={tab} className={`ch2-tab${activeTab === tab ? ' active' : ''}`} onClick={() => setActiveTab(tab)}>
+            <button key={tab} className={`ch2-tab${activeTab === tab ? ' active' : ''}`} onClick={() => { if (tab !== 'experiences') setSelectedExperienceId(null); setActiveTab(tab) }}>
               {tab === 'identity' ? 'Identity' : tab === 'experiences' ? 'Experiences' : tab === 'growth' ? 'Growth' : '⚡ AI Portal'}
             </button>
           ))}
