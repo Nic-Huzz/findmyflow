@@ -2,18 +2,19 @@
  * AIPortal.jsx — AI Portal mode switcher
  *
  * Desktop-only tab within /create. Contains 4 modes:
- *   Growth   — Growth Line + Grind Line dashboard
+ *   Growth   — Growth Line pipeline (computed from existing data)
  *   App Build — health scanner + terminal + preview
  *   Documents — document processing + output panel
  *   Agents   — Zarlo + Perry AI chat
  *
- * Terminal slides up from bottom on task click.
+ * Terminal slides up from bottom on task click via TerminalDrawer.
  */
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import GrowthDashboard from './GrowthDashboard'
 import AppBuildMode from './AppBuildMode'
 import AgentsMode from './AgentsMode'
+import TerminalDrawer from './TerminalDrawer'
 import './portal.css'
 
 const MODES = [
@@ -25,6 +26,17 @@ const MODES = [
 
 export default function AIPortal() {
   const [activeMode, setActiveMode] = useState('growth')
+  const [terminalOpen, setTerminalOpen] = useState(false)
+  const [pendingPrompt, setPendingPrompt] = useState(null)
+
+  const runInTerminal = useCallback((prompt) => {
+    setPendingPrompt(prompt)
+    setTerminalOpen(true)
+  }, [])
+
+  const handlePromptSent = useCallback(() => {
+    setPendingPrompt(null)
+  }, [])
 
   return (
     <div className="portal-container">
@@ -39,14 +51,31 @@ export default function AIPortal() {
             <span className="portal-mode-label">{mode.label}</span>
           </button>
         ))}
+
+        {/* Terminal toggle */}
+        <button
+          className={`portal-mode-btn${terminalOpen ? ' active' : ''}`}
+          onClick={() => setTerminalOpen(prev => !prev)}
+          style={{ marginLeft: 'auto' }}
+        >
+          <span className="portal-mode-icon">⌨</span>
+          <span className="portal-mode-label">Terminal</span>
+        </button>
       </div>
 
-      <div className="portal-mode-content">
-        {activeMode === 'growth' && <GrowthDashboard />}
+      <div className="portal-mode-content" style={terminalOpen ? { paddingBottom: '45vh' } : undefined}>
+        {activeMode === 'growth' && <GrowthDashboard runInTerminal={runInTerminal} />}
         {activeMode === 'build' && <AppBuildMode />}
         {activeMode === 'documents' && <PlaceholderMode label="Documents" description="Process decks, copy, proposals, and session guides. Coming with the desktop app." />}
         {activeMode === 'agents' && <AgentsMode />}
       </div>
+
+      <TerminalDrawer
+        isOpen={terminalOpen}
+        onClose={() => setTerminalOpen(false)}
+        pendingPrompt={pendingPrompt}
+        onPromptSent={handlePromptSent}
+      />
     </div>
   )
 }

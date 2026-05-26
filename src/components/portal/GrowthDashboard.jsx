@@ -37,15 +37,15 @@ const STATUS_LABELS = {
   bad: 'Blocked',
 }
 
-export default function GrowthDashboard() {
+export default function GrowthDashboard({ runInTerminal }) {
   return (
     <PortalProvider>
-      <GrowthDashboardInner />
+      <GrowthDashboardInner runInTerminal={runInTerminal} />
     </PortalProvider>
   )
 }
 
-function GrowthDashboardInner() {
+function GrowthDashboardInner({ runInTerminal }) {
   const {
     nodes, tasks, loading,
     selectedNode, selectedNodeKey, nodeTasks,
@@ -100,16 +100,16 @@ function GrowthDashboardInner() {
           onComplete={completeTask}
           onReopen={reopenTask}
           navigate={navigate}
+          runInTerminal={runInTerminal}
         />
       )}
     </div>
   )
 }
 
-function NodeDetail({ node, tasks, onComplete, onReopen, navigate }) {
+function NodeDetail({ node, tasks, onComplete, onReopen, navigate, runInTerminal }) {
   const openTasks = tasks.filter(t => t.status === 'open')
   const completedTasks = tasks.filter(t => t.status === 'completed')
-  const isDesktop = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
 
   return (
     <div className="node-detail">
@@ -149,7 +149,7 @@ function NodeDetail({ node, tasks, onComplete, onReopen, navigate }) {
               task={task}
               onComplete={onComplete}
               navigate={navigate}
-              isDesktop={isDesktop}
+              runInTerminal={runInTerminal}
               nodeKey={node.key}
             />
           ))}
@@ -182,10 +182,10 @@ function NodeDetail({ node, tasks, onComplete, onReopen, navigate }) {
   )
 }
 
-function TaskCard({ task, onComplete, navigate, isDesktop, nodeKey }) {
+function TaskCard({ task, onComplete, navigate, runInTerminal, nodeKey }) {
   const handleAction = () => {
-    if (isDesktop && window.electronAPI?.runInTerminal && task.message) {
-      window.electronAPI.runInTerminal(task.message)
+    if (runInTerminal && task.message) {
+      runInTerminal(task.message)
     } else if (NODE_ROUTES[nodeKey]) {
       navigate(NODE_ROUTES[nodeKey])
     } else if (task.message) {
@@ -194,7 +194,7 @@ function TaskCard({ task, onComplete, navigate, isDesktop, nodeKey }) {
     }
   }
 
-  const actionLabel = isDesktop ? 'Run' : (NODE_ROUTES[nodeKey] ? 'Go' : 'Copy')
+  const actionLabel = runInTerminal ? 'Run' : (NODE_ROUTES[nodeKey] ? 'Go' : 'Copy')
 
   return (
     <div className="task-card">

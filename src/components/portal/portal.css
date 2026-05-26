@@ -828,3 +828,70 @@
   border: none;
   background: #fff;
 }
+
+/* ─── Terminal Drawer ────────────────────────────────────────────────────── */
+
+.terminal-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45vh;
+  background: #0d0d0d;
+  border-top: 2px solid #5e17eb;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.terminal-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: rgba(94, 23, 235, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.terminal-drawer-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.5px;
+}
+
+.terminal-drawer-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.terminal-drawer-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.terminal-drawer-body {
+  flex: 1;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.terminal-drawer-body .xterm {
+  height: 100%;
+}
+
+.terminal-drawer-body .xterm-viewport {
+  overflow-y: auto !important;
+}
