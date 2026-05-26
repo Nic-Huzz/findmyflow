@@ -13,6 +13,7 @@
 import { useState, useCallback } from 'react'
 import GrowthDashboard from './GrowthDashboard'
 import AppBuildMode from './AppBuildMode'
+import DocumentsMode from './DocumentsMode'
 import AgentsMode from './AgentsMode'
 import TerminalDrawer from './TerminalDrawer'
 import './portal.css'
@@ -66,7 +67,7 @@ export default function AIPortal() {
       <div className="portal-mode-content" style={terminalOpen ? { paddingBottom: '45vh' } : undefined}>
         {activeMode === 'growth' && <GrowthDashboard runInTerminal={runInTerminal} />}
         {activeMode === 'build' && <AppBuildMode />}
-        {activeMode === 'documents' && <PlaceholderMode label="Documents" description="Process decks, copy, proposals, and session guides. Coming with the desktop app." />}
+        {activeMode === 'documents' && <DocumentsMode runInTerminal={runInTerminal} />}
         {activeMode === 'agents' && <AgentsMode />}
       </div>
 

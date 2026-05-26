@@ -895,3 +895,200 @@
 .terminal-drawer-body .xterm-viewport {
   overflow-y: auto !important;
 }
+
+/* ─── Documents Mode ─────────────────────────────────────────────────────── */
+
+.docs-layout {
+  display: flex;
+  gap: 16px;
+  height: 100%;
+  min-height: 50vh;
+}
+
+.docs-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.docs-output {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.docs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.docs-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.docs-step {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #5e17eb;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.docs-folder-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.docs-path-input {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.docs-path-input:focus { outline: none; border-color: #5e17eb; }
+
+.docs-folder-info {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.docs-folder-types {
+  margin-left: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.docs-outcomes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.docs-outcome-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.docs-outcome-btn:hover {
+  background: rgba(94, 23, 235, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.docs-outcome-btn.active {
+  background: rgba(94, 23, 235, 0.15);
+  border-color: #5e17eb;
+  color: #fff;
+}
+
+.docs-textarea {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  font-size: 12px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.docs-textarea:focus { outline: none; border-color: #5e17eb; }
+.docs-textarea::placeholder { color: rgba(255, 255, 255, 0.2); }
+
+.docs-go-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #5e17eb;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.docs-go-btn:hover { background: #4c12c0; }
+.docs-go-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.docs-output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 8px;
+}
+
+.docs-output-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.15s ease;
+}
+
+.docs-output-file:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(94, 23, 235, 0.2);
+}
+
+.docs-output-file-date {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.docs-output-body {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+}
+
+.docs-output-body pre {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+}
