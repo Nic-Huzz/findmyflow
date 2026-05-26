@@ -1155,7 +1155,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               <div className="lm-shareable-card">
                 <div className="lm-sc-header">
                   <span className="lm-sc-title">🗺️ My Life Map</span>
-                  <span className="lm-sc-watermark">findmyflow</span>
+                  <span className="lm-sc-watermark">viberise</span>
                 </div>
                 <div className="lm-sc-grid">
                   {cardPeriods.map((period, pi) => (

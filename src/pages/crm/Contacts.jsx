@@ -8,6 +8,7 @@ import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
 import { createDeal, scheduleFollowUp, ACTIVE_STAGES, STAGE_INFO } from '../../lib/crm/dealService'
 import PullToRefresh from '../../components/crm/PullToRefresh'
+import ExperienceSelector from '../../components/ExperienceSelector'
 import { hapticLight, hapticMedium } from '../../lib/haptics'
 import './Contacts.css'
 
@@ -558,6 +559,7 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
     outreach_status: contact?.outreach_status || '',
     tags: contact?.tags || [],
     notes: contact?.notes || prefill?.notes || '',
+    experience_id: prefill?.experience_id || '',
   })
   const [tagInput, setTagInput] = useState('')
 
@@ -651,6 +653,17 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
 
         if (error) throw error
         savedData = data
+
+        // Link contact to experience if selected
+        if (form.experience_id) {
+          const { error: expError } = await supabase.from('contact_experiences').upsert({
+            contact_id: savedData.id,
+            experience_id: form.experience_id,
+            user_id: userId,
+            role: 'lead',
+          }, { onConflict: 'contact_id,experience_id' })
+          if (expError) console.warn('Failed to link contact to experience:', expError.message)
+        }
       }
 
       // Create a deal if a project was selected (works for both add and edit)
@@ -668,6 +681,7 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
           value: 0,
           status: dealStage,
           probability: stageInfo?.probability || 10,
+          experience_id: form.experience_id || null,
         })
 
         // Schedule follow-up if date set
@@ -769,6 +783,14 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="form-group">
+              <label>Linked Experience</label>
+              <ExperienceSelector
+                value={form.experience_id}
+                onChange={v => setForm({ ...form, experience_id: v })}
+                placeholder="Link to an experience (optional)"
+              />
             </div>
             <div className="form-group">
               <label>Source</label>

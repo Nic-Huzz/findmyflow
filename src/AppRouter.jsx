@@ -267,6 +267,8 @@ const PayRentFlow = lazyRetry(() => import('./flows/PayRentFlow'))
 const RemarkableFlow = lazyRetry(() => import('./flows/RemarkableFlow'))
 const StrikeDesignFlow = lazyRetry(() => import('./flows/StrikeDesignFlow'))
 const ScaleIncomeFlow = lazyRetry(() => import('./flows/ScaleIncomeFlow'))
+const ExperienceAttractionStack = lazyRetry(() => import('./flows/ExperienceAttractionStack'))
+const ExperienceMarketingCampaign = lazyRetry(() => import('./flows/ExperienceMarketingCampaign'))
 const ScopeMapFlow = lazyRetry(() => import('./flows/ScopeMapFlow'))
 const ExperienceInspiration = lazyRetry(() => import('./flows/ExperienceInspiration'))
 
@@ -940,6 +942,16 @@ function AppRouter() {
                   <RemarkableFlow />
                 </AuthGate>
               </CreateGate>
+            } />
+            <Route path="/create/attraction-stack" element={
+              <AuthGate>
+                <ExperienceAttractionStack />
+              </AuthGate>
+            } />
+            <Route path="/create/marketing-campaign" element={
+              <AuthGate>
+                <ExperienceMarketingCampaign />
+              </AuthGate>
             } />
             <Route path="/create/scale-income" element={
               <CreateGate>

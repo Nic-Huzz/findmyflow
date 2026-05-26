@@ -1,28 +1,40 @@
 /**
- * AIPortal.jsx — AI Portal mode switcher
+ * AIPortal.jsx — AI Portal mode switcher (desktop-only)
  *
- * Desktop-only tab within /create. Contains 4 modes:
- *   Growth   — Growth Line + Grind Line dashboard
+ * 3 modes:
  *   App Build — health scanner + terminal + preview
  *   Documents — document processing + output panel
  *   Agents   — Zarlo + Perry AI chat
  *
- * Terminal slides up from bottom on task click.
+ * Terminal slides up from bottom on task click via TerminalDrawer.
  */
 
-import { useState } from 'react'
-import GrowthDashboard from './GrowthDashboard'
+import { useState, useCallback } from 'react'
+import AppBuildMode from './AppBuildMode'
+import DocumentsMode from './DocumentsMode'
+import AgentsMode from './AgentsMode'
+import TerminalDrawer from './TerminalDrawer'
 import './portal.css'
 
 const MODES = [
-  { key: 'growth', label: 'Growth', icon: '📈' },
   { key: 'build', label: 'App Build', icon: '🔨' },
   { key: 'documents', label: 'Documents', icon: '📄' },
   { key: 'agents', label: 'Agents', icon: '🤖' },
 ]
 
 export default function AIPortal() {
-  const [activeMode, setActiveMode] = useState('growth')
+  const [activeMode, setActiveMode] = useState('agents')
+  const [terminalOpen, setTerminalOpen] = useState(false)
+  const [pendingPrompt, setPendingPrompt] = useState(null)
+
+  const runInTerminal = useCallback((prompt) => {
+    setPendingPrompt(prompt)
+    setTerminalOpen(true)
+  }, [])
+
+  const handlePromptSent = useCallback(() => {
+    setPendingPrompt(null)
+  }, [])
 
   return (
     <div className="portal-container">
@@ -37,23 +49,30 @@ export default function AIPortal() {
             <span className="portal-mode-label">{mode.label}</span>
           </button>
         ))}
+
+        {/* Terminal toggle */}
+        <button
+          className={`portal-mode-btn${terminalOpen ? ' active' : ''}`}
+          onClick={() => setTerminalOpen(prev => !prev)}
+          style={{ marginLeft: 'auto' }}
+        >
+          <span className="portal-mode-icon">⌨</span>
+          <span className="portal-mode-label">Terminal</span>
+        </button>
       </div>
 
-      <div className="portal-mode-content">
-        {activeMode === 'growth' && <GrowthDashboard />}
-        {activeMode === 'build' && <PlaceholderMode label="App Build" description="Health scanner, terminal, and preview panel. Coming soon." />}
-        {activeMode === 'documents' && <PlaceholderMode label="Documents" description="Document processing and output panel. Coming soon." />}
-        {activeMode === 'agents' && <PlaceholderMode label="Agents" description="Zarlo and Perry AI chat. Coming soon." />}
+      <div className="portal-mode-content" style={terminalOpen ? { paddingBottom: '45vh' } : undefined}>
+        {activeMode === 'build' && <AppBuildMode />}
+        {activeMode === 'documents' && <DocumentsMode runInTerminal={runInTerminal} />}
+        {activeMode === 'agents' && <AgentsMode />}
       </div>
-    </div>
-  )
-}
 
-function PlaceholderMode({ label, description }) {
-  return (
-    <div className="portal-placeholder">
-      <div className="portal-placeholder-label">{label}</div>
-      <div className="portal-placeholder-desc">{description}</div>
+      <TerminalDrawer
+        isOpen={terminalOpen}
+        onClose={() => setTerminalOpen(false)}
+        pendingPrompt={pendingPrompt}
+        onPromptSent={handlePromptSent}
+      />
     </div>
   )
 }

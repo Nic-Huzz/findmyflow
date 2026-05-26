@@ -233,7 +233,7 @@ export const PAGE_CONTENT = {
     ],
     faq: {
       what_is_fmf: `Vibe Rise helps people discover what they're meant to build — and actually follow through. Strategy + healing + accountability + tools, all in one place.`,
-      what_is_river: `"Find My Flow" isn't just a name — it's the whole framework.\n\nImagine your personal growth as a river system. The Spring is where the water emerges (your identity/direction). The Riverbed holds it (your nervous system). The Current carries it forward (your visibility). The Ocean is where it meets the world (your value/pricing).\n\nThese four questions check which part of your river is blocked. That's where we focus first.`,
+      what_is_river: `"Vibe Rise" isn't just a name — it's the whole framework.\n\nImagine your personal growth as a river system. The Spring is where the water emerges (your identity/direction). The Riverbed holds it (your nervous system). The Current carries it forward (your visibility). The Ocean is where it meets the world (your value/pricing).\n\nThese four questions check which part of your river is blocked. That's where we focus first.`,
       why_questions: `These four questions identify where your flow is stuck. Instead of guessing what you need, we pinpoint the exact blockage — then focus your journey there.\n\nMost people are stuck at one specific layer. Fix that, and everything downstream starts moving.`,
       honest_answer: `There's no wrong answer. Pick whichever feels most true RIGHT NOW.\n\nThis isn't a test — it's a mirror. We're not judging your score, we're using it to give you the right starting point.`
     }

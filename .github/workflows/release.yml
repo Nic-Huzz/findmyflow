@@ -1,0 +1,178 @@
+name: Release Desktop App
+
+# Push a vX.Y.Z tag to trigger: git tag v0.1.0 && git push --tags
+# Or manually dispatch from Actions tab.
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release (e.g. v0.1.0). Must already exist.'
+        required: true
+        type: string
+
+jobs:
+  # ─── 1. Build macOS DMGs ──────────────────────────────────────────────────
+  build-mac:
+    name: Build macOS
+    runs-on: macos-14
+    timeout-minutes: 120
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify version matches tag
+        run: |
+          TAG="${{ inputs.tag || github.ref_name }}"
+          PKG_VERSION="v$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "$PKG_VERSION" ]; then
+            echo "❌ Tag $TAG does not match package.json version $PKG_VERSION"
+            exit 1
+          fi
+          echo "✅ Version matches: $TAG"
+
+      # ─── Code signing (skipped if secrets absent) ─────────────────────────
+      - name: Import Apple Developer ID certificate
+        if: env.MAC_CERTIFICATE_P12_BASE64 != ''
+        env:
+          MAC_CERTIFICATE_P12_BASE64: ${{ secrets.MAC_CERTIFICATE_P12_BASE64 }}
+          MAC_CERTIFICATE_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
+        run: |
+          KEYCHAIN_PATH=$RUNNER_TEMP/build.keychain
+          CERT_PATH=$RUNNER_TEMP/cert.p12
+
+          echo "$MAC_CERTIFICATE_P12_BASE64" | base64 --decode > "$CERT_PATH"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" -P "$MAC_CERTIFICATE_PASSWORD" \
+            -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: \
+            -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+          security find-identity -v -p codesigning "$KEYCHAIN_PATH"
+
+      - name: Build Mac DMGs
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          npm run build
+          npx electron-builder --config electron/builder.config.cjs --mac --publish never
+
+      - name: List outputs
+        run: ls -lh electron-dist/
+
+      - name: Upload Mac artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-binaries
+          path: |
+            electron-dist/Vibe-Rise-mac-arm64.dmg
+            electron-dist/Vibe-Rise-mac-x64.dmg
+          retention-days: 7
+          if-no-files-found: error
+
+  # ─── 2. Build Windows installer ───────────────────────────────────────────
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          fetch-depth: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Windows installer
+        run: |
+          npm run build
+          npx electron-builder --config electron/builder.config.cjs --win --publish never
+
+      - name: List outputs
+        shell: bash
+        run: ls -lh electron-dist/
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binaries
+          path: electron-dist/Vibe-Rise-Setup.exe
+          retention-days: 7
+          if-no-files-found: error
+
+  # ─── 3. Publish release ──────────────────────────────────────────────────
+  publish:
+    name: Publish Release
+    needs: [build-mac, build-windows]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Mac artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: mac-binaries
+          path: dist/
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-binaries
+          path: dist/
+
+      - name: List all artifacts
+        run: ls -lhR dist/
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ inputs.tag || github.ref_name }}"
+          gh release create "$TAG" \
+            --repo "${{ github.repository }}" \
+            --title "Vibe Rise $TAG" \
+            --notes "Desktop app release $TAG. Download the DMG (Mac) or EXE (Windows) below." \
+            --draft=false \
+            dist/*
