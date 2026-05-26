@@ -17,8 +17,8 @@ const NODE_MODULES = {
     { key: 'validation', name: 'Validation', icon: '🔍', desc: 'Learn your audience\'s language', route: '/validation-flows', multi: 'Capture, Convert' },
   ],
   capture: [
-    { key: 'attraction_offer', name: 'Attraction Offer', icon: '🎁', desc: 'Free/low-cost entry offer', route: '/attraction-offer' },
-    { key: 'lead_magnet', name: 'Lead Magnet', icon: '🧲', desc: 'Pick the right format', route: '/lead-magnet-selection' },
+    { key: 'attraction_offer', name: 'Attraction Stack', icon: '🎁', desc: 'Choose your attraction strategies', route: '/create/attraction-stack', passExperienceId: true },
+    { key: 'lead_magnet', name: 'Marketing Campaign', icon: '📣', desc: 'Build your marketing campaign', route: '/create/marketing-campaign', passExperienceId: true },
     { key: 'funnel_builder', name: 'Funnel Builder', icon: '🗺️', desc: 'Map stranger → lead journey', route: '/funnel-builder' },
   ],
   convert: [
@@ -109,7 +109,7 @@ export default function PipelineNodeDetail({ node, experience, checklists, wahoo
             {modules.map(mod => {
               const done = isModuleComplete(mod.key)
               return (
-                <div key={mod.key} className="pl-item" onClick={() => navigate(mod.route)}>
+                <div key={mod.key} className="pl-item" onClick={() => navigate(mod.passExperienceId ? `${mod.route}?experienceId=${experience.id}` : mod.route)}>
                   <div className={`pl-ico ${done ? 'done' : 'todo'}`}>{mod.icon}</div>
                   <div className="pl-txt">
                     <div className="pl-nm">{mod.name}</div>
