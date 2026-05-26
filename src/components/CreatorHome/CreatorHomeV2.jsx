@@ -16,6 +16,7 @@ import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
+import ExperiencePipeline from '../pipeline/ExperiencePipeline'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
@@ -80,6 +81,7 @@ export default function CreatorHomeV2() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('identity')
   const [loading, setLoading] = useState(true)
+  const [selectedExperienceId, setSelectedExperienceId] = useState(null)
   const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
 
   // Data
@@ -480,6 +482,14 @@ export default function CreatorHomeV2() {
         {/* ═══ EXPERIENCES TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'experiences' ? ' active' : ''}`}>
 
+          {/* ── Growth Line Pipeline (when experience selected) ── */}
+          {selectedExperienceId ? (
+            <ExperiencePipeline
+              experienceId={selectedExperienceId}
+              onBack={() => setSelectedExperienceId(null)}
+            />
+          ) : (
+          <>
           {/* Upcoming */}
           {upcoming.length > 0 && (
             <>
@@ -489,9 +499,12 @@ export default function CreatorHomeV2() {
                 const cl = checklistCounts[exp.id] || {}
                 const marketingItems = cl.marketing || { total: 0, done: 0 }
                 const orgItems = cl.organisation || { total: 0, done: 0 }
+                // Mini pipeline dot statuses
+                const mPct = marketingItems.total > 0 ? marketingItems.done / marketingItems.total * 100 : 0
+                const oPct = orgItems.total > 0 ? orgItems.done / orgItems.total * 100 : 0
 
                 return (
-                  <div key={exp.id} className="ch2-exp-card" onClick={() => navigate(`/create/experience/${exp.id}`)}>
+                  <div key={exp.id} className="ch2-exp-card" onClick={() => setSelectedExperienceId(exp.id)}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <div>
                         <div className="ch2-exp-name">{exp.name}</div>
@@ -503,45 +516,14 @@ export default function CreatorHomeV2() {
                       </div>
                       <div style={{ fontSize: 10, fontWeight: 700, color: '#5e17eb' }}>Open →</div>
                     </div>
-                    {(marketingItems.total > 0 || orgItems.total > 0) && (
-                      <div style={{ marginTop: 10 }}>
-                        {marketingItems.total > 0 && (
-                          <div className="ch2-exp-progress">
-                            <div className="ch2-exp-p-icon">📣</div>
-                            <div className="ch2-exp-p-info"><div className="ch2-exp-p-name">Marketing</div><div className="ch2-exp-p-count">{marketingItems.done} of {marketingItems.total}</div></div>
-                            <div className="ch2-exp-p-bar"><div className="ch2-progress-track"><div className="ch2-progress-fill" style={{ width: `${(marketingItems.total ? marketingItems.done / marketingItems.total * 100 : 0)}%` }} /></div></div>
-                          </div>
-                        )}
-                        {orgItems.total > 0 && (
-                          <div className="ch2-exp-progress">
-                            <div className="ch2-exp-p-icon">🗂️</div>
-                            <div className="ch2-exp-p-info"><div className="ch2-exp-p-name">Organisation</div><div className="ch2-exp-p-count">{orgItems.done} of {orgItems.total}</div></div>
-                            <div className="ch2-exp-p-bar"><div className="ch2-progress-track"><div className="ch2-progress-fill" style={{ width: `${(orgItems.total ? orgItems.done / orgItems.total * 100 : 0)}%` }} /></div></div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    {/* Plays linked to this experience */}
-                    {(() => {
-                      const expPlays = activePlays.filter(c => c.experience_id === exp.id)
-                      if (!expPlays.length) return null
-                      return (
-                        <div style={{ marginTop: 10, borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: 8 }} onClick={e => e.stopPropagation()}>
-                          <div className="ch2-label">Active Plays</div>
-                          {expPlays.map(play => (
-                            <div key={play.id} className="ch2-play-item">
-                              <span className="ch2-play-icon">🎯</span>
-                              <span className="ch2-play-text">{play.title}</span>
-                              {play.deadline && (
-                                <span className="ch2-play-due">
-                                  {new Date(play.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                                </span>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )
-                    })()}
+                    {/* Mini pipeline dots */}
+                    <div style={{ display: 'flex', gap: 3, marginTop: 8 }}>
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: mPct >= 60 ? '#22c55e' : mPct >= 20 ? '#eab308' : 'rgba(255,255,255,0.08)' }} title="Attract" />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} title="Capture" />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} title="Convert" />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: oPct >= 60 ? '#22c55e' : oPct >= 20 ? '#eab308' : 'rgba(255,255,255,0.08)' }} title="Deliver" />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} title="Grow" />
+                    </div>
                   </div>
                 )
               })}
@@ -588,7 +570,7 @@ export default function CreatorHomeV2() {
             <div className="ch2-card">
               <div className="ch2-label">Past Experiences</div>
               {past.map(exp => (
-                <div key={exp.id} className="ch2-past-item" style={{ cursor: 'pointer' }} onClick={() => navigate(`/create/experience/${exp.id}`)}>
+                <div key={exp.id} className="ch2-past-item" style={{ cursor: 'pointer' }} onClick={() => setSelectedExperienceId(exp.id)}>
                   <div className="ch2-past-dot" />
                   <div className="ch2-past-info">
                     <div className="ch2-past-name">{exp.name}</div>
@@ -603,6 +585,8 @@ export default function CreatorHomeV2() {
                 </div>
               ))}
             </div>
+          )}
+          </>
           )}
         </div>
 
