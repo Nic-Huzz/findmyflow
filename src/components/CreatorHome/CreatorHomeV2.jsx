@@ -14,8 +14,9 @@ import { supabase } from '../../lib/supabaseClient'
 import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
+import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
-import AIPortal from '../portal/AIPortal'
+const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
 // ─── Constants ─────────────────────────────────────────────────────────────
@@ -710,7 +711,9 @@ export default function CreatorHomeV2() {
         {/* ═══ AI PORTAL TAB (desktop-only) ═══ */}
         {isElectron && (
           <div className={`ch2-tab-panel${activeTab === 'ai-portal' ? ' active' : ''}`}>
-            <AIPortal />
+            <Suspense fallback={<div style={{ padding: 20, color: 'rgba(255,255,255,0.4)' }}>Loading AI Portal...</div>}>
+              <AIPortal />
+            </Suspense>
           </div>
         )}
       </div>
