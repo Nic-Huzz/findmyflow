@@ -277,7 +277,7 @@ export default function Reports() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `findmyflow-report-${viewMode}-${periodRange.label.replace(/\s/g, '-')}.csv`
+    a.download = `viberise-report-${viewMode}-${periodRange.label.replace(/\s/g, '-')}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
