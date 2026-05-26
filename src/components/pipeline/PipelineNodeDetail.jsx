@@ -12,7 +12,7 @@ import { hapticLight, hapticSuccess } from '../../lib/haptics'
 // Module definitions per node
 const NODE_MODULES = {
   attract: [
-    { key: 'leads_strategy', name: 'Leads Strategy', icon: '📢', desc: 'Define where your audience hangs out', route: '/campaign-creation' },
+    { key: 'leads_strategy', name: 'Leads Strategy', icon: '📢', desc: 'Define where your audience hangs out', route: '/leads-strategy' },
     { key: 'blow_up_brand', name: 'Blow Up Your Brand', icon: '🔥', desc: 'Find your remarkable angle', route: '/create/remarkable' },
     { key: 'validation', name: 'Validation', icon: '🔍', desc: 'Learn your audience\'s language', route: '/validation-flows', multi: 'Capture, Convert' },
   ],
@@ -29,7 +29,7 @@ const NODE_MODULES = {
   ],
   deliver: [
     { key: 'journey_designer', name: 'Journey Designer', icon: '🎨', desc: 'AI runsheet for this event', route: '/create' },
-    { key: 'testing', name: 'Testing', icon: '🔬', desc: 'Test with real users', route: '/testing', multi: 'Convert' },
+    { key: 'testing', name: 'Testing', icon: '🔬', desc: 'Test with real users', route: '/testing-explainer', multi: 'Convert' },
   ],
   grow: [
     { key: 'upsell', name: 'Upsell Offer', icon: '⬆️', desc: 'What do they buy next?', route: '/upsell-offer' },
@@ -48,7 +48,7 @@ const NODE_TOOLS = {
   ],
   capture: [
     { name: 'Landing Page', icon: '🌐', desc: 'Build/update capture page', route: '/crm/pages' },
-    { name: 'Email Sequence', icon: '✉️', desc: 'Welcome nurture after signup', route: '/crm/email' },
+    { name: 'Email Sequence', icon: '✉️', desc: 'Welcome nurture after signup', route: '/crm/email-sequences' },
   ],
   convert: [
     { name: 'Sales Pipeline', icon: '💼', desc: 'Track bookings', route: '/crm/sales' },
