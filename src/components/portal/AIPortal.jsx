@@ -1,8 +1,7 @@
 /**
- * AIPortal.jsx — AI Portal mode switcher
+ * AIPortal.jsx — AI Portal mode switcher (desktop-only)
  *
- * Desktop-only tab within /create. Contains 4 modes:
- *   Growth   — Growth Line pipeline (computed from existing data)
+ * 3 modes:
  *   App Build — health scanner + terminal + preview
  *   Documents — document processing + output panel
  *   Agents   — Zarlo + Perry AI chat
@@ -18,14 +17,13 @@ import TerminalDrawer from './TerminalDrawer'
 import './portal.css'
 
 const MODES = [
-  { key: 'growth', label: 'Growth', icon: '📈' },
   { key: 'build', label: 'App Build', icon: '🔨' },
   { key: 'documents', label: 'Documents', icon: '📄' },
   { key: 'agents', label: 'Agents', icon: '🤖' },
 ]
 
 export default function AIPortal() {
-  const [activeMode, setActiveMode] = useState('growth')
+  const [activeMode, setActiveMode] = useState('agents')
   const [terminalOpen, setTerminalOpen] = useState(false)
   const [pendingPrompt, setPendingPrompt] = useState(null)
 
@@ -64,7 +62,6 @@ export default function AIPortal() {
       </div>
 
       <div className="portal-mode-content" style={terminalOpen ? { paddingBottom: '45vh' } : undefined}>
-        {activeMode === 'growth' && <PlaceholderMode label="Growth Line" description="The Growth Line is now in the Experiences tab. Go to Create → click an experience to see your pipeline." />}
         {activeMode === 'build' && <AppBuildMode />}
         {activeMode === 'documents' && <DocumentsMode runInTerminal={runInTerminal} />}
         {activeMode === 'agents' && <AgentsMode />}
@@ -76,15 +73,6 @@ export default function AIPortal() {
         pendingPrompt={pendingPrompt}
         onPromptSent={handlePromptSent}
       />
-    </div>
-  )
-}
-
-function PlaceholderMode({ label, description }) {
-  return (
-    <div className="portal-placeholder">
-      <div className="portal-placeholder-label">{label}</div>
-      <div className="portal-placeholder-desc">{description}</div>
     </div>
   )
 }
