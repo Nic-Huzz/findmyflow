@@ -191,6 +191,7 @@ export async function createDeal(userId, dealData) {
       expected_close_date: dealData.expected_close_date || null,
       notes: dealData.notes || null,
       conversation_screenshot_url: dealData.conversation_screenshot_url || null,
+      experience_id: dealData.experience_id || null,
     })
     .select()
     .single()

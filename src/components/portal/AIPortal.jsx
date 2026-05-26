@@ -11,7 +11,6 @@
  */
 
 import { useState, useCallback } from 'react'
-import GrowthDashboard from './GrowthDashboard'
 import AppBuildMode from './AppBuildMode'
 import DocumentsMode from './DocumentsMode'
 import AgentsMode from './AgentsMode'
@@ -65,7 +64,7 @@ export default function AIPortal() {
       </div>
 
       <div className="portal-mode-content" style={terminalOpen ? { paddingBottom: '45vh' } : undefined}>
-        {activeMode === 'growth' && <GrowthDashboard runInTerminal={runInTerminal} />}
+        {activeMode === 'growth' && <PlaceholderMode label="Growth Line" description="The Growth Line is now in the Experiences tab. Go to Create → click an experience to see your pipeline." />}
         {activeMode === 'build' && <AppBuildMode />}
         {activeMode === 'documents' && <DocumentsMode runInTerminal={runInTerminal} />}
         {activeMode === 'agents' && <AgentsMode />}
