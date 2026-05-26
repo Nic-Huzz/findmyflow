@@ -23,7 +23,7 @@ const MODULE_CHECKS = {
   lead_magnet: (data) => data.products?.some(p => p.money_model_tier === 'attraction'),
   funnel_builder: (data) => data.flowSessions?.some(f => f.flow_type === 'funnel_builder'),
   // Convert modules
-  grand_slam: (data) => data.flowSessions?.some(f => f.flow_type === 'grand_slam_offer'),
+  grand_slam: (data) => data.flowSessions?.some(f => f.flow_type === 'grand_slam_offer' || f.flow_type === 'offer_builder_v2'),
   offer_builder: (data) => data.flowSessions?.some(f => f.flow_type === '100m_offer'),
   product_selection: (data) => data.flowSessions?.some(f => f.flow_type === 'product_selection'),
   launch_readiness: (data) => data.flowSessions?.some(f => f.flow_type === 'launch_readiness'),
