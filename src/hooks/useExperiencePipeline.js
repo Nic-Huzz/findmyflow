@@ -245,6 +245,7 @@ export default function useExperiencePipeline(experienceId) {
     checklists,
     wahoos,
     experience,
+    userId,
     loading,
     isModuleComplete,
     refresh: fetchPipeline,

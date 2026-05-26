@@ -73,7 +73,7 @@ const NODE_CHECKLIST = {
   grow: 'followup',
 }
 
-export default function PipelineNodeDetail({ node, experience, checklists, wahoos, isModuleComplete, navigate }) {
+export default function PipelineNodeDetail({ node, experience, userId, checklists, wahoos, isModuleComplete, navigate }) {
   const modules = (NODE_MODULES[node.key] || []).filter(m => !m.certification)
   const tools = NODE_TOOLS[node.key] || []
   const checklistSection = NODE_CHECKLIST[node.key]
@@ -180,7 +180,7 @@ export default function PipelineNodeDetail({ node, experience, checklists, wahoo
         {/* Checklist */}
         {checklist && checklist.total > 0 && (
           <CollapsibleSection title={`${checklistSection.charAt(0).toUpperCase() + checklistSection.slice(1)} Checklist · ${checklist.done}/${checklist.total}`}>
-            <ChecklistItems experienceId={experience.id} section={checklistSection} userId={experience.user_id} />
+            <ChecklistItems experienceId={experience.id} section={checklistSection} userId={userId} />
           </CollapsibleSection>
         )}
       </div>

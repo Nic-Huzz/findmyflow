@@ -14,7 +14,7 @@ import { hapticLight } from '../../lib/haptics'
 import './pipeline.css'
 
 export default function ExperiencePipeline({ experienceId, onBack }) {
-  const { nodes, checklists, wahoos, experience, loading, isModuleComplete, refresh } = useExperiencePipeline(experienceId)
+  const { nodes, checklists, wahoos, experience, userId, loading, isModuleComplete, refresh } = useExperiencePipeline(experienceId)
   const [selectedKey, setSelectedKey] = useState(null)
   const navigate = useNavigate()
 
@@ -86,6 +86,7 @@ export default function ExperiencePipeline({ experienceId, onBack }) {
         <PipelineNodeDetail
           node={selectedNode}
           experience={experience}
+          userId={userId}
           checklists={checklists}
           wahoos={wahoos}
           isModuleComplete={isModuleComplete}

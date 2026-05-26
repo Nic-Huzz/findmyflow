@@ -162,6 +162,11 @@ export default function ExperienceAttractionStack() {
   const experienceId = searchParams.get('experienceId')
   const { user } = useAuth()
 
+  // Redirect if no experienceId
+  useEffect(() => {
+    if (!experienceId) navigate('/create', { replace: true })
+  }, [experienceId, navigate])
+
   const [step, setStep] = useState('questions') // questions | results | saving
   const [questionIndex, setQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState({})
@@ -202,21 +207,33 @@ export default function ExperienceAttractionStack() {
     if (!experienceId || !user) return
     setStep('saving')
 
-    // Collect all checklist items from selected strategies
+    // Get existing custom marketing items to avoid duplicates
+    const { data: existing } = await supabase.from('experience_checklist_items')
+      .select('label')
+      .eq('experience_id', experienceId)
+      .eq('user_id', user.id)
+      .eq('section', 'marketing')
+      .eq('is_custom', true)
+
+    const existingLabels = new Set((existing || []).map(e => e.label))
+
+    // Collect new checklist items, skip duplicates
     const items = []
     STRATEGIES.forEach(s => {
       if (selected[s.id]) {
-        s.checklistItems.forEach((label, i) => {
-          items.push({
-            experience_id: experienceId,
-            user_id: user.id,
-            phase: 'pre',
-            section: 'marketing',
-            label,
-            sort_order: items.length,
-            is_custom: true,
-            completed: false,
-          })
+        s.checklistItems.forEach(label => {
+          if (!existingLabels.has(label)) {
+            items.push({
+              experience_id: experienceId,
+              user_id: user.id,
+              phase: 'pre',
+              section: 'marketing',
+              label,
+              sort_order: items.length,
+              is_custom: true,
+              completed: false,
+            })
+          }
         })
       }
     })

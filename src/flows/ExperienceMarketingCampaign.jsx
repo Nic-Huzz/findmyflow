@@ -144,6 +144,11 @@ export default function ExperienceMarketingCampaign() {
   const experienceId = searchParams.get('experienceId')
   const { user } = useAuth()
 
+  // Redirect if no experienceId
+  useEffect(() => {
+    if (!experienceId) navigate('/create', { replace: true })
+  }, [experienceId, navigate])
+
   const [step, setStep] = useState('questions')
   const [questionIndex, setQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState({})
@@ -190,20 +195,32 @@ export default function ExperienceMarketingCampaign() {
     if (!experienceId || !user) return
     setStep('saving')
 
+    // Get existing custom marketing items to avoid duplicates
+    const { data: existing } = await supabase.from('experience_checklist_items')
+      .select('label')
+      .eq('experience_id', experienceId)
+      .eq('user_id', user.id)
+      .eq('section', 'marketing')
+      .eq('is_custom', true)
+
+    const existingLabels = new Set((existing || []).map(e => e.label))
+
     const items = []
     CAMPAIGN_ITEMS.forEach(ci => {
       if (selected[ci.id]) {
         ci.checklistItems.forEach(label => {
-          items.push({
-            experience_id: experienceId,
-            user_id: user.id,
-            phase: 'pre',
-            section: 'marketing',
-            label,
-            sort_order: items.length,
-            is_custom: true,
-            completed: false,
-          })
+          if (!existingLabels.has(label)) {
+            items.push({
+              experience_id: experienceId,
+              user_id: user.id,
+              phase: 'pre',
+              section: 'marketing',
+              label,
+              sort_order: items.length,
+              is_custom: true,
+              completed: false,
+            })
+          }
         })
       }
     })
