@@ -9,8 +9,8 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "electron:dev": "vite build && electron .",
-    "electron:build": "vite build && electron-builder --config electron/builder.config.cjs",
+    "electron:dev": "vite build --base ./ && electron .",
+    "electron:build": "vite build --base ./ && electron-builder --config electron/builder.config.cjs",
     "db:push": "supabase db push",
     "db:pull": "supabase db pull",
     "db:diff": "supabase db diff -f",
@@ -37,7 +37,6 @@
     "canvas-confetti": "^1.9.4",
     "d3": "^7.9.0",
     "dompurify": "^3.3.0",
-    "express": "^4.21.0",
     "html2canvas": "^1.4.1",
     "papaparse": "^5.5.3",
     "react": "^18.2.0",
@@ -45,8 +44,7 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.9.4",
     "remark-gfm": "^4.0.1",
-    "remotion": "^4.0.419",
-    "ws": "^8.18.0"
+    "remotion": "^4.0.419"
   },
   "optionalDependencies": {
     "node-pty": "^1.2.0-beta.11"
@@ -60,6 +58,8 @@
     "dotenv": "^16.3.1",
     "electron": "^35.0.0",
     "electron-builder": "^26.0.0",
+    "express": "^4.21.0",
+    "ws": "^8.18.0",
     "eslint": "^8.55.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
