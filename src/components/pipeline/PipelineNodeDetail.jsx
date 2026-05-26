@@ -10,32 +10,33 @@ import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 
 // Module definitions per node
+// certification: true = hidden in v1, shown in certification tier
 const NODE_MODULES = {
   attract: [
     { key: 'leads_strategy', name: 'Leads Strategy', icon: '📢', desc: 'Define where your audience hangs out', route: '/leads-strategy' },
     { key: 'blow_up_brand', name: 'Blow Up Your Brand', icon: '🔥', desc: 'Find your remarkable angle', route: '/create/remarkable' },
-    { key: 'validation', name: 'Validation', icon: '🔍', desc: 'Learn your audience\'s language', route: '/validation-flows', multi: 'Capture, Convert' },
+    { key: 'validation', name: 'Validation', icon: '🔍', desc: 'Deep audience research', route: '/validation-flows', multi: 'Capture, Convert', certification: true },
   ],
   capture: [
     { key: 'attraction_offer', name: 'Attraction Stack', icon: '🎁', desc: 'Choose your attraction strategies', route: '/create/attraction-stack', passExperienceId: true },
     { key: 'lead_magnet', name: 'Marketing Campaign', icon: '📣', desc: 'Build your marketing campaign', route: '/create/marketing-campaign', passExperienceId: true },
-    { key: 'funnel_builder', name: 'Funnel Builder', icon: '🗺️', desc: 'Map stranger → lead journey', route: '/funnel-builder' },
+    { key: 'funnel_builder', name: 'Funnel Builder', icon: '🗺️', desc: 'Deep funnel mapping', route: '/funnel-builder', certification: true },
   ],
   convert: [
-    { key: 'grand_slam', name: 'Grand Slam Offer', icon: '🎯', desc: 'Bonuses + guarantee + scarcity', route: '/offer-builder' },
-    { key: 'offer_builder', name: '100M Offer Builder', icon: '💰', desc: 'Dream outcome, price, proof', route: '/offer-builder' },
-    { key: 'product_selection', name: 'Product Selection', icon: '📦', desc: 'Choose what to build', route: '/product-selection' },
     { key: 'launch_readiness', name: 'Launch Readiness', icon: '🚀', desc: 'Pre-launch checklist', route: '/launch-readiness' },
+    { key: 'grand_slam', name: 'Grand Slam Offer', icon: '🎯', desc: 'Bonuses + guarantee + scarcity', route: '/offer-builder', certification: true },
+    { key: 'offer_builder', name: '100M Offer Builder', icon: '💰', desc: 'Dream outcome, price, proof', route: '/offer-builder', certification: true },
+    { key: 'product_selection', name: 'Product Selection', icon: '📦', desc: 'Build a full product suite', route: '/product-selection', certification: true },
   ],
   deliver: [
     { key: 'journey_designer', name: 'Journey Designer', icon: '🎨', desc: 'AI runsheet for this event', route: '/create' },
-    { key: 'testing', name: 'Testing', icon: '🔬', desc: 'Test with real users', route: '/testing-explainer', multi: 'Convert' },
+    { key: 'testing', name: 'Testing', icon: '🔬', desc: 'Test with real users', route: '/testing-explainer', multi: 'Convert', certification: true },
   ],
   grow: [
-    { key: 'upsell', name: 'Upsell Offer', icon: '⬆️', desc: 'What do they buy next?', route: '/upsell-offer' },
-    { key: 'downsell', name: 'Downsell Offer', icon: '⬇️', desc: 'Lower-tier alternative', route: '/downsell-offer' },
-    { key: 'continuity', name: 'Continuity Offer', icon: '🔁', desc: 'Recurring membership', route: '/continuity-offer' },
-    { key: 'scale_income', name: 'Scale Income', icon: '📈', desc: '3-layer offer stack', route: '/create/scale-income' },
+    { key: 'scale_income', name: 'Scale Income', icon: '📈', desc: 'See your 3-layer offer stack', route: '/create/scale-income' },
+    { key: 'upsell', name: 'Upsell Offer', icon: '⬆️', desc: 'Design your upsell', route: '/upsell-offer', certification: true },
+    { key: 'downsell', name: 'Downsell Offer', icon: '⬇️', desc: 'Design your downsell', route: '/downsell-offer', certification: true },
+    { key: 'continuity', name: 'Continuity Offer', icon: '🔁', desc: 'Design recurring offer', route: '/continuity-offer', certification: true },
   ],
 }
 
@@ -73,7 +74,7 @@ const NODE_CHECKLIST = {
 }
 
 export default function PipelineNodeDetail({ node, experience, checklists, wahoos, isModuleComplete, navigate }) {
-  const modules = NODE_MODULES[node.key] || []
+  const modules = (NODE_MODULES[node.key] || []).filter(m => !m.certification)
   const tools = NODE_TOOLS[node.key] || []
   const checklistSection = NODE_CHECKLIST[node.key]
   const checklist = checklistSection ? checklists[checklistSection] : null
