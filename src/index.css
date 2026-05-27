@@ -10,15 +10,16 @@
   --soft-gray: #e9ecef;
   --text-gray: #495057;
   --border-gray: #dee2e6;
-  /* iOS safe area insets */
-  --sat: env(safe-area-inset-top, 0px);
-  --sab: env(safe-area-inset-bottom, 0px);
 }
 
-/* iOS safe area — push content below status bar */
+/* iOS safe area — extend background into status bar area, pad content down */
+html {
+  background: var(--warm-gray, #f8f9fa);
+}
 body {
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--warm-gray, #f8f9fa);
 }
 
 /* ============ GLOBAL ANIMATED TEXT ============ */
