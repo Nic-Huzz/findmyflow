@@ -8,7 +8,7 @@
   },
   "ios": {
     "contentInset": "automatic",
-    "backgroundColor": "#0a0a0f"
+    "backgroundColor": "#f8f9fa"
   },
   "plugins": {
     "StatusBar": {
