@@ -101,7 +101,7 @@ export default function ExperienceCreate() {
 
       // Fetch previous stats
       const [{ count: attendeeCount }, { data: costsData }] = await Promise.all([
-        supabase.from('experience_attendees').select('id', { count: 'exact', head: true }).eq('experience_id', runAgainFromId),
+        supabase.from('contact_experiences').select('id', { count: 'exact', head: true }).eq('experience_id', runAgainFromId).eq('user_id', authUser.id).eq('role', 'attendee'),
         supabase.from('experience_costs').select('amount').eq('experience_id', runAgainFromId),
       ])
       if (!cancelled) {
