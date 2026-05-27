@@ -169,7 +169,7 @@ export default function CreatorHomeV2() {
         supabase.from('creator_assessments').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('user_stage_progress').select('pay_rent_model, current_journey_level, hero_avatar_url').eq('user_id', userId).maybeSingle(),
         supabase.from('remarkable_angles').select('id, wound_problem, rule_identified, combination_insight, extreme_action_plan, ai_rule_statement, ai_tribe_statement').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
-        supabase.from('experience_attendees').select('contact_id, experience_id').eq('user_id', userId),
+        supabase.from('contact_experiences').select('contact_id, experience_id').eq('user_id', userId),
         supabase.from('lead_flow_profiles').select('essence_archetype, custom_essence_image, custom_essence_name').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('quest_completions').select('points_earned').eq('user_id', userId).eq('quest_category', 'Movement'),
         supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'skills').eq('cluster_stage', 'final'),
@@ -596,15 +596,15 @@ export default function CreatorHomeV2() {
           {/* KPIs */}
           <div className="ch2-kpi-grid">
             <div className="ch2-kpi">
-              <div className="ch2-kpi-val">{dashboardKPIs.totalAttendees || '—'}</div>
+              <div className="ch2-kpi-val">{dashboardKPIs.totalAttendees ?? '—'}</div>
               <div className="ch2-kpi-label">Total Attendees</div>
             </div>
             <div className="ch2-kpi">
-              <div className="ch2-kpi-val">{dashboardKPIs.repeatRate ? `${dashboardKPIs.repeatRate}%` : '—'}</div>
+              <div className="ch2-kpi-val">{`${dashboardKPIs.repeatRate ?? 0}%`}</div>
               <div className="ch2-kpi-label">Repeat Rate</div>
             </div>
             <div className="ch2-kpi">
-              <div className="ch2-kpi-val">{past.length || '—'}</div>
+              <div className="ch2-kpi-val">{past.length}</div>
               <div className="ch2-kpi-label">Experiences Run</div>
             </div>
             <div className="ch2-kpi">

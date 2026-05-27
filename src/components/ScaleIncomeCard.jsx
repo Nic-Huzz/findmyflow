@@ -19,37 +19,31 @@ const LAYER_META = {
 export default function ScaleIncomeCard({ experienceId, userId, ticketPrice }) {
   const [model, setModel] = useState(null)
   const [pitchNext, setPitchNext] = useState(false)
+  const [layerOverride, setLayerOverride] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!userId) return
-    supabase
-      .from('creator_assessments')
-      .select('attraction_detail, core_detail, continuity_detail')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data && (data.attraction_detail || data.core_detail || data.continuity_detail)) {
-          setModel(data)
-        }
-        setLoading(false)
-      })
-  }, [userId])
-
-  // Load pitch toggle from experience
-  useEffect(() => {
-    if (!experienceId) return
-    supabase
-      .from('experiences')
-      .select('pitch_next_offer')
-      .eq('id', experienceId)
-      .single()
-      .then(({ data }) => {
-        if (data?.pitch_next_offer) setPitchNext(true)
-      })
-  }, [experienceId])
+    Promise.all([
+      supabase
+        .from('creator_assessments')
+        .select('attraction_detail, core_detail, continuity_detail')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      experienceId
+        ? supabase.from('experiences').select('pitch_next_offer, layer_override').eq('id', experienceId).single()
+        : Promise.resolve({ data: null }),
+    ]).then(([{ data: modelData }, { data: expData }]) => {
+      if (modelData && (modelData.attraction_detail || modelData.core_detail || modelData.continuity_detail)) {
+        setModel(modelData)
+      }
+      if (expData?.pitch_next_offer) setPitchNext(true)
+      if (expData?.layer_override) setLayerOverride(expData.layer_override)
+      setLoading(false)
+    })
+  }, [userId, experienceId])
 
   const handleTogglePitch = async (val) => {
     hapticLight()
@@ -62,10 +56,15 @@ export default function ScaleIncomeCard({ experienceId, userId, ticketPrice }) {
 
   if (loading || !model) return null
 
-  // Detect which layer this experience is based on price
-  const detectedLayer = !ticketPrice || ticketPrice === 0
-    ? 'attraction'
-    : 'core'
+  // Detect which layer this experience is based on override or price
+  const detectedLayer = layerOverride
+    || (!ticketPrice || ticketPrice === 0 ? 'attraction' : 'core')
+
+  const handleLayerSelect = async (key) => {
+    hapticLight()
+    setLayerOverride(key)
+    await supabase.from('experiences').update({ layer_override: key }).eq('id', experienceId)
+  }
 
   const layers = [
     { key: 'attraction', detail: model.attraction_detail },
@@ -94,7 +93,7 @@ export default function ScaleIncomeCard({ experienceId, userId, ticketPrice }) {
           const meta = LAYER_META[l.key]
           const isCurrent = l.key === detectedLayer
           return (
-            <div key={l.key} className={`sic-layer ${isCurrent ? 'sic-current' : ''}`}>
+            <div key={l.key} className={`sic-layer ${isCurrent ? 'sic-current' : ''}`} onClick={() => handleLayerSelect(l.key)} style={{ cursor: 'pointer' }}>
               <div className="sic-layer-dot" style={{ background: meta.color }} />
               <div className="sic-layer-info">
                 <span className="sic-layer-label">{meta.label}</span>

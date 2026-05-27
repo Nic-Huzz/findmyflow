@@ -379,8 +379,8 @@ export default function StrikeDesignFlow() {
 
           <div className="stk-nav">
             <button className="stk-back-btn" onClick={() => setStep(STEPS.TYPE)}>Back</button>
-            <button className="stk-cta" onClick={() => { hapticLight(); setStep(STEPS.WRITE) }}>
-              {typeof selectedSuggestion === 'number' ? 'Use this idea' : 'Write my own'}
+            <button className="stk-cta" disabled={generating} onClick={() => { hapticLight(); setStep(STEPS.WRITE) }}>
+              {generating ? 'Generating...' : typeof selectedSuggestion === 'number' ? 'Use this idea' : 'Write my own'}
             </button>
           </div>
         </div>

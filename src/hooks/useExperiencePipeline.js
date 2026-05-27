@@ -78,11 +78,12 @@ export default function useExperiencePipeline(experienceId) {
       supabase.from('contact_experiences')
         .select('id', { count: 'exact', head: true })
         .eq('experience_id', experienceId).eq('user_id', userId),
-      // Convert: attendees
-      supabase.from('experience_attendees')
+      // Convert: attendees (from contact_experiences where role = attendee)
+      supabase.from('contact_experiences')
         .select('id', { count: 'exact', head: true })
         .eq('experience_id', experienceId)
-        .eq('user_id', userId),
+        .eq('user_id', userId)
+        .eq('role', 'attendee'),
       // Convert: revenue
       supabase.from('sales_deals')
         .select('value, status')

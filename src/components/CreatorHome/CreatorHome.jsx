@@ -124,7 +124,7 @@ export default function CreatorHome() {
     try {
       // Fetch all attendance records, compute unique + repeat from one query
       const { data: attendanceData } = await supabase
-        .from('experience_attendees')
+        .from('contact_experiences')
         .select('contact_id, experience_id')
         .eq('user_id', userId)
 
@@ -200,7 +200,7 @@ export default function CreatorHome() {
           .limit(1)
           .maybeSingle(),
         supabase
-          .from('experience_attendees')
+          .from('contact_experiences')
           .select('contact_id, experience_id')
           .eq('user_id', userId),
         supabase
