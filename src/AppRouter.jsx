@@ -459,12 +459,11 @@ function AppRouter() {
           <LocationAwareErrorBoundary>
           <SuspenseRoutes>
             <Routes>
-              {/* Landing Page - Public */}
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
-
-              {/* Signup/Onboarding */}
+              {/* Home - Onboarding */}
+              <Route path="/" element={<PlaySkillsOnboarding />} />
               <Route path="/get-started" element={<PlaySkillsOnboarding />} />
+              <Route path="/landing-page" element={<LandingPage />} />
+              <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
               <Route path="/essence-identify" element={<EssenceIdentify />} />
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
               <Route path="/log-in" element={<PersonaAssessment />} />
