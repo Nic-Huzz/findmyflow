@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useCreateExperience, daysUntil } from '../hooks/useExperienceData'
+import { createTemplate } from '../lib/experienceTemplateService'
 import { hapticSuccess, hapticLight } from '../lib/haptics'
 import './ExperienceCreate.css'
 
@@ -32,6 +33,7 @@ export default function ExperienceCreate() {
   const [experienceType, setExperienceType] = useState(templateType || 'workshop')
   const [validationError, setValidationError] = useState('')
   const [templateSource, setTemplateSource] = useState(null)
+  const [saveToLibrary, setSaveToLibrary] = useState(!templateId)
 
   useEffect(() => {
     document.title = runAgainFromId ? 'Run Again' : templateId ? 'Run from Template' : 'New Experience'
@@ -125,13 +127,35 @@ export default function ExperienceCreate() {
 
     hapticLight()
     try {
+      const { data: { user } } = await supabase.auth.getUser()
+      let resolvedTemplateId = templateId || null
+
+      // Also save to library if checkbox is checked and not already from a template
+      if (saveToLibrary && !templateId && user) {
+        try {
+          const tmpl = await createTemplate(user.id, {
+            name: name.trim(),
+            experience_type: experienceType,
+            duration_minutes: null,
+            runsheet: [
+              { phase: 'opening', duration: 5, notes: '' },
+              { phase: 'main', duration: 30, notes: '' },
+              { phase: 'closing', duration: 5, notes: '' },
+            ],
+          })
+          resolvedTemplateId = tmpl.id
+        } catch (err) {
+          console.warn('Save to library failed:', err)
+        }
+      }
+
       const exp = await createExperience({
         name,
         experience_date: dateStr || null,
         previous_experience_id: runAgainFromId || null,
         ticket_price: ticketPrice ? parseFloat(ticketPrice) : null,
         experience_type: experienceType,
-        template_id: templateId || null,
+        template_id: resolvedTemplateId,
         runAgainFromId: runAgainFromId || null,
       })
       hapticSuccess()
@@ -298,6 +322,18 @@ export default function ExperienceCreate() {
           </label>
 
           <p className="exp-pricing-hint">Set your full pricing in the Details tab after creating.</p>
+
+          {!templateId && (
+            <label className="exp-checkbox-row">
+              <input
+                type="checkbox"
+                checked={saveToLibrary}
+                onChange={e => setSaveToLibrary(e.target.checked)}
+              />
+              <span className="exp-checkbox-label">Also save to library</span>
+              <span className="exp-checkbox-hint">Create a reusable template you can run again</span>
+            </label>
+          )}
 
           {(validationError || error) && (
             <div className="exp-form-error">{validationError || error}</div>
