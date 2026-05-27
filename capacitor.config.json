@@ -2,6 +2,10 @@
   "appId": "com.nichuzz.viberise",
   "appName": "Vibe Rise",
   "webDir": "dist",
+  "server": {
+    "url": "https://viberise.nichuzz.com",
+    "cleartext": false
+  },
   "ios": {
     "contentInset": "automatic",
     "backgroundColor": "#0a0a0f"
