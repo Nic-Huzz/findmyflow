@@ -63,11 +63,22 @@ export const AuthProvider = ({ children }) => {
     setupNotifications()
   }, [user])
 
+  // App Store review test account
+  const TEST_EMAIL = 'apple-review@test.com'
+  const TEST_CODE = '000000'
+  const TEST_PASSWORD = 'VibeRise-Review-2026!'
+
   // Sign in with verification code
   // shouldCreateUser: true (default) for signup flows, false for login-only (AuthGate)
   const signInWithCode = async (email, { shouldCreateUser = true } = {}) => {
     try {
       setLoading(true)
+
+      // Test account: skip sending OTP, pretend it was sent
+      if (email.toLowerCase() === TEST_EMAIL) {
+        console.log('🔐 Test account — skipping OTP send')
+        return { success: true, message: 'Check your email for the verification code!' }
+      }
 
       console.log('🔐 Sending verification code to:', email)
 
@@ -97,6 +108,17 @@ export const AuthProvider = ({ children }) => {
   const verifyCode = async (email, token) => {
     try {
       setLoading(true)
+
+      // Test account: sign in with password instead of OTP
+      if (email.toLowerCase() === TEST_EMAIL && token === TEST_CODE) {
+        console.log('🔐 Test account — signing in with password')
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: TEST_EMAIL,
+          password: TEST_PASSWORD,
+        })
+        if (error) throw error
+        return { success: true, user: data.user }
+      }
 
       console.log('🔐 Verifying code for:', email)
 
