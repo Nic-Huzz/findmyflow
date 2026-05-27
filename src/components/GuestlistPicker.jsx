@@ -56,12 +56,12 @@ export default function GuestlistPicker({ experienceId, userId, onGuestlistChang
       setGuestIds(prev => { const next = new Set(prev); next.delete(contactId); return next })
       onGuestlistChange?.()
     } else {
-      await supabase.from('contact_experiences').insert({
+      await supabase.from('contact_experiences').upsert({
         experience_id: experienceId,
         contact_id: contactId,
         user_id: userId,
         role: 'attendee',
-      })
+      }, { onConflict: 'contact_id,experience_id' })
       setGuestIds(prev => new Set([...prev, contactId]))
       hapticSuccess()
       onGuestlistChange?.()
@@ -90,12 +90,12 @@ export default function GuestlistPicker({ experienceId, userId, onGuestlistChang
     if (!error && data) {
       setContacts(prev => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)))
       // Auto-add to guestlist
-      await supabase.from('contact_experiences').insert({
+      await supabase.from('contact_experiences').upsert({
         experience_id: experienceId,
         contact_id: data.id,
         user_id: userId,
         role: 'attendee',
-      })
+      }, { onConflict: 'contact_id,experience_id' })
       setGuestIds(prev => new Set([...prev, data.id]))
       hapticSuccess()
       onGuestlistChange?.()
