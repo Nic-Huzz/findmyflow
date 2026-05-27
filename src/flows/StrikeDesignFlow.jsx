@@ -57,7 +57,7 @@ export default function StrikeDesignFlow() {
   // User selections
   const [outcome, setOutcome] = useState(null)
   const [strikeType, setStrikeType] = useState(null)
-  const [selectedSuggestion, setSelectedSuggestion] = useState(null)
+  const [selectedSuggestion, setSelectedSuggestion] = useState(undefined)
   const [strikeTitle, setStrikeTitle] = useState('')
   const [strikeDescription, setStrikeDescription] = useState('')
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
@@ -347,7 +347,7 @@ export default function StrikeDesignFlow() {
                   onClick={() => {
                     hapticLight()
                     if (selectedSuggestion === i) {
-                      setSelectedSuggestion(null)
+                      setSelectedSuggestion(undefined)
                       setStrikeTitle('')
                       setStrikeDescription('')
                     } else {
@@ -363,10 +363,10 @@ export default function StrikeDesignFlow() {
                 </button>
               ))}
               <button
-                className={`stk-suggestion stk-suggestion-custom ${selectedSuggestion === null ? 'stk-suggestion-selected' : ''}`}
+                className={`stk-suggestion stk-suggestion-custom ${selectedSuggestion === 'custom' ? 'stk-suggestion-selected' : ''}`}
                 onClick={() => {
                   hapticLight()
-                  setSelectedSuggestion(null)
+                  setSelectedSuggestion('custom')
                   setStrikeTitle('')
                   setStrikeDescription('')
                 }}
@@ -380,7 +380,7 @@ export default function StrikeDesignFlow() {
           <div className="stk-nav">
             <button className="stk-back-btn" onClick={() => setStep(STEPS.TYPE)}>Back</button>
             <button className="stk-cta" onClick={() => { hapticLight(); setStep(STEPS.WRITE) }}>
-              {selectedSuggestion !== null ? 'Use this idea' : 'Write my own'}
+              {typeof selectedSuggestion === 'number' ? 'Use this idea' : 'Write my own'}
             </button>
           </div>
         </div>
