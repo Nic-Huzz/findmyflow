@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/create — Mockup with Growth Line</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ─── Creator Portal Header ─── */
+  .creator-header {
+    padding: 20px 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .creator-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .creator-info { flex: 1; }
+  .creator-name { font-size: 16px; font-weight: 700; }
+  .creator-sub { font-size: 12px; color: rgba(255,255,255,0.4); }
+  .creator-xp { font-size: 12px; color: #E9A23B; font-weight: 600; }
+
+  /* ─── Tabs ─── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    padding: 16px 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .tab {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .tab:hover { color: rgba(255,255,255,0.6); }
+  .tab.active { color: #fff; border-bottom-color: #5e17eb; }
+
+  /* ─── Tab Panels ─── */
+  .panel { display: none; padding: 16px; }
+  .panel.active { display: block; }
+
+  /* ─── Experience List ─── */
+  .exp-section-label {
+    font-size: 11px; font-weight: 700;
+    color: rgba(255,255,255,0.25);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin: 12px 0 8px;
+  }
+
+  .exp-card {
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .exp-card:hover { background: rgba(94,23,235,0.06); border-color: rgba(94,23,235,0.15); }
+  .exp-card:active { transform: scale(0.99); }
+
+  .exp-type-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: rgba(94,23,235,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .exp-info { flex: 1; }
+  .exp-name { font-size: 14px; font-weight: 600; }
+  .exp-meta { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+  .exp-meta span { margin-right: 8px; }
+
+  /* Mini pipeline in card */
+  .exp-mini-pipeline {
+    display: flex;
+    gap: 3px;
+    margin-top: 6px;
+  }
+  .exp-mini-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .exp-mini-dot.good { background: #22c55e; }
+  .exp-mini-dot.warn { background: #eab308; }
+  .exp-mini-dot.bad { background: #ef4444; }
+  .exp-mini-dot.empty { background: rgba(255,255,255,0.1); }
+
+  .exp-arrow { font-size: 14px; color: rgba(255,255,255,0.15); flex-shrink: 0; }
+
+  .exp-add-btn {
+    width: 100%; padding: 12px;
+    border-radius: 10px; border: 1px dashed rgba(255,255,255,0.1);
+    background: transparent; color: rgba(255,255,255,0.3);
+    font-size: 13px; cursor: pointer; transition: all 0.15s;
+  }
+  .exp-add-btn:hover { border-color: #5e17eb; color: rgba(255,255,255,0.6); }
+
+  /* ─── Experience Detail (Growth Line view) ─── */
+  .exp-detail {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: #0a0a0f;
+    z-index: 50;
+    overflow-y: auto;
+    padding-bottom: 80px;
+    animation: slideRight 0.2s ease;
+  }
+  .exp-detail.visible { display: block; }
+
+  @keyframes slideRight {
+    from { transform: translateX(30px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .detail-topbar {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky;
+    top: 0;
+    background: #0a0a0f;
+    z-index: 10;
+  }
+  .back-btn {
+    background: none; border: none; color: rgba(255,255,255,0.5);
+    font-size: 18px; cursor: pointer; padding: 4px;
+  }
+  .back-btn:hover { color: #fff; }
+  .detail-event-name { font-size: 15px; font-weight: 700; flex: 1; }
+  .detail-event-badge {
+    font-size: 10px; padding: 3px 8px; border-radius: 4px;
+    background: rgba(34,197,94,0.12); color: #22c55e; font-weight: 600;
+  }
+
+  /* Pipeline in detail */
+  .pipeline {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    padding: 14px 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pipeline::-webkit-scrollbar { height: 0; }
+
+  .node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 64px;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+  }
+  .node:hover { background: rgba(94,23,235,0.08); }
+  .node.selected { background: rgba(94,23,235,0.12); border-color: #5e17eb; }
+
+  .node-ring {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; position: relative;
+  }
+  .node-ring.good { background: rgba(34,197,94,0.12); }
+  .node-ring.warn { background: rgba(234,179,8,0.12); }
+  .node-ring.bad { background: rgba(239,68,68,0.12); }
+  .node-ring.empty { background: rgba(255,255,255,0.04); }
+
+  .node-ring svg {
+    position: absolute; inset: -2px; width: 42px; height: 42px;
+    transform: rotate(-90deg);
+  }
+  .node-ring svg circle { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+  .ring-bg { stroke: rgba(255,255,255,0.06); }
+  .ring-fill { transition: stroke-dashoffset 0.5s; }
+  .ring-fill.good { stroke: #22c55e; }
+  .ring-fill.warn { stroke: #eab308; }
+  .ring-fill.bad { stroke: #ef4444; }
+
+  .node-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.45); }
+  .node-value { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9); }
+  .node-sublabel { font-size: 8px; color: rgba(255,255,255,0.2); }
+  .arrow { color: rgba(255,255,255,0.08); font-size: 14px; align-self: center; flex-shrink: 0; }
+
+  /* Node detail sections */
+  .node-detail { display: none; padding: 0 16px 16px; animation: fadeIn 0.15s; }
+  .node-detail.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .nd-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .nd-top {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; margin-bottom: 12px;
+  }
+  .nd-title { font-size: 15px; font-weight: 700; }
+  .nd-stats { display: flex; gap: 14px; margin-top: 4px; }
+  .nd-stat-val { font-size: 20px; font-weight: 800; }
+  .nd-stat-lbl { font-size: 10px; color: rgba(255,255,255,0.3); }
+  .nd-pill {
+    display: flex; align-items: center; gap: 4px;
+    padding: 3px 8px; border-radius: 5px;
+    font-size: 11px; font-weight: 600; flex-shrink: 0;
+  }
+  .nd-pill.good { background: rgba(34,197,94,0.12); color: #22c55e; }
+  .nd-pill.warn { background: rgba(234,179,8,0.12); color: #eab308; }
+  .nd-pill.bad { background: rgba(239,68,68,0.12); color: #ef4444; }
+
+  .nd-section {
+    font-size: 9px; font-weight: 700;
+    color: rgba(255,255,255,0.2);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin: 12px 0 6px;
+  }
+
+  .nd-item {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.01);
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 4px;
+    cursor: pointer; transition: all 0.12s;
+  }
+  .nd-item:hover { background: rgba(94,23,235,0.05); }
+  .nd-item:active { transform: scale(0.99); }
+
+  .nd-icon {
+    width: 24px; height: 24px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0;
+  }
+  .nd-icon.done { background: rgba(34,197,94,0.1); }
+  .nd-icon.todo { background: rgba(255,255,255,0.04); }
+  .nd-icon.tool { background: rgba(94,23,235,0.08); }
+  .nd-icon.check { background: none; font-size: 10px; }
+
+  .nd-text { flex: 1; }
+  .nd-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); }
+  .nd-desc { font-size: 10px; color: rgba(255,255,255,0.25); }
+
+  .nd-badge {
+    font-size: 9px; padding: 2px 6px; border-radius: 3px;
+    font-weight: 600; flex-shrink: 0;
+  }
+  .nd-badge.done { background: rgba(34,197,94,0.1); color: #22c55e; }
+  .nd-badge.todo { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); }
+  .nd-badge.use { background: rgba(94,23,235,0.08); color: #a78bfa; }
+  .nd-badge.ai { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.15); margin-left: 3px; }
+
+  .checklist-item {
+    padding: 6px 10px;
+    display: flex; align-items: center; gap: 8px;
+    border-radius: 6px; margin-bottom: 2px;
+  }
+  .checklist-item.done { opacity: 0.4; }
+  .check-box {
+    width: 16px; height: 16px; border-radius: 4px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; flex-shrink: 0;
+  }
+  .check-box.checked { background: #5e17eb; border-color: #5e17eb; color: #fff; }
+  .check-text { font-size: 11px; color: rgba(255,255,255,0.6); }
+  .check-text.struck { text-decoration: line-through; color: rgba(255,255,255,0.3); }
+
+  /* ─── Bottom Nav ─── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 480px;
+    display: flex; justify-content: space-around;
+    padding: 8px 0 20px;
+    background: #0a0a0f;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    z-index: 200;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 10px; color: rgba(255,255,255,0.3);
+    cursor: pointer; padding: 4px 12px;
+  }
+  .nav-item.active { color: #5e17eb; }
+  .nav-icon { font-size: 20px; }
+
+  /* ─── Identity placeholder ─── */
+  .identity-placeholder, .growth-placeholder {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; min-height: 200px; gap: 8px;
+    color: rgba(255,255,255,0.2); font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Creator Header -->
+<div class="creator-header">
+  <div class="creator-avatar">🎭</div>
+  <div class="creator-info">
+    <div class="creator-name">Movement Maker</div>
+    <div class="creator-sub">Workshop Creator</div>
+  </div>
+  <div class="creator-xp">240 RP</div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab" data-tab="identity" onclick="switchTab('identity')">Identity</div>
+  <div class="tab active" data-tab="experiences" onclick="switchTab('experiences')">Experiences</div>
+  <div class="tab" data-tab="growth" onclick="switchTab('growth')">Growth</div>
+</div>
+
+<!-- Identity Panel -->
+<div class="panel" id="panel-identity">
+  <div class="identity-placeholder">
+    <div style="font-size:32px">🪪</div>
+    <div>Identity tab content</div>
+    <div style="font-size:11px; color:rgba(255,255,255,0.15)">Archetype, skills, remarkable angle...</div>
+  </div>
+</div>
+
+<!-- Experiences Panel -->
+<div class="panel active" id="panel-experiences">
+  <div class="exp-section-label">Upcoming</div>
+
+  <div class="exp-card" onclick="openExperience('vibe-rise-fest')">
+    <div class="exp-type-icon">🎪</div>
+    <div class="exp-info">
+      <div class="exp-name">Vibe Rise Fest</div>
+      <div class="exp-meta"><span>Jun 28</span><span>Workshop</span><span>8 booked</span></div>
+      <div class="exp-mini-pipeline">
+        <div class="exp-mini-dot warn" title="Attract"></div>
+        <div class="exp-mini-dot warn" title="Capture"></div>
+        <div class="exp-mini-dot good" title="Convert"></div>
+        <div class="exp-mini-dot warn" title="Deliver"></div>
+        <div class="exp-mini-dot empty" title="Grow"></div>
+      </div>
+    </div>
+    <div class="exp-arrow">›</div>
+  </div>
+
+  <div class="exp-card" onclick="openExperience('bali-workshop')">
+    <div class="exp-type-icon">🏝️</div>
+    <div class="exp-info">
+      <div class="exp-name">Bali Workshop</div>
+      <div class="exp-meta"><span>Jun 14</span><span>Workshop</span><span>0 booked</span></div>
+      <div class="exp-mini-pipeline">
+        <div class="exp-mini-dot bad" title="Attract"></div>
+        <div class="exp-mini-dot bad" title="Capture"></div>
+        <div class="exp-mini-dot bad" title="Convert"></div>
+        <div class="exp-mini-dot bad" title="Deliver"></div>
+        <div class="exp-mini-dot empty" title="Grow"></div>
+      </div>
+    </div>
+    <div class="exp-arrow">›</div>
+  </div>
+
+  <div class="exp-card" onclick="openExperience('1day-retreat')">
+    <div class="exp-type-icon">🧘</div>
+    <div class="exp-info">
+      <div class="exp-name">1-Day Retreat</div>
+      <div class="exp-meta"><span>Jul 5</span><span>Retreat</span><span>0 booked</span></div>
+      <div class="exp-mini-pipeline">
+        <div class="exp-mini-dot empty" title="Attract"></div>
+        <div class="exp-mini-dot empty" title="Capture"></div>
+        <div class="exp-mini-dot empty" title="Convert"></div>
+        <div class="exp-mini-dot empty" title="Deliver"></div>
+        <div class="exp-mini-dot empty" title="Grow"></div>
+      </div>
+    </div>
+    <div class="exp-arrow">›</div>
+  </div>
+
+  <div class="exp-section-label" style="margin-top:20px">Past</div>
+
+  <div class="exp-card" style="opacity:0.5">
+    <div class="exp-type-icon">🎭</div>
+    <div class="exp-info">
+      <div class="exp-name">BuildwithAi Workshop #3</div>
+      <div class="exp-meta"><span>May 10</span><span>12 attended</span><span>$2,400</span></div>
+      <div class="exp-mini-pipeline">
+        <div class="exp-mini-dot good"></div>
+        <div class="exp-mini-dot good"></div>
+        <div class="exp-mini-dot good"></div>
+        <div class="exp-mini-dot good"></div>
+        <div class="exp-mini-dot warn"></div>
+      </div>
+    </div>
+    <div class="exp-arrow">›</div>
+  </div>
+
+  <div style="margin-top:12px">
+    <button class="exp-add-btn" onclick="alert('Create new experience')">+ New Experience</button>
+  </div>
+</div>
+
+<!-- Growth Panel -->
+<div class="panel" id="panel-growth">
+  <div class="growth-placeholder">
+    <div style="font-size:32px">📈</div>
+    <div>Growth tab — cross-event metrics</div>
+    <div style="font-size:11px; color:rgba(255,255,255,0.15)">Total attendees, repeat rate, 3% chain, top fans</div>
+  </div>
+</div>
+
+<!-- ═══ Experience Detail (Growth Line) ═══ -->
+<div class="exp-detail" id="exp-detail">
+  <div class="detail-topbar">
+    <button class="back-btn" onclick="closeExperience()">←</button>
+    <div class="detail-event-name" id="detail-name">Vibe Rise Fest</div>
+    <div class="detail-event-badge">Upcoming · Jun 28</div>
+  </div>
+
+  <!-- Pipeline -->
+  <div class="pipeline">
+    <div class="node" data-nd="attract" onclick="toggleND('attract')">
+      <div class="node-ring warn">⚠️<svg viewBox="0 0 42 42"><circle class="ring-bg" cx="21" cy="21" r="18"/><circle class="ring-fill warn" cx="21" cy="21" r="18" stroke-dasharray="113" stroke-dashoffset="25"/></svg></div>
+      <div class="node-label">Attract</div>
+      <div class="node-value">5</div>
+      <div class="node-sublabel">posts</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="node" data-nd="capture" onclick="toggleND('capture')">
+      <div class="node-ring warn">⚠️<svg viewBox="0 0 42 42"><circle class="ring-bg" cx="21" cy="21" r="18"/><circle class="ring-fill warn" cx="21" cy="21" r="18" stroke-dasharray="113" stroke-dashoffset="76"/></svg></div>
+      <div class="node-label">Capture</div>
+      <div class="node-value">12</div>
+      <div class="node-sublabel">leads</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="node" data-nd="convert" onclick="toggleND('convert')">
+      <div class="node-ring good">✅<svg viewBox="0 0 42 42"><circle class="ring-bg" cx="21" cy="21" r="18"/><circle class="ring-fill good" cx="21" cy="21" r="18" stroke-dasharray="113" stroke-dashoffset="0"/></svg></div>
+      <div class="node-label">Convert</div>
+      <div class="node-value">8</div>
+      <div class="node-sublabel">booked</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="node" data-nd="deliver" onclick="toggleND('deliver')">
+      <div class="node-ring warn">⚠️<svg viewBox="0 0 42 42"><circle class="ring-bg" cx="21" cy="21" r="18"/><circle class="ring-fill warn" cx="21" cy="21" r="18" stroke-dasharray="113" stroke-dashoffset="66"/></svg></div>
+      <div class="node-label">Deliver</div>
+      <div class="node-value">33d</div>
+      <div class="node-sublabel">until</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="node" data-nd="grow" onclick="toggleND('grow')">
+      <div class="node-ring empty">○<svg viewBox="0 0 42 42"><circle class="ring-bg" cx="21" cy="21" r="18"/><circle class="ring-fill bad" cx="21" cy="21" r="18" stroke-dasharray="113" stroke-dashoffset="113"/></svg></div>
+      <div class="node-label">Grow</div>
+      <div class="node-value">—</div>
+      <div class="node-sublabel">after</div>
+    </div>
+  </div>
+
+  <!-- Attract Detail -->
+  <div class="node-detail" id="nd-attract">
+    <div class="nd-card">
+      <div class="nd-top">
+        <div>
+          <div class="nd-title">Attract</div>
+          <div class="nd-stats">
+            <div><div class="nd-stat-val">5</div><div class="nd-stat-lbl">posts</div></div>
+            <div><div class="nd-stat-val">~240</div><div class="nd-stat-lbl">est. reach</div></div>
+          </div>
+        </div>
+        <div class="nd-pill warn">78%</div>
+      </div>
+      <div class="nd-section">Modules</div>
+      <div class="nd-item"><div class="nd-icon todo">📢</div><div class="nd-text"><div class="nd-name">Leads Strategy</div></div><div class="nd-badge todo">Start</div></div>
+      <div class="nd-item"><div class="nd-icon done">🔥</div><div class="nd-text"><div class="nd-name">Blow Up Your Brand</div></div><div class="nd-badge done">Done ✓</div></div>
+      <div class="nd-section">Tools</div>
+      <div class="nd-item"><div class="nd-icon tool">✨</div><div class="nd-text"><div class="nd-name">Content Generator</div><div class="nd-desc">Create posts for this event</div></div><div class="nd-badge use">Open</div></div>
+      <div class="nd-item"><div class="nd-icon tool">☀️</div><div class="nd-text"><div class="nd-name">Warm Outreach</div><div class="nd-desc">DM contacts about Vibe Rise Fest</div></div><div class="nd-badge use">Open</div></div>
+      <div class="nd-section">Marketing Checklist · 7/9</div>
+      <div class="checklist-item done"><div class="check-box checked">✓</div><div class="check-text struck">Write the one-line promise</div></div>
+      <div class="checklist-item done"><div class="check-box checked">✓</div><div class="check-text struck">Create booking / sales page</div></div>
+      <div class="checklist-item done"><div class="check-box checked">✓</div><div class="check-text struck">Announce to email list</div></div>
+      <div class="checklist-item done"><div class="check-box checked">✓</div><div class="check-text struck">Post 3 teaser pieces</div></div>
+      <div class="checklist-item done"><div class="check-box checked">✓</div><div class="check-text struck">DM 10 warm leads</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Share 1 testimonial</div></div>
+      <div class="checklist-item done"><div class="check-box checked">✓</div><div class="check-text struck">Confirmation email</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Behind-the-scenes content</div></div>
+      <div class="checklist-item done"><div class="check-box checked">✓</div><div class="check-text struck">Last chance reminder</div></div>
+    </div>
+  </div>
+
+  <!-- Convert Detail -->
+  <div class="node-detail" id="nd-convert">
+    <div class="nd-card">
+      <div class="nd-top">
+        <div>
+          <div class="nd-title">Convert</div>
+          <div class="nd-stats">
+            <div><div class="nd-stat-val">8</div><div class="nd-stat-lbl">booked</div></div>
+            <div><div class="nd-stat-val">$1,600</div><div class="nd-stat-lbl">revenue</div></div>
+          </div>
+        </div>
+        <div class="nd-pill good">100%</div>
+      </div>
+      <div class="nd-section">Modules</div>
+      <div class="nd-item"><div class="nd-icon done">🎯</div><div class="nd-text"><div class="nd-name">Grand Slam Offer</div></div><div class="nd-badge done">Done ✓</div></div>
+      <div class="nd-item"><div class="nd-icon todo">🚀</div><div class="nd-text"><div class="nd-name">Launch Readiness</div></div><div class="nd-badge todo">Start</div></div>
+      <div class="nd-section">Tools</div>
+      <div class="nd-item"><div class="nd-icon tool">💼</div><div class="nd-text"><div class="nd-name">Sales Pipeline</div></div><div class="nd-badge use">Open</div></div>
+    </div>
+  </div>
+
+  <!-- Deliver Detail -->
+  <div class="node-detail" id="nd-deliver">
+    <div class="nd-card">
+      <div class="nd-top">
+        <div>
+          <div class="nd-title">Deliver</div>
+          <div class="nd-stats">
+            <div><div class="nd-stat-val">Jun 28</div><div class="nd-stat-lbl">event day</div></div>
+            <div><div class="nd-stat-val">33d</div><div class="nd-stat-lbl">until</div></div>
+          </div>
+        </div>
+        <div class="nd-pill warn">42%</div>
+      </div>
+      <div class="nd-section">Organisation Checklist · 5/12</div>
+      <div class="checklist-item done"><div class="check-box checked">✓</div><div class="check-text struck">Confirm venue</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Write runsheet</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Prepare materials</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Test tech / sound</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Brief co-facilitators</div></div>
+    </div>
+  </div>
+
+  <!-- Capture Detail -->
+  <div class="node-detail" id="nd-capture">
+    <div class="nd-card">
+      <div class="nd-top">
+        <div>
+          <div class="nd-title">Capture</div>
+          <div class="nd-stats">
+            <div><div class="nd-stat-val">12</div><div class="nd-stat-lbl">leads tagged</div></div>
+          </div>
+        </div>
+        <div class="nd-pill warn">33%</div>
+      </div>
+      <div class="nd-section">Modules</div>
+      <div class="nd-item"><div class="nd-icon done">🎁</div><div class="nd-text"><div class="nd-name">Attraction Offer</div></div><div class="nd-badge done">Done ✓</div></div>
+      <div class="nd-item"><div class="nd-icon done">🧲</div><div class="nd-text"><div class="nd-name">Lead Magnet</div></div><div class="nd-badge done">Done ✓</div></div>
+      <div class="nd-item"><div class="nd-icon todo">🗺️</div><div class="nd-text"><div class="nd-name">Funnel Builder</div></div><div class="nd-badge todo">Start</div></div>
+      <div class="nd-section">Tools</div>
+      <div class="nd-item"><div class="nd-icon tool">🌐</div><div class="nd-text"><div class="nd-name">Landing Page</div></div><div class="nd-badge use">Open</div></div>
+      <div class="nd-item"><div class="nd-icon tool">✉️</div><div class="nd-text"><div class="nd-name">Email Sequence</div></div><div class="nd-badge use">Open</div></div>
+    </div>
+  </div>
+
+  <!-- Grow Detail -->
+  <div class="node-detail" id="nd-grow">
+    <div class="nd-card">
+      <div class="nd-top">
+        <div>
+          <div class="nd-title">Grow</div>
+          <div class="nd-stats">
+            <div><div class="nd-stat-val">—</div><div class="nd-stat-lbl">after event</div></div>
+          </div>
+        </div>
+        <div class="nd-pill bad">0%</div>
+      </div>
+      <div class="nd-section">Prepare now</div>
+      <div class="nd-item"><div class="nd-icon todo">⬆️</div><div class="nd-text"><div class="nd-name">Upsell Offer</div><div class="nd-desc">What do they buy next?</div></div><div class="nd-badge todo">Start</div></div>
+      <div class="nd-item"><div class="nd-icon todo">🔁</div><div class="nd-text"><div class="nd-name">Continuity Offer</div><div class="nd-desc">Recurring membership</div></div><div class="nd-badge todo">Start</div></div>
+      <div class="nd-section">After event</div>
+      <div class="nd-item" style="opacity:0.35"><div class="nd-icon tool">📋</div><div class="nd-text"><div class="nd-name">Follow-Up Checklist</div></div><div style="font-size:9px;color:rgba(255,255,255,0.2)">After event</div></div>
+      <div class="nd-item" style="opacity:0.35"><div class="nd-icon tool">🔄</div><div class="nd-text"><div class="nd-name">3% Chain</div></div><div style="font-size:9px;color:rgba(255,255,255,0.2)">After event</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <div class="nav-item"><div class="nav-icon">🏠</div>Home</div>
+  <div class="nav-item"><div class="nav-icon">🎮</div>Play</div>
+  <div class="nav-item active"><div class="nav-icon">🌞</div>Create</div>
+  <div class="nav-item"><div class="nav-icon">👤</div>Profile</div>
+</div>
+
+<script>
+  let selectedND = null
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'))
+    document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active')
+    document.getElementById(`panel-${tab}`).classList.add('active')
+  }
+
+  function openExperience(id) {
+    document.getElementById('exp-detail').classList.add('visible')
+  }
+
+  function closeExperience() {
+    document.getElementById('exp-detail').classList.remove('visible')
+    document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'))
+    document.querySelectorAll('.node-detail').forEach(d => d.classList.remove('visible'))
+    selectedND = null
+  }
+
+  function toggleND(key) {
+    document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'))
+    document.querySelectorAll('.node-detail').forEach(d => d.classList.remove('visible'))
+    if (selectedND === key) { selectedND = null; return }
+    selectedND = key
+    document.querySelector(`.node[data-nd="${key}"]`).classList.add('selected')
+    document.getElementById(`nd-${key}`).classList.add('visible')
+  }
+</script>
+
+</body>
+</html>

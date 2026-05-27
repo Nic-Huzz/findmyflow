@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growth Line — Mockup v2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 24px;
+    padding-bottom: 60px;
+    min-height: 100vh;
+  }
+
+  /* ─── Pipeline ─── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding: 8px 0 20px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+    border: 2px solid transparent;
+  }
+
+  .node:hover { background: rgba(94, 23, 235, 0.08); }
+  .node.selected { background: rgba(94, 23, 235, 0.12); border-color: #5e17eb; }
+
+  .node-status {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .node-status.good { background: rgba(34, 197, 94, 0.15); }
+  .node-status.warn { background: rgba(234, 179, 8, 0.15); }
+  .node-status.bad { background: rgba(239, 68, 68, 0.15); }
+
+  .node-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); }
+  .node-value { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.9); }
+  .node-sublabel { font-size: 10px; color: rgba(255,255,255,0.3); }
+  .arrow { color: rgba(255,255,255,0.12); font-size: 18px; padding: 0 4px; flex-shrink: 0; }
+
+  /* ─── Detail Panel ─── */
+  .detail {
+    display: none;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+  }
+  .detail.visible { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .detail-title { font-size: 18px; font-weight: 700; }
+
+  .detail-metric { display: flex; align-items: baseline; gap: 8px; margin-top: 4px; }
+  .detail-metric-value { font-size: 28px; font-weight: 800; }
+  .detail-metric-label { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+  .detail-status {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .detail-status.good { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+  .detail-status.warn { background: rgba(234, 179, 8, 0.15); color: #eab308; }
+  .detail-status.bad { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+  /* ─── Section Labels ─── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 16px 0 8px;
+  }
+
+  /* ─── Module/Tool Cards ─── */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 8px;
+  }
+
+  .module-card {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .module-card:hover {
+    background: rgba(94, 23, 235, 0.08);
+    border-color: rgba(94, 23, 235, 0.2);
+  }
+  .module-card.active-card {
+    background: rgba(94, 23, 235, 0.12);
+    border-color: #5e17eb;
+  }
+
+  .module-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .module-icon.complete { background: rgba(34, 197, 94, 0.15); }
+  .module-icon.incomplete { background: rgba(255, 255, 255, 0.06); }
+  .module-icon.tool { background: rgba(94, 23, 235, 0.12); }
+
+  .module-info { flex: 1; min-width: 0; }
+  .module-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.85); }
+  .module-desc { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+  .multi-badge { font-size: 9px; color: rgba(255,255,255,0.2); margin-top: 2px; }
+
+  .module-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 4px;
+    font-weight: 600; flex-shrink: 0;
+  }
+  .module-badge.done { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+  .module-badge.todo { background: rgba(255, 255, 255, 0.06); color: rgba(255,255,255,0.4); }
+  .module-badge.use { background: rgba(94, 23, 235, 0.12); color: #a78bfa; }
+
+  /* ─── Action Panel (appears when you click a card) ─── */
+  .action-panel {
+    display: none;
+    margin-top: 12px;
+    padding: 16px;
+    background: rgba(94, 23, 235, 0.06);
+    border: 1px solid rgba(94, 23, 235, 0.15);
+    border-radius: 10px;
+    animation: fadeIn 0.15s ease;
+  }
+  .action-panel.visible { display: block; }
+
+  .action-panel-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 6px;
+  }
+
+  .action-panel-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .action-btn.primary {
+    background: #5e17eb;
+    color: #fff;
+  }
+  .action-btn.primary:hover { background: #4c12c0; }
+
+  .action-btn.secondary {
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .action-btn.secondary:hover { background: rgba(255,255,255,0.1); }
+
+  .action-btn.terminal {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+  }
+  .action-btn.terminal:hover { background: rgba(34, 197, 94, 0.25); }
+
+  /* ─── Terminal Drawer ─── */
+  .terminal-drawer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    background: #0d0d0d;
+    border-top: 2px solid #5e17eb;
+    transition: height 0.25s ease;
+    overflow: hidden;
+    z-index: 1000;
+  }
+  .terminal-drawer.open { height: 40vh; }
+
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: rgba(94, 23, 235, 0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .terminal-title { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); }
+  .terminal-close {
+    background: none; border: none; color: rgba(255,255,255,0.3);
+    font-size: 14px; cursor: pointer; padding: 2px 6px; border-radius: 4px;
+  }
+  .terminal-close:hover { color: #fff; background: rgba(255,255,255,0.1); }
+
+  .terminal-body {
+    padding: 12px 16px;
+    font-family: 'Menlo', 'Monaco', monospace;
+    font-size: 13px;
+    color: #22c55e;
+    line-height: 1.6;
+    height: calc(100% - 40px);
+    overflow-y: auto;
+  }
+
+  .terminal-prompt { color: #a78bfa; }
+  .terminal-output { color: rgba(255,255,255,0.6); }
+  .terminal-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: #5e17eb;
+    animation: blink 1s infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+  @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+  /* ─── Toast ─── */
+  .toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 2000;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+  }
+  .toast.visible { opacity: 1; transform: translateY(0); }
+  .toast.navigate { background: #5e17eb; color: #fff; }
+  .toast.terminal { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+
+  .divider { height: 1px; background: rgba(255,255,255,0.06); margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<!-- Pipeline nodes -->
+<div class="pipeline" id="pipeline">
+  <div class="node" data-node="attract" onclick="toggleNode('attract')">
+    <div class="node-status warn">⚠️</div>
+    <div class="node-label">Attract</div>
+    <div class="node-value">48</div>
+    <div class="node-sublabel">leads</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="node" data-node="capture" onclick="toggleNode('capture')">
+    <div class="node-status warn">⚠️</div>
+    <div class="node-label">Capture</div>
+    <div class="node-value">51</div>
+    <div class="node-sublabel">captured</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="node" data-node="convert" onclick="toggleNode('convert')">
+    <div class="node-status good">✅</div>
+    <div class="node-label">Convert</div>
+    <div class="node-value">$5,895</div>
+    <div class="node-sublabel">24 customers</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="node" data-node="deliver" onclick="toggleNode('deliver')">
+    <div class="node-status good">✅</div>
+    <div class="node-label">Deliver</div>
+    <div class="node-value">4</div>
+    <div class="node-sublabel">upcoming</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="node" data-node="grow" onclick="toggleNode('grow')">
+    <div class="node-status bad">❌</div>
+    <div class="node-label">Grow</div>
+    <div class="node-value">0%</div>
+    <div class="node-sublabel">recurring</div>
+  </div>
+</div>
+
+<!-- ATTRACT -->
+<div class="detail" id="detail-attract">
+  <div class="detail-header">
+    <div>
+      <div class="detail-title">Attract</div>
+      <div class="detail-metric">
+        <div class="detail-metric-value">48</div>
+        <div class="detail-metric-label">leads this month</div>
+      </div>
+    </div>
+    <div class="detail-status warn">Needs systems</div>
+  </div>
+
+  <div class="section-label">Modules — complete to improve</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'module', 'Leads Strategy', 'Define where your audience hangs out and which channels to prioritise.', '/campaign-creation', 'Start leads strategy flow')">
+      <div class="module-icon incomplete">📢</div>
+      <div class="module-info">
+        <div class="module-name">Leads Strategy</div>
+        <div class="module-desc">Define where your audience hangs out</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'done', 'Blow Up Your Brand', 'Your remarkable angle is defined. Retake anytime to refine.', '/create/remarkable', 'Retake')">
+      <div class="module-icon complete">🔥</div>
+      <div class="module-info">
+        <div class="module-name">Blow Up Your Brand</div>
+        <div class="module-desc">Find your remarkable angle</div>
+      </div>
+      <div class="module-badge done">Done</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'module', 'Validation', 'Talk to real potential customers. Learn their language and pain points.', '/validation-flows', 'Start validation')">
+      <div class="module-icon incomplete">🔍</div>
+      <div class="module-info">
+        <div class="module-name">Validation</div>
+        <div class="module-desc">Learn your audience\'s language</div>
+        <div class="multi-badge">Also improves: Capture, Convert</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+  </div>
+
+  <div class="section-label">Tools — use regularly</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'tool', 'Content Generator', 'Generate a post for your best-performing platform using your voice profile.', '/crm/content-create', 'Open Content Generator', 'Generate 3 Instagram posts about my next workshop using my voice profile')">
+      <div class="module-icon tool">✨</div>
+      <div class="module-info">
+        <div class="module-name">Content Generator</div>
+        <div class="module-desc">AI-powered posts for any platform</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'tool', 'Content Planning', 'Plan this week\'s content calendar across platforms.', '/crm/content-create', 'Open Content Planner')">
+      <div class="module-icon tool">📋</div>
+      <div class="module-info">
+        <div class="module-name">Content Planning</div>
+        <div class="module-desc">Weekly content calendar</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'tool', 'Warm Outreach', 'DM 10 warm contacts about your next event.', '/crm/warm-outreach', 'Open Warm Outreach', 'Draft 10 personalised DMs for my warm contacts about my upcoming Bali Workshop')">
+      <div class="module-icon tool">☀️</div>
+      <div class="module-info">
+        <div class="module-name">Warm Outreach</div>
+        <div class="module-desc">DM warm contacts</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+  </div>
+
+  <div id="action-attract" class="action-panel"></div>
+</div>
+
+<!-- CAPTURE -->
+<div class="detail" id="detail-capture">
+  <div class="detail-header">
+    <div>
+      <div class="detail-title">Capture</div>
+      <div class="detail-metric">
+        <div class="detail-metric-value">51</div>
+        <div class="detail-metric-label">contacts captured</div>
+      </div>
+    </div>
+    <div class="detail-status warn">Needs systems</div>
+  </div>
+
+  <div class="section-label">Modules</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'done', 'Attraction Offer', 'Your attraction offer is defined.', '/attraction-offer', 'Review')">
+      <div class="module-icon complete">🎁</div>
+      <div class="module-info">
+        <div class="module-name">Attraction Offer</div>
+        <div class="module-desc">Free/low-cost entry offer</div>
+      </div>
+      <div class="module-badge done">Done</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'done', 'Lead Magnet', 'Lead magnet defined.', '/lead-magnet-selection', 'Review')">
+      <div class="module-icon complete">🧲</div>
+      <div class="module-info">
+        <div class="module-name">Lead Magnet Selection</div>
+        <div class="module-desc">Pick the right format</div>
+      </div>
+      <div class="module-badge done">Done</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'module', 'Funnel Builder', 'Map the journey from stranger to captured lead.', '/funnel-builder', 'Start funnel builder')">
+      <div class="module-icon incomplete">🗺️</div>
+      <div class="module-info">
+        <div class="module-name">Funnel Builder</div>
+        <div class="module-desc">Map stranger → lead journey</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+  </div>
+
+  <div class="section-label">Tools</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'tool', 'Landing Page', 'Build or improve your landing page.', '/crm/pages', 'Open Pages', 'Create a landing page for my Bali Workshop lead magnet with email capture')">
+      <div class="module-icon tool">🌐</div>
+      <div class="module-info">
+        <div class="module-name">Landing Page</div>
+        <div class="module-desc">Build the page that captures emails</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'tool', 'Email Sequence', 'Set up welcome and nurture emails.', '/crm/email', 'Open Email Builder', 'Create a 5-email welcome sequence for new subscribers to my workshop list')">
+      <div class="module-icon tool">✉️</div>
+      <div class="module-info">
+        <div class="module-name">Email Sequence</div>
+        <div class="module-desc">Welcome/nurture after signup</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+  </div>
+
+  <div id="action-capture" class="action-panel"></div>
+</div>
+
+<!-- CONVERT -->
+<div class="detail" id="detail-convert">
+  <div class="detail-header">
+    <div>
+      <div class="detail-title">Convert</div>
+      <div class="detail-metric">
+        <div class="detail-metric-value">$5,895</div>
+        <div class="detail-metric-label">revenue · 24 customers</div>
+      </div>
+    </div>
+    <div class="detail-status good">On track</div>
+  </div>
+
+  <div class="section-label">Modules</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'done', 'Grand Slam Offer', 'Your irresistible offer is built.', '/offer-builder', 'Review')">
+      <div class="module-icon complete">🎯</div>
+      <div class="module-info">
+        <div class="module-name">Grand Slam Offer</div>
+        <div class="module-desc">Bonuses + guarantee + scarcity</div>
+      </div>
+      <div class="module-badge done">Done</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'done', '100M Offer Builder', 'Core offer structure defined.', '/offer-builder', 'Review')">
+      <div class="module-icon complete">💰</div>
+      <div class="module-info">
+        <div class="module-name">100M Offer Builder</div>
+        <div class="module-desc">Dream outcome, price, proof</div>
+      </div>
+      <div class="module-badge done">Done</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'module', 'Launch Readiness', 'Pre-launch checklist before you go live.', '/launch-readiness', 'Start checklist')">
+      <div class="module-icon incomplete">🚀</div>
+      <div class="module-info">
+        <div class="module-name">Launch Readiness</div>
+        <div class="module-desc">Pre-launch checklist</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+  </div>
+
+  <div class="section-label">Tools</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'tool', 'Sales Script', 'Practice your sales conversation.', '/crm/scripts', 'Open Scripts', 'Write a sales script for my $200 1-day retreat targeting burnt-out professionals')">
+      <div class="module-icon tool">📝</div>
+      <div class="module-info">
+        <div class="module-name">Sales Script</div>
+        <div class="module-desc">Scripted conversations for closing</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'tool', 'Sales Pipeline', 'Track your deals through stages.', '/crm/sales', 'Open Pipeline')">
+      <div class="module-icon tool">💼</div>
+      <div class="module-info">
+        <div class="module-name">Sales Pipeline</div>
+        <div class="module-desc">Track deals through stages</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+  </div>
+
+  <div id="action-convert" class="action-panel"></div>
+</div>
+
+<!-- DELIVER -->
+<div class="detail" id="detail-deliver">
+  <div class="detail-header">
+    <div>
+      <div class="detail-title">Deliver</div>
+      <div class="detail-metric">
+        <div class="detail-metric-value">4</div>
+        <div class="detail-metric-label">upcoming experiences</div>
+      </div>
+    </div>
+    <div class="detail-status good">On track</div>
+  </div>
+
+  <div class="section-label">Modules</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'module', 'Journey Designer', 'Design your experience runsheet with AI.', '/create', 'Open Journey Designer')">
+      <div class="module-icon incomplete">🎨</div>
+      <div class="module-info">
+        <div class="module-name">Journey Designer</div>
+        <div class="module-desc">AI runsheet generator</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'module', 'Testing', 'Test with real users, gather feedback.', '/testing', 'Start testing flow')">
+      <div class="module-icon incomplete">🔬</div>
+      <div class="module-info">
+        <div class="module-name">Testing</div>
+        <div class="module-desc">Test with real users</div>
+        <div class="multi-badge">Also improves: Convert</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+  </div>
+
+  <div class="section-label">Tools</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'tool', 'Experience Creation', 'Create a new experience with type-aware checklists.', '/create/experience/new', 'Create Experience')">
+      <div class="module-icon tool">🎪</div>
+      <div class="module-info">
+        <div class="module-name">Experience Creation</div>
+        <div class="module-desc">Create events with checklists</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'tool', '3% Chain / Run Again', 'Capture what you learned and iterate.', '/create', 'Open Experiences')">
+      <div class="module-icon tool">🔄</div>
+      <div class="module-info">
+        <div class="module-name">3% Chain / Run Again</div>
+        <div class="module-desc">Iterate and improve each time</div>
+        <div class="multi-badge">Also improves: Grow</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+  </div>
+
+  <div id="action-deliver" class="action-panel"></div>
+</div>
+
+<!-- GROW -->
+<div class="detail" id="detail-grow">
+  <div class="detail-header">
+    <div>
+      <div class="detail-title">Grow</div>
+      <div class="detail-metric">
+        <div class="detail-metric-value">0%</div>
+        <div class="detail-metric-label">recurring revenue · 0% repeat rate</div>
+      </div>
+    </div>
+    <div class="detail-status bad">Not started</div>
+  </div>
+
+  <div class="section-label">Modules</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'module', 'Upsell Offer', 'Design the next-level offer for existing customers.', '/upsell-offer', 'Start upsell flow')">
+      <div class="module-icon incomplete">⬆️</div>
+      <div class="module-info">
+        <div class="module-name">Upsell Offer</div>
+        <div class="module-desc">Next-level offer for existing customers</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'module', 'Downsell Offer', 'Design a lower-tier alternative.', '/downsell-offer', 'Start downsell flow')">
+      <div class="module-icon incomplete">⬇️</div>
+      <div class="module-info">
+        <div class="module-name">Downsell Offer</div>
+        <div class="module-desc">Lower-tier alternative</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'module', 'Continuity Offer', 'Design recurring subscription/membership.', '/continuity-offer', 'Start continuity flow')">
+      <div class="module-icon incomplete">🔁</div>
+      <div class="module-info">
+        <div class="module-name">Continuity Offer</div>
+        <div class="module-desc">Recurring subscription</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'module', 'Scale Income', 'Design your 3-layer offer stack (attraction → core → continuity).', '/create/scale-income', 'Start scale income flow')">
+      <div class="module-icon incomplete">📈</div>
+      <div class="module-info">
+        <div class="module-name">Scale Income</div>
+        <div class="module-desc">Design 3-layer offer stack</div>
+      </div>
+      <div class="module-badge todo">To do</div>
+    </div>
+  </div>
+
+  <div class="section-label">Tools</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showAction(this, 'tool', 'Funnel Calculator', 'See conversion rates between all stages.', '/funnel-calculator', 'Open Calculator')">
+      <div class="module-icon tool">📊</div>
+      <div class="module-info">
+        <div class="module-name">Funnel Calculator</div>
+        <div class="module-desc">Track conversion rates</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'tool', 'Analytics', 'Weekly grade and performance breakdown.', '/crm/analytics', 'Open Analytics')">
+      <div class="module-icon tool">📈</div>
+      <div class="module-info">
+        <div class="module-name">Analytics</div>
+        <div class="module-desc">Weekly grade + performance</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+    <div class="module-card" onclick="showAction(this, 'tool', '3% Chain', 'Compound improvements over time.', '/create', 'Open Experiences')">
+      <div class="module-icon tool">🔄</div>
+      <div class="module-info">
+        <div class="module-name">3% Chain</div>
+        <div class="module-desc">Compound improvements</div>
+        <div class="multi-badge">Also improves: Deliver</div>
+      </div>
+      <div class="module-badge use">Use →</div>
+    </div>
+  </div>
+
+  <div id="action-grow" class="action-panel"></div>
+</div>
+
+<!-- Terminal Drawer -->
+<div class="terminal-drawer" id="terminal">
+  <div class="terminal-header">
+    <div class="terminal-title">Terminal <span style="color: #22c55e">●</span></div>
+    <button class="terminal-close" onclick="closeTerminal()">✕</button>
+  </div>
+  <div class="terminal-body" id="terminal-body">
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  let selectedNode = null
+  let activeActionPanel = null
+
+  function toggleNode(nodeKey) {
+    document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'))
+    document.querySelectorAll('.detail').forEach(d => d.classList.remove('visible'))
+    document.querySelectorAll('.action-panel').forEach(a => { a.classList.remove('visible'); a.innerHTML = '' })
+    document.querySelectorAll('.module-card').forEach(c => c.classList.remove('active-card'))
+
+    if (selectedNode === nodeKey) { selectedNode = null; return }
+
+    selectedNode = nodeKey
+    document.querySelector(`.node[data-node="${nodeKey}"]`).classList.add('selected')
+    document.getElementById(`detail-${nodeKey}`).classList.add('visible')
+  }
+
+  function showAction(card, type, name, desc, route, btnLabel, terminalPrompt) {
+    // Clear previous
+    document.querySelectorAll('.module-card').forEach(c => c.classList.remove('active-card'))
+    document.querySelectorAll('.action-panel').forEach(a => { a.classList.remove('visible'); a.innerHTML = '' })
+
+    card.classList.add('active-card')
+
+    // Find the action panel for the current node
+    const panel = document.getElementById(`action-${selectedNode}`)
+    if (!panel) return
+
+    let buttons = ''
+
+    if (type === 'module') {
+      buttons = `
+        <button class="action-btn primary" onclick="navigate('${route}')">${btnLabel}</button>
+      `
+    } else if (type === 'done') {
+      buttons = `
+        <button class="action-btn secondary" onclick="navigate('${route}')">${btnLabel}</button>
+      `
+    } else if (type === 'tool') {
+      buttons = `
+        <button class="action-btn primary" onclick="navigate('${route}')">${btnLabel}</button>
+        ${terminalPrompt ? `<button class="action-btn terminal" onclick="openTerminal(\`${terminalPrompt}\`)">⌨ Run with AI</button>` : ''}
+      `
+    }
+
+    panel.innerHTML = `
+      <div class="action-panel-title">${name}</div>
+      <div class="action-panel-desc">${desc}</div>
+      <div class="action-buttons">${buttons}</div>
+    `
+    panel.classList.add('visible')
+  }
+
+  function navigate(route) {
+    showToast(`Navigating to ${route}`, 'navigate')
+  }
+
+  function openTerminal(prompt) {
+    const terminal = document.getElementById('terminal')
+    const body = document.getElementById('terminal-body')
+    terminal.classList.add('open')
+    document.body.style.paddingBottom = '42vh'
+
+    // Simulate terminal
+    body.innerHTML = `
+      <div><span class="terminal-prompt">~ $</span> <span class="terminal-output">${prompt}</span></div>
+      <div style="margin-top: 8px"><span class="terminal-prompt">claude ›</span> Working on it...</div>
+      <div style="margin-top: 4px; color: rgba(255,255,255,0.4)">Analyzing your voice profile and workshop details...</div>
+      <div style="margin-top: 4px; color: rgba(255,255,255,0.4)">Generating content...</div>
+      <div style="margin-top: 8px"><span class="terminal-cursor"></span></div>
+    `
+
+    showToast('Running in terminal', 'terminal')
+  }
+
+  function closeTerminal() {
+    document.getElementById('terminal').classList.remove('open')
+    document.body.style.paddingBottom = '60px'
+  }
+
+  function showToast(msg, type) {
+    const toast = document.getElementById('toast')
+    toast.textContent = msg
+    toast.className = `toast ${type} visible`
+    setTimeout(() => { toast.classList.remove('visible') }, 2000)
+  }
+</script>
+
+</body>
+</html>

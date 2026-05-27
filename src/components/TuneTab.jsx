@@ -166,6 +166,12 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
     )
   }
 
+  // Check if quest is completed this week (for weekly quests)
+  // completions are already fetched from weekStart forward, so any match = done this week
+  const isCompletedThisWeek = (questId) => {
+    return completions.some(c => c.quest_id === questId)
+  }
+
   // Get 7-day streak data for a quest
   const getStreak = (questId) => {
     const days = []
@@ -466,7 +472,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
 
   // Render a quest row (reuses healing tab ht- pattern)
   function renderQuestRow(quest, useInlineComplete = true) {
-    const completed = isCompletedToday(quest.id)
+    const completed = quest.frequency === 'weekly' ? isCompletedThisWeek(quest.id) : isCompletedToday(quest.id)
     const streak = quest.frequency === 'daily' ? getStreak(quest.id) : null
     const dayLabels = quest.frequency === 'daily' ? getDayLabels() : null
     const isCompleting = completingQuestId === quest.id

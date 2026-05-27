@@ -106,7 +106,7 @@ const STEP_CONFIGS = {
   recognise_body_listen: { totalSteps: 4, stepTitles: ['Decision', 'Yes or No', 'How Did You Know', 'Review'] },
   // Stage-specific voice quests (simplified flows)
   voice_essence: { totalSteps: 2, stepTitles: ['Reflect', 'Review'] },
-  voice_protective: { totalSteps: 3, stepTitles: ['Fears', 'Situation', 'Review'] }
+  voice_protective: { totalSteps: 4, stepTitles: ['Fears', 'Situation', 'Talk Back', 'Review'] }
 }
 
 // Helper to get config key for voice quests
@@ -138,7 +138,11 @@ const INITIAL_FORM_DATA = {
   body_response: null,
   body_message: '',
   // Trigger Pattern fields
-  trigger_type: ''
+  trigger_type: '',
+  // Inner Critic Dialog fields (protective voice quests)
+  critic_statement: '',
+  critic_origin: '',
+  critic_response: ''
 }
 
 function RecogniseQuestInput({ quest, onComplete }) {
@@ -171,7 +175,8 @@ function RecogniseQuestInput({ quest, onComplete }) {
       switch (currentStep) {
         case 1: return data.fears_triggered.length > 0
         case 2: return data.situation.trim().length >= 10 && data.intensity !== null
-        case 3: return true
+        case 3: return true // Inner critic dialog is optional — always valid
+        case 4: return true
         default: return false
       }
     }
@@ -232,7 +237,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
     }
     // Stage-specific protective voice quest
     if (quest.voiceType === 'protective') {
-      return {
+      const result = {
         quest_type: 'voice_protective',
         stage: quest.stage_required,
         protective_archetype: quest.archetypeName || userArchetypes.protective,
@@ -241,6 +246,15 @@ function RecogniseQuestInput({ quest, onComplete }) {
         situation: data.situation,
         stage_block: quest.stageBlock
       }
+      // Include inner critic dialog fields if the user filled any of them
+      if (data.critic_statement || data.critic_origin || data.critic_response) {
+        result.critic_dialog = {
+          statement: data.critic_statement,
+          origin: data.critic_origin,
+          response: data.critic_response
+        }
+      }
+      return result
     }
     // Original quest types
     if (quest.id === 'recognise_protective_observe') {
@@ -1450,8 +1464,57 @@ function RecogniseQuestInput({ quest, onComplete }) {
           </div>
         )}
 
-        {/* Step 3: Summary */}
+        {/* Step 3: Inner Critic Dialog (optional deepening) */}
         {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🗣️</span>
+              <h4>Talk back to the critic</h4>
+            </div>
+            <p className="step-description">Optional — skip if nothing comes up. The critic loses power when you question it.</p>
+
+            <div className="step-subsection">
+              <label className="recognise-label">What is the critic saying?</label>
+              <textarea
+                className="recognise-textarea"
+                placeholder={"e.g. \"You're not good enough to charge for this\""}
+                value={formData.critic_statement}
+                onChange={(e) => setFormData(prev => ({ ...prev, critic_statement: e.target.value }))}
+                rows={2}
+              />
+            </div>
+
+            <div className="step-subsection">
+              <label className="recognise-label">Whose voice does it sound like?</label>
+              <div className="critic-origin-options">
+                {['Parent', 'Teacher', 'Peer', 'Boss', 'Myself', 'Other'].map(origin => (
+                  <button
+                    key={origin}
+                    type="button"
+                    className={`critic-origin-btn ${formData.critic_origin === origin ? 'selected' : ''}`}
+                    onClick={() => setFormData(prev => ({ ...prev, critic_origin: origin }))}
+                  >
+                    {origin}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="step-subsection">
+              <label className="recognise-label">What would you say back?</label>
+              <textarea
+                className="recognise-textarea"
+                placeholder={"e.g. \"That's a recording from school, not a fact about today\""}
+                value={formData.critic_response}
+                onChange={(e) => setFormData(prev => ({ ...prev, critic_response: e.target.value }))}
+                rows={2}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Summary */}
+        {step === 4 && (
           <div className="step-content">
             <div className="step-header">
               <span className="step-icon">✅</span>
@@ -1476,6 +1539,28 @@ function RecogniseQuestInput({ quest, onComplete }) {
                 <span className="summary-label">Situation:</span>
                 <span className="summary-value">{formData.situation}</span>
               </div>
+              {(formData.critic_statement || formData.critic_origin || formData.critic_response) && (
+                <>
+                  {formData.critic_statement && (
+                    <div className="summary-item">
+                      <span className="summary-label">Critic says:</span>
+                      <span className="summary-value">{formData.critic_statement}</span>
+                    </div>
+                  )}
+                  {formData.critic_origin && (
+                    <div className="summary-item">
+                      <span className="summary-label">Sounds like:</span>
+                      <span className="summary-value">{formData.critic_origin}</span>
+                    </div>
+                  )}
+                  {formData.critic_response && (
+                    <div className="summary-item">
+                      <span className="summary-label">You said back:</span>
+                      <span className="summary-value">{formData.critic_response}</span>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         )}

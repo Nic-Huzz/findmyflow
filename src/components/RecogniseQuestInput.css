@@ -745,3 +745,33 @@
   font-weight: 700;
   color: #1f2937;
 }
+
+/* Inner Critic Dialog (protective voice step 3) */
+.recognise-input .critic-origin-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.recognise-input .critic-origin-btn {
+  padding: 0.5rem 0.875rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 20px;
+  background: #f9fafb;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.recognise-input .critic-origin-btn:hover {
+  border-color: #d1d5db;
+}
+
+.recognise-input .critic-origin-btn.selected {
+  border-color: #5e17eb;
+  background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  color: #5e17eb;
+}

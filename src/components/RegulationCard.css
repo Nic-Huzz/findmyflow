@@ -1,0 +1,159 @@
+/* RegulationCard — post-check-in micro-intervention */
+
+.regulation-card {
+  text-align: center;
+  padding: 4px 0 0;
+  position: relative;
+  animation: regulation-fade-in 0.2s ease;
+}
+
+@keyframes regulation-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.regulation-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #adb5bd;
+  cursor: pointer;
+  padding: 0;
+}
+
+.regulation-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 4px;
+}
+
+.regulation-subtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.regulation-single {
+  background: #f8f8fa;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.regulation-single .regulation-instruction {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+.regulation-exercises {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+@media (max-height: 667px) {
+  .regulation-exercises {
+    max-height: 170px;
+  }
+}
+
+.regulation-exercise {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  border: 1.5px solid #eef0f3;
+  border-radius: 12px;
+  background: #f8f8fa;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  width: 100%;
+}
+
+.regulation-exercise:hover {
+  border-color: #d1d5db;
+}
+
+.regulation-exercise.expanded {
+  background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  border-color: #5e17eb;
+}
+
+.regulation-exercise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.regulation-exercise-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.regulation-duration {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  background: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.regulation-exercise.expanded .regulation-duration {
+  background: rgba(94, 23, 235, 0.1);
+  color: #5e17eb;
+}
+
+.regulation-instruction {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+
+.regulation-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.regulation-done {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.regulation-done:hover {
+  transform: scale(0.98);
+}
+
+.regulation-skip {
+  padding: 12px 20px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}

@@ -18,7 +18,6 @@ const RECONNECT_QUEST_IDS = [
   'reconnect_morning_breathwork',   // Breathwork
   'reconnect_self_identified',      // Self-Identified Activity
   'reconnect_daily_prayer',         // Daily Prayer
-  'reconnect_weekly_task',          // Weekly Self-Identified Task
   'reconnect_remove_negative'       // Environment Hygiene
 ]
 
@@ -96,7 +95,6 @@ const STEP_CONFIGS = {
   reconnect_morning_breathwork: { totalSteps: 3, stepTitles: ['Breathwork Type', 'How You Felt', 'Review'] },
   reconnect_self_identified: { totalSteps: 3, stepTitles: ['Your Activity', 'How You Felt', 'Review'] },
   reconnect_daily_prayer: { totalSteps: 3, stepTitles: ['Prayer Elements', 'Connection', 'Review'] },
-  reconnect_weekly_task: { totalSteps: 3, stepTitles: ['Your Practice', 'Experience', 'Review'] },
   reconnect_remove_negative: { totalSteps: 4, stepTitles: ['What You Addressed', 'Your Action', 'How It Felt', 'Review'] }
 }
 
@@ -152,10 +150,6 @@ function ReconnectQuestInput({ quest, onComplete }) {
         if (currentStep === 1) return data.prayerElements.length > 0
         if (currentStep === 2) return data.connectionRating
         return true
-      case 'reconnect_weekly_task':
-        if (currentStep === 1) return data.dimension && data.duration
-        if (currentStep === 2) return data.practiceDescription.trim().length >= 10 && data.meaningfulnessRating
-        return true
       case 'reconnect_remove_negative':
         if (currentStep === 1) return data.drainType
         if (currentStep === 2) return data.actionDescription.trim().length >= 10
@@ -207,14 +201,6 @@ function ReconnectQuestInput({ quest, onComplete }) {
           elements: data.prayerElements,
           note: data.prayerNote,
           connection_rating: data.connectionRating
-        }
-      case 'reconnect_weekly_task':
-        return {
-          quest_type: 'weekly_reconnection',
-          dimension: data.dimension,
-          duration: data.duration,
-          practice: data.practiceDescription,
-          meaningfulness: data.meaningfulnessRating
         }
       case 'reconnect_remove_negative':
         return {
@@ -298,8 +284,6 @@ function ReconnectQuestInput({ quest, onComplete }) {
         return renderSelfIdentifiedSteps()
       case 'reconnect_daily_prayer':
         return renderPrayerSteps()
-      case 'reconnect_weekly_task':
-        return renderWeeklyTaskSteps()
       case 'reconnect_remove_negative':
         return renderEnvironmentHygieneSteps()
       default:
@@ -656,112 +640,6 @@ function ReconnectQuestInput({ quest, onComplete }) {
   }
 
   // Weekly Task steps
-  const renderWeeklyTaskSteps = () => {
-    if (step === 1) {
-      return (
-        <div className="step-content">
-          <div className="step-header">
-            <span className="step-icon">📅</span>
-            <h4>Your Weekly Practice</h4>
-          </div>
-
-          <div className="reconnect-section">
-            <label className="reconnect-label">Which dimension?</label>
-            <div className="dimension-grid">
-              {DIMENSIONS.map(dim => (
-                <button
-                  key={dim.id}
-                  type="button"
-                  className={`dimension-option ${formData.dimension === dim.id ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, dimension: dim.id })}
-                >
-                  <span className="dimension-icon">{dim.icon}</span>
-                  <span className="dimension-label">{dim.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="reconnect-section">
-            <label className="reconnect-label">How long was your practice?</label>
-            <div className="duration-selector">
-              {DURATION_OPTIONS.map(d => (
-                <button
-                  key={d.id}
-                  type="button"
-                  className={`duration-option ${formData.duration === d.id ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, duration: d.id })}
-                >
-                  {d.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    }
-
-    if (step === 2) {
-      return (
-        <div className="step-content">
-          <div className="step-header">
-            <span className="step-icon">✨</span>
-            <h4>Your Experience</h4>
-          </div>
-
-          <div className="reconnect-section">
-            <label className="reconnect-label">What was your practice?</label>
-            <textarea
-              className="reconnect-textarea"
-              placeholder="Describe your weekly reconnection practice"
-              value={formData.practiceDescription}
-              onChange={(e) => setFormData({ ...formData, practiceDescription: e.target.value })}
-              rows={3}
-            />
-            <span className={`char-hint ${formData.practiceDescription.trim().length >= 10 ? 'met' : ''}`}>
-              {formData.practiceDescription.trim().length}/10 characters minimum
-            </span>
-          </div>
-
-          {renderStateSelector('How meaningful was it?', formData.meaningfulnessRating,
-            (val) => setFormData({ ...formData, meaningfulnessRating: val }), '😐', '🌟')}
-        </div>
-      )
-    }
-
-    // Review step
-    return (
-      <div className="step-content">
-        <div className="step-header">
-          <span className="step-icon">🎯</span>
-          <h4>Review Your Practice</h4>
-        </div>
-        <div className="selection-summary">
-          <div className="summary-item">
-            <span className="summary-label">Dimension</span>
-            <span className="summary-value">
-              {DIMENSIONS.find(d => d.id === formData.dimension)?.icon} {DIMENSIONS.find(d => d.id === formData.dimension)?.label || '-'}
-            </span>
-          </div>
-          <div className="summary-item">
-            <span className="summary-label">Duration</span>
-            <span className="summary-value">
-              {DURATION_OPTIONS.find(d => d.id === formData.duration)?.label || '-'}
-            </span>
-          </div>
-          <div className="summary-item">
-            <span className="summary-label">Practice</span>
-            <span className="summary-value">{formData.practiceDescription || '-'}</span>
-          </div>
-          <div className="summary-item">
-            <span className="summary-label">Meaningfulness</span>
-            <span className="summary-value">{formData.meaningfulnessRating}/5</span>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   // Environment Hygiene steps
   const renderEnvironmentHygieneSteps = () => {
     if (step === 1) {

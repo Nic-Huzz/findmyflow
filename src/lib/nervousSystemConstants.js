@@ -35,3 +35,48 @@ export function getArchetypesForState(state) {
 export const needsArchetype = (beforeState, afterState) =>
   beforeState === 'sympathetic' || beforeState === 'dorsal' ||
   afterState === 'sympathetic' || afterState === 'dorsal'
+
+/**
+ * Regulation exercises by nervous system state.
+ * Shown after daily check-in to turn diagnosis into medicine.
+ */
+export const REGULATION_EXERCISES = {
+  sympathetic: {
+    label: 'Ground Down',
+    subtitle: "You're activated. Try one of these to come back to earth.",
+    exercises: [
+      { id: 'feet_ground', name: 'Feet on Floor', instruction: 'Feel your feet on the floor. Press down. Feel gravity holding you.', duration: '30s' },
+      { id: '54321', name: '5-4-3-2-1 Senses', instruction: 'Name 5 things you see, 4 you hear, 3 you can touch, 2 you smell, 1 you taste.', duration: '60s' },
+      { id: 'box_breathing', name: 'Box Breathing', instruction: '4 seconds in. 4 hold. 4 out. 4 hold. Repeat 3 times.', duration: '60s' },
+      { id: 'hum', name: 'Hum or Sigh', instruction: 'Hum or sigh out loud for 3 breaths. Feel the vibration in your chest.', duration: '30s' },
+      { id: 'cold_water', name: 'Cold Water', instruction: 'Splash cold water on your face. The dive reflex triggers instant calm.', duration: '15s' },
+      { id: 'palms', name: 'Palm Press', instruction: 'Press palms together hard for 10 seconds. Release. Notice what shifts.', duration: '15s' },
+    ],
+  },
+  dorsal: {
+    label: 'Wake Up Gently',
+    subtitle: "You're shut down. Try one of these to come back online.",
+    exercises: [
+      { id: 'wiggle', name: 'Wiggle', instruction: 'Wiggle your fingers and toes for 10 seconds. Feel them come alive.', duration: '15s' },
+      { id: 'deeper_breaths', name: 'Deeper Breaths', instruction: 'Take 3 breaths slightly deeper than normal. Not forced — just a little more.', duration: '30s' },
+      { id: 'look_around', name: 'Look Around', instruction: 'Look around the room. Name 3 things you can see — out loud.', duration: '15s' },
+      { id: 'rub_hands', name: 'Warm Hands', instruction: 'Rub your hands together vigorously until they\'re warm. Feel the heat.', duration: '15s' },
+      { id: 'shake', name: 'Shake It Out', instruction: 'Stand up and shake your whole body for 30 seconds. Arms, legs, everything.', duration: '30s' },
+      { id: 'cold_water_up', name: 'Cold Water', instruction: 'Splash cold water on your face. The shock gently wakes the system.', duration: '15s' },
+    ],
+  },
+  ventral: {
+    label: "You're Regulated",
+    subtitle: "Good place to be. What's one stretch you could take today?",
+    exercises: [
+      { id: 'wahoo_nudge', name: 'Consider a Wahoo', instruction: "You're safe and grounded — the perfect launch pad for a courage challenge.", duration: null },
+    ],
+  },
+  vibe_rise: {
+    label: "You're in Vibe Rise",
+    subtitle: 'This is home. Anchor it.',
+    exercises: [
+      { id: 'anchor', name: 'Remember This', instruction: 'Where do you feel this in your body? Notice it. Name it. Remember this feeling. This is your natural state.', duration: '15s' },
+    ],
+  },
+}

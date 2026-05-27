@@ -18,7 +18,7 @@ import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChal
 
 const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-const SELF_IDENTIFIED_QUEST_IDS = ['reconnect_self_identified', 'reconnect_weekly_task']
+const SELF_IDENTIFIED_QUEST_IDS = ['reconnect_self_identified']
 const HEALING_TYPE_ORDER = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Rest']
 const sortHealingQuests = (quests) => {
   return [...quests].sort((a, b) => {
