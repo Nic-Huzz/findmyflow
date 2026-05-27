@@ -16,14 +16,14 @@ export default function ExperienceHealthCard({ experienceId, userId, previousExp
     ;(async () => {
       try {
         const queries = [
-          supabase.from('experience_attendees').select('id', { count: 'exact', head: true }).eq('experience_id', experienceId),
+          supabase.from('contact_experiences').select('id', { count: 'exact', head: true }).eq('experience_id', experienceId),
           supabase.from('experience_costs').select('amount').eq('experience_id', experienceId),
           supabase.from('groan_challenges').select('id, title, status').eq('experience_id', experienceId).eq('challenge_source', 'strike').limit(1).maybeSingle(),
         ]
         // Fetch previous experience data if linked
         if (previousExperienceId) {
           queries.push(
-            supabase.from('experience_attendees').select('id', { count: 'exact', head: true }).eq('experience_id', previousExperienceId),
+            supabase.from('contact_experiences').select('id', { count: 'exact', head: true }).eq('experience_id', previousExperienceId),
             supabase.from('experience_costs').select('amount').eq('experience_id', previousExperienceId),
             supabase.from('experiences').select('ticket_price').eq('id', previousExperienceId).maybeSingle(),
           )

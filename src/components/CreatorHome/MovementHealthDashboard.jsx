@@ -17,7 +17,7 @@ export default function MovementHealthDashboard({ userId, completedExperiences, 
       try {
         // Fetch all attendees for user, group by experience client-side
         const { data: allAttendees } = await supabase
-          .from('experience_attendees')
+          .from('contact_experiences')
           .select('experience_id')
           .eq('user_id', userId)
 

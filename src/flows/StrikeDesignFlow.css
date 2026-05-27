@@ -2,6 +2,7 @@
 
 .stk {
   min-height: 100vh;
+  min-height: 100dvh;
   background: linear-gradient(180deg, #5e17eb 0%, #4a12c4 100%);
   color: #fff;
   padding: 0 1.25rem;

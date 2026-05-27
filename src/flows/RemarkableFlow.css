@@ -4,6 +4,7 @@
   background: linear-gradient(180deg, #5e17eb 0%, #4a12c4 100%);
   color: white;
   min-height: 100vh;
+  min-height: 100dvh;
   padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
 }
 

@@ -1,7 +1,7 @@
 /**
  * GuestlistPicker — Inline contact picker for the Pre-Event tab.
  * Select existing contacts to add to the guestlist, or quick-add new ones.
- * Writes to experience_attendees + crm_contacts.
+ * Writes to contact_experiences + crm_contacts.
  */
 
 import { useState, useEffect, useMemo } from 'react'
@@ -26,7 +26,7 @@ export default function GuestlistPicker({ experienceId, userId, onGuestlistChang
 
     Promise.all([
       supabase.from('crm_contacts').select('id, name, email, phone, social_handle, platform').eq('user_id', userId).order('name'),
-      supabase.from('experience_attendees').select('contact_id').eq('experience_id', experienceId),
+      supabase.from('contact_experiences').select('contact_id').eq('experience_id', experienceId),
     ]).then(([contactsRes, guestsRes]) => {
       setContacts(contactsRes.data || [])
       setGuestIds(new Set((guestsRes.data || []).map(g => g.contact_id)))
@@ -49,18 +49,18 @@ export default function GuestlistPicker({ experienceId, userId, onGuestlistChang
   const toggleGuest = async (contactId) => {
     hapticLight()
     if (guestIds.has(contactId)) {
-      await supabase.from('experience_attendees')
+      await supabase.from('contact_experiences')
         .delete()
         .eq('experience_id', experienceId)
         .eq('contact_id', contactId)
       setGuestIds(prev => { const next = new Set(prev); next.delete(contactId); return next })
       onGuestlistChange?.()
     } else {
-      await supabase.from('experience_attendees').insert({
+      await supabase.from('contact_experiences').insert({
         experience_id: experienceId,
         contact_id: contactId,
         user_id: userId,
-        source: 'guestlist',
+        role: 'attendee',
       })
       setGuestIds(prev => new Set([...prev, contactId]))
       hapticSuccess()
@@ -90,11 +90,11 @@ export default function GuestlistPicker({ experienceId, userId, onGuestlistChang
     if (!error && data) {
       setContacts(prev => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)))
       // Auto-add to guestlist
-      await supabase.from('experience_attendees').insert({
+      await supabase.from('contact_experiences').insert({
         experience_id: experienceId,
         contact_id: data.id,
         user_id: userId,
-        source: 'guestlist',
+        role: 'attendee',
       })
       setGuestIds(prev => new Set([...prev, data.id]))
       hapticSuccess()

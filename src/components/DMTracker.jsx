@@ -19,7 +19,7 @@ export default function DMTracker({ experienceId, userId, refreshKey }) {
     if (!userId || !experienceId) return
 
     supabase
-      .from('experience_attendees')
+      .from('contact_experiences')
       .select('contact_id, crm_contacts(id, name, email, social_handle, platform, outreach_status)')
       .eq('experience_id', experienceId)
       .then(({ data }) => {

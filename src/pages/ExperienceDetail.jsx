@@ -1078,9 +1078,10 @@ function AttendeeUpload({ experienceId, userId }) {
   useEffect(() => {
     if (!experienceId) return
     supabase
-      .from('experience_attendees')
+      .from('contact_experiences')
       .select('id', { count: 'exact', head: true })
       .eq('experience_id', experienceId)
+      .eq('role', 'attendee')
       .then(({ count }) => setAttendeeCount(count || 0))
   }, [experienceId, saved])
 
@@ -1202,13 +1203,13 @@ function AttendeeUpload({ experienceId, userId }) {
 
         if (contactId) {
           await supabase
-            .from('experience_attendees')
+            .from('contact_experiences')
             .upsert({
               experience_id: experienceId,
               contact_id: contactId,
               user_id: userId,
-              source: extracted?.source_type === 'CSV' ? 'csv' : 'screenshot',
-            }, { onConflict: 'experience_id,contact_id' })
+              role: 'attendee',
+            }, { onConflict: 'contact_id,experience_id' })
           added++
         }
       }

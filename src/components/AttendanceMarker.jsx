@@ -22,7 +22,7 @@ export default function AttendanceMarker({ experienceId, userId, previousExperie
 
     if (previousExperienceId) {
       supabase
-        .from('experience_attendees')
+        .from('contact_experiences')
         .select('id', { count: 'exact', head: true })
         .eq('experience_id', previousExperienceId)
         .eq('attended', true)
@@ -30,7 +30,7 @@ export default function AttendanceMarker({ experienceId, userId, previousExperie
     }
 
     supabase
-      .from('experience_attendees')
+      .from('contact_experiences')
       .select('id, contact_id, attended, crm_contacts(name, email, social_handle)')
       .eq('experience_id', experienceId)
       .then(({ data }) => {
@@ -69,7 +69,7 @@ export default function AttendanceMarker({ experienceId, userId, previousExperie
 
     const newVal = !guest.attended
     await supabase
-      .from('experience_attendees')
+      .from('contact_experiences')
       .update({ attended: newVal })
       .eq('id', guestId)
 
@@ -99,12 +99,12 @@ export default function AttendanceMarker({ experienceId, userId, previousExperie
     if (contact) {
       // Add as attended
       const { data: attendee } = await supabase
-        .from('experience_attendees')
+        .from('contact_experiences')
         .insert({
           experience_id: experienceId,
           contact_id: contact.id,
           user_id: userId,
-          source: 'walk-in',
+          role: 'attendee',
           attended: true,
         })
         .select('id')
