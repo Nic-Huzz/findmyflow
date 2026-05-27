@@ -22,9 +22,9 @@ const STEPS = {
 }
 
 const OUTCOMES = [
-  { id: 'fill_room', label: 'Fill This Room', desc: 'Your next experience needs attendees. The Strike makes the cash register sing.', bestFor: 'You have an upcoming experience and need more signups.', icon: '🎯' },
+  { id: 'fill_room', label: 'Fill This Room', desc: 'Your next experience needs attendees. This Wahoo makes the cash register sing.', bestFor: 'You have an upcoming experience and need more signups.', icon: '🎯' },
   { id: 'go_public', label: 'Go Public', desc: 'Nobody outside your attendees knows your movement. Time to declare it.', bestFor: 'Increase awareness about who you are and what you do.', icon: '📢' },
-  { id: 'own_it', label: 'Own It', desc: 'You\'re already known. The Strike cements your position as the leader.', bestFor: 'You have repeat attendees and want to become the go-to.', icon: '👑' },
+  { id: 'own_it', label: 'Own It', desc: 'You\'re already known. This Wahoo cements your position as the leader.', bestFor: 'You have repeat attendees and want to become the go-to.', icon: '👑' },
 ]
 
 const STRIKE_TYPES = [
@@ -227,7 +227,7 @@ export default function StrikeDesignFlow() {
       <div className="stk">
         <div className="stk-container stk-screen stk-centered-screen">
           <h2 className="stk-heading">First, find your movement</h2>
-          <p className="stk-prompt">Before designing a Lightning Strike, you need to know what you stand for.</p>
+          <p className="stk-prompt">Before designing a Wahoo, you need to know what you stand for.</p>
           <button className="stk-cta" onClick={() => navigate('/create/remarkable')}>Find My Movement</button>
         </div>
       </div>
@@ -327,7 +327,7 @@ export default function StrikeDesignFlow() {
           )}
 
           {/* AI suggestions */}
-          <div className="stk-fuel-label" style={{ marginTop: '1rem' }}>Strike ideas for you</div>
+          <div className="stk-fuel-label" style={{ marginTop: '1rem' }}>Wahoo ideas for you</div>
           {generating ? (
             <div className="stk-generating">
               <div className="stk-spinner" />
@@ -372,7 +372,7 @@ export default function StrikeDesignFlow() {
                 }}
               >
                 <div className="stk-suggestion-title">Create Your Own</div>
-                <div className="stk-suggestion-desc">Write your own strike idea from scratch.</div>
+                <div className="stk-suggestion-desc">Write your own Wahoo idea from scratch.</div>
               </button>
             </div>
           ) : null}
@@ -394,7 +394,7 @@ export default function StrikeDesignFlow() {
       <div className="stk">
         <div className="stk-container stk-screen">
           <div className="stk-step-label">Step 4 of 5</div>
-          <h2 className="stk-heading">My Strike is:</h2>
+          <h2 className="stk-heading">My Wahoo is:</h2>
           <textarea
             className="stk-textarea"
             value={strikeTitle}
@@ -470,9 +470,9 @@ export default function StrikeDesignFlow() {
           {/* Essence zone indicator */}
           <div className={`stk-zone stk-zone-${ez.zone}`}>
             {ez.isEssenceZone
-              ? 'Essence zone. This is a real Strike.'
+              ? 'Essence zone. This is a real Wahoo.'
               : scaryScore < 7 || wahooScore < 7
-                ? 'This doesn\'t feel like a Strike yet. What would make it scarier or more exciting?'
+                ? 'This doesn\'t feel like a Wahoo yet. What would make it scarier or more exciting?'
                 : ez.insight
             }
           </div>
@@ -515,7 +515,7 @@ export default function StrikeDesignFlow() {
               disabled={saving || !strikeTitle.trim()}
               onClick={saveStrike}
             >
-              {saving ? 'Saving...' : 'Save Strike'}
+              {saving ? 'Saving...' : 'Save Wahoo'}
             </button>
           </div>
         </div>

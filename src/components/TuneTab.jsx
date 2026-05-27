@@ -78,7 +78,6 @@ const DAILY_PRACTICE_IDS = [
   'practice_voice_work',
   'practice_own_style',
   'practice_social_media',
-  'practice_honour_values',
 ]
 
 export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLevelUp }) {

@@ -12,16 +12,27 @@ import { useAuth } from '../auth/AuthProvider'
 import { useSteppedForm } from '../hooks/useSteppedForm'
 import { StepProgress } from './QuestInputShared'
 import { getEssenceDisplayName } from '../lib/essencePreferences'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import './RewireQuestInput.css'
 
 // Rewire quest IDs
 const REWIRE_QUEST_IDS = [
-  'rewire_behavior_change',       // Embody Your Essence
-  'rewire_protective_to_essence', // Protective to Essence Shift
-  'rewire_dopamine_diet',         // Dopamine Diet Change
-  'rewire_future_successful_you', // Future Successful You
-  'rewire_hell_yea',              // Make It A Hell Yea
-  'reconnect_groan_wheel'         // Essence Voice Groan
+  'rewire_behavior_change',       // Embody Your Essence (archived)
+  'rewire_protective_to_essence', // Protective to Essence Shift (archived)
+  'rewire_dopamine_diet',         // Dopamine Diet Change (archived)
+  'rewire_future_successful_you', // Future Successful You (archived)
+  'rewire_hell_yea',              // Make It A Hell Yea (archived)
+  'reconnect_groan_wheel',        // Essence Voice Groan
+  'rewire_weekly_focus'           // Weekly Focus (intention + daily tracking)
+]
+
+// Weekly Focus categories
+const FOCUS_CATEGORIES = [
+  { id: 'boundary', label: 'Boundary', icon: '🛡️', description: 'Protecting a value', prompt: 'What boundary are you protecting this week? With who or what?' },
+  { id: 'behaviour_swap', label: 'Behaviour Swap', icon: '🔄', description: 'Replacing a habit', prompt: 'What are you swapping? From what to what?' },
+  { id: 'future_self', label: 'Future Self', icon: '🔮', description: 'Practising who you\'re becoming', prompt: 'What\'s one thing your future self does daily?' },
+  { id: 'belief', label: 'Belief', icon: '🧠', description: 'Watching for a pattern', prompt: 'What belief are you watching for this week?' },
+  { id: 'expression', label: 'Expression', icon: '🎨', description: 'Creating or speaking truth', prompt: 'What are you creating or expressing this week?' },
 ]
 
 // Protective voices
@@ -83,7 +94,8 @@ const STEP_CONFIGS = {
   rewire_dopamine_diet: { totalSteps: 4, stepTitles: ['Avoided', 'Chose', 'Outcome', 'Review'] },
   rewire_future_successful_you: { totalSteps: 3, stepTitles: ['Action', 'Outcome', 'Review'] },
   rewire_hell_yea: { totalSteps: 4, stepTitles: ['Type', 'Event', 'What Made It', 'Review'] },
-  reconnect_groan_wheel: { totalSteps: 4, stepTitles: ['Fears & Layer', 'Action', 'Intensity', 'Review'] }
+  reconnect_groan_wheel: { totalSteps: 4, stepTitles: ['Fears & Layer', 'Action', 'Intensity', 'Review'] },
+  rewire_weekly_focus: { totalSteps: 3, stepTitles: ['Category', 'Your Intention', 'Confirm'] }
 }
 
 // Initial form data
@@ -112,13 +124,47 @@ const INITIAL_REWIRE_FORM_DATA = {
   // Essence Voice Groan
   fears: [],
   action: '',
-  intensity: null
+  intensity: null,
+  // Weekly Focus
+  focusCategory: null,
+  focusIntention: '',
+  focusDailyReflection: ''
 }
 
 function RewireQuestInput({ quest, onComplete }) {
   const { user } = useAuth()
   const [userArchetypes, setUserArchetypes] = useState({ protective: null, essence: null })
   const [showOtherVoices, setShowOtherVoices] = useState(false)
+
+  // Weekly Focus: load this week's intention (if already set)
+  const [weeklyFocus, setWeeklyFocus] = useState(null)
+  const [focusLoading, setFocusLoading] = useState(quest.id === 'rewire_weekly_focus')
+
+  useEffect(() => {
+    if (quest.id !== 'rewire_weekly_focus' || !user?.id) return
+    const loadFocus = async () => {
+      try {
+        const weekStart = getWeekStartLocal()
+        const { data } = await supabase
+          .from('quest_completions')
+          .select('response_data, completed_at')
+          .eq('user_id', user.id)
+          .eq('quest_id', 'rewire_weekly_focus')
+          .gte('completed_at', weekStart)
+          .order('completed_at', { ascending: true })
+          .limit(1)
+
+        if (data?.[0]?.response_data?.quest_type === 'weekly_focus_setup') {
+          setWeeklyFocus(data[0].response_data)
+        }
+      } catch (e) {
+        // Degrade to setup mode on error
+      } finally {
+        setFocusLoading(false)
+      }
+    }
+    loadFocus()
+  }, [quest.id, user?.id])
 
   const config = STEP_CONFIGS[quest.id] || { totalSteps: 3, stepTitles: ['Input', 'Details', 'Review'] }
 
@@ -170,6 +216,13 @@ function RewireQuestInput({ quest, onComplete }) {
           case 2: return data.action.trim().length >= 10
           case 3: return data.intensity !== null && data.outcome !== null
           case 4: return true
+          default: return false
+        }
+      case 'rewire_weekly_focus':
+        switch (currentStep) {
+          case 1: return data.focusCategory !== null
+          case 2: return data.focusIntention.trim().length >= 10
+          case 3: return true
           default: return false
         }
       default: return false
@@ -224,10 +277,26 @@ function RewireQuestInput({ quest, onComplete }) {
           intensity: data.intensity,
           outcome: data.outcome
         }
+      case 'rewire_weekly_focus':
+        // Daily mode saves differently from setup mode
+        if (weeklyFocus) {
+          return {
+            quest_type: 'weekly_focus_daily',
+            focus_category: weeklyFocus.focus_category,
+            intention: weeklyFocus.intention,
+            honoured: true,
+            reflection: data.focusDailyReflection || ''
+          }
+        }
+        return {
+          quest_type: 'weekly_focus_setup',
+          focus_category: data.focusCategory,
+          intention: data.focusIntention
+        }
       default:
         return data
     }
-  }, [quest.id])
+  }, [quest.id, weeklyFocus])
 
   const {
     step,
@@ -1096,6 +1165,147 @@ function RewireQuestInput({ quest, onComplete }) {
           ) : (
             <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
               {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ============ WEEKLY FOCUS QUEST ============
+  if (quest.id === 'rewire_weekly_focus') {
+    if (focusLoading) {
+      return <div className="rewire-input"><p style={{ textAlign: 'center', color: '#9ca3af', padding: '2rem 0' }}>Loading your focus...</p></div>
+    }
+
+    // DAILY MODE: intention already set this week
+    if (weeklyFocus) {
+      const category = FOCUS_CATEGORIES.find(c => c.id === weeklyFocus.focus_category)
+      return (
+        <div className="rewire-input weekly-focus">
+          <div className="focus-daily-card">
+            <div className="focus-daily-label">This week's focus</div>
+            <div className="focus-daily-intention">{weeklyFocus.intention}</div>
+            {category && (
+              <div className="focus-daily-category">
+                <span>{category.icon}</span>
+                <span>{category.label}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="step-subsection">
+            <label className="rewire-label">Did you honour this today?</label>
+            <textarea
+              className="rewire-textarea"
+              placeholder="What happened? (optional)"
+              value={formData.focusDailyReflection}
+              onChange={(e) => setFormData({ ...formData, focusDailyReflection: e.target.value })}
+              rows={2}
+            />
+          </div>
+
+          <div className="step-navigation">
+            <button type="button" className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Yes, I honoured it (+${quest.points} pts)`}
+            </button>
+          </div>
+        </div>
+      )
+    }
+
+    // SETUP MODE: no intention set this week
+    return (
+      <div className="rewire-input stepped weekly-focus">
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
+
+        {/* Step 1: Pick category */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🎯</span>
+              <h4>What are you working on this week?</h4>
+            </div>
+            <div className="focus-categories">
+              {FOCUS_CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  className={`focus-category-btn ${formData.focusCategory === cat.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, focusCategory: cat.id })}
+                >
+                  <span className="focus-category-icon">{cat.icon}</span>
+                  <div className="focus-category-text">
+                    <span className="focus-category-label">{cat.label}</span>
+                    <span className="focus-category-desc">{cat.description}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Get specific */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">{FOCUS_CATEGORIES.find(c => c.id === formData.focusCategory)?.icon}</span>
+              <h4>Get specific</h4>
+            </div>
+            <p className="step-description">
+              {FOCUS_CATEGORIES.find(c => c.id === formData.focusCategory)?.prompt}
+            </p>
+            <textarea
+              className="rewire-textarea"
+              placeholder="Be specific — vague intentions get ignored"
+              value={formData.focusIntention}
+              onChange={(e) => setFormData({ ...formData, focusIntention: e.target.value })}
+              rows={3}
+            />
+            <p className={`char-hint ${formData.focusIntention.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.focusIntention.trim().length}/10 characters minimum
+            </p>
+          </div>
+        )}
+
+        {/* Step 3: Confirm */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Your focus for this week</h4>
+            </div>
+            <div className="focus-daily-card">
+              <div className="focus-daily-category">
+                <span>{FOCUS_CATEGORIES.find(c => c.id === formData.focusCategory)?.icon}</span>
+                <span>{FOCUS_CATEGORIES.find(c => c.id === formData.focusCategory)?.label}</span>
+              </div>
+              <div className="focus-daily-intention" style={{ marginTop: '0.5rem' }}>
+                {formData.focusIntention}
+              </div>
+            </div>
+            <p className="step-description" style={{ marginTop: '1rem', fontSize: '0.8125rem', color: '#6b7280' }}>
+              You'll see this each day. Track whether you honoured it.
+            </p>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button type="button" className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button type="button" className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button type="button" className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Set Focus (+${quest.points} pts)`}
             </button>
           )}
         </div>

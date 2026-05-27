@@ -61,9 +61,10 @@
 }
 .el-input::placeholder { color: rgba(255,255,255,0.3); }
 .el-input:focus { outline: none; border-color: #E9A23B; }
-.el-input-sm { max-width: 120px; }
+.el-input-sm { max-width: 120px; flex-shrink: 0; }
 .el-select {
   flex: 1;
+  min-width: 0;
   padding: 10px 12px;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);

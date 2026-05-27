@@ -143,12 +143,10 @@
       "type": "Rewire",
       "frequency": "daily",
       "name": "Embody Your Essence",
-      "description": "What's a moment where you were on auto-pilot and consciously tapped into your essence voice to show up consciously?",
       "points": 5,
       "inputType": "text",
-      "maxPerDay": 3,
-      "placeholder": "What did you do?",
-      "healing_checkin": true
+      "archived": true,
+      "archived_reason": "Absorbed by Weekly Focus quest — May 2026"
     },
     {
       "id": "rewire_dopamine_diet",
@@ -156,12 +154,10 @@
       "type": "Rewire",
       "frequency": "weekly",
       "name": "Dopamine Diet Change",
-      "description": "What's a moment where instead of defaulting to 'fast-food' joy, you pursued 'nutritious' joy instead?",
       "points": 3,
       "inputType": "text",
-      "placeholder": "What 'fast-food' joy do you usually default to and what was the 'nutritious' joy you chose instead?",
-      "learnMore": "Fast-food joy is anything where you feel good in the moment, but leaves you feeling lower after. Think: drinking alcohol, eating high-sugar foods, scrolling social media, watching netflix.\n\nNutritious joy is anything where you suffer but it leaves you feeling better after. Think: purposeful work, going to the gym, vulnerable conversations with friends/family, learning something new.\n\nThe more you choose nutritious joy, the less you'll crave the fast-food hits. You're literally rewiring your brain's reward system.",
-      "healing_checkin": true
+      "archived": true,
+      "archived_reason": "Absorbed by Weekly Focus quest — May 2026"
     },
     {
       "id": "rewire_future_successful_you",
@@ -169,11 +165,10 @@
       "type": "Rewire",
       "frequency": "daily",
       "name": "Future Successful You",
-      "description": "What's something you weren't going to do today, but it's something future successful you would have done so you did it?",
       "points": 5,
       "inputType": "text",
-      "placeholder": "What did you do that future successful you would have done?",
-      "healing_checkin": true
+      "archived": true,
+      "archived_reason": "Absorbed by Weekly Focus quest — May 2026"
     },
     {
       "id": "rewire_protective_to_essence",
@@ -194,11 +189,21 @@
       "type": "Rewire",
       "frequency": "weekly",
       "name": "Make It A Hell Yea",
-      "description": "What event this week flowed into your life that was an immediate \"hell yea\" or what event wasn't a hell yea but you turned into one by changing something about it?",
       "points": 3,
       "inputType": "text",
-      "placeholder": "What event this week was a Hell Yea for you?",
-      "learnMore": "What's the difference between an A-grade actor and a C-grade actor who started with the same talent? One said yes to any opportunity and found themselves too busy to say yes to the \"hell yea\" ones when they did come and one said yes to only \"Hell Yea\" opportunities which led to more hell yeas.\n\nBy bringing awareness to what a \"hell yea\" is for you also shows what you're interested in and what you want to be doing.",
+      "archived": true,
+      "archived_reason": "Absorbed by Weekly Focus quest — May 2026"
+    },
+    {
+      "id": "rewire_weekly_focus",
+      "category": "Healing",
+      "type": "Rewire",
+      "frequency": "daily",
+      "name": "Weekly Focus",
+      "description": "Set a weekly intention. Honour it daily. Rewire one pattern at a time.",
+      "points": 5,
+      "inputType": "rewire_quest",
+      "learnMore": "Vague goals get ignored. Specific intentions get done.\n\nEach week, pick ONE thing to work on: a boundary to protect, a habit to swap, something your future self does, a belief to watch for, or something to create.\n\nThen track it daily. Did you honour your intention today? Over time, these weekly commitments rewire the patterns that hold you back.",
       "healing_checkin": true
     },
     {
@@ -408,11 +413,10 @@
       "type": "Practice",
       "frequency": "daily",
       "name": "Honour Your Values",
-      "description": "Did you act from your values today? Your values are an extension of your expression.",
       "points": 4,
       "inputType": "checkbox",
-      "healing_checkin": true,
-      "capacityType": "expression"
+      "archived": true,
+      "archived_reason": "Absorbed by Weekly Focus quest (boundary category) — May 2026"
     },
     {
       "id": "reconnect_self_identified",
@@ -725,12 +729,10 @@
       "type": "Recognise",
       "frequency": "daily",
       "name": "Subconscious Task",
-      "description": "What question or problem will you hand to your subconscious tonight?",
       "points": 3,
       "inputType": "text",
-      "placeholder": "Give your subconscious a task before bed",
-      "learnMore": "Your subconscious mind processes information while you sleep. By giving it a specific question or problem to work on before bed, you tap into a powerful problem-solving engine that works without effort.\n\nThis isn't wishful thinking. Research shows that sleep consolidates learning, reorganises memories, and generates creative insights. The key is giving your mind a clear, specific task.\n\nGood examples: 'What would my ideal first offer look like?', 'Why do I keep avoiding that conversation?', 'What am I not seeing about this problem?'\n\nWrite it down, read it once, then let go. Trust the process.",
-      "healing_checkin": true
+      "archived": true,
+      "archived_reason": "Absorbed by Weekly Focus (belief category) + Dream Capture — May 2026"
     },
     {
       "id": "recognise_trigger_pattern",
@@ -889,11 +891,10 @@
       "type": "Release",
       "frequency": "daily",
       "name": "Daily Release Challenge",
-      "description": "Check the group chat to see the daily release challenge for the day.",
       "points": 7,
       "inputType": "text",
-      "placeholder": "What came up for you in this process today?",
-      "healing_checkin": true
+      "archived": true,
+      "archived_reason": "Absorbed by Weekly Focus quest — May 2026"
     },
     {
       "id": "release_negative_charge",

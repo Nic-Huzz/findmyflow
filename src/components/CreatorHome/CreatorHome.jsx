@@ -753,7 +753,7 @@ export default function CreatorHome() {
               {/* Strikes linked to this experience */}
               {activeChallenges.filter(c => c.challenge_source === 'strike' && c.experience_id === exp.id).length > 0 && (
                 <div className="ch-strikes-section">
-                  <div className="ch-strikes-label">Active Strikes</div>
+                  <div className="ch-strikes-label">Active Wahoos</div>
                   {activeChallenges.filter(c => c.challenge_source === 'strike' && c.experience_id === exp.id).map(ch => {
                     const isDone = ch.status === 'completed'
                     const daysLeft = ch.deadline ? Math.ceil((new Date(ch.deadline) - new Date()) / (24 * 60 * 60 * 1000)) : null
@@ -779,7 +779,7 @@ export default function CreatorHome() {
           {/* Design a Strike */}
           {remarkableAngle && (
             <button className="ch-strike-cta" onClick={() => navigate('/create/strike')}>
-              ⚡ Design a Play-List Task
+              ⚡ Design a Wahoo
             </button>
           )}
 
@@ -789,7 +789,7 @@ export default function CreatorHome() {
               <span className="ch-card-title">Group Call</span>
               <span style={{ fontSize: '0.7rem', color: '#999', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coming soon</span>
             </div>
-            <p className="ch-muted-text" style={{ marginBottom: 0 }}>Fortnightly call with your cohort. Design Strikes, set commitments, debrief what worked.</p>
+            <p className="ch-muted-text" style={{ marginBottom: 0 }}>Fortnightly call with your cohort. Design Wahoos, set commitments, debrief what worked.</p>
           </div>
 
           {/* Past experiences */}
