@@ -8,7 +8,9 @@
   },
   "ios": {
     "contentInset": "automatic",
-    "backgroundColor": "#f8f9fa"
+    "backgroundColor": "#ffffff",
+    "scrollEnabled": true,
+    "allowsLinkPreview": false
   },
   "plugins": {
     "StatusBar": {

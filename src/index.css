@@ -12,19 +12,9 @@
   --border-gray: #dee2e6;
 }
 
-/* iOS safe area — extend background into safe areas, no black bars */
-html, body {
-  background: #f8f9fa;
-}
-body {
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-/* Ensure dark-themed pages also cover safe areas */
-html[data-theme="dark"], html[data-theme="dark"] body,
-body[data-theme="dark"] {
-  background: #0a0a0f;
-}
+/* iOS safe area: viewport-fit=cover extends the page behind the notch.
+   No body padding — the page background fills the safe area naturally.
+   The BottomToolbar already handles its own safe-area padding. */
 
 /* ============ GLOBAL ANIMATED TEXT ============ */
 /* Staggered fade-in for paragraphs - used across all flows */
