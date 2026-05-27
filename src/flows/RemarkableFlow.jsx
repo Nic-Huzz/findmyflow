@@ -244,11 +244,10 @@ export default function RemarkableFlow() {
         <div className="rmk-container rmk-screen rmk-centered-screen">
           <div className="rmk-badge">Ingredient 2</div>
           <h2 className="rmk-heading"><span className="rmk-gold">Attention</span></h2>
-          <p className="rmk-prompt-lg">They gained attention through being remarkable.</p>
-          <p className="rmk-prompt-lg">Word of mouth is the best marketing in the world.</p>
-          <p className="rmk-prompt-lg">What creates word of mouth? Being remarkable.</p>
-          <p className="rmk-prompt-lg">It literally means to be <strong>re-marked</strong>.</p>
-          <p className="rmk-prompt-lg">Something so interesting that people remark about it to their friends.</p>
+          <p className="rmk-prompt-lg">They didn't get attention by shouting louder. They got it by being <strong>remarkable</strong>.</p>
+          <p className="rmk-prompt-lg">Remarkable literally means worth <strong>re-marking</strong> on.</p>
+          <p className="rmk-prompt-lg">Something so interesting that people can't help but tell their friends.</p>
+          <p className="rmk-prompt-lg">Word of mouth is the most powerful marketing in the world. And you can't buy it. You have to earn it.</p>
 
           <div className="rmk-nav">
             <button className="rmk-back" onClick={() => setStep(STEPS.TRUST)}>Back</button>

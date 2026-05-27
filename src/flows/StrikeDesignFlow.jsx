@@ -346,9 +346,15 @@ export default function StrikeDesignFlow() {
                   className={`stk-suggestion ${selectedSuggestion === i ? 'stk-suggestion-selected' : ''}`}
                   onClick={() => {
                     hapticLight()
-                    setSelectedSuggestion(i)
-                    setStrikeTitle(s.title)
-                    setStrikeDescription(s.description)
+                    if (selectedSuggestion === i) {
+                      setSelectedSuggestion(null)
+                      setStrikeTitle('')
+                      setStrikeDescription('')
+                    } else {
+                      setSelectedSuggestion(i)
+                      setStrikeTitle(s.title)
+                      setStrikeDescription(s.description)
+                    }
                   }}
                 >
                   <div className="stk-suggestion-title">{s.title}</div>
@@ -356,6 +362,18 @@ export default function StrikeDesignFlow() {
                   {s.hook && <div className="stk-suggestion-hook">{s.hook}</div>}
                 </button>
               ))}
+              <button
+                className={`stk-suggestion stk-suggestion-custom ${selectedSuggestion === null ? 'stk-suggestion-selected' : ''}`}
+                onClick={() => {
+                  hapticLight()
+                  setSelectedSuggestion(null)
+                  setStrikeTitle('')
+                  setStrikeDescription('')
+                }}
+              >
+                <div className="stk-suggestion-title">Create Your Own</div>
+                <div className="stk-suggestion-desc">Write your own strike idea from scratch.</div>
+              </button>
             </div>
           ) : null}
 
