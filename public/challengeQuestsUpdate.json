@@ -526,11 +526,9 @@
       "type": "Practice",
       "frequency": "weekly",
       "name": "Peak State Activity",
-      "description": "Do ONE thing this week that puts you in a peak state. Ecstatic dance, hard hike, deep creative work, sport, live music, breathwork ceremony.",
+      "description": "Pick ONE thing this week that puts you in a peak state. Set it, schedule it, do it.",
       "points": 7,
-      "inputType": "text",
-      "placeholder": "What peak state activity did you do?",
-      "healing_checkin": true,
+      "inputType": "rewire_quest",
       "capacityType": "activation"
     },
     {

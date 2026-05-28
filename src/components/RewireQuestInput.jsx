@@ -23,8 +23,24 @@ const REWIRE_QUEST_IDS = [
   'rewire_future_successful_you', // Future Successful You (archived)
   'rewire_hell_yea',              // Make It A Hell Yea (archived)
   'reconnect_groan_wheel',        // Essence Voice Groan
-  'rewire_weekly_focus'           // Weekly Focus (intention + daily tracking)
+  'rewire_weekly_focus',          // Weekly Focus (intention + daily tracking)
+  'weekly_peak_state'             // Peak State Activity (weekly intention)
 ]
+
+// Peak State activity options
+const PEAK_STATE_ACTIVITIES = [
+  { id: 'ecstatic_dance', label: 'Ecstatic Dance', icon: '💃' },
+  { id: 'hard_hike', label: 'Hard Hike', icon: '🥾' },
+  { id: 'sport', label: 'Sport', icon: '⚽' },
+  { id: 'breathwork', label: 'Breathwork Ceremony', icon: '🌬️' },
+  { id: 'cold_water', label: 'Cold Water / Ice Bath', icon: '🧊' },
+  { id: 'live_music', label: 'Live Music / Concert', icon: '🎵' },
+  { id: 'creative_deep', label: 'Deep Creative Work', icon: '🎨' },
+  { id: 'martial_arts', label: 'Martial Arts', icon: '🥊' },
+  { id: 'other', label: 'Something Else', icon: '⚡' },
+]
+
+const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 // Weekly Focus categories
 const FOCUS_CATEGORIES = [
@@ -95,7 +111,8 @@ const STEP_CONFIGS = {
   rewire_future_successful_you: { totalSteps: 3, stepTitles: ['Action', 'Outcome', 'Review'] },
   rewire_hell_yea: { totalSteps: 4, stepTitles: ['Type', 'Event', 'What Made It', 'Review'] },
   reconnect_groan_wheel: { totalSteps: 4, stepTitles: ['Fears & Layer', 'Action', 'Intensity', 'Review'] },
-  rewire_weekly_focus: { totalSteps: 3, stepTitles: ['Category', 'Your Intention', 'Confirm'] }
+  rewire_weekly_focus: { totalSteps: 3, stepTitles: ['Category', 'Your Intention', 'Confirm'] },
+  weekly_peak_state: { totalSteps: 2, stepTitles: ['Activity & Day', 'Confirm'] }
 }
 
 // Initial form data
@@ -128,7 +145,11 @@ const INITIAL_REWIRE_FORM_DATA = {
   // Weekly Focus
   focusCategory: null,
   focusIntention: '',
-  focusDailyReflection: ''
+  focusDailyReflection: '',
+  // Peak State
+  peakActivity: null,
+  peakActivityOther: '',
+  peakDay: null
 }
 
 function RewireQuestInput({ quest, onComplete }) {
@@ -138,9 +159,36 @@ function RewireQuestInput({ quest, onComplete }) {
 
   // Weekly Focus: load this week's intention (if already set)
   const [weeklyFocus, setWeeklyFocus] = useState(null)
-  const [focusLoading, setFocusLoading] = useState(quest.id === 'rewire_weekly_focus')
+  const [focusLoading, setFocusLoading] = useState(quest.id === 'rewire_weekly_focus' || quest.id === 'weekly_peak_state')
+
+  // Peak State: load this week's commitment (if already set)
+  const [peakState, setPeakState] = useState(null)
 
   useEffect(() => {
+    if (quest.id === 'weekly_peak_state' && user?.id) {
+      const loadPeak = async () => {
+        try {
+          const weekStart = getWeekStartLocal()
+          const { data } = await supabase
+            .from('quest_completions')
+            .select('response_data')
+            .eq('user_id', user.id)
+            .eq('quest_id', 'weekly_peak_state_setup')
+            .gte('completed_at', weekStart)
+            .order('completed_at', { ascending: true })
+            .limit(1)
+          if (data?.[0]?.response_data?.quest_type === 'peak_state_setup') {
+            setPeakState(data[0].response_data)
+          }
+        } catch (e) {
+          // Degrade to setup mode
+        } finally {
+          setFocusLoading(false)
+        }
+      }
+      loadPeak()
+      return
+    }
     if (quest.id !== 'rewire_weekly_focus' || !user?.id) return
     const loadFocus = async () => {
       try {
@@ -225,6 +273,12 @@ function RewireQuestInput({ quest, onComplete }) {
           case 3: return true
           default: return false
         }
+      case 'weekly_peak_state':
+        switch (currentStep) {
+          case 1: return data.peakActivity !== null && data.peakDay !== null && (data.peakActivity !== 'other' || data.peakActivityOther.trim().length >= 3)
+          case 2: return true
+          default: return false
+        }
       default: return false
     }
   }, [quest.id])
@@ -293,10 +347,25 @@ function RewireQuestInput({ quest, onComplete }) {
           focus_category: data.focusCategory,
           intention: data.focusIntention
         }
+      case 'weekly_peak_state':
+        if (peakState) {
+          return {
+            quest_type: 'peak_state_done',
+            activity: peakState.activity,
+            activity_label: peakState.activity_label,
+            day: peakState.day,
+          }
+        }
+        return {
+          quest_type: 'peak_state_setup',
+          activity: data.peakActivity,
+          activity_label: data.peakActivity === 'other' ? data.peakActivityOther : PEAK_STATE_ACTIVITIES.find(a => a.id === data.peakActivity)?.label,
+          day: data.peakDay,
+        }
       default:
         return data
     }
-  }, [quest.id, weeklyFocus])
+  }, [quest.id, weeklyFocus, peakState])
 
   const {
     step,
@@ -328,7 +397,20 @@ function RewireQuestInput({ quest, onComplete }) {
           response_data: structuredData,
         })
         setWeeklyFocus(structuredData)
-        return // Don't call onComplete — stay in modal, now in daily mode
+        return
+      }
+      // Peak State setup: save metadata, switch to completion mode
+      if (quest.id === 'weekly_peak_state' && structuredData.quest_type === 'peak_state_setup') {
+        await supabase.from('quest_completions').insert({
+          user_id: user.id,
+          quest_id: 'weekly_peak_state_setup',
+          quest_category: quest.category,
+          quest_type: quest.type,
+          points_earned: 0,
+          response_data: structuredData,
+        })
+        setPeakState(structuredData)
+        return
       }
       onComplete(quest, structuredData)
     }
@@ -1323,6 +1405,140 @@ function RewireQuestInput({ quest, onComplete }) {
           ) : (
             <button type="button" className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
               {isSubmitting ? 'Saving...' : 'Set Focus →'}
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ============ PEAK STATE ACTIVITY ============
+  if (quest.id === 'weekly_peak_state') {
+    if (focusLoading) {
+      return <div className="rewire-input"><p style={{ textAlign: 'center', color: '#9ca3af', padding: '2rem 0' }}>Loading...</p></div>
+    }
+
+    // COMPLETION MODE: activity already set this week
+    if (peakState) {
+      const activity = PEAK_STATE_ACTIVITIES.find(a => a.id === peakState.activity)
+      return (
+        <div className="rewire-input weekly-focus">
+          <div className="focus-daily-card">
+            <div className="focus-daily-label">This week's peak state</div>
+            <div className="focus-daily-intention">
+              {activity?.icon || '⚡'} {peakState.activity_label}
+            </div>
+            <div className="focus-daily-category">
+              <span>📅</span>
+              <span>{peakState.day}</span>
+            </div>
+          </div>
+
+          <div className="step-navigation">
+            <button type="button" className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Yes, I did it! (+${quest.points} pts)`}
+            </button>
+          </div>
+        </div>
+      )
+    }
+
+    // SETUP MODE: no activity set this week
+    return (
+      <div className="rewire-input stepped weekly-focus">
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
+
+        {/* Step 1: Pick activity + day */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">⚡</span>
+              <h4>What will put you in a peak state this week?</h4>
+            </div>
+
+            <div className="focus-categories">
+              {PEAK_STATE_ACTIVITIES.map(act => (
+                <button
+                  key={act.id}
+                  type="button"
+                  className={`focus-category-btn ${formData.peakActivity === act.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, peakActivity: act.id })}
+                >
+                  <span className="focus-category-icon">{act.icon}</span>
+                  <span className="focus-category-label">{act.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {formData.peakActivity === 'other' && (
+              <div className="step-subsection" style={{ marginTop: '0.75rem' }}>
+                <textarea
+                  className="rewire-textarea"
+                  placeholder="What's your peak state activity?"
+                  value={formData.peakActivityOther}
+                  onChange={(e) => setFormData({ ...formData, peakActivityOther: e.target.value })}
+                  rows={2}
+                />
+              </div>
+            )}
+
+            <div className="step-subsection" style={{ marginTop: '1rem' }}>
+              <label className="rewire-label">Which day?</label>
+              <div className="focus-categories" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: '0.375rem' }}>
+                {DAYS_OF_WEEK.map(day => (
+                  <button
+                    key={day}
+                    type="button"
+                    className={`critic-origin-btn ${formData.peakDay === day ? 'selected' : ''}`}
+                    onClick={() => setFormData({ ...formData, peakDay: day })}
+                  >
+                    {day}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Confirm */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Your peak state this week</h4>
+            </div>
+            <div className="focus-daily-card">
+              <div className="focus-daily-intention">
+                {PEAK_STATE_ACTIVITIES.find(a => a.id === formData.peakActivity)?.icon || '⚡'}{' '}
+                {formData.peakActivity === 'other' ? formData.peakActivityOther : PEAK_STATE_ACTIVITIES.find(a => a.id === formData.peakActivity)?.label}
+              </div>
+              <div className="focus-daily-category">
+                <span>📅</span>
+                <span>{formData.peakDay}</span>
+              </div>
+            </div>
+            <p className="step-description" style={{ marginTop: '1rem', fontSize: '0.8125rem', color: '#6b7280' }}>
+              Lock it in. When {formData.peakDay} comes, do it.
+            </p>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button type="button" className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button type="button" className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button type="button" className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : 'Lock it in →'}
             </button>
           )}
         </div>

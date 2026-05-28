@@ -98,6 +98,8 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
 
   // Weekly Focus state
   const [weeklyFocus, setWeeklyFocus] = useState(null)
+  // Peak State state
+  const [peakState, setPeakState] = useState(null)
 
   // Capacity / Vibe Rise score (single hook call, shared with CapacityCard)
   const [capacityRefresh, setCapacityRefresh] = useState(0)
@@ -165,7 +167,16 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
         .limit(1),
-    ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }, { data: focusData }]) => {
+      // Load peak state commitment
+      supabase
+        .from('quest_completions')
+        .select('response_data')
+        .eq('user_id', userId)
+        .eq('quest_id', 'weekly_peak_state_setup')
+        .gte('completed_at', getWeekStartLocal())
+        .order('completed_at', { ascending: true })
+        .limit(1),
+    ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }, { data: focusData }, { data: peakData }]) => {
       const tuneQuests = (questData.quests || []).filter(q => q.category === 'Tune' && !q.archived)
       setAllQuests(tuneQuests)
       setCompletions(completionData || [])
@@ -173,6 +184,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setRecentStalls(stallData || [])
       if (focusData?.[0]?.response_data?.quest_type === 'weekly_focus_setup') {
         setWeeklyFocus(focusData[0].response_data)
+      }
+      if (peakData?.[0]?.response_data?.quest_type === 'peak_state_setup') {
+        setPeakState(peakData[0].response_data)
       }
       setLoading(false)
     }).catch(err => {
@@ -417,6 +431,21 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .then(({ data: focusRows }) => {
           if (focusRows?.[0]?.response_data?.quest_type === 'weekly_focus_setup') {
             setWeeklyFocus(focusRows[0].response_data)
+          }
+        })
+    }
+    if (q?.id === 'weekly_peak_state') {
+      supabase
+        .from('quest_completions')
+        .select('response_data')
+        .eq('user_id', userId)
+        .eq('quest_id', 'weekly_peak_state_setup')
+        .gte('completed_at', getWeekStartLocal())
+        .order('completed_at', { ascending: true })
+        .limit(1)
+        .then(({ data: peakRows }) => {
+          if (peakRows?.[0]?.response_data?.quest_type === 'peak_state_setup') {
+            setPeakState(peakRows[0].response_data)
           }
         })
     }
@@ -765,7 +794,41 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                 <span className="tt-subsection-label tt-label-activation">Expression</span>
               </div>
               <div className="tt-quest-list">
-                {weeklyExpression.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+                {weeklyExpression.map(q => {
+                  // Custom render for Peak State when commitment is set
+                  if (q.id === 'weekly_peak_state' && peakState) {
+                    const peakDone = isCompletedThisWeek('weekly_peak_state')
+                    return (
+                      <div key={q.id} className={`ht-item-row ${peakDone ? 'done' : ''}`}>
+                        <span className={`ht-item-check ${peakDone ? 'done' : ''}`}>
+                          {peakDone ? '✓' : ''}
+                        </span>
+                        <div className="ht-item-body">
+                          <div className="ht-item-name">
+                            ⚡ {peakState.activity_label}
+                          </div>
+                          <div className="ht-item-meta">
+                            <span className="ht-item-type">📅 {peakState.day}</span>
+                            <span className="ht-item-sep">·</span>
+                            <span className="ht-pts">{q.points}pts</span>
+                          </div>
+                        </div>
+                        {peakDone ? (
+                          <span className="ht-item-action done-action">Done</span>
+                        ) : (
+                          <button
+                            type="button"
+                            className="ht-item-action"
+                            onClick={() => setHealingModalQuest(q)}
+                          >
+                            Did it
+                          </button>
+                        )}
+                      </div>
+                    )
+                  }
+                  return renderQuestRow(q, q.inputType === 'checkbox')
+                })}
                 {/* Weekly Focus setup — show when no intention set this week */}
                 {!weeklyFocus && (() => {
                   const focusQuest = allQuests.find(q => q.id === 'rewire_weekly_focus')
