@@ -142,18 +142,6 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
               </div>
             </div>
 
-            {t.runsheet?.length > 0 && (
-              <div className="el-runsheet-preview">
-                {t.runsheet.map((phase, i) => (
-                  <div key={i} className="el-phase-dot">
-                    <div className="el-phase-bar" />
-                    <span className="el-phase-name">{phase.phase}</span>
-                    {phase.duration && <span className="el-phase-dur">{phase.duration}m</span>}
-                  </div>
-                ))}
-              </div>
-            )}
-
             <div className="el-card-actions">
               <button
                 className="el-run-btn"
