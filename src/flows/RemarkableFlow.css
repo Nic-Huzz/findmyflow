@@ -202,13 +202,13 @@
   margin-top: 0.1rem;
 }
 .rmk-trigger-hit .rmk-trigger-icon { color: #E9A23B; }
-.rmk-trigger-miss .rmk-trigger-icon { color: rgba(255,255,255,0.2); }
+.rmk-trigger-miss .rmk-trigger-icon { color: rgba(255,255,255,0.4); }
 .rmk-trigger-name {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.55);
   margin-bottom: 0.1rem;
 }
 .rmk-trigger-hit .rmk-trigger-name { color: rgba(255,255,255,0.7); }
