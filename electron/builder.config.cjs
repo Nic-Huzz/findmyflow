@@ -23,6 +23,7 @@ module.exports = {
   ],
   mac: {
     category: 'public.app-category.business',
+    identity: 'NICHOLAS HURRELL (482U24RWYX)',
     target: [
       { target: 'dmg', arch: ['arm64', 'x64'] },
     ],
