@@ -314,7 +314,23 @@ function RewireQuestInput({ quest, onComplete }) {
     totalSteps: config.totalSteps,
     initialData: INITIAL_REWIRE_FORM_DATA,
     validateStep,
-    onSubmit: (data) => onComplete(quest, buildStructuredData(data))
+    onSubmit: async (data) => {
+      const structuredData = buildStructuredData(data)
+      // Weekly Focus setup: save to DB but don't close modal — switch to daily mode
+      if (quest.id === 'rewire_weekly_focus' && structuredData.quest_type === 'weekly_focus_setup') {
+        await supabase.from('quest_completions').insert({
+          user_id: user.id,
+          quest_id: quest.id,
+          quest_category: quest.category,
+          quest_type: quest.type,
+          points_earned: 0,
+          response_data: structuredData,
+        })
+        setWeeklyFocus(structuredData)
+        return // Don't call onComplete — stay in modal, now in daily mode
+      }
+      onComplete(quest, structuredData)
+    }
   })
 
   // Fetch user's archetypes
@@ -1305,7 +1321,7 @@ function RewireQuestInput({ quest, onComplete }) {
             </button>
           ) : (
             <button type="button" className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
-              {isSubmitting ? 'Saving...' : `Set Focus (+${quest.points} pts)`}
+              {isSubmitting ? 'Saving...' : 'Set Focus →'}
             </button>
           )}
         </div>
