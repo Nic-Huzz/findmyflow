@@ -142,10 +142,16 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
                 </div>
               </div>
             )) : (
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', padding: '6px 0' }}>
-                No courage challenges yet. Add one from the Challenge tab.
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', padding: '6px 0' }}>
+                No Wahoos yet. Design one to get noticed.
               </div>
             )}
+            <button
+              className="pl-wahoo-cta"
+              onClick={() => navigate('/create/strike')}
+            >
+              ⚡ Design a New Wahoo
+            </button>
           </CollapsibleSection>
         )}
 

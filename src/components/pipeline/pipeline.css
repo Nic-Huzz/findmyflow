@@ -151,6 +151,22 @@
 .pl-bg.use { background: rgba(94,23,235,0.08); color: #a78bfa; }
 .pl-bg.wahoo { background: rgba(233,162,59,0.12); color: #E9A23B; }
 
+.pl-wahoo-cta {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: rgba(233,162,59,0.1);
+  border: 1px dashed rgba(233,162,59,0.3);
+  border-radius: 8px;
+  color: #E9A23B;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, border-color 0.2s;
+}
+.pl-wahoo-cta:hover { background: rgba(233,162,59,0.15); border-color: rgba(233,162,59,0.5); }
+
 /* Checklist items */
 .pl-ck {
   padding: 5px 8px; display: flex; align-items: center; gap: 6px;
