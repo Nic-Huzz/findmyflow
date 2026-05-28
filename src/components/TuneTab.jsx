@@ -80,12 +80,24 @@ const DAILY_PRACTICE_IDS = [
   'practice_social_media',
 ]
 
+// Weekly Focus category labels
+const FOCUS_CATEGORY_LABELS = {
+  boundary: { icon: '🛡️', label: 'Boundary' },
+  behaviour_swap: { icon: '🔄', label: 'Behaviour Swap' },
+  future_self: { icon: '🔮', label: 'Future Self' },
+  belief: { icon: '🧠', label: 'Belief' },
+  expression: { icon: '🎨', label: 'Expression' },
+}
+
 export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLevelUp }) {
   const [allQuests, setAllQuests] = useState([])
   const [completions, setCompletions] = useState([])
   const [loading, setLoading] = useState(true)
   const [completingQuestId, setCompletingQuestId] = useState(null)
   const [healingModalQuest, setHealingModalQuest] = useState(null) // for Reconnect multi-step
+
+  // Weekly Focus state
+  const [weeklyFocus, setWeeklyFocus] = useState(null)
 
   // Capacity / Vibe Rise score (single hook call, shared with CapacityCard)
   const [capacityRefresh, setCapacityRefresh] = useState(0)
@@ -144,12 +156,24 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .eq('checkin_type', 'stall')
         .gte('created_at', getWeekStartLocal())
         .order('created_at', { ascending: false }),
-    ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }]) => {
+      // Load weekly focus intention
+      supabase
+        .from('quest_completions')
+        .select('response_data')
+        .eq('user_id', userId)
+        .eq('quest_id', 'rewire_weekly_focus')
+        .gte('completed_at', getWeekStartLocal())
+        .order('completed_at', { ascending: true })
+        .limit(1),
+    ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }, { data: focusData }]) => {
       const tuneQuests = (questData.quests || []).filter(q => q.category === 'Tune' && !q.archived)
       setAllQuests(tuneQuests)
       setCompletions(completionData || [])
       setRecentDrains(drainData || [])
       setRecentStalls(stallData || [])
+      if (focusData?.[0]?.response_data?.quest_type === 'weekly_focus_setup') {
+        setWeeklyFocus(focusData[0].response_data)
+      }
       setLoading(false)
     }).catch(err => {
       console.error('TuneTab load error:', err)
@@ -380,6 +404,22 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       .then(({ data: rows }) => {
         if (rows) setCompletions(rows)
       })
+    // Refresh weekly focus (in case setup just completed)
+    if (q?.id === 'rewire_weekly_focus') {
+      supabase
+        .from('quest_completions')
+        .select('response_data')
+        .eq('user_id', userId)
+        .eq('quest_id', 'rewire_weekly_focus')
+        .gte('completed_at', getWeekStartLocal())
+        .order('completed_at', { ascending: true })
+        .limit(1)
+        .then(({ data: focusRows }) => {
+          if (focusRows?.[0]?.response_data?.quest_type === 'weekly_focus_setup') {
+            setWeeklyFocus(focusRows[0].response_data)
+          }
+        })
+    }
     onRefreshPoints?.()
   }
 
@@ -651,12 +691,51 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
           </div>
           <div className="tt-quest-list">
             {expressionPractices.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+            {/* Weekly Focus daily tick — shows the saved intention as a daily checkbox */}
+            {weeklyFocus && (() => {
+              const focusQuest = allQuests.find(q => q.id === 'rewire_weekly_focus')
+              if (!focusQuest) return null
+              const focusDoneToday = isCompletedToday('rewire_weekly_focus')
+              const cat = FOCUS_CATEGORY_LABELS[weeklyFocus.focus_category]
+              return (
+                <div className={`ht-item-row ${focusDoneToday ? 'done' : ''}`}>
+                  <span className={`ht-item-check ${focusDoneToday ? 'done' : ''}`}>
+                    {focusDoneToday ? '✓' : ''}
+                  </span>
+                  <div className="ht-item-body">
+                    <div className="ht-item-name">
+                      {cat?.icon} {weeklyFocus.intention}
+                    </div>
+                    <div className="ht-item-meta">
+                      <span className="ht-item-type">Weekly Focus</span>
+                      <span className="ht-item-sep">·</span>
+                      <span className="ht-pts">{focusQuest.points}pts</span>
+                    </div>
+                  </div>
+                  {focusDoneToday ? (
+                    <span className="ht-item-action done-action">Done</span>
+                  ) : (
+                    <button
+                      type="button"
+                      className="ht-item-action"
+                      disabled={completingQuestId === 'rewire_weekly_focus'}
+                      onClick={() => {
+                        // Open modal in daily tick mode — RewireQuestInput will detect weeklyFocus
+                        setHealingModalQuest(focusQuest)
+                      }}
+                    >
+                      {completingQuestId === 'rewire_weekly_focus' ? '...' : 'Honour'}
+                    </button>
+                  )}
+                </div>
+              )
+            })()}
           </div>
         </div>
       </div>
 
       {/* Section 2: Weekly */}
-      {(weeklySafety.length > 0 || weeklyExpression.length > 0) && (
+      {(weeklySafety.length > 0 || weeklyExpression.length > 0 || !weeklyFocus) && (
         <div className="tt-section">
           <div className="tt-section-header">
             <div className="tt-section-header-left">
@@ -665,6 +744,38 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             </div>
           </div>
           <p className="tt-section-sub">At least once a week, go deeper.</p>
+
+          {/* Weekly Focus setup — show when no intention set this week */}
+          {!weeklyFocus && (() => {
+            const focusQuest = allQuests.find(q => q.id === 'rewire_weekly_focus')
+            if (!focusQuest) return null
+            return (
+              <div className="tt-subsection">
+                <div className="tt-subsection-header">
+                  <span className="tt-subsection-icon">🎯</span>
+                  <span className="tt-subsection-label tt-label-activation">Focus</span>
+                </div>
+                <div className="tt-quest-list">
+                  <div className="ht-item-row">
+                    <span className="ht-item-check" />
+                    <div className="ht-item-body">
+                      <div className="ht-item-name">Set your Weekly Focus</div>
+                      <div className="ht-item-meta">
+                        <span className="ht-item-type">Pick one thing to work on this week</span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="ht-item-action"
+                      onClick={() => setHealingModalQuest(focusQuest)}
+                    >
+                      Set
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
 
           {weeklySafety.length > 0 && (
             <div className="tt-subsection">

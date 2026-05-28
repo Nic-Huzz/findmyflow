@@ -196,15 +196,15 @@
     },
     {
       "id": "rewire_weekly_focus",
-      "category": "Healing",
-      "type": "Rewire",
+      "category": "Tune",
+      "type": "Practice",
       "frequency": "daily",
       "name": "Weekly Focus",
       "description": "Set a weekly intention. Honour it daily. Rewire one pattern at a time.",
       "points": 5,
       "inputType": "rewire_quest",
       "learnMore": "Vague goals get ignored. Specific intentions get done.\n\nEach week, pick ONE thing to work on: a boundary to protect, a habit to swap, something your future self does, a belief to watch for, or something to create.\n\nThen track it daily. Did you honour your intention today? Over time, these weekly commitments rewire the patterns that hold you back.",
-      "healing_checkin": true
+      "capacityType": "expression"
     },
     {
       "id": "session_with_huzz",
