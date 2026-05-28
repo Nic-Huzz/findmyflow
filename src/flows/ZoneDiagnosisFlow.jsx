@@ -6,10 +6,9 @@
  *
  * Steps:
  *   1. Graph — Sweet Spot graph + explanation
- *   2. Zone Explainer — what the 3 zones mean
- *   3. Zone Pick — tap which zone resonates
- *   4. Protective Voices — if extreme zone, pick which Boss (conditional)
- *   5. Boss Reveal — dramatic reveal + save
+ *   2. Zone Pick — tap which zone resonates (descriptions on cards)
+ *   3. Protective Voices — if extreme zone, pick which Boss (conditional)
+ *   4. Boss Reveal — dramatic reveal + save
  *
  * Route: /zone-diagnosis/:levelNumber
  * Saves to user_level_progress table.
@@ -42,7 +41,6 @@ const PROTECTIVE_VOICES = {
 
 const STEPS = {
   GRAPH: 'graph',
-  EXPLAINER: 'explainer',
   PICK: 'pick',
   VOICES: 'voices',
   REVEAL: 'reveal',

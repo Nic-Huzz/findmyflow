@@ -21,8 +21,7 @@ const CHECKIN_QUEST_IDS = [
 const shouldShowCheckin = (quest) => {
   if (CHECKIN_QUEST_IDS.includes(quest.id)) return true
   if (quest.voiceType === 'protective') return true
-  // Weekly Focus setup mode (not daily tick)
-  if (quest.id === 'rewire_weekly_focus') return true
+  if (quest.id === 'session_with_huzz') return true
   return false
 }
 

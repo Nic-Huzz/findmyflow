@@ -229,7 +229,7 @@ body.project-selector-active .bottom-toolbar {
 
 /* Also detect keyboard via visual viewport on iOS/Android */
 @supports (height: 1dvh) {
-  @media (max-height: 600px) and (hover: none) and (pointer: coarse) {
+  @media (max-height: 480px) and (hover: none) and (pointer: coarse) {
     .bottom-toolbar {
       display: none;
     }
