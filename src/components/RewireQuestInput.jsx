@@ -149,7 +149,7 @@ function RewireQuestInput({ quest, onComplete }) {
           .from('quest_completions')
           .select('response_data, completed_at')
           .eq('user_id', user.id)
-          .eq('quest_id', 'rewire_weekly_focus')
+          .eq('quest_id', 'rewire_weekly_focus_setup')
           .gte('completed_at', weekStart)
           .order('completed_at', { ascending: true })
           .limit(1)
@@ -316,11 +316,12 @@ function RewireQuestInput({ quest, onComplete }) {
     validateStep,
     onSubmit: async (data) => {
       const structuredData = buildStructuredData(data)
-      // Weekly Focus setup: save to DB but don't close modal — switch to daily mode
+      // Weekly Focus setup: save to DB with separate quest_id (avoids duplicate guard),
+      // then switch to daily mode without closing modal
       if (quest.id === 'rewire_weekly_focus' && structuredData.quest_type === 'weekly_focus_setup') {
         await supabase.from('quest_completions').insert({
           user_id: user.id,
-          quest_id: quest.id,
+          quest_id: 'rewire_weekly_focus_setup',
           quest_category: quest.category,
           quest_type: quest.type,
           points_earned: 0,

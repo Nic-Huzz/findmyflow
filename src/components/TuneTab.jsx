@@ -161,7 +161,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .from('quest_completions')
         .select('response_data')
         .eq('user_id', userId)
-        .eq('quest_id', 'rewire_weekly_focus')
+        .eq('quest_id', 'rewire_weekly_focus_setup')
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
         .limit(1),
@@ -410,7 +410,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .from('quest_completions')
         .select('response_data')
         .eq('user_id', userId)
-        .eq('quest_id', 'rewire_weekly_focus')
+        .eq('quest_id', 'rewire_weekly_focus_setup')
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
         .limit(1)

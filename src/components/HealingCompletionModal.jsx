@@ -71,7 +71,7 @@ export default function HealingCompletionModal({ quest, userId, onComplete, onCl
     if (type === 'recognise' && hasMultiStepHandler) {
       return <RecogniseQuestInput quest={quest} onComplete={handleQuestDone} />
     }
-    if (type === 'rewire') {
+    if (type === 'rewire' || quest.inputType === 'rewire_quest') {
       return <RewireQuestInput quest={quest} onComplete={handleQuestDone} />
     }
     if (type === 'reconnect') {
