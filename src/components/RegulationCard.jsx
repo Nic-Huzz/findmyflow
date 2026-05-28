@@ -55,12 +55,20 @@ export default function RegulationCard({ state, onDone, onSkip, onBack }) {
       )}
 
       <div className="regulation-actions">
-        <button type="button" className="regulation-done" onClick={onDone}>
-          {isSimple ? 'Done' : 'I did one'}
-        </button>
-        <button type="button" className="regulation-skip" onClick={onSkip}>
-          Skip exercise
-        </button>
+        {isSimple ? (
+          <button type="button" className="regulation-done" onClick={onDone}>
+            Done
+          </button>
+        ) : (
+          <>
+            <button type="button" className="regulation-skip" onClick={onSkip}>
+              Skip exercise
+            </button>
+            <button type="button" className="regulation-done" onClick={onDone}>
+              I did one
+            </button>
+          </>
+        )}
       </div>
     </div>
   )

@@ -221,9 +221,18 @@ body.project-selector-active .bottom-toolbar {
 }
 
 /* Hide toolbar when keyboard is open (mobile) */
-@media (max-height: 450px) {
+@media (max-height: 500px) {
   .bottom-toolbar {
     display: none;
+  }
+}
+
+/* Also detect keyboard via visual viewport on iOS/Android */
+@supports (height: 1dvh) {
+  @media (max-height: 600px) and (hover: none) and (pointer: coarse) {
+    .bottom-toolbar {
+      display: none;
+    }
   }
 }
 
