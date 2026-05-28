@@ -7,8 +7,27 @@ import ReleaseQuestInput from './ReleaseQuestInput'
 import NervousSystemCheckin from './NervousSystemCheckin'
 import './GroanCompletionModal.css'
 
+// Deep work quests that warrant a nervous system check-in
+const CHECKIN_QUEST_IDS = [
+  'release_negative_charge',        // Processing Your Emotions
+  'release_weekly_big',             // Big Release
+  'recognise_healing_compass',      // Healing Compass
+  'recognise_nervous_system',       // Map NS Boundaries
+  'recognise_limiting_belief_rewire', // Limiting Belief Rewire
+  'recognise_matrix_codes',         // Matrix Codes
+]
+
+// Also check-in for voice quests (protective voice tracking = deep work)
+const shouldShowCheckin = (quest) => {
+  if (CHECKIN_QUEST_IDS.includes(quest.id)) return true
+  if (quest.voiceType === 'protective') return true
+  // Weekly Focus setup mode (not daily tick)
+  if (quest.id === 'rewire_weekly_focus') return true
+  return false
+}
+
 export default function HealingCompletionModal({ quest, userId, onComplete, onClose }) {
-  const [phase, setPhase] = useState('after_checkin') // 'after_checkin' | 'quest_input'
+  const [phase, setPhase] = useState(() => shouldShowCheckin(quest) ? 'after_checkin' : 'quest_input')
   const [textInput, setTextInput] = useState('')
 
   // Nervous system state (after only)
