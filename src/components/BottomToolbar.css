@@ -45,6 +45,7 @@ body.project-selector-active .bottom-toolbar {
   padding: 4px 16px calc(4px + env(safe-area-inset-bottom, 0px));
   z-index: 1000;
   box-shadow: var(--toolbar-shadow);
+  overflow: hidden;
   /* Force GPU compositing layer — prevents iOS PWA position:fixed detach during scroll */
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
