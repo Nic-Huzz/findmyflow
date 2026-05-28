@@ -207,3 +207,110 @@
   font-family: inherit;
 }
 .el-edit-btn:hover { border-color: rgba(255,255,255,0.2); }
+
+/* Manual journey editor */
+.el-manual-editor {
+  padding: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.el-manual-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.el-manual-phase {
+  flex: 2;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  min-width: 0;
+}
+.el-manual-dur {
+  flex: 0 0 50px;
+  padding: 8px 6px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  text-align: center;
+}
+.el-manual-notes {
+  flex: 3;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  min-width: 0;
+}
+.el-manual-phase:focus,
+.el-manual-dur:focus,
+.el-manual-notes:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+.el-manual-phase::placeholder,
+.el-manual-dur::placeholder,
+.el-manual-notes::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+.el-manual-remove {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.3);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+}
+.el-manual-add {
+  background: none;
+  border: 1px dashed rgba(255,255,255,0.15);
+  border-radius: 6px;
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.el-manual-add:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); }
+.el-manual-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.el-manual-save {
+  flex: 1;
+  padding: 10px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.el-manual-save:disabled { opacity: 0.5; cursor: not-allowed; }
+.el-manual-cancel {
+  padding: 10px 14px;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}

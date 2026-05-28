@@ -776,13 +776,6 @@ export default function CreatorHome() {
             </div>
           )}
 
-          {/* Design a Strike */}
-          {remarkableAngle && (
-            <button className="ch-strike-cta" onClick={() => navigate('/create/strike')}>
-              ⚡ Design a Wahoo
-            </button>
-          )}
-
           {/* Group Call — Coming Soon */}
           <div className="ch-card" style={{ opacity: 0.5, pointerEvents: 'none' }}>
             <div className="ch-card-head">

@@ -34,6 +34,9 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
   const [newDuration, setNewDuration] = useState('')
   const [creating, setCreating] = useState(false)
   const [designerOpen, setDesignerOpen] = useState(null) // template ID
+  const [manualEditId, setManualEditId] = useState(null) // template ID for manual edit
+  const [manualRunsheet, setManualRunsheet] = useState([])
+  const [savingManual, setSavingManual] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -73,6 +76,35 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
     hapticLight()
     await archiveTemplate(id)
     setTemplates(prev => prev.filter(t => t.id !== id))
+  }
+
+  const openManualEdit = (t) => {
+    hapticLight()
+    setDesignerOpen(null)
+    setManualEditId(t.id)
+    setManualRunsheet(t.runsheet?.length > 0 ? t.runsheet.map(p => ({ ...p })) : [
+      { phase: 'Opening', duration: 5, notes: '' },
+      { phase: 'Main', duration: 30, notes: '' },
+      { phase: 'Closing', duration: 5, notes: '' },
+    ])
+  }
+
+  const handleManualSave = async () => {
+    if (savingManual) return
+    setSavingManual(true)
+    try {
+      const filtered = manualRunsheet.filter(p => p.phase.trim())
+      await updateTemplate(manualEditId, {
+        runsheet: filtered,
+        duration_minutes: filtered.reduce((s, p) => s + (parseInt(p.duration) || 0), 0),
+      })
+      hapticSuccess()
+      setTemplates(prev => prev.map(tp => tp.id === manualEditId ? { ...tp, runsheet: filtered, duration_minutes: filtered.reduce((s, p) => s + (parseInt(p.duration) || 0), 0) } : tp))
+      setManualEditId(null)
+    } catch (err) {
+      console.error('Manual save error:', err)
+    }
+    setSavingManual(false)
   }
 
   if (loading) return null
@@ -158,9 +190,15 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
               </button>
               <button
                 className="el-edit-btn"
-                onClick={() => { hapticLight(); setDesignerOpen(designerOpen === t.id ? null : t.id) }}
+                onClick={() => { hapticLight(); setManualEditId(null); setDesignerOpen(designerOpen === t.id ? null : t.id) }}
               >
-                {designerOpen === t.id ? 'Close' : '🤖 Design'}
+                {designerOpen === t.id ? 'Close' : '🤖 AI Design'}
+              </button>
+              <button
+                className="el-edit-btn"
+                onClick={() => openManualEdit(t)}
+              >
+                {manualEditId === t.id ? 'Close' : '✏️ Complete Myself'}
               </button>
             </div>
 
@@ -172,6 +210,44 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
                   setDesignerOpen(null)
                 }}
               />
+            )}
+
+            {manualEditId === t.id && (
+              <div className="el-manual-editor">
+                {manualRunsheet.map((phase, i) => (
+                  <div key={i} className="el-manual-row">
+                    <input
+                      className="el-manual-phase"
+                      value={phase.phase}
+                      onChange={e => setManualRunsheet(prev => prev.map((p, j) => j === i ? { ...p, phase: e.target.value } : p))}
+                      placeholder="Phase name"
+                    />
+                    <input
+                      className="el-manual-dur"
+                      type="number"
+                      value={phase.duration}
+                      onChange={e => setManualRunsheet(prev => prev.map((p, j) => j === i ? { ...p, duration: e.target.value } : p))}
+                      placeholder="min"
+                    />
+                    <input
+                      className="el-manual-notes"
+                      value={phase.notes || ''}
+                      onChange={e => setManualRunsheet(prev => prev.map((p, j) => j === i ? { ...p, notes: e.target.value } : p))}
+                      placeholder="Notes (optional)"
+                    />
+                    <button className="el-manual-remove" onClick={() => setManualRunsheet(prev => prev.filter((_, j) => j !== i))}>×</button>
+                  </div>
+                ))}
+                <button className="el-manual-add" onClick={() => setManualRunsheet(prev => [...prev, { phase: '', duration: 5, notes: '' }])}>
+                  + Add phase
+                </button>
+                <div className="el-manual-actions">
+                  <button className="el-manual-save" onClick={handleManualSave} disabled={savingManual}>
+                    {savingManual ? 'Saving...' : 'Save Journey'}
+                  </button>
+                  <button className="el-manual-cancel" onClick={() => setManualEditId(null)}>Cancel</button>
+                </div>
+              </div>
             )}
           </div>
         ))}
