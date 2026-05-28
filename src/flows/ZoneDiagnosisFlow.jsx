@@ -162,59 +162,8 @@ export default function ZoneDiagnosisFlow() {
             </p>
           </div>
 
-          <button className="primary-button zd-next-btn" onClick={() => goToStep(STEPS.EXPLAINER)}>
-            Show me the zones <span>→</span>
-          </button>
-        </div>
-      )}
-
-      {/* Step 2: Zone Explainer */}
-      {step === STEPS.EXPLAINER && (
-        <div className="zd-step zd-explainer-step">
-          <div className="zd-step-header">
-            <h1 className="zd-step-title">Three zones</h1>
-            <p className="zd-step-subtitle">
-              Where you sit on this graph tells us what's keeping you stuck.
-            </p>
-          </div>
-
-          <div className="zd-zone-explainers">
-            <div className="zd-zone-explain-card top-left">
-              <div className="zd-zone-explain-dot" />
-              <div className="zd-zone-explain-info">
-                <div className="zd-zone-explain-name">{config.zones.topLeft.name}</div>
-                <div className="zd-zone-explain-desc">{config.zones.topLeft.description}</div>
-              </div>
-            </div>
-
-            <div className="zd-zone-explain-card diagonal">
-              <div className="zd-zone-explain-dot gold" />
-              <div className="zd-zone-explain-info">
-                <div className="zd-zone-explain-name">{config.zones.diagonal.name}</div>
-                <div className="zd-zone-explain-desc">{config.zones.diagonal.description}</div>
-              </div>
-            </div>
-
-            <div className="zd-zone-explain-card bottom-right">
-              <div className="zd-zone-explain-dot" />
-              <div className="zd-zone-explain-info">
-                <div className="zd-zone-explain-name">{config.zones.bottomRight.name}</div>
-                <div className="zd-zone-explain-desc">{config.zones.bottomRight.description}</div>
-              </div>
-            </div>
-          </div>
-
-          <p className="zd-step-body zd-explanation">
-            The two outer zones each have a <strong>protective voice</strong> keeping you there.
-            That voice became your Boss.
-          </p>
-
           <button className="primary-button zd-next-btn" onClick={() => goToStep(STEPS.PICK)}>
             Which zone am I in? <span>→</span>
-          </button>
-
-          <button className="secondary-button zd-back-btn" onClick={() => goToStep(STEPS.GRAPH)}>
-            ← Back
           </button>
         </div>
       )}
@@ -272,7 +221,7 @@ export default function ZoneDiagnosisFlow() {
             </button>
           )}
 
-          <button className="secondary-button zd-back-btn" onClick={() => goToStep(STEPS.EXPLAINER)}>
+          <button className="secondary-button zd-back-btn" onClick={() => goToStep(STEPS.GRAPH)}>
             ← Back
           </button>
         </div>
