@@ -20,22 +20,20 @@
 /* Only activates on screens wider than 768px — phone is unaffected */
 
 @media (min-width: 768px) {
-  /* Cap main content width and centre it */
+  /* Offset content for sidebar */
   #root {
-    display: flex;
-    justify-content: center;
+    padding-left: 72px;
   }
 
-  #root > * {
-    width: 100%;
-    max-width: 480px;
-  }
-
-  /* Full-width pages (flows, onboarding) override the cap */
-  #root > .flow-fullwidth,
-  #root > [class*="onboarding"],
-  #root > [class*="flow-base"] {
-    max-width: 100%;
+  /* Cap page content width for readability — centred */
+  .me-page,
+  .challenge-container,
+  .ch2,
+  .crm-layout,
+  .profile-hub-container {
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 

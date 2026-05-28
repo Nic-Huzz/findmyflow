@@ -262,3 +262,10 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Desktop: offset tower toolbar for sidebar */
+@media (min-width: 768px) {
+  .tower-toolbar {
+    left: 72px;
+  }
+}

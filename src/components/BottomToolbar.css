@@ -273,15 +273,9 @@ body.project-selector-active .bottom-toolbar {
     letter-spacing: 0.3px;
   }
 
-  /* Content area needs left margin to not be hidden behind sidebar */
+  /* Content area clears the sidebar */
   .has-bottom-toolbar {
     padding-bottom: 0;
-    padding-left: 72px;
-  }
-
-  /* Adjust #root layout for sidebar */
-  #root {
-    padding-left: 72px;
   }
 }
 
