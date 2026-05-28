@@ -16,6 +16,29 @@
    No body padding — the page background fills the safe area naturally.
    The BottomToolbar already handles its own safe-area padding. */
 
+/* ============ DESKTOP LAYOUT ============ */
+/* Only activates on screens wider than 768px — phone is unaffected */
+
+@media (min-width: 768px) {
+  /* Cap main content width and centre it */
+  #root {
+    display: flex;
+    justify-content: center;
+  }
+
+  #root > * {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  /* Full-width pages (flows, onboarding) override the cap */
+  #root > .flow-fullwidth,
+  #root > [class*="onboarding"],
+  #root > [class*="flow-base"] {
+    max-width: 100%;
+  }
+}
+
 /* ============ GLOBAL ANIMATED TEXT ============ */
 /* Staggered fade-in for paragraphs - used across all flows */
 
