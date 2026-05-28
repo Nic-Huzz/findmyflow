@@ -365,143 +365,143 @@
     },
     {
       "name": "Adriene Mishler",
-      "experienceType": "certification",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "experienceType": "media_training",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 1,
+      "knowledgeStyle": 4,
+      "scaleApproach": 5,
+      "confidence": 85
     },
     {
       "name": "Alain de Botton",
-      "experienceType": "certification",
-      "workRhythm": 2,
+      "experienceType": "book_newsletter",
+      "workRhythm": 1,
       "fuelType": 1,
       "orientation": 3,
-      "knowledgeStyle": 4,
+      "knowledgeStyle": 2,
       "scaleApproach": 4,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Bill Thomas",
-      "experienceType": "facilitation",
+      "experienceType": "certification",
       "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 3,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 1,
       "scaleApproach": 3,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Bill Wilson",
       "experienceType": "facilitation",
-      "workRhythm": 2,
+      "workRhythm": 1,
       "fuelType": 1,
-      "orientation": 3,
+      "orientation": 4,
       "knowledgeStyle": 4,
-      "scaleApproach": 4,
-      "confidence": 70
+      "scaleApproach": 5,
+      "confidence": 85
     },
     {
       "name": "Dan Hughes",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 4,
-      "orientation": 3,
-      "knowledgeStyle": 4,
-      "scaleApproach": 3,
-      "confidence": 70
+      "experienceType": "certification",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 2,
+      "scaleApproach": 4,
+      "confidence": 85
     },
     {
       "name": "Dave Ramsey",
-      "experienceType": "facilitation",
+      "experienceType": "media_training",
       "workRhythm": 1,
-      "fuelType": 3,
-      "orientation": 3,
+      "fuelType": 5,
+      "orientation": 5,
       "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "scaleApproach": 5,
+      "confidence": 85
     },
     {
       "name": "David Bohm",
       "experienceType": "facilitation",
       "workRhythm": 1,
-      "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 4,
-      "scaleApproach": 3,
-      "confidence": 70
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 1,
+      "scaleApproach": 1,
+      "confidence": 85
     },
     {
       "name": "Elizabeth Gilbert",
       "experienceType": "book_newsletter",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 2,
-      "knowledgeStyle": 3,
+      "workRhythm": 3,
+      "fuelType": 2,
+      "orientation": 4,
+      "knowledgeStyle": 4,
       "scaleApproach": 4,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Ella Baker",
       "experienceType": "facilitation",
-      "workRhythm": 2,
+      "workRhythm": 1,
       "fuelType": 1,
-      "orientation": 4,
-      "knowledgeStyle": 4,
+      "orientation": 5,
+      "knowledgeStyle": 2,
       "scaleApproach": 3,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Erin Gruwell",
-      "experienceType": "certification",
+      "experienceType": "cohort",
       "workRhythm": 2,
-      "fuelType": 3,
+      "fuelType": 1,
       "orientation": 3,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "knowledgeStyle": 4,
+      "scaleApproach": 2,
+      "confidence": 85
     },
     {
       "name": "Fela Kuti",
-      "experienceType": "facilitation",
+      "experienceType": "live_events",
       "workRhythm": 2,
-      "fuelType": 4,
-      "orientation": 3,
-      "knowledgeStyle": 3,
+      "fuelType": 1,
+      "orientation": 5,
+      "knowledgeStyle": 5,
       "scaleApproach": 3,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Glennon Doyle",
       "experienceType": "book_newsletter",
-      "workRhythm": 2,
-      "fuelType": 4,
-      "orientation": 2,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "workRhythm": 3,
+      "fuelType": 2,
+      "orientation": 4,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 85
     },
     {
       "name": "Gloria Steinem",
-      "experienceType": "facilitation",
+      "experienceType": "book_newsletter",
       "workRhythm": 1,
-      "fuelType": 4,
-      "orientation": 3,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "fuelType": 1,
+      "orientation": 5,
+      "knowledgeStyle": 2,
+      "scaleApproach": 4,
+      "confidence": 85
     },
     {
       "name": "Gordon Lish",
-      "experienceType": "book_newsletter",
+      "experienceType": "cohort",
       "workRhythm": 2,
       "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "orientation": 2,
+      "knowledgeStyle": 5,
+      "scaleApproach": 1,
+      "confidence": 85
     },
     {
       "name": "Grace Lee Boggs",
@@ -509,329 +509,329 @@
       "workRhythm": 1,
       "fuelType": 1,
       "orientation": 4,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "knowledgeStyle": 2,
+      "scaleApproach": 2,
+      "confidence": 85
     },
     {
       "name": "Harville Hendrix",
-      "experienceType": "facilitation",
+      "experienceType": "certification",
       "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 2,
-      "knowledgeStyle": 3,
-      "scaleApproach": 2,
-      "confidence": 70
+      "fuelType": 2,
+      "orientation": 3,
+      "knowledgeStyle": 2,
+      "scaleApproach": 5,
+      "confidence": 85
     },
     {
       "name": "Holly Whitaker",
-      "experienceType": "cohort",
-      "workRhythm": 2,
+      "experienceType": "book_newsletter",
+      "workRhythm": 3,
       "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 4,
+      "orientation": 4,
+      "knowledgeStyle": 3,
       "scaleApproach": 4,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "James Clear",
       "experienceType": "book_newsletter",
-      "workRhythm": 2,
+      "workRhythm": 1,
       "fuelType": 3,
       "orientation": 2,
-      "knowledgeStyle": 4,
-      "scaleApproach": 4,
-      "confidence": 70
+      "knowledgeStyle": 1,
+      "scaleApproach": 5,
+      "confidence": 85
     },
     {
       "name": "Jesse Itzler",
-      "experienceType": "book_newsletter",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 2,
-      "knowledgeStyle": 3,
+      "experienceType": "live_events",
+      "workRhythm": 5,
+      "fuelType": 5,
+      "orientation": 5,
+      "knowledgeStyle": 4,
       "scaleApproach": 3,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "John Gottman",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 3,
+      "experienceType": "certification",
+      "workRhythm": 1,
+      "fuelType": 2,
       "orientation": 2,
-      "knowledgeStyle": 2,
-      "scaleApproach": 3,
-      "confidence": 70
+      "knowledgeStyle": 1,
+      "scaleApproach": 4,
+      "confidence": 85
     },
     {
       "name": "Jose Andres",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 3,
+      "experienceType": "live_events",
+      "workRhythm": 4,
+      "fuelType": 2,
+      "orientation": 5,
       "knowledgeStyle": 3,
       "scaleApproach": 4,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Joseph Campbell",
       "experienceType": "book_newsletter",
       "workRhythm": 1,
-      "fuelType": 3,
+      "fuelType": 1,
       "orientation": 2,
-      "knowledgeStyle": 3,
+      "knowledgeStyle": 2,
       "scaleApproach": 3,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Kae Tempest",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 4,
-      "scaleApproach": 3,
-      "confidence": 70
+      "experienceType": "live_events",
+      "workRhythm": 3,
+      "fuelType": 4,
+      "orientation": 4,
+      "knowledgeStyle": 5,
+      "scaleApproach": 2,
+      "confidence": 85
     },
     {
       "name": "Lin-Manuel Miranda",
-      "experienceType": "facilitation",
+      "experienceType": "live_events",
       "workRhythm": 2,
-      "fuelType": 4,
-      "orientation": 2,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "fuelType": 3,
+      "orientation": 5,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 85
     },
     {
       "name": "Luciano Pavarotti",
       "experienceType": "live_events",
+      "workRhythm": 1,
+      "fuelType": 4,
+      "orientation": 5,
+      "knowledgeStyle": 3,
+      "scaleApproach": 5,
+      "confidence": 85
+    },
+    {
+      "name": "Marc Freedman",
+      "experienceType": "facilitation",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 2,
+      "scaleApproach": 4,
+      "confidence": 85
+    },
+    {
+      "name": "Marie Forleo",
+      "experienceType": "cohort",
       "workRhythm": 2,
       "fuelType": 4,
       "orientation": 4,
       "knowledgeStyle": 3,
       "scaleApproach": 5,
-      "confidence": 70
-    },
-    {
-      "name": "Marc Freedman",
-      "experienceType": "certification",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 4,
-      "scaleApproach": 3,
-      "confidence": 70
-    },
-    {
-      "name": "Marie Forleo",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 4,
-      "scaleApproach": 3,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Marshall Ganz",
       "experienceType": "facilitation",
       "workRhythm": 1,
       "fuelType": 1,
-      "orientation": 4,
-      "knowledgeStyle": 3,
+      "orientation": 5,
+      "knowledgeStyle": 2,
       "scaleApproach": 3,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Martti Ahtisaari",
-      "experienceType": "certification",
-      "workRhythm": 2,
-      "fuelType": 3,
+      "experienceType": "facilitation",
+      "workRhythm": 1,
+      "fuelType": 1,
       "orientation": 3,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "knowledgeStyle": 2,
+      "scaleApproach": 2,
+      "confidence": 85
     },
     {
       "name": "Marva Collins",
-      "experienceType": "certification",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 2,
-      "scaleApproach": 3,
-      "confidence": 70
+      "experienceType": "cohort",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 1,
+      "confidence": 85
     },
     {
       "name": "Mercedes Sosa",
       "experienceType": "live_events",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 5,
+      "knowledgeStyle": 5,
+      "scaleApproach": 3,
+      "confidence": 85
+    },
+    {
+      "name": "Myles Horton",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 2,
+      "confidence": 85
+    },
+    {
+      "name": "Nina Simone",
+      "experienceType": "live_events",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 5,
+      "scaleApproach": 3,
+      "confidence": 85
+    },
+    {
+      "name": "P.T. Barnum",
+      "experienceType": "live_events",
+      "workRhythm": 3,
+      "fuelType": 5,
+      "orientation": 5,
+      "knowledgeStyle": 4,
+      "scaleApproach": 5,
+      "confidence": 85
+    },
+    {
+      "name": "Paulo Freire",
+      "experienceType": "cohort",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 2,
+      "scaleApproach": 4,
+      "confidence": 85
+    },
+    {
+      "name": "Rita Pierson",
+      "experienceType": "cohort",
+      "workRhythm": 1,
+      "fuelType": 2,
+      "orientation": 4,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 85
+    },
+    {
+      "name": "Simon Sinek",
+      "experienceType": "book_newsletter",
       "workRhythm": 2,
       "fuelType": 3,
       "orientation": 4,
       "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "scaleApproach": 5,
+      "confidence": 85
     },
     {
-      "name": "Myles Horton",
+      "name": "Stan Tatkin",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 2,
+      "orientation": 2,
+      "knowledgeStyle": 1,
+      "scaleApproach": 3,
+      "confidence": 85
+    },
+    {
+      "name": "Sue Johnson",
+      "experienceType": "certification",
+      "workRhythm": 1,
+      "fuelType": 2,
+      "orientation": 3,
+      "knowledgeStyle": 2,
+      "scaleApproach": 5,
+      "confidence": 85
+    },
+    {
+      "name": "Tara Brach",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 85
+    },
+    {
+      "name": "Tarana Burke",
+      "experienceType": "facilitation",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 5,
+      "knowledgeStyle": 4,
+      "scaleApproach": 5,
+      "confidence": 85
+    },
+    {
+      "name": "Terry Real",
       "experienceType": "certification",
       "workRhythm": 1,
       "fuelType": 3,
       "orientation": 3,
       "knowledgeStyle": 3,
       "scaleApproach": 3,
-      "confidence": 70
-    },
-    {
-      "name": "Nina Simone",
-      "experienceType": "book_newsletter",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 2,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
-    },
-    {
-      "name": "P.T. Barnum",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 4,
-      "orientation": 4,
-      "knowledgeStyle": 3,
-      "scaleApproach": 4,
-      "confidence": 70
-    },
-    {
-      "name": "Paulo Freire",
-      "experienceType": "book_newsletter",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 2,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
-    },
-    {
-      "name": "Rita Pierson",
-      "experienceType": "certification",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 2,
-      "scaleApproach": 4,
-      "confidence": 70
-    },
-    {
-      "name": "Simon Sinek",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "orientation": 3,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
-    },
-    {
-      "name": "Stan Tatkin",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "orientation": 2,
-      "knowledgeStyle": 4,
-      "scaleApproach": 3,
-      "confidence": 70
-    },
-    {
-      "name": "Sue Johnson",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 2,
-      "knowledgeStyle": 4,
-      "scaleApproach": 3,
-      "confidence": 70
-    },
-    {
-      "name": "Tara Brach",
-      "experienceType": "book_newsletter",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "orientation": 2,
-      "knowledgeStyle": 4,
-      "scaleApproach": 4,
-      "confidence": 70
-    },
-    {
-      "name": "Tarana Burke",
-      "experienceType": "book_newsletter",
-      "workRhythm": 2,
-      "fuelType": 1,
-      "orientation": 2,
-      "knowledgeStyle": 2,
-      "scaleApproach": 3,
-      "confidence": 70
-    },
-    {
-      "name": "Terry Real",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 2,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "confidence": 85
     },
     {
       "name": "Tiffany Aliche",
-      "experienceType": "certification",
+      "experienceType": "cohort",
       "workRhythm": 2,
-      "fuelType": 3,
-      "orientation": 2,
-      "knowledgeStyle": 4,
-      "scaleApproach": 4,
-      "confidence": 70
+      "fuelType": 2,
+      "orientation": 5,
+      "knowledgeStyle": 3,
+      "scaleApproach": 5,
+      "confidence": 85
     },
     {
       "name": "V\u00e1clav Havel",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
+      "experienceType": "book_newsletter",
+      "workRhythm": 1,
       "fuelType": 1,
       "orientation": 3,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "knowledgeStyle": 2,
+      "scaleApproach": 2,
+      "confidence": 85
     },
     {
       "name": "Walt Disney",
-      "experienceType": "facilitation",
+      "experienceType": "live_events",
       "workRhythm": 2,
       "fuelType": 3,
-      "orientation": 3,
+      "orientation": 4,
       "knowledgeStyle": 4,
-      "scaleApproach": 3,
-      "confidence": 70
+      "scaleApproach": 5,
+      "confidence": 85
     },
     {
       "name": "William Shakespeare",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 4,
-      "orientation": 2,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
-      "confidence": 70
+      "experienceType": "live_events",
+      "workRhythm": 1,
+      "fuelType": 3,
+      "orientation": 4,
+      "knowledgeStyle": 5,
+      "scaleApproach": 4,
+      "confidence": 85
     },
     {
       "name": "Yayoi Kusama",
-      "experienceType": "facilitation",
-      "workRhythm": 2,
-      "fuelType": 3,
+      "experienceType": "live_events",
+      "workRhythm": 1,
+      "fuelType": 2,
       "orientation": 3,
-      "knowledgeStyle": 4,
-      "scaleApproach": 3,
-      "confidence": 70
+      "knowledgeStyle": 5,
+      "scaleApproach": 4,
+      "confidence": 85
     }
   ]
 }
