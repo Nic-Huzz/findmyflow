@@ -430,3 +430,125 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   .ch2-kpi-val { font-size: 20px; }
   .ch2-create-options { flex-direction: column; }
 }
+
+/* ═══ CREATOR DETAIL MODAL ═══ */
+.ch2-creator-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  animation: ch2CreatorFadeIn 0.2s ease;
+}
+
+@keyframes ch2CreatorFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ch2-creator-modal {
+  background: linear-gradient(180deg, #1a0a3e 0%, #0d0620 100%);
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  animation: ch2CreatorSlideUp 0.3s ease;
+}
+
+@keyframes ch2CreatorSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.ch2-creator-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: rgba(255,255,255,0.6);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ch2-creator-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ch2-creator-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(233, 162, 59, 0.3);
+  margin-bottom: 12px;
+}
+
+.ch2-creator-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+}
+
+.ch2-creator-section {
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+}
+
+.ch2-creator-section-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #E9A23B;
+  margin-bottom: 8px;
+}
+
+.ch2-creator-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ch2-creator-stat-num {
+  font-size: 36px;
+  font-weight: 900;
+  color: #E9A23B;
+  line-height: 1;
+}
+
+.ch2-creator-stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+}
+
+.ch2-creator-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.8);
+  margin: 0;
+}
+
+.ch2-creator-remarkable {
+  font-style: italic;
+  color: rgba(255,255,255,0.9);
+}

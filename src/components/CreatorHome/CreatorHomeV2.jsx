@@ -7,7 +7,7 @@
  *   Growth — KPIs, 3% chain, top fans, trajectory
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
@@ -83,6 +83,35 @@ export default function CreatorHomeV2() {
   const [loading, setLoading] = useState(true)
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
   const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
+
+  // Creator detail modal
+  const [creatorDetail, setCreatorDetail] = useState(null)
+  const [creatorDataCache, setCreatorDataCache] = useState(null)
+
+  const loadCreatorData = useCallback(async () => {
+    if (creatorDataCache) return creatorDataCache
+    try {
+      const [timelines, growth, revenue] = await Promise.all([
+        fetch('/data/creatorGrowthTimelines.json').then(r => r.json()),
+        fetch('/data/experienceCreatorGrowthStrategies.json').then(r => r.json()),
+        fetch('/data/creatorEarlyRevenueModels.json').then(r => r.json()),
+      ])
+      const cache = { timelines: timelines.creators || timelines, growth: growth.creators || growth, revenue: Array.isArray(revenue.creators || revenue) ? Object.fromEntries((revenue.creators || revenue).map(c => [c.name, c])) : revenue.creators || revenue }
+      setCreatorDataCache(cache)
+      return cache
+    } catch { return null }
+  }, [creatorDataCache])
+
+  const handleCreatorTap = async (name) => {
+    const data = await loadCreatorData()
+    if (!data) return
+    setCreatorDetail({
+      name,
+      timeline: data.timelines[name] || null,
+      growth: data.growth[name] || null,
+      revenue: data.revenue[name] || null,
+    })
+  }
 
   // Data
   const [scopeResult, setScopeResult] = useState(null)
@@ -336,7 +365,7 @@ export default function CreatorHomeV2() {
                     {selectedCreators.slice(0, 5).map(name => {
                       const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
                       return (
-                        <div key={name} className="ch2-star">
+                        <div key={name} className="ch2-star" onClick={() => handleCreatorTap(name)} style={{ cursor: 'pointer' }}>
                           <div className="ch2-star-img">
                             <img src={`/images/creators/${slug}.png`} alt="" onError={e => { e.target.style.display = 'none' }} />
                           </div>
@@ -701,6 +730,64 @@ export default function CreatorHomeV2() {
           </div>
         )}
       </div>
+
+      {/* Creator Detail Modal */}
+      {creatorDetail && (
+        <div className="ch2-creator-overlay" onClick={() => setCreatorDetail(null)}>
+          <div className="ch2-creator-modal" onClick={e => e.stopPropagation()}>
+            <button className="ch2-creator-close" onClick={() => setCreatorDetail(null)}>×</button>
+            <div className="ch2-creator-header">
+              <img
+                className="ch2-creator-avatar"
+                src={`/images/creators/${creatorDetail.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')}.png`}
+                alt=""
+                onError={e => { e.target.style.display = 'none' }}
+              />
+              <h2 className="ch2-creator-name">{creatorDetail.name}</h2>
+            </div>
+
+            {creatorDetail.timeline && (
+              <div className="ch2-creator-section">
+                <div className="ch2-creator-stat">
+                  <span className="ch2-creator-stat-num">{creatorDetail.timeline.trust_years}</span>
+                  <span className="ch2-creator-stat-label">years before breakthrough</span>
+                </div>
+                <p className="ch2-creator-text">{creatorDetail.timeline.inflection}</p>
+              </div>
+            )}
+
+            {creatorDetail.revenue && (
+              <div className="ch2-creator-section">
+                <div className="ch2-creator-section-label">How they paid rent</div>
+                <p className="ch2-creator-text">{creatorDetail.revenue.early_revenue_description}</p>
+              </div>
+            )}
+
+            {creatorDetail.growth && (
+              <>
+                <div className="ch2-creator-section">
+                  <div className="ch2-creator-section-label">How they started</div>
+                  <p className="ch2-creator-text">{creatorDetail.growth.early_growth}</p>
+                </div>
+                <div className="ch2-creator-section">
+                  <div className="ch2-creator-section-label">How they blew up</div>
+                  <p className="ch2-creator-text">{creatorDetail.growth.scaling_move}</p>
+                </div>
+                {creatorDetail.growth.remarkable_thing && (
+                  <div className="ch2-creator-section">
+                    <div className="ch2-creator-section-label">What made them remarkable</div>
+                    <p className="ch2-creator-text ch2-creator-remarkable">{creatorDetail.growth.remarkable_thing}</p>
+                  </div>
+                )}
+              </>
+            )}
+
+            {!creatorDetail.timeline && !creatorDetail.growth && !creatorDetail.revenue && (
+              <p className="ch2-creator-text" style={{ textAlign: 'center', opacity: 0.5 }}>Detailed data coming soon for this creator.</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
