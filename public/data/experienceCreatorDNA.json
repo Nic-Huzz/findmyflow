@@ -2,32 +2,32 @@
   "meta": {
     "version": "2.0",
     "generatedAt": "2026-05-09",
-    "totalProfiles": 33,
+    "totalProfiles": 80,
     "sliders": {
       "workRhythm": {
         "min": 1,
         "max": 5,
-        "label": "Marathon ↔ Sprints"
+        "label": "Marathon \u2194 Sprints"
       },
       "fuelType": {
         "min": 1,
         "max": 5,
-        "label": "Fire ↔ Purpose"
+        "label": "Fire \u2194 Purpose"
       },
       "orientation": {
         "min": 1,
         "max": 5,
-        "label": "Solo/Deep ↔ Social/Enterprising"
+        "label": "Solo/Deep \u2194 Social/Enterprising"
       },
       "knowledgeStyle": {
         "min": 1,
         "max": 5,
-        "label": "Analytical ↔ Intuitive"
+        "label": "Analytical \u2194 Intuitive"
       },
       "scaleApproach": {
         "min": 1,
         "max": 5,
-        "label": "Craft ↔ Empire"
+        "label": "Craft \u2194 Empire"
       }
     },
     "notes": "33 live experience creators. Sliders match the Play Profile quiz output (workRhythm, fuelType from user sliders; orientation, knowledgeStyle inferred from games; scaleApproach from user slider). Full 221-profile archive at public/data/archived/experienceCreatorDNA-221-full.json"
@@ -64,7 +64,7 @@
       "confidence": 88
     },
     {
-      "name": "Brené Brown",
+      "name": "Bren\u00e9 Brown",
       "experienceType": "book_newsletter",
       "workRhythm": 2,
       "fuelType": 1,
@@ -362,6 +362,476 @@
       "knowledgeStyle": 5,
       "scaleApproach": 4,
       "confidence": 88
+    },
+    {
+      "name": "Adriene Mishler",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Alain de Botton",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "Bill Thomas",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Bill Wilson",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "Dan Hughes",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 4,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Dave Ramsey",
+      "experienceType": "facilitation",
+      "workRhythm": 1,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "David Bohm",
+      "experienceType": "facilitation",
+      "workRhythm": 1,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Elizabeth Gilbert",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "Ella Baker",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Erin Gruwell",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Fela Kuti",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 4,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Glennon Doyle",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 4,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Gloria Steinem",
+      "experienceType": "facilitation",
+      "workRhythm": 1,
+      "fuelType": 4,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Gordon Lish",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Grace Lee Boggs",
+      "experienceType": "facilitation",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Harville Hendrix",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 2,
+      "confidence": 70
+    },
+    {
+      "name": "Holly Whitaker",
+      "experienceType": "cohort",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "James Clear",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "Jesse Itzler",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "John Gottman",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 2,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Jose Andres",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "Joseph Campbell",
+      "experienceType": "book_newsletter",
+      "workRhythm": 1,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Kae Tempest",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Lin-Manuel Miranda",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 4,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Luciano Pavarotti",
+      "experienceType": "live_events",
+      "workRhythm": 2,
+      "fuelType": 4,
+      "orientation": 4,
+      "knowledgeStyle": 3,
+      "scaleApproach": 5,
+      "confidence": 70
+    },
+    {
+      "name": "Marc Freedman",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Marie Forleo",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Marshall Ganz",
+      "experienceType": "facilitation",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Martti Ahtisaari",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Marva Collins",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 2,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Mercedes Sosa",
+      "experienceType": "live_events",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 4,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Myles Horton",
+      "experienceType": "certification",
+      "workRhythm": 1,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Nina Simone",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "P.T. Barnum",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 4,
+      "orientation": 4,
+      "knowledgeStyle": 3,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "Paulo Freire",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Rita Pierson",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 2,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "Simon Sinek",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Stan Tatkin",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Sue Johnson",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Tara Brach",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "Tarana Burke",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 2,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Terry Real",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Tiffany Aliche",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 70
+    },
+    {
+      "name": "V\u00e1clav Havel",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Walt Disney",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "William Shakespeare",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 4,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 70
+    },
+    {
+      "name": "Yayoi Kusama",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 70
     }
   ]
 }
