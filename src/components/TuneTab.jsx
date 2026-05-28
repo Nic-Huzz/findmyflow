@@ -736,6 +736,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
 
       {/* Section 2: Weekly */}
       {(weeklySafety.length > 0 || weeklyExpression.length > 0 || !weeklyFocus) && (
+        /* Note: Weekly Focus setup row is inside the Expression subsection below */
         <div className="tt-section">
           <div className="tt-section-header">
             <div className="tt-section-header-left">
@@ -744,38 +745,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             </div>
           </div>
           <p className="tt-section-sub">At least once a week, go deeper.</p>
-
-          {/* Weekly Focus setup — show when no intention set this week */}
-          {!weeklyFocus && (() => {
-            const focusQuest = allQuests.find(q => q.id === 'rewire_weekly_focus')
-            if (!focusQuest) return null
-            return (
-              <div className="tt-subsection">
-                <div className="tt-subsection-header">
-                  <span className="tt-subsection-icon">🎯</span>
-                  <span className="tt-subsection-label tt-label-activation">Focus</span>
-                </div>
-                <div className="tt-quest-list">
-                  <div className="ht-item-row">
-                    <span className="ht-item-check" />
-                    <div className="ht-item-body">
-                      <div className="ht-item-name">Set your Weekly Focus</div>
-                      <div className="ht-item-meta">
-                        <span className="ht-item-type">Pick one thing to work on this week</span>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="ht-item-action"
-                      onClick={() => setHealingModalQuest(focusQuest)}
-                    >
-                      Set
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )
-          })()}
 
           {weeklySafety.length > 0 && (
             <div className="tt-subsection">
@@ -789,7 +758,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             </div>
           )}
 
-          {weeklyExpression.length > 0 && (
+          {(weeklyExpression.length > 0 || !weeklyFocus) && (
             <div className="tt-subsection">
               <div className="tt-subsection-header">
                 <span className="tt-subsection-icon">🔥</span>
@@ -797,6 +766,29 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
               </div>
               <div className="tt-quest-list">
                 {weeklyExpression.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+                {/* Weekly Focus setup — show when no intention set this week */}
+                {!weeklyFocus && (() => {
+                  const focusQuest = allQuests.find(q => q.id === 'rewire_weekly_focus')
+                  if (!focusQuest) return null
+                  return (
+                    <div className="ht-item-row">
+                      <span className="ht-item-check" />
+                      <div className="ht-item-body">
+                        <div className="ht-item-name">Set your Weekly Focus</div>
+                        <div className="ht-item-meta">
+                          <span className="ht-item-type">Pick one thing to work on this week</span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        className="ht-item-action"
+                        onClick={() => setHealingModalQuest(focusQuest)}
+                      >
+                        Set
+                      </button>
+                    </div>
+                  )
+                })()}
               </div>
             </div>
           )}
