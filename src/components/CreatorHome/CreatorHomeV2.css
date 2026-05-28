@@ -395,6 +395,7 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
 .ch2-create-opt,
 .ch2-locked,
 .ch2-biz-row[style*="cursor"],
+.ch2-star,
 .ch2-btn-gold,
 .ch2-btn-outline {
   touch-action: manipulation;
@@ -456,6 +457,7 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   max-width: 480px;
   width: 100%;
   max-height: 85vh;
+  max-height: 85dvh;
   overflow-y: auto;
   position: relative;
   animation: ch2CreatorSlideUp 0.3s ease;
@@ -546,6 +548,7 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   line-height: 1.6;
   color: rgba(255,255,255,0.8);
   margin: 0;
+  overflow-wrap: break-word;
 }
 
 .ch2-creator-remarkable {
