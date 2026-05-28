@@ -11,8 +11,8 @@
   --card-border: rgba(255,255,255,0.06);
   --text-bright: #ffffff;
   --text-primary: rgba(255,255,255,0.6);
-  --text-secondary: rgba(255,255,255,0.3);
-  --text-muted: rgba(255,255,255,0.15);
+  --text-secondary: rgba(255,255,255,0.4);
+  --text-muted: rgba(255,255,255,0.45);
 
   min-height: 100vh;
   background: var(--bg);
