@@ -144,10 +144,10 @@
           }
         ]
       },
-      "blowUpMoment": "Emerged from her 12-year cave retreat in 1988 and gave her first public teaching that would later become the book 'Cave in the Snow,' read by millions worldwide.",
-      "blowUpYear": 1988,
-      "blowUpType": "event",
-      "blowUpContext": "She was living as an unknown Western Buddhist nun studying in India when her teacher suggested she undertake the traditional three-year retreat."
+      "blowUpMoment": "Vicki Mackenzie published 'Cave in the Snow' which told the story of her 12-year meditation retreat in a Himalayan cave to international audiences.",
+      "blowUpYear": 1998,
+      "blowUpType": "product",
+      "blowUpContext": "She had completed her cave retreat in 1988 and was teaching Buddhism quietly in India and occasionally in the West, known only to small circles of practitioners."
     },
     {
       "name": "Gabor Mate",
@@ -260,10 +260,10 @@
           }
         ]
       },
-      "blowUpMoment": "His 1991 infomercial 'Personal Power' became the most successful self-help infomercial of all time, reaching millions and creating a global following.",
+      "blowUpMoment": "His infomercial 'Personal Power' became one of the most successful self-help products ever sold, generating over $80 million in revenue and reaching millions of households.",
       "blowUpYear": 1991,
-      "blowUpType": "content",
-      "blowUpContext": "He was a struggling motivational speaker doing small seminars and working as a janitor's son trying to make ends meet."
+      "blowUpType": "product",
+      "blowUpContext": "He was already a successful motivational speaker and author of 'Unlimited Power' (1986), coaching celebrities and running fire-walking seminars, but hadn't yet achieved mainstream mass-market penetration."
     },
     {
       "name": "Wim Hof",
@@ -608,10 +608,10 @@
           }
         ]
       },
-      "blowUpMoment": "Oprah selected 'The Power of Now' for her book club in 2000 and conducted a 10-week online class that reached millions globally.",
-      "blowUpYear": 2000,
+      "blowUpMoment": "Oprah Winfrey launched a 10-week live webcast series with Tolle discussing 'A New Earth' that attracted over 35 million participants worldwide.",
+      "blowUpYear": 2008,
       "blowUpType": "event",
-      "blowUpContext": "He was an unknown spiritual teacher living in poverty in Vancouver, having self-published his book after his spontaneous awakening."
+      "blowUpContext": "He had been teaching spiritual concepts and had published 'The Power of Now' in 1997 with modest success, building a small but dedicated following through workshops and speaking engagements."
     },
     {
       "name": "Deepak Chopra",
@@ -898,10 +898,10 @@
           }
         ]
       },
-      "blowUpMoment": "Co-founded Off the Mat Into the World in 2007, connecting yoga practice to social activism and raising millions for global causes.",
-      "blowUpYear": 2007,
-      "blowUpType": "movement",
-      "blowUpContext": "She was a popular yoga teacher in Los Angeles dealing with her own trauma while building a following in the studio."
+      "blowUpMoment": "She appeared on the cover of Yoga Journal magazine, which introduced her as a leading voice of power yoga to the mainstream yoga community.",
+      "blowUpYear": 2001,
+      "blowUpType": "event",
+      "blowUpContext": "She had been teaching yoga in Los Angeles since the early 1990s, building a following at studios like Exhale and among Hollywood celebrities."
     },
     {
       "name": "Joe Dispenza",
@@ -1130,10 +1130,10 @@
           }
         ]
       },
-      "blowUpMoment": "His TED talk 'Inner Engineering' in 2016 gained millions of views and introduced his teachings to a global mainstream audience.",
-      "blowUpYear": 2016,
-      "blowUpType": "content",
-      "blowUpContext": "He was building the Isha Foundation in India and teaching yoga while riding motorcycles, known mainly in spiritual circles."
+      "blowUpMoment": "His Rally for Rivers campaign launched across India with motorcycle rallies covering 7,000 kilometers, drawing massive crowds and international media attention.",
+      "blowUpYear": 2017,
+      "blowUpType": "movement",
+      "blowUpContext": "He had been building his following through Isha Foundation programs and YouTube videos for years, but remained primarily known within spiritual circles and India."
     },
     {
       "name": "Marianne Williamson",
@@ -1188,10 +1188,10 @@
           }
         ]
       },
-      "blowUpMoment": "Oprah discovered her teaching 'A Course in Miracles' in the late 1980s and featured her repeatedly, launching her into mainstream spirituality.",
-      "blowUpYear": "~1989",
+      "blowUpMoment": "Oprah Winfrey devoted an entire show to discussing 'A Return to Love' which immediately shot the book to #1 on the New York Times bestseller list.",
+      "blowUpYear": 1992,
       "blowUpType": "event",
-      "blowUpContext": "She was working as a cocktail waitress and nightclub singer while struggling with depression and studying the spiritual text."
+      "blowUpContext": "She had been leading Course in Miracles study groups in Los Angeles since 1983, building a local following and had recently published 'A Return to Love' with modest initial sales."
     },
     {
       "name": "Mooji",
@@ -1246,10 +1246,10 @@
           }
         ]
       },
-      "blowUpMoment": "His satsang videos began going viral on YouTube around 2008, spreading his direct pointing method to millions seeking awakening.",
-      "blowUpYear": 2008,
+      "blowUpMoment": "His satsang video 'The Invitation' went viral on YouTube, accumulating millions of views and introducing his teachings to a global audience.",
+      "blowUpYear": 2009,
       "blowUpType": "content",
-      "blowUpContext": "He was a Jamaican street artist and painter who had found awakening through meeting his teacher Papaji in India."
+      "blowUpContext": "He had been holding small satsangs in London and Rishikesh since 1999, known primarily to followers of his teacher Papaji and local spiritual seekers."
     },
     {
       "name": "Yung Pueblo",
@@ -1362,10 +1362,10 @@
           }
         ]
       },
-      "blowUpMoment": "Her podcast 'Highest Self' launched in 2017 and quickly became the #1 spirituality podcast, making Ayurveda accessible to millions.",
+      "blowUpMoment": "Her book 'Idiot's Guide to Ayurveda' became a bestseller after receiving endorsements from Deepak Chopra and other wellness leaders.",
       "blowUpYear": 2017,
-      "blowUpType": "content",
-      "blowUpContext": "She was a nutritionist studying Ayurveda in India while building her expertise in combining ancient wisdom with modern wellness."
+      "blowUpType": "product",
+      "blowUpContext": "She had been blogging about Ayurveda and wellness since 2013, building a modest social media following while working as a nutritionist and wellness coach."
     },
     {
       "name": "Sri Sri Ravi Shankar",
@@ -1420,10 +1420,10 @@
           }
         ]
       },
-      "blowUpMoment": "Founded the Art of Living in 1981 with the Sudarshan Kriya breathing technique, which spread to millions worldwide through courses.",
-      "blowUpYear": 1981,
-      "blowUpType": "product",
-      "blowUpContext": "He was a young spiritual teacher in India who had developed a powerful breathing technique during a period of silence."
+      "blowUpMoment": "Art of Living reached one million participants worldwide, marking his transition from regional Indian guru to global spiritual leader.",
+      "blowUpYear": 1995,
+      "blowUpType": "movement",
+      "blowUpContext": "He had founded Art of Living in 1981 and spent over a decade teaching Sudarshan Kriya breathing techniques primarily in India and among Indian diaspora communities."
     },
     {
       "name": "Vishen Lakhiani",
@@ -1478,10 +1478,10 @@
           }
         ]
       },
-      "blowUpMoment": "Launched Mindvalley University in 2018 as a transformational education platform that attracted global thought leaders and millions of students.",
-      "blowUpYear": 2018,
+      "blowUpMoment": "'The Code of the Extraordinary Mind' became a New York Times bestseller and established him as a major voice in the personal development space.",
+      "blowUpYear": 2016,
       "blowUpType": "product",
-      "blowUpContext": "He was running Mindvalley as an online meditation platform after leaving his computer engineering career in Silicon Valley."
+      "blowUpContext": "He had been running Mindvalley as an online education company since 2003, creating courses and content, but was known primarily within entrepreneurial and meditation communities."
     },
     {
       "name": "Michael Singer",
@@ -1536,10 +1536,10 @@
           }
         ]
       },
-      "blowUpMoment": "His book 'The Untethered Soul' became a #1 New York Times bestseller in 2007, spreading his surrender teachings globally.",
-      "blowUpYear": 2007,
-      "blowUpType": "product",
-      "blowUpContext": "He was living as a reclusive spiritual seeker who had built a billion-dollar software company while maintaining a hermit-like lifestyle."
+      "blowUpMoment": "Oprah Winfrey featured 'The Untethered Soul' on her Super Soul Sunday program, calling it one of her favorite spiritual books.",
+      "blowUpYear": 2012,
+      "blowUpType": "event",
+      "blowUpContext": "He had published 'The Untethered Soul' in 2007 where it sold modestly while he continued running his software company and spiritual center in Florida largely unknown to mainstream audiences."
     },
     {
       "name": "Michael Beckwith",
@@ -1652,10 +1652,10 @@
           }
         ]
       },
-      "blowUpMoment": "Launched Daybreaker's first sober morning dance party in 2013 in Brooklyn, creating a global movement that redefined nightlife culture.",
+      "blowUpMoment": "She launched the first Daybreaker morning dance party in Brooklyn, creating a new category of alcohol-free nightlife experience.",
       "blowUpYear": 2013,
       "blowUpType": "event",
-      "blowUpContext": "She was a wellness entrepreneur and DJ who wanted to create community experiences without alcohol or late nights."
+      "blowUpContext": "She was an entrepreneur who had previously co-founded Super Sprowtz and was looking for ways to create community and wellness-focused social experiences."
     },
     {
       "name": "Meghan Pappenheim",
@@ -1710,10 +1710,10 @@
           }
         ]
       },
-      "blowUpMoment": "Co-founded the first ISSA luxury wellness event in 2015, creating high-end spiritual experiences that attracted celebrities and influencers worldwide.",
-      "blowUpYear": 2015,
-      "blowUpType": "event",
-      "blowUpContext": "She was working in luxury brand marketing while seeking deeper meaning and community in the wellness space."
+      "blowUpMoment": "She founded ISSA (International Sports Sciences Association) which became one of the world's largest fitness certification organizations.",
+      "blowUpYear": 1988,
+      "blowUpType": "product",
+      "blowUpContext": "She was working in the fitness industry during the aerobics boom of the 1980s, recognizing the need for standardized fitness professional certification programs."
     },
     {
       "name": "Jeff Krasno",
@@ -1826,10 +1826,10 @@
           }
         ]
       },
-      "blowUpMoment": "Created the 5Rhythms movement practice in the late 1970s after a spontaneous ecstatic dance experience healed her own trauma.",
-      "blowUpYear": "~1977",
+      "blowUpMoment": "She published 'Maps to Ecstasy' which codified her 5Rhythms movement practice and brought it to mainstream spiritual seekers.",
+      "blowUpYear": 1989,
       "blowUpType": "product",
-      "blowUpContext": "She was a dancer and theater director in New York exploring how movement could be used for healing and self-expression."
+      "blowUpContext": "She had been developing her movement work since the 1960s, leading workshops at Esalen and teaching what would become 5Rhythms to small groups in New York and California."
     },
     {
       "name": "Larry Harvey",
