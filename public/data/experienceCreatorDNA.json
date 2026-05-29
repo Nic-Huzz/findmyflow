@@ -85,7 +85,11 @@
             "content": "He framed sitting meditation as team strategy sessions, not personal development. Players had to attend because it was basketball preparation, then experienced the benefits without admitting they liked 'spiritual stuff.'"
           }
         ]
-      }
+      },
+      "blowUpMoment": "Led the Chicago Bulls to their first NBA championship in 1991 using Zen meditation and triangle offense with Michael Jordan after seven years of playoff failures.",
+      "blowUpYear": 1991,
+      "blowUpType": "event",
+      "blowUpContext": "He was an assistant coach with the Bulls watching Michael Jordan repeatedly fail to get past the Detroit Pistons in the playoffs."
     },
     {
       "name": "Tenzin Palmo",
@@ -139,7 +143,11 @@
             "content": "When high Tibetan lamas began acknowledging her realization and asking her to teach, she knew she had succeeded. The ultimate measure was that the same tradition that excluded women now invited her to train the next generation."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Emerged from her 12-year cave retreat in 1988 and gave her first public teaching that would later become the book 'Cave in the Snow,' read by millions worldwide.",
+      "blowUpYear": 1988,
+      "blowUpType": "event",
+      "blowUpContext": "She was living as an unknown Western Buddhist nun studying in India when her teacher suggested she undertake the traditional three-year retreat."
     },
     {
       "name": "Gabor Mate",
@@ -193,7 +201,11 @@
             "content": "He realized that his trauma insights applied beyond addiction to corporate stress, parenting, and general mental health. His Downtown Eastside experience became valuable content for middle-class audiences willing to pay for workshops and books."
           }
         ]
-      }
+      },
+      "blowUpMoment": "His documentary 'The Wisdom of Trauma' gained 2 million views in 6 days when released in 2021, spreading his addiction-as-trauma philosophy globally.",
+      "blowUpYear": 2021,
+      "blowUpType": "content",
+      "blowUpContext": "He was a family physician in Vancouver working quietly with addicts in the Downtown Eastside for over a decade."
     },
     {
       "name": "Tony Robbins",
@@ -247,7 +259,11 @@
             "content": "He showcased testimonials from business leaders and celebrities who had done his events, making fire walking seem like what successful people do for breakthrough performance rather than a fringe spiritual practice."
           }
         ]
-      }
+      },
+      "blowUpMoment": "His 1991 infomercial 'Personal Power' became the most successful self-help infomercial of all time, reaching millions and creating a global following.",
+      "blowUpYear": 1991,
+      "blowUpType": "content",
+      "blowUpContext": "He was a struggling motivational speaker doing small seminars and working as a janitor's son trying to make ends meet."
     },
     {
       "name": "Wim Hof",
@@ -301,7 +317,11 @@
             "content": "He worked with researchers to measure inflammatory response to endotoxin injection and tracked students' ability to maintain core body temperature during cold exposure. These became the standard metrics for his training programs."
           }
         ]
-      }
+      },
+      "blowUpMoment": "A 2014 study published in PNAS proved his students could control their immune response using his breathing method when injected with bacterial endotoxin.",
+      "blowUpYear": 2014,
+      "blowUpType": "event",
+      "blowUpContext": "He was considered a freak show performer known mainly for extreme cold stunts that scientists dismissed as impossible."
     },
     {
       "name": "Esther Perel",
@@ -355,7 +375,11 @@
             "content": "She built a business around podcast sponsorships, online courses, corporate workshops, and book deals, all leveraging her therapy insights. This allowed her to earn more while serving millions instead of dozens of people."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Launched the podcast 'Where Should We Begin?' in 2017, featuring real couples therapy sessions that gained millions of downloads globally.",
+      "blowUpYear": 2017,
+      "blowUpType": "content",
+      "blowUpContext": "She was a respected relationships therapist known mainly in professional circles for her book 'Mating in Captivity.'"
     },
     {
       "name": "Priya Parker",
@@ -409,7 +433,11 @@
             "content": "She created evaluation tools that measured meeting effectiveness and decision quality, giving executives data-driven evidence of their gathering problems. The objective metrics made it easier for leaders to request her help without admitting personal failure."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Her book 'The Art of Gathering' became a bestseller in 2018 after she applied conflict resolution principles from war zones to corporate meetings.",
+      "blowUpYear": 2018,
+      "blowUpType": "product",
+      "blowUpContext": "She was working as a conflict resolution facilitator in international peace negotiations and community organizing."
     },
     {
       "name": "Jay Shetty",
@@ -463,7 +491,11 @@
             "content": "He built his business by giving away most content for free and monetizing through books, courses, and speaking that genuinely helped people transform their lives. The service-first approach aligned with monk principles while creating sustainable income."
           }
         ]
-      }
+      },
+      "blowUpMoment": "His 2016 Facebook video 'A Monk's Take on Life Lessons' went viral with over 300 million views, launching his global platform.",
+      "blowUpYear": 2016,
+      "blowUpType": "content",
+      "blowUpContext": "He had returned from three years as a monk in India and was working at a corporate consulting job in London."
     },
     {
       "name": "Gabby Bernstein",
@@ -517,7 +549,11 @@
             "content": "Gabby applied her publicist skills to spiritual teaching, using Instagram, Twitter, and Facebook to create buzz around her workshops like she used to promote club events. She made spiritual practice look fun, stylish, and socially desirable rather than serious and austere."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Oprah named her to the SuperSoul 100 list in 2013 as a next-generation thought leader, catapulting her to mainstream recognition.",
+      "blowUpYear": 2013,
+      "blowUpType": "event",
+      "blowUpContext": "She was a young spiritual teacher building her following through social media and small workshops after getting sober from cocaine addiction."
     },
     {
       "name": "Eckhart Tolle",
@@ -571,7 +607,11 @@
             "content": "Rather than pushing for publicity, Eckhart focused entirely on the depth of transformation in small groups and individual sessions. Students began referring others, and eventually The Power of Now found its way to Oprah through genuine grassroots recommendation rather than marketing."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Oprah selected 'The Power of Now' for her book club in 2000 and conducted a 10-week online class that reached millions globally.",
+      "blowUpYear": 2000,
+      "blowUpType": "event",
+      "blowUpContext": "He was an unknown spiritual teacher living in poverty in Vancouver, having self-published his book after his spontaneous awakening."
     },
     {
       "name": "Deepak Chopra",
@@ -625,7 +665,11 @@
             "content": "He began carefully introducing meditation and mind-body techniques alongside conventional treatment, measuring patient outcomes and satisfaction. When patients showed improved results and expressed enthusiasm for the holistic approach, he knew there was demand for integrated medicine."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Appeared on The Oprah Winfrey Show in 1993 discussing 'Ageless Body, Timeless Mind,' which became a #1 New York Times bestseller.",
+      "blowUpYear": 1993,
+      "blowUpType": "content",
+      "blowUpContext": "He was practicing as an endocrinologist in Boston before leaving conventional medicine to explore Ayurvedic healing."
     },
     {
       "name": "Jack Kornfield",
@@ -679,7 +723,11 @@
             "content": "He began introducing simple mindfulness exercises to therapy clients, carefully monitoring their responses and outcomes. When clients consistently reported reduced anxiety and increased self-awareness, he developed more structured mindfulness-based therapy protocols."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Co-founded the Insight Meditation Society in 1975, creating the first major American center teaching Vipassana meditation to Westerners.",
+      "blowUpYear": 1975,
+      "blowUpType": "action",
+      "blowUpContext": "He was a clinical psychologist who had spent time as a Buddhist monk in Thailand through the Peace Corps."
     },
     {
       "name": "Sam Harris",
@@ -733,7 +781,11 @@
             "content": "Sam structured his meditation teaching around direct investigation of consciousness and the illusion of the self, using philosophical inquiry and neuroscience rather than Buddhist doctrine. This created a coherent secular path that maintained the transformative power of traditional practices."
           }
         ]
-      }
+      },
+      "blowUpMoment": "His book 'The End of Faith' won the 2005 PEN Award for Nonfiction and sparked global debate about religion and spirituality.",
+      "blowUpYear": 2004,
+      "blowUpType": "product",
+      "blowUpContext": "He was a Stanford philosophy student and neuroscience researcher who had spent years studying meditation in India."
     },
     {
       "name": "Thich Nhat Hanh",
@@ -787,7 +839,11 @@
             "content": "He developed workshops around basic practices like mindful breathing and walking that required no special knowledge or cultural background. His simple, poetic teaching style and emphasis on peace attracted Western audiences seeking alternatives to more intense spiritual approaches."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Martin Luther King Jr. nominated him for the Nobel Peace Prize in 1967 for his work promoting peace during the Vietnam War.",
+      "blowUpYear": 1967,
+      "blowUpType": "event",
+      "blowUpContext": "He was a Vietnamese Zen monk teaching at universities and helping war refugees while his country was being destroyed."
     },
     {
       "name": "Seane Corn",
@@ -841,7 +897,11 @@
             "content": "She collaborated with licensed trauma therapists to co-facilitate small workshops, carefully monitoring student responses and refining techniques based on professional feedback. This safe testing environment allowed her to develop effective protocols before teaching independently."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Co-founded Off the Mat Into the World in 2007, connecting yoga practice to social activism and raising millions for global causes.",
+      "blowUpYear": 2007,
+      "blowUpType": "movement",
+      "blowUpContext": "She was a popular yoga teacher in Los Angeles dealing with her own trauma while building a following in the studio."
     },
     {
       "name": "Joe Dispenza",
@@ -895,7 +955,11 @@
             "content": "He developed multiple price points from $300 online courses to $2,000 week-long retreats, allowing people to start affordably and invest more as they experienced results. His highest-level programs command premium pricing because participants achieve documented transformations."
           }
         ]
-      }
+      },
+      "blowUpMoment": "His appearance in the 2004 film 'What the Bleep Do We Know!?' introduced his brain-change theories to mainstream audiences worldwide.",
+      "blowUpYear": 2004,
+      "blowUpType": "content",
+      "blowUpContext": "He was a chiropractor researching spontaneous remissions and neuroplasticity after healing his own broken spine through visualization."
     },
     {
       "name": "Aubrey Marcus",
@@ -949,7 +1013,11 @@
             "content": "He leveraged his friendship with Joe Rogan and other podcasters to authentically share his personal experiences with Alpha Brain rather than paying for ads. This organic endorsement strategy generated millions in sales and established Onnit as the trusted nootropics leader without traditional advertising costs."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Launched Onnit in 2010 with Alpha BRAIN nootropic supplement, which became Joe Rogan's signature product and reached $100M+ revenue.",
+      "blowUpYear": 2010,
+      "blowUpType": "product",
+      "blowUpContext": "He was an entrepreneur experimenting with performance optimization and psychedelics while searching for his life purpose."
     },
     {
       "name": "Ram Dass",
@@ -1003,7 +1071,11 @@
             "content": "He launched 'Be Here Now' through grassroots distribution at spiritual centers and gatherings, using direct feedback from seekers to refine his message. The organic word-of-mouth growth and personal testimonials became his primary success metrics, proving impact through transformed lives rather than sales numbers."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Published 'Be Here Now' in 1971, which sold over 2 million copies and became the spiritual bible for an entire generation.",
+      "blowUpYear": 1971,
+      "blowUpType": "product",
+      "blowUpContext": "He was Richard Alpert, a Harvard psychology professor who had been fired for LSD research with Timothy Leary."
     },
     {
       "name": "Sadhguru",
@@ -1057,7 +1129,11 @@
             "content": "He created a hybrid model combining live online sessions, recorded guided practices, and strategic in-person intensives. By training certified instructors and using high-quality video production, he preserved the energetic transmission while scaling Inner Engineering to over 7 million practitioners worldwide."
           }
         ]
-      }
+      },
+      "blowUpMoment": "His TED talk 'Inner Engineering' in 2016 gained millions of views and introduced his teachings to a global mainstream audience.",
+      "blowUpYear": 2016,
+      "blowUpType": "content",
+      "blowUpContext": "He was building the Isha Foundation in India and teaching yoga while riding motorcycles, known mainly in spiritual circles."
     },
     {
       "name": "Marianne Williamson",
@@ -1111,7 +1187,11 @@
             "content": "She created multiple access points - free community lectures, paid workshops, and higher-priced intensives for deeper work. By positioning her teachings as spiritual therapy that could replace years of traditional counseling, she justified premium pricing while maintaining free options for those who couldn't afford to pay."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Oprah discovered her teaching 'A Course in Miracles' in the late 1980s and featured her repeatedly, launching her into mainstream spirituality.",
+      "blowUpYear": "~1989",
+      "blowUpType": "event",
+      "blowUpContext": "She was working as a cocktail waitress and nightclub singer while struggling with depression and studying the spiritual text."
     },
     {
       "name": "Mooji",
@@ -1165,7 +1245,11 @@
             "content": "He spoke and taught exactly as he was, without spiritual personas or marketing polish, trusting that his authentic expression would naturally attract those resonating with truth. This genuine approach created organic word-of-mouth growth among serious seekers while filtering out those seeking entertainment rather than liberation."
           }
         ]
-      }
+      },
+      "blowUpMoment": "His satsang videos began going viral on YouTube around 2008, spreading his direct pointing method to millions seeking awakening.",
+      "blowUpYear": 2008,
+      "blowUpType": "content",
+      "blowUpContext": "He was a Jamaican street artist and painter who had found awakening through meeting his teacher Papaji in India."
     },
     {
       "name": "Yung Pueblo",
@@ -1219,7 +1303,11 @@
             "content": "He developed a signature style of short, impactful poems that could be read in seconds but contemplated for hours. Each piece combined personal healing insights with universal wisdom, creating easily shareable content that introduced followers to deeper concepts they could explore further through his books and longer-form content."
           }
         ]
-      }
+      },
+      "blowUpMoment": "His Instagram poetry about healing and meditation went viral in 2016, gaining millions of followers and reshaping spiritual social media.",
+      "blowUpYear": 2016,
+      "blowUpType": "content",
+      "blowUpContext": "He was Diego Perez, working in political activism while practicing Vipassana meditation and writing poetry to process his healing."
     },
     {
       "name": "Sahara Rose",
@@ -1273,7 +1361,11 @@
             "content": "She launched 'Highest Self Podcast' to establish expertise by interviewing other wellness leaders and sharing Ayurvedic insights consistently. This content-first approach built authority and audience simultaneously, allowing her to become the go-to voice for 'millennial Ayurveda' before expanding into courses and books."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Her podcast 'Highest Self' launched in 2017 and quickly became the #1 spirituality podcast, making Ayurveda accessible to millions.",
+      "blowUpYear": 2017,
+      "blowUpType": "content",
+      "blowUpContext": "She was a nutritionist studying Ayurveda in India while building her expertise in combining ancient wisdom with modern wellness."
     },
     {
       "name": "Sri Sri Ravi Shankar",
@@ -1327,7 +1419,11 @@
             "content": "Art of Living developed comprehensive tracking systems including participant surveys, scientific studies measuring physiological changes, and documentation of social impact in conflict resolution projects. They track everything from individual stress reduction to measurable peace-building outcomes in post-war regions, proving the scalable impact of breathing practices."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Founded the Art of Living in 1981 with the Sudarshan Kriya breathing technique, which spread to millions worldwide through courses.",
+      "blowUpYear": 1981,
+      "blowUpType": "product",
+      "blowUpContext": "He was a young spiritual teacher in India who had developed a powerful breathing technique during a period of silence."
     },
     {
       "name": "Vishen Lakhiani",
@@ -1381,7 +1477,11 @@
             "content": "He reframed consciousness work as 'life hacking' and 'upgrading your operating system,' using tech language that resonated with his audience. Programs promised specific outcomes like '10X productivity' and 'effortless success,' making spiritual growth feel like competitive advantage."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Launched Mindvalley University in 2018 as a transformational education platform that attracted global thought leaders and millions of students.",
+      "blowUpYear": 2018,
+      "blowUpType": "product",
+      "blowUpContext": "He was running Mindvalley as an online meditation platform after leaving his computer engineering career in Silicon Valley."
     },
     {
       "name": "Michael Singer",
@@ -1435,7 +1535,11 @@
             "content": "He measured success by how much ease and flow he experienced while running the business. When decisions created stress or resistance, he course-corrected; when business felt effortless and joyful, he knew he was aligned with deeper intelligence guiding the company's growth."
           }
         ]
-      }
+      },
+      "blowUpMoment": "His book 'The Untethered Soul' became a #1 New York Times bestseller in 2007, spreading his surrender teachings globally.",
+      "blowUpYear": 2007,
+      "blowUpType": "product",
+      "blowUpContext": "He was living as a reclusive spiritual seeker who had built a billion-dollar software company while maintaining a hermit-like lifestyle."
     },
     {
       "name": "Michael Beckwith",
@@ -1489,7 +1593,11 @@
             "content": "He built relationships with conscious celebrities like Oprah and spiritual authors, creating events that felt more like concerts than church services. By partnering with recognized figures, he gave people permission to explore spirituality in a mainstream, credible context."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Featured prominently in 'The Secret' documentary in 2006, introducing his 'Life Visioning' process to millions worldwide.",
+      "blowUpYear": 2006,
+      "blowUpType": "content",
+      "blowUpContext": "He was the founder of Agape International Spiritual Center, building a congregation in Los Angeles after transforming from drug dealing."
     },
     {
       "name": "Radha Agrawal",
@@ -1543,7 +1651,11 @@
             "content": "She marketed Daybreaker as exclusive access to your most vibrant self, emphasizing the natural high and genuine connections possible without substances. VIP packages, surprise performances, and beautiful venues made it feel like the most elevated party experience available."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Launched Daybreaker's first sober morning dance party in 2013 in Brooklyn, creating a global movement that redefined nightlife culture.",
+      "blowUpYear": 2013,
+      "blowUpType": "event",
+      "blowUpContext": "She was a wellness entrepreneur and DJ who wanted to create community experiences without alcohol or late nights."
     },
     {
       "name": "Meghan Pappenheim",
@@ -1597,7 +1709,11 @@
             "content": "She created all-inclusive packages with private chefs, luxury accommodations, exclusive access to renowned teachers, and personalized integration support. The 'done-for-you transformation' positioning made busy executives feel they were getting maximum value for their limited time."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Co-founded the first ISSA luxury wellness event in 2015, creating high-end spiritual experiences that attracted celebrities and influencers worldwide.",
+      "blowUpYear": 2015,
+      "blowUpType": "event",
+      "blowUpContext": "She was working in luxury brand marketing while seeking deeper meaning and community in the wellness space."
     },
     {
       "name": "Jeff Krasno",
@@ -1651,7 +1767,11 @@
             "content": "He measured success through post-festival community engagement - how many people started regular yoga practice, joined local studios, or attended future events. When 70% of participants reported maintaining practices six months later, he knew the festival was creating lasting change."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Created the first Wanderlust Festival in 2009, transforming yoga from studio practice into massive outdoor festivals combining music and mindfulness.",
+      "blowUpYear": 2009,
+      "blowUpType": "event",
+      "blowUpContext": "He was a music industry executive who had produced albums for major artists before discovering yoga and wellness."
     },
     {
       "name": "Gabrielle Roth",
@@ -1705,7 +1825,11 @@
             "content": "She learned to read validation through participants' movement quality, energy shifts, and post-session integration. When people moved with more freedom and reported feeling 'more themselves,' she knew the practice was working regardless of what they could articulate."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Created the 5Rhythms movement practice in the late 1970s after a spontaneous ecstatic dance experience healed her own trauma.",
+      "blowUpYear": "~1977",
+      "blowUpType": "product",
+      "blowUpContext": "She was a dancer and theater director in New York exploring how movement could be used for healing and self-expression."
     },
     {
       "name": "Larry Harvey",
@@ -1759,7 +1883,11 @@
             "content": "Harvey measured success through year-round community building - how many regional burns emerged, gift economy practices people maintained at home, and art projects inspired by the event. When Burning Man principles spread globally, he knew the cultural experiment was working."
           }
         ]
-      }
+      },
+      "blowUpMoment": "Burned the first 8-foot wooden man on Baker Beach in San Francisco in 1986, creating what would become Burning Man festival.",
+      "blowUpYear": 1986,
+      "blowUpType": "event",
+      "blowUpContext": "He was a landscaper and sometime-artist going through a breakup who decided to burn a wooden effigy as a spontaneous act of expression."
     }
   ]
 }
