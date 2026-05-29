@@ -41,7 +41,9 @@
       "orientation": 3,
       "knowledgeStyle": 5,
       "scaleApproach": 3,
-      "confidence": 88
+      "confidence": 88,
+      "bio": "The Zen Master who won 11 NBA championships by teaching millionaire athletes to meditate and brought sacred rituals into locker rooms.",
+      "oneLiner": "The team that pays attention to this moment wins the most games."
     },
     {
       "name": "Tenzin Palmo",
@@ -51,7 +53,9 @@
       "orientation": 1,
       "knowledgeStyle": 5,
       "scaleApproach": 2,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A London fishmonger's daughter who spent 12 years alone in a Himalayan cave to prove women could achieve enlightenment.",
+      "oneLiner": "The cave was the easy part - changing tradition was harder."
     },
     {
       "name": "Gabor Mate",
@@ -61,7 +65,9 @@
       "orientation": 2,
       "knowledgeStyle": 4,
       "scaleApproach": 3,
-      "confidence": 88
+      "confidence": 88,
+      "bio": "The addiction doctor who spent 12 years with Vancouver's most hopeless addicts asking 'why the pain?' instead of 'why the addiction?'",
+      "oneLiner": "Not why the addiction, but why the pain."
     },
     {
       "name": "Tony Robbins",
@@ -71,7 +77,9 @@
       "orientation": 5,
       "knowledgeStyle": 4,
       "scaleApproach": 5,
-      "confidence": 92
+      "confidence": 92,
+      "bio": "A janitor's son who revolutionized therapy by making 10,000 people at once walk on fire and transform their lives in arenas.",
+      "oneLiner": "Change your state, change your life."
     },
     {
       "name": "Wim Hof",
@@ -81,7 +89,9 @@
       "orientation": 2,
       "knowledgeStyle": 5,
       "scaleApproach": 4,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "The Iceman who climbed Everest in shorts and proved through science that breathing and cold can control the immune system.",
+      "oneLiner": "Breathe and get cold."
     },
     {
       "name": "Esther Perel",
@@ -91,7 +101,9 @@
       "orientation": 3,
       "knowledgeStyle": 5,
       "scaleApproach": 3,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "The therapist who broke confidentiality taboos by recording real couples therapy sessions for millions to hear as podcasts.",
+      "oneLiner": "The quality of your relationships determines the quality of your life."
     },
     {
       "name": "Priya Parker",
@@ -101,7 +113,9 @@
       "orientation": 4,
       "knowledgeStyle": 3,
       "scaleApproach": 2,
-      "confidence": 88
+      "confidence": 88,
+      "bio": "A conflict mediator who moved from war zones to boardrooms, proving that how you gather people is itself leadership.",
+      "oneLiner": "How you gather matters more than why you gather."
     },
     {
       "name": "Jay Shetty",
@@ -111,7 +125,9 @@
       "orientation": 4,
       "knowledgeStyle": 4,
       "scaleApproach": 5,
-      "confidence": 85
+      "confidence": 85,
+      "bio": "A former Hindu monk who became Will Smith's spiritual adviser and translated ancient wisdom for the social media generation.",
+      "oneLiner": "Think like a monk in a modern world."
     },
     {
       "name": "Gabby Bernstein",
@@ -121,7 +137,9 @@
       "orientation": 4,
       "knowledgeStyle": 5,
       "scaleApproach": 4,
-      "confidence": 85
+      "confidence": 85,
+      "bio": "A cocaine-addicted nightclub publicist who got sober at 25 and became Oprah's chosen next-generation spiritual teacher.",
+      "oneLiner": "The universe has your back."
     },
     {
       "name": "Eckhart Tolle",
@@ -131,7 +149,9 @@
       "orientation": 1,
       "knowledgeStyle": 5,
       "scaleApproach": 2,
-      "confidence": 92
+      "confidence": 92,
+      "bio": "A suicidal graduate student who experienced sudden awakening and wrote The Power of Now, teaching presence to millions globally.",
+      "oneLiner": "The power is in the now."
     },
     {
       "name": "Deepak Chopra",
@@ -141,7 +161,9 @@
       "orientation": 3,
       "knowledgeStyle": 3,
       "scaleApproach": 5,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "An endocrinologist who left Western medicine to merge quantum physics with ancient Ayurveda, becoming wellness royalty.",
+      "oneLiner": "You are not in the world, the world is in you."
     },
     {
       "name": "Jack Kornfield",
@@ -151,7 +173,9 @@
       "orientation": 3,
       "knowledgeStyle": 3,
       "scaleApproach": 3,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A Peace Corps volunteer turned Buddhist monk who brought mindfulness from Thai monasteries to American psychotherapy.",
+      "oneLiner": "After the ecstasy, the laundry."
     },
     {
       "name": "Sam Harris",
@@ -161,7 +185,9 @@
       "orientation": 1,
       "knowledgeStyle": 1,
       "scaleApproach": 3,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A neuroscientist and atheist who champions meditation without religion, making mindfulness intellectually respectable.",
+      "oneLiner": "Spirituality without superstition is possible."
     },
     {
       "name": "Thich Nhat Hanh",
@@ -171,7 +197,9 @@
       "orientation": 3,
       "knowledgeStyle": 4,
       "scaleApproach": 4,
-      "confidence": 92
+      "confidence": 92,
+      "bio": "A Vietnamese monk who survived war by creating mindful living practices, coining 'engaged Buddhism' for modern life.",
+      "oneLiner": "Walk as if your feet are kissing the earth."
     },
     {
       "name": "Seane Corn",
@@ -181,7 +209,9 @@
       "orientation": 4,
       "knowledgeStyle": 4,
       "scaleApproach": 2,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A trauma survivor who transformed yoga from physical practice into revolutionary tool for healing and social justice.",
+      "oneLiner": "Your issues are in your tissues."
     },
     {
       "name": "Joe Dispenza",
@@ -191,7 +221,9 @@
       "orientation": 3,
       "knowledgeStyle": 2,
       "scaleApproach": 5,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A chiropractor who studied spontaneous remissions and teaches people to rewire their brains through meditation and visualization.",
+      "oneLiner": "Become greater than your environment, body, and time."
     },
     {
       "name": "Aubrey Marcus",
@@ -201,7 +233,9 @@
       "orientation": 4,
       "knowledgeStyle": 3,
       "scaleApproach": 4,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A supplement entrepreneur who created Onnit and explores peak performance through psychedelics, breath, and ancient wisdom.",
+      "oneLiner": "Own the day, own your life."
     },
     {
       "name": "Ram Dass",
@@ -211,7 +245,9 @@
       "orientation": 2,
       "knowledgeStyle": 5,
       "scaleApproach": 2,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A Harvard psychologist who took LSD, found God in India, and taught an entire generation to 'be here now' until his death.",
+      "oneLiner": "Be here now."
     },
     {
       "name": "Sadhguru",
@@ -221,7 +257,9 @@
       "orientation": 3,
       "knowledgeStyle": 4,
       "scaleApproach": 5,
-      "confidence": 92
+      "confidence": 92,
+      "bio": "A motorcycle-riding mystic who built a global yoga empire while making ancient yogic sciences accessible to modern seekers.",
+      "oneLiner": "Inner engineering is the key to outer transformation."
     },
     {
       "name": "Marianne Williamson",
@@ -231,7 +269,9 @@
       "orientation": 4,
       "knowledgeStyle": 4,
       "scaleApproach": 4,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A cocktail waitress turned spiritual teacher who brought A Course in Miracles to millions and ran for President twice.",
+      "oneLiner": "Love is the only rational response to fear."
     },
     {
       "name": "Mooji",
@@ -241,7 +281,9 @@
       "orientation": 2,
       "knowledgeStyle": 5,
       "scaleApproach": 2,
-      "confidence": 88
+      "confidence": 88,
+      "bio": "A Jamaican-born street painter who found awakening in India and guides thousands to self-realization through simple inquiry.",
+      "oneLiner": "You are the awareness in which all experience comes and goes."
     },
     {
       "name": "Yung Pueblo",
@@ -251,7 +293,9 @@
       "orientation": 1,
       "knowledgeStyle": 4,
       "scaleApproach": 3,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A former party-goer who found meditation, quit drinking, and builds healing communities through poetry and mindfulness.",
+      "oneLiner": "Healing is returning to your original wholeness."
     },
     {
       "name": "Sahara Rose",
@@ -261,7 +305,9 @@
       "orientation": 4,
       "knowledgeStyle": 4,
       "scaleApproach": 4,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A nutritionist who modernized Ayurveda for millennials through podcasts, combining ancient doshas with modern wellness.",
+      "oneLiner": "You are your own guru."
     },
     {
       "name": "Sri Sri Ravi Shankar",
@@ -271,7 +317,9 @@
       "orientation": 3,
       "knowledgeStyle": 5,
       "scaleApproach": 5,
-      "confidence": 92
+      "confidence": 92,
+      "bio": "The founder of Art of Living who teaches breathing techniques to millions and mediates conflicts in war zones worldwide.",
+      "oneLiner": "A smile is much more than just a facial expression."
     },
     {
       "name": "Vishen Lakhiani",
@@ -281,7 +329,9 @@
       "orientation": 5,
       "knowledgeStyle": 4,
       "scaleApproach": 5,
-      "confidence": 88
+      "confidence": 88,
+      "bio": "A tech entrepreneur who built Mindvalley into a personal growth empire, questioning traditional education and life rules.",
+      "oneLiner": "Question the brules - bullshit rules that don't serve you."
     },
     {
       "name": "Michael Singer",
@@ -291,7 +341,9 @@
       "orientation": 1,
       "knowledgeStyle": 4,
       "scaleApproach": 1,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A spiritual seeker who built a billion-dollar software company while living as a modern-day hermit and meditation teacher.",
+      "oneLiner": "Your inner peace is more important than anything happening around you."
     },
     {
       "name": "Michael Beckwith",
@@ -301,7 +353,9 @@
       "orientation": 4,
       "knowledgeStyle": 5,
       "scaleApproach": 3,
-      "confidence": 87
+      "confidence": 87,
+      "bio": "A former drug dealer turned minister who founded Agape and teaches 'life visioning' to manifest higher purpose.",
+      "oneLiner": "You are not going somewhere to get something, you're going somewhere to give something."
     },
     {
       "name": "Radha Agrawal",
@@ -311,7 +365,9 @@
       "orientation": 5,
       "knowledgeStyle": 5,
       "scaleApproach": 4,
-      "confidence": 85
+      "confidence": 85,
+      "bio": "The founder of Daybreaker who created sober morning dance parties, reimagining nightlife as conscious community building.",
+      "oneLiner": "Life is a party and you're invited."
     },
     {
       "name": "Meghan Pappenheim",
@@ -321,7 +377,9 @@
       "orientation": 3,
       "knowledgeStyle": 4,
       "scaleApproach": 2,
-      "confidence": 82
+      "confidence": 82,
+      "bio": "A wellness entrepreneur who co-founded ISSA events, creating luxury experiences that blend spirituality with high-end lifestyle.",
+      "oneLiner": "Wellness is the new luxury."
     },
     {
       "name": "Jeff Krasno",
@@ -331,7 +389,9 @@
       "orientation": 4,
       "knowledgeStyle": 3,
       "scaleApproach": 4,
-      "confidence": 85
+      "confidence": 85,
+      "bio": "The founder of Wanderlust Festival who turned yoga from studio practice into massive outdoor celebration and digital platform.",
+      "oneLiner": "Find your true north."
     },
     {
       "name": "Gabrielle Roth",
@@ -341,7 +401,9 @@
       "orientation": 3,
       "knowledgeStyle": 5,
       "scaleApproach": 3,
-      "confidence": 90
+      "confidence": 90,
+      "bio": "A dancer who created the 5Rhythms movement practice, teaching people to find healing and truth through ecstatic dance.",
+      "oneLiner": "In many shamanic societies, if you came to a medicine person complaining of being disheartened, dispirited, or depressed, they would ask one of four questions: When did you stop dancing?"
     },
     {
       "name": "Larry Harvey",
@@ -351,7 +413,9 @@
       "orientation": 4,
       "knowledgeStyle": 5,
       "scaleApproach": 4,
-      "confidence": 88
+      "confidence": 88,
+      "bio": "The founder of Burning Man who turned a beach bonfire into a desert utopia based on radical self-expression and gifting.",
+      "oneLiner": "We don't have a product, we have a culture."
     }
   ]
 }
