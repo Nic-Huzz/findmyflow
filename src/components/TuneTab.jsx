@@ -158,15 +158,15 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .eq('checkin_type', 'stall')
         .gte('created_at', getWeekStartLocal())
         .order('created_at', { ascending: false }),
-      // Load weekly focus intention
+      // Load weekly focus intention (check both setup ID and main ID for backwards compat)
       supabase
         .from('quest_completions')
-        .select('response_data')
+        .select('response_data, reflection_text')
         .eq('user_id', userId)
-        .eq('quest_id', 'rewire_weekly_focus_setup')
+        .in('quest_id', ['rewire_weekly_focus_setup', 'rewire_weekly_focus'])
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
-        .limit(1),
+        .limit(5),
       // Load peak state commitment
       supabase
         .from('quest_completions')
@@ -182,8 +182,16 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setCompletions(completionData || [])
       setRecentDrains(drainData || [])
       setRecentStalls(stallData || [])
-      if (focusData?.[0]?.response_data?.quest_type === 'weekly_focus_setup') {
-        setWeeklyFocus(focusData[0].response_data)
+      // Find the setup record — check response_data first, fall back to reflection_text
+      const focusRecord = (focusData || []).find(r => {
+        if (r.response_data?.quest_type === 'weekly_focus_setup') return true
+        if (r.reflection_text) {
+          try { return JSON.parse(r.reflection_text)?.quest_type === 'weekly_focus_setup' } catch { return false }
+        }
+        return false
+      })
+      if (focusRecord) {
+        setWeeklyFocus(focusRecord.response_data || JSON.parse(focusRecord.reflection_text))
       }
       if (peakData?.[0]?.response_data?.quest_type === 'peak_state_setup') {
         setPeakState(peakData[0].response_data)

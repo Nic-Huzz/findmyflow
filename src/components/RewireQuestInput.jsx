@@ -385,6 +385,7 @@ function RewireQuestInput({ quest, onComplete }) {
     validateStep,
     onSubmit: async (data) => {
       const structuredData = buildStructuredData(data)
+      console.log('[WeeklyFocus] onSubmit', { questId: quest.id, structuredData, weeklyFocusState: weeklyFocus })
       // Weekly Focus setup: save to DB with separate quest_id (avoids duplicate guard),
       // then switch to daily mode without closing modal
       if (quest.id === 'rewire_weekly_focus' && structuredData.quest_type === 'weekly_focus_setup') {
