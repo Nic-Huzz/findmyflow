@@ -795,7 +795,25 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
               </div>
               <div className="tt-quest-list">
                 {weeklyExpression.map(q => {
-                  // Custom render for Peak State when commitment is set
+                  // Custom render for Peak State — show "Set" when no commitment, custom card when set
+                  if (q.id === 'weekly_peak_state' && !peakState) {
+                    return (
+                      <div key={q.id} className="ht-item-row">
+                        <span className="ht-item-check" />
+                        <div className="ht-item-body">
+                          <div className="ht-item-name">{q.name}</div>
+                          <div className="ht-item-meta">
+                            <span className="ht-item-type">{q.type}</span>
+                            <span className="ht-item-sep">·</span>
+                            <span className="ht-pts">{q.points}pts</span>
+                          </div>
+                        </div>
+                        <button type="button" className="ht-item-action" onClick={() => setHealingModalQuest(q)}>
+                          Set
+                        </button>
+                      </div>
+                    )
+                  }
                   if (q.id === 'weekly_peak_state' && peakState) {
                     const peakDone = isCompletedThisWeek('weekly_peak_state')
                     return (
