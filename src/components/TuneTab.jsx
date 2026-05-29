@@ -751,9 +751,11 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                 )
               }
 
-              // After intention set: show the intention + Honour button
+              // After intention set: show the intention + Honour button + day dots
               const focusDoneToday = isCompletedToday('rewire_weekly_focus')
               const cat = FOCUS_CATEGORY_LABELS[weeklyFocus.focus_category]
+              const focusStreak = getStreak('rewire_weekly_focus')
+              const focusDayLabels = getDayLabels()
               return (
                 <div className={`ht-item-row ${focusDoneToday ? 'done' : ''}`}>
                   <span className={`ht-item-check ${focusDoneToday ? 'done' : ''}`}>
@@ -768,6 +770,16 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                       <span className="ht-item-sep">·</span>
                       <span className="ht-pts">{focusQuest.points}pts</span>
                     </div>
+                    {focusStreak && focusDayLabels && (
+                      <div className="ht-streak-dots">
+                        {focusDayLabels.map((day, i) => (
+                          <div key={i} className="ht-streak-day">
+                            <span className={`ht-streak-dot ${focusStreak[i] ? 'filled' : ''}`} />
+                            <span className="ht-streak-label">{day}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   {focusDoneToday ? (
                     <span className="ht-item-action done-action">Done</span>

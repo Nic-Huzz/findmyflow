@@ -195,15 +195,23 @@ function RewireQuestInput({ quest, onComplete }) {
         const weekStart = getWeekStartLocal()
         const { data } = await supabase
           .from('quest_completions')
-          .select('response_data, completed_at')
+          .select('response_data, reflection_text')
           .eq('user_id', user.id)
-          .eq('quest_id', 'rewire_weekly_focus_setup')
+          .in('quest_id', ['rewire_weekly_focus_setup', 'rewire_weekly_focus'])
           .gte('completed_at', weekStart)
           .order('completed_at', { ascending: true })
-          .limit(1)
+          .limit(5)
 
-        if (data?.[0]?.response_data?.quest_type === 'weekly_focus_setup') {
-          setWeeklyFocus(data[0].response_data)
+        // Find setup record — check response_data first, fall back to reflection_text
+        const setupRecord = (data || []).find(r => {
+          if (r.response_data?.quest_type === 'weekly_focus_setup') return true
+          if (r.reflection_text) {
+            try { return JSON.parse(r.reflection_text)?.quest_type === 'weekly_focus_setup' } catch { return false }
+          }
+          return false
+        })
+        if (setupRecord) {
+          setWeeklyFocus(setupRecord.response_data || JSON.parse(setupRecord.reflection_text))
         }
       } catch (e) {
         // Degrade to setup mode on error
