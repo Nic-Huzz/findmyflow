@@ -806,7 +806,7 @@ function Challenge() {
 
       // Quest types that use specialized input components with structured data
       const structuredDataTypes = ['reconnect', 'recognise', 'rewire', 'release']
-      const hasStructuredData = structuredDataTypes.includes(quest.type?.toLowerCase()) && specialData
+      const hasStructuredData = (structuredDataTypes.includes(quest.type?.toLowerCase()) || quest.inputType === 'rewire_quest') && specialData
 
       // Helper to safely stringify data (avoid double-stringification)
       const safeStringify = (data) => {
@@ -833,6 +833,11 @@ function Challenge() {
       } else if (hasStructuredData) {
         // Fallback for any other quests with specialized input components
         completionData.reflection_text = safeStringify(specialData)
+      }
+
+      // Save structured data to response_data JSONB column for quests that need it
+      if (hasStructuredData && typeof specialData === 'object') {
+        completionData.response_data = specialData
       }
 
       // Check for duplicate completions
