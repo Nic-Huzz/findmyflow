@@ -365,11 +365,11 @@
     },
     {
       "name": "Adriene Mishler",
-      "experienceType": "media_training",
+      "experienceType": "certification",
       "workRhythm": 1,
       "fuelType": 1,
-      "orientation": 1,
-      "knowledgeStyle": 4,
+      "orientation": 4,
+      "knowledgeStyle": 5,
       "scaleApproach": 5,
       "confidence": 85
     },
@@ -415,13 +415,13 @@
     },
     {
       "name": "Dave Ramsey",
-      "experienceType": "media_training",
+      "experienceType": "live_events",
       "workRhythm": 1,
       "fuelType": 5,
       "orientation": 5,
       "knowledgeStyle": 3,
       "scaleApproach": 5,
-      "confidence": 85
+      "confidence": 90
     },
     {
       "name": "David Bohm",
@@ -579,9 +579,9 @@
       "workRhythm": 1,
       "fuelType": 1,
       "orientation": 2,
-      "knowledgeStyle": 2,
+      "knowledgeStyle": 4,
       "scaleApproach": 3,
-      "confidence": 85
+      "confidence": 90
     },
     {
       "name": "Kae Tempest",
@@ -609,9 +609,9 @@
       "workRhythm": 1,
       "fuelType": 4,
       "orientation": 5,
-      "knowledgeStyle": 3,
+      "knowledgeStyle": 5,
       "scaleApproach": 5,
-      "confidence": 85
+      "confidence": 90
     },
     {
       "name": "Marc Freedman",
@@ -675,7 +675,7 @@
     },
     {
       "name": "Myles Horton",
-      "experienceType": "retreat",
+      "experienceType": "certification",
       "workRhythm": 1,
       "fuelType": 1,
       "orientation": 3,
@@ -777,10 +777,10 @@
       "name": "Terry Real",
       "experienceType": "certification",
       "workRhythm": 1,
-      "fuelType": 3,
-      "orientation": 3,
-      "knowledgeStyle": 3,
-      "scaleApproach": 3,
+      "fuelType": 4,
+      "orientation": 4,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
       "confidence": 85
     },
     {
