@@ -104,12 +104,19 @@ export default function CreatorHomeV2() {
 
   const handleCreatorTap = async (name) => {
     const data = await loadCreatorData()
-    if (!data) return
+    // Also get DNA profile data (bio, oneLiner, blowUpMoment)
+    let dnaProfile = null
+    try {
+      const dnaRes = await fetch('/data/experienceCreatorDNA.json')
+      const dnaData = await dnaRes.json()
+      dnaProfile = (dnaData.profiles || []).find(p => p.name === name) || null
+    } catch {}
     setCreatorDetail({
       name,
-      timeline: data.timelines[name] || null,
-      growth: data.growth[name] || null,
-      revenue: data.revenue[name] || null,
+      timeline: data?.timelines[name] || null,
+      growth: data?.growth[name] || null,
+      revenue: data?.revenue[name] || null,
+      dna: dnaProfile,
     })
   }
 
@@ -744,7 +751,26 @@ export default function CreatorHomeV2() {
                 onError={e => { e.target.style.display = 'none' }}
               />
               <h2 className="ch2-creator-name">{creatorDetail.name}</h2>
+              {creatorDetail.dna?.oneLiner && (
+                <p className="ch2-creator-oneliner">"{creatorDetail.dna.oneLiner}"</p>
+              )}
             </div>
+
+            {creatorDetail.dna?.bio && (
+              <div className="ch2-creator-section">
+                <p className="ch2-creator-text">{creatorDetail.dna.bio}</p>
+              </div>
+            )}
+
+            {creatorDetail.dna?.blowUpMoment && (
+              <div className="ch2-creator-section">
+                <div className="ch2-creator-section-label">⚡ Blow-up moment ({creatorDetail.dna.blowUpYear})</div>
+                <p className="ch2-creator-text">{creatorDetail.dna.blowUpMoment}</p>
+                {creatorDetail.dna.blowUpContext && (
+                  <p className="ch2-creator-text" style={{ opacity: 0.6, fontSize: 12, marginTop: 4 }}>Before: {creatorDetail.dna.blowUpContext}</p>
+                )}
+              </div>
+            )}
 
             {creatorDetail.timeline && (
               <div className="ch2-creator-section">
