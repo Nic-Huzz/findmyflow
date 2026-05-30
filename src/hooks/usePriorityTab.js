@@ -223,6 +223,7 @@ export default function usePriorityTab(userId, stageProgress, isQuestEverComplet
       return quests.filter(q =>
         q.category === 'Healing' &&
         (q.frequency === 'daily' || q.frequency === 'weekly') &&
+        !q.archived &&
         q.id !== 'release_daily_challenge'
       )
     } catch (err) {

@@ -74,8 +74,8 @@ const DAILY_PRACTICE_IDS = [
   'safety_self_compassion',
   'safety_savouring',
   // Expression
-  'practice_voice_work',
   'practice_own_style',
+  'practice_voice_work',
   'practice_social_media',
   'weekly_peak_state',
 ]
@@ -617,9 +617,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const mealsLoggedToday = MEALS.filter(m => isMealLogged(m.id)).length
   const maintenanceDone = maintenancePractices.filter(q => q.inputType !== 'meal_tracker' && isCompletedToday(q.id)).length + (mealsLoggedToday === 3 ? 1 : 0)
   const safetyDone = safetyPractices.filter(q => isCompletedToday(q.id)).length
-  const expressionDone = expressionPractices.filter(q => isCompletedToday(q.id)).length
+  const expressionDone = expressionPractices.filter(q => isCompletedToday(q.id)).length + (isCompletedToday('rewire_weekly_focus') ? 1 : 0)
+  const expressionTotal = expressionPractices.length + 1 // +1 for Weekly Focus
   const totalDone = maintenanceDone + safetyDone + expressionDone
-  const totalPractices = maintenancePractices.length + safetyPractices.length + expressionPractices.length
+  const totalPractices = maintenancePractices.length + safetyPractices.length + expressionTotal
 
   return (
     <div className="tune-tab">
@@ -732,11 +733,12 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             <span className="tt-subsection-icon">🔥</span>
             <span className="tt-subsection-label tt-label-activation">Expression</span>
             {expression !== null && <span className="tt-score-badge tt-score-expression">{expression}/10</span>}
-            <span className="tt-subsection-count">{expressionDone}/{expressionPractices.length}</span>
+            <span className="tt-subsection-count">{expressionDone}/{expressionTotal}</span>
           </div>
           <div className="tt-quest-list">
-            {expressionPractices.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
-            {/* Weekly Focus — always visible in daily expression */}
+            {/* First two expression practices: Own Style, Voice Work */}
+            {expressionPractices.slice(0, 2).map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
+            {/* Weekly Focus — positioned 3rd in expression */}
             {(() => {
               const focusQuest = allQuests.find(q => q.id === 'rewire_weekly_focus')
               if (!focusQuest) return null
@@ -804,6 +806,8 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                 </div>
               )
             })()}
+            {/* Remaining expression practices: Social Media, Peak State */}
+            {expressionPractices.slice(2).map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
           </div>
         </div>
       </div>

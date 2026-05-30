@@ -721,7 +721,7 @@
       "type": "Recognise",
       "frequency": "daily",
       "name": "Responded From Love",
-      "description": "What's a moment where you were challenged in your work today but reacted from a place of love?",
+      "description": "What's a moment where you were challenged today but reacted from a place of love?",
       "points": 3,
       "inputType": "text",
       "placeholder": "What was the situation?",
@@ -734,11 +734,23 @@
       "type": "Recognise",
       "frequency": "daily",
       "name": "Responded From Fear",
-      "description": "What's a moment you were challenged in your work today and reacted from a place of fear?",
+      "description": "What's a moment you were challenged today and reacted from a place of fear?",
       "points": 3,
       "inputType": "text",
       "placeholder": "What was the situation? What caused you to be triggered?",
       "learnMore": "A fear response is anything below 'courage' on the emotional frequency scale.\n\nIt includes Anger: 'Blaming or pointing out what others did wrong'.\nFear: 'Hesitating or avoiding taking action'.\nShame: 'Going quiet / withdrawing emotionally or physically'.\n\nThis is important because we attract more of what we are. If we show up from fear we limit our growth and opportunities that align with what we love.\n\nTracking these moments builds awareness about what's causing us to react from fear and build accountability to show up from love in the future.",
+      "healing_checkin": true
+    },
+    {
+      "id": "rewire_repeat_mantras",
+      "category": "Healing",
+      "type": "Rewire",
+      "frequency": "daily",
+      "name": "Repeat Mantras",
+      "description": "Repeat your chosen mantras today to rewire the beliefs your protective voice installed.",
+      "points": 3,
+      "inputType": "checkbox",
+      "learnMore": "Your subconscious mind learns through repetition. The limiting beliefs your protective voice created were installed through repeated experiences — and they can be overwritten the same way.\n\nChoose mantras that directly counter your core wounds. If your wound is 'I'm not enough,' your mantra might be 'I am whole exactly as I am.' If it's 'I'm not safe,' try 'I am safe to be seen.'\n\nRepeat them out loud, in the mirror, or silently throughout the day. It feels uncomfortable at first — that discomfort is your nervous system encountering something unfamiliar. Stay with it. Consistency matters more than belief.",
       "healing_checkin": true
     },
     {
@@ -776,7 +788,8 @@
       "inputType": "text",
       "placeholder": "Any image, scene, feeling, or fragment from a dream this week. Don't interpret -- just capture.",
       "learnMore": "Dreams are your nervous system processing without your inner critic editing. They surface what the conscious mind won't touch.\n\nYou don't need to remember a full dream. A single image, a feeling, a fragment is enough. The act of recording tells your unconscious 'I'm paying attention.' Dream recall naturally improves with attention.\n\nDon't interpret. Don't analyse. Just capture whatever you remember. The pattern recognition happens over time, on its own.",
-      "healing_checkin": true
+      "healing_checkin": true,
+      "archived": true
     },
     {
       "id": "recognise_body_listen",
@@ -810,7 +823,7 @@
       "type": "Recognise",
       "frequency": "deepdive",
       "name": "Map The Boundaries Of Your Nervous System",
-      "description": "Identify how much money your nervous system feels safe earning before it self-sabotages",
+      "description": "Identify the invisible limits your nervous system has around money, visibility, and success",
       "points": 6,
       "inputType": "flow",
       "flow_id": "nervous_system",
