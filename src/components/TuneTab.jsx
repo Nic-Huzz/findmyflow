@@ -71,7 +71,6 @@ const DAILY_PRACTICE_IDS = [
   'reconnect_morning_meditation_breathwork',
   'reconnect_daily_prayer',
   'practice_connect_friend',
-  'practice_feel_emotions',
   'safety_self_compassion',
   'safety_savouring',
   // Expression
@@ -159,12 +158,12 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .eq('checkin_type', 'stall')
         .gte('created_at', getWeekStartLocal())
         .order('created_at', { ascending: false }),
-      // Load weekly focus intention (check both setup ID and main ID for backwards compat)
+      // Load weekly focus intention
       supabase
         .from('quest_completions')
         .select('response_data, reflection_text')
         .eq('user_id', userId)
-        .in('quest_id', ['rewire_weekly_focus_setup', 'rewire_weekly_focus'])
+        .eq('quest_id', 'rewire_weekly_focus')
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
         .limit(5)
@@ -173,12 +172,12 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       // Load peak state commitment
       supabase
         .from('quest_completions')
-        .select('response_data')
+        .select('response_data, reflection_text')
         .eq('user_id', userId)
-        .eq('quest_id', 'weekly_peak_state_setup')
+        .eq('quest_id', 'weekly_peak_state')
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
-        .limit(1)
+        .limit(5)
         .then(res => res)
         .catch(() => ({ data: null })),
     ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }, { data: focusData }, { data: peakData }]) => {
@@ -194,20 +193,20 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setCompletions(completionData || [])
       setRecentDrains(drainData || [])
       setRecentStalls(stallData || [])
-      // Find the setup record — check response_data first, fall back to reflection_text
-      const focusRecord = (focusData || []).find(r => {
-        if (r.response_data?.quest_type === 'weekly_focus_setup') return true
-        if (r.reflection_text) {
-          try { return JSON.parse(r.reflection_text)?.quest_type === 'weekly_focus_setup' } catch { return false }
-        }
-        return false
-      })
-      if (focusRecord) {
-        setWeeklyFocus(focusRecord.response_data || JSON.parse(focusRecord.reflection_text))
+      // Find setup records — check response_data first, fall back to reflection_text
+      const findSetup = (rows, type) => {
+        return (rows || []).find(r => {
+          const rd = r.response_data || (r.reflection_text ? (() => { try { return JSON.parse(r.reflection_text) } catch { return null } })() : null)
+          return rd?.quest_type === type
+        })
       }
-      if (peakData?.[0]?.response_data?.quest_type === 'peak_state_setup') {
-        setPeakState(peakData[0].response_data)
-      }
+      const parseSetup = (record) => record.response_data || JSON.parse(record.reflection_text)
+
+      const focusRecord = findSetup(focusData, 'weekly_focus_setup')
+      if (focusRecord) setWeeklyFocus(parseSetup(focusRecord))
+
+      const peakRecord = findSetup(peakData, 'peak_state_setup')
+      if (peakRecord) setPeakState(parseSetup(peakRecord))
       setLoading(false)
     }).catch(err => {
       console.error('TuneTab load error:', err)
@@ -444,7 +443,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .from('quest_completions')
         .select('response_data')
         .eq('user_id', userId)
-        .eq('quest_id', 'rewire_weekly_focus_setup')
+        .eq('quest_id', 'rewire_weekly_focus')
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
         .limit(1)
@@ -459,7 +458,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .from('quest_completions')
         .select('response_data')
         .eq('user_id', userId)
-        .eq('quest_id', 'weekly_peak_state_setup')
+        .eq('quest_id', 'weekly_peak_state')
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
         .limit(1)
@@ -1067,21 +1066,22 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             setHealingModalQuest(null)
             // Refresh setup state in case setup completed without onComplete (setup mode returns early)
             if (closingQuest?.id === 'rewire_weekly_focus' || closingQuest?.id === 'weekly_peak_state') {
-              const setupId = closingQuest.id === 'rewire_weekly_focus' ? 'rewire_weekly_focus_setup' : 'weekly_peak_state_setup'
               const setupType = closingQuest.id === 'rewire_weekly_focus' ? 'weekly_focus_setup' : 'peak_state_setup'
               const setter = closingQuest.id === 'rewire_weekly_focus' ? setWeeklyFocus : setPeakState
               supabase
                 .from('quest_completions')
-                .select('response_data')
+                .select('response_data, reflection_text')
                 .eq('user_id', userId)
-                .eq('quest_id', setupId)
+                .eq('quest_id', closingQuest.id)
                 .gte('completed_at', getWeekStartLocal())
                 .order('completed_at', { ascending: true })
-                .limit(1)
+                .limit(5)
                 .then(({ data }) => {
-                  if (data?.[0]?.response_data?.quest_type === setupType) {
-                    setter(data[0].response_data)
-                  }
+                  const record = (data || []).find(r => {
+                    const rd = r.response_data || (r.reflection_text ? (() => { try { return JSON.parse(r.reflection_text) } catch { return null } })() : null)
+                    return rd?.quest_type === setupType
+                  })
+                  if (record) setter(record.response_data || JSON.parse(record.reflection_text))
                 })
             }
           }}

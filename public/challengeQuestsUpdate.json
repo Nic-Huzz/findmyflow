@@ -392,6 +392,8 @@
       "type": "Practice",
       "frequency": "daily",
       "name": "Feel Your Emotions",
+      "archived": true,
+      "archived_reason": "Replaced by Self-Compassion — May 2026",
       "description": "Sit with what's there instead of numbing. Prove to your nervous system that emotions are survivable.",
       "points": 4,
       "inputType": "checkbox",

@@ -165,61 +165,39 @@ function RewireQuestInput({ quest, onComplete }) {
   const [peakState, setPeakState] = useState(null)
 
   useEffect(() => {
-    if (quest.id === 'weekly_peak_state' && user?.id) {
-      const loadPeak = async () => {
-        try {
-          const weekStart = getWeekStartLocal()
-          const { data } = await supabase
-            .from('quest_completions')
-            .select('response_data')
-            .eq('user_id', user.id)
-            .eq('quest_id', 'weekly_peak_state_setup')
-            .gte('completed_at', weekStart)
-            .order('completed_at', { ascending: true })
-            .limit(1)
-          if (data?.[0]?.response_data?.quest_type === 'peak_state_setup') {
-            setPeakState(data[0].response_data)
-          }
-        } catch (e) {
-          // Degrade to setup mode
-        } finally {
-          setFocusLoading(false)
-        }
-      }
-      loadPeak()
+    if (!user?.id || (quest.id !== 'rewire_weekly_focus' && quest.id !== 'weekly_peak_state')) {
+      setFocusLoading(false)
       return
     }
-    if (quest.id !== 'rewire_weekly_focus' || !user?.id) return
-    const loadFocus = async () => {
+    const loadSetup = async () => {
       try {
         const weekStart = getWeekStartLocal()
         const { data } = await supabase
           .from('quest_completions')
           .select('response_data, reflection_text')
           .eq('user_id', user.id)
-          .in('quest_id', ['rewire_weekly_focus_setup', 'rewire_weekly_focus'])
+          .eq('quest_id', quest.id)
           .gte('completed_at', weekStart)
           .order('completed_at', { ascending: true })
           .limit(5)
 
         // Find setup record — check response_data first, fall back to reflection_text
         const setupRecord = (data || []).find(r => {
-          if (r.response_data?.quest_type === 'weekly_focus_setup') return true
-          if (r.reflection_text) {
-            try { return JSON.parse(r.reflection_text)?.quest_type === 'weekly_focus_setup' } catch { return false }
-          }
-          return false
+          const rd = r.response_data || (r.reflection_text ? (() => { try { return JSON.parse(r.reflection_text) } catch { return null } })() : null)
+          return rd?.quest_type === 'weekly_focus_setup' || rd?.quest_type === 'peak_state_setup'
         })
         if (setupRecord) {
-          setWeeklyFocus(setupRecord.response_data || JSON.parse(setupRecord.reflection_text))
+          const parsed = setupRecord.response_data || JSON.parse(setupRecord.reflection_text)
+          if (quest.id === 'rewire_weekly_focus') setWeeklyFocus(parsed)
+          if (quest.id === 'weekly_peak_state') setPeakState(parsed)
         }
       } catch (e) {
-        // Degrade to setup mode on error
+        // Degrade to setup mode
       } finally {
         setFocusLoading(false)
       }
     }
-    loadFocus()
+    loadSetup()
   }, [quest.id, user?.id])
 
   const config = STEP_CONFIGS[quest.id] || { totalSteps: 3, stepTitles: ['Input', 'Details', 'Review'] }
@@ -393,34 +371,7 @@ function RewireQuestInput({ quest, onComplete }) {
     validateStep,
     onSubmit: async (data) => {
       const structuredData = buildStructuredData(data)
-      console.log('[WeeklyFocus] onSubmit', { questId: quest.id, structuredData, weeklyFocusState: weeklyFocus })
-      // Weekly Focus setup: save to DB with separate quest_id (avoids duplicate guard),
-      // then switch to daily mode without closing modal
-      if (quest.id === 'rewire_weekly_focus' && structuredData.quest_type === 'weekly_focus_setup') {
-        await supabase.from('quest_completions').insert({
-          user_id: user.id,
-          quest_id: 'rewire_weekly_focus_setup',
-          quest_category: quest.category,
-          quest_type: quest.type,
-          points_earned: 0,
-          response_data: structuredData,
-        })
-        setWeeklyFocus(structuredData)
-        return
-      }
-      // Peak State setup: save metadata, switch to completion mode
-      if (quest.id === 'weekly_peak_state' && structuredData.quest_type === 'peak_state_setup') {
-        await supabase.from('quest_completions').insert({
-          user_id: user.id,
-          quest_id: 'weekly_peak_state_setup',
-          quest_category: quest.category,
-          quest_type: quest.type,
-          points_earned: 0,
-          response_data: structuredData,
-        })
-        setPeakState(structuredData)
-        return
-      }
+      // All quests go through onComplete — no intercept, no dual-path saving
       onComplete(quest, structuredData)
     }
   })
