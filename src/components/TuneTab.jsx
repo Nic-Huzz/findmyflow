@@ -167,7 +167,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .in('quest_id', ['rewire_weekly_focus_setup', 'rewire_weekly_focus'])
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
-        .limit(5),
+        .limit(5)
+        .then(res => res)
+        .catch(() => ({ data: null })),
       // Load peak state commitment
       supabase
         .from('quest_completions')
@@ -176,7 +178,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .eq('quest_id', 'weekly_peak_state_setup')
         .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: true })
-        .limit(1),
+        .limit(1)
+        .then(res => res)
+        .catch(() => ({ data: null })),
     ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }, { data: focusData }, { data: peakData }]) => {
       const tuneQuests = (questData.quests || []).filter(q => q.category === 'Tune' && !q.archived)
       setAllQuests(tuneQuests)
