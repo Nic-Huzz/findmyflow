@@ -41,8 +41,8 @@ const DIVISOR = 5
 
 // Quest IDs by category
 const MAINTENANCE_IDS = ['practice_sleep', 'practice_exercise', 'practice_sunlight', 'meal_breakfast', 'meal_lunch', 'meal_dinner']
-const SAFETY_IDS = ['reconnect_morning_breathwork', 'reconnect_morning_meditation', 'reconnect_daily_prayer', 'practice_connect_friend', 'practice_feel_emotions']
-const EXPRESSION_IDS = ['reconnect_morning_dance', 'practice_voice_work', 'practice_own_style', 'practice_social_media', 'rewire_weekly_focus']
+const SAFETY_IDS = ['reconnect_morning_meditation_breathwork', 'reconnect_daily_prayer', 'practice_connect_friend', 'practice_feel_emotions', 'safety_self_compassion', 'safety_savouring']
+const EXPRESSION_IDS = ['practice_voice_work', 'practice_own_style', 'practice_social_media', 'weekly_peak_state', 'rewire_weekly_focus']
 
 function getZone(score) {
   if (score >= 75) return 'vibe-rise'

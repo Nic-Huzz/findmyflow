@@ -68,16 +68,17 @@ const DAILY_PRACTICE_IDS = [
   'practice_sunlight',
   'practice_healthy_meal',
   // Safety
-  'reconnect_morning_breathwork',
-  'reconnect_morning_meditation',
+  'reconnect_morning_meditation_breathwork',
   'reconnect_daily_prayer',
   'practice_connect_friend',
   'practice_feel_emotions',
+  'safety_self_compassion',
+  'safety_savouring',
   // Expression
-  'reconnect_morning_dance',
   'practice_voice_work',
   'practice_own_style',
   'practice_social_media',
+  'weekly_peak_state',
 ]
 
 // Weekly Focus category labels
@@ -800,94 +801,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         </div>
       </div>
 
-      {/* Section 2: Weekly */}
-      {(weeklySafety.length > 0 || weeklyExpression.length > 0) && (
-        <div className="tt-section">
-          <div className="tt-section-header">
-            <div className="tt-section-header-left">
-              <span className="tt-section-icon">📅</span>
-              <span className="tt-section-title">Weekly</span>
-            </div>
-          </div>
-          <p className="tt-section-sub">At least once a week, go deeper.</p>
-
-          {weeklySafety.length > 0 && (
-            <div className="tt-subsection">
-              <div className="tt-subsection-header">
-                <span className="tt-subsection-icon">🛡️</span>
-                <span className="tt-subsection-label tt-label-safety">Safety</span>
-              </div>
-              <div className="tt-quest-list">
-                {weeklySafety.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
-              </div>
-            </div>
-          )}
-
-          {weeklyExpression.length > 0 && (
-            <div className="tt-subsection">
-              <div className="tt-subsection-header">
-                <span className="tt-subsection-icon">🔥</span>
-                <span className="tt-subsection-label tt-label-activation">Expression</span>
-              </div>
-              <div className="tt-quest-list">
-                {weeklyExpression.map(q => {
-                  // Custom render for Peak State — show "Set" when no commitment, custom card when set
-                  if (q.id === 'weekly_peak_state' && !peakState) {
-                    return (
-                      <div key={q.id} className="ht-item-row">
-                        <span className="ht-item-check" />
-                        <div className="ht-item-body">
-                          <div className="ht-item-name">{q.name}</div>
-                          <div className="ht-item-meta">
-                            <span className="ht-item-type">Pick your peak state activity this week</span>
-                          </div>
-                        </div>
-                        <button type="button" className="ht-item-action" onClick={() => setHealingModalQuest(q)}>
-                          Set
-                        </button>
-                      </div>
-                    )
-                  }
-                  if (q.id === 'weekly_peak_state' && peakState) {
-                    const peakDone = isCompletedThisWeek('weekly_peak_state')
-                    return (
-                      <div key={q.id} className={`ht-item-row ${peakDone ? 'done' : ''}`}>
-                        <span className={`ht-item-check ${peakDone ? 'done' : ''}`}>
-                          {peakDone ? '✓' : ''}
-                        </span>
-                        <div className="ht-item-body">
-                          <div className="ht-item-name">
-                            ⚡ {peakState.activity_label}
-                          </div>
-                          <div className="ht-item-meta">
-                            <span className="ht-item-type">📅 {peakState.day}</span>
-                            <span className="ht-item-sep">·</span>
-                            <span className="ht-pts">{q.points}pts</span>
-                          </div>
-                        </div>
-                        {peakDone ? (
-                          <span className="ht-item-action done-action">Done</span>
-                        ) : (
-                          <button
-                            type="button"
-                            className="ht-item-action"
-                            onClick={() => setHealingModalQuest(q)}
-                          >
-                            Did it
-                          </button>
-                        )}
-                      </div>
-                    )
-                  }
-                  return renderQuestRow(q, q.inputType === 'checkbox')
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Section 3: Drains */}
+      {/* Section 2: Drains */}
       <div className="tt-section">
         <div className="tt-section-header">
           <div className="tt-section-header-left">
