@@ -182,13 +182,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .catch(() => ({ data: null })),
     ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }, { data: focusData }, { data: peakData }]) => {
       const tuneQuests = (questData.quests || []).filter(q => q.category === 'Tune' && !q.archived)
-      console.log('[TuneTab] Loaded quests:', tuneQuests.length, tuneQuests.map(q => q.id))
       const mapped = DAILY_PRACTICE_IDS.map(id => {
         const found = tuneQuests.find(q => q.id === id)
-        if (!found) console.log('[TuneTab] MISSING from JSON:', id)
         return found
       }).filter(Boolean)
-      console.log('[TuneTab] Mapped daily practices:', mapped.length, mapped.map(q => q.id))
       setAllQuests(tuneQuests)
       setCompletions(completionData || [])
       setRecentDrains(drainData || [])
