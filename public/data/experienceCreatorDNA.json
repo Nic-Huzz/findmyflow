@@ -89,7 +89,37 @@
       "blowUpMoment": "Led the Chicago Bulls to their first NBA championship in 1991 using Zen meditation and triangle offense with Michael Jordan after seven years of playoff failures.",
       "blowUpYear": 1991,
       "blowUpType": "event",
-      "blowUpContext": "He was an assistant coach with the Bulls watching Michael Jordan repeatedly fail to get past the Detroit Pistons in the playoffs."
+      "blowUpContext": "He was an assistant coach with the Bulls watching Michael Jordan repeatedly fail to get past the Detroit Pistons in the playoffs.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1967-1978",
+          "format": "Team player and bench player",
+          "audience": "12-15 teammates",
+          "insight": "He learned that basketball was as much mental and spiritual as physical by observing team dynamics from the bench."
+        },
+        {
+          "stage": 2,
+          "year": "1979-1987",
+          "format": "Assistant coach working with individual players",
+          "audience": "12-15 players per team",
+          "insight": "He discovered that traditional coaching methods weren't reaching modern athletes and began experimenting with Eastern philosophy."
+        },
+        {
+          "stage": 3,
+          "year": "1989-1991",
+          "format": "Head coach integrating meditation and Native American rituals into team practices",
+          "audience": "Bulls team plus staff",
+          "insight": "He realized that getting superstars like Michael Jordan to buy into team concepts required spiritual practices, not just X's and O's."
+        },
+        {
+          "stage": 4,
+          "year": "1991-2011",
+          "format": "Championship coach leading pre-game meditation circles and sacred team rituals",
+          "audience": "NBA teams plus millions of fans watching",
+          "insight": "He understood that creating championship cultures required treating the team as a spiritual community, not just a business."
+        }
+      ]
     },
     {
       "name": "Tenzin Palmo",
@@ -147,7 +177,37 @@
       "blowUpMoment": "Vicki Mackenzie published 'Cave in the Snow' which told the story of her 12-year meditation retreat in a Himalayan cave to international audiences.",
       "blowUpYear": 1998,
       "blowUpType": "product",
-      "blowUpContext": "She had completed her cave retreat in 1988 and was teaching Buddhism quietly in India and occasionally in the West, known only to small circles of practitioners."
+      "blowUpContext": "She had completed her cave retreat in 1988 and was teaching Buddhism quietly in India and occasionally in the West, known only to small circles of practitioners.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1964-1976",
+          "format": "Traditional monastic training in Indian monasteries",
+          "audience": "Small community of monks and nuns",
+          "insight": "She realized that women were being denied the same spiritual opportunities as men in traditional Buddhism."
+        },
+        {
+          "stage": 2,
+          "year": "1976-1988",
+          "format": "Solitary retreat in a Himalayan cave",
+          "audience": "Completely alone for 12 years",
+          "insight": "She discovered that extreme solitude and dedication could prove women's capacity for the highest spiritual attainments."
+        },
+        {
+          "stage": 3,
+          "year": "1988-1998",
+          "format": "Small group teachings in India and occasional Western talks",
+          "audience": "20-50 serious Buddhist practitioners",
+          "insight": "She learned that her cave experience had given her unique authority to teach but needed to reach more women."
+        },
+        {
+          "stage": 4,
+          "year": "1998-present",
+          "format": "International teaching tours and retreat leadership",
+          "audience": "Hundreds at retreats, thousands through books",
+          "insight": "She realized her story could inspire women globally while she focused on establishing nunneries for future generations."
+        }
+      ]
     },
     {
       "name": "Gabor Mate",
@@ -205,7 +265,37 @@
       "blowUpMoment": "His documentary 'The Wisdom of Trauma' gained 2 million views in 6 days when released in 2021, spreading his addiction-as-trauma philosophy globally.",
       "blowUpYear": 2021,
       "blowUpType": "content",
-      "blowUpContext": "He was a family physician in Vancouver working quietly with addicts in the Downtown Eastside for over a decade."
+      "blowUpContext": "He was a family physician in Vancouver working quietly with addicts in the Downtown Eastside for over a decade.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1977-1990",
+          "format": "Traditional family medicine practice",
+          "audience": "Individual patients in clinical setting",
+          "insight": "He noticed that many patients' physical ailments seemed connected to emotional stress and trauma."
+        },
+        {
+          "stage": 2,
+          "year": "1990-2005",
+          "format": "Direct service with addicts in Vancouver's Downtown Eastside",
+          "audience": "Dozens of severely addicted patients daily",
+          "insight": "He realized that addiction wasn't about the substances but about escaping unbearable emotional pain from trauma."
+        },
+        {
+          "stage": 3,
+          "year": "2005-2018",
+          "format": "Writing books and giving medical conference presentations",
+          "audience": "Thousands of medical professionals and readers",
+          "insight": "He understood that the medical establishment needed to fundamentally shift from treating symptoms to addressing root trauma."
+        },
+        {
+          "stage": 4,
+          "year": "2018-present",
+          "format": "Global workshops, documentaries, and certification programs",
+          "audience": "Millions through films and tens of thousands in programs",
+          "insight": "He saw that trauma-informed healing needed to reach not just doctors but anyone working with human suffering."
+        }
+      ]
     },
     {
       "name": "Tony Robbins",
@@ -263,7 +353,44 @@
       "blowUpMoment": "His infomercial 'Personal Power' became one of the most successful self-help products ever sold, generating over $80 million in revenue and reaching millions of households.",
       "blowUpYear": 1991,
       "blowUpType": "product",
-      "blowUpContext": "He was already a successful motivational speaker and author of 'Unlimited Power' (1986), coaching celebrities and running fire-walking seminars, but hadn't yet achieved mainstream mass-market penetration."
+      "blowUpContext": "He was already a successful motivational speaker and author of 'Unlimited Power' (1986), coaching celebrities and running fire-walking seminars, but hadn't yet achieved mainstream mass-market penetration.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1979-1983",
+          "format": "Door-to-door sales and small evening seminars",
+          "audience": "5-20 people in hotel conference rooms",
+          "insight": "He discovered that people's psychology, not their circumstances, determined their success."
+        },
+        {
+          "stage": 2,
+          "year": "1984-1987",
+          "format": "Fire-walking seminars and weekend workshops",
+          "audience": "50-200 people in hotel ballrooms",
+          "insight": "He realized that breakthrough experiences required physical challenges that proved people could do the impossible."
+        },
+        {
+          "stage": 3,
+          "year": "1988-1991",
+          "format": "Large arena events and celebrity coaching",
+          "audience": "1,000-5,000 people plus high-profile clients",
+          "insight": "He learned that massive energy and scale could create transformation that small groups couldn't achieve."
+        },
+        {
+          "stage": 4,
+          "year": "1991-2000",
+          "format": "Television infomercials and mass media products",
+          "audience": "Millions of households watching TV",
+          "insight": "He understood that media could democratize transformation tools but needed to maintain the intensity of live experience."
+        },
+        {
+          "stage": 5,
+          "year": "2000-present",
+          "format": "Stadium events, Netflix documentaries, and global virtual experiences",
+          "audience": "10,000+ live, millions online and streaming",
+          "insight": "He saw that technology could scale intimate breakthrough experiences to reach people who could never afford or access live events."
+        }
+      ]
     },
     {
       "name": "Wim Hof",
@@ -321,7 +448,37 @@
       "blowUpMoment": "A 2014 study published in PNAS proved his students could control their immune response using his breathing method when injected with bacterial endotoxin.",
       "blowUpYear": 2014,
       "blowUpType": "event",
-      "blowUpContext": "He was considered a freak show performer known mainly for extreme cold stunts that scientists dismissed as impossible."
+      "blowUpContext": "He was considered a freak show performer known mainly for extreme cold stunts that scientists dismissed as impossible.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1980-1999",
+          "format": "Personal cold exposure experiments and local demonstrations",
+          "audience": "Family and curious locals",
+          "insight": "He discovered that breathing techniques combined with cold exposure could control his nervous system in ways science said was impossible."
+        },
+        {
+          "stage": 2,
+          "year": "2000-2010",
+          "format": "Guinness World Record attempts and television stunts",
+          "audience": "Millions through TV but dismissed as entertainment",
+          "insight": "He realized that extreme feats got attention but people saw him as a freak rather than someone with teachable methods."
+        },
+        {
+          "stage": 3,
+          "year": "2011-2014",
+          "format": "Small group training with scientists and researchers",
+          "audience": "Dozens of students plus research teams",
+          "insight": "He learned that proving his methods scientifically would give him credibility to teach others rather than just perform."
+        },
+        {
+          "stage": 4,
+          "year": "2014-present",
+          "format": "Global workshops, online courses, and instructor certification programs",
+          "audience": "Hundreds of thousands learning the method worldwide",
+          "insight": "He understood that creating a standardized method and training instructors could help millions access the same benefits he discovered."
+        }
+      ]
     },
     {
       "name": "Esther Perel",
@@ -379,7 +536,37 @@
       "blowUpMoment": "Launched the podcast 'Where Should We Begin?' in 2017, featuring real couples therapy sessions that gained millions of downloads globally.",
       "blowUpYear": 2017,
       "blowUpType": "content",
-      "blowUpContext": "She was a respected relationships therapist known mainly in professional circles for her book 'Mating in Captivity.'"
+      "blowUpContext": "She was a respected relationships therapist known mainly in professional circles for her book 'Mating in Captivity.'",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1980s-1990s",
+          "format": "Private couples therapy sessions in clinical office",
+          "audience": "One couple at a time",
+          "insight": "She noticed that modern relationships faced unique challenges around intimacy that traditional therapy wasn't addressing."
+        },
+        {
+          "stage": 2,
+          "year": "2000-2010",
+          "format": "Professional workshops for therapists and relationship conferences",
+          "audience": "50-200 mental health professionals",
+          "insight": "She realized that therapists needed new frameworks to help couples navigate modern relationship paradoxes."
+        },
+        {
+          "stage": 3,
+          "year": "2010-2017",
+          "format": "Public speaking, TED talks, and media appearances",
+          "audience": "Thousands live, millions through TED and media",
+          "insight": "She discovered that relationship wisdom needed to reach couples directly, not just through therapists."
+        },
+        {
+          "stage": 4,
+          "year": "2017-present",
+          "format": "Podcast therapy sessions with real couples and global workshops",
+          "audience": "Millions of podcast listeners learning from real sessions",
+          "insight": "She understood that people could learn as much from hearing others' therapy as from their own, breaking traditional confidentiality models."
+        }
+      ]
     },
     {
       "name": "Priya Parker",
@@ -437,7 +624,37 @@
       "blowUpMoment": "Her book 'The Art of Gathering' became a bestseller in 2018 after she applied conflict resolution principles from war zones to corporate meetings.",
       "blowUpYear": 2018,
       "blowUpType": "product",
-      "blowUpContext": "She was working as a conflict resolution facilitator in international peace negotiations and community organizing."
+      "blowUpContext": "She was working as a conflict resolution facilitator in international peace negotiations and community organizing.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "2002-2008",
+          "format": "University dialogue facilitation and student organizing",
+          "audience": "20-50 students in campus settings",
+          "insight": "She learned that how you bring people together determines whether they connect authentically or remain superficial."
+        },
+        {
+          "stage": 2,
+          "year": "2008-2015",
+          "format": "International conflict resolution and peace negotiations",
+          "audience": "Small groups of political leaders and communities",
+          "insight": "She discovered that the same principles that heal war-torn communities could transform any gathering."
+        },
+        {
+          "stage": 3,
+          "year": "2015-2018",
+          "format": "Corporate facilitation and leadership retreat design",
+          "audience": "Executive teams and corporate groups",
+          "insight": "She realized that business meetings and conferences were wasting massive human potential through poor gathering design."
+        },
+        {
+          "stage": 4,
+          "year": "2018-present",
+          "format": "Global workshops, virtual facilitation training, and gathering consultancy",
+          "audience": "Thousands of facilitators and millions of book readers",
+          "insight": "She understood that teaching others to gather well could multiply impact far beyond what she could facilitate personally."
+        }
+      ]
     },
     {
       "name": "Jay Shetty",
@@ -495,7 +712,37 @@
       "blowUpMoment": "His 2016 Facebook video 'A Monk's Take on Life Lessons' went viral with over 300 million views, launching his global platform.",
       "blowUpYear": 2016,
       "blowUpType": "content",
-      "blowUpContext": "He had returned from three years as a monk in India and was working at a corporate consulting job in London."
+      "blowUpContext": "He had returned from three years as a monk in India and was working at a corporate consulting job in London.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "2007-2010",
+          "format": "University speaking and youth motivation talks",
+          "audience": "100-500 students at universities",
+          "insight": "He discovered that ancient wisdom resonated powerfully with young people when translated into modern language."
+        },
+        {
+          "stage": 2,
+          "year": "2010-2013",
+          "format": "Monastic training and temple community living",
+          "audience": "Small community of monks and temple visitors",
+          "insight": "He realized that authentic spiritual teaching required deep personal practice and understanding."
+        },
+        {
+          "stage": 3,
+          "year": "2013-2016",
+          "format": "Corporate consulting while creating content in spare time",
+          "audience": "Business teams plus growing social media followers",
+          "insight": "He learned that social media could be a vehicle for spreading wisdom if content was crafted thoughtfully."
+        },
+        {
+          "stage": 4,
+          "year": "2016-present",
+          "format": "Viral social media content, podcasts, and online courses",
+          "audience": "Millions across social platforms and podcast listeners",
+          "insight": "He understood that combining ancient principles with modern storytelling could reach a generation hungry for meaning."
+        }
+      ]
     },
     {
       "name": "Gabby Bernstein",
@@ -553,7 +800,37 @@
       "blowUpMoment": "Oprah named her to the SuperSoul 100 list in 2013 as a next-generation thought leader, catapulting her to mainstream recognition.",
       "blowUpYear": 2013,
       "blowUpType": "event",
-      "blowUpContext": "She was a young spiritual teacher building her following through social media and small workshops after getting sober from cocaine addiction."
+      "blowUpContext": "She was a young spiritual teacher building her following through social media and small workshops after getting sober from cocaine addiction.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "2005-2009",
+          "format": "Small living room gatherings and local spiritual meetups",
+          "audience": "10-20 people in intimate settings",
+          "insight": "She discovered that sharing her recovery story gave others permission to seek spiritual solutions to their problems."
+        },
+        {
+          "stage": 2,
+          "year": "2009-2013",
+          "format": "Weekend workshops and online courses with social media marketing",
+          "audience": "100-300 people per workshop, thousands online",
+          "insight": "She realized that combining spirituality with business and marketing could amplify her message without compromising authenticity."
+        },
+        {
+          "stage": 3,
+          "year": "2013-2018",
+          "format": "Arena-style events and major media appearances",
+          "audience": "1,000-5,000 live attendees, millions through media",
+          "insight": "She learned that mainstream platforms could introduce spiritual concepts to people who would never enter a traditional spiritual space."
+        },
+        {
+          "stage": 4,
+          "year": "2018-present",
+          "format": "Global retreats, certification programs, and virtual experiences",
+          "audience": "Thousands in programs, millions through books and content",
+          "insight": "She understood that training others to teach spiritual principles could create lasting impact beyond her personal reach."
+        }
+      ]
     },
     {
       "name": "Eckhart Tolle",
@@ -611,7 +888,37 @@
       "blowUpMoment": "Oprah Winfrey launched a 10-week live webcast series with Tolle discussing 'A New Earth' that attracted over 35 million participants worldwide.",
       "blowUpYear": 2008,
       "blowUpType": "event",
-      "blowUpContext": "He had been teaching spiritual concepts and had published 'The Power of Now' in 1997 with modest success, building a small but dedicated following through workshops and speaking engagements."
+      "blowUpContext": "He had been teaching spiritual concepts and had published 'The Power of Now' in 1997 with modest success, building a small but dedicated following through workshops and speaking engagements.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1988-1997",
+          "format": "Small group conversations and informal spiritual counseling",
+          "audience": "5-15 people in living rooms and cafes",
+          "insight": "He discovered that presence itself was more transformative than any teaching technique or spiritual practice."
+        },
+        {
+          "stage": 2,
+          "year": "1997-2005",
+          "format": "Weekend workshops and retreat center talks",
+          "audience": "50-200 spiritual seekers",
+          "insight": "He realized that people needed practical guidance on how to access presence in daily life, not just spiritual concepts."
+        },
+        {
+          "stage": 3,
+          "year": "2005-2008",
+          "format": "Larger venue events and growing book readership",
+          "audience": "500-1,000 live, hundreds of thousands reading",
+          "insight": "He learned that his message could reach far beyond traditional spiritual seekers to anyone suffering from mental and emotional pain."
+        },
+        {
+          "stage": 4,
+          "year": "2008-present",
+          "format": "Global webcasts, online courses, and stadium-sized events",
+          "audience": "Millions online, 10,000+ at live events",
+          "insight": "He understood that presence could be transmitted through technology and that massive scale didn't diminish the intimacy of the teaching."
+        }
+      ]
     },
     {
       "name": "Deepak Chopra",
@@ -669,7 +976,37 @@
       "blowUpMoment": "Appeared on The Oprah Winfrey Show in 1993 discussing 'Ageless Body, Timeless Mind,' which became a #1 New York Times bestseller.",
       "blowUpYear": 1993,
       "blowUpType": "content",
-      "blowUpContext": "He was practicing as an endocrinologist in Boston before leaving conventional medicine to explore Ayurvedic healing."
+      "blowUpContext": "He was practicing as an endocrinologist in Boston before leaving conventional medicine to explore Ayurvedic healing.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1970-1985",
+          "format": "Traditional medical practice as endocrinologist",
+          "audience": "Individual patients in clinical settings",
+          "insight": "He noticed that Western medicine treated symptoms but ignored the mind-body connection that seemed crucial to healing."
+        },
+        {
+          "stage": 2,
+          "year": "1985-1993",
+          "format": "Ayurvedic medicine practice and small wellness lectures",
+          "audience": "Patients plus 50-100 people at health talks",
+          "insight": "He discovered that ancient healing wisdom could be validated by modern science and appeal to Western audiences."
+        },
+        {
+          "stage": 3,
+          "year": "1993-2000",
+          "format": "Major media appearances, bestselling books, and wellness center creation",
+          "audience": "Millions through TV and books, hundreds at centers",
+          "insight": "He realized that mainstream media could introduce consciousness-based healing to people who would reject traditional spirituality."
+        },
+        {
+          "stage": 4,
+          "year": "2000-present",
+          "format": "Global wellness empire, online courses, and retreat destinations",
+          "audience": "Millions globally through multiple platforms and programs",
+          "insight": "He understood that creating systematic programs and training teachers could democratize mind-body healing worldwide."
+        }
+      ]
     },
     {
       "name": "Jack Kornfield",
@@ -727,7 +1064,37 @@
       "blowUpMoment": "Co-founded the Insight Meditation Society in 1975, creating the first major American center teaching Vipassana meditation to Westerners.",
       "blowUpYear": 1975,
       "blowUpType": "action",
-      "blowUpContext": "He was a clinical psychologist who had spent time as a Buddhist monk in Thailand through the Peace Corps."
+      "blowUpContext": "He was a clinical psychologist who had spent time as a Buddhist monk in Thailand through the Peace Corps.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1967-1972",
+          "format": "Traditional Buddhist monastic training in Thai monasteries",
+          "audience": "Small monastery communities",
+          "insight": "He learned authentic meditation practices but realized they needed adaptation for Western psychological frameworks."
+        },
+        {
+          "stage": 2,
+          "year": "1972-1975",
+          "format": "Graduate psychology training while leading small meditation groups",
+          "audience": "20-30 students and therapy clients",
+          "insight": "He discovered that combining Eastern meditation with Western psychology created more complete healing than either alone."
+        },
+        {
+          "stage": 3,
+          "year": "1975-1990",
+          "format": "Insight Meditation Society retreats and teacher training",
+          "audience": "100-200 retreat participants",
+          "insight": "He realized that intensive retreat experiences could give Westerners authentic taste of meditation without requiring monastic life."
+        },
+        {
+          "stage": 4,
+          "year": "1990-present",
+          "format": "Global teaching circuit, books, and online dharma programs",
+          "audience": "Thousands at events, millions through books and audio",
+          "insight": "He understood that meditation needed to be integrated into daily Western life, not just retreat experiences."
+        }
+      ]
     },
     {
       "name": "Sam Harris",
@@ -785,7 +1152,37 @@
       "blowUpMoment": "His book 'The End of Faith' won the 2005 PEN Award for Nonfiction and sparked global debate about religion and spirituality.",
       "blowUpYear": 2004,
       "blowUpType": "product",
-      "blowUpContext": "He was a Stanford philosophy student and neuroscience researcher who had spent years studying meditation in India."
+      "blowUpContext": "He was a Stanford philosophy student and neuroscience researcher who had spent years studying meditation in India.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1987-2004",
+          "format": "Personal meditation practice and academic research",
+          "audience": "Academic peers and meditation teachers",
+          "insight": "He discovered that meditation's benefits could be separated from religious belief systems and studied scientifically."
+        },
+        {
+          "stage": 2,
+          "year": "2004-2012",
+          "format": "Academic lectures and atheist conference speaking",
+          "audience": "University students and secular audiences",
+          "insight": "He realized that rationalist audiences were hungry for contemplative practices stripped of supernatural claims."
+        },
+        {
+          "stage": 3,
+          "year": "2012-2018",
+          "format": "Podcasts, public debates, and meditation workshops for skeptics",
+          "audience": "Hundreds of thousands of podcast listeners",
+          "insight": "He learned that long-form conversation could introduce meditation to people who would reject traditional spiritual teaching."
+        },
+        {
+          "stage": 4,
+          "year": "2018-present",
+          "format": "Meditation app and online courses for secular practitioners",
+          "audience": "Hundreds of thousands using guided meditations",
+          "insight": "He understood that technology could deliver authentic meditation instruction to skeptics without requiring belief in anything beyond their direct experience."
+        }
+      ]
     },
     {
       "name": "Thich Nhat Hanh",
@@ -843,7 +1240,37 @@
       "blowUpMoment": "Martin Luther King Jr. nominated him for the Nobel Peace Prize in 1967 for his work promoting peace during the Vietnam War.",
       "blowUpYear": 1967,
       "blowUpType": "event",
-      "blowUpContext": "He was a Vietnamese Zen monk teaching at universities and helping war refugees while his country was being destroyed."
+      "blowUpContext": "He was a Vietnamese Zen monk teaching at universities and helping war refugees while his country was being destroyed.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1942-1966",
+          "format": "Traditional Vietnamese monastery training and university teaching",
+          "audience": "Monks and university students in Vietnam",
+          "insight": "He discovered that Buddhist practice needed to directly address social suffering and injustice, not just personal liberation."
+        },
+        {
+          "stage": 2,
+          "year": "1966-1973",
+          "format": "War relief work and peace activism with refugee communities",
+          "audience": "Thousands of war refugees and peace activists",
+          "insight": "He realized that mindfulness could be a tool for healing trauma and building peace in the midst of violence."
+        },
+        {
+          "stage": 3,
+          "year": "1973-1982",
+          "format": "Exile teaching in Europe and building contemplative community",
+          "audience": "Small international community of practitioners",
+          "insight": "He learned that creating sustainable community required adapting monastic practices for lay practitioners and families."
+        },
+        {
+          "stage": 4,
+          "year": "1982-2014",
+          "format": "Global retreats, mindfulness trainings, and prolific writing",
+          "audience": "Millions through books, thousands at international retreats",
+          "insight": "He understood that simple, practical mindfulness techniques could help anyone find peace regardless of their religious background."
+        }
+      ]
     },
     {
       "name": "Seane Corn",
@@ -901,7 +1328,37 @@
       "blowUpMoment": "She appeared on the cover of Yoga Journal magazine, which introduced her as a leading voice of power yoga to the mainstream yoga community.",
       "blowUpYear": 2001,
       "blowUpType": "event",
-      "blowUpContext": "She had been teaching yoga in Los Angeles since the early 1990s, building a following at studios like Exhale and among Hollywood celebrities."
+      "blowUpContext": "She had been teaching yoga in Los Angeles since the early 1990s, building a following at studios like Exhale and among Hollywood celebrities.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1987-1995",
+          "format": "Personal yoga practice for trauma healing",
+          "audience": "Solo practice and small classes as student",
+          "insight": "She discovered that yoga could heal childhood sexual trauma in ways therapy alone couldn't achieve."
+        },
+        {
+          "stage": 2,
+          "year": "1995-2001",
+          "format": "Teaching at LA yoga studios and building celebrity following",
+          "audience": "20-40 students per class in upscale studios",
+          "insight": "She realized that yoga's transformative power needed to reach beyond privileged wellness communities to people experiencing real trauma."
+        },
+        {
+          "stage": 3,
+          "year": "2001-2010",
+          "format": "National workshops, magazine features, and activist yoga projects",
+          "audience": "Hundreds at workshops, thousands through media",
+          "insight": "She learned that combining yoga teaching with social justice work could address both personal and collective healing."
+        },
+        {
+          "stage": 4,
+          "year": "2010-present",
+          "format": "Global retreats, trauma-informed yoga teacher training, and activism programs",
+          "audience": "Thousands in programs, millions through advocacy work",
+          "insight": "She understood that training other teachers in trauma-informed practices could multiply healing impact far beyond her personal reach."
+        }
+      ]
     },
     {
       "name": "Joe Dispenza",
@@ -959,7 +1416,37 @@
       "blowUpMoment": "His appearance in the 2004 film 'What the Bleep Do We Know!?' introduced his brain-change theories to mainstream audiences worldwide.",
       "blowUpYear": 2004,
       "blowUpType": "content",
-      "blowUpContext": "He was a chiropractor researching spontaneous remissions and neuroplasticity after healing his own broken spine through visualization."
+      "blowUpContext": "He was a chiropractor researching spontaneous remissions and neuroplasticity after healing his own broken spine through visualization.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1986-1995",
+          "format": "Traditional chiropractic practice and personal healing",
+          "audience": "Individual patients in clinical setting",
+          "insight": "He discovered through healing his own spine that mental rehearsal and visualization could create measurable physical changes."
+        },
+        {
+          "stage": 2,
+          "year": "1995-2004",
+          "format": "Small seminars on mind-body healing for health professionals",
+          "audience": "50-100 doctors and alternative health practitioners",
+          "insight": "He realized that spontaneous remissions followed patterns that could be taught and replicated."
+        },
+        {
+          "stage": 3,
+          "year": "2004-2012",
+          "format": "Weekend workshops combining neuroscience with meditation",
+          "audience": "200-500 participants seeking personal transformation",
+          "insight": "He learned that people could change their brain chemistry and biology through specific meditation practices when taught the science behind it."
+        },
+        {
+          "stage": 4,
+          "year": "2012-present",
+          "format": "Week-long intensives with real-time brain and heart monitoring",
+          "audience": "1,000+ participants, millions through online courses",
+          "insight": "He understood that measuring biological changes in real-time could prove to skeptical minds that consciousness directly affects physical reality."
+        }
+      ]
     },
     {
       "name": "Aubrey Marcus",
@@ -1017,7 +1504,37 @@
       "blowUpMoment": "Launched Onnit in 2010 with Alpha BRAIN nootropic supplement, which became Joe Rogan's signature product and reached $100M+ revenue.",
       "blowUpYear": 2010,
       "blowUpType": "product",
-      "blowUpContext": "He was an entrepreneur experimenting with performance optimization and psychedelics while searching for his life purpose."
+      "blowUpContext": "He was an entrepreneur experimenting with performance optimization and psychedelics while searching for his life purpose.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "2007-2010",
+          "format": "Personal experimentation with performance optimization",
+          "audience": "Small circle of friends and training partners",
+          "insight": "He discovered that peak performance required optimizing consciousness, not just physical training and supplements."
+        },
+        {
+          "stage": 2,
+          "year": "2010-2015",
+          "format": "Onnit supplement company and Joe Rogan podcast appearances",
+          "audience": "Hundreds of thousands of customers and podcast listeners",
+          "insight": "He realized that business success could fund deeper exploration into consciousness and that mainstream audiences were ready for alternative approaches."
+        },
+        {
+          "stage": 3,
+          "year": "2015-2020",
+          "format": "Own podcast, ayahuasca ceremonies, and lifestyle content",
+          "audience": "Millions of podcast listeners and social media followers",
+          "insight": "He learned that sharing vulnerable personal growth experiences could help others navigate their own consciousness expansion."
+        },
+        {
+          "stage": 4,
+          "year": "2020-present",
+          "format": "Fit For Service programs and men's leadership communities",
+          "audience": "Thousands in structured programs combining ancient wisdom with modern practices",
+          "insight": "He understood that men needed structured programs combining physical challenge with emotional and spiritual development."
+        }
+      ]
     },
     {
       "name": "Ram Dass",
@@ -1075,7 +1592,37 @@
       "blowUpMoment": "Published 'Be Here Now' in 1971, which sold over 2 million copies and became the spiritual bible for an entire generation.",
       "blowUpYear": 1971,
       "blowUpType": "product",
-      "blowUpContext": "He was Richard Alpert, a Harvard psychology professor who had been fired for LSD research with Timothy Leary."
+      "blowUpContext": "He was Richard Alpert, a Harvard psychology professor who had been fired for LSD research with Timothy Leary.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1958-1963",
+          "format": "Harvard psychology professor conducting traditional academic research",
+          "audience": "University students and academic colleagues",
+          "insight": "He realized that conventional psychology couldn't explain or utilize the expanded states of consciousness he was experiencing."
+        },
+        {
+          "stage": 2,
+          "year": "1963-1967",
+          "format": "LSD research sessions and consciousness exploration",
+          "audience": "Small groups of researchers and subjects",
+          "insight": "He discovered that psychedelics could catalyze spiritual awakening but needed integration with authentic spiritual practice."
+        },
+        {
+          "stage": 3,
+          "year": "1967-1971",
+          "format": "Spiritual seeking in India and traditional guru-disciple relationship",
+          "audience": "Small ashram community and fellow seekers",
+          "insight": "He learned that Eastern wisdom traditions offered time-tested methods for stabilizing expanded consciousness."
+        },
+        {
+          "stage": 4,
+          "year": "1971-2019",
+          "format": "Public teaching, books, and spiritual community building",
+          "audience": "Millions through books, thousands at talks and retreats",
+          "insight": "He understood that his role was to bridge Eastern wisdom and Western psychology for a generation seeking authentic spiritual experience."
+        }
+      ]
     },
     {
       "name": "Sadhguru",
@@ -1133,7 +1680,37 @@
       "blowUpMoment": "His Rally for Rivers campaign launched across India with motorcycle rallies covering 7,000 kilometers, drawing massive crowds and international media attention.",
       "blowUpYear": 2017,
       "blowUpType": "movement",
-      "blowUpContext": "He had been building his following through Isha Foundation programs and YouTube videos for years, but remained primarily known within spiritual circles and India."
+      "blowUpContext": "He had been building his following through Isha Foundation programs and YouTube videos for years, but remained primarily known within spiritual circles and India.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1973-1982",
+          "format": "Personal spiritual practice and business success",
+          "audience": "Family and business associates",
+          "insight": "He realized that material success without inner fulfillment was meaningless and began seeking deeper purpose."
+        },
+        {
+          "stage": 2,
+          "year": "1982-1992",
+          "format": "Small yoga classes and local spiritual gatherings",
+          "audience": "20-50 local seekers in South India",
+          "insight": "He discovered that authentic yoga practices could transform lives but needed systematic transmission methods."
+        },
+        {
+          "stage": 3,
+          "year": "1992-2010",
+          "format": "Isha Foundation programs and growing ashram community",
+          "audience": "Thousands participating in programs across India",
+          "insight": "He learned that creating structured programs could preserve and transmit yogic sciences effectively to modern seekers."
+        },
+        {
+          "stage": 4,
+          "year": "2010-present",
+          "format": "Global initiatives, social media presence, and environmental campaigns",
+          "audience": "Millions through digital platforms and global programs",
+          "insight": "He understood that spiritual teachers needed to address global crises and that technology could democratize access to ancient wisdom."
+        }
+      ]
     },
     {
       "name": "Marianne Williamson",
@@ -1191,7 +1768,37 @@
       "blowUpMoment": "Oprah Winfrey devoted an entire show to discussing 'A Return to Love' which immediately shot the book to #1 on the New York Times bestseller list.",
       "blowUpYear": 1992,
       "blowUpType": "event",
-      "blowUpContext": "She had been leading Course in Miracles study groups in Los Angeles since 1983, building a local following and had recently published 'A Return to Love' with modest initial sales."
+      "blowUpContext": "She had been leading Course in Miracles study groups in Los Angeles since 1983, building a local following and had recently published 'A Return to Love' with modest initial sales.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1983-1989",
+          "format": "Small living room study groups for A Course in Miracles",
+          "audience": "10-30 people in intimate home settings",
+          "insight": "She discovered that spiritual principles became practical when applied to real-life relationship and career challenges."
+        },
+        {
+          "stage": 2,
+          "year": "1989-1992",
+          "format": "Church sanctuary lectures and weekend workshops",
+          "audience": "200-500 spiritual seekers in Los Angeles",
+          "insight": "She realized that spiritual teaching needed to address contemporary issues like AIDS, relationships, and social justice."
+        },
+        {
+          "stage": 3,
+          "year": "1992-2000",
+          "format": "Major media appearances and bestselling books",
+          "audience": "Millions through television and book sales",
+          "insight": "She learned that mainstream platforms could introduce spiritual concepts to people who would never enter traditional religious spaces."
+        },
+        {
+          "stage": 4,
+          "year": "2000-present",
+          "format": "Political campaigns, lecture tours, and social justice integration",
+          "audience": "Hundreds of thousands at events, millions through political and spiritual platforms",
+          "insight": "She understood that spiritual principles needed to be applied to systemic change and political transformation, not just personal growth."
+        }
+      ]
     },
     {
       "name": "Mooji",
@@ -1249,7 +1856,37 @@
       "blowUpMoment": "His 'Invitation to Freedom' guidance arose spontaneously during Satsang in Rishikesh in 2017, becoming a viral self-realisation tool shared by thousands worldwide.",
       "blowUpYear": 2017,
       "blowUpType": "content",
-      "blowUpContext": "He had been holding intimate satsangs in London, Rishikesh, and his Monte Sahaja ashram in Portugal for nearly two decades, known to a devoted but niche following."
+      "blowUpContext": "He had been holding intimate satsangs in London, Rishikesh, and his Monte Sahaja ashram in Portugal for nearly two decades, known to a devoted but niche following.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1987-1999",
+          "format": "Personal spiritual seeking and small group sharing in London",
+          "audience": "5-15 people in informal gatherings",
+          "insight": "He discovered that direct pointing to truth was more effective than complex spiritual practices or philosophy."
+        },
+        {
+          "stage": 2,
+          "year": "1999-2010",
+          "format": "Regular satsangs in London and annual Rishikesh gatherings",
+          "audience": "50-200 people in community halls and outdoor spaces",
+          "insight": "He realized that authentic spiritual transmission happened through presence and direct inquiry, not teaching techniques."
+        },
+        {
+          "stage": 3,
+          "year": "2010-2017",
+          "format": "International tours and Monte Sahaja ashram establishment",
+          "audience": "Hundreds at retreats, thousands through online videos",
+          "insight": "He learned that creating a stable spiritual community allowed for deeper transmission than constant traveling."
+        },
+        {
+          "stage": 4,
+          "year": "2017-present",
+          "format": "Global online satsangs and viral self-inquiry tools",
+          "audience": "Millions accessing teachings through social media and streaming",
+          "insight": "He understood that simple, direct pointing could reach countless seekers through technology while maintaining the intimacy of personal transmission."
+        }
+      ]
     },
     {
       "name": "Yung Pueblo",
@@ -1307,7 +1944,37 @@
       "blowUpMoment": "His Instagram poetry about healing and meditation went viral in 2016, gaining millions of followers and reshaping spiritual social media.",
       "blowUpYear": 2016,
       "blowUpType": "content",
-      "blowUpContext": "He was Diego Perez, working in political activism while practicing Vipassana meditation and writing poetry to process his healing."
+      "blowUpContext": "He was Diego Perez, working in political activism while practicing Vipassana meditation and writing poetry to process his healing.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "2012-2016",
+          "format": "Personal meditation practice and political activism",
+          "audience": "Fellow activists and meditation group participants",
+          "insight": "He discovered that inner healing work was essential for creating sustainable social change."
+        },
+        {
+          "stage": 2,
+          "year": "2016-2018",
+          "format": "Instagram poetry posts and social media spiritual content",
+          "audience": "Hundreds of thousands of social media followers",
+          "insight": "He realized that spiritual wisdom could reach young people through poetry and social media when stripped of traditional religious language."
+        },
+        {
+          "stage": 3,
+          "year": "2018-2021",
+          "format": "Bestselling books and online courses",
+          "audience": "Millions of readers and thousands in programs",
+          "insight": "He learned that combining ancient wisdom with modern mental health concepts could help people understand healing as a practical process."
+        },
+        {
+          "stage": 4,
+          "year": "2021-present",
+          "format": "Global speaking tours and community building platforms",
+          "audience": "Thousands at live events, millions through books and online community",
+          "insight": "He understood that creating spaces for people to share their healing journeys could be as transformative as teaching the practices themselves."
+        }
+      ]
     },
     {
       "name": "Sahara Rose",
@@ -1365,7 +2032,37 @@
       "blowUpMoment": "Her book 'Idiot's Guide to Ayurveda' became a bestseller after receiving endorsements from Deepak Chopra and other wellness leaders.",
       "blowUpYear": 2017,
       "blowUpType": "product",
-      "blowUpContext": "She had been blogging about Ayurveda and wellness since 2013, building a modest social media following while working as a nutritionist and wellness coach."
+      "blowUpContext": "She had been blogging about Ayurveda and wellness since 2013, building a modest social media following while working as a nutritionist and wellness coach.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "2013-2015",
+          "format": "Personal blog and social media content about Ayurveda",
+          "audience": "Hundreds of blog readers and social followers",
+          "insight": "She discovered that ancient Ayurvedic wisdom needed modern translation to resonate with millennial wellness seekers."
+        },
+        {
+          "stage": 2,
+          "year": "2015-2017",
+          "format": "Online courses and wellness coaching programs",
+          "audience": "Hundreds of students in digital programs",
+          "insight": "She realized that combining Ayurveda with contemporary nutrition science made ancient practices more credible and accessible."
+        },
+        {
+          "stage": 3,
+          "year": "2017-2020",
+          "format": "Bestselling books and major podcast launch",
+          "audience": "Hundreds of thousands of readers and podcast listeners",
+          "insight": "She learned that storytelling and personal narrative could make complex spiritual concepts relatable to mainstream audiences."
+        },
+        {
+          "stage": 4,
+          "year": "2020-present",
+          "format": "Certification programs and global wellness community",
+          "audience": "Thousands in training programs, millions through content platforms",
+          "insight": "She understood that training others to teach Ayurveda could preserve and spread ancient wisdom while adapting it for modern life."
+        }
+      ]
     },
     {
       "name": "Sri Sri Ravi Shankar",
@@ -1423,7 +2120,37 @@
       "blowUpMoment": "Art of Living reached one million participants worldwide, marking his transition from regional Indian guru to global spiritual leader.",
       "blowUpYear": 1995,
       "blowUpType": "movement",
-      "blowUpContext": "He had founded Art of Living in 1981 and spent over a decade teaching Sudarshan Kriya breathing techniques primarily in India and among Indian diaspora communities."
+      "blowUpContext": "He had founded Art of Living in 1981 and spent over a decade teaching Sudarshan Kriya breathing techniques primarily in India and among Indian diaspora communities.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1975-1981",
+          "format": "Personal spiritual practice and small local teaching",
+          "audience": "Dozens of local students in informal settings",
+          "insight": "He discovered that breathing techniques could rapidly shift consciousness and reduce stress in ways meditation alone couldn't achieve."
+        },
+        {
+          "stage": 2,
+          "year": "1981-1990",
+          "format": "Art of Living courses across India",
+          "audience": "Hundreds per course, thousands annually",
+          "insight": "He realized that systematic breathing programs could be taught to people of all backgrounds without requiring spiritual beliefs."
+        },
+        {
+          "stage": 3,
+          "year": "1990-2000",
+          "format": "International expansion and conflict resolution work",
+          "audience": "Tens of thousands in programs, millions impacted by peace initiatives",
+          "insight": "He learned that the same techniques that brought individual peace could be applied to resolve large-scale conflicts."
+        },
+        {
+          "stage": 4,
+          "year": "2000-present",
+          "format": "Global humanitarian initiatives and online programs",
+          "audience": "Millions participating worldwide through digital and local programs",
+          "insight": "He understood that spiritual practices needed to address social problems and that technology could democratize access to ancient wisdom."
+        }
+      ]
     },
     {
       "name": "Vishen Lakhiani",
@@ -1481,7 +2208,37 @@
       "blowUpMoment": "'The Code of the Extraordinary Mind' became a New York Times bestseller and established him as a major voice in the personal development space.",
       "blowUpYear": 2016,
       "blowUpType": "product",
-      "blowUpContext": "He had been running Mindvalley as an online education company since 2003, creating courses and content, but was known primarily within entrepreneurial and meditation communities."
+      "blowUpContext": "He had been running Mindvalley as an online education company since 2003, creating courses and content, but was known primarily within entrepreneurial and meditation communities.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "2003-2010",
+          "format": "Online meditation courses and email marketing",
+          "audience": "Thousands of digital customers",
+          "insight": "He discovered that traditional education and life paths weren't leading to fulfillment and began questioning conventional success models."
+        },
+        {
+          "stage": 2,
+          "year": "2010-2016",
+          "format": "Mindvalley University events and personal growth festivals",
+          "audience": "Hundreds at live events, tens of thousands online",
+          "insight": "He realized that combining multiple modalities of personal growth could accelerate transformation beyond single-method approaches."
+        },
+        {
+          "stage": 3,
+          "year": "2016-2020",
+          "format": "Bestselling books and major conference speaking",
+          "audience": "Hundreds of thousands reading, millions through viral content",
+          "insight": "He learned that questioning cultural conditioning and life rules resonated with people feeling trapped by societal expectations."
+        },
+        {
+          "stage": 4,
+          "year": "2020-present",
+          "format": "Global online university and transformation certification programs",
+          "audience": "Millions in online programs and communities worldwide",
+          "insight": "He understood that creating alternative education systems could help people design lives aligned with their authentic purpose rather than cultural programming."
+        }
+      ]
     },
     {
       "name": "Michael Singer",
@@ -1539,7 +2296,37 @@
       "blowUpMoment": "Oprah Winfrey featured 'The Untethered Soul' on her Super Soul Sunday program, calling it one of her favorite spiritual books.",
       "blowUpYear": 2012,
       "blowUpType": "event",
-      "blowUpContext": "He had published 'The Untethered Soul' in 2007 where it sold modestly while he continued running his software company and spiritual center in Florida largely unknown to mainstream audiences."
+      "blowUpContext": "He had published 'The Untethered Soul' in 2007 where it sold modestly while he continued running his software company and spiritual center in Florida largely unknown to mainstream audiences.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1971-1990",
+          "format": "Personal meditation practice and small spiritual community",
+          "audience": "20-50 people at rural Florida spiritual center",
+          "insight": "He discovered that observing thoughts and emotions without identification could lead to profound inner freedom."
+        },
+        {
+          "stage": 2,
+          "year": "1990-2007",
+          "format": "Sunday talks at spiritual center while building software business",
+          "audience": "100-200 weekly attendees, thousands of employees",
+          "insight": "He realized that spiritual principles could be applied to business success without compromising authentic practice."
+        },
+        {
+          "stage": 3,
+          "year": "2007-2012",
+          "format": "Book publication and gradual expansion of teaching",
+          "audience": "Tens of thousands of readers, hundreds at occasional talks",
+          "insight": "He learned that simple, practical teachings about consciousness could reach people who weren't traditionally spiritual."
+        },
+        {
+          "stage": 4,
+          "year": "2012-present",
+          "format": "Global recognition, online courses, and major media attention",
+          "audience": "Millions through books and online programs",
+          "insight": "He understood that surrender and letting go were universal principles that could help anyone regardless of their spiritual background."
+        }
+      ]
     },
     {
       "name": "Michael Beckwith",
@@ -1597,7 +2384,37 @@
       "blowUpMoment": "Featured prominently in 'The Secret' documentary in 2006, introducing his 'Life Visioning' process to millions worldwide.",
       "blowUpYear": 2006,
       "blowUpType": "content",
-      "blowUpContext": "He was the founder of Agape International Spiritual Center, building a congregation in Los Angeles after transforming from drug dealing."
+      "blowUpContext": "He was the founder of Agape International Spiritual Center, building a congregation in Los Angeles after transforming from drug dealing.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1970s-1985",
+          "format": "Personal spiritual transformation from drug dealing",
+          "audience": "Small circle of friends and fellow seekers",
+          "insight": "He discovered that spiritual awakening could completely redirect a life from destruction to service."
+        },
+        {
+          "stage": 2,
+          "year": "1986-2000",
+          "format": "Building Agape International Spiritual Center congregation",
+          "audience": "Growing from dozens to thousands of regular attendees",
+          "insight": "He realized that progressive spiritual community could bridge traditional religion with New Thought and consciousness principles."
+        },
+        {
+          "stage": 3,
+          "year": "2000-2006",
+          "format": "Conference speaking and spiritual leadership development",
+          "audience": "Thousands at spiritual conferences and events",
+          "insight": "He learned that Life Visioning practices could help anyone discover their authentic purpose beyond ego desires."
+        },
+        {
+          "stage": 4,
+          "year": "2006-present",
+          "format": "Global platform through The Secret and international teaching",
+          "audience": "Millions through film and media, thousands at global events",
+          "insight": "He understood that spiritual principles needed practical application methods that could help people manifest their highest potential."
+        }
+      ]
     },
     {
       "name": "Radha Agrawal",
@@ -1655,7 +2472,37 @@
       "blowUpMoment": "She launched the first Daybreaker morning dance party in Brooklyn, creating a new category of alcohol-free nightlife experience.",
       "blowUpYear": 2013,
       "blowUpType": "event",
-      "blowUpContext": "She was an entrepreneur who had previously co-founded Super Sprowtz and was looking for ways to create community and wellness-focused social experiences."
+      "blowUpContext": "She was an entrepreneur who had previously co-founded Super Sprowtz and was looking for ways to create community and wellness-focused social experiences.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "2008-2013",
+          "format": "Entrepreneur building food education company for children",
+          "audience": "Thousands of families through Super Sprowtz",
+          "insight": "She discovered that community and wellness were more important than traditional nightlife and social experiences."
+        },
+        {
+          "stage": 2,
+          "year": "2013-2016",
+          "format": "Morning dance parties in Brooklyn and select cities",
+          "audience": "Hundreds per event, thousands participating monthly",
+          "insight": "She realized that alcohol-free conscious community experiences could be more fulfilling than traditional partying."
+        },
+        {
+          "stage": 3,
+          "year": "2016-2020",
+          "format": "Global Daybreaker expansion and wellness festival integration",
+          "audience": "Tens of thousands across 30+ cities worldwide",
+          "insight": "She learned that people were hungry for authentic connection and that morning rituals could set positive tone for entire days."
+        },
+        {
+          "stage": 4,
+          "year": "2020-present",
+          "format": "Virtual experiences and community leadership training",
+          "audience": "Hundreds of thousands through digital events and programs",
+          "insight": "She understood that teaching others to create conscious community could multiply the impact beyond what she could organize personally."
+        }
+      ]
     },
     {
       "name": "Meghan Pappenheim",
@@ -1713,7 +2560,37 @@
       "blowUpMoment": "Co-launched the first BaliSpirit Festival in 2008, which grew from a small gathering into a global phenomenon drawing thousands from 60+ countries annually.",
       "blowUpYear": 2008,
       "blowUpType": "event",
-      "blowUpContext": "She had moved to Bali and co-founded The Yoga Barn in Ubud with her husband Kadek Gunarta, building the wellness infrastructure before the festival."
+      "blowUpContext": "She had moved to Bali and co-founded The Yoga Barn in Ubud with her husband Kadek Gunarta, building the wellness infrastructure before the festival.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "2007-2008",
+          "format": "Co-founding The Yoga Barn in Ubud, Bali",
+          "audience": "Dozens of yoga students and retreat participants",
+          "insight": "She discovered that Bali could become a spiritual destination if the right infrastructure and community were created."
+        },
+        {
+          "stage": 2,
+          "year": "2008-2012",
+          "format": "Launching BaliSpirit Festival as small gathering",
+          "audience": "Hundreds of yoga and wellness enthusiasts",
+          "insight": "She realized that combining yoga, music, and wellness could create transformative experiences beyond traditional retreats."
+        },
+        {
+          "stage": 3,
+          "year": "2012-2018",
+          "format": "Growing festival to international wellness destination",
+          "audience": "Thousands from 60+ countries attending annually",
+          "insight": "She learned that authentic spiritual experiences could scale while maintaining intimacy if community and purpose remained central."
+        },
+        {
+          "stage": 4,
+          "year": "2018-present",
+          "format": "Global wellness tourism influence and sustainable spiritual business modeling",
+          "audience": "Millions influenced by the wellness tourism model, thousands participating directly",
+          "insight": "She understood that conscious business could transform entire regions while preserving authentic spiritual traditions and environmental sustainability."
+        }
+      ]
     },
     {
       "name": "Jeff Krasno",
@@ -1771,7 +2648,37 @@
       "blowUpMoment": "Created the first Wanderlust Festival in 2009, transforming yoga from studio practice into massive outdoor festivals combining music and mindfulness.",
       "blowUpYear": 2009,
       "blowUpType": "event",
-      "blowUpContext": "He was a music industry executive who had produced albums for major artists before discovering yoga and wellness."
+      "blowUpContext": "He was a music industry executive who had produced albums for major artists before discovering yoga and wellness.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1990s-2009",
+          "format": "Music industry executive producing albums and managing artists",
+          "audience": "Musicians and music industry professionals",
+          "insight": "He discovered that festival experiences could create community and transformation beyond just entertainment."
+        },
+        {
+          "stage": 2,
+          "year": "2009-2012",
+          "format": "Small Wanderlust Festivals combining yoga and music",
+          "audience": "Thousands of yoga practitioners and music fans",
+          "insight": "He realized that combining mindfulness with music and outdoor experiences could reach people who wouldn't attend traditional spiritual events."
+        },
+        {
+          "stage": 3,
+          "year": "2012-2018",
+          "format": "Multi-city festival circuit and digital platform development",
+          "audience": "Tens of thousands at festivals, hundreds of thousands online",
+          "insight": "He learned that wellness festivals could become a new category of experience that merged entertainment with genuine spiritual growth."
+        },
+        {
+          "stage": 4,
+          "year": "2018-present",
+          "format": "Global digital wellness platform and online community",
+          "audience": "Millions through digital content and virtual experiences",
+          "insight": "He understood that technology could democratize access to world-class teachers while maintaining the community aspect that made festivals powerful."
+        }
+      ]
     },
     {
       "name": "Gabrielle Roth",
@@ -1829,7 +2736,37 @@
       "blowUpMoment": "She published 'Maps to Ecstasy' which codified her 5Rhythms movement practice and brought it to mainstream spiritual seekers.",
       "blowUpYear": 1989,
       "blowUpType": "product",
-      "blowUpContext": "She had been developing her movement work since the 1960s, leading workshops at Esalen and teaching what would become 5Rhythms to small groups in New York and California."
+      "blowUpContext": "She had been developing her movement work since the 1960s, leading workshops at Esalen and teaching what would become 5Rhythms to small groups in New York and California.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1960s-1977",
+          "format": "Personal dance exploration and Esalen Institute workshops",
+          "audience": "Small groups of movement therapy participants",
+          "insight": "She discovered that specific movement patterns could access and release emotions more effectively than talk therapy."
+        },
+        {
+          "stage": 2,
+          "year": "1977-1989",
+          "format": "Developing 5Rhythms method through workshops and training",
+          "audience": "Hundreds participating in weekend intensives",
+          "insight": "She realized that structured improvisation through five universal rhythms could be taught systematically to anyone."
+        },
+        {
+          "stage": 3,
+          "year": "1989-2000",
+          "format": "Books, music albums, and international teacher training",
+          "audience": "Thousands learning 5Rhythms globally",
+          "insight": "She learned that combining movement with music and spiritual practice could heal trauma and awaken authentic expression."
+        },
+        {
+          "stage": 4,
+          "year": "2000-2012",
+          "format": "Global 5Rhythms teacher network and community",
+          "audience": "Tens of thousands practicing worldwide through certified teachers",
+          "insight": "She understood that training facilitators to hold sacred movement space could preserve and spread the practice far beyond her personal teaching capacity."
+        }
+      ]
     },
     {
       "name": "Larry Harvey",
@@ -1887,7 +2824,37 @@
       "blowUpMoment": "Burned the first 8-foot wooden man on Baker Beach in San Francisco in 1986, creating what would become Burning Man festival.",
       "blowUpYear": 1986,
       "blowUpType": "event",
-      "blowUpContext": "He was a landscaper and sometime-artist going through a breakup who decided to burn a wooden effigy as a spontaneous act of expression."
+      "blowUpContext": "He was a landscaper and sometime-artist going through a breakup who decided to burn a wooden effigy as a spontaneous act of expression.",
+      "experienceEvolution": [
+        {
+          "stage": 1,
+          "year": "1986-1990",
+          "format": "Spontaneous beach bonfire with wooden man effigy",
+          "audience": "20-30 curious onlookers at Baker Beach",
+          "insight": "He discovered that radical self-expression and ritual could create instant community among strangers."
+        },
+        {
+          "stage": 2,
+          "year": "1990-1996",
+          "format": "Growing desert gathering with art and survival challenges",
+          "audience": "Hundreds to thousands in Nevada's Black Rock Desert",
+          "insight": "He realized that removing commerce and creating extreme conditions could foster gift economy and authentic human connection."
+        },
+        {
+          "stage": 3,
+          "year": "1996-2006",
+          "format": "Temporary city with infrastructure and global art community",
+          "audience": "Tens of thousands creating massive collaborative artwork",
+          "insight": "He learned that decommodified space could enable unprecedented artistic collaboration and social experimentation."
+        },
+        {
+          "stage": 4,
+          "year": "2006-2018",
+          "format": "Global network of regional burns and cultural movement",
+          "audience": "Hundreds of thousands participating in events worldwide",
+          "insight": "He understood that the principles of radical self-expression and gift economy could transform communities far beyond the original festival experience."
+        }
+      ]
     }
   ]
 }
