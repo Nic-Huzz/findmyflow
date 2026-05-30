@@ -30,7 +30,73 @@
         "label": "Craft \u2194 Empire"
       }
     },
-    "notes": "33 live experience creators. Sliders match the Play Profile quiz output (workRhythm, fuelType from user sliders; orientation, knowledgeStyle inferred from games; scaleApproach from user slider). Full 221-profile archive at public/data/archived/experienceCreatorDNA-221-full.json"
+    "notes": "33 live experience creators. Sliders match the Play Profile quiz output (workRhythm, fuelType from user sliders; orientation, knowledgeStyle inferred from games; scaleApproach from user slider). Full 221-profile archive at public/data/archived/experienceCreatorDNA-221-full.json",
+    "blowUpPatterns": {
+      "book_crystallization": {
+        "description": "Codified their method into a book that crystallized years of practice into a shareable format",
+        "count": 12,
+        "examples": "Ram Dass, Priya Parker, Vishen Lakhiani"
+      },
+      "oprah_amplification": {
+        "description": "Oprah discovered them and amplified to mainstream. The single most common bridge person.",
+        "count": 5,
+        "examples": "Eckhart Tolle, Deepak Chopra, Marianne Williamson, Michael Singer, Gabby Bernstein"
+      },
+      "institution_creation": {
+        "description": "Founded an organization, festival, or platform that outlived any single event",
+        "count": 8,
+        "examples": "Larry Harvey (Burning Man), Jeff Krasno (Wanderlust), Jack Kornfield (IMS)"
+      },
+      "first_event": {
+        "description": "Created a new category of experience that didnt exist before",
+        "count": 4,
+        "examples": "Larry Harvey, Radha Agrawal (Daybreaker), Jeff Krasno (Wanderlust)"
+      },
+      "viral_content": {
+        "description": "A single piece of content went viral on social media",
+        "count": 4,
+        "examples": "Jay Shetty (300M views), Yung Pueblo (Instagram poetry), Gabor Mate (documentary)"
+      },
+      "film_documentary": {
+        "description": "Featured in a documentary that reached mainstream audiences",
+        "count": 3,
+        "examples": "Michael Beckwith (The Secret), Joe Dispenza (What the Bleep), Gabor Mate (Wisdom of Trauma)"
+      },
+      "scientific_validation": {
+        "description": "A scientific study proved their method worked, giving them credibility",
+        "count": 1,
+        "examples": "Wim Hof (PNAS 2014)"
+      },
+      "new_media_vehicle": {
+        "description": "Adopted a new media format (podcast, social video) before competitors",
+        "count": 3,
+        "examples": "Esther Perel (podcast therapy), Jay Shetty (Facebook video), Yung Pueblo (Instagram poetry)"
+      }
+    },
+    "universalPatterns": [
+      "Everyone starts by solving their own problem first",
+      "Stage 1 is always tiny (5-30 people in living rooms)",
+      "The blow-up is a format change, not a content change",
+      "There is always a bridge person or platform that carries them",
+      "The final evolution is always train-the-trainers",
+      "Marathon beats sprints (median 16 years to blow-up)",
+      "The experience gets more embodied over time, not less"
+    ],
+    "blowUpStats": {
+      "median_years_to_blowup": 14,
+      "fastest": {
+        "name": "Larry Harvey",
+        "years": 0,
+        "note": "First burn WAS the blow-up"
+      },
+      "slowest": {
+        "name": "Gabor Mate",
+        "years": 44,
+        "note": "44 years of clinical work before documentary"
+      },
+      "most_common_pattern": "book_crystallization (12 of 32)",
+      "most_common_bridge": "Oprah (5 of 32)"
+    }
   },
   "profiles": [
     {
@@ -119,7 +185,11 @@
           "audience": "NBA teams plus millions of fans watching",
           "insight": "He understood that creating championship cultures required treating the team as a spiritual community, not just a business."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "achievement_proof"
+      ],
+      "yearsToBlowUp": 24
     },
     {
       "name": "Tenzin Palmo",
@@ -207,7 +277,12 @@
           "audience": "Hundreds at retreats, thousands through books",
           "insight": "She realized her story could inspire women globally while she focused on establishing nunneries for future generations."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "book_crystallization",
+        "extreme_commitment"
+      ],
+      "yearsToBlowUp": 34
     },
     {
       "name": "Gabor Mate",
@@ -295,7 +370,12 @@
           "audience": "Millions through films and tens of thousands in programs",
           "insight": "He saw that trauma-informed healing needed to reach not just doctors but anyone working with human suffering."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "film_documentary",
+        "viral_content"
+      ],
+      "yearsToBlowUp": 44
     },
     {
       "name": "Tony Robbins",
@@ -390,7 +470,11 @@
           "audience": "10,000+ live, millions online and streaming",
           "insight": "He saw that technology could scale intimate breakthrough experiences to reach people who could never afford or access live events."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "mass_media"
+      ],
+      "yearsToBlowUp": 12
     },
     {
       "name": "Wim Hof",
@@ -478,7 +562,11 @@
           "audience": "Hundreds of thousands learning the method worldwide",
           "insight": "He understood that creating a standardized method and training instructors could help millions access the same benefits he discovered."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "scientific_validation"
+      ],
+      "yearsToBlowUp": 34
     },
     {
       "name": "Esther Perel",
@@ -566,6 +654,9 @@
           "audience": "Millions of podcast listeners learning from real sessions",
           "insight": "She understood that people could learn as much from hearing others' therapy as from their own, breaking traditional confidentiality models."
         }
+      ],
+      "blowUpPatterns": [
+        "new_media_vehicle"
       ]
     },
     {
@@ -654,7 +745,11 @@
           "audience": "Thousands of facilitators and millions of book readers",
           "insight": "She understood that teaching others to gather well could multiply impact far beyond what she could facilitate personally."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "book_crystallization"
+      ],
+      "yearsToBlowUp": 16
     },
     {
       "name": "Jay Shetty",
@@ -742,7 +837,12 @@
           "audience": "Billions of video views, millions of podcast listeners, celebrity coaching clients",
           "insight": "He proved that ancient wisdom could compete with entertainment for attention if delivered with production quality and emotional storytelling."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "viral_content",
+        "new_media_vehicle"
+      ],
+      "yearsToBlowUp": 9
     },
     {
       "name": "Gabby Bernstein",
@@ -830,7 +930,11 @@
           "audience": "Thousands in programs, millions through books and content",
           "insight": "She understood that training others to teach spiritual principles could create lasting impact beyond her personal reach."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "oprah_amplification"
+      ],
+      "yearsToBlowUp": 8
     },
     {
       "name": "Eckhart Tolle",
@@ -918,7 +1022,11 @@
           "audience": "Millions online, 10,000+ at live events",
           "insight": "He understood that presence could be transmitted through technology and that massive scale didn't diminish the intimacy of the teaching."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "oprah_amplification"
+      ],
+      "yearsToBlowUp": 20
     },
     {
       "name": "Deepak Chopra",
@@ -1006,7 +1114,12 @@
           "audience": "Millions globally through multiple platforms and programs",
           "insight": "He understood that creating systematic programs and training teachers could democratize mind-body healing worldwide."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "oprah_amplification",
+        "book_crystallization"
+      ],
+      "yearsToBlowUp": 23
     },
     {
       "name": "Jack Kornfield",
@@ -1094,7 +1207,11 @@
           "audience": "Thousands at events, millions through books and audio",
           "insight": "He understood that meditation needed to be integrated into daily Western life, not just retreat experiences."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "institution_creation"
+      ],
+      "yearsToBlowUp": 8
     },
     {
       "name": "Sam Harris",
@@ -1182,7 +1299,12 @@
           "audience": "Hundreds of thousands using guided meditations",
           "insight": "He understood that technology could deliver authentic meditation instruction to skeptics without requiring belief in anything beyond their direct experience."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "book_crystallization",
+        "achievement_proof"
+      ],
+      "yearsToBlowUp": 17
     },
     {
       "name": "Thich Nhat Hanh",
@@ -1270,7 +1392,11 @@
           "audience": "Millions through books, thousands at international retreats",
           "insight": "He understood that simple, practical mindfulness techniques could help anyone find peace regardless of their religious background."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "achievement_proof"
+      ],
+      "yearsToBlowUp": 25
     },
     {
       "name": "Seane Corn",
@@ -1358,7 +1484,11 @@
           "audience": "Global nonprofit raising millions, teacher trainings worldwide",
           "insight": "She proved that yoga and activism weren't separate paths but the same practice expressed in two directions, inward and outward."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "media_feature"
+      ],
+      "yearsToBlowUp": 13
     },
     {
       "name": "Joe Dispenza",
@@ -1446,7 +1576,11 @@
           "audience": "1,000+ participants, millions through online courses",
           "insight": "He understood that measuring biological changes in real-time could prove to skeptical minds that consciousness directly affects physical reality."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "film_documentary"
+      ],
+      "yearsToBlowUp": 18
     },
     {
       "name": "Aubrey Marcus",
@@ -1534,7 +1668,12 @@
           "audience": "Thousands in structured programs combining ancient wisdom with modern practices",
           "insight": "He understood that men needed structured programs combining physical challenge with emotional and spiritual development."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "product_launch",
+        "bridge_person"
+      ],
+      "yearsToBlowUp": 3
     },
     {
       "name": "Ram Dass",
@@ -1622,7 +1761,11 @@
           "audience": "Millions through books, thousands at talks and retreats",
           "insight": "He understood that his role was to bridge Eastern wisdom and Western psychology for a generation seeking authentic spiritual experience."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "book_crystallization"
+      ],
+      "yearsToBlowUp": 13
     },
     {
       "name": "Sadhguru",
@@ -1710,7 +1853,11 @@
           "audience": "Millions online, 11M+ YouTube subscribers, global policy influence",
           "insight": "He discovered that environmental activism and motorcycle rallies could reach audiences who would never attend a yoga class."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "movement_campaign"
+      ],
+      "yearsToBlowUp": 38
     },
     {
       "name": "Marianne Williamson",
@@ -1798,7 +1945,12 @@
           "audience": "Hundreds of thousands at events, millions through political and spiritual platforms",
           "insight": "She understood that spiritual principles needed to be applied to systemic change and political transformation, not just personal growth."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "oprah_amplification",
+        "book_crystallization"
+      ],
+      "yearsToBlowUp": 9
     },
     {
       "name": "Mooji",
@@ -1886,7 +2038,11 @@
           "audience": "Millions accessing teachings through social media and streaming",
           "insight": "He understood that simple, direct pointing could reach countless seekers through technology while maintaining the intimacy of personal transmission."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "viral_content"
+      ],
+      "yearsToBlowUp": 30
     },
     {
       "name": "Yung Pueblo",
@@ -1974,7 +2130,12 @@
           "audience": "Thousands at live events, millions through books and online community",
           "insight": "He understood that creating spaces for people to share their healing journeys could be as transformative as teaching the practices themselves."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "viral_content",
+        "new_media_vehicle"
+      ],
+      "yearsToBlowUp": 4
     },
     {
       "name": "Sahara Rose",
@@ -2062,7 +2223,12 @@
           "audience": "Global community of thousands in structured programs",
           "insight": "She shifted from content creation to community building, realizing transformation happens in containers, not just consumption."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "book_crystallization",
+        "bridge_person"
+      ],
+      "yearsToBlowUp": 4
     },
     {
       "name": "Sri Sri Ravi Shankar",
@@ -2150,7 +2316,11 @@
           "audience": "Millions participating worldwide through digital and local programs",
           "insight": "He understood that spiritual practices needed to address social problems and that technology could democratize access to ancient wisdom."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "institution_scaling"
+      ],
+      "yearsToBlowUp": 20
     },
     {
       "name": "Vishen Lakhiani",
@@ -2238,7 +2408,11 @@
           "audience": "Millions in online programs and communities worldwide",
           "insight": "He understood that creating alternative education systems could help people design lives aligned with their authentic purpose rather than cultural programming."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "book_crystallization"
+      ],
+      "yearsToBlowUp": 13
     },
     {
       "name": "Michael Singer",
@@ -2326,7 +2500,12 @@
           "audience": "Millions through books and online programs",
           "insight": "He understood that surrender and letting go were universal principles that could help anyone regardless of their spiritual background."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "oprah_amplification",
+        "book_crystallization"
+      ],
+      "yearsToBlowUp": 41
     },
     {
       "name": "Michael Beckwith",
@@ -2414,6 +2593,9 @@
           "audience": "Millions through film and media, thousands at global events",
           "insight": "He understood that spiritual principles needed practical application methods that could help people manifest their highest potential."
         }
+      ],
+      "blowUpPatterns": [
+        "film_documentary"
       ]
     },
     {
@@ -2502,7 +2684,12 @@
           "audience": "Hundreds of thousands through digital events and programs",
           "insight": "She understood that teaching others to create conscious community could multiply the impact beyond what she could organize personally."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "first_event",
+        "institution_creation"
+      ],
+      "yearsToBlowUp": 5
     },
     {
       "name": "Meghan Pappenheim",
@@ -2590,7 +2777,12 @@
           "audience": "Millions influenced by the wellness tourism model, thousands participating directly",
           "insight": "She understood that conscious business could transform entire regions while preserving authentic spiritual traditions and environmental sustainability."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "first_event",
+        "institution_creation"
+      ],
+      "yearsToBlowUp": 1
     },
     {
       "name": "Jeff Krasno",
@@ -2678,6 +2870,10 @@
           "audience": "Millions through digital content and virtual experiences",
           "insight": "He understood that technology could democratize access to world-class teachers while maintaining the community aspect that made festivals powerful."
         }
+      ],
+      "blowUpPatterns": [
+        "first_event",
+        "institution_creation"
       ]
     },
     {
@@ -2766,7 +2962,11 @@
           "audience": "245 certified teachers worldwide, workshops on five continents",
           "insight": "She realized the practice had to outlive her, so she focused on training teachers who could hold the container independently."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "book_crystallization"
+      ],
+      "yearsToBlowUp": 22
     },
     {
       "name": "Larry Harvey",
@@ -2854,7 +3054,11 @@
           "audience": "Hundreds of thousands participating in events worldwide",
           "insight": "He understood that the principles of radical self-expression and gift economy could transform communities far beyond the original festival experience."
         }
-      ]
+      ],
+      "blowUpPatterns": [
+        "first_event"
+      ],
+      "yearsToBlowUp": 0
     }
   ]
 }
