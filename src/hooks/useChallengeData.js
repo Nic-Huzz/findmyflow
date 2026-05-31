@@ -211,22 +211,11 @@ export function useChallengeData() {
         const isMobile = isIOS || isAndroid
 
         if (anyPrevious) {
-          // Returning user — go straight to challenge tabs (Level, Tune, Wahoo work without a project)
-          // They can pick a project from settings if needed
-          if (isMobile && !isStandalone) {
-            setOnboardingScreen('install-app')
-            setShowOnboarding(true)
-          }
-          // Otherwise just load the page with no project selected
+          // Returning user — go straight to challenge tabs
+          // No install prompt needed (app is on App Store now)
         } else {
-          // First-time user - show appropriate onboarding screen
-          if (isMobile && !isStandalone) {
-            // Mobile browser: show install-app screen
-            setOnboardingScreen('install-app')
-          } else {
-            // PWA or desktop: show notifications screen (skip install)
-            setOnboardingScreen('enable-notifications')
-          }
+          // First-time user — show notifications screen only (skip install-app)
+          setOnboardingScreen('enable-notifications')
           setShowOnboarding(true)
         }
         return
