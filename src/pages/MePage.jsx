@@ -458,16 +458,8 @@ export default function MePage() {
   const journeyRevealRef = useReveal()
   const questRevealRef = useReveal()
 
-  // First-time onboarding gate — redirect to Essence Mirror flow
-  useEffect(() => {
-    if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed)) {
-      navigate('/essence-mirror?returnTo=/me', { replace: true })
-    }
-  }, [stageProgress, navigate])
-
-  if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed)) {
-    return null
-  }
+  // First-time users stay on /me — they can click the Essence Mirror CTA when ready
+  // (Previously auto-redirected to /essence-mirror, removed to improve first impression)
 
   // Loading (wait for both hero data AND stageProgress to resolve)
   if (heroLoading || stageProgress === undefined) {
