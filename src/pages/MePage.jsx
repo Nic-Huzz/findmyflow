@@ -17,7 +17,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { useHeroProfile } from '../hooks/useHeroProfile'
 import { getLevel, getLevelNumber, getLevelProgress, getLevelMaxXP, LEVELS } from '../lib/crm/statsService'
 import { getStageDisplayName } from '../lib/stageConfig'
-import { getLevelConfig, HEALING_DAYS_REQUIRED } from '../components/level/LevelConfig'
+// LevelConfig used by LevelTab directly
 import { ONBOARDING_QUEST_IDS } from '../hooks/usePriorityTab'
 import { useReveal } from '../hooks/useReveal'
 import VibeColorPicker from '../components/VibeColorPicker'

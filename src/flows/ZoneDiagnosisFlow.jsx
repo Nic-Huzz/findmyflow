@@ -284,7 +284,7 @@ export default function ZoneDiagnosisFlow() {
               <h1 className="zd-reveal-title">{getBossName()}</h1>
               <p className="zd-reveal-subtitle">
                 This is the voice that's been keeping you in the <strong>{config.zones[selectedZone]?.name}</strong>.
-                Every courage challenge, every deep dive, every healing day at this level is about
+                Every courage challenge, every deep dive, every tune day at this level is about
                 moving past this Boss and onto the diagonal.
               </p>
               <div className="zd-boss-card">

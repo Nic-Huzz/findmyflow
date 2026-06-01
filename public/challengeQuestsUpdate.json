@@ -478,7 +478,7 @@
       "id": "rest_massage",
       "category": "Healing",
       "type": "Rest",
-      "frequency": "daily",
+      "frequency": "weekly",
       "name": "Massage",
       "description": "Let someone else move the tension your body is holding. Book it, show up, receive.",
       "points": 3,

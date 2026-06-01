@@ -52,7 +52,7 @@ export const LEVEL_CONFIG = {
     zones: null,
     essenceQuestion: null,
     courageCount: 0,
-    healingDaysRequired: 1,
+    tuneDaysRequired: 1,
   },
   1: {
     name: 'Identity',
@@ -93,7 +93,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'Who were you before the world told you who to be?',
     courageCount: 1,
-    healingDaysRequired: 7,
+    tuneDaysRequired: 2,
   },
   2: {
     name: 'Vulnerability',
@@ -120,7 +120,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What does your essence actually need?',
     courageCount: 1,
-    healingDaysRequired: 8,
+    tuneDaysRequired: 3,
   },
   3: {
     name: 'Direction',
@@ -156,7 +156,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What code is blocking your essence from moving?',
     courageCount: 2,
-    healingDaysRequired: 9,
+    tuneDaysRequired: 4,
   },
   4: {
     name: 'Enough',
@@ -182,7 +182,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What code is blocking your essence from moving?',
     courageCount: 2,
-    healingDaysRequired: 10,
+    tuneDaysRequired: 5,
   },
   5: {
     name: 'Growth',
@@ -208,7 +208,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'Where does your nervous system stop your essence from expanding?',
     courageCount: 3,
-    healingDaysRequired: 11,
+    tuneDaysRequired: 6,
   },
   6: {
     name: 'Execution',
@@ -234,7 +234,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What belief makes your essence burn out or stall?',
     courageCount: 3,
-    healingDaysRequired: 12,
+    tuneDaysRequired: 7,
   },
   7: {
     name: 'Passion-Risk',
@@ -260,7 +260,7 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'What does your essence actually care about enough to risk it?',
     courageCount: 3,
-    healingDaysRequired: 13,
+    tuneDaysRequired: 8,
   },
   8: {
     name: 'Play',
@@ -281,32 +281,46 @@ export const LEVEL_CONFIG = {
     },
     essenceQuestion: 'Are you free?',
     courageCount: null, // ongoing
-    healingDaysRequired: 14,
+    tuneDaysRequired: 9,
   },
 }
 
-export const HEALING_DAYS_REQUIRED = 7
+export const TUNE_DAYS_REQUIRED = 7
 
 export function getLevelConfig(level) {
   const config = LEVEL_CONFIG[level] || LEVEL_CONFIG[1]
+  let extraQuests = [...(config.extraQuests || [])]
+
   // Auto-add playlist challenge quest for levels 1+ that have courageCount
-  if (level > 0 && config.courageCount > 0 && (!config.extraQuests || !config.extraQuests.find(q => q.id === 'playlist_challenge'))) {
-    return {
-      ...config,
-      extraQuests: [
-        ...(config.extraQuests || []),
-        {
-          id: 'playlist_challenge',
-          name: config.courageCount === 1 ? 'Your First Wahoo' : 'Wahoo Challenges',
-          route: null,
-          narrative: config.courageCount === 1
-            ? 'Complete your first Wahoo.'
-            : `Complete ${config.courageCount} Wahoos.`,
-          icon: '🔥',
-          navigateTo: 'Wahoo',
-        },
-      ],
-    }
+  if (level > 0 && config.courageCount > 0 && !extraQuests.find(q => q.id === 'playlist_challenge')) {
+    extraQuests.push({
+      id: 'playlist_challenge',
+      name: config.courageCount === 1 && level === 1 ? 'Your First Wahoo' : 'Wahoo Challenges',
+      route: null,
+      narrative: config.courageCount === 1 && level === 1
+        ? 'Complete your first Wahoo.'
+        : `Complete ${config.courageCount} Wahoo${config.courageCount > 1 ? 's' : ''}.`,
+      icon: '🔥',
+      navigateTo: 'Wahoo',
+    })
+  }
+
+  // Auto-add weekly healing quest requirement for levels 1+ that have courageCount
+  if (level > 0 && config.courageCount > 0 && !extraQuests.find(q => q.id === 'healing_challenge')) {
+    extraQuests.push({
+      id: 'healing_challenge',
+      name: 'Weekly Healing Task',
+      route: null,
+      narrative: config.courageCount === 1
+        ? 'Complete 1 weekly healing quest.'
+        : `Complete ${config.courageCount} weekly healing quests.`,
+      icon: '💜',
+      navigateTo: 'Healing',
+    })
+  }
+
+  if (level > 0 && config.courageCount > 0) {
+    return { ...config, extraQuests }
   }
   return config
 }

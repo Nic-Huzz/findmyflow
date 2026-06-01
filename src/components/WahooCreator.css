@@ -541,6 +541,79 @@
   }
 }
 
+/* === INLINE CATEGORY PICK === */
+.wc-inline-category {
+  margin-bottom: 16px;
+}
+
+.wc-inline-category-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.wc-inline-category-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.wc-inline-cat-btn {
+  flex: 1;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 8px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.wc-inline-cat-btn:hover {
+  border-color: rgba(233, 162, 59, 0.4);
+}
+
+.wc-inline-cat-btn.selected {
+  border-color: #E9A23B;
+  background: #fffbf2;
+  color: #b37a1a;
+}
+
+/* Inside preview card (dark bg) */
+.wc-preview-actions .wc-inline-cat-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.wc-preview-actions .wc-inline-cat-btn:hover {
+  border-color: rgba(233, 162, 59, 0.5);
+}
+
+.wc-preview-actions .wc-inline-cat-btn.selected {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.2);
+  color: #E9A23B;
+}
+
+/* === LIST GROUP HEADER === */
+.wc-list-group-header {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1a1a2e;
+  padding: 8px 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* === REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
   .wc-spinner {

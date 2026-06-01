@@ -16,20 +16,29 @@ import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../lib/dateUtils'
-import { SKILLS_SEGMENTS, findSkillSegment } from '../lib/wheelTaxonomy'
+import { findSkillSegment } from '../lib/wheelTaxonomy'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './WahooCreator.css'
+
+const WAHOO_CATEGORIES = [
+  { id: 'appearance', name: 'Appearance', icon: '👤' },
+  { id: 'creation', name: 'Creation', icon: '🎨' },
+  { id: 'connection', name: 'Connection', icon: '🤝' },
+]
 
 export default function WahooCreator({
   userId,
   categories = [], // user's play-skill category ids (from nikigai_clusters)
   currentVisibilityLayer = 'screen', // from current level config
+  bucketList = [], // queued wahoos from parent
   onWahooAccepted,
   onClose,
 }) {
-  const [step, setStep] = useState('choose') // choose | freetext | browse | generating | preview | suggestions | success
+  const [step, setStep] = useState('choose') // choose | freetext | browse | generating | preview | suggestions | fromlist | success
   const [freeText, setFreeText] = useState('')
   const [selectedCategory, setSelectedCategory] = useState(null)
+  const [wahooCategory, setWahooCategory] = useState(null)
+  const [previewOrigin, setPreviewOrigin] = useState('freetext')
   const [generating, setGenerating] = useState(false)
   const [generatedChallenge, setGeneratedChallenge] = useState(null)
   const [isEditing, setIsEditing] = useState(false)
@@ -160,6 +169,7 @@ export default function WahooCreator({
         sourceLabel: challenge.sourceLabel,
         scaryScore: challenge.scaryScore,
         wahooScore: challenge.wahooScore,
+        wahooCategory: challenge.wahooCategory || wahooCategory,
       })
       if (saveError || !dbRecord) throw saveError || new Error('Challenge was not saved')
 
@@ -225,7 +235,7 @@ export default function WahooCreator({
           <p className="wc-explainer">Every Wahoo is a rep. The more you practise expression with safety, the more Vibe Rise your nervous system can hold.</p>
         </div>
 
-        <button className="wc-path-card" onClick={() => { hapticLight(); setStep('freetext') }}>
+        <button className="wc-path-card" onClick={() => { hapticLight(); setWahooCategory(null); setStep('freetext') }}>
           <div className="wc-path-icon">🎯</div>
           <div className="wc-path-body">
             <div className="wc-path-name">I know what I want to do</div>
@@ -234,7 +244,18 @@ export default function WahooCreator({
           <span className="wc-path-arrow">›</span>
         </button>
 
-        <button className="wc-path-card" onClick={() => { hapticLight(); setStep('browse') }}>
+        {bucketList.length > 0 && (
+          <button className="wc-path-card" onClick={() => { hapticLight(); setStep('fromlist') }}>
+            <div className="wc-path-icon">📋</div>
+            <div className="wc-path-body">
+              <div className="wc-path-name">Choose from your list</div>
+              <div className="wc-path-desc">{bucketList.length} wahoo{bucketList.length !== 1 ? 's' : ''} waiting</div>
+            </div>
+            <span className="wc-path-arrow">›</span>
+          </button>
+        )}
+
+        <button className="wc-path-card" onClick={() => { hapticLight(); setWahooCategory(null); setStep('browse') }}>
           <div className="wc-path-icon">🔍</div>
           <div className="wc-path-body">
             <div className="wc-path-name">Help me find one</div>
@@ -242,6 +263,64 @@ export default function WahooCreator({
           </div>
           <span className="wc-path-arrow">›</span>
         </button>
+      </div>
+    )
+  }
+
+  // ─── Path C: Choose from bucket list ───────────────────────────────────────
+
+  if (step === 'fromlist') {
+    return (
+      <div className="wc-container">
+        <button className="wc-back" onClick={() => setStep('choose')}>← Back</button>
+
+        <div className="wc-card">
+          <h3 className="wc-card-title">Your Wahoo List</h3>
+          <p className="wc-card-sub">Pick one to activate this week.</p>
+
+          <div className="wc-suggestions-list">
+            {bucketList.map(w => (
+              <button
+                key={w.id}
+                className="wc-suggestion-card"
+                onClick={async () => {
+                  hapticLight()
+                  setGenerating(true)
+                  try {
+                    const { error: acceptError } = await acceptGroanChallenge(w.id)
+                    if (acceptError) throw acceptError
+                    await supabase.from('priority_weekly_picks').insert({
+                      user_id: userId,
+                      week_start_date: getWeekStartLocal(),
+                      pick_type: 'groan',
+                      reference_id: w.id,
+                      display_name: w.title || w.challenge_text,
+                    })
+                    hapticSuccess()
+                    onWahooAccepted?.()
+                    setStep('success')
+                    successTimerRef.current = setTimeout(() => onClose?.(), 1500)
+                  } catch (err) {
+                    console.error('Accept from list error:', err)
+                    setError('Failed to activate. Try again.')
+                  } finally {
+                    setGenerating(false)
+                  }
+                }}
+                disabled={generating}
+              >
+                <div className="wc-suggestion-title">{w.title || w.challenge_text}</div>
+                {w.wahoo_category && (
+                  <div className="wc-suggestion-desc">
+                    {WAHOO_CATEGORIES.find(c => c.id === w.wahoo_category)?.icon} {WAHOO_CATEGORIES.find(c => c.id === w.wahoo_category)?.name}
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {error && <p className="wc-error">{error}</p>}
+        </div>
       </div>
     )
   }
@@ -265,11 +344,26 @@ export default function WahooCreator({
             rows={3}
           />
 
+          <div className="wc-inline-category">
+            <span className="wc-inline-category-label">Category:</span>
+            <div className="wc-inline-category-btns">
+              {WAHOO_CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  className={`wc-inline-cat-btn ${wahooCategory === cat.id ? 'selected' : ''}`}
+                  onClick={() => { hapticLight(); setWahooCategory(cat.id) }}
+                >
+                  {cat.icon} {cat.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {error && <p className="wc-error">{error}</p>}
 
           <button
             className="wc-cta"
-            disabled={!freeText.trim() || generating}
+            disabled={!freeText.trim() || !wahooCategory || generating}
             onClick={() => acceptChallenge({
               title: freeText.trim(),
               description: freeText.trim(),
@@ -320,7 +414,7 @@ export default function WahooCreator({
 
           <button
             className="wc-text-link"
-            onClick={() => setStep('freetext')}
+            onClick={() => { setWahooCategory(null); setStep('freetext') }}
           >
             Or type your own idea instead
           </button>
@@ -345,7 +439,7 @@ export default function WahooCreator({
   if (step === 'preview' && generatedChallenge) {
     return (
       <div className="wc-container">
-        <button className="wc-back" onClick={() => setStep('freetext')}>← Back</button>
+        <button className="wc-back" onClick={() => setStep(previewOrigin)}>← Back</button>
 
         <div className="wc-preview-card">
           <div className="wc-preview-label">Your Wahoo</div>
@@ -388,10 +482,24 @@ export default function WahooCreator({
 
           {!isEditing && (
             <div className="wc-preview-actions">
+              <div className="wc-inline-category" style={{ marginBottom: '10px' }}>
+                <span className="wc-inline-category-label" style={{ color: 'rgba(255,255,255,0.6)' }}>Category:</span>
+                <div className="wc-inline-category-btns">
+                  {WAHOO_CATEGORIES.map(cat => (
+                    <button
+                      key={cat.id}
+                      className={`wc-inline-cat-btn ${wahooCategory === cat.id ? 'selected' : ''}`}
+                      onClick={() => { hapticLight(); setWahooCategory(cat.id) }}
+                    >
+                      {cat.icon} {cat.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <button
                 className="wc-cta"
                 onClick={() => acceptChallenge(generatedChallenge)}
-                disabled={generating}
+                disabled={generating || !wahooCategory}
               >
                 {generating ? 'Saving...' : 'Accept this Wahoo'}
               </button>
@@ -440,7 +548,7 @@ export default function WahooCreator({
               <button
                 key={i}
                 className="wc-suggestion-card"
-                onClick={() => { hapticLight(); acceptChallenge(s) }}
+                onClick={() => { hapticLight(); setGeneratedChallenge(s); setWahooCategory(null); setPreviewOrigin('suggestions'); setStep('preview') }}
                 disabled={generating}
               >
                 <div className="wc-suggestion-title">{s.title}</div>
@@ -461,7 +569,7 @@ export default function WahooCreator({
             </button>
             <button
               className="wc-text-link"
-              onClick={() => setStep('freetext')}
+              onClick={() => { setWahooCategory(null); setStep('freetext') }}
             >
               Type my own instead
             </button>

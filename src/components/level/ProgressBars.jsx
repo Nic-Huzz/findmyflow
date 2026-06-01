@@ -1,7 +1,7 @@
 /**
  * ProgressBars.jsx
  *
- * 3 progress bars: Level Quests, Healing Streak, Play-List Tasks.
+ * 2 progress bars: Level Quests (includes Tune Days), Play-List Tasks.
  *
  * Created: 2026-03-27
  */
@@ -10,8 +10,6 @@ export default function ProgressBars({
   levelQuests,
   courageCount,
   courageDone,
-  healingDaysDone,
-  healingDaysRequired = 14,
   questsCompleted,
 }) {
   const totalQuests = levelQuests.length
@@ -40,18 +38,7 @@ export default function ProgressBars({
         </div>
       </div>
 
-      {/* Bar 2: Healing Days */}
-      <div className="level-bar-section">
-        <div className="level-bar-label">
-          <span>Healing Days</span>
-          <span>{healingDaysDone}/{healingDaysRequired}</span>
-        </div>
-        <div className="level-bar-dots">
-          {Array.from({ length: healingDaysRequired }).map((_, i) => (
-            <div key={i} className={`level-bar-dot ${i < healingDaysDone ? 'filled' : ''}`} />
-          ))}
-        </div>
-      </div>
+      {/* Tune Days now tracked in levelQuests checklist above — no separate bar needed */}
 
       {/* Bar 3: Play-list Courage (hidden if 0) */}
       {courageCount > 0 && (

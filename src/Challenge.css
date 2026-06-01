@@ -3929,6 +3929,165 @@
   font-style: italic;
 }
 
+/* ── Expression Header + Category Bubbles ── */
+.plt-expression-header {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.plt-expression-tagline {
+  font-size: 13px;
+  color: #6c757d;
+  text-align: center;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.plt-category-bubbles {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.plt-bubble-wrapper {
+  flex: 1;
+  max-width: 120px;
+}
+
+.plt-category-bubble {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 14px;
+  padding: 12px 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.plt-category-bubble:hover,
+.plt-category-bubble.expanded {
+  border-color: #E9A23B;
+  background: #fffbf2;
+}
+
+.plt-bubble-icon {
+  font-size: 1.3rem;
+}
+
+.plt-bubble-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a1a2e;
+  letter-spacing: 0.3px;
+}
+
+.plt-bubble-count {
+  font-size: 18px;
+  font-weight: 900;
+  color: #E9A23B;
+  line-height: 1;
+}
+
+/* ── Bubble Dropdown ── */
+.plt-bubble-dropdown {
+  margin-top: 8px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.plt-dropdown-empty {
+  font-size: 12px;
+  color: #adb5bd;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.plt-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px;
+  font-size: 13px;
+  color: #1a1a2e;
+}
+
+.plt-dropdown-item.done {
+  color: #6c757d;
+}
+
+.plt-dropdown-check {
+  font-size: 12px;
+  flex-shrink: 0;
+  color: #28a745;
+}
+
+.plt-dropdown-item:not(.done) .plt-dropdown-check {
+  color: #dee2e6;
+}
+
+.plt-dropdown-name.crossed {
+  text-decoration: line-through;
+}
+
+.plt-dropdown-add {
+  width: 100%;
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 8px 4px 4px;
+  font-family: inherit;
+  text-align: left;
+}
+
+.plt-quickadd {
+  display: flex;
+  gap: 6px;
+  padding: 4px 0 0;
+}
+
+.plt-quickadd-input {
+  flex: 1;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.plt-quickadd-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.plt-quickadd-btn {
+  background: #E9A23B;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
 /* ── Active Challenges Section Card (mirrors PriorityTab design) ── */
 .playlist-tab .plt-section-card {
   background: white;

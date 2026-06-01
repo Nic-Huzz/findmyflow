@@ -41,6 +41,9 @@ import { getScoringCategory } from './lib/scoringCategories'
 // ContentChallenges archived — moves to Fantasy League when reactivated
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
+import HealingIntentionCard from './components/HealingIntentionCard'
+import HealingIntentionSetter from './components/HealingIntentionSetter'
+import HealingIntentionCheckin from './components/HealingIntentionCheckin'
 import ChallengeIntro from './components/ChallengeIntro'
 import DailyCheckin from './components/DailyCheckin'
 import LevelTab from './components/level/LevelTab'
@@ -323,6 +326,10 @@ function Challenge() {
   // State for POST-ACTION modal (3% reflection after completing milestones)
   const [postActionQuest, setPostActionQuest] = useState(null)
   const [splinterCheckinData, setSplinterCheckinData] = useState(null)
+  const [healingIntention, setHealingIntention] = useState(null)
+  const [healingIntentionLoaded, setHealingIntentionLoaded] = useState(false)
+  const [showIntentionSetter, setShowIntentionSetter] = useState(false)
+  const [showIntentionCheckin, setShowIntentionCheckin] = useState(false)
 
   // State for PRE-ACTION modal (resistance capture before starting milestones)
   const [preActionQuest, setPreActionQuest] = useState(null)
@@ -779,7 +786,32 @@ function Challenge() {
         completionData.project_id = null
         completionData.challenge_day = 0  // NOT NULL constraint requires a value
 
-        // Track healing day for current level progress (non-blocking)
+        // Track weekly healing quest for current level progress (non-blocking)
+        if (currentJourneyLevel > 0 && quest.frequency === 'weekly') {
+          supabase
+            .from('user_level_progress')
+            .select('healing_quest_ids')
+            .eq('user_id', user.id)
+            .eq('current_level', currentJourneyLevel)
+            .maybeSingle()
+            .then(({ data }) => {
+              const existing = data?.healing_quest_ids || []
+              if (!existing.includes(quest.id)) {
+                supabase.from('user_level_progress')
+                  .upsert(
+                    { user_id: user.id, current_level: currentJourneyLevel, healing_quest_ids: [...existing, quest.id] },
+                    { onConflict: 'user_id,current_level' }
+                  )
+                  .then(() => {})
+              }
+            })
+        }
+      } else if (quest.category === 'Tune') {
+        completionData.challenge_instance_id = null
+        completionData.project_id = null
+        completionData.challenge_day = 0  // NOT NULL constraint requires a value
+
+        // Track tune day for current level progress (non-blocking)
         const today = new Date().toISOString().slice(0, 10)
         supabase
           .from('user_level_progress')
@@ -1128,6 +1160,21 @@ function Challenge() {
       return null
     }
   }
+
+  // Fetch healing intention for current week
+  useEffect(() => {
+    if (!user?.id) return
+    supabase
+      .from('weekly_healing_intentions')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('week_start_date', getWeekStartLocal())
+      .maybeSingle()
+      .then(({ data }) => {
+        setHealingIntention(data || null)
+        setHealingIntentionLoaded(true)
+      })
+  }, [user?.id])
 
   // Handler for generating challenges from the Groan Matrix
   const handleGenerateChallenge = async (cellData) => {
@@ -1793,6 +1840,17 @@ function Challenge() {
         })}
       </div>
 
+      {/* Healing Intention Card */}
+      {activeCategory === 'Healing' && healingIntentionLoaded && (
+        <HealingIntentionCard
+          intention={healingIntention}
+          dayOfWeek={Math.min(7, Math.max(1, new Date().getDay() || 7))}
+          weeklyPoints={getCategoryPoints('Healing')?.total || 0}
+          onSetIntention={() => setShowIntentionSetter(true)}
+          onCheckIn={() => setShowIntentionCheckin(true)}
+        />
+      )}
+
       {/* Frequency tabs for Healing */}
       {activeCategory === 'Healing' && (
         <div className="stage-tabs-wrapper">
@@ -1800,9 +1858,9 @@ function Challenge() {
             <div className="stage-tabs">
               {[
                 { id: 'daily', label: 'Daily', icon: '☀️', color: '#5e17eb' },
-                { id: 'weekly', label: 'Weekly', icon: '📅', color: '#7c3aed' },
-                { id: 'explainer', label: 'Explainers', icon: '📖', color: '#c27aed' },
-                { id: 'map', label: 'Map', icon: '🧠', color: '#9333ea', route: '/nervous-system-map' }
+                { id: 'weekly', label: 'Weekly', icon: '📅', color: '#5e17eb' },
+                { id: 'explainer', label: 'Explainers', icon: '📖', color: '#5e17eb' },
+                { id: 'map', label: 'Map', icon: '🧠', color: '#5e17eb', route: '/nervous-system-map' }
               ].map(tab => {
                 const isActive = activeFrequencyFilter === tab.id
                 const activeStyles = isActive ? {
@@ -1852,7 +1910,7 @@ function Challenge() {
         {activeCategory !== 'GroansSummary' && activeCategory !== 'HealingSummary' && (
           <>
         {/* Artifact Progress — hidden on Play-list tab */}
-        {artifactProgress && activeCategory !== 'Wahoo' && (() => {
+        {artifactProgress && activeCategory !== 'Wahoo' && activeCategory !== 'Healing' && (() => {
           const stageConfig = null
 
           // Healing: per-frequency title and description
@@ -2494,6 +2552,30 @@ function Challenge() {
             await handleQuestComplete(quest, inputValue)
           }}
           onClose={() => setHealingModalQuest(null)}
+        />
+      )}
+
+      {/* Healing Intention Setter Modal */}
+      {showIntentionSetter && (
+        <HealingIntentionSetter
+          userId={user?.id}
+          onSave={(data) => {
+            setHealingIntention(data)
+            setShowIntentionSetter(false)
+          }}
+          onClose={() => setShowIntentionSetter(false)}
+        />
+      )}
+
+      {/* Healing Intention Check-in Modal */}
+      {showIntentionCheckin && healingIntention && (
+        <HealingIntentionCheckin
+          intention={healingIntention}
+          onSave={(data) => {
+            setHealingIntention(data)
+            setShowIntentionCheckin(false)
+          }}
+          onClose={() => setShowIntentionCheckin(false)}
         />
       )}
       </div>

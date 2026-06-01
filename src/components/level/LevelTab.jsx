@@ -48,8 +48,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasPlaylistCompletion, setHasPlaylistCompletion] = useState(false)
   const [hasPlaySkills, setHasPlaySkills] = useState(false)
   const [showPlaySkillPicker, setShowPlaySkillPicker] = useState(false)
-  const [healingDaysDone, setHealingDaysDone] = useState(0)
+  const [tuneDaysDone, setTuneDaysDone] = useState(0)
   const [courageDone, setCourageDone] = useState(0)
+  const [healingDone, setHealingDone] = useState(0)
 
   // Milestone state
   const [milestoneCommitment, setMilestoneCommitment] = useState(null)
@@ -185,19 +186,22 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       .then(({ data }) => {
         if (data?.length > 0) setHasHealingCompletion(true)
       })
-    // Load healing day dates + courage challenge progress for current level
+    // Load tune day dates + courage challenge progress for current level
     supabase
       .from('user_level_progress')
-      .select('healing_day_dates, courage_challenge_ids')
+      .select('healing_day_dates, courage_challenge_ids, healing_quest_ids')
       .eq('user_id', userId)
       .eq('current_level', currentLevel)
       .maybeSingle()
       .then(({ data }) => {
         if (data?.healing_day_dates?.length) {
-          setHealingDaysDone(data.healing_day_dates.length)
+          setTuneDaysDone(data.healing_day_dates.length)
         }
         if (data?.courage_challenge_ids?.length) {
           setCourageDone(data.courage_challenge_ids.length)
+        }
+        if (data?.healing_quest_ids?.length) {
+          setHealingDone(data.healing_quest_ids.length)
         }
       })
     // Check if topic identifier has been completed (nikigai_clusters with identify_topics)
@@ -231,11 +235,13 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         : q.id === 'play_skills' ? (hasCuriosityCompass || hasPlaySkills)
         : q.id === 'healing_task' ? hasHealingCompletion
         : q.id === 'playlist_challenge' ? (config.courageCount > 0 ? courageDone >= config.courageCount : hasPlaylistCompletion)
+        : q.id === 'healing_challenge' ? (config.courageCount > 0 ? healingDone >= config.courageCount : false)
         : q.id === 'people_matching' ? hasPeopleMatching
         : false,
     })),
     ...(boss ? [{ label: 'Boss Fight', done: false }] : []),
     ...(config.milestone ? [{ label: 'Milestone', done: milestoneCompleted }] : []),
+    { label: 'Tune Days', done: tuneDaysDone >= (config.tuneDaysRequired || 14) },
   ]
   const questsCompleted = levelQuests.filter(q => q.done).length
   const allQuestsDone = levelQuests.length > 0 && questsCompleted === levelQuests.length
@@ -352,6 +358,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           : quest.id === 'play_skills' ? (hasCuriosityCompass || hasPlaySkills)
           : quest.id === 'healing_task' ? hasHealingCompletion
           : quest.id === 'playlist_challenge' ? (config.courageCount > 0 ? courageDone >= config.courageCount : hasPlaylistCompletion)
+          : quest.id === 'healing_challenge' ? (config.courageCount > 0 ? healingDone >= config.courageCount : false)
           : quest.id === 'people_matching' ? hasPeopleMatching
           : quest.id === 'playlist_update' ? hasPlaylistUpdate
           : false
@@ -391,25 +398,65 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         if (quest.id === 'playlist_challenge' && currentLevel > 0 && config.courageCount > 0) {
           // courageDone loaded from user_level_progress.courage_challenge_ids
           const courageTarget = config.courageCount
+          const wahooComplete = courageDone >= courageTarget
           return (
-            <div key={quest.id} className="level-deep-dive">
-              <div className="level-dd-icon">{quest.icon}</div>
+            <div key={quest.id} className={`level-deep-dive ${wahooComplete ? 'completed' : ''}`}>
+              <div className="level-dd-icon">{wahooComplete ? '✅' : quest.icon}</div>
               <div className="level-dd-info">
                 <div className="level-dd-name">{quest.name}</div>
                 <div className="level-dd-narrative">Complete {courageTarget} courage challenge{courageTarget > 1 ? 's' : ''}</div>
-                <div className="level-bar-dots" style={{ marginTop: '0.5rem' }}>
-                  {Array.from({ length: courageTarget }).map((_, i) => (
-                    <div key={i} className={`level-bar-dot ${i < courageDone ? 'filled' : ''}`} />
-                  ))}
-                </div>
+                {!wahooComplete && (
+                  <div className="level-bar-dots" style={{ marginTop: '0.5rem' }}>
+                    {Array.from({ length: courageTarget }).map((_, i) => (
+                      <div key={i} className={`level-bar-dot ${i < courageDone ? 'filled' : ''}`} />
+                    ))}
+                  </div>
+                )}
               </div>
-              <button
-                className="level-dd-status start"
-                onClick={() => onNavigateTab?.('Wahoo')}
-                style={{ cursor: 'pointer' }}
-              >
-                {courageDone > 0 ? `${courageDone}/${courageTarget}` : 'Start'}
-              </button>
+              {wahooComplete ? (
+                <span className="level-dd-status done">Done</span>
+              ) : (
+                <button
+                  className="level-dd-status start"
+                  onClick={() => onNavigateTab?.('Wahoo')}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {courageDone > 0 ? `${courageDone}/${courageTarget}` : 'Start'}
+                </button>
+              )}
+            </div>
+          )
+        }
+
+        // Weekly Healing Task with dot tracking (levels 1+)
+        if (quest.id === 'healing_challenge' && currentLevel > 0 && config.courageCount > 0) {
+          const healingTarget = config.courageCount
+          const healingComplete = healingDone >= healingTarget
+          return (
+            <div key={quest.id} className={`level-deep-dive ${healingComplete ? 'completed' : ''}`}>
+              <div className="level-dd-icon">{healingComplete ? '✅' : quest.icon}</div>
+              <div className="level-dd-info">
+                <div className="level-dd-name">{quest.name}</div>
+                <div className="level-dd-narrative">Complete {healingTarget} weekly healing quest{healingTarget > 1 ? 's' : ''}</div>
+                {!healingComplete && (
+                  <div className="level-bar-dots" style={{ marginTop: '0.5rem' }}>
+                    {Array.from({ length: healingTarget }).map((_, i) => (
+                      <div key={i} className={`level-bar-dot ${i < healingDone ? 'filled' : ''}`} />
+                    ))}
+                  </div>
+                )}
+              </div>
+              {healingComplete ? (
+                <span className="level-dd-status done">Done</span>
+              ) : (
+                <button
+                  className="level-dd-status start"
+                  onClick={() => onNavigateTab?.('Healing')}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {healingDone > 0 ? `${healingDone}/${healingTarget}` : 'Start'}
+                </button>
+              )}
             </div>
           )
         }
@@ -466,8 +513,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         levelQuests={levelQuests}
         courageCount={config.courageCount || 0}
         courageDone={courageDone}
-        healingDaysDone={healingDaysDone}
-        healingDaysRequired={config.healingDaysRequired || 14}
         questsCompleted={questsCompleted}
       />
 
