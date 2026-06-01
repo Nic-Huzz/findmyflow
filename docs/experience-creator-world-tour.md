@@ -185,6 +185,48 @@ In order:
 5. **Write posts 2-5** (Marie, Priya, James, Tony) over weeks 2-5 to establish the archive.
 6. **Audit the offer map** to confirm the top-6 packs by frequency, then build packs 2-6.
 
+## Beyond blog posts: other ways the research has utility
+
+The same 33-creator dataset can live in many vessels, each serving a different consumption mode and moment in the user journey.
+
+### The full menu
+
+| Format | What it is | Why it works |
+|--------|------------|--------------|
+| **Interactive 2D map** | All 33 creators plotted on filterable axes (workRhythm × impactStyle, etc.) | Shareable standalone page. Visitors play, then convert to matcher. |
+| **Trading card deck** | Each creator = a card with stats, DNA, signature move (Pokemon-style, digital or print) | Collectible, gift-able, screenshot-able. "Gotta catch 'em all" loop. |
+| **"State of Experience Creators" annual report** | PDF wrapping patterns across all 33: who's growing, what's working, archetype trends | Authority play. Free, gated by email. Press-worthy. |
+| **Workbook** | Printable PDF that mirrors the matcher but is offline | For people who don't want an app. High-margin product ($20-50). |
+| **Live monthly teardown** | 90-min session: one creator deep-dive + Q&A | Recurring revenue ($20-50/mo). Builds the group. |
+| **Short-form video** | TikTok/Reels: one insight per creator, repurpose newsletter content | Top-of-funnel reach. Each newsletter post = 5 clips. |
+| **Searchable database** | "Find all creators who started after 40" / "who scaled via certification" | Power user tool. Lives at `/creators/explore`. Pulls existing JSON. |
+| **In-app daily prompts** | Push notification: "Brené spent year 1 naming the unnamed feeling. What's your version this week?" | Turns data into ambient nudges. Pulls users back daily. |
+| **Trajectory comparison** | "You're at month 3. Brené at month 3 had X listeners. Marie at month 3 had Y." | Makes the data living. Benchmarks user against their match over time. |
+| **Embeddable matcher widget** | Iframe other creators/coaches drop on their site to give their audience a match | Distribution multiplier. They get a free tool, we get signups. |
+
+### The three to build first
+
+1. **Interactive 2D map.** Reuses every bit of data we already have. Single page, viral on its own, drives matcher traffic. 1-2 days of work.
+
+2. **In-app daily prompts** tied to the user's matched creator. The matcher currently fires once and goes cold. Daily prompts keep the match alive. This is the difference between "I took a quiz once" and "I'm being mentored by Brené every day."
+
+3. **"State of Experience Creators" annual report.** A 30-page PDF gating an email. Press-worthy. Generates inbound. Written once, works for 12 months.
+
+### The strategic pattern (the moat)
+
+Most research is one-and-done. The matcher is one-and-done today. The unfair version is when the data *follows the user* through their journey:
+
+| Moment | Format | What it does |
+|--------|--------|--------------|
+| Discovery | Newsletter, short-form video, 2D map | Teaches the architecture, builds trust |
+| Diagnosis | Matcher | Tells user who they're like |
+| Design | Template packs | Equips user with the assets to build |
+| Execution | AI coaches, daily prompts | Mentors user through the work |
+| Maintenance | Trajectory comparison, daily prompts | Benchmarks user against their match over time |
+| Authority | Annual report, live teardowns | Keeps the brand growing the audience |
+
+Same 33 creators, six moments of utility. That's the moat. Senra can't do this, because he doesn't know who *you* are.
+
 ## Related docs
 
 - `docs/feature-brief-experience-creator-matching.md` — original product spec for the matcher
