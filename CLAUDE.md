@@ -160,9 +160,9 @@ docs/                         # Documentation files
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
-**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`
+**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/inspiration`, `/create/pay-rent`, `/create/remarkable`, `/create/attraction-stack`, `/create/marketing-campaign`, `/create/scale-income`, `/create/plays`
 
 **Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching)
 
@@ -230,7 +230,7 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 ### 6. 7-Day Challenge System (Vibe Rise Maintenance Engine)
 
-**Tabs**: Level → Tune → Play-list → Healing. Layout: Header (streak + Wahoo Counter ⚡ + score pills + Rise bar) → Category tabs → Tab content.
+**Tabs**: Tune → Wahoo → Healing → Level. Layout: Header (streak + Wahoo Counter ⚡ + score pills + Rise bar) → Category tabs → Tab content.
 
 **Vibe Rise Equation**: `Sustained Vibe Rise = (Practices + Wahoos + Healing) ÷ (Drains)`. All state data flows through `nervous_system_checkins` table. Capacity Score (0-100) displayed on Level tab.
 
@@ -238,7 +238,7 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 4 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown).
 
-**Play-list tab** (`PlayListTab.jsx`): WahooCreator (two-path: "I know" free text or "Help me find one" browse categories) + Active Wahoos + Wahoo Map link.
+**Wahoo tab** (`PlayListTab.jsx`): WahooCreator (two-path: "I know" free text or "Help me find one" browse categories) + Active Wahoos + Wahoo Map link.
 
 **Healing tab**: Recognise, Release, Rewire only (blockage clearing). After-only 4-state check-in (before step removed).
 
@@ -264,7 +264,7 @@ Workflow: generated → accepted → completed. Post-completion: "I Did It!" →
 
 AI-powered assessment: quiz → DNA match → stuck point → AI diagnostic → custom challenge. Modes: default (dashboard), `?mode=retake`, `?mode=unstuck`, `?mode=rate`.
 
-**33 experience creators** matched via 5D Euclidean distance. Sliders: `workRhythm` (Marathon↔Sprints), `fuelType` (Fire↔Purpose), `orientation` (Solo/Deep↔Social/Enterprising, inferred from games), `knowledgeStyle` (Analytical↔Intuitive, inferred from games), `scaleApproach` (Craft↔Empire). DNAReveal shows Pixar creator portraits.
+**32 experience creators** matched via 5D Euclidean distance. Sliders: `workRhythm` (Marathon↔Sprints), `fuelType` (Fire↔Purpose), `orientation` (Solo/Deep↔Social/Enterprising, inferred from games), `knowledgeStyle` (Analytical↔Intuitive, inferred from games), `scaleApproach` (Craft↔Empire). DNAReveal shows Pixar creator portraits.
 
 Key data: `public/data/experienceCreatorDNA.json` (33 profiles, v2.0). Old 75-founder dataset at `public/data/founderDnaFounders.json` (unused). Old 221-profile dataset at `public/data/archived/experienceCreatorDNA-221-full.json`.
 
@@ -366,19 +366,22 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 ## Database Schema
 
 ### Core Tables
-`user_stage_progress` (persona, onboarding, current_journey_level) | `user_projects` (stage, points) | `flow_sessions` | `flow_entries` (compass) | `milestone_completions` | `quest_completions` | `challenge_instances` | `groan_reflections` | `user_level_progress` | `boss_fight_sessions`
+`user_stage_progress` (persona, onboarding, current_journey_level, fest_participant) | `user_projects` (stage, points) | `flow_sessions` | `flow_entries` (compass) | `milestone_completions` | `quest_completions` | `challenge_instances` | `groan_reflections` | `user_level_progress` | `boss_fight_sessions`
 
 ### Flow & Assessment Data
 `nikigai_clusters` | `nikigai_responses` | `nikigai_key_outcomes` | `persona_profiles` | `nervous_system_responses` | `healing_compass_responses` | `lead_flow_profiles` | `scope_map_results` | `quiz_results` | `attraction_offer_assessments` | `upsell_assessments` | `downsell_assessments` | `continuity_assessments` | `leads_assessments` | `lead_magnet_assessments` | `offer_builder_assessments` | `funnel_metrics` | `zarlo_conversations`
 
 ### CRM Tables
-`crm_pages` | `crm_contacts` (includes outreach columns: outreach_status, platform, engagement_type, priority, temperature) | `crm_email_sequences` | `crm_email_steps` | `sales_deals` | `sales_scripts` | `script_usage_log` | `content_history` | `ecosystem_system_progress` | `offer_implementations`
+`crm_pages` | `crm_contacts` (includes outreach columns: outreach_status, platform, engagement_type, priority, temperature) | `crm_email_sequences` | `crm_email_steps` | `sales_deals` (experience_id) | `sales_scripts` | `script_usage_log` | `content_history` (experience_id) | `ecosystem_system_progress` | `offer_implementations` | `contact_experiences` (contact_id, experience_id, role)
 
 ### Fantasy League
 `fantasy_leagues` | `fantasy_teams` | `fantasy_team_members` | `fantasy_matchups` | `league_content_submissions` | `league_content_reactions` | `league_signups`
 
 ### Play Profile
 `founder_dna_results` | `founder_dna_sessions`
+
+### Portal / Agent
+`portal_tasks` (node_key, type, priority, status) | `portal_activity` (node_key, actor, action) | `agent_conversations` (agent_id, messages JSONB) | `agent_tasks` (agent_id, status)
 
 ### Other
 `user_subscriptions` (Stripe) | `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
