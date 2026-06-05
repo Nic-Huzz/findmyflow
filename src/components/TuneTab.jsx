@@ -311,7 +311,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setCompletions(prev => [...prev, { quest_id: quest.id, completed_at: optimisticTs }])
 
       // 1. Save quest completion
-      const { error: questError } = await supabase.from('quest_completions').insert({
+      const insertData = {
         user_id: userId,
         quest_id: quest.id,
         quest_category: 'Tune',
@@ -320,7 +320,17 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         challenge_instance_id: null,
         challenge_day: 0,
         project_id: null,
-      })
+      }
+      // Weekly focus daily honoring: include response_data so downstream reads find the right format
+      if (quest.id === 'rewire_weekly_focus' && weeklyFocus) {
+        insertData.response_data = {
+          quest_type: 'weekly_focus_daily',
+          honoured: true,
+          intention: weeklyFocus.intention,
+          focus_category: weeklyFocus.focus_category,
+        }
+      }
+      const { error: questError } = await supabase.from('quest_completions').insert(insertData)
       if (questError) {
         console.error('Tune quest completion error:', questError)
         setCompletions(prev => prev.filter(c => c.completed_at !== optimisticTs))
@@ -798,7 +808,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                       type="button"
                       className="ht-item-action"
                       disabled={completingQuestId === 'rewire_weekly_focus'}
-                      onClick={() => setHealingModalQuest(focusQuest)}
+                      onClick={() => handleInlineComplete(focusQuest)}
                     >
                       {completingQuestId === 'rewire_weekly_focus' ? '...' : 'Honour'}
                     </button>

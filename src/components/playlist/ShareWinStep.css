@@ -10,7 +10,7 @@
 .sws-title {
   font-size: 24px;
   font-weight: 700;
-  color: #fff;
+  color: #1a1a2e;
   margin: 0;
   text-align: center;
 }
@@ -18,7 +18,7 @@
 .sws-subtitle {
   font-size: 14px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.75);
+  color: #6b7280;
   margin: 0 0 8px 0;
   text-align: center;
 }
@@ -30,7 +30,7 @@
   justify-content: center;
   gap: 6px;
   padding: 32px 16px;
-  background: rgba(255, 255, 255, 0.05);
+  background: #faf8f5;
   border: 2px dashed rgba(233, 162, 59, 0.5);
   border-radius: 16px;
   cursor: pointer;
@@ -40,7 +40,7 @@
 
 .sws-picker:hover,
 .sws-picker:active {
-  background: rgba(233, 162, 59, 0.1);
+  background: rgba(233, 162, 59, 0.08);
   border-color: #E9A23B;
 }
 
@@ -57,7 +57,7 @@
 
 .sws-picker-hint {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #9ca3af;
 }
 
 .sws-preview-wrap {
@@ -97,10 +97,10 @@
 .sws-caption {
   width: 100%;
   padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #f8f8fa;
+  border: 1.5px solid #eef0f3;
   border-radius: 12px;
-  color: #fff;
+  color: #1a1a2e;
   font-size: 14px;
   font-family: inherit;
   resize: none;
@@ -109,11 +109,12 @@
 
 .sws-caption:focus {
   outline: none;
-  border-color: #E9A23B;
+  border-color: #5e17eb;
+  background: white;
 }
 
 .sws-caption::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: #9ca3af;
 }
 
 .sws-char-count {
@@ -121,7 +122,7 @@
   bottom: 8px;
   right: 12px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #9ca3af;
   pointer-events: none;
 }
 
@@ -163,7 +164,7 @@
 .sws-skip-btn {
   padding: 12px 20px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.6);
+  color: #9ca3af;
   border: none;
   font-size: 14px;
   font-weight: 500;
@@ -171,7 +172,7 @@
 }
 
 .sws-skip-btn:hover {
-  color: #fff;
+  color: #1a1a2e;
 }
 
 .sws-done-btn {

@@ -199,14 +199,14 @@ function RecogniseQuestInput({ quest, onComplete }) {
     } else if (quest.id === 'recognise_negative_frequency' || quest.id === 'recognise_positive_frequency') {
       switch (currentStep) {
         case 1: return data.frequency
-        case 2: return data.area_of_life && data.frequency_intensity && data.situation.trim().length >= 10
+        case 2: return data.frequency_intensity && data.situation.trim().length >= 10
         case 3: return true
         default: return false
       }
     } else if (quest.id === 'recognise_trigger_pattern') {
       switch (currentStep) {
         case 1: return data.trigger_type
-        case 2: return data.area_of_life && data.frequency_intensity && data.situation.trim().length >= 10
+        case 2: return data.frequency_intensity && data.situation.trim().length >= 10
         case 3: return true
         default: return false
       }
@@ -277,14 +277,12 @@ function RecogniseQuestInput({ quest, onComplete }) {
     } else if (quest.id === 'recognise_negative_frequency' || quest.id === 'recognise_positive_frequency') {
       return {
         frequency: data.frequency,
-        area_of_life: data.area_of_life,
         intensity: data.frequency_intensity,
         situation: data.situation
       }
     } else if (quest.id === 'recognise_trigger_pattern') {
       return {
         trigger_type: data.trigger_type,
-        area_of_life: data.area_of_life,
         intensity: data.frequency_intensity,
         situation: data.situation
       }
@@ -769,24 +767,6 @@ function RecogniseQuestInput({ quest, onComplete }) {
         {/* Step 2: Area + Intensity + Situation */}
         {step === 2 && (
           <div className="step-content">
-            <div className="step-header">
-              <span className="step-icon">🎯</span>
-              <h4>What area of life?</h4>
-            </div>
-            <div className="area-of-life-grid">
-              {AREAS_OF_LIFE.map(area => (
-                <button
-                  key={area.id}
-                  type="button"
-                  className={`area-option ${formData.area_of_life === area.id ? 'selected' : ''}`}
-                  onClick={() => setFormData(prev => ({ ...prev, area_of_life: area.id }))}
-                >
-                  <span className="area-icon">{area.icon}</span>
-                  <span className="area-label">{area.label}</span>
-                </button>
-              ))}
-            </div>
-
             <div className="step-subsection">
               <label className="recognise-label">How intense was it?</label>
               <div className="intensity-slider">
@@ -837,10 +817,6 @@ function RecogniseQuestInput({ quest, onComplete }) {
               <div className="summary-item">
                 <span className="summary-label">Frequency:</span>
                 <span className="summary-value">{getFrequency(formData.frequency, false)?.icon} {getFrequency(formData.frequency, false)?.label}</span>
-              </div>
-              <div className="summary-item">
-                <span className="summary-label">Area:</span>
-                <span className="summary-value">{getLifeArea(formData.area_of_life)?.icon} {getLifeArea(formData.area_of_life)?.label}</span>
               </div>
               <div className="summary-item">
                 <span className="summary-label">Intensity:</span>
@@ -909,27 +885,9 @@ function RecogniseQuestInput({ quest, onComplete }) {
           </div>
         )}
 
-        {/* Step 2: Area + Intensity + Situation */}
+        {/* Step 2: Intensity + Situation */}
         {step === 2 && (
           <div className="step-content">
-            <div className="step-header">
-              <span className="step-icon">🎯</span>
-              <h4>What area of life?</h4>
-            </div>
-            <div className="area-of-life-grid">
-              {AREAS_OF_LIFE.map(area => (
-                <button
-                  key={area.id}
-                  type="button"
-                  className={`area-option ${formData.area_of_life === area.id ? 'selected' : ''}`}
-                  onClick={() => setFormData(prev => ({ ...prev, area_of_life: area.id }))}
-                >
-                  <span className="area-icon">{area.icon}</span>
-                  <span className="area-label">{area.label}</span>
-                </button>
-              ))}
-            </div>
-
             <div className="step-subsection">
               <label className="recognise-label">How strong was this feeling?</label>
               <div className="intensity-slider">
@@ -980,10 +938,6 @@ function RecogniseQuestInput({ quest, onComplete }) {
               <div className="summary-item">
                 <span className="summary-label">Frequency:</span>
                 <span className="summary-value">{getFrequency(formData.frequency, true)?.icon} {getFrequency(formData.frequency, true)?.label}</span>
-              </div>
-              <div className="summary-item">
-                <span className="summary-label">Area:</span>
-                <span className="summary-value">{getLifeArea(formData.area_of_life)?.icon} {getLifeArea(formData.area_of_life)?.label}</span>
               </div>
               <div className="summary-item">
                 <span className="summary-label">Intensity:</span>
@@ -1175,27 +1129,9 @@ function RecogniseQuestInput({ quest, onComplete }) {
           </div>
         )}
 
-        {/* Step 2: Area + Intensity + Situation */}
+        {/* Step 2: Intensity + Situation */}
         {step === 2 && (
           <div className="step-content">
-            <div className="step-header">
-              <span className="step-icon">🎯</span>
-              <h4>What area of life?</h4>
-            </div>
-            <div className="area-of-life-grid">
-              {AREAS_OF_LIFE.map(area => (
-                <button
-                  key={area.id}
-                  type="button"
-                  className={`area-option ${formData.area_of_life === area.id ? 'selected' : ''}`}
-                  onClick={() => setFormData(prev => ({ ...prev, area_of_life: area.id }))}
-                >
-                  <span className="area-icon">{area.icon}</span>
-                  <span className="area-label">{area.label}</span>
-                </button>
-              ))}
-            </div>
-
             <div className="step-subsection">
               <label className="recognise-label">How intense was the reaction?</label>
               <div className="intensity-slider">
@@ -1246,10 +1182,6 @@ function RecogniseQuestInput({ quest, onComplete }) {
               <div className="summary-item">
                 <span className="summary-label">Trigger:</span>
                 <span className="summary-value">{getTrigger(formData.trigger_type)?.icon} {getTrigger(formData.trigger_type)?.label}</span>
-              </div>
-              <div className="summary-item">
-                <span className="summary-label">Area:</span>
-                <span className="summary-value">{getLifeArea(formData.area_of_life)?.icon} {getLifeArea(formData.area_of_life)?.label}</span>
               </div>
               <div className="summary-item">
                 <span className="summary-label">Intensity:</span>

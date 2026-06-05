@@ -4,7 +4,7 @@
   text-align: center;
   padding: 4px 0 0;
   position: relative;
-  animation: regulation-fade-in 0.2s ease;
+  animation: regulation-fade-in 0.25s ease;
 }
 
 @keyframes regulation-fade-in {
@@ -20,13 +20,45 @@
   border: none;
   font-size: 13px;
   font-weight: 600;
-  color: #adb5bd;
+  color: #9ca3af;
   cursor: pointer;
   padding: 0;
 }
 
+.regulation-state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 0.3px;
+}
+
+.regulation-state-badge.state-ventral {
+  background: rgba(52, 211, 153, 0.12);
+  color: #059669;
+}
+
+.regulation-state-badge.state-vibe_rise {
+  background: rgba(233, 162, 59, 0.12);
+  color: #d4890e;
+}
+
+.regulation-state-badge.state-sympathetic {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.regulation-state-badge.state-dorsal {
+  background: rgba(107, 114, 128, 0.12);
+  color: #4b5563;
+}
+
 .regulation-title {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 800;
   color: #1a1a2e;
   margin: 0 0 4px;
@@ -35,30 +67,34 @@
 .regulation-subtitle {
   font-size: 13px;
   color: #6b7280;
-  margin: 0 0 16px;
-  line-height: 1.4;
+  margin: 0 0 18px;
+  line-height: 1.5;
 }
 
+/* Single exercise (ventral / vibe_rise) */
 .regulation-single {
-  background: #f8f8fa;
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 16px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 100%);
+  border: 1.5px solid rgba(94, 23, 235, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 18px;
 }
 
 .regulation-single .regulation-instruction {
-  font-size: 14px;
+  font-size: 15px;
   color: #374151;
-  line-height: 1.5;
+  line-height: 1.6;
   margin: 0 0 8px;
+  font-weight: 500;
 }
 
+/* Exercise list (sympathetic / dorsal) */
 .regulation-exercises {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 16px;
-  max-height: 220px;
+  margin-bottom: 18px;
+  max-height: 240px;
   overflow-y: auto;
 }
 
@@ -71,9 +107,9 @@
 .regulation-exercise {
   display: flex;
   flex-direction: column;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border: 1.5px solid #eef0f3;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #f8f8fa;
   cursor: pointer;
   transition: all 0.2s;
@@ -83,11 +119,13 @@
 
 .regulation-exercise:hover {
   border-color: #d1d5db;
+  background: #f3f4f6;
 }
 
 .regulation-exercise.expanded {
-  background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 100%);
   border-color: #5e17eb;
+  box-shadow: 0 2px 12px rgba(94, 23, 235, 0.1);
 }
 
 .regulation-exercise-header {
@@ -105,26 +143,27 @@
 
 .regulation-duration {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   color: #9ca3af;
-  background: #f3f4f6;
-  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 3px 10px;
   border-radius: 20px;
   flex-shrink: 0;
 }
 
 .regulation-exercise.expanded .regulation-duration {
-  background: rgba(94, 23, 235, 0.1);
+  background: rgba(94, 23, 235, 0.08);
   color: #5e17eb;
 }
 
 .regulation-instruction {
   font-size: 13px;
   color: #4b5563;
-  line-height: 1.5;
-  margin: 8px 0 0;
+  line-height: 1.6;
+  margin: 10px 0 0;
 }
 
+/* Actions */
 .regulation-actions {
   display: flex;
   gap: 8px;
@@ -132,28 +171,39 @@
 
 .regulation-done {
   flex: 1;
-  padding: 12px;
+  padding: 14px;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
   color: white;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
   cursor: pointer;
   transition: transform 0.15s;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.25);
 }
 
 .regulation-done:hover {
   transform: scale(0.98);
 }
 
+.regulation-done:active {
+  transform: scale(0.96);
+}
+
 .regulation-skip {
-  padding: 12px 20px;
+  padding: 14px 20px;
   border: 1.5px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 14px;
   background: white;
   color: #9ca3af;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.15s;
+}
+
+.regulation-skip:hover {
+  border-color: #d1d5db;
+  color: #6b7280;
 }

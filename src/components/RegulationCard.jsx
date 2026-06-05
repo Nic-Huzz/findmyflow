@@ -5,7 +5,7 @@
  */
 
 import { useState } from 'react'
-import { REGULATION_EXERCISES } from '../lib/nervousSystemConstants'
+import { REGULATION_EXERCISES, NERVOUS_SYSTEM_STATES } from '../lib/nervousSystemConstants'
 import './RegulationCard.css'
 
 export default function RegulationCard({ state, onDone, onSkip, onBack }) {
@@ -15,6 +15,7 @@ export default function RegulationCard({ state, onDone, onSkip, onBack }) {
   if (!regulation) return null
 
   const isSimple = regulation.exercises.length === 1
+  const stateInfo = NERVOUS_SYSTEM_STATES.find(s => s.id === state)
 
   return (
     <div className="regulation-card">
@@ -22,6 +23,11 @@ export default function RegulationCard({ state, onDone, onSkip, onBack }) {
         <button type="button" className="regulation-back" onClick={onBack}>
           ← Back
         </button>
+      )}
+      {stateInfo && (
+        <span className={`regulation-state-badge state-${state}`}>
+          {stateInfo.emoji} {stateInfo.name}
+        </span>
       )}
       <h4 className="regulation-title">{regulation.label}</h4>
       <p className="regulation-subtitle">{regulation.subtitle}</p>

@@ -196,21 +196,31 @@ function Challenge() {
       })
   }, [user?.id])
 
-  // Daily nervous system check-in (proactive, once per day)
+  // Daily nervous system check-in (3x per day: first login, 1pm, 6pm)
   const [showDailyCheckin, setShowDailyCheckin] = useState(false)
   const [capacityRefresh, setCapacityRefresh] = useState(0)
 
   useEffect(() => {
     if (!user?.id) return
-    // Use local date to avoid timezone issues (e.g. Bali UTC+8)
     const now = new Date()
-    const todayLocal = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+    const hour = now.getHours()
+
+    // Determine current window start: midnight, 1pm, or 6pm
+    const windowStart = new Date(now)
+    if (hour >= 18) {
+      windowStart.setHours(18, 0, 0, 0)
+    } else if (hour >= 13) {
+      windowStart.setHours(13, 0, 0, 0)
+    } else {
+      windowStart.setHours(0, 0, 0, 0)
+    }
+
     supabase
       .from('nervous_system_checkins')
       .select('id')
       .eq('user_id', user.id)
       .eq('checkin_type', 'daily')
-      .gte('created_at', todayLocal)
+      .gte('created_at', windowStart.toISOString())
       .limit(1)
       .then(({ data }) => {
         if (!data?.length) setShowDailyCheckin(true)
