@@ -263,6 +263,7 @@ export default function useExperiencePipeline(experienceId) {
         sublabel: isPast ? 'follow-up' : 'after',
         status: isPast ? deriveStatus(followupPct, { good: 80, warn: 50 }) : 'empty',
         readinessPercent: isPast ? Math.round((followupPct + moduleReadiness(growModules)) / 2) : moduleReadiness(growModules),
+        hasManualMetrics: nodeHasMetrics('grow'),
       },
     ])
 

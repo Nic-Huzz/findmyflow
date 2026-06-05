@@ -79,9 +79,14 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
     }
 
     const partnerName = isAttract && method === 'affiliates' ? values.partner_name : null
+    const saveable = entries.filter(f => f.key !== 'partner_name')
 
-    for (const field of entries) {
-      if (field.key === 'partner_name') continue
+    if (saveable.length === 0) {
+      setSaving(false)
+      return
+    }
+
+    for (const field of saveable) {
       await savePipelineMetric(userId, experienceId, {
         node,
         method: isAttract ? method : null,
