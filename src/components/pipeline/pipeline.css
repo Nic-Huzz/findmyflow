@@ -151,6 +151,65 @@
 .pl-bg.use { background: rgba(94,23,235,0.08); color: #a78bfa; }
 .pl-bg.wahoo { background: rgba(233,162,59,0.12); color: #E9A23B; }
 
+/* Contextual nudge */
+.pl-nudge {
+  background: rgba(233,162,59,0.08);
+  border: 1px solid rgba(233,162,59,0.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+.pl-nudge-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.pl-nudge-cta {
+  background: rgba(233,162,59,0.15);
+  border: 1px solid rgba(233,162,59,0.35);
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: #E9A23B;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  touch-action: manipulation;
+}
+.pl-nudge-cta:hover { background: rgba(233,162,59,0.25); }
+
+/* Conversion funnel */
+.pl-funnel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  margin: 0 16px 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+}
+.pl-funnel-step { text-align: center; }
+.pl-funnel-val { font-size: 16px; font-weight: 800; color: white; }
+.pl-funnel-label { font-size: 10px; color: rgba(255,255,255,0.4); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.pl-funnel-arrow { font-size: 11px; font-weight: 700; color: #E9A23B; padding: 0 2px; }
+
+.pl-update-btn {
+  padding: 5px 12px;
+  background: rgba(233,162,59,0.15);
+  border: 1px solid rgba(233,162,59,0.3);
+  border-radius: 8px;
+  color: #E9A23B;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  touch-action: manipulation;
+}
+.pl-update-btn:hover { background: rgba(233,162,59,0.25); }
+
 .pl-wahoo-cta {
   width: 100%;
   padding: 10px;

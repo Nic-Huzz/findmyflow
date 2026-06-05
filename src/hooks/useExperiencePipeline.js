@@ -1,9 +1,15 @@
 /**
  * useExperiencePipeline.js — Compute 5-node Growth Line for a specific experience
  *
- * Fetches per-experience data and computes:
- *   Attract (content posted), Capture (leads tagged), Convert (booked + revenue),
- *   Deliver (checklist + countdown), Grow (follow-up + repeat rate)
+ * Primary data source: pipeline_metrics (manual user-reported numbers)
+ * Fallback: in-app data (content_history, contact_experiences, etc.)
+ *
+ * Node definitions (Hormozi framework):
+ *   Attract = eyeballs (reach across all methods)
+ *   Capture = clicked the link (signups/interest)
+ *   Convert = bought a ticket (paid attendees + revenue)
+ *   Deliver = showed up (actual attendance) + readiness checklist
+ *   Grow = follow-up actions post-event
  *
  * Each node: { key, label, value, sublabel, status, readinessPercent }
  */
@@ -65,26 +71,31 @@ export default function useExperiencePipeline(experienceId) {
 
     try {
     const [
-      expRes, contentRes, contactsRes, attendeesRes, dealsRes,
+      expRes, metricsRes, contentRes, contactsRes, attendeesRes, dealsRes,
       checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes,
     ] = await Promise.all([
       // Experience details
       supabase.from('experiences').select('*').eq('id', experienceId).single(),
-      // Attract: content for this event
+      // Manual pipeline metrics (primary source)
+      supabase.from('pipeline_metrics')
+        .select('node, method, metric_key, metric_value, partner_name')
+        .eq('experience_id', experienceId)
+        .eq('user_id', userId),
+      // Fallback: Attract content for this event
       supabase.from('content_history')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId).eq('experience_id', experienceId),
-      // Capture: leads tagged to this event
+      // Fallback: Capture leads tagged to this event
       supabase.from('contact_experiences')
         .select('id', { count: 'exact', head: true })
         .eq('experience_id', experienceId).eq('user_id', userId),
-      // Convert: attendees (from contact_experiences where role = attendee)
+      // Fallback: Convert attendees
       supabase.from('contact_experiences')
         .select('id', { count: 'exact', head: true })
         .eq('experience_id', experienceId)
         .eq('user_id', userId)
         .eq('role', 'attendee'),
-      // Convert: revenue
+      // Fallback: Convert revenue
       supabase.from('sales_deals')
         .select('value, status')
         .eq('experience_id', experienceId).eq('user_id', userId),
@@ -119,7 +130,7 @@ export default function useExperiencePipeline(experienceId) {
     ])
 
     // Log any query errors
-    ;[expRes, contentRes, contactsRes, attendeesRes, dealsRes, checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes]
+    ;[expRes, metricsRes, contentRes, contactsRes, attendeesRes, dealsRes, checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes]
       .forEach((res, i) => { if (res.error) console.warn(`Pipeline query ${i} failed:`, res.error.message) })
 
     const exp = expRes.data
@@ -148,13 +159,38 @@ export default function useExperiencePipeline(experienceId) {
     // Wahoos
     setWahoos(wahoosRes.data || [])
 
-    // Compute nodes
+    // Aggregate manual pipeline metrics by node
+    const metrics = metricsRes.data || []
+    const metricSum = (node, key) => metrics
+      .filter(m => m.node === node && m.metric_key === key)
+      .reduce((sum, m) => sum + Number(m.metric_value || 0), 0)
+    const nodeHasMetrics = (node) => metrics.some(m => m.node === node)
+
+    // Attract: total reach across all methods (manual), fallback to content_history count
+    const attractReach = metricSum('attract', 'reach')
+    const attractPosts = metricSum('attract', 'posts')
+    const attractTotal = attractReach || attractPosts
     const contentCount = contentRes.count || 0
+    const attractValue = nodeHasMetrics('attract') ? attractTotal : contentCount
+    const attractSublabel = nodeHasMetrics('attract') ? (attractReach ? 'reach' : 'posts') : 'posts'
+
+    // Capture: manual clicks/signups, fallback to contact_experiences count
+    const captureManual = metricSum('capture', 'clicks') + metricSum('capture', 'signups')
     const captureCount = contactsRes.count || 0
+    const captureValue = nodeHasMetrics('capture') ? captureManual : captureCount
+
+    // Convert: manual tickets + revenue, fallback to contact_experiences attendees + deals
+    const convertTickets = metricSum('convert', 'tickets')
+    const convertRevenue = metricSum('convert', 'revenue')
     const attendeeCount = attendeesRes.count || 0
     const deals = dealsRes.data || []
-    const revenue = deals.filter(d => ['won', 'delivering', 'completed'].includes(d.status))
+    const dealsRevenue = deals.filter(d => ['won', 'delivering', 'completed'].includes(d.status))
       .reduce((sum, d) => sum + (d.value || 0), 0)
+    const finalTickets = nodeHasMetrics('convert') ? convertTickets : attendeeCount
+    const finalRevenue = nodeHasMetrics('convert') ? convertRevenue : dealsRevenue
+
+    // Deliver: manual showed_up count, fallback to contact_experiences attended count
+    const deliverShowedUp = metricSum('deliver', 'showed_up')
 
     const marketingCl = cl.marketing || { total: 0, done: 0 }
     const orgCl = cl.organisation || { total: 0, done: 0 }
@@ -179,40 +215,54 @@ export default function useExperiencePipeline(experienceId) {
     const days = daysUntil(exp?.experience_date)
     const isPast = exp?.status === 'completed' || exp?.status === 'archived'
 
+    // Funnel data for conversion visual
+    const funnel = {
+      attract: attractValue,
+      capture: captureValue,
+      convert: finalTickets,
+      deliver: deliverShowedUp || (isPast ? attendeeCount : 0),
+    }
+
     setNodes([
       {
         key: 'attract',
         label: 'Attract',
-        value: String(contentCount),
-        sublabel: 'posts',
-        status: deriveStatus(contentCount, { good: 3, warn: 1 }),
+        value: String(attractValue),
+        sublabel: attractSublabel,
+        status: deriveStatus(attractValue, { good: 100, warn: 10 }),
         readinessPercent: Math.round((marketingPct + moduleReadiness(attractModules)) / 2),
+        hasManualMetrics: nodeHasMetrics('attract'),
       },
       {
         key: 'capture',
         label: 'Capture',
-        value: String(captureCount),
-        sublabel: 'leads',
-        status: deriveStatus(captureCount, { good: 10, warn: 3 }),
+        value: String(captureValue),
+        sublabel: 'signups',
+        status: deriveStatus(captureValue, { good: 20, warn: 5 }),
         readinessPercent: moduleReadiness(captureModules),
+        hasManualMetrics: nodeHasMetrics('capture'),
       },
       {
         key: 'convert',
         label: 'Convert',
-        value: attendeeCount > 0 ? String(attendeeCount) : '0',
-        sublabel: revenue > 0 ? `$${revenue.toLocaleString()}` : 'booked',
-        status: deriveStatus(attendeeCount, { good: 5, warn: 1 }),
+        value: String(finalTickets),
+        sublabel: finalRevenue > 0 ? `$${finalRevenue.toLocaleString()}` : 'tickets',
+        status: deriveStatus(finalTickets, { good: 10, warn: 3 }),
         readinessPercent: moduleReadiness(convertModules),
-        revenue,
-        attendeeCount,
+        revenue: finalRevenue,
+        attendeeCount: finalTickets,
+        hasManualMetrics: nodeHasMetrics('convert'),
       },
       {
         key: 'deliver',
         label: 'Deliver',
-        value: days !== null ? `${days}d` : (isPast ? 'Done' : '—'),
-        sublabel: isPast ? 'completed' : 'until',
+        value: isPast
+          ? (deliverShowedUp > 0 ? String(deliverShowedUp) : (attendeeCount > 0 ? String(attendeeCount) : 'Done'))
+          : (days !== null ? `${days}d` : '—'),
+        sublabel: isPast ? 'showed up' : 'until',
         status: isPast ? 'good' : deriveStatus(orgPct, { good: 70, warn: 30 }),
         readinessPercent: orgPct,
+        hasManualMetrics: nodeHasMetrics('deliver'),
       },
       {
         key: 'grow',
@@ -251,4 +301,20 @@ export default function useExperiencePipeline(experienceId) {
     isModuleComplete,
     refresh: fetchPipeline,
   }
+}
+
+// Utility: save a manual metric
+export async function savePipelineMetric(userId, experienceId, { node, method, metric_key, metric_value, partner_name, notes }) {
+  const { error } = await supabase.from('pipeline_metrics').insert({
+    user_id: userId,
+    experience_id: experienceId,
+    node,
+    method: method || null,
+    metric_key,
+    metric_value,
+    partner_name: partner_name || null,
+    notes: notes || null,
+  })
+  if (error) console.error('Save pipeline metric error:', error)
+  return !error
 }

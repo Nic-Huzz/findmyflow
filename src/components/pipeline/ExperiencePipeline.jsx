@@ -10,12 +10,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useExperiencePipeline from '../../hooks/useExperiencePipeline'
 import PipelineNodeDetail from './PipelineNodeDetail'
+import MetricInputSheet from './MetricInputSheet'
 import { hapticLight } from '../../lib/haptics'
 import './pipeline.css'
 
 export default function ExperiencePipeline({ experienceId, onBack }) {
   const { nodes, checklists, wahoos, experience, userId, loading, isModuleComplete, refresh } = useExperiencePipeline(experienceId)
   const [selectedKey, setSelectedKey] = useState(null)
+  const [metricSheetNode, setMetricSheetNode] = useState(null)
   const navigate = useNavigate()
 
   if (loading) {
@@ -43,6 +45,48 @@ export default function ExperiencePipeline({ experienceId, onBack }) {
             : experience.status}
         </div>
       </div>
+
+      {/* Mini conversion funnel */}
+      {(() => {
+        const attract = nodes.find(n => n.key === 'attract')
+        const capture = nodes.find(n => n.key === 'capture')
+        const convert = nodes.find(n => n.key === 'convert')
+        const deliver = nodes.find(n => n.key === 'deliver')
+        const a = Number(attract?.value) || 0
+        const ca = Number(capture?.value) || 0
+        const co = Number(convert?.value) || 0
+        const d = deliver?.value && !isNaN(deliver.value) ? Number(deliver.value) : 0
+        const hasData = a > 0 || ca > 0 || co > 0 || d > 0
+        if (!hasData) return null
+        const pct = (from, to) => from > 0 ? `${Math.round(to / from * 100)}%` : '—'
+        return (
+          <div className="pl-funnel">
+            <div className="pl-funnel-step">
+              <div className="pl-funnel-val">{a}</div>
+              <div className="pl-funnel-label">reached</div>
+            </div>
+            <div className="pl-funnel-arrow">{pct(a, ca)}</div>
+            <div className="pl-funnel-step">
+              <div className="pl-funnel-val">{ca}</div>
+              <div className="pl-funnel-label">clicked</div>
+            </div>
+            <div className="pl-funnel-arrow">{pct(ca, co)}</div>
+            <div className="pl-funnel-step">
+              <div className="pl-funnel-val">{co}</div>
+              <div className="pl-funnel-label">bought</div>
+            </div>
+            {d > 0 && (
+              <>
+                <div className="pl-funnel-arrow">{pct(co, d)}</div>
+                <div className="pl-funnel-step">
+                  <div className="pl-funnel-val">{d}</div>
+                  <div className="pl-funnel-label">showed up</div>
+                </div>
+              </>
+            )}
+          </div>
+        )
+      })()}
 
       {/* Pipeline nodes */}
       <div className="pl-track">
@@ -83,14 +127,28 @@ export default function ExperiencePipeline({ experienceId, onBack }) {
 
       {/* Expanded node detail */}
       {selectedNode && (
-        <PipelineNodeDetail
-          node={selectedNode}
-          experience={experience}
+        <>
+          <PipelineNodeDetail
+            node={selectedNode}
+            experience={experience}
+            userId={userId}
+            checklists={checklists}
+            wahoos={wahoos}
+            isModuleComplete={isModuleComplete}
+            navigate={navigate}
+            onUpdate={() => setMetricSheetNode(selectedNode.key)}
+          />
+        </>
+      )}
+
+      {/* Metric input bottom sheet */}
+      {metricSheetNode && (
+        <MetricInputSheet
+          node={metricSheetNode}
+          experienceId={experienceId}
           userId={userId}
-          checklists={checklists}
-          wahoos={wahoos}
-          isModuleComplete={isModuleComplete}
-          navigate={navigate}
+          onSaved={refresh}
+          onClose={() => setMetricSheetNode(null)}
         />
       )}
     </div>
