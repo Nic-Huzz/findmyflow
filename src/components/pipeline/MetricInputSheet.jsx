@@ -151,7 +151,10 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
             ))}
             <button
               className="mis-save"
-              disabled={saving || fields.filter(f => f.type === 'number').every(f => !values[f.key] || Number(values[f.key]) === 0)}
+              disabled={saving || (
+                !(isAttract && method === 'affiliates' && values.partner_name?.trim()) &&
+                fields.filter(f => f.type === 'number').every(f => !values[f.key] || Number(values[f.key]) === 0)
+              )}
               onClick={handleSave}
             >
               {saving ? 'Saving...' : 'Save'}

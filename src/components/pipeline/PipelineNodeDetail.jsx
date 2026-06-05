@@ -112,12 +112,13 @@ function getNodeNudge(node, experience, isModuleComplete, wahoos, checklists) {
       if (val === 0)
         return { text: 'Event is done. Log how many people showed up.', cta: 'Log Attendance', action: 'update' }
       return null
-    case 'grow':
+    case 'grow': {
       if (!isPast) return null
       const followCl = checklists.followup || { total: 0, done: 0 }
       if (followCl.total > 0 && followCl.done === 0)
         return { text: "Don't lose the connection. Start your follow-up.", cta: null }
       return null
+    }
     default:
       return null
   }
@@ -298,7 +299,7 @@ function ChecklistItems({ experienceId, section, userId }) {
       .order('sort_order')
       .then(({ data }) => { if (!cancelled && data) setItems(data) })
     return () => { cancelled = true }
-  }, [experienceId, section])
+  }, [experienceId, section, userId])
 
   return items.map(item => (
     <div key={item.id} className={`pl-ck${item.completed ? ' done' : ''}`}>

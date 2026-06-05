@@ -169,7 +169,7 @@ export default function useExperiencePipeline(experienceId) {
     // Attract: total reach across all methods (manual), fallback to content_history count
     const attractReach = metricSum('attract', 'reach')
     const attractPosts = metricSum('attract', 'posts')
-    const attractTotal = attractReach || attractPosts
+    const attractTotal = attractReach > 0 ? attractReach : attractPosts
     const contentCount = contentRes.count || 0
     const attractValue = nodeHasMetrics('attract') ? attractTotal : contentCount
     const attractSublabel = nodeHasMetrics('attract') ? (attractReach ? 'reach' : 'posts') : 'posts'
@@ -214,14 +214,6 @@ export default function useExperiencePipeline(experienceId) {
 
     const days = daysUntil(exp?.experience_date)
     const isPast = exp?.status === 'completed' || exp?.status === 'archived'
-
-    // Funnel data for conversion visual
-    const funnel = {
-      attract: attractValue,
-      capture: captureValue,
-      convert: finalTickets,
-      deliver: deliverShowedUp || (isPast ? attendeeCount : 0),
-    }
 
     setNodes([
       {
