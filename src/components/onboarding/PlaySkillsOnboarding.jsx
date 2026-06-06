@@ -278,6 +278,7 @@ export default function PlaySkillsOnboarding() {
             </button>
           </form>
           {authError && <p className="jo-auth-error">{authError}</p>}
+          <a href="/log-in" className="jo-login-link">Already have an account? Log in</a>
         </div>
       </div>
     )
