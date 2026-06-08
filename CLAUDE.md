@@ -160,9 +160,9 @@ docs/                         # Documentation files
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
-**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`
+**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/inspiration`, `/create/pay-rent`, `/create/remarkable`, `/create/attraction-stack`, `/create/marketing-campaign`, `/create/scale-income`, `/create/plays`
 
 **Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching)
 
@@ -180,7 +180,7 @@ docs/                         # Documentation files
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`
 
-**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share)
+**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share), `/wound-map`, `/limiting-belief-rewire`
 
 **CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
 
@@ -244,7 +244,7 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Scoring**: Points are RP (Rise Points). Header pills: ☀️ Tune (green) | 🔥 Wahoos (gold) | 💜 Healing (purple). State values: dorsal=-2, sympathetic=-1, ventral=+1, vibe_rise=+2.
 
-**Daily check-in**: 4-state overlay on page load (Vibe Rise/Safe/Activated/Shutdown). Once per day, skippable.
+**Daily check-in**: 4-state overlay on page load (Vibe Rise/Safe/Activated/Shutdown). Up to 3x per day (first login, 1pm, 6pm), skippable.
 
 **"Was that a Wahoo?"**: Post-Wahoo classification: Hell yes (vibe_rise, gold confetti) / Felt alive (vibe_rise) / Just did it (ventral). User self-report replaces AI scores.
 
