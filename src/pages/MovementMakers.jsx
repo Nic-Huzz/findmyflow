@@ -28,6 +28,7 @@ export default function MovementMakers() {
   const navigate = useNavigate()
   const [headerSolid, setHeaderSolid] = useState(false)
   const [expandedFaq, setExpandedFaq] = useState(null)
+  const [joinSubmitted, setJoinSubmitted] = useState(false)
   const matchingRef = useRef(null)
 
   useEffect(() => {
@@ -42,6 +43,10 @@ export default function MovementMakers() {
 
   const scrollToPricing = () => {
     document.getElementById('mm-pricing')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const handleJoinCohort = () => {
+    setJoinSubmitted(true)
   }
 
   return (
@@ -271,7 +276,13 @@ export default function MovementMakers() {
             <div className="mm-price-amount">$100<span>/month</span></div>
             <div className="mm-price-was">Total value: <s>$1,276/month</s></div>
             <div className="mm-price-roi">Fill 3 extra seats at your next experience and it's paid for itself.</div>
-            <button className="mm-price-cta">Join The Next Cohort &rarr;</button>
+            {joinSubmitted ? (
+              <div className="mm-price-submitted">You're on the list. We'll be in touch.</div>
+            ) : (
+              <button className="mm-price-cta" onClick={handleJoinCohort}>
+                Join The Next Cohort →
+              </button>
+            )}
             <div className="mm-price-spots"><strong>10 spots</strong> per cohort. Founding membership pricing.</div>
           </div>
         </div>

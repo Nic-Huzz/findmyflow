@@ -190,6 +190,7 @@
   font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 1rem; transition: transform 0.3s var(--spring);
 }
 .mm .mm-price-cta:hover { transform: translateY(-2px); }
+.mm .mm-price-submitted { font-size: 1rem; font-weight: 600; color: var(--purple); background: rgba(94,23,235,0.06); padding: 1rem; border-radius: 14px; margin-bottom: 1rem; }
 .mm .mm-price-spots { font-size: 0.8rem; color: var(--text-3); }
 .mm .mm-price-spots strong { color: var(--purple); }
 

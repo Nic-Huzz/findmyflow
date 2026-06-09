@@ -39,15 +39,12 @@ export default function FantasyLeagueLanding() {
     e.preventDefault()
     setSubmitting(true)
     try {
-      const { error } = await supabase.from('league_signups').upsert(
-        {
-          name: formData.name,
-          whatsapp: formData.whatsapp,
-          team_readiness: formData.team_readiness,
-          team_name: formData.team_name || null,
-        },
-        { onConflict: 'whatsapp' }
-      )
+      const { error } = await supabase.from('league_signups').insert({
+        name: formData.name,
+        whatsapp: formData.whatsapp || null,
+        team_readiness: formData.team_readiness,
+        team_name: formData.team_name || null,
+      })
       if (error) {
         console.warn('Signup save failed:', error)
         alert('Something went wrong — please try again.')
@@ -281,8 +278,7 @@ export default function FantasyLeagueLanding() {
               <input
                 className="flp-field"
                 type="tel"
-                placeholder="WhatsApp number"
-                required
+                placeholder="WhatsApp number (optional)"
                 value={formData.whatsapp}
                 onChange={e => setFormData(p => ({ ...p, whatsapp: e.target.value }))}
               />

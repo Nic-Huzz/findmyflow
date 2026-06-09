@@ -25,6 +25,12 @@ function UserSettings() {
   const [accountSaving, setAccountSaving] = useState(false)
   const [accountMessage, setAccountMessage] = useState(null)
 
+  // Delete account state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteInput, setDeleteInput] = useState('')
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState(null)
+
   // Notification state
   const [notificationStatus, setNotificationStatus] = useState({
     supported: false,
@@ -102,6 +108,30 @@ function UserSettings() {
   const handleSignOut = async () => {
     await signOut()
     navigate('/')
+  }
+
+  const handleDeleteAccount = async () => {
+    if (deleteInput !== 'DELETE') return
+    setDeleting(true)
+    setDeleteError(null)
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('Not authenticated')
+
+      const { data, error } = await supabase.functions.invoke('delete-account', {
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      })
+
+      if (error) throw error
+      if (data?.error) throw new Error(data.error)
+
+      await signOut()
+      navigate('/')
+    } catch (err) {
+      setDeleteError(err.message || 'Failed to delete account. Please try again.')
+      setDeleting(false)
+    }
   }
 
   // --- Notification Methods ---
@@ -394,6 +424,55 @@ function UserSettings() {
         <button className="settings-signout-btn" onClick={handleSignOut}>
           Sign Out
         </button>
+      </section>
+
+      {/* Delete Account */}
+      <section className="settings-section settings-section--delete">
+        {!showDeleteConfirm ? (
+          <button
+            className="settings-delete-btn"
+            onClick={() => setShowDeleteConfirm(true)}
+          >
+            Delete Account
+          </button>
+        ) : (
+          <div className="settings-delete-confirm">
+            <h3 className="settings-delete-title">Delete your account?</h3>
+            <p className="settings-delete-warning">
+              This will permanently delete your account and all associated data. This action cannot be undone.
+            </p>
+            <label className="settings-label">
+              Type <strong>DELETE</strong> to confirm
+            </label>
+            <input
+              type="text"
+              className="settings-input settings-delete-input"
+              value={deleteInput}
+              onChange={(e) => { setDeleteInput(e.target.value); setDeleteError(null) }}
+              placeholder="DELETE"
+              autoComplete="off"
+            />
+            {deleteError && (
+              <p className="settings-delete-error">{deleteError}</p>
+            )}
+            <div className="settings-delete-actions">
+              <button
+                className="settings-delete-cancel"
+                onClick={() => { setShowDeleteConfirm(false); setDeleteInput(''); setDeleteError(null) }}
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+              <button
+                className="settings-delete-confirm-btn"
+                onClick={handleDeleteAccount}
+                disabled={deleteInput !== 'DELETE' || deleting}
+              >
+                {deleting ? 'Deleting...' : 'Permanently Delete'}
+              </button>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   )

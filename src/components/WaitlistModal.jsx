@@ -43,11 +43,6 @@ export default function WaitlistModal({ isOpen, onClose }) {
   }
 
   const handleSubmit = async () => {
-    if (!formData.whatsapp.trim()) {
-      setError('Please enter your WhatsApp number')
-      return
-    }
-
     setLoading(true)
     setError(null)
 
@@ -73,7 +68,7 @@ export default function WaitlistModal({ isOpen, onClose }) {
         .insert({
           name: formData.name.trim(),
           email: formData.email.toLowerCase().trim(),
-          whatsapp: formData.whatsapp.trim(),
+          whatsapp: formData.whatsapp.trim() || null,
           flow_audit_id: flowAuditId,
           source: 'landing_page'
         })
@@ -174,8 +169,8 @@ export default function WaitlistModal({ isOpen, onClose }) {
 
               {step === 3 && (
                 <div className="waitlist-step">
-                  <label className="waitlist-label">What's your WhatsApp number?</label>
-                  <p className="waitlist-hint">We'll send updates via WhatsApp</p>
+                  <label className="waitlist-label">What's your WhatsApp number? (optional)</label>
+                  <p className="waitlist-hint">We'll send updates via WhatsApp if provided</p>
                   <input
                     type="tel"
                     className="waitlist-input"

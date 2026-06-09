@@ -1126,15 +1126,15 @@ export default function PlaySkillsIdentifier() {
           <p className="jo-signup-subtext">Create your account to start your 100-day journey</p>
           <form className="jo-signup-form" onSubmit={(e) => {
             e.preventDefault()
-            if (userName.trim() && email.trim() && whatsapp.trim()) handleEmailSubmit(e)
+            if (userName.trim() && email.trim()) handleEmailSubmit(e)
           }}>
             <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)}
               placeholder="Your first name" className="jo-signup-input" autoFocus />
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com" className="jo-signup-input" />
             <input type="tel" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)}
-              placeholder="WhatsApp number (incl. area code, e.g. +61...)" className="jo-signup-input" />
-            <button type="submit" className="jo-cta-button" disabled={isLoading || !userName.trim() || !email.trim() || !whatsapp.trim()}>
+              placeholder="WhatsApp number, optional" className="jo-signup-input" />
+            <button type="submit" className="jo-cta-button" disabled={isLoading || !userName.trim() || !email.trim()}>
               {isLoading ? <span>Sending code...</span> : (
                 <><span className="jo-shimmer-layer" />Send Verification Code<span className="jo-btn-arrow">&#8594;</span></>
               )}

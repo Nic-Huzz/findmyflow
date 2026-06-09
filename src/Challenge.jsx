@@ -52,7 +52,7 @@ import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
 import { preloadChallengeFlows } from './lib/preloadRoutes'
 import { useSubscription } from './hooks/useSubscription'
-import { isPaidQuest, createCheckoutSession } from './lib/subscriptionService'
+import { isPaidQuest } from './lib/subscriptionService'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -458,16 +458,6 @@ function Challenge() {
     }
 
     return parts.length > 0 ? parts : description
-  }
-
-  // Redirect to Stripe checkout for subscription upgrade
-  const handleUpgrade = async () => {
-    try {
-      const url = await createCheckoutSession(user.id)
-      window.location.href = url
-    } catch (err) {
-      console.error('Failed to create checkout session:', err)
-    }
   }
 
   // Helper for updating quest inputs
