@@ -129,3 +129,106 @@
   font-weight: 500;
   color: #6b7280;
 }
+
+/* Back button (drain + regulation reuse) */
+.daily-checkin-back {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #adb5bd;
+  cursor: pointer;
+}
+
+/* Drain capture step */
+.daily-checkin-drain {
+  text-align: center;
+}
+
+.daily-checkin-drain-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.daily-checkin-drain-cat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  background: #f8f8fa;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.daily-checkin-drain-cat:hover {
+  border-color: #d1d5db;
+}
+
+.daily-checkin-drain-cat.selected {
+  background: linear-gradient(135deg, #fee2e2 0%, #fef3c7 100%);
+  border-color: #ef4444;
+}
+
+.daily-checkin-drain-note {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.daily-checkin-drain-note:focus {
+  border-color: #5e17eb;
+}
+
+.daily-checkin-drain-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.daily-checkin-drain-skip {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #eef0f3;
+  border-radius: 14px;
+  background: white;
+  font-size: 14px;
+  font-weight: 700;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.daily-checkin-drain-save {
+  flex: 2;
+  padding: 12px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.daily-checkin-drain-save:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

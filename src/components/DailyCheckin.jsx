@@ -1,7 +1,7 @@
 /**
  * DailyCheckin — Lightweight overlay on challenge page load.
  * "How are you right now?" with 4 state buttons.
- * After selection: shows a regulation exercise (turns diagnosis into medicine).
+ * Flow: State pick → Drain capture (sympathetic/dorsal only) → Regulation exercise.
  */
 
 import { useState, useRef } from 'react'
@@ -10,20 +10,49 @@ import { NERVOUS_SYSTEM_STATES } from '../lib/nervousSystemConstants'
 import RegulationCard from './RegulationCard'
 import './DailyCheckin.css'
 
+const DRAIN_CATEGORIES = [
+  { id: 'drain_work', label: 'Work', icon: '💼' },
+  { id: 'drain_people', label: 'People', icon: '👤' },
+  { id: 'drain_environment', label: 'Environment', icon: '🏠' },
+  { id: 'drain_content', label: 'Content', icon: '📱' },
+  { id: 'drain_commitment', label: 'Commitment', icon: '📋' },
+]
+
+const isDysregulated = (state) => state === 'sympathetic' || state === 'dorsal'
+
 export default function DailyCheckin({ userId, onComplete }) {
+  // Steps: 'state' → 'drain' (sympathetic/dorsal only) → 'regulation'
+  const [step, setStep] = useState('state')
   const [selectedState, setSelectedState] = useState(null)
-  const [showRegulation, setShowRegulation] = useState(false)
+  const [drainCategory, setDrainCategory] = useState(null)
+  const [drainNote, setDrainNote] = useState('')
   const savingRef = useRef(false)
 
   const handleSelect = (stateId) => {
     if (savingRef.current) return
     setSelectedState(stateId)
-    setShowRegulation(true)
+    setStep(isDysregulated(stateId) ? 'drain' : 'regulation')
   }
 
-  const handleBack = () => {
-    setShowRegulation(false)
+  const handleBackToState = () => {
+    setStep('state')
     setSelectedState(null)
+    setDrainCategory(null)
+    setDrainNote('')
+  }
+
+  const handleDrainContinue = () => {
+    // Save drain as a separate checkin row (best-effort, don't block)
+    if (drainCategory) {
+      supabase.from('nervous_system_checkins').insert({
+        user_id: userId,
+        after_state: selectedState,
+        checkin_type: 'drain',
+        source_quest_id: drainCategory,
+        drain_note: drainNote.trim() || null,
+      })
+    }
+    setStep('regulation')
   }
 
   const finishCheckin = async () => {
@@ -43,7 +72,7 @@ export default function DailyCheckin({ userId, onComplete }) {
   return (
     <div className="daily-checkin-overlay">
       <div className="daily-checkin-card">
-        {!showRegulation ? (
+        {step === 'state' && (
           <>
             <button type="button" className="daily-checkin-skip" onClick={() => {
               supabase.from('nervous_system_checkins').insert({
@@ -75,12 +104,70 @@ export default function DailyCheckin({ userId, onComplete }) {
               ))}
             </div>
           </>
-        ) : (
+        )}
+
+        {step === 'drain' && (
+          <div className="daily-checkin-drain">
+            <button type="button" className="daily-checkin-back" onClick={handleBackToState}>
+              ← Back
+            </button>
+            <span className="daily-checkin-emoji">
+              {selectedState === 'dorsal' ? '😶' : '😬'}
+            </span>
+            <h3 className="daily-checkin-title">What created this?</h3>
+            <p className="daily-checkin-sub">Naming it is the first step back</p>
+
+            <div className="daily-checkin-drain-cats">
+              {DRAIN_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  className={`daily-checkin-drain-cat ${drainCategory === cat.id ? 'selected' : ''}`}
+                  onClick={() => setDrainCategory(drainCategory === cat.id ? null : cat.id)}
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {drainCategory && (
+              <textarea
+                className="daily-checkin-drain-note"
+                placeholder="What specifically? (optional)"
+                value={drainNote}
+                onChange={(e) => setDrainNote(e.target.value)}
+                rows={2}
+                maxLength={200}
+              />
+            )}
+
+            <div className="daily-checkin-drain-actions">
+              <button
+                type="button"
+                className="daily-checkin-drain-skip"
+                onClick={() => setStep('regulation')}
+              >
+                Skip
+              </button>
+              <button
+                type="button"
+                className="daily-checkin-drain-save"
+                onClick={handleDrainContinue}
+                disabled={!drainCategory}
+              >
+                {drainCategory ? 'Log it' : 'Pick one above'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 'regulation' && (
           <RegulationCard
             state={selectedState}
             onDone={finishCheckin}
             onSkip={finishCheckin}
-            onBack={handleBack}
+            onBack={isDysregulated(selectedState) ? () => setStep('drain') : handleBackToState}
           />
         )}
       </div>
