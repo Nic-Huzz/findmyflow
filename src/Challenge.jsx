@@ -288,7 +288,7 @@ function Challenge() {
       })
   }, [user?.id])
 
-  // Wahoo count: completed challenges this week with user-reported high scary + wahoo
+  // Wahoo count: all completed challenges this week
   useEffect(() => {
     if (!user?.id) return
     supabase
@@ -296,8 +296,6 @@ function Challenge() {
       .select('id')
       .eq('user_id', user.id)
       .eq('status', 'completed')
-      .gte('scary_score', 7)
-      .gte('wahoo_score', 7)
       .gte('completed_at', getWeekStartLocal())
       .then(({ data }) => {
         setWahooCountThisWeek(data?.length || 0)
@@ -1854,8 +1852,7 @@ function Challenge() {
               {[
                 { id: 'daily', label: 'Daily', icon: '☀️', color: '#5e17eb' },
                 { id: 'weekly', label: 'Weekly', icon: '📅', color: '#5e17eb' },
-                { id: 'explainer', label: 'Explainers', icon: '📖', color: '#5e17eb' },
-                { id: 'map', label: 'Map', icon: '🧠', color: '#5e17eb', route: '/nervous-system-map' }
+                { id: 'explainer', label: 'Explainers', icon: '📖', color: '#5e17eb' }
               ].map(tab => {
                 const isActive = activeFrequencyFilter === tab.id
                 const activeStyles = isActive ? {

@@ -85,9 +85,7 @@ export default function PlayListTab({
         .from('groan_challenges')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId)
-        .eq('status', 'completed')
-        .gte('scary_score', 7)
-        .gte('wahoo_score', 7),
+        .eq('status', 'completed'),
       fetchCategoryWahoos(),
     ]).then(([{ data }, , { count }]) => {
       if (data) setPlayskills(data)
@@ -274,7 +272,7 @@ export default function PlayListTab({
         <div className="plt-category-bubbles">
           {WAHOO_CATEGORIES.map(cat => {
             const items = categoryWahoos[cat.id] || []
-            const completedCount = items.filter(w => w.status === 'completed').length
+            const completedCount = items.length
             const isExpanded = expandedBubble === cat.id
             return (
               <div key={cat.id} className="plt-bubble-wrapper">
@@ -288,19 +286,6 @@ export default function PlayListTab({
                 </button>
                 {isExpanded && (
                   <div className="plt-bubble-dropdown">
-                    {items.length === 0 && addingTo !== cat.id && (
-                      <div className="plt-dropdown-empty">No wahoos yet</div>
-                    )}
-                    {items.map(w => {
-                      const name = w.title || w.challenge_text
-                      const isDone = w.status === 'completed'
-                      return (
-                        <div key={w.id} className={`plt-dropdown-item ${isDone ? 'done' : ''}`}>
-                          <span className="plt-dropdown-check">{isDone ? '✓' : '○'}</span>
-                          <span className={`plt-dropdown-name ${isDone ? 'crossed' : ''}`}>{name}</span>
-                        </div>
-                      )
-                    })}
                     {addingTo === cat.id ? (
                       <div className="plt-quickadd">
                         <input
@@ -331,6 +316,23 @@ export default function PlayListTab({
                         + Add a future wahoo
                       </button>
                     )}
+                    {items.length === 0 && addingTo !== cat.id && (
+                      <div className="plt-dropdown-empty">No wahoos yet</div>
+                    )}
+                    {[...items].sort((a, b) => {
+                      if (a.status === 'completed' && b.status !== 'completed') return 1
+                      if (a.status !== 'completed' && b.status === 'completed') return -1
+                      return 0
+                    }).map(w => {
+                      const name = w.title || w.challenge_text
+                      const isDone = w.status === 'completed'
+                      return (
+                        <div key={w.id} className={`plt-dropdown-item ${isDone ? 'done' : ''}`}>
+                          <span className="plt-dropdown-check">{isDone ? '✓' : '○'}</span>
+                          <span className={`plt-dropdown-name ${isDone ? 'crossed' : ''}`}>{name}</span>
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
               </div>
