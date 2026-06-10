@@ -437,7 +437,7 @@ export default function NervousSystemFlow() {
           impact_goal: responses.visibility_action,
           income_goal: responses.deal_amount,
           nervous_system_impact_limit: `${responses.test1_visibility_safe === 'yes' ? 'Safe' : 'Unsafe'}: ${responses.visibility_action}`,
-          nervous_system_income_limit: `$${responses.earning_edge.toLocaleString()} per deal`,
+          nervous_system_income_limit: responses.earning_edge != null ? `$${responses.earning_edge.toLocaleString()} per deal` : null,
           positive_change: responses.positive_change,
           current_struggle: responses.struggle_area,
           belief_test_results: responses.contracts_tested,
@@ -458,7 +458,7 @@ export default function NervousSystemFlow() {
       // Auto-populate brain
       onNervousSystemComplete(user.id, {
         impactLimit: `${responses.test1_visibility_safe === 'yes' ? 'Safe' : 'Unsafe'}: ${responses.visibility_action}`,
-        incomeLimit: `$${responses.earning_edge.toLocaleString()} per deal`,
+        incomeLimit: responses.earning_edge != null ? `$${responses.earning_edge.toLocaleString()} per deal` : null,
         archetype: reflection?.archetype_name || null,
       })
 

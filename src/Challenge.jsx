@@ -253,7 +253,7 @@ function Challenge() {
   // Healing info pop-up (quest description)
   const [healingInfoQuest, setHealingInfoQuest] = useState(null)
 
-  // Wahoo count this week (challenges completed with scary >= 7 AND wahoo >= 7)
+  // Wahoo count: all completed challenges this week
   const [wahooCountThisWeek, setWahooCountThisWeek] = useState(0)
 
   // Dynamic level detection

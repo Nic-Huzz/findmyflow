@@ -129,7 +129,7 @@ export function mergeField(existing, incoming) {
         has_conflict: true,
         conflicts,
       },
-      action: 'conflict',
+      action: 'conflicts',
     }
   }
 

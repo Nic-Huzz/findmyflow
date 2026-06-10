@@ -54,9 +54,9 @@ function parseRuleBreak(ruleIdentified) {
     return part ? part.replace(prefix, '').trim() : ''
   }
   return {
-    current: extract('Current:'),
-    wrong: extract('Wrong:'),
-    mine: extract('Mine:'),
+    current: extract('Assumption:'),
+    wrong: extract('Two worlds:'),
+    mine: extract('Without it:'),
   }
 }
 
@@ -864,7 +864,7 @@ export default function CreatorHomeV2() {
               <div className="ch2-traj-label">Your Focus</div>
               <div className="ch2-traj-title">{scopeResult.stage.charAt(0).toUpperCase() + scopeResult.stage.slice(1)}</div>
               <div className="ch2-traj-desc">{SCOPE_FOCUS[scopeResult.stage]}</div>
-              <button className="ch2-btn-outline" style={{ marginTop: 10 }} onClick={() => navigate('/create/scope-map')}>Retake Diagnostic →</button>
+              <button className="ch2-btn-outline" style={{ marginTop: 10 }} onClick={() => navigate('/scope-map')}>Retake Diagnostic →</button>
             </div>
           )}
 
