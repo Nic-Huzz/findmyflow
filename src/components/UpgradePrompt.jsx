@@ -1,3 +1,8 @@
+/**
+ * UpgradePrompt — UNUSED
+ * Kept for potential future reactivation. Not imported anywhere.
+ * Previously showed a Stripe checkout lock overlay for paid quests.
+ */
 import { useState } from 'react'
 import './UpgradePrompt.css'
 

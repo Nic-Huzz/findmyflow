@@ -51,8 +51,6 @@ import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
 import { preloadChallengeFlows } from './lib/preloadRoutes'
-import { useSubscription } from './hooks/useSubscription'
-import { isPaidQuest } from './lib/subscriptionService'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -226,9 +224,6 @@ function Challenge() {
         if (!data?.length) setShowDailyCheckin(true)
       })
   }, [user?.id])
-
-  // Subscription status for payment gating
-  const { hasSubscription } = useSubscription()
 
   // Celebrations (level-up modal)
   const { showLevelUp, levelUpKey, celebrateLevelUp, closeLevelUp } = useCelebrations()

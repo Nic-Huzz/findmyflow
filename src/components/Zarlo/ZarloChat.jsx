@@ -14,8 +14,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import ZarloMessage from './ZarloMessage'
 import ZarloQuickReplies from './ZarloQuickReplies'
-import ZarloVoiceInput from './ZarloVoiceInput'
-import { processVoiceCommand } from '../../lib/zarlo/voiceProcessor'
 import {
   loadZarloState,
   saveZarloState,
@@ -156,8 +154,6 @@ function ZarloChat({ onClose, challengeTab = null }) {
   const [intakeStep, setIntakeStep] = useState(0) // 0, 1, 2 for intake progress dots
   const [commitmentText, setCommitmentText] = useState('')
   const [showCommitmentInput, setShowCommitmentInput] = useState(false)
-  const [showVoiceInput, setShowVoiceInput] = useState(false)
-  const [voiceProcessing, setVoiceProcessing] = useState(false)
 
   // Current route for page awareness
   const currentRoute = location.pathname
@@ -540,74 +536,6 @@ Now go make it happen. Your future self is counting on you.`)
   // VOICE INPUT HANDLER
   // ============================================
 
-  const handleVoiceResult = async (transcript) => {
-    if (!transcript.trim() || !user?.id) return
-
-    addMessage('user', transcript)
-    setVoiceProcessing(true)
-    setShowVoiceInput(false)
-
-    try {
-      const result = await processVoiceCommand(transcript, user.id)
-
-      if (result.success) {
-        addMessage('zarlo', result.message)
-
-        // Handle navigation if needed
-        if (result.action === 'navigate' && result.route) {
-          setTimeout(() => {
-            navigate(result.route)
-            if (onClose) onClose()
-          }, 1500)
-        }
-
-        // Refresh options after action
-        if (result.action !== 'navigate') {
-          const prompts = getPromptsForPage(currentRoute, challengeTab)
-          setCurrentOptions(prompts)
-        }
-      } else {
-        addMessage('zarlo', result.message || "I didn't catch that. Try saying something like 'log a $500 deal with John' or 'complete my first task'.")
-        setCurrentOptions([
-          { id: 'voice_retry', label: 'Try voice again' },
-          { id: 'voice_help', label: 'What can I say?' }
-        ])
-      }
-    } catch (err) {
-      console.error('Voice processing error:', err)
-      addMessage('zarlo', "Something went wrong processing that. Let's try again.")
-    } finally {
-      setVoiceProcessing(false)
-    }
-  }
-
-  const handleVoiceHelp = () => {
-    addMessage('zarlo', `Here's what you can say:
-
-**Deals:**
-• "Log a $500 deal with John"
-• "Add a new lead from LinkedIn"
-
-**Tasks:**
-• "Complete my first task"
-• "Add a task: follow up with Sarah"
-
-**Funnel:**
-• "Update awareness to 1000"
-• "Set nurture to 50 leads"
-
-**Stats:**
-• "What are my stats?"
-• "How's my pipeline?"
-
-**Notes:**
-• "Note: Great call with client today"`)
-    setCurrentOptions([
-      { id: 'voice_retry', label: 'Try voice command' },
-      { id: 'close', label: 'Got it' }
-    ])
-  }
-
   // ============================================
   // SOUTH MODE
   // ============================================
@@ -672,16 +600,6 @@ Now go make it happen. Your future self is counting on you.`)
     // Handle commitment setting
     if (option.id === 'commit') {
       showCommitmentSetting()
-      return
-    }
-
-    // Handle voice options
-    if (option.id === 'voice_retry') {
-      setShowVoiceInput(true)
-      return
-    }
-    if (option.id === 'voice_help') {
-      handleVoiceHelp()
       return
     }
 
@@ -968,14 +886,6 @@ That's it. No action required. Just awareness.`)
             <span className="zarlo-bug-icon">🐛</span>
             <span className="zarlo-bug-label">Bug?</span>
           </a>
-          <button
-            className={`zarlo-voice-toggle ${showVoiceInput ? 'active' : ''}`}
-            onClick={() => setShowVoiceInput(!showVoiceInput)}
-            disabled={voiceProcessing}
-            title="Voice command"
-          >
-            {voiceProcessing ? '...' : '🎤'}
-          </button>
           <button className="zarlo-close-btn" onClick={onClose}>×</button>
         </div>
       </div>
@@ -986,22 +896,10 @@ That's it. No action required. Just awareness.`)
         {messages.map(msg => (
           <ZarloMessage key={msg.id} message={msg} />
         ))}
-        {voiceProcessing && (
-          <div className="zarlo-message zarlo-message-zarlo">
-            <span className="zarlo-typing">Processing voice...</span>
-          </div>
-        )}
         <div ref={messagesEndRef} />
       </div>
 
-      {showVoiceInput && (
-        <ZarloVoiceInput
-          onResult={handleVoiceResult}
-          onClose={() => setShowVoiceInput(false)}
-        />
-      )}
-
-      {currentOptions.length > 0 && !showVoiceInput && (
+      {currentOptions.length > 0 && (
         <ZarloQuickReplies
           options={currentOptions}
           onSelect={handleOptionSelect}

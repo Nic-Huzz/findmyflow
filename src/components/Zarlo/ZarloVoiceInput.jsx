@@ -13,9 +13,12 @@ export default function ZarloVoiceInput({ userId, projectId, onResult, onFallbac
   const [error, setError] = useState(null)
   const recognitionRef = useRef(null)
 
-  // Check for browser support
+  // Check for browser support — WKWebView on iOS often lacks SpeechRecognition
   const isSupported = typeof window !== 'undefined' &&
     ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)
+
+  // If speech recognition isn't available, don't render the voice UI at all
+  if (!isSupported) return null
 
   useEffect(() => {
     // Cleanup on unmount
@@ -174,11 +177,6 @@ export default function ZarloVoiceInput({ userId, projectId, onResult, onFallbac
         </div>
       )}
 
-      {!isSupported && (
-        <p className="voice-unsupported">
-          Voice input requires Chrome, Safari, or Edge browser.
-        </p>
-      )}
     </div>
   )
 }

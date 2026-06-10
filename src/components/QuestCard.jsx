@@ -25,7 +25,6 @@ import GrandSlamDropdownInput from './GrandSlamDropdownInput'
 import ValidationResponsesInput from './ValidationResponsesInput'
 import ResponseCounterInput from './ResponseCounterInput'
 import { getCategoryColor } from '../lib/league/leagueConfig'
-import UpgradePrompt from './UpgradePrompt'
 import VoiceDropdown from './VoiceDropdown'
 
 // Recognise quest IDs that use the enhanced input
@@ -94,9 +93,6 @@ function QuestCard({
   completionCount = 0,
   // Pre-launch lock: grey out all non-flow quests
   prelaunchLocked = false,
-  // Payment gating
-  paidLocked = false,
-  onUpgrade = null,
   // Return path after flow completion (e.g. '/business')
   returnTo
 }) {
@@ -116,7 +112,6 @@ function QuestCard({
     locked ? 'locked' : '',
     justCompleted ? 'just-completed' : '',
     isPlanned ? 'planned' : '',
-    paidLocked ? 'paid-locked' : '',
     extraClass
   ].filter(Boolean).join(' ')
 
@@ -249,10 +244,6 @@ function QuestCard({
         </div>
       )}
 
-      {paidLocked && (
-        <UpgradePrompt onUpgrade={onUpgrade} />
-      )}
-
       {/* Locked due to prerequisite quest */}
       {!completed && locked && lockedPrerequisite && (
         <div className="quest-locked-message">
@@ -260,8 +251,8 @@ function QuestCard({
         </div>
       )}
 
-      {/* Quest input area - only show if not completed, not locked, and not paid-locked */}
-      {!completed && !locked && !paidLocked && (
+      {/* Quest input area - only show if not completed and not locked */}
+      {!completed && !locked && (
         <div className="quest-input-area">
           {quest.status === 'coming_soon' ? (
             <button className="quest-flow-btn coming-soon" disabled>

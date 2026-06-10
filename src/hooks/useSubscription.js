@@ -1,7 +1,7 @@
 /**
- * useSubscription — React hook for checking user payment status
+ * useSubscription — React hook for checking user subscription status
  *
- * Fetches once on mount, re-fetches on window focus (catches post-checkout return).
+ * Fetches once on mount, re-fetches on window focus.
  * Returns: { hasSubscription, loading, plan, refresh }
  */
 import { useState, useEffect, useCallback } from 'react'
@@ -32,7 +32,7 @@ export function useSubscription() {
     refresh()
   }, [refresh])
 
-  // Re-fetch on window focus (user returning from Stripe Checkout)
+  // Re-fetch on window focus
   useEffect(() => {
     const handleFocus = () => refresh()
     window.addEventListener('focus', handleFocus)

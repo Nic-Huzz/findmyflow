@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import useBusinessPageData from '../hooks/useBusinessPageData'
-import { useSubscription } from '../hooks/useSubscription'
-import { isPaidQuest } from '../lib/subscriptionService'
 import { supabase } from '../lib/supabaseClient'
 import { sanitizeText } from '../lib/sanitize'
 import { getScoringCategory } from '../lib/scoringCategories'
@@ -40,8 +38,6 @@ export default function BusinessPage() {
     stageProgressPct, nextQuest, completedStages,
     currentStageConfig, stageProgress, refreshData
   } = useBusinessPageData()
-
-  const { hasSubscription } = useSubscription()
 
   const [questInputs, setQuestInputs] = useState({})
   const [expandedLearnMore, setExpandedLearnMore] = useState({})
@@ -509,8 +505,6 @@ export default function BusinessPage() {
           </div>
           <div className="next-meta">
             {nextQuest.isExplainer ? 'Explainer' : nextQuest.type || 'Quest'}
-            {' • '}
-            {isPaidQuest(nextQuest) ? (hasSubscription ? 'Included' : 'Paid') : 'Free'}
           </div>
           {nextQuest.inputType === 'flow' ? (
             <a
@@ -541,8 +535,6 @@ export default function BusinessPage() {
           {stageQuests.map(quest => {
             const completed = isQuestCompleted(quest.id)
             const isFlow = quest.inputType === 'flow'
-            const paidQuest = isPaidQuest(quest)
-            const paidLocked = paidQuest && !hasSubscription
             const isExpanded = expandedLearnMore[quest.id]
 
             return (
@@ -563,8 +555,6 @@ export default function BusinessPage() {
                       ) : (
                         <>
                           {quest.isExplainer ? 'Explainer' : quest.type || 'Quest'}
-                          {' \u00B7 '}
-                          {paidLocked ? 'Paid' : paidQuest ? 'Included' : 'Free'}
                         </>
                       )}
                     </div>
@@ -608,7 +598,6 @@ export default function BusinessPage() {
                       progress={null}
                       projectStage={activeStageTab}
                       userId={user?.id}
-                      paidLocked={paidLocked}
                       justCompleted={justCompletedQuestId === quest.id}
                       returnTo="/business"
                     />

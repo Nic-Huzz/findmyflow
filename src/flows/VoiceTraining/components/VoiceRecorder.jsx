@@ -9,10 +9,8 @@
  * - Fallback message if speech recognition unavailable
  */
 import { useState, useRef, useEffect } from 'react'
+import { isSpeechRecognitionAvailable } from '../../../lib/platform'
 import './VoiceRecorder.css'
-
-// Check if speech recognition is available
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 
 export default function VoiceRecorder({
   onTranscript,
@@ -21,9 +19,10 @@ export default function VoiceRecorder({
   disabled = false
 }) {
   const [isRecording, setIsRecording] = useState(false)
-  const [isSupported, setIsSupported] = useState(true)
+  const [isSupported, setIsSupported] = useState(isSpeechRecognitionAvailable())
   const [interimTranscript, setInterimTranscript] = useState('')
   const [error, setError] = useState(null)
+  const [textFallback, setTextFallback] = useState('')
   const recognitionRef = useRef(null)
   const audioContextRef = useRef(null)
   const analyserRef = useRef(null)
@@ -39,13 +38,14 @@ export default function VoiceRecorder({
   useEffect(() => { isRecordingRef.current = isRecording }, [isRecording])
 
   useEffect(() => {
-    if (!SpeechRecognition) {
+    if (!isSpeechRecognitionAvailable()) {
       setIsSupported(false)
       return
     }
 
     // Initialize speech recognition once
-    const recognition = new SpeechRecognition()
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition
+    const recognition = new SR()
     recognition.continuous = true
     recognition.interimResults = true
     recognition.lang = 'en-US'
@@ -156,7 +156,8 @@ export default function VoiceRecorder({
 
         draw()
       } catch (err) {
-        console.error('Error starting visualization:', err)
+        // getUserMedia may not be available in WKWebView — silently skip visualization
+        console.warn('Audio visualization unavailable:', err.message)
       }
     }
 
@@ -204,12 +205,24 @@ export default function VoiceRecorder({
     }
   }
 
+  // Text fallback handler for unsupported environments
+  const handleTextFallback = (e) => {
+    setTextFallback(e.target.value)
+    onTranscript(e.target.value)
+  }
+
   if (!isSupported) {
     return (
       <div className="vr-unsupported">
-        <span className="vr-unsupported-icon">🎤</span>
-        <p>Voice recording is not supported in your browser.</p>
-        <p className="vr-unsupported-hint">Try using Chrome, Edge, or Safari for voice input.</p>
+        <p className="vr-unsupported-hint">Voice input is not available on this device. Type your response below.</p>
+        <textarea
+          className="vr-text-fallback"
+          value={textFallback || existingText}
+          onChange={handleTextFallback}
+          placeholder={placeholder.replace('microphone', 'text box').replace('speaking', 'typing')}
+          rows={4}
+          disabled={disabled}
+        />
       </div>
     )
   }
