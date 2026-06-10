@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { onCreatorMatchingComplete } from '../lib/brain/autoPopulate'
 import './ExperienceCreatorFlow.css'
 
 // ── Data imports ──
@@ -324,17 +325,24 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
     try {
       const archId = chosenArchetype || dominantArchetype || 'workshop'
       const baseOffers = ARCHETYPE_OFFERS[archId] || ARCHETYPE_OFFERS.workshop
+      const suite = {
+        attraction: baseOffers.attraction?.name,
+        core: baseOffers.core?.name,
+        continuity: baseOffers.continuity?.name,
+      }
       const { error } = await supabase.from('experience_creator_selections').insert({
         user_id: user.id,
         selected_creators: [...selected],
         dominant_archetype: archId,
-        product_suite: {
-          attraction: baseOffers.attraction?.name,
-          core: baseOffers.core?.name,
-          continuity: baseOffers.continuity?.name,
-        },
+        product_suite: suite,
       })
       if (error) throw error
+      // Auto-populate brain
+      onCreatorMatchingComplete(user.id, {
+        dominantArchetype: archId,
+        selectedCreators: [...selected],
+        productSuite: suite,
+      })
       hapticSuccess()
       navigate('/create')
     } catch (err) {

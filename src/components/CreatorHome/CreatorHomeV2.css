@@ -209,6 +209,28 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
 .ch2-star-img img { width: 100%; height: 100%; object-fit: cover; }
 .ch2-star-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.35); }
 
+/* Sub-tabs (Playbook / Inner Game) */
+.ch2-subtabs {
+  display: flex; gap: 4px; padding: 4px 20px 14px;
+  position: relative; z-index: 2;
+}
+.ch2-subtab {
+  flex: 1; padding: 9px 0; text-align: center; cursor: pointer;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px; color: rgba(255,255,255,0.3);
+  font-family: inherit; transition: all 0.2s ease;
+}
+.ch2-subtab.active {
+  background: linear-gradient(135deg, rgba(94,23,235,0.12), rgba(233,162,59,0.08));
+  border-color: rgba(94,23,235,0.25);
+  color: rgba(255,255,255,0.85);
+}
+.ch2-subtab:first-child.active {
+  border-color: rgba(233,162,59,0.3);
+  background: linear-gradient(135deg, rgba(233,162,59,0.1), rgba(233,162,59,0.04));
+}
+
 /* Biz rows */
 .ch2-biz-row {
   display: flex; align-items: center; gap: 10px; padding: 8px 12px;
@@ -431,6 +453,58 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   .ch2-kpi-val { font-size: 20px; }
   .ch2-create-options { flex-direction: column; }
 }
+
+/* ═══ READINESS CARD ═══ */
+.ch2-readiness-layers {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-top: 10px;
+}
+.ch2-readiness-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.ch2-readiness-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  margin-top: 3px; flex-shrink: 0;
+}
+.ch2-readiness-green .ch2-readiness-dot { background: #10b981; box-shadow: 0 0 6px rgba(16,185,129,0.4); }
+.ch2-readiness-amber .ch2-readiness-dot { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+.ch2-readiness-red .ch2-readiness-dot { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.4); }
+.ch2-readiness-info { display: flex; flex-direction: column; gap: 2px; }
+.ch2-readiness-name {
+  font-size: 12px; font-weight: 700;
+  color: rgba(255,255,255,0.7);
+}
+.ch2-readiness-hint {
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  line-height: 1.4;
+}
+.ch2-readiness-verdict {
+  margin-top: 12px; padding: 10px 14px;
+  border-radius: 10px; font-size: 12px; font-weight: 700;
+  text-align: center; line-height: 1.4;
+}
+.ch2-readiness-ready {
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.15);
+  color: #10b981;
+}
+.ch2-readiness-building {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.5);
+}
+.ch2-readiness-retake {
+  display: block; width: 100%; margin-top: 10px;
+  padding: 8px; border-radius: 8px;
+  background: none; border: none;
+  font-size: 12px; font-weight: 600;
+  color: var(--purple); cursor: pointer;
+  text-align: center; font-family: inherit;
+}
+.ch2-readiness-retake:active { opacity: 0.7; }
 
 /* ═══ CREATOR DETAIL MODAL ═══ */
 .ch2-creator-overlay {

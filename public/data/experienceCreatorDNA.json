@@ -7,34 +7,34 @@
       "workRhythm": {
         "min": 1,
         "max": 5,
-        "label": "Marathon \u2194 Sprints"
+        "label": "Marathon ↔ Sprints"
       },
       "fuelType": {
         "min": 1,
         "max": 5,
-        "label": "Fire \u2194 Purpose"
+        "label": "Fire ↔ Purpose"
       },
       "orientation": {
         "min": 1,
         "max": 5,
-        "label": "Solo/Deep \u2194 Social/Enterprising"
+        "label": "Solo/Deep ↔ Social/Enterprising"
       },
       "knowledgeStyle": {
         "min": 1,
         "max": 5,
-        "label": "Analytical \u2194 Intuitive"
+        "label": "Analytical ↔ Intuitive"
       },
       "scaleApproach": {
         "min": 1,
         "max": 5,
-        "label": "Craft \u2194 Empire"
+        "label": "Craft ↔ Empire"
       }
     },
     "notes": "33 live experience creators. Sliders match the Play Profile quiz output (workRhythm, fuelType from user sliders; orientation, knowledgeStyle inferred from games; scaleApproach from user slider). Full 221-profile archive at public/data/archived/experienceCreatorDNA-221-full.json",
     "blowUpPatterns": {
       "book_crystallization": {
         "description": "Codified their method into a book that crystallized years of practice into a shareable format",
-        "count": 12,
+        "count": 10,
         "examples": "Ram Dass, Priya Parker, Vishen Lakhiani"
       },
       "oprah_amplification": {
@@ -83,7 +83,7 @@
       "The experience gets more embodied over time, not less"
     ],
     "blowUpStats": {
-      "median_years_to_blowup": 14,
+      "median_years_to_blowup": 16,
       "fastest": {
         "name": "Larry Harvey",
         "years": 0,
@@ -94,8 +94,44 @@
         "years": 44,
         "note": "44 years of clinical work before documentary"
       },
-      "most_common_pattern": "book_crystallization (12 of 32)",
+      "most_common_pattern": "book_crystallization (10 of 32)",
       "most_common_bridge": "Oprah (5 of 32)"
+    },
+    "blowUpEngines": {
+      "note": "Engines are vehicles for the format change, not personality types. Bridge is an accelerator, not a standalone engine.",
+      "category_creation": {
+        "first_event": {
+          "count": 4,
+          "avgYears": 1.75,
+          "examples": "Larry Harvey, Radha Agrawal, Jeff Krasno, Meghan Pappenheim"
+        },
+        "institution": {
+          "count": 2,
+          "avgYears": 14,
+          "examples": "Jack Kornfield, Sri Sri Ravi Shankar"
+        }
+      },
+      "content_vehicle": {
+        "count": 10,
+        "avgYears": 21.3,
+        "examples": "Gabor Mate, Jay Shetty, Esther Perel, Tony Robbins"
+      },
+      "making_it_portable": {
+        "organic": {
+          "count": 8,
+          "avgYears": 21.75,
+          "examples": "Ram Dass, Wim Hof, Priya Parker, Gabrielle Roth"
+        },
+        "bridge_amplified": {
+          "count": 7,
+          "avgYears": 15.4,
+          "examples": "Eckhart Tolle, Deepak Chopra, Gabby Bernstein"
+        }
+      },
+      "uncategorized": {
+        "count": 1,
+        "note": "Phil Jackson - achievement proof"
+      }
     }
   },
   "profiles": [
@@ -111,16 +147,6 @@
       "bio": "The Zen Master who won 11 NBA championships by teaching millionaire athletes to meditate and brought sacred rituals into locker rooms.",
       "oneLiner": "The team that pays attention to this moment wins the most games.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Players with massive egos wouldn't pass the ball",
-            "content": "Michael Jordan was scoring 37 points per game but the Bulls kept losing in the playoffs. Star players were hogging the ball and playing hero basketball instead of team basketball."
-          },
-          {
-            "title": "Solution: Used Zen meditation to quiet egos and create flow",
-            "content": "Jackson had millionaire athletes sit in darkness and meditate before games. He taught them to surrender individual glory for collective consciousness, which led to 6 championships with the Bulls."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Too many coaching philosophies competing in his head",
@@ -149,6 +175,16 @@
           {
             "title": "Solution: Made meditation mandatory team meetings, not optional spiritual practice",
             "content": "He framed sitting meditation as team strategy sessions, not personal development. Players had to attend because it was basketball preparation, then experienced the benefits without admitting they liked 'spiritual stuff.'"
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Players with massive egos wouldn't pass the ball",
+            "content": "Michael Jordan was scoring 37 points per game but the Bulls kept losing in the playoffs. Star players were hogging the ball and playing hero basketball instead of team basketball."
+          },
+          {
+            "title": "Solution: Used Zen meditation to quiet egos and create flow",
+            "content": "Jackson had millionaire athletes sit in darkness and meditate before games. He taught them to surrender individual glory for collective consciousness, which led to 6 championships with the Bulls."
           }
         ]
       },
@@ -189,7 +225,25 @@
       "blowUpPatterns": [
         "achievement_proof"
       ],
-      "yearsToBlowUp": 24
+      "yearsToBlowUp": 24,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Invented mindful basketball, merging Zen Buddhism with triangle offense"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "11 NBA championships with global media coverage"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Methods require his personal presence, though mindful coaching concepts spread"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Michael Jordan's stardom and Bulls championships"
+      }
     },
     {
       "name": "Tenzin Palmo",
@@ -203,16 +257,6 @@
       "bio": "A London fishmonger's daughter who spent 12 years alone in a Himalayan cave to prove women could achieve enlightenment.",
       "oneLiner": "The cave was the easy part - changing tradition was harder.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Male Buddhist teachers said women couldn't achieve enlightenment",
-            "content": "After traveling to India at age 20, Tenzin Palmo was told by multiple Tibetan lamas that the female body was a 'lower rebirth' and she'd need to be reborn as a man to achieve high realization."
-          },
-          {
-            "title": "Solution: Spent 12 years in solo cave retreat to prove them wrong",
-            "content": "She found a cave at 13,000 feet and meditated alone for 12 years, never lying down, sleeping in a wooden box. Her achievement forced the tradition to acknowledge women's spiritual capacity."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Torn between becoming a traditional nun or revolutionary practitioner",
@@ -241,6 +285,16 @@
           {
             "title": "Solution: Used recognition from male teachers as validation metric",
             "content": "When high Tibetan lamas began acknowledging her realization and asking her to teach, she knew she had succeeded. The ultimate measure was that the same tradition that excluded women now invited her to train the next generation."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Male Buddhist teachers said women couldn't achieve enlightenment",
+            "content": "After traveling to India at age 20, Tenzin Palmo was told by multiple Tibetan lamas that the female body was a 'lower rebirth' and she'd need to be reborn as a man to achieve high realization."
+          },
+          {
+            "title": "Solution: Spent 12 years in solo cave retreat to prove them wrong",
+            "content": "She found a cave at 13,000 feet and meditated alone for 12 years, never lying down, sleeping in a wooden box. Her achievement forced the tradition to acknowledge women's spiritual capacity."
           }
         ]
       },
@@ -282,7 +336,25 @@
         "book_crystallization",
         "extreme_commitment"
       ],
-      "yearsToBlowUp": 34
+      "yearsToBlowUp": 34,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Pioneered women's capability in intensive Tibetan Buddhist practice"
+        },
+        "capture": {
+          "strength": "starting",
+          "evidence": "Cave in the Snow book brought attention, but known mainly to serious practitioners"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Created nunnery model but authority rests on extreme personal achievement"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Vicki Mackenzie's book"
+      }
     },
     {
       "name": "Gabor Mate",
@@ -296,16 +368,6 @@
       "bio": "The addiction doctor who spent 12 years with Vancouver's most hopeless addicts asking 'why the pain?' instead of 'why the addiction?'",
       "oneLiner": "Not why the addiction, but why the pain.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Traditional addiction treatment wasn't working for Vancouver's worst cases",
-            "content": "As a doctor in Vancouver's Downtown Eastside, Gabor Mate watched the same heroin addicts cycle through detox programs repeatedly. The medical model of treating addiction as a brain disease was failing his patients."
-          },
-          {
-            "title": "Solution: Started asking about childhood trauma instead of drug use",
-            "content": "Mate began every appointment asking 'What happened to you?' instead of 'What's wrong with you?' He discovered that 100% of the women and 90% of the men had severe childhood trauma histories."
-          }
-        ],
         "1": [
           {
             "title": "Problem: No evidence that trauma-focused addiction treatment would work",
@@ -334,6 +396,16 @@
           {
             "title": "Solution: Monetized the insights through books and corporate speaking",
             "content": "He realized that his trauma insights applied beyond addiction to corporate stress, parenting, and general mental health. His Downtown Eastside experience became valuable content for middle-class audiences willing to pay for workshops and books."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Traditional addiction treatment wasn't working for Vancouver's worst cases",
+            "content": "As a doctor in Vancouver's Downtown Eastside, Gabor Mate watched the same heroin addicts cycle through detox programs repeatedly. The medical model of treating addiction as a brain disease was failing his patients."
+          },
+          {
+            "title": "Solution: Started asking about childhood trauma instead of drug use",
+            "content": "Mate began every appointment asking 'What happened to you?' instead of 'What's wrong with you?' He discovered that 100% of the women and 90% of the men had severe childhood trauma histories."
           }
         ]
       },
@@ -375,7 +447,25 @@
         "film_documentary",
         "viral_content"
       ],
-      "yearsToBlowUp": 44
+      "yearsToBlowUp": 44,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Invented trauma-as-root-cause model of addiction"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Documentary Wisdom of Trauma 2M views in 6 days"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Certifications, books, repeatable trauma-informed protocols taught by others"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Documentary platform"
+      }
     },
     {
       "name": "Tony Robbins",
@@ -389,16 +479,6 @@
       "bio": "A janitor's son who revolutionized therapy by making 10,000 people at once walk on fire and transform their lives in arenas.",
       "oneLiner": "Change your state, change your life.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Traditional therapy took years and only helped one person at a time",
-            "content": "As a young man studying NLP and therapy techniques, Robbins was frustrated that breakthrough change took months or years of weekly sessions. He wanted to create rapid transformation for more people simultaneously."
-          },
-          {
-            "title": "Solution: Created mass intervention events using fire walking as a breakthrough tool",
-            "content": "Robbins developed 4-day seminars where thousands of people walked on fire together, creating peak state experiences that generated rapid psychological shifts. His events now serve 10,000+ people at once."
-          }
-        ],
         "1": [
           {
             "title": "Problem: People doubted that fire walking was safe or effective for personal change",
@@ -427,6 +507,16 @@
           {
             "title": "Solution: Used success stories and celebrity endorsements to build social proof",
             "content": "He showcased testimonials from business leaders and celebrities who had done his events, making fire walking seem like what successful people do for breakthrough performance rather than a fringe spiritual practice."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Traditional therapy took years and only helped one person at a time",
+            "content": "As a young man studying NLP and therapy techniques, Robbins was frustrated that breakthrough change took months or years of weekly sessions. He wanted to create rapid transformation for more people simultaneously."
+          },
+          {
+            "title": "Solution: Created mass intervention events using fire walking as a breakthrough tool",
+            "content": "Robbins developed 4-day seminars where thousands of people walked on fire together, creating peak state experiences that generated rapid psychological shifts. His events now serve 10,000+ people at once."
           }
         ]
       },
@@ -474,7 +564,25 @@
       "blowUpPatterns": [
         "mass_media"
       ],
-      "yearsToBlowUp": 12
+      "yearsToBlowUp": 12,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Applied existing NLP techniques in new mass-event format"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Personal Power infomercial reached 10M+ households"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Robbins-Madanes Training certifies thousands of Strategic Intervention Coaches who deliver his methodology independently"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Infomercial TV format"
+      }
     },
     {
       "name": "Wim Hof",
@@ -488,16 +596,6 @@
       "bio": "The Iceman who climbed Everest in shorts and proved through science that breathing and cold can control the immune system.",
       "oneLiner": "Breathe and get cold.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Scientists dismissed cold exposure and breathing as pseudoscience",
-            "content": "For decades, Wim Hof claimed he could control his immune system through cold exposure and breathing, but the medical community rejected his claims as impossible since the autonomic nervous system was considered involuntary."
-          },
-          {
-            "title": "Solution: Submitted to controlled laboratory studies at universities",
-            "content": "Hof worked with researchers at Radboud University who injected him with endotoxin and measured his immune response. He trained 12 volunteers in his method, and all showed immune system control, proving his techniques worked scientifically."
-          }
-        ],
         "1": [
           {
             "title": "Problem: No one believed his extreme cold feats were replicable by regular people",
@@ -526,6 +624,16 @@
           {
             "title": "Solution: Used inflammation markers and cold tolerance times as success metrics",
             "content": "He worked with researchers to measure inflammatory response to endotoxin injection and tracked students' ability to maintain core body temperature during cold exposure. These became the standard metrics for his training programs."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Scientists dismissed cold exposure and breathing as pseudoscience",
+            "content": "For decades, Wim Hof claimed he could control his immune system through cold exposure and breathing, but the medical community rejected his claims as impossible since the autonomic nervous system was considered involuntary."
+          },
+          {
+            "title": "Solution: Submitted to controlled laboratory studies at universities",
+            "content": "Hof worked with researchers at Radboud University who injected him with endotoxin and measured his immune response. He trained 12 volunteers in his method, and all showed immune system control, proving his techniques worked scientifically."
           }
         ]
       },
@@ -566,7 +674,25 @@
       "blowUpPatterns": [
         "scientific_validation"
       ],
-      "yearsToBlowUp": 34
+      "yearsToBlowUp": 34,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Scientifically-validated breathing + cold exposure system"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "PNAS study, millions learning through apps and courses"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Method fully codified, replicable, teachable, instructor certification exists"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "2014 PNAS publication"
+      }
     },
     {
       "name": "Esther Perel",
@@ -580,16 +706,6 @@
       "bio": "The therapist who broke confidentiality taboos by recording real couples therapy sessions for millions to hear as podcasts.",
       "oneLiner": "The quality of your relationships determines the quality of your life.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Private therapy insights couldn't help the millions struggling with relationships",
-            "content": "As a couples therapist, Esther Perel was helping individual couples but knew that millions of people needed relationship guidance they couldn't access through traditional therapy due to cost, stigma, or availability."
-          },
-          {
-            "title": "Solution: Recorded real therapy sessions and published them as podcast episodes",
-            "content": "Perel launched 'Where Should We Begin?' featuring actual couples therapy sessions, allowing millions to hear real relationship problems being worked through. The podcast became one of the most popular therapy shows ever."
-          }
-        ],
         "1": [
           {
             "title": "Problem: No way to know if therapy podcasts would actually help listeners",
@@ -618,6 +734,16 @@
           {
             "title": "Solution: Created multiple revenue streams from therapy expertise",
             "content": "She built a business around podcast sponsorships, online courses, corporate workshops, and book deals, all leveraging her therapy insights. This allowed her to earn more while serving millions instead of dozens of people."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Private therapy insights couldn't help the millions struggling with relationships",
+            "content": "As a couples therapist, Esther Perel was helping individual couples but knew that millions of people needed relationship guidance they couldn't access through traditional therapy due to cost, stigma, or availability."
+          },
+          {
+            "title": "Solution: Recorded real therapy sessions and published them as podcast episodes",
+            "content": "Perel launched 'Where Should We Begin?' featuring actual couples therapy sessions, allowing millions to hear real relationship problems being worked through. The podcast became one of the most popular therapy shows ever."
           }
         ]
       },
@@ -657,7 +783,26 @@
       ],
       "blowUpPatterns": [
         "new_media_vehicle"
-      ]
+      ],
+      "yearsToBlowUp": 25,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Invented therapeutic podcasting, recording real couples sessions publicly"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Podcast became one of most popular therapy shows ever"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Podcast format teachable but her clinical depth is core"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Podcast platform"
+      }
     },
     {
       "name": "Priya Parker",
@@ -671,16 +816,6 @@
       "bio": "A conflict mediator who moved from war zones to boardrooms, proving that how you gather people is itself leadership.",
       "oneLiner": "How you gather matters more than why you gather.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Corporate meetings were less functional than peace negotiations in war zones",
-            "content": "After years facilitating dialogue between warring factions, Priya Parker was hired by corporations and discovered their leadership meetings were more dysfunctional than peace talks between enemies in actual conflicts."
-          },
-          {
-            "title": "Solution: Applied conflict resolution techniques to corporate gatherings",
-            "content": "Parker brought war zone facilitation methods into boardrooms, teaching executives how to have difficult conversations and make decisions together. Her approach transformed how companies conduct meetings and strategic sessions."
-          }
-        ],
         "1": [
           {
             "title": "Problem: No evidence that conflict mediation skills would work in corporate environments",
@@ -709,6 +844,16 @@
           {
             "title": "Solution: Used diagnostic assessments that revealed meeting dysfunction objectively",
             "content": "She created evaluation tools that measured meeting effectiveness and decision quality, giving executives data-driven evidence of their gathering problems. The objective metrics made it easier for leaders to request her help without admitting personal failure."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Corporate meetings were less functional than peace negotiations in war zones",
+            "content": "After years facilitating dialogue between warring factions, Priya Parker was hired by corporations and discovered their leadership meetings were more dysfunctional than peace talks between enemies in actual conflicts."
+          },
+          {
+            "title": "Solution: Applied conflict resolution techniques to corporate gatherings",
+            "content": "Parker brought war zone facilitation methods into boardrooms, teaching executives how to have difficult conversations and make decisions together. Her approach transformed how companies conduct meetings and strategic sessions."
           }
         ]
       },
@@ -749,7 +894,25 @@
       "blowUpPatterns": [
         "book_crystallization"
       ],
-      "yearsToBlowUp": 16
+      "yearsToBlowUp": 16,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Invented gathering facilitation as leadership practice"
+        },
+        "capture": {
+          "strength": "starting",
+          "evidence": "Book is bestseller but remains primarily within professional circles"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Workshops and Art of Gathering teach frameworks other facilitators use"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "2018 book publication"
+      }
     },
     {
       "name": "Jay Shetty",
@@ -763,16 +926,6 @@
       "bio": "A former Hindu monk who became Will Smith's spiritual adviser and translated ancient wisdom for the social media generation.",
       "oneLiner": "Think like a monk in a modern world.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Ancient wisdom teachings weren't reaching the social media generation",
-            "content": "Jay Shetty saw that powerful insights from his monk training were stuck in traditional formats like books and lectures, while young people were getting their guidance from influencers and short-form content online."
-          },
-          {
-            "title": "Solution: Translated 3,000-year-old wisdom into viral social media content",
-            "content": "Shetty created Instagram posts, YouTube videos, and TikToks that packaged ancient Vedic principles into modern, shareable formats. His content reached millions of young people who would never pick up traditional spiritual texts."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Torn between staying a monk and returning to help modern world",
@@ -801,6 +954,16 @@
           {
             "title": "Solution: Created value-first business model focused on service over profit",
             "content": "He built his business by giving away most content for free and monetizing through books, courses, and speaking that genuinely helped people transform their lives. The service-first approach aligned with monk principles while creating sustainable income."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Ancient wisdom teachings weren't reaching the social media generation",
+            "content": "Jay Shetty saw that powerful insights from his monk training were stuck in traditional formats like books and lectures, while young people were getting their guidance from influencers and short-form content online."
+          },
+          {
+            "title": "Solution: Translated 3,000-year-old wisdom into viral social media content",
+            "content": "Shetty created Instagram posts, YouTube videos, and TikToks that packaged ancient Vedic principles into modern, shareable formats. His content reached millions of young people who would never pick up traditional spiritual texts."
           }
         ]
       },
@@ -842,7 +1005,25 @@
         "viral_content",
         "new_media_vehicle"
       ],
-      "yearsToBlowUp": 9
+      "yearsToBlowUp": 9,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Packaged existing monk teachings in new social media format"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "2016 viral video 300M views, massive podcast, bestselling books"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Teachings codified in books, courses, podcast, replicable by others"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "2016 Facebook video algorithm"
+      }
     },
     {
       "name": "Gabby Bernstein",
@@ -856,16 +1037,6 @@
       "bio": "A cocaine-addicted nightclub publicist who got sober at 25 and became Oprah's chosen next-generation spiritual teacher.",
       "oneLiner": "The universe has your back.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: How to Transform Personal Rock Bottom into Credible Teaching Platform",
-            "content": "After hitting rock bottom with cocaine addiction at 25, Gabby faced the challenge of how someone with zero spiritual credentials could teach ancient wisdom. Traditional spiritual teachers had decades of study and pristine backgrounds, while she was a nightclub publicist with a drug problem."
-          },
-          {
-            "title": "Solution: Made Recovery the Credential and Vulnerability the Authority",
-            "content": "Instead of hiding her past, Gabby made her recovery journey the core of her teaching authority. She openly shared her addiction story in workshops and on social media, positioning herself as proof that spiritual transformation works for anyone, making ancient teachings accessible to people who would never enter a traditional spiritual space."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Too Many Spiritual Modalities to Choose From",
@@ -894,6 +1065,16 @@
           {
             "title": "Solution: Used Social Media and Nightlife Marketing Energy",
             "content": "Gabby applied her publicist skills to spiritual teaching, using Instagram, Twitter, and Facebook to create buzz around her workshops like she used to promote club events. She made spiritual practice look fun, stylish, and socially desirable rather than serious and austere."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: How to Transform Personal Rock Bottom into Credible Teaching Platform",
+            "content": "After hitting rock bottom with cocaine addiction at 25, Gabby faced the challenge of how someone with zero spiritual credentials could teach ancient wisdom. Traditional spiritual teachers had decades of study and pristine backgrounds, while she was a nightclub publicist with a drug problem."
+          },
+          {
+            "title": "Solution: Made Recovery the Credential and Vulnerability the Authority",
+            "content": "Instead of hiding her past, Gabby made her recovery journey the core of her teaching authority. She openly shared her addiction story in workshops and on social media, positioning herself as proof that spiritual transformation works for anyone, making ancient teachings accessible to people who would never enter a traditional spiritual space."
           }
         ]
       },
@@ -934,7 +1115,25 @@
       "blowUpPatterns": [
         "oprah_amplification"
       ],
-      "yearsToBlowUp": 8
+      "yearsToBlowUp": 8,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Applied A Course in Miracles to young professional audiences"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Oprah SuperSoul 100, bestselling books, arena events"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "ACIM framework codified, certifications exist, systematic programs"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Oprah SuperSoul 100"
+      }
     },
     {
       "name": "Eckhart Tolle",
@@ -948,16 +1147,6 @@
       "bio": "A suicidal graduate student who experienced sudden awakening and wrote The Power of Now, teaching presence to millions globally.",
       "oneLiner": "The power is in the now.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: How to Share Profound Awakening Experience Without Sounding Delusional",
-            "content": "After his sudden spiritual awakening at 29, Eckhart faced the challenge of communicating his transformative experience to others without appearing mentally unstable. He had no formal spiritual training or credentials to back up his insights."
-          },
-          {
-            "title": "Solution: Focused on Universal Present-Moment Awareness Rather Than Personal Story",
-            "content": "Instead of centering his teaching on his dramatic awakening story, Eckhart focused entirely on the practical experience of present-moment awareness that anyone could access. He made the teaching about the student's direct experience rather than his personal transformation."
-          }
-        ],
         "2": [
           {
             "title": "Problem: How to Structure Ineffable Awakening into Teachable Content",
@@ -986,6 +1175,16 @@
           {
             "title": "Solution: Let Word-of-Mouth Build Organically Through Transformative Results",
             "content": "Rather than pushing for publicity, Eckhart focused entirely on the depth of transformation in small groups and individual sessions. Students began referring others, and eventually The Power of Now found its way to Oprah through genuine grassroots recommendation rather than marketing."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: How to Share Profound Awakening Experience Without Sounding Delusional",
+            "content": "After his sudden spiritual awakening at 29, Eckhart faced the challenge of communicating his transformative experience to others without appearing mentally unstable. He had no formal spiritual training or credentials to back up his insights."
+          },
+          {
+            "title": "Solution: Focused on Universal Present-Moment Awareness Rather Than Personal Story",
+            "content": "Instead of centering his teaching on his dramatic awakening story, Eckhart focused entirely on the practical experience of present-moment awareness that anyone could access. He made the teaching about the student's direct experience rather than his personal transformation."
           }
         ]
       },
@@ -1026,7 +1225,25 @@
       "blowUpPatterns": [
         "oprah_amplification"
       ],
-      "yearsToBlowUp": 20
+      "yearsToBlowUp": 20,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Simplified non-dual awareness, present-moment focus crystallized accessibly"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Oprah 10-week webcast 35M participants, millions of book sales"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Books, teachings, guided meditations widely taught by others"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Oprah's 2008 webcast"
+      }
     },
     {
       "name": "Deepak Chopra",
@@ -1040,14 +1257,14 @@
       "bio": "An endocrinologist who left Western medicine to merge quantum physics with ancient Ayurveda, becoming wellness royalty.",
       "oneLiner": "You are not in the world, the world is in you.",
       "stageStories": {
-        "general": [
+        "1": [
           {
-            "title": "Problem: How to Leave Prestigious Medical Career Without Losing Credibility",
-            "content": "As a successful endocrinologist with a thriving practice, Deepak faced the challenge of transitioning to alternative wellness without appearing to abandon legitimate medicine for pseudoscience. His medical colleagues viewed his interest in Ayurveda and consciousness as professional suicide."
+            "title": "Problem: Uncertain if Western Patients Would Accept Eastern Medical Philosophy",
+            "content": "While working as an endocrinologist, Deepak questioned whether his patients would be open to Ayurvedic approaches that seemed completely contrary to Western medical training. He worried about professional backlash and patient skepticism."
           },
           {
-            "title": "Solution: Bridged Western Medicine with Ancient Wisdom Using Scientific Language",
-            "content": "Deepak maintained his medical credentials while introducing Ayurvedic concepts through the lens of modern science, particularly quantum physics. He positioned himself as expanding medicine rather than abandoning it, creating a new category of 'integrative medicine' that honored both traditions."
+            "title": "Solution: Started Integrating Meditation with Traditional Treatment Plans",
+            "content": "He began carefully introducing meditation and mind-body techniques alongside conventional treatment, measuring patient outcomes and satisfaction. When patients showed improved results and expressed enthusiasm for the holistic approach, he knew there was demand for integrated medicine."
           }
         ],
         "4": [
@@ -1070,14 +1287,14 @@
             "content": "He packaged traditional Ayurvedic principles using quantum physics terminology and modern wellness language, making ancient practices feel cutting-edge rather than outdated. This attracted educated Western audiences who wanted both scientific validity and spiritual depth."
           }
         ],
-        "1": [
+        "general": [
           {
-            "title": "Problem: Uncertain if Western Patients Would Accept Eastern Medical Philosophy",
-            "content": "While working as an endocrinologist, Deepak questioned whether his patients would be open to Ayurvedic approaches that seemed completely contrary to Western medical training. He worried about professional backlash and patient skepticism."
+            "title": "Problem: How to Leave Prestigious Medical Career Without Losing Credibility",
+            "content": "As a successful endocrinologist with a thriving practice, Deepak faced the challenge of transitioning to alternative wellness without appearing to abandon legitimate medicine for pseudoscience. His medical colleagues viewed his interest in Ayurveda and consciousness as professional suicide."
           },
           {
-            "title": "Solution: Started Integrating Meditation with Traditional Treatment Plans",
-            "content": "He began carefully introducing meditation and mind-body techniques alongside conventional treatment, measuring patient outcomes and satisfaction. When patients showed improved results and expressed enthusiasm for the holistic approach, he knew there was demand for integrated medicine."
+            "title": "Solution: Bridged Western Medicine with Ancient Wisdom Using Scientific Language",
+            "content": "Deepak maintained his medical credentials while introducing Ayurvedic concepts through the lens of modern science, particularly quantum physics. He positioned himself as expanding medicine rather than abandoning it, creating a new category of 'integrative medicine' that honored both traditions."
           }
         ]
       },
@@ -1119,7 +1336,25 @@
         "oprah_amplification",
         "book_crystallization"
       ],
-      "yearsToBlowUp": 23
+      "yearsToBlowUp": 23,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Bridged Ayurveda and quantum physics terminology for Western audiences"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Oprah appearance made Ageless Body #1 bestseller, wellness empire"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Ayurveda framework ancient and portable, courses and certifications teach his methods"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "1993 Oprah appearance"
+      }
     },
     {
       "name": "Jack Kornfield",
@@ -1133,14 +1368,14 @@
       "bio": "A Peace Corps volunteer turned Buddhist monk who brought mindfulness from Thai monasteries to American psychotherapy.",
       "oneLiner": "After the ecstasy, the laundry.",
       "stageStories": {
-        "general": [
+        "0": [
           {
-            "title": "Problem: How to Translate Monastery Buddhism for American Psychology Patients",
-            "content": "After spending years as a Buddhist monk in Thai monasteries, Jack faced the challenge of making intensive meditation practices relevant for Western therapy clients who weren't interested in becoming monks. Traditional Buddhist teaching methods didn't fit American psychological frameworks."
+            "title": "Problem: Too Many Buddhist Traditions and Psychology Schools to Choose From",
+            "content": "With training in multiple Buddhist traditions (Theravada, Zen, Tibetan) plus Western psychology, Jack was overwhelmed by the various approaches he could teach. Each tradition had different techniques and philosophies that could conflict with each other."
           },
           {
-            "title": "Solution: Integrated Mindfulness with Western Psychotherapy Techniques",
-            "content": "Jack combined his monastic training with his psychology doctorate, creating a new approach that used Buddhist mindfulness practices within familiar therapeutic contexts. He made meditation a tool for psychological healing rather than religious practice."
+            "title": "Solution: Chose Theravada Mindfulness as Core Foundation",
+            "content": "Jack focused primarily on Theravada mindfulness meditation as his teaching foundation because it was most compatible with Western psychological approaches. He used insights from other traditions to enrich this core rather than trying to teach everything equally."
           }
         ],
         "2": [
@@ -1153,16 +1388,6 @@
             "content": "He developed weekend and week-long retreats that maintained the depth and rigor of monastery practice while accommodating Western schedules. Students could progress through increasingly intensive experiences without leaving their lives behind."
           }
         ],
-        "0": [
-          {
-            "title": "Problem: Too Many Buddhist Traditions and Psychology Schools to Choose From",
-            "content": "With training in multiple Buddhist traditions (Theravada, Zen, Tibetan) plus Western psychology, Jack was overwhelmed by the various approaches he could teach. Each tradition had different techniques and philosophies that could conflict with each other."
-          },
-          {
-            "title": "Solution: Chose Theravada Mindfulness as Core Foundation",
-            "content": "Jack focused primarily on Theravada mindfulness meditation as his teaching foundation because it was most compatible with Western psychological approaches. He used insights from other traditions to enrich this core rather than trying to teach everything equally."
-          }
-        ],
         "3": [
           {
             "title": "Problem: How to Test if Monastery Practices Would Work in Therapy Settings",
@@ -1171,6 +1396,16 @@
           {
             "title": "Solution: Started Integrating Mindfulness into Clinical Practice Gradually",
             "content": "He began introducing simple mindfulness exercises to therapy clients, carefully monitoring their responses and outcomes. When clients consistently reported reduced anxiety and increased self-awareness, he developed more structured mindfulness-based therapy protocols."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: How to Translate Monastery Buddhism for American Psychology Patients",
+            "content": "After spending years as a Buddhist monk in Thai monasteries, Jack faced the challenge of making intensive meditation practices relevant for Western therapy clients who weren't interested in becoming monks. Traditional Buddhist teaching methods didn't fit American psychological frameworks."
+          },
+          {
+            "title": "Solution: Integrated Mindfulness with Western Psychotherapy Techniques",
+            "content": "Jack combined his monastic training with his psychology doctorate, creating a new approach that used Buddhist mindfulness practices within familiar therapeutic contexts. He made meditation a tool for psychological healing rather than religious practice."
           }
         ]
       },
@@ -1211,7 +1446,25 @@
       "blowUpPatterns": [
         "institution_creation"
       ],
-      "yearsToBlowUp": 8
+      "yearsToBlowUp": 8,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Integrated Western psychology with Theravada Buddhism, creating mindfulness-based therapy"
+        },
+        "capture": {
+          "strength": "starting",
+          "evidence": "IMS retreats reach hundreds, books thousands, known primarily within meditation communities"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Mindfulness-based cognitive therapy widely taught, foundational to modern interventions"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": false,
+        "bridge": null
+      }
     },
     {
       "name": "Sam Harris",
@@ -1225,16 +1478,6 @@
       "bio": "A neuroscientist and atheist who champions meditation without religion, making mindfulness intellectually respectable.",
       "oneLiner": "Spirituality without superstition is possible.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: How to Promote Meditation Without Religious Baggage to Skeptical Scientists",
-            "content": "As a neuroscientist and prominent atheist, Sam faced the challenge of advocating for meditation practices that were traditionally embedded in religious contexts. His academic and atheist communities were deeply suspicious of anything that seemed spiritual or supernatural."
-          },
-          {
-            "title": "Solution: Framed Meditation as Neuroscience and Rational Spirituality",
-            "content": "Sam stripped meditation of all religious language and positioned it purely as neuroscience-backed consciousness training. He used brain imaging studies and rational arguments to make meditation intellectually respectable for scientists and skeptics."
-          }
-        ],
         "1": [
           {
             "title": "Problem: Uncertain if Atheist Audience Would Accept Meditation and Mindfulness",
@@ -1243,6 +1486,16 @@
           {
             "title": "Solution: Surveyed Audience and Found Hidden Interest in Consciousness Exploration",
             "content": "Through his blog and speaking events, Sam discovered that many atheists and scientists were privately interested in consciousness and meditation but had no secular framework to explore them. This validation led him to develop his secular meditation teachings and Waking Up app."
+          }
+        ],
+        "2": [
+          {
+            "title": "Problem: How to Structure Secular Meditation Without Traditional Buddhist Framework",
+            "content": "Traditional meditation instruction relied heavily on Buddhist concepts like karma, rebirth, and the Four Noble Truths, but Sam needed to create equally effective instruction using only rational, secular concepts. He had to rebuild meditation pedagogy from scratch."
+          },
+          {
+            "title": "Solution: Built Curriculum Around Consciousness and Self-Inquiry",
+            "content": "Sam structured his meditation teaching around direct investigation of consciousness and the illusion of the self, using philosophical inquiry and neuroscience rather than Buddhist doctrine. This created a coherent secular path that maintained the transformative power of traditional practices."
           }
         ],
         "4": [
@@ -1255,14 +1508,14 @@
             "content": "He launched Waking Up with a higher price point than typical meditation apps but offered substantial free content and need-based free subscriptions. This attracted serious practitioners while maintaining accessibility, generating over $20 million in revenue."
           }
         ],
-        "2": [
+        "general": [
           {
-            "title": "Problem: How to Structure Secular Meditation Without Traditional Buddhist Framework",
-            "content": "Traditional meditation instruction relied heavily on Buddhist concepts like karma, rebirth, and the Four Noble Truths, but Sam needed to create equally effective instruction using only rational, secular concepts. He had to rebuild meditation pedagogy from scratch."
+            "title": "Problem: How to Promote Meditation Without Religious Baggage to Skeptical Scientists",
+            "content": "As a neuroscientist and prominent atheist, Sam faced the challenge of advocating for meditation practices that were traditionally embedded in religious contexts. His academic and atheist communities were deeply suspicious of anything that seemed spiritual or supernatural."
           },
           {
-            "title": "Solution: Built Curriculum Around Consciousness and Self-Inquiry",
-            "content": "Sam structured his meditation teaching around direct investigation of consciousness and the illusion of the self, using philosophical inquiry and neuroscience rather than Buddhist doctrine. This created a coherent secular path that maintained the transformative power of traditional practices."
+            "title": "Solution: Framed Meditation as Neuroscience and Rational Spirituality",
+            "content": "Sam stripped meditation of all religious language and positioned it purely as neuroscience-backed consciousness training. He used brain imaging studies and rational arguments to make meditation intellectually respectable for scientists and skeptics."
           }
         ]
       },
@@ -1304,7 +1557,25 @@
         "book_crystallization",
         "achievement_proof"
       ],
-      "yearsToBlowUp": 17
+      "yearsToBlowUp": 17,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Stripped religious language from meditation, repackaged as neuroscience"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "The End of Faith won PEN Award, Waking Up app hundreds of thousands"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "App-based meditation fully scalable, secular framework documented"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Book award and PEN recognition"
+      }
     },
     {
       "name": "Thich Nhat Hanh",
@@ -1318,14 +1589,14 @@
       "bio": "A Vietnamese monk who survived war by creating mindful living practices, coining 'engaged Buddhism' for modern life.",
       "oneLiner": "Walk as if your feet are kissing the earth.",
       "stageStories": {
-        "general": [
+        "0": [
           {
-            "title": "Problem: How to Maintain Buddhist Practice While Responding to Vietnam War Crisis",
-            "content": "During the Vietnam War, Thich Nhat Hanh faced the challenge of whether to maintain traditional monastery life focused on personal liberation or engage with the urgent suffering around him. Traditional Buddhism emphasized detachment from worldly affairs."
+            "title": "Problem: Too Many Urgent Needs During Wartime to Focus Teaching",
+            "content": "During the Vietnam War, Thich Nhat Hanh was pulled in many directions - direct relief work, peace activism, traditional teaching, and caring for orphans and victims. He struggled to decide which area deserved his primary focus."
           },
           {
-            "title": "Solution: Created 'Engaged Buddhism' Combining Meditation with Social Action",
-            "content": "He developed a new approach called 'engaged Buddhism' that applied mindfulness practices directly to social action and humanitarian work. This allowed him to maintain deep spiritual practice while actively helping war victims and working for peace."
+            "title": "Solution: Integrated All Activities Under 'Engaged Buddhism' Framework",
+            "content": "Rather than choosing between contemplative practice and social action, he made social engagement itself a form of Buddhist practice. This allowed him to address urgent needs while maintaining spiritual depth and creating a coherent teaching approach."
           }
         ],
         "2": [
@@ -1338,16 +1609,6 @@
             "content": "He created simple practices like mindful walking, mindful eating, and mindful breathing that could be done anywhere without special conditions. These 'interbeing' practices transformed ordinary activities into opportunities for awakening."
           }
         ],
-        "0": [
-          {
-            "title": "Problem: Too Many Urgent Needs During Wartime to Focus Teaching",
-            "content": "During the Vietnam War, Thich Nhat Hanh was pulled in many directions - direct relief work, peace activism, traditional teaching, and caring for orphans and victims. He struggled to decide which area deserved his primary focus."
-          },
-          {
-            "title": "Solution: Integrated All Activities Under 'Engaged Buddhism' Framework",
-            "content": "Rather than choosing between contemplative practice and social action, he made social engagement itself a form of Buddhist practice. This allowed him to address urgent needs while maintaining spiritual depth and creating a coherent teaching approach."
-          }
-        ],
         "6": [
           {
             "title": "Problem: How to Reach Western Audiences with Vietnamese Buddhist Teachings",
@@ -1356,6 +1617,16 @@
           {
             "title": "Solution: Focused on Simple, Universal Practices Anyone Could Access",
             "content": "He developed workshops around basic practices like mindful breathing and walking that required no special knowledge or cultural background. His simple, poetic teaching style and emphasis on peace attracted Western audiences seeking alternatives to more intense spiritual approaches."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: How to Maintain Buddhist Practice While Responding to Vietnam War Crisis",
+            "content": "During the Vietnam War, Thich Nhat Hanh faced the challenge of whether to maintain traditional monastery life focused on personal liberation or engage with the urgent suffering around him. Traditional Buddhism emphasized detachment from worldly affairs."
+          },
+          {
+            "title": "Solution: Created 'Engaged Buddhism' Combining Meditation with Social Action",
+            "content": "He developed a new approach called 'engaged Buddhism' that applied mindfulness practices directly to social action and humanitarian work. This allowed him to maintain deep spiritual practice while actively helping war victims and working for peace."
           }
         ]
       },
@@ -1396,7 +1667,25 @@
       "blowUpPatterns": [
         "achievement_proof"
       ],
-      "yearsToBlowUp": 25
+      "yearsToBlowUp": 25,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Invented engaged Buddhism, merging contemplative practice with social action"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "MLK Nobel nomination, global book distribution, mainstream mindfulness recognition"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Mindful walking, eating, breathing widely taught, engaged Buddhism replicable"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "MLK's 1967 Nobel Prize nomination"
+      }
     },
     {
       "name": "Seane Corn",
@@ -1410,26 +1699,6 @@
       "bio": "A trauma survivor who transformed yoga from physical practice into revolutionary tool for healing and social justice.",
       "oneLiner": "Your issues are in your tissues.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: How to Transform Personal Trauma into Teaching Authority Without Retraumatizing",
-            "content": "As a survivor of childhood sexual abuse and addiction, Seane faced the challenge of using her trauma healing journey as teaching material without constantly reopening wounds or making her classes therapy sessions rather than yoga instruction."
-          },
-          {
-            "title": "Solution: Created 'Trauma-Informed Yoga' Linking Body Awareness to Healing",
-            "content": "Seane developed teaching methods that addressed trauma through body-based yoga practices rather than talk therapy, creating safe containers for students to process their own experiences. She made trauma healing accessible through physical practice while maintaining professional boundaries."
-          }
-        ],
-        "5": [
-          {
-            "title": "Problem: How to Differentiate Trauma-Informed Yoga from Regular Yoga Classes",
-            "content": "The yoga market was saturated with physical fitness classes, and Seane needed to position her trauma-informed approach as distinctly valuable without scaring away students who just wanted exercise. She had to package deep healing work accessibly."
-          },
-          {
-            "title": "Solution: Branded 'Revolution of the Soul' Combining Yoga with Social Justice",
-            "content": "She created workshops and trainings called 'Off the Mat, Into the World' that combined trauma-informed yoga with social activism, making her offerings about both personal healing and social change. This attracted students seeking meaning beyond physical practice."
-          }
-        ],
         "1": [
           {
             "title": "Problem: Uncertain if Yoga Students Wanted to Address Trauma and Social Issues",
@@ -1448,6 +1717,26 @@
           {
             "title": "Solution: Partnered with Therapists for Small Group Pilot Programs",
             "content": "She collaborated with licensed trauma therapists to co-facilitate small workshops, carefully monitoring student responses and refining techniques based on professional feedback. This safe testing environment allowed her to develop effective protocols before teaching independently."
+          }
+        ],
+        "5": [
+          {
+            "title": "Problem: How to Differentiate Trauma-Informed Yoga from Regular Yoga Classes",
+            "content": "The yoga market was saturated with physical fitness classes, and Seane needed to position her trauma-informed approach as distinctly valuable without scaring away students who just wanted exercise. She had to package deep healing work accessibly."
+          },
+          {
+            "title": "Solution: Branded 'Revolution of the Soul' Combining Yoga with Social Justice",
+            "content": "She created workshops and trainings called 'Off the Mat, Into the World' that combined trauma-informed yoga with social activism, making her offerings about both personal healing and social change. This attracted students seeking meaning beyond physical practice."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: How to Transform Personal Trauma into Teaching Authority Without Retraumatizing",
+            "content": "As a survivor of childhood sexual abuse and addiction, Seane faced the challenge of using her trauma healing journey as teaching material without constantly reopening wounds or making her classes therapy sessions rather than yoga instruction."
+          },
+          {
+            "title": "Solution: Created 'Trauma-Informed Yoga' Linking Body Awareness to Healing",
+            "content": "Seane developed teaching methods that addressed trauma through body-based yoga practices rather than talk therapy, creating safe containers for students to process their own experiences. She made trauma healing accessible through physical practice while maintaining professional boundaries."
           }
         ]
       },
@@ -1488,7 +1777,25 @@
       "blowUpPatterns": [
         "media_feature"
       ],
-      "yearsToBlowUp": 13
+      "yearsToBlowUp": 13,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Invented trauma-informed yoga integrating body-based trauma work into vinyasa"
+        },
+        "capture": {
+          "strength": "starting",
+          "evidence": "Yoga Journal cover gave national recognition, limited mainstream beyond yoga world"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Off the Mat trains teachers but her authority comes from personal journey"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Yoga Journal cover"
+      }
     },
     {
       "name": "Joe Dispenza",
@@ -1502,14 +1809,14 @@
       "bio": "A chiropractor who studied spontaneous remissions and teaches people to rewire their brains through meditation and visualization.",
       "oneLiner": "Become greater than your environment, body, and time.",
       "stageStories": {
-        "general": [
+        "1": [
           {
-            "title": "Problem: How to Transition from Chiropractic Practice to Teaching Consciousness Transformation",
-            "content": "As a successful chiropractor, Joe faced the challenge of shifting from hands-on physical healing to teaching people to transform their brains and bodies through meditation and visualization. His chiropractic patients expected physical manipulation, not consciousness work."
+            "title": "Problem: Uncertain if People Would Believe Meditation Could Create Physical Healing",
+            "content": "Joe's claims about using meditation to heal diseases and transform personality seemed extraordinary, and he worried that audiences would dismiss them as pseudoscience or wishful thinking. The medical community was particularly skeptical."
           },
           {
-            "title": "Solution: Used Personal Healing Story and Scientific Research to Bridge Fields",
-            "content": "Joe shared his own story of healing spinal injuries through meditation and visualization, then backed up the approach with neuroscience research on neuroplasticity and epigenetics. This gave him credibility to teach consciousness-based healing while maintaining his medical background."
+            "title": "Solution: Collected Brain Scans and Testimonials from Workshop Participants",
+            "content": "He began systematically collecting brain imaging data, blood work, and health markers from workshop participants, documenting measurable changes. When he could show brain scans demonstrating increased coherence and participants sharing verified healing stories, his credibility grew rapidly."
           }
         ],
         "2": [
@@ -1522,16 +1829,6 @@
             "content": "He created weekend workshops that taught the science behind neuroplasticity in the morning and guided participants through specific meditations in the afternoon, allowing people to understand and immediately apply the concepts. This structure made complex science accessible and actionable."
           }
         ],
-        "1": [
-          {
-            "title": "Problem: Uncertain if People Would Believe Meditation Could Create Physical Healing",
-            "content": "Joe's claims about using meditation to heal diseases and transform personality seemed extraordinary, and he worried that audiences would dismiss them as pseudoscience or wishful thinking. The medical community was particularly skeptical."
-          },
-          {
-            "title": "Solution: Collected Brain Scans and Testimonials from Workshop Participants",
-            "content": "He began systematically collecting brain imaging data, blood work, and health markers from workshop participants, documenting measurable changes. When he could show brain scans demonstrating increased coherence and participants sharing verified healing stories, his credibility grew rapidly."
-          }
-        ],
         "4": [
           {
             "title": "Problem: How to Price Consciousness Transformation Workshops for Mass Market",
@@ -1540,6 +1837,16 @@
           {
             "title": "Solution: Created Tiered Pricing from Online Courses to Week-Long Intensives",
             "content": "He developed multiple price points from $300 online courses to $2,000 week-long retreats, allowing people to start affordably and invest more as they experienced results. His highest-level programs command premium pricing because participants achieve documented transformations."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: How to Transition from Chiropractic Practice to Teaching Consciousness Transformation",
+            "content": "As a successful chiropractor, Joe faced the challenge of shifting from hands-on physical healing to teaching people to transform their brains and bodies through meditation and visualization. His chiropractic patients expected physical manipulation, not consciousness work."
+          },
+          {
+            "title": "Solution: Used Personal Healing Story and Scientific Research to Bridge Fields",
+            "content": "Joe shared his own story of healing spinal injuries through meditation and visualization, then backed up the approach with neuroscience research on neuroplasticity and epigenetics. This gave him credibility to teach consciousness-based healing while maintaining his medical background."
           }
         ]
       },
@@ -1580,7 +1887,25 @@
       "blowUpPatterns": [
         "film_documentary"
       ],
-      "yearsToBlowUp": 18
+      "yearsToBlowUp": 18,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Applied neuroscience language to meditation, repackaged as brain change technology"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "What the Bleep film, millions through online courses, 1000+ at intensives"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Meditation protocols codified and teachable, online courses scale to millions"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "2004 What the Bleep film"
+      }
     },
     {
       "name": "Aubrey Marcus",
@@ -1594,16 +1919,6 @@
       "bio": "A supplement entrepreneur who created Onnit and explores peak performance through psychedelics, breath, and ancient wisdom.",
       "oneLiner": "Own the day, own your life.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Supplement Industry Saturation",
-            "content": "The supplement market was flooded with generic protein powders and basic vitamins targeting only physical performance. Aubrey realized that existing companies were ignoring the mental, emotional, and spiritual aspects of peak performance that he'd experienced through psychedelics and breathwork."
-          },
-          {
-            "title": "Solution: Total Human Optimization",
-            "content": "He created Onnit with Alpha Brain, a nootropic targeting cognitive performance rather than just muscle building. By combining his personal experiences with plant medicines and ancient practices into supplement formulations, he carved out the 'total human optimization' category that generated over $100M in revenue."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Too Many Consciousness Paths",
@@ -1632,6 +1947,16 @@
           {
             "title": "Solution: Authentic Influence Strategy",
             "content": "He leveraged his friendship with Joe Rogan and other podcasters to authentically share his personal experiences with Alpha Brain rather than paying for ads. This organic endorsement strategy generated millions in sales and established Onnit as the trusted nootropics leader without traditional advertising costs."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Supplement Industry Saturation",
+            "content": "The supplement market was flooded with generic protein powders and basic vitamins targeting only physical performance. Aubrey realized that existing companies were ignoring the mental, emotional, and spiritual aspects of peak performance that he'd experienced through psychedelics and breathwork."
+          },
+          {
+            "title": "Solution: Total Human Optimization",
+            "content": "He created Onnit with Alpha Brain, a nootropic targeting cognitive performance rather than just muscle building. By combining his personal experiences with plant medicines and ancient practices into supplement formulations, he carved out the 'total human optimization' category that generated over $100M in revenue."
           }
         ]
       },
@@ -1673,7 +1998,25 @@
         "product_launch",
         "bridge_person"
       ],
-      "yearsToBlowUp": 3
+      "yearsToBlowUp": 3,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Created total human optimization positioning combining supplements and ancient wisdom"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Major podcast, Joe Rogan endorsement, $100M+ Onnit revenue"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Alpha Brain product, Fit for Service certification, codified protocols"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Joe Rogan friendship and podcast"
+      }
     },
     {
       "name": "Ram Dass",
@@ -1687,16 +2030,6 @@
       "bio": "A Harvard psychologist who took LSD, found God in India, and taught an entire generation to 'be here now' until his death.",
       "oneLiner": "Be here now.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Academic Prison of Consciousness Research",
-            "content": "As Harvard psychology professor Richard Alpert, he was frustrated by the limitations of studying consciousness through traditional academic methods. His LSD research with Timothy Leary was generating profound insights but faced institutional resistance and eventual termination from the university."
-          },
-          {
-            "title": "Solution: Eastern Wisdom Integration",
-            "content": "After his Harvard dismissal, he traveled to India where his guru Neem Karoli Baba showed him how to integrate psychedelic insights with ancient spiritual practices. This fusion became the foundation for 'Be Here Now,' which sold over 2 million copies and launched the Western mindfulness movement."
-          }
-        ],
         "1": [
           {
             "title": "Problem: Psychedelic Insights Without Practical Application",
@@ -1725,6 +2058,16 @@
           {
             "title": "Solution: Community Feedback Loops",
             "content": "He launched 'Be Here Now' through grassroots distribution at spiritual centers and gatherings, using direct feedback from seekers to refine his message. The organic word-of-mouth growth and personal testimonials became his primary success metrics, proving impact through transformed lives rather than sales numbers."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Academic Prison of Consciousness Research",
+            "content": "As Harvard psychology professor Richard Alpert, he was frustrated by the limitations of studying consciousness through traditional academic methods. His LSD research with Timothy Leary was generating profound insights but faced institutional resistance and eventual termination from the university."
+          },
+          {
+            "title": "Solution: Eastern Wisdom Integration",
+            "content": "After his Harvard dismissal, he traveled to India where his guru Neem Karoli Baba showed him how to integrate psychedelic insights with ancient spiritual practices. This fusion became the foundation for 'Be Here Now,' which sold over 2 million copies and launched the Western mindfulness movement."
           }
         ]
       },
@@ -1765,7 +2108,25 @@
       "blowUpPatterns": [
         "book_crystallization"
       ],
-      "yearsToBlowUp": 13
+      "yearsToBlowUp": 13,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Bridged Eastern philosophy + Western psychology + psychedelic insights"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Be Here Now sold 2M+ copies, became spiritual bible"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Book format, meditation practices, organizational structures supporting thousands"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Harvard credentials + Timothy Leary association"
+      }
     },
     {
       "name": "Sadhguru",
@@ -1779,16 +2140,6 @@
       "bio": "A motorcycle-riding mystic who built a global yoga empire while making ancient yogic sciences accessible to modern seekers.",
       "oneLiner": "Inner engineering is the key to outer transformation.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Ancient Yogic Science Accessibility",
-            "content": "Sadhguru possessed profound knowledge of traditional yogic practices that could transform lives, but these teachings were typically reserved for serious spiritual seekers willing to spend years in ashrams. The modern world needed these tools but couldn't access them through traditional guru-disciple structures."
-          },
-          {
-            "title": "Solution: Systematic Spiritual Technology",
-            "content": "He developed Inner Engineering as a structured program that distilled thousands of years of yogic science into practical, secular formats. By presenting meditation and breathwork as 'technologies for wellbeing' rather than religious practices, he made ancient wisdom accessible to CEOs, athletes, and everyday people globally."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Overwhelming Yogic Possibilities",
@@ -1817,6 +2168,16 @@
           {
             "title": "Solution: Technology-Enhanced Transmission",
             "content": "He created a hybrid model combining live online sessions, recorded guided practices, and strategic in-person intensives. By training certified instructors and using high-quality video production, he preserved the energetic transmission while scaling Inner Engineering to over 7 million practitioners worldwide."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Ancient Yogic Science Accessibility",
+            "content": "Sadhguru possessed profound knowledge of traditional yogic practices that could transform lives, but these teachings were typically reserved for serious spiritual seekers willing to spend years in ashrams. The modern world needed these tools but couldn't access them through traditional guru-disciple structures."
+          },
+          {
+            "title": "Solution: Systematic Spiritual Technology",
+            "content": "He developed Inner Engineering as a structured program that distilled thousands of years of yogic science into practical, secular formats. By presenting meditation and breathwork as 'technologies for wellbeing' rather than religious practices, he made ancient wisdom accessible to CEOs, athletes, and everyday people globally."
           }
         ]
       },
@@ -1857,7 +2218,25 @@
       "blowUpPatterns": [
         "movement_campaign"
       ],
-      "yearsToBlowUp": 38
+      "yearsToBlowUp": 38,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Positioned ancient yogic practices as inner technology for modern CEOs"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "7M+ Inner Engineering practitioners, 11M+ YouTube subscribers"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Shambhavi Mahamudra certification, standardized curriculum, certified instructor network"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "YouTube algorithm and Rally for Rivers campaigns"
+      }
     },
     {
       "name": "Marianne Williamson",
@@ -1871,16 +2250,6 @@
       "bio": "A cocktail waitress turned spiritual teacher who brought A Course in Miracles to millions and ran for President twice.",
       "oneLiner": "Love is the only rational response to fear.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Spiritual Teachings Trapped in Religious Containers",
-            "content": "Marianne discovered 'A Course in Miracles' as a transformative spiritual text, but it was written in Christian terminology that alienated many seekers. As a former cocktail waitress with no religious authority, she needed to make these profound teachings accessible to mainstream audiences without formal credentials."
-          },
-          {
-            "title": "Solution: Love-Based Interpretation Revolution",
-            "content": "She translated the Course's complex metaphysical concepts into practical applications for relationships, career, and personal healing. Her lectures at the Philosophical Research Society grew from 12 people to packed auditoriums, proving that spiritual wisdom presented through personal storytelling and psychological insights could reach millions."
-          }
-        ],
         "1": [
           {
             "title": "Problem: Validating Spiritual Market Demand",
@@ -1909,6 +2278,16 @@
           {
             "title": "Solution: Sliding Scale Service Model",
             "content": "She created multiple access points - free community lectures, paid workshops, and higher-priced intensives for deeper work. By positioning her teachings as spiritual therapy that could replace years of traditional counseling, she justified premium pricing while maintaining free options for those who couldn't afford to pay."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Spiritual Teachings Trapped in Religious Containers",
+            "content": "Marianne discovered 'A Course in Miracles' as a transformative spiritual text, but it was written in Christian terminology that alienated many seekers. As a former cocktail waitress with no religious authority, she needed to make these profound teachings accessible to mainstream audiences without formal credentials."
+          },
+          {
+            "title": "Solution: Love-Based Interpretation Revolution",
+            "content": "She translated the Course's complex metaphysical concepts into practical applications for relationships, career, and personal healing. Her lectures at the Philosophical Research Society grew from 12 people to packed auditoriums, proving that spiritual wisdom presented through personal storytelling and psychological insights could reach millions."
           }
         ]
       },
@@ -1950,7 +2329,25 @@
         "oprah_amplification",
         "book_crystallization"
       ],
-      "yearsToBlowUp": 9
+      "yearsToBlowUp": 9,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Interpreted A Course in Miracles through practical psychological lens"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Oprah endorsement catapulted book to #1 NYT, major media presence"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Teachings personality-dependent, frameworks teachable but not fully codified"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Oprah dedicated full show to A Return to Love"
+      }
     },
     {
       "name": "Mooji",
@@ -1964,16 +2361,6 @@
       "bio": "A Jamaican-born street painter who found awakening in India and guides thousands to self-realization through simple inquiry.",
       "oneLiner": "You are the awareness in which all experience comes and goes.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Awakening Without Systematic Teaching Method",
-            "content": "After his profound awakening through Papaji's guidance, Mooji experienced the absolute truth of non-dual awareness but had no formal training in spiritual instruction. He needed to develop an authentic way to point others toward the same recognition without becoming another guru dispensing concepts and techniques."
-          },
-          {
-            "title": "Solution: Self-Inquiry Simplification",
-            "content": "He refined the traditional 'Who am I?' inquiry into accessible questions and direct pointing that anyone could follow. His approach stripped away complex spiritual practices, focusing entirely on recognizing the aware presence that observes all thoughts and experiences, making self-realization accessible through simple investigation."
-          }
-        ],
         "1": [
           {
             "title": "Problem: Validating Formless Teachings",
@@ -2002,6 +2389,16 @@
           {
             "title": "Solution: Authentic Expression Strategy",
             "content": "He spoke and taught exactly as he was, without spiritual personas or marketing polish, trusting that his authentic expression would naturally attract those resonating with truth. This genuine approach created organic word-of-mouth growth among serious seekers while filtering out those seeking entertainment rather than liberation."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Awakening Without Systematic Teaching Method",
+            "content": "After his profound awakening through Papaji's guidance, Mooji experienced the absolute truth of non-dual awareness but had no formal training in spiritual instruction. He needed to develop an authentic way to point others toward the same recognition without becoming another guru dispensing concepts and techniques."
+          },
+          {
+            "title": "Solution: Self-Inquiry Simplification",
+            "content": "He refined the traditional 'Who am I?' inquiry into accessible questions and direct pointing that anyone could follow. His approach stripped away complex spiritual practices, focusing entirely on recognizing the aware presence that observes all thoughts and experiences, making self-realization accessible through simple investigation."
           }
         ]
       },
@@ -2042,7 +2439,25 @@
       "blowUpPatterns": [
         "viral_content"
       ],
-      "yearsToBlowUp": 30
+      "yearsToBlowUp": 30,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Simplified traditional Who am I inquiry into radically accessible self-inquiry"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "1.8M total followers (840K YouTube, 480K Instagram, 460K Facebook), viral Invitation to Freedom video"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Direct inquiry transmissible but teaching power comes from his presence"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": false,
+        "bridge": null
+      }
     },
     {
       "name": "Yung Pueblo",
@@ -2056,16 +2471,6 @@
       "bio": "A former party-goer who found meditation, quit drinking, and builds healing communities through poetry and mindfulness.",
       "oneLiner": "Healing is returning to your original wholeness.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Bridging Party Culture and Spiritual Healing",
-            "content": "Diego Perez was trapped in a cycle of drinking, partying, and emotional numbing that represented millions of young people's relationship with mental health. He discovered meditation and plant-based healing but struggled to communicate these transformative tools to his peers who were still caught in destructive patterns like his former self."
-          },
-          {
-            "title": "Solution: Millennial-Accessible Healing Language",
-            "content": "He created the Yung Pueblo persona to share healing wisdom through Instagram poetry and relatable language that resonated with his generation. By combining ancient meditation practices with modern psychological insights presented through social media, he built a community of over 1 million followers seeking authentic healing approaches."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Multiple Healing Modalities to Choose From",
@@ -2094,6 +2499,16 @@
           {
             "title": "Solution: Healing Poetry Micro-Format",
             "content": "He developed a signature style of short, impactful poems that could be read in seconds but contemplated for hours. Each piece combined personal healing insights with universal wisdom, creating easily shareable content that introduced followers to deeper concepts they could explore further through his books and longer-form content."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Bridging Party Culture and Spiritual Healing",
+            "content": "Diego Perez was trapped in a cycle of drinking, partying, and emotional numbing that represented millions of young people's relationship with mental health. He discovered meditation and plant-based healing but struggled to communicate these transformative tools to his peers who were still caught in destructive patterns like his former self."
+          },
+          {
+            "title": "Solution: Millennial-Accessible Healing Language",
+            "content": "He created the Yung Pueblo persona to share healing wisdom through Instagram poetry and relatable language that resonated with his generation. By combining ancient meditation practices with modern psychological insights presented through social media, he built a community of over 1 million followers seeking authentic healing approaches."
           }
         ]
       },
@@ -2135,7 +2550,25 @@
         "viral_content",
         "new_media_vehicle"
       ],
-      "yearsToBlowUp": 4
+      "yearsToBlowUp": 4,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Applied meditation and healing through poetry format"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Viral Instagram poetry millions of followers, bestselling books"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Published books, structured online courses, community platforms"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Instagram algorithm"
+      }
     },
     {
       "name": "Sahara Rose",
@@ -2149,16 +2582,6 @@
       "bio": "A nutritionist who modernized Ayurveda for millennials through podcasts, combining ancient doshas with modern wellness.",
       "oneLiner": "You are your own guru.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Ancient Ayurveda for Modern Lifestyles",
-            "content": "Sahara discovered Ayurveda's transformative power for her own health but found traditional presentations too complex and culturally distant for her millennial peers. Classical Ayurvedic texts required extensive study and lifestyle changes that seemed impossible for busy young professionals seeking practical wellness solutions."
-          },
-          {
-            "title": "Solution: Millennial Ayurveda Translation",
-            "content": "She created accessible content that translated 5,000-year-old doshas, food combining, and seasonal living into practical guidance for modern life. Her podcast 'Highest Self' became the top spirituality show on iTunes by making ancient wisdom actionable for millennials through relatable examples and contemporary language."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Choosing Between Nutrition and Spirituality",
@@ -2187,6 +2610,16 @@
           {
             "title": "Solution: Podcast-First Authority Strategy",
             "content": "She launched 'Highest Self Podcast' to establish expertise by interviewing other wellness leaders and sharing Ayurvedic insights consistently. This content-first approach built authority and audience simultaneously, allowing her to become the go-to voice for 'millennial Ayurveda' before expanding into courses and books."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Ancient Ayurveda for Modern Lifestyles",
+            "content": "Sahara discovered Ayurveda's transformative power for her own health but found traditional presentations too complex and culturally distant for her millennial peers. Classical Ayurvedic texts required extensive study and lifestyle changes that seemed impossible for busy young professionals seeking practical wellness solutions."
+          },
+          {
+            "title": "Solution: Millennial Ayurveda Translation",
+            "content": "She created accessible content that translated 5,000-year-old doshas, food combining, and seasonal living into practical guidance for modern life. Her podcast 'Highest Self' became the top spirituality show on iTunes by making ancient wisdom actionable for millennials through relatable examples and contemporary language."
           }
         ]
       },
@@ -2228,7 +2661,25 @@
         "book_crystallization",
         "bridge_person"
       ],
-      "yearsToBlowUp": 4
+      "yearsToBlowUp": 4,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Translated 5000-year-old Ayurveda into millennial-accessible format"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Bestselling book with Chopra foreword, top iTunes podcast"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Certification programs, digital courses, Rose Gold Goddesses community"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Deepak Chopra endorsement"
+      }
     },
     {
       "name": "Sri Sri Ravi Shankar",
@@ -2242,16 +2693,6 @@
       "bio": "The founder of Art of Living who teaches breathing techniques to millions and mediates conflicts in war zones worldwide.",
       "oneLiner": "A smile is much more than just a facial expression.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Breathing Practices Limited to Ashram Settings",
-            "content": "Sri Sri discovered powerful breathing techniques during his spiritual training but these pranayama practices were traditionally taught only in serious ashram environments to dedicated spiritual seekers. He saw their potential to help stressed modern people but needed to adapt ancient techniques for contemporary urban lifestyles."
-          },
-          {
-            "title": "Solution: Art of Living Global Movement",
-            "content": "He systematized traditional breathing practices into the Sudarshan Kriya technique that could be taught in weekend workshops to busy professionals, students, and families. Art of Living programs have now reached over 370 million people in 156 countries, proving that ancient breathwork could scale globally when properly structured."
-          }
-        ],
         "2": [
           {
             "title": "Problem: Systematizing Spontaneous Spiritual Experiences",
@@ -2280,6 +2721,16 @@
           {
             "title": "Solution: Multi-Level Impact Assessment",
             "content": "Art of Living developed comprehensive tracking systems including participant surveys, scientific studies measuring physiological changes, and documentation of social impact in conflict resolution projects. They track everything from individual stress reduction to measurable peace-building outcomes in post-war regions, proving the scalable impact of breathing practices."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Breathing Practices Limited to Ashram Settings",
+            "content": "Sri Sri discovered powerful breathing techniques during his spiritual training but these pranayama practices were traditionally taught only in serious ashram environments to dedicated spiritual seekers. He saw their potential to help stressed modern people but needed to adapt ancient techniques for contemporary urban lifestyles."
+          },
+          {
+            "title": "Solution: Art of Living Global Movement",
+            "content": "He systematized traditional breathing practices into the Sudarshan Kriya technique that could be taught in weekend workshops to busy professionals, students, and families. Art of Living programs have now reached over 370 million people in 156 countries, proving that ancient breathwork could scale globally when properly structured."
           }
         ]
       },
@@ -2320,7 +2771,25 @@
       "blowUpPatterns": [
         "institution_scaling"
       ],
-      "yearsToBlowUp": 20
+      "yearsToBlowUp": 20,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Systematized traditional pranayama into teachable replicable protocols"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "370M+ people reached, 156 countries, research partnerships"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Sudarshan Kriya certification, standardized teaching, certified instructor network"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Scientific research collaboration"
+      }
     },
     {
       "name": "Vishen Lakhiani",
@@ -2334,16 +2803,6 @@
       "bio": "A tech entrepreneur who built Mindvalley into a personal growth empire, questioning traditional education and life rules.",
       "oneLiner": "Question the brules - bullshit rules that don't serve you.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Traditional Education Business Model",
-            "content": "Vishen recognized that conventional education was failing people, but creating an alternative learning platform seemed impossible without academic credentials. The personal development space was crowded with generic self-help content that didn't address real transformation."
-          },
-          {
-            "title": "Solution: Question Everything Approach",
-            "content": "He built Mindvalley by systematically questioning educational 'brules' - why learning had to be boring, why personal growth couldn't be scientific, why education had to follow traditional formats. This contrarian approach attracted millions seeking authentic transformation beyond conventional wisdom."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Too Many Personal Growth Ideas",
@@ -2372,6 +2831,16 @@
           {
             "title": "Solution: The 'Unfair Advantage' Positioning",
             "content": "He reframed consciousness work as 'life hacking' and 'upgrading your operating system,' using tech language that resonated with his audience. Programs promised specific outcomes like '10X productivity' and 'effortless success,' making spiritual growth feel like competitive advantage."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Traditional Education Business Model",
+            "content": "Vishen recognized that conventional education was failing people, but creating an alternative learning platform seemed impossible without academic credentials. The personal development space was crowded with generic self-help content that didn't address real transformation."
+          },
+          {
+            "title": "Solution: Question Everything Approach",
+            "content": "He built Mindvalley by systematically questioning educational 'brules' - why learning had to be boring, why personal growth couldn't be scientific, why education had to follow traditional formats. This contrarian approach attracted millions seeking authentic transformation beyond conventional wisdom."
           }
         ]
       },
@@ -2412,7 +2881,25 @@
       "blowUpPatterns": [
         "book_crystallization"
       ],
-      "yearsToBlowUp": 13
+      "yearsToBlowUp": 13,
+      "dimensions": {
+        "create": {
+          "strength": "starting",
+          "evidence": "Reframed personal development as questioning brules"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Bestselling author, millions through Mindvalley platform"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Structured Mindvalley courses, 6 Phase Meditation, frameworks others teach"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "NYT bestseller status"
+      }
     },
     {
       "name": "Michael Singer",
@@ -2426,16 +2913,6 @@
       "bio": "A spiritual seeker who built a billion-dollar software company while living as a modern-day hermit and meditation teacher.",
       "oneLiner": "Your inner peace is more important than anything happening around you.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Balancing Spiritual Practice with Business Success",
-            "content": "Michael faced the challenge of maintaining deep spiritual practice while building a software company. Traditional business advice conflicted with his commitment to non-attachment and present-moment awareness."
-          },
-          {
-            "title": "Solution: Surrender as Business Strategy",
-            "content": "He applied spiritual surrender principles to business decisions, letting go of ego-driven choices and following intuitive guidance. This led to unexpected opportunities like government contracts that grew his company to billion-dollar valuations while maintaining inner peace."
-          }
-        ],
         "1": [
           {
             "title": "Problem: Validating Software Without Market Research",
@@ -2464,6 +2941,16 @@
           {
             "title": "Solution: Flow State as Success Indicator",
             "content": "He measured success by how much ease and flow he experienced while running the business. When decisions created stress or resistance, he course-corrected; when business felt effortless and joyful, he knew he was aligned with deeper intelligence guiding the company's growth."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Balancing Spiritual Practice with Business Success",
+            "content": "Michael faced the challenge of maintaining deep spiritual practice while building a software company. Traditional business advice conflicted with his commitment to non-attachment and present-moment awareness."
+          },
+          {
+            "title": "Solution: Surrender as Business Strategy",
+            "content": "He applied spiritual surrender principles to business decisions, letting go of ego-driven choices and following intuitive guidance. This led to unexpected opportunities like government contracts that grew his company to billion-dollar valuations while maintaining inner peace."
           }
         ]
       },
@@ -2505,7 +2992,25 @@
         "oprah_amplification",
         "book_crystallization"
       ],
-      "yearsToBlowUp": 41
+      "yearsToBlowUp": 41,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Applied non-dual awareness to business decision-making"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Untethered Soul reached millions via Oprah Super Soul Sunday"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Teaching primarily through books and talks, spiritual transmission personality-dependent"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Oprah's Super Soul Sunday feature"
+      }
     },
     {
       "name": "Michael Beckwith",
@@ -2519,16 +3024,6 @@
       "bio": "A former drug dealer turned minister who founded Agape and teaches 'life visioning' to manifest higher purpose.",
       "oneLiner": "You are not going somewhere to get something, you're going somewhere to give something.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Transitioning from Destruction to Service",
-            "content": "After his drug dealing past, Michael struggled to find a legitimate path that could channel his street-smart intensity and leadership skills. Traditional career paths felt small compared to the transformation he'd experienced."
-          },
-          {
-            "title": "Solution: Life Visioning Ministry",
-            "content": "He created Agape as a 'trans-denominational' spiritual community that welcomed people from all backgrounds. By teaching life visioning - a practice of receiving guidance for your highest purpose - he helped others find their calling while building a thriving spiritual organization."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Too Many Ways to Serve",
@@ -2557,6 +3052,16 @@
           {
             "title": "Solution: Celebrity Spiritual Partnerships",
             "content": "He built relationships with conscious celebrities like Oprah and spiritual authors, creating events that felt more like concerts than church services. By partnering with recognized figures, he gave people permission to explore spirituality in a mainstream, credible context."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Transitioning from Destruction to Service",
+            "content": "After his drug dealing past, Michael struggled to find a legitimate path that could channel his street-smart intensity and leadership skills. Traditional career paths felt small compared to the transformation he'd experienced."
+          },
+          {
+            "title": "Solution: Life Visioning Ministry",
+            "content": "He created Agape as a 'trans-denominational' spiritual community that welcomed people from all backgrounds. By teaching life visioning - a practice of receiving guidance for your highest purpose - he helped others find their calling while building a thriving spiritual organization."
           }
         ]
       },
@@ -2596,7 +3101,26 @@
       ],
       "blowUpPatterns": [
         "film_documentary"
-      ]
+      ],
+      "yearsToBlowUp": 20,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Pioneered life visioning as practical spirituality tool"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Featured in The Secret, Agape congregation, major speaking presence"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "Life visioning practice taught by others, Agape programs, leadership training"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "The Secret documentary"
+      }
     },
     {
       "name": "Radha Agrawal",
@@ -2610,16 +3134,6 @@
       "bio": "The founder of Daybreaker who created sober morning dance parties, reimagining nightlife as conscious community building.",
       "oneLiner": "Life is a party and you're invited.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Nightlife Culture Misalignment",
-            "content": "Radha loved dancing and community but hated how traditional nightlife required alcohol and late nights that left people feeling depleted. She wanted the joy of dance parties without the negative side effects."
-          },
-          {
-            "title": "Solution: Morning Dance Revolution",
-            "content": "She created Daybreaker as alcohol-free morning dance parties that gave people the same high-energy community experience but aligned with wellness values. Starting at 6 AM, events attracted conscious professionals wanting to start their day with joy instead of ending it with regret."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Multiple Event Ideas Competing",
@@ -2648,6 +3162,16 @@
           {
             "title": "Solution: 'Life is a Party' Positioning",
             "content": "She marketed Daybreaker as exclusive access to your most vibrant self, emphasizing the natural high and genuine connections possible without substances. VIP packages, surprise performances, and beautiful venues made it feel like the most elevated party experience available."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Nightlife Culture Misalignment",
+            "content": "Radha loved dancing and community but hated how traditional nightlife required alcohol and late nights that left people feeling depleted. She wanted the joy of dance parties without the negative side effects."
+          },
+          {
+            "title": "Solution: Morning Dance Revolution",
+            "content": "She created Daybreaker as alcohol-free morning dance parties that gave people the same high-energy community experience but aligned with wellness values. Starting at 6 AM, events attracted conscious professionals wanting to start their day with joy instead of ending it with regret."
           }
         ]
       },
@@ -2689,7 +3213,25 @@
         "first_event",
         "institution_creation"
       ],
-      "yearsToBlowUp": 5
+      "yearsToBlowUp": 5,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Invented sober morning dance parties as conscious community building"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Daybreaker 30+ cities, viral movement, significant media coverage"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Event format replicable but requires her leadership and vision"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": false,
+        "bridge": null
+      }
     },
     {
       "name": "Meghan Pappenheim",
@@ -2703,16 +3245,6 @@
       "bio": "A New York native who co-founded The Yoga Barn and BaliSpirit Festival, turning Ubud into the global epicentre of yoga and wellness tourism.",
       "oneLiner": "Harmony with nature, people, and spirit.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Wellness Industry Low-Value Perception",
-            "content": "Meghan saw that wellness events were often positioned as budget-friendly or grassroots, which attracted price-sensitive customers but couldn't fund the high-quality experiences she envisioned. The industry lacked luxury positioning."
-          },
-          {
-            "title": "Solution: Luxury Wellness Category Creation",
-            "content": "She created ISSA events as premium wellness experiences with five-star accommodations, celebrity facilitators, and exclusive access. By positioning wellness as luxury lifestyle rather than alternative health, she attracted affluent clients willing to invest significantly in their transformation."
-          }
-        ],
         "1": [
           {
             "title": "Problem: Validating Luxury Wellness Market",
@@ -2741,6 +3273,16 @@
           {
             "title": "Solution: Curated Transformation Experiences",
             "content": "She created all-inclusive packages with private chefs, luxury accommodations, exclusive access to renowned teachers, and personalized integration support. The 'done-for-you transformation' positioning made busy executives feel they were getting maximum value for their limited time."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Wellness Industry Low-Value Perception",
+            "content": "Meghan saw that wellness events were often positioned as budget-friendly or grassroots, which attracted price-sensitive customers but couldn't fund the high-quality experiences she envisioned. The industry lacked luxury positioning."
+          },
+          {
+            "title": "Solution: Luxury Wellness Category Creation",
+            "content": "She created ISSA events as premium wellness experiences with five-star accommodations, celebrity facilitators, and exclusive access. By positioning wellness as luxury lifestyle rather than alternative health, she attracted affluent clients willing to invest significantly in their transformation."
           }
         ]
       },
@@ -2782,7 +3324,25 @@
         "first_event",
         "institution_creation"
       ],
-      "yearsToBlowUp": 1
+      "yearsToBlowUp": 1,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Created Yoga Barn (2007, now 25+ classes/day) and BaliSpirit Festival (2008), turning Ubud into a global wellness destination category"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "BaliSpirit Festival thousands from 60+ countries, wellness tourism influence"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Festival format can be replicated but curation is personality-dependent"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Bali as spiritual destination + luxury traveler networks"
+      }
     },
     {
       "name": "Jeff Krasno",
@@ -2796,16 +3356,6 @@
       "bio": "The founder of Wanderlust Festival who turned yoga from studio practice into massive outdoor celebration and digital platform.",
       "oneLiner": "Find your true north.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Yoga Limited to Studio Experience",
-            "content": "Jeff saw yoga trapped in small studio spaces reaching limited audiences, while the practice had potential for massive cultural impact. Traditional yoga business models couldn't scale the transformational experience."
-          },
-          {
-            "title": "Solution: Festival-Scale Yoga Revolution",
-            "content": "He created Wanderlust Festival to bring yoga outdoors with music, nature, and community celebration. By combining yoga with festival culture, he made the practice accessible to thousands simultaneously while creating sustainable business model through tickets, sponsorships, and merchandise."
-          }
-        ],
         "2": [
           {
             "title": "Problem: Structuring Multi-Day Yoga Experience",
@@ -2834,6 +3384,16 @@
           {
             "title": "Solution: Community Engagement Tracking",
             "content": "He measured success through post-festival community engagement - how many people started regular yoga practice, joined local studios, or attended future events. When 70% of participants reported maintaining practices six months later, he knew the festival was creating lasting change."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Yoga Limited to Studio Experience",
+            "content": "Jeff saw yoga trapped in small studio spaces reaching limited audiences, while the practice had potential for massive cultural impact. Traditional yoga business models couldn't scale the transformational experience."
+          },
+          {
+            "title": "Solution: Festival-Scale Yoga Revolution",
+            "content": "He created Wanderlust Festival to bring yoga outdoors with music, nature, and community celebration. By combining yoga with festival culture, he made the practice accessible to thousands simultaneously while creating sustainable business model through tickets, sponsorships, and merchandise."
           }
         ]
       },
@@ -2874,7 +3434,26 @@
       "blowUpPatterns": [
         "first_event",
         "institution_creation"
-      ]
+      ],
+      "yearsToBlowUp": 1,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Transformed yoga from studio practice into massive festival with music + mindfulness"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Wanderlust multi-city expansion, millions through digital platform"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "Festival format replicable but his curation and music expertise are key"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Music industry background + festival culture"
+      }
     },
     {
       "name": "Gabrielle Roth",
@@ -2888,16 +3467,6 @@
       "bio": "A dancer who created the 5Rhythms movement practice, teaching people to find healing and truth through ecstatic dance.",
       "oneLiner": "In many shamanic societies, if you came to a medicine person complaining of being disheartened, dispirited, or depressed, they would ask one of four questions: When did you stop dancing?",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Dance Therapy Stuck in Clinical Settings",
-            "content": "Gabrielle experienced profound healing through movement but saw dance therapy limited to clinical contexts with trained therapists. She wanted to make transformational dance accessible to anyone seeking healing and self-discovery."
-          },
-          {
-            "title": "Solution: 5Rhythms Universal Language",
-            "content": "She created 5Rhythms as a structured yet free-form practice anyone could access. By mapping five universal movement patterns - flowing, staccato, chaos, lyrical, stillness - she gave people a framework for self-guided healing through dance."
-          }
-        ],
         "0": [
           {
             "title": "Problem: Multiple Movement Healing Approaches",
@@ -2906,6 +3475,16 @@
           {
             "title": "Solution: Universal Rhythm Integration",
             "content": "She realized all effective movement practices contained five core rhythms that appeared across cultures and healing traditions. By focusing on these universal patterns, she created one system that incorporated the benefits of multiple approaches."
+          }
+        ],
+        "1": [
+          {
+            "title": "Problem: Validating Movement Without Words",
+            "content": "Traditional validation methods relied on verbal feedback, but Roth's work happened in non-verbal states where participants accessed healing beyond cognitive understanding. She needed ways to confirm the practice's effectiveness."
+          },
+          {
+            "title": "Solution: Body-Based Validation Signals",
+            "content": "She learned to read validation through participants' movement quality, energy shifts, and post-session integration. When people moved with more freedom and reported feeling 'more themselves,' she knew the practice was working regardless of what they could articulate."
           }
         ],
         "2": [
@@ -2918,14 +3497,14 @@
             "content": "She designed 5Rhythms as a 'map not territory' - providing enough structure to guide people into each rhythm while emphasizing that their personal expression was what mattered. This balance allowed for both instruction and authentic movement discovery."
           }
         ],
-        "1": [
+        "general": [
           {
-            "title": "Problem: Validating Movement Without Words",
-            "content": "Traditional validation methods relied on verbal feedback, but Roth's work happened in non-verbal states where participants accessed healing beyond cognitive understanding. She needed ways to confirm the practice's effectiveness."
+            "title": "Problem: Dance Therapy Stuck in Clinical Settings",
+            "content": "Gabrielle experienced profound healing through movement but saw dance therapy limited to clinical contexts with trained therapists. She wanted to make transformational dance accessible to anyone seeking healing and self-discovery."
           },
           {
-            "title": "Solution: Body-Based Validation Signals",
-            "content": "She learned to read validation through participants' movement quality, energy shifts, and post-session integration. When people moved with more freedom and reported feeling 'more themselves,' she knew the practice was working regardless of what they could articulate."
+            "title": "Solution: 5Rhythms Universal Language",
+            "content": "She created 5Rhythms as a structured yet free-form practice anyone could access. By mapping five universal movement patterns - flowing, staccato, chaos, lyrical, stillness - she gave people a framework for self-guided healing through dance."
           }
         ]
       },
@@ -2966,7 +3545,25 @@
       "blowUpPatterns": [
         "book_crystallization"
       ],
-      "yearsToBlowUp": 22
+      "yearsToBlowUp": 22,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Mapped five universal rhythms into systematized movement practice"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Maps to Ecstasy published, 245 certified teachers, workshops on five continents"
+        },
+        "portable": {
+          "strength": "strong",
+          "evidence": "5Rhythms framework, certification teacher training, codified in book"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": true,
+        "bridge": "Esalen Institute mentorship"
+      }
     },
     {
       "name": "Larry Harvey",
@@ -2980,16 +3577,6 @@
       "bio": "The founder of Burning Man who turned a beach bonfire into a desert utopia based on radical self-expression and gifting.",
       "oneLiner": "We don't have a product, we have a culture.",
       "stageStories": {
-        "general": [
-          {
-            "title": "Problem: Art Event Trapped in Commercial Framework",
-            "content": "Larry wanted to create authentic artistic community but found that traditional event models - selling tickets, sponsorships, vendor booths - corrupted the creative spirit he was trying to cultivate."
-          },
-          {
-            "title": "Solution: Gift Economy Experiment",
-            "content": "He built Burning Man on gifting principles where money couldn't buy anything except entry and basic necessities. This radical economic experiment created genuine community where people contributed their gifts freely, resulting in more creativity and connection than any commercial festival."
-          }
-        ],
         "4": [
           {
             "title": "Problem: Funding Art Without Commercializing It",
@@ -3018,6 +3605,16 @@
           {
             "title": "Solution: Cultural Impact Measurement",
             "content": "Harvey measured success through year-round community building - how many regional burns emerged, gift economy practices people maintained at home, and art projects inspired by the event. When Burning Man principles spread globally, he knew the cultural experiment was working."
+          }
+        ],
+        "general": [
+          {
+            "title": "Problem: Art Event Trapped in Commercial Framework",
+            "content": "Larry wanted to create authentic artistic community but found that traditional event models - selling tickets, sponsorships, vendor booths - corrupted the creative spirit he was trying to cultivate."
+          },
+          {
+            "title": "Solution: Gift Economy Experiment",
+            "content": "He built Burning Man on gifting principles where money couldn't buy anything except entry and basic necessities. This radical economic experiment created genuine community where people contributed their gifts freely, resulting in more creativity and connection than any commercial festival."
           }
         ]
       },
@@ -3058,7 +3655,25 @@
       "blowUpPatterns": [
         "first_event"
       ],
-      "yearsToBlowUp": 0
+      "yearsToBlowUp": 0,
+      "dimensions": {
+        "create": {
+          "strength": "strong",
+          "evidence": "Invented radical self-expression + gifting economy festival"
+        },
+        "capture": {
+          "strength": "strong",
+          "evidence": "Burning Man grew to 70,000+ participants, global cultural phenomenon"
+        },
+        "portable": {
+          "strength": "starting",
+          "evidence": "10 Principles codified but Burning Man is place-specific and community-dependent"
+        }
+      },
+      "bridgeAmplified": {
+        "flag": false,
+        "bridge": null
+      }
     }
   ]
 }

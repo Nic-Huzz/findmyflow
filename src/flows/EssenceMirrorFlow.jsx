@@ -19,6 +19,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { ESSENCE_ARCHETYPES, SUPERPOWER_ROUNDS, getArchetype, getArchetypesByIds } from '../data/essenceArchetypes'
+import { onEssenceMirrorComplete } from '../lib/brain/autoPopulate'
 
 // Emoji per archetype for card display
 const ARCHETYPE_EMOJI = {
@@ -380,6 +381,14 @@ export default function EssenceMirrorFlow() {
         .from('lead_flow_profiles')
         .insert({ ...essenceData, user_id: user.id, email: user.email, user_name: displayName })
       if (profileErr) console.error('lead_flow_profiles insert error:', profileErr)
+      // Auto-populate brain
+      const secondaryArch = getArchetype(getSecondary())
+      onEssenceMirrorComplete(user.id, {
+        primaryArchetype: primary?.name,
+        secondaryArchetype: secondaryArch?.name || null,
+        heroName: heroName,
+        avatarUrl: avatarGenerated !== 'skip' ? avatarGenerated : null,
+      })
       // Auto-create a Discovery Project so /7-day-challenge doesn't show empty state
       const { data: existingProject } = await supabase
         .from('user_projects')

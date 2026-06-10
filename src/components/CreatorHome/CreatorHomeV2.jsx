@@ -80,6 +80,7 @@ export default function CreatorHomeV2() {
   const userId = user?.id
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('identity')
+  const [identitySubTab, setIdentitySubTab] = useState('playbook')
   const [loading, setLoading] = useState(true)
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
   const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
@@ -127,12 +128,18 @@ export default function CreatorHomeV2() {
   const [assessment, setAssessment] = useState(null)
   const [payRentModel, setPayRentModel] = useState(null)
   const [remarkableAngle, setRemarkableAngle] = useState(null)
+  const [blowUpReadiness, setBlowUpReadiness] = useState(null)
   const [essenceAvatar, setEssenceAvatar] = useState(null)
   const [essenceName, setEssenceName] = useState(null)
   const [userSkills, setUserSkills] = useState([])
   const [userProblems, setUserProblems] = useState([])
   const [topFans, setTopFans] = useState([])
   const [movementXP, setMovementXP] = useState(0)
+
+  // Inner Game data
+  const [nervousSystemData, setNervousSystemData] = useState(null)
+  const [woundMapData, setWoundMapData] = useState(null)
+  const [limitingBeliefData, setLimitingBeliefData] = useState(null)
 
   // Set dark theme on body for BottomToolbar styling, clean up on unmount
   useEffect(() => {
@@ -198,6 +205,10 @@ export default function CreatorHomeV2() {
         { data: xpData },
         { data: skillsData },
         { data: problemsData },
+        { data: nsData },
+        { data: wmData },
+        { data: lbData },
+        { data: readinessData },
       ] = await Promise.all([
         supabase.from('scope_map_results').select('stage').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('experience_creator_selections').select('dominant_archetype, product_suite, selected_creators').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
@@ -210,6 +221,10 @@ export default function CreatorHomeV2() {
         supabase.from('quest_completions').select('points_earned').eq('user_id', userId).eq('quest_category', 'Movement'),
         supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'skills').eq('cluster_stage', 'final'),
         supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'problems').eq('cluster_stage', 'final'),
+        supabase.from('nervous_system_responses').select('nervous_system_impact_limit, nervous_system_income_limit, archetype').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+        supabase.from('quest_completions').select('id').eq('user_id', userId).eq('quest_id', 'wound_map').limit(1).maybeSingle(),
+        supabase.from('healing_compass_responses').select('id, created_at').eq('user_id', userId).eq('flow_version', 2).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+        supabase.from('blow_up_readiness').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
       ])
 
       setScopeResult(scope || null)
@@ -219,6 +234,10 @@ export default function CreatorHomeV2() {
       setPayRentModel(stageProgress?.pay_rent_model || null)
       setRemarkableAngle(remarkData || null)
       setMovementXP((xpData || []).reduce((sum, r) => sum + (r.points_earned || 0), 0))
+      setNervousSystemData(nsData || null)
+      setWoundMapData(wmData || null)
+      setLimitingBeliefData(lbData || null)
+      setBlowUpReadiness(readinessData || null)
       const allSkills = (skillsData || []).map(s => ({ label: s.cluster_label, fav: s.is_favourite }))
       const allProblems = (problemsData || []).map(p => ({ label: p.cluster_label, fav: p.is_favourite }))
       const hasFavSkills = allSkills.some(s => s.fav)
@@ -384,7 +403,14 @@ export default function CreatorHomeV2() {
                 </div>
               )}
 
-              <div className="ch2-id-divider" />
+              {/* Sub-tabs: Playbook / Inner Game */}
+              <div className="ch2-subtabs">
+                <button className={`ch2-subtab${identitySubTab === 'playbook' ? ' active' : ''}`} onClick={() => setIdentitySubTab('playbook')}>Playbook</button>
+                <button className={`ch2-subtab${identitySubTab === 'inner-game' ? ' active' : ''}`} onClick={() => setIdentitySubTab('inner-game')}>Inner Game</button>
+              </div>
+
+              {/* ═══ PLAYBOOK SUB-TAB ═══ */}
+              {identitySubTab === 'playbook' && <>
 
               {/* Blow Up Brand */}
               {remarkableAngle ? (
@@ -428,6 +454,64 @@ export default function CreatorHomeV2() {
                     <div className="ch2-locked-sub">What rule do you break? What's your unexpected combo?</div>
                     <div className="ch2-locked-cta">Find Your Edge →</div>
                   </div>
+                </div>
+              )}
+
+              {/* Readiness Card — shows after completing RemarkableFlow */}
+              {blowUpReadiness && (
+                <div className="ch2-id-section ch2-readiness-card" style={{ paddingTop: 14 }}>
+                  <div className="ch2-label">Your Readiness</div>
+                  <div className="ch2-readiness-layers">
+                    <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer1_status}`}>
+                      <span className="ch2-readiness-dot" />
+                      <div className="ch2-readiness-info">
+                        <span className="ch2-readiness-name">Distilled</span>
+                        <span className="ch2-readiness-hint">
+                          {blowUpReadiness.layer1_status === 'green'
+                            ? remarkableAngle?.extreme_action_plan || 'Your method is compressed'
+                            : 'Keep running experiences. Capture 3% after each.'}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer2_status}`}>
+                      <span className="ch2-readiness-dot" />
+                      <div className="ch2-readiness-info">
+                        <span className="ch2-readiness-name">Proven</span>
+                        <span className="ch2-readiness-hint">
+                          {blowUpReadiness.layer2_status === 'green'
+                            ? `${blowUpReadiness.proof_count === '50_plus' ? '50+' : '10-50'} people experienced it`
+                            : blowUpReadiness.layer2_status === 'amber'
+                              ? '1-10 people so far. Keep going.'
+                              : 'Run 5 experiences. Capture one 3% improvement after each.'}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer3_status}`}>
+                      <span className="ch2-readiness-dot" />
+                      <div className="ch2-readiness-info">
+                        <span className="ch2-readiness-name">Ceiling</span>
+                        <span className="ch2-readiness-hint">
+                          {blowUpReadiness.ceiling_type === 'reach'
+                            ? 'Reach ceiling. Your method is ready for a bigger container.'
+                            : blowUpReadiness.ceiling_type === 'credibility'
+                              ? 'Credibility ceiling. You need proof that scales.'
+                              : 'Keep filling the room you\'re in.'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  {blowUpReadiness.all_ready ? (
+                    <div className="ch2-readiness-verdict ch2-readiness-ready">
+                      Ready for a format change. Time to choose your vehicle.
+                    </div>
+                  ) : (
+                    <div className="ch2-readiness-verdict ch2-readiness-building">
+                      Keep building. The 3% chain turns good into undeniable.
+                    </div>
+                  )}
+                  <button className="ch2-readiness-retake" onClick={() => navigate('/create/remarkable')}>
+                    Retake assessment →
+                  </button>
                 </div>
               )}
 
@@ -475,7 +559,10 @@ export default function CreatorHomeV2() {
                 </div>
               )}
 
-              <div className="ch2-id-divider" />
+              </>}
+
+              {/* ═══ INNER GAME SUB-TAB ═══ */}
+              {identitySubTab === 'inner-game' && <>
 
               {/* Play Profile */}
               {dnaResult ? (
@@ -501,6 +588,96 @@ export default function CreatorHomeV2() {
                   </div>
                 </div>
               )}
+
+              <div className="ch2-id-divider" />
+
+              {/* Know Your Ceiling (Nervous System) */}
+              {nervousSystemData ? (
+                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                  <div className="ch2-label">Know Your Ceiling</div>
+                  {nervousSystemData.nervous_system_impact_limit && (
+                    <div className="ch2-biz-row">
+                      <div className="ch2-biz-icon">👁️</div>
+                      <div className="ch2-biz-info">
+                        <div className="ch2-biz-label">Visibility Limit</div>
+                        <div className="ch2-biz-val">{nervousSystemData.nervous_system_impact_limit}</div>
+                      </div>
+                    </div>
+                  )}
+                  {nervousSystemData.nervous_system_income_limit && (
+                    <div className="ch2-biz-row">
+                      <div className="ch2-biz-icon">💰</div>
+                      <div className="ch2-biz-info">
+                        <div className="ch2-biz-label">Income Limit</div>
+                        <div className="ch2-biz-val">{nervousSystemData.nervous_system_income_limit}</div>
+                      </div>
+                    </div>
+                  )}
+                  <button className="ch2-btn-outline" onClick={() => navigate('/nervous-system')} style={{ marginTop: 8, fontSize: 11, padding: '8px 14px' }}>
+                    Retake →
+                  </button>
+                </div>
+              ) : (
+                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                  <div className="ch2-locked" onClick={() => navigate('/nervous-system')}>
+                    <div className="ch2-locked-title">Know Your Ceiling</div>
+                    <div className="ch2-locked-sub">What are your current visibility and income limits? Where does your nervous system cap you?</div>
+                    <div className="ch2-locked-cta">Map Your Limits →</div>
+                  </div>
+                </div>
+              )}
+
+              <div className="ch2-id-divider" />
+
+              {/* Wound Map */}
+              {woundMapData ? (
+                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                  <div className="ch2-label">Wound Map</div>
+                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => navigate('/wound-map')}>
+                    <div className="ch2-biz-icon">🗺️</div>
+                    <div className="ch2-biz-info">
+                      <div className="ch2-biz-label">Origin Story</div>
+                      <div className="ch2-biz-val">Completed</div>
+                    </div>
+                    <div className="ch2-biz-status ch2-st-done">✓</div>
+                  </div>
+                </div>
+              ) : (
+                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                  <div className="ch2-locked" onClick={() => navigate('/wound-map')}>
+                    <div className="ch2-locked-title">Wound Map</div>
+                    <div className="ch2-locked-sub">The story behind the work. Your wound often IS your remarkable angle.</div>
+                    <div className="ch2-locked-cta">Map Your Story →</div>
+                  </div>
+                </div>
+              )}
+
+              <div className="ch2-id-divider" />
+
+              {/* Limiting Beliefs */}
+              {limitingBeliefData ? (
+                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                  <div className="ch2-label">Limiting Beliefs</div>
+                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => navigate('/limiting-belief-rewire')}>
+                    <div className="ch2-biz-icon">🔓</div>
+                    <div className="ch2-biz-info">
+                      <div className="ch2-biz-label">Belief Rewire</div>
+                      <div className="ch2-biz-val">Completed</div>
+                    </div>
+                    <div className="ch2-biz-status ch2-st-done">✓</div>
+                  </div>
+                </div>
+              ) : (
+                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                  <div className="ch2-locked" onClick={() => navigate('/limiting-belief-rewire')}>
+                    <div className="ch2-locked-title">Limiting Beliefs</div>
+                    <div className="ch2-locked-sub">"I'm not ready." "I can't charge that." Rewire the beliefs blocking your next level.</div>
+                    <div className="ch2-locked-cta">Start Rewiring →</div>
+                  </div>
+                </div>
+              )}
+
+              </>}
 
               <div className="ch2-id-footer">
                 <div className="ch2-id-brand">VIBE RISE</div>
@@ -706,6 +883,7 @@ export default function CreatorHomeV2() {
         {/* ═══ EDIT IDENTITY PANEL ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'edit-identity' ? ' active' : ''}`}>
           <div className="ch2-label" style={{ marginBottom: 12 }}>Edit Your Identity</div>
+          <div className="ch2-label" style={{ marginBottom: 4, marginTop: 8, color: 'var(--gold)' }}>Playbook</div>
           {[
             { label: 'Your Skills', sub: 'Retake Play-Skills flow', path: '/play-skills-identifier' },
             { label: 'North Stars', sub: 'Redo Experience Creator Matching', path: '/experience-creators' },
@@ -713,7 +891,21 @@ export default function CreatorHomeV2() {
             { label: 'Blow Up Brand', sub: 'Redo the Remarkable flow', path: '/create/remarkable' },
             { label: 'Pay Rent', sub: 'Explore how creators pay rent', path: '/create/pay-rent' },
             { label: 'Scale Income', sub: 'Redo attraction / core / continuity', path: '/create/scale-income' },
+          ].map(item => (
+            <div key={item.path} className="ch2-biz-row" style={{ cursor: 'pointer', marginBottom: 6 }} onClick={() => navigate(item.path)}>
+              <div className="ch2-biz-info">
+                <div className="ch2-biz-val">{item.label}</div>
+                <div className="ch2-biz-label">{item.sub}</div>
+              </div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', fontWeight: 600 }}>→</div>
+            </div>
+          ))}
+          <div className="ch2-label" style={{ marginBottom: 4, marginTop: 14, color: 'var(--purple)' }}>Inner Game</div>
+          {[
             { label: 'Play Profile', sub: 'Retake the DNA quiz', path: '/play-profile?mode=retake' },
+            { label: 'Know Your Ceiling', sub: 'Map visibility + income limits', path: '/nervous-system' },
+            { label: 'Wound Map', sub: 'The story behind the work', path: '/wound-map' },
+            { label: 'Limiting Beliefs', sub: 'Rewire what blocks you', path: '/limiting-belief-rewire' },
           ].map(item => (
             <div key={item.path} className="ch2-biz-row" style={{ cursor: 'pointer', marginBottom: 6 }} onClick={() => navigate(item.path)}>
               <div className="ch2-biz-info">

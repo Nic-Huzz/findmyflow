@@ -1,15 +1,13 @@
 /**
- * CreateGate — password-protected landing page for the Creator Portal.
- * Shows teaser sections with blurred answers to create tension.
- * Once unlocked via access code, stores in localStorage.
+ * CreateGate — account-based landing page for the Creator Portal.
+ * Shows teaser sections to non-members.
+ * Access is granted via user_subscriptions (plan_type includes 'creator').
+ * Members are enrolled on the website; the app checks account status.
  */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import './CreateGate.css'
-
-const ACCESS_CODE = 'movement2026'
-const STORAGE_KEY = 'create_portal_access'
 
 const CREATORS = [
   { name: 'Brené Brown', img: '/images/creators/bren-brown.png' },
@@ -43,23 +41,53 @@ function CreatorRow({ creator, children }) {
 }
 
 export default function CreateGate({ children }) {
-  const [hasAccess, setHasAccess] = useState(() => {
-    return localStorage.getItem(STORAGE_KEY) === 'granted'
-  })
-  const { user } = useAuth()
-  const [code, setCode] = useState('')
-  const [error, setError] = useState('')
-  const [showCode, setShowCode] = useState(false)
+  const { user, loading: authLoading } = useAuth()
+  const [hasAccess, setHasAccess] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [expressed, setExpressed] = useState(false)
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (code.trim().toLowerCase() === ACCESS_CODE) {
-      localStorage.setItem(STORAGE_KEY, 'granted')
-      setHasAccess(true)
-    } else {
-      setError('Incorrect access code')
-      setCode('')
+  // Check account-based access via user_subscriptions
+  useEffect(() => {
+    if (authLoading) return // wait for auth to resolve first
+
+    async function checkAccess() {
+      if (!user?.id) {
+        setHasAccess(false)
+        setLoading(false)
+        return
+      }
+
+      const { data, error } = await supabase
+        .from('user_subscriptions')
+        .select('status, plan_type')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      if (error) {
+        // On query failure, keep loading rather than wrongly denying access
+        console.error('Subscription check failed:', error.message)
+        setLoading(false)
+        return
+      }
+
+      const active = data?.status === 'active' &&
+        (data?.plan_type === 'creator' || data?.plan_type === 'pro')
+
+      setHasAccess(active)
+      setLoading(false)
     }
+
+    checkAccess()
+  }, [user?.id, authLoading])
+
+  if (loading) {
+    return (
+      <div className="cg-page">
+        <div className="cg-container" style={{ textAlign: 'center', paddingTop: '4rem' }}>
+          <div className="cg-loading-spinner" />
+        </div>
+      </div>
+    )
   }
 
   if (hasAccess) return children
@@ -128,51 +156,35 @@ export default function CreateGate({ children }) {
           ))}
         </div>
 
-        {/* CTA */}
+        {/* CTA — no pricing, no external purchase link (App Store 3.1.3(f) compliant) */}
         <div className="cg-gate-section">
-          <button
-            className="cg-cta-main"
-            onClick={async () => {
-              if (!user) {
-                window.location.href = '/log-in?returnTo=/create'
-                return
-              }
-              const { error: insertError } = await supabase.from('creator_interest').insert({
-                user_id: user.id,
-                email: user.email,
-              }).select()
-              if (!insertError || insertError.code === '23505') {
-                setShowCode(true)
-              }
-            }}
-          >
-            Sign up to learn how
-          </button>
-
-          {showCode ? (
-            <p className="cg-expressed">You're on the list. We'll send you access soon.</p>
+          {expressed ? (
+            <p className="cg-expressed">You're on the list. We'll be in touch soon.</p>
           ) : (
-            <button className="cg-code-toggle" onClick={() => setShowCode(true)}>
-              Already have an access code?
+            <button
+              className="cg-cta-main"
+              onClick={async () => {
+                if (!user) {
+                  window.location.href = '/log-in?returnTo=/create'
+                  return
+                }
+                setExpressed(true)
+                const { error } = await supabase.from('creator_interest').insert({
+                  user_id: user.id,
+                  email: user.email,
+                })
+                if (error && error.code !== '23505') {
+                  console.error('Waitlist insert failed:', error.message)
+                }
+              }}
+            >
+              Join the waitlist
             </button>
           )}
 
-          {showCode && (
-            <form className="cg-form" onSubmit={handleSubmit}>
-              <input
-                type="text"
-                className="cg-input"
-                value={code}
-                onChange={e => { setCode(e.target.value); setError('') }}
-                placeholder="Access code"
-                autoFocus
-              />
-              <button type="submit" className="cg-cta" disabled={!code.trim()}>
-                Enter
-              </button>
-            </form>
-          )}
-          {error && <p className="cg-error">{error}</p>}
+          <p className="cg-member-hint">
+            Already a Movement Maker? Log in with the email you enrolled with.
+          </p>
         </div>
       </div>
     </div>

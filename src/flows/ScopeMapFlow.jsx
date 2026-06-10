@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { hapticLight, hapticMedium, hapticSuccess } from '../lib/haptics'
+import { onScopeMapComplete } from '../lib/brain/autoPopulate'
 import './ScopeMapFlow.css'
 
 const STEPS = {
@@ -178,6 +179,8 @@ export default function ScopeMapFlow({ onComplete }) {
       if (error?.code === '42703') {
         await supabase.from('scope_map_results').insert(base)
       }
+      // Auto-populate brain
+      onScopeMapComplete(user.id, stage)
     } catch (err) {
       console.error('Failed to save scope map result:', err)
     }

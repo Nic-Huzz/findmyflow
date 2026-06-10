@@ -8,6 +8,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { onPayRentComplete } from '../lib/brain/autoPopulate'
 import revenueData from '../../public/data/creatorEarlyRevenueModels.json'
 import growthData from '../../public/data/experienceCreatorGrowthStrategies.json'
 import './PayRentFlow.css'
@@ -132,6 +133,7 @@ export default function PayRentFlow() {
         }, { onConflict: 'user_id' })
 
       if (error) throw error
+      onPayRentComplete(user.id, chosenModel)
       hapticSuccess()
       navigate('/create')
     } catch (err) {

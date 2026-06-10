@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Rise League — Content Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a1a;
+    --bg-2: #14122b;
+    --ink: #ffffff;
+    --ink-dim: #b0b0c0;
+    --ink-faint: #6a6a85;
+    --purple: #5e17eb;
+    --gold: #E9A23B;
+    --green: #10b981;
+    --grad: linear-gradient(135deg, #5e17eb 0%, #8b3dd9 45%, #E9A23B 100%);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: 'Inter', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .deck { height: 100vh; width: 100vw; position: relative; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: clamp(1.5rem, 4vw, 5rem); opacity: 0; pointer-events: none; transition: opacity 0.7s ease; background: radial-gradient(ellipse at 50% 50%, var(--bg-2) 0%, var(--bg) 70%); overflow-y: auto; }
+  .slide.active { opacity: 1; pointer-events: auto; z-index: 1; }
+  .slide-inner { width: 100%; max-width: 1100px; transform: translateY(20px); opacity: 0; transition: transform 0.9s cubic-bezier(0.16,1,0.3,1), opacity 0.9s ease; transition-delay: 0.15s; }
+  .slide.active .slide-inner { transform: translateY(0); opacity: 1; }
+
+  /* Grain */
+  .deck::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 100; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* Type */
+  .eyebrow { font-size: clamp(0.65rem, 1vw, 0.8rem); letter-spacing: 0.4em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; margin-bottom: 1.5rem; }
+  h1.mega { font-size: clamp(3.5rem, 12vw, 10rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.04em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 1.5rem; }
+  h2.big { font-size: clamp(2rem, 4.5vw, 3.8rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+  .gradient-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .body-text { font-size: clamp(0.9rem, 1.3vw, 1.15rem); color: var(--ink-dim); line-height: 1.55; max-width: 700px; margin-bottom: 0.8rem; font-weight: 300; }
+  .body-text strong { color: var(--ink); font-weight: 500; }
+  .subtitle { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(1.1rem, 1.8vw, 1.5rem); color: var(--ink-dim); }
+  .accent-line { width: 60px; height: 2px; background: var(--grad); margin: 1.5rem auto; }
+
+  /* Cards */
+  .content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-top: 1.5rem; }
+  .content-card { padding: 1.3rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); text-align: left; }
+  .content-card .cc-cat { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .content-card .cc-title { font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 0.4rem; }
+  .content-card .cc-desc { font-size: 0.82rem; color: var(--ink-dim); line-height: 1.45; }
+  .content-card .cc-format { font-size: 0.7rem; color: var(--ink-faint); margin-top: 0.6rem; font-weight: 600; letter-spacing: 0.05em; }
+  .cc-wahoo { border-color: rgba(233,162,59,0.15); }
+  .cc-wahoo .cc-cat { color: var(--gold); }
+  .cc-heal { border-color: rgba(94,23,235,0.15); }
+  .cc-heal .cc-cat { color: #8b5cf6; }
+  .cc-tune { border-color: rgba(16,185,129,0.15); }
+  .cc-tune .cc-cat { color: var(--green); }
+
+  /* Pillars */
+  .pillar-row { display: flex; gap: 1.2rem; margin-top: 1.5rem; }
+  .pillar { flex: 1; padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); text-align: left; }
+  .pillar .p-icon { font-size: 1.5rem; margin-bottom: 0.8rem; }
+  .pillar .p-title { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.6rem; }
+  .pillar .p-desc { font-size: 0.85rem; color: var(--ink-dim); line-height: 1.5; }
+
+  /* Week cards */
+  .week-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  .week { padding: 1.2rem; border-radius: 10px; border: 1px solid rgba(233,162,59,0.12); background: linear-gradient(180deg, rgba(233,162,59,0.03), transparent); text-align: left; }
+  .week .w-num { font-family: 'Fraunces', serif; font-style: italic; font-size: 0.85rem; color: var(--gold); margin-bottom: 0.5rem; }
+  .week .w-title { font-size: 0.85rem; font-weight: 700; color: var(--ink); margin-bottom: 0.4rem; }
+  .week .w-videos { font-size: 0.78rem; color: var(--ink-dim); line-height: 1.45; }
+  .week .w-videos strong { color: var(--ink-faint); font-weight: 600; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-top: 0.4rem; }
+
+  /* Video spec */
+  .spec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  .spec { padding: 1.2rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); }
+  .spec .s-label { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .spec .s-val { font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+
+  /* Nav */
+  .nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 50; transition: all 0.3s; backdrop-filter: blur(10px); }
+  .nav-arrow:hover { background: rgba(255,255,255,0.1); border-color: rgba(233,162,59,0.4); }
+  .nav-arrow.prev { left: 1.5rem; }
+  .nav-arrow.next { right: 1.5rem; }
+  .nav-arrow svg { width: 18px; height: 18px; }
+  .counter { position: fixed; top: 1.5rem; right: 2rem; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--ink-faint); z-index: 50; }
+  .counter .current { color: var(--gold); font-weight: 600; }
+  .dots { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 50; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s; }
+  .dot.active { background: var(--gold); width: 24px; border-radius: 3px; }
+
+  @media (max-width: 820px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .pillar-row { flex-direction: column; }
+    .week-row { grid-template-columns: 1fr 1fr; }
+    .spec-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. TITLE -->
+  <section class="slide active">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">Content Deep Dive</div>
+      <h1 class="mega">FANTASY<br>LEAGUE</h1>
+      <div class="accent-line"></div>
+      <p class="subtitle">Season 0: Huzz as the test case.<br>Build the case studies. Prove the format. Then scale.</p>
+    </div>
+  </section>
+
+  <!-- 2. THE CONCEPT -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">The Concept</div>
+      <h2 class="big">I run the playbook on <span class="gradient-text">myself.</span></h2>
+      <p class="body-text" style="margin:0.8rem auto;">Document everything. Create content from it. Prove the format works. Then invite others to compete.</p>
+      <p class="body-text" style="margin:0.8rem auto;"><strong>Season 0 = one player, all three categories, four weeks of content.</strong></p>
+      <p class="subtitle" style="margin-top:1.5rem;">The content from this season becomes the pitch<br>for every creator who joins Season 1.</p>
+    </div>
+  </section>
+
+  <!-- 3. THREE CONTENT CATEGORIES -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">Three Categories, Three Content Types</div>
+      <h2 class="big">Every category produces <span class="gradient-text">different content.</span></h2>
+      <div class="pillar-row">
+        <div class="pillar" style="border-color:rgba(233,162,59,0.15);">
+          <div class="p-icon">🔥</div>
+          <div class="p-title" style="color:var(--gold);">Wahoo</div>
+          <div class="p-desc"><strong style="color:var(--ink);">Remarkable acts.</strong> The things that scare you. Going live for the first time. Running an event. Launching an offer. High drama, high shareability.</div>
+        </div>
+        <div class="pillar" style="border-color:rgba(94,23,235,0.15);">
+          <div class="p-icon">💜</div>
+          <div class="p-title" style="color:#8b5cf6;">Healing</div>
+          <div class="p-desc"><strong style="color:var(--ink);">Vulnerable storytelling.</strong> What you recognised about yourself. The pattern you're breaking. The wound behind the work. Depth that builds trust.</div>
+        </div>
+        <div class="pillar" style="border-color:rgba(16,185,129,0.15);">
+          <div class="p-icon">☀️</div>
+          <div class="p-title" style="color:var(--green);">Tune</div>
+          <div class="p-desc"><strong style="color:var(--ink);">Daily reps.</strong> Morning breathwork. Cold plunge. State check-in. The streak that stacks into a transformation documentary.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. WAHOO VIDEOS DEEP DIVE -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">🔥 Wahoo Videos</div>
+      <h2 class="big">Setup. Action. <span class="gradient-text">Reveal.</span></h2>
+      <p class="body-text" style="margin:0.5rem auto 1.5rem;">Every Wahoo video follows the same three-act structure. The audience watches the fear, the decision, and the aftermath.</p>
+      <div class="content-grid">
+        <div class="content-card cc-wahoo">
+          <div class="cc-cat">Setup</div>
+          <div class="cc-title">What you're about to do</div>
+          <div class="cc-desc">Film yourself explaining what the Wahoo is and why it scares you. Sitting in the car before. Pacing. The honest "I don't want to do this."</div>
+          <div class="cc-format">15-30s · talking to camera · raw</div>
+        </div>
+        <div class="content-card cc-wahoo">
+          <div class="cc-cat">Action</div>
+          <div class="cc-title">Doing the thing</div>
+          <div class="cc-desc">Footage of the Wahoo itself. Going live. Running the event. Sharing the post. Shaky cam is fine. Real is better than polished.</div>
+          <div class="cc-format">30-90s · BTS footage · real-time</div>
+        </div>
+        <div class="content-card cc-wahoo">
+          <div class="cc-cat">Reveal</div>
+          <div class="cc-title">Was that a Wahoo?</div>
+          <div class="cc-desc">Post-action debrief. How it felt. What shifted. The self-classification: "Hell yes" / "Felt alive" / "Just did it." The emotional payoff.</div>
+          <div class="cc-format">15-30s · talking to camera · immediate</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. WAHOO WEEK-BY-WEEK -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">🔥 Wahoo Videos · Season 0</div>
+      <h2 class="big">Four weeks. Four <span class="gradient-text">Wahoos.</span></h2>
+      <div class="week-row">
+        <div class="week">
+          <div class="w-num">Week 1</div>
+          <div class="w-title">Share revenue numbers publicly</div>
+          <div class="w-videos">Film writing the post. The hesitation. Hitting publish. Film the reactions coming in.</div>
+          <div class="w-videos"><strong>Videos: Setup + publish moment + reaction reel</strong></div>
+        </div>
+        <div class="week">
+          <div class="w-num">Week 2</div>
+          <div class="w-title">Go live and teach "Blow Up Your Brand"</div>
+          <div class="w-videos">Film the prep. The nerves. The live itself. The debrief after. How many people showed up.</div>
+          <div class="w-videos"><strong>Videos: BTS prep + live clip + debrief</strong></div>
+        </div>
+        <div class="week">
+          <div class="w-num">Week 3</div>
+          <div class="w-title">Run a free Shift Architecture experience</div>
+          <div class="w-videos">Film the setup. The room filling. The session. One participant's reaction after.</div>
+          <div class="w-videos"><strong>Videos: Setup + event highlights + testimonial</strong></div>
+        </div>
+        <div class="week">
+          <div class="w-num">Week 4</div>
+          <div class="w-title">Open Season 1 applications</div>
+          <div class="w-videos">Film building the pitch. Sending it to friends. Waiting for responses. Reactions.</div>
+          <div class="w-videos"><strong>Videos: Build montage + send moment + responses</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. HEALING VIDEOS DEEP DIVE -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">💜 Healing Videos</div>
+      <h2 class="big">Recognition. <span class="gradient-text">Not the wound.</span></h2>
+      <p class="body-text" style="margin:0.5rem auto 1.5rem;">Share what you recognised about yourself, not the trauma itself. The Queer Eye principle: empathy first, never exploitative.</p>
+      <div class="content-grid">
+        <div class="content-card cc-heal">
+          <div class="cc-cat">The Pattern</div>
+          <div class="cc-title">Name it</div>
+          <div class="cc-desc">"I recognised I've been using busyness as a Controller pattern." Name the defence pattern. Explain how it shows up. Make it relatable.</div>
+          <div class="cc-format">60-90s · reel or carousel</div>
+        </div>
+        <div class="content-card cc-heal">
+          <div class="cc-cat">The Explainer</div>
+          <div class="cc-title">Teach it</div>
+          <div class="cc-desc">The educational layer. What the pattern is. Why it exists. How it shows up for experience creators specifically. Framework content.</div>
+          <div class="cc-format">60-90s · talking head + text overlay</div>
+        </div>
+        <div class="content-card cc-heal">
+          <div class="cc-cat">The Shift</div>
+          <div class="cc-title">What changed</div>
+          <div class="cc-desc">"After recognising this, here's what I did differently this week." The actionable takeaway. Before/after in behaviour, not just feeling.</div>
+          <div class="cc-format">30-60s · reel or story</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. HEALING WEEK-BY-WEEK -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">💜 Healing Videos · Season 0</div>
+      <h2 class="big">Four weeks. Four <span class="gradient-text">recognitions.</span></h2>
+      <div class="week-row">
+        <div class="week" style="border-color:rgba(94,23,235,0.15);">
+          <div class="w-num" style="color:#8b5cf6;">Week 1</div>
+          <div class="w-title">The Controller pattern</div>
+          <div class="w-videos">"I recognised I've been using busyness to avoid marketing." Explainer: what the Controller is, how it keeps creators invisible.</div>
+          <div class="w-videos"><strong>Videos: Personal story + framework explainer</strong></div>
+        </div>
+        <div class="week" style="border-color:rgba(94,23,235,0.15);">
+          <div class="w-num" style="color:#8b5cf6;">Week 2</div>
+          <div class="w-title">The inherited rule</div>
+          <div class="w-videos">"I found the rule I was following that isn't mine." Explainer: how inherited rules keep experience creators playing small.</div>
+          <div class="w-videos"><strong>Videos: Rule reveal + "Two Worlds" framework</strong></div>
+        </div>
+        <div class="week" style="border-color:rgba(94,23,235,0.15);">
+          <div class="w-num" style="color:#8b5cf6;">Week 3</div>
+          <div class="w-title">Why I undercharge</div>
+          <div class="w-videos">"I processed the link between self-worth and pricing." Explainer: the nervous system limit on income.</div>
+          <div class="w-videos"><strong>Videos: Vulnerability piece + pricing framework</strong></div>
+        </div>
+        <div class="week" style="border-color:rgba(94,23,235,0.15);">
+          <div class="w-num" style="color:#8b5cf6;">Week 4</div>
+          <div class="w-title">What shifted</div>
+          <div class="w-videos">"4 weeks of this practice. Here's what actually changed." Before/after honest assessment.</div>
+          <div class="w-videos"><strong>Videos: Transformation arc + metrics</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. TUNE VIDEOS -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">☀️ Tune Videos</div>
+      <h2 class="big">The streak IS <span class="gradient-text">the content.</span></h2>
+      <p class="body-text" style="margin:0.5rem auto 1.5rem;">One daily Tune post is boring. 30 in a row is a transformation documentary. The 75 Hard effect.</p>
+      <div class="content-grid">
+        <div class="content-card cc-tune">
+          <div class="cc-cat">Morning Practice</div>
+          <div class="cc-title">"Day 12. Cold plunge."</div>
+          <div class="cc-desc">15s clip of the practice. Breathwork, movement, cold exposure. Same format every day. The repetition builds the narrative.</div>
+          <div class="cc-format">15s · story · daily</div>
+        </div>
+        <div class="content-card cc-tune">
+          <div class="cc-cat">State Check-in</div>
+          <div class="cc-title">"Today: Vibe Rise."</div>
+          <div class="cc-desc">Text overlay on selfie. One of four states: Vibe Rise, Safe, Activated, Shutdown. Tracks the emotional arc across the season.</div>
+          <div class="cc-format">Static · story · daily</div>
+        </div>
+        <div class="content-card cc-tune">
+          <div class="cc-cat">Weekly Compilation</div>
+          <div class="cc-title">"7 days in 30 seconds"</div>
+          <div class="cc-desc">Edit all 7 daily clips into one reel. Shows the week's arc. The compilation is the shareable piece.</div>
+          <div class="cc-format">30s · reel · weekly</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. FULL WEEKLY SCHEDULE -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">The Weekly Schedule</div>
+      <h2 class="big">What gets posted <span class="gradient-text">when.</span></h2>
+      <div class="spec-grid" style="grid-template-columns:repeat(7,1fr);max-width:900px;margin:1.5rem auto 0;">
+        <div class="spec" style="text-align:center;"><div class="s-label">Mon</div><div class="s-val" style="font-size:0.8rem;">☀️ Tune<br><span style="color:var(--gold);font-size:0.7rem;">+ Topic</span></div></div>
+        <div class="spec" style="text-align:center;"><div class="s-label">Tue</div><div class="s-val" style="font-size:0.8rem;">☀️ Tune</div></div>
+        <div class="spec" style="text-align:center;"><div class="s-label">Wed</div><div class="s-val" style="font-size:0.8rem;">☀️ Tune<br><span style="color:#8b5cf6;font-size:0.7rem;">+ Healing</span></div></div>
+        <div class="spec" style="text-align:center;"><div class="s-label">Thu</div><div class="s-val" style="font-size:0.8rem;">☀️ Tune</div></div>
+        <div class="spec" style="text-align:center;"><div class="s-label">Fri</div><div class="s-val" style="font-size:0.8rem;">☀️ Tune<br><span style="color:var(--gold);font-size:0.7rem;">+ Wahoo</span></div></div>
+        <div class="spec" style="text-align:center;"><div class="s-label">Sat</div><div class="s-val" style="font-size:0.8rem;">☀️ Tune</div></div>
+        <div class="spec" style="text-align:center;"><div class="s-label">Sun</div><div class="s-val" style="font-size:0.8rem;">☀️ Tune<br><span style="color:var(--ink-faint);font-size:0.7rem;">+ Reflect</span></div></div>
+      </div>
+      <p class="body-text" style="margin:1.5rem auto 0;text-align:center;"><strong>Per week:</strong> 7 daily tune + 1 healing + 1 wahoo = 10-11 pieces<br><strong>Per season (4 weeks):</strong> ~40-44 pieces of content</p>
+    </div>
+  </section>
+
+  <!-- 10. VIDEO SPECS -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">Video Specifications</div>
+      <h2 class="big">What the agency <span class="gradient-text">delivers.</span></h2>
+      <div class="spec-grid" style="max-width:700px;margin:1.5rem auto 0;">
+        <div class="spec"><div class="s-label">Wahoo Reels</div><div class="s-val">60-180s · 9:16 · Setup/Action/Reveal edit</div></div>
+        <div class="spec"><div class="s-label">Healing Reels</div><div class="s-val">60-90s · 9:16 · Story + explainer overlay</div></div>
+        <div class="spec"><div class="s-label">Tune Stories</div><div class="s-val">15s · 9:16 · Daily clip, minimal edit</div></div>
+        <div class="spec"><div class="s-label">Weekly Compilation</div><div class="s-val">30s · 9:16 · 7 clips stitched</div></div>
+        <div class="spec"><div class="s-label">Weekly Highlight</div><div class="s-val">60s · 16:9 · Best moments, cinematic</div></div>
+        <div class="spec"><div class="s-label">Raw Footage In</div><div class="s-val">Dropbox dump every Sunday</div></div>
+        <div class="spec"><div class="s-label">Edited Content Out</div><div class="s-val">Delivered by Tuesday</div></div>
+        <div class="spec"><div class="s-label">Platform</div><div class="s-val">Instagram primary · TikTok secondary</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. WHAT SUCCESS LOOKS LIKE -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">After 4 Weeks</div>
+      <h2 class="big">What Season 0 <span class="gradient-text">produces.</span></h2>
+      <div class="pillar-row">
+        <div class="pillar" style="border-color:rgba(233,162,59,0.15);">
+          <div class="p-icon">📹</div>
+          <div class="p-title" style="color:var(--gold);">40+ Content Pieces</div>
+          <div class="p-desc">28 daily tune posts. 4 Wahoo reels. 4 Healing reels. 4 weekly compilations. A library of proof.</div>
+        </div>
+        <div class="pillar" style="border-color:rgba(94,23,235,0.15);">
+          <div class="p-icon">📖</div>
+          <div class="p-title" style="color:#8b5cf6;">A Case Study</div>
+          <div class="p-desc">Before/after transformation arc. Real metrics. Real content. The pitch for Season 1: "I did this. Here's what happened."</div>
+        </div>
+        <div class="pillar">
+          <div class="p-icon">🚀</div>
+          <div class="p-title" style="color:var(--ink);">Season 1 Ready</div>
+          <div class="p-desc">Format proven. Content templates tested. Agency workflow dialled. Ready to onboard Movement Makers.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. CLOSE -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <h2 class="big" style="font-size:clamp(2.5rem,6vw,5rem);">Season 0 starts <span class="gradient-text">now.</span></h2>
+      <p class="subtitle">One player. Three categories. Four weeks.<br>The content that proves the format.</p>
+      <div class="accent-line"></div>
+      <p class="body-text" style="margin:1rem auto;text-align:center;color:var(--ink-faint);">VIBE RISE LEAGUE</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- Nav -->
+<button class="nav-arrow prev" id="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+<button class="nav-arrow next" id="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+<div class="counter"><span class="current" id="curNum">01</span> / <span id="totalNum">12</span></div>
+<div class="dots" id="dots"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const curNum = document.getElementById('curNum');
+  const totalNum = document.getElementById('totalNum');
+  const dotsWrap = document.getElementById('dots');
+  totalNum.textContent = String(total).padStart(2, '0');
+  let current = 0;
+  slides.forEach((_, i) => { const d = document.createElement('div'); d.className = 'dot' + (i === 0 ? ' active' : ''); d.onclick = () => goTo(i); dotsWrap.appendChild(d); });
+  const dots = dotsWrap.children;
+  function goTo(n) { slides[current].classList.remove('active'); dots[current].classList.remove('active'); current = Math.max(0, Math.min(total - 1, n)); slides[current].classList.add('active'); dots[current].classList.add('active'); curNum.textContent = String(current + 1).padStart(2, '0'); }
+  prevBtn.onclick = () => goTo(current - 1);
+  nextBtn.onclick = () => goTo(current + 1);
+  document.addEventListener('keydown', e => { if (['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)) { e.preventDefault(); goTo(current + 1); } if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) { e.preventDefault(); goTo(current - 1); } });
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.changedTouches[0].screenX; }, {passive:true});
+  document.addEventListener('touchend', e => { const dx = e.changedTouches[0].screenX - tx; if (Math.abs(dx) > 50) dx < 0 ? goTo(current+1) : goTo(current-1); }, {passive:true});
+</script>
+</body>
+</html>

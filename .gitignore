@@ -64,3 +64,4 @@ out/
 remotion/public/*.mp3
 .env.pipeline
 ios/
+electron-dist/

@@ -1,128 +1,154 @@
 /**
  * RemarkableFlow.jsx — /create/remarkable
- * "How to Blow Up Your Personal Brand"
- * Section 1: Education — Trust + Attention + 5 triggers with creator proof
- * Section 2: User diagnostic — Rule Break, Unexpected Combination, Extreme Action
+ * "Blow Up Your Brand — Part 1: Readiness Diagnostic"
+ *
+ * 3-layer model: Distil → Prove → Ceiling
+ * Category Pirates-aligned: Two Worlds first, Assumption, Remove, Compress
+ * Data-enriched: Scope Map, DNA match, experience counts inform answers
  */
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
-import remarkableData from '../../public/data/experienceCreatorRemarkableAnalysis.json'
-import growthData from '../../public/data/experienceCreatorGrowthStrategies.json'
+import { onRemarkableComplete } from '../lib/brain/autoPopulate'
+import dnaData from '../../public/data/experienceCreatorDNA.json'
 import './RemarkableFlow.css'
 
 const STEPS = {
   INTRO: 'intro',
-  TRUST: 'trust',
-  ATTENTION: 'attention',
-  TRIGGERS: 'triggers',
-  RULE_PICK: 'rule_pick',
-  RULE_CURRENT: 'rule_current',
-  RULE_WRONG: 'rule_wrong',
-  RULE_YOURS: 'rule_yours',
-  TAGLINE: 'tagline',
-  COMBINATION: 'combination',
-  EXTREME_ACTION: 'extreme_action',
+  TWO_WORLDS: 'two_worlds',
+  ASSUMPTION: 'assumption',
+  WHATS_LEFT: 'whats_left',
+  COMPRESSION: 'compression',
   GENERATING: 'generating',
   SUMMARY: 'summary',
-}
-
-const TRIGGER_LABELS = {
-  rule_broken: { name: 'Rule Broken', emoji: '🔥', desc: 'They challenged a norm everyone accepted' },
-  unexpected_combination: { name: 'Unexpected Combination', emoji: '🔀', desc: 'They combined two things nobody expected together' },
-  extreme_action: { name: 'Extreme Action', emoji: '⚡', desc: 'They did something that made people say "wait, what?"' },
-  stupid_simplicity: { name: 'Stupid Simplicity', emoji: '💎', desc: 'They found a truth so simple it felt insulting' },
-  impossible_result: { name: 'Impossible Result', emoji: '🏆', desc: 'They produced evidence that defied belief' },
+  PROOF: 'proof',
+  CEILING: 'ceiling',
+  READINESS: 'readiness',
 }
 
 function creatorSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
 }
 
+function lookupCreatorOneLiner(name) {
+  const profile = dnaData.profiles?.find(p => p.name === name)
+  return profile?.oneLiner || null
+}
+
 export default function RemarkableFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const [step, setStep] = useState(STEPS.INTRO)
+  const [step, setStepRaw] = useState(STEPS.INTRO)
 
-  // User inputs
-  const [woundProblem, setWoundProblem] = useState('')
-  const [currentSolution, setCurrentSolution] = useState('')
-  const [whatsWrong, setWhatsWrong] = useState('')
-  const [yourSolution, setYourSolution] = useState('')
-  const [tagline, setTagline] = useState('')
-  const [aiTaglineSuggestions, setAiTaglineSuggestions] = useState([])
-  const [combinationInsight, setCombinationInsight] = useState('')
-  const [extremeAction, setExtremeAction] = useState('')
+  const setStep = (next) => {
+    setStepRaw(next)
+    setError(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
-  // Life Map data
-  const [problems, setProblems] = useState([])
+  // User inputs — Layer 1 (Distillation)
+  const [twoWorlds, setTwoWorlds] = useState('')
+  const [assumption, setAssumption] = useState('')
+  const [whatsLeft, setWhatsLeft] = useState('')
+  const [compression, setCompression] = useState('')
+
+  // User inputs — Layer 2 (Proof)
+  const [proofCount, setProofCount] = useState('')
+  const [proofEvidence, setProofEvidence] = useState('')
+  const [previousExperience, setPreviousExperience] = useState('')
+
+  // User inputs — Layer 3 (Ceiling)
+  const [ceilingType, setCeilingType] = useState('')
+
+  // Data from other flows
   const [skills, setSkills] = useState([])
-  const [selectedCreatorNames, setSelectedCreatorNames] = useState([])
+  const [problems, setProblems] = useState([])
+  const [scopeMapProblem, setScopeMapProblem] = useState('')
+  const [matchedFounder, setMatchedFounder] = useState('')
+  const [matchedOneLiner, setMatchedOneLiner] = useState('')
+  const [experienceCount, setExperienceCount] = useState(0)
+  const [existingAngle, setExistingAngle] = useState(null)
   const [loading, setLoading] = useState(true)
 
   // AI result
   const [aiResult, setAiResult] = useState(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
+  const [savedAngleId, setSavedAngleId] = useState(null)
 
-  // Fetch Life Map data + selected creators
+  // Fetch all data sources
   useEffect(() => {
     if (!user) { setLoading(false); return }
     ;(async () => {
-      const [{ data: probData }, { data: skillData }, { data: selData }] = await Promise.all([
-        supabase
-          .from('nikigai_clusters')
-          .select('cluster_label, is_favourite')
-          .eq('user_id', user.id)
-          .eq('cluster_type', 'problems'),
-        supabase
-          .from('nikigai_clusters')
-          .select('cluster_label, items')
-          .eq('user_id', user.id)
-          .eq('cluster_type', 'skills'),
-        supabase
-          .from('experience_creator_selections')
-          .select('selected_creators')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(1),
-      ])
-      const sorted = (probData || []).sort((a, b) => (b.is_favourite ? 1 : 0) - (a.is_favourite ? 1 : 0))
-      setProblems(sorted.map(p => p.cluster_label))
-      setSkills(skillData?.map(s => s.cluster_label) || [])
-      setSelectedCreatorNames(selData?.[0]?.selected_creators || [])
-      setLoading(false)
+      try {
+        const [
+          { data: probData },
+          { data: skillData },
+          { data: scopeData },
+          { data: dnaResult },
+          { count: expCount },
+          { data: angleData },
+        ] = await Promise.all([
+          supabase
+            .from('nikigai_clusters')
+            .select('cluster_label, is_favourite')
+            .eq('user_id', user.id)
+            .eq('cluster_type', 'problems'),
+          supabase
+            .from('nikigai_clusters')
+            .select('cluster_label, items')
+            .eq('user_id', user.id)
+            .eq('cluster_type', 'skills'),
+          supabase
+            .from('scope_map_results')
+            .select('stage, response_problem, response_audience')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1),
+          supabase
+            .from('founder_dna_results')
+            .select('matched_founder, archetype')
+            .eq('user_id', user.id)
+            .limit(1),
+          supabase
+            .from('experiences')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', user.id),
+          supabase
+            .from('remarkable_angles')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1),
+        ])
+
+        const sorted = (probData || []).sort((a, b) => (b.is_favourite ? 1 : 0) - (a.is_favourite ? 1 : 0))
+        setProblems(sorted.map(p => p.cluster_label))
+        setSkills(skillData?.map(s => s.cluster_label) || [])
+        setScopeMapProblem(scopeData?.[0]?.response_problem || '')
+        setExperienceCount(expCount || 0)
+
+        // DNA match → look up oneLiner from JSON
+        const founder = dnaResult?.[0]?.matched_founder || ''
+        setMatchedFounder(founder)
+        if (founder) setMatchedOneLiner(lookupCreatorOneLiner(founder) || '')
+
+        // Pre-fill for returning users
+        const angle = angleData?.[0]
+        if (angle) {
+          setExistingAngle(angle)
+          if (angle.combination_insight) setTwoWorlds(angle.combination_insight)
+          if (angle.wound_problem) setAssumption(angle.wound_problem)
+        }
+      } catch (err) {
+        console.warn('RemarkableFlow data load failed:', err.message)
+      } finally {
+        setLoading(false)
+      }
     })()
   }, [user])
-
-  // Build education data from selected creators
-  const educationData = useMemo(() => {
-    if (!selectedCreatorNames.length) return null
-
-    // Trust: how long each creator did the work
-    const trustEntries = selectedCreatorNames.map(name => {
-      const gs = growthData.creators?.[name]
-      if (!gs) return null
-      return { name, earlyGrowth: gs.early_growth, scalingMove: gs.scaling_move }
-    }).filter(Boolean)
-
-    // Triggers: 5 triggers per selected creator
-    const triggerEntries = selectedCreatorNames.map(name => {
-      const rm = remarkableData.creators?.[name]
-      if (!rm) return null
-      const triggers = {}
-      for (const key of ['rule_broken', 'unexpected_combination', 'extreme_action', 'stupid_simplicity', 'impossible_result']) {
-        if (rm[key]?.present === 'yes') {
-          triggers[key] = rm[key].evidence
-        }
-      }
-      return { name, triggers, headline: rm.remarkable_headline || '' }
-    }).filter(Boolean)
-
-    return { trustEntries, triggerEntries }
-  }, [selectedCreatorNames])
 
   // Generate AI synthesis
   const generate = async () => {
@@ -133,10 +159,10 @@ export default function RemarkableFlow() {
     try {
       const { data, error: fnError } = await supabase.functions.invoke('generate-remarkable-angle', {
         body: {
-          wound_problem: woundProblem,
-          rule_identified: `Current solution: ${currentSolution}. What's wrong: ${whatsWrong}. My solution: ${yourSolution}`,
-          combination_insight: combinationInsight,
-          extreme_action_plan: extremeAction,
+          wound_problem: `Assumption everyone follows: ${assumption}`,
+          rule_identified: `Current assumption: ${assumption}. Remove it and what's left: ${whatsLeft}`,
+          combination_insight: twoWorlds,
+          extreme_action_plan: `One-sentence method: ${compression}`,
         },
       })
       if (fnError) throw fnError
@@ -146,33 +172,82 @@ export default function RemarkableFlow() {
     } catch (err) {
       console.error('Remarkable generation error:', err)
       setError('Something went wrong. Let\'s try again.')
-      setStep(STEPS.EXTREME_ACTION)
+      setStep(STEPS.COMPRESSION)
     }
   }
 
-  // Save result
+  // Save result — returns true on success, false on failure
   const save = async () => {
-    if (!user || saving) return
+    if (!user || saving) return false
     setSaving(true)
     try {
-      await supabase.from('remarkable_angles').insert({
+      const { data: insertedRow, error: saveErr } = await supabase.from('remarkable_angles').insert({
         user_id: user.id,
-        wound_problem: woundProblem,
-        rule_identified: `Current: ${currentSolution} | Wrong: ${whatsWrong} | Mine: ${yourSolution}`,
-        combination_insight: combinationInsight,
-        extreme_action_plan: extremeAction,
+        wound_problem: assumption,
+        rule_identified: `Two worlds: ${twoWorlds} | Assumption: ${assumption} | Without it: ${whatsLeft}`,
+        combination_insight: twoWorlds,
+        extreme_action_plan: compression,
         ai_rule_statement: aiResult?.rule_statement || null,
         ai_remarkable_bio: aiResult?.remarkable_bio || null,
         ai_tribe_statement: aiResult?.tribe_statement || null,
+      }).select('id').single()
+      if (saveErr) throw saveErr
+      if (insertedRow?.id) setSavedAngleId(insertedRow.id)
+      // Auto-populate brain
+      onRemarkableComplete(user.id, {
+        ruleIdentified: `Two worlds: ${twoWorlds} | Assumption: ${assumption} | Without it: ${whatsLeft}`,
+        combinationInsight: twoWorlds,
+        extremeAction: compression,
+        aiRuleStatement: aiResult?.rule_statement || null,
+        aiTribeStatement: aiResult?.tribe_statement || null,
       })
       hapticSuccess()
-      navigate('/create')
+      return true
     } catch (err) {
       console.error('Save error:', err)
+      setError('Failed to save. Please try again.')
+      return false
     } finally {
       setSaving(false)
     }
   }
+
+  // Save readiness assessment (Layer 2 + 3)
+  const saveReadiness = async () => {
+    if (!user) return
+    try {
+      await supabase.from('blow_up_readiness').insert({
+        user_id: user.id,
+        proof_count: proofCount || 'not_yet',
+        proof_evidence: proofEvidence || null,
+        previous_experience: previousExperience || null,
+        ceiling_type: ceilingType || 'not_yet',
+        layer1_status: readiness.layer1,
+        layer2_status: readiness.layer2,
+        layer3_status: readiness.layer3,
+        all_ready: readiness.allReady,
+        matched_founder_used: matchedFounder || null,
+        experience_count_at_time: experienceCount,
+        remarkable_angle_id: savedAngleId || null,
+      })
+    } catch (err) {
+      console.warn('Readiness save failed:', err.message)
+    }
+  }
+
+  // Readiness computation
+  const readiness = useMemo(() => {
+    const layer1 = compression.trim().length > 10
+    const layer2 = proofCount === '10_50' || proofCount === '50_plus'
+    const layer2Amber = proofCount === '1_10'
+    const layer3 = ceilingType === 'reach' || ceilingType === 'credibility'
+    return {
+      layer1: layer1 ? 'green' : 'amber',
+      layer2: layer2 ? 'green' : layer2Amber ? 'amber' : 'red',
+      layer3: layer3 ? 'green' : 'red',
+      allReady: layer1 && layer2 && layer3,
+    }
+  }, [compression, proofCount, ceilingType])
 
   if (loading) {
     return (
@@ -184,52 +259,42 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SLIDE 1: INTRO ──
+  // ── SCREEN 1: INTRO (3-Layer Model) ──
   if (step === STEPS.INTRO) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
           <div className="rmk-intro">
-            <div className="rmk-badge">How They Blew Up</div>
-            <h1>How did these people become <span className="rmk-gold">known globally</span>?</h1>
-            <p>There are two ingredients to becoming known: Trust and Attention.</p>
-            <p className="rmk-intro-sub">Let us show you how the people you picked nailed both.</p>
-            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(educationData ? STEPS.TRUST : STEPS.RULE_PICK) }}>
-              Show me
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
+            <div className="rmk-badge">Blow Up Your Brand</div>
+            {existingAngle ? (
+              <>
+                <h1>Welcome back. Let's <span className="rmk-gold">sharpen</span> your angle.</h1>
+                <p>Last time you identified your remarkable angle. Let's see if it's evolved.</p>
+              </>
+            ) : (
+              <>
+                <h1>What makes you <span className="rmk-gold">worth talking about</span>?</h1>
+                <p>We studied 129 experience creators. Every one who sustained had 3 ingredients. Every one who peaked was missing at least one.</p>
+              </>
+            )}
 
-  // ── SLIDE 2: TRUST ──
-  if (step === STEPS.TRUST) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-badge">Ingredient 1</div>
-          <h2 className="rmk-heading"><span className="rmk-gold">Trust</span></h2>
-          <p className="rmk-prompt">Each of your picks built trust through repetition. Showing up week after week after week for years. And results. Becoming so good at what they do that their results became undeniable.</p>
-
-          {educationData?.trustEntries?.length > 0 && (
-            <div className="rmk-edu-cards">
-              {educationData.trustEntries.map(entry => (
-                <div key={entry.name} className="rmk-edu-card">
-                  <div className="rmk-edu-card-top">
-                    <img className="rmk-edu-avatar" src={`/images/creators/${creatorSlug(entry.name)}.png`} alt={entry.name} onError={e => { e.target.style.display = 'none' }} />
-                    <span className="rmk-edu-name">{entry.name}</span>
-                  </div>
-                  <div className="rmk-edu-text">{entry.earlyGrowth}</div>
-                </div>
-              ))}
+            <div className="rmk-layers-preview">
+              <div className="rmk-layer-pill">
+                <span className="rmk-layer-num">1</span>
+                <span>Distil your method</span>
+              </div>
+              <div className="rmk-layer-pill">
+                <span className="rmk-layer-num">2</span>
+                <span>Prove it works</span>
+              </div>
+              <div className="rmk-layer-pill">
+                <span className="rmk-layer-num">3</span>
+                <span>Find your ceiling</span>
+              </div>
             </div>
-          )}
 
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
-            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.ATTENTION) }}>
-              What about attention?
+            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.TWO_WORLDS) }}>
+              {existingAngle ? 'Sharpen my angle' : 'Let\'s go'}
             </button>
           </div>
         </div>
@@ -237,284 +302,109 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SLIDE 3: ATTENTION ──
-  if (step === STEPS.ATTENTION) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen rmk-centered-screen">
-          <div className="rmk-badge">Ingredient 2</div>
-          <h2 className="rmk-heading"><span className="rmk-gold">Attention</span></h2>
-          <p className="rmk-prompt-lg">They didn't get attention by shouting louder. They got it by being <strong>remarkable</strong>.</p>
-          <p className="rmk-prompt-lg">Remarkable literally means worth <strong>re-marking</strong> on.</p>
-          <p className="rmk-prompt-lg">Something so interesting that people can't help but tell their friends.</p>
-          <p className="rmk-prompt-lg">Word of mouth is the most powerful marketing in the world. And you can't buy it. You have to earn it.</p>
-
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.TRUST)}>Back</button>
-            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.TRIGGERS) }}>
-              So how do I become remarkable?
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── EDUCATION: TRIGGERS ──
-  if (step === STEPS.TRIGGERS) {
+  // ── SCREEN 2: TWO WORLDS ──
+  if (step === STEPS.TWO_WORLDS) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-badge">The Formula</div>
-          <h2 className="rmk-heading">We've found a <span className="rmk-gold">formula</span> to help what you do be seen as remarkable</h2>
-          <p className="rmk-prompt">We analysed 57 experience creators. Over 90% hit all 5 of these triggers. Here's how your picks did it.</p>
-
-          {educationData?.triggerEntries?.length > 0 && (
-            <div className="rmk-trigger-proof">
-              {educationData.triggerEntries.slice(0, 3).map(entry => (
-                <div key={entry.name} className="rmk-trigger-creator">
-                  <div className="rmk-trigger-creator-top">
-                    <img className="rmk-edu-avatar" src={`/images/creators/${creatorSlug(entry.name)}.png`} alt={entry.name} onError={e => { e.target.style.display = 'none' }} />
-                    <span className="rmk-edu-name">{entry.name}</span>
-                  </div>
-                  <div className="rmk-trigger-list">
-                    {Object.entries(TRIGGER_LABELS).map(([key, label]) => {
-                      const evidence = entry.triggers[key]
-                      return (
-                        <div key={key} className={`rmk-trigger-row ${evidence ? 'rmk-trigger-hit' : 'rmk-trigger-miss'}`}>
-                          <span className="rmk-trigger-icon">{evidence ? '✓' : '◯'}</span>
-                          <div>
-                            <div className="rmk-trigger-name">{label.emoji} {label.name}</div>
-                            {evidence && <div className="rmk-trigger-evidence">{evidence}</div>}
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <p className="rmk-prompt" style={{ marginTop: '1.5rem', textAlign: 'center' }}>Now let's find yours.</p>
-
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.ATTENTION)}>Back</button>
-            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.RULE_PICK) }}>
-              Find my remarkable angle
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── STEP 1a: PICK THE PROBLEM ──
-  if (step === STEPS.RULE_PICK) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">1 of 3</div>
-          <h2 className="rmk-heading">Pick the problem that makes you <span className="rmk-gold">angriest</span></h2>
-          <p className="rmk-prompt">The one that still fires you up when you think about it.</p>
-
-          {problems.length > 0 && (
-            <div className="rmk-problem-list">
-              {problems.map((prob, i) => (
-                <button
-                  key={i}
-                  className={`rmk-problem-btn ${woundProblem === prob ? 'rmk-problem-selected' : ''}`}
-                  onClick={() => { hapticLight(); setWoundProblem(prob) }}
-                >
-                  {prob}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {!problems.length && (
-            <textarea
-              className="rmk-textarea"
-              value={woundProblem}
-              onChange={e => setWoundProblem(e.target.value)}
-              placeholder="What problem in the world makes you angriest?"
-              rows={3}
-            />
-          )}
-
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(educationData ? STEPS.TRIGGERS : STEPS.INTRO)}>Back</button>
-            <button
-              className="rmk-cta"
-              disabled={!woundProblem}
-              onClick={() => { hapticLight(); setStep(STEPS.RULE_CURRENT) }}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── STEP 1b: HOW DOES THE WORLD CURRENTLY SOLVE THIS? ──
-  if (step === STEPS.RULE_CURRENT) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">1 of 3</div>
-          <div className="rmk-context-card">{woundProblem}</div>
-          <h2 className="rmk-heading">How does the world currently <span className="rmk-gold">solve</span> this?</h2>
-          <textarea
-            className="rmk-textarea"
-            value={currentSolution}
-            onChange={e => setCurrentSolution(e.target.value)}
-            placeholder="e.g. Therapy. One-on-one. Private. Serious. Expensive."
-            rows={3}
-            autoFocus
-          />
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_PICK)}>Back</button>
-            <button
-              className="rmk-cta"
-              disabled={currentSolution.trim().length < 5}
-              onClick={() => { hapticLight(); setStep(STEPS.RULE_WRONG) }}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── STEP 1c: WHAT'S WRONG WITH THAT? ──
-  if (step === STEPS.RULE_WRONG) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">1 of 3</div>
-          <div className="rmk-context-card">{currentSolution}</div>
-          <h2 className="rmk-heading">What's <span className="rmk-gold">wrong</span> with that?</h2>
-          <textarea
-            className="rmk-textarea"
-            value={whatsWrong}
-            onChange={e => setWhatsWrong(e.target.value)}
-            placeholder="e.g. It's isolating. People got wounded in groups but heal alone. And most people can't afford it."
-            rows={3}
-            autoFocus
-          />
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_CURRENT)}>Back</button>
-            <button
-              className="rmk-cta"
-              disabled={whatsWrong.trim().length < 5}
-              onClick={() => { hapticLight(); setStep(STEPS.RULE_YOURS) }}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── STEP 1d: HOW DO YOU SOLVE IT? ──
-  if (step === STEPS.RULE_YOURS) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">1 of 3</div>
-          <div className="rmk-context-card">{whatsWrong}</div>
-          <h2 className="rmk-heading">How do <span className="rmk-gold">you</span> solve it?</h2>
-          <textarea
-            className="rmk-textarea"
-            value={yourSolution}
-            onChange={e => setYourSolution(e.target.value)}
-            placeholder="e.g. Dancing with strangers at sunrise. Community. Play. Fun."
-            rows={3}
-            autoFocus
-          />
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_WRONG)}>Back</button>
-            <button
-              className="rmk-cta"
-              disabled={yourSolution.trim().length < 5}
-              onClick={() => {
-                hapticLight()
-                setStep(STEPS.COMBINATION)
-              }}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── STEP 1e: YOUR TAGLINE ──
-  if (step === STEPS.TAGLINE) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">1 of 3</div>
-          <h2 className="rmk-heading">What's your <span className="rmk-gold">tagline</span>?</h2>
-          <p className="rmk-prompt">Distill your rule break into 2-4 words. This is what goes on your bio, your events, your brand.</p>
-
-          {aiTaglineSuggestions.length > 0 && (
-            <div className="rmk-tagline-suggestions">
-              <div className="rmk-tagline-label">AI suggestions (tap to use):</div>
-              {aiTaglineSuggestions.map((suggestion, i) => (
-                <button
-                  key={i}
-                  className={`rmk-tagline-btn ${tagline === suggestion ? 'rmk-tagline-selected' : ''}`}
-                  onClick={() => { hapticLight(); setTagline(suggestion) }}
-                >
-                  {suggestion}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <textarea
-            className="rmk-textarea"
-            value={tagline}
-            onChange={e => setTagline(e.target.value)}
-            placeholder="e.g. Healing but Fun"
-            rows={2}
-          />
-
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_YOURS)}>Back</button>
-            <button
-              className="rmk-cta"
-              disabled={tagline.trim().length < 2}
-              onClick={() => { hapticLight(); setStep(STEPS.COMBINATION) }}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── STEP 2: UNEXPECTED COMBINATION ──
-  if (step === STEPS.COMBINATION) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">2 of 3</div>
-          <h2 className="rmk-heading">What's your unexpected combination?</h2>
-          <p className="rmk-prompt">What do you bring from OUTSIDE your field that nobody inside it has tried?</p>
+          <div className="rmk-step-badge">Distil · 1 of 4</div>
+          <h2 className="rmk-heading">What <span className="rmk-gold">two worlds</span> do you live in?</h2>
+          <p className="rmk-prompt">Every remarkable creator combines two domains nobody expected together.</p>
 
           {skills.length > 0 && (
             <div className="rmk-skills-hint">
-              <div className="rmk-skills-label">Your play-skills:</div>
+              <div className="rmk-skills-label">Your Life Map</div>
               <div className="rmk-skills-tags">
-                {skills.slice(0, 8).map((skill, i) => (
+                {skills.slice(0, 6).map((skill, i) => (
                   <span key={i} className="rmk-skill-tag">{skill}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="rmk-example-card">
+            Radha Agrawal combined nightlife + wellness. Phil Jackson combined Zen Buddhism + basketball. What's yours?
+          </div>
+
+          <textarea
+            className="rmk-textarea"
+            value={twoWorlds}
+            onChange={e => setTwoWorlds(e.target.value)}
+            placeholder="e.g. I combine VC analytical thinking with breathwork facilitation"
+            rows={3}
+            autoFocus
+          />
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={twoWorlds.trim().length < 10}
+              onClick={() => { hapticLight(); setStep(STEPS.ASSUMPTION) }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 3: ASSUMPTION ──
+  if (step === STEPS.ASSUMPTION) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Distil · 2 of 4</div>
+          <h2 className="rmk-heading">What does everyone assume is <span className="rmk-gold">required</span>?</h2>
+          <p className="rmk-prompt">In your space, what rule does everyone follow that you think is wrong?</p>
+
+          {scopeMapProblem && (
+            <div className="rmk-context-card">
+              You told us the problem is: "{scopeMapProblem}". What assumption caused that?
+            </div>
+          )}
+
+          <textarea
+            className="rmk-textarea"
+            value={assumption}
+            onChange={e => setAssumption(e.target.value)}
+            placeholder="e.g. Everyone assumes healing must be serious, clinical, and expensive"
+            rows={3}
+            autoFocus
+          />
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.TWO_WORLDS)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={assumption.trim().length < 10}
+              onClick={() => { hapticLight(); setStep(STEPS.WHATS_LEFT) }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 4: WHAT'S LEFT ──
+  if (step === STEPS.WHATS_LEFT) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Distil · 3 of 4</div>
+          <div className="rmk-context-card">{assumption}</div>
+          <h2 className="rmk-heading">Remove that assumption. What's <span className="rmk-gold">left</span>?</h2>
+          <p className="rmk-prompt">If that rule didn't exist, how would you solve this problem?</p>
+
+          {problems.length > 0 && (
+            <div className="rmk-skills-hint">
+              <div className="rmk-skills-label">Problems you care about</div>
+              <div className="rmk-skills-tags">
+                {problems.slice(0, 4).map((prob, i) => (
+                  <span key={i} className="rmk-skill-tag">{prob}</span>
                 ))}
               </div>
             </div>
@@ -522,19 +412,19 @@ export default function RemarkableFlow() {
 
           <textarea
             className="rmk-textarea"
-            value={combinationInsight}
-            onChange={e => setCombinationInsight(e.target.value)}
-            placeholder="e.g. I combine VC analytical thinking with breathwork facilitation and comedy performance"
+            value={whatsLeft}
+            onChange={e => setWhatsLeft(e.target.value)}
+            placeholder="e.g. Dancing with strangers at sunrise. Community. Play. No certification needed."
             rows={3}
             autoFocus
           />
 
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.RULE_YOURS)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(STEPS.ASSUMPTION)}>Back</button>
             <button
               className="rmk-cta"
-              disabled={combinationInsight.trim().length < 10}
-              onClick={() => { hapticLight(); setStep(STEPS.EXTREME_ACTION) }}
+              disabled={whatsLeft.trim().length < 10}
+              onClick={() => { hapticLight(); setStep(STEPS.COMPRESSION) }}
             >
               Next
             </button>
@@ -544,31 +434,43 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── STEP 3: EXTREME ACTION ──
-  if (step === STEPS.EXTREME_ACTION) {
+  // ── SCREEN 5: COMPRESSION GATE ──
+  if (step === STEPS.COMPRESSION) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">3 of 3</div>
-          <h2 className="rmk-heading">What's your extreme action?</h2>
-          <p className="rmk-prompt">What could you do THIS MONTH that would make people say "wait, what?" Not bigger. Weirder. Bolder.</p>
+          <div className="rmk-step-badge">Distil · 4 of 4</div>
+          <h2 className="rmk-heading">State your method in <span className="rmk-gold">one sentence</span>.</h2>
+          <p className="rmk-prompt">If you can compress it, it's ready to travel. If you can't, it needs more reps.</p>
+
+          {matchedOneLiner && (
+            <div className="rmk-example-card">
+              {matchedFounder}: "{matchedOneLiner}"
+            </div>
+          )}
+
+          {!matchedOneLiner && (
+            <div className="rmk-example-card">
+              Ram Dass: "Be here now." Priya Parker: "How you gather matters more than why."
+            </div>
+          )}
 
           <textarea
             className="rmk-textarea"
-            value={extremeAction}
-            onChange={e => setExtremeAction(e.target.value)}
-            placeholder="e.g. Host a sober dance party at sunrise for 50 strangers"
-            rows={3}
+            value={compression}
+            onChange={e => setCompression(e.target.value)}
+            placeholder="e.g. Healing should be fun, communal, and accessible"
+            rows={2}
             autoFocus
           />
 
           {error && <div className="rmk-error">{error}</div>}
 
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.COMBINATION)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(STEPS.WHATS_LEFT)}>Back</button>
             <button
               className="rmk-cta"
-              disabled={extremeAction.trim().length < 10}
+              disabled={compression.trim().length < 5}
               onClick={generate}
             >
               Show me my angle
@@ -579,7 +481,7 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── GENERATING ──
+  // ── SCREEN 6: GENERATING ──
   if (step === STEPS.GENERATING) {
     return (
       <div className="rmk">
@@ -591,58 +493,19 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SUMMARY ──
+  // ── SCREEN 7: SUMMARY ──
   if (step === STEPS.SUMMARY && aiResult) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
           <div className="rmk-badge">Your Remarkable Angle</div>
 
-          {/* The 5 triggers checklist */}
-          <div className="rmk-checklist">
-            <div className="rmk-check-item rmk-check-done">
-              <span className="rmk-check-icon">✓</span>
-              <div>
-                <div className="rmk-check-label">Rule Broken</div>
-                <div className="rmk-check-value">{aiResult.rule_statement}</div>
-              </div>
-            </div>
-
-            <div className="rmk-check-item rmk-check-done">
-              <span className="rmk-check-icon">✓</span>
-              <div>
-                <div className="rmk-check-label">Unexpected Combination</div>
-                <div className="rmk-check-value">{combinationInsight}</div>
-              </div>
-            </div>
-
-            <div className="rmk-check-item rmk-check-done">
-              <span className="rmk-check-icon">✓</span>
-              <div>
-                <div className="rmk-check-label">Extreme Action</div>
-                <div className="rmk-check-value">{extremeAction}</div>
-              </div>
-            </div>
-
-            <div className="rmk-check-item rmk-check-pending">
-              <span className="rmk-check-icon">◯</span>
-              <div>
-                <div className="rmk-check-label">Stupid Simplicity</div>
-                <div className="rmk-check-value rmk-check-future">Will emerge from doing the work</div>
-              </div>
-            </div>
-
-            <div className="rmk-check-item rmk-check-pending">
-              <span className="rmk-check-icon">◯</span>
-              <div>
-                <div className="rmk-check-label">Impossible Result</div>
-                <div className="rmk-check-value rmk-check-future">Will emerge from evidence</div>
-              </div>
-            </div>
-          </div>
-
-          {/* AI-generated outputs */}
           <div className="rmk-output-section">
+            <div className="rmk-output-card">
+              <div className="rmk-output-label">Your rule break</div>
+              <p className="rmk-output-text">{aiResult.rule_statement}</p>
+            </div>
+
             <div className="rmk-output-card">
               <div className="rmk-output-label">Your remarkable bio</div>
               <p className="rmk-output-text">{aiResult.remarkable_bio}</p>
@@ -654,8 +517,246 @@ export default function RemarkableFlow() {
             </div>
           </div>
 
-          <button className="rmk-cta" onClick={save} disabled={saving} style={{ width: '100%' }}>
-            {saving ? 'Saving...' : 'Save my remarkable angle'}
+          <div className="rmk-output-card" style={{ marginBottom: '1.5rem' }}>
+            <div className="rmk-output-label">Your one-liner</div>
+            <p className="rmk-output-text" style={{ fontWeight: 700, fontSize: '1.1rem' }}>{compression}</p>
+          </div>
+
+          {error && <div className="rmk-error">{error}</div>}
+
+          <p className="rmk-prompt" style={{ textAlign: 'center' }}>
+            That's your angle. Now let's check if you're ready to deploy it.
+          </p>
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.COMPRESSION)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={saving}
+              onClick={async () => {
+                const saved = await save()
+                if (saved) {
+                  hapticLight()
+                  setStep(STEPS.PROOF)
+                }
+              }}
+            >
+              {saving ? 'Saving...' : 'Check my readiness'}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 8: PROOF ──
+  if (step === STEPS.PROOF) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Prove · 1 of 2</div>
+          <h2 className="rmk-heading">Have you <span className="rmk-gold">run this</span>?</h2>
+          <p className="rmk-prompt">How many people have experienced your method?</p>
+
+          {experienceCount > 0 && (
+            <div className="rmk-context-card">
+              You've created {experienceCount} experience{experienceCount !== 1 ? 's' : ''} in the app. Include any work outside the app too.
+            </div>
+          )}
+
+          <div className="rmk-problem-list">
+            {[
+              { key: 'not_yet', label: 'Not yet' },
+              { key: '1_10', label: '1-10 people' },
+              { key: '10_50', label: '10-50 people' },
+              { key: '50_plus', label: '50+ people' },
+            ].map(opt => (
+              <button
+                key={opt.key}
+                className={`rmk-problem-btn ${proofCount === opt.key ? 'rmk-problem-selected' : ''}`}
+                onClick={() => { hapticLight(); setProofCount(opt.key) }}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+
+          {proofCount && proofCount !== 'not_yet' && (
+            <>
+              <p className="rmk-prompt" style={{ marginTop: '0.5rem' }}>What happened to them? What changed?</p>
+              <textarea
+                className="rmk-textarea"
+                value={proofEvidence}
+                onChange={e => setProofEvidence(e.target.value)}
+                placeholder="e.g. People said they felt lighter. Three came back every week."
+                rows={3}
+              />
+            </>
+          )}
+
+          <p className="rmk-prompt" style={{ marginTop: '1rem' }}>Have you done something like this before, even in a different context?</p>
+          <textarea
+            className="rmk-textarea"
+            value={previousExperience}
+            onChange={e => setPreviousExperience(e.target.value)}
+            placeholder="e.g. I ran team workshops at my corporate job for 3 years"
+            rows={2}
+          />
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.SUMMARY)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={!proofCount}
+              onClick={() => { hapticLight(); setStep(STEPS.CEILING) }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 9: CEILING ──
+  if (step === STEPS.CEILING) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Ceiling · 2 of 2</div>
+          <h2 className="rmk-heading">Where are you <span className="rmk-gold">stuck</span>?</h2>
+          <p className="rmk-prompt">Which sounds most like where you are right now?</p>
+
+          <div className="rmk-problem-list">
+            <button
+              className={`rmk-problem-btn ${ceilingType === 'reach' ? 'rmk-problem-selected' : ''}`}
+              onClick={() => { hapticLight(); setCeilingType('reach') }}
+            >
+              My method works. People love it. But I can only reach the people in my room. It's relevant to way more.
+            </button>
+            <button
+              className={`rmk-problem-btn ${ceilingType === 'credibility' ? 'rmk-problem-selected' : ''}`}
+              onClick={() => { hapticLight(); setCeilingType('credibility') }}
+            >
+              My method works. But people who haven't experienced it don't believe me yet. I need proof that scales.
+            </button>
+            <button
+              className={`rmk-problem-btn ${ceilingType === 'not_yet' ? 'rmk-problem-selected' : ''}`}
+              onClick={() => { hapticLight(); setCeilingType('not_yet') }}
+            >
+              I'm still filling the room I'm in. My format isn't the bottleneck yet.
+            </button>
+          </div>
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.PROOF)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={!ceilingType}
+              onClick={() => { hapticLight(); setStep(STEPS.READINESS) }}
+            >
+              Show my readiness
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 10: READINESS MAP ──
+  if (step === STEPS.READINESS) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-badge">Your Readiness</div>
+
+          <div className="rmk-readiness-map">
+            <div className={`rmk-readiness-layer rmk-readiness-${readiness.layer1}`}>
+              <div className="rmk-readiness-dot" />
+              <div>
+                <div className="rmk-readiness-label">Distilled</div>
+                <div className="rmk-readiness-detail">
+                  {readiness.layer1 === 'green'
+                    ? `"${compression}"`
+                    : 'Your method needs more compression.'}
+                </div>
+              </div>
+            </div>
+
+            <div className={`rmk-readiness-layer rmk-readiness-${readiness.layer2}`}>
+              <div className="rmk-readiness-dot" />
+              <div>
+                <div className="rmk-readiness-label">Proven</div>
+                <div className="rmk-readiness-detail">
+                  {readiness.layer2 === 'green'
+                    ? `${proofCount === '50_plus' ? '50+' : '10-50'} people have experienced it.`
+                    : readiness.layer2 === 'amber'
+                      ? '1-10 people. Keep going. Run the 3% chain after every experience.'
+                      : 'No proof yet. Run 5 experiences. Capture one 3% improvement after each.'}
+                </div>
+              </div>
+            </div>
+
+            <div className={`rmk-readiness-layer rmk-readiness-${readiness.layer3}`}>
+              <div className="rmk-readiness-dot" />
+              <div>
+                <div className="rmk-readiness-label">Ceiling</div>
+                <div className="rmk-readiness-detail">
+                  {ceilingType === 'reach'
+                    ? 'You\'re hitting a reach ceiling. Your method is ready for a format change.'
+                    : ceilingType === 'credibility'
+                      ? 'You\'re hitting a credibility ceiling. You need proof that scales.'
+                      : 'Keep filling the room you\'re in. Run the 3% chain. The ceiling will come.'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {matchedFounder && (
+            <div className="rmk-output-card" style={{ marginTop: '1.25rem' }}>
+              <div className="rmk-output-label">Your DNA match</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                <img
+                  className="rmk-edu-avatar"
+                  src={`/images/creators/${creatorSlug(matchedFounder)}.png`}
+                  alt={matchedFounder}
+                  onError={e => { e.target.style.display = 'none' }}
+                />
+                <span className="rmk-edu-name">{matchedFounder}</span>
+              </div>
+              {matchedOneLiner && (
+                <p className="rmk-output-text" style={{ fontStyle: 'italic', fontSize: '0.85rem' }}>
+                  "{matchedOneLiner}"
+                </p>
+              )}
+            </div>
+          )}
+
+          {readiness.allReady ? (
+            <div className="rmk-ready-card">
+              <p style={{ fontWeight: 700, fontSize: '1.05rem', margin: '0 0 0.5rem' }}>You're ready.</p>
+              <p style={{ margin: 0, color: 'rgba(255,255,255,0.6)', fontSize: '0.88rem' }}>
+                Your method is distilled, proven, and hitting a ceiling. Time to change the format.
+              </p>
+            </div>
+          ) : (
+            <div className="rmk-notready-card">
+              <p style={{ fontWeight: 700, fontSize: '1.05rem', margin: '0 0 0.5rem' }}>Keep building.</p>
+              <p style={{ margin: 0, color: 'rgba(255,255,255,0.6)', fontSize: '0.88rem' }}>
+                After every experience, ask: "What's the one thing I'd improve by 3%?" That's the chain that turns good into undeniable.
+              </p>
+            </div>
+          )}
+
+          <button
+            className="rmk-cta"
+            style={{ width: '100%', marginTop: '1.25rem' }}
+            onClick={async () => {
+              await saveReadiness()
+              navigate('/create')
+            }}
+          >
+            Back to Creator Portal
           </button>
         </div>
       </div>

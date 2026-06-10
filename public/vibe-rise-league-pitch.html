@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Rise League — The Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#06030f;
+    --char:#120d1e;
+    --purple:#5e17eb;
+    --purple-bright:#8b5cf6;
+    --purple-dim:#3b0f94;
+    --gold:#E9A23B;
+    --gold-bright:#f5c45a;
+    --gold-dim:#a67820;
+    --bone:#efe6d4;
+    --bone-dim:#b7ad99;
+    --green:#34d399;
+    --silver:#9ca3af;
+    --white:#ffffff;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html,body{
+    height:100%;
+    background:var(--ink);
+    color:var(--bone);
+    font-family:'Inter',system-ui,sans-serif;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- film grain + vignette ---------- */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:90;pointer-events:none;
+    background:radial-gradient(ellipse 120% 90% at 50% 50%, transparent 40%, rgba(0,0,0,.45) 100%);
+    mix-blend-mode:multiply;
+  }
+  body::after{
+    content:"";position:fixed;inset:-50%;z-index:91;pointer-events:none;opacity:.03;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation:grain 1.2s steps(4) infinite;
+  }
+  @keyframes grain{
+    0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}
+    50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-2%)}100%{transform:translate(2%,2%)}
+  }
+
+  /* ---------- deck + slides ---------- */
+  #deck{position:fixed;inset:0;}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:6vmin 8vmin;
+    opacity:0;visibility:hidden;
+    transition:opacity .7s ease;
+    text-align:center;
+    background:var(--ink);
+  }
+  .slide.active{opacity:1;visibility:visible;z-index:2;}
+  .slide.active .reveal{animation:rise .9s cubic-bezier(.16,1,.3,1) both;}
+  .slide.active .reveal:nth-child(1){animation-delay:.15s}
+  .slide.active .reveal:nth-child(2){animation-delay:.35s}
+  .slide.active .reveal:nth-child(3){animation-delay:.55s}
+  .slide.active .reveal:nth-child(4){animation-delay:.75s}
+  .slide.active .reveal:nth-child(5){animation-delay:.95s}
+  .slide.active .reveal:nth-child(6){animation-delay:1.15s}
+  .slide.active .reveal:nth-child(7){animation-delay:1.35s}
+  @keyframes rise{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ---------- typography ---------- */
+  .kicker{
+    font-family:'Inter',sans-serif;font-weight:600;
+    letter-spacing:.42em;text-transform:uppercase;
+    font-size:clamp(.62rem,1.1vw,.82rem);
+    color:var(--gold);margin-bottom:2.4vmin;
+  }
+  .kicker.purple{color:var(--purple-bright)}
+  .kicker.dim{color:var(--bone-dim)}
+  h1.mega{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(4rem,16vw,14rem);
+    line-height:.86;letter-spacing:.02em;color:var(--white);
+    text-shadow:0 0 60px rgba(233,162,59,.2);
+  }
+  h2.title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(2.4rem,6.5vw,5.5rem);
+    line-height:.94;letter-spacing:.015em;color:var(--white);
+  }
+  h2.title .gold{color:var(--gold-bright)}
+  h2.title .purple{color:var(--purple-bright)}
+  .flavour{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;
+    font-size:clamp(1.3rem,3vw,2.3rem);line-height:1.35;color:var(--bone);
+    max-width:28ch;margin:0 auto;
+  }
+  .body{
+    font-family:'Inter',sans-serif;font-weight:400;
+    font-size:clamp(1rem,1.7vw,1.35rem);line-height:1.62;color:var(--bone-dim);
+    max-width:36ch;margin:0 auto;
+  }
+  .body strong{color:var(--bone);font-weight:600;}
+  .stack>*+*{margin-top:3vmin;}
+
+  /* ---------- act divider ---------- */
+  .act{
+    position:absolute;top:6vmin;left:50%;transform:translateX(-50%);
+    font-family:'Inter';font-weight:700;letter-spacing:.4em;text-transform:uppercase;
+    font-size:.6rem;color:var(--purple-dim);
+  }
+
+  /* ---------- backgrounds ---------- */
+  .bg-warm{background:
+    radial-gradient(circle at 30% 20%, rgba(233,162,59,.12), transparent 45%),
+    radial-gradient(circle at 80% 90%, rgba(94,23,235,.08), transparent 50%),
+    var(--ink);}
+  .bg-deep{background:
+    radial-gradient(ellipse at 50% 70%, rgba(94,23,235,.22), transparent 55%),
+    radial-gradient(circle at 50% 10%, rgba(20,8,30,.6), transparent 40%),
+    #08031a;}
+  .bg-darkest{background:radial-gradient(ellipse at 50% 60%, #0e0520 0%, #04010a 70%);}
+  .bg-gold{background:
+    radial-gradient(circle at 50% 40%, rgba(233,162,59,.18), transparent 55%),
+    radial-gradient(circle at 30% 80%, rgba(94,23,235,.06), transparent 45%),
+    var(--ink);}
+  .bg-fire{background:
+    radial-gradient(circle at 50% 50%, rgba(233,162,59,.22), transparent 55%),
+    radial-gradient(circle at 20% 80%, rgba(94,23,235,.12), transparent 50%),
+    #08031a;}
+  .bg-sport{background:
+    radial-gradient(circle at 60% 30%, rgba(233,162,59,.14), transparent 50%),
+    radial-gradient(circle at 30% 70%, rgba(94,23,235,.16), transparent 50%),
+    var(--ink);}
+
+  /* ---------- monster cards ---------- */
+  .monster-row{
+    display:flex;gap:2.2vmin;justify-content:center;flex-wrap:wrap;
+    width:100%;max-width:1000px;margin-top:1vmin;
+  }
+  .monster{
+    flex:1;min-width:220px;max-width:320px;
+    border:1px solid rgba(94,23,235,.25);border-radius:6px;
+    padding:2.8vmin 2.2vmin;text-align:left;
+    background:linear-gradient(160deg, rgba(94,23,235,.06), transparent);
+  }
+  .monster .num{
+    font-family:'Bebas Neue';font-size:.9rem;letter-spacing:.15em;
+    color:var(--purple-bright);margin-bottom:.8em;
+  }
+  .monster h4{
+    font-family:'Bebas Neue';font-size:clamp(1.2rem,2.2vw,1.6rem);
+    color:var(--gold-bright);letter-spacing:.03em;margin-bottom:.6em;
+  }
+  .monster p{font-size:.82rem;line-height:1.55;color:var(--bone-dim);}
+
+  /* ---------- league scoring ---------- */
+  .league-row{
+    display:flex;gap:2vmin;justify-content:center;align-items:stretch;
+    flex-wrap:wrap;width:100%;max-width:800px;
+  }
+  .league-cat{
+    flex:1;min-width:180px;
+    border:1px solid rgba(94,23,235,.25);border-radius:6px;
+    padding:2vmin;text-align:center;
+    background:linear-gradient(160deg, rgba(94,23,235,.05), transparent);
+  }
+  .league-cat h4{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.04em;margin-bottom:.5em;}
+  .league-cat p{font-size:.78rem;line-height:1.5;color:var(--bone-dim);}
+  .league-cat.tune h4{color:var(--green);}
+  .league-cat.wahoo h4{color:var(--gold-bright);}
+  .league-cat.heal h4{color:var(--purple-bright);}
+
+  /* ---------- vs matchup ---------- */
+  .vs-matchup{
+    display:flex;align-items:center;gap:2.5vmin;justify-content:center;
+    margin:2vmin 0;
+  }
+  .vs-team{
+    text-align:center;
+    padding:2vmin 3vmin;
+    border:1px solid rgba(94,23,235,.25);
+    border-radius:6px;
+    background:linear-gradient(160deg, rgba(94,23,235,.05), transparent);
+    min-width:clamp(120px,18vw,200px);
+  }
+  .vs-team .team-name{font-family:'Bebas Neue';font-size:clamp(1.2rem,2.5vw,2rem);color:var(--white);letter-spacing:.03em;}
+  .vs-team .team-score{font-family:'Bebas Neue';font-size:clamp(2rem,4vw,3.5rem);margin-top:.3em;}
+  .vs-team.left .team-score{color:var(--purple-bright);}
+  .vs-team.right .team-score{color:var(--gold-bright);}
+  .vs-badge{font-family:'Bebas Neue';font-size:clamp(1.5rem,3vw,2.5rem);color:var(--bone-dim);letter-spacing:.1em;}
+  .cat-bars{
+    display:flex;flex-direction:column;gap:.6vmin;
+    width:100%;max-width:600px;margin:2vmin auto 0;
+  }
+  .cat-bar{
+    display:flex;align-items:center;gap:1vmin;
+    font-family:'Inter';font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  }
+  .cat-bar .label{width:70px;text-align:right;}
+  .cat-bar .track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;display:flex;overflow:hidden;}
+  .cat-bar .fill-l{height:100%;border-radius:3px 0 0 3px;transition:width 1.4s cubic-bezier(.16,1,.3,1);width:0;}
+  .cat-bar .fill-r{height:100%;border-radius:0 3px 3px 0;margin-left:auto;transition:width 1.4s cubic-bezier(.16,1,.3,1);width:0;}
+  .slide.active .cat-bar .fill-l,.slide.active .cat-bar .fill-r{width:var(--w);}
+  .cat-bar.tune .label{color:var(--green);}.cat-bar.tune .fill-l{background:var(--green);}.cat-bar.tune .fill-r{background:var(--green);opacity:.5;}
+  .cat-bar.wahoo .label{color:var(--gold-bright);}.cat-bar.wahoo .fill-l{background:var(--gold-bright);}.cat-bar.wahoo .fill-r{background:var(--gold-bright);opacity:.5;}
+  .cat-bar.heal .label{color:var(--purple-bright);}.cat-bar.heal .fill-l{background:var(--purple-bright);}.cat-bar.heal .fill-r{background:var(--purple-bright);opacity:.5;}
+
+  /* ---------- flywheel ---------- */
+  .flywheel{
+    display:flex;flex-wrap:wrap;gap:1.2vmin;justify-content:center;
+    max-width:900px;margin:0 auto;
+  }
+  .fly-step{
+    font-family:'Bebas Neue';font-size:clamp(.85rem,1.5vw,1.1rem);
+    letter-spacing:.04em;
+    padding:.5em 1.2em;border-radius:3px;
+    border:1px solid rgba(233,162,59,.2);color:var(--bone);
+    background:rgba(233,162,59,.03);
+    display:flex;align-items:center;gap:.6em;
+  }
+  .fly-step .arrow{color:var(--gold-dim);font-size:.8em;}
+
+  /* ---------- week grid ---------- */
+  .week-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1.6vmin;
+    width:100%;max-width:900px;margin-top:1vmin;
+  }
+  .week-card{
+    border:1px solid rgba(233,162,59,.15);border-radius:4px;
+    padding:2vmin 1.8vmin;text-align:left;
+    background:linear-gradient(160deg, rgba(233,162,59,.03), transparent);
+  }
+  .week-card h4{
+    font-family:'Bebas Neue';font-size:clamp(.95rem,1.8vw,1.3rem);
+    color:var(--gold-bright);letter-spacing:.03em;margin-bottom:.6em;
+  }
+  .week-card .prompt{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:.85rem;color:var(--bone);line-height:1.3;
+    margin-top:.4em;
+  }
+
+  /* ---------- package ---------- */
+  .package{
+    display:flex;flex-direction:column;gap:1.2vmin;
+    width:100%;max-width:600px;margin-top:1vmin;
+  }
+  .pkg-item{
+    display:flex;align-items:center;gap:1.4vmin;
+    padding:1.4vmin 2vmin;
+    border-left:3px solid var(--gold-dim);
+    background:rgba(233,162,59,.03);
+  }
+  .pkg-item .icon{font-size:1.3rem;}
+  .pkg-item .text{font-size:.9rem;color:var(--bone);line-height:1.4;}
+
+  /* ---------- narrative layers ---------- */
+  .layers{
+    display:flex;flex-direction:column;gap:1.6vmin;
+    width:100%;max-width:700px;margin-top:1vmin;
+  }
+  .layer{
+    display:flex;align-items:center;gap:2vmin;
+    padding:2vmin 2.5vmin;
+    border:1px solid rgba(94,23,235,.2);border-radius:4px;
+    background:linear-gradient(160deg, rgba(94,23,235,.04), transparent);
+    text-align:left;
+  }
+  .layer .who{
+    font-family:'Bebas Neue';font-size:clamp(1rem,2vw,1.4rem);
+    letter-spacing:.05em;min-width:90px;
+  }
+  .layer .what{font-size:.88rem;color:var(--bone-dim);line-height:1.4;}
+  .layer .what strong{color:var(--bone);font-weight:600;}
+
+  /* ---------- tiers ---------- */
+  .tiers{
+    display:flex;gap:2vmin;justify-content:center;align-items:flex-end;
+    margin-top:2vmin;
+  }
+  .tier{
+    display:flex;flex-direction:column;align-items:center;gap:.6em;
+    padding:1.5vmin 2.5vmin;border-radius:4px;
+    border:1px solid rgba(94,23,235,.2);
+    background:linear-gradient(160deg, rgba(94,23,235,.03), transparent);
+  }
+  .tier .icon{font-size:clamp(1.8rem,3vw,2.6rem);}
+  .tier .name{font-family:'Bebas Neue';font-size:clamp(1rem,1.8vw,1.3rem);letter-spacing:.06em;}
+  .tier.diamond{
+    border-color:rgba(233,162,59,.4);
+    background:linear-gradient(160deg, rgba(233,162,59,.08), transparent);
+    padding-bottom:2.5vmin;
+  }
+  .tier.diamond .name{color:var(--gold-bright);}
+
+  /* ---------- cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:2.2vmin;width:100%;max-width:1200px;margin-top:1vmin;}
+  .card{
+    border:1px solid rgba(233,162,59,.2);border-radius:4px;
+    background:linear-gradient(160deg, rgba(233,162,59,.04), rgba(0,0,0,0));
+    padding:2.4vmin 2.2vmin;text-align:left;
+  }
+  .card h4{font-family:'Bebas Neue';font-size:clamp(1.1rem,2.2vw,1.5rem);color:var(--gold-bright);letter-spacing:.03em;margin-bottom:.6em;}
+  .card p{font-size:.82rem;line-height:1.5;color:var(--bone-dim);}
+
+  /* ---------- quote ---------- */
+  .quote{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;
+    font-size:clamp(1.4rem,3.2vw,2.5rem);line-height:1.3;color:var(--bone);
+    max-width:22ch;margin:0 auto;
+    position:relative;padding:0 1em;
+  }
+  .quote::before,.quote::after{
+    font-family:'Cormorant Garamond',serif;font-size:2em;color:var(--gold-dim);
+    position:absolute;line-height:1;
+  }
+  .quote::before{content:"\201C";left:-.2em;top:-.15em;}
+  .quote::after{content:"\201D";right:-.2em;bottom:-.3em;}
+
+  /* ---------- CTA ---------- */
+  .cta-btn{
+    display:inline-flex;align-items:center;gap:.8em;
+    font-family:'Bebas Neue';font-size:clamp(1.3rem,3vw,2rem);letter-spacing:.08em;
+    color:var(--ink);background:linear-gradient(135deg, var(--gold), var(--gold-bright));
+    padding:.7em 2em;border-radius:4px;border:none;cursor:pointer;
+    box-shadow:0 0 30px rgba(233,162,59,.3);
+    transition:transform .2s, box-shadow .2s;
+    text-decoration:none;
+  }
+  .cta-btn:hover{transform:scale(1.04);box-shadow:0 0 50px rgba(233,162,59,.5);}
+
+  /* ---------- chrome ---------- */
+  #progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--gold-bright));z-index:100;transition:width .5s ease;box-shadow:0 0 12px rgba(94,23,235,.6);}
+  #counter{position:fixed;bottom:3.4vmin;right:4vmin;z-index:100;font-family:'Bebas Neue';letter-spacing:.12em;color:var(--bone-dim);font-size:1rem;}
+  #counter b{color:var(--gold-bright);}
+  #dots{position:fixed;bottom:3.6vmin;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:7px;}
+  #dots button{width:7px;height:7px;border-radius:50%;border:none;background:rgba(183,173,153,.32);cursor:pointer;padding:0;transition:.3s;}
+  #dots button.on{background:var(--gold);transform:scale(1.35);box-shadow:0 0 10px rgba(233,162,59,.5);}
+  #hint{position:fixed;bottom:3.4vmin;left:4vmin;z-index:100;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(183,173,153,.5);}
+  .navzone{position:fixed;top:0;bottom:0;width:18%;z-index:80;cursor:pointer;}
+  .navzone.left{left:0}.navzone.right{right:0}
+
+  @media(max-width:820px){
+    .cards{grid-template-columns:1fr;}
+    .league-row{flex-direction:column;align-items:center;}
+    .league-cat{min-width:0;width:100%;max-width:320px;}
+    .week-grid{grid-template-columns:1fr 1fr;}
+    .monster-row{flex-direction:column;align-items:center;}
+    .monster{min-width:0;width:100%;max-width:400px;}
+    .tiers{flex-wrap:wrap;}
+    .vs-matchup{flex-wrap:wrap;}
+    #hint{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div class="navzone left" onclick="prev()"></div>
+<div class="navzone right" onclick="next()"></div>
+
+<div id="deck">
+
+  <!-- ═══════════ BEAT 1: HOOK ═══════════ -->
+
+  <section class="slide bg-warm">
+    <div class="stack" style="max-width:740px">
+      <p class="flavour reveal">The gap between your dream of delivering global experiences and today?</p>
+      <h2 class="title reveal">THE NUMBER OF<br>PEOPLE WHO<br><span class="gold">KNOW ABOUT YOU.</span></h2>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 2: VILLAIN ═══════════ -->
+
+  <section class="slide bg-darkest">
+    <div class="stack" style="max-width:720px">
+      <p class="flavour reveal">You know you deliver amazing experiences.</p>
+      <p class="body reveal">And you know the positive impact they'd make if more people knew about them.</p>
+      <p class="body reveal"><strong>But the art of delivering experiences and the art of being a marketer are two separate skills.</strong></p>
+      <p class="flavour reveal">And nobody taught you the second one.</p>
+    </div>
+  </section>
+
+  <section class="slide bg-darkest">
+    <div class="stack" style="max-width:700px">
+      <h2 class="title reveal">NOTHING IS MORE<br><span class="purple">FRUSTRATING</span></h2>
+      <p class="body reveal">than watching other people blow up their brands</p>
+      <p class="body reveal"><strong>and knowing your experiences are even better.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 3: MONSTERS ═══════════ -->
+
+  <section class="slide bg-darkest">
+    <div class="act">What's Keeping You Stuck</div>
+    <div class="stack" style="max-width:1000px;width:100%">
+      <h2 class="title reveal">THREE <span class="purple">BLOCKERS.</span></h2>
+      <div class="monster-row reveal">
+        <div class="monster">
+          <div class="num">01</div>
+          <h4>The Solo Grind</h4>
+          <p>Growing alone with no accountability. No one pushing you past comfortable. <strong>The league gives you opponents, matchups, and a scoreboard.</strong></p>
+        </div>
+        <div class="monster">
+          <div class="num">02</div>
+          <h4>The Content Trap</h4>
+          <p>Filming talking heads about stuff you did months ago. It feels fake because it is. <strong>The league makes your real journey the content.</strong></p>
+        </div>
+        <div class="monster">
+          <div class="num">03</div>
+          <h4>The Comfort Zone</h4>
+          <p>Knowing you need to go live, launch the offer, put yourself out there. But nothing forcing your hand. <strong>The league forces your hand.</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 4: WHAT IF ═══════════ -->
+
+  <section class="slide bg-warm">
+    <div class="stack" style="max-width:740px">
+      <h2 class="title reveal">WHAT <span class="gold">IF...</span></h2>
+    </div>
+  </section>
+
+  <section class="slide bg-fire">
+    <div class="stack" style="max-width:1000px;width:100%">
+      <div class="monster-row reveal">
+        <div class="monster" style="border-color:rgba(233,162,59,.3);background:linear-gradient(160deg, rgba(233,162,59,.06), transparent);">
+          <div class="num" style="color:var(--gold)">01</div>
+          <h4>We create a game around growth</h4>
+          <p>Weekly matchups. Real opponents. A scoreboard that makes showing up non-negotiable.</p>
+        </div>
+        <div class="monster" style="border-color:rgba(233,162,59,.3);background:linear-gradient(160deg, rgba(233,162,59,.06), transparent);">
+          <div class="num" style="color:var(--gold)">02</div>
+          <h4>We turn it into a content series</h4>
+          <p>Every action you take becomes a piece of content. Filmed, edited, posted. Your journey IS the show.</p>
+        </div>
+        <div class="monster" style="border-color:rgba(233,162,59,.3);background:linear-gradient(160deg, rgba(233,162,59,.06), transparent);">
+          <div class="num" style="color:var(--gold)">03</div>
+          <h4>The game + content grows your movement</h4>
+          <p>More content, more visibility. More visibility, more people at your events. The game fuels itself.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 5: HOW ═══════════ -->
+
+  <section class="slide bg-darkest">
+    <div class="stack">
+      <h2 class="title reveal"><span class="gold">HOW?</span></h2>
+    </div>
+  </section>
+
+  <section class="slide bg-fire">
+    <div class="stack" style="max-width:760px">
+      <p class="kicker reveal">Think</p>
+      <h2 class="title reveal">DRIVE TO <span class="gold">SURVIVE</span><br>FOR GROWING<br>YOUR <span class="gold">MOVEMENT.</span></h2>
+      <p class="body reveal">It didn't make F1 faster. It made you <strong>care about the drivers.</strong> 73 million new fans. Most had never watched a race.</p>
+      <p class="flavour reveal">The sport was always there.<br>The stories made it matter.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 5: FREEDOM (3 slides) ═══════════ -->
+
+  <section class="slide bg-deep">
+    <div class="stack">
+      <p class="kicker reveal">The Game That Solves All Three</p>
+      <h1 class="mega reveal">VIBE RISE<br><span style="color:var(--gold-bright)">LEAGUE</span></h1>
+      <p class="flavour reveal">Grow yourself. Grow your brand.<br>Grow your movement. All at once.</p>
+    </div>
+  </section>
+
+  <section class="slide bg-deep">
+    <div class="act">The Sport</div>
+    <div class="stack" style="max-width:900px;width:100%">
+      <h2 class="title reveal">THREE <span class="gold">CATEGORIES.</span></h2>
+      <div class="league-row reveal">
+        <div class="league-cat tune"><h4>&#9728;&#65039; Tune</h4><p>Daily practices. Breathwork, movement, journalling. <strong>Consistency wins.</strong></p></div>
+        <div class="league-cat wahoo"><h4>&#128293; Wahoo</h4><p>Courage challenges that build your business. <strong>Bravery wins.</strong></p></div>
+        <div class="league-cat heal"><h4>&#128156; Healing</h4><p>Process what's been keeping you stuck. <strong>Depth wins.</strong></p></div>
+      </div>
+      <p class="body reveal" style="margin-top:2vmin">Win 2 of 3 categories each week = <strong>Win the matchup.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 6: YOU FILM, WE EDIT ═══════════ -->
+
+  <section class="slide bg-darkest">
+    <div class="act">The Secret Weapon</div>
+    <div class="stack" style="max-width:700px;width:100%">
+      <h2 class="title reveal">YOU FILM IT.<br>WE <span class="gold">EDIT</span> IT.</h2>
+      <p class="body reveal">You capture the moments. An editing team turns them into polished, branded content. Every week.</p>
+      <div class="package reveal">
+        <div class="pkg-item"><span class="icon">&#127909;</span><span class="text">Dump raw footage weekly. Get back ready-to-post content.</span></div>
+        <div class="pkg-item"><span class="icon">&#128196;</span><span class="text">Prompts and templates so you always know what to film.</span></div>
+        <div class="pkg-item"><span class="icon">&#127942;</span><span class="text">Real opponents. Live scoring. Weekly matchups.</span></div>
+        <div class="pkg-item"><span class="icon">&#128640;</span><span class="text">Weekly highlight reel featuring the best moments from all players.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 7: MECHANICS (3 slides) ═══════════ -->
+
+  <section class="slide bg-sport">
+    <div class="act">How It Works</div>
+    <div class="stack" style="max-width:800px;width:100%">
+      <p class="kicker reveal">Week 3 Matchup</p>
+      <div class="vs-matchup reveal">
+        <div class="vs-team left">
+          <div class="team-name">Team Firewalkers</div>
+          <div class="team-score">2</div>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div class="vs-team right">
+          <div class="team-name">Team Vibe Tribe</div>
+          <div class="team-score">1</div>
+        </div>
+      </div>
+      <div class="cat-bars reveal">
+        <div class="cat-bar tune"><span class="label">Tune</span><div class="track"><div class="fill-l" style="--w:62%"></div><div class="fill-r" style="--w:38%"></div></div></div>
+        <div class="cat-bar wahoo"><span class="label">Wahoo</span><div class="track"><div class="fill-l" style="--w:45%"></div><div class="fill-r" style="--w:55%"></div></div></div>
+        <div class="cat-bar heal"><span class="label">Healing</span><div class="track"><div class="fill-l" style="--w:71%"></div><div class="fill-r" style="--w:29%"></div></div></div>
+      </div>
+      <p class="flavour reveal" style="margin-top:2vmin">Live scores. Lead changes.<br>Notifications when your opponent pulls ahead.</p>
+    </div>
+  </section>
+
+  <section class="slide bg-fire">
+    <div class="act">How It Works</div>
+    <div class="stack" style="max-width:900px;width:100%">
+      <h2 class="title reveal">THE <span class="gold">FLYWHEEL.</span></h2>
+      <div class="flywheel reveal">
+        <div class="fly-step">You compete <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">You document it <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">It becomes content <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">Your audience grows <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">Your events fill <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">You earn league points <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">Better matchup <span class="arrow">&rarr;</span></div>
+        <div class="fly-step" style="border-color:var(--gold-dim);color:var(--gold-bright)">Better story &circlearrowleft;</div>
+      </div>
+      <p class="body reveal" style="margin-top:2vmin"><strong>Every action serves three purposes at once.</strong></p>
+    </div>
+  </section>
+
+  <section class="slide bg-warm">
+    <div class="act">How It Works</div>
+    <div class="stack" style="max-width:1000px;width:100%">
+      <h2 class="title reveal">YOUR <span class="gold">CONTENT MAP.</span></h2>
+      <p class="body reveal">Each week has a theme. Every piece of content builds your business.</p>
+      <div class="week-grid reveal">
+        <div class="week-card">
+          <h4>Week 1: Pay Rent</h4>
+          <p class="prompt">"How I fund while I build"</p>
+          <p class="prompt">"What I was doing before anyone noticed"</p>
+          <p class="prompt">"My day job isn't a failure, it's a strategy"</p>
+        </div>
+        <div class="week-card">
+          <h4>Week 2: Blow Up</h4>
+          <p class="prompt">"The rule I'm breaking"</p>
+          <p class="prompt">"Two worlds that shouldn't mix, but do in me"</p>
+          <p class="prompt">"This is my tribe"</p>
+        </div>
+        <div class="week-card">
+          <h4>Week 3: Scale</h4>
+          <p class="prompt">"What I give away for free"</p>
+          <p class="prompt">"What I charge for and why"</p>
+          <p class="prompt">"How this becomes a business"</p>
+        </div>
+        <div class="week-card">
+          <h4>Week 4: Launch</h4>
+          <p class="prompt">"Before vs now"</p>
+          <p class="prompt">"My first paid experience"</p>
+          <p class="prompt">"What's next for my movement"</p>
+        </div>
+      </div>
+      <p class="body reveal" style="margin-top:2vmin"><strong>Every piece of content also builds your business. That's the point.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 8: NARRATIVE ═══════════ -->
+
+  <section class="slide bg-warm">
+    <div class="act">The Narrative</div>
+    <div class="stack" style="max-width:800px;width:100%">
+      <h2 class="title reveal">TWO LAYERS OF<br><span class="gold">STORY.</span></h2>
+      <div class="layers reveal">
+        <div class="layer">
+          <div class="who" style="color:var(--gold-bright)">You</div>
+          <div class="what">Post daily. Document your Wahoos, practices, breakthroughs. <strong>You are the main character of your own feed.</strong></div>
+        </div>
+        <div class="layer">
+          <div class="who" style="color:var(--purple-bright)">Huzz</div>
+          <div class="what">Weekly reviews. Match results, upsets, Wahoo of the Week. <strong>The commentator who weaves the league narrative.</strong></div>
+        </div>
+      </div>
+      <p class="flavour reveal" style="margin-top:2vmin">You tell your story.<br>I tell the league's story.<br>Your audience watches both.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 9: ACTIVATION (1 slide) ═══════════ -->
+
+  <section class="slide bg-darkest">
+    <div class="stack" style="max-width:700px">
+      <h2 class="title reveal">WHAT'S THE WAHOO<br>YOU'VE BEEN<br><span class="gold">AVOIDING?</span></h2>
+      <p class="body reveal">Going live for the first time? Launching the offer? Sharing your real story? Hosting an event in a new city?</p>
+      <p class="body reveal"><strong>You already know what it is.</strong></p>
+      <p class="flavour reveal">That's your first Wahoo.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 10: STAKES (2 slides) ═══════════ -->
+
+  <section class="slide bg-gold">
+    <div class="act">The Stakes</div>
+    <div class="stack" style="max-width:800px;width:100%">
+      <h2 class="title reveal">IN FOUR <span class="gold">WEEKS.</span></h2>
+      <div class="cards reveal">
+        <div class="card">
+          <h4>&#9889; Real Shifts</h4>
+          <p>Daily practices, courage challenges, and healing work. Not theory. Actual changes in how you feel, show up, and operate.</p>
+        </div>
+        <div class="card">
+          <h4>&#128248; 30+ Content Pieces</h4>
+          <p>Professionally edited. Ready to post. Documenting a real transformation, not another talking head about something you did last year.</p>
+        </div>
+        <div class="card">
+          <h4>&#127775; A Story People Follow</h4>
+          <p>You become a character in a league people are watching. Your audience grows because your journey is genuinely interesting.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 11: CHARGE (1 slide) ═══════════ -->
+
+  <section class="slide bg-fire">
+    <div class="stack" style="max-width:700px">
+      <h2 class="title reveal">THE PEOPLE WHO<br>FILL ROOMS AREN'T<br>THE MOST <span class="gold">TALENTED.</span></h2>
+      <h2 class="title reveal">THEY'RE THE MOST<br><span class="gold">VISIBLE.</span></h2>
+      <p class="flavour reveal">Visibility comes from showing up,<br>not from being perfect.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ BEAT 12: GO (1 slide) ═══════════ -->
+
+  <section class="slide bg-deep">
+    <div class="stack">
+      <p class="kicker reveal">Season 1</p>
+      <h2 class="title reveal" style="margin-top:1vmin">FOUR WEEKS.<br>LIMITED <span class="gold">SPOTS.</span></h2>
+      <p class="body reveal">Paid entry covers your editing team, league access, content templates, and weekly highlight reel.</p>
+      <p class="flavour reveal">The game starts when you do.</p>
+      <a class="cta-btn reveal" href="#">I'M IN</a>
+    </div>
+  </section>
+
+</div>
+
+<div id="dots"></div>
+<div id="counter"><b id="cur">01</b> / <span id="tot">19</span></div>
+<div id="hint">&larr; &rarr; or Space to navigate</div>
+
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+const dotsBox = document.getElementById('dots');
+const cur = document.getElementById('cur');
+const prog = document.getElementById('progress');
+document.getElementById('tot').textContent = String(slides.length).padStart(2,'0');
+let i = 0;
+slides.forEach((_,k) => { const b = document.createElement('button'); b.onclick = () => go(k); dotsBox.appendChild(b); });
+const dots = [...dotsBox.children];
+
+function go(n){
+  i = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach((s,k) => s.classList.toggle('active', k===i));
+  dots.forEach((d,k) => d.classList.toggle('on', k===i));
+  cur.textContent = String(i+1).padStart(2,'0');
+  prog.style.width = ((i+1)/slides.length*100)+'%';
+}
+function next(){ go(i+1); }
+function prev(){ go(i-1); }
+
+addEventListener('keydown', e => {
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){ e.preventDefault(); next(); }
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); prev(); }
+  if(e.key==='Home') go(0);
+  if(e.key==='End') go(slides.length-1);
+});
+
+let touchX = 0;
+addEventListener('touchstart', e => { touchX = e.changedTouches[0].screenX; }, {passive:true});
+addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].screenX - touchX;
+  if(Math.abs(dx) > 50){ dx < 0 ? next() : prev(); }
+}, {passive:true});
+
+go(0);
+</script>
+</body>
+</html>

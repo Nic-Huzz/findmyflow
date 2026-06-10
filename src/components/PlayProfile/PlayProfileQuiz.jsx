@@ -7,6 +7,7 @@ import DNAReveal from './DNAReveal'
 import StuckPointSelection from './StuckPointSelection'
 import FollowUpQuestions from './FollowUpQuestions'
 import ProfileSummary from './ProfileSummary'
+import { onPlayProfileComplete } from '../../lib/brain/autoPopulate'
 import './PlayProfile.css'
 
 // Strip large stageStories from founder objects before saving to localStorage
@@ -201,6 +202,16 @@ export default function PlayProfileQuiz({ userId, onQuizComplete, founders: exte
         .upsert(row, { onConflict: 'user_id' })
 
       if (error) console.error('Failed to save founder DNA result:', error)
+
+      // Auto-populate brain
+      if (userId) {
+        onPlayProfileComplete(userId, {
+          dnaCode: s.dnaProfile?.code || row.dna_code,
+          archetype: row.archetype,
+          matchedFounder: row.matched_founder,
+          sliders: s.sliderValues,
+        })
+      }
 
       try { if (storageKey) localStorage.removeItem(storageKey) } catch {}
 

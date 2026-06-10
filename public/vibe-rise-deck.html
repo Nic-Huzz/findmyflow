@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Rise — A movement for human aliveness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a1a;
+    --bg-2: #14122b;
+    --bg-3: #1a1535;
+    --ink: #ffffff;
+    --ink-dim: #b0b0c0;
+    --ink-faint: #6a6a85;
+    --purple: #5e17eb;
+    --gold: #E9A23B;
+    --grad: linear-gradient(135deg, #5e17eb 0%, #8b3dd9 45%, #E9A23B 100%);
+    --grad-soft: linear-gradient(135deg, rgba(94,23,235,0.18) 0%, rgba(233,162,59,0.18) 100%);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .deck {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(2rem, 5vw, 6rem);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    background: radial-gradient(ellipse at 50% 50%, var(--bg-2) 0%, var(--bg) 70%);
+    overflow-y: auto;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+  }
+
+  .slide-inner {
+    width: 100%;
+    max-width: 1200px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+    transition-delay: 0.15s;
+  }
+
+  .slide.active .slide-inner {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Grain overlay */
+  .deck::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Typography */
+  .eyebrow {
+    font-size: clamp(0.7rem, 1vw, 0.85rem);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+    margin-bottom: 2rem;
+  }
+
+  h1.mega {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(4rem, 14vw, 13rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 1.5rem;
+  }
+
+  h2.big {
+    font-size: clamp(2.2rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+  }
+
+  h2.serif {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2rem, 4.5vw, 4rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .gradient-text {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .body-text {
+    font-size: clamp(1rem, 1.4vw, 1.3rem);
+    color: var(--ink-dim);
+    line-height: 1.5;
+    max-width: 760px;
+    margin-bottom: 1rem;
+    font-weight: 300;
+  }
+
+  .body-text strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .subtitle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    color: var(--ink-dim);
+    letter-spacing: 0.01em;
+  }
+
+  /* Bar graphic */
+  .bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+    max-width: 540px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .bar-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    width: 110px;
+    font-weight: 500;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--grad);
+    border-radius: 4px;
+    transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w, 100%); }
+
+  /* Navigation */
+  .nav-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-arrow:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(233,162,59,0.4);
+  }
+
+  .nav-arrow.prev { left: 2rem; }
+  .nav-arrow.next { right: 2rem; }
+  .nav-arrow svg { width: 18px; height: 18px; }
+  .nav-arrow.disabled { opacity: 0.2; pointer-events: none; }
+
+  /* Dots */
+  .dots {
+    position: fixed;
+    bottom: 1.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 50;
+    max-width: 90vw;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .dot.active {
+    background: var(--gold);
+    width: 24px;
+    border-radius: 3px;
+  }
+
+  /* Slide counter */
+  .counter {
+    position: fixed;
+    top: 1.75rem;
+    right: 2rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    z-index: 50;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .counter .current {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* === TITLE SLIDE === */
+  .title-slide { text-align: center; }
+  .title-slide .mega { margin: 0 auto 2rem; }
+  .title-slide .accent-line {
+    width: 80px;
+    height: 2px;
+    background: var(--grad);
+    margin: 2rem auto;
+  }
+
+  /* === STAGE SLIDES (kid/school) === */
+  .stage-slide { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  @media (max-width: 900px) { .stage-slide { grid-template-columns: 1fr; gap: 2rem; } }
+
+  .age-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(233,162,59,0.3);
+    border-radius: 100px;
+    margin-bottom: 2rem;
+  }
+
+  .radiating {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* === FLAT YEARS === */
+  .flat-list {
+    list-style: none;
+    margin-top: 3rem;
+  }
+  .flat-list li {
+    font-size: clamp(1.05rem, 1.5vw, 1.4rem);
+    padding: 1.25rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    color: var(--ink-faint);
+    text-decoration: line-through;
+    text-decoration-color: rgba(255,255,255,0.15);
+  }
+  .flat-list li::before {
+    content: attr(data-num);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 0.9rem;
+    min-width: 24px;
+    text-decoration: none;
+  }
+  .flat-list li strong { color: var(--ink-dim); margin-right: 0.5rem; font-weight: 500; }
+
+  /* === CRACK SLIDE === */
+  .crack-slide { position: relative; }
+  .crack-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .crack-svg { width: 100%; height: 100%; opacity: 0.5; }
+
+  /* === ACTUAL PROBLEM === */
+  .problem-slide { text-align: center; }
+  .problem-statement {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    margin: 2rem 0 3rem;
+    letter-spacing: -0.02em;
+  }
+  .problem-list {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .problem-list > div {
+    flex: 1;
+    min-width: 260px;
+    text-align: left;
+    padding-left: 1.5rem;
+    border-left: 2px solid;
+    border-image: var(--grad) 1;
+  }
+  .problem-list .num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .problem-list .text { font-size: 1.1rem; color: var(--ink); font-weight: 400; line-height: 1.4; }
+  .problem-list .text strong { color: var(--gold); font-weight: 600; }
+
+  /* === QUADRANT === */
+  .quadrant-slide { display: grid; grid-template-columns: 1fr 1.1fr; gap: 4rem; align-items: center; }
+  @media (max-width: 900px) { .quadrant-slide { grid-template-columns: 1fr; } }
+
+  .quadrant {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .quadrant-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .quad {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: 1px solid rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.015);
+    transition: all 0.6s ease;
+    position: relative;
+  }
+  .quad .quad-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+  }
+  .quad .quad-sub {
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    margin-top: 0.3rem;
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+  }
+  .quad.glow {
+    background: var(--grad);
+    box-shadow: 0 0 60px rgba(233,162,59,0.4), inset 0 0 30px rgba(255,255,255,0.1);
+  }
+  .quad.glow .quad-label {
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+  .quad.glow .quad-sub {
+    color: rgba(255,255,255,0.9);
+  }
+
+  .axis-label {
+    position: absolute;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+  .axis-name-x { bottom: -3rem; left: 50%; transform: translateX(-50%); color: var(--gold); }
+  .axis-name-y { left: -3rem; top: 50%; transform: translateY(-50%) rotate(-90deg); color: var(--gold); }
+
+  /* === CONTAGION === */
+  .contagion-slide { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  @media (max-width: 900px) { .contagion-slide { grid-template-columns: 1fr; } }
+  .ripple-container { position: relative; aspect-ratio: 1; max-width: 420px; margin: 0 auto; width: 100%; }
+
+  /* === FOUR LAYERS === */
+  .layers-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    max-width: 900px;
+  }
+  .layer {
+    padding: 1.25rem 2rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    transition: all 0.5s ease;
+  }
+  .layer:hover { transform: translateX(8px); border-color: rgba(233,162,59,0.3); }
+  .layer-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    width: 40px;
+  }
+  .layer-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-width: 180px;
+  }
+  .layer-desc { color: var(--ink-dim); font-size: 0.95rem; }
+  .layer.l0 { background: rgba(255,255,255,0.01); border-style: dashed; }
+  .layer.l0 .layer-num { color: var(--ink-faint); }
+  .layer.l1 .layer-num { color: #5e17eb; }
+  .layer.l2 .layer-num { color: #8b3dd9; }
+  .layer.l3 .layer-num { color: #c570a4; }
+  .layer.l4 .layer-num { color: #E9A23B; }
+  .layer.l4 { background: linear-gradient(90deg, rgba(233,162,59,0.06), transparent); border-color: rgba(233,162,59,0.15); }
+
+  /* === PUNCHY DEPTH COMPONENTS === */
+  .state-ladder {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 2rem auto;
+    max-width: 720px;
+  }
+  .state-band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.6s ease;
+  }
+  .state-band.s-vibe {
+    background: var(--grad);
+    box-shadow: 0 0 50px rgba(233,162,59,0.35), inset 0 0 20px rgba(255,255,255,0.08);
+    border-color: rgba(233,162,59,0.4);
+  }
+  .state-band.s-ventral { background: rgba(94,23,235,0.18); }
+  .state-band.s-symp { background: rgba(94,23,235,0.08); }
+  .state-band.s-dorsal { background: rgba(255,255,255,0.02); }
+  .state-name {
+    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .state-band.s-vibe .state-name { color: var(--ink); font-weight: 800; }
+  .state-band.s-ventral .state-name { color: var(--ink); }
+  .state-band.s-symp .state-name { color: var(--ink-dim); }
+  .state-band.s-dorsal .state-name { color: var(--ink-faint); }
+  .state-desc {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+  }
+  .state-band.s-vibe .state-desc { color: rgba(255,255,255,0.95); }
+  .state-band.s-ventral .state-desc { color: var(--ink-dim); }
+  .state-band.s-symp .state-desc { color: var(--ink-faint); }
+  .state-band.s-dorsal .state-desc { color: var(--ink-faint); opacity: 0.7; }
+  .state-tag {
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  /* Before/After Table */
+  .before-after {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    margin: 2rem auto;
+    max-width: 900px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .ba-col { padding: 0; background: var(--bg-2); }
+  .ba-header {
+    padding: 1rem 1.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .ba-col.before .ba-header { color: var(--ink-faint); }
+  .ba-col.after .ba-header {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .ba-row {
+    padding: 0.85rem 1.5rem;
+    font-size: clamp(0.85rem, 1.05vw, 1rem);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.4;
+  }
+  .ba-row:last-child { border-bottom: none; }
+  .ba-col.before .ba-row { color: var(--ink-faint); text-decoration: line-through; text-decoration-color: rgba(255,255,255,0.15); }
+  .ba-col.after .ba-row { color: var(--ink); }
+
+  /* Big Quote Block */
+  .quote-block {
+    margin: 2.5rem auto;
+    padding: 2.5rem 3rem;
+    max-width: 900px;
+    border-left: 3px solid;
+    border-image: var(--grad) 1;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .quote-block p { margin-bottom: 1rem; }
+  .quote-block p:last-child { margin-bottom: 0; }
+  .quote-block .punch {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 400;
+  }
+
+  /* Stat Row */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin: 2rem auto;
+    max-width: 900px;
+  }
+  @media (max-width: 700px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+  .stat-cell {
+    text-align: center;
+    padding: 1rem;
+  }
+  .stat-cell .stat-figure {
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 0.3rem;
+    line-height: 1;
+  }
+  .stat-cell .stat-label {
+    font-size: 0.75rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+    line-height: 1.35;
+  }
+
+  /* 9D vs Shift Architecture compare */
+  .compare-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    margin: 2rem auto;
+    max-width: 900px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .compare-col { padding: 0; background: var(--bg-2); }
+  .compare-col.ours { background: linear-gradient(180deg, rgba(94,23,235,0.08), rgba(233,162,59,0.05)); }
+  .compare-header {
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    letter-spacing: 0.05em;
+  }
+  .compare-col.theirs .compare-header { color: var(--ink-dim); }
+  .compare-col.ours .compare-header {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .compare-row {
+    padding: 0.9rem 1.5rem;
+    font-size: clamp(0.85rem, 1.05vw, 1rem);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.4;
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-col.theirs .compare-row { color: var(--ink-faint); }
+  .compare-col.ours .compare-row { color: var(--ink); }
+
+  /* Phase band - simpler */
+  .phase-band {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    margin: 2rem auto;
+    max-width: 900px;
+  }
+  @media (max-width: 700px) { .phase-band { grid-template-columns: repeat(3, 1fr); } }
+  .phase-cell {
+    padding: 0.85rem 0.5rem;
+    text-align: center;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .phase-cell.final {
+    background: rgba(233,162,59,0.12);
+    border-color: rgba(233,162,59,0.3);
+  }
+  .phase-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+  .phase-name {
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  /* === LAYER DEPTH SLIDES === */
+  .depth-slide { max-width: 1100px; }
+  .depth-eyebrow {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .depth-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 1.8rem;
+    font-weight: 300;
+  }
+  .depth-eyebrow-text {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+  .depth-headline {
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 2rem;
+    max-width: 900px;
+  }
+  .depth-block {
+    margin-bottom: 1.5rem;
+  }
+  .depth-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .depth-body {
+    font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+    color: var(--ink-dim);
+    line-height: 1.55;
+    font-weight: 300;
+    max-width: 920px;
+  }
+  .depth-body strong { color: var(--ink); font-weight: 500; }
+  .depth-body em { color: var(--gold); font-style: italic; }
+  .depth-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 800px) { .depth-cols { grid-template-columns: 1fr; gap: 1.25rem; } }
+  .depth-feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-top: 0.4rem;
+  }
+  .depth-feature-list li {
+    font-size: 0.95rem;
+    color: var(--ink-dim);
+    padding-left: 1.2rem;
+    position: relative;
+    line-height: 1.4;
+  }
+  .depth-feature-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 8px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .depth-feature-list li strong { color: var(--ink); font-weight: 500; }
+  .depth-economics {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.95rem;
+    color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+  }
+  .depth-economics strong {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-style: normal;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+  }
+  .polyvagal-states {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin: 0.75rem 0 0.5rem;
+  }
+  @media (max-width: 700px) { .polyvagal-states { grid-template-columns: 1fr; } }
+  .pv-state {
+    padding: 0.85rem 1rem;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .pv-state.target {
+    background: var(--grad-soft);
+    border-color: rgba(233,162,59,0.3);
+  }
+  .pv-state .pv-name {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .pv-state.target .pv-name {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .pv-state .pv-desc { font-size: 0.78rem; color: var(--ink-dim); line-height: 1.35; font-style: italic; font-family: 'Fraunces', serif; }
+
+  /* === LAYER DETAIL SLIDES === */
+  .layer-detail { display: grid; grid-template-columns: 1fr 1.3fr; gap: 4rem; align-items: center; }
+  @media (max-width: 900px) { .layer-detail { grid-template-columns: 1fr; } }
+
+  .layer-badge {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(5rem, 12vw, 9rem);
+    line-height: 1;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 300;
+  }
+  .layer-badge-sub {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  .layer-north-star {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .layer-north-star .ns-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.3rem;
+  }
+  .layer-north-star .ns-name {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 1.4rem;
+  }
+
+  .proof-tag {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.6rem 1.2rem;
+    background: rgba(233,162,59,0.08);
+    border: 1px solid rgba(233,162,59,0.2);
+    border-radius: 100px;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    font-weight: 500;
+  }
+
+  /* === SHIFT IS HAPPENING === */
+  .shift-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 700px) { .shift-grid { grid-template-columns: 1fr; } }
+  .shift-stat {
+    padding: 1.5rem;
+    border-left: 2px solid;
+    border-image: var(--grad) 1;
+    background: rgba(255,255,255,0.015);
+  }
+  .shift-stat .stat-num {
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .shift-stat .stat-text { color: var(--ink-dim); font-size: 0.95rem; line-height: 1.4; }
+  .shift-stat .stat-text strong { color: var(--ink); }
+
+  /* === FLYWHEEL === */
+  .flywheel-slide { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: center; text-align: center; }
+  .flywheel-svg { width: 100%; max-width: 620px; height: auto; margin: 0 auto; }
+
+  /* === FOUNDER PLAYBOOKS === */
+  .playbook-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem; }
+  @media (max-width: 900px) { .playbook-grid { grid-template-columns: 1fr; gap: 2rem; } }
+  .playbook {
+    padding: 2rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    position: relative;
+  }
+  .playbook-name {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+  .playbook-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1.5rem;
+  }
+  .playbook-quote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    border-left: 2px solid rgba(233,162,59,0.3);
+  }
+  .playbook-mapping {
+    font-size: 0.95rem;
+    color: var(--ink-dim);
+    line-height: 1.5;
+  }
+  .playbook-mapping strong { color: var(--ink); }
+
+  /* === PROVEN / BET === */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; gap: 2rem; } }
+  .col-head {
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .col-list { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; }
+  .col-list li {
+    font-size: 0.98rem;
+    line-height: 1.4;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  .col-list.proven li { color: var(--ink); }
+  .col-list.proven li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .col-list.bet li {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 500;
+  }
+  .col-list.bet li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    -webkit-text-fill-color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* === NUMBERS === */
+  .numbers-slide { text-align: center; }
+  .numbers-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin: 3rem 0;
+  }
+  @media (max-width: 700px) { .numbers-row { grid-template-columns: 1fr; gap: 1.5rem; } }
+  .num-cell { text-align: left; }
+  .num-year {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .num-big {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .num-cell:nth-child(3) .num-big {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .num-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 1rem;
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .num-bar::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--grad);
+    transition: width 1.5s ease;
+    width: 0;
+  }
+  .slide.active .num-cell:nth-child(1) .num-bar::after { width: 20%; }
+  .slide.active .num-cell:nth-child(2) .num-bar::after { width: 45%; }
+  .slide.active .num-cell:nth-child(3) .num-bar::after { width: 100%; }
+  .num-detail {
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    margin-top: 0.5rem;
+  }
+
+  /* === ASK === */
+  .ask-slide { text-align: left; max-width: 900px; }
+  .ask-headline {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .ask-headline .gradient-text { font-weight: 800; }
+  .ask-period { color: var(--ink-faint); font-size: 0.9rem; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 2.5rem; font-family: 'Fraunces', serif; font-style: italic; }
+  .ask-list { list-style: none; display: flex; flex-direction: column; gap: 1.1rem; }
+  .ask-list li {
+    font-size: 1.05rem;
+    color: var(--ink-dim);
+    padding-left: 2rem;
+    position: relative;
+    line-height: 1.5;
+  }
+  .ask-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 12px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .ask-list li strong { color: var(--ink); font-weight: 500; }
+
+  /* === WHY NOW === */
+  .why-slide { text-align: center; }
+  .date-tag {
+    display: inline-block;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--gold);
+    margin-bottom: 2rem;
+    padding: 0.5rem 1.5rem;
+    border-top: 1px solid rgba(233,162,59,0.3);
+    border-bottom: 1px solid rgba(233,162,59,0.3);
+  }
+
+  /* === FOUNDER STORY === */
+  .founder-slide { text-align: left; max-width: 900px; }
+  .founder-quote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 2rem 0;
+    padding-left: 1.5rem;
+    border-left: 3px solid;
+    border-image: var(--grad) 1;
+  }
+
+  /* === CLOSE === */
+  .close-slide { text-align: center; }
+  .close-line {
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+  }
+  .close-line.gradient {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .close-stack {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink-dim);
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    line-height: 1.5;
+    margin-bottom: 4rem;
+  }
+  .close-logo {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Animations */
+  @keyframes pulse-ring {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+  .ripple-ring {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(233,162,59,0.4);
+    border-radius: 50%;
+    animation: pulse-ring 3s ease-out infinite;
+  }
+  .ripple-ring:nth-child(2) { animation-delay: 1s; }
+  .ripple-ring:nth-child(3) { animation-delay: 2s; }
+
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .rotating { animation: rotate-slow 40s linear infinite; transform-origin: center; }
+
+  /* Mobile */
+  @media (max-width: 700px) {
+    .nav-arrow.prev { left: 0.5rem; }
+    .nav-arrow.next { right: 0.5rem; }
+    .counter { right: 1rem; top: 1rem; font-size: 0.7rem; }
+    .slide { padding: 3rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1: TITLE -->
+  <section class="slide active title-slide" data-slide="1">
+    <div class="slide-inner">
+      <div class="eyebrow">A new infrastructure</div>
+      <h1 class="mega">VIBE<br>RISE</h1>
+      <div class="accent-line"></div>
+      <p class="subtitle">A movement for human aliveness.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: THE KID -->
+  <section class="slide stage-slide" data-slide="2">
+    <div class="slide-inner stage-slide">
+      <div>
+        <div class="age-tag">Age 5</div>
+        <h2 class="serif">Picture a kid.<br><em>Five years old.</em></h2>
+        <p class="body-text" style="margin-top:2rem;">Dancing in the living room. Yelling. Making weird noises. Crying one minute, laughing the next. Saying exactly what they think.</p>
+        <p class="body-text"><strong>Fully expressed. Completely safe.</strong></p>
+        <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--ink);">Both dials at maximum. <em class="gradient-text">That's the state.</em></p>
+        <div class="bars">
+          <div class="bar-row"><span class="bar-label">Expression</span><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div></div>
+          <div class="bar-row"><span class="bar-label">Safety</span><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div></div>
+        </div>
+      </div>
+      <div class="radiating">
+        <svg viewBox="0 0 400 400" style="width:100%;height:100%;">
+          <defs>
+            <radialGradient id="kidGlow" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#E9A23B" stop-opacity="0.8"/>
+              <stop offset="50%" stop-color="#5e17eb" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#0a0a1a" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="grad-line" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#5e17eb"/>
+              <stop offset="100%" stop-color="#E9A23B"/>
+            </linearGradient>
+          </defs>
+          <circle cx="200" cy="200" r="180" fill="url(#kidGlow)"/>
+          <g class="rotating">
+            <g stroke="url(#grad-line)" stroke-width="1.2" fill="none" opacity="0.8">
+              <line x1="200" y1="20" x2="200" y2="80"/>
+              <line x1="200" y1="320" x2="200" y2="380"/>
+              <line x1="20" y1="200" x2="80" y2="200"/>
+              <line x1="320" y1="200" x2="380" y2="200"/>
+              <line x1="70" y1="70" x2="115" y2="115"/>
+              <line x1="285" y1="285" x2="330" y2="330"/>
+              <line x1="70" y1="330" x2="115" y2="285"/>
+              <line x1="285" y1="115" x2="330" y2="70"/>
+            </g>
+          </g>
+          <circle cx="200" cy="200" r="60" fill="none" stroke="url(#grad-line)" stroke-width="1.5"/>
+          <circle cx="200" cy="200" r="6" fill="#E9A23B"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: SCHOOL -->
+  <section class="slide stage-slide" data-slide="3">
+    <div class="slide-inner">
+      <div class="age-tag">Age 5 – 12</div>
+      <h2 class="big">Expression dims.</h2>
+      <p class="body-text">Six hours a day behind a desk. Uniform. Hand up. Right answer or laughed at.</p>
+      <p class="body-text">School teaches one thing above all: <strong>thinking &gt; feeling. Knowledge &gt; experience.</strong> Art becomes an elective. Music becomes a grade. Dance doesn't exist.</p>
+      <p class="body-text" style="font-style:italic;font-family:Fraunces,serif;font-size:1.2rem;color:var(--ink);">The body becomes something you carry your brain around in.</p>
+      <div class="bars">
+        <div class="bar-row"><span class="bar-label">Expression</span><div class="bar-track"><div class="bar-fill" style="--w:30%"></div></div></div>
+        <div class="bar-row"><span class="bar-label">Safety</span><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: HIGH SCHOOL -->
+  <section class="slide stage-slide" data-slide="4">
+    <div class="slide-inner">
+      <div class="age-tag">Age 13 – 18</div>
+      <h2 class="big">Safety dims.</h2>
+      <p class="body-text">Locked in a building with 500 other insecure, hormonal humans for five years.</p>
+      <p class="body-text">Everyone remembers the moment. <strong>The dance you didn't do. The thing you didn't say. The interest you hid.</strong></p>
+      <p class="body-text">The most brutal enforcement mechanism in human history: <em style="color:var(--gold);font-style:normal;">teenagers.</em></p>
+      <p class="body-text">They learn the safest strategy: <strong>figure out what's acceptable and perform that version.</strong></p>
+      <div class="bars">
+        <div class="bar-row"><span class="bar-label">Expression</span><div class="bar-track"><div class="bar-fill" style="--w:15%"></div></div></div>
+        <div class="bar-row"><span class="bar-label">Safety</span><div class="bar-track"><div class="bar-fill" style="--w:25%"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: BOTH GONE -->
+  <section class="slide stage-slide" data-slide="5">
+    <div class="slide-inner">
+      <div class="age-tag">Age 18</div>
+      <h2 class="big">Both dials gone.<br><span style="color:var(--ink-faint);font-weight:300;font-style:italic;font-family:Fraunces,serif;">No map.</span></h2>
+      <p class="body-text">13 years of sitting behind a desk. That's what feels normal. So they go find another desk.</p>
+      <p class="body-text"><strong>University. Then a job. Then a career.</strong> Sitting in a slightly nicer chair, performing a slightly more sophisticated version of acceptable.</p>
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--ink);">And everyone calls this <em class="gradient-text">"growing up."</em></p>
+      <div class="bars">
+        <div class="bar-row"><span class="bar-label">Expression</span><div class="bar-track"><div class="bar-fill" style="--w:8%"></div></div></div>
+        <div class="bar-row"><span class="bar-label">Safety</span><div class="bar-track"><div class="bar-fill" style="--w:8%"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: THE PATTERN -->
+  <section class="slide crack-slide" data-slide="6">
+    <div class="crack-bg">
+      <svg class="crack-svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="crackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#E9A23B" stop-opacity="0"/>
+            <stop offset="50%" stop-color="#E9A23B" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#5e17eb" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3"/>
+          </filter>
+        </defs>
+        <g stroke="url(#crackGrad)" stroke-width="1.5" fill="none" filter="url(#glow)">
+          <path d="M0,400 L300,380 L350,420 L600,390 L650,440 L900,400 L950,360 L1200,400"/>
+          <path d="M300,380 L320,340 L340,360" />
+          <path d="M600,390 L580,330 L620,310" />
+          <path d="M900,400 L920,460 L880,490" />
+        </g>
+        <g stroke="url(#crackGrad)" stroke-width="0.5" fill="none" opacity="0.5">
+          <path d="M0,400 L300,380 L350,420 L600,390 L650,440 L900,400 L950,360 L1200,400"/>
+        </g>
+      </svg>
+    </div>
+    <div class="slide-inner" style="position:relative;z-index:1;">
+      <div class="eyebrow">The Pattern</div>
+      <h2 class="serif" style="margin-bottom:2rem;">We've started to see <em class="gradient-text" style="font-style:italic;">midlife crises as normal.</em></h2>
+      <p class="body-text">Just part of life. The thing that happens to you in your forties. Burnout. A breakdown. A quiet Tuesday at your desk: <strong>"Is this it?"</strong></p>
+      <p class="body-text">Sports car. Divorce. Career change. The clichés are so familiar we stopped questioning them.</p>
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.35rem;color:var(--ink);margin-top:1.5rem;">Nobody asks why this is happening to <em class="gradient-text">an entire generation.</em></p>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: THE ANTIDOTE -->
+  <section class="slide" data-slide="7">
+    <div class="slide-inner">
+      <div class="eyebrow">My Antidote</div>
+      <h2 class="big">I hit mine at <span class="gradient-text">23.</span></h2>
+      <p class="body-text" style="margin-top:1.5rem;">Spent $30K on 52 courses trying to <em style="color:var(--gold);font-style:italic;">think</em> my way out.</p>
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.35rem;color:var(--ink);margin-top:1.5rem;">What actually worked: <em class="gradient-text">one scary thing a week.</em></p>
+      <p class="body-text" style="margin-top:1.5rem;">Within <strong>4 weeks</strong> I was working remotely from Bali.</p>
+      <p class="body-text">Within <strong>3 months</strong> I'd quit.</p>
+      <p class="body-text">Within <strong>6 months</strong> I was funding my own life.</p>
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--ink);margin-top:2rem;">The bottleneck was never information. <em class="gradient-text">It was what my body believed was safe.</em></p>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: THE ACTUAL PROBLEM -->
+  <section class="slide problem-slide" data-slide="8">
+    <div class="slide-inner">
+      <div class="eyebrow">The actual problem</div>
+      <h2 class="problem-statement">We are <span class="gradient-text">vessels of experience.</span><br><span style="font-size:0.75em;color:var(--ink-dim);">We're not having enough<br>that make us feel alive.</span></h2>
+      <div class="problem-list">
+        <div>
+          <div class="num">01</div>
+          <div class="text">We don't feel <strong>safe enough</strong> to have them.</div>
+        </div>
+        <div>
+          <div class="num">02</div>
+          <div class="text">We don't even <strong>know what they are.</strong></div>
+        </div>
+      </div>
+      <p class="body-text" style="margin:3rem auto 0;font-family:Fraunces,serif;font-style:italic;color:var(--ink-dim);max-width:680px;text-align:center;">We call them <em style="color:var(--gold);">Wahoos.</em> The things that scare you and make you feel alive at the same time. Most adults can't name a single one.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 9: THE EQUATION (2x2) -->
+  <section class="slide quadrant-slide" data-slide="9">
+    <div class="slide-inner quadrant-slide">
+      <div>
+        <div class="eyebrow">The Equation</div>
+        <h2 class="big">Safety<br>× Expression<br>= <span class="gradient-text">Vibe Rise</span></h2>
+        <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--ink);">Stack enough experiences you love together and you have <em class="gradient-text">a life you love.</em></p>
+      </div>
+      <div style="position:relative;padding:3rem;">
+        <div class="quadrant">
+          <span class="axis-label axis-name-y">Safety →</span>
+          <span class="axis-label axis-name-x">Expression →</span>
+          <div class="quadrant-grid">
+            <div class="quad">
+              <span class="quad-label">Calm</span>
+              <span class="quad-sub">safe, but flat</span>
+            </div>
+            <div class="quad glow">
+              <span class="quad-label">Vibe Rise</span>
+              <span class="quad-sub">expressing, safe</span>
+            </div>
+            <div class="quad">
+              <span class="quad-label">Numb</span>
+              <span class="quad-sub">shutdown, not alive</span>
+            </div>
+            <div class="quad">
+              <span class="quad-label">Anxious</span>
+              <span class="quad-sub">performing, unsafe</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: A SHIFT IS HAPPENING -->
+  <section class="slide" data-slide="10">
+    <div class="slide-inner">
+      <div class="eyebrow">The Tailwind</div>
+      <h2 class="big">A shift is <span class="gradient-text">happening.</span></h2>
+      <div class="shift-grid">
+        <div class="shift-stat">
+          <div class="stat-num">$30B</div>
+          <div class="stat-text"><strong>Sober curious is a $30B trend.</strong> Gen Z drinks 20% less than any generation before. They're trading alcohol for something else.</div>
+        </div>
+        <div class="shift-stat">
+          <div class="stat-num">$1.2B</div>
+          <div class="stat-text"><strong>Breathwork industry</strong> — zero to $1.2B in a decade. 16.7% growth/year. Yoga did this in 15 years and became mainstream.</div>
+        </div>
+        <div class="shift-stat">
+          <div class="stat-num">100M+</div>
+          <div class="stat-text"><strong>Meditation app downloads.</strong> Headspace and Calm owned <em>"feel less bad."</em> The next category is <em>"feel alive."</em></div>
+        </div>
+        <div class="shift-stat">
+          <div class="stat-num">82K</div>
+          <div class="stat-text"><strong>Dawnbreak Australia</strong> — 0 → 82,000 followers in 18 months. Sober sunrise silent disco. 2,000 people dancing on Scarborough Beach at 5am. <em>No app. Just headphones and a sunrise.</em></div>
+        </div>
+      </div>
+      <p class="body-text" style="margin-top:2.5rem;font-family:Fraunces,serif;font-style:italic;font-size:1.25rem;color:var(--ink);">People are reaching for the state. <em class="gradient-text">Nobody has built the daily system that delivers it.</em></p>
+    </div>
+  </section>
+
+  <!-- SLIDE 11: FOUR LAYERS OVERVIEW -->
+  <section class="slide" data-slide="12">
+    <div class="slide-inner">
+      <div class="eyebrow">The Architecture</div>
+      <h2 class="big">Four layers<br><span style="font-weight:300;font-style:italic;font-family:Fraunces,serif;color:var(--ink-dim);">+ a funnel that feeds them.</span></h2>
+      <div class="layers-stack">
+        <div class="layer l0">
+          <div class="layer-num">00</div>
+          <div class="layer-title">Events (Funnel)</div>
+          <div class="layer-desc">Free brand stunts + paid workshops</div>
+        </div>
+        <div class="layer l1">
+          <div class="layer-num">01</div>
+          <div class="layer-title">The App</div>
+          <div class="layer-desc">Nike Run Club for personal growth</div>
+        </div>
+        <div class="layer l2">
+          <div class="layer-num">02</div>
+          <div class="layer-title">Creator Platform</div>
+          <div class="layer-desc">GoHighLevel for experience creators</div>
+        </div>
+        <div class="layer l3">
+          <div class="layer-num">03</div>
+          <div class="layer-title">Hardware</div>
+          <div class="layer-desc">The yoga mat industry for wellness</div>
+        </div>
+        <div class="layer l4">
+          <div class="layer-num">04</div>
+          <div class="layer-title">Certification</div>
+          <div class="layer-desc">9D Breathwork, but for all guided experiences</div>
+        </div>
+      </div>
+      <p class="body-text" style="margin-top:2rem;font-family:Fraunces,serif;font-style:italic;">Nobody has all four. <em class="gradient-text">9D has 3+4. GHL has 2. NRC has 1.</em> We're integrating all of them.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 13: LAYER 0 - EVENTS -->
+  <section class="slide layer-detail" data-slide="13">
+    <div class="slide-inner layer-detail">
+      <div>
+        <div class="layer-badge">00</div>
+        <div class="layer-badge-sub">The Funnel</div>
+        <div class="layer-north-star">
+          <div class="ns-label">North Star</div>
+          <div class="ns-name">Branson's blackboard +<br>Mateschitz's free samples</div>
+        </div>
+      </div>
+      <div>
+        <h2 class="big">Events</h2>
+        <p class="body-text"><strong>Two types, two purposes.</strong></p>
+        <p class="body-text">→ <strong>Brand stunts (free).</strong> Silent disco at monuments. Disco hikes. The Europe tour. Create content. Build brand. Route to app via QR.</p>
+        <p class="body-text">→ <strong>Workshops (paid).</strong> Breathwork. Dance journeys. Healing Compass. Revenue + acquisition combined.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 14: LAYER 1 - APP -->
+  <section class="slide layer-detail" data-slide="14">
+    <div class="slide-inner layer-detail">
+      <div>
+        <div class="layer-badge">01</div>
+        <div class="layer-badge-sub">The App</div>
+        <div class="layer-north-star">
+          <div class="ns-label">North Star</div>
+          <div class="ns-name">Nike Run Club</div>
+        </div>
+      </div>
+      <div>
+        <h2 class="big">Gamifies life.</h2>
+        <p class="body-text">Daily 4-state check-in. 9-level journey. <strong>Wahoo courage challenges.</strong> Tune tab. Fantasy League. Leaderboards. Zarlo AI coach.</p>
+        <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--ink);">Duolingo gamifies language. Strava gamifies cycling. <em class="gradient-text">Nobody gamifies life.</em></p>
+        <p class="body-text"><strong>14-day trial → $14.99/mo or $99/year.</strong></p>
+        <div class="proof-tag">BUILT · READY FOR SUPER-CONSUMER RELAUNCH</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 15: LAYER 1 - APP DEPTH (PUNCHY) -->
+  <section class="slide" data-slide="15">
+    <div class="slide-inner depth-slide" style="text-align:center;">
+      <div class="depth-eyebrow" style="justify-content:center;">
+        <span class="depth-num">01</span>
+        <span class="depth-eyebrow-text">Depth · The App</span>
+      </div>
+      <h2 class="depth-headline" style="margin-left:auto;margin-right:auto;">A <span class="gradient-text">fourth state.</span></h2>
+
+      <div class="state-ladder">
+        <div class="state-band s-vibe">
+          <span class="state-name">Vibe Rise</span>
+          <span class="state-desc">expressed + alive</span>
+        </div>
+        <div class="state-band s-ventral">
+          <span class="state-name">Ventral Vagal</span>
+          <span class="state-desc">safe + social</span>
+        </div>
+        <div class="state-band s-symp">
+          <span class="state-name">Sympathetic</span>
+          <span class="state-desc">fight / flight</span>
+        </div>
+        <div class="state-band s-dorsal">
+          <span class="state-name">Dorsal Vagal</span>
+          <span class="state-desc">shutdown / numb</span>
+        </div>
+      </div>
+
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--ink);max-width:760px;margin:1rem auto 0;">Polyvagal theory maps three states. <em class="gradient-text">We're training the fourth.</em></p>
+      <p class="body-text" style="max-width:760px;margin:1rem auto 0;">Your Wahoos and curiosities become the compass for life design.</p>
+
+      <div class="depth-economics" style="text-align:center;max-width:680px;margin:1.5rem auto 0;"><strong>$14.99/mo · $99/year · 14-day free trial</strong></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 16: LAYER 2 - CREATOR PLATFORM -->
+  <section class="slide layer-detail" data-slide="15">
+    <div class="slide-inner layer-detail">
+      <div>
+        <div class="layer-badge">02</div>
+        <div class="layer-badge-sub">Creator Platform</div>
+        <div class="layer-north-star">
+          <div class="ns-label">North Star</div>
+          <div class="ns-name">GoHighLevel (early)</div>
+        </div>
+      </div>
+      <div>
+        <h2 class="big">/create</h2>
+        <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.25rem;color:var(--ink);">Experience creators don't need a <em>better</em> tool. <em class="gradient-text">They need their first one.</em></p>
+        <p class="body-text" style="margin-top:1rem;">Contacts in phone notes. Bookings via WhatsApp. No email list. No idea what their repeat rate is. They're choosing between /create and a <strong>spreadsheet they haven't made yet.</strong></p>
+        <p class="body-text">CRM, event management, growth analytics, AI co-founder. <strong style="color:var(--ink);">$97/mo.</strong></p>
+        <div class="proof-tag">BUILT · FUNCTIONAL · NEEDS FIRST USERS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 17: LAYER 2 - CREATOR PLATFORM DEPTH (PUNCHY) -->
+  <section class="slide" data-slide="17">
+    <div class="slide-inner depth-slide" style="text-align:center;">
+      <div class="depth-eyebrow" style="justify-content:center;">
+        <span class="depth-num">02</span>
+        <span class="depth-eyebrow-text">Depth · /create</span>
+      </div>
+      <h2 class="depth-headline" style="margin-left:auto;margin-right:auto;">A business accelerator <span class="gradient-text">disguised as a CRM.</span></h2>
+
+      <div class="before-after">
+        <div class="ba-col before">
+          <div class="ba-header">Before</div>
+          <div class="ba-row">Contacts in phone notes</div>
+          <div class="ba-row">Bookings via WhatsApp</div>
+          <div class="ba-row">No idea of repeat rate</div>
+          <div class="ba-row">No business plan</div>
+          <div class="ba-row">Burning out alone</div>
+        </div>
+        <div class="ba-col after">
+          <div class="ba-header">After</div>
+          <div class="ba-row">CRM + pipeline</div>
+          <div class="ba-row">Email sequences</div>
+          <div class="ba-row">Growth analytics</div>
+          <div class="ba-row">Pay Rent → Scale Income → Remarkable</div>
+          <div class="ba-row">Zarlo AI co-founder</div>
+        </div>
+      </div>
+
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--ink);max-width:820px;margin:1.5rem auto 0;">Kajabi for course sellers. GoHighLevel for marketers.<br><em class="gradient-text">/create for the category nobody named.</em></p>
+
+      <div class="depth-economics" style="text-align:center;max-width:680px;margin:1.5rem auto 0;"><strong>$97/mo</strong></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 18: LAYER 3 - HARDWARE -->
+  <section class="slide layer-detail" data-slide="16">
+    <div class="slide-inner layer-detail">
+      <div>
+        <div class="layer-badge">03</div>
+        <div class="layer-badge-sub">Hardware</div>
+        <div class="layer-north-star">
+          <div class="ns-label">North Star</div>
+          <div class="ns-name">The Yoga Mat Industry</div>
+        </div>
+        <svg viewBox="0 0 200 200" style="width:120px;margin-top:1.5rem;">
+          <defs>
+            <linearGradient id="hpGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#5e17eb"/>
+              <stop offset="100%" stop-color="#E9A23B"/>
+            </linearGradient>
+          </defs>
+          <path d="M40 110 Q40 50 100 50 Q160 50 160 110 L160 140 L145 140 L145 115 Q145 100 130 100 L130 145 Q130 160 115 160 L115 110 Z" fill="none" stroke="url(#hpGrad)" stroke-width="2"/>
+          <path d="M40 110 L40 145 Q40 160 55 160 L70 160 L70 110 Q70 100 55 100 L55 100 Q40 100 40 115 Z" fill="none" stroke="url(#hpGrad)" stroke-width="2" transform="scale(-1,1) translate(-200,0)"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="big">Headsets.</h2>
+        <p class="body-text">Search "silent disco headphones" → party equipment. Flashing LEDs. Weddings. <strong>Nobody is talking to the breathwork facilitator.</strong></p>
+        <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--ink);">Headsets make people feel safer. Safer = deeper. Deeper = more powerful. <em class="gradient-text">The headset IS the thesis</em>, in physical form.</p>
+        <p class="body-text"><strong>$17 cost → $39 retail. 56% margins. Bali rental: 70–80% margin.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 19: LAYER 3 - HARDWARE DEPTH (PUNCHY) -->
+  <section class="slide" data-slide="19">
+    <div class="slide-inner depth-slide" style="text-align:center;">
+      <div class="depth-eyebrow" style="justify-content:center;">
+        <span class="depth-num">03</span>
+        <span class="depth-eyebrow-text">Depth · Hardware</span>
+      </div>
+      <h2 class="depth-headline" style="margin-left:auto;margin-right:auto;">Safety × Expression — <span class="gradient-text">in physical form.</span></h2>
+
+      <div class="quote-block" style="text-align:left;">
+        <p>Put them on and the room disappears. Self-consciousness disappears. The facilitator's voice feels like it's speaking only to you.</p>
+        <p class="punch">A private container inside a shared experience.</p>
+      </div>
+
+      <div class="stat-row" style="grid-template-columns:repeat(2,1fr);max-width:560px;">
+        <div class="stat-cell">
+          <div class="stat-figure">600</div>
+          <div class="stat-label">Headset fleet<br>Bali, #1 ranked</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-figure">56%</div>
+          <div class="stat-label">Margins on sales<br>$17 → $39</div>
+        </div>
+      </div>
+
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--ink);max-width:760px;margin:1.5rem auto 0;">Nobody is talking to the breathwork facilitator. <em class="gradient-text">We are.</em></p>
+    </div>
+  </section>
+
+  <!-- SLIDE 20: LAYER 4 - CERTIFICATION -->
+  <section class="slide layer-detail" data-slide="17">
+    <div class="slide-inner layer-detail">
+      <div>
+        <div class="layer-badge">04</div>
+        <div class="layer-badge-sub">Revenue Engine</div>
+        <div class="layer-north-star">
+          <div class="ns-label">North Star</div>
+          <div class="ns-name">9D Breathwork<br><span style="font-size:0.9rem;color:var(--ink-dim);font-style:normal;">$0 → $5–9M/yr in 4 years</span></div>
+        </div>
+      </div>
+      <div>
+        <h2 class="big">Shift Architecture.</h2>
+        <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.25rem;color:var(--ink);margin-top:1rem;">9D Breathwork in 4 years:</p>
+        <ul style="list-style:none;margin:1.25rem 0 1.5rem;display:flex;flex-direction:column;gap:0.6rem;">
+          <li style="font-size:1rem;color:var(--ink-dim);padding-left:1.5rem;position:relative;">
+            <span style="position:absolute;left:0;color:var(--gold);font-weight:600;">·</span>
+            Founded 2021 · <strong style="color:var(--ink);">$0 → $5–9M/year</strong>
+          </li>
+          <li style="font-size:1rem;color:var(--ink-dim);padding-left:1.5rem;position:relative;">
+            <span style="position:absolute;left:0;color:var(--gold);font-weight:600;">·</span>
+            <strong style="color:var(--ink);">1,300 certified facilitators</strong> in 80+ countries
+          </li>
+          <li style="font-size:1rem;color:var(--ink-dim);padding-left:1.5rem;position:relative;">
+            <span style="position:absolute;left:0;color:var(--gold);font-weight:600;">·</span>
+            $5K certification · $200/mo ongoing · mandatory headsets
+          </li>
+          <li style="font-size:1rem;color:var(--ink-dim);padding-left:1.5rem;position:relative;">
+            <span style="position:absolute;left:0;color:var(--gold);font-weight:600;">·</span>
+            <strong style="color:var(--ink);">One modality. No app. No funnel.</strong>
+          </li>
+        </ul>
+        <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.2rem;color:var(--ink);"><em class="gradient-text">A digital franchise that prints money.</em> We're building the same model with four modalities, the app, and the supply chain.</p>
+        <div class="proof-tag">$3–5K + $97/MO + MANDATORY HEADSETS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 21: LAYER 4 - CERTIFICATION DEPTH (PUNCHY) -->
+  <section class="slide" data-slide="21">
+    <div class="slide-inner depth-slide" style="text-align:center;">
+      <div class="depth-eyebrow" style="justify-content:center;">
+        <span class="depth-num">04</span>
+        <span class="depth-eyebrow-text">Depth · Certification</span>
+      </div>
+      <h2 class="depth-headline" style="margin-left:auto;margin-right:auto;">Teach <span class="gradient-text">design,</span> not delivery.</h2>
+
+      <div class="compare-table">
+        <div class="compare-col theirs">
+          <div class="compare-header">9D Breathwork</div>
+          <div class="compare-row">Teaches one journey</div>
+          <div class="compare-row">Press play</div>
+          <div class="compare-row">1,300 facilitators in 4 years</div>
+          <div class="compare-row">$9M/year · one product</div>
+        </div>
+        <div class="compare-col ours">
+          <div class="compare-header">Shift Architecture</div>
+          <div class="compare-row">Teaches the framework</div>
+          <div class="compare-row">Engineer the result</div>
+          <div class="compare-row">4 modalities to start</div>
+          <div class="compare-row">The architecture, not one product</div>
+        </div>
+      </div>
+
+      <div class="phase-band">
+        <div class="phase-cell"><div class="phase-num">01</div><div class="phase-name">Locate</div></div>
+        <div class="phase-cell"><div class="phase-num">02</div><div class="phase-name">Embody</div></div>
+        <div class="phase-cell"><div class="phase-num">03</div><div class="phase-name">Mismatch</div></div>
+        <div class="phase-cell"><div class="phase-num">04</div><div class="phase-name">Shake</div></div>
+        <div class="phase-cell"><div class="phase-num">05</div><div class="phase-name">Meditate</div></div>
+        <div class="phase-cell final"><div class="phase-num">06</div><div class="phase-name">Verify</div></div>
+      </div>
+
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.25rem;color:var(--ink);max-width:820px;margin:1.5rem auto 0;">Built on memory reconsolidation. <em class="gradient-text">The only neurological mechanism proven to rewrite subconscious patterns permanently.</em></p>
+
+      <div class="depth-economics" style="text-align:center;max-width:780px;margin:1.5rem auto 0;"><strong>$3–5K cert · $97/mo · mandatory headsets</strong></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 22: FLYWHEEL -->
+  <section class="slide flywheel-slide" data-slide="18">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="eyebrow">The Flywheel</div>
+      <h2 class="big" style="margin-bottom:2rem;">Consumer growth =<br><span class="gradient-text">Creator growth.</span></h2>
+      <svg class="flywheel-svg" viewBox="0 0 700 700">
+        <defs>
+          <linearGradient id="fwGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#5e17eb"/>
+            <stop offset="100%" stop-color="#E9A23B"/>
+          </linearGradient>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="#E9A23B"/>
+          </marker>
+        </defs>
+
+        <circle cx="350" cy="350" r="260" fill="none" stroke="url(#fwGrad)" stroke-width="1" opacity="0.3" stroke-dasharray="2 6"/>
+
+        <g fill="none" stroke="url(#fwGrad)" stroke-width="1.5" opacity="0.6">
+          <path d="M 520 215 A 260 260 0 0 1 580 410" marker-end="url(#arrow)"/>
+          <path d="M 540 460 A 260 260 0 0 1 410 580" marker-end="url(#arrow)"/>
+          <path d="M 350 610 A 260 260 0 0 1 160 510" marker-end="url(#arrow)"/>
+          <path d="M 120 410 A 260 260 0 0 1 120 290" marker-end="url(#arrow)"/>
+          <path d="M 160 190 A 260 260 0 0 1 280 110" marker-end="url(#arrow)"/>
+          <path d="M 350 90 A 260 260 0 0 1 510 175" marker-end="url(#arrow)"/>
+        </g>
+
+        <g>
+          <circle cx="350" cy="90" r="55" fill="#14122b" stroke="url(#fwGrad)" stroke-width="2"/>
+          <text x="350" y="82" text-anchor="middle" fill="#E9A23B" font-family="Fraunces, serif" font-style="italic" font-size="11">00</text>
+          <text x="350" y="100" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Events</text>
+          <text x="350" y="115" text-anchor="middle" fill="#b0b0c0" font-size="9">QR → App Trial</text>
+        </g>
+
+        <g>
+          <circle cx="575" cy="220" r="55" fill="#14122b" stroke="url(#fwGrad)" stroke-width="2"/>
+          <text x="575" y="212" text-anchor="middle" fill="#E9A23B" font-family="Fraunces, serif" font-style="italic" font-size="11">01</text>
+          <text x="575" y="230" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">App $14.99</text>
+          <text x="575" y="245" text-anchor="middle" fill="#b0b0c0" font-size="9">20% convert</text>
+        </g>
+
+        <g>
+          <circle cx="575" cy="480" r="55" fill="#14122b" stroke="url(#fwGrad)" stroke-width="2"/>
+          <text x="575" y="472" text-anchor="middle" fill="#E9A23B" font-family="Fraunces, serif" font-style="italic" font-size="11">02</text>
+          <text x="575" y="490" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">/create $97</text>
+          <text x="575" y="505" text-anchor="middle" fill="#b0b0c0" font-size="9">Wants to share</text>
+        </g>
+
+        <g>
+          <circle cx="350" cy="610" r="55" fill="#14122b" stroke="url(#fwGrad)" stroke-width="2"/>
+          <text x="350" y="602" text-anchor="middle" fill="#E9A23B" font-family="Fraunces, serif" font-style="italic" font-size="11">03</text>
+          <text x="350" y="620" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Headsets</text>
+          <text x="350" y="635" text-anchor="middle" fill="#b0b0c0" font-size="9">$1–3K</text>
+        </g>
+
+        <g>
+          <circle cx="125" cy="480" r="55" fill="#14122b" stroke="url(#fwGrad)" stroke-width="2"/>
+          <text x="125" y="472" text-anchor="middle" fill="#E9A23B" font-family="Fraunces, serif" font-style="italic" font-size="11">04</text>
+          <text x="125" y="490" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Cert $3–5K</text>
+          <text x="125" y="505" text-anchor="middle" fill="#b0b0c0" font-size="9">Needs method</text>
+        </g>
+
+        <g>
+          <circle cx="125" cy="220" r="55" fill="#14122b" stroke="url(#fwGrad)" stroke-width="2"/>
+          <text x="125" y="212" text-anchor="middle" fill="#E9A23B" font-family="Fraunces, serif" font-style="italic" font-size="11">↺</text>
+          <text x="125" y="230" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Run Events</text>
+          <text x="125" y="245" text-anchor="middle" fill="#b0b0c0" font-size="9">Cycle repeats</text>
+        </g>
+
+        <g>
+          <circle cx="350" cy="350" r="90" fill="url(#fwGrad)" opacity="0.1"/>
+          <circle cx="350" cy="350" r="90" fill="none" stroke="url(#fwGrad)" stroke-width="1"/>
+          <text x="350" y="335" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">9D is linear.</text>
+          <text x="350" y="358" text-anchor="middle" fill="#E9A23B" font-family="Fraunces, serif" font-style="italic" font-size="15">Ours is</text>
+          <text x="350" y="380" text-anchor="middle" fill="#E9A23B" font-family="Fraunces, serif" font-style="italic" font-size="15">circular.</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- SLIDE 19: HOW TO SCALE A MOVEMENT (Branson + Mateschitz) -->
+  <section class="slide" data-slide="19">
+    <div class="slide-inner">
+      <div class="eyebrow">How do you scale a movement?</div>
+      <h2 class="big">Two playbooks.<br><span style="font-weight:300;font-style:italic;font-family:Fraunces,serif;color:var(--ink-dim);">Both founders went first.</span></h2>
+      <div class="playbook-grid">
+        <div class="playbook">
+          <div class="playbook-name">Richard Branson</div>
+          <div class="playbook-tag">The Stunt</div>
+          <div class="playbook-quote">Blackboard at the airport. "Virgin Airlines: $39." Filled a plane with stranded passengers. That became Virgin Atlantic.</div>
+          <div class="playbook-mapping"><strong>Our blackboard moment:</strong> 100 people dancing in silence at the Eiffel Tower. <em>The Europe tour, July 10.</em></div>
+        </div>
+        <div class="playbook">
+          <div class="playbook-name">Dietrich Mateschitz</div>
+          <div class="playbook-tag">The Culture</div>
+          <div class="playbook-quote">Didn't advertise. Free cans at nightclubs and college campuses. Created the culture first. Lost money for 5 years. Built $30B.</div>
+          <div class="playbook-mapping"><strong>Our free samples:</strong> Free events. The app is the can. <em>The certification + headsets are the infrastructure.</em></div>
+        </div>
+      </div>
+      <p class="body-text" style="margin-top:2.5rem;font-family:Fraunces,serif;font-style:italic;font-size:1.2rem;color:var(--ink);max-width:920px;">Branson had a blackboard. Mateschitz had a reformulated drink. <em class="gradient-text">We have 200+ events, a working app, a headset supply chain, and a science-backed methodology.</em></p>
+    </div>
+  </section>
+
+  <!-- SLIDE 21: NUMBERS -->
+  <section class="slide numbers-slide" data-slide="21">
+    <div class="slide-inner" style="text-align:left;">
+      <div class="eyebrow">The Numbers</div>
+      <h2 class="big">Three years to <span class="gradient-text">$2M+ ARR.</span></h2>
+      <div class="numbers-row">
+        <div class="num-cell">
+          <div class="num-year">Year 1</div>
+          <div class="num-big">$105K</div>
+          <div class="num-bar"></div>
+          <div class="num-detail">480 Pro · 15 creators</div>
+        </div>
+        <div class="num-cell">
+          <div class="num-year">Year 2</div>
+          <div class="num-big">$861K</div>
+          <div class="num-bar"></div>
+          <div class="num-detail">1,600 Pro · 65 creators · 50 certified</div>
+        </div>
+        <div class="num-cell">
+          <div class="num-year">Year 3</div>
+          <div class="num-big">$2.1M</div>
+          <div class="num-bar"></div>
+          <div class="num-detail">5,000 Pro · 200 creators · 150 certified</div>
+        </div>
+      </div>
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;font-size:1.2rem;max-width:900px;">9D reached 1,300 facilitators with <em>one</em> modality and no app. <em class="gradient-text" style="font-style:italic;">500 facilitators</em> (40% of theirs) with four modalities, the app, the platform, and the supply chain = $2M+ ARR.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 22: ASK -->
+  <section class="slide ask-slide" data-slide="22">
+    <div class="slide-inner ask-slide">
+      <div class="eyebrow">What we need</div>
+      <h2 class="ask-headline">It happens in <span class="gradient-text">12 months</span><br>or <span style="color:var(--ink-faint);">30 months.</span></h2>
+      <div class="ask-period">Investment compresses the timeline</div>
+      <ul class="ask-list">
+        <li><strong>Europe monument tour</strong> — the founding stunt, first branded funnel test, content library</li>
+        <li><strong>Ad spend on headset store</strong> — 56% margins, immediate ROI, warm leads for certification</li>
+        <li><strong>Headset fleet (100 units)</strong> — becomes European rental asset post-tour</li>
+        <li><strong>Certification development</strong> — package curriculum, first cohort Year 2</li>
+        <li><strong>App subscription launch</strong> — Stripe config, trial flow, revenue from month 1</li>
+      </ul>
+      <p class="body-text" style="margin-top:2rem;font-family:Fraunces,serif;font-style:italic;color:var(--ink);font-size:1.15rem;">Exact amount and allocation <em class="gradient-text">to be discussed</em> based on which parts we prioritize together.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 23: WHY NOW -->
+  <section class="slide why-slide" data-slide="23">
+    <div class="slide-inner">
+      <div class="eyebrow">Why Now</div>
+      <div class="date-tag">July 10 · Europe Tour</div>
+      <h2 class="serif" style="margin-bottom:2rem;">Seven weeks from now.</h2>
+      <p class="body-text" style="margin:0 auto;font-size:1.15rem;max-width:780px;">The app is built. The headset store is live. The methodology is tested across <strong>200+ events</strong>. The subscription infrastructure is <strong>80% ready.</strong></p>
+      <p class="body-text" style="margin:2rem auto;font-family:Fraunces,serif;font-style:italic;font-size:1.4rem;color:var(--ink);max-width:780px;">This isn't <em>"fund my idea."</em> Everything exists. <em class="gradient-text">Nobody knows about it.</em></p>
+      <p class="body-text" style="margin:2rem auto 0;max-width:780px;">The money funds <strong>the brand, the marketing, and the proof of concept</strong> that wires it all together. <strong style="color:var(--gold);">12 months to prove the flywheel spins.</strong></p>
+    </div>
+  </section>
+
+  <!-- SLIDE 24: MY STORY -->
+  <section class="slide founder-slide" data-slide="24">
+    <div class="slide-inner founder-slide">
+      <div class="eyebrow">Why I'm the one building this</div>
+      <h2 class="big" style="margin-bottom:1rem;">$30K on 52 courses.<br><span style="font-weight:300;font-style:italic;font-family:Fraunces,serif;color:var(--ink-dim);">None of them worked.</span></h2>
+      <p class="body-text">I hit mine at 23. Knew it wasn't mine but too terrified to leave. Because my body had learned that <strong>safety = performing. Quitting = danger.</strong></p>
+      <div class="founder-quote">What actually worked: doing one thing a week that terrified me. One scary thing. That's it.</div>
+      <p class="body-text">Within 4 weeks I was working remotely from Bali. Within 3 months I'd quit. Within 6 months I was funding my own life doing work that actually meant something.</p>
+      <p class="body-text" style="font-family:Fraunces,serif;font-style:italic;color:var(--ink);font-size:1.2rem;margin-top:2rem;">Three years later: 200+ events. A working app. A headset business. A science-backed methodology. <em class="gradient-text">Everything is built. Nobody knows about it.</em></p>
+    </div>
+  </section>
+
+  <!-- SLIDE 25: CLOSE -->
+  <section class="slide close-slide" data-slide="25">
+    <div class="slide-inner">
+      <div class="close-line gradient">The app that<br>gamifies life.</div>
+      <div class="close-stack">
+        Safety × Expression = experiences you love.<br>
+        Stack enough and you have <em>a life you love.</em>
+      </div>
+      <div class="close-logo">VIBE RISE</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Navigation -->
+<button class="nav-arrow prev" id="prev" aria-label="Previous slide">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+</button>
+<button class="nav-arrow next" id="next" aria-label="Next slide">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+</button>
+
+<div class="counter"><span class="current" id="curNum">01</span> / <span id="totalNum">27</span></div>
+
+<div class="dots" id="dots"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const curNum = document.getElementById('curNum');
+  const totalNum = document.getElementById('totalNum');
+  const dotsWrap = document.getElementById('dots');
+
+  totalNum.textContent = String(total).padStart(2, '0');
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(d);
+  });
+  const dotEls = dotsWrap.querySelectorAll('.dot');
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= total) return;
+    slides[current].classList.remove('active');
+    dotEls[current].classList.remove('active');
+    current = idx;
+    slides[current].classList.add('active');
+    dotEls[current].classList.add('active');
+    curNum.textContent = String(current + 1).padStart(2, '0');
+    prevBtn.classList.toggle('disabled', current === 0);
+    nextBtn.classList.toggle('disabled', current === total - 1);
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goTo(current - 1); }
+    else if (e.key === 'Home') { goTo(0); }
+    else if (e.key === 'End') { goTo(total - 1); }
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
+  });
+
+  prevBtn.classList.add('disabled');
+</script>
+
+</body>
+</html>

@@ -162,7 +162,7 @@ const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const WoundMapFlow = lazyRetry(() => import('./flows/WoundMapFlow'))
 const CuriosityCompassFlow = lazyRetry(() => import('./flows/CuriosityCompassFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
-const NervousSystemMap = lazyRetry(() => import('./pages/NervousSystemMap'))
+// const NervousSystemMap = lazyRetry(() => import('./pages/NervousSystemMap')) // archived
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
 const PublicMoneyModelFlow = lazyRetry(() => import('./flows/PublicMoneyModelFlow'))
@@ -701,11 +701,7 @@ function AppRouter() {
                 <NervousSystemFlow />
               </AuthGate>
             } />
-            <Route path="/nervous-system-map" element={
-              <AuthGate>
-                <NervousSystemMap />
-              </AuthGate>
-            } />
+            {/* /nervous-system-map archived — component at src/archive/NervousSystemMap.jsx */}
             <Route path="/matrix-code-deep-dive" element={
               <AuthGate>
                 <MatrixCodeDeepDive />

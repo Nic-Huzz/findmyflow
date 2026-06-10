@@ -5,6 +5,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { FlowFeedback } from '../components/FlowFeedback'
+import { onNervousSystemComplete } from '../lib/brain/autoPopulate'
 import './NervousSystemHealingCompass.css'
 import './FlowFinder.css'
 
@@ -453,6 +454,13 @@ export default function NervousSystemFlow() {
         })
 
       if (error) throw error
+
+      // Auto-populate brain
+      onNervousSystemComplete(user.id, {
+        impactLimit: `${responses.test1_visibility_safe === 'yes' ? 'Safe' : 'Unsafe'}: ${responses.visibility_action}`,
+        incomeLimit: `$${responses.earning_edge.toLocaleString()} per deal`,
+        archetype: reflection?.archetype_name || null,
+      })
 
       // Complete quest
       await completeFlowQuest({
