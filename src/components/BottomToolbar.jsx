@@ -3,7 +3,7 @@
  *
  * Context-aware bottom navigation that changes based on app section.
  *
- * Main App: Home (/me) → Challenge (/7-day-challenge) → Create (/create) → Profile (/profile-hub)
+ * Main App: Home (/me) → Challenge (/7-day-challenge) → Profile (/profile-hub) → League (/league)
  * CRM Section: Sales (/crm/sales) → Marketing (/crm/marketing) → Analytics (/crm/analytics) → Portal (back to challenge)
  */
 
@@ -32,10 +32,10 @@ const MAIN_NAV_ITEMS = [
     path: '/profile-hub'
   },
   {
-    id: 'create',
-    label: 'Create',
-    icon: '🌞',
-    path: '/create'
+    id: 'league',
+    label: 'League',
+    icon: '🏆',
+    path: '/league'
   }
 ]
 
@@ -202,8 +202,8 @@ function BottomToolbar() {
       if (item.id === 'execute') return path === '/crm/execute'
     }
 
-    // Main nav: Create is active on any /create/* path
-    if (item.id === 'create') return path === '/create' || path.startsWith('/create/')
+    // Main nav: League is active on any /league/* path
+    if (item.id === 'league') return path === '/league' || path.startsWith('/league/')
 
     return path === item.path
   }

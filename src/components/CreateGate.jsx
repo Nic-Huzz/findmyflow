@@ -182,9 +182,6 @@ export default function CreateGate({ children }) {
             </button>
           )}
 
-          <p className="cg-member-hint">
-            Already a Movement Maker? Log in with the email you enrolled with.
-          </p>
         </div>
       </div>
     </div>

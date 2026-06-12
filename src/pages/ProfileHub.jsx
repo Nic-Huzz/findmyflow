@@ -27,6 +27,14 @@ const ProfileHub = () => {
     },
     ...(isAdmin ? [
       {
+        id: 'create',
+        icon: '🌞',
+        title: 'Create Portal',
+        description: 'Experience creator tools, flows, and business builder',
+        path: '/create',
+        color: '#E9A23B'
+      },
+      {
         id: 'crm',
         icon: '🏰',
         title: 'CRM Command Center',

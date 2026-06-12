@@ -408,7 +408,6 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/healing-compass-workshop' ||
                         location.pathname === '/breathwork' ||
                         location.pathname === '/why-i-created-this' ||
-                        location.pathname.startsWith('/league') ||
                         location.pathname.startsWith('/play-list-feed') ||
                         location.pathname === '/content-review' ||
                         location.pathname === '/product-suite-map' ||
