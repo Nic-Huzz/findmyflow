@@ -857,7 +857,11 @@ Create a dynamic pose and scene background that embodies this essence. The chara
               ) : (
                 <button
                   className="primary-button"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => {
+                    try { fileInputRef.current?.click() } catch (e) {
+                      setAvatarError('Could not open photo picker. Please check your permissions.')
+                    }
+                  }}
                   style={{ marginTop: '1.5rem', width: '100%', maxWidth: '400px' }}
                 >
                   Upload photo →

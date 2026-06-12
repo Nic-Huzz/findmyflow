@@ -133,7 +133,9 @@ function EditEssenceModal({
   const handleGenerate = async (selfieOverride) => {
     const file = selfieOverride || selfieFile
     if (!file) {
-      selfieInputRef.current?.click()
+      try { selfieInputRef.current?.click() } catch (e) {
+        setError('Could not open photo picker. Please check your permissions.')
+      }
       return
     }
 
@@ -423,7 +425,11 @@ function EditEssenceModal({
             <div className="edit-essence-upload-actions">
               <button
                 className="edit-essence-upload-btn"
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => {
+                  try { fileInputRef.current?.click() } catch (e) {
+                    setError('Could not open photo picker. Please check your permissions.')
+                  }
+                }}
                 disabled={generating}
               >
                 Choose Photo
