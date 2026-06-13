@@ -18,20 +18,33 @@ const DRAIN_CATEGORIES = [
   { id: 'drain_commitment', label: 'Commitment', icon: '📋' },
 ]
 
+const BOOST_CATEGORIES = [
+  { id: 'boost_wahoo', label: 'A Wahoo', icon: '⚡' },
+  { id: 'boost_movement', label: 'Movement', icon: '🏃' },
+  { id: 'boost_connection', label: 'Connection', icon: '👥' },
+  { id: 'boost_nature', label: 'Nature', icon: '🌿' },
+  { id: 'boost_creative', label: 'Creative', icon: '🎨' },
+  { id: 'boost_rest', label: 'Rest', icon: '😌' },
+]
+
 const isDysregulated = (state) => state === 'sympathetic' || state === 'dorsal'
 
 export default function DailyCheckin({ userId, onComplete }) {
-  // Steps: 'state' → 'drain' (sympathetic/dorsal only) → 'regulation'
+  // Steps: 'state' → 'drain'|'boost' (conditional) → 'regulation'
   const [step, setStep] = useState('state')
   const [selectedState, setSelectedState] = useState(null)
   const [drainCategory, setDrainCategory] = useState(null)
   const [drainNote, setDrainNote] = useState('')
+  const [boostCategory, setBoostCategory] = useState(null)
+  const [boostNote, setBoostNote] = useState('')
   const savingRef = useRef(false)
 
   const handleSelect = (stateId) => {
     if (savingRef.current) return
     setSelectedState(stateId)
-    setStep(isDysregulated(stateId) ? 'drain' : 'regulation')
+    if (isDysregulated(stateId)) setStep('drain')
+    else if (stateId === 'vibe_rise') setStep('boost')
+    else setStep('regulation')
   }
 
   const handleBackToState = () => {
@@ -39,6 +52,8 @@ export default function DailyCheckin({ userId, onComplete }) {
     setSelectedState(null)
     setDrainCategory(null)
     setDrainNote('')
+    setBoostCategory(null)
+    setBoostNote('')
   }
 
   const handleDrainContinue = () => {
@@ -50,6 +65,19 @@ export default function DailyCheckin({ userId, onComplete }) {
         checkin_type: 'drain',
         source_quest_id: drainCategory,
         drain_note: drainNote.trim() || null,
+      })
+    }
+    setStep('regulation')
+  }
+
+  const handleBoostContinue = () => {
+    if (boostCategory) {
+      supabase.from('nervous_system_checkins').insert({
+        user_id: userId,
+        after_state: 'vibe_rise',
+        checkin_type: 'boost',
+        source_quest_id: boostCategory,
+        drain_note: boostNote.trim() || null,
       })
     }
     setStep('regulation')
@@ -162,12 +190,66 @@ export default function DailyCheckin({ userId, onComplete }) {
           </div>
         )}
 
+        {step === 'boost' && (
+          <div className="daily-checkin-drain daily-checkin-boost">
+            <button type="button" className="daily-checkin-back" onClick={handleBackToState}>
+              ← Back
+            </button>
+            <span className="daily-checkin-emoji">⚡</span>
+            <h3 className="daily-checkin-title">What created this?</h3>
+            <p className="daily-checkin-sub">Knowing your fuel helps you find more of it</p>
+
+            <div className="daily-checkin-drain-cats">
+              {BOOST_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  className={`daily-checkin-drain-cat ${boostCategory === cat.id ? 'selected boost-selected' : ''}`}
+                  onClick={() => setBoostCategory(boostCategory === cat.id ? null : cat.id)}
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {boostCategory && (
+              <textarea
+                className="daily-checkin-drain-note daily-checkin-boost-note"
+                placeholder="What specifically? (optional)"
+                value={boostNote}
+                onChange={(e) => setBoostNote(e.target.value)}
+                rows={2}
+                maxLength={200}
+              />
+            )}
+
+            <div className="daily-checkin-drain-actions">
+              <button
+                type="button"
+                className="daily-checkin-drain-skip"
+                onClick={() => setStep('regulation')}
+              >
+                Skip
+              </button>
+              <button
+                type="button"
+                className="daily-checkin-drain-save daily-checkin-boost-save"
+                onClick={handleBoostContinue}
+                disabled={!boostCategory}
+              >
+                {boostCategory ? 'Log it' : 'Pick one above'}
+              </button>
+            </div>
+          </div>
+        )}
+
         {step === 'regulation' && (
           <RegulationCard
             state={selectedState}
             onDone={finishCheckin}
             onSkip={finishCheckin}
-            onBack={isDysregulated(selectedState) ? () => setStep('drain') : handleBackToState}
+            onBack={isDysregulated(selectedState) ? () => setStep('drain') : selectedState === 'vibe_rise' ? () => setStep('boost') : handleBackToState}
           />
         )}
       </div>

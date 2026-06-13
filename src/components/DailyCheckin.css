@@ -232,3 +232,17 @@
   opacity: 0.4;
   cursor: default;
 }
+
+/* Boost capture (vibe_rise) — gold theme */
+.daily-checkin-boost .daily-checkin-drain-cat.boost-selected {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #E9A23B;
+}
+
+.daily-checkin-boost-note:focus {
+  border-color: #E9A23B;
+}
+
+.daily-checkin-boost-save {
+  background: linear-gradient(135deg, #E9A23B 0%, #f59e0b 100%) !important;
+}
