@@ -1,0 +1,399 @@
+/* WahooInspiration — "Need inspiration?" section on the Wahoo tab (prefix: wi-) */
+
+.wahoo-inspiration {
+  margin-bottom: 16px;
+}
+
+/* Toggle header */
+.wahoo-inspiration .wi-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: none;
+  border-radius: 22px;
+  border-top: 4px solid #5e17eb;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  padding: 16px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.wahoo-inspiration .wi-toggle-icon {
+  font-size: 1.2rem;
+}
+
+.wahoo-inspiration .wi-toggle-label {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.wahoo-inspiration .wi-toggle-chevron {
+  font-size: 1.2rem;
+  color: #6c757d;
+  transition: transform 0.2s ease;
+}
+
+.wahoo-inspiration .wi-toggle-chevron.open {
+  transform: rotate(90deg);
+}
+
+/* Flash confirmation */
+.wahoo-inspiration .wi-flash {
+  background: #fff9f0;
+  border: 1px solid #E9A23B;
+  color: #1a1a2e;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 8px;
+  animation: wi-fade-in 0.25s ease;
+}
+
+/* Body */
+.wahoo-inspiration .wi-body {
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  padding: 18px 20px;
+  margin-top: 8px;
+  animation: wi-fade-in 0.25s ease;
+}
+
+/* Rows */
+.wahoo-inspiration .wi-row {
+  padding: 12px 0;
+}
+
+.wahoo-inspiration .wi-row + .wi-row {
+  border-top: 1px solid #f1f3f5;
+}
+
+.wahoo-inspiration .wi-row-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #5e17eb;
+  margin-bottom: 6px;
+}
+
+.wahoo-inspiration .wi-row-sub {
+  font-size: 0.85rem;
+  color: #6c757d;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.wahoo-inspiration .wi-locked {
+  margin-bottom: 0;
+}
+
+.wahoo-inspiration .wi-locked a {
+  color: #5e17eb;
+  font-weight: 700;
+}
+
+/* Chips */
+.wahoo-inspiration .wi-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wahoo-inspiration .wi-chip {
+  background: #f8f5ff;
+  border: 1px solid #d3c2f5;
+  color: #5e17eb;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wahoo-inspiration .wi-chip:active {
+  transform: scale(0.97);
+}
+
+.wahoo-inspiration .wi-chip.selected {
+  background: #5e17eb;
+  border-color: #5e17eb;
+  color: #ffffff;
+}
+
+.wahoo-inspiration .wi-chip:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.wahoo-inspiration .wi-chip-small {
+  padding: 5px 11px;
+  font-size: 12px;
+}
+
+.wahoo-inspiration .wi-chip-cta {
+  background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
+  border: none;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Ikigai dimension rows */
+.wahoo-inspiration .wi-ikigai-dim {
+  margin-bottom: 8px;
+}
+
+.wahoo-inspiration .wi-ikigai-dim-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #6c757d;
+  margin-bottom: 4px;
+}
+
+.wahoo-inspiration .wi-ikigai-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.wahoo-inspiration .wi-mix-btn {
+  flex: 1;
+}
+
+/* Buttons */
+.wahoo-inspiration .wi-primary-btn {
+  background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.wahoo-inspiration .wi-primary-btn:active {
+  transform: scale(0.98);
+}
+
+.wahoo-inspiration .wi-primary-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.wahoo-inspiration .wi-secondary-btn {
+  background: #f8f9fa;
+  border: 1.5px solid #dee2e6;
+  color: #1a1a2e;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.wahoo-inspiration .wi-secondary-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.wahoo-inspiration .wi-text-btn {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 8px;
+  margin-top: 4px;
+}
+
+.wahoo-inspiration .wi-text-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.wahoo-inspiration .wi-back {
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0 0 10px;
+}
+
+/* Panels (suggestions / preview) */
+.wahoo-inspiration .wi-panel-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 10px;
+}
+
+.wahoo-inspiration .wi-suggestion-card {
+  display: block;
+  width: 100%;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+}
+
+.wahoo-inspiration .wi-suggestion-card:active {
+  border-color: #E9A23B;
+}
+
+.wahoo-inspiration .wi-suggestion-card:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.wahoo-inspiration .wi-suggestion-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 3px;
+}
+
+.wahoo-inspiration .wi-suggestion-desc {
+  font-size: 12.5px;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+/* Preview card */
+.wahoo-inspiration .wi-preview-card {
+  background: #f8f5ff;
+  border: 1px solid #d3c2f5;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.wahoo-inspiration .wi-preview-source {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #E9A23B;
+  margin-bottom: 6px;
+}
+
+.wahoo-inspiration .wi-preview-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+
+.wahoo-inspiration .wi-preview-desc {
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.wahoo-inspiration .wi-cat-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.wahoo-inspiration .wi-cat-btn {
+  flex: 1;
+  background: #ffffff;
+  border: 1.5px solid #dee2e6;
+  color: #1a1a2e;
+  border-radius: 999px;
+  padding: 7px 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wahoo-inspiration .wi-cat-btn.selected {
+  border-color: #E9A23B;
+  background: #fff9f0;
+}
+
+.wahoo-inspiration .wi-preview-card .wi-primary-btn {
+  width: 100%;
+}
+
+/* Generating */
+.wahoo-inspiration .wi-generating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #6c757d;
+  margin-top: 10px;
+}
+
+.wahoo-inspiration .wi-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #e9ecef;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: wi-spin 0.7s linear infinite;
+}
+
+/* Error */
+.wahoo-inspiration .wi-error {
+  color: #dc2626;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin: 8px 0 0;
+}
+
+@keyframes wi-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes wi-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wahoo-inspiration .wi-body,
+  .wahoo-inspiration .wi-flash {
+    animation: none;
+  }
+  .wahoo-inspiration .wi-spinner {
+    animation-duration: 1.5s;
+  }
+  .wahoo-inspiration .wi-toggle-chevron,
+  .wahoo-inspiration .wi-chip,
+  .wahoo-inspiration .wi-primary-btn,
+  .wahoo-inspiration .wi-cat-btn,
+  .wahoo-inspiration .wi-suggestion-card {
+    transition: none;
+  }
+}

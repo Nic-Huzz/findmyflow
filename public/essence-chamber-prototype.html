@@ -21,6 +21,8 @@
   --bone: #efe6d4;
   --bone-dim: #b7ad99;
   --white: #ffffff;
+  --green: #22c55e;
+  --green-dim: #166534;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -101,10 +103,7 @@ body::after {
   animation: fadeUp 0.8s 0.9s ease forwards;
 }
 
-.intro-body strong {
-  color: var(--bone);
-  font-weight: 600;
-}
+.intro-body strong { color: var(--bone); font-weight: 600; }
 
 .intro-cta {
   background: linear-gradient(135deg, var(--gold), var(--gold-bright));
@@ -127,28 +126,17 @@ body::after {
 
 /* ── Chamber ambient ── */
 .chamber-ambient {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
 }
 .chamber-ambient .glow-top {
-  position: absolute;
-  top: -20%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 400px;
+  position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 400px;
   background: radial-gradient(ellipse, rgba(94, 23, 235, 0.12) 0%, transparent 70%);
   animation: ambientPulse 6s ease-in-out infinite;
 }
 .chamber-ambient .glow-bottom {
-  position: absolute;
-  bottom: -10%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 800px;
-  height: 300px;
+  position: absolute; bottom: -10%; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 300px;
   background: radial-gradient(ellipse, rgba(233, 162, 59, 0.06) 0%, transparent 70%);
   animation: ambientPulse 8s 2s ease-in-out infinite;
 }
@@ -159,15 +147,9 @@ body::after {
 
 /* ── Floor line ── */
 .chamber-floor {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
+  position: fixed; bottom: 0; left: 0; right: 0; height: 2px;
   background: linear-gradient(90deg, transparent, rgba(94, 23, 235, 0.3), rgba(233, 162, 59, 0.2), rgba(94, 23, 235, 0.3), transparent);
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 1s 0.5s ease;
+  z-index: 1; opacity: 0; transition: opacity 1s 0.5s ease;
 }
 .chamber-floor.visible { opacity: 1; }
 
@@ -185,40 +167,26 @@ body::after {
 }
 
 .chamber-header .kicker {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  color: var(--gold);
-  margin-bottom: 12px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2.5px; color: var(--gold); margin-bottom: 12px;
 }
 
 .chamber-header h1 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 30px;
-  font-weight: 500;
-  color: var(--white);
+  font-size: 30px; font-weight: 500; color: var(--white);
 }
 
 /* ── Pillar container ── */
 .pillars-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 420px;
-  width: 100%;
-  margin: 0 auto;
+  display: flex; flex-direction: column; gap: 20px;
+  max-width: 420px; width: 100%; margin: 0 auto;
 }
 
 /* ── Individual pillar ── */
 .pillar-card {
-  position: relative;
-  border-radius: 20px;
-  padding: 24px 20px;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-  opacity: 0;
-  overflow: hidden;
+  position: relative; border-radius: 20px; padding: 24px 20px;
+  cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;
+  opacity: 0; overflow: hidden;
 }
 
 .pillar-card:nth-child(1) { animation: pillarRise 0.9s 0.4s cubic-bezier(.16,1,.3,1) forwards; }
@@ -230,25 +198,20 @@ body::after {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.pillar-card:hover {
-  transform: translateY(-2px);
-}
+.pillar-card:hover { transform: translateY(-2px); }
 
-/* Pillar backgrounds */
 .pillar-card.active-status {
   background: linear-gradient(135deg, rgba(94, 23, 235, 0.15) 0%, rgba(94, 23, 235, 0.08) 100%);
   border: 1px solid rgba(94, 23, 235, 0.25);
   box-shadow: 0 4px 24px rgba(94, 23, 235, 0.1);
 }
-.pillar-card.active-status:hover {
-  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.2);
-}
+.pillar-card.active-status:hover { box-shadow: 0 8px 32px rgba(94, 23, 235, 0.2); }
 
 .pillar-card.flickering-status {
   background: linear-gradient(135deg, rgba(233, 162, 59, 0.1) 0%, rgba(233, 162, 59, 0.04) 100%);
   border: 1px solid rgba(233, 162, 59, 0.2);
   box-shadow: 0 4px 24px rgba(233, 162, 59, 0.08);
-  animation: pillarRise 0.9s 1.0s cubic-bezier(.16,1,.3,1) forwards, flickerGlow 3s 2s ease-in-out infinite;
+  animation: pillarRise 0.9s 0.7s cubic-bezier(.16,1,.3,1) forwards, flickerGlow 3s 2s ease-in-out infinite;
 }
 
 @keyframes flickerGlow {
@@ -256,426 +219,619 @@ body::after {
   50% { border-color: rgba(233, 162, 59, 0.35); box-shadow: 0 4px 32px rgba(233, 162, 59, 0.15); }
 }
 
-/* Pillar inner glow */
 .pillar-card::before {
-  content: '';
-  position: absolute;
-  top: -40px;
-  right: -20px;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  pointer-events: none;
+  content: ''; position: absolute; top: -40px; right: -20px;
+  width: 120px; height: 120px; border-radius: 50%; pointer-events: none;
 }
-.pillar-card.active-status::before {
-  background: radial-gradient(circle, rgba(94, 23, 235, 0.15) 0%, transparent 70%);
-}
-.pillar-card.flickering-status::before {
-  background: radial-gradient(circle, rgba(233, 162, 59, 0.12) 0%, transparent 70%);
-}
+.pillar-card.active-status::before { background: radial-gradient(circle, rgba(94, 23, 235, 0.15) 0%, transparent 70%); }
+.pillar-card.flickering-status::before { background: radial-gradient(circle, rgba(233, 162, 59, 0.12) 0%, transparent 70%); }
 
 /* Pillar content */
 .pillar-status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin-bottom: 12px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; padding: 4px 10px; border-radius: 6px; margin-bottom: 12px;
 }
+.pillar-status-badge.active { background: rgba(94, 23, 235, 0.2); color: var(--purple-bright); }
+.pillar-status-badge.flickering { background: rgba(233, 162, 59, 0.15); color: var(--gold); }
 
-.pillar-status-badge.active {
-  background: rgba(94, 23, 235, 0.2);
-  color: var(--purple-bright);
-}
-.pillar-status-badge.flickering {
-  background: rgba(233, 162, 59, 0.15);
-  color: var(--gold);
-}
-
-.pillar-status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-.pillar-status-badge.active .pillar-status-dot {
-  background: var(--purple-bright);
-  box-shadow: 0 0 6px var(--purple-bright);
-}
-.pillar-status-badge.flickering .pillar-status-dot {
-  background: var(--gold);
-  animation: dotFlicker 2s ease-in-out infinite;
-}
-@keyframes dotFlicker {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; box-shadow: 0 0 8px var(--gold); }
-}
+.pillar-status-dot { width: 6px; height: 6px; border-radius: 50%; }
+.pillar-status-badge.active .pillar-status-dot { background: var(--purple-bright); box-shadow: 0 0 6px var(--purple-bright); }
+.pillar-status-badge.flickering .pillar-status-dot { background: var(--gold); animation: dotFlicker 2s ease-in-out infinite; }
+@keyframes dotFlicker { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; box-shadow: 0 0 8px var(--gold); } }
 
 .pillar-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--white);
-  line-height: 1.25;
-  margin-bottom: 6px;
+  font-size: 22px; font-weight: 500; color: var(--white); line-height: 1.25; margin-bottom: 6px;
 }
 
-.pillar-confidence {
-  font-size: 12px;
-  color: var(--bone-dim);
-  margin-bottom: 16px;
-}
+.pillar-confidence { font-size: 12px; color: var(--bone-dim); margin-bottom: 16px; }
 
 /* ── Orb timeline ── */
 .orb-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  position: relative;
-  padding-left: 20px;
+  display: flex; flex-direction: column; gap: 0;
+  position: relative; padding-left: 20px;
 }
 
-/* Vertical connector line */
 .orb-timeline::before {
-  content: '';
-  position: absolute;
-  left: 5px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  background: linear-gradient(to bottom,
-    var(--purple-dim),
-    var(--purple),
-    var(--purple-bright),
-    var(--gold-dim),
-    var(--gold)
-  );
-  opacity: 0.4;
-  border-radius: 1px;
+  content: ''; position: absolute; left: 5px; top: 8px; bottom: 8px; width: 2px;
+  background: linear-gradient(to bottom, var(--purple-dim), var(--purple), var(--purple-bright), var(--gold-dim), var(--gold));
+  opacity: 0.4; border-radius: 1px;
 }
 
-.orb-period {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 6px 0;
-  position: relative;
-}
+.orb-period { display: flex; align-items: flex-start; gap: 12px; padding: 6px 0; position: relative; }
 
-/* Orb dot */
 .orb-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-left: -20px;
-  margin-top: 2px;
-  position: relative;
-  z-index: 1;
-  transition: all 0.3s;
+  width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+  margin-left: -20px; margin-top: 2px; position: relative; z-index: 1;
 }
-
 .orb-dot.childhood { background: var(--purple-dim); border: 2px solid var(--purple); }
 .orb-dot.teens { background: var(--purple); border: 2px solid var(--purple-bright); }
 .orb-dot.young-adult { background: var(--purple-bright); border: 2px solid #a78bfa; }
 .orb-dot.career { background: #a78bfa; border: 2px solid var(--gold-dim); }
 .orb-dot.now { background: var(--gold); border: 2px solid var(--gold-bright); box-shadow: 0 0 10px rgba(233, 162, 59, 0.4); }
+.orb-dot.empty { background: transparent; border: 2px dashed rgba(255, 255, 255, 0.15); box-shadow: none; }
 
-.orb-dot.empty {
-  background: transparent;
-  border: 2px dashed rgba(255, 255, 255, 0.15);
-  box-shadow: none;
-}
-
-.orb-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.orb-period-label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--bone-dim);
-  margin-bottom: 3px;
-}
-
-.orb-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.orb-item {
-  font-size: 12px;
-  padding: 3px 8px;
-  border-radius: 6px;
-  line-height: 1.4;
-}
-
+.orb-content { flex: 1; min-width: 0; }
+.orb-period-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--bone-dim); margin-bottom: 3px; }
+.orb-items { display: flex; flex-wrap: wrap; gap: 4px; }
+.orb-item { font-size: 12px; padding: 3px 8px; border-radius: 6px; line-height: 1.4; }
 .orb-item.childhood { background: rgba(59, 15, 148, 0.3); color: #c4b5fd; }
 .orb-item.teens { background: rgba(94, 23, 235, 0.2); color: #c4b5fd; }
 .orb-item.young-adult { background: rgba(139, 92, 246, 0.2); color: #ddd6fe; }
 .orb-item.career { background: rgba(167, 139, 250, 0.15); color: #ede9fe; }
 .orb-item.now { background: rgba(233, 162, 59, 0.15); color: var(--gold-bright); font-weight: 600; }
-
-.orb-empty-text {
-  font-size: 12px;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.2);
-}
+.orb-empty-text { font-size: 12px; font-style: italic; color: rgba(255, 255, 255, 0.2); }
 
 /* ── Expand arrow ── */
 .pillar-expand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--bone-dim);
-  margin-top: 12px;
-  transition: color 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 11px; color: var(--bone-dim); margin-top: 12px; transition: color 0.2s;
 }
 .pillar-card:hover .pillar-expand { color: var(--bone); }
-.pillar-expand .arrow {
-  transition: transform 0.3s;
-  font-size: 10px;
-}
-.pillar-card.expanded .pillar-expand .arrow {
-  transform: rotate(180deg);
-}
+.pillar-expand .arrow { transition: transform 0.3s; font-size: 10px; }
+.pillar-card.expanded .pillar-expand .arrow { transform: rotate(180deg); }
 
-/* ── Detail panel (hidden by default) ── */
+/* ── Detail panel ── */
 .pillar-detail {
-  max-height: 0;
-  overflow: hidden;
+  max-height: 0; overflow: hidden;
   transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
-  opacity: 0;
-  margin-top: 0;
+  opacity: 0; margin-top: 0;
 }
-.pillar-card.expanded .pillar-detail {
-  max-height: 400px;
-  opacity: 1;
-  margin-top: 16px;
-}
+.pillar-card.expanded .pillar-detail { max-height: 400px; opacity: 1; margin-top: 16px; }
 
-.detail-section {
-  margin-bottom: 14px;
-}
-
-.detail-label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--bone-dim);
-  margin-bottom: 6px;
-}
-
-.detail-wounds {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.wound-tag {
-  font-size: 12px;
-  color: #fca5a5;
-  background: rgba(239, 68, 68, 0.1);
-  padding: 4px 8px;
-  border-radius: 6px;
-  border-left: 2px solid rgba(239, 68, 68, 0.3);
-  line-height: 1.4;
-}
-
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.hero-tag {
-  font-size: 12px;
-  color: var(--gold-bright);
-  background: rgba(233, 162, 59, 0.1);
-  padding: 4px 8px;
-  border-radius: 6px;
-}
+.detail-section { margin-bottom: 14px; }
+.detail-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bone-dim); margin-bottom: 6px; }
+.detail-wounds { display: flex; flex-direction: column; gap: 4px; }
+.wound-tag { font-size: 12px; color: #fca5a5; background: rgba(239, 68, 68, 0.1); padding: 4px 8px; border-radius: 6px; border-left: 2px solid rgba(239, 68, 68, 0.3); line-height: 1.4; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.hero-tag { font-size: 12px; color: var(--gold-bright); background: rgba(233, 162, 59, 0.1); padding: 4px 8px; border-radius: 6px; }
 
 /* ── Current Direction ── */
 .direction-card {
-  max-width: 420px;
-  width: 100%;
-  margin: 24px auto 0;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  padding: 20px;
-  opacity: 0;
-  animation: fadeUp 0.8s 1.4s ease forwards;
+  max-width: 420px; width: 100%; margin: 24px auto 0;
+  background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px; padding: 20px;
+  opacity: 0; animation: fadeUp 0.8s 1.4s ease forwards;
 }
-
-.direction-label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--bone-dim);
-  margin-bottom: 8px;
-}
-
-.direction-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px;
-  color: var(--white);
-  margin-bottom: 6px;
-}
-
-.direction-desc {
-  font-size: 13px;
-  color: var(--bone-dim);
-  line-height: 1.6;
-}
+.direction-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bone-dim); margin-bottom: 8px; }
+.direction-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--white); margin-bottom: 6px; }
+.direction-desc { font-size: 13px; color: var(--bone-dim); line-height: 1.6; }
 
 /* ── Continue button ── */
 .chamber-continue {
-  max-width: 420px;
-  width: 100%;
-  margin: 32px auto 0;
-  opacity: 0;
-  animation: fadeUp 0.8s 1.8s ease forwards;
+  max-width: 420px; width: 100%; margin: 32px auto 0;
+  opacity: 0; animation: fadeUp 0.8s 1.8s ease forwards;
 }
-
 .chamber-continue button {
   width: 100%;
   background: linear-gradient(135deg, var(--gold), var(--gold-bright));
-  color: var(--ink);
-  border: none;
-  padding: 16px;
-  border-radius: 16px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
+  color: var(--ink); border: none; padding: 16px; border-radius: 16px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.chamber-continue button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(233, 162, 59, 0.3);
-}
+.chamber-continue button:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(233, 162, 59, 0.3); }
 
 /* ── Screen 3: Gap Insight ── */
 .gap-screen {
-  justify-content: center;
-  padding: 40px 24px;
-  text-align: center;
+  justify-content: center; padding: 40px 24px; text-align: center;
 }
 
 .gap-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+  width: 64px; height: 64px; border-radius: 50%;
   border: 2px dashed rgba(233, 162, 59, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 24px;
-  animation: fadeUp 0.8s 0.3s ease forwards, dotFlicker 3s 1s ease-in-out infinite;
-  opacity: 0;
-  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px; position: relative;
+  opacity: 0; animation: fadeUp 0.8s 0.3s ease forwards, dotFlicker 3s 1s ease-in-out infinite;
 }
 .gap-icon::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
+  content: ''; position: absolute; inset: -8px; border-radius: 50%;
   border: 1px solid rgba(233, 162, 59, 0.1);
   animation: gapRing 3s ease-in-out infinite;
 }
-@keyframes gapRing {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.15); opacity: 0; }
-}
-.gap-icon-inner {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(233, 162, 59, 0.15);
-  border: 1px dashed rgba(233, 162, 59, 0.3);
-}
+@keyframes gapRing { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.15); opacity: 0; } }
+.gap-icon-inner { width: 20px; height: 20px; border-radius: 50%; background: rgba(233, 162, 59, 0.15); border: 1px dashed rgba(233, 162, 59, 0.3); }
 
-.gap-kicker {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  color: var(--gold);
-  margin-bottom: 16px;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.5s ease forwards;
-}
-
-.gap-pillar-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
-  font-weight: 500;
-  color: var(--white);
-  line-height: 1.2;
-  margin-bottom: 24px;
-  max-width: 340px;
-  margin-left: auto;
-  margin-right: auto;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.7s ease forwards;
-}
-
-.gap-insight-text {
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--bone-dim);
-  max-width: 380px;
-  margin: 0 auto 16px;
-  opacity: 0;
-  animation: fadeUp 0.8s 1.0s ease forwards;
-}
-
-.gap-insight-text strong {
-  color: var(--bone);
-  font-weight: 600;
-}
-
-.gap-question {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 24px;
-  font-style: italic;
-  color: var(--gold);
-  margin: 32px auto 40px;
-  max-width: 300px;
-  opacity: 0;
-  animation: fadeUp 0.8s 1.4s ease forwards;
-}
+.gap-kicker { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2.5px; color: var(--gold); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.8s 0.5s ease forwards; }
+.gap-pillar-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 500; color: var(--white); line-height: 1.2; margin-bottom: 24px; max-width: 340px; margin-left: auto; margin-right: auto; opacity: 0; animation: fadeUp 0.8s 0.7s ease forwards; }
+.gap-insight-text { font-size: 15px; line-height: 1.75; color: var(--bone-dim); max-width: 380px; margin: 0 auto 16px; opacity: 0; animation: fadeUp 0.8s 1.0s ease forwards; }
+.gap-insight-text strong { color: var(--bone); font-weight: 600; }
+.gap-question { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-style: italic; color: var(--gold); margin: 32px auto 40px; max-width: 300px; opacity: 0; animation: fadeUp 0.8s 1.4s ease forwards; }
 
 .gap-cta {
   background: linear-gradient(135deg, var(--purple), var(--purple-bright));
-  color: var(--white);
-  border: none;
-  padding: 16px 48px;
-  border-radius: 16px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  opacity: 0;
-  animation: fadeUp 0.8s 1.7s ease forwards;
+  color: var(--white); border: none; padding: 16px 48px; border-radius: 16px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  opacity: 0; animation: fadeUp 0.8s 1.7s ease forwards;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.gap-cta:hover {
+.gap-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3); }
+
+/* ═══════════════════════════════════════════════
+   Screen 4: COMPLETION (Chamber + Wahoos + Detail Dropdowns)
+   ═══════════════════════════════════════════════ */
+.completion-screen {
+  padding: 48px 16px 100px;
+  overflow-y: auto;
+}
+
+.completion-header {
+  text-align: center;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s ease forwards;
+}
+.completion-header .check {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--green), #4ade80);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 28px; color: white;
+}
+.completion-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 500; color: var(--white); margin-bottom: 4px;
+}
+.completion-header .rp-badge {
+  display: inline-block; font-size: 13px; font-weight: 700;
+  color: var(--gold); background: rgba(233, 162, 59, 0.12);
+  padding: 4px 12px; border-radius: 8px; margin-top: 8px;
+}
+
+/* ── Mural placeholder ── */
+.mural-section {
+  max-width: 420px; width: 100%; margin: 0 auto 28px;
+  border-radius: 16px; overflow: hidden;
+  opacity: 0; animation: fadeUp 0.8s 0.4s ease forwards;
+}
+.mural-placeholder {
+  width: 100%; aspect-ratio: 21/9;
+  background: linear-gradient(135deg, var(--purple-dim), var(--char), rgba(233, 162, 59, 0.1));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--bone-dim); font-size: 13px; font-style: italic;
+}
+
+/* ── Mini chamber summary ── */
+.chamber-summary {
+  max-width: 420px; width: 100%; margin: 0 auto 20px;
+  opacity: 0; animation: fadeUp 0.8s 0.6s ease forwards;
+}
+.chamber-summary-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--gold); margin-bottom: 12px;
+  text-align: center;
+}
+
+.mini-pillars { display: flex; flex-direction: column; gap: 10px; }
+
+.mini-pillar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-radius: 14px;
+  cursor: pointer; transition: transform 0.2s, background 0.2s;
+}
+.mini-pillar:hover { transform: translateX(4px); }
+
+.mini-pillar.active-status {
+  background: rgba(94, 23, 235, 0.1);
+  border: 1px solid rgba(94, 23, 235, 0.2);
+}
+.mini-pillar.flickering-status {
+  background: rgba(233, 162, 59, 0.08);
+  border: 1px solid rgba(233, 162, 59, 0.15);
+  animation: flickerGlow 3s ease-in-out infinite;
+}
+
+.mini-pillar-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.mini-pillar.active-status .mini-pillar-dot {
+  background: var(--purple-bright); box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+}
+.mini-pillar.flickering-status .mini-pillar-dot {
+  background: var(--gold); animation: dotFlicker 2s ease-in-out infinite;
+}
+
+.mini-pillar-text { flex: 1; }
+.mini-pillar-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; color: var(--white); line-height: 1.3;
+}
+.mini-pillar-status {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;
+}
+.mini-pillar.active-status .mini-pillar-status { color: var(--purple-bright); }
+.mini-pillar.flickering-status .mini-pillar-status { color: var(--gold); }
+
+.mini-pillar-arrow { color: var(--bone-dim); font-size: 14px; }
+
+/* ── Gap nudge card (the Wahoo bridge) ── */
+.gap-nudge {
+  max-width: 420px; width: 100%; margin: 0 auto 28px;
+  background: linear-gradient(135deg, rgba(233, 162, 59, 0.08), rgba(233, 162, 59, 0.03));
+  border: 1px solid rgba(233, 162, 59, 0.15);
+  border-radius: 16px; padding: 20px;
+  opacity: 0; animation: fadeUp 0.8s 0.8s ease forwards;
+  position: relative; overflow: hidden;
+}
+.gap-nudge::before {
+  content: ''; position: absolute; top: -30px; right: -20px;
+  width: 100px; height: 100px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.1), transparent 70%);
+  animation: ambientPulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.gap-nudge-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.gap-nudge-icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px dashed rgba(233, 162, 59, 0.3);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.gap-nudge-icon-inner {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(233, 162, 59, 0.2); border: 1px dashed rgba(233, 162, 59, 0.3);
+}
+.gap-nudge-title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--gold);
+}
+
+.gap-nudge-pillar {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; color: var(--white); margin-bottom: 10px; line-height: 1.3;
+}
+
+.gap-nudge-text {
+  font-size: 13px; color: var(--bone-dim); line-height: 1.6; margin-bottom: 16px;
+}
+
+/* ── Wahoo suggestions ── */
+.wahoo-suggestions {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 12px;
+}
+
+.wahoo-suggestion {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(233, 162, 59, 0.06);
+  border: 1px solid rgba(233, 162, 59, 0.1);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.wahoo-suggestion:hover {
+  background: rgba(233, 162, 59, 0.12);
+  border-color: rgba(233, 162, 59, 0.25);
+  transform: translateX(4px);
+}
+.wahoo-suggestion.selected {
+  background: rgba(233, 162, 59, 0.15);
+  border-color: var(--gold);
+}
+
+.wahoo-bolt {
+  font-size: 18px; flex-shrink: 0;
+}
+.wahoo-suggestion-text {
+  flex: 1;
+}
+.wahoo-suggestion-title {
+  font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 2px;
+}
+.wahoo-suggestion-desc {
+  font-size: 12px; color: var(--bone-dim); line-height: 1.4;
+}
+.wahoo-suggestion-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid rgba(233, 162, 59, 0.25);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.2s;
+  font-size: 12px; color: transparent;
+}
+.wahoo-suggestion.selected .wahoo-suggestion-check {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+.wahoo-accept-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  color: var(--ink); border: none; padding: 14px; border-radius: 12px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+  opacity: 0.4; pointer-events: none;
+}
+.wahoo-accept-btn.enabled {
+  opacity: 1; pointer-events: auto;
+}
+.wahoo-accept-btn.enabled:hover {
+  transform: translateY(-2px); box-shadow: 0 6px 24px rgba(233, 162, 59, 0.3);
+}
+
+.wahoo-skip {
+  display: block; text-align: center; margin-top: 8px;
+  font-size: 12px; color: var(--bone-dim); cursor: pointer;
+  background: none; border: none;
+  transition: color 0.2s;
+}
+.wahoo-skip:hover { color: var(--bone); }
+
+/* ── Detail dropdowns ── */
+.detail-dropdowns {
+  max-width: 420px; width: 100%; margin: 0 auto;
+  opacity: 0; animation: fadeUp 0.8s 1.0s ease forwards;
+}
+
+.detail-dropdowns-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.detail-dropdowns-divider::before,
+.detail-dropdowns-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.detail-dropdowns-divider span {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--bone-dim); white-space: nowrap;
+}
+
+.dropdown-section {
+  margin-bottom: 8px;
+}
+
+.dropdown-trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer; transition: background 0.2s;
+  color: var(--bone);
+}
+.dropdown-trigger:hover { background: rgba(255, 255, 255, 0.05); }
+
+.dropdown-trigger-left {
+  display: flex; align-items: center; gap: 10px;
+}
+.dropdown-trigger-icon { font-size: 16px; }
+.dropdown-trigger-text { font-size: 14px; font-weight: 600; }
+.dropdown-trigger-count {
+  font-size: 11px; color: var(--bone-dim);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 8px; border-radius: 4px;
+}
+.dropdown-trigger-arrow {
+  font-size: 10px; color: var(--bone-dim);
+  transition: transform 0.3s;
+}
+.dropdown-section.open .dropdown-trigger-arrow { transform: rotate(180deg); }
+.dropdown-section.open .dropdown-trigger {
+  border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+  border-bottom-color: transparent;
+}
+
+.dropdown-content {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: none;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.dropdown-section.open .dropdown-content { max-height: 600px; }
+
+.dropdown-inner { padding: 16px; }
+
+/* Cluster card inside dropdown */
+.cluster-card {
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.cluster-card:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+.cluster-label {
+  font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px;
+}
+.cluster-insight {
+  font-size: 12px; color: var(--bone-dim); line-height: 1.5; margin-bottom: 8px;
+}
+.cluster-items { display: flex; flex-wrap: wrap; gap: 4px; }
+.cluster-item-tag {
+  font-size: 11px; padding: 3px 8px; border-radius: 6px; line-height: 1.3;
+}
+.cluster-item-tag.skills { background: rgba(233, 162, 59, 0.1); color: var(--gold-bright); }
+.cluster-item-tag.problems { background: rgba(239, 100, 100, 0.1); color: #fca5a5; }
+.cluster-item-tag.personas { background: rgba(139, 92, 246, 0.1); color: #c4b5fd; }
+
+/* ── Narrative dropdown ── */
+.narrative-text {
+  font-size: 14px; color: var(--bone-dim); line-height: 1.75;
+}
+.narrative-text strong { color: var(--bone); font-weight: 600; }
+
+/* ── Share section ── */
+.share-section {
+  max-width: 420px; width: 100%; margin: 32px auto 0;
+  display: flex; gap: 10px;
+  opacity: 0; animation: fadeUp 0.8s 1.2s ease forwards;
+}
+.share-btn {
+  flex: 1; padding: 14px; border-radius: 12px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: transform 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.share-btn:hover { transform: translateY(-2px); }
+.share-btn.primary {
+  background: linear-gradient(135deg, var(--purple), var(--purple-bright));
+  color: white; border: none;
+}
+.share-btn.secondary {
+  background: transparent; color: var(--bone-dim);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ═══ NIKIGAI SCREEN ═══ */
+.nikigai-screen {
+  padding: 48px 16px 100px;
+  overflow-y: auto;
+}
+
+.nikigai-header {
+  text-align: center;
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s ease forwards;
+}
+.nikigai-header .kicker {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2.5px; color: var(--gold); margin-bottom: 12px;
+}
+.nikigai-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px; font-weight: 500; color: var(--white); margin-bottom: 6px;
+}
+.nikigai-header .subtitle {
+  font-size: 14px; color: var(--bone-dim); line-height: 1.5;
+}
+
+.nikigai-categories {
+  max-width: 420px; width: 100%; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+.nikigai-category {
+  opacity: 0;
+}
+.nikigai-category:nth-child(1) { animation: fadeUp 0.8s 0.4s ease forwards; }
+.nikigai-category:nth-child(2) { animation: fadeUp 0.8s 0.7s ease forwards; }
+.nikigai-category:nth-child(3) { animation: fadeUp 0.8s 1.0s ease forwards; }
+
+.nikigai-cat-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.nikigai-cat-icon { font-size: 20px; }
+.nikigai-cat-title {
+  font-size: 14px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.nikigai-cat-title.skills-color { color: var(--gold); }
+.nikigai-cat-title.problems-color { color: #fca5a5; }
+.nikigai-cat-title.personas-color { color: #c4b5fd; }
+
+.nikigai-cat-count {
+  font-size: 11px; color: var(--bone-dim);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 8px; border-radius: 4px; margin-left: auto;
+}
+
+.nikigai-clusters {
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.nikigai-cluster-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px; padding: 14px 16px;
+  transition: background 0.2s;
+}
+
+.nikigai-cluster-label {
+  font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 4px; line-height: 1.3;
+}
+.nikigai-cluster-insight {
+  font-size: 12px; color: var(--bone-dim); line-height: 1.5; margin-bottom: 8px;
+}
+.nikigai-cluster-items {
+  display: flex; flex-wrap: wrap; gap: 4px;
+}
+.nikigai-item {
+  font-size: 11px; padding: 3px 8px; border-radius: 6px; line-height: 1.3;
+}
+.nikigai-item.skills { background: rgba(233, 162, 59, 0.1); color: var(--gold-bright); }
+.nikigai-item.problems { background: rgba(239, 100, 100, 0.1); color: #fca5a5; }
+.nikigai-item.personas { background: rgba(139, 92, 246, 0.1); color: #c4b5fd; }
+
+.nikigai-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  margin: 4px 0;
+}
+
+.nikigai-continue {
+  max-width: 420px; width: 100%; margin: 32px auto 0;
+  opacity: 0; animation: fadeUp 0.8s 1.3s ease forwards;
+}
+.nikigai-continue button {
+  width: 100%;
+  background: linear-gradient(135deg, var(--purple), var(--purple-bright));
+  color: var(--white); border: none; padding: 16px; border-radius: 16px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nikigai-continue button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
 }
+
+/* ── Gap seed (lighter nudge for completion) ── */
+.gap-seed {
+  max-width: 420px; width: 100%; margin: 0 auto 28px;
+  background: rgba(233, 162, 59, 0.05);
+  border: 1px solid rgba(233, 162, 59, 0.12);
+  border-radius: 16px; padding: 18px 20px;
+  display: flex; align-items: flex-start; gap: 14px;
+  opacity: 0; animation: fadeUp 0.8s 0.8s ease forwards;
+  cursor: pointer; transition: background 0.2s, transform 0.2s;
+}
+.gap-seed:hover { background: rgba(233, 162, 59, 0.08); transform: translateX(4px); }
+.gap-seed-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px dashed rgba(233, 162, 59, 0.25);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; animation: dotFlicker 3s ease-in-out infinite;
+}
+.gap-seed-icon-inner {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: rgba(233, 162, 59, 0.2); border: 1px dashed rgba(233, 162, 59, 0.3);
+}
+.gap-seed-text { flex: 1; }
+.gap-seed-title {
+  font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 4px;
+}
+.gap-seed-desc {
+  font-size: 12px; color: var(--bone-dim); line-height: 1.5;
+}
+.gap-seed-arrow { color: var(--gold-dim); font-size: 16px; margin-top: 8px; }
 
 /* ── Utility ── */
 @keyframes fadeUp {
@@ -683,9 +839,10 @@ body::after {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Mobile scroll hint ── */
 @media (max-width: 480px) {
   .chamber-screen { padding: 48px 12px 100px; }
+  .completion-screen { padding: 40px 12px 80px; }
+  .nikigai-screen { padding: 40px 12px 80px; }
   .pillar-name { font-size: 20px; }
   .intro-title { font-size: 32px; }
 }
@@ -699,14 +856,162 @@ body::after {
 </div>
 <div class="chamber-floor" id="floor"></div>
 
-<!-- ══════════ SCREEN 1: INTRO ══════════ -->
-<div class="screen intro-screen active" id="screen-intro">
-  <div class="intro-kicker">Your Life Map revealed</div>
+<!-- ══════════ SCREEN 1: NIKIGAI ══════════ -->
+<div class="screen nikigai-screen active" id="screen-nikigai">
+  <div class="nikigai-header">
+    <div class="kicker">Your Nikigai</div>
+    <h1>Skills, Problems, Personas</h1>
+    <div class="subtitle">The patterns your life map revealed</div>
+  </div>
+
+  <div class="nikigai-categories">
+    <!-- Skills -->
+    <div class="nikigai-category">
+      <div class="nikigai-cat-header">
+        <span class="nikigai-cat-icon">&#10024;</span>
+        <span class="nikigai-cat-title skills-color">Skills</span>
+        <span class="nikigai-cat-count">4 clusters</span>
+      </div>
+      <div class="nikigai-clusters">
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">Experience Architect &amp; Joy Catalyst</div>
+          <div class="nikigai-cluster-insight">You're drawn to designing moments where people feel engaged and alive.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item skills">Building Lego</span>
+            <span class="nikigai-item skills">Board games</span>
+            <span class="nikigai-item skills">Building forts</span>
+            <span class="nikigai-item skills">Funny videos</span>
+            <span class="nikigai-item skills">Program delivery</span>
+            <span class="nikigai-item skills">Workshops</span>
+            <span class="nikigai-item skills">Making people feel alive</span>
+          </div>
+        </div>
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">Movement, Play &amp; Embodied Expression</div>
+          <div class="nikigai-cluster-insight">Your body and movement are a primary language for you.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item skills">Playground</span>
+            <span class="nikigai-item skills">Dancing</span>
+            <span class="nikigai-item skills">Sport</span>
+            <span class="nikigai-item skills">Partying</span>
+          </div>
+        </div>
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">Subconscious Transformation Catalyst</div>
+          <div class="nikigai-cluster-insight">Drawn to understanding and shifting what lies beneath.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item skills">Emotional alchemist</span>
+            <span class="nikigai-item skills">Writing online</span>
+            <span class="nikigai-item skills">Coding</span>
+            <span class="nikigai-item skills">No-code tools</span>
+          </div>
+        </div>
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">Startup Visionary &amp; Innovation Builder</div>
+          <div class="nikigai-cluster-insight">Entrepreneurial DNA and technical capacity to build from scratch.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item skills">Startups</span>
+            <span class="nikigai-item skills">No-code tools</span>
+            <span class="nikigai-item skills">Coding</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nikigai-divider"></div>
+
+    <!-- Problems -->
+    <div class="nikigai-category">
+      <div class="nikigai-cat-header">
+        <span class="nikigai-cat-icon">&#128293;</span>
+        <span class="nikigai-cat-title problems-color">Problems</span>
+        <span class="nikigai-cat-count">3 clusters</span>
+      </div>
+      <div class="nikigai-clusters">
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">Making Transformation Joyful &amp; Accessible</div>
+          <div class="nikigai-cluster-insight">Transformation doesn't have to be clinical or heavy.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item problems">Making healing fun</span>
+            <span class="nikigai-item problems">Career clarity</span>
+            <span class="nikigai-item problems">Removing fear</span>
+          </div>
+        </div>
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">Finding &amp; Expressing Authentic Self</div>
+          <div class="nikigai-cluster-insight">Core need for authenticity and freedom from external pressures.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item problems">Expressing playfulness at school</span>
+            <span class="nikigai-item problems">Girlfriend reduced partying</span>
+            <span class="nikigai-item problems">Empowering essence</span>
+          </div>
+        </div>
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">Healing From Shame &amp; Perfectionism</div>
+          <div class="nikigai-cluster-insight">Internalized perfectionism shaped your empathy for others.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item problems">Getting in trouble</span>
+            <span class="nikigai-item problems">Sport shame</span>
+            <span class="nikigai-item problems">Unfulfilled dream job</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nikigai-divider"></div>
+
+    <!-- Personas -->
+    <div class="nikigai-category">
+      <div class="nikigai-cat-header">
+        <span class="nikigai-cat-icon">&#11088;</span>
+        <span class="nikigai-cat-title personas-color">Personas</span>
+        <span class="nikigai-cat-count">3 clusters</span>
+      </div>
+      <div class="nikigai-clusters">
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">The Authentic Voice Finder</div>
+          <div class="nikigai-cluster-insight">Drawn to people learning to shed masks and find their real voice.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item personas">Brene Brown</span>
+            <span class="nikigai-item personas">My dad</span>
+            <span class="nikigai-item personas">Aspiring healers</span>
+          </div>
+        </div>
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">The Wounded Corporate Soul</div>
+          <div class="nikigai-cluster-insight">Talented people trapped in systems that don't honor who they are.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item personas">Unfulfilled corporate workers</span>
+            <span class="nikigai-item personas">Anyone stuck in an unfulfilled life</span>
+          </div>
+        </div>
+        <div class="nikigai-cluster-card">
+          <div class="nikigai-cluster-label">The Lost Seeker in Transition</div>
+          <div class="nikigai-cluster-insight">Big visions but stuck in the gap between where you are and want to be.</div>
+          <div class="nikigai-cluster-items">
+            <span class="nikigai-item personas">Stuck in head full of dreams</span>
+            <span class="nikigai-item personas">Naval Ravikant</span>
+            <span class="nikigai-item personas">Ben Crowe</span>
+            <span class="nikigai-item personas">AFL players</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nikigai-continue">
+    <button onclick="showScreen('screen-intro')">Go deeper</button>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN 2: CHAMBER INTRO ══════════ -->
+<div class="screen intro-screen" id="screen-intro">
+  <div class="intro-kicker">Beyond the patterns</div>
   <h1 class="intro-title">Your Essence Chamber</h1>
   <p class="intro-body">
-    Inside you is a chamber. It holds the expression needs that have been with you since childhood.
+    Your skills, problems, and personas are the building blocks. But underneath them is something deeper.
     <br><br>
-    Some are <strong>glowing</strong>. Some are <strong>flickering</strong>. One might be sitting in the dark.
+    Your <strong>Essence Chamber</strong> holds the expression needs that have been with you since childhood. Some are <strong>glowing</strong>. Some are <strong>flickering</strong>.
     <br><br>
     Let's look inside.
   </p>
@@ -721,262 +1026,68 @@ body::after {
   </div>
 
   <div class="pillars-container">
-
-    <!-- PILLAR 1: Container Building -->
+    <!-- PILLAR 1 -->
     <div class="pillar-card active-status" onclick="togglePillar(this)">
-      <div class="pillar-status-badge active">
-        <span class="pillar-status-dot"></span>
-        Active
-      </div>
+      <div class="pillar-status-badge active"><span class="pillar-status-dot"></span> Active</div>
       <div class="pillar-name">The need to build containers that hold others</div>
       <div class="pillar-confidence">Present in all 5 life periods</div>
-
       <div class="orb-timeline">
-        <div class="orb-period">
-          <div class="orb-dot childhood"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Childhood</div>
-            <div class="orb-items">
-              <span class="orb-item childhood">Building Lego</span>
-              <span class="orb-item childhood">Building forts</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot teens"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Teens</div>
-            <div class="orb-items">
-              <span class="orb-item teens">Creating funny videos</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot young-adult"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Young Adult</div>
-            <div class="orb-items">
-              <span class="orb-item young-adult">Program delivery</span>
-              <span class="orb-item young-adult">Writing online</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot career"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Career</div>
-            <div class="orb-items">
-              <span class="orb-item career">Facilitating workshops</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot now"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Now</div>
-            <div class="orb-items">
-              <span class="orb-item now">Emotional alchemist creating subconscious shifts</span>
-            </div>
-          </div>
-        </div>
+        <div class="orb-period"><div class="orb-dot childhood"></div><div class="orb-content"><div class="orb-period-label">Childhood</div><div class="orb-items"><span class="orb-item childhood">Building Lego</span><span class="orb-item childhood">Building forts</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot teens"></div><div class="orb-content"><div class="orb-period-label">Teens</div><div class="orb-items"><span class="orb-item teens">Creating funny videos</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot young-adult"></div><div class="orb-content"><div class="orb-period-label">Young Adult</div><div class="orb-items"><span class="orb-item young-adult">Program delivery</span><span class="orb-item young-adult">Writing online</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot career"></div><div class="orb-content"><div class="orb-period-label">Career</div><div class="orb-items"><span class="orb-item career">Facilitating workshops</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot now"></div><div class="orb-content"><div class="orb-period-label">Now</div><div class="orb-items"><span class="orb-item now">Emotional alchemist creating subconscious shifts</span></div></div></div>
       </div>
-
-      <div class="pillar-expand">
-        <span>Wounds &amp; Heroes</span>
-        <span class="arrow">&#9660;</span>
-      </div>
-
+      <div class="pillar-expand"><span>Wounds &amp; Personas</span><span class="arrow">&#9660;</span></div>
       <div class="pillar-detail">
-        <div class="detail-section">
-          <div class="detail-label">Wounds on this pillar</div>
-          <div class="detail-wounds">
-            <div class="wound-tag">"Making healing fun" — tension between depth and lightness</div>
-            <div class="wound-tag">"Career clarity" — the container wasn't yet the career</div>
-          </div>
-        </div>
-        <div class="detail-section">
-          <div class="detail-label">Heroes who embody this</div>
-          <div class="hero-tags">
-            <span class="hero-tag">Experience creators</span>
-            <span class="hero-tag">Brene Brown</span>
-          </div>
-        </div>
+        <div class="detail-section"><div class="detail-label">Wounds on this pillar</div><div class="detail-wounds"><div class="wound-tag">"Making healing fun" -- tension between depth and lightness</div><div class="wound-tag">"Career clarity" -- the container wasn't yet the career</div></div></div>
+        <div class="detail-section"><div class="detail-label">Personas who embody this</div><div class="hero-tags"><span class="hero-tag">Experience creators</span><span class="hero-tag">Brene Brown</span></div></div>
       </div>
     </div>
 
-    <!-- PILLAR 2: Embodied Aliveness -->
+    <!-- PILLAR 2: Flickering -->
     <div class="pillar-card flickering-status" onclick="togglePillar(this)">
-      <div class="pillar-status-badge flickering">
-        <span class="pillar-status-dot"></span>
-        Flickering
-      </div>
+      <div class="pillar-status-badge flickering"><span class="pillar-status-dot"></span> Flickering</div>
       <div class="pillar-name">The need for embodied aliveness and playful expression</div>
       <div class="pillar-confidence">Strong in Childhood + Teens, dormant in Young Adult, partial return in Career</div>
-
       <div class="orb-timeline">
-        <div class="orb-period">
-          <div class="orb-dot childhood"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Childhood</div>
-            <div class="orb-items">
-              <span class="orb-item childhood">Playing in the playground</span>
-              <span class="orb-item childhood">Dancing</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot teens"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Teens</div>
-            <div class="orb-items">
-              <span class="orb-item teens">Sport</span>
-              <span class="orb-item teens">Partying</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot young-adult empty"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Young Adult</div>
-            <div class="orb-items">
-              <span class="orb-empty-text">Nothing here</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot career"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Career</div>
-            <div class="orb-items">
-              <span class="orb-item career">Dancing</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot now empty"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Now</div>
-            <div class="orb-items">
-              <span class="orb-empty-text">Nothing here</span>
-            </div>
-          </div>
-        </div>
+        <div class="orb-period"><div class="orb-dot childhood"></div><div class="orb-content"><div class="orb-period-label">Childhood</div><div class="orb-items"><span class="orb-item childhood">Playing in the playground</span><span class="orb-item childhood">Dancing</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot teens"></div><div class="orb-content"><div class="orb-period-label">Teens</div><div class="orb-items"><span class="orb-item teens">Sport</span><span class="orb-item teens">Partying</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot young-adult empty"></div><div class="orb-content"><div class="orb-period-label">Young Adult</div><div class="orb-items"><span class="orb-empty-text">Nothing here</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot career"></div><div class="orb-content"><div class="orb-period-label">Career</div><div class="orb-items"><span class="orb-item career">Dancing</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot now empty"></div><div class="orb-content"><div class="orb-period-label">Now</div><div class="orb-items"><span class="orb-empty-text">Nothing here</span></div></div></div>
       </div>
-
-      <div class="pillar-expand">
-        <span>Wounds &amp; Heroes</span>
-        <span class="arrow">&#9660;</span>
-      </div>
-
+      <div class="pillar-expand"><span>Wounds &amp; Personas</span><span class="arrow">&#9660;</span></div>
       <div class="pillar-detail">
-        <div class="detail-section">
-          <div class="detail-label">Wounds on this pillar</div>
-          <div class="detail-wounds">
-            <div class="wound-tag">"Shame from failing to live up to sport expectations"</div>
-            <div class="wound-tag">"Expressing my playfulness at school" — suppressed by institution</div>
-            <div class="wound-tag">"Girlfriend reduced my partying" — relationship dimmed the orb</div>
-          </div>
-        </div>
-        <div class="detail-section">
-          <div class="detail-label">Heroes who embody this</div>
-          <div class="hero-tags">
-            <span class="hero-tag">AFL players</span>
-            <span class="hero-tag">My dad</span>
-          </div>
-        </div>
+        <div class="detail-section"><div class="detail-label">Wounds on this pillar</div><div class="detail-wounds"><div class="wound-tag">"Shame from failing to live up to sport expectations"</div><div class="wound-tag">"Expressing my playfulness at school" -- suppressed by institution</div><div class="wound-tag">"Girlfriend reduced my partying" -- relationship dimmed the orb</div></div></div>
+        <div class="detail-section"><div class="detail-label">Personas who embody this</div><div class="hero-tags"><span class="hero-tag">AFL players</span><span class="hero-tag">My dad</span></div></div>
       </div>
     </div>
 
-    <!-- PILLAR 3: Beneath the Surface -->
+    <!-- PILLAR 3 -->
     <div class="pillar-card active-status" onclick="togglePillar(this)">
-      <div class="pillar-status-badge active">
-        <span class="pillar-status-dot"></span>
-        Active
-      </div>
+      <div class="pillar-status-badge active"><span class="pillar-status-dot"></span> Active</div>
       <div class="pillar-name">The need to understand and shift what lies beneath the surface</div>
       <div class="pillar-confidence">Inferential in childhood, unmistakable from Young Adult onward</div>
-
       <div class="orb-timeline">
-        <div class="orb-period">
-          <div class="orb-dot childhood"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Childhood</div>
-            <div class="orb-items">
-              <span class="orb-item childhood">Board games</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot teens"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Teens</div>
-            <div class="orb-items">
-              <span class="orb-item teens">Creating funny videos</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot young-adult"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Young Adult</div>
-            <div class="orb-items">
-              <span class="orb-item young-adult">Writing online</span>
-              <span class="orb-item young-adult">Building no-code tools</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot career"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Career</div>
-            <div class="orb-items">
-              <span class="orb-item career">Coding</span>
-              <span class="orb-item career">Facilitating workshops</span>
-            </div>
-          </div>
-        </div>
-        <div class="orb-period">
-          <div class="orb-dot now"></div>
-          <div class="orb-content">
-            <div class="orb-period-label">Now</div>
-            <div class="orb-items">
-              <span class="orb-item now">Emotional alchemist creating subconscious shifts</span>
-            </div>
-          </div>
-        </div>
+        <div class="orb-period"><div class="orb-dot childhood"></div><div class="orb-content"><div class="orb-period-label">Childhood</div><div class="orb-items"><span class="orb-item childhood">Board games</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot teens"></div><div class="orb-content"><div class="orb-period-label">Teens</div><div class="orb-items"><span class="orb-item teens">Creating funny videos</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot young-adult"></div><div class="orb-content"><div class="orb-period-label">Young Adult</div><div class="orb-items"><span class="orb-item young-adult">Writing online</span><span class="orb-item young-adult">Building no-code tools</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot career"></div><div class="orb-content"><div class="orb-period-label">Career</div><div class="orb-items"><span class="orb-item career">Coding</span><span class="orb-item career">Facilitating workshops</span></div></div></div>
+        <div class="orb-period"><div class="orb-dot now"></div><div class="orb-content"><div class="orb-period-label">Now</div><div class="orb-items"><span class="orb-item now">Emotional alchemist creating subconscious shifts</span></div></div></div>
       </div>
-
-      <div class="pillar-expand">
-        <span>Wounds &amp; Heroes</span>
-        <span class="arrow">&#9660;</span>
-      </div>
-
+      <div class="pillar-expand"><span>Wounds &amp; Personas</span><span class="arrow">&#9660;</span></div>
       <div class="pillar-detail">
-        <div class="detail-section">
-          <div class="detail-label">Wounds on this pillar</div>
-          <div class="detail-wounds">
-            <div class="wound-tag">"Failing to find fulfilment in a dream job" — the alchemy wasn't happening in the wrong container</div>
-          </div>
-        </div>
-        <div class="detail-section">
-          <div class="detail-label">Heroes who embody this</div>
-          <div class="hero-tags">
-            <span class="hero-tag">Naval Ravikant</span>
-            <span class="hero-tag">Brene Brown</span>
-            <span class="hero-tag">Ben Crowe</span>
-          </div>
-        </div>
+        <div class="detail-section"><div class="detail-label">Wounds on this pillar</div><div class="detail-wounds"><div class="wound-tag">"Failing to find fulfilment in a dream job" -- the alchemy wasn't happening in the wrong container</div></div></div>
+        <div class="detail-section"><div class="detail-label">Personas who embody this</div><div class="hero-tags"><span class="hero-tag">Naval Ravikant</span><span class="hero-tag">Brene Brown</span><span class="hero-tag">Ben Crowe</span></div></div>
       </div>
     </div>
   </div>
 
-  <!-- Current Direction -->
   <div class="direction-card">
     <div class="direction-label">Current Direction (not a pillar)</div>
     <div class="direction-name">Healing as a primary vehicle</div>
-    <div class="direction-desc">
-      This emerged in your Career and Now periods. It's where your three pillars are converging: building containers + embodied aliveness + shifting what's beneath the surface, all channelled through healing work. Not a lifelong need, but where your needs are pointing.
-    </div>
+    <div class="direction-desc">Where your three pillars are converging: building containers + embodied aliveness + shifting what's beneath the surface, all channelled through healing work.</div>
   </div>
 
   <div class="chamber-continue">
@@ -986,20 +1097,254 @@ body::after {
 
 <!-- ══════════ SCREEN 3: GAP INSIGHT ══════════ -->
 <div class="screen gap-screen" id="screen-gap">
-  <div class="gap-icon">
-    <div class="gap-icon-inner"></div>
-  </div>
-  <div class="gap-kicker">The empty pillar</div>
+  <div class="gap-icon"><div class="gap-icon-inner"></div></div>
+  <div class="gap-kicker">The flickering pillar</div>
   <h2 class="gap-pillar-name">Embodied aliveness and playful expression</h2>
   <p class="gap-insight-text">
     Your three pillars converge most powerfully when container-building, aliveness, and subconscious work happen <strong>in the body, in real time, with others</strong>.
     <br><br>
-    But right now, there's a risk that healing becomes <strong>cognitive</strong> rather than <strong>embodied</strong>. Understanding subconscious dynamics instead of transmitting aliveness through movement and presence.
+    But right now, there's a risk that healing becomes <strong>cognitive</strong> rather than <strong>embodied</strong>.
     <br><br>
     Dancing was your first language. Sport, partying, playground play. This pillar went dark in your Young Adult years and never fully came back.
   </p>
   <div class="gap-question">What orb could sit on this pillar next?</div>
-  <button class="gap-cta" onclick="alert('This would connect to Wahoo suggestions')">Explore this</button>
+  <button class="gap-cta" onclick="showScreen('screen-complete')">Continue</button>
+</div>
+
+<!-- ══════════ SCREEN 4: COMPLETION ══════════ -->
+<div class="screen completion-screen" id="screen-complete">
+
+  <!-- Header -->
+  <div class="completion-header">
+    <div class="check">&#10003;</div>
+    <h1>Your Life Map is complete</h1>
+    <span class="rp-badge">+15 RP</span>
+  </div>
+
+  <!-- Mural -->
+  <div class="mural-section">
+    <div class="mural-placeholder">Your Pixar mural generates here...</div>
+  </div>
+
+  <!-- Mini Chamber Summary -->
+  <div class="chamber-summary">
+    <div class="chamber-summary-label">Your Essence Chamber</div>
+    <div class="mini-pillars">
+      <div class="mini-pillar active-status" onclick="showScreen('screen-chamber')">
+        <div class="mini-pillar-dot"></div>
+        <div class="mini-pillar-text">
+          <div class="mini-pillar-name">Build containers that hold others</div>
+          <div class="mini-pillar-status">Active</div>
+        </div>
+        <div class="mini-pillar-arrow">&#8250;</div>
+      </div>
+      <div class="mini-pillar flickering-status" onclick="showScreen('screen-chamber')">
+        <div class="mini-pillar-dot"></div>
+        <div class="mini-pillar-text">
+          <div class="mini-pillar-name">Embodied aliveness and playful expression</div>
+          <div class="mini-pillar-status">Flickering</div>
+        </div>
+        <div class="mini-pillar-arrow">&#8250;</div>
+      </div>
+      <div class="mini-pillar active-status" onclick="showScreen('screen-chamber')">
+        <div class="mini-pillar-dot"></div>
+        <div class="mini-pillar-text">
+          <div class="mini-pillar-name">Understand and shift what lies beneath</div>
+          <div class="mini-pillar-status">Active</div>
+        </div>
+        <div class="mini-pillar-arrow">&#8250;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gap Seed (lighter nudge → points to Wahoo tab) -->
+  <div class="gap-seed" onclick="alert('This routes to the Wahoo tab with your flickering pillar pre-selected')">
+    <div class="gap-seed-icon"><div class="gap-seed-icon-inner"></div></div>
+    <div class="gap-seed-text">
+      <div class="gap-seed-title">Your flickering pillar</div>
+      <div class="gap-seed-desc">Embodied aliveness is waiting for a new orb. When you're ready, your Wahoo tab has suggestions designed for this pillar.</div>
+    </div>
+    <div class="gap-seed-arrow">&#8250;</div>
+  </div>
+
+  <!-- Detail Dropdowns -->
+  <div class="detail-dropdowns">
+    <div class="detail-dropdowns-divider"><span>Your Life Map details</span></div>
+
+    <!-- Skills -->
+    <div class="dropdown-section" onclick="toggleDropdown(this)">
+      <div class="dropdown-trigger">
+        <div class="dropdown-trigger-left">
+          <span class="dropdown-trigger-icon">&#10024;</span>
+          <span class="dropdown-trigger-text">Skills</span>
+          <span class="dropdown-trigger-count">4 clusters</span>
+        </div>
+        <span class="dropdown-trigger-arrow">&#9660;</span>
+      </div>
+      <div class="dropdown-content">
+        <div class="dropdown-inner">
+          <div class="cluster-card">
+            <div class="cluster-label">Experience Architect &amp; Joy Catalyst</div>
+            <div class="cluster-insight">You're drawn to designing moments and spaces where people feel engaged and alive.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag skills">Building Lego</span>
+              <span class="cluster-item-tag skills">Board games</span>
+              <span class="cluster-item-tag skills">Building forts</span>
+              <span class="cluster-item-tag skills">Creating funny videos</span>
+              <span class="cluster-item-tag skills">Program delivery</span>
+              <span class="cluster-item-tag skills">Facilitating workshops</span>
+              <span class="cluster-item-tag skills">Making people feel alive</span>
+            </div>
+          </div>
+          <div class="cluster-card">
+            <div class="cluster-label">Movement, Play &amp; Embodied Expression</div>
+            <div class="cluster-insight">Your body and movement are a primary language for you.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag skills">Playground</span>
+              <span class="cluster-item-tag skills">Dancing</span>
+              <span class="cluster-item-tag skills">Sport</span>
+              <span class="cluster-item-tag skills">Partying</span>
+            </div>
+          </div>
+          <div class="cluster-card">
+            <div class="cluster-label">Subconscious Transformation Catalyst</div>
+            <div class="cluster-insight">You're deeply drawn to understanding and shifting what lies beneath the surface.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag skills">Emotional alchemist</span>
+              <span class="cluster-item-tag skills">Writing online</span>
+              <span class="cluster-item-tag skills">Coding</span>
+              <span class="cluster-item-tag skills">No-code tools</span>
+            </div>
+          </div>
+          <div class="cluster-card">
+            <div class="cluster-label">Startup Visionary &amp; Innovation Builder</div>
+            <div class="cluster-insight">You have the entrepreneurial DNA and technical capacity to build from scratch.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag skills">Startups</span>
+              <span class="cluster-item-tag skills">No-code tools</span>
+              <span class="cluster-item-tag skills">Coding</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Problems -->
+    <div class="dropdown-section" onclick="toggleDropdown(this)">
+      <div class="dropdown-trigger">
+        <div class="dropdown-trigger-left">
+          <span class="dropdown-trigger-icon">&#128293;</span>
+          <span class="dropdown-trigger-text">Problems</span>
+          <span class="dropdown-trigger-count">3 clusters</span>
+        </div>
+        <span class="dropdown-trigger-arrow">&#9660;</span>
+      </div>
+      <div class="dropdown-content">
+        <div class="dropdown-inner">
+          <div class="cluster-card">
+            <div class="cluster-label">Making Transformation Joyful &amp; Accessible</div>
+            <div class="cluster-insight">Your unique insight: transformation doesn't have to be clinical or heavy.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag problems">Making healing fun</span>
+              <span class="cluster-item-tag problems">Career clarity</span>
+              <span class="cluster-item-tag problems">Removing fear</span>
+            </div>
+          </div>
+          <div class="cluster-card">
+            <div class="cluster-label">Finding &amp; Expressing Authentic Self</div>
+            <div class="cluster-insight">Your core need for authenticity and freedom from external pressures.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag problems">Expressing playfulness at school</span>
+              <span class="cluster-item-tag problems">Girlfriend reduced partying</span>
+              <span class="cluster-item-tag problems">Empowering essence</span>
+            </div>
+          </div>
+          <div class="cluster-card">
+            <div class="cluster-label">Healing From Shame &amp; Perfectionism</div>
+            <div class="cluster-insight">Internalized perfectionism and fear of failure shaped your empathy for others.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag problems">Getting in trouble</span>
+              <span class="cluster-item-tag problems">Sport shame</span>
+              <span class="cluster-item-tag problems">Unfulfilled dream job</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heroes -->
+    <div class="dropdown-section" onclick="toggleDropdown(this)">
+      <div class="dropdown-trigger">
+        <div class="dropdown-trigger-left">
+          <span class="dropdown-trigger-icon">&#11088;</span>
+          <span class="dropdown-trigger-text">Personas</span>
+          <span class="dropdown-trigger-count">3 clusters</span>
+        </div>
+        <span class="dropdown-trigger-arrow">&#9660;</span>
+      </div>
+      <div class="dropdown-content">
+        <div class="dropdown-inner">
+          <div class="cluster-card">
+            <div class="cluster-label">The Authentic Voice Finder</div>
+            <div class="cluster-insight">You're drawn to people learning to shed masks and find their real voice.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag personas">Brene Brown</span>
+              <span class="cluster-item-tag personas">My dad</span>
+              <span class="cluster-item-tag personas">Aspiring healers</span>
+            </div>
+          </div>
+          <div class="cluster-card">
+            <div class="cluster-label">The Wounded Corporate Soul</div>
+            <div class="cluster-insight">You recognize talented people trapped in systems that don't honor who they are.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag personas">Unfulfilled corporate workers</span>
+              <span class="cluster-item-tag personas">Anyone stuck in an unfulfilled life</span>
+            </div>
+          </div>
+          <div class="cluster-card">
+            <div class="cluster-label">The Lost Seeker in Transition</div>
+            <div class="cluster-insight">You understand what it feels like to have big visions but feel stuck in the gap.</div>
+            <div class="cluster-items">
+              <span class="cluster-item-tag personas">Anyone stuck in head full of dreams</span>
+              <span class="cluster-item-tag personas">Naval Ravikant</span>
+              <span class="cluster-item-tag personas">Ben Crowe</span>
+              <span class="cluster-item-tag personas">AFL players</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Narrative -->
+    <div class="dropdown-section" onclick="toggleDropdown(this)">
+      <div class="dropdown-trigger">
+        <div class="dropdown-trigger-left">
+          <span class="dropdown-trigger-icon">&#128220;</span>
+          <span class="dropdown-trigger-text">Connecting Dots</span>
+        </div>
+        <span class="dropdown-trigger-arrow">&#9660;</span>
+      </div>
+      <div class="dropdown-content">
+        <div class="dropdown-inner">
+          <div class="narrative-text">
+            <p>From <strong>building Lego forts</strong> as a kid to "being an emotional alchemist creating subconscious shifts" now, you've traced a clear thread that most people never actually see.</p>
+            <br>
+            <p>There's been one constant: you've always been someone who <strong>builds containers where transformation can happen</strong>. Those childhood forts weren't just structures. They were worlds where new things were possible.</p>
+            <br>
+            <p>The Playful Alchemist was always in you. While other kids were just playing, you were orchestrating experiences. The shame you felt about "failing to live up to sport expectations" wasn't really about sports. It was about <strong>being forced into a role that didn't let you be the catalyst you naturally are</strong>.</p>
+            <br>
+            <p>Every time you've tried to be small or serious or one thing, you get stuck. The moments you've thrived are when you've been <strong>allowed to be the person who makes the invisible shifts visible, who brings play and consciousness together</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share -->
+  <div class="share-section">
+    <button class="share-btn primary">&#128247; Share Life Map</button>
+    <button class="share-btn secondary">&#128279; Copy Link</button>
+  </div>
 </div>
 
 <script>
@@ -1007,18 +1352,16 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
-
-  // Show floor on chamber + gap screens
   const floor = document.getElementById('floor');
-  if (id === 'screen-chamber' || id === 'screen-gap') {
-    floor.classList.add('visible');
-  } else {
-    floor.classList.remove('visible');
-  }
+  floor.classList.toggle('visible', id !== 'screen-nikigai');
 }
 
 function togglePillar(card) {
   card.classList.toggle('expanded');
+}
+
+function toggleDropdown(section) {
+  section.classList.toggle('open');
 }
 </script>
 </body>

@@ -101,8 +101,11 @@ export function mergeField(existing, incoming) {
     evidence: incoming.evidence || null,
   })
 
-  // Case 1: No existing field — add as proposed
+  // Case 1: No existing field — add as proposed (or confirmed if the user explicitly chose the value)
   if (!existing || existing.state === 'empty') {
+    if (incoming.confidence === 'confirmed') {
+      incomingField.state = 'confirmed'
+    }
     return { field: incomingField, action: 'added' }
   }
 
@@ -159,15 +162,16 @@ function reconcileProposed(existing, incoming) {
 
   // Higher confidence wins
   if (incomingConfRank > existingConfRank) {
-    return {
-      field: proposedField(incoming.value, {
-        confidence: incoming.confidence || 'high',
-        source: incoming.source || 'flow',
-        sourceIdentifier: incoming.sourceIdentifier || null,
-        evidence: incoming.evidence || null,
-      }),
-      action: 'updated',
+    const winner = proposedField(incoming.value, {
+      confidence: incoming.confidence || 'high',
+      source: incoming.source || 'flow',
+      sourceIdentifier: incoming.sourceIdentifier || null,
+      evidence: incoming.evidence || null,
+    })
+    if (incoming.confidence === 'confirmed') {
+      winner.state = 'confirmed'
     }
+    return { field: winner, action: 'updated' }
   }
 
   if (existingConfRank > incomingConfRank) {

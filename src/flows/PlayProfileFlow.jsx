@@ -15,6 +15,7 @@ import { supabase } from '../lib/supabaseClient'
 import { generateChallenge } from '../lib/founderDnaAI'
 import { syncFounderDnaChallengeCompletion } from '../lib/questCompletionHelpers'
 import PlayProfileQuiz from '../components/PlayProfile/PlayProfileQuiz'
+import { getDisplayCompany } from '../components/PlayProfile/DNAReveal'
 import StuckPointSelection from '../components/PlayProfile/StuckPointSelection'
 import FollowUpQuestions from '../components/PlayProfile/FollowUpQuestions'
 import AIDiagnostic from '../components/PlayProfile/AIDiagnostic'
@@ -102,7 +103,7 @@ export default function PlayProfileFlow() {
       dna_code: quizData.dnaProfile.code,
       archetype: quizData.matchResult.archetype,
       matched_founder: quizData.matchResult.founder.name,
-      matched_founder_company: quizData.matchResult.founder.company,
+      matched_founder_company: getDisplayCompany(quizData.matchResult.founder) || null,
       slider_values: quizData.sliderValues,
       selected_games: quizData.selectedGames.map(g => ({ name: g.name, icon: g.icon, category: g.category })),
     }

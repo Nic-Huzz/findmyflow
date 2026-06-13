@@ -18,10 +18,11 @@
 import { createClient } from '@supabase/supabase-js'
 
 const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
-const key = process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+const key = process.env.SUPABASE_SERVICE_KEY
 
 if (!url || !key) {
-  console.error('Missing SUPABASE_URL / SUPABASE_SERVICE_KEY env vars')
+  // Anon key is useless here: RLS (auth.uid() = user_id) blocks all writes in a server-side script
+  console.error('Missing SUPABASE_URL / SUPABASE_SERVICE_KEY env vars (service role key required, anon key cannot write)')
   process.exit(1)
 }
 
@@ -60,11 +61,18 @@ function regenerateMarkdown(facts) {
 async function backfill() {
   console.log('Starting Creator Brain backfill...\n')
 
-  // Get all users who have completed at least one flow
-  const { data: users } = await supabase.from('user_stage_progress').select('user_id')
-  if (!users?.length) { console.log('No users found.'); return }
+  // Get all users who have completed at least one flow (paginated past the 1000-row default limit)
+  const allUsers = []
+  const PAGE = 1000
+  for (let from = 0; ; from += PAGE) {
+    const { data: page, error } = await supabase.from('user_stage_progress').select('user_id').range(from, from + PAGE - 1)
+    if (error) { console.error('Failed to fetch users:', error.message); process.exit(1) }
+    allUsers.push(...(page || []))
+    if (!page || page.length < PAGE) break
+  }
+  if (!allUsers.length) { console.log('No users found.'); return }
 
-  const userIds = [...new Set(users.map(u => u.user_id))]
+  const userIds = [...new Set(allUsers.map(u => u.user_id))]
   console.log(`Found ${userIds.length} users to backfill.\n`)
 
   let success = 0, skipped = 0

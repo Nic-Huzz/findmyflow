@@ -25,12 +25,12 @@ export const LEVEL_CONFIG = {
     },
     extraQuests: [
       {
-        id: 'play_skills',
-        name: 'Find Your Wahoos',
+        id: 'find_wahoos',
+        name: 'Unlock Your Wahoos',
         route: null,
-        narrative: 'Pick what lights you up.',
+        narrative: 'Open your Wahoo space and name what would light you up.',
         icon: '🔥',
-        action: 'openPlaySkillPicker',
+        navigateTo: 'Wahoo',
       },
       {
         id: 'wound_map',

@@ -31,7 +31,7 @@ const EXPERIENCE_TYPE_LABELS = {
   cohort: 'Cohort Programs',
 }
 
-function getDisplayCompany(founder) {
+export function getDisplayCompany(founder) {
   return founder.company || EXPERIENCE_TYPE_LABELS[founder.experienceType] || founder.experienceType || ''
 }
 

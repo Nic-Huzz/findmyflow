@@ -4,11 +4,11 @@
  * Play-List tab for the 7-Day Challenge page.
  *
  * States:
- *   1. No playskills → "Find Your Play-Skills" CTA
- *   2. Has playskills → WahooCreator (two-path: free text or browse categories)
+ *   1. No category wahoos and no playskills → WahooDiscoveryFlow (first-visit)
+ *   2. Otherwise → category bubbles + Active Wahoos + WahooCreator (free text
+ *      + bucket list) + WahooInspiration ("Need inspiration?")
  *
- * Also shows Active Wahoos section (from priority_weekly_picks)
- * and a link to the Wahoo Map (Groan Matrix).
+ * Active Wahoos come from priority_weekly_picks.
  */
 
 import { useMemo, useState, useEffect, useCallback } from 'react'
@@ -20,7 +20,8 @@ import { createGroanChallenge } from '../lib/crm/groanChallengeService'
 import { hapticLight } from '../lib/haptics'
 import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
-import PlaySkillPicker from './PlaySkillPicker'
+import WahooDiscoveryFlow from './WahooDiscoveryFlow'
+import WahooInspiration from './WahooInspiration'
 
 const WAHOO_CATEGORIES = [
   { id: 'appearance', name: 'Appearance', icon: '👤' },
@@ -41,7 +42,6 @@ export default function PlayListTab({
   const [activeChallenges, setActiveChallenges] = useState([])
   const [completingChallenge, setCompletingChallenge] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
-  const [showPlaySkillPicker, setShowPlaySkillPicker] = useState(false)
   const [wahooCreatorKey, setWahooCreatorKey] = useState(0)
   const [allTimeWahoos, setAllTimeWahoos] = useState(0)
   const [categoryWahoos, setCategoryWahoos] = useState({ appearance: [], creation: [], connection: [] })
@@ -70,16 +70,23 @@ export default function PlayListTab({
     }
   }, [userId])
 
+  // Fetch playskills (extracted so WahooInspiration's PlaySkillPicker can refresh)
+  const fetchPlayskills = useCallback(async () => {
+    if (!userId) return
+    const { data } = await supabase
+      .from('nikigai_clusters')
+      .select('id, cluster_label, cluster_type, items, step_id')
+      .eq('user_id', userId)
+      .eq('cluster_type', 'skills')
+    if (data) setPlayskills(data)
+  }, [userId])
+
   // Fetch playskills + active challenges + category wahoos
   useEffect(() => {
     if (!userId) return
 
     Promise.all([
-      supabase
-        .from('nikigai_clusters')
-        .select('id, cluster_label, cluster_type, items, step_id')
-        .eq('user_id', userId)
-        .eq('cluster_type', 'skills'),
+      fetchPlayskills(),
       fetchActiveChallenges(),
       supabase
         .from('groan_challenges')
@@ -87,8 +94,7 @@ export default function PlayListTab({
         .eq('user_id', userId)
         .eq('status', 'completed'),
       fetchCategoryWahoos(),
-    ]).then(([{ data }, , { count }]) => {
-      if (data) setPlayskills(data)
+    ]).then(([, , { count }]) => {
       setAllTimeWahoos(count || 0)
       setLoading(false)
     }).catch(err => {
@@ -205,46 +211,24 @@ export default function PlayListTab({
     return <div className="playlist-tab"><div className="loading-state"><div className="spinner" /></div></div>
   }
 
-  // ─── State 1: No playskills ───────────────────────────────────────────────
+  // ─── State 1: First visit (no category wahoos, no playskills) ──────────────
 
-  if (playskills.length === 0) {
+  const hasCategoryWahoos = Object.values(categoryWahoos).flat().length > 0
+
+  if (playskills.length === 0 && !hasCategoryWahoos) {
     return (
       <div className="playlist-tab">
         {activeChallenges.length > 0 && renderActiveWahoos()}
 
-        <div className="plt-section-card" style={{ textAlign: 'center', padding: '2rem 1.5rem' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🔥</div>
-          <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem', fontWeight: 800 }}>Find Your Play-Skills First</h3>
-          <p style={{ color: '#6c757d', fontSize: '0.85rem', margin: '0 0 1.25rem', lineHeight: 1.5 }}>
-            Pick what lights you up so we can generate Wahoos that fit you.
-          </p>
-          <button
-            className="mpp-gold-btn"
-            onClick={() => setShowPlaySkillPicker(true)}
-            style={{ width: '100%' }}
-          >
-            Find My Play-Skills
-          </button>
-        </div>
-
-        {showPlaySkillPicker && (
-          <PlaySkillPicker
-            userId={userId}
-            onComplete={() => {
-              setShowPlaySkillPicker(false)
-              // Reload playskills
-              supabase
-                .from('nikigai_clusters')
-                .select('id, cluster_label, cluster_type, items, step_id')
-                .eq('user_id', userId)
-                .eq('cluster_type', 'skills')
-                .then(({ data }) => {
-                  if (data) setPlayskills(data)
-                })
-            }}
-            onClose={() => setShowPlaySkillPicker(false)}
-          />
-        )}
+        <WahooDiscoveryFlow
+          userId={userId}
+          currentVisibilityLayer={currentVisibilityLayer}
+          onComplete={() => {
+            fetchCategoryWahoos()
+            fetchActiveChallenges()
+            onRefreshPoints?.()
+          }}
+        />
 
         {completingChallenge && (
           <GroanCompletionModal
@@ -262,7 +246,7 @@ export default function PlayListTab({
     )
   }
 
-  // ─── State 2: Has playskills → WahooCreator ──────────────────────────────
+  // ─── State 2: Has wahoos or playskills → WahooCreator ──────────────────────
 
   return (
     <div className="playlist-tab">
@@ -348,7 +332,6 @@ export default function PlayListTab({
       <WahooCreator
         key={wahooCreatorKey}
         userId={userId}
-        categories={categoryIds}
         currentVisibilityLayer={currentVisibilityLayer}
         bucketList={Object.values(categoryWahoos).flat().filter(w => w.status !== 'completed' && !w.accepted_at)}
         onWahooAccepted={() => {
@@ -361,6 +344,20 @@ export default function PlayListTab({
           fetchCategoryWahoos()
           setWahooCreatorKey(k => k + 1)
         }}
+      />
+
+      {/* Need inspiration? — play-skills + Ikigai Mix (+ future pillar gaps) */}
+      <WahooInspiration
+        userId={userId}
+        categories={categoryIds}
+        currentVisibilityLayer={currentVisibilityLayer}
+        onWahooAccepted={() => {
+          fetchActiveChallenges()
+          fetchCategoryWahoos()
+          onRefreshPoints?.()
+        }}
+        onWahooSaved={fetchCategoryWahoos}
+        onPlaySkillsUpdated={fetchPlayskills}
       />
 
       {/* Completion modal */}

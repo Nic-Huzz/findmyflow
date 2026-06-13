@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { inferFromGames, buildDNAProfile, matchFounder } from '../../lib/dnaMatching'
 import GameSelection from './GameSelection'
 import DNASliders from './DNASliders'
-import DNAReveal from './DNAReveal'
+import DNAReveal, { getDisplayCompany } from './DNAReveal'
 import StuckPointSelection from './StuckPointSelection'
 import FollowUpQuestions from './FollowUpQuestions'
 import ProfileSummary from './ProfileSummary'
@@ -188,7 +188,7 @@ export default function PlayProfileQuiz({ userId, onQuizComplete, founders: exte
         dna_code: s.dnaProfile.code,
         archetype: s.matchResult.archetype,
         matched_founder: s.matchResult.founder.name,
-        matched_founder_company: s.matchResult.founder.company,
+        matched_founder_company: getDisplayCompany(s.matchResult.founder) || null,
         match_distance: s.matchResult.distance,
         stuck_point_id: s.stuckPoint?.id ?? null,
         stuck_point_name: s.stuckPoint?.name ?? null,

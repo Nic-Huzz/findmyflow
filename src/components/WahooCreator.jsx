@@ -1,22 +1,21 @@
 /**
  * WahooCreator.jsx
  *
- * Two-path Wahoo creation flow for the Play-list tab.
- * Path A: "I know what I want to do" → free text → AI generates challenge
- * Path B: "Help me find one" → browse play-skill categories → AI suggests 2-3 options
+ * Wahoo creation for the Play-list tab.
+ * Primary path: free text ("I know what I want to do") → category → save + activate.
+ * Secondary path: "Choose from your list" → activate a queued bucket-list wahoo.
  *
- * Both paths save via createGroanChallenge + acceptGroanChallenge (same data model).
- * Replaces MobilePlaylistPicker.
+ * Browse/AI-suggestion paths moved to WahooInspiration ("Need inspiration?").
+ * Saves via createGroanChallenge + acceptGroanChallenge + priority_weekly_picks.
  *
  * CSS prefix: wc-
- * Created: 2026-05-09
+ * Created: 2026-05-09. Slimmed: 2026-06-12.
  */
 
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../lib/dateUtils'
-import { findSkillSegment } from '../lib/wheelTaxonomy'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './WahooCreator.css'
 
@@ -28,130 +27,21 @@ const WAHOO_CATEGORIES = [
 
 export default function WahooCreator({
   userId,
-  categories = [], // user's play-skill category ids (from nikigai_clusters)
   currentVisibilityLayer = 'screen', // from current level config
   bucketList = [], // queued wahoos from parent
   onWahooAccepted,
   onClose,
 }) {
-  const [step, setStep] = useState('choose') // choose | freetext | browse | generating | preview | suggestions | fromlist | success
+  const [step, setStep] = useState('freetext') // freetext | fromlist | success
   const [freeText, setFreeText] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState(null)
   const [wahooCategory, setWahooCategory] = useState(null)
-  const [previewOrigin, setPreviewOrigin] = useState('freetext')
   const [generating, setGenerating] = useState(false)
-  const [generatedChallenge, setGeneratedChallenge] = useState(null)
-  const [isEditing, setIsEditing] = useState(false)
-  const [editedTitle, setEditedTitle] = useState('')
-  const [editedDescription, setEditedDescription] = useState('')
-  const [suggestions, setSuggestions] = useState([])
   const [error, setError] = useState(null)
   const successTimerRef = useRef(null)
 
   useEffect(() => {
     return () => { if (successTimerRef.current) clearTimeout(successTimerRef.current) }
   }, [])
-
-  // All play-skill categories (user's selected + custom)
-  const userCategories = categories.map(catId => {
-    const seg = findSkillSegment(catId)
-    return seg
-      ? { id: seg.id, name: seg.displayName, icon: seg.icon, isCustom: false }
-      : { id: catId, name: catId, icon: '✨', isCustom: true }
-  })
-
-  // ─── AI Generation ──────────────────────────────────────────────────────────
-
-  async function generateFromFreeText() {
-    if (!freeText.trim() || generating) return
-    setGenerating(true)
-    setError(null)
-    setStep('generating')
-
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke('groan-challenge-generator', {
-        body: {
-          sourceType: 'skill',
-          sourceLabel: freeText.trim(),
-          sourceInsight: `User-described Wahoo: "${freeText.trim()}"`,
-          visibilityLayer: currentVisibilityLayer,
-        },
-      })
-
-      if (fnError) throw fnError
-
-      setGeneratedChallenge({
-        title: data.title,
-        description: data.description,
-        completionCriteria: data.completionCriteria,
-        whyThisMatters: data.whyThisMatters,
-        alternativeVersion: data.alternativeVersion,
-        scaryScore: data.scaryScore,
-        wahooScore: data.wahooScore,
-        sourceLabel: freeText.trim(),
-        visibilityLayer: currentVisibilityLayer,
-      })
-      setStep('preview')
-    } catch (err) {
-      console.error('Wahoo generation error:', err)
-      setError('Failed to generate your Wahoo. Try again.')
-      setStep('freetext')
-    } finally {
-      setGenerating(false)
-    }
-  }
-
-  async function generateSuggestions(categoryId) {
-    if (generating) return
-    setGenerating(true)
-    setError(null)
-    setSelectedCategory(categoryId)
-    setStep('generating')
-
-    const seg = findSkillSegment(categoryId)
-    const label = seg?.displayName || categoryId
-
-    try {
-      // Generate 3 suggestions in parallel
-      const results = await Promise.all(
-        [1, 2, 3].map((n) =>
-          supabase.functions.invoke('groan-challenge-generator', {
-            body: {
-              sourceType: 'skill',
-              sourceLabel: label,
-              sourceInsight: `Generate suggestion ${n} of 3 for "${label}". Each suggestion must be completely different from the others. Suggestion ${n} should take a distinct angle.`,
-              visibilityLayer: currentVisibilityLayer,
-            },
-          }).then(r => r.data).catch(() => null)
-        )
-      )
-
-      const validSuggestions = results.filter(Boolean).map(data => ({
-        title: data.title,
-        description: data.description,
-        completionCriteria: data.completionCriteria,
-        whyThisMatters: data.whyThisMatters,
-        alternativeVersion: data.alternativeVersion,
-        scaryScore: data.scaryScore,
-        wahooScore: data.wahooScore,
-        sourceLabel: label,
-        visibilityLayer: currentVisibilityLayer,
-      }))
-
-      if (validSuggestions.length === 0) {
-        throw new Error('No suggestions generated')
-      }
-
-      setSuggestions(validSuggestions)
-      setStep('suggestions')
-    } catch (err) {
-      console.error('Suggestion generation error:', err)
-      setError('Failed to generate suggestions. Try again.')
-      setStep('browse')
-    } finally {
-      setGenerating(false)
-    }
-  }
 
   // ─── Accept Challenge ───────────────────────────────────────────────────────
 
@@ -212,67 +102,12 @@ export default function WahooCreator({
     )
   }
 
-  // ─── Generating ─────────────────────────────────────────────────────────────
-
-  if (step === 'generating') {
-    return (
-      <div className="wc-container">
-        <div className="wc-generating">
-          <div className="wc-spinner" />
-          <p className="wc-generating-text">Finding your Wahoo...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // ─── Step: Choose Path ──────────────────────────────────────────────────────
-
-  if (step === 'choose') {
-    return (
-      <div className="wc-container">
-        <div className="wc-header">
-          <h3 className="wc-title">Choose Your Wahoo:</h3>
-          <p className="wc-explainer">Every Wahoo is a rep. The more you practise expression with safety, the more Vibe Rise your nervous system can hold.</p>
-        </div>
-
-        <button className="wc-path-card" onClick={() => { hapticLight(); setWahooCategory(null); setStep('freetext') }}>
-          <div className="wc-path-icon">🎯</div>
-          <div className="wc-path-body">
-            <div className="wc-path-name">I know what I want to do</div>
-            <div className="wc-path-desc">Type it in, we'll build your challenge from it</div>
-          </div>
-          <span className="wc-path-arrow">›</span>
-        </button>
-
-        {bucketList.length > 0 && (
-          <button className="wc-path-card" onClick={() => { hapticLight(); setStep('fromlist') }}>
-            <div className="wc-path-icon">📋</div>
-            <div className="wc-path-body">
-              <div className="wc-path-name">Choose from your list</div>
-              <div className="wc-path-desc">{bucketList.length} wahoo{bucketList.length !== 1 ? 's' : ''} waiting</div>
-            </div>
-            <span className="wc-path-arrow">›</span>
-          </button>
-        )}
-
-        <button className="wc-path-card" onClick={() => { hapticLight(); setWahooCategory(null); setStep('browse') }}>
-          <div className="wc-path-icon">🔍</div>
-          <div className="wc-path-body">
-            <div className="wc-path-name">Help me find one</div>
-            <div className="wc-path-desc">Browse your play-skills for inspiration</div>
-          </div>
-          <span className="wc-path-arrow">›</span>
-        </button>
-      </div>
-    )
-  }
-
-  // ─── Path C: Choose from bucket list ───────────────────────────────────────
+  // ─── Choose from bucket list ────────────────────────────────────────────────
 
   if (step === 'fromlist') {
     return (
       <div className="wc-container">
-        <button className="wc-back" onClick={() => setStep('choose')}>← Back</button>
+        <button className="wc-back" onClick={() => setStep('freetext')}>← Back</button>
 
         <div className="wc-card">
           <h3 className="wc-card-title">Your Wahoo List</h3>
@@ -325,259 +160,68 @@ export default function WahooCreator({
     )
   }
 
-  // ─── Path A: Free Text ──────────────────────────────────────────────────────
+  // ─── Free Text (default) ────────────────────────────────────────────────────
 
-  if (step === 'freetext') {
-    return (
-      <div className="wc-container">
-        <button className="wc-back" onClick={() => setStep('choose')}>← Back</button>
-
-        <div className="wc-card">
-          <h3 className="wc-card-title">What's something you'd love to do that scares you a little?</h3>
-          <p className="wc-card-sub">Anything goes. Host a silent disco, do magic tricks, post a vulnerable video, cold-call 5 strangers.</p>
-
-          <textarea
-            className="wc-textarea"
-            placeholder="I want to..."
-            value={freeText}
-            onChange={e => setFreeText(e.target.value)}
-            rows={3}
-          />
-
-          <div className="wc-inline-category">
-            <span className="wc-inline-category-label">Category:</span>
-            <div className="wc-inline-category-btns">
-              {WAHOO_CATEGORIES.map(cat => (
-                <button
-                  key={cat.id}
-                  className={`wc-inline-cat-btn ${wahooCategory === cat.id ? 'selected' : ''}`}
-                  onClick={() => { hapticLight(); setWahooCategory(cat.id) }}
-                >
-                  {cat.icon} {cat.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {error && <p className="wc-error">{error}</p>}
-
-          <button
-            className="wc-cta"
-            disabled={!freeText.trim() || !wahooCategory || generating}
-            onClick={() => acceptChallenge({
-              title: freeText.trim(),
-              description: freeText.trim(),
-              visibilityLayer: currentVisibilityLayer || 'screen',
-              sourceLabel: 'Free text',
-              scaryScore: 7,
-              wahooScore: 7,
-            })}
-          >
-            {generating ? 'Saving...' : 'Submit'}
-          </button>
-        </div>
+  return (
+    <div className="wc-container">
+      <div className="wc-header">
+        <h3 className="wc-title">Choose Your Wahoo:</h3>
+        <p className="wc-explainer">Every Wahoo is a rep. The more you practise expression with safety, the more Vibe Rise your nervous system can hold.</p>
       </div>
-    )
-  }
 
-  // ─── Path B: Browse Categories ──────────────────────────────────────────────
+      <div className="wc-card">
+        <h3 className="wc-card-title">What&apos;s something you&apos;d love to do that scares you a little?</h3>
+        <p className="wc-card-sub">Anything goes. Host a silent disco, do magic tricks, post a vulnerable video, cold-call 5 strangers.</p>
 
-  if (step === 'browse') {
-    return (
-      <div className="wc-container">
-        <button className="wc-back" onClick={() => setStep('choose')}>← Back</button>
+        <textarea
+          className="wc-textarea"
+          placeholder="I want to..."
+          value={freeText}
+          onChange={e => setFreeText(e.target.value)}
+          rows={3}
+        />
 
-        <div className="wc-card">
-          <h3 className="wc-card-title">Pick a play-skill</h3>
-          <p className="wc-card-sub">We'll suggest Wahoos based on what lights you up.</p>
-
-          {userCategories.length > 0 ? (
-            <div className="wc-browse-grid">
-              {userCategories.map(cat => (
-                <button
-                  key={cat.id}
-                  className="wc-browse-card"
-                  onClick={() => { hapticLight(); generateSuggestions(cat.id) }}
-                >
-                  <span className="wc-browse-icon">{cat.icon}</span>
-                  <span className="wc-browse-name">{cat.name}</span>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <p className="wc-card-sub" style={{ textAlign: 'center', padding: '1rem 0' }}>
-              Find your play-skills first to unlock suggestions here.
-            </p>
-          )}
-
-          {error && <p className="wc-error">{error}</p>}
-
-          <button
-            className="wc-text-link"
-            onClick={() => { setWahooCategory(null); setStep('freetext') }}
-          >
-            Or type your own idea instead
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // ─── Preview (single challenge from Path A) ─────────────────────────────────
-
-  if (step === 'preview' && !generatedChallenge) {
-    return (
-      <div className="wc-container">
-        <div className="wc-generating">
-          <div className="wc-spinner" />
-          <p className="wc-generating-text">Loading...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (step === 'preview' && generatedChallenge) {
-    return (
-      <div className="wc-container">
-        <button className="wc-back" onClick={() => setStep(previewOrigin)}>← Back</button>
-
-        <div className="wc-preview-card">
-          <div className="wc-preview-label">Your Wahoo</div>
-
-          {isEditing ? (
-            <div className="wc-edit-form">
-              <input
-                className="wc-edit-input"
-                value={editedTitle}
-                onChange={e => setEditedTitle(e.target.value)}
-                placeholder="Wahoo title"
-              />
-              <textarea
-                className="wc-edit-textarea"
-                value={editedDescription}
-                onChange={e => setEditedDescription(e.target.value)}
-                placeholder="Description"
-                rows={3}
-              />
-              <div className="wc-edit-actions">
-                <button
-                  className="wc-cta"
-                  onClick={() => {
-                    setGeneratedChallenge(prev => ({ ...prev, title: editedTitle.trim(), description: editedDescription.trim() }))
-                    setIsEditing(false)
-                  }}
-                  disabled={!editedTitle.trim()}
-                >
-                  Save Changes
-                </button>
-                <button className="wc-secondary" onClick={() => setIsEditing(false)}>Cancel</button>
-              </div>
-            </div>
-          ) : (
-            <>
-              <h3 className="wc-preview-title">{generatedChallenge.title}</h3>
-              <p className="wc-preview-desc">{generatedChallenge.description}</p>
-            </>
-          )}
-
-          {!isEditing && (
-            <div className="wc-preview-actions">
-              <div className="wc-inline-category" style={{ marginBottom: '10px' }}>
-                <span className="wc-inline-category-label" style={{ color: 'rgba(255,255,255,0.6)' }}>Category:</span>
-                <div className="wc-inline-category-btns">
-                  {WAHOO_CATEGORIES.map(cat => (
-                    <button
-                      key={cat.id}
-                      className={`wc-inline-cat-btn ${wahooCategory === cat.id ? 'selected' : ''}`}
-                      onClick={() => { hapticLight(); setWahooCategory(cat.id) }}
-                    >
-                      {cat.icon} {cat.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
+        <div className="wc-inline-category">
+          <span className="wc-inline-category-label">Category:</span>
+          <div className="wc-inline-category-btns">
+            {WAHOO_CATEGORIES.map(cat => (
               <button
-                className="wc-cta"
-                onClick={() => acceptChallenge(generatedChallenge)}
-                disabled={generating || !wahooCategory}
+                key={cat.id}
+                className={`wc-inline-cat-btn ${wahooCategory === cat.id ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setWahooCategory(cat.id) }}
               >
-                {generating ? 'Saving...' : 'Accept this Wahoo'}
-              </button>
-              <button
-                className="wc-secondary"
-                onClick={() => {
-                  setEditedTitle(generatedChallenge.title)
-                  setEditedDescription(generatedChallenge.description)
-                  setIsEditing(true)
-                }}
-              >
-                Edit
-              </button>
-              <button
-                className="wc-secondary"
-                onClick={generateFromFreeText}
-                disabled={generating}
-              >
-                Regenerate
-              </button>
-            </div>
-          )}
-
-          {error && <p className="wc-error">{error}</p>}
-        </div>
-      </div>
-    )
-  }
-
-  // ─── Suggestions (2-3 options from Path B) ──────────────────────────────────
-
-  if (step === 'suggestions') {
-    const seg = findSkillSegment(selectedCategory)
-    return (
-      <div className="wc-container">
-        <button className="wc-back" onClick={() => setStep('browse')}>← {seg?.displayName || 'Back'}</button>
-
-        <div className="wc-card">
-          <h3 className="wc-card-title">Pick your Wahoo</h3>
-          <p className="wc-card-sub">
-            {suggestions.length} suggestions for {seg?.displayName || selectedCategory}
-          </p>
-
-          <div className="wc-suggestions-list">
-            {suggestions.map((s, i) => (
-              <button
-                key={i}
-                className="wc-suggestion-card"
-                onClick={() => { hapticLight(); setGeneratedChallenge(s); setWahooCategory(null); setPreviewOrigin('suggestions'); setStep('preview') }}
-                disabled={generating}
-              >
-                <div className="wc-suggestion-title">{s.title}</div>
-                <div className="wc-suggestion-desc">{s.description}</div>
+                {cat.icon} {cat.name}
               </button>
             ))}
           </div>
-
-          {error && <p className="wc-error">{error}</p>}
-
-          <div className="wc-suggestions-footer">
-            <button
-              className="wc-secondary"
-              onClick={() => generateSuggestions(selectedCategory)}
-              disabled={generating}
-            >
-              Different suggestions
-            </button>
-            <button
-              className="wc-text-link"
-              onClick={() => { setWahooCategory(null); setStep('freetext') }}
-            >
-              Type my own instead
-            </button>
-          </div>
         </div>
-      </div>
-    )
-  }
 
-  return null
+        {error && <p className="wc-error">{error}</p>}
+
+        <button
+          className="wc-cta"
+          disabled={!freeText.trim() || !wahooCategory || generating}
+          onClick={() => acceptChallenge({
+            title: freeText.trim(),
+            description: freeText.trim(),
+            visibilityLayer: currentVisibilityLayer || 'screen',
+            sourceLabel: 'Free text',
+            scaryScore: 7,
+            wahooScore: 7,
+          })}
+        >
+          {generating ? 'Saving...' : 'Submit'}
+        </button>
+
+        {bucketList.length > 0 && (
+          <button
+            className="wc-text-link"
+            onClick={() => { hapticLight(); setError(null); setStep('fromlist') }}
+          >
+            Or choose from your list ({bucketList.length} waiting)
+          </button>
+        )}
+      </div>
+    </div>
+  )
 }

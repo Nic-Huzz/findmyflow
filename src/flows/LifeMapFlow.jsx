@@ -56,8 +56,7 @@ const SCREEN_ORDER = [
   'time_check', 'welcome',
   'period_childhood', 'period_teens', 'period_young_adult', 'period_career', 'period_now',
   'processing', 'connecting_dots', 'life_map',
-  'reveal_skills', 'reveal_problems', 'reveal_personas',
-  'curate_skills', 'curate_problems',
+  'nikigai', 'chamber_intro', 'chamber_reveal', 'gap_insight',
   'complete',
 ]
 
@@ -103,6 +102,11 @@ export default function LifeMapFlow() {
   // Favourites curation
   const [favouriteSkillIds, setFavouriteSkillIds] = useState(new Set())
   const [favouriteProblemIds, setFavouriteProblemIds] = useState(new Set())
+
+  // Essence Chamber (pillars)
+  const [essenceChamber, setEssenceChamber] = useState(null)
+  const [expandedDropdown, setExpandedDropdown] = useState(null)
+  const [expandedPillar, setExpandedPillar] = useState(null)
 
   // Mural
   const [muralUrl, setMuralUrl] = useState(null)
@@ -182,9 +186,9 @@ export default function LifeMapFlow() {
   // ─── AUTO-SAVE on screen/response changes ─────
 
   useEffect(() => {
-    if (!user || ['time_check', 'return', 'complete', 'processing', 'connecting_dots'].includes(currentScreen)) return
-    saveProgress({ currentScreen, responses })
-  }, [currentScreen, responses, saveProgress, user])
+    if (!user || ['time_check', 'return', 'complete', 'processing', 'connecting_dots', 'chamber_intro'].includes(currentScreen)) return
+    saveProgress({ currentScreen, responses, essenceChamber })
+  }, [currentScreen, responses, essenceChamber, saveProgress, user])
 
   // ─── SESSION ──────────────────────────────────────────
 
@@ -303,14 +307,6 @@ export default function LifeMapFlow() {
     try {
       const sid = newSessionId || sessionId
 
-      // Call 1: Skills
-      const skillsItems = aggregateByCategory('skills', currentResponses)
-      const skillsCl = await clusterWithRetry(
-        'life_map_skills', 'Life Map skills clustering', 'roles',
-        ['life_map_skills'], skillsItems
-      )
-      setSkillsClusters(skillsCl)
-
       // Helper: call clustering with one retry on empty/error result
       const clusterWithRetry = async (stepId, prompt, type, sources, items) => {
         if (items.length === 0) return []
@@ -341,6 +337,14 @@ export default function LifeMapFlow() {
         const retry = await supabase.functions.invoke('nikigai-conversation', { body })
         return retry.data?.clusters || []
       }
+
+      // Call 1: Skills
+      const skillsItems = aggregateByCategory('skills', currentResponses)
+      const skillsCl = await clusterWithRetry(
+        'life_map_skills', 'Life Map skills clustering', 'roles',
+        ['life_map_skills'], skillsItems
+      )
+      setSkillsClusters(skillsCl)
 
       // Call 2: Problems
       setProcessingStep(1)
@@ -392,6 +396,29 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
         }
       })
       setConnectingDotsNarrative(dotsResult.data?.message || '')
+
+      // Call 5: Derive Essence Chamber pillars
+      setProcessingStep(4)
+      let chamberData = null
+      try {
+        const chamberResult = await supabase.functions.invoke('derive-pillars', {
+          body: {
+            responses: currentResponses,
+            skillsClusters: skillsCl,
+            problemsClusters: problemsCl,
+            personasClusters: personasCl,
+            essenceArchetype: essenceArchetype || null,
+          }
+        })
+        if (chamberResult.error || chamberResult.data?.error) {
+          console.warn('Essence Chamber derivation failed:', chamberResult.error || chamberResult.data?.error)
+        } else {
+          chamberData = chamberResult.data
+          setEssenceChamber(chamberData)
+        }
+      } catch (chamberErr) {
+        console.warn('Essence Chamber call failed:', chamberErr)
+      }
 
       // Warn if any category came back empty despite having input
       const emptyCategories = []
@@ -463,6 +490,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             responses: currentResponses,
             connecting_dots_narrative: dotsResult.data?.message || '',
             essence_archetype_used: essenceArchetype || null,
+            essence_chamber: chamberData || null,
           },
         })
         .eq('id', sid)
@@ -493,6 +521,10 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
     // Restore narrative from saved session
     if (savedSession?.response_data?.connecting_dots_narrative) {
       setConnectingDotsNarrative(savedSession.response_data.connecting_dots_narrative)
+    }
+    // Restore Essence Chamber from saved session
+    if (savedSession?.response_data?.essence_chamber) {
+      setEssenceChamber(savedSession.response_data.essence_chamber)
     }
     // Load clusters from DB
     const { data: clusters } = await supabase
@@ -543,6 +575,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
   const handleResume = () => {
     if (savedProgressData) {
       setResponses(savedProgressData.responses || initResponses())
+      if (savedProgressData.essenceChamber) setEssenceChamber(savedProgressData.essenceChamber)
       goToScreen(savedProgressData.currentScreen)
     }
     setShowResumePrompt(false)
@@ -775,6 +808,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       'Mapping problems you care about',
       'Revealing who you\'re meant to serve',
       'Connecting the dots',
+      'Building your Essence Chamber',
     ]
 
     return (
@@ -783,7 +817,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
           <div className="lm-processing">
             <div className="lm-spinner" />
             <h2 className="lm-processing-title lm-gold-text">Reading your life story...</h2>
-            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>This takes about 30 seconds</p>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>This takes about 40 seconds</p>
             <div className="lm-processing-steps">
               {steps.map((label, i) => (
                 <div key={i} className={`lm-step ${i < processingStep ? 'done' : i === processingStep ? 'active' : 'pending'}`}>
@@ -868,7 +902,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               ))}
             </div>
 
-            <button className="lm-cta-gold" style={{ marginTop: 12 }} onClick={() => { generateMural(); goToScreen('reveal_skills') }}>
+            <button className="lm-cta-gold" style={{ marginTop: 12 }} onClick={() => { generateMural(); goToScreen('nikigai') }}>
               See What This Means →
             </button>
           </div>
@@ -877,89 +911,53 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
     )
   }
 
-  // Skills Reveal
-  if (currentScreen === 'reveal_skills') {
-    return (
-      <div className="life-map-app">
-        <div className="lm-container">
-          <div className="lm-reveal">
-            <span className="lm-reveal-badge skills">Your Natural Skills</span>
-            <h2 className="lm-reveal-title lm-gold-text">What You've Always<br/>Been Good At</h2>
-            <p className="lm-reveal-subtitle">Patterns from what you loved doing across every period of your life</p>
-            <div className="lm-cluster-cards">
-              {skillsClusters.map((cluster, i) => (
-                <div key={i} className="lm-cluster-card">
-                  <div className="lm-cluster-name skills-name">{cluster.label}</div>
-                  <div className="lm-cluster-insight">{cluster.insight}</div>
-                  <div className="lm-cluster-items">
-                    {(cluster.items || []).map((item, j) => (
-                      <span key={j} className="lm-cluster-pill">{typeof item === 'string' ? item : item.text}</span>
-                    ))}
-                  </div>
-                </div>
+  // ── Nikigai: All 3 cluster categories on one screen ──
+  if (currentScreen === 'nikigai') {
+    const renderClusterCards = (clusters, colorClass) => (
+      <div className="lm-cluster-cards">
+        {clusters.map((cluster, i) => (
+          <div key={i} className="lm-cluster-card">
+            <div className={`lm-cluster-name ${colorClass}`}>{cluster.label}</div>
+            <div className="lm-cluster-insight">{cluster.insight}</div>
+            <div className="lm-cluster-items">
+              {(cluster.items || []).map((item, j) => (
+                <span key={j} className="lm-cluster-pill">{typeof item === 'string' ? item : item.text}</span>
               ))}
             </div>
-            <button className="lm-cta-purple" onClick={() => goToScreen('reveal_problems')}>Next: Your Problems →</button>
           </div>
-        </div>
+        ))}
       </div>
     )
-  }
 
-  // Problems Reveal
-  if (currentScreen === 'reveal_problems') {
     return (
       <div className="life-map-app">
         <div className="lm-container">
           <div className="lm-reveal">
-            <span className="lm-reveal-badge problems">Problems You Care About</span>
-            <h2 className="lm-reveal-title lm-gold-text">What You've Always<br/>Cared About Fixing</h2>
-            <p className="lm-reveal-subtitle">The struggles that shaped you are the same ones you're meant to solve for others</p>
-            <div className="lm-cluster-cards">
-              {problemsClusters.map((cluster, i) => (
-                <div key={i} className="lm-cluster-card">
-                  <div className="lm-cluster-name problems-name">{cluster.label}</div>
-                  <div className="lm-cluster-insight">{cluster.insight}</div>
-                  <div className="lm-cluster-items">
-                    {(cluster.items || []).map((item, j) => (
-                      <span key={j} className="lm-cluster-pill">{typeof item === 'string' ? item : item.text}</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
+            <span className="lm-reveal-badge skills">Your Nikigai</span>
+            <h2 className="lm-reveal-title lm-gold-text">Skills, Problems, Personas</h2>
+            <p className="lm-reveal-subtitle">The patterns your life map revealed</p>
+
+            <div className="lm-nikigai-section">
+              <div className="lm-nikigai-header skills-color">Skills <span className="lm-nikigai-count">{skillsClusters.length} clusters</span></div>
+              {renderClusterCards(skillsClusters, 'skills-name')}
             </div>
-            <button className="lm-cta-purple" onClick={() => goToScreen('reveal_personas')}>Next: Your People →</button>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
-  // Personas Reveal (with essence threading)
-  if (currentScreen === 'reveal_personas') {
-    return (
-      <div className="life-map-app">
-        <div className="lm-container">
-          <div className="lm-reveal">
-            <span className="lm-reveal-badge personas">Who You're Meant to Serve</span>
-            <h2 className="lm-reveal-title lm-gold-text">The People Who<br/>Need What You Know</h2>
-            <p className="lm-reveal-subtitle">Your heroes across life reveal who you understand deeply enough to help</p>
-            <div className="lm-cluster-cards">
-              {personasClusters.map((cluster, i) => (
-                <div key={i} className="lm-cluster-card">
-                  <div className="lm-cluster-name personas-name">{cluster.label}</div>
-                  <div className="lm-cluster-insight">{cluster.insight}</div>
-                  <div className="lm-cluster-items">
-                    {(cluster.items || []).map((item, j) => (
-                      <span key={j} className="lm-cluster-pill">{typeof item === 'string' ? item : item.text}</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
+            <div className="lm-nikigai-divider" />
+
+            <div className="lm-nikigai-section">
+              <div className="lm-nikigai-header problems-color">Problems <span className="lm-nikigai-count">{problemsClusters.length} clusters</span></div>
+              {renderClusterCards(problemsClusters, 'problems-name')}
+            </div>
+
+            <div className="lm-nikigai-divider" />
+
+            <div className="lm-nikigai-section">
+              <div className="lm-nikigai-header personas-color">Personas <span className="lm-nikigai-count">{personasClusters.length} clusters</span></div>
+              {renderClusterCards(personasClusters, 'personas-name')}
             </div>
 
             {essenceArchetype && (
-              <div className="lm-essence-card">
+              <div className="lm-essence-card" style={{ marginTop: 20 }}>
                 {essenceImage ? (
                   <img src={essenceImage} alt={essenceArchetype} className="lm-essence-avatar" />
                 ) : (
@@ -968,123 +966,181 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
                 <div>
                   <div className="lm-essence-label">Your Essence Archetype</div>
                   <div className="lm-essence-name">{essenceArchetype}</div>
-                  <p className="lm-essence-text">
-                    Your {essenceArchetype} has been present in every hero you've chosen across your life. The people you're drawn to all share your essence.
-                  </p>
                 </div>
               </div>
             )}
 
-            <button className="lm-cta-gold" onClick={() => goToScreen('curate_skills')}>Pick Your Top Skills →</button>
+            <button className="lm-cta-purple" onClick={() => goToScreen(essenceChamber ? 'chamber_intro' : 'complete')}>
+              {essenceChamber ? 'Go deeper' : 'See your results'}
+            </button>
           </div>
         </div>
       </div>
     )
   }
 
-  // ── Curate Skills ──
-  if (currentScreen === 'curate_skills') {
-    const toggleSkill = (id) => {
-      if (!id) return
-      setFavouriteSkillIds(prev => {
-        const next = new Set(prev)
-        if (next.has(id)) { next.delete(id) } else if (next.size < 5) { next.add(id); hapticLight() }
-        return next
-      })
-    }
-    const saveSkillFavourites = async () => {
-      const ids = [...favouriteSkillIds].filter(Boolean)
-      if (ids.length > 0) {
-        await supabase.from('nikigai_clusters').update({ is_favourite: false }).eq('user_id', user.id).eq('cluster_type', 'skills')
-        await supabase.from('nikigai_clusters').update({ is_favourite: true }).eq('user_id', user.id).eq('cluster_type', 'skills').in('id', ids)
-      }
-      goToScreen('curate_problems')
-    }
+  // ── Chamber Intro ──
+  if (currentScreen === 'chamber_intro') {
+    return (
+      <div className="life-map-app">
+        <div className="lm-container">
+          <div className="lm-chamber-intro">
+            <div className="lm-chamber-intro-kicker">Beyond the patterns</div>
+            <h1 className="lm-chamber-intro-title lm-gold-text">Your Essence Chamber</h1>
+            <p className="lm-chamber-intro-body">
+              Your skills, problems, and personas are the building blocks. But underneath them is something deeper.
+            </p>
+            <p className="lm-chamber-intro-body">
+              Your <strong>Essence Chamber</strong> holds the expression needs that have been with you since childhood. Some are <strong>glowing</strong>. Some are <strong>flickering</strong>.
+            </p>
+            <button className="lm-cta-gold" onClick={() => goToScreen('chamber_reveal')}>Enter the Chamber</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Chamber Reveal: Pillars with orb timelines ──
+  if (currentScreen === 'chamber_reveal' && !essenceChamber) {
+    return (
+      <div className="life-map-app">
+        <div className="lm-container">
+          <div className="lm-chamber-intro">
+            <p className="lm-chamber-intro-body">We couldn't build your Essence Chamber this time.</p>
+            <button className="lm-cta-gold" onClick={() => goToScreen('complete')}>Continue to results</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (currentScreen === 'chamber_reveal' && essenceChamber) {
+    const PERIOD_LABELS = { childhood: 'Childhood', teens: 'Teens', young_adult: 'Young Adult', career: 'Career', now: 'Now' }
+
     return (
       <div className="life-map-app">
         <div className="lm-container">
           <div className="lm-reveal">
-            <span className="lm-reveal-badge skills">Curate Your Skills</span>
-            <h2 className="lm-reveal-title lm-gold-text">Which of these feel<br/>most like you?</h2>
-            <p className="lm-reveal-subtitle">Pick up to 5 that feel most alive right now</p>
-            <div className="lm-curate-counter">{favouriteSkillIds.size}/5 selected</div>
-            <div className="lm-curate-grid">
-              {skillsClusters.map((cluster) => (
-                <button
-                  key={cluster.id || cluster.label}
-                  className={`lm-curate-pill ${favouriteSkillIds.has(cluster.id) ? 'lm-curate-selected' : ''}`}
-                  onClick={() => toggleSkill(cluster.id)}
+            <span className="lm-reveal-badge skills">Essence Chamber</span>
+            <h2 className="lm-reveal-title lm-gold-text">Your Pillars</h2>
+
+            <div className="lm-chamber-pillars">
+              {essenceChamber.pillars.map((pillar, pi) => (
+                <div
+                  key={pi}
+                  className={`lm-pillar-card lm-pillar-${pillar.status.toLowerCase()}`}
+                  onClick={() => setExpandedPillar(expandedPillar === pi ? null : pi)}
                 >
-                  {cluster.label}
-                </button>
+                  <div className={`lm-pillar-badge lm-pillar-badge-${pillar.status.toLowerCase()}`}>
+                    <span className="lm-pillar-dot" />
+                    {pillar.status === 'ACTIVE' ? 'Active' : pillar.status === 'FLICKERING' ? 'Flickering' : 'Empty'}
+                  </div>
+                  <div className="lm-pillar-name">{pillar.name}</div>
+                  <div className="lm-pillar-confidence">{pillar.confidence_note}</div>
+
+                  <div className="lm-orb-timeline">
+                    {Object.entries(PERIOD_LABELS).map(([periodId, periodName]) => {
+                      const orbs = pillar.orbs[periodId] || []
+                      return (
+                        <div key={periodId} className="lm-orb-period">
+                          <div className={`lm-orb-dot lm-orb-${periodId} ${orbs.length === 0 ? 'lm-orb-empty' : ''}`} />
+                          <div className="lm-orb-content">
+                            <div className="lm-orb-period-label">{periodName}</div>
+                            {orbs.length > 0 ? (
+                              <div className="lm-orb-items">
+                                {orbs.map((orb, oi) => (
+                                  <span key={oi} className={`lm-orb-item lm-orb-item-${periodId}`}>{orb}</span>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="lm-orb-empty-text">Nothing here</span>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  <div className="lm-pillar-expand-hint">
+                    Wounds & Personas <span className={`lm-pillar-arrow ${expandedPillar === pi ? 'open' : ''}`}>&#9660;</span>
+                  </div>
+
+                  {expandedPillar === pi && (
+                    <div className="lm-pillar-detail">
+                      {pillar.wounds.length > 0 && (
+                        <div className="lm-pillar-detail-section">
+                          <div className="lm-pillar-detail-label">Wounds on this pillar</div>
+                          {pillar.wounds.map((w, wi) => (
+                            <div key={wi} className="lm-wound-tag">{w.text}</div>
+                          ))}
+                        </div>
+                      )}
+                      {pillar.personas.length > 0 && (
+                        <div className="lm-pillar-detail-section">
+                          <div className="lm-pillar-detail-label">Personas who embody this</div>
+                          <div className="lm-pillar-personas">
+                            {pillar.personas.map((p, pi2) => (
+                              <span key={pi2} className="lm-persona-tag">{p}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
-            <div className="lm-curate-actions">
-              <button className="lm-cta-gold" onClick={saveSkillFavourites}>
-                {favouriteSkillIds.size > 0 ? 'Next: Pick Problems →' : 'Skip for now →'}
-              </button>
-            </div>
+
+            {essenceChamber.current_directions?.length > 0 && (
+              <div className="lm-direction-card">
+                <div className="lm-direction-label">Current Direction (not a pillar)</div>
+                <div className="lm-direction-name">{essenceChamber.current_directions[0].name}</div>
+                <div className="lm-direction-desc">{essenceChamber.current_directions[0].description}</div>
+              </div>
+            )}
+
+            <button className="lm-cta-gold" onClick={() => goToScreen('gap_insight')}>See what's missing</button>
           </div>
         </div>
       </div>
     )
   }
 
-  // ── Curate Problems ──
-  if (currentScreen === 'curate_problems') {
-    const toggleProblem = (id) => {
-      if (!id) return
-      setFavouriteProblemIds(prev => {
-        const next = new Set(prev)
-        if (next.has(id)) { next.delete(id) } else if (next.size < 5) { next.add(id); hapticLight() }
-        return next
-      })
-    }
-    const saveProblemFavourites = async () => {
-      const ids = [...favouriteProblemIds].filter(Boolean)
-      if (ids.length > 0) {
-        await supabase.from('nikigai_clusters').update({ is_favourite: false }).eq('user_id', user.id).eq('cluster_type', 'problems')
-        await supabase.from('nikigai_clusters').update({ is_favourite: true }).eq('user_id', user.id).eq('cluster_type', 'problems').in('id', ids)
-      }
-      hapticSuccess()
-      goToScreen('complete')
-    }
+  // ── Gap Insight ──
+  if (currentScreen === 'gap_insight' && !essenceChamber?.gap) {
     return (
       <div className="life-map-app">
         <div className="lm-container">
-          <div className="lm-reveal">
-            <span className="lm-reveal-badge problems">Curate Your Problems</span>
-            <h2 className="lm-reveal-title lm-gold-text">Which of these<br/>fire you up most?</h2>
-            <p className="lm-reveal-subtitle">Pick up to 5 that make you want to do something about it</p>
-            <div className="lm-curate-counter">{favouriteProblemIds.size}/5 selected</div>
-            <div className="lm-curate-grid">
-              {problemsClusters.map((cluster) => (
-                <button
-                  key={cluster.id || cluster.label}
-                  className={`lm-curate-pill ${favouriteProblemIds.has(cluster.id) ? 'lm-curate-selected' : ''}`}
-                  onClick={() => toggleProblem(cluster.id)}
-                >
-                  {cluster.label}
-                </button>
-              ))}
-            </div>
-            <div className="lm-curate-actions">
-              <button className="lm-cta-gold" onClick={saveProblemFavourites}>
-                {favouriteProblemIds.size > 0 ? 'Complete Life Map ✨' : 'Skip for now ✨'}
-              </button>
-            </div>
+          <div className="lm-chamber-intro">
+            <button className="lm-cta-gold" onClick={() => goToScreen('complete')}>Continue to results</button>
           </div>
         </div>
       </div>
     )
   }
 
-  // Complete
+  if (currentScreen === 'gap_insight' && essenceChamber?.gap) {
+    return (
+      <div className="life-map-app">
+        <div className="lm-container">
+          <div className="lm-gap-screen">
+            <div className="lm-gap-icon"><div className="lm-gap-icon-inner" /></div>
+            <div className="lm-gap-kicker">The {essenceChamber.gap.status === 'FLICKERING' ? 'flickering' : 'empty'} pillar</div>
+            <h2 className="lm-gap-pillar-name lm-gold-text">{essenceChamber.gap.pillar_name}</h2>
+            <p className="lm-gap-insight-text">{essenceChamber.gap.insight}</p>
+            <div className="lm-gap-question">What orb could sit on this pillar next?</div>
+            <button className="lm-cta-purple" onClick={() => goToScreen('complete')}>Continue</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Complete ──
   if (currentScreen === 'complete') {
     const handleDownloadMural = async () => {
       if (!muralUrl) return
       try {
-        // Use the Web Share API on mobile (saves to camera roll)
         if (navigator.share && navigator.canShare) {
           const res = await fetch(muralUrl)
           const blob = await res.blob()
@@ -1094,10 +1150,8 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             return
           }
         }
-        // Fallback: open in new tab (user can long-press to save)
         window.open(muralUrl, '_blank')
       } catch (err) {
-        // Fallback on any error
         window.open(muralUrl, '_blank')
       }
     }
@@ -1107,25 +1161,30 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       hapticSuccess()
     }
 
-    // Build shareable card data
-    const cardPeriods = PERIODS.map(p => ({
-      name: p.name,
-      items: CATEGORIES.flatMap(cat =>
-        responsesRef.current[`${p.id}_${cat}`]
-          ?.filter(v => v?.trim())
-          .map(v => ({ text: v.trim().length > 16 ? v.trim().substring(0, 14) + '...' : v.trim(), cat })) || []
-      ),
-    }))
+    const toggleSection = (section) => setExpandedDropdown(expandedDropdown === section ? null : section)
+
+    const renderDropdownClusters = (clusters, colorClass) => (
+      <div className="lm-dropdown-inner">
+        {clusters.map((cluster, i) => (
+          <div key={i} className="lm-dropdown-cluster">
+            <div className={`lm-cluster-name ${colorClass}`}>{cluster.label}</div>
+            <div className="lm-cluster-insight">{cluster.insight}</div>
+            <div className="lm-cluster-items">
+              {(cluster.items || []).map((item, j) => (
+                <span key={j} className="lm-cluster-pill">{typeof item === 'string' ? item : item.text}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    )
 
     return (
       <div className="life-map-app">
         <div className="lm-container">
           <div className="lm-complete">
             <div className="lm-checkmark">✓</div>
-            <h1 className="lm-complete-title lm-gold-text">Life Map Complete</h1>
-            <p className="lm-complete-message">
-              Your life has been building toward this. Your skills, your struggles, your heroes. They all point the same direction.
-            </p>
+            <h1 className="lm-complete-title lm-gold-text">Your Life Map is complete</h1>
             <div className="lm-xp-card">
               <p className="lm-xp-amount">+15 RP</p>
               <p className="lm-xp-label">Life Map Complete</p>
@@ -1133,14 +1192,12 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
 
             {/* Mural Section */}
             <div className="lm-mural-section">
-              <h4>Your Life Map Mural</h4>
               {muralUrl ? (
                 <img src={muralUrl} alt="Life Map Mural" className="lm-mural-image" />
               ) : muralLoading ? (
                 <div className="lm-mural-loading">
                   <div className="lm-spinner" style={{ width: 40, height: 40 }} />
                   <p>Painting your life story...</p>
-                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>This takes about 30 seconds</p>
                 </div>
               ) : (
                 <button className="lm-cta-purple" onClick={generateMural} style={{ maxWidth: 300 }}>
@@ -1149,48 +1206,90 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               )}
             </div>
 
-            {/* Shareable Card Preview */}
-            <div className="lm-mural-section">
-              <h4>Quick Share Card</h4>
-              <div className="lm-shareable-card">
-                <div className="lm-sc-header">
-                  <span className="lm-sc-title">🗺️ My Life Map</span>
-                  <span className="lm-sc-watermark">viberise</span>
-                </div>
-                <div className="lm-sc-grid">
-                  {cardPeriods.map((period, pi) => (
-                    <div key={pi} className="lm-sc-col">
-                      <div className="lm-sc-col-label">{period.name}</div>
-                      {period.items.map((item, ii) => (
-                        <div key={ii} className={`lm-sc-sticky ${item.cat}`}>{item.text}</div>
-                      ))}
+            {/* Mini Chamber Summary */}
+            {essenceChamber && (
+              <div className="lm-mini-chamber">
+                <div className="lm-mini-chamber-label">Your Essence Chamber</div>
+                {essenceChamber.pillars.map((pillar, i) => (
+                  <div
+                    key={i}
+                    className={`lm-mini-pillar lm-mini-pillar-${pillar.status.toLowerCase()}`}
+                    onClick={() => goToScreen('chamber_reveal')}
+                  >
+                    <span className="lm-mini-pillar-dot" />
+                    <div className="lm-mini-pillar-text">
+                      <div className="lm-mini-pillar-name">{pillar.name}</div>
+                      <div className="lm-mini-pillar-status">
+                        {pillar.status === 'ACTIVE' ? 'Active' : pillar.status === 'FLICKERING' ? 'Flickering' : 'Empty'}
+                      </div>
                     </div>
-                  ))}
+                    <span className="lm-mini-pillar-arrow">&#8250;</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Gap Seed Nudge */}
+            {essenceChamber?.gap && (
+              <div className="lm-gap-seed" onClick={() => navigate('/7-day-challenge')}>
+                <div className="lm-gap-seed-icon"><div className="lm-gap-seed-icon-inner" /></div>
+                <div className="lm-gap-seed-text">
+                  <div className="lm-gap-seed-title">Your {essenceChamber.gap.status === 'FLICKERING' ? 'flickering' : 'empty'} pillar</div>
+                  <div className="lm-gap-seed-desc">
+                    {essenceChamber.gap.pillar_name}. When you're ready, your Wahoo tab has suggestions designed for this pillar.
+                  </div>
                 </div>
-                <div className="lm-sc-clusters">
-                  {skillsClusters[0] && (
-                    <div className="lm-sc-cluster skills"><span className="lm-sc-cl-label">SKILL</span><span className="lm-sc-cl-name">{skillsClusters[0].label}</span></div>
-                  )}
-                  {problemsClusters[0] && (
-                    <div className="lm-sc-cluster problems"><span className="lm-sc-cl-label">PROBLEM</span><span className="lm-sc-cl-name">{problemsClusters[0].label}</span></div>
-                  )}
-                  {personasClusters[0] && (
-                    <div className="lm-sc-cluster personas"><span className="lm-sc-cl-label">PERSONA</span><span className="lm-sc-cl-name">{personasClusters[0].label}</span></div>
-                  )}
+                <span className="lm-gap-seed-arrow">&#8250;</span>
+              </div>
+            )}
+
+            {/* Detail Dropdowns */}
+            <div className="lm-detail-dropdowns">
+              <div className="lm-detail-divider"><span>Your Life Map details</span></div>
+
+              <div className={`lm-dropdown-section ${expandedDropdown === 'skills' ? 'open' : ''}`}>
+                <div className="lm-dropdown-trigger" onClick={() => toggleSection('skills')}>
+                  <span>Skills <span className="lm-dropdown-count">{skillsClusters.length} clusters</span></span>
+                  <span className="lm-dropdown-arrow">&#9660;</span>
                 </div>
+                {expandedDropdown === 'skills' && renderDropdownClusters(skillsClusters, 'skills-name')}
+              </div>
+
+              <div className={`lm-dropdown-section ${expandedDropdown === 'problems' ? 'open' : ''}`}>
+                <div className="lm-dropdown-trigger" onClick={() => toggleSection('problems')}>
+                  <span>Problems <span className="lm-dropdown-count">{problemsClusters.length} clusters</span></span>
+                  <span className="lm-dropdown-arrow">&#9660;</span>
+                </div>
+                {expandedDropdown === 'problems' && renderDropdownClusters(problemsClusters, 'problems-name')}
+              </div>
+
+              <div className={`lm-dropdown-section ${expandedDropdown === 'personas' ? 'open' : ''}`}>
+                <div className="lm-dropdown-trigger" onClick={() => toggleSection('personas')}>
+                  <span>Personas <span className="lm-dropdown-count">{personasClusters.length} clusters</span></span>
+                  <span className="lm-dropdown-arrow">&#9660;</span>
+                </div>
+                {expandedDropdown === 'personas' && renderDropdownClusters(personasClusters, 'personas-name')}
+              </div>
+
+              <div className={`lm-dropdown-section ${expandedDropdown === 'narrative' ? 'open' : ''}`}>
+                <div className="lm-dropdown-trigger" onClick={() => toggleSection('narrative')}>
+                  <span>Connecting Dots</span>
+                  <span className="lm-dropdown-arrow">&#9660;</span>
+                </div>
+                {expandedDropdown === 'narrative' && (
+                  <div className="lm-dropdown-inner">
+                    <div className="lm-narrative-text" dangerouslySetInnerHTML={{ __html: connectingDotsNarrative }} />
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Share Buttons */}
             <div className="lm-share-buttons">
               {muralUrl && (
-                <button className="lm-share-btn download" onClick={handleDownloadMural}>
-                  📥 Save Mural
-                </button>
+                <button className="lm-share-btn download" onClick={handleDownloadMural}>Save Mural</button>
               )}
-              <button className="lm-share-btn copy" onClick={handleCopyLink}>
-                📋 Copy Link
-              </button>
+              <button className="lm-share-btn copy" onClick={handleCopyLink}>Copy Link</button>
             </div>
 
             <button className="lm-cta-gold" onClick={() => navigate('/7-day-challenge')} style={{ marginTop: 8 }}>

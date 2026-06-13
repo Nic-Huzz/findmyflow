@@ -141,13 +141,13 @@ export default function PlaySkillPicker({ userId, onComplete, onClose }) {
     <div className="psp-overlay" onClick={onClose}>
       <div className="psp-sheet" onClick={e => e.stopPropagation()}>
         <div className="psp-header">
-          <h3 className="psp-title">Find Your Wahoos</h3>
+          <h3 className="psp-title">Pick Your Play-Skills</h3>
           <button className="psp-close" onClick={onClose}>&times;</button>
         </div>
 
         <div className="psp-body">
           <p className="psp-subtitle">
-            Pick {MIN_CATEGORIES}-{MAX_CATEGORIES} that feel like you. These become your Wahoo channels.
+            Pick {MIN_CATEGORIES}-{MAX_CATEGORIES} that feel like you. These feed your Wahoo ideas.
           </p>
 
           <div className="psp-grid">

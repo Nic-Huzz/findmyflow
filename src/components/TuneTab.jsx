@@ -21,6 +21,8 @@ import { getLevel, getLevelNumber } from '../lib/crm/statsService'
 import HealingCompletionModal from './HealingCompletionModal'
 import CapacityCard from './level/CapacityCard'
 import useCapacityScore from '../hooks/useCapacityScore'
+import RegulationCard from './RegulationCard'
+import { REGULATION_EXERCISES } from '../lib/nervousSystemConstants'
 import './TuneTab.css'
 
 // Quest IDs that render inline (Practice + Rest checkboxes)
@@ -130,6 +132,15 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const [savingStall, setSavingStall] = useState(false)
   const [recentStalls, setRecentStalls] = useState([])
 
+  // Regulation overlay after drain/stall save
+  const [regulationState, setRegulationState] = useState(null)
+
+  // Recovery tracking
+  const [recoveryItem, setRecoveryItem] = useState(null)
+  const [recoveryActivities, setRecoveryActivities] = useState([])
+  const [recoveryOther, setRecoveryOther] = useState('') // free-text "what else helped?"
+  const [savingRecovery, setSavingRecovery] = useState(false)
+
   // Load quests from static JSON + completions from DB
   useEffect(() => {
     if (!userId) return
@@ -145,7 +156,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       // Load this week's drains
       supabase
         .from('nervous_system_checkins')
-        .select('source_quest_id, after_state, drain_note, created_at')
+        .select('id, source_quest_id, after_state, drain_note, created_at, recovered_at')
         .eq('user_id', userId)
         .eq('checkin_type', 'drain')
         .gte('created_at', getWeekStartLocal())
@@ -153,7 +164,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       // Load this week's stalls
       supabase
         .from('nervous_system_checkins')
-        .select('source_quest_id, after_state, drain_note, protective_voice, created_at')
+        .select('id, source_quest_id, after_state, drain_note, protective_voice, created_at, recovered_at')
         .eq('user_id', userId)
         .eq('checkin_type', 'stall')
         .gte('created_at', getWeekStartLocal())
@@ -482,6 +493,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const handleSaveDrain = async () => {
     if (!drainCategory || !drainState || savingDrain) return
     setSavingDrain(true)
+    const savedState = drainState // capture before reset for regulation overlay
 
     try {
       const { error } = await supabase.from('nervous_system_checkins').insert({
@@ -502,11 +514,12 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setDrainNote('')
       setDrainState(null)
       setShowDrainForm(false)
+      setRegulationState(savedState) // show regulation exercises overlay
 
       // Refresh recent drains
       const { data } = await supabase
         .from('nervous_system_checkins')
-        .select('source_quest_id, after_state, drain_note, created_at')
+        .select('id, source_quest_id, after_state, drain_note, created_at, recovered_at')
         .eq('user_id', userId)
         .eq('checkin_type', 'drain')
         .gte('created_at', getWeekStartLocal())
@@ -525,6 +538,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const handleSaveStall = async () => {
     if (!stallCategory || !stallState || !stallVoice || savingStall) return
     setSavingStall(true)
+    const savedState = stallState // capture before reset for regulation overlay
 
     try {
       const { error } = await supabase.from('nervous_system_checkins').insert({
@@ -546,10 +560,11 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setStallState(null)
       setStallVoice(null)
       setShowStallForm(false)
+      setRegulationState(savedState) // show regulation exercises overlay
 
       const { data } = await supabase
         .from('nervous_system_checkins')
-        .select('source_quest_id, after_state, drain_note, protective_voice, created_at')
+        .select('id, source_quest_id, after_state, drain_note, protective_voice, created_at, recovered_at')
         .eq('user_id', userId)
         .eq('checkin_type', 'stall')
         .gte('created_at', getWeekStartLocal())
@@ -561,6 +576,78 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       console.error('Stall save error:', err)
     } finally {
       setSavingStall(false)
+    }
+  }
+
+  // --- Recovery tracking helpers ---
+
+  const formatElapsed = (createdAt) => {
+    const mins = Math.round((Date.now() - new Date(createdAt).getTime()) / 60000)
+    if (mins < 60) return `${mins}min`
+    const hrs = Math.floor(mins / 60)
+    const remainMins = mins % 60
+    return remainMins > 0 ? `${hrs}h ${remainMins}m` : `${hrs}h`
+  }
+
+  const formatRecoveryTime = (createdAt, recoveredAt) => {
+    const mins = Math.round((new Date(recoveredAt).getTime() - new Date(createdAt).getTime()) / 60000)
+    if (mins < 60) return `${mins}min`
+    const hrs = Math.floor(mins / 60)
+    const remainMins = mins % 60
+    return remainMins > 0 ? `${hrs}h ${remainMins}m` : `${hrs}h`
+  }
+
+  // Recovery is only trackable same-day. Sleep is the natural reset, so an
+  // unrecovered item from a previous day shows neither button nor badge
+  // (recovered_at stays NULL = "unknown", excluded from averages).
+  const isToday = (createdAt) => {
+    const d = new Date(createdAt)
+    const now = new Date()
+    return d.getFullYear() === now.getFullYear() &&
+      d.getMonth() === now.getMonth() &&
+      d.getDate() === now.getDate()
+  }
+
+  // Average recovery time across this week's recovered drains + stalls
+  const avgRecoveryLabel = useMemo(() => {
+    const recovered = [...recentDrains, ...recentStalls].filter(d => d.recovered_at)
+    if (recovered.length === 0) return null
+    const avgMins = Math.round(recovered.reduce((sum, d) =>
+      sum + (new Date(d.recovered_at) - new Date(d.created_at)) / 60000, 0) / recovered.length)
+    return avgMins < 60 ? `${avgMins}min` : `${Math.floor(avgMins / 60)}h ${avgMins % 60}m`
+  }, [recentDrains, recentStalls])
+
+  const handleSaveRecovery = async () => {
+    if (!recoveryItem || savingRecovery) return
+    setSavingRecovery(true)
+    const recoveredAt = new Date().toISOString() // single timestamp for DB + local state
+    const activities = [
+      ...recoveryActivities,
+      ...(recoveryOther.trim() ? [`other:${recoveryOther.trim()}`] : []),
+    ]
+    try {
+      const { error } = await supabase
+        .from('nervous_system_checkins')
+        .update({
+          recovered_at: recoveredAt,
+          recovery_activities: activities.length > 0 ? activities : null,
+        })
+        .eq('id', recoveryItem.id)
+      if (error) throw error
+      hapticSuccess()
+      const updater = (list) => list.map(item =>
+        item.id === recoveryItem.id ? { ...item, recovered_at: recoveredAt } : item
+      )
+      // Only update the list the item belongs to
+      if (recoveryItem.type === 'drain') setRecentDrains(updater)
+      else setRecentStalls(updater)
+      setRecoveryItem(null)
+      setRecoveryActivities([])
+      setRecoveryOther('')
+    } catch (err) {
+      console.error('Recovery save error:', err)
+    } finally {
+      setSavingRecovery(false)
     }
   }
 
@@ -830,9 +917,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             <span className="tt-section-title">Drains</span>
             {expression !== null && <span className="tt-score-badge tt-score-expression">🔥 {expression}/10</span>}
           </div>
-          {recentDrains.length > 0 && (
-            <span className="tt-section-count tt-drain-count">{recentDrains.length} this week</span>
-          )}
+          <div className="tt-section-header-right">
+            {avgRecoveryLabel && (
+              <span className="tt-section-count tt-recovery-avg">⏱ {avgRecoveryLabel} avg recovery</span>
+            )}
+            {recentDrains.length > 0 && (
+              <span className="tt-section-count tt-drain-count">{recentDrains.length} this week</span>
+            )}
+          </div>
         </div>
         <p className="tt-section-sub">What's depleting your energy? Drains pull you out of expression faster than practices can refill it.</p>
 
@@ -916,7 +1008,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             {recentDrains.slice(0, 5).map((drain, i) => {
               const cat = DRAIN_CATEGORIES.find(c => c.id === drain.source_quest_id)
               return (
-                <div key={i} className="tt-drain-item">
+                <div key={drain.id || i} className="tt-drain-item">
                   <span className="tt-drain-item-icon">{cat?.icon || '⚡'}</span>
                   <div className="tt-drain-item-body">
                     <span className="tt-drain-item-cat">{cat?.label || 'Drain'}</span>
@@ -925,6 +1017,16 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                   <span className={`tt-drain-item-state ${drain.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
                     {drain.after_state === 'dorsal' ? '😶' : '😬'}
                   </span>
+                  {drain.recovered_at ? (
+                    <span className="tt-recovered-badge">✓ {formatRecoveryTime(drain.created_at, drain.recovered_at)}</span>
+                  ) : drain.id && isToday(drain.created_at) ? (
+                    <button
+                      className="tt-recover-btn"
+                      onClick={() => { hapticLight(); setRecoveryItem({ ...drain, type: 'drain' }) }}
+                    >
+                      Recovered?
+                    </button>
+                  ) : null}
                 </div>
               )
             })}
@@ -1039,7 +1141,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             {recentStalls.slice(0, 5).map((stall, i) => {
               const cat = STALL_CATEGORIES.find(c => c.id === stall.source_quest_id)
               return (
-                <div key={i} className="tt-drain-item">
+                <div key={stall.id || i} className="tt-drain-item">
                   <span className="tt-drain-item-icon">{cat?.icon || '🧊'}</span>
                   <div className="tt-drain-item-body">
                     <span className="tt-drain-item-cat">{cat?.label || 'Stall'}{stall.protective_voice ? ` · ${stall.protective_voice}` : ''}</span>
@@ -1048,6 +1150,16 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                   <span className={`tt-drain-item-state ${stall.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
                     {stall.after_state === 'dorsal' ? '😶' : '😬'}
                   </span>
+                  {stall.recovered_at ? (
+                    <span className="tt-recovered-badge">✓ {formatRecoveryTime(stall.created_at, stall.recovered_at)}</span>
+                  ) : stall.id && isToday(stall.created_at) ? (
+                    <button
+                      className="tt-recover-btn"
+                      onClick={() => { hapticLight(); setRecoveryItem({ ...stall, type: 'stall' }) }}
+                    >
+                      Recovered?
+                    </button>
+                  ) : null}
                 </div>
               )
             })}
@@ -1097,6 +1209,63 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             }
           }}
         />
+      )}
+
+      {/* Regulation overlay after drain/stall save */}
+      {regulationState && (
+        <div className="tt-info-overlay" onClick={() => setRegulationState(null)}>
+          <div className="tt-info-modal tt-regulation-modal" onClick={e => e.stopPropagation()}>
+            <RegulationCard
+              state={regulationState}
+              onDone={() => setRegulationState(null)}
+              onSkip={() => setRegulationState(null)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Recovery tracking popup */}
+      {recoveryItem && (
+        <div className="tt-info-overlay" onClick={() => { setRecoveryItem(null); setRecoveryActivities([]); setRecoveryOther('') }}>
+          <div className="tt-info-modal tt-recovery-modal" onClick={e => e.stopPropagation()}>
+            <span className="tt-recovery-emoji">
+              {recoveryItem.after_state === 'dorsal' ? '😶' : '😬'}
+            </span>
+            <h3 className="tt-recovery-title">Back to baseline?</h3>
+            <p className="tt-recovery-time">⏱ {formatElapsed(recoveryItem.created_at)} since logged</p>
+            <p className="tt-recovery-sub">What brought you back?</p>
+            <div className="tt-recovery-activities">
+              {(REGULATION_EXERCISES[recoveryItem.after_state]?.exercises || []).map(ex => (
+                <button
+                  key={ex.id}
+                  type="button"
+                  className={`tt-recovery-activity ${recoveryActivities.includes(ex.id) ? 'selected' : ''}`}
+                  onClick={() => setRecoveryActivities(prev =>
+                    prev.includes(ex.id) ? prev.filter(a => a !== ex.id) : [...prev, ex.id]
+                  )}
+                >
+                  {ex.name}
+                </button>
+              ))}
+            </div>
+            <input
+              type="text"
+              className="tt-recovery-other"
+              placeholder="Something else? (walk, friend, food...)"
+              value={recoveryOther}
+              onChange={e => setRecoveryOther(e.target.value)}
+              maxLength={80}
+            />
+            <button
+              type="button"
+              className="tt-recovery-save"
+              disabled={savingRecovery}
+              onClick={handleSaveRecovery}
+            >
+              {savingRecovery ? 'Saving...' : "I'm back ✓"}
+            </button>
+          </div>
+        </div>
       )}
     </div>
   )

@@ -109,8 +109,10 @@ src/
 │   ├── Challenge*.jsx        # Header, Filters, etc.
 │   ├── *QuestInput.jsx       # Groan, Recognise, Rewire, Release, etc.
 │   ├── GroanMatrix.jsx       # Wahoo Map (2D courage challenge matrix)
-│   ├── WahooCreator.jsx      # Two-path Wahoo creation (free text or browse)
-│   ├── PlaySkillPicker.jsx   # Level 0 play-skill category picker
+│   ├── WahooCreator.jsx      # Wahoo creation (free text + bucket list)
+│   ├── WahooDiscoveryFlow.jsx # First-visit Wahoo tab flow (3 category pages)
+│   ├── WahooInspiration.jsx  # "Need inspiration?" (play-skills + Ikigai Mix)
+│   ├── PlaySkillPicker.jsx   # Play-skill category picker (inspiration engine)
 │   ├── TuneTab.jsx           # Tune tab (daily practices + drains)
 │   ├── DailyCheckin.jsx      # Daily 4-state check-in overlay
 │   ├── QuestCard.jsx         # Unified quest rendering
@@ -234,11 +236,11 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Vibe Rise Equation**: `Sustained Vibe Rise = (Practices + Wahoos + Healing) ÷ (Drains)`. All state data flows through `nervous_system_checkins` table. Capacity Score (0-100) displayed on Level tab.
 
-**Level tab**: Journey progression (9 levels), zone diagnosis, boss fights, milestones, CapacityCard. Courage counts re-enabled (L1=1...L7=3, total 15 Wahoos). PlaySkillPicker at Level 0.
+**Level tab**: Journey progression (9 levels), zone diagnosis, boss fights, milestones, CapacityCard. Courage counts re-enabled (L1=1...L7=3, total 15 Wahoos). Level 0 quest "Unlock Your Wahoos" navigates to the Wahoo tab.
 
 **Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 4 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown).
 
-**Play-list tab** (`PlayListTab.jsx`): WahooCreator (two-path: "I know" free text or "Help me find one" browse categories) + Active Wahoos + Wahoo Map link.
+**Play-list tab** (`PlayListTab.jsx`): First visit (no category wahoos, no playskills) → WahooDiscoveryFlow (3 category pages: Creation/Connection/Appearance, 1-5 wahoos each, pick first active). Otherwise → category bubbles + Active Wahoos + WahooCreator (free text + bucket list) + WahooInspiration ("Need inspiration?": play-skill chips → AI suggestions, Ikigai Mix skill × problem × persona gated by Life Map completion, future pillar row). Unlock/quest signal: `groan_challenges.wahoo_category` not null, OR'd with legacy play-skills rows.
 
 **Healing tab**: Recognise, Release, Rewire only (blockage clearing). After-only 4-state check-in (before step removed).
 
@@ -250,7 +252,7 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Forgiving streak**: 1 day miss allowed without breaking streak.
 
-Key files: `Challenge.jsx`, `useChallengeData.js`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`
+Key files: `Challenge.jsx`, `useChallengeData.js`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `WahooDiscoveryFlow.jsx`, `WahooInspiration.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`
 
 Key docs: `docs/vibe-rise-ecosystem-architecture.md`, `docs/vibe-rise-challenge-alignment.md`
 

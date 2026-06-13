@@ -272,12 +272,18 @@ function Challenge() {
         setCurrentJourneyLevel(level)
         // Pre-unlock tabs based on DB state for Level 0
         if (level === 0) {
-          // Unlock Play-list if topic identifier completed
-          supabase.from('nikigai_clusters')
-            .select('id').eq('user_id', user.id).eq('step_id', 'identify_topics').limit(1)
-            .then(({ data: d }) => {
-              if (d?.length > 0) setUnlockedTabs(prev => new Set([...prev, 'Wahoo']))
-            })
+          // Unlock Wahoo tab if wahoos identified (discovery flow / quick-add)
+          // or legacy play-skills picked (PlaySkillPicker, pre-2026-06)
+          Promise.all([
+            supabase.from('groan_challenges')
+              .select('id').eq('user_id', user.id).not('wahoo_category', 'is', null).limit(1),
+            supabase.from('nikigai_clusters')
+              .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
+          ]).then(([wahoos, skills]) => {
+            if (wahoos.data?.length > 0 || skills.data?.length > 0) {
+              setUnlockedTabs(prev => new Set([...prev, 'Wahoo']))
+            }
+          })
           // Unlock Healing if any healing quest completed
           supabase.from('quest_completions')
             .select('id').eq('user_id', user.id).eq('quest_category', 'Healing').limit(1)

@@ -1,3 +1,5 @@
+import { getDisplayCompany } from './DNAReveal'
+
 function getStageStory(founder, stageId) {
   const stories = founder.stageStories || {}
   const stageKey = String(stageId)
@@ -67,8 +69,8 @@ export default function ProfileSummary({ founder, stuckPoint, dnaCode, archetype
             <span className="pp-summary-value" style={{ color: '#E9A23B' }}>{founder.name}</span>
           </div>
           <div className="pp-summary-row">
-            <span className="pp-summary-label">Company</span>
-            <span className="pp-summary-value">{founder.company}</span>
+            <span className="pp-summary-label">Known for</span>
+            <span className="pp-summary-value">{getDisplayCompany(founder)}</span>
           </div>
           <div className="pp-summary-row">
             <span className="pp-summary-label">Archetype</span>

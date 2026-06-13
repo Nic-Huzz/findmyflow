@@ -1,0 +1,254 @@
+/* WahooDiscoveryFlow — first-visit flow for the Wahoo tab (prefix: wdf-) */
+
+.wahoo-discovery-flow .wdf-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 24px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  border-top: 4px solid #E9A23B;
+  text-align: center;
+}
+
+/* Progress dots */
+.wahoo-discovery-flow .wdf-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.wahoo-discovery-flow .wdf-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e9ecef;
+  transition: all 0.25s ease;
+}
+
+.wahoo-discovery-flow .wdf-dot.active {
+  background: #5e17eb;
+  transform: scale(1.25);
+}
+
+.wahoo-discovery-flow .wdf-dot.done {
+  background: #E9A23B;
+}
+
+/* Category header */
+.wahoo-discovery-flow .wdf-cat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 4px;
+}
+
+.wahoo-discovery-flow .wdf-cat-name {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #E9A23B;
+  margin-bottom: 8px;
+}
+
+.wahoo-discovery-flow .wdf-headline {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.wahoo-discovery-flow .wdf-explainer {
+  color: #6c757d;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+
+/* Example chips */
+.wahoo-discovery-flow .wdf-examples {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.wahoo-discovery-flow .wdf-example-chip {
+  background: #f8f5ff;
+  border: 1px dashed #d3c2f5;
+  color: #5e17eb;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* Inputs */
+.wahoo-discovery-flow .wdf-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.wahoo-discovery-flow .wdf-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #dee2e6;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 16px; /* 16px+ prevents iOS Safari zoom-on-focus */
+  font-family: inherit;
+  color: #1a1a2e;
+}
+
+.wahoo-discovery-flow .wdf-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.wahoo-discovery-flow .wdf-add-btn {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 6px;
+  margin-bottom: 14px;
+}
+
+/* Pick page */
+.wahoo-discovery-flow .wdf-pick-group {
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+.wahoo-discovery-flow .wdf-pick-group-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #6c757d;
+  margin-bottom: 6px;
+}
+
+.wahoo-discovery-flow .wdf-pick-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 11px 12px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.wahoo-discovery-flow .wdf-pick-item.selected {
+  border-color: #E9A23B;
+  background: #fff9f0;
+}
+
+.wahoo-discovery-flow .wdf-pick-radio {
+  color: #E9A23B;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.wahoo-discovery-flow .wdf-pick-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+/* Buttons */
+.wahoo-discovery-flow .wdf-primary-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.wahoo-discovery-flow .wdf-primary-btn:active {
+  transform: scale(0.98);
+}
+
+.wahoo-discovery-flow .wdf-primary-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.wahoo-discovery-flow .wdf-footer-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.wahoo-discovery-flow .wdf-footer-row:has(.wdf-text-btn:only-child) {
+  justify-content: center;
+}
+
+.wahoo-discovery-flow .wdf-text-btn {
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px;
+  font-family: inherit;
+}
+
+.wahoo-discovery-flow .wdf-text-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Error */
+.wahoo-discovery-flow .wdf-error {
+  display: block;
+  width: 100%;
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* Success */
+.wahoo-discovery-flow .wdf-success-icon {
+  font-size: 3rem;
+  margin-bottom: 8px;
+  animation: wdf-pop 0.4s ease;
+}
+
+@keyframes wdf-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wahoo-discovery-flow .wdf-success-icon { animation: none; }
+  .wahoo-discovery-flow .wdf-dot,
+  .wahoo-discovery-flow .wdf-pick-item,
+  .wahoo-discovery-flow .wdf-primary-btn { transition: none; }
+}

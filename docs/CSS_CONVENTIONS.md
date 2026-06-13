@@ -33,6 +33,8 @@ Every CSS class must be prefixed with a 2-4 letter component abbreviation.
 | `gm-` | Graduation Modal | GraduationModal.css |
 | `fi-` | Flow Insights | FlowInsights.css |
 | `np-` | Notification Prompt | NotificationPrompt.css |
+| `wdf-` | Wahoo Discovery Flow | WahooDiscoveryFlow.css |
+| `wi-` | Wahoo Inspiration | WahooInspiration.css |
 
 ## Rules
 

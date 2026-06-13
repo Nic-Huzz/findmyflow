@@ -1204,7 +1204,9 @@ export default function NervousSystemFlow() {
           <h3>📊 Your Nervous System Edges:</h3>
           <div style={{ marginTop: 12, paddingLeft: 8 }}>
             <p>{responses.test1_visibility_safe === 'yes' ? '✅' : '🚫'} <strong style={{ color: '#fbbf24' }}>{responses.visibility_action || 'Visibility action'}</strong> — {responses.test1_visibility_safe === 'yes' ? 'feels safe' : 'triggers contraction'}</p>
-            <p>💰 Charging up to <strong style={{ color: '#fbbf24' }}>{formatMoney(responses.earning_edge)} per deal</strong></p>
+            {responses.earning_edge != null && (
+              <p>💰 Charging up to <strong style={{ color: '#fbbf24' }}>{formatMoney(responses.earning_edge)} per deal</strong></p>
+            )}
           </div>
         </div>
 
