@@ -171,6 +171,7 @@ const PublicOfferAuditFlow = lazyRetry(() => import('./flows/PublicOfferAuditFlo
 const CareerClarityQuiz = lazyRetry(() => import('./flows/CareerClarityQuiz'))
 const EarthquakeQuiz = lazyRetry(() => import('./flows/EarthquakeQuiz'))
 const TryPlayProfile = lazyRetry(() => import('./flows/TryPlayProfile'))
+const TryEssenceMirror = lazyRetry(() => import('./flows/TryEssenceMirror'))
 const ShiftScorecard = lazyRetry(() => import('./flows/ShiftScorecard'))
 const OldLandingPage = lazyRetry(() => import('./pages/OldLandingPage'))
 const FantasyLeagueLanding = lazyRetry(() => import('./pages/FantasyLeagueLanding'))
@@ -605,6 +606,7 @@ function AppRouter() {
             <Route path="/try/flow-audit" element={<PublicOfferAuditFlow />} />
             <Route path="/try/earthquake" element={<EarthquakeQuiz />} />
             <Route path="/try/play-profile" element={<TryPlayProfile />} />
+            <Route path="/try/essence-mirror" element={<TryEssenceMirror />} />
             <Route path="/try/career-clarity" element={<CareerClarityQuiz />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
 
