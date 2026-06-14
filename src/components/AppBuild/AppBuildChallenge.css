@@ -1,0 +1,681 @@
+/**
+ * AppBuildChallenge.css — Styles for the challenge viewer
+ * Scoped to .app-build-challenge parent
+ */
+
+/* ─── Layout ─────────────────────────────────────────────────────── */
+
+.app-build-challenge {
+  min-height: 100vh;
+  background: #0a0a1a;
+  color: #e0e0e0;
+  padding: 24px 16px 80px;
+  max-width: 720px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────── */
+
+.app-build-challenge .challenge-header {
+  margin-bottom: 32px;
+}
+
+.app-build-challenge .back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 0;
+  margin-bottom: 16px;
+  transition: color 0.2s;
+}
+
+.app-build-challenge .back-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.app-build-challenge .challenge-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.app-build-challenge .challenge-emoji {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.app-build-challenge .challenge-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  flex: 1;
+}
+
+.app-build-challenge .duration-badge {
+  background: rgba(94, 23, 235, 0.2);
+  border: 1px solid rgba(94, 23, 235, 0.4);
+  color: #a78bfa;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.app-build-challenge .progress-bar-container {
+  margin-top: 12px;
+}
+
+.app-build-challenge .progress-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 6px;
+}
+
+.app-build-challenge .progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.app-build-challenge .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* ─── Objective ──────────────────────────────────────────────────── */
+
+.app-build-challenge .objective-section {
+  margin-bottom: 24px;
+}
+
+.app-build-challenge .objective-section p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+/* ─── Cards (shared base) ────────────────────────────────────────── */
+
+.app-build-challenge .card {
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* ─── LEGO Parallel Card ────────────────────────────────────────── */
+
+.app-build-challenge .lego-card {
+  background: rgba(233, 162, 59, 0.08);
+  border: 1px solid rgba(233, 162, 59, 0.2);
+}
+
+.app-build-challenge .lego-card .card-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.app-build-challenge .lego-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #E9A23B;
+  margin: 0 0 8px;
+}
+
+.app-build-challenge .lego-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* ─── Learning Outcomes ──────────────────────────────────────────── */
+
+.app-build-challenge .section-heading {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 12px;
+}
+
+.app-build-challenge .outcomes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+}
+
+.app-build-challenge .outcomes-list li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 6px 0 6px 20px;
+  position: relative;
+}
+
+.app-build-challenge .outcomes-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #5e17eb;
+  font-weight: 700;
+}
+
+/* ─── Tools ──────────────────────────────────────────────────────── */
+
+.app-build-challenge .tools-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.app-build-challenge .tool-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+.app-build-challenge .tool-pill .tool-name {
+  color: #fff;
+  font-weight: 600;
+}
+
+.app-build-challenge .tool-pill .tool-desc {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ─── Steps Accordion ────────────────────────────────────────────── */
+
+.app-build-challenge .steps-section {
+  margin-bottom: 32px;
+}
+
+.app-build-challenge .step-item {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.app-build-challenge .step-item:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.app-build-challenge .step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.03);
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.app-build-challenge .step-header:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.app-build-challenge .step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.app-build-challenge .step-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.app-build-challenge .step-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.app-build-challenge .step-duration {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 2px;
+}
+
+.app-build-challenge .step-chevron {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.3);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.app-build-challenge .step-chevron.open {
+  transform: rotate(180deg);
+}
+
+.app-build-challenge .step-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+
+.app-build-challenge .step-body.expanded {
+  max-height: 5000px;
+  padding: 0 20px 20px;
+}
+
+.app-build-challenge .step-content {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px;
+}
+
+/* ─── Substeps ───────────────────────────────────────────────────── */
+
+.app-build-challenge .substep {
+  margin-bottom: 20px;
+  padding-left: 16px;
+  border-left: 2px solid rgba(94, 23, 235, 0.2);
+}
+
+.app-build-challenge .substep-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #c4b5fd;
+  margin: 0 0 8px;
+}
+
+.app-build-challenge .substep-content {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 12px;
+}
+
+.app-build-challenge .substep-items {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+}
+
+.app-build-challenge .substep-items li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+
+.app-build-challenge .substep-items li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: rgba(94, 23, 235, 0.6);
+}
+
+.app-build-challenge .follow-up {
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 8px 0 0;
+}
+
+/* ─── Prompt Block ───────────────────────────────────────────────── */
+
+.app-build-challenge .prompt-block {
+  background: rgba(10, 10, 30, 0.6);
+  border: 1px solid rgba(94, 23, 235, 0.25);
+  border-left: 3px solid #5e17eb;
+  border-radius: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+
+.app-build-challenge .prompt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(94, 23, 235, 0.08);
+}
+
+.app-build-challenge .prompt-instruction {
+  font-size: 12px;
+  font-weight: 600;
+  color: #a78bfa;
+}
+
+.app-build-challenge .copy-btn {
+  background: rgba(94, 23, 235, 0.2);
+  border: 1px solid rgba(94, 23, 235, 0.3);
+  color: #c4b5fd;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.app-build-challenge .copy-btn:hover {
+  background: rgba(94, 23, 235, 0.35);
+  color: #fff;
+}
+
+.app-build-challenge .copy-btn.copied {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #4ade80;
+}
+
+.app-build-challenge .prompt-content {
+  padding: 14px;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ─── Info Box ───────────────────────────────────────────────────── */
+
+.app-build-challenge .info-box {
+  background: rgba(94, 23, 235, 0.06);
+  border: 1px solid rgba(94, 23, 235, 0.15);
+  border-left: 3px solid rgba(94, 23, 235, 0.4);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0;
+}
+
+.app-build-challenge .info-box h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #a78bfa;
+  margin: 0 0 6px;
+}
+
+.app-build-challenge .info-box p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ─── Checkboxes ─────────────────────────────────────────────────── */
+
+.app-build-challenge .checkboxes-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.app-build-challenge .checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s;
+}
+
+.app-build-challenge .checkbox-item:hover {
+  opacity: 0.9;
+}
+
+.app-build-challenge .checkbox-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.app-build-challenge .checkbox-box.checked {
+  background: #5e17eb;
+  border-color: #5e17eb;
+}
+
+.app-build-challenge .checkbox-box .check-icon {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s;
+}
+
+.app-build-challenge .checkbox-box.checked .check-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.app-build-challenge .checkbox-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+  transition: color 0.2s;
+}
+
+.app-build-challenge .checkbox-item.done .checkbox-label {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: line-through;
+}
+
+/* ─── Outcomes ───────────────────────────────────────────────────── */
+
+.app-build-challenge .deliverables-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+}
+
+.app-build-challenge .deliverables-list li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 6px 0 6px 22px;
+  position: relative;
+}
+
+.app-build-challenge .deliverables-list li::before {
+  content: '📦';
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+}
+
+/* ─── Feedback Form (Challenge 5) ────────────────────────────────── */
+
+.app-build-challenge .feedback-intro {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.app-build-challenge .feedback-intro h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.app-build-challenge .feedback-intro p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.app-build-challenge .feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.app-build-challenge .feedback-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.app-build-challenge .feedback-field .required-star {
+  color: #E9A23B;
+  margin-left: 2px;
+}
+
+.app-build-challenge .feedback-field textarea,
+.app-build-challenge .feedback-field input[type="url"],
+.app-build-challenge .feedback-field input[type="text"] {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #fff;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.app-build-challenge .feedback-field textarea {
+  min-height: 100px;
+}
+
+.app-build-challenge .feedback-field textarea:focus,
+.app-build-challenge .feedback-field input:focus {
+  outline: none;
+  border-color: rgba(94, 23, 235, 0.5);
+}
+
+.app-build-challenge .feedback-field textarea::placeholder,
+.app-build-challenge .feedback-field input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.app-build-challenge .feedback-submit {
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  margin: 8px auto 0;
+  display: block;
+}
+
+.app-build-challenge .feedback-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.app-build-challenge .info-box-content p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 4px;
+}
+
+.app-build-challenge .info-box-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── Loading / Not Found ────────────────────────────────────────── */
+
+.app-build-challenge .loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 15px;
+}
+
+.app-build-challenge .not-found {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.app-build-challenge .not-found h2 {
+  font-size: 20px;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.app-build-challenge .not-found p {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .app-build-challenge {
+    padding: 16px 12px 60px;
+  }
+
+  .app-build-challenge .challenge-title {
+    font-size: 22px;
+  }
+
+  .app-build-challenge .step-header {
+    padding: 14px 16px;
+  }
+
+  .app-build-challenge .step-body.expanded {
+    padding: 0 16px 16px;
+  }
+
+  .app-build-challenge .prompt-content {
+    font-size: 12px;
+    padding: 12px;
+  }
+}

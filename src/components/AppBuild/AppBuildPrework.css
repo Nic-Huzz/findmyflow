@@ -1,0 +1,559 @@
+/* ============================================================
+   AppBuildPrework — Product Definition Form
+   Scoped to .app-build-prework
+   ============================================================ */
+
+.app-build-prework {
+  min-height: 100dvh;
+  background: #0a0a1a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px 40px;
+  box-sizing: border-box;
+}
+
+/* ── Loading ─────────────────────────────────────────────── */
+
+.app-build-prework .prework-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-build-prework .prework-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: preworkSpin 0.8s linear infinite;
+}
+
+@keyframes preworkSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Progress Dots ───────────────────────────────────────── */
+
+.app-build-prework .prework-progress {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.app-build-prework .prework-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.app-build-prework .prework-dot.completed {
+  background: #5e17eb;
+}
+
+.app-build-prework .prework-dot.current {
+  background: #E9A23B;
+  box-shadow: 0 0 10px rgba(233, 162, 59, 0.6);
+  transform: scale(1.25);
+}
+
+/* ── Step Card ───────────────────────────────────────────── */
+
+.app-build-prework .prework-step {
+  width: 100%;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 28px 24px;
+  animation: preworkFadeIn 0.35s ease;
+}
+
+@keyframes preworkFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.app-build-prework .prework-step-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.app-build-prework .step-number {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.app-build-prework .step-duration {
+  font-size: 12px;
+  color: #E9A23B;
+  background: rgba(233, 162, 59, 0.12);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.app-build-prework .prework-step-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: white;
+}
+
+.app-build-prework .prework-step-instruction {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 20px;
+}
+
+/* ── Example Block ───────────────────────────────────────── */
+
+.app-build-prework .prework-example {
+  background: rgba(233, 162, 59, 0.06);
+  border-left: 3px solid #E9A23B;
+  border-radius: 0 10px 10px 0;
+  padding: 16px 18px;
+  margin-bottom: 24px;
+}
+
+.app-build-prework .prework-example .example-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #E9A23B;
+  margin-bottom: 8px;
+}
+
+.app-build-prework .prework-example p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ── Input Area ──────────────────────────────────────────── */
+
+.app-build-prework .prework-input-area {
+  margin-bottom: 20px;
+}
+
+/* Shared input base */
+.app-build-prework .prework-input,
+.app-build-prework .prework-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.app-build-prework .prework-input::placeholder,
+.app-build-prework .prework-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.app-build-prework .prework-input:focus,
+.app-build-prework .prework-textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.app-build-prework .prework-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.app-build-prework .prework-textarea.small {
+  min-height: 56px;
+}
+
+/* ── Features Input ──────────────────────────────────────── */
+
+.app-build-prework .prework-features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.app-build-prework .feature-entry {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-build-prework .feature-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-build-prework .feature-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(94, 23, 235, 0.25);
+  color: #a78bfa;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-build-prework .feature-remove {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.app-build-prework .feature-remove:hover {
+  color: #ff6b6b;
+}
+
+/* ── Steps Input ─────────────────────────────────────────── */
+
+.app-build-prework .prework-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-build-prework .step-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-build-prework .step-entry-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  min-width: 24px;
+  text-align: right;
+}
+
+.app-build-prework .step-remove {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.app-build-prework .step-remove:hover {
+  color: #ff6b6b;
+}
+
+/* ── List Input ──────────────────────────────────────────── */
+
+.app-build-prework .prework-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-build-prework .list-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-build-prework .list-bullet {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.app-build-prework .list-remove {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.app-build-prework .list-remove:hover {
+  color: #ff6b6b;
+}
+
+/* ── Design Input ────────────────────────────────────────── */
+
+.app-build-prework .prework-design {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.app-build-prework .design-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app-build-prework .design-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.app-build-prework .design-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.app-build-prework .design-pill {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.app-build-prework .design-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.app-build-prework .design-pill.selected {
+  background: rgba(94, 23, 235, 0.2);
+  border-color: #5e17eb;
+  color: #c4b5fd;
+}
+
+/* ── Add Button ──────────────────────────────────────────── */
+
+.app-build-prework .prework-add-btn {
+  background: none;
+  border: 2px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.app-build-prework .prework-add-btn:hover {
+  border-color: rgba(94, 23, 235, 0.4);
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(94, 23, 235, 0.06);
+}
+
+/* ── Checkpoint ──────────────────────────────────────────── */
+
+.app-build-prework .prework-checkpoint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(94, 23, 235, 0.08);
+  border: 1px solid rgba(94, 23, 235, 0.2);
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+.app-build-prework .prework-checkpoint .checkpoint-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.app-build-prework .prework-checkpoint span:last-child {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+/* ── Navigation ──────────────────────────────────────────── */
+
+.app-build-prework .prework-nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.app-build-prework .prework-btn-primary {
+  flex: 1;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  font-family: inherit;
+}
+
+.app-build-prework .prework-btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.app-build-prework .prework-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.app-build-prework .prework-btn-ghost {
+  padding: 14px 24px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.app-build-prework .prework-btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── Success Screen ──────────────────────────────────────── */
+
+.app-build-prework .prework-success {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 480px;
+  padding: 40px 20px;
+  animation: preworkFadeIn 0.4s ease;
+}
+
+.app-build-prework .prework-success .success-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: white;
+  margin-bottom: 24px;
+}
+
+.app-build-prework .prework-success h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.app-build-prework .prework-success p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 32px;
+  line-height: 1.5;
+}
+
+.app-build-prework .prework-success .prework-btn-primary {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 12px;
+}
+
+.app-build-prework .prework-success .prework-btn-ghost {
+  width: 100%;
+  max-width: 300px;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .app-build-prework {
+    padding: 16px 14px 32px;
+  }
+
+  .app-build-prework .prework-step {
+    padding: 20px 16px;
+  }
+
+  .app-build-prework .prework-step-title {
+    font-size: 20px;
+  }
+
+  .app-build-prework .prework-nav {
+    flex-direction: column-reverse;
+  }
+
+  .app-build-prework .prework-btn-ghost {
+    text-align: center;
+  }
+
+  .app-build-prework .design-pills {
+    gap: 6px;
+  }
+
+  .app-build-prework .design-pill {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .app-build-prework .prework-success h2 {
+    font-size: 24px;
+  }
+}

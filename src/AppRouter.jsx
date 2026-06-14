@@ -273,6 +273,9 @@ const ExperienceAttractionStack = lazyRetry(() => import('./flows/ExperienceAttr
 const ExperienceMarketingCampaign = lazyRetry(() => import('./flows/ExperienceMarketingCampaign'))
 const ScopeMapFlow = lazyRetry(() => import('./flows/ScopeMapFlow'))
 const ExperienceInspiration = lazyRetry(() => import('./flows/ExperienceInspiration'))
+const AppBuildDashboard = lazyRetry(() => import('./components/AppBuild/AppBuildDashboard'))
+const AppBuildChallenge = lazyRetry(() => import('./components/AppBuild/AppBuildChallenge'))
+const AppBuildPrework = lazyRetry(() => import('./components/AppBuild/AppBuildPrework'))
 
 
 // Lazy-loaded - Public Play-List Feed
@@ -964,6 +967,22 @@ function AppRouter() {
                   <StrikeDesignFlow />
                 </AuthGate>
               </CreateGate>
+            } />
+            {/* Build Your App — hidden upsell, no nav links */}
+            <Route path="/create/build-app" element={
+              <AuthGate>
+                <AppBuildDashboard />
+              </AuthGate>
+            } />
+            <Route path="/create/build-app/prework" element={
+              <AuthGate>
+                <AppBuildPrework />
+              </AuthGate>
+            } />
+            <Route path="/create/build-app/challenge/:number" element={
+              <AuthGate>
+                <AppBuildChallenge />
+              </AuthGate>
             } />
             {/* Backward compat */}
             <Route path="/create/strike" element={<Navigate to="/create/plays" replace />} />
