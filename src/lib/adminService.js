@@ -30,5 +30,8 @@ export const fetchUsers = (filter, search, page, pageSize) =>
 export const fetchStats = () =>
   adminFetch('get_stats')
 
+export const fetchEngagement = () =>
+  adminFetch('get_engagement')
+
 export const sendNudge = (targetUserId, title, body, url) =>
   adminFetch('send_nudge', { targetUserId, title, body, url })

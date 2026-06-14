@@ -66,6 +66,8 @@ serve(async (req) => {
         return await handleGetUsers(supabase, body)
       case 'get_stats':
         return await handleGetStats(supabase)
+      case 'get_engagement':
+        return await handleGetEngagement(supabase)
       case 'send_nudge':
         return await handleSendNudge(supabase, user.id, body)
       default:
@@ -236,6 +238,55 @@ async function handleGetStats(supabase: any) {
     activeThisWeek,
     notificationsEnabled,
     avgQuests,
+  })
+}
+
+// ─── GET ENGAGEMENT ─────────────────────────────────────────────────────
+
+async function handleGetEngagement(supabase: any) {
+  const now = new Date()
+  const today = now.toISOString().split('T')[0]
+  const day7 = new Date(now.getTime() - 7 * 86400000).toISOString().split('T')[0]
+
+  const [
+    appOpens1d,
+    appOpens7d,
+    wahoos7d,
+    dailyCheckins7d,
+    tunePractices7d,
+    healingCompleted7d,
+    leagueJoins,
+    eventCheckins,
+  ] = await Promise.all([
+    supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'app_opened').gte('created_at', today),
+    supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'app_opened').gte('created_at', day7),
+    supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'wahoo_completed').gte('created_at', day7),
+    supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'daily_checkin').gte('created_at', day7),
+    supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'tune_practice').gte('created_at', day7),
+    supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'healing_completed').gte('created_at', day7),
+    supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'league_joined'),
+    supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'event_checkin'),
+  ])
+
+  // Unique users who opened app in last 7 days (DAU proxy)
+  const { data: uniqueOpens } = await supabase
+    .from('events')
+    .select('session_id')
+    .eq('name', 'app_opened')
+    .gte('created_at', day7)
+
+  const uniqueSessions7d = new Set((uniqueOpens || []).map((e: any) => e.session_id)).size
+
+  return jsonResponse({
+    appOpens1d: appOpens1d.count || 0,
+    appOpens7d: appOpens7d.count || 0,
+    uniqueSessions7d,
+    wahoos7d: wahoos7d.count || 0,
+    dailyCheckins7d: dailyCheckins7d.count || 0,
+    tunePractices7d: tunePractices7d.count || 0,
+    healingCompleted7d: healingCompleted7d.count || 0,
+    leagueJoins: leagueJoins.count || 0,
+    eventCheckins: eventCheckins.count || 0,
   })
 }
 

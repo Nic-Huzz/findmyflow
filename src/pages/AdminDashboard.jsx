@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
-import { supabase } from '../lib/supabaseClient'
-import { fetchUsers, fetchStats } from '../lib/adminService'
+import { fetchUsers, fetchStats, fetchEngagement } from '../lib/adminService'
 import UserTable from '../components/admin/UserTable'
 import NudgeModal from '../components/admin/NudgeModal'
 import './AdminDashboard.css'
@@ -58,48 +57,10 @@ export default function AdminDashboard() {
       }
     }
 
-    // Load engagement metrics from events table
+    // Load engagement metrics via edge function (service_role bypasses RLS on events table)
     try {
-      const now = new Date()
-      const today = now.toISOString().split('T')[0]
-      const day7 = new Date(now - 7 * 86400000).toISOString().split('T')[0]
-      const day30 = new Date(now - 30 * 86400000).toISOString().split('T')[0]
-
-      const [
-        { count: appOpens7d },
-        { count: appOpens1d },
-        { count: wahoos7d },
-        { count: dailyCheckins7d },
-        { count: leagueJoins },
-        { data: eventCounts },
-      ] = await Promise.all([
-        supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'app_opened').gte('created_at', day7),
-        supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'app_opened').gte('created_at', today),
-        supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'wahoo_completed').gte('created_at', day7),
-        supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'daily_checkin').gte('created_at', day7),
-        supabase.from('events').select('id', { count: 'exact', head: true }).eq('name', 'league_joined'),
-        supabase.from('events').select('name, created_at').gte('created_at', day7).in('name', ['app_opened', 'wahoo_completed', 'daily_checkin', 'tune_practice', 'healing_completed']),
-      ])
-
-      // Calculate DAU from unique sessions per day
-      const dailyUsers = {}
-      ;(eventCounts || []).forEach(e => {
-        const day = e.created_at?.substring(0, 10)
-        if (day) {
-          if (!dailyUsers[day]) dailyUsers[day] = new Set()
-          dailyUsers[day].add(e.session_id || 'unknown')
-        }
-      })
-      const activeDays = Object.keys(dailyUsers).length || 1
-
-      setEngagement({
-        appOpens7d: appOpens7d || 0,
-        appOpens1d: appOpens1d || 0,
-        wahoos7d: wahoos7d || 0,
-        dailyCheckins7d: dailyCheckins7d || 0,
-        leagueJoins: leagueJoins || 0,
-        eventsPerDay: Math.round((eventCounts?.length || 0) / activeDays),
-      })
+      const engData = await fetchEngagement()
+      setEngagement(engData)
     } catch (err) {
       console.warn('Engagement metrics error:', err)
     }
@@ -212,8 +173,8 @@ export default function AdminDashboard() {
               <span className="ad-stat-label">Opens Today</span>
             </div>
             <div className="ad-stat">
-              <span className="ad-stat-value">{engagement.appOpens7d}</span>
-              <span className="ad-stat-label">Opens (7d)</span>
+              <span className="ad-stat-value">{engagement.uniqueSessions7d}</span>
+              <span className="ad-stat-label">Unique Users (7d)</span>
             </div>
             <div className="ad-stat">
               <span className="ad-stat-value">{engagement.dailyCheckins7d}</span>
@@ -228,8 +189,8 @@ export default function AdminDashboard() {
               <span className="ad-stat-label">League Joins</span>
             </div>
             <div className="ad-stat">
-              <span className="ad-stat-value">{engagement.eventsPerDay}</span>
-              <span className="ad-stat-label">Events/Day</span>
+              <span className="ad-stat-value">{engagement.eventCheckins}</span>
+              <span className="ad-stat-label">Event Check-ins</span>
             </div>
           </div>
         </div>
