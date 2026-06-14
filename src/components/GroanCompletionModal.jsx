@@ -7,6 +7,7 @@ import { awardMovementXP } from '../lib/movementXP'
 import NervousSystemCheckin from './NervousSystemCheckin'
 import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
+import { trackWahooCompleted } from '../lib/analytics'
 import './GroanCompletionModal.css'
 
 const PLAY_LIST_POINTS = 7
@@ -123,7 +124,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('Score increment error:', e)
       }
 
-      // 4b. Award Movement XP for Strike completion
+      // 4b. Track wahoo analytics
+      trackWahooCompleted({ challengeId: challenge.id, wahooScore: scores.wahoo, scaryScore: scores.scary })
+
+      // 4c. Award Movement XP for Strike completion
       if (challenge.challenge_source === 'strike') {
         awardMovementXP(userId, 'strike_complete', challenge.title)
       }

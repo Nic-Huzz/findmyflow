@@ -9,6 +9,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { submitEventCheckin } from '../lib/experienceTemplateService'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { trackEventCheckin } from '../lib/analytics'
 import './EventCheckin.css'
 
 const STATES = [
@@ -52,6 +53,7 @@ export default function EventCheckin() {
     hapticLight()
     try {
       await submitEventCheckin(experienceId, user.id, experience.user_id, checkinType, selected)
+      trackEventCheckin({ experienceId, checkinType, state: selected })
       hapticSuccess()
       setSaved(true)
       if (checkinType === 'before') {

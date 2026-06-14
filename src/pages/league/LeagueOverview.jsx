@@ -11,6 +11,7 @@ import { FANTASY_CATEGORIES, CATEGORY_KEYS } from '../../lib/league/leagueConfig
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import { supabase } from '../../lib/supabaseClient'
 import LeagueLeaderboard from '../../components/league/LeagueLeaderboard'
+import { trackLeagueJoined } from '../../lib/analytics'
 import './LeagueOverview.css'
 
 export default function LeagueOverview() {
@@ -67,6 +68,7 @@ export default function LeagueOverview() {
       const name = displayName.trim()
       const fallback = await getDefaultDisplayName()
       await joinSolo({ leagueId: league.id, userId: user.id, displayName: name || fallback || 'Player' })
+      trackLeagueJoined({ leagueId: league.id, teamName: name || fallback || 'Player' })
       hapticSuccess()
       setShowSoloModal(false)
       setDisplayName('')

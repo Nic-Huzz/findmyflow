@@ -147,6 +147,36 @@ export async function trackQuizSignupClick() {
   return sendEvent('quiz_signup_click', { quiz: 'earthquake', ...getStoredUtmParams() })
 }
 
+// ── Vibe Rise Core Events ──
+
+export async function trackDailyCheckin({ state }) {
+  return sendEvent('daily_checkin', { state })
+}
+
+export async function trackWahooCompleted({ challengeId, wahooScore, scaryScore }) {
+  return sendEvent('wahoo_completed', { challengeId, wahooScore, scaryScore })
+}
+
+export async function trackTunePractice({ practiceId }) {
+  return sendEvent('tune_practice', { practiceId })
+}
+
+export async function trackHealingCompleted({ questId, questType }) {
+  return sendEvent('healing_completed', { questId, questType })
+}
+
+export async function trackLeagueJoined({ leagueId, teamName }) {
+  return sendEvent('league_joined', { leagueId, teamName })
+}
+
+export async function trackAppOpened() {
+  return sendEvent('app_opened', { page: window.location.pathname })
+}
+
+export async function trackEventCheckin({ experienceId, checkinType, state }) {
+  return sendEvent('event_checkin', { experienceId, checkinType, state })
+}
+
 
 
 
