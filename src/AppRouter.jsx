@@ -377,7 +377,8 @@ function ConditionalZarlo() {
   const isScopeMap = location.pathname === '/scope-map'
   const isCreatePortal = location.pathname.startsWith('/create')
 
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isCreatePortal) return null
+  const isPreLaunch = location.pathname === '/pre-launch'
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isCreatePortal || isPreLaunch) return null
   return <ZarloWidget />
 }
 
@@ -428,7 +429,8 @@ function ConditionalBottomToolbar() {
                         location.pathname.startsWith('/zone-diagnosis') ||
                         location.pathname === '/get-started' ||
                         location.pathname === '/shift-scorecard' ||
-                        location.pathname === '/movement-makers'
+                        location.pathname === '/movement-makers' ||
+                        location.pathname === '/pre-launch'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
