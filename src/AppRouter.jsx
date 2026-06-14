@@ -30,6 +30,7 @@ function lazyRetry(importFn) {
 
 // Static imports - Core infrastructure
 import LandingPage from './pages/LandingPage'
+const PreLaunch = lazyRetry(() => import('./pages/PreLaunch'))
 import PersonaAssessment from './PersonaAssessment'
 import JourneyOnboarding from './components/onboarding/JourneyOnboarding'
 import PlaySkillsOnboarding from './components/onboarding/PlaySkillsOnboarding'
@@ -463,6 +464,7 @@ function AppRouter() {
               <Route path="/" element={<PlaySkillsOnboarding />} />
               <Route path="/get-started" element={<PlaySkillsOnboarding />} />
               <Route path="/landing-page" element={<LandingPage />} />
+              <Route path="/pre-launch" element={<PreLaunch />} />
               <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
               <Route path="/essence-identify" element={<EssenceIdentify />} />
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
