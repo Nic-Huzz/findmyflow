@@ -46,6 +46,7 @@ import HealingIntentionSetter from './components/HealingIntentionSetter'
 import HealingIntentionCheckin from './components/HealingIntentionCheckin'
 import ChallengeIntro from './components/ChallengeIntro'
 import DailyCheckin from './components/DailyCheckin'
+import WeeklyReview from './components/WeeklyReview'
 import LevelTab from './components/level/LevelTab'
 import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
@@ -198,6 +199,12 @@ function Challenge() {
   const [showDailyCheckin, setShowDailyCheckin] = useState(false)
   const [capacityRefresh, setCapacityRefresh] = useState(0)
 
+  // Weekly Review state
+  const [weeklyReviewNeeded, setWeeklyReviewNeeded] = useState(false)
+  const [weeklyReviewDismissed, setWeeklyReviewDismissed] = useState(false)
+  const [showWeeklyReview, setShowWeeklyReview] = useState(false)
+  const [reviewWeekStart, setReviewWeekStart] = useState(null)
+
   useEffect(() => {
     if (!user?.id) return
     const now = new Date()
@@ -222,6 +229,25 @@ function Challenge() {
       .limit(1)
       .then(({ data }) => {
         if (!data?.length) setShowDailyCheckin(true)
+      })
+  }, [user?.id])
+
+  // Weekly Review trigger (Sunday or Monday)
+  useEffect(() => {
+    if (!user?.id) return
+    const day = new Date().getDay()
+    if (day !== 0 && day !== 1) return // only Sun/Mon
+    // Sunday: review this week. Monday: review last week.
+    const reviewWeek = day === 0 ? getWeekStartLocal() : getWeekStartLocal(new Date(), -1)
+    setReviewWeekStart(reviewWeek)
+    supabase
+      .from('weekly_reviews')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('week_start', reviewWeek)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data) setWeeklyReviewNeeded(true)
       })
   }, [user?.id])
 
@@ -1805,6 +1831,15 @@ function Challenge() {
         />
       )}
 
+      {showWeeklyReview && reviewWeekStart && (
+        <WeeklyReview
+          userId={user.id}
+          weekStart={reviewWeekStart}
+          onComplete={() => { setShowWeeklyReview(false); setWeeklyReviewNeeded(false) }}
+          onClose={() => setShowWeeklyReview(false)}
+        />
+      )}
+
       {/* ARCHIVED: Fantasy League nudge — re-enable when league is active
       {leagueExists && !isOnTeam && (
         <Link to="/league" className="league-nudge-banner" style={{
@@ -1887,6 +1922,23 @@ function Challenge() {
       )}
 
       <div className="challenge-content">
+        {/* Weekly Review CTA */}
+        {weeklyReviewNeeded && !weeklyReviewDismissed && !showWeeklyReview && (
+          <div className="wr-cta-card" onClick={() => setShowWeeklyReview(true)}>
+            <div className="wr-cta-left">
+              <span className="wr-cta-icon">⚡</span>
+              <div className="wr-cta-text">
+                <span className="wr-cta-title">Weekly Review</span>
+                <span className="wr-cta-sub">60s audit · +15 RP</span>
+              </div>
+            </div>
+            <div className="wr-cta-right">
+              <span className="wr-cta-arrow">→</span>
+              <button className="wr-cta-dismiss" onClick={e => { e.stopPropagation(); setWeeklyReviewDismissed(true) }}>&times;</button>
+            </div>
+          </div>
+        )}
+
         {/* Groans Summary */}
         {activeCategory === 'GroansSummary' && (
           <GroansSummary
@@ -2009,7 +2061,7 @@ function Challenge() {
 
             {artifactProgress.unlocked && (
               <div className="artifact-unlocked-message">
-                Artifact Unlocked! You've completed this category.
+                Artifact Unlocked! You&apos;ve completed this category.
               </div>
             )}
           </div>
@@ -2430,7 +2482,7 @@ function Challenge() {
                     <div className="groan-three-percent-toggle">
                       <label className="groan-three-percent-label">Did you implement your 3% improvement?</label>
                       {improvementText && (
-                        <div className="groan-three-percent-quote">"{improvementText}"</div>
+                        <div className="groan-three-percent-quote">&quot;{improvementText}&quot;</div>
                       )}
                       <div className="groan-toggle-buttons">
                         <button

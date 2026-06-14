@@ -1,7 +1,7 @@
 /**
  * DailyCheckin — Lightweight overlay on challenge page load.
  * "How are you right now?" with 4 state buttons.
- * Flow: State pick → Drain capture (sympathetic/dorsal only) → Regulation exercise → Predict (optional).
+ * Flow: State pick → Drain capture (sympathetic/dorsal only) → Regulation exercise.
  */
 
 import { useState, useRef } from 'react'
@@ -30,23 +30,14 @@ const BOOST_CATEGORIES = [
 
 const isDysregulated = (state) => state === 'sympathetic' || state === 'dorsal'
 
-const EXPERIENCE_OUTCOMES = [
-  { id: 'bored', label: 'Bored', emoji: '😶' },
-  { id: 'stressful', label: 'Stressful', emoji: '😬' },
-  { id: 'fun', label: 'Fun', emoji: '😊' },
-  { id: 'wahoo', label: 'Wahoo', emoji: '⚡' },
-]
-
 export default function DailyCheckin({ userId, onComplete }) {
-  // Steps: 'state' → 'drain'|'boost' (conditional) → 'regulation' → 'predict' (optional)
+  // Steps: 'state' → 'drain'|'boost' (conditional) → 'regulation'
   const [step, setStep] = useState('state')
   const [selectedState, setSelectedState] = useState(null)
   const [drainCategory, setDrainCategory] = useState(null)
   const [drainNote, setDrainNote] = useState('')
   const [boostCategory, setBoostCategory] = useState(null)
   const [boostNote, setBoostNote] = useState('')
-  const [predictText, setPredictText] = useState('')
-  const [predictOutcome, setPredictOutcome] = useState(null)
   const savingRef = useRef(false)
 
   const handleSelect = (stateId) => {
@@ -259,71 +250,10 @@ export default function DailyCheckin({ userId, onComplete }) {
         {step === 'regulation' && (
           <RegulationCard
             state={selectedState}
-            onDone={() => setStep('predict')}
-            onSkip={() => setStep('predict')}
+            onDone={finishCheckin}
+            onSkip={finishCheckin}
             onBack={isDysregulated(selectedState) ? () => setStep('drain') : selectedState === 'vibe_rise' ? () => setStep('boost') : handleBackToState}
           />
-        )}
-
-        {step === 'predict' && (
-          <div className="daily-checkin-drain daily-checkin-predict">
-            <span className="daily-checkin-emoji">🔮</span>
-            <h3 className="daily-checkin-title">What&apos;s your main thing today?</h3>
-            <p className="daily-checkin-sub">Predict how it will feel. Check back later in Tune.</p>
-
-            <input
-              type="text"
-              className="daily-checkin-predict-input"
-              placeholder="e.g. dinner with friends, big presentation..."
-              value={predictText}
-              onChange={(e) => setPredictText(e.target.value)}
-              maxLength={120}
-            />
-
-            {predictText.trim() && (
-              <div className="daily-checkin-predict-outcomes">
-                {EXPERIENCE_OUTCOMES.map((o) => (
-                  <button
-                    key={o.id}
-                    type="button"
-                    className={`daily-checkin-predict-btn ${predictOutcome === o.id ? 'selected' : ''}`}
-                    onClick={() => setPredictOutcome(o.id)}
-                  >
-                    <span>{o.emoji}</span> {o.label}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <div className="daily-checkin-drain-actions">
-              <button
-                type="button"
-                className="daily-checkin-drain-skip"
-                onClick={finishCheckin}
-              >
-                Skip
-              </button>
-              <button
-                type="button"
-                className="daily-checkin-drain-save"
-                disabled={!predictText.trim() || !predictOutcome}
-                onClick={() => {
-                  // Fire-and-forget (matches drain/boost pattern)
-                  const today = new Date()
-                  const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-                  supabase.from('experience_checkins').insert({
-                    user_id: userId,
-                    date: dateStr,
-                    activity_description: predictText.trim(),
-                    predicted_outcome: predictOutcome,
-                  })
-                  finishCheckin()
-                }}
-              >
-                {predictText.trim() && predictOutcome ? 'Save & close' : 'Pick an outcome'}
-              </button>
-            </div>
-          </div>
         )}
       </div>
     </div>

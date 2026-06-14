@@ -44,7 +44,7 @@ const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'S
 
 // Weekly Focus categories
 const FOCUS_CATEGORIES = [
-  { id: 'boundary', label: 'Boundary', icon: '🛡️', description: 'Protecting a value', prompt: 'What boundary are you protecting this week? With who or what?' },
+  { id: 'boundary', label: 'Value', icon: '🛡️', description: 'Prioritising what matters', prompt: 'What value are you prioritising this week?' },
   { id: 'behaviour_swap', label: 'Behaviour Swap', icon: '🔄', description: 'Replacing a habit', prompt: 'What are you swapping? From what to what?' },
   { id: 'future_self', label: 'Future Self', icon: '🔮', description: 'Practising who you\'re becoming', prompt: 'What\'s one thing your future self does daily?' },
   { id: 'belief', label: 'Belief', icon: '🧠', description: 'Watching for a pattern', prompt: 'What belief are you watching for this week?' },

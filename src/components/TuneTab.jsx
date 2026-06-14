@@ -2,7 +2,8 @@
  * TuneTab.jsx
  *
  * Daily maintenance tab — "Tuning your nervous system."
- * Three sections:
+ * Four sections:
+ *   0. Today's Experiences (predict outcomes, close the loop, calibration)
  *   1. Daily Practices (6 items, inline 2-option state check)
  *   2. Reconnect Practices (opens HealingCompletionModal for multi-step input)
  *   3. Rest (simple checkbox, inline 2-option state check)
@@ -14,7 +15,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getScoringCategory } from '../lib/scoringCategories'
-import { getWeekStartLocal } from '../lib/dateUtils'
+import { getWeekStartLocal, getTodayLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import confetti from 'canvas-confetti'
 import { getLevel, getLevelNumber } from '../lib/crm/statsService'
@@ -23,6 +24,7 @@ import CapacityCard from './level/CapacityCard'
 import useCapacityScore from '../hooks/useCapacityScore'
 import RegulationCard from './RegulationCard'
 import { REGULATION_EXERCISES } from '../lib/nervousSystemConstants'
+import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import './TuneTab.css'
 
 // Quest IDs that render inline (Practice + Rest checkboxes)
@@ -62,6 +64,20 @@ const STALL_CATEGORIES = [
   { id: 'stall_commitment', label: 'Commitment', icon: '📋' },
 ]
 
+// Experience Check-in outcome predictions (T1a Self-Knowledge)
+const EXPERIENCE_OUTCOMES = [
+  { id: 'bored', label: 'Bored', emoji: '😶' },
+  { id: 'stressful', label: 'Stressful', emoji: '😬' },
+  { id: 'fun', label: 'Fun', emoji: '😊' },
+  { id: 'wahoo', label: 'Wahoo', emoji: '⚡' },
+]
+
+const WAHOO_CATEGORIES = [
+  { id: 'creation', name: 'Creation', icon: '🎨' },
+  { id: 'connection', name: 'Connection', icon: '🤝' },
+  { id: 'appearance', name: 'Appearance', icon: '👤' },
+]
+
 // All daily Tune quest IDs (used for filtering from JSON)
 const DAILY_PRACTICE_IDS = [
   // Maintenance
@@ -84,7 +100,7 @@ const DAILY_PRACTICE_IDS = [
 
 // Weekly Focus category labels
 const FOCUS_CATEGORY_LABELS = {
-  boundary: { icon: '🛡️', label: 'Boundary' },
+  boundary: { icon: '🛡️', label: 'Value' },
   behaviour_swap: { icon: '🔄', label: 'Behaviour Swap' },
   future_self: { icon: '🔮', label: 'Future Self' },
   belief: { icon: '🧠', label: 'Belief' },
@@ -141,6 +157,18 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const [recoveryOther, setRecoveryOther] = useState('') // free-text "what else helped?"
   const [savingRecovery, setSavingRecovery] = useState(false)
 
+  // Experience Check-in state
+  const [experiences, setExperiences] = useState([])
+  const [showExpForm, setShowExpForm] = useState(false)
+  const [expDescription, setExpDescription] = useState('')
+  const [expPrediction, setExpPrediction] = useState(null)
+  const [savingExp, setSavingExp] = useState(false)
+  const [expOutcomeItem, setExpOutcomeItem] = useState(null)
+  const [expActual, setExpActual] = useState(null)
+  const [savingExpOutcome, setSavingExpOutcome] = useState(false)
+  const [showWahooPrompt, setShowWahooPrompt] = useState(null)
+  const [wahooConvertCat, setWahooConvertCat] = useState(null)
+
   // Load quests from static JSON + completions from DB
   useEffect(() => {
     if (!userId) return
@@ -191,7 +219,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .limit(5)
         .then(res => res)
         .catch(() => ({ data: null })),
-    ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }, { data: focusData }, { data: peakData }]) => {
+      // Load this week's experience checkins
+      supabase
+        .from('experience_checkins')
+        .select('id, activity_description, predicted_outcome, actual_outcome, calibration_hit, completed_at, date, created_at')
+        .eq('user_id', userId)
+        .gte('date', getWeekStartLocal())
+        .order('created_at', { ascending: false }),
+    ]).then(([questData, { data: completionData }, { data: drainData }, { data: stallData }, { data: focusData }, { data: peakData }, { data: experienceData }]) => {
       const tuneQuests = (questData.quests || []).filter(q => q.category === 'Tune' && !q.archived)
       const mapped = DAILY_PRACTICE_IDS.map(id => {
         const found = tuneQuests.find(q => q.id === id)
@@ -201,6 +236,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setCompletions(completionData || [])
       setRecentDrains(drainData || [])
       setRecentStalls(stallData || [])
+      setExperiences(experienceData || [])
       // Find setup records — check response_data first, fall back to reflection_text
       const findSetup = (rows, type) => {
         return (rows || []).find(r => {
@@ -651,6 +687,117 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
     }
   }
 
+  // --- Experience Check-in ---
+
+  const todayStr = getTodayLocal()
+  const todayExpCount = experiences.filter(e => e.date === todayStr).length
+  const canAddExp = todayExpCount < 3
+
+  const calibrationStat = useMemo(() => {
+    const completed = experiences.filter(e => e.actual_outcome != null)
+    if (completed.length === 0) return null
+    const hits = completed.filter(e => e.calibration_hit).length
+    return { hits, total: completed.length }
+  }, [experiences])
+
+  async function handleSaveExperience() {
+    if (!expDescription.trim() || !expPrediction || savingExp) return
+    setSavingExp(true)
+    try {
+      const { data, error } = await supabase
+        .from('experience_checkins')
+        .insert({
+          user_id: userId,
+          date: todayStr,
+          activity_description: expDescription.trim(),
+          predicted_outcome: expPrediction,
+        })
+        .select()
+        .single()
+      if (error) throw error
+      hapticSuccess()
+      setExperiences(prev => [data, ...prev])
+      setExpDescription('')
+      setExpPrediction(null)
+      setShowExpForm(false)
+    } catch (err) {
+      console.error('Experience save error:', err)
+    } finally {
+      setSavingExp(false)
+    }
+  }
+
+  async function handleSaveExpOutcome() {
+    if (!expOutcomeItem || !expActual || savingExpOutcome) return
+    setSavingExpOutcome(true)
+    const calibrationHit = expActual === expOutcomeItem.predicted_outcome
+    try {
+      const { error } = await supabase
+        .from('experience_checkins')
+        .update({
+          actual_outcome: expActual,
+          calibration_hit: calibrationHit,
+          completed_at: new Date().toISOString(),
+        })
+        .eq('id', expOutcomeItem.id)
+      if (error) throw error
+      hapticSuccess()
+      setExperiences(prev => prev.map(e =>
+        e.id === expOutcomeItem.id
+          ? { ...e, actual_outcome: expActual, calibration_hit: calibrationHit, completed_at: new Date().toISOString() }
+          : e
+      ))
+      if (expActual === 'wahoo') {
+        setShowWahooPrompt(expOutcomeItem)
+      }
+      setExpOutcomeItem(null)
+      setExpActual(null)
+    } catch (err) {
+      console.error('Experience outcome error:', err)
+    } finally {
+      setSavingExpOutcome(false)
+    }
+  }
+
+  async function handleWahooConvert() {
+    if (!showWahooPrompt || !wahooConvertCat) return
+    try {
+      const { data: challenge, error: createErr } = await createGroanChallenge({
+        userId,
+        title: showWahooPrompt.activity_description,
+        description: showWahooPrompt.activity_description,
+        visibilityLayer: 'screen',
+        sourceType: 'skill',
+        sourceLabel: 'experience-checkin',
+        scaryScore: 3,
+        wahooScore: 8,
+        wahooCategory: wahooConvertCat,
+      })
+      if (createErr || !challenge) throw createErr || new Error('Failed to create')
+
+      const { error: acceptErr } = await acceptGroanChallenge(challenge.id)
+      if (acceptErr) throw acceptErr
+
+      await supabase.from('priority_weekly_picks').insert({
+        user_id: userId,
+        week_start_date: getWeekStartLocal(),
+        pick_type: 'groan',
+        reference_id: challenge.id,
+        display_name: showWahooPrompt.activity_description,
+      })
+
+      hapticSuccess()
+      confetti({ particleCount: 80, spread: 60, origin: { y: 0.5 } })
+      setShowWahooPrompt(null)
+      setWahooConvertCat(null)
+      onRefreshPoints?.()
+    } catch (err) {
+      console.error('Wahoo convert error:', err)
+      setShowWahooPrompt(null)
+      setWahooConvertCat(null)
+    }
+  }
+
   // Render a quest row (reuses healing tab ht- pattern)
   function renderQuestRow(quest, useInlineComplete = true) {
     const completed = quest.frequency === 'weekly' ? isCompletedThisWeek(quest.id) : isCompletedToday(quest.id)
@@ -926,7 +1073,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             )}
           </div>
         </div>
-        <p className="tt-section-sub">What's depleting your energy? Drains pull you out of expression faster than practices can refill it.</p>
+        <p className="tt-section-sub">What&apos;s depleting your energy? Drains pull you out of expression faster than practices can refill it.</p>
 
         {!showDrainForm ? (
           <button
@@ -1167,6 +1314,107 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         )}
       </div>
 
+      {/* Today's Experiences (below Stalls) */}
+      <div className="tt-section">
+        <div className="tt-section-header">
+          <div className="tt-section-header-left">
+            <span className="tt-section-icon">🔮</span>
+            <span className="tt-section-title">Today&apos;s Experiences</span>
+          </div>
+          {calibrationStat && (
+            <span className="tt-section-count">🎯 {calibrationStat.hits}/{calibrationStat.total} this week</span>
+          )}
+        </div>
+        <p className="tt-section-sub">Predict how activities will feel. Closing the loop builds self-knowledge.</p>
+
+        {!showExpForm ? (
+          <button
+            className="tt-drain-log-btn tt-exp-add-btn"
+            onClick={() => { hapticLight(); setShowExpForm(true) }}
+            disabled={!canAddExp}
+          >
+            {canAddExp ? '+ Add an experience' : '3/3 for today'}
+          </button>
+        ) : (
+          <div className="tt-drain-form">
+            <input
+              type="text"
+              className="tt-drain-note tt-exp-input"
+              placeholder="What are you doing today?"
+              value={expDescription}
+              onChange={e => setExpDescription(e.target.value)}
+              maxLength={120}
+            />
+            {expDescription.trim() && (
+              <div className="tt-exp-predictions">
+                <span className="tt-state-label">How do you think it will feel?</span>
+                <div className="tt-exp-prediction-buttons">
+                  {EXPERIENCE_OUTCOMES.map(o => (
+                    <button
+                      key={o.id}
+                      type="button"
+                      className={`tt-exp-pred-btn ${expPrediction === o.id ? 'selected' : ''}`}
+                      onClick={() => { hapticLight(); setExpPrediction(o.id) }}
+                    >
+                      <span>{o.emoji}</span> {o.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="tt-drain-actions">
+              <button
+                className="tt-drain-save tt-exp-save"
+                disabled={!expDescription.trim() || !expPrediction || savingExp}
+                onClick={handleSaveExperience}
+              >
+                {savingExp ? 'Saving...' : 'Save Prediction'}
+              </button>
+              <button
+                className="tt-drain-cancel"
+                onClick={() => { setShowExpForm(false); setExpDescription(''); setExpPrediction(null) }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {experiences.length > 0 && (
+          <div className="tt-drain-list">
+            {experiences.map(exp => {
+              const pred = EXPERIENCE_OUTCOMES.find(o => o.id === exp.predicted_outcome)
+              const actual = exp.actual_outcome ? EXPERIENCE_OUTCOMES.find(o => o.id === exp.actual_outcome) : null
+              const isExpToday = exp.date === todayStr
+              return (
+                <div key={exp.id} className="tt-drain-item">
+                  <span className="tt-drain-item-icon">{actual ? (exp.calibration_hit ? '🎯' : actual.emoji) : pred?.emoji || '🔮'}</span>
+                  <div className="tt-drain-item-body">
+                    <span className="tt-drain-item-cat">{exp.activity_description}</span>
+                    <span className="tt-drain-item-note">
+                      Predicted: {pred?.label}{actual ? ` · Actual: ${actual.label}` : ''}
+                      {exp.calibration_hit === true && ' ✓'}
+                    </span>
+                  </div>
+                  {exp.actual_outcome ? (
+                    <span className={`tt-exp-result ${exp.calibration_hit ? 'tt-hit' : 'tt-miss'}`}>
+                      {exp.calibration_hit ? '🎯' : actual?.emoji}
+                    </span>
+                  ) : isExpToday ? (
+                    <button
+                      className="tt-recover-btn"
+                      onClick={() => { hapticLight(); setExpOutcomeItem(exp) }}
+                    >
+                      How did it go?
+                    </button>
+                  ) : null}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
       {/* Practice Info Pop-up */}
       {infoQuest && (
         <div className="tt-info-overlay" onClick={() => setInfoQuest(null)}>
@@ -1264,6 +1512,76 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             >
               {savingRecovery ? 'Saving...' : "I'm back ✓"}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Experience outcome popup */}
+      {expOutcomeItem && (
+        <div className="tt-info-overlay" onClick={() => { setExpOutcomeItem(null); setExpActual(null) }}>
+          <div className="tt-info-modal tt-exp-outcome-modal" onClick={e => e.stopPropagation()}>
+            <h3 className="tt-recovery-title">How did it go?</h3>
+            <p className="tt-recovery-sub">{expOutcomeItem.activity_description}</p>
+            <div className="tt-exp-prediction-buttons tt-exp-actual-buttons">
+              {EXPERIENCE_OUTCOMES.map(o => (
+                <button
+                  key={o.id}
+                  type="button"
+                  className={`tt-exp-pred-btn ${expActual === o.id ? 'selected' : ''}`}
+                  onClick={() => setExpActual(o.id)}
+                >
+                  <span>{o.emoji}</span> {o.label}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="tt-recovery-save"
+              disabled={!expActual || savingExpOutcome}
+              onClick={handleSaveExpOutcome}
+            >
+              {savingExpOutcome ? 'Saving...' : 'Save'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Wahoo conversion prompt */}
+      {showWahooPrompt && (
+        <div className="tt-info-overlay" onClick={() => { setShowWahooPrompt(null); setWahooConvertCat(null) }}>
+          <div className="tt-info-modal" onClick={e => e.stopPropagation()}>
+            <span className="tt-recovery-emoji">⚡</span>
+            <h3 className="tt-recovery-title">That sounds like a Wahoo!</h3>
+            <p className="tt-recovery-sub">Add &quot;{showWahooPrompt.activity_description}&quot; to your active Wahoos?</p>
+            <div className="tt-exp-prediction-buttons" style={{ marginBottom: 16 }}>
+              {WAHOO_CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  className={`tt-exp-pred-btn ${wahooConvertCat === cat.id ? 'selected' : ''}`}
+                  onClick={() => { hapticLight(); setWahooConvertCat(cat.id) }}
+                >
+                  <span>{cat.icon}</span> {cat.name}
+                </button>
+              ))}
+            </div>
+            <div className="tt-drain-actions">
+              <button
+                type="button"
+                className="tt-drain-save"
+                disabled={!wahooConvertCat}
+                onClick={handleWahooConvert}
+              >
+                Add Wahoo
+              </button>
+              <button
+                type="button"
+                className="tt-drain-cancel"
+                onClick={() => { setShowWahooPrompt(null); setWahooConvertCat(null) }}
+              >
+                Not now
+              </button>
+            </div>
           </div>
         </div>
       )}

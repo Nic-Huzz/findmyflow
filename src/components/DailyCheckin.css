@@ -246,3 +246,60 @@
 .daily-checkin-boost-save {
   background: linear-gradient(135deg, #E9A23B 0%, #f59e0b 100%) !important;
 }
+
+/* Predict step — experience check-in seed */
+.daily-checkin-predict-input {
+  width: 100%;
+  margin-top: 4px;
+  padding: 12px 14px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #1a1a2e;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.daily-checkin-predict-input:focus {
+  border-color: #5e17eb;
+}
+
+.daily-checkin-predict-outcomes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.daily-checkin-predict-btn {
+  flex: 1;
+  min-width: calc(50% - 4px);
+  padding: 10px 8px;
+  border: 2px solid #eef0f3;
+  border-radius: 12px;
+  background: #f8f8fa;
+  font-size: 13px;
+  font-weight: 700;
+  color: #495057;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.daily-checkin-predict-btn.selected {
+  border-color: #5e17eb;
+  background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+  color: #5e17eb;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .daily-checkin-predict-btn {
+    transition: none;
+  }
+}

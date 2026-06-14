@@ -754,7 +754,89 @@
   .tt-drain-note,
   .tt-recover-btn,
   .tt-recovery-activity,
-  .tt-recovery-save {
+  .tt-recovery-save,
+  .tt-exp-pred-btn {
     transition-duration: 0.01ms !important;
   }
+}
+
+/* === EXPERIENCE CHECK-IN === */
+.tt-exp-add-btn {
+  border-color: rgba(94, 23, 235, 0.2);
+  color: #5e17eb;
+}
+
+.tt-exp-add-btn:hover:not(:disabled) {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.04);
+}
+
+.tt-exp-add-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.tt-exp-input {
+  font-size: 16px;
+}
+
+.tt-exp-predictions {
+  margin-top: 4px;
+}
+
+.tt-exp-prediction-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.tt-exp-pred-btn {
+  flex: 1;
+  min-width: calc(50% - 4px);
+  padding: 10px 8px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  color: #495057;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tt-exp-pred-btn.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+  color: #5e17eb;
+}
+
+.tt-exp-save {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+}
+
+.tt-exp-result {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.tt-exp-actual-buttons {
+  margin-bottom: 16px;
+}
+
+.tt-exp-outcome-modal {
+  text-align: center;
+}
+
+.tt-hit {
+  color: #10b981;
+}
+
+.tt-miss {
+  color: #6c757d;
 }
