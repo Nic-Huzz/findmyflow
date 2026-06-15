@@ -85,7 +85,6 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
           const m = result.metrics
           setValues(prev => ({
             ...prev,
-            posts: m.posts || prev.posts || '',
             reach: m.reach || m.impressions || prev.reach || '',
             spend: m.spend || prev.spend || '',
             clicks: m.link_clicks || m.clicks || prev.clicks || '',
@@ -96,11 +95,13 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
         }
       } else if (method === 'warm') {
         const result = await analyzeLeadsScreenshot(file)
-        if (result?.leads) {
+        if (result?.leads?.length > 0) {
+          const total = result.total_leads_found || result.leads.length
+          const replied = result.leads.filter(l => l.temperature === 'hot' || l.temperature === 'warm').length
           setValues(prev => ({
             ...prev,
-            dms_sent: result.total_leads_found || prev.dms_sent || '',
-            replies: result.leads.filter(l => l.engagement_type === 'dm' && l.temperature !== 'cold').length || prev.replies || '',
+            dms_sent: total || prev.dms_sent || '',
+            replies: replied || prev.replies || '',
           }))
           hapticSuccess()
         } else {
