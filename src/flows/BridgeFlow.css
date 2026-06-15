@@ -13,10 +13,6 @@
   max-width: 480px; margin: 0 auto;
   padding: 24px 20px calc(40px + env(safe-area-inset-bottom, 0px));
 }
-/* Hide bottom toolbar in this flow */
-.brg-fullscreen ~ .bottom-toolbar,
-body:has(.brg-fullscreen) .bottom-toolbar { display: none !important; }
-
 .brg-screen { animation: brgFadeIn 0.3s ease; }
 
 /* Intro layout — content top, CTA pinned bottom */

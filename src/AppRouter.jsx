@@ -383,7 +383,8 @@ function ConditionalZarlo() {
 
   const isPreLaunch = location.pathname === '/pre-launch'
   const isRemarkableFlow = location.pathname === '/create/remarkable'
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow) return null
+  const isBridgeFlow = location.pathname === '/create/bridge'
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isBridgeFlow) return null
   return <ZarloWidget />
 }
 
@@ -436,7 +437,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/shift-scorecard' ||
                         location.pathname === '/movement-makers' ||
                         location.pathname === '/pre-launch' ||
-                        location.pathname === '/create/remarkable'
+                        location.pathname === '/create/remarkable' ||
+                        location.pathname === '/create/bridge'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -498,6 +500,14 @@ function SuspenseRoutes({ children }) {
   )
 }
 
+// Build mode — controls which routes are available
+// No flag (local dev): all routes available
+// Consumer build (VITE_APP_MODE=consumer): /create/* redirects to /league
+// Creator build (VITE_APP_MODE=creator): consumer routes redirect to /create
+const APP_MODE = import.meta.env.VITE_APP_MODE
+const IS_CREATOR = APP_MODE === 'creator'
+const IS_CONSUMER = APP_MODE === 'consumer'
+
 function RedirectWithParam({ to }) {
   const { id } = useParams()
   return <Navigate to={`${to}/${id}`} replace />
@@ -515,6 +525,14 @@ function AppRouter() {
           <LocationAwareErrorBoundary>
           <SuspenseRoutes>
             <Routes>
+              {/* Mode-specific redirects — matched first by React Router */}
+              {IS_CONSUMER && <Route path="/create/*" element={<Navigate to="/league" replace />} />}
+              {IS_CONSUMER && <Route path="/business/*" element={<Navigate to="/league" replace />} />}
+              {IS_CONSUMER && <Route path="/crm/*" element={<Navigate to="/me" replace />} />}
+              {IS_CREATOR && <Route path="/" element={<Navigate to="/create" replace />} />}
+              {IS_CREATOR && <Route path="/7-day-challenge" element={<Navigate to="/create" replace />} />}
+              {IS_CREATOR && <Route path="/league/*" element={<Navigate to="/create" replace />} />}
+
               {/* Home - Onboarding */}
               <Route path="/" element={<PlaySkillsOnboarding />} />
               <Route path="/get-started" element={<PlaySkillsOnboarding />} />
