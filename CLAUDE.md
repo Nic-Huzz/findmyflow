@@ -115,6 +115,8 @@ src/
 │   ├── PlaySkillPicker.jsx   # Play-skill category picker (inspiration engine)
 │   ├── TuneTab.jsx           # Tune tab (daily practices + drains)
 │   ├── DailyCheckin.jsx      # Daily 4-state check-in overlay
+│   ├── WeeklyReview.jsx      # Weekly multiplier review wizard
+│   ├── WeeklyReviewCard.jsx  # Shareable weekly review card
 │   ├── QuestCard.jsx         # Unified quest rendering
 │   ├── FlowMapRiver.jsx      # River visualization
 │   └── SeeYourFlow.jsx       # Journey mapping
@@ -238,7 +240,7 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Level tab**: Journey progression (9 levels), zone diagnosis, boss fights, milestones, CapacityCard. Courage counts re-enabled (L1=1...L7=3, total 15 Wahoos). Level 0 quest "Unlock Your Wahoos" navigates to the Wahoo tab.
 
-**Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 4 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown).
+**Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 5 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown), Experience Check-in (predict activity outcomes, "How did it go?" closure, wahoo conversion). Weekly Focus "Value" category (renamed from "Boundary").
 
 **Play-list tab** (`PlayListTab.jsx`): First visit (no category wahoos, no playskills) → WahooDiscoveryFlow (3 category pages: Creation/Connection/Appearance, 1-5 wahoos each, pick first active). Otherwise → category bubbles + Active Wahoos + WahooCreator (free text + bucket list) + WahooInspiration ("Need inspiration?": play-skill chips → AI suggestions, Ikigai Mix skill × problem × persona gated by Life Map completion, future pillar row). Unlock/quest signal: `groan_challenges.wahoo_category` not null, OR'd with legacy play-skills rows.
 
@@ -252,7 +254,9 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Forgiving streak**: 1 day miss allowed without breaking streak.
 
-Key files: `Challenge.jsx`, `useChallengeData.js`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `WahooDiscoveryFlow.jsx`, `WahooInspiration.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`
+**Weekly Review**: Triggers Sunday/Monday, 7 multiplier questions (Environment, Network, Bet-Sizing, Identity, Compounding, Learning, Attention), 15 RP + 5 for sharing. Produces a shareable canvas card.
+
+Key files: `Challenge.jsx`, `useChallengeData.js`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `WahooDiscoveryFlow.jsx`, `WahooInspiration.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`, `WeeklyReview.jsx`, `WeeklyReviewCard.jsx`, `WeeklyReview.css`
 
 Key docs: `docs/vibe-rise-ecosystem-architecture.md`, `docs/vibe-rise-challenge-alignment.md`
 
@@ -381,6 +385,9 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 
 ### Play Profile
 `founder_dna_results` | `founder_dna_sessions`
+
+### Challenge & Review
+`experience_checkins` | `weekly_reviews`
 
 ### Other
 `user_subscriptions` (Stripe) | `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`

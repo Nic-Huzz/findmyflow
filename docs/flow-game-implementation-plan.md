@@ -12,10 +12,10 @@
 
 | Priority | Feature | Tier | Status |
 |----------|---------|------|--------|
-| **1** | Exercise suggestions after drain/stall logging | T0 | **Ready to build** |
-| **2** | "Recovered?" button + recovery tracking | T0 | **Ready to build** |
-| **3** | Prediction Log in daily check-in | T1a | Designed, not started |
-| **4** | Weekly Review (T4 multipliers) | T4 | Designed, not started |
+| **1** | Exercise suggestions after drain/stall logging | T0 | **Built** |
+| **2** | "Recovered?" button + recovery tracking | T0 | **Built** |
+| **3** | Prediction Log in daily check-in | T1a | **Superseded by Experience Check-in (built 2026-06-14)** |
+| **4** | Weekly Review (T4 multipliers) | T4 | **Built (2026-06-14)** |
 | **5** | Shareable metric card | T1b | Concept only |
 
 ---
