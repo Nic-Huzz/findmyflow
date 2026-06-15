@@ -208,6 +208,41 @@
 }
 .el-edit-btn:hover { border-color: rgba(255,255,255,0.2); }
 
+/* Design panel (inline AI/Manual) */
+.el-design-panel {
+  padding: 12px 0 0;
+}
+.el-design-picker {
+  display: flex;
+  gap: 8px;
+}
+.el-design-opt {
+  flex: 1;
+  padding: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.el-design-opt:hover { border-color: rgba(233,162,59,0.4); }
+.el-design-back {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 8px;
+  font-family: inherit;
+}
+
 /* Manual journey editor */
 .el-manual-editor {
   padding: 12px 0 0;

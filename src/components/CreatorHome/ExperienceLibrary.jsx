@@ -6,8 +6,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
-import { fetchTemplates, createTemplate, archiveTemplate } from '../../lib/experienceTemplateService'
+import { fetchTemplates, createTemplate, archiveTemplate, updateTemplate } from '../../lib/experienceTemplateService'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
+import JourneyDesigner from './JourneyDesigner'
 import './ExperienceLibrary.css'
 
 const EXPERIENCE_TYPES = [
@@ -31,6 +32,10 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
   const [newType, setNewType] = useState('workshop')
   const [newDuration, setNewDuration] = useState('')
   const [creating, setCreating] = useState(false)
+  const [designOpen, setDesignOpen] = useState(null) // template ID
+  const [designMode, setDesignMode] = useState(null) // 'ai' | 'manual'
+  const [manualRunsheet, setManualRunsheet] = useState([])
+  const [savingManual, setSavingManual] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -70,6 +75,41 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
     hapticLight()
     await archiveTemplate(id)
     setTemplates(prev => prev.filter(t => t.id !== id))
+  }
+
+  const openDesign = (t) => {
+    hapticLight()
+    if (designOpen === t.id) {
+      setDesignOpen(null)
+      setDesignMode(null)
+    } else {
+      setDesignOpen(t.id)
+      setDesignMode(null)
+      setManualRunsheet(t.runsheet?.length > 0 ? t.runsheet.map(p => ({ ...p })) : [
+        { phase: 'Opening', duration: 5, notes: '' },
+        { phase: 'Main', duration: 30, notes: '' },
+        { phase: 'Closing', duration: 5, notes: '' },
+      ])
+    }
+  }
+
+  const handleManualSave = async (templateId) => {
+    if (savingManual) return
+    setSavingManual(true)
+    try {
+      const filtered = manualRunsheet.filter(p => p.phase.trim())
+      await updateTemplate(templateId, {
+        runsheet: filtered,
+        duration_minutes: filtered.reduce((s, p) => s + (parseInt(p.duration) || 0), 0),
+      })
+      hapticSuccess()
+      setTemplates(prev => prev.map(tp => tp.id === templateId ? { ...tp, runsheet: filtered, duration_minutes: filtered.reduce((s, p) => s + (parseInt(p.duration) || 0), 0) } : tp))
+      setDesignOpen(null)
+      setDesignMode(null)
+    } catch (err) {
+      console.error('Manual save error:', err)
+    }
+    setSavingManual(false)
   }
 
   if (loading) return null
@@ -153,7 +193,60 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
               >
                 Run This →
               </button>
+              <button className="el-edit-btn" onClick={() => openDesign(t)}>
+                {designOpen === t.id ? 'Close' : '✏️ Update Design'}
+              </button>
             </div>
+
+            {designOpen === t.id && (
+              <div className="el-design-panel">
+                {!designMode && (
+                  <div className="el-design-picker">
+                    <button className="el-design-opt" onClick={() => { hapticLight(); setDesignMode('ai') }}>
+                      🤖 AI Design
+                    </button>
+                    <button className="el-design-opt" onClick={() => { hapticLight(); setDesignMode('manual') }}>
+                      ✏️ Complete Myself
+                    </button>
+                  </div>
+                )}
+
+                {designMode === 'ai' && (
+                  <>
+                    <button className="el-design-back" onClick={() => setDesignMode(null)}>← Back</button>
+                    <JourneyDesigner
+                      templateId={t.id}
+                      onSaved={(runsheet) => {
+                        setTemplates(prev => prev.map(tp => tp.id === t.id ? { ...tp, runsheet, duration_minutes: runsheet.reduce((s, p) => s + (p.duration || 0), 0) } : tp))
+                        setDesignOpen(null)
+                        setDesignMode(null)
+                      }}
+                    />
+                  </>
+                )}
+
+                {designMode === 'manual' && (
+                  <>
+                    <button className="el-design-back" onClick={() => setDesignMode(null)}>← Back</button>
+                    <div className="el-manual-editor">
+                      {manualRunsheet.map((phase, i) => (
+                        <div key={i} className="el-manual-row">
+                          <input className="el-manual-phase" value={phase.phase} onChange={e => setManualRunsheet(prev => prev.map((p, j) => j === i ? { ...p, phase: e.target.value } : p))} placeholder="Phase name" />
+                          <input className="el-manual-dur" type="number" value={phase.duration} onChange={e => setManualRunsheet(prev => prev.map((p, j) => j === i ? { ...p, duration: e.target.value } : p))} placeholder="min" />
+                          <input className="el-manual-notes" value={phase.notes || ''} onChange={e => setManualRunsheet(prev => prev.map((p, j) => j === i ? { ...p, notes: e.target.value } : p))} placeholder="Notes" />
+                          <button className="el-manual-remove" onClick={() => setManualRunsheet(prev => prev.filter((_, j) => j !== i))}>×</button>
+                        </div>
+                      ))}
+                      <button className="el-manual-add" onClick={() => setManualRunsheet(prev => [...prev, { phase: '', duration: 5, notes: '' }])}>+ Add phase</button>
+                      <div className="el-manual-actions">
+                        <button className="el-manual-save" onClick={() => handleManualSave(t.id)} disabled={savingManual}>{savingManual ? 'Saving...' : 'Save Journey'}</button>
+                        <button className="el-manual-cancel" onClick={() => { setDesignOpen(null); setDesignMode(null) }}>Cancel</button>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </div>

@@ -34,7 +34,6 @@ export default function ExperienceCreate() {
   const [validationError, setValidationError] = useState('')
   const [templateSource, setTemplateSource] = useState(null)
   const [saveToLibrary, setSaveToLibrary] = useState(!templateId)
-  const [journeyMode, setJourneyMode] = useState('skip')
 
   useEffect(() => {
     document.title = runAgainFromId ? 'Run Again' : templateId ? 'Run from Template' : 'New Experience'
@@ -160,8 +159,7 @@ export default function ExperienceCreate() {
         runAgainFromId: runAgainFromId || null,
       })
       hapticSuccess()
-      const jParam = journeyMode !== 'skip' ? `?journey=${journeyMode}` : ''
-      navigate(`/create/experience/${exp.id}${jParam}`)
+      navigate(`/create/experience/${exp.id}`)
     } catch {
       // error state already set in the hook
     }
@@ -336,25 +334,6 @@ export default function ExperienceCreate() {
               <span className="exp-checkbox-hint">Create a reusable template you can run again</span>
             </label>
           )}
-
-          {/* Journey Design option */}
-          <div className="exp-journey-section">
-            <span className="exp-journey-label">Journey Design</span>
-            <div className="exp-journey-options">
-              <button type="button" className={`exp-journey-opt ${journeyMode === 'skip' ? 'active' : ''}`} onClick={() => setJourneyMode('skip')}>
-                Skip for now
-              </button>
-              <button type="button" className={`exp-journey-opt ${journeyMode === 'ai' ? 'active' : ''}`} onClick={() => setJourneyMode('ai')}>
-                🤖 AI Design
-              </button>
-              <button type="button" className={`exp-journey-opt ${journeyMode === 'manual' ? 'active' : ''}`} onClick={() => setJourneyMode('manual')}>
-                ✏️ Complete Myself
-              </button>
-            </div>
-            <span className="exp-journey-hint">
-              {journeyMode === 'ai' ? 'AI will generate a runsheet after creation' : journeyMode === 'manual' ? 'You\'ll fill in your journey phases after creation' : 'You can design your journey later from the experience detail page'}
-            </span>
-          </div>
 
           {(validationError || error) && (
             <div className="exp-form-error">{validationError || error}</div>
