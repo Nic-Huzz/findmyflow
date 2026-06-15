@@ -222,3 +222,36 @@
 }
 .stk-cta:disabled { opacity: 0.4; cursor: not-allowed; }
 .stk-cta:active:not(:disabled) { transform: scale(0.98); }
+
+/* Capture nudge */
+.stk-capture {
+  margin-top: 1rem; padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.stk-capture-label {
+  font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.8);
+  margin-bottom: 4px;
+}
+.stk-capture-hint {
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  margin-bottom: 10px; font-style: italic;
+}
+.stk-capture-options {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+}
+.stk-capture-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.6);
+  font-size: 12px; font-weight: 600; font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.stk-capture-btn:active { background: rgba(255,255,255,0.08); }
+.stk-capture-selected {
+  background: rgba(233,162,59,0.1);
+  border-color: rgba(233,162,59,0.3);
+  color: #E9A23B;
+}

@@ -34,7 +34,7 @@ const STRIKE_TYPES = [
   { id: 'culture_creating', label: 'Start a Ritual', desc: 'Create something your attendees take home and spread without you.', tag: 'Builds both', icon: '🌀' },
 ]
 
-// Shared parsing logic — must match CreatorHome's parseMovement
+// Shared parsing logic — handles both old and new remarkable_angles formats
 function parseMovement(ruleIdentified) {
   if (!ruleIdentified) return null
   const parts = ruleIdentified.split('|').map(s => s.trim())
@@ -42,11 +42,20 @@ function parseMovement(ruleIdentified) {
     const part = parts.find(p => p.startsWith(prefix))
     return part ? part.replace(prefix, '').trim() : ''
   }
+  // New format
+  const assumption = extract('Assumption:')
+  const different = extract('Different:')
+  const experience = extract('Experience:')
+  const project = extract('Project:')
+  if (assumption && different) {
+    return { current: assumption, wrong: different, mine: experience || different, project, experience }
+  }
+  // Legacy format
   const current = extract('Current:')
   const wrong = extract('Wrong:')
   const mine = extract('Mine:')
-  if (!current || !wrong || !mine) return null
-  return { current, wrong, mine }
+  if (current && mine) return { current, wrong, mine }
+  return null
 }
 
 export default function StrikeDesignFlow() {
@@ -67,6 +76,7 @@ export default function StrikeDesignFlow() {
   const [pillarPosition, setPillarPosition] = useState(false)
   const [pillarConvert, setPillarConvert] = useState(false)
   const [deadlineDate, setDeadlineDate] = useState('')
+  const [captureMethod, setCaptureMethod] = useState('')
 
   // Loaded data
   const [movement, setMovement] = useState(null)
@@ -189,7 +199,7 @@ export default function StrikeDesignFlow() {
         user_id: user.id,
         challenge_text: strikeTitle.trim(),
         title: strikeTitle.trim(),
-        description: strikeDescription || null,
+        description: [strikeDescription, captureMethod ? `Capture: ${captureMethod}` : ''].filter(Boolean).join('\n') || null,
         source_type: 'movement',
         source_value: 'remarkable_angle',
         source_label: movement?.ruleStatement || 'Lightning Strike',
@@ -504,6 +514,28 @@ export default function StrikeDesignFlow() {
               onChange={(e) => setDeadlineDate(e.target.value)}
               min={new Date().toISOString().split('T')[0]}
             />
+          </div>
+
+          {/* Content capture nudge */}
+          <div className="stk-capture">
+            <div className="stk-capture-label">How will you capture this?</div>
+            <div className="stk-capture-hint">Post the moment, not a description of it.</div>
+            <div className="stk-capture-options">
+              {[
+                { id: 'film', label: 'Film it', icon: '🎬' },
+                { id: 'livestream', label: 'Go live', icon: '📡' },
+                { id: 'photo', label: 'Get photos', icon: '📸' },
+                { id: 'screenshot', label: 'Screenshot reactions', icon: '💬' },
+              ].map(opt => (
+                <button
+                  key={opt.id}
+                  className={`stk-capture-btn ${captureMethod === opt.id ? 'stk-capture-selected' : ''}`}
+                  onClick={() => { hapticLight(); setCaptureMethod(opt.id) }}
+                >
+                  <span>{opt.icon}</span> {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {saveError && <div className="stk-error">{saveError}</div>}
