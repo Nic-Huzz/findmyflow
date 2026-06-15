@@ -25,6 +25,14 @@ const ProfileHub = () => {
       path: '/user-settings',
       color: '#6c757d'
     },
+    {
+      id: 'build-app',
+      icon: '🔨',
+      title: 'Build an App',
+      description: 'Scale your impact and income by building your own app',
+      path: '/create/build-app/interest',
+      color: '#E9A23B'
+    },
     ...(isAdmin ? [
       {
         id: 'crm',

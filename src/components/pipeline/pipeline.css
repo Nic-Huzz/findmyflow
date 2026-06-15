@@ -345,3 +345,104 @@
 .pl-stat { display: none; }
 .pl-stat-val { display: none; }
 .pl-stat-lbl { display: none; }
+
+/* ─── Template Selector ─── */
+
+.pl-tpl-section { margin-top: 16px; }
+
+.pl-tpl-heading {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  color: rgba(255,255,255,0.3); margin-bottom: 8px; padding: 0 2px;
+}
+
+.pl-tpl-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-radius: 10px;
+  background: rgba(94,23,235,0.08); border: 1px solid rgba(94,23,235,0.15);
+  cursor: pointer; transition: all 0.2s; margin-bottom: 6px;
+}
+.pl-tpl-card:hover { background: rgba(94,23,235,0.14); border-color: rgba(94,23,235,0.3); }
+.pl-tpl-card:active { transform: scale(0.98); }
+
+.pl-tpl-icon { font-size: 20px; flex-shrink: 0; }
+.pl-tpl-info { flex: 1; min-width: 0; }
+.pl-tpl-name { font-size: 13px; font-weight: 600; color: var(--text-primary, #fff); }
+.pl-tpl-desc { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.pl-tpl-go {
+  font-size: 10px; font-weight: 700; color: #5e17eb;
+  padding: 4px 10px; border-radius: 6px;
+  background: rgba(94,23,235,0.12); flex-shrink: 0;
+}
+
+.pl-tpl-error { font-size: 12px; color: #ef4444; margin-bottom: 8px; }
+
+/* Generating */
+.pl-tpl-generating {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 32px 0; gap: 12px;
+}
+.pl-tpl-spinner {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2px solid rgba(94,23,235,0.2); border-top-color: #5e17eb;
+  animation: pl-spin 0.8s linear infinite;
+}
+@keyframes pl-spin { to { transform: rotate(360deg); } }
+.pl-tpl-progress { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+/* Results */
+.pl-tpl-results-header { margin-bottom: 12px; }
+.pl-tpl-back {
+  background: none; border: none; color: rgba(255,255,255,0.4);
+  font-size: 13px; cursor: pointer; padding: 4px 0;
+}
+.pl-tpl-back:hover { color: rgba(255,255,255,0.7); }
+
+.pl-tpl-block {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 14px; margin-bottom: 10px;
+}
+
+.pl-tpl-block-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+}
+.pl-tpl-block-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); }
+
+.pl-tpl-copy {
+  font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 4px;
+  background: rgba(94,23,235,0.15); color: #5e17eb; border: none; cursor: pointer;
+  transition: all 0.15s;
+}
+.pl-tpl-copy:hover { background: rgba(94,23,235,0.25); }
+.pl-tpl-copy.copied { background: rgba(34,197,94,0.15); color: #22c55e; }
+
+.pl-tpl-block-content {
+  font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.6;
+  white-space: pre-wrap; word-break: break-word;
+}
+.pl-tpl-block-error { font-size: 12px; color: #ef4444; }
+
+/* Voice rating */
+.pl-tpl-rating { display: flex; gap: 6px; margin-top: 10px; }
+.pl-tpl-rate {
+  font-size: 11px; padding: 4px 10px; border-radius: 6px;
+  background: rgba(34,197,94,0.08); color: rgba(34,197,94,0.6);
+  border: 1px solid rgba(34,197,94,0.15); cursor: pointer; transition: all 0.15s;
+}
+.pl-tpl-rate:hover { background: rgba(34,197,94,0.15); color: #22c55e; }
+.pl-tpl-rate.active { background: rgba(34,197,94,0.2); color: #22c55e; border-color: #22c55e; }
+.pl-tpl-rate.neg {
+  background: rgba(239,68,68,0.06); color: rgba(239,68,68,0.5);
+  border-color: rgba(239,68,68,0.12);
+}
+.pl-tpl-rate.neg:hover { background: rgba(239,68,68,0.12); color: #ef4444; }
+.pl-tpl-rate.neg.active { background: rgba(239,68,68,0.15); color: #ef4444; border-color: #ef4444; }
+.pl-tpl-rate:disabled { opacity: 0.5; cursor: default; }
+
+.pl-tpl-regen {
+  width: 100%; padding: 10px; border-radius: 8px; margin-top: 8px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.4); font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all 0.15s;
+}
+.pl-tpl-regen:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+.pl-tpl-regen:disabled { opacity: 0.4; cursor: not-allowed; }

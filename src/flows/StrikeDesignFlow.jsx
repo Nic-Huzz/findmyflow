@@ -101,7 +101,7 @@ export default function StrikeDesignFlow() {
     ;(async () => {
       const [remarkRes, scopeRes, archetypeRes, expRes] = await Promise.all([
         supabase.from('remarkable_angles')
-          .select('id, wound_problem, rule_identified, ai_rule_statement, ai_tribe_statement')
+          .select('id, wound_problem, assumption, rule_identified, combination_insight, different, experience, extreme_action_plan, project_name, ai_rule_statement, ai_tribe_statement')
           .eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('scope_map_results')
           .select('stage').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle(),
@@ -114,16 +114,31 @@ export default function StrikeDesignFlow() {
       ])
 
       if (remarkRes.data) {
-        const mv = parseMovement(remarkRes.data.rule_identified)
-        if (mv) {
+        const d = remarkRes.data
+        // Prefer new columns, fall back to parseMovement for legacy data
+        if (d.assumption && d.different) {
           setMovement({
-            ...mv,
-            woundProblem: remarkRes.data.wound_problem,
-            ruleStatement: remarkRes.data.ai_rule_statement,
-            tribeStatement: remarkRes.data.ai_tribe_statement,
+            current: d.assumption,
+            wrong: d.different,
+            mine: d.experience || d.different,
+            project: d.project_name,
+            experience: d.experience,
+            woundProblem: d.wound_problem,
+            ruleStatement: d.ai_rule_statement,
+            tribeStatement: d.ai_tribe_statement,
           })
+        } else {
+          const mv = parseMovement(d.rule_identified)
+          if (mv) {
+            setMovement({
+              ...mv,
+              woundProblem: d.wound_problem,
+              ruleStatement: d.ai_rule_statement,
+              tribeStatement: d.ai_tribe_statement,
+            })
+          }
         }
-        setRemarkableAngleId(remarkRes.data.id)
+        setRemarkableAngleId(d.id)
       }
       if (scopeRes.data) setScopeStage(scopeRes.data.stage)
       if (archetypeRes.data?.essence_archetype) {

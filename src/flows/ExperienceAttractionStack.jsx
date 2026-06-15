@@ -1,7 +1,8 @@
 /**
- * ExperienceAttractionStack — 2 questions → 8 attraction strategies → toggle → seeds checklist
+ * ExperienceAttractionStack — 3 questions → 8 attraction strategies → toggle → seeds checklist
  *
- * Accessed from Growth Line Attract node.
+ * Accessed from Experience Pipeline Attract node.
+ * Questions: capacity, price (saves to experiences.ticket_price), community leaders.
  * Saves selected strategies as marketing checklist items for the experience.
  */
 
@@ -146,6 +147,11 @@ const QUESTIONS = [
     ],
   },
   {
+    id: 'pricing',
+    question: 'What are you charging?',
+    type: 'price_input',
+  },
+  {
     id: 'community_leaders',
     question: 'Do you know anyone with an existing audience in your space?',
     options: [
@@ -167,18 +173,30 @@ export default function ExperienceAttractionStack() {
     if (!experienceId) navigate('/create', { replace: true })
   }, [experienceId, navigate])
 
-  const [step, setStep] = useState('questions') // questions | results | saving
+  // Hide bottom toolbar on mount, restore on unmount
+  useEffect(() => {
+    document.body.setAttribute('data-hide-toolbar', 'true')
+    return () => document.body.removeAttribute('data-hide-toolbar')
+  }, [])
+
+  const [step, setStep] = useState('intro') // intro | questions | results | saving
   const [questionIndex, setQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState({})
   const [experience, setExperience] = useState(null)
   const [selected, setSelected] = useState({})
   const [saved, setSaved] = useState(false)
+  const [priceInput, setPriceInput] = useState('')
 
   // Load experience
   useEffect(() => {
     if (!experienceId) return
     supabase.from('experiences').select('*').eq('id', experienceId).single()
-      .then(({ data }) => { if (data) setExperience(data) })
+      .then(({ data }) => {
+        if (data) {
+          setExperience(data)
+          if (data.ticket_price != null) setPriceInput(String(data.ticket_price))
+        }
+      })
   }, [experienceId])
 
   const currentQuestion = QUESTIONS[questionIndex]
@@ -187,6 +205,27 @@ export default function ExperienceAttractionStack() {
     hapticLight()
     const newAnswers = { ...answers, [currentQuestion.id]: value }
     setAnswers(newAnswers)
+
+    if (questionIndex < QUESTIONS.length - 1) {
+      setQuestionIndex(questionIndex + 1)
+    } else {
+      setStep('results')
+    }
+  }
+
+  const handlePriceSubmit = async () => {
+    hapticLight()
+    const price = Math.max(0, parseFloat(priceInput) || 0)
+    const newAnswers = { ...answers, pricing: price === 0 ? 'free' : 'paid' }
+    setAnswers(newAnswers)
+
+    // Save price to experience so it's the single source of truth
+    if (experienceId) {
+      await supabase.from('experiences')
+        .update({ ticket_price: price > 0 ? price : null })
+        .eq('id', experienceId)
+      setExperience(prev => prev ? { ...prev, ticket_price: price > 0 ? price : null } : prev)
+    }
 
     if (questionIndex < QUESTIONS.length - 1) {
       setQuestionIndex(questionIndex + 1)
@@ -256,27 +295,88 @@ export default function ExperienceAttractionStack() {
 
   return (
     <div className="eas-container">
-      <button className="eas-back" onClick={() => navigate(-1)}>← Back</button>
 
-      {step === 'questions' && currentQuestion && (
-        <div className="eas-question-screen">
-          <div className="eas-step-indicator">{questionIndex + 1} of {QUESTIONS.length}</div>
-          <h2 className="eas-question">{currentQuestion.question}</h2>
-          <div className="eas-options">
-            {currentQuestion.options.map(opt => (
-              <button
-                key={opt.value}
-                className="eas-option"
-                onClick={() => handleAnswer(opt.value)}
-              >
-                <div className="eas-option-label">{opt.label}</div>
-                <div className="eas-option-desc">{opt.desc}</div>
-              </button>
-            ))}
+      {/* ── INTRO SCREEN ── */}
+      {step === 'intro' && (
+        <div className="eas-intro">
+          <div className="eas-intro-top">
+            <div className="eas-intro-icon">🎯</div>
+            <h1 className="eas-intro-title">Attraction Stack</h1>
+            <p className="eas-intro-sub">
+              Pick the strategies that will fill the room for{experience ? ` ${experience.name}` : ' your event'}. We'll recommend what fits based on your event size and network.
+            </p>
+            <div className="eas-intro-steps">
+              <div className="eas-intro-step">
+                <span className="eas-intro-step-num">1</span>
+                <span>Answer 3 quick questions about your event</span>
+              </div>
+              <div className="eas-intro-step">
+                <span className="eas-intro-step-num">2</span>
+                <span>See strategies ranked for your situation</span>
+              </div>
+              <div className="eas-intro-step">
+                <span className="eas-intro-step-num">3</span>
+                <span>Toggle on what you want. They become checklist items.</span>
+              </div>
+            </div>
+          </div>
+          <div className="eas-intro-bottom">
+            <button className="eas-save" onClick={() => { hapticLight(); setStep('questions') }}>
+              Let's go
+            </button>
+            <button className="eas-bottom-back" onClick={() => navigate(-1)}>← Back</button>
           </div>
         </div>
       )}
 
+      {/* ── QUESTIONS ── */}
+      {step === 'questions' && currentQuestion && (
+        <div className="eas-question-screen">
+          <div className="eas-step-indicator">{questionIndex + 1} of {QUESTIONS.length}</div>
+          <h2 className="eas-question">{currentQuestion.question}</h2>
+
+          {currentQuestion.type === 'price_input' ? (
+            <div className="eas-price-input-wrap">
+              <div className="eas-price-field">
+                <span className="eas-price-currency">$</span>
+                <input
+                  type="number"
+                  className="eas-price-input"
+                  placeholder="0"
+                  value={priceInput}
+                  onChange={e => setPriceInput(e.target.value)}
+                  inputMode="decimal"
+                  autoFocus
+                />
+              </div>
+              <p className="eas-price-hint">Enter 0 or leave blank for a free event</p>
+              <button className="eas-save" onClick={handlePriceSubmit} style={{ marginTop: 20 }}>
+                {parseFloat(priceInput) > 0 ? `Continue with $${parseFloat(priceInput)}` : 'Continue as free event'}
+              </button>
+            </div>
+          ) : (
+            <div className="eas-options">
+              {currentQuestion.options.map(opt => (
+                <button
+                  key={opt.value}
+                  className="eas-option"
+                  onClick={() => handleAnswer(opt.value)}
+                >
+                  <div className="eas-option-label">{opt.label}</div>
+                  <div className="eas-option-desc">{opt.desc}</div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          <button className="eas-bottom-back" onClick={() => {
+            if (questionIndex > 0) { setQuestionIndex(questionIndex - 1) }
+            else { setStep('intro') }
+          }}>← Back</button>
+        </div>
+      )}
+
+      {/* ── RESULTS ── */}
       {step === 'results' && (
         <div className="eas-results">
           <h2 className="eas-results-title">
@@ -335,9 +435,11 @@ export default function ExperienceAttractionStack() {
           >
             {saved ? '✓ Saved!' : `Save ${selectedCount} ${selectedCount === 1 ? 'Strategy' : 'Strategies'} to Checklist`}
           </button>
+          <button className="eas-bottom-back" onClick={() => { setStep('questions'); setQuestionIndex(0) }}>← Back</button>
         </div>
       )}
 
+      {/* ── SAVING ── */}
       {step === 'saving' && (
         <div className="eas-saving">
           <div className="eas-saving-text">{saved ? '✓ Added to your marketing checklist!' : 'Saving...'}</div>

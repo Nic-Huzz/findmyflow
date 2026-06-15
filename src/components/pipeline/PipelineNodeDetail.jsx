@@ -8,17 +8,18 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
+import TemplateSelector from './TemplateSelector'
 
 // Module definitions per node
 // certification: true = hidden in v1, shown in certification tier
 const NODE_MODULES = {
   attract: [
+    { key: 'attraction_offer', name: 'Attraction Stack', icon: '🎁', desc: 'Choose your attraction strategies', route: '/create/attraction-stack', passExperienceId: true },
     { key: 'leads_strategy', name: 'Leads Strategy', icon: '📢', desc: 'Define where your audience hangs out', route: '/leads-strategy' },
     { key: 'blow_up_brand', name: 'Blow Up Your Brand', icon: '🔥', desc: 'Find your remarkable angle', route: '/create/remarkable' },
     { key: 'validation', name: 'Validation', icon: '🔍', desc: 'Deep audience research', route: '/validation-flows', multi: 'Capture, Convert', certification: true },
   ],
   capture: [
-    { key: 'attraction_offer', name: 'Attraction Stack', icon: '🎁', desc: 'Choose your attraction strategies', route: '/create/attraction-stack', passExperienceId: true },
     { key: 'lead_magnet', name: 'Marketing Campaign', icon: '📣', desc: 'Build your marketing campaign', route: '/create/marketing-campaign', passExperienceId: true },
     { key: 'funnel_builder', name: 'Funnel Builder', icon: '🗺️', desc: 'Deep funnel mapping', route: '/funnel-builder', certification: true },
   ],
@@ -246,6 +247,14 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
             })}
           </CollapsibleSection>
         )}
+
+        {/* Templates */}
+        <TemplateSelector
+          nodeKey={node.key}
+          experienceId={experience.id}
+          experience={experience}
+          userId={userId}
+        />
 
         {/* Checklist */}
         {checklist && checklist.total > 0 && (

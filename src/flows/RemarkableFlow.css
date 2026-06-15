@@ -54,7 +54,9 @@
 }
 
 .rmk-step-badge {
-  display: inline-block;
+  display: block;
+  width: fit-content;
+  margin: 0 auto 1.25rem;
   padding: 0.3rem 0.8rem;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
@@ -64,7 +66,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 1.25rem;
+  text-align: center;
 }
 
 /* ── Typography ── */
@@ -81,9 +83,16 @@
   min-height: calc(100vh - 70px);
   padding-top: 0;
 }
+.rmk-intro-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 .rmk-intro .rmk-cta {
-  margin-top: auto;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .rmk-intro h1 {
@@ -328,6 +337,125 @@
   color: rgba(255,255,255,0.7);
   font-size: 0.72rem;
   font-weight: 600;
+}
+
+/* ── Project inputs ── */
+.rmk-project-inputs {
+  margin-bottom: 0.5rem;
+}
+.rmk-add-more {
+  display: block;
+  width: fit-content;
+  margin: 0.25rem 0 0;
+  padding: 0.4rem 0.8rem;
+  background: none;
+  border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.rmk-add-more:hover {
+  border-color: rgba(233,162,59,0.3);
+  color: rgba(233,162,59,0.8);
+}
+
+/* ── Score screen ── */
+.rmk-score-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1rem 0;
+}
+.rmk-score-row {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 1rem;
+}
+.rmk-score-header {
+  margin-bottom: 0.6rem;
+}
+.rmk-score-hint {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+  margin-top: 0.15rem;
+}
+.rmk-score-buttons {
+  display: flex;
+  gap: 0.4rem;
+}
+.rmk-score-btn {
+  flex: 1;
+  padding: 0.6rem 0;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
+}
+.rmk-score-btn:hover {
+  border-color: rgba(233,162,59,0.3);
+}
+.rmk-score-active {
+  border-color: #E9A23B;
+  background: rgba(233,162,59,0.12);
+  color: #E9A23B;
+}
+.rmk-score-result {
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+.rmk-score-good {
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.2);
+}
+.rmk-score-low {
+  background: rgba(251,191,36,0.06);
+  border: 1px solid rgba(251,191,36,0.15);
+}
+.rmk-score-total {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #E9A23B;
+}
+.rmk-score-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+.rmk-score-fix {
+  padding: 0.6rem 1rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 10px;
+  color: #E9A23B;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.rmk-score-fix:hover {
+  background: rgba(233,162,59,0.08);
+}
+
+/* ── Or divider ── */
+.rmk-or-divider {
+  text-align: center;
+  margin: 0.75rem 0;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 /* ── Textarea ── */

@@ -2,11 +2,11 @@
  * RemarkableFlow.jsx — /create/remarkable
  * "Blow Up Your Brand — Part 1: Readiness Diagnostic"
  *
- * 3-layer model: Distil → Prove → Ceiling
- * 5-question distillation: Problem → Assumption → Two Worlds → Different → Compress
- * Data-enriched: Scope Map, DNA match, experience counts inform answers
+ * 7-step distillation: Problem → Assumption → Two Worlds → Different → Experience → Compress → Score
+ * Remarkability Score: Uniqueness x Shareability x Simplicity (gates AI generation)
+ * Data-enriched: Scope Map, DNA match, Life Map inform answers
  */
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
@@ -17,16 +17,17 @@ import './RemarkableFlow.css'
 
 const STEPS = {
   INTRO: 'intro',
+  PROJECTS: 'projects',
   PROBLEM: 'problem',
   ASSUMPTION: 'assumption',
   TWO_WORLDS: 'two_worlds',
   DIFFERENT: 'different',
+  EXPERIENCE: 'experience',
   COMPRESSION: 'compression',
+  SCORE: 'score',
   GENERATING: 'generating',
+  REVIEW_RULE: 'review_rule',
   SUMMARY: 'summary',
-  PROOF: 'proof',
-  CEILING: 'ceiling',
-  READINESS: 'readiness',
 }
 
 function creatorSlug(name) {
@@ -49,20 +50,24 @@ export default function RemarkableFlow() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // User inputs — Layer 1 (Distillation)
+  // User inputs — Screen 0 (Projects)
+  const [projectItems, setProjectItems] = useState([''])
+  const [projectType, setProjectType] = useState('') // 'one_thing' | 'separate'
+  const [selectedItems, setSelectedItems] = useState([])
+  const [projectName, setProjectName] = useState('')
+
+  // User inputs — Distillation
   const [problem, setProblem] = useState('')
   const [assumption, setAssumption] = useState('')
   const [twoWorlds, setTwoWorlds] = useState('')
   const [different, setDifferent] = useState('')
+  const [experience, setExperience] = useState('')
   const [compression, setCompression] = useState('')
 
-  // User inputs — Layer 2 (Proof)
-  const [proofCount, setProofCount] = useState('')
-  const [proofEvidence, setProofEvidence] = useState('')
-  const [previousExperience, setPreviousExperience] = useState('')
-
-  // User inputs — Layer 3 (Ceiling)
-  const [ceilingType, setCeilingType] = useState('')
+  // User inputs — Remarkability Score
+  const [scoreUnique, setScoreUnique] = useState(0)
+  const [scoreShare, setScoreShare] = useState(0)
+  const [scoreSimple, setScoreSimple] = useState(0)
 
   // Data from other flows
   const [skills, setSkills] = useState([])
@@ -70,12 +75,12 @@ export default function RemarkableFlow() {
   const [scopeMapProblem, setScopeMapProblem] = useState('')
   const [matchedFounder, setMatchedFounder] = useState('')
   const [matchedOneLiner, setMatchedOneLiner] = useState('')
-  const [experienceCount, setExperienceCount] = useState(0)
   const [existingAngle, setExistingAngle] = useState(null)
   const [loading, setLoading] = useState(true)
 
   // AI result
   const [aiResult, setAiResult] = useState(null)
+  const [editedRuleBreak, setEditedRuleBreak] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [savedAngleId, setSavedAngleId] = useState(null)
@@ -90,7 +95,6 @@ export default function RemarkableFlow() {
           { data: skillData },
           { data: scopeData },
           { data: dnaResult },
-          { count: expCount },
           { data: angleData },
         ] = await Promise.all([
           supabase
@@ -115,12 +119,8 @@ export default function RemarkableFlow() {
             .eq('user_id', user.id)
             .limit(1),
           supabase
-            .from('experiences')
-            .select('id', { count: 'exact', head: true })
-            .eq('user_id', user.id),
-          supabase
             .from('remarkable_angles')
-            .select('*')
+            .select('id, wound_problem, assumption, rule_identified, combination_insight, different, experience, extreme_action_plan, project_name, score_unique, score_share, score_simple, ai_rule_statement, ai_remarkable_bio')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(1),
@@ -130,7 +130,6 @@ export default function RemarkableFlow() {
         setProblems(sorted.map(p => p.cluster_label))
         setSkills(skillData?.map(s => s.cluster_label) || [])
         setScopeMapProblem(scopeData?.[0]?.response_problem || '')
-        setExperienceCount(expCount || 0)
 
         // DNA match → look up oneLiner from JSON
         const founder = dnaResult?.[0]?.matched_founder || ''
@@ -141,15 +140,26 @@ export default function RemarkableFlow() {
         const angle = angleData?.[0]
         if (angle) {
           setExistingAngle(angle)
+          if (angle.id) setSavedAngleId(angle.id)
           if (angle.wound_problem) setProblem(angle.wound_problem)
+          if (angle.assumption) setAssumption(angle.assumption)
           if (angle.combination_insight) setTwoWorlds(angle.combination_insight)
+          if (angle.different) setDifferent(angle.different)
+          if (angle.experience) setExperience(angle.experience)
           if (angle.extreme_action_plan) setCompression(angle.extreme_action_plan)
-          // Parse rule_identified for assumption + different (new format)
-          if (angle.rule_identified) {
+          if (angle.project_name) setProjectName(angle.project_name)
+          if (angle.score_unique) setScoreUnique(angle.score_unique)
+          if (angle.score_share) setScoreShare(angle.score_share)
+          if (angle.score_simple) setScoreSimple(angle.score_simple)
+          // Legacy fallback: parse rule_identified if new columns are empty
+          if (!angle.assumption && angle.rule_identified?.includes('Assumption: ')) {
             const parts = angle.rule_identified.split(' | ')
             parts.forEach(part => {
-              if (part.startsWith('Assumption: ')) setAssumption(part.replace('Assumption: ', ''))
-              if (part.startsWith('Different: ')) setDifferent(part.replace('Different: ', ''))
+              if (part.startsWith('Project: ') && !angle.project_name) setProjectName(part.replace('Project: ', ''))
+              if (part.startsWith('Assumption: ') && !angle.assumption) setAssumption(part.replace('Assumption: ', ''))
+              if (part.startsWith('Different: ') && !angle.different) setDifferent(part.replace('Different: ', ''))
+              if (part.startsWith('Experience: ') && !angle.experience) setExperience(part.replace('Experience: ', ''))
+              if (part.startsWith('One-liner: ') && !angle.extreme_action_plan) setCompression(part.replace('One-liner: ', ''))
             })
           }
         }
@@ -161,7 +171,45 @@ export default function RemarkableFlow() {
     })()
   }, [user])
 
-  // Generate AI synthesis
+  // Auto-save when step changes (after render with latest state)
+  useEffect(() => {
+    if (step !== STEPS.INTRO && step !== STEPS.PROJECTS && step !== STEPS.SCORE && step !== STEPS.GENERATING && step !== STEPS.SUMMARY && user) {
+      autoSave()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step])
+
+  // Auto-save progress after each screen (silent, non-blocking)
+  // Only saves fields that have values — never blanks existing data
+  const autoSave = () => {
+    if (!user) return
+    const ruleId = `Project: ${projectName} | Problem: ${problem} | Assumption: ${assumption} | Two worlds: ${twoWorlds} | Different: ${different} | Experience: ${experience} | One-liner: ${compression} | Score: ${scoreUnique}x${scoreShare}x${scoreSimple}=${scoreUnique * scoreShare * scoreSimple}`
+
+    const fields = { rule_identified: ruleId }
+    if (problem) fields.wound_problem = problem
+    if (assumption) fields.assumption = assumption
+    if (twoWorlds) fields.combination_insight = twoWorlds
+    if (different) fields.different = different
+    if (experience) fields.experience = experience
+    if (compression) fields.extreme_action_plan = compression
+    if (projectName) fields.project_name = projectName
+    if (scoreUnique) fields.score_unique = scoreUnique
+    if (scoreShare) fields.score_share = scoreShare
+    if (scoreSimple) fields.score_simple = scoreSimple
+
+    if (savedAngleId) {
+      supabase.from('remarkable_angles').update(fields).eq('id', savedAngleId)
+        .then(({ error }) => { if (error) console.error('Auto-save update failed:', error.message) })
+    } else {
+      supabase.from('remarkable_angles').insert({ ...fields, user_id: user.id }).select('id').single()
+        .then(({ data: row, error }) => {
+          if (error) console.error('Auto-save insert failed:', error.message)
+          else if (row?.id) setSavedAngleId(row.id)
+        })
+    }
+  }
+
+  // Generate AI extractions from user's answers
   const generate = async () => {
     setStep(STEPS.GENERATING)
     setError(null)
@@ -170,47 +218,63 @@ export default function RemarkableFlow() {
     try {
       const { data, error: fnError } = await supabase.functions.invoke('generate-remarkable-angle', {
         body: {
-          wound_problem: `The problem: ${problem}. The assumption everyone follows: ${assumption}`,
-          rule_identified: `Assumption to break: ${assumption}. How they're different: ${different}`,
+          wound_problem: problem,
+          rule_identified: assumption,
           combination_insight: twoWorlds,
-          extreme_action_plan: `One-sentence method: ${compression}`,
+          extreme_action_plan: `${different}. The experience: ${experience}. User's one-liner: ${compression}`,
+          user_name: projectName,
         },
       })
       if (fnError) throw fnError
       setAiResult(data)
+      setEditedRuleBreak(data?.rule_statement || '')
       hapticSuccess()
-      setStep(STEPS.SUMMARY)
+      setStep(STEPS.REVIEW_RULE)
     } catch (err) {
       console.error('Remarkable generation error:', err)
       setError('Something went wrong. Let\'s try again.')
-      setStep(STEPS.COMPRESSION)
+      setStep(STEPS.SCORE)
     }
   }
 
-  // Save result — returns true on success, false on failure
+  // Save final result — updates existing auto-saved row or inserts new
   const save = async () => {
     if (!user || saving) return false
     setSaving(true)
     try {
-      const { data: insertedRow, error: saveErr } = await supabase.from('remarkable_angles').insert({
-        user_id: user.id,
+      const coreData = {
         wound_problem: problem,
-        rule_identified: `Problem: ${problem} | Assumption: ${assumption} | Two worlds: ${twoWorlds} | Different: ${different} | One-liner: ${compression}`,
+        assumption: assumption,
         combination_insight: twoWorlds,
+        different: different,
+        experience: experience,
         extreme_action_plan: compression,
-        ai_rule_statement: aiResult?.rule_statement || null,
+        project_name: projectName,
+        score_unique: scoreUnique || null,
+        score_share: scoreShare || null,
+        score_simple: scoreSimple || null,
+        rule_identified: `Project: ${projectName} | Problem: ${problem} | Assumption: ${assumption} | Two worlds: ${twoWorlds} | Different: ${different} | Experience: ${experience} | One-liner: ${compression} | Score: ${scoreUnique}x${scoreShare}x${scoreSimple}=${scoreUnique * scoreShare * scoreSimple}`,
+        ai_rule_statement: editedRuleBreak || aiResult?.rule_statement || null,
         ai_remarkable_bio: aiResult?.remarkable_bio || null,
-        ai_tribe_statement: aiResult?.tribe_statement || null,
-      }).select('id').single()
-      if (saveErr) throw saveErr
-      if (insertedRow?.id) setSavedAngleId(insertedRow.id)
+        ai_tribe_statement: null,
+      }
+      let rowId = savedAngleId
+      if (rowId) {
+        const { error: updateErr } = await supabase.from('remarkable_angles').update(coreData).eq('id', rowId)
+        if (updateErr) throw updateErr
+      } else {
+        const { data: insertedRow, error: insertErr } = await supabase.from('remarkable_angles').insert({ ...coreData, user_id: user.id }).select('id').single()
+        if (insertErr) throw insertErr
+        if (insertedRow?.id) rowId = insertedRow.id
+      }
+      if (rowId) setSavedAngleId(rowId)
       // Auto-populate brain
       onRemarkableComplete(user.id, {
         ruleIdentified: `Assumption: ${assumption} | Two worlds: ${twoWorlds} | Different: ${different}`,
         combinationInsight: twoWorlds,
         extremeAction: compression,
         aiRuleStatement: aiResult?.rule_statement || null,
-        aiTribeStatement: aiResult?.tribe_statement || null,
+        aiTribeStatement: null,
       })
       hapticSuccess()
       return true
@@ -222,43 +286,6 @@ export default function RemarkableFlow() {
       setSaving(false)
     }
   }
-
-  // Save readiness assessment (Layer 2 + 3)
-  const saveReadiness = async () => {
-    if (!user) return
-    try {
-      await supabase.from('blow_up_readiness').insert({
-        user_id: user.id,
-        proof_count: proofCount || 'not_yet',
-        proof_evidence: proofEvidence || null,
-        previous_experience: previousExperience || null,
-        ceiling_type: ceilingType || 'not_yet',
-        layer1_status: readiness.layer1,
-        layer2_status: readiness.layer2,
-        layer3_status: readiness.layer3,
-        all_ready: readiness.allReady,
-        matched_founder_used: matchedFounder || null,
-        experience_count_at_time: experienceCount,
-        remarkable_angle_id: savedAngleId || null,
-      })
-    } catch (err) {
-      console.warn('Readiness save failed:', err.message)
-    }
-  }
-
-  // Readiness computation
-  const readiness = useMemo(() => {
-    const layer1 = compression.trim().length > 10
-    const layer2 = proofCount === '10_50' || proofCount === '50_plus'
-    const layer2Amber = proofCount === '1_10'
-    const layer3 = ceilingType === 'reach' || ceilingType === 'credibility'
-    return {
-      layer1: layer1 ? 'green' : 'amber',
-      layer2: layer2 ? 'green' : layer2Amber ? 'amber' : 'red',
-      layer3: layer3 ? 'green' : 'red',
-      allReady: layer1 && layer2 && layer3,
-    }
-  }, [compression, proofCount, ceilingType])
 
   if (loading) {
     return (
@@ -276,36 +303,137 @@ export default function RemarkableFlow() {
       <div className="rmk">
         <div className="rmk-container rmk-screen">
           <div className="rmk-intro">
-            <div className="rmk-badge">Blow Up Your Brand</div>
-            {existingAngle ? (
-              <>
-                <h1>Welcome back. Let's <span className="rmk-gold">sharpen</span> your angle.</h1>
-                <p>Last time you identified your remarkable angle. Let's see if it's evolved.</p>
-              </>
-            ) : (
-              <>
-                <h1>What makes you <span className="rmk-gold">worth talking about</span>?</h1>
-                <p>We studied 129 experience creators. Every one who sustained had 3 ingredients. Every one who peaked was missing at least one.</p>
-              </>
-            )}
-
-            <div className="rmk-layers-preview">
-              <div className="rmk-layer-pill">
-                <span className="rmk-layer-num">1</span>
-                <span>Distil your method</span>
-              </div>
-              <div className="rmk-layer-pill">
-                <span className="rmk-layer-num">2</span>
-                <span>Prove it works</span>
-              </div>
-              <div className="rmk-layer-pill">
-                <span className="rmk-layer-num">3</span>
-                <span>Find your ceiling</span>
-              </div>
+            <div className="rmk-intro-content">
+              <div className="rmk-badge">Blow Up Your Brand</div>
+              {existingAngle ? (
+                <>
+                  <h1>Welcome back. Let's <span className="rmk-gold">sharpen</span> your angle.</h1>
+                  <p>Last time you identified your remarkable angle. Let's see if it's evolved.</p>
+                </>
+              ) : (
+                <>
+                  <h1>What makes you <span className="rmk-gold">worth talking about</span>?</h1>
+                  <p>We studied 129 experience creators. Every one who sustained had 3 ingredients. Every one who peaked was missing at least one.</p>
+                </>
+              )}
             </div>
 
-            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.PROBLEM) }}>
+            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.PROJECTS) }}>
               {existingAngle ? 'Sharpen my angle' : 'Let\'s go'}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 0: PROJECTS ──
+  if (step === STEPS.PROJECTS) {
+    const filledItems = projectItems.filter(s => s.trim())
+    const canAddMore = projectItems.length < 5
+    const showTypeChoice = filledItems.length >= 2 && !projectType
+    const singleItem = filledItems.length === 1
+    const showNameInput = projectType === 'one_thing' || (projectType === 'separate' && selectedItems.length > 0) || singleItem
+    const canProceed = projectName.trim().length >= 2
+
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Getting started</div>
+          <h2 className="rmk-heading">What are you <span className="rmk-gold">building</span>?</h2>
+          <p className="rmk-prompt">List everything you're working on. Events, apps, content, products.</p>
+
+          <div className="rmk-project-inputs">
+            {projectItems.map((item, i) => (
+              <textarea
+                key={i}
+                className="rmk-textarea"
+                value={item}
+                onChange={e => {
+                  const next = [...projectItems]
+                  next[i] = e.target.value
+                  setProjectItems(next)
+                }}
+                placeholder={i === 0 ? 'e.g. Dance events, breathwork workshops' : 'e.g. An app, a podcast, a course'}
+                rows={1}
+                style={{ marginBottom: '0.5rem' }}
+              />
+            ))}
+            {canAddMore && (
+              <button
+                className="rmk-add-more"
+                onClick={() => { hapticLight(); setProjectItems([...projectItems, '']) }}
+              >
+                + Add more
+              </button>
+            )}
+          </div>
+
+          {showTypeChoice && (
+            <div style={{ marginTop: '1.25rem' }}>
+              <p className="rmk-prompt">Are these expressions of one thing, or separate projects?</p>
+              <div className="rmk-problem-list">
+                <button
+                  className="rmk-problem-btn"
+                  onClick={() => { hapticLight(); setProjectType('one_thing'); setSelectedItems(filledItems) }}
+                >
+                  Expressions of one thing
+                </button>
+                <button
+                  className="rmk-problem-btn"
+                  onClick={() => { hapticLight(); setProjectType('separate') }}
+                >
+                  Separate projects
+                </button>
+              </div>
+            </div>
+          )}
+
+          {projectType === 'separate' && (
+            <div style={{ marginTop: '1rem' }}>
+              <p className="rmk-prompt">Select which ones you want to focus on:</p>
+              <div className="rmk-problem-list">
+                {filledItems.map((item, i) => (
+                  <button
+                    key={i}
+                    className={`rmk-problem-btn ${selectedItems.includes(item) ? 'rmk-problem-selected' : ''}`}
+                    onClick={() => {
+                      hapticLight()
+                      setSelectedItems(prev =>
+                        prev.includes(item) ? prev.filter(s => s !== item) : [...prev, item]
+                      )
+                    }}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {showNameInput && (
+            <div style={{ marginTop: '1.25rem' }}>
+              <p className="rmk-prompt">
+                {projectType === 'one_thing' ? 'What do you call this movement?' : 'What do you call this project?'}
+              </p>
+              <textarea
+                className="rmk-textarea"
+                value={projectName}
+                onChange={e => setProjectName(e.target.value)}
+                placeholder={projectType === 'one_thing' ? 'e.g. Vibe Rise' : 'e.g. My breathwork workshop'}
+                rows={1}
+              />
+            </div>
+          )}
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={!canProceed}
+              onClick={() => { hapticLight(); setStep(STEPS.PROBLEM) }}
+            >
+              Next
             </button>
           </div>
         </div>
@@ -318,43 +446,43 @@ export default function RemarkableFlow() {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Distil · 1 of 5</div>
-          <h2 className="rmk-heading">What problem do you see that nobody's <span className="rmk-gold">solving right</span>?</h2>
+          <div className="rmk-step-badge">Distil · 1 of 7</div>
+          <h2 className="rmk-heading">What problem does {projectName ? <span className="rmk-gold">{projectName}</span> : 'your work'} solve that nobody else is <span className="rmk-gold">solving right</span>?</h2>
           <p className="rmk-prompt">The one that still fires you up when you think about it.</p>
 
-          {problems.length > 0 && (
-            <div className="rmk-problem-list">
-              {problems.map((prob, i) => (
-                <button
-                  key={i}
-                  className={`rmk-problem-btn ${problem === prob ? 'rmk-problem-selected' : ''}`}
-                  onClick={() => { hapticLight(); setProblem(prob) }}
-                >
-                  {prob}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {!problems.length && (
-            <textarea
-              className="rmk-textarea"
-              value={problem}
-              onChange={e => setProblem(e.target.value)}
-              placeholder="e.g. Real transformation is paywalled. People spend thousands and are still stuck."
-              rows={3}
-              autoFocus
-            />
-          )}
-
-          {scopeMapProblem && !problems.length && (
+          {scopeMapProblem && (
             <div className="rmk-context-card">
               You told us before: "{scopeMapProblem}"
             </div>
           )}
 
+          {problems.length > 0 && (
+            <>
+              <div className="rmk-problem-list">
+                {problems.map((prob, i) => (
+                  <button
+                    key={i}
+                    className={`rmk-problem-btn ${problem === prob ? 'rmk-problem-selected' : ''}`}
+                    onClick={() => { hapticLight(); setProblem(prob) }}
+                  >
+                    {prob}
+                  </button>
+                ))}
+              </div>
+              <div className="rmk-or-divider"><span>or write your own</span></div>
+            </>
+          )}
+
+          <textarea
+            className="rmk-textarea"
+            value={problem}
+            onChange={e => setProblem(e.target.value)}
+            placeholder="e.g. Real transformation is paywalled. People spend thousands and are still stuck."
+            rows={3}
+          />
+
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(STEPS.PROJECTS)}>Back</button>
             <button
               className="rmk-cta"
               disabled={!problem || problem.trim().length < 5}
@@ -373,7 +501,7 @@ export default function RemarkableFlow() {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Distil · 2 of 5</div>
+          <div className="rmk-step-badge">Distil · 2 of 7</div>
           <div className="rmk-context-card">{problem}</div>
           <h2 className="rmk-heading">What does everyone assume is <span className="rmk-gold">required</span> to solve it?</h2>
           <p className="rmk-prompt">What rule does everyone follow that you think is wrong?</p>
@@ -407,10 +535,10 @@ export default function RemarkableFlow() {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Distil · 3 of 5</div>
+          <div className="rmk-step-badge">Distil · 3 of 7</div>
           <div className="rmk-context-card">{assumption}</div>
-          <h2 className="rmk-heading">What do you bring from <span className="rmk-gold">outside</span> that lets you see past that?</h2>
-          <p className="rmk-prompt">What's your unusual combination of backgrounds, skills, or experiences?</p>
+          <h2 className="rmk-heading">What experience or background showed you that assumption is <span className="rmk-gold">wrong</span>?</h2>
+          <p className="rmk-prompt">What did you live through that made you see what others can't?</p>
 
           {skills.length > 0 && (
             <div className="rmk-skills-hint">
@@ -424,14 +552,14 @@ export default function RemarkableFlow() {
           )}
 
           <div className="rmk-example-card">
-            Radha Agrawal's nightlife background showed her parties don't need alcohol. Phil Jackson's Zen practice showed him coaches don't need to shout. What do your worlds show you?
+            Radha Agrawal spent years in nightlife and saw parties don't need alcohol. Wim Hof nearly lost everything and discovered breathing could control what doctors said was impossible.
           </div>
 
           <textarea
             className="rmk-textarea"
             value={twoWorlds}
             onChange={e => setTwoWorlds(e.target.value)}
-            placeholder="e.g. VC analytical thinking showed me healing can be designed like a product. Breathwork showed me it doesn't need a clinic."
+            placeholder="e.g. I did a year-long fear challenge that changed my life more in 3 months than 3 years of online courses"
             rows={3}
             autoFocus
           />
@@ -456,10 +584,10 @@ export default function RemarkableFlow() {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Distil · 4 of 5</div>
+          <div className="rmk-step-badge">Distil · 4 of 7</div>
           <div className="rmk-context-card">{assumption}</div>
-          <h2 className="rmk-heading">Remove that assumption. How do you <span className="rmk-gold">solve it differently</span>?</h2>
-          <p className="rmk-prompt">Given what your worlds showed you, what does your approach look like?</p>
+          <h2 className="rmk-heading">Remove that assumption. How does {projectName ? <span className="rmk-gold">{projectName}</span> : 'your approach'} <span className="rmk-gold">solve it differently</span>?</h2>
+          <p className="rmk-prompt">Given what you lived through, what does your approach look like?</p>
 
           <textarea
             className="rmk-textarea"
@@ -475,6 +603,43 @@ export default function RemarkableFlow() {
             <button
               className="rmk-cta"
               disabled={different.trim().length < 10}
+              onClick={() => { hapticLight(); setStep(STEPS.EXPERIENCE) }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── THE EXPERIENCE (Product) ──
+  if (step === STEPS.EXPERIENCE) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Distil · 5 of 7</div>
+          <h2 className="rmk-heading">What's the <span className="rmk-gold">experience</span> people actually have?</h2>
+          <p className="rmk-prompt">Describe the thing someone walks into, signs up for, or downloads. The product that IS the rule break.</p>
+
+          <div className="rmk-example-card">
+            Dawnbreak: 5am sober silent discos on the beach. Byron Katie: 4 questions anyone can ask themselves. Wim Hof: A breathing protocol + ice baths.
+          </div>
+
+          <textarea
+            className="rmk-textarea"
+            value={experience}
+            onChange={e => setExperience(e.target.value)}
+            placeholder="e.g. A weekly fear challenge where participants do one scary thing and track how it shifts their state"
+            rows={3}
+            autoFocus
+          />
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.DIFFERENT)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={experience.trim().length < 10}
               onClick={() => { hapticLight(); setStep(STEPS.COMPRESSION) }}
             >
               Next
@@ -485,12 +650,12 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SCREEN 6: COMPRESSION GATE ──
+  // ── COMPRESSION GATE ──
   if (step === STEPS.COMPRESSION) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Distil · 5 of 5</div>
+          <div className="rmk-step-badge">Distil · 6 of 7</div>
           <h2 className="rmk-heading">State your method in <span className="rmk-gold">one sentence</span>.</h2>
           <p className="rmk-prompt">If you can compress it, it's ready to travel. If you can't, it needs more reps.</p>
 
@@ -518,13 +683,13 @@ export default function RemarkableFlow() {
           {error && <div className="rmk-error">{error}</div>}
 
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.DIFFERENT)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(STEPS.EXPERIENCE)}>Back</button>
             <button
               className="rmk-cta"
               disabled={compression.trim().length < 5}
-              onClick={generate}
+              onClick={() => { hapticLight(); setStep(STEPS.SCORE) }}
             >
-              Show me my angle
+              Next
             </button>
           </div>
         </div>
@@ -532,7 +697,117 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SCREEN 7: GENERATING ──
+  // ── SCORE YOURSELF ──
+  if (step === STEPS.SCORE) {
+    const total = scoreUnique * scoreShare * scoreSimple
+    const allScored = scoreUnique > 0 && scoreShare > 0 && scoreSimple > 0
+    const anyLow = allScored && (scoreUnique < 3 || scoreShare < 3 || scoreSimple < 3)
+
+    const ScoreRow = ({ label, value, setValue, hint }) => (
+      <div className="rmk-score-row">
+        <div className="rmk-score-header">
+          <div className="rmk-output-label">{label}</div>
+          <div className="rmk-score-hint">{hint}</div>
+        </div>
+        <div className="rmk-score-buttons">
+          {[1, 2, 3, 4, 5].map(n => (
+            <button
+              key={n}
+              className={`rmk-score-btn ${value === n ? 'rmk-score-active' : ''}`}
+              onClick={() => { hapticLight(); setValue(n) }}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Rate your angle</div>
+          <h2 className="rmk-heading">How <span className="rmk-gold">remarkable</span> is this?</h2>
+          <p className="rmk-prompt">Be honest. Low scores help you sharpen.</p>
+
+          {experience && (
+            <div className="rmk-context-card">{experience}</div>
+          )}
+
+          <div className="rmk-score-section">
+            <ScoreRow
+              label="Uniqueness"
+              value={scoreUnique}
+              setValue={setScoreUnique}
+              hint="How many others do this thing this way?"
+            />
+            <ScoreRow
+              label="Shareability"
+              value={scoreShare}
+              setValue={setScoreShare}
+              hint="If you saw someone doing this, would you tell a friend?"
+            />
+            <ScoreRow
+              label="Simplicity"
+              value={scoreSimple}
+              setValue={setScoreSimple}
+              hint="Could a stranger get it in under 10 seconds?"
+            />
+          </div>
+
+          {allScored && (
+            <div className={`rmk-score-result ${anyLow ? 'rmk-score-low' : 'rmk-score-good'}`}>
+              <div className="rmk-score-total">{total}<span style={{ fontSize: '0.7rem', opacity: 0.5 }}>/125</span></div>
+              {anyLow ? (
+                <>
+                  <p style={{ margin: '0.5rem 0 0', fontSize: '0.88rem' }}>
+                    {scoreUnique < 3 && 'Your angle might not be different enough. '}
+                    {scoreShare < 3 && 'It\'s not remarkable enough to spread yet. '}
+                    {scoreSimple < 3 && 'It\'s too complex to travel. '}
+                    Sharpen it.
+                  </p>
+                  <div className="rmk-score-actions">
+                    {scoreUnique < 3 && (
+                      <button className="rmk-score-fix" onClick={() => setStep(STEPS.ASSUMPTION)}>
+                        Sharpen your assumption
+                      </button>
+                    )}
+                    {scoreShare < 3 && (
+                      <button className="rmk-score-fix" onClick={() => setStep(STEPS.DIFFERENT)}>
+                        Sharpen how you're different
+                      </button>
+                    )}
+                    {scoreSimple < 3 && (
+                      <button className="rmk-score-fix" onClick={() => setStep(STEPS.COMPRESSION)}>
+                        Sharpen your one-liner
+                      </button>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <p style={{ margin: '0.5rem 0 0', fontSize: '0.88rem', color: 'rgba(255,255,255,0.7)' }}>
+                  Your angle is remarkable. Let's generate your positioning.
+                </p>
+              )}
+            </div>
+          )}
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.COMPRESSION)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={!allScored}
+              onClick={generate}
+            >
+              {anyLow ? 'Generate anyway' : 'Show me my angle'}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── GENERATING ──
   if (step === STEPS.GENERATING) {
     return (
       <div className="rmk">
@@ -544,271 +819,114 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SCREEN 7: SUMMARY ──
+  // ── REVIEW RULE BREAK ──
+  if (step === STEPS.REVIEW_RULE && aiResult) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-badge">Your Rule Break</div>
+          <p className="rmk-prompt">The AI generated this from your answers. Edit it until it feels right.</p>
+
+          <textarea
+            className="rmk-textarea"
+            value={editedRuleBreak}
+            onChange={e => setEditedRuleBreak(e.target.value)}
+            placeholder="Your rule break statement..."
+            rows={3}
+            autoFocus
+            style={{ fontSize: '1.05rem', fontWeight: 600 }}
+          />
+
+          <div className="rmk-example-card">
+            Examples: "You don't change by learning, you change by being in your discomfort zone." "The question is never why the addiction, but why the pain."
+          </div>
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.SCORE)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={editedRuleBreak.trim().length < 5}
+              onClick={() => { hapticLight(); setStep(STEPS.SUMMARY) }}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SUMMARY ──
   if (step === STEPS.SUMMARY && aiResult) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-badge">Your Remarkable Angle</div>
+          <div className="rmk-badge">{projectName || 'Your'} Remarkable Angle</div>
+
+          {/* Rule break statement */}
+          {editedRuleBreak && (
+            <div className="rmk-output-card rmk-output-tribe" style={{ marginBottom: '1rem' }}>
+              <div className="rmk-output-label">Your rule break</div>
+              <p className="rmk-output-text" style={{ fontWeight: 700, fontSize: '1.05rem' }}>{editedRuleBreak}</p>
+            </div>
+          )}
 
           <div className="rmk-output-section">
             <div className="rmk-output-card">
-              <div className="rmk-output-label">Your rule break</div>
-              <p className="rmk-output-text">{aiResult.rule_statement}</p>
+              <div className="rmk-output-label">The problem{projectName ? ` ${projectName}` : ' you'} solve{projectName ? 's' : ''}</div>
+              <p className="rmk-output-text">{problem}</p>
             </div>
 
             <div className="rmk-output-card">
+              <div className="rmk-output-label">The assumption you break</div>
+              <p className="rmk-output-text">{assumption}</p>
+            </div>
+
+            <div className="rmk-output-card">
+              <div className="rmk-output-label">What showed you it was wrong</div>
+              <p className="rmk-output-text">{twoWorlds}</p>
+            </div>
+
+            <div className="rmk-output-card">
+              <div className="rmk-output-label">How {projectName || 'you\'re'} different</div>
+              <p className="rmk-output-text">{different}</p>
+            </div>
+
+            <div className="rmk-output-card">
+              <div className="rmk-output-label">The experience</div>
+              <p className="rmk-output-text">{experience}</p>
+            </div>
+
+            <div className="rmk-output-card">
+              <div className="rmk-output-label">Your one-liner</div>
+              <p className="rmk-output-text" style={{ fontWeight: 700, fontSize: '1.05rem' }}>{compression}</p>
+            </div>
+          </div>
+
+          {aiResult.remarkable_bio && (
+            <div className="rmk-output-card" style={{ marginTop: '0.75rem' }}>
               <div className="rmk-output-label">Your remarkable bio</div>
               <p className="rmk-output-text">{aiResult.remarkable_bio}</p>
             </div>
-
-            <div className="rmk-output-card rmk-output-tribe">
-              <div className="rmk-output-label">Your tribe</div>
-              <p className="rmk-output-text">{aiResult.tribe_statement}</p>
-            </div>
-          </div>
-
-          <div className="rmk-output-card" style={{ marginBottom: '1.5rem' }}>
-            <div className="rmk-output-label">Your one-liner</div>
-            <p className="rmk-output-text" style={{ fontWeight: 700, fontSize: '1.1rem' }}>{compression}</p>
-          </div>
+          )}
 
           {error && <div className="rmk-error">{error}</div>}
 
-          <p className="rmk-prompt" style={{ textAlign: 'center' }}>
-            That's your angle. Now let's check if you're ready to deploy it.
-          </p>
-
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.COMPRESSION)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(STEPS.REVIEW_RULE)}>Back</button>
             <button
               className="rmk-cta"
               disabled={saving}
               onClick={async () => {
                 const saved = await save()
                 if (saved) {
-                  hapticLight()
-                  setStep(STEPS.PROOF)
+                  navigate('/create')
                 }
               }}
             >
-              {saving ? 'Saving...' : 'Check my readiness'}
+              {saving ? 'Saving...' : 'Save my angle'}
             </button>
           </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── SCREEN 8: PROOF ──
-  if (step === STEPS.PROOF) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Prove · 1 of 2</div>
-          <h2 className="rmk-heading">Have you <span className="rmk-gold">run this</span>?</h2>
-          <p className="rmk-prompt">How many people have experienced your method?</p>
-
-          {experienceCount > 0 && (
-            <div className="rmk-context-card">
-              You've created {experienceCount} experience{experienceCount !== 1 ? 's' : ''} in the app. Include any work outside the app too.
-            </div>
-          )}
-
-          <div className="rmk-problem-list">
-            {[
-              { key: 'not_yet', label: 'Not yet' },
-              { key: '1_10', label: '1-10 people' },
-              { key: '10_50', label: '10-50 people' },
-              { key: '50_plus', label: '50+ people' },
-            ].map(opt => (
-              <button
-                key={opt.key}
-                className={`rmk-problem-btn ${proofCount === opt.key ? 'rmk-problem-selected' : ''}`}
-                onClick={() => { hapticLight(); setProofCount(opt.key) }}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-
-          {proofCount && proofCount !== 'not_yet' && (
-            <>
-              <p className="rmk-prompt" style={{ marginTop: '0.5rem' }}>What happened to them? What changed?</p>
-              <textarea
-                className="rmk-textarea"
-                value={proofEvidence}
-                onChange={e => setProofEvidence(e.target.value)}
-                placeholder="e.g. People said they felt lighter. Three came back every week."
-                rows={3}
-              />
-            </>
-          )}
-
-          <p className="rmk-prompt" style={{ marginTop: '1rem' }}>Have you done something like this before, even in a different context?</p>
-          <textarea
-            className="rmk-textarea"
-            value={previousExperience}
-            onChange={e => setPreviousExperience(e.target.value)}
-            placeholder="e.g. I ran team workshops at my corporate job for 3 years"
-            rows={2}
-          />
-
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.SUMMARY)}>Back</button>
-            <button
-              className="rmk-cta"
-              disabled={!proofCount}
-              onClick={() => { hapticLight(); setStep(STEPS.CEILING) }}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── SCREEN 9: CEILING ──
-  if (step === STEPS.CEILING) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Ceiling · 2 of 2</div>
-          <h2 className="rmk-heading">Where are you <span className="rmk-gold">stuck</span>?</h2>
-          <p className="rmk-prompt">Which sounds most like where you are right now?</p>
-
-          <div className="rmk-problem-list">
-            <button
-              className={`rmk-problem-btn ${ceilingType === 'reach' ? 'rmk-problem-selected' : ''}`}
-              onClick={() => { hapticLight(); setCeilingType('reach') }}
-            >
-              My method works. People love it. But I can only reach the people in my room. It's relevant to way more.
-            </button>
-            <button
-              className={`rmk-problem-btn ${ceilingType === 'credibility' ? 'rmk-problem-selected' : ''}`}
-              onClick={() => { hapticLight(); setCeilingType('credibility') }}
-            >
-              My method works. But people who haven't experienced it don't believe me yet. I need proof that scales.
-            </button>
-            <button
-              className={`rmk-problem-btn ${ceilingType === 'not_yet' ? 'rmk-problem-selected' : ''}`}
-              onClick={() => { hapticLight(); setCeilingType('not_yet') }}
-            >
-              I'm still filling the room I'm in. My format isn't the bottleneck yet.
-            </button>
-          </div>
-
-          <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.PROOF)}>Back</button>
-            <button
-              className="rmk-cta"
-              disabled={!ceilingType}
-              onClick={() => { hapticLight(); setStep(STEPS.READINESS) }}
-            >
-              Show my readiness
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── SCREEN 10: READINESS MAP ──
-  if (step === STEPS.READINESS) {
-    return (
-      <div className="rmk">
-        <div className="rmk-container rmk-screen">
-          <div className="rmk-badge">Your Readiness</div>
-
-          <div className="rmk-readiness-map">
-            <div className={`rmk-readiness-layer rmk-readiness-${readiness.layer1}`}>
-              <div className="rmk-readiness-dot" />
-              <div>
-                <div className="rmk-readiness-label">Distilled</div>
-                <div className="rmk-readiness-detail">
-                  {readiness.layer1 === 'green'
-                    ? `"${compression}"`
-                    : 'Your method needs more compression.'}
-                </div>
-              </div>
-            </div>
-
-            <div className={`rmk-readiness-layer rmk-readiness-${readiness.layer2}`}>
-              <div className="rmk-readiness-dot" />
-              <div>
-                <div className="rmk-readiness-label">Proven</div>
-                <div className="rmk-readiness-detail">
-                  {readiness.layer2 === 'green'
-                    ? `${proofCount === '50_plus' ? '50+' : '10-50'} people have experienced it.`
-                    : readiness.layer2 === 'amber'
-                      ? '1-10 people. Keep going. Run the 3% chain after every experience.'
-                      : 'No proof yet. Run 5 experiences. Capture one 3% improvement after each.'}
-                </div>
-              </div>
-            </div>
-
-            <div className={`rmk-readiness-layer rmk-readiness-${readiness.layer3}`}>
-              <div className="rmk-readiness-dot" />
-              <div>
-                <div className="rmk-readiness-label">Ceiling</div>
-                <div className="rmk-readiness-detail">
-                  {ceilingType === 'reach'
-                    ? 'You\'re hitting a reach ceiling. Your method is ready for a format change.'
-                    : ceilingType === 'credibility'
-                      ? 'You\'re hitting a credibility ceiling. You need proof that scales.'
-                      : 'Keep filling the room you\'re in. Run the 3% chain. The ceiling will come.'}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {matchedFounder && (
-            <div className="rmk-output-card" style={{ marginTop: '1.25rem' }}>
-              <div className="rmk-output-label">Your DNA match</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                <img
-                  className="rmk-edu-avatar"
-                  src={`/images/creators/${creatorSlug(matchedFounder)}.png`}
-                  alt={matchedFounder}
-                  onError={e => { e.target.style.display = 'none' }}
-                />
-                <span className="rmk-edu-name">{matchedFounder}</span>
-              </div>
-              {matchedOneLiner && (
-                <p className="rmk-output-text" style={{ fontStyle: 'italic', fontSize: '0.85rem' }}>
-                  "{matchedOneLiner}"
-                </p>
-              )}
-            </div>
-          )}
-
-          {readiness.allReady ? (
-            <div className="rmk-ready-card">
-              <p style={{ fontWeight: 700, fontSize: '1.05rem', margin: '0 0 0.5rem' }}>You're ready.</p>
-              <p style={{ margin: 0, color: 'rgba(255,255,255,0.6)', fontSize: '0.88rem' }}>
-                Your method is distilled, proven, and hitting a ceiling. Time to change the format.
-              </p>
-            </div>
-          ) : (
-            <div className="rmk-notready-card">
-              <p style={{ fontWeight: 700, fontSize: '1.05rem', margin: '0 0 0.5rem' }}>Keep building.</p>
-              <p style={{ margin: 0, color: 'rgba(255,255,255,0.6)', fontSize: '0.88rem' }}>
-                After every experience, ask: "What's the one thing I'd improve by 3%?" That's the chain that turns good into undeniable.
-              </p>
-            </div>
-          )}
-
-          <button
-            className="rmk-cta"
-            style={{ width: '100%', marginTop: '1.25rem' }}
-            onClick={async () => {
-              await saveReadiness()
-              navigate('/create')
-            }}
-          >
-            Back to Creator Portal
-          </button>
         </div>
       </div>
     )

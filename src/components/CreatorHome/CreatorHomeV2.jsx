@@ -231,7 +231,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         supabase.from('founder_dna_results').select('dna_code, archetype, matched_founder').eq('user_id', userId).order('completed_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('creator_assessments').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('user_stage_progress').select('pay_rent_model, current_journey_level, hero_avatar_url').eq('user_id', userId).maybeSingle(),
-        supabase.from('remarkable_angles').select('id, wound_problem, rule_identified, combination_insight, extreme_action_plan, ai_rule_statement, ai_remarkable_bio, ai_tribe_statement').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+        supabase.from('remarkable_angles').select('id, wound_problem, assumption, rule_identified, combination_insight, different, experience, extreme_action_plan, project_name, score_unique, score_share, score_simple, ai_rule_statement, ai_remarkable_bio, ai_tribe_statement').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('contact_experiences').select('contact_id, experience_id').eq('user_id', userId),
         supabase.from('lead_flow_profiles').select('essence_archetype, custom_essence_image, custom_essence_name').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('quest_completions').select('points_earned').eq('user_id', userId).eq('quest_category', 'Movement'),
@@ -300,7 +300,8 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const archetype = creatorSelection?.dominant_archetype || null
   const archetypeLabel = ARCHETYPE_LABELS[archetype] || 'Creator'
   const scopeFocus = SCOPE_FOCUS[scopeResult?.stage] || null
-  const ruleBreak = parseRuleBreak(remarkableAngle?.rule_identified)
+  // parseRuleBreak kept for legacy compat but no longer used in display
+  // const ruleBreak = parseRuleBreak(remarkableAngle?.rule_identified)
   const selectedCreators = creatorSelection?.selected_creators || []
 
   const threePercentChain = past
@@ -428,25 +429,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                     <div className="ch2-tagline">{remarkableAngle.ai_rule_statement}</div>
                   )}
 
-                  {/* Primary 3: Assumption, Two Worlds, One-liner */}
-                  {ruleBreak?.assumption && (
-                    <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
-                      <div className="ch2-biz-icon">🔥</div>
-                      <div className="ch2-biz-info">
-                        <div className="ch2-biz-label">The Assumption You Break</div>
-                        <div className="ch2-biz-val">{ruleBreak.assumption}</div>
-                      </div>
-                    </div>
-                  )}
-                  {remarkableAngle.combination_insight && (
-                    <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
-                      <div className="ch2-biz-icon">🔀</div>
-                      <div className="ch2-biz-info">
-                        <div className="ch2-biz-label">Two Worlds</div>
-                        <div className="ch2-biz-val">{remarkableAngle.combination_insight}</div>
-                      </div>
-                    </div>
-                  )}
+                  {/* Primary 3: One-liner, Experience, Different */}
                   {remarkableAngle.extreme_action_plan && (
                     <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
                       <div className="ch2-biz-icon">💎</div>
@@ -456,13 +439,49 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                       </div>
                     </div>
                   )}
+                  {remarkableAngle.experience && (
+                    <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
+                      <div className="ch2-biz-icon">🎪</div>
+                      <div className="ch2-biz-info">
+                        <div className="ch2-biz-label">The Experience</div>
+                        <div className="ch2-biz-val">{remarkableAngle.experience}</div>
+                      </div>
+                    </div>
+                  )}
+                  {remarkableAngle.different && (
+                    <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
+                      <div className="ch2-biz-icon">✨</div>
+                      <div className="ch2-biz-info">
+                        <div className="ch2-biz-label">How You're Different</div>
+                        <div className="ch2-biz-val">{remarkableAngle.different}</div>
+                      </div>
+                    </div>
+                  )}
 
-                  {/* See more: Problem, Different, Experience, Score, Bio */}
+                  {/* See more */}
                   {!showBlowUpMore && (
                     <span className="ch2-see-more" onClick={() => setShowBlowUpMore(true)}>see more</span>
                   )}
                   {showBlowUpMore && (
                     <>
+                      {remarkableAngle.assumption && (
+                        <div className="ch2-biz-row">
+                          <div className="ch2-biz-icon">🔥</div>
+                          <div className="ch2-biz-info">
+                            <div className="ch2-biz-label">The Assumption You Break</div>
+                            <div className="ch2-biz-val">{remarkableAngle.assumption}</div>
+                          </div>
+                        </div>
+                      )}
+                      {remarkableAngle.combination_insight && (
+                        <div className="ch2-biz-row">
+                          <div className="ch2-biz-icon">🔀</div>
+                          <div className="ch2-biz-info">
+                            <div className="ch2-biz-label">Two Worlds</div>
+                            <div className="ch2-biz-val">{remarkableAngle.combination_insight}</div>
+                          </div>
+                        </div>
+                      )}
                       {remarkableAngle.wound_problem && (
                         <div className="ch2-biz-row">
                           <div className="ch2-biz-icon">🎯</div>
@@ -472,30 +491,12 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                           </div>
                         </div>
                       )}
-                      {ruleBreak?.different && (
-                        <div className="ch2-biz-row">
-                          <div className="ch2-biz-icon">✨</div>
-                          <div className="ch2-biz-info">
-                            <div className="ch2-biz-label">How You're Different</div>
-                            <div className="ch2-biz-val">{ruleBreak.different}</div>
-                          </div>
-                        </div>
-                      )}
-                      {ruleBreak?.experience && (
-                        <div className="ch2-biz-row">
-                          <div className="ch2-biz-icon">🎪</div>
-                          <div className="ch2-biz-info">
-                            <div className="ch2-biz-label">The Experience</div>
-                            <div className="ch2-biz-val">{ruleBreak.experience}</div>
-                          </div>
-                        </div>
-                      )}
-                      {ruleBreak?.score && (
+                      {remarkableAngle.score_unique && (
                         <div className="ch2-biz-row">
                           <div className="ch2-biz-icon">📊</div>
                           <div className="ch2-biz-info">
                             <div className="ch2-biz-label">Remarkability Score</div>
-                            <div className="ch2-biz-val">{ruleBreak.score}</div>
+                            <div className="ch2-biz-val">{remarkableAngle.score_unique}x{remarkableAngle.score_share}x{remarkableAngle.score_simple}={remarkableAngle.score_unique * remarkableAngle.score_share * remarkableAngle.score_simple}</div>
                           </div>
                         </div>
                       )}

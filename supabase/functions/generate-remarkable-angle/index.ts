@@ -72,23 +72,20 @@ Return ONLY valid JSON: {"taglines": ["...", "...", "...", "..."]}`
       throw new Error('All three inputs are required')
     }
 
-    const prompt = `You synthesize a person's remarkable angle into three outputs. They've identified their rule break, unexpected combination, and extreme action. Your job is to distill these into copy they can use.
+    const prompt = `You help experience creators find their remarkable angle. A user answered 4 questions about their project${user_name ? ` called "${user_name}"` : ''}. Your job is to extract insights and generate copy from their raw answers.
 
-THE PERSON'S INPUTS:
+THE USER'S 4 ANSWERS:
 
-The problem that makes them angriest: "${wound_problem}"
-The rule they want to break: "${rule_identified}"
-Their unexpected combination: "${combination_insight}"
-Their planned extreme action: "${extreme_action_plan}"
-${user_name ? `Their name: ${user_name}` : ''}
+1. The problem they solve: "${wound_problem}"
+2. The assumption everyone follows that they think is wrong: "${rule_identified}"
+3. The experience that showed them the assumption was wrong: "${combination_insight}"
+4. How they solve it differently: "${extreme_action_plan}"
 
-Generate three things:
+Generate two things:
 
-1. RULE STATEMENT: One sentence that captures their rule break. Written as a belief statement their tribe would rally around. Not "I believe..." but a universal truth. Like "Vulnerability is not weakness" or "The question is never why the addiction, but why the pain."
+1. RULE STATEMENT: Synthesize answers 1 + 2 into one punchy sentence that captures the rule they break. Written as a universal truth their audience would rally around. Not "I believe..." but a declaration. Like "You don't change by learning, you change by being in your discomfort zone" or "The question is never why the addiction, but why the pain." The statement should reject the assumption (answer 2) and point toward their solution (answer 4).
 
-2. REMARKABLE BIO: 2-3 sentences written in the style of gossip, not credentials. Lead with the surprising thing about them. Follow with what they do differently. Close with the result or the mission. No credential lists. No superlatives. Written as something you'd text a friend: "You HAVE to hear about this person."
-
-3. TRIBE STATEMENT: One sentence starting with "People who believe..." This defines who their audience is by shared belief, not demographics. Like "People who believe healing should be fun, not clinical."
+2. REMARKABLE BIO: 2-3 sentences written in the style of gossip, not credentials. Lead with the surprising thing from their experience (answer 3). Follow with what they do differently (answer 4). Close with the mission. No credential lists. No superlatives. Written as something you'd text a friend: "You HAVE to hear about this person." Use specific details from their answers, do NOT invent facts they didn't share.
 
 Rules:
 - NEVER use em dashes, semicolons, or double hyphens
@@ -96,13 +93,12 @@ Rules:
 - Be direct and concrete, not inspirational or vague
 - The rule statement should make someone say "YES, finally someone said it"
 - The bio should make someone say "wait, what?"
-- The tribe statement should make someone say "that's me"
+- ONLY use facts the user provided. Do not invent specific numbers, stories, or details they didn't share.
 
 Return ONLY valid JSON:
 {
   "rule_statement": "...",
-  "remarkable_bio": "...",
-  "tribe_statement": "People who believe..."
+  "remarkable_bio": "..."
 }`
 
     console.log('generate-remarkable-angle: synthesizing')

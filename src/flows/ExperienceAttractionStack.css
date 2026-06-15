@@ -11,17 +11,48 @@
   position: relative;
 }
 
-.eas-back, .emc-back {
-  align-self: flex-start;
+/* Bottom back button (replaces top-left back) */
+.eas-bottom-back, .emc-bottom-back {
   background: none;
   border: none;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.4);
   font-size: 14px;
   cursor: pointer;
-  padding: 4px 0;
-  margin-bottom: 16px;
+  padding: 12px 0;
+  margin-top: 16px;
+  width: 100%;
+  text-align: center;
 }
-.eas-back:hover, .emc-back:hover { color: #fff; }
+.eas-bottom-back:hover, .emc-bottom-back:hover { color: rgba(255,255,255,0.7); }
+.eas-question-screen .eas-bottom-back,
+.eas-results .eas-bottom-back { margin-top: auto; }
+
+/* Intro screen */
+.eas-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 60px;
+  width: 100%;
+  max-width: 420px;
+  flex: 1;
+  justify-content: space-between;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+}
+.eas-intro-top { display: flex; flex-direction: column; align-items: center; }
+.eas-intro-bottom { width: 100%; margin-top: auto; }
+.eas-intro-icon { font-size: 48px; margin-bottom: 16px; }
+.eas-intro-title { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+.eas-intro-sub { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.5; margin-bottom: 28px; }
+.eas-intro-steps { display: flex; flex-direction: column; gap: 12px; width: 100%; margin-bottom: 28px; text-align: left; }
+.eas-intro-step { display: flex; align-items: center; gap: 12px; font-size: 14px; color: rgba(255,255,255,0.75); }
+.eas-intro-step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,221,39,0.15); color: #ffdd27;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
 
 /* Question screen */
 .eas-question-screen, .emc-question-screen {
@@ -32,6 +63,8 @@
   padding-top: 40px;
   width: 100%;
   max-width: 420px;
+  flex: 1;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
 }
 
 .eas-step-indicator, .emc-step-indicator {
@@ -78,11 +111,29 @@
 .eas-option-label { font-size: 15px; font-weight: 600; }
 .eas-option-desc { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 3px; }
 
+/* Price input */
+.eas-price-input-wrap { width: 100%; max-width: 280px; display: flex; flex-direction: column; align-items: center; }
+.eas-price-field {
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 14px; padding: 14px 20px; width: 100%;
+  transition: border-color 0.2s;
+}
+.eas-price-field:focus-within { border-color: #ffdd27; }
+.eas-price-currency { font-size: 28px; font-weight: 700; color: rgba(255,255,255,0.5); }
+.eas-price-input {
+  background: none; border: none; outline: none; color: #fff;
+  font-size: 28px; font-weight: 700; width: 100%; font-family: inherit;
+}
+.eas-price-input::placeholder { color: rgba(255,255,255,0.2); }
+.eas-price-hint { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 8px; }
+
 /* Results screen */
 .eas-results, .emc-results {
   width: 100%;
   max-width: 480px;
   padding-top: 8px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
 }
 
 .eas-results-title, .emc-results-title {
