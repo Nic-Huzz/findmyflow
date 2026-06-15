@@ -84,6 +84,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [showSkillsExpanded, setShowSkillsExpanded] = useState(false)
   const [loading, setLoading] = useState(true)
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
+  const [showAllPast, setShowAllPast] = useState(false)
   const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
 
   // Creator detail modal
@@ -697,7 +698,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           {/* Upcoming */}
           {upcoming.length > 0 && (
             <>
-              <div className="ch2-label" style={{ marginBottom: 8 }}>Upcoming</div>
+              <div className="ch2-label" style={{ marginBottom: 10, marginTop: 4 }}>Upcoming</div>
               {upcoming.map(exp => {
                 const cd = countdownLabel(exp.experience_date)
                 const cl = checklistCounts[exp.id] || {}
@@ -766,7 +767,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           {past.length > 0 && (
             <div className="ch2-card">
               <div className="ch2-label">Past Experiences</div>
-              {past.map(exp => (
+              {past.slice(0, showAllPast ? past.length : 3).map(exp => (
                 <div key={exp.id} className="ch2-past-item" style={{ cursor: 'pointer' }} onClick={() => setSelectedExperienceId(exp.id)}>
                   <div className="ch2-past-dot" />
                   <div className="ch2-past-info">
@@ -781,6 +782,11 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                   )}
                 </div>
               ))}
+              {past.length > 3 && !showAllPast && (
+                <button className="ch2-see-more" onClick={() => setShowAllPast(true)}>
+                  See all {past.length} experiences
+                </button>
+              )}
             </div>
           )}
           </>

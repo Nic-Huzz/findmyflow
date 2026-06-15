@@ -61,8 +61,8 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
 /* ═══ SHARED ═══ */
 .ch2-section { padding: 0 0 18px; position: relative; }
 .ch2-label {
-  font-size: 11px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 1.2px; color: var(--gold); margin-bottom: 8px;
+  font-size: 12px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--gold); margin-bottom: 8px;
 }
 .ch2-divider {
   height: 1px; margin: 4px 0;
@@ -307,6 +307,25 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
 .ch2-past-name { font-size: 12px; font-weight: 700; color: var(--text-primary); }
 .ch2-past-meta { font-size: 12px; color: var(--text-muted); }
 .ch2-past-3pct { font-size: 12px; color: var(--green); font-weight: 600; text-align: right; max-width: 110px; }
+
+.ch2-see-more {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  background: none;
+  border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s;
+}
+.ch2-see-more:hover {
+  color: var(--gold);
+  border-color: rgba(233,162,59,0.3);
+}
 
 /* ═══ GROWTH TAB ═══ */
 .ch2-kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
