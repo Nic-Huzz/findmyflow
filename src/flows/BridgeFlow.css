@@ -1,0 +1,127 @@
+/* BridgeFlow — /create/bridge */
+/* Micro-bridge building exercise */
+/* CSS prefix: brg- */
+
+.brg {
+  min-height: 100vh;
+  background: #0a0a12;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+.brg-container {
+  max-width: 480px; margin: 0 auto;
+  padding: 24px 20px calc(40px + env(safe-area-inset-bottom, 0px));
+}
+.brg-screen { animation: brgFadeIn 0.3s ease; }
+@keyframes brgFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.brg-step-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
+  margin-bottom: 12px;
+}
+.brg-heading {
+  font-size: 22px; font-weight: 900; line-height: 1.2;
+  letter-spacing: -0.5px; color: #fff; margin: 0 0 8px;
+}
+.brg-gold { color: #E9A23B; }
+.brg-prompt {
+  font-size: 14px; color: rgba(255,255,255,0.5);
+  line-height: 1.5; margin: 0 0 20px;
+}
+.brg-principle {
+  padding: 14px 16px; border-radius: 12px;
+  background: rgba(94,23,235,0.06);
+  border: 1px solid rgba(94,23,235,0.12);
+  font-size: 13px; color: rgba(255,255,255,0.6);
+  line-height: 1.5; margin-bottom: 20px;
+  font-style: italic;
+}
+.brg-person-card {
+  padding: 16px; border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 10px;
+}
+.brg-person-num {
+  font-size: 10px; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; color: #E9A23B; margin-bottom: 8px;
+}
+.brg-input {
+  width: 100%; padding: 10px 12px; border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #fff; font-size: 14px; font-family: inherit;
+  margin-bottom: 8px; outline: none; box-sizing: border-box;
+}
+.brg-input:focus { border-color: rgba(233,162,59,0.4); }
+.brg-input::placeholder { color: rgba(255,255,255,0.25); }
+.brg-input-small { font-size: 13px; padding: 8px 12px; }
+.brg-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.brg-option {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer; font-size: 13px; color: rgba(255,255,255,0.6);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.brg-option:active { background: rgba(255,255,255,0.06); }
+.brg-option-selected {
+  background: rgba(233,162,59,0.08);
+  border-color: rgba(233,162,59,0.25);
+  color: #E9A23B;
+}
+.brg-option-icon { font-size: 16px; flex-shrink: 0; }
+.brg-summary-card {
+  padding: 14px 16px; border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 8px;
+}
+.brg-summary-name {
+  font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 2px;
+}
+.brg-summary-platform {
+  font-size: 11px; color: rgba(255,255,255,0.35); margin-bottom: 6px;
+}
+.brg-summary-row {
+  font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px;
+}
+.brg-summary-label {
+  font-weight: 700; color: rgba(255,255,255,0.35);
+  text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;
+}
+.brg-add-btn {
+  width: 100%; padding: 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.02);
+  border: 1px dashed rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit; margin-bottom: 10px;
+}
+.brg-add-btn:active { background: rgba(255,255,255,0.05); }
+.brg-nav {
+  display: flex; gap: 10px; margin-top: 24px;
+}
+.brg-back {
+  padding: 14px 20px; border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+}
+.brg-cta {
+  flex: 1; padding: 14px; border-radius: 12px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none; color: #fff; font-size: 15px; font-weight: 800;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 4px 16px rgba(94,23,235,0.3);
+}
+.brg-cta:disabled { opacity: 0.4; cursor: not-allowed; }
+.brg-cta:active:not(:disabled) { transform: scale(0.98); }
+.brg-error {
+  padding: 10px; border-radius: 8px; margin-top: 10px;
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);
+  color: #ef4444; font-size: 13px; text-align: center;
+}
