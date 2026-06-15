@@ -86,21 +86,21 @@ function getNodeNudge(node, experience, isModuleComplete, wahoos, checklists) {
       if (!hasMetrics && !isModuleComplete('blow_up_brand'))
         return { text: 'Find your angle first, then start attracting.', cta: 'Blow Up Your Brand', route: '/create/remarkable' }
       if (!hasMetrics && days !== null && days < 14)
-        return { text: 'Your event is soon and nobody knows. Start with warm outreach.', cta: 'Log Activity', action: 'update' }
+        return { text: 'Your event is soon and nobody knows. Start with warm outreach. Tap "New Activity" above.', cta: null }
       if (!hasMetrics)
-        return { text: 'Log your first attraction activity to track progress.', cta: 'Log Activity', action: 'update' }
+        return { text: 'Tap "New Activity" to log your first attraction activity.', cta: null }
       if (val > 0 && wahoos.length === 0)
         return { text: 'People are seeing you. A Wahoo will make you stand out.', cta: 'Design a Wahoo', route: '/create/strike' }
       return null
     case 'capture':
       if (val === 0)
-        return { text: 'No signups yet. Share your link and log the clicks.', cta: 'Log Signups', action: 'update' }
+        return { text: 'No signups yet. Share your link and tap "New Activity" to log clicks.', cta: null }
       return null
     case 'convert':
       if (val === 0 && days !== null && days < 7)
-        return { text: 'Event is soon. Send a direct pitch to your warmest leads.', cta: 'Log Tickets', action: 'update' }
+        return { text: 'Event is soon. Send a direct pitch to your warmest leads.', cta: null }
       if (val === 0)
-        return { text: 'No tickets sold yet. Log your first sale.', cta: 'Log Tickets', action: 'update' }
+        return { text: 'No tickets sold yet. Tap "New Activity" to log your first sale.', cta: null }
       return null
     case 'deliver':
       if (!isPast) {
@@ -110,7 +110,7 @@ function getNodeNudge(node, experience, isModuleComplete, wahoos, checklists) {
         return null
       }
       if (val === 0)
-        return { text: 'Event is done. Log how many people showed up.', cta: 'Log Attendance', action: 'update' }
+        return { text: 'Event is done. Tap "New Activity" to log attendance.', cta: null }
       return null
     case 'grow': {
       if (!isPast) return null
@@ -176,32 +176,13 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
             <div className={`pl-pill ${node.status}`}>{node.readinessPercent}%</div>
             {node.key !== 'grow' && (
               <button className="pl-update-btn" onClick={() => { hapticLight(); onUpdate?.() }}>
-                Update
+                New Activity
               </button>
             )}
           </div>
         </div>
 
-        {/* Modules */}
-        {modules.length > 0 && (
-          <CollapsibleSection title="Modules" defaultOpen>
-            {modules.map(mod => {
-              const done = isModuleComplete(mod.key)
-              return (
-                <div key={mod.key} className="pl-item" onClick={() => navigate(mod.passExperienceId ? `${mod.route}?experienceId=${experience.id}` : mod.route)}>
-                  <div className={`pl-ico ${done ? 'done' : 'todo'}`}>{mod.icon}</div>
-                  <div className="pl-txt">
-                    <div className="pl-nm">{mod.name}</div>
-                    {mod.multi && <div className="pl-ds">Also improves: {mod.multi}</div>}
-                  </div>
-                  <div className={`pl-bg ${done ? 'done' : 'todo'}`}>{done ? 'Done ✓' : 'Start'}</div>
-                </div>
-              )
-            })}
-          </CollapsibleSection>
-        )}
-
-        {/* Awareness Wahoos (Attract only) */}
+        {/* Awareness Wahoos (Attract only) — above modules */}
         {node.key === 'attract' && (
           <CollapsibleSection title="Awareness Wahoos" defaultOpen={wahoos.length > 0}>
             {wahoos.length > 0 ? wahoos.map(w => (
@@ -230,6 +211,25 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
             >
               ⚡ Design a New Wahoo
             </button>
+          </CollapsibleSection>
+        )}
+
+        {/* Modules */}
+        {modules.length > 0 && (
+          <CollapsibleSection title="Modules" defaultOpen>
+            {modules.map(mod => {
+              const done = isModuleComplete(mod.key)
+              return (
+                <div key={mod.key} className="pl-item" onClick={() => navigate(mod.passExperienceId ? `${mod.route}?experienceId=${experience.id}` : mod.route)}>
+                  <div className={`pl-ico ${done ? 'done' : 'todo'}`}>{mod.icon}</div>
+                  <div className="pl-txt">
+                    <div className="pl-nm">{mod.name}</div>
+                    {mod.multi && <div className="pl-ds">Also improves: {mod.multi}</div>}
+                  </div>
+                  <div className={`pl-bg ${done ? 'done' : 'todo'}`}>{done ? 'Done ✓' : 'Start'}</div>
+                </div>
+              )
+            })}
           </CollapsibleSection>
         )}
 

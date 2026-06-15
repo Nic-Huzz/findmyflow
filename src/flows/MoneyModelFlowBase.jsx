@@ -599,7 +599,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
               </button>
               <button
                 className="secondary-button"
-                onClick={() => navigate('/7-day-challenge')}
+                onClick={() => navigate(searchParams.get('returnTo') || '/create')}
               >
                 Come Back Later
               </button>

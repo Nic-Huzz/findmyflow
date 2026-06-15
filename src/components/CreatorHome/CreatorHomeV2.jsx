@@ -75,11 +75,11 @@ function getInitials(name) {
 
 // ─── Component ─────────────────────────────────────────────────────────────
 
-export default function CreatorHomeV2() {
+export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const { user } = useAuth()
   const userId = user?.id
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState('identity')
+  const [activeTab, setActiveTab] = useState(defaultTab)
   const [identitySubTab, setIdentitySubTab] = useState('playbook')
   const [loading, setLoading] = useState(true)
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
@@ -769,13 +769,6 @@ export default function CreatorHomeV2() {
               <div className="ch2-create-label">New Experience</div>
               <div className="ch2-create-sub">I know what I want</div>
             </div>
-          </div>
-
-          {/* New Play CTA */}
-          <div className="ch2-card" style={{ cursor: 'pointer', textAlign: 'center' }} onClick={() => navigate('/create/plays')}>
-            <div style={{ fontSize: 16, marginBottom: 4 }}>🎯</div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>Design a New Play</div>
-            <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>Set a courage challenge with a deadline</div>
           </div>
 
           {/* Past */}
