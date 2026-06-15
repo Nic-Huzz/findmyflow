@@ -522,7 +522,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
           </button>
           <button
             className="go-back-link"
-            onClick={() => navigate('/7-day-challenge')}
+            onClick={() => navigate(searchParams.get('returnTo') || '/create')}
           >
             ← Go Back
           </button>
