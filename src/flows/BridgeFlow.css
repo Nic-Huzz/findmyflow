@@ -4,7 +4,8 @@
 
 .brg {
   min-height: 100vh;
-  background: #0a0a12;
+  min-height: 100dvh;
+  background: linear-gradient(180deg, #5e17eb 0%, #4a12c4 100%);
   color: #fff;
   -webkit-font-smoothing: antialiased;
 }
@@ -31,16 +32,16 @@
 }
 .brg-principle {
   padding: 14px 16px; border-radius: 12px;
-  background: rgba(94,23,235,0.06);
-  border: 1px solid rgba(94,23,235,0.12);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
   font-size: 13px; color: rgba(255,255,255,0.6);
   line-height: 1.5; margin-bottom: 20px;
   font-style: italic;
 }
 .brg-person-card {
   padding: 16px; border-radius: 12px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
   margin-bottom: 10px;
 }
 .brg-person-num {
@@ -49,8 +50,8 @@
 }
 .brg-input {
   width: 100%; padding: 10px 12px; border-radius: 8px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
   color: #fff; font-size: 14px; font-family: inherit;
   margin-bottom: 8px; outline: none; box-sizing: border-box;
 }
@@ -61,8 +62,8 @@
 .brg-option {
   display: flex; align-items: center; gap: 10px;
   padding: 10px 14px; border-radius: 10px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
   cursor: pointer; font-size: 13px; color: rgba(255,255,255,0.6);
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
@@ -76,8 +77,8 @@
 .brg-option-icon { font-size: 16px; flex-shrink: 0; }
 .brg-summary-card {
   padding: 14px 16px; border-radius: 12px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
   margin-bottom: 8px;
 }
 .brg-summary-name {
@@ -95,8 +96,8 @@
 }
 .brg-add-btn {
   width: 100%; padding: 12px; border-radius: 10px;
-  background: rgba(255,255,255,0.02);
-  border: 1px dashed rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  border: 1px dashed rgba(255,255,255,0.2);
   color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 600;
   cursor: pointer; font-family: inherit; margin-bottom: 10px;
 }
@@ -106,17 +107,17 @@
 }
 .brg-back {
   padding: 14px 20px; border-radius: 12px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
   color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 700;
   cursor: pointer; font-family: inherit;
 }
 .brg-cta {
   flex: 1; padding: 14px; border-radius: 12px;
-  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  background: linear-gradient(135deg, #E9A23B, #f0b956);
   border: none; color: #fff; font-size: 15px; font-weight: 800;
   cursor: pointer; font-family: inherit;
-  box-shadow: 0 4px 16px rgba(94,23,235,0.3);
+  box-shadow: 0 4px 16px rgba(233,162,59,0.3);
 }
 .brg-cta:disabled { opacity: 0.4; cursor: not-allowed; }
 .brg-cta:active:not(:disabled) { transform: scale(0.98); }
