@@ -13,7 +13,29 @@
   max-width: 480px; margin: 0 auto;
   padding: 24px 20px calc(40px + env(safe-area-inset-bottom, 0px));
 }
+/* Hide bottom toolbar in this flow */
+.brg-fullscreen ~ .bottom-toolbar,
+body:has(.brg-fullscreen) .bottom-toolbar { display: none !important; }
+
 .brg-screen { animation: brgFadeIn 0.3s ease; }
+
+/* Intro layout — content top, CTA pinned bottom */
+.brg-intro-layout {
+  display: flex; flex-direction: column;
+  min-height: 100vh; min-height: 100dvh;
+}
+.brg-intro-content { flex: 1; }
+.brg-intro-footer {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+  display: flex; flex-direction: column; gap: 12px;
+  align-items: center;
+}
+.brg-back-link {
+  background: none; border: none;
+  color: rgba(255,255,255,0.5); font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: inherit; padding: 8px 16px;
+}
+.brg-back-link:active { color: rgba(255,255,255,0.7); }
 @keyframes brgFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 .brg-step-label {

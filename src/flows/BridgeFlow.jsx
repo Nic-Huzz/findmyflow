@@ -129,29 +129,36 @@ export default function BridgeFlow() {
   // ── SCREEN 1: INTRO ──
   if (step === STEPS.INTRO) {
     return (
-      <div className="brg">
-        <div className="brg-container brg-screen">
-          <div className="brg-step-label">Bridge Building</div>
-          <h2 className="brg-heading">Find your 5 <span className="brg-gold">micro-bridges</span></h2>
-          <p className="brg-prompt">
-            Every creator who blew up had a bridge. But you don't wait for Oprah. You build lateral:
-            people slightly ahead, not above. Cross-pollinate, don't pitch.
-          </p>
+      <div className="brg brg-fullscreen">
+        <div className="brg-container brg-screen brg-intro-layout">
+          <div className="brg-intro-content">
+            <div className="brg-step-label">Bridge Building</div>
+            <h2 className="brg-heading">Find your 5 <span className="brg-gold">micro-bridges</span></h2>
+            <p className="brg-prompt">
+              Every creator who blew up had a bridge. But you don't wait for Oprah. You build lateral:
+              people slightly ahead, not above. Cross-pollinate, don't pitch.
+            </p>
 
-          <div className="brg-principle">
-            The bridge's incentive is always self-serving: you fill a gap they can't fill alone.
-            Lead with value. The ask comes after.
+            <div className="brg-principle">
+              The bridge's incentive is always self-serving: you fill a gap they can't fill alone.
+              Lead with value. The ask comes after.
+            </div>
+
+            {remarkableAngle?.ai_rule_statement && (
+              <div className="brg-principle" style={{ borderColor: 'rgba(233,162,59,0.15)', background: 'rgba(233,162,59,0.04)' }}>
+                Your angle: "{remarkableAngle.ai_rule_statement}"
+              </div>
+            )}
           </div>
 
-          {remarkableAngle?.ai_rule_statement && (
-            <div className="brg-principle" style={{ borderColor: 'rgba(233,162,59,0.15)', background: 'rgba(233,162,59,0.04)' }}>
-              Your angle: "{remarkableAngle.ai_rule_statement}"
-            </div>
-          )}
-
-          <button className="brg-cta" onClick={() => { hapticLight(); setStep(STEPS.ADD_PEOPLE) }}>
-            Find my bridges
-          </button>
+          <div className="brg-intro-footer">
+            <button className="brg-cta" style={{ width: '100%' }} onClick={() => { hapticLight(); setStep(STEPS.ADD_PEOPLE) }}>
+              Find my bridges
+            </button>
+            <button className="brg-back-link" onClick={() => navigate('/create')}>
+              ← Back
+            </button>
+          </div>
         </div>
       </div>
     )
