@@ -63,12 +63,7 @@
   box-shadow: 0 -1px 12px rgba(94,23,235,0.08);
 }
 
-/* Funnel narrowing — subtle indentation per node */
-.pl-funnel-track > div:nth-child(1) .pl-vnode { margin-left: 0; margin-right: 0; }
-.pl-funnel-track > div:nth-child(2) .pl-vnode,
-.pl-funnel-track > div:nth-child(3) .pl-vnode { margin-left: 0; margin-right: 0; }
-.pl-funnel-track > div:nth-child(4) .pl-vnode,
-.pl-funnel-track > div:nth-child(5) .pl-vnode { margin-left: 0; margin-right: 0; }
+
 
 .pl-vnode-info { flex: 1; min-width: 0; }
 .pl-vnode-label { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
