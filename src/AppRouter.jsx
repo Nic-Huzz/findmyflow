@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useNavigationType, useParams } from 'react-router-dom'
 
 // Retry wrapper for lazy imports — handles stale chunks after deploys
@@ -46,7 +46,8 @@ const Challenge = lazyRetry(() => import('./Challenge'))
 
 import { preloadMePage, preloadChallenge, preloadFlowCompass, preloadProfileHub } from './lib/preloadRoutes'
 import AuthGate from './AuthGate'
-import CreateGate from './components/CreateGate'
+import AIConsentModal from './components/AIConsentModal'
+import { supabase } from './lib/supabaseClient'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
 import BottomToolbar from './components/BottomToolbar'
@@ -326,6 +327,7 @@ import './pages/crm/Calculators.css'
 import './pages/BrandToneDemo.css'
 import './pages/VoiceOfCustomerPage.css'
 import './components/BottomToolbar.css'
+import './components/AIConsentModal.css'
 import './components/GroanMatrix.css'
 import './components/HeroProfile/HeroProfile.css'
 import './components/VibeColorPicker.css'
@@ -375,10 +377,9 @@ function ConditionalZarlo() {
   const isMatrixCodeDeepDive = location.pathname === '/matrix-code-deep-dive'
   const isExperienceCreators = location.pathname === '/experience-creators' || location.pathname === '/try/experience-creators' || location.pathname === '/movement-makers'
   const isScopeMap = location.pathname === '/scope-map'
-  const isCreatePortal = location.pathname.startsWith('/create')
 
   const isPreLaunch = location.pathname === '/pre-launch'
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isCreatePortal || isPreLaunch) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch) return null
   return <ZarloWidget />
 }
 
@@ -436,6 +437,49 @@ function ConditionalBottomToolbar() {
   return <BottomToolbar />
 }
 
+// AI data disclosure gate (Apple 5.1.1(i) / 5.1.2(i))
+// Shows once per user before any AI features are reachable
+function AIConsentGate() {
+  const { user, loading: authLoading } = useAuth()
+  const [show, setShow] = useState(false)
+  const [checked, setChecked] = useState(false)
+
+  useEffect(() => {
+    if (authLoading) return
+
+    // Fast local check first
+    if (localStorage.getItem('ai_consent_given') === 'true') {
+      setChecked(true)
+      return
+    }
+
+    // DB check for logged-in users
+    if (user?.id) {
+      supabase
+        .from('user_stage_progress')
+        .select('ai_consent_given')
+        .eq('user_id', user.id)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data?.ai_consent_given) {
+            localStorage.setItem('ai_consent_given', 'true')
+          } else {
+            setShow(true)
+          }
+          setChecked(true)
+        })
+    } else {
+      // Not logged in — show consent for public AI flows
+      setShow(true)
+      setChecked(true)
+    }
+  }, [user?.id, authLoading])
+
+  if (!checked || !show) return null
+
+  return <AIConsentModal userId={user?.id} onContinue={() => setShow(false)} />
+}
+
 // Wrapper that adds key={location.key} to Suspense so lazy routes
 // show the loading spinner instead of freezing on the old page.
 // Without this, navigate() uses startTransition which suppresses
@@ -462,6 +506,7 @@ function AppRouter() {
         <Router>
           <ScrollToTop />
           <PreloadCoreRoutes />
+          <AIConsentGate />
           <LocationAwareErrorBoundary>
           <SuspenseRoutes>
             <Routes>
@@ -903,100 +948,9 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Create — Experience Creator Portal (Head Full of Dreams → Self-Actualisation) */}
-            <Route path="/create" element={
-              <CreateGate>
-                <AuthGate>
-                  <CreatorHome />
-                </AuthGate>
-              </CreateGate>
-            } />
-            <Route path="/create/inspiration" element={
-              <CreateGate>
-                <AuthGate>
-                  <ExperienceInspiration />
-                </AuthGate>
-              </CreateGate>
-            } />
-            <Route path="/create/experience/new" element={
-              <CreateGate>
-                <AuthGate>
-                  <ExperienceCreate />
-                </AuthGate>
-              </CreateGate>
-            } />
-            <Route path="/create/experience/:id" element={
-              <CreateGate>
-                <AuthGate>
-                  <ExperienceDetail />
-                </AuthGate>
-              </CreateGate>
-            } />
-            <Route path="/create/pay-rent" element={
-              <CreateGate>
-                <AuthGate>
-                  <PayRentFlow />
-                </AuthGate>
-              </CreateGate>
-            } />
-            <Route path="/create/remarkable" element={
-              <CreateGate>
-                <AuthGate>
-                  <RemarkableFlow />
-                </AuthGate>
-              </CreateGate>
-            } />
-            <Route path="/create/attraction-stack" element={
-              <AuthGate>
-                <ExperienceAttractionStack />
-              </AuthGate>
-            } />
-            <Route path="/create/marketing-campaign" element={
-              <AuthGate>
-                <ExperienceMarketingCampaign />
-              </AuthGate>
-            } />
-            <Route path="/create/scale-income" element={
-              <CreateGate>
-                <AuthGate>
-                  <ScaleIncomeFlow />
-                </AuthGate>
-              </CreateGate>
-            } />
-            <Route path="/create/plays" element={
-              <CreateGate>
-                <AuthGate>
-                  <StrikeDesignFlow />
-                </AuthGate>
-              </CreateGate>
-            } />
-            {/* Build Your App — hidden upsell, no nav links */}
-            <Route path="/create/build-app" element={
-              <AuthGate>
-                <AppBuildDashboard />
-              </AuthGate>
-            } />
-            <Route path="/create/build-app/prework" element={
-              <AuthGate>
-                <AppBuildPrework />
-              </AuthGate>
-            } />
-            <Route path="/create/build-app/challenge/:number" element={
-              <AuthGate>
-                <AppBuildChallenge />
-              </AuthGate>
-            } />
-            {/* Backward compat */}
-            <Route path="/create/strike" element={<Navigate to="/create/plays" replace />} />
-            {/* Backward compat — /business redirects to /create */}
-            <Route path="/business" element={<Navigate to="/create" replace />} />
-            <Route path="/business/experience/new" element={<Navigate to="/create/experience/new" replace />} />
-            <Route path="/business/experience/:id" element={<RedirectWithParam to="/create/experience" />} />
-            <Route path="/business/app" element={
-              <AuthGate>
-                <BusinessPage />
-              </AuthGate>
-            } />
+            {/* Create Portal — redirected to League for consumer app (creator app coming later) */}
+            <Route path="/create/*" element={<Navigate to="/league" replace />} />
+            <Route path="/business/*" element={<Navigate to="/league" replace />} />
 
             {/* Sol — AI Co-Founder */}
             <Route path="/sol" element={

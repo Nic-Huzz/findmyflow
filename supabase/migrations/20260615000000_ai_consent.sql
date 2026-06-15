@@ -1,0 +1,1 @@
+ALTER TABLE user_stage_progress ADD COLUMN IF NOT EXISTS ai_consent_given BOOLEAN DEFAULT FALSE;
