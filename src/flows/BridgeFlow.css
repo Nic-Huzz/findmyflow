@@ -112,6 +112,37 @@
   font-weight: 700; color: rgba(255,255,255,0.35);
   text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;
 }
+/* Manage screen */
+.brg-manage-card {
+  padding: 14px 16px; border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  margin-bottom: 10px;
+}
+.brg-manage-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 6px;
+}
+.brg-manage-detail {
+  font-size: 11px; color: rgba(255,255,255,0.45);
+  margin-bottom: 3px;
+}
+.brg-manage-stages {
+  display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap;
+}
+.brg-manage-stage {
+  padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 700;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.4);
+  cursor: pointer; font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.brg-manage-stage:active { background: rgba(255,255,255,0.1); }
+.brg-manage-stage-active {
+  background: rgba(255,255,255,0.1);
+}
+
 .brg-add-btn {
   width: 100%; padding: 12px; border-radius: 10px;
   background: rgba(255,255,255,0.06);
@@ -144,3 +175,11 @@
   background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);
   color: #ef4444; font-size: 13px; text-align: center;
 }
+.brg-loading-spinner {
+  width: 28px; height: 28px;
+  border: 3px solid rgba(255,255,255,0.15);
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  animation: brgSpin 0.8s linear infinite;
+}
+@keyframes brgSpin { to { transform: rotate(360deg); } }

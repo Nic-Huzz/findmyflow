@@ -13,11 +13,20 @@ import { hapticLight, hapticSuccess, hapticError } from '../lib/haptics'
 import './BridgeFlow.css'
 
 const STEPS = {
+  LOADING: 'loading',
+  MANAGE: 'manage',
   INTRO: 'intro',
   ADD_PEOPLE: 'add_people',
   VALUE_AND_ASK: 'value_and_ask',
   SUMMARY: 'summary',
 }
+
+const OUTREACH_STAGES = [
+  { id: 'to_contact', label: 'To contact', color: 'rgba(255,255,255,0.3)' },
+  { id: 'reached_out', label: 'Reached out', color: '#f59e0b' },
+  { id: 'in_conversation', label: 'In conversation', color: '#3b82f6' },
+  { id: 'meeting_booked', label: 'Meeting booked', color: '#10b981' },
+]
 
 const VALUE_OPTIONS = [
   { id: 'share_content', label: 'Share their content with my audience', icon: '📣' },
@@ -40,12 +49,13 @@ const EMPTY_PERSON = { name: '', platform: '', what_they_do: '', value: '', ask:
 export default function BridgeFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const [step, setStepRaw] = useState(STEPS.INTRO)
+  const [step, setStepRaw] = useState(STEPS.LOADING)
   const [people, setPeople] = useState([{ ...EMPTY_PERSON }])
   const [editingIndex, setEditingIndex] = useState(0)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [remarkableAngle, setRemarkableAngle] = useState(null)
+  const [existingBridges, setExistingBridges] = useState([])
 
   const setStep = (next) => {
     setStepRaw(next)
@@ -53,17 +63,51 @@ export default function BridgeFlow() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // Load existing bridges + remarkable angle
   useEffect(() => {
     if (!user) return
-    supabase
-      .from('remarkable_angles')
-      .select('ai_rule_statement, combination_insight, extreme_action_plan')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => { if (data) setRemarkableAngle(data) })
+    Promise.all([
+      supabase
+        .from('remarkable_angles')
+        .select('ai_rule_statement, combination_insight, extreme_action_plan')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('crm_contacts')
+        .select('id, name, social_handle, notes, outreach_status')
+        .eq('user_id', user.id)
+        .contains('tags', ['bridge'])
+        .order('created_at', { ascending: false }),
+    ]).then(([{ data: angle }, { data: bridges }]) => {
+      if (angle) setRemarkableAngle(angle)
+      const b = bridges || []
+      setExistingBridges(b)
+      setStepRaw(b.length > 0 ? STEPS.MANAGE : STEPS.INTRO)
+    })
   }, [user])
+
+  const updateOutreachStatus = async (contactId, newStatus) => {
+    hapticLight()
+    setExistingBridges(prev => prev.map(b => b.id === contactId ? { ...b, outreach_status: newStatus } : b))
+    await supabase.from('crm_contacts').update({
+      outreach_status: newStatus,
+      outreach_status_entered_at: new Date().toISOString(),
+    }).eq('id', contactId)
+  }
+
+  const parseNotes = (notes) => {
+    if (!notes) return {}
+    const lines = notes.split('\n')
+    const result = {}
+    lines.forEach(l => {
+      if (l.startsWith('Does: ')) result.what = l.replace('Does: ', '')
+      if (l.startsWith('Value I can offer: ')) result.value = l.replace('Value I can offer: ', '')
+      if (l.startsWith('My ask: ')) result.ask = l.replace('My ask: ', '')
+    })
+    return result
+  }
 
   const updatePerson = (index, field, value) => {
     setPeople(prev => prev.map((p, i) => i === index ? { ...p, [field]: value } : p))
@@ -115,6 +159,15 @@ export default function BridgeFlow() {
       const { error: insertError } = await supabase.from('crm_contacts').insert(rows)
       if (insertError) throw insertError
 
+      // Refresh existing bridges so MANAGE screen has fresh data
+      const { data: refreshed } = await supabase
+        .from('crm_contacts')
+        .select('id, name, social_handle, notes, outreach_status')
+        .eq('user_id', user.id)
+        .contains('tags', ['bridge'])
+        .order('created_at', { ascending: false })
+      setExistingBridges(refreshed || [])
+
       hapticSuccess()
       setStep(STEPS.SUMMARY)
     } catch (err) {
@@ -124,6 +177,74 @@ export default function BridgeFlow() {
     } finally {
       setSaving(false)
     }
+  }
+
+  // ── LOADING ──
+  if (step === STEPS.LOADING) {
+    return (
+      <div className="brg brg-fullscreen">
+        <div className="brg-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+          <div className="brg-loading-spinner" />
+        </div>
+      </div>
+    )
+  }
+
+  // ── MANAGE: Existing bridges ──
+  if (step === STEPS.MANAGE) {
+    const contacted = existingBridges.filter(b => b.outreach_status && b.outreach_status !== 'to_contact').length
+
+    return (
+      <div className="brg brg-fullscreen">
+        <div className="brg-container brg-screen brg-intro-layout">
+          <div className="brg-intro-content">
+            <div className="brg-step-label">Your Bridges</div>
+            <h2 className="brg-heading"><span className="brg-gold">{contacted}</span> of {existingBridges.length} contacted</h2>
+            <p className="brg-prompt">Tap to update outreach status. Lead with value this week.</p>
+
+            {existingBridges.map(bridge => {
+              const notes = parseNotes(bridge.notes)
+              const currentStage = OUTREACH_STAGES.find(s => s.id === bridge.outreach_status) || OUTREACH_STAGES[0]
+              const currentIdx = OUTREACH_STAGES.findIndex(s => s.id === bridge.outreach_status)
+
+              return (
+                <div key={bridge.id} className="brg-manage-card">
+                  <div className="brg-manage-header">
+                    <div>
+                      <div className="brg-summary-name">{bridge.name}</div>
+                      {bridge.social_handle && <div className="brg-summary-platform">{bridge.social_handle}</div>}
+                    </div>
+                  </div>
+                  {notes.value && <div className="brg-manage-detail">Offer: {notes.value}</div>}
+                  {notes.ask && <div className="brg-manage-detail">Ask: {notes.ask}</div>}
+                  <div className="brg-manage-stages">
+                    {OUTREACH_STAGES.map((stage, i) => (
+                      <button
+                        key={stage.id}
+                        className={`brg-manage-stage ${bridge.outreach_status === stage.id ? 'brg-manage-stage-active' : ''}`}
+                        style={bridge.outreach_status === stage.id ? { borderColor: stage.color, color: stage.color } : {}}
+                        onClick={() => updateOutreachStatus(bridge.id, stage.id)}
+                      >
+                        {stage.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          <div className="brg-intro-footer">
+            <button className="brg-cta" style={{ width: '100%' }} onClick={() => { hapticLight(); setStep(STEPS.ADD_PEOPLE) }}>
+              + Add more bridges
+            </button>
+            <button className="brg-back-link" onClick={() => navigate('/create')}>
+              ← Back
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   // ── SCREEN 1: INTRO ──
@@ -353,9 +474,16 @@ export default function BridgeFlow() {
           <button
             className="brg-cta"
             style={{ width: '100%', marginTop: 16 }}
-            onClick={() => navigate('/create')}
+            onClick={() => {
+              setPeople([{ ...EMPTY_PERSON }])
+              setEditingIndex(0)
+              setStep(STEPS.MANAGE)
+            }}
           >
-            Back to Creator Portal
+            View all bridges
+          </button>
+          <button className="brg-back-link" onClick={() => navigate('/create')}>
+            ← Back to Creator Portal
           </button>
         </div>
       </div>
