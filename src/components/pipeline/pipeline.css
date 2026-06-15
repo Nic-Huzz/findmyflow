@@ -50,6 +50,10 @@
   width: 36px; height: 36px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 15px; position: relative;
+  line-height: 1;
+}
+.pl-ring-icon {
+  position: relative; z-index: 1;
 }
 .pl-ring.good { background: rgba(34,197,94,0.12); }
 .pl-ring.warn { background: rgba(234,179,8,0.12); }

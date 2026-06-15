@@ -104,7 +104,7 @@ export default function ExperiencePipeline({ experienceId, onBack }) {
                 }}
               >
                 <div className={`pl-ring ${node.status}`}>
-                  {node.status === 'good' ? '✅' : node.status === 'warn' ? '⚠️' : node.status === 'bad' ? '❌' : '○'}
+                  <span className="pl-ring-icon">{node.status === 'good' ? '✅' : node.status === 'warn' ? '⚠️' : node.status === 'bad' ? '❌' : '○'}</span>
                   <svg viewBox="0 0 40 40">
                     <circle className="pl-ring-bg" cx="20" cy="20" r="17" />
                     <circle
