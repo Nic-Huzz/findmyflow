@@ -1,0 +1,26 @@
+{
+  "appId": "com.nichuzz.viberise.creator",
+  "appName": "Vibe Rise for Creators",
+  "webDir": "dist-creator",
+  "server": {
+    "url": "https://create.viberise.com",
+    "cleartext": false
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "backgroundColor": "#0a0a12",
+    "scrollEnabled": true,
+    "allowsLinkPreview": false
+  },
+  "plugins": {
+    "StatusBar": {
+      "style": "LIGHT",
+      "backgroundColor": "#0a0a12"
+    },
+    "SplashScreen": {
+      "backgroundColor": "#0a0a12",
+      "launchAutoHide": true,
+      "launchShowDuration": 1000
+    }
+  }
+}
