@@ -528,6 +528,12 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   font-size: 11px; color: var(--text-secondary);
   margin-top: 2px; line-height: 1.4;
 }
+.ch2-action-count {
+  font-size: 11px; font-weight: 700; color: var(--gold);
+  background: rgba(233,162,59,0.12); border: 1px solid rgba(233,162,59,0.2);
+  padding: 2px 8px; border-radius: 10px; flex-shrink: 0;
+  white-space: nowrap;
+}
 .ch2-action-arrow {
   font-size: 18px; color: rgba(255,255,255,0.2);
   font-weight: 300; flex-shrink: 0;

@@ -168,12 +168,17 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [dashboardKPIs, setDashboardKPIs] = useState({ totalAttendees: 0, repeatRate: 0 })
   const [checklistCounts, setChecklistCounts] = useState({})
   const [activePlays, setActivePlays] = useState([])
+  const [bridgeCount, setBridgeCount] = useState({ total: 0, contacted: 0 })
 
   // ── Load all data ──────────────────────────────────────────────────────
   useEffect(() => {
     if (!userId) return
     loadData()
     fetchCreatorChallenges(userId, null).then(({ data }) => setActivePlays(data || []))
+    supabase.from('crm_contacts').select('outreach_status').eq('user_id', userId).contains('tags', ['bridge']).then(({ data }) => {
+      const contacts = data || []
+      setBridgeCount({ total: contacts.length, contacted: contacts.filter(c => c.outreach_status && c.outreach_status !== 'to_contact').length })
+    })
   }, [userId])
 
   // KPIs computed inside loadData from the same attendeeRows fetch
@@ -585,6 +590,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                       <div className="ch2-action-title">Create</div>
                       <div className="ch2-action-sub">Design a Lightning Strike that makes your movement impossible to ignore</div>
                     </div>
+                    {activePlays.filter(p => p.challenge_source === 'strike').length > 0 && (
+                      <div className="ch2-action-count">{activePlays.filter(p => p.challenge_source === 'strike').length} active</div>
+                    )}
                     <div className="ch2-action-arrow">›</div>
                   </div>
                   <div className="ch2-action-card" onClick={() => navigate('/create/bridge')}>
@@ -593,6 +601,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                       <div className="ch2-action-title">Bridge</div>
                       <div className="ch2-action-sub">Find 5 people slightly ahead of you and build mutual value</div>
                     </div>
+                    {bridgeCount.total > 0 && (
+                      <div className="ch2-action-count">{bridgeCount.contacted} of {bridgeCount.total}</div>
+                    )}
                     <div className="ch2-action-arrow">›</div>
                   </div>
                 </div>
