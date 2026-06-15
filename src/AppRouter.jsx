@@ -270,6 +270,7 @@ const EventCheckin = lazyRetry(() => import('./pages/EventCheckin'))
 const PayRentFlow = lazyRetry(() => import('./flows/PayRentFlow'))
 const RemarkableFlow = lazyRetry(() => import('./flows/RemarkableFlow'))
 const StrikeDesignFlow = lazyRetry(() => import('./flows/StrikeDesignFlow'))
+const BridgeFlow = lazyRetry(() => import('./flows/BridgeFlow'))
 const ScaleIncomeFlow = lazyRetry(() => import('./flows/ScaleIncomeFlow'))
 const ExperienceAttractionStack = lazyRetry(() => import('./flows/ExperienceAttractionStack'))
 const ExperienceMarketingCampaign = lazyRetry(() => import('./flows/ExperienceMarketingCampaign'))
@@ -278,6 +279,7 @@ const ExperienceInspiration = lazyRetry(() => import('./flows/ExperienceInspirat
 const AppBuildDashboard = lazyRetry(() => import('./components/AppBuild/AppBuildDashboard'))
 const AppBuildChallenge = lazyRetry(() => import('./components/AppBuild/AppBuildChallenge'))
 const AppBuildPrework = lazyRetry(() => import('./components/AppBuild/AppBuildPrework'))
+const AppBuildInterest = lazyRetry(() => import('./components/AppBuild/AppBuildInterest'))
 
 
 // Lazy-loaded - Public Play-List Feed
@@ -380,7 +382,8 @@ function ConditionalZarlo() {
   const isScopeMap = location.pathname === '/scope-map'
 
   const isPreLaunch = location.pathname === '/pre-launch'
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch) return null
+  const isRemarkableFlow = location.pathname === '/create/remarkable'
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow) return null
   return <ZarloWidget />
 }
 
@@ -432,7 +435,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/get-started' ||
                         location.pathname === '/shift-scorecard' ||
                         location.pathname === '/movement-makers' ||
-                        location.pathname === '/pre-launch'
+                        location.pathname === '/pre-launch' ||
+                        location.pathname === '/create/remarkable'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -1016,6 +1020,18 @@ function AppRouter() {
                 </AuthGate>
               </CreateGate>
             } />
+            <Route path="/create/bridge" element={
+              <CreateGate>
+                <AuthGate>
+                  <BridgeFlow />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/build-app/interest" element={
+              <AuthGate>
+                <AppBuildInterest />
+              </AuthGate>
+            } />
             <Route path="/create/build-app" element={
               <AuthGate>
                 <AppBuildDashboard />
@@ -1031,7 +1047,13 @@ function AppRouter() {
                 <AppBuildChallenge />
               </AuthGate>
             } />
-            <Route path="/create/experiences" element={<Navigate to="/create/experience/new" replace />} />
+            <Route path="/create/experiences" element={
+              <CreateGate>
+                <AuthGate>
+                  <CreatorHome defaultTab="experiences" />
+                </AuthGate>
+              </CreateGate>
+            } />
             <Route path="/create/growth" element={
               <CreateGate>
                 <AuthGate>
