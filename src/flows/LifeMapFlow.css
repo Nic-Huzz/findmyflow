@@ -922,15 +922,15 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: #6ee7b7;
+  color: rgba(255, 255, 255, 0.5);
   margin: 0 0 6px;
 }
 
 .lm-essence-name {
   font-size: 16px;
   font-weight: 700;
-  color: #fbbf24;
-  margin: 0 0 6px;
+  color: #ffffff;
+  margin: 0;
 }
 
 .lm-essence-text {
@@ -1576,8 +1576,19 @@
 }
 .lm-gap-question {
   font-size: 22px; font-weight: 600; font-style: italic;
-  color: #fbbf24; margin: 28px 0 36px; max-width: 300px;
+  color: #fbbf24; margin: 28px 0 20px; max-width: 300px;
 }
+
+.lm-gap-update-link {
+  background: none; border: none; cursor: pointer;
+  font-size: 13px; color: rgba(255, 255, 255, 0.4);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 8px 0; margin-bottom: 40px;
+  transition: color 0.2s;
+  font-family: inherit;
+}
+.lm-gap-update-link:hover { color: rgba(255, 255, 255, 0.65); }
 
 /* ═══════════════════════════════════════
    COMPLETION: MINI CHAMBER + GAP SEED + DROPDOWNS

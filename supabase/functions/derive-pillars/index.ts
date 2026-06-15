@@ -36,7 +36,7 @@ const SYSTEM_PROMPT = `You are analyzing a user's Life Map data to identify thei
 
 8. After pillars, separately list any Current Directions (emerged recently, may be where pillars are converging but don't have childhood roots).
 
-9. End with the Essence Chamber Gap: the pillar most clearly sitting empty or flickering. This is the diagnostic gold — be specific and honest. If ALL pillars are genuinely ACTIVE, set gap to null.`
+9. End with the Essence Chamber Gap. If a pillar is genuinely FLICKERING or EMPTY (no current orb), identify it. But if ALL pillars have active orbs in Now, set gap to null. Do NOT fabricate a gap by reinterpreting active orbs as "untested" or "nascent" — if the user says they are doing something, that counts as an active orb. A pillar with a stated Now orb is ACTIVE, period.`
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

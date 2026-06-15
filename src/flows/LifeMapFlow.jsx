@@ -107,6 +107,7 @@ export default function LifeMapFlow() {
   const [essenceChamber, setEssenceChamber] = useState(null)
   const [expandedDropdown, setExpandedDropdown] = useState(null)
   const [expandedPillar, setExpandedPillar] = useState(null)
+  const [isRederiving, setIsRederiving] = useState(false)
 
   // Mural
   const [muralUrl, setMuralUrl] = useState(null)
@@ -115,6 +116,46 @@ export default function LifeMapFlow() {
   // Ref to always have current responses (avoids stale closure in async runClustering)
   const responsesRef = useRef(responses)
   useEffect(() => { responsesRef.current = responses }, [responses])
+
+  // Re-derive chamber ref (must be declared before any early returns for Rules of Hooks)
+  const rederiveRef = useRef(false)
+  useEffect(() => {
+    if (currentScreen !== 'rederive_chamber' || rederiveRef.current) return
+    rederiveRef.current = true
+    ;(async () => {
+      try {
+        const chamberResult = await supabase.functions.invoke('derive-pillars', {
+          body: {
+            responses: responsesRef.current,
+            skillsClusters,
+            problemsClusters,
+            personasClusters,
+            essenceArchetype: essenceArchetype || null,
+          }
+        })
+        if (!chamberResult.error && !chamberResult.data?.error) {
+          setEssenceChamber(chamberResult.data)
+          const sid = savedSession?.id || sessionId
+          if (sid) {
+            supabase.from('flow_sessions').update({
+              response_data: {
+                responses: responsesRef.current,
+                connecting_dots_narrative: connectingDotsNarrative,
+                essence_archetype_used: essenceArchetype || null,
+                essence_chamber: chamberResult.data,
+              }
+            }).eq('id', sid).then(() => {})
+          }
+        }
+      } catch (err) {
+        console.error('Re-derive failed:', err)
+      } finally {
+        rederiveRef.current = false
+        setIsRederiving(false)
+        goToScreen('chamber_reveal')
+      }
+    })()
+  }, [currentScreen])
 
   // Stable sticky note rotations (seeded once, not on every render)
   const stickyRotations = useMemo(() => {
@@ -254,6 +295,8 @@ export default function LifeMapFlow() {
   const getNextPeriodScreen = (currentPeriodId) => {
     const idx = PERIODS.findIndex(p => p.id === currentPeriodId)
     if (idx < PERIODS.length - 1) return `period_${PERIODS[idx + 1].id}`
+    // If user came back from gap_insight to edit Now, re-derive pillars only
+    if (isRederiving) return 'rederive_chamber'
     return 'processing'
   }
 
@@ -646,17 +689,27 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
         <div className="lm-period-nav">
           <button className="lm-back-btn" onClick={() => goToScreen(getPrevPeriodScreen(period.id))}>←</button>
           {isLast ? (
-            <button
-              className="lm-cta-gold"
-              disabled={!valid}
-              onClick={async () => {
-                hapticSuccess()
-                const sid = sessionId || await createSession()
-                runClustering(sid)
-              }}
-            >
-              Reveal My Life Map ✨
-            </button>
+            isRederiving ? (
+              <button
+                className="lm-cta-gold"
+                disabled={!valid}
+                onClick={() => { hapticSuccess(); goToScreen('rederive_chamber') }}
+              >
+                Update My Chamber →
+              </button>
+            ) : (
+              <button
+                className="lm-cta-gold"
+                disabled={!valid}
+                onClick={async () => {
+                  hapticSuccess()
+                  const sid = sessionId || await createSession()
+                  runClustering(sid)
+                }}
+              >
+                Reveal My Life Map ✨
+              </button>
+            )
           ) : (
             <button
               className="lm-cta-gold"
@@ -914,6 +967,20 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
     )
   }
 
+  // ── Re-derive chamber loading screen ──
+  if (currentScreen === 'rederive_chamber') {
+    return (
+      <div className="life-map-app">
+        <div className="lm-container">
+          <div className="lm-processing">
+            <div className="lm-spinner" />
+            <h2 className="lm-processing-title lm-gold-text">Rebuilding your chamber...</h2>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // ── Nikigai: All 3 cluster categories on one screen ──
   if (currentScreen === 'nikigai') {
     const renderClusterCards = (clusters, colorClass) => (
@@ -967,7 +1034,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
                   <div className="lm-essence-avatar-placeholder">🦸</div>
                 )}
                 <div>
-                  <div className="lm-essence-label">Your Voice</div>
+                  <div className="lm-essence-label">Your Essence Voice</div>
                   <div className="lm-essence-name">{essenceArchetype}</div>
                 </div>
               </div>
@@ -1145,7 +1212,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
   }
 
   // ── Gap Insight ──
-  if (currentScreen === 'gap_insight' && !essenceChamber?.gap) {
+  if (currentScreen === 'gap_insight' && !essenceChamber?.gap?.pillar_name) {
     return (
       <div className="life-map-app">
         <div className="lm-container">
@@ -1162,7 +1229,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
     )
   }
 
-  if (currentScreen === 'gap_insight' && essenceChamber?.gap) {
+  if (currentScreen === 'gap_insight' && essenceChamber?.gap?.pillar_name) {
     return (
       <div className="life-map-app">
         <div className="lm-container">
@@ -1172,6 +1239,13 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             <h2 className="lm-gap-pillar-name lm-gold-text">{essenceChamber.gap.pillar_name}</h2>
             <p className="lm-gap-insight-text">{essenceChamber.gap.insight}</p>
             <div className="lm-gap-question">What orb could sit on this pillar next?</div>
+
+            <button
+              className="lm-gap-update-link"
+              onClick={() => { setIsRederiving(true); goToScreen('period_now') }}
+            >
+              Something missing? Update your Now answers
+            </button>
           </div>
 
           <div className="lm-fixed-bottom">
@@ -1231,7 +1305,10 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             {/* Mural Section */}
             <div className="lm-mural-section">
               {muralUrl ? (
-                <img src={muralUrl} alt="Life Map Mural" className="lm-mural-image" onClick={handleDownloadMural} style={{ cursor: 'pointer' }} />
+                <>
+                  <img src={muralUrl} alt="Life Map Mural" className="lm-mural-image" onClick={handleDownloadMural} style={{ cursor: 'pointer' }} />
+                  <button className="lm-share-btn download" onClick={handleDownloadMural} style={{ width: '100%', marginTop: 8 }}>Save Mural</button>
+                </>
               ) : muralLoading ? (
                 <div className="lm-mural-loading">
                   <div className="lm-spinner" style={{ width: 40, height: 40 }} />
@@ -1268,7 +1345,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             )}
 
             {/* Gap Seed Nudge */}
-            {essenceChamber?.gap && (
+            {essenceChamber?.gap?.pillar_name && (
               <div className="lm-gap-seed" onClick={() => navigate('/7-day-challenge')}>
                 <div className="lm-gap-seed-icon"><div className="lm-gap-seed-icon-inner" /></div>
                 <div className="lm-gap-seed-text">
@@ -1321,11 +1398,6 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
                 )}
               </div>
             </div>
-
-            {/* Share */}
-            {muralUrl && (
-              <button className="lm-share-btn download" onClick={handleDownloadMural} style={{ width: '100%', marginBottom: 8 }}>Save Mural</button>
-            )}
 
             <button className="lm-cta-gold" onClick={() => navigate('/7-day-challenge')} style={{ marginTop: 8 }}>
               Return Home
