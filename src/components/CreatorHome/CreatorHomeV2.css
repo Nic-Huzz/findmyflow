@@ -505,6 +505,37 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
 }
 .ch2-readiness-retake:active { opacity: 0.7; }
 
+/* ═══ ACTIONS ═══ */
+.ch2-actions-grid {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.ch2-action-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.ch2-action-card:active { background: rgba(255,255,255,0.07); }
+.ch2-action-icon { font-size: 20px; flex-shrink: 0; }
+.ch2-action-info { flex: 1; }
+.ch2-action-title {
+  font-size: 14px; font-weight: 800; color: var(--text-bright);
+  letter-spacing: -0.2px;
+}
+.ch2-action-sub {
+  font-size: 11px; color: var(--text-secondary);
+  margin-top: 2px; line-height: 1.4;
+}
+.ch2-action-arrow {
+  font-size: 18px; color: rgba(255,255,255,0.2);
+  font-weight: 300; flex-shrink: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ch2-action-card:hover { background: rgba(255,255,255,0.06); }
+}
+
 /* ═══ CREATOR DETAIL MODAL ═══ */
 .ch2-creator-overlay {
   position: fixed;
