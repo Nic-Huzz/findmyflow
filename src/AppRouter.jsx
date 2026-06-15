@@ -383,8 +383,8 @@ function ConditionalZarlo() {
 
   const isPreLaunch = location.pathname === '/pre-launch'
   const isRemarkableFlow = location.pathname === '/create/remarkable'
-  const isBridgeFlow = location.pathname === '/create/bridge'
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isBridgeFlow) return null
+  const isCreateFlow = location.pathname.startsWith('/create/') && location.pathname !== '/create'
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow) return null
   return <ZarloWidget />
 }
 
@@ -437,8 +437,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/shift-scorecard' ||
                         location.pathname === '/movement-makers' ||
                         location.pathname === '/pre-launch' ||
-                        location.pathname === '/create/remarkable' ||
-                        location.pathname === '/create/bridge'
+                        (location.pathname.startsWith('/create/') && location.pathname !== '/create')
 
   if (isPublicRoute) return null
   return <BottomToolbar />
