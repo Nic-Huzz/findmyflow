@@ -32,9 +32,11 @@ const SYSTEM_PROMPT = `You are analyzing a user's Life Map data to identify thei
 
 6. For personas: they validate pillars. Note which ones, but don't force a persona onto a pillar if the connection is weak.
 
-7. After pillars, separately list any Current Directions (emerged recently, may be where pillars are converging but don't have childhood roots).
+7. IMPORTANT: Career (25+) and Now often overlap in time. Users frequently don't repeat activities in Now that they already mentioned in Career. If an orb appears in Career, treat it as likely still active in Now unless problems or context suggest it stopped. Don't flag a pillar as FLICKERING just because the user didn't re-state a Career activity in Now.
 
-8. End with the Essence Chamber Gap: the pillar most clearly sitting empty or flickering. This is the diagnostic gold — be specific and honest. If ALL pillars are genuinely ACTIVE, set gap to null.`
+8. After pillars, separately list any Current Directions (emerged recently, may be where pillars are converging but don't have childhood roots).
+
+9. End with the Essence Chamber Gap: the pillar most clearly sitting empty or flickering. This is the diagnostic gold — be specific and honest. If ALL pillars are genuinely ACTIVE, set gap to null.`
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

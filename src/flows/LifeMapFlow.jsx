@@ -46,7 +46,7 @@ const QUESTIONS = {
     personas: { label: 'Who do you wish you could help?', hint: 'Who did you see struggling? Who needed what you know?', placeholders: ['e.g. Junior team members who felt lost...', 'e.g. Friends burnt out in corporate...'] },
   },
   now: {
-    skills: { label: 'What lights you up right now?', hint: 'What would you do even if no one paid you?', placeholders: ['e.g. Building this app, writing, coaching...', 'e.g. Making videos, designing experiences...'] },
+    skills: { label: 'What lights you up right now?', hint: 'Work, play, movement, creative expression. How do you spend your energy?', placeholders: ['e.g. Building this app, writing, coaching...', 'e.g. Dancing, designing experiences, sport...'] },
     problems: { label: 'What do you want to change?', hint: 'In your life, in others\' lives, in the world', placeholders: ['e.g. People wasting lives in unfulfilling careers...', 'e.g. The way mental health is treated...'] },
     personas: { label: 'Who needs what you\'ve learned?', hint: 'If you could go back and help a younger version of someone, who?', placeholders: ['e.g. The 25-year-old me who was burnt out...', 'e.g. Anyone stuck in "Head Full of Dreams"...'] },
   },
@@ -273,7 +273,7 @@ export default function LifeMapFlow() {
     setMuralLoading(true)
     try {
       const { data, error } = await supabase.functions.invoke('generate-life-map-mural', {
-        body: { responses: responsesRef.current }
+        body: { responses: responsesRef.current, essenceImageUrl: essenceImage || null }
       })
       if (error) throw error
       if (data?.url) setMuralUrl(data.url)
@@ -526,12 +526,13 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
     if (savedSession?.response_data?.essence_chamber) {
       setEssenceChamber(savedSession.response_data.essence_chamber)
     }
-    // Load clusters from DB
+    // Load clusters from DB (scoped to this Life Map session)
     const { data: clusters } = await supabase
       .from('nikigai_clusters')
       .select('*')
       .eq('user_id', user.id)
       .eq('cluster_stage', 'final')
+      .eq('session_id', savedSession.id)
       .in('cluster_type', ['skills', 'problems', 'persona'])
       .order('created_at', { ascending: false })
 
@@ -847,9 +848,9 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
                 connectingDotsNarrative.split('\n\n').filter(Boolean).map((para, i) => {
                   // Sanitize: strip all HTML tags except <strong> and </strong>
                   const sanitized = para
-                    .replace(/<\/?(?!strong\b)[a-z][^>]*>/gi, '')
+                    .replace(/<\/?(?!strong\b|em\b)[a-z][^>]*>/gi, '')
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*\*/g, '')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
                   return <p key={i} dangerouslySetInnerHTML={{ __html: sanitized }} />
                 })
               ) : (
@@ -901,8 +902,10 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
                 </div>
               ))}
             </div>
+          </div>
 
-            <button className="lm-cta-gold" style={{ marginTop: 12 }} onClick={() => { generateMural(); goToScreen('nikigai') }}>
+          <div className="lm-fixed-bottom">
+            <button className="lm-cta-gold" onClick={() => { generateMural(); goToScreen('nikigai') }}>
               See What This Means →
             </button>
           </div>
@@ -970,8 +973,48 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               </div>
             )}
 
-            <button className="lm-cta-purple" onClick={() => goToScreen(essenceChamber ? 'chamber_intro' : 'complete')}>
-              {essenceChamber ? 'Go deeper' : 'See your results'}
+            {!essenceChamber && skillsClusters.length > 0 && (
+              <button
+                className="lm-cta-purple"
+                style={{ marginBottom: 10 }}
+                disabled={isProcessing}
+                onClick={async () => {
+                  try {
+                    setIsProcessing(true)
+                    const chamberResult = await supabase.functions.invoke('derive-pillars', {
+                      body: {
+                        responses: responsesRef.current,
+                        skillsClusters,
+                        problemsClusters,
+                        personasClusters,
+                        essenceArchetype: essenceArchetype || null,
+                      }
+                    })
+                    if (!chamberResult.error && !chamberResult.data?.error) {
+                      setEssenceChamber(chamberResult.data)
+                      if (savedSession?.id) {
+                        supabase.from('flow_sessions').update({
+                          response_data: {
+                            ...savedSession.response_data,
+                            essence_chamber: chamberResult.data,
+                          }
+                        }).eq('id', savedSession.id).then(() => {})
+                      }
+                    }
+                    setIsProcessing(false)
+                    goToScreen('chamber_intro')
+                  } catch (err) {
+                    console.error('Chamber derivation failed:', err)
+                    setIsProcessing(false)
+                    goToScreen('complete')
+                  }
+                }}
+              >
+                {isProcessing ? 'Building your chamber...' : 'Discover your Essence Chamber'}
+              </button>
+            )}
+            <button className="lm-cta-gold" onClick={() => goToScreen(essenceChamber ? 'chamber_intro' : 'complete')}>
+              {essenceChamber ? 'Go deeper →' : 'See your results →'}
             </button>
           </div>
         </div>
@@ -993,6 +1036,9 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             <p className="lm-chamber-intro-body">
               Your <strong>Essence Chamber</strong> holds the expression needs that have been with you since childhood. Some are <strong>glowing</strong>. Some are <strong>flickering</strong>.
             </p>
+          </div>
+
+          <div className="lm-fixed-bottom">
             <button className="lm-cta-gold" onClick={() => goToScreen('chamber_reveal')}>Enter the Chamber</button>
           </div>
         </div>
@@ -1091,14 +1137,6 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               ))}
             </div>
 
-            {essenceChamber.current_directions?.length > 0 && (
-              <div className="lm-direction-card">
-                <div className="lm-direction-label">Current Direction (not a pillar)</div>
-                <div className="lm-direction-name">{essenceChamber.current_directions[0].name}</div>
-                <div className="lm-direction-desc">{essenceChamber.current_directions[0].description}</div>
-              </div>
-            )}
-
             <button className="lm-cta-gold" onClick={() => goToScreen('gap_insight')}>See what's missing</button>
           </div>
         </div>
@@ -1111,8 +1149,13 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
     return (
       <div className="life-map-app">
         <div className="lm-container">
-          <div className="lm-chamber-intro">
-            <button className="lm-cta-gold" onClick={() => goToScreen('complete')}>Continue to results</button>
+          <div className="lm-gap-screen">
+            <div style={{ fontSize: 48 }}>&#10024;</div>
+            <h2 className="lm-gap-pillar-name lm-gold-text">All pillars glowing</h2>
+            <p className="lm-gap-insight-text">Every expression need in your chamber has a current orb. Nothing is sitting empty right now.</p>
+          </div>
+          <div className="lm-fixed-bottom">
+            <button className="lm-cta-gold" onClick={() => goToScreen('complete')}>Continue →</button>
           </div>
         </div>
       </div>
@@ -1129,7 +1172,10 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             <h2 className="lm-gap-pillar-name lm-gold-text">{essenceChamber.gap.pillar_name}</h2>
             <p className="lm-gap-insight-text">{essenceChamber.gap.insight}</p>
             <div className="lm-gap-question">What orb could sit on this pillar next?</div>
-            <button className="lm-cta-purple" onClick={() => goToScreen('complete')}>Continue</button>
+          </div>
+
+          <div className="lm-fixed-bottom">
+            <button className="lm-cta-gold" onClick={() => goToScreen('complete')}>Continue →</button>
           </div>
         </div>
       </div>
@@ -1185,15 +1231,12 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
           <div className="lm-complete">
             <div className="lm-checkmark">✓</div>
             <h1 className="lm-complete-title lm-gold-text">Your Life Map is complete</h1>
-            <div className="lm-xp-card">
-              <p className="lm-xp-amount">+15 RP</p>
-              <p className="lm-xp-label">Life Map Complete</p>
-            </div>
+            <div className="lm-complete-rp">+15 RP</div>
 
             {/* Mural Section */}
             <div className="lm-mural-section">
               {muralUrl ? (
-                <img src={muralUrl} alt="Life Map Mural" className="lm-mural-image" />
+                <img src={muralUrl} alt="Life Map Mural" className="lm-mural-image" onClick={handleDownloadMural} style={{ cursor: 'pointer' }} />
               ) : muralLoading ? (
                 <div className="lm-mural-loading">
                   <div className="lm-spinner" style={{ width: 40, height: 40 }} />
@@ -1284,13 +1327,10 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               </div>
             </div>
 
-            {/* Share Buttons */}
-            <div className="lm-share-buttons">
-              {muralUrl && (
-                <button className="lm-share-btn download" onClick={handleDownloadMural}>Save Mural</button>
-              )}
-              <button className="lm-share-btn copy" onClick={handleCopyLink}>Copy Link</button>
-            </div>
+            {/* Share */}
+            {muralUrl && (
+              <button className="lm-share-btn download" onClick={handleDownloadMural} style={{ width: '100%', marginBottom: 8 }}>Save Mural</button>
+            )}
 
             <button className="lm-cta-gold" onClick={() => navigate('/7-day-challenge')} style={{ marginTop: 8 }}>
               Return Home

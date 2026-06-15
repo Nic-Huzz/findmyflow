@@ -24,7 +24,9 @@ export default function DeepDiveCard({ deepDive, isCompleted, onNavigate }) {
         <div className="level-dd-name">{deepDive.name}</div>
         <div className="level-dd-narrative">{deepDive.narrative}</div>
       </div>
-      {isCompleted ? (
+      {isCompleted && deepDive.route ? (
+        <a href={deepDive.route} className="level-dd-status done" style={{ textDecoration: 'none' }}>View</a>
+      ) : isCompleted ? (
         <span className="level-dd-status done">Done</span>
       ) : deepDive.route?.startsWith('#') ? (
         <button className="level-dd-status start" onClick={handleClick} style={{ cursor: 'pointer' }}>Start</button>

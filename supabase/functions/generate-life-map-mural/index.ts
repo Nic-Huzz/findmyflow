@@ -65,7 +65,9 @@ SCENE 4 (right-center — Career): The same character, now energized and purpose
 
 SCENE 5 (far right — Now): The same character at a glowing desk or creative space with tropical plants. ${now.skills[0] ? `Working on "${now.skills[0]}".` : 'Building something that glows.'} Golden light radiates outward from their work. ${now.personas[0] ? `Behind them, slightly transparent like a Pixar memory sequence, stands "${now.personas[0]}" watching with awe.` : 'A younger version of themselves watches from behind, slightly transparent.'} The golden light touches everything on the right side of the mural.
 
-CRITICAL STYLE REQUIREMENTS: Full Pixar/Disney 3D animation rendering quality throughout. NOT 2D illustration, NOT watercolor, NOT flat. Must look like it was rendered by Pixar's RenderMan engine. Smooth 3D surfaces, subsurface scattering on skin, volumetric lighting, cinematic camera depth of field. The entire mural must feel cohesive like one continuous Pixar concept-art painting. No text or words anywhere. Landscape orientation, wide panoramic aspect ratio.`
+CRITICAL STYLE REQUIREMENTS: Full Pixar/Disney 3D animation rendering quality throughout. NOT 2D illustration, NOT watercolor, NOT flat. Must look like it was rendered by Pixar's RenderMan engine. Smooth 3D surfaces, subsurface scattering on skin, volumetric lighting, cinematic camera depth of field. The entire mural must feel cohesive like one continuous Pixar concept-art painting. No text or words anywhere. Landscape orientation, wide panoramic aspect ratio.
+
+CHARACTER CONSISTENCY: The SAME character must appear in ALL five scenes, aging naturally from child to adult. Maintain consistent facial features, skin tone, and recognizable traits throughout.`
 }
 
 serve(async (req) => {
@@ -96,9 +98,11 @@ serve(async (req) => {
 
     // Parse request
     let responses: Record<string, string[]>
+    let essenceImageUrl: string | null = null
     try {
       const body = await req.json()
       responses = body.responses
+      essenceImageUrl = body.essenceImageUrl || null
     } catch {
       return jsonResponse({ error: 'Invalid JSON body' }, 400)
     }
@@ -112,17 +116,42 @@ serve(async (req) => {
     }
 
     // Build prompt from user's life map data
-    const prompt = buildScenePrompt(responses)
+    let prompt = buildScenePrompt(responses)
     console.log('Generating Life Map mural for user:', userId)
 
-    // Call Gemini (text-only, no input image)
+    // Fetch reference image if provided (essence archetype avatar)
+    let referenceImageParts: any[] = []
+    if (essenceImageUrl) {
+      try {
+        const imgRes = await fetch(essenceImageUrl)
+        if (imgRes.ok) {
+          const imgBuffer = await imgRes.arrayBuffer()
+          const imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBuffer)))
+          const imgMime = imgRes.headers.get('content-type') || 'image/png'
+          referenceImageParts = [{
+            inlineData: { mimeType: imgMime, data: imgBase64 }
+          }]
+          prompt += `\n\nIMPORTANT: A reference image of the person's Pixar avatar is provided. The character in ALL five scenes must closely match this reference: same face shape, skin tone, hairstyle, and overall appearance. Age the character naturally (child → teen → young adult → adult) while keeping the core facial features recognizable.`
+          console.log('Reference image included for character consistency')
+        }
+      } catch (imgErr) {
+        console.warn('Failed to fetch reference image, proceeding without:', imgErr)
+      }
+    }
+
+    // Call Gemini with optional reference image
+    const contentParts = [
+      ...referenceImageParts,
+      { text: prompt },
+    ]
+
     const geminiResponse = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
+          contents: [{ parts: contentParts }],
           generationConfig: { responseModalities: ['IMAGE', 'TEXT'] },
         }),
       }

@@ -165,8 +165,8 @@ export default function WahooCreator({
   return (
     <div className="wc-container">
       <div className="wc-header">
-        <h3 className="wc-title">Choose Your Wahoo:</h3>
-        <p className="wc-explainer">Every Wahoo is a rep. The more you practise expression with safety, the more Vibe Rise your nervous system can hold.</p>
+        <h3 className="wc-title">Add a Wahoo</h3>
+        <p className="wc-explainer">Wahoos are bucket-list experiences you&apos;d love to have. Each one is like a rep in the gym training your system that expressing in this way is safe.</p>
       </div>
 
       <div className="wc-card">

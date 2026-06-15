@@ -4,7 +4,7 @@
  * "Need inspiration? 💡" — collapsible section on the Wahoo tab (Play-list).
  * Permanent home for all Wahoo inspiration engines:
  *
- *   Row 1: ✨ Your play-skills — chips → AI suggestions (or PlaySkillPicker CTA if none)
+ *   Row 1: ✨ Your play-skills — chips → expression dials → freetext (or PlaySkillPicker CTA if none)
  *   Row 2: 🎯 Ikigai Mix — skill × problem × persona from the Life Map (gated)
  *   Row 3: 🏛️ Fill a pillar — FUTURE (Essence Chamber pillar gaps), stub below
  *
@@ -45,8 +45,8 @@ export default function WahooInspiration({
   onPlaySkillsUpdated,
 }) {
   const [expanded, setExpanded] = useState(false)
-  const [mode, setMode] = useState('rows') // rows | suggestions | preview
-  const [genSource, setGenSource] = useState(null) // 'skill' | 'mix' | 'save' | null
+  const [mode, setMode] = useState('rows') // rows | dials | preview
+  const [genSource, setGenSource] = useState(null) // 'save' | null
   const generating = genSource !== null
   const [error, setError] = useState(null)
   const [showPicker, setShowPicker] = useState(false)
@@ -59,7 +59,8 @@ export default function WahooInspiration({
 
   // Row 1 state
   const [selectedSkillCat, setSelectedSkillCat] = useState(null)
-  const [suggestions, setSuggestions] = useState([])
+  const [selectedDial, setSelectedDial] = useState(null)
+  const [dialText, setDialText] = useState('')
 
   // Row 2 state
   const [ikigaiReady, setIkigaiReady] = useState(false)
@@ -86,7 +87,11 @@ export default function WahooInspiration({
       if (!completed) return
       setIkigaiReady(true)
       fetchFlowFinderData(userId).then(({ data }) => {
-        if (data) setIkigaiData(data)
+        if (data) {
+          // Filter out play-skills (step_id 'get_started') — those belong in Row 1
+          const lifeMapSkills = data.skills.filter(s => s.step_id !== 'get_started')
+          setIkigaiData({ ...data, skills: lifeMapSkills })
+        }
       })
     })
   }, [userId])
@@ -97,50 +102,44 @@ export default function WahooInspiration({
     flashTimerRef.current = setTimeout(() => setFlash(null), 1800)
   }
 
-  // ─── Row 1: play-skill suggestions (3 in parallel) ─────────────────────────
+  // ─── Row 1: expression dials ────────────────────────────────────────────────
 
-  async function generateSuggestions(categoryId) {
-    if (generating) return
+  const EXPRESSION_DIALS = [
+    { id: 'more_people', label: 'More people', icon: '🎤' },
+    { id: 'bolder_topic', label: 'Bolder topic', icon: '📢' },
+    { id: 'new_format', label: 'New format', icon: '🎭' },
+    { id: 'charge_for_it', label: 'Higher price', icon: '💰' },
+    { id: 'go_public', label: 'Go public', icon: '🌍' },
+  ]
+
+  function selectSkillChip(categoryId) {
     hapticLight()
-    setGenSource('skill')
-    setError(null)
     setSelectedSkillCat(categoryId)
+    setSelectedDial(null)
+    setDialText('')
+    setMode('dials')
+  }
 
-    const seg = findSkillSegment(categoryId)
-    const label = seg?.displayName || categoryId
+  function selectDial(dialId) {
+    hapticLight()
+    setSelectedDial(dialId)
+  }
 
-    try {
-      const results = await Promise.all(
-        [1, 2, 3].map(n =>
-          supabase.functions.invoke('groan-challenge-generator', {
-            body: {
-              sourceType: 'skill',
-              sourceLabel: label,
-              sourceInsight: `Generate suggestion ${n} of 3 for "${label}". Each suggestion must be completely different from the others. Suggestion ${n} should take a distinct angle.`,
-              visibilityLayer: currentVisibilityLayer,
-            },
-          }).then(r => r.data).catch(() => null)
-        )
-      )
-
-      const valid = results.filter(Boolean).map(data => ({
-        title: data.title,
-        description: data.description,
-        scaryScore: data.scaryScore,
-        wahooScore: data.wahooScore,
-        sourceType: 'skill',
-        sourceLabel: label,
-      }))
-      if (valid.length === 0) throw new Error('No suggestions generated')
-
-      setSuggestions(valid)
-      setMode('suggestions')
-    } catch (err) {
-      console.error('Inspiration suggestion error:', err)
-      setError('Failed to generate suggestions. Try again.')
-    } finally {
-      setGenSource(null)
-    }
+  function handleDialSave() {
+    if (!dialText.trim() || !selectedSkillCat) return
+    const seg = findSkillSegment(selectedSkillCat)
+    const dial = EXPRESSION_DIALS.find(d => d.id === selectedDial)
+    setPreview({
+      title: dialText.trim(),
+      description: dialText.trim(),
+      scaryScore: 5,
+      wahooScore: 7,
+      sourceType: 'skill',
+      sourceLabel: `${seg?.displayName || selectedSkillCat}${dial ? ` · ${dial.label}` : ''}`,
+    })
+    setWahooCategory('creation')
+    setPreviewOrigin('dials')
+    setMode('preview')
   }
 
   // ─── Row 2: Ikigai Mix ──────────────────────────────────────────────────────
@@ -150,49 +149,28 @@ export default function WahooInspiration({
     hapticLight()
     const rand = arr => (arr.length ? arr[Math.floor(Math.random() * arr.length)] : null)
     setPicks({
-      skill: rand(ikigaiData.skills)?.cluster_label || null,
-      problem: rand(ikigaiData.problems)?.cluster_label || null,
-      persona: rand(ikigaiData.personas)?.cluster_label || null,
+      skill: rand(ikigaiData.skills.slice(0, 5))?.cluster_label || null,
+      problem: rand(ikigaiData.problems.slice(0, 5))?.cluster_label || null,
+      persona: rand(ikigaiData.personas.slice(0, 5))?.cluster_label || null,
     })
   }
 
   const mixReady = picks.skill && picks.problem && picks.persona
+  const [mixText, setMixText] = useState('')
 
-  async function generateMix() {
-    if (!mixReady || generating) return
-    hapticLight()
-    setGenSource('mix')
-    setError(null)
-
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke('groan-challenge-generator', {
-        body: {
-          sourceType: 'skill_x_problem',
-          skillLabel: picks.skill,
-          problemLabel: picks.problem,
-          personaLabel: picks.persona,
-          visibilityLayer: currentVisibilityLayer,
-        },
-      })
-      if (fnError) throw fnError
-
-      setPreview({
-        title: data.title,
-        description: data.description,
-        scaryScore: data.scaryScore,
-        wahooScore: data.wahooScore,
-        sourceType: 'skill_x_problem',
-        sourceLabel: data.sourceLabel || `${picks.skill} × ${picks.problem} (for ${picks.persona})`,
-      })
-      setWahooCategory('creation')
-      setPreviewOrigin('rows')
-      setMode('preview')
-    } catch (err) {
-      console.error('Ikigai Mix error:', err)
-      setError('Failed to mix. Try again.')
-    } finally {
-      setGenSource(null)
-    }
+  function handleMixSave() {
+    if (!mixText.trim() || !mixReady) return
+    setPreview({
+      title: mixText.trim(),
+      description: mixText.trim(),
+      scaryScore: 5,
+      wahooScore: 7,
+      sourceType: 'skill_x_problem',
+      sourceLabel: `${picks.skill} × ${picks.problem} (for ${picks.persona})`,
+    })
+    setWahooCategory('creation')
+    setPreviewOrigin('rows')
+    setMode('preview')
   }
 
   // ─── Save / Accept ──────────────────────────────────────────────────────────
@@ -235,8 +213,8 @@ export default function WahooInspiration({
         flashThen('saved')
       }
       setMode('rows')
-      setSuggestions([])
       setPreview(null)
+      setMixText('')
     } catch (err) {
       console.error('Inspiration save error:', err)
       setError('Failed to save. Try again.')
@@ -250,7 +228,7 @@ export default function WahooInspiration({
   return (
     <div className="wahoo-inspiration">
       <button
-        className="wi-toggle"
+        className={`wi-toggle ${expanded ? 'open' : ''}`}
         onClick={() => { hapticLight(); setExpanded(e => !e) }}
         aria-expanded={expanded}
       >
@@ -267,31 +245,45 @@ export default function WahooInspiration({
 
       {expanded && (
         <div className="wi-body">
-          {/* ── Suggestions list (Row 1 result) ── */}
-          {mode === 'suggestions' && (
+          {/* ── Expression dials (Row 1 result) ── */}
+          {mode === 'dials' && (
             <div className="wi-panel">
-              <button className="wi-back" onClick={() => { setMode('rows'); setError(null) }}>← Back</button>
+              <button className="wi-back" onClick={() => { setMode('rows'); setSelectedSkillCat(null); setSelectedDial(null); setDialText('') }}>← Back</button>
               <div className="wi-panel-title">
-                Pick one for {findSkillSegment(selectedSkillCat)?.displayName || selectedSkillCat}
+                How could you stretch your {findSkillSegment(selectedSkillCat)?.displayName || selectedSkillCat}?
               </div>
-              {suggestions.map((s, i) => (
-                <button
-                  key={i}
-                  className="wi-suggestion-card"
-                  disabled={generating}
-                  onClick={() => {
-                    hapticLight()
-                    setPreview(s)
-                    setWahooCategory('creation')
-                    setPreviewOrigin('suggestions')
-                    setMode('preview')
-                  }}
-                >
-                  <div className="wi-suggestion-title">{s.title}</div>
-                  <div className="wi-suggestion-desc">{s.description}</div>
-                </button>
-              ))}
-              {error && <p className="wi-error">{error}</p>}
+              <div className="wi-dials">
+                {EXPRESSION_DIALS.map(dial => (
+                  <button
+                    key={dial.id}
+                    className={`wi-dial ${selectedDial === dial.id ? 'selected' : ''}`}
+                    onClick={() => selectDial(dial.id)}
+                  >
+                    <span className="wi-dial-icon">{dial.icon}</span>
+                    <span className="wi-dial-label">{dial.label}</span>
+                  </button>
+                ))}
+              </div>
+              {selectedDial && (
+                <div className="wi-dial-input">
+                  <input
+                    type="text"
+                    className="wi-dial-text"
+                    placeholder="Write your Wahoo..."
+                    value={dialText}
+                    onChange={e => setDialText(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleDialSave()}
+                    maxLength={120}
+                  />
+                  <button
+                    className="wi-primary-btn"
+                    disabled={!dialText.trim()}
+                    onClick={handleDialSave}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -302,7 +294,9 @@ export default function WahooInspiration({
               <div className="wi-preview-card">
                 <div className="wi-preview-source">{preview.sourceLabel}</div>
                 <div className="wi-preview-title">{preview.title}</div>
-                <div className="wi-preview-desc">{preview.description}</div>
+                {preview.description && preview.description !== preview.title && (
+                  <div className="wi-preview-desc">{preview.description}</div>
+                )}
                 <div className="wi-cat-row">
                   {WAHOO_CATEGORIES.map(cat => (
                     <button
@@ -341,22 +335,18 @@ export default function WahooInspiration({
                 <div className="wi-row-label">✨ Your play-skills</div>
                 {skillChips.length > 0 ? (
                   <>
-                    <div className="wi-row-sub">Tap one for tailored Wahoo ideas.</div>
+                    <div className="wi-row-sub">Tap one to stretch your expression.</div>
                     <div className="wi-chips">
                       {skillChips.map(chip => (
                         <button
                           key={chip.id}
                           className="wi-chip"
-                          disabled={generating}
-                          onClick={() => generateSuggestions(chip.id)}
+                          onClick={() => selectSkillChip(chip.id)}
                         >
                           {chip.icon} {chip.name}
                         </button>
                       ))}
                     </div>
-                    {genSource === 'skill' && (
-                      <div className="wi-generating"><div className="wi-spinner" /> Finding ideas...</div>
-                    )}
                   </>
                 ) : (
                   <>
@@ -377,7 +367,8 @@ export default function WahooInspiration({
                   <>
                     <div className="wi-row-sub">Mix a skill, a problem and a person from your Life Map.</div>
                     {['skill', 'problem', 'persona'].map(dim => {
-                      const items = dim === 'skill' ? ikigaiData.skills : dim === 'problem' ? ikigaiData.problems : ikigaiData.personas
+                      const allItems = dim === 'skill' ? ikigaiData.skills : dim === 'problem' ? ikigaiData.problems : ikigaiData.personas
+                      const items = allItems.slice(0, 5)
                       return (
                         <div key={dim} className="wi-ikigai-dim">
                           <div className="wi-ikigai-dim-label">{dim}</div>
@@ -397,13 +388,33 @@ export default function WahooInspiration({
                       )
                     })}
                     <div className="wi-ikigai-actions">
-                      <button className="wi-secondary-btn" disabled={generating} onClick={shufflePicks}>
+                      <button className="wi-secondary-btn" onClick={shufflePicks}>
                         Shuffle 🎲
                       </button>
-                      <button className="wi-primary-btn wi-mix-btn" disabled={!mixReady || generating} onClick={generateMix}>
-                        {genSource === 'mix' ? 'Mixing...' : 'Mix'}
-                      </button>
                     </div>
+                    {mixReady && (
+                      <div className="wi-mix-prompt">
+                        <p className="wi-mix-question">
+                          What experience could you create that solves <strong>{picks.problem}</strong> for <strong>{picks.persona}</strong> using your <strong>{picks.skill}</strong>?
+                        </p>
+                        <input
+                          type="text"
+                          className="wi-dial-text"
+                          placeholder="Write your Wahoo..."
+                          value={mixText}
+                          onChange={e => setMixText(e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && handleMixSave()}
+                          maxLength={120}
+                        />
+                        <button
+                          className="wi-primary-btn wi-mix-btn"
+                          disabled={!mixText.trim()}
+                          onClick={handleMixSave}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <div className="wi-row-sub wi-locked">
