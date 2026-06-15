@@ -86,21 +86,21 @@ function getNodeNudge(node, experience, isModuleComplete, wahoos, checklists) {
       if (!hasMetrics && !isModuleComplete('blow_up_brand'))
         return { text: 'Find your angle first, then start attracting.', cta: 'Blow Up Your Brand', route: '/create/remarkable' }
       if (!hasMetrics && days !== null && days < 14)
-        return { text: 'Your event is soon and nobody knows. Start with warm outreach. Tap "New Activity" above.', cta: null }
+        return { text: 'Your event is soon and nobody knows. Start with warm outreach.', cta: null }
       if (!hasMetrics)
-        return { text: 'Tap "New Activity" to log your first attraction activity.', cta: null }
+        return { text: 'Log your first attraction activity to start tracking.', cta: null }
       if (val > 0 && wahoos.length === 0)
         return { text: 'People are seeing you. A Wahoo will make you stand out.', cta: 'Design a Wahoo', route: '/create/strike' }
       return null
     case 'capture':
       if (val === 0)
-        return { text: 'No signups yet. Share your link and tap "New Activity" to log clicks.', cta: null }
+        return { text: 'No signups yet. Share your link and log the clicks.', cta: null }
       return null
     case 'convert':
       if (val === 0 && days !== null && days < 7)
         return { text: 'Event is soon. Send a direct pitch to your warmest leads.', cta: null }
       if (val === 0)
-        return { text: 'No tickets sold yet. Tap "New Activity" to log your first sale.', cta: null }
+        return { text: 'No tickets sold yet. Log your first sale.', cta: null }
       return null
     case 'deliver':
       if (!isPast) {
@@ -110,7 +110,7 @@ function getNodeNudge(node, experience, isModuleComplete, wahoos, checklists) {
         return null
       }
       if (val === 0)
-        return { text: 'Event is done. Tap "New Activity" to log attendance.', cta: null }
+        return { text: 'Event is done. Log how many people showed up.', cta: null }
       return null
     case 'grow': {
       if (!isPast) return null
@@ -155,32 +155,14 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
           </div>
         )}
 
-        {/* Header */}
-        <div className="pl-detail-top">
-          <div>
-            <div className="pl-detail-title">{node.label}</div>
-            <div className="pl-detail-stats">
-              <div className="pl-stat">
-                <div className="pl-stat-val">{node.value}</div>
-                <div className="pl-stat-lbl">{node.sublabel}</div>
-              </div>
-              {node.revenue > 0 && (
-                <div className="pl-stat">
-                  <div className="pl-stat-val">${node.revenue.toLocaleString()}</div>
-                  <div className="pl-stat-lbl">revenue</div>
-                </div>
-              )}
-            </div>
+        {/* Action bar */}
+        {node.key !== 'grow' && (
+          <div className="pl-detail-actions">
+            <button className="pl-update-btn" onClick={() => { hapticLight(); onUpdate?.() }}>
+              + New Activity
+            </button>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div className={`pl-pill ${node.status}`}>{node.readinessPercent}%</div>
-            {node.key !== 'grow' && (
-              <button className="pl-update-btn" onClick={() => { hapticLight(); onUpdate?.() }}>
-                New Activity
-              </button>
-            )}
-          </div>
-        </div>
+        )}
 
         {/* Awareness Wahoos (Attract only) — above modules */}
         {node.key === 'attract' && (
