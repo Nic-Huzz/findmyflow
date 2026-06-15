@@ -70,16 +70,21 @@ export default function BridgeFlow() {
   }
 
   const addPerson = () => {
-    if (people.length < 10) {
-      setPeople(prev => [...prev, { ...EMPTY_PERSON }])
-      setEditingIndex(people.length)
-    }
+    setPeople(prev => {
+      if (prev.length >= 10) return prev
+      const next = [...prev, { ...EMPTY_PERSON }]
+      setEditingIndex(next.length - 1)
+      return next
+    })
   }
 
   const removePerson = (index) => {
-    if (people.length <= 1) return
-    setPeople(prev => prev.filter((_, i) => i !== index))
-    setEditingIndex(Math.min(editingIndex, people.length - 2))
+    setPeople(prev => {
+      if (prev.length <= 1) return prev
+      const next = prev.filter((_, i) => i !== index)
+      setEditingIndex(Math.min(editingIndex, next.length - 1))
+      return next
+    })
   }
 
   const validPeople = people.filter(p => p.name.trim())
@@ -230,7 +235,16 @@ export default function BridgeFlow() {
   // ── SCREEN 3: VALUE & ASK ──
   if (step === STEPS.VALUE_AND_ASK) {
     const current = validPeople[editingIndex] || validPeople[0]
-    const currentGlobalIndex = people.indexOf(current)
+    // Derive global index by counting valid people up to editingIndex
+    // Can't use indexOf — object references change after updatePerson spreads
+    let currentGlobalIndex = -1
+    let validCount = 0
+    for (let i = 0; i < people.length; i++) {
+      if (people[i].name.trim()) {
+        if (validCount === editingIndex) { currentGlobalIndex = i; break }
+        validCount++
+      }
+    }
     const isLast = editingIndex >= validPeople.length - 1
 
     return (
