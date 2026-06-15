@@ -3,6 +3,7 @@
  *
  * Adapts per node:
  *   Attract: method picker (Content, Warm, Cold, Paid, Affiliates) → method-specific fields
+ *   Content + Warm: screenshot upload option that auto-fills fields via AI
  *   Capture: clicks/signups count
  *   Convert: tickets sold + revenue
  *   Deliver: showed up count
@@ -10,17 +11,18 @@
  * CSS prefix: mis-
  */
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { savePipelineMetric } from '../../hooks/useExperiencePipeline'
+import { analyzeMetricsScreenshot, analyzeLeadsScreenshot } from '../../lib/screenshotAnalysis'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import './MetricInputSheet.css'
 
 const ATTRACT_METHODS = [
-  { id: 'content', label: 'Content', icon: '📱', fields: [
+  { id: 'content', label: 'Content', icon: '📱', hasScreenshot: true, fields: [
     { key: 'posts', label: 'Posts made', type: 'number' },
     { key: 'reach', label: 'Reach / impressions', type: 'number' },
   ]},
-  { id: 'warm', label: 'Warm Outreach', icon: '☀️', fields: [
+  { id: 'warm', label: 'Warm Outreach', icon: '☀️', hasScreenshot: true, fields: [
     { key: 'dms_sent', label: 'DMs sent', type: 'number' },
     { key: 'replies', label: 'Replies received', type: 'number' },
   ]},
@@ -28,7 +30,7 @@ const ATTRACT_METHODS = [
     { key: 'messages_sent', label: 'Messages sent', type: 'number' },
     { key: 'replies', label: 'Replies received', type: 'number' },
   ]},
-  { id: 'paid', label: 'Paid Ads', icon: '💰', fields: [
+  { id: 'paid', label: 'Paid Ads', icon: '💰', hasScreenshot: true, fields: [
     { key: 'spend', label: 'Ad spend', type: 'number' },
     { key: 'reach', label: 'Impressions', type: 'number' },
     { key: 'clicks', label: 'Clicks', type: 'number' },
@@ -58,11 +60,61 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
   const [method, setMethod] = useState(null)
   const [values, setValues] = useState({})
   const [saving, setSaving] = useState(false)
+  const [analyzing, setAnalyzing] = useState(false)
+  const [analyzeError, setAnalyzeError] = useState(null)
+  const fileInputRef = useRef(null)
 
   const isAttract = node === 'attract'
+  const currentMethod = isAttract ? ATTRACT_METHODS.find(m => m.id === method) : null
   const fields = isAttract
-    ? (method ? ATTRACT_METHODS.find(m => m.id === method)?.fields || [] : [])
+    ? (currentMethod?.fields || [])
     : (NODE_FIELDS[node] || [])
+  const hasScreenshot = currentMethod?.hasScreenshot
+
+  const handleScreenshot = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setAnalyzing(true)
+    setAnalyzeError(null)
+    hapticLight()
+
+    try {
+      if (method === 'content' || method === 'paid') {
+        const result = await analyzeMetricsScreenshot(file)
+        if (result?.metrics) {
+          const m = result.metrics
+          setValues(prev => ({
+            ...prev,
+            posts: m.posts || prev.posts || '',
+            reach: m.reach || m.impressions || prev.reach || '',
+            spend: m.spend || prev.spend || '',
+            clicks: m.link_clicks || m.clicks || prev.clicks || '',
+          }))
+          hapticSuccess()
+        } else {
+          setAnalyzeError('Could not extract metrics. Try entering manually.')
+        }
+      } else if (method === 'warm') {
+        const result = await analyzeLeadsScreenshot(file)
+        if (result?.leads) {
+          setValues(prev => ({
+            ...prev,
+            dms_sent: result.total_leads_found || prev.dms_sent || '',
+            replies: result.leads.filter(l => l.engagement_type === 'dm' && l.temperature !== 'cold').length || prev.replies || '',
+          }))
+          hapticSuccess()
+        } else {
+          setAnalyzeError('Could not extract outreach data. Try entering manually.')
+        }
+      }
+    } catch (err) {
+      console.error('Screenshot analysis error:', err)
+      setAnalyzeError('Analysis failed. Try entering manually.')
+    }
+    setAnalyzing(false)
+    // Reset file input
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
 
   const handleSave = async () => {
     if (saving) return
@@ -133,10 +185,37 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
         {fields.length > 0 && (
           <div className="mis-fields">
             {isAttract && method && (
-              <button className="mis-back" onClick={() => { setMethod(null); setValues({}) }}>
+              <button className="mis-back" onClick={() => { setMethod(null); setValues({}); setAnalyzeError(null) }}>
                 ← Different method
               </button>
             )}
+
+            {/* Screenshot upload option */}
+            {hasScreenshot && (
+              <div className="mis-screenshot">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleScreenshot}
+                  style={{ display: 'none' }}
+                />
+                <button
+                  className="mis-screenshot-btn"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={analyzing}
+                >
+                  {analyzing ? '🔍 Analyzing...' : '📸 Upload Screenshot'}
+                </button>
+                <span className="mis-screenshot-hint">
+                  {method === 'content' ? 'Instagram insights, post metrics' : method === 'warm' ? 'DM conversations, message list' : 'Ad manager dashboard'}
+                </span>
+                {analyzeError && <span className="mis-screenshot-error">{analyzeError}</span>}
+              </div>
+            )}
+
+            {hasScreenshot && <div className="mis-divider"><span>or enter manually</span></div>}
+
             {fields.map(field => (
               <label key={field.key} className="mis-field">
                 <span className="mis-field-label">{field.label}</span>
@@ -149,14 +228,13 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
                     value={values[field.key] || ''}
                     onChange={e => setValues(prev => ({ ...prev, [field.key]: e.target.value }))}
                     placeholder="0"
-                    autoFocus={fields.indexOf(field) === 0}
                   />
                 </div>
               </label>
             ))}
             <button
               className="mis-save"
-              disabled={saving || (
+              disabled={saving || analyzing || (
                 !(isAttract && method === 'affiliates' && values.partner_name?.trim()) &&
                 fields.filter(f => f.type === 'number').every(f => !values[f.key] || Number(values[f.key]) === 0)
               )}
