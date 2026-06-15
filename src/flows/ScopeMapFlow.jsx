@@ -218,7 +218,7 @@ export default function ScopeMapFlow({ onComplete }) {
       case 'waterfall':
       case 'river':
       default:
-        navigate('/create/experience/new')
+        navigate('/experience-creators')
         break
     }
   }

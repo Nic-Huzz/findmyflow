@@ -14,14 +14,16 @@ export default function AIConsentModal({ userId, onContinue }) {
 
   const handleContinue = async () => {
     setSaving(true)
-
-    // Persist to DB for logged-in users
-    if (userId) {
-      await supabase
-        .from('user_stage_progress')
-        .update({ ai_consent_given: true })
-        .eq('user_id', userId)
-        .then()
+    try {
+      // Persist to DB for logged-in users
+      if (userId) {
+        await supabase
+          .from('user_stage_progress')
+          .update({ ai_consent_given: true })
+          .eq('user_id', userId)
+      }
+    } catch (e) {
+      console.error('AI consent save failed:', e)
     }
 
     // Always persist locally for fast future checks
