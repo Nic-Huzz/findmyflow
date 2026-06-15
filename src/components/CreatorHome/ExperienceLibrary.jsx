@@ -6,11 +6,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
-import { fetchTemplates, createTemplate, archiveTemplate, updateTemplate } from '../../lib/experienceTemplateService'
+import { fetchTemplates, createTemplate, archiveTemplate } from '../../lib/experienceTemplateService'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
-import JourneyDesigner from './JourneyDesigner'
 import './ExperienceLibrary.css'
-import './JourneyDesigner.css'
 
 const EXPERIENCE_TYPES = [
   { id: 'workshop', label: 'Workshops & Training', emoji: '🎓' },
@@ -33,10 +31,6 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
   const [newType, setNewType] = useState('workshop')
   const [newDuration, setNewDuration] = useState('')
   const [creating, setCreating] = useState(false)
-  const [designerOpen, setDesignerOpen] = useState(null) // template ID
-  const [manualEditId, setManualEditId] = useState(null) // template ID for manual edit
-  const [manualRunsheet, setManualRunsheet] = useState([])
-  const [savingManual, setSavingManual] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -76,35 +70,6 @@ export default function ExperienceLibrary({ onCreateFromTemplate }) {
     hapticLight()
     await archiveTemplate(id)
     setTemplates(prev => prev.filter(t => t.id !== id))
-  }
-
-  const openManualEdit = (t) => {
-    hapticLight()
-    setDesignerOpen(null)
-    setManualEditId(t.id)
-    setManualRunsheet(t.runsheet?.length > 0 ? t.runsheet.map(p => ({ ...p })) : [
-      { phase: 'Opening', duration: 5, notes: '' },
-      { phase: 'Main', duration: 30, notes: '' },
-      { phase: 'Closing', duration: 5, notes: '' },
-    ])
-  }
-
-  const handleManualSave = async () => {
-    if (savingManual) return
-    setSavingManual(true)
-    try {
-      const filtered = manualRunsheet.filter(p => p.phase.trim())
-      await updateTemplate(manualEditId, {
-        runsheet: filtered,
-        duration_minutes: filtered.reduce((s, p) => s + (parseInt(p.duration) || 0), 0),
-      })
-      hapticSuccess()
-      setTemplates(prev => prev.map(tp => tp.id === manualEditId ? { ...tp, runsheet: filtered, duration_minutes: filtered.reduce((s, p) => s + (parseInt(p.duration) || 0), 0) } : tp))
-      setManualEditId(null)
-    } catch (err) {
-      console.error('Manual save error:', err)
-    }
-    setSavingManual(false)
   }
 
   if (loading) return null

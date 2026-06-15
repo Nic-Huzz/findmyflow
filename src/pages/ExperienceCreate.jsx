@@ -160,7 +160,8 @@ export default function ExperienceCreate() {
         runAgainFromId: runAgainFromId || null,
       })
       hapticSuccess()
-      navigate(`/create/experience/${exp.id}`)
+      const jParam = journeyMode !== 'skip' ? `?journey=${journeyMode}` : ''
+      navigate(`/create/experience/${exp.id}${jParam}`)
     } catch {
       // error state already set in the hook
     }
