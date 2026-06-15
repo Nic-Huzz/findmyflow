@@ -172,6 +172,27 @@ body.project-selector-active .bottom-toolbar {
   background: var(--toolbar-active-bg);
 }
 
+/* Create portal toolbar - Dark theme */
+.bottom-toolbar.create-toolbar {
+  background: #0a0a12;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.create-toolbar .toolbar-item {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.create-toolbar .toolbar-item:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.create-toolbar .toolbar-item.active {
+  color: #E9A23B;
+  background: rgba(233, 162, 59, 0.1);
+}
+
 /* Main app toolbar - Same white styling */
 .bottom-toolbar.main-toolbar {
   background: var(--toolbar-bg);
@@ -244,7 +265,7 @@ body.project-selector-active .bottom-toolbar {
     left: 0;
     bottom: 0;
     right: auto;
-    width: 72px;
+    width: 80px;
     height: 100vh;
     flex-direction: column;
     justify-content: flex-start;
@@ -260,7 +281,7 @@ body.project-selector-active .bottom-toolbar {
   .toolbar-item {
     padding: 10px 8px;
     min-width: auto;
-    width: 56px;
+    width: 64px;
     border-radius: 12px;
   }
 
@@ -271,6 +292,8 @@ body.project-selector-active .bottom-toolbar {
   .toolbar-label {
     font-size: 0.5rem;
     letter-spacing: 0.3px;
+    text-align: center;
+    white-space: nowrap;
   }
 
   /* Content area clears the sidebar */

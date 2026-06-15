@@ -1,6 +1,6 @@
 /**
  * LeagueOverview.css — /league
- * Fantasy League standings, schedule, team cards
+ * Redesigned: identity strip → matchup hero → tabs → content
  */
 
 /* === ROOT === */
@@ -13,15 +13,9 @@
   --surface: #ffffff;
 
   min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    rgba(94, 23, 235, 0.04) 0%,
-    #fafafa 25%,
-    #fafafa 75%,
-    rgba(233, 162, 59, 0.04) 100%
-  );
+  background: #fafafa;
   padding: 24px 20px;
-  padding-top: 80px;
+  padding-top: 72px;
   padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   color: var(--text-primary);
   overflow-x: hidden;
@@ -95,62 +89,287 @@
   letter-spacing: -0.3px;
 }
 
-/* === HERO CARD === */
-.league-overview .lo-hero {
-  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
-  border-radius: 24px;
-  padding: 28px 24px;
+/* === IDENTITY STRIP — slim, ambient === */
+.league-overview .lo-identity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.league-overview .lo-identity-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.league-overview .lo-identity-text strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.league-overview .lo-join-btn {
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: #1a1a2e;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s;
+}
+
+.league-overview .lo-join-btn:active {
+  transform: scale(0.96);
+}
+
+.league-overview .lo-invite-btn {
+  background: transparent;
+  border: 1px solid #dee2e6;
+  color: var(--brand-purple);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.league-overview .lo-invite-btn:hover {
+  background: rgba(94, 23, 235, 0.04);
+  border-color: rgba(94, 23, 235, 0.2);
+}
+
+/* === UPCOMING BANNER === */
+.league-overview .lo-upcoming-banner {
+  text-align: center;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  background: rgba(94, 23, 235, 0.04);
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-purple);
+}
+
+/* === MATCHUP HERO CARD === */
+.league-overview .lo-matchup-hero {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 20px;
+  padding: 20px;
   margin-bottom: 16px;
   color: white;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.25);
 }
 
-.league-overview .lo-hero::before {
+.league-overview .lo-matchup-hero::before {
   content: '';
   position: absolute;
   top: -40px; right: -20px;
-  width: 180px; height: 180px;
-  background: radial-gradient(circle, rgba(233, 162, 59, 0.2) 0%, transparent 70%);
-  animation: loGlow 4s ease-in-out infinite;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.15) 0%, transparent 70%);
   pointer-events: none;
 }
 
-.league-overview .lo-hero::after {
-  content: '';
-  position: absolute;
-  bottom: -60px; left: -30px;
-  width: 140px; height: 140px;
-  background: radial-gradient(circle, rgba(94, 23, 235, 0.25) 0%, transparent 70%);
-  pointer-events: none;
+/* Compact bye week (no purple card, just inline) */
+.league-overview .lo-matchup-compact {
+  margin-bottom: 16px;
 }
 
-@keyframes loGlow {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.1); }
+.league-overview .lo-bye-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-left: 4px solid var(--brand-purple);
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
 }
 
-.league-overview .lo-hero-label {
-  font-size: 11px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 1.5px; color: rgba(255,255,255,0.6);
-  display: block; margin-bottom: 12px;
-  position: relative; z-index: 1;
+/* Week nav (integrated into matchup card header) */
+.league-overview .lo-matchup-week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
 }
 
-.league-overview .lo-hero-title {
-  font-size: 22px; font-weight: 800; letter-spacing: -0.3px;
-  margin: 0 0 6px; position: relative; z-index: 1;
+.league-overview .lo-week-btn {
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
 }
 
-.league-overview .lo-hero-sub {
-  font-size: 14px; color: rgba(255,255,255,0.65);
-  margin: 0 0 20px; position: relative; z-index: 1;
+.lo-matchup-compact .lo-week-btn {
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  color: var(--brand-purple);
 }
 
-.league-overview .lo-hero-actions {
-  display: flex; flex-direction: column; gap: 10px;
-  position: relative; z-index: 1;
+.league-overview .lo-week-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.league-overview .lo-week-display {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lo-matchup-compact .lo-week-display {
+  color: var(--text-primary);
+}
+
+.lo-matchup-compact .lo-matchup-week-nav {
+  margin-bottom: 8px;
+}
+
+.league-overview .lo-week-current {
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2px 8px;
+  border-radius: 100px;
+  letter-spacing: 0.5px;
+}
+
+.lo-matchup-compact .lo-week-current {
+  background: rgba(94, 23, 235, 0.08);
+  color: var(--brand-purple);
+}
+
+.league-overview .lo-live-badge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fff;
+  background: #10b981;
+  padding: 2px 8px;
+  border-radius: 100px;
+  animation: loPulse 2s ease-in-out infinite;
+}
+
+@keyframes loPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Team VS layout */
+.league-overview .lo-matchup-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.league-overview .lo-matchup-team-name {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  flex: 1;
+}
+
+.league-overview .lo-matchup-team-name:last-child {
+  text-align: right;
+}
+
+.league-overview .lo-matchup-vs {
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+
+/* Category scores */
+.league-overview .lo-matchup-categories {
+  position: relative;
+  z-index: 1;
+}
+
+.league-overview .lo-cat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.league-overview .lo-cat-row:last-child {
+  border-bottom: none;
+}
+
+.league-overview .lo-cat-score {
+  font-size: 16px;
+  font-weight: 800;
+  min-width: 32px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.league-overview .lo-cat-score:first-child { text-align: left; }
+.league-overview .lo-cat-score:last-child { text-align: right; }
+.league-overview .lo-cat-score.lo-winning { color: #10b981; }
+
+.league-overview .lo-cat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  flex: 1;
+}
+
+/* Result line */
+.league-overview .lo-matchup-result {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+  position: relative;
+  z-index: 1;
+}
+
+.league-overview .lo-matchup-loading {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.league-overview .lo-matchup-loading .lo-spinner {
+  border-color: rgba(255, 255, 255, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.8);
 }
 
 /* === GOLD CTA === */
@@ -163,50 +382,18 @@
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-  font-family: inherit; position: relative; z-index: 1;
-}
-
-.league-overview .lo-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4);
-}
-
-.league-overview .lo-ghost-btn {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: white; padding: 14px; border-radius: 14px;
-  font-size: 15px; font-weight: 700;
-  cursor: pointer; text-align: center;
-  font-family: inherit; transition: all 0.2s;
-}
-
-.league-overview .lo-ghost-btn:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-/* My Team Badge */
-.league-overview .lo-my-team-badge {
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(255,255,255,0.12);
-  border-radius: 12px; padding: 12px 16px;
-  font-size: 14px; position: relative; z-index: 1;
-}
-
-.league-overview .lo-share-btn {
-  background: rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: white; padding: 6px 14px;
-  border-radius: 100px; font-size: 12px;
-  font-weight: 700; cursor: pointer;
+  transition: transform 0.2s;
   font-family: inherit;
+}
+
+.league-overview .lo-cta:active {
+  transform: scale(0.97);
 }
 
 /* === TABS === */
 .league-overview .lo-tabs {
   display: flex; gap: 8px; margin-bottom: 16px;
   justify-content: center;
-  overflow-x: auto; -webkit-overflow-scrolling: touch;
 }
 
 .league-overview .lo-tab {
@@ -227,129 +414,39 @@
   color: var(--brand-purple);
 }
 
-/* Content Submit Link */
-.league-overview .lo-content-link {
-  width: 100%;
-  background: rgba(59, 130, 246, 0.06);
-  border: 1px solid rgba(59, 130, 246, 0.15);
-  border-radius: 14px;
-  padding: 14px 20px;
-  font-size: 14px; font-weight: 700;
-  color: #3B82F6;
-  cursor: pointer; text-align: left;
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-  font-family: inherit; transition: all 0.2s;
+/* === GUIDE LINK (inside Rules tab) === */
+.league-overview .lo-guide-link {
+  display: block;
+  text-align: center;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  background: rgba(94, 23, 235, 0.04);
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  border-radius: 12px;
+  color: var(--brand-purple);
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background 0.15s;
 }
 
-.league-overview .lo-content-link:hover {
-  background: rgba(59, 130, 246, 0.1);
+.league-overview .lo-guide-link:hover {
+  background: rgba(94, 23, 235, 0.08);
 }
 
 /* === SECTION === */
 .league-overview .lo-section { margin-bottom: 16px; }
 
-.league-overview .lo-section-header {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
-}
-
-.league-overview .lo-section-icon {
-  width: 32px; height: 32px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-}
-
-.league-overview .lo-section-title {
-  font-size: 11px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 1.5px; color: var(--brand-purple);
-}
-
-/* === TEAM CARDS === */
+/* === CARDS === */
 .league-overview .lo-card {
   background: var(--surface);
   border: 1px solid #e9ecef;
-  border-radius: 24px;
-  padding: 20px 24px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
-  overflow: hidden; position: relative;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
   margin-bottom: 12px;
 }
-
-.league-overview .lo-card.accented::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 5px;
-  background: linear-gradient(180deg, var(--brand-purple), #10b981, var(--brand-gold));
-  border-radius: 24px 0 0 24px;
-  z-index: 2;
-}
-
-.league-overview .lo-card.my-team {
-  border-color: rgba(94, 23, 235, 0.2);
-  box-shadow: 0 4px 24px rgba(94, 23, 235, 0.08);
-}
-
-.league-overview .lo-team-header {
-  display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer; user-select: none;
-}
-
-.league-overview .lo-team-rank {
-  display: flex; align-items: center; gap: 12px;
-}
-
-.league-overview .lo-rank-num {
-  font-size: 18px; font-weight: 800; color: var(--text-secondary);
-  min-width: 32px;
-}
-
-.league-overview .lo-rank-num.gold {
-  color: var(--brand-gold);
-}
-
-.league-overview .lo-team-info { display: flex; flex-direction: column; }
-
-.league-overview .lo-team-name {
-  font-size: 16px; font-weight: 800; color: var(--text-primary);
-  letter-spacing: -0.3px;
-}
-
-.league-overview .lo-team-meta {
-  font-size: 12px; color: var(--text-muted); margin-top: 2px;
-}
-
-.league-overview .lo-team-points {
-  display: flex; align-items: center; gap: 8px;
-}
-
-.league-overview .lo-points-value {
-  font-size: 16px; font-weight: 800; color: var(--brand-purple);
-}
-
-.league-overview .lo-expand-chevron {
-  font-size: 10px; color: var(--text-muted);
-}
-
-/* Team Detail (expanded) */
-.league-overview .lo-team-detail {
-  margin-top: 16px; padding-top: 16px;
-  border-top: 1px solid #e9ecef;
-}
-
-.league-overview .lo-team-code {
-  font-size: 13px; color: var(--text-secondary);
-  margin-bottom: 12px;
-}
-
-.league-overview .lo-stat-row {
-  display: flex; justify-content: space-between;
-  padding: 8px 0; font-size: 14px;
-  border-bottom: 1px solid #f1f3f5;
-}
-
-.league-overview .lo-stat-row:last-child { border-bottom: none; }
 
 /* === SCHEDULE === */
 .league-overview .lo-week-header {
@@ -399,7 +496,7 @@
   font-size: 12px; color: var(--text-muted);
 }
 
-.league-overview .lo-matchup-vs {
+.league-overview .lo-matchup-vs-text {
   font-size: 13px; font-weight: 700;
   color: var(--text-muted); padding: 0 16px;
   min-width: 60px; text-align: center;
@@ -414,10 +511,6 @@
   font-size: 14px; font-weight: 800; margin: 20px 0 12px;
   color: var(--brand-purple); text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.league-overview .lo-rules-text {
-  font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin: 0;
 }
 
 .league-overview .lo-rules-list { display: flex; flex-direction: column; gap: 16px; }
@@ -455,7 +548,7 @@
 }
 
 .league-overview .lo-cat-icon { font-size: 14px; }
-.league-overview .lo-cat-label { color: var(--text-primary); }
+.league-overview .lo-cat-label-text { color: var(--text-primary); }
 
 /* === MODALS === */
 .league-overview .lo-modal-overlay {
@@ -510,6 +603,7 @@
   border: 2px solid #e9ecef; border-radius: 12px;
   padding: 14px 16px; color: var(--text-primary);
   font-size: 16px; font-family: inherit; transition: all 0.2s;
+  box-sizing: border-box;
 }
 
 .league-overview .lo-field input:focus {
@@ -537,25 +631,23 @@
   cursor: pointer; font-family: inherit;
 }
 
-/* Share Code Display */
 /* === RESPONSIVE === */
 @media (min-width: 768px) {
-  .league-overview { max-width: 700px; margin: 0 auto; }
+  .league-overview { max-width: 700px; margin: 0 auto; padding-left: 100px; }
   .league-overview .lo-modal-overlay { align-items: center; }
   .league-overview .lo-modal { border-radius: 24px; }
 }
 
 @media (max-width: 480px) {
-  .league-overview { padding: 16px; padding-top: 72px; }
+  .league-overview { padding: 16px; padding-top: 68px; }
   .league-overview .lo-modal-actions { flex-direction: column; }
   .league-overview .lo-modal-actions button { width: 100%; }
 }
 
-
 /* === REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
   .league-overview .lo-spinner { animation: none; }
-  .league-overview .lo-hero::before { animation: none; }
+  .league-overview .lo-live-badge { animation: none; }
   .league-overview *,
   .league-overview *::before,
   .league-overview *::after {

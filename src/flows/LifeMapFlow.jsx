@@ -924,7 +924,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             <div className="lm-cluster-insight">{cluster.insight}</div>
             <div className="lm-cluster-items">
               {(cluster.items || []).map((item, j) => (
-                <span key={j} className="lm-cluster-pill">{typeof item === 'string' ? item : item.text}</span>
+                <span key={j} className="lm-cluster-pill">{(typeof item === 'string' ? item : item.text).replace(/^\[.*?\]\s*/, '')}</span>
               ))}
             </div>
           </div>
@@ -967,7 +967,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
                   <div className="lm-essence-avatar-placeholder">🦸</div>
                 )}
                 <div>
-                  <div className="lm-essence-label">Your Essence Archetype</div>
+                  <div className="lm-essence-label">Your Voice</div>
                   <div className="lm-essence-name">{essenceArchetype}</div>
                 </div>
               </div>
@@ -975,7 +975,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
 
             {!essenceChamber && skillsClusters.length > 0 && (
               <button
-                className="lm-cta-purple"
+                className="lm-cta-gold"
                 style={{ marginBottom: 10 }}
                 disabled={isProcessing}
                 onClick={async () => {
@@ -1202,11 +1202,6 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       }
     }
 
-    const handleCopyLink = () => {
-      navigator.clipboard.writeText(window.location.origin + '/life-map')
-      hapticSuccess()
-    }
-
     const toggleSection = (section) => setExpandedDropdown(expandedDropdown === section ? null : section)
 
     const renderDropdownClusters = (clusters, colorClass) => (
@@ -1217,7 +1212,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             <div className="lm-cluster-insight">{cluster.insight}</div>
             <div className="lm-cluster-items">
               {(cluster.items || []).map((item, j) => (
-                <span key={j} className="lm-cluster-pill">{typeof item === 'string' ? item : item.text}</span>
+                <span key={j} className="lm-cluster-pill">{(typeof item === 'string' ? item : item.text).replace(/^\[.*?\]\s*/, '')}</span>
               ))}
             </div>
           </div>

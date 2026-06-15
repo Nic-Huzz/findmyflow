@@ -47,6 +47,7 @@ const Challenge = lazyRetry(() => import('./Challenge'))
 import { preloadMePage, preloadChallenge, preloadFlowCompass, preloadProfileHub } from './lib/preloadRoutes'
 import AuthGate from './AuthGate'
 import AIConsentModal from './components/AIConsentModal'
+import CreateGate from './components/CreateGate'
 import { supabase } from './lib/supabaseClient'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
@@ -948,9 +949,110 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Create Portal — redirected to League for consumer app (creator app coming later) */}
-            <Route path="/create/*" element={<Navigate to="/league" replace />} />
-            <Route path="/business/*" element={<Navigate to="/league" replace />} />
+            {/* Create — Experience Creator Portal */}
+            <Route path="/create" element={
+              <CreateGate>
+                <AuthGate>
+                  <CreatorHome />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/inspiration" element={
+              <CreateGate>
+                <AuthGate>
+                  <ExperienceInspiration />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/experience/new" element={
+              <CreateGate>
+                <AuthGate>
+                  <ExperienceCreate />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/experience/:id" element={
+              <CreateGate>
+                <AuthGate>
+                  <ExperienceDetail />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/pay-rent" element={
+              <CreateGate>
+                <AuthGate>
+                  <PayRentFlow />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/remarkable" element={
+              <CreateGate>
+                <AuthGate>
+                  <RemarkableFlow />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/attraction-stack" element={
+              <AuthGate>
+                <ExperienceAttractionStack />
+              </AuthGate>
+            } />
+            <Route path="/create/marketing-campaign" element={
+              <AuthGate>
+                <ExperienceMarketingCampaign />
+              </AuthGate>
+            } />
+            <Route path="/create/scale-income" element={
+              <CreateGate>
+                <AuthGate>
+                  <ScaleIncomeFlow />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/plays" element={
+              <CreateGate>
+                <AuthGate>
+                  <StrikeDesignFlow />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/build-app" element={
+              <AuthGate>
+                <AppBuildDashboard />
+              </AuthGate>
+            } />
+            <Route path="/create/build-app/prework" element={
+              <AuthGate>
+                <AppBuildPrework />
+              </AuthGate>
+            } />
+            <Route path="/create/build-app/challenge/:number" element={
+              <AuthGate>
+                <AppBuildChallenge />
+              </AuthGate>
+            } />
+            <Route path="/create/experiences" element={<Navigate to="/create/experience/new" replace />} />
+            <Route path="/create/growth" element={
+              <CreateGate>
+                <AuthGate>
+                  <CreatorHome defaultTab="growth" />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/profile" element={
+              <AuthGate>
+                <ProfileHub />
+              </AuthGate>
+            } />
+            <Route path="/create/strike" element={<Navigate to="/create/plays" replace />} />
+            <Route path="/business" element={<Navigate to="/create" replace />} />
+            <Route path="/business/experience/new" element={<Navigate to="/create/experience/new" replace />} />
+            <Route path="/business/experience/:id" element={<RedirectWithParam to="/create/experience" />} />
+            <Route path="/business/app" element={
+              <AuthGate>
+                <BusinessPage />
+              </AuthGate>
+            } />
 
             {/* Sol — AI Co-Founder */}
             <Route path="/sol" element={

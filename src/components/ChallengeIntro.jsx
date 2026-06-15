@@ -23,9 +23,10 @@ const SLIDES = [
     duration: 8000,
   },
   {
-    heading: 'Ready to find your flow?',
+    heading: 'A gym for your nervous system.',
     body: null,
-    duration: null, // waits for button
+    duration: null,
+    hasQuadrant: true,
     hasButton: true,
   },
 ]
@@ -77,9 +78,31 @@ export default function ChallengeIntro({ userId, onComplete }) {
         {slide.body && (
           <p className="challenge-intro-body">{slide.body}</p>
         )}
+        {slide.hasQuadrant && (
+          <div className="ci-quadrant">
+            <div className="ci-quad ci-quad-calm">
+              <span className="ci-quad-label">Calm</span>
+              <span className="ci-quad-sub">safe, but flat</span>
+            </div>
+            <div className="ci-quad ci-quad-vr">
+              <span className="ci-quad-label">Vibe Rise</span>
+              <span className="ci-quad-sub">expressing, safe</span>
+            </div>
+            <div className="ci-quad ci-quad-numb">
+              <span className="ci-quad-label">Numb</span>
+              <span className="ci-quad-sub">shutdown, not alive</span>
+            </div>
+            <div className="ci-quad ci-quad-anxious">
+              <span className="ci-quad-label">Anxious</span>
+              <span className="ci-quad-sub">performing, unsafe</span>
+            </div>
+            <span className="ci-axis ci-axis-y">Safety →</span>
+            <span className="ci-axis ci-axis-x">Expression →</span>
+          </div>
+        )}
         {slide.hasButton && (
           <button className="challenge-intro-cta" onClick={handleComplete}>
-            Let's Go
+            Let&apos;s Go
           </button>
         )}
       </div>

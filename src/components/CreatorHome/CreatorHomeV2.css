@@ -7,11 +7,11 @@
   --green: #10b981;
   --blue: #3b82f6;
   --bg: #0a0a12;
-  --card-bg: rgba(255,255,255,0.03);
-  --card-border: rgba(255,255,255,0.06);
+  --card-bg: rgba(255,255,255,0.06);
+  --card-border: rgba(255,255,255,0.1);
   --text-bright: #ffffff;
-  --text-primary: rgba(255,255,255,0.6);
-  --text-secondary: rgba(255,255,255,0.4);
+  --text-primary: rgba(255,255,255,0.85);
+  --text-secondary: rgba(255,255,255,0.6);
   --text-muted: rgba(255,255,255,0.45);
 
   min-height: 100vh;
@@ -51,72 +51,26 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
 }
 @keyframes ch2spin { to { transform: rotate(360deg); } }
 
-/* ═══ HEADER ═══ */
-.ch2-header {
-  background: linear-gradient(135deg, var(--purple) 0%, #3b0d99 100%);
-  padding: 18px 16px 0; color: white;
-  border-radius: 0 0 20px 20px;
-  position: relative; overflow: hidden;
-}
-.ch2-header::after {
-  content: ''; position: absolute; top: -30px; right: -20px;
-  width: 120px; height: 120px;
-  background: radial-gradient(circle, rgba(233,162,59,0.15) 0%, transparent 70%);
-  pointer-events: none;
-}
-.ch2-header-top {
-  display: flex; align-items: center; gap: 12px;
-  position: relative; z-index: 1;
-}
-.ch2-header-avatar {
-  width: 38px; height: 38px; border-radius: 12px;
-  border: 2px solid rgba(233,162,59,0.3);
-  overflow: hidden; background: rgba(255,255,255,0.1);
-  display: flex; align-items: center; justify-content: center;
-}
-.ch2-header-avatar img {
-  width: 100%; height: 100%; object-fit: cover;
-}
-.ch2-header-name { font-size: 16px; font-weight: 800; }
-.ch2-header-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 1px; }
-.ch2-header-xp {
-  margin-left: auto;
-  padding: 3px 10px; background: rgba(233,162,59,0.2); border-radius: 8px;
-  font-size: 12px; font-weight: 700; color: var(--gold);
-}
-
-/* ═══ TABS ═══ */
-.ch2-tabs {
-  display: flex; padding: 0 4px; margin-top: 12px;
-  position: relative; z-index: 1;
-}
-.ch2-tab {
-  flex: 1; padding: 11px 0; text-align: center;
-  font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.3);
-  border-bottom: 2px solid transparent; cursor: pointer;
-  background: none; border-top: none; border-left: none; border-right: none;
-  font-family: inherit;
-}
-.ch2-tab.active { color: white; border-bottom-color: var(--gold); }
+/* Header and in-page tabs removed — navigation is now in bottom toolbar */
 
 /* ═══ CONTENT ═══ */
-.ch2-content { padding: 16px; }
+.ch2-content { padding: 20px 16px; }
 .ch2-tab-panel { display: none; }
 .ch2-tab-panel.active { display: block; }
 
 /* ═══ SHARED ═══ */
-.ch2-section { padding: 0 0 14px; position: relative; }
+.ch2-section { padding: 0 0 18px; position: relative; }
 .ch2-label {
-  font-size: 10px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 1.2px; color: var(--text-muted); margin-bottom: 6px;
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--gold); margin-bottom: 8px;
 }
 .ch2-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  height: 1px; margin: 4px 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
 }
 .ch2-card {
   background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: 14px; padding: 14px; margin-bottom: 10px;
+  border-radius: 14px; padding: 16px; margin-bottom: 12px;
 }
 
 /* ═══ IDENTITY CARD ═══ */
@@ -148,58 +102,84 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   pointer-events: none;
 }
 
-.ch2-id-section { padding: 0 20px 14px; position: relative; z-index: 2; }
-.ch2-id-divider { height: 1px; margin: 0 20px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
+.ch2-id-section { padding: 0 20px 16px; position: relative; z-index: 2; }
+.ch2-id-divider { height: 1px; margin: 4px 20px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
 
-/* Hero */
+/* Hero — purple card with depth, matches original header treatment */
 .ch2-id-hero {
-  display: flex; align-items: flex-start; gap: 16px;
-  padding: 22px 20px 14px; position: relative; z-index: 2;
+  display: flex; align-items: center; gap: 18px;
+  padding: 28px 24px; position: relative; z-index: 2;
+  background: linear-gradient(135deg, var(--purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 0;
+  margin: 0;
+  overflow: hidden;
+}
+.ch2-id-hero::before {
+  content: ''; position: absolute; top: -40px; right: -20px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ch2-id-hero::after {
+  content: ''; position: absolute; bottom: -50px; left: -20px;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, rgba(94,23,235,0.3) 0%, transparent 70%);
+  pointer-events: none;
 }
 .ch2-id-avatar {
-  width: 76px; height: 76px; border-radius: 16px;
-  border: 2px solid rgba(233,162,59,0.35);
-  box-shadow: 0 0 20px rgba(94,23,235,0.2);
+  width: 88px; height: 88px; border-radius: 18px;
+  border: 2px solid rgba(233,162,59,0.4);
+  box-shadow: 0 0 28px rgba(94,23,235,0.3), 0 0 8px rgba(233,162,59,0.15);
   overflow: hidden; flex-shrink: 0;
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.05);
 }
 .ch2-id-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .ch2-id-avatar-empty {
-  width: 76px; height: 76px; border-radius: 16px;
-  border: 2px dashed rgba(255,255,255,0.12);
+  width: 88px; height: 88px; border-radius: 18px;
+  border: 2px dashed rgba(255,255,255,0.2);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; font-size: 12px; font-weight: 700;
   color: rgba(255,255,255,0.5); text-align: center; line-height: 1.3;
 }
 .ch2-id-type {
-  font-size: 10px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 1.5px; color: var(--gold); margin-bottom: 3px;
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--gold); margin-bottom: 4px;
+  position: relative; z-index: 1;
 }
 .ch2-id-name {
-  font-size: 20px; font-weight: 900; line-height: 1.1; letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #fff 30%, var(--gold) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 24px; font-weight: 900; line-height: 1.1; letter-spacing: -0.5px;
+  color: #fff;
+  position: relative; z-index: 1;
 }
 .ch2-id-focus {
-  display: inline-flex; align-items: center; gap: 4px; margin-top: 6px;
-  padding: 3px 9px; background: rgba(255,255,255,0.05); border-radius: 7px;
-  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4);
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
+  padding: 4px 10px; background: rgba(255,255,255,0.12); border-radius: 8px;
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7);
+  position: relative; z-index: 1;
 }
 
 /* Skills */
-.ch2-skills { display: flex; flex-wrap: wrap; gap: 5px; }
+.ch2-skills { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
 .ch2-skill {
-  padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700;
-  background: rgba(94,23,235,0.1); border: 1px solid rgba(94,23,235,0.18);
-  color: rgba(255,255,255,0.6);
+  padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  background: rgba(94,23,235,0.15); border: 1px solid rgba(94,23,235,0.25);
+  color: rgba(255,255,255,0.8);
+  max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* See more toggle */
+.ch2-see-more {
+  padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  background: rgba(233,162,59,0.12); border: 1px solid rgba(233,162,59,0.2);
+  color: var(--gold); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* North Stars */
 .ch2-stars { display: flex; gap: 5px; flex-wrap: wrap; }
 .ch2-star {
-  display: flex; align-items: center; gap: 5px; padding: 3px 9px 3px 3px;
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+  display: flex; align-items: center; gap: 5px; padding: 4px 10px 4px 4px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
   border-radius: 20px;
 }
 .ch2-star-img {
@@ -207,7 +187,7 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   background: rgba(255,255,255,0.06); overflow: hidden;
 }
 .ch2-star-img img { width: 100%; height: 100%; object-fit: cover; }
-.ch2-star-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.35); }
+.ch2-star-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); }
 
 /* Sub-tabs (Playbook / Inner Game) */
 .ch2-subtabs {
@@ -215,10 +195,10 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   position: relative; z-index: 2;
 }
 .ch2-subtab {
-  flex: 1; padding: 9px 0; text-align: center; cursor: pointer;
+  flex: 1; padding: 10px 0; text-align: center; cursor: pointer;
   font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 8px; color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; color: rgba(255,255,255,0.45);
   font-family: inherit; transition: all 0.2s ease;
 }
 .ch2-subtab.active {
@@ -233,9 +213,9 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
 
 /* Biz rows */
 .ch2-biz-row {
-  display: flex; align-items: center; gap: 10px; padding: 8px 12px;
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);
-  border-radius: 10px; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; margin-bottom: 6px;
 }
 .ch2-biz-row:last-child { margin-bottom: 0; }
 .ch2-biz-icon { font-size: 14px; flex-shrink: 0; }

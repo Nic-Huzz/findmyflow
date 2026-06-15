@@ -81,6 +81,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState(defaultTab)
   const [identitySubTab, setIdentitySubTab] = useState('playbook')
+  const [showSkillsExpanded, setShowSkillsExpanded] = useState(false)
   const [loading, setLoading] = useState(true)
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
   const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
@@ -308,80 +309,32 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   // ── Render ─────────────────────────────────────────────────────────────
   return (
     <div className="ch2">
-      {/* Header */}
-      <div className="ch2-header">
-        <div className="ch2-header-top">
-          <div className="ch2-header-avatar">
-            {essenceAvatar
-              ? <img src={essenceAvatar} alt="" onError={e => { e.target.style.display = 'none' }} />
-              : <span style={{ fontSize: 18 }}>🔥</span>
-            }
-          </div>
+
+      {/* Hero — sits above the content area, flush to edges */}
+      {activeTab === 'identity' && (
+        <div className="ch2-id-hero">
+          {essenceAvatar ? (
+            <div className="ch2-id-avatar">
+              <img src={essenceAvatar} alt="" onError={e => { e.target.style.display = 'none' }} />
+            </div>
+          ) : (
+            <div className="ch2-id-avatar-empty">Complete<br />Essence<br />Mirror</div>
+          )}
           <div>
-            <div className="ch2-header-name">Movement Maker</div>
-            <div className="ch2-header-sub">{archetypeLabel}</div>
+            <div className="ch2-id-type">{archetypeLabel}</div>
+            <div className="ch2-id-name">{essenceName || 'Your Identity'}</div>
+            {scopeFocus && (
+              <div className="ch2-id-focus">🎯 {scopeFocus}</div>
+            )}
           </div>
-          <div className="ch2-header-xp">{movementXP} RP</div>
         </div>
-        <div className="ch2-tabs">
-          {['identity', 'experiences', 'growth', ...(isElectron ? ['ai-portal'] : [])].map(tab => (
-            <button key={tab} className={`ch2-tab${activeTab === tab ? ' active' : ''}`} onClick={() => { if (tab !== 'experiences') setSelectedExperienceId(null); setActiveTab(tab) }}>
-              {tab === 'identity' ? 'Identity' : tab === 'experiences' ? 'Experiences' : tab === 'growth' ? 'Growth' : '⚡ AI Portal'}
-            </button>
-          ))}
-        </div>
-      </div>
+      )}
 
       <div className="ch2-content">
         {/* ═══ IDENTITY TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'identity' ? ' active' : ''}`}>
           <div className="ch2-id-card">
             <div className="ch2-id-inner">
-
-              {/* Hero */}
-              <div className="ch2-id-hero">
-                {essenceAvatar ? (
-                  <div className="ch2-id-avatar">
-                    <img src={essenceAvatar} alt="" onError={e => { e.target.style.display = 'none' }} />
-                  </div>
-                ) : (
-                  <div className="ch2-id-avatar-empty">Complete<br />Essence<br />Mirror</div>
-                )}
-                <div>
-                  <div className="ch2-id-type">{archetypeLabel}</div>
-                  <div className="ch2-id-name">{essenceName || 'Your Identity'}</div>
-                  {scopeFocus && (
-                    <div className="ch2-id-focus">🎯 {scopeFocus}</div>
-                  )}
-                </div>
-              </div>
-
-              {/* Skills */}
-              {userSkills.length > 0 && (
-                <div className="ch2-id-section">
-                  <div className="ch2-label">Your Skills</div>
-                  <div className="ch2-skills">
-                    {userSkills.map(s => <span key={s} className="ch2-skill">{s}</span>)}
-                  </div>
-                </div>
-              )}
-
-              {/* Problems */}
-              {userProblems.length > 0 ? (
-                <div className="ch2-id-section">
-                  <div className="ch2-label">Problems You're Passionate About</div>
-                  <div className="ch2-skills">
-                    {userProblems.map(p => <span key={p} className="ch2-skill">{p}</span>)}
-                  </div>
-                </div>
-              ) : (
-                <div className="ch2-id-section">
-                  <div className="ch2-label">Problems You're Passionate About</div>
-                  <button className="ch2-btn-outline" onClick={() => navigate('/life-map')} style={{ marginTop: 4, fontSize: 12, padding: '8px 14px' }}>
-                    Complete your Life Map to discover these
-                  </button>
-                </div>
-              )}
 
               {/* North Stars */}
               {selectedCreators.length > 0 && (
@@ -400,6 +353,44 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                       )
                     })}
                   </div>
+                </div>
+              )}
+
+              {/* Skills */}
+              {userSkills.length > 0 && (
+                <div className="ch2-id-section">
+                  <div className="ch2-label">Your Skills</div>
+                  <div className="ch2-skills">
+                    <span className="ch2-skill">{userSkills[0]}</span>
+                    {userSkills.length > 1 && !showSkillsExpanded && (
+                      <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(true)}>+{userSkills.length - 1} more</span>
+                    )}
+                    {showSkillsExpanded && userSkills.slice(1).map(s => <span key={s} className="ch2-skill">{s}</span>)}
+                    {showSkillsExpanded && (
+                      <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(false)}>show less</span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Problems */}
+              {userProblems.length > 0 ? (
+                <div className="ch2-id-section">
+                  <div className="ch2-label">Problems You Solve</div>
+                  <div className="ch2-skills">
+                    <span className="ch2-skill">{userProblems[0]}</span>
+                    {userProblems.length > 1 && !showSkillsExpanded && (
+                      <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(true)}>+{userProblems.length - 1} more</span>
+                    )}
+                    {showSkillsExpanded && userProblems.slice(1).map(p => <span key={p} className="ch2-skill">{p}</span>)}
+                  </div>
+                </div>
+              ) : (
+                <div className="ch2-id-section">
+                  <div className="ch2-label">Problems You Solve</div>
+                  <button className="ch2-btn-outline" onClick={() => navigate('/life-map')} style={{ marginTop: 4, fontSize: 12, padding: '8px 14px' }}>
+                    Complete your Life Map to discover these
+                  </button>
                 </div>
               )}
 

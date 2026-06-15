@@ -64,11 +64,16 @@
   }
 }
 
-/* CTA button (last slide) */
+/* CTA button (last slide) — pinned near bottom */
 .challenge-intro-cta {
-  display: inline-block;
-  margin-top: 32px;
-  padding: 14px 40px;
+  position: fixed;
+  bottom: max(80px, calc(env(safe-area-inset-bottom, 32px) + 60px));
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: fit-content;
+  z-index: 10001;
+  padding: 16px 48px;
   border: none;
   border-radius: 14px;
   background: linear-gradient(135deg, #E9A23B 0%, #d4922f 100%);
@@ -76,6 +81,7 @@
   font-size: 17px;
   font-weight: 700;
   cursor: pointer;
+  font-family: inherit;
   animation: introTextIn 0.6s ease 0.3s both;
   transition: transform 0.15s ease;
 }
@@ -102,6 +108,82 @@
 
 .challenge-intro-dot.active {
   background: #E9A23B;
+}
+
+/* Quadrant (slide 3) */
+.ci-quadrant {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin: 24px auto 0;
+  max-width: 340px;
+  padding-left: 20px;
+  animation: introTextIn 0.6s ease 0.2s both;
+}
+
+.ci-quad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ci-quad-vr {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.5), rgba(233, 162, 59, 0.5));
+  border-color: rgba(233, 162, 59, 0.4);
+  box-shadow: 0 0 24px rgba(233, 162, 59, 0.15);
+}
+
+.ci-quad-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ci-quad-vr .ci-quad-label {
+  font-size: 14px;
+}
+
+.ci-quad-sub {
+  font-size: 11px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 2px;
+}
+
+.ci-quad-vr .ci-quad-sub {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ci-axis {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(233, 162, 59, 0.6);
+}
+
+.ci-axis-y {
+  left: -36px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center center;
+  white-space: nowrap;
+}
+
+.ci-axis-x {
+  bottom: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 /* Reduced motion */

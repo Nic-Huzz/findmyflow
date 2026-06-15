@@ -6,6 +6,7 @@
  *
  * Created: 2026-03-27
  */
+import { Link } from 'react-router-dom'
 
 export default function DeepDiveCard({ deepDive, isCompleted, onNavigate }) {
   if (!deepDive) return null
@@ -25,13 +26,13 @@ export default function DeepDiveCard({ deepDive, isCompleted, onNavigate }) {
         <div className="level-dd-narrative">{deepDive.narrative}</div>
       </div>
       {isCompleted && deepDive.route ? (
-        <a href={deepDive.route} className="level-dd-status done" style={{ textDecoration: 'none' }}>View</a>
+        <Link to={deepDive.route} className="level-dd-status done" style={{ textDecoration: 'none' }}>View</Link>
       ) : isCompleted ? (
         <span className="level-dd-status done">Done</span>
       ) : deepDive.route?.startsWith('#') ? (
         <button className="level-dd-status start" onClick={handleClick} style={{ cursor: 'pointer' }}>Start</button>
       ) : deepDive.route ? (
-        <a href={deepDive.route} className="level-dd-status start">Start</a>
+        <Link to={deepDive.route} className="level-dd-status start">Start</Link>
       ) : deepDive.lockedUntil ? (
         <span className="level-dd-status locked">Locked</span>
       ) : (

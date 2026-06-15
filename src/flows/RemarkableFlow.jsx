@@ -3,7 +3,7 @@
  * "Blow Up Your Brand — Part 1: Readiness Diagnostic"
  *
  * 3-layer model: Distil → Prove → Ceiling
- * Category Pirates-aligned: Two Worlds first, Assumption, Remove, Compress
+ * 5-question distillation: Problem → Assumption → Two Worlds → Different → Compress
  * Data-enriched: Scope Map, DNA match, experience counts inform answers
  */
 import { useState, useEffect, useMemo } from 'react'
@@ -17,9 +17,10 @@ import './RemarkableFlow.css'
 
 const STEPS = {
   INTRO: 'intro',
-  TWO_WORLDS: 'two_worlds',
+  PROBLEM: 'problem',
   ASSUMPTION: 'assumption',
-  WHATS_LEFT: 'whats_left',
+  TWO_WORLDS: 'two_worlds',
+  DIFFERENT: 'different',
   COMPRESSION: 'compression',
   GENERATING: 'generating',
   SUMMARY: 'summary',
@@ -49,9 +50,10 @@ export default function RemarkableFlow() {
   }
 
   // User inputs — Layer 1 (Distillation)
-  const [twoWorlds, setTwoWorlds] = useState('')
+  const [problem, setProblem] = useState('')
   const [assumption, setAssumption] = useState('')
-  const [whatsLeft, setWhatsLeft] = useState('')
+  const [twoWorlds, setTwoWorlds] = useState('')
+  const [different, setDifferent] = useState('')
   const [compression, setCompression] = useState('')
 
   // User inputs — Layer 2 (Proof)
@@ -139,8 +141,17 @@ export default function RemarkableFlow() {
         const angle = angleData?.[0]
         if (angle) {
           setExistingAngle(angle)
+          if (angle.wound_problem) setProblem(angle.wound_problem)
           if (angle.combination_insight) setTwoWorlds(angle.combination_insight)
-          if (angle.wound_problem) setAssumption(angle.wound_problem)
+          if (angle.extreme_action_plan) setCompression(angle.extreme_action_plan)
+          // Parse rule_identified for assumption + different (new format)
+          if (angle.rule_identified) {
+            const parts = angle.rule_identified.split(' | ')
+            parts.forEach(part => {
+              if (part.startsWith('Assumption: ')) setAssumption(part.replace('Assumption: ', ''))
+              if (part.startsWith('Different: ')) setDifferent(part.replace('Different: ', ''))
+            })
+          }
         }
       } catch (err) {
         console.warn('RemarkableFlow data load failed:', err.message)
@@ -159,8 +170,8 @@ export default function RemarkableFlow() {
     try {
       const { data, error: fnError } = await supabase.functions.invoke('generate-remarkable-angle', {
         body: {
-          wound_problem: `Assumption everyone follows: ${assumption}`,
-          rule_identified: `Current assumption: ${assumption}. Remove it and what's left: ${whatsLeft}`,
+          wound_problem: `The problem: ${problem}. The assumption everyone follows: ${assumption}`,
+          rule_identified: `Assumption to break: ${assumption}. How they're different: ${different}`,
           combination_insight: twoWorlds,
           extreme_action_plan: `One-sentence method: ${compression}`,
         },
@@ -183,8 +194,8 @@ export default function RemarkableFlow() {
     try {
       const { data: insertedRow, error: saveErr } = await supabase.from('remarkable_angles').insert({
         user_id: user.id,
-        wound_problem: assumption,
-        rule_identified: `Two worlds: ${twoWorlds} | Assumption: ${assumption} | Without it: ${whatsLeft}`,
+        wound_problem: problem,
+        rule_identified: `Problem: ${problem} | Assumption: ${assumption} | Two worlds: ${twoWorlds} | Different: ${different} | One-liner: ${compression}`,
         combination_insight: twoWorlds,
         extreme_action_plan: compression,
         ai_rule_statement: aiResult?.rule_statement || null,
@@ -195,7 +206,7 @@ export default function RemarkableFlow() {
       if (insertedRow?.id) setSavedAngleId(insertedRow.id)
       // Auto-populate brain
       onRemarkableComplete(user.id, {
-        ruleIdentified: `Two worlds: ${twoWorlds} | Assumption: ${assumption} | Without it: ${whatsLeft}`,
+        ruleIdentified: `Assumption: ${assumption} | Two worlds: ${twoWorlds} | Different: ${different}`,
         combinationInsight: twoWorlds,
         extremeAction: compression,
         aiRuleStatement: aiResult?.rule_statement || null,
@@ -293,7 +304,7 @@ export default function RemarkableFlow() {
               </div>
             </div>
 
-            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.TWO_WORLDS) }}>
+            <button className="rmk-cta" onClick={() => { hapticLight(); setStep(STEPS.PROBLEM) }}>
               {existingAngle ? 'Sharpen my angle' : 'Let\'s go'}
             </button>
           </div>
@@ -302,44 +313,51 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SCREEN 2: TWO WORLDS ──
-  if (step === STEPS.TWO_WORLDS) {
+  // ── SCREEN 2: PROBLEM ──
+  if (step === STEPS.PROBLEM) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Distil · 1 of 4</div>
-          <h2 className="rmk-heading">What <span className="rmk-gold">two worlds</span> do you live in?</h2>
-          <p className="rmk-prompt">Every remarkable creator combines two domains nobody expected together.</p>
+          <div className="rmk-step-badge">Distil · 1 of 5</div>
+          <h2 className="rmk-heading">What problem do you see that nobody's <span className="rmk-gold">solving right</span>?</h2>
+          <p className="rmk-prompt">The one that still fires you up when you think about it.</p>
 
-          {skills.length > 0 && (
-            <div className="rmk-skills-hint">
-              <div className="rmk-skills-label">Your Life Map</div>
-              <div className="rmk-skills-tags">
-                {skills.slice(0, 6).map((skill, i) => (
-                  <span key={i} className="rmk-skill-tag">{skill}</span>
-                ))}
-              </div>
+          {problems.length > 0 && (
+            <div className="rmk-problem-list">
+              {problems.map((prob, i) => (
+                <button
+                  key={i}
+                  className={`rmk-problem-btn ${problem === prob ? 'rmk-problem-selected' : ''}`}
+                  onClick={() => { hapticLight(); setProblem(prob) }}
+                >
+                  {prob}
+                </button>
+              ))}
             </div>
           )}
 
-          <div className="rmk-example-card">
-            Radha Agrawal combined nightlife + wellness. Phil Jackson combined Zen Buddhism + basketball. What's yours?
-          </div>
+          {!problems.length && (
+            <textarea
+              className="rmk-textarea"
+              value={problem}
+              onChange={e => setProblem(e.target.value)}
+              placeholder="e.g. Real transformation is paywalled. People spend thousands and are still stuck."
+              rows={3}
+              autoFocus
+            />
+          )}
 
-          <textarea
-            className="rmk-textarea"
-            value={twoWorlds}
-            onChange={e => setTwoWorlds(e.target.value)}
-            placeholder="e.g. I combine VC analytical thinking with breathwork facilitation"
-            rows={3}
-            autoFocus
-          />
+          {scopeMapProblem && !problems.length && (
+            <div className="rmk-context-card">
+              You told us before: "{scopeMapProblem}"
+            </div>
+          )}
 
           <div className="rmk-nav">
             <button className="rmk-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
             <button
               className="rmk-cta"
-              disabled={twoWorlds.trim().length < 10}
+              disabled={!problem || problem.trim().length < 5}
               onClick={() => { hapticLight(); setStep(STEPS.ASSUMPTION) }}
             >
               Next
@@ -355,15 +373,10 @@ export default function RemarkableFlow() {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Distil · 2 of 4</div>
-          <h2 className="rmk-heading">What does everyone assume is <span className="rmk-gold">required</span>?</h2>
-          <p className="rmk-prompt">In your space, what rule does everyone follow that you think is wrong?</p>
-
-          {scopeMapProblem && (
-            <div className="rmk-context-card">
-              You told us the problem is: "{scopeMapProblem}". What assumption caused that?
-            </div>
-          )}
+          <div className="rmk-step-badge">Distil · 2 of 5</div>
+          <div className="rmk-context-card">{problem}</div>
+          <h2 className="rmk-heading">What does everyone assume is <span className="rmk-gold">required</span> to solve it?</h2>
+          <p className="rmk-prompt">What rule does everyone follow that you think is wrong?</p>
 
           <textarea
             className="rmk-textarea"
@@ -375,11 +388,11 @@ export default function RemarkableFlow() {
           />
 
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.TWO_WORLDS)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(STEPS.PROBLEM)}>Back</button>
             <button
               className="rmk-cta"
               disabled={assumption.trim().length < 10}
-              onClick={() => { hapticLight(); setStep(STEPS.WHATS_LEFT) }}
+              onClick={() => { hapticLight(); setStep(STEPS.TWO_WORLDS) }}
             >
               Next
             </button>
@@ -389,32 +402,36 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SCREEN 4: WHAT'S LEFT ──
-  if (step === STEPS.WHATS_LEFT) {
+  // ── SCREEN 4: TWO WORLDS ──
+  if (step === STEPS.TWO_WORLDS) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Distil · 3 of 4</div>
+          <div className="rmk-step-badge">Distil · 3 of 5</div>
           <div className="rmk-context-card">{assumption}</div>
-          <h2 className="rmk-heading">Remove that assumption. What's <span className="rmk-gold">left</span>?</h2>
-          <p className="rmk-prompt">If that rule didn't exist, how would you solve this problem?</p>
+          <h2 className="rmk-heading">What do you bring from <span className="rmk-gold">outside</span> that lets you see past that?</h2>
+          <p className="rmk-prompt">What's your unusual combination of backgrounds, skills, or experiences?</p>
 
-          {problems.length > 0 && (
+          {skills.length > 0 && (
             <div className="rmk-skills-hint">
-              <div className="rmk-skills-label">Problems you care about</div>
+              <div className="rmk-skills-label">Your Life Map</div>
               <div className="rmk-skills-tags">
-                {problems.slice(0, 4).map((prob, i) => (
-                  <span key={i} className="rmk-skill-tag">{prob}</span>
+                {skills.slice(0, 6).map((skill, i) => (
+                  <span key={i} className="rmk-skill-tag">{skill}</span>
                 ))}
               </div>
             </div>
           )}
 
+          <div className="rmk-example-card">
+            Radha Agrawal's nightlife background showed her parties don't need alcohol. Phil Jackson's Zen practice showed him coaches don't need to shout. What do your worlds show you?
+          </div>
+
           <textarea
             className="rmk-textarea"
-            value={whatsLeft}
-            onChange={e => setWhatsLeft(e.target.value)}
-            placeholder="e.g. Dancing with strangers at sunrise. Community. Play. No certification needed."
+            value={twoWorlds}
+            onChange={e => setTwoWorlds(e.target.value)}
+            placeholder="e.g. VC analytical thinking showed me healing can be designed like a product. Breathwork showed me it doesn't need a clinic."
             rows={3}
             autoFocus
           />
@@ -423,7 +440,41 @@ export default function RemarkableFlow() {
             <button className="rmk-back" onClick={() => setStep(STEPS.ASSUMPTION)}>Back</button>
             <button
               className="rmk-cta"
-              disabled={whatsLeft.trim().length < 10}
+              disabled={twoWorlds.trim().length < 10}
+              onClick={() => { hapticLight(); setStep(STEPS.DIFFERENT) }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 5: HOW YOU'RE DIFFERENT ──
+  if (step === STEPS.DIFFERENT) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Distil · 4 of 5</div>
+          <div className="rmk-context-card">{assumption}</div>
+          <h2 className="rmk-heading">Remove that assumption. How do you <span className="rmk-gold">solve it differently</span>?</h2>
+          <p className="rmk-prompt">Given what your worlds showed you, what does your approach look like?</p>
+
+          <textarea
+            className="rmk-textarea"
+            value={different}
+            onChange={e => setDifferent(e.target.value)}
+            placeholder="e.g. Silent discos with breathwork. Group healing through play. No credentials, just a room, music, and permission."
+            rows={3}
+            autoFocus
+          />
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.TWO_WORLDS)}>Back</button>
+            <button
+              className="rmk-cta"
+              disabled={different.trim().length < 10}
               onClick={() => { hapticLight(); setStep(STEPS.COMPRESSION) }}
             >
               Next
@@ -434,12 +485,12 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SCREEN 5: COMPRESSION GATE ──
+  // ── SCREEN 6: COMPRESSION GATE ──
   if (step === STEPS.COMPRESSION) {
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
-          <div className="rmk-step-badge">Distil · 4 of 4</div>
+          <div className="rmk-step-badge">Distil · 5 of 5</div>
           <h2 className="rmk-heading">State your method in <span className="rmk-gold">one sentence</span>.</h2>
           <p className="rmk-prompt">If you can compress it, it's ready to travel. If you can't, it needs more reps.</p>
 
@@ -467,7 +518,7 @@ export default function RemarkableFlow() {
           {error && <div className="rmk-error">{error}</div>}
 
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.WHATS_LEFT)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(STEPS.DIFFERENT)}>Back</button>
             <button
               className="rmk-cta"
               disabled={compression.trim().length < 5}
@@ -481,7 +532,7 @@ export default function RemarkableFlow() {
     )
   }
 
-  // ── SCREEN 6: GENERATING ──
+  // ── SCREEN 7: GENERATING ──
   if (step === STEPS.GENERATING) {
     return (
       <div className="rmk">

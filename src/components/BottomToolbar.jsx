@@ -39,6 +39,34 @@ const MAIN_NAV_ITEMS = [
   }
 ]
 
+// Create portal navigation items
+const CREATE_NAV_ITEMS = [
+  {
+    id: 'identity',
+    label: 'Identity',
+    icon: '✨',
+    path: '/create'
+  },
+  {
+    id: 'experiences',
+    label: 'Experiences',
+    icon: '🎪',
+    path: '/create/experiences'
+  },
+  {
+    id: 'growth',
+    label: 'Growth',
+    icon: '📈',
+    path: '/create/growth'
+  },
+  {
+    id: 'creator-profile',
+    label: 'Profile',
+    icon: '👤',
+    path: '/create/profile'
+  }
+]
+
 // CRM section navigation items - Tower structure
 const CRM_NAV_ITEMS = [
   {
@@ -151,11 +179,14 @@ function BottomToolbar() {
 
   if (shouldHide || isOnboarding) return null
 
-  // Detect if we're in the CRM section
+  // Detect which section we're in
   const isCRMSection = location.pathname.startsWith('/crm')
+  const isCreateSection = location.pathname === '/create' || location.pathname.startsWith('/create/')
 
   // Select appropriate nav items based on section
-  const navItems = isCRMSection ? CRM_NAV_ITEMS : MAIN_NAV_ITEMS
+  const navItems = isCreateSection ? CREATE_NAV_ITEMS
+    : isCRMSection ? CRM_NAV_ITEMS
+    : MAIN_NAV_ITEMS
 
   // Active state check - for CRM towers, highlight parent when on sub-pages
   const isActive = (item) => {
@@ -201,6 +232,25 @@ function BottomToolbar() {
       if (item.id === 'execute') return path === '/crm/execute'
     }
 
+    // Create portal navigation logic
+    if (isCreateSection) {
+      if (item.id === 'identity') return path === '/create'
+      if (item.id === 'experiences') {
+        return path.startsWith('/create/experience') ||
+               path === '/create/inspiration'
+      }
+      if (item.id === 'growth') {
+        return path === '/create/growth' ||
+               path === '/create/pay-rent' ||
+               path === '/create/remarkable' ||
+               path === '/create/scale-income' ||
+               path === '/create/plays' ||
+               path === '/create/attraction-stack' ||
+               path === '/create/marketing-campaign'
+      }
+      if (item.id === 'creator-profile') return path === '/create/profile'
+    }
+
     // Main nav: League is active on any /league/* path
     if (item.id === 'league') return path === '/league' || path.startsWith('/league/')
 
@@ -208,7 +258,7 @@ function BottomToolbar() {
   }
 
   return (
-    <nav className={`bottom-toolbar ${isCRMSection ? 'crm-toolbar' : 'main-toolbar'}`}>
+    <nav className={`bottom-toolbar ${isCreateSection ? 'create-toolbar' : isCRMSection ? 'crm-toolbar' : 'main-toolbar'}`}>
       {navItems.map(item => (
         // Use plain <a> instead of navigate() — React Router v7 wraps navigate()
         // in startTransition which suppresses Suspense fallbacks for lazy routes.

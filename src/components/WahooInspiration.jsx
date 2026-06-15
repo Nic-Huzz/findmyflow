@@ -6,7 +6,7 @@
  *
  *   Row 1: ✨ Your play-skills — chips → expression dials → freetext (or PlaySkillPicker CTA if none)
  *   Row 2: 🎯 Ikigai Mix — skill × problem × persona from the Life Map (gated)
- *   Row 3: 🏛️ Fill a pillar — FUTURE (Essence Chamber pillar gaps), stub below
+ *   Row 3: 🏛️ Fill a pillar — gap pillar + lost orbs + freetext (gated by Essence Chamber)
  *
  * Accept pipeline: createGroanChallenge → acceptGroanChallenge → priority_weekly_picks.
  * "Save for later" stops after step 1 (lands in bucket as status 'generated').
@@ -67,6 +67,10 @@ export default function WahooInspiration({
   const [ikigaiData, setIkigaiData] = useState(null) // { skills, problems, personas }
   const [picks, setPicks] = useState({ skill: null, problem: null, persona: null })
 
+  // Row 3 state (Essence Chamber pillars)
+  const [pillarData, setPillarData] = useState(null) // { pillars, gap }
+  const [pillarText, setPillarText] = useState('')
+
   // Preview state
   const [preview, setPreview] = useState(null) // challenge object
   const [previewOrigin, setPreviewOrigin] = useState('rows') // where Back returns to
@@ -93,6 +97,18 @@ export default function WahooInspiration({
           setIkigaiData({ ...data, skills: lifeMapSkills })
         }
       })
+      // Fetch Essence Chamber pillars from latest Life Map session
+      supabase
+        .from('flow_sessions')
+        .select('response_data')
+        .eq('user_id', userId)
+        .eq('flow_type', 'life_map')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .then(({ data }) => {
+          const chamber = data?.[0]?.response_data?.essence_chamber
+          if (chamber?.pillars) setPillarData(chamber)
+        })
     })
   }, [userId])
 
@@ -167,6 +183,47 @@ export default function WahooInspiration({
       wahooScore: 7,
       sourceType: 'skill_x_problem',
       sourceLabel: `${picks.skill} × ${picks.problem} (for ${picks.persona})`,
+    })
+    setWahooCategory('creation')
+    setPreviewOrigin('rows')
+    setMode('preview')
+  }
+
+  // ─── Row 3: Essence Chamber pillar gaps ─────────────────────────────────────
+
+  const gapPillar = pillarData?.gap ? pillarData.pillars?.find(
+    p => p.name === pillarData.gap.pillar_name
+  ) : null
+
+  const gapNowOrbs = gapPillar?.orbs?.now || []
+  const gapLostOrbs = (() => {
+    if (!gapPillar?.orbs) return []
+    const nowSet = new Set((gapPillar.orbs.now || []).map(o => o.toLowerCase()))
+    const earlier = [
+      ...(gapPillar.orbs.childhood || []),
+      ...(gapPillar.orbs.teens || []),
+      ...(gapPillar.orbs.young_adult || []),
+      ...(gapPillar.orbs.career || []),
+    ]
+    // Dedupe and exclude anything already in "now"
+    const seen = new Set()
+    return earlier.filter(o => {
+      const key = o.toLowerCase()
+      if (nowSet.has(key) || seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+  })()
+
+  function handlePillarSave() {
+    if (!pillarText.trim() || !gapPillar) return
+    setPreview({
+      title: pillarText.trim(),
+      description: pillarText.trim(),
+      scaryScore: 5,
+      wahooScore: 8,
+      sourceType: 'skill',
+      sourceLabel: `Pillar: ${gapPillar.name}`,
     })
     setWahooCategory('creation')
     setPreviewOrigin('rows')
@@ -423,11 +480,63 @@ export default function WahooInspiration({
                 )}
               </div>
 
-              {/* Row 3: 🏛️ Fill a pillar — FUTURE
-                  Appears when Essence Chamber data exists
-                  (flow_sessions.response_data.essence_chamber). Empty/flickering
-                  pillars feed "test a new orb" wahoo suggestions through the same
-                  generator pipeline (new sourceType 'pillar' when built). */}
+              {/* Row 3: Fill a pillar */}
+              {pillarData && gapPillar && (
+                <div className="wi-row">
+                  <div className="wi-row-label">🏛️ Fill a pillar</div>
+                  <div className="wi-pillar-card">
+                    <div className="wi-pillar-status">
+                      <span className={`wi-pillar-badge wi-pillar-${gapPillar.status.toLowerCase()}`}>
+                        {gapPillar.status === 'FLICKERING' ? '⚡ Flickering' : '💀 Empty'}
+                      </span>
+                    </div>
+                    <div className="wi-pillar-name">{gapPillar.name}</div>
+                    <div className="wi-pillar-insight">{pillarData.gap.insight}</div>
+
+                    {gapNowOrbs.length > 0 && (
+                      <div className="wi-pillar-orbs">
+                        <div className="wi-pillar-orbs-label">Currently feeding this:</div>
+                        <div className="wi-chips">
+                          {gapNowOrbs.map(orb => (
+                            <span key={orb} className="wi-chip wi-chip-small wi-chip-muted">{orb}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {gapLostOrbs.length > 0 && (
+                      <div className="wi-pillar-orbs">
+                        <div className="wi-pillar-orbs-label">You used to do:</div>
+                        <div className="wi-chips">
+                          {gapLostOrbs.map(orb => (
+                            <span key={orb} className="wi-chip wi-chip-small wi-chip-lost">{orb}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="wi-pillar-prompt">
+                      <p className="wi-mix-question">What experience could feed this pillar?</p>
+                      <input
+                        type="text"
+                        className="wi-dial-text"
+                        placeholder="Write your Wahoo..."
+                        value={pillarText}
+                        onChange={e => setPillarText(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handlePillarSave()}
+                        maxLength={120}
+                      />
+                      <button
+                        className="wi-primary-btn"
+                        disabled={!pillarText.trim()}
+                        onClick={handlePillarSave}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {error && <p className="wi-error">{error}</p>}
             </>

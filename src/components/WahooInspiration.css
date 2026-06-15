@@ -490,3 +490,84 @@
 .wi-dial-text:focus {
   border-color: #5e17eb;
 }
+
+/* === PILLAR GAP (ROW 3) === */
+.wi-pillar-card {
+  background: #f9f8fc;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 8px;
+}
+
+.wi-pillar-status {
+  margin-bottom: 8px;
+}
+
+.wi-pillar-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 8px;
+}
+
+.wi-pillar-badge.wi-pillar-flickering {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+}
+
+.wi-pillar-badge.wi-pillar-empty {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.wi-pillar-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.wi-pillar-insight {
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.wi-pillar-orbs {
+  margin-bottom: 10px;
+}
+
+.wi-pillar-orbs-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+  margin-bottom: 6px;
+}
+
+.wahoo-inspiration .wi-chip-muted {
+  background: #eef0f3;
+  color: #6c757d;
+  border-color: #e0dce8;
+  cursor: default;
+}
+
+.wahoo-inspiration .wi-chip-lost {
+  background: rgba(245, 158, 11, 0.08);
+  color: #d97706;
+  border-color: rgba(245, 158, 11, 0.25);
+  cursor: default;
+}
+
+.wi-pillar-prompt {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

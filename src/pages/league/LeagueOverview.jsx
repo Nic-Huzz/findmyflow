@@ -1,8 +1,10 @@
 /**
  * LeagueOverview.jsx — /league
- * Fantasy League hub: standings, schedule, join/create team, expandable team cards
+ * Fantasy League hub: matchup card, standings, schedule, rules
+ *
+ * Redesigned hierarchy: identity strip → matchup hero → tabs → content
  */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { useLeagueData } from '../../hooks/useLeagueData'
@@ -26,7 +28,7 @@ export default function LeagueOverview() {
   } = useLeagueData()
 
   // UI State
-  const [activeTab, setActiveTab] = useState('standings') // standings | schedule | rules
+  const [activeTab, setActiveTab] = useState('standings')
   const [showJoinModal, setShowJoinModal] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showSoloModal, setShowSoloModal] = useState(false)
@@ -34,6 +36,20 @@ export default function LeagueOverview() {
   const [teamName, setTeamName] = useState('')
   const [displayName, setDisplayName] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
+
+  // Week state (lifted from LeagueLeaderboard so matchup card + standings stay in sync)
+  const currentWeek = getCurrentWeek()
+  const numWeeks = league?.num_weeks || 4
+  const isUpcoming = currentWeek === 0
+  const [selectedWeek, setSelectedWeek] = useState(currentWeek || 1)
+
+  useEffect(() => {
+    if (currentWeek > 0) setSelectedWeek(currentWeek)
+  }, [currentWeek])
+
+  // Live matchup scores (for hero card)
+  const [liveMatchupScores, setLiveMatchupScores] = useState(null)
+  const [loadingLive, setLoadingLive] = useState(false)
 
   // Handle ?join= query param
   useEffect(() => {
@@ -44,9 +60,7 @@ export default function LeagueOverview() {
     }
   }, [searchParams, isOnTeam])
 
-  const currentWeek = getCurrentWeek()
-
-  // Pre-fill display name from profile
+  // Pre-fill display name
   const getDefaultDisplayName = async () => {
     if (!user?.id) return ''
     const { data } = await supabase
@@ -55,6 +69,106 @@ export default function LeagueOverview() {
       .eq('user_id', user.id)
       .maybeSingle()
     return data?.display_name?.split(' ')[0] || user.email?.split('@')[0] || ''
+  }
+
+  // ============================================
+  // Matchup helpers
+  // ============================================
+
+  const getTeamById = useCallback((teamId) => {
+    return teams.find(t => t.id === teamId)
+  }, [teams])
+
+  const getTeamNameById = useCallback((teamId) => {
+    return getTeamById(teamId)?.name || 'TBD'
+  }, [getTeamById])
+
+  const getTeamMembers = useCallback((teamId) => {
+    const team = getTeamById(teamId)
+    return (team?.fantasy_team_members || []).map(m => m.user_id)
+  }, [getTeamById])
+
+  const getUserMatchup = useCallback((weekNum) => {
+    if (!userTeam) return null
+    const weekMatchups = getWeekMatchups(weekNum)
+    return weekMatchups.find(m =>
+      m.team_a_id === userTeam.id || m.team_b_id === userTeam.id
+    ) || null
+  }, [userTeam, getWeekMatchups])
+
+  const orientMatchup = useCallback((matchup) => {
+    if (!matchup || !userTeam) return null
+    const isTeamA = matchup.team_a_id === userTeam.id
+    return {
+      myTeamId: isTeamA ? matchup.team_a_id : matchup.team_b_id,
+      oppTeamId: isTeamA ? matchup.team_b_id : matchup.team_a_id,
+      myMatchPoints: isTeamA ? matchup.team_a_match_points : matchup.team_b_match_points,
+      oppMatchPoints: isTeamA ? matchup.team_b_match_points : matchup.team_a_match_points,
+      myCategoriesWon: isTeamA ? matchup.team_a_categories_won : matchup.team_b_categories_won,
+      oppCategoriesWon: isTeamA ? matchup.team_b_categories_won : matchup.team_a_categories_won,
+      categoryResults: (matchup.category_results || []).map(cr => ({
+        ...cr,
+        myScore: isTeamA ? cr.teamAScore : cr.teamBScore,
+        oppScore: isTeamA ? cr.teamBScore : cr.teamAScore,
+        myWinner: cr.winner === (isTeamA ? 'a' : 'b'),
+        oppWinner: cr.winner === (isTeamA ? 'b' : 'a'),
+      })),
+      calculated: !!matchup.calculated_at,
+    }
+  }, [userTeam])
+
+  // ============================================
+  // Live score fetching
+  // ============================================
+
+  useEffect(() => {
+    if (isUpcoming || !userTeam) {
+      setLiveMatchupScores(null)
+      setLoadingLive(false)
+      return
+    }
+
+    const matchup = getUserMatchup(selectedWeek)
+    if (!matchup || matchup.calculated_at) {
+      setLiveMatchupScores(null)
+      setLoadingLive(false)
+      return
+    }
+
+    let cancelled = false
+    setLoadingLive(true)
+
+    const myMembers = getTeamMembers(userTeam.id)
+    const oppId = matchup.team_a_id === userTeam.id ? matchup.team_b_id : matchup.team_a_id
+    const oppMembers = getTeamMembers(oppId)
+
+    Promise.all([
+      fetchLiveTeamScores(myMembers, selectedWeek),
+      fetchLiveTeamScores(oppMembers, selectedWeek),
+    ]).then(([my, opp]) => {
+      if (!cancelled) {
+        setLiveMatchupScores(my && opp ? { my, opponent: opp } : null)
+        setLoadingLive(false)
+      }
+    }).catch(() => {
+      if (!cancelled) setLoadingLive(false)
+    })
+
+    return () => { cancelled = true }
+  }, [selectedWeek, userTeam, isUpcoming, getUserMatchup, getTeamMembers, fetchLiveTeamScores])
+
+  // ============================================
+  // Week navigation
+  // ============================================
+
+  const handlePrevWeek = () => {
+    hapticLight()
+    setSelectedWeek(w => Math.max(1, w - 1))
+  }
+
+  const handleNextWeek = () => {
+    hapticLight()
+    setSelectedWeek(w => Math.min(numWeeks, w + 1))
   }
 
   // ============================================
@@ -122,16 +236,11 @@ export default function LeagueOverview() {
         await navigator.share({ title: 'Join the League', text: shareText })
       } catch { /* user cancelled */ }
     } else {
-      await navigator.clipboard.writeText(shareText)
-      alert('Share link copied to clipboard!')
+      try {
+        await navigator.clipboard.writeText(shareText)
+        alert('Share link copied!')
+      } catch { /* clipboard failed */ }
     }
-  }
-
-  const handleCopyCode = async () => {
-    if (!userTeam?.invite_code) return
-    await navigator.clipboard.writeText(userTeam.invite_code)
-    hapticLight()
-    alert(`Code copied: ${userTeam.invite_code}`)
   }
 
   const getDaysUntilStart = () => {
@@ -142,13 +251,122 @@ export default function LeagueOverview() {
     return diff > 0 ? diff : 0
   }
 
-  const getTeamNameById = (teamId) => {
-    const team = teams.find(t => t.id === teamId)
-    return team?.name || 'TBD'
+  // ============================================
+  // Render: Matchup Hero Card (promoted from LeagueLeaderboard)
+  // ============================================
+
+  const renderMatchupCard = () => {
+    if (isUpcoming || !userTeam) return null
+
+    const matchup = getUserMatchup(selectedWeek)
+
+    // Bye week — compact inline message
+    if (!matchup) {
+      return (
+        <div className="lo-matchup-compact">
+          <div className="lo-matchup-week-nav">
+            <button className="lo-week-btn" onClick={handlePrevWeek} disabled={selectedWeek <= 1}>←</button>
+            <span className="lo-week-display">
+              Week {selectedWeek}
+              {selectedWeek === currentWeek && <span className="lo-week-current">Current</span>}
+            </span>
+            <button className="lo-week-btn" onClick={handleNextWeek} disabled={selectedWeek >= numWeeks}>→</button>
+          </div>
+          <div className="lo-bye-inline">
+            <span>🏖️</span>
+            <span>Bye week. No matchup this week.</span>
+          </div>
+        </div>
+      )
+    }
+
+    const oriented = orientMatchup(matchup)
+    const isLive = !oriented.calculated && liveMatchupScores
+
+    let categoryRows
+    if (oriented.calculated) {
+      categoryRows = oriented.categoryResults
+    } else if (isLive) {
+      categoryRows = CATEGORY_KEYS.map(key => {
+        const myScore = liveMatchupScores.my?.[key] || 0
+        const oppScore = liveMatchupScores.opponent?.[key] || 0
+        return {
+          category: key,
+          myScore, oppScore,
+          myWinner: myScore > oppScore,
+          oppWinner: oppScore > myScore,
+        }
+      })
+    }
+
+    let myWins = 0, oppWins = 0
+    if (isLive && categoryRows) {
+      categoryRows.forEach(r => {
+        if (r.myWinner) myWins++
+        if (r.oppWinner) oppWins++
+      })
+    }
+
+    return (
+      <div className="lo-matchup-hero">
+        {/* Week nav integrated into card header */}
+        <div className="lo-matchup-week-nav">
+          <button className="lo-week-btn" onClick={handlePrevWeek} disabled={selectedWeek <= 1}>←</button>
+          <span className="lo-week-display">
+            Week {selectedWeek}
+            {selectedWeek === currentWeek && <span className="lo-week-current">Current</span>}
+            {isLive && <span className="lo-live-badge">LIVE</span>}
+          </span>
+          <button className="lo-week-btn" onClick={handleNextWeek} disabled={selectedWeek >= numWeeks}>→</button>
+        </div>
+
+        {/* VS layout */}
+        <div className="lo-matchup-teams">
+          <span className="lo-matchup-team-name">{getTeamNameById(oriented.myTeamId)}</span>
+          <span className="lo-matchup-vs">VS</span>
+          <span className="lo-matchup-team-name">{getTeamNameById(oriented.oppTeamId)}</span>
+        </div>
+
+        {/* Category scores */}
+        {loadingLive && !categoryRows && (
+          <div className="lo-matchup-loading"><div className="lo-spinner" /></div>
+        )}
+
+        {categoryRows && (
+          <div className="lo-matchup-categories">
+            {categoryRows.map(row => {
+              const cat = FANTASY_CATEGORIES[row.category]
+              if (!cat) return null
+              return (
+                <div key={row.category} className="lo-cat-row">
+                  <span className={`lo-cat-score ${row.myWinner ? 'lo-winning' : ''}`}>{row.myScore}</span>
+                  <span className="lo-cat-label">{cat.icon} {cat.label}</span>
+                  <span className={`lo-cat-score ${row.oppWinner ? 'lo-winning' : ''}`}>{row.oppScore}</span>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Result */}
+        <div className="lo-matchup-result">
+          {oriented.calculated ? (
+            <span>
+              Result: {oriented.myCategoriesWon} – {oriented.oppCategoriesWon}
+              {oriented.myMatchPoints === 3 && ' · Win'}
+              {oriented.oppMatchPoints === 3 && ' · Loss'}
+              {oriented.myMatchPoints === 1 && ' · Draw'}
+            </span>
+          ) : isLive ? (
+            <span>Live: {myWins} – {oppWins}</span>
+          ) : null}
+        </div>
+      </div>
+    )
   }
 
   // ============================================
-  // Loading
+  // Loading & Empty
   // ============================================
 
   if (loading) {
@@ -193,80 +411,36 @@ export default function LeagueOverview() {
         <h2 className="lo-toolbar-title">Fantasy League</h2>
       </div>
 
-      {/* Hero Card */}
-      <div className="lo-hero">
-        <span className="lo-hero-label">
-          {currentWeek === 0 ? 'Coming Soon' :
-           currentWeek <= (league.num_weeks || 4) ? `Week ${currentWeek}` : 'Season Complete'}
-        </span>
-        <h2 className="lo-hero-title">{league.name}</h2>
-        <p className="lo-hero-sub">
-          {currentWeek === 0 && getDaysUntilStart() !== null && (
-            <>Starts in {getDaysUntilStart()} day{getDaysUntilStart() !== 1 ? 's' : ''}!</>
-          )}
-          {currentWeek >= 1 && currentWeek <= (league.num_weeks || 4) && (
-            <>{league.num_weeks}-week season • {teams.length} player{teams.length !== 1 ? 's' : ''} competing</>
-          )}
-          {league.status === 'completed' && (
-            <>Final results are in!</>
-          )}
-        </p>
-
-        {/* Join Actions */}
+      {/* Identity Strip — slim, ambient */}
+      <div className="lo-identity">
         {!isOnTeam && league.status !== 'completed' ? (
-          <div className="lo-hero-actions">
-            <button className="lo-cta" onClick={() => { hapticLight(); setShowSoloModal(true) }}>
-              Join Solo <span>→</span>
+          <>
+            <span className="lo-identity-text">{league.name}</span>
+            <button className="lo-join-btn" onClick={() => { hapticLight(); setShowSoloModal(true) }}>
+              Join League →
             </button>
-          </div>
-        ) : isOnTeam && (
-          <div className="lo-my-team-badge">
-            <span>Playing as: <strong>{userTeam.name}</strong></span>
-            <button className="lo-share-btn" onClick={handleShare}>
-              Invite
-            </button>
-          </div>
+          </>
+        ) : isOnTeam ? (
+          <>
+            <span className="lo-identity-text">Playing as <strong>{userTeam.name}</strong></span>
+            <button className="lo-invite-btn" onClick={handleShare}>Invite</button>
+          </>
+        ) : (
+          <span className="lo-identity-text">{league.name} · Season Complete</span>
         )}
       </div>
 
-      {/* View Matchup card */}
-      {isOnTeam && currentWeek > 0 && (
-        <div
-          className="league-matchup-card"
-          onClick={() => { hapticLight(); navigate('/league/matchup') }}
-          style={{
-            background: 'linear-gradient(135deg, rgba(94,23,235,0.06), rgba(233,162,59,0.06))',
-            border: '1px solid rgba(94,23,235,0.12)',
-            borderRadius: '14px', padding: '14px 18px',
-            margin: '0 16px 16px', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            transition: 'all 0.2s',
-          }}
-        >
-          <span style={{ fontWeight: 700, color: '#5e17eb', fontSize: '0.9rem' }}>
-            ⚔️ View This Week's Matchup
-          </span>
-          <span style={{ color: '#9ca3af', fontSize: '0.85rem' }}>→</span>
+      {/* Upcoming state */}
+      {isUpcoming && getDaysUntilStart() !== null && (
+        <div className="lo-upcoming-banner">
+          Season starts in {getDaysUntilStart()} day{getDaysUntilStart() !== 1 ? 's' : ''}
         </div>
       )}
 
-      {/* Guide link */}
-      <a
-        href="/league/guide"
-        style={{
-          display: 'block',
-          textAlign: 'center',
-          margin: '0 16px 12px',
-          color: '#5e17eb',
-          fontWeight: 600,
-          fontSize: '0.85rem',
-          textDecoration: 'none',
-        }}
-      >
-        New to Fantasy? Read the full guide →
-      </a>
+      {/* Matchup Card — the true hero */}
+      {renderMatchupCard()}
 
-      {/* Tab Navigation */}
+      {/* Tabs — immediately below matchup */}
       <div className="lo-tabs">
         {['standings', 'schedule', 'rules'].map(tab => (
           <button
@@ -292,12 +466,14 @@ export default function LeagueOverview() {
           getWeekDateRange={getWeekDateRange}
           fetchLiveTeamScores={fetchLiveTeamScores}
           memberNames={memberNames}
+          selectedWeek={selectedWeek}
+          liveMatchupScores={liveMatchupScores}
         />
       )}
 
       {activeTab === 'schedule' && (
         <section className="lo-section">
-          {Array.from({ length: league.num_weeks || 4 }, (_, i) => i + 1).map(weekNum => {
+          {Array.from({ length: numWeeks }, (_, i) => i + 1).map(weekNum => {
             const weekMatchups = getWeekMatchups(weekNum)
             return (
               <div key={weekNum} className="lo-card">
@@ -318,7 +494,7 @@ export default function LeagueOverview() {
                           <span className="lo-matchup-score">{m.team_a_categories_won}</span>
                         )}
                       </div>
-                      <span className="lo-matchup-vs">
+                      <span className="lo-matchup-vs-text">
                         {m.calculated_at ? `${m.team_a_match_points} - ${m.team_b_match_points}` : 'vs'}
                       </span>
                       <div className={`lo-matchup-team ${m.team_b_match_points === 3 ? 'winner' : ''}`}>
@@ -338,6 +514,9 @@ export default function LeagueOverview() {
 
       {activeTab === 'rules' && (
         <section className="lo-section">
+          <a href="/league/guide" className="lo-guide-link">
+            New to Fantasy? Read the full guide →
+          </a>
           <div className="lo-card">
             <h3 className="lo-rules-title">How It Works</h3>
             <div className="lo-rules-list">
@@ -371,12 +550,11 @@ export default function LeagueOverview() {
                 return (
                   <div key={key} className="lo-category-pill" style={{ borderColor: cat.color }}>
                     <span className="lo-cat-icon">{cat.icon}</span>
-                    <span className="lo-cat-label">{cat.label}</span>
+                    <span className="lo-cat-label-text">{cat.label}</span>
                   </div>
                 )
               })}
             </div>
-
           </div>
         </section>
       )}
@@ -403,11 +581,7 @@ export default function LeagueOverview() {
               </div>
               <div className="lo-modal-actions">
                 <button className="lo-cancel" onClick={() => setShowSoloModal(false)}>Cancel</button>
-                <button
-                  className="lo-save"
-                  onClick={handleJoinSolo}
-                  disabled={actionLoading}
-                >
+                <button className="lo-save" onClick={handleJoinSolo} disabled={actionLoading}>
                   {actionLoading ? 'Joining...' : 'Join'}
                 </button>
               </div>
@@ -438,11 +612,7 @@ export default function LeagueOverview() {
               </div>
               <div className="lo-modal-actions">
                 <button className="lo-cancel" onClick={() => setShowJoinModal(false)}>Cancel</button>
-                <button
-                  className="lo-save"
-                  onClick={handleJoinTeam}
-                  disabled={actionLoading || !joinCode.trim()}
-                >
+                <button className="lo-save" onClick={handleJoinTeam} disabled={actionLoading || !joinCode.trim()}>
                   {actionLoading ? 'Joining...' : 'Join Team'}
                 </button>
               </div>
@@ -473,11 +643,7 @@ export default function LeagueOverview() {
               </div>
               <div className="lo-modal-actions">
                 <button className="lo-cancel" onClick={() => setShowCreateModal(false)}>Cancel</button>
-                <button
-                  className="lo-save"
-                  onClick={handleCreateTeam}
-                  disabled={actionLoading || !teamName.trim()}
-                >
+                <button className="lo-save" onClick={handleCreateTeam} disabled={actionLoading || !teamName.trim()}>
                   {actionLoading ? 'Creating...' : 'Create Team'}
                 </button>
               </div>

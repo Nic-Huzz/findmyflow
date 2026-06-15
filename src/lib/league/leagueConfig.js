@@ -96,7 +96,7 @@ export const FANTASY_CATEGORIES = {
     key: 'tune',
     label: 'Tune',
     icon: '☀️',
-    color: '#10b981',
+    color: '#5e17eb',
     dbFilter: ['Tune'],
     scoringType: 'raw',
   },

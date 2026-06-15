@@ -12,9 +12,9 @@ import { hapticLight } from '../lib/haptics'
 import './FlowFinderExplainer.css'
 
 const CATEGORY_DESCRIPTIONS = {
-  play_list: 'Courage challenges. Face your fears.',
-  healing: 'Self-care, daily & weekly rituals.',
-  bonus: 'Tracker quests + social content.',
+  play_list: 'Expression. Do the things that scare you and make you feel alive.',
+  healing: 'Safety. Recognise, release, and rewire what keeps you stuck.',
+  tune: 'Balance. Daily practices that keep your nervous system regulated.',
 }
 
 export default function LeagueGuide() {
@@ -28,13 +28,13 @@ export default function LeagueGuide() {
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Fantasy League is a competition that makes building your business fun.
+            Fantasy League is a competition that makes training your nervous system fun.
           </p>
           <p>
             Play solo or form a team. Each week, you go head-to-head in matchups.
           </p>
           <p className="highlight-box">
-            The more you work on yourself and your business, <strong>the more you win</strong>.
+            The more you show up for yourself, <strong>the more you win</strong>.
           </p>
         </div>
       )
@@ -48,28 +48,28 @@ export default function LeagueGuide() {
             Every week, you'll get quests in the 7-Day Challenge.
           </p>
           <p>
-            These quests help you build your business, face your fears, and take care of yourself. Completing them earns points.
+            These quests train your nervous system to hold more expression while staying safe. Completing them earns points.
           </p>
           <div className="validation-steps">
             <div className="validation-step">
-              <div className="step-icon">💼</div>
+              <div className="step-icon">☀️</div>
               <div className="step-info">
-                <h4>Business Quests</h4>
-                <p>Work on your project — validation, offers, funnels, and more.</p>
+                <h4>Tune</h4>
+                <p>Daily practices that keep your nervous system regulated and balanced.</p>
+              </div>
+            </div>
+            <div className="validation-step">
+              <div className="step-icon">🔥</div>
+              <div className="step-info">
+                <h4>Wahoos</h4>
+                <p>Courage challenges that expand your capacity for expression and aliveness.</p>
               </div>
             </div>
             <div className="validation-step">
               <div className="step-icon">💚</div>
               <div className="step-info">
-                <h4>Healing Quests</h4>
-                <p>Daily check-ins, weekly reflections, and self-care rituals.</p>
-              </div>
-            </div>
-            <div className="validation-step">
-              <div className="step-icon">🎮</div>
-              <div className="step-info">
-                <h4>Courage Challenges</h4>
-                <p>Face your fears with visibility challenges from your Play-List.</p>
+                <h4>Healing</h4>
+                <p>Recognise, release, and rewire the patterns that keep you stuck.</p>
               </div>
             </div>
           </div>
@@ -227,25 +227,25 @@ export default function LeagueGuide() {
           {isLastSlide ? (
             <>
               <button
-                className="nav-btn primary"
-                onClick={() => navigate('/league')}
-              >
-                Join the League →
-              </button>
-              <button
                 className="nav-btn secondary"
                 onClick={() => navigate('/7-day-challenge')}
               >
                 Back to Challenge
               </button>
+              <button
+                className="nav-btn primary"
+                onClick={() => navigate('/league')}
+              >
+                Join the League →
+              </button>
             </>
           ) : (
             <>
-              <button className="nav-btn primary" onClick={handleNext}>
-                Next →
-              </button>
               <button className="nav-btn secondary" onClick={handlePrev}>
                 ← Back
+              </button>
+              <button className="nav-btn primary" onClick={handleNext}>
+                Next →
               </button>
             </>
           )}

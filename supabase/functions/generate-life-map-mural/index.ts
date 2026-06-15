@@ -126,7 +126,13 @@ serve(async (req) => {
         const imgRes = await fetch(essenceImageUrl)
         if (imgRes.ok) {
           const imgBuffer = await imgRes.arrayBuffer()
-          const imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBuffer)))
+          const bytes = new Uint8Array(imgBuffer)
+          let binary = ''
+          const chunkSize = 8192
+          for (let i = 0; i < bytes.length; i += chunkSize) {
+            binary += String.fromCharCode.apply(null, Array.from(bytes.slice(i, i + chunkSize)))
+          }
+          const imgBase64 = btoa(binary)
           const imgMime = imgRes.headers.get('content-type') || 'image/png'
           referenceImageParts = [{
             inlineData: { mimeType: imgMime, data: imgBase64 }

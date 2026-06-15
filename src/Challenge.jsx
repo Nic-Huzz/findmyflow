@@ -1897,8 +1897,8 @@ function Challenge() {
               ].map(tab => {
                 const isActive = activeFrequencyFilter === tab.id
                 const activeStyles = isActive ? {
-                  background: tab.color,
-                  borderColor: tab.color,
+                  background: 'linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%)',
+                  borderColor: '#5e17eb',
                   color: 'white'
                 } : {}
                 return (

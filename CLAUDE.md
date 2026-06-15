@@ -350,6 +350,9 @@ const { celebrateTaskComplete, celebrateLevelUp } = useCelebrations()
 ### CSS Scoping
 Always scope to parent: `.see-your-flow .entry-card { }` not `.entry-card { }`
 
+### Fixed Bottom Buttons
+When pinning a CTA button to the bottom of a screen, **always constrain to the app container width** — never span full viewport. Use `left: 50%; transform: translateX(-50%); max-width: 480px;` so the button stays centered within the app column on desktop. Add `padding-bottom` with `env(safe-area-inset-bottom)` for mobile. Match the background gradient to the screen's background color (e.g. `rgba(94, 23, 235, 1)` for purple screens). See `.lm-fixed-bottom` in `LifeMapFlow.css` for reference.
+
 ### Shared Flow CSS
 Import `src/styles/flow-base.css`. Classes: `.primary-button`, `.secondary-button`, `.welcome-container`, `.resume-prompt`, `.nav-buttons`, `.option-btn`, `.input-group`, `.loading-state`, `.spinner`, `.progress-dots`, `.error-message`
 
