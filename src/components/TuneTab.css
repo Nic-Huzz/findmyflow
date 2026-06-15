@@ -833,6 +833,14 @@
   text-align: center;
 }
 
+.tt-exp-outcome-modal .tt-recovery-save {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+}
+
+.tt-exp-outcome-modal .tt-recovery-save:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
 .tt-hit {
   color: #10b981;
 }

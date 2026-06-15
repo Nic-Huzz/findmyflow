@@ -1321,9 +1321,11 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             <span className="tt-section-icon">🔮</span>
             <span className="tt-section-title">Today&apos;s Experiences</span>
           </div>
+          {/* Calibration stat — re-enable once enough data accumulates
           {calibrationStat && (
             <span className="tt-section-count">🎯 {calibrationStat.hits}/{calibrationStat.total} this week</span>
           )}
+          */}
         </div>
         <p className="tt-section-sub">Predict how activities will feel. Closing the loop builds self-knowledge.</p>
 
