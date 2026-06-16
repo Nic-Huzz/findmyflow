@@ -73,6 +73,7 @@ export default function useExperiencePipeline(experienceId) {
     const [
       expRes, metricsRes, contentRes, contactsRes, attendeesRes, dealsRes,
       checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes,
+      igPostsRes,
     ] = await Promise.all([
       // Experience details
       supabase.from('experiences').select('*').eq('id', experienceId).single(),
@@ -127,10 +128,15 @@ export default function useExperiencePipeline(experienceId) {
         .select('id')
         .eq('experience_id', experienceId)
         .limit(1),
+      // Instagram posts tagged to this experience
+      supabase.from('instagram_posts')
+        .select('id, reach, views, like_count, comments_count, shares, saves, ig_media_id, permalink, media_type, caption, posted_at, thumbnail_url')
+        .eq('experience_id', experienceId)
+        .eq('user_id', userId),
     ])
 
     // Log any query errors
-    ;[expRes, metricsRes, contentRes, contactsRes, attendeesRes, dealsRes, checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes]
+    ;[expRes, metricsRes, contentRes, contactsRes, attendeesRes, dealsRes, checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes, igPostsRes]
       .forEach((res, i) => { if (res.error) console.warn(`Pipeline query ${i} failed:`, res.error.message) })
 
     const exp = expRes.data
@@ -166,13 +172,23 @@ export default function useExperiencePipeline(experienceId) {
       .reduce((sum, m) => sum + Number(m.metric_value || 0), 0)
     const nodeHasMetrics = (node) => metrics.some(m => m.node === node)
 
-    // Attract: total reach across all methods (manual), fallback to content_history count
+    // Instagram posts tagged to this experience
+    const igPosts = igPostsRes?.data || []
+    const igReach = igPosts.reduce((sum, p) => sum + (p.reach || 0), 0)
+    const igPostCount = igPosts.length
+
+    // Attract: Instagram data > manual metrics > content_history fallback
     const attractReach = metricSum('attract', 'reach')
     const attractPosts = metricSum('attract', 'posts')
     const attractTotal = attractReach > 0 ? attractReach : attractPosts
     const contentCount = contentRes.count || 0
-    const attractValue = nodeHasMetrics('attract') ? attractTotal : contentCount
-    const attractSublabel = nodeHasMetrics('attract') ? (attractReach ? 'reach' : 'posts') : 'posts'
+    const hasInstagram = igPostCount > 0
+    const attractValue = hasInstagram
+      ? igReach
+      : (nodeHasMetrics('attract') ? attractTotal : contentCount)
+    const attractSublabel = hasInstagram
+      ? `reach (${igPostCount} post${igPostCount > 1 ? 's' : ''})`
+      : (nodeHasMetrics('attract') ? (attractReach ? 'reach' : 'posts') : 'posts')
 
     // Capture: manual clicks/signups, fallback to contact_experiences count
     const captureManual = metricSum('capture', 'clicks') + metricSum('capture', 'signups')
@@ -224,6 +240,8 @@ export default function useExperiencePipeline(experienceId) {
         status: deriveStatus(attractValue, { good: 100, warn: 10 }),
         readinessPercent: Math.round((marketingPct + moduleReadiness(attractModules)) / 2),
         hasManualMetrics: nodeHasMetrics('attract'),
+        hasInstagram,
+        igPosts,
       },
       {
         key: 'capture',

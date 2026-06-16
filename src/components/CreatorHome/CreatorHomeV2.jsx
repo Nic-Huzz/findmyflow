@@ -17,6 +17,8 @@ import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
+import InstagramConnect from '../pipeline/InstagramConnect'
+import BrandPulseCard from '../pipeline/BrandPulseCard'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
@@ -898,6 +900,10 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
 
         {/* ═══ GROWTH TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'growth' ? ' active' : ''}`}>
+
+          {/* Instagram Integration */}
+          <InstagramConnect />
+          <BrandPulseCard />
 
           {/* KPIs */}
           <div className="ch2-kpi-grid">

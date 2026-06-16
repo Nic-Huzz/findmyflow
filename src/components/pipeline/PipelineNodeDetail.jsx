@@ -9,6 +9,8 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import TemplateSelector from './TemplateSelector'
+import InstagramPostSelector from './InstagramPostSelector'
+import './InstagramPostSelector.css'
 
 // Module definitions per node
 // certification: true = hidden in v1, shown in certification tier
@@ -133,6 +135,7 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
   const isPast = experience?.status === 'completed' || experience?.status === 'archived'
   const isDesktop = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
   const nudge = getNodeNudge(node, experience, isModuleComplete, wahoos, checklists)
+  const [showPostSelector, setShowPostSelector] = useState(false)
 
   return (
     <div className="pl-detail">
@@ -195,6 +198,54 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
               ⚡ Design a New Wahoo
             </button>
           </CollapsibleSection>
+        )}
+
+        {/* Instagram Post Tagging (Attract only) */}
+        {node.key === 'attract' && node.hasInstagram && (
+          <CollapsibleSection title={`Tagged Posts (${node.igPosts?.length || 0})`} defaultOpen>
+            {node.igPosts?.map(post => (
+              <div key={post.id} className="pl-item" style={{ cursor: 'default' }}>
+                <div className="pl-ico" style={{ fontSize: 14 }}>
+                  {post.media_type === 'VIDEO' ? '🎬' : '📷'}
+                </div>
+                <div className="pl-txt">
+                  <div className="pl-nm">{(post.reach || 0).toLocaleString()} reach</div>
+                  <div className="pl-ds">{post.like_count || 0} likes · {post.comments_count || 0} comments</div>
+                </div>
+                {post.permalink && (
+                  <a href={post.permalink} target="_blank" rel="noopener noreferrer"
+                    style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>↗</a>
+                )}
+              </div>
+            ))}
+            <button
+              className="pl-wahoo-cta"
+              onClick={() => { hapticLight(); setShowPostSelector(true) }}
+            >
+              📸 Tag Instagram Posts
+            </button>
+          </CollapsibleSection>
+        )}
+
+        {node.key === 'attract' && !node.hasInstagram && (
+          <div style={{ padding: '0 0 8px' }}>
+            <button
+              className="pl-wahoo-cta"
+              onClick={() => { hapticLight(); setShowPostSelector(true) }}
+              style={{ opacity: 0.6 }}
+            >
+              📸 Tag Instagram Posts
+            </button>
+          </div>
+        )}
+
+        {showPostSelector && (
+          <InstagramPostSelector
+            experienceId={experience?.id}
+            experienceName={experience?.name}
+            onClose={() => setShowPostSelector(false)}
+            onSave={() => onUpdate?.()}
+          />
         )}
 
         {/* Modules */}
