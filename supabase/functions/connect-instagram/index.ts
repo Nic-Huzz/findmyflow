@@ -54,7 +54,11 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        integration_id: Deno.env.get('COMPOSIO_INSTAGRAM_INTEGRATION_ID'),
+        // Use specific integration if configured, otherwise use toolkit default
+        ...(Deno.env.get('COMPOSIO_INSTAGRAM_INTEGRATION_ID')
+          ? { integration_id: Deno.env.get('COMPOSIO_INSTAGRAM_INTEGRATION_ID') }
+          : { toolkit_slug: 'instagram' }
+        ),
         user_id: user.id,
         redirect_url: callback_url,
       }),
