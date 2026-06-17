@@ -91,56 +91,89 @@ serve(async (req) => {
           user_id
         )
 
-        // 2. Fetch account insights (last 1 day for daily cron, last 7 for initial)
+        // 2. Fetch account insights as daily time series (last 14 days for initial, last 3 for cron)
         const now = Math.floor(Date.now() / 1000)
-        const sinceDays = isInitialSync ? 7 : 1
+        const sinceDays = isInitialSync ? 14 : 3
         const since = now - (sinceDays * 86400)
 
-        let insights: any = {}
-        try {
-          const insightsData = await composioExecute(
-            'INSTAGRAM_GET_USER_INSIGHTS',
-            composio_connection_id,
-            {
-              metric: ['reach', 'accounts_engaged', 'total_interactions', 'likes', 'comments', 'shares', 'saves', 'follows_and_unfollows', 'profile_link_taps', 'views'],
-              period: 'day',
-              metric_type: 'total_value',
-              since,
-              until: now,
-            },
-            user_id
-          )
+        // Build daily metrics map: { '2026-06-17': { reach: 100, views: 200, ... } }
+        const dailyMetrics: Record<string, Record<string, number>> = {}
+        const today = new Date().toISOString().split('T')[0]
 
-          // Parse insights into a map
-          const metricsArray = insightsData.data || insightsData || []
-          if (Array.isArray(metricsArray)) {
-            for (const m of metricsArray) {
-              const val = metricValue(m)
-              if (m.name && val !== null) insights[m.name] = val
+        // Fetch each metric group separately (Instagram API is picky about combos)
+        const metricGroups = [
+          ['reach', 'views', 'total_interactions', 'accounts_engaged'],
+          ['likes', 'comments', 'shares', 'saves'],
+          ['follows_and_unfollows', 'profile_links_taps'],
+        ]
+
+        for (const metrics of metricGroups) {
+          try {
+            const insightsData = await composioExecute(
+              'INSTAGRAM_GET_USER_INSIGHTS',
+              composio_connection_id,
+              {
+                metric: metrics,
+                period: 'day',
+                since,
+                until: now,
+              },
+              user_id
+            )
+
+            const metricsArray = insightsData.data || insightsData || []
+            if (Array.isArray(metricsArray)) {
+              for (const m of metricsArray) {
+                const name = m.name
+                if (!name) continue
+
+                // time_series returns values[] with {value, end_time} per day
+                const values = m.values || []
+                for (const v of values) {
+                  if (v.end_time && v.value !== undefined) {
+                    const date = v.end_time.split('T')[0]
+                    if (!dailyMetrics[date]) dailyMetrics[date] = {}
+                    dailyMetrics[date][name] = v.value
+                  }
+                }
+
+                // Also check total_value format
+                if (m.total_value?.value !== undefined && values.length === 0) {
+                  if (!dailyMetrics[today]) dailyMetrics[today] = {}
+                  dailyMetrics[today][name] = m.total_value.value
+                }
+              }
             }
+          } catch (e) {
+            console.warn(`Insights group [${metrics.join(',')}] failed for ${user_id}:`, e.message)
           }
-        } catch (e) {
-          console.warn(`Insights fetch failed for ${user_id}:`, e.message)
         }
 
-        // 3. Upsert daily metrics
-        const today = new Date().toISOString().split('T')[0]
-        await supabase.from('instagram_metrics').upsert({
-          user_id,
-          date: today,
-          followers: userInfo.followers_count || null,
-          following: userInfo.follows_count || null,
-          reach: insights.reach ?? null,
-          views: insights.views ?? null,
-          accounts_engaged: insights.accounts_engaged ?? null,
-          total_interactions: insights.total_interactions ?? null,
-          likes: insights.likes ?? null,
-          comments: insights.comments ?? null,
-          shares: insights.shares ?? null,
-          saves: insights.saves ?? null,
-          profile_link_taps: insights.profile_link_taps ?? null,
-          follows_net: insights.follows_and_unfollows ?? null,
-        }, { onConflict: 'user_id,date' })
+        // 3. Upsert daily metrics rows (one per day)
+        const followers = userInfo.followers_count || null
+        const following = userInfo.follows_count || null
+
+        // Always upsert today with follower count even if no insights
+        if (!dailyMetrics[today]) dailyMetrics[today] = {}
+
+        for (const [date, m] of Object.entries(dailyMetrics)) {
+          await supabase.from('instagram_metrics').upsert({
+            user_id,
+            date,
+            followers: date === today ? followers : null,
+            following: date === today ? following : null,
+            reach: m.reach ?? null,
+            views: m.views ?? null,
+            accounts_engaged: m.accounts_engaged ?? null,
+            total_interactions: m.total_interactions ?? null,
+            likes: m.likes ?? null,
+            comments: m.comments ?? null,
+            shares: m.shares ?? null,
+            saves: m.saves ?? null,
+            profile_link_taps: m.profile_links_taps ?? null,
+            follows_net: m.follows_and_unfollows ?? null,
+          }, { onConflict: 'user_id,date' })
+        }
 
         // 4. Fetch recent posts (last 30 days for initial, last 7 for daily)
         const postDays = isInitialSync ? 30 : 7
