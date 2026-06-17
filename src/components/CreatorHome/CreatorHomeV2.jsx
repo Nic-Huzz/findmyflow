@@ -413,10 +413,10 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 </div>
               )}
 
-              {/* Sub-tabs: Playbook / Inner Game */}
+              {/* Sub-tabs: Playbook only (Inner Game locked for now) */}
               <div className="ch2-subtabs">
                 <button className={`ch2-subtab${identitySubTab === 'playbook' ? ' active' : ''}`} onClick={() => setIdentitySubTab('playbook')}>Playbook</button>
-                <button className={`ch2-subtab${identitySubTab === 'inner-game' ? ' active' : ''}`} onClick={() => setIdentitySubTab('inner-game')}>Inner Game</button>
+                <button className="ch2-subtab" style={{ opacity: 0.35, cursor: 'not-allowed' }} disabled>Inner Game 🔒</button>
               </div>
 
               {/* ═══ PLAYBOOK SUB-TAB ═══ */}
