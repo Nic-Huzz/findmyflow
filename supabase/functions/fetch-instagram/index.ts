@@ -100,60 +100,56 @@ serve(async (req) => {
         const dailyMetrics: Record<string, Record<string, number>> = {}
         const today = new Date().toISOString().split('T')[0]
 
-        // Fetch each metric individually (Instagram API is very picky about combos and periods)
-        const metricGroups = [
-          ['reach'],
-          ['views'],
-          ['total_interactions'],
-          ['accounts_engaged'],
-          ['likes'],
-          ['comments'],
-          ['shares'],
-          ['saves'],
-          ['follows_and_unfollows'],
-          ['profile_links_taps'],
-        ]
-
-        for (const metrics of metricGroups) {
-          try {
-            const insightsData = await composioExecute(
-              'INSTAGRAM_GET_USER_INSIGHTS',
-              composio_connection_id,
-              {
-                metric: metrics,
-                period: 'day',
-                since,
-                until: now,
-              },
-              user_id
-            )
-
-            const metricsArray = insightsData.data || insightsData || []
-            if (Array.isArray(metricsArray)) {
-              for (const m of metricsArray) {
-                const name = m.name
-                if (!name) continue
-
-                // time_series returns values[] with {value, end_time} per day
-                const values = m.values || []
-                for (const v of values) {
-                  if (v.end_time && v.value !== undefined) {
-                    const date = v.end_time.split('T')[0]
-                    if (!dailyMetrics[date]) dailyMetrics[date] = {}
-                    dailyMetrics[date][name] = v.value
-                  }
-                }
-
-                // Also check total_value format
-                if (m.total_value?.value !== undefined && values.length === 0) {
-                  if (!dailyMetrics[today]) dailyMetrics[today] = {}
-                  dailyMetrics[today][name] = m.total_value.value
+        // A. Fetch REACH as daily time_series (only metric that supports it)
+        try {
+          const reachData = await composioExecute(
+            'INSTAGRAM_GET_USER_INSIGHTS',
+            composio_connection_id,
+            { metric: ['reach'], period: 'day', since, until: now },
+            user_id
+          )
+          const reachMetrics = reachData.data || reachData || []
+          if (Array.isArray(reachMetrics)) {
+            for (const m of reachMetrics) {
+              for (const v of (m.values || [])) {
+                if (v.end_time && v.value !== undefined) {
+                  const date = v.end_time.split('T')[0]
+                  if (!dailyMetrics[date]) dailyMetrics[date] = {}
+                  dailyMetrics[date].reach = v.value
                 }
               }
             }
-          } catch (e) {
-            console.warn(`Insights group [${metrics.join(',')}] failed for ${user_id}:`, e.message)
           }
+        } catch (e) {
+          console.warn(`Reach time_series failed for ${user_id}:`, e.message)
+        }
+
+        // B. Fetch all other metrics as total_value (stored on today's row)
+        const totalValueMetrics = ['views', 'total_interactions', 'accounts_engaged', 'likes', 'comments', 'shares', 'saves', 'follows_and_unfollows', 'profile_links_taps']
+        try {
+          const totalData = await composioExecute(
+            'INSTAGRAM_GET_USER_INSIGHTS',
+            composio_connection_id,
+            {
+              metric: totalValueMetrics,
+              period: 'day',
+              metric_type: 'total_value',
+              since: now - (sinceDays * 86400),
+              until: now,
+            },
+            user_id
+          )
+          if (!dailyMetrics[today]) dailyMetrics[today] = {}
+          const totalMetrics = totalData.data || totalData || []
+          if (Array.isArray(totalMetrics)) {
+            for (const m of totalMetrics) {
+              if (m.name && m.total_value?.value !== undefined) {
+                dailyMetrics[today][m.name] = m.total_value.value
+              }
+            }
+          }
+        } catch (e) {
+          console.warn(`Total value metrics failed for ${user_id}:`, e.message)
         }
 
         // 3. Upsert daily metrics rows (one per day)
