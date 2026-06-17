@@ -9,13 +9,13 @@ const hasNotarizationCreds =
   !!process.env.APPLE_TEAM_ID
 
 module.exports = {
-  appId: 'com.nichuzz.viberise',
-  productName: 'Vibe Rise',
+  appId: 'com.nichuzz.viberise.creator',
+  productName: 'Vibe Rise for Creators',
   directories: {
     output: 'electron-dist',
   },
   files: [
-    'dist/**/*',
+    'dist-creator/**/*',
     'server/**/*',
     'electron/**/*',
     'node_modules/**/*',
@@ -28,7 +28,7 @@ module.exports = {
       { target: 'dmg', arch: ['arm64', 'x64'] },
     ],
     icon: 'electron/icons/icon.icns',
-    artifactName: 'Vibe-Rise-mac-${arch}.dmg',
+    artifactName: 'Vibe-Rise-Creator-mac-${arch}.dmg',
     hardenedRuntime: hasNotarizationCreds,
     gatekeeperAssess: false,
     entitlements: hasNotarizationCreds ? 'electron/entitlements.mac.plist' : undefined,

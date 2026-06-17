@@ -204,8 +204,147 @@ function startServer(port) {
       }
     })
 
+    // ── Build Engine: detect + install tools ──
+
+    const { detectAll, getExpandedPath } = require('./lib/detect-tools.cjs')
+    const { installTool } = require('./lib/install-tools.cjs')
+    const { fixNpmPrefix } = require('./lib/fix-npm-prefix.cjs')
+
+    // Detect installed tools
+    app.get('/api/detect', (req, res) => {
+      res.setHeader('Cache-Control', 'no-store')
+      res.json(detectAll())
+    })
+
+    // Install a single tool (SSE streaming progress)
+    app.post('/api/install/:toolId', async (req, res) => {
+      const { toolId } = req.params
+
+      res.setHeader('Content-Type', 'text/event-stream')
+      res.setHeader('Cache-Control', 'no-cache')
+      res.setHeader('Connection', 'keep-alive')
+      res.setHeader('X-Accel-Buffering', 'no')
+
+      const send = (data) => {
+        try { res.write(`data: ${JSON.stringify(data)}\n\n`) } catch {}
+      }
+
+      try {
+        // Fix npm prefix on Mac to avoid sudo
+        try {
+          const prefixResult = fixNpmPrefix()
+          if (prefixResult.fixed) {
+            send({ tool: toolId, status: 'progress', message: 'npm configured for global installs (no sudo needed)' })
+          }
+        } catch {}
+
+        send({ tool: toolId, status: 'installing', message: `Installing ${toolId}...` })
+
+        const result = await installTool(toolId, (message) => {
+          send({ tool: toolId, status: 'progress', message })
+        })
+
+        if (result.success) {
+          send({ tool: toolId, status: 'done' })
+        } else {
+          send({ tool: toolId, status: 'error', error: result.error })
+        }
+      } catch (err) {
+        send({ tool: toolId, status: 'error', error: err.message })
+      }
+
+      send({ status: 'complete' })
+      res.end()
+    })
+
+    // Install all missing tools
+    app.post('/api/install-all', async (req, res) => {
+      res.setHeader('Content-Type', 'text/event-stream')
+      res.setHeader('Cache-Control', 'no-cache')
+      res.setHeader('Connection', 'keep-alive')
+      res.setHeader('X-Accel-Buffering', 'no')
+
+      let clientDisconnected = false
+      req.on('close', () => { clientDisconnected = true })
+
+      const send = (data) => {
+        if (clientDisconnected) return
+        try { res.write(`data: ${JSON.stringify(data)}\n\n`) } catch {}
+      }
+
+      send({ status: 'phase', message: 'Preparing...' })
+      fixNpmPrefix()
+
+      const { tools } = detectAll()
+      const missing = tools.filter(t => !t.installed && t.required)
+
+      if (missing.length === 0) {
+        send({ status: 'complete', message: 'All tools already installed!' })
+        res.end()
+        return
+      }
+
+      send({ status: 'info', message: `Installing ${missing.length} tool(s)...` })
+
+      const results = []
+      for (const tool of missing) {
+        if (clientDisconnected) break
+        send({ tool: tool.id, status: 'installing', message: `Installing ${tool.name}...` })
+
+        const result = await installTool(tool.id, (message) => {
+          send({ tool: tool.id, status: 'progress', message })
+        })
+
+        if (result.success) {
+          send({ tool: tool.id, status: 'done', message: `${tool.name} installed` })
+          results.push({ id: tool.id, success: true })
+        } else {
+          send({ tool: tool.id, status: 'error', error: result.error })
+          results.push({ id: tool.id, success: false, error: result.error })
+        }
+      }
+
+      const updated = detectAll()
+      send({ status: 'complete', results, tools: updated.tools })
+      res.end()
+    })
+
+    // Launch Claude Code authentication
+    app.post('/api/launch-auth', (req, res) => {
+      const { spawn } = require('child_process')
+      try {
+        const child = spawn('claude', ['login'], {
+          env: { ...process.env, PATH: getExpandedPath() },
+          stdio: ['pipe', 'pipe', 'pipe'],
+          timeout: 60000,
+        })
+        child.on('error', () => {})
+        child.unref()
+        res.json({ launched: true })
+      } catch {
+        res.status(500).json({ error: 'Failed to launch claude login' })
+      }
+    })
+
+    // Launch Vercel authentication
+    app.post('/api/launch-vercel-auth', (req, res) => {
+      const { spawn } = require('child_process')
+      try {
+        const child = spawn('vercel', ['login'], {
+          env: { ...process.env, PATH: getExpandedPath() },
+          stdio: ['pipe', 'pipe', 'pipe'],
+          timeout: 60000,
+        })
+        child.on('error', () => {})
+        child.unref()
+        res.json({ launched: true })
+      } catch {
+        res.status(500).json({ error: 'Failed to launch vercel login' })
+      }
+    })
+
     // Serve the Vite build
-    const distPath = path.join(__dirname, '..', 'dist')
+    const distPath = path.join(__dirname, '..', 'dist-creator')
     app.use(express.static(distPath))
 
     // SPA fallback — all non-file routes serve index.html

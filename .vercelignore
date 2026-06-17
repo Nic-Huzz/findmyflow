@@ -1,0 +1,5 @@
+electron-dist/
+ios/
+out/
+remotion/public/*.mp3
+.env.pipeline

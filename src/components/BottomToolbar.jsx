@@ -40,6 +40,8 @@ const MAIN_NAV_ITEMS = [
 ]
 
 // Create portal navigation items
+const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
+
 const CREATE_NAV_ITEMS = [
   {
     id: 'identity',
@@ -59,6 +61,12 @@ const CREATE_NAV_ITEMS = [
     icon: '📈',
     path: '/create/growth'
   },
+  ...(isElectron ? [{
+    id: 'ai-portal',
+    label: 'Terminal',
+    icon: '⚡',
+    path: '/create/terminal'
+  }] : []),
   {
     id: 'creator-profile',
     label: 'Profile',
@@ -248,6 +256,7 @@ function BottomToolbar() {
                path === '/create/attraction-stack' ||
                path === '/create/marketing-campaign'
       }
+      if (item.id === 'ai-portal') return path === '/create/terminal'
       if (item.id === 'creator-profile') return path === '/create/profile'
     }
 

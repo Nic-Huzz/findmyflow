@@ -114,6 +114,35 @@
   cursor: not-allowed;
 }
 
+/* Don't Allow button */
+.ai-consent-decline {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 17px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ai-consent-decline:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Declined state links */
+.ai-consent-declined-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 16px;
+}
+
 /* Privacy link */
 .ai-consent-privacy-link {
   display: inline-block;
@@ -125,6 +154,10 @@
 
 .ai-consent-privacy-link:hover {
   color: rgba(255, 255, 255, 0.6);
+}
+
+.ai-consent-declined-links .ai-consent-privacy-link {
+  margin-top: 0;
 }
 
 /* Reduced motion */

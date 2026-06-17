@@ -19,6 +19,7 @@ import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
 import InstagramConnect from '../pipeline/InstagramConnect'
 import BrandPulseCard from '../pipeline/BrandPulseCard'
+import RootReachCard from '../pipeline/RootReachCard'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
@@ -900,6 +901,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
 
         {/* ═══ GROWTH TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'growth' ? ' active' : ''}`}>
+
+          {/* Creator Momentum */}
+          <RootReachCard />
 
           {/* Instagram Integration */}
           <InstagramConnect />

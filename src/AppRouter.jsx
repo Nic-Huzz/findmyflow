@@ -1078,6 +1078,13 @@ function AppRouter() {
                 </AuthGate>
               </CreateGate>
             } />
+            <Route path="/create/terminal" element={
+              <CreateGate>
+                <AuthGate>
+                  <CreatorHome defaultTab="ai-portal" />
+                </AuthGate>
+              </CreateGate>
+            } />
             <Route path="/create/profile" element={
               <AuthGate>
                 <ProfileHub />
