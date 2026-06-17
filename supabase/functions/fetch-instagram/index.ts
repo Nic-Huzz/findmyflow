@@ -12,7 +12,7 @@ const corsHeaders = {
 }
 
 // Execute a Composio tool via REST API
-async function composioExecute(toolSlug: string, connectedAccountId: string, args: Record<string, any>) {
+async function composioExecute(toolSlug: string, connectedAccountId: string, args: Record<string, any>, entityId?: string) {
   const res = await fetch(`${COMPOSIO_BASE}/tools/execute/${toolSlug}`, {
     method: 'POST',
     headers: {
@@ -21,6 +21,7 @@ async function composioExecute(toolSlug: string, connectedAccountId: string, arg
     },
     body: JSON.stringify({
       connected_account_id: connectedAccountId,
+      entity_id: entityId || connectedAccountId,
       arguments: args,
     }),
   })
@@ -86,7 +87,8 @@ serve(async (req) => {
         const userInfo = await composioExecute(
           'INSTAGRAM_GET_USER_INFO',
           composio_connection_id,
-          { ig_user_id: 'me' }
+          { ig_user_id: 'me' },
+          user_id
         )
 
         // 2. Fetch account insights (last 1 day for daily cron, last 7 for initial)
@@ -105,7 +107,8 @@ serve(async (req) => {
               metric_type: 'total_value',
               since,
               until: now,
-            }
+            },
+            user_id
           )
 
           // Parse insights into a map
@@ -160,7 +163,8 @@ serve(async (req) => {
           const mediaData = await composioExecute(
             'INSTAGRAM_GET_IG_USER_MEDIA',
             composio_connection_id,
-            mediaArgs
+            mediaArgs,
+            user_id
           )
 
           const posts = mediaData.data || mediaData || []
@@ -181,7 +185,8 @@ serve(async (req) => {
               {
                 ig_media_id: post.id,
                 metric: ['reach', 'views', 'likes', 'comments', 'shares', 'saved'],
-              }
+              },
+              user_id
             )
 
             const postMetrics = postInsights.data || postInsights || []
