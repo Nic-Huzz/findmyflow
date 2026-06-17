@@ -182,6 +182,25 @@ export default function CreateGate({ children }) {
             </button>
           )}
 
+          <button
+            className="cg-cta-signin"
+            onClick={() => { window.location.href = '/log-in?returnTo=/create' }}
+            style={{
+              marginTop: 12,
+              padding: '14px 24px',
+              borderRadius: 12,
+              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'transparent',
+              color: 'rgba(255,255,255,0.6)',
+              fontSize: 15,
+              fontWeight: 600,
+              cursor: 'pointer',
+              width: '100%',
+            }}
+          >
+            Already a member? Sign in
+          </button>
+
         </div>
       </div>
     </div>
