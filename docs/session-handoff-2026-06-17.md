@@ -74,8 +74,13 @@ content_history, experience_checklist_items, crm_contacts outreach, groan_challe
 
 ### Immediate Fixes
 1. **Instagram callback redirect** — Composio redirects to its own page, not our callback. `instagram-callback` edge function never fires. Need to investigate Composio's redirect_url behavior or use a webhook instead.
-2. **Auto-complete past experiences** — Experiences with dates in the past should auto-move to `status='completed'` (currently manual). The Tuk Tuk Tournament from May 30 still shows as "Upcoming".
+2. **Auto-complete past experiences** — Experiences with dates 7+ days in the past should auto-move to `status='completed'`. Currently manual. The Tuk Tuk Tournament from May 30 still shows as "Upcoming". Either cron or client-side check on load.
 3. **Daily Instagram cron** — Set up pg_cron to call `fetch-instagram` daily. Pattern exists in `supabase/migrations/Sql commands/setup_league_auto_scoring.sql`.
+4. **Reach item links point to /crm routes** — Several Reach breakdown items in `useReachScore.js` link to `/crm/*` routes which are NOT accessible from the creator portal. Review each and either bring those CRM pages into `/create/*` routes or build creator-native equivalents. Current links that need fixing:
+   - `content` → `/crm/content-create` (CRM content generator)
+   - `outreach` → `/crm/warm-outreach` (CRM warm outreach)
+   - `tasks` → `/crm/execute` (CRM execute system)
+   - `contacts_added` → `/crm/contacts` (CRM contacts)
 
 ### Ready to Build
 4. **Brand Pulse post tagging** — Tap Brand Pulse → post gallery → tag as experience/brand building. Spec at `docs/brand-pulse-post-tagging-spec.md`. ~3-4 hours.
