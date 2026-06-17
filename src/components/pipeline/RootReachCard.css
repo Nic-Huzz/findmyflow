@@ -200,6 +200,21 @@
   margin-left: auto;
 }
 
+.rr-arrow {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.15);
+  margin-left: auto;
+  transition: color 0.2s;
+}
+
+.rr-breakdown-item.pending:hover .rr-arrow {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.rr-breakdown-item.pending:active {
+  opacity: 0.7;
+}
+
 /* Prescription / Next Move */
 .rr-prescription {
   padding: 14px 16px;

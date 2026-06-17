@@ -12,16 +12,16 @@ import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
 const REACH_ITEMS = [
-  { key: 'content', label: 'Posted content' },
-  { key: 'checklist', label: 'Completed checklist items' },
-  { key: 'outreach', label: 'Reached out to someone' },
-  { key: 'wahoo', label: 'Completed a courage challenge' },
-  { key: 'experience', label: 'Delivered an experience' },
-  { key: 'tasks', label: 'Completed tasks' },
-  { key: 'contacts_added', label: 'Added contacts to an experience' },
-  { key: 'reflection', label: 'Logged a 3% reflection' },
-  { key: 'pipeline_metric', label: 'Updated pipeline metrics' },
-  { key: 'instagram', label: 'Posted on Instagram' },
+  { key: 'content', label: 'Posted content', route: '/crm/content-create' },
+  { key: 'checklist', label: 'Completed checklist items', route: '/create/experiences' },
+  { key: 'outreach', label: 'Reached out to someone', route: '/crm/warm-outreach' },
+  { key: 'wahoo', label: 'Completed a courage challenge', route: '/create/plays' },
+  { key: 'experience', label: 'Delivered an experience', route: '/create/experience/new' },
+  { key: 'tasks', label: 'Completed tasks', route: '/crm/execute' },
+  { key: 'contacts_added', label: 'Added contacts to an experience', route: '/crm/contacts' },
+  { key: 'reflection', label: 'Logged a 3% reflection', route: '/create/experiences' },
+  { key: 'pipeline_metric', label: 'Updated pipeline metrics', route: '/create/experiences' },
+  { key: 'instagram', label: 'Posted on Instagram', route: null },
 ]
 
 export { REACH_ITEMS }

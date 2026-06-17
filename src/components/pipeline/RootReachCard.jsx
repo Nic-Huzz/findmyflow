@@ -63,18 +63,45 @@ export default function RootReachCard() {
       <div className="rr-breakdown">
         <div className="rr-breakdown-col">
           {rootBreakdown?.map(item => (
-            <div key={item.key} className={`rr-breakdown-item ${item.built ? 'done' : 'pending'}`}>
+            <div
+              key={item.key}
+              className={`rr-breakdown-item ${item.built ? 'done' : 'pending'}`}
+              onClick={() => {
+                if (!item.built && item.action?.route) {
+                  hapticLight()
+                  navigate(`${item.action.route}?returnTo=/create/growth`)
+                }
+              }}
+              style={{ cursor: item.built ? 'default' : 'pointer' }}
+            >
               <span className={`rr-dot roots ${item.built ? 'done' : 'pending'}`} />
               <span>{item.label}</span>
-              {item.built && <span className="rr-check">✓</span>}
+              {item.built
+                ? <span className="rr-check">✓</span>
+                : <span className="rr-arrow">→</span>
+              }
             </div>
           ))}
         </div>
         <div className="rr-breakdown-col">
           {reachBreakdown?.slice(0, 5).map(item => (
-            <div key={item.key} className={`rr-breakdown-item ${item.active ? 'done' : 'pending'}`}>
+            <div
+              key={item.key}
+              className={`rr-breakdown-item ${item.active ? 'done' : 'pending'}`}
+              onClick={() => {
+                if (!item.active && item.route) {
+                  hapticLight()
+                  navigate(item.route)
+                }
+              }}
+              style={{ cursor: item.active ? 'default' : item.route ? 'pointer' : 'default' }}
+            >
               <span className={`rr-dot reach ${item.active ? 'done' : 'pending'}`} />
               <span>{item.label}</span>
+              {item.active
+                ? null
+                : item.route ? <span className="rr-arrow">→</span> : null
+              }
             </div>
           ))}
         </div>
