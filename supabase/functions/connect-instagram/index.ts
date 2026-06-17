@@ -47,6 +47,9 @@ serve(async (req) => {
     }
 
     // Initiate Composio connection for this user
+    const authConfigId = Deno.env.get('COMPOSIO_INSTAGRAM_AUTH_CONFIG_ID')
+    if (!authConfigId) throw new Error('COMPOSIO_INSTAGRAM_AUTH_CONFIG_ID not set')
+
     const connectRes = await fetch(`${COMPOSIO_BASE}/connected_accounts`, {
       method: 'POST',
       headers: {
@@ -54,13 +57,11 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        // Use specific integration if configured, otherwise use toolkit default
-        ...(Deno.env.get('COMPOSIO_INSTAGRAM_INTEGRATION_ID')
-          ? { integration_id: Deno.env.get('COMPOSIO_INSTAGRAM_INTEGRATION_ID') }
-          : { toolkit_slug: 'instagram' }
-        ),
-        user_id: user.id,
-        redirect_url: callback_url,
+        auth_config: { id: authConfigId },
+        connection: {
+          user_id: user.id,
+          redirect_url: callback_url,
+        },
       }),
     })
 
