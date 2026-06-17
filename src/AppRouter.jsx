@@ -438,7 +438,12 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/shift-scorecard' ||
                         location.pathname === '/movement-makers' ||
                         location.pathname === '/pre-launch' ||
-                        (location.pathname.startsWith('/create/') && location.pathname !== '/create')
+                        (location.pathname.startsWith('/create/') &&
+                         location.pathname !== '/create' &&
+                         location.pathname !== '/create/experiences' &&
+                         location.pathname !== '/create/growth' &&
+                         location.pathname !== '/create/terminal' &&
+                         location.pathname !== '/create/profile')
 
   if (isPublicRoute) return null
   return <BottomToolbar />
