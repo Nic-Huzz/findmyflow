@@ -241,7 +241,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'skills').eq('cluster_stage', 'final'),
         supabase.from('nikigai_clusters').select('cluster_label, is_favourite').eq('user_id', userId).eq('cluster_type', 'problems').eq('cluster_stage', 'final'),
         supabase.from('nervous_system_responses').select('nervous_system_impact_limit, nervous_system_income_limit, archetype').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
-        supabase.from('quest_completions').select('id').eq('user_id', userId).eq('quest_id', 'wound_map').limit(1).maybeSingle(),
+        supabase.from('journey_onboarding_selections').select('id').eq('user_id', userId).then(({ data, error }) => ({ data: data?.length >= 4 ? { id: 'complete' } : null, error })),
         supabase.from('healing_compass_responses').select('id, created_at').eq('user_id', userId).eq('flow_version', 2).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('blow_up_readiness').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
       ])
@@ -494,7 +494,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                           </div>
                         </div>
                       )}
-                      {remarkableAngle.score_unique && (
+                      {remarkableAngle.score_unique != null && remarkableAngle.score_share != null && remarkableAngle.score_simple != null && (
                         <div className="ch2-biz-row">
                           <div className="ch2-biz-icon">📊</div>
                           <div className="ch2-biz-info">

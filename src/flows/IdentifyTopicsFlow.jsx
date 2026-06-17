@@ -386,11 +386,12 @@ export default function IdentifyTopicsFlow() {
               quest_type: 'Rewire',
               points_earned: 10,
               challenge_day: 0,
-            }).then(() => {
-              supabase.rpc('increment_scores', { p_user_id: user.id, p_project_id: null, p_category: 'play_list', p_points: 10, p_week_start: new Date().toISOString().slice(0, 10) }).catch(() => {})
-            }).catch(() => {})
+            }).then(r => {
+              if (r.error) console.warn('Playlist quest insert:', r.error.message)
+              supabase.rpc('increment_scores', { p_user_id: user.id, p_project_id: null, p_category: 'play_list', p_points: 10, p_week_start: new Date().toISOString().slice(0, 10) }).then(r2 => { if (r2.error) console.warn('Playlist score sync:', r2.error.message) })
+            }).then(r => { if (r?.error) console.warn('Playlist quest chain:', r.error.message) })
           }
-        }).catch(() => {})
+        }).then(r => { if (r?.error) console.warn('Playlist quest check:', r.error.message) })
 
       navigate('/7-day-challenge')
     } catch (err) {

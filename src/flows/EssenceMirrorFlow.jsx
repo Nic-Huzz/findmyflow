@@ -350,8 +350,8 @@ export default function EssenceMirrorFlow() {
           quest_type: 'Rewire',
           points_earned: 10,
           challenge_day: 0,
-        }).catch(() => {})
-        await supabase.rpc('increment_scores', { p_user_id: user.id, p_project_id: null, p_category: 'play_list', p_points: 10, p_week_start: new Date().toISOString().slice(0, 10) }).catch(() => {})
+        }).then(r => { if (r.error) console.warn('Hero avatar quest insert:', r.error.message) })
+        await supabase.rpc('increment_scores', { p_user_id: user.id, p_project_id: null, p_category: 'play_list', p_points: 10, p_week_start: new Date().toISOString().slice(0, 10) }).then(r => { if (r.error) console.warn('Hero avatar score sync:', r.error.message) })
       }
 
       // Update lead_flow_profiles so /me hero section picks it up
