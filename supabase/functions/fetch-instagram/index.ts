@@ -91,20 +91,27 @@ serve(async (req) => {
           user_id
         )
 
-        // 2. Fetch account insights as daily time series (last 14 days for initial, last 3 for cron)
+        // 2. Fetch account insights as daily time series (max 28 days for initial, last 3 for cron)
         const now = Math.floor(Date.now() / 1000)
-        const sinceDays = isInitialSync ? 14 : 3
+        const sinceDays = isInitialSync ? 28 : 3
         const since = now - (sinceDays * 86400)
 
         // Build daily metrics map: { '2026-06-17': { reach: 100, views: 200, ... } }
         const dailyMetrics: Record<string, Record<string, number>> = {}
         const today = new Date().toISOString().split('T')[0]
 
-        // Fetch each metric group separately (Instagram API is picky about combos)
+        // Fetch each metric individually (Instagram API is very picky about combos and periods)
         const metricGroups = [
-          ['reach', 'views', 'total_interactions', 'accounts_engaged'],
-          ['likes', 'comments', 'shares', 'saves'],
-          ['follows_and_unfollows', 'profile_links_taps'],
+          ['reach'],
+          ['views'],
+          ['total_interactions'],
+          ['accounts_engaged'],
+          ['likes'],
+          ['comments'],
+          ['shares'],
+          ['saves'],
+          ['follows_and_unfollows'],
+          ['profile_links_taps'],
         ]
 
         for (const metrics of metricGroups) {
@@ -176,13 +183,13 @@ serve(async (req) => {
         }
 
         // 4. Fetch recent posts (last 30 days for initial, last 7 for daily)
-        const postDays = isInitialSync ? 30 : 7
+        const postDays = isInitialSync ? 90 : 7
         const postSince = now - (postDays * 86400)
 
         let allPosts: any[] = []
         let cursor: string | null = null
         let pages = 0
-        const maxPages = isInitialSync ? 5 : 2
+        const maxPages = isInitialSync ? 10 : 2
 
         do {
           const mediaArgs: any = {
