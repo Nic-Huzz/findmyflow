@@ -77,7 +77,7 @@ export default function useBrandPulse() {
       .gte('date', fourteenDaysAgo.toISOString().split('T')[0])
       .order('date', { ascending: true })
 
-    if (!metrics || metrics.length < 7) {
+    if (!metrics || metrics.length < 2) {
       setData(prev => ({
         ...prev,
         loading: false,
