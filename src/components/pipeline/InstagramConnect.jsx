@@ -91,7 +91,7 @@ export default function InstagramConnect({ onRefresh }) {
             'Authorization': `Bearer ${session.access_token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ user_id: user.id }),
+          body: JSON.stringify({ user_id: user.id, initial_sync: true }),
         }
       )
       await loadIntegration()
