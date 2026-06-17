@@ -32,6 +32,7 @@ function lazyRetry(importFn) {
 import LandingPage from './pages/LandingPage'
 const PreLaunch = lazyRetry(() => import('./pages/PreLaunch'))
 import PersonaAssessment from './PersonaAssessment'
+import CreatorLogin from './components/CreatorLogin'
 import JourneyOnboarding from './components/onboarding/JourneyOnboarding'
 import PlaySkillsOnboarding from './components/onboarding/PlaySkillsOnboarding'
 const PlaySkillsIdentifier = lazy(() => import('./flows/PlaySkillsIdentifier'))
@@ -507,6 +508,11 @@ const APP_MODE = import.meta.env.VITE_APP_MODE
 const IS_CREATOR = APP_MODE === 'creator'
 const IS_CONSUMER = APP_MODE === 'consumer'
 
+// Set document title for creator build
+if (IS_CREATOR && typeof document !== 'undefined') {
+  document.title = 'Vibe Rise — Where Experience Creators Grow'
+}
+
 function RedirectWithParam({ to }) {
   const { id } = useParams()
   return <Navigate to={`${to}/${id}`} replace />
@@ -540,7 +546,7 @@ function AppRouter() {
               <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
               <Route path="/essence-identify" element={<EssenceIdentify />} />
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
-              <Route path="/log-in" element={<PersonaAssessment />} />
+              <Route path="/log-in" element={IS_CREATOR ? <CreatorLogin /> : <PersonaAssessment />} />
 
               {/* Play-Skills Identifier - Standalone */}
               <Route path="/play-skills-identifier" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PlaySkillsIdentifier /></Suspense></AuthGate>} />
