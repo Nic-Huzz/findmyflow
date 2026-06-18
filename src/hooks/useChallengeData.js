@@ -1621,7 +1621,7 @@ export function useChallengeData() {
     const MAX_MISSES = 1 // forgiving streak: 1 day grace period
     let checkDate = new Date(today)
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; ; i++) {
       const dateKey = `${checkDate.getFullYear()}-${checkDate.getMonth() + 1}-${checkDate.getDate()}`
       if (completionDates.has(dateKey)) {
         streak++
