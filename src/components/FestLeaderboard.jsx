@@ -1,9 +1,8 @@
 /**
  * FestLeaderboard.jsx
  *
- * Simple RP leaderboard for Vibe Rise Fest.
- * Join = insert into challenge_participants with FEST_GROUP_ID.
- * Leaderboard = all participants ranked by lifetime RP.
+ * Vibe Rise leaderboard popup.
+ * Shows all users active in the past 7 days, ranked by capacity score.
  *
  * CSS prefix: fl-
  */
@@ -11,56 +10,38 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getLevel } from '../lib/crm/statsService'
-import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './FestLeaderboard.css'
-
-// Fixed group ID for Vibe Rise Fest
-const FEST_GROUP_ID = 'bbbbbbbb-0000-0000-0000-000000000001'
 
 const RANK_MEDALS = ['🥇', '🥈', '🥉']
 
 export default function FestLeaderboard({ userId, onClose }) {
-  const [joined, setJoined] = useState(null) // null = loading, true/false
-  const [joining, setJoining] = useState(false)
   const [leaderboard, setLeaderboard] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!userId) return
-
-    Promise.all([
-      supabase
-        .from('challenge_participants')
-        .select('user_id')
-        .eq('group_id', FEST_GROUP_ID)
-        .eq('user_id', userId)
-        .maybeSingle(),
-      loadLeaderboard(),
-    ]).then(([{ data }]) => {
-      setJoined(!!data)
-      setLoading(false)
-    }).catch(() => setLoading(false))
+    loadLeaderboard().finally(() => setLoading(false))
   }, [userId])
 
   const loadLeaderboard = async () => {
-    const { data: participants } = await supabase
-      .from('challenge_participants')
-      .select('user_id')
-      .eq('group_id', FEST_GROUP_ID)
+    // All users active in the past 7 days
+    const sevenDaysAgo = new Date()
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
 
-    if (!participants?.length) {
+    const { data: scores } = await supabase
+      .from('user_lifetime_scores')
+      .select('user_id, lifetime_total_score, capacity_score, capacity_zone, safety_score, expression_score')
+      .is('project_id', null)
+      .gte('updated_at', sevenDaysAgo.toISOString())
+
+    if (!scores?.length) {
       setLeaderboard([])
       return
     }
 
-    const userIds = participants.map(p => p.user_id)
+    const userIds = scores.map(s => s.user_id)
 
-    const [{ data: scores }, { data: profiles }, { data: authNames }] = await Promise.all([
-      supabase
-        .from('user_lifetime_scores')
-        .select('user_id, lifetime_total_score')
-        .in('user_id', userIds)
-        .is('project_id', null),
+    const [{ data: profiles }, { data: authNames }] = await Promise.all([
       supabase
         .from('lead_flow_profiles')
         .select('user_id, user_name, custom_essence_image, custom_essence_name')
@@ -69,76 +50,37 @@ export default function FestLeaderboard({ userId, onClose }) {
       supabase.rpc('get_leaderboard_names', { p_user_ids: userIds }),
     ])
 
-    const ranked = userIds.map(uid => {
-      const score = scores?.find(s => s.user_id === uid)
+    const ranked = scores.map(score => {
+      const uid = score.user_id
       const profile = profiles?.find(p => p.user_id === uid)
       const authName = authNames?.find(a => a.user_id === uid)
-      const rp = score?.lifetime_total_score || 0
+      const rp = score.lifetime_total_score || 0
+
       return {
         user_id: uid,
         firstName: profile?.user_name || authName?.display_name || 'Anonymous',
-        essenceName: profile?.custom_essence_name || null,
         avatar: profile?.custom_essence_image || null,
         rp,
         level: getLevel(rp),
+        capacity: score.capacity_score ?? 0,
+        zone: score.capacity_zone || 'stuck',
+        safety: score.safety_score ?? 0,
+        expression: score.expression_score ?? 0,
       }
-    }).sort((a, b) => b.rp - a.rp)
+    }).sort((a, b) => b.capacity - a.capacity || b.rp - a.rp)
 
     setLeaderboard(ranked)
   }
 
-  const handleJoin = async () => {
-    setJoining(true)
-    hapticLight()
+  if (loading) return null
 
-    const { error } = await supabase
-      .from('challenge_participants')
-      .insert({ group_id: FEST_GROUP_ID, user_id: userId })
-
-    if (error) {
-      console.error('Fest join error:', error)
-      // Might already be joined (unique constraint)
-      if (error.code === '23505') {
-        setJoined(true)
-        await loadLeaderboard()
-      }
-    } else {
-      hapticSuccess()
-      setJoined(true)
-      await loadLeaderboard()
-    }
-    setJoining(false)
-  }
-
-  if (loading || joined === null) return null
-
-  // Join prompt
-  if (!joined) {
-    return (
-      <div className="fl-overlay" onClick={onClose}>
-        <div className="fl-modal" onClick={e => e.stopPropagation()}>
-          <div className="fl-join">
-            <div className="fl-join-icon">⚡</div>
-            <h2 className="fl-join-title">Join Vibe Rise Fest Group?</h2>
-            <p className="fl-join-sub">Compete with others on the leaderboard. Your Rise Points track your progress.</p>
-            <button className="fl-join-btn" onClick={handleJoin} disabled={joining}>
-              {joining ? 'Joining...' : 'Join Now'}
-            </button>
-            <button className="fl-join-skip" onClick={onClose}>Maybe later</button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Leaderboard
   const myRank = leaderboard.findIndex(p => p.user_id === userId) + 1
 
   return (
     <div className="fl-overlay" onClick={onClose}>
       <div className="fl-modal fl-leaderboard-modal" onClick={e => e.stopPropagation()}>
         <div className="fl-header">
-          <h2 className="fl-title">Vibe Rise Fest</h2>
+          <h2 className="fl-title">Vibe Rise Leaderboard</h2>
           <button className="fl-close" onClick={onClose}>×</button>
         </div>
 
@@ -163,15 +105,18 @@ export default function FestLeaderboard({ userId, onClose }) {
                 </div>
                 <div className="fl-info">
                   <span className="fl-name">{p.firstName}{isMe ? ' (you)' : ''}</span>
-                  {p.essenceName && <span className="fl-essence">{p.essenceName}</span>}
+                  <span className="fl-level">{p.level.emoji} {p.level.name}: {p.rp} RP</span>
                 </div>
-                <span className="fl-rp">{p.rp} RP</span>
+                <div className="fl-scores">
+                  <span className="fl-axes">🛡️ {p.safety} x ✨ {p.expression}</span>
+                  <span className={`fl-capacity fl-capacity-${p.zone}`}>{p.capacity}</span>
+                </div>
               </div>
             )
           })}
 
           {leaderboard.length === 0 && (
-            <p className="fl-empty">No participants yet. You're first!</p>
+            <p className="fl-empty">No active users this week</p>
           )}
         </div>
       </div>

@@ -25,59 +25,6 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
-/* === JOIN PROMPT === */
-.fl-join {
-  padding: 32px 24px;
-  text-align: center;
-}
-
-.fl-join-icon {
-  font-size: 3rem;
-  margin-bottom: 12px;
-}
-
-.fl-join-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: #1a1a2e;
-  margin: 0 0 8px;
-}
-
-.fl-join-sub {
-  font-size: 14px;
-  color: #6c757d;
-  line-height: 1.5;
-  margin: 0 0 20px;
-}
-
-.fl-join-btn {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #5e17eb, #7c3aed);
-  color: #ffffff;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.fl-join-btn:disabled {
-  opacity: 0.6;
-}
-
-.fl-join-skip {
-  display: block;
-  margin: 12px auto 0;
-  background: none;
-  border: none;
-  color: #adb5bd;
-  font-size: 14px;
-  cursor: pointer;
-  font-family: inherit;
-}
-
 /* === LEADERBOARD === */
 .fl-header {
   display: flex;
@@ -175,18 +122,52 @@
   display: block;
 }
 
-.fl-essence {
+.fl-level {
   font-size: 11px;
-  color: #8b5cf6;
+  color: #6c757d;
   font-weight: 600;
   display: block;
 }
 
-.fl-rp {
-  font-size: 15px;
-  font-weight: 800;
-  color: #E9A23B;
+.fl-scores {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
   flex-shrink: 0;
+}
+
+.fl-axes {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.fl-capacity {
+  font-size: 18px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+.fl-capacity-stuck {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.fl-capacity-wired {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.fl-capacity-grounded {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.fl-capacity-vibe-rise {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
 }
 
 .fl-empty {

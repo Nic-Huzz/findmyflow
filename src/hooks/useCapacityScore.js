@@ -249,6 +249,19 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
         dataPoints: totalInputs,
         loading: false,
       })
+
+      // Persist capacity to user_lifetime_scores for cross-user leaderboard reads
+      supabase
+        .from('user_lifetime_scores')
+        .update({
+          capacity_score: thisWeek.capacity,
+          capacity_zone: thisWeek.zone,
+          safety_score: thisWeek.safety,
+          expression_score: thisWeek.expression,
+        })
+        .eq('user_id', userId)
+        .is('project_id', null)
+        .then(() => {}) // fire-and-forget
     }).catch(err => {
       console.error('useCapacityScore error:', err)
       setData(prev => ({ ...prev, loading: false }))
