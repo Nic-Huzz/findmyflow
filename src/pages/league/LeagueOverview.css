@@ -631,6 +631,276 @@
   cursor: pointer; font-family: inherit;
 }
 
+/* =============================================
+   MINI LANDING PAGE (non-joined users)
+   ============================================= */
+
+/* Hero */
+.lo-landing .lo-land-hero {
+  text-align: center;
+  padding: 40px 0 32px;
+}
+
+.lo-landing .lo-land-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--brand-purple);
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.lo-landing .lo-land-h1 {
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  margin: 0 0 16px;
+  color: var(--text-primary);
+}
+
+.lo-landing .lo-land-sub {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 24px;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Sections */
+.lo-landing .lo-land-section {
+  padding: 32px 0;
+  border-top: 1px solid #e9ecef;
+}
+
+.lo-landing .lo-land-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--brand-purple);
+  text-align: center;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.lo-landing .lo-land-h2 {
+  font-size: 22px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: -0.3px;
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.lo-landing .lo-land-muted {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+/* Why It Works - 3 sells */
+.lo-landing .lo-land-sells {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lo-landing .lo-land-sell {
+  text-align: center;
+  padding: 20px 16px;
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+}
+
+.lo-landing .lo-land-sell-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.lo-landing .lo-land-sell h3 {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: var(--text-primary);
+}
+
+.lo-landing .lo-land-sell p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Example Scoreboard */
+.lo-landing .lo-land-scoreboard {
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.lo-landing .lo-land-sc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.lo-landing .lo-land-sc-vs {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.lo-landing .lo-land-sc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1px solid #f1f3f5;
+}
+
+.lo-landing .lo-land-sc-score {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  min-width: 40px;
+}
+
+.lo-landing .lo-land-sc-score:first-child { text-align: left; }
+.lo-landing .lo-land-sc-score:last-child { text-align: right; }
+
+.lo-landing .lo-land-sc-win {
+  color: var(--brand-purple);
+  font-weight: 900;
+}
+
+.lo-landing .lo-land-sc-cat {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  flex: 1;
+}
+
+.lo-landing .lo-land-sc-result {
+  text-align: center;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.04) 0%, rgba(233, 162, 59, 0.06) 100%);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--brand-purple);
+}
+
+/* Season Details */
+.lo-landing .lo-land-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.lo-landing .lo-land-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 12px;
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  gap: 4px;
+}
+
+.lo-landing .lo-land-detail-emoji {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.lo-landing .lo-land-detail-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.lo-landing .lo-land-detail-value {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+/* Express Interest */
+.lo-landing .lo-land-interest {
+  text-align: center;
+}
+
+.lo-landing .lo-land-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.lo-landing .lo-land-input {
+  width: 100%;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--text-primary);
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.lo-landing .lo-land-input:focus {
+  outline: none;
+  border-color: var(--brand-purple);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+/* Success state */
+.lo-landing .lo-land-success {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.lo-landing .lo-land-success-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.lo-landing .lo-land-success h3 {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: var(--text-primary);
+}
+
+.lo-landing .lo-land-success p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
 /* === RESPONSIVE === */
 @media (min-width: 768px) {
   .league-overview { max-width: 700px; margin: 0 auto; padding-left: 100px; }

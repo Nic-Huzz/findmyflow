@@ -37,6 +37,10 @@ export default function LeagueOverview() {
   const [displayName, setDisplayName] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
 
+  // Interest state (for non-joined landing page)
+  const [interestSubmitted, setInterestSubmitted] = useState(false)
+  const [interestSubmitting, setInterestSubmitting] = useState(false)
+
   // Week state (lifted from LeagueLeaderboard so matchup card + standings stay in sync)
   const currentWeek = getCurrentWeek()
   const numWeeks = league?.num_weeks || 4
@@ -251,6 +255,31 @@ export default function LeagueOverview() {
     return diff > 0 ? diff : 0
   }
 
+  const handleExpressInterest = async () => {
+    if (!user?.id) return
+    setInterestSubmitting(true)
+    try {
+      const { error } = await supabase.from('league_signups').insert({
+        user_id: user.id,
+        name: user.email?.split('@')[0] || 'Player',
+        team_readiness: 'solo',
+      })
+      if (error) {
+        console.warn('Interest save failed:', error)
+        alert('Something went wrong. Please try again.')
+        setInterestSubmitting(false)
+        return
+      }
+      hapticSuccess()
+      setInterestSubmitted(true)
+    } catch (err) {
+      console.warn('Interest error:', err)
+      alert('Something went wrong. Please try again.')
+    } finally {
+      setInterestSubmitting(false)
+    }
+  }
+
   // ============================================
   // Render: Matchup Hero Card (promoted from LeagueLeaderboard)
   // ============================================
@@ -400,7 +429,126 @@ export default function LeagueOverview() {
   }
 
   // ============================================
-  // Render
+  // Render: Mini landing page for non-joined users
+  // ============================================
+
+  if (leagueExists && !isOnTeam && league.status !== 'completed') {
+    return (
+      <div className="league-overview lo-landing">
+        {/* Toolbar */}
+        <div className="lo-toolbar">
+          <button className="lo-back" onClick={() => navigate('/me')}>←</button>
+          <h2 className="lo-toolbar-title">Fantasy League</h2>
+        </div>
+
+        {/* Hero */}
+        <div className="lo-land-hero">
+          <p className="lo-land-eyebrow">SEASON 1</p>
+          <h1 className="lo-land-h1">Think Fantasy Football<br />For Your Growth.</h1>
+          <p className="lo-land-sub">
+            Compete head-to-head each week. Score points for practices, wahoos, and healing you're already doing.
+          </p>
+          <button className="lo-cta" onClick={() => document.getElementById('lo-interest')?.scrollIntoView({ behavior: 'smooth' })}>
+            I'm In <span>→</span>
+          </button>
+        </div>
+
+        {/* Why It Works */}
+        <div className="lo-land-section">
+          <p className="lo-land-label">WHY IT WORKS</p>
+          <h2 className="lo-land-h2">Making accountability fun.</h2>
+          <p className="lo-land-muted">You want to do these things anyway. This just makes it more fun.</p>
+          <div className="lo-land-sells">
+            <div className="lo-land-sell">
+              <span className="lo-land-sell-icon">🎯</span>
+              <h3>Score points for what you're already doing</h3>
+              <p>Now every action earns you Rise Points.</p>
+            </div>
+            <div className="lo-land-sell">
+              <span className="lo-land-sell-icon">🤝</span>
+              <h3>Connect with like-minded legends</h3>
+              <p>You're not doing this alone. Play alongside people on the same path.</p>
+            </div>
+            <div className="lo-land-sell">
+              <span className="lo-land-sell-icon">🔥</span>
+              <h3>Compete head-to-head each week</h3>
+              <p>You vs another player. Who doesn't love to win?</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Example Scoreboard */}
+        <div className="lo-land-section">
+          <p className="lo-land-label">EXAMPLE SCOREBOARD</p>
+          <p className="lo-land-muted">Score more in 2 of 3 categories to win the week.</p>
+          <div className="lo-land-scoreboard">
+            <div className="lo-land-sc-header">
+              <span>Comfort Crushers</span>
+              <span className="lo-land-sc-vs">VS</span>
+              <span>Flow Finders</span>
+            </div>
+            {[
+              { emoji: '☀️', name: 'Tune', left: 145, right: 162 },
+              { emoji: '🔥', name: 'Wahoos', left: 89, right: 67 },
+              { emoji: '💚', name: 'Healing', left: 85, right: 70 },
+            ].map(row => (
+              <div key={row.name} className="lo-land-sc-row">
+                <span className={`lo-land-sc-score ${row.left > row.right ? 'lo-land-sc-win' : ''}`}>{row.left}</span>
+                <span className="lo-land-sc-cat">{row.emoji} {row.name}</span>
+                <span className={`lo-land-sc-score ${row.right > row.left ? 'lo-land-sc-win' : ''}`}>{row.right}</span>
+              </div>
+            ))}
+            <div className="lo-land-sc-result">Comfort Crushers win 2-1 🏆</div>
+          </div>
+        </div>
+
+        {/* Season Details */}
+        <div className="lo-land-section">
+          <p className="lo-land-label">SEASON 1</p>
+          <h2 className="lo-land-h2">Season Details</h2>
+          <div className="lo-land-details">
+            {[
+              { emoji: '📅', label: 'Duration', value: '4 weeks' },
+              { emoji: '⚔️', label: 'Format', value: 'Weekly matchup' },
+              { emoji: '📱', label: 'Platform', value: 'Vibe Rise app' },
+              { emoji: '🏆', label: 'Prize', value: 'Bragging rights' },
+            ].map(item => (
+              <div key={item.label} className="lo-land-detail">
+                <span className="lo-land-detail-emoji">{item.emoji}</span>
+                <span className="lo-land-detail-label">{item.label}</span>
+                <span className="lo-land-detail-value">{item.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Express Interest */}
+        <div className="lo-land-section lo-land-interest" id="lo-interest">
+          {!interestSubmitted ? (
+            <>
+              <p className="lo-land-label">JOIN</p>
+              <h2 className="lo-land-h2">Express your interest.</h2>
+              <p className="lo-land-muted">Tap below and Nic will confirm your spot.</p>
+              <div className="lo-land-form">
+                <button className="lo-cta" onClick={handleExpressInterest} disabled={interestSubmitting}>
+                  {interestSubmitting ? 'Submitting...' : "I'm Interested →"}
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="lo-land-success">
+              <span className="lo-land-success-icon">🏆</span>
+              <h3>Interest received.</h3>
+              <p>Nic will confirm your spot shortly.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ============================================
+  // Render: Active player view
   // ============================================
 
   return (
@@ -413,14 +561,7 @@ export default function LeagueOverview() {
 
       {/* Identity Strip — slim, ambient */}
       <div className="lo-identity">
-        {!isOnTeam && league.status !== 'completed' ? (
-          <>
-            <span className="lo-identity-text">{league.name}</span>
-            <button className="lo-join-btn" onClick={() => { hapticLight(); setShowSoloModal(true) }}>
-              Join League →
-            </button>
-          </>
-        ) : isOnTeam ? (
+        {isOnTeam ? (
           <>
             <span className="lo-identity-text">Playing as <strong>{userTeam.name}</strong></span>
             <button className="lo-invite-btn" onClick={handleShare}>Invite</button>
