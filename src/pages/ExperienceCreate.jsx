@@ -34,6 +34,8 @@ export default function ExperienceCreate() {
   const [validationError, setValidationError] = useState('')
   const [templateSource, setTemplateSource] = useState(null)
   const [saveToLibrary, setSaveToLibrary] = useState(!templateId)
+  const [pitchOfferType, setPitchOfferType] = useState(null)
+  const [pitchOtherText, setPitchOtherText] = useState('')
 
   useEffect(() => {
     document.title = runAgainFromId ? 'Run Again' : templateId ? 'Run from Template' : 'New Experience'
@@ -158,6 +160,15 @@ export default function ExperienceCreate() {
         template_id: resolvedTemplateId,
         runAgainFromId: runAgainFromId || null,
       })
+
+      // Save pitch offer type if selected
+      if (pitchOfferType) {
+        await supabase
+          .from('experiences')
+          .update({ pitch_offer_type: pitchOfferType, pitch_next_offer: true })
+          .eq('id', exp.id)
+      }
+
       hapticSuccess()
       navigate(`/create/experience/${exp.id}`)
     } catch {
@@ -322,6 +333,54 @@ export default function ExperienceCreate() {
           </label>
 
           <p className="exp-pricing-hint">Set your full pricing in the Details tab after creating.</p>
+
+          <div className="exp-field">
+            <span className="exp-field-label">Will you pitch another offer at this event?</span>
+            <div className="exp-pitch-options">
+              {['core', 'continuity'].map(type => (
+                <button
+                  key={type}
+                  type="button"
+                  className={`exp-pitch-btn ${pitchOfferType === type ? 'active' : ''}`}
+                  onClick={() => {
+                    hapticLight()
+                    setPitchOfferType(pitchOfferType === type ? null : type)
+                  }}
+                >
+                  {type === 'core' ? 'Core' : 'Continuity'}
+                </button>
+              ))}
+              <button
+                type="button"
+                className={`exp-pitch-btn ${pitchOfferType && pitchOfferType !== 'core' && pitchOfferType !== 'continuity' ? 'active' : ''}`}
+                onClick={() => {
+                  hapticLight()
+                  if (pitchOfferType && pitchOfferType !== 'core' && pitchOfferType !== 'continuity') {
+                    setPitchOfferType(null)
+                    setPitchOtherText('')
+                  } else {
+                    setPitchOfferType('other')
+                  }
+                }}
+              >
+                Other
+              </button>
+            </div>
+            {pitchOfferType && pitchOfferType !== 'core' && pitchOfferType !== 'continuity' && (
+              <input
+                type="text"
+                className="exp-pitch-other-input"
+                value={pitchOtherText}
+                onChange={(e) => {
+                  setPitchOtherText(e.target.value)
+                  setPitchOfferType(e.target.value.trim() || 'other')
+                }}
+                placeholder="What will you pitch?"
+                maxLength={80}
+                autoFocus
+              />
+            )}
+          </div>
 
           {!templateId && (
             <label className="exp-checkbox-row">

@@ -222,7 +222,7 @@
   top: 0;
   bottom: 0;
   width: 5px;
-  background: linear-gradient(180deg, #5e17eb 0%, #E9A23B 100%);
+  background: #5e17eb;
 }
 
 .exp-catalog .exp-card-body {
@@ -251,7 +251,7 @@
   display: inline-block;
   margin-top: 8px;
   padding: 4px 12px;
-  background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
+  background: #5e17eb;
   color: #fff;
   font-size: 12px;
   font-weight: 700;

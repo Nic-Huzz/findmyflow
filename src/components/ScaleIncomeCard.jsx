@@ -18,7 +18,8 @@ const LAYER_META = {
 
 export default function ScaleIncomeCard({ experienceId, userId, ticketPrice }) {
   const [model, setModel] = useState(null)
-  const [pitchNext, setPitchNext] = useState(false)
+  const [pitchOfferType, setPitchOfferType] = useState(null)
+  const [pitchOtherText, setPitchOtherText] = useState('')
   const [layerOverride, setLayerOverride] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -33,24 +34,41 @@ export default function ScaleIncomeCard({ experienceId, userId, ticketPrice }) {
         .limit(1)
         .maybeSingle(),
       experienceId
-        ? supabase.from('experiences').select('pitch_next_offer, layer_override').eq('id', experienceId).single()
+        ? supabase.from('experiences').select('pitch_offer_type, pitch_next_offer, layer_override').eq('id', experienceId).single()
         : Promise.resolve({ data: null }),
     ]).then(([{ data: modelData }, { data: expData }]) => {
       if (modelData && (modelData.attraction_detail || modelData.core_detail || modelData.continuity_detail)) {
         setModel(modelData)
       }
-      if (expData?.pitch_next_offer) setPitchNext(true)
+      if (expData?.pitch_offer_type) {
+        setPitchOfferType(expData.pitch_offer_type)
+        if (expData.pitch_offer_type !== 'core' && expData.pitch_offer_type !== 'continuity') {
+          setPitchOtherText(expData.pitch_offer_type === 'other' ? '' : expData.pitch_offer_type)
+        }
+      }
       if (expData?.layer_override) setLayerOverride(expData.layer_override)
       setLoading(false)
     })
   }, [userId, experienceId])
 
-  const handleTogglePitch = async (val) => {
+  const handlePitchSelect = async (type) => {
     hapticLight()
-    setPitchNext(val)
+    const newType = pitchOfferType === type ? null : type
+    setPitchOfferType(newType)
+    if (newType !== 'other' && newType !== pitchOfferType) setPitchOtherText('')
     await supabase
       .from('experiences')
-      .update({ pitch_next_offer: val })
+      .update({ pitch_offer_type: newType, pitch_next_offer: !!newType })
+      .eq('id', experienceId)
+  }
+
+  const handlePitchOtherChange = async (text) => {
+    setPitchOtherText(text)
+    const type = text.trim() || 'other'
+    setPitchOfferType(type)
+    await supabase
+      .from('experiences')
+      .update({ pitch_offer_type: type, pitch_next_offer: true })
       .eq('id', experienceId)
   }
 
@@ -105,27 +123,38 @@ export default function ScaleIncomeCard({ experienceId, userId, ticketPrice }) {
         })}
       </div>
 
-      {nextDetail && (
-        <div className="sic-pitch">
-          <span className="sic-pitch-label">
-            Will you pitch your {LAYER_META[nextLayer]?.label.toLowerCase()} offer at this event?
-          </span>
-          <div className="sic-pitch-toggle">
+      <div className="sic-pitch">
+        <span className="sic-pitch-label">
+          Will you pitch another offer at this event?
+        </span>
+        <div className="sic-pitch-toggle">
+          {['core', 'continuity'].map(type => (
             <button
-              className={`sic-toggle-btn ${pitchNext ? 'active' : ''}`}
-              onClick={() => handleTogglePitch(true)}
+              key={type}
+              className={`sic-toggle-btn ${pitchOfferType === type ? 'active' : ''}`}
+              onClick={() => handlePitchSelect(type)}
             >
-              Yes
+              {LAYER_META[type].label}
             </button>
-            <button
-              className={`sic-toggle-btn ${!pitchNext ? 'active' : ''}`}
-              onClick={() => handleTogglePitch(false)}
-            >
-              No
-            </button>
-          </div>
+          ))}
+          <button
+            className={`sic-toggle-btn ${pitchOfferType && pitchOfferType !== 'core' && pitchOfferType !== 'continuity' ? 'active' : ''}`}
+            onClick={() => handlePitchSelect(pitchOfferType && pitchOfferType !== 'core' && pitchOfferType !== 'continuity' ? pitchOfferType : 'other')}
+          >
+            Other
+          </button>
         </div>
-      )}
+        {pitchOfferType && pitchOfferType !== 'core' && pitchOfferType !== 'continuity' && (
+          <input
+            type="text"
+            className="sic-pitch-other"
+            value={pitchOtherText}
+            onChange={(e) => handlePitchOtherChange(e.target.value)}
+            placeholder="What will you pitch?"
+            maxLength={80}
+          />
+        )}
+      </div>
     </div>
   )
 }

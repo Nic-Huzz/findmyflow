@@ -91,9 +91,8 @@
 
 .sic-pitch {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
   padding-top: 12px;
   border-top: 1px solid #eef0f3;
 }
@@ -102,16 +101,15 @@
   font-size: 13px;
   font-weight: 600;
   color: #1a1a2e;
-  flex: 1;
 }
 
 .sic-pitch-toggle {
   display: flex;
   gap: 4px;
-  flex-shrink: 0;
 }
 
 .sic-toggle-btn {
+  flex: 1;
   padding: 6px 14px;
   border: 2px solid #eef0f3;
   border-radius: 10px;
@@ -128,3 +126,15 @@
   border-color: #5e17eb;
   color: white;
 }
+
+.sic-pitch-other {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1.5px solid #eef0f3;
+  border-radius: 10px;
+  font-size: 13px;
+  outline: none;
+  background: #f8f8fa;
+  box-sizing: border-box;
+}
+.sic-pitch-other:focus { border-color: #5e17eb; background: #fff; }

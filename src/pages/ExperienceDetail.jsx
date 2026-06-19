@@ -15,7 +15,7 @@
  */
 
 import { useState, useMemo, useEffect, useCallback } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { useExperience, daysUntil, formatExperienceDate } from '../hooks/useExperienceData'
@@ -65,7 +65,9 @@ export default function ExperienceDetail() {
     updateExperience,
   } = useExperience(id)
 
-  const [activePhase, setActivePhase] = useState('details')
+  const [searchParams] = useSearchParams()
+  const initialTab = searchParams.get('tab') || 'details'
+  const [activePhase, setActivePhase] = useState(initialTab)
   const [guestlistVersion, setGuestlistVersion] = useState(0)
   const [showHidden, setShowHidden] = useState(false)
   const [dnaSliders, setDnaSliders] = useState(null)
@@ -210,45 +212,21 @@ export default function ExperienceDetail() {
   const totalStackValue = valueStackItems.reduce((sum, item) => sum + (item.value || 0), 0)
 
   // Bucket items by phase → section
-  // Load pitch-next-offer state + next offer label for dynamic checklist item
-  const [pitchOfferLabel, setPitchOfferLabel] = useState(null)
-  const [pitchEnabled, setPitchEnabled] = useState(false)
+  // Load pitch offer type for dynamic checklist item
+  const [pitchOfferType, setPitchOfferType] = useState(null)
   const [pitchDone, setPitchDone] = useState(false)
 
   useEffect(() => {
-    if (!user?.id || !experience) return
-
-    // Check current pitch_next_offer from DB (in case ScaleIncomeCard updated it)
+    if (!experience?.id) return
     supabase
       .from('experiences')
-      .select('pitch_next_offer')
+      .select('pitch_offer_type')
       .eq('id', experience.id)
       .single()
       .then(({ data }) => {
-        const enabled = data?.pitch_next_offer || false
-        setPitchEnabled(enabled)
-        if (!enabled) { setPitchOfferLabel(null); return }
-
-        supabase
-          .from('creator_assessments')
-          .select('attraction_detail, core_detail, continuity_detail')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle()
-          .then(({ data: assessData }) => {
-            if (!assessData) return
-            const price = experience?.ticket_price || 0
-            const currentLayer = price === 0 ? 'attraction' : 'core'
-            const order = ['attraction', 'core', 'continuity']
-            const nextIdx = order.indexOf(currentLayer) + 1
-            if (nextIdx < order.length) {
-              const nextKey = `${order[nextIdx]}_detail`
-              if (assessData[nextKey]) setPitchOfferLabel(assessData[nextKey])
-            }
-          })
+        setPitchOfferType(data?.pitch_offer_type || null)
       })
-  }, [user?.id, experience?.id, experience?.ticket_price])
+  }, [experience?.id])
 
   const grouped = useMemo(() => {
     const buckets = { pre: { marketing: [], organisation: [] }, post: { followup: [], reflection: [] } }
@@ -258,14 +236,18 @@ export default function ExperienceDetail() {
       buckets[item.phase][item.section].push(item)
     }
 
-    // Inject dynamic pitch item if toggle is on
-    if (pitchEnabled && pitchOfferLabel) {
+    // Inject dynamic pitch item if a pitch offer type is set
+    if (pitchOfferType) {
+      const pitchLabel = pitchOfferType === 'core' ? 'Pitch your core offer'
+        : pitchOfferType === 'continuity' ? 'Pitch your continuity offer'
+        : pitchOfferType === 'other' ? 'Pitch your other offer'
+        : `Pitch: "${pitchOfferType}"`
       buckets.post.followup.push({
         id: 'dynamic_pitch_next',
         phase: 'post',
         section: 'followup',
         sort_order: 3.5,
-        label: `Pitch your next offer: "${pitchOfferLabel}"`,
+        label: pitchLabel,
         completed: pitchDone,
         is_custom: false,
         is_hidden: false,
@@ -274,7 +256,7 @@ export default function ExperienceDetail() {
     }
 
     return buckets
-  }, [items, pitchEnabled, pitchOfferLabel, pitchDone])
+  }, [items, pitchOfferType, pitchDone])
 
   const handleToggle = async (itemId) => {
     if (itemId === 'dynamic_pitch_next') {

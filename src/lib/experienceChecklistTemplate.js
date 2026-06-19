@@ -137,9 +137,7 @@ const ORG_POPUP = [
   { sort_order: 3, key: 'energy_arc', label: 'Plan the energy arc (build, peak, cool-down)' },
   { sort_order: 4, key: 'equipment', label: 'Confirm all equipment (sound, lighting, props, signage)' },
   { sort_order: 5, key: 'volunteers', label: 'Recruit and brief volunteers or staff for the day' },
-  { sort_order: 6, key: 'weather_backup', label: 'Prepare weather backup plan (if outdoor)' },
-  { sort_order: 7, key: 'safety_plan', label: 'Prepare safety and emergency plan for the venue' },
-  { sort_order: 8, key: 'day_before_reminder', label: 'Send day-before reminder with location + what to bring' },
+  { sort_order: 6, key: 'day_before_reminder', label: 'Send day-before reminder with location + what to bring' },
 ]
 
 // ─── Type-to-organisation mapping ──────────────────────────────

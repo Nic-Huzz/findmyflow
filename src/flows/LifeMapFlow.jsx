@@ -6,7 +6,7 @@
  * Living document: can be revisited and expanded over time.
  */
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
@@ -77,6 +77,8 @@ const initResponses = () => {
 export default function LifeMapFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const returnTo = searchParams.get('returnTo') || '/7-day-challenge'
 
   // Core state
   const [currentScreen, setCurrentScreen] = useState('time_check')
@@ -1346,7 +1348,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
 
             {/* Gap Seed Nudge */}
             {essenceChamber?.gap?.pillar_name && (
-              <div className="lm-gap-seed" onClick={() => navigate('/7-day-challenge')}>
+              <div className="lm-gap-seed" onClick={() => navigate(returnTo)}>
                 <div className="lm-gap-seed-icon"><div className="lm-gap-seed-icon-inner" /></div>
                 <div className="lm-gap-seed-text">
                   <div className="lm-gap-seed-title">Your {essenceChamber.gap.status === 'FLICKERING' ? 'flickering' : 'empty'} pillar</div>
@@ -1399,7 +1401,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               </div>
             </div>
 
-            <button className="lm-cta-gold" onClick={() => navigate('/7-day-challenge')} style={{ marginTop: 8 }}>
+            <button className="lm-cta-gold" onClick={() => navigate(returnTo)} style={{ marginTop: 8 }}>
               Return Home
             </button>
           </div>

@@ -27,6 +27,17 @@ export function useExperienceList() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not signed in')
 
+      // Auto-complete experiences whose date is 7+ days in the past
+      const cutoff = new Date()
+      cutoff.setDate(cutoff.getDate() - 7)
+      const cutoffStr = cutoff.toISOString().split('T')[0]
+      await supabase
+        .from('experiences')
+        .update({ status: 'completed', updated_at: new Date().toISOString() })
+        .eq('user_id', user.id)
+        .eq('status', 'upcoming')
+        .lt('experience_date', cutoffStr)
+
       const { data, error: err } = await supabase
         .from('experiences')
         .select('*')

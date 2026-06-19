@@ -46,17 +46,17 @@ const NODE_MODULES = {
 // Tool definitions per node
 const NODE_TOOLS = {
   attract: [
-    { name: 'Content Generator', icon: '✨', desc: 'AI posts for this event', route: '/crm/content-create' },
-    { name: 'Content Planning', icon: '📋', desc: 'Weekly calendar', route: '/crm/content-create' },
-    { name: 'Warm Outreach', icon: '☀️', desc: 'DM contacts about this event', route: '/crm/warm-outreach' },
+    { name: 'Content Generator', icon: '✨', desc: 'AI posts for this event', soon: true },
+    { name: 'Content Planning', icon: '📋', desc: 'Weekly calendar', soon: true },
+    { name: 'Warm Outreach', icon: '☀️', desc: 'DM contacts about this event', soon: true },
   ],
   capture: [
-    { name: 'Landing Page', icon: '🌐', desc: 'Build/update capture page', route: '/crm/pages' },
-    { name: 'Email Sequence', icon: '✉️', desc: 'Welcome nurture after signup', route: '/crm/email-sequences' },
+    { name: 'Landing Page', icon: '🌐', desc: 'Build/update capture page', soon: true },
+    { name: 'Email Sequence', icon: '✉️', desc: 'Welcome nurture after signup', soon: true },
   ],
   convert: [
-    { name: 'Sales Pipeline', icon: '💼', desc: 'Track bookings', route: '/crm/sales' },
-    { name: 'Sales Script', icon: '📝', desc: 'Close conversations', route: '/crm/scripts' },
+    { name: 'Sales Pipeline', icon: '💼', desc: 'Track bookings', soon: true },
+    { name: 'Sales Script', icon: '📝', desc: 'Close conversations', soon: true },
   ],
   deliver: [
     { name: 'Experience Checklist', icon: '✅', desc: 'Organisation items', route: null },
@@ -65,7 +65,7 @@ const NODE_TOOLS = {
     { name: 'Follow-Up Checklist', icon: '📋', desc: 'Thank you, feedback, testimonials', route: null, afterEvent: true },
     { name: '3% Chain', icon: '🔄', desc: 'What\'s the one improvement?', route: '/create', afterEvent: true },
     { name: 'Funnel Calculator', icon: '📊', desc: 'Track conversion rates', route: '/funnel-calculator', afterEvent: true },
-    { name: 'Analytics', icon: '📈', desc: 'Weekly grade + performance', route: '/crm/analytics', afterEvent: true },
+    { name: 'Analytics', icon: '📈', desc: 'Weekly grade + performance', soon: true, afterEvent: true },
   ],
 }
 
@@ -275,7 +275,7 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
         {tools.length > 0 && (
           <CollapsibleSection title="Tools">
             {tools.map((tool, i) => {
-              const disabled = tool.afterEvent && !isPast
+              const disabled = tool.soon || (tool.afterEvent && !isPast)
               return (
                 <div
                   key={i}
@@ -288,7 +288,9 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
                     <div className="pl-nm">{tool.name}</div>
                     <div className="pl-ds">{tool.desc}</div>
                   </div>
-                  {disabled ? (
+                  {tool.soon ? (
+                    <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.25)', fontWeight: 600 }}>Coming soon</span>
+                  ) : disabled ? (
                     <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>After event</span>
                   ) : (
                     <div className="pl-bg use">Open</div>

@@ -12,15 +12,15 @@ import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
 const REACH_ITEMS = [
-  { key: 'content', label: 'Posted content', route: '/crm/content-create' },
-  { key: 'checklist', label: 'Completed checklist items', route: '/create/experiences' },
-  { key: 'outreach', label: 'Reached out to someone', route: '/crm/warm-outreach' },
+  { key: 'content', label: 'Posted content', route: '/create/growth' },
+  { key: 'checklist', label: 'Completed checklist items', route: null, expRoute: (id) => `/create/experience/${id}?tab=pre` },
+  { key: 'outreach', label: 'Reached out to someone', route: null, expRoute: (id) => `/create/experience/${id}?tab=pre` },
   { key: 'wahoo', label: 'Completed a courage challenge', route: '/create/plays' },
   { key: 'experience', label: 'Delivered an experience', route: '/create/experience/new' },
-  { key: 'tasks', label: 'Completed tasks', route: '/crm/execute' },
-  { key: 'contacts_added', label: 'Added contacts to an experience', route: '/crm/contacts' },
-  { key: 'reflection', label: 'Logged a 3% reflection', route: '/create/experiences' },
-  { key: 'pipeline_metric', label: 'Updated pipeline metrics', route: '/create/experiences' },
+  { key: 'tasks', label: 'Completed tasks', route: null, expRoute: (id) => `/create/experience/${id}?tab=pre` },
+  { key: 'contacts_added', label: 'Added contacts to an experience', route: null, expRoute: (id) => `/create/experience/${id}?tab=pre` },
+  { key: 'reflection', label: 'Logged a 3% reflection', route: null, expRoute: (id) => `/create/experience/${id}?tab=post` },
+  { key: 'pipeline_metric', label: 'Updated pipeline metrics', route: null, expRoute: (id) => `/create/experience/${id}` },
   { key: 'instagram', label: 'Posted on Instagram', route: null },
 ]
 
@@ -113,12 +113,24 @@ export default function useReachScore(userId) {
           .catch(() => ({ count: 0 })),
       ])
 
+      // Fetch active experience for dynamic routing
+      const { data: activeExp } = await supabase
+        .from('experiences')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('status', 'upcoming')
+        .order('experience_date', { ascending: true, nullsFirst: false })
+        .limit(1)
+        .maybeSingle()
+
+      const activeExpId = activeExp?.id
       const counts = results.map(r => r.count || 0)
 
       const breakdown = REACH_ITEMS.map((item, i) => ({
         ...item,
         active: counts[i] > 0,
         count: counts[i],
+        route: item.route || (item.expRoute && activeExpId ? item.expRoute(activeExpId) : '/create/experiences'),
       }))
 
       const reach = breakdown.filter(item => item.active).length

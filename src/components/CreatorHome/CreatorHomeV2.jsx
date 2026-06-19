@@ -14,6 +14,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
+import { hapticLight } from '../../lib/haptics'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
@@ -337,7 +338,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               <img src={essenceAvatar} alt="" onError={e => { e.target.style.display = 'none' }} />
             </div>
           ) : (
-            <div className="ch2-id-avatar-empty">Complete<br />Essence<br />Mirror</div>
+            <div className="ch2-id-avatar-empty" onClick={() => { hapticLight(); navigate('/essence-mirror?returnTo=/create') }} style={{ cursor: 'pointer' }}>
+              Discover<br />Your<br />Essence →
+            </div>
           )}
           <div>
             <div className="ch2-id-type">{archetypeLabel}</div>
@@ -376,9 +379,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               )}
 
               {/* Skills */}
-              {userSkills.length > 0 && (
-                <div className="ch2-id-section">
-                  <div className="ch2-label">Your Skills</div>
+              <div className="ch2-id-section">
+                <div className="ch2-label">Your Skills</div>
+                {userSkills.length > 0 ? (
                   <div className="ch2-skills">
                     <span className="ch2-skill">{userSkills[0]}</span>
                     {userSkills.length > 1 && !showSkillsExpanded && (
@@ -389,13 +392,17 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                       <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(false)}>show less</span>
                     )}
                   </div>
-                </div>
-              )}
+                ) : (
+                  <button className="ch2-btn-outline" onClick={() => { hapticLight(); navigate('/life-map?returnTo=/create') }} style={{ marginTop: 4, fontSize: 12, padding: '8px 14px' }}>
+                    Complete your Life Map to discover these
+                  </button>
+                )}
+              </div>
 
               {/* Problems */}
-              {userProblems.length > 0 ? (
-                <div className="ch2-id-section">
-                  <div className="ch2-label">Problems You Solve</div>
+              <div className="ch2-id-section">
+                <div className="ch2-label">Problems You Solve</div>
+                {userProblems.length > 0 ? (
                   <div className="ch2-skills">
                     <span className="ch2-skill">{userProblems[0]}</span>
                     {userProblems.length > 1 && !showSkillsExpanded && (
@@ -403,15 +410,12 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                     )}
                     {showSkillsExpanded && userProblems.slice(1).map(p => <span key={p} className="ch2-skill">{p}</span>)}
                   </div>
-                </div>
-              ) : (
-                <div className="ch2-id-section">
-                  <div className="ch2-label">Problems You Solve</div>
-                  <button className="ch2-btn-outline" onClick={() => navigate('/life-map')} style={{ marginTop: 4, fontSize: 12, padding: '8px 14px' }}>
+                ) : (
+                  <button className="ch2-btn-outline" onClick={() => { hapticLight(); navigate('/life-map?returnTo=/create') }} style={{ marginTop: 4, fontSize: 12, padding: '8px 14px' }}>
                     Complete your Life Map to discover these
                   </button>
-                </div>
-              )}
+                )}
+              </div>
 
               {/* Sub-tabs: Playbook only (Inner Game locked for now) */}
               <div className="ch2-subtabs">
