@@ -1,0 +1,73 @@
+{
+  "purpose": "Identifies which front-end offer strategy best fits the user's business model, margins, and growth goals. The attraction offer is the entry point to their offer ecosystem — how new customers come in.",
+  "when_to_use": "When the user needs to figure out their front-end offer, is starting a new business, wants to optimize customer acquisition, or asks about lead magnets, free trials, or guarantees.",
+  "when_not_to_use": "When the user already has a working front-end and wants to optimize upsells (use Upsell), needs lead generation channels (use Leads Strategy), or wants a free lead magnet specifically (use Lead Magnet).",
+  "questions": {
+    "q1_business_model": {
+      "agent_context": "This is the single most influential scoring factor across all offers. Coaching/consulting and agency models score highest for relationship-based offers (Win Your Money Back, consultation-based strategies) because the personal relationship justifies risk-reversal guarantees and the high margins absorb the risk. Digital products and SaaS favor volume strategies (Free Trial, Bundle) because they scale without per-customer cost. Physical products severely limit options due to COGS — most guarantee-based offers become unprofitable when you have to eat shipping and manufacturing costs.",
+      "if_unknown": "Ask: 'What do you sell, and how do you deliver it to customers?' If they describe services -> coaching_consulting or agency. If they describe a product people download -> digital_product. If they ship something -> physical_product."
+    },
+    "q2_gross_margin": {
+      "agent_context": "Margin determines which risk-reversal strategies are viable. At 85%+ margins (typical for coaching, digital), you can afford aggressive guarantees like Win Your Money Back because refunds barely cost you. At 60-85%, you have room for moderate guarantees. Below 40%, guarantee-based offers are dangerous — a refund costs you real money. Low-margin businesses should lean toward Free Trial or Bundle strategies where the risk is controlled.",
+      "if_unknown": "Ask: 'Roughly what percentage of your revenue is profit after delivering the product/service?' For coaches: assume 85%+. For agencies: typically 40-60%. For physical products: typically under 40%."
+    },
+    "q3_cashflow_tolerance": {
+      "agent_context": "This separates aggressive growth strategies from conservative ones. If the user MUST profit on every front-end sale, they're disqualified from the most powerful offers (Win Your Money Back, Free Trial) because those are loss-leaders designed to be recouped on the backend. 'Can afford short-term loss' or 'can run free front-end' unlocks the highest-scoring strategies. This is heavily correlated with backend strength — you can only afford to lose money upfront if you have strong upsells.",
+      "if_unknown": "Ask: 'Can you afford to break even or even lose money on the first sale, knowing you'll make it back on upsells? Or do you need to profit immediately on every transaction?'"
+    },
+    "q4_capacity": {
+      "agent_context": "High capacity favors volume-based strategies (Free Trial, Bundle) that bring in lots of customers at once. Low capacity favors exclusive, high-touch strategies (consultation, application-based) that control flow. If someone has no capacity, most aggressive acquisition strategies are counterproductive — they'll get overwhelmed. This question also signals business maturity: high capacity usually means systems are in place.",
+      "if_unknown": "Ask: 'If your offer worked really well and brought in a big spike of new customers, could you handle that? Or are you already near capacity?'"
+    },
+    "q5_tracking": {
+      "agent_context": "This is a hard disqualifier for Win Your Money Back — if you can't track whether customers complete the required actions, the whole guarantee falls apart. 'Can track everything' scores +4 for WYMB. 'Cannot track at all' disqualifies it entirely. For other offers like Free Trial or Bundle, tracking matters less. This question reveals operational maturity.",
+      "if_unknown": "Ask: 'Can you measure whether your customers are actually getting results? Do you have a system to track their progress, or is it more of a guess?'"
+    },
+    "q6_lead_challenge": {
+      "agent_context": "This maps directly to which offer type solves their specific problem. 'Leads don't trust me yet' -> Win Your Money Back (risk reversal builds trust). 'Price sensitive' -> Free Trial or loss-leader (remove the price barrier). 'Slow sales cycle' -> urgency-based offers. 'Not enough leads' -> volume-focused strategies. The answer reveals what the offer needs to SOLVE, not just what sounds good.",
+      "if_unknown": "Ask: 'What's the main reason potential customers don't buy from you? Is it trust, price, they take too long to decide, or something else?'"
+    },
+    "q7_backend_strength": {
+      "agent_context": "This is CRITICAL and often underestimated. If there's no backend offer, aggressive front-end strategies (loss leaders, free trials) are financial suicide — you lose money acquiring customers with no way to recoup it. Multiple strong upsells (+3) means you can be very aggressive on the front end. No backend (-4) means you need front-end profitability, which limits options severely. This is the #1 question where agents should push back if the user picks an aggressive strategy without backend offers.",
+      "if_unknown": "Ask: 'After someone buys your main thing, what else can you sell them? Do you have upsells, premium tiers, or additional services?' If the answer is 'nothing yet', flag this as a critical gap."
+    },
+    "q8_repeat_purchase": {
+      "agent_context": "Repeat purchase behavior affects long-term ROI calculations. Frequent repurchase means you can afford higher acquisition costs because LTV is high. One-time purchase means you need to capture maximum value at the point of sale. This question has relatively low scoring impact across most offers but slightly penalizes one-time-purchase businesses for strategies that depend on repeat engagement.",
+      "if_unknown": "Ask: 'Do customers typically buy from you more than once, or is it usually a one-time transaction?'"
+    },
+    "q9_primary_goal": {
+      "agent_context": "This aligns the offer to the user's strategic priority. 'Get more leads fast' -> volume strategies. 'Build trust' -> risk-reversal. 'Generate testimonials' -> Win Your Money Back (designed to produce social proof). 'Fill a program' -> urgency/scarcity offers. 'Sell high-ticket' -> consultation/application. This is a tiebreaker more than a primary factor.",
+      "if_unknown": "Ask: 'If this offer could only achieve ONE thing for your business, what would that be?'"
+    },
+    "q10_lead_preference": {
+      "agent_context": "Volume vs quality trade-off. 'As many as possible' favors low-barrier offers (free trial, bundle). 'Only likely buyers' favors high-barrier qualifying offers (application, consultation). This is a secondary factor — it won't flip the primary recommendation but can strengthen or weaken marginal candidates.",
+      "if_unknown": "Ask: 'Would you rather have 1,000 leads where maybe 10 buy, or 50 leads where 25 buy?'"
+    }
+  },
+  "outcomes": {
+    "win_your_money_back": {
+      "best_for": "High-margin coaching/consulting with strong backend offers and ability to track customer completion.",
+      "tell_the_user": "Your business model supports a results-based guarantee. You can afford the risk because your margins are high and you have backend offers to recoup any refunds. The key is making the completion criteria specific and trackable — customers who complete earn their money back, which creates testimonials, engagement, and upsell opportunities."
+    },
+    "giveaway": {
+      "best_for": "Businesses with high capacity that can deliver significant value at low cost to build a large lead pool.",
+      "tell_the_user": "A flagship giveaway lets you attract a massive audience by giving away something genuinely valuable for free. This works because your delivery costs are low relative to perceived value. Focus on making the giveaway so good people feel guilty not paying — that goodwill converts into backend sales."
+    },
+    "decoy_offer": {
+      "best_for": "Product/service businesses where a tiered pricing structure can anchor perception and drive mid-tier purchases.",
+      "tell_the_user": "A Good/Better/Best pricing structure uses psychology to guide buyers toward your preferred tier. The 'Good' tier serves as a decoy that makes 'Better' look like the obvious choice. This works especially well when you have a clear value ladder."
+    },
+    "buy_x_get_y_free": {
+      "best_for": "Product businesses with multiple SKUs where bundling increases perceived value without proportional cost increase.",
+      "tell_the_user": "A buy-one-get-one or bundle offer increases average order value while making customers feel they're getting a deal. This works because your cost to deliver the bonus is less than the perceived value to the customer."
+    },
+    "pay_less_now_or_pay_more_later": {
+      "best_for": "High-ticket services where upfront cost is the main barrier to purchase.",
+      "tell_the_user": "Offering a payment plan or reduced initial commitment removes the price barrier while maintaining your total revenue over time. This works when leads want what you offer but flinch at the full price upfront."
+    },
+    "free_with_consumption_to_upsell": {
+      "best_for": "SaaS, subscription, or consumable businesses where usage drives habit formation and upgrade desire.",
+      "tell_the_user": "A free tier or trial with usage limits lets customers experience your product's value with zero risk. This works because once they've built the habit of using your product, upgrading to paid becomes natural. Focus on making the free experience valuable enough to create dependency."
+    }
+  }
+}

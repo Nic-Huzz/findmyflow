@@ -1,0 +1,286 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "flow_name": "Upsell Offer Selector",
+    "total_questions": 10,
+    "estimated_completion_time_minutes": 3,
+    "description": "Discover which upsell strategy will maximize your revenue: Classic, Menu, Anchor, or Rollover"
+  },
+  "questions": [
+    {
+      "id": "q1_customer_base_size",
+      "question": "How would you describe your current customer base?",
+      "subtext": "Select the option that best reflects your active customer situation",
+      "options": [
+        {
+          "label": "New Business (Few Customers)",
+          "value": "new_business_few_customers",
+          "description": "Just starting out, building my first customer base"
+        },
+        {
+          "label": "Growing Customer Base",
+          "value": "growing_customer_base",
+          "description": "Steady stream of new customers, some repeat buyers"
+        },
+        {
+          "label": "Established Customer Base",
+          "value": "established_customer_base",
+          "description": "Large pool of existing customers with purchase history"
+        },
+        {
+          "label": "Many Dormant/Past Customers",
+          "value": "dormant_customers",
+          "description": "Have customers who haven't purchased recently"
+        }
+      ]
+    },
+    {
+      "id": "q2_product_portfolio",
+      "question": "How many products or service tiers do you currently offer?",
+      "subtext": "Think about your complete product catalog",
+      "options": [
+        {
+          "label": "Single Product/Service",
+          "value": "single_product",
+          "description": "I sell one main thing"
+        },
+        {
+          "label": "2-3 Products/Tiers",
+          "value": "2_3_products",
+          "description": "Small curated selection"
+        },
+        {
+          "label": "4-10 Products/Tiers",
+          "value": "4_10_products",
+          "description": "Moderate product range"
+        },
+        {
+          "label": "10+ Products/Tiers",
+          "value": "10_plus_products",
+          "description": "Extensive catalog to choose from"
+        }
+      ]
+    },
+    {
+      "id": "q3_average_order_value",
+      "question": "What is your current average order value?",
+      "subtext": "Select the range closest to what customers typically pay",
+      "options": [
+        {
+          "label": "Under $50",
+          "value": "under_50",
+          "description": "Low-ticket offers"
+        },
+        {
+          "label": "$50 - $200",
+          "value": "50_200",
+          "description": "Mid-ticket range"
+        },
+        {
+          "label": "$200 - $1,000",
+          "value": "200_1000",
+          "description": "Higher-ticket products"
+        },
+        {
+          "label": "$1,000 - $5,000",
+          "value": "1000_5000",
+          "description": "High-ticket offers"
+        },
+        {
+          "label": "$5,000+",
+          "value": "5000_plus",
+          "description": "Premium high-ticket"
+        }
+      ]
+    },
+    {
+      "id": "q4_upsell_infrastructure",
+      "question": "Do you have a 'card on file' system for easy upsell purchases?",
+      "subtext": "Can customers buy additional products without re-entering payment info?",
+      "options": [
+        {
+          "label": "Yes - Card on File System",
+          "value": "yes_card_on_file",
+          "description": "Customers can buy more with one click"
+        },
+        {
+          "label": "No, But Can Implement Easily",
+          "value": "can_implement_easily",
+          "description": "Have the tech stack, just need to turn it on"
+        },
+        {
+          "label": "Would Need to Build This",
+          "value": "would_need_to_build",
+          "description": "Don't currently have this capability"
+        },
+        {
+          "label": "No Plans to Implement",
+          "value": "no_plans_to_implement",
+          "description": "Prefer manual payment collection"
+        }
+      ]
+    },
+    {
+      "id": "q5_product_modularity",
+      "question": "Can you easily create premium or deluxe versions of your current offers?",
+      "subtext": "Think about whether you could 5-10x your product's value",
+      "options": [
+        {
+          "label": "Already Have Premium Versions",
+          "value": "already_have_premium",
+          "description": "I offer deluxe/VIP tiers at higher prices"
+        },
+        {
+          "label": "Can Create Premium Easily",
+          "value": "can_create_easily",
+          "description": "I know exactly what premium would include"
+        },
+        {
+          "label": "Would Be Challenging",
+          "value": "would_be_challenging",
+          "description": "Not sure how to make premium version worth 5-10x"
+        },
+        {
+          "label": "Not Possible for My Business",
+          "value": "not_possible",
+          "description": "My product can't be tiered this way"
+        }
+      ]
+    },
+    {
+      "id": "q6_customer_tracking",
+      "question": "Can you track each customer's complete purchase history?",
+      "subtext": "Do you know what every customer has bought from you and when?",
+      "options": [
+        {
+          "label": "Full Purchase History Tracking",
+          "value": "full_tracking",
+          "description": "I know exactly what each customer has purchased"
+        },
+        {
+          "label": "Partial Tracking",
+          "value": "partial_tracking",
+          "description": "I track some purchases but not all details"
+        },
+        {
+          "label": "Minimal Tracking",
+          "value": "minimal_tracking",
+          "description": "Basic records only"
+        },
+        {
+          "label": "No Purchase History Tracking",
+          "value": "no_tracking",
+          "description": "Don't currently track customer purchase history"
+        }
+      ]
+    },
+    {
+      "id": "q7_primary_upsell_goal",
+      "question": "What is your PRIMARY goal for adding an upsell?",
+      "subtext": "Select the most important objective",
+      "options": [
+        {
+          "label": "Maximize Immediate Profit Per Sale",
+          "value": "maximize_immediate_profit",
+          "description": "Get the most money right now from each customer"
+        },
+        {
+          "label": "Increase Customer Lifetime Value",
+          "value": "increase_customer_ltv",
+          "description": "Build long-term customer relationships and revenue"
+        },
+        {
+          "label": "Re-engage Dormant/Past Customers",
+          "value": "reengage_past_customers",
+          "description": "Win back customers who haven't purchased recently"
+        },
+        {
+          "label": "Attract Competitor's Upset Customers",
+          "value": "steal_competitor_customers",
+          "description": "Win over people unhappy with competitors"
+        }
+      ]
+    },
+    {
+      "id": "q8_customer_sophistication",
+      "question": "How sophisticated are your customers about buying decisions?",
+      "subtext": "How much do they know about your industry and solutions?",
+      "options": [
+        {
+          "label": "Very Sophisticated",
+          "value": "very_sophisticated",
+          "description": "They know the space well, appreciate expert guidance"
+        },
+        {
+          "label": "Moderately Sophisticated",
+          "value": "moderately_sophisticated",
+          "description": "Have some knowledge, open to recommendations"
+        },
+        {
+          "label": "Beginners/Novices",
+          "value": "beginners",
+          "description": "New to the space, need guidance"
+        },
+        {
+          "label": "Primarily Price Shoppers",
+          "value": "price_shoppers",
+          "description": "Main concern is getting the best deal"
+        }
+      ]
+    },
+    {
+      "id": "q9_sales_channel",
+      "question": "Where do most of your sales happen?",
+      "subtext": "Select your primary sales channel",
+      "options": [
+        {
+          "label": "Automated Online Funnel",
+          "value": "automated_funnel",
+          "description": "Self-serve checkout, minimal human interaction"
+        },
+        {
+          "label": "Sales Calls/Appointments",
+          "value": "sales_calls",
+          "description": "I talk to customers before they buy"
+        },
+        {
+          "label": "Email/Backend Offers",
+          "value": "email_backend",
+          "description": "Upsell after initial purchase via email"
+        },
+        {
+          "label": "Hybrid Approach",
+          "value": "hybrid_approach",
+          "description": "Mix of automated and human touchpoints"
+        }
+      ]
+    },
+    {
+      "id": "q10_current_upsell_situation",
+      "question": "What is your current upsell situation?",
+      "subtext": "Be honest about where you are now",
+      "options": [
+        {
+          "label": "No Upsell Currently",
+          "value": "no_upsell_currently",
+          "description": "I only sell my main product, nothing more"
+        },
+        {
+          "label": "Have Upsell - Working OK",
+          "value": "have_upsell_working_ok",
+          "description": "Have an upsell, decent results, want to optimize"
+        },
+        {
+          "label": "Have Upsell - Not Working Well",
+          "value": "have_upsell_not_working",
+          "description": "Tried upselling but poor conversion rates"
+        },
+        {
+          "label": "Have Upset/Churned Customers",
+          "value": "upset_customers",
+          "description": "Need to rescue customer relationships"
+        }
+      ]
+    }
+  ]
+}

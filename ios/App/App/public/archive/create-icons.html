@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head><title>Create Icons</title></head>
+<body>
+<canvas id="icon" width="192" height="192"></canvas>
+<canvas id="badge" width="72" height="72"></canvas>
+<script>
+// Create 192x192 icon
+const iconCanvas = document.getElementById('icon');
+const iconCtx = iconCanvas.getContext('2d');
+const gradient = iconCtx.createLinearGradient(0, 0, 192, 192);
+gradient.addColorStop(0, '#5e17eb');
+gradient.addColorStop(1, '#8b5cf6');
+iconCtx.fillStyle = gradient;
+iconCtx.beginPath();
+iconCtx.arc(96, 96, 80, 0, Math.PI * 2);
+iconCtx.fill();
+iconCtx.fillStyle = 'white';
+iconCtx.font = 'bold 80px Arial';
+iconCtx.textAlign = 'center';
+iconCtx.textBaseline = 'middle';
+iconCtx.fillText('F', 96, 96);
+
+// Create 72x72 badge
+const badgeCanvas = document.getElementById('badge');
+const badgeCtx = badgeCanvas.getContext('2d');
+badgeCtx.fillStyle = 'white';
+badgeCtx.beginPath();
+badgeCtx.arc(36, 36, 30, 0, Math.PI * 2);
+badgeCtx.fill();
+badgeCtx.fillStyle = '#5e17eb';
+badgeCtx.font = 'bold 40px Arial';
+badgeCtx.textAlign = 'center';
+badgeCtx.textBaseline = 'middle';
+badgeCtx.fillText('F', 36, 36);
+
+// Download icons
+setTimeout(() => {
+  iconCanvas.toBlob(blob => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'icon-192x192.png';
+    a.click();
+  });
+  
+  setTimeout(() => {
+    badgeCanvas.toBlob(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'badge-72x72.png';
+      a.click();
+    });
+  }, 500);
+}, 500);
+</script>
+</body>
+</html>

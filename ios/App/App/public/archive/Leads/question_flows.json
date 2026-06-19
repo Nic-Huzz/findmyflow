@@ -1,0 +1,134 @@
+{
+  "questions": [
+    {
+      "id": "Q1_network_size",
+      "text": "How large is your existing network of people who know you?",
+      "type": "single_choice",
+      "options": [
+        "large_network_500_plus",
+        "medium_network_100_500",
+        "small_network_under_100",
+        "no_existing_network"
+      ],
+      "store_as": "network_size",
+      "tags": ["network"]
+    },
+    {
+      "id": "Q2_time_availability",
+      "text": "How much time can you dedicate to lead generation daily?",
+      "type": "single_choice",
+      "options": [
+        "4_plus_hours_daily",
+        "2_4_hours_daily",
+        "1_2_hours_daily",
+        "under_1_hour_daily"
+      ],
+      "store_as": "time_availability",
+      "tags": ["time"]
+    },
+    {
+      "id": "Q3_budget",
+      "text": "What marketing budget can you allocate per month?",
+      "type": "single_choice",
+      "options": [
+        "5000_plus_monthly",
+        "1000_5000_monthly",
+        "100_1000_monthly",
+        "minimal_under_100_monthly"
+      ],
+      "store_as": "budget",
+      "tags": ["budget"]
+    },
+    {
+      "id": "Q4_comfort_level",
+      "text": "How comfortable are you with direct 1-on-1 outreach?",
+      "type": "single_choice",
+      "options": [
+        "very_comfortable_love_it",
+        "comfortable_can_do_it",
+        "uncomfortable_but_willing",
+        "prefer_to_avoid_it"
+      ],
+      "store_as": "outreach_comfort",
+      "tags": ["comfort"]
+    },
+    {
+      "id": "Q5_content_ability",
+      "text": "How confident are you creating valuable content regularly?",
+      "type": "single_choice",
+      "options": [
+        "very_confident_do_it_already",
+        "confident_learning_curve",
+        "somewhat_confident_need_help",
+        "not_confident_at_all"
+      ],
+      "store_as": "content_ability",
+      "tags": ["content"]
+    },
+    {
+      "id": "Q6_technical_skills",
+      "text": "How comfortable are you with technical tools (ads platforms, landing pages, tracking)?",
+      "type": "single_choice",
+      "options": [
+        "very_comfortable_technical",
+        "comfortable_can_figure_out",
+        "basic_skills_need_guidance",
+        "not_comfortable_prefer_simple"
+      ],
+      "store_as": "technical_skills",
+      "tags": ["technical"]
+    },
+    {
+      "id": "Q7_business_maturity",
+      "text": "What stage is your business in?",
+      "type": "single_choice",
+      "options": [
+        "established_proven_offer",
+        "early_stage_testing_market",
+        "pre_launch_validating_idea",
+        "side_hustle_part_time"
+      ],
+      "store_as": "business_maturity",
+      "tags": ["maturity"]
+    },
+    {
+      "id": "Q8_sales_skills",
+      "text": "How strong are your 1-on-1 sales or conversion skills?",
+      "type": "single_choice",
+      "options": [
+        "strong_close_regularly",
+        "moderate_can_convert_some",
+        "weak_struggle_to_close",
+        "no_sales_experience_yet"
+      ],
+      "store_as": "sales_skills",
+      "tags": ["sales"]
+    },
+    {
+      "id": "Q9_speed_priority",
+      "text": "How quickly do you need to generate leads?",
+      "type": "single_choice",
+      "options": [
+        "asap_need_leads_now",
+        "within_30_days",
+        "within_90_days",
+        "building_for_long_term"
+      ],
+      "store_as": "speed_priority",
+      "tags": ["speed"]
+    },
+    {
+      "id": "Q10_risk_tolerance",
+      "text": "How do you feel about spending money to test and learn?",
+      "type": "single_choice",
+      "options": [
+        "high_tolerance_willing_to_test",
+        "moderate_small_tests_okay",
+        "low_want_proven_methods",
+        "no_tolerance_free_only"
+      ],
+      "store_as": "risk_tolerance",
+      "tags": ["risk"]
+    }
+  ]
+}

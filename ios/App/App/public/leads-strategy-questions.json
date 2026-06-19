@@ -1,0 +1,280 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "total_questions": 10,
+    "estimated_completion_time_minutes": 3,
+    "last_updated": "2025-12-04"
+  },
+  "questions": [
+    {
+      "id": "q1_network_size",
+      "question": "How large is your existing network of people who know you?",
+      "subtext": "Consider social media connections, email contacts, past clients, and professional relationships",
+      "options": [
+        {
+          "label": "Large Network (500+)",
+          "value": "large_network_500_plus",
+          "description": "Substantial existing relationships you can tap into"
+        },
+        {
+          "label": "Medium Network (100-500)",
+          "value": "medium_network_100_500",
+          "description": "Decent foundation of warm connections"
+        },
+        {
+          "label": "Small Network (Under 100)",
+          "value": "small_network_under_100",
+          "description": "Limited but genuine connections"
+        },
+        {
+          "label": "No Existing Network",
+          "value": "no_existing_network",
+          "description": "Starting from scratch with lead generation"
+        }
+      ]
+    },
+    {
+      "id": "q2_time_availability",
+      "question": "How much time can you dedicate to lead generation daily?",
+      "subtext": "Realistic daily time commitment for outreach, content creation, or ads management",
+      "options": [
+        {
+          "label": "4+ Hours Daily",
+          "value": "4_plus_hours_daily",
+          "description": "Full-time focus on lead generation"
+        },
+        {
+          "label": "2-4 Hours Daily",
+          "value": "2_4_hours_daily",
+          "description": "Significant daily commitment"
+        },
+        {
+          "label": "1-2 Hours Daily",
+          "value": "1_2_hours_daily",
+          "description": "Moderate daily time available"
+        },
+        {
+          "label": "Under 1 Hour Daily",
+          "value": "under_1_hour_daily",
+          "description": "Limited time, need efficient methods"
+        }
+      ]
+    },
+    {
+      "id": "q3_budget",
+      "question": "What marketing budget can you allocate per month?",
+      "subtext": "Include paid ads, tools, software, and potential losses during testing phase",
+      "options": [
+        {
+          "label": "$5,000+ Monthly",
+          "value": "5000_plus_monthly",
+          "description": "Significant budget for testing and scaling"
+        },
+        {
+          "label": "$1,000-$5,000 Monthly",
+          "value": "1000_5000_monthly",
+          "description": "Moderate budget for strategic testing"
+        },
+        {
+          "label": "$100-$1,000 Monthly",
+          "value": "100_1000_monthly",
+          "description": "Minimal budget for small tests or tools"
+        },
+        {
+          "label": "Under $100 Monthly",
+          "value": "minimal_under_100_monthly",
+          "description": "Bootstrap mode, need free/low-cost methods"
+        }
+      ]
+    },
+    {
+      "id": "q4_comfort_level",
+      "question": "How comfortable are you with direct 1-on-1 outreach?",
+      "subtext": "This includes DMing, emailing, or calling people directly",
+      "options": [
+        {
+          "label": "Very Comfortable - Love It",
+          "value": "very_comfortable_love_it",
+          "description": "Enjoy personal conversations and relationship building"
+        },
+        {
+          "label": "Comfortable - Can Do It",
+          "value": "comfortable_can_do_it",
+          "description": "Willing and able to reach out consistently"
+        },
+        {
+          "label": "Uncomfortable But Willing",
+          "value": "uncomfortable_but_willing",
+          "description": "Will push through discomfort if needed"
+        },
+        {
+          "label": "Prefer to Avoid It",
+          "value": "prefer_to_avoid_it",
+          "description": "Would rather use 1-to-many approaches"
+        }
+      ]
+    },
+    {
+      "id": "q5_content_ability",
+      "question": "How confident are you creating valuable content regularly?",
+      "subtext": "Posts, videos, emails, articles that provide value to your audience",
+      "options": [
+        {
+          "label": "Very Confident - Already Doing It",
+          "value": "very_confident_do_it_already",
+          "description": "Content creation is a strength"
+        },
+        {
+          "label": "Confident - Learning Curve",
+          "value": "confident_learning_curve",
+          "description": "Can create content with some practice"
+        },
+        {
+          "label": "Somewhat Confident - Need Help",
+          "value": "somewhat_confident_need_help",
+          "description": "Struggle with consistency or quality"
+        },
+        {
+          "label": "Not Confident At All",
+          "value": "not_confident_at_all",
+          "description": "Content creation feels overwhelming"
+        }
+      ]
+    },
+    {
+      "id": "q6_technical_skills",
+      "question": "How comfortable are you with technical tools?",
+      "subtext": "Ads platforms, landing page builders, tracking pixels, analytics",
+      "options": [
+        {
+          "label": "Very Comfortable - Technical Person",
+          "value": "very_comfortable_technical",
+          "description": "Tech-savvy, can learn new platforms quickly"
+        },
+        {
+          "label": "Comfortable - Can Figure It Out",
+          "value": "comfortable_can_figure_out",
+          "description": "Willing to learn with tutorials and support"
+        },
+        {
+          "label": "Basic Skills - Need Guidance",
+          "value": "basic_skills_need_guidance",
+          "description": "Can handle simple tools but need hand-holding"
+        },
+        {
+          "label": "Not Comfortable - Prefer Simple",
+          "value": "not_comfortable_prefer_simple",
+          "description": "Technology is intimidating, need simple solutions"
+        }
+      ]
+    },
+    {
+      "id": "q7_business_maturity",
+      "question": "What stage is your business in?",
+      "subtext": "Understanding your business maturity helps recommend the right strategy",
+      "options": [
+        {
+          "label": "Established - Proven Offer",
+          "value": "established_proven_offer",
+          "description": "Product-market fit validated, ready to scale"
+        },
+        {
+          "label": "Early Stage - Testing Market",
+          "value": "early_stage_testing_market",
+          "description": "Some customers, still refining offer"
+        },
+        {
+          "label": "Pre-Launch - Validating Idea",
+          "value": "pre_launch_validating_idea",
+          "description": "Still testing if people will pay"
+        },
+        {
+          "label": "Side Hustle - Part Time",
+          "value": "side_hustle_part_time",
+          "description": "Building while working another job"
+        }
+      ]
+    },
+    {
+      "id": "q8_sales_skills",
+      "question": "How strong are your 1-on-1 sales or conversion skills?",
+      "subtext": "Ability to have conversations that convert leads into paying customers",
+      "options": [
+        {
+          "label": "Strong - Close Regularly",
+          "value": "strong_close_regularly",
+          "description": "Confident closing sales in conversations"
+        },
+        {
+          "label": "Moderate - Can Convert Some",
+          "value": "moderate_can_convert_some",
+          "description": "Hit or miss, working on improving"
+        },
+        {
+          "label": "Weak - Struggle to Close",
+          "value": "weak_struggle_to_close",
+          "description": "Difficulty asking for the sale"
+        },
+        {
+          "label": "No Sales Experience Yet",
+          "value": "no_sales_experience_yet",
+          "description": "Haven't done many sales conversations"
+        }
+      ]
+    },
+    {
+      "id": "q9_speed_priority",
+      "question": "How quickly do you need to generate leads?",
+      "subtext": "Some strategies work faster than others",
+      "options": [
+        {
+          "label": "ASAP - Need Leads Now",
+          "value": "asap_need_leads_now",
+          "description": "Urgent need for immediate lead flow"
+        },
+        {
+          "label": "Within 30 Days",
+          "value": "within_30_days",
+          "description": "Want results within a month"
+        },
+        {
+          "label": "Within 90 Days",
+          "value": "within_90_days",
+          "description": "Can wait 2-3 months for momentum"
+        },
+        {
+          "label": "Building for Long Term",
+          "value": "building_for_long_term",
+          "description": "Patient, focused on sustainable growth"
+        }
+      ]
+    },
+    {
+      "id": "q10_risk_tolerance",
+      "question": "How do you feel about spending money to test and learn?",
+      "subtext": "Some strategies require upfront investment with uncertain returns during testing",
+      "options": [
+        {
+          "label": "High Tolerance - Willing to Test",
+          "value": "high_tolerance_willing_to_test",
+          "description": "Understand testing requires investment"
+        },
+        {
+          "label": "Moderate - Small Tests Okay",
+          "value": "moderate_small_tests_okay",
+          "description": "Willing to test with small amounts"
+        },
+        {
+          "label": "Low - Want Proven Methods",
+          "value": "low_want_proven_methods",
+          "description": "Prefer safer, validated approaches"
+        },
+        {
+          "label": "No Tolerance - Free Only",
+          "value": "no_tolerance_free_only",
+          "description": "Cannot afford to lose any money"
+        }
+      ]
+    }
+  ]
+}

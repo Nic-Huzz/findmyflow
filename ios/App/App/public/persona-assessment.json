@@ -1,0 +1,408 @@
+{
+  "version": "2.0.0",
+  "metadata": {
+    "name": "Persona Assessment",
+    "description": "3-question assessment integrating Wealth Ladder identification with Flow journey personas"
+  },
+  "questions": [
+    {
+      "id": "q1_journey",
+      "question": "Where are you in your flow journey?",
+      "subtext": "Be honest - there's no wrong answer",
+      "why_we_ask": "This helps us understand your current situation so we can recommend the right starting point.",
+      "options": [
+        {
+          "label": "Exploring from my day job",
+          "value": "employed_exploring",
+          "description": "I'm employed, searching for what lights me up",
+          "persona": "vibe_seeker",
+          "data": {
+            "employment_status": "employed",
+            "has_side_project": false
+          }
+        },
+        {
+          "label": "Building on the side",
+          "value": "employed_building",
+          "description": "I'm employed, growing something alongside my job",
+          "persona": "vibe_riser",
+          "data": {
+            "employment_status": "employed",
+            "has_side_project": true
+          }
+        },
+        {
+          "label": "Gone solo, finding my footing",
+          "value": "self_employed_early",
+          "description": "I've left employment, still building momentum",
+          "persona": "vibe_riser",
+          "data": {
+            "employment_status": "self_employed",
+            "stage": "early"
+          }
+        },
+        {
+          "label": "Scaling what I do",
+          "value": "self_employed_established",
+          "description": "I'm self-employed with paying clients",
+          "persona": "movement_maker",
+          "data": {
+            "employment_status": "self_employed",
+            "stage": "established"
+          }
+        }
+      ],
+      "zarlo_help": {
+        "trigger_text": "I'm not sure",
+        "opening": "No worries! Let me help you figure this out.",
+        "questions": [
+          {
+            "question": "Are you currently getting a paycheck from an employer?",
+            "yes_followup": "Do you have anything going on the side - a business, freelancing, or project you're building?",
+            "no_followup": "Are you making money from your own thing, or still figuring that out?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q2_created",
+      "question": "What have you created so far?",
+      "subtext": "Think about what you're currently offering or selling",
+      "why_we_ask": "This tells us where you are on the wealth ladder, so we can show you the right next steps.",
+      "options": [
+        {
+          "label": "Still discovering",
+          "value": "nothing_yet",
+          "description": "Nothing concrete yet, exploring possibilities",
+          "persona": "vibe_seeker",
+          "data": {
+            "wealth_ladder": "pre_ladder"
+          }
+        },
+        {
+          "label": "Trading my time",
+          "value": "service",
+          "description": "A service where I work with clients directly",
+          "persona": "vibe_riser",
+          "data": {
+            "wealth_ladder": "service"
+          }
+        },
+        {
+          "label": "Packaged offerings",
+          "value": "productized",
+          "description": "Courses, programs, or fixed-scope packages",
+          "persona": "vibe_riser",
+          "data": {
+            "wealth_ladder": "productized"
+          }
+        },
+        {
+          "label": "Products people buy",
+          "value": "products",
+          "description": "Digital products, software, or physical goods",
+          "persona": "movement_maker",
+          "data": {
+            "wealth_ladder": "products"
+          }
+        }
+      ],
+      "zarlo_help": {
+        "trigger_text": "I'm not sure",
+        "opening": "Let's figure this out together.",
+        "questions": [
+          {
+            "question": "Have you ever been paid for your skills or knowledge?",
+            "yes_followup": "Was it custom work for each client, or the same package/product every time?",
+            "no_followup": "That's totally okay! 'Still discovering' is your answer - that's where everyone starts."
+          }
+        ]
+      }
+    },
+    {
+      "id": "q3_goal",
+      "question": "What would help you find your flow?",
+      "subtext": "Your biggest priority right now",
+      "why_we_ask": "This helps us prioritize what to show you first and tailor your experience.",
+      "options": [
+        {
+          "label": "Clarity on my path",
+          "value": "discovery",
+          "description": "Finally knowing what I'm meant to build",
+          "persona": "vibe_seeker",
+          "data": {
+            "primary_goal": "discovery"
+          }
+        },
+        {
+          "label": "An offer that resonates",
+          "value": "creation",
+          "description": "Creating something people actually want",
+          "persona": "vibe_riser",
+          "data": {
+            "primary_goal": "creation"
+          }
+        },
+        {
+          "label": "Consistent clients",
+          "value": "monetization",
+          "description": "Landing paying customers regularly",
+          "persona": "vibe_riser",
+          "data": {
+            "primary_goal": "monetization"
+          }
+        },
+        {
+          "label": "Scale and systems",
+          "value": "growth",
+          "description": "Growing what's already working",
+          "persona": "movement_maker",
+          "data": {
+            "primary_goal": "growth"
+          }
+        }
+      ],
+      "zarlo_help": {
+        "trigger_text": "I'm not sure",
+        "opening": "What keeps you up at night about your work or business?",
+        "questions": [
+          {
+            "question": "What frustrates you most right now?",
+            "options": [
+              { "answer": "I don't know what to do or build", "maps_to": "discovery" },
+              { "answer": "I know what to do but can't make it work", "maps_to": "creation" },
+              { "answer": "I can't get enough clients or sales", "maps_to": "monetization" },
+              { "answer": "I'm maxed out and can't grow", "maps_to": "growth" }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "personas": {
+    "vibe_seeker": {
+      "name": "Flow Seeker",
+      "tagline": "Finding Your Direction",
+      "description": "You're at the beginning of your journey, sensing there's more to life. Your next step is discovering your unique gifts and how to share them with the world.",
+      "color": "#9333EA",
+      "flow": "nikigai",
+      "flowPath": "/nikigai/skills",
+      "flowName": "Flow Finder",
+      "icon": "compass"
+    },
+    "vibe_riser": {
+      "name": "Flow Finder",
+      "tagline": "Bringing It To Life",
+      "description": "You know your direction but need help monetising it. Your next step is creating an irresistible offer that people feel silly saying no to.",
+      "color": "#F59E0B",
+      "flow": "offer",
+      "flowPath": "/offer-builder",
+      "flowName": "Offer Builder",
+      "icon": "rocket"
+    },
+    "movement_maker": {
+      "name": "Movement Maker",
+      "tagline": "Scaling Your Impact",
+      "description": "You're making money and ready to scale. Your next step is building a product suite that maximizes your impact and cashflow.",
+      "color": "#10B981",
+      "flow": "money-model",
+      "flowPath": "/product-suite",
+      "flowName": "Product Suite Builder",
+      "icon": "chart"
+    }
+  },
+  "routing": {
+    "description": "Routing is determined by wealth_ladder from Q2, not just persona",
+    "paths": {
+      "pre_ladder": {
+        "name": "Flow Seeker Path",
+        "first_screen": "flow_finder_explainer",
+        "flow_path": "/nikigai/skills"
+      },
+      "service": {
+        "name": "Service Path",
+        "first_screen": "quick_capture",
+        "follow_up_questions": ["delivery_model", "num_offers"]
+      },
+      "productized": {
+        "name": "Productized Path",
+        "first_screen": "quick_capture",
+        "follow_up_questions": ["offering_type"]
+      },
+      "products": {
+        "name": "Products Path",
+        "first_screen": "quick_capture",
+        "follow_up_questions": ["product_type"]
+      }
+    }
+  },
+  "follow_up_questions": {
+    "delivery_model": {
+      "id": "delivery_model",
+      "question": "How do you deliver your service?",
+      "subtext": "This helps us tailor your offer building experience",
+      "options": [
+        {
+          "label": "Custom for each client",
+          "value": "custom",
+          "description": "Every engagement is different based on their needs",
+          "data": { "product_type": "custom_service" }
+        },
+        {
+          "label": "Same package every time",
+          "value": "packaged",
+          "description": "Standardized deliverables and process",
+          "data": { "product_type": "packaged_service" }
+        },
+        {
+          "label": "Mix of both",
+          "value": "hybrid",
+          "description": "Some custom, some packaged",
+          "data": { "product_type": "hybrid_service" }
+        }
+      ]
+    },
+    "num_offers": {
+      "id": "num_offers",
+      "question": "How many offers do you currently sell?",
+      "subtext": "This determines whether we start with one offer or map your whole suite",
+      "options": [
+        {
+          "label": "Just one main thing",
+          "value": "single",
+          "description": "I focus on a single offer",
+          "data": { "num_offers": "single" },
+          "route": "offer_builder"
+        },
+        {
+          "label": "A few different offers",
+          "value": "multiple",
+          "description": "I have multiple things I sell",
+          "data": { "num_offers": "multiple" },
+          "route": "product_suite_builder"
+        },
+        {
+          "label": "One now, planning more",
+          "value": "planning",
+          "description": "Starting with one, building toward a suite",
+          "data": { "num_offers": "planning" },
+          "route": "offer_builder"
+        }
+      ]
+    },
+    "offering_type": {
+      "id": "offering_type",
+      "question": "What type of offering do you have?",
+      "subtext": "This helps us configure your product suite correctly",
+      "options": [
+        {
+          "label": "Self-paced course",
+          "value": "course",
+          "description": "People go through on their own time",
+          "data": { "product_type": "automated_group" }
+        },
+        {
+          "label": "Live cohort or coaching",
+          "value": "live",
+          "description": "You facilitate live sessions",
+          "data": { "product_type": "live_group" }
+        },
+        {
+          "label": "Done-for-you packages",
+          "value": "dfy",
+          "description": "Team delivers standardized work",
+          "data": { "product_type": "managed_service" }
+        },
+        {
+          "label": "Membership or community",
+          "value": "membership",
+          "description": "Ongoing access to content/community",
+          "data": { "product_type": "membership" }
+        }
+      ]
+    },
+    "product_type": {
+      "id": "product_type",
+      "question": "What type of products do you sell?",
+      "subtext": "This helps us set up the right tracking and metrics",
+      "options": [
+        {
+          "label": "Digital products",
+          "value": "digital",
+          "description": "Templates, ebooks, downloads",
+          "data": { "product_subtype": "digital" }
+        },
+        {
+          "label": "Software / SaaS",
+          "value": "software",
+          "description": "Apps, platforms, tools",
+          "data": { "product_subtype": "software" }
+        },
+        {
+          "label": "Physical products",
+          "value": "physical",
+          "description": "Merchandise, equipment, goods",
+          "data": { "product_subtype": "physical" }
+        },
+        {
+          "label": "Mix of different types",
+          "value": "mixed",
+          "description": "Multiple product types",
+          "data": { "product_subtype": "mixed" }
+        }
+      ]
+    },
+    "solution_type_guidance": {
+      "id": "solution_type_guidance",
+      "question": "Based on your skills, here's the fastest path to your first paying client:",
+      "subtext": "Most successful entrepreneurs start with services - you learn what works, then productize.",
+      "recommended": {
+        "label": "Start with a Service",
+        "value": "service",
+        "description": "Work directly with clients, learn what works, then turn it into a product.",
+        "why": "You'll learn what clients actually need, get paid while learning, and have proven material to turn into products later.",
+        "data": { "chosen_path": "service" }
+      },
+      "alternatives_intro": "Already know you want to build something else?",
+      "alternatives": [
+        {
+          "label": "I want to create a course or program",
+          "value": "course",
+          "data": { "chosen_path": "course" }
+        },
+        {
+          "label": "I want to build a digital product",
+          "value": "digital",
+          "data": { "chosen_path": "digital_product" }
+        },
+        {
+          "label": "I want to sell physical products",
+          "value": "physical",
+          "data": { "chosen_path": "physical_product" }
+        }
+      ]
+    }
+  },
+  "scoring": {
+    "method": "majority",
+    "tiebreaker": "vibe_seeker",
+    "confidence_thresholds": {
+      "high": 3,
+      "medium": 2,
+      "low": 1
+    }
+  },
+  "ux_config": {
+    "show_time_estimate": true,
+    "estimated_time": "2 minutes",
+    "show_progress_labels": true,
+    "progress_labels": ["Your Journey", "Your Creations", "Your Goal"],
+    "show_why_we_ask": true,
+    "enable_zarlo_help": true,
+    "warm_transitions": {
+      "after_q1": "Great! Now let's see what you've built...",
+      "after_q2": "Perfect. One more question...",
+      "after_q3": "Thanks! Here's what we learned about you..."
+    }
+  }
+}

@@ -1,0 +1,1655 @@
+{
+  "meta": {
+    "slice": "partA",
+    "range": "profiles[0:50]",
+    "count": 50,
+    "generatedAt": "2026-04-07"
+  },
+  "profiles": [
+    {
+      "name": "Fred Rogers",
+      "dominantCategories": ["nurturing", "expressing", "clarifying"],
+      "playSkills": [
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "high",
+          "evidence": "Aired a full televised minute of silence so children could think about who loved them, refusing producer requests to cut the dead air."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Give patient, useful feedback",
+          "confidence": "high",
+          "evidence": "For 33 years he personally replied to every child who wrote him, with handwritten two-page letters naming the child's specific concern."
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "At the 1969 Senate testimony he spoke for six minutes without notes, quoted his own lyric 'What do you do with the mad that you feel' and secured the full $20m, leaving Senator Pastore with goosebumps."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Make a confusing thing feel obvious",
+          "confidence": "medium",
+          "evidence": "Translated hard emotions like anger, fear and divorce into plain, unhurried language a four-year-old could follow, treating simple words as the discipline."
+        },
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "medium",
+          "evidence": "Biographer Maxwell King documented that the language, patterns, and sign-offs of his letters were his, even when volume was shared with a small correspondence team."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "strategizing",
+          "skill": "Pick what matters and cut the rest",
+          "evidence": "Rogers rejected founder logic explicitly: no merchandising, no scaling, and treated the slow tempo as non-negotiable, against every producer instinct around him."
+        },
+        {
+          "category": "influencing",
+          "skill": "Rally a group behind an idea",
+          "evidence": "His persuasive mode was one person at a time, not crowd mobilisation. The Senate moment worked because he refused the rally register and used stillness instead."
+        }
+      ]
+    },
+    {
+      "name": "Maria Montessori",
+      "dominantCategories": ["designing", "analyzing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "designing",
+          "skill": "Craft a space people want to stay in",
+          "confidence": "high",
+          "evidence": "At Casa dei Bambini in January 1907 she equipped the room with child-sized furniture and a locked cabinet of tactile materials, letting the environment do the teaching."
+        },
+        {
+          "category": "designing",
+          "skill": "Make something beautiful and usable",
+          "confidence": "high",
+          "evidence": "She designed the tactile Orthophrenic materials and shaped the furniture, tools and timetable around what she observed children actually doing."
+        },
+        {
+          "category": "analyzing",
+          "skill": "Spot the thing everyone else missed",
+          "confidence": "high",
+          "evidence": "Put the 'uneducable' Orthophrenic children through the standard Italian public school exams, they passed, and she used the result to argue the materials, not the children, were the variable."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Watch someone grow without taking credit",
+          "confidence": "medium",
+          "evidence": "Within weeks of Casa dei Bambini opening she was writing down unexpected observations of children choosing work over toys and policing their own order, treating the child as the protagonist."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Pick what matters and cut the rest",
+          "confidence": "high",
+          "evidence": "In 1934, at 64, she left Italy permanently rather than let Mussolini absorb her teacher training, choosing exile over a compromised version of the method."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "connecting",
+          "skill": "Be the glue in a scattered team",
+          "evidence": "She was a singular, controlling figure with Opera Montessori, resigning rather than sharing institutional control, not a coalition builder."
+        }
+      ]
+    },
+    {
+      "name": "Anne Sullivan",
+      "dominantCategories": ["nurturing", "clarifying"],
+      "playSkills": [
+        {
+          "category": "nurturing",
+          "skill": "Give patient, useful feedback",
+          "confidence": "high",
+          "evidence": "After a formal curriculum failed she switched to spelling words into Helen's palm whenever Helen reached for something, producing a 575-word vocabulary inside six months."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "high",
+          "evidence": "Remained at Helen Keller's side for 49 years from 1887 to 1936, moving through teacher, governess, lecture interpreter and companion as conditions changed."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Teach someone something they are stuck on",
+          "confidence": "high",
+          "evidence": "She spelled the world into a deafblind child's hand one word at a time, turning the hand itself into a language channel where no curriculum had worked."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Watch someone grow without taking credit",
+          "confidence": "medium",
+          "evidence": "By 1935 Sullivan had gone completely blind herself and kept working, letting Helen be her eyes in return, the partnership now conducted through touch on both sides."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "organizing",
+          "skill": "Build a workflow that runs itself",
+          "evidence": "The method was not a transferable system; it was a 49-year single-case relationship she could not hand off."
+        }
+      ]
+    },
+    {
+      "name": "Janusz Korczak",
+      "dominantCategories": ["nurturing", "creating", "clarifying"],
+      "playSkills": [
+        {
+          "category": "creating",
+          "skill": "Invent a new idea from scratch",
+          "confidence": "high",
+          "evidence": "At Dom Sierot he built a democratic children's republic with its own parliament, court, code of law, and child-written weekly newspaper Maly Przeglad from 1926."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "high",
+          "evidence": "On 5-6 August 1942 he walked at the head of roughly 192 orphans and a dozen staff to the Umschlagplatz, hatless, holding a child's hand, refusing multiple Zegota offers to smuggle him out."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Write a \"how it actually works\" explainer",
+          "confidence": "high",
+          "evidence": "In Jak kochac dziecko (1919) he laid down three rights every child already possessed and argued, concretely, against the normalised casual smack."
+        },
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "medium",
+          "evidence": "Two weeks before the deportation he staged Tagore's The Post Office inside the Warsaw Ghetto, deliberately choosing a play about a dying boy waiting for a letter from a king."
+        },
+        {
+          "category": "influencing",
+          "skill": "Change someone's mind",
+          "confidence": "medium",
+          "evidence": "He used radio broadcasts and published tracts for years to argue that hitting a child was unthinkable if you would not hit an adult that way."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "strategizing",
+          "skill": "Call the smart play under pressure",
+          "evidence": "The survival-smart play was to accept Zegota's offers of safe passage; he refused each one, saying 'you do not leave children at a time like this.'"
+        }
+      ]
+    },
+    {
+      "name": "Vivian Gussin Paley",
+      "dominantCategories": ["nurturing", "synthesizing", "clarifying"],
+      "playSkills": [
+        {
+          "category": "synthesizing",
+          "skill": "Find the bigger pattern under the noise",
+          "confidence": "high",
+          "evidence": "Left an audio recorder running in her classroom for decades, transcribing the tapes every evening, using the actual sentences four-year-olds said as the primary data of her books."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "high",
+          "evidence": "Introduced the single rule 'You Can't Say You Can't Play' and trialled it first with older children, recording their objections and publishing them alongside her own defence."
+        },
+        {
+          "category": "creating",
+          "skill": "Make something that did not exist yesterday",
+          "confidence": "medium",
+          "evidence": "Each day every child dictated a story she wrote verbatim, and the class then acted the stories out on a taped rectangle on the floor, turning dictation into a daily ritual."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Make a confusing thing feel obvious",
+          "confidence": "medium",
+          "evidence": "Her books turned classroom transcripts into arguments readable by parents and non-specialists, from White Teacher (1979) to The Boy Who Would Be a Helicopter (1991)."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "T. Berry Brazelton",
+      "dominantCategories": ["clarifying", "analyzing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "analyzing",
+          "skill": "Turn numbers into a clear story",
+          "confidence": "high",
+          "evidence": "Developed the 28-item NBAS to produce a 'behavioural portrait' of a specific newborn, designed as a profile parents could read rather than a pass/fail instrument."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Make a confusing thing feel obvious",
+          "confidence": "high",
+          "evidence": "Running the NBAS in front of parents, narrating what the baby was doing as it happened, so parents reliably said afterwards they had just met their child for the first time."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Build a framework that holds it all",
+          "confidence": "high",
+          "evidence": "His Touchpoints framework identified predictable regressions at specific ages and reframed them as developmental reorganisations rather than failures."
+        },
+        {
+          "category": "influencing",
+          "skill": "Rally a group behind an idea",
+          "confidence": "medium",
+          "evidence": "Testified repeatedly before Congress through the 1980s and early 1990s for paid parental and medical leave, co-founded Parent Action, and chaired the Pampers Parenting Institute."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Emmi Pikler",
+      "dominantCategories": ["nurturing", "designing", "analyzing"],
+      "playSkills": [
+        {
+          "category": "designing",
+          "skill": "Shape how a moment feels",
+          "confidence": "high",
+          "evidence": "Trained Loczy caregivers to announce each movement before making it during nappy-changing and bathing, and to wait for the baby to participate, making the routine the relationship."
+        },
+        {
+          "category": "analyzing",
+          "skill": "Spot the thing everyone else missed",
+          "confidence": "high",
+          "evidence": "Ran Loczy from 1946 to 1979 as a long-running observation site, watching babies placed on their backs find rolling, sitting, crawling and standing at their own pace."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Watch someone grow without taking credit",
+          "confidence": "high",
+          "evidence": "Her rule, documented with her daughter Anna Tardos, was that an adult should never put a baby in a position the baby could not get into and out of on its own."
+        },
+        {
+          "category": "designing",
+          "skill": "Craft a space people want to stay in",
+          "confidence": "medium",
+          "evidence": "Visitors described the Loczy nursery as strikingly quiet, because the babies were not crying, they were being spoken to."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Mary Ainsworth",
+      "dominantCategories": ["analyzing", "synthesizing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "analyzing",
+          "skill": "Find the pattern in messy data",
+          "confidence": "high",
+          "evidence": "From the Baltimore data she classified 26 infants into secure, anxious-avoidant and anxious-resistant patterns, converting Bowlby's clinical hypothesis into a measurable phenomenon."
+        },
+        {
+          "category": "analyzing",
+          "skill": "Turn numbers into a clear story",
+          "confidence": "high",
+          "evidence": "Reported that roughly 70 per cent of middle-class American babies showed secure attachment, with the rest clustering into avoidant and resistant patterns, becoming a foundational empirical result."
+        },
+        {
+          "category": "creating",
+          "skill": "Invent a new idea from scratch",
+          "confidence": "high",
+          "evidence": "In 1965 she designed the Strange Situation as a structured eight-episode lab procedure, each episode three minutes, coding infant behaviour across caregiver separations and reunions."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Connect dots across two worlds",
+          "confidence": "medium",
+          "evidence": "Her 1954 Kampala fieldwork, going house to house across six villages, convinced her the attachment patterns were not Western cultural artefacts, bridging ethnographic and lab work."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Paul Farmer",
+      "dominantCategories": ["nurturing", "influencing", "synthesizing"],
+      "playSkills": [
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "high",
+          "evidence": "Ended Mountains Beyond Mountains by leading a days-long hike on foot to visit a single family with tuberculosis near Casse in the Haitian hills; the walking was the argument."
+        },
+        {
+          "category": "influencing",
+          "skill": "Change someone's mind",
+          "confidence": "high",
+          "evidence": "In the late 1990s he and Jim Yong Kim broke the WHO's DOTS orthodoxy on MDR-TB by insisting on second-line drugs, and in 1999 the WHO formally designated them to run global MDR-TB programmes."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Build a framework that holds it all",
+          "confidence": "medium",
+          "evidence": "Co-founded Partners In Health in 1987 and its sister Zanmi Lasante, expanding beyond a hospital in Cange into schools, homes and sanitation as one integrated argument."
+        },
+        {
+          "category": "influencing",
+          "skill": "Sell something you actually believe in",
+          "confidence": "high",
+          "evidence": "Secured a $44.7m Gates grant to run drug therapy initiatives in Haiti, Peru and Russia, reporting some of the highest MDR-TB cure rates in the world."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "organizing",
+          "skill": "Build a workflow that runs itself",
+          "evidence": "He slept one to two hours most nights and flew Boston-Haiti-Rwanda-Russia in single weeks; his method scaled through personal presence, not systems that ran without him."
+        }
+      ]
+    },
+    {
+      "name": "Virginia Apgar",
+      "dominantCategories": ["clarifying", "analyzing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "clarifying",
+          "skill": "Make a confusing thing feel obvious",
+          "confidence": "high",
+          "evidence": "Scribbled five newborn categories on a breakfast napkin, each scored 0 to 2, in answer to a resident's casual question; by the 1960s it was being performed on millions of babies a minute after birth."
+        },
+        {
+          "category": "analyzing",
+          "skill": "Spot the thing everyone else missed",
+          "confidence": "high",
+          "evidence": "Had been watching newborns as an anaesthesiologist for over a decade and felt too many were being called 'fine' without a structured look; later published data that cyclopropane was harming fetal outcomes."
+        },
+        {
+          "category": "influencing",
+          "skill": "Rally a group behind an idea",
+          "confidence": "high",
+          "evidence": "As March of Dimes VP for medical affairs from 1959 to 1974 she became one of the loudest American voices for universal rubella vaccination during the 1964-65 pandemic."
+        },
+        {
+          "category": "building",
+          "skill": "Get your hands dirty on a real object",
+          "confidence": "medium",
+          "evidence": "In her home workshop in the 1950s she handcrafted two violins, a viola and a cello with a luthier friend, alongside flying small aircraft and fly-fishing."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Cicely Saunders",
+      "dominantCategories": ["nurturing", "synthesizing", "designing"],
+      "playSkills": [
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "high",
+          "evidence": "Her entire method was sitting with the dying; she developed the concept of 'total pain' to name the combined physical, emotional, social and spiritual distress of a dying patient."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Write a \"here is how it all fits\" doc",
+          "confidence": "high",
+          "evidence": "Introduced the phrase 'total pain' and the principle of regular anticipatory opioid dosing, reorganising how a generation of palliative doctors were trained."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Map out the next 10 moves",
+          "confidence": "high",
+          "evidence": "Requalified from nurse to social worker to physician, entering medical school at 33, specifically so no consultant could block her from running a new kind of place for dying people."
+        },
+        {
+          "category": "designing",
+          "skill": "Craft a space people want to stay in",
+          "confidence": "medium",
+          "evidence": "When St Christopher's opened in 1967 the entrance included a plain sheet of glass memorialising David Tasma's £500 bequest, the physical space embodying the founding conversation."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Irena Sendler",
+      "dominantCategories": ["organizing", "connecting", "nurturing"],
+      "playSkills": [
+        {
+          "category": "organizing",
+          "skill": "Clean up something no one wants to touch",
+          "confidence": "high",
+          "evidence": "Kept paper lists of every smuggled child with original name, new Christian name and current hiding place, buried in glass jars under an apple tree in a neighbour's garden in Warsaw."
+        },
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "high",
+          "evidence": "Through Zegota she placed roughly 75 per cent of the rescued children into Catholic convents and 25 per cent into Polish families, coordinating a distributed hiding network under Gestapo occupation."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "medium",
+          "evidence": "Beaten so badly at Pawiak prison that she had permanent damage to her feet and sentenced to death, she managed to throw the current list to a friend as the Gestapo ransacked her house."
+        },
+        {
+          "category": "organizing",
+          "skill": "Map how the work actually flows",
+          "confidence": "medium",
+          "evidence": "The register was designed so children could be reunited with surviving family after the war; the system was built around post-war reassembly, not just rescue."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "expressing",
+          "skill": "Perform, present, or hit record",
+          "evidence": "She was essentially unknown outside Poland until a Kansas high school project wrote a play about her in the late 1990s; she insisted into her old age that the number of children was never the point."
+        }
+      ]
+    },
+    {
+      "name": "Wangari Maathai",
+      "dominantCategories": ["connecting", "influencing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "high",
+          "evidence": "Turned a ceremonial planting of seven trees at Kamukunji Park in 1977 into a national organising structure of tree nurseries run by rural women, paid a small stipend per seedling."
+        },
+        {
+          "category": "influencing",
+          "skill": "Move someone from stuck to action",
+          "confidence": "high",
+          "evidence": "In March 1992 she went on hunger strike at Freedom Corner alongside mothers of political prisoners; beaten unconscious and hospitalised, she returned to the park after recovering."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Connect dots across two worlds",
+          "confidence": "high",
+          "evidence": "Argued for 27 years that forest clearing, women's disempowerment and authoritarianism were the same problem with different names, the frame the 2004 Nobel citation eventually adopted."
+        },
+        {
+          "category": "influencing",
+          "skill": "Rally a group behind an idea",
+          "confidence": "high",
+          "evidence": "In January 1999 she led activists, MPs and foreign environmentalists into Karura Forest to plant trees against a private development; photographs of her bleeding forehead ran internationally and the land allocation was reversed."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "John Wooden",
+      "dominantCategories": ["nurturing", "clarifying", "synthesizing"],
+      "playSkills": [
+        {
+          "category": "nurturing",
+          "skill": "Coach someone through a block",
+          "confidence": "high",
+          "evidence": "Began each season teaching elite athletes like Kareem Abdul-Jabbar and Bill Walton how to put on socks and lace shoes, because wrinkles caused blisters, blisters cost minutes, minutes cost games."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Build a framework that holds it all",
+          "confidence": "high",
+          "evidence": "Developed the Pyramid of Success, a 15-block diagram with Industriousness and Enthusiasm at the base and Competitive Greatness at the apex, refined over decades and distributed to every player."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Break down a hard idea so anyone gets it",
+          "confidence": "medium",
+          "evidence": "The sock demonstration was a literal lesson but also a statement that nothing at the elite level was beneath attention, and he would be the one deciding what counted as too small."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Watch someone grow without taking credit",
+          "confidence": "medium",
+          "evidence": "Kareem Abdul-Jabbar and Bill Walton both documented friendships with Wooden that continued nearly fifty years after college, with Abdul-Jabbar publishing Coach Wooden and Me in 2017."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Carl Sagan",
+      "dominantCategories": ["clarifying", "expressing", "synthesizing"],
+      "playSkills": [
+        {
+          "category": "clarifying",
+          "skill": "Break down a hard idea so anyone gets it",
+          "confidence": "high",
+          "evidence": "Cosmos (1980) aired as a 13-episode PBS series reaching 500 million viewers in 60 countries, delivered as a first-person account by a working scientist of what he found beautiful and why."
+        },
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "high",
+          "evidence": "Lobbied NASA to turn Voyager 1's camera around at 6 billion kilometres; the Pale Blue Dot image produced his 1994 Cornell lecture reprinted in dozens of languages."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Build a framework that holds it all",
+          "confidence": "high",
+          "evidence": "In The Demon-Haunted World (1995) he laid out the 'Baloney Detection Kit,' nine heuristics for critical thinking, and taught a Cornell senior seminar using the same material."
+        },
+        {
+          "category": "creating",
+          "skill": "Remix two things into something new",
+          "confidence": "high",
+          "evidence": "In 1977 chaired the Voyager Golden Record committee, assembling Bach, Beethoven, Chuck Berry, greetings in 55 languages and a recording of a kiss as conscious authorship on behalf of the species."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "David Attenborough",
+      "dominantCategories": ["clarifying", "expressing", "synthesizing"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "high",
+          "evidence": "In the Life on Earth (1979) mountain gorilla sequence filmed in Rwanda he sat quietly with a habituated troop and they chose to come to him, one of the most replayed moments of British television."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Teach someone something they are stuck on",
+          "confidence": "high",
+          "evidence": "At COP26 in Glasgow at age 95 he told world leaders, 'In my lifetime I've witnessed a terrible decline. In yours, you could, and should, witness a wonderful recovery.'"
+        },
+        {
+          "category": "nurturing",
+          "skill": "Watch someone grow without taking credit",
+          "confidence": "high",
+          "evidence": "Deliberately restricted his own screen time so the animals could take the frame; got out of the way as an explicit method across the blue-chip natural history format."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Call the smart play under pressure",
+          "confidence": "medium",
+          "evidence": "Left the BBC Two Controller chair in 1973 at the peak of a broadcasting career to go back to filmmaking, saying he could not have made Life on Earth from behind a desk."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jacob Bronowski",
+      "dominantCategories": ["synthesizing", "clarifying", "expressing"],
+      "playSkills": [
+        {
+          "category": "synthesizing",
+          "skill": "Connect dots across two worlds",
+          "confidence": "high",
+          "evidence": "Wrote on William Blake, lectured on the ethics of science, published on the mathematics of biology, played serious chess, and refused to specialise, arguing specialisation was how scientists surrendered moral claims over their work."
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "Walked into the Auschwitz ash pond containing his own relatives' ashes and said in one unbroken take, 'When people believe that they have absolute knowledge, with no test in reality, this is how they behave.'"
+        },
+        {
+          "category": "clarifying",
+          "skill": "Break down a hard idea so anyone gets it",
+          "confidence": "high",
+          "evidence": "Delivered The Ascent of Man (1973) as a 13-part personal history from prehistoric toolmaking to modern physics, one presenter at the actual sites, usually without notes."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Find the bigger pattern under the noise",
+          "confidence": "medium",
+          "evidence": "Spent the war doing operations research for the British government calculating bombing efficacy, then moved fluently between mathematics, biology, poetry and ethics for the rest of his life."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Oliver Sacks",
+      "dominantCategories": ["clarifying", "creating", "nurturing"],
+      "playSkills": [
+        {
+          "category": "creating",
+          "skill": "Fill a blank page with something real",
+          "confidence": "high",
+          "evidence": "Wrote The Man Who Mistook His Wife for a Hat (1985) as case portraits rather than diagnoses, refusing to reduce people to symptoms; the book was adapted into a Michael Nyman opera in 1986."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Write a \"how it actually works\" explainer",
+          "confidence": "high",
+          "evidence": "Documented the temporary returns of post-encephalitic patients on levodopa in Awakenings (1973), keeping notes on each patient in thick hand-bound casebooks for the rest of his career."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "high",
+          "evidence": "His February 2015 NYT op-ed announcing his terminal ocular melanoma was itself a piece of clinical writing about himself, thanking his friends and readers and then writing final essays until his August 2015 death."
+        },
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "medium",
+          "evidence": "Wrote about his patients the way a novelist writes about characters because he thought the clinic was cheating them otherwise, producing portraits with personal voice embedded."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Julia Child",
+      "dominantCategories": ["clarifying", "expressing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "clarifying",
+          "skill": "Write a \"how it actually works\" explainer",
+          "confidence": "high",
+          "evidence": "Mastering the Art of French Cooking (1961) ran to 726 pages, deliberately over-detailed; her test was whether an American home cook with no French training could replicate a recipe in a normal kitchen."
+        },
+        {
+          "category": "expressing",
+          "skill": "Perform, present, or hit record",
+          "confidence": "high",
+          "evidence": "The French Chef was broadcast live and unedited from 1963; when she dropped things or burned things the tape kept rolling, and the mistakes were the argument that cooking was recoverable."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Give patient, useful feedback",
+          "confidence": "high",
+          "evidence": "She treated fear as the enemy, not the roux, explicitly positioning the show so nobody watching needed to be perfect."
+        },
+        {
+          "category": "influencing",
+          "skill": "Move someone from stuck to action",
+          "confidence": "medium",
+          "evidence": "The aesthetic of visible recovery from kitchen mistakes converted home viewers into people who would actually try the recipes, which was the stated point of the book and the show."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Isaiah Berlin",
+      "dominantCategories": ["synthesizing", "clarifying", "expressing"],
+      "playSkills": [
+        {
+          "category": "synthesizing",
+          "skill": "Build a framework that holds it all",
+          "confidence": "high",
+          "evidence": "In his 1958 Oxford inaugural Two Concepts of Liberty he drew the negative/positive liberty distinction that has since structured most English-language writing on freedom."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Find the bigger pattern under the noise",
+          "confidence": "high",
+          "evidence": "In The Hedgehog and the Fox he used an Archilochus fragment to divide thinkers into hedgehogs and foxes, a frame that has travelled into management, forecasting and literary criticism."
+        },
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "high",
+          "evidence": "Most of what bears his name was dictated in rapid unpunctuated speech at roughly 200 words a minute to a secretary and lightly edited; the torrent of asides and proper nouns is the residue of the dictating voice."
+        },
+        {
+          "category": "connecting",
+          "skill": "Facilitate a hard conversation",
+          "confidence": "medium",
+          "evidence": "His all-night meeting with Akhmatova at Fountain House in November 1945 was treated by both participants as one of the formative conversations of their intellectual lives."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "building",
+          "skill": "Ship a rough v1",
+          "evidence": "Published comparatively little for a major 20th-century intellectual; Maurice Bowra noted Berlin 'thinks and says a great deal' but wrote little, and he was an author by capture."
+        }
+      ]
+    },
+    {
+      "name": "Lynn Margulis",
+      "dominantCategories": ["synthesizing", "analyzing", "creating"],
+      "playSkills": [
+        {
+          "category": "creating",
+          "skill": "Follow a wild hunch and see where it goes",
+          "confidence": "high",
+          "evidence": "In 1966 she wrote 'On the Origin of Mitosing Cells' arguing organelles were originally free-living bacteria; roughly fifteen journals rejected it before the Journal of Theoretical Biology accepted it in 1967."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Connect dots across two worlds",
+          "confidence": "high",
+          "evidence": "Serial endosymbiosis merged microbiology and evolutionary biology; twelve years after publication the genetic evidence arrived and proved her right, shifting an unorthodoxy into orthodoxy."
+        },
+        {
+          "category": "analyzing",
+          "skill": "Spot the thing everyone else missed",
+          "confidence": "high",
+          "evidence": "Treated the consensus as the first thing to test, a pattern Dawkins acknowledged in 1995 as 'sheer courage and stamina in sticking by the endosymbiosis theory.'"
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "medium",
+          "evidence": "Extended her heterodoxy in her last years to skepticism about aspects of the modern synthesis, HIV/AIDS and 9/11, even at cost to her standing, treating the consensus as the first thing to test."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "E.O. Wilson",
+      "dominantCategories": ["analyzing", "synthesizing", "expressing"],
+      "playSkills": [
+        {
+          "category": "analyzing",
+          "skill": "Find the pattern in messy data",
+          "confidence": "high",
+          "evidence": "At age 18 a wartime shortage of insect pins pushed him from flies to ants; one of his first published reports was on the arrival of the invasive fire ant near Mobile, Alabama."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Build a framework that holds it all",
+          "confidence": "high",
+          "evidence": "Sociobiology: The New Synthesis (1975) tried to describe all social behaviour in animals, including humans, in evolutionary terms, synthesising across scales from ant colonies to human societies."
+        },
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "high",
+          "evidence": "Won the Pulitzer Prize for General Nonfiction twice, including for the 732-page technical encyclopedia The Ants (1991), because the prose was strong enough to reach a general reader."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Design the game before playing it",
+          "confidence": "medium",
+          "evidence": "Proposed Half-Earth as a forcing frame rather than a policy, setting aside 50 per cent of the planet's surface for other species to make anything short of it feel like compromise."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "connecting",
+          "skill": "Facilitate a hard conversation",
+          "evidence": "At the 1978 AAAS meeting protesters poured ice water over his head; his response was to dry off and finish the talk rather than engage in dialogue, and the ice water clarified what was at stake."
+        }
+      ]
+    },
+    {
+      "name": "Joseph Campbell",
+      "dominantCategories": ["synthesizing", "clarifying", "expressing"],
+      "playSkills": [
+        {
+          "category": "synthesizing",
+          "skill": "Find the bigger pattern under the noise",
+          "confidence": "high",
+          "evidence": "The Hero with a Thousand Faces (1949) proposed the monomyth, a single recurring hero's journey pattern underlying myths from all cultures, developed teaching undergraduates at Sarah Lawrence."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Mentor someone earlier on the path",
+          "confidence": "high",
+          "evidence": "Stayed at Sarah Lawrence from 1934 to 1972 and said teaching the same material to different cohorts of 20-year-olds every year kept it honest, because they noticed anything he had stopped believing."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Turn jargon into plain words",
+          "confidence": "medium",
+          "evidence": "'Follow your bliss' came from the Sanskrit sat-chit-ananda; late in life he said he sometimes wished he had said 'follow your blisters' to correct the misread toward hedonism."
+        },
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "medium",
+          "evidence": "The Power of Myth interviews with Bill Moyers, recorded at Skywalker Ranch in 1985-86, found an audience after his death that he had never had in his lifetime because Moyers forced him into first person."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Susan Sontag",
+      "dominantCategories": ["synthesizing", "expressing", "analyzing"],
+      "playSkills": [
+        {
+          "category": "synthesizing",
+          "skill": "Make meaning out of a mess",
+          "confidence": "high",
+          "evidence": "Notes on 'Camp' (1964) took an unnamed sensibility from gay subcultures and gave it 58 numbered notes of critical treatment, reframing what a serious critic was allowed to take seriously."
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "Wrote Illness as Metaphor (1978) from inside breast cancer treatment, arguing that metaphors of battle and invasion damaged patients by loading illness with shame."
+        },
+        {
+          "category": "expressing",
+          "skill": "Perform, present, or hit record",
+          "confidence": "high",
+          "evidence": "In July-August 1993 she directed Waiting for Godot in besieged Sarajevo by candlelight, with cast walking through sniper fire, saying she had gone to be useful inside the siege not to document it."
+        },
+        {
+          "category": "analyzing",
+          "skill": "Diagnose why something is not working",
+          "confidence": "medium",
+          "evidence": "In Regarding the Pain of Others (2003) she publicly revised On Photography's worry about numbing, arguing the problem was not saturation but the privacy of the viewer, and treated the revision as a professional obligation."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Claude Lévi-Strauss",
+      "dominantCategories": ["synthesizing", "analyzing"],
+      "playSkills": [
+        {
+          "category": "synthesizing",
+          "skill": "Build a framework that holds it all",
+          "confidence": "high",
+          "evidence": "Between 1964 and 1971 Mythologiques traced a single myth-complex from the Amazon through Central America to the Arctic, treating hundreds of distinct stories as variations on a transformation grid."
+        },
+        {
+          "category": "analyzing",
+          "skill": "Find the pattern in messy data",
+          "confidence": "high",
+          "evidence": "His structural method assumed what mattered about a myth was the structural relations between its elements, not its content, letting him code Nambikwara villages and Parisian kinship charts as the same kind of sentence."
+        },
+        {
+          "category": "creating",
+          "skill": "Remix two things into something new",
+          "confidence": "medium",
+          "evidence": "Tristes Tropiques (1955) was simultaneously travel book, memoir, philosophical essay and ethnography; the Goncourt committee issued a regret that they could not honour it because it was not fiction."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Find the bigger pattern under the noise",
+          "confidence": "medium",
+          "evidence": "Conducted 1935-39 fieldwork among the Guaycuru, Bororo, Nambikwara and Tupi-Kawahib, using the raw material to argue for universal structures across otherwise incomparable peoples."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Svante Pääbo",
+      "dominantCategories": ["analyzing", "creating", "synthesizing"],
+      "playSkills": [
+        {
+          "category": "creating",
+          "skill": "Follow a wild hunch and see where it goes",
+          "confidence": "high",
+          "evidence": "In 1984 as a graduate student he extracted DNA from a 2,400-year-old Egyptian mummy in secret at night because the project was not officially sanctioned; the 2009 Kistler Prize traced his career back to that unauthorised experiment."
+        },
+        {
+          "category": "analyzing",
+          "skill": "Investigate a weird anomaly",
+          "confidence": "high",
+          "evidence": "In March 2010 analysed a single finger bone from Denisova Cave and found a genome too divergent to be Neanderthal or modern human, discovering a previously unknown population of archaic humans."
+        },
+        {
+          "category": "analyzing",
+          "skill": "Diagnose why something is not working",
+          "confidence": "high",
+          "evidence": "His three-decade technical obsession was contamination; his lab pioneered clean room protocols, multiple extraction controls and statistical methods for distinguishing ancient from contaminating sequences."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Connect dots across two worlds",
+          "confidence": "high",
+          "evidence": "The May 2010 Neanderthal draft showed 1-4 per cent of non-African modern human DNA was Neanderthal, meaning Homo sapiens and Neanderthals had interbred, rewriting standard accounts of human origins inside a month."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jane Jacobs",
+      "dominantCategories": ["synthesizing", "influencing", "connecting"],
+      "playSkills": [
+        {
+          "category": "synthesizing",
+          "skill": "Find the bigger pattern under the noise",
+          "confidence": "high",
+          "evidence": "The Death and Life of Great American Cities (1961) named the specific phenomena 'eyes on the street,' 'mixed primary uses' and 'sidewalk ballet' that kept a neighbourhood alive, from observations on her own Greenwich Village block."
+        },
+        {
+          "category": "influencing",
+          "skill": "Rally a group behind an idea",
+          "confidence": "high",
+          "evidence": "From 1962 to 1968 she chaired the Joint Committee to Stop the Lower Manhattan Expressway, organising petitions, hearings and press campaigns until Robert Moses's ten-lane highway was shelved in 1969."
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "Wrote The Death and Life without planning credentials and attacked the entire mid-century urban renewal consensus; Lewis Mumford reviewed it savagely and it is still the standard text in its field."
+        },
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "medium",
+          "evidence": "After moving to Toronto in 1971 she immediately helped organise the successful fight against the Spadina Expressway, repeating her Manhattan method in a new city."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Ella Baker",
+      "dominantCategories": ["nurturing", "connecting", "strategizing"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "high",
+          "evidence": "As NAACP director of branches from 1943 she travelled the Jim Crow South by bus and train, showing up in small towns, listening for who was already trusted locally, and building the branch around that person."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Watch someone grow without taking credit",
+          "confidence": "high",
+          "evidence": "Her formulation 'strong people don't need strong leaders' was an explicit argument against charismatic leadership; she built group-centred structures rather than movements around one speaker."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Design the game before playing it",
+          "confidence": "high",
+          "evidence": "At the Easter 1960 Shaw University meeting she specifically warned the sit-in student leaders against joining SCLC as a youth wing, and SNCC was founded at that meeting as a result."
+        },
+        {
+          "category": "connecting",
+          "skill": "Facilitate a hard conversation",
+          "confidence": "medium",
+          "evidence": "Her method required spending longer in one place developing local people rather than bringing in celebrity organisers from outside, a deliberate alternative to King's model."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "expressing",
+          "skill": "Perform, present, or hit record",
+          "evidence": "She explicitly rejected the charismatic public-speaker model of King and SCLC, considering it fragile, and built her career in rooms without microphones."
+        }
+      ]
+    },
+    {
+      "name": "Dorothy Height",
+      "dominantCategories": ["connecting", "nurturing", "influencing"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "high",
+          "evidence": "Ran the National Council of Negro Women for 32 years from 1958 to 1990, building it into the primary organisational home for Black women in the civil rights and women's rights movements."
+        },
+        {
+          "category": "connecting",
+          "skill": "Facilitate a hard conversation",
+          "confidence": "high",
+          "evidence": "Created 'Wednesdays in Mississippi' with Polly Spiegel Cowan, flying interracial teams of women into Mississippi to pressure segregated institutions through living-room conversations rather than protest."
+        },
+        {
+          "category": "organizing",
+          "skill": "Map how the work actually flows",
+          "confidence": "medium",
+          "evidence": "Provided the institutional infrastructure behind many initiatives credited to male-led organisations, including helping plan logistics for the 1963 March on Washington."
+        },
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "medium",
+          "evidence": "Became publicly identifiable by her wide-brimmed hats, made by Black milliner Vanilla Beane; she said a hat made it harder to be overlooked in rooms where Black women were routinely dismissed."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Bayard Rustin",
+      "dominantCategories": ["strategizing", "organizing", "connecting"],
+      "playSkills": [
+        {
+          "category": "organizing",
+          "skill": "Turn a mess into a system",
+          "confidence": "high",
+          "evidence": "Ran the operational plan for the 1963 March on Washington in roughly eight weeks: drilling marshals, assigning bus captains, scheduling speakers, arranging water, toilets and sound for about 250,000 people."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Design the game before playing it",
+          "confidence": "high",
+          "evidence": "In 1956 in Montgomery he argued King into removing the pistol from his table and sending the armed guards away, reframing the bus boycott as nonviolent action rather than defensive."
+        },
+        {
+          "category": "influencing",
+          "skill": "Change someone's mind",
+          "confidence": "high",
+          "evidence": "King, Rustin recorded, had 'almost nonexistent' familiarity with Gandhian nonviolence at the start; Rustin imported Quaker, Gandhian and pacifist methods directly from his 1948 trip to India."
+        },
+        {
+          "category": "organizing",
+          "skill": "Remove a friction point permanently",
+          "confidence": "medium",
+          "evidence": "After his 1953 Pasadena arrest and 1960 Adam Clayton Powell threat he was pushed out of SCLC to protect King and kept organising from harder-to-see roles, absorbing visibility cost as operational cost."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Fannie Lou Hamer",
+      "dominantCategories": ["expressing", "connecting", "nurturing"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "At the 1964 Democratic Convention in Atlantic City she testified 'I question America' on behalf of the Mississippi Freedom Democratic Party; Johnson tried to bump her off live TV and the networks aired her testimony in full that evening instead."
+        },
+        {
+          "category": "expressing",
+          "skill": "Tell a story that lands",
+          "confidence": "high",
+          "evidence": "Her phrase 'sick and tired of being sick and tired' and her account of the Winona beating and the 'Mississippi appendectomy' became the language of the voting rights movement in her voice."
+        },
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "high",
+          "evidence": "In 1969 founded the Freedom Farm Cooperative in the Mississippi Delta, running a 'pig bank' that loaned pregnant sows to poor Black families, concluding voting rights alone were not enough if families could not eat."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "medium",
+          "evidence": "After the June 1963 Winona jail beating that caused permanent kidney damage she spent more than a month recovering and went back to organising."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Grace Lee Boggs",
+      "dominantCategories": ["synthesizing", "connecting", "nurturing"],
+      "playSkills": [
+        {
+          "category": "synthesizing",
+          "skill": "Make meaning out of a mess",
+          "confidence": "high",
+          "evidence": "Her politics evolved for 70 years from Trotskyism through Black Power to 'revolution as evolution,' kept rebuilding the frame from the same Detroit house, and published The Next American Revolution at 95."
+        },
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "high",
+          "evidence": "In 1992 at age 77 she founded Detroit Summer, a multiracial intergenerational youth programme mobilising young people to paint murals, plant urban gardens and rehabilitate abandoned buildings."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Mentor someone earlier on the path",
+          "confidence": "medium",
+          "evidence": "Kept doing interviews and hosting Sunday study sessions at her house almost to her death at 100, writing The Next American Revolution in longhand at 95."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Connect dots across two worlds",
+          "confidence": "medium",
+          "evidence": "Remained in the same Detroit house for 62 years, saying repeatedly that you could not organise a place you did not live in, fusing Chinese-American, Black, philosophical and local civic worlds."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Saul Alinsky",
+      "dominantCategories": ["connecting", "influencing", "strategizing"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "high",
+          "evidence": "Starting 1938 he organised Back of the Yards by bringing together Polish, Lithuanian, Slovak, Mexican and African American residents through their parishes and unions, strong enough by 1946 to back the packinghouse strike."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Design the game before playing it",
+          "confidence": "high",
+          "evidence": "Rules for Radicals (1971) codified the method: 'power is not only what you have but what the enemy thinks you have' and 'never go outside the expertise of your people.'"
+        },
+        {
+          "category": "influencing",
+          "skill": "Make a pitch that moves people",
+          "confidence": "high",
+          "evidence": "The threatened fart-in at the Rochester Philharmonic, combined with a disrupted 1967 Kodak stockholders' meeting, pushed Kodak into recognising FIGHT and committing to a Black employment programme."
+        },
+        {
+          "category": "organizing",
+          "skill": "Build a workflow that runs itself",
+          "confidence": "high",
+          "evidence": "Founded the Industrial Areas Foundation in 1940 as the template for broad-based, congregation-anchored community organising, still visible in COPS, East Brooklyn Congregations and many federations today."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "evidence": "His method was to be a 'visible nuisance' first, deliberately abrasive and confrontational rather than holding emotional space."
+        }
+      ]
+    },
+    {
+      "name": "Václav Havel",
+      "dominantCategories": ["expressing", "synthesizing", "influencing"],
+      "playSkills": [
+        {
+          "category": "synthesizing",
+          "skill": "Make meaning out of a mess",
+          "confidence": "high",
+          "evidence": "The Power of the Powerless (1978) described late-communist post-totalitarianism as 'living within a lie,' with the greengrocer's Workers-of-the-World sign as evidence that the regime's power depended on performance."
+        },
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "high",
+          "evidence": "During his longest prison term (1979-1983) he wrote weekly philosophical letters to Olga under strict censorship rules forbidding politics, fellow prisoners and humour, later collected as Letters to Olga."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Connect dots across two worlds",
+          "confidence": "high",
+          "evidence": "Treated the 1976 trial of the Plastic People of the Universe as a constitutional crisis, co-drafting Charter 77 and arguing the right to make rock music was the same right as political dissent."
+        },
+        {
+          "category": "influencing",
+          "skill": "Move someone from stuck to action",
+          "confidence": "medium",
+          "evidence": "On 29 December 1989 he was elected President of Czechoslovakia by unanimous vote of the Federal Assembly, having been released from his last prison term earlier the same year."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Harriet Tubman",
+      "dominantCategories": ["strategizing", "connecting", "nurturing"],
+      "playSkills": [
+        {
+          "category": "strategizing",
+          "skill": "Call the smart play under pressure",
+          "confidence": "high",
+          "evidence": "Across roughly 13 trips back into slaveholding territory between 1851 and 1862 she used forged passes, safe houses, code songs and a concealed pistol to prevent any rescued person from turning back, and there is no record of her ever losing a passenger."
+        },
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "high",
+          "evidence": "On 2 June 1863 she helped lead the Combahee Ferry raid, guiding Colonel Montgomery's Second South Carolina Volunteers up the river and liberating more than 700 people in a single day, becoming the first woman in US history to lead an armed military operation."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "high",
+          "evidence": "In 1859 she bought land in Auburn, brought her ageing parents to live there, founded the Harriet Tubman Home for the Aged, and eventually moved into the Home herself as a resident in her final years."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Map out the next 10 moves",
+          "confidence": "medium",
+          "evidence": "Her rescue routes were partly shaped by vivid religious visions following a teenage head injury; she treated the visions as guidance from God and built logistics around them."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Frederick Douglass",
+      "dominantCategories": ["expressing", "influencing", "synthesizing"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Tell a story that lands",
+          "confidence": "high",
+          "evidence": "On 5 July 1852 he delivered 'What to the Slave is the Fourth of July?' at Corinthian Hall in Rochester, invited as a patriotic address, and used it instead to call the holiday a sham from the standpoint of the enslaved."
+        },
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "high",
+          "evidence": "Published the 1845 Narrative naming his former enslavers because Northern audiences had begun to disbelieve that a man who spoke so well could have been enslaved, then fled to Britain under threat of recapture."
+        },
+        {
+          "category": "influencing",
+          "skill": "Change someone's mind",
+          "confidence": "high",
+          "evidence": "By the early 1850s he broke publicly with Garrison's 'covenant with death' reading of the Constitution, arguing it was actually an anti-slavery document, treating the break as necessary and unavoidable."
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "medium",
+          "evidence": "When his 1884 interracial marriage to Helen Pitts drew public fury including from his own children, his answer was that his first marriage honoured his mother's race and the second honoured his father's, and he was done apologising."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jane Addams",
+      "dominantCategories": ["connecting", "organizing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Host a gathering",
+          "confidence": "high",
+          "evidence": "In 1889 she and Ellen Gates Starr moved into a semi-derelict mansion and opened it to immigrant families as Hull House, growing to a 13-building complex with a peak of about 2,000 visitors a week."
+        },
+        {
+          "category": "organizing",
+          "skill": "Remove a friction point permanently",
+          "confidence": "high",
+          "evidence": "As the first woman sanitary inspector of Chicago's Nineteenth Ward in 1894 she reported more than 1,000 health code violations inside a single year, using her own data to link municipal services to mortality."
+        },
+        {
+          "category": "connecting",
+          "skill": "Facilitate a hard conversation",
+          "confidence": "high",
+          "evidence": "Chaired the 1915 International Congress of Women at The Hague with almost 1,200 participants from both warring and neutral countries in the middle of the First World War."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Write a \"here is how it all fits\" doc",
+          "confidence": "medium",
+          "evidence": "Twenty Years at Hull-House (1910) was both a practical account of settlement work and an argument for a new kind of American civic life, arguing charity from a distance did not work."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Dorothy Day",
+      "dominantCategories": ["connecting", "expressing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "high",
+          "evidence": "The Catholic Worker Houses of Hospitality offered food and shelter to any homeless person who came to the door without intake forms, conditions or proselytising; by 1941 there were more than 30 communities."
+        },
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "high",
+          "evidence": "On 1 May 1933 she and Peter Maurin brought out the first Catholic Worker newspaper on Union Square and sold it for one cent, continuously published at one cent per copy ever since, much of it written by hand by Day herself."
+        },
+        {
+          "category": "connecting",
+          "skill": "Build a group from nothing",
+          "confidence": "high",
+          "evidence": "Insisted on voluntary poverty as a rule for Catholic Worker staff, who lived in the Houses alongside the people they were serving rather than going home to separate apartments."
+        },
+        {
+          "category": "influencing",
+          "skill": "Sell something you actually believe in",
+          "confidence": "medium",
+          "evidence": "Arrested in 1917 for suffrage picketing, in the 1950s for refusing mandatory civil defence drills, and in 1973 at age 75 on Cesar Chavez's UFW picket lines; the consistency across 56 years is the actual politics."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Studs Terkel",
+      "dominantCategories": ["connecting", "expressing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "nurturing",
+          "skill": "Give patient, useful feedback",
+          "confidence": "high",
+          "evidence": "For 45 years on WFMT he treated every guest the same way, famous or not, and the mix of a steelworker after a novelist after a concert pianist was the format itself."
+        },
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "high",
+          "evidence": "Hard Times (1970) collected interviews with bankers, dustbowl migrants, unemployed autoworkers and bootleggers, printed with minimal editorial commentary and reset the oral history genre for 40 years."
+        },
+        {
+          "category": "clarifying",
+          "skill": "Make a confusing thing feel obvious",
+          "confidence": "medium",
+          "evidence": "Working (1974) argued in the introduction that work is 'about a search for daily meaning as well as daily bread,' with the interviews as his evidence; it was adapted into a Broadway musical in 1978."
+        },
+        {
+          "category": "connecting",
+          "skill": "Facilitate a hard conversation",
+          "confidence": "medium",
+          "evidence": "The Good War (1984) let former soldiers, nurses, Japanese internment camp detainees and war workers contradict each other at length, and won the 1985 Pulitzer Prize for General Nonfiction."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jimmy Carter",
+      "dominantCategories": ["nurturing", "influencing", "connecting"],
+      "playSkills": [
+        {
+          "category": "influencing",
+          "skill": "Move someone from stuck to action",
+          "confidence": "high",
+          "evidence": "The Carter Center took Guinea worm disease from about 3.5 million annual cases in 1986 to 14 by 2023, the closest humanity has ever come to eradicating a parasitic disease."
+        },
+        {
+          "category": "organizing",
+          "skill": "Build a workflow that runs itself",
+          "confidence": "high",
+          "evidence": "Between 1989 and the early 2020s the Carter Center observed 115 elections in roughly 40 countries, publishing frank post-election reports including on US elections, with a consistent observation methodology."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Watch someone grow without taking credit",
+          "confidence": "high",
+          "evidence": "From 1984 onward he and Rosalynn spent one week each year on Habitat for Humanity construction sites, still swinging a hammer in his 90s, the photos more effective as recruitment than any argument about need."
+        },
+        {
+          "category": "connecting",
+          "skill": "Host a gathering",
+          "confidence": "medium",
+          "evidence": "For decades he taught Sunday school at Maranatha Baptist Church in Plains, Georgia, most weeks he was home, with tourists driving through the night to hear a former president teach the Book of Ruth."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Desmond Tutu",
+      "dominantCategories": ["connecting", "expressing", "nurturing"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Facilitate a hard conversation",
+          "confidence": "high",
+          "evidence": "As chair of the Truth and Reconciliation Commission from 1996 he insisted victims and perpetrators sit in the same room, with amnesty conditional on full disclosure, visibly weeping on camera in the opening days."
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "In May 1976 he wrote an open letter to Prime Minister Vorster warning that apartheid would trigger violence; six weeks later the Soweto uprising began and killed at least 660 people over ten months."
+        },
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "high",
+          "evidence": "Accepting the 1984 Nobel he diverted the audience toward South African mothers waiting at railway stations for miner husbands: 'This award is for you,' one of the clearest twentieth-century uses of an international podium to redirect attention."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Hold space for a hard moment",
+          "confidence": "medium",
+          "evidence": "In August 1980 he organised twenty church leaders to meet Prime Minister Botha and seven ministers; the meeting failed and he recorded the failure as a data point, not a humiliation, and kept meeting state officials for another decade."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Nawal El Saadawi",
+      "dominantCategories": ["expressing", "influencing", "creating"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "high",
+          "evidence": "In Qanatir Women's Prison in 1981, denied pen and paper, she used an eyebrow pencil and tattered toilet paper to record what became Memoirs from the Women's Prison."
+        },
+        {
+          "category": "creating",
+          "skill": "Follow a wild hunch and see where it goes",
+          "confidence": "high",
+          "evidence": "While still imprisoned she drafted the charter for the Arab Women's Solidarity Association, founding it formally in 1982 as 'historical, socialist, and feminist.'"
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "Her 1972 book Women and Sex confronted female circumcision and domestic violence in clinical first-person prose; three positions, one book, one year, and she was dismissed from all three."
+        },
+        {
+          "category": "influencing",
+          "skill": "Rally a group behind an idea",
+          "confidence": "medium",
+          "evidence": "Published more than fifty books on the condition of Arab women, repeatedly moving a specific rural patient's specific injury into a public argument as the spine of each book."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Toni Morrison",
+      "dominantCategories": ["expressing", "nurturing", "synthesizing"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "high",
+          "evidence": "Wrote The Bluest Eye (1970) by getting up every morning at 4am while raising two sons on her own and holding a full-time editorial job at Random House, publishing at age 39."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Mentor someone earlier on the path",
+          "confidence": "high",
+          "evidence": "As senior editor at Random House from the late 1960s through 1983 she commissioned and edited Muhammad Ali, Angela Davis, Toni Cade Bambara, Gayl Jones and The Black Book (1974), building the Black canon with one hand."
+        },
+        {
+          "category": "nurturing",
+          "skill": "Watch someone grow without taking credit",
+          "confidence": "high",
+          "evidence": "Used her Random House platform to champion Henry Dumas after his death by a New York City transit officer in 1968, keeping him in print, writing introductions and placing stories in anthologies."
+        },
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "medium",
+          "evidence": "Her 1993 Nobel lecture parable of the old blind woman and the bird ended with 'We die. That may be the meaning of life. But we do language. That may be the measure of our lives.'"
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "James Baldwin",
+      "dominantCategories": ["expressing", "synthesizing", "influencing"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "At the 1965 Cambridge Union debate against Buckley on whether the American Dream had been achieved at the expense of the American Negro, he grounded the abstract proposition in a single concrete image, the cost of cheap cotton, and students voted overwhelmingly for him."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Make meaning out of a mess",
+          "confidence": "high",
+          "evidence": "Notes of a Native Son (1955) was a compiled collection of essays he had placed one by one between 1948 and 1955 in Commentary, Partisan Review, Harper's and others, shaping a public voice out of seven years of quiet magazine work."
+        },
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "high",
+          "evidence": "Left New York for Paris on 11 November 1948 at age 24 with $40 and a Rosenwald Fellowship, saying the move saved his life and finally allowed him to finish Go Tell It on the Mountain."
+        },
+        {
+          "category": "influencing",
+          "skill": "Change someone's mind",
+          "confidence": "medium",
+          "evidence": "In May 1963 he gathered a group including Lorraine Hansberry and Harry Belafonte to meet RFK privately in New York; the young civil rights field worker's testimony made Kennedy visibly uncomfortable and the meeting ended badly."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Seamus Heaney",
+      "dominantCategories": ["expressing", "nurturing", "synthesizing"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "high",
+          "evidence": "His 1999 Beowulf translation imported the rhythms of older County Derry farmers from his father's generation into Anglo-Saxon meter, producing a version that sounded overheard in a kitchen and became the standard undergraduate text."
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "After Penguin included him in The Penguin Book of Contemporary British Poetry (1982) without asking, he published An Open Letter in verse: 'My passport's green. No glass of ours was ever raised / To toast The Queen.'"
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Find the bigger pattern under the noise",
+          "confidence": "medium",
+          "evidence": "Described his Troubles-era stance as 'silence-breaking rather than rabble-rousing,' a private constitution he held for four decades across three collections of bog poems and a Nobel prize."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Pick what matters and cut the rest",
+          "confidence": "medium",
+          "evidence": "In 1972 he left his Queen's University Belfast lectureship and moved with his family to Glanmore in Wicklow to write full time, a vocational commitment that produced Field Work (1979)."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "influencing",
+          "skill": "Rally a group behind an idea",
+          "evidence": "He actively refused the rabble-rouser frame even when readers tried to read Requiem for the Croppies as an IRA anthem, insisting on silence-breaking rather than mobilisation."
+        }
+      ]
+    },
+    {
+      "name": "Mahmoud Darwish",
+      "dominantCategories": ["expressing", "synthesizing", "creating"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Perform, present, or hit record",
+          "confidence": "high",
+          "evidence": "On 1 May 1965 in Nazareth he read Identity Card aloud, opening 'Write down: I am an Arab'; within days it had spread across Israel and the Arab world and he was placed under house arrest specifically for reciting it."
+        },
+        {
+          "category": "creating",
+          "skill": "Remix two things into something new",
+          "confidence": "high",
+          "evidence": "Wrote the 1988 Palestinian Declaration of Independence in literary Arabic with the cadences of classical poetry rather than the flat register of most independence declarations, translated into over thirty languages."
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "In 1993 he resigned from the PLO Executive Committee over Oslo, saying 'all I saw in the agreement was an Israeli solution to Israeli problems,' freeing him to publish criticism no other senior cultural figure would."
+        },
+        {
+          "category": "synthesizing",
+          "skill": "Make meaning out of a mess",
+          "confidence": "medium",
+          "evidence": "In 1996 used a four-day permit to walk through what remained of al-Birwa and wrote Memory for Forgetfulness, treating exile as a repeating act rather than a single event."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Audre Lorde",
+      "dominantCategories": ["expressing", "influencing", "building"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "After a 1978 mastectomy she refused the prosthesis her surgeon pressed on her and published The Cancer Journals (1980), arguing the cosmetic performance of recovery was a form of silencing."
+        },
+        {
+          "category": "influencing",
+          "skill": "Change someone's mind",
+          "confidence": "high",
+          "evidence": "At a 1979 NYU feminist conference she delivered 'The Master's Tools Will Never Dismantle the Master's House,' criticising the panel organisers for including only two women of color, to a room of about two hundred people who had not expected to be addressed."
+        },
+        {
+          "category": "building",
+          "skill": "Build the thing you keep talking about",
+          "confidence": "high",
+          "evidence": "In 1980 she co-founded Kitchen Table: Women of Color Press with Barbara Smith and Cherrie Moraga, the first US publisher dedicated to work by women of color, run out of Smith's Brooklyn apartment."
+        },
+        {
+          "category": "expressing",
+          "skill": "Write something in your actual voice",
+          "confidence": "medium",
+          "evidence": "Her six-word manifesto 'Black, lesbian, feminist, socialist, mother, warrior, poet' was used in print, introductions, book jackets and lectures to answer interviewers before they narrowed her."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Nina Simone",
+      "dominantCategories": ["expressing", "creating", "influencing"],
+      "playSkills": [
+        {
+          "category": "creating",
+          "skill": "Make something that did not exist yesterday",
+          "confidence": "high",
+          "evidence": "Wrote Mississippi Goddam in less than an hour after the 16th Street Baptist Church bombing on 15 September 1963, performed it the next week, and by her own account the song ended her commercial career and began her political one."
+        },
+        {
+          "category": "expressing",
+          "skill": "Perform, present, or hit record",
+          "confidence": "high",
+          "evidence": "Her 1976 Montreux set, filmed in full, included arriving late, berating the audience, forgetting lyrics, then pulling the room through Janis Ian's Stars and weeping at the piano; now a primary text on the risks of letting a room in."
+        },
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "medium",
+          "evidence": "In September 1970 she left the US entirely over a tax warrant tied to Vietnam War tax withholding, relocating to Barbados, Liberia, Switzerland, France and the Netherlands; not a pause, a full relocation."
+        },
+        {
+          "category": "influencing",
+          "skill": "Rally a group behind an idea",
+          "confidence": "medium",
+          "evidence": "Treated her 1950 Curtis rejection as a racial wound and built a protest career around it that ended with Curtis awarding an honorary degree two days before her death in 2003."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Mercedes Sosa",
+      "dominantCategories": ["expressing", "connecting"],
+      "playSkills": [
+        {
+          "category": "expressing",
+          "skill": "Perform, present, or hit record",
+          "confidence": "high",
+          "evidence": "During a 1979 La Plata concert under the Argentine junta she was searched and arrested on stage mid-performance along with every member of the audience, one of the few documented cases of an entire audience being detained with a performer."
+        },
+        {
+          "category": "connecting",
+          "skill": "Be the glue in a scattered team",
+          "confidence": "high",
+          "evidence": "At her February 1982 Teatro Opera return from exile she deliberately invited younger Argentine folk colleagues onto her stage, treating the return not as a solo victory but as an introduction of a generation."
+        },
+        {
+          "category": "expressing",
+          "skill": "Turn a message into a moment",
+          "confidence": "high",
+          "evidence": "Her slower, heavier 1971 recording of Gracias a la Vida became the definitive version and one of the most covered Spanish-language songs of the twentieth century; she performed it at nearly every concert for 38 years."
+        },
+        {
+          "category": "connecting",
+          "skill": "Host a gathering",
+          "confidence": "medium",
+          "evidence": "She said 'an artist isn't political in the party political sense, they have a constituency, which is their public. It is the poetry that matters most of all,' treating her audience as the constituency across Sistine Chapel and Carnegie Hall in one decade."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Fela Kuti",
+      "dominantCategories": ["creating", "expressing", "building"],
+      "playSkills": [
+        {
+          "category": "creating",
+          "skill": "Make something that did not exist yesterday",
+          "confidence": "high",
+          "evidence": "Invented Afrobeat in the late 1960s by fusing jazz, funk, highlife and Yoruba percussion, and ran the Shrine venue in Lagos as the main live home of the sound."
+        },
+        {
+          "category": "building",
+          "skill": "Build the thing you keep talking about",
+          "confidence": "high",
+          "evidence": "Founded Kalakuta Republic in 1970 in Surulere and declared it formally independent of the Nigerian state, with its own clinic, school, generator, recording studio and fence; not a metaphor."
+        },
+        {
+          "category": "expressing",
+          "skill": "Say the thing people are thinking but will not",
+          "confidence": "high",
+          "evidence": "Released Zombie in 1976 mocking the Nigerian army; after 1,000 soldiers raided Kalakuta in 1977 and his mother Funmilayo Ransome-Kuti died of her injuries, he delivered her coffin to the Dodan Barracks and recorded Coffin for Head of State."
+        },
+        {
+          "category": "strategizing",
+          "skill": "Design the game before playing it",
+          "confidence": "high",
+          "evidence": "Chose a two-track, 15-30 minute per side album format deliberately to make the music unplayable on three-minute radio slots, forcing distribution into live performance at the Shrine and album sales he could control."
+        }
+      ],
+      "antiTags": [
+        {
+          "category": "nurturing",
+          "skill": "Give patient, useful feedback",
+          "evidence": "Married 27 women in a single 1978 ceremony and divorced all twelve remaining wives in 1986 saying 'marriage brings jealousy and selfishness'; his relational mode was grand statement, not patient care."
+        }
+      ]
+    }
+  ]
+}

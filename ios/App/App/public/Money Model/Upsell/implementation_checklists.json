@@ -1,0 +1,508 @@
+{
+  "classic_upsell": {
+    "name": "Classic Upsell",
+    "summary": "The simplest upsell—offer something free or heavily discounted just for buying. Target 80%+ take rate when done seamlessly.",
+    "target_metrics": {
+      "take_rate": "80%+ when optimized",
+      "aov_increase": "15-40%",
+      "implementation_time": "1-2 days"
+    },
+    "hormozi_principle": "You can't have X without Y. Make it feel like they're incomplete without the upsell.",
+    "implementation_checklist": [
+      {
+        "phase": "Offer Selection",
+        "tasks": [
+          {
+            "task": "Identify complementary product/service",
+            "description": "Choose something that enhances what they just bought",
+            "principle": "The upsell should make the original purchase MORE valuable",
+            "examples": ["Course → Implementation templates", "Product → Extended warranty", "Service → Priority support"]
+          },
+          {
+            "task": "Calculate max discount possible",
+            "description": "Determine how much you can discount while staying profitable",
+            "formula": "Break-even = (Upsell Cost) / (Original AOV increase × Take Rate)",
+            "recommendation": "Offer 70-90% off or FREE to maximize take rate"
+          },
+          {
+            "task": "Frame as 'just for buying'",
+            "description": "Position upsell as exclusive reward for customers",
+            "language": ["Only for customers", "You don't want this too?", "Special one-time offer"]
+          }
+        ]
+      },
+      {
+        "phase": "Seamless Integration",
+        "tasks": [
+          {
+            "task": "Implement one-click acceptance",
+            "description": "Customer should be able to add upsell with single click",
+            "requirement": "Card already on file from main purchase",
+            "best_practice": "No new checkout process, just 'Add to order'"
+          },
+          {
+            "task": "Position at optimal moment",
+            "description": "Show upsell immediately after main purchase commitment",
+            "options": ["Same page after 'Buy Now'", "Order confirmation page", "Thank you page", "Immediately in cart"]
+          },
+          {
+            "task": "Make declining easy (but not obvious)",
+            "description": "Allow skip without friction, but don't highlight it",
+            "example": "Small 'No thanks' link below prominent 'Yes! Add to my order' button"
+          }
+        ]
+      },
+      {
+        "phase": "Upsell Copy",
+        "tasks": [
+          {
+            "task": "Write headline that creates FOMO",
+            "description": "Make them feel they're missing out without it",
+            "templates": [
+              "Wait! You don't want [BONUS] too?",
+              "EXCLUSIVE: Add [PRODUCT] for just $X",
+              "One-time offer for new customers only"
+            ]
+          },
+          {
+            "task": "Show value comparison",
+            "description": "Display normal price vs. special price",
+            "format": "Regular $297 → TODAY ONLY: $47 (84% off)"
+          },
+          {
+            "task": "Add urgency element",
+            "description": "Create reason to act now",
+            "examples": ["This page only", "Disappears in 10 minutes", "Never offered again at this price"]
+          }
+        ]
+      },
+      {
+        "phase": "Testing & Optimization",
+        "tasks": [
+          {
+            "task": "A/B test upsell offers",
+            "description": "Test different products, prices, and positioning"
+          },
+          {
+            "task": "Track take rate obsessively",
+            "description": "Measure: (Upsells Accepted / Main Purchases) × 100",
+            "target": "If under 80%, the offer or presentation needs work"
+          },
+          {
+            "task": "Test front-end AND back-end placement",
+            "description": "Try upsell at different points in customer journey",
+            "front_end": "Immediately at checkout",
+            "back_end": "In follow-up emails after purchase"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Upsell requires too many steps (friction kills conversion)",
+      "Offer isn't compelling enough (needs to be 70%+ off or FREE)",
+      "Wrong timing—too early or too late in journey",
+      "Upsell is unrelated to main purchase",
+      "Making 'No thanks' too prominent"
+    ],
+    "quick_wins": [
+      "Start with FREE bonus product (100% take rate proves the mechanism works)",
+      "Test $1 upsell to validate demand before pricing higher",
+      "Implement order bumps (checkbox upsell) for 30-50% take rate"
+    ]
+  },
+
+  "menu_upsell": {
+    "name": "Menu Upsell (Hormozi's Favorite)",
+    "summary": "The most sophisticated upsell using 4 tactics: Unselling (tell them what they DON'T need), Prescribing (tell them what they DO need), A/B Offer (ask preference), and Card on File (make it easy).",
+    "target_metrics": {
+      "customer_ltv_increase": "2-4x",
+      "trust_indicators": "Higher satisfaction, more testimonials",
+      "prescription_accuracy": "Right product for customer 90%+ of time"
+    },
+    "hormozi_principle": "Prescribe, don't sell. Act like a doctor—diagnose their situation and prescribe the right solution.",
+    "implementation_checklist": [
+      {
+        "phase": "Tactic 1: Unselling",
+        "tasks": [
+          {
+            "task": "Identify what customers DON'T need",
+            "description": "For each customer type, determine which products to tell them to skip",
+            "principle": "Telling someone NOT to buy something builds massive trust",
+            "example": "You don't need our premium package because you're just starting. That's for people who already have X."
+          },
+          {
+            "task": "Create unselling scripts",
+            "description": "Write specific language for what to unsell to whom",
+            "format": "'Based on what you told me, you actually don't need [product] because [reason]. That's designed for [different situation].'"
+          },
+          {
+            "task": "Train team on unselling",
+            "description": "Most salespeople struggle to tell customers NOT to buy",
+            "key": "This builds trust that makes them buy MORE overall"
+          }
+        ]
+      },
+      {
+        "phase": "Tactic 2: Prescribing",
+        "tasks": [
+          {
+            "task": "Build product diagnosis matrix",
+            "description": "Map customer situations to right products",
+            "format": "If customer has [situation A] → Prescribe [product X]. If [situation B] → Prescribe [product Y]"
+          },
+          {
+            "task": "Create discovery questions",
+            "description": "Questions to diagnose which products customer needs",
+            "examples": ["What's your biggest challenge right now?", "Where are you in your journey?", "What have you tried before?"]
+          },
+          {
+            "task": "Write prescription scripts",
+            "description": "How to present the recommendation",
+            "template": "'Based on what you told me about [their situation], I'd recommend [specific product] because [specific reason]. Here's why it's right for you...'"
+          },
+          {
+            "task": "Document prescription logic",
+            "description": "Create decision tree for which product to prescribe when"
+          }
+        ]
+      },
+      {
+        "phase": "Tactic 3: A/B Offer",
+        "tasks": [
+          {
+            "task": "Never ask 'yes or no'",
+            "description": "Always give two options and ask which they prefer",
+            "principle": "Changes the question from 'Do you want this?' to 'Which one do you want?'"
+          },
+          {
+            "task": "Create A/B pairs for each product",
+            "description": "Every product should have a paired alternative",
+            "example": "'Would you prefer the standard package with X, or the premium with X and Y?'"
+          },
+          {
+            "task": "Write A/B offer scripts",
+            "description": "Language for presenting both options",
+            "template": "'We have two options that could work for you. Option A gives you [benefits]. Option B gives you [different benefits]. Which feels more aligned with your goals?'"
+          }
+        ]
+      },
+      {
+        "phase": "Tactic 4: Card on File",
+        "tasks": [
+          {
+            "task": "Implement stored payment method",
+            "description": "Save customer's card for future purchases",
+            "timing": "Capture card during first purchase"
+          },
+          {
+            "task": "Create one-click purchase capability",
+            "description": "Once prescribed, customer can add with single confirmation",
+            "script": "'I'll add that to your account now. You'll see the charge on your next statement.'"
+          },
+          {
+            "task": "Design frictionless checkout flow",
+            "description": "No re-entering payment info, no cart abandonment"
+          }
+        ]
+      },
+      {
+        "phase": "Implementation",
+        "tasks": [
+          {
+            "task": "Train sales team on all 4 tactics",
+            "description": "Role-play scenarios using Unsell → Prescribe → A/B → Card on File flow"
+          },
+          {
+            "task": "Track prescription accuracy",
+            "description": "Monitor: Did prescribed product lead to good customer outcome?",
+            "adjust": "Refine diagnosis matrix based on results"
+          },
+          {
+            "task": "Measure trust indicators",
+            "description": "Track: Testimonials, repeat purchases, referrals from menu upsell customers"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Selling instead of prescribing (pushing products vs. diagnosing needs)",
+      "Not having enough products to prescribe from (need 4+ products)",
+      "Asking 'yes or no' instead of 'A or B'",
+      "Not capturing card for easy future purchases",
+      "Skipping the unselling step (loses trust-building opportunity)"
+    ],
+    "quick_wins": [
+      "Start with just the A/B offer tactic (immediate improvement)",
+      "Add unselling to your next 5 sales calls (watch trust increase)",
+      "Save cards for all customers now to enable future one-click"
+    ]
+  },
+
+  "anchor_upsell": {
+    "name": "Anchor Upsell",
+    "summary": "Present the premium version FIRST at 5-10x the price, wait for the gasp, then 'rescue' them with your main offer—which now feels like a bargain.",
+    "target_metrics": {
+      "aov_increase": "30-100% vs. main offer alone",
+      "premium_take_rate": "5-15% (bonus profit)",
+      "main_offer_conversion": "Higher than without anchor"
+    },
+    "hormozi_principle": "Only change secondary features between anchor and main offer. The core transformation stays the same—premium just does it faster, with more support, or in a better format.",
+    "implementation_checklist": [
+      {
+        "phase": "Premium Tier Creation",
+        "tasks": [
+          {
+            "task": "Define your main offer clearly",
+            "description": "This is what you want most people to buy",
+            "price_point": "Your current or intended price"
+          },
+          {
+            "task": "Create legitimate 5-10x premium",
+            "description": "Premium must be real value, not inflated fake tier",
+            "pricing": "5-10x your main offer price",
+            "example": "Main offer: $2,000 → Premium: $10,000-$20,000"
+          },
+          {
+            "task": "Differentiate on SECONDARY features only",
+            "description": "Same core outcome, different delivery method",
+            "secondary_features": ["Speed (faster results)", "Access (more 1-on-1 time)", "Done-for-you vs. DIY", "Exclusivity (private vs. group)", "Guarantee (stronger)", "Bonuses (more/better)"],
+            "principle": "Never change the PRIMARY outcome—just how they get there"
+          },
+          {
+            "task": "Ensure premium is truly deliverable",
+            "description": "Some people WILL buy it (5-15%)",
+            "requirement": "You must be able to deliver premium if they say yes"
+          }
+        ]
+      },
+      {
+        "phase": "Presentation Flow",
+        "tasks": [
+          {
+            "task": "Present premium FIRST with full enthusiasm",
+            "description": "Don't hold back—sell the premium like you want them to buy it",
+            "script": "'Let me show you our VIP program. This is our most comprehensive solution...'"
+          },
+          {
+            "task": "State premium price confidently",
+            "description": "No apologizing, no flinching",
+            "script": "'The investment for this is $15,000.'"
+          },
+          {
+            "task": "Wait for 'the gasp'",
+            "description": "Pause and let them react to the price",
+            "signs": ["Sharp intake of breath", "Eyes widen", "Silence", "'That's out of my budget'"]
+          },
+          {
+            "task": "Come to the rescue",
+            "description": "Offer the main product as the affordable alternative",
+            "script": "'I totally understand. That's not for everyone. Let me show you something that might work better for where you are right now...'"
+          },
+          {
+            "task": "Present main offer as the solution",
+            "description": "Now your regular price feels like a bargain",
+            "psychology": "After seeing $15,000, $2,000 feels reasonable"
+          }
+        ]
+      },
+      {
+        "phase": "Premium Design Principles",
+        "tasks": [
+          {
+            "task": "List all possible premium enhancements",
+            "description": "Brainstorm everything that could justify 5-10x price",
+            "categories": ["More 1-on-1 access", "Faster implementation", "Done-for-you services", "Exclusive community", "Physical components", "Extended support", "Bigger guarantee"]
+          },
+          {
+            "task": "Calculate premium delivery costs",
+            "description": "What does it actually cost you to deliver premium?",
+            "target": "Premium should still have strong margins"
+          },
+          {
+            "task": "Create premium-only bonuses",
+            "description": "Things only premium customers get",
+            "examples": ["Private Slack channel", "Monthly 1-on-1 calls", "Done-for-you setup", "VIP event access"]
+          }
+        ]
+      },
+      {
+        "phase": "Execution",
+        "tasks": [
+          {
+            "task": "Script the full conversation flow",
+            "description": "Write out exactly how to present premium → rescue with main"
+          },
+          {
+            "task": "Practice on sales calls",
+            "description": "Role-play until presenting high prices feels natural"
+          },
+          {
+            "task": "Track premium vs. main offer selection",
+            "description": "Monitor: % who buy premium (should be 5-15%), % who buy main after seeing premium"
+          },
+          {
+            "task": "Collect 'gasp' moments",
+            "description": "Note what customers say when they hear premium price (useful for refining)"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Premium feels fake or inflated (customers see through it)",
+      "Can't actually deliver premium (what if they say yes?)",
+      "Apologizing for premium price (undermines the anchor)",
+      "Changing the core outcome between tiers (confuses customers)",
+      "Premium is only 2-3x main price (not enough anchoring effect)"
+    ],
+    "quick_wins": [
+      "Start by adding 1-on-1 access to create 5x premium tier",
+      "Practice stating high prices out loud until comfortable",
+      "Use anchor in proposals: Show premium budget first, then recommended option"
+    ]
+  },
+
+  "rollover_upsell": {
+    "name": "Rollover Upsell",
+    "summary": "Credit what customers already paid toward a higher-priced next offer (at least 4x higher). Hormozi's most-used upsell for reactivation and retention.",
+    "target_metrics": {
+      "reactivation_rate": "20-40% of dormant customers",
+      "rescue_rate": "50-70% of upset customers",
+      "ltv_increase": "3-5x compared to lost customers"
+    },
+    "hormozi_principle": "Works in 4 scenarios: Re-engage old customers, Rescue upset customers, Steal competitors' upset customers, Upsell current customers. The key is: next offer must be at least 4x the credit amount.",
+    "implementation_checklist": [
+      {
+        "phase": "Tracking Setup",
+        "tasks": [
+          {
+            "task": "Implement purchase history tracking",
+            "description": "Must know exactly what each customer has spent",
+            "required_data": ["Total $ spent", "Products purchased", "Purchase dates", "Customer status"],
+            "critical": "Cannot do rollover without accurate tracking"
+          },
+          {
+            "task": "Calculate rollover credit amounts",
+            "description": "Determine credit for each customer segment",
+            "segments": ["Recent purchasers", "Dormant customers (6+ months)", "Upset/churned customers", "Competitor customers"]
+          },
+          {
+            "task": "Ensure next offer is 4x+ credit",
+            "description": "Rollover only works if upgrade is significantly higher value",
+            "example": "Customer paid $500 → Roll into $2,000+ offer (4x minimum)",
+            "math": "Credit: $500, Next offer: $2,000, They pay: $1,500"
+          }
+        ]
+      },
+      {
+        "phase": "Scenario 1: Re-engage Dormant Customers",
+        "tasks": [
+          {
+            "task": "Identify dormant customer list",
+            "description": "Customers who purchased 6+ months ago and haven't bought since"
+          },
+          {
+            "task": "Calculate individual rollover credits",
+            "description": "Pull total spend for each dormant customer"
+          },
+          {
+            "task": "Write reactivation campaign",
+            "description": "Reach out with rollover offer",
+            "script": "'You invested $X with us before. We don't want that to go to waste. We'll credit that entire amount toward [premium offer] if you're ready to take the next step.'"
+          },
+          {
+            "task": "Create reactivation email sequence",
+            "description": "3-5 emails to re-engage with rollover offer"
+          }
+        ]
+      },
+      {
+        "phase": "Scenario 2: Rescue Upset Customers",
+        "tasks": [
+          {
+            "task": "Identify upset/churning customers",
+            "description": "Customers who requested refund, complained, or canceled"
+          },
+          {
+            "task": "Create rescue offer",
+            "description": "Credit their investment toward better solution",
+            "script": "'I hear you're not happy with [product]. Rather than just refunding you, what if we credited that entire amount toward [better solution] that might be a better fit?'"
+          },
+          {
+            "task": "Train support team on rescue protocol",
+            "description": "When customer complains → Offer rollover before refund"
+          }
+        ]
+      },
+      {
+        "phase": "Scenario 3: Steal Competitors' Customers",
+        "tasks": [
+          {
+            "task": "Create competitor switchover offer",
+            "description": "Credit what they paid competitors toward your solution",
+            "script": "'Paid $X to [competitor] and didn't get results? We'll credit that toward our program.'"
+          },
+          {
+            "task": "Design proof requirements",
+            "description": "How customers prove what they paid competitors",
+            "options": ["Invoice/receipt", "Bank statement", "Honor system for first X customers"]
+          },
+          {
+            "task": "Market the switchover offer",
+            "description": "Target competitor's audience with rollover messaging"
+          }
+        ]
+      },
+      {
+        "phase": "Scenario 4: Upsell Current Customers",
+        "tasks": [
+          {
+            "task": "Identify upsell candidates",
+            "description": "Current customers ready for next level"
+          },
+          {
+            "task": "Create upgrade path with rollover",
+            "description": "Credit previous purchases toward premium tier",
+            "script": "'You've invested $X with us so far. We'll roll that toward [premium program], so you're already $X closer to your goal.'"
+          },
+          {
+            "task": "Build rollover into sales conversations",
+            "description": "Make rollover standard part of upgrade discussions"
+          }
+        ]
+      },
+      {
+        "phase": "Implementation",
+        "tasks": [
+          {
+            "task": "Create rollover tracking system",
+            "description": "Track credits offered, accepted, and revenue generated"
+          },
+          {
+            "task": "Write scripts for all 4 scenarios",
+            "description": "Prepare team to handle each rollover situation"
+          },
+          {
+            "task": "Automate rollover offer emails",
+            "description": "Trigger rollover offers based on customer behavior"
+          },
+          {
+            "task": "Measure rollover conversion rates",
+            "description": "Track: Rollover offers made, accepted, revenue recovered"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "No purchase history tracking (can't calculate credits)",
+      "Next offer isn't valuable enough (less than 4x credit)",
+      "Using rollover too frequently (diminishes effectiveness)",
+      "Not following up on rollover offers (need multiple touches)",
+      "Forgetting to include competitor switchover (missing market)"
+    ],
+    "quick_wins": [
+      "Start with dormant customer reactivation (lowest-hanging fruit)",
+      "Implement rescue protocol before refunds (save lost revenue)",
+      "Add rollover to every upsell conversation as standard practice"
+    ]
+  }
+}

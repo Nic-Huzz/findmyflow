@@ -1,0 +1,578 @@
+{
+  "meta": {
+    "slice": "partC",
+    "range": "profiles[100:150]",
+    "count": 50,
+    "generatedAt": "2026-04-07"
+  },
+  "profiles": [
+    {
+      "name": "Brian Cox",
+      "dominantCategories": ["clarifying", "expressing", "synthesizing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "Quoted Feynman's rule that if you cannot explain physics to a first-year undergraduate you have not understood it, and rereads Feynman's Lectures before every public talk as a discipline."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "In Namibia he staged a single shot of a desert as an argument about entropy and the arrow of time, making an abstract thermodynamic claim visible."},
+        {"category": "expressing", "skill": "Turn a message into a moment", "confidence": "high", "evidence": "Said on Desert Island Discs that playing a rock show and explaining the Higgs field both involve asking an audience to feel something."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "medium", "evidence": "On Infinite Monkey Cage with Robin Ince he answers comedian questions with serious physics, refusing to let jokes turn physics off."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Ruth Westheimer",
+      "dominantCategories": ["clarifying", "influencing", "nurturing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "high", "evidence": "Refused euphemism on air. Told a station manager she would call a penis a penis, because vagueness is the reason people suffer."},
+        {"category": "clarifying", "skill": "Teach someone something they are stuck on", "confidence": "high", "evidence": "For decades she took open phone lines on Sexually Speaking, coaching callers to name anatomy, positions and timing precisely."},
+        {"category": "influencing", "skill": "Change someone's mind", "confidence": "medium", "evidence": "A 15-minute unpaid WYNY slot became a nationally syndicated two-hour show within three years because her insistence on precision shifted what listeners thought was sayable in public."},
+        {"category": "nurturing", "skill": "Hold space for a hard moment", "confidence": "medium", "evidence": "Handwrote thank-you notes to guests and callers into her nineties, framing it as an apology to history for a life where nobody had said goodbye to her."}
+      ],
+      "antiTags": [
+        {"category": "designing", "skill": "Polish the small details others miss", "evidence": "Her output is oral, direct, and deliberately unadorned. The point is plain speech, not crafted aesthetics."}
+      ]
+    },
+    {
+      "name": "Henry Louis Gates Jr.",
+      "dominantCategories": ["clarifying", "synthesizing", "connecting"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Teach someone something they are stuck on", "confidence": "high", "evidence": "On Finding Your Roots he personally reviews each guest's genealogical research and walks them through documents tracing an ancestor they had never seen."},
+        {"category": "synthesizing", "skill": "Make meaning out of a mess", "confidence": "high", "evidence": "Spent a year with forensic paper specialists, ink analysts and historians to authenticate The Bondwoman's Narrative, giving Black literature the same forensic respect as a Dickens manuscript."},
+        {"category": "connecting", "skill": "Introduce two people who should know each other", "confidence": "high", "evidence": "The entire structure of Finding Your Roots is built around a reveal moment in which Gates connects a living guest to an ancestor, what he calls 'a very elaborate act of bothering'."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "medium", "evidence": "After his 2009 Cambridge arrest he wrote in the NYT that he did not become a scholar so he could explain who he is on his own porch, and launched a PBS series on policing in response."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jacques Pepin",
+      "dominantCategories": ["clarifying", "nurturing", "expressing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "Chops an onion on television slowly and deliberately to show the next cook it can be done. Demonstrates technique as an accessible craft."},
+        {"category": "nurturing", "skill": "Give patient, useful feedback", "confidence": "medium", "evidence": "Described his 1999 series with Julia Child as unscripted, cooking from a shopping list so viewers could watch them disagree and improvise, treating cooking as 'a conversation, not a performance'."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "Since a 2020 accident limited his mobility he has turned to watercolour painting of dishes as another form of cooking them, saying painting a dish is cooking it again with colour instead of salt."},
+        {"category": "organizing", "skill": "Build a workflow that runs itself", "confidence": "high", "evidence": "Spent ten years at Howard Johnson's refining recipes for mass production, saying he learned there how to cook the same thing a thousand times a day and have it be good every time."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Samin Nosrat",
+      "dominantCategories": ["clarifying", "synthesizing", "expressing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "Articulated her four-variable theory of cooking (salt, fat, acid, heat) so a cook could walk into any grocery store in any country and make dinner without a recipe."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "Teaches cooking by the sound of the pan: 'if the oil is quiet the pan is cold, if the oil is screaming the pan is too hot, if it whispers you can cook'."},
+        {"category": "clarifying", "skill": "Write a \"how it actually works\" explainer", "confidence": "high", "evidence": "Wanted Salt Fat Acid Heat to make recipes obsolete by putting the knowledge in the cook, not the instructions."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "After a 2020 grief sabbatical she returned to the Home Cooking podcast saying she found out how much cooking she had been doing to be seen rather than to be fed."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Ha-Joon Chang",
+      "dominantCategories": ["clarifying", "synthesizing", "analyzing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "high", "evidence": "Reads every chapter aloud to his historian wife at the kitchen table, saying if she cannot follow an argument no reader can, because economists forgive each other's jargon."},
+        {"category": "analyzing", "skill": "Spot the thing everyone else missed", "confidence": "high", "evidence": "Kicking Away the Ladder assembled 19th-century trade and industrial-policy histories to show rich countries had done the opposite of what they now tell poor ones. 'It is a point of archive. I just read what the ministers had actually written.'"},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "Argued the washing machine changed the world more than the internet, by redefining who counted as a worker. Connects domestic history to labour economics."},
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "medium", "evidence": "Describes himself as a pluralist on purpose who would rather be embarrassed by nine schools of economics than loyal to one, using that framing to teach lay readers."}
+      ],
+      "antiTags": [
+        {"category": "influencing", "skill": "Sell something you actually believe in", "evidence": "His method is archival understatement, not persuasion. He lets the documents speak rather than pitching a polemic."}
+      ]
+    },
+    {
+      "name": "Eugenia Cheng",
+      "dominantCategories": ["clarifying", "creating", "synthesizing"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "high", "evidence": "Uses a recipe for cream in How to Bake Pi to let readers see a structure-preserving map with their eyes before she shows them one with letters. 'The cake is the proof.'"},
+        {"category": "creating", "skill": "Invent a new idea from scratch", "confidence": "high", "evidence": "In x + y she coined 'ingressive' and 'congressive' to replace masculine/feminine traits, because as a mathematician, when a term is ambiguous she replaces it."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "Plays Bach at maths conferences as part of lectures, arguing the piano gives her hands structural thinking category theory wants before her head has it."},
+        {"category": "clarifying", "skill": "Teach someone something they are stuck on", "confidence": "medium", "evidence": "Teaches pure mathematics to art students at the School of the Art Institute of Chicago, who she says are the only students who trust that abstraction is interesting."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Matthew Walker",
+      "dominantCategories": ["clarifying", "analyzing", "nurturing"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Turn numbers into a clear story", "confidence": "high", "evidence": "Built the argument of Why We Sleep around specific data, such as a 2014 Open Heart study showing a spike in heart attacks after the spring daylight-saving hour is lost."},
+        {"category": "clarifying", "skill": "Teach someone something they are stuck on", "confidence": "high", "evidence": "Wrote a bestseller and a podcast making sleep science actionable for a mass audience, arguing sleep is not optional and the data is no longer a debate."},
+        {"category": "analyzing", "skill": "Diagnose why something is not working", "confidence": "medium", "evidence": "After Alexey Guzey's 2019 critique he published 19 public corrections and walked readers through which points he accepted and which he thought misread the evidence."},
+        {"category": "nurturing", "skill": "Watch someone grow without taking credit", "confidence": "low", "evidence": "Runs a lab and ends each workday writing one sentence about the most interesting thing he learned from an experiment or paper that day."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Siddhartha Mukherjee",
+      "dominantCategories": ["clarifying", "synthesizing", "expressing"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "Drafts long books into voice memos on his hospital commute, then transcribes. 'If I cannot say it in the car I cannot write it at the desk.'"},
+        {"category": "synthesizing", "skill": "Write a \"here is how it all fits\" doc", "confidence": "high", "evidence": "Wrote The Emperor of All Maladies as a 4,000-year biography of cancer after a patient asked him what she was battling and he realised he only had fragment answers."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "For The Gene he used his family's schizophrenia as a spine so readers would meet genes as pronouns (the word a grandmother uses when she says you have your mother's temper), not double helixes."},
+        {"category": "nurturing", "skill": "Hold space for a hard moment", "confidence": "high", "evidence": "Teaches oncology fellows to end a terminal diagnosis consultation by asking the patient 'What do you hope for now?', reframing the visit around the patient's own list."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Mary Beard",
+      "dominantCategories": ["clarifying", "expressing", "synthesizing"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Perform, present, or hit record", "confidence": "high", "evidence": "On BBC documentaries she routinely steps over fencing into Pompeii itself to read inscriptions off walls rather than presenting from a studio."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "In SPQR she structured Rome's history around tax collectors, market women and slaves rather than emperors, 'reading the sources sideways'."},
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "medium", "evidence": "In Women and Power she quotes Telemachus telling his mother to go and weave to show modern sexism is 2,800 years old, making classical texts legible to a 2017 reader."},
+        {"category": "connecting", "skill": "Facilitate a hard conversation", "confidence": "medium", "evidence": "After a troll's obscene tweet she replied by contacting him directly, accepted his mother's apology and reportedly wrote him a university reference."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Trevor Noah",
+      "dominantCategories": ["clarifying", "expressing", "connecting"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Tell a story that lands", "confidence": "high", "evidence": "Born a Crime opens with his birth certificate as a criminal document under apartheid's Immorality Act, setting the book's thesis in one specific artefact."},
+        {"category": "connecting", "skill": "Be the glue in a scattered team", "confidence": "high", "evidence": "Speaks six languages (Xhosa, Zulu, Sotho, Tswana, Afrikaans, English) and always tried one phrase in a guest's language before Daily Show interviews because 'people relax'."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "medium", "evidence": "Created Between the Scenes as an informal audience Q&A where the thought had to be true every six seconds, because comedy without thought becomes noise."},
+        {"category": "strategizing", "skill": "Call the smart play under pressure", "confidence": "medium", "evidence": "Announced he was leaving The Daily Show at peak audience because his mother taught him 'you leave a room while the conversation is still good'."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Iain McGilchrist",
+      "dominantCategories": ["synthesizing", "analyzing", "clarifying"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "The Matter With Things runs 1,500 pages across two volumes and took over a decade, because he wrote slowly on purpose so the left hemisphere would not take over."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "Uses the Nietzsche parable of the master and emissary to argue the left hemisphere is a brilliant assistant acting like the boss, across cultural consequences."},
+        {"category": "analyzing", "skill": "Spot the thing everyone else missed", "confidence": "medium", "evidence": "Repeated the line 'those who believe they are certainly right are certainly wrong' as the single lesson of 30 years of psychiatry: the patients he could not help were the certain ones."},
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "low", "evidence": "Writes on the Isle of Skye where the Cuillin mountains are always different, saying the left hemisphere 'loses an argument' before he starts writing."}
+      ],
+      "antiTags": [
+        {"category": "building", "skill": "Ship a rough v1", "evidence": "He explicitly refused to rush and took a decade for a second book; his method is anti-prototype."}
+      ]
+    },
+    {
+      "name": "Karen Armstrong",
+      "dominantCategories": ["synthesizing", "clarifying", "connecting"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "Practises a religion in her flat for months before writing about it, fasting for Ramadan, keeping kosher, chanting for Buddhism. 'You have to borrow the robes.'"},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "high", "evidence": "For her 2008 TED Prize Charter for Compassion she assembled Muslim, Jewish, Christian, Hindu and Buddhist clerics and 'made each of them sit in a room until we had one sentence'."},
+        {"category": "nurturing", "skill": "Watch someone grow without taking credit", "confidence": "medium", "evidence": "Defines compassion as a muscle, 'you build it by paying attention to somebody whose position you find uncomfortable, staying present without fixing them, and then doing it again the next day'."},
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "medium", "evidence": "Has written 25+ books making every major religion legible to lay readers after leaving a strict Catholic order in 1969."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Robin Wall Kimmerer",
+      "dominantCategories": ["synthesizing", "nurturing", "expressing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "high", "evidence": "Took 13 years to write Braiding Sweetgrass because she refused to separate her scientific training from her Potawatomi inheritance, keeping two editors (botanist and grandmother) in her head."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "high", "evidence": "In 'Learning the Grammar of Animacy' she argues bay is a verb in Potawatomi and grammar is cosmology: 'When you change the word, you change what is allowed to matter.'"},
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "Articulated the Honourable Harvest: never take the first, never take the last, take only what you need, use everything, be grateful, reciprocate."},
+        {"category": "nurturing", "skill": "Give patient, useful feedback", "confidence": "medium", "evidence": "Refused a rapid follow-up after Braiding Sweetgrass hit bestseller in 2020, saying she will write the next book when the plants have given her something else to say."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jill Lepore",
+      "dominantCategories": ["synthesizing", "expressing", "analyzing"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Write a \"here is how it all fits\" doc", "confidence": "high", "evidence": "Wrote These Truths as a deliberate 960-page single-volume history of the US in one arc, because if we do not tell the whole story we cede it to people who will tell it badly."},
+        {"category": "analyzing", "skill": "Investigate a weird anomaly", "confidence": "high", "evidence": "For The Secret History of Wonder Woman she sat for weeks on a basement floor with Marston's granddaughter's papers in garbage bags, earning trust for nearly a year."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "Drafts essays by walking around Cambridge dictating into a phone. 'I do not write a sentence I could not say to somebody walking beside me.'"},
+        {"category": "creating", "skill": "Remix two things into something new", "confidence": "medium", "evidence": "Launched The Last Archive podcast to put the history of evidence on tape, letting listeners hear 'a filing cabinet open' instead of reading a textbook."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Yuval Noah Harari",
+      "dominantCategories": ["synthesizing", "clarifying"],
+      "playSkills": [
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "Takes an annual 30-60 day silent Vipassana retreat with no reading, writing or phone, because he cannot write about human history while constantly consuming opinions about it."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "Argues money is the most successful fiction ever told, because two strangers from different religions trade a goat for a piece of paper based on a shared story."},
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "medium", "evidence": "Sapiens began as an undergraduate world history course he was handed because no senior colleague wanted it, forcing him to write for 18-year-olds and his supervisor simultaneously."},
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "medium", "evidence": "His core thesis is that human cooperation at scale depends on shared fictions, a single frame stretched across religions, nations and money."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Michael Pollan",
+      "dominantCategories": ["synthesizing", "clarifying", "expressing"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Investigate a weird anomaly", "confidence": "high", "evidence": "Structured The Omnivore's Dilemma around four meals traced from plate back to field, refusing to write about a calorie he could not trace to its source."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "Takes legal psilocybin and LSD for How to Change Your Mind in his sixties because a journalism book on consciousness without consciousness would be cowardice."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "high", "evidence": "Reduced In Defense of Food to seven words ('Eat food. Not too much. Mostly plants.') then wrote 200 pages of history and biochemistry to make them sound obvious."},
+        {"category": "synthesizing", "skill": "Write a \"here is how it all fits\" doc", "confidence": "medium", "evidence": "Every book begins with boots on the ground, spending time on the actual land, farm or kitchen until he has a specific physical fact he did not know before."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Rebecca Solnit",
+      "dominantCategories": ["synthesizing", "expressing", "creating"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "high", "evidence": "Wrote 'Men Explain Things to Me' after a man at a party explained to her a book she herself had written. The internet coined mansplaining from it."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "In A Paradise Built in Hell she went into disaster archives expecting looting and chaos and found soup kitchens and mutual aid, building an archival case that disaster movies lie."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "Walks two or three miles when stuck because 'walking is a structural activity of the mind, not just the body'. Wanderlust itself is a history of walking as method."},
+        {"category": "expressing", "skill": "Turn a message into a moment", "confidence": "high", "evidence": "Defined hope not as a lottery ticket clutched on a sofa but as 'an axe you break down doors with in an emergency'."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Timothy Snyder",
+      "dominantCategories": ["synthesizing", "analyzing", "influencing"],
+      "playSkills": [
+        {"category": "strategizing", "skill": "Call the smart play under pressure", "confidence": "high", "evidence": "Drafted On Tyranny as a Facebook post a week after the 2016 election, then expanded in weeks. 'If I did not write them down that week they would be useless the week after.'"},
+        {"category": "influencing", "skill": "Move someone from stuck to action", "confidence": "high", "evidence": "First lesson of On Tyranny: 'Do not obey in advance. Most of the power of authoritarianism is freely given.' Designed as testable-at-home discharge instructions."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "Spent 25 years reading about European democratic collapse; the 20 lessons were 'a paragraph each in my head' waiting for an occasion."},
+        {"category": "analyzing", "skill": "Turn numbers into a clear story", "confidence": "medium", "evidence": "Takes Yale students to specific killing sites in Ukraine and Belarus because they cannot understand Bloodlands by reading it in a Connecticut classroom."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "David Graeber",
+      "dominantCategories": ["synthesizing", "analyzing", "creating"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Spot the thing everyone else missed", "confidence": "high", "evidence": "Checked every footnote in economics textbooks on barter-to-money and found the claim led back through textbooks to Adam Smith making it up in a thought experiment. 'I checked.'"},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "The Dawn of Everything with Wengrow took a decade arguing the standard narrative from egalitarian bands to hierarchical states is wrong, re-reading anthropology from scratch."},
+        {"category": "creating", "skill": "Invent a new idea from scratch", "confidence": "high", "evidence": "His Strike Magazine essay 'On the Phenomenon of Bullshit Jobs' went viral in 48 hours and produced the book from thousands of reader emails. He 'simply organised what they sent'."},
+        {"category": "connecting", "skill": "Facilitate a hard conversation", "confidence": "medium", "evidence": "At Occupy Wall Street insisted on consensus-based General Assemblies over leaders, spending four hours on decisions that could have taken ten minutes because 'the slowness was the politics'."}
+      ],
+      "antiTags": [
+        {"category": "organizing", "skill": "Build a workflow that runs itself", "evidence": "He explicitly valued slowness and horizontal process over efficient systems; shortcuts reintroduced the hierarchies he was trying to leave behind."}
+      ]
+    },
+    {
+      "name": "Elaine Pagels",
+      "dominantCategories": ["synthesizing", "analyzing", "clarifying"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Investigate a weird anomaly", "confidence": "high", "evidence": "As a Harvard grad student in the late 1960s she chose to work on the Nag Hammadi texts that most of her cohort considered marginal, treating them as legitimate Christian sources."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "In Beyond Belief she put the Gospel of John and the Gospel of Thomas side by side and argued John was composed as a polemic against Thomas, reading winners and losers together to see the shape of the fight."},
+        {"category": "clarifying", "skill": "Write a \"how it actually works\" explainer", "confidence": "medium", "evidence": "The Gnostic Gospels moved a scholarly argument about the 4th century into a late-20th-century argument about church and gender, winning the National Book Award."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "In Why Religion? she admitted in print that her later work was shaped by her dead six-year-old son, rereading Thomas as a text about staying alive inside unbearable loss."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Zadie Smith",
+      "dominantCategories": ["synthesizing", "creating", "expressing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "Sold White Teeth on about 80 pages and a synopsis as a Cambridge undergrad, delivering the finished novel shortly after graduating at 24."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "Returns to the same Willesden and Kilburn corner across White Teeth, NW and Swing Time, deliberately narrowing her map to go deeper. 'I don't know any other place as well.'"},
+        {"category": "clarifying", "skill": "Teach someone something they are stuck on", "confidence": "medium", "evidence": "Published ten rules for writers including 'read your own work as a stranger would, or even better as an enemy would' and 'protect the time and space in which you write'."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "Writes with MacFreedom installed and the internet physically disabled because she does not trust her own attention; wrote Intimations in six weeks of lockdown and donated royalties."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Lech Wałęsa",
+      "dominantCategories": ["connecting", "influencing", "strategizing"],
+      "playSkills": [
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "high", "evidence": "Climbed over the Lenin Shipyard fence on 14 August 1980 to join a local strike and was recognised as spokesman within hours; Solidarity grew to roughly 10 million members, a quarter of Poland's population."},
+        {"category": "influencing", "skill": "Rally a group behind an idea", "confidence": "high", "evidence": "Signed the Gdańsk Agreement on 31 August 1980 with an oversized souvenir pen, legalising the first independent trade union in the Eastern Bloc."},
+        {"category": "strategizing", "skill": "Call the smart play under pressure", "confidence": "high", "evidence": "Refused to travel to Oslo for his 1983 Nobel Peace Prize fearing the government would not let him return, having Danuta accept it on his behalf. He stayed physically inside Poland when it was expensive."},
+        {"category": "connecting", "skill": "Facilitate a hard conversation", "confidence": "medium", "evidence": "Led the Solidarity delegation at the 1989 Round Table Talks that produced the partially free June 1989 elections and set the template for negotiated transitions across the Eastern Bloc."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Krista Tippett",
+      "dominantCategories": ["connecting", "nurturing", "clarifying"],
+      "playSkills": [
+        {"category": "connecting", "skill": "Facilitate a hard conversation", "confidence": "high", "evidence": "Uses as her governing rule 'I can disagree with your opinion, but I can't disagree with your experience' to push guests off defending positions and onto describing what happened to them."},
+        {"category": "nurturing", "skill": "Hold space for a hard moment", "confidence": "high", "evidence": "On Civil Conversations Project she repeats 'Anger is often what pain looks like when it shows itself in public', using it to ask a follow-up question about the injury under an argument."},
+        {"category": "designing", "skill": "Polish the small details others miss", "confidence": "high", "evidence": "Edits two-hour On Being conversations down to 52 minutes, removing her own throat-clearings, treating editing as a form of listening to bring out what the guest was trying to say."},
+        {"category": "clarifying", "skill": "Teach someone something they are stuck on", "confidence": "medium", "evidence": "Traces her interviewing method to walking between East and West Berlin as a diplomat, learning that supposedly settled categories were thinner and more porous than they looked."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "John Hume",
+      "dominantCategories": ["connecting", "influencing", "strategizing"],
+      "playSkills": [
+        {"category": "connecting", "skill": "Facilitate a hard conversation", "confidence": "high", "evidence": "Held secret Hume-Adams talks with Gerry Adams at a Redemptorist monastery from 1988, at a time when the SDLP was publicly condemned for it, until the 1994 IRA ceasefire."},
+        {"category": "influencing", "skill": "Make a pitch that moves people", "confidence": "high", "evidence": "Used the single image of France and Germany sharing a parliament after killing each other across the Rhine, as an argument to unionists and republicans that a border should matter less."},
+        {"category": "influencing", "skill": "Move someone from stuck to action", "confidence": "high", "evidence": "Repeated a three-part line: 'A united people is more important than a united Ireland. I want to unite people, not territory.' And 'You can't eat a flag.' Designed to be unassailable."},
+        {"category": "strategizing", "skill": "Pick what matters and cut the rest", "confidence": "medium", "evidence": "At the 1998 Nobel acceptance he thanked Trimble by name and framed the Good Friday Agreement as shared, denying himself individual credit to stabilise the agreement."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Martti Ahtisaari",
+      "dominantCategories": ["connecting", "strategizing", "organizing"],
+      "playSkills": [
+        {"category": "strategizing", "skill": "Design the game before playing it", "confidence": "high", "evidence": "For the 2005 Helsinki Accord on Aceh he insisted all five rounds of talks happen face to face in the same building rather than by shuttle diplomacy, so physical presence forced concessions."},
+        {"category": "connecting", "skill": "Facilitate a hard conversation", "confidence": "high", "evidence": "Oversaw Namibian independence in 1989 after being appointed UN Commissioner in 1977, twelve years of apparently stalled work. 'Most mediation is waiting with a file.'"},
+        {"category": "organizing", "skill": "Build a workflow that runs itself", "confidence": "high", "evidence": "Founded Crisis Management Initiative in 2000 as a small independent professional office doing the quiet mediation work no single UN department was structured to do."},
+        {"category": "influencing", "skill": "Move someone from stuck to action", "confidence": "medium", "evidence": "In his 2008 Nobel lecture he said 'Peace is a question of will. All conflicts can be settled, and there are no excuses for allowing them to become eternal' as a professional self-instruction."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Tawakkol Karman",
+      "dominantCategories": ["connecting", "influencing", "expressing"],
+      "playSkills": [
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "high", "evidence": "From 2007 ran weekly sit-ins at Freedom Square with only a handful of people for three years. When the 2011 uprising began she already had a venue, schedule and trained core of protesters."},
+        {"category": "influencing", "skill": "Rally a group behind an idea", "confidence": "high", "evidence": "Her 22 January 2011 arrest after calling a 'Day of Rage' triggered Yemen's first mass protests, using the Tunisian and Egyptian playbook deliberately."},
+        {"category": "expressing", "skill": "Perform, present, or hit record", "confidence": "high", "evidence": "In her December 2011 Nobel lecture, aged 32 and the first Arab woman to win, she spoke in Arabic and addressed the prize to the young people of the Arab Spring, handing the recognition back to the square."},
+        {"category": "nurturing", "skill": "Hold space for a hard moment", "confidence": "medium", "evidence": "Lived in a tent in Change Square through 2011, mediating between factions inside the square and refusing to leave while protests continued."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Tarana Burke",
+      "dominantCategories": ["connecting", "nurturing", "expressing"],
+      "playSkills": [
+        {"category": "nurturing", "skill": "Hold space for a hard moment", "confidence": "high", "evidence": "Founded the original Me Too in 2006 as workshops, retreats and healing groups for young Black girls in Selma and the Bronx, not a hashtag. The work happened in church basements."},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "high", "evidence": "Built Just Be Inc. (2003) and the Me Too programme for eleven years as a grassroots peer-support practice, with survivors saying the phrase to each other across circles of chairs."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "high", "evidence": "Traces the whole project to a 1997 moment with a 13-year-old girl she calls Heaven, when she could not say me too, and spent the next decades finding the words she could not say in that cabin."},
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "medium", "evidence": "Her self-definition 'empowerment through empathy' shapes programme design toward healing circles and long-term survivor relationships, not punishment of abusers."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Ta-Nehisi Coates",
+      "dominantCategories": ["expressing", "analyzing", "synthesizing"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Turn numbers into a clear story", "confidence": "high", "evidence": "Spent 2012-2014 'boring Clyde Ross on the phone for a year' so The Case for Reparations could live on one homeowner's ledger of contract-buying purchases in North Lawndale."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "Wrote Between the World and Me as a letter to his son Samori to avoid the temptation of reassurance, because a father writing publicly cannot be both honest and comforting."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "medium", "evidence": "Took Marvel's Black Panther in 2016 as forced education, writing dialogue instead of essays and constructing arguments across serialised monthly instalments."},
+        {"category": "clarifying", "skill": "Write a \"how it actually works\" explainer", "confidence": "medium", "evidence": "Maintained a public Atlantic blog 2008-2014 reviewing his own reading of Civil War history and French exercises, describing it as 'thinking out loud with witnesses'."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Chimamanda Ngozi Adichie",
+      "dominantCategories": ["expressing", "influencing", "connecting"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Tell a story that lands", "confidence": "high", "evidence": "Her 2009 TED talk The Danger of a Single Story built its whole thesis from one autobiographical moment of being asked for 'tribal music' at a US university, and has over 27 million views."},
+        {"category": "influencing", "skill": "Change someone's mind", "confidence": "high", "evidence": "We Should All Be Feminists was sampled by Beyoncé in Flawless a year after delivery, routing a feminist argument into a pop audience of tens of millions."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "Dear Ijeawele began as a private letter to a friend in Lagos asking how to raise a feminist daughter, which she converted into a book without abstracting the original question."},
+        {"category": "analyzing", "skill": "Investigate a weird anomaly", "confidence": "medium", "evidence": "Took four years on Half of a Yellow Sun, conducting oral histories with Biafran war survivors and cross-checking her father's fragmented accounts against Biafran newspapers."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Patti Smith",
+      "dominantCategories": ["expressing", "creating"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Perform, present, or hit record", "confidence": "high", "evidence": "Closed CBGB on 15 October 2006 with a three-and-a-half hour final show, ending by reading the names of dead musicians who had played there for roughly ten minutes."},
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "Writes daily longhand in pencil in a small notebook at the same corner café in Greenwich Village, ordering black coffee. 'My handwriting is the rhythm of my thinking.'"},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "Took over twenty years to write Just Kids after promising Mapplethorpe on his deathbed in 1989, refusing to invent the missing scenes."},
+        {"category": "designing", "skill": "Make something beautiful and usable", "confidence": "medium", "evidence": "Refused to let Arista replace the Mapplethorpe cover of Horses (1975), wanting to look 'like Rimbaud at a Patti Smith concert'. It became one of the most imitated rock portraits."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Wisława Szymborska",
+      "dominantCategories": ["expressing", "creating", "clarifying"],
+      "playSkills": [
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "Published fewer than 350 poems in 50+ years, about six a year, by drafting constantly and throwing most away. Told a journalist 'I have a trash can in my home' as her method description."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "In her 1996 Nobel lecture she argued the three most important words for a writer are 'I don't know', contrasting inspiration with the certainty of dictators and torturers."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "'Cat in an Empty Apartment' is written entirely from a dead owner's cat's point of view, demonstrating her constant technique of choosing the least-expected perspective."},
+        {"category": "clarifying", "skill": "Make a confusing thing feel obvious", "confidence": "medium", "evidence": "From 1968 she wrote a Non-required Reading column reviewing calendars, dictionaries and cookbooks, a public refusal of the official Polish literary hierarchy."}
+      ],
+      "antiTags": [
+        {"category": "influencing", "skill": "Rally a group behind an idea", "evidence": "She was famously suspicious of the public role of the poet and disclaimed authority in her Nobel lecture rather than claiming it."}
+      ]
+    },
+    {
+      "name": "Aretha Franklin",
+      "dominantCategories": ["expressing", "creating", "designing"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Perform, present, or hit record", "confidence": "high", "evidence": "At the December 2015 Kennedy Center honours for Carole King she walked out cold, dropped a fur coat on the piano bench mid-song and owned A Natural Woman by a single gesture and a held-back final verse."},
+        {"category": "creating", "skill": "Remix two things into something new", "confidence": "high", "evidence": "On Valentine's Day 1967 she rearranged Otis Redding's Respect with her sister Carolyn, adding R-E-S-P-E-C-T, sock-it-to-me and 'just a little bit', converting a pleading husband song into a civil-rights anthem."},
+        {"category": "designing", "skill": "Shape how a moment feels", "confidence": "high", "evidence": "Cut I Never Loved a Man at FAME Studios Muscle Shoals 24 January 1967 in a single day, playing the electric piano herself and working out voicings live with the band as her arranging template."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "medium", "evidence": "In January 1972 she recorded Amazing Grace live over two nights at New Temple Missionary Baptist in Watts, returning to church music, producing the best-selling live gospel album ever."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Luciano Pavarotti",
+      "dominantCategories": ["expressing", "connecting", "influencing"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Perform, present, or hit record", "confidence": "high", "evidence": "On 17 February 1972 at the Met he delivered all nine high Cs of 'Ah, mes amis' cleanly and received seventeen curtain calls, earning the nickname King of the High Cs."},
+        {"category": "connecting", "skill": "Host a gathering", "confidence": "high", "evidence": "From 1992 to 2003 organised the annual Pavarotti and Friends benefit in Modena with Bono, Sting, Céline Dion, Clapton and Queen, raising millions for War Child and Bosnia, Kosovo, Afghanistan and Iraq relief."},
+        {"category": "influencing", "skill": "Sell something you actually believe in", "confidence": "medium", "evidence": "Defended crossover against classical purists by saying the concerts delivered concrete sums to specific crises and the purity argument was a luxury for people with other platforms."},
+        {"category": "nurturing", "skill": "Watch someone grow without taking credit", "confidence": "low", "evidence": "Studied free for six years with Arrigo Pola in Modena from 1954 and learned every role by ear from a repetiteur at the piano, one phrase at a time, never learning to read music fluently."}
+      ],
+      "antiTags": [
+        {"category": "analyzing", "skill": "Find the pattern in messy data", "evidence": "He never learned to read music with real fluency and worked entirely by ear, a non-analytic method."}
+      ]
+    },
+    {
+      "name": "Tupac Shakur",
+      "dominantCategories": ["expressing", "influencing", "creating"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "At 11 he wrote poems addressed to Black Panther prisoners his mother knew; the earliest preserved traces of his writing are a child scribe's correspondence with incarcerated adults."},
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "All Eyez on Me was recorded in roughly two weeks at Can-Am Studios, writing and recording multiple songs per night, with engineer Dave Aron describing single-pass vocal takes."},
+        {"category": "influencing", "skill": "Make a pitch that moves people", "confidence": "high", "evidence": "Dear Mama (1995) itemised specific facts about Afeni Shakur (crack addiction, prison time, cooking, exhaustion), refusing to abstract his mother, reaching Billboard #9 and the National Recording Registry."},
+        {"category": "strategizing", "skill": "Design the game before playing it", "confidence": "medium", "evidence": "In Dannemora in 1995 he read Machiavelli's The Prince, Sun Tzu and Robert Greene, producing the later Makaveli alias and the strategic framing of his post-prison career."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Lin-Manuel Miranda",
+      "dominantCategories": ["expressing", "creating", "connecting"],
+      "playSkills": [
+        {"category": "creating", "skill": "Remix two things into something new", "confidence": "high", "evidence": "At the 12 May 2009 White House Poetry Jam he rapped the opening of Hamilton about 'someone I believe embodies hip hop, Treasury Secretary Alexander Hamilton', combining biography and counterpoint six years before Broadway."},
+        {"category": "expressing", "skill": "Turn a message into a moment", "confidence": "high", "evidence": "Spent roughly a year rewriting My Shot so every verse was consistent with what a young intellectually hungry Hamilton would say; the whole show went through that editing density."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "Wrote the first draft of In the Heights as a Wesleyan sophomore at 19 and rewrote it continuously for nine years to Broadway in 2008."},
+        {"category": "connecting", "skill": "Be the glue in a scattered team", "confidence": "medium", "evidence": "Tests every ensemble number (We Don't Talk About Bruno, five vocal lines in counterpoint) with the rule: can every character sing their own truth simultaneously and still be intelligible?"}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Ira Glass",
+      "dominantCategories": ["expressing", "clarifying", "creating"],
+      "playSkills": [
+        {"category": "clarifying", "skill": "Teach someone something they are stuck on", "confidence": "high", "evidence": "His widely-shared 'gap between taste and ability' video tells creative workers that the only fix is volume of work; it is the most-reposted single piece of craft advice on the internet."},
+        {"category": "expressing", "skill": "Tell a story that lands", "confidence": "high", "evidence": "Credits NPR editor Noah Adams with the anecdote-then-reflection two-part engine that became the entire house style of This American Life and the podcast generation that copied it."},
+        {"category": "creating", "skill": "Invent a new idea from scratch", "confidence": "medium", "evidence": "Apprenticed for 17 years at NPR from a teenage intern tape-splicer before launching This American Life in November 1995, having failed publicly on air dozens of times already."},
+        {"category": "nurturing", "skill": "Watch someone grow without taking credit", "confidence": "high", "evidence": "In 2014 he backed Julie Snyder as host of Serial rather than taking the chair himself, following his producer instinct to hand the microphone to whoever will be best at holding it."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Kae Tempest",
+      "dominantCategories": ["expressing", "creating", "connecting"],
+      "playSkills": [
+        {"category": "expressing", "skill": "Perform, present, or hit record", "confidence": "high", "evidence": "Brand New Ancients, staged at Battersea Arts Centre in 2012 as an hour of single-voice narration with live music, reintroduced an epic oral form to British theatre audiences and won the Ted Hughes Award in 2013 at age 27."},
+        {"category": "creating", "skill": "Remix two things into something new", "confidence": "high", "evidence": "Let Them Eat Chaos (2016) was released simultaneously as a Picador poetry book and a Fiction Records album, engineered to be both literature and a record with neither secondary."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "high", "evidence": "Came out publicly as non-binary (2020) and as a trans man (2025) via short written statements, framing it as the same work as the poems: describing one's experience accurately in public."},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "medium", "evidence": "Wrote On Connection during 2020 lockdown arguing creative work exists to break the 'culture of distraction', a manifesto for why live audiences matter written when live audiences were unavailable."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Wong Kar-wai",
+      "dominantCategories": ["expressing", "designing", "creating"],
+      "playSkills": [
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "Shot In the Mood for Love over roughly 15 months with a 30x shooting ratio, beginning without a completed script and letting the story change during the shoot."},
+        {"category": "designing", "skill": "Shape how a moment feels", "confidence": "high", "evidence": "Delivered the final cut of In the Mood for Love to Cannes the morning of its 2000 premiere; the accumulated emotional exhaustion on screen is the residue of the 15-month duration."},
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "high", "evidence": "Conceived and shot Chungking Express in six weeks while waiting for a sound mix, with no script, in a takeaway food stall and a rented apartment."},
+        {"category": "connecting", "skill": "Be the glue in a scattered team", "confidence": "medium", "evidence": "Described his work with Tony Leung across seven features as beyond words: long collaboration reducing dialogue to essentials and carrying the rest in looks and tempo."}
+      ],
+      "antiTags": [
+        {"category": "strategizing", "skill": "Map out the next 10 moves", "evidence": "He famously arrives with no script and no storyboards, explicitly trusting the room over planning."}
+      ]
+    },
+    {
+      "name": "Hayao Miyazaki",
+      "dominantCategories": ["creating", "designing", "expressing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "Begins films without a script and works from hand-drawn e-konte storyboards produced as the film is in production; animators often did not know how a film would end while drawing its middle."},
+        {"category": "designing", "skill": "Polish the small details others miss", "confidence": "high", "evidence": "In the 2016 NHK documentary he is filmed weeping at his desk when he cannot get a bug's movement right on the Boro the Caterpillar short."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "Began Spirited Away after watching a friend's ten-year-old daughter across his kitchen table for a week, wanting a film in which a child finds the discipline to work through a frightening adult world."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "Has publicly retired several times since 2013 and unretired each time, saying 'I keep making work because there is no point to life if I don't.'"}
+      ],
+      "antiTags": [
+        {"category": "organizing", "skill": "Build a workflow that runs itself", "evidence": "Ghibli releases have been delayed because he had not yet drawn the ending his animators were racing toward; his process resists planned workflow."}
+      ]
+    },
+    {
+      "name": "Yayoi Kusama",
+      "dominantCategories": ["creating", "designing", "expressing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "From around age 10 she drew compulsively to survive hallucinations of dots and flowers covering her mother's body. The famous dot pattern is a direct visual record of those childhood episodes."},
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "high", "evidence": "In New York 1958-1972 she produced Infinity Net paintings in single obsessive sessions, sewed phallic protrusions onto boats and ladders, and staged Naked Happenings at the MoMA sculpture garden in 1969, working across new media at factory-scale output."},
+        {"category": "designing", "skill": "Craft a space people want to stay in", "confidence": "high", "evidence": "Began Infinity Mirror Rooms in 1965 with Phalli's Field; the format became the canonical Instagram artwork of the 2010s with hours-long queues for 30-second slots."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "medium", "evidence": "Has lived voluntarily in Seiwa Hospital since 1977 and walks daily to her studio, saying the only method that relieves her illness is to keep creating art."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Björk",
+      "dominantCategories": ["creating", "designing", "expressing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Remix two things into something new", "confidence": "high", "evidence": "Biophilia (2011) released simultaneously as a studio album and ten interactive iPad apps, with commissioned new instruments including the gameleste and a Tesla coil percussion voice; archive held at MoMA."},
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "high", "evidence": "Arrives at each album with a new set of instruments commissioned from other specialists and recruits collaborators from different genres when she decides in public that a mode is exhausted."},
+        {"category": "expressing", "skill": "Write something in your actual voice", "confidence": "high", "evidence": "Vulnicura tracks are labelled with timestamps relative to her breakup with Matthew Barney ('nine months before', 'two months after'), treating an emotional experience as a sequence she can index."},
+        {"category": "synthesizing", "skill": "Connect dots across two worlds", "confidence": "medium", "evidence": "Trained at Reykjavík's Barnamúsíkskóli from age 6 on classical piano and flute, then released a children's album at 11, arriving at punk and electronic music with 'absolute theory already installed'."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "William Kentridge",
+      "dominantCategories": ["creating", "synthesizing", "expressing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Make something that did not exist yesterday", "confidence": "high", "evidence": "Developed the charcoal-and-eraser animation technique alone in his Johannesburg studio: drawing, photographing, erasing and redrawing across ~30 drawings per film, the eraser never wiping clean so each bears the ghost of every previous state."},
+        {"category": "synthesizing", "skill": "Find the bigger pattern under the noise", "confidence": "high", "evidence": "Refused the aestheticist starting point: 'My drawings don't start with a beautiful mark. It has to be a mark of something out there in the world.' Every line has to correspond to the apartheid archive or a real body."},
+        {"category": "expressing", "skill": "Say the thing people are thinking but will not", "confidence": "medium", "evidence": "Soho Eckstein (pinstriped white industrialist) and Felix Teitlebaum (naked weeping alter ego) stage the contradictions of being a white South African artist benefiting from the system and mourning it."},
+        {"category": "connecting", "skill": "Build a group from nothing", "confidence": "medium", "evidence": "The 2012 Refusal of Time is a five-channel installation with composer Philip Miller and physicist Peter Galison, and his Johannesburg workshop now runs as a small interdisciplinary team."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Marcel Duchamp",
+      "dominantCategories": ["creating", "analyzing", "synthesizing"],
+      "playSkills": [
+        {"category": "creating", "skill": "Invent a new idea from scratch", "confidence": "high", "evidence": "In April 1917 he submitted a J.L. Mott urinal signed 'R. Mutt 1917' as Fountain, defending it in an anonymous editorial arguing Mr Mutt had created 'a new thought for that object' by placing it so its useful significance disappeared."},
+        {"category": "analyzing", "skill": "Spot the thing everyone else missed", "confidence": "high", "evidence": "His rule for choosing a readymade was the inverse of what art students are taught: choose an object that attracts neither beauty nor ugliness, 'a point of indifference in my looking at it'."},
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "Secretly built Étant donnés in his New York studio 1946-1966 while publicly claiming he had retired to chess. Not revealed until after his 1968 death, installed at Philadelphia per his detailed instructions."},
+        {"category": "strategizing", "skill": "Pick what matters and cut the rest", "confidence": "medium", "evidence": "Largely replaced art-making with competitive chess from 1923, competing for France at four Chess Olympiads, saying chess had 'all the beauty of art, and much more. It cannot be commercialised.'"}
+      ],
+      "antiTags": [
+        {"category": "influencing", "skill": "Sell something you actually believe in", "evidence": "He explicitly withdrew from the art market in favour of chess because he wanted a practice with no market wrapping around it."}
+      ]
+    },
+    {
+      "name": "Dieter Rams",
+      "dominantCategories": ["designing", "clarifying", "synthesizing"],
+      "playSkills": [
+        {"category": "designing", "skill": "Make something beautiful and usable", "confidence": "high", "evidence": "1956 Phonosuper SK4 at Braun (with Gugelot and Aicher) was one of the first consumer electronics framed as a deliberate aesthetic object, defining West German industrial output for forty years."},
+        {"category": "synthesizing", "skill": "Build a framework that holds it all", "confidence": "high", "evidence": "Wrote the Ten Principles of Good Design in the 1970s (innovative, useful, aesthetic, understandable, unobtrusive, honest, long-lasting, thorough, environmentally friendly, as little design as possible) adopted across Apple, Muji and software UI teams."},
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "high", "evidence": "'Weniger, aber besser' (less, but better) contrasts his ethical position with the aesthetic 'less is more'. 'Indifference towards people and the reality in which they live is actually the one and only cardinal sin in design.'"},
+        {"category": "designing", "skill": "Polish the small details others miss", "confidence": "high", "evidence": "The 606 Shelving System for Vitsœ (1960) is still manufactured today 60+ years later, with components interchangeable with the 1960 originals. A customer can still order a part to expand a shelf their grandfather bought."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Massimo Vignelli",
+      "dominantCategories": ["designing", "clarifying", "organizing"],
+      "playSkills": [
+        {"category": "designing", "skill": "Make something beautiful and usable", "confidence": "high", "evidence": "1972 NYC subway diagram stylised geography into coloured lines at 45 and 90 degrees; after being replaced in 1979 the MTA returned to a variant in 2025, a 53-year vindication."},
+        {"category": "organizing", "skill": "Build a workflow that runs itself", "confidence": "high", "evidence": "Unigrid system for the US National Park Service in the late 1970s imposed a single grid on every national park brochure so visitors could find the same information in the same place on every page."},
+        {"category": "clarifying", "skill": "Turn jargon into plain words", "confidence": "high", "evidence": "Defined graphic design borrowing linguistics vocabulary: 'the organisation of information that is semantically correct, syntactically consistent, and pragmatically understandable'."},
+        {"category": "strategizing", "skill": "Pick what matters and cut the rest", "confidence": "high", "evidence": "The Vignelli Canon argued a designer needs only about five typefaces (Bodoni, Garamond, Century, Futura, Helvetica, Times Roman). 'Design authority comes from what you refuse to use.'"}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Tadao Ando",
+      "dominantCategories": ["designing", "creating", "building"],
+      "playSkills": [
+        {"category": "designing", "skill": "Shape how a moment feels", "confidence": "high", "evidence": "At the 1989 Church of the Light he cut a cross of four openings into a concrete rear wall so direct sunlight falls as a cross inside the chapel, saying the light did the decorative work because they had no budget."},
+        {"category": "building", "skill": "Make a working version from scratch", "confidence": "high", "evidence": "A former amateur boxer, he taught himself architecture by reading Le Corbusier and travelling 1962-1969, founding his Osaka practice in 1968 at 27 with no degree and no formal apprenticeship."},
+        {"category": "designing", "skill": "Craft a space people want to stay in", "confidence": "high", "evidence": "Defines architecture as 'boundaries for protection and then opening them up for movement'. Concrete walls that look closed from outside are opened at one specific angle to let light, rain, or a garden in."},
+        {"category": "nurturing", "skill": "Watch someone grow without taking credit", "confidence": "medium", "evidence": "Donated his entire 1995 Pritzker Prize $100,000 cheque to orphans of the Great Hanshin earthquake, announced quietly, saying the prize recognised work done by many in his office and the Kobe children needed it more."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Paula Scher",
+      "dominantCategories": ["designing", "expressing", "creating"],
+      "playSkills": [
+        {"category": "designing", "skill": "Make something beautiful and usable", "confidence": "high", "evidence": "Designed the Citi logo (red arc over 'citi') on a napkin during an initial client meeting in seconds, inheriting decades of Traveler's umbrella equity; uses the story to show a quick design is quick only after thirty years of training."},
+        {"category": "expressing", "skill": "Turn a message into a moment", "confidence": "high", "evidence": "Her 1995 Bring in 'da Noise, Bring in 'da Funk posters for the Public Theater used wood-type letters at aggressive angles borrowing from Victorian theatre and graffiti, wanting the graphics to 'look like the noise you walk past on 42nd Street'."},
+        {"category": "building", "skill": "Ship a rough v1", "confidence": "high", "evidence": "At CBS Records 1972-1980 she designed around 150 album covers a year, earning four Grammy nominations. The volume was the education: forced to produce a finished design every two days for eight years."},
+        {"category": "clarifying", "skill": "Break down a hard idea so anyone gets it", "confidence": "low", "evidence": "Her self-description 'Less is more and more is more. It's the middle that's not a good place' is a direct teachable rebuttal to the modernist house rule."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Zaha Hadid",
+      "dominantCategories": ["designing", "creating"],
+      "playSkills": [
+        {"category": "creating", "skill": "Follow a wild hunch and see where it goes", "confidence": "high", "evidence": "From 1977 until 1993 she was dismissed as a 'paper architect' whose painted drawings could not be translated into concrete, producing competition entries that won praise and client rejection for 16 years."},
+        {"category": "creating", "skill": "Fill a blank page with something real", "confidence": "high", "evidence": "Used suprematist paint compositions under Koolhaas at the AA as the primary design phase, before any plan was drawn. Her curvilinear geometry was invented on canvas before any CAD programme."},
+        {"category": "designing", "skill": "Make something beautiful and usable", "confidence": "high", "evidence": "The 2013 Heydar Aliyev Center in Baku is a 57,500 sqm continuously curving glass-fibre-reinforced polyester skin with no visible column grid, winning the 2014 London Design Museum Design of the Year."},
+        {"category": "influencing", "skill": "Move someone from stuck to action", "confidence": "medium", "evidence": "As the first woman Pritzker laureate in 2004 she used her acceptance to speak about underrepresentation of women in architecture and the pressure to be 'twice as good', returning to the theme in almost every public appearance."}
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jan Gehl",
+      "dominantCategories": ["designing", "analyzing", "clarifying"],
+      "playSkills": [
+        {"category": "analyzing", "skill": "Find the pattern in messy data", "confidence": "high", "evidence": "After Copenhagen pedestrianised Strøget on 17 November 1962 he and his wife Ingrid began counting people in the new zone by hand, tracking how many sat on benches, how long they stayed, for decades. 'The street is the data set.'"},
+        {"category": "designing", "skill": "Craft a space people want to stay in", "confidence": "high", "evidence": "Life Between Buildings (1971) argued modernist urbanism had designed buildings and roads but not the spaces between them, and the 'in-between' is where city life actually happens."},
+        {"category": "clarifying", "skill": "Teach someone something they are stuck on", "confidence": "high", "evidence": "His most-repeated instruction is 'Go out there and see what works and what doesn't work, and learn from reality', a direct polemic against design from plans requiring a notebook and a folding chair."},
+        {"category": "strategizing", "skill": "Build a roadmap for something chaotic", "confidence": "medium", "evidence": "In 2007 Gehl Architects' study of Manhattan at Janette Sadik-Khan's invitation directly shaped the 2009 pedestrianisation of Times Square and NYC's protected bike-lane expansion."}
+      ],
+      "antiTags": []
+    }
+  ]
+}

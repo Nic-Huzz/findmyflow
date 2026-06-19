@@ -1,0 +1,147 @@
+{
+“questions”: [
+{
+“id”: “Q1_business_model”,
+“text”: “What type of business do you run?”,
+“type”: “single_choice”,
+“options”: [
+“digital_product”,
+“coaching_consulting”,
+“physical_product”,
+“membership_subscription”,
+“saas_software”,
+“agency”,
+“hybrid”
+],
+“store_as”: “business_model”,
+“tags”: [“business_model”]
+},
+{
+  "id": "Q2_gross_margin",
+  "text": "What best describes your average gross margin?",
+  "type": "single_choice",
+  "options": [
+    "under_40_percent",
+    "40_60_percent",
+    "60_85_percent",
+    "85_plus_percent"
+  ],
+  "store_as": "gross_margin",
+  "tags": ["margin"]
+},
+
+{
+  "id": "Q3_cashflow_tolerance",
+  "text": "What best describes your cashflow tolerance for front-end offers?",
+  "type": "single_choice",
+  "options": [
+    "must_profit_front_end",
+    "break_even_is_okay",
+    "can_afford_short_term_loss",
+    "can_run_free_front_end"
+  ],
+  "store_as": "cashflow_tolerance",
+  "tags": ["cashflow"]
+},
+
+{
+  "id": "Q4_capacity",
+  "text": "How much new customer volume can you handle right now?",
+  "type": "single_choice",
+  "options": [
+    "high_capacity_can_handle_big_spike",
+    "moderate_capacity_some_limitations",
+    "low_capacity_can_only_take_a_few",
+    "no_capacity_need_to_control_volume"
+  ],
+  "store_as": "capacity",
+  "tags": ["capacity"]
+},
+
+{
+  "id": "Q5_tracking",
+  "text": "How well can you track user outcomes or progress?",
+  "type": "single_choice",
+  "options": [
+    "can_track_everything",
+    "can_track_some_things",
+    "tracking_is_difficult",
+    "cannot_track_results_at_all"
+  ],
+  "store_as": "tracking_ability",
+  "tags": ["tracking"]
+},
+
+{
+  "id": "Q6_lead_challenge",
+  "text": "What is your biggest challenge with leads right now?",
+  "type": "single_choice",
+  "options": [
+    "not_enough_leads",
+    "leads_dont_trust_me_yet",
+    "leads_are_price_sensitive",
+    "slow_or_unclear_sales_cycle",
+    "low_quality_leads",
+    "none_of_the_above"
+  ],
+  "store_as": "lead_challenge",
+  "tags": ["lead_challenge"]
+},
+
+{
+  "id": "Q7_backend_strength",
+  "text": "How strong is your back-end monetization?",
+  "type": "single_choice",
+  "options": [
+    "multiple_strong_upsells_and_backend",
+    "one_strong_backend_offer",
+    "weak_backend_working_on_it",
+    "no_backend_offer_yet"
+  ],
+  "store_as": "backend_strength",
+  "tags": ["backend"]
+},
+
+{
+  "id": "Q8_repeat_purchase",
+  "text": "How often do customers buy from you again or consume repeatedly?",
+  "type": "single_choice",
+  "options": [
+    "frequent_repurchase_or_consumption",
+    "occasional_repeat_purchase",
+    "rare_repeat_purchase",
+    "one_time_purchase_only"
+  ],
+  "store_as": "repeat_purchase_behavior",
+  "tags": ["repeat_purchase"]
+},
+
+{
+  "id": "Q9_primary_goal",
+  "text": "What is your primary goal for the attraction offer?",
+  "type": "single_choice",
+  "options": [
+    "get_more_leads_fast",
+    "build_trust_and_authority",
+    "generate_testimonials_and_case_studies",
+    "fill_a_program_or_cohort",
+    "sell_high_ticket_offer",
+    "grow_a_large_email_list"
+  ],
+  "store_as": "primary_goal",
+  "tags": ["primary_goal"]
+},
+
+{
+  "id": "Q10_lead_preference",
+  "text": "What type of leads do you most want from this offer?",
+  "type": "single_choice",
+  "options": [
+    "as_many_leads_as_possible",
+    "fewer_but_higher_quality_leads",
+    "only_people_likely_to_buy",
+    "balanced_mix_of_volume_and_quality"
+  ],
+  "store_as": "lead_preference",
+  "tags": ["lead_preference"]
+}

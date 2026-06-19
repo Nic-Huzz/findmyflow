@@ -1,0 +1,728 @@
+{
+  "meta": {
+    "tier": "gap_filling",
+    "count": 28,
+    "generatedAt": "2026-04-12",
+    "gapAreas": {
+      "relationship_repair": 7,
+      "addiction_recovery": 7,
+      "aging_elder_care": 4,
+      "disability_advocacy": 5,
+      "financial_empowerment": 5
+    }
+  },
+  "profiles": [
+    {
+      "name": "John Gottman",
+      "domain": "couples research / relationship science",
+      "era": "1942-present",
+      "region": "US",
+      "bio": "Psychologist who can predict divorce with over 90% accuracy from watching a couple interact for 15 minutes. Built the Love Lab at the University of Washington and turned decades of clinical observation into a therapist certification empire.",
+      "oneLiner": "Watched thousands of couples fight and discovered that contempt, not anger, kills a marriage.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["forgot_what_for", "kids_deserved_better"],
+      "narratives": [
+        {
+          "title": "The Love Lab",
+          "content": "At the University of Washington in the early 1990s, Gottman built an apartment-laboratory where couples lived while sensors tracked heart rate, skin conductance, and facial expressions during conflict. From thousands of hours of observation he identified four behaviours that predict divorce with over 90% accuracy: criticism, contempt, defensiveness, and stonewalling. He called them the Four Horsemen. The research drew on longitudinal data from over 3,000 couples tracked across multiple studies."
+        },
+        {
+          "title": "The magic ratio",
+          "content": "In a 1992 study published in the Journal of Marriage and the Family, Gottman and Robert Levenson followed 73 couples and found that stable relationships had at least five positive interactions for every negative one during conflict. The 5:1 ratio became one of the most cited findings in relationship psychology. It gave therapists a number to aim for rather than vague advice about being nicer."
+        },
+        {
+          "title": "From academic papers to the Gottman Institute",
+          "content": "In 1996 Gottman and his wife Julie Schwartz Gottman founded the Gottman Institute in Seattle. They took 20 years of university research and turned it into structured weekend workshops for couples, therapist certification programs, and a clinical training model. By the 2010s, thousands of therapists worldwide held Gottman certifications, making the method one of the most widely practiced evidence-based couples interventions on the planet."
+        },
+        {
+          "title": "The bid for connection",
+          "content": "In a 1998 study of newlyweds, Gottman observed what he called 'bids for connection,' small moments where one partner reaches toward the other with a comment, question, or gesture. He tracked whether the other partner 'turned toward' the bid or 'turned away.' Couples who were still married six years later had turned toward bids 86% of the time. Divorced couples had turned toward only 33% of the time. The finding reframed relationship health as something built in micro-moments, not grand gestures."
+        }
+      ]
+    },
+    {
+      "name": "Sue Johnson",
+      "domain": "emotionally focused therapy / attachment science",
+      "era": "1947-present",
+      "region": "Canada / UK",
+      "bio": "Clinical psychologist who created Emotionally Focused Therapy (EFT) in the 1980s and proved that couple distress is fundamentally an attachment problem, not a communication problem.",
+      "oneLiner": "Showed therapists that the couple fighting about dishes is actually fighting about whether anyone will be there when they call.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["forgot_what_for"],
+      "narratives": [
+        {
+          "title": "Building EFT from Bowlby's blueprint",
+          "content": "In the early 1980s at the University of British Columbia, Johnson began developing Emotionally Focused Therapy by applying John Bowlby's attachment theory to adult romantic relationships. The insight was radical at the time: that the distressed couple's arguments were not about the surface content but about unmet attachment needs. 'Are you there for me? Can I count on you? Do I matter to you?' became the three questions she said every relationship argument is really asking."
+        },
+        {
+          "title": "The outcome studies that changed the field",
+          "content": "Between 1985 and 2005, EFT accumulated more clinical outcome research than almost any other couples therapy model. A meta-analysis of the early studies showed 70-75% of couples moving from distress to recovery, with 90% showing significant improvement. By the mid-2000s, EFT was being recognized as one of only two or three empirically validated couples therapy models in the world."
+        },
+        {
+          "title": "Hold Me Tight",
+          "content": "In 2008 Johnson published Hold Me Tight: Seven Conversations for a Lifetime of Love, translating clinical EFT into language ordinary couples could use. The book structured the therapy into seven key conversations, from 'Recognizing the Demon Dialogues' to 'Forgiving Injuries.' It sold hundreds of thousands of copies and spawned Hold Me Tight workshops run by certified EFT therapists in over 30 countries."
+        },
+        {
+          "title": "Taking EFT to the military",
+          "content": "After research showed EFT was effective with trauma survivors, Johnson's team began working with military couples dealing with PTSD. A study at the Ottawa Couple and Family Institute showed that EFT reduced relationship distress in veteran couples even when the PTSD itself was not the direct treatment target. The work challenged the assumption that you had to fix the individual before fixing the relationship."
+        }
+      ]
+    },
+    {
+      "name": "Harville Hendrix",
+      "domain": "couples therapy / Imago Relationship Therapy",
+      "era": "1935-present",
+      "region": "US",
+      "bio": "Therapist and author who developed Imago Relationship Therapy, arguing that we unconsciously choose partners who resemble the caregivers who wounded us, and that the relationship itself becomes the vehicle for healing.",
+      "oneLiner": "Proved that the person who drives you crazy is the exact person your psyche picked for the job.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["kids_deserved_better", "forgot_what_for"],
+      "narratives": [
+        {
+          "title": "The Oprah interview that changed everything",
+          "content": "In 1988 Hendrix appeared on The Oprah Winfrey Show to discuss his book Getting the Love You Want. The episode generated such an intense audience response that Oprah invited him back 17 more times. She called the book one of the most important she had ever read. Within months it was a New York Times bestseller, and Imago therapy went from a niche practice to a recognizable name in couples work."
+        },
+        {
+          "title": "The Imago Dialogue",
+          "content": "The core technique Hendrix developed is the Imago Dialogue: a structured conversation where one partner mirrors, validates, and empathizes with the other before responding. The simple three-step process (mirroring: 'What I heard you say is...'; validation: 'That makes sense because...'; empathy: 'I imagine you feel...') was designed to bypass the defensive reactions that hijack most couple arguments. It spread through workshops and has been adapted into school programs, corporate training, and conflict resolution settings."
+        },
+        {
+          "title": "Personal breakdown as theory origin",
+          "content": "Hendrix's first marriage ended in divorce, and he spent years examining why a trained therapist could not save his own relationship. The failure became the research question. He noticed that his ex-wife and his childhood caregivers shared specific traits, and he began mapping the pattern across his clinical caseload. The theory that emerged, that we choose partners who activate our deepest childhood wounds so we can finally heal them, became the foundation of Imago."
+        }
+      ]
+    },
+    {
+      "name": "Terry Real",
+      "domain": "men's mental health / relational therapy",
+      "era": "1953-present",
+      "region": "US",
+      "bio": "Family therapist who spent decades naming the specific ways men are taught to disconnect from their own emotions and then destroy their relationships with the same disconnection.",
+      "oneLiner": "Told men the truth about what patriarchy costs them personally, not just the women around them.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["voice_taken", "forgot_what_for"],
+      "narratives": [
+        {
+          "title": "I Don't Want to Talk About It",
+          "content": "In 1997 Real published I Don't Want to Talk About It: Overcoming the Secret Legacy of Male Depression, one of the first books to argue that male depression is massively underdiagnosed because men express it through rage, addiction, and workaholism rather than sadness. He named the phenomenon 'covert depression' and traced it to the emotional disconnection boys are trained into starting around age five. The book drew on his own father's violence and depression as its emotional spine."
+        },
+        {
+          "title": "The Relational Life Institute",
+          "content": "Real founded the Relational Life Institute to train therapists in his method, which is notably more confrontational than most couples therapy. He is known for interrupting clients mid-session, naming grandiosity and victimhood in real time, and refusing to let either partner hide behind polite therapeutic language. His training videos show him telling a husband, in front of his wife, exactly what his behaviour looks like from the outside, a move most therapists are trained to avoid."
+        },
+        {
+          "title": "Naming the 'losing strategy'",
+          "content": "Real's clinical framework centres on what he calls the 'losing strategy,' the habitual relational move each person defaults to under stress. He categorises them as variations of one-up (controlling, contemptuous) or one-down (withdrawing, compliant). His approach requires the therapist to identify the losing strategy quickly and name it directly, then teach the client what he calls 'the winner's move,' which is almost always vulnerability."
+        }
+      ]
+    },
+    {
+      "name": "Gary Chapman",
+      "domain": "relationship counselling / pastoral care",
+      "era": "1938-present",
+      "region": "US",
+      "bio": "Baptist pastor and counsellor who wrote The Five Love Languages, a framework so simple it entered everyday conversation and has sold over 20 million copies worldwide.",
+      "oneLiner": "Gave millions of couples a shared vocabulary for why they keep missing each other.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["feeling_stupid"],
+      "narratives": [
+        {
+          "title": "The Five Love Languages",
+          "content": "Published in 1992, The Five Love Languages: The Secret to Love That Lasts proposed that people express and receive love in five primary ways: words of affirmation, quality time, receiving gifts, acts of service, and physical touch. Chapman developed the framework after years of pastoral counselling at Calvary Baptist Church in Winston-Salem, North Carolina, where he noticed couples who genuinely loved each other still felt unloved because they were speaking different 'languages.' The book sold slowly at first, then accelerated through word of mouth, eventually exceeding 20 million copies."
+        },
+        {
+          "title": "The framework that escaped the book",
+          "content": "Chapman's love languages framework became one of those rare ideas that outgrows its source. By the 2010s, people who had never read the book could tell you their love language. The phrase entered dating app profiles, workplace team-building exercises, and parenting forums. Chapman expanded the franchise into editions for children, teenagers, military families, singles, and the workplace. The simplicity of the model, five categories with a free online quiz, made it spreadable in a way most relationship research never achieves."
+        },
+        {
+          "title": "Thirty years of Saturday morning counselling",
+          "content": "Before and after the book's success, Chapman continued weekly couples counselling sessions at his church in Winston-Salem. He ran Saturday morning marriage seminars for decades, often seeing couples who had tried the love languages framework on their own and needed help applying it to deeper wounds. The pastoral practice never stopped being the foundation. He has said repeatedly that the framework came from sitting with real couples, not from theory."
+        }
+      ]
+    },
+    {
+      "name": "Stan Tatkin",
+      "domain": "couples therapy / psychobiology of relationships",
+      "era": "1954-present",
+      "region": "US",
+      "bio": "Clinician who built the PACT (Psychobiological Approach to Couple Therapy) model by combining attachment theory with neuroscience, teaching couples to regulate each other's nervous systems in real time.",
+      "oneLiner": "Taught couples that their bodies are already in the argument before their mouths open.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["feeling_stupid"],
+      "narratives": [
+        {
+          "title": "PACT: reading the body, not the story",
+          "content": "In the early 2000s Tatkin developed the Psychobiological Approach to Couple Therapy at UCLA, blending attachment theory, developmental neuroscience, and arousal regulation. PACT therapists are trained to watch partners' faces, breathing, and posture more than their words. The approach argues that couples' nervous systems are wired to each other, and that a skilled therapist can see the threat response in one partner's body before it becomes an argument."
+        },
+        {
+          "title": "Wired for Love",
+          "content": "Tatkin's 2012 book Wired for Love brought neuroscience concepts into plain language for couples. He introduced the idea of a 'couple bubble,' a mutual agreement to protect the relationship as a system, not just to protect each individual's needs. The book used brain science to explain why secure-functioning relationships require both partners to be experts on each other's triggers, and to intervene before the amygdala hijacks the conversation."
+        },
+        {
+          "title": "Anchor, Island, Wave",
+          "content": "Tatkin simplified attachment styles into three accessible categories: Anchors (securely attached), Islands (avoidant, self-reliant), and Waves (anxiously attached, externally regulated). The language was designed to be less clinical than traditional attachment labels. He uses it in PACT training to teach therapists how to spot the pairing quickly and predict where the couple's nervous system will break down under stress."
+        }
+      ]
+    },
+    {
+      "name": "Alain de Botton",
+      "domain": "philosophy / emotional education",
+      "era": "1969-present",
+      "region": "UK / Switzerland",
+      "bio": "Philosopher and author who founded The School of Life to make emotional intelligence and philosophical wisdom accessible to people who would never set foot in a university philosophy department.",
+      "oneLiner": "Built a global school for the emotions that philosophy departments forgot to teach.",
+      "primaryCategoryIntent": "forgot_what_for",
+      "secondaryCategoryIntents": ["pain_not_believed", "feeling_stupid"],
+      "narratives": [
+        {
+          "title": "The School of Life",
+          "content": "In 2008 de Botton opened The School of Life in a shopfront on Marchmont Street in London. The premise was that the most important things in life, how to find fulfilling work, sustain relationships, face death, and deal with anxiety, were never formally taught. The school offered classes, therapy, books, and eventually a YouTube channel that amassed over 8 million subscribers. It expanded to locations in over a dozen cities worldwide."
+        },
+        {
+          "title": "The Course of Love",
+          "content": "In his 2016 novel The Course of Love, de Botton tracked a couple from infatuation through marriage, children, affairs, and eventual mature love. Interspersed with the narrative were essay-like interruptions where de Botton explained the psychology behind each stage. The book argued that Romanticism is the enemy of good relationships because it teaches us that love should be effortless, when in fact love is a skill that requires study, practice, and repeated failure."
+        },
+        {
+          "title": "Redefining what philosophy is for",
+          "content": "De Botton's 2000 book The Consolations of Philosophy took six philosophers (Socrates, Epicurus, Seneca, Montaigne, Schopenhauer, Nietzsche) and matched each to a common human problem: unpopularity, not having enough money, frustration, inadequacy, a broken heart, and difficulty. Academic philosophers criticized the approach as oversimplified. It sold over two million copies and demonstrated a market for philosophy that actually helped people live."
+        },
+        {
+          "title": "Status Anxiety and the question beneath ambition",
+          "content": "In his 2004 book and Channel 4 series Status Anxiety, de Botton argued that much of modern unhappiness stems from comparing ourselves to our peers rather than from absolute deprivation. He traced the emotion through history, noting that premodern societies had less status anxiety because social position was fixed at birth. The insight that meritocracy intensifies suffering, because failure now feels deserved, gave language to a feeling millions of professionals carry but rarely name."
+        }
+      ]
+    },
+    {
+      "name": "Gabor Mate",
+      "domain": "addiction medicine / trauma",
+      "era": "1944-present",
+      "region": "Canada / Hungary",
+      "bio": "Physician who spent 12 years working in Vancouver's Downtown Eastside with patients in the most severe stages of drug addiction and concluded that addiction is not a choice or a disease but a response to childhood pain.",
+      "oneLiner": "Worked with the most addicted people in North America and said the question is never 'Why the addiction?' but always 'Why the pain?'",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["kids_deserved_better", "left_behind"],
+      "narratives": [
+        {
+          "title": "Twelve years on the Downtown Eastside",
+          "content": "From the late 1990s to the early 2010s, Mate worked as a staff physician at the Portland Hotel, a residence and harm reduction facility in Vancouver's Downtown Eastside, one of the most concentrated areas of drug use in North America. His patients injected heroin, smoked crack, and lived with HIV, hepatitis C, and mental illness. He prescribed methadone, treated abscesses, and listened. What he heard, over and over, was childhood trauma: abuse, neglect, abandonment. He documented these stories in In the Realm of Hungry Ghosts, published in 2008."
+        },
+        {
+          "title": "The question that changed the frame",
+          "content": "Mate's central contribution is a single reframe: instead of asking 'Why the addiction?', ask 'Why the pain?' He argues that every addiction, from heroin to work to shopping, is an attempt to soothe a wound that was never properly attended to, usually in childhood. The idea draws on attachment theory, neuroscience, and ACE (Adverse Childhood Experiences) research, but Mate's power is that he delivers it with the authority of someone who spent over a decade in rooms with people no other doctor wanted to treat."
+        },
+        {
+          "title": "His own confession",
+          "content": "In Hungry Ghosts, Mate disclosed his own compulsive buying of classical music CDs, sometimes spending thousands of dollars in a single spree while his patients waited. He traced the compulsion to his infancy in Budapest in 1944, when his mother, a Jewish woman in Nazi-occupied Hungary, handed him to a stranger to save his life. The admission cost him professional credibility in some circles but gave the book an honesty that academic addiction literature almost never achieves."
+        },
+        {
+          "title": "The Myth of Normal",
+          "content": "Published in 2022, The Myth of Normal expanded Mate's argument beyond addiction to Western culture itself. He argued that a society producing epidemics of anxiety, depression, autoimmune disease, and addiction is not normal but toxic, and that the medical system treats symptoms while ignoring the conditions that produce them. The book debuted at number one on the New York Times bestseller list."
+        }
+      ]
+    },
+    {
+      "name": "Johann Hari",
+      "domain": "journalism / addiction and mental health",
+      "era": "1979-present",
+      "region": "UK / Switzerland",
+      "bio": "Journalist who travelled to drug war frontlines across nine countries and concluded that the opposite of addiction is not sobriety but connection.",
+      "oneLiner": "Told a world obsessed with chemical hooks that the real hook is loneliness.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "narratives": [
+        {
+          "title": "Chasing the Scream",
+          "content": "Published in 2015, Chasing the Scream: The First and Last Days of the War on Drugs traced the drug war from its origins with Harry Anslinger in the 1930s through to present-day experiments in decriminalisation. Hari travelled across nine countries over three years, interviewing everyone from a transgender crack dealer in Brooklyn to a scientist who gave rats a choice between drugged water and a social playground (the rats chose the playground). The book argued that addiction is driven primarily by isolation and distress, not chemical dependency alone."
+        },
+        {
+          "title": "The Rat Park insight",
+          "content": "Hari popularised Bruce Alexander's Rat Park experiment from the late 1970s, in which rats housed in enriched social environments largely ignored morphine-laced water, while isolated rats drank it compulsively. The experiment had been mostly forgotten. Hari made it the centrepiece of his TED talk, which has been viewed over 20 million times. His summary line, 'The opposite of addiction is not sobriety. The opposite of addiction is connection,' became one of the most quoted sentences in modern addiction discourse."
+        },
+        {
+          "title": "Portugal as proof of concept",
+          "content": "A key chapter in Chasing the Scream focused on Portugal's 2001 decision to decriminalise all personal drug use and redirect enforcement budgets into treatment and social reintegration. Hari interviewed Joao Goulao, the doctor who designed the Portuguese policy, and documented the results: injection drug use fell by 50% in the decade following decriminalisation. The chapter became a reference point in drug policy debates worldwide."
+        }
+      ]
+    },
+    {
+      "name": "Maia Szalavitz",
+      "domain": "addiction journalism / neuroscience",
+      "era": "1965-present",
+      "region": "US",
+      "bio": "Journalist and former cocaine and heroin user who became one of the most rigorous science writers covering addiction, arguing that addiction is a learning disorder, not a moral failing or a brain disease.",
+      "oneLiner": "Used her own needle marks as credentials to demand that addiction science stop lying to itself.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["stopped_wondering", "feeling_stupid"],
+      "narratives": [
+        {
+          "title": "Unbroken Brain",
+          "content": "In her 2016 book Unbroken Brain: A Revolutionary New Way of Understanding Addiction, Szalavitz proposed that addiction is best understood as a developmental learning disorder, not a disease or a choice. She argued that the brain learns addiction the same way it learns love: through repeated experience during sensitive developmental periods. The framing challenged both the moral model (addiction as sin) and the disease model (addiction as hijacked brain chemistry) by offering a third path grounded in neuroscience and developmental psychology."
+        },
+        {
+          "title": "Personal history as methodology",
+          "content": "Szalavitz was injecting cocaine and heroin in her early twenties while attending Columbia University. She was arrested for possession of two kilograms of cocaine in 1986 and faced a potential sentence of 15 years to life. The charges were eventually reduced. She has written openly about using her history not for shock value but as an epistemological advantage: she knows what the literature describes because she lived it, and she knows when the literature is wrong because the experience does not match."
+        },
+        {
+          "title": "The exposé of tough love",
+          "content": "Szalavitz's 2006 book Help at Any Cost investigated the abusive practices of the 'tough love' youth treatment industry, including programmes where teenagers were isolated, humiliated, and physically restrained. She documented multiple deaths in facilities that parents had paid thousands of dollars to attend. The book was one of the first mainstream investigations of an industry that operated largely without regulatory oversight, and it contributed to the closure of several programmes."
+        }
+      ]
+    },
+    {
+      "name": "Carl Hart",
+      "domain": "neuroscience / drug policy",
+      "era": "1966-present",
+      "region": "US",
+      "bio": "Columbia University neuroscientist who ran controlled experiments giving drugs to people in laboratory settings and found that the vast majority of drug users are not addicted, challenging the narrative that certain substances are irresistibly addictive.",
+      "oneLiner": "Gave people drugs in a lab, measured what happened, and told the world most of what it believes about addiction is wrong.",
+      "primaryCategoryIntent": "stopped_wondering",
+      "secondaryCategoryIntents": ["pain_not_believed", "life_not_yours"],
+      "narratives": [
+        {
+          "title": "The lab experiments nobody expected",
+          "content": "At Columbia University, Hart ran controlled studies in which he offered crack cocaine or methamphetamine users a choice between another hit and a small cash reward (five dollars or a voucher). The majority of participants chose the cash or voucher over the drug. The results, published in peer-reviewed journals across the 2000s and 2010s, directly contradicted the dominant narrative that crack and meth are so addictive that users cannot resist them even when alternatives are available."
+        },
+        {
+          "title": "Drug Use for Grown-Ups",
+          "content": "In his 2021 book Drug Use for Grown-Ups: Chasing Liberty in the Land of Fear, Hart argued that most drug use is recreational and responsible, and that the war on drugs causes more harm than the drugs themselves. He disclosed his own regular use of heroin (by snorting, not injection) as part of the argument. The disclosure was deliberate: he wanted to force readers to reconcile their image of a tenured Columbia professor with their assumptions about who uses heroin."
+        },
+        {
+          "title": "From the hood to the Ivy League",
+          "content": "Hart grew up in poverty in Miami, raised by a single mother in a neighbourhood saturated with crack in the 1980s. He initially entered neuroscience believing the drug-war narrative, wanting to find the neurochemical mechanism that made Black communities vulnerable to crack. His own research gradually dismantled that belief. He has described the process as painful: the data he was generating contradicted everything he had been raised to think, and it took years before he was willing to say so publicly."
+        }
+      ]
+    },
+    {
+      "name": "Holly Whitaker",
+      "domain": "sobriety / wellness",
+      "era": "1981-present",
+      "region": "US",
+      "bio": "Founder of Tempest (formerly Hip Sobriety) who built an alternative to Alcoholics Anonymous, arguing that the 12-step model was designed by and for white men in the 1930s and fails women, queer people, and people of colour.",
+      "oneLiner": "Looked at the rooms of AA and asked why a programme designed by men in 1935 was still the only option on the table.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "narratives": [
+        {
+          "title": "Quit Like a Woman",
+          "content": "Whitaker's 2019 book Quit Like a Woman: The Radical Choice to Not Drink in a Culture Obsessed with Alcohol argued that alcohol is marketed specifically to women as self-care, stress relief, and empowerment, and that the recovery industry then treats the resulting dependency with a model (AA) that asks women to surrender their will and confess their powerlessness. She framed sobriety as a feminist act, not a confession of failure. The book spent weeks on the New York Times bestseller list."
+        },
+        {
+          "title": "Tempest: recovery without the church basement",
+          "content": "In 2014 Whitaker launched Hip Sobriety School, later renamed Tempest, an online recovery programme that replaced 12-step meetings with a combination of meditation, nutrition, movement, therapy, and community. The programme was designed for people, especially women, who did not identify with AA's framing of addiction as a spiritual disease requiring surrender to a higher power. Tempest grew to thousands of members before financial difficulties led to its closure in 2022."
+        },
+        {
+          "title": "Her own rock bottom",
+          "content": "Whitaker was a director at a health startup in San Francisco when her drinking and drug use brought her to a breaking point. She tried AA, found the meetings alienating, and began researching alternatives. She discovered that the scientific evidence for AA's effectiveness was surprisingly thin, and that most peer-reviewed research showed AA worked no better than other approaches. The gap between AA's cultural authority and its evidence base became the foundation of her entire platform."
+        }
+      ]
+    },
+    {
+      "name": "Russell Brand",
+      "domain": "comedy / addiction recovery / media",
+      "era": "1975-present",
+      "region": "UK",
+      "bio": "Comedian and actor who used his public platform and personal history of heroin and crack addiction to advocate loudly for a compassionate, abstinence-based approach to recovery, bringing the language of 12-step programmes to millions who had never heard it.",
+      "oneLiner": "Took the language of the rooms to the biggest stages in the world and made recovery look like something other than defeat.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["forgot_what_for", "voice_taken"],
+      "narratives": [
+        {
+          "title": "Recovery: Freedom from Our Addictions",
+          "content": "In his 2017 book Recovery: Freedom from Our Addictions, Brand rewrote the 12 steps of Alcoholics Anonymous in contemporary language, stripping away the mid-century Christian framing and making each step applicable to any compulsive behaviour. The book was not subtle. It opened with: 'I have been addicted to drugs, alcohol, sex, food, money, fame. I have been in and out of the 12-step programme for 15 years.' It sold widely and introduced the 12-step framework to an audience that would never walk into a meeting."
+        },
+        {
+          "title": "The BBC testimony",
+          "content": "In 2012, Brand gave evidence before the UK Home Affairs Select Committee on drug policy. He told MPs about his own crack and heroin addiction, described the treatment that saved his life, and argued for decriminalisation and treatment over criminalisation. The testimony went viral because Brand spoke in a register that parliamentary committees almost never hear: personal, profane, and precise. He told the chair, Keith Vaz, that abstinence-based recovery worked for him but that punishing users was 'cruel and pointless.'"
+        },
+        {
+          "title": "From abstinence to mentorship",
+          "content": "Brand has spoken repeatedly about working as a mentor to people in early recovery, describing the process as the single most effective thing for maintaining his own sobriety. He has funded and promoted abstinence-based treatment centres in the UK, including the Focus 12 clinic in Suffolk. His advocacy is unapologetically personal: he does not pretend to speak from clinical distance but from the position of someone who came close to dying and did not."
+        }
+      ]
+    },
+    {
+      "name": "Bill Wilson",
+      "domain": "recovery / mutual aid",
+      "era": "1895-1971",
+      "region": "US",
+      "bio": "Co-founder of Alcoholics Anonymous, a stockbroker who got sober in 1934 and, together with Dr. Bob Smith, built the most influential mutual aid movement of the 20th century.",
+      "oneLiner": "A failed stockbroker who discovered that one drunk talking to another drunk was more powerful than any doctor or preacher.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["left_behind", "forgot_what_for"],
+      "narratives": [
+        {
+          "title": "The hospital room revelation",
+          "content": "In December 1934, Bill Wilson was admitted to Towns Hospital in Manhattan for the fourth time for alcohol detoxification. Under the influence of the belladonna cure (a hallucinogenic treatment then standard), Wilson reported a spiritual experience in which 'the room blazed with an indescribably white light.' He never drank again. Whether the experience was pharmacological or mystical remains debated, but the result was concrete: Wilson stayed sober for the remaining 36 years of his life."
+        },
+        {
+          "title": "The meeting at the Mayflower Hotel",
+          "content": "In May 1935, Wilson was in Akron, Ohio, on a failed business deal and desperately wanted a drink. He began making phone calls from the lobby of the Mayflower Hotel, asking to be connected with another alcoholic. The calls eventually led him to Dr. Bob Smith, a surgeon whose own drinking was destroying his practice. Their first conversation lasted six hours. Neither man drank that night. That meeting is generally considered the founding moment of Alcoholics Anonymous."
+        },
+        {
+          "title": "Writing the Big Book",
+          "content": "In 1938 and 1939, Wilson drafted Alcoholics Anonymous, known as the Big Book, which laid out the 12-step recovery programme. He wrote most of it in bed at his home in Brooklyn, with input from early AA members. The first printing of 4,730 copies in April 1939 sold slowly. By the time Wilson died in 1971, the book had sold over 10 million copies. It remains the foundational text of the global 12-step movement, which has spawned over 200 derivative programmes for every compulsion from narcotics to overeating to codependency."
+        },
+        {
+          "title": "The tradition of anonymity",
+          "content": "Wilson's most radical organisational decision was building anonymity into the structure of AA. The 11th and 12th Traditions state that members should maintain personal anonymity at the level of press, radio, and films, and that the programme's principles should always come before personalities. Wilson himself struggled with this, enjoying public attention, but he eventually stepped back from leadership entirely. The result was an organisation that survived its founders and scaled to over 2 million members in 180 countries without a CEO, a board, or a marketing budget."
+        }
+      ]
+    },
+    {
+      "name": "Louise Aronson",
+      "domain": "geriatrics / medical writing",
+      "era": "1964-present",
+      "region": "US",
+      "bio": "Geriatrician and professor at UCSF who wrote Elderhood to argue that old age is not a disease to be treated but a distinct phase of life that medicine and society refuse to take seriously.",
+      "oneLiner": "Told medicine that treating old age as a disease is the disease.",
+      "primaryCategoryIntent": "pain_not_believed",
+      "secondaryCategoryIntents": ["left_behind", "feeling_stupid"],
+      "narratives": [
+        {
+          "title": "Elderhood",
+          "content": "Published in 2019, Elderhood: Redefining Aging, Transforming Medicine, Reimagining Life argued that American medicine divides life into childhood and adulthood but treats everything after 65 as decline. Aronson pointed out that 'old age' can span 30 or 40 years, longer than childhood, and yet has no developmental framework, no medical specialty with prestige, and no cultural narrative other than loss. The book was a Pulitzer Prize finalist and forced a conversation about why geriatrics, a field serving the fastest-growing demographic, remains one of the least-funded and least-chosen medical specialities."
+        },
+        {
+          "title": "The geriatrics recruitment crisis",
+          "content": "Aronson has written extensively about the fact that the United States has roughly 7,000 certified geriatricians for a population of over 50 million people aged 65 and older. Medical students avoid the speciality because it pays less, carries less prestige, and involves longer, more complex appointments. Aronson frames this not as a staffing problem but as a values problem: a culture that fears aging produces a medical system that neglects it."
+        },
+        {
+          "title": "Stories as clinical evidence",
+          "content": "Aronson teaches narrative medicine at UCSF, using patient stories as a clinical tool. In Elderhood, she interweaves her own patients' experiences with medical evidence, philosophical argument, and memoir. One recurring patient, a woman she calls Neeta, appears across multiple chapters, aging in real time through the book. The technique makes the reader experience aging as a lived process, not a statistical category."
+        }
+      ]
+    },
+    {
+      "name": "Bill Thomas",
+      "domain": "geriatric medicine / elder care redesign",
+      "era": "1959-present",
+      "region": "US",
+      "bio": "Geriatrician who looked at nursing homes and saw institutions designed for efficiency rather than life, then spent 30 years building alternatives that treat old people as people rather than patients.",
+      "oneLiner": "Put dogs, cats, birds, and children into a nursing home and watched the death rate drop.",
+      "primaryCategoryIntent": "left_behind",
+      "secondaryCategoryIntents": ["pain_not_believed", "life_not_yours"],
+      "narratives": [
+        {
+          "title": "The Eden Alternative",
+          "content": "In 1991, at Chase Memorial Nursing Home in New Berlin, New York, Thomas introduced what he called the Eden Alternative. He brought in two dogs, four cats, hens, rabbits, over 100 parakeets, and a flock of children from an on-site after-school programme. The hypothesis was that loneliness, helplessness, and boredom, what he called the three plagues of institutional care, were more deadly than most medical conditions. Within two years, Chase Memorial reported a 15% reduction in mortality, a significant drop in staff turnover, and a 38% reduction in prescription drug costs compared to a matched facility."
+        },
+        {
+          "title": "Green Houses",
+          "content": "Thomas's next iteration was the Green House Project, launched in 2003 with funding from the Robert Wood Johnson Foundation. Green Houses replaced 100-bed nursing homes with clusters of homes housing 10-12 elders each, with private rooms, shared kitchens, and self-managed care teams called Shahbazim. By the 2020s, over 300 Green House homes had been built across the United States. Research published in Health Services Research showed that Green House residents had lower rates of hospitalisation and higher satisfaction scores than residents of conventional facilities."
+        },
+        {
+          "title": "The Age of Disruption Tour",
+          "content": "In 2015, Thomas took his message on the road with the Age of Disruption Tour, a one-man theatrical show performed in theatres across the United States. He used storytelling, music, and multimedia to argue that aging is not a problem to be solved but a stage of life to be designed for. The show was deliberately non-medical. Thomas wanted to reach audiences who would never attend a geriatrics conference but might buy a theatre ticket."
+        }
+      ]
+    },
+    {
+      "name": "Ai-jen Poo",
+      "domain": "domestic workers' rights / elder care advocacy",
+      "era": "1974-present",
+      "region": "US",
+      "bio": "Labour organiser who built the National Domestic Workers Alliance to fight for the rights of nannies, housekeepers, and home care workers, then connected that fight to the aging crisis by arguing that caring for the elderly is the civil rights issue of the 21st century.",
+      "oneLiner": "Organised the workforce that America depends on but refuses to protect: the women who care for our parents.",
+      "primaryCategoryIntent": "work_hollows",
+      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "narratives": [
+        {
+          "title": "The New York Domestic Workers' Bill of Rights",
+          "content": "In 2010, after six years of organising, Poo and the Domestic Workers United coalition won passage of the New York Domestic Workers' Bill of Rights, the first legislation in the United States to guarantee domestic workers paid days off, overtime protection, and protection from harassment. The law covered roughly 200,000 nannies, housekeepers, and elder care workers in New York State. It became a template for similar legislation in nine other states."
+        },
+        {
+          "title": "The National Domestic Workers Alliance",
+          "content": "Poo co-founded the National Domestic Workers Alliance in 2007, growing it from a small coalition into an organisation representing over 2.5 million domestic workers. The organising challenge was extreme: domestic workers are isolated in private homes, work for individual employers, and were explicitly excluded from the National Labor Relations Act and the Fair Labor Standards Act in the 1930s, exclusions originally designed to deny protections to Black and immigrant workers."
+        },
+        {
+          "title": "The Age of Dignity",
+          "content": "In her 2015 book The Age of Dignity: Preparing for the Elder Boom in a Changing America, Poo argued that the United States was approaching a caregiving crisis: 10,000 Americans turning 65 every day, a shrinking family caregiver pool, and a professional care workforce earning poverty wages with no benefits. She framed elder care not as a personal family problem but as an infrastructure problem on the scale of the interstate highway system. The book positioned domestic workers' rights and aging policy as the same fight."
+        }
+      ]
+    },
+    {
+      "name": "Marc Freedman",
+      "domain": "encore careers / intergenerational community",
+      "era": "1958-present",
+      "region": "US",
+      "bio": "Social entrepreneur who founded Encore.org (now CoGenerate) to challenge the idea that people over 60 are finished contributing, and to build bridges between older and younger generations.",
+      "oneLiner": "Looked at a country warehousing its most experienced people and asked what would happen if they were deployed instead.",
+      "primaryCategoryIntent": "left_behind",
+      "secondaryCategoryIntents": ["forgot_what_for", "work_hollows"],
+      "narratives": [
+        {
+          "title": "Experience Corps",
+          "content": "In the late 1990s, Freedman helped develop Experience Corps, a programme that placed Americans over 55 as tutors and mentors in under-resourced elementary schools. A randomised controlled study by Johns Hopkins found that the children improved in reading, and the older volunteers showed improvements in physical and cognitive health. The research was among the first to demonstrate that meaningful work in later life produced measurable health benefits for the workers themselves, not just the beneficiaries."
+        },
+        {
+          "title": "The Purpose Prize",
+          "content": "In 2006, Encore.org launched the Purpose Prize, awarding $100,000 each to social innovators over 60 who were using their experience to solve problems. Winners included a retired nurse who created a mobile healthcare system for migrant farmworkers and a former businessman who built schools in rural Cambodia. The prize was designed to create counter-narratives to the cultural assumption that innovation belongs exclusively to the young."
+        },
+        {
+          "title": "How to Live Forever",
+          "content": "Freedman's 2018 book How to Live Forever: The Enduring Power of Connecting the Generations argued that the segregation of old and young is one of the defining failures of modern society. He pointed to cultures where multigenerational connection is the norm and documented American experiments, cohousing projects, shared-site programmes, and intergenerational schools, that were trying to rebuild what suburban sprawl and age-segregated housing had destroyed."
+        }
+      ]
+    },
+    {
+      "name": "Judith Heumann",
+      "domain": "disability rights / civil rights",
+      "era": "1947-2023",
+      "region": "US",
+      "bio": "Wheelchair user from age 18 months who became the leading disability rights activist of the 20th century, from suing the New York City Board of Education for the right to teach to leading the longest occupation of a federal building in US history.",
+      "oneLiner": "Told a world that saw wheelchairs as tragedies that the real tragedy was the stairs.",
+      "primaryCategoryIntent": "locked_out",
+      "secondaryCategoryIntents": ["life_not_yours", "voice_taken"],
+      "narratives": [
+        {
+          "title": "Suing for the right to teach",
+          "content": "In 1970, after earning her teaching degree, Heumann was denied a teaching licence by the New York City Board of Education, which deemed her a fire hazard because she used a wheelchair. She sued. The case drew national press attention. She won, becoming one of the first wheelchair users to teach in New York City public schools. She was 22 years old."
+        },
+        {
+          "title": "The Section 504 sit-in",
+          "content": "In April 1977, Heumann helped lead the occupation of the San Francisco Federal Building to force the Carter administration to sign Section 504 of the Rehabilitation Act, the first US civil rights protection for disabled people. Over 150 disabled activists occupied the building for 25 days, the longest sit-in at a federal building in American history. The Black Panthers brought in food. The Butterfly Brigade (a gay rights group) ran supplies. Heumann negotiated with officials while catheterising herself in a government office. HEW Secretary Joseph Califano signed the regulations on April 28, 1977."
+        },
+        {
+          "title": "Being Heumann",
+          "content": "Heumann's 2020 memoir Being Heumann and the 2020 documentary Crip Camp brought her story to a new generation. Crip Camp, which she co-produced, traced the disability rights movement from Camp Jened, a summer camp for disabled teenagers in the 1970s, through the passage of the Americans with Disabilities Act in 1990. The film was nominated for an Academy Award and purchased by Netflix after Barack and Michelle Obama's production company, Higher Ground, picked it up."
+        },
+        {
+          "title": "From activist to policymaker",
+          "content": "Heumann served as Assistant Secretary for Special Education under Bill Clinton and as the World Bank's first Advisor on Disability and Development. In both roles she pushed institutions to move from charity models of disability to rights-based models. Her argument was consistent across four decades: disabled people do not need pity, they need access. She died in 2023 at age 75."
+        }
+      ]
+    },
+    {
+      "name": "Stella Young",
+      "domain": "disability rights / journalism / comedy",
+      "era": "1982-2014",
+      "region": "Australia",
+      "bio": "Comedian, journalist, and disability activist who coined the term 'inspiration porn' to describe the media habit of using disabled people as motivational props for non-disabled audiences.",
+      "oneLiner": "Told the world that being disabled does not make you brave, and that calling it brave is the problem.",
+      "primaryCategoryIntent": "voice_taken",
+      "secondaryCategoryIntents": ["locked_out", "pain_not_believed"],
+      "narratives": [
+        {
+          "title": "The TED talk that named it",
+          "content": "In April 2014, Young delivered a TEDxSydney talk titled 'I'm Not Your Inspiration, Thank You Very Much' in which she defined inspiration porn: images and stories of disabled people doing ordinary things, framed as extraordinary to make non-disabled people feel better about their own lives. She showed a slide of a child with no legs running on prosthetics, captioned 'Your excuse is invalid,' and asked the audience: 'What is this kid doing that's so inspiring? Using his legs? That's just his Tuesday.' The talk has been viewed over 10 million times."
+        },
+        {
+          "title": "The community achievement award at age 15",
+          "content": "Young was born with osteogenesis imperfecta (brittle bone disease) and used a wheelchair from childhood. At age 15, she was nominated for a community achievement award. She had done nothing to earn it. There was no project, no fundraiser, no event. The nomination existed because she was a disabled teenager who showed up to school. She later described this moment as the origin of her political consciousness: the realisation that the world saw her disability as an achievement in itself."
+        },
+        {
+          "title": "Editing Ramp Up",
+          "content": "Young edited Ramp Up, the ABC's (Australian Broadcasting Corporation) online platform for disability news and commentary, from 2012 until her death in 2014. Under her editorship, Ramp Up published disabled writers on everything from accessible dating to the politics of disability parking permits. She insisted on disabled people telling their own stories rather than having journalists narrate their experiences. She died suddenly at age 32 from complications related to her condition."
+        }
+      ]
+    },
+    {
+      "name": "Haben Girma",
+      "domain": "disability rights / law / accessibility",
+      "era": "1988-present",
+      "region": "US / Eritrea",
+      "bio": "The first deafblind graduate of Harvard Law School, who has spent her career using law and technology to argue that disability is a failure of design, not a failure of the person.",
+      "oneLiner": "Graduated from Harvard Law without hearing or seeing the lectures, then turned around and sued the institutions that made it harder than it needed to be.",
+      "primaryCategoryIntent": "locked_out",
+      "secondaryCategoryIntents": ["voice_taken", "feeling_stupid"],
+      "narratives": [
+        {
+          "title": "Harvard Law, deafblind",
+          "content": "Girma enrolled at Harvard Law School in 2010, using a braille display connected to a laptop to follow classes in real time while a typist transcribed lectures. She navigated campus with a guide dog and advocate. She has described the experience not as inspirational but as logistical: every system at Harvard was designed for people who could see and hear, and her daily work was reverse-engineering access from systems built without her in mind. She graduated in 2013."
+        },
+        {
+          "title": "Suing for digital accessibility",
+          "content": "After Harvard, Girma took on cases arguing that digital platforms must be accessible under the Americans with Disabilities Act. She advocated for websites, apps, and educational materials to be usable with screen readers and braille displays. Her argument is structural: in a world where services are moving online, an inaccessible website is the digital equivalent of stairs at the entrance to a building."
+        },
+        {
+          "title": "The Obama White House recognition",
+          "content": "In 2013, President Obama named Girma a White House Champion of Change for her work on disability rights. She used the platform to push for technology companies to build accessibility into products from the start rather than retrofitting it later. She has described retrofit accessibility as 'building a ramp after the building is finished,' arguing that inclusive design from the start is cheaper, better, and treats disabled users as customers rather than afterthoughts."
+        },
+        {
+          "title": "The dinner party argument",
+          "content": "In her 2019 memoir Haben: The Deafblind Woman Who Conquered Harvard Law, Girma described attending a dinner party where another guest expressed sympathy for her 'suffering.' She responded by asking whether the guest suffered from not being able to echolocate like a bat. The exchange crystallised her public argument: disability is not the absence of ability but the presence of barriers that society chose to build."
+        }
+      ]
+    },
+    {
+      "name": "Ed Roberts",
+      "domain": "disability rights / independent living",
+      "era": "1939-1995",
+      "region": "US",
+      "bio": "Paralysed from the neck down by polio at age 14, Roberts fought his way into UC Berkeley, founded the first Centre for Independent Living, and built the philosophical framework that disability is a social construct, not a medical one.",
+      "oneLiner": "Lived in an iron lung and still became the person who redesigned how an entire country thinks about disability.",
+      "primaryCategoryIntent": "life_not_yours",
+      "secondaryCategoryIntents": ["locked_out", "voice_taken"],
+      "narratives": [
+        {
+          "title": "Getting into Berkeley",
+          "content": "In 1962, Roberts applied to the University of California, Berkeley. The Department of Rehabilitation initially refused to fund his education, calling him 'too severely disabled to ever work.' He challenged the decision. Berkeley admitted him but had nowhere to put him: his 800-pound iron lung would not fit in a dormitory. He lived in the campus hospital, Cowell Hospital, and other severely disabled students followed. By 1967 there were 12 of them, calling themselves the Rolling Quads."
+        },
+        {
+          "title": "The first Centre for Independent Living",
+          "content": "In 1972, Roberts and fellow activists founded the Centre for Independent Living (CIL) in Berkeley, the first organisation in the world run by and for disabled people. CIL offered wheelchair repair, housing referrals, benefits counselling, and peer support. The model was revolutionary: it assumed that disabled people were the experts on their own lives and that the problem was not the disability but the environment. Within a decade, over 400 independent living centres had opened across the United States, all modelled on CIL Berkeley."
+        },
+        {
+          "title": "From the iron lung to the governor's office",
+          "content": "In 1975, Governor Jerry Brown appointed Roberts as Director of the California Department of Rehabilitation, the same agency that had once called him too disabled to work. Roberts used the position to shift policy from institutionalisation toward community-based independent living. He served until 1983 and spent the rest of his life advocating for the social model of disability: the idea that disability is created by inaccessible environments, not by the person's body."
+        }
+      ]
+    },
+    {
+      "name": "Alice Wong",
+      "domain": "disability rights / media / activism",
+      "era": "1974-present",
+      "region": "US",
+      "bio": "Founder of the Disability Visibility Project, a community partnership with StoryCorps that collects and amplifies first-person stories from disabled people, and editor of the anthology that became a movement text.",
+      "oneLiner": "Built a megaphone for the stories that the disability rights movement had always told but that the mainstream had always ignored.",
+      "primaryCategoryIntent": "voice_taken",
+      "secondaryCategoryIntents": ["left_behind", "locked_out"],
+      "narratives": [
+        {
+          "title": "The Disability Visibility Project",
+          "content": "In 2014, Wong launched the Disability Visibility Project as a community partnership with StoryCorps, the oral history organisation. The project invited disabled people to record their own stories in StoryCorps booths across the country, creating a growing archive of first-person disability narratives at the Library of Congress. Wong managed the project while using a ventilator and power wheelchair, conducting most of her work remotely from San Francisco."
+        },
+        {
+          "title": "The anthology",
+          "content": "In 2020, Wong edited Disability Visibility: First-Person Stories from the Twenty-First Century, an anthology of 37 essays by disabled writers covering everything from deafness to chronic illness to psychiatric disability. The book was designed to centre disabled voices rather than filter them through non-disabled interpreters. It became a bestseller and was adopted in university disability studies courses across the United States."
+        },
+        {
+          "title": "Virtual attendance at the White House",
+          "content": "In 2015, Wong attended a celebration of the 25th anniversary of the Americans with Disabilities Act at the White House via a telepresence robot, the first time a private citizen attended a White House event by robot. The image of her face on a screen mounted on a rolling robot, navigating the East Room among standing politicians, became one of the most shared images of the disability rights movement in the 2010s."
+        },
+        {
+          "title": "Year of the Tiger",
+          "content": "Wong's 2022 memoir Year of the Tiger: An Activist's Life combined personal essay, cultural criticism, and disability politics. She wrote about growing up as a Chinese American disabled woman, the intersections of ableism and racism, and the experience of being ventilator-dependent during a pandemic that treated ventilator users as expendable. She dedicated the book to 'all the disabled people who didn't survive the pandemic, not because of COVID but because of ableism.'"
+        }
+      ]
+    },
+    {
+      "name": "Muhammad Yunus",
+      "domain": "microfinance / social business",
+      "era": "1940-present",
+      "region": "Bangladesh",
+      "bio": "Economist who lent $27 to 42 women in a Bangladeshi village in 1976 and built that experiment into Grameen Bank, proving that the poorest people on earth are creditworthy if someone will lend to them.",
+      "oneLiner": "Lent $27 to a village and proved that poor people pay back loans more reliably than rich ones.",
+      "primaryCategoryIntent": "locked_out",
+      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "narratives": [
+        {
+          "title": "The $27 loan",
+          "content": "In 1976, while teaching economics at the University of Chittagong, Yunus visited the nearby village of Jobra during the Bangladesh famine. He found 42 women making bamboo stools, each borrowing from local moneylenders at usurious rates and earning a profit of about two cents per day. He lent them $27 from his own pocket. They repaid every cent. The experience convinced him that the banking system's refusal to lend to the poor was not based on risk but on prejudice."
+        },
+        {
+          "title": "Grameen Bank",
+          "content": "In 1983, Yunus formally established Grameen Bank as a microfinance institution owned by its borrowers, 97% of whom were women. The bank lent small amounts, sometimes as little as a few dollars, without collateral. Borrowers organised into five-member groups who guaranteed each other's loans. By the 2000s, Grameen Bank had lent over $30 billion to more than 9 million borrowers in Bangladesh, with a repayment rate above 98%. The model was replicated in over 100 countries."
+        },
+        {
+          "title": "The Nobel Peace Prize",
+          "content": "In 2006, Yunus and Grameen Bank jointly received the Nobel Peace Prize. The committee cited their work 'to create economic and social development from below.' Yunus used the platform to push the concept of 'social business,' a company designed to solve a social problem rather than maximise shareholder profit. He argued that capitalism needed a second type of business alongside the profit-maximising kind."
+        },
+        {
+          "title": "The criticism and the counterargument",
+          "content": "By the 2010s, microfinance faced serious criticism. Studies in India and elsewhere showed that microloans did not reliably lift families out of poverty and sometimes created debt traps. Yunus acknowledged the problems but argued they came from for-profit imitators who had abandoned the social mission. He pointed to Grameen's ownership structure (borrowers own the bank) and its 98% repayment rate as evidence that the original model worked when the incentives were aligned correctly."
+        }
+      ]
+    },
+    {
+      "name": "Tiffany Aliche",
+      "domain": "personal finance / financial education",
+      "era": "1982-present",
+      "region": "US",
+      "bio": "Former preschool teacher who lost her savings in the 2008 financial crisis, rebuilt from zero, and became 'The Budgetnista,' teaching millions of women, especially Black women, to build wealth using language that sounds like a friend at the kitchen table.",
+      "oneLiner": "Lost everything in 2008 and turned the wreckage into a financial education movement for the women nobody else was teaching.",
+      "primaryCategoryIntent": "locked_out",
+      "secondaryCategoryIntents": ["feeling_stupid", "left_behind"],
+      "narratives": [
+        {
+          "title": "From preschool teacher to financial educator",
+          "content": "Aliche was a preschool teacher in Newark, New Jersey, earning about $39,000 a year, when she lost nearly all her savings to a financial con artist during the 2008 crisis. She was also laid off from her teaching job. Starting from zero, she began teaching herself personal finance and sharing what she learned through a blog called The Budgetnista. The early audience was small, but the tone was distinctive: she wrote about money the way a big sister talks, not the way a financial advisor lectures."
+        },
+        {
+          "title": "The Live Richer Challenge",
+          "content": "In 2015, Aliche launched the Live Richer Challenge, a free 36-day financial challenge delivered by email and social media. The first cohort attracted 60,000 participants. By 2020, over one million women had participated across multiple rounds. The challenge walked participants through budgeting, saving, credit repair, investing, and insurance in daily micro-steps. Aliche reported that participants collectively saved and paid off over $250 million in debt during the programme's first five years."
+        },
+        {
+          "title": "Get Good with Money",
+          "content": "Her 2021 book Get Good with Money: Ten Simple Steps to Becoming Financially Whole became a New York Times bestseller. She built it around what she calls the '10 money moves,' covering everything from budgeting to estate planning. The book deliberately uses no jargon. She has described her editorial rule as: 'If my mother wouldn't understand this sentence, I rewrite it.' The approach was directly informed by watching financial literacy programmes fail because they assumed knowledge their audience did not have."
+        }
+      ]
+    },
+    {
+      "name": "Jose Quinonez",
+      "domain": "financial inclusion / credit building",
+      "era": "1971-present",
+      "region": "US / Mexico",
+      "bio": "Undocumented immigrant from Mexico who became a MacArthur Fellow by building Mission Asset Fund, an organisation that makes the financial lives of immigrant families visible to the credit system by formalising the lending circles they already use.",
+      "oneLiner": "Did not invent lending circles. He just made the credit bureaus notice they existed.",
+      "primaryCategoryIntent": "locked_out",
+      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "narratives": [
+        {
+          "title": "Lending Circles",
+          "content": "In 2008, Quinonez launched Mission Asset Fund's Lending Circles programme in San Francisco's Mission District. The concept was simple: groups of 8-12 people made monthly payments into a shared pool, and each month one member received the full amount as a zero-interest loan. The practice, known as tandas in Mexican communities and susu in West African ones, had existed for centuries. Quinonez's innovation was to report every payment to the three major credit bureaus, turning an invisible financial practice into a visible credit history. Within a decade, over 10,000 participants had built or improved their credit scores."
+        },
+        {
+          "title": "The MacArthur Fellowship",
+          "content": "In 2016, Quinonez received the MacArthur 'genius' Fellowship for his work on financial inclusion. He used the platform to argue that millions of Americans are not financially irresponsible but financially invisible: they save, borrow, and repay through informal networks that the formal banking system refuses to recognise. His point was that the system's definition of 'creditworthy' was built around products (credit cards, mortgages) that excluded the very communities he served."
+        },
+        {
+          "title": "His own crossing",
+          "content": "Quinonez crossed the US-Mexico border as an undocumented nine-year-old in 1980. He has spoken publicly about growing up without a Social Security number, unable to open a bank account or build credit, and watching his mother manage the family's finances entirely through cash and community trust. He eventually gained legal status, attended UC Davis, and earned a master's at Princeton. He has said that Mission Asset Fund exists because he knows what it feels like to be financially competent but financially invisible."
+        }
+      ]
+    },
+    {
+      "name": "Suze Orman",
+      "domain": "personal finance / media",
+      "era": "1951-present",
+      "region": "US",
+      "bio": "Financial advisor and television host who built a media empire by treating money as an emotional subject, not a mathematical one, and by telling her audience hard truths with the energy of a close friend who loves you too much to lie.",
+      "oneLiner": "Told millions of Americans they could not afford the life they were pretending to live, and they kept tuning in because she said it like she cared.",
+      "primaryCategoryIntent": "feeling_stupid",
+      "secondaryCategoryIntents": ["locked_out", "forgot_what_for"],
+      "narratives": [
+        {
+          "title": "The waitress who lost everything to a broker",
+          "content": "Before becoming a financial advisor, Orman worked as a waitress at the Buttercup Bakery in Berkeley, California, for seven years. She saved $50,000 over those years to open a restaurant. A broker at Merrill Lynch invested her savings in high-risk options without proper disclosure, and she lost it all within three months. She sued, won, and the experience became the origin story of her entire career. She has said that losing everything as a waitress is what made her understand that finance is not about money but about power and shame."
+        },
+        {
+          "title": "The Suze Orman Show",
+          "content": "From 2002 to 2015, The Suze Orman Show on CNBC ran a segment called 'Can I Afford It?' in which callers described a purchase they wanted to make and Orman, after reviewing their finances, told them either 'Approved' or 'Denied.' The format was deliberately confrontational. She told people to their faces, on national television, that they could not afford the vacation, the car, or the handbag. The show drew millions of viewers precisely because it treated money as something adults should be able to discuss honestly."
+        },
+        {
+          "title": "Women and Money",
+          "content": "Orman's 2007 book Women and Money: Owning the Power to Control Your Destiny argued that women's relationship with money is shaped by a specific emotional pattern: the willingness to take care of everyone else's financial needs while neglecting their own. She told readers that financial competence is not selfish but essential. The book sold over a million copies and Oprah Winfrey gave away copies to her entire studio audience, calling it the most important financial book for women ever written."
+        }
+      ]
+    },
+    {
+      "name": "Dave Ramsey",
+      "domain": "personal finance / media / publishing",
+      "era": "1960-present",
+      "region": "US",
+      "bio": "Radio host and author who went bankrupt in his twenties, rebuilt by following an intensely disciplined approach to debt elimination, and then taught that approach to millions through a media empire built on the principle that debt is the enemy.",
+      "oneLiner": "Went bankrupt, clawed back to zero, and spent the next 30 years screaming at Americans to cut up their credit cards.",
+      "primaryCategoryIntent": "feeling_stupid",
+      "secondaryCategoryIntents": ["locked_out", "forgot_what_for"],
+      "narratives": [
+        {
+          "title": "The bankruptcy that built the brand",
+          "content": "By age 26, Ramsey had built a $4 million real estate portfolio in Nashville, largely financed by debt. When his primary lender was acquired and the new bank called in his notes, he could not refinance quickly enough. He and his wife Sharon went through bankruptcy in 1988 with a newborn child. He has described walking through the experience as humiliating and clarifying in equal measure. The lesson he drew was absolute: all consumer debt is dangerous, and the only safe strategy is to owe nothing to anyone."
+        },
+        {
+          "title": "The debt snowball",
+          "content": "Ramsey's signature method is the debt snowball: list all debts from smallest to largest balance regardless of interest rate, make minimum payments on everything except the smallest, and throw every extra dollar at the smallest balance until it is gone. Then move to the next. Mathematically, paying highest-interest debt first saves more money. Ramsey argues that personal finance is about behaviour, not maths, and that the psychological momentum of eliminating small debts quickly keeps people from quitting. Millions of followers have reported using the method to become debt-free."
+        },
+        {
+          "title": "Financial Peace University",
+          "content": "In 1994, Ramsey launched Financial Peace University, a 9-lesson course taught in churches, community centres, and workplaces across the United States. By the 2020s, over 10 million people had taken the course. The church distribution model was deliberate: Ramsey is an evangelical Christian and frames financial discipline as a moral and spiritual practice. The course's church-based distribution gave it a built-in community and accountability structure that online courses struggle to replicate."
+        },
+        {
+          "title": "The Ramsey Solutions empire",
+          "content": "What started as a local radio show in Nashville in 1992 grew into Ramsey Solutions, a company with over 1,000 employees, multiple bestselling authors on staff (including Rachel Cruze and Christy Wright), a daily radio show reaching over 18 million listeners weekly, and a real estate referral network. The business model is content-driven: free radio and podcast content builds trust, which drives book sales, course enrolments, and referral fees. Ramsey has never accepted advertising on his show, funding it entirely through product sales."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+function i(){"vibrate"in navigator&&navigator.vibrate(10)}function a(){"vibrate"in navigator&&navigator.vibrate(20)}function t(){"vibrate"in navigator&&navigator.vibrate([10,50,20])}function n(){"vibrate"in navigator&&navigator.vibrate([50,30,50])}export{t as a,n as b,a as c,i as h};

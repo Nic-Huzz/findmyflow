@@ -1,0 +1,1130 @@
+{
+  "meta": {
+    "tier": 2,
+    "slice": "b",
+    "count": 40,
+    "generatedAt": "2026-04-07"
+  },
+  "profiles": [
+    {
+      "name": "Elaine Pagels",
+      "domain": "religious history / gnosticism",
+      "era": "1943-present",
+      "region": "US",
+      "bio": "American historian of religion at Princeton. Her 1979 book The Gnostic Gospels reframed early Christian history by taking the Nag Hammadi texts seriously as historical evidence. Won the National Book Award, the National Book Critics Circle Award, and a MacArthur Fellowship in 1981.",
+      "oneLiner": "Reads suppressed documents alongside the official ones and asks why the church needed the suppression.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "Harvard, 1970, the box nobody else wanted",
+          "content": "As a Harvard graduate student under Helmut Koester in the late 1960s, Pagels chose to work on the Nag Hammadi Gnostic texts, a collection discovered by an Egyptian peasant in 1945 that had sat largely unread by Western scholars for a generation. Most of her cohort considered them marginal. Her 1970 dissertation treated them as legitimate first-and-second-century Christian sources. The decision about which box to open in graduate school became the entire shape of her career."
+        },
+        {
+          "title": "The Gnostic Gospels, 1979, and a new canon question",
+          "content": "The Gnostic Gospels, published in 1979, argued that the texts suppressed by the emerging orthodox church included writings in which Mary Magdalene speaks, in which women hold authority, and in which Jesus is a teacher rather than a sacrifice. The book won the National Book Award and the National Book Critics Circle Award, and was later placed by the Modern Library at number 72 on its list of the 100 best twentieth-century nonfiction books. It moved a scholarly argument about the fourth century into the center of a late-twentieth-century argument about church and gender."
+        },
+        {
+          "title": "April 1987 and the room with the oxygen tank",
+          "content": "Pagels's six-year-old son Mark died in April 1987 after a long illness with pulmonary hypertension. Her husband, physicist Heinz Pagels, died in a climbing accident the following year. In Why Religion? (2018) she wrote that she could not bear to re-enter academic life as if nothing had happened, and that grief forced her to reread the Gospel of Thomas not as scholarship but as a text about how to stay alive inside unbearable loss. The book is an unusual document: a senior historian of religion admitting in print that her later work was shaped by her dead child."
+        },
+        {
+          "title": "Beyond Belief, 2003, and the fight inside a single gospel",
+          "content": "Beyond Belief: The Secret Gospel of Thomas (2003) put the Gospel of John and the Gospel of Thomas side by side and argued that John was composed, in part, as a polemic against the kind of Christianity Thomas represents. Pagels treats the canonical gospels not as settled scripture but as the surviving side of an argument. The move is characteristic: she reads the winners and the losers together and looks for the shape of the fight that produced the textbook."
+        }
+      ]
+    },
+    {
+      "name": "Zadie Smith",
+      "domain": "fiction / essays",
+      "era": "1975-present",
+      "region": "UK",
+      "bio": "British novelist and essayist born in Willesden, north-west London. Debut novel White Teeth (2000) was written while she was an undergraduate at King's College, Cambridge. Later novels include On Beauty (2005), NW (2012), Swing Time (2016) and The Fraud (2023). Essay collections Feel Free (2018) and Intimations (2020).",
+      "oneLiner": "Writes the same postcode from fifteen angles until one of them sounds like a novel.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "A partial manuscript sold out of Cambridge",
+          "content": "While still an undergraduate at King's College, Cambridge, Smith published short stories in the May Anthologies. On the strength of about 80 pages of an unfinished novel and a synopsis, her agent sold the manuscript that became White Teeth to Hamish Hamilton in a reported six-figure auction. She delivered the completed book shortly after graduating and it was published in January 2000, when she was 24. The novel reshaped the expected shape of a London debut for a generation of writers who followed."
+        },
+        {
+          "title": "Ten rules for writers",
+          "content": "In a 2010 Guardian piece, Smith offered ten rules for writing fiction. Two of them read: 'When an adult, try to read your own work as a stranger would read it, or even better, as an enemy would.' And: 'Protect the time and space in which you write. Keep everybody away from it, even the people who are most important to you.' The rules describe her actual practice. She has said in interviews that she writes with MacFreedom installed and the internet physically disabled, because she does not trust her own attention."
+        },
+        {
+          "title": "Intimations, written in lockdown, profits donated",
+          "content": "In the first months of the 2020 pandemic Smith wrote six short essays in roughly six weeks and published them as a slim Penguin volume titled Intimations. She directed her royalties to the Equal Justice Initiative and the New York COVID-19 Emergency Relief Fund. The book is a real-time attempt to narrate a crisis while it is still happening. It is also a model of how a writer with platform converts that platform into cash for specific institutions rather than into general commentary."
+        },
+        {
+          "title": "Willesden as workable territory",
+          "content": "Smith has returned to the same north-west London corner, Willesden and Kilburn, across White Teeth, NW, Swing Time, and much of her short fiction. In a Paris Review interview she said, 'I write about the neighbourhood I grew up in because I know it. I don't know any other place as well.' The discipline is visible on the page: recurring streets, recurring bus routes, the same estate seen through three different decades. It is a writer deliberately narrowing her map in order to go deeper into it."
+        }
+      ]
+    },
+    {
+      "name": "Lech Wałęsa",
+      "domain": "trade union organising",
+      "era": "1943-present",
+      "region": "Poland",
+      "bio": "Polish electrician at the Lenin Shipyard in Gdańsk who became the leader of Solidarity, the first independent trade union inside a Warsaw Pact country. Nobel Peace Prize 1983. First freely elected President of Poland 1990 to 1995.",
+      "oneLiner": "Climbed a fence and turned a local wage strike into a ten-million-member political instrument.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["influencing"],
+      "narratives": [
+        {
+          "title": "August 14, 1980, over the shipyard wall",
+          "content": "On August 14, 1980, workers at the Lenin Shipyard in Gdańsk walked off the job over food price rises and the sacking of crane operator Anna Walentynowicz. Wałęsa, who had himself been fired from the yard four years earlier, was not inside the gates. According to multiple accounts he climbed over the shipyard fence to join the strike, and within hours was recognised by the strikers as their spokesman. The physical image, an electrician going over a wall rather than waiting for permission to enter, became the founding visual of Solidarity."
+        },
+        {
+          "title": "The giant pen, August 31, 1980",
+          "content": "On August 31, 1980, Wałęsa signed the Gdańsk Agreement on behalf of the Inter-Factory Strike Committee with an oversized souvenir pen carrying a picture of Pope John Paul II. The agreement legalised an independent trade union in a communist country, the first in the Eastern Bloc. Within weeks Solidarity grew to roughly 10 million members, more than a quarter of Poland's population. The pen was not chosen for image. It was the one he had with him."
+        },
+        {
+          "title": "Martial law, Arlamów, and a Nobel accepted by his wife",
+          "content": "When General Jaruzelski declared martial law on December 13, 1981, Wałęsa was arrested and held in internment for eleven months, mostly at Arlamów hunting lodge. The Nobel Peace Prize was awarded to him in October 1983. He refused to travel to Oslo, fearing the government would not let him return. His wife Danuta accepted it on his behalf. The decision to stay is characteristic of his method during that decade: remain physically inside Poland, even when it is expensive."
+        },
+        {
+          "title": "Round Table talks, 1989",
+          "content": "Between February and April 1989 Wałęsa led the Solidarity delegation at the Round Table Talks with the Polish government. The agreement they produced led to the partially free elections of June 1989, which Solidarity won overwhelmingly, and set the template for the negotiated collapse of communist governments across central and eastern Europe that autumn. Wałęsa spent the negotiations in the same unchanging uniform, a grey jacket and a Madonna pin on the lapel. He was still presenting himself as a shipyard worker."
+        }
+      ]
+    },
+    {
+      "name": "Krista Tippett",
+      "domain": "interview / public theology",
+      "era": "1960-present",
+      "region": "US",
+      "bio": "American journalist and former diplomat who created the public radio programme Speaking of Faith in 2001, later renamed On Being. Co-founded Krista Tippett Public Productions in 2013 and the Civil Conversations Project. Author of Speaking of Faith (2008) and Becoming Wise (2016).",
+      "oneLiner": "Asks one more question than most interviewers think they are allowed to, and then waits.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["synthesizing"],
+      "narratives": [
+        {
+          "title": "Divided Berlin, diplomacy before radio",
+          "content": "Before radio, Tippett spent most of the 1980s as a freelance journalist and then as a special assistant to the US Ambassador in West Berlin. In On Being episodes she has described walking between East and West Berlin and seeing, day after day, how quickly supposedly settled political certainties could crack. She has said the experience is the original source for her interviewing method: assume the categories people are placed in are thinner and more porous than they look, and ask questions that test the category rather than confirm it."
+        },
+        {
+          "title": "'I can't disagree with your experience'",
+          "content": "Tippett's most quoted sentence on her own method is: 'I can disagree with your opinion, it turns out, but I can't disagree with your experience.' She uses this as the governing rule of the Civil Conversations Project, which she co-created as an attempt to rebuild a shared vocabulary across American political divides. The rule is strict enough to be tactical. Inside a conversation, it pushes guests to stop defending positions and start describing what actually happened to them."
+        },
+        {
+          "title": "The editing that makes a voice sound alive",
+          "content": "Tippett has been open in interviews about the unusually heavy editing that On Being conversations go through after they are recorded. An interview can run two hours and be cut to fifty-two minutes, with a parallel unedited version also released. She treats editing as a form of listening: removing her own throat-clearings, her own clumsy reformulations, so that what remains is as close as possible to what the guest was trying to say. The producer's craft and the host's craft are, in her work, not separable."
+        },
+        {
+          "title": "Civil Conversations Project, and 'anger is pain in public'",
+          "content": "One of Tippett's most cited framings is, 'Anger is often what pain looks like when it shows itself in public.' She repeats it across the Civil Conversations Project, the 2016 book Becoming Wise, and in On Being episodes with scientists and activists. The formulation gives her a way to ask a follow-up question about the injury under an argument without telling the guest their anger is wrong. It is a workshop-ready line that is also, on inspection, a theological claim."
+        }
+      ]
+    },
+    {
+      "name": "John Hume",
+      "domain": "Northern Irish politics",
+      "era": "1937-2020",
+      "region": "Northern Ireland",
+      "bio": "Founding leader of the Social Democratic and Labour Party (SDLP), MP for Foyle, MEP, and a principal architect of the 1998 Good Friday Agreement. Shared the 1998 Nobel Peace Prize with David Trimble.",
+      "oneLiner": "Held the same three sentences about non-violence for thirty years until the other side agreed to use them too.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["influencing"],
+      "narratives": [
+        {
+          "title": "The single currency argument",
+          "content": "Hume's political vocabulary was formed in part by his experience as an MEP in the European Parliament from 1979. He would return again and again, in speeches and interviews, to a single image: that France and Germany had killed each other repeatedly across the same Rhine valley, and had now agreed, of their own accord, to share a parliament and, later, a currency. He used the image as an argument to unionists and republicans both: the point of a peace agreement is not that it abolishes the border, but that it makes the border matter less."
+        },
+        {
+          "title": "The Hume-Adams talks, 1988 onwards",
+          "content": "Beginning in 1988 and continuing in secret for years, Hume held private meetings with Sinn Féin leader Gerry Adams, at a time when the SDLP was publicly condemned for talking to a party linked to the IRA's armed campaign. The meetings were held at a redemptorist monastery in west Belfast. Hume's offer was simple and repeated: accept the principle of consent of the majority of people in Northern Ireland, and a real political path opens. The offer took years to land. When it did, it produced the 1994 IRA ceasefire."
+        },
+        {
+          "title": "'A single life is a single life'",
+          "content": "Hume used a three-part line in many speeches: 'A united people is more important than a united Ireland. I want to unite people, not territory.' Close to it, he repeated, 'You can't eat a flag.' The simplicity was deliberate. His political opponents inside nationalism accused him of being soft. His argument was that the only defensible unit of measurement inside a violent political conflict is a human life, not a piece of territory. The slogans were designed to be unforgettable to a voter and unassailable in an interview."
+        },
+        {
+          "title": "Nobel Prize, 1998, shared with a man he did not like",
+          "content": "Hume shared the 1998 Nobel Peace Prize with Ulster Unionist leader David Trimble. The two men had a cool personal relationship. Hume's acceptance speech nonetheless thanked Trimble by name and framed the Good Friday Agreement as a shared document, not an SDLP victory. The speech is a small case study in what it looks like when a negotiator denies themselves the individual credit the occasion allows, and treats the moment of maximum personal attention as an instrument for stabilising an agreement that could still fall apart."
+        }
+      ]
+    },
+    {
+      "name": "Martti Ahtisaari",
+      "domain": "international mediation",
+      "era": "1937-2023",
+      "region": "Finland",
+      "bio": "Finnish diplomat and tenth President of Finland. Oversaw Namibian independence in 1989, mediated the 1999 end of the Kosovo war, brokered the 2005 Helsinki Accord ending the Aceh insurgency, and founded Crisis Management Initiative in 2000. Nobel Peace Prize 2008.",
+      "oneLiner": "Treated peace negotiations as a professional craft with a schedule and a room, not a moral occasion.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "Namibia, 1989, and a decade of patience",
+          "content": "Ahtisaari was first appointed UN Commissioner for Namibia in 1977. He did not see Namibian independence elections until November 1989, twelve years later. As Special Representative heading the UN Transition Assistance Group (UNTAG) in 1989, he supervised the withdrawal of South African forces and the first free election. He and his wife Eeva were made honorary Namibian citizens. In his own later telling, the twelve years of apparently stalled work were the work: most mediation is waiting with a file."
+        },
+        {
+          "title": "The Helsinki accord on Aceh, August 2005",
+          "content": "In 2005 Ahtisaari's Crisis Management Initiative convened the Indonesian government and the Free Aceh Movement (GAM) in Königstedt Manor near Helsinki for five rounds of talks between January and July 2005. The final agreement was signed on August 15, 2005. A critical tactical move was to hold all sessions face to face in the same building rather than through shuttle diplomacy. Ahtisaari argued that the physical presence of negotiators in the same rooms, day after day, forced concessions that separate meetings would not have produced."
+        },
+        {
+          "title": "'Peace is a question of will'",
+          "content": "In his 2008 Nobel lecture in Oslo, Ahtisaari said, 'Peace is a question of will. All conflicts can be settled, and there are no excuses for allowing them to become eternal.' The sentence reads as a slogan and functioned as a professional self-instruction. He returned to it whenever journalists asked him to comment on intractable conflicts in Syria, Afghanistan, or Cyprus. It was his way of refusing the category of 'impossible case' as a matter of principle, because accepting it would have invalidated his job description."
+        },
+        {
+          "title": "CMI as a privatised UN desk",
+          "content": "Ahtisaari founded Crisis Management Initiative in Helsinki in 2000 after leaving the Finnish presidency. The organisation was explicitly designed to do the kind of quiet, slow mediation work that no single UN department was structured to do, funded by Nordic governments and private donors. CMI staff handled Aceh, contributed to Iraq talks, and supported processes in Kenya and the Horn of Africa. The institutional design, a small independent professional office doing state-level work, is its own contribution to the field."
+        }
+      ]
+    },
+    {
+      "name": "Tawakkol Karman",
+      "domain": "journalism / peace activism",
+      "era": "1979-present",
+      "region": "Yemen",
+      "bio": "Yemeni journalist and human-rights activist. Co-founded Women Journalists Without Chains in 2005 and led student-centred protests at Change Square in Sana'a during the 2011 Yemeni uprising. Shared the 2011 Nobel Peace Prize with Ellen Johnson Sirleaf and Leymah Gbowee.",
+      "oneLiner": "Ran the same weekly sit-in for three years before a revolution arrived to join her.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["influencing"],
+      "narratives": [
+        {
+          "title": "The weekly sit-in before the revolution",
+          "content": "From 2007 onwards Karman organised weekly sit-ins at Freedom Square in Sana'a on behalf of Women Journalists Without Chains, protesting against press restrictions and the detention of journalists. Most weeks the protests attracted only a handful of people. She held them anyway, in the same place at the same time, for three years. When the 2011 uprising began she already had a venue, a schedule, and a trained core of protesters. The revolution did not start the sit-in. It joined one that already existed."
+        },
+        {
+          "title": "January 22, 2011, her first 2011 arrest",
+          "content": "On January 22, 2011, Karman was arrested in Sana'a after calling for a 'Day of Rage' against the Saleh government. She was held for about 36 hours. Her arrest triggered the first mass protests of what became Yemen's 2011 uprising, and she was released in response to the size of the crowds. The pattern, an arrest intended to remove her that instead converted her into a rallying point, was the same pattern the Tunisian and Egyptian uprisings had established weeks earlier. Karman and her organisers used the playbook deliberately."
+        },
+        {
+          "title": "The Nobel speech, Oslo, December 2011",
+          "content": "In her Nobel lecture in Oslo in December 2011, Karman spoke in Arabic and addressed the prize directly to 'the young people of the Arab Spring', not to herself. She said, 'This prize is a gift to the entire Arab world and to the Yemeni people, especially our women and young people.' She was 32 and the first Arab woman to win the Peace Prize. She used the speech to hand the recognition back to the square, which is the same instinct her years of weekly sit-ins had required."
+        },
+        {
+          "title": "A tent in Change Square",
+          "content": "Through most of 2011 Karman lived in a tent in Change Square in Sana'a, refusing to return home while the protests continued. She organised student speakers, mediated between factions inside the square, and broadcast updates on her mobile phone. The physical decision, sleep in a tent, is the connector. She was trusted in the square because she refused to leave it."
+        }
+      ]
+    },
+    {
+      "name": "Tarana Burke",
+      "domain": "survivor advocacy",
+      "era": "1973-present",
+      "region": "US",
+      "bio": "American activist from the Bronx who founded Just Be Inc. in 2003 and the original Me Too movement in 2006 as a grassroots programme to support young Black women survivors of sexual violence. The phrase went viral in October 2017 during the Weinstein reporting.",
+      "oneLiner": "Built a support practice in Alabama basements for a decade before the hashtag found it.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["nurturing"],
+      "narratives": [
+        {
+          "title": "1997, the girl named Heaven",
+          "content": "In her 2021 memoir Unbound and in many interviews, Burke describes a moment in 1997 when she was a 23-year-old youth worker at a summer camp in Selma, Alabama. A 13-year-old girl she calls Heaven approached her and began to disclose abuse. Burke shut the conversation down and referred her to another counsellor, a choice she has said haunted her for years. 'I didn't even say me too,' she has said. 'I couldn't find the words.' The Me Too project is, by her own account, the work of going back and finding the words she could not say in that cabin."
+        },
+        {
+          "title": "2006, MySpace and the phrase",
+          "content": "Burke founded the original Me Too programme in 2006 as part of her nonprofit Just Be Inc., a group for young Black girls in Selma and then in the Bronx. She set up a MySpace page for the campaign. The work consisted of workshops, retreats, and healing groups, not a hashtag. For eleven years the phrase existed mostly inside church basements, school gyms, and community rooms, where survivors said it to each other across a circle of chairs."
+        },
+        {
+          "title": "October 15, 2017, and a lost decade of attribution",
+          "content": "On October 15, 2017, actress Alyssa Milano tweeted a suggestion that women reply Me Too if they had been sexually harassed or assaulted. The tweet went viral within hours. Burke saw it from her apartment and feared her decade of work would be erased. Friends started a parallel campaign flagging her as the originator, and Milano publicly credited her within 24 hours. Time named Burke one of the Silence Breakers as Person of the Year weeks later. The sequence is a case study in how a long grassroots project survives, or nearly does not survive, its viral moment."
+        },
+        {
+          "title": "Empowerment through empathy",
+          "content": "Burke's most repeated self-definition of her work is the phrase 'empowerment through empathy.' She uses it to push back against the idea that Me Too is primarily about punishment of abusers. In multiple interviews she has said, 'Me too is not a moment, it is a movement, and it is about the survivors.' The framing shapes her programme design: healing circles, peer support, long-term relationships with survivors rather than one-time public testimony."
+        }
+      ]
+    },
+    {
+      "name": "Ta-Nehisi Coates",
+      "domain": "journalism / essays",
+      "era": "1975-present",
+      "region": "US",
+      "bio": "American essayist and novelist. Senior writer at The Atlantic for a decade, where his 2014 cover story The Case for Reparations reopened the policy debate on American housing discrimination. Between the World and Me (2015) won the National Book Award. Wrote Marvel's Black Panther comic 2016 to 2021.",
+      "oneLiner": "Writes sentences the way a boxer throws combinations, with the footwork done in the research.",
+      "primaryCategoryIntent": "connecting",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "The Case for Reparations, and two years inside a Chicago neighbourhood",
+          "content": "Coates spent most of 2012 to 2014 researching The Case for Reparations, published in The Atlantic in May 2014. The 16,000-word piece follows Clyde Ross, a Black homeowner in the North Lawndale neighbourhood of Chicago, through the mechanics of contract buying, blockbusting, and the effects of federal redlining maps. Coates drew heavily on historian Beryl Satter's book Family Properties. In interviews he has described the reporting as 'boring Clyde Ross on the phone for a year', meaning the piece lives on one specific person's ledger of purchases."
+        },
+        {
+          "title": "Between the World and Me as a letter to his son",
+          "content": "Between the World and Me (2015) is written as a letter to Coates's teenage son Samori. The title comes from a Richard Wright poem about a Black man coming upon the site of a lynching. Coates has said in interviews, including with Terry Gross on Fresh Air, that he wrote the book in part to avoid the temptation of reassurance, because a father writing to a son in public cannot be both honest and comforting. The book won the 2015 National Book Award for nonfiction and was a finalist for the Pulitzer Prize."
+        },
+        {
+          "title": "The Atlantic blog and public thinking",
+          "content": "Between 2008 and 2014 Coates maintained a public blog at The Atlantic where he reviewed his own reading of Civil War history, French language exercises, and political events. The comment section became famous inside journalism circles for its unusually high quality. He moderated it personally and described the blog in interviews as a place to 'think out loud with witnesses'. It was an apprenticeship carried out in public, and the cadences of those posts are visible in Between the World and Me and in his later novel The Water Dancer."
+        },
+        {
+          "title": "Black Panther, Marvel, 2016",
+          "content": "In 2016 Coates began writing Marvel's Black Panther comic with artist Brian Stelfreeze, a form he had not worked in before. The first issue sold roughly 253,000 copies, the best-selling single comic of its month. He wrote Wakanda through a storyline about popular uprising and constitutional reform. In interviews he said he took the job as a forced education: he wanted to write dialogue rather than essays, and the monthly deadline cycle taught him how to construct an argument across serialised instalments."
+        }
+      ]
+    },
+    {
+      "name": "Chimamanda Ngozi Adichie",
+      "domain": "fiction / essays",
+      "era": "1977-present",
+      "region": "Nigeria / US",
+      "bio": "Nigerian novelist born in Enugu and raised on the University of Nigeria campus at Nsukka. Novels include Purple Hibiscus (2003), Half of a Yellow Sun (2006), Americanah (2013), and Dream Count (2025). Her 2009 TED talk The Danger of a Single Story and 2012 TEDxEuston talk We Should All Be Feminists shaped a generation of reading lists.",
+      "oneLiner": "Insists that the smallest unit of a story is not a country, it is one specific woman at a kitchen table.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["connecting"],
+      "narratives": [
+        {
+          "title": "The Danger of a Single Story, 2009",
+          "content": "Adichie's TEDGlobal 2009 talk, The Danger of a Single Story, told the autobiographical story of arriving at an American university and being asked by her roommate to produce 'tribal music', when she had grown up listening to Mariah Carey. She framed the talk around a single thesis: when there is only one story told about a place, that story becomes the place. As of 2022 the talk had over 27 million views, and is assigned in humanities departments worldwide as a short canonical text on representation."
+        },
+        {
+          "title": "We Should All Be Feminists, then Beyoncé",
+          "content": "In December 2012 Adichie gave a TEDxEuston talk titled We Should All Be Feminists. In December 2013 Beyoncé sampled a section of it in the song Flawless, on her self-titled visual album. The sample routed Adichie's argument into a pop audience of tens of millions. Adichie has said in subsequent interviews that she was initially unsure about the sample and then decided that a feminist argument reaching teenage girls through a stadium song was a good outcome, even if it was not one she had planned."
+        },
+        {
+          "title": "Half of a Yellow Sun and her father's notebooks",
+          "content": "Half of a Yellow Sun (2006) is set during the 1967 to 1970 Nigerian civil war, during which Adichie's family lost two grandfathers. She has said she grew up hearing her father's fragmented accounts of the war and took four years to write the novel, during which she conducted oral history interviews with survivors and read Biafran newspapers. The paperback sold 500,000 copies in the UK alone by October 2009. The book is a specific example of a writer treating family memory as a primary source and cross-checking it against a public archive."
+        },
+        {
+          "title": "Dear Ijeawele, a letter in fifteen suggestions",
+          "content": "Dear Ijeawele, or A Feminist Manifesto in Fifteen Suggestions (2017) began as a private letter Adichie wrote to a friend in Lagos who had asked her how to raise a feminist daughter. She published it as a short book on the friend's encouragement. The document is characteristic of her working method: she converts a single specific question from one person she knows into a document intended to be read by strangers, and refuses to abstract the question in the process."
+        }
+      ]
+    },
+    {
+      "name": "Patti Smith",
+      "domain": "poetry / rock",
+      "era": "1946-present",
+      "region": "US",
+      "bio": "American poet and rock musician. Debut album Horses (1975) is regarded as a founding document of New York punk. Her 2010 memoir Just Kids, about her young friendship with photographer Robert Mapplethorpe, won the National Book Award for nonfiction.",
+      "oneLiner": "Treats a stage, a notebook, and a Polaroid camera as the same tool.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "A promise to Mapplethorpe in a hospital room, 1989",
+          "content": "Robert Mapplethorpe died of AIDS in March 1989. In Just Kids, Smith recounts that in the days before his death he asked her to write the story of their friendship as a book. She agreed. It took her more than twenty years. Just Kids was finally published in January 2010 and won the National Book Award for nonfiction that November. The book is, in a literal sense, a promise delivered late. It is also a case study in how long a non-fiction project can take when the writer refuses to invent the missing scenes."
+        },
+        {
+          "title": "Horses, December 1975, and a cover that took three tries",
+          "content": "Horses was recorded in late 1975 at Electric Lady Studios with John Cale producing. The cover photograph, taken by Mapplethorpe, is a black-and-white portrait of Smith in a white shirt and black jacket slung over her shoulder. She has said in interviews that she deliberately wanted to look androgynous, 'like Rimbaud at a Patti Smith concert'. Arista Records initially resisted the image. She refused to replace it. The cover became one of the most imitated rock portraits of the late twentieth century."
+        },
+        {
+          "title": "October 15, 2006, closing CBGB",
+          "content": "On October 15, 2006, Smith performed the last concert at CBGB in the Bowery, where her band had played a six-week residency with Television in 1975 at the start of her recording career. The final show ran about three and a half hours. She ended by reading out the names of musicians who had played at the club and were now dead. The list took roughly ten minutes. The gesture is characteristic: she closed the venue not by playing her hits but by turning the stage into a memorial."
+        },
+        {
+          "title": "Writing longhand in corner cafés",
+          "content": "In M Train (2015) and in many interviews Smith describes her daily writing practice: she sits in the same corner café in Greenwich Village, orders black coffee, and writes by hand in a small notebook. She has said in an interview with the Louisiana Channel, 'I never write on the computer. I write in pencil first. My handwriting is the rhythm of my thinking.' The ritual is the point. The work depends on the chair and the coffee and the notebook being in the same relation to each other every morning."
+        }
+      ]
+    },
+    {
+      "name": "Wisława Szymborska",
+      "domain": "poetry",
+      "era": "1923-2012",
+      "region": "Poland",
+      "bio": "Polish poet awarded the 1996 Nobel Prize in Literature. Spent most of her life in Kraków. Published fewer than 350 poems across a career of over fifty years. Famously suspicious of the public role of the poet.",
+      "oneLiner": "Wrote one good poem a year for fifty years and threw out the rest.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "The wastebasket as part of the method",
+          "content": "Asked by a journalist how she could have published such a slim body of work, Szymborska is widely reported to have answered, 'I have a trash can in my home.' She meant it literally. Her output was fewer than 350 poems in more than fifty working years, roughly six a year. The remark is quoted by her translators and biographers as her most compact description of her method: she drafted constantly and threw away most of what she drafted, treating the trash can as an editor."
+        },
+        {
+          "title": "The Nobel lecture, December 1996, on 'I don't know'",
+          "content": "In her Nobel lecture in Stockholm in December 1996, Szymborska argued that the three most important words available to a writer were 'I don't know'. She said, 'Whatever inspiration is, it's born from a continuous I don't know.' She contrasted this with dictators and torturers, whose distinguishing feature, she said, was their certainty. The lecture is short by Nobel standards and does the opposite of what a winner's speech is usually expected to do: it disclaims authority instead of claiming it."
+        },
+        {
+          "title": "The cat, the empty apartment",
+          "content": "Her poem 'Cat in an Empty Apartment', about a pet whose owner has died, is written entirely from the cat's point of view: the cat is outraged at the unexplained absence of a person who has always been there. The poem is widely read at funerals in Poland and in translation. It is a one-page demonstration of her constant technique: choose the perspective a reader expects least, and write the world from there."
+        },
+        {
+          "title": "A literary column as a practice of refusal",
+          "content": "From 1968 for many years Szymborska wrote a short book review column in the magazine Literary Life, titled Non-required Reading, in which she reviewed calendars, dictionaries, cookbooks, and other books that were not ordinarily considered review-worthy. The column was a public refusal of the official Polish literary hierarchy. It is also a place where her sideways perspective was rehearsed weekly. The discipline of the column fed directly into the poems."
+        }
+      ]
+    },
+    {
+      "name": "Aretha Franklin",
+      "domain": "soul music",
+      "era": "1942-2018",
+      "region": "US",
+      "bio": "American singer born in Memphis and raised in Detroit as the daughter of the Baptist minister C.L. Franklin. Her 1967 recordings for Atlantic Records produced a run of hits including I Never Loved a Man, Respect, and (You Make Me Feel Like) A Natural Woman. Known as the Queen of Soul.",
+      "oneLiner": "Took other people's songs and rebuilt them from the piano bench up until they belonged to her.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "January 1967, FAME Studios, Muscle Shoals",
+          "content": "On January 24, 1967, Franklin cut I Never Loved a Man (The Way I Love You) at FAME Studios in Muscle Shoals, Alabama, in a single day with producer Jerry Wexler and the local session players. Franklin herself played the electric piano part. The session collapsed the next day after a fight between her manager Ted White and studio owner Rick Hall. The band was flown to New York to finish the B-side. The song became her first top-ten pop single. Her role at the piano, working out voicings live with the band, was the template for the entire Atlantic run."
+        },
+        {
+          "title": "'Respect', February 14, 1967, Valentine's Day",
+          "content": "Franklin recorded Respect in New York on Valentine's Day 1967, rearranging Otis Redding's 1965 original with her sister Carolyn. Her version added the spelling breakdown (R-E-S-P-E-C-T), the sock-it-to-me backing vocals, and the 'just a little bit' counter-line. Otis Redding reportedly said after hearing her version, 'That little girl done took my song away from me.' Franklin turned an Otis Redding pleading husband song into a civil-rights-era anthem of non-negotiable self-assertion. The instrument of the conversion was the arrangement, not the performance."
+        },
+        {
+          "title": "Amazing Grace, January 1972, New Temple Missionary Baptist",
+          "content": "In January 1972 Franklin recorded the live double gospel album Amazing Grace over two nights at New Temple Missionary Baptist Church in Watts, Los Angeles, with the Reverend James Cleveland. She returned to the church music she had learned as a child in her father's congregation in Detroit. The album sold over two million copies, the best-selling live gospel album ever. Mick Jagger is visible in the documentary footage sitting in a back pew. The gesture, a secular superstar returning to the church to record an unplugged act of worship, is one of the defining turns of her career."
+        },
+        {
+          "title": "A Natural Woman at the Kennedy Center, December 2015",
+          "content": "On December 6, 2015, at the Kennedy Center Honors ceremony for Carole King, Franklin performed (You Make Me Feel Like) A Natural Woman with a full fur coat, which she removed mid-song and let fall on the piano bench. King was visibly crying in the audience. President Obama wiped his eyes. The performance was not rehearsed in full with the house orchestra. Franklin counted in the tempo herself at the piano. It is one of the clearest public examples of a 73-year-old singer walking out cold and owning a room by a single gesture and a vocal held in reserve until the last verse."
+        }
+      ]
+    },
+    {
+      "name": "Luciano Pavarotti",
+      "domain": "opera",
+      "era": "1935-2007",
+      "region": "Italy",
+      "bio": "Italian operatic tenor born in Modena. Studied from 1954 with Arrigo Pola, then Ettore Campogalliani. Best known for Puccini and bel canto roles, nine high Cs in Donizetti's La Fille du Régiment, and the 1990 Three Tenors concert at the Baths of Caracalla that sold more classical records than any other recording.",
+      "oneLiner": "Never learned to read music and became the most famous tenor of the twentieth century.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["influencing"],
+      "narratives": [
+        {
+          "title": "Six years of free lessons with Arrigo Pola",
+          "content": "Pavarotti began studying voice seriously in 1954 at age 19 with Arrigo Pola, a professional tenor in Modena who taught him without charge for six years. Pavarotti later said he decided on a singing career on the night of his debut as Rodolfo in La Bohème in Reggio Emilia in 1961, at age 25. Conductor Richard Bonynge, who worked with him closely from the mid-1960s, said in interviews that Pavarotti never learned to read music with any real fluency. He learned roles by ear from a repetiteur at the piano, one phrase at a time."
+        },
+        {
+          "title": "February 17, 1972, nine high Cs at the Met",
+          "content": "On February 17, 1972, at the Metropolitan Opera, Pavarotti sang Tonio in Donizetti's La Fille du Régiment opposite Joan Sutherland. The role's signature aria 'Ah, mes amis' requires nine high Cs in a row. Pavarotti delivered all nine cleanly and received seventeen curtain calls. The performance gave him the nickname King of the High Cs. It also turned an obscure comic opera into a recurring vehicle for his voice and effectively launched his international solo career."
+        },
+        {
+          "title": "July 7, 1990, Baths of Caracalla",
+          "content": "On July 7, 1990, the night before the World Cup final in Italy, Pavarotti appeared at the Baths of Caracalla in Rome alongside Plácido Domingo and José Carreras, with Zubin Mehta conducting. The concert was produced as a benefit for Carreras, who had recently recovered from leukaemia. The resulting album became the best-selling classical record of all time, with over ten million copies sold. Pavarotti's encore performance of Nessun Dorma from Turandot, used by the BBC as its World Cup theme, became the most recognisable single classical recording of the television era."
+        },
+        {
+          "title": "Pavarotti and Friends, Modena, 1992 to 2003",
+          "content": "From 1992 until 2003 Pavarotti organised an annual benefit concert in Modena called Pavarotti and Friends, staging duets with pop artists including Bono, Sting, Céline Dion, Eric Clapton, and Queen. The concerts raised millions for causes including War Child and refugee relief in Bosnia, Kosovo, Afghanistan, and Iraq. Purists inside classical music criticised the crossover as a dilution of opera. Pavarotti's position in interviews was that the concerts delivered concrete sums to specific crises, and that the purity argument was a luxury available only to people with other platforms."
+        }
+      ]
+    },
+    {
+      "name": "Tupac Shakur",
+      "domain": "hip hop",
+      "era": "1971-1996",
+      "region": "US",
+      "bio": "American rapper and actor, born Lesane Parish Crooks in East Harlem to Afeni Shakur, a Black Panther Party member acquitted in the Panther 21 trial one month before his birth. Five studio albums between 1991 and 1996, including All Eyez on Me (1996), the first hip-hop double album. Shot in Las Vegas on September 7, 1996, died six days later.",
+      "oneLiner": "Wrote like a prison correspondent and recorded like a man running a clock he could see.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "Age 11, letters to Black Panther prisoners",
+          "content": "Shakur was writing poetry from at least the age of 11. A set of his handwritten poems from that period, addressed to Black Panther prisoners that his mother knew, was sold at auction for approximately $90,000 in 2022. The provenance is unusual. The earliest preserved traces of his writing are correspondence between a child and incarcerated adults his mother trusted. That origin, the hip-hop star as a child scribe inside an activist household, is not invented later for marketing. It is literally on paper."
+        },
+        {
+          "title": "Dannemora, 1995, reading Machiavelli and Sun Tzu",
+          "content": "Shakur spent about eight months in the Clinton Correctional Facility at Dannemora in 1995 during his appeal on a sexual abuse conviction. He read extensively, including Niccolò Machiavelli's The Prince, Sun Tzu's The Art of War, and Robert Greene. He recorded Me Against the World remotely, the album debuting at number one on the Billboard 200 while he was behind bars, the first artist to do so. The later Makaveli alias and the strategic framing of his post-prison career trace directly to this reading list."
+        },
+        {
+          "title": "All Eyez on Me, two weeks of work",
+          "content": "All Eyez on Me was recorded in roughly two weeks at Can-Am Studios in Tarzana, California, after Suge Knight posted Shakur's $1.4 million bail in October 1995. Shakur wrote and recorded multiple songs per night. Engineer Dave Aron has described him completing vocal takes in single passes and moving to the next track. The album was released in February 1996 as hip-hop's first double studio album. The density of output in that fortnight is the clearest surviving evidence of how fast he actually worked when not waiting for other people to finish."
+        },
+        {
+          "title": "Dear Mama, 1995, receipts for a parent",
+          "content": "Dear Mama, released in February 1995, is a mid-tempo letter to Afeni Shakur that catalogues specific facts: her crack addiction, her prison time, her cooking, her exhaustion. The song rose to number nine on the Billboard Hot 100. In 2010 the Library of Congress added it to the National Recording Registry. The register cited it as 'a moving and eloquent homage' to mothers. The song is also a methodological decision: Shakur refused to abstract his mother, and kept the verses specific enough to read like an itemised bill."
+        }
+      ]
+    },
+    {
+      "name": "Lin-Manuel Miranda",
+      "domain": "musical theatre",
+      "era": "1980-present",
+      "region": "US",
+      "bio": "American composer, lyricist, actor, and director. Wrote In the Heights as a Wesleyan sophomore in 1999, which opened on Broadway in 2008. Hamilton premiered off-Broadway in 2015 and on Broadway in August 2015, winning the Pulitzer Prize for Drama and eleven Tony Awards. Contributed songs to Moana (2016) and Encanto (2021).",
+      "oneLiner": "Turns biography into counterpoint, three voices at a time.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "May 12, 2009, the White House Poetry Jam",
+          "content": "On May 12, 2009, at a White House evening of poetry and music, Miranda performed a mixtape number he introduced as being about 'someone I believe embodies hip hop, Treasury Secretary Alexander Hamilton'. The Obamas laughed, expecting a joke. Miranda then rapped the opening of what became Alexander Hamilton, the first song of the musical Hamilton. The footage went viral years later when the musical opened. The White House performance is therefore the public birth of Hamilton, roughly six years before it reached Broadway. He had one song and a premise that night."
+        },
+        {
+          "title": "A year on a single song",
+          "content": "Miranda has said in multiple interviews, including with the New York Times, that he spent roughly a year writing the Hamilton song My Shot, rewriting it repeatedly so that every verse would be consistent with what a young, intellectually hungry Alexander Hamilton would actually say. The discipline, a year on one four-minute number, is the opposite of how most commercial theatre composers work. It is also the shape of Hamilton's density: the show is so heavily argued because each song went through the My Shot editing process."
+        },
+        {
+          "title": "In the Heights, written sophomore year",
+          "content": "Miranda wrote the first draft of In the Heights as a 19-year-old sophomore at Wesleyan University in 1999. The show was first produced by a student theatre company at Wesleyan, then off-Broadway in 2007, then on Broadway in March 2008, where it won four Tony Awards including Best Musical and Best Original Score. The path is unusual: nine years from undergraduate draft to Broadway opening, with the same author continuously rewriting the same material. Miranda was 28 when the show opened on Broadway."
+        },
+        {
+          "title": "The Encanto bridge and a Disney number one",
+          "content": "We Don't Talk About Bruno from Encanto (2021) became Miranda's first number-one song on the Billboard Hot 100, displacing Adele. The song features five vocal lines in counterpoint in its final section, all delivered by different characters simultaneously. Miranda has described the counterpoint idea, borrowed from Les Misérables's One Day More and from Into the Woods, as the test he sets himself for any ensemble number: can every character sing their own truth at the same time as everyone else and still be intelligible?"
+        }
+      ]
+    },
+    {
+      "name": "Ira Glass",
+      "domain": "radio / storytelling",
+      "era": "1959-present",
+      "region": "US",
+      "bio": "American radio host and producer. Host of This American Life since its debut on November 17, 1995. Spent seventeen years as a production assistant, editor, and reporter at NPR before creating the show. Pioneered a first-person, scene-based form of public radio storytelling.",
+      "oneLiner": "Turned a specific editing rule, get in the story fast and quote the person in scene, into a whole public radio house style.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "Seventeen years of being the kid in the room",
+          "content": "Glass started at NPR as an unpaid teenage intern in 1978, tape-splicing and fetching tape, and stayed for seventeen years as production assistant, reporter, and editor on Morning Edition, All Things Considered, and Talk of the Nation before creating This American Life in November 1995. In interviews he has said that by the time he launched his own show he had already failed publicly, on air, dozens of times. The length of that apprenticeship is unusual for a star of his form. The show exists because its host learned its craft for almost two decades before being allowed to host anything."
+        },
+        {
+          "title": "The anecdote-then-thought structure",
+          "content": "Glass credits NPR editor Noah Adams with teaching him a specific structural move: tell a scene, then step back from the scene to a larger idea, then return to the scene. He has described this, in a widely circulated set of video clips on storytelling, as the two-part engine of This American Life, anecdote plus reflection. 'You need both pieces,' he has said. 'A great anecdote and a great moment of reflection on it. If one is missing, the story collapses.' The entire house style of the show, and of a generation of podcasts that copied it, is built on that one rule."
+        },
+        {
+          "title": "The gap between taste and ability",
+          "content": "In a short 2009 video interview about creative work, Glass said, 'All of us who do creative work, we get into it because we have good taste. But it's like there is a gap. For the first couple years that you're making stuff, what you're making isn't so good... It's only by going through a volume of work that you're actually going to catch up and close that gap.' The clip has been reposted endlessly in design, writing, and music communities. It is one of the most widely shared single pieces of practical advice about craft on the internet."
+        },
+        {
+          "title": "Glass and Julie Snyder, and the Serial spin-off",
+          "content": "In 2014 Glass and his longtime This American Life collaborator Julie Snyder launched Serial, a spin-off podcast which put the show's style into a single-story serialised form. The first season on the Adnan Syed case became the fastest podcast to reach five million downloads and is generally credited with making podcasting a mainstream form. Glass's choice to back Snyder as host, rather than take the chair himself, is characteristic: his producer instinct is usually to hand the microphone to whoever will be best at holding it, even when he could plausibly hold it himself."
+        }
+      ]
+    },
+    {
+      "name": "Kae Tempest",
+      "domain": "performance poetry",
+      "era": "1985-present",
+      "region": "UK",
+      "bio": "British performance poet, recording artist, playwright and novelist from south-east London. Won the Ted Hughes Award for Brand New Ancients in 2013, the first person under 40 to receive it. Mercury Prize nominations for Everybody Down (2014) and Let Them Eat Chaos (2016). Author of the 2020 essay On Connection.",
+      "oneLiner": "Walks on stage and reads the room back to itself until it stops being separate rooms.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["connecting"],
+      "narratives": [
+        {
+          "title": "The Battersea Arts Centre and Brand New Ancients",
+          "content": "Tempest developed Brand New Ancients as a long spoken-word piece that treats the working-class residents of south-east London as figures from Greek mythology. It was first staged at Battersea Arts Centre in London in 2012 and toured from there. It won the Ted Hughes Award in 2013. Tempest was then 27, the youngest recipient of the prize. The format, an hour of single-voice narration with live music, reintroduced an epic oral form to British theatre audiences who had not encountered anything like it since the folk revival."
+        },
+        {
+          "title": "On Connection, lockdown 2020",
+          "content": "Tempest wrote the short book On Connection (Faber, 2020) during the 2020 pandemic lockdown. In it they argue that creative work, and specifically live performance, exists to break the spell of what they call the 'culture of distraction'. 'Creativity is the ability to feel connection', they write, and every craft activity, from cooking to drawing to writing, counts as a practice of it. The book is a working manifesto for a performance artist explaining why live audiences matter, written during a period when live audiences were not available."
+        },
+        {
+          "title": "Coming out, 2020 and 2025",
+          "content": "In August 2020 Tempest came out as non-binary and changed their first name from Kate to Kae. In 2025 they came out as a trans man and began using he/him pronouns. Both announcements were made publicly in short written statements on social media rather than through magazine profiles. Tempest framed the decisions as part of the same work as the poems: describing one's own experience accurately in public, and making the description available for other people to use if they need it."
+        },
+        {
+          "title": "Let Them Eat Chaos as one continuous poem",
+          "content": "Let Them Eat Chaos (2016) was released simultaneously as a poetry book from Picador and as a studio album on Fiction Records. The work is a single unbroken poem set at 4:18 a.m. on a single London street, moving between seven neighbours who are all awake at the same time for different reasons. The Mercury Prize nominated the album. The book made the Costa Poetry Award shortlist. The project is unusual in being engineered to be legally and formally both literature and a record, neither the book nor the album being a secondary artefact."
+        }
+      ]
+    },
+    {
+      "name": "Wong Kar-wai",
+      "domain": "cinema",
+      "era": "1958-present",
+      "region": "Hong Kong",
+      "bio": "Hong Kong filmmaker born in Shanghai. Films include Chungking Express (1994), Happy Together (1997, Best Director at Cannes), In the Mood for Love (2000), and 2046 (2004). Works without completed scripts and often without storyboards, in long shoots with high shooting ratios.",
+      "oneLiner": "Shoots until the actors forget they are acting, then edits until one year fits into one glance.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "In the Mood for Love, fifteen months of shooting",
+          "content": "In the Mood for Love (2000) was shot across roughly fifteen months in Hong Kong and Bangkok, with Maggie Cheung and Tony Leung returning again and again to the same sets in different costumes. Wong famously began without a completed script and let the story change during the shoot. The final cut was delivered to the Cannes Festival the morning of its 2000 premiere. The shooting ratio is reported to have been over 30 times the length of the final film. The method is the film: the period detail and emotional exhaustion on screen are the accumulated residue of that duration."
+        },
+        {
+          "title": "Chungking Express in six weeks",
+          "content": "Chungking Express (1994) was conceived and shot in roughly six weeks while Wong was waiting for the sound mix on his previous film Ashes of Time. He used the gap in his schedule as an opportunity to make a small, fast film with no script, setting the action in a takeaway food stall and a rented apartment in Chungking Mansions. The film won Best Picture and Best Director at the 1995 Hong Kong Film Awards. The episode is a case study in what a major filmmaker makes when he is given six weeks and no commercial pressure."
+        },
+        {
+          "title": "The Christopher Doyle partnership",
+          "content": "Australian cinematographer Christopher Doyle photographed seven Wong films between As Tears Go By (1988) and 2046 (2004). The partnership produced the handheld, slow-shutter, saturated look that defined 1990s Hong Kong cinema. Doyle has said in interviews that Wong often arrived on set with no script pages and asked him to shoot what the actors were doing, then rearranged the footage during editing. The visual style is therefore partly an editorial invention: it is what a cinematographer does when the director has given up on planning and trusted the room."
+        },
+        {
+          "title": "'I feel like there is a lot of things between me and Tony that is beyond words'",
+          "content": "Asked about his long collaboration with Tony Leung Chiu-wai, his leading man in seven features including Happy Together and In the Mood for Love, Wong said, 'I feel like there is a lot of things between me and Tony that is beyond words.' The remark, delivered repeatedly in interviews, is not throwaway. It is the exact description of how he wants his films to operate: a shared silence between two people who have worked together for so long that dialogue is reduced to the essentials, and the rest is carried in looks and tempo."
+        }
+      ]
+    },
+    {
+      "name": "Hayao Miyazaki",
+      "domain": "animation",
+      "era": "1941-present",
+      "region": "Japan",
+      "bio": "Japanese animator and filmmaker. Co-founded Studio Ghibli on June 15, 1985 with Isao Takahata and Toshio Suzuki. Films include My Neighbor Totoro (1988), Princess Mononoke (1997), Spirited Away (2001, Academy Award for Best Animated Feature), and The Boy and the Heron (2023, second Academy Award).",
+      "oneLiner": "Draws the next frame by hand until he knows what the story is, and then draws it again.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "Storyboards instead of scripts",
+          "content": "Miyazaki has described his working method to interviewers many times: he begins a film without a completed script and works from hand-drawn storyboards, the e-konte, which he produces as the film is in production. Animators at Studio Ghibli have said in documentaries that they often did not know how a film would end while they were drawing its middle. The approach means the director has to keep producing new pages ahead of the animators, and several Ghibli releases were delayed because Miyazaki had not yet drawn the ending his team was racing toward."
+        },
+        {
+          "title": "Never Ending Man, 2016",
+          "content": "In the 2016 NHK documentary Never Ending Man: Hayao Miyazaki, the then 75-year-old director is filmed coming out of retirement to work on a short film, Boro the Caterpillar, and is shown in repeated close-up hand-drawing frames, weeping at his desk when he cannot get a bug's movement right. He tells the camera, 'I keep making work because there is no point to life if I don't.' The film is unusual among studio documentaries: the subject lets himself be shown failing for hours at a time, which is the most honest surviving evidence of how he works."
+        },
+        {
+          "title": "Spirited Away, from a real ten-year-old",
+          "content": "Miyazaki began Spirited Away (2001) after a friend brought her ten-year-old daughter to his summer house. He watched the girl and thought the existing animation produced for her generation was condescending. He has said in interviews that he wanted to make a film in which a ten-year-old girl walks into a frightening adult world and finds the discipline to work through it. Spirited Away became Japan's highest-grossing film and won the 2003 Academy Award for Best Animated Feature. The premise came from watching one specific child across a kitchen table for a week."
+        },
+        {
+          "title": "Retirement, seven times",
+          "content": "Miyazaki has publicly announced his retirement from feature filmmaking on several occasions, most loudly in 2013 after The Wind Rises, citing eye trouble and exhaustion. He has come out of every retirement so far, most recently to make The Boy and the Heron (2023), which won a second Academy Award for Best Animated Feature. Ghibli staff have described the cycle with affection: the retirements are not false, they are accurate descriptions of his state at the time. The returns are the same."
+        }
+      ]
+    },
+    {
+      "name": "Yayoi Kusama",
+      "domain": "installation / painting",
+      "era": "1929-present",
+      "region": "Japan",
+      "bio": "Japanese artist born in Matsumoto. Lived in New York from 1958 to 1972 and was central to the early happenings scene. Returned to Japan in 1973 and has lived voluntarily in Seiwa Hospital for the Mentally Ill in Tokyo since 1977, walking daily to her nearby studio. Her dotted installations and Infinity Rooms are among the most visited contemporary artworks in the world.",
+      "oneLiner": "Treats the repeated mark as a survival technology and the repetition is the piece.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "Age 10, the table that multiplied",
+          "content": "Kusama began having vivid hallucinations around age 10, in which fields of dots and patterns of flowers covered tables, walls, and the body of her mother. She drew what she saw compulsively. Her mother destroyed her drawings and ordered her to work in the family seed nursery instead. In her memoir Infinity Net (2002) she writes that her earliest decision as an artist was that the only way to survive the visions was to put them onto paper before they closed over her. The dot pattern that made her famous is the exact visual record of an episode she had as a child."
+        },
+        {
+          "title": "1958 to 1972, New York, soft sculptures and happenings",
+          "content": "Kusama moved to New York in 1958 and spent the next fourteen years there, competing with male pop artists on a budget that left her occasionally fishing food from bins. She produced huge Infinity Net paintings in single obsessive sessions, sewed stuffed phallic protrusions onto chairs, ladders, and boats in the Accumulation series, and staged Naked Happenings in which she painted polka dots on nude strangers in public spaces including Central Park and the MoMA sculpture garden in 1969. She was arrested repeatedly. The volume of work made in these years, across media she had not previously used, is closer to a factory's output than a single artist's."
+        },
+        {
+          "title": "1977, voluntarily into the hospital",
+          "content": "In 1977 Kusama voluntarily checked into Seiwa Hospital for the Mentally Ill in Tokyo and has lived there ever since. Her studio is across the street. She walks to it every morning and works until evening, then returns to the hospital to sleep. She has told interviewers, 'I fight pain, anxiety, and fear every day, and the only method I have found that relieves my illness is to keep creating art.' The living arrangement is its own piece of practice design: the hospital stabilises her, the studio absorbs her, and the distance between them is a short walk."
+        },
+        {
+          "title": "Infinity Mirror Rooms and the Instagram decade",
+          "content": "Kusama began making Infinity Mirror Rooms in 1965 with Phalli's Field. The format, a cube lined with mirrors containing suspended lights or polka-dotted objects, was conceived decades before social media existed. From roughly 2013 onwards the rooms became among the most-photographed artworks in the world, with visitors queueing for hours for 30-second slots. The Hirshhorn Museum's 2017 Kusama retrospective in Washington DC drew record crowds. A piece made in the 1960s as a hallucination-management device became, fifty years later, the canonical Instagram artwork of the 2010s."
+        }
+      ]
+    },
+    {
+      "name": "Björk",
+      "domain": "pop / electronic music",
+      "era": "1965-present",
+      "region": "Iceland",
+      "bio": "Icelandic singer, composer and producer. Child recording artist, then frontperson of The Sugarcubes (1986-1992), then a solo career from Debut (1993) through Homogenic (1997), Vespertine (2001), Medúlla (2004), Biophilia (2011), Vulnicura (2015) and Fossora (2022). Released the first app-album Biophilia in 2011.",
+      "oneLiner": "Arrives at each album with a new set of instruments she has commissioned from other specialists.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "Enrolled at 6, recording at 11",
+          "content": "Björk enrolled at Reykjavík's Barnamúsíkskóli at age six, where she studied classical piano and flute. She released her first album, a self-titled record of children's songs, at age 11 in 1977. The combination of classical training in a small country's national conservatory and a pop release as a pre-teen is the distinctive formation of her career. She has said in interviews that she arrived at punk and electronic music with an unusual amount of absolute theory already installed, which is why she can sit down with conservatory composers and laptop producers and talk to both."
+        },
+        {
+          "title": "Biophilia, 2011, built as an app",
+          "content": "Biophilia (2011) was released simultaneously as a studio album and as a suite of ten interactive iPad apps, one per song, produced with a team including educator Chris Messina and a Swedish instrument maker. Björk commissioned several new instruments for the project, including the gameleste (a modified celesta) and a Tesla coil used as a percussion voice. The project was framed by her as a music education programme as much as an album. It is the first time a mainstream pop record was released as an app-album, and the archive is held by the Museum of Modern Art in New York."
+        },
+        {
+          "title": "Vulnicura, 2015, and breakup as structure",
+          "content": "Vulnicura (2015) is a concept album about the breakup of Björk's long relationship with artist Matthew Barney. She produced it with Alejandro Ghersi (Arca) and Haxan Cloak, and the tracks are labelled with timestamps relative to the breakup ('nine months before', 'five months before', 'two months after'). She has called her work with Arca 'the strongest musical relationship' of her career. The choice to time-stamp a grief album in months is characteristic: she treats an emotional experience as a sequence she can index, not a mood she has to describe."
+        },
+        {
+          "title": "Homogenic and 'the extrovert thing'",
+          "content": "About Homogenic (1997), recorded in Spain, Björk said in interviews, 'I realised that I'd come to the end of the extrovert thing.' Debut and Post had been brightly lit pop records. Homogenic moved to dense beats and string arrangements and a deliberately more inward vocal. The remark is a small self-portrait of how she moves between albums. She decides in public that a mode is exhausted, and then engineers a replacement mode, usually by recruiting new collaborators from a different genre."
+        }
+      ]
+    },
+    {
+      "name": "William Kentridge",
+      "domain": "animation / drawing",
+      "era": "1955-present",
+      "region": "South Africa",
+      "bio": "South African artist born in Johannesburg to lawyers who defended victims of apartheid. Developed a distinctive charcoal animation technique in which the same drawing is filmed, erased, and re-drawn across hundreds of frames. Best known for the Drawings for Projection series (1989 onwards) and for directing operas including Berg's Lulu and Wozzeck.",
+      "oneLiner": "Erases most of a drawing back into its own smudge, and treats the smudge as memory.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "The charcoal-and-eraser technique",
+          "content": "Kentridge developed his signature method in the late 1980s working alone in his Johannesburg studio: he makes a large charcoal drawing, photographs it, erases a section, draws a small change on top of the existing marks, photographs it again, and repeats. Each change gets between a quarter of a second and two seconds of screen time in the final animation. The eraser never wipes the drawing clean. The result is a film made of about thirty drawings, each one bearing the ghost of every previous state. The technique was invented partly because he did not have an animation studio or assistants."
+        },
+        {
+          "title": "'A mark of something out there in the world'",
+          "content": "In lectures at Harvard and in the 2012 Norton Lectures at Harvard, collected as Six Drawing Lessons, Kentridge said, 'My drawings don't start with a beautiful mark. It has to be a mark of something out there in the world.' The sentence is a working instruction. He refuses the aestheticist starting point in which a line is beautiful in itself. Every charcoal line in his films has to correspond to something in the apartheid archive, a South African landscape, a specific body, before it is allowed to exist."
+        },
+        {
+          "title": "Soho Eckstein and Felix Teitlebaum",
+          "content": "From Johannesburg, 2nd Greatest City After Paris (1989) through his 2011 film Other Faces, Kentridge returned to two recurring characters: Soho Eckstein, a pinstriped white industrialist, and Felix Teitlebaum, a naked and often weeping alter ego. Both are openly drawn versions of himself at different angles. He has said in interviews that the two figures are a way of staging, inside a single drawing, the contradictions of being a white South African artist of his generation: part of the system that benefited him, part of the mourning for what the system did."
+        },
+        {
+          "title": "The Refusal of Time, 2012",
+          "content": "In 2012 Kentridge produced The Refusal of Time, a five-channel video installation with music by Philip Miller and input from physicist Peter Galison on the history of time coordination. The work was shown at Documenta 13 in Kassel and later acquired jointly by the Metropolitan Museum of Art and the San Francisco Museum of Modern Art. It is unusual inside his catalogue for being a collaboration with a scientist and a composer rather than a solo studio output. The move, a studio artist running a small interdisciplinary team, is now central to his later workshop in Johannesburg."
+        }
+      ]
+    },
+    {
+      "name": "Marcel Duchamp",
+      "domain": "conceptual art",
+      "era": "1887-1968",
+      "region": "France / US",
+      "bio": "French-American artist whose readymades and Large Glass reshaped twentieth-century art's definition of itself. Moved to New York in 1915. Publicly abandoned art for chess in 1923, then worked secretly on Étant donnés from 1946 to 1966.",
+      "oneLiner": "Proved that deciding is an art form by submitting a urinal and signing it R. Mutt.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "April 1917, Fountain and a fake name",
+          "content": "In April 1917 Duchamp submitted a porcelain urinal, purchased from J.L. Mott Iron Works in New York, to the exhibition of the Society of Independent Artists. He turned the urinal on its back, signed it 'R. Mutt 1917', and titled it Fountain. He was on the organising committee of the Society. The committee rejected the work, and Duchamp and two collaborators then publicly defended it in an anonymous editorial, arguing that Mr Mutt had 'taken an ordinary article of life, placed it so that its useful significance disappeared' and in doing so had 'created a new thought for that object'. In 2004, 500 art professionals voted it the most influential work of twentieth-century art."
+        },
+        {
+          "title": "The rule for choosing a readymade",
+          "content": "In a 1961 lecture at the Museum of Modern Art Duchamp described the rule he had set himself for readymades. 'It is important to choose an object that won't attract me, either by its beauty or by its ugliness,' he said. 'To find a point of indifference in my looking at it.' The rule is the opposite of what an art student is usually taught. A readymade is not chosen for what the artist likes about it; it is chosen for the absence of the artist's aesthetic response. The discipline is negative, not positive."
+        },
+        {
+          "title": "Chess as art without commerce",
+          "content": "From around 1923 Duchamp increasingly replaced art-making with competitive chess. He competed for France at four Chess Olympiads between 1928 and 1933 and wrote a chess endgame book with Vitaly Halberstadt. He told interviewers that chess had 'all the beauty of art, and much more. It cannot be commercialised.' The sentence is his clearest statement of why he withdrew from the art market: he wanted a practice in which the moves themselves were the entire output, with no market wrapping around them."
+        },
+        {
+          "title": "Étant donnés, secretly, 1946 to 1966",
+          "content": "While Duchamp told the public for decades that he had stopped making art for chess, he was in fact constructing Étant donnés in his New York studio between 1946 and 1966, a hidden tableau visible only through two peepholes in a wooden door. The work was not revealed until after his death in 1968, when it was installed at the Philadelphia Museum of Art according to detailed instructions he had left. The twenty-year secret project is one of the most extreme examples in art history of a public persona (retired player of chess) that was a deliberate cover for continuing studio work."
+        }
+      ]
+    },
+    {
+      "name": "Dieter Rams",
+      "domain": "industrial design",
+      "era": "1932-present",
+      "region": "Germany",
+      "bio": "German industrial designer. Chief of design at Braun from 1961 to 1995. Designed the 606 Universal Shelving System for Vitsœ (1960), still in production. Wrote the Ten Principles of Good Design in the 1970s. His work is the direct visual ancestor of the early Apple product catalogue.",
+      "oneLiner": "Refused to make a product until he could answer the question, is it still useful in twenty years.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["building"],
+      "narratives": [
+        {
+          "title": "1956, the SK4 and 'Snow White's Coffin'",
+          "content": "In 1956, working at Braun alongside Hans Gugelot and Otl Aicher, Rams designed the Phonosuper SK4 radiogram, a white metal and wood box with a transparent Plexiglas lid over the turntable. Critics nicknamed it 'Snow White's Coffin' (Schneewittchensarg). It was one of the first consumer electronics products to be framed as a deliberate aesthetic object rather than a box decorated to look like furniture. The design moved Braun into the identity that defined West German industrial output for the next forty years."
+        },
+        {
+          "title": "Ten Principles, written in the 1970s",
+          "content": "Rams formulated his Ten Principles of Good Design in the 1970s in response to what he saw as a growing chaos in the world of objects. Good design is innovative, useful, aesthetic, understandable, unobtrusive, honest, long-lasting, thorough down to the last detail, environmentally friendly, and involves as little design as possible. The tenth is the most famous. The list has been adopted as a house reference inside Apple's design studio, inside the Muji product catalogue, and inside a generation of software interface teams."
+        },
+        {
+          "title": "'Weniger, aber besser'",
+          "content": "Rams's most repeated phrase is the German 'Weniger, aber besser', less, but better. He contrasts it with 'less is more', which he views as aesthetic. His version is ethical. 'Indifference towards people and the reality in which they live is actually the one and only cardinal sin in design,' he said in a 1995 interview, and later in the 2018 documentary Rams. The sentence is the instrument by which he judges his own and other people's products. A product that is visually spare but does not consider the person using it still fails the test."
+        },
+        {
+          "title": "606 Shelving, 1960, still on sale",
+          "content": "Rams designed the 606 Universal Shelving System for Vitsœ in 1960. It is a modular wall-mounted aluminium shelving system. The same product is still manufactured and sold by Vitsœ today, more than 60 years after its release, with components that are interchangeable with the 1960 originals. A customer can still order a part to expand a shelf their grandfather bought. The continuity is unusual in industrial design and is the practical expression of principle seven: long-lasting."
+        }
+      ]
+    },
+    {
+      "name": "Massimo Vignelli",
+      "domain": "graphic design",
+      "era": "1931-2014",
+      "region": "Italy / US",
+      "bio": "Italian modernist designer born in Milan. Co-founded the New York office of Unimark International in 1966 and Vignelli Associates in 1971 with his wife Lella. Clients included IBM, Knoll, Bloomingdale's, the National Park Service, and the New York City subway system. Designer of the 1972 NYC subway diagram.",
+      "oneLiner": "Believed a designer's job is to refuse nine typefaces and use the tenth for forty years.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "1972, the New York subway diagram",
+          "content": "Vignelli's 1972 diagram of the New York City subway took the city's geography and stylised it into a diagram of coloured lines at 45 and 90 degrees, with equally spaced stations and a grey blob for Central Park. New Yorkers objected to the inaccuracy: the map did not match the streets above ground. The MTA replaced it with a more geographic design in 1979. In 2025, however, the MTA returned to a variant of Vignelli's diagrammatic design for its new weekend-service map. The vindication took 53 years."
+        },
+        {
+          "title": "A short list of acceptable typefaces",
+          "content": "Vignelli published a pamphlet titled The Vignelli Canon in which he argued that of the thousands of typefaces commercially available, a designer really only needs about five. He named Bodoni, Garamond, Century, Futura, Helvetica, and Times Roman. 'Using a special typeface for every occasion,' he wrote, 'is like being a chef who uses a different plate for every dish.' The argument is characteristic: design authority comes from what you refuse to use, not what you allow yourself."
+        },
+        {
+          "title": "Design is organising information",
+          "content": "Vignelli defined graphic design as 'the organisation of information that is semantically correct, syntactically consistent, and pragmatically understandable'. The formulation is unusual in the field for borrowing vocabulary from linguistics rather than fine art. It shaped his work for the National Park Service's Unigrid system in the late 1970s, which imposed a single grid on every US National Park brochure, allowing a visitor to Yosemite and a visitor to the Everglades to find the same information in the same place on the page."
+        },
+        {
+          "title": "The Vignelli Center and a full archive",
+          "content": "In 2010 Vignelli and his wife Lella donated their complete professional archive to the Rochester Institute of Technology, which built the Vignelli Center for Design Studies to house it. Unusually for a major designer, the archive includes their unsuccessful proposals and client briefs as well as the finished work. Vignelli has said in interviews that he wanted design students to be able to study the process, not just the outputs, and the only way to do that was to give them access to the material that had been rejected."
+        }
+      ]
+    },
+    {
+      "name": "Tadao Ando",
+      "domain": "architecture",
+      "era": "1941-present",
+      "region": "Japan",
+      "bio": "Self-taught Japanese architect from Osaka. Former amateur boxer. Founded Tadao Ando Architects & Associates in 1968. Pritzker Prize 1995. Known for exposed cast-in-place concrete, natural light, and sited integration with landscape. Works include Row House in Sumiyoshi (1976) and the Church of the Light in Ibaraki (1989).",
+      "oneLiner": "Pours a concrete wall smooth enough that sunlight draws the floor plan.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "Boxer to self-taught architect",
+          "content": "Ando boxed professionally as a teenager in Osaka to earn money, then taught himself architecture by reading books on Le Corbusier and by travelling around Europe, the US, and Asia between 1962 and 1969. He never enrolled in a school of architecture. He founded Tadao Ando Architects & Associates in Osaka in 1968, at age 27, with no degree and no formal apprenticeship. The biography is a practical rebuke to the assumption that architecture requires institutional training. His Pritzker jury in 1995 cited it explicitly."
+        },
+        {
+          "title": "Church of the Light, 1989",
+          "content": "The Church of the Light in Ibaraki, Osaka Prefecture, completed in 1989, is a small concrete box. Ando cut a cross into the rear wall in four openings, so that at certain times of day a cross of direct sunlight falls on the inside of the chapel. The congregation had almost no budget for fittings. Ando has said the design was cheap to build because the light was doing the decorative work. The church remains one of the most visited small religious buildings in modern Japanese architecture."
+        },
+        {
+          "title": "1995 Pritzker prize, donated",
+          "content": "When Ando won the Pritzker Prize in 1995 the prize came with a cheque for US$100,000. He donated the entire sum to the orphans of the 1995 Great Hanshin earthquake, which had devastated Kobe earlier that year. The gesture was quietly announced and he did not publicise it further. Ando has said in interviews that the money was never really his: the prize recognised work done by many people in his Osaka office, and the Kobe children needed it more specifically than he did."
+        },
+        {
+          "title": "Architecture as a boundary that opens",
+          "content": "Ando has said, 'Architecture has always been about boundaries; building boundaries for protection and then opening them up for movement.' The remark is his clearest statement of the paradox that defines his concrete walls. They look closed from the outside but are almost always opened at one specific angle to let light, rain, or a specific view of a garden into the interior. The Koshino House (1981), Naoshima contemporary art house projects, and the Modern Art Museum of Fort Worth (2002) all follow the same logic."
+        }
+      ]
+    },
+    {
+      "name": "Paula Scher",
+      "domain": "graphic design",
+      "era": "1948-present",
+      "region": "US",
+      "bio": "American graphic designer. Art director at CBS Records in the 1970s, designing around 150 album covers a year. Partner at Pentagram New York since 1991. Created the identity for the Public Theater (1994 onwards) and the Citi logo (1998).",
+      "oneLiner": "Treats typefaces as physical tools and is not shy about how much paint she wants on the brush.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "Citi in a napkin meeting",
+          "content": "Scher has recounted in interviews and in her TED talk Great Design Is Serious, Not Solemn that she designed the Citi logo, a red arc over the word 'citi', on a napkin during the initial client meeting. The sketch took seconds. Citigroup then paid the Pentagram invoice for what Scher has described as years of design work, because the arc was inherited from the long history of Traveler's umbrella and the years of equity were visible to anyone who looked. She uses the story to make a point: a 'quick' design is quick only if the person making it has been training for thirty years."
+        },
+        {
+          "title": "The Public Theater, 1994",
+          "content": "Scher began working with the Public Theater in New York in 1994 and has been its designer ever since. Her first poster series for Bring in 'da Noise, Bring in 'da Funk (1995) used wood-type letters set aggressively at angles, borrowing from Victorian theatre posters and street graffiti. The style was immediately copied across off-Broadway and into advertising generally. Scher has said she wanted the theatre's graphics to look like the noise you walk past on 42nd Street, not like the graphics of the Metropolitan Opera."
+        },
+        {
+          "title": "'Less is more and more is more'",
+          "content": "Scher's most-quoted self-description is, 'Less is more and more is more. It's the middle that's not a good place.' The sentence is her direct response to the modernist house rule. She uses it to justify both extremes in her work: the minimal Pentagram-era identity systems and the dense maximalist hand-painted maps she has been producing in her personal practice since the late 1990s. The rule is a prohibition against the middle register of competent but unresolved design."
+        },
+        {
+          "title": "CBS Records, 150 covers a year",
+          "content": "Between 1972 and 1980 Scher worked at CBS Records, designing about 150 album covers annually and earning four Grammy nominations. She has said in interviews that the volume was the education: being forced to produce a finished design every two days for eight years taught her to make decisions quickly and to recognise her own instincts. The Pentagram work after 1991 is visibly the output of someone who is no longer afraid to commit to a first idea in a client meeting."
+        }
+      ]
+    },
+    {
+      "name": "Zaha Hadid",
+      "domain": "architecture",
+      "era": "1950-2016",
+      "region": "Iraq / UK",
+      "bio": "Iraqi-British architect. Studied mathematics at the American University of Beirut before enrolling at the Architectural Association in London. First woman to receive the Pritzker Prize (2004) and the Royal Gold Medal individually (2016). Works include MAXXI Rome, the London Aquatics Centre, the Heydar Aliyev Center, and the Guangzhou Opera House.",
+      "oneLiner": "Drew buildings the profession considered unbuildable until the profession built them.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "The paper architect years",
+          "content": "From her graduation at the Architectural Association in 1977 until her first constructed building, the Vitra Fire Station in Germany in 1993, Hadid was dismissed inside the profession as a 'paper architect' whose sweeping painted drawings could not actually be translated into concrete. She kept producing competition entries that won jury praise and client rejection. For almost sixteen years she was a publicly famous architect who had built nothing. She persisted on a teaching income. The Vitra Fire Station finally broke the pattern and was followed by a rush of commissions through the late 1990s."
+        },
+        {
+          "title": "Painting as a design tool",
+          "content": "Hadid's early work at the Architectural Association under Rem Koolhaas involved producing large-scale painted compositions in the suprematist tradition of Malevich, often before any plan had been drawn. She used paint as a way to explore an architectural idea spatially before it was converted to conventional drawings. She has said in interviews that the paintings were not 'concept art' but the primary design phase. The curvilinear geometry that later defined her built work was invented on canvas before it ever touched a CAD programme."
+        },
+        {
+          "title": "2004 Pritzker, first woman",
+          "content": "In 2004 Hadid became the first woman to receive the Pritzker Prize in its then 25-year history. She was 53 and at that point had a modest number of completed buildings. The jury cited her trajectory from 'paper architect' to a growing body of built work. The ceremony was awkward: she used her acceptance to speak about the underrepresentation of women in architecture and the pressure on women architects to be 'twice as good'. She returned to the theme in almost every public appearance for the rest of her life."
+        },
+        {
+          "title": "Heydar Aliyev Center, 2013",
+          "content": "The Heydar Aliyev Center in Baku, Azerbaijan, completed in 2013, is a 57,500 square metre building whose external skin is formed from continuously curving glass-fibre-reinforced polyester panels, with no visible column grid. The building won the 2014 Design of the Year award from the London Design Museum. It is an example of Hadid's practical thesis: if the geometry can be described parametrically, contemporary fabrication methods can produce the panels, and the apparently impossible curve is merely an engineering budget question."
+        }
+      ]
+    },
+    {
+      "name": "Jan Gehl",
+      "domain": "public-space urbanism",
+      "era": "1936-present",
+      "region": "Denmark",
+      "bio": "Danish architect and urban design consultant. Author of Life Between Buildings (1971), Public Spaces, Public Life (2004), and Cities for People (2010). Founding partner of Gehl Architects in Copenhagen (2000). Designed public-realm interventions in Copenhagen, Melbourne, New York, London, Moscow, and many other cities.",
+      "oneLiner": "Counts people on a street the same way an ornithologist counts birds in a marsh.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["analyzing"],
+      "narratives": [
+        {
+          "title": "Strøget, November 17, 1962",
+          "content": "On November 17, 1962, Copenhagen pedestrianised the first section of Strøget, its central shopping street. Merchants were furious and predicted an exodus. Gehl, a young architect at the time, began counting people in the new pedestrian zone by hand with his wife Ingrid Gehl, a psychologist. Year after year, for decades, they tracked how many people sat on benches, how long they stayed, what they did while they were there. The longitudinal counts became the empirical spine of his entire professional argument. The street is the data set."
+        },
+        {
+          "title": "'Go out there and see what works'",
+          "content": "Gehl's most repeated instruction to students and consultants is, 'Go out there and see what works and what doesn't work, and learn from reality. Look out of your windows, spend time in the streets and squares and see how people actually use spaces, learn from that, and use it.' The sentence is a direct polemic against design from plans. It is also a labour instruction: urban design research is physical fieldwork, not computer simulation. It requires a notebook and a folding chair."
+        },
+        {
+          "title": "New York, 2007, Janette Sadik-Khan's phone call",
+          "content": "In 2007 New York City Transportation Commissioner Janette Sadik-Khan invited Gehl Architects to study pedestrian and cyclist conditions in Manhattan. The resulting recommendations directly shaped the pedestrianisation of Times Square in 2009 and the rapid expansion of the city's protected bike-lane network. For a Copenhagen-based firm to be invited to tell New York how to think about its own streets was a career-defining commission, and Gehl treats it as a case study of how a small specialised consultancy can shift a city the size of New York through observation data and a clear method."
+        },
+        {
+          "title": "Life Between Buildings, 1971",
+          "content": "Gehl's first book, Life Between Buildings, was published in Danish in 1971 and in English translation in 1987. It set out his argument, in numbered sections and photographs taken on Copenhagen streets, that modernist urbanism had designed buildings and roads but not the spaces between them, and that the 'in-between' space is where city life actually happens. The book took 16 years to reach English-language readers, but has since been translated into more than thirty languages and is on reading lists for urban design programmes from Melbourne to Mumbai."
+        }
+      ]
+    },
+    {
+      "name": "Piet Oudolf",
+      "domain": "landscape design",
+      "era": "1944-present",
+      "region": "Netherlands",
+      "bio": "Dutch garden designer and nurseryman. Pioneer of the New Perennial Movement. Major commissions include the Lurie Garden in Chicago (2003), the High Line in New York (2006), and the Serpentine Gallery meadow in London (2011). Plans are drawn by hand in coloured pencil.",
+      "oneLiner": "Designs for how a plant looks when it is dying as well as for how it looks in flower.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "The High Line, 2006 onwards",
+          "content": "When the New York High Line reopened as a public park in 2009, the planting design was by Oudolf. He selected species that had already colonised the abandoned railway viaduct, native grasses and perennials, and integrated them with his own signature drifts of echinacea, eryngium, and miscanthus. The result is a 1.45 mile linear park that looks like an overgrown railway, not a garden. By 2019 the High Line was receiving roughly 8 million visitors a year. The planting is why most of them come back."
+        },
+        {
+          "title": "Hand-drawn plans in coloured pencil",
+          "content": "Every Oudolf planting scheme is drawn by hand, on paper, in coloured pencil. He has shown the plans for the Lurie Garden and the High Line in his books and in the 2017 documentary Five Seasons. He has said he does not use design software because the act of drawing plants as overlapping circles in different colours is the design process itself. If a plan needs to be changed, he draws the new plan from scratch. The physical plan is also how he communicates with gardeners on site, the drawings travel with the plants."
+        },
+        {
+          "title": "'A garden is exciting when it looks good through out the year'",
+          "content": "Oudolf's most quoted working principle is, 'A garden is exciting for me when it looks good through out the year, not just at one particular time.' In practice this rule drives his plant selection: he picks species whose seed heads, stems, and winter silhouettes are as interesting as their flowers. His gardens are famously left un-cut through autumn and into early winter, because dead perennials covered in frost are, in his design logic, part of the fifth season. The rule is the hard edge that distinguishes him from the English herbaceous border tradition."
+        },
+        {
+          "title": "Hummelo, the private nursery",
+          "content": "From 1982 until 2018 Oudolf and his wife Anja ran a private nursery at Hummelo in the eastern Netherlands, where he propagated and tested the perennials he used in client projects. The garden was open to the public twice a week in season. He has said the nursery was his laboratory: he could not use a plant in a public commission until he had lived with it at Hummelo for several growing seasons and knew how it looked in every month of the year. The commercial nursery closed in 2018 but the garden remains as a private research plot."
+        }
+      ]
+    },
+    {
+      "name": "Malala Yousafzai",
+      "domain": "girls' education advocacy",
+      "era": "1997-present",
+      "region": "Pakistan / UK",
+      "bio": "Pakistani education activist born in Mingora, Swat Valley. Began blogging for BBC Urdu under the pseudonym Gul Makai at age 11 during the Taliban's occupation of Swat. Shot by a Taliban gunman on October 9, 2012. Co-founder of the Malala Fund. Youngest Nobel Peace Prize laureate in 2014.",
+      "oneLiner": "Took the bullet that was meant to silence her and turned her recovery into a global fund.",
+      "primaryCategoryIntent": "influencing",
+      "secondaryCategoryIntents": ["connecting"],
+      "narratives": [
+        {
+          "title": "2009, the Gul Makai diary",
+          "content": "In early 2009, at the age of 11, Malala began writing a diary for BBC Urdu under the pseudonym Gul Makai, describing life under Taliban rule in the Swat Valley of Pakistan, including the closure of girls' schools and the nightly sound of artillery. The diary was published online weekly. It was, at the time, a small piece of youth journalism consumed largely by a Pashto-speaking audience. It later turned out to be the only contemporaneous first-person public record by a schoolgirl inside Taliban-controlled Swat. The diary set the voice and the framing that defined her later career."
+        },
+        {
+          "title": "October 9, 2012, the school bus",
+          "content": "On October 9, 2012, a Taliban gunman boarded the school bus carrying 15-year-old Malala and her classmates home from school in Mingora. He asked for her by name and fired three shots. One bullet travelled through her forehead and lodged in her shoulder. She was airlifted from a hospital in Peshawar to Queen Elizabeth Hospital in Birmingham, UK, where she underwent reconstructive surgery. She survived. The attack that was intended to make her silent turned her into one of the most recognisable faces in global education advocacy within nine months."
+        },
+        {
+          "title": "July 12, 2013, the UN speech",
+          "content": "On her sixteenth birthday, July 12, 2013, nine months after the attack, Malala addressed the UN Youth Assembly in New York. She said, 'The terrorists thought they would change my aims and stop my ambitions, but nothing changed in my life except this: weakness, fear and hopelessness died. Strength, power and courage was born.' The UN declared the day Malala Day. The speech is notable for what it refused to do: she did not demonise the Taliban in personal terms, and instead framed education as a specific right that terrorists specifically fear."
+        },
+        {
+          "title": "The Malala Fund and the choice of 'country leaders'",
+          "content": "After her recovery, Malala and her father Ziauddin co-founded the Malala Fund, which by 2023 was operating in eight countries, funding local educators rather than running its own schools. The fund's Gulmakai Network supports what it calls 'country leaders', local women already running girls' education projects, with unrestricted grants and connections. The design choice, to channel money to existing local organisers rather than to build a parallel international NGO, is the operational argument that distinguishes her fund from older development charities."
+        }
+      ]
+    },
+    {
+      "name": "Greta Thunberg",
+      "domain": "climate activism",
+      "era": "2003-present",
+      "region": "Sweden",
+      "bio": "Swedish climate activist. Began a solo school strike outside the Riksdag on August 20, 2018, at age 15. Catalysed the global Fridays for Future movement. Has been diagnosed with Asperger syndrome, OCD, and selective mutism.",
+      "oneLiner": "Sat down outside the Swedish parliament alone and refused to leave until everyone else was also sitting down.",
+      "primaryCategoryIntent": "influencing",
+      "secondaryCategoryIntents": ["expressing"],
+      "narratives": [
+        {
+          "title": "August 20, 2018, alone outside the Riksdag",
+          "content": "On August 20, 2018, 15-year-old Thunberg sat down outside the Swedish parliament in Stockholm with a hand-painted sign reading 'Skolstrejk för klimatet' (School strike for climate). She was alone. She had been reading about climate change since age 8 and had fallen into an eating disorder and depression about it for several years. For the first three weeks she sat there during school hours with a pile of leaflets she handed to anyone who stopped. The action was small, local, and photographed mostly by Swedish passers-by. Fridays for Future, which by December 2018 had organised strikes in at least 270 cities, began with that single chair."
+        },
+        {
+          "title": "'I want you to panic'",
+          "content": "At the 2019 World Economic Forum in Davos, Thunberg told an audience of business leaders, 'I don't want you to be hopeful. I want you to panic. I want you to feel the fear I feel every day. And then I want you to act.' The sentence inverted the standard script for public climate speaking, which is to reassure audiences that technology and markets can still solve the problem. Thunberg refused the script and was widely criticised for it. She repeated the formulation in more than one later speech, on purpose, because she regarded the reassurance script as part of the problem."
+        },
+        {
+          "title": "August 2019, sailing across the Atlantic",
+          "content": "In August 2019 Thunberg sailed from Plymouth, England to New York City on the racing yacht Malizia II, a 15-day voyage. She refused to fly because of aviation's carbon footprint. The voyage was organised specifically so she could address the UN Climate Action Summit in New York in September without boarding a plane. On September 23, 2019, she delivered her How Dare You speech at the UN, asking, 'How dare you! You have stolen my dreams and my childhood with your empty words.' The trip and the speech are, tactically, a single event."
+        },
+        {
+          "title": "'Asperger's is a superpower'",
+          "content": "In multiple interviews, including her 2019 TED talk, Thunberg has described her autism, OCD, and selective mutism as the precondition of her activism, not a complication of it. 'Being different is a gift,' she said in 2019. 'It makes me see things from outside the box. I don't easily fall for lies, I can see through things.' The framing is rhetorically important: it refuses the framing in which she is brave 'despite' being on the spectrum. In her account, it is why she noticed the climate problem and refused to let other people dismiss it as normal."
+        }
+      ]
+    },
+    {
+      "name": "Al Gore",
+      "domain": "climate advocacy",
+      "era": "1948-present",
+      "region": "US",
+      "bio": "45th Vice President of the United States (1993 to 2001) under Bill Clinton. Lost the 2000 presidential election to George W. Bush despite winning the popular vote. Reinvented his career as a climate campaigner, producing the slideshow and film An Inconvenient Truth (2006). Nobel Peace Prize 2007, shared with the IPCC.",
+      "oneLiner": "Took a losing presidential campaign and rebuilt his life around a single PowerPoint deck.",
+      "primaryCategoryIntent": "influencing",
+      "secondaryCategoryIntents": ["synthesizing"],
+      "narratives": [
+        {
+          "title": "The slideshow that became a movie",
+          "content": "After losing the 2000 presidential election, Gore spent years delivering an unpaid climate change slideshow to whatever audiences would have him, thousands of times, on road trips across the United States and abroad. Producer Laurie David saw one of the live presentations in Los Angeles in 2005 and approached him about filming it. An Inconvenient Truth (2006) is, structurally, the slideshow. The film won two Academy Awards, including Best Documentary Feature, and was the first major documentary made inside an Apple Keynote deck. The cinematic object is essentially a middle-aged man advancing his own slides."
+        },
+        {
+          "title": "December 2000, Supreme Court and the concession",
+          "content": "In December 2000, after the Supreme Court's Bush v. Gore ruling ended the Florida recount, Gore delivered a concession speech in which he said, 'I accept the finality of the outcome.' The speech was watched by historians and constitutional lawyers as the single point where the 2000 election crisis formally resolved without a legitimacy collapse. Gore spent the following decade publicly refusing to run again, which freed him to become a full-time campaigner on a single issue. The concession was, in its own strange way, the first step of the climate work."
+        },
+        {
+          "title": "Climate Reality Project and training 50,000 presenters",
+          "content": "In 2006 Gore founded what is now the Climate Reality Project, an organisation whose core product is the three-day Climate Reality Leadership Corps training. Gore personally delivers the opening session of most training cohorts. By 2023 the programme had trained more than 50,000 people in over 190 countries to give a version of the slideshow themselves. The design choice, to franchise the slideshow rather than monopolise it, is the operational core of his climate work after the film and the Nobel Prize."
+        },
+        {
+          "title": "Nobel Peace Prize, 2007",
+          "content": "Gore shared the 2007 Nobel Peace Prize with the Intergovernmental Panel on Climate Change 'for their efforts to build up and disseminate greater knowledge about man-made climate change'. In his Oslo acceptance lecture, Gore said, 'We, the human species, are confronting a planetary emergency, a threat to the survival of our civilization that is gathering ominous and destructive potential even as we gather here.' He declined to use the speech to relitigate the 2000 election. Every minute of his acceptance was spent on the climate brief he had chosen after the loss."
+        }
+      ]
+    },
+    {
+      "name": "Dolores Huerta",
+      "domain": "labor organising",
+      "era": "1930-present",
+      "region": "US",
+      "bio": "American labour and civil rights activist. Co-founded the National Farm Workers Association (later the United Farm Workers) with Cesar Chavez and Gilbert Padilla in 1962. Lead negotiator during the 1965 to 1970 Delano grape strike and boycott. Coined or popularised the organising slogan 'Sí, se puede'.",
+      "oneLiner": "Negotiated grape contracts for farmworkers in rooms where nobody expected a Mexican-American woman to sit at the table.",
+      "primaryCategoryIntent": "influencing",
+      "secondaryCategoryIntents": ["connecting"],
+      "narratives": [
+        {
+          "title": "Delano grape boycott, 1965 to 1970",
+          "content": "From 1965 Huerta ran the East Coast end of the Delano grape boycott, organising distributors, union members, and church groups to refuse to handle California table grapes. She personally negotiated with A&P, one of the largest US supermarket chains of the era, to pull non-union grapes from its shelves. The five-year boycott produced, in July 1970, the first contracts in the history of the United Farm Workers, including wage increases, pesticide protections, and a health and welfare fund. The boycott is a textbook case of consumer pressure translating into labour contracts."
+        },
+        {
+          "title": "'Sí, se puede', and Robert F. Kennedy",
+          "content": "Huerta is widely credited with popularising, and in some accounts coining, the slogan 'Sí, se puede' (yes, we can) during a 1972 Arizona hunger strike led by Cesar Chavez. The phrase became the UFW's rallying cry and was later adopted by the Obama presidential campaign in English translation in 2008. Huerta was also a close ally of Robert F. Kennedy and stood on the Ambassador Hotel stage with him on the night of his assassination in June 1968. The biography therefore intersects directly with three of the major US political moments of the twentieth century."
+        },
+        {
+          "title": "1988, ribs broken at a Bush rally in San Francisco",
+          "content": "On September 14, 1988, Huerta, then 58, was peacefully protesting a campaign event for presidential candidate George H.W. Bush outside the St Francis Hotel in San Francisco when she was beaten by an officer of the San Francisco Police Department. The injuries included two broken ribs and a ruptured spleen, requiring emergency surgery. The city later settled a civil claim for $825,000 and the SFPD reformed its crowd-control policies. Huerta resumed public protest as soon as she had recovered. Her willingness to go back onto a picket line after that beating became a template for younger organisers."
+        },
+        {
+          "title": "The Dolores Huerta Foundation",
+          "content": "In 2002 Huerta founded the Dolores Huerta Foundation, with a $100,000 Puffin / Nation Institute Prize for Creative Citizenship as the seed capital. The foundation works in the Central Valley of California training community organisers in local civic campaigns: school boards, water boards, redistricting. Its model is explicit about the choice to work on small races that rarely attract national attention. Huerta has said in interviews that the contracts she won in the 1960s were possible only because organised people sat on public bodies, and the foundation is designed to put those people in those chairs."
+        }
+      ]
+    },
+    {
+      "name": "Naomi Klein",
+      "domain": "journalism / activism",
+      "era": "1970-present",
+      "region": "Canada",
+      "bio": "Canadian journalist, essayist, and activist. Author of No Logo (1999), The Shock Doctrine (2007), This Changes Everything (2014), On Fire (2019), and Doppelganger (2023), which won the Women's Prize for Non-Fiction. Professor of Climate Justice at the University of British Columbia.",
+      "oneLiner": "Reads a crisis in the same week it is happening and files a book about it four years later.",
+      "primaryCategoryIntent": "influencing",
+      "secondaryCategoryIntents": ["synthesizing"],
+      "narratives": [
+        {
+          "title": "No Logo, published December 1999",
+          "content": "Klein began researching No Logo in the mid-1990s, visiting Nike and Reebok sweatshops in South East Asia and culture-jamming collectives in North America. The book was published in December 1999, the same month as the Seattle WTO protests, and became an unexpected central text of the global justice movement of the next decade. Klein has said in interviews that the timing was partly luck: she had been writing a book about brand culture, and the world decided to have a movement about brand culture the week it was published. The alignment of a single journalist's four years of reporting with a generational moment is rare and instructive."
+        },
+        {
+          "title": "The Shock Doctrine, 2007, one thesis",
+          "content": "The Shock Doctrine (2007) proposes a single historical thesis: that disaster, natural or political, creates openings for rapid neoliberal economic reforms that would be politically impossible under normal conditions. Klein tested the thesis against Chile 1973, Iraq 2003, Hurricane Katrina 2005, and Sri Lanka 2004. The book is structured as a single argument repeated across seven case studies. Critics objected that no one framework can hold seven countries. Klein's response in interviews was that the pattern had to be named before it could be argued with, and the book exists to name it."
+        },
+        {
+          "title": "Doppelganger, 2023, a memoir about being confused with Naomi Wolf",
+          "content": "Doppelganger (2023) is a memoir built on a strange premise: Klein and fellow author Naomi Wolf are repeatedly confused for each other online, and Wolf's journey into anti-vaccine and pro-Trump content during the pandemic kept producing angry messages aimed at Klein. The book uses the confusion as a way into the conspiracy internet's relationship with genuine leftist critique. It won the 2024 Women's Prize for Non-Fiction. The formal move, turning a personal annoyance into a book-length analytical frame, is characteristic: Klein refuses to throw out the accident and looks for the structure it is pointing at."
+        },
+        {
+          "title": "'It's a fantasy that you could fundamentally shift the building blocks'",
+          "content": "Across the promotion of This Changes Everything (2014) Klein repeated a single line in interviews: 'It's a fantasy that you could fundamentally shift the building blocks of your economy without engaging with politics.' She used it against both mainstream environmentalists who wanted to keep climate apolitical and against leftists who wanted to keep political economy separate from ecology. The sentence is her working thesis: the climate and the economy are the same file, and any proposal to fix one without touching the other is an evasion."
+        }
+      ]
+    },
+    {
+      "name": "Cédric Villani",
+      "domain": "mathematics",
+      "era": "1973-present",
+      "region": "France",
+      "bio": "French mathematician, Fields Medallist 2010 for work on Landau damping and the Boltzmann equation. Director of the Institut Henri Poincaré 2009 to 2017. Served in the French National Assembly 2017 to 2022. Author of the memoir Birth of a Theorem (2012).",
+      "oneLiner": "Treats a theorem as a piece of long-distance emotional weather that has to be survived collaboratively.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "Birth of a Theorem, 2012, a proof as diary",
+          "content": "Villani's memoir Théorème vivant (Birth of a Theorem, 2012) tracks the two-year collaboration with Clément Mouhot that led to their proof of nonlinear Landau damping, the work for which Villani won the 2010 Fields Medal. The book is written in real time as a combination of emails between the co-authors, drafts of the proof with corrections, transcripts of dead ends, and accounts of nights when nothing worked. It is one of the most unusual works of popular science writing because it refuses to tidy the process. The reader sees the proof fail twice before it stabilises."
+        },
+        {
+          "title": "The spider brooch and the lavalière",
+          "content": "Villani is consistently photographed in a three-piece silk suit, a lavalière tie, and a large jewelled spider brooch on the lapel. He has explained the costume in interviews, including on Lex Fridman's podcast, as a deliberate visual strategy. Mathematicians who look the part of their stereotype, he argues, are easier to ignore. The spider brooch and the tie are an invitation for a journalist, a politician, or a taxi driver to ask him a question about his work, because the costume forces the other person to start the conversation. Villani treats his wardrobe as a publicity machine for mathematics."
+        },
+        {
+          "title": "'What's so sexy about math?' TED, 2016",
+          "content": "In his 2016 TED talk, Villani argued that mathematics is an emotional activity whose real inputs are 'imagination, drawing, the willingness to go far from the known, the willingness to be bad at something for a long time'. The talk has been viewed more than two million times. It is unusual among mathematician TED talks for refusing the puzzle-solving frame and instead framing research mathematics as a creative practice closer to writing a symphony than to checking homework."
+        },
+        {
+          "title": "Institut Henri Poincaré, 2009 to 2017",
+          "content": "Villani directed the Institut Henri Poincaré in Paris from 2009 to 2017. The institute is a small research centre that runs intensive three-month thematic programmes with visiting mathematicians from around the world. Villani used the directorship to experiment with public outreach, including children's workshops and exhibitions inside a working research building. He has said in interviews that the role taught him that institutional leadership in mathematics is mostly about choosing which mathematicians spend a summer in Paris together, and trusting them to generate the work without interference."
+        }
+      ]
+    },
+    {
+      "name": "Susan Fowler",
+      "domain": "engineering / whistleblowing",
+      "era": "1991-present",
+      "region": "US",
+      "bio": "American software engineer and writer. Published Reflecting on One Very, Very Strange Year at Uber on her personal blog on February 19, 2017. Author of Production-Ready Microservices (2016) and Whistleblower (2020). Former editor-in-chief of Increment and former New York Times opinion editor.",
+      "oneLiner": "Wrote a 3,000-word blog post that toppled a CEO from her own living room.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "The Uber blog post, February 19, 2017",
+          "content": "On February 19, 2017, Fowler published a 3,000-word post on her personal blog titled Reflecting on One Very, Very Strange Year at Uber. The post documented, in chronological and specific detail, a series of sexual-harassment incidents starting on her first day at the company, the HR department's explicit refusal to discipline a 'high performer', and the pattern of retaliation that followed her complaints. She wrote the post alone, without a co-author, and published it without warning. Within days it had 22,000 Twitter shares. Within four months it had contributed to CEO Travis Kalanick's resignation and the firing of more than 20 employees."
+        },
+        {
+          "title": "Physics, home-schooled in Arizona",
+          "content": "Fowler was home-schooled by her mother in rural Yarnell, Arizona, the daughter of an evangelical Assemblies of God preacher. She enrolled at Arizona State University and then transferred to the University of Pennsylvania, where she earned a physics degree. In her 2020 memoir Whistleblower she describes being denied entry to a Penn physics class she had passed prerequisite exams for, on the grounds that women did not normally take that class. She persisted and graduated. The pattern, a structured refusal and a structured escalation, is the same pattern visible in the Uber post a decade later."
+        },
+        {
+          "title": "The receipts inside the post",
+          "content": "The February 2017 blog post is unusual for a whistleblowing document because it reads more like an engineering bug report than a personal essay. Fowler names specific dates, specific team reorganisations, specific performance review numbers that changed, and specific HR conversations. She has said in later interviews that she wrote it that way because she had spent months keeping a private file of every incident, and the post was a cleaned-up version of that file. The evidentiary style was why her account could not be dismissed as a single employee's bad day."
+        },
+        {
+          "title": "After Uber, books and a Supreme Court petition",
+          "content": "After leaving Uber, Fowler published Production-Ready Microservices (2016), became editor-in-chief of the engineering magazine Increment at Stripe, and moved to the New York Times as technology opinion editor in 2018. She also petitioned the US Supreme Court on the question of forced arbitration clauses in employment contracts, the same clauses that had nearly stopped her own account from becoming public. The trajectory from whistleblower to editor to litigant is deliberate: she has said in interviews that her project is to make it easier for the next person to file a similar report and be believed."
+        }
+      ]
+    },
+    {
+      "name": "Cathy O'Neil",
+      "domain": "mathematics / algorithmic audit",
+      "era": "1972-present",
+      "region": "US",
+      "bio": "American mathematician and data scientist. PhD in algebraic number theory at Harvard under Barry Mazur, 1999. Worked in academia, then as a quant at D. E. Shaw, then became active in Occupy Wall Street. Author of Weapons of Math Destruction (2016) and The Shame Machine (2022). Founded ORCAA, an algorithmic auditing company.",
+      "oneLiner": "Left a hedge fund to teach the public how to sue algorithms.",
+      "primaryCategoryIntent": "analyzing",
+      "secondaryCategoryIntents": ["influencing"],
+      "narratives": [
+        {
+          "title": "From pure mathematics to D. E. Shaw, 2007",
+          "content": "O'Neil earned her Harvard PhD under Barry Mazur in 1999 with a thesis on Jacobians of curves of genus one. She held academic positions at MIT and Barnard before leaving in 2007 for D. E. Shaw, one of the largest hedge funds in the world. The move was partly financial and partly curiosity: she wanted to see whether the mathematical techniques she had been teaching undergraduates were actually being used outside the classroom. They were, in ways she has said in interviews she found increasingly difficult to defend, particularly during the 2008 financial crisis."
+        },
+        {
+          "title": "Occupy Wall Street, Alternative Banking Group",
+          "content": "O'Neil left finance in 2011 and joined Occupy Wall Street, where she became active in the Alternative Banking Group, a study circle that met weekly in a Columbia University classroom to pull apart specific financial products. She has said the group taught her that most citizens had no vocabulary for the mathematics that were being used to run their lives. The experience directly shaped her decision to start the mathbabe.org blog and to write a popular book aimed at readers who had never taken a statistics course."
+        },
+        {
+          "title": "Weapons of Math Destruction, 2016",
+          "content": "Weapons of Math Destruction (2016) argued that predictive algorithms in hiring, teacher evaluation, policing, credit scoring, and college admissions were operating as hidden discriminatory systems, often against the very populations their marketing claimed to serve. O'Neil coined the acronym WMD deliberately, to borrow the weight of the Iraq war phrase. The book was a New York Times bestseller and was long-listed for the National Book Award for Nonfiction. It was adopted on reading lists in computer science programmes that had, until then, rarely taught ethics."
+        },
+        {
+          "title": "ORCAA, the consultancy as political instrument",
+          "content": "O'Neil founded O'Neil Risk Consulting & Algorithmic Auditing (ORCAA) to offer companies and regulators a practical service: auditing specific algorithms for disparate impact, feedback loops, and perverse optimisation targets. Clients have included New York City's automated hiring review, insurance companies, and municipal governments. She has said the consultancy is her answer to the question 'what do you do after writing a book about the problem?' The answer is: charge organisations to find the specific harms the book described, and document them one at a time."
+        }
+      ]
+    },
+    {
+      "name": "Hedy Lamarr",
+      "domain": "acting / wireless invention",
+      "era": "1914-2000",
+      "region": "Austria / US",
+      "bio": "Austrian-born Hollywood actress, born Hedwig Kiesler in Vienna in 1914. Fled an arms-dealer husband in 1937 and became a major MGM star, most famously in Samson and Delilah (1949). Co-invented a frequency-hopping spread-spectrum radio guidance system with composer George Antheil during World War II, granted US Patent 2,292,387 on August 11, 1942.",
+      "oneLiner": "Patented the working principle of modern wireless on a kitchen table between film takes.",
+      "primaryCategoryIntent": "building",
+      "secondaryCategoryIntents": ["creating"],
+      "narratives": [
+        {
+          "title": "1937, leaving Fritz Mandl",
+          "content": "At age 19 Lamarr married Friedrich Mandl, a Viennese munitions manufacturer who sold arms to Italian fascists and early Nazis. She attended his dinners with clients and, by her own later account in the memoir Ecstasy and Me, listened to conversations about weapons guidance systems without showing that she understood them. In 1937 she left him and escaped to London, then to Hollywood on an MGM contract arranged with Louis B. Mayer. The dinners with Mandl became her first informal technical education in armaments, long before the torpedo patent."
+        },
+        {
+          "title": "George Antheil, 1940, at a dinner party",
+          "content": "Lamarr met avant-garde composer George Antheil at a Hollywood dinner in the summer of 1940. The topic of anti-submarine warfare came up. Lamarr proposed a radio guidance system for torpedoes that would hop between frequencies so that enemy jamming could not lock onto any single frequency for long. Antheil had synchronised the 16 pianos in his 1924 Ballet Mécanique using piano rolls. He realised the same piano-roll mechanism could synchronise a transmitter and receiver hopping together. The two of them designed the system across a series of meetings at Lamarr's house."
+        },
+        {
+          "title": "US Patent 2,292,387, August 11, 1942",
+          "content": "The patent for the Secret Communication System, US 2,292,387, was granted on August 11, 1942 to Hedy Kiesler Markey (her legal name at the time) and George Antheil. The patent described frequency hopping between 88 channels. The US Navy rejected the design as impractical for torpedo deployment, reportedly objecting to the piano-roll mechanism. The patent expired in 1959 without being used militarily. When spread-spectrum techniques were rediscovered for civilian wireless communications in the 1980s and 1990s, the 1942 patent was identified as prior art. The working principle now underlies Bluetooth, GPS, and early Wi-Fi."
+        },
+        {
+          "title": "Inventing as relief from typecasting",
+          "content": "Lamarr was, in multiple interviews, open about why she invented. She told the 2017 documentary Bombshell and earlier interviewers that Hollywood gave her 'maybe two pages of dialogue a film' and she was bored between takes. She set up a small drafting table in her trailer and in her home, and invented in her spare time: a skin tablet that dissolved in water to make a soft drink, a new kind of traffic stoplight, and the torpedo guidance system. She had no engineering training. She described herself as 'self-taught'. Inventing was, in her account, what she did instead of smoking."
+        }
+      ]
+    }
+  ]
+}

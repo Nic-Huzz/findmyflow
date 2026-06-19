@@ -1,0 +1,138 @@
+{
+  "questions": [
+    {
+      "id": "Q1_core_offer_type",
+      "text": "What type of core offer do you have or plan to sell?",
+      "type": "single_choice",
+      "options": [
+        "software_saas",
+        "coaching_consulting",
+        "course_program",
+        "physical_product",
+        "service_done_for_you",
+        "membership_community",
+        "not_sure_yet"
+      ],
+      "store_as": "core_offer_type",
+      "tags": ["core_offer"]
+    },
+    {
+      "id": "Q2_technical_ability",
+      "text": "How comfortable are you with technical tools and software?",
+      "type": "single_choice",
+      "options": [
+        "very_technical_can_build",
+        "comfortable_can_use_tools",
+        "basic_prefer_simple",
+        "not_technical_need_easy"
+      ],
+      "store_as": "technical_ability",
+      "tags": ["skills"]
+    },
+    {
+      "id": "Q3_time_to_create",
+      "text": "How much time can you invest in creating your lead magnet?",
+      "type": "single_choice",
+      "options": [
+        "1_week_or_less",
+        "2_4_weeks",
+        "1_3_months",
+        "3_plus_months"
+      ],
+      "store_as": "time_to_create",
+      "tags": ["resources"]
+    },
+    {
+      "id": "Q4_budget",
+      "text": "What budget do you have for creating your lead magnet?",
+      "type": "single_choice",
+      "options": [
+        "minimal_under_100",
+        "small_100_500",
+        "moderate_500_2000",
+        "significant_2000_plus"
+      ],
+      "store_as": "budget",
+      "tags": ["resources"]
+    },
+    {
+      "id": "Q5_content_comfort",
+      "text": "How comfortable are you creating educational content?",
+      "type": "single_choice",
+      "options": [
+        "very_comfortable_do_it_regularly",
+        "comfortable_can_create",
+        "somewhat_comfortable_need_help",
+        "not_comfortable_prefer_other_methods"
+      ],
+      "store_as": "content_comfort",
+      "tags": ["skills"]
+    },
+    {
+      "id": "Q6_service_capacity",
+      "text": "Can you deliver personalized services or consultations?",
+      "type": "single_choice",
+      "options": [
+        "yes_have_capacity_now",
+        "yes_but_limited_capacity",
+        "no_too_time_intensive",
+        "no_prefer_scalable_solutions"
+      ],
+      "store_as": "service_capacity",
+      "tags": ["capacity"]
+    },
+    {
+      "id": "Q7_problem_clarity",
+      "text": "How well do your prospects understand their problem?",
+      "type": "single_choice",
+      "options": [
+        "dont_know_they_have_problem",
+        "know_problem_not_severity",
+        "know_problem_not_solution",
+        "know_problem_and_solution"
+      ],
+      "store_as": "problem_clarity",
+      "tags": ["market"]
+    },
+    {
+      "id": "Q8_conversion_goal",
+      "text": "What's your primary goal for the lead magnet?",
+      "type": "single_choice",
+      "options": [
+        "educate_and_build_trust",
+        "let_them_experience_value",
+        "diagnose_specific_problem",
+        "get_them_quick_win"
+      ],
+      "store_as": "conversion_goal",
+      "tags": ["goals"]
+    },
+    {
+      "id": "Q9_scalability_priority",
+      "text": "How important is scalability (delivering to many people)?",
+      "type": "single_choice",
+      "options": [
+        "critical_need_scale",
+        "important_but_not_critical",
+        "not_important_prefer_personal",
+        "doesnt_matter"
+      ],
+      "store_as": "scalability_priority",
+      "tags": ["goals"]
+    },
+    {
+      "id": "Q10_existing_assets",
+      "text": "What existing assets do you have that could become a lead magnet?",
+      "type": "single_choice",
+      "options": [
+        "have_software_or_tool",
+        "have_content_guides_videos",
+        "can_offer_consulting_time",
+        "have_physical_samples",
+        "nothing_yet_starting_fresh"
+      ],
+      "store_as": "existing_assets",
+      "tags": ["resources"]
+    }
+  ]
+}

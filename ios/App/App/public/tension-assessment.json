@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "name": "Tension Layer Assessment",
+    "description": "4-question diagnostic identifying where in the river the user's flow is stuck"
+  },
+  "questions": [
+    {
+      "id": "tension_discover",
+      "layer": "discover",
+      "question": "When it comes to knowing your direction...",
+      "river_element": "The Spring",
+      "emoji": "💧",
+      "options": [
+        { "label": "I have no idea what my thing is", "score": 0, "signal": "fully_unresolved" },
+        { "label": "I know my skills but not how they fit together", "score": 1, "signal": "partially_resolved" },
+        { "label": "I have a sense but it's fuzzy", "score": 2, "signal": "mostly_resolved" },
+        { "label": "I'm clear on what I do and who I help", "score": 3, "signal": "resolved" }
+      ]
+    },
+    {
+      "id": "tension_regulate",
+      "layer": "regulate",
+      "question": "When you imagine going all-in on your path...",
+      "river_element": "The Riverbed",
+      "emoji": "🪨",
+      "options": [
+        { "label": "My body tightens up. I feel anxious or shutdown", "score": 0, "signal": "fully_unresolved" },
+        { "label": "I get anxious but can push through sometimes", "score": 1, "signal": "partially_resolved" },
+        { "label": "I notice the fear but it doesn't stop me as much", "score": 2, "signal": "mostly_resolved" },
+        { "label": "I feel grounded. I can sit with discomfort", "score": 3, "signal": "resolved" }
+      ]
+    },
+    {
+      "id": "tension_reveal",
+      "layer": "reveal",
+      "question": "When it comes to being seen for your work...",
+      "river_element": "The Current",
+      "emoji": "🌊",
+      "options": [
+        { "label": "I hide. Almost nobody knows what I'm working on", "score": 0, "signal": "fully_unresolved" },
+        { "label": "I share sometimes but hold back the real stuff", "score": 1, "signal": "partially_resolved" },
+        { "label": "I'm visible online but struggle with deeper exposure", "score": 2, "signal": "mostly_resolved" },
+        { "label": "I put myself out there regularly, even when it's scary", "score": 3, "signal": "resolved" }
+      ]
+    },
+    {
+      "id": "tension_value",
+      "layer": "value",
+      "question": "When it comes to being paid for what you do...",
+      "river_element": "The Ocean",
+      "emoji": "🌏",
+      "options": [
+        { "label": "I can't imagine charging. It feels wrong", "score": 0, "signal": "fully_unresolved" },
+        { "label": "I've charged but always feel like I should charge less", "score": 1, "signal": "partially_resolved" },
+        { "label": "I charge but struggle to raise prices or expand", "score": 2, "signal": "mostly_resolved" },
+        { "label": "I know my value and price accordingly", "score": 3, "signal": "resolved" }
+      ]
+    }
+  ],
+  "layers": {
+    "discover": {
+      "name": "Discover",
+      "river_element": "The Spring",
+      "emoji": "💧",
+      "color": "#9333EA",
+      "description": "Where the water first emerges. You can't have a river without finding the source.",
+      "when_blocked": "You sense there's more inside you, but you can't quite name it yet.",
+      "why_first": "Without finding the source, there's no river to flow. Visibility, pricing, healing — everything works better once you know your direction.",
+      "app_feature": "Flow Finder",
+      "app_description": "Discover your unique skills, the problems you naturally solve, and who you're meant to help."
+    },
+    "regulate": {
+      "name": "Regulate",
+      "river_element": "The Riverbed",
+      "emoji": "🪨",
+      "color": "#10B981",
+      "description": "The channel that holds the water. Without it, flow floods, freezes, or dries up.",
+      "when_blocked": "You know what to do, but your body keeps pulling the emergency brake.",
+      "why_first": "You can't outwork a dysregulated nervous system. Building capacity to hold the pressure comes before pushing for visibility — otherwise you'll burn out or freeze.",
+      "app_feature": "Healing & Rewiring",
+      "app_description": "Build the nervous system capacity to hold your ambition without burning out."
+    },
+    "reveal": {
+      "name": "Reveal",
+      "river_element": "The Current",
+      "emoji": "🌊",
+      "color": "#E9A23B",
+      "description": "Water moving into the open. Visible, felt, carving new paths as it flows.",
+      "when_blocked": "You have real gifts, but you're keeping them hidden. The world can't benefit from what it can't see.",
+      "why_first": "You have the skills and the capacity — now it's time to let the current run. Graduated courage challenges will expand your comfort zone one step at a time.",
+      "app_feature": "Play-list Live + Money Layers",
+      "app_description": "Show up with courage challenges across 5 visibility layers — from behind a screen to full authority."
+    },
+    "value": {
+      "name": "Value",
+      "river_element": "The Ocean",
+      "emoji": "🌏",
+      "color": "#5e17eb",
+      "description": "Where the river meets the world. Vast, deep, receiving and giving back.",
+      "when_blocked": "You're doing the work and people can see it, but you're not owning the price.",
+      "why_first": "This is the final piece. You've found your source, built capacity, and shown up — now it's time to release your value into the world at full price.",
+      "app_feature": "Play-list Vulnerable + Authority Layers",
+      "app_description": "Structure your pricing, build your offers, and own what your work is worth."
+    }
+  },
+  "ux_config": {
+    "estimated_time": "1 minute",
+    "warm_transitions": {
+      "after_q1": "Now let's check the foundation...",
+      "after_q2": "Almost there...",
+      "after_q3": "One more..."
+    }
+  }
+}

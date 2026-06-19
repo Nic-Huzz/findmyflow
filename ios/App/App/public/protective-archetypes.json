@@ -1,0 +1,39 @@
+{
+  "archetypes": [
+    {
+      "name": "Controller",
+      "description": "Leaving it to chance isn't an option. You manage, you perform, you stay on top of everything because if you loosen your grip, it all falls apart.",
+      "voice": "You grip. You manage. You perform. You can't delegate, can't rest, can't let go. You white-knuckle through life because if you're not in control, everything falls apart.",
+      "bio": "Leaving it to chance isn't an option. You grip, you manage, you perform. You white-knuckle through life because if you're not in control of the outcome and how people see you, everything falls apart.",
+      "image": "the-controller.webp"
+    },
+    {
+      "name": "Ghost",
+      "description": "I don't feel comfortable sharing. You withdraw, you hide, you leave before things get too real because being seen has never felt safe.",
+      "voice": "You disappear. You hide. You stay invisible. You leave situations before they get intense because being seen feels dangerous.",
+      "bio": "I don't feel comfortable sharing. You disappear, you hide, you leave before things get intense. Being seen has never felt safe, so you direct all your energy toward escape.",
+      "image": "the-ghost.webp"
+    },
+    {
+      "name": "Perfectionist",
+      "description": "I'm not ready yet. You prepare, you polish, you wait until it's perfect. Nothing is ever ready because making a mistake feels like the end of the world.",
+      "voice": "You prepare. You polish. You wait until it's perfect. Nothing is ever ready because making a mistake feels like the end of the world.",
+      "bio": "I'm not ready yet. You prepare, you polish, you wait until it's perfect. Gas and brake pressed at the same time. Nothing is ever ready because making a mistake feels like the end of the world.",
+      "image": "perfectionist.webp"
+    },
+    {
+      "name": "Auto-Pilot",
+      "description": "I'm fine, just tired. You go through the motions. You scroll, you numb, you check out because feeling things became too heavy a long time ago.",
+      "voice": "You go through the motions. You scroll, you numb, you zone out. You say 'I'm fine' on autopilot because actually feeling things stopped being an option a long time ago.",
+      "bio": "I'm fine, just tired. You go through the motions, you scroll, you numb. You say 'I'm fine' on autopilot because actually feeling things stopped being an option a long time ago.",
+      "image": "auto-pilot.webp"
+    },
+    {
+      "name": "People Pleaser",
+      "description": "As long as everyone's happy, I'm safe. You say yes when you mean no. You put everyone else first because your needs never seemed to matter.",
+      "voice": "You say yes when you mean no. You put everyone else first. You abandon yourself to keep others happy because your needs never seemed to matter.",
+      "bio": "As long as everyone's happy, I'm safe. You say yes when you mean no. You put everyone else first. You abandon yourself to keep others happy because your needs never seemed to matter.",
+      "image": "people-pleaser.webp"
+    }
+  ]
+}

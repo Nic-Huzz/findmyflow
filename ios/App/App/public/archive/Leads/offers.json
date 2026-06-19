@@ -1,0 +1,467 @@
+[
+  {
+    "id": "warm_outreach",
+    "name": "Warm Outreach",
+    "description": "Leverage your existing network through 1-on-1 private conversations. Use the ACA Framework (Acknowledge, Compliment, Ask) to reach out to 100 people daily. Build relationships with free value, then transition to paid offers using the Hinge Method.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FWO1_daily_commitment",
+        "FWO2_network_quality"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "network_size",
+          "disallowed": ["no_existing_network"]
+        },
+        {
+          "field": "outreach_comfort",
+          "disallowed": ["prefer_to_avoid_it"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_network_size": {
+        "large_network_500_plus": 4,
+        "medium_network_100_500": 3,
+        "small_network_under_100": 1,
+        "no_existing_network": -5
+      },
+      "Q2_time_availability": {
+        "4_plus_hours_daily": 4,
+        "2_4_hours_daily": 3,
+        "1_2_hours_daily": 1,
+        "under_1_hour_daily": -2
+      },
+      "Q3_budget": {
+        "5000_plus_monthly": 0,
+        "1000_5000_monthly": 0,
+        "100_1000_monthly": 1,
+        "minimal_under_100_monthly": 2
+      },
+      "Q4_comfort_level": {
+        "very_comfortable_love_it": 4,
+        "comfortable_can_do_it": 3,
+        "uncomfortable_but_willing": 1,
+        "prefer_to_avoid_it": -5
+      },
+      "Q5_content_ability": {
+        "very_confident_do_it_already": 1,
+        "confident_learning_curve": 0,
+        "somewhat_confident_need_help": 0,
+        "not_confident_at_all": 1
+      },
+      "Q6_technical_skills": {
+        "very_comfortable_technical": 0,
+        "comfortable_can_figure_out": 0,
+        "basic_skills_need_guidance": 1,
+        "not_comfortable_prefer_simple": 2
+      },
+      "Q7_business_maturity": {
+        "established_proven_offer": 2,
+        "early_stage_testing_market": 3,
+        "pre_launch_validating_idea": 3,
+        "side_hustle_part_time": 2
+      },
+      "Q8_sales_skills": {
+        "strong_close_regularly": 4,
+        "moderate_can_convert_some": 2,
+        "weak_struggle_to_close": -1,
+        "no_sales_experience_yet": -2
+      },
+      "Q9_speed_priority": {
+        "asap_need_leads_now": 4,
+        "within_30_days": 3,
+        "within_90_days": 1,
+        "building_for_long_term": 0
+      },
+      "Q10_risk_tolerance": {
+        "high_tolerance_willing_to_test": 0,
+        "moderate_small_tests_okay": 1,
+        "low_want_proven_methods": 2,
+        "no_tolerance_free_only": 3
+      }
+    },
+
+    "max_possible_score": 34,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "100 Daily Outreach Strategy: ACA Framework",
+        "Turn Your Network Into Paying Customers"
+      ],
+      "offer_structure": [
+        "Identify 100 warm connections (past clients, friends, social media followers)",
+        "Use ACA Framework: Acknowledge their work → Compliment something specific → Ask how you can help",
+        "Provide free value first (first 5 free, next 5 at 80% off, etc.)",
+        "Use Hinge Method: Create natural transition from free to paid"
+      ],
+      "key_tactics": [
+        "Make it about them, not you",
+        "Give first before asking",
+        "Use voice notes and video messages for personal touch",
+        "Follow up consistently without being pushy",
+        "Track conversations in a simple spreadsheet"
+      ],
+      "success_metrics": [
+        "100 daily reach-outs completed",
+        "Response rate (aim for 30-50%)",
+        "Conversion from free to paid (aim for 20-30%)",
+        "Time to first paid customer"
+      ]
+    }
+  },
+
+  {
+    "id": "cold_outreach",
+    "name": "Cold Outreach",
+    "description": "Reach out to strangers who match your ideal customer profile. Target people on other platforms, in communities, or from purchased lists. Use similar outreach tactics but expect lower response rates and longer trust-building cycles.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FCO1_volume_tolerance",
+        "FCO2_rejection_resilience"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "outreach_comfort",
+          "disallowed": ["prefer_to_avoid_it"]
+        },
+        {
+          "field": "time_availability",
+          "disallowed": ["under_1_hour_daily"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_network_size": {
+        "large_network_500_plus": 0,
+        "medium_network_100_500": 1,
+        "small_network_under_100": 2,
+        "no_existing_network": 3
+      },
+      "Q2_time_availability": {
+        "4_plus_hours_daily": 4,
+        "2_4_hours_daily": 3,
+        "1_2_hours_daily": 1,
+        "under_1_hour_daily": -4
+      },
+      "Q3_budget": {
+        "5000_plus_monthly": 0,
+        "1000_5000_monthly": 1,
+        "100_1000_monthly": 2,
+        "minimal_under_100_monthly": 2
+      },
+      "Q4_comfort_level": {
+        "very_comfortable_love_it": 4,
+        "comfortable_can_do_it": 3,
+        "uncomfortable_but_willing": 1,
+        "prefer_to_avoid_it": -5
+      },
+      "Q5_content_ability": {
+        "very_confident_do_it_already": 1,
+        "confident_learning_curve": 0,
+        "somewhat_confident_need_help": 0,
+        "not_confident_at_all": 0
+      },
+      "Q6_technical_skills": {
+        "very_comfortable_technical": 2,
+        "comfortable_can_figure_out": 1,
+        "basic_skills_need_guidance": 0,
+        "not_comfortable_prefer_simple": -1
+      },
+      "Q7_business_maturity": {
+        "established_proven_offer": 3,
+        "early_stage_testing_market": 2,
+        "pre_launch_validating_idea": 1,
+        "side_hustle_part_time": 0
+      },
+      "Q8_sales_skills": {
+        "strong_close_regularly": 4,
+        "moderate_can_convert_some": 2,
+        "weak_struggle_to_close": -2,
+        "no_sales_experience_yet": -3
+      },
+      "Q9_speed_priority": {
+        "asap_need_leads_now": 2,
+        "within_30_days": 3,
+        "within_90_days": 2,
+        "building_for_long_term": 0
+      },
+      "Q10_risk_tolerance": {
+        "high_tolerance_willing_to_test": 1,
+        "moderate_small_tests_okay": 2,
+        "low_want_proven_methods": 2,
+        "no_tolerance_free_only": 3
+      }
+    },
+
+    "max_possible_score": 31,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Cold Outreach at Scale: Find Your Ideal Customers",
+        "From Stranger to Customer in 90 Days"
+      ],
+      "offer_structure": [
+        "Identify platforms where your ideal customers congregate",
+        "Build targeted lists of prospects (500-1000 names)",
+        "Craft personalized but scalable outreach messages",
+        "Provide value upfront (free resources, insights, help)",
+        "Follow up consistently over 30-90 day cycle"
+      ],
+      "key_tactics": [
+        "Research each prospect briefly to personalize",
+        "Lead with value, not sales pitch",
+        "Use tools to track and automate follow-ups",
+        "Expect 5-10% response rate (lower than warm outreach)",
+        "Build trust over multiple touchpoints before asking"
+      ],
+      "success_metrics": [
+        "Number of outreach messages sent daily",
+        "Response rate (aim for 5-10%)",
+        "Conversation-to-call booking rate",
+        "Cold lead to customer conversion rate"
+      ]
+    }
+  },
+
+  {
+    "id": "post_free_content",
+    "name": "Post Free Content",
+    "description": "Create valuable content that attracts your ideal customers. Use the Hook→Retain→Reward framework with 5 topic types and 7 headline formulas. Build trust at scale through 1-to-many public content. Monetize with a 4:1 Give:Ask ratio.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FPC1_consistency_commitment",
+        "FPC2_platform_choice"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "content_ability",
+          "disallowed": ["not_confident_at_all"]
+        },
+        {
+          "field": "time_availability",
+          "disallowed": ["under_1_hour_daily"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_network_size": {
+        "large_network_500_plus": 2,
+        "medium_network_100_500": 1,
+        "small_network_under_100": 0,
+        "no_existing_network": 0
+      },
+      "Q2_time_availability": {
+        "4_plus_hours_daily": 3,
+        "2_4_hours_daily": 4,
+        "1_2_hours_daily": 2,
+        "under_1_hour_daily": -3
+      },
+      "Q3_budget": {
+        "5000_plus_monthly": 0,
+        "1000_5000_monthly": 1,
+        "100_1000_monthly": 2,
+        "minimal_under_100_monthly": 3
+      },
+      "Q4_comfort_level": {
+        "very_comfortable_love_it": 1,
+        "comfortable_can_do_it": 1,
+        "uncomfortable_but_willing": 2,
+        "prefer_to_avoid_it": 3
+      },
+      "Q5_content_ability": {
+        "very_confident_do_it_already": 4,
+        "confident_learning_curve": 3,
+        "somewhat_confident_need_help": 1,
+        "not_confident_at_all": -4
+      },
+      "Q6_technical_skills": {
+        "very_comfortable_technical": 2,
+        "comfortable_can_figure_out": 1,
+        "basic_skills_need_guidance": 0,
+        "not_comfortable_prefer_simple": -1
+      },
+      "Q7_business_maturity": {
+        "established_proven_offer": 2,
+        "early_stage_testing_market": 3,
+        "pre_launch_validating_idea": 2,
+        "side_hustle_part_time": 3
+      },
+      "Q8_sales_skills": {
+        "strong_close_regularly": 1,
+        "moderate_can_convert_some": 2,
+        "weak_struggle_to_close": 2,
+        "no_sales_experience_yet": 1
+      },
+      "Q9_speed_priority": {
+        "asap_need_leads_now": -2,
+        "within_30_days": 0,
+        "within_90_days": 3,
+        "building_for_long_term": 4
+      },
+      "Q10_risk_tolerance": {
+        "high_tolerance_willing_to_test": 0,
+        "moderate_small_tests_okay": 1,
+        "low_want_proven_methods": 2,
+        "no_tolerance_free_only": 3
+      }
+    },
+
+    "max_possible_score": 34,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Content That Converts: Hook, Retain, Reward",
+        "Build an Audience That Buys"
+      ],
+      "offer_structure": [
+        "Choose primary platform based on where your audience is",
+        "Create Hook (grab attention with topics/headlines/format)",
+        "Retain attention (lists, steps, stories)",
+        "Reward viewers (value per second)",
+        "Monetize with 4:1 Give:Ask ratio (4 value posts to 1 ask)"
+      ],
+      "key_tactics": [
+        "5 Topic Types: How To → How I, Results, Reasons, Mistakes, Comparisons",
+        "7 Headline Formulas: Number lists, questions, bold claims, before/after, secrets, mistakes, comparisons",
+        "Post daily for 90 days minimum before judging results",
+        "Repurpose: Turn 'How to' into 'How I' after you achieve the result",
+        "Use integrated CTAs (within content) not intermittent (separate posts)"
+      ],
+      "success_metrics": [
+        "Posting consistency (daily for 90 days)",
+        "Engagement rate (likes, comments, shares)",
+        "Follower/subscriber growth rate",
+        "Give:Ask ratio maintained (4:1)",
+        "Conversion rate from audience to email/customers"
+      ]
+    }
+  },
+
+  {
+    "id": "run_paid_ads",
+    "name": "Run Paid Ads",
+    "description": "Invest in paid advertising to reach cold audiences at scale. Use the What-Who-When framework for ad creation. Follow the 3 phases: Track Money (install pixels), Lose Money (test ads), Print Money (scale winners). Requires LTGP/CAC > 3 for profitability.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FPA1_platform_requirements",
+        "FPA2_testing_budget"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "budget",
+          "disallowed": ["minimal_under_100_monthly"]
+        },
+        {
+          "field": "risk_tolerance",
+          "disallowed": ["no_tolerance_free_only"]
+        },
+        {
+          "field": "business_maturity",
+          "disallowed": ["pre_launch_validating_idea"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_network_size": {
+        "large_network_500_plus": 0,
+        "medium_network_100_500": 0,
+        "small_network_under_100": 1,
+        "no_existing_network": 2
+      },
+      "Q2_time_availability": {
+        "4_plus_hours_daily": 2,
+        "2_4_hours_daily": 3,
+        "1_2_hours_daily": 2,
+        "under_1_hour_daily": 1
+      },
+      "Q3_budget": {
+        "5000_plus_monthly": 4,
+        "1000_5000_monthly": 3,
+        "100_1000_monthly": 1,
+        "minimal_under_100_monthly": -5
+      },
+      "Q4_comfort_level": {
+        "very_comfortable_love_it": 0,
+        "comfortable_can_do_it": 0,
+        "uncomfortable_but_willing": 1,
+        "prefer_to_avoid_it": 2
+      },
+      "Q5_content_ability": {
+        "very_confident_do_it_already": 3,
+        "confident_learning_curve": 2,
+        "somewhat_confident_need_help": 0,
+        "not_confident_at_all": -2
+      },
+      "Q6_technical_skills": {
+        "very_comfortable_technical": 4,
+        "comfortable_can_figure_out": 2,
+        "basic_skills_need_guidance": -1,
+        "not_comfortable_prefer_simple": -3
+      },
+      "Q7_business_maturity": {
+        "established_proven_offer": 4,
+        "early_stage_testing_market": 2,
+        "pre_launch_validating_idea": -5,
+        "side_hustle_part_time": 0
+      },
+      "Q8_sales_skills": {
+        "strong_close_regularly": 2,
+        "moderate_can_convert_some": 1,
+        "weak_struggle_to_close": 0,
+        "no_sales_experience_yet": -1
+      },
+      "Q9_speed_priority": {
+        "asap_need_leads_now": 1,
+        "within_30_days": 2,
+        "within_90_days": 3,
+        "building_for_long_term": 2
+      },
+      "Q10_risk_tolerance": {
+        "high_tolerance_willing_to_test": 4,
+        "moderate_small_tests_okay": 2,
+        "low_want_proven_methods": -1,
+        "no_tolerance_free_only": -5
+      }
+    },
+
+    "max_possible_score": 31,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Paid Ads Playbook: From Testing to Scaling",
+        "Turn $1 Into $3+ with Profitable Ads"
+      ],
+      "offer_structure": [
+        "Choose platform: (1) You've used it, (2) Can target ideal customers, (3) Know ad formats, (4) Have minimum budget",
+        "Phase 1 - Track Money: Install tracking pixels, set up analytics",
+        "Phase 2 - Lose Money: Test 11+ ad variations (What-Who-When framework)",
+        "Phase 3 - Print Money: Scale winning ads that achieve LTGP/CAC > 3"
+      ],
+      "key_tactics": [
+        "Ad Structure: Call Out (get attention) + Value (what's in it for them) + CTA (clear next step)",
+        "Targeting: Start with lookalike audiences (upload customer lists) or factor-based (demographics)",
+        "What-Who-When Framework: Test different offers (What), audiences (Who), and timing (When)",
+        "Visual Hooks: Use Contrast, Likeness (relatable person), or The Scene (environment)",
+        "Top 1% advertisers split test 11x more - test constantly",
+        "Use upsells to achieve break-even or profit on day 1"
+      ],
+      "success_metrics": [
+        "Cost Per Lead (CPL)",
+        "Lead to Customer Conversion Rate",
+        "Customer Acquisition Cost (CAC)",
+        "Lifetime Gross Profit (LTGP)",
+        "LTGP/CAC ratio (must be > 3 for profitability)",
+        "Number of ad variations tested per week"
+      ]
+    }
+  }
+]

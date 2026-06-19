@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/icon-192.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Vibe Rise — The App That Gamifies Courage</title>
+    <meta name="description" content="Safety × Expression = experiences you love. Vibe Rise gamifies courage, tracks your aliveness, and helps you stack experiences you love until you have a life you love." />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Vibe Rise — The App That Gamifies Courage" />
+    <meta property="og:description" content="Safety × Expression = experiences you love. Gamified courage challenges, daily practices, and a community that helps you feel more alive." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://viberise.nichuzz.com" />
+    <meta property="og:image" content="https://viberise.nichuzz.com/icon-512.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Vibe Rise — The App That Gamifies Courage" />
+    <meta name="twitter:description" content="Safety × Expression = experiences you love. Gamified courage challenges, daily practices, and a community that helps you feel more alive." />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["WebApplication", "SoftwareApplication"],
+      "name": "Vibe Rise",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web",
+      "description": "The app that gamifies courage. Safety × Expression = experiences you love. Stack enough and you have a life you love.",
+      "url": "https://viberise.nichuzz.com",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Vibe Rise",
+      "url": "https://viberise.nichuzz.com",
+      "logo": "https://viberise.nichuzz.com/icon-512.png",
+      "description": "The app that gamifies courage. Safety × Expression = experiences you love.",
+      "founder": {
+        "@type": "Person",
+        "name": "Nic Hurrell",
+        "sameAs": [
+          "https://www.instagram.com/_Huzz"
+        ]
+      },
+      "sameAs": [
+        "https://www.instagram.com/_Huzz",
+        "https://github.com/Nic-Huzz/findmyflow"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What if I don't know what I want to build?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "That's exactly what we help with. The Flow Finder guides you through discovering your unique skills, the problems you naturally solve, and the people you're meant to serve."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is this different from courses or coaching?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Courses dump information and hope you figure it out. Coaches tell you what to do. We guide you through discovering your own answers — because you're the expert on you."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does it take?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Earthquake Quiz takes 3 minutes. The full Flow Finder journey can be done in a few focused sessions. But this isn't about speed — it's about getting clear."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this just for people who want to start a business?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Some people discover they need to build their own thing. Others realise they need a different job. The Earthquake Quiz helps you discover what's actually blocking you."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What if I've tried other programs and they didn't work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most programs focus on what action to take, without addressing what's stopping you from taking action. We combine business strategy with healing work — so you actually do the things you know you should do."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's included in the free version?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Earthquake Quiz is completely free. You'll discover your loudest Protective Voice, your awakening stage, and your primary block — with a personalised report. No credit card required."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#5e17eb" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Vibe Rise" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <script type="module" crossorigin src="/assets/index-CsU49d_5.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-sAju-B9u.css">
+  </head>
+  <body>
+    <!-- Splash Screen -->
+    <style>
+      @keyframes splashFadeIn {
+        0% { opacity: 0; transform: scale(0.95); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      @keyframes splashPulse {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; }
+      }
+      #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(145deg, #6b21eb 0%, #5e17eb 50%, #4a0ea8 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.4s ease-out;
+      }
+      #splash-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        animation: splashFadeIn 0.5s ease-out;
+      }
+      #splash-logo span {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: #ffdd27;
+        line-height: 1.1;
+        text-shadow: 0 0 30px rgba(255, 221, 39, 0.3);
+      }
+      #splash-logo .word-vibe {
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+      }
+      #splash-logo .word-rise {
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+      }
+      #splash-loader {
+        margin-top: 40px;
+        display: flex;
+        gap: 8px;
+      }
+      #splash-loader span {
+        width: 8px;
+        height: 8px;
+        background: rgba(255, 221, 39, 0.6);
+        border-radius: 50%;
+        animation: splashPulse 1.2s ease-in-out infinite;
+      }
+      #splash-loader span:nth-child(2) { animation-delay: 0.2s; }
+      #splash-loader span:nth-child(3) { animation-delay: 0.4s; }
+    </style>
+    <div id="splash-screen">
+      <div id="splash-logo">
+        <span class="word-vibe">VIBE</span>
+        <span class="word-rise">RISE</span>
+      </div>
+      <div id="splash-loader">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div id="root"></div>
+
+    <script>
+      // Hide splash screen once React app loads
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          var splash = document.getElementById('splash-screen');
+          if (splash) {
+            splash.style.opacity = '0';
+            setTimeout(function() {
+              splash.style.display = 'none';
+            }, 300);
+          }
+        }, 500);
+      });
+    </script>
+  </body>
+</html>
+

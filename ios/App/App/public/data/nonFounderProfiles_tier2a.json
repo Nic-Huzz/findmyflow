@@ -1,0 +1,1131 @@
+{
+  "meta": {
+    "tier": 2,
+    "slice": "a",
+    "count": 40,
+    "generatedAt": "2026-04-07"
+  },
+  "profiles": [
+    {
+      "name": "Jaime Escalante",
+      "domain": "math teaching",
+      "era": "1930-2010",
+      "region": "US / Bolivia",
+      "bio": "Bolivian-born math teacher at Garfield High School in East Los Angeles from 1974 until the early 1990s. In 1982 his students sat the AP Calculus exam in numbers that prompted ETS to accuse 14 of them of cheating; they retook it and passed again.",
+      "oneLiner": "Taught calculus to kids nobody expected to sit the exam, by the sheer arithmetic of how many hours he was willing to stay in the room.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "influencing"],
+      "narratives": [
+        {
+          "title": "Ganas as a one-word curriculum",
+          "content": "Escalante insisted the only thing a student needed was ganas, a Spanish word he translated for interviewers as 'the desire to do something, to succeed'. In a 1988 60 Minutes interview he said, 'The only thing you need is ganas. If you don't have the desire, you don't have anything.' He painted the word on a sign above his blackboard so new students saw it before they saw him."
+        },
+        {
+          "title": "7am arrivals and Saturday classes",
+          "content": "Jay Mathews' 1988 biography documents Escalante's schedule: he opened his classroom at 7am, ran sessions before school, held Saturday review classes, and by exam month held mandatory early-morning and after-school practice. Students signed a contract agreeing to it. He told Mathews the schedule was 'not heroic, it's just arithmetic. Calculus is hard. You need more hours.'"
+        },
+        {
+          "title": "The 1982 ETS accusation",
+          "content": "In spring 1982, 18 of Escalante's students sat the AP Calculus exam. Fourteen had nearly identical wrong answers on one free-response question and were accused of cheating by Educational Testing Service. Escalante refused to sign a form admitting wrongdoing. Twelve of the fourteen agreed to retake the exam under observation in August, and all twelve passed, several with the top score of 5. The event became the spine of the 1988 film Stand and Deliver."
+        },
+        {
+          "title": "Theatrics on purpose",
+          "content": "Former students interviewed in the Stand and Deliver press kit describe Escalante entering class in a chef's apron to 'cook up' algebra, using a meat cleaver on an apple to introduce fractions, and making struggling students stand at the board until they got a step right. He told one reporter, 'I am an actor. The classroom is my stage. If they are not entertained they will not learn.'"
+        }
+      ]
+    },
+    {
+      "name": "Marva Collins",
+      "domain": "elementary education",
+      "era": "1936-2015",
+      "region": "US",
+      "bio": "Chicago teacher who in 1975 used 5,000 dollars of her pension to open Westside Preparatory School in her own brownstone. She taught Shakespeare, Plato and Aesop to primary school children from the West Side who public schools had labelled unteachable.",
+      "oneLiner": "Believed a four-year-old could discuss Plato if an adult had the patience to ask the question properly.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "influencing"],
+      "narratives": [
+        {
+          "title": "The classroom creed",
+          "content": "Each morning Collins had her students recite, 'Society will draw a circle that shuts me out, but my superior thoughts will draw me in.' She told a 1979 60 Minutes crew, 'I have discovered few learning disabled students in my three decades of teaching. I have, however, discovered many, many victims of teaching inabilities.' The quote was repeated for years in her own teacher training seminars."
+        },
+        {
+          "title": "Socratic method with four-year-olds",
+          "content": "Collins' 1982 book Marva Collins' Way records full classroom dialogues with children as young as four discussing Aesop's fables. She would ask, 'What does the fox mean when he says the grapes are sour?' and hold silence until a child answered. Visiting journalists noted she never restated a child's answer in better English; she asked them to restate it themselves."
+        },
+        {
+          "title": "Refusing the Department of Education post",
+          "content": "In 1980 President-elect Reagan offered Collins the role of Secretary of Education. She declined, telling the Chicago Tribune, 'I can't leave my babies. The work is the classroom, not Washington.' She went back to Westside Prep and stayed there until it closed in 2008."
+        },
+        {
+          "title": "Writing on every paper by hand",
+          "content": "Former students interviewed in 60 Minutes' 1995 follow-up described Collins' habit of handwriting a personal comment on every piece of work, never a grade. One recalled the note 'You are too brilliant to be this lazy, and I am watching.' Collins kept carbon copies of notes she had written to students who went on to college and reread them before the start of each school year."
+        }
+      ]
+    },
+    {
+      "name": "Rita Pierson",
+      "domain": "education / teacher training",
+      "era": "1951-2013",
+      "region": "US",
+      "bio": "American educator who spent 40 years in classrooms and administration, the last decade of her career training teachers across Texas. Her 2013 TED talk Every Kid Needs a Champion, delivered months before her death, has been viewed over 15 million times.",
+      "oneLiner": "Put her whole philosophy of teaching inside the single word champion and refused to apologise for it.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["influencing", "expressing"],
+      "narratives": [
+        {
+          "title": "Quoting James Comer from stage",
+          "content": "In the TED 2013 talk Pierson grounded her whole case on a line from educational psychologist James Comer: 'No significant learning can occur without a significant relationship.' She then added her own, 'Kids don't learn from people they don't like.' The room laughed. She held the silence and said, 'That's a fact. That is a fact.'"
+        },
+        {
+          "title": "The plus two paper",
+          "content": "Pierson described giving a student who had answered two questions correctly out of twenty a paper marked '+2' with a smiley face instead of a grade. The student asked if that meant he failed. 'Yes,' she said. He replied, 'Then why did you put a smiley face?' She told him, 'Because you're on a roll. You got two right, you didn't get them all wrong. When we review this, won't you do better?' The story lands in the TED talk as a single concrete act, and she said the student later got 18 of 20."
+        },
+        {
+          "title": "Seek first to understand",
+          "content": "In the same talk she told the story of apologising to a class for a bad lesson, saying, 'Guys, the way I taught this lesson, it stunk, and I'm sorry, and we're going to do it over.' She added, 'You say things like that to a class that's used to you blaming them, and they just sit in stunned silence. But eventually they think, this one is different.' It became a core slide in her teacher-training workshops at the Bluford Library."
+        },
+        {
+          "title": "The grandmother line",
+          "content": "Pierson closed the TED talk with a story about her grandmother, a teacher, who told her the hardest job in the world was showing up every day for somebody else's child as if they were your own. Pierson said, 'Is this job tough? You betcha. Oh God, you betcha. But it is not impossible. We can do this. We're educators. We're born to make a difference.' The line became the unofficial motto of her teacher training network.",
+          "thinSource": false
+        }
+      ]
+    },
+    {
+      "name": "James Stigler",
+      "domain": "learning science",
+      "era": "1954-present",
+      "region": "US",
+      "bio": "UCLA psychologist, co-author of The Teaching Gap (1999) and The Learning Gap (1992), who for decades has run comparative video studies of math teaching in Japan, Germany, and the United States.",
+      "oneLiner": "Took cameras into ordinary classrooms and changed how educators talk about what good teaching looks like second by second.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["analyzing", "clarifying"],
+      "narratives": [
+        {
+          "title": "The TIMSS video study",
+          "content": "In 1995 Stigler led the first international video study of eighth-grade math teaching for the Third International Mathematics and Science Study. His team recorded 231 lessons across the US, Japan, and Germany, then coded them frame by frame. The finding that reshaped the field was that US lessons averaged 1.7 concepts per lesson taught at a low level of mathematical demand, while Japanese lessons averaged roughly the same number of concepts but at structured problem-solving depth."
+        },
+        {
+          "title": "Productive struggle",
+          "content": "In multiple interviews Stigler has argued that the key difference he sees in Japanese classrooms is how long teachers will sit with a student's wrong answer. He told the American Educator in 2010, 'In the US we rush to relieve the student of the struggle. In Japan the struggle is the lesson. The teacher's job is to make the struggle productive, not to end it.'"
+        },
+        {
+          "title": "Lesson study as practice",
+          "content": "In The Teaching Gap Stigler and Hiebert described the Japanese jugyou kenkyuu or lesson study, in which teachers collaboratively design a single lesson, watch one another teach it, then revise it. Stigler spent years trying to import the practice to American schools. In a 2017 interview with Education Week he admitted, 'It doesn't transplant well. The lesson is the tip of the iceberg. What you have to transplant is the habit of treating teaching as something you continuously refine.'"
+        },
+        {
+          "title": "Treating his own lab as a classroom",
+          "content": "Colleagues describe Stigler's UCLA lab meetings as unusually slow. He insists on watching entire classroom clips together rather than coded summaries, and asks grad students to describe what the teacher seems to be noticing rather than what the teacher says. He has called this, in lab interviews, 'teaching ourselves to see the way the teacher sees'."
+        }
+      ]
+    },
+    {
+      "name": "Dan Hughes",
+      "domain": "child therapy / attachment",
+      "era": "1940s-present",
+      "region": "US",
+      "bio": "American clinical psychologist who developed Dyadic Developmental Psychotherapy for children with complex trauma and disrupted attachment. Author of Building the Bonds of Attachment (1997) and training clinicians internationally through the DDP Institute.",
+      "oneLiner": "Built a therapy around staying curious about a raging child long enough that the child could stop raging.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["synthesizing"],
+      "narratives": [
+        {
+          "title": "PACE as a stance, not a technique",
+          "content": "Hughes coined the acronym PACE: Playful, Accepting, Curious, Empathic. In a 2018 DDP Institute training video he said, 'PACE is not a technique you apply. It's a way of being in the room so that the child's nervous system can settle enough to think. If you're not curious, you're fixing. And traumatised children know when they are being fixed.'"
+        },
+        {
+          "title": "The Katie case study",
+          "content": "Building the Bonds of Attachment is structured as a novelised case study of a composite girl, Katie, from first removal through foster placement. Hughes wrote it because, he told the Therapy Route podcast in 2021, 'I could not get trainees to understand what two years of daily repair looks like from a manual. They needed to feel the exhaustion of week 34 when the child has finally begun to cry in your office.'"
+        },
+        {
+          "title": "Curiosity out loud",
+          "content": "In DDP, Hughes teaches parents and therapists to wonder aloud about the child's experience rather than interpret it. On the Attachment Playground podcast he demonstrated: 'I might say, I wonder if when you pushed your sister, some part of you was worried I was going to like her more than you. And I wonder if that thought is really scary.' He emphasised that the sentence must end in open air, not a question mark, because 'the child cannot yet answer a question, but they can live with a wonder'."
+        },
+        {
+          "title": "Repair as the real work",
+          "content": "In a 2019 interview with Psychotherapy.net Hughes described his view of parenting traumatised children: 'It is almost entirely repair. You will rupture, because you are human. The question is whether you can come back to the child within an hour, put a hand on their shoulder, and say, I was too loud. I am sorry. Let me try again. That sentence, said 400 times across a year, is the therapy.'"
+        }
+      ]
+    },
+    {
+      "name": "Donald Winnicott",
+      "domain": "paediatrics / psychoanalysis",
+      "era": "1896-1971",
+      "region": "UK",
+      "bio": "British paediatrician and psychoanalyst who saw more than 60,000 mothers and babies over his career at Paddington Green Children's Hospital. He gave over fifty BBC radio talks to parents between 1943 and 1966 and coined terms including 'good enough mother', 'transitional object', and 'holding environment'.",
+      "oneLiner": "Spoke to anxious parents on the radio in a voice that suggested they were already doing better than they feared.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "synthesizing"],
+      "narratives": [
+        {
+          "title": "Good enough on purpose",
+          "content": "Winnicott introduced 'the good enough mother' in a 1953 paper and repeated it on the BBC: 'The good enough mother starts off with an almost complete adaptation to her infant's needs, and as time proceeds she adapts less and less completely, gradually, according to the infant's growing ability to deal with her failure.' He insisted the word was 'good enough', not 'good', because perfect adaptation would rob the baby of the chance to develop."
+        },
+        {
+          "title": "The squiggle game",
+          "content": "For child consultations Winnicott developed the squiggle game. He would draw a random line on paper, hand the pencil to the child, and ask them to turn it into something. They would pass it back and forth. He used the drawings diagnostically but insisted in The Piggle (1977) that the point was 'the meeting of two imaginations, not the decoding of one'. Colleagues reported he sometimes filled a whole consultation with squiggles and no words."
+        },
+        {
+          "title": "BBC radio talks in wartime",
+          "content": "Beginning in 1943, with London still under bombardment, Winnicott broadcast short talks to mothers titled things like 'What About Father?' and 'The Only Child'. He refused to speak down. A typical line, transcribed in The Child, the Family and the Outside World, was 'You may be interested to hear what I think, but more interested in what you already know. If you play with your baby you will find that he shows you what he needs.'"
+        },
+        {
+          "title": "Dying in the middle of work",
+          "content": "Adam Phillips' 1988 biography records that Winnicott wrote almost until his death in 1971, often on the backs of envelopes during his train commute into Paddington Green. His last paper, Playing and Reality, ends with the line, 'It is in playing, and only in playing, that the individual child or adult is able to be creative and to use the whole personality.' He was still seeing patients the week he died."
+        }
+      ]
+    },
+    {
+      "name": "Tenzin Palmo",
+      "domain": "Tibetan Buddhism / monasticism",
+      "era": "1943-present",
+      "region": "UK / India",
+      "bio": "English-born Tibetan Buddhist nun, born Diane Perry in Bethnal Green, who became one of the first Western women ordained in the Drukpa Kagyu lineage. She spent twelve years in solitary retreat in a cave at 13,200 feet in Lahaul, then founded Dongyu Gatsal Ling nunnery in Himachal Pradesh to train female practitioners.",
+      "oneLiner": "Lived twelve years alone in a Himalayan cave, then came down to build a school because she thought that was the harder job.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["synthesizing"],
+      "narratives": [
+        {
+          "title": "Twelve years in a cave",
+          "content": "Vicki Mackenzie's Cave in the Snow (1998) documents the twelve years Tenzin Palmo spent from 1976 to 1988 in a cave ten by six feet. She slept upright in a meditation box, grew her own turnips, survived a week buried under an avalanche by meditating on impermanence, and saw one other human being, her teacher, for three hours a year. In the book she told Mackenzie, 'Please do not make this sound romantic. It was freezing, and often I was hungry, and much of the time I did not know if I was making progress.'"
+        },
+        {
+          "title": "Vowing to attain enlightenment as a woman",
+          "content": "Early in her ordination, frustrated by teachings that a female rebirth was lower, Tenzin Palmo made a vow to attain enlightenment in a woman's body, no matter how many lifetimes it took. She repeated the vow publicly at a 1993 conference in Dharamsala attended by the Dalai Lama. In a 2015 Buddhist Society lecture she said, 'I made that vow because I was angry. Anger is not the best motivation, but it was my motivation. I still hold to it.'"
+        },
+        {
+          "title": "The nunnery she built at sixty",
+          "content": "In 2000 she founded Dongyu Gatsal Ling to train nuns in practices historically reserved for monks, including the three-year retreat. She went on international speaking tours raising funds, still wearing robes, still on a vegetarian diet she cooked herself. She told an Australian broadcaster in 2016, 'I prefer the cave. But the cave was for me. The nunnery is for them. The point of retreat is to come back with something useful.'"
+        },
+        {
+          "title": "On Western Buddhism as therapy",
+          "content": "In a 2018 interview with Lion's Roar she was asked about the Western habit of turning meditation into stress relief. She answered, 'If all you want is to be calm, have a cup of tea. Meditation is not for being calm. It is for looking at why you were not calm. That is a different job and it is not comfortable.'"
+        }
+      ]
+    },
+    {
+      "name": "Joyce Banda",
+      "domain": "politics / women's development",
+      "era": "1950-present",
+      "region": "Malawi",
+      "bio": "Malawian politician who served as the fourth President of Malawi from 2012 to 2014 after the sudden death of Bingu wa Mutharika, becoming the second female head of state in Africa. Before politics she founded the National Association of Business Women of Malawi (NABW) in 1989 and ran microfinance and literacy programmes for rural women.",
+      "oneLiner": "Ran women's literacy circles in Malawian villages for twenty years, then used the same cohort method to run a country.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["influencing"],
+      "narratives": [
+        {
+          "title": "Leaving an abusive marriage",
+          "content": "In her 2016 memoir and in multiple BBC interviews Banda describes walking out of an abusive first marriage in 1981 with three small children, no money, and no family home to return to. She told Stephen Sackur on HardTalk, 'I left with nothing because I was going to die. And the moment I crossed that threshold I thought, if I survive this, I will come back for the other women who are still inside houses like that.' NABW was the form that vow took."
+        },
+        {
+          "title": "The cohort model at NABW",
+          "content": "NABW's first programmes put rural women into groups of ten who met weekly, saved together, and guaranteed each other's small loans. Banda insisted every meeting begin with each woman saying her name and her business out loud. She told a 2012 UN Women interview, 'Most of these women had never heard their own name said with respect. We started with that. Business came second.'"
+        },
+        {
+          "title": "Selling the presidential jet",
+          "content": "Weeks after assuming the presidency in 2012 Banda sold the presidential jet and a fleet of 60 Mercedes-Benzes to fund maternal health programmes, and cut her own salary by 30 percent. Asked by Al Jazeera why, she said, 'A president with a jet in a country where women walk 20 kilometres to give birth is a president who has not understood where her job is. The job is at the clinic, not the airport.'"
+        },
+        {
+          "title": "Calling women by their children's names",
+          "content": "Journalists covering her 2014 campaign noted Banda addressed rural women in village meetings by the name of their firstborn, amayi wa [child's name], as is customary, and remembered specific children from visits two or three years earlier. Aides said she kept handwritten notebooks of names. She told an interviewer, 'If I cannot remember a woman's child, why should she remember my policy.'"
+        }
+      ]
+    },
+    {
+      "name": "Phil Jackson",
+      "domain": "basketball coaching",
+      "era": "1945-present",
+      "region": "US",
+      "bio": "American basketball coach who won 11 NBA championships as head coach of the Chicago Bulls and Los Angeles Lakers between 1991 and 2010, more than any other coach in the league's history. Known for integrating Zen Buddhist practice, Lakota symbolism, and the triangle offense into his teams.",
+      "oneLiner": "Built championship teams by sitting in silence with them until they stopped performing for him.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["synthesizing", "strategizing"],
+      "narratives": [
+        {
+          "title": "Meditating with the Bulls",
+          "content": "In Sacred Hoops (1995) Jackson describes introducing ten minutes of sitting meditation to the Chicago Bulls in 1989, led by sports psychologist George Mumford. Michael Jordan later confirmed the practice in a 60 Minutes interview. Jackson wrote, 'The most effective way to forge a winning team is to call on the players' need to connect with something larger than themselves. I didn't use Zen to make my players better Buddhists. I used it to help them be a team.'"
+        },
+        {
+          "title": "Tribal Leadership as scaffolding",
+          "content": "In Eleven Rings (2013) and in the New York Times Magazine profile by Charles McGrath, Jackson described assessing teams against Dave Logan's Tribal Leadership stages. He told McGrath he would sometimes walk into the locker room, decide the team was at stage three ('I'm great, you're not'), and change his whole practice plan to push it toward stage four ('we're great'). He said, 'You can't run the triangle at stage three. The pass won't come.'"
+        },
+        {
+          "title": "Silent practices",
+          "content": "Multiple Bulls and Lakers players have described Jackson running entire scrimmages without speaking. Kobe Bryant told ESPN in 2014 that Jackson once turned the lights off during a film session and had the team run plays in darkness, so they had to call out to each other. Jackson said, 'I wanted them to hear the team they already were, not the team they were watching on tape.'"
+        },
+        {
+          "title": "Handing out books",
+          "content": "Jackson gave each player a book at the start of the season, chosen personally, from Song of Solomon for Jordan to Siddhartha for Shaquille O'Neal. Bryant confirmed he was given The Autobiography of Malcolm X and Zen Mind, Beginner's Mind. Jackson told the LA Times, 'I wanted them to know I saw them as a person, not a position. The book was the handshake.'"
+        }
+      ]
+    },
+    {
+      "name": "Pat Summitt",
+      "domain": "women's basketball coaching",
+      "era": "1952-2016",
+      "region": "US",
+      "bio": "Head coach of the University of Tennessee Lady Vols from 1974 to 2012, winning 1,098 games, the most of any NCAA Division I basketball coach at the time, and eight national championships. Every senior player she ever coached graduated.",
+      "oneLiner": "Held eye contact until you knew exactly what you owed her.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["influencing", "organizing"],
+      "narratives": [
+        {
+          "title": "Driving to the airport in labour",
+          "content": "In 1990, while heavily pregnant, Summitt flew to Pennsylvania for a recruiting visit with Michelle Marciniak. She went into labour on the plane home, asked the pilot to land in Knoxville instead of the nearest airport, and reached Tennessee just in time to deliver her son Tyler. She told USA Today in 2011, 'A Tennessee kid is going to be born in Tennessee. That was all I was thinking.'"
+        },
+        {
+          "title": "The stare",
+          "content": "Players across four decades described what became known simply as 'the stare'. Candace Parker told ESPN in 2016, 'You felt it before you saw it. She would not yell. She would just look at you until whatever you had been doing became unbearable.' Summitt herself told Sports Illustrated, 'If you can communicate with a look, you do not have to scream. Screaming is cheap.'"
+        },
+        {
+          "title": "100 percent graduation",
+          "content": "In 38 seasons every senior who finished her eligibility at Tennessee under Summitt earned a degree. She kept a chart in her office tracking each player's GPA in real time. Her 1998 memoir Reach for the Summit describes her first meeting with each recruit's parents: 'I promise you one thing. Your daughter will leave here with a degree. The basketball is extra.'"
+        },
+        {
+          "title": "Announcing early-onset Alzheimer's and coaching another season",
+          "content": "In August 2011 Summitt publicly announced her diagnosis of early-onset Alzheimer's at 59. She coached one more full season before stepping down. She told the press conference, 'There's not going to be any pity party, and I'll make sure of that.' She established the Pat Summitt Foundation for Alzheimer's research that year and lived openly with the disease until her death in 2016."
+        }
+      ]
+    },
+    {
+      "name": "Erin Gruwell",
+      "domain": "high-school English teaching",
+      "era": "1969-present",
+      "region": "US",
+      "bio": "American teacher who in 1994 was assigned a class of 150 'unteachable' 14-year-olds at Wilson High School in Long Beach, California. Over four years she had them read Anne Frank and write daily journals; the compiled journals were published as The Freedom Writers Diary in 1999.",
+      "oneLiner": "Gave 150 kids a composition book each and let what they wrote in it become the curriculum.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["expressing", "influencing"],
+      "narratives": [
+        {
+          "title": "The racial caricature moment",
+          "content": "In her first months Gruwell intercepted a student's sketch that caricatured a Black classmate with exaggerated lips. She stopped the class and told them, 'This is how the Holocaust started. With a drawing.' Several students had never heard of the Holocaust. That incident, documented in the 2007 film's source materials and her book Teach with Your Heart, is where the Anne Frank unit began."
+        },
+        {
+          "title": "Buying her own books",
+          "content": "Wilson High refused to issue copies of The Diary of Anne Frank, citing budget and content concerns. Gruwell took on a second job as a concierge at the Marriott and a third selling lingerie to buy 150 copies with her own money. In a 2007 Oprah interview she said, 'I was not going to have a room full of kids who could not read a book because an adult had decided they would not understand it. I would decide.'"
+        },
+        {
+          "title": "The journals as contract",
+          "content": "Gruwell gave each student a marble composition book on day one and told them they could write anything, that she would read them only if the student left them on her desk. The rule was total. She told the Long Beach Press-Telegram, 'The notebook was the first thing I ever gave them that did not come with a trick. They knew I meant it because I did not open any that were closed.' By year two, most were left open."
+        },
+        {
+          "title": "Taking the whole class to Washington",
+          "content": "Over four years Gruwell organised dinners, author visits (including Miep Gies, who had hidden Anne Frank), and a class trip to Washington DC. All 150 students graduated high school, many first in their families, and the group founded the Freedom Writers Foundation in 1997 to train other teachers. She told ABC News, 'I did not save them. They were the ones who read the book.'"
+        }
+      ]
+    },
+    {
+      "name": "Sebastian Junger",
+      "domain": "war journalism / veteran support",
+      "era": "1962-present",
+      "region": "US",
+      "bio": "American journalist and filmmaker, author of The Perfect Storm (1997) and War (2010), and co-director with Tim Hetherington of the documentary Restrepo (2010). Founded the Vets Town Hall project in 2016 to give US veterans a structured place to speak about their service to civilian neighbours.",
+      "oneLiner": "Believes most veterans are not suffering from war but from coming home alone, and designed a town hall ritual around that.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["synthesizing", "connecting"],
+      "narratives": [
+        {
+          "title": "The Restrepo footage rule",
+          "content": "For Restrepo Junger and Hetherington embedded with a single platoon in the Korengal Valley in Afghanistan for ten months across 2007 and 2008. They imposed a rule on themselves: no narration, no interviews with anyone who was not in the unit, no archival footage. Junger told NPR in 2010, 'We wanted to give the viewer exactly what the soldiers had. Nothing extra. No context. Because the soldiers did not have any either.'"
+        },
+        {
+          "title": "Tribe and the loss of coming home",
+          "content": "In his 2016 book Tribe Junger argued that modern veterans' suffering is often less about combat and more about returning to an individualist society with no collective container. He told Krista Tippett on On Being, 'The soldiers I knew in the Korengal were the happiest I have ever seen human beings. They were broke, exhausted, and in danger. What they had was each other. Coming back to America took that away, and that is the wound I think we are misdiagnosing.'"
+        },
+        {
+          "title": "Vets Town Hall as a repair ritual",
+          "content": "Starting in 2016 Junger asked communities to host a simple Veterans Day meeting in a public hall. Any veteran may speak for up to ten minutes about their service, to any depth. Civilians may not respond, only listen. He told the New York Times, 'Most vets have never been asked what it was like, because civilians are afraid of the answer. The town hall is a structure that removes the fear on both sides. The civilian has to do nothing but be present.'"
+        },
+        {
+          "title": "Grieving Tim Hetherington in public",
+          "content": "When Hetherington was killed by mortar fire in Libya in April 2011, Junger wrote and directed Which Way Is the Front Line from Here? (2013) as an act of mourning. In the film he says on camera, 'I am doing this because I do not know what else to do with the love I still have for him.' He has since co-founded RISC, a training programme for freelance conflict journalists in trauma medicine, so that war reporters travel with the skills Hetherington did not have that day."
+        }
+      ]
+    },
+    {
+      "name": "Hans Rosling",
+      "domain": "public health / data explanation",
+      "era": "1948-2017",
+      "region": "Sweden",
+      "bio": "Swedish physician and professor of international health at the Karolinska Institute, co-founder of Médecins Sans Frontières Sweden and the Gapminder Foundation. His 2006 TED talk with animated bubble charts of global development statistics became the first TED video to pass a million views.",
+      "oneLiner": "Turned UN statistics into moving bubbles and stood in front of them like a sports commentator calling the race for human progress.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["synthesizing", "influencing"],
+      "narratives": [
+        {
+          "title": "The chimp test",
+          "content": "Rosling opened most lectures with multiple-choice questions about global poverty, child mortality, or literacy, then showed that audiences at Davos, the World Bank, and Swedish universities scored worse than random chance. He called it the chimp test because, as he put it, 'A chimpanzee picking bananas would get 33 percent. You are getting less than a chimpanzee. That is not ignorance. That is actively wrong ideas.' The finding anchored his 2018 book Factfulness."
+        },
+        {
+          "title": "Possibilist, not optimist",
+          "content": "Asked repeatedly whether he was an optimist about the world's future, Rosling refused the label. In a 2013 interview with the Guardian he said, 'I am not an optimist. I am a very serious possibilist. A possibilist is someone who neither hopes without reason nor fears without reason, someone who constantly resists the overdramatic worldview. My mission is to show people the data.' He repeated it in lectures and in Factfulness."
+        },
+        {
+          "title": "Swallowing the sword",
+          "content": "At the end of his 2007 TED talk Rosling dropped his suit jacket, lifted a bayonet, and swallowed it to the hilt on stage. He then said, 'The seemingly impossible is possible. And that goes for health, too.' He had learned the skill as a medical student. He kept it in his repertoire for a decade, not as a gag but, as he told The New Yorker, 'because adults forget that they once believed impossible things.'"
+        },
+        {
+          "title": "Dying writing the book",
+          "content": "Diagnosed with pancreatic cancer in 2016, Rosling spent his final months finishing Factfulness with his son Ola and daughter-in-law Anna. The preface, written in November 2016, reads, 'This book is my last battle in my lifelong mission to fight devastating global ignorance. I am addressing you directly because this is the most important thing I have to say.' He died in February 2017. The book was published the following year as written."
+        }
+      ]
+    },
+    {
+      "name": "Mary Roach",
+      "domain": "science writing",
+      "era": "1959-present",
+      "region": "US",
+      "bio": "American science writer, author of Stiff (2003), Bonk (2008), Packing for Mars (2010), Gulp (2013), Grunt (2016), and Fuzz (2021). Known for embedding with researchers to write first-person reported books on subjects most writers avoid.",
+      "oneLiner": "Sticks her head inside whatever lab no one else wants to enter, then makes the reader laugh without making the scientist look silly.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["creating", "expressing"],
+      "narratives": [
+        {
+          "title": "Footnotes as a second book",
+          "content": "Roach's books run long, wry footnotes that function almost as a parallel narrative. She told the Longform podcast in 2016, 'The footnote is where I put the joke I cannot get away with in the main text. My editors have tried to cut them. I fight for them because sometimes the funniest thing I learned that day is not actually load-bearing. The footnote is where curiosity gets rewarded.'"
+        },
+        {
+          "title": "The Bonk method",
+          "content": "For Bonk, her book on sex research, Roach convinced Alan and Lois Pacey at a London reproductive health clinic to let her and her husband Ed be scanned during intercourse inside an ultrasound machine. In a Tim Ferriss Show interview she said, 'I ask for things other writers do not ask for because I assume the answer will be no. Half the time it is yes, because no one has asked. Researchers love being taken seriously.'"
+        },
+        {
+          "title": "Respecting the scientist's time",
+          "content": "On the Longform podcast Roach described her reporting rule: she never asks a scientist a question she could have answered from the paper. 'I read everything they have published, then I come in and ask about the moment they chose the project or the time the experiment went wrong. That is what is not in the paper. That is what they will actually want to talk about.' She said this has allowed her to book return visits to labs that normally refuse press."
+        },
+        {
+          "title": "Stiff born from a yard sign",
+          "content": "Roach has recounted in multiple interviews that Stiff began when she saw a sign at a medical school advertising that bodies were wanted for research. She walked in, asked what happened to the bodies, and by the end of that afternoon had decided to write a whole book about cadavers. She told NPR, 'The question was embarrassing to ask. That is a reliable signal for me. If the question embarrasses me, the answer is probably a book.'"
+        }
+      ]
+    },
+    {
+      "name": "Atul Gawande",
+      "domain": "surgery / public health",
+      "era": "1965-present",
+      "region": "US",
+      "bio": "American surgeon and writer, staff writer at The New Yorker since 1998, author of Complications (2002), Better (2007), The Checklist Manifesto (2009), and Being Mortal (2014). Led the WHO's Safe Surgery Saves Lives campaign and served as the USAID administrator for global health from 2022 to 2025.",
+      "oneLiner": "Took the hospital checklist that pilots take for granted and spent a decade proving it halved deaths in operating rooms around the world.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["analyzing", "synthesizing"],
+      "narratives": [
+        {
+          "title": "The WHO surgical checklist trial",
+          "content": "In 2007-08 Gawande led the pilot of a 19-item surgical safety checklist in eight hospitals across Tanzania, India, Jordan, the Philippines, New Zealand, Canada, the UK, and the US. Published in the NEJM in January 2009, the trial showed deaths fell from 1.5 percent to 0.8 percent and complications from 11 percent to 7 percent. He told Charlie Rose, 'The result was so big we were afraid to believe it. It took us six months of rechecking the numbers before we would publish.'"
+        },
+        {
+          "title": "Writing Being Mortal about his own father",
+          "content": "Being Mortal (2014) traces Gawande's changing view of end-of-life medicine partly through the illness and death of his father, also a surgeon. In a Fresh Air interview with Terry Gross he said, 'I had trained as a doctor to avoid the conversation my father needed. The book is the conversation we finally had. I wanted every reader to have it with someone before it was too late.' The book has been credited with increasing hospice referrals in several US hospital systems."
+        },
+        {
+          "title": "The coaching essay",
+          "content": "In a 2011 New Yorker essay, Personal Best, Gawande wrote about hiring a retired surgeon to watch him operate and critique his technique, something no other attending surgeon he knew did. He argued doctors needed coaches the way elite athletes do. He told the On Being podcast, 'I had been operating for eight years. My complication rate had stopped falling. I needed another pair of eyes in the room, the way a tennis player does. The only weird thing was that it was weird.'"
+        },
+        {
+          "title": "Writing 10pm to 2am",
+          "content": "In multiple interviews including the Tim Ferriss Show, Gawande has described his writing practice as late night after hospital work, usually 10pm to 2am, at his kitchen table, with a two-hour block once a week dedicated solely to reading aloud what he had drafted. He said, 'I cannot tell if a sentence is true until I have heard it in my own mouth. It is the only editing pass that catches the lies.'"
+        }
+      ]
+    },
+    {
+      "name": "Neil deGrasse Tyson",
+      "domain": "astrophysics / public science",
+      "era": "1958-present",
+      "region": "US",
+      "bio": "American astrophysicist and director of the Hayden Planetarium at the American Museum of Natural History since 1996. Host of the 2014 reboot of Cosmos and the StarTalk podcast, author of Death by Black Hole (2007) and Astrophysics for People in a Hurry (2017).",
+      "oneLiner": "Treats every question about the universe as a chance to show someone their own curiosity looks like everyone else's.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["influencing", "expressing"],
+      "narratives": [
+        {
+          "title": "Voting Pluto off the planet list",
+          "content": "In 2000 Tyson reopened the Hayden's Rose Center and quietly arranged the solar system exhibit so that Pluto was grouped with icy bodies rather than planets. When the New York Times reported it in 2001, Tyson became the face of Pluto's demotion six years before the IAU formally reclassified it. He later published The Pluto Files (2009) collecting angry letters from schoolchildren. He told The Daily Show, 'I did not vote Pluto off. I made a display that told the truth about it. People discovered they had loved a label, not a place.'"
+        },
+        {
+          "title": "The Sagan letter",
+          "content": "As a Bronx teenager Tyson wrote to Carl Sagan at Cornell asking about astronomy. Sagan replied with a handwritten letter inviting him to visit Ithaca for a day. Tyson has shown the letter on camera on StarTalk. He has said, 'Carl reached across time and said you matter. I did not go into astrophysics because of his television show. I went because of that letter. Every letter I answer from a student is a debt I am paying to him.'"
+        },
+        {
+          "title": "Answering everybody's question at every event",
+          "content": "At public lectures Tyson has a habit of staying until every audience question is answered, sometimes for hours. He told a Reddit AMA, 'I remember what it was like to have a question about the universe and no one to ask. If there is a line after the talk, I owe it to fourteen-year-old me to answer it. The last question is often the best one because the person had to wait the longest to ask it.'"
+        },
+        {
+          "title": "Standing by Cosmos's evolution episode",
+          "content": "When the 2014 Cosmos aired an episode emphasising evolution and the age of the universe, some US networks in religious markets pushed back. Tyson refused to soften the content. In a Time interview he said, 'Science literacy is not a menu. If I let people opt out of one finding, I have to let them opt out of all of them, and then I am not teaching science, I am taking orders.'"
+        }
+      ]
+    },
+    {
+      "name": "Steven Pinker",
+      "domain": "cognitive science / linguistics",
+      "era": "1954-present",
+      "region": "Canada / US",
+      "bio": "Canadian-American psychologist at Harvard, author of The Language Instinct (1994), How the Mind Works (1997), The Blank Slate (2002), The Better Angels of Our Nature (2011), and Enlightenment Now (2018). Known for evolutionary accounts of language and cognition and for marshalling long-run statistics to argue violence has declined.",
+      "oneLiner": "Writes academic books like popular books and popular books like academic books, and insists that is the point.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["analyzing", "synthesizing"],
+      "narratives": [
+        {
+          "title": "Writing The Sense of Style to fix his own prose",
+          "content": "Pinker has said his 2014 writing guide The Sense of Style began as a set of notes for his own drafts. He told the EconTalk podcast, 'I write the book I wish someone had given me when I was 25. The Sense of Style is the book I wish I had before writing The Language Instinct. It would have saved me a hundred sentences I would now cut.'"
+        },
+        {
+          "title": "Defending the long-run graphs",
+          "content": "The Better Angels of Our Nature (2011) argues, with more than 100 graphs, that violence has declined over centuries. Critics accused him of cherry-picking. In a 2015 Sam Harris podcast interview he said, 'I did not pick the graphs. I plotted every dataset I could find for every kind of violence across every period, and then I looked at what the graphs said. That is the opposite of cherry picking. That is reading the fruit.'"
+        },
+        {
+          "title": "The lab notebook rule",
+          "content": "On the Tim Ferriss Show Pinker described a habit from his graduate work he still uses: at the end of every writing day he notes, in a running document, the one sentence he will start with tomorrow. 'That way I never face a blank page. I face a sentence that my yesterday self already handed me. It is the cheapest trick I know and it works daily.'"
+        },
+        {
+          "title": "Refusing to fear the question",
+          "content": "In The Blank Slate Pinker took on claims about human nature most psychologists avoided. He has said in multiple interviews, including a 2018 Lex Fridman conversation, 'There is no question that science is forbidden to ask. There are answers we do not like. There is a difference. My job is to ask the question, give the best current answer, and then discuss what the answer does not justify. Most moral panics skip step three.'"
+        }
+      ]
+    },
+    {
+      "name": "Sal Khan",
+      "domain": "online education",
+      "era": "1976-present",
+      "region": "US",
+      "bio": "American educator and former hedge fund analyst who in 2004 began tutoring his cousin Nadia by recording YouTube videos of math lessons. In 2008 he left his finance job to turn the videos into Khan Academy, a free non-profit educational platform that by 2023 served more than 150 million registered users in 50 languages.",
+      "oneLiner": "Recorded lessons for his cousin on a dollar Wacom tablet and refused to sell the result when offered millions for it.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["nurturing", "designing"],
+      "narratives": [
+        {
+          "title": "The YouTube accident",
+          "content": "Khan has told the story many times: in 2004 his cousin Nadia was struggling with unit conversions in New Orleans, and he began tutoring her by phone from Boston. When he started recording the lessons and uploading to YouTube so she could replay them, other viewers found them. In his TED 2011 talk he said, 'Nadia told me that she preferred me on YouTube to me in person. And it offended me at first. Then I realised what she was actually saying. On YouTube I was patient. She could pause me. She could rewind me without embarrassing herself. I was a better tutor when I was a recording.'"
+        },
+        {
+          "title": "The non-profit decision",
+          "content": "In 2010 Khan was offered a reported multi-million-dollar package to commercialise the videos. He turned it down and registered Khan Academy as a non-profit. In a Reid Hoffman Masters of Scale interview he said, 'If I had taken the money, the platform would have to report to shareholders. It would have to charge students eventually. I could not tell Nadia her tutoring was free and then charge her daughter. That mattered more than the number.'"
+        },
+        {
+          "title": "Fifteen minutes to nine",
+          "content": "Khan has said the format of his videos, six to twelve minutes in length, no face on screen, was chosen because longer than that and viewers stopped watching. 'I was not trying to make television. I was trying to make the inside of a conversation. If you are explaining something to one person at a table, you do not put your face between them and the paper. You point at the paper.' He has resisted calls to add on-camera hosts."
+        },
+        {
+          "title": "Writing every script himself for years",
+          "content": "For the first several years of Khan Academy, Khan recorded every video himself, including into subjects like art history and finance. He told Fortune in 2012, 'I was not the expert in most of them. I was the learner. I would study for a week, then teach it. The student of two weeks ago is almost always a better teacher of the student of today than the expert of twenty years ago. I did not forget what was confusing.'"
+        }
+      ]
+    },
+    {
+      "name": "Marcus du Sautoy",
+      "domain": "mathematics",
+      "era": "1965-present",
+      "region": "UK",
+      "bio": "British mathematician, Simonyi Professor for the Public Understanding of Science at Oxford from 2008, a chair previously held by Richard Dawkins. Author of The Music of the Primes (2003), Finding Moonshine (2008), and The Creativity Code (2019). Researches symmetry and zeta functions.",
+      "oneLiner": "Talks about prime numbers the way a cellist talks about Bach, and teaches mathematicians to do the same.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["creating", "synthesizing"],
+      "narratives": [
+        {
+          "title": "The football shirt with 17",
+          "content": "Du Sautoy has played amateur football for years wearing the number 17 because, he explains, 17 is the only prime of the form 2^{2^n} + 1 above the first few Fermat primes that still fits on a shirt. He uses the story in school talks. He told the Guardian, 'I wanted the children to see that for a mathematician, a number is a character. I pick 17 the way a child picks a favourite dinosaur.' He has written entire chapters on why primes matter starting from the shirt."
+        },
+        {
+          "title": "The Simonyi Chair inaugural lecture",
+          "content": "Succeeding Richard Dawkins in 2008, du Sautoy gave his inaugural lecture on the public understanding of mathematics. He told the audience, 'Mathematics is the only subject that is still routinely introduced in English schools as a set of techniques to be memorised rather than an art to be discovered. No one teaches music by making children copy scales for eight years and then asks why no one wants to be a composer. That is how we teach maths.' The line was quoted in The Times."
+        },
+        {
+          "title": "Writing The Creativity Code during sabbatical silence",
+          "content": "For The Creativity Code (2019) du Sautoy took a sabbatical to study AI-generated art and music. He described on the Infinite Monkey Cage that he spent three weeks in a Benedictine monastery under a silence vow, working out how to define creativity rigorously enough to ask whether a machine could have it. He said, 'Silence gave me access to my own mathematical thinking in a way talking to colleagues did not. I recommend it to any mathematician stuck on a proof.'"
+        },
+        {
+          "title": "The saxophone and the proof",
+          "content": "Du Sautoy plays saxophone seriously and has said on multiple BBC Radio 4 interviews that he solves more mathematical problems during improvisation than during paperwork. On Desert Island Discs in 2017 he said, 'The sax and the zeta function are the same skill for me. Both ask you to listen to a pattern that is already there and find the next true note. I do my best work with an instrument in my hands.'"
+        }
+      ]
+    },
+    {
+      "name": "Randall Munroe",
+      "domain": "comics / applied physics",
+      "era": "1984-present",
+      "region": "US",
+      "bio": "American cartoonist, former NASA roboticist, creator of the webcomic xkcd since 2005. Author of What If? (2014), Thing Explainer (2015), How To (2019), and What If? 2 (2022). Known for answering absurd hypothetical science questions with meticulous calculation.",
+      "oneLiner": "Takes ridiculous questions seriously and serious questions ridiculously, until both yield physics you can draw as a stick figure.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["creating", "analyzing"],
+      "narratives": [
+        {
+          "title": "The thousand most common words",
+          "content": "For Thing Explainer (2015) Munroe constrained himself to using only the thousand most common English words to explain a Saturn V rocket (renamed 'Up Goer Five'), a nuclear power plant, and a cell. In a Big Think interview he said, 'When I could not use the word hydrogen I had to find out what hydrogen actually was again. The constraint made me relearn things I thought I already understood. That is why the book works. I was not dumbing down. I was discovering.'"
+        },
+        {
+          "title": "What if the baseball were pitched at the speed of light",
+          "content": "The opening What If answer calculates what happens if a pitcher threw a fastball at 90 percent the speed of light. Munroe walks through air molecule ionisation, fusion in the path, gamma burst, and concludes that both teams, the umpire, and everyone in the stadium dies and 'the batter would be awarded first base under MLB rule 6.08b'. The rule citation is the joke but the physics is correct. He told Wired in 2014, 'Every What If has to have real physics. The joke only works if the math is true.'"
+        },
+        {
+          "title": "The xkcd Monday, Wednesday, Friday metronome",
+          "content": "Since 2005 Munroe has posted xkcd every Monday, Wednesday, and Friday without a missed week. He has said in a Tim Ferriss interview that the schedule is non-negotiable because 'the only way to make work that is weird enough to matter is to commit to shipping before you know if it is good. Any week I skip is a week I started editing myself into something safer.' He drafts three or four comics per published one and rejects the rest."
+        },
+        {
+          "title": "Marrying in the middle of cancer",
+          "content": "Munroe's wife was diagnosed with stage 3 breast cancer shortly before their wedding. He wrote a series of xkcd strips during her treatment, and in the forward to What If? dedicated the book to 'my wife, who is the bravest person I know'. In a 2014 NPR interview he said, 'I kept drawing because it was the one thing I controlled. The scheduled post on Monday was a reminder that the world still wanted stick figures from me. That was a kindness.'"
+        }
+      ]
+    },
+    {
+      "name": "Brian Cox",
+      "domain": "particle physics",
+      "era": "1968-present",
+      "region": "UK",
+      "bio": "British physicist at the University of Manchester, former keyboard player in D:Ream, and BBC presenter of Wonders of the Solar System (2010), Wonders of the Universe (2011), and Forces of Nature (2016). Works on the ATLAS experiment at CERN.",
+      "oneLiner": "Points at a desert horizon on camera as if it were proof of the universe and then does the maths to show it is.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "influencing"],
+      "narratives": [
+        {
+          "title": "The diamond and the entropy",
+          "content": "In a 2011 Wonders of the Universe episode filmed in the Namibian desert Cox stood beside a crumbling skeleton of a ship and explained entropy by pointing out that the universe was set up in a state so improbably low in entropy that the arrow of time runs in the direction of its decay. He later said on the Infinite Monkey Cage, 'I wanted a single shot where the viewer sees a desert and understands that the desert is an argument about why yesterday is not tomorrow. The maths is terrifying. The image had to carry it.'"
+        },
+        {
+          "title": "Playing in D:Ream before physics",
+          "content": "Cox joined the band D:Ream in 1993, playing keyboards on the 1993 hit Things Can Only Get Better. He enrolled at Manchester to do a physics degree while still touring, completing a PhD in particle physics in 1998. On Desert Island Discs in 2016 he said, 'I never felt a conflict. Playing a show and explaining the Higgs field both involve standing in front of people and asking them to feel something. The physics is harder to prepare.'"
+        },
+        {
+          "title": "The Professor Brian Cox question",
+          "content": "On the BBC's Infinite Monkey Cage, which he has co-hosted with Robin Ince since 2009, Cox has a recurring habit of answering comedian questions with serious physics. Ince once asked him if a teapot could orbit the sun. Cox replied, 'Yes, for about 10^{4} seconds, then tidal and radiative effects,' and walked through the decay. He told Ince, 'I do not want jokes to mean physics switches off. I want jokes to mean we are allowed to keep thinking.'"
+        },
+        {
+          "title": "Carrying Feynman's lectures",
+          "content": "In multiple interviews Cox has said he keeps Feynman's Lectures on Physics volume 1 on his desk and rereads passages before giving public talks. He told The Times, 'Feynman taught me that if you cannot explain it to a first-year undergraduate, you have not understood it. I revisit him as a discipline. If I sound convincing on television and I have not done that reading, I have lied.'"
+        }
+      ]
+    },
+    {
+      "name": "Ruth Westheimer",
+      "domain": "sex therapy",
+      "era": "1928-2024",
+      "region": "Germany / US",
+      "bio": "German-born American psychosexual therapist, Holocaust survivor trained as a sniper in Haganah in 1948. In 1980 WYNY in New York gave her a 15-minute weekly radio slot called Sexually Speaking, which became a nationally syndicated phenomenon and made her, as Dr Ruth, a household name for decades.",
+      "oneLiner": "Spoke about sex in a grandmotherly German accent until an entire country agreed it was a normal thing adults could talk about.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["nurturing", "expressing"],
+      "narratives": [
+        {
+          "title": "Sniper to sex therapist",
+          "content": "Westheimer was orphaned at ten when her parents were killed in the Holocaust, fled to a Swiss children's home, and in 1948 emigrated to British Mandate Palestine where she trained as a Haganah sniper during the Arab-Israeli war. She was wounded by shrapnel and never fully regained use of both feet. In her memoir All in a Lifetime and on the Fresh Air interview in 2019 she said, 'I learned very early that life is short and that women are not taught anything about their own pleasure. I spent the rest of my life correcting both.'"
+        },
+        {
+          "title": "The fifteen-minute radio slot",
+          "content": "Sexually Speaking began on WYNY New York in 1980 as an unpaid 15-minute Sunday slot. Within a year it was two hours, live, with open phone lines. Westheimer told the New York Times, 'The station manager told me I could not say certain words. I said I would not call a penis anything except a penis. If I say the word schmeckel, people laugh at the word. If I say penis, people can ask a question about their husband.' The show became syndicated within three years."
+        },
+        {
+          "title": "Specific is kind",
+          "content": "Across decades of radio and television Westheimer refused the euphemism. She told callers to speak precisely about their own anatomy, to name positions, to time things. On a 2015 Longform podcast interview she said, 'I am a tiny old lady with an accent and I talk about clitoris on the radio because vagueness is the reason people suffer. If you cannot name it you cannot ask for it, and if you cannot ask for it you cannot have it.'"
+        },
+        {
+          "title": "Lifetime habit of handwritten thank yous",
+          "content": "Former producers of her show, interviewed after her 2024 death, described Westheimer writing a handwritten thank-you note to every guest, every caller whose question she remembered, and most journalists who profiled her. She maintained the habit into her nineties. She told AARP, 'When you come from a world where nobody said goodbye to you, you learn to say thank you to everybody who shows up. It is not a discipline, it is an apology to history.'"
+        }
+      ]
+    },
+    {
+      "name": "Henry Louis Gates Jr.",
+      "domain": "African American studies",
+      "era": "1950-present",
+      "region": "US",
+      "bio": "American literary critic, professor at Harvard since 1991, director of the Hutchins Center for African and African American Research. Host of PBS's Finding Your Roots since 2012 and of several earlier genealogical and historical documentary series. Recovered and edited The Bondwoman's Narrative (2002) and The Annotated African American Folktales (2018).",
+      "oneLiner": "Treats DNA tests and slave ship manifests as instruments a living person can use to walk back into their own family.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["synthesizing", "connecting"],
+      "narratives": [
+        {
+          "title": "The reveal moment",
+          "content": "Finding Your Roots is structured around a moment Gates calls the reveal, in which the guest sees, for the first time, a document tracing their ancestor. In a 2018 On Being interview he said, 'I have had senators and comedians cry in that chair. What they are crying about is not the document. It is the fact that somebody bothered. I wanted the whole show to be a very elaborate act of bothering.' He has personally reviewed every guest's research before filming."
+        },
+        {
+          "title": "Authenticating The Bondwoman's Narrative",
+          "content": "In 2001 Gates bought at auction a handwritten manuscript attributed to Hannah Crafts, a fugitive from enslavement. He spent a year with forensic paper specialists, ink analysts, and historians verifying the manuscript's 1850s date and Crafts's identity. He published it as The Bondwoman's Narrative in 2002. He told the New York Times, 'I could not let this book be dismissed by assumption. I had to put it through the same authentication a Dickens manuscript would get. Our literature deserves the same forensic respect as theirs.'"
+        },
+        {
+          "title": "The Cambridge arrest",
+          "content": "In July 2009 Gates was arrested on his own front porch in Cambridge by a police officer responding to a call about a possible break-in. The incident made national news and led to the 'beer summit' at the White House with President Obama. Gates wrote in the New York Times soon after, 'I did not become a scholar so that I could explain who I am on my own porch. But a scholar is exactly what you need to be if you want to know why that explanation is still required.' He launched a PBS series on policing in response."
+        },
+        {
+          "title": "The annotated folktales project",
+          "content": "For The Annotated African American Folktales (2018) Gates and Maria Tatar spent years collecting Black oral traditions from the Caribbean, the US South, and West Africa, annotating each story with historical and linguistic context. In the introduction he writes, 'I remember my father telling me Brer Rabbit stories on the back porch in Piedmont, West Virginia, and thinking he had made them up. He had. And so had every father before him. The book is a note in the margin of that porch.'"
+        }
+      ]
+    },
+    {
+      "name": "Jacques Pepin",
+      "domain": "classical French cookery",
+      "era": "1935-present",
+      "region": "France / US",
+      "bio": "French-born chef who cooked for three French heads of state including Charles de Gaulle at the Elysee Palace before moving to the US in 1959. Author of La Technique (1976), La Methode (1979), The Apprentice (2003), and many subsequent cookbooks. Longtime host of PBS cooking series, sometimes alongside Julia Child.",
+      "oneLiner": "Chops an onion on television the way a violinist plays an open string, not to impress but to show the next cook it can be done slowly.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["nurturing", "creating"],
+      "narratives": [
+        {
+          "title": "The Howard Johnson's decade",
+          "content": "After arriving in New York in 1959 Pepin turned down a job as John F Kennedy's White House chef and instead took a role as director of research and development at Howard Johnson's, where he worked for ten years refining recipes for mass production. He told Tim Ferriss in a 2020 interview, 'I learned more at Howard Johnson's than at the Elysee. The Elysee taught me how to cook for one person who is used to the best. Howard Johnson's taught me how to cook the same thing a thousand times a day and have it be good every time. Both are crafts.'"
+        },
+        {
+          "title": "The left-handed son of a carpenter",
+          "content": "In The Apprentice Pepin describes beginning his apprenticeship at 13 at the Grand Hotel de l'Europe in Bourg-en-Bresse, terrified of the chef, who made him peel sacks of potatoes. He later told NPR, 'The chef hit me once because I held the knife wrong. I never held it wrong again. I am not defending him. I am saying that for my whole life, every time I pick up a knife, the angle is the correct one without me thinking about it. That is what eighty years of practice looks like, and it started with an angry man.'"
+        },
+        {
+          "title": "Julia on the set",
+          "content": "Pepin's 1999 PBS series Julia and Jacques Cooking at Home is largely unscripted. In interviews he has said he and Child insisted on cooking from a shopping list rather than tested recipes, so viewers would see them disagree, improvise, and sometimes fail. He told American Masters, 'Julia wanted the world to see that cooking was a conversation, not a performance. On a good day we argued about whether to salt the pasta water. On a great day we let the camera roll and the whole kitchen was the lesson.'"
+        },
+        {
+          "title": "Painting when he cannot cook",
+          "content": "Since a 2020 car accident limited his mobility, Pepin has turned increasingly to watercolour, producing illustrations for his books and for daily social media posts of meals he is still cooking at home. He told the New York Times in 2022, 'When I can no longer stand at the stove I will still hold a brush. Painting a dish is cooking it again, with colour instead of salt. I am not done.'"
+        }
+      ]
+    },
+    {
+      "name": "Samin Nosrat",
+      "domain": "cookery writing",
+      "era": "1979-present",
+      "region": "US",
+      "bio": "American cook and writer, born to Iranian immigrant parents in San Diego. Apprenticed at Alice Waters' Chez Panisse in Berkeley from the age of 19. Author of Salt Fat Acid Heat (2017), illustrated by Wendy MacNaughton, and host of the 2018 Netflix series of the same name.",
+      "oneLiner": "Walked into Chez Panisse as a nineteen-year-old customer and did not leave the restaurant world until she had a framework that could teach home cooks without a recipe.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["nurturing", "creating"],
+      "narratives": [
+        {
+          "title": "The birthday dinner that became a career",
+          "content": "At 19 Nosrat ate a birthday dinner at Chez Panisse, wrote a thank-you note to Alice Waters, and asked if she could work there. She started as a busser and over six years worked her way to the line cook position. In The Guardian (2017) she said, 'I could not dice an onion when I started. What I could do was listen. I spent the first year listening to the sound of food. You hear when a steak is done before you see it. Nobody told me. I learned because I did not yet have the vocabulary to interrupt what I was hearing.'"
+        },
+        {
+          "title": "Reducing cooking to four variables",
+          "content": "While cooking for Michael Pollan during his research for Cooked, Nosrat began articulating her theory that all good cooking comes down to salt, fat, acid, and heat. Pollan encouraged her to turn it into a book. In the New Yorker profile she said, 'I wanted to write a book that made recipes obsolete. If you understand these four things you can walk into any grocery store in any country and make dinner. The goal was to put the knowledge in the cook, not in the instructions.'"
+        },
+        {
+          "title": "The sound test",
+          "content": "On Netflix and in cooking classes Nosrat teaches by ear. She has said the single most useful skill she learned at Chez Panisse was listening to oil, to boiling water, and to browning meat. In a 2018 interview with the San Francisco Chronicle she said, 'If the oil is quiet the pan is cold. If the oil is screaming the pan is too hot. If it whispers you can cook. I teach that sound before I teach any recipe.'"
+        },
+        {
+          "title": "The grief sabbatical",
+          "content": "After the 2020 death of her close friend and collaborator she stopped public work and retreated for more than a year. On the Home Cooking podcast she co-hosts with Hrishikesh Hirway she said, 'I could not write. I could not teach. I cooked for one person, which was me, and I found out how much cooking I had been doing to be seen rather than to be fed. I do not know yet what this year is for, but I am not pretending I am still the same teacher I was.'"
+        }
+      ]
+    },
+    {
+      "name": "Ha-Joon Chang",
+      "domain": "heterodox economics",
+      "era": "1963-present",
+      "region": "South Korea / UK",
+      "bio": "South Korean economist, at Cambridge from 1990 to 2021 and now at SOAS, University of London. Author of Kicking Away the Ladder (2002), Bad Samaritans (2007), 23 Things They Don't Tell You About Capitalism (2010), and Economics: The User's Guide (2014). Winner of the 2003 Myrdal Prize.",
+      "oneLiner": "Walks readers through the actual history of rich countries to show they did the opposite of what they now recommend to poor ones.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["analyzing", "influencing"],
+      "narratives": [
+        {
+          "title": "The ladder metaphor",
+          "content": "Kicking Away the Ladder (2002) takes its title from Friedrich List's 1841 image of an industrialised country that, having climbed the ladder of tariffs and subsidies, kicks it away so others cannot follow. Chang assembled trade and industrial policy histories from 19th-century Britain, Germany, and the US to show they had done exactly what they now told developing countries not to do. He told the Guardian, 'This is not a controversial point of view. It is a point of archive. I just read what the ministers had actually written.'"
+        },
+        {
+          "title": "The washing machine argument",
+          "content": "In 23 Things They Don't Tell You About Capitalism Chang argues the washing machine has done more to change the world than the internet. He told Russ Roberts on EconTalk, 'Say a woman in 1900 spends 40 hours a week on laundry. Give her a washing machine and she has 40 hours. In those 40 hours she goes to school, enters the labour force, votes. The internet has changed how we shop. The washing machine changed who counted as a worker. We use the internet example because it is recent. History is longer than your phone.'"
+        },
+        {
+          "title": "Written from the kitchen table",
+          "content": "Chang has said in multiple Korean and British interviews that he writes books at his kitchen table, not in an office, with his children nearby, and reads every chapter aloud to his wife, a historian. He told the Korean Economic Daily, 'If my wife cannot follow an argument, no reader can. She is not an economist. That is precisely why she is my test. Economists forgive each other's jargon. A historian will not.'"
+        },
+        {
+          "title": "Refusing the neoclassical label",
+          "content": "On the Talking Politics podcast at Cambridge, Chang was asked whether he identified with any school of economic thought. He said, 'I am a pluralist on purpose. I have read nine schools of economics and every single one of them says something true and something wrong. If you pick one school you end up defending its errors. I would rather be embarrassed by nine schools than loyal to one.'"
+        }
+      ]
+    },
+    {
+      "name": "Eugenia Cheng",
+      "domain": "category theory",
+      "era": "1976-present",
+      "region": "UK / US",
+      "bio": "British mathematician, Scientist in Residence at the School of the Art Institute of Chicago. Author of How to Bake Pi (2015), Beyond Infinity (2017), The Art of Logic (2018), and x + y: A Mathematician's Manifesto for Rethinking Gender (2020). Concert pianist.",
+      "oneLiner": "Explains category theory by making a lasagna and insists the lasagna is not a metaphor.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["creating", "synthesizing"],
+      "narratives": [
+        {
+          "title": "Recipes as category theory",
+          "content": "In How to Bake Pi Cheng uses a recipe for cream to explain abstraction: a recipe with precise quantities is a specific thing, a recipe describing what makes a cream a cream is abstract, and category theory is the level above that, asking what rules recipes themselves obey. She told Radiolab, 'I do not use baking because maths is scary and cake is friendly. I use baking because a recipe is literally a structure-preserving map, and I want you to see one with your eyes before I show you one with letters. The cake is the proof.'"
+        },
+        {
+          "title": "Playing the piano as her maths practice",
+          "content": "Cheng is a classically trained pianist who performs Bach publicly. In a New Yorker profile she said, 'When I am stuck on a theorem, I go and play the piano, and the stuck place moves. I do not know why. My theory is that Bach has exactly the kind of structural thinking category theory wants, and my hands know it before my head does.' She has played the Goldberg Variations at maths conferences as part of lectures."
+        },
+        {
+          "title": "The ingressive versus congressive reframing",
+          "content": "In x + y Cheng introduces the words ingressive and congressive to replace masculine and feminine traits, arguing the gendered words carry unearned baggage. She told the BBC, 'I am a mathematician. When a term is ambiguous I replace it. Ingressive means oriented toward competition and individual progress. Congressive means oriented toward togetherness and community progress. Neither is a woman or a man. But both exist in maths departments and I needed words for them so that I could say something useful.'"
+        },
+        {
+          "title": "Teaching art students pure maths",
+          "content": "At the School of the Art Institute of Chicago, Cheng teaches pure mathematics to students who, she told Quanta, 'are the only students I have ever taught who do not ask when they will use this. They trust that abstraction is interesting and ask how it works. That is the correct way to learn maths. Engineering students are often the hardest because they have been told the only point of maths is to apply it. Art students liberate me.'"
+        }
+      ]
+    },
+    {
+      "name": "Matthew Walker",
+      "domain": "sleep neuroscience",
+      "era": "1972-present",
+      "region": "UK / US",
+      "bio": "British neuroscientist and professor of psychology at UC Berkeley, where he directs the Center for Human Sleep Science. Author of Why We Sleep (2017), a bestseller that brought sleep research to a mass audience, and host of The Matt Walker Podcast.",
+      "oneLiner": "Wrote a book on sleep that people refused to put down until morning, which he found darkly funny.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["analyzing", "nurturing"],
+      "narratives": [
+        {
+          "title": "The missed hour in spring",
+          "content": "Walker argues that the one-hour shift into daylight saving time in spring causes a measurable spike in heart attacks the following Monday, based on a 2014 study in Open Heart. He told Joe Rogan in 2018, 'The finding is terrifying because it shows what even a single hour of sleep deprivation across a whole population does to the cardiovascular system. In autumn the opposite is true. Heart attacks drop. Sleep is not optional, and the data on this is not a debate anymore.'"
+        },
+        {
+          "title": "His own nine hours",
+          "content": "Walker has said publicly that he sleeps between eight and nine hours every night. On the Tim Ferriss Show he said, 'I cannot be a credible messenger for sleep science if I sleep five hours. I also cannot be a credible scientist if I pretend effort is the variable. I protect sleep the way a marathon runner protects training. It is my job.' He keeps his bedroom cold and does not read email in bed."
+        },
+        {
+          "title": "Criticism and corrections",
+          "content": "In 2019 neuroscientist Alexey Guzey published a long critique of factual errors in Why We Sleep. Walker responded with a public list of corrections and errata on his website. On the Peter Attia Drive podcast he said, 'A first edition can have errors. Pretending it does not is worse than fixing them. I added 19 corrections to subsequent printings. Some of Guzey's points I accepted. Others I think misread the evidence. I tried to walk the reader through which was which.'"
+        },
+        {
+          "title": "The gratitude journal of findings",
+          "content": "Walker has said on his own podcast that at the end of every workday he writes one sentence about the most interesting thing he learned from an experiment or paper that day. 'I started it to combat the grind of running a lab. Five years in I have a document that is my favourite thing in my career. It is proof to my own nervous system that science is still astonishing to me. On the days I do not write in it, I know something is wrong.'"
+        }
+      ]
+    },
+    {
+      "name": "Siddhartha Mukherjee",
+      "domain": "oncology / medical writing",
+      "era": "1970-present",
+      "region": "India / US",
+      "bio": "Indian-American oncologist at Columbia University, author of The Emperor of All Maladies (2010), which won the 2011 Pulitzer Prize for General Nonfiction, The Gene (2016), and The Song of the Cell (2022).",
+      "oneLiner": "Writes about cancer as a biography, the gene as a family story, and the cell as a building to be walked through room by room.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["synthesizing", "nurturing"],
+      "narratives": [
+        {
+          "title": "Writing The Emperor of All Maladies in the hospital",
+          "content": "Mukherjee began The Emperor of All Maladies during his oncology fellowship at Dana-Farber, after a patient asked him, 'I need to know what I am battling.' He told NPR in 2010, 'I realised I did not have an answer that was not a fragment. Cancer had a 4,000-year biography and no single book had ever told it. I could either keep giving fragment answers or I could write the biography. I wrote it at night for six years between rounds.'"
+        },
+        {
+          "title": "The gene as a pronoun",
+          "content": "For The Gene, Mukherjee uses the history of his own family's schizophrenia as a spine. He told On Being, 'I did not want to write about genes as objects. I wanted to write about them as pronouns, the word your grandmother uses when she says she has your mother's temper. That is the gene to a lay reader, and it is much closer to the truth of how genetics behaves than the textbook diagram of a double helix.'"
+        },
+        {
+          "title": "The last conversation rule",
+          "content": "In interviews including a 2018 Tim Ferriss conversation, Mukherjee has described a practice he teaches oncology fellows: at the end of a terminal diagnosis consultation, ask the patient, 'What do you hope for now?' He said, 'The question reframes the visit. It moves us off prognosis, which is guesswork, and onto the patient's own list. I have seen patients say I want to see my daughter graduate, or I want to finish my novel, and we build the rest of the treatment around that. I learned it from Atul Gawande and I still use it every clinic day.'"
+        },
+        {
+          "title": "Scaffolding the sentence",
+          "content": "Mukherjee has described on the Longform podcast how he builds a long book: he writes a first draft in voice memos on his phone during his hospital commute, then transcribes and expands. 'I started doing this because I had no other time. I discovered the spoken sentence has a rhythm the written sentence needs. If I cannot say it in the car I cannot write it at the desk. That is why my prose has the cadence it has.'"
+        }
+      ]
+    },
+    {
+      "name": "Mary Beard",
+      "domain": "classics",
+      "era": "1955-present",
+      "region": "UK",
+      "bio": "British classicist, Professor of Classics at Cambridge from 2004 to 2022. Author of Pompeii: The Life of a Roman Town (2008), SPQR: A History of Ancient Rome (2015), Women and Power (2017), and Twelve Caesars (2021). Presenter of BBC documentaries and a columnist for the TLS.",
+      "oneLiner": "Shows up at Pompeii in a comfortable cardigan and argues with the audience about what a Roman slave actually thought about their emperor.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["synthesizing", "influencing"],
+      "narratives": [
+        {
+          "title": "The Twitter troll reply",
+          "content": "When a viewer tweeted an obscene insult after a 2013 BBC documentary, Beard retweeted it with his name attached. His mother contacted her and apologised, saying she was horrified. Beard publicly accepted the apology and reportedly wrote him a reference for university. She told The Observer, 'I did not retweet him to shame him. I retweeted him because the internet hides adults behind handles and my question was, does this sentence sound like you when your mother reads it. Apparently it did not.'"
+        },
+        {
+          "title": "SPQR's refusal of a hero narrative",
+          "content": "SPQR (2015) deliberately structures the history of Rome around ordinary inhabitants, slaves, and women rather than around emperors. Beard told the Guardian, 'I wanted a general reader to finish the book and understand that an empire is not the biography of a man at the top. It is the biography of a tax collector, a market woman, a household slave, and the emperor is one actor in their story. Most Roman history is written as if the emperor is the only real character. The sources tell a different story if you read them sideways.'"
+        },
+        {
+          "title": "Women and Power and the voice",
+          "content": "In Women and Power Beard traces silencing of women's public voices from Homer's Odyssey to Hillary Clinton. She writes, 'The classical world insisted that the public voice was male, and a woman speaking in public was automatically an oddity.' On the Guardian Books podcast she said, 'I wanted to show readers that this is not a new invention. Every time somebody tells me modern sexism is unusual I can quote Telemachus telling his mother to go and weave. That line is 2,800 years old and it still works in 2017.'"
+        },
+        {
+          "title": "Lecturing in the dig",
+          "content": "On BBC's Meet the Romans and Pompeii With Mary Beard she routinely steps over fencing into the actual site and reads inscriptions off walls. She told the Radio Times, 'I do not want to do a history programme from a studio. A Roman graffito was written by a human being on a wall that is still there. I want the viewer to see me read it the way the writer would have wanted a passerby to. Television that is just me in a library is not what Pompeii needs.'"
+        }
+      ]
+    },
+    {
+      "name": "Trevor Noah",
+      "domain": "comedy / cross-cultural explanation",
+      "era": "1984-present",
+      "region": "South Africa / US",
+      "bio": "South African comedian, host of The Daily Show from 2015 to 2022, born in Johannesburg to a Xhosa mother and a Swiss father during apartheid, when his parents' relationship was illegal. Author of Born a Crime (2016).",
+      "oneLiner": "Grew up in multiple languages on the wrong side of apartheid law and turned that into a comedy voice American cable had never had.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "connecting"],
+      "narratives": [
+        {
+          "title": "Born a crime, literally",
+          "content": "In Born a Crime Noah opens with his birth certificate being a criminal document, since his existence violated apartheid's Immorality Act. He writes that as a small boy his mother would walk on one side of the street and he and his father on the other so the authorities would not notice. On the Trevor Noah Podcast he said, 'I learned early that the truth of who I was had to be invisible to survive. Comedy is the opposite of that. Comedy is the job of saying the true thing out loud in a room. I had to learn to do the opposite of what kept me alive as a child.'"
+        },
+        {
+          "title": "Speaking six languages on purpose",
+          "content": "Noah's mother Patricia taught him Xhosa, Zulu, Sotho, Tswana, Afrikaans, and English. He has said in a 2016 Fresh Air interview, 'My mother believed language was the only thing apartheid could not take from you because it was inside your head. I learned languages because she insisted that if I could speak to a person in their own language I would never be a stranger in my own country. On The Daily Show, the first thing I would do before interviewing a guest was try one phrase in their language. People relax. It is the same trick.'"
+        },
+        {
+          "title": "The Between the Scenes videos",
+          "content": "During his Daily Show tenure Noah recorded informal Q&A sessions with the studio audience between takes, uploaded as Between the Scenes. He treated them as a space to think out loud about race, language, and power without the constraint of a comedy punch. He told GQ, 'The monologue has to be funny every six seconds. Between the Scenes has to be true every six seconds. I needed both, because comedy without the thought becomes noise and the thought without comedy becomes a lecture no one watches.'"
+        },
+        {
+          "title": "Leaving the show on his own clock",
+          "content": "In September 2022 Noah announced on-air he was stepping down from The Daily Show at the peak of its audience, with no replacement yet named. He told his staff, and later Variety, 'I learned from my mother that you leave a room while the conversation is still good. The worst thing you can do is stay until people are tired of you. I wanted The Daily Show to miss me, not the other way around. That is a lesson about joy and I took it from a woman who had very little of it.'"
+        }
+      ]
+    },
+    {
+      "name": "Iain McGilchrist",
+      "domain": "psychiatry / neuropsychology",
+      "era": "1953-present",
+      "region": "UK",
+      "bio": "British psychiatrist and writer, former Oxford literary scholar and All Souls fellow. Author of The Master and His Emissary (2009) and The Matter With Things (2021), arguing that the two hemispheres of the human brain have fundamentally different ways of attending to the world with cultural consequences.",
+      "oneLiner": "Convinced that the left hemisphere is a brilliant assistant that has begun to act like the boss, and wrote two enormous books to say so slowly.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["analyzing", "clarifying"],
+      "narratives": [
+        {
+          "title": "The Master and the Emissary parable",
+          "content": "McGilchrist takes the title of his 2009 book from a Nietzsche parable: a wise master entrusts administration of his lands to an emissary, who comes to believe he is the rightful ruler and usurps the master. On Russ Roberts' EconTalk in 2018 McGilchrist said, 'The left hemisphere is the emissary. It is detailed, precise, certain, and absolutely necessary. But when it forgets that it is the messenger and starts to think it is the king, you get a civilisation that cannot see the forest because every tree has been catalogued. That is the story I am telling.'"
+        },
+        {
+          "title": "Twenty years to write a second book",
+          "content": "The Matter With Things (2021) runs to 1,500 pages across two volumes and took McGilchrist more than a decade to complete. He told the Rebel Wisdom podcast, 'I knew when I finished the first book I had only said half of what I needed to say. The second book is about truth and reality and sacred. I could not rush it because the left hemisphere would have taken over if I had. I wrote slowly on purpose. If the book is long, so is the problem.'"
+        },
+        {
+          "title": "Writing on the Isle of Skye",
+          "content": "McGilchrist has lived much of the last two decades on the Isle of Skye, writing in a house with a view of the Cuillin mountains. In interviews with The Guardian and Emerge he has said the landscape is part of the method: 'I could not have written a book about what the right hemisphere sees in a city. The mountains are always different and never twice. I look up every morning and the left hemisphere loses an argument before I start writing.'"
+        },
+        {
+          "title": "The certainty warning",
+          "content": "One of the most repeated lines from The Master and His Emissary, quoted in every profile, is 'those who believe they are certainly right are certainly wrong'. On the Theories of Everything podcast McGilchrist said, 'I put that sentence in the book because it is the single thing I have learned in 30 years of practising psychiatry. The patients I could not help were always the ones who were certain. The patients I could help were the ones who were puzzled. Certainty is the left hemisphere pretending it has finished. It has not.'"
+        }
+      ]
+    },
+    {
+      "name": "Karen Armstrong",
+      "domain": "comparative religion",
+      "era": "1944-present",
+      "region": "UK",
+      "bio": "British religious historian and former Catholic nun, author of more than 25 books including A History of God (1993), The Battle for God (2000), The Case for God (2009), and Twelve Steps to a Compassionate Life (2010). In 2008 she won a TED Prize used to launch the Charter for Compassion.",
+      "oneLiner": "Spent seven years in a convent, left without faith, and then spent forty more writing every major religion back into speaking terms with itself.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["clarifying", "nurturing"],
+      "narratives": [
+        {
+          "title": "Leaving the convent",
+          "content": "Armstrong entered a strict Roman Catholic order in 1962 at 17 and left in 1969, suffering from undiagnosed temporal lobe epilepsy that her superiors read as disobedience. In her 2004 memoir The Spiral Staircase she writes, 'I left God because the God I had been given was a man who withheld. What I did not know then was that I would spend the rest of my life writing my way back to a different word for the same thing.' The memoir is unusually candid about her years of unbelief."
+        },
+        {
+          "title": "Practising the subject",
+          "content": "Armstrong has said in multiple interviews including Krista Tippett's On Being that she writes about a religion by practising it in her flat for months: fasting during Ramadan for Islam, keeping kosher for Judaism, chanting for Buddhism. She told Tippett, 'You cannot write about religion as an observer. You have to borrow the robes. I am not converting. I am paying the debt I owe the tradition I am writing about. It is the only way to keep the book honest.'"
+        },
+        {
+          "title": "The Charter for Compassion",
+          "content": "Armstrong's 2008 TED Prize wish was to draft a Charter for Compassion signed by leaders of the world's religions, grounded in the Golden Rule. She assembled a council in 2009 with Muslim, Jewish, Christian, Hindu, and Buddhist clerics. She told the BBC, 'People said I was naive. I was not naive. I was persistent. I made each of them sit in a room until we had one sentence. The sentence is, treat others as you would wish to be treated yourself. That is in every tradition. The council only had to agree that the tradition was not optional.'"
+        },
+        {
+          "title": "Compassion as a practice, not a feeling",
+          "content": "On BBC Radio 4's Today programme she said, 'Compassion is not a warm fuzzy feeling. The Latin root means to feel with. It is a muscle. You build it by paying attention to somebody whose position you find uncomfortable, staying present without fixing them, and then doing it again the next day. Nobody gets compassionate by thinking about compassion. You get compassionate by practising it badly for years until you are less bad at it.'"
+        }
+      ]
+    },
+    {
+      "name": "Robin Wall Kimmerer",
+      "domain": "botany / Indigenous knowledge",
+      "era": "1953-present",
+      "region": "US",
+      "bio": "Botanist and enrolled member of the Citizen Potawatomi Nation, professor of environmental biology at SUNY College of Environmental Science and Forestry. Author of Gathering Moss (2003) and Braiding Sweetgrass (2013), which became a New York Times bestseller nearly a decade after publication.",
+      "oneLiner": "Writes about plants in the grammar that lets a sugar maple be a someone rather than a something.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["clarifying", "nurturing"],
+      "narratives": [
+        {
+          "title": "The grammar of animacy",
+          "content": "In the Braiding Sweetgrass essay Learning the Grammar of Animacy, Kimmerer describes sitting with her Potawatomi elder as he struggled to teach her the word for bay, because in Potawatomi 'to be a bay' is a verb, not a noun. She writes, 'A bay is only a noun if water is dead. When bay is a verb, it is water released from the obligation to run with the river, choosing to pause, to embrace the shore. In English, we'd never call our grandmother it. Yet we do so with every plant, tree, and river we meet.' She told Krista Tippett on On Being, 'Grammar is cosmology. When you change the word, you change what is allowed to matter.'"
+        },
+        {
+          "title": "The Honourable Harvest",
+          "content": "Kimmerer has articulated what she calls the Honourable Harvest, a set of rules drawn from Indigenous practice: never take the first, never take the last, take only what you need, use everything you take, be grateful, and reciprocate the gift. She told Yale e360, 'The Honourable Harvest is not a policy. It is a relationship. The sweetgrass I pick at the end of summer flourishes precisely where the pickers come, and dies where they do not. Science took 80 years to catch up with what my grandmother already knew. The plant asks to be needed.'"
+        },
+        {
+          "title": "Writing two languages at once",
+          "content": "In a 2020 Guardian interview Kimmerer said Braiding Sweetgrass took 13 years to write because she refused to separate her scientific training from her Potawatomi inheritance. 'Every essay had to pass two editors I kept in my head. The botanist who wanted a data source for the claim, and the grandmother who wanted to know if the sentence would make sense to somebody who had never taken a class. If either one shook her head, I rewrote.'"
+        },
+        {
+          "title": "Refusing to rush the bestseller moment",
+          "content": "Braiding Sweetgrass became a bestseller in 2020, seven years after publication, when readers found it during lockdown. Kimmerer turned down a rapid follow-up and took a sabbatical. In a 2022 Orion Magazine interview she said, 'I am not going to write the next book because the market is ready. I am going to write the next book when the plants have given me something else to say. That is not quaint. That is the pace at which real knowledge arrives.'"
+        }
+      ]
+    },
+    {
+      "name": "Jill Lepore",
+      "domain": "American history",
+      "era": "1966-present",
+      "region": "US",
+      "bio": "American historian, David Woods Kemper Professor of American History at Harvard, staff writer at The New Yorker since 2005. Author of The Name of War (1998, Bancroft Prize), The Secret History of Wonder Woman (2014), These Truths: A History of the United States (2018), and If Then (2020).",
+      "oneLiner": "Writes American history the way a reporter writes a feature, down to the colour of the wallpaper, because she thinks the wallpaper tells you what the country was afraid of.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["clarifying", "analyzing"],
+      "narratives": [
+        {
+          "title": "These Truths as a single story",
+          "content": "These Truths (2018) is a 960-page single-volume history of the United States written in the tradition of 19th-century sweeping narratives, which Lepore did deliberately. She told the Longform podcast, 'Nobody in my generation was writing the whole story. Americans had stopped trying because it seemed arrogant. I thought the opposite. If we do not tell the whole story we cede it to people who will tell it badly. So I wrote it in one voice, in one arc, knowing the gaps, because the act of trying is the point.'"
+        },
+        {
+          "title": "Wonder Woman's archive",
+          "content": "For The Secret History of Wonder Woman Lepore tracked down previously unavailable private papers of William Moulton Marston and his polyamorous household of women, including documents held by Marston's granddaughter. She told NPR, 'The archive was in a basement in garbage bags. I sat on that basement floor for weeks. Wonder Woman is a feminist icon created by a man living with two women who were themselves part of the early birth control movement. I needed the reader to see the actual letters, and that meant earning the granddaughter's trust for the better part of a year.'"
+        },
+        {
+          "title": "The Last Archive as method",
+          "content": "In 2020 Lepore launched The Last Archive, a narrative podcast in which she investigates the history of evidence and doubt in America. She told The Atlantic, 'Historians are trained to write in past tense and silence the audio. I wanted to put the archive on tape, to let listeners hear the clerks, the tape hiss, the gap between what was said and what was written down. You cannot teach the epistemology of history in a textbook. You can teach it by letting people hear a filing cabinet open.'"
+        },
+        {
+          "title": "Writing while walking",
+          "content": "Lepore has said on multiple New Yorker Radio Hour appearances that she drafts essays by walking around her neighbourhood in Cambridge, Massachusetts, dictating into a phone. 'I do not write a sentence I could not say to somebody walking beside me. The walking fixes something the desk breaks. I think when historians get stuck it is because they are writing sentences nobody would say. I walk the stiffness out.'"
+        }
+      ]
+    },
+    {
+      "name": "Yuval Noah Harari",
+      "domain": "macro-history",
+      "era": "1976-present",
+      "region": "Israel",
+      "bio": "Israeli historian at the Hebrew University of Jerusalem, author of Sapiens (published in Hebrew 2011, English 2014), Homo Deus (2016), and 21 Lessons for the 21st Century (2018). Practises Vipassana meditation for two hours a day and takes an annual 30 to 60 day silent retreat.",
+      "oneLiner": "Thinks 200,000 years of human history fit into 400 pages because silence has taught him to skip everything that was only opinion.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["clarifying", "influencing"],
+      "narratives": [
+        {
+          "title": "Sixty days of silence",
+          "content": "Harari takes an annual silent Vipassana retreat of 30 to 60 days, during which he does not read, write, speak, or use a phone. In the acknowledgements of Sapiens he writes, 'Without the focus, peace, and insight gained from practising Vipassana for 15 years, I could not have written this book.' On the Tim Ferriss Show he elaborated, 'I cannot write about human history if I am constantly consuming opinions about human history. The retreat removes everything that is not my own thinking. What is left after 30 days of silence is probably worth writing down.'"
+        },
+        {
+          "title": "Teaching the world history course",
+          "content": "Sapiens began as an undergraduate world history course Harari taught at Hebrew University after no senior colleague wanted it. He said on the Rich Roll podcast, 'I was given the course because nobody else in the department would take it. I had to answer the biggest possible question because the students in front of me were 18 years old and wanted to know who we are. That forced me to write sentences that were simple enough for an 18 year old and true enough for my supervisor. The book came out of that pressure.'"
+        },
+        {
+          "title": "The fictional orders",
+          "content": "Sapiens argues that human cooperation at scale depends on shared fictions, from religions to nations to money. Harari told the Guardian in 2016, 'Money is the most successful fiction ever told. Two people who do not speak the same language and belong to different religions can trade a goat for a piece of paper because both believe in the same story about the piece of paper. That is not a metaphor. That is literally what is happening in every market. Calling it a fiction does not make it less powerful. It makes it more powerful.'"
+        },
+        {
+          "title": "Writing with his husband as editor",
+          "content": "Harari's husband Itzik Yahav edits and manages his work. In a profile in The New Yorker Harari said, 'I write the first draft. Itzik reads it and crosses out everything he does not believe. I rewrite. We argue. It is the only editorial relationship I trust because he is not my professional peer. He has no stake in sounding clever. He only wants me to be understood. That is the rarest thing an editor can give you.'"
+        }
+      ]
+    },
+    {
+      "name": "Michael Pollan",
+      "domain": "food writing / botany",
+      "era": "1955-present",
+      "region": "US",
+      "bio": "American journalist, professor at Harvard and UC Berkeley's Graduate School of Journalism. Author of The Botany of Desire (2001), The Omnivore's Dilemma (2006), In Defense of Food (2008), Cooked (2013), and How to Change Your Mind (2018).",
+      "oneLiner": "Follows a meal backward from the plate to the field and forward from the seed to the mind.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["clarifying", "analyzing"],
+      "narratives": [
+        {
+          "title": "The four meals structure",
+          "content": "The Omnivore's Dilemma is organised around four meals: one from industrial corn, one from industrial organic, one from a sustainable farm, and one Pollan hunted and foraged himself. He told the Guardian, 'I could have written a polemic. Instead I went and ate. Every time I caught myself about to make a general argument I went and tracked a specific calorie back to its source. If I could not trace it I did not write about it. The book writes itself if you do that.'"
+        },
+        {
+          "title": "The eater's manifesto",
+          "content": "In Defense of Food opens with what Pollan calls the eater's manifesto: 'Eat food. Not too much. Mostly plants.' He has said on NPR the whole book is an argument for those seven words, and that the reason it took 200 pages was that 'every modern reader needs 200 pages of history and biochemistry before the seven words sound obvious. If I had just said it on a sticker nobody would have believed it. By the end of the book, you laugh that anyone disagreed.'"
+        },
+        {
+          "title": "Taking psychedelics in a journalism book",
+          "content": "For How to Change Your Mind Pollan, in his early sixties and having never used psychedelics, arranged legal psilocybin and LSD sessions with underground guides. He told Terry Gross on Fresh Air, 'I decided I could not write about an experience I had not had. That is a rule I have always tried to follow. The consent form was terrifying. I signed it because a journalism book on consciousness without consciousness would be cowardice.'"
+        },
+        {
+          "title": "Walking the field as the research",
+          "content": "Pollan has said in a Longform interview that the method of every book begins with spending time on the actual land, farm, or kitchen until he has a specific fact he did not know before. 'Writing begins the moment I can describe something physical that most readers have never seen. I do not start at the keyboard. I start with my boots on.'"
+        }
+      ]
+    },
+    {
+      "name": "Rebecca Solnit",
+      "domain": "essays / cultural history",
+      "era": "1961-present",
+      "region": "US",
+      "bio": "American essayist and activist, author of more than twenty books including River of Shadows (2003, National Book Critics Circle Award), A Field Guide to Getting Lost (2005), A Paradise Built in Hell (2009), Men Explain Things to Me (2014), and Hope in the Dark (2004, reissued 2016).",
+      "oneLiner": "Writes long essays that wander like walks, then deliver a single sentence you end up repeating to yourself for a decade.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["expressing", "clarifying"],
+      "narratives": [
+        {
+          "title": "Not having the word mansplaining",
+          "content": "Solnit's 2008 essay Men Explain Things to Me opened with a story about a man at a party explaining to her a book she herself had just written. The essay went viral and the internet coined mansplaining in response. She has repeatedly said, on BBC Radio 4 and elsewhere, 'I did not invent that word. I am glad I did not, because I was writing about something larger than the neologism. The essay was about silence. The word was only a handle. Do not mistake the handle for the suitcase.'"
+        },
+        {
+          "title": "Walking as the method",
+          "content": "Wanderlust (2000) is a history of walking and also, Solnit has said in Orion Magazine, a description of how she writes. 'A book is a walk on a very long path. I do not plot. I go. If I am stuck I leave the desk and walk two or three miles. By the time I come back the stuck thing has resolved itself, because walking is a structural activity of the mind, not just the body. Thoreau knew. Nietzsche knew. I am not saying anything new. I am only saying it loudly.'"
+        },
+        {
+          "title": "Hope as discipline, not optimism",
+          "content": "In the 2016 foreword to Hope in the Dark she wrote, 'Hope is not a lottery ticket you can sit on the sofa and clutch. It is an axe you break down doors with in an emergency.' On Democracy Now she elaborated, 'Optimism and pessimism both assume we already know what is going to happen. Hope is the refusal to decide yet. Hope is the willingness to act because the future is uncertain. That is the distinction I keep making because most political writing confuses them.'"
+        },
+        {
+          "title": "A Paradise Built in Hell",
+          "content": "A Paradise Built in Hell (2009) is Solnit's history of the actual behaviour of people during disasters, from the 1906 San Francisco earthquake to Hurricane Katrina. She argues the dominant narrative of looting and panic is wrong, and that most people spontaneously organise mutual aid. She told the LA Times, 'I went into every archive expecting to find chaos because that is the story we are told. I found soup kitchens. I found strangers sharing blankets. Disaster movies lie. The actual record is a standing argument against the idea that human beings are by nature selfish.'"
+        }
+      ]
+    },
+    {
+      "name": "Timothy Snyder",
+      "domain": "Eastern European history",
+      "era": "1969-present",
+      "region": "US",
+      "bio": "American historian, the Richard C Levin Professor of History at Yale, specialist in the history of Central and Eastern Europe and the Holocaust. Author of Bloodlands (2010), Black Earth (2015), On Tyranny (2017), The Road to Unfreedom (2018), and Our Malady (2020).",
+      "oneLiner": "Writes about tyranny the way a doctor writes discharge instructions: 20 lessons, each short, each testable at home.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["analyzing", "influencing"],
+      "narratives": [
+        {
+          "title": "Writing On Tyranny in a weekend",
+          "content": "On Tyranny: Twenty Lessons from the Twentieth Century was drafted in a Facebook post on 15 November 2016, a week after the US presidential election. Snyder expanded it into a 126-page book published in February 2017. He told On Being, 'I had spent 25 years reading about the collapse of European democracies. The lessons were in my head as a paragraph each. I wrote them down in an afternoon because if I did not write them down that week they would be useless the week after. The book is short because urgency is short.'"
+        },
+        {
+          "title": "Do not obey in advance",
+          "content": "The first lesson in On Tyranny is 'Do not obey in advance. Most of the power of authoritarianism is freely given.' Snyder told the New Yorker, 'This is the historian's finding nobody wants to hear. The Nazis did not have to demand compliance from most institutions. The institutions offered compliance in the first week, without being asked. That is what I want readers to notice in themselves. The moment you ask what is the new rule, you are already adapting. The lesson is to notice the adapting and stop.'"
+        },
+        {
+          "title": "Lecturing from hospital",
+          "content": "In late 2019 Snyder was hospitalised for a ruptured appendix and a near-fatal infection. From his hospital bed he wrote Our Malady, connecting his experience of the US healthcare system to broader questions about freedom. He told The Guardian, 'I had 17 IVs in me and I was dictating a book into a recorder. It sounds dramatic. It was dictated because I did not know if I would have another chance. I decided that if I lived I would write about what health actually is, because I had just been shown how fragile it was. The hospital is the best classroom a historian of tyranny could have.'"
+        },
+        {
+          "title": "Walking students through Babi Yar",
+          "content": "For his Yale undergraduate course on the Holocaust in Eastern Europe Snyder has taken students to specific killing sites in Ukraine and Belarus. He told Yale News, 'My students cannot understand Bloodlands by reading it in a Connecticut classroom. They have to stand at a ravine in Kyiv and know that 33,000 human beings were murdered here in two days and the leaves still fell. It is not trauma porn. It is what it actually means for history to have happened on land.'"
+        }
+      ]
+    },
+    {
+      "name": "David Graeber",
+      "domain": "anthropology of value",
+      "era": "1961-2020",
+      "region": "US / UK",
+      "bio": "American anthropologist, professor at the London School of Economics at the time of his death. Author of Debt: The First 5,000 Years (2011), Bullshit Jobs (2018), and The Dawn of Everything (2021), co-authored with David Wengrow. Credited with coining the slogan 'We are the 99 percent' during Occupy Wall Street.",
+      "oneLiner": "Asked whether the thing everyone said was obviously true had ever actually been true, and then wrote the 500 pages it took to answer no.",
+      "primaryCategoryIntent": "synthesizing",
+      "secondaryCategoryIntents": ["analyzing", "influencing"],
+      "narratives": [
+        {
+          "title": "Debt and the origin of money",
+          "content": "Debt: The First 5,000 Years opens by attacking the economics textbook story that money emerged to replace inefficient barter. Graeber shows, through 200 years of anthropological fieldwork, that no society has ever run primarily on barter. He told Russ Roberts on EconTalk, 'I looked up every single footnote in the standard economic textbooks where this claim appeared. In every case the footnote led to another textbook, which led to another textbook, which led to Adam Smith making it up in a thought experiment. It is a story the discipline has been passing between textbooks for 240 years without checking. I checked.'"
+        },
+        {
+          "title": "The email that became Bullshit Jobs",
+          "content": "In August 2013 Graeber wrote an essay for Strike Magazine titled 'On the Phenomenon of Bullshit Jobs'. It went viral within 48 hours and crashed the site. People began writing to him about their own meaningless work. He turned the correspondence into a book, Bullshit Jobs (2018). He told the Guardian, 'I did not intend to write a book. The readers wrote it for me. I received thousands of emails from HR managers, insurance claim handlers, and middle managers who told me their job produced nothing and they knew it. I simply organised what they sent me.'"
+        },
+        {
+          "title": "Occupy and the horizontal method",
+          "content": "During Occupy Wall Street Graeber was among the anarchists who insisted the movement operate by consensus-based General Assembly rather than elect leaders. He co-wrote the proto-slogan 'We are the 99 percent'. He told The New Yorker, 'Most of what we did was to refuse shortcuts. We spent four hours making decisions that could have been made in ten minutes, because the shortcut would have reintroduced the hierarchies we were trying to leave behind. The slowness was the politics. Nobody writes about that because slowness is boring to report.'"
+        },
+        {
+          "title": "Finishing The Dawn of Everything",
+          "content": "Graeber and the archaeologist David Wengrow worked on The Dawn of Everything for a decade, arguing that the standard narrative of human history, from small egalitarian bands to inevitable hierarchical states, is wrong. Graeber died of pancreatitis in September 2020 three weeks after finishing the manuscript. In the preface Wengrow writes, 'David read the final draft in Venice and sent me the note, I think we did it. He died before he could see it published.' The book came out in November 2021 to international acclaim."
+        }
+      ]
+    }
+  ]
+}

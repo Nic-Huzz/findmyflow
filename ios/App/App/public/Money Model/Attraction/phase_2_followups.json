@@ -1,0 +1,108 @@
+{
+“phase_2_followup_logic”: {
+“description”: “After scoring phase-1 questions, identify the top 2 candidate offers. Then ask only the follow-up questions tied to those specific offers to validate eligibility or rule out options.”,
+"offers_to_followups": {
+
+  "win_your_money_back": [
+    {
+      "id": "FW1_tracking_requirement",
+      "text": "To confirm, can you reliably track customer progress or completion of required actions?",
+      "type": "single_choice",
+      "options": ["yes", "somewhat", "no"],
+      "store_as": "wywb_tracking_confirm"
+    },
+    {
+      "id": "FW2_refund_flexibility",
+      "text": "Would you be open to offering store credit or refunds if clients complete the required actions?",
+      "type": "single_choice",
+      "options": ["yes", "store_credit_only", "maybe", "no"],
+      "store_as": "wywb_refund_flexibility"
+    }
+  ],
+
+  "giveaway": [
+    {
+      "id": "FG1_prize_openness",
+      "text": "Are you willing to offer a meaningful prize or scholarship to attract attention?",
+      "type": "single_choice",
+      "options": ["yes", "maybe", "no"],
+      "store_as": "giveaway_prize_openness"
+    },
+    {
+      "id": "FG2_legal_comfort",
+      "text": "Do you feel comfortable complying with any legal requirements around giveaways (e.g., simple terms & conditions)?",
+      "type": "single_choice",
+      "options": ["yes", "maybe", "no", "not_sure"],
+      "store_as": "giveaway_legal_comfort"
+    }
+  ],
+
+  "decoy_offer": [
+    {
+      "id": "FD1_premium_vs_basic",
+      "text": "Do you currently have (or could you easily create) both a premium version and a more basic version of your offer?",
+      "type": "single_choice",
+      "options": ["yes", "could_create_one", "no"],
+      "store_as": "decoy_premium_basic_check"
+    }
+  ],
+
+  "buy_x_get_y_free": [
+    {
+      "id": "FB1_repeat_purchase_confirm",
+      "text": "Do customers typically buy your product or service multiple times (or consume it repeatedly)?",
+      "type": "single_choice",
+      "options": ["frequent", "occasional", "rare", "never"],
+      "store_as": "bxgy_repeat_confirm"
+    },
+    {
+      "id": "FB2_unit_cost_feasibility",
+      "text": "Could you afford to give away additional units without harming profitability?",
+      "type": "single_choice",
+      "options": ["yes", "maybe", "no"],
+      "store_as": "bxgy_cost_feasibility"
+    }
+  ],
+
+  "pay_less_now_or_pay_more_later": [
+    {
+      "id": "FP1_urgency_creation",
+      "text": "Can you create strong urgency with a clear deadline (e.g., price increases after a certain date)?",
+      "type": "single_choice",
+      "options": ["yes", "maybe", "no"],
+      "store_as": "pln_urgency_confirm"
+    },
+    {
+      "id": "FP2_delayed_cashflow_okay",
+      "text": "Are you comfortable collecting most revenue on the backend instead of the frontend?",
+      "type": "single_choice",
+      "options": ["yes", "maybe", "no"],
+      "store_as": "pln_cashflow_confirm"
+    }
+  ],
+
+  "free_with_consumption_to_upsell": [
+    {
+      "id": "FC1_free_sample_feasibility",
+      "text": "Can you offer a free sample, trial, or first session without hurting your margins?",
+      "type": "single_choice",
+      "options": ["yes", "maybe", "no"],
+      "store_as": "fwc_sample_feasibility"
+    },
+    {
+      "id": "FC2_clear_upsell_path",
+      "text": "Does trying your product or service once naturally lead to a paid upgrade?",
+      "type": "single_choice",
+      "options": ["yes", "somewhat", "no"],
+      "store_as": "fwc_upsell_path"
+    }
+  ]
+},
+
+"logic_rules": {
+  "ask_top_two_offers_only": true,
+  "max_followup_questions_per_offer": 2,
+  "skip_if_not_in_top_two": true,
+  "auto_rule_out_if_hard_no": true,
+  "if_both_offers_fail_followups": "fallback_to_next_best_offer"
+}

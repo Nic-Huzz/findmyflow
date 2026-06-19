@@ -1,0 +1,108 @@
+{
+"version": "1.0.0",
+"metadata": {
+"last_updated": "2025-12-04",
+"author": "Findmyflow",
+"description": "Attraction Offer Recommendation Engine Configuration"
+},
+
+"scoring": {
+“method”: “weighted_sum”,
+“normalize_by_max_possible_score”: true,
+“primary_min_confidence”: 0.55,
+“secondary_min_confidence”: 0.3,
+“experimental_min_confidence”: 0.2,
+“min_total_score_for_any_recommendation”: 3,
+“tie_breaker”: “higher_margin_then_stronger_backend”,
+“max_offers_to_return”: 3
+},
+
+“phase_1”: {
+“questions_file”: “question_flows.json”,
+“offers_file”: “offers.json”,
+“use_questions_in_order”: true,
+“store_answers_namespace”: “user_answers”,
+“steps”: [
+“Ask all questions in question_flows.json in order.”,
+“Store each answer under its ‘store_as’ key.”,
+“For each offer in offers.json, compute an initial total_score by summing scoring_weights for the selected options on Q1–Q10.”,
+“Estimate confidence for each offer as: confidence = total_score / max_possible_score.”,
+“Sort offers by total_score in descending order.”,
+“Keep the top N offers (defined in phase_2.ask_followups_for_top_n_offers) as Phase-2 candidates.”
+]
+},
+
+“phase_2”: {
+“followups_file”: “phase_2_followups.json”,
+“ask_followups_for_top_n_offers”: 2,
+“max_followups_per_offer”: 2,
+“auto_skip_if_not_candidate”: true,
+“apply_followup_disqualifiers”: true,
+“followup_disqualifier_values”: [
+“no”,
+“never”
+],
+“steps”: [
+“Identify the top N candidate offers based on Phase-1 total_score and confidence.”,
+“For each candidate offer, look up its required_followups in offers.json and the corresponding followup questions in phase_2_followups.json.”,
+“Ask only those followup questions that have not yet been answered.”,
+“If a followup answer matches a disallowed or hard-no value (for example ‘no’ or ‘never’), mark that offer as ineligible.”,
+“Recompute the candidate list by removing ineligible offers.”,
+“Re-rank the remaining offers by total_score and confidence for final output.”
+]
+},
+
+“eligibility”: {
+“respect_hard_disqualifiers”: true,
+“hard_disqualifier_field”: “hard_disqualifiers”,
+“rules”: [
+“Before scoring, check each offer’s hard_disqualifiers against stored answers. If a user’s answer is in the disallowed list for a field, mark the offer as ineligible.”,
+“After followups, re-check eligibility if followup answers reference any fields used in hard_disqualifiers.”,
+“Do not recommend any offer marked ineligible, regardless of score.”
+]
+},
+
+“fallbacks”: {
+“if_no_offer_eligible”: “explain_constraints_and_recommend_safest_generic_path”,
+“if_all_confidence_below_primary_threshold”: “recommend_best_offer_with_low_confidence_warning”,
+“if_all_confidence_below_secondary_threshold”: “offer_testing_plan_instead_of_single_recommendation”,
+“generic_low_risk_suggestion”: “suggest_simple_discount_or_content_lead_magnet_if_margins_low_and_no_backend”
+},
+
+“output”: {
+“max_offers_to_show”: 3,
+“labels”: {
+“primary”: “Primary Recommendation”,
+“secondary”: “Secondary Recommendation”,
+“experimental”: “Experimental / Test Offer”
+},
+“include_fields”: [
+“offer_id”,
+“name”,
+“confidence”,
+“reasoning_summary”,
+“funnel_template”,
+“metrics”
+],
+“reasoning_template”: “Summarize why this offer fits based on business_model, margin, capacity, tracking_ability, backend_strength, repeat_purchase_behavior, primary_goal, and lead_preference.”
+},
+
+"global_rules": {
+"require_upsell_warning_if_no_backend": true,
+"legal_disclaimer_for_giveaways": "If you choose a giveaway-style attraction offer, always check your local laws around sweepstakes, lotteries, and promotions, and publish clear terms and conditions.",
+"prefer_store_credit_over_cash_refund": true,
+"never_overpromise_results": true,
+"prioritize_business_sustainability_over_aggressive_front_end": true
+},
+
+"ui": {
+"show_progress_indicator": true,
+"animate_transitions": true,
+"transition_delay_ms": 300,
+"show_question_numbers": true,
+"allow_back_navigation": true,
+"save_progress": true,
+"show_confidence_scores": true,
+"show_why_this_works_section": true
+}
+}

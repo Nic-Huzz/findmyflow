@@ -1,0 +1,108 @@
+
+{
+  "version": "1.0.0",
+  "metadata": {
+    "name": "Lead Magnet Flow - Test Version",
+    "description": "A short introduction flow to help users identify their Essence and Protective Voices and unlock their profile."
+  },
+  "steps": [
+    {
+      "step": "lead_q1_intro_name",
+      "step_order_index": 1.0,
+      "prompt": "Welcome!🌞 I'm Huzz 👋🏼\n\nEver since I quit my job two and a half years ago, I've developed an unwavering belief in 'Flow'.\n\nThe idea that there's a unique path that only you could walk due to your combination of skills, experiences and circumstances.\n\nI believe when you find your flow — aligning what gives you flow internally, with what's flowing externally — life becomes crazy and magical.\n\nThis webapp is designed to help you find your flow. It has everything I wish I had on my journey from the beginning.\n\nSo you can go from idea to monetising your mission as fast as possible.\n\nWhat do I call you?",
+      "tag_as": "user_name",
+      "store_as": "lead_q1_name_complete",
+      "instructions_to_gpt": "Wait for short name. Store exactly as provided. Do not proceed until captured."
+    },
+    {
+      "step": "lead_q2_essence_intro",
+      "step_order_index": 2.0,
+      "required_inputs": ["lead_q1_name_complete"],
+      "prompt": "Perfect, {{user_name}}.\n\nHere's what I've learned: every river has a natural current.\n\nA direction it flows most powerfully. A way it serves the world most naturally.\n\nThis is your essence—the unique way your energy moves when nothing blocks it.\n\n**There are 8 Essence Voices. Each one flows in a unique way to create its impact.**\n\nOne will resonate as the version of you that's most alive and authentic.\n\nWhen you serve from this place, you're at your most impactful and magnetic.\n\nSwipe right on the ones that resonate. Left on the ones that don't.",
+      "options": [
+        { "label": "Yes, let's go!", "value": "yes" }
+      ],
+      "tag_as": "lead_q2_essence_intro",
+      "store_as": "lead_q2_essence_intro_complete"
+    },
+    {
+      "step": "lead_q3_essence_swipe",
+      "step_order_index": 3.0,
+      "required_inputs": ["lead_q2_essence_intro_complete"],
+      "step_type": "hybrid_swipe",
+      "archetype_type": "essence",
+      "prompt": "We'll start by discovering your Essence Voice — who you naturally are when fear isn't driving.\n\nYour essence is the real you, the version of yourself that feels most alive and authentic.\n\nWhich of these feels most like the real you? Swipe right on the ones that resonate, left on the ones that don't.",
+      "tag_as": "essence_archetype_selection",
+      "store_as": "lead_q3_essence_archetype_complete"
+    },
+    {
+      "step": "lead_q4_essence_reflection",
+      "step_order_index": 4.0,
+      "required_inputs": ["lead_q3_essence_archetype_complete"],
+      "prompt": "{{ESSENCE_REVEAL(essence_archetype_selection)}}\n\nDoes this feel like you?",
+      "options": [
+        { "label": "Yes, that feels true", "value": "yes" },
+        { "label": "Hmm, show me the list again", "value": "no" }
+      ],
+      "tag_as": "essence_archetype_reflect",
+      "store_as": "lead_q4_essence_reflection_complete"
+    },
+    {
+      "step": "lead_q5_protective_intro",
+      "step_order_index": 5.0,
+      "required_inputs": ["lead_q4_essence_reflection_complete"],
+      "prompt": "Now {{user_name}}, let's explore what's been blocking your flow.\n\nThese are protective patterns you developed when you were younger to keep yourself safe from failure, rejection, or judgement.\n\n*The Perfectionist. The People Pleaser. The Controller. The Performer. The Ghost.*\n\nThey were so effective they've now become the thing blocking you from sharing your {{essence_archetype}} gifts with the world.\n\nLet's identify which one is showing up most in the pursuit of your ambitions.\n\nSwipe right on the ones that sound most familiar. Left on the ones that don't.",
+      "options": [
+        { "label": "Yes, let's go!", "value": "yes" }
+      ],
+      "tag_as": "lead_q5_protective_intro",
+      "store_as": "lead_q5_protective_intro_complete"
+    },
+    {
+      "step": "lead_q6_protective_swipe",
+      "step_order_index": 6.0,
+      "required_inputs": ["lead_q5_protective_intro_complete"],
+      "step_type": "hybrid_swipe",
+      "archetype_type": "protective",
+      "prompt": "Now let's identify what's been blocking you from living as your essence.\n\nWhen it comes to your ambitions, you likely have protective patterns — brilliant but outdated behaviours that keep you safe from failure, rejection, or judgment.\n\nWhich protective patterns sound familiar? Swipe right on the ones that resonate, left on the ones that don't.",
+      "tag_as": "protective_archetype_selection",
+      "store_as": "lead_q6_protective_archetype_complete"
+    },
+    {
+      "step": "lead_q7_protective_reflection",
+      "step_order_index": 7.0,
+      "required_inputs": ["lead_q6_protective_archetype_complete"],
+      "prompt": "{{PROTECTIVE_MIRROR(protective_archetype_selection)}}\n\nDoes this sound like you?",
+      "options": [
+        { "label": "Yes, that's me", "value": "confirm" },
+        { "label": "Hmm, show me the list again", "value": "change" }
+      ],
+      "tag_as": "protective_archetype_reflect",
+      "store_as": "lead_q7_protective_reflection_complete",
+      "instructions_to_gpt": "If value is 'confirm', acknowledge briefly and continue. If value is 'change', return the user to lead_q6_protective_swipe to choose again."
+    },
+    {
+      "step": "lead_q8_email_capture",
+      "step_order_index": 8.0,
+      "required_inputs": ["lead_q7_protective_reflection_complete"],
+      "prompt": "Perfect, {{user_name}}.\n\nYou've now identified your {{essence_archetype}} current and the {{protective_archetype}} pattern that's slowing it down.\n\nNow here's what happens next:\n\nI've created a personalised profile that shows you how to navigate from protection back to flow.\n\nEnter your email below and I'll send you a link to your full profile.",
+      "tag_as": "user_email",
+      "store_as": "lead_q8_email_capture_complete",
+      "instructions_to_gpt": "Capture valid email address and store. Trigger Supabase profile creation.",
+      "save_to_db": true
+    },
+    {
+      "step": "lead_q9_persona",
+      "step_order_index": 9.0,
+      "required_inputs": ["lead_q8_email_capture_complete"],
+      "prompt": "Sweet — you just received an email to see your profile.\n\nFinal question: where are you now on your return to that essence?\n\n1) Vibe Seeker: Disconnected but ready to reconnect\n2) Vibe Riser: Connected but wanting to live more in alignment with it\n3) Movement Maker: Already leading from it and wanting to scale my impact",
+      "options": [
+        { "label": "Vibe Seeker", "value": "Vibe Seeker" },
+        { "label": "Vibe Riser", "value": "Vibe Riser" },
+        { "label": "Movement Maker", "value": "Movement Maker" }
+      ],
+      "tag_as": "persona_selection",
+      "store_as": "lead_q9_persona_complete"
+    }
+  ]
+}

@@ -1,0 +1,350 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "total_questions": 10,
+    "estimated_completion_time_minutes": 3,
+    "last_updated": "2025-12-04"
+  },
+  "questions": [
+    {
+      "id": "q1_business_model",
+      "question": "What type of business or product do you offer?",
+      "subtext": "Understanding your business model helps us recommend the right continuity approach",
+      "options": [
+        {
+          "label": "Physical Consumables",
+          "value": "physical_consumables",
+          "description": "Products customers use up and need to reorder regularly"
+        },
+        {
+          "label": "Digital Products / Content",
+          "value": "digital_products_content",
+          "description": "Online courses, content libraries, memberships"
+        },
+        {
+          "label": "SaaS / Software",
+          "value": "saas_software",
+          "description": "Software platforms or web applications"
+        },
+        {
+          "label": "Coaching / Consulting",
+          "value": "coaching_consulting",
+          "description": "1-on-1 or group coaching, consulting services"
+        },
+        {
+          "label": "Service-Based Business",
+          "value": "service_based",
+          "description": "Ongoing services like marketing, cleaning, maintenance"
+        },
+        {
+          "label": "Hybrid Product + Service",
+          "value": "hybrid_product_service",
+          "description": "Combination of products and services"
+        }
+      ]
+    },
+    {
+      "id": "q2_current_revenue_model",
+      "question": "How do you currently charge customers?",
+      "subtext": "Your existing pricing model influences which continuity offer will work best",
+      "options": [
+        {
+          "label": "One-Time Purchases Only",
+          "value": "one_time_only",
+          "description": "Customers pay once and that's it"
+        },
+        {
+          "label": "Recurring Subscriptions",
+          "value": "recurring_subscriptions",
+          "description": "Already charging monthly or annually"
+        },
+        {
+          "label": "Mix of Both",
+          "value": "mix_both",
+          "description": "Some one-time, some recurring"
+        },
+        {
+          "label": "Payment Plans",
+          "value": "payment_plans",
+          "description": "Breaking larger payments into installments"
+        },
+        {
+          "label": "Retainer Contracts",
+          "value": "retainer_contracts",
+          "description": "Fixed monthly retainers for ongoing work"
+        }
+      ]
+    },
+    {
+      "id": "q3_gross_margins",
+      "question": "What are your typical gross margins?",
+      "subtext": "Higher margins give you more flexibility with continuity offers. Margin = (Price - COGS) / Price × 100%",
+      "options": [
+        {
+          "label": "Under 30%",
+          "value": "under_30_percent",
+          "description": "Low margin, high cost of goods/delivery"
+        },
+        {
+          "label": "30% to 50%",
+          "value": "30_to_50_percent",
+          "description": "Moderate margins"
+        },
+        {
+          "label": "50% to 70%",
+          "value": "50_to_70_percent",
+          "description": "Good margins"
+        },
+        {
+          "label": "Over 70%",
+          "value": "over_70_percent",
+          "description": "Excellent margins (typical for digital/SaaS)"
+        },
+        {
+          "label": "Not Sure",
+          "value": "not_sure",
+          "description": "Need to calculate this"
+        }
+      ]
+    },
+    {
+      "id": "q4_repurchase_frequency",
+      "question": "How often do customers naturally need your product/service again?",
+      "subtext": "Natural repurchase frequency indicates continuity potential",
+      "options": [
+        {
+          "label": "Weekly or More Often",
+          "value": "weekly_or_more",
+          "description": "Very frequent consumption or need"
+        },
+        {
+          "label": "Monthly",
+          "value": "monthly",
+          "description": "Regular monthly need or consumption"
+        },
+        {
+          "label": "Quarterly",
+          "value": "quarterly",
+          "description": "Every 3 months"
+        },
+        {
+          "label": "Annually",
+          "value": "annually",
+          "description": "Once per year"
+        },
+        {
+          "label": "One-Time Only",
+          "value": "one_time_only",
+          "description": "Customers typically don't rebuy"
+        },
+        {
+          "label": "Varies Widely",
+          "value": "varies_widely",
+          "description": "No predictable pattern"
+        }
+      ]
+    },
+    {
+      "id": "q5_ongoing_value_capability",
+      "question": "Can you deliver NEW ongoing value each month (not just one-time education)?",
+      "subtext": "Continuity requires ongoing value, not just access to static content",
+      "options": [
+        {
+          "label": "Yes, Easily",
+          "value": "yes_easily",
+          "description": "Already have systems for ongoing value creation"
+        },
+        {
+          "label": "Yes, With Effort",
+          "value": "yes_with_effort",
+          "description": "Can create ongoing value but need to build it"
+        },
+        {
+          "label": "Maybe, Limited",
+          "value": "maybe_limited",
+          "description": "Some ongoing value possible but limited"
+        },
+        {
+          "label": "No, One-Time Value",
+          "value": "no_one_time_value",
+          "description": "Value is delivered once, no ongoing component"
+        },
+        {
+          "label": "Need to Bundle Services",
+          "value": "need_to_bundle",
+          "description": "Would need to add support/services to create ongoing value"
+        }
+      ]
+    },
+    {
+      "id": "q6_setup_onboarding_cost",
+      "question": "How much does it cost you to onboard a new customer?",
+      "subtext": "Higher onboarding costs favor 'Waived Fee' continuity models",
+      "options": [
+        {
+          "label": "Under $500",
+          "value": "under_500",
+          "description": "Minimal setup costs"
+        },
+        {
+          "label": "$500 to $2,000",
+          "value": "500_to_2000",
+          "description": "Moderate onboarding investment"
+        },
+        {
+          "label": "$2,000 to $5,000",
+          "value": "2000_to_5000",
+          "description": "Significant setup required"
+        },
+        {
+          "label": "Over $5,000",
+          "value": "over_5000",
+          "description": "Major onboarding/setup process"
+        },
+        {
+          "label": "Minimal to None",
+          "value": "minimal_to_none",
+          "description": "Little to no setup required"
+        }
+      ]
+    },
+    {
+      "id": "q7_customer_retention",
+      "question": "What's your current customer retention/churn situation?",
+      "subtext": "Understanding retention helps us recommend the right incentive structure",
+      "options": [
+        {
+          "label": "High Retention, Low Churn",
+          "value": "high_retention_low_churn",
+          "description": "Customers stick around for a long time"
+        },
+        {
+          "label": "Moderate Retention",
+          "value": "moderate_retention",
+          "description": "Some churn but manageable"
+        },
+        {
+          "label": "High Churn Problem",
+          "value": "high_churn_problem",
+          "description": "Losing customers quickly"
+        },
+        {
+          "label": "No Repeat Customers",
+          "value": "no_repeat_customers",
+          "description": "Currently all one-time transactions"
+        },
+        {
+          "label": "Just Starting, No Data",
+          "value": "just_starting_no_data",
+          "description": "Too new to have retention metrics"
+        }
+      ]
+    },
+    {
+      "id": "q8_average_transaction_value",
+      "question": "What's your average transaction or project value?",
+      "subtext": "Transaction size influences which continuity model works best",
+      "options": [
+        {
+          "label": "Under $100",
+          "value": "under_100",
+          "description": "Low-ticket offers"
+        },
+        {
+          "label": "$100 to $500",
+          "value": "100_to_500",
+          "description": "Mid-ticket offers"
+        },
+        {
+          "label": "$500 to $2,000",
+          "value": "500_to_2000",
+          "description": "Higher-ticket offers"
+        },
+        {
+          "label": "$2,000 to $10,000",
+          "value": "2000_to_10000",
+          "description": "Premium pricing"
+        },
+        {
+          "label": "Over $10,000",
+          "value": "over_10000",
+          "description": "High-end/enterprise pricing"
+        }
+      ]
+    },
+    {
+      "id": "q9_primary_continuity_goal",
+      "question": "What's your PRIMARY goal with continuity/recurring revenue?",
+      "subtext": "Your goal determines the best continuity strategy",
+      "options": [
+        {
+          "label": "Predictable, Stable Revenue",
+          "value": "predictable_stable_revenue",
+          "description": "Want to know revenue 30-90 days in advance"
+        },
+        {
+          "label": "Increase Customer LTV",
+          "value": "increase_customer_ltv",
+          "description": "Maximize total revenue per customer over time"
+        },
+        {
+          "label": "Reduce Customer Acquisition Cost",
+          "value": "reduce_customer_acquisition_cost",
+          "description": "Get more value from existing customers"
+        },
+        {
+          "label": "Create Passive Income",
+          "value": "create_passive_income",
+          "description": "Build automatic recurring income stream"
+        },
+        {
+          "label": "Increase Business Valuation",
+          "value": "increase_business_valuation",
+          "description": "Build sellable asset with recurring revenue"
+        },
+        {
+          "label": "Improve Cash Flow",
+          "value": "improve_cash_flow",
+          "description": "Get more money upfront or regularly"
+        }
+      ]
+    },
+    {
+      "id": "q10_customer_commitment_readiness",
+      "question": "How ready are your customers to commit long-term?",
+      "subtext": "Customer psychology determines which incentive structure works best",
+      "options": [
+        {
+          "label": "Very Ready & Loyal",
+          "value": "very_ready_loyal",
+          "description": "Customers love us and want to stay"
+        },
+        {
+          "label": "Moderately Ready",
+          "value": "moderately_ready",
+          "description": "Open to commitment with right offer"
+        },
+        {
+          "label": "Hesitant, Need Incentive",
+          "value": "hesitant_need_incentive",
+          "description": "Need strong reason to commit"
+        },
+        {
+          "label": "Prefer Flexibility",
+          "value": "prefer_flexibility",
+          "description": "Want to cancel anytime without penalty"
+        },
+        {
+          "label": "Price Sensitive",
+          "value": "price_sensitive",
+          "description": "Main concern is getting best price"
+        },
+        {
+          "label": "Not Sure Yet",
+          "value": "not_sure_yet",
+          "description": "Haven't tested continuity offers before"
+        }
+      ]
+    }
+  ]
+}

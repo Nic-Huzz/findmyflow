@@ -1,0 +1,367 @@
+{
+  "meta": {
+    "version": "2.0",
+    "generatedAt": "2026-05-09",
+    "totalProfiles": 33,
+    "sliders": {
+      "workRhythm": {
+        "min": 1,
+        "max": 5,
+        "label": "Marathon ↔ Sprints"
+      },
+      "fuelType": {
+        "min": 1,
+        "max": 5,
+        "label": "Fire ↔ Purpose"
+      },
+      "orientation": {
+        "min": 1,
+        "max": 5,
+        "label": "Solo/Deep ↔ Social/Enterprising"
+      },
+      "knowledgeStyle": {
+        "min": 1,
+        "max": 5,
+        "label": "Analytical ↔ Intuitive"
+      },
+      "scaleApproach": {
+        "min": 1,
+        "max": 5,
+        "label": "Craft ↔ Empire"
+      }
+    },
+    "notes": "33 live experience creators. Sliders match the Play Profile quiz output (workRhythm, fuelType from user sliders; orientation, knowledgeStyle inferred from games; scaleApproach from user slider). Full 221-profile archive at public/data/archived/experienceCreatorDNA-221-full.json"
+  },
+  "profiles": [
+    {
+      "name": "Phil Jackson",
+      "experienceType": "facilitation",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 5,
+      "scaleApproach": 3,
+      "confidence": 88
+    },
+    {
+      "name": "Tenzin Palmo",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 1,
+      "knowledgeStyle": 5,
+      "scaleApproach": 2,
+      "confidence": 90
+    },
+    {
+      "name": "Gabor Mate",
+      "experienceType": "certification",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 88
+    },
+    {
+      "name": "Brené Brown",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 3,
+      "scaleApproach": 4,
+      "confidence": 90
+    },
+    {
+      "name": "Tony Robbins",
+      "experienceType": "live_events",
+      "workRhythm": 5,
+      "fuelType": 3,
+      "orientation": 5,
+      "knowledgeStyle": 4,
+      "scaleApproach": 5,
+      "confidence": 92
+    },
+    {
+      "name": "Wim Hof",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 5,
+      "scaleApproach": 4,
+      "confidence": 90
+    },
+    {
+      "name": "Esther Perel",
+      "experienceType": "media_training",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 5,
+      "scaleApproach": 3,
+      "confidence": 90
+    },
+    {
+      "name": "Priya Parker",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 3,
+      "scaleApproach": 2,
+      "confidence": 88
+    },
+    {
+      "name": "Jay Shetty",
+      "experienceType": "certification",
+      "workRhythm": 2,
+      "fuelType": 2,
+      "orientation": 4,
+      "knowledgeStyle": 4,
+      "scaleApproach": 5,
+      "confidence": 85
+    },
+    {
+      "name": "Gabby Bernstein",
+      "experienceType": "certification",
+      "workRhythm": 4,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 5,
+      "scaleApproach": 4,
+      "confidence": 85
+    },
+    {
+      "name": "Eckhart Tolle",
+      "experienceType": "book_newsletter",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 1,
+      "knowledgeStyle": 5,
+      "scaleApproach": 2,
+      "confidence": 92
+    },
+    {
+      "name": "Deepak Chopra",
+      "experienceType": "certification",
+      "workRhythm": 4,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 5,
+      "confidence": 90
+    },
+    {
+      "name": "Jack Kornfield",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 3,
+      "scaleApproach": 3,
+      "confidence": 90
+    },
+    {
+      "name": "Sam Harris",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 2,
+      "orientation": 1,
+      "knowledgeStyle": 1,
+      "scaleApproach": 3,
+      "confidence": 90
+    },
+    {
+      "name": "Thich Nhat Hanh",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 92
+    },
+    {
+      "name": "Seane Corn",
+      "experienceType": "retreat",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 4,
+      "knowledgeStyle": 4,
+      "scaleApproach": 2,
+      "confidence": 90
+    },
+    {
+      "name": "Joe Dispenza",
+      "experienceType": "retreat",
+      "workRhythm": 3,
+      "fuelType": 2,
+      "orientation": 3,
+      "knowledgeStyle": 2,
+      "scaleApproach": 5,
+      "confidence": 90
+    },
+    {
+      "name": "Aubrey Marcus",
+      "experienceType": "cohort",
+      "workRhythm": 4,
+      "fuelType": 4,
+      "orientation": 4,
+      "knowledgeStyle": 3,
+      "scaleApproach": 4,
+      "confidence": 90
+    },
+    {
+      "name": "Ram Dass",
+      "experienceType": "book_newsletter",
+      "workRhythm": 1,
+      "fuelType": 3,
+      "orientation": 2,
+      "knowledgeStyle": 5,
+      "scaleApproach": 2,
+      "confidence": 90
+    },
+    {
+      "name": "Sadhguru",
+      "experienceType": "certification",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 5,
+      "confidence": 92
+    },
+    {
+      "name": "Marianne Williamson",
+      "experienceType": "live_events",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 4,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 90
+    },
+    {
+      "name": "Mooji",
+      "experienceType": "retreat",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 2,
+      "knowledgeStyle": 5,
+      "scaleApproach": 2,
+      "confidence": 88
+    },
+    {
+      "name": "Yung Pueblo",
+      "experienceType": "book_newsletter",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 1,
+      "knowledgeStyle": 4,
+      "scaleApproach": 3,
+      "confidence": 90
+    },
+    {
+      "name": "Sahara Rose",
+      "experienceType": "certification",
+      "workRhythm": 4,
+      "fuelType": 3,
+      "orientation": 4,
+      "knowledgeStyle": 4,
+      "scaleApproach": 4,
+      "confidence": 90
+    },
+    {
+      "name": "Sri Sri Ravi Shankar",
+      "experienceType": "certification",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 5,
+      "scaleApproach": 5,
+      "confidence": 92
+    },
+    {
+      "name": "Vishen Lakhiani",
+      "experienceType": "cohort",
+      "workRhythm": 4,
+      "fuelType": 3,
+      "orientation": 5,
+      "knowledgeStyle": 4,
+      "scaleApproach": 5,
+      "confidence": 88
+    },
+    {
+      "name": "Michael Singer",
+      "experienceType": "book_newsletter",
+      "workRhythm": 1,
+      "fuelType": 1,
+      "orientation": 1,
+      "knowledgeStyle": 4,
+      "scaleApproach": 1,
+      "confidence": 90
+    },
+    {
+      "name": "Michael Beckwith",
+      "experienceType": "live_events",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 4,
+      "knowledgeStyle": 5,
+      "scaleApproach": 3,
+      "confidence": 87
+    },
+    {
+      "name": "Radha Agrawal",
+      "experienceType": "live_events",
+      "workRhythm": 4,
+      "fuelType": 3,
+      "orientation": 5,
+      "knowledgeStyle": 5,
+      "scaleApproach": 4,
+      "confidence": 85
+    },
+    {
+      "name": "Meghan Pappenheim",
+      "experienceType": "live_events",
+      "workRhythm": 2,
+      "fuelType": 1,
+      "orientation": 3,
+      "knowledgeStyle": 4,
+      "scaleApproach": 2,
+      "confidence": 82
+    },
+    {
+      "name": "Jeff Krasno",
+      "experienceType": "live_events",
+      "workRhythm": 4,
+      "fuelType": 1,
+      "orientation": 4,
+      "knowledgeStyle": 3,
+      "scaleApproach": 4,
+      "confidence": 85
+    },
+    {
+      "name": "Gabrielle Roth",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 3,
+      "knowledgeStyle": 5,
+      "scaleApproach": 3,
+      "confidence": 90
+    },
+    {
+      "name": "Larry Harvey",
+      "experienceType": "facilitation",
+      "workRhythm": 2,
+      "fuelType": 3,
+      "orientation": 4,
+      "knowledgeStyle": 5,
+      "scaleApproach": 4,
+      "confidence": 88
+    }
+  ]
+}

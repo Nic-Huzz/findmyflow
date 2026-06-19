@@ -1,0 +1,649 @@
+{
+  "meta": {
+    "version": "proposal-1.0",
+    "generatedAt": "2026-04-07",
+    "inputTags": 524,
+    "clusterCount": 13,
+    "method": "Bottom-up clustering of 524 free-form problem tags from 275 people (75 founders + 200 non-founders)"
+  },
+  "clusters": [
+    {
+      "id": "children_unseen",
+      "name": "Children not being seen",
+      "tagline": "Children dismissed, labelled, hit, or left to face the worst alone",
+      "turnsInto": "Child development consulting, play therapy, progressive education, parenting coaching, youth advocacy, family support services",
+      "size": 42,
+      "essence": "The underlying brokenness is: adults treating children as less than whole people, whether through neglect, control, labels, or violence",
+      "representativeTags": [
+        "children being treated as less than whole people",
+        "adults imposing their pace on children instead of watching",
+        "children labelled uneducable by institutions that never tried",
+        "children facing the darkest moments of history alone",
+        "adults remembering children as cartoons instead of people",
+        "children not learning because nobody in the building likes them",
+        "teachers blaming students for not learning instead of examining their own teaching",
+        "traumatised children being fixed instead of understood"
+      ],
+      "representativePeople": ["Fred Rogers", "Maria Montessori", "Janusz Korczak", "Vivian Gussin Paley", "Dan Hughes", "Donald Winnicott", "Marva Collins", "Rita Pierson", "Jerome Bruner", "Emmi Pikler"],
+      "placemakes": [
+        {
+          "label": "Children being treated as less than whole people",
+          "example": "Like Fred Rogers airing a full minute of silence on television because he believed children deserved time to think about who loved them",
+          "anchorPerson": "Fred Rogers"
+        },
+        {
+          "label": "Children labelled uneducable by institutions that never tried",
+          "example": "Like Maria Montessori taking children from asylums labelled uneducable, designing tactile materials, and watching them pass standard Italian public school exams",
+          "anchorPerson": "Maria Montessori"
+        },
+        {
+          "label": "Children facing the darkest moments of history alone",
+          "example": "Like Janusz Korczak refusing offers to escape the Warsaw Ghetto, reportedly saying 'You do not leave children at a time like this,' then walking with 192 orphans to the Umschlagplatz",
+          "anchorPerson": "Janusz Korczak"
+        },
+        {
+          "label": "Children not learning because nobody in the building likes them",
+          "example": "Like Rita Pierson grounding her whole case on James Comer's line: 'No significant learning can occur without a significant relationship'",
+          "anchorPerson": "Rita Pierson"
+        },
+        {
+          "label": "Traumatised children being fixed instead of understood",
+          "example": "Like Dan Hughes coining the PACE stance and saying 'If you're not curious, you're fixing. And traumatised children know when they are being fixed'",
+          "anchorPerson": "Dan Hughes"
+        }
+      ]
+    },
+    {
+      "id": "voices_silenced",
+      "name": "Voices being silenced",
+      "tagline": "People whose voice was taken, suppressed, punished, or never allowed to exist",
+      "turnsInto": "Advocacy, voice coaching, expressive arts therapy, storytelling workshops, media platforms, memoir facilitation, protest art",
+      "size": 52,
+      "essence": "The underlying brokenness is: people being prevented from saying what they see, feel, or know, whether by governments, institutions, culture, or trauma",
+      "representativeTags": [
+        "childhood trauma stealing a person's voice",
+        "women being punished for speaking about what is done to them",
+        "military dictatorships silencing artists who give people a voice",
+        "citizens being forced to perform lies they no longer believe",
+        "Black talent being rejected by institutions that claim to value merit",
+        "speaking truth to power costing you your country",
+        "women's voices being silenced in public life for thousands of years",
+        "governments silencing journalists who expose the truth"
+      ],
+      "representativePeople": ["Maya Angelou", "Mahmoud Darwish", "Mercedes Sosa", "Fela Kuti", "Miriam Makeba", "Václav Havel", "Anna Politkovskaya", "Nawal El Saadawi", "Nina Simone", "Mary Beard"],
+      "placemakes": [
+        {
+          "label": "Childhood trauma stealing a person's voice",
+          "example": "Like Maya Angelou going mute for nearly five years at age eight after being raped, until a family friend coaxed her out of silence by asking her to read poetry aloud",
+          "anchorPerson": "Maya Angelou"
+        },
+        {
+          "label": "Military dictatorships silencing artists who give people a voice",
+          "example": "Like Mercedes Sosa being arrested on stage mid-performance in 1979, along with her entire audience, then forced into exile for three years",
+          "anchorPerson": "Mercedes Sosa"
+        },
+        {
+          "label": "Truth-tellers being murdered to maintain silence",
+          "example": "Like Anna Politkovskaya warning 'People sometimes pay with their lives for saying aloud what they think,' then being shot dead in her elevator ten months later",
+          "anchorPerson": "Anna Politkovskaya"
+        },
+        {
+          "label": "Women's voices being silenced in public life for thousands of years",
+          "example": "Like Mary Beard tracing silencing from Homer's Odyssey to Hillary Clinton, quoting Telemachus telling his mother to go and weave: 'That line is 2,800 years old and it still works in 2017'",
+          "anchorPerson": "Mary Beard"
+        },
+        {
+          "label": "Speaking truth to power costing you your country",
+          "example": "Like Miriam Makeba testifying at the UN asking for an arms embargo on South Africa, then having her citizenship revoked, leaving her stateless for nearly 30 years",
+          "anchorPerson": "Miriam Makeba"
+        }
+      ]
+    },
+    {
+      "id": "bodies_suffering",
+      "name": "Bodies in pain",
+      "tagline": "Physical suffering that nobody names, treats, or takes seriously enough",
+      "turnsInto": "Health coaching, chronic illness support, pain management, somatic therapy, end-of-life care, sleep consulting, body-based healing practices",
+      "size": 34,
+      "essence": "The underlying brokenness is: bodies in pain being ignored, undertreated, or separated from the person inside them",
+      "representativeTags": [
+        "a body in constant pain with no way to express what that feels like",
+        "people dying in pain because hospitals weren't designed for dying",
+        "society treating sleep deprivation as a badge of honour",
+        "people dying in surgery from errors a simple checklist could prevent",
+        "poor people dying of treatable diseases because the system decided they weren't worth treating",
+        "patients being reduced to diagnoses instead of seen as whole people",
+        "illness being loaded with shame through metaphors like battle and invasion",
+        "burnout being glorified as the price of success"
+      ],
+      "representativePeople": ["Frida Kahlo", "Cicely Saunders", "Paul Farmer", "Atul Gawande", "Matthew Walker", "Oliver Sacks", "Virginia Apgar", "Florence Nightingale", "Arianna Huffington", "Susan Sontag"],
+      "placemakes": [
+        {
+          "label": "A body in constant pain with no way to express what that feels like",
+          "example": "Like Frida Kahlo, whose bus accident at 18 broke her spine in three places and her right leg in eleven, painting from a mirror above her hospital bed for the rest of her life",
+          "anchorPerson": "Frida Kahlo"
+        },
+        {
+          "label": "People dying in pain because hospitals were not designed for dying",
+          "example": "Like Cicely Saunders introducing the concept of total pain, arguing that opioid dosing had to be anticipatory rather than waiting for the patient to beg, then dying in her own hospice using the protocols she designed",
+          "anchorPerson": "Cicely Saunders"
+        },
+        {
+          "label": "Poor people dying of treatable diseases because the system decided they were not worth treating",
+          "example": "Like Paul Farmer walking eight hours to reach one patient because he argued the rural poor deserved the same treatment standards as patients at Harvard hospitals",
+          "anchorPerson": "Paul Farmer"
+        },
+        {
+          "label": "Society treating sleep deprivation as a badge of honour",
+          "example": "Like Matthew Walker showing that even a one-hour sleep loss from daylight saving causes measurable spikes in heart attacks",
+          "anchorPerson": "Matthew Walker"
+        },
+        {
+          "label": "Burnout being glorified as the price of success",
+          "example": "Like Arianna Huffington collapsing from exhaustion and breaking her cheekbone on her desk, then spending years building Thrive Global to change how the world thinks about burnout",
+          "anchorPerson": "Arianna Huffington"
+        }
+      ]
+    },
+    {
+      "id": "planet_breaking",
+      "name": "The planet breaking",
+      "tagline": "Ecological destruction, species loss, and climate crisis happening while most people look away",
+      "turnsInto": "Environmental consulting, sustainability coaching, regenerative design, climate communication, conservation education, eco-business strategy",
+      "size": 28,
+      "essence": "The underlying brokenness is: humans destroying the living systems they depend on, and not enough people noticing or acting",
+      "representativeTags": [
+        "ecological collapse happening while most people don't notice",
+        "industrial chemicals poisoning the natural world while governments look away",
+        "species being wiped out without anyone noticing or caring",
+        "the climate crisis being treated as a future problem instead of a present emergency",
+        "business growth destroying the natural world it depends on",
+        "Western language making it impossible to treat the natural world as alive",
+        "exponential growth on a finite planet being treated as normal",
+        "humans managing land without understanding they are part of it"
+      ],
+      "representativePeople": ["Rachel Carson", "David Attenborough", "Greta Thunberg", "Wangari Maathai", "E.O. Wilson", "Aldo Leopold", "Robin Wall Kimmerer", "Yvon Chouinard", "Donella Meadows", "Al Gore"],
+      "placemakes": [
+        {
+          "label": "Industrial chemicals poisoning the natural world while governments look away",
+          "example": "Like Rachel Carson publishing Silent Spring while dying of cancer she kept secret, exposing DDT bioaccumulation the chemical industry had been hiding since the 1940s",
+          "anchorPerson": "Rachel Carson"
+        },
+        {
+          "label": "The climate crisis being treated as a future problem instead of a present emergency",
+          "example": "Like Greta Thunberg saying 'I don't want you to be hopeful. I want you to panic. I want you to feel the fear I feel every day. And then I want you to act'",
+          "anchorPerson": "Greta Thunberg"
+        },
+        {
+          "label": "Western language making it impossible to treat the natural world as alive",
+          "example": "Like Robin Wall Kimmerer noting that in Potawatomi 'to be a bay' is a verb, while in English 'we'd never call our grandmother it, yet we do so with every plant, tree, and river we meet'",
+          "anchorPerson": "Robin Wall Kimmerer"
+        },
+        {
+          "label": "Business growth destroying the natural world it depends on",
+          "example": "Like Yvon Chouinard transferring ownership of Patagonia to fight the climate crisis, saying 'Earth is now our only shareholder'",
+          "anchorPerson": "Yvon Chouinard"
+        }
+      ]
+    },
+    {
+      "id": "power_crushing",
+      "name": "Power crushing people",
+      "tagline": "Systems of control that own, oppress, or dehumanize whole populations",
+      "turnsInto": "Human rights advocacy, community organising, political leadership, legal reform, grassroots mobilisation, conflict resolution, democracy work",
+      "size": 56,
+      "essence": "The underlying brokenness is: power being used to own, exclude, or crush people who have no way to fight back",
+      "representativeTags": [
+        "people being owned as property",
+        "an entire population being dehumanized by law based on skin colour",
+        "Black people being systematically prevented from voting",
+        "an entire nation being ruled by a foreign power through everyday compliance",
+        "citizens being forced to perform lies they no longer believe",
+        "ordinary people having no power against institutions that control their lives",
+        "democracies collapsing because citizens obey in advance without being asked",
+        "political enemies refusing to talk to each other while people die"
+      ],
+      "representativePeople": ["Harriet Tubman", "Frederick Douglass", "Mahatma Gandhi", "Desmond Tutu", "Fannie Lou Hamer", "Ella Baker", "Václav Havel", "Lech Wałęsa", "Saul Alinsky", "Timothy Snyder"],
+      "placemakes": [
+        {
+          "label": "People being owned as property",
+          "example": "Like Harriet Tubman escaping slavery and returning to the South roughly 13 times to guide approximately 70 enslaved people to freedom, with no record of her ever losing a passenger",
+          "anchorPerson": "Harriet Tubman"
+        },
+        {
+          "label": "An entire population being dehumanized by law based on skin colour",
+          "example": "Like Desmond Tutu spending decades confronting apartheid, from writing warnings to the Prime Minister to chairing the Truth and Reconciliation Commission",
+          "anchorPerson": "Desmond Tutu"
+        },
+        {
+          "label": "Citizens being forced to perform lies they no longer believe",
+          "example": "Like Václav Havel describing post-totalitarianism as a condition where citizens were forced to 'live within a lie,' using the example of a greengrocer displaying a sign from fear, not conviction",
+          "anchorPerson": "Václav Havel"
+        },
+        {
+          "label": "Ordinary people having no power against institutions that control their lives",
+          "example": "Like Saul Alinsky building the modern template for community organising rooted in institutions people already belonged to, like parishes and unions, not abstract movements",
+          "anchorPerson": "Saul Alinsky"
+        },
+        {
+          "label": "Democracies collapsing because citizens obey in advance without being asked",
+          "example": "Like Timothy Snyder noting 'Most of the power of authoritarianism is freely given. The Nazis did not have to demand compliance from most institutions. The institutions offered it'",
+          "anchorPerson": "Timothy Snyder"
+        }
+      ]
+    },
+    {
+      "id": "knowledge_locked",
+      "name": "Knowledge locked away",
+      "tagline": "Understanding that could change lives, trapped behind jargon, cost, embarrassment, or gatekeeping",
+      "turnsInto": "Science communication, educational technology, accessible publishing, teaching, public speaking, translation, curriculum design, knowledge democratisation",
+      "size": 58,
+      "essence": "The underlying brokenness is: knowledge that belongs to everyone being locked behind gates only a few people can pass through",
+      "representativeTags": [
+        "education being inaccessible to anyone who can't afford it",
+        "scientific knowledge being locked behind jargon nobody can penetrate",
+        "mathematics being taught as techniques to memorize rather than an art to discover",
+        "the world being dramatically wrong about basic facts of human progress",
+        "the most important science being locked behind embarrassment",
+        "education treating students as containers to be filled instead of humans with their own knowledge",
+        "girls being denied education under threat of death",
+        "data being invisible to decision-makers because nobody visualized it"
+      ],
+      "representativePeople": ["Sal Khan", "Randall Munroe", "Marcus du Sautoy", "Hans Rosling", "Paulo Freire", "Florence Nightingale", "Malala Yousafzai", "Samin Nosrat", "Mary Roach", "Carl Sagan"],
+      "placemakes": [
+        {
+          "label": "Education being inaccessible to anyone who cannot afford it",
+          "example": "Like Sal Khan turning down multi-million-dollar offers and registering Khan Academy as a non-profit because 'I could not tell Nadia her tutoring was free and then charge her daughter'",
+          "anchorPerson": "Sal Khan"
+        },
+        {
+          "label": "Scientific knowledge being locked behind jargon nobody can penetrate",
+          "example": "Like Randall Munroe using only the thousand most common English words to explain a Saturn V rocket for Thing Explainer, discovering he had to relearn things he thought he already understood",
+          "anchorPerson": "Randall Munroe"
+        },
+        {
+          "label": "The world being dramatically wrong about basic facts of human progress",
+          "example": "Like Hans Rosling showing audiences at Davos scored worse than random chance on global development questions: 'You are getting less than a chimpanzee. That is actively wrong ideas'",
+          "anchorPerson": "Hans Rosling"
+        },
+        {
+          "label": "Education treating students as containers to be filled",
+          "example": "Like Paulo Freire calling traditional education 'banking' and proposing problem-posing education where teacher and student investigate the world together",
+          "anchorPerson": "Paulo Freire"
+        },
+        {
+          "label": "Girls being denied education under threat of death",
+          "example": "Like Malala Yousafzai blogging for BBC Urdu at age 11 describing life under Taliban rule, then being shot by the Taliban for it at 15",
+          "anchorPerson": "Malala Yousafzai"
+        }
+      ]
+    },
+    {
+      "id": "creative_dismissed",
+      "name": "Creative work dismissed",
+      "tagline": "Art, craft, and creative vision being blocked, stolen, ignored, or treated as less than serious",
+      "turnsInto": "Creative coaching, art therapy, design leadership, creative entrepreneurship, artists' advocacy, portfolio development, creative confidence workshops",
+      "size": 48,
+      "essence": "The underlying brokenness is: creative work being dismissed, constrained, or stolen, especially when it comes from women, outsiders, or anyone who does not fit the establishment",
+      "representativeTags": [
+        "women artists being read through sexual lenses they never chose",
+        "the world not being ready for what a woman artist already knows",
+        "artists being forced to choose between commercial access and honest expression",
+        "artistic vision being constrained by commercial timidity",
+        "art being defined by what it looks like instead of what it makes you think",
+        "the art market corrupting the practice of making art",
+        "creative people losing ownership of the work they create",
+        "women architects being told their designs are unbuildable when the real issue is who drew them"
+      ],
+      "representativePeople": ["Georgia O'Keeffe", "Hilma af Klint", "Louise Bourgeois", "Yayoi Kusama", "Zaha Hadid", "Hedy Lamarr", "Philip Glass", "Marcel Duchamp", "Octavia Butler", "Andrei Tarkovsky"],
+      "placemakes": [
+        {
+          "label": "The world not being ready for what a woman artist already knows",
+          "example": "Like Hilma af Klint producing the first fully abstract paintings in Western art around 1906, years before Kandinsky, then specifying they not be shown until 20 years after her death",
+          "anchorPerson": "Hilma af Klint"
+        },
+        {
+          "label": "Women architects being told their designs are unbuildable when the real issue is who drew them",
+          "example": "Like Zaha Hadid being dismissed as a 'paper architect' for sixteen years until the Vitra Fire Station proved the drawings could become buildings",
+          "anchorPerson": "Zaha Hadid"
+        },
+        {
+          "label": "Artists having to choose between artistic integrity and paying rent",
+          "example": "Like Philip Glass driving a taxi and working as an unlicensed plumber until 41 so that his music would not have to pay the rent",
+          "anchorPerson": "Philip Glass"
+        },
+        {
+          "label": "Brilliant women being typecast as decorative and nothing more",
+          "example": "Like Hedy Lamarr, given 'maybe two pages of dialogue a film' by Hollywood, who set up a drafting table in her trailer and co-invented frequency-hopping spread spectrum between takes",
+          "anchorPerson": "Hedy Lamarr"
+        },
+        {
+          "label": "Black women writers having to will themselves into existence",
+          "example": "Like Octavia Butler writing in a 1988 notebook 'I shall be a bestselling writer,' working daytime jobs and writing at 2-3am because 'Forget inspiration. Habit is more dependable'",
+          "anchorPerson": "Octavia Butler"
+        }
+      ]
+    },
+    {
+      "id": "identity_stolen",
+      "name": "Identity stolen or forced",
+      "tagline": "Being reduced to a single story, forced into someone else's version of you, or having your identity erased",
+      "turnsInto": "Identity coaching, cultural consulting, memoir facilitation, personal branding, diversity work, narrative therapy, heritage preservation",
+      "size": 38,
+      "essence": "The underlying brokenness is: people being told who they are instead of being allowed to discover it, or having who they are erased entirely",
+      "representativeTags": [
+        "people being forced to hide parts of their identity to be accepted",
+        "being born into a world where your own existence is illegal",
+        "being forced to perform an identity that was chosen for you",
+        "people and places being reduced to a single story",
+        "identities being erased along with lives",
+        "having your identity claimed by a country that is not yours",
+        "Black Americans being denied their own identity and self-determination",
+        "Black Americans being disconnected from their own family history by slavery's erasure"
+      ],
+      "representativePeople": ["Audre Lorde", "Trevor Noah", "Andre Agassi", "Chimamanda Ngozi Adichie", "Irena Sendler", "Seamus Heaney", "Malcolm X", "Ta-Nehisi Coates", "Henry Louis Gates Jr.", "Toni Morrison"],
+      "placemakes": [
+        {
+          "label": "People being forced to hide parts of their identity to be accepted",
+          "example": "Like Audre Lorde publishing her self-description 'Black, lesbian, feminist, socialist, mother, warrior, poet' repeatedly, refusing to be listed in a narrower set of identities",
+          "anchorPerson": "Audre Lorde"
+        },
+        {
+          "label": "Being born into a world where your own existence is illegal",
+          "example": "Like Trevor Noah, whose birth certificate was a criminal document under apartheid's Immorality Act, with his mother walking on one side of the street while he and his father walked on the other",
+          "anchorPerson": "Trevor Noah"
+        },
+        {
+          "label": "People and places being reduced to a single story",
+          "example": "Like Chimamanda Ngozi Adichie arguing that when there is only one story told about a place, that story becomes the place, in a talk viewed over 27 million times",
+          "anchorPerson": "Chimamanda Ngozi Adichie"
+        },
+        {
+          "label": "Black Americans being disconnected from their own family history by slavery's erasure",
+          "example": "Like Henry Louis Gates Jr. building Finding Your Roots around the 'reveal' moment, saying 'What they are crying about is not the document. It is the fact that somebody bothered'",
+          "anchorPerson": "Henry Louis Gates Jr."
+        }
+      ]
+    },
+    {
+      "id": "systems_not_caring",
+      "name": "Systems that don't see you",
+      "tagline": "Algorithms, bureaucracies, and invisible structures running people's lives without their knowledge or consent",
+      "turnsInto": "Systems design, tech ethics consulting, policy reform, algorithmic auditing, organizational design, information architecture, UX advocacy",
+      "size": 36,
+      "essence": "The underlying brokenness is: systems designed without the people who live inside them, hiding their logic behind complexity, math, or authority",
+      "representativeTags": [
+        "algorithms discriminating against vulnerable people while hiding behind mathematical authority",
+        "people being shaped by media they cannot see because they only notice content",
+        "bureaucratic systems hiding failures behind complexity",
+        "good strategy being corrupted beyond recognition by the institutions that adopt it",
+        "information being disorganized in ways that exclude people from using public systems",
+        "cities being designed for cars instead of people",
+        "cities being destroyed by planners who never walked the streets they designed",
+        "plans falling apart on contact with reality and nobody having a name for why"
+      ],
+      "representativePeople": ["Cathy O'Neil", "Marshall McLuhan", "Richard Feynman", "Jane Jacobs", "Jan Gehl", "Kevin Lynch", "Massimo Vignelli", "Dieter Rams", "Donella Meadows", "George Kennan"],
+      "placemakes": [
+        {
+          "label": "Algorithms discriminating against vulnerable people while hiding behind mathematical authority",
+          "example": "Like Cathy O'Neil coining 'weapons of math destruction' to describe predictive algorithms in hiring, policing, and credit that operated as hidden discriminatory systems",
+          "anchorPerson": "Cathy O'Neil"
+        },
+        {
+          "label": "Cities being destroyed by planners who never walked the streets they designed",
+          "example": "Like Jane Jacobs attacking the entire mid-century consensus from her apartment, then leading the fight that defeated Robert Moses's ten-lane expressway through Lower Manhattan",
+          "anchorPerson": "Jane Jacobs"
+        },
+        {
+          "label": "Bureaucratic systems hiding failures behind complexity",
+          "example": "Like Richard Feynman dropping an O-ring into ice water on live television during the Challenger investigation, making the failure visible in a way no one could deny",
+          "anchorPerson": "Richard Feynman"
+        },
+        {
+          "label": "Cities being designed for cars instead of people",
+          "example": "Like Jan Gehl counting people on Copenhagen's pedestrianised street by hand for decades, building the empirical spine for the argument that streets should serve pedestrians",
+          "anchorPerson": "Jan Gehl"
+        }
+      ]
+    },
+    {
+      "id": "people_abandoned",
+      "name": "People falling through the cracks",
+      "tagline": "Communities abandoned, people with nowhere to turn, and the helpers who refuse to leave",
+      "turnsInto": "Community building, social enterprise, disaster response, elder care, veteran support, refugee services, mutual aid, neighbourhood revitalisation",
+      "size": 40,
+      "essence": "The underlying brokenness is: people being abandoned by the systems and communities that should hold them, falling into gaps nobody designed a net for",
+      "representativeTags": [
+        "homeless people being asked to prove they deserve help",
+        "communities being abandoned by everyone who could leave",
+        "veterans suffering not from war but from coming home to a society with no container for them",
+        "the elderly having nowhere to be cared for with dignity",
+        "refugees being defined by their displacement instead of their capability",
+        "poor immigrants having no access to the resources that could change their lives",
+        "disaster victims having no organized civilian relief system",
+        "people going hungry in disasters because relief systems are too slow"
+      ],
+      "representativePeople": ["Dorothy Day", "Grace Lee Boggs", "Sebastian Junger", "Jane Addams", "Clara Barton", "Jimmy Carter", "Hamdi Ulukaya", "Jose Andres", "Harriet Tubman", "Tarana Burke"],
+      "placemakes": [
+        {
+          "label": "Homeless people being asked to prove they deserve help",
+          "example": "Like Dorothy Day's Houses of Hospitality offering food and shelter without intake forms, conditions or proselytising, with staff living alongside the people they served",
+          "anchorPerson": "Dorothy Day"
+        },
+        {
+          "label": "Communities being abandoned by everyone who could leave",
+          "example": "Like Grace Lee Boggs refusing to relocate from Detroit for 62 years, saying you could not organise a place you did not live in, then founding Detroit Summer at 77",
+          "anchorPerson": "Grace Lee Boggs"
+        },
+        {
+          "label": "Veterans suffering not from war but from coming home to a society with no container for them",
+          "example": "Like Sebastian Junger arguing that veterans' suffering is less about combat and more about returning to an individualist society, creating Vets Town Hall where veterans speak and civilians listen",
+          "anchorPerson": "Sebastian Junger"
+        },
+        {
+          "label": "People going hungry in disasters because relief systems are too slow",
+          "example": "Like Jose Andres founding World Central Kitchen, serving over 350 million meals in disaster zones worldwide, proving food could be the fastest first responder",
+          "anchorPerson": "Jose Andres"
+        },
+        {
+          "label": "Refugees being defined by their displacement instead of their capability",
+          "example": "Like Hamdi Ulukaya saying 'The minute a refugee gets a job is the minute they stop being a refugee' and hiring refugees at Chobani",
+          "anchorPerson": "Hamdi Ulukaya"
+        }
+      ]
+    },
+    {
+      "id": "meaning_missing",
+      "name": "Meaning that got lost",
+      "tagline": "The search for purpose, connection, and what makes a life worth living when the old answers stop working",
+      "turnsInto": "Life coaching, spiritual direction, philosophical counselling, retreat facilitation, meaning-making workshops, grief support, contemplative practice",
+      "size": 34,
+      "essence": "The underlying brokenness is: people living without meaning, purpose, or a felt sense of belonging to something larger than themselves",
+      "representativeTags": [
+        "meaninglessness as the central human suffering",
+        "people unable to recognize their own life story as meaningful",
+        "the soul's longing for wholeness after being separated from its source",
+        "the mind being its own worst enemy every morning",
+        "people suffering over things they cannot control while ignoring what they can",
+        "the sacred being invisible to modern eyes because nobody teaches how to notice it",
+        "religions being used to divide rather than connect people",
+        "grief needing decades to find its form"
+      ],
+      "representativePeople": ["Viktor Frankl", "Joseph Campbell", "Rumi", "Marcus Aurelius", "Epictetus", "Mircea Eliade", "Karen Armstrong", "Tenzin Palmo", "Patti Smith", "Krista Tippett"],
+      "placemakes": [
+        {
+          "label": "Meaninglessness as the central human suffering",
+          "example": "Like Viktor Frankl losing his wife, brother, and mother in the camps, then choosing to remain in Vienna and rebuild, applying his own theory of choosing attitude toward unchangeable facts",
+          "anchorPerson": "Viktor Frankl"
+        },
+        {
+          "label": "People unable to recognize their own life story as meaningful",
+          "example": "Like Joseph Campbell proposing the monomyth, a universal hero's journey pattern underlying all cultures' myths, giving people a framework to understand their own path",
+          "anchorPerson": "Joseph Campbell"
+        },
+        {
+          "label": "The soul's longing for wholeness after being separated from its source",
+          "example": "Like Rumi's Masnavi opening with the reed flute's complaint of separation: 'The reed has been cut from the reed bed and its music is the sound of that wound'",
+          "anchorPerson": "Rumi"
+        },
+        {
+          "label": "Religions being used to divide rather than connect people",
+          "example": "Like Karen Armstrong assembling Muslim, Jewish, Christian, Hindu, and Buddhist clerics until they agreed on the Golden Rule, producing the Charter for Compassion",
+          "anchorPerson": "Karen Armstrong"
+        }
+      ]
+    },
+    {
+      "id": "certainty_poison",
+      "name": "Certainty as poison",
+      "tagline": "The damage done when people stop questioning and start knowing, whether in science, politics, or daily life",
+      "turnsInto": "Critical thinking workshops, facilitation, dialogue design, intellectual humility coaching, systems thinking, cross-disciplinary consulting, decision-making advisory",
+      "size": 32,
+      "essence": "The underlying brokenness is: certainty replacing curiosity, fragmenting thinking, and closing people off from what they could learn if they stayed open",
+      "representativeTags": [
+        "absolute certainty turning humans into monsters",
+        "certainty being the tool of dictators and torturers",
+        "certainty being mistaken for wisdom",
+        "intellectual rigidity from seeing the world through only one organizing idea",
+        "Western civilization losing the ability to see the whole because it has catalogued every part",
+        "fragmentation being a disease of thought, not a feature of the world",
+        "groups being unable to think together because everyone defends their assumptions",
+        "smart people making terrible decisions because they use only one mental framework"
+      ],
+      "representativePeople": ["Jacob Bronowski", "Wisława Szymborska", "Iain McGilchrist", "Isaiah Berlin", "David Bohm", "Charlie Munger", "Martha Nussbaum", "Gregory Bateson", "Steven Pinker", "Clifford Geertz"],
+      "placemakes": [
+        {
+          "label": "Absolute certainty turning humans into monsters",
+          "example": "Like Jacob Bronowski walking into the ash pond at Auschwitz and saying 'When people believe that they have absolute knowledge, with no test in reality, this is how they behave'",
+          "anchorPerson": "Jacob Bronowski"
+        },
+        {
+          "label": "Certainty being the tool of dictators and torturers",
+          "example": "Like Wisława Szymborska arguing in her Nobel lecture that the most important words were 'I don't know,' contrasting this with dictators whose distinguishing feature was certainty",
+          "anchorPerson": "Wisława Szymborska"
+        },
+        {
+          "label": "Groups being unable to think together because everyone defends their assumptions",
+          "example": "Like David Bohm instructing dialogue participants to notice assumptions, name them, and hold them visible without defending or abandoning them",
+          "anchorPerson": "David Bohm"
+        },
+        {
+          "label": "Smart people making terrible decisions because they use only one mental framework",
+          "example": "Like Charlie Munger collecting mental models across psychology, physics, biology, and economics, arguing any single-discipline approach was guaranteed to produce blind spots",
+          "anchorPerson": "Charlie Munger"
+        }
+      ]
+    },
+    {
+      "id": "work_without_soul",
+      "name": "Work that breaks people",
+      "tagline": "Jobs that strip dignity, businesses that exploit, and systems that treat workers as disposable",
+      "turnsInto": "Workplace culture consulting, ethical business coaching, leadership development, employee wellbeing, social entrepreneurship, career transition coaching, fair trade advocacy",
+      "size": 46,
+      "essence": "The underlying brokenness is: work and business being organised in ways that break the people inside them, whether through exploitation, meaninglessness, or the denial of dignity",
+      "representativeTags": [
+        "workers being humiliated and stripped of dignity in the workplace",
+        "millions of people doing jobs that produce nothing and knowing it",
+        "work being stripped of meaning and reduced to a paycheck",
+        "Wall Street pressuring companies to exploit workers and customers for higher margins",
+        "workers being disposable in an economy that breaks their bodies and offers no safety net",
+        "success culture treating exhaustion as proof of dedication",
+        "women losing professional identity during years of full-time parenting",
+        "failure being treated as something to be ashamed of instead of learned from"
+      ],
+      "representativePeople": ["Brunello Cucinelli", "David Graeber", "Howard Schultz", "James Sinegal", "Studs Terkel", "Arianna Huffington", "Alli Webb", "Mary Catherine Bateson", "Tony Hsieh", "Oprah Winfrey"],
+      "placemakes": [
+        {
+          "label": "Workers being humiliated and stripped of dignity in the workplace",
+          "example": "Like Brunello Cucinelli saying 'I saw my father coming home offended, mortified' from the factory, then building a billion-dollar company while paying workers above market and mandating 90-minute lunches",
+          "anchorPerson": "Brunello Cucinelli"
+        },
+        {
+          "label": "Millions of people doing jobs that produce nothing and knowing it",
+          "example": "Like David Graeber receiving thousands of emails from people describing their meaningless work: 'I did not intend to write a book. The readers wrote it for me'",
+          "anchorPerson": "David Graeber"
+        },
+        {
+          "label": "Work being stripped of meaning and reduced to a paycheck",
+          "example": "Like Studs Terkel's thesis in Working that work is 'about a search for daily meaning as well as daily bread,' interviewing people at almost every job an American could hold",
+          "anchorPerson": "Studs Terkel"
+        },
+        {
+          "label": "Wall Street pressuring companies to exploit workers for higher margins",
+          "example": "Like James Sinegal telling analysts who called Costco's wages too high: 'Those are our core strengths, not problems,' holding the line on wages and low prices for decades",
+          "anchorPerson": "James Sinegal"
+        },
+        {
+          "label": "Women losing professional identity during years of full-time parenting",
+          "example": "Like Mary Catherine Bateson arguing that 'jazz musicians practice improvisation by the hour,' reframing broken plans and reshaped priorities as composition under constraint rather than failure",
+          "anchorPerson": "Mary Catherine Bateson"
+        }
+      ]
+    }
+  ],
+  "orphanTags": [
+    {
+      "tag": "conventional mathematics being too limited for organic structural form",
+      "person": "Antoni Gaudí",
+      "note": "Highly specific to architectural mathematics; loosely fits 'knowledge locked away' or 'creative work dismissed'"
+    },
+    {
+      "tag": "military technology being vulnerable to enemy jamming",
+      "person": "Hedy Lamarr",
+      "note": "Technical military problem; person placed in 'creative work dismissed' for her broader story"
+    },
+    {
+      "tag": "sacred architecture taking longer than a human lifetime to complete",
+      "person": "Antoni Gaudí",
+      "note": "About the tension between human lifespan and creative ambition; loosely fits 'meaning that got lost'"
+    },
+    {
+      "tag": "financial markets being treated as random when mathematical structure exists",
+      "person": "Jim Simons",
+      "note": "Niche quantitative finance insight; loosely fits 'certainty as poison' or 'knowledge locked away'"
+    },
+    {
+      "tag": "photography making people wait for the moment they already experienced",
+      "person": "Edwin Land",
+      "note": "Very specific product-level problem; does not fit cleanly"
+    }
+  ],
+  "overlapFlags": [
+    {
+      "cluster1": "voices_silenced",
+      "cluster2": "power_crushing",
+      "note": "Significant overlap. Many tags about state censorship and political silencing could belong in either cluster. Decision rule: if the core brokenness is about having no voice, it goes in 'voices_silenced'. If it is about being dominated or controlled by power, it goes in 'power_crushing'. Tags about activists who were silenced BY power structures are placed in 'power_crushing' when the activism was the point, and 'voices_silenced' when the silencing was the point."
+    },
+    {
+      "cluster1": "voices_silenced",
+      "cluster2": "creative_dismissed",
+      "note": "Creative silencing overlaps with general silencing. Decision rule: if the person is primarily an artist and the brokenness is about art being dismissed or constrained, it goes in 'creative_dismissed'. If the silencing is political or identity-based, it goes in 'voices_silenced'."
+    },
+    {
+      "cluster1": "identity_stolen",
+      "cluster2": "voices_silenced",
+      "note": "Identity erasure often comes with silencing. Decision rule: if the core brokenness is about WHO someone is allowed to be, it goes in 'identity_stolen'. If it is about WHAT someone is allowed to say, it goes in 'voices_silenced'."
+    },
+    {
+      "cluster1": "knowledge_locked",
+      "cluster2": "children_unseen",
+      "note": "Some education tags (Escalante, Gruwell, Kohl) could go in either cluster. Decision rule: if the problem is about children specifically being dismissed or mistreated, it goes in 'children_unseen'. If the problem is about knowledge or education being inaccessible generally, it goes in 'knowledge_locked'."
+    },
+    {
+      "cluster1": "bodies_suffering",
+      "cluster2": "work_without_soul",
+      "note": "Burnout tags (Huffington) bridge both clusters. Placed primarily in 'work_without_soul' since burnout is work-caused, with body-specific health tags in 'bodies_suffering'."
+    }
+  ],
+  "gapFlags": [
+    {
+      "description": "Design and craft: tags about good design, thoughtful making, and the relationship between form and use. These are currently split between 'creative_dismissed', 'systems_not_caring', and 'knowledge_locked'. Could become its own cluster ('Things made badly') but the tags are too few and diverse (gardens, furniture, typography, buildings) to hold together as one felt category."
+    },
+    {
+      "description": "Grief and loss: scattered tags about grief (Patti Smith, Rumi, Elaine Pagels, Akira Kurosawa) are currently in 'meaning_missing' but could be their own cluster if the dataset were larger. At 8-10 tags it does not reach critical mass."
+    },
+    {
+      "description": "Women specifically: a large cross-cutting theme of women being dismissed, silenced, exploited, and forced into roles appears across at least 8 clusters. Rather than pulling it out as a separate cluster (which would gut the others), it stays distributed. But a future version might add a 'women_pushed_aside' lens or tag."
+    }
+  ]
+}

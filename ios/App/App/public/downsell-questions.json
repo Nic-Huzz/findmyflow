@@ -1,0 +1,340 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "total_questions": 10,
+    "estimated_completion_time_minutes": 3,
+    "last_updated": "2025-12-04"
+  },
+  "questions": [
+    {
+      "id": "q1_business_type",
+      "question": "What type of product or service do you offer?",
+      "subtext": "Understanding your business model helps us recommend the right downsell strategy",
+      "options": [
+        {
+          "label": "High-Ticket Service ($5K+)",
+          "value": "high_ticket_service",
+          "description": "Coaching, consulting, agency services, or premium programs"
+        },
+        {
+          "label": "Mid-Ticket Service ($500-$5K)",
+          "value": "mid_ticket_service",
+          "description": "Online courses, group programs, professional services"
+        },
+        {
+          "label": "Low-Ticket Service (Under $500)",
+          "value": "low_ticket_service",
+          "description": "Workshops, mini-courses, entry-level services"
+        },
+        {
+          "label": "Physical Product",
+          "value": "physical_product",
+          "description": "Tangible goods that ship to customers"
+        },
+        {
+          "label": "Digital Product",
+          "value": "digital_product",
+          "description": "Downloads, software, digital content"
+        },
+        {
+          "label": "SaaS/Software",
+          "value": "saas_software",
+          "description": "Subscription-based software or tools"
+        },
+        {
+          "label": "Membership/Subscription",
+          "value": "membership_subscription",
+          "description": "Recurring access to content or community"
+        }
+      ]
+    },
+    {
+      "id": "q2_price_point",
+      "question": "What is your typical price point or order value?",
+      "subtext": "Your price range determines which downsell strategies work best",
+      "options": [
+        {
+          "label": "Under $100",
+          "value": "under_100",
+          "description": "Low-ticket offers and entry products"
+        },
+        {
+          "label": "$100 - $500",
+          "value": "100_to_500",
+          "description": "Mid-range products and services"
+        },
+        {
+          "label": "$500 - $2,000",
+          "value": "500_to_2000",
+          "description": "Premium products and group programs"
+        },
+        {
+          "label": "$2,000 - $5,000",
+          "value": "2000_to_5000",
+          "description": "High-ticket coaching and consulting"
+        },
+        {
+          "label": "$5,000 - $10,000",
+          "value": "5000_to_10000",
+          "description": "Elite programs and done-for-you services"
+        },
+        {
+          "label": "Over $10,000",
+          "value": "over_10000",
+          "description": "Enterprise or ultra-premium offerings"
+        }
+      ]
+    },
+    {
+      "id": "q3_main_objection",
+      "question": "What's the #1 reason prospects say no to your offer?",
+      "subtext": "The main objection reveals which downsell will overcome resistance",
+      "options": [
+        {
+          "label": "Too expensive upfront",
+          "value": "too_expensive_upfront",
+          "description": "They want it but can't afford the full price today"
+        },
+        {
+          "label": "Not sure if it works",
+          "value": "not_sure_it_works",
+          "description": "Skeptical about results or need proof"
+        },
+        {
+          "label": "Timing isn't right",
+          "value": "timing_not_right",
+          "description": "Want to start later or need more time"
+        },
+        {
+          "label": "Prefer a cheaper option",
+          "value": "prefer_cheaper_option",
+          "description": "Looking for lower-priced alternative"
+        },
+        {
+          "label": "Want to try it first",
+          "value": "want_to_try_first",
+          "description": "Need to test before committing fully"
+        },
+        {
+          "label": "Don't need all the features",
+          "value": "dont_need_all_features",
+          "description": "Interested in partial solution only"
+        },
+        {
+          "label": "Payment terms are inflexible",
+          "value": "payment_terms_inflexible",
+          "description": "Need payment plans or financing options"
+        }
+      ]
+    },
+    {
+      "id": "q4_payment_flexibility",
+      "question": "Can you offer flexible payment options (payment plans, financing)?",
+      "subtext": "Payment flexibility is key for payment plan downsells",
+      "options": [
+        {
+          "label": "Yes, already offer them",
+          "value": "yes_already_do",
+          "description": "Currently have payment plans or financing in place"
+        },
+        {
+          "label": "Yes, could implement easily",
+          "value": "yes_could_implement",
+          "description": "Ready and able to set up payment plans"
+        },
+        {
+          "label": "Maybe, need some setup",
+          "value": "maybe_need_setup",
+          "description": "Would require payment processor or system changes"
+        },
+        {
+          "label": "No, must be paid in full",
+          "value": "no_must_pay_full",
+          "description": "Business model requires full upfront payment"
+        }
+      ]
+    },
+    {
+      "id": "q5_feature_modularity",
+      "question": "Can you break your offer into smaller versions (fewer features, lower quantity, reduced service)?",
+      "subtext": "Modularity enables feature downsells that find the right fit",
+      "options": [
+        {
+          "label": "Yes, easily modular",
+          "value": "yes_easily_modular",
+          "description": "Can remove features/components to create lite versions"
+        },
+        {
+          "label": "Yes, have lite version",
+          "value": "yes_have_lite_version",
+          "description": "Already offer scaled-down alternatives"
+        },
+        {
+          "label": "Maybe, could create one",
+          "value": "maybe_could_create",
+          "description": "Possible but would need to design options"
+        },
+        {
+          "label": "No, all-or-nothing",
+          "value": "no_all_or_nothing",
+          "description": "Can't break it down—must deliver full package"
+        }
+      ]
+    },
+    {
+      "id": "q6_current_close_rate",
+      "question": "What's your current close rate or conversion rate?",
+      "subtext": "Lower close rates often indicate strong potential for downsells",
+      "options": [
+        {
+          "label": "Under 10%",
+          "value": "under_10_percent",
+          "description": "Majority of prospects don't convert"
+        },
+        {
+          "label": "10-25%",
+          "value": "10_to_25_percent",
+          "description": "Converting 1 in 4-10 prospects"
+        },
+        {
+          "label": "25-50%",
+          "value": "25_to_50_percent",
+          "description": "Converting about half of prospects"
+        },
+        {
+          "label": "50-75%",
+          "value": "50_to_75_percent",
+          "description": "Converting majority of prospects"
+        },
+        {
+          "label": "Over 75%",
+          "value": "over_75_percent",
+          "description": "Very high conversion rate already"
+        }
+      ]
+    },
+    {
+      "id": "q7_cancellation_rate",
+      "question": "What's your refund, churn, or cancellation rate?",
+      "subtext": "Understanding retention helps identify if downsells can reduce churn",
+      "options": [
+        {
+          "label": "Under 5%",
+          "value": "under_5_percent",
+          "description": "Very low cancellation rate"
+        },
+        {
+          "label": "5-15%",
+          "value": "5_to_15_percent",
+          "description": "Moderate, typical cancellation rate"
+        },
+        {
+          "label": "15-30%",
+          "value": "15_to_30_percent",
+          "description": "Higher than average cancellations"
+        },
+        {
+          "label": "Over 30%",
+          "value": "over_30_percent",
+          "description": "Significant retention problem"
+        },
+        {
+          "label": "Don't track this",
+          "value": "dont_track",
+          "description": "Not currently measuring cancellations"
+        }
+      ]
+    },
+    {
+      "id": "q8_trial_capability",
+      "question": "Could you offer a trial where customers must complete actions to avoid fees?",
+      "subtext": "Trial with penalty requires ability to track and enforce completion",
+      "options": [
+        {
+          "label": "Yes, can track completion",
+          "value": "yes_can_track_completion",
+          "description": "Have systems to monitor customer actions and attendance"
+        },
+        {
+          "label": "Yes, with some setup",
+          "value": "yes_with_some_setup",
+          "description": "Could implement tracking with effort"
+        },
+        {
+          "label": "Maybe, not sure how",
+          "value": "maybe_not_sure_how",
+          "description": "Unclear on how to track and enforce"
+        },
+        {
+          "label": "No, can't enforce",
+          "value": "no_cant_enforce",
+          "description": "Unable to monitor compliance or charge fees"
+        }
+      ]
+    },
+    {
+      "id": "q9_sales_process",
+      "question": "How do you currently sell (where would downsells happen)?",
+      "subtext": "Your sales process determines downsell implementation method",
+      "options": [
+        {
+          "label": "Live sales calls",
+          "value": "live_sales_calls",
+          "description": "One-on-one or group sales conversations"
+        },
+        {
+          "label": "Automated checkout",
+          "value": "automated_checkout",
+          "description": "Self-service purchase through website"
+        },
+        {
+          "label": "Hybrid (both)",
+          "value": "hybrid_both",
+          "description": "Mix of live calls and automated funnels"
+        },
+        {
+          "label": "In-person",
+          "value": "in_person",
+          "description": "Face-to-face sales meetings"
+        },
+        {
+          "label": "Email follow-up",
+          "value": "email_follow_up",
+          "description": "Email sequences and nurture campaigns"
+        }
+      ]
+    },
+    {
+      "id": "q10_downsell_goal",
+      "question": "What's your primary goal with downsell offers?",
+      "subtext": "Your main objective guides which downsell strategy to prioritize",
+      "options": [
+        {
+          "label": "Increase conversions",
+          "value": "increase_conversions",
+          "description": "Convert more prospects who currently say no"
+        },
+        {
+          "label": "Reduce cart abandonment",
+          "value": "reduce_cart_abandonment",
+          "description": "Rescue customers who don't complete checkout"
+        },
+        {
+          "label": "Retain canceling customers",
+          "value": "retain_canceling_customers",
+          "description": "Keep customers who want to cancel or refund"
+        },
+        {
+          "label": "Offer budget options",
+          "value": "offer_budget_options",
+          "description": "Provide alternatives for price-sensitive customers"
+        },
+        {
+          "label": "Maximize revenue per lead",
+          "value": "maximize_revenue_per_lead",
+          "description": "Extract maximum value from every prospect"
+        }
+      ]
+    }
+  ]
+}

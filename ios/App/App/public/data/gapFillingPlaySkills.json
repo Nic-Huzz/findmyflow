@@ -1,0 +1,861 @@
+{
+  "meta": { "count": 28, "generatedAt": "2026-04-14" },
+  "profiles": [
+    {
+      "name": "John Gottman",
+      "dominantCategories": ["teaching", "coaching"],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Building a framework others can use without you",
+          "confidence": "high",
+          "evidence": "The Four Horsemen and 5:1 ratio became tools therapists worldwide use without Gottman in the room."
+        },
+        {
+          "category": "teaching",
+          "skill": "Turning research data into a number people can aim for",
+          "confidence": "high",
+          "evidence": "The 5:1 ratio gave therapists a concrete target rather than vague advice about being nicer."
+        },
+        {
+          "category": "coaching",
+          "skill": "Training other practitioners to deliver your method",
+          "confidence": "high",
+          "evidence": "The Gottman Institute certifies thousands of therapists internationally to deliver his couples interventions."
+        },
+        {
+          "category": "teaching",
+          "skill": "Reframing relationship health as micro-moments, not grand gestures",
+          "confidence": "high",
+          "evidence": "His 'bids for connection' research showed that turning toward small moments predicted marriage survival six years later."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Sue Johnson",
+      "dominantCategories": ["coaching", "teaching"],
+      "playSkills": [
+        {
+          "category": "coaching",
+          "skill": "Holding couples through attachment pain",
+          "confidence": "high",
+          "evidence": "EFT is built on the insight that couple distress is an attachment problem, and Johnson coaches couples through unmet attachment needs."
+        },
+        {
+          "category": "teaching",
+          "skill": "Translating clinical therapy into language ordinary people can use",
+          "confidence": "high",
+          "evidence": "Hold Me Tight restructured EFT into seven conversations accessible enough for non-therapists, selling hundreds of thousands of copies."
+        },
+        {
+          "category": "teaching",
+          "skill": "Building an evidence base that gives a method institutional credibility",
+          "confidence": "high",
+          "evidence": "EFT accumulated more clinical outcome research than almost any other couples therapy model, with 70-75% recovery rates."
+        },
+        {
+          "category": "coaching",
+          "skill": "Adapting a therapeutic method to trauma populations",
+          "confidence": "medium",
+          "evidence": "Took EFT to military couples dealing with PTSD, showing relationship therapy could help even when individual trauma was untreated."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Harville Hendrix",
+      "dominantCategories": ["coaching", "storytelling"],
+      "playSkills": [
+        {
+          "category": "storytelling",
+          "skill": "Turning personal failure into the origin of a theory",
+          "confidence": "high",
+          "evidence": "His divorce became the research question that produced Imago therapy. He noticed his ex-wife shared traits with childhood caregivers and mapped the pattern across patients."
+        },
+        {
+          "category": "coaching",
+          "skill": "Creating a structured dialogue technique others can teach",
+          "confidence": "high",
+          "evidence": "The Imago Dialogue (mirror, validate, empathize) spread into schools, corporate training, and conflict resolution worldwide."
+        },
+        {
+          "category": "teaching",
+          "skill": "Making a therapeutic insight feel personal rather than clinical",
+          "confidence": "high",
+          "evidence": "Getting the Love You Want reached millions through Oprah because it made the idea that we choose partners who activate childhood wounds feel true, not academic."
+        },
+        {
+          "category": "connecting",
+          "skill": "Using a media platform to create demand for a certification",
+          "confidence": "medium",
+          "evidence": "18 Oprah appearances turned Imago from a niche practice into a household name, creating demand met by a global training network."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Terry Real",
+      "dominantCategories": ["coaching", "speaking_up"],
+      "playSkills": [
+        {
+          "category": "speaking_up",
+          "skill": "Saying the uncomfortable truth in the room",
+          "confidence": "high",
+          "evidence": "He interrupts clients mid-session, names grandiosity in real time, and tells husbands what their behaviour looks like from the outside."
+        },
+        {
+          "category": "coaching",
+          "skill": "Naming the habitual losing strategy and teaching the alternative",
+          "confidence": "high",
+          "evidence": "His clinical framework identifies each person's default relational move under stress (one-up or one-down) and replaces it with vulnerability."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Using personal pain as the spine of a professional argument",
+          "confidence": "high",
+          "evidence": "I Don't Want to Talk About It drew on his own father's violence and depression to name covert male depression."
+        },
+        {
+          "category": "teaching",
+          "skill": "Creating a distinctive therapeutic brand through confrontation",
+          "confidence": "medium",
+          "evidence": "The Relational Life Institute trains therapists in a notably more confrontational style than the field's default neutrality."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Gary Chapman",
+      "dominantCategories": ["teaching", "coaching"],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Making a framework so simple it escapes the book",
+          "confidence": "high",
+          "evidence": "By the 2010s, people who had never read the book could name their love language. The five categories entered dating profiles, parenting forums, and workplaces."
+        },
+        {
+          "category": "teaching",
+          "skill": "Creating a self-service assessment that does the marketing for you",
+          "confidence": "high",
+          "evidence": "The free online love languages quiz drove millions of new readers back to the book through word of mouth."
+        },
+        {
+          "category": "coaching",
+          "skill": "Sitting with real couples and extracting the pattern",
+          "confidence": "high",
+          "evidence": "Thirty years of Saturday morning couples counselling at his church in Winston-Salem produced the framework, not theory."
+        }
+      ],
+      "antiTags": ["performing", "speaking_up"]
+    },
+    {
+      "name": "Stan Tatkin",
+      "dominantCategories": ["teaching", "coaching"],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Bridging two fields that don't usually talk to each other",
+          "confidence": "high",
+          "evidence": "PACT blends attachment theory with developmental neuroscience, creating a clinically distinctive synthesis."
+        },
+        {
+          "category": "coaching",
+          "skill": "Teaching therapists to read bodies, not just words",
+          "confidence": "high",
+          "evidence": "PACT trains therapists to watch faces, breathing, and posture to spot the threat response before it becomes an argument."
+        },
+        {
+          "category": "teaching",
+          "skill": "Simplifying attachment styles into accessible language",
+          "confidence": "high",
+          "evidence": "Anchor/Island/Wave replaced clinical attachment labels with terms designed to be less clinical and easier to spot in session."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Translating brain science into plain-language relationship advice",
+          "confidence": "medium",
+          "evidence": "Wired for Love brought neuroscience concepts like the 'couple bubble' and amygdala hijack into language couples could use."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Alain de Botton",
+      "dominantCategories": ["storytelling", "teaching"],
+      "playSkills": [
+        {
+          "category": "storytelling",
+          "skill": "Making philosophy feel personal rather than academic",
+          "confidence": "high",
+          "evidence": "The Consolations of Philosophy matched six philosophers to common human problems. Academic philosophers called it oversimplified. It sold over two million copies."
+        },
+        {
+          "category": "teaching",
+          "skill": "Building an institution for things nobody teaches",
+          "confidence": "high",
+          "evidence": "The School of Life opened in a London shopfront to teach the subjects formal education ignores: relationships, work, anxiety, death."
+        },
+        {
+          "category": "creating",
+          "skill": "Designing branded products that carry ideas into daily life",
+          "confidence": "medium",
+          "evidence": "The School of Life sells journals, cards, and kits alongside classes and YouTube content, embedding philosophy into physical objects."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Giving language to a feeling millions carry but never name",
+          "confidence": "high",
+          "evidence": "Status Anxiety named the insight that meritocracy intensifies suffering because failure now feels deserved."
+        },
+        {
+          "category": "teaching",
+          "skill": "Using free video content as a classroom that scales beyond the shopfront",
+          "confidence": "high",
+          "evidence": "The School of Life YouTube channel amassed 8 million subscribers, becoming the primary distribution channel when the audience outgrew the physical school."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Gabor Mate",
+      "dominantCategories": ["coaching", "storytelling"],
+      "playSkills": [
+        {
+          "category": "coaching",
+          "skill": "Sitting with the people nobody else will treat",
+          "confidence": "high",
+          "evidence": "Spent 12 years as staff physician at the Portland Hotel treating the most severely addicted patients in Vancouver's Downtown Eastside."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Using witnessed suffering as the raw material for books that write themselves",
+          "confidence": "high",
+          "evidence": "In the Realm of Hungry Ghosts documented patient stories from the Downtown Eastside, giving the argument an authority no academic literature could match."
+        },
+        {
+          "category": "teaching",
+          "skill": "Reframing a question so the answer changes everything",
+          "confidence": "high",
+          "evidence": "His central reframe, asking 'Why the pain?' instead of 'Why the addiction?', shifted how millions understand compulsive behaviour."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Confessing your own compulsion to give the argument honesty",
+          "confidence": "high",
+          "evidence": "He disclosed his compulsive CD buying in Hungry Ghosts, tracing it to his infancy in Nazi-occupied Budapest, risking credibility for truth."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Johann Hari",
+      "dominantCategories": ["storytelling", "speaking_up"],
+      "playSkills": [
+        {
+          "category": "storytelling",
+          "skill": "Travelling to the places nobody else goes and bringing back the story",
+          "confidence": "high",
+          "evidence": "Spent three years in nine countries researching Chasing the Scream, from a transgender crack dealer in Brooklyn to rat experiments in labs."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Distilling a book's argument into one sentence that travels further than the book",
+          "confidence": "high",
+          "evidence": "'The opposite of addiction is not sobriety. The opposite of addiction is connection' became one of the most quoted sentences in addiction discourse."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Rebuilding credibility through depth after public disgrace",
+          "confidence": "high",
+          "evidence": "After a plagiarism scandal destroyed his journalism career, he invested three years in a single book to rebuild authority through depth, not speed."
+        },
+        {
+          "category": "teaching",
+          "skill": "Popularising forgotten research that changes the frame",
+          "confidence": "medium",
+          "evidence": "He revived Bruce Alexander's Rat Park experiment from the 1970s and made it the centrepiece of a TED talk viewed over 20 million times."
+        }
+      ],
+      "antiTags": ["building"]
+    },
+    {
+      "name": "Maia Szalavitz",
+      "dominantCategories": ["storytelling", "speaking_up"],
+      "playSkills": [
+        {
+          "category": "storytelling",
+          "skill": "Using personal history as an epistemological tool, not just memoir",
+          "confidence": "high",
+          "evidence": "She uses her own addiction experience not for shock value but to know when the research literature is wrong because the experience does not match."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Exposing an abusive industry that operates without oversight",
+          "confidence": "high",
+          "evidence": "Help at Any Cost documented deaths in 'tough love' youth treatment facilities, contributing to the closure of several programmes."
+        },
+        {
+          "category": "teaching",
+          "skill": "Offering a third explanatory model when two existing ones fail",
+          "confidence": "high",
+          "evidence": "Unbroken Brain reframed addiction as a developmental learning disorder, challenging both the moral model and the disease model."
+        }
+      ],
+      "antiTags": ["performing", "connecting"]
+    },
+    {
+      "name": "Carl Hart",
+      "dominantCategories": ["teaching", "speaking_up"],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Designing experiments that disprove the dominant narrative",
+          "confidence": "high",
+          "evidence": "His controlled lab studies showed crack and meth users chose a five-dollar voucher over another hit, contradicting the story that these drugs are irresistible."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Publishing findings that contradict your own starting beliefs",
+          "confidence": "high",
+          "evidence": "He entered neuroscience to prove the drug-war narrative and spent years publishing data that dismantled it, despite professional risk."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Using personal disclosure to force a conversation the data alone cannot start",
+          "confidence": "high",
+          "evidence": "In Drug Use for Grown-Ups he disclosed his own regular heroin use as a tenured Columbia professor, making the academic argument impossible to ignore."
+        }
+      ],
+      "antiTags": ["performing", "connecting"]
+    },
+    {
+      "name": "Holly Whitaker",
+      "dominantCategories": ["building", "storytelling"],
+      "playSkills": [
+        {
+          "category": "building",
+          "skill": "Creating an alternative to a broken institution",
+          "confidence": "high",
+          "evidence": "Tempest replaced AA meetings with meditation, nutrition, movement, therapy, and community for people who found 12-step alienating."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Reframing an old problem with a new identity",
+          "confidence": "high",
+          "evidence": "Quit Like a Woman positioned sobriety as feminist empowerment rather than shame-based confession, creating a brand that resonated with women who would never go to AA."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Challenging the evidence base of a culturally sacred institution",
+          "confidence": "high",
+          "evidence": "She researched and publicised that the scientific evidence for AA's effectiveness was surprisingly thin, questioning its outsized cultural authority."
+        },
+        {
+          "category": "building",
+          "skill": "Growing an audience through free content before monetising",
+          "confidence": "medium",
+          "evidence": "The Hip Sobriety blog built an audience, the online programme captured revenue, and the book created mass awareness."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Russell Brand",
+      "dominantCategories": ["performing", "storytelling"],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Making recovery look exciting rather than defeated",
+          "confidence": "high",
+          "evidence": "Used celebrity visibility to make sobriety seem countercultural and compelling rather than shameful."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Rewriting a sacred text in contemporary language",
+          "confidence": "high",
+          "evidence": "Recovery rewrote the 12 steps, stripping away mid-century Christian framing and making each step applicable to any compulsive behaviour."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Testifying from lived experience in rooms built for experts",
+          "confidence": "high",
+          "evidence": "Gave evidence before the UK Home Affairs Select Committee, speaking about his own crack and heroin addiction in a register parliamentary committees almost never hear."
+        },
+        {
+          "category": "coaching",
+          "skill": "Mentoring people in early recovery as the foundation of your own sobriety",
+          "confidence": "medium",
+          "evidence": "Describes mentoring people in early recovery as the single most effective thing for maintaining his own sobriety."
+        }
+      ],
+      "antiTags": ["building"]
+    },
+    {
+      "name": "Bill Wilson",
+      "dominantCategories": ["connecting", "leading"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Discovering that one person reaching out to another is more powerful than any professional",
+          "confidence": "high",
+          "evidence": "The founding moment of AA was Wilson calling strangers from the Mayflower Hotel to find another alcoholic. Their six-hour conversation became the template for peer support."
+        },
+        {
+          "category": "leading",
+          "skill": "Building a structure designed to survive without its founder",
+          "confidence": "high",
+          "evidence": "Built anonymity and anti-personality principles into AA's 12 Traditions, ensuring the movement could not be owned or corrupted by any individual."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Writing the foundational text that holds a movement together",
+          "confidence": "high",
+          "evidence": "Drafted the Big Book in bed in Brooklyn. It has sold over 10 million copies and spawned 200+ derivative programmes worldwide."
+        },
+        {
+          "category": "connecting",
+          "skill": "Creating a replicable meeting format anyone can start anywhere for free",
+          "confidence": "high",
+          "evidence": "AA scaled to 2 million members in 180 countries with no CEO, no board, no marketing budget. Anyone can start a meeting."
+        }
+      ],
+      "antiTags": ["designing"]
+    },
+    {
+      "name": "Louise Aronson",
+      "dominantCategories": ["storytelling", "teaching"],
+      "playSkills": [
+        {
+          "category": "storytelling",
+          "skill": "Weaving patient narratives into medical argument so people feel what data cannot convey",
+          "confidence": "high",
+          "evidence": "Elderhood interweaves patient stories, medical evidence, and memoir. A recurring patient ages in real time through the book."
+        },
+        {
+          "category": "teaching",
+          "skill": "Naming a structural values problem that disguises itself as a staffing problem",
+          "confidence": "high",
+          "evidence": "She frames the geriatrics recruitment crisis (7,000 geriatricians for 50 million elders) as a culture that fears aging producing a medical system that neglects it."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Arguing that an entire phase of life has been erased from medicine's framework",
+          "confidence": "high",
+          "evidence": "Elderhood pointed out that old age can span 40 years but has no developmental framework, no prestigious specialty, and no cultural narrative other than loss."
+        },
+        {
+          "category": "teaching",
+          "skill": "Using narrative medicine as a clinical tool",
+          "confidence": "medium",
+          "evidence": "She teaches narrative medicine at UCSF, using patient stories as instruments for clinical understanding."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Bill Thomas",
+      "dominantCategories": ["designing", "leading"],
+      "playSkills": [
+        {
+          "category": "designing",
+          "skill": "Redesigning an institution from the ground up rather than reforming it",
+          "confidence": "high",
+          "evidence": "Green Houses replaced 100-bed nursing homes with 10-person homes, with private rooms, shared kitchens, and self-managed care teams."
+        },
+        {
+          "category": "leading",
+          "skill": "Starting with the smallest possible proof that a redesign works",
+          "confidence": "high",
+          "evidence": "The Eden Alternative at Chase Memorial (dogs, cats, birds, children) reduced mortality by 15% and drug costs by 38%, proving the concept before scaling."
+        },
+        {
+          "category": "creating",
+          "skill": "Using theatre to carry an argument beyond the conference room",
+          "confidence": "medium",
+          "evidence": "The Age of Disruption Tour was a one-man theatrical show in venues across the US, reaching audiences who would never attend a geriatrics conference."
+        },
+        {
+          "category": "designing",
+          "skill": "Naming the root cause as loneliness, helplessness, and boredom rather than medical conditions",
+          "confidence": "high",
+          "evidence": "He identified the 'three plagues' of institutional care and designed environments to eliminate them, treating the social illness rather than the medical symptoms."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Ai-jen Poo",
+      "dominantCategories": ["leading", "connecting"],
+      "playSkills": [
+        {
+          "category": "leading",
+          "skill": "Organising a workforce that is isolated by the nature of the work itself",
+          "confidence": "high",
+          "evidence": "Built the National Domestic Workers Alliance to 2.5 million members despite workers being scattered in private homes with individual employers."
+        },
+        {
+          "category": "connecting",
+          "skill": "Linking an invisible fight to a problem everyone fears",
+          "confidence": "high",
+          "evidence": "Connected domestic workers' rights to the aging crisis, making the cause relevant to every family with aging parents, not just the immigrant workforce."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Passing legislation that creates a template for other states",
+          "confidence": "high",
+          "evidence": "Won the 2010 New York Domestic Workers' Bill of Rights after six years of organising, which became a template for nine other states."
+        },
+        {
+          "category": "leading",
+          "skill": "Reframing a personal problem as an infrastructure problem on the scale of highways",
+          "confidence": "medium",
+          "evidence": "The Age of Dignity framed elder care not as a family problem but as infrastructure on the scale of the interstate highway system."
+        }
+      ],
+      "antiTags": ["creating"]
+    },
+    {
+      "name": "Marc Freedman",
+      "dominantCategories": ["leading", "connecting"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Building bridges between generations that society has segregated",
+          "confidence": "high",
+          "evidence": "How to Live Forever documented experiments in cohousing, shared-site programmes, and intergenerational schools to rebuild multigenerational connection."
+        },
+        {
+          "category": "leading",
+          "skill": "Giving a nameless experience a name people want to claim",
+          "confidence": "high",
+          "evidence": "Reframed 'retirement' as 'encore,' signalling that the second act could be as significant as the first."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Using prizes to create counter-narratives in culture",
+          "confidence": "medium",
+          "evidence": "The Purpose Prize awarded $100,000 to social innovators over 60, creating media stories that contradicted the assumption that innovation belongs only to the young."
+        },
+        {
+          "category": "connecting",
+          "skill": "Building programmes that produce research, then using research to drive policy",
+          "confidence": "high",
+          "evidence": "Experience Corps placed older volunteers in schools, then a Johns Hopkins study proved the children improved in reading and the volunteers improved in health."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Judith Heumann",
+      "dominantCategories": ["speaking_up", "leading"],
+      "playSkills": [
+        {
+          "category": "speaking_up",
+          "skill": "Suing for the right to do the thing everyone says you cannot do",
+          "confidence": "high",
+          "evidence": "At 22, she sued the NYC Board of Education after they denied her a teaching licence because her wheelchair made her 'a fire hazard.' She won."
+        },
+        {
+          "category": "leading",
+          "skill": "Leading a sustained occupation to force policy change",
+          "confidence": "high",
+          "evidence": "Led the 25-day Section 504 sit-in at the San Francisco Federal Building, the longest occupation of a federal building in US history."
+        },
+        {
+          "category": "leading",
+          "skill": "Fighting the same fight from outside and then inside the institution",
+          "confidence": "high",
+          "evidence": "Moved from street activism to serving as Clinton's Assistant Secretary and the World Bank's first Disability Advisor, changing policies she once protested."
+        },
+        {
+          "category": "connecting",
+          "skill": "Building coalitions across movements for a shared cause",
+          "confidence": "medium",
+          "evidence": "During the 504 sit-in, the Black Panthers brought food and a gay rights group ran supplies, creating cross-movement solidarity."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Stella Young",
+      "dominantCategories": ["speaking_up", "performing"],
+      "playSkills": [
+        {
+          "category": "speaking_up",
+          "skill": "Coining the term that names what everyone sees but nobody has language for",
+          "confidence": "high",
+          "evidence": "She coined 'inspiration porn' to describe the media habit of using disabled people as motivational props. The term entered common use."
+        },
+        {
+          "category": "performing",
+          "skill": "Making people laugh while telling them an uncomfortable truth",
+          "confidence": "high",
+          "evidence": "Her TEDxSydney talk used comedy to show that calling disabled people brave for doing ordinary things is the problem. Over 10 million views."
+        },
+        {
+          "category": "leading",
+          "skill": "Centring disabled writers on their own stories rather than letting others narrate",
+          "confidence": "high",
+          "evidence": "As editor of ABC's Ramp Up, she insisted on disabled people telling their own stories rather than having journalists narrate their experiences."
+        }
+      ],
+      "antiTags": ["building"]
+    },
+    {
+      "name": "Haben Girma",
+      "dominantCategories": ["speaking_up", "teaching"],
+      "playSkills": [
+        {
+          "category": "speaking_up",
+          "skill": "Reframing a rights issue as a design problem",
+          "confidence": "high",
+          "evidence": "Positioned accessibility as a design problem (inclusive design is cheaper than retrofitting), making the business case alongside the moral one."
+        },
+        {
+          "category": "teaching",
+          "skill": "Making the invisible barrier visible through analogy",
+          "confidence": "high",
+          "evidence": "Compared inaccessible websites to stairs at a building entrance, and asked a dinner guest if she suffered from not echolocating like a bat."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Using legal cases to set structural precedents",
+          "confidence": "high",
+          "evidence": "Took on cases arguing digital platforms must be accessible under the ADA, treating inaccessible websites as the digital equivalent of physical barriers."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turning lived logistics into a public argument about design",
+          "confidence": "medium",
+          "evidence": "Her memoir described Harvard not as inspirational but as logistical: every system was designed for people who could see and hear."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Ed Roberts",
+      "dominantCategories": ["leading", "speaking_up"],
+      "playSkills": [
+        {
+          "category": "leading",
+          "skill": "Building the first one so well that others can copy it without asking permission",
+          "confidence": "high",
+          "evidence": "The Centre for Independent Living in Berkeley became a replicable template. Within a decade, 400+ centres opened across the US, all following the CIL model."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Challenging the institution that wrote you off",
+          "confidence": "high",
+          "evidence": "The Department of Rehabilitation called him 'too severely disabled to ever work.' He later became its Director under Governor Jerry Brown."
+        },
+        {
+          "category": "leading",
+          "skill": "Establishing that the people affected are the experts on their own lives",
+          "confidence": "high",
+          "evidence": "CIL was built on the principle that disabled people, not medical professionals, are the experts on their own needs."
+        },
+        {
+          "category": "connecting",
+          "skill": "Gathering other excluded people into a named collective",
+          "confidence": "medium",
+          "evidence": "His iron lung would not fit in a dorm. By 1967, twelve severely disabled students had followed him to Berkeley, calling themselves the Rolling Quads."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Alice Wong",
+      "dominantCategories": ["connecting", "storytelling"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Building the platform where a community tells its own stories",
+          "confidence": "high",
+          "evidence": "The Disability Visibility Project partnered with StoryCorps to create a permanent archive of first-person disability narratives at the Library of Congress."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Curating an anthology that becomes a movement text",
+          "confidence": "high",
+          "evidence": "Disability Visibility centred 37 disabled writers' own voices, became a bestseller, and was adopted in university disability studies courses."
+        },
+        {
+          "category": "speaking_up",
+          "skill": "Making presence itself a political act",
+          "confidence": "high",
+          "evidence": "Attended a White House event via telepresence robot, creating one of the most shared images of the disability rights movement in the 2010s."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Writing at the intersection of ableism, racism, and pandemic politics",
+          "confidence": "medium",
+          "evidence": "Year of the Tiger combined personal essay and cultural criticism as a Chinese American disabled woman ventilator-dependent during a pandemic that treated her as expendable."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Muhammad Yunus",
+      "dominantCategories": ["leading", "connecting"],
+      "playSkills": [
+        {
+          "category": "leading",
+          "skill": "Making borrowers the owners so growth serves the mission",
+          "confidence": "high",
+          "evidence": "Grameen Bank is 97% owned by its borrowers (women), aligning incentives so that growth serves the poor rather than extracting from them."
+        },
+        {
+          "category": "connecting",
+          "skill": "Using group trust to replace collateral",
+          "confidence": "high",
+          "evidence": "Five-member guarantee circles eliminated the need for collateral, making microloans possible anywhere there was poverty and trust."
+        },
+        {
+          "category": "teaching",
+          "skill": "Proving with a $27 experiment that an entire system's assumptions are wrong",
+          "confidence": "high",
+          "evidence": "He lent $27 to 42 women, they repaid every cent, and the experiment proved that the banking system's refusal to lend to the poor was based on prejudice, not risk."
+        },
+        {
+          "category": "leading",
+          "skill": "Proposing a second type of capitalism alongside the profit-maximising kind",
+          "confidence": "medium",
+          "evidence": "Used the Nobel Peace Prize platform to push 'social business,' a company designed to solve social problems rather than maximise shareholder profit."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Tiffany Aliche",
+      "dominantCategories": ["teaching", "connecting"],
+      "playSkills": [
+        {
+          "category": "teaching",
+          "skill": "Writing about money the way a big sister talks, not the way an advisor lectures",
+          "confidence": "high",
+          "evidence": "Her editorial rule is 'if my mother wouldn't understand this sentence, I rewrite it.' The approach directly addressed why financial literacy programmes fail."
+        },
+        {
+          "category": "connecting",
+          "skill": "Building a free challenge that creates a community before you monetise",
+          "confidence": "high",
+          "evidence": "The Live Richer Challenge attracted 60,000 in its first cohort and over one million women total, collectively saving and paying off $250 million in debt."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turning financial wreckage into the origin story of a movement",
+          "confidence": "high",
+          "evidence": "Lost her savings to a con artist in 2008, was laid off, and started from zero. The Budgetnista was born from rebuilding, not from expertise."
+        },
+        {
+          "category": "teaching",
+          "skill": "Breaking a complex subject into daily micro-steps anyone can follow",
+          "confidence": "high",
+          "evidence": "The 36-day Live Richer Challenge walked participants through budgeting, saving, credit repair, investing, and insurance one day at a time."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Jose Quinonez",
+      "dominantCategories": ["leading", "connecting"],
+      "playSkills": [
+        {
+          "category": "connecting",
+          "skill": "Making an invisible financial practice visible to the formal system",
+          "confidence": "high",
+          "evidence": "His innovation was not inventing lending circles but reporting every payment to credit bureaus, turning centuries-old community lending into visible credit history."
+        },
+        {
+          "category": "leading",
+          "skill": "Challenging the system's definition of creditworthy",
+          "confidence": "high",
+          "evidence": "He argued that millions of Americans are not financially irresponsible but financially invisible, saving and repaying through networks the banking system refuses to recognise."
+        },
+        {
+          "category": "building",
+          "skill": "Creating a model simple enough for other non-profits to replicate",
+          "confidence": "high",
+          "evidence": "One local programme in San Francisco's Mission District proved the concept, and the Lending Circles model was simple enough for replication nationally."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Using your own crossing as the reason the organisation exists",
+          "confidence": "medium",
+          "evidence": "He crossed the US-Mexico border undocumented at age nine and has said Mission Asset Fund exists because he knows what it feels like to be financially competent but invisible."
+        }
+      ],
+      "antiTags": ["performing"]
+    },
+    {
+      "name": "Suze Orman",
+      "dominantCategories": ["performing", "teaching"],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Treating a boring subject as emotionally urgent so people actually listen",
+          "confidence": "high",
+          "evidence": "She treated money as an emotional subject rather than a mathematical one, creating an audience that bland financial experts could never reach."
+        },
+        {
+          "category": "teaching",
+          "skill": "Telling people hard truths about their finances with the energy of someone who loves them",
+          "confidence": "high",
+          "evidence": "The 'Can I Afford It?' segment told callers on national television they could not afford the vacation or the handbag, and they kept tuning in."
+        },
+        {
+          "category": "coaching",
+          "skill": "Making financial competence feel like a form of self-care rather than deprivation",
+          "confidence": "high",
+          "evidence": "Women and Money argued that financial competence is essential, not selfish, reaching women who had been taught to take care of everyone else's money first."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Using your own financial loss as the origin of your authority",
+          "confidence": "high",
+          "evidence": "Lost $50,000 in waitress savings to a Merrill Lynch broker, sued, and the experience became the emotional foundation of her entire career."
+        }
+      ],
+      "antiTags": []
+    },
+    {
+      "name": "Dave Ramsey",
+      "dominantCategories": ["performing", "leading"],
+      "playSkills": [
+        {
+          "category": "performing",
+          "skill": "Making personal finance feel like a moral and spiritual practice",
+          "confidence": "high",
+          "evidence": "His evangelical framing turns budgeting into a moral practice. The confrontational radio style makes financial discipline feel urgent, not tedious."
+        },
+        {
+          "category": "teaching",
+          "skill": "Prioritising psychological momentum over mathematical optimisation",
+          "confidence": "high",
+          "evidence": "The debt snowball pays smallest balances first, not highest-interest. He argues personal finance is about behaviour, not maths."
+        },
+        {
+          "category": "leading",
+          "skill": "Distributing through existing communities rather than building your own",
+          "confidence": "high",
+          "evidence": "Financial Peace University runs through churches, using pre-built community and accountability structures that online courses cannot replicate. Over 10 million graduates."
+        },
+        {
+          "category": "building",
+          "skill": "Funding a media empire through product sales with zero advertising",
+          "confidence": "high",
+          "evidence": "Ramsey Solutions grew to 1,000+ employees and 18 million weekly listeners with no ads, funding everything through book sales, courses, and referral fees."
+        },
+        {
+          "category": "storytelling",
+          "skill": "Turning bankruptcy into the credibility that makes people listen",
+          "confidence": "medium",
+          "evidence": "Went bankrupt at 26 with a newborn. The experience gave him absolute conviction that all consumer debt is dangerous, and that conviction became the brand."
+        }
+      ],
+      "antiTags": []
+    }
+  ]
+}

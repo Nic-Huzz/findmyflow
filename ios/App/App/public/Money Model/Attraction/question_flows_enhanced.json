@@ -1,0 +1,443 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "total_questions": 10,
+    "estimated_completion_time_minutes": 3,
+    "last_updated": "2025-12-04"
+  },
+
+  "questions": [
+    {
+      "id": "Q1_business_model",
+      "question_number": 1,
+      "text": "What type of business do you run?",
+      "help_text": "Select the option that best describes your primary revenue model",
+      "why_this_matters": "Different attraction offers work better for different business models. For example, 'Buy X Get Y Free' works great for physical products, while 'Free With Consumption' is ideal for SaaS.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "digital_product",
+          "label": "Digital Product",
+          "description": "Online courses, ebooks, templates, digital downloads",
+          "examples": ["Online course", "PDF guide", "Design templates"]
+        },
+        {
+          "value": "coaching_consulting",
+          "label": "Coaching / Consulting",
+          "description": "1-on-1 or group coaching, consulting services",
+          "examples": ["Life coaching", "Business consulting", "Health coaching"]
+        },
+        {
+          "value": "physical_product",
+          "label": "Physical Product",
+          "description": "Tangible products that ship to customers",
+          "examples": ["Supplements", "Clothing", "Equipment"]
+        },
+        {
+          "value": "membership_subscription",
+          "label": "Membership / Subscription",
+          "description": "Recurring access to content, community, or services",
+          "examples": ["Monthly membership", "Content subscription", "Community access"]
+        },
+        {
+          "value": "saas_software",
+          "label": "SaaS / Software",
+          "description": "Software-as-a-service or web applications",
+          "examples": ["Project management tool", "CRM software", "Analytics platform"]
+        },
+        {
+          "value": "agency",
+          "label": "Agency / Done-For-You",
+          "description": "Services where you do the work for clients",
+          "examples": ["Marketing agency", "Web design", "Content creation"]
+        },
+        {
+          "value": "hybrid",
+          "label": "Hybrid / Multiple Models",
+          "description": "Combination of multiple business models",
+          "examples": ["Coaching + courses", "Products + membership"]
+        }
+      ],
+      "store_as": "business_model",
+      "tags": ["business_model", "core_identity"]
+    },
+
+    {
+      "id": "Q2_gross_margin",
+      "question_number": 2,
+      "text": "What best describes your average gross margin?",
+      "help_text": "Gross margin = (Revenue - Cost of Goods Sold) / Revenue. If you sell something for $100 and it costs you $20 to deliver, your gross margin is 80%.",
+      "why_this_matters": "Some attraction offers (like Win Your Money Back or Buy X Get Y Free) require high margins to be profitable. Lower margin businesses need to focus on volume or backend monetization.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "under_40_percent",
+          "label": "Under 40%",
+          "description": "Lower margin, higher cost to deliver",
+          "warning": "Most attraction offers require higher margins. Consider focusing on volume-based offers or improving margins first."
+        },
+        {
+          "value": "40_60_percent",
+          "label": "40-60%",
+          "description": "Moderate margin",
+          "tip": "You have decent flexibility. Focus on offers that don't require giving away too much free."
+        },
+        {
+          "value": "60_85_percent",
+          "label": "60-85%",
+          "description": "Good margin",
+          "tip": "Strong position for most attraction offers including bonuses and giveaways."
+        },
+        {
+          "value": "85_plus_percent",
+          "label": "85%+",
+          "description": "Excellent margin",
+          "tip": "You can afford to be generous with free trials, bonuses, and refund guarantees."
+        }
+      ],
+      "store_as": "gross_margin",
+      "tags": ["margin", "economics", "critical"]
+    },
+
+    {
+      "id": "Q3_cashflow_tolerance",
+      "question_number": 3,
+      "text": "What best describes your cashflow tolerance for front-end offers?",
+      "help_text": "Can you afford to break even or lose money on the initial sale, making it up on the backend? Or do you need to profit immediately?",
+      "why_this_matters": "Offers like 'Pay Later' or 'Win Your Money Back' delay revenue. If you need immediate cashflow, you'll need different strategies.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "must_profit_front_end",
+          "label": "Must profit on front-end",
+          "description": "I need to make money immediately on each sale",
+          "impact": "Limits you to decoy offers and immediate payment options"
+        },
+        {
+          "value": "break_even_is_okay",
+          "label": "Break-even is okay",
+          "description": "I can break even upfront if there's backend potential",
+          "impact": "Opens up more attraction offer possibilities"
+        },
+        {
+          "value": "can_afford_short_term_loss",
+          "label": "Can afford short-term loss",
+          "description": "I can invest in customer acquisition",
+          "impact": "Best position for maximum flexibility"
+        },
+        {
+          "value": "can_run_free_front_end",
+          "label": "Can run free front-end",
+          "description": "I can give away significant value for free",
+          "impact": "Unlocks all attraction offer strategies including giveaways"
+        }
+      ],
+      "store_as": "cashflow_tolerance",
+      "tags": ["cashflow", "economics", "critical"]
+    },
+
+    {
+      "id": "Q4_capacity",
+      "question_number": 4,
+      "text": "How much new customer volume can you handle right now?",
+      "help_text": "If your attraction offer works, how many new customers can you actually serve without breaking your systems or quality?",
+      "why_this_matters": "Giveaways and 'Buy X Get Y' offers can bring massive volume. Win Your Money Back and high-touch offers need controlled capacity.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "high_capacity_can_handle_big_spike",
+          "label": "High capacity - can handle big spike",
+          "description": "Automated delivery or scalable team",
+          "best_for": "Volume offers like giveaways and bundles"
+        },
+        {
+          "value": "moderate_capacity_some_limitations",
+          "label": "Moderate capacity - some limitations",
+          "description": "Can grow but need time to scale",
+          "best_for": "Most balanced attraction offers"
+        },
+        {
+          "value": "low_capacity_can_only_take_a_few",
+          "label": "Low capacity - can only take a few",
+          "description": "Limited spots or time-intensive delivery",
+          "best_for": "Quality-over-volume offers, decoy pricing"
+        },
+        {
+          "value": "no_capacity_need_to_control_volume",
+          "label": "No capacity - need to control volume",
+          "description": "At or near max capacity now",
+          "best_for": "Exclusive, premium positioning only"
+        }
+      ],
+      "store_as": "capacity",
+      "tags": ["capacity", "operations", "critical"]
+    },
+
+    {
+      "id": "Q5_tracking",
+      "question_number": 5,
+      "text": "How well can you track user outcomes or progress?",
+      "help_text": "Can you measure whether customers complete actions, achieve results, or hit milestones? This is CRITICAL for Win Your Money Back offers.",
+      "why_this_matters": "Win Your Money Back requires reliable tracking. Free challenges need progress monitoring. If you can't track, you're limited to simpler offers.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "can_track_everything",
+          "label": "Can track everything",
+          "description": "Automated systems, clear metrics, reliable data",
+          "examples": ["Software usage analytics", "Course completion rates", "Workout logs"],
+          "unlocks": "Win Your Money Back, All challenge-based offers"
+        },
+        {
+          "value": "can_track_some_things",
+          "label": "Can track some things",
+          "description": "Manual tracking or partial automation",
+          "examples": ["Check-ins", "Self-reported progress", "Session attendance"],
+          "unlocks": "Most offers except strict Win Your Money Back"
+        },
+        {
+          "value": "tracking_is_difficult",
+          "label": "Tracking is difficult",
+          "description": "Hard to measure or verify outcomes",
+          "warning": "Avoid offers that depend on tracking completion"
+        },
+        {
+          "value": "cannot_track_results_at_all",
+          "label": "Cannot track results at all",
+          "description": "No tracking capability",
+          "warning": "Limited to giveaways, simple discounts, and free trials"
+        }
+      ],
+      "store_as": "tracking_ability",
+      "tags": ["tracking", "operations", "critical"]
+    },
+
+    {
+      "id": "Q6_lead_challenge",
+      "question_number": 6,
+      "text": "What is your biggest challenge with leads right now?",
+      "help_text": "What's the main obstacle preventing leads from becoming customers?",
+      "why_this_matters": "Each attraction offer solves a specific lead problem. No leads? Giveaway. No trust? Free trial. Price sensitive? Decoy pricing.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "not_enough_leads",
+          "label": "Not enough leads",
+          "description": "Need more people to enter the funnel",
+          "best_solution": "Giveaways, Buy X Get Y Free - volume plays"
+        },
+        {
+          "value": "leads_dont_trust_me_yet",
+          "label": "Leads don't trust me yet",
+          "description": "People are skeptical or need proof",
+          "best_solution": "Win Your Money Back, Free With Consumption - build trust through experience"
+        },
+        {
+          "value": "leads_are_price_sensitive",
+          "label": "Leads are price sensitive",
+          "description": "People think it's too expensive",
+          "best_solution": "Decoy Offer, Pay Less Now/More Later - reframe the value"
+        },
+        {
+          "value": "slow_or_unclear_sales_cycle",
+          "label": "Slow or unclear sales cycle",
+          "description": "People take forever to decide",
+          "best_solution": "Pay Less Now/More Later, Decoy - create urgency"
+        },
+        {
+          "value": "low_quality_leads",
+          "label": "Low quality leads",
+          "description": "Wrong fit or tire-kickers",
+          "best_solution": "Decoy Offer, Win Your Money Back - self-select quality"
+        },
+        {
+          "value": "none_of_the_above",
+          "label": "None of the above",
+          "description": "Different challenge or no major issue"
+        }
+      ],
+      "store_as": "lead_challenge",
+      "tags": ["lead_challenge", "market_fit"]
+    },
+
+    {
+      "id": "Q7_backend_strength",
+      "question_number": 7,
+      "text": "How strong is your back-end monetization?",
+      "help_text": "After someone buys your front-end offer, what else can you sell them? This is CRITICAL for most attraction offers.",
+      "why_this_matters": "Most attraction offers make money on the backend. Without upsells, you can only use offers that profit upfront.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "multiple_strong_upsells_and_backend",
+          "label": "Multiple strong upsells",
+          "description": "Several proven offers that convert well",
+          "examples": ["Supplement company with multiple products", "Gym with training + nutrition + membership"],
+          "advantage": "Can afford generous front-end offers"
+        },
+        {
+          "value": "one_strong_backend_offer",
+          "label": "One strong backend offer",
+          "description": "One main upsell that works",
+          "examples": ["Challenge that upsells to program", "Free trial that converts to paid"],
+          "advantage": "Good position for most offers"
+        },
+        {
+          "value": "weak_backend_working_on_it",
+          "label": "Weak backend, working on it",
+          "description": "Have something but needs improvement",
+          "warning": "Focus on building backend before aggressive front-end offers"
+        },
+        {
+          "value": "no_backend_offer_yet",
+          "label": "No backend offer yet",
+          "description": "Only have one product/service",
+          "warning": "Build backend monetization FIRST, then create attraction offer"
+        }
+      ],
+      "store_as": "backend_strength",
+      "tags": ["backend", "monetization", "critical"]
+    },
+
+    {
+      "id": "Q8_repeat_purchase",
+      "question_number": 8,
+      "text": "How often do customers buy from you again or consume repeatedly?",
+      "help_text": "Is this a one-time purchase or do customers come back for more?",
+      "why_this_matters": "Buy X Get Y Free works best with repeat purchases. Win Your Money Back leverages repeated consumption to generate testimonials.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "frequent_repurchase_or_consumption",
+          "label": "Frequent repurchase/consumption",
+          "description": "Weekly or monthly reorders/usage",
+          "examples": ["Supplements", "Meal delivery", "Monthly software"],
+          "advantage": "Perfect for Buy X Get Y Free and subscription offers"
+        },
+        {
+          "value": "occasional_repeat_purchase",
+          "label": "Occasional repeat purchase",
+          "description": "Customers return periodically",
+          "examples": ["Seasonal products", "Quarterly services"],
+          "advantage": "Good for most offers"
+        },
+        {
+          "value": "rare_repeat_purchase",
+          "label": "Rare repeat purchase",
+          "description": "Customers might buy again but infrequently",
+          "examples": ["Annual services", "Referrals"],
+          "impact": "Focus on backend upsells rather than repeat of same product"
+        },
+        {
+          "value": "one_time_purchase_only",
+          "label": "One-time purchase only",
+          "description": "Customers typically only buy once ever",
+          "examples": ["Wedding services", "Real estate"],
+          "impact": "Need strong backend with different offers"
+        }
+      ],
+      "store_as": "repeat_purchase_behavior",
+      "tags": ["repeat_purchase", "ltv"]
+    },
+
+    {
+      "id": "Q9_primary_goal",
+      "question_number": 9,
+      "text": "What is your primary goal for the attraction offer?",
+      "help_text": "What's the #1 outcome you want from this front-end offer?",
+      "why_this_matters": "Your goal determines which offer to use. Lead volume? Giveaway. Testimonials? Win Your Money Back. Fill cohort? Urgency-based offers.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "get_more_leads_fast",
+          "label": "Get more leads fast",
+          "description": "Volume is the priority",
+          "best_offers": ["Giveaway", "Buy X Get Y Free"]
+        },
+        {
+          "value": "build_trust_and_authority",
+          "label": "Build trust and authority",
+          "description": "Establish credibility and prove value",
+          "best_offers": ["Free With Consumption", "Win Your Money Back"]
+        },
+        {
+          "value": "generate_testimonials_and_case_studies",
+          "label": "Generate testimonials & case studies",
+          "description": "Get social proof and success stories",
+          "best_offers": ["Win Your Money Back"]
+        },
+        {
+          "value": "fill_a_program_or_cohort",
+          "label": "Fill a program or cohort",
+          "description": "Fill limited spots by specific deadline",
+          "best_offers": ["Pay Less Now/More Later", "Decoy Offer"]
+        },
+        {
+          "value": "sell_high_ticket_offer",
+          "label": "Sell high-ticket offer",
+          "description": "Convert to premium pricing",
+          "best_offers": ["Decoy Offer", "Pay Less Now/More Later"]
+        },
+        {
+          "value": "grow_a_large_email_list",
+          "label": "Grow a large email list",
+          "description": "Build database for future marketing",
+          "best_offers": ["Giveaway", "Free With Consumption"]
+        }
+      ],
+      "store_as": "primary_goal",
+      "tags": ["primary_goal", "strategy"]
+    },
+
+    {
+      "id": "Q10_lead_preference",
+      "question_number": 10,
+      "text": "What type of leads do you most want from this offer?",
+      "help_text": "Would you rather have 1,000 okay leads or 50 perfect leads?",
+      "why_this_matters": "Volume offers (giveaways) attract many leads. Quality offers (decoy, Win Your Money Back) attract fewer but more committed leads.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "as_many_leads_as_possible",
+          "label": "As many leads as possible",
+          "description": "Volume over quality - we'll nurture them",
+          "best_offers": ["Giveaway", "Buy X Get Y Free"],
+          "tradeoff": "Higher volume, lower intent"
+        },
+        {
+          "value": "fewer_but_higher_quality_leads",
+          "label": "Fewer but higher quality leads",
+          "description": "Quality over quantity - serious buyers only",
+          "best_offers": ["Decoy Offer", "Win Your Money Back"],
+          "tradeoff": "Lower volume, higher intent"
+        },
+        {
+          "value": "only_people_likely_to_buy",
+          "label": "Only people likely to buy",
+          "description": "Pre-qualified, ready to purchase",
+          "best_offers": ["Decoy Offer", "Pay Less Now/More Later"],
+          "tradeoff": "Very selective, highest conversion"
+        },
+        {
+          "value": "balanced_mix_of_volume_and_quality",
+          "label": "Balanced mix of volume and quality",
+          "description": "Good middle ground",
+          "best_offers": ["Free With Consumption", "Most offers work"],
+          "tradeoff": "Moderate volume, moderate quality"
+        }
+      ],
+      "store_as": "lead_preference",
+      "tags": ["lead_preference", "strategy"]
+    }
+  ]
+}

@@ -1,0 +1,485 @@
+{
+  "meta": {
+    "count": 28,
+    "generatedAt": "2026-04-12",
+    "gapAreas": ["relationship_repair", "addiction_recovery", "aging_elder_care", "disability_advocacy", "financial_empowerment"]
+  },
+  "profiles": [
+    {
+      "name": "John Gottman",
+      "source": "nonfounder",
+      "domain": "couples research",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["teaching", "coaching"],
+      "careerModel": {
+        "type": "academic_to_institute",
+        "primaryRevenue": "Gottman Institute workshops, therapist training certification, books",
+        "revenueStreams": ["university salary", "workshops", "books", "therapist training certification", "online courses"],
+        "trajectory": "MIT math PhD -> clinical psychology researcher -> Love Lab at University of Washington -> Gottman Institute with wife Julie Schwartz Gottman -> global therapist certification empire",
+        "keyDecision": "Turned 20 years of academic research into a couples training methodology that therapists worldwide now certify in",
+        "scaleModel": "Academic research gave credibility, then a certification programme trained thousands of therapists to deliver the method without Gottman in the room",
+        "lessonsForUser": "If you teach and care about relationships: spend years building the evidence first, then create a certification that lets others deliver your method"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Sue Johnson",
+      "source": "nonfounder",
+      "domain": "couples therapy",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["coaching", "teaching"],
+      "careerModel": {
+        "type": "academic_to_training_model",
+        "primaryRevenue": "EFT therapist training and certification, books, workshops",
+        "revenueStreams": ["university position", "therapist certification", "books", "Hold Me Tight workshops", "clinical training intensives"],
+        "trajectory": "Clinical psychology PhD at UBC -> developed EFT in the 1980s -> outcome research built credibility -> International Centre for Excellence in EFT -> Hold Me Tight workshops worldwide",
+        "keyDecision": "Published outcome studies that made EFT one of the few empirically validated couples therapy models, giving it an evidence edge over competitors",
+        "scaleModel": "Rigorous research created institutional trust, then a book (Hold Me Tight) and structured workshops let the method spread through both professional and consumer channels",
+        "lessonsForUser": "If you coach and care about evidence: build the outcome data first, then write the book that translates the clinical method for ordinary people"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Harville Hendrix",
+      "source": "nonfounder",
+      "domain": "couples therapy",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["coaching", "teaching", "storytelling"],
+      "careerModel": {
+        "type": "practitioner_to_media_brand",
+        "primaryRevenue": "Books, Imago therapist training certification, workshops",
+        "revenueStreams": ["books", "Imago certification", "couples workshops", "speaking", "online courses"],
+        "trajectory": "Pastoral counsellor -> divorced -> developed Imago theory from personal failure -> Getting the Love You Want -> 18 appearances on Oprah -> global Imago training network",
+        "keyDecision": "Used Oprah as the distribution channel that turned a niche therapy into a household name",
+        "scaleModel": "One bestselling book plus massive media exposure created demand, then a certification programme met it by training therapists worldwide",
+        "lessonsForUser": "If you coach and tell stories: your biggest failure might be the research question that produces your life's work, and one media hit can create a decade of demand"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Terry Real",
+      "source": "nonfounder",
+      "domain": "men's mental health / couples therapy",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["coaching", "speaking_up", "storytelling"],
+      "careerModel": {
+        "type": "practitioner_to_training_institute",
+        "primaryRevenue": "Relational Life Institute training, books, clinical practice",
+        "revenueStreams": ["clinical practice", "books", "therapist training", "speaking", "online courses", "intensives"],
+        "trajectory": "Family therapy training -> I Don't Want to Talk About It (1997) named male depression -> built Relational Life Institute -> became go-to voice on men and relationships",
+        "keyDecision": "Positioned himself as the therapist willing to confront men directly in session, creating a distinctive brand in a field that defaults to neutrality",
+        "scaleModel": "Provocative clinical style made for compelling training videos and books, building demand for a training institute that teaches the method to other therapists",
+        "lessonsForUser": "If you coach and speak up: being willing to say the uncomfortable thing in the room can become your entire brand, if you back it with genuine skill"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Gary Chapman",
+      "source": "nonfounder",
+      "domain": "relationship counselling",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["teaching", "coaching"],
+      "careerModel": {
+        "type": "pastoral_to_publishing_empire",
+        "primaryRevenue": "Books, speaking, online quiz traffic",
+        "revenueStreams": ["books", "speaking", "online quiz", "church seminars", "licensing for adaptations"],
+        "trajectory": "Baptist pastor in Winston-Salem -> decades of Saturday counselling -> The Five Love Languages (1992) sold slowly then exploded -> 20+ million copies -> adapted for children, teens, military, workplace",
+        "keyDecision": "Created a framework simple enough to spread without the book, with a free online quiz that kept driving new readers back to the source material",
+        "scaleModel": "One hyper-simple framework with a free assessment tool that went viral through word of mouth, spawning dozens of derivative editions for different audiences",
+        "lessonsForUser": "If you teach and care about relationships: make the framework so simple that people can explain it to a friend in 30 seconds, then let the quiz do the marketing"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Stan Tatkin",
+      "source": "nonfounder",
+      "domain": "couples therapy / neuroscience",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["teaching", "coaching"],
+      "careerModel": {
+        "type": "academic_clinician_to_training_model",
+        "primaryRevenue": "PACT therapist training and certification, books",
+        "revenueStreams": ["PACT certification training", "books", "clinical practice", "online courses", "speaking"],
+        "trajectory": "Clinical training at UCLA -> developed PACT model combining attachment and neuroscience -> Wired for Love (2012) -> PACT Institute trains therapists internationally",
+        "keyDecision": "Blended neuroscience with attachment theory to create a method that therapists could learn through body-reading skills, not just talk therapy techniques",
+        "scaleModel": "A clinically distinctive method (reading physiology, not just words) created a training programme that felt genuinely different from competing certifications",
+        "lessonsForUser": "If you teach and care about the body: combine two fields that don't usually talk to each other, and the synthesis becomes your competitive advantage"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Alain de Botton",
+      "source": "nonfounder",
+      "domain": "philosophy / emotional education",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": ["storytelling", "teaching", "creating"],
+      "careerModel": {
+        "type": "author_to_institution",
+        "primaryRevenue": "Books, The School of Life locations, YouTube ad revenue, branded products",
+        "revenueStreams": ["books", "YouTube channel (8M+ subscribers)", "School of Life classes", "branded products (journals, cards, kits)", "speaking"],
+        "trajectory": "Essays on How Proust Can Change Your Life (1997) -> bestselling philosophy books -> founded The School of Life (2008) -> YouTube channel became primary distribution -> global School of Life network",
+        "keyDecision": "Opened a physical school for emotional intelligence, then pivoted to YouTube as the primary channel when the audience outgrew the shopfront",
+        "scaleModel": "Free YouTube content (8M subscribers) drives awareness, physical locations and products capture revenue, books provide credibility",
+        "lessonsForUser": "If you tell stories and teach: start with the book, build the institution, then let free content on YouTube become your biggest classroom"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Gabor Mate",
+      "source": "nonfounder",
+      "domain": "addiction medicine / trauma",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["teaching", "coaching", "storytelling"],
+      "careerModel": {
+        "type": "clinician_to_public_intellectual",
+        "primaryRevenue": "Books, speaking, documentary collaborations, online courses",
+        "revenueStreams": ["books", "speaking", "documentary appearances", "online courses", "retreat facilitation"],
+        "trajectory": "Family physician in East Vancouver -> staff physician at Portland Hotel (harm reduction) -> In the Realm of Hungry Ghosts (2008) -> global speaking career -> The Myth of Normal (2022) #1 NYT bestseller",
+        "keyDecision": "Stayed on the Downtown Eastside for 12 years treating the most severely addicted patients, building an authority that no academic researcher could match",
+        "scaleModel": "Clinical frontline experience gave moral authority, books gave reach, speaking gave revenue, each reinforcing the others",
+        "lessonsForUser": "If you coach and tell stories: the years you spend in the hardest rooms build an authority that nothing else can replicate, and the books write themselves from what you witnessed"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Johann Hari",
+      "source": "nonfounder",
+      "domain": "journalism / addiction and mental health",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["storytelling", "speaking_up"],
+      "careerModel": {
+        "type": "journalist_to_public_intellectual",
+        "primaryRevenue": "Books, speaking, TED talks",
+        "revenueStreams": ["books", "journalism", "TED talk revenue and exposure", "speaking", "documentary consulting"],
+        "trajectory": "Newspaper columnist (The Independent) -> plagiarism scandal and public disgrace -> three years researching Chasing the Scream -> TED talk (20M+ views) -> Lost Connections -> Stolen Focus",
+        "keyDecision": "After his journalism career was destroyed by scandal, invested three years travelling to nine countries for a single book, rebuilding credibility through depth rather than speed",
+        "scaleModel": "One TED talk distilled the book's core argument ('the opposite of addiction is connection') into a sentence that travelled further than the book itself",
+        "lessonsForUser": "If you tell stories and speak up: one sentence that captures a genuine insight can reach further than a career of columns, especially if you earned it by going to the places nobody else went"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Maia Szalavitz",
+      "source": "nonfounder",
+      "domain": "addiction science journalism",
+      "primaryProblem": "stopped_wondering",
+      "primarySkills": ["storytelling", "speaking_up"],
+      "careerModel": {
+        "type": "journalist",
+        "primaryRevenue": "Books, journalism assignments, speaking",
+        "revenueStreams": ["books", "magazine and online journalism", "speaking", "consulting"],
+        "trajectory": "Columbia student injecting cocaine and heroin -> arrest -> recovery -> science journalism -> Help at Any Cost (2006) exposed abusive treatment industry -> Unbroken Brain (2016) reframed addiction as learning disorder",
+        "keyDecision": "Used her own addiction history not for memoir but as an epistemological tool, claiming she knows when the research is wrong because the experience does not match",
+        "scaleModel": "Rigorous science journalism with personal authority created a niche: the writer who could read the papers AND had the needle marks to challenge them",
+        "lessonsForUser": "If you tell stories and speak up: your worst experience might be the credential that gives your reporting an authority no degree can match"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Carl Hart",
+      "source": "nonfounder",
+      "domain": "neuroscience / drug policy",
+      "primaryProblem": "stopped_wondering",
+      "primarySkills": ["teaching", "speaking_up"],
+      "careerModel": {
+        "type": "academic",
+        "primaryRevenue": "University salary, books, speaking",
+        "revenueStreams": ["Columbia University salary", "books", "speaking", "media appearances", "expert testimony"],
+        "trajectory": "Grew up in poverty in Miami -> entered neuroscience to prove drug-war narrative -> PhD research contradicted own beliefs -> tenured Columbia professor -> Drug Use for Grown-Ups (2021) disclosed own heroin use",
+        "keyDecision": "Published findings that contradicted the dominant addiction narrative despite professional risk, then disclosed personal drug use to force the conversation further",
+        "scaleModel": "Tenure provided a platform safe enough to say what others could not, and personal disclosure made the academic argument impossible to ignore",
+        "lessonsForUser": "If you teach and speak up: build the institutional safety net first (tenure), then use it to say the thing everyone is afraid to say"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Holly Whitaker",
+      "source": "nonfounder",
+      "domain": "sobriety / wellness entrepreneurship",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["building", "storytelling", "speaking_up"],
+      "careerModel": {
+        "type": "startup_founder",
+        "primaryRevenue": "Online recovery programme subscriptions, book",
+        "revenueStreams": ["Tempest programme subscriptions", "book sales", "speaking", "brand partnerships"],
+        "trajectory": "Director at health startup -> addiction crisis -> tried AA, found it alienating -> researched alternatives -> launched Hip Sobriety School (2014) -> rebranded to Tempest -> Quit Like a Woman bestseller (2019) -> Tempest closed (2022)",
+        "keyDecision": "Positioned sobriety as feminist empowerment rather than shame-based confession, creating a brand identity that resonated with women who would never go to AA",
+        "scaleModel": "Blog built audience, online programme captured revenue, book created mass awareness. The model worked for growth but not for financial sustainability",
+        "lessonsForUser": "If you build and tell stories: reframing an old problem with a new identity (sobriety as feminism, not failure) can create explosive growth, but the business model needs to be as strong as the story"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Russell Brand",
+      "source": "nonfounder",
+      "domain": "entertainment / addiction advocacy",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["performing", "storytelling", "speaking_up"],
+      "careerModel": {
+        "type": "celebrity_to_advocate",
+        "primaryRevenue": "Books, podcast, speaking, entertainment career",
+        "revenueStreams": ["books", "podcast/YouTube", "stand-up", "speaking", "film/TV", "treatment centre partnerships"],
+        "trajectory": "Heroin and crack addiction -> comedy circuit -> MTV/film career -> publicly sober -> My Booky Wook memoir -> Recovery (2017) rewrote 12 steps -> UK parliamentary testimony -> YouTube/podcast",
+        "keyDecision": "Used celebrity visibility to make recovery seem exciting and countercultural rather than defeated and shameful",
+        "scaleModel": "Entertainment career provided the megaphone, authenticity of lived experience provided the credibility, and the 12-step rewrite provided a product others could use",
+        "lessonsForUser": "If you perform and tell stories: the platform you built for entertainment can become the distribution channel for advocacy, if the personal story is real enough to survive scrutiny"
+      },
+      "confidence": "medium"
+    },
+    {
+      "name": "Bill Wilson",
+      "source": "nonfounder",
+      "domain": "recovery / mutual aid",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["connecting", "storytelling", "leading"],
+      "careerModel": {
+        "type": "movement_founder",
+        "primaryRevenue": "Book royalties (Big Book), speaking (declined salary from AA)",
+        "revenueStreams": ["Big Book royalties", "speaking", "writing"],
+        "trajectory": "Failed stockbroker -> chronic alcoholism -> hospital spiritual experience (1934) -> met Dr. Bob Smith in Akron (1935) -> co-founded AA -> wrote Big Book (1939) -> built global movement -> died 1971",
+        "keyDecision": "Built anonymity and anti-personality principles into AA's structure, ensuring the movement could not be owned, marketed, or corrupted by any individual's ego",
+        "scaleModel": "Peer-to-peer mutual aid with zero marketing budget, no paid staff at the group level, and a book as the only product. The structure is the scale model: anyone can start a meeting, anywhere, for free",
+        "lessonsForUser": "If you connect people and lead: the most scalable thing you can build might be the one you remove yourself from, letting the structure replicate without needing you"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Louise Aronson",
+      "source": "nonfounder",
+      "domain": "geriatric medicine / medical writing",
+      "primaryProblem": "pain_not_believed",
+      "primarySkills": ["storytelling", "teaching", "speaking_up"],
+      "careerModel": {
+        "type": "academic_to_public_intellectual",
+        "primaryRevenue": "University salary (UCSF), books, speaking",
+        "revenueStreams": ["university salary", "books", "speaking", "journalism", "teaching"],
+        "trajectory": "UCSF geriatrician -> narrative medicine teacher -> Elderhood (2019) Pulitzer finalist -> became public voice for geriatric medicine reform",
+        "keyDecision": "Wrote Elderhood as a hybrid of patient stories, medical evidence, and personal memoir rather than a policy book, making aging feel personal rather than statistical",
+        "scaleModel": "Academic position gave credibility and security, a trade book gave reach, and the Pulitzer nomination gave media access to argue for systemic change",
+        "lessonsForUser": "If you tell stories and teach: weaving patient narratives into medical argument makes people feel what data alone cannot convey"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Bill Thomas",
+      "source": "nonfounder",
+      "domain": "elder care redesign",
+      "primaryProblem": "left_behind",
+      "primarySkills": ["designing", "leading", "creating"],
+      "careerModel": {
+        "type": "social_entrepreneur",
+        "primaryRevenue": "Consulting, Green House Project licensing, speaking, books",
+        "revenueStreams": ["Eden Alternative consulting and certification", "Green House Project licensing", "books", "speaking", "theatrical touring"],
+        "trajectory": "Rural geriatrician in New York -> Eden Alternative at Chase Memorial (1991) -> Green House Project (2003, Robert Wood Johnson Foundation) -> Age of Disruption tour -> elder care thought leader",
+        "keyDecision": "Moved from animals-in-nursing-homes to redesigning the nursing home itself, replacing 100-bed institutions with 10-person Green Houses",
+        "scaleModel": "Pilot project proved the concept, foundation funding scaled it, licensing let others build it, and a theatrical tour made the public case",
+        "lessonsForUser": "If you design and lead: start with the smallest possible proof that your redesign works (dogs in one nursing home), then let the data justify rebuilding the entire model"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Ai-jen Poo",
+      "source": "nonfounder",
+      "domain": "domestic workers' rights / elder care",
+      "primaryProblem": "work_hollows",
+      "primarySkills": ["leading", "connecting", "speaking_up"],
+      "careerModel": {
+        "type": "labour_organiser_to_movement_leader",
+        "primaryRevenue": "Non-profit salary, grants, speaking, books",
+        "revenueStreams": ["NDWA salary", "grants and philanthropy", "books", "speaking", "MacArthur Fellowship"],
+        "trajectory": "Community organiser -> co-founded Domestic Workers United -> won NY Bill of Rights (2010) -> co-founded National Domestic Workers Alliance (2007) -> MacArthur Fellow -> The Age of Dignity (2015) -> Caring Across Generations campaign",
+        "keyDecision": "Connected domestic workers' rights to the aging crisis, making the cause relevant to every family with aging parents, not just the immigrant workforce",
+        "scaleModel": "Organised isolated workers through community networks, passed state-level legislation as proof of concept, then went national. The aging angle gave the cause bipartisan appeal",
+        "lessonsForUser": "If you lead and connect: link the fight of the people nobody sees to the problem everyone fears, and the coalition builds itself"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Marc Freedman",
+      "source": "nonfounder",
+      "domain": "encore careers / intergenerational community",
+      "primaryProblem": "left_behind",
+      "primarySkills": ["leading", "connecting", "storytelling"],
+      "careerModel": {
+        "type": "social_entrepreneur",
+        "primaryRevenue": "Non-profit grants, books, speaking, Purpose Prize partnerships",
+        "revenueStreams": ["Encore.org grants and philanthropy", "books", "speaking", "Purpose Prize partnerships", "Experience Corps programme funding"],
+        "trajectory": "Social sector background -> developed Experience Corps with AARP -> founded Civic Ventures (later Encore.org, now CoGenerate) -> Purpose Prize -> How to Live Forever (2018) -> rebranded around intergenerational connection",
+        "keyDecision": "Reframed 'retirement' as the wrong frame entirely, replacing it with 'encore' to signal that the second act could be as significant as the first",
+        "scaleModel": "Built programmes (Experience Corps) that produced research, used research to drive policy, used prizes (Purpose Prize) to create media narratives, used books to shape public imagination",
+        "lessonsForUser": "If you lead and connect: sometimes the most powerful thing you can do is give a nameless experience a name that people want to claim"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Judith Heumann",
+      "source": "nonfounder",
+      "domain": "disability rights",
+      "primaryProblem": "locked_out",
+      "primarySkills": ["speaking_up", "leading", "connecting"],
+      "careerModel": {
+        "type": "activist_to_policymaker",
+        "primaryRevenue": "Government positions, non-profit leadership, books, speaking, documentary",
+        "revenueStreams": ["government salary", "World Bank advisory role", "books", "speaking", "Crip Camp documentary"],
+        "trajectory": "Denied teaching licence at 22 -> sued and won -> founded Disabled in Action -> led Section 504 sit-in (1977) -> Assistant Secretary under Clinton -> World Bank Disability Advisor -> Crip Camp (2020) Oscar nomination -> Being Heumann memoir",
+        "keyDecision": "Moved from street activism to government positions, using insider power to change policies she had once protested against from the outside",
+        "scaleModel": "Direct action created public pressure, government roles created policy change, a memoir and documentary created cultural memory. Each phase built on the last",
+        "lessonsForUser": "If you speak up and lead: the same fight can be fought from the outside and then from the inside, and doing both in sequence is more powerful than either alone"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Stella Young",
+      "source": "nonfounder",
+      "domain": "disability rights / comedy / journalism",
+      "primaryProblem": "voice_taken",
+      "primarySkills": ["speaking_up", "storytelling", "performing"],
+      "careerModel": {
+        "type": "journalist_and_comedian",
+        "primaryRevenue": "Journalism, ABC editorial role, speaking, comedy",
+        "revenueStreams": ["ABC salary (Ramp Up editor)", "speaking", "comedy performances", "writing"],
+        "trajectory": "Grew up with osteogenesis imperfecta -> studied journalism -> disability rights activism -> comedy -> edited ABC's Ramp Up -> TEDxSydney talk (10M+ views) -> died at 32",
+        "keyDecision": "Used comedy and media platforms instead of traditional advocacy channels, reaching audiences who had never thought about disability politics",
+        "scaleModel": "One TED talk ('I'm Not Your Inspiration, Thank You Very Much') became a permanent cultural reference point, and a media platform (Ramp Up) centred disabled writers",
+        "lessonsForUser": "If you speak up and perform: making people laugh while telling them an uncomfortable truth gets past defences that earnest advocacy cannot"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Haben Girma",
+      "source": "nonfounder",
+      "domain": "disability rights / law / technology",
+      "primaryProblem": "locked_out",
+      "primarySkills": ["speaking_up", "teaching"],
+      "careerModel": {
+        "type": "lawyer_to_public_advocate",
+        "primaryRevenue": "Speaking, legal practice, books, consulting",
+        "revenueStreams": ["speaking", "legal work", "book", "consulting for tech companies", "White House recognition"],
+        "trajectory": "Deafblind from childhood -> Harvard Law (2013) -> digital accessibility litigation -> Obama White House Champion of Change -> Haben memoir (2019) -> corporate and conference speaking",
+        "keyDecision": "Positioned accessibility as a design problem (inclusive design is cheaper than retrofitting), making the business case alongside the moral one",
+        "scaleModel": "Harvard credential opened doors, legal cases set precedents, the memoir humanised the argument, and corporate consulting provided revenue while advancing the cause",
+        "lessonsForUser": "If you speak up and teach: framing a rights issue as a design problem makes it solvable, and making the business case alongside the moral case gets you into rooms that moral arguments alone cannot open"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Ed Roberts",
+      "source": "nonfounder",
+      "domain": "disability rights / independent living",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": ["leading", "speaking_up", "connecting"],
+      "careerModel": {
+        "type": "activist_to_policymaker",
+        "primaryRevenue": "Government salary, non-profit leadership, advocacy",
+        "revenueStreams": ["government salary (Director of CA Dept of Rehabilitation)", "Centre for Independent Living leadership", "speaking", "advocacy"],
+        "trajectory": "Paralysed by polio at 14 -> lived in iron lung -> fought into UC Berkeley (1962) -> Rolling Quads -> founded Centre for Independent Living (1972) -> appointed Director of CA Dept of Rehabilitation by Gov. Brown (1975)",
+        "keyDecision": "Built the independent living model on the principle that disabled people are the experts on their own lives, rejecting the medical model's assumption that professionals know best",
+        "scaleModel": "One centre in Berkeley became a replicable template: within a decade, 400+ independent living centres opened across the US, all following the CIL model",
+        "lessonsForUser": "If you lead and speak up: build the first one so well that others can copy it without asking permission, and the movement scales itself"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Alice Wong",
+      "source": "nonfounder",
+      "domain": "disability media / activism",
+      "primaryProblem": "voice_taken",
+      "primarySkills": ["connecting", "storytelling", "speaking_up"],
+      "careerModel": {
+        "type": "media_organiser",
+        "primaryRevenue": "Books, grants, speaking, partnerships",
+        "revenueStreams": ["book sales and advances", "grants", "speaking", "StoryCorps partnership", "podcast and media"],
+        "trajectory": "Growing up Chinese American and disabled -> launched Disability Visibility Project with StoryCorps (2014) -> anthology bestseller (2020) -> Year of the Tiger memoir (2022) -> cultural voice for disability politics",
+        "keyDecision": "Partnered with StoryCorps to give first-person disability stories a permanent home at the Library of Congress, creating infrastructure rather than just content",
+        "scaleModel": "A StoryCorps partnership built the archive, an anthology curated the best voices, a memoir personalised the politics, and Twitter became the daily distribution channel",
+        "lessonsForUser": "If you connect and tell stories: sometimes the most powerful act is not telling your own story but building the platform where a community tells theirs"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Muhammad Yunus",
+      "source": "nonfounder",
+      "domain": "microfinance / social business",
+      "primaryProblem": "locked_out",
+      "primarySkills": ["leading", "teaching", "connecting"],
+      "careerModel": {
+        "type": "academic_to_social_enterprise",
+        "primaryRevenue": "Grameen Bank operations (interest on microloans), speaking, books, Nobel Prize",
+        "revenueStreams": ["Grameen Bank interest income", "books", "speaking", "consulting", "social business ventures"],
+        "trajectory": "Economics professor at Chittagong -> $27 personal loan to 42 women (1976) -> Grameen Bank Project (1976) -> formal bank charter (1983) -> $30B+ in loans -> Nobel Peace Prize (2006) -> social business concept",
+        "keyDecision": "Made borrowers the owners of the bank (97% women), aligning incentives so that growth served the poor rather than extracting from them",
+        "scaleModel": "Group lending (five-member guarantee circles) eliminated the need for collateral, making the model replicable anywhere there was poverty and trust. Replicated in 100+ countries",
+        "lessonsForUser": "If you lead and teach: the simplest financial innovation (lending $27 with no collateral) can become the most scalable if the ownership structure protects the mission"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Tiffany Aliche",
+      "source": "nonfounder",
+      "domain": "personal finance / financial education",
+      "primaryProblem": "feeling_stupid",
+      "primarySkills": ["teaching", "connecting", "storytelling"],
+      "careerModel": {
+        "type": "content_creator_to_educator",
+        "primaryRevenue": "Books, courses, Live Richer Challenge, speaking",
+        "revenueStreams": ["books", "online courses", "Live Richer Challenge", "speaking", "brand partnerships", "newsletter"],
+        "trajectory": "Preschool teacher earning $39K -> lost savings to financial fraud in 2008 -> laid off -> started The Budgetnista blog -> Live Richer Challenge (60K first cohort, 1M+ total) -> Get Good with Money NYT bestseller (2021)",
+        "keyDecision": "Made the Live Richer Challenge free and social-media-native, building an audience of over a million before monetising with a book and paid courses",
+        "scaleModel": "Free challenge built trust and audience, social media created community, book captured mainstream credibility, paid courses captured revenue. The editorial rule ('if my mother wouldn't understand it, rewrite it') kept the language accessible",
+        "lessonsForUser": "If you teach and connect: give away the most valuable thing for free first, build the community around it, and the community will buy whatever you make next because they already trust you"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Jose Quinonez",
+      "source": "nonfounder",
+      "domain": "financial inclusion",
+      "primaryProblem": "locked_out",
+      "primarySkills": ["leading", "connecting", "building"],
+      "careerModel": {
+        "type": "social_entrepreneur",
+        "primaryRevenue": "Mission Asset Fund grants, lending circle programme fees, consulting",
+        "revenueStreams": ["non-profit grants", "lending circle programme management", "consulting", "MacArthur Fellowship", "speaking"],
+        "trajectory": "Undocumented immigrant at age 9 -> UC Davis -> Princeton master's -> founded Mission Asset Fund (2007) -> Lending Circles programme (2008) -> MacArthur Fellow (2016) -> national model for financial inclusion",
+        "keyDecision": "Did not invent lending circles but had the insight to report payments to credit bureaus, making invisible financial behaviour visible to the formal system",
+        "scaleModel": "One local programme in San Francisco's Mission District proved the concept, the MacArthur Fellowship gave national visibility, and the model was simple enough for other non-profits to replicate",
+        "lessonsForUser": "If you lead and connect: the most powerful innovation is sometimes not building something new but making something that already works visible to the system that ignores it"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Suze Orman",
+      "source": "nonfounder",
+      "domain": "personal finance / media",
+      "primaryProblem": "feeling_stupid",
+      "primarySkills": ["performing", "teaching", "coaching"],
+      "careerModel": {
+        "type": "practitioner_to_media_brand",
+        "primaryRevenue": "Books, TV show, speaking, financial products",
+        "revenueStreams": ["books", "CNBC show", "speaking", "pre-paid debit card (controversial)", "online courses", "podcast"],
+        "trajectory": "Waitress at Buttercup Bakery for 7 years -> lost savings to Merrill Lynch broker -> sued and won -> became financial advisor -> first book (1995) -> Oprah appearances -> The Suze Orman Show on CNBC (2002-2015) -> Women and Money (2007)",
+        "keyDecision": "Treated money as an emotional subject rather than a mathematical one, making financial advice feel like therapy rather than accounting",
+        "scaleModel": "Oprah provided the initial distribution, CNBC provided weekly access to millions, books provided depth, and the confrontational 'Can I Afford It?' format created appointment television",
+        "lessonsForUser": "If you perform and teach: treating a 'boring' subject as emotionally urgent creates an audience that bland experts can never reach"
+      },
+      "confidence": "high"
+    },
+    {
+      "name": "Dave Ramsey",
+      "source": "nonfounder",
+      "domain": "personal finance / media / publishing",
+      "primaryProblem": "feeling_stupid",
+      "primarySkills": ["performing", "teaching", "leading"],
+      "careerModel": {
+        "type": "media_empire",
+        "primaryRevenue": "Books, Financial Peace University course, radio show, referral network",
+        "revenueStreams": ["books", "Financial Peace University enrolments", "radio show (product sales, not ads)", "Endorsed Local Provider referral fees", "live events", "Ramsey Solutions subsidiary authors"],
+        "trajectory": "Built $4M real estate portfolio on debt -> bankrupt at 26 -> local radio show in Nashville (1992) -> Financial Peace University (1994) -> grew to 1,000+ employees, 18M weekly listeners, 10M+ FPU graduates",
+        "keyDecision": "Distributed Financial Peace University through churches, using pre-built community and accountability structures that online courses lack",
+        "scaleModel": "Free radio/podcast content builds trust, church-based course distribution provides community and accountability, referral network monetises the trust. Never accepted advertising, funding everything through product sales",
+        "lessonsForUser": "If you perform and lead: distributing your programme through existing communities (churches, workplaces) gives you accountability infrastructure that no app can replicate"
+      },
+      "confidence": "high"
+    }
+  ]
+}

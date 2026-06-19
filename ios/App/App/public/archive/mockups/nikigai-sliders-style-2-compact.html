@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nikigai Sliders - Style 2: Compact List</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f3f4f6;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: #6b7280;
+    }
+
+    .nikigai-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .nikigai-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 24px;
+      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+      border-radius: 12px;
+      border-left: 4px solid;
+      transition: all 0.3s ease;
+    }
+
+    .nikigai-item:hover {
+      background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .nikigai-item.skill {
+      border-left-color: #8b5cf6;
+    }
+
+    .nikigai-item.problem {
+      border-left-color: #ec4899;
+    }
+
+    .nikigai-item.persona {
+      border-left-color: #06b6d4;
+    }
+
+    .item-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .skill .item-icon {
+      background: #ede9fe;
+    }
+
+    .problem .item-icon {
+      background: #fce7f3;
+    }
+
+    .persona .item-icon {
+      background: #cffafe;
+    }
+
+    .item-content {
+      flex: 1;
+    }
+
+    .item-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .skill .item-label {
+      color: #8b5cf6;
+    }
+
+    .problem .item-label {
+      color: #ec4899;
+    }
+
+    .persona .item-label {
+      color: #06b6d4;
+    }
+
+    .item-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .item-description {
+      font-size: 0.9rem;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 24px;
+      }
+
+      .nikigai-item {
+        flex-direction: column;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Your Nikigai Combination</h2>
+      <p class="section-subtitle">Where your skills, passion, and purpose align</p>
+    </div>
+
+    <div class="nikigai-list">
+      <!-- Skill Item -->
+      <div class="nikigai-item skill">
+        <div class="item-icon">🎯</div>
+        <div class="item-content">
+          <div class="item-label">Your Skill</div>
+          <div class="item-value">Content Creation & Storytelling</div>
+          <div class="item-description">
+            Your unique ability to craft compelling narratives and engage audiences through multiple media formats.
+          </div>
+        </div>
+      </div>
+
+      <!-- Problem Item -->
+      <div class="nikigai-item problem">
+        <div class="item-icon">💡</div>
+        <div class="item-content">
+          <div class="item-label">Problem You Solve</div>
+          <div class="item-value">Marketing Challenges for Small Businesses</div>
+          <div class="item-description">
+            Helping businesses cut through the noise and connect authentically with their ideal customers.
+          </div>
+        </div>
+      </div>
+
+      <!-- Persona Item -->
+      <div class="nikigai-item persona">
+        <div class="item-icon">👥</div>
+        <div class="item-content">
+          <div class="item-label">People You Serve</div>
+          <div class="item-value">Ambitious Entrepreneurs</div>
+          <div class="item-description">
+            Driven founders and business owners who are ready to scale their impact and build meaningful connections.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+# FindMyFlow
+
+> Career clarity platform helping burnt-out professionals discover their ideal path through AI-guided self-discovery and nervous system healing.
+
+FindMyFlow combines business strategy with inner work to help people who feel stuck in their careers. Unlike courses that dump information or coaches who tell you what to do, FindMyFlow guides you through discovering your own answers.
+
+## Core Framework: Nikigai
+
+Nikigai (Nic + Ikigai) is based on four questions:
+- What skills are you passionate about using?
+- What problems are you passionate about solving?
+- What people are you passionate about serving?
+- What mission are you passionate about standing for?
+
+## Key Features
+
+- **Flow Finder**: AI-guided discovery of your unique skills, problems you solve, and ideal customers
+- **Earthquake Quiz**: 9-question assessment revealing your loudest Protective Voice, awakening stage, and primary block
+- **7-Day Challenge System**: Gamified daily quests across Business, Play, Healing, Voice, and Bonus categories
+- **Groan Matrix**: Courage challenges across 5 visibility layers (Screen, Live, Money, Vulnerable, Authority)
+- **Nervous System Work**: Identifies and addresses emotional blocks preventing business action
+- **CRM Command Center**: Three-tower marketing/sales hub (Attract, Nurture, Tools)
+- **Weekly Planning**: 4-phase cycle (Push, Flow, Rest, Launch)
+- **Zarlo AI**: Context-aware AI co-founder assistant on every page
+
+## The 5 Protective Voices
+
+Patterns that keep people stuck:
+1. The Perfectionist - "It's not ready yet"
+2. The Pleaser - "What will people think?"
+3. The Controller - "I need to figure it all out first"
+4. The Achiever - "I need another qualification"
+5. The Avoider - "I'll start Monday"
+
+## The 4 R's (Healing Framework)
+
+1. **Recognise** - Notice your protective patterns
+2. **Release** - Let go of stored tension
+3. **Rewire** - Create new neural pathways
+4. **Reconnect** - Return to your essence
+
+## 10-Stage System
+
+Stage 0: Flow Finder (discover skills/problems/personas)
+Stage 0.5: Groans (courage challenges)
+Stages 1-7: Validation through Launch (progressive project stages)
+Stage 8: Tracking (funnel metrics)
+
+## Based On
+
+- Alex Hormozi's $100M Offers framework
+- Ikigai (Japanese concept of purpose)
+- Nervous system regulation and somatic healing
+- Gamification via Octalysis framework
+
+## Links
+
+- Website: https://findmyflow.nichuzz.com
+- Earthquake Quiz: https://findmyflow.nichuzz.com/try/earthquake

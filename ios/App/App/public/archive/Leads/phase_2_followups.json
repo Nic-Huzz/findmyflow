@@ -1,0 +1,84 @@
+{
+  "phase_2_followup_logic": {
+    "description": "After scoring phase-1 questions, identify the top 2 candidate strategies. Then ask only the follow-up questions tied to those specific strategies to validate commitment and readiness.",
+    "offers_to_followups": {
+
+      "warm_outreach": [
+        {
+          "id": "FWO1_daily_commitment",
+          "text": "Can you realistically commit to reaching out to 100 people daily for 30 days?",
+          "type": "single_choice",
+          "options": ["yes_committed", "maybe_will_try", "no_too_much"],
+          "store_as": "warm_outreach_daily_commitment"
+        },
+        {
+          "id": "FWO2_network_quality",
+          "text": "Are your existing connections genuinely warm (know you, trust you, would respond)?",
+          "type": "single_choice",
+          "options": ["yes_very_warm", "somewhat_warm", "mostly_cold", "not_sure"],
+          "store_as": "warm_outreach_network_quality"
+        }
+      ],
+
+      "cold_outreach": [
+        {
+          "id": "FCO1_volume_tolerance",
+          "text": "Can you handle sending 200+ cold messages per day consistently?",
+          "type": "single_choice",
+          "options": ["yes_ready_to_grind", "maybe_100_per_day", "no_too_many"],
+          "store_as": "cold_outreach_volume_tolerance"
+        },
+        {
+          "id": "FCO2_rejection_resilience",
+          "text": "How do you handle rejection and low response rates (5-10%)?",
+          "type": "single_choice",
+          "options": ["unfazed_part_of_game", "manageable_can_handle", "difficult_for_me", "very_discouraging"],
+          "store_as": "cold_outreach_rejection_resilience"
+        }
+      ],
+
+      "post_free_content": [
+        {
+          "id": "FPC1_consistency_commitment",
+          "text": "Can you commit to posting valuable content daily for at least 90 days?",
+          "type": "single_choice",
+          "options": ["yes_committed", "probably_most_days", "maybe_few_times_week", "no_cant_commit"],
+          "store_as": "content_consistency_commitment"
+        },
+        {
+          "id": "FPC2_platform_choice",
+          "text": "Have you chosen a primary platform where your ideal customers spend time?",
+          "type": "single_choice",
+          "options": ["yes_know_exactly", "have_few_options", "not_sure_yet", "no_idea"],
+          "store_as": "content_platform_choice"
+        }
+      ],
+
+      "run_paid_ads": [
+        {
+          "id": "FPA1_platform_requirements",
+          "text": "Have you used your chosen ad platform as a consumer (Facebook, Instagram, YouTube, etc.)?",
+          "type": "single_choice",
+          "options": ["yes_familiar", "somewhat_used_it", "no_but_willing_learn", "no_never_used"],
+          "store_as": "paid_ads_platform_familiarity"
+        },
+        {
+          "id": "FPA2_testing_budget",
+          "text": "Can you afford to spend $1,000-3,000 testing ads that may not work initially?",
+          "type": "single_choice",
+          "options": ["yes_budgeted_for_it", "yes_but_tight", "maybe_smaller_amount", "no_cant_afford_loss"],
+          "store_as": "paid_ads_testing_budget"
+        }
+      ]
+
+    },
+
+    "logic_rules": {
+      "ask_top_two_offers_only": true,
+      "max_followup_questions_per_offer": 2,
+      "skip_if_not_in_top_two": true,
+      "auto_rule_out_if_hard_no": true,
+      "if_both_offers_fail_followups": "fallback_to_next_best_offer"
+    }
+  }
+}

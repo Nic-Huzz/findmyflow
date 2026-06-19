@@ -1,0 +1,146 @@
+{
+  "questions": [
+    {
+      "id": "Q1_business_type",
+      "text": "What type of product or service do you offer?",
+      "type": "single_choice",
+      "options": [
+        "high_ticket_service",
+        "mid_ticket_service",
+        "low_ticket_service",
+        "physical_product",
+        "digital_product",
+        "saas_software",
+        "membership_subscription"
+      ],
+      "store_as": "business_type",
+      "tags": ["business_model", "offer_type"]
+    },
+    {
+      "id": "Q2_price_point",
+      "text": "What is your typical price point or order value?",
+      "type": "single_choice",
+      "options": [
+        "under_100",
+        "100_to_500",
+        "500_to_2000",
+        "2000_to_5000",
+        "5000_to_10000",
+        "over_10000"
+      ],
+      "store_as": "price_point",
+      "tags": ["pricing", "ticket_size"]
+    },
+    {
+      "id": "Q3_main_objection",
+      "text": "What's the #1 reason prospects say no to your offer?",
+      "type": "single_choice",
+      "options": [
+        "too_expensive_upfront",
+        "not_sure_it_works",
+        "timing_not_right",
+        "prefer_cheaper_option",
+        "want_to_try_first",
+        "dont_need_all_features",
+        "payment_terms_inflexible"
+      ],
+      "store_as": "main_objection",
+      "tags": ["objections", "conversion_barriers"]
+    },
+    {
+      "id": "Q4_payment_flexibility",
+      "text": "Can you offer flexible payment options (payment plans, financing)?",
+      "type": "single_choice",
+      "options": [
+        "yes_already_do",
+        "yes_could_implement",
+        "maybe_need_setup",
+        "no_must_pay_full"
+      ],
+      "store_as": "payment_flexibility",
+      "tags": ["payment_plans", "capability"]
+    },
+    {
+      "id": "Q5_feature_modularity",
+      "text": "Can you break your offer into smaller versions (fewer features, lower quantity, reduced service)?",
+      "type": "single_choice",
+      "options": [
+        "yes_easily_modular",
+        "yes_have_lite_version",
+        "maybe_could_create",
+        "no_all_or_nothing"
+      ],
+      "store_as": "feature_modularity",
+      "tags": ["features", "modularity"]
+    },
+    {
+      "id": "Q6_current_close_rate",
+      "text": "What's your current close rate or conversion rate?",
+      "type": "single_choice",
+      "options": [
+        "under_10_percent",
+        "10_to_25_percent",
+        "25_to_50_percent",
+        "50_to_75_percent",
+        "over_75_percent"
+      ],
+      "store_as": "current_close_rate",
+      "tags": ["metrics", "conversion"]
+    },
+    {
+      "id": "Q7_cancellation_rate",
+      "text": "What's your refund, churn, or cancellation rate?",
+      "type": "single_choice",
+      "options": [
+        "under_5_percent",
+        "5_to_15_percent",
+        "15_to_30_percent",
+        "over_30_percent",
+        "dont_track"
+      ],
+      "store_as": "cancellation_rate",
+      "tags": ["retention", "churn"]
+    },
+    {
+      "id": "Q8_trial_capability",
+      "text": "Could you offer a trial where customers must complete actions to avoid fees?",
+      "type": "single_choice",
+      "options": [
+        "yes_can_track_completion",
+        "yes_with_some_setup",
+        "maybe_not_sure_how",
+        "no_cant_enforce"
+      ],
+      "store_as": "trial_capability",
+      "tags": ["trial", "enforcement"]
+    },
+    {
+      "id": "Q9_sales_process",
+      "text": "How do you currently sell (where would downsells happen)?",
+      "type": "single_choice",
+      "options": [
+        "live_sales_calls",
+        "automated_checkout",
+        "hybrid_both",
+        "in_person",
+        "email_follow_up"
+      ],
+      "store_as": "sales_process",
+      "tags": ["process", "delivery"]
+    },
+    {
+      "id": "Q10_downsell_goal",
+      "text": "What's your primary goal with downsell offers?",
+      "type": "single_choice",
+      "options": [
+        "increase_conversions",
+        "reduce_cart_abandonment",
+        "retain_canceling_customers",
+        "offer_budget_options",
+        "maximize_revenue_per_lead"
+      ],
+      "store_as": "downsell_goal",
+      "tags": ["goals", "strategy"]
+    }
+  ]
+}

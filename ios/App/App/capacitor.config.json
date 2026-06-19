@@ -1,0 +1,27 @@
+{
+	"appId": "com.nichuzz.viberise",
+	"appName": "Vibe Rise",
+	"webDir": "dist",
+	"server": {
+		"url": "https://viberise.nichuzz.com",
+		"cleartext": false
+	},
+	"ios": {
+		"contentInset": "automatic",
+		"backgroundColor": "#ffffff",
+		"scrollEnabled": true,
+		"allowsLinkPreview": false
+	},
+	"plugins": {
+		"StatusBar": {
+			"style": "LIGHT",
+			"backgroundColor": "#0a0a0f"
+		},
+		"SplashScreen": {
+			"backgroundColor": "#0a0a0f",
+			"launchAutoHide": true,
+			"launchShowDuration": 1000
+		}
+	},
+	"packageClassList": []
+}

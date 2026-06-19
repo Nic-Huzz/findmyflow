@@ -1,0 +1,389 @@
+{
+  "version": "2.0",
+  "generatedAt": "2026-04-11",
+  "totalCategories": 10,
+  "totalPlacemakes": 43,
+  "categories": [
+    {
+      "id": "storytelling",
+      "displayName": "Storytelling",
+      "tagline": "Writing, narrative, making meaning through story",
+      "turnsInto": "Books, newsletters, brand stories, memoir workshops, content",
+      "placemakes": [
+        {
+          "id": "storytelling_lived_experience",
+          "label": "Turning what you lived into something others can hold",
+          "example": "Like Viktor Frankl dictating the concentration camp section of Man's Search for Meaning in nine days, so fast he planned to publish it anonymously",
+          "anchorPerson": "Viktor Frankl",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "storytelling_daily_practice",
+          "label": "Showing up to the page whether you feel like it or not",
+          "example": "Like Maya Angelou checking into a rented hotel room each morning with legal pads and sherry, producing ten pages before editing down to three by evening",
+          "anchorPerson": "Maya Angelou",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "storytelling_reframe",
+          "label": "Telling the story the room needs to hear",
+          "example": "Like Chimamanda Ngozi Adichie building her 2009 TED talk around one moment of being asked for 'tribal music' at a US university, now viewed 27 million times",
+          "anchorPerson": "Chimamanda Ngozi Adichie",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "storytelling_against_grain",
+          "label": "Going against the grain of how your world tells stories",
+          "example": "Like Andre Agassi confessing meth use, hair loss and hating tennis in Open, shattering every rule of athlete self-mythology",
+          "anchorPerson": "Andre Agassi",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "storytelling_noticing_detail",
+          "label": "Noticing the detail that becomes the whole story",
+          "example": "Like Ira Glass crediting NPR editor Noah Adams with the anecdote-then-reflection engine, a two-part structure that became the house style of This American Life and the entire podcast generation",
+          "anchorPerson": "Ira Glass",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "teaching",
+      "displayName": "Teaching",
+      "tagline": "Explaining, simplifying, making the complex click",
+      "turnsInto": "Courses, workshops, YouTube education, masterclasses, books, frameworks",
+      "placemakes": [
+        {
+          "id": "teaching_simplify",
+          "label": "Making the complex simple enough that anyone can hold it",
+          "example": "Like Carl Sagan delivering Cosmos as a first-person account of what a working scientist found beautiful, reaching 500 million viewers in 60 countries",
+          "anchorPerson": "Carl Sagan",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "teaching_click",
+          "label": "Creating the moment something finally clicks",
+          "example": "Like Virginia Apgar scribbling five newborn categories on a breakfast napkin, each scored 0 to 2. By the 1960s it was being performed on millions of babies a minute after birth",
+          "anchorPerson": "Virginia Apgar",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "teaching_framework",
+          "label": "Building a framework others can use without you",
+          "example": "Like John Wooden refining his Pyramid of Success over decades, a 15-block diagram with Industriousness and Enthusiasm at the base, then handing it to every player who walked in the door",
+          "anchorPerson": "John Wooden",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "teaching_bridge",
+          "label": "Bridging two worlds that don't know they need each other",
+          "example": "Like Wangari Maathai arguing for 27 years that forest clearing, women's disempowerment and authoritarianism were the same problem, until the 2004 Nobel committee adopted her frame",
+          "anchorPerson": "Wangari Maathai",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "coaching",
+      "displayName": "Coaching",
+      "tagline": "Growing people, mentoring, holding space",
+      "turnsInto": "1:1 coaching, group programs, retreats, facilitation, talent development",
+      "placemakes": [
+        {
+          "id": "coaching_hold",
+          "label": "Holding someone through a hard moment",
+          "example": "Like Fred Rogers airing a full televised minute of silence so children could think about who loved them, refusing producer requests to cut the dead air",
+          "anchorPerson": "Fred Rogers",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "coaching_patience",
+          "label": "Showing up with patience until something clicks",
+          "example": "Like Anne Sullivan spelling the world into Helen Keller's hand one word at a time, producing a 575-word vocabulary inside six months after formal curriculum had failed",
+          "anchorPerson": "Anne Sullivan",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "coaching_see",
+          "label": "Helping someone see what they can't see yet",
+          "example": "Like Toni Morrison commissioning Muhammad Ali, Angela Davis, Gayl Jones and The Black Book as a Random House editor, building an entire generation of Black literature from behind a desk",
+          "anchorPerson": "Toni Morrison",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "coaching_step_back",
+          "label": "Stepping back so someone else can step forward",
+          "example": "Like David Attenborough deliberately restricting his own screen time so the animals could take the frame, getting out of the way as an explicit method",
+          "anchorPerson": "David Attenborough",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "performing",
+      "displayName": "Performing",
+      "tagline": "Stage, speaking, presenting, being the show",
+      "turnsInto": "Keynote speaking, MC work, podcasting, live events, YouTube, event production, workshops",
+      "placemakes": [
+        {
+          "id": "performing_spectacle",
+          "label": "Making the moment itself the message",
+          "example": "Like Edwin Land turning Polaroid shareholder meetings into theatrical product demos, personally peeling developing prints and handing them to the front row",
+          "anchorPerson": "Edwin Land",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "performing_lean_forward",
+          "label": "Getting a room to lean forward",
+          "example": "Like Estee Lauder inventing Gift-with-Purchase, turning a freebie into the most efficient customer acquisition in cosmetics",
+          "anchorPerson": "Estee Lauder",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "performing_on_record",
+          "label": "Putting yourself on record",
+          "example": "Like Rita Pierson grounding her TED 2013 talk on one James Comer line ('No significant learning without a significant relationship') then adding, 'Kids don't learn from people they don't like'",
+          "anchorPerson": "Rita Pierson",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "performing_embodied",
+          "label": "Performing with nothing but your body and voice",
+          "example": "Like Miriam Makeba singing on nine separate passports from 1963 to 1990, touring continuously after South Africa rendered her stateless, her voice the only home she carried",
+          "anchorPerson": "Miriam Makeba",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "creating",
+      "displayName": "Creating",
+      "tagline": "Inventing, art, making things that didn't exist",
+      "turnsInto": "Art, products, creative direction, IP, experiences, category creation",
+      "placemakes": [
+        {
+          "id": "creating_new_category",
+          "label": "Making something that didn't exist before",
+          "example": "Like Edwin Land inventing instant photography because he only worked on things 'manifestly important and nearly impossible'",
+          "anchorPerson": "Edwin Land",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "creating_wild_hunch",
+          "label": "Following a hunch everyone said was wrong",
+          "example": "Like Lynn Margulis writing On the Origin of Mitosing Cells in 1966, getting rejected by roughly fifteen journals, then watching the genetic evidence arrive twelve years later",
+          "anchorPerson": "Lynn Margulis",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "creating_remix",
+          "label": "Remixing two things nobody thought to combine",
+          "example": "Like Hedy Lamarr co-inventing frequency-hopping spread spectrum by combining her knowledge of torpedo guidance with pianist George Antheil's player-piano synchronization",
+          "anchorPerson": "Hedy Lamarr",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "creating_daily_making",
+          "label": "Making something with your hands every single day",
+          "example": "Like Louise Bourgeois making 220 Insomnia Drawings between November 1994 and June 1995, dating each one, using the series as a diary her conscious voice could not have written",
+          "anchorPerson": "Louise Bourgeois",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "building",
+      "displayName": "Building",
+      "tagline": "Making with hands, prototyping, shipping, craft",
+      "turnsInto": "Products, apps, physical goods, maker businesses, hardware, bootstrapped ventures",
+      "placemakes": [
+        {
+          "id": "building_hands_on",
+          "label": "Getting your hands on the actual thing",
+          "example": "Like Enzo Ferrari personally obsessing over engines ('aerodynamics are for people who can't build engines') in hands-on factory work from childhood to his 80s",
+          "anchorPerson": "Enzo Ferrari",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "building_iterate",
+          "label": "Prototyping until it works no matter how many tries",
+          "example": "Like James Dyson making 5,127 prototypes of his bagless vacuum before getting it right, day by day, for years",
+          "anchorPerson": "James Dyson",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "building_sweat",
+          "label": "Doing whatever it takes to physically bring it into existence",
+          "example": "Like Todd Graves working oil rigs and fishing boats in Alaska to earn the money to build his first Raising Cane's restaurant",
+          "anchorPerson": "Todd Graves",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "building_digital",
+          "label": "Building something from scratch because nothing good enough exists",
+          "example": "Like Tobi Lutke building Shopify from scratch on an unproven framework because he couldn't find ecommerce software he liked for his snowboard shop",
+          "anchorPerson": "Tobi Lutke",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "building_noticing_broken",
+          "label": "Noticing what's broken and not being able to leave it alone",
+          "example": "Like Henry Ford building his first car in a shed at 2am and knocking out a wall with an axe when it didn't fit through the door, because he saw the problem and couldn't stop until he'd built the fix",
+          "anchorPerson": "Henry Ford",
+          "anchorSource": "founder"
+        }
+      ]
+    },
+    {
+      "id": "designing",
+      "displayName": "Designing",
+      "tagline": "Aesthetics, taste, beauty, shaping how things feel",
+      "turnsInto": "Experience design, event design, interior design, hospitality, UX, brand",
+      "placemakes": [
+        {
+          "id": "designing_feel",
+          "label": "Shaping how a space or moment feels",
+          "example": "Like Walt Disney engineering Disneyland so that sight lines, smells and transitions between 'lands' made every visitor feel something specific, inventing experience design as a discipline",
+          "anchorPerson": "Walt Disney",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "designing_detail",
+          "label": "Obsessing over the detail everyone else skips",
+          "example": "Like Akira Kurosawa treating weather as a character to be cast: waiting for real fog in Throne of Blood and rebuilding Ran sets twice to get the sun in exact positions",
+          "anchorPerson": "Akira Kurosawa",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "designing_strip",
+          "label": "Stripping away everything that doesn't belong",
+          "example": "Like Coco Chanel removing corsets and ornament and redesigning women's fashion from scratch, making simplicity itself luxurious",
+          "anchorPerson": "Coco Chanel",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "leading",
+      "displayName": "Leading",
+      "tagline": "Strategy, vision, game-design, organizing, running things",
+      "turnsInto": "Consulting, fractional leadership, operations, advisory, turnaround",
+      "placemakes": [
+        {
+          "id": "leading_game_design",
+          "label": "Seeing a future nobody else sees and building the rules to get there",
+          "example": "Like Sol Price inventing the membership warehouse model where merchandise sold at break-even and the membership fee was the entire profit, designing the economic game before playing it",
+          "anchorPerson": "Sol Price",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "leading_system",
+          "label": "Building a system that runs without you in the room",
+          "example": "Like Jeff Bezos codifying Amazon into 16 Leadership Principles that govern hiring, promotion and decisions across 1M+ employees",
+          "anchorPerson": "Jeff Bezos",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "leading_high_stakes",
+          "label": "Making the right call when the stakes are highest",
+          "example": "Like Ed Thorp grounding every decision in expected value and the Kelly Criterion, capping his fund and returning capital rather than chasing size",
+          "anchorPerson": "Ed Thorp",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "leading_mess",
+          "label": "Turning a mess no one wants to touch into something that runs",
+          "example": "Like Bayard Rustin running the operational plan for the 1963 March on Washington in eight weeks: drilling marshals, assigning bus captains, arranging water and sound for 250,000 people",
+          "anchorPerson": "Bayard Rustin",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "leading_noticing_number",
+          "label": "Spotting the number everyone else walked past",
+          "example": "Like John D. Rockefeller auditing 39 drops of solder per barrel across every furnace, turning a daily hunt for tiny cost deviations into the greatest fortune in history",
+          "anchorPerson": "John D. Rockefeller",
+          "anchorSource": "founder"
+        }
+      ]
+    },
+    {
+      "id": "connecting",
+      "displayName": "Connecting",
+      "tagline": "Community, gathering, hosting, introducing, being glue",
+      "turnsInto": "Community building, events, retreats, facilitation, partnerships, network-weaving",
+      "placemakes": [
+        {
+          "id": "connecting_community",
+          "label": "Building a community from nothing",
+          "example": "Like Ben Franklin founding the Junto, the library company, the fire company and the university, building civic groups from nothing in colonial Philadelphia",
+          "anchorPerson": "Ben Franklin",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "connecting_hard_conversation",
+          "label": "Holding space for a conversation nobody else will host",
+          "example": "Like Oprah Winfrey turning her daytime show into a facilitated hard conversation on camera about abuse, race, weight and shame, every day for 25 years",
+          "anchorPerson": "Oprah Winfrey",
+          "anchorSource": "founder"
+        },
+        {
+          "id": "connecting_gathering",
+          "label": "Making a gathering people walk away changed by",
+          "example": "Like Jane Addams moving into a semi-derelict mansion in 1889 and opening Hull House to immigrant families, growing it to 13 buildings with 2,000 visitors a week",
+          "anchorPerson": "Jane Addams",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "connecting_glue",
+          "label": "Being the person who holds a scattered room together",
+          "example": "Like Trevor Noah speaking six languages and always trying one phrase in a guest's language before Daily Show interviews, because 'people relax'",
+          "anchorPerson": "Trevor Noah",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    },
+    {
+      "id": "speaking_up",
+      "displayName": "Speaking up",
+      "tagline": "Truth-telling, activism, courage, standing for something",
+      "turnsInto": "Advocacy, journalism, campaigns, movement-building, cause-based entrepreneurship, speaking",
+      "placemakes": [
+        {
+          "id": "speaking_up_power",
+          "label": "Speaking truth to power face to face",
+          "example": "Like Fannie Lou Hamer testifying 'I question America' at the 1964 Democratic Convention, so forcefully that Johnson tried to bump her off live TV and the networks aired her testimony in full that evening",
+          "anchorPerson": "Fannie Lou Hamer",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "speaking_up_wound",
+          "label": "Speaking from inside your own wound",
+          "example": "Like Audre Lorde refusing the prosthesis her surgeon pressed on her after a 1978 mastectomy and publishing The Cancer Journals, arguing the cosmetic performance of recovery was a form of silencing",
+          "anchorPerson": "Audre Lorde",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "speaking_up_alone",
+          "label": "Standing alone against an industry that rewards silence",
+          "example": "Like Anna Politkovskaya telling a Vienna conference in December 2005, 'People sometimes pay with their lives for saying aloud what they think'",
+          "anchorPerson": "Anna Politkovskaya",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "speaking_up_long_game",
+          "label": "Refusing to stop saying it when no one's listening yet",
+          "example": "Like Wangari Maathai arguing for 27 years that ecology, feminism and democracy were the same fight, until the Nobel committee finally adopted her frame",
+          "anchorPerson": "Wangari Maathai",
+          "anchorSource": "nonfounder"
+        },
+        {
+          "id": "speaking_up_inside",
+          "label": "Challenging the room you have to keep working in tomorrow",
+          "example": "Like Marva Collins saying on 60 Minutes in 1979, 'I have discovered few learning disabled students. I have, however, discovered many victims of teaching inabilities,' while still being a working teacher",
+          "anchorPerson": "Marva Collins",
+          "anchorSource": "nonfounder"
+        }
+      ]
+    }
+  ]
+}

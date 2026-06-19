@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="black" stop-opacity="0.45"/>
+      <stop offset="40%" stop-color="black" stop-opacity="0.2"/>
+      <stop offset="60%" stop-color="black" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="black" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#g)"/>
+
+  <!-- Tag -->
+  <text x="70" y="830" fill="#E9A23B" font-family="Inter,Helvetica,Arial,sans-serif" font-size="22" font-weight="700" letter-spacing="3">STEP 2 — HEAD FULL OF DREAMS</text>
+
+  <!-- Headline -->
+  <text x="70" y="900" fill="white" font-family="Inter,Helvetica,Arial,sans-serif" font-size="64" font-weight="900">Head full</text>
+  <text x="70" y="972" fill="white" font-family="Inter,Helvetica,Arial,sans-serif" font-size="64" font-weight="900">of <tspan fill="#E9A23B">dreams.</tspan></text>
+
+  <!-- Body -->
+  <text x="70" y="1020" fill="rgba(255,255,255,0.8)" font-family="Inter,Helvetica,Arial,sans-serif" font-size="22" font-weight="500">10+ courses. Still stuck. "I need to know more</text>
+  <text x="70" y="1048" fill="rgba(255,255,255,0.8)" font-family="Inter,Helvetica,Arial,sans-serif" font-size="22" font-weight="500">before I can start."</text>
+  <text x="70" y="1076" fill="white" font-family="Inter,Helvetica,Arial,sans-serif" font-size="22" font-weight="700">Information is the drug. Integration is the cure.</text>
+</svg>

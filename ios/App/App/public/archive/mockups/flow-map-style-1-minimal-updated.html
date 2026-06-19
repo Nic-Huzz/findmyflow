@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Map - Style 1: Minimal (Updated)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Flow Map Container */
+    .flow-map {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Flow Section - Minimal Clean Style with Brand Colors */
+    .flow-section {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .section-header {
+      padding: 20px 24px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .section-header:hover {
+      background: #fafafa;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .section-icon {
+      font-size: 24px;
+    }
+
+    .expand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #666;
+      transition: all 0.3s ease;
+    }
+
+    .section-header.expanded .expand-icon {
+      transform: rotate(180deg);
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+    }
+
+    /* Section Content - Clean Layout */
+    .section-content {
+      padding: 24px;
+      background: #fafafa;
+      display: none;
+    }
+
+    .section-content.expanded {
+      display: block;
+    }
+
+    /* Flow Finder with Slider Style */
+    .finder-category {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .finder-category:last-child {
+      margin-bottom: 0;
+    }
+
+    .category-title {
+      font-size: 13px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    /* Slider Container */
+    .slider-container {
+      width: 100%;
+      overflow: hidden;
+      touch-action: pan-y;
+      user-select: none;
+    }
+
+    .slider-content {
+      width: 100%;
+      cursor: grab;
+    }
+
+    .slider-content:active {
+      cursor: grabbing;
+    }
+
+    .cluster-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 24px;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .cluster-label {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+    }
+
+    /* Slider Controls */
+    .slider-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .slider-arrow {
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .slider-arrow:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+    }
+
+    .slider-arrow:active {
+      transform: scale(0.9);
+    }
+
+    .slider-indicator {
+      text-align: center;
+      font-size: 14px;
+      color: #999;
+      font-weight: 500;
+    }
+
+    /* Nervous System with Gold Highlights */
+    .limitation-item {
+      background: white;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 3px solid #5e17eb;
+    }
+
+    .limitation-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .limitation-label {
+      font-size: 12px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .limitation-value {
+      font-size: 15px;
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    .safety-contracts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .contract-item {
+      background: linear-gradient(135deg, #fff9e6 0%, #ffedd5 100%);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #92400e;
+      font-weight: 500;
+      border-left: 3px solid #ffdd27;
+    }
+
+    .limitation-item.core-wound {
+      border-left-color: #ef4444;
+    }
+
+    .core-wound .limitation-label {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .core-wound .limitation-value {
+      color: #991b1b;
+    }
+
+    /* Flow Tracker Minimal Style */
+    .project-item {
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .project-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-header {
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s ease;
+    }
+
+    .project-header:hover {
+      background: #fafafa;
+    }
+
+    .project-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .project-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .latest-direction {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: #f0f0f0;
+    }
+
+    .direction-indicator {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .direction-north { color: #10b981; }
+    .direction-east { color: #f59e0b; }
+    .direction-south { color: #ef4444; }
+    .direction-west { color: #5e17eb; }
+
+    .project-expand-icon {
+      font-size: 18px;
+      color: #999;
+      transition: transform 0.3s ease;
+    }
+
+    .project-header.expanded .project-expand-icon {
+      transform: rotate(90deg);
+    }
+
+    .project-history {
+      padding: 14px;
+      background: #fafafa;
+      border-top: 1px solid #e0e0e0;
+      display: none;
+    }
+
+    .project-history.expanded {
+      display: block;
+    }
+
+    .history-title {
+      font-size: 12px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .history-entry {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: white;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .entry-direction {
+      font-weight: 600;
+      min-width: 70px;
+    }
+
+    .entry-date {
+      color: #999;
+      font-size: 11px;
+      min-width: 80px;
+    }
+
+    .entry-states {
+      color: #666;
+      font-size: 11px;
+      font-style: italic;
+    }
+
+    .demo-label {
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="demo-label">Flow Map - Minimal Style with Brand Colors</div>
+
+    <div class="flow-map">
+      <!-- Section 1: Flow Finder -->
+      <div class="flow-section">
+        <div class="section-header expanded" onclick="toggleSection('flow-finder')">
+          <div class="section-title">
+            <span class="section-icon">🧭</span>
+            Flow Finder
+          </div>
+          <div class="expand-icon">↓</div>
+        </div>
+
+        <div class="section-content expanded" id="flow-finder">
+          <!-- Problems Slider -->
+          <div class="finder-category">
+            <div class="category-title">Problems You're Passionate About</div>
+            <div class="slider-container">
+              <div class="slider-content"
+                   ontouchstart="onTouchStart(event, 'problems')"
+                   ontouchmove="onTouchMove(event, 'problems')"
+                   ontouchend="onTouchEnd('problems')">
+                <div class="cluster-card" id="problems-card">
+                  <div class="cluster-label" id="problems-label">Mental Health Access</div>
+                </div>
+              </div>
+            </div>
+            <div class="slider-controls">
+              <button class="slider-arrow" onclick="previousCluster('problems')">‹</button>
+              <div class="slider-indicator" id="problems-indicator">1 / 2</div>
+              <button class="slider-arrow" onclick="nextCluster('problems')">›</button>
+            </div>
+          </div>
+
+          <!-- People Slider -->
+          <div class="finder-category">
+            <div class="category-title">People You're Passionate About</div>
+            <div class="slider-container">
+              <div class="slider-content"
+                   ontouchstart="onTouchStart(event, 'people')"
+                   ontouchmove="onTouchMove(event, 'people')"
+                   ontouchend="onTouchEnd('people')">
+                <div class="cluster-card" id="people-card">
+                  <div class="cluster-label" id="people-label">Overwhelmed Entrepreneurs</div>
+                </div>
+              </div>
+            </div>
+            <div class="slider-controls">
+              <button class="slider-arrow" onclick="previousCluster('people')">‹</button>
+              <div class="slider-indicator" id="people-indicator">1 / 1</div>
+              <button class="slider-arrow" onclick="nextCluster('people')">›</button>
+            </div>
+          </div>
+
+          <!-- Skills Slider -->
+          <div class="finder-category">
+            <div class="category-title">Skills You're Passionate About</div>
+            <div class="slider-container">
+              <div class="slider-content"
+                   ontouchstart="onTouchStart(event, 'skills')"
+                   ontouchmove="onTouchMove(event, 'skills')"
+                   ontouchend="onTouchEnd('skills')">
+                <div class="cluster-card" id="skills-card">
+                  <div class="cluster-label" id="skills-label">Facilitation & Coaching</div>
+                </div>
+              </div>
+            </div>
+            <div class="slider-controls">
+              <button class="slider-arrow" onclick="previousCluster('skills')">‹</button>
+              <div class="slider-indicator" id="skills-indicator">1 / 1</div>
+              <button class="slider-arrow" onclick="nextCluster('skills')">›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Nervous System Limitations -->
+      <div class="flow-section">
+        <div class="section-header" onclick="toggleSection('nervous-system')">
+          <div class="section-title">
+            <span class="section-icon">⚡</span>
+            Nervous System Limitations
+          </div>
+          <div class="expand-icon">↓</div>
+        </div>
+
+        <div class="section-content" id="nervous-system">
+          <div class="limitation-item">
+            <div class="limitation-label">Current Money Limit</div>
+            <div class="limitation-value">$50,000/year</div>
+          </div>
+
+          <div class="limitation-item">
+            <div class="limitation-label">Current Visibility Limit</div>
+            <div class="limitation-value">1,000 people reached</div>
+          </div>
+
+          <div class="limitation-item">
+            <div class="limitation-label">Current Safety Contracts</div>
+            <div class="safety-contracts-list">
+              <div class="contract-item">If I'm successful, people will judge me</div>
+              <div class="contract-item">Making money means I'm greedy</div>
+            </div>
+          </div>
+
+          <div class="limitation-item core-wound">
+            <div class="limitation-label">Core Wound</div>
+            <div class="limitation-value">Fear of being seen as an imposter</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Flow Tracker -->
+      <div class="flow-section">
+        <div class="section-header" onclick="toggleSection('flow-tracker')">
+          <div class="section-title">
+            <span class="section-icon">📊</span>
+            Flow Tracker
+          </div>
+          <div class="expand-icon">↓</div>
+        </div>
+
+        <div class="section-content" id="flow-tracker">
+          <div class="project-item">
+            <div class="project-header" onclick="toggleProject('project-1')">
+              <div class="project-info">
+                <div class="project-name">Mental Health Marketplace</div>
+                <div class="latest-direction">
+                  <span class="direction-indicator direction-north">↑</span>
+                  <span>North</span>
+                </div>
+              </div>
+              <div class="project-expand-icon">→</div>
+            </div>
+            <div class="project-history" id="project-1">
+              <div class="history-title">Last 5 Directional Inputs</div>
+              <div class="history-list">
+                <div class="history-entry">
+                  <span class="direction-indicator direction-north">↑</span>
+                  <span class="entry-direction">North</span>
+                  <span class="entry-date">Dec 2, 2025</span>
+                  <span class="entry-states">energized • ease</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-east">→</span>
+                  <span class="entry-direction">East</span>
+                  <span class="entry-date">Dec 1, 2025</span>
+                  <span class="entry-states">curious • resistance</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-north">↑</span>
+                  <span class="entry-direction">North</span>
+                  <span class="entry-date">Nov 30, 2025</span>
+                  <span class="entry-states">focused • ease</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-item">
+            <div class="project-header" onclick="toggleProject('project-2')">
+              <div class="project-info">
+                <div class="project-name">Creator Wellness App</div>
+                <div class="latest-direction">
+                  <span class="direction-indicator direction-east">→</span>
+                  <span>East</span>
+                </div>
+              </div>
+              <div class="project-expand-icon">→</div>
+            </div>
+            <div class="project-history" id="project-2">
+              <div class="history-title">Last 5 Directional Inputs</div>
+              <div class="history-list">
+                <div class="history-entry">
+                  <span class="direction-indicator direction-east">→</span>
+                  <span class="entry-direction">East</span>
+                  <span class="entry-date">Dec 2, 2025</span>
+                  <span class="entry-states">excited • ease</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-north">↑</span>
+                  <span class="entry-direction">North</span>
+                  <span class="entry-date">Dec 1, 2025</span>
+                  <span class="entry-states">focused • resistance</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-south">↓</span>
+                  <span class="entry-direction">South</span>
+                  <span class="entry-date">Nov 30, 2025</span>
+                  <span class="entry-states">tired • ease</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-west">←</span>
+                  <span class="entry-direction">West</span>
+                  <span class="entry-date">Nov 29, 2025</span>
+                  <span class="entry-states">reflective • ease</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-north">↑</span>
+                  <span class="entry-direction">North</span>
+                  <span class="entry-date">Nov 28, 2025</span>
+                  <span class="entry-states">energized • ease</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mock data for sliders
+    const clusterData = {
+      problems: [
+        { label: 'Mental Health Access' },
+        { label: 'Creator Burnout' }
+      ],
+      people: [
+        { label: 'Overwhelmed Entrepreneurs' }
+      ],
+      skills: [
+        { label: 'Facilitation & Coaching' }
+      ]
+    };
+
+    // Current indices
+    const currentIndex = {
+      problems: 0,
+      people: 0,
+      skills: 0
+    };
+
+    // Touch tracking
+    let touchStart = null;
+    let touchEnd = null;
+    const minSwipeDistance = 50;
+
+    function updateCluster(category) {
+      const data = clusterData[category];
+      const index = currentIndex[category];
+      const cluster = data[index];
+
+      // Update label
+      document.getElementById(`${category}-label`).textContent = cluster.label;
+
+      // Update indicator
+      document.getElementById(`${category}-indicator`).textContent =
+        `${index + 1} / ${data.length}`;
+    }
+
+    function nextCluster(category) {
+      const data = clusterData[category];
+      currentIndex[category] = (currentIndex[category] + 1) % data.length;
+      updateCluster(category);
+    }
+
+    function previousCluster(category) {
+      const data = clusterData[category];
+      currentIndex[category] = currentIndex[category] > 0
+        ? currentIndex[category] - 1
+        : data.length - 1;
+      updateCluster(category);
+    }
+
+    function onTouchStart(e, category) {
+      touchEnd = null;
+      touchStart = e.targetTouches[0].clientX;
+    }
+
+    function onTouchMove(e, category) {
+      touchEnd = e.targetTouches[0].clientX;
+    }
+
+    function onTouchEnd(category) {
+      if (!touchStart || !touchEnd) return;
+
+      const distance = touchStart - touchEnd;
+      const isLeftSwipe = distance > minSwipeDistance;
+      const isRightSwipe = distance < -minSwipeDistance;
+
+      if (isLeftSwipe) {
+        nextCluster(category);
+      } else if (isRightSwipe) {
+        previousCluster(category);
+      }
+
+      touchStart = null;
+      touchEnd = null;
+    }
+
+    function toggleSection(sectionId) {
+      const content = document.getElementById(sectionId);
+      const header = content.previousElementSibling;
+
+      content.classList.toggle('expanded');
+      header.classList.toggle('expanded');
+    }
+
+    function toggleProject(projectId) {
+      const history = document.getElementById(projectId);
+      const header = history.previousElementSibling;
+
+      history.classList.toggle('expanded');
+      header.classList.toggle('expanded');
+    }
+  </script>
+</body>
+</html>

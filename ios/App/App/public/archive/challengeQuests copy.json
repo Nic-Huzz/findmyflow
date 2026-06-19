@@ -1,0 +1,416 @@
+{
+  "quests": [
+    {
+      "id": "recognise_essence_observe",
+      "category": "Recognise",
+      "type": "daily",
+      "name": "Essence Archetype",
+      "description": "Where did your essence archetype naturally emerge today?",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What was the situation? What were you doing? Who were you with?",
+      "learnMore": "Your essence archetype is who you naturally are when fear isn't driving. These are moments when you felt fully yourself—energized, authentic, in flow. Tracking when your essence emerges helps you identify the conditions that allow your true self to shine. You're training your awareness to recognize these moments so you can create more of them intentionally."
+    },
+    {
+      "id": "recognise_protective_observe",
+      "category": "Recognise",
+      "type": "daily",
+      "name": "Protective Archetype",
+      "description": "Where did your protective archetype emerge today?",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What was the situation? What caused it to arise?",
+      "learnMore": "Your protective archetype is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain. It shows up as people-pleasing, perfectionism, control, or withdrawal. Recognizing when it activates is the first step to choosing a different response. Notice the triggers without judgment—this awareness is what creates change."
+    },
+    {
+      "id": "recognise_positive_frequency",
+      "category": "Recognise",
+      "type": "daily",
+      "name": "Positive Frequency",
+      "description": "What moment/s did you find yourself reacting from a place of Love today?",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What was the situation?",
+      "learnMore": "Love frequency includes: trust, openness, curiosity, compassion, generosity, joy, and connection. When you operate from this state, you're expansive and present. You make decisions from abundance rather than scarcity. Tracking these moments helps you recognize what raises your frequency so you can cultivate it."
+    },
+    {
+      "id": "recognise_negative_frequency",
+      "category": "Recognise",
+      "type": "daily",
+      "name": "Negative Frequency",
+      "description": "What moment/s did you find yourself reacting from Fear today?",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What was the situation? What caused you to be triggered?",
+      "learnMore": "Fear frequency includes: anxiety, jealousy, judgment, control, defensiveness, scarcity thinking, and disconnection. These reactions aren't 'bad'—they're information. They show you where you're carrying unhealed wounds or limiting beliefs. By tracking them, you can identify patterns and begin to shift them."
+    },
+    {
+      "id": "recognise_archetype_quiz",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Identify Your Archetypes",
+      "description": "Which essence and protective archetypes did you most identify with?",
+      "points": 7,
+      "inputType": "text",
+      "placeholder": "Share what essence and protective archetype you identified"
+    },
+    {
+      "id": "recognise_healing_compass",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Healing Compass",
+      "description": "Identify the wound/s causing your Protective Archetype to protect you",
+      "points": 20,
+      "inputType": "flow",
+      "flow_id": "healing_compass",
+      "flow_route": "/healing-compass",
+      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin. Your protective archetype developed as a survival mechanism—understanding the original wound allows you to heal it at the root, rather than just managing symptoms. This process typically takes 15-20 minutes and will help you gain clarity on why certain patterns keep showing up in your life."
+    },
+    {
+      "id": "recognise_ikigai",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Nikigai",
+      "description": "The Ikigai process modernised to identify business opportunities",
+      "points": 25,
+      "inputType": "flow",
+      "flow_id": "nikigai",
+      "flow_route": "/nikigai",
+      "learnMore": "Ikigai is a Japanese concept meaning 'reason for being.' It sits at the intersection of what you love, what you're good at, what the world needs, and what you can be paid for. This modernized version helps you identify tangible business opportunities aligned with your passion and skills. Takes 20-30 minutes."
+    },
+    {
+      "id": "recognise_consciousness_quiz",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Spiral Dynamics Quiz",
+      "description": "Discover where you operate on the consciousness spectrum. Understand your current state and opportunities for growth.",
+      "points": 15,
+      "inputType": "flow",
+      "flow_id": "spiral_dynamics",
+      "flow_route": "/spiral-dynamics",
+      "learnMore": "Spiral Dynamics maps stages of human consciousness—from survival-based thinking to purpose-driven living. Understanding where you currently operate helps you see your blind spots and growth edges. This isn't about being 'better than' others—it's about recognizing your worldview and where you're ready to expand. Takes 15 minutes."
+    },
+    {
+      "id": "recognise_nervous_system",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Map The Boundaries Of Your Nervous System",
+      "description": "Identify how much money your nervous system feels safe earning before it self-sabotages",
+      "points": 15,
+      "inputType": "flow",
+      "flow_id": "nervous_system",
+      "flow_route": "/nervous-system",
+      "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success. When you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear. This flow uses sway testing (a somatic practice) to identify exactly where those boundaries are—so you can consciously expand them. Takes about 20 minutes."
+    },
+    {
+      "id": "recognise_define_success",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Define Success",
+      "description": "What does success mean to you? What's your North Star? How will you know you're 'successful'?",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "What does success mean to you?",
+      "learnMore": "Most people chase inherited definitions of success—money, status, titles—only to feel empty when they achieve them. Defining success on your own terms is essential for building a life you actually want. Get specific: what does success feel like, look like, and allow you to do? This becomes your compass for decision-making."
+    },
+    {
+      "id": "recognise_nonfiction_content",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Identify Your Curiosities",
+      "description": "What was the topic of a podcast, book, or learning that you absolutely loved this week?",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "The more specific the topic the better",
+      "learnMore": "Your curiosities are breadcrumbs leading to your purpose. The topics you can't stop learning about reveal what you're meant to share with the world. Most people dismiss their interests as 'just hobbies,' but tracking them over time reveals patterns that point to your unique genius and potential business opportunities."
+    },
+    {
+      "id": "release_daily_challenge",
+      "category": "Release",
+      "type": "daily",
+      "name": "Daily Release Challenge",
+      "description": "Check the group chat to see the daily release challenge for the day.",
+      "points": 7,
+      "inputType": "text",
+      "placeholder": "What came up for you in this process today?"
+    },
+    {
+      "id": "release_negative_charge",
+      "category": "Release",
+      "type": "daily",
+      "name": "Processing Our Emotions",
+      "description": "When you find yourself feeling negatively charged today, rather than bottle it up, release it",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What emotion were you feeling and how did you release it?",
+      "learnMore": "Emotions are energy in motion—when we suppress them, they get stored in the body and create chronic tension, anxiety, or numbness. Release practices include: crying, shaking, screaming (into a pillow), journaling, breathwork, movement, or simply allowing yourself to feel without judgment. The goal isn't to 'fix' the emotion but to move it through you."
+    },
+    {
+      "id": "release_weekly_big",
+      "category": "Release",
+      "type": "weekly",
+      "name": "Big Release",
+      "description": "Complete an extended release whether it be breathwork or another release practise of your choosing",
+      "points": 30,
+      "inputType": "text",
+      "placeholder": "What came up in the session? What did you process and release?",
+      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma. Options include: holotropic or Wim Hof breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions. These practices often bring up unexpected emotions—trust the process and let your body lead."
+    },
+    {
+      "id": "rewire_behavior_change",
+      "category": "Rewire",
+      "type": "daily",
+      "name": "Embody Your Essence",
+      "description": "What's a moment where you were on auto-pilot and consciously chose to show-up as your essence archetype instead?",
+      "points": 5,
+      "inputType": "text",
+      "maxPerDay": 3,
+      "placeholder": "What did you do?"
+    },
+    {
+      "id": "rewire_dopamine_diet",
+      "category": "Rewire",
+      "type": "daily",
+      "name": "Dopamine Diet Change",
+      "description": "What's a moment where instead of default to 'fast-food' joy, you pursued 'nutritious' joy instead?",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What was the 'fast-food' joy you usually default to in this moment and what was the 'nutritious' joy you chose instead?",
+      "learnMore": "Fast-food joy is quick dopamine hits that leave you empty: scrolling, junk food, gossip, binge-watching. Nutritious joy requires more effort but fills you up: creating, connecting deeply, moving your body, learning something new. The more you choose nutritious joy, the less you'll crave the fast-food hits. You're literally rewiring your brain's reward system."
+    },
+    {
+      "id": "rewire_customer_acquisition",
+      "category": "Rewire",
+      "type": "daily",
+      "name": "Customer Acquisition Task",
+      "description": "Take one action toward attracting your ideal audience or customers. Post, reach out, create, or connect.",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What action did you take?"
+    },
+    {
+      "id": "rewire_protective_to_essence",
+      "category": "Rewire",
+      "type": "daily",
+      "name": "Protective to Essence Shift",
+      "description": "What's a moment where you were showing up as your protective archetype but shifted and showed up in your essence?",
+      "points": 7,
+      "inputType": "text",
+      "placeholder": "How did you shift from protective to essence?"
+    },
+    {
+      "id": "rewire_groan_skills",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "Groan Challenge: Skills",
+      "description": "Do something outside your comfort zone but develops a key skill.",
+      "points": 25,
+      "inputType": "text",
+      "placeholder": "What skill-building groan task did you complete?",
+      "learnMore": "A 'groan' is something that makes you feel resistance in your body—that ugh, I don't want to do this feeling. These are usually the tasks that would most accelerate your growth. The groan indicates you're at an edge. Skill-building groans might include: recording a video, asking for feedback, learning a new tool, or practicing a skill publicly before you feel 'ready.'"
+    },
+    {
+      "id": "rewire_groan_serve",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "Groan Challenge: Persona",
+      "description": "Do something outside your comfort zone to serve and support your ideal audience",
+      "points": 25,
+      "inputType": "text",
+      "placeholder": "How did you serve your persona this week?",
+      "learnMore": "Serving your ideal audience stretches you beyond your current identity. It forces you to show up bigger than you feel ready for. Examples: hosting a free workshop, reaching out to someone you admire to offer value, creating content about something vulnerable, or asking your audience what they need and delivering it. The groan is your growth edge."
+    },
+    {
+      "id": "rewire_groan_solve",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "Groan Challenge: Problem",
+      "description": "Solve a problem your passionate about for someone in a way that is outside your comfort zone",
+      "points": 25,
+      "inputType": "text",
+      "placeholder": "What problem did you solve?",
+      "learnMore": "The best way to discover your genius is to solve problems you care about in ways that scare you. This builds evidence that you're capable of more than you thought. Examples: offering a paid service before you feel qualified, solving a problem publicly (video/article), or approaching someone directly to help them with something they're struggling with."
+    },
+    {
+      "id": "rewire_3_percent_better",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "3% Better",
+      "description": "In your business what can you make 3% better this week?",
+      "points": 20,
+      "inputType": "text",
+      "placeholder": "What did you improve by 3%?",
+      "learnMore": "The 3% rule focuses on marginal gains instead of massive transformation. Small consistent improvements compound exponentially. Instead of 'I need to completely overhaul my website,' you ask 'What's 3% better?' Maybe it's improving one headline, simplifying your offer, or speeding up your response time. Tiny improvements sustained over time create massive results."
+    },
+    {
+      "id": "reconnect_morning_meditation",
+      "category": "Reconnect",
+      "type": "daily",
+      "name": "Meditation",
+      "description": "Establish connection with your essence archetype and drop into a meditation",
+      "points": 5,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "reconnect_morning_dance",
+      "category": "Reconnect",
+      "type": "daily",
+      "name": "Rise & Vibe Dance",
+      "description": "Play one of your favourite bangers and get your dance on",
+      "points": 3,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "reconnect_morning_breathwork",
+      "category": "Reconnect",
+      "type": "daily",
+      "name": "Breathwork",
+      "description": "Complete breathwork and breath life into your essence archetype",
+      "points": 5,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "reconnect_self_identified",
+      "category": "Reconnect",
+      "type": "daily",
+      "name": "Self-Identified Activity",
+      "description": "Do something that reconnects you to YOU. Your choice, your ritual, your essence.",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What did you do to reconnect today?"
+    },
+    {
+      "id": "reconnect_weekly_task",
+      "category": "Reconnect",
+      "type": "weekly",
+      "name": "Weekly Self-Identified Task",
+      "description": "Choose a weekly reconnection practice that deeply resonates with you. Make it meaningful.",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "What was your reconnection practice this week?"
+    },
+    {
+      "id": "reconnect_clothing_ritual",
+      "category": "Reconnect",
+      "type": "weekly",
+      "name": "Clothing Item Ritual",
+      "description": "Choose a clothing item your essence archetype would love to wear but sparks your fear of judgement",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "What item did you choose and why?",
+      "learnMore": "Your protective archetype keeps you small by controlling how you present yourself to the world. Wearing something that feels 'too much' or 'not professional' or 'too bold' is a somatic way to practice being yourself despite fear of judgment. When you dress like your essence, you literally embody it. This is identity work disguised as fashion."
+    },
+    {
+      "id": "reconnect_groan_wheel",
+      "category": "Reconnect",
+      "type": "weekly",
+      "name": "Essence Archetype Groan",
+      "description": "Do something your Essence Archetype would love to do but sparks a fear of judgement, failure or not being good enough",
+      "points": 20,
+      "inputType": "text",
+      "placeholder": "What did you do and how did it go?",
+      "learnMore": "Your essence wants to express itself fully, but your protective archetype has been blocking it to keep you safe. This quest is about giving your essence permission to play—even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway."
+    },
+    {
+      "id": "reconnect_remove_negative",
+      "category": "Reconnect",
+      "type": "weekly",
+      "name": "Environment Hygiene",
+      "description": "Identify and remove yourself from an environment, relationship, or situation that drains your essence.",
+      "points": 25,
+      "inputType": "text",
+      "placeholder": "What negative environment did you address?",
+      "learnMore": "You can't thrive in toxic environments. Sometimes the most important thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish—it's essential."
+    },
+    {
+      "id": "bonus_feedback",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Feedback Form",
+      "description": "Share your experience with the challenge. Your feedback helps us improve the journey for everyone.",
+      "points": 10,
+      "inputType": "text",
+      "placeholder": "What feedback do you have about the challenge?"
+    },
+    {
+      "id": "bonus_ig_groan",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Post Your Groan/s on Instagram",
+      "description": "Share one of your 'groan' tasks as a story or post on Instagram. Vulnerability is magnetic. Tag @_Huzz so I can reshare it 🫶🏻",
+      "points": 10,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "bonus_tell_friend",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Tell a Friend",
+      "description": "Share this 7-day challenge with someone who you think would love to join.",
+      "points": 5,
+      "inputType": "checkbox",
+      "maxCompletions": 3
+    },
+    {
+      "id": "bonus_essence_ring",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Buy Essence Ring",
+      "description": "Invest in a physical reminder of your essence archetype. Wear your truth. If you can't find one, send Huzz a message.",
+      "points": 10,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "bonus_elephant_report",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Weekly Reflection",
+      "description": "Submit your weekly reflection. Track your transformation over the 7 days.",
+      "points": 10,
+      "inputType": "text",
+      "placeholder": "Share your weekly reflection"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "essence_boat",
+      "name": "Treasure Map",
+      "category": "Recognise",
+      "description": "Identify where to find your flow.",
+      "weeklyPointsRequired": 50,
+      "dailyPointsRequired": 40,
+      "totalRequired": 90,
+      "image": "/images/artifacts/essence-boat.png"
+    },
+    {
+      "id": "captains_hat",
+      "name": "Cutting The Anchor",
+      "category": "Release",
+      "description": "Letting go of what's stopping your flow.",
+      "weeklyPointsRequired": 30,
+      "dailyPointsRequired": 30,
+      "totalRequired": 60,
+      "image": "/images/artifacts/captains-hat.png"
+    },
+    {
+      "id": "treasure_map",
+      "name": "Captain's Hat",
+      "category": "Rewire",
+      "description": "Taking action to be who you were born to be.",
+      "weeklyPointsRequired": 60,
+      "dailyPointsRequired": 50,
+      "totalRequired": 110,
+      "image": "/images/artifacts/treasure-map.png"
+    },
+    {
+      "id": "sailing_sails",
+      "name": "Essence Boat",
+      "category": "Reconnect",
+      "description": "Your Vessel for living your flow.",
+      "weeklyPointsRequired": 40,
+      "dailyPointsRequired": 50,
+      "totalRequired": 90,
+      "image": "/images/artifacts/sailing-sails.png"
+    }
+  ]
+}

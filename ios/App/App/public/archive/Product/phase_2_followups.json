@@ -1,0 +1,67 @@
+{
+  "phase_2_followup_logic": {
+    "description": "After scoring phase-1 questions, identify the top 2 candidate lead magnet types. Then ask only the follow-up questions tied to those specific types to validate readiness.",
+    "offers_to_followups": {
+
+      "reveal_problem": [
+        {
+          "id": "FRP1_problem_framework",
+          "text": "Do you have a clear framework or scoring system for diagnosing the problem?",
+          "type": "single_choice",
+          "options": ["yes_have_framework", "have_idea_need_to_formalize", "no_need_to_create"],
+          "store_as": "reveal_problem_framework"
+        },
+        {
+          "id": "FRP2_scoring_system",
+          "text": "Can you create different outcomes based on assessment results (segmentation)?",
+          "type": "single_choice",
+          "options": ["yes_can_segment", "somewhat_basic_segmentation", "no_same_result_everyone"],
+          "store_as": "reveal_problem_scoring"
+        }
+      ],
+
+      "free_trial": [
+        {
+          "id": "FFT1_trial_limitations",
+          "text": "Can you easily limit features or time for a trial version?",
+          "type": "single_choice",
+          "options": ["yes_easy_to_limit", "yes_but_need_development", "no_all_or_nothing", "not_sure"],
+          "store_as": "free_trial_limitations"
+        },
+        {
+          "id": "FFT2_upsell_path",
+          "text": "Is the path from trial to paid clear and frictionless?",
+          "type": "single_choice",
+          "options": ["yes_very_clear", "mostly_clear", "needs_work", "no_path_yet"],
+          "store_as": "free_trial_upsell_path"
+        }
+      ],
+
+      "free_step_1": [
+        {
+          "id": "FFS1_multi_step_process",
+          "text": "Does your core offer follow a clear multi-step process?",
+          "type": "single_choice",
+          "options": ["yes_clear_steps", "yes_but_need_to_document", "somewhat_sequential", "no_not_step_based"],
+          "store_as": "free_step_1_process"
+        },
+        {
+          "id": "FFS2_standalone_value",
+          "text": "Can step 1 deliver a complete quick win on its own?",
+          "type": "single_choice",
+          "options": ["yes_complete_value", "yes_with_some_tweaks", "maybe_partial_value", "no_needs_full_process"],
+          "store_as": "free_step_1_standalone"
+        }
+      ]
+
+    },
+
+    "logic_rules": {
+      "ask_top_two_offers_only": true,
+      "max_followup_questions_per_offer": 2,
+      "skip_if_not_in_top_two": true,
+      "auto_rule_out_if_hard_no": true,
+      "if_both_offers_fail_followups": "fallback_to_next_best_offer"
+    }
+  }
+}

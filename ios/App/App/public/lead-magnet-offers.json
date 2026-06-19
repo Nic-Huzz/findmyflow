@@ -1,0 +1,350 @@
+[
+  {
+    "id": "reveal_problem",
+    "name": "Reveal Problem Lead Magnet",
+    "description": "A diagnostic tool, assessment, or quiz that helps prospects discover and understand their problem. This builds awareness and positions you as the expert who can solve it. Best delivered as Software (assessment tool) or Information (scorecard/report).",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FRP1_problem_framework",
+        "FRP2_scoring_system"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "problem_clarity",
+          "disallowed": ["know_problem_and_solution"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_core_offer_type": {
+        "coaching_consulting": 4,
+        "course_program": 3,
+        "software_saas": 3,
+        "service_done_for_you": 3,
+        "membership_community": 2,
+        "physical_product": 1,
+        "not_sure_yet": 2
+      },
+      "Q2_technical_ability": {
+        "very_technical_can_build": 3,
+        "comfortable_can_use_tools": 4,
+        "basic_prefer_simple": 2,
+        "not_technical_need_easy": 0
+      },
+      "Q3_time_to_create": {
+        "1_week_or_less": -1,
+        "2_4_weeks": 3,
+        "1_3_months": 4,
+        "3_plus_months": 2
+      },
+      "Q4_budget": {
+        "minimal_under_100": 1,
+        "small_100_500": 3,
+        "moderate_500_2000": 4,
+        "significant_2000_plus": 3
+      },
+      "Q5_content_comfort": {
+        "very_comfortable_do_it_regularly": 3,
+        "comfortable_can_create": 2,
+        "somewhat_comfortable_need_help": 1,
+        "not_comfortable_prefer_other_methods": 0
+      },
+      "Q6_service_capacity": {
+        "yes_have_capacity_now": 0,
+        "yes_but_limited_capacity": 0,
+        "no_too_time_intensive": 2,
+        "no_prefer_scalable_solutions": 3
+      },
+      "Q7_problem_clarity": {
+        "dont_know_they_have_problem": 4,
+        "know_problem_not_severity": 4,
+        "know_problem_not_solution": 2,
+        "know_problem_and_solution": -3
+      },
+      "Q8_conversion_goal": {
+        "educate_and_build_trust": 3,
+        "let_them_experience_value": 1,
+        "diagnose_specific_problem": 4,
+        "get_them_quick_win": 2
+      },
+      "Q9_scalability_priority": {
+        "critical_need_scale": 4,
+        "important_but_not_critical": 3,
+        "not_important_prefer_personal": 1,
+        "doesnt_matter": 2
+      },
+      "Q10_existing_assets": {
+        "have_software_or_tool": 4,
+        "have_content_guides_videos": 2,
+        "can_offer_consulting_time": 1,
+        "have_physical_samples": 0,
+        "nothing_yet_starting_fresh": 2
+      }
+    },
+
+    "max_possible_score": 36,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Discover [Your Hidden Problem] in 5 Minutes",
+        "Free Assessment: Find Out Why [Problem] Keeps Happening"
+      ],
+      "offer_structure": [
+        "Create assessment/quiz with 8-15 questions",
+        "Score answers to reveal specific problems",
+        "Provide personalized results/report",
+        "Reveal next problem your core offer solves"
+      ],
+      "delivery_mechanisms": [
+        "Software: TypeForm, Quiz tools, Custom assessment",
+        "Information: PDF scorecard, Email report, Video breakdown"
+      ],
+      "key_tactics": [
+        "Make questions reveal insights they didn't know",
+        "Segment leads based on their results",
+        "Use results to personalize your pitch",
+        "Include specific next steps in results"
+      ],
+      "success_metrics": [
+        "Completion rate",
+        "Lead quality (problem awareness)",
+        "Segmentation accuracy",
+        "Assessment-to-call booking rate"
+      ]
+    }
+  },
+
+  {
+    "id": "free_trial",
+    "name": "Free Trial Lead Magnet",
+    "description": "Let prospects experience your solution firsthand with a free trial, sample, or demo. This works best when the value is immediately obvious and creates desire for the full version. Best delivered as Software (limited features/time) or Physical Products (samples).",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FFT1_trial_limitations",
+        "FFT2_upsell_path"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "core_offer_type",
+          "disallowed": ["not_sure_yet"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_core_offer_type": {
+        "software_saas": 4,
+        "physical_product": 4,
+        "membership_community": 3,
+        "course_program": 2,
+        "coaching_consulting": 1,
+        "service_done_for_you": 1,
+        "not_sure_yet": -3
+      },
+      "Q2_technical_ability": {
+        "very_technical_can_build": 4,
+        "comfortable_can_use_tools": 3,
+        "basic_prefer_simple": 1,
+        "not_technical_need_easy": -1
+      },
+      "Q3_time_to_create": {
+        "1_week_or_less": 2,
+        "2_4_weeks": 3,
+        "1_3_months": 4,
+        "3_plus_months": 4
+      },
+      "Q4_budget": {
+        "minimal_under_100": -1,
+        "small_100_500": 1,
+        "moderate_500_2000": 3,
+        "significant_2000_plus": 4
+      },
+      "Q5_content_comfort": {
+        "very_comfortable_do_it_regularly": 2,
+        "comfortable_can_create": 1,
+        "somewhat_comfortable_need_help": 0,
+        "not_comfortable_prefer_other_methods": 1
+      },
+      "Q6_service_capacity": {
+        "yes_have_capacity_now": 1,
+        "yes_but_limited_capacity": 0,
+        "no_too_time_intensive": 2,
+        "no_prefer_scalable_solutions": 3
+      },
+      "Q7_problem_clarity": {
+        "dont_know_they_have_problem": 0,
+        "know_problem_not_severity": 1,
+        "know_problem_not_solution": 3,
+        "know_problem_and_solution": 4
+      },
+      "Q8_conversion_goal": {
+        "educate_and_build_trust": 2,
+        "let_them_experience_value": 4,
+        "diagnose_specific_problem": 1,
+        "get_them_quick_win": 3
+      },
+      "Q9_scalability_priority": {
+        "critical_need_scale": 4,
+        "important_but_not_critical": 3,
+        "not_important_prefer_personal": 1,
+        "doesnt_matter": 2
+      },
+      "Q10_existing_assets": {
+        "have_software_or_tool": 4,
+        "have_content_guides_videos": 1,
+        "can_offer_consulting_time": 0,
+        "have_physical_samples": 4,
+        "nothing_yet_starting_fresh": -2
+      }
+    },
+
+    "max_possible_score": 36,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Try [Product] Free for [Time Period]",
+        "Experience [Result] Risk-Free"
+      ],
+      "offer_structure": [
+        "Offer limited version of your core product",
+        "Set clear trial period (7-30 days typical)",
+        "Remove friction (no credit card required works best)",
+        "Create natural desire for upgrade"
+      ],
+      "delivery_mechanisms": [
+        "Software: Limited features, time-based trial, usage limits",
+        "Physical: Sample products, trial sizes, demo kits",
+        "Services: Free consultation, audit, strategy session"
+      ],
+      "key_tactics": [
+        "Make trial valuable enough to experience transformation",
+        "Set up upgrade prompts at key moments",
+        "Track usage to identify ready-to-buy signals",
+        "Follow up based on trial engagement"
+      ],
+      "success_metrics": [
+        "Trial signup rate",
+        "Trial activation rate",
+        "Trial-to-paid conversion",
+        "Time to conversion",
+        "Feature usage during trial"
+      ]
+    }
+  },
+
+  {
+    "id": "free_step_1",
+    "name": "Free Step 1 of X Lead Magnet",
+    "description": "Give away the first step of your multi-step process for free. This demonstrates your expertise, gets them a quick win, and creates desire for steps 2-X. Best delivered as Information (guides, videos, templates) or Services (first session free).",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FFS1_multi_step_process",
+        "FFS2_standalone_value"
+      ],
+      "hard_disqualifiers": []
+    },
+
+    "scoring_weights": {
+      "Q1_core_offer_type": {
+        "course_program": 4,
+        "coaching_consulting": 4,
+        "service_done_for_you": 3,
+        "membership_community": 3,
+        "software_saas": 2,
+        "physical_product": 1,
+        "not_sure_yet": 1
+      },
+      "Q2_technical_ability": {
+        "very_technical_can_build": 2,
+        "comfortable_can_use_tools": 3,
+        "basic_prefer_simple": 3,
+        "not_technical_need_easy": 4
+      },
+      "Q3_time_to_create": {
+        "1_week_or_less": 4,
+        "2_4_weeks": 4,
+        "1_3_months": 2,
+        "3_plus_months": 1
+      },
+      "Q4_budget": {
+        "minimal_under_100": 4,
+        "small_100_500": 3,
+        "moderate_500_2000": 2,
+        "significant_2000_plus": 1
+      },
+      "Q5_content_comfort": {
+        "very_comfortable_do_it_regularly": 4,
+        "comfortable_can_create": 3,
+        "somewhat_comfortable_need_help": 1,
+        "not_comfortable_prefer_other_methods": -1
+      },
+      "Q6_service_capacity": {
+        "yes_have_capacity_now": 3,
+        "yes_but_limited_capacity": 2,
+        "no_too_time_intensive": 1,
+        "no_prefer_scalable_solutions": 0
+      },
+      "Q7_problem_clarity": {
+        "dont_know_they_have_problem": 1,
+        "know_problem_not_severity": 2,
+        "know_problem_not_solution": 4,
+        "know_problem_and_solution": 3
+      },
+      "Q8_conversion_goal": {
+        "educate_and_build_trust": 4,
+        "let_them_experience_value": 3,
+        "diagnose_specific_problem": 2,
+        "get_them_quick_win": 4
+      },
+      "Q9_scalability_priority": {
+        "critical_need_scale": 3,
+        "important_but_not_critical": 4,
+        "not_important_prefer_personal": 3,
+        "doesnt_matter": 3
+      },
+      "Q10_existing_assets": {
+        "have_software_or_tool": 1,
+        "have_content_guides_videos": 4,
+        "can_offer_consulting_time": 4,
+        "have_physical_samples": 2,
+        "nothing_yet_starting_fresh": 2
+      }
+    },
+
+    "max_possible_score": 38,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Get [Quick Win] in [Timeframe] - Free First Step",
+        "Free: [Step 1 Name] from Our [Full Program Name]"
+      ],
+      "offer_structure": [
+        "Extract first step of your proven process",
+        "Make it valuable and complete on its own",
+        "Show clear path to steps 2-X",
+        "Create natural curiosity for what's next"
+      ],
+      "delivery_mechanisms": [
+        "Information: First module, template, worksheet, chapter",
+        "Services: First session free, opening consultation",
+        "Software: Basic tool that's part of larger platform"
+      ],
+      "key_tactics": [
+        "Ensure step 1 delivers a complete quick win",
+        "Reference the full process throughout",
+        "Show what becomes possible with full access",
+        "Make step 2 the obvious next move"
+      ],
+      "success_metrics": [
+        "Download/consumption rate",
+        "Quick win achievement rate",
+        "Time to upgrade request",
+        "Step 1 to full program conversion"
+      ]
+    }
+  }
+]

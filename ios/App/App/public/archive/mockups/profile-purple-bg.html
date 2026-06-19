@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Page - Purple Background Mock-up</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    }
+
+    /* ONLY CHANGE: Background from #fafbfc to purple gradient */
+    .dashboard-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+      position: relative;
+    }
+
+    /* Mobile Top Bar */
+    .mobile-topbar {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+      color: white;
+      padding: 15px 20px;
+      z-index: 101;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .topbar-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topbar-logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .hamburger-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 5px;
+      line-height: 1;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 0;
+      padding: 65px 20px 25px 20px;
+    }
+
+    .page-header {
+      margin-bottom: 16px;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+      font-weight: 800;
+    }
+
+    .page-subtitle {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    /* Section Headings */
+    .section-heading {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+      margin-top: 16px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: start;
+    }
+
+    .stat-card-wrapper {
+      position: relative;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #e8ecef;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .stat-card.purple .stat-icon {
+      background: #f0e7ff;
+    }
+
+    .stat-card.yellow .stat-icon {
+      background: #fff9e6;
+    }
+
+    .stat-card.orange .stat-icon {
+      background: #fff0e6;
+    }
+
+    .stat-card.blue .stat-icon {
+      background: #e6f0ff;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 1.4rem;
+      color: #1a1a1a;
+      font-weight: 800;
+    }
+
+    .expand-arrow {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #666;
+    }
+
+    /* Stage Progress Card */
+    .stage-progress-section {
+      margin-bottom: 30px;
+    }
+
+    .stage-progress-card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e8ecef;
+    }
+
+    .stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .stage-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .stage-badge {
+      background: linear-gradient(135deg, #ffdd27, #f59e0b);
+      color: #333;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .stage-progress-bar {
+      height: 8px;
+      background: #e8ecef;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .stage-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #5e17eb, #7c3aed);
+      border-radius: 4px;
+    }
+
+    .stage-requirements {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .requirement-tag {
+      background: #f5f5f5;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      color: #666;
+    }
+
+    .requirement-tag.completed {
+      background: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    /* Flow Map */
+    .flow-map {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e8ecef;
+    }
+
+    .flow-map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .flow-map-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .flow-stages {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .flow-stages::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: #e8ecef;
+    }
+
+    .flow-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 1;
+    }
+
+    .flow-stage-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #999;
+      border: 2px solid #e8ecef;
+    }
+
+    .flow-stage-dot.active {
+      background: linear-gradient(135deg, #5e17eb, #7c3aed);
+      border-color: #5e17eb;
+      color: white;
+    }
+
+    .flow-stage-dot.completed {
+      background: #22c55e;
+      border-color: #22c55e;
+      color: white;
+    }
+
+    .flow-stage-label {
+      font-size: 0.7rem;
+      color: #999;
+      text-align: center;
+    }
+
+    /* CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, #5e17eb, #764ba2);
+      border-radius: 20px;
+      padding: 35px 25px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,221,39,0.2) 0%, transparent 70%);
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-banner h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      font-weight: 800;
+    }
+
+    .cta-banner p {
+      font-size: 1rem;
+      margin-bottom: 30px;
+      opacity: 0.95;
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: stretch;
+    }
+
+    .btn-white {
+      background: white;
+      color: #5e17eb;
+      border: none;
+      padding: 16px 35px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-white:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+      padding: 14px 33px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      background: white;
+      color: #5e17eb;
+    }
+
+    /* Desktop styles */
+    @media (min-width: 769px) {
+      .mobile-topbar {
+        display: none;
+      }
+
+      .main-content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+      }
+
+      .stat-card {
+        padding: 30px;
+      }
+
+      .stat-value {
+        font-size: 1.8rem;
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+      }
+
+      .page-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .cta-banner {
+        padding: 50px;
+      }
+
+      .cta-banner h3 {
+        font-size: 2rem;
+      }
+
+      .cta-buttons {
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar">
+      <div class="topbar-content">
+        <div class="topbar-logo">FindMyFlow</div>
+        <button class="hamburger-btn">☰</button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">Welcome Back, Nick</h1>
+        <p class="page-subtitle">Here's Your Profile:</p>
+      </div>
+
+      <!-- Your Voices Section -->
+      <h2 class="section-heading">Your Voices</h2>
+
+      <div class="stats-grid">
+        <div class="stat-card-wrapper">
+          <div class="stat-card purple">
+            <div class="stat-icon">✨</div>
+            <div class="stat-label">Essence</div>
+            <div class="stat-value">The Visionary</div>
+            <div class="expand-arrow">↓</div>
+          </div>
+        </div>
+
+        <div class="stat-card-wrapper">
+          <div class="stat-card yellow">
+            <div class="stat-icon">🛡️</div>
+            <div class="stat-label">Protective</div>
+            <div class="stat-value">The Perfectionist</div>
+            <div class="expand-arrow">↓</div>
+          </div>
+        </div>
+
+        <div class="stat-card-wrapper">
+          <div class="stat-card orange">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-label">Current Streak</div>
+            <div class="stat-value">5 days</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Journey Guide Section -->
+      <h2 class="section-heading">Journey Guide</h2>
+
+      <div class="stage-progress-section">
+        <div class="stage-progress-card">
+          <div class="stage-header">
+            <div class="stage-title">Movement Maker</div>
+            <div class="stage-badge">Creation Stage</div>
+          </div>
+          <div class="stage-progress-bar">
+            <div class="stage-progress-fill" style="width: 60%"></div>
+          </div>
+          <div class="stage-requirements">
+            <div class="requirement-tag completed">✓ Skills Flow</div>
+            <div class="requirement-tag completed">✓ Problems Flow</div>
+            <div class="requirement-tag">○ Persona Flow</div>
+            <div class="requirement-tag">○ Integration</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flow Map -->
+      <div class="flow-map">
+        <div class="flow-map-header">
+          <div class="flow-map-title">Your Journey Map</div>
+        </div>
+        <div class="flow-stages">
+          <div class="flow-stage">
+            <div class="flow-stage-dot completed">✓</div>
+            <div class="flow-stage-label">Clarity</div>
+          </div>
+          <div class="flow-stage">
+            <div class="flow-stage-dot completed">✓</div>
+            <div class="flow-stage-label">Validation</div>
+          </div>
+          <div class="flow-stage">
+            <div class="flow-stage-dot active">3</div>
+            <div class="flow-stage-label">Creation</div>
+          </div>
+          <div class="flow-stage">
+            <div class="flow-stage-dot">4</div>
+            <div class="flow-stage-label">Testing</div>
+          </div>
+          <div class="flow-stage">
+            <div class="flow-stage-dot">5</div>
+            <div class="flow-stage-label">Launch</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <h2 class="section-heading">Ready To Find Your Flow?</h2>
+
+      <div class="cta-banner">
+        <div class="cta-content">
+          <h3>Live Your Ambitions Faster</h3>
+          <p>Start a 7-day-challenge to gamify your ambitions and advance through the persona stages</p>
+          <div class="cta-buttons">
+            <button class="btn-white">Continue 7-Day Challenge 🔥</button>
+            <button class="btn-outline">Give Feedback 💬</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1001 @@
+{
+  "meta": {
+    "tier": 3,
+    "count": 40,
+    "generatedAt": "2026-04-07"
+  },
+  "profiles": [
+    {
+      "name": "Pearl Kazin Bell",
+      "domain": "editing / literary criticism",
+      "era": "1922-2016",
+      "region": "US",
+      "bio": "American editor and literary critic. She worked as an assistant literary editor at Harper's Bazaar, a copy editor at The New Yorker, and as a fiction critic for The New Leader, Commentary, and Partisan Review from the 1950s through the 1980s. Her papers are held at Columbia.",
+      "oneLiner": "Read fiction the way a watchmaker listens to a movement, then wrote down exactly what she heard.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying"],
+      "narratives": [
+        {
+          "title": "Copy editor at The New Yorker in the 1940s",
+          "content": "Kazin began her working life on the copy desk at The New Yorker in the 1940s, the house where editorial punctilio was a kind of religion. Her son David A. Bell, writing in the New York Review of Books in 2024 after going through her archive, described her desk habits as almost physical: she marked galleys in a small, precise hand and kept correspondence files in which acceptance and rejection letters were alphabetised by writer. The discipline of that room never left her. She carried New Yorker standards into every later publication she touched."
+        },
+        {
+          "title": "Fiction critic for The New Leader, Commentary and Partisan Review",
+          "content": "For three decades Kazin wrote a regular fiction column in The New Leader and contributed long review essays to Commentary and Partisan Review, the core journals of the New York Intellectuals. She reviewed Bellow, Roth, Doris Lessing, Graham Greene and Isaac Bashevis Singer. She refused the then-fashionable deconstructive vocabulary and insisted on plain sentences about character, sentence rhythm and moral seriousness, a stance her brother Alfred Kazin shared and that the circle around Partisan Review argued about for years."
+        },
+        {
+          "title": "Dylan Thomas and the editor's private file",
+          "content": "In 1950 Kazin had a love affair with Dylan Thomas during his first American lecture tour. The letters he sent her survive and were published in 2014 as A Pearl of Great Price, edited by Jeff Towns. What is striking about the file is how carefully she kept it. She did not publish the letters in her lifetime and did not write about the affair, but she preserved every envelope. David Bell found them in order when he opened her archive after her death."
+        },
+        {
+          "title": "Letters as a craft of reading",
+          "content": "Kazin's correspondence with writers, preserved in the Pearl Kazin Bell papers and in the archives of her magazines, shows an editor who replied in specific sentences rather than general praise. She would quote a line back to the author and ask whether the next paragraph had earned it. The method is the opposite of line editing by red pen. She made writers feel read first and corrected second, which is itself a quieter kind of instruction."
+        }
+      ]
+    },
+    {
+      "name": "Gordon Lish",
+      "domain": "fiction editing / writing workshop",
+      "era": "1934-2025",
+      "region": "US",
+      "bio": "American editor, writer and teacher. He was fiction editor at Esquire from 1969 to 1976, editor at Alfred A. Knopf from 1977 to 1995, and the publisher and editor of The Quarterly from 1987 to 1995. He famously edited Raymond Carver, Amy Hempel, Barry Hannah and Don DeLillo, and taught private fiction workshops in New York for decades.",
+      "oneLiner": "Taught a generation that the sentence was the unit of attention and that the next sentence had to earn the right to exist.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["creating", "clarifying"],
+      "narratives": [
+        {
+          "title": "The attack sentence",
+          "content": "In his private workshop, transcribed in The Lish Notes by student Tetman Callis, Lish told writers that the opening line of a story was not an opening but an attack. 'Your attack sentence is a provoking sentence,' he said. 'You follow it with a series of provoking sentences.' He drilled his students on the idea that each sentence had to generate the pressure that produced the next, a method he called consecution."
+        },
+        {
+          "title": "Editing What We Talk About When We Talk About Love",
+          "content": "Lish cut Raymond Carver's 1981 collection What We Talk About When We Talk About Love by roughly 50 percent. On several stories the surviving typescripts at Indiana University show cuts of 70 percent or more, along with new endings in Lish's hand. Carver protested in a 1980 letter, begging him to 'stop the presses,' but eventually let the edited versions go to print. The documented edits, later published side by side, are the clearest case study in modern American editing of how far a strong editor can push a willing writer."
+        },
+        {
+          "title": "Paris Review, The Art of Editing No. 2",
+          "content": "In his long 2015 interview for the Paris Review, Lish was asked whether he had taken too much from Carver. He refused the framing. He said the job of the editor was to help the writer become more the writer, not less, even if that meant writing over the top of them for a while. The interview is unusual among editor portraits because Lish defends cutting as a form of love rather than violence."
+        },
+        {
+          "title": "The Quarterly as a teaching magazine",
+          "content": "From 1987 to 1995 Lish ran The Quarterly out of Knopf as a venue where the writers from his workshops could place pieces that would never have been accepted anywhere else. The magazine printed Amy Hempel, Mary Robison and Christine Schutt early in their careers. It was less a literary journal than a lab book for his pedagogy, and the prose there is recognisably Lishian: clipped sentences, a refusal of exposition, a belief that the music of the prose could carry the meaning."
+        }
+      ]
+    },
+    {
+      "name": "Herbert Kohl",
+      "domain": "progressive education",
+      "era": "1937-present",
+      "region": "US",
+      "bio": "American teacher and writer, founder of the Open Schools movement in the United States. His 1967 memoir 36 Children, about his sixth-grade class in Harlem, became a foundational text for progressive urban pedagogy. He has published over 30 books on teaching and learning.",
+      "oneLiner": "Wrote down what the children in Harlem actually said and let those sentences argue for a better school.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "creating"],
+      "narratives": [
+        {
+          "title": "36 Children, 1967",
+          "content": "Kohl took a job teaching sixth grade in a Harlem public school in 1962 and, with no curriculum he believed in, let the children write. 36 Children, published in 1967, reprints their poems and essays in long blocks alongside his classroom journal. In the preface Kohl wrote that the book was an attempt 'to describe the life of one class of thirty-six children and one teacher in Harlem.' The choice to foreground the children's own writing rather than his theory was the argument."
+        },
+        {
+          "title": "I Won't Learn From You",
+          "content": "In his 1991 essay I Won't Learn From You Kohl introduced the concept of 'not-learning' as distinct from failure to learn. He wrote: 'Not-learning tends to take place when someone has to deal with unavoidable challenges to her or his personal and family loyalties, integrity, and identity.' A student who refuses to learn, he argued, is often protecting something. The essay reframed decades of remedial pedagogy by moving the question from deficit to resistance."
+        },
+        {
+          "title": "Writing about teaching as a political act",
+          "content": "Across essays in the New York Review of Books and Rethinking Schools, Kohl argued that teaching could not be separated from the structures that surrounded the classroom. He wrote that 'good teaching requires teachers who believe in their students and who have hope for their future.' His essays show a practitioner who kept his ear on what happened at a single table while arguing with the policy conversation above it."
+        }
+      ]
+    },
+    {
+      "name": "Rafe Esquith",
+      "domain": "elementary teaching",
+      "era": "1954-present",
+      "region": "US",
+      "bio": "American fifth-grade teacher at Hobart Boulevard Elementary in Los Angeles from 1984 to 2015. He founded the Hobart Shakespeareans, a class of mostly first-generation immigrant children from poverty who performed unabridged Shakespeare and toured internationally. Author of Teach Like Your Hair's on Fire (2007) and There Are No Shortcuts.",
+      "oneLiner": "Ran a classroom at 6:30 in the morning where ten-year-olds rehearsed Macbeth and meant every word of it.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["creating", "designing"],
+      "narratives": [
+        {
+          "title": "There are no shortcuts, on the wall",
+          "content": "In Room 56 a banner reading 'There Are No Shortcuts' hung beside the Shakespeare posters for Esquith's entire career. In his book of the same name he treated the phrase as a curriculum rather than a slogan. He opened class at 6:30 in the morning, kept going long after the official day ended, and argued that the reason his students could play Vivaldi and perform unabridged Shakespeare was that they were given the time to actually practise, not a motivational assembly."
+        },
+        {
+          "title": "Teaching Kohlberg's six stages to ten-year-olds",
+          "content": "Esquith taught his fifth graders Lawrence Kohlberg's six stages of moral development as the framework for classroom behaviour. In Teach Like Your Hair's on Fire (2007) he explained that Level One was 'I don't want to get in trouble,' Level Six was 'I have a code I live by.' He pushed students to name which level they were operating from in any given decision. The framework let a ten-year-old talk about their own motivation with adult vocabulary."
+        },
+        {
+          "title": "The Hobart Shakespeareans",
+          "content": "For more than twenty years Esquith's class performed a full Shakespeare play every year, with no cuts, at the end of the school year. Sir Ian McKellen visited the classroom and called the students' grasp of the language better than many professionals. The children were almost all English-language learners from immigrant families in poverty. Esquith documented the rehearsal process in his books: line by line, scene by scene, no shortcuts."
+        }
+      ]
+    },
+    {
+      "name": "Richard Feynman",
+      "domain": "theoretical physics / teaching",
+      "era": "1918-1988",
+      "region": "US",
+      "bio": "American theoretical physicist. Shared the 1965 Nobel Prize in Physics for his work on quantum electrodynamics. Worked on the Manhattan Project at Los Alamos, taught at Caltech from 1950, and served on the Rogers Commission investigating the Challenger disaster in 1986. His books Surely You're Joking, Mr. Feynman! and the Feynman Lectures on Physics made him a household name.",
+      "oneLiner": "Insisted that the first principle of science was that you must not fool yourself, and made the joke of physics feel like the point of it.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "directing"],
+      "narratives": [
+        {
+          "title": "Do not fool yourself, and you are the easiest person to fool",
+          "content": "In the 1974 Caltech commencement address reprinted in Surely You're Joking, Mr. Feynman! (1985) he gave the most quoted sentence of his career: 'The first principle is that you must not fool yourself, and you are the easiest person to fool.' The address, later titled Cargo Cult Science, set out a definition of scientific integrity as the leaning over backwards to show how you might be wrong, not merely to show you are right."
+        },
+        {
+          "title": "Safecracking at Los Alamos",
+          "content": "In the chapter Safecracker Meets Safecracker in Surely You're Joking, Feynman described cracking the combination safes that held classified Manhattan Project documents. He would leave notes inside reading things like 'I borrowed document X from your safe.' He learned that many physicists set their combinations to the mathematical constants e or pi. The point of the chapter was not mischief. It was that the security system at the most secret facility in the world rested on people not being curious."
+        },
+        {
+          "title": "The Challenger O-ring in a glass of ice water",
+          "content": "On the Rogers Commission in February 1986, Feynman dropped a piece of O-ring rubber into a glass of ice water during a live television hearing and showed that it lost its resilience at cold temperatures. He did it without permission from the commission chair. It was the moment the Challenger investigation became public property. Feynman later wrote in What Do You Care What Other People Think? that he had been warned by a NASA engineer which question to ask and had set up the demonstration himself."
+        },
+        {
+          "title": "The Feynman Lectures on Physics",
+          "content": "Between 1961 and 1963 Feynman gave the introductory physics course at Caltech from scratch and the lectures were transcribed into three volumes. In the preface he wrote that he was not sure he had succeeded as a teacher because the freshmen had struggled, but that the books might be useful to graduate students and professionals who wanted to see the whole shape of physics. Six decades later the volumes are still in print and still assigned."
+        }
+      ]
+    },
+    {
+      "name": "Jerome Bruner",
+      "domain": "educational psychology",
+      "era": "1915-2016",
+      "region": "US",
+      "bio": "American psychologist, a founder of the cognitive revolution in psychology. His 1960 book The Process of Education introduced the spiral curriculum. He taught at Harvard, Oxford, and NYU, and published Actual Minds, Possible Worlds in 1986, a foundational text for narrative psychology.",
+      "oneLiner": "Argued that any subject could be taught to any child at any stage, if you were honest about what the subject really was.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["nurturing", "designing"],
+      "narratives": [
+        {
+          "title": "Any subject, any child, any stage",
+          "content": "In The Process of Education (1960) Bruner wrote the sentence that rewired twentieth-century curriculum design: 'We begin with the hypothesis that any subject can be taught effectively in some intellectually honest form to any child at any stage of development.' The qualifier 'intellectually honest' was the key. He was not claiming that a four-year-old could do calculus. He was claiming that the real idea behind calculus, the idea of rate of change, could be offered at any age in a form the child could actually use."
+        },
+        {
+          "title": "The spiral curriculum",
+          "content": "Bruner proposed that a curriculum should revisit the same core ideas at every level of schooling, each time with more formal apparatus. 'A curriculum as it develops should revisit these basic ideas repeatedly,' he wrote, 'building upon them until the student has grasped the full formal apparatus that goes with them.' The spiral replaced the linear textbook model, in which a topic appeared once in sixth grade and was never seen again."
+        },
+        {
+          "title": "The narrative mode of thought",
+          "content": "In Actual Minds, Possible Worlds (1986) Bruner broke thought into two modes, the paradigmatic (logical, argumentative) and the narrative (story-based). He wrote that each mode 'provides distinctive ways of ordering experience, of constructing reality.' He argued that psychology had overinvested in the paradigmatic and had ignored how human beings actually made sense of their lives, which was almost entirely through telling themselves stories. The book founded what is now called narrative psychology."
+        }
+      ]
+    },
+    {
+      "name": "Harold McGee",
+      "domain": "food science / writing",
+      "era": "1951-present",
+      "region": "US",
+      "bio": "American writer specialising in the chemistry and history of food and cooking. His 1984 book On Food and Cooking: The Science and Lore of the Kitchen, heavily revised in 2004, is the reference text for kitchen science. He writes the Curious Cook column and has consulted with chefs including Heston Blumenthal and Ferran Adrià.",
+      "oneLiner": "Proved that a kitchen was the best-equipped laboratory most people would ever own, and wrote the manual for it.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["creating", "designing"],
+      "narratives": [
+        {
+          "title": "On Food and Cooking, 1984 and 2004",
+          "content": "McGee began On Food and Cooking while writing a PhD on Keats at Yale, wondering why no one had written the chemistry of the thing he cooked for dinner. The 1984 first edition was an oddity on the cookbook shelf, a reference book with no recipes. The heavily rewritten 2004 edition became the bible of the molecular gastronomy movement. Chefs from Thomas Keller to Ferran Adrià keep copies in their kitchens next to the stoves, not on a shelf."
+        },
+        {
+          "title": "Curiosity as a culinary method",
+          "content": "In the preface to the revised On Food and Cooking, McGee wrote that 'curiosity and understanding make their own contribution to mastery.' He meant that a cook who knew why an egg thickened a sauce could improvise better than a cook following a recipe. The book is organised as a series of invitations to ask what is happening, not as a set of procedures to follow."
+        },
+        {
+          "title": "Writing that treats a plant as a problem",
+          "content": "In a chapter on spices and herbs McGee asked, in a line that has since been quoted back at him often, 'If plants are so well endowed with their own natural pesticides, then why isn't the world littered with the corpses of their victims?' The voice is the book's signature: a scientist who is also delighted, and who refuses to treat cooking as folklore that must not be interrogated."
+        }
+      ]
+    },
+    {
+      "name": "Marcus Aurelius",
+      "domain": "philosophy / Roman emperorship",
+      "era": "121-180 CE",
+      "region": "Roman Empire",
+      "bio": "Roman emperor from 161 to 180 CE and Stoic philosopher. His private notebook, the Meditations, was written in Greek during his military campaigns on the Danube frontier and was never intended for publication.",
+      "oneLiner": "Wrote a journal to himself on the northern frontier and accidentally left a manual for how to run a human being.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["directing", "nurturing"],
+      "narratives": [
+        {
+          "title": "Get up to do the work of a human being",
+          "content": "Book 5 of the Meditations opens with Marcus talking himself out of bed before dawn. 'At dawn, when you have trouble getting out of bed, tell yourself: I have to go to work, as a human being. What do I have to complain of, if I'm going to do what I was born for, the things I was brought into the world to do?' (Hays translation, 2002). The passage is the earliest surviving example in Western literature of a person using written self-talk as a morning practice."
+        },
+        {
+          "title": "The view from above",
+          "content": "Several times in the Meditations Marcus pulls the camera up. In Book 7 he writes, 'You have the power to strip away many superfluous troubles located wholly in your judgement, and to possess a large room for yourself embracing in thought the whole cosmos.' Pierre Hadot, in The Inner Citadel, treats this as a core Stoic exercise called the view from above, a deliberate imaginative zoom out so that the crisis of the hour was seen in the scale of the universe."
+        },
+        {
+          "title": "Writing as a practice, not an audience",
+          "content": "The Meditations was never published by Marcus. The text has no title, no dedication, no readership in mind. Book 1 is a list of thank-yous to the people who taught him anything useful, composed as an exercise in gratitude rather than a preface. The strangeness of reading it is the feeling of opening a notebook no one ever intended to show you. Hadot argued that the private form was the point: Marcus was training himself through repetition, not composing an argument."
+        },
+        {
+          "title": "On being wronged",
+          "content": "In Book 2 Marcus tells himself: 'Begin the morning by saying to thyself, I shall meet with the busybody, the ungrateful, arrogant, deceitful, envious, unsocial.' He then reminds himself that none of those people can touch him, because they do not know what good and evil are. The passage is not resignation. It is a rehearsal, written down so that when the thing happened later in the day he already had the sentence ready."
+        }
+      ]
+    },
+    {
+      "name": "Epictetus",
+      "domain": "Stoic philosophy",
+      "era": "c.50-c.135 CE",
+      "region": "Roman Empire / Greece",
+      "bio": "Greek Stoic philosopher, born a slave in Phrygia and freed as a young man. He taught in Rome until Emperor Domitian banished philosophers in 93 CE, then founded a school in Nicopolis. He wrote nothing himself. His lectures were transcribed by his student Arrian as the Discourses and the Enchiridion.",
+      "oneLiner": "Divided the world into what is yours and what is not, and refused to let his students confuse the two.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["directing", "nurturing"],
+      "narratives": [
+        {
+          "title": "Some things are up to us and some are not",
+          "content": "The Enchiridion opens: 'Some things are up to us and some are not up to us. Our opinions are up to us, and our impulses, desires, aversions, in short, whatever is our own doing. Our bodies are not up to us, nor are our possessions, our reputations, or our public offices.' Arrian put this sentence first because the entire Stoic method flows from it. Every later instruction in the book is a working out of this one division."
+        },
+        {
+          "title": "It is not things that disturb us",
+          "content": "In Enchiridion 5 Epictetus writes: 'It is not things that disturb us, but our judgements about things.' Two thousand years later the line is the epigraph of most cognitive behavioural therapy textbooks and is embedded in every manual on reframing. Epictetus gave it to his students as a pocket instrument. Whenever a feeling arose, the question to ask was not what caused it but what judgement was under it."
+        },
+        {
+          "title": "The Discourses as classroom transcripts",
+          "content": "The Discourses are not written essays. They are class notes taken by Arrian, who in his dedication to Lucius Gellius says he 'set down in writing, word for word, as nearly as possible' what he heard Epictetus say. The texture is oral throughout. Epictetus interrupts himself, quarrels with imagined interlocutors, gives homework. The reader sits in a classroom in Nicopolis around 108 CE, listening to a freed slave explaining to the sons of wealthy Romans why their distress was their own work."
+        }
+      ]
+    },
+    {
+      "name": "Tim Gowers",
+      "domain": "combinatorial mathematics",
+      "era": "1963-present",
+      "region": "UK",
+      "bio": "British mathematician, Rouse Ball Professor of Mathematics at Cambridge. Fields Medalist in 1998 for work on Banach spaces and combinatorics. Author of Mathematics: A Very Short Introduction (2002) and the Princeton Companion to Mathematics (2008). His blog pioneered the Polymath Project, a model for open massively collaborative mathematics.",
+      "oneLiner": "Opened his own thinking in public and invited any mathematician in the world to step in beside him.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["creating", "nurturing"],
+      "narratives": [
+        {
+          "title": "What a proof actually does",
+          "content": "In Mathematics: A Very Short Introduction (2002) Gowers wrote one of the cleanest sentences on the subject of proof aimed at the lay reader: 'What a mathematical proof actually does is show that certain conclusions, such as the irrationality of pi, follow from certain premises, such as the principle of mathematical induction. The validity of these premises is an entirely independent matter which can safely be left to philosophers.' The framing dissolves most first-year confusion about why mathematics is certain."
+        },
+        {
+          "title": "The Polymath Project, 2009",
+          "content": "In January 2009 Gowers posted on his blog a problem he was working on and asked whether it was possible to do mathematics collaboratively in an open comment thread. Within weeks, dozens of mathematicians were contributing. The thread produced a new proof of a density version of the Hales-Jewett theorem, later published under the collective pseudonym D. H. J. Polymath. The experiment changed how working mathematicians thought about credit, collaboration and the shape of a research problem."
+        },
+        {
+          "title": "Primes feel like data",
+          "content": "In the same Very Short Introduction Gowers offered a sentence that working number theorists quote to each other: 'Although the prime numbers are rigidly determined, they somehow feel like experimental data.' The line captures the strange position of a mathematical object that is completely fixed by definition and yet behaves, from a researcher's point of view, like something being measured."
+        }
+      ]
+    },
+    {
+      "name": "George Steiner",
+      "domain": "comparative literature / translation",
+      "era": "1929-2020",
+      "region": "France / UK / US",
+      "bio": "French-born American literary critic, essayist and philosopher, fluent in English, French and German from childhood. He taught at Princeton, Cambridge and Geneva, and wrote for The New Yorker for three decades. His 1975 book After Babel: Aspects of Language and Translation is a foundational work in translation studies.",
+      "oneLiner": "Argued that every act of understanding was already a translation, and that multilingual life was the only honest condition.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "nurturing"],
+      "narratives": [
+        {
+          "title": "To understand is to decipher",
+          "content": "The thesis of After Babel (1975) is collapsed into a single sentence early in the book: 'To understand is to decipher. To hear significance is to translate.' Steiner argued that translation is not a specialised activity practised by a few bilingual professionals. It is what we all do whenever we read another person, including someone speaking our own language. The book treats translation as the central problem of meaning itself."
+        },
+        {
+          "title": "Errata, and the childhood of three languages",
+          "content": "In Errata: An Examined Life (1997) Steiner described his Parisian childhood in which his mother would begin a sentence in one language and finish it in another. He wrote that he had no single mother tongue and that this had turned out to be the condition of his adult work. The autobiography is unusual because it treats multilingualism not as a biographical accident but as the origin of his entire intellectual stance."
+        },
+        {
+          "title": "Language as refusal",
+          "content": "In After Babel Steiner wrote that 'language is the main instrument of man's refusal to accept the world as it is.' He meant that the grammatical capacity to say 'not' and to imagine a counterfactual is what separates human speech from signalling. The whole chapter is a defence of the conditional tense as a moral instrument."
+        }
+      ]
+    },
+    {
+      "name": "Edith Grossman",
+      "domain": "Spanish-English literary translation",
+      "era": "1936-2023",
+      "region": "US",
+      "bio": "American literary translator known for her English versions of Gabriel García Márquez, Mario Vargas Llosa, Carlos Fuentes, Álvaro Mutis, and Miguel de Cervantes. Her 2003 translation of Don Quixote was the first by a North American woman. Her 2010 book Why Translation Matters is a short manifesto for the craft.",
+      "oneLiner": "Held that fidelity in translation meant writing the second book, not tracing the first.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "nurturing"],
+      "narratives": [
+        {
+          "title": "Translation is not tracing paper",
+          "content": "In Why Translation Matters (2010) Grossman wrote: 'Fidelity is surely our highest aim, but a translation is not made with tracing paper. It is an act of critical interpretation.' She argued that every sentence in the target language had to be chosen rather than derived, because the languages carried 'immense, individual histories behind them.' The book became required reading in graduate translation programmes the year it appeared."
+        },
+        {
+          "title": "Don Quixote, 2003",
+          "content": "Grossman spent two years translating Don Quixote and published it in 2003 with an introduction by Harold Bloom, who called it 'the best available English version.' In the translator's note she wrote that her governing question had been how Cervantes would sound if he were writing in contemporary English, and that she had refused the antiqued vocabulary of earlier translators. The decision opened the novel to a new generation of readers."
+        },
+        {
+          "title": "What we read is the translator's writing",
+          "content": "Grossman insisted, repeatedly in essays and in the Paris Review Art of Translation interview, that 'what we read in a translation is the translator's writing.' The claim sounds obvious and was not. She was arguing against the industry convention of treating the translator as a transparent pane of glass. She wanted her name on the cover and her interpretive choices treated as literary decisions rather than technical substitutions."
+        }
+      ]
+    },
+    {
+      "name": "Gregory Rabassa",
+      "domain": "Latin American literary translation",
+      "era": "1922-2016",
+      "region": "US",
+      "bio": "American literary translator, credited with bringing much of the Latin American Boom into English. His translations include Cortázar's Hopscotch, García Márquez's One Hundred Years of Solitude, and works by Mario Vargas Llosa, Jorge Amado and Machado de Assis. His 2005 memoir If This Be Treason: Translation and Its Dyscontents is the field's most beloved craft book.",
+      "oneLiner": "Was paid in the original author's astonishment when García Márquez said the English was better than the Spanish.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "nurturing"],
+      "narratives": [
+        {
+          "title": "One Hundred Years of Solitude",
+          "content": "García Márquez waited three years for Rabassa to be free to translate Cien Años de Soledad. When the English version appeared in 1970 García Márquez told interviewers he preferred it to his own Spanish original. In If This Be Treason (2005) Rabassa responded with characteristic modesty: 'Maybe in some way I was simply translating in a way close to the way he wrote it.' The line is quoted by every practising translator as an image of what success looks like."
+        },
+        {
+          "title": "Translation as reading",
+          "content": "Rabassa's working method, described in the memoir, was to open the book on page one and translate forward without reading the whole thing first. He wanted to encounter the novel at the same pace as a first-time reader, on the grounds that a translator who already knew the ending would over-interpret early sentences. No other major translator of his generation worked that way. It was part craft, part confession of how he liked to read."
+        },
+        {
+          "title": "If this be treason",
+          "content": "The title of the memoir comes from the Italian proverb traduttore, traditore (translator, traitor). Rabassa adopted the charge with a light hand and spent 180 pages demonstrating that every choice a translator makes is a small betrayal of something, and that the only dishonest translator is the one who pretends otherwise. The chapters on Hopscotch, Paradiso and Autumn of the Patriarch read as love letters to problems that had no clean solution."
+        }
+      ]
+    },
+    {
+      "name": "Clifford Geertz",
+      "domain": "anthropology",
+      "era": "1926-2006",
+      "region": "US",
+      "bio": "American cultural anthropologist who did fieldwork in Indonesia and Morocco, and taught at the University of Chicago and the Institute for Advanced Study in Princeton. His 1973 essay collection The Interpretation of Cultures is the founding document of interpretive anthropology.",
+      "oneLiner": "Renamed his discipline a branch of literature by insisting that what an anthropologist did was write thick description.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "nurturing"],
+      "narratives": [
+        {
+          "title": "Thick description",
+          "content": "In the opening essay of The Interpretation of Cultures (1973) Geertz borrowed Gilbert Ryle's distinction between a wink and a twitch and built a method of fieldwork around it. He wrote: 'Culture is not a power, something to which social events, behaviors, institutions, or processes can be causally attributed; it is a context, something within which they can be intelligibly, that is, thickly, described.' The term thick description entered the vocabulary of every qualitative social science."
+        },
+        {
+          "title": "The Balinese cockfight",
+          "content": "In Deep Play: Notes on the Balinese Cockfight, included in the same 1973 volume, Geertz narrated the moment he and his wife were raided by the police during an illegal cockfight in a Balinese village and ran with the locals rather than toward the authorities. The next day the villagers treated them as insiders for the first time. The essay uses the cockfight to argue that 'cocks are symbolic expressions or magnifications of their owner's self, the narcissistic male ego writ out in Aesopian terms,' and builds an entire reading of Balinese society from that one event."
+        },
+        {
+          "title": "Anthropology as a kind of writing",
+          "content": "In Works and Lives (1988) Geertz made the move explicit: anthropologists should be judged as authors, and their texts analysed for voice and persuasion the way novels were. He read Evans-Pritchard, Malinowski, Benedict and Lévi-Strauss as stylists with distinct signatures. The argument was a gentle provocation to a field that preferred to think of itself as scientific reporting, and it changed how a generation of PhD students wrote up their fieldwork."
+        }
+      ]
+    },
+    {
+      "name": "Bruno Latour",
+      "domain": "sociology of science",
+      "era": "1947-2022",
+      "region": "France",
+      "bio": "French sociologist and philosopher of science. His ethnographic study Laboratory Life (1979, with Steve Woolgar) of the Salk Institute helped found the field of science and technology studies. His 1991 book We Have Never Been Modern and his actor-network theory reshaped sociology, anthropology and STS.",
+      "oneLiner": "Treated scientists, microbes, doorknobs and courts as equally worthy of ethnographic attention.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "designing"],
+      "narratives": [
+        {
+          "title": "We Have Never Been Modern, 1991",
+          "content": "Latour's central claim is compressed in the book's title. He wrote: 'So long as we consider these two practices of translation and purification separately, we are truly modern. As soon as we direct our attention simultaneously to the work of purification and the work of hybridization, we immediately stop being wholly modern.' He argued that the modern constitution officially separated nature and culture while unofficially producing hybrids of the two at an accelerating pace. The climate crisis was the moment this contradiction became undeniable."
+        },
+        {
+          "title": "Reassembling the Social",
+          "content": "In Reassembling the Social (2005) Latour pressed actor-network theory to its logical conclusion: there is no such thing as 'the social' as a separate substance that can explain anything. What social scientists should do instead is trace the associations that link humans and nonhumans into temporary networks. He wrote, 'If you wish to know what I am talking about, just follow the actors themselves.' The line became a methodological instruction for a generation of ethnographers."
+        },
+        {
+          "title": "Laboratory Life at the Salk Institute",
+          "content": "In 1975 Latour spent two years inside Roger Guillemin's laboratory at the Salk Institute in La Jolla as an anthropologist would spend time in a village. Laboratory Life (1979) described the production of a scientific fact as a literary achievement: papers cited papers until a sentence that had once been marked with a modality, such as 'it is possible that,' hardened into a fact, such as 'TRH is Pyro-Glu-His-Pro-NH2.' The book argued that scientific facts were constructed in the most literal sense, by people writing and rewriting sentences."
+        }
+      ]
+    },
+    {
+      "name": "Donella Meadows",
+      "domain": "systems thinking / environmental science",
+      "era": "1941-2001",
+      "region": "US",
+      "bio": "American environmental scientist, systems thinker, and writer. Lead author of The Limits to Growth (1972), the Club of Rome report that introduced systems modelling of resource use to a popular audience. She taught at Dartmouth and founded the Sustainability Institute. Thinking in Systems, assembled from her drafts, was published posthumously in 2008.",
+      "oneLiner": "Wrote the gentlest manual for how to notice a feedback loop, and then insisted the point was to dance with it, not control it.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["designing", "directing"],
+      "narratives": [
+        {
+          "title": "Leverage Points: Places to Intervene in a System",
+          "content": "Meadows's 1999 essay Leverage Points: Places to Intervene in a System ranked twelve places a change agent could push on a system, from numbers and parameters at the bottom to goals and paradigms at the top. She wrote that small shifts at the right place could 'produce big changes in everything.' The list has been copied into every systems thinking textbook since and is still taught in its original order, because the ordering was the argument."
+        },
+        {
+          "title": "Dancing with systems",
+          "content": "In her essay Dancing with Systems, written near the end of her life and included as the closing chapter of Thinking in Systems (2008), she wrote: 'We can't control systems or figure them out. But we can dance with them.' And then: 'In the end, it seems that mastery has less to do with pushing leverage points than it does with strategically, profoundly, madly letting go and dancing with the system.' The essay closes thirty years of her work with a concession that humility was the real method."
+        },
+        {
+          "title": "The Limits to Growth, 1972",
+          "content": "At 31, Meadows led the team that built World3, a computer model of population, industrial output, pollution and resource use. The book The Limits to Growth sold 12 million copies in 37 languages. It argued that the planet could not support exponential material growth indefinitely. She spent the rest of her career defending the model against attacks from economists who did not understand that the curves were not predictions but scenarios, and teaching other people to build their own models."
+        },
+        {
+          "title": "The Global Citizen column",
+          "content": "From 1985 until her death in 2001 Meadows wrote a weekly newspaper column called The Global Citizen, syndicated in small regional papers. She used it to explain a feedback loop or a leverage point using a single local story, often from her own Vermont farm. The discipline of writing 750 readable words a week on a systems concept is the reason Thinking in Systems reads like prose and not like a textbook."
+        }
+      ]
+    },
+    {
+      "name": "Fritjof Capra",
+      "domain": "physics / systems thinking",
+      "era": "1939-present",
+      "region": "Austria / US",
+      "bio": "Austrian-born American physicist and systems theorist. His 1975 book The Tao of Physics was the first bestselling popular account of modern physics to draw parallels with Eastern mysticism. He founded the Center for Ecoliteracy in Berkeley in 1995, bringing systems thinking into school curricula.",
+      "oneLiner": "Held that the universe modern physics was uncovering looked more like the one the mystics described than the one Newton drew.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["creating", "expressing"],
+      "narratives": [
+        {
+          "title": "The Tao of Physics, 1975",
+          "content": "Capra wrote that quantum theory 'reveals a basic oneness of the universe. It shows that we cannot decompose the world into independently existing smallest units. As we penetrate into matter, nature does not show us any isolated building blocks, but rather appears as a complicated web of relations between the various parts of the whole.' He put that sentence alongside a passage from the Avatamsaka Sutra describing the net of Indra, in which every jewel reflects every other. The juxtaposition was the book's method."
+        },
+        {
+          "title": "Science and mysticism both or neither",
+          "content": "Capra summarised his own motivation in a line often quoted back to him: 'Science does not need mysticism and mysticism does not need science. But man needs both.' The claim was controversial among working physicists, some of whom argued that his parallels were verbal rather than structural. The book nonetheless sold over a million copies and created a whole popular genre."
+        },
+        {
+          "title": "The Center for Ecoliteracy",
+          "content": "From 1995 onward Capra turned from physics toward ecology education. The Center for Ecoliteracy in Berkeley worked with California public schools to redesign curricula around systems principles: cycles, flows, feedback, networks. In The Web of Life (1996) he wrote that understanding the living world required shifting from objects to relationships, from parts to patterns. The school garden movement in the United States owes much of its pedagogy to this shift."
+        }
+      ]
+    },
+    {
+      "name": "Mary Catherine Bateson",
+      "domain": "cultural anthropology",
+      "era": "1939-2021",
+      "region": "US",
+      "bio": "American cultural anthropologist, daughter of Margaret Mead and Gregory Bateson. She taught at Harvard, Amherst, and George Mason, and wrote Composing a Life (1989) and With a Daughter's Eye (1984), a memoir of her parents. Her final book, Composing a Further Life (2010), examined the new long second adulthood.",
+      "oneLiner": "Said that composing a life was improvisation, and that improvisation was a craft that took hours of practice like any other.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["clarifying", "creating"],
+      "narratives": [
+        {
+          "title": "Composing a Life, 1989",
+          "content": "Bateson's central metaphor is worked out in the first chapter: 'In a stable society, composing a life is somewhat like throwing a pot or building a house in a traditional form: the materials are known, the hands move skillfully in tasks familiar from thousands of performances.' In a changing society, she wrote, life looks more like improvisation in a piece of music that no one has written yet. She wove the argument through the lives of five women she knew, refusing the format of case study or biography."
+        },
+        {
+          "title": "Improvisation as practice",
+          "content": "Bateson pushed back on the lazy reading of improvisation as the absence of preparation. In an On Being interview and in the book itself she argued that 'jazz musicians practice improvisation by the hour.' The wisdom of interrupted careers, broken plans and reshaped priorities, which she observed in many women of her generation, was not a deficit of ambition but a high-order craft of composition under constraint."
+        },
+        {
+          "title": "With a Daughter's Eye",
+          "content": "In the 1984 memoir of her parents, Bateson wrote from inside one of the strangest intellectual households of the twentieth century. She described Margaret Mead's typing in one room while Gregory Bateson sat reading in another, each of them constructing theories of the other. The book is unusual because she refused to resolve them into a clean narrative. Instead she let the contradictions stand and treated the household itself as an ethnographic field."
+        }
+      ]
+    },
+    {
+      "name": "Mircea Eliade",
+      "domain": "history of religion",
+      "era": "1907-1986",
+      "region": "Romania / France / US",
+      "bio": "Romanian historian of religion, fiction writer, and philosopher. Chair of History of Religions at the University of Chicago from 1957 until his death. His books The Sacred and the Profane (1957), Cosmos and History, and the three-volume A History of Religious Ideas shaped the comparative study of religion in the twentieth century.",
+      "oneLiner": "Argued that the sacred showed itself in ordinary objects, and built a method for noticing the moment it did.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "nurturing"],
+      "narratives": [
+        {
+          "title": "Hierophany",
+          "content": "In The Sacred and the Profane (1957) Eliade wrote: 'To designate the act of manifestation of the sacred, we have proposed the term hierophany. It is a fitting term, because it does not imply anything further; it expresses no more than is implicit in its etymological content, that something sacred shows itself to us.' He argued that religious history was the accumulation of such manifestations, from a stone that revealed itself as holy to the incarnation of God in Christ. The whole comparative method of the book flows from this single coinage."
+        },
+        {
+          "title": "The centre of the world",
+          "content": "Eliade argued that sacred space was never homogeneous. 'In the homogeneous and infinite expanse, in which no point of reference is possible,' he wrote, 'the hierophany reveals an absolute fixed point, a centre.' A temple, an altar, a household hearth, a marked tree: each was a way of saying here is where the world begins. The observation lets Eliade read buildings and rituals across cultures without flattening them, because the centre was differently located in each case."
+        },
+        {
+          "title": "The Autobiography",
+          "content": "Eliade's two-volume Autobiography, published in English in 1981 and 1988, describes his Romanian childhood, his years studying Sanskrit in Calcutta under Surendranath Dasgupta, and his fascist political entanglements in the 1930s, which he never fully accounted for. The book is a primary source because it shows a scholar of religion who believed that the life of the scholar was itself material. He treated his own dreams, illnesses and unfinished novels as data alongside the ancient texts."
+        }
+      ]
+    },
+    {
+      "name": "David Bohm",
+      "domain": "quantum physics / dialogue",
+      "era": "1917-1992",
+      "region": "US / UK",
+      "bio": "American theoretical physicist, briefly a student of Oppenheimer at Berkeley. Blacklisted during the McCarthy era, he worked in Brazil, Israel, and finally at Birkbeck College in London. His books Wholeness and the Implicate Order (1980) and On Dialogue (1996) extended his physics into metaphysics and group practice.",
+      "oneLiner": "Proposed that reality was a wholeness being continually unfolded, and taught groups to sit together and suspend their assumptions until they could feel it.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["nurturing", "expressing"],
+      "narratives": [
+        {
+          "title": "Wholeness and the Implicate Order",
+          "content": "Bohm's 1980 book argued for what he called the implicate order, a deeper level of reality in which everything is enfolded into everything else, with the explicate order we see being only a surface projection. He wrote: 'What is needed is for man to give attention to his habit of fragmentary thought, to be aware of it, and thus bring it to an end. Man's approach to reality may then be whole, and so the response will be whole.' The book positioned fragmentation as a disease of thought, not a feature of the world."
+        },
+        {
+          "title": "Suspending assumptions in dialogue",
+          "content": "In his On Dialogue workshops, transcribed in the 1996 book, Bohm instructed participants: 'The thing that mostly gets in the way of dialogue is holding to assumptions and opinions, and defending them.' The practice was to notice your own assumption, name it, and hold it visible in front of the group without either defending or abandoning it. Dozens of organisational learning methods, including Peter Senge's at MIT, grew out of the Bohm Dialogue groups of the 1980s."
+        },
+        {
+          "title": "Conversations with Krishnamurti",
+          "content": "Bohm had a long friendship with Jiddu Krishnamurti from 1961 until Krishnamurti's death in 1986. Their recorded conversations, published as The Ending of Time and The Future of Humanity, are an unusual genre: a working physicist and an Indian teacher sitting in a room at Brockwood Park trying to figure out whether the structure of thought itself was the cause of human suffering. Bohm treated the conversations as a method of inquiry, not as interviews."
+        }
+      ]
+    },
+    {
+      "name": "Gregory Bateson",
+      "domain": "anthropology / systems",
+      "era": "1904-1980",
+      "region": "UK / US",
+      "bio": "British anthropologist, cybernetician and social scientist. His 1972 collection Steps to an Ecology of Mind gathered thirty years of essays across anthropology, psychiatry, evolution, and epistemology. With Jurgen Ruesch and others he developed the double bind theory of schizophrenia.",
+      "oneLiner": "Held that the major problems of the world came from the gap between how nature worked and how people thought.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["expressing", "designing"],
+      "narratives": [
+        {
+          "title": "The gap between nature and thought",
+          "content": "The sentence Bateson is most quoted on, from Steps to an Ecology of Mind (1972), is: 'The major problems in the world are the result of the difference between how nature works and the way people think.' It sounds like a slogan. In context it is the summary of thirty years of work on circular causation, feedback, and the mismatch between linear Western logic and the non-linear behaviour of ecosystems and families."
+        },
+        {
+          "title": "The unit of survival",
+          "content": "In the same book Bateson pushed Darwin one step: 'The unit of survival is organism plus environment.' He argued that thinking of the organism as the unit led directly to the destruction of the environment that kept the organism alive, because the environment became a resource outside the accounting. This one move seeded the field of ecological psychology and influenced deep ecology in the 1970s."
+        },
+        {
+          "title": "The double bind",
+          "content": "With Don Jackson, Jay Haley and John Weakland, Bateson developed the double bind theory of schizophrenia in the 1950s. The theory held that chronic exposure to contradictory messages at different logical levels, in a relationship you cannot leave, could drive a person toward schizophrenic symptoms. He wrote that 'without context, words and actions have no meaning at all.' The framing moved the diagnosis out of the individual brain and into the pattern of communication in the family."
+        }
+      ]
+    },
+    {
+      "name": "Frances Yates",
+      "domain": "Renaissance intellectual history",
+      "era": "1899-1981",
+      "region": "UK",
+      "bio": "British historian of the Renaissance, associated with the Warburg Institute in London from 1941 until her death. Her books The Art of Memory (1966), Giordano Bruno and the Hermetic Tradition (1964), and The Rosicrucian Enlightenment (1972) recovered whole fields of Renaissance thought that had been lost to standard histories of science.",
+      "oneLiner": "Rebuilt the mental palaces of Renaissance mnemonists so that twentieth-century readers could walk through them.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["creating", "expressing"],
+      "narratives": [
+        {
+          "title": "The Art of Memory, 1966",
+          "content": "Yates traced the ancient technique of the memory palace from Simonides of Ceos through Cicero, Quintilian, Aquinas, Giulio Camillo, and Giordano Bruno. She quoted the Rhetorica ad Herennium: 'When we see in everyday life things that are petty, ordinary, and banal, we generally fail to remember them, because the mind is not being stirred by anything novel or marvellous. But if we see or hear something exceptionally base, dishonourable, unusual, great, unbelievable, or ridiculous, that we are likely to remember for a long time.' The book became the standard text for anyone interested in how premodern people actually stored large bodies of knowledge in their heads."
+        },
+        {
+          "title": "Giordano Bruno and the Hermetic Tradition",
+          "content": "In the 1964 book Yates argued that Bruno was not a martyr of modern science, as the nineteenth century had cast him, but a Renaissance magus deep in the Hermetic tradition who was burned for his magic as much as for his cosmology. The book reopened the question of how the scientific revolution was actually connected to esoteric thought, and is cited in almost every subsequent account of early modern science."
+        },
+        {
+          "title": "Theory valueless without toil",
+          "content": "Yates quoted a classical mnemonist's warning in her book: 'In every discipline, artistic theory is of little avail without unremitting exercise, but especially in mnemonics, theory is almost valueless unless made good by industry, devotion, toil, and care.' She used the line to remind her readers that the memory palace was not a trick to read about but a practice that took years to install."
+        }
+      ]
+    },
+    {
+      "name": "Martha Nussbaum",
+      "domain": "philosophy / ethics",
+      "era": "1947-present",
+      "region": "US",
+      "bio": "American philosopher, Ernst Freund Distinguished Service Professor at the University of Chicago. Her books include The Fragility of Goodness (1986), Upheavals of Thought (2001), Creating Capabilities (2011), and Anger and Forgiveness (2016). With Amartya Sen she developed the capabilities approach to human welfare.",
+      "oneLiner": "Argued that emotions were not the opposite of reason but a form of it, and rebuilt moral philosophy from that observation.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["nurturing", "expressing"],
+      "narratives": [
+        {
+          "title": "Upheavals of Thought, 2001",
+          "content": "Nussbaum's central thesis in the 750-page Upheavals of Thought is captured in a single sentence: 'Emotions are not just the fuel that powers the psychological mechanism of a reasoning creature, they are parts, highly complex and messy parts, of this creature's reasoning itself.' The book draws the title from Proust, who called the emotions 'geologic upheavals of thought,' and defends a cognitive theory of emotion against the older view of emotions as blind impulses."
+        },
+        {
+          "title": "Neediness as an essential human feature",
+          "content": "In the same book Nussbaum wrote that emotions 'are judgments in which people acknowledge the great importance, for their own flourishing, of things that they do not fully control, and acknowledge thereby their neediness before the world and its events.' The concept of neediness, which she said is 'invariably shrouded in negative judgement and shame,' was reclaimed as one of the essential features of being human, not something to be argued away."
+        },
+        {
+          "title": "Creating Capabilities",
+          "content": "In Creating Capabilities (2011) Nussbaum set out ten central human capabilities, from life and bodily health to 'being able to use the senses, to imagine, think and reason' and 'being able to have attachments to things and people outside ourselves.' The list was the result of twenty years of collaboration with Amartya Sen and of fieldwork in India with women's development programmes. It is now the backbone of the Human Development Index adopted by the UN."
+        }
+      ]
+    },
+    {
+      "name": "Myles Horton",
+      "domain": "popular education / Highlander",
+      "era": "1905-1990",
+      "region": "US",
+      "bio": "American educator, civil rights activist, and co-founder in 1932 of the Highlander Folk School in Tennessee, later the Highlander Research and Education Center. Highlander trained labour organisers in the 1930s, civil rights activists including Rosa Parks and Martin Luther King Jr. in the 1950s, and Appalachian community activists later. His 1990 autobiography The Long Haul was written with the help of Herbert and Judith Kohl.",
+      "oneLiner": "Ran a school whose first principle was that poor people already knew the answers and just needed a place to hear each other.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["directing", "clarifying"],
+      "narratives": [
+        {
+          "title": "The Long Haul, 1990",
+          "content": "In his autobiography The Long Haul Horton wrote: 'Nothing will change until we change, until we throw off our dependence and act for ourselves.' The book is organised around the belief that education is not information delivery but the practice of democracy, and that the teacher's job is to set conditions for people to discover what they already know. Herbert Kohl, who helped edit the book, treated it as a primary text for progressive education."
+        },
+        {
+          "title": "Rosa Parks at Highlander, summer 1955",
+          "content": "In July 1955, four months before she refused to give up her seat on a Montgomery bus, Rosa Parks attended a two-week workshop at Highlander on implementing the Brown v. Board of Education decision. Parks later said it was the first place in her life she had been in an integrated setting where Black and white people ate together and slept under the same roof. Horton wrote in The Long Haul that Highlander had not told her what to do; it had given her a week to imagine what she might do."
+        },
+        {
+          "title": "Trust and intelligent use of feeling",
+          "content": "Another line from The Long Haul: 'Any decent society has to be built on trust and love and the intelligent use of information and feelings. Education involves being able to practice those things as you struggle to build a decent society that can be nonviolent.' The sentence is a compact summary of his method: conditions first, content second, and the teacher on the same side of the table as the student."
+        }
+      ]
+    },
+    {
+      "name": "Paulo Freire",
+      "domain": "critical pedagogy",
+      "era": "1921-1997",
+      "region": "Brazil",
+      "bio": "Brazilian educator, founder of critical pedagogy. His 1968 book Pedagogy of the Oppressed, written in exile in Chile after the 1964 military coup, sold over a million copies and has been translated into more than 20 languages. He later served as Secretary of Education in the city of São Paulo.",
+      "oneLiner": "Refused to teach adults to read by depositing words into them, and built a method that began instead with what they already knew.",
+      "primaryCategoryIntent": "nurturing",
+      "secondaryCategoryIntents": ["directing", "clarifying"],
+      "narratives": [
+        {
+          "title": "The banking concept of education",
+          "content": "In Pedagogy of the Oppressed (1968) Freire wrote that traditional education treats students as 'containers to be filled by the teacher. The more completely she fills the receptacles, the better a teacher she is.' He called this the banking concept. It was the opposite of the problem-posing education he wanted to put in its place, in which teacher and student together investigate the world the student already lives in."
+        },
+        {
+          "title": "Problem-posing as the alternative",
+          "content": "Against the banking model Freire posed a method in which 'whereas banking education anesthetizes and inhibits creative power, problem-posing education involves a constant unveiling of reality.' The teacher's job was to ask the questions that let the learner name their own world. In the literacy campaigns he ran in northeast Brazil in the early 1960s, peasants learned to read by starting from the words that named their actual work."
+        },
+        {
+          "title": "Letters to Cristina",
+          "content": "Letters to Cristina (1996) is structured as letters to his niece, retracing his own childhood poverty in Recife and his political education. He wrote that the teacher who truly respects her students is the one who 'becomes their student' while remaining their teacher. The form of the book, letters rather than lectures, is itself the argument: pedagogy is a relationship, not a delivery system."
+        }
+      ]
+    },
+    {
+      "name": "William Shakespeare",
+      "domain": "poetry / drama",
+      "era": "1564-1616",
+      "region": "England",
+      "bio": "English playwright and poet. Author of 39 plays and 154 sonnets between roughly 1589 and 1613, working with the Lord Chamberlain's Men (later the King's Men) at the Globe and Blackfriars theatres in London.",
+      "oneLiner": "Wrote the soliloquy that everyone recognises in every language, and the love sonnet that every other love sonnet has to answer to.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["creating", "clarifying"],
+      "narratives": [
+        {
+          "title": "To be or not to be",
+          "content": "In Hamlet, Act III Scene 1 (c.1600), the prince walks on stage and speaks the soliloquy that begins 'To be, or not to be: that is the question.' The speech is the most quoted passage in English literature and has been translated into almost every written language on earth. Its singularity is not the question about suicide, which earlier literature had handled, but the decision to stage a mind working through that question aloud in meter, in front of a paying audience at the Globe."
+        },
+        {
+          "title": "Sonnet 18",
+          "content": "'Shall I compare thee to a summer's day? Thou art more lovely and more temperate.' Sonnet 18 was written in the early 1590s and is the most anthologised lyric poem in English. Its argument is a compact piece of rhetoric: summer fades, but the sonnet you are reading will not, because it is the vehicle in which the beloved's beauty has been placed. The poem is simultaneously a love poem and an advertisement for the technology of the printed line."
+        },
+        {
+          "title": "The speech of the King in Henry V before Agincourt",
+          "content": "In Henry V, Act IV Scene 3, Shakespeare gave the young king the Saint Crispin's Day speech, in which Henry tells his outnumbered soldiers that 'we few, we happy few, we band of brothers' will be remembered forever for this day. The speech is a textbook example of what Marshall Ganz would later call a story of us and a story of now. It is also the most quoted battlefield speech in English political life, from Churchill onward."
+        }
+      ]
+    },
+    {
+      "name": "Rumi",
+      "domain": "Sufi poetry",
+      "era": "1207-1273",
+      "region": "Persia / Konya",
+      "bio": "Persian-language poet, Sufi mystic and Islamic scholar. Born in Balkh in what is now Afghanistan, he settled in Konya in Anatolia. His masterwork, the Masnavi, is a 25,000-couplet poem on love and the inner life. His work reached a mass English-language audience in the late twentieth century through Coleman Barks's translations.",
+      "oneLiner": "Wrote that there is a field out beyond right and wrong, and said he would meet you there.",
+      "primaryCategoryIntent": "expressing",
+      "secondaryCategoryIntents": ["nurturing", "creating"],
+      "narratives": [
+        {
+          "title": "Out beyond ideas",
+          "content": "In the short poem translated by Coleman Barks in The Essential Rumi (1995), Rumi writes: 'Out beyond ideas of wrongdoing and rightdoing, there is a field. I'll meet you there. When the soul lies down in that grass, the world is too full to talk about. Ideas, language, even the phrase each other doesn't make any sense.' The four lines are the most widely quoted Rumi couplet in English today and are printed on more meditation-hall walls than any other passage of Persian poetry."
+        },
+        {
+          "title": "The Masnavi and the reed flute",
+          "content": "The Masnavi opens with the complaint of the reed flute: 'Listen to this reed, how it complains, telling a tale of separation.' The reed has been cut from the reed bed and its music is the sound of that wound. Rumi used this image in the opening eighteen couplets as the thesis for 25,000 more. The longing of the soul for its origin, expressed through loss rather than possession, is his signature move."
+        },
+        {
+          "title": "Writing after Shams of Tabriz",
+          "content": "Rumi's transformation from scholar into poet is traced by his biographers, including Franklin Lewis in Rumi: Past and Present, East and West (2000), to his encounter in 1244 with the wandering dervish Shams of Tabriz. When Shams disappeared, almost certainly murdered, Rumi began composing the Divan-e Shams, tens of thousands of verses addressed to his missing friend. The Divan is one of the strangest documents of grief in world literature because the loss seems to have opened the language instead of closing it."
+        }
+      ]
+    },
+    {
+      "name": "Ursula K. Le Guin",
+      "domain": "speculative fiction",
+      "era": "1929-2018",
+      "region": "US",
+      "bio": "American novelist. Author of the Earthsea cycle, The Left Hand of Darkness, The Dispossessed, and essay collections including The Language of the Night and The Wave in the Mind. Her 1998 craft book Steering the Craft, revised in 2015, is one of the most used fiction writing textbooks in English.",
+      "oneLiner": "Treated the sentence as a piece of music and the story as a sea voyage, and would not let her students forget either.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing", "nurturing"],
+      "narratives": [
+        {
+          "title": "The chief duty of a sentence",
+          "content": "In Steering the Craft (1998) Le Guin wrote: 'The chief duty of a narrative sentence is to lead to the next sentence, to keep the story going.' It is the opposite of the first lesson in most beginner workshops, which is to make each sentence beautiful. Le Guin wanted the sentence to be invisible in the direction it was travelling, not admired on the shelf it was sitting on."
+        },
+        {
+          "title": "The test of a sentence is does it sound right",
+          "content": "In the same book she gave her students a test so simple it read as a provocation: 'The test of a sentence is, does it sound right?' She argued that every question about grammar, punctuation, usage and rhythm could be resolved by reading the sentence aloud and listening. The rule is not reductive because it assumes an ear trained by decades of reading, which Le Guin's students knew they did not yet have. The sentence was a long-term instruction."
+        },
+        {
+          "title": "Language as delight in itself",
+          "content": "Le Guin wrote that 'a story is made out of language, and language can and does express delight in itself just as music does.' She refused the utilitarian view of prose as a pipe for delivering plot. In her teaching notes she treated the sound of the sentence as part of what the sentence was saying, so that a story about grief written in a brittle staccato was a different story than the same plot in long soft clauses."
+        },
+        {
+          "title": "A Rant About Technology",
+          "content": "In The Wave in the Mind (2004) Le Guin included a short essay in which she refused the fashionable framing that technology meant electronics. 'Technology is how a society copes with physical reality,' she wrote. 'Clay pots, chopsticks, and the way a carpenter drives a nail are all technology.' The essay is typical of her late prose: a plain sentence used to dismantle a lazy category."
+        }
+      ]
+    },
+    {
+      "name": "Haruki Murakami",
+      "domain": "fiction / running",
+      "era": "1949-present",
+      "region": "Japan",
+      "bio": "Japanese novelist. Author of Norwegian Wood, The Wind-Up Bird Chronicle, Kafka on the Shore, and 1Q84. Before turning to fiction at 29 he ran a jazz bar in Tokyo. His 2007 memoir What I Talk About When I Talk About Running describes his writing life through the discipline of long-distance running.",
+      "oneLiner": "Ran an hour a day, wrote a thousand words a day, and said the two practices were the same practice.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["directing", "expressing"],
+      "narratives": [
+        {
+          "title": "Pain is inevitable, suffering is optional",
+          "content": "In What I Talk About When I Talk About Running (2007) Murakami opens with the line he found in a magazine profile of a marathon runner, quoted from the runner's older brother: 'Pain is inevitable. Suffering is optional.' He expands it: 'Say you're running and you start to think, Man this hurts, I can't take it anymore. The hurt part is an unavoidable reality, but whether or not you can stand any more is up to the runner himself.' Murakami adopted it as a working principle for both running and writing a long novel."
+        },
+        {
+          "title": "The discipline of showing up",
+          "content": "Murakami describes his daily schedule in the memoir: up at 4 a.m., five to six hours of writing, a ten kilometre run, in bed by 9 p.m., repeated without variation for months. He writes that the problem with a long novel is never talent, it is whether you can sit at the desk for three or four years and keep showing up. Running, he says, is how he trained the muscle of showing up, and he does not trust writing to generate that muscle on its own."
+        },
+        {
+          "title": "Novelist as a Vocation",
+          "content": "In Novelist as a Vocation (translated 2022) Murakami returns to the same theme: writing novels is 'physical labour of an almost manual kind.' He argues that the idea of the writer as delicate aesthete is a nineteenth-century fiction, and that the actual job is closer to a long apprenticeship in a trade. The book is a working writer's manual, not a memoir, and it reads like the field notes of someone who has been practising the same few moves for forty years and still thinks they are worth explaining."
+        }
+      ]
+    },
+    {
+      "name": "Octavia Butler",
+      "domain": "speculative fiction",
+      "era": "1947-2006",
+      "region": "US",
+      "bio": "American science fiction writer. Author of Kindred (1979), the Patternist series, the Xenogenesis trilogy, and the Parable series. First science fiction writer to receive a MacArthur Genius Grant, in 1995. Her archive at the Huntington Library in San Marino contains decades of notebooks, drafts, and handwritten affirmations.",
+      "oneLiner": "Wrote on the inside of a notebook in 1988 that she would be a bestselling writer, then spent the next eighteen years quietly making it true.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing", "directing"],
+      "narratives": [
+        {
+          "title": "So be it, so see it",
+          "content": "In a 1988 notebook now held in the Octavia E. Butler papers at the Huntington Library, Butler wrote: 'I shall be a bestselling writer. My novels go onto the bestsellers list on or shortly after publication. My books will be read by millions of people. I will buy a beautiful home in an excellent neighborhood. I will send poor black youngsters to Clarion or other writer's workshops. So be it. So see it.' She wrote versions of this affirmation for years. The Huntington's curator has said she cannot think of another writer whose archive contains notes of this kind."
+        },
+        {
+          "title": "Every day, whether you like it or not",
+          "content": "Butler's handwritten writing rules, also in the Huntington archive, included the instruction: 'Forget inspiration. Habit is more dependable. Habit will sustain you whether you're inspired or not.' She worked daytime jobs until her fiction could pay rent, got up at 2 or 3 a.m. to write before her shift, and kept the journal in which she told herself that she was already the writer she intended to become."
+        },
+        {
+          "title": "Kindred, and the body on the page",
+          "content": "In 1979 Butler published Kindred, in which a contemporary Black woman is pulled back through time to an antebellum Maryland plantation. The book is unusual because it refuses the genre courtesy of protecting the reader from the body. The protagonist loses an arm. Butler said in interviews she had written the book because she wanted to make the history of slavery physically present to a generation that could no longer imagine it. The method is blunt and is part of why the book is taught in more university courses than any of her others."
+        }
+      ]
+    },
+    {
+      "name": "Toni Cade Bambara",
+      "domain": "fiction / film",
+      "era": "1939-1995",
+      "region": "US",
+      "bio": "American writer, filmmaker, and community activist. Author of the short story collections Gorilla, My Love (1972) and The Sea Birds Are Still Alive (1977), and the novel The Salt Eaters (1980). Editor of The Black Woman: An Anthology (1970). Her essays and interviews were collected posthumously by Toni Morrison in Deep Sightings and Rescue Missions (1996).",
+      "oneLiner": "Treated the writer as a cultural worker and the story as a rescue mission for a community's memory.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["nurturing", "directing"],
+      "narratives": [
+        {
+          "title": "The writer as cultural worker",
+          "content": "Throughout Deep Sightings and Rescue Missions (1996) Bambara insisted that writing was a form of community work rather than self-expression. In the essay 'The Education of a Storyteller' she described her grandmother Dorothy sitting her down as a child and telling her to 'tell the tale.' Bambara took the instruction seriously enough that she moved from Harlem to Atlanta, took up filmmaking with Louis Massiah, and treated the camera as a second form of the same practice."
+        },
+        {
+          "title": "How she came by her name",
+          "content": "In the long interview 'How She Came by Her Name,' also in Deep Sightings, Bambara explains that she adopted the surname Cade from a signature in a sketchbook she found in a trunk that had belonged to her great-grandmother. She told Massiah she chose the name to mark her lineage of Black women she would never meet. The interview is unusually candid about the mechanics of naming oneself, and about her 'four most profound commitments: community activism, writing, motherhood, and film.'"
+        },
+        {
+          "title": "The Salt Eaters, 1980",
+          "content": "Bambara's only novel opens with a healer in a Georgia community clinic asking a woman who has just attempted suicide, 'Are you sure, sweetheart, that you want to be well?' The question is the book. The 300 pages that follow are a spiral through personal, political, and cosmic trauma, told in prose that collapses the distinction between the activist and the mystic. Toni Morrison edited the book at Random House and treated it as one of the most important novels she ever acquired."
+        }
+      ]
+    },
+    {
+      "name": "Philip Glass",
+      "domain": "composition",
+      "era": "1937-present",
+      "region": "US",
+      "bio": "American composer, central figure in minimalism. Composer of Einstein on the Beach (1976), Akhnaten, Koyaanisqatsi, and hundreds of film scores and concert works. His 2015 memoir Words Without Music describes his life up to the commission from the Netherlands Opera that allowed him to give up his day jobs at age 41.",
+      "oneLiner": "Drove a taxi and fixed sinks until he was 41 so that the music he wrote would not have to pay the rent.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["directing", "expressing"],
+      "narratives": [
+        {
+          "title": "Plumber, cabbie, unlicensed",
+          "content": "In Words Without Music (2015) Glass describes his years in 1970s New York supporting the Philip Glass Ensemble by driving a cab, moving furniture, and working as an unlicensed plumber. He kept those jobs until he was 41, when a commission from the Netherlands Opera allowed him to stop. The memoir includes an extended, practical disquisition on the specifics of fixing cast-iron drains using lead, oakum and a propane burner, inside a book about contemporary music. Glass treats the manual labour and the composing as two halves of the same working life, not as obstacle and vocation."
+        },
+        {
+          "title": "Studying tabla with Ravi Shankar",
+          "content": "Glass describes in the memoir how in 1965, working as Ravi Shankar's musical assistant on the film score for Chappaqua, he was asked to transcribe Indian rhythmic patterns into Western notation. The exercise broke his ear. He realised that Western meter cut musical time into boxes, while the Indian patterns built longer structures out of additive rhythmic cells. This insight, worked out at 28, is the origin of the minimalist rhythmic method he then spent forty years composing inside of."
+        },
+        {
+          "title": "Einstein on the Beach, 1976",
+          "content": "Einstein on the Beach, written with Robert Wilson, premiered at the Festival d'Avignon in 1976 and was performed at the Metropolitan Opera later the same year. The opera has no plot, lasts close to five hours, and the audience is told they can come and go. Glass wrote in the memoir that they had no money to stage it and had to mortgage the future of the company to rent the hall. He was driving a cab the week after the premiere. The reviews had been rapturous. The cash had not yet arrived."
+        }
+      ]
+    },
+    {
+      "name": "Anni Albers",
+      "domain": "weaving / design",
+      "era": "1899-1994",
+      "region": "Germany / US",
+      "bio": "German-American textile artist and printmaker. Studied and taught weaving at the Bauhaus from 1922 to 1933, then at Black Mountain College in North Carolina. Her 1965 book On Weaving is the most influential text on the craft in the twentieth century. In 1949 she became the first textile artist to have a solo exhibition at the Museum of Modern Art.",
+      "oneLiner": "Treated thread as a medium with the same seriousness a painter gave to pigment, and asked her readers to remember how to touch.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["designing", "clarifying"],
+      "narratives": [
+        {
+          "title": "Touch as elemental",
+          "content": "In On Weaving (1965) Albers wrote: 'We touch things to assure ourselves of reality. We touch the objects of our love. We touch the things we form. Our tactile experiences are elemental. If we reduce their range, as we do when we reduce the necessity to form things ourselves, we grow lopsided.' The passage frames tactile experience as a faculty that can atrophy, and the hand-woven object as an argument for preserving it."
+        },
+        {
+          "title": "The event of a thread",
+          "content": "Elsewhere in On Weaving Albers called weaving 'the event of a thread' and wrote of 'the nomadic character of things made of threads.' The phrase 'the event of a thread' has become the title of exhibitions, a Times Square commission by Ann Hamilton, and a generation of essays on textile art. Albers meant something specific by it: that a single strand is not a finished object but a line of force, and that the weave is the record of a decision made at every crossing."
+        },
+        {
+          "title": "Arriving at Black Mountain College, 1933",
+          "content": "When the Nazis shut the Bauhaus in 1933, Albers and her husband Josef were among the first European modernists to take up teaching positions at the newly founded Black Mountain College in North Carolina. She ran the weaving workshop with almost no equipment. Her students, many of whom had never touched a loom, were made to weave grasses and bark before they were allowed near commercial yarn. She argued that the constraint was the training."
+        }
+      ]
+    },
+    {
+      "name": "Andrei Tarkovsky",
+      "domain": "cinema",
+      "era": "1932-1986",
+      "region": "Soviet Union",
+      "bio": "Soviet filmmaker. Director of Ivan's Childhood, Andrei Rublev, Solaris, Mirror, Stalker, Nostalghia, and The Sacrifice. His 1986 book Sculpting in Time: Reflections on the Cinema is the closest thing to a director's manual that he left behind, assembled from lectures and essays.",
+      "oneLiner": "Said a film was not shot from a script but carved from a lump of time, and defended the long take as a moral act.",
+      "primaryCategoryIntent": "creating",
+      "secondaryCategoryIntents": ["expressing", "clarifying"],
+      "narratives": [
+        {
+          "title": "Sculpting in time",
+          "content": "In Sculpting in Time (1986) Tarkovsky gave his method its image: 'We could define it as sculpting in time. Just as a sculptor takes a lump of marble, and, inwardly conscious of the features of his finished piece, removes everything that is not a part of it, so the filmmaker, from a lump of time made up of an enormous, solid cluster of living facts, cuts off and discards whatever he does not need, leaving only what is to be an element of the finished film.' The metaphor is an explicit rebuke to the idea of filmmaking as storytelling."
+        },
+        {
+          "title": "The dominant factor is rhythm",
+          "content": "Tarkovsky wrote in the same book that 'the dominant, all-powerful factor of the film image is rhythm, expressing the course of time within the frame.' He argued that a shot had to be held long enough for time itself to register inside it, and that cutting too early broke the only thing cinema could do that no other art could. His long takes, which sometimes run five to nine minutes, are the working-out of this principle."
+        },
+        {
+          "title": "Pressure and the artist",
+          "content": "On why anyone makes art at all, Tarkovsky wrote: 'Some sort of pressure must exist. The artist exists because the world is not perfect. Art would be useless if the world were perfect, as man wouldn't look for harmony but would simply live in it.' The sentence is often quoted without its context, which is a defence of art made under the Soviet censorship he lived with for his entire professional life. The pressure he meant was not only metaphysical."
+        },
+        {
+          "title": "Martyrolog",
+          "content": "Tarkovsky kept a diary he called Martyrolog from 1970 until his death in Paris in 1986. The published edition runs to about 400 pages and contains domestic complaints, budget anxieties, drafts of project ideas, and religious reflection in the same paragraph. It is the most granular document we have of how a great filmmaker lived between films, and of how little the genius looked like genius from the inside."
+        }
+      ]
+    },
+    {
+      "name": "Kenya Hara",
+      "domain": "graphic design / Muji",
+      "era": "1958-present",
+      "region": "Japan",
+      "bio": "Japanese graphic designer and curator. Art director of Muji since 2002. Author of Designing Design (2007) and White (2009). Professor at Musashino Art University. His work is associated with the Japanese aesthetics of emptiness, subtraction, and the un-printed.",
+      "oneLiner": "Designed the brand most associated with emptiness by treating white as a noun rather than a colour.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["creating", "clarifying"],
+      "narratives": [
+        {
+          "title": "White is not nothing",
+          "content": "In White (2009) Hara wrote: 'In some cases, white denotes emptiness. White as noncolor transforms into a symbol of nonbeing. Yet emptiness doesn't mean nothingness or energy-less; rather, in many cases, it indicates a condition which will likely be filled with content in the future.' The book is an extended argument that Japanese design's use of empty space is not minimalism in the Western sense but a specific invitation for meaning to arrive."
+        },
+        {
+          "title": "The empty vessel",
+          "content": "Hara has written, and repeated in lectures, that 'the mechanism of communication is activated when we look at an empty vessel, not as a negative state, but in terms of its capability to be filled with something.' He uses the empty vessel as the governing image of his Muji work. The brand's products are deliberately unbranded so that the customer's life can be the content."
+        },
+        {
+          "title": "Muji campaign in the salt flats",
+          "content": "For the 2003 Muji campaign Hara sent photographer Tamotsu Fujii to shoot a tiny figure standing in the Bolivian salt flats at Uyuni, with a horizon extending in every direction. There was no product in the frame and no slogan. Hara wrote in Designing Design (2007) that the emptiness of the image was itself the product promise: that Muji sold not objects but the space around them. The campaign is a textbook example of his thesis about white as a positive condition."
+        }
+      ]
+    },
+    {
+      "name": "Kevin Lynch",
+      "domain": "urban design",
+      "era": "1918-1984",
+      "region": "US",
+      "bio": "American urban planner. Professor at MIT from 1948 until his retirement. His 1960 book The Image of the City is the foundational text of urban wayfinding research and introduced the five elements of urban imageability: paths, edges, districts, nodes and landmarks.",
+      "oneLiner": "Proved that the city lived inside the heads of the people who walked through it, and gave designers a vocabulary for what they saw there.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["clarifying", "creating"],
+      "narratives": [
+        {
+          "title": "Imageability",
+          "content": "In The Image of the City (1960) Lynch defined imageability as 'that quality in a physical object which gives it a high probability of evoking a strong image in any given observer. It is that shape, color, or arrangement which facilitates the making of vividly identified, powerfully structured, highly useful mental images of the environment.' The coinage gave urban planners a testable criterion for what made a street or a plaza memorable, and decades of subsequent research built on it."
+        },
+        {
+          "title": "Paths, edges, districts, nodes, landmarks",
+          "content": "Lynch's five-element vocabulary was developed from interviews with residents of Boston, Jersey City and Los Angeles, who were asked to draw their city from memory. He wrote that 'nodes are points, the strategic spots in a city into which an observer can enter, and which are the intensive foci to and from which he is travelling.' The interview method let him treat the city as something that existed in its inhabitants' cognition as much as on the map, and the five categories came out of those hand-drawn maps, not from planning doctrine."
+        },
+        {
+          "title": "Legibility as a right",
+          "content": "Lynch wrote that legibility, meaning the ease with which a city's parts could be recognised and organised into a coherent pattern, was not only an aesthetic question. He argued it was close to a civic right. A city whose structure you could not read was a city you could not fully use, and in his view this was a form of exclusion as real as a locked door. The argument shifted urban design toward an empathy-based method that the profession is still catching up with."
+        }
+      ]
+    },
+    {
+      "name": "Achille Castiglioni",
+      "domain": "industrial design",
+      "era": "1918-2002",
+      "region": "Italy",
+      "bio": "Italian industrial and interior designer. Working first with his brother Pier Giacomo and later alone, he designed the Arco lamp (1962), the Mezzadro stool (1957), the Parentesi lamp (1971) and dozens of other objects that are still in production. He won the Compasso d'Oro nine times, more than any other designer. His Milan studio is preserved as a museum.",
+      "oneLiner": "Said design required observation, and spent fifty years pointing at ordinary things his students had stopped seeing.",
+      "primaryCategoryIntent": "designing",
+      "secondaryCategoryIntents": ["creating", "clarifying"],
+      "narratives": [
+        {
+          "title": "Design demands observation",
+          "content": "Castiglioni's maxim, repeated to his students at the Politecnico di Milano for decades, was 'design demands observation.' He took the instruction literally. He kept a collection of mass-produced objects, including suction cups, bicycle seats, tractor seats and wooden stools, which he brought to class and forced his students to look at until they could say something precise about them. The Mezzadro stool is literally a farm tractor seat on a single steel stem."
+        },
+        {
+          "title": "If you are not curious, forget it",
+          "content": "To his students Castiglioni said: 'If you are not curious, forget it. If you are not interested in others, what they do and how they act, then being a designer is not the right job for you.' The quotation is one of the most repeated in Italian design pedagogy. He is making a gatekeeping move: not everybody should be a designer, and the gate is curiosity, not talent."
+        },
+        {
+          "title": "The Arco lamp, 1962",
+          "content": "With his brother Pier Giacomo, Castiglioni designed the Arco floor lamp in 1962 as a solution to a specific observed problem: people wanted a ceiling lamp over a dining table without drilling into the ceiling. They used a Carrara marble base heavy enough to anchor a long arching steel arm. The base had a hole in it so that two people could slip a broom handle through and carry it. The hole was not decoration. It was the answer to how you moved a 65-kilogram block of marble across an apartment."
+        }
+      ]
+    },
+    {
+      "name": "Marshall Ganz",
+      "domain": "organising / public narrative",
+      "era": "1943-present",
+      "region": "US",
+      "bio": "American organiser and academic. Joined the United Farm Workers with Cesar Chavez in 1965 and spent 28 years as an organiser before completing his PhD and joining the Harvard Kennedy School. His 2009 book Why David Sometimes Wins analyses the UFW's 1965-1972 victories. He developed the Public Narrative framework of self, us, and now.",
+      "oneLiner": "Taught organisers that leadership is the work of translating values into action by telling three stories.",
+      "primaryCategoryIntent": "directing",
+      "secondaryCategoryIntents": ["nurturing", "expressing"],
+      "narratives": [
+        {
+          "title": "Story of self, story of us, story of now",
+          "content": "Ganz's Public Narrative framework, taught at the Kennedy School since the early 2000s, asks the organiser to tell three linked stories. He wrote: 'A Story of Self communicates the values that have called you to leadership; a Story of Us communicates the values shared by those in action; a Story of Now communicates an urgent challenge to those values that demand action now.' The framework has been used in the 2008 Obama campaign's Camp Obama training, in movement building in South Africa and Ireland, and by hundreds of non-profits."
+        },
+        {
+          "title": "The three questions of Hillel",
+          "content": "Ganz has said that the framework came directly from the three questions of Rabbi Hillel, which he had learned as a child: 'If I am not for myself, who will be for me? If I am for myself alone, what am I? If not now, when?' The three questions map onto the three stories. The pedagogy hides an ancient source in modern political language."
+        },
+        {
+          "title": "Why David Sometimes Wins, 2009",
+          "content": "The book is a close history of the United Farm Workers' 1965 to 1972 campaigns against California growers, in which Ganz was a front-line organiser. He argued that the UFW won not because it was larger or richer than its opponents but because it used the tools it had more strategically. 'David prevails,' he wrote, 'not by emulating Goliath, but by wisely using the tools that are available to him.' The book became a casebook for movement strategy in the years after the 2008 Obama victory."
+        }
+      ]
+    },
+    {
+      "name": "Marshall McLuhan",
+      "domain": "media theory",
+      "era": "1911-1980",
+      "region": "Canada",
+      "bio": "Canadian philosopher and literary scholar, professor at the University of Toronto. His books The Gutenberg Galaxy (1962), Understanding Media: The Extensions of Man (1964), and The Medium Is the Massage (1967) founded the discipline of media studies.",
+      "oneLiner": "Argued that the shape of a medium did more to us than anything it carried, and spent a career making us see what we were swimming in.",
+      "primaryCategoryIntent": "clarifying",
+      "secondaryCategoryIntents": ["directing", "expressing"],
+      "narratives": [
+        {
+          "title": "The medium is the message",
+          "content": "The first chapter of Understanding Media (1964) is titled 'The Medium is the Message.' McLuhan wrote: 'The personal and social consequences of any medium, that is, of any extension of ourselves, result from the new scale that is introduced into our affairs by each extension of ourselves, or by any new technology.' The claim was that what a television show said mattered less than the fact of television itself, the shape of attention it produced. The book's subtitle, The Extensions of Man, spells out the underlying thesis."
+        },
+        {
+          "title": "The light bulb has no content",
+          "content": "To make the abstract point concrete, McLuhan used the example of the electric light bulb. A light bulb has no content the way a newspaper has articles, but it is still a medium with a powerful social effect: it allows human activity to continue after dark. 'A light bulb enables people to create spaces during nighttime that would otherwise be enveloped by darkness.' The example became the most cited in the book because it was so hard to argue with."
+        },
+        {
+          "title": "The Medium Is the Massage, 1967",
+          "content": "With designer Quentin Fiore and producer Jerome Agel, McLuhan produced The Medium Is the Massage in 1967, a paperback made of bold typography, photographs, pull quotes, and blank spreads. The title was originally a typo for 'Message' but McLuhan kept it because it captured what media actually did: they massaged the senses and rearranged the nervous system. The book sold nearly a million copies and remains the model for every subsequent designed non-fiction paperback."
+        }
+      ]
+    },
+    {
+      "name": "Carl von Clausewitz",
+      "domain": "military strategy",
+      "era": "1780-1831",
+      "region": "Prussia",
+      "bio": "Prussian general and military theorist. Served in the Napoleonic Wars on the Russian and Prussian sides. His unfinished treatise Vom Kriege (On War), edited and published posthumously by his wife Marie in 1832-1834, is the foundational text of modern strategic thought.",
+      "oneLiner": "Wrote that war was simple in its parts and nearly impossible in practice, and named the reason friction.",
+      "primaryCategoryIntent": "directing",
+      "secondaryCategoryIntents": ["clarifying", "designing"],
+      "narratives": [
+        {
+          "title": "War is the continuation of politics by other means",
+          "content": "The most quoted sentence in all of military theory appears in Book One of On War: 'War is nothing but the continuation of policy with other means.' Clausewitz was arguing against the view, common in his lifetime, that once war began it became its own domain with its own rules. He insisted that war never stopped being a political instrument, and that any general who forgot that was a menace to his own state."
+        },
+        {
+          "title": "Friction",
+          "content": "Also in Book One Clausewitz introduces the concept that distinguishes real war from war on paper: 'Everything in war is very simple, but the simplest thing is difficult. The difficulties accumulate and end by producing a kind of friction.' He used the analogy of a traveller expecting to change horses at the next station and finding there are none. The concept of friction has since been adopted in every discipline where plans meet reality, from aviation to software engineering to emergency response."
+        },
+        {
+          "title": "The fog of war",
+          "content": "Clausewitz wrote: 'Many intelligence reports in war are contradictory; even more are false, and most are uncertain.' He argued that commanders had to act under conditions of radical informational ambiguity, and that strategic judgement was precisely the ability to decide well while knowing you might be wrong. The phrase 'fog of war' that later became commonplace is a compression of this passage."
+        },
+        {
+          "title": "Marie von Clausewitz as editor",
+          "content": "Clausewitz died of cholera in 1831 with On War unfinished. His widow Marie, who had read every draft and had transcribed chapters in her own hand, assembled and published the three volumes between 1832 and 1834. She wrote a preface acknowledging the book's incompleteness. Without her editorial work the treatise as we have it would not exist, and military theory would be missing its central text. Her role as editor is now the subject of its own scholarship, including Vanya Eftimova Bellinger's 2015 biography."
+        }
+      ]
+    }
+  ]
+}
