@@ -57,9 +57,26 @@ See `docs/zone-calibration-framework.md` for the full theoretical framework (Ori
 
 ## Tech Stack
 
-React 18 + Vite + React Router v7 | Supabase (PostgreSQL, Auth, Edge Functions) | Anthropic Claude API | Vercel | Web Push API
+React 18 + Vite + React Router v7 | Supabase (PostgreSQL, Auth, Edge Functions) | Anthropic Claude API | Vercel | Web Push API | Capacitor 8 (iOS)
 
-**Brand Colors**: Purple (#5e17eb) → Gold (#E9A23B) ombre gradient. Based on Alex Hormozi's $100M Offers framework.
+**Two Products, One Repo**: Single codebase produces two branded apps via `VITE_APP_MODE` env var. Vite plugin (`creatorBrandPlugin` in `vite.config.js`) swaps index.html meta, icons, manifest, splash screen, and JSON-LD at build time.
+
+| | Vibe Rise (Consumer) | Scale (Creator) |
+|---|---|---|
+| Domain | `viberise.nichuzz.com` | `create.nichuzz.com` |
+| Vercel project | `findmyflow` | `viberise-creator` |
+| Build command | `npm run build` | `npm run build:creator` |
+| Output dir | `dist/` | `dist-creator/` |
+| Manifest | `manifest.json` | `manifest-creator.json` |
+| Icons | `icon-192.png`, `icon-512.png` | `icon-creator-192.png`, `icon-creator-512.png` |
+| App ID (iOS) | `com.nichuzz.viberise` | `com.nichuzz.viberise.creator` |
+| Capacitor config | `capacitor.config.json` | `capacitor.config.creator.json` |
+| Start URL | `/7-day-challenge` | `/create` |
+| Routing | Consumer routes; `/create/*` redirects to `/league` | Creator routes; `/` and `/league/*` redirect to `/create` |
+
+**iOS App**: Native iOS wrapper via Capacitor 8 (SPM). Xcode project: `ios/App/App.xcodeproj`. Build: `npm run build` → `npx cap sync` → open in Xcode. Xcode Cloud watches the repo for CI builds.
+
+**Brand Colors**: Purple (#5e17eb) → Gold (#E9A23B) ombre gradient. Both products share the same gradient. Logo font: Inter 900.
 
 ## Folder Structure
 
@@ -406,9 +423,11 @@ ENUMs: `groan_visibility_layer` (screen/live/money/vulnerable/authority), `groan
 ## Quick Commands
 
 ```bash
-npm run dev       # Dev server
-npm run build     # Production build
-npm run db:push   # Apply migrations
+npm run dev            # Dev server (consumer)
+npm run dev:creator    # Dev server (creator mode)
+npm run build          # Production build (consumer → dist/)
+npm run build:creator  # Production build (creator → dist-creator/)
+npm run db:push        # Apply migrations
 ```
 
 ## Obsidian Brain (Quick Reference)
@@ -438,6 +457,7 @@ When working on features, strategy, or content, read the relevant section of the
 
 ## Links
 
-- **Live**: https://viberise.nichuzz.com
+- **Vibe Rise (Consumer)**: https://viberise.nichuzz.com
+- **Scale (Creator)**: https://create.nichuzz.com
 - **Repo**: https://github.com/Nic-Huzz/findmyflow
 - **Supabase**: https://supabase.com/dashboard/project/qlwfcfypnoptsocdpxuv

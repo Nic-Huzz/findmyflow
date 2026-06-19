@@ -64,5 +64,8 @@ jspm_packages/
 out/
 remotion/public/*.mp3
 .env.pipeline
-ios/
+# iOS (tracked for Xcode Cloud, but ignore user-specific data)
+xcuserdata/
+*.xcuserdatad/
+
 electron-dist/

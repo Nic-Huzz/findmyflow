@@ -1,0 +1,27 @@
+{
+  "name": "Scale",
+  "short_name": "Scale",
+  "description": "Where experience creators grow. Design, fill, and scale transformational experiences.",
+  "start_url": "/create",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#5e17eb",
+  "theme_color": "#5e17eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-creator-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-creator-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "prefer_related_applications": false
+}
