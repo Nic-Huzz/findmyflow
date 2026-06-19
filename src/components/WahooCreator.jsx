@@ -66,14 +66,14 @@ export default function WahooCreator({
       const { error: acceptError } = await acceptGroanChallenge(dbRecord.id)
       if (acceptError) throw acceptError
 
-      // Add to weekly picks
-      const { error: pickError } = await supabase.from('priority_weekly_picks').insert({
+      // Add to weekly picks (ignoreDuplicates prevents double-tap issues)
+      const { error: pickError } = await supabase.from('priority_weekly_picks').upsert({
         user_id: userId,
         week_start_date: getWeekStartLocal(),
         pick_type: 'groan',
         reference_id: dbRecord.id,
         display_name: challenge.title,
-      })
+      }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
       if (pickError) throw pickError
 
       hapticSuccess()
@@ -124,13 +124,13 @@ export default function WahooCreator({
                   try {
                     const { error: acceptError } = await acceptGroanChallenge(w.id)
                     if (acceptError) throw acceptError
-                    await supabase.from('priority_weekly_picks').insert({
+                    await supabase.from('priority_weekly_picks').upsert({
                       user_id: userId,
                       week_start_date: getWeekStartLocal(),
                       pick_type: 'groan',
                       reference_id: w.id,
                       display_name: w.title || w.challenge_text,
-                    })
+                    }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
                     hapticSuccess()
                     onWahooAccepted?.()
                     setStep('success')

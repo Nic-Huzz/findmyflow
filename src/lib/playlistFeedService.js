@@ -34,6 +34,7 @@ export async function uploadFeedMedia(userId, file) {
   if (error) throw error
 
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(path)
+  if (!data?.publicUrl) throw new Error('Failed to get public URL for uploaded file')
   return { publicUrl: data.publicUrl, path }
 }
 

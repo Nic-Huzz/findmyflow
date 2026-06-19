@@ -120,6 +120,7 @@ export default function EssenceMirrorFlow() {
   const [round2, setRound2] = useState([])
   const [round3, setRound3] = useState([])
   const [swipeIndex, setSwipeIndex] = useState(0) // which card within a round
+  const swipeActionFired = useRef(false)
   const swipeTouchStartX = useRef(0)
   const swipeTouchEndX = useRef(0)
   const [visionSelections, setVisionSelections] = useState([])
@@ -170,9 +171,10 @@ export default function EssenceMirrorFlow() {
 
   // ─── Navigation ─────────────────────────────────────────────────────────
 
-  const goToStep = (nextStep) => {
+  const goToStep = (nextStep, newSwipeIndex) => {
     setIsTransitioning(true)
     setTimeout(() => {
+      if (newSwipeIndex !== undefined) setSwipeIndex(newSwipeIndex)
       setStep(nextStep)
       setIsTransitioning(false)
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -483,23 +485,28 @@ export default function EssenceMirrorFlow() {
         const globalIndex = roundIndex * 4 + swipeIndex
 
         const advanceSwipe = () => {
+          if (swipeActionFired.current) return
+          swipeActionFired.current = true
           if (isLast) {
-            setSwipeIndex(0)
-            goToStep(nextStep)
+            goToStep(nextStep, 0)
           } else {
             setSwipeIndex(swipeIndex + 1)
           }
+          // Reset after React processes the state update
+          requestAnimationFrame(() => { swipeActionFired.current = false })
         }
 
         const goBackSwipe = () => {
+          if (swipeActionFired.current) return
+          swipeActionFired.current = true
           if (swipeIndex > 0) {
             setSwipeIndex(swipeIndex - 1)
           } else if (roundIndex > 0) {
-            setSwipeIndex(3)
-            goToStep(prevStep)
+            goToStep(prevStep, SUPERPOWER_ROUNDS[roundIndex - 1].length - 1)
           } else {
             goToStep(STEPS.HOOK)
           }
+          requestAnimationFrame(() => { swipeActionFired.current = false })
         }
 
         return (
@@ -551,7 +558,7 @@ export default function EssenceMirrorFlow() {
             </div>
 
             {/* Buttons pinned to bottom */}
-            <div className="em-swipe-bottom">
+            <div className="em-swipe-bottom" onTouchStart={(e) => e.stopPropagation()} onTouchEnd={(e) => e.stopPropagation()}>
               <div className="em-swipe-actions">
                 <button
                   className="em-swipe-btn no"
@@ -626,7 +633,7 @@ export default function EssenceMirrorFlow() {
             >
               {visionSelections.length === 0 ? 'None of these' : 'Continue'} →
             </button>
-            <button className="secondary-button" onClick={() => goToStep(STEPS.ROUND_3)} style={{ width: '100%' }}>
+            <button className="secondary-button" onClick={() => goToStep(STEPS.ROUND_3, SUPERPOWER_ROUNDS[2].length - 1)} style={{ width: '100%' }}>
               ← Back
             </button>
           </div>

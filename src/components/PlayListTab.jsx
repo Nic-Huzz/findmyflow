@@ -43,6 +43,14 @@ export default function PlayListTab({
   const [completingChallenge, setCompletingChallenge] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [wahooCreatorKey, setWahooCreatorKey] = useState(0)
+  const [showWahooModal, setShowWahooModal] = useState(false)
+
+  useEffect(() => {
+    if (showWahooModal) {
+      document.body.classList.add('modal-active')
+      return () => document.body.classList.remove('modal-active')
+    }
+  }, [showWahooModal])
   const [allTimeWahoos, setAllTimeWahoos] = useState(0)
   const [categoryWahoos, setCategoryWahoos] = useState({ appearance: [], creation: [], connection: [] })
   const [expandedBubble, setExpandedBubble] = useState(null)
@@ -328,23 +336,39 @@ export default function PlayListTab({
       {/* Active Wahoos */}
       {activeChallenges.length > 0 && renderActiveWahoos()}
 
-      {/* WahooCreator — always visible inline, key resets after success */}
-      <WahooCreator
-        key={wahooCreatorKey}
-        userId={userId}
-        currentVisibilityLayer={currentVisibilityLayer}
-        bucketList={Object.values(categoryWahoos).flat().filter(w => w.status !== 'completed' && !w.accepted_at)}
-        onWahooAccepted={() => {
-          fetchActiveChallenges()
-          fetchCategoryWahoos()
-          onRefreshPoints?.()
-        }}
-        onClose={() => {
-          fetchActiveChallenges()
-          fetchCategoryWahoos()
-          setWahooCreatorKey(k => k + 1)
-        }}
-      />
+      {/* Add a Wahoo button */}
+      <button
+        className="wc-add-btn"
+        onClick={() => setShowWahooModal(true)}
+      >
+        + Add a Wahoo
+      </button>
+
+      {/* WahooCreator Modal */}
+      {showWahooModal && (
+        <div className="wc-modal-overlay" onClick={() => { setWahooCreatorKey(k => k + 1); setShowWahooModal(false) }}>
+          <div className="wc-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="wc-modal-close" onClick={() => { setWahooCreatorKey(k => k + 1); setShowWahooModal(false) }}>&times;</button>
+            <WahooCreator
+              key={wahooCreatorKey}
+              userId={userId}
+              currentVisibilityLayer={currentVisibilityLayer}
+              bucketList={Object.values(categoryWahoos).flat().filter(w => w.status !== 'completed' && !w.accepted_at)}
+              onWahooAccepted={() => {
+                fetchActiveChallenges()
+                fetchCategoryWahoos()
+                onRefreshPoints?.()
+              }}
+              onClose={() => {
+                fetchActiveChallenges()
+                fetchCategoryWahoos()
+                setWahooCreatorKey(k => k + 1)
+                setShowWahooModal(false)
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Need inspiration? — play-skills + Ikigai Mix (+ future pillar gaps) */}
       <WahooInspiration

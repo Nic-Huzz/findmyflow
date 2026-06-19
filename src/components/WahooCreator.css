@@ -74,6 +74,7 @@
 
 /* === TEXTAREA === */
 .wc-textarea {
+  box-sizing: border-box;
   width: 100%;
   background: #f8f9fa;
   border: 2px solid #e9ecef;
@@ -259,6 +260,86 @@
   border-color: #E9A23B;
   background: #fffbf2;
   color: #b37a1a;
+}
+
+/* === ADD BUTTON (trigger for modal) === */
+.wc-add-btn {
+  width: 100%;
+  background: #ffffff;
+  border: 2px dashed #d4d4d4;
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #5e17eb;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.wc-add-btn:hover {
+  border-color: #5e17eb;
+  background: #f8f5ff;
+}
+
+/* === MODAL OVERLAY === */
+.wc-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: wc-fade-in 0.2s ease-out;
+}
+
+@keyframes wc-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.wc-modal {
+  background: #ffffff;
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px 20px calc(32px + env(safe-area-inset-bottom, 0));
+  position: relative;
+  animation: wc-slide-up 0.3s ease-out;
+}
+
+@keyframes wc-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.wc-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  z-index: 1;
+}
+
+.wc-modal .wc-container {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.wc-modal .wc-card {
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }
 
 /* === REDUCED MOTION === */

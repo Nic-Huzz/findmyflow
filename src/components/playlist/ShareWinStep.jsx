@@ -79,6 +79,7 @@ export default function ShareWinStep({
         caption,
         enrichment,
       })
+      setSharing(false)
       onDone?.({ shared: true })
     } catch (err) {
       console.error('Share error:', err)
@@ -93,8 +94,7 @@ export default function ShareWinStep({
     <div className="sws-container">
       <h2 className="sws-title">Share your win?</h2>
       <p className="sws-subtitle">
-        Other people on their 100-day Play-List want to see this. Show them what courage
-        looks like today.
+        Everyone loves seeing other people's Wahoo's, share what you did!
       </p>
 
       {!previewUrl && (
