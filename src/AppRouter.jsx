@@ -53,7 +53,7 @@ import { supabase } from './lib/supabaseClient'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
 import BottomToolbar from './components/BottomToolbar'
-import { ZarloWidget } from './components/Zarlo'
+import EssenceAvatarWidget from './components/EssenceAvatar/EssenceAvatarWidget'
 import { OnboardingProvider } from './context/OnboardingContext'
 import { CRMLayout } from './components/crm'
 import { initVibeColor } from './hooks/useVibeColor'
@@ -386,7 +386,7 @@ function ConditionalZarlo() {
   const isRemarkableFlow = location.pathname === '/create/remarkable'
   const isCreateFlow = location.pathname.startsWith('/create/') && location.pathname !== '/create'
   if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow) return null
-  return <ZarloWidget />
+  return <EssenceAvatarWidget />
 }
 
 function ConditionalBottomToolbar() {

@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essence Avatar - Design Mockup v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0a0f;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .mockup-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 16px;
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+    margin-bottom: 32px;
+  }
+
+  h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #E9A23B;
+    margin: 32px 0 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .section-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    margin: 32px 0;
+  }
+
+  /* ─── Figurine Base Styles ─── */
+  .figurine-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .figurine-img {
+    position: relative;
+    z-index: 2;
+    transition: all 0.8s ease;
+    /* Remove white background via masking */
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+  }
+
+  /* White background removal trick: radial gradient mask fades the edges */
+  .figurine-bg-blend {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .figurine-bg-blend::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 45%, #0a0a0f 75%);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* ─── Section 1: Four NS States ─── */
+  .states-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .state-card {
+    background: rgba(255,255,255,0.03);
+    border-radius: 16px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+  }
+
+  .state-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .state-card.vibe-rise .state-label { color: #E9A23B; }
+  .state-card.ventral .state-label { color: #7dd87d; }
+  .state-card.sympathetic .state-label { color: #ff8c50; }
+  .state-card.dorsal .state-label { color: #555; }
+
+  .state-desc {
+    font-size: 10px;
+    color: #666;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  .state-figurine-wrap {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .state-figurine-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .state-card .figurine-img {
+    height: 140px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Vibe Rise state */
+  .vibe-rise .state-figurine-wrap {
+    background: radial-gradient(ellipse at center bottom, rgba(233,162,59,0.12) 0%, rgba(94,23,235,0.06) 40%, transparent 70%);
+  }
+
+  .vibe-rise .figurine-img {
+    filter: saturate(1.3) brightness(1.1) drop-shadow(0 0 20px rgba(233,162,59,0.5)) drop-shadow(0 0 40px rgba(233,162,59,0.2));
+    animation: breathe-confident 3s ease-in-out infinite;
+  }
+
+  .vibe-rise .state-figurine-wrap::after {
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(10,10,15,1) 80%);
+  }
+
+  /* Vibe Rise particles */
+  .vr-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .vr-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #E9A23B;
+    animation: float-up 2.5s ease-in-out infinite;
+    opacity: 0;
+  }
+
+  .vr-particle:nth-child(1) { left: 25%; bottom: 20%; animation-delay: 0s; }
+  .vr-particle:nth-child(2) { left: 65%; bottom: 30%; animation-delay: 0.5s; }
+  .vr-particle:nth-child(3) { left: 40%; bottom: 15%; animation-delay: 1.0s; }
+  .vr-particle:nth-child(4) { left: 75%; bottom: 25%; animation-delay: 1.5s; }
+  .vr-particle:nth-child(5) { left: 50%; bottom: 35%; animation-delay: 2.0s; }
+  .vr-particle:nth-child(6) { left: 30%; bottom: 40%; animation-delay: 0.7s; }
+
+  @keyframes float-up {
+    0% { opacity: 0; transform: translateY(0) scale(0.5); }
+    20% { opacity: 0.9; }
+    80% { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(-40px) scale(0); }
+  }
+
+  /* Ventral state */
+  .ventral .state-figurine-wrap {
+    background: radial-gradient(ellipse at center bottom, rgba(125,216,125,0.06) 0%, transparent 60%);
+  }
+
+  .ventral .figurine-img {
+    filter: saturate(0.95) brightness(0.95) drop-shadow(0 0 10px rgba(125,216,125,0.2));
+    animation: breathe-relaxed 4s ease-in-out infinite;
+  }
+
+  .ventral .state-figurine-wrap::after {
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(10,10,15,1) 80%);
+  }
+
+  /* Sympathetic state */
+  .sympathetic .state-figurine-wrap {
+    background: radial-gradient(ellipse at center bottom, rgba(255,140,50,0.08) 0%, transparent 60%);
+  }
+
+  .sympathetic .figurine-img {
+    filter: saturate(1.1) brightness(1.0) drop-shadow(0 0 12px rgba(255,140,50,0.35));
+    animation: breathe-agitated 1.5s ease-in-out infinite;
+  }
+
+  .sympathetic .state-figurine-wrap::after {
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(10,10,15,1) 80%);
+  }
+
+  /* Sympathetic sparks */
+  .sy-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .sy-particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: #ff6a30;
+    animation: spark 0.8s ease-out infinite;
+    opacity: 0;
+  }
+
+  .sy-particle:nth-child(1) { left: 30%; top: 30%; animation-delay: 0s; }
+  .sy-particle:nth-child(2) { right: 30%; top: 20%; animation-delay: 0.25s; }
+  .sy-particle:nth-child(3) { left: 25%; bottom: 35%; animation-delay: 0.5s; }
+  .sy-particle:nth-child(4) { right: 25%; bottom: 40%; animation-delay: 0.75s; }
+
+  @keyframes spark {
+    0% { opacity: 0; transform: scale(1); }
+    15% { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--sx, 5px), var(--sy, -10px)) scale(0); }
+  }
+
+  .sy-particle:nth-child(1) { --sx: -8px; --sy: -12px; }
+  .sy-particle:nth-child(2) { --sx: 10px; --sy: -15px; }
+  .sy-particle:nth-child(3) { --sx: -12px; --sy: 8px; }
+  .sy-particle:nth-child(4) { --sx: 8px; --sy: 10px; }
+
+  /* Dorsal state */
+  .dorsal .state-figurine-wrap {
+    background: radial-gradient(ellipse at center bottom, rgba(94,23,235,0.03) 0%, transparent 60%);
+  }
+
+  .dorsal .figurine-img {
+    filter: saturate(0.3) brightness(0.55) drop-shadow(0 0 4px rgba(94,23,235,0.1));
+    animation: breathe-slow 6s ease-in-out infinite;
+  }
+
+  .dorsal .state-figurine-wrap::after {
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(10,10,15,1) 80%);
+  }
+
+  /* Breathing keyframes */
+  @keyframes breathe-confident {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.02) translateY(-2px); }
+  }
+
+  @keyframes breathe-relaxed {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.01); }
+  }
+
+  @keyframes breathe-agitated {
+    0%, 100% { transform: scale(1) translateX(0); }
+    25% { transform: scale(1.01) translateX(-0.5px); }
+    75% { transform: scale(1.01) translateX(0.5px); }
+  }
+
+  @keyframes breathe-slow {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.005); }
+  }
+
+  @keyframes flicker-glow {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+  }
+
+  /* ─── Section 2: Widget Sizes ─── */
+  .widget-demo {
+    display: flex;
+    align-items: flex-end;
+    gap: 40px;
+    justify-content: center;
+    padding: 32px 0;
+  }
+
+  .widget-size-label {
+    font-size: 10px;
+    color: #666;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  /* Figurine widget - circular crop of upper body */
+  .widget-circle {
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .widget-circle img {
+    width: 150%;
+    height: 150%;
+    object-fit: cover;
+    object-position: center 10%;
+    position: relative;
+    left: -25%;
+    top: -10%;
+  }
+
+  /* Idle (56px) */
+  .widget-idle-v2 {
+    width: 56px;
+    height: 56px;
+    box-shadow:
+      0 0 14px rgba(233, 162, 59, 0.35),
+      0 0 28px rgba(233, 162, 59, 0.12),
+      0 2px 8px rgba(0,0,0,0.5);
+    border: 2px solid rgba(233, 162, 59, 0.2);
+  }
+
+  .widget-idle-v2 img {
+    filter: saturate(1.2) brightness(1.05);
+    animation: breathe-confident 3s ease-in-out infinite;
+  }
+
+  /* Speaking (80px) */
+  .widget-speaking-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .widget-speaking-v2 {
+    width: 80px;
+    height: 80px;
+    box-shadow:
+      0 0 20px rgba(233, 162, 59, 0.45),
+      0 0 40px rgba(233, 162, 59, 0.2),
+      0 2px 12px rgba(0,0,0,0.5);
+    border: 2px solid rgba(233, 162, 59, 0.35);
+    animation: widget-pulse 2s ease-in-out infinite;
+  }
+
+  .widget-speaking-v2 img {
+    filter: saturate(1.3) brightness(1.1);
+    animation: breathe-confident 3s ease-in-out infinite;
+  }
+
+  @keyframes widget-pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(233,162,59,0.45), 0 0 40px rgba(233,162,59,0.2); }
+    50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(233,162,59,0.55), 0 0 50px rgba(233,162,59,0.3); }
+  }
+
+  .speech-bubble {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: -10px;
+    background: rgba(20, 14, 38, 0.95);
+    border: 1px solid rgba(233, 162, 59, 0.25);
+    border-radius: 14px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #ddd;
+    line-height: 1.4;
+    width: 200px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 28px;
+    width: 12px;
+    height: 12px;
+    background: rgba(20, 14, 38, 0.95);
+    border-right: 1px solid rgba(233, 162, 59, 0.25);
+    border-bottom: 1px solid rgba(233, 162, 59, 0.25);
+    transform: rotate(45deg);
+  }
+
+  /* ─── Section 3: Live Transition ─── */
+  .transition-demo {
+    text-align: center;
+    padding: 16px 0;
+  }
+
+  .transition-stage {
+    position: relative;
+    width: 200px;
+    height: 220px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+
+  .transition-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    border-radius: 20px;
+    transition: background 0.8s ease;
+  }
+
+  .transition-stage .figurine-img {
+    height: 200px;
+    width: auto;
+    object-fit: contain;
+    z-index: 2;
+    position: relative;
+    transition: filter 0.8s ease;
+  }
+
+  .transition-glow-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    transition: all 0.8s ease;
+    border-radius: 20px;
+  }
+
+  .transition-particles-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .t-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: background 0.8s ease;
+  }
+
+  /* Transition states */
+  .t-vibe-rise .transition-glow-layer {
+    background: radial-gradient(ellipse at center bottom, rgba(233,162,59,0.15) 0%, rgba(94,23,235,0.06) 40%, rgba(10,10,15,1) 75%);
+  }
+  .t-vibe-rise .figurine-img {
+    filter: saturate(1.3) brightness(1.1) drop-shadow(0 0 20px rgba(233,162,59,0.5)) drop-shadow(0 0 40px rgba(233,162,59,0.2));
+    animation: breathe-confident 3s ease-in-out infinite;
+  }
+  .t-vibe-rise .transition-stage::after { background: radial-gradient(ellipse at center, transparent 55%, rgba(10,10,15,1) 85%); }
+  .t-vibe-rise .t-particle { background: #E9A23B; animation: float-up 2.5s ease-in-out infinite; }
+
+  .t-ventral .transition-glow-layer {
+    background: radial-gradient(ellipse at center bottom, rgba(125,216,125,0.08) 0%, rgba(10,10,15,1) 65%);
+  }
+  .t-ventral .figurine-img {
+    filter: saturate(0.95) brightness(0.95) drop-shadow(0 0 10px rgba(125,216,125,0.2));
+    animation: breathe-relaxed 4s ease-in-out infinite;
+  }
+  .t-ventral .transition-stage::after { background: radial-gradient(ellipse at center, transparent 55%, rgba(10,10,15,1) 85%); }
+  .t-ventral .t-particle { animation: none; opacity: 0 !important; }
+
+  .t-sympathetic .transition-glow-layer {
+    background: radial-gradient(ellipse at center bottom, rgba(255,140,50,0.1) 0%, rgba(10,10,15,1) 65%);
+  }
+  .t-sympathetic .figurine-img {
+    filter: saturate(1.1) brightness(1.0) drop-shadow(0 0 12px rgba(255,140,50,0.35));
+    animation: breathe-agitated 1.5s ease-in-out infinite;
+  }
+  .t-sympathetic .transition-stage::after { background: radial-gradient(ellipse at center, transparent 55%, rgba(10,10,15,1) 85%); }
+  .t-sympathetic .t-particle { background: #ff6a30; animation: spark 0.8s ease-out infinite; }
+
+  .t-dorsal .transition-glow-layer {
+    background: radial-gradient(ellipse at center bottom, rgba(94,23,235,0.04) 0%, rgba(10,10,15,1) 55%);
+  }
+  .t-dorsal .figurine-img {
+    filter: saturate(0.3) brightness(0.55) drop-shadow(0 0 4px rgba(94,23,235,0.1));
+    animation: breathe-slow 6s ease-in-out infinite;
+  }
+  .t-dorsal .transition-stage::after { background: radial-gradient(ellipse at center, transparent 55%, rgba(10,10,15,1) 85%); }
+  .t-dorsal .t-particle { animation: none; opacity: 0 !important; }
+
+  .t-particle:nth-child(1) { left: 25%; bottom: 25%; animation-delay: 0s; }
+  .t-particle:nth-child(2) { left: 60%; bottom: 30%; animation-delay: 0.5s; }
+  .t-particle:nth-child(3) { left: 40%; bottom: 20%; animation-delay: 1.0s; }
+  .t-particle:nth-child(4) { left: 70%; bottom: 35%; animation-delay: 1.5s; }
+  .t-particle:nth-child(5) { left: 35%; bottom: 40%; animation-delay: 2.0s; }
+
+  .state-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .state-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    color: #aaa;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .state-btn:hover { background: rgba(255,255,255,0.08); color: #ddd; }
+  .state-btn.active { border-color: #E9A23B; color: #E9A23B; background: rgba(233,162,59,0.1); }
+
+  /* ─── Section 4: Conversation Panel ─── */
+  .panel-mockup {
+    background: rgba(12, 8, 22, 0.98);
+    border-radius: 20px 20px 0 0;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-bottom: none;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .panel-avatar-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 14px rgba(233, 162, 59, 0.3);
+    border: 2px solid rgba(233, 162, 59, 0.2);
+    flex-shrink: 0;
+  }
+
+  .panel-avatar-wrap img {
+    width: 150%;
+    height: 150%;
+    object-fit: cover;
+    object-position: center 10%;
+    position: relative;
+    left: -25%;
+    top: -10%;
+    filter: saturate(1.2) brightness(1.05);
+  }
+
+  .panel-identity { flex: 1; }
+  .panel-name { font-size: 15px; font-weight: 700; color: #fff; }
+  .panel-archetype { font-size: 11px; color: #E9A23B; margin-top: 1px; }
+
+  .panel-close {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: none;
+    color: #555;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Intelligence bar */
+  .intelligence-bar-container { padding: 0 20px 16px; }
+
+  .intelligence-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .intelligence-title { font-size: 11px; font-weight: 600; color: #888; }
+  .intelligence-percent { font-size: 11px; font-weight: 700; color: #E9A23B; }
+
+  .intelligence-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .intelligence-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #5e17eb, #E9A23B);
+    transition: width 1s ease;
+  }
+
+  .intelligence-hint { font-size: 10px; color: #555; margin-top: 4px; }
+
+  .panel-messages {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 180px;
+  }
+
+  .msg-avatar {
+    background: linear-gradient(135deg, rgba(94, 23, 235, 0.12), rgba(233, 162, 59, 0.06));
+    border: 1px solid rgba(233, 162, 59, 0.1);
+    border-radius: 16px 16px 16px 4px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #ccc;
+    line-height: 1.55;
+    max-width: 90%;
+  }
+
+  .msg-avatar .hl { color: #E9A23B; font-weight: 600; }
+
+  .msg-user {
+    background: rgba(94, 23, 235, 0.15);
+    border: 1px solid rgba(94, 23, 235, 0.15);
+    border-radius: 16px 16px 4px 16px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #ccc;
+    line-height: 1.5;
+    max-width: 85%;
+    align-self: flex-end;
+  }
+
+  .panel-input {
+    display: flex;
+    gap: 8px;
+    padding: 12px 20px 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .panel-input input {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 10px 16px;
+    color: #fff;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+  }
+
+  .panel-input input::placeholder { color: #444; }
+  .panel-input input:focus { border-color: rgba(233, 162, 59, 0.3); }
+
+  .panel-input button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* ─── Section 5: In-Context App Preview ─── */
+  .app-preview {
+    position: relative;
+    background: linear-gradient(180deg, #12091f 0%, #0a0a14 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+    min-height: 480px;
+    overflow: hidden;
+  }
+
+  .app-header-mock {
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .app-streak { font-size: 13px; font-weight: 700; color: #E9A23B; }
+
+  .app-pills { display: flex; gap: 8px; }
+  .app-pill { font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 600; }
+  .app-pill.tune { background: rgba(125,216,125,0.12); color: #7dd87d; }
+  .app-pill.wahoo { background: rgba(233,162,59,0.12); color: #E9A23B; }
+  .app-pill.healing { background: rgba(94,23,235,0.12); color: #9b6dff; }
+
+  .app-tabs {
+    display: flex;
+    padding: 12px 20px;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .app-tab {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: #555;
+  }
+
+  .app-tab.active { background: rgba(94, 23, 235, 0.2); color: #fff; }
+
+  .app-content-mock { padding: 16px 20px; }
+
+  .mock-card {
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .mock-card-title { font-size: 13px; font-weight: 600; color: #bbb; margin-bottom: 3px; }
+  .mock-card-desc { font-size: 11px; color: #555; }
+
+  /* Floating figurine widget in context */
+  .floating-widget {
+    position: absolute;
+    bottom: 20px;
+    right: 16px;
+    z-index: 10;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 2px solid rgba(233, 162, 59, 0.25);
+  }
+
+  .floating-widget img {
+    width: 150%;
+    height: 150%;
+    object-fit: cover;
+    object-position: center 10%;
+    position: relative;
+    left: -25%;
+    top: -10%;
+    filter: saturate(1.2) brightness(1.05);
+    animation: breathe-confident 3s ease-in-out infinite;
+  }
+
+  .floating-widget.idle {
+    width: 56px;
+    height: 56px;
+    box-shadow:
+      0 0 14px rgba(233, 162, 59, 0.35),
+      0 0 28px rgba(233, 162, 59, 0.12),
+      0 2px 10px rgba(0,0,0,0.5);
+  }
+
+  .floating-widget.speaking {
+    width: 80px;
+    height: 80px;
+    box-shadow:
+      0 0 20px rgba(233, 162, 59, 0.5),
+      0 0 40px rgba(233, 162, 59, 0.2),
+      0 2px 12px rgba(0,0,0,0.5);
+    border-color: rgba(233, 162, 59, 0.4);
+    animation: widget-pulse 2s ease-in-out infinite;
+  }
+
+  .float-bubble {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: -4px;
+    background: rgba(20, 14, 38, 0.95);
+    border: 1px solid rgba(233, 162, 59, 0.25);
+    border-radius: 14px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #ddd;
+    line-height: 1.4;
+    width: 190px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    display: none;
+    animation: bubble-in 0.3s ease-out;
+  }
+
+  .float-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 22px;
+    width: 12px;
+    height: 12px;
+    background: rgba(20, 14, 38, 0.95);
+    border-right: 1px solid rgba(233, 162, 59, 0.25);
+    border-bottom: 1px solid rgba(233, 162, 59, 0.25);
+    transform: rotate(45deg);
+  }
+
+  .floating-widget.speaking .float-bubble { display: block; }
+
+  @keyframes bubble-in {
+    0% { opacity: 0; transform: translateY(5px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── Section 6: Memory View ─── */
+  .memory-view {
+    background: rgba(12, 8, 22, 0.98);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 20px;
+  }
+
+  .memory-section { margin-bottom: 16px; }
+
+  .memory-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #E9A23B;
+    margin-bottom: 8px;
+  }
+
+  .memory-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .memory-text { font-size: 12px; color: #bbb; line-height: 1.4; flex: 1; }
+  .memory-meta { font-size: 10px; color: #444; margin-top: 3px; }
+
+  .memory-delete {
+    font-size: 10px;
+    color: #444;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+
+  .memory-delete:hover { color: #ff6b6b; background: rgba(255,107,107,0.08); }
+</style>
+</head>
+<body>
+
+<div class="mockup-container">
+
+  <h1>Essence Avatar v2</h1>
+  <p class="subtitle">Playful Alchemist figurine with NS state effects</p>
+
+  <!-- ─── 1. Four NS States ─── -->
+  <h2>1. Four Nervous System States</h2>
+
+  <div class="states-grid">
+    <div class="state-card vibe-rise">
+      <div class="state-label">Vibe Rise</div>
+      <div class="state-figurine-wrap">
+        <img class="figurine-img" src="/images/huzz-figurine.png" alt="Figurine">
+        <div class="vr-particles">
+          <div class="vr-particle"></div><div class="vr-particle"></div><div class="vr-particle"></div>
+          <div class="vr-particle"></div><div class="vr-particle"></div><div class="vr-particle"></div>
+        </div>
+      </div>
+      <div class="state-desc">Gold glow, energy sparkles, confident breathing</div>
+    </div>
+
+    <div class="state-card ventral">
+      <div class="state-label">Ventral (Safe)</div>
+      <div class="state-figurine-wrap">
+        <img class="figurine-img" src="/images/huzz-figurine.png" alt="Figurine">
+      </div>
+      <div class="state-desc">Gentle green glow, relaxed breathing</div>
+    </div>
+
+    <div class="state-card sympathetic">
+      <div class="state-label">Sympathetic</div>
+      <div class="state-figurine-wrap">
+        <img class="figurine-img" src="/images/huzz-figurine.png" alt="Figurine">
+        <div class="sy-particles">
+          <div class="sy-particle"></div><div class="sy-particle"></div>
+          <div class="sy-particle"></div><div class="sy-particle"></div>
+        </div>
+      </div>
+      <div class="state-desc">Flickering orange, fast breathing, sparks</div>
+    </div>
+
+    <div class="state-card dorsal">
+      <div class="state-label">Dorsal</div>
+      <div class="state-figurine-wrap">
+        <img class="figurine-img" src="/images/huzz-figurine.png" alt="Figurine">
+      </div>
+      <div class="state-desc">Desaturated, dim, stillness</div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ─── 2. Widget Sizes ─── -->
+  <h2>2. Widget States (Circular Crop)</h2>
+
+  <div class="widget-demo">
+    <div>
+      <div class="widget-circle widget-idle-v2">
+        <img src="/images/huzz-figurine.png" alt="Avatar">
+      </div>
+      <div class="widget-size-label">Idle (56px)</div>
+    </div>
+
+    <div>
+      <div class="widget-speaking-wrap">
+        <div class="speech-bubble">I noticed something about your afternoons...</div>
+        <div class="widget-circle widget-speaking-v2">
+          <img src="/images/huzz-figurine.png" alt="Avatar">
+        </div>
+      </div>
+      <div class="widget-size-label">Speaking (80px)</div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ─── 3. Live Transitions ─── -->
+  <h2>3. Live State Transitions</h2>
+  <p style="font-size: 12px; color: #555; margin-bottom: 16px;">Click a state to see the 0.8s morph.</p>
+
+  <div class="transition-demo">
+    <div id="transitionWrap" class="t-vibe-rise">
+      <div class="transition-stage">
+        <div class="transition-glow-layer"></div>
+        <img class="figurine-img" src="/images/huzz-figurine.png" alt="Figurine">
+        <div class="transition-particles-layer">
+          <div class="t-particle"></div><div class="t-particle"></div><div class="t-particle"></div>
+          <div class="t-particle"></div><div class="t-particle"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="state-buttons">
+      <button class="state-btn active" onclick="setState('vibe-rise', this)">Vibe Rise</button>
+      <button class="state-btn" onclick="setState('ventral', this)">Ventral</button>
+      <button class="state-btn" onclick="setState('sympathetic', this)">Sympathetic</button>
+      <button class="state-btn" onclick="setState('dorsal', this)">Dorsal</button>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ─── 4. Conversation Panel ─── -->
+  <h2>4. Conversation Panel</h2>
+
+  <div class="panel-mockup">
+    <div class="panel-header">
+      <div class="panel-avatar-wrap">
+        <img src="/images/huzz-figurine.png" alt="Avatar">
+      </div>
+      <div class="panel-identity">
+        <div class="panel-name">Playful Alchemist</div>
+        <div class="panel-archetype">Essence Avatar</div>
+      </div>
+      <button class="panel-close">&times;</button>
+    </div>
+
+    <div class="intelligence-bar-container">
+      <div class="intelligence-label">
+        <span class="intelligence-title">Intelligence: Pattern Emergence</span>
+        <span class="intelligence-percent">43%</span>
+      </div>
+      <div class="intelligence-bar">
+        <div class="intelligence-fill" style="width: 43%"></div>
+      </div>
+      <div class="intelligence-hint">3 more check-ins until I can spot your patterns</div>
+    </div>
+
+    <div class="panel-messages">
+      <div class="msg-avatar">I'm starting to see something about your afternoons. You've checked in as <span class="hl">Sympathetic</span> between 2-5pm four times this week. That's your vulnerability window. Want to try breathwork before lunch tomorrow?</div>
+      <div class="msg-user">That's actually true. I never noticed that.</div>
+      <div class="msg-avatar">That's what I'm here for. You give me the data, I find the patterns you can't see from inside. Your <span class="hl">Playful Creator</span> is strongest in the mornings. Let's protect that window.</div>
+    </div>
+
+    <div class="panel-input">
+      <input type="text" placeholder="Talk to your Essence Avatar...">
+      <button>&uarr;</button>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ─── 5. In-Context ─── -->
+  <h2>5. In-Context (App Preview)</h2>
+  <p style="font-size: 12px; color: #555; margin-bottom: 12px;">Click the floating avatar to toggle idle/speaking.</p>
+
+  <div class="app-preview">
+    <div class="app-header-mock">
+      <div class="app-streak">12 day streak</div>
+      <div class="app-pills">
+        <span class="app-pill tune">+8</span>
+        <span class="app-pill wahoo">+15</span>
+        <span class="app-pill healing">+6</span>
+      </div>
+    </div>
+    <div class="app-tabs">
+      <div class="app-tab active">Level</div>
+      <div class="app-tab">Tune</div>
+      <div class="app-tab">Play-list</div>
+      <div class="app-tab">Healing</div>
+    </div>
+    <div class="app-content-mock">
+      <div class="mock-card">
+        <div class="mock-card-title">Level 2: Vulnerability</div>
+        <div class="mock-card-desc">Zone Diagnosis available. 2/3 quests complete.</div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-card-title">Capacity Score: 67</div>
+        <div class="mock-card-desc">Safety: 8/10 | Expression: 5/10 | Zone: Grounded</div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-card-title">Active Wahoos</div>
+        <div class="mock-card-desc">Creation: "Write something vulnerable" | Connection: none</div>
+      </div>
+      <div class="mock-card" style="opacity: 0.15; height: 50px;"></div>
+    </div>
+
+    <div class="floating-widget idle" id="floatingWidget" onclick="toggleFloat()">
+      <img src="/images/huzz-figurine.png" alt="Avatar">
+      <div class="float-bubble">I learned something about you. Want to see?</div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ─── 6. Memory View ─── -->
+  <h2>6. "What Do You Know About Me?"</h2>
+
+  <div class="memory-view">
+    <div class="memory-section">
+      <div class="memory-section-title">Patterns</div>
+      <div class="memory-item">
+        <div>
+          <div class="memory-text">Gateway practice is breathwork. Vibe Rise 3x more likely after morning breathwork.</div>
+          <div class="memory-meta">Confidence: 80% | Jun 20</div>
+        </div>
+        <button class="memory-delete">Forget</button>
+      </div>
+      <div class="memory-item">
+        <div>
+          <div class="memory-text">Afternoons (2-5pm) are vulnerability window. Sympathetic state spikes.</div>
+          <div class="memory-meta">Confidence: 85% | Jun 25</div>
+        </div>
+        <button class="memory-delete">Forget</button>
+      </div>
+    </div>
+
+    <div class="memory-section">
+      <div class="memory-section-title">Your Corrections</div>
+      <div class="memory-item">
+        <div>
+          <div class="memory-text">"Ghost detection on Jun 12 was wrong. Was tired, not avoiding."</div>
+          <div class="memory-meta">Corrected Jun 12</div>
+        </div>
+        <button class="memory-delete">Forget</button>
+      </div>
+    </div>
+
+    <div class="memory-section">
+      <div class="memory-section-title">Milestones</div>
+      <div class="memory-item">
+        <div>
+          <div class="memory-text">First social media Wahoo completed.</div>
+          <div class="memory-meta">Jun 18</div>
+        </div>
+        <button class="memory-delete">Forget</button>
+      </div>
+    </div>
+
+    <div class="memory-section">
+      <div class="memory-section-title">Breakthroughs</div>
+      <div class="memory-item">
+        <div>
+          <div class="memory-text">Completed Authority wahoo after 6 weeks of avoidance.</div>
+          <div class="memory-meta">Jul 1</div>
+        </div>
+        <button class="memory-delete">Forget</button>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align: center; color: #333; font-size: 10px; padding: 24px 0 12px;">
+    Essence Avatar v2 | Figurine Style | June 2026
+  </p>
+
+</div>
+
+<script>
+  function setState(state, btn) {
+    document.getElementById('transitionWrap').className = 't-' + state;
+    document.querySelectorAll('.state-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function toggleFloat() {
+    const w = document.getElementById('floatingWidget');
+    w.classList.toggle('idle');
+    w.classList.toggle('speaking');
+  }
+</script>
+
+</body>
+</html>

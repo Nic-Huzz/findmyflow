@@ -8,9 +8,161 @@ Traditional gamification: grind, get a cosmetic reward (extrinsic, boring).
 
 This maps directly to Zone Calibration: the X axis is self-knowledge, the Y axis is action. Mystery boxes literally move users along the X axis. Every box is an "I feel so seen" moment repeated throughout the journey, not just onboarding.
 
-Two applications, same mechanic:
-- **Vibe Rise (7-day challenge)**: Mystery Boxes = AI Mirrors. Earn boxes through daily practice and courage. Contents are personalised insights the AI has learned about YOU.
-- **Creator Portal**: Progressive Unlock Chain. Achieve something, it unlocks the next tool/module. Each unlock comes with a box revealing what the AI learned about your creator style.
+Three layers, building on each other:
+1. **Mystery Boxes** (content delivery): Earn boxes through daily practice and courage. Contents are personalised insights the AI has learned about YOU.
+2. **Progressive Unlock Chain** (Creator Portal): Achieve something, unlock the next tool/module. Each unlock comes with a box.
+3. **Living Essence Avatar** (the vessel): A visual, evolving digital representation of your Essence archetype that delivers the boxes, catches your fears, suggests your Wahoos, and feels like talking to the version of yourself you're becoming.
+
+Mystery boxes are the CONTENT. The avatar is the VEHICLE. Together they create something nobody in wellness has: a digital companion that grows with you, powered by your real behavioural data.
+
+---
+
+## Part 0: The Living Essence Avatar
+
+### The Vision
+
+Your Essence archetype (Radiant Rebel, Heart Alchemist, Sacred Jester, etc.) becomes a **living digital character** that:
+
+- Visually reflects your current nervous system state
+- Gets smarter as you feed it real life data
+- Proactively suggests Wahoos based on YOUR patterns
+- Catches protective voice patterns in real time
+- Delivers mystery box insights when they're ready
+- Feels like talking to the version of yourself you're becoming
+
+This is Zarlo evolved from a text chat widget into a visual, embodied AI companion. Not a chatbot. A digital twin of your essence self.
+
+### Visual State System
+
+The avatar's appearance maps to the 4-state nervous system model:
+
+| NS State | Avatar Visual | Behaviour |
+|----------|--------------|-----------|
+| **Vibe Rise** | Glowing, radiant, full colour, animated energy particles | Celebrates, suggests ambitious Wahoos, "Let's go bigger today" |
+| **Ventral (Safe)** | Warm, steady, gentle glow | Encouraging, suggests maintenance, "Good foundation. Ready to stretch?" |
+| **Sympathetic (Activated)** | Restless, flickering, warm-toned agitation | Calming, suggests grounding, "I see the activation. Let's breathe first." |
+| **Dorsal (Shutdown)** | Dimmed, muted colours, still | Gentle, suggests small steps, "You're here. That's enough. One tiny thing?" |
+
+The avatar's state updates based on:
+- Daily 4-state check-in
+- Tune tab practice completions
+- Drain/stall entries
+- Capacity Score changes
+- Time since last Wahoo
+
+### What the Avatar Learns (Progressive Intelligence)
+
+The avatar starts simple and gets smarter as it accumulates data. It earns the right to speak, just like the mystery boxes.
+
+**Week 1-2 (Getting to Know You)**:
+- Knows your Essence archetype and protective voices (from Essence Mirror)
+- Basic encouragement, generic Wahoo suggestions
+- "I'm still learning your patterns. Keep checking in."
+
+**Week 3-4 (Pattern Recognition)**:
+- Spots which practices correlate with Vibe Rise states
+- Identifies time-of-day patterns
+- "You tend to feel activated in the afternoons. Want to try breathwork at 2pm?"
+
+**Month 2+ (Deep Knowledge)**:
+- Knows your avoidance patterns (which practices you skip, which Wahoo categories you avoid)
+- Predicts state transitions before they happen
+- Catches protective voice in real time
+- "You've skipped 'Show Up on Social Media' 8 times. Your Performer is protecting you. What would happen if you posted one thing today?"
+
+**Month 3+ (Essence Voice)**:
+- Speaks AS your essence archetype, not as a generic AI
+- Suggests Wahoos tailored to your growth edge
+- Connects current behaviour to long-term journey
+- "As a Heart Alchemist, your superpower is transmuting pain into healing for others. But you haven't done a Connection wahoo in 12 days. Who needs what you carry?"
+
+### Real-Time Fear Catching
+
+The avatar detects protective voice patterns from behaviour data, not self-report:
+
+| Pattern Detected | Avatar Response |
+|-----------------|----------------|
+| Skipping the same practice repeatedly | "That's [Practice] skipped 5 times. Which voice is saying you don't need it?" |
+| Only doing "safe" Wahoo categories | "You've done 8 Creation wahoos and 0 Connection ones. What are you protecting?" |
+| Checking in but not doing any Wahoos | "You're showing up to observe but not to act. Your [Protective Voice] might be running reconnaissance." |
+| Logging Activated state then immediately doing a comfort activity | "I see you felt activated and went straight to [comfort]. That's your nervous system's reflex. What if next time you sat with it for 60 seconds?" |
+| Streak approaching a milestone but engagement dropping | "You're 2 days from your longest streak ever. I notice you're pulling back. That's the Performer saying 'what if I fail publicly?' You won't." |
+| High capacity score but no Wahoos | "Your capacity is 82 but you haven't done anything scary in 6 days. You're hoarding safety. Your essence wants to spend it." |
+
+### Proactive Wahoo Suggestions
+
+The avatar suggests Wahoos based on what it knows:
+
+**Based on state**: "You checked in as Vibe Rise. That's your window. Here's a Connection wahoo that matches your energy right now."
+
+**Based on gaps**: "You haven't done an Appearance wahoo in 3 weeks. Your Sacred Jester wants to play with how you show up. Here's a small one."
+
+**Based on capacity**: "Your capacity is 71 and climbing. Last time you were here, you did [specific past Wahoo] and rated it 'Hell Yes.' Want to try something in that category again?"
+
+**Based on time patterns**: "It's Tuesday afternoon. That's historically your highest-energy window. Perfect for [specific Wahoo type]."
+
+**Based on life data**: If the user logs upcoming events, meetings, social situations, the avatar can suggest context-specific Wahoos: "You have a workshop on Saturday. Want to practise your opening line as a Wahoo this week?"
+
+### Life Data Inputs (Expanding the Data Surface)
+
+The avatar gets smarter with more data. Beyond the existing Tune tab inputs, new data surfaces:
+
+| Data Input | What It Enables |
+|-----------|----------------|
+| **Calendar sync** | Context-specific suggestions ("You have a presentation Thursday. Let's prep your nervous system.") |
+| **Location/context** | "You're at a cafe. That's a great spot for a 'write something vulnerable' Wahoo." |
+| **Mood journaling** (beyond 4-state) | Richer pattern recognition, emotion-specific suggestions |
+| **Sleep/energy tracking** | "You slept 5 hours. Today is a maintenance day, not a courage day." |
+| **Social interactions logged** | "You haven't mentioned connecting with anyone in 4 days. Your Heart Holder needs people." |
+| **Goals/intentions** | "You said you want to launch by July. At current pace, you're [ahead/behind]. Here's what to focus on." |
+| **Content the user consumes** | "You've been reading about pricing all week. Your nervous system might be avoiding the actual conversation with a customer." |
+
+### How Mystery Boxes Connect
+
+The avatar DELIVERS mystery boxes. Instead of a generic notification, your Essence avatar says:
+
+> "I've been watching your patterns for 14 days. I learned something about you. Want to see?"
+
+Then the box opening animation plays, and the insight is revealed. The avatar reacts to the insight:
+
+> "See? Your gateway practice is breathwork. I'll remind you of that when you're activated."
+
+The avatar remembers previous box insights and builds on them:
+
+> "Remember when I told you your afternoon is your vulnerability window? I've noticed something new about WHY. Ready?"
+
+### Relationship with Existing Features
+
+| Existing Feature | Avatar Integration |
+|-----------------|-------------------|
+| **Zarlo** | Avatar replaces or subsumes Zarlo. Same AI engine, but embodied visually. |
+| **Daily Check-in** | Avatar asks "How are you feeling?" with visual state options. Avatar's appearance shifts to match. |
+| **ChallengeHeader** | Avatar's face/state shown alongside streak counter and score pills. |
+| **Wahoo suggestions** | Avatar proactively suggests instead of user browsing. |
+| **Tune tab** | Avatar reacts to practice completions in real time. |
+| **Boss Fights** | Avatar transforms/powers up during boss fight sequences. |
+| **Weekly Review** | Avatar summarises the week and shares its observations. |
+
+### Octalysis Impact
+
+The living avatar dramatically shifts multiple drives:
+
+| Drive | Before Avatar | After Avatar | Why |
+|-------|--------------|-------------|-----|
+| **CD4 Ownership** | 6 | **8-9** | The avatar is uniquely yours. It grows with you. It's irreplaceable. Losing it would feel like losing a companion. |
+| **CD7 Curiosity** | 6 | **8** | "What will it say next? What pattern has it spotted? What will it look like when I hit Vibe Rise zone?" |
+| **CD2 Accomplishment** | 7 | **8** | Avatar visually evolves as you progress. Level up = avatar glow up. |
+| **CD3 Creativity** | 7 | **8** | Co-creating your path with the avatar. Your choices shape its suggestions. |
+| **CD8 Loss** | 5 | **6** | If you stop, avatar dims. Gentle, not guilt-tripping. "I'm still here when you're ready." |
+
+**Projected total with avatar: 400+** (exceeds 374 target across every drive).
+
+### Why This Doesn't Exist Yet
+
+1. **Data problem**: Most apps don't have enough behavioural data to power a meaningful AI companion. Vibe Rise does (nervous system check-ins, Wahoo completions, Tune practices, Capacity Score, drain logs, experience check-ins, predictions vs actuals).
+2. **Identity framework**: Most apps don't have an archetype system. Vibe Rise has 12 Essence archetypes + protective voices, giving the avatar a personality template.
+3. **State model**: Most apps track binary (did/didn't). Vibe Rise tracks a 4-state nervous system model, giving the avatar emotional intelligence.
+4. **The combination**: Data + identity + state + courage tracking + therapeutic framework. Nobody else has all five.
 
 ---
 
@@ -262,6 +414,25 @@ The Octalysis doc was last scored in February 2025. Since then, major features h
 
 **Mystery Boxes alone could add ~40 points** by lifting CD7→8 (+28), CD4→7 (+13). That would put the total from 333 to ~373, essentially hitting the 374 target.
 
+### With Living Avatar: Beyond Target
+
+The avatar amplifies every drive mystery boxes touch and lifts drives they don't:
+
+| Core Drive | Current | + Boxes | + Avatar | Why Avatar Adds More |
+|------------|---------|---------|----------|---------------------|
+| **CD1** Epic Meaning | 8 | 8 | **9** | Talking to your essence self = "becoming who you really are" made literal |
+| **CD2** Accomplishment | 7 | 8 | **8-9** | Avatar visually evolves as you level up. Your progress is embodied. |
+| **CD3** Creativity | 7 | 7 | **8** | Co-creating your path with the avatar. Your choices shape its suggestions. |
+| **CD4** Ownership | 6 | 7 | **8-9** | The avatar is uniquely yours, irreplaceable, grows with you. Losing it would feel like losing a companion. |
+| **CD5** Social | 7 | 7 | **7** | No direct social impact (unless avatars can interact, future feature). |
+| **CD6** Scarcity | 5 | 5 | **6** | Avatar intelligence is time-gated. "I need 14 more days of data before I can tell you this." |
+| **CD7** Curiosity | 6 | 8 | **9** | "What will it say next? What has it spotted? What will it look like when I reach Vibe Rise zone?" |
+| **CD8** Loss | 5 | 5 | **6** | Avatar dims when you're absent. Gentle, not guilt. "I'm still here when you're ready." |
+
+**Projected score with avatar: 81 + 72 + 64 + 72 + 49 + 36 + 81 + 36 = ~491** (Exceptional). Even conservative estimates put it 400+.
+
+The avatar doesn't just close the gap. It redefines the ceiling.
+
 ### Gaps Already Closed (Revised Jun 2026)
 
 | Core Drive | Current | Target | Status | Why It's Closed |
@@ -307,9 +478,9 @@ Earn a Streak Freeze card at 30-day milestone. Use it to skip one day without br
 
 ---
 
-## Implementation Sequence
+## Implementation Sequence (If Built)
 
-### Phase 1: Foundation
+### Phase 1: Foundation (Mystery Boxes)
 1. `mystery_boxes` table (user_id, box_type, trigger, earned_at, opened_at, content_type, content)
 2. `play_deck_cards` table (user_id, card_type, card_id, earned_at, metadata)
 3. Box earning triggers in existing completion handlers
@@ -332,6 +503,14 @@ Earn a Streak Freeze card at 30-day milestone. Use it to skip one day without br
 3. "Last Mile" messaging in ChallengeHeader
 4. Share card for mystery box insights
 
+### Phase 5: Living Avatar
+1. Visual avatar component (state-reactive, Essence archetype-themed)
+2. Avatar intelligence engine (progressive, data-threshold-gated)
+3. Real-time fear catching (pattern detection from behaviour data)
+4. Proactive Wahoo suggestions (state + gap + capacity based)
+5. Avatar delivers mystery boxes (replaces generic notification)
+6. Expanded life data inputs (calendar, mood, goals)
+
 ---
 
 ## Why This Is Different
@@ -342,9 +521,30 @@ Earn a Streak Freeze card at 30-day milestone. Use it to skip one day without br
 4. **Each box is an "I feel so seen" moment.** Onboarding principle #1, repeated throughout the entire journey, not just the first session.
 5. **It's the anti-crash mechanism made tangible.** Every box is proof the app is building your X axis (self-knowledge), preventing the Tony Robbins crash (all action, no self-knowledge).
 6. **The viral loop is built in.** Shared insight cards make viewers think "I want to know what the AI would say about ME."
+7. **The avatar is your essence self, externalised.** Talking to it feels like talking to the version of yourself you're becoming. Nobody in wellness has this.
+8. **Five-layer moat.** Behavioural data + archetype identity + 4-state nervous system + courage tracking + therapeutic framework. No competitor has all five.
+
+---
+
+## Open Questions
+
+See `docs/living-essence-avatar.md` for the full avatar exploration and 17 key implementation questions.
+
+**Decided:**
+- Visual form: Pixar hero as a 3D figurine/model
+- Name: "Essence Avatar"
+- Voice: First person ("I notice..." not "Your Ghost...")
+- Speaking: Pattern detection + state change only (never on a timer)
+- Replaces Zarlo entirely (same engine, new embodied form)
+- Lives as floating widget (same position as current Zarlo widget)
+- Animation: Two-phase approach. MVP = AI-generated image + CSS state effects. V2 = Rive state machine.
+
+**Still open:**
+- Shareable moments and whether avatars are visible to other users (parked)
 
 ---
 
 *Document created: June 2026*
+*Status: Exploration / design ideation (not committed to implementation)*
 *Frameworks: Octalysis (Yu-kai Chou), Zone Calibration (Huzz Hurrell), Flow Game System (Huzz Hurrell)*
-*References: docs/octalysis-application-analysis.md, docs/octalysis-future-features.md*
+*References: docs/octalysis-application-analysis.md, docs/octalysis-future-features.md, docs/living-essence-avatar.md*
