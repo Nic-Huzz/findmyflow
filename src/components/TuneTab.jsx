@@ -980,7 +980,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             <span className="tt-subsection-count">{expressionDone}/{expressionTotal}</span>
           </div>
           <div className="tt-quest-list">
-            {/* First two expression practices: Own Style, Voice Work */}
+            {/* First two expression practices: Own Style, Two Hours of Creation */}
             {expressionPractices.slice(0, 2).map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
             {/* Weekly Focus — positioned 3rd in expression */}
             {(() => {
