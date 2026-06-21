@@ -840,23 +840,6 @@ Create a dynamic pose and scene background that embodies this essence. The chara
                           clearInterval(loadingInterval)
                           setAvatarGenerated(data.url)
                           setAvatarGenerating(false)
-
-                          // Generate figurine version in background (non-blocking)
-                          ;(async () => {
-                            try {
-                              const figurinePrompt = `Transform this person into a premium collectible figurine/toy. Keep the EXACT same character, face, outfit, and style. Render as a small collectible figurine standing on a small circular metallic purple-gold gradient base/pedestal. The figurine should look like a high-end collectible toy. Pure white background, no environment, no scene. Full body visible head to toe. Their essence: "${primary?.name}" - ${primary?.poetic_line}. Their superpower: ${primary?.superpower}. Maintain Pixar 3D animation quality. Square composition. No text or words anywhere in the image.`
-                              const { data: figData } = await supabase.functions.invoke('generate-avatar-gemini', {
-                                body: { photo_base64: base64, photo_mime: 'image/jpeg', prompt: figurinePrompt }
-                              })
-                              if (figData?.url && user) {
-                                await supabase.from('lead_flow_profiles')
-                                  .update({ custom_essence_figurine: figData.url })
-                                  .eq('user_id', user.id)
-                              }
-                            } catch (figErr) {
-                              console.warn('Figurine generation failed (non-blocking):', figErr)
-                            }
-                          })()
                         } catch (err) {
                           clearInterval(loadingInterval)
                           console.warn('Avatar generation error:', err)

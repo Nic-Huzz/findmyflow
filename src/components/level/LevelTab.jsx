@@ -500,21 +500,16 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       {graduatedTo !== null && (
         <div className="level-graduation-overlay" onClick={() => setGraduatedTo(null)}>
           <div className="level-graduation-card" onClick={e => e.stopPropagation()}>
-            <div className="level-graduation-emoji">{graduatedTo === 1 ? '✨' : '🎓'}</div>
-            <h2 className="level-graduation-title">
-              {graduatedTo === 1 ? 'Meet Your Essence Avatar' : `Level ${graduatedTo} Unlocked!`}
-            </h2>
+            <div className="level-graduation-emoji">🎓</div>
+            <h2 className="level-graduation-title">Level {graduatedTo} Unlocked!</h2>
             <p className="level-graduation-subtitle">
-              {graduatedTo === 1
-                ? "Your essence is now alive. Look for the figurine in the corner. It learns from your check-ins, your practices, and your courage. Tap it anytime."
-                : `You completed Level ${graduatedTo - 1}. Time for the next chapter.`
-              }
+              You completed Level {graduatedTo - 1}. Time for the next chapter.
             </p>
             <button className="level-graduation-btn" onClick={() => {
               setGraduatedTo(null)
               onLevelChange?.(graduatedTo)
             }}>
-              {graduatedTo === 1 ? "Let's go" : `Go to Level ${graduatedTo}`}
+              Go to Level {graduatedTo}
             </button>
           </div>
         </div>
