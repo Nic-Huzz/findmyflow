@@ -5,6 +5,10 @@
       "destination": "/vibe-rise-game.html"
     },
     {
+      "source": "/vibe-rise-game",
+      "destination": "/vibe-rise-game.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
