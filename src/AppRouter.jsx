@@ -486,8 +486,7 @@ function AIConsentGate() {
           setChecked(true)
         })
     } else {
-      // Not logged in — show consent for public AI flows
-      setShow(true)
+      // Not logged in — skip consent, only show for authenticated users
       setChecked(true)
     }
   }, [user?.id, authLoading, isTryRoute])
