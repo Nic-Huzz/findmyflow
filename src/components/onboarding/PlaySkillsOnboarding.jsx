@@ -32,8 +32,9 @@ const BEATS = {
 }
 
 const HOOK_SLIDES = [
-  { id: 'alive', text: 'I didn\'t come into this life to be a zoombie.', subtext: 'I came to have experiences that make me feel alive.\n\nTo make an impact.' },
-  { id: 'cta', text: 'Ready to make yours?', subtext: null },
+  { id: 'states', text: 'The state you live in decides the path you walk.', subtext: 'There are four states.', image: '/images/life-map-cropped.png' },
+  { id: 'school', text: 'School trained us to live in the bottom two:\nAnxious + Numb.', subtext: 'This app trains the top two:\nPeace + Vibe Rise.', goldSubtext: true },
+  { id: 'cta', text: 'So you live your ambitions faster.', subtext: 'Ready?' },
 ]
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -214,13 +215,30 @@ export default function PlaySkillsOnboarding() {
         </div>
         <div className="jo-hook-content">
           <div className="jo-hook-text-container">
-            <h1 className="jo-hook-text" key={slide.id}>{slide.text}</h1>
+            <h1 className="jo-hook-text" key={slide.id} style={slide.goldSubtext ? { color: 'rgba(255,255,255,0.85)', fontSize: '1.15rem', fontWeight: 400 } : undefined}>
+              {slide.text.includes('\n') ? slide.text.split('\n').map((line, i) => <span key={i}>{line}{i < slide.text.split('\n').length - 1 && <br />}</span>) : slide.text}
+            </h1>
             {slide.subtext && (
-              <p className="jo-hook-subtext">
-                {slide.subtext.split('\n\n').map((para, i) => (
-                  <span key={i}>{para}{i < slide.subtext.split('\n\n').length - 1 && <><br /><br /></>}</span>
+              <p className="jo-hook-subtext" style={slide.goldSubtext ? { color: '#E9A23B', fontWeight: 700, fontSize: '2rem', lineHeight: 1.4 } : undefined}>
+                {slide.subtext.split('\n').map((line, i) => (
+                  <span key={i}>{line}{i < slide.subtext.split('\n').length - 1 && <br />}</span>
                 ))}
               </p>
+            )}
+            {slide.image && (
+              <div style={{ position: 'relative', width: '100%', maxWidth: 480, margin: '1.5rem auto 0' }}>
+                <img src={slide.image} alt="" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
+                <svg viewBox="0 0 1192 901" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+                  <rect x="415" y="210" width="190" height="134" fill="#b8b0e8" rx="0"/>
+                  <rect x="415" y="344" width="190" height="137" fill="#a8e6cf" rx="0"/>
+                  <rect x="415" y="481" width="190" height="176" fill="#f5deb3" rx="0"/>
+                  <rect x="415" y="657" width="190" height="163" fill="#d5d5d5" rx="0"/>
+                  <text x="510" y="290" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#3b1a8e" textAnchor="middle">Vibe Rise</text>
+                  <text x="510" y="430" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#065f46" textAnchor="middle">Peace</text>
+                  <text x="510" y="585" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#92400e" textAnchor="middle">Anxious</text>
+                  <text x="510" y="755" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#4b5563" textAnchor="middle">Shutdown</text>
+                </svg>
+              </div>
             )}
           </div>
         </div>
