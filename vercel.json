@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/Vibe-Rise-Game",
+      "destination": "/vibe-rise-game.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
