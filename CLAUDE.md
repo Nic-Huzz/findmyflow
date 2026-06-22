@@ -181,9 +181,9 @@ docs/                         # Documentation files
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
-**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`
+**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/inspiration`, `/create/pay-rent`, `/create/remarkable`, `/create/scale-income`, `/create/plays`, `/movement-makers` (Experience Library), `/event/:experienceId/checkin` (attendee check-in)
 
 **Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching)
 
@@ -201,11 +201,11 @@ docs/                         # Documentation files
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`
 
-**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share)
+**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/scope-map` (Scope Map diagnostic), `/shift-scorecard`, `/v/:shareToken` (public share)
 
 **CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
 
-**Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`
+**Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`, `/create/strike` → `/create/plays`
 
 ## Key Features
 
@@ -402,6 +402,9 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 
 ### Fantasy League
 `fantasy_leagues` | `fantasy_teams` | `fantasy_team_members` | `fantasy_matchups` | `league_content_submissions` | `league_content_reactions` | `league_signups`
+
+### Create Portal
+`experiences` (total_revenue, revenue_notes, pitch_next_offer, upsell_strategy, upsell_answers, downsell_strategy, downsell_answers) | `experience_attendees` (attended)
 
 ### Play Profile
 `founder_dna_results` | `founder_dna_sessions`
