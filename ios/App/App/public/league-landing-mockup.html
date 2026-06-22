@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Fantasy League - Landing Mockup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --brand-purple: #5e17eb;
+    --brand-gold: #E9A23B;
+    --text-primary: #1a1a2e;
+    --text-secondary: #6c757d;
+    --text-muted: #adb5bd;
+    --surface: #ffffff;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #fafafa;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .league-overview {
+    min-height: 100vh;
+    padding: 24px 20px;
+    padding-top: 72px;
+    padding-bottom: 80px;
+    max-width: 480px;
+    margin: 0 auto;
+    overflow-x: hidden;
+  }
+
+  /* === TOOLBAR === */
+  .lo-toolbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    border-bottom: 1px solid #dee2e6;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .lo-back {
+    position: absolute;
+    left: 16px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--brand-purple);
+    cursor: pointer;
+    padding: 8px;
+    margin: -8px;
+    line-height: 1;
+  }
+
+  .lo-toolbar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.3px;
+  }
+
+  /* === GOLD CTA === */
+  .lo-cta {
+    width: 100%;
+    background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+    color: #1a1a2e;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+    transition: transform 0.2s;
+    font-family: inherit;
+  }
+
+  .lo-cta:active { transform: scale(0.97); }
+  .lo-cta:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* === HERO === */
+  .lo-land-hero {
+    text-align: center;
+    padding: 40px 0 32px;
+  }
+
+  .lo-land-eyebrow {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--brand-purple);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+  }
+
+  .lo-land-h1 {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin: 0 0 16px;
+    color: var(--text-primary);
+  }
+
+  .lo-land-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 24px;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* === SECTIONS === */
+  .lo-land-section {
+    padding: 32px 0;
+    border-top: 1px solid #e9ecef;
+  }
+
+  .lo-land-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--brand-purple);
+    text-align: center;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+  }
+
+  .lo-land-h2 {
+    font-size: 22px;
+    font-weight: 900;
+    text-align: center;
+    letter-spacing: -0.3px;
+    margin: 0 0 8px;
+    color: var(--text-primary);
+  }
+
+  .lo-land-muted {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin: 0 0 24px;
+    line-height: 1.5;
+  }
+
+  /* === WHY IT WORKS === */
+  .lo-land-sells {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lo-land-sell {
+    text-align: center;
+    padding: 20px 16px;
+    background: var(--surface);
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+  }
+
+  .lo-land-sell-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .lo-land-sell h3 {
+    font-size: 15px;
+    font-weight: 800;
+    margin: 0 0 6px;
+    color: var(--text-primary);
+  }
+
+  .lo-land-sell p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* === SCOREBOARD === */
+  .lo-land-scoreboard {
+    background: var(--surface);
+    border: 1px solid #e9ecef;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .lo-land-sc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+  }
+
+  .lo-land-sc-vs {
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+
+  .lo-land-sc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-top: 1px solid #f1f3f5;
+  }
+
+  .lo-land-sc-score {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-secondary);
+    min-width: 40px;
+  }
+
+  .lo-land-sc-score:first-child { text-align: left; }
+  .lo-land-sc-score:last-child { text-align: right; }
+
+  .lo-land-sc-win {
+    color: var(--brand-purple);
+    font-weight: 900;
+  }
+
+  .lo-land-sc-cat {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: center;
+    flex: 1;
+  }
+
+  .lo-land-sc-result {
+    text-align: center;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(94, 23, 235, 0.04) 0%, rgba(233, 162, 59, 0.06) 100%);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--brand-purple);
+  }
+
+  /* === SEASON DETAILS === */
+  .lo-land-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .lo-land-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 16px 12px;
+    background: var(--surface);
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    gap: 4px;
+  }
+
+  .lo-land-detail-emoji {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+
+  .lo-land-detail-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .lo-land-detail-value {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  /* === EXPRESS INTEREST === */
+  .lo-land-interest {
+    text-align: center;
+  }
+
+  .lo-land-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .lo-land-input {
+    width: 100%;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 16px;
+    font-family: inherit;
+    color: var(--text-primary);
+    box-sizing: border-box;
+    transition: all 0.2s;
+  }
+
+  .lo-land-input:focus {
+    outline: none;
+    border-color: var(--brand-purple);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+  }
+
+  /* === SUCCESS === */
+  .lo-land-success {
+    text-align: center;
+    padding: 24px 0;
+    display: none;
+  }
+
+  .lo-land-success-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .lo-land-success h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 6px;
+    color: var(--text-primary);
+  }
+
+  .lo-land-success p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  /* Toggle for demo */
+  .lo-land-success.visible {
+    display: block;
+  }
+
+  .lo-land-form.hidden {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="league-overview">
+
+  <!-- Toolbar -->
+  <div class="lo-toolbar">
+    <button class="lo-back">&#8592;</button>
+    <h2 class="lo-toolbar-title">Fantasy League</h2>
+  </div>
+
+  <!-- Hero -->
+  <div class="lo-land-hero">
+    <p class="lo-land-eyebrow">SEASON 1</p>
+    <h1 class="lo-land-h1">Think Fantasy Football<br>For Your Growth.</h1>
+    <p class="lo-land-sub">
+      Compete head-to-head each week. Score points for practices, wahoos, and healing you're already doing.
+    </p>
+    <button class="lo-cta" onclick="document.getElementById('lo-interest').scrollIntoView({ behavior: 'smooth' })">
+      I'm In <span>&rarr;</span>
+    </button>
+  </div>
+
+  <!-- Why It Works -->
+  <div class="lo-land-section">
+    <p class="lo-land-label">WHY IT WORKS</p>
+    <h2 class="lo-land-h2">Making accountability fun.</h2>
+    <p class="lo-land-muted">You want to do these things anyway. This just makes it more fun.</p>
+    <div class="lo-land-sells">
+      <div class="lo-land-sell">
+        <span class="lo-land-sell-icon">&#127919;</span>
+        <h3>Score points for what you're already doing</h3>
+        <p>Now every action earns you Rise Points.</p>
+      </div>
+      <div class="lo-land-sell">
+        <span class="lo-land-sell-icon">&#129309;</span>
+        <h3>Connect with like-minded legends</h3>
+        <p>You're not doing this alone. Play alongside people on the same path.</p>
+      </div>
+      <div class="lo-land-sell">
+        <span class="lo-land-sell-icon">&#128293;</span>
+        <h3>Compete head-to-head each week</h3>
+        <p>You vs another player. Who doesn't love to win?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example Scoreboard -->
+  <div class="lo-land-section">
+    <p class="lo-land-label">EXAMPLE SCOREBOARD</p>
+    <p class="lo-land-muted">Score more in 2 of 3 categories to win the week.</p>
+    <div class="lo-land-scoreboard">
+      <div class="lo-land-sc-header">
+        <span>Comfort Crushers</span>
+        <span class="lo-land-sc-vs">VS</span>
+        <span>Flow Finders</span>
+      </div>
+      <!-- Tune -->
+      <div class="lo-land-sc-row">
+        <span class="lo-land-sc-score">145</span>
+        <span class="lo-land-sc-cat">&#9728;&#65039; Tune</span>
+        <span class="lo-land-sc-score lo-land-sc-win">162</span>
+      </div>
+      <!-- Wahoos -->
+      <div class="lo-land-sc-row">
+        <span class="lo-land-sc-score lo-land-sc-win">89</span>
+        <span class="lo-land-sc-cat">&#128293; Wahoos</span>
+        <span class="lo-land-sc-score">67</span>
+      </div>
+      <!-- Healing -->
+      <div class="lo-land-sc-row">
+        <span class="lo-land-sc-score lo-land-sc-win">85</span>
+        <span class="lo-land-sc-cat">&#128154; Healing</span>
+        <span class="lo-land-sc-score">70</span>
+      </div>
+      <div class="lo-land-sc-result">Comfort Crushers win 2-1 &#127942;</div>
+    </div>
+  </div>
+
+  <!-- Season Details -->
+  <div class="lo-land-section">
+    <p class="lo-land-label">SEASON 1</p>
+    <h2 class="lo-land-h2">Season Details</h2>
+    <div class="lo-land-details">
+      <div class="lo-land-detail">
+        <span class="lo-land-detail-emoji">&#128197;</span>
+        <span class="lo-land-detail-label">Duration</span>
+        <span class="lo-land-detail-value">4 weeks</span>
+      </div>
+      <div class="lo-land-detail">
+        <span class="lo-land-detail-emoji">&#9876;&#65039;</span>
+        <span class="lo-land-detail-label">Format</span>
+        <span class="lo-land-detail-value">Weekly matchup</span>
+      </div>
+      <div class="lo-land-detail">
+        <span class="lo-land-detail-emoji">&#128241;</span>
+        <span class="lo-land-detail-label">Platform</span>
+        <span class="lo-land-detail-value">Vibe Rise app</span>
+      </div>
+      <div class="lo-land-detail">
+        <span class="lo-land-detail-emoji">&#127942;</span>
+        <span class="lo-land-detail-label">Prize</span>
+        <span class="lo-land-detail-value">Bragging rights</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Express Interest -->
+  <div class="lo-land-section lo-land-interest" id="lo-interest">
+    <p class="lo-land-label" id="interest-label">JOIN</p>
+    <h2 class="lo-land-h2" id="interest-h2">Express your interest.</h2>
+    <p class="lo-land-muted" id="interest-muted">Tap below and Nic will confirm your spot.</p>
+    <div class="lo-land-form" id="interest-form">
+      <button class="lo-cta" onclick="handleSubmit(event)">I'm Interested &rarr;</button>
+    </div>
+    <div class="lo-land-success" id="interest-success">
+      <span class="lo-land-success-icon">&#127942;</span>
+      <h3>Interest received.</h3>
+      <p>Nic will confirm your spot shortly.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('interest-form').classList.add('hidden');
+  document.getElementById('interest-label').style.display = 'none';
+  document.getElementById('interest-h2').style.display = 'none';
+  document.getElementById('interest-muted').style.display = 'none';
+  document.getElementById('interest-success').classList.add('visible');
+}
+</script>
+
+</body>
+</html>

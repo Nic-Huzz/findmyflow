@@ -1,0 +1,1 @@
+import{s as a}from"./index-BVCI1RSX.js";async function i({userId:o,projectId:t,flowType:s,flowVersion:e="v1"}){try{await a.from("flow_sessions").insert({user_id:o,project_id:t||null,flow_type:s,flow_version:e,status:"completed",last_step_id:"complete"})}catch(r){console.warn("Flow tracking failed:",r)}}export{i as t};

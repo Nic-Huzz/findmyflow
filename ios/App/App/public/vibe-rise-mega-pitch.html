@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Rise League — The Full Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#06030f;
+    --char:#120d1e;
+    --purple:#5e17eb;
+    --purple-bright:#8b5cf6;
+    --purple-dim:#3b0f94;
+    --gold:#E9A23B;
+    --gold-bright:#f5c45a;
+    --gold-dim:#a67820;
+    --bone:#efe6d4;
+    --bone-dim:#b7ad99;
+    --green:#34d399;
+    --silver:#9ca3af;
+    --white:#ffffff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{
+    height:100%;background:var(--ink);color:var(--bone);
+    font-family:'Inter',system-ui,sans-serif;overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* film grain + vignette */
+  body::before{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;background:radial-gradient(ellipse 120% 90% at 50% 50%, transparent 40%, rgba(0,0,0,.45) 100%);mix-blend-mode:multiply;}
+  body::after{content:"";position:fixed;inset:-50%;z-index:91;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(4) infinite;}
+  @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-2%)}100%{transform:translate(2%,2%)}}
+
+  /* deck + slides */
+  #deck{position:fixed;inset:0;}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:6vmin 8vmin;opacity:0;visibility:hidden;transition:opacity .7s ease;text-align:center;background:var(--ink);}
+  .slide.active{opacity:1;visibility:visible;z-index:2;}
+  .slide.active .reveal{animation:rise .9s cubic-bezier(.16,1,.3,1) both;}
+  .slide.active .reveal:nth-child(1){animation-delay:.15s}
+  .slide.active .reveal:nth-child(2){animation-delay:.35s}
+  .slide.active .reveal:nth-child(3){animation-delay:.55s}
+  .slide.active .reveal:nth-child(4){animation-delay:.75s}
+  .slide.active .reveal:nth-child(5){animation-delay:.95s}
+  .slide.active .reveal:nth-child(6){animation-delay:1.15s}
+  .slide.active .reveal:nth-child(7){animation-delay:1.35s}
+  @keyframes rise{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+
+  /* typography */
+  .kicker{font-family:'Inter',sans-serif;font-weight:600;letter-spacing:.42em;text-transform:uppercase;font-size:clamp(.62rem,1.1vw,.82rem);color:var(--gold);margin-bottom:2.4vmin;}
+  .kicker.purple{color:var(--purple-bright)}
+  h1.mega{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,16vw,14rem);line-height:.86;letter-spacing:.02em;color:var(--white);text-shadow:0 0 60px rgba(233,162,59,.2);}
+  h2.title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,6.5vw,5.5rem);line-height:.94;letter-spacing:.015em;color:var(--white);}
+  h2.title .gold{color:var(--gold-bright)}
+  h2.title .purple{color:var(--purple-bright)}
+  .flavour{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(1.3rem,3vw,2.3rem);line-height:1.35;color:var(--bone);max-width:28ch;margin:0 auto;}
+  .body{font-family:'Inter',sans-serif;font-weight:400;font-size:clamp(1rem,1.7vw,1.35rem);line-height:1.62;color:var(--bone-dim);max-width:36ch;margin:0 auto;}
+  .body strong{color:var(--bone);font-weight:600;}
+  .stack>*+*{margin-top:3vmin;}
+  .act{position:absolute;top:6vmin;left:50%;transform:translateX(-50%);font-family:'Inter';font-weight:700;letter-spacing:.4em;text-transform:uppercase;font-size:.6rem;color:var(--purple-dim);}
+
+  /* backgrounds */
+  .bg-warm{background:radial-gradient(circle at 30% 20%, rgba(233,162,59,.12), transparent 45%),radial-gradient(circle at 80% 90%, rgba(94,23,235,.08), transparent 50%),var(--ink);}
+  .bg-deep{background:radial-gradient(ellipse at 50% 70%, rgba(94,23,235,.22), transparent 55%),radial-gradient(circle at 50% 10%, rgba(20,8,30,.6), transparent 40%),#08031a;}
+  .bg-darkest{background:radial-gradient(ellipse at 50% 60%, #0e0520 0%, #04010a 70%);}
+  .bg-gold{background:radial-gradient(circle at 50% 40%, rgba(233,162,59,.18), transparent 55%),radial-gradient(circle at 30% 80%, rgba(94,23,235,.06), transparent 45%),var(--ink);}
+  .bg-fire{background:radial-gradient(circle at 50% 50%, rgba(233,162,59,.22), transparent 55%),radial-gradient(circle at 20% 80%, rgba(94,23,235,.12), transparent 50%),#08031a;}
+  .bg-matrix{background:radial-gradient(ellipse at 50% 50%, rgba(94,23,235,.18), transparent 60%),linear-gradient(180deg, #08031a 0%, #0a0510 100%);}
+  .bg-sport{background:radial-gradient(circle at 60% 30%, rgba(233,162,59,.14), transparent 50%),radial-gradient(circle at 30% 70%, rgba(94,23,235,.16), transparent 50%),var(--ink);}
+
+  /* two-column */
+  .split{display:grid;grid-template-columns:1.05fr .95fr;gap:7vmin;align-items:center;width:100%;max-width:1300px;text-align:left;}
+  .split .colL{display:flex;flex-direction:column;gap:2.4vmin;}
+  .split .body,.split .flavour{margin:0;}
+  .badge{display:inline-flex;align-items:center;gap:.6em;align-self:flex-start;border:1px solid var(--purple-dim);border-radius:2px;padding:.5em 1em;font-family:'Inter';font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:.66rem;color:var(--purple-bright);}
+  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--purple-bright);box-shadow:0 0 10px var(--purple-bright);}
+
+  /* chain / nodes */
+  .chain{display:flex;gap:clamp(1.2rem,4vw,3.2rem);align-items:center;justify-content:center;flex-wrap:wrap;}
+  .node{display:flex;flex-direction:column;align-items:center;gap:.8em;width:clamp(80px,11vw,120px);}
+  .node .orb{width:100%;aspect-ratio:1;border-radius:50%;border:1.5px solid var(--purple-dim);display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#140d1e,#080412);font-size:clamp(1.8rem,3vw,2.4rem);}
+  .node .name{font-family:'Bebas Neue';font-size:clamp(.85rem,1.7vw,1.2rem);color:var(--bone);letter-spacing:.04em;}
+  .node .sub{font-size:clamp(.6rem,1vw,.72rem);color:var(--bone-dim);line-height:1.3;text-align:center;max-width:14ch;}
+
+  /* monster cards */
+  .monster-row{display:flex;gap:2.2vmin;justify-content:center;flex-wrap:wrap;width:100%;max-width:1000px;margin-top:1vmin;}
+  .monster{flex:1;min-width:220px;max-width:320px;border:1px solid rgba(94,23,235,.25);border-radius:6px;padding:2.8vmin 2.2vmin;text-align:left;background:linear-gradient(160deg, rgba(94,23,235,.06), transparent);}
+  .monster .num{font-family:'Bebas Neue';font-size:.9rem;letter-spacing:.15em;color:var(--purple-bright);margin-bottom:.8em;}
+  .monster h4{font-family:'Bebas Neue';font-size:clamp(1.2rem,2.2vw,1.6rem);color:var(--gold-bright);letter-spacing:.03em;margin-bottom:.6em;}
+  .monster p{font-size:.82rem;line-height:1.55;color:var(--bone-dim);}
+
+  /* league scoring */
+  .league-row{display:flex;gap:2vmin;justify-content:center;align-items:stretch;flex-wrap:wrap;width:100%;max-width:800px;}
+  .league-cat{flex:1;min-width:180px;border:1px solid rgba(94,23,235,.25);border-radius:6px;padding:2vmin;text-align:center;background:linear-gradient(160deg, rgba(94,23,235,.05), transparent);}
+  .league-cat h4{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.04em;margin-bottom:.5em;}
+  .league-cat p{font-size:.78rem;line-height:1.5;color:var(--bone-dim);}
+  .league-cat.tune h4{color:var(--green);}
+  .league-cat.wahoo h4{color:var(--gold-bright);}
+  .league-cat.heal h4{color:var(--purple-bright);}
+
+  /* equation */
+  .equation{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.4rem,3.5vw,2.8rem);color:var(--gold-bright);letter-spacing:.04em;padding:2.5vmin 4vmin;border:1px solid rgba(233,162,59,.3);border-radius:4px;background:linear-gradient(160deg, rgba(233,162,59,.06), transparent);}
+  .equation .op{color:var(--bone-dim);font-family:'Inter';font-weight:400;font-size:.7em;}
+
+  /* flywheel */
+  .flywheel{display:flex;flex-wrap:wrap;gap:1.2vmin;justify-content:center;max-width:900px;margin:0 auto;}
+  .fly-step{font-family:'Bebas Neue';font-size:clamp(.85rem,1.5vw,1.1rem);letter-spacing:.04em;padding:.5em 1.2em;border-radius:3px;border:1px solid rgba(233,162,59,.2);color:var(--bone);background:rgba(233,162,59,.03);display:flex;align-items:center;gap:.6em;}
+  .fly-step .arrow{color:var(--gold-dim);font-size:.8em;}
+
+  /* week grid */
+  .week-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6vmin;width:100%;max-width:900px;margin-top:1vmin;}
+  .week-card{border:1px solid rgba(233,162,59,.15);border-radius:4px;padding:2vmin 1.8vmin;text-align:left;background:linear-gradient(160deg, rgba(233,162,59,.03), transparent);}
+  .week-card h4{font-family:'Bebas Neue';font-size:clamp(.95rem,1.8vw,1.3rem);color:var(--gold-bright);letter-spacing:.03em;margin-bottom:.6em;}
+  .week-card .prompt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;color:var(--bone);line-height:1.3;margin-top:.4em;}
+
+  /* package */
+  .package{display:flex;flex-direction:column;gap:1.2vmin;width:100%;max-width:600px;margin-top:1vmin;}
+  .pkg-item{display:flex;align-items:center;gap:1.4vmin;padding:1.4vmin 2vmin;border-left:3px solid var(--gold-dim);background:rgba(233,162,59,.03);}
+  .pkg-item .icon{font-size:1.3rem;}
+  .pkg-item .text{font-size:.9rem;color:var(--bone);line-height:1.4;}
+
+  /* narrative layers */
+  .layers{display:flex;flex-direction:column;gap:1.6vmin;width:100%;max-width:700px;margin-top:1vmin;}
+  .layer{display:flex;align-items:center;gap:2vmin;padding:2vmin 2.5vmin;border:1px solid rgba(94,23,235,.2);border-radius:4px;background:linear-gradient(160deg, rgba(94,23,235,.04), transparent);text-align:left;}
+  .layer .who{font-family:'Bebas Neue';font-size:clamp(1rem,2vw,1.4rem);letter-spacing:.05em;min-width:90px;}
+  .layer .what{font-size:.88rem;color:var(--bone-dim);line-height:1.4;}
+  .layer .what strong{color:var(--bone);font-weight:600;}
+
+  /* cards */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:2.2vmin;width:100%;max-width:1200px;margin-top:1vmin;}
+  .card{border:1px solid rgba(233,162,59,.2);border-radius:4px;background:linear-gradient(160deg, rgba(233,162,59,.04), rgba(0,0,0,0));padding:2.4vmin 2.2vmin;text-align:left;}
+  .card h4{font-family:'Bebas Neue';font-size:clamp(1.1rem,2.2vw,1.5rem);color:var(--gold-bright);letter-spacing:.03em;margin-bottom:.6em;}
+  .card p{font-size:.82rem;line-height:1.5;color:var(--bone-dim);}
+
+  /* video embed */
+  .video-wrap{width:100%;max-width:640px;margin:2vmin auto 0;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 40px rgba(0,0,0,.4);}
+  .video-wrap iframe{width:100%;aspect-ratio:16/9;display:block;border:none;}
+  .video-placeholder{width:100%;max-width:500px;aspect-ratio:9/16;margin:2vmin auto 0;border-radius:12px;border:2px dashed rgba(233,162,59,.25);background:rgba(233,162,59,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1vmin;}
+  .video-placeholder .ph-icon{font-size:clamp(2rem,4vw,3rem);opacity:.5;}
+  .video-placeholder .ph-text{font-size:clamp(.7rem,1.2vw,.9rem);color:var(--bone-dim);text-align:center;max-width:20ch;line-height:1.4;}
+
+  /* mock leaderboard */
+  .mock-lb{width:100%;max-width:420px;background:#0d0d1a;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;font-family:'Inter',sans-serif;}
+  .mock-lb-header{padding:12px 16px;background:linear-gradient(135deg,rgba(94,23,235,.15),rgba(233,162,59,.08));display:flex;justify-content:space-between;align-items:center;}
+  .mock-lb-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold-bright);}
+  .mock-lb-week{font-size:10px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.5px;}
+  .mock-lb-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04);}
+  .mock-lb-row:last-child{border-bottom:none;}
+  .mock-lb-rank{width:20px;font-size:14px;text-align:center;}
+  .mock-lb-team{flex:1;}
+  .mock-lb-name{font-size:12px;font-weight:700;color:rgba(255,255,255,.7);}
+  .mock-lb-record{font-size:10px;color:rgba(255,255,255,.3);margin-top:1px;}
+  .mock-lb-pts{font-size:14px;font-weight:800;color:var(--gold-bright);min-width:30px;text-align:right;}
+
+  /* mock matchup */
+  .mock-match{width:100%;max-width:420px;background:#0d0d1a;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;font-family:'Inter',sans-serif;}
+  .mock-match-header{padding:10px 16px;text-align:center;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.3);}
+  .mock-match-teams{display:flex;align-items:center;justify-content:center;gap:16px;padding:0 16px 12px;}
+  .mock-match-team{text-align:center;flex:1;}
+  .mock-match-name{font-size:11px;font-weight:700;color:rgba(255,255,255,.5);}
+  .mock-match-score{font-size:28px;font-weight:900;margin-top:2px;}
+  .mock-match-vs{font-size:12px;font-weight:700;color:rgba(255,255,255,.15);}
+  .mock-match-bars{padding:0 16px 14px;}
+  .mock-match-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+  .mock-match-bar:last-child{margin-bottom:0;}
+  .mock-match-cat{font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;width:50px;text-align:right;}
+  .mock-match-track{flex:1;height:5px;background:rgba(255,255,255,.04);border-radius:3px;display:flex;overflow:hidden;}
+  .mock-match-fill{height:100%;border-radius:3px;transition:width 1.4s cubic-bezier(.16,1,.3,1);width:0;}
+  .slide.active .mock-match-fill{width:var(--w);}
+  .mock-match-live{display:inline-block;padding:2px 8px;border-radius:4px;background:rgba(226,59,46,.15);color:#e23b2e;font-size:9px;font-weight:800;letter-spacing:1px;margin-left:8px;animation:livepulse 2s ease infinite;}
+  @keyframes livepulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* mock visuals layout */
+  .mock-row{display:flex;gap:2.5vmin;justify-content:center;align-items:flex-start;flex-wrap:wrap;width:100%;max-width:900px;margin-top:1vmin;}
+
+  /* voice chips */
+  .voice-row{display:flex;gap:clamp(.8rem,2vw,1.6rem);justify-content:center;flex-wrap:wrap;margin:2vmin 0;}
+  .voice-chip{font-family:'Bebas Neue';font-size:clamp(1rem,2vw,1.4rem);letter-spacing:.06em;padding:.5em 1.2em;border-radius:3px;border:1px solid rgba(94,23,235,.3);color:var(--bone);background:rgba(94,23,235,.06);cursor:default;transition:.3s;}
+
+  /* quote */
+  .quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(1.4rem,3.2vw,2.5rem);line-height:1.3;color:var(--bone);max-width:22ch;margin:0 auto;position:relative;padding:0 1em;}
+  .quote::before,.quote::after{font-family:'Cormorant Garamond',serif;font-size:2em;color:var(--gold-dim);position:absolute;line-height:1;}
+  .quote::before{content:"\201C";left:-.2em;top:-.15em;}
+  .quote::after{content:"\201D";right:-.2em;bottom:-.3em;}
+
+  /* CTA */
+  .cta-btn{display:inline-flex;align-items:center;gap:.8em;font-family:'Bebas Neue';font-size:clamp(1.3rem,3vw,2rem);letter-spacing:.08em;color:var(--ink);background:linear-gradient(135deg, var(--gold), var(--gold-bright));padding:.7em 2em;border-radius:4px;border:none;cursor:pointer;box-shadow:0 0 30px rgba(233,162,59,.3);transition:transform .2s, box-shadow .2s;text-decoration:none;}
+  .cta-btn:hover{transform:scale(1.04);box-shadow:0 0 50px rgba(233,162,59,.5);}
+
+  /* chrome */
+  #progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--gold-bright));z-index:100;transition:width .5s ease;box-shadow:0 0 12px rgba(94,23,235,.6);}
+  #counter{position:fixed;bottom:3.4vmin;right:4vmin;z-index:100;font-family:'Bebas Neue';letter-spacing:.12em;color:var(--bone-dim);font-size:1rem;}
+  #counter b{color:var(--gold-bright);}
+  #dots{position:fixed;bottom:3.6vmin;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:7px;}
+  #dots button{width:7px;height:7px;border-radius:50%;border:none;background:rgba(183,173,153,.32);cursor:pointer;padding:0;transition:.3s;}
+  #dots button.on{background:var(--gold);transform:scale(1.35);box-shadow:0 0 10px rgba(233,162,59,.5);}
+  #hint{position:fixed;bottom:3.4vmin;left:4vmin;z-index:100;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(183,173,153,.5);}
+  .navzone{position:fixed;top:0;bottom:0;width:18%;z-index:80;cursor:pointer;}
+  .navzone.left{left:0}.navzone.right{right:0}
+
+  @media(max-width:820px){
+    .split{grid-template-columns:1fr;gap:3vmin;text-align:center;}
+    .split .colL{align-items:center;}
+    .cards{grid-template-columns:1fr;}
+    .league-row{flex-direction:column;align-items:center;}
+    .league-cat{min-width:0;width:100%;max-width:320px;}
+    .week-grid{grid-template-columns:1fr 1fr;}
+    .monster-row{flex-direction:column;align-items:center;}
+    .monster{min-width:0;width:100%;max-width:400px;}
+    .chain{gap:clamp(.8rem,3vw,1.6rem);}
+    .node{width:clamp(60px,16vw,90px);}
+    .node .sub{display:none;}
+    #hint{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div class="navzone left" onclick="prev()"></div>
+<div class="navzone right" onclick="next()"></div>
+
+<div id="deck">
+
+  <!-- ═══════════ 1. HOOK ═══════════ -->
+
+  <section class="slide bg-warm">
+    <div class="stack" style="max-width:740px">
+      <p class="flavour reveal">The gap between your dream of delivering global experiences and today?</p>
+      <h2 class="title reveal">THE NUMBER OF<br>PEOPLE WHO<br><span class="gold">KNOW ABOUT YOU.</span></h2>
+    </div>
+  </section>
+
+  <!-- ═══════════ 2. VILLAIN: THE GAP ═══════════ -->
+
+  <section class="slide bg-darkest">
+    <div class="stack" style="max-width:720px">
+      <p class="body reveal">Delivering experiences and marketing them are <strong>two separate skills.</strong> Nobody taught you the second one.</p>
+      <h2 class="title reveal">SO YOU WATCH OTHERS<br><span class="purple">BLOW UP</span></h2>
+      <p class="body reveal"><strong>and know your experiences are even better.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 4. VILLAIN: THE MATRIX ═══════════ -->
+
+  <section class="slide bg-matrix">
+    <div class="stack" style="max-width:720px">
+      <p class="kicker purple reveal">But here's the deeper reason</p>
+      <h2 class="title reveal">THE <span class="purple">MATRIX.</span></h2>
+      <p class="body reveal">The system that shaped you before you could choose. School. Work. Family. Culture.</p>
+      <p class="body reveal"><strong>It didn't just shape your clients. It shaped you too.</strong> And it installed patterns that keep your movement small.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 5. MONSTERS: DEFENCE PATTERNS FOR CREATORS ═══════════ -->
+
+  <section class="slide bg-matrix">
+    <div class="act">The Defence Patterns</div>
+    <div class="stack" style="max-width:1100px;width:100%">
+      <h2 class="title reveal">IT INSTALLED FIVE<br><span class="gold">PATTERNS.</span></h2>
+      <div class="chain reveal">
+        <div class="node"><div class="orb">🧱</div><span class="name">Controller</span><span class="sub">Overworks. Never markets.</span></div>
+        <div class="node"><div class="orb">🤝</div><span class="name">People Pleaser</span><span class="sub">Undercharges. Gives it all away.</span></div>
+        <div class="node"><div class="orb">🤖</div><span class="name">Auto-Pilot</span><span class="sub">Same 10 people. Every event.</span></div>
+        <div class="node"><div class="orb">🎯</div><span class="name">Perfectionist</span><span class="sub">Never launches. Not ready yet.</span></div>
+        <div class="node"><div class="orb">👻</div><span class="name">Ghost</span><span class="sub">Avoids visibility. Hides.</span></div>
+      </div>
+      <p class="body reveal" style="margin-top:3vmin">They kept you safe once. <strong>Now they keep your movement invisible.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 6. MYSTERY: YOUR ESSENCE VOICE ═══════════ -->
+
+  <section class="slide bg-gold">
+    <div class="stack" style="max-width:720px">
+      <p class="kicker reveal">Before the Matrix shaped you</p>
+      <h2 class="title reveal">YOU HAD A <span class="gold">VOICE.</span></h2>
+      <p class="body reveal">Your Essence Voice. The person you were before the world told you who to be.</p>
+      <p class="flavour reveal">It's the reason you became<br>a Movement Maker in the first place.</p>
+      <p class="body reveal"><strong>It's still in there. Buried under the defence patterns. Waiting.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 7. WHAT IF ═══════════ -->
+
+  <section class="slide bg-warm">
+    <div class="stack" style="max-width:740px">
+      <h2 class="title reveal">WHAT <span class="gold">IF...</span></h2>
+    </div>
+  </section>
+
+  <!-- ═══════════ 8. THREE SOLVES ═══════════ -->
+
+  <section class="slide bg-fire">
+    <div class="stack" style="max-width:1000px;width:100%">
+      <div class="monster-row reveal">
+        <div class="monster" style="border-color:rgba(233,162,59,.3);background:linear-gradient(160deg, rgba(233,162,59,.06), transparent);">
+          <div class="num" style="color:var(--gold)">01</div>
+          <h4>We create a game around growth</h4>
+          <p>Weekly matchups. Real opponents. A scoreboard that makes showing up non-negotiable. The patterns can't hide when there's a game to play.</p>
+        </div>
+        <div class="monster" style="border-color:rgba(233,162,59,.3);background:linear-gradient(160deg, rgba(233,162,59,.06), transparent);">
+          <div class="num" style="color:var(--gold)">02</div>
+          <h4>We turn it into a content series</h4>
+          <p>Every action you take becomes a piece of content. Filmed, edited, posted. Your journey IS the show your audience follows.</p>
+        </div>
+        <div class="monster" style="border-color:rgba(233,162,59,.3);background:linear-gradient(160deg, rgba(233,162,59,.06), transparent);">
+          <div class="num" style="color:var(--gold)">03</div>
+          <h4>The game + content grows your movement</h4>
+          <p>More content, more visibility. More visibility, more people at your events. The game fuels itself.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 9. DTS ═══════════ -->
+
+  <section class="slide bg-fire">
+    <div class="stack" style="max-width:760px">
+      <p class="kicker reveal">Think</p>
+      <h2 class="title reveal">DRIVE TO <span class="gold">SURVIVE</span><br>FOR GROWING<br>YOUR <span class="gold">MOVEMENT.</span></h2>
+      <div class="video-wrap reveal">
+        <iframe src="https://www.youtube.com/embed/wtJPe1ksS6E?rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <p class="body reveal">73 million new fans. Most had never watched a race. <strong>The stories made it matter.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 10. YOU FILM, WE EDIT ═══════════ -->
+
+  <section class="slide bg-darkest">
+    <div class="act">The Secret Weapon</div>
+    <div class="stack" style="max-width:700px;width:100%">
+      <h2 class="title reveal">YOU FILM IT.<br>WE <span class="gold">EDIT</span> IT.</h2>
+      <p class="body reveal">You capture the moments. An editing team turns them into polished, branded content. Every week.</p>
+      <div class="package reveal">
+        <div class="pkg-item"><span class="icon">&#127909;</span><span class="text">Dump raw footage weekly. Get back ready-to-post content.</span></div>
+        <div class="pkg-item"><span class="icon">&#128196;</span><span class="text">Prompts and templates so you always know what to film.</span></div>
+        <div class="pkg-item"><span class="icon">&#127942;</span><span class="text">Real opponents. Live scoring. Weekly matchups.</span></div>
+        <div class="pkg-item"><span class="icon">&#128640;</span><span class="text">Weekly highlight reel featuring the best moments from all players.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 11. TITLE CARD ═══════════ -->
+
+  <section class="slide bg-deep">
+    <div class="stack">
+      <p class="kicker reveal">Introducing</p>
+      <h1 class="mega reveal">VIBE RISE<br><span style="color:var(--gold-bright)">LEAGUE</span></h1>
+      <p class="flavour reveal">Grow yourself. Grow your brand.<br>Grow your movement. All at once.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 12. THREE WEAPONS ═══════════ -->
+
+  <section class="slide bg-deep">
+    <div class="act">Your Three Weapons</div>
+    <div class="stack" style="max-width:900px;width:100%">
+      <h2 class="title reveal">THREE <span class="gold">CATEGORIES.</span></h2>
+      <div class="league-row reveal">
+        <div class="league-cat tune"><h4>&#9728;&#65039; Tune</h4><p>Daily practices that regulate your nervous system and quiet the defence patterns. <strong>Consistency wins.</strong></p></div>
+        <div class="league-cat wahoo"><h4>&#128293; Wahoo</h4><p>Courage challenges that build your business. The things the Ghost, Perfectionist, and Controller don't want you to do. <strong>Bravery wins.</strong></p></div>
+        <div class="league-cat heal"><h4>&#128156; Healing</h4><p>Repair work. Process the patterns keeping you stuck. Recognise, Release, Rewire. <strong>Depth wins.</strong></p></div>
+      </div>
+      <p class="body reveal" style="margin-top:2vmin">Win 2 of 3 categories each week = <strong>Win the matchup.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 13. MOCK LEADERBOARD + MATCHUP ═══════════ -->
+
+  <section class="slide bg-sport">
+    <div class="act">Inside The League</div>
+    <div class="stack" style="max-width:900px;width:100%">
+      <h2 class="title reveal">LIVE <span class="gold">SCORES.</span> REAL <span class="gold">STAKES.</span></h2>
+      <div class="mock-row reveal">
+
+        <!-- Matchup -->
+        <div class="mock-match">
+          <div class="mock-match-header">Week 3 Matchup <span class="mock-match-live">LIVE</span></div>
+          <div class="mock-match-teams">
+            <div class="mock-match-team">
+              <div class="mock-match-name">Team Firewalkers</div>
+              <div class="mock-match-score" style="color:var(--purple-bright)">2</div>
+            </div>
+            <div class="mock-match-vs">VS</div>
+            <div class="mock-match-team">
+              <div class="mock-match-name">Team Vibe Tribe</div>
+              <div class="mock-match-score" style="color:var(--gold-bright)">1</div>
+            </div>
+          </div>
+          <div class="mock-match-bars">
+            <div class="mock-match-bar"><span class="mock-match-cat" style="color:var(--green)">Tune</span><div class="mock-match-track"><div class="mock-match-fill" style="--w:62%;background:var(--green)"></div></div></div>
+            <div class="mock-match-bar"><span class="mock-match-cat" style="color:var(--gold-bright)">Wahoo</span><div class="mock-match-track"><div class="mock-match-fill" style="--w:45%;background:var(--gold-bright)"></div></div></div>
+            <div class="mock-match-bar"><span class="mock-match-cat" style="color:var(--purple-bright)">Healing</span><div class="mock-match-track"><div class="mock-match-fill" style="--w:71%;background:var(--purple-bright)"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="mock-lb">
+          <div class="mock-lb-header">
+            <div class="mock-lb-title">Season 1 Standings</div>
+            <div class="mock-lb-week">Week 3 of 4</div>
+          </div>
+          <div class="mock-lb-row">
+            <div class="mock-lb-rank">&#129351;</div>
+            <div class="mock-lb-team"><div class="mock-lb-name">Team Firewalkers</div><div class="mock-lb-record">2W 1D 0L</div></div>
+            <div class="mock-lb-pts">7</div>
+          </div>
+          <div class="mock-lb-row">
+            <div class="mock-lb-rank">&#129352;</div>
+            <div class="mock-lb-team"><div class="mock-lb-name">Team Vibe Tribe</div><div class="mock-lb-record">2W 0D 1L</div></div>
+            <div class="mock-lb-pts">6</div>
+          </div>
+          <div class="mock-lb-row">
+            <div class="mock-lb-rank">&#129353;</div>
+            <div class="mock-lb-team"><div class="mock-lb-name">Team Deep Breathers</div><div class="mock-lb-record">1W 1D 1L</div></div>
+            <div class="mock-lb-pts">4</div>
+          </div>
+          <div class="mock-lb-row">
+            <div class="mock-lb-rank" style="color:rgba(255,255,255,.2)">4</div>
+            <div class="mock-lb-team"><div class="mock-lb-name">Team Essence Rising</div><div class="mock-lb-record">0W 2D 1L</div></div>
+            <div class="mock-lb-pts">2</div>
+          </div>
+        </div>
+
+      </div>
+      <p class="flavour reveal" style="margin-top:2vmin">Lead changes trigger notifications.<br>Your opponent just pulled ahead in Healing.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 14. WAHOO ARC — PROOF ═══════════ -->
+
+  <section class="slide bg-gold">
+    <div class="act">What This Looks Like</div>
+    <div class="split" style="max-width:1100px">
+      <div class="colL">
+        <h2 class="title reveal">ONE <span class="gold">WAHOO</span><br>AT A TIME.</h2>
+        <div class="reveal" style="display:flex;flex-direction:column;gap:1vmin">
+          <div class="fly-step" style="justify-content:flex-start">&#127754; 4 people at Bondi Beach</div>
+          <div class="fly-step" style="justify-content:flex-start">&#127754; 20 people at Bondi Beach</div>
+          <div class="fly-step" style="justify-content:flex-start">&#127963;&#65039; 20 people at the Opera House</div>
+          <div class="fly-step" style="justify-content:flex-start">&#127796; 30 people in Thailand</div>
+          <div class="fly-step" style="justify-content:flex-start">&#127796; 50 people in Bali</div>
+          <div class="fly-step" style="justify-content:flex-start;border-color:var(--gold-dim);color:var(--gold-bright)">&#127878; 150 people at a festival</div>
+        </div>
+        <p class="flavour reveal">Each one was terrifying.<br>Each one grew the movement.</p>
+      </div>
+      <div class="colR reveal" style="display:flex;justify-content:center">
+        <div class="video-placeholder">
+          <div class="ph-icon">&#127909;</div>
+          <div class="ph-text">Your first Wahoo reel goes here</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 14. CONTENT MAP ═══════════ -->
+
+  <section class="slide bg-warm">
+    <div class="act">The Content</div>
+    <div class="stack" style="max-width:1000px;width:100%">
+      <h2 class="title reveal">YOUR <span class="gold">CONTENT MAP.</span></h2>
+      <p class="body reveal">Each week has a theme. Every piece of content builds your business.</p>
+      <div class="week-grid reveal">
+        <div class="week-card">
+          <h4>Week 1: Pay Rent</h4>
+          <p class="prompt">"How I fund while I build"</p>
+          <p class="prompt">"What I was doing before anyone noticed"</p>
+          <p class="prompt">"My day job isn't a failure, it's a strategy"</p>
+        </div>
+        <div class="week-card">
+          <h4>Week 2: Blow Up</h4>
+          <p class="prompt">"The rule I'm breaking"</p>
+          <p class="prompt">"Two worlds that shouldn't mix, but do in me"</p>
+          <p class="prompt">"This is my tribe"</p>
+        </div>
+        <div class="week-card">
+          <h4>Week 3: Scale</h4>
+          <p class="prompt">"What I give away for free"</p>
+          <p class="prompt">"What I charge for and why"</p>
+          <p class="prompt">"How this becomes a business"</p>
+        </div>
+        <div class="week-card">
+          <h4>Week 4: Launch</h4>
+          <p class="prompt">"Before vs now"</p>
+          <p class="prompt">"My first paid experience"</p>
+          <p class="prompt">"What's next for my movement"</p>
+        </div>
+      </div>
+      <p class="body reveal" style="margin-top:2vmin"><strong>Every piece of content also builds your business. That's the point.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 16. FLYWHEEL ═══════════ -->
+
+  <section class="slide bg-fire">
+    <div class="act">The Engine</div>
+    <div class="stack" style="max-width:900px;width:100%">
+      <h2 class="title reveal">THE <span class="gold">FLYWHEEL.</span></h2>
+      <div class="flywheel reveal">
+        <div class="fly-step">You compete <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">You document it <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">It becomes content <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">Your audience grows <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">Your events fill <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">You earn league points <span class="arrow">&rarr;</span></div>
+        <div class="fly-step">Better matchup <span class="arrow">&rarr;</span></div>
+        <div class="fly-step" style="border-color:var(--gold-dim);color:var(--gold-bright)">Better story &circlearrowleft;</div>
+      </div>
+      <p class="body reveal" style="margin-top:2vmin"><strong>Every action serves three purposes at once.</strong></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 17. TWO NARRATIVE LAYERS ═══════════ -->
+
+  <section class="slide bg-warm">
+    <div class="act">The Narrative</div>
+    <div class="stack" style="max-width:800px;width:100%">
+      <h2 class="title reveal">TWO LAYERS OF<br><span class="gold">STORY.</span></h2>
+      <div class="layers reveal">
+        <div class="layer">
+          <div class="who" style="color:var(--gold-bright)">You</div>
+          <div class="what">Post daily. Document your Wahoos, practices, breakthroughs. <strong>You are the main character of your own feed.</strong></div>
+        </div>
+        <div class="layer">
+          <div class="who" style="color:var(--purple-bright)">Huzz</div>
+          <div class="what">Weekly reviews. Match results, upsets, Wahoo of the Week. <strong>The commentator who weaves the league narrative.</strong></div>
+        </div>
+      </div>
+      <p class="flavour reveal" style="margin-top:2vmin">You tell your story.<br>I tell the league's story.<br>Your audience watches both.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 18. ACTIVATION ═══════════ -->
+
+  <section class="slide bg-matrix">
+    <div class="stack" style="max-width:700px">
+      <h2 class="title reveal">WHICH PATTERN IS<br>KEEPING YOUR<br>MOVEMENT <span class="gold">SMALL?</span></h2>
+      <div class="voice-row reveal">
+        <div class="voice-chip">Controller</div>
+        <div class="voice-chip">People Pleaser</div>
+        <div class="voice-chip">Auto-Pilot</div>
+        <div class="voice-chip">Perfectionist</div>
+        <div class="voice-chip">Ghost</div>
+      </div>
+      <p class="body reveal"><strong>You already know.</strong></p>
+      <p class="flavour reveal">That pattern doesn't drive anymore.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ 19. STAKES ═══════════ -->
+
+  <section class="slide bg-gold">
+    <div class="act">In Four Weeks</div>
+    <div class="stack" style="max-width:800px;width:100%">
+      <h2 class="title reveal">WHAT YOU <span class="gold">WALK AWAY</span> WITH.</h2>
+      <div class="cards reveal">
+        <div class="card">
+          <h4>&#9889; Real Shifts</h4>
+          <p>The defence patterns quieter. Your Essence Voice louder. Actual changes in how you feel, show up, and operate.</p>
+        </div>
+        <div class="card">
+          <h4>&#128248; 30+ Content Pieces</h4>
+          <p>Professionally edited. Ready to post. Documenting a real transformation, not another talking head about something you did last year.</p>
+        </div>
+        <div class="card">
+          <h4>&#127775; A Story People Follow</h4>
+          <p>You become a character in a league people are watching. Your audience grows because your journey is genuinely interesting.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 20. CHARGE ═══════════ -->
+
+  <section class="slide bg-fire">
+    <div class="stack" style="max-width:700px">
+      <p class="flavour reveal">Your essence voice has been waiting.</p>
+      <h2 class="title reveal">SO HAS YOUR<br><span class="gold">MOVEMENT.</span></h2>
+    </div>
+  </section>
+
+  <!-- ═══════════ 21. GO ═══════════ -->
+
+  <section class="slide bg-deep">
+    <div class="stack">
+      <p class="kicker reveal">Season 1</p>
+      <h2 class="title reveal" style="margin-top:1vmin">FOUR WEEKS.<br>LIMITED <span class="gold">SPOTS.</span></h2>
+      <p class="body reveal">Paid entry covers your editing team, league access, content templates, and weekly highlight reel.</p>
+      <p class="flavour reveal">The game starts when you do.</p>
+      <a class="cta-btn reveal" href="#">I'M IN</a>
+    </div>
+  </section>
+
+</div>
+
+<div id="dots"></div>
+<div id="counter"><b id="cur">01</b> / <span id="tot">20</span></div>
+<div id="hint">&larr; &rarr; or Space to navigate</div>
+
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+const dotsBox = document.getElementById('dots');
+const cur = document.getElementById('cur');
+const prog = document.getElementById('progress');
+document.getElementById('tot').textContent = String(slides.length).padStart(2,'0');
+let i = 0;
+slides.forEach((_,k) => { const b = document.createElement('button'); b.onclick = () => go(k); dotsBox.appendChild(b); });
+const dots = [...dotsBox.children];
+
+function go(n){
+  i = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach((s,k) => s.classList.toggle('active', k===i));
+  dots.forEach((d,k) => d.classList.toggle('on', k===i));
+  cur.textContent = String(i+1).padStart(2,'0');
+  prog.style.width = ((i+1)/slides.length*100)+'%';
+}
+function next(){ go(i+1); }
+function prev(){ go(i-1); }
+
+addEventListener('keydown', e => {
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){ e.preventDefault(); next(); }
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); prev(); }
+  if(e.key==='Home') go(0);
+  if(e.key==='End') go(slides.length-1);
+});
+
+let touchX = 0;
+addEventListener('touchstart', e => { touchX = e.changedTouches[0].screenX; }, {passive:true});
+addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].screenX - touchX;
+  if(Math.abs(dx) > 50){ dx < 0 ? next() : prev(); }
+}, {passive:true});
+
+go(0);
+</script>
+</body>
+</html>
