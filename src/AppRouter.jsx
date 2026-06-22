@@ -39,6 +39,7 @@ const PlaySkillsIdentifier = lazy(() => import('./flows/PlaySkillsIdentifier'))
 import IdentifyTopicsFlow from './flows/IdentifyTopicsFlow'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import EssenceIdentify from './pages/EssenceIdentify'
+import Unsubscribe from './pages/Unsubscribe'
 import ProtectiveIdentify from './pages/ProtectiveIdentify'
 
 // Lazy-load heavy pages — preloaded after initial render (see useEffect below)
@@ -453,11 +454,15 @@ function ConditionalBottomToolbar() {
 // Shows once per user before any AI features are reachable
 function AIConsentGate() {
   const { user, loading: authLoading } = useAuth()
+  const location = useLocation()
   const [show, setShow] = useState(false)
   const [checked, setChecked] = useState(false)
 
+  // Skip consent gate on /try/* routes — these are public lead magnets
+  const isTryRoute = location.pathname.startsWith('/try/')
+
   useEffect(() => {
-    if (authLoading) return
+    if (authLoading || isTryRoute) return
 
     // Fast local check first
     if (localStorage.getItem('ai_consent_given') === 'true') {
@@ -485,7 +490,7 @@ function AIConsentGate() {
       setShow(true)
       setChecked(true)
     }
-  }, [user?.id, authLoading])
+  }, [user?.id, authLoading, isTryRoute])
 
   if (!checked || !show) return null
 
@@ -552,6 +557,7 @@ function AppRouter() {
               <Route path="/essence-identify" element={<EssenceIdentify />} />
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
               <Route path="/log-in" element={IS_CREATOR ? <CreatorLogin /> : <PersonaAssessment />} />
+              <Route path="/unsubscribe" element={<Unsubscribe />} />
 
               {/* Play-Skills Identifier - Standalone */}
               <Route path="/play-skills-identifier" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PlaySkillsIdentifier /></Suspense></AuthGate>} />
