@@ -445,52 +445,10 @@
     </div>
 
     <div class="glass">
-      <h2>Your Protective Voice</h2>
+      <h2>The Dream</h2>
       <div class="field">
-        <label for="protectiveVoice">Read these and pick the one your body responds to most <span class="hint">— not which sounds like you, which one you FEEL</span></label>
-        <select id="protectiveVoice">
-          <option value="">Pick one...</option>
-          <option value="The Ghost">The Ghost — You disappear. You hide. You stay invisible. Being seen feels dangerous.</option>
-          <option value="The Controller">The Controller — You grip. You overwork. You micro-manage. If you control it, it won't fall apart.</option>
-          <option value="The Auto-Pilot">The Auto-Pilot — You go through the motions. Nobody's home. You've told yourself 'this is fine.' It's not.</option>
-          <option value="The Perfectionist">The Perfectionist — You prepare. You polish. You wait until it's perfect. Nothing is ever ready.</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="glass">
-      <h2>Your Story</h2>
-      <div class="field">
-        <label for="firstExperience">What's the earliest experience where you learned this pattern? <span class="hint">— the first time your body learned to freeze like this</span></label>
-        <textarea id="firstExperience" rows="2" placeholder="e.g. being shut down when I tried to express myself as a kid, watching my dad go quiet"></textarea>
-      </div>
-      <div class="field">
-        <label for="mismatchNic">What do you need to hear from someone safe that contradicts the old story? <span class="hint">— the thing your nervous system never got</span></label>
-        <textarea id="mismatchNic" rows="2" placeholder="e.g. You showed up. You let your guard down. And I'm still here. I didn't leave."></textarea>
-      </div>
-      <div class="field">
-        <label for="mismatchChild">What would you say to your younger self? <span class="hint">— the words that little version of you needed to hear</span></label>
-        <textarea id="mismatchChild" rows="2" placeholder="e.g. I'm here now. You're not alone anymore. You didn't do anything wrong."></textarea>
-      </div>
-    </div>
-
-    <div class="glass">
-      <h2>The Shift</h2>
-      <div class="field">
-        <label for="newStory">What does it look like when the freeze doesn't fire? <span class="hint">— describe the moment where you just... do the thing</span></label>
-        <textarea id="newStory" rows="3" placeholder="e.g. I wake up, I feel a pull toward something that excites me, and I just move toward it without overthinking. My body feels light, open."></textarea>
-      </div>
-    </div>
-
-    <div class="glass">
-      <h2>Between Sessions</h2>
-      <div class="field">
-        <label for="dailyChallenge">A small daily practice you're willing to try <span class="hint">— something you can do in 5 minutes</span></label>
-        <textarea id="dailyChallenge" rows="2" placeholder="e.g. 5 min body scan — notice where tension lives before social moments"></textarea>
-      </div>
-      <div class="field">
-        <label for="weeklyChallenge">A weekly stretch <span class="hint">— one action that gently pushes the edge</span></label>
-        <textarea id="weeklyChallenge" rows="2" placeholder="e.g. One real conversation — say one unfiltered thing to someone and notice what my body does"></textarea>
+        <label for="dreamAction">What's the action you dream of taking? <span class="hint">— the thing you'd do if the freeze didn't fire</span></label>
+        <textarea id="dreamAction" rows="3" placeholder="e.g. Wake up and choose joy before productivity. Dance around the kitchen. Start the thing I've been putting off."></textarea>
       </div>
     </div>
 
@@ -574,13 +532,7 @@ async function saveResponses() {
         action_scene: getVal('actionScene'),
         take_action: getVal('takeAction'),
         paint_picture: getVal('paintPicture'),
-        first_experience: getVal('firstExperience'),
-        mismatch_nic: getVal('mismatchNic'),
-        mismatch_child: getVal('mismatchChild'),
-        daily_challenge: getVal('dailyChallenge'),
-        weekly_challenge: getVal('weeklyChallenge'),
-        new_story: getVal('newStory'),
-        protective_voice: getVal('protectiveVoice')
+        new_story: getVal('dreamAction')
       })
     });
 
@@ -646,13 +598,7 @@ if (params.has('admin')) {
       document.getElementById('actionScene').value = r.action_scene || '';
       document.getElementById('takeAction').value = r.take_action || '';
       document.getElementById('paintPicture').value = r.paint_picture || '';
-      document.getElementById('firstExperience').value = r.first_experience || '';
-      document.getElementById('mismatchNic').value = r.mismatch_nic || '';
-      document.getElementById('mismatchChild').value = r.mismatch_child || '';
-      document.getElementById('dailyChallenge').value = r.daily_challenge || '';
-      document.getElementById('weeklyChallenge').value = r.weekly_challenge || '';
-      document.getElementById('newStory').value = r.new_story || '';
-      document.getElementById('protectiveVoice').value = r.protective_voice || '';
+      document.getElementById('dreamAction').value = r.new_story || '';
     };
 
     // Generate script button
@@ -676,13 +622,7 @@ if (params.has('admin')) {
           document.getElementById('actionScene').value = r.action_scene || '';
           document.getElementById('takeAction').value = r.take_action || '';
           document.getElementById('paintPicture').value = r.paint_picture || '';
-          document.getElementById('firstExperience').value = r.first_experience || '';
-          document.getElementById('mismatchNic').value = r.mismatch_nic || '';
-          document.getElementById('mismatchChild').value = r.mismatch_child || '';
-          document.getElementById('dailyChallenge').value = r.daily_challenge || '';
-          document.getElementById('weeklyChallenge').value = r.weekly_challenge || '';
-          document.getElementById('newStory').value = r.new_story || '';
-          document.getElementById('protectiveVoice').value = r.protective_voice || '';
+          document.getElementById('dreamAction').value = r.new_story || '';
         }
       }, 500);
     });
@@ -695,12 +635,7 @@ function fillExample() {
   document.getElementById('actionScene').value = 'sitting across from someone on a date, wanting to say the unfiltered thing';
   document.getElementById('takeAction').value = 'share an unfiltered truth — say the thing I have no idea how it will be received, instead of defaulting to my go-to lines';
   document.getElementById('paintPicture').value = "You're out. It's evening. You can hear music... conversations around you... the clink of glasses. The room is warm. There's people everywhere.";
-  document.getElementById('firstExperience').value = 'learned that being fully seen means being judged — that the unfiltered version gets rejected';
-  document.getElementById('mismatchNic').value = "You showed up. You let your guard down completely. And I'm still here. I didn't leave.";
-  document.getElementById('mismatchChild').value = "I'm here now. You're not alone anymore. You didn't do anything wrong.";
-  document.getElementById('dailyChallenge').value = '5 min body scan — notice where tension lives before social moments';
-  document.getElementById('weeklyChallenge').value = 'One unfiltered share — say one real thing to someone and notice what your body does';
-  document.getElementById('newStory').value = "I'm sitting across from someone. I feel the pull to say the real thing. And I just say it. My body stays open. I don't brace. And they're still there.";
+  document.getElementById('dreamAction').value = "Say the real thing. My body stays open. I don't brace. And they're still there.";
 }
 
 function generateScript() {
@@ -709,13 +644,8 @@ function generateScript() {
   const scene = getVal('actionScene') || '[ACTION SCENE]';
   const action = getVal('takeAction') || '[TAKE ACTION]';
   const picture = getVal('paintPicture') || '[PAINT PICTURE]';
-  const origin = getVal('firstExperience') || '[FIRST EXPERIENCE]';
-  const mNic = getVal('mismatchNic') || '[MISMATCH LINE]';
-  const mChild = getVal('mismatchChild') || '[MISMATCH LINE]';
-  const daily = getVal('dailyChallenge') || '[DAILY CHALLENGE]';
-  const weekly = getVal('weeklyChallenge') || '[WEEKLY CHALLENGE]';
-  const newStory = getVal('newStory') || '';
-  const voice = getVal('protectiveVoice') || '';
+  const dreamAction = getVal('dreamAction') || '';
+  const voice = '';
   const isConnection = area === 'Connection';
 
   const voiceDescriptions = {
@@ -1286,11 +1216,11 @@ Let it land in your body. In your chest. In your bones."</div>
 
 <div class="script-block">
   <h3>The Two Mismatches</h3>
-  <p class="note">Two layers of reconsolidation:</p>
-  <table class="check-table">
-    <tr><td>1. Nic → ${esc(name)}</td><td>${filled(mNic)}</td></tr>
-    <tr><td>2. ${esc(name)} → Inner Child</td><td>${filled(mChild)}</td></tr>
-  </table>
+  <p class="note">Two layers of reconsolidation — capture what emerged:</p>
+  <div class="live-input-group">
+    <input class="live-input" id="liveMismatchNic" placeholder="1. Nic → Client (your corrective line)">
+    <input class="live-input" id="liveMismatchChild" placeholder="2. Client → Inner Child (their message)">
+  </div>
 </div>
 
 <div class="script-block">
@@ -1329,10 +1259,10 @@ What happens?"</div>
 
 <div class="script-block">
   <h3>New Story Visualisation</h3>
-${newStory ? `
+${dreamAction ? `
   <div class="say">"I want you to keep your eyes closed for a moment.
 
-I want you to see yourself... a few weeks from now. ${filled(newStory)}
+I want you to see yourself... a few weeks from now. ${filled(dreamAction)}
 
 And you feel that familiar pull — part of you wants to move toward it. And part of you wants to stay where you are.
 
@@ -1407,11 +1337,11 @@ Good. One more."</div>
   <h3>Challenges</h3>
   <div class="say">"Alright. Before we wrap up — two things for the next two weeks before our next session.
 
-One daily: ${filled(daily)}
-
-One weekly: ${filled(weekly)}
-
 These aren't tests. There's no failing. They're just experiments. You're collecting data on your own nervous system."</div>
+  <div class="live-input-group">
+    <input class="live-input" id="liveDailyChallenge" placeholder="Daily challenge (co-created)">
+    <input class="live-input" id="liveWeeklyChallenge" placeholder="Weekly challenge (co-created)">
+  </div>
 </div>
 
 <div class="script-block">
