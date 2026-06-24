@@ -807,7 +807,7 @@ Is this voice really protecting you? Or is it secretly sabotaging you?"</div>
 <div class="script-block">
   <h3>Find the Moment</h3>
   <div class="say">"${N}... I want you to stay with your body for a moment.
-I'm going to ask you something and I don't want you to think about the answer. I want you to feel it.
+I'm going to ask you something. As I do, let your body answer before your mind does.
 ...
 Think about a moment recently... this week, last week, whenever... where you wanted to:
 ${filled(action)}
@@ -853,7 +853,7 @@ But you now ask the timeline to show you how old this voice is... ask it to show
 
 This will be a moment where this need of yours didn't feel safe."</div>
   <p class="note">PAUSE. 10 seconds. Hold the silence.</p>
-  <div class="say">"Don't force it. Just notice what comes. An image. A face. A place. A feeling. An age."</div>
+  <div class="say">"Allow it to come naturally. Notice what emerges — an image. A face. A place. A feeling. An age."</div>
   <p class="note">PAUSE. 10 seconds.</p>
   <div class="say">"When you have something — even if it's not perfectly clear — tell me what you see."</div>
   <p class="note">If struggling: "If you're struggling to find a specific memory, that's okay. Sometimes the mind has locked it away, but your body remembers. Just stay with the feeling." Whatever they give you — anchor to it.</p>
@@ -914,8 +914,6 @@ The pattern didn't protect you. It guaranteed the wound would keep repeating."</
   <h3>The Confrontation</h3>
   <div class="say">"So in the timeline, you were <span class="age-ref">[age]</span> years old.
 
-That version of you had an experience that really hurt. They didn't know what else to do... so in that moment, your brain created a story.
-
 And you've been living by that story... Every. Single. Day. Since."</div>
   <p class="note">PAUSE.</p>
   <div class="say">"If you met a <span class="age-ref">[age]</span> year old on the street... would you accept their life advice?
@@ -937,7 +935,7 @@ Does that scared version of you get to choose your relationships?"</div>
 
 You've been doing the best you could with what you had.
 
-But this belief? It was never the TRUTH. It was a survival strategy. Created by a child who didn't have another option.
+But this belief — '<span class="belief-ref">[their belief]</span>'? It was never the TRUTH. It was a survival strategy. Created by a child who didn't have another option.
 
 But you're not that kid anymore.
 
@@ -1029,18 +1027,26 @@ Stay there. Don't move away from it. That's the program running."</div>
 
 <div class="script-block">
   <h3>Step 2: Find Counter-Evidence (Embodied Memory)</h3>
-  <div class="say">"Keep your hand there. Keep that feeling alive.
+  <div class="say">"Stay with that feeling. Keep it alive.
 ...
 Now... has there been a time... where you DID ${filled(action)}
 ...
 And the thing your body just told you would happen... didn't happen?"</div>
-  <p class="note">Most important question of the session. Give time. Don't feed answers. Let them search their own life with their body, not their mind.</p>
-  <div class="say">"Don't tell me the story. Take me into your body in that moment.
+  <p class="note">Most important question of the session. Give time. Let them search their own life with their body, not their mind.</p>
+  <div class="say">"Tell me about that moment. What happened?"</div>
+  <input class="live-input" id="liveCounterEvidence" placeholder="Their counter-evidence moment" style="width:100%;display:block;margin:8px 0;">
+  <div class="say">"Now take me into your body in that moment.
 ...
 What did you feel? In your chest... your stomach... your hands... what happened in your body when it went differently than expected?"
 
 "What's happening in your body RIGHT NOW as you remember that?"</div>
-  <p class="note">Present-tense body sensation IS the mismatch material.</p>
+  <div class="live-input-group">
+    <input class="live-input" id="livePositiveLocation" placeholder="Where they feel it (e.g. stomach, chest)">
+    <input class="live-input" id="livePositiveFeeling" placeholder="What it feels like (e.g. expansive, warm, loose)">
+    <input class="live-input" id="livePositiveColour" placeholder="Colour / shape">
+    <input class="live-input" id="livePositiveSize" placeholder="Size / texture">
+  </div>
+  <p class="note">Present-tense body sensation IS the mismatch material. This is the resource state you'll reference in the 3-round mismatch.</p>
 </div>
 
 <details>
@@ -1129,13 +1135,13 @@ Picture yourself doing it. Really see it."</div>
   <p class="note">Van der Kolk: trauma freezes the body mid-action. The impulse to move toward was interrupted and never completed. Allowing the body to physically complete the action it couldn't finish IS reconsolidation.</p>
   <div class="say">"${N}... I want to try something. Stay in that scene — ${filled(scene)}.
 ...
-Your body's old program says freeze. Pull back. Don't go.
+Your body's old program says freeze. Pull back. Stay.
 ...
 But right now, in this room, you're safe. And I want to see what your body wants to do.
 ...
 I want you to physically lean forward. Just a few inches. Lean toward the camera. Toward the screen."</div>
   <p class="note">If they lean: "Good. What's happening in your body?" If they resist, the lean is enough.</p>
-  <div class="say">"Now stand up for me."
+  <div class="say">"When you're ready... stand up."
 
 "You're in that ${filled(scene)}.
 ...
@@ -1176,7 +1182,7 @@ Like a circle. In... out... in... out..."</div>
 
 <div class="script-block">
   <h3>Breathing + Shaking</h3>
-  <div class="say">"Start breathing now. Find your rhythm.
+  <div class="say">"You might start breathing now. Find whatever rhythm feels right.
 And as you breathe... let your body start to move.
 Soft knees. Let them bounce.
 Shake your hands. Let your arms be loose.
@@ -1191,7 +1197,7 @@ Where is it right now? Chest? Throat? Stomach?
 Breathe directly into that spot.
 Feel its weight. Its shape. Its heat.
 You're safe now. But let your body feel it.
-Breathe INTO it. Don't run from it. Move WITH it."</div>
+Breathe INTO it. Stay with it. Move WITH it."</div>
 </div>
 
 <div class="script-block">
@@ -1324,7 +1330,7 @@ Take a breath. Feel your feet on the ground. Feel the chair underneath you."</di
 <div class="script-block">
   <h3>Somatic Reset</h3>
   <p class="note">60-90 seconds. Teaching the nervous system: the hard part is over. We're safe. Also gives physical agency.</p>
-  <div class="say">"Before we go any further... I want you to do something for me.
+  <div class="say">"Before we go any further... I want to guide you through something.
 
 Roll your neck gently. Just slow circles. Let it go wherever it wants.
 
