@@ -12,7 +12,7 @@
 
 import { useState } from 'react'
 
-export default function BossFightCard({ boss, condition, isCompleted, onSubmitPre }) {
+export default function BossFightCard({ boss, condition, zone, isCompleted, onSubmitPre }) {
   const [mode, setMode] = useState(null)
   const [preAnswers, setPreAnswers] = useState({
     actionScene: '',
@@ -31,7 +31,7 @@ export default function BossFightCard({ boss, condition, isCompleted, onSubmitPr
           <div className="level-boss-fight-title">Boss Fight: {boss}</div>
           <div className="level-boss-fight-sub">
             {condition
-              ? `Your shift session for ${condition}`
+              ? `Your shift session for ${condition}${zone ? ` — ${zone}` : ''}`
               : 'Book a healing session to defeat this boss'}
           </div>
         </div>
