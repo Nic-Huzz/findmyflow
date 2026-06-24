@@ -991,8 +991,44 @@ Can you check in with that part? Can you say to it: 'I know you're protecting me
 <div class="phase-marker">Phase 4 — Juxtaposition / Mismatch</div>
 
 <div class="script-block">
-  <div class="say">"Staying with that feeling...
+  <h3>Drop Into the Scene</h3>
+  <div class="say">"${N}... close your eyes if they're not already.
+...
+I want to put you somewhere. Stay with me.
 
+${filled(picture)}
+...
+What does it look like? Where are you?"</div>
+  <p class="note">Let them fill in details. Ask 1-2 sensory questions to deepen: "What can you hear?... What does the air feel like?... What are you wearing?" Each sensory detail drops them deeper out of prefrontal cortex and into the body.</p>
+</div>
+
+<div class="script-block">
+${isConnection ? `
+  <div class="say">"Now... across the room... you notice someone. Something about them catches your eye.
+...
+What do they look like?"
+
+"You feel that pull. That part of you that wants to walk over.
+...
+And then what happens?"</div>
+` : `
+  <div class="say">"Now... you feel it. The pull. That part of you that wants to ${filled(action)}.
+...
+It's right there. You can feel the possibility of it.
+...
+And then what happens?"</div>
+`}
+  <p class="note">STOP. Let the freeze/tension/shutdown fire. Then: "Where is that? Show me — put your hand where you feel it."</p>
+  <div class="say">"And if you could hear that feeling speak... what does it say will happen if you ${filled(action)}?"
+
+"Your body says [their words].
+Stay there. That's the program running."</div>
+</div>
+
+<div class="script-block">
+  <h3>Find Counter-Evidence</h3>
+  <div class="say">"Stay with that feeling. Keep it alive.
+...
 Now... has there been a time... where you DID ${filled(action)}
 ...
 And the thing your body just told you would happen... didn't happen?"</div>
@@ -1010,7 +1046,8 @@ What did you feel? In your chest... your stomach... your hands... what happened 
     <input class="live-input" id="livePositiveColour" placeholder="Colour / shape">
     <input class="live-input" id="livePositiveSize" placeholder="Size / texture">
   </div>
-  <p class="note">This is the resource state. Both states are now online — the old encoding and the counter-evidence.</p>
+  <p class="note">Present-tense body sensation IS the mismatch material. This is the resource state.</p>
+</div>
 
 <details>
   <summary>If they go blank / can't find counter-evidence</summary>
@@ -1023,9 +1060,11 @@ What happened next? Not what you thought about it. What did your body feel when 
   </div>
 </details>
 
+<div class="script-block">
+  <h3>The Mismatch</h3>
   <div class="say">"Now ask yourself this question...
 Has it ALWAYS been true?"</div>
-  <p class="note">PAUSE. 5 seconds. They're already in the counter-evidence — stay there.</p>
+  <p class="note">PAUSE. 5 seconds. Let the question land.</p>
 
   <h3>"Now... HERE'S THE WORK..."</h3>
 
