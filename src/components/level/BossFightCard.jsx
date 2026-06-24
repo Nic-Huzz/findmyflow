@@ -1,21 +1,24 @@
 /**
  * BossFightCard.jsx
  *
- * Pre/post session verification for boss fights.
- * Users prepare for a healing session by answering
- * diagnostic questions about where the boss shows up.
+ * Pre-session intake for boss fights (shift sessions).
+ * Captures the same fields as vibe-rise-shift form.
+ * User is logged in so no name needed.
+ * Stuck area comes from the level/condition context.
  *
  * Created: 2026-03-27
+ * Updated: 2026-06-24
  */
 
 import { useState } from 'react'
 
-export default function BossFightCard({ boss, isCompleted, onSubmitPre }) {
-  const [mode, setMode] = useState(null) // null or 'pre'
+export default function BossFightCard({ boss, condition, isCompleted, onSubmitPre }) {
+  const [mode, setMode] = useState(null)
   const [preAnswers, setPreAnswers] = useState({
     actionScene: '',
+    takeAction: '',
+    dreamAction: '',
     tensionScore: 5,
-    bossPrediction: '',
   })
 
   if (!boss) return null
@@ -26,7 +29,11 @@ export default function BossFightCard({ boss, isCompleted, onSubmitPre }) {
         <span className="level-boss-fight-icon">&#9876;&#65039;</span>
         <div>
           <div className="level-boss-fight-title">Boss Fight: {boss}</div>
-          <div className="level-boss-fight-sub">Book a healing session to defeat this boss</div>
+          <div className="level-boss-fight-sub">
+            {condition
+              ? `Your shift session for ${condition}`
+              : 'Book a healing session to defeat this boss'}
+          </div>
         </div>
         {isCompleted && <span className="level-dd-status done">Defeated</span>}
       </div>
@@ -44,13 +51,31 @@ export default function BossFightCard({ boss, isCompleted, onSubmitPre }) {
       {mode === 'pre' && (
         <div className="level-boss-form">
           <label className="level-boss-label">
-            What's the action scene you're working with?
+            Describe the situation where you feel the freeze
           </label>
           <textarea
             className="level-boss-textarea"
             value={preAnswers.actionScene}
             onChange={e => setPreAnswers(p => ({ ...p, actionScene: e.target.value }))}
-            placeholder="Describe the situation where the Boss shows up..."
+            placeholder="Where does your body lock up or pull back?"
+          />
+          <label className="level-boss-label">
+            What do you want to do in that moment but can't?
+          </label>
+          <textarea
+            className="level-boss-textarea"
+            value={preAnswers.takeAction}
+            onChange={e => setPreAnswers(p => ({ ...p, takeAction: e.target.value }))}
+            placeholder="The action you avoid..."
+          />
+          <label className="level-boss-label">
+            What's the action you dream of taking?
+          </label>
+          <textarea
+            className="level-boss-textarea"
+            value={preAnswers.dreamAction}
+            onChange={e => setPreAnswers(p => ({ ...p, dreamAction: e.target.value }))}
+            placeholder="What does it look like when the freeze doesn't fire?"
           />
           <label className="level-boss-label">
             Tension in your body (1-10): {preAnswers.tensionScore}
@@ -62,15 +87,6 @@ export default function BossFightCard({ boss, isCompleted, onSubmitPre }) {
             value={preAnswers.tensionScore}
             onChange={e => setPreAnswers(p => ({ ...p, tensionScore: parseInt(e.target.value) }))}
             className="level-boss-slider"
-          />
-          <label className="level-boss-label">
-            What does your body tell you will happen?
-          </label>
-          <textarea
-            className="level-boss-textarea"
-            value={preAnswers.bossPrediction}
-            onChange={e => setPreAnswers(p => ({ ...p, bossPrediction: e.target.value }))}
-            placeholder="The Boss voice prediction..."
           />
           <button
             type="button"

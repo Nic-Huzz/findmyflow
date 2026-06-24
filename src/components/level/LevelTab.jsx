@@ -454,7 +454,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       })}
 
       {/* Boss Fight */}
-      {boss && <BossFightCard boss={boss} isCompleted={false} />}
+      {boss && <BossFightCard boss={boss} condition={config.name} isCompleted={false} />}
 
       {/* Milestone */}
       <MilestoneCard
