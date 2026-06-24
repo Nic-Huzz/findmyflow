@@ -434,13 +434,13 @@
     </div>
 
     <div class="btn-row">
-      <button class="btn-primary" onclick="generateScript()">Generate My Script</button>
+      <button class="btn-primary" onclick="saveResponses()">Save Responses</button>
       <button class="btn-secondary" onclick="fillExample()">See Example</button>
     </div>
   </div>
 
-  <!-- SCRIPT OUTPUT -->
-  <div id="script-output">
+  <!-- SCRIPT OUTPUT (hidden from client) -->
+  <div id="script-output" style="display:none;">
     <div class="script-header">
       <h1 id="script-title">Session Script</h1>
       <div class="script-actions">
@@ -490,6 +490,66 @@ function getVal(id) {
   return document.getElementById(id).value.trim();
 }
 
+async function saveResponses() {
+  const btn = document.querySelector('.btn-primary');
+  const name = getVal('clientName');
+  if (!name) { btn.textContent = 'Enter your name first'; setTimeout(() => btn.textContent = 'Save Responses', 2000); return; }
+
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/mismatch_sections`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        client_name: name,
+        stuck_area: getVal('stuckArea'),
+        action_scene: getVal('actionScene'),
+        take_action: getVal('takeAction'),
+        paint_picture: getVal('paintPicture'),
+        first_experience: getVal('firstExperience'),
+        mismatch_nic: getVal('mismatchNic'),
+        mismatch_child: getVal('mismatchChild'),
+        daily_challenge: getVal('dailyChallenge'),
+        weekly_challenge: getVal('weeklyChallenge')
+      })
+    });
+
+    if (res.ok) {
+      btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#51CF66" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+      btn.style.background = 'rgba(81,207,102,0.15)';
+      btn.style.border = '1px solid rgba(81,207,102,0.3)';
+      btn.style.boxShadow = 'none';
+    } else {
+      btn.textContent = 'Something went wrong — try again';
+      btn.disabled = false;
+      setTimeout(() => btn.textContent = 'Save Responses', 3000);
+    }
+  } catch (e) {
+    btn.textContent = 'Something went wrong — try again';
+    btn.disabled = false;
+    setTimeout(() => btn.textContent = 'Save Responses', 3000);
+  }
+}
+
+// Admin mode: add ?admin to URL to show script generation
+if (new URLSearchParams(window.location.search).has('admin')) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnRow = document.querySelector('.btn-row');
+    const genBtn = document.createElement('button');
+    genBtn.className = 'btn-secondary';
+    genBtn.textContent = 'Generate Script';
+    genBtn.onclick = () => generateScript();
+    btnRow.appendChild(genBtn);
+  });
+}
+
 function fillExample() {
   document.getElementById('clientName').value = 'Ryan';
   document.getElementById('stuckArea').value = 'Connection';
@@ -514,20 +574,6 @@ function generateScript() {
   const mChild = getVal('mismatchChild') || '[MISMATCH LINE]';
   const daily = getVal('dailyChallenge') || '[DAILY CHALLENGE]';
   const weekly = getVal('weeklyChallenge') || '[WEEKLY CHALLENGE]';
-
-  // Save to Supabase
-  saveToSupabase({
-    client_name: getVal('clientName'),
-    stuck_area: getVal('stuckArea'),
-    action_scene: getVal('actionScene'),
-    take_action: getVal('takeAction'),
-    paint_picture: getVal('paintPicture'),
-    first_experience: getVal('firstExperience'),
-    mismatch_nic: getVal('mismatchNic'),
-    mismatch_child: getVal('mismatchChild'),
-    daily_challenge: getVal('dailyChallenge'),
-    weekly_challenge: getVal('weeklyChallenge')
-  });
 
   const N = filled(name);
   const html = `
