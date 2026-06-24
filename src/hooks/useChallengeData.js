@@ -212,11 +212,9 @@ export function useChallengeData() {
 
         if (anyPrevious) {
           // Returning user — go straight to challenge tabs
-          // No install prompt needed (app is on App Store now)
         } else {
-          // First-time user — show notifications screen only (skip install-app)
-          setOnboardingScreen('enable-notifications')
-          setShowOnboarding(true)
+          // First-time user — go straight to challenge tabs
+          // Notification prompt disabled until native iOS push is fully live
         }
         return
       }
