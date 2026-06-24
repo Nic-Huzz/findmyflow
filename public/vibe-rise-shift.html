@@ -838,6 +838,7 @@ Where does that live in your body right now? When you think about that moment...
   <div class="say">"That sensation... it knows something. It's been running this program for a long time.
 If that feeling could speak... if it had words... what would it say?"</div>
   <p class="note">Wait for the belief to surface from the body. Common: "Don't bother" / "They don't want you" / "You'll get hurt" / "Stay where you are." Mirror it back slowly.</p>
+  <input class="live-input" id="liveBeliefVoice" placeholder="What the feeling said (their words)" style="width:100%;display:block;margin:8px 0;" oninput="document.querySelectorAll('.belief-ref').forEach(el=>el.textContent=this.value||'[their belief]')">
 </div>
 
 <div class="script-block">
@@ -887,7 +888,7 @@ So your nervous system — your safety system — did what it thought it needed 
 
 <div class="script-block">
   <h3>The Tragic Irony</h3>
-  <div class="say">"It created a belief. A story. This voice you heard.
+  <div class="say">"It created a belief. A story. This voice you heard — '<span class="belief-ref">[their belief]</span>.'
 
 A story about yourself. About others. About what was safe. About how the world works.
 
@@ -911,7 +912,7 @@ The pattern didn't protect you. It guaranteed the wound would keep repeating."</
 
 <div class="script-block">
   <h3>The Confrontation</h3>
-  <div class="say">"So in the timeline... how old were you when this belief was created? 5... 10... 15... 20 years old?
+  <div class="say">"So in the timeline, you were <span class="age-ref">[age]</span> years old.
 
 That version of you had an experience that really hurt. They didn't know what else to do... so in that moment, your brain created a story.
 
