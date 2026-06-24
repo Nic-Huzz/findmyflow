@@ -819,7 +819,7 @@ Where does that live in your body right now? When you think about that moment...
   <p class="note">Let them locate it. Common: chest, throat, stomach, shoulders. Whatever they say, go there.</p>
   <div class="live-input-group">
     <input class="live-input" id="liveLocation" placeholder="Location (e.g. chest, throat)">
-    <input class="live-input" id="liveBaseline" placeholder="Tension 1-10">
+    <input class="live-input" id="liveBaseline" placeholder="Tension 1-10" oninput="document.querySelectorAll('.baseline-ref').forEach(el=>el.textContent=this.value||'[baseline]')">
   </div>
 </div>
 
@@ -1305,7 +1305,7 @@ And you feel that familiar pull — part of you wants to move toward it. And par
 
 But this time... that second part is quieter. It's not screaming anymore. It's just a whisper.
 
-And you notice something different in your body. That tension that used to be a [baseline number]... it's a 3. Maybe a 2.
+And you notice something different in your body. That tension that used to be a <span class="baseline-ref">[baseline]</span>... it's a 3. Maybe a 2.
 
 And you just... do it. Not because you forced yourself. Not because you're performing. Because the thing that used to stop you... doesn't fire the same way anymore.
 
@@ -1321,7 +1321,7 @@ Someone catches your eye. And you feel that familiar pull — part of you wants 
 
 But this time... that second part is quieter. It's not screaming anymore. It's just a whisper.
 
-And you notice something different in your body. That tension that used to be a [baseline number]... it's a 3. Maybe a 2.
+And you notice something different in your body. That tension that used to be a <span class="baseline-ref">[baseline]</span>... it's a 3. Maybe a 2.
 
 And you just... walk over. Not because you forced yourself. Not because you're performing confidence. Because the thing that used to stop you... doesn't fire the same way anymore.
 
@@ -1337,7 +1337,7 @@ And you feel that familiar pull — part of you wants to ${filled(action)}. And 
 
 But this time... that second part is quieter. It's not screaming anymore. It's just a whisper.
 
-And you notice something different in your body. That tension that used to be a [baseline number]... it's a 3. Maybe a 2.
+And you notice something different in your body. That tension that used to be a <span class="baseline-ref">[baseline]</span>... it's a 3. Maybe a 2.
 
 And you just... do it. Not because you forced yourself. Not because you're performing. Because the thing that used to stop you... doesn't fire the same way anymore.
 
