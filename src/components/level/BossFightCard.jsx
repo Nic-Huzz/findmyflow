@@ -69,15 +69,6 @@ export default function BossFightCard({ boss, condition, isCompleted, onSubmitPr
             placeholder="The action you avoid..."
           />
           <label className="level-boss-label">
-            What's the action you dream of taking?
-          </label>
-          <textarea
-            className="level-boss-textarea"
-            value={preAnswers.dreamAction}
-            onChange={e => setPreAnswers(p => ({ ...p, dreamAction: e.target.value }))}
-            placeholder="What does it look like when the freeze doesn't fire?"
-          />
-          <label className="level-boss-label">
             Tension in your body (1-10): {preAnswers.tensionScore}
           </label>
           <input
@@ -87,6 +78,15 @@ export default function BossFightCard({ boss, condition, isCompleted, onSubmitPr
             value={preAnswers.tensionScore}
             onChange={e => setPreAnswers(p => ({ ...p, tensionScore: parseInt(e.target.value) }))}
             className="level-boss-slider"
+          />
+          <label className="level-boss-label">
+            What's the action you dream of taking?
+          </label>
+          <textarea
+            className="level-boss-textarea"
+            value={preAnswers.dreamAction}
+            onChange={e => setPreAnswers(p => ({ ...p, dreamAction: e.target.value }))}
+            placeholder="What does it look like when the freeze doesn't fire?"
           />
           <button
             type="button"
