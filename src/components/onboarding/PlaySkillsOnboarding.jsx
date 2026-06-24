@@ -248,22 +248,20 @@ export default function PlaySkillsOnboarding() {
           ))}
         </div>
         {isLast ? (
-          <>
-            <button className="jo-hook-continue" onClick={(e) => { e.stopPropagation(); transitionTo(BEATS.SIGNUP) }}>
-              <span className="jo-shimmer-layer" />
-              Let's go
-            </button>
-            <a
-              href="/log-in"
-              className="jo-login-link"
-              onClick={(e) => e.stopPropagation()}
-            >
-              Already have an account? Log in
-            </a>
-          </>
+          <button className="jo-hook-continue" onClick={(e) => { e.stopPropagation(); transitionTo(BEATS.SIGNUP) }}>
+            <span className="jo-shimmer-layer" />
+            Let's go
+          </button>
         ) : (
           <div className="jo-tap-anywhere-hint">Tap to continue</div>
         )}
+        <a
+          href="/log-in"
+          className="jo-login-link"
+          onClick={(e) => e.stopPropagation()}
+        >
+          Already have an account? Log in
+        </a>
       </div>
     )
   }

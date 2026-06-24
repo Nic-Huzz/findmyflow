@@ -449,8 +449,7 @@ When working on features, strategy, or content, read the relevant section of the
 - `docs/root-and-reach-framework.md` - **Vibe Rise / River System** (Original IP)
 - `docs/root-and-reach-overview-prompt.md` - Shareable framework overview
 - `docs/feature-brief-experience-creator-matching.md` - Experience Creator Matching brief
-- `docs/crm-status.md` - CRM feature status and audit
-- `docs/crm-testing-checklist.md` - 120+ CRM test checkpoints
+- `docs/INDEX.md` - **Thematic index of all living docs**
 - `docs/scoring-system-refactor.md` - Points/scoring architecture
 - `docs/PUSH_NOTIFICATIONS.md` - Push notification setup
 - `docs/2026-01-29-priority-hierarchy.md` - Priority hierarchy and test milestones
