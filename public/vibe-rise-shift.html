@@ -406,6 +406,20 @@
     </div>
 
     <div class="glass">
+      <h2>Your Protective Voice</h2>
+      <div class="field">
+        <label for="protectiveVoice">Read these and pick the one your body responds to most <span class="hint">— not which sounds like you, which one you FEEL</span></label>
+        <select id="protectiveVoice">
+          <option value="">Pick one...</option>
+          <option value="The Ghost">The Ghost — You disappear. You hide. You stay invisible. Being seen feels dangerous.</option>
+          <option value="The Controller">The Controller — You grip. You overwork. You micro-manage. If you control it, it won't fall apart.</option>
+          <option value="The Auto-Pilot">The Auto-Pilot — You go through the motions. Nobody's home. You've told yourself 'this is fine.' It's not.</option>
+          <option value="The Perfectionist">The Perfectionist — You prepare. You polish. You wait until it's perfect. Nothing is ever ready.</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="glass">
       <h2>Your Story</h2>
       <div class="field">
         <label for="firstExperience">What's the earliest experience where you learned this pattern? <span class="hint">— the first time your body learned to freeze like this</span></label>
@@ -526,7 +540,8 @@ async function saveResponses() {
         mismatch_child: getVal('mismatchChild'),
         daily_challenge: getVal('dailyChallenge'),
         weekly_challenge: getVal('weeklyChallenge'),
-        new_story: getVal('newStory')
+        new_story: getVal('newStory'),
+        protective_voice: getVal('protectiveVoice')
       })
     });
 
@@ -598,6 +613,7 @@ if (params.has('admin')) {
       document.getElementById('dailyChallenge').value = r.daily_challenge || '';
       document.getElementById('weeklyChallenge').value = r.weekly_challenge || '';
       document.getElementById('newStory').value = r.new_story || '';
+      document.getElementById('protectiveVoice').value = r.protective_voice || '';
     };
 
     // Generate script button
@@ -627,6 +643,7 @@ if (params.has('admin')) {
           document.getElementById('dailyChallenge').value = r.daily_challenge || '';
           document.getElementById('weeklyChallenge').value = r.weekly_challenge || '';
           document.getElementById('newStory').value = r.new_story || '';
+          document.getElementById('protectiveVoice').value = r.protective_voice || '';
         }
       }, 500);
     });
@@ -659,7 +676,15 @@ function generateScript() {
   const daily = getVal('dailyChallenge') || '[DAILY CHALLENGE]';
   const weekly = getVal('weeklyChallenge') || '[WEEKLY CHALLENGE]';
   const newStory = getVal('newStory') || '';
+  const voice = getVal('protectiveVoice') || '';
   const isConnection = area === 'Connection';
+
+  const voiceDescriptions = {
+    "The Ghost": "You disappear. You hide. You stay invisible. You avoid being seen at all costs because being seen feels dangerous.",
+    "The Controller": "You grip. You manage. You overwork, overachieve, micro-manage everything. You white-knuckle through life because if you can control it, it won't fall apart.",
+    "The Auto-Pilot": "You go through the motions. You show up. You function. But nobody's home. You've checked out of your own life and told yourself 'this is fine.' It's not.",
+    "The Perfectionist": "You prepare. You polish. You wait until it's perfect. But nothing is ever ready because making a mistake feels like the end of the world."
+  };
 
   const N = filled(name);
   const html = `
@@ -685,7 +710,30 @@ Land the resource anchor from whatever feels most settled:
 <hr>
 <div class="phase-marker">Phase 2 — Locate the Encoding</div>
 
+${voice ? `
 <div class="script-block">
+  <h3>The Protective Voice</h3>
+  <div class="say">"${N}... before we go deeper, I want to name something.
+
+There's a part of you that's been running a program. A protective voice. And based on what you've shared with me, I think you know this one well.
+
+I call it ${filled(voice)}.
+
+${esc(voiceDescriptions[voice] || '')}
+
+...
+
+That pattern isn't a flaw. It's a survival strategy. Something happened — somewhere between being a carefree kid and today — that made this pattern feel necessary to stay safe.
+
+But here's the real question...
+If nothing changes — if this pattern keeps running you for another 5 years... 10 years...
+Is this voice really protecting you? Or is it secretly sabotaging you?"</div>
+  <p class="note">Let the question land. Don't rush past it. Watch their body — this is where the first activation often starts.</p>
+</div>
+` : ''}
+
+<div class="script-block">
+  <h3>Find the Moment</h3>
   <div class="say">"${N}... I want you to stay with your body for a moment.
 I'm going to ask you something and I don't want you to think about the answer. I want you to feel it.
 ...
@@ -707,7 +755,25 @@ Where does that live in your body right now? When you think about that moment...
 <div class="script-block">
   <div class="say">"That sensation... it knows something. It's been running this program for a long time.
 If that feeling could speak... if it had words... what would it say?"</div>
-  <p class="note">Wait for the belief to surface from the body. Common: "Don't bother" / "They don't want you" / "You'll get hurt" / "Stay where you are." Mirror it back slowly. Then: "How old does that voice feel?" — this bridges to the origin.</p>
+  <p class="note">Wait for the belief to surface from the body. Common: "Don't bother" / "They don't want you" / "You'll get hurt" / "Stay where you are." Mirror it back slowly.</p>
+</div>
+
+<div class="script-block">
+  <h3>Find the Age — Timeline</h3>
+  <div class="say">"Now I invite you to visualise yourself floating in space... light and free.
+
+You see a light in the distance so you move towards it. As you get closer you realise it's a timeline of your life. From the day you were born to now to your future.
+
+You glide over to where it starts and begin seeing the highlights of your childhood. The joy, the giggles, the love. Take a moment to bathe in this feeling, this memory.
+
+But you now ask the timeline to show you how old this voice is... ask it to show you the time in life that created it...
+
+This will be a moment where this need of yours didn't feel safe."</div>
+  <p class="note">PAUSE. 10 seconds. Hold the silence.</p>
+  <div class="say">"Don't force it. Just notice what comes. An image. A face. A place. A feeling. An age."</div>
+  <p class="note">PAUSE. 10 seconds.</p>
+  <div class="say">"When you have something — even if it's not perfectly clear — tell me what you see."</div>
+  <p class="note">If struggling: "If you're struggling to find a specific memory, that's okay. Sometimes the mind has locked it away, but your body remembers. Just stay with the feeling." Whatever they give you — an age, an image, a sensation — anchor to it. This is the origin. This is what Phase 3 activates.</p>
 </div>
 
 <hr>
@@ -724,7 +790,76 @@ You said it feels like it's [age they named]. Stay with the sensation. What's ha
 ...
 "...and does it get that?"</div>
   <p class="note">The gap between what the body needed and what it got IS the wound. Sit with it.</p>
+
+  <h3>Deepen the Pain</h3>
+  <div class="say">"And how does it feel... to not get that?"</div>
+  <p class="note">PAUSE. Let them feel the weight of it.</p>
+  <div class="say">"And do you want to feel that way again?
+...
+No.
+...
+So your nervous system — your safety system — did what it thought it needed to do to keep you safe and protect you."</div>
 </div>
+
+<div class="script-block">
+  <h3>The Tragic Irony</h3>
+  <div class="say">"It created a belief. A story. This voice you heard.
+
+A story about yourself. About others. About what was safe. About how the world works.
+
+A story designed to make sure you would NEVER feel that way again.
+
+But here's the tragic irony...
+
+That pattern? It was supposed to protect you.
+But the very thing you did to AVOID the pain... created more of it.
+
+${voice ? esc(({
+  "The Ghost": "The Ghost hides to avoid rejection... and never gets to be truly seen or loved.",
+  "The Controller": "The Controller grips to feel safe... and pushes everyone away.",
+  "The Auto-Pilot": "The Auto-Pilot checks out to avoid pain... and misses their own life.",
+  "The Perfectionist": "The Perfectionist waits to feel ready... and never starts."
+})[voice] || '') : "The pattern didn't protect you."}
+
+It guaranteed the wound would keep repeating.
+
+And you've been living by that story... Every. Single. Day. Since."</div>
+  <p class="note">Let this land. Don't rush. Watch the body — this is often where activation deepens significantly.</p>
+</div>
+
+<div class="script-block">
+  <h3>The Confrontation</h3>
+  <div class="say">"So in the timeline... how old were you when this belief was created? 5... 10... 15... 20 years old?
+
+That version of you had an experience that really hurt. They didn't know what else to do... so in that moment, your brain created a story.
+
+And you've been living by that story... Every. Single. Day. Since."</div>
+  <p class="note">PAUSE.</p>
+  <div class="say">"If you met a [their age] year old on the street... would you accept their life advice?
+...
+No.
+...
+So does your hurt kid get to run your life?
+
+Does that wounded child get to decide your career?
+
+Does that scared version of you get to choose your relationships?"</div>
+  <p class="note">PAUSE. Let the absurdity land. This is a pattern-interrupt — the cognitive frame cracking.</p>
+  <div class="say">"No."</div>
+</div>
+
+<div class="script-block">
+  <h3>The Reframe</h3>
+  <div class="say">"But it's not your fault.
+
+You've been doing the best you could with what you had.
+
+But this belief? It was never the TRUTH. It was a survival strategy. Created by a child who didn't have another option.
+
+But you're not that kid anymore.
+
+And you have options now that child didn't have."</div>
+  <p class="note">This is the compassion bridge. The body needs to feel safe enough — not attacked — before the mismatch can land. Watch for softening, deeper breaths, relief.</p>
 
 <details>
   <summary>Fallback A — Guided Visualisation (if sensation-tracking isn't landing)</summary>
