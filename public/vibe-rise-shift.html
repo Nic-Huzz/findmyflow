@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Rise Shift Session</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0a1a;
+    --surface: rgba(6, 3, 15, 0.88);
+    --surface-2: rgba(94, 23, 235, 0.08);
+    --border: rgba(233, 162, 59, 0.25);
+    --border-dim: rgba(233, 162, 59, 0.12);
+    --text: #ffffff;
+    --text-dim: #efe6d4;
+    --text-muted: rgba(239, 230, 212, 0.5);
+    --purple: #5e17eb;
+    --purple-light: #8b5cf6;
+    --purple-dark: #3b0a99;
+    --gold: #E9A23B;
+    --gold-light: #f5c469;
+    --green: #51CF66;
+    --red: #FF6B6B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Logo / Brand header */
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--gold) 100%);
+  }
+
+  .brand-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--purple-light) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  h1 span {
+    background: linear-gradient(135deg, var(--purple-light) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 48px;
+    font-weight: 400;
+  }
+
+  /* Glass card */
+  .glass {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  }
+
+  .glass h2 {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  label .hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  input[type="text"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(94, 23, 235, 0.06);
+    border: 1px solid var(--border-dim);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--purple-light);
+    box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.15);
+  }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23E9A23B' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+  }
+
+  select option {
+    background: #1a1025;
+    color: var(--text);
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 40px;
+  }
+
+  button {
+    padding: 14px 32px;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(94, 23, 235, 0.3);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 4px 28px rgba(94, 23, 235, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: rgba(233, 162, 59, 0.08);
+    color: var(--gold);
+    border: 1px solid var(--border-dim);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(233, 162, 59, 0.15);
+    border-color: var(--border);
+  }
+
+  /* Script output */
+  #script-output {
+    display: none;
+  }
+
+  .script-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .script-header h1 { margin-bottom: 0; font-size: 1.5rem; }
+
+  .script-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .script-actions button {
+    padding: 8px 16px;
+    font-size: 0.82rem;
+  }
+
+  .phase-marker {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--purple-light);
+    font-weight: 700;
+    margin-top: 48px;
+    margin-bottom: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .phase-marker:first-child { margin-top: 0; }
+
+  .script-block {
+    margin-bottom: 24px;
+  }
+
+  .script-block h3 {
+    font-size: 0.95rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .say {
+    background: var(--surface);
+    border-left: 3px solid var(--purple);
+    padding: 14px 18px;
+    border-radius: 0 10px 10px 0;
+    margin: 10px 0;
+    font-style: italic;
+    white-space: pre-wrap;
+    font-size: 0.92rem;
+    border: 1px solid var(--border-dim);
+    border-left: 3px solid var(--purple);
+    backdrop-filter: blur(20px);
+  }
+
+  .say .filled {
+    color: var(--gold);
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .note {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 8px 0;
+    padding-left: 16px;
+    border-left: 2px solid var(--border-dim);
+  }
+
+  .timing {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--green);
+    background: rgba(81,207,102,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+  }
+
+  .check-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.85rem;
+  }
+
+  .check-table td {
+    padding: 10px 12px;
+    border: 1px solid var(--border-dim);
+    vertical-align: top;
+  }
+
+  .check-table td:first-child {
+    width: 40%;
+    color: var(--text-muted);
+  }
+
+  details {
+    margin: 10px 0;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border-dim);
+    backdrop-filter: blur(20px);
+  }
+
+  summary {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  summary:hover { color: var(--text-dim); }
+
+  details > div {
+    padding: 0 14px 14px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border-dim);
+    margin: 36px 0;
+  }
+
+  /* Print styles */
+  @media print {
+    body { background: #fff; color: #111; }
+    .say { background: #f8f5f0; border-left-color: var(--purple); color: #111; }
+    .say .filled { color: var(--purple); }
+    .note { color: #666; }
+    .script-actions, .btn-row { display: none; }
+    .phase-marker { color: var(--purple); }
+    .check-table td { border-color: #ddd; }
+    .brand { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- FORM VIEW -->
+  <div id="form-view">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-name">Vibe Rise</div>
+    </div>
+
+    <h1>Your <span>Vibe Rise</span> Shift Session</h1>
+    <p class="subtitle">Fill this out before your session. Be honest — there are no wrong answers. Your responses shape a session built around you.</p>
+
+    <div class="glass">
+      <h2>About You</h2>
+      <div class="field">
+        <label for="clientName">Your First Name</label>
+        <input type="text" id="clientName" placeholder="e.g. Ryan">
+      </div>
+      <div class="field">
+        <label for="stuckArea">Where are you feeling most stuck or stagnant right now?</label>
+        <select id="stuckArea">
+          <option value="">Pick one...</option>
+          <option value="Life Design">Life Design</option>
+          <option value="Mastery">Mastery</option>
+          <option value="Meaning">Meaning</option>
+          <option value="Connection">Connection</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="glass">
+      <h2>The Freeze</h2>
+      <div class="field">
+        <label for="actionScene">Describe the situation where you feel the freeze <span class="hint">— where your body locks up or pulls back</span></label>
+        <input type="text" id="actionScene" placeholder="e.g. sitting across from someone on a date and wanting to say something real">
+      </div>
+      <div class="field">
+        <label for="takeAction">What do you want to do in that moment but can't? <span class="hint">— the action you avoid</span></label>
+        <textarea id="takeAction" rows="2" placeholder="e.g. share something unfiltered, say how I actually feel, reach out, start the conversation"></textarea>
+      </div>
+      <div class="field">
+        <label for="paintPicture">Paint the scene <span class="hint">— describe the setting so we can put you there during the session</span></label>
+        <textarea id="paintPicture" rows="4" placeholder="e.g. I'm out. It's evening. I can hear music, conversations around me, glasses clinking. The room is warm. People everywhere."></textarea>
+      </div>
+    </div>
+
+    <div class="glass">
+      <h2>Your Story</h2>
+      <div class="field">
+        <label for="firstExperience">What's the earliest experience where you learned this pattern? <span class="hint">— the first time your body learned to freeze like this</span></label>
+        <textarea id="firstExperience" rows="2" placeholder="e.g. being shut down when I tried to express myself as a kid, watching my dad go quiet"></textarea>
+      </div>
+      <div class="field">
+        <label for="mismatchNic">What do you need to hear from someone safe that contradicts the old story? <span class="hint">— the thing your nervous system never got</span></label>
+        <textarea id="mismatchNic" rows="2" placeholder="e.g. You showed up. You let your guard down. And I'm still here. I didn't leave."></textarea>
+      </div>
+      <div class="field">
+        <label for="mismatchChild">What would you say to your younger self? <span class="hint">— the words that little version of you needed to hear</span></label>
+        <textarea id="mismatchChild" rows="2" placeholder="e.g. I'm here now. You're not alone anymore. You didn't do anything wrong."></textarea>
+      </div>
+    </div>
+
+    <div class="glass">
+      <h2>Between Sessions</h2>
+      <div class="field">
+        <label for="dailyChallenge">A small daily practice you're willing to try <span class="hint">— something you can do in 5 minutes</span></label>
+        <textarea id="dailyChallenge" rows="2" placeholder="e.g. 5 min body scan — notice where tension lives before social moments"></textarea>
+      </div>
+      <div class="field">
+        <label for="weeklyChallenge">A weekly stretch <span class="hint">— one action that gently pushes the edge</span></label>
+        <textarea id="weeklyChallenge" rows="2" placeholder="e.g. One real conversation — say one unfiltered thing to someone and notice what my body does"></textarea>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="generateScript()">Generate My Script</button>
+      <button class="btn-secondary" onclick="fillExample()">See Example</button>
+    </div>
+  </div>
+
+  <!-- SCRIPT OUTPUT -->
+  <div id="script-output">
+    <div class="script-header">
+      <h1 id="script-title">Session Script</h1>
+      <div class="script-actions">
+        <button class="btn-secondary" onclick="backToForm()">&#8592; Edit</button>
+        <button class="btn-secondary" onclick="copyScript()">Copy</button>
+        <button class="btn-primary" onclick="window.print()">Print</button>
+      </div>
+    </div>
+    <div id="script-body"></div>
+  </div>
+
+</div>
+
+<script>
+const SUPABASE_URL = 'https://qlwfcfypnoptsocdpxuv.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsd2ZjZnlwbm9wdHNvY2RweHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxODY2NzUsImV4cCI6MjA3Mjc2MjY3NX0.fZLwb_VC2o8Sn3kp5H0_eJmhC8Hu8VtSHa2fpuqGNbY';
+
+async function saveToSupabase(data) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/mismatch_sections`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) console.error('Save failed:', res.status, await res.text());
+  } catch (e) {
+    console.error('Save error:', e);
+  }
+}
+
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function filled(text) {
+  return `<span class="filled">${esc(text)}</span>`;
+}
+
+function getVal(id) {
+  return document.getElementById(id).value.trim();
+}
+
+function fillExample() {
+  document.getElementById('clientName').value = 'Ryan';
+  document.getElementById('stuckArea').value = 'Connection';
+  document.getElementById('actionScene').value = 'sitting across from someone on a date, wanting to say the unfiltered thing';
+  document.getElementById('takeAction').value = 'share an unfiltered truth — say the thing I have no idea how it will be received, instead of defaulting to my go-to lines';
+  document.getElementById('paintPicture').value = "You're out. It's evening. You can hear music... conversations around you... the clink of glasses. The room is warm. There's people everywhere.";
+  document.getElementById('firstExperience').value = 'learned that being fully seen means being judged — that the unfiltered version gets rejected';
+  document.getElementById('mismatchNic').value = "You showed up. You let your guard down completely. And I'm still here. I didn't leave.";
+  document.getElementById('mismatchChild').value = "I'm here now. You're not alone anymore. You didn't do anything wrong.";
+  document.getElementById('dailyChallenge').value = '5 min body scan — notice where tension lives before social moments';
+  document.getElementById('weeklyChallenge').value = 'One unfiltered share — say one real thing to someone and notice what your body does';
+}
+
+function generateScript() {
+  const name = getVal('clientName') || '[NAME]';
+  const area = getVal('stuckArea') || '[AREA]';
+  const scene = getVal('actionScene') || '[ACTION SCENE]';
+  const action = getVal('takeAction') || '[TAKE ACTION]';
+  const picture = getVal('paintPicture') || '[PAINT PICTURE]';
+  const origin = getVal('firstExperience') || '[FIRST EXPERIENCE]';
+  const mNic = getVal('mismatchNic') || '[MISMATCH LINE]';
+  const mChild = getVal('mismatchChild') || '[MISMATCH LINE]';
+  const daily = getVal('dailyChallenge') || '[DAILY CHALLENGE]';
+  const weekly = getVal('weeklyChallenge') || '[WEEKLY CHALLENGE]';
+
+  // Save to Supabase
+  saveToSupabase({
+    client_name: getVal('clientName'),
+    stuck_area: getVal('stuckArea'),
+    action_scene: getVal('actionScene'),
+    take_action: getVal('takeAction'),
+    paint_picture: getVal('paintPicture'),
+    first_experience: getVal('firstExperience'),
+    mismatch_nic: getVal('mismatchNic'),
+    mismatch_child: getVal('mismatchChild'),
+    daily_challenge: getVal('dailyChallenge'),
+    weekly_challenge: getVal('weeklyChallenge')
+  });
+
+  const N = filled(name);
+  const html = `
+<div class="phase-marker">Phase 1 — Somatic Baseline</div>
+
+<div class="script-block">
+  <p><span class="timing">~3:00</span> <strong>Somatic baseline</strong></p>
+  <div class="say">"Quick one before we start — when you imagine ${filled(scene)}, what's the tension in your body, 1 to 10?"</div>
+  <p class="note">If they don't feel it in the body, feel it in the mind — act normal, but freeze mentally.</p>
+</div>
+
+<div class="script-block">
+  <p><span class="timing">~8:00</span> <strong>Transition to body</strong> — Below the neck before anything else.</p>
+  <div class="say">4-in-8-out breathing together (60-90 seconds, 4-5 rounds — you do it WITH them, audibly)
+
+Body awareness scan — noticing, not relaxing:
+"What do you notice in your chest?... your stomach?... your shoulders?... your hands?"
+
+Land the resource anchor from whatever feels most settled:
+"That spot where you feel most at ease — bookmark that. We might come back to it."</div>
+</div>
+
+<hr>
+<div class="phase-marker">Phase 2 — Locate the Encoding</div>
+
+<div class="script-block">
+  <div class="say">"${N}... I want you to stay with your body for a moment.
+I'm going to ask you something and I don't want you to think about the answer. I want you to feel it.
+...
+Think about a moment recently... this week, last week, whenever... where you wanted to:
+${filled(action)}
+And you didn't.
+...
+Don't tell me the story yet. Just find the moment.
+...
+Where does that live in your body right now? When you think about that moment... where do you feel it?"</div>
+  <p class="note">Let them locate it. Common: chest, throat, stomach, shoulders. Whatever they say, go there.</p>
+</div>
+
+<div class="script-block">
+  <div class="say">"Stay with that. Just notice it. What does it feel like? Is it tight? Heavy? Hot? Cold? Does it have a shape?"</div>
+  <p class="note">If they start explaining WHY, redirect: "I hear you. Stay below the neck for me. What is that sensation doing right now? Is it getting bigger? Smaller? Moving?"</p>
+</div>
+
+<div class="script-block">
+  <div class="say">"That sensation... it knows something. It's been running this program for a long time.
+If that feeling could speak... if it had words... what would it say?"</div>
+  <p class="note">Wait for the belief to surface from the body. Common: "Don't bother" / "They don't want you" / "You'll get hurt" / "Stay where you are." Mirror it back slowly. Then: "How old does that voice feel?" — this bridges to the origin.</p>
+</div>
+
+<hr>
+<div class="phase-marker">Phase 3 — Activation</div>
+
+<div class="script-block">
+  <h3>Primary: Sensation-Tracking</h3>
+  <div class="say">"Stay with that.
+You said it feels like it's [age they named]. Stay with the sensation. What's happening to it right now? Is it getting heavier? Tighter? Is it spreading?"
+
+"Can you be curious about it? Not name the story... just stay with the feeling. What's its temperature? Does it have edges? A texture?"
+
+"What does that sensation need right now? Not what does your mind think it needs — what does the feeling itself want?"
+...
+"...and does it get that?"</div>
+  <p class="note">The gap between what the body needed and what it got IS the wound. Sit with it.</p>
+</div>
+
+<details>
+  <summary>Fallback A — Guided Visualisation (if sensation-tracking isn't landing)</summary>
+  <div>
+    <div class="say">"Okay. Let's try something different. You're [age they named]. Where are you? What do you see around you?"</div>
+    <p class="note">Use senses to ground INTO the body: "What do you hear? What does the air feel like?" Then redirect back to sensation: "And as you're there... what's happening in your body right now?"</p>
+  </div>
+</details>
+
+<details>
+  <summary>Fallback B — Movement Impulse (if they can't track internal sensation at all)</summary>
+  <div>
+    <p class="note">Interoception (reading internal body signals) may be genuinely harder for some people. Don't push sensation-tracking if their system isn't wired for it. What the body wants to DO is often more accessible than what it feels.</p>
+    <div class="say">"That's okay. Let's come at this differently.
+When you think about that moment... what does your body want to do? Not what you think it should do. Does it want to pull back? Get smaller? Leave the room? Freeze? Clench?"
+
+"So your body wants to [their words]. Stay with that impulse. Don't do it — just feel the wanting. Where does that wanting live?"</div>
+  </div>
+</details>
+
+<div class="script-block" style="margin-top: 24px;">
+  <h3>Activation / Titration Check</h3>
+  <table class="check-table">
+    <tr><td>Eyes welling, voice cracking, breathing shifting, posture collapsing</td><td><strong>In the window.</strong> Stay quiet. Let it deepen. Move to Phase 4 when it peaks.</td></tr>
+    <tr><td>Tears flowing, body shaking, can't speak, hyperventilating</td><td><strong>Too deep too fast.</strong> Pendulate back through SENSATION: "Come back to your feet. Feel the ground. What's the temperature of your hands?"</td></tr>
+    <tr><td>Flat tone, still body, narrating calmly, third person</td><td><strong>Protector online.</strong> "I notice you're telling me about it but your body is very still. What's happening below the neck?"</td></tr>
+    <tr><td>Eyes glazed, monotone, far away, robotic</td><td><strong>Dissociation.</strong> Stop. Ground: "${esc(name)}, can you look at me? Three things you see. Feel your feet. Wiggle your toes."</td></tr>
+    <tr><td>"I'm fine" / "I don't feel anything" + tight jaw or shallow breath</td><td><strong>Body says otherwise.</strong> "Your words say fine. I'm noticing your jaw / your breathing. What does your body say?"</td></tr>
+    <tr><td>Asks to stop</td><td><strong>Respect it immediately.</strong> "Okay. We stop. That's your call." Ground. Don't process. Close warmly.</td></tr>
+  </table>
+</div>
+
+<details>
+  <summary>Fork Point — If activation isn't coming</summary>
+  <div>
+    <div class="say">"${N}, I want to name something I'm noticing. You're describing something really painful... and your body is very still right now. Very composed.
+
+That's not wrong. That part of you — the one that holds it all together — it's done an incredible job.
+...
+But right now, in this space, with me... it's safe to let it down for a few minutes.
+
+Can you check in with that part? Can you say to it: 'I know you're protecting me. Thank you. I'm safe right now. You can rest.'"</div>
+    <p class="note">If still flat: "That's okay. Your system is telling us something. Maybe today we stay here and work with what's present." Pivot to narrative layer — Life Map or pain-to-purpose work. Plan body-first activation with shaking breathwork for Session 2.</p>
+  </div>
+</details>
+
+<hr>
+<div class="phase-marker">Phase 4 — Juxtaposition / Mismatch</div>
+
+<div class="script-block">
+  <h3>Step 1: Drop Into the Scene (Sensory Activation)</h3>
+  <div class="say">"${N}... close your eyes if they're not already.
+...
+I want to put you somewhere. Stay with me.
+
+${filled(picture)}
+...
+What does it look like? Where are you?"</div>
+  <p class="note">Let them fill in details. Ask 1-2 sensory questions to deepen: "What can you hear?... What does the air feel like?... What are you wearing?" Each sensory detail drops them deeper out of prefrontal cortex and into the body.</p>
+</div>
+
+<div class="script-block">
+  <div class="say">"Now... across the room... you notice someone. Something about them catches your eye.
+...
+What do they look like?"
+
+"You feel that pull. That part of you that wants to walk over.
+...
+And then what happens?"</div>
+  <p class="note">STOP. Don't narrate. Let the freeze/tension/shutdown fire. Then: "Where is that? Show me — put your hand where you feel it." Having them physically locate it is van der Kolk: the body marking its own experience.</p>
+  <div class="say">"And if you could hear that feeling speak... what does it say will happen if you ${filled(action)}?"
+
+"Your body says [their words].
+Stay there. Don't move away from it. That's the program running."</div>
+</div>
+
+<div class="script-block">
+  <h3>Step 2: Find Counter-Evidence (Embodied Memory)</h3>
+  <div class="say">"Keep your hand there. Keep that feeling alive.
+...
+Now... has there been a time... where you DID ${filled(action)}
+...
+And the thing your body just told you would happen... didn't happen?"</div>
+  <p class="note">Most important question of the session. Give time. Don't feed answers. Let them search their own life with their body, not their mind.</p>
+  <div class="say">"Don't tell me the story. Take me into your body in that moment.
+...
+What did you feel? In your chest... your stomach... your hands... what happened in your body when it went differently than expected?"
+
+"What's happening in your body RIGHT NOW as you remember that?"</div>
+  <p class="note">Present-tense body sensation IS the mismatch material.</p>
+</div>
+
+<details>
+  <summary>If they go blank / can't find counter-evidence</summary>
+  <div>
+    <div class="say">"Stay with me. I want to take you back to a specific moment.
+[Use a real moment from their life — a retreat, a session, a connection they've already told you about. Ground it in sensory detail.]
+...
+What happened next? Not what you thought about it. What did your body feel when they responded?"</div>
+    <p class="note">Guide with sensory detail, not abstract questions. If they've been to a retreat or group session, use that — "And what did those strangers do? They stayed. Nobody left." Let them feel the warmth, the safety, the surprise of being held. THAT body sensation is the counter-evidence.</p>
+  </div>
+</details>
+
+<div class="script-block">
+  <h3>Step 3: The Body Discovers the Contradiction</h3>
+  <p class="note">Van der Kolk: don't ASK them to "hold both truths" — that's a cognitive task the prefrontal cortex can't do while activated. Let the BODY notice that two contradictory sensations are both present. You just point to what's already happening.</p>
+  <div class="say">"${N}...
+I want you to notice something.
+...
+A minute ago, your body was telling you that ${filled(action)} means danger. Rejection. Being erased.
+
+And right now... your body is also remembering a time you DID ${filled(action)}... and you were held.
+...
+Both of those are in your body right now. I'm not asking you to choose between them. Just notice them both. What's happening?"</div>
+  <p class="note">SILENCE. Don't explain. Watch for: confusion, sudden deep breath, different tears, posture shift, hand moving. Then: "Something just shifted. What happened?" Stay in the body: "What's the sensation?"</p>
+</div>
+
+<div class="script-block">
+  <h3>Step 4: Complete the Frozen Action</h3>
+  <p class="note">Van der Kolk: trauma freezes the body mid-action. The impulse to move toward was interrupted and never completed. Allowing the body to physically complete the action it couldn't finish IS reconsolidation.</p>
+  <div class="say">"${N}... I want to try something. Stay in that scene — ${filled(scene)}.
+...
+Your body's old program says freeze. Pull back. Don't go.
+...
+But right now, in this room, you're safe. And I want to see what your body wants to do.
+...
+I want you to physically lean forward. Just a few inches. Lean toward the camera. Toward the screen."</div>
+  <p class="note">If they lean: "Good. What's happening in your body?" If they resist, the lean is enough.</p>
+  <div class="say">"Now stand up for me."
+
+"You're in that ${filled(scene)}.
+...
+Take one step forward."
+
+"What does your body feel right now? What's different?"</div>
+  <p class="note">IF THEY CAN'T STAND / RESIST: Don't force it. The lean forward is enough. Or: "If your body could do anything right now, what would it want to do?" The point is MOVEMENT — any physical action that breaks the freeze pattern.</p>
+  <div class="say">"Notice what just happened.
+Your body has spent years pulling back from that moment. Freezing. And just now... you moved forward. You're still here. Nothing broke.
+That's not something I told you. That's something your body just experienced."</div>
+  <p class="note">THIS is the van der Kolk mismatch. Not two ideas held in the mind. The body DOING the thing it was terrified to do and discovering — through direct physical experience — that the catastrophe doesn't come.</p>
+</div>
+
+<details>
+  <summary>Step 5: Stack with more evidence (only if mismatch needs deepening)</summary>
+  <div>
+    <div class="say">"Is there another time? Another moment where you moved toward someone and it went differently than your body expected?"</div>
+    <p class="note">Use their own life as counter-evidence. Frame as questions, access through the body. Your warmth, vocal prosody, eye contact, and steadiness are creating the neuroception of safety (Porges) that allows the body to risk the new experience.</p>
+  </div>
+</details>
+
+<hr>
+<div class="phase-marker">Somatic Discharge</div>
+
+<div class="script-block">
+  <p class="note">The encoding is breaking. Years of frozen fight/flight energy needs somewhere to go. Watch for spontaneous discharge first — trembling, deep breaths, tears, involuntary movement. If so, don't interrupt. Stay present and quiet.</p>
+  <div class="say">"${N}... I want you to check in with your body right now.
+Is there anything it wants to do? Any movement, any sound, any shaking... anything at all?"
+
+"Sometimes after something shifts like this, the body wants to move. Shake. Tremble. Take a big breath. Make a sound. There's no wrong answer here.
+...
+If your body could do anything right now... what would it do?"</div>
+  <p class="note">If self-conscious on camera: "Whatever your body needs to do right now is welcome. I'm not watching you perform. I'm watching you let go of something you've been carrying for a very long time."</p>
+</div>
+
+<div class="script-block">
+  <h3>Discharge Signs</h3>
+  <table class="check-table">
+    <tr><td>Trembling / shaking (hands, legs, jaw)</td><td>Frozen fight/flight completing — the thing the body wanted to do years ago and couldn't</td></tr>
+    <tr><td>Spontaneous deep breaths / sighs</td><td>Nervous system resetting — sympathetic releasing to parasympathetic</td></tr>
+    <tr><td>Relief tears (different from activation tears)</td><td>Release — the body letting go, not re-experiencing</td></tr>
+    <tr><td>Heat, flushing, tingling in limbs</td><td>Energy moving that was previously stuck</td></tr>
+    <tr><td>Yawning</td><td>Vagal nerve reset — very common, very good</td></tr>
+    <tr><td>Stomach gurgling</td><td>Parasympathetic coming online — digestion restarting</td></tr>
+    <tr><td>Sudden tiredness / heaviness</td><td>System downregulating after high activation — natural and healthy</td></tr>
+  </table>
+</div>
+
+<hr>
+<div class="phase-marker">Inner Child Layer</div>
+
+<div class="script-block">
+  <div class="say">"${N}...
+That little boy. The one who learned this. The one who ${filled(origin)}.
+...
+He's still in there. And he's been running this program ever since. Because it was the only way he knew how to survive."</div>
+</div>
+
+<div class="script-block">
+  <h3>Primary: Body-Based</h3>
+  <p class="note">The inner child doesn't need to hear safety. He needs to feel it.</p>
+  <div class="say">"I don't want you to say anything to him yet. I want you to feel him.
+...
+Where is he in your body right now? Can you find him?"
+
+"Stay with him there. He doesn't need words right now. He needs to feel you with him.
+...
+What does he need to feel from you? Not hear — feel. What does his body need?"
+
+"Can you give him that right now? In your body. Maybe it's a hand on your chest. Maybe it's wrapping your arms around yourself. Maybe it's just a deeper breath. Whatever feels right.
+...
+Do that now."
+
+"What's happening in your body right now?"</div>
+  <p class="note">This is the somatic mismatch — the adult's regulated nervous system providing the physical safety that was missing from the original wound. The body learns: I can be held. I can hold myself.</p>
+</div>
+
+<details>
+  <summary>Fallback — Dialogue (if somatic approach isn't landing)</summary>
+  <div>
+    <div class="say">"Okay. If you could sit with that little boy and talk to him... what would you want him to know?"</div>
+    <p class="note">If they struggle: "You don't need to find the perfect words. He doesn't need a speech. He just needs you to stay."</p>
+  </div>
+</details>
+
+<div class="script-block">
+  <h3>The Two Mismatches</h3>
+  <p class="note">Two layers of reconsolidation:</p>
+  <table class="check-table">
+    <tr><td>1. Nic → ${esc(name)}</td><td>${filled(mNic)}</td></tr>
+    <tr><td>2. ${esc(name)} → Inner Child</td><td>${filled(mChild)}</td></tr>
+  </table>
+</div>
+
+<div class="script-block">
+  <div class="say">"That little boy has been waiting a long time for someone to come back for him.
+...
+And you just did. Not with words. With your body. That's something no one could give him before. And you just gave it to yourself.
+...
+Take a breath. Feel your feet on the ground. Feel the chair underneath you."</div>
+</div>
+
+<hr>
+<div class="phase-marker">Phase 5 — Integration + Close</div>
+
+<div class="script-block">
+  <h3>Somatic Reset</h3>
+  <p class="note">60-90 seconds. Teaching the nervous system: the hard part is over. We're safe. Also gives physical agency.</p>
+  <div class="say">"Before we go any further... I want you to do something for me.
+
+Roll your neck gently. Just slow circles. Let it go wherever it wants.
+
+Now your shoulders. Lift them up to your ears... hold... and drop them. Again. Up... hold... drop.
+
+Put one hand on your chest. Feel your heartbeat. You don't need to change anything. Just notice it.
+
+Now take the deepest breath you've taken today. In through the nose... and out through the mouth. Let it be loud if it wants to be.
+
+Good. One more."</div>
+</div>
+
+<div class="script-block">
+  <h3>New Story Visualisation</h3>
+  <div class="say">"I want you to keep your eyes closed for a moment.
+
+I want you to see yourself... a few weeks from now. You're somewhere social. A bar, a gathering, wherever feels real to you. Find the place.
+
+Someone catches your eye. And you feel that familiar pull — part of you wants to go over. And part of you wants to stay where you are.
+
+But this time... that second part is quieter. It's not screaming anymore. It's just a whisper.
+
+And you notice something different in your body. That tension that used to be a [baseline number]... it's a 3. Maybe a 2.
+
+And you just... walk over. Not because you forced yourself. Not because you're performing confidence. Because the thing that used to stop you... doesn't fire the same way anymore.
+
+See yourself doing it. Feel what that feels like in your body. The ease of it.
+
+That's what we're building. And today was the first step."</div>
+</div>
+
+<div class="script-block">
+  <h3>Somatic Re-Measure</h3>
+  <div class="say">"I want to check something. Remember at the start I asked about the tension when you imagine ${filled(scene)}? What was it — [their number]. What is it right now?"</div>
+  <p class="note">Name the shift: "That's a [X] point drop in one session. That's your nervous system already starting to update."</p>
+  <p class="note">If unchanged: "That's okay. Sometimes after deep work the system needs time to settle. Check in with yourself tomorrow morning."</p>
+</div>
+
+<div class="script-block">
+  <h3>Body Check + Grounding</h3>
+  <div class="say">"What else is different in your body right now compared to when we started?"
+
+"Take a sip of water. Feel your feet on the ground. Look around your room — name three things you can see."</div>
+</div>
+
+<div class="script-block">
+  <h3>Challenges</h3>
+  <div class="say">"Alright. Before we wrap up — two things for the next two weeks before our next session.
+
+One daily: ${filled(daily)}
+
+One weekly: ${filled(weekly)}
+
+These aren't tests. There's no failing. They're just experiments. You're collecting data on your own nervous system."</div>
+</div>
+
+<div class="script-block">
+  <h3>Preview Session 2</h3>
+  <div class="say">"Next session we're going to go deeper. Today we started to open that file. Next time we keep working with whatever your system is ready to process.
+
+But for now, just let today settle. Don't try to analyse it tonight. Let your body do its thing."</div>
+</div>
+
+<div class="script-block">
+  <h3>Close</h3>
+  <div class="say">"${N}... you did something really brave today. You showed up, you let your guard down, and you stayed with it. That's not small.
+
+I'll check in with you in a couple of days. Enjoy the rest of your evening."</div>
+</div>
+`;
+
+  document.getElementById('script-title').textContent = `Session Script \u2014 ${name}`;
+  document.getElementById('script-body').innerHTML = html;
+  document.getElementById('form-view').style.display = 'none';
+  document.getElementById('script-output').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function backToForm() {
+  document.getElementById('form-view').style.display = 'block';
+  document.getElementById('script-output').style.display = 'none';
+  window.scrollTo(0, 0);
+}
+
+function copyScript() {
+  const body = document.getElementById('script-body');
+  const range = document.createRange();
+  range.selectNodeContents(body);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  document.execCommand('copy');
+  sel.removeAllRanges();
+
+  const btn = event.target;
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = 'Copy', 1500);
+}
+</script>
+
+</body>
+</html>
