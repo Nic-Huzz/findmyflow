@@ -422,6 +422,14 @@
     </div>
 
     <div class="glass">
+      <h2>The Shift</h2>
+      <div class="field">
+        <label for="newStory">What does it look like when the freeze doesn't fire? <span class="hint">— describe the moment where you just... do the thing</span></label>
+        <textarea id="newStory" rows="3" placeholder="e.g. I wake up, I feel a pull toward something that excites me, and I just move toward it without overthinking. My body feels light, open."></textarea>
+      </div>
+    </div>
+
+    <div class="glass">
       <h2>Between Sessions</h2>
       <div class="field">
         <label for="dailyChallenge">A small daily practice you're willing to try <span class="hint">— something you can do in 5 minutes</span></label>
@@ -517,7 +525,8 @@ async function saveResponses() {
         mismatch_nic: getVal('mismatchNic'),
         mismatch_child: getVal('mismatchChild'),
         daily_challenge: getVal('dailyChallenge'),
-        weekly_challenge: getVal('weeklyChallenge')
+        weekly_challenge: getVal('weeklyChallenge'),
+        new_story: getVal('newStory')
       })
     });
 
@@ -588,6 +597,7 @@ if (params.has('admin')) {
       document.getElementById('mismatchChild').value = r.mismatch_child || '';
       document.getElementById('dailyChallenge').value = r.daily_challenge || '';
       document.getElementById('weeklyChallenge').value = r.weekly_challenge || '';
+      document.getElementById('newStory').value = r.new_story || '';
     };
 
     // Generate script button
@@ -616,6 +626,7 @@ if (params.has('admin')) {
           document.getElementById('mismatchChild').value = r.mismatch_child || '';
           document.getElementById('dailyChallenge').value = r.daily_challenge || '';
           document.getElementById('weeklyChallenge').value = r.weekly_challenge || '';
+          document.getElementById('newStory').value = r.new_story || '';
         }
       }, 500);
     });
@@ -633,6 +644,7 @@ function fillExample() {
   document.getElementById('mismatchChild').value = "I'm here now. You're not alone anymore. You didn't do anything wrong.";
   document.getElementById('dailyChallenge').value = '5 min body scan — notice where tension lives before social moments';
   document.getElementById('weeklyChallenge').value = 'One unfiltered share — say one real thing to someone and notice what your body does';
+  document.getElementById('newStory').value = "I'm sitting across from someone. I feel the pull to say the real thing. And I just say it. My body stays open. I don't brace. And they're still there.";
 }
 
 function generateScript() {
@@ -646,6 +658,8 @@ function generateScript() {
   const mChild = getVal('mismatchChild') || '[MISMATCH LINE]';
   const daily = getVal('dailyChallenge') || '[DAILY CHALLENGE]';
   const weekly = getVal('weeklyChallenge') || '[WEEKLY CHALLENGE]';
+  const newStory = getVal('newStory') || '';
+  const isConnection = area === 'Connection';
 
   const N = filled(name);
   const html = `
@@ -773,6 +787,7 @@ What does it look like? Where are you?"</div>
 </div>
 
 <div class="script-block">
+${isConnection ? `
   <div class="say">"Now... across the room... you notice someone. Something about them catches your eye.
 ...
 What do they look like?"
@@ -780,6 +795,13 @@ What do they look like?"
 "You feel that pull. That part of you that wants to walk over.
 ...
 And then what happens?"</div>
+` : `
+  <div class="say">"Now... you feel it. The pull. That part of you that wants to ${filled(action)}.
+...
+It's right there. You can feel the possibility of it.
+...
+And then what happens?"</div>
+`}
   <p class="note">STOP. Don't narrate. Let the freeze/tension/shutdown fire. Then: "Where is that? Show me — put your hand where you feel it." Having them physically locate it is van der Kolk: the body marking its own experience.</p>
   <div class="say">"And if you could hear that feeling speak... what does it say will happen if you ${filled(action)}?"
 
@@ -810,22 +832,77 @@ What did you feel? In your chest... your stomach... your hands... what happened 
 [Use a real moment from their life — a retreat, a session, a connection they've already told you about. Ground it in sensory detail.]
 ...
 What happened next? Not what you thought about it. What did your body feel when they responded?"</div>
-    <p class="note">Guide with sensory detail, not abstract questions. If they've been to a retreat or group session, use that — "And what did those strangers do? They stayed. Nobody left." Let them feel the warmth, the safety, the surprise of being held. THAT body sensation is the counter-evidence.</p>
+    <p class="note">Guide with sensory detail, not abstract questions. Use a real moment from their life where the pattern broke — a retreat, a conversation, a morning that went differently. Let them feel the body memory of it working. THAT body sensation is the counter-evidence.</p>
   </div>
 </details>
 
 <div class="script-block">
   <h3>Step 3: The Body Discovers the Contradiction</h3>
   <p class="note">Van der Kolk: don't ASK them to "hold both truths" — that's a cognitive task the prefrontal cortex can't do while activated. Let the BODY notice that two contradictory sensations are both present. You just point to what's already happening.</p>
-  <div class="say">"${N}...
-I want you to notice something.
-...
-A minute ago, your body was telling you that ${filled(action)} means danger. Rejection. Being erased.
 
-And right now... your body is also remembering a time you DID ${filled(action)}... and you were held.
+  <div class="say">"Now ask yourself this question...
+Has it ALWAYS been true?"</div>
+  <p class="note">PAUSE. 5 seconds. Let the question land.</p>
+
+  <div class="say">"Remember earlier you identified a time you DID take the action... and it worked out. Go back to that moment now.
 ...
-Both of those are in your body right now. I'm not asking you to choose between them. Just notice them both. What's happening?"</div>
-  <p class="note">SILENCE. Don't explain. Watch for: confusion, sudden deep breath, different tears, posture shift, hand moving. Then: "Something just shifted. What happened?" Stay in the body: "What's the sensation?"</p>
+The time you WERE seen... and you weren't rejected.
+The time you WEREN'T perfect... and you were still loved.
+The time you let go of control... and things were okay."</div>
+  <p class="note">PAUSE. 10 seconds.</p>
+
+  <div class="say">"What was the moment? Where were you? Who was there? What happened?"</div>
+  <p class="note">PAUSE. Let them find it.</p>
+  <div class="say">"What did you feel?
+...
+What's happening in your body when you remember you were seen, loved, accepted for this thing?
+Really tune into it. Where do you feel it? What colour is it? What size? If it was a shape? What texture?"</div>
+</div>
+
+<div class="script-block">
+  <h3>"Now... HERE'S THE WORK..."</h3>
+
+  <h3>Round 1</h3>
+  <div class="say">"Hold BOTH at the same time.
+The protective emotion... AND the emotion you felt when you took the action and it was okay.
+Simply hold both. Observe both. Sit with both."</div>
+  <p class="note">PAUSE. 10 seconds.</p>
+  <div class="say">"Observe what's happening."</div>
+
+  <h3>Round 2</h3>
+  <div class="say">"Stay with me. We're going deeper.
+...
+Go back to the old protective voice and the emotion it felt. Feel its grip. Where is it in your body right now? Chest? Throat? Stomach?"
+...
+"Let it get loud."</div>
+  <p class="note">PAUSE. 15 seconds. Let them sit in it. Let it be heard, be seen.</p>
+  <div class="say">"Now... bring back the moment you took action and it worked out. Go there. Feel it. Not the story — the FEELING. The warmth. The safety. Where is THAT in your body?"</div>
+  <p class="note">PAUSE. 15 seconds.</p>
+  <div class="say">"Now hold both. At the same time. The old voice in one hand. The truth in the other. Don't choose. Just hold."</div>
+  <p class="note">PAUSE. 20 seconds.</p>
+  <div class="say">"What shifted? Is the old voice as loud as it was 30 seconds ago?"</div>
+  <p class="note">PAUSE.</p>
+
+  <h3>Round 3</h3>
+  <div class="say">"One more time. Let the old story speak..."</div>
+  <p class="note">PAUSE. 10 seconds.</p>
+  <div class="say">"And now the truth..."</div>
+  <p class="note">PAUSE. 10 seconds.</p>
+  <div class="say">"Both. Together. Don't choose. Just notice what your body is doing with both of them."</div>
+  <p class="note">PAUSE. 15 seconds.</p>
+  <div class="say">"Whatever is happening right now — the tension, the softening, the confusion — that's your nervous system processing something it's been holding for years. You don't need to figure it out. Just let it work.
+Allowing your body to process and update into the new truth."</div>
+</div>
+
+<div class="script-block">
+  <h3>Visualise the Action</h3>
+  <div class="say">"I want you to think about that action you identified at the start that you know you need to take.
+The one your pattern has been stopping you from.
+...
+Picture yourself doing it. Really see it."</div>
+  <p class="note">PAUSE. 10 seconds.</p>
+  <div class="say">"What do you notice?"</div>
+  <p class="note">PAUSE. 5 seconds. The shift has begun — transition to somatic discharge.</p>
 </div>
 
 <div class="script-block">
@@ -848,7 +925,7 @@ Take one step forward."
 "What does your body feel right now? What's different?"</div>
   <p class="note">IF THEY CAN'T STAND / RESIST: Don't force it. The lean forward is enough. Or: "If your body could do anything right now, what would it want to do?" The point is MOVEMENT — any physical action that breaks the freeze pattern.</p>
   <div class="say">"Notice what just happened.
-Your body has spent years pulling back from that moment. Freezing. And just now... you moved forward. You're still here. Nothing broke.
+Your body has spent years ${isConnection ? 'pulling back from that moment' : 'defaulting in that moment. Shutting down'}. Freezing. And just now... you moved forward. You're still here. Nothing broke.
 That's not something I told you. That's something your body just experienced."</div>
   <p class="note">THIS is the van der Kolk mismatch. Not two ideas held in the mind. The body DOING the thing it was terrified to do and discovering — through direct physical experience — that the catastrophe doesn't come.</p>
 </div>
@@ -856,8 +933,8 @@ That's not something I told you. That's something your body just experienced."</
 <details>
   <summary>Step 5: Stack with more evidence (only if mismatch needs deepening)</summary>
   <div>
-    <div class="say">"Is there another time? Another moment where you moved toward someone and it went differently than your body expected?"</div>
-    <p class="note">Use their own life as counter-evidence. Frame as questions, access through the body. Your warmth, vocal prosody, eye contact, and steadiness are creating the neuroception of safety (Porges) that allows the body to risk the new experience.</p>
+    <div class="say">"Is there another time? Another moment where you ${isConnection ? 'moved toward someone' : 'moved toward that feeling'} and it went differently than your body expected?"</div>
+    <p class="note">Use their own life as counter-evidence. Frame as questions, access through the body.</p>
   </div>
 </details>
 
@@ -963,6 +1040,23 @@ Good. One more."</div>
 
 <div class="script-block">
   <h3>New Story Visualisation</h3>
+${newStory ? `
+  <div class="say">"I want you to keep your eyes closed for a moment.
+
+I want you to see yourself... a few weeks from now. ${filled(newStory)}
+
+And you feel that familiar pull — part of you wants to move toward it. And part of you wants to stay where you are.
+
+But this time... that second part is quieter. It's not screaming anymore. It's just a whisper.
+
+And you notice something different in your body. That tension that used to be a [baseline number]... it's a 3. Maybe a 2.
+
+And you just... do it. Not because you forced yourself. Not because you're performing. Because the thing that used to stop you... doesn't fire the same way anymore.
+
+See yourself doing it. Feel what that feels like in your body. The ease of it.
+
+That's what we're building. And today was the first step."</div>
+` : (isConnection ? `
   <div class="say">"I want you to keep your eyes closed for a moment.
 
 I want you to see yourself... a few weeks from now. You're somewhere social. A bar, a gathering, wherever feels real to you. Find the place.
@@ -978,6 +1072,23 @@ And you just... walk over. Not because you forced yourself. Not because you're p
 See yourself doing it. Feel what that feels like in your body. The ease of it.
 
 That's what we're building. And today was the first step."</div>
+` : `
+  <div class="say">"I want you to keep your eyes closed for a moment.
+
+I want you to see yourself... a few weeks from now. You're in that same moment — ${filled(scene)}.
+
+And you feel that familiar pull — part of you wants to ${filled(action)}. And part of you wants to stay where you are.
+
+But this time... that second part is quieter. It's not screaming anymore. It's just a whisper.
+
+And you notice something different in your body. That tension that used to be a [baseline number]... it's a 3. Maybe a 2.
+
+And you just... do it. Not because you forced yourself. Not because you're performing. Because the thing that used to stop you... doesn't fire the same way anymore.
+
+See yourself doing it. Feel what that feels like in your body. The ease of it.
+
+That's what we're building. And today was the first step."</div>
+`)}
 </div>
 
 <div class="script-block">
