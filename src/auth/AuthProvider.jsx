@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { initializeNotifications } from '../lib/notifications'
+import { initializeNotifications, isNativePushSupported } from '../lib/notifications'
 import { trackAccountCreated, getStoredUtmParams } from '../lib/analytics'
 
 const AuthContext = createContext({})
@@ -40,6 +40,19 @@ export const AuthProvider = ({ children }) => {
           const signedIn = new Date(session.user.last_sign_in_at).getTime()
           if (Math.abs(signedIn - created) < 60000) {
             trackAccountCreated({ userId: session.user.id, source: 'otp', ...getStoredUtmParams() })
+
+            // Enroll in welcome email sequence
+            const userEmail = session.user.email
+            if (userEmail) {
+              const name = session.user.user_metadata?.full_name || userEmail.split('@')[0]
+              supabase.functions.invoke('enroll-email-sequence', {
+                body: {
+                  email: userEmail,
+                  sequence_type: 'welcome',
+                  personalization_tokens: { name }
+                }
+              }).catch(err => console.warn('Welcome email enrollment failed:', err))
+            }
           }
         }
       }
@@ -53,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     const setupNotifications = async () => {
       if (user) {
         const vapidPublicKey = import.meta.env.VITE_VAPID_PUBLIC_KEY
-        if (vapidPublicKey) {
+        if (vapidPublicKey || isNativePushSupported()) {
           await initializeNotifications(user.id, vapidPublicKey)
           console.log('🔔 Notifications initialized')
         }

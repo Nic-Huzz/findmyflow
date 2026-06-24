@@ -312,7 +312,8 @@ serve(async (req) => {
         try {
           const deviceToken = subscription.keys?.token || subscription.endpoint.replace('apns://', '')
           const jwt = await getApnsJwt()
-          const response = await fetch(`https://api.push.apple.com/3/device/${deviceToken}`, {
+          const apnsHost = Deno.env.get('APNS_USE_SANDBOX') === 'true' ? 'api.sandbox.push.apple.com' : 'api.push.apple.com'
+          const response = await fetch(`https://${apnsHost}/3/device/${deviceToken}`, {
             method: 'POST',
             headers: {
               'authorization': `bearer ${jwt}`,
@@ -328,7 +329,7 @@ serve(async (req) => {
           })
           if (!response.ok) {
             const errText = await response.text()
-            if (response.status === 410 || response.status === 400) {
+            if (response.status === 410) {
               await supabaseClient.from('push_subscriptions').delete().eq('endpoint', subscription.endpoint)
             }
             results.push({ success: false, endpoint: subscription.endpoint, error: `APNs ${response.status}: ${errText}` })

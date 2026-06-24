@@ -82,11 +82,16 @@ const urlBase64ToUint8Array = (base64String) => {
 
 // Track whether native listeners are registered to avoid duplicates
 let nativeListenersRegistered = false
+// Mutable ref for current userId so listeners always use the latest
+let currentNativeUserId = null
 
 // Register for native push notifications (Capacitor)
 export const registerNativePush = async (userId) => {
   console.log('[Notifications] Registering native push for user:', userId)
   const Push = await getNativePush()
+
+  // Always update the current user (so existing listeners save to correct account)
+  currentNativeUserId = userId
 
   // Register with APNs
   await Push.register()
@@ -97,7 +102,7 @@ export const registerNativePush = async (userId) => {
 
     Push.addListener('registration', async (token) => {
       console.log('[Notifications] APNs device token:', token.value?.substring(0, 20) + '...')
-      await saveNativePushToken(userId, token.value)
+      await saveNativePushToken(currentNativeUserId, token.value)
     })
 
     Push.addListener('registrationError', (error) => {

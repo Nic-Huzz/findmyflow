@@ -58,7 +58,7 @@ async function getApnsJwt(): Promise<string> {
     new TextEncoder().encode(signingInput)
   )
 
-  // Convert DER signature to raw r||s format for JWT
+  // Deno crypto.subtle.sign returns IEEE P1363 (raw r||s) which is what JWT ES256 expects
   const sigBytes = new Uint8Array(signature)
   const encodedSig = base64url(sigBytes)
 
@@ -74,8 +74,11 @@ async function getApnsJwt(): Promise<string> {
 async function sendApns(deviceToken: string, payload: object, bundleId: string): Promise<void> {
   const jwt = await getApnsJwt()
 
-  // Use production APNs endpoint
-  const url = `https://api.push.apple.com/3/device/${deviceToken}`
+  // Try production first, fall back to sandbox if token is rejected
+  const apnsHost = Deno.env.get('APNS_USE_SANDBOX') === 'true'
+    ? 'api.sandbox.push.apple.com'
+    : 'api.push.apple.com'
+  const url = `https://${apnsHost}/3/device/${deviceToken}`
 
   const response = await fetch(url, {
     method: 'POST',
@@ -170,7 +173,7 @@ serve(async (req) => {
           console.error('APNs error:', error.message)
 
           // 410 Gone = token expired, clean up
-          if (error.statusCode === 410 || error.statusCode === 400) {
+          if (error.statusCode === 410) {
             await supabaseClient
               .from('push_subscriptions')
               .delete()
