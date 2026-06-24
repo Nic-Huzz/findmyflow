@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import {
   isNotificationSupported,
+  isNativePushSupported,
   getNotificationPermission,
   requestNotificationPermission,
   subscribeToPushNotifications,
@@ -59,13 +60,23 @@ function NotificationSettings() {
   }
 
   const checkNotificationStatus = async () => {
+    // Native app: check via Capacitor API
+    if (isNativePushSupported()) {
+      try {
+        const { PushNotifications } = await import('@capacitor/push-notifications')
+        const permStatus = await PushNotifications.checkPermissions()
+        const permission = permStatus.receive === 'granted' ? 'granted' : 'default'
+        setNotificationStatus({ supported: true, permission, subscribed: permission === 'granted' })
+      } catch {
+        setNotificationStatus({ supported: true, permission: 'default', subscribed: false })
+      }
+      return
+    }
+
+    // Web: check via browser APIs
     const supported = isNotificationSupported()
     const permission = getNotificationPermission()
-
-    // TODO: Check if user has an active subscription in database
-    // For now, assume subscribed if permission is granted
     const subscribed = permission === 'granted'
-
     setNotificationStatus({ supported, permission, subscribed })
   }
 
@@ -82,8 +93,8 @@ function NotificationSettings() {
       console.log('[NotificationSettings] Permission result:', permission)
 
       if (permission === 'granted') {
-        // Subscribe to push notifications
-        if (VAPID_PUBLIC_KEY) {
+        // Subscribe to push notifications (native doesn't need VAPID key)
+        if (isNativePushSupported() || VAPID_PUBLIC_KEY) {
           console.log('[NotificationSettings] Subscribing to push...')
           await subscribeToPushNotifications(user.id, VAPID_PUBLIC_KEY)
           console.log('[NotificationSettings] Subscribed successfully')
@@ -183,7 +194,7 @@ function NotificationSettings() {
     }
   }
 
-  if (!notificationStatus.supported) {
+  if (!notificationStatus.supported && !isNativePushSupported()) {
     // Check if user is on mobile Chrome/iOS Safari browser (not PWA)
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
@@ -195,7 +206,7 @@ function NotificationSettings() {
       <div className="notification-settings">
         {isMobile && !isStandalone ? (
           <div className="notification-install-required">
-            <h2 className="settings-title">📱 Install Required</h2>
+            <h2 className="settings-title">Install Required</h2>
             <p className="install-explanation">
               Push notifications are only available when Vibe Rise is installed
               as an app on your home screen.
@@ -208,7 +219,7 @@ function NotificationSettings() {
 
               {isIOS && (
                 <div className="device-instructions">
-                  <h4>📱 iPhone/iPad Instructions:</h4>
+                  <h4>iPhone/iPad Instructions:</h4>
                   <ol>
                     <li>
                       <strong>Safari:</strong> Tap the share button (
@@ -230,7 +241,7 @@ function NotificationSettings() {
 
               {isAndroid && (
                 <div className="device-instructions">
-                  <h4>🤖 Android Instructions:</h4>
+                  <h4>Android Instructions:</h4>
                   <ol>
                     <li>
                       <strong>Chrome:</strong> Tap the install button above, or tap the menu (⋮) in the top right and select "Add to Home screen"
@@ -243,14 +254,14 @@ function NotificationSettings() {
               )}
 
               <p className="install-note">
-                💡 After installing, open the app from your home screen and return
+                After installing, open the app from your home screen and return
                 to this page to enable notifications!
               </p>
             </div>
           </div>
         ) : (
           <div className="notification-unsupported">
-            <p>⚠️ Push notifications are not supported in your browser.</p>
+            <p>Push notifications are not supported in your browser.</p>
             <p className="notification-hint">
               Try using Chrome, Firefox, or Safari on a supported device.
             </p>

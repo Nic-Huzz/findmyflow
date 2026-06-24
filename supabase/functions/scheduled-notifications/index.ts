@@ -1,6 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 import webpush from 'npm:web-push@3.6.7'
+import { encode as base64url } from 'https://deno.land/std@0.168.0/encoding/base64url.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -271,67 +272,114 @@ serve(async (req) => {
       )
     }
 
-    // Get VAPID keys from environment
-    const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY')
-    const vapidPrivateKey = Deno.env.get('VAPID_PRIVATE_KEY')
-    const vapidEmail = Deno.env.get('VAPID_EMAIL')
+    // --- APNs JWT helper (inline, same as send-push-notification) ---
+    let cachedApnsToken: { token: string; expires: number } | null = null
 
-    if (!vapidPublicKey || !vapidPrivateKey || !vapidEmail) {
-      console.error('VAPID keys not configured')
-      return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+    async function getApnsJwt(): Promise<string> {
+      if (cachedApnsToken && Date.now() < cachedApnsToken.expires) {
+        return cachedApnsToken.token
+      }
+      const keyId = Deno.env.get('APNS_KEY_ID')!
+      const teamId = Deno.env.get('APNS_TEAM_ID')!
+      const keyP8 = Deno.env.get('APNS_KEY_P8')!
+      const header = { alg: 'ES256', kid: keyId }
+      const now = Math.floor(Date.now() / 1000)
+      const claims = { iss: teamId, iat: now }
+      const encodedHeader = base64url(new TextEncoder().encode(JSON.stringify(header)))
+      const encodedClaims = base64url(new TextEncoder().encode(JSON.stringify(claims)))
+      const signingInput = `${encodedHeader}.${encodedClaims}`
+      const pemBody = keyP8.replace(/-----BEGIN PRIVATE KEY-----/g, '').replace(/-----END PRIVATE KEY-----/g, '').replace(/\s/g, '')
+      const keyData = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0))
+      const cryptoKey = await crypto.subtle.importKey('pkcs8', keyData, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign'])
+      const signature = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, cryptoKey, new TextEncoder().encode(signingInput))
+      const encodedSig = base64url(new Uint8Array(signature))
+      const jwt = `${signingInput}.${encodedSig}`
+      cachedApnsToken = { token: jwt, expires: Date.now() + 50 * 60 * 1000 }
+      return jwt
     }
 
-    // Configure web-push (using static import at top of file)
-    // Add mailto: prefix if not present
-    const formattedEmail = vapidEmail.startsWith('mailto:') ? vapidEmail : `mailto:${vapidEmail}`
-    webpush.setVapidDetails(
-      formattedEmail,
-      vapidPublicKey,
-      vapidPrivateKey
-    )
+    // --- Split and send ---
+    const apnsItems = notificationsToSend.filter(n => n.subscription.endpoint?.startsWith('apns://'))
+    const webItems = notificationsToSend.filter(n => !n.subscription.endpoint?.startsWith('apns://'))
 
-    // Send notifications
-    const results = await Promise.allSettled(
-      notificationsToSend.map(async ({ subscription, notification }) => {
+    const results: Array<{ success: boolean; endpoint: string; error?: string }> = []
+
+    // Send APNs
+    const apnsConfigured = Deno.env.get('APNS_KEY_ID') && Deno.env.get('APNS_TEAM_ID') && Deno.env.get('APNS_KEY_P8')
+    if (apnsItems.length > 0 && apnsConfigured) {
+      const bundleId = Deno.env.get('APNS_BUNDLE_ID') || 'com.nichuzz.viberise'
+      for (const { subscription, notification } of apnsItems) {
         try {
-          const payload = JSON.stringify({
-            title: notification.title,
-            body: notification.body,
-            icon: '/icon-192.png',
-            badge: '/badge-72x72.png',
-            tag: notification.tag,
-            url: notification.url,
-            timestamp: Date.now()
+          const deviceToken = subscription.keys?.token || subscription.endpoint.replace('apns://', '')
+          const jwt = await getApnsJwt()
+          const response = await fetch(`https://api.push.apple.com/3/device/${deviceToken}`, {
+            method: 'POST',
+            headers: {
+              'authorization': `bearer ${jwt}`,
+              'apns-topic': bundleId,
+              'apns-push-type': 'alert',
+              'apns-priority': '10',
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              aps: { alert: { title: notification.title, body: notification.body || '' }, sound: 'default', badge: 1 },
+              url: notification.url || '/',
+            }),
           })
-
-          const pushSubscription = {
-            endpoint: subscription.endpoint,
-            keys: subscription.keys
+          if (!response.ok) {
+            const errText = await response.text()
+            if (response.status === 410 || response.status === 400) {
+              await supabaseClient.from('push_subscriptions').delete().eq('endpoint', subscription.endpoint)
+            }
+            results.push({ success: false, endpoint: subscription.endpoint, error: `APNs ${response.status}: ${errText}` })
+          } else {
+            results.push({ success: true, endpoint: subscription.endpoint })
           }
-
-          await webpush.sendNotification(pushSubscription, payload)
-          return { success: true, endpoint: subscription.endpoint }
         } catch (error: any) {
-          console.error('Error sending to subscription:', error)
-
-          // If subscription is invalid/expired, delete it from database
-          if (error.statusCode === 410 || error.statusCode === 404) {
-            await supabaseClient
-              .from('push_subscriptions')
-              .delete()
-              .eq('endpoint', subscription.endpoint)
-          }
-
-          return { success: false, endpoint: subscription.endpoint, error: error.message }
+          results.push({ success: false, endpoint: subscription.endpoint, error: error.message })
         }
-      })
-    )
+      }
+    } else if (apnsItems.length > 0) {
+      console.warn(`${apnsItems.length} APNs subscriptions skipped: APNS credentials not configured`)
+    }
 
-    // Count successes and failures
-    const sent = results.filter(r => r.status === 'fulfilled' && r.value.success).length
+    // Send Web Push
+    if (webItems.length > 0) {
+      const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY')
+      const vapidPrivateKey = Deno.env.get('VAPID_PRIVATE_KEY')
+      const vapidEmail = Deno.env.get('VAPID_EMAIL')
+
+      if (vapidPublicKey && vapidPrivateKey && vapidEmail) {
+        const formattedEmail = vapidEmail.startsWith('mailto:') ? vapidEmail : `mailto:${vapidEmail}`
+        webpush.setVapidDetails(formattedEmail, vapidPublicKey, vapidPrivateKey)
+
+        for (const { subscription, notification } of webItems) {
+          try {
+            const payload = JSON.stringify({
+              title: notification.title,
+              body: notification.body,
+              icon: '/icon-192.png',
+              badge: '/badge-72x72.png',
+              tag: notification.tag,
+              url: notification.url,
+              timestamp: Date.now()
+            })
+            await webpush.sendNotification({ endpoint: subscription.endpoint, keys: subscription.keys }, payload)
+            results.push({ success: true, endpoint: subscription.endpoint })
+          } catch (error: any) {
+            console.error('Error sending to subscription:', error)
+            if (error.statusCode === 410 || error.statusCode === 404) {
+              await supabaseClient.from('push_subscriptions').delete().eq('endpoint', subscription.endpoint)
+            }
+            results.push({ success: false, endpoint: subscription.endpoint, error: error.message })
+          }
+        }
+      } else {
+        console.error('VAPID keys not configured, skipping web push')
+      }
+    }
+
+    const sent = results.filter(r => r.success).length
     const failed = results.length - sent
 
     console.log(`Notifications sent: ${sent} successful, ${failed} failed`)

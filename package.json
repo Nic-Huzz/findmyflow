@@ -27,12 +27,18 @@
     "studio": "remotion studio remotion/index.ts",
     "render": "remotion render remotion/index.ts",
     "render:nikigai": "remotion render remotion/index.ts nikigai-explainer out/nikigai-explainer.mp4",
-    "generate:llms": "node scripts/generate-llms-full.js"
+    "generate:llms": "node scripts/generate-llms-full.js",
+    "android:sync": "npm run build && npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:build": "npm run build && npx cap sync android && cd android && JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home ./gradlew bundleRelease",
+    "android:debug": "npm run build && npx cap sync android && cd android && JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home ./gradlew assembleDebug"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.1",
     "@capacitor/cli": "^8.3.4",
     "@capacitor/core": "^8.3.4",
     "@capacitor/ios": "^8.3.4",
+    "@capacitor/push-notifications": "^8.1.1",
     "@remotion/cli": "^4.0.419",
     "@remotion/google-fonts": "^4.0.419",
     "@remotion/player": "^4.0.419",

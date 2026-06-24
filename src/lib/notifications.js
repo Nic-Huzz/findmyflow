@@ -1,19 +1,45 @@
 import { supabase } from './supabaseClient'
+import { isNativeApp } from './platform'
 
-// Check if browser supports notifications
-export const isNotificationSupported = () => {
+// Lazy-load Capacitor Push plugin only when in native app
+let PushNotifications = null
+const getNativePush = async () => {
+  if (!PushNotifications) {
+    const mod = await import('@capacitor/push-notifications')
+    PushNotifications = mod.PushNotifications
+  }
+  return PushNotifications
+}
+
+// Check if running in Capacitor native shell
+export const isNativePushSupported = () => isNativeApp()
+
+// Check if browser supports web push notifications
+export const isWebPushSupported = () => {
   return 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window
+}
+
+// Check if ANY notification method is supported (native or web)
+export const isNotificationSupported = () => {
+  return isNativePushSupported() || isWebPushSupported()
 }
 
 // Check current notification permission status
 export const getNotificationPermission = () => {
-  if (!isNotificationSupported()) return 'unsupported'
+  if (isNativePushSupported()) return 'default' // Will check native status async
+  if (!isWebPushSupported()) return 'unsupported'
   return Notification.permission
 }
 
 // Request notification permission from user
 export const requestNotificationPermission = async () => {
-  if (!isNotificationSupported()) {
+  if (isNativePushSupported()) {
+    const Push = await getNativePush()
+    const result = await Push.requestPermissions()
+    return result.receive === 'granted' ? 'granted' : 'denied'
+  }
+
+  if (!isWebPushSupported()) {
     throw new Error('Notifications are not supported in this browser')
   }
 
@@ -54,22 +80,80 @@ const urlBase64ToUint8Array = (base64String) => {
   return outputArray
 }
 
+// Track whether native listeners are registered to avoid duplicates
+let nativeListenersRegistered = false
+
+// Register for native push notifications (Capacitor)
+export const registerNativePush = async (userId) => {
+  console.log('[Notifications] Registering native push for user:', userId)
+  const Push = await getNativePush()
+
+  // Register with APNs
+  await Push.register()
+
+  // Only add listeners once
+  if (!nativeListenersRegistered) {
+    nativeListenersRegistered = true
+
+    Push.addListener('registration', async (token) => {
+      console.log('[Notifications] APNs device token:', token.value?.substring(0, 20) + '...')
+      await saveNativePushToken(userId, token.value)
+    })
+
+    Push.addListener('registrationError', (error) => {
+      console.error('[Notifications] Native push registration error:', error)
+    })
+
+    Push.addListener('pushNotificationReceived', (notification) => {
+      console.log('[Notifications] Foreground notification:', notification)
+    })
+
+    Push.addListener('pushNotificationActionPerformed', (action) => {
+      console.log('[Notifications] Notification tapped:', action)
+      const url = action.notification?.data?.url
+      if (url) window.location.href = url
+    })
+  }
+}
+
+// Save APNs device token to Supabase
+const saveNativePushToken = async (userId, token) => {
+  const { error } = await supabase
+    .from('push_subscriptions')
+    .upsert({
+      user_id: userId,
+      endpoint: `apns://${token}`,
+      keys: { platform: 'ios', token },
+      created_at: new Date().toISOString()
+    }, { onConflict: 'user_id,endpoint' })
+
+  if (error) {
+    console.error('[Notifications] Error saving APNs token:', error)
+    throw error
+  }
+  console.log('[Notifications] APNs token saved')
+}
+
 // Subscribe to push notifications
 export const subscribeToPushNotifications = async (userId, vapidPublicKey) => {
+  // Native path
+  if (isNativePushSupported()) {
+    await registerNativePush(userId)
+    return { native: true }
+  }
+
+  // Web push path
   console.log('[Notifications] subscribeToPushNotifications called', { userId, hasVapidKey: !!vapidPublicKey })
 
   try {
-    // Get service worker registration
     console.log('[Notifications] Waiting for service worker ready...')
     const registration = await navigator.serviceWorker.ready
     console.log('[Notifications] Service worker ready:', registration.scope)
 
-    // Check if already subscribed
     let subscription = await registration.pushManager.getSubscription()
     console.log('[Notifications] Existing subscription:', subscription ? 'yes' : 'no')
 
     if (!subscription) {
-      // Create new subscription
       console.log('[Notifications] Creating new push subscription...')
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
@@ -78,7 +162,6 @@ export const subscribeToPushNotifications = async (userId, vapidPublicKey) => {
       console.log('[Notifications] Push subscription created:', subscription.endpoint)
     }
 
-    // Save subscription to Supabase
     console.log('[Notifications] Saving subscription to database...')
     await savePushSubscription(userId, subscription)
     console.log('[Notifications] Subscription saved successfully')
@@ -129,6 +212,17 @@ const savePushSubscription = async (userId, subscription) => {
 // Unsubscribe from push notifications
 export const unsubscribeFromPushNotifications = async (userId) => {
   try {
+    // Native: just remove from database (APNs token stays registered on device)
+    if (isNativePushSupported()) {
+      await supabase
+        .from('push_subscriptions')
+        .delete()
+        .eq('user_id', userId)
+      console.log('Unsubscribed from native push notifications')
+      return true
+    }
+
+    // Web: unsubscribe from PushManager + remove from database
     const registration = await navigator.serviceWorker.ready
     const subscription = await registration.pushManager.getSubscription()
 
@@ -136,7 +230,6 @@ export const unsubscribeFromPushNotifications = async (userId) => {
       await subscription.unsubscribe()
       console.log('Unsubscribed from push notifications')
 
-      // Remove from database
       await supabase
         .from('push_subscriptions')
         .delete()
@@ -150,9 +243,17 @@ export const unsubscribeFromPushNotifications = async (userId) => {
   }
 }
 
-// Show a local notification (for testing)
+// Show a local notification
 export const showLocalNotification = async (title, options = {}) => {
-  if (!isNotificationSupported()) {
+  // Native: local notifications not available without @capacitor/local-notifications
+  // Remote push notifications will work via APNs; local ones are skipped in native
+  if (isNativePushSupported()) {
+    console.log('[Notifications] Local notification skipped in native app:', title)
+    return
+  }
+
+  // Web: use service worker
+  if (!isWebPushSupported()) {
     throw new Error('Notifications are not supported')
   }
 
@@ -175,20 +276,30 @@ export const showLocalNotification = async (title, options = {}) => {
 // Initialize notifications (call this on app startup)
 export const initializeNotifications = async (userId, vapidPublicKey) => {
   try {
-    // Check if supported
-    if (!isNotificationSupported()) {
+    // Native app path
+    if (isNativePushSupported()) {
+      const Push = await getNativePush()
+      const permStatus = await Push.checkPermissions()
+      const permission = permStatus.receive === 'granted' ? 'granted' : 'default'
+
+      if (permission === 'granted' && userId) {
+        await registerNativePush(userId)
+        return { supported: true, permission: 'granted', subscribed: true, native: true }
+      }
+
+      return { supported: true, permission, subscribed: false, native: true }
+    }
+
+    // Web push path
+    if (!isWebPushSupported()) {
       console.log('Notifications not supported in this browser')
       return { supported: false }
     }
 
-    // Register service worker
     await registerServiceWorker()
-
-    // Check permission status
     const permission = getNotificationPermission()
 
     if (permission === 'granted' && userId && vapidPublicKey) {
-      // Auto-subscribe if already granted permission
       await subscribeToPushNotifications(userId, vapidPublicKey)
       return { supported: true, permission: 'granted', subscribed: true }
     }
@@ -257,7 +368,8 @@ export const checkValidationProgressNotification = async (userId, totalResponses
 
   try {
     // Try local notification first (instant)
-    if (Notification.permission === 'granted') {
+    const hasPermission = isNativePushSupported() || Notification.permission === 'granted'
+    if (hasPermission) {
       await showLocalNotification(title, {
         body,
         tag: 'validation-progress',
@@ -285,7 +397,8 @@ export const sendAnalysisUnlockedNotification = async (userId) => {
   }
 
   try {
-    if (Notification.permission === 'granted') {
+    const hasPermission = isNativePushSupported() || Notification.permission === 'granted'
+    if (hasPermission) {
       await showLocalNotification('AI Analysis Unlocked!', {
         body: 'You have 3+ validation responses. Tap to discover what your audience really wants.',
         tag: 'validation-unlocked',
@@ -308,7 +421,8 @@ export const sendAchievementNotification = async ({ title, body, url = '/7-day-c
       return { sent: false, reason: 'Notifications not supported' }
     }
 
-    if (Notification.permission !== 'granted') {
+    const hasPermission = isNativePushSupported() || Notification.permission === 'granted'
+    if (!hasPermission) {
       return { sent: false, reason: 'Notification permission not granted' }
     }
 

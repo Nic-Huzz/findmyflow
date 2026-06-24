@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import {
   isNotificationSupported,
+  isNativePushSupported,
   getNotificationPermission,
   requestNotificationPermission,
   subscribeToPushNotifications,
@@ -137,6 +138,19 @@ function UserSettings() {
   // --- Notification Methods ---
 
   const checkNotificationStatus = async () => {
+    // Native app: check via Capacitor
+    if (isNativePushSupported()) {
+      try {
+        const { PushNotifications } = await import('@capacitor/push-notifications')
+        const permStatus = await PushNotifications.checkPermissions()
+        const permission = permStatus.receive === 'granted' ? 'granted' : 'default'
+        setNotificationStatus({ supported: true, permission, subscribed: permission === 'granted' })
+      } catch {
+        setNotificationStatus({ supported: true, permission: 'default', subscribed: false })
+      }
+      return
+    }
+
     const supported = isNotificationSupported()
     const permission = getNotificationPermission()
 
@@ -238,7 +252,7 @@ function UserSettings() {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
                       window.navigator.standalone === true
-  const needsPWAInstall = isMobile && !isStandalone && !notificationStatus.supported
+  const needsPWAInstall = isMobile && !isStandalone && !notificationStatus.supported && !isNativePushSupported()
 
   return (
     <div className="user-settings-container">
