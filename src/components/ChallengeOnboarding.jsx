@@ -99,8 +99,8 @@ function ChallengeOnboarding({
       console.log('[ChallengeOnboarding] Permission result:', permission)
 
       if (permission === 'granted') {
-        // Subscribe to push notifications
-        if (VAPID_PUBLIC_KEY && userId) {
+        // Subscribe to push notifications (native doesn't need VAPID key)
+        if ((isNativePushSupported() || VAPID_PUBLIC_KEY) && userId) {
           console.log('[ChallengeOnboarding] Subscribing to push notifications...')
           await subscribeToPushNotifications(userId, VAPID_PUBLIC_KEY)
 
@@ -344,7 +344,7 @@ function ChallengeOnboarding({
               </div>
             </div>
 
-            {!notificationsSupported && !isStandalone && isMobile && (
+            {!notificationsSupported && !isStandalone && isMobile && !isNativePushSupported() && (
               <div className="notification-warning">
                 <span className="warning-icon">⚠️</span>
                 <p>

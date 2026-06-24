@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import {
   isNotificationSupported,
+  isNativePushSupported,
   getNotificationPermission,
   initializeNotifications
 } from '../lib/notifications'
@@ -49,7 +50,7 @@ function NotificationPrompt({ onDismiss }) {
   }
 
   const handleQuickEnable = async () => {
-    if (user && VAPID_PUBLIC_KEY) {
+    if (user && (isNativePushSupported() || VAPID_PUBLIC_KEY)) {
       try {
         await initializeNotifications(user.id, VAPID_PUBLIC_KEY)
         setShow(false)

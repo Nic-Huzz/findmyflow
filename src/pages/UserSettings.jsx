@@ -194,7 +194,7 @@ function UserSettings() {
     try {
       const permission = await requestNotificationPermission()
       if (permission === 'granted') {
-        if (VAPID_PUBLIC_KEY) {
+        if (isNativePushSupported() || VAPID_PUBLIC_KEY) {
           await subscribeToPushNotifications(user.id, VAPID_PUBLIC_KEY)
         }
         await showLocalNotification('Notifications Enabled!', {

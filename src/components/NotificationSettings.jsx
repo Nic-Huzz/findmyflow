@@ -423,10 +423,9 @@ function NotificationSettings() {
         )}
       </div>
 
-      {!VAPID_PUBLIC_KEY && (
+      {!VAPID_PUBLIC_KEY && !isNativePushSupported() && (
         <div className="setup-warning">
-          <strong>⚠️ Setup Required:</strong> VAPID keys need to be configured.
-          See md files/PUSH_NOTIFICATIONS_SETUP.md for instructions.
+          <strong>Setup Required:</strong> VAPID keys need to be configured.
         </div>
       )}
     </div>
