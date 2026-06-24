@@ -273,6 +273,45 @@
     backdrop-filter: blur(20px);
   }
 
+  .live-input {
+    display: inline-block;
+    min-width: 120px;
+    padding: 4px 10px;
+    background: rgba(94, 23, 235, 0.12);
+    border: 1px dashed var(--purple-light);
+    border-radius: 6px;
+    color: var(--gold);
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-style: normal;
+    vertical-align: baseline;
+  }
+
+  .live-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(94, 23, 235, 0.2);
+  }
+
+  .live-input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .live-input-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .live-input-group .live-input {
+    width: 100%;
+    display: block;
+  }
+
   .say .filled {
     color: var(--gold);
     font-weight: 700;
@@ -748,7 +787,14 @@ The Perfectionist: You prepare. You polish. You wait until it's perfect. But not
   <div class="say">"Which one landed?
 Maybe it was obvious. Maybe you felt it before I finished the sentence.
 Maybe it's a combination. That's okay. Pick the ONE that has the strongest grip on you right now."</div>
-  <p class="note">Wait for their answer. Remember what they pick — this becomes their protective voice for the rest of the session.</p>
+  <p class="note">Wait for their answer. This becomes their protective voice for the rest of the session.</p>
+  <select class="live-input" id="liveVoice" style="width:100%;display:block;padding:10px 14px;" onchange="document.querySelectorAll('.voice-ref').forEach(el=>el.textContent=this.value||'[their voice]')">
+    <option value="">They chose...</option>
+    <option value="The Ghost">The Ghost</option>
+    <option value="The Controller">The Controller</option>
+    <option value="The Auto-Pilot">The Auto-Pilot</option>
+    <option value="The Perfectionist">The Perfectionist</option>
+  </select>
   <div class="say">"That pattern isn't a flaw. It's a survival strategy. Something happened — somewhere between being a carefree kid and today — that made this pattern feel necessary to stay safe.
 
 But here's the real question...
@@ -771,11 +817,21 @@ Don't tell me the story yet. Just find the moment.
 ...
 Where does that live in your body right now? When you think about that moment... where do you feel it?"</div>
   <p class="note">Let them locate it. Common: chest, throat, stomach, shoulders. Whatever they say, go there.</p>
+  <div class="live-input-group">
+    <input class="live-input" id="liveLocation" placeholder="Location (e.g. chest, throat)">
+    <input class="live-input" id="liveBaseline" placeholder="Tension 1-10">
+  </div>
 </div>
 
 <div class="script-block">
   <div class="say">"Stay with that. Just notice it. What does it feel like? Is it tight? Heavy? Hot? Cold? Does it have a shape?"</div>
-  <p class="note">If they start explaining WHY, redirect: "I hear you. Stay below the neck for me. What is that sensation doing right now? Is it getting bigger? Smaller? Moving?"</p>
+  <p class="note">If they start explaining WHY, redirect: "Stay below the neck for me. Just stay with the sensation."</p>
+  <div class="live-input-group">
+    <input class="live-input" id="liveColour" placeholder="Colour">
+    <input class="live-input" id="liveSize" placeholder="Size">
+    <input class="live-input" id="liveShape" placeholder="Shape">
+    <input class="live-input" id="liveTexture" placeholder="Texture / temperature">
+  </div>
 </div>
 
 <div class="script-block">
@@ -799,7 +855,11 @@ This will be a moment where this need of yours didn't feel safe."</div>
   <div class="say">"Don't force it. Just notice what comes. An image. A face. A place. A feeling. An age."</div>
   <p class="note">PAUSE. 10 seconds.</p>
   <div class="say">"When you have something — even if it's not perfectly clear — tell me what you see."</div>
-  <p class="note">If struggling: "If you're struggling to find a specific memory, that's okay. Sometimes the mind has locked it away, but your body remembers. Just stay with the feeling." Whatever they give you — an age, an image, a sensation — anchor to it. This is the origin. This is what Phase 3 activates.</p>
+  <p class="note">If struggling: "If you're struggling to find a specific memory, that's okay. Sometimes the mind has locked it away, but your body remembers. Just stay with the feeling." Whatever they give you — anchor to it.</p>
+  <div class="live-input-group">
+    <input class="live-input" id="liveAge" placeholder="Age they named" oninput="document.querySelectorAll('.age-ref').forEach(el=>el.textContent=this.value||'[age]')">
+    <input class="live-input" id="liveOriginScene" placeholder="What they saw (scene/image)">
+  </div>
 </div>
 
 <hr>
@@ -808,9 +868,9 @@ This will be a moment where this need of yours didn't feel safe."</div>
 <div class="script-block">
   <h3>Primary: Sensation-Tracking</h3>
   <div class="say">"Stay with that.
-You said it feels like it's [age they named]. Stay with the sensation. What's happening to it right now? Is it getting heavier? Tighter? Is it spreading?"
+You said it feels like it's <span class="age-ref">[age]</span>. Stay with the sensation. What's happening to it right now? Is it getting heavier? Tighter? Is it spreading?"
 
-"Can you be curious about it? Not name the story... just stay with the feeling. What's its temperature? Does it have edges? A texture?"
+"Can you be curious about it? Not name the story... just stay with the feeling. Does it have movement or is it static?"
 
 "What does that sensation need right now? Not what does your mind think it needs — what does the feeling itself want?"
 ...
@@ -847,9 +907,7 @@ ${voice ? esc(({
   "The Perfectionist": "The Perfectionist waits to feel ready... and never starts."
 })[voice] || '') : "The pattern didn't protect you."}
 
-It guaranteed the wound would keep repeating.
-
-And you've been living by that story... Every. Single. Day. Since."</div>
+The pattern didn't protect you. It guaranteed the wound would keep repeating."</div>
   <p class="note">Let this land. Don't rush. Watch the body — this is often where activation deepens significantly.</p>
 </div>
 
@@ -861,7 +919,7 @@ That version of you had an experience that really hurt. They didn't know what el
 
 And you've been living by that story... Every. Single. Day. Since."</div>
   <p class="note">PAUSE.</p>
-  <div class="say">"If you met a [their age] year old on the street... would you accept their life advice?
+  <div class="say">"If you met a <span class="age-ref">[age]</span> year old on the street... would you accept their life advice?
 ...
 No.
 ...
@@ -890,7 +948,7 @@ And you have options now that child didn't have."</div>
 <details>
   <summary>Fallback A — Guided Visualisation (if sensation-tracking isn't landing)</summary>
   <div>
-    <div class="say">"Okay. Let's try something different. You're [age they named]. Where are you? What do you see around you?"</div>
+    <div class="say">"Okay. Let's try something different. You're <span class="age-ref">[age]</span>. Where are you? What do you see around you?"</div>
     <p class="note">Use senses to ground INTO the body: "What do you hear? What does the air feel like?" Then redirect back to sensation: "And as you're there... what's happening in your body right now?"</p>
   </div>
 </details>
@@ -1347,7 +1405,13 @@ Try to find that old feeling. The one we started with. The one that used to fire
 Go looking for it. Try to feel it the way you used to.
 ...
 What happens?"</div>
-  <p class="note">This is the gold standard verification. If reconsolidation occurred, they'll struggle to access the old feeling in the same way. Common responses: "It's... not the same" / "I can't find it" / "It's there but it doesn't have the same charge." All signs the encoding has updated. If the old feeling is still fully intact, the shift may need more time or another session to consolidate.</p>
+  <p class="note">This is the gold standard verification. If reconsolidation occurred, they'll struggle to access the old feeling in the same way. Common responses: "It's... not the same" / "I can't find it" / "It's there but it doesn't have the same charge." All signs the encoding has updated.</p>
+  <div class="live-input-group">
+    <input class="live-input" id="liveNewTension" placeholder="New tension 1-10">
+    <input class="live-input" id="liveNewFeeling" placeholder="What's different? (e.g. lighter, open)">
+    <input class="live-input" id="liveNewColour" placeholder="New colour">
+    <input class="live-input" id="liveNewTexture" placeholder="New texture / quality">
+  </div>
 </div>
 
 <div class="script-block">
