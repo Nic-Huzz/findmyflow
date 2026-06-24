@@ -538,16 +538,88 @@ async function saveResponses() {
   }
 }
 
-// Admin mode: add ?admin to URL to show script generation
-if (new URLSearchParams(window.location.search).has('admin')) {
-  document.addEventListener('DOMContentLoaded', () => {
+// Admin mode: add ?admin to URL to show script generation + load clients
+const params = new URLSearchParams(window.location.search);
+if (params.has('admin')) {
+  document.addEventListener('DOMContentLoaded', async () => {
     const btnRow = document.querySelector('.btn-row');
+
+    // Load client dropdown
+    const loadRow = document.createElement('div');
+    loadRow.style.cssText = 'margin-bottom:20px;display:flex;gap:10px;align-items:center;';
+    const sel = document.createElement('select');
+    sel.id = 'adminClientSelect';
+    sel.style.cssText = 'flex:1;padding:10px 14px;background:rgba(94,23,235,0.06);border:1px solid rgba(233,162,59,0.12);border-radius:10px;color:#fff;font-family:inherit;font-size:0.92rem;appearance:none;cursor:pointer;';
+    sel.innerHTML = '<option value="">Load a client submission...</option>';
+    const loadBtn = document.createElement('button');
+    loadBtn.className = 'btn-secondary';
+    loadBtn.textContent = 'Load';
+    loadBtn.style.padding = '10px 20px';
+    loadRow.appendChild(sel);
+    loadRow.appendChild(loadBtn);
+    btnRow.parentNode.insertBefore(loadRow, btnRow);
+
+    // Fetch submissions
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/mismatch_sections?order=created_at.desc`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      const rows = await res.json();
+      window._adminRows = rows;
+      rows.forEach((r, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `${r.client_name} — ${r.stuck_area || 'no area'} (${new Date(r.created_at).toLocaleDateString()})`;
+        sel.appendChild(opt);
+      });
+    } catch(e) { console.error(e); }
+
+    loadBtn.onclick = () => {
+      const idx = sel.value;
+      if (idx === '' || !window._adminRows) return;
+      const r = window._adminRows[idx];
+      document.getElementById('clientName').value = r.client_name || '';
+      document.getElementById('stuckArea').value = r.stuck_area || '';
+      document.getElementById('actionScene').value = r.action_scene || '';
+      document.getElementById('takeAction').value = r.take_action || '';
+      document.getElementById('paintPicture').value = r.paint_picture || '';
+      document.getElementById('firstExperience').value = r.first_experience || '';
+      document.getElementById('mismatchNic').value = r.mismatch_nic || '';
+      document.getElementById('mismatchChild').value = r.mismatch_child || '';
+      document.getElementById('dailyChallenge').value = r.daily_challenge || '';
+      document.getElementById('weeklyChallenge').value = r.weekly_challenge || '';
+    };
+
+    // Generate script button
     const genBtn = document.createElement('button');
     genBtn.className = 'btn-secondary';
     genBtn.textContent = 'Generate Script';
     genBtn.onclick = () => generateScript();
     btnRow.appendChild(genBtn);
   });
+
+  // Auto-load if ?admin&client=Name
+  if (params.get('client')) {
+    document.addEventListener('DOMContentLoaded', () => {
+      const target = params.get('client').toLowerCase();
+      setTimeout(() => {
+        if (!window._adminRows) return;
+        const r = window._adminRows.find(r => r.client_name.toLowerCase() === target);
+        if (r) {
+          document.getElementById('clientName').value = r.client_name || '';
+          document.getElementById('stuckArea').value = r.stuck_area || '';
+          document.getElementById('actionScene').value = r.action_scene || '';
+          document.getElementById('takeAction').value = r.take_action || '';
+          document.getElementById('paintPicture').value = r.paint_picture || '';
+          document.getElementById('firstExperience').value = r.first_experience || '';
+          document.getElementById('mismatchNic').value = r.mismatch_nic || '';
+          document.getElementById('mismatchChild').value = r.mismatch_child || '';
+          document.getElementById('dailyChallenge').value = r.daily_challenge || '';
+          document.getElementById('weeklyChallenge').value = r.weekly_challenge || '';
+        }
+      }, 500);
+    });
+  }
 }
 
 function fillExample() {
