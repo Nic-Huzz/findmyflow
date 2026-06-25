@@ -123,21 +123,25 @@ const Profile = () => {
         .eq('user_id', user.id)
         .order('completed_at', { ascending: false })
 
-      // Calculate daily streak
+      // Calculate daily streak (using local dates, not UTC)
       let dailyStreak = 0
       if (completions?.length > 0) {
         const daysWithCompletions = new Set(
-          completions.map(c => c.completed_at?.split('T')[0])
+          completions
+            .filter(c => c.completed_at)
+            .map(c => new Date(c.completed_at).toLocaleDateString('en-CA'))
         )
         const sortedDays = Array.from(daysWithCompletions).sort().reverse()
-        const today = new Date().toISOString().split('T')[0]
-        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
+        const today = new Date().toLocaleDateString('en-CA')
+        const yest = new Date()
+        yest.setDate(yest.getDate() - 1)
+        const yesterday = yest.toLocaleDateString('en-CA')
 
         // Check if today or yesterday has completions
         if (sortedDays.includes(today) || sortedDays.includes(yesterday)) {
-          let checkDate = new Date(sortedDays[0])
+          let checkDate = new Date(sortedDays[0] + 'T12:00:00')
           for (const dayStr of sortedDays) {
-            const expected = checkDate.toISOString().split('T')[0]
+            const expected = checkDate.toLocaleDateString('en-CA')
             if (dayStr === expected) {
               dailyStreak++
               checkDate.setDate(checkDate.getDate() - 1)
@@ -387,14 +391,16 @@ const Profile = () => {
             const completions = completionsResponse.data || []
 
             // Get today's date for daily quest check
-            const today = new Date().toISOString().split('T')[0]
+            const today = new Date().toLocaleDateString('en-CA')
 
             // Filter active quests (not archived, not coming_soon)
             const activeQuests = questData.quests.filter(q => !q.archived && q.status !== 'coming_soon')
 
             // Count daily quests
             const dailyQuests = activeQuests.filter(q => q.frequency === 'daily')
-            const todayCompletions = completions.filter(c => c.completed_at?.startsWith(today))
+            const todayCompletions = completions.filter(c =>
+              c.completed_at && new Date(c.completed_at).toLocaleDateString('en-CA') === today
+            )
             const dailyDone = dailyQuests.filter(q =>
               todayCompletions.some(c => c.quest_id === q.id)
             ).length

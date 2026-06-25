@@ -54,12 +54,11 @@ function getZone(score) {
 function getDaysInWindow(completions, checkins, wahoos) {
   const dates = new Set()
   ;[...completions, ...checkins].forEach(c => {
-    const d = (c.completed_at || c.created_at)?.substring(0, 10)
-    if (d) dates.add(d)
+    const ts = c.completed_at || c.created_at
+    if (ts) dates.add(formatLocalDate(new Date(ts)))
   })
   wahoos.forEach(w => {
-    const d = w.completed_at?.substring(0, 10)
-    if (d) dates.add(d)
+    if (w.completed_at) dates.add(formatLocalDate(new Date(w.completed_at)))
   })
   return Math.max(1, dates.size)
 }
@@ -116,8 +115,8 @@ function computeAxes(completions, checkins, wahoos, daysElapsed) {
   const maintenanceCompletions = completions.filter(c => MAINTENANCE_IDS.includes(c.quest_id))
   const dayMap = {}
   maintenanceCompletions.forEach(c => {
-    const day = c.completed_at?.substring(0, 10)
-    if (day) {
+    if (c.completed_at) {
+      const day = formatLocalDate(new Date(c.completed_at))
       if (!dayMap[day]) dayMap[day] = new Set()
       dayMap[day].add(c.quest_id)
     }

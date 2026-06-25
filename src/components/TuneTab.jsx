@@ -259,11 +259,13 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
     })
   }, [userId])
 
-  // Check if quest is completed today
+  // Check if quest is completed today (convert UTC timestamps to local date)
   const isCompletedToday = (questId) => {
     const today = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD local
     return completions.some(c =>
-      c.quest_id === questId && c.completed_at?.startsWith(today)
+      c.quest_id === questId &&
+      c.completed_at &&
+      new Date(c.completed_at).toLocaleDateString('en-CA') === today
     )
   }
 
@@ -273,14 +275,18 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
     return completions.some(c => c.quest_id === questId)
   }
 
-  // Get 7-day streak data for a quest
+  // Get 7-day streak data for a quest (convert UTC timestamps to local date)
   const getStreak = (questId) => {
     const days = []
     for (let i = 6; i >= 0; i--) {
       const d = new Date()
       d.setDate(d.getDate() - i)
       const dateStr = d.toLocaleDateString('en-CA')
-      days.push(completions.some(c => c.quest_id === questId && c.completed_at?.startsWith(dateStr)))
+      days.push(completions.some(c =>
+        c.quest_id === questId &&
+        c.completed_at &&
+        new Date(c.completed_at).toLocaleDateString('en-CA') === dateStr
+      ))
     }
     return days
   }
@@ -431,7 +437,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
     { value: 'skipped', label: 'Skipped', color: '#ef4444' },
   ]
 
-  const isMealLogged = (mealId) => completions.some(c => c.quest_id === mealId && c.completed_at?.startsWith(new Date().toLocaleDateString('en-CA')))
+  const isMealLogged = (mealId) => {
+    const today = new Date().toLocaleDateString('en-CA')
+    return completions.some(c =>
+      c.quest_id === mealId &&
+      c.completed_at &&
+      new Date(c.completed_at).toLocaleDateString('en-CA') === today
+    )
+  }
 
   const handleMealLog = async (mealId, mealType) => {
     if (savingMeal) return
