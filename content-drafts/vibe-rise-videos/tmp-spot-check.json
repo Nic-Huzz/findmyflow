@@ -1,0 +1,557 @@
+[
+  {
+    "name": "Baron Baptiste",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected traditional yoga's emphasis on gentleness and spiritual transcendence.",
+        "verified": true,
+        "confidence": 85,
+        "correction": null,
+        "source": "Yoga Journal profiles confirm he created an intense, athletic power vinyasa style that broke from traditional gentle/spiritual yoga. Accurate characterization."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Son of two yoga pioneers (Walt and Magana Baptiste) meets intense athletic fitness culture.",
+        "verified": true,
+        "confidence": 90,
+        "correction": "Minor: mother's name is typically spelled 'Magaña' (with tilde). They opened one of the first yoga schools in San Francisco in 1952/1955, not just generic 'yoga pioneers'. Walt was given the title 'Yogiraj' by Swami Sivananda.",
+        "source": "Yoga Journal, baptisteyoga.com, powerofyoga.com confirm Walt and Magaña Baptiste as yoga pioneers in San Francisco."
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "True transformation begins at the edge of your comfort zone.",
+        "verified": true,
+        "confidence": 80,
+        "correction": "This captures his philosophy accurately. His book is called 'Journey Into Power' and emphasizes pushing edges. Not a direct quote but a fair compression.",
+        "source": "Amazon book description, Talking Yoga profile, baptisteyoga.com"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Power yoga classes in LA exploded to 2,000+ students/week. Baptiste Yoga certified 3,000+ teachers across 10+ countries.",
+        "verified": false,
+        "confidence": 45,
+        "correction": "2,000+ students/week in Hollywood is CONFIRMED by multiple sources. However, '3,000+ teachers across 10+ countries' is UNVERIFIABLE. Sources say 'thousands' of graduates and yoga practiced in '22 countries', but no source confirms 3,000+ certified teachers specifically. The teacher count appears inflated or at least cannot be substantiated. Recommend: 'Power yoga classes in Hollywood exploded to 2,000+ students/week. Baptiste Yoga is now practiced in 22+ countries.'",
+        "source": "baronbaptiste.com, Talking Yoga, baptisteyoga.com, Yoga Journal"
+      }
+    ]
+  },
+  {
+    "name": "Caroline Myss",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected the idea that diagnosis requires physical examination.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "Multiple sources confirm she diagnosed illness remotely/intuitively without seeing the patient, challenging medical convention."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Journalist + medical intuitive who could diagnose illness without seeing the patient.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "Accurate. She earned a BA in journalism (1974) from Saint Mary-of-the-Woods College, worked as a newspaper journalist, then co-founded Stillpoint Publishing before her medical intuitive work emerged. The journalism-to-medical-intuitive trajectory is confirmed.",
+        "source": "Wikipedia, prabook.com, encyclopedia.com, myss.com"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Your biography becomes your biology.",
+        "verified": true,
+        "confidence": 95,
+        "correction": null,
+        "source": "This is her most famous phrase, the subtitle of her bestseller 'Anatomy of the Spirit'. Widely attributed and confirmed."
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Partnership with neurosurgeon Dr. Norman Shealy validated her intuitive diagnoses at 93% accuracy.",
+        "verified": false,
+        "confidence": 55,
+        "correction": "PARTIALLY WRONG. Dr. C. Norman Shealy is a neurosurgeon, and the 93% accuracy claim is widely repeated in their joint materials and Merlian News. However, this figure comes from Shealy's own testing, not independent peer-reviewed validation. It's a self-reported/partner-reported figure. Also, the claim is more accurately stated as Shealy reporting she was '93% accurate' in his personal testing, not a formally published study. Recommend keeping but noting it's Shealy's reported figure, not independently validated.",
+        "source": "Merlian News, Sounds True, joint course materials"
+      }
+    ]
+  },
+  {
+    "name": "Andy Puddicombe",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected the idea that meditation requires spiritual interest or long sessions.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "Headspace's entire brand is built on secular, short-session meditation. His book is literally called 'Get Some Headspace: 10 Minutes Can Make All the Difference'. Confirmed."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Buddhist monk (10 years ordained) meets marketing and tech entrepreneurship.",
+        "verified": false,
+        "confidence": 55,
+        "correction": "MISLEADING. He was NOT ordained for 10 years. He spent ~10 years on a spiritual journey (age 22 to ~32) that CULMINATED in ordination as a Tibetan Buddhist monk. He was ordained for a portion of that period, not the full 10 years. He trained in multiple traditions (Burmese Mahasi lineage as novice, then Kagyu Tibetan lineage for full ordination). Also, his co-founder Rich Pierson brought the marketing/business side — Andy's background was circus arts (degree from Moscow circus school) and Sports Science, not 'marketing and tech entrepreneurship'. Recommend: 'Buddhist monk (10-year journey including ordination in India) meets circus performer turned tech co-founder.'",
+        "source": "Wikipedia, Headspace.com/teachers, Psychology Today, NPR, HuffPost"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Ten minutes of doing nothing changes everything.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "Good compression. His book subtitle is '10 Minutes Can Make All the Difference' and his TED talk is titled 'All it takes is 10 mindful minutes.' Not an exact quote but captures the essence.",
+        "source": "Goodreads (book subtitle), TED talk"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Headspace reached 70+ million users across 190 countries, valued at over $3 billion.",
+        "verified": true,
+        "confidence": 80,
+        "correction": "Mostly accurate. Multiple sources confirm '70+ million members in 190+ countries'. The $3 billion valuation is from the 2021 Headspace-Ginger merger (Headspace Health). Note: paid subscribers have since declined significantly (to ~2M in 2025), and total downloads are reported as 80-105M. The 70M figure and $3B valuation were peak numbers, both verifiable.",
+        "source": "Business of Apps, Statista, nikolaroza.com, startupsavant.com"
+      }
+    ]
+  },
+  {
+    "name": "Donna Eden",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Claimed she could see the body's energy systems.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "Accurate. Multiple sources confirm she has claimed since childhood the ability to see the body's energy systems, including chakras and 8 additional energy systems.",
+        "source": "Mindvalley, Audible, blog.mindvalley.com"
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Natural clairvoyant + systematic energy medicine practitioner.",
+        "verified": true,
+        "confidence": 75,
+        "correction": "Technically accurate but weak as a 'two worlds' intersection. Both are in the same domain. A stronger framing might be: 'Born seeing energy (clairvoyant since childhood) + created a systematic, teachable method from what she naturally perceives.' The tension is natural gift vs. systematized curriculum, but both live in the same world.",
+        "source": "Mindvalley, Eden Energy Medicine site"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Your body's energies are the key to your health.",
+        "verified": true,
+        "confidence": 80,
+        "correction": "Fair compression of her core message. Her book subtitle is 'Balancing Your Body's Energies for Optimal Health, Joy, and Vitality.'",
+        "source": "Book subtitle, Mindvalley course description"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "'Energy Medicine' book became the standard text, Mindvalley partnership expanded global reach.",
+        "verified": true,
+        "confidence": 70,
+        "correction": "Partially verifiable. The book is described as 'a classic in its field' and has been translated into 12+ languages. The Mindvalley partnership (Energy Medicine quest + The Energies of Love quest) is confirmed. However, 'became the standard text' is a subjective claim — it's a bestseller and widely referenced, but calling it 'the standard text' is an overstatement. No specific enrollment numbers found for the Mindvalley courses. This result is VAGUE compared to other creators. Recommend adding specifics if available.",
+        "source": "Goodreads, Mindvalley.com, e-student.org review"
+      }
+    ]
+  },
+  {
+    "name": "Brian Weiss",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "A Yale-trained psychiatrist validated past life regression.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "Wikipedia, Simon & Schuster author page confirm Columbia BA (1966), Yale Medical School (1970), and his shift to past life regression therapy."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Ivy League psychiatrist + past life regression therapy.",
+        "verified": true,
+        "confidence": 90,
+        "correction": "Accurate. Columbia (BA) + Yale (MD) = Ivy League credentials. Chairman of Psychiatry at Mount Sinai Miami. The contrast between elite medical credentials and past life regression is well-documented.",
+        "source": "Wikipedia, Simon & Schuster, brianweiss.com"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Through the eyes of your past lives, you understand the patterns of your present.",
+        "verified": true,
+        "confidence": 75,
+        "correction": "Reasonable compression of his core message. Not a direct quote but captures the therapeutic premise of his work.",
+        "source": "Book descriptions, author interviews"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "'Many Lives Many Masters' sold over 1 million copies.",
+        "verified": true,
+        "confidence": 90,
+        "correction": "CONFIRMED. Multiple sources state 'more than one million copies in print.' Some sources cite 1.5 million. The figure is conservative and accurate.",
+        "source": "Simon & Schuster, Bookshop.org, Amazon"
+      }
+    ]
+  },
+  {
+    "name": "Thomas Hübl",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected the idea that trauma is only individual.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "His book 'Healing Collective Trauma' (2020) and The Pocket Project NGO are built on this premise. Confirmed."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Austrian mystical teacher + collective trauma researcher.",
+        "verified": false,
+        "confidence": 50,
+        "correction": "PARTIALLY INACCURATE. He is Austrian-born, confirmed. But calling him a 'mystical teacher' is reductive. His actual background is: medical student at University of Vienna + paramedic for 9 years + 4-year independent contemplative retreat. He later became a visiting scholar at Harvard's Wyss Institute. A more accurate twoWorlds: 'Medical science student and paramedic meets contemplative mystic who undertook a 4-year solo retreat.' The 'collective trauma researcher' part is also underselling — he has published in Harvard Health and peer-reviewed journals.",
+        "source": "thomashuebl.com/about, Wikipedia"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Unresolved collective trauma shapes the present until it is witnessed.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "Good compression of his core thesis. His work centers on the idea that unintegrated collective and ancestral trauma perpetuates until consciously attended to.",
+        "source": "Sounds True interview, thomashuebl.com"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Built international following through collective trauma courses.",
+        "verified": true,
+        "confidence": 60,
+        "correction": "TECHNICALLY TRUE BUT EXTREMELY VAGUE. This is the weakest remarkableResult in the set. Better specifics available: 'Programs reached 100,000+ participants worldwide. Published in Harvard Health. Visiting scholar at Harvard's Wyss Institute. Founded The Pocket Project NGO (2017) for collective trauma integration.' Recommend replacing with concrete numbers.",
+        "source": "thomashuebl.com/about, Wikipedia"
+      }
+    ]
+  },
+  {
+    "name": "Gabrielle Roth",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected the separation between dance and therapy.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "Accurate. She explicitly stated '5Rhythms is not therapy and it is therapeutic.' She merged movement with psychological and spiritual healing.",
+        "source": "5rhythms.com, Wikipedia"
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Street dancer + Gestalt therapy + shamanic ritual.",
+        "verified": false,
+        "confidence": 50,
+        "correction": "PARTIALLY INACCURATE. She was NOT a 'street dancer' in the conventional sense. She taught dance on playgrounds, in senior homes, mental wards, and halfway houses to put herself through school. She was invited by Fritz Perls himself to teach movement to his Gestalt therapy groups at Esalen in the mid-1960s — so the Gestalt connection was real but was Fritz Perls inviting HER, not her studying Gestalt. The shamanic element is confirmed — she was known as the 'urban shaman.' Better framing: 'Dance teacher in mental wards and halfway houses + invited by Fritz Perls to bring movement to Gestalt therapy at Esalen + shamanic ritual.'",
+        "source": "Wikipedia, Esalen In Memoriam, Spirituality & Practice"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Put your body in motion and your psyche will heal itself.",
+        "verified": true,
+        "confidence": 80,
+        "correction": "Good compression. She said 'In many shamanic societies, if you came to a medicine person complaining of being disheartened, dispirited, or depressed, they would ask one of four questions: When did you stop dancing? When did you stop singing? When did you stop being enchanted by stories? When did you stop finding comfort in the sweet territory of silence?' The compression captures the essence.",
+        "source": "Multiple attributed quotes, 5rhythms.com"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "5Rhythms now taught in 50+ countries, thousands of certified teachers.",
+        "verified": true,
+        "confidence": 75,
+        "correction": "PARTIALLY VERIFIED. Sources confirm 50+ countries and 396 certified teachers/SpaceHolders (as of 2017 data). Some sources say 90+ countries. 'Thousands of certified teachers' appears to be an OVERSTATEMENT — the 2017 count was 396. The number may have grown since, but 'thousands' is likely inflated. Recommend: '5Rhythms now taught in 50+ countries with hundreds of certified teachers.'",
+        "source": "5rhythms.com, Wikipedia, consciousdancing.co.uk"
+      }
+    ]
+  },
+  {
+    "name": "Sahara Rose",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected the idea that Ayurveda is only for Indians or spiritual seekers.",
+        "verified": true,
+        "confidence": 85,
+        "correction": null,
+        "source": "Her brand and book (Idiot's Guide to Ayurveda, Eat Feel Fresh) are explicitly about making Ayurveda accessible to millennials/modern Western audiences. Confirmed."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Millennial wellness influencer + ancient Ayurvedic wisdom.",
+        "verified": true,
+        "confidence": 80,
+        "correction": "Accurate. Deepak Chopra himself called her 'a leading voice for the millennial generation into the new paradigm shift.' She bridges social media/influencer culture with ancient Vedic tradition.",
+        "source": "thechalkboardmag.com, iamsahararose.com, Deepak Chopra forewords"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Discover your dosha, discover yourself.",
+        "verified": true,
+        "confidence": 70,
+        "correction": "Reasonable compression. Dosha discovery is central to her Ayurvedic teaching. Not a direct quote but captures the method.",
+        "source": "Book descriptions, iamsahararose.com"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Youngest person asked to be on Deepak Chopra's podcast.",
+        "verified": false,
+        "confidence": 20,
+        "correction": "UNVERIFIABLE. No web source confirms she was the 'youngest person asked to be on Deepak Chopra's podcast.' Deepak Chopra doesn't have a single named podcast — he has appeared on many and been featured across platforms. Sahara Rose has her OWN podcast (Highest Self Podcast, #1 on iTunes in spirituality). Chopra wrote the foreword to her books and they collaborate on Jiyo app and Chopra Global certification. The 'youngest person' claim appears fabricated or conflated. Recommend: 'Deepak Chopra wrote the foreword to her books and called her a leading voice for the millennial generation. Her Highest Self Podcast became #1 in spirituality on iTunes.'",
+        "source": "iamsahararose.com, thechalkboardmag.com, NBC News"
+      }
+    ]
+  },
+  {
+    "name": "Vishen Lakhiani",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected traditional education and corporate career paths as the route to fulfillment.",
+        "verified": true,
+        "confidence": 85,
+        "correction": null,
+        "source": "His book 'The Code for the Extraordinary Mind' challenges what he calls 'brules' (bullshit rules) of society, including conventional career paths. Confirmed."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Silicon Valley tech entrepreneur + meditation practitioner.",
+        "verified": false,
+        "confidence": 45,
+        "correction": "MISLEADING. He is MALAYSIAN (born in Kuala Lumpur), not a 'Silicon Valley tech entrepreneur.' He studied Computer Engineering at University of Michigan, then briefly worked in Silicon Valley as a telemarketer during the dot-com bust (not as a tech entrepreneur). He discovered meditation while struggling in that role. Mindvalley was founded in NYC (2002/2003) and relocated to Kuala Lumpur (2004) when his US work visa was not renewed. Recommend: 'Malaysian computer engineer who discovered meditation while struggling as a Silicon Valley telemarketer, then built a global ed-tech empire from Kuala Lumpur.'",
+        "source": "Wikipedia, South China Morning Post, firstclasse.com.my"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Hack your mind, transform your life.",
+        "verified": true,
+        "confidence": 75,
+        "correction": "Reasonable compression. He's known as a 'brain hacker' and his book is about 'extraordinary mind' optimization. Not a direct quote but captures his brand.",
+        "source": "South China Morning Post, book descriptions"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Mindvalley grew to 20M+ students across 80+ countries.",
+        "verified": false,
+        "confidence": 50,
+        "correction": "CONFLICTING DATA. Mindvalley's own site says '12 million students across 80 countries.' Other sources say '15 million social media followers' and 'nearly half-a-million students online each year.' Yet another source claims '195 countries.' The 20M+ figure appears inflated — the most reliable company-stated figure is 12 million. Recommend: 'Mindvalley grew to 12M+ students across 80+ countries.'",
+        "source": "mindvalley.com/about, Wikipedia, bigspeak.com"
+      }
+    ]
+  },
+  {
+    "name": "Radha Agrawal",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected the idea that nightlife requires alcohol.",
+        "verified": true,
+        "confidence": 95,
+        "correction": null,
+        "source": "Daybreaker is explicitly described as the 'sober morning dance and wellness movement' across all sources. Core brand premise confirmed."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Nightclub culture + morning wellness.",
+        "verified": true,
+        "confidence": 90,
+        "correction": "Accurate. The founding story is literally a 4am conversation about combining 'nightlife' and 'wellness.' They replaced alcohol with green juice, bouncers with a 'hugging committee.'",
+        "source": "Freethink, TODAY, community.inc"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Dance sober at sunrise.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "Perfect compression of the Daybreaker concept. Events are early-morning, sober, dance parties. Confirmed."
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Daybreaker grew to events in 30+ cities worldwide, thousands dancing before work.",
+        "verified": false,
+        "confidence": 55,
+        "correction": "UNDERSTATED, not overstated. Sources report 800K community members, events in 33 cities (confirmed) but also expanding claims of 60 cities. Half a million people have attended across 5 continents. The '30+ cities' is conservative but within range. However, 'thousands dancing before work' undersells the actual reach (800K community, 500K+ attendees). Recommend: 'Daybreaker grew to 800K community members, events in 30+ cities across 5 continents.'",
+        "source": "community.inc, daybreaker.com/our-story, Freethink"
+      }
+    ]
+  },
+  {
+    "name": "Kyle Cease",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Walked away from a top-20 comedy career to do transformation.",
+        "verified": false,
+        "confidence": 40,
+        "correction": "PARTIALLY INACCURATE. He did walk away from comedy at its peak, confirmed. But 'top-20 comedy career' is UNVERIFIABLE. He had two #1 Comedy Central specials and won Comedy Central's Stand-up Showdown. He was a successful touring comedian and actor, but no source confirms a 'top-20' ranking. Recommend: 'Walked away from a peak comedy career (two #1 Comedy Central specials) to do transformation.'",
+        "source": "Wikipedia, kylecease.com, Omega Institute, IMDB"
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Hollywood comedian + spiritual teacher.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "Confirmed across all sources. He transitioned from stand-up comedy and acting to 'transformational comedy' and spiritual teaching."
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "The thing you're avoiding is the door to everything you want.",
+        "verified": true,
+        "confidence": 80,
+        "correction": "Good compression. His work centers on facing avoidance and finding freedom through surrender. Consistent with his published teachings.",
+        "source": "kylecease.com, book descriptions, Evolving Out Loud content"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Filled theaters doing transformation events, NYT bestseller.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "CONFIRMED. 'I Hope I Screw This Up' is confirmed as NYT, USA Today, and Wall Street Journal bestseller. He does sold-out Evolving Out Loud Live events. 400,000+ community members, 15,000+ people personally coached, 60M+ YouTube views. The claim is accurate but VAGUE — could be strengthened with specifics.",
+        "source": "Simon & Schuster, kylecease.com, Hay House"
+      }
+    ]
+  },
+  {
+    "name": "Danielle LaPorte",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected goal-setting by achievement metrics.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "The Desire Map's core premise is 'How do you want to FEEL?' rather than 'What do you want to achieve?' Confirmed across all descriptions."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Brand strategist + spiritual seeker.",
+        "verified": true,
+        "confidence": 80,
+        "correction": "Accurate but could be stronger. She was specifically Executive Director of the Arlington Institute (Washington DC think tank), managed analysts for IBM, The Pentagon, and The World Bank, and ran her own communications agency for 10 years. 'Brand strategist' undersells her credentials. Better: 'Washington DC think tank executive (Pentagon, World Bank clients) + spiritual seeker.'",
+        "source": "daniellelaporte.com/media, theartof.com, connorbeaton.com"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "How do you want to feel?",
+        "verified": true,
+        "confidence": 95,
+        "correction": null,
+        "source": "This is THE central question of The Desire Map. Perfect compression."
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "The Desire Map sold 500K+ copies, 1000+ licensed facilitators.",
+        "verified": false,
+        "confidence": 30,
+        "correction": "BOTH NUMBERS APPEAR INFLATED. Sources report 200,000+ copies sold in English (translated into 10 languages). Licensed facilitators: sources say 500+ (not 1000+) in 15 countries. Recommend: 'The Desire Map sold 200K+ copies in English, 500+ licensed facilitators in 15 countries.'",
+        "source": "theadnostic.com (facilitator review), book sales data, daniellelaporte.com"
+      }
+    ]
+  },
+  {
+    "name": "Sue Johnson",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected behavioral and cognitive approaches to couples therapy.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "EFT was explicitly developed as an alternative to CBT-based approaches, grounded in attachment theory instead. Confirmed across ICEEFT and research sources."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Attachment theory researcher + couples therapist.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "Accurate. She developed EFT with Les Greenberg in the 1980s, integrating John Bowlby's attachment theory with experiential therapy and systems theory. She is Professor Emeritus at University of Ottawa and a clinical psychologist.",
+        "source": "Wikipedia, ICEEFT, psychotherapy.net interview"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "Are you there for me?",
+        "verified": true,
+        "confidence": 90,
+        "correction": "This is the core attachment question at the heart of EFT. Her book 'Hold Me Tight' centers on this fundamental question of emotional accessibility and responsiveness.",
+        "source": "ICEEFT, Hold Me Tight book, anniewright.com"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "EFT achieves 70-75% recovery rate, most empirically validated couples therapy.",
+        "verified": true,
+        "confidence": 90,
+        "correction": "CONFIRMED. Multiple research sources and ICEEFT confirm 70-75% move from distress to recovery, ~90% show significant improvements, with little evidence of relapse. It IS considered the most (or among the most) empirically validated forms of couples therapy.",
+        "source": "ICEEFT (iceeft.com/eft-research), liberationinstitute.org, mnceft.org, Wikipedia"
+      }
+    ]
+  },
+  {
+    "name": "Jack Kornfield",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected keeping meditation cloistered in monasteries.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "He co-founded IMS (1975) and Spirit Rock (1987) specifically to bring Buddhist meditation practice to Westerners outside monastic settings. Confirmed."
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Peace Corps volunteer in Thailand + Buddhist monk + Western psychologist.",
+        "verified": true,
+        "confidence": 90,
+        "correction": "Accurate. Dartmouth BA (1967) in Asian Studies → Peace Corps in Thailand (Mekong River valley, tropical medicine) → Buddhist monk training in Thailand, India, Burma → PhD in clinical psychology. All three elements confirmed.",
+        "source": "Wikipedia, Spirit Rock, Lion's Roar, jackkornfield.com"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "The heart is wiser than the intellect.",
+        "verified": true,
+        "confidence": 75,
+        "correction": "Reasonable compression. His book is called 'A Path With Heart' and 'The Wise Heart.' The emphasis on heart-centered wisdom is central to his teaching. Not a direct famous quote but captures the essence.",
+        "source": "Book titles, jackkornfield.com"
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Co-founded IMS and Spirit Rock, two most influential meditation centers in the West.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "CONFIRMED. IMS co-founded 1975 with Sharon Salzberg and Joseph Goldstein. Spirit Rock co-founded 1987. Both are widely regarded as the most influential insight meditation centers in the Western world. 'Most influential' is subjective but widely supported.",
+        "source": "Wikipedia, Spirit Rock, Lion's Roar"
+      }
+    ]
+  },
+  {
+    "name": "Mooji",
+    "fields": [
+      {
+        "field": "ruleBreak",
+        "currentValue": "Rejected the idea that enlightenment requires years of practice.",
+        "verified": true,
+        "confidence": 80,
+        "correction": "Accurate. His teaching emphasizes immediate recognition — 'you are already what you are looking for.' He has been described as teaching 'the lazy person's way to spiritual enlightenment.' His Advaita approach points to direct recognition rather than progressive practice.",
+        "source": "happiness.com, Medium articles, noblechatter.com, Mooji teachings"
+      },
+      {
+        "field": "twoWorlds",
+        "currentValue": "Jamaican street painter + Advaita Vedanta teacher.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "Accurate. Born in Port Antonio, Jamaica (1954). Moved to London at 16. Worked as a street portrait artist in London's West End (charcoal/pastel portraits outside the National Portrait Gallery on Charing Cross Road). Later became Advaita Vedanta teacher after meeting Papaji (H.W.L. Poonja). Note: he was a London street painter, not a Jamaican street painter — he left Jamaica at 16.",
+        "source": "Wikipedia, mooji.org, stillchemy.com, anantasatsang.org"
+      },
+      {
+        "field": "stupidSimplicity",
+        "currentValue": "You are already what you are looking for.",
+        "verified": true,
+        "confidence": 90,
+        "correction": null,
+        "source": "This is the essence of his Advaita Vedanta teaching. Widely attributed and consistent with his body of work."
+      },
+      {
+        "field": "remarkableResult",
+        "currentValue": "Monte Sahaja ashram in Portugal, YouTube videos with 100M+ total views.",
+        "verified": true,
+        "confidence": 85,
+        "correction": "CONFIRMED. Monte Sahaja ashram in Alentejo, Portugal is confirmed. YouTube main channel has 131.42M total views (as of current data) with 828K subscribers, plus additional Mooji Mala Music channel with 48.5M views. Total across channels exceeds 100M+ views. Accurate.",
+        "source": "vidIQ/SocialBlade stats, mooji.org, Wikipedia"
+      }
+    ]
+  }
+]

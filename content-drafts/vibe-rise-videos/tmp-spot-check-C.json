@@ -1,0 +1,409 @@
+{
+  "meta": {
+    "batch": "C",
+    "verifiedBy": "Claude Opus 4.6 (web search)",
+    "date": "2026-06-16",
+    "creators": 14,
+    "method": "Web search verification of 4 Remarkability Ingredients per creator. Only entries with confidence < 85 or corrections needed are included.",
+    "totalFlags": 22
+  },
+  "results": [
+    {
+      "name": "Harville Hendrix",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 90,
+          "verdict": "ACCURATE",
+          "notes": "Verified. He did reject individual therapy as the default and built Imago around the idea that romantic conflict is a growth opportunity tied to childhood wounds. Well documented."
+        },
+        "twoWorlds": {
+          "confidence": 75,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file says 'theologian-turned-psychologist' which is correct (PhD in Psychology and Religion from U of Chicago, ordained Baptist minister). However, calling it 'Academic developmental psychology meets practical couples therapy' undersells the theology angle. His actual two worlds are THEOLOGY + PSYCHOLOGY — he was an ordained minister who got a PhD in psychology and religion. The 'object relations theory' mention is fine but the framing misses the theological root.",
+          "suggestedFix": "Theologian and ordained Baptist minister meets developmental psychology and attachment theory. He has a PhD in Psychology and Religion from the University of Chicago and was a professor at Southern Methodist University, bringing dense attachment theory into a structured couples dialogue process that regular people could actually use."
+        },
+        "stupidSimplicity": {
+          "confidence": 92,
+          "verdict": "ACCURATE",
+          "notes": "This is a good compression of his core thesis. Verified through multiple sources."
+        },
+        "remarkableResult": {
+          "confidence": 65,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "Multiple errors: (1) The book has sold over 4 million copies across ALL his books with Helen LaKelly Hunt, not 4 million for this one book alone. (2) It was NOT an 'Oprah Book Club selection' — Oprah featured him 17 times on her show and recommended it, but it was not an official Oprah Book Club pick. (3) The file says '2,000 certified Imago therapists in 53 countries' — sources vary: 2,000-2,500 therapists in 35-62 countries depending on the date. The most recent figure is 2,500+ therapists in 53+ countries.",
+          "suggestedFix": "Together with Helen LaKelly Hunt, their books have sold over 4 million copies. 'Getting the Love You Want' was featured on 17 episodes of the Oprah Winfrey Show. Imago Relationship Therapy became a global movement with over 2,500 certified Imago therapists in 53+ countries. The Imago dialogue process is now taught in graduate programs worldwide."
+        }
+      }
+    },
+    {
+      "name": "Irene Lyon",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 90,
+          "verdict": "ACCURATE",
+          "notes": "Verified. Her emphasis on going slowly, doing less, and letting the body discharge at its own pace is well documented. She explicitly contrasts with exposure therapy and talk therapy."
+        },
+        "twoWorlds": {
+          "confidence": 80,
+          "verdict": "MINOR CORRECTION",
+          "notes": "She has a Master's in Biomedical and Health Science (not just 'biomedical science'). The Feldenkrais training is confirmed (she studied under Moshe Feldenkrais's methods). Peter Levine and Kathy Kain training confirmed. However, calling her a 'musician and recording engineer' would be wrong — that's Jonathan Goldman. Her two worlds description is mostly accurate but should specify 'Master's in Biomedical and Health Science' not just 'biomedical science'.",
+          "suggestedFix": "Biomedical and health science (Master's degree) and Feldenkrais somatic education meets Peter Levine's Somatic Experiencing and Kathy Kain's developmental trauma work. She brings a rigorous biological understanding of the autonomic nervous system to trauma healing."
+        },
+        "stupidSimplicity": {
+          "confidence": 92,
+          "verdict": "ACCURATE",
+          "notes": "Good compression of her core message."
+        },
+        "remarkableResult": {
+          "confidence": 70,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file says 'millions of views' on YouTube and 'thousands of students globally.' Web sources say her programs have reached 'over 27,000 people in over 90 countries' — much more specific and impressive than 'thousands.' YouTube views claim of 'millions' is plausible but not specifically verified. She was the FIRST person in the Somatic Experiencing/Feldenkrais worlds to offer a full online course — that's a notable claim worth including.",
+          "suggestedFix": "First professional in the Somatic Experiencing and Feldenkrais worlds to offer a full online self-healing course. Her programs have reached over 27,000 people in over 90 countries. Her YouTube channel has become one of the leading sources of nervous system education online."
+        }
+      }
+    },
+    {
+      "name": "Jason Nemer",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 92,
+          "verdict": "ACCURATE",
+          "notes": "Verified. The idea that yoga was solo and individual, and he made it about partner trust, is well documented."
+        },
+        "twoWorlds": {
+          "confidence": 85,
+          "verdict": "ACCURATE",
+          "notes": "Verified. He was a competitive Sports Acrobatics athlete (represented the US at age 16 at the 1991 World Championships in Beijing), combined with yoga and Thai massage. The file says 'competitive acrobat' which is correct."
+        },
+        "stupidSimplicity": {
+          "confidence": 90,
+          "verdict": "ACCURATE",
+          "notes": "Good compression."
+        },
+        "remarkableResult": {
+          "confidence": 72,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file says AcroYoga is 'practiced in 100+ countries with thousands of certified teachers.' Web sources say 1,500+ certified teachers in 55-60+ countries (not 100+), supporting over a million participants. The '100+ countries' claim is inflated; the official AcroYoga.org site says 60+ countries.",
+          "suggestedFix": "Co-founded AcroYoga (with Jenny Sauer-Klein), which grew from informal park jams to a global movement with over 1,500 certified teachers in 60+ countries and over a million participants worldwide. AcroYoga is now recognized as its own distinct discipline alongside traditional yoga styles."
+        }
+      }
+    },
+    {
+      "name": "Jesse Israel",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 90,
+          "verdict": "ACCURATE",
+          "notes": "Verified. He filled arenas with mass meditation. Well documented."
+        },
+        "twoWorlds": {
+          "confidence": 80,
+          "verdict": "MINOR CORRECTION",
+          "notes": "The file says 'Cantora Records' which is correct. However, calling it just 'music industry founder' understates it — he co-founded Cantora Records with Will Griggs (and Nick Panama), and they signed MGMT. Also, 'concert production' framing is good but he was more of a label/management guy than a concert producer.",
+          "suggestedFix": "Co-founder of Cantora Records (the label that signed MGMT) meets mass meditation events. Brought music industry production values, event curation, and cultural cool to contemplative practice."
+        },
+        "stupidSimplicity": {
+          "confidence": 95,
+          "verdict": "ACCURATE",
+          "notes": "Perfect compression."
+        },
+        "remarkableResult": {
+          "confidence": 70,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "Several issues: (1) '23 people' start is verified (December 2014 Medi Club). (2) Madison Square Garden and World Trade Center rooftop are verified venues. (3) However, the 'Oprah and Deepak partnerships' is slightly misleading — he toured with Oprah on her 2020 Vision Tour and did global broadcasts with Deepak, but these were separate engagements, not a joint 'Oprah and Deepak partnership.' (4) Timeline claim of '3 years' from 23 people to MSG is roughly correct (2014 to ~2017). (5) He was also invited on Oprah's 2020 tour with WW, speaking at 15,000+ person arenas.",
+          "suggestedFix": "23 people in December 2014 to sold-out meditations at Madison Square Garden, the World Trade Center rooftop, and the American Museum of Natural History within 3 years. Toured with Oprah Winfrey on her 2020 Vision arena tour and led global meditation broadcasts with Deepak Chopra."
+        }
+      }
+    },
+    {
+      "name": "John Friend",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 88,
+          "verdict": "ACCURATE",
+          "notes": "Verified. He derived Anusara from Iyengar yoga and reintroduced Tantric/Hindu spirituality with a heart-opening, celebratory philosophy."
+        },
+        "twoWorlds": {
+          "confidence": 88,
+          "verdict": "ACCURATE",
+          "notes": "Verified. Iyengar alignment meets Tantric philosophy is well documented."
+        },
+        "stupidSimplicity": {
+          "confidence": 90,
+          "verdict": "ACCURATE",
+          "notes": "Good compression of his 'Open to Grace' philosophy."
+        },
+        "remarkableResult": {
+          "confidence": 75,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file says '100,000+ students in 70 countries.' Web sources say approximately 500,000-600,000 practitioners in 70 countries with ~1,500 teachers at peak. The student number is significantly understated. Also, the 'Wiccan sex coven' detail is verified (The Blazing Solar Flames). The word 'allegations' undersells it — multiple sources confirm the coven existed.",
+          "suggestedFix": "Built Anusara into one of the fastest-growing yoga styles in the world with approximately 1,500 certified teachers and 500,000-600,000 practitioners in 70 countries at its peak around 2010-2012. Then it collapsed spectacularly when a scandal broke involving sexual relationships with married employees and students, financial mismanagement, and a Wiccan coven called the Blazing Solar Flames. Most Anusara teachers left. He launched a new system called Sridaiva in 2013 that never gained traction."
+        }
+      }
+    },
+    {
+      "name": "Jonathan Goldman",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 88,
+          "verdict": "ACCURATE",
+          "notes": "Verified. His emphasis on bringing scientific framework (acoustics, psychoacoustics, physics of resonance) to the typically mystical sound healing field is well documented."
+        },
+        "twoWorlds": {
+          "confidence": 65,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file says he was 'a musician and recording engineer.' Web sources show he was a PUNK ROCK GUITARIST in the Boston scene in the late 1970s, not a 'recording engineer.' He had an epiphany that his rock music was creating disharmony, which led him to study sound healing. He then got a Master's degree from Lesley University. The 'recording engineer' claim appears to be fabricated.",
+          "suggestedFix": "Punk rock guitarist in the late-1970s Boston club scene meets ancient sacred sound traditions (Tibetan, Hindu, indigenous) and the science of psychoacoustics. He had an epiphany that his rock music was contributing to disharmony, pursued a Master's degree from Lesley University studying sound as a healing force, and trained with master sound healers across multiple traditions."
+        },
+        "stupidSimplicity": {
+          "confidence": 95,
+          "verdict": "ACCURATE",
+          "notes": "His formula 'Frequency + Intention = Healing' is his most famous contribution and is verified across multiple sources."
+        },
+        "remarkableResult": {
+          "confidence": 78,
+          "verdict": "MINOR ISSUES",
+          "notes": "The file says 'Healing Sounds' was 'translated into dozens of languages' — this is plausible but not specifically verified. The book was first published in 1992 (the file says ~1994, which is wrong). World Sound Healing Day since 2002 is verified (February 14th annually). 'Grammy nominee' is verified. 'Simon & Schuster' publisher is verified. The '8 books' claim — S&S shows multiple titles but not necessarily 8. The Sound Healers Association was founded in 1982, which is verified. The 'Visionary Awards' claim is verified (Coalition of Visionary Resources Gold Award).",
+          "suggestedFix": "Authored 'Healing Sounds' (1992) which became the foundational text of modern sound healing. Grammy-nominated musician. Created the Sound Healers Association (1982) and World Sound Healing Day (observed annually since 2002 on February 14th). His formula 'Frequency + Intention = Healing' became the most widely cited framework in the field. Won the Coalition of Visionary Resources Gold Award."
+        }
+      }
+    },
+    {
+      "name": "Kino MacGregor",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 90,
+          "verdict": "ACCURATE",
+          "notes": "Verified. She democratized Ashtanga by putting the full series on YouTube, challenging the gatekeeping tradition."
+        },
+        "twoWorlds": {
+          "confidence": 80,
+          "verdict": "MINOR CORRECTION",
+          "notes": "The file says 'one of the youngest people ever certified' — web sources say she is 'the youngest WOMAN to receive certification.' This is a meaningful distinction. She received certification at age 29. Also, she was certified by Sri K. Pattabhi Jois (not 'the Jois family' as the file implies).",
+          "suggestedFix": "Social media and digital content creation meets traditional Ashtanga yoga lineage. She was the youngest woman ever certified to teach Ashtanga by Sri K. Pattabhi Jois in Mysore, India, AND became one of the first yoga teachers to build a massive following on Instagram and YouTube, bridging ancient lineage with modern platform culture."
+        },
+        "stupidSimplicity": {
+          "confidence": 88,
+          "verdict": "ACCURATE",
+          "notes": "'Practice and all is coming' is the classic Ashtanga mantra. Her addition of 'but you don't need a guru's permission to start' captures her innovation."
+        },
+        "remarkableResult": {
+          "confidence": 78,
+          "verdict": "MINOR CORRECTION",
+          "notes": "File says 'over 1 million YouTube subscribers.' Web sources from 2017 show 435K YouTube subs, and later sources say 'over 500,000.' She has over 1 million Instagram followers (not YouTube subscribers). The '140M+ views' YouTube claim from the bio section is not verified in current sources. OmStars platform is verified. '100+ countries' for OmStars students is not verified.",
+          "suggestedFix": "Over 1 million Instagram followers, 500,000+ YouTube subscribers, youngest woman ever certified to teach Ashtanga by Sri K. Pattabhi Jois, author of multiple bestselling yoga books, and built OmStars — the world's first online yoga TV network."
+        }
+      }
+    },
+    {
+      "name": "Mastin Kipp",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 85,
+          "verdict": "ACCURATE",
+          "notes": "Verified. He did pivot from inspirational content to trauma-informed coaching and publicly acknowledged the limitation of his earlier approach."
+        },
+        "twoWorlds": {
+          "confidence": 68,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file says 'he worked in the music business in LA.' This dramatically understates it. He was Senior VP of A&R at Geffen Records by age 21, managed Grammy-winning artists including Gnarls Barkley, and worked at The Firm (management company behind Leonardo DiCaprio, Jennifer Lopez, Korn, Linkin Park). Also, the claim he 'studied with Bessel van der Kolk and Peter Levine' could not be verified — no web sources link Mastin Kipp to direct study with either of them. He may have been influenced by their work but 'studying with' implies direct mentorship.",
+          "suggestedFix": "Major label music executive (youngest Senior VP of A&R at Geffen Records, managed Grammy-winning artists at The Firm) meets clinical trauma science. Went from managing artists like Gnarls Barkley and losing everything to addiction, to sending inspirational emails from a pool house, to building a trauma-informed coaching methodology (Functional Life Coaching) grounded in nervous system regulation."
+        },
+        "stupidSimplicity": {
+          "confidence": 88,
+          "verdict": "ACCURATE",
+          "notes": "Good compression of his pivot message."
+        },
+        "remarkableResult": {
+          "confidence": 72,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "Several issues: (1) The Kim Kardashian tweet happened around 2010, not 2012-2013 as the blowUpYear suggests. (2) The file says 'hundreds of thousands of subscribers' for the email list — this is vague but plausible. (3) Book was 'Claim Your Power' by Hay House, confirmed. He also published 'Daily Love: Growing Into Grace' (2014) and 'Reclaim Your Nervous System' (2024) with Hay House. (4) Oprah dubbed him 'up and coming thought leader of the next generation' on Super Soul Sunday, confirmed. (5) Tony Robbins opened a door for him and Louise Hay personally brought him into Hay House — these are additional details that strengthen the result.",
+          "suggestedFix": "The Daily Love email list grew massively after a Kim Kardashian tweet drove it from 1,000 to 10,000 followers overnight. Oprah dubbed him 'an up and coming thought leader of the next generation' on Super Soul Sunday and named him to the SuperSoul 100. Published three books with Hay House. He then pivoted to Functional Life Coaching certification, training hundreds of coaches, deliberately trading audience size for depth."
+        }
+      }
+    },
+    {
+      "name": "Meghan Currie",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 88,
+          "verdict": "ACCURATE",
+          "notes": "Verified. Her unclassifiable blend of yoga styles with dance and emotional expression is well documented."
+        },
+        "twoWorlds": {
+          "confidence": 82,
+          "verdict": "MINOR ISSUES",
+          "notes": "The core claim is accurate — she blends dance, visual art, yoga, and somatics. She started Ashtanga at 19 in Costa Rica, studied Anusara alignment, overcame anxiety/depression/eating disorders/addiction. The visual artist detail and Isabelle Moon ethical yogawear are verified. The 'performance art' framing is appropriate."
+        },
+        "stupidSimplicity": {
+          "confidence": 88,
+          "verdict": "ACCURATE",
+          "notes": "Her Micro Evolution Method trademarked approach is verified. Good compression."
+        },
+        "remarkableResult": {
+          "confidence": 60,
+          "verdict": "LOW CONFIDENCE — FLAGGED IN FILE",
+          "notes": "The file already flags this as LOW_CONFIDENCE, which is honest. The 'Mad Love' video has approximately 1M+ YouTube views (verified). 143K Instagram followers (verified). Isabelle Moon yogawear (verified). Sold-out retreats and teacher trainings (verified in general terms). The lack of specific business metrics is correctly noted."
+        }
+      }
+    },
+    {
+      "name": "Melissa Wood",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 90,
+          "verdict": "ACCURATE",
+          "notes": "Verified. Her rejection of 'beast mode' fitness culture and championing low-impact, 20-minute workouts is well documented."
+        },
+        "twoWorlds": {
+          "confidence": 85,
+          "verdict": "ACCURATE",
+          "notes": "Verified. She was a model and actress in NYC, certified yoga and Pilates instructor, certified health coach. The fashion/modeling background bringing aesthetic sensibility to wellness is confirmed."
+        },
+        "stupidSimplicity": {
+          "confidence": 90,
+          "verdict": "ACCURATE",
+          "notes": "Good compression of her 'less is more' approach."
+        },
+        "remarkableResult": {
+          "confidence": 55,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "Multiple issues: (1) 'Over 100,000 subscribers' — a Harvard Business School case study from October 2020 showed 92,000 paying subscribers. So 100K may be rounded up or may have been reached later but is not confirmed. (2) 'Zero outside funding' is WRONG. Melissa Wood Health raised $4.9M from Winklevoss Capital Management. The 'bootstrapped' narrative is false. (3) Instagram followers are now 700K+, not mentioned in the result but relevant context. (4) There IS a Harvard Business School case study about her business, which is a notable achievement worth mentioning.",
+          "suggestedFix": "Built the MWH Method app to approximately 92,000+ paying subscribers at ~$10/month (per Harvard Business School case study). Over 700K Instagram followers. One of the most successful independent fitness app creators, featured in a Harvard Business School case study on winning in the creator economy. Initially started filming workouts on her iPhone from her living room."
+        }
+      }
+    },
+    {
+      "name": "Niraj Naik",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 88,
+          "verdict": "ACCURATE",
+          "notes": "Verified. His rejection of lifelong medication for ulcerative colitis and his challenge to solemn/clinical breathwork are both well documented."
+        },
+        "twoWorlds": {
+          "confidence": 85,
+          "verdict": "ACCURATE",
+          "notes": "Verified. He is a qualified pharmacist AND a music producer/DJ. He is the lead music producer for the Wim Hof Method. His combination of pharmacology, music production, and breathwork is confirmed."
+        },
+        "stupidSimplicity": {
+          "confidence": 90,
+          "verdict": "ACCURATE",
+          "notes": "Good compression."
+        },
+        "remarkableResult": {
+          "confidence": 82,
+          "verdict": "MINOR CORRECTION",
+          "notes": "The bio claims he 'co-created the 9D Breathwork format.' This is NOT verified. 9D Breathwork appears to be a SEPARATE system created by someone named Brian, with 1,300+ facilitators. Niraj Naik founded SOMA Breath, which is a different program. The '3,000+ certified instructors' is slightly outdated — current sources say 3,500+. The ulcerative colitis healing claim is verified (though 'reversed' and 'cured' are his words; medical establishment would not use these terms).",
+          "suggestedFix": "Remove '9D Breathwork' co-creation claim from bio. Result: Reversed his own ulcerative colitis through breathwork and lifestyle changes after being told he'd need medication for life, then built SOMA Breath into a global platform with over 3,500 certified instructors. He is also the lead music producer for the Wim Hof Method."
+        }
+      }
+    },
+    {
+      "name": "Patrick McKeown",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 92,
+          "verdict": "ACCURATE",
+          "notes": "Verified. His challenge to 'breathe deeply' advice and championing of breathing less/lighter/slower/nasal is his core thesis, well documented."
+        },
+        "twoWorlds": {
+          "confidence": 70,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file says 'He trained directly under Dr. Konstantin Buteyko's widow.' Web sources say he completed clinical training at the Buteyko Clinic in Moscow and was ACCREDITED by Professor Konstantin Buteyko (in 2002, when Buteyko was still alive — he died in 2003). There is no mention of training under Buteyko's widow. He trained at the clinic and received accreditation from Buteyko himself.",
+          "suggestedFix": "Buteyko method (Russian clinical breathing science) meets Western sports performance and everyday health. He completed clinical training at the Buteyko Clinic in Moscow and was personally accredited by Dr. Konstantin Buteyko, then translated that clinical methodology into accessible protocols for athletes, asthmatics, and anxious professionals."
+        },
+        "stupidSimplicity": {
+          "confidence": 95,
+          "verdict": "ACCURATE",
+          "notes": "Perfect compression of his message."
+        },
+        "remarkableResult": {
+          "confidence": 80,
+          "verdict": "MINOR CORRECTION",
+          "notes": "The file says '15+ languages' for the book translation — not specifically verified but plausible. BOLT score as 'industry-standard metric' is well supported. 'Olympic athletes and elite sports teams' is verified. The certified instructors count: the file says 'thousands across 50+ countries' — web sources say '5,000+ people trained including Olympic athletes' and 'certified instructors in over 50 countries.' So the numbers are slightly more specific than the file states.",
+          "suggestedFix": "'The Oxygen Advantage' became a global bestseller. His BOLT score became an industry-standard metric used by Olympic athletes and elite sports teams. He has trained over 5,000 people and has certified instructors across 50+ countries through the Oxygen Advantage program."
+        }
+      }
+    },
+    {
+      "name": "Pema Chodron",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 92,
+          "verdict": "ACCURATE",
+          "notes": "Verified. Her teaching about leaning into groundlessness and uncertainty rather than seeking calm is her core message, well documented across many sources."
+        },
+        "twoWorlds": {
+          "confidence": 78,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file says 'middle-class American divorcee' and 'elementary school teacher.' Both verified. However, saying she was 'one of the first American women ordained as a Tibetan Buddhist nun' is slightly inaccurate. She was the FIRST American to become a fully ordained nun in the VAJRAYANA tradition (in 1981). This is a more specific and more impressive claim. Also, she had TWO divorces, not just one. Her second divorce is what led her to Buddhism.",
+          "suggestedFix": "American elementary school teacher and twice-divorced mother meets Tibetan Buddhist monastic tradition (Shambhala lineage under Chogyam Trungpa). After her second painful divorce in her mid-thirties, she became the first American woman to be fully ordained as a Tibetan Buddhist nun in the Vajrayana tradition (1981), bringing raw emotional honesty and accessible language to dense philosophical teachings."
+        },
+        "stupidSimplicity": {
+          "confidence": 92,
+          "verdict": "ACCURATE",
+          "notes": "Good compression of her 'sit with it' teaching."
+        },
+        "remarkableResult": {
+          "confidence": 65,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file claims 'over 3 million copies' sold for 'When Things Fall Apart.' Web sources indicate 'over 1.5 million copies in print' and 'million-copy internationally bestselling.' The 3 million figure appears inflated — no source supports it. The '25+ years in print' is verified (published 1997). 'Director of Gampo Abbey' is verified. 'First Tibetan Buddhist monastery in North America for Westerners' is verified. She is also the resident teacher, not just 'director.'",
+          "suggestedFix": "'When Things Fall Apart' has sold over 1.5 million copies and remained continuously in print for 25+ years. She became the resident teacher of Gampo Abbey, the first Tibetan Buddhist monastery in North America established for Westerners. She is one of the most widely read Buddhist teachers in the English-speaking world, with over 20 books in publication."
+        }
+      }
+    },
+    {
+      "name": "Preston Smiles",
+      "fields": {
+        "ruleBreak": {
+          "confidence": 82,
+          "verdict": "MOSTLY ACCURATE",
+          "notes": "The core claim about bringing raw, loud energy to the spiritual space is verified. However, the file mentions 'hip-hop energy' and 'bro culture' — his background was actually gang life in Compton/LA, not hip-hop culture per se. He grew up in a gang from age 11. The 'skateboarding' mention in twoWorlds is NOT verified by any source."
+        },
+        "twoWorlds": {
+          "confidence": 50,
+          "verdict": "NEEDS CORRECTION",
+          "notes": "The file says 'Urban/hip-hop culture and skateboarding meets spiritual teaching.' SKATEBOARDING is unverified — no source mentions this. His actual background is growing up in gang culture in Compton/LA from age 11, with a pivotal moment at 15 when his friends were shot in a car he almost rode in. 'Street culture' is more accurate than 'hip-hop culture and skateboarding.'",
+          "suggestedFix": "Gang culture in Compton and South LA meets spiritual teaching and personal development. Grew up in a gang from age 11, faced a life-changing moment at 15 when friends were shot in a car ride he narrowly avoided, then had a spiritual awakening and brought that raw, street-forged energy into the transformation space."
+        },
+        "stupidSimplicity": {
+          "confidence": 85,
+          "verdict": "ACCURATE",
+          "notes": "This is a fair compression of his core message, though somewhat generic."
+        },
+        "remarkableResult": {
+          "confidence": 55,
+          "verdict": "LOW CONFIDENCE — ALREADY FLAGGED",
+          "notes": "The file already flags this as LOW_CONFIDENCE. The Oprah SuperSoul 100 claim could NOT be specifically verified in search results — he is clearly part of Oprah's network (appeared on platforms, featured by Oprah-adjacent media) but his specific inclusion on the SuperSoul 100 list was not confirmed. The Simon & Schuster book deal for 'Love Louder' IS verified. Lewis Howes podcast appearance is verified. His current status and reach remain unclear. The 'Bridge Method Program' with his partner Alexi Panos is his current offering.",
+          "suggestedFix": "Book deal with Simon & Schuster for 'Love Louder: 33 Ways to Amplify Your Life.' Featured across major podcasts (Lewis Howes, Tom Bilyeu, Rich Roll). Co-created the Bridge Method Program with Alexi Panos. Visibility peaked around 2016-2018; current reach is unclear."
+        }
+      }
+    }
+  ],
+  "summary": {
+    "highConfidenceCreators": [
+      "Jason Nemer (mostly accurate, one number inflated)",
+      "Irene Lyon (mostly accurate, result section needs specifics)",
+      "Niraj Naik (accurate except 9D Breathwork co-creation claim in bio)"
+    ],
+    "needsCorrectionCreators": [
+      "Harville Hendrix — remarkableResult: NOT an Oprah Book Club selection; 4M is across all books not just one; therapist/country numbers need updating",
+      "Jonathan Goldman — twoWorlds: was a punk rock guitarist, NOT a recording engineer",
+      "Mastin Kipp — twoWorlds: understates his music career (was SVP at Geffen, managed Gnarls Barkley); 'studied with van der Kolk and Peter Levine' is UNVERIFIED",
+      "Melissa Wood — remarkableResult: raised $4.9M from Winklevoss Capital, NOT bootstrapped/zero outside funding",
+      "Pema Chodron — remarkableResult: book sold ~1.5M copies, NOT 3M; twoWorlds: she was the FIRST American ordained in Vajrayana, not just 'one of the first'",
+      "Patrick McKeown — twoWorlds: trained at Buteyko Clinic Moscow and accredited by Buteyko himself, NOT trained under Buteyko's widow",
+      "Preston Smiles — twoWorlds: 'skateboarding' is FABRICATED; background is gang culture in Compton; SuperSoul 100 inclusion unverified"
+    ],
+    "criticalErrors": [
+      "Jonathan Goldman twoWorlds: 'recording engineer' is wrong — he was a punk rock guitarist",
+      "Melissa Wood remarkableResult: 'zero outside funding' is wrong — raised $4.9M from Winklevoss Capital",
+      "Pema Chodron remarkableResult: '3 million copies' is inflated — sources say ~1.5 million",
+      "Patrick McKeown twoWorlds: 'Buteyko's widow' is wrong — he was accredited by Buteyko himself",
+      "Preston Smiles twoWorlds: 'skateboarding' has no source — appears fabricated",
+      "Mastin Kipp twoWorlds: 'studied with Bessel van der Kolk and Peter Levine' is unverified",
+      "Niraj Naik bio: '9D Breathwork co-created' is wrong — 9D Breathwork is a separate system by a different creator"
+    ]
+  }
+}

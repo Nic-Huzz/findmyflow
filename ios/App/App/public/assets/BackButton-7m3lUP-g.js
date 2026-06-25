@@ -1,1 +1,0 @@
-import{j as o}from"./index-BVCI1RSX.js";function r({onClick:t}){return o.jsx("button",{className:"back-button",onClick:t,style:{background:"transparent",border:"none",color:"rgba(255,255,255,0.6)",cursor:"pointer",fontSize:"14px",padding:"4px 0 2px 0",marginTop:"16px",marginBottom:"0",display:"block",width:"100%",textAlign:"center"},children:"← Go Back"})}export{r as B};

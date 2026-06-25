@@ -1,0 +1,708 @@
+[
+  {
+    "name": "Stanislav Grof",
+    "experienceType": "Breathwork",
+    "yearsToBlowUp": 23,
+    "blowUpMoment": "Co-developed Holotropic Breathwork at Esalen (1973-1987), launched GTT certification 1989",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Invented Holotropic Breathwork as non-pharmacological alternative to psychedelic therapy" },
+      "capture": { "strength": "starting", "evidence": "20+ books, academic lectures, but no mainstream media pursuit" },
+      "portable": { "strength": "strong", "evidence": "GTT certification training 35+ years, facilitators worldwide" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Niraj Naik",
+    "experienceType": "Breathwork",
+    "yearsToBlowUp": 10,
+    "blowUpMoment": "Mindvalley partnership, TEDx, scaled to 3,000+ instructors",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "Blends pranayama with music/DJ sets. Novel combination, not new method" },
+      "capture": { "strength": "strong", "evidence": "Mindvalley course, TEDx, Entrepreneur magazine, 100K email list" },
+      "portable": { "strength": "strong", "evidence": "3,000+ certified instructors worldwide" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Mindvalley" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Patrick McKeown",
+    "experienceType": "Breathwork",
+    "yearsToBlowUp": 18,
+    "blowUpMoment": "\"The Oxygen Advantage\" (2015) reframed Buteyko for sports performance",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "Repackaged Buteyko for athletic performance. Genuine repositioning." },
+      "capture": { "strength": "strong", "evidence": "7 books, 3 Amazon bestsellers, trained thousands in 50+ countries" },
+      "portable": { "strength": "strong", "evidence": "3,000+ certified professionals via Buteyko Clinic International" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Dan Brulé",
+    "experienceType": "Breathwork",
+    "yearsToBlowUp": 25,
+    "blowUpMoment": "\"Just Breathe\" (Simon & Schuster, 2017) with Tony Robbins foreword",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "Synthesized Rebirthing, Prana Yoga, Qigong into unified framework" },
+      "capture": { "strength": "strong", "evidence": "S&S book deal, Robbins endorsement, trained 250K+ people" },
+      "portable": { "strength": "strong", "evidence": "Breath Mastery certification, practitioners in 70+ countries" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Tony Robbins" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "David Elliott",
+    "experienceType": "Breathwork",
+    "yearsToBlowUp": 11,
+    "blowUpMoment": "LA practice grew from 5 to 40 clients/week, launched 5-level Healer Training (2001)",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "Combines breathwork with energy healing and intuition" },
+      "capture": { "strength": "starting", "evidence": "2 books, Omega Institute workshops, LA wellness circles" },
+      "portable": { "strength": "strong", "evidence": "5-level Healer Training, thousands of graduates worldwide" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "9D Breathwork (Brian Kelly)",
+    "experienceType": "Breathwork",
+    "yearsToBlowUp": 3,
+    "blowUpMoment": "Created multi-sensory breathwork journeys, facilitator-as-SaaS model scaled to 2,000+ facilitators in 80+ countries",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "9 dimensions of audio technology (binaural beats, NLP, solfeggio, etc.) in breathwork. New category." },
+      "capture": { "strength": "strong", "evidence": "TEDx, Skool community, social media, press" },
+      "portable": { "strength": "strong", "evidence": "MAXIMALLY portable. Sessions pre-created. Facilitators hold space. SaaS model." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Adriene Mishler",
+    "experienceType": "Yoga",
+    "yearsToBlowUp": 8,
+    "blowUpMoment": "COVID lockdown 2020 sent her from 4M to 7M+ YouTube subs overnight",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Free, personality-driven, living-room yoga. 30-day challenge format. New FORMAT." },
+      "capture": { "strength": "strong", "evidence": "13M+ YouTube subscribers, Streamy award, NYT features" },
+      "portable": { "strength": "starting", "evidence": "FWFG membership exists, but no teacher training. The experience IS Adriene." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "YouTube algorithm + COVID" },
+    "isPeakedStalled": false,
+    "early_revenue_model": "day_job_side_project",
+    "early_revenue_description": "Paid rent through acting gigs and yoga classes in Austin while uploading free yoga videos to YouTube on the side."
+  },
+  {
+    "name": "Shiva Rea",
+    "experienceType": "Yoga",
+    "yearsToBlowUp": 13,
+    "blowUpMoment": "Gaiam DVDs early 2000s, Vanity Fair \"Madonna of yoga\" 2007",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Created Prana Vinyasa. Trademarked system. 50+ Namaskars." },
+      "capture": { "strength": "strong", "evidence": "DVDs, Yoga Journal, festival headliner" },
+      "portable": { "strength": "strong", "evidence": "20+ year teacher training (200/300/500 hour)" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Gaiam, Yoga Journal, Vanity Fair" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Ana Forrest",
+    "experienceType": "Yoga",
+    "yearsToBlowUp": 29,
+    "blowUpMoment": "Decades of LA teaching, then memoir \"Fierce Medicine\" (2011) brought mainstream recognition",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Created Forrest Yoga 1982. Trauma healing + yoga. Distinct named style." },
+      "capture": { "strength": "starting", "evidence": "Tours 33+ countries, one book, but not a content creator" },
+      "portable": { "strength": "strong", "evidence": "Full Forrest Yoga teacher training. Guardians (senior teachers) globally." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Baron Baptiste",
+    "experienceType": "Yoga",
+    "yearsToBlowUp": 15,
+    "blowUpMoment": "Hollywood power vinyasa classes exploded to 2,000+ students/week mid-1990s",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Created Baptiste Power Vinyasa. Popularized \"power yoga.\"" },
+      "capture": { "strength": "strong", "evidence": "NYT/WSJ bestselling author, ESPN/PBS appearances" },
+      "portable": { "strength": "strong", "evidence": "Baptiste Yoga teacher training since 1999, thousands of graduates" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Hollywood celebrities, ESPN, professional sports teams" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Kino MacGregor",
+    "experienceType": "Yoga",
+    "yearsToBlowUp": 9,
+    "blowUpMoment": "Early YouTube adoption (2011), 140M+ views, most visible Ashtanga teacher online",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "Teaches traditional Ashtanga (inherited lineage). Founded Omstars." },
+      "capture": { "strength": "strong", "evidence": "1M+ Instagram, 500K+ YouTube, 140M+ views" },
+      "portable": { "strength": "starting", "evidence": "Omstars platform but no \"Kino Method\" teacher training" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "YouTube/Instagram algorithms" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Jason Nemer",
+    "experienceType": "Yoga",
+    "yearsToBlowUp": 5,
+    "blowUpMoment": "Co-founded AcroYoga International 2003, first certifications 2006",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Fused acrobatics + yoga + Thai massage. New category." },
+      "capture": { "strength": "starting", "evidence": "Book, teaches globally, but Jason the name is less visible than AcroYoga the category" },
+      "portable": { "strength": "strong", "evidence": "1,500+ certified teachers globally. Full curriculum." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "yoga festival culture + Instagram visual appeal" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Rachel Brathen",
+    "experienceType": "Yoga",
+    "yearsToBlowUp": 6,
+    "blowUpMoment": "One of Instagram's first yoga influencers. 2M+ followers. NYT bestseller \"Yoga Girl\" (2015).",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "Pioneered SUP yoga and lifestyle influencer model, not a new methodology" },
+      "capture": { "strength": "strong", "evidence": "2M+ Instagram, NYT bestseller, Forbes/TEDx" },
+      "portable": { "strength": "starting", "evidence": "Studio, teacher trainings, but no proprietary system. Peaked ~2017, moved to Sweden 2021." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Instagram, Simon & Schuster" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Tara Brach",
+    "experienceType": "Meditation",
+    "yearsToBlowUp": 35,
+    "blowUpMoment": "Podcast (2010) quietly grew to 3M+ monthly downloads",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Developed RAIN method (Recognize, Allow, Investigate, Nurture)" },
+      "capture": { "strength": "strong", "evidence": "3M+ monthly podcast downloads, bestselling books" },
+      "portable": { "strength": "strong", "evidence": "Co-founded MMTCP with Jack Kornfield (2016). RAIN used as clinical tool globally." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "podcasting as early adoption" },
+    "isPeakedStalled": false,
+    "early_revenue_model": "one_on_one_service",
+    "early_revenue_description": "Maintained a private clinical psychology practice while leading meditation gatherings."
+  },
+  {
+    "name": "Andy Puddicombe",
+    "experienceType": "Meditation",
+    "yearsToBlowUp": 8,
+    "blowUpMoment": "Headspace app launched 2012, 1M paid subscribers by 2018, $100M revenue by 2019",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "\"Meditation for people who don't meditate.\" 10-minute daily format." },
+      "capture": { "strength": "strong", "evidence": "$348M revenue (2024), Netflix series, TED talk, $3B valuation" },
+      "portable": { "strength": "strong", "evidence": "The app IS the portable method. Company continued after he left 2022." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Rich Pierson as co-founder, TED talk, Netflix" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Sharon Salzberg",
+    "experienceType": "Meditation",
+    "yearsToBlowUp": 37,
+    "blowUpMoment": "\"Real Happiness\" hit NYT bestseller list 2011, ~40 years after she started teaching",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Primary Western popularizer of Metta (lovingkindness) as standalone practice" },
+      "capture": { "strength": "strong", "evidence": "NYT bestselling author, 50+ years teaching" },
+      "portable": { "strength": "strong", "evidence": "IMS and Barre Center train teachers. Metta taught by thousands worldwide." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "IMS co-founders, NYT bestseller list" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Emily Fletcher",
+    "experienceType": "Meditation",
+    "yearsToBlowUp": 7,
+    "blowUpMoment": "Corporate meditation boom 2015-2018. Google, Harvard, 50,000+ students.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "The Ziva Technique. Trademarked trifecta: mindfulness + meditation + manifesting." },
+      "capture": { "strength": "strong", "evidence": "Bestselling author, Google/Harvard, Mindvalley featured" },
+      "portable": { "strength": "strong", "evidence": "zivaONLINE + Ziva teacher training certification" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "corporate wellness trend, Mindvalley" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Jesse Israel",
+    "experienceType": "Meditation",
+    "yearsToBlowUp": 3,
+    "blowUpMoment": "23 people Dec 2014 to Lincoln Center 500+ (2016) to MSG and WTC rooftop (2017)",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Created \"mass meditation events\" as a category. Nobody filled arenas with meditation before." },
+      "capture": { "strength": "strong", "evidence": "ABC News, Oprah/Deepak, keynote circuit" },
+      "portable": { "strength": "starting", "evidence": "Events still depend on Jesse's curation. No teacher training or licensable format." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Oprah + Deepak partnerships, NYC media" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Pema Chödrön",
+    "experienceType": "Meditation",
+    "yearsToBlowUp": 25,
+    "blowUpMoment": "\"When Things Fall Apart\" (1997) became perennial bestseller, gateway book for secular Buddhists",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "Teaches traditional Tibetan Buddhist meditation. Innovation is TRANSLATION, not creation." },
+      "capture": { "strength": "strong", "evidence": "20+ books, continuous print 28+ years, years-long waitlists" },
+      "portable": { "strength": "strong", "evidence": "Shambhala lineage, hundreds of centers globally. Gampo Abbey training center." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Shambhala Publications, Trungpa lineage" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Jonathan Goldman",
+    "experienceType": "Sound healing",
+    "yearsToBlowUp": 12,
+    "blowUpMoment": "\"Healing Sounds: The Power of Harmonics\" (~1994) became foundational text of modern sound healing",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Pioneered \"Vowels As Mantras,\" Overtoning" },
+      "capture": { "strength": "strong", "evidence": "8 books (Simon & Schuster), Grammy-nominated, Hay House courses" },
+      "portable": { "strength": "strong", "evidence": "16-week correspondence course, online courses, teacher trainings" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Sara Auster",
+    "experienceType": "Sound healing",
+    "yearsToBlowUp": 5,
+    "blowUpMoment": "Book \"Sound Bath\" (S&S, 2019) + Apple, Google, Spotify, MoMA partnerships brought sound baths mainstream",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Sound baths in MoMA, Lincoln Center, MSG, WHO curriculum" },
+      "capture": { "strength": "strong", "evidence": "Book, PAUSE app, corporate partnerships" },
+      "portable": { "strength": "starting", "evidence": "Book + app codify method, but no teacher training found" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Apple, Google, Spotify, MoMA" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Vinn Marti",
+    "experienceType": "Conscious dance",
+    "yearsToBlowUp": 25,
+    "blowUpMoment": "Codified Soul Motion as a conscious dance practice in early 2000s, now taught globally",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Created Soul Motion practice (correction: NOT ecstatic dance founder)" },
+      "capture": { "strength": "starting", "evidence": "Kripalu features, YouTube, but no books or mainstream media" },
+      "portable": { "strength": "strong", "evidence": "International teacher training, certified teachers globally" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "DJ Taz Rashid",
+    "experienceType": "Conscious dance / music",
+    "yearsToBlowUp": 3,
+    "blowUpMoment": "Created \"Club Divine\" monthly parties (2012), touring Wanderlust festivals worldwide",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Created \"Devotronic\" genre (EDM + kirtan + devotional)" },
+      "capture": { "strength": "starting", "evidence": "SoundCloud, Spotify, but no book/course/app" },
+      "portable": { "strength": "not_yet", "evidence": "The product is him as a performer" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Wanderlust festivals" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Meghan Currie",
+    "experienceType": "Movement / yoga",
+    "yearsToBlowUp": 5,
+    "blowUpMoment": "\"Mad Love\" yoga video went viral (1M+ YouTube views), established movement-as-art on Instagram",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Trademarked \"Micro Evolution Method,\" \"Rewired: Project Self\"" },
+      "capture": { "strength": "strong", "evidence": "143K Instagram, online studio, EkhartYoga" },
+      "portable": { "strength": "starting", "evidence": "200hr teacher training exists, but personality-driven" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Peter Levine",
+    "experienceType": "Somatic therapy",
+    "yearsToBlowUp": 25,
+    "blowUpMoment": "\"Waking the Tiger\" (1997) after 25 years of clinical work",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Created Somatic Experiencing. New category of trauma therapy." },
+      "capture": { "strength": "starting", "evidence": "Books, academic reputation, but not a content creator" },
+      "portable": { "strength": "strong", "evidence": "SE International, 30,000+ trained in 42 countries" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Bessel van der Kolk",
+    "experienceType": "Somatic / trauma",
+    "yearsToBlowUp": 30,
+    "blowUpMoment": "\"The Body Keeps the Score\" (2014) exploded during COVID. 328 weeks on NYT bestseller, 3M+ copies.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Synthesized trauma/body connection into mainstream understanding" },
+      "capture": { "strength": "strong", "evidence": "NYT mega-bestseller, podcast appearances, mainstream media" },
+      "portable": { "strength": "starting", "evidence": "Book travels, but no formal van der Kolk certification" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "pandemic as cultural moment" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Thomas Hübl",
+    "experienceType": "Collective trauma",
+    "yearsToBlowUp": 18,
+    "blowUpMoment": "Built international online following through collective trauma courses and \"Attuning to Collective Trauma\" work",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Collective trauma as group process. New category." },
+      "capture": { "strength": "starting", "evidence": "Online courses, retreats, but limited mainstream media" },
+      "portable": { "strength": "starting", "evidence": "Training programs exist but still personality-dependent" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Irene Lyon",
+    "experienceType": "Nervous system education",
+    "yearsToBlowUp": 16,
+    "blowUpMoment": "Built significant online following teaching nervous system regulation through YouTube and courses",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Nervous system education for laypeople. New accessibility category." },
+      "capture": { "strength": "strong", "evidence": "YouTube, online courses, strong social presence" },
+      "portable": { "strength": "starting", "evidence": "Online programs but no formal certification for others to teach" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Byron Katie",
+    "experienceType": "Self-inquiry",
+    "yearsToBlowUp": 17,
+    "blowUpMoment": "\"Loving What Is\" (2003) brought The Work to mainstream, 17 years after her 1986 awakening",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Created The Work. 4 questions + turnarounds. Completely distinct method." },
+      "capture": { "strength": "strong", "evidence": "Bestselling books, global speaking, YouTube" },
+      "portable": { "strength": "strong", "evidence": "Anyone can facilitate The Work. Thousands of certified facilitators." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Nicole LePera",
+    "experienceType": "Psychology / self-healing",
+    "yearsToBlowUp": 3,
+    "blowUpMoment": "Instagram grew from 0 to 5M+ followers in ~3 years (started 2018)",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "\"Self-healing\" framework. Translates existing psychology, not new category." },
+      "capture": { "strength": "strong", "evidence": "9M+ Instagram followers, bestselling book" },
+      "portable": { "strength": "starting", "evidence": "Book and SelfHealers Circle, but no formal certification" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Instagram algorithm" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Marisa Peer",
+    "experienceType": "Hypnotherapy / transformation",
+    "yearsToBlowUp": 30,
+    "blowUpMoment": "Launched RTT certification (2015/2017) after 30 years as celebrity therapist. 10,000+ certified therapists.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Created Rapid Transformational Therapy. New category of hypnotherapy." },
+      "capture": { "strength": "strong", "evidence": "Mindvalley featured, bestselling author, global speaking" },
+      "portable": { "strength": "strong", "evidence": "10,000+ certified RTT therapists worldwide. Empire." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Mindvalley" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Kyle Cease",
+    "experienceType": "Comedy + transformation",
+    "yearsToBlowUp": 5,
+    "blowUpMoment": "Pivoted from comedy to transformation. \"Evolving Out Loud\" events filled theaters.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Comedy + transformation fusion. Unique combination." },
+      "capture": { "strength": "strong", "evidence": "YouTube, filled theaters, podcast" },
+      "portable": { "strength": "not_yet", "evidence": "The product is his live presence. No method others can teach." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "David Deida",
+    "experienceType": "Sacred sexuality / polarity",
+    "yearsToBlowUp": 12,
+    "blowUpMoment": "\"The Way of the Superior Man\" became underground bestseller in masculine development",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Masculine/feminine polarity workshops. Category creation." },
+      "capture": { "strength": "starting", "evidence": "Books, workshops, but not a content creator" },
+      "portable": { "strength": "not_yet", "evidence": "No certification. Workshops require his presence." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Louise Hay",
+    "experienceType": "Affirmations / self-help publishing",
+    "yearsToBlowUp": 12,
+    "blowUpMoment": "Self-published pamphlet at 50 (1976). Oprah appearance 1988 made it explode.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Affirmations as healing. Mind-body connection for laypeople." },
+      "capture": { "strength": "strong", "evidence": "\"You Can Heal Your Life\" 50M+ copies" },
+      "portable": { "strength": "strong", "evidence": "Hay House publishing empire. Affirmations taught by millions." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Oprah" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Caroline Myss",
+    "experienceType": "Medical intuition",
+    "yearsToBlowUp": 14,
+    "blowUpMoment": "Partnership with Dr. Norman Shealy + \"Anatomy of the Spirit\" (1996)",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Medical intuitive as a category for laypeople" },
+      "capture": { "strength": "strong", "evidence": "Bestselling books, PBS, Hay House" },
+      "portable": { "strength": "starting", "evidence": "CMED Institute, but method is hard to certify (intuition-dependent)" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Dr. Shealy" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Donna Eden",
+    "experienceType": "Energy medicine",
+    "yearsToBlowUp": 20,
+    "blowUpMoment": "\"Energy Medicine\" book (1998) became the standard text. Mindvalley expanded reach.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Energy Medicine as hands-on practice for laypeople" },
+      "capture": { "strength": "starting", "evidence": "Book, Mindvalley, but not a content creator" },
+      "portable": { "strength": "strong", "evidence": "Eden Energy Medicine certification. Practitioners worldwide." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Mindvalley" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Brian Weiss",
+    "experienceType": "Past life regression",
+    "yearsToBlowUp": 8,
+    "blowUpMoment": "\"Many Lives Many Masters\" (1988). Mainstream psychiatrist validates past life regression.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Past life regression for mainstream. New category." },
+      "capture": { "strength": "strong", "evidence": "Bestselling books, Oprah, media appearances" },
+      "portable": { "strength": "starting", "evidence": "Workshops, but no formal Weiss certification" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Oprah" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Do LaB / Lightning in a Bottle",
+    "experienceType": "Transformational festival",
+    "yearsToBlowUp": 8,
+    "blowUpMoment": "150-person birthday party (2000) to 26,000 attendees (2025). Also runs Do LaB stage at Coachella.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Premier US transformational festival" },
+      "capture": { "strength": "strong", "evidence": "Coachella stage, media coverage" },
+      "portable": { "strength": "starting", "evidence": "Coachella stage is portable, but festival isn't licensable" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Envision Festival",
+    "experienceType": "Wellness festival",
+    "yearsToBlowUp": 5,
+    "blowUpMoment": "Few hundred to globally recognized jungle wellness festival in Costa Rica by ~2016",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Jungle wellness festival category" },
+      "capture": { "strength": "starting", "evidence": "Limited mainstream media" },
+      "portable": { "strength": "not_yet", "evidence": "Location-locked to Costa Rica. Scaling DOWN for 2026 after health crisis." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Sanctum",
+    "experienceType": "Immersive guided experience (headsets)",
+    "yearsToBlowUp": 3,
+    "blowUpMoment": "Amsterdam cult following to Auberge Resorts + Six Senses (Ibiza, Dubai, Rome) partnerships in 3 years",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Headphone-based immersive movement (HIIT, Kundalini, breathwork, primal). Nomadic." },
+      "capture": { "strength": "strong", "evidence": "Sanctum Digital app with \"Frequency Arc\" felt-state tracking" },
+      "portable": { "strength": "strong", "evidence": "Nomadic model. Headphones + app + guide-led. No venue needed." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Auberge Resorts" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Dawnbreak Australia",
+    "experienceType": "Sober silent disco",
+    "yearsToBlowUp": 2,
+    "blowUpMoment": "35 people (early 2024) to 10 events across 8 cities, ~13,000 attendees, 9.9M social views",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Constraint stacking: 5am + sober + silent + beach + sunrise" },
+      "capture": { "strength": "strong", "evidence": "9.9M social views, TikTok/Instagram" },
+      "portable": { "strength": "starting", "evidence": "Multi-city tour but still founder-operated" }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Danielle LaPorte",
+    "experienceType": "Personal development",
+    "yearsToBlowUp": 6,
+    "blowUpMoment": "\"The Desire Map\" (2012). \"Core Desired Feelings\" went viral. 500+ licensed facilitators.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "Desire mapping as goal-setting framework. New category." },
+      "capture": { "strength": "strong", "evidence": "Bestselling books, Oprah, strong online presence" },
+      "portable": { "strength": "strong", "evidence": "400+ facilitators in 32 countries. Licensing model." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Oprah SuperSoul 100" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Rupert Spira",
+    "experienceType": "Non-duality",
+    "yearsToBlowUp": 10,
+    "blowUpMoment": "YouTube non-duality dialogues accumulated millions of views",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "Teaches traditional non-duality (Advaita). Innovation is accessibility." },
+      "capture": { "strength": "strong", "evidence": "YouTube presence, bestselling books" },
+      "portable": { "strength": "not_yet", "evidence": "No certification. The experience is his guided inquiry." }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "YouTube algorithm" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Melissa Wood",
+    "experienceType": "Mindful movement / wellness app",
+    "yearsToBlowUp": 4,
+    "blowUpMoment": "Instagram wellness content to MWH Method app with loyal subscriber base",
+    "dimensions": {
+      "create": { "strength": "starting", "evidence": "Low-impact mindful movement. Not a new category, but new accessibility." },
+      "capture": { "strength": "strong", "evidence": "Strong Instagram, app, celebrity following" },
+      "portable": { "strength": "starting", "evidence": "App delivers content, but no teacher training" }
+    },
+    "bridgeAmplified": { "flag": true, "bridgeName": "Instagram + celebrity endorsements" },
+    "isPeakedStalled": false
+  },
+  {
+    "name": "Tara Stiles",
+    "experienceType": "Yoga",
+    "yearsToBlowUp": 4,
+    "blowUpMoment": "~2013. NYT \"rebel yoga\" profile, Deepak collaboration, W Hotels, multiple books.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "starting", "evidence": "At peak: Capture=starting" },
+      "portable": { "strength": "starting", "evidence": "At peak: Portable=starting. Missing: Differentiated methodology. No \"Strala teachers\" movement." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  },
+  {
+    "name": "Mastin Kipp",
+    "experienceType": "Motivational / coaching",
+    "yearsToBlowUp": 3,
+    "blowUpMoment": "~2013. Kim Kardashian tweet, Oprah Super Soul Sunday, massive email list.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "strong", "evidence": "At peak: Capture=strong" },
+      "portable": { "strength": "not_yet", "evidence": "At peak: Portable=not_yet. Missing: Portable methodology at peak. Brand equity couldn't transfer to new direction." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  },
+  {
+    "name": "Preston Smiles",
+    "experienceType": "Motivational speaking",
+    "yearsToBlowUp": 3,
+    "blowUpMoment": "~2016. Viral YouTube, Simon & Schuster book deal, Lewis Howes/Tom Bilyeu podcasts.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "starting", "evidence": "At peak: Capture=starting" },
+      "portable": { "strength": "not_yet", "evidence": "At peak: Portable=not_yet. Missing: Any portable methodology. Entire brand was energy and charisma on camera." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  },
+  {
+    "name": "Guru Jagat",
+    "experienceType": "Kundalini yoga",
+    "yearsToBlowUp": 5,
+    "blowUpMoment": "~2018. THE celebrity Kundalini studio in Venice. Fashion + music expansion.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "starting", "evidence": "At peak: Capture=starting" },
+      "portable": { "strength": "not_yet", "evidence": "At peak: Portable=not_yet. Missing: Own methodology + governance structure." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  },
+  {
+    "name": "Bikram Choudhury",
+    "experienceType": "Hot yoga",
+    "yearsToBlowUp": 30,
+    "blowUpMoment": "~2006. 1,500-1,650 studios in 40+ countries. $4.15M per teacher training cohort.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "strong", "evidence": "At peak: Capture=strong" },
+      "portable": { "strength": "strong", "evidence": "At peak: Portable=strong. The PRACTICE survived because it was genuinely portable. Studios renamed to \"hot yoga\" and kept teaching." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  },
+  {
+    "name": "John Friend",
+    "experienceType": "Yoga certification",
+    "yearsToBlowUp": 13,
+    "blowUpMoment": "~2010. Fastest-growing yoga style. ~1,500 certified teachers, ~600,000 practitioners.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "strong", "evidence": "At peak: Capture=strong" },
+      "portable": { "strength": "strong", "evidence": "At peak: Portable=strong. Method too intertwined with his philosophy to survive." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  },
+  {
+    "name": "Rachel Brathen (Peaked)",
+    "experienceType": "Instagram yoga / retreats",
+    "yearsToBlowUp": 4,
+    "blowUpMoment": "~2017. 2M+ followers. Bestselling book. Island Yoga studio.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "starting", "evidence": "At peak: Capture=starting" },
+      "portable": { "strength": "not_yet", "evidence": "At peak: Portable=not_yet. Missing: Portable methodology. Brand was her body doing yoga, in Aruba, sharing vulnerable stories." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  },
+  {
+    "name": "Gabby Reece",
+    "experienceType": "Performance wellness",
+    "yearsToBlowUp": 5,
+    "blowUpMoment": "~2019-2020. XPT + Laird Superfood IPO ($22/share).",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "starting", "evidence": "At peak: Capture=starting" },
+      "portable": { "strength": "not_yet", "evidence": "At peak: Portable=not_yet. Missing: Portability. No certification, no simplified version. Got unbundled by specialists." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  },
+  {
+    "name": "Russell Brand",
+    "experienceType": "Recovery / spirituality / commentary",
+    "yearsToBlowUp": 5,
+    "blowUpMoment": "~2022. 6.6M YouTube subscribers, 1.1B views.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "strong", "evidence": "At peak: Capture=strong" },
+      "portable": { "strength": "not_yet", "evidence": "At peak: Portable=not_yet. 100% personality-dependent. Recovery is a topic, not his method." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  },
+  {
+    "name": "Danielle LaPorte (Peaked)",
+    "experienceType": "Personal development",
+    "yearsToBlowUp": 6,
+    "blowUpMoment": "~2015. Bestselling framework. 500+ licensees. Planners. App.",
+    "dimensions": {
+      "create": { "strength": "strong", "evidence": "At peak: Create=strong" },
+      "capture": { "strength": "strong", "evidence": "At peak: Capture=strong" },
+      "portable": { "strength": "strong", "evidence": "At peak: Portable=strong. Had all dimensions. Chose to evolve." }
+    },
+    "bridgeAmplified": { "flag": false, "bridgeName": null },
+    "isPeakedStalled": true
+  }
+]
