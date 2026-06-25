@@ -105,13 +105,8 @@ export async function createFeedPost({
   if (!userId) throw new Error('userId required')
   if (!mediaUrl) throw new Error('mediaUrl required')
 
-  let dayNumber = 1
-  try {
-    const enrollment = await ensureEnrolled(userId)
-    dayNumber = computeDayNumber(enrollment.started_at)
-  } catch (e) {
-    console.warn('Enrollment tracking skipped:', e.message)
-  }
+  const enrollment = await ensureEnrolled(userId)
+  const dayNumber = computeDayNumber(enrollment.started_at)
 
   const { data, error } = await supabase
     .from('playlist_feed_posts')
