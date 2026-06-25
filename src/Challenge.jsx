@@ -2597,6 +2597,7 @@ function Challenge() {
         <HealingCompletionModal
           quest={healingModalQuest}
           userId={user?.id}
+          weeklyFocus={healingIntention?.intention_text}
           onComplete={async (quest, textInput) => {
             const inputValue = quest.inputType === 'checkbox' ? 'completed' : textInput
             await handleQuestComplete(quest, inputValue)

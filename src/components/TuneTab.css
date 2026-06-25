@@ -702,6 +702,13 @@
   margin: 0;
 }
 
+.tt-recovery-sub {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+  margin: 4px 0 0;
+}
+
 .tt-recovery-body {
   flex: 1;
   overflow-y: auto;
@@ -836,9 +843,12 @@
   .tt-drain-note,
   .tt-recover-btn,
   .tt-recovery-activity,
+  .tt-recovery-dur,
   .tt-recovery-save,
+  .tt-recovery-sheet,
   .tt-exp-pred-btn {
     transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }
 

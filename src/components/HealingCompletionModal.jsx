@@ -9,7 +9,6 @@ import './GroanCompletionModal.css'
 
 // Deep work quests that warrant a nervous system check-in
 const CHECKIN_QUEST_IDS = [
-  'release_negative_charge',        // Processing Your Emotions
   'release_weekly_big',             // Big Release
   'recognise_healing_compass',      // Healing Compass
   'recognise_nervous_system',       // Map NS Boundaries
@@ -25,7 +24,7 @@ const shouldShowCheckin = (quest) => {
   return false
 }
 
-export default function HealingCompletionModal({ quest, userId, onComplete, onClose }) {
+export default function HealingCompletionModal({ quest, userId, weeklyFocus, onComplete, onClose }) {
   const [phase, setPhase] = useState(() => shouldShowCheckin(quest) ? 'after_checkin' : 'quest_input')
   const [textInput, setTextInput] = useState('')
 
@@ -69,7 +68,7 @@ export default function HealingCompletionModal({ quest, userId, onComplete, onCl
     const hasMultiStepHandler = MULTI_STEP_QUEST_IDS.includes(quest.id) || quest.voiceType
 
     if (type === 'recognise' && hasMultiStepHandler) {
-      return <RecogniseQuestInput quest={quest} onComplete={handleQuestDone} />
+      return <RecogniseQuestInput quest={quest} weeklyFocus={weeklyFocus} onComplete={handleQuestDone} />
     }
     if (type === 'rewire' || quest.inputType === 'rewire_quest') {
       return <RewireQuestInput quest={quest} onComplete={handleQuestDone} />

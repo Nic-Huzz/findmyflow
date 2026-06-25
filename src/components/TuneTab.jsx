@@ -1065,9 +1065,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             {avgRecoveryLabel && (
               <span className="tt-section-count tt-recovery-avg">⏱ {avgRecoveryLabel} avg recovery</span>
             )}
-            {recentDrains.length > 0 && (
-              <span className="tt-section-count tt-drain-count">{recentDrains.length} this week</span>
-            )}
           </div>
         </div>
         <p className="tt-section-sub">What&apos;s depleting your energy? Drains pull you out of expression faster than practices can refill it.</p>
@@ -1186,9 +1183,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             <span className="tt-section-title">Stalls</span>
             {safety !== null && <span className="tt-score-badge tt-score-safety">🛡️ {safety}/10</span>}
           </div>
-          {recentStalls.length > 0 && (
-            <span className="tt-section-count tt-stall-count">{recentStalls.length} this week</span>
-          )}
         </div>
         <p className="tt-section-sub">Where did your protective voice win? Stalls erode safety and keep you stuck in the smaller version of yourself.</p>
 

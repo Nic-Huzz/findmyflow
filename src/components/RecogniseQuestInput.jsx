@@ -145,7 +145,7 @@ const INITIAL_FORM_DATA = {
   critic_response: ''
 }
 
-function RecogniseQuestInput({ quest, onComplete }) {
+function RecogniseQuestInput({ quest, weeklyFocus, onComplete }) {
   const { user } = useAuth()
   const [userArchetypes, setUserArchetypes] = useState({
     essence: null,
@@ -741,6 +741,9 @@ function RecogniseQuestInput({ quest, onComplete }) {
         {/* Step 1: Frequency selector */}
         {step === 1 && (
           <div className="step-content">
+            {weeklyFocus && (
+              <div className="step-focus-context">"{weeklyFocus}"</div>
+            )}
             <div className="step-header">
               <span className="step-icon">📉</span>
               <h4>I showed up from a place of...</h4>
@@ -862,6 +865,9 @@ function RecogniseQuestInput({ quest, onComplete }) {
         {/* Step 1: Frequency selector */}
         {step === 1 && (
           <div className="step-content">
+            {weeklyFocus && (
+              <div className="step-focus-context">"{weeklyFocus}"</div>
+            )}
             <div className="step-header">
               <span className="step-icon">✨</span>
               <h4>I showed up from a place of...</h4>

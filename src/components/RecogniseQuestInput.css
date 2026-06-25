@@ -30,6 +30,14 @@
   min-height: 200px;
 }
 
+.recognise-input .step-focus-context {
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 600;
+  color: #5e17eb;
+  margin-bottom: 8px;
+}
+
 .recognise-input .step-header {
   display: flex;
   align-items: center;
