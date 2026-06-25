@@ -1,12 +1,11 @@
 /**
  * playlistFeedService — public Play-List feed
  *
- * Powers the 100-day Play-List Challenge newsfeed:
+ * Powers the Play-List newsfeed:
  *  - Upload photos to the playlist-feed storage bucket
  *  - Create posts tied to a groan completion
  *  - Fetch paginated public feed (anon-readable via RPC)
  *  - Toggle reactions optimistically
- *  - Enrol users into the 100-day challenge on first share
  */
 import { supabase } from './supabaseClient'
 
@@ -39,54 +38,7 @@ export async function uploadFeedMedia(userId, file) {
 }
 
 /**
- * Get user's 100-day enrolment row, or null if not enrolled.
- */
-export async function getEnrollment(userId) {
-  if (!userId) return null
-  const { data, error } = await supabase
-    .from('playlist_100_enrollments')
-    .select('*')
-    .eq('user_id', userId)
-    .maybeSingle()
-  if (error) {
-    console.warn('getEnrollment error:', error)
-    return null
-  }
-  return data
-}
-
-/**
- * Enrol the user in the 100-day challenge if they aren't already.
- * Returns the enrolment row.
- */
-export async function ensureEnrolled(userId) {
-  if (!userId) throw new Error('userId required')
-  const existing = await getEnrollment(userId)
-  if (existing) return existing
-
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
-  const { data, error } = await supabase
-    .from('playlist_100_enrollments')
-    .insert({ user_id: userId, timezone: tz })
-    .select()
-    .single()
-  if (error) throw error
-  return data
-}
-
-/**
- * Compute day_number (1-indexed) from started_at.
- */
-export function computeDayNumber(startedAt) {
-  if (!startedAt) return 1
-  const start = new Date(startedAt).getTime()
-  const now = Date.now()
-  const days = Math.floor((now - start) / (1000 * 60 * 60 * 24))
-  return Math.max(1, days + 1)
-}
-
-/**
- * Create a feed post. Auto-enrols the user on their first post.
+ * Create a feed post.
  * `enrichment` carries denormalized profile fields so the feed query stays cheap.
  */
 export async function createFeedPost({
@@ -105,9 +57,6 @@ export async function createFeedPost({
   if (!userId) throw new Error('userId required')
   if (!mediaUrl) throw new Error('mediaUrl required')
 
-  const enrollment = await ensureEnrolled(userId)
-  const dayNumber = computeDayNumber(enrollment.started_at)
-
   const { data, error } = await supabase
     .from('playlist_feed_posts')
     .insert({
@@ -121,7 +70,7 @@ export async function createFeedPost({
       media_width: mediaWidth ?? null,
       media_height: mediaHeight ?? null,
       caption: caption?.slice(0, 280) || null,
-      day_number: dayNumber,
+      day_number: null,
       display_name: enrichment.displayName || null,
       essence_archetype: enrichment.essenceArchetype || null,
       hero_avatar_url: enrichment.heroAvatarUrl || null,
@@ -203,11 +152,9 @@ export async function getUserReactionsForPosts(userId, postIds) {
 /**
  * Report a post — flips moderation_status to 'pending' so it disappears
  * from the public feed until an admin reviews it.
- * Note: relies on the owner-update policy being permissive enough OR
- * a future admin RPC. For v1 we just call an edge function or skip.
  */
 export async function reportPost(postId) {
-  // v1: no-op until we add a report RPC. Wire UI now, finish backend in moderation pass.
+  // v1: no-op until we add a report RPC
   console.log('reportPost queued for', postId)
   return { ok: true }
 }
@@ -233,8 +180,6 @@ export async function fetchPostEnrichment(userId) {
         .eq('user_id', userId)
         .maybeSingle(),
     ])
-    // essence_archetype is not yet on any base table — left null until we
-    // pick a canonical source. founder_dna_results.archetype could work too.
     return {
       displayName: lfp?.user_name || null,
       heroAvatarUrl: usp?.hero_avatar_url || null,
