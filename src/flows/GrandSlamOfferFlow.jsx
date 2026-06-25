@@ -512,7 +512,8 @@ function GrandSlamOfferFlow() {
         await trackFlowCompletion({
           userId: user.id,
           projectId,
-          flowType: 'offer_builder_v2'
+          flowType: 'offer_builder_v2',
+          experienceId: searchParams.get('experienceId') || null
         })
       } catch (trackingError) {
         console.warn('Flow tracking failed:', trackingError)

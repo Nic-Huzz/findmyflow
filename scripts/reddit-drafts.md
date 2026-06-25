@@ -1,0 +1,69 @@
+# Reddit Comment Drafts — June 22, 2026
+
+*Review, edit in your voice, then approve for posting. Max 2 per day.*
+
+---
+
+## Draft 1 — BEST FIT
+**Thread:** "I'm 32 and genuinely don't know what to do with my life anymore"
+**Link:** https://www.reddit.com/r/findapath/comments/1ucyjhd/career_of_my_dream/
+**Comments:** 3 | **Score:** 1
+**Why:** 32yo, grew up poor, dreamed of astronomy, tried medicine, freelancing, now lost. Classic Head Full of Dreams.
+
+**Draft comment:**
+
+> The fact that you've tried this many things isn't a sign something's wrong with you. It's a sign you haven't found the thing that matches who you actually are yet.
+>
+> I was in a similar spot at 26. Corporate job, spent years and money trying to figure it out. What cracked it wasn't finding the "right career." It was realising I was scared of the things that actually excited me. The astronomy dream, the curiosity — that stuff doesn't go away. It just gets buried under "be practical."
+>
+> What helped me: I stopped trying to figure it all out and started doing one small thing a week that scared me. Not career moves. Just… things that made me feel something. Clarity came from that, not from more thinking.
+
+**Tone check:** Personal, no links, no product mention, one insight. ✓
+
+---
+
+## Draft 2
+**Thread:** "21, Confused, and Torn Between Passion, Pressure, and Practicality"
+**Link:** https://www.reddit.com/r/findapath/comments/1ucyc80/21_confused_and_torn_between_passion_pressure_and/
+**Comments:** 1 | **Score:** 1
+**Why:** Stuck between AI freelancing, father's wishes, self-doubt. Classic gas-and-brake.
+
+**Draft comment:**
+
+> The sword hanging over your neck isn't the career choice. It's trying to make the "right" decision before you have enough data.
+>
+> At 21 you're not supposed to have this figured out. The people who look like they do are mostly just committed to one path and haven't hit their crisis yet.
+>
+> My take: do the AI thing on the side for 3 months. Actually do it, not research it. You'll know within a few weeks whether it lights you up or drains you. That data is worth more than any amount of thinking about it.
+
+**Tone check:** Direct, practical, no links. ✓
+
+---
+
+## Draft 3
+**Thread:** "I feel like my entire future plan has fallen apart and now I'm turning back to art"
+**Link:** https://www.reddit.com/r/findapath/comments/1ucscsb/i_feel_like_my_entire_future_plan_has_fallen/
+**Comments:** 1 | **Score:** 3
+**Why:** 19, plan collapsed, returning to art. The "plan falling apart" IS the signal.
+
+**Draft comment:**
+
+> Your plan didn't fall apart. The plan that wasn't yours fell apart. That's different.
+>
+> The fact that you keep coming back to art isn't a failure of discipline. It's data. Your body is telling you something your brain hasn't fully accepted yet.
+>
+> I pushed away what I actually wanted for years because it didn't feel "practical." Turns out the impractical thing was ignoring it. The energy you spend fighting what you actually want is way more expensive than just exploring it.
+
+**Tone check:** Reframe, personal, encouraging without being preachy. ✓
+
+---
+
+## Posting Rules
+- [ ] Post max 2 today (pick your favourites)
+- [ ] Wait 24h before posting the 3rd
+- [ ] Edit these in YOUR words before posting — AI drafts get flagged
+- [ ] No links, no app mentions (karma is still 2)
+- [ ] Reply to any replies you get (genuine engagement builds karma)
+
+## Next scan
+Run again tomorrow or use: `/schedule` to automate daily

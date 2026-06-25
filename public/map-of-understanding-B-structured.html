@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Map of Understanding v2 — Structured</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a12;
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    color: #e0e0e0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .format-badge {
+    position: fixed;
+    top: 20px; right: 32px;
+    background: rgba(233,162,59,0.15);
+    border: 1px solid rgba(233,162,59,0.3);
+    color: #E9A23B;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    z-index: 100;
+    letter-spacing: 0.5px;
+  }
+
+  /* Hero */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    position: relative;
+    padding: 40px 20px;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(94,23,235,0.12) 0%, rgba(233,162,59,0.05) 40%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #666;
+    margin-bottom: 24px;
+  }
+  .hero-title {
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #5e17eb 0%, #a78bfa 40%, #E9A23B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+    max-width: 700px;
+  }
+  .hero-meta {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 40px;
+  }
+  .hero-quote {
+    font-size: 18px;
+    color: #888;
+    font-style: italic;
+    max-width: 500px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+  }
+  .scroll-hint {
+    color: #444;
+    font-size: 12px;
+    animation: pulse 2s infinite;
+  }
+  .scroll-arrow {
+    display: block;
+    margin: 8px auto 0;
+    font-size: 20px;
+    color: #444;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* Timeline spine */
+  .timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px 120px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(94,23,235,0.4), rgba(233,162,59,0.4));
+    transform: translateX(-50%);
+  }
+
+  /* Branch section */
+  .branch-section {
+    position: relative;
+    margin-bottom: 80px;
+  }
+
+  .branch-hub {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+    padding: 16px 28px;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .branch-hub:hover {
+    background: rgba(255,255,255,0.08);
+    transform: translateX(-50%) scale(1.02);
+  }
+  .branch-hub.active {
+    border-color: var(--branch-color);
+    box-shadow: 0 0 30px color-mix(in srgb, var(--branch-color) 20%, transparent);
+  }
+  .branch-icon {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .branch-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e0e0e0;
+  }
+  .branch-summary {
+    font-size: 11px;
+    color: #777;
+    margin-top: 6px;
+    max-width: 280px;
+  }
+  .branch-count {
+    display: inline-block;
+    font-size: 10px;
+    color: #555;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+  }
+
+  /* Leaves container */
+  .leaves-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s ease, opacity 0.4s ease;
+    opacity: 0;
+  }
+  .leaves-container.open {
+    max-height: 2000px;
+    opacity: 1;
+  }
+
+  .leaf-card {
+    padding: 16px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    border-left: 3px solid var(--branch-color);
+    transition: all 0.3s;
+  }
+  .leaf-card:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+  }
+  .leaf-date {
+    font-size: 10px;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .leaf-text {
+    font-size: 13px;
+    line-height: 1.55;
+    color: #bbb;
+  }
+  .leaf-card.proto-ip {
+    background: rgba(94,23,235,0.06);
+    border-left-color: #5e17eb;
+  }
+  .leaf-card.proto-ip .leaf-badge {
+    display: inline-block;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #a78bfa;
+    background: rgba(94,23,235,0.15);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  /* Connection lines between sections */
+  .cross-connection {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 0;
+    border-top: 1px dashed rgba(255,255,255,0.08);
+    margin: 12px 0;
+  }
+
+  /* Arc headers */
+  .arc-header {
+    text-align: center;
+    margin: 80px 0 48px;
+    position: relative;
+  }
+  .arc-year {
+    font-size: 48px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.15;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -20px;
+  }
+  .arc-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #777;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 32px 20px;
+    margin: 0 auto 60px;
+    max-width: 700px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #555;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Synthesis at bottom */
+  .synthesis {
+    max-width: 700px;
+    margin: 80px auto 0;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(94,23,235,0.08), rgba(233,162,59,0.05));
+    border: 1px solid rgba(94,23,235,0.15);
+    border-radius: 20px;
+    text-align: center;
+  }
+  .synthesis h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e0e0e0;
+    margin-bottom: 16px;
+  }
+  .synthesis p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #999;
+  }
+  .synthesis .thread {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    text-align: left;
+  }
+  .thread-arrow {
+    color: #5e17eb;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .thread-text {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .timeline { padding: 0 20px 80px; }
+    .timeline::before { left: 20px; }
+    .leaves-container { grid-template-columns: 1fr; }
+    .stats-bar { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="format-badge">OPTION B: STRUCTURED</div>
+
+<section class="hero">
+  <div class="hero-label">Map of Understanding v2</div>
+  <h1 class="hero-title">We are vessels of experiences</h1>
+  <div class="hero-meta">196 thought entries / 7 themes / 2022-2025</div>
+  <p class="hero-quote">"My search for purpose was a search to end my suffering. My intuition has been like a sculptor, chipping away, until now the masterpiece that's always been inside has revealed itself."</p>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-number">196</div><div class="stat-label">Thoughts</div></div>
+    <div class="stat"><div class="stat-number">7</div><div class="stat-label">Themes</div></div>
+    <div class="stat"><div class="stat-number">3</div><div class="stat-label">Years</div></div>
+    <div class="stat"><div class="stat-number">8</div><div class="stat-label">Proto-IP</div></div>
+  </div>
+  <div class="scroll-hint">Scroll to explore the worldview
+    <span class="scroll-arrow">↓</span>
+  </div>
+</section>
+
+<section class="timeline" id="timeline">
+
+  <!-- Branch 1: Experience -->
+  <div class="branch-section" style="--branch-color: #a78bfa;">
+    <div class="branch-hub" onclick="toggleBranch(this)">
+      <span class="branch-icon">✦</span>
+      <div class="branch-label">Experience is all there is</div>
+      <div class="branch-summary">We are only ever our present experience. The past is stories. The external never changes the internal.</div>
+      <div class="branch-count">8 entries</div>
+    </div>
+    <div class="leaves-container">
+      <div class="leaf-card proto-ip">
+        <div class="leaf-badge">Proto-IP: The Crack</div>
+        <div class="leaf-date">2022-09-26</div>
+        <div class="leaf-text">My search for purpose was a search to end my suffering.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2022-09-26</div>
+        <div class="leaf-text">Memories are simply stories we tell ourselves. Our story is the only boundary we place upon ourselves.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2022-10-22</div>
+        <div class="leaf-text">Thesis: we are only ever our present experience. Our memories are a story. Therefore we're simply the story we tell ourselves.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2022-10-06</div>
+        <div class="leaf-text">Life is simply experiencing experiences. Our brain, eyes and body is the tool we've been given to experience it. Emotions are signals about experiences we do and don't want.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-09-07</div>
+        <div class="leaf-text">What makes us unique? The combination of things that we love. There's no one on earth with your combination.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-12-17</div>
+        <div class="leaf-text">Experiences make you happy. Not goods.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branch 2: Love -->
+  <div class="branch-section" style="--branch-color: #f472b6;">
+    <div class="branch-hub" onclick="toggleBranch(this)">
+      <span class="branch-icon">💜</span>
+      <div class="branch-label">Our essence is love</div>
+      <div class="branch-summary">We are born as love. Conditioning, trauma, and fear block it. The journey is returning to it.</div>
+      <div class="branch-count">7 entries</div>
+    </div>
+    <div class="leaves-container">
+      <div class="leaf-card proto-ip">
+        <div class="leaf-badge">Proto-IP: The Water Model</div>
+        <div class="leaf-date">2024-09-16</div>
+        <div class="leaf-text">Our essence is love. However this essence becomes blocked by fear. Three reasons: 1) Survival. 2) Protection: we experience trauma that leads us to adopt behaviours to protect ourselves. 3) Conditioning. Return to love is the ultimate role of "healing."</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2023-05-01</div>
+        <div class="leaf-text">If all we are is love, anytime you "hate" something in someone else it's simply a reflection of something you hate in yourself.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-11-08</div>
+        <div class="leaf-text">Journey is the most important piece. We choose that journey. Most important journey? Returning to love.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2022-11-01</div>
+        <div class="leaf-text">Doesn't make sense to chase anything that satisfies my ego. No desire. All my previous attempts at being happy were based on fighting with the ego. Connecting the inner joy is surpassing the ego.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2023-09-28</div>
+        <div class="leaf-text">We hide the parts we love the most because we love them so much we don't want them to be hurt.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branch 3: Safety -->
+  <div class="branch-section" style="--branch-color: #f87171;">
+    <div class="branch-hub" onclick="toggleBranch(this)">
+      <span class="branch-icon">🛡</span>
+      <div class="branch-label">Safety is the foundation</div>
+      <div class="branch-summary">Safety > truth. Without safety, no expression. Limiting beliefs are fears. Connection = safety + being seen.</div>
+      <div class="branch-count">9 entries</div>
+    </div>
+    <div class="leaves-container">
+      <div class="leaf-card proto-ip">
+        <div class="leaf-badge">Proto-IP: Safety x Expression</div>
+        <div class="leaf-date">2024-10-01</div>
+        <div class="leaf-text">Why does vulnerability create connection? Connection = how safe you feel + how much you feel seen. Being vulnerable = feeling seen. Listening = feeling safe.</div>
+      </div>
+      <div class="leaf-card proto-ip">
+        <div class="leaf-badge">Proto-IP: Habits + Safety</div>
+        <div class="leaf-date">2025-05-18</div>
+        <div class="leaf-text">You don't rise to the level of your ambitions, you fall to the level of your habits + safety. Missing half the equation. Arguably the most important half.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-01-01</div>
+        <div class="leaf-text">Safety > truth. Cultures that can't speak the truth become sick. 85% work disengagement. Record mental health statistics.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-01-09</div>
+        <div class="leaf-text">Limiting belief = fear. Why is it a limiting belief? We don't feel safe.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-08-17</div>
+        <div class="leaf-text">Number 1 source of all fears: Our worth is dependent on our actions. Body is a vessel of beliefs. Beliefs create filter for reality.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-06-03</div>
+        <div class="leaf-text">All our wounds and programming can be simplified to making us feel safe + affiliation + status.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branch 4: Body -->
+  <div class="branch-section" style="--branch-color: #fb923c;">
+    <div class="branch-hub" onclick="toggleBranch(this)">
+      <span class="branch-icon">⚡</span>
+      <div class="branch-label">The body keeps the score</div>
+      <div class="branch-summary">Emotions are the body's communication. Suppressed emotions become triggers. The nervous system stores everything.</div>
+      <div class="branch-count">10 entries</div>
+    </div>
+    <div class="leaves-container">
+      <div class="leaf-card">
+        <div class="leaf-date">2022-10-12</div>
+        <div class="leaf-text">Emotions are your body's communication mechanism. Cycle of suffering: can't escape it but we try to.</div>
+      </div>
+      <div class="leaf-card proto-ip">
+        <div class="leaf-badge">Proto-IP: Protective Archetypes</div>
+        <div class="leaf-date">2023-08-02</div>
+        <div class="leaf-text">School micro-traumas from bantering prevents us from growing into authentic selves. Every time we suppress painful emotions, they don't disappear. Our body stores them and they become triggers.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2023-08-21</div>
+        <div class="leaf-text">Performance improvement: moving from mindset into the body. The next frontier is treating our central nervous system.</div>
+      </div>
+      <div class="leaf-card proto-ip">
+        <div class="leaf-badge">Proto-IP: 7-Stage Journey</div>
+        <div class="leaf-date">2024-12-23</div>
+        <div class="leaf-text">Level 1: learning the tools. Level 2: deploying the tools. Level 3: not becoming dis-regulated no matter the environment.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2023-06-05</div>
+        <div class="leaf-text">Humans are constant waves of emotions. We're emotional beings that think. Not thinking beings with emotions.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branch 5: Frequency -->
+  <div class="branch-section" style="--branch-color: #38bdf8;">
+    <div class="branch-hub" onclick="toggleBranch(this)">
+      <span class="branch-icon">〰</span>
+      <div class="branch-label">Everything is frequency</div>
+      <div class="branch-summary">Vibration dictates thoughts. Consciousness scales. Manifestation = aligning frequency.</div>
+      <div class="branch-count">12 entries</div>
+    </div>
+    <div class="leaves-container">
+      <div class="leaf-card">
+        <div class="leaf-date">2025-01-12</div>
+        <div class="leaf-text">Humans are vessels for experiences.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-04-29</div>
+        <div class="leaf-text">Everything is frequency. Part of our greatest limitation is how limited our vision is.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-02-20</div>
+        <div class="leaf-text">Frequency dictates thoughts. Duality of life seen through crest + trough of frequency. My attempt to always be happy kept me stuck in a low frequency e.g. desire.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-03-19</div>
+        <div class="leaf-text">Manifestation = aligning frequency. Habits + safety (subconscious) + visualise (mind doesn't know difference between reality + thought).</div>
+      </div>
+      <div class="leaf-card proto-ip">
+        <div class="leaf-badge">Proto-IP: Dorsal vs Vibe Rise</div>
+        <div class="leaf-date">2025-01-01</div>
+        <div class="leaf-text">Needing to feel the lows to feel the highs, less about contrast and more about numbing. If you've numbed yourself from the lows, you're likely numbing yourself from the highs.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-05-11</div>
+        <div class="leaf-text">Your vibration is determined by your response to your emotions. Determining vibration is like tuning your ego.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branch 6: Healing -->
+  <div class="branch-section" style="--branch-color: #4ade80;">
+    <div class="branch-hub" onclick="toggleBranch(this)">
+      <span class="branch-icon">💧</span>
+      <div class="branch-label">Healing = return to flow</div>
+      <div class="branch-summary">River analogy: trauma creates blockages. Healing restores flow. The body heals itself. Meditation creates space.</div>
+      <div class="branch-count">7 entries</div>
+    </div>
+    <div class="leaves-container">
+      <div class="leaf-card proto-ip">
+        <div class="leaf-badge">Proto-IP: The Water Model (verbatim)</div>
+        <div class="leaf-date">2025-04-12</div>
+        <div class="leaf-text">Healing: river that flows. Trauma creates the flow to stop (suppression) or rampage (triggers). Being whole (fully healed) = being able to flow without restraint.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2023-05-15</div>
+        <div class="leaf-text">The body heals itself. It doesn't need outside intervention. Holding space is simply helping them regulate their own emotions.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-05-23</div>
+        <div class="leaf-text">Meditation is so effective because it helps create space between stimulus and response.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-06-01</div>
+        <div class="leaf-text">Point of healing is to feel safe to respond from higher levels.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-05-14</div>
+        <div class="leaf-text">Is a trigger something you haven't felt safe to process?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branch 7: Culture -->
+  <div class="branch-section" style="--branch-color: #fb923c;">
+    <div class="branch-hub" onclick="toggleBranch(this)">
+      <span class="branch-icon">🏛</span>
+      <div class="branch-label">Culture installs fear</div>
+      <div class="branch-summary">Western culture values the external. Capitalism orients toward ownership. We're in a sick society and most can't see the water.</div>
+      <div class="branch-count">14 entries</div>
+    </div>
+    <div class="leaves-container">
+      <div class="leaf-card">
+        <div class="leaf-date">2022-09-26</div>
+        <div class="leaf-text">Current culture: identify with the external, driven to attain the external, ownership society, pain of work.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2022-11-05</div>
+        <div class="leaf-text">Western culture has ingrained us that a "good time" is dopamine receptors firing + lowering consciousness through distraction. In reality, a "good time" is whenever we find peace.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-01-13</div>
+        <div class="leaf-text">Regi-beta paradox: stuck / comfortable numb in the middle. Things aren't too bad but aren't that good. No motivation to improve. Summarises western culture.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-02-24</div>
+        <div class="leaf-text">Environment has the ultimate power over our thoughts. Only by being OUTSIDE of Sydney did I observe my own changes.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-05-22</div>
+        <div class="leaf-text">Humans (and our neuroplasticity) are like play-doh. Our environment can make us into a masterpiece or a scrunched up anxious mess.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branch 8: School -->
+  <div class="branch-section" style="--branch-color: #94a3b8;">
+    <div class="branch-hub" onclick="toggleBranch(this)">
+      <span class="branch-icon">🎒</span>
+      <div class="branch-label">School broke the software</div>
+      <div class="branch-summary">School micro-traumas prevent authentic self-expression. Kids leave with armour and masks instead of self-knowledge.</div>
+      <div class="branch-count">6 entries</div>
+    </div>
+    <div class="leaves-container">
+      <div class="leaf-card">
+        <div class="leaf-date">2023-08-02</div>
+        <div class="leaf-text">School micro-traumas from bantering prevents us from growing into authentic selves. We become paralysed and conform. To conform is to feel safe.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-03-17</div>
+        <div class="leaf-text">Kid software = love, joy, carefree. Conditioning removes it. To reach higher states of consciousness we need to re-embody states of the child.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-01-31</div>
+        <div class="leaf-text">Teenage years we don't feel safe being our authentic vulnerable self (teasing, banter, jokes), so we never find self-worth there.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-06-05</div>
+        <div class="leaf-text">Students leave as people full of armour and masks. The armour is exterior accolades. The masks is a persona worn to fit in. My mission is to break through the armour and remove the masks.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branch 9: Mission -->
+  <div class="branch-section" style="--branch-color: #E9A23B;">
+    <div class="branch-hub" onclick="toggleBranch(this)">
+      <span class="branch-icon">🔥</span>
+      <div class="branch-label">Make people high on life</div>
+      <div class="branch-summary">Mission: make people safe to be themselves, living a life they love. Raise frequency through experiences that rewire the subconscious.</div>
+      <div class="branch-count">11 entries</div>
+    </div>
+    <div class="leaves-container">
+      <div class="leaf-card">
+        <div class="leaf-date">2024-12-09</div>
+        <div class="leaf-text">Mission: making people safe to be themselves, living a life they love. Safety = overcoming trauma. Life they love = overcoming limiting beliefs.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-02-20</div>
+        <div class="leaf-text">Make people high on life. How? By raising their frequency. How? By reconnecting them to their child-like frequency. How? Experiences that put them in that state + rewire their subconscious.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2025-03-09</div>
+        <div class="leaf-text">It feels like my intuition has always been guiding me to my truth. I've never known what connected all the parts. But now with Vibe Rise it feels like everything is now interconnected.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-08-07</div>
+        <div class="leaf-text">To get paid you need to be remarkable. We're all unique so we're all remarkable. Never taught who we are so don't know our remarkableness.</div>
+      </div>
+      <div class="leaf-card">
+        <div class="leaf-date">2024-08-18</div>
+        <div class="leaf-text">We all have a purpose, a mission, a change to create. School and university teaches us the knowledge to work but never the self-knowledge to identify what that purpose is.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Synthesis -->
+  <div class="synthesis">
+    <h2>The Golden Thread</h2>
+    <p>196 thoughts across 3 years converge on a single equation:</p>
+    <div class="thread">
+      <span class="thread-arrow">→</span>
+      <span class="thread-text">We are born as love (essence), into a culture that installs fear (conditioning), through a school system that breaks the software (micro-traumas).</span>
+    </div>
+    <div class="thread">
+      <span class="thread-arrow">→</span>
+      <span class="thread-text">The body stores these wounds (nervous system). Our frequency drops. We chase external fixes that never change the internal.</span>
+    </div>
+    <div class="thread">
+      <span class="thread-arrow">→</span>
+      <span class="thread-text">Healing = restoring the river's flow. Safety + Expression = Vibe Rise. The mission: make people safe to return to themselves.</span>
+    </div>
+  </div>
+
+</section>
+
+<script>
+function toggleBranch(hub) {
+  const section = hub.closest('.branch-section');
+  const leaves = section.querySelector('.leaves-container');
+  const isOpen = leaves.classList.contains('open');
+
+  // Close all others
+  document.querySelectorAll('.leaves-container.open').forEach(l => l.classList.remove('open'));
+  document.querySelectorAll('.branch-hub.active').forEach(h => h.classList.remove('active'));
+
+  if (!isOpen) {
+    leaves.classList.add('open');
+    hub.classList.add('active');
+    // Scroll into view
+    setTimeout(() => {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+}
+
+// Subtle scroll animation
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.branch-section').forEach(section => {
+  section.style.opacity = '0';
+  section.style.transform = 'translateY(20px)';
+  section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  observer.observe(section);
+});
+</script>
+</body>
+</html>

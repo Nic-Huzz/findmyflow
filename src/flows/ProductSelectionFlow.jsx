@@ -953,7 +953,8 @@ function ProductSelectionFlow() {
         await trackFlowCompletion({
           userId: user.id,
           projectId,
-          flowType: 'product_selection'
+          flowType: 'product_selection',
+          experienceId: searchParams.get('experienceId') || null
         })
       } catch (trackingError) {
         console.warn('Flow tracking failed:', trackingError)

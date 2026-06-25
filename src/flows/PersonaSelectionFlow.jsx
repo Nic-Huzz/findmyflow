@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
@@ -69,6 +69,7 @@ const getEssenceMessage = (voice, layer) => {
 
 function PersonaSelectionFlow() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const { projectId } = useProjectId()
 
@@ -295,7 +296,8 @@ function PersonaSelectionFlow() {
         await trackFlowCompletion({
           userId: user.id,
           projectId,
-          flowType: 'persona_selection'
+          flowType: 'persona_selection',
+          experienceId: searchParams.get('experienceId') || null
         })
       } catch (trackingError) {
         console.warn('Flow tracking failed:', trackingError)

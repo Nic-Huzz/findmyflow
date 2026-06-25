@@ -13,13 +13,31 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// Email schedule (days after enrollment)
-const EMAIL_SCHEDULE = {
-  day_0: 0,
-  day_1: 1,
-  day_3: 3,
-  day_5: 5,
-  day_7: 7
+// Email schedules per sequence type (days after enrollment)
+const EMAIL_SCHEDULES: Record<string, Record<string, number>> = {
+  money_model: {
+    day_0: 0,
+    day_1: 1,
+    day_3: 3,
+    day_5: 5,
+    day_7: 7
+  },
+  nervous_system: {
+    day_0: 0,
+    day_1: 1,
+    day_3: 3,
+    day_5: 5,
+    day_7: 7
+  },
+  welcome: {
+    day_0: 0,
+    day_1: 1,
+    day_3: 3,
+    day_5: 5,
+    day_7: 7,
+    day_10: 10,
+    day_14: 14
+  }
 }
 
 serve(async (req) => {
@@ -43,15 +61,18 @@ serve(async (req) => {
       )
     }
 
-    // Find the lead
-    const { data: lead, error: leadError } = await supabase
+    // Find or create the lead
+    let leadId: string
+
+    const { data: existingLead } = await supabase
       .from('public_leads')
       .select('id')
       .eq('email', email)
       .single()
 
-    if (leadError || !lead) {
-      // Create the lead if it doesn't exist
+    if (existingLead) {
+      leadId = existingLead.id
+    } else {
       const { data: newLead, error: createError } = await supabase
         .from('public_leads')
         .insert({
@@ -62,18 +83,18 @@ serve(async (req) => {
         .select('id')
         .single()
 
-      if (createError) {
-        throw new Error(`Failed to create lead: ${createError.message}`)
+      if (createError || !newLead) {
+        throw new Error(`Failed to create lead: ${createError?.message || 'Unknown error'}`)
       }
 
-      lead.id = newLead.id
+      leadId = newLead.id
     }
 
     // Check if already enrolled in this sequence
     const { data: existingEnrollment } = await supabase
       .from('email_sequence_enrollments')
       .select('id')
-      .eq('lead_id', lead.id)
+      .eq('lead_id', leadId)
       .eq('sequence_type', sequence_type)
       .single()
 
@@ -88,7 +109,7 @@ serve(async (req) => {
     const { data: enrollment, error: enrollError } = await supabase
       .from('email_sequence_enrollments')
       .insert({
-        lead_id: lead.id,
+        lead_id: leadId,
         sequence_type,
         status: 'active'
       })
@@ -100,14 +121,16 @@ serve(async (req) => {
     }
 
     // Schedule all emails in the sequence
+    const schedule = EMAIL_SCHEDULES[sequence_type] || EMAIL_SCHEDULES.money_model
     const now = new Date()
-    const emailsToSchedule = Object.entries(EMAIL_SCHEDULE).map(([emailKey, daysDelay]) => {
+    const emailsToSchedule = Object.entries(schedule).map(([emailKey, daysDelay]) => {
       const scheduledFor = new Date(now)
       scheduledFor.setDate(scheduledFor.getDate() + daysDelay)
 
-      // For day_0, send in 5 minutes (not immediately, gives time for processing)
       if (daysDelay === 0) {
-        scheduledFor.setMinutes(scheduledFor.getMinutes() + 5)
+        // Welcome sequence: 30 min delay. Others: 5 min delay.
+        const delayMinutes = sequence_type === 'welcome' ? 30 : 5
+        scheduledFor.setMinutes(scheduledFor.getMinutes() + delayMinutes)
       } else {
         // Send at 10am in their timezone (approximated as UTC for now)
         scheduledFor.setHours(10, 0, 0, 0)

@@ -12,6 +12,11 @@
 		"scrollEnabled": true,
 		"allowsLinkPreview": false
 	},
+	"android": {
+		"backgroundColor": "#0a0a0f",
+		"allowMixedContent": false,
+		"useLegacyBridge": false
+	},
 	"plugins": {
 		"StatusBar": {
 			"style": "LIGHT",
@@ -21,7 +26,16 @@
 			"backgroundColor": "#0a0a0f",
 			"launchAutoHide": true,
 			"launchShowDuration": 1000
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
 		}
 	},
-	"packageClassList": []
+	"packageClassList": [
+		"PushNotificationsPlugin"
+	]
 }

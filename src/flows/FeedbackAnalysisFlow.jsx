@@ -237,7 +237,8 @@ function FeedbackAnalysisFlow() {
           userId: user.id,
           projectId,
           flowType: 'feedback_analysis',
-          flowVersion: '1.0'
+          flowVersion: '1.0',
+          experienceId: searchParams.get('experienceId') || null
         })
       } catch (e) {
         console.warn('Flow tracking failed:', e)

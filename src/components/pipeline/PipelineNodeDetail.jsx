@@ -255,9 +255,8 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
               const done = isModuleComplete(mod.key)
               return (
                 <div key={mod.key} className="pl-item" onClick={() => {
-                  const sep = mod.route.includes('?') ? '&' : '?'
-                  const base = mod.passExperienceId ? `${mod.route}?experienceId=${experience.id}` : mod.route
-                  navigate(`${base}${base.includes('?') ? '&' : '?'}returnTo=/create`)
+                  const base = `${mod.route}${mod.route.includes('?') ? '&' : '?'}experienceId=${experience.id}&returnTo=/create`
+                  navigate(base)
                 }}>
                   <div className={`pl-ico ${done ? 'done' : 'todo'}`}>{mod.icon}</div>
                   <div className="pl-txt">

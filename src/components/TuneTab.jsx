@@ -155,6 +155,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const [recoveryItem, setRecoveryItem] = useState(null)
   const [recoveryActivities, setRecoveryActivities] = useState([])
   const [recoveryOther, setRecoveryOther] = useState('') // free-text "what else helped?"
+  const [recoveryMinutes, setRecoveryMinutes] = useState('') // user-entered duration in minutes
   const [savingRecovery, setSavingRecovery] = useState(false)
 
   // Experience Check-in state
@@ -617,14 +618,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
 
   // --- Recovery tracking helpers ---
 
-  const formatElapsed = (createdAt) => {
-    const mins = Math.round((Date.now() - new Date(createdAt).getTime()) / 60000)
-    if (mins < 60) return `${mins}min`
-    const hrs = Math.floor(mins / 60)
-    const remainMins = mins % 60
-    return remainMins > 0 ? `${hrs}h ${remainMins}m` : `${hrs}h`
-  }
-
   const formatRecoveryTime = (createdAt, recoveredAt) => {
     const mins = Math.round((new Date(recoveredAt).getTime() - new Date(createdAt).getTime()) / 60000)
     if (mins < 60) return `${mins}min`
@@ -656,7 +649,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const handleSaveRecovery = async () => {
     if (!recoveryItem || savingRecovery) return
     setSavingRecovery(true)
-    const recoveredAt = new Date().toISOString() // single timestamp for DB + local state
+    const mins = parseInt(recoveryMinutes, 10) || 0
+    const recoveredAt = mins > 0
+      ? new Date(new Date(recoveryItem.created_at).getTime() + mins * 60000).toISOString()
+      : new Date().toISOString()
     const activities = [
       ...recoveryActivities,
       ...(recoveryOther.trim() ? [`other:${recoveryOther.trim()}`] : []),
@@ -680,6 +676,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setRecoveryItem(null)
       setRecoveryActivities([])
       setRecoveryOther('')
+      setRecoveryMinutes('')
     } catch (err) {
       console.error('Recovery save error:', err)
     } finally {
@@ -1474,46 +1471,78 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         </div>
       )}
 
-      {/* Recovery tracking popup */}
+      {/* Recovery tracking popup — bottom sheet */}
       {recoveryItem && (
-        <div className="tt-info-overlay" onClick={() => { setRecoveryItem(null); setRecoveryActivities([]); setRecoveryOther('') }}>
-          <div className="tt-info-modal tt-recovery-modal" onClick={e => e.stopPropagation()}>
-            <span className="tt-recovery-emoji">
-              {recoveryItem.after_state === 'dorsal' ? '😶' : '😬'}
-            </span>
-            <h3 className="tt-recovery-title">Back to baseline?</h3>
-            <p className="tt-recovery-time">⏱ {formatElapsed(recoveryItem.created_at)} since logged</p>
-            <p className="tt-recovery-sub">What brought you back?</p>
-            <div className="tt-recovery-activities">
-              {(REGULATION_EXERCISES[recoveryItem.after_state]?.exercises || []).map(ex => (
-                <button
-                  key={ex.id}
-                  type="button"
-                  className={`tt-recovery-activity ${recoveryActivities.includes(ex.id) ? 'selected' : ''}`}
-                  onClick={() => setRecoveryActivities(prev =>
-                    prev.includes(ex.id) ? prev.filter(a => a !== ex.id) : [...prev, ex.id]
-                  )}
-                >
-                  {ex.name}
-                </button>
-              ))}
+        <div className="tt-recovery-overlay" onClick={() => { setRecoveryItem(null); setRecoveryActivities([]); setRecoveryOther(''); setRecoveryMinutes('') }}>
+          <div className="tt-recovery-sheet" onClick={e => e.stopPropagation()}>
+            <div className="tt-recovery-handle" />
+
+            <div className="tt-recovery-hero">
+              <span className="tt-recovery-emoji">
+                {recoveryItem.after_state === 'dorsal' ? '😶' : '😬'}
+              </span>
+              <h3 className="tt-recovery-title">Back to baseline?</h3>
             </div>
-            <input
-              type="text"
-              className="tt-recovery-other"
-              placeholder="Something else? (walk, friend, food...)"
-              value={recoveryOther}
-              onChange={e => setRecoveryOther(e.target.value)}
-              maxLength={80}
-            />
-            <button
-              type="button"
-              className="tt-recovery-save"
-              disabled={savingRecovery}
-              onClick={handleSaveRecovery}
-            >
-              {savingRecovery ? 'Saving...' : "I'm back ✓"}
-            </button>
+
+            <div className="tt-recovery-body">
+              <div className="tt-recovery-section">
+                <span className="tt-recovery-label">Recovery time</span>
+                <div className="tt-recovery-duration-row">
+                  {[
+                    { value: '10', label: '< 15m' },
+                    { value: '22', label: '15-30m' },
+                    { value: '45', label: '30-60m' },
+                    { value: '90', label: '1hr +' },
+                  ].map(opt => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={`tt-recovery-dur ${recoveryMinutes === opt.value ? 'selected' : ''}`}
+                      onClick={() => { hapticLight(); setRecoveryMinutes(opt.value) }}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="tt-recovery-section">
+                <span className="tt-recovery-label">What brought you back?</span>
+                <div className="tt-recovery-activities">
+                  {(REGULATION_EXERCISES[recoveryItem.after_state]?.exercises || []).map(ex => (
+                    <button
+                      key={ex.id}
+                      type="button"
+                      className={`tt-recovery-activity ${recoveryActivities.includes(ex.id) ? 'selected' : ''}`}
+                      onClick={() => setRecoveryActivities(prev =>
+                        prev.includes(ex.id) ? prev.filter(a => a !== ex.id) : [...prev, ex.id]
+                      )}
+                    >
+                      {ex.name}
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  className="tt-recovery-other"
+                  placeholder="Something else..."
+                  value={recoveryOther}
+                  onChange={e => setRecoveryOther(e.target.value)}
+                  maxLength={80}
+                />
+              </div>
+            </div>
+
+            <div className="tt-recovery-footer">
+              <button
+                type="button"
+                className="tt-recovery-save"
+                disabled={savingRecovery}
+                onClick={handleSaveRecovery}
+              >
+                {savingRecovery ? 'Saving...' : "I'm back"}
+              </button>
+            </div>
           </div>
         </div>
       )}

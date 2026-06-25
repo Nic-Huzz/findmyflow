@@ -1102,7 +1102,8 @@ function OfferBuilderFlow() {
           userId: user.id,
           projectId,
           flowType: '100m_offer',
-          flowVersion: 'offer-builder-v2'
+          flowVersion: 'offer-builder-v2',
+          experienceId: searchParams.get('experienceId') || null
         })
       } catch (trackingError) {
         console.warn('Flow tracking failed:', trackingError)

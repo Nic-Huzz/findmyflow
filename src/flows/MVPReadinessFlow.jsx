@@ -338,7 +338,8 @@ function MVPReadinessFlow() {
           userId: user.id,
           projectId,
           flowType: 'mvp_readiness',
-          flowVersion: '1.0'
+          flowVersion: '1.0',
+          experienceId: searchParams.get('experienceId') || null
         })
       } catch (e) {
         console.warn('Flow tracking failed:', e)

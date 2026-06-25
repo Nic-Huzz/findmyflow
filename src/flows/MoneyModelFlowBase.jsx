@@ -403,7 +403,8 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
           userId: user.id,
           projectId,
           flowType: config.flowType,
-          flowVersion: config.flowVersion
+          flowVersion: config.flowVersion,
+          experienceId: searchParams.get('experienceId') || null,
         })
       } catch (trackingError) {
         console.warn('Flow tracking failed:', trackingError)

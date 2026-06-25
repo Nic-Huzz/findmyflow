@@ -54,7 +54,6 @@ export default function PlayListTab({
   const [allTimeWahoos, setAllTimeWahoos] = useState(0)
   const [categoryWahoos, setCategoryWahoos] = useState({ appearance: [], creation: [], connection: [] })
   const [expandedBubble, setExpandedBubble] = useState(null)
-  const [addingTo, setAddingTo] = useState(null) // category id for quick-add
   const [quickAddText, setQuickAddText] = useState('')
   const [quickAddSaving, setQuickAddSaving] = useState(false)
 
@@ -128,7 +127,6 @@ export default function PlayListTab({
         wahooCategory: catId,
       })
       setQuickAddText('')
-      setAddingTo(null)
       fetchCategoryWahoos()
     } catch (err) {
       console.error('Quick-add error:', err)
@@ -270,15 +268,19 @@ export default function PlayListTab({
               <div key={cat.id} className="plt-bubble-wrapper">
                 <button
                   className={`plt-category-bubble ${isExpanded ? 'expanded' : ''}`}
-                  onClick={() => { hapticLight(); setExpandedBubble(isExpanded ? null : cat.id); setAddingTo(null); setQuickAddText('') }}
+                  onClick={() => { hapticLight(); setExpandedBubble(isExpanded ? null : cat.id); setQuickAddText('') }}
                 >
                   <span className="plt-bubble-icon">{cat.icon}</span>
                   <span className="plt-bubble-name">{cat.name}</span>
                   <span className="plt-bubble-count">{completedCount}</span>
                 </button>
                 {isExpanded && (
-                  <div className="plt-bubble-dropdown">
-                    {addingTo === cat.id ? (
+                  <div className="plt-bubble-modal-overlay" onClick={() => { setExpandedBubble(null); setQuickAddText('') }}>
+                    <div className="plt-bubble-modal" onClick={e => e.stopPropagation()}>
+                      <div className="plt-modal-header">
+                        <span className="plt-modal-title">{cat.icon} {cat.name} Wahoos</span>
+                        <button className="plt-modal-close" onClick={() => { setExpandedBubble(null); setQuickAddText('') }}>✕</button>
+                      </div>
                       <div className="plt-quickadd">
                         <input
                           className="plt-quickadd-input"
@@ -300,31 +302,24 @@ export default function PlayListTab({
                           {quickAddSaving ? '...' : '+'}
                         </button>
                       </div>
-                    ) : (
-                      <button
-                        className="plt-dropdown-add"
-                        onClick={() => { setAddingTo(cat.id); setQuickAddText('') }}
-                      >
-                        + Add a future wahoo
-                      </button>
-                    )}
-                    {items.length === 0 && addingTo !== cat.id && (
-                      <div className="plt-dropdown-empty">No wahoos yet</div>
-                    )}
-                    {[...items].sort((a, b) => {
-                      if (a.status === 'completed' && b.status !== 'completed') return 1
-                      if (a.status !== 'completed' && b.status === 'completed') return -1
-                      return 0
-                    }).map(w => {
-                      const name = w.title || w.challenge_text
-                      const isDone = w.status === 'completed'
-                      return (
-                        <div key={w.id} className={`plt-dropdown-item ${isDone ? 'done' : ''}`}>
-                          <span className="plt-dropdown-check">{isDone ? '✓' : '○'}</span>
-                          <span className={`plt-dropdown-name ${isDone ? 'crossed' : ''}`}>{name}</span>
-                        </div>
-                      )
-                    })}
+                      {items.length === 0 && (
+                        <div className="plt-dropdown-empty">No wahoos yet</div>
+                      )}
+                      {[...items].sort((a, b) => {
+                        if (a.status === 'completed' && b.status !== 'completed') return 1
+                        if (a.status !== 'completed' && b.status === 'completed') return -1
+                        return 0
+                      }).map(w => {
+                        const name = w.title || w.challenge_text
+                        const isDone = w.status === 'completed'
+                        return (
+                          <div key={w.id} className={`plt-dropdown-item ${isDone ? 'done' : ''}`}>
+                            <span className="plt-dropdown-check">{isDone ? '✓' : '○'}</span>
+                            <span className={`plt-dropdown-name ${isDone ? 'crossed' : ''}`}>{name}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
                   </div>
                 )}
               </div>

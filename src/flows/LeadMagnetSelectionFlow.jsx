@@ -360,7 +360,8 @@ function LeadMagnetSelectionFlow() {
         await trackFlowCompletion({
           userId: user.id,
           projectId,
-          flowType: 'lead_magnet_selection'
+          flowType: 'lead_magnet_selection',
+          experienceId: searchParams.get('experienceId') || null
         })
       } catch (trackingError) {
         console.warn('Flow tracking failed:', trackingError)
