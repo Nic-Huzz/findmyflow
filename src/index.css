@@ -75,6 +75,7 @@
 html, body, #root {
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  overscroll-behavior: none;
 }
 
 body {
@@ -91,7 +92,7 @@ body {
   }
 
   #root {
-    min-height: 100vh;
+    min-height: 100dvh;
     height: auto;
   }
 }
@@ -435,7 +436,8 @@ body {
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .app {
-    height: 100vh;
+    min-height: 100dvh;
+    height: auto;
     border-radius: 0;
     box-shadow: none;
   }
@@ -490,9 +492,9 @@ body {
   }
 }
 
-/* iOS viewport fix */
+/* iOS viewport fix — dvh handles dynamic browser chrome natively */
 @supports (-webkit-touch-callout: none) {
   body {
-    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
   }
 }
