@@ -69,3 +69,6 @@ xcuserdata/
 *.xcuserdatad/
 
 electron-dist/
+content-drafts/
+Superseeded/
+assets-archive/
