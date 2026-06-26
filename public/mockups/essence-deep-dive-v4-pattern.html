@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Essence Deep Dive - The Pattern Style</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #000000;
+      --near-black: #0a0a0a;
+      --dark-gray: #1a1a1a;
+      --mid-gray: #2a2a2a;
+      --text-dim: #555555;
+      --text-muted: #777777;
+      --text-soft: #999999;
+      --text-light: #cccccc;
+      --text-bright: #e8e8e8;
+      --white: #f5f5f5;
+      --accent-purple: #8b5cf6;
+      --accent-gold: #d4a853;
+      --accent-dim-purple: rgba(139, 92, 246, 0.15);
+      --accent-dim-gold: rgba(212, 168, 83, 0.12);
+    }
+
+    html, body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', -apple-system, sans-serif;
+      height: 100%;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ============================================================
+       APP SHELL
+       ============================================================ */
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      height: 100vh;
+      height: 100dvh;
+      position: relative;
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    /* ============================================================
+       SLIDES CONTAINER — vertical scroll-snap
+       ============================================================ */
+    .slides {
+      height: 100%;
+      width: 100%;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .slides::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 36px 120px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Fade-in on scroll via IntersectionObserver */
+    .slide .slide-inner {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .slide.in-view .slide-inner {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       TOP BAR
+       ============================================================ */
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 56px 24px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+
+    .top-bar-back {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-soft);
+      transition: all 0.3s ease;
+    }
+
+    .top-bar-back:hover {
+      border-color: rgba(255,255,255,0.15);
+      color: var(--white);
+    }
+
+    .top-bar-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .top-bar-edit {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-dim);
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .top-bar-edit:hover {
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
+    }
+
+    /* ============================================================
+       SLIDE: COVER
+       ============================================================ */
+    .slide-cover {
+      background: radial-gradient(ellipse at 50% 40%, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+    }
+
+    .cover-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--accent-purple), var(--accent-gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      margin-bottom: 32px;
+      position: relative;
+      box-shadow: 0 0 80px rgba(139, 92, 246, 0.2), 0 0 160px rgba(139, 92, 246, 0.05);
+    }
+
+    .cover-avatar::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--accent-purple), transparent 30%, var(--accent-gold), transparent 70%, var(--accent-purple));
+      opacity: 0.4;
+      animation: spin 12s linear infinite;
+    }
+
+    .cover-avatar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--accent-purple), var(--accent-gold));
+    }
+
+    .cover-avatar span {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .cover-eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-purple);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .cover-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .cover-tagline {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 280px;
+      font-weight: 300;
+    }
+
+    .cover-divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+      margin: 24px 0;
+    }
+
+    .cover-prompt {
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      animation: pulse-soft 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-soft {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
+    /* ============================================================
+       SLIDE: INSIGHT (reusable)
+       ============================================================ */
+    .insight-icon {
+      font-size: 28px;
+      margin-bottom: 24px;
+      opacity: 0.7;
+    }
+
+    .insight-eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-purple);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .insight-eyebrow.gold {
+      color: var(--accent-gold);
+    }
+
+    .insight-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--text-bright);
+      line-height: 1.5;
+      max-width: 320px;
+    }
+
+    .insight-text {
+      font-size: 16px;
+      color: var(--text-light);
+      line-height: 1.8;
+      max-width: 320px;
+      font-weight: 300;
+    }
+
+    .insight-text-small {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 300px;
+      font-weight: 300;
+      margin-top: 16px;
+    }
+
+    .insight-divider {
+      width: 24px;
+      height: 1px;
+      background: var(--mid-gray);
+      margin: 24px 0;
+    }
+
+    /* ============================================================
+       SLIDE: ORIGIN (split card)
+       ============================================================ */
+    .origin-container {
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .origin-card {
+      background: var(--near-black);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 16px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .origin-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+    }
+
+    .origin-card.wound::before {
+      background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.3), transparent);
+    }
+
+    .origin-card-icon {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .origin-card-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent-purple);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .origin-card.wound .origin-card-label {
+      color: var(--accent-gold);
+    }
+
+    .origin-card-text {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ============================================================
+       SLIDE: HEROES (chips)
+       ============================================================ */
+    .heroes-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 340px;
+      margin-top: 8px;
+    }
+
+    .hero-chip {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 10px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      color: var(--text-light);
+      font-weight: 400;
+      letter-spacing: 0.3px;
+      transition: all 0.3s ease;
+    }
+
+    .hero-chip:hover {
+      border-color: var(--accent-purple);
+      background: var(--accent-dim-purple);
+      color: var(--white);
+    }
+
+    /* ============================================================
+       SLIDE: DEEPER INSIGHT
+       ============================================================ */
+    .deeper-card {
+      width: 100%;
+      max-width: 340px;
+      background: var(--near-black);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: left;
+      position: relative;
+    }
+
+    .deeper-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 24px;
+      right: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+    }
+
+    .deeper-card-icon {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .deeper-card-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent-purple);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .deeper-card-text {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ============================================================
+       SLIDE: CTA
+       ============================================================ */
+    .slide-cta {
+      background: radial-gradient(ellipse at 50% 60%, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
+    }
+
+    .cta-icon {
+      font-size: 40px;
+      margin-bottom: 28px;
+      opacity: 0.8;
+    }
+
+    .cta-eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .cta-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 300px;
+      font-weight: 300;
+      margin-bottom: 32px;
+    }
+
+    .cta-button {
+      background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
+      color: white;
+      border: none;
+      padding: 16px 48px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 60px rgba(139, 92, 246, 0.35);
+    }
+
+    /* ============================================================
+       SIDE DOTS (vertical progress)
+       ============================================================ */
+    .side-dots {
+      position: fixed;
+      right: max(12px, calc((100vw - 430px) / 2 + 12px));
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 200;
+    }
+
+    .side-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mid-gray);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .side-dot.active {
+      background: var(--accent-purple);
+      height: 20px;
+      border-radius: 100px;
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+    }
+
+    .side-dot.visited {
+      background: var(--text-dim);
+    }
+
+    /* ============================================================
+       SCROLL HINT (bottom of cover)
+       ============================================================ */
+    .scroll-hint {
+      position: absolute;
+      bottom: calc(32px + env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .scroll-hint-text {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: pulse-soft 3s ease-in-out infinite;
+    }
+
+    .scroll-hint-arrow {
+      color: var(--text-dim);
+      animation: bounce-down 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce-down {
+      0%, 100% { transform: translateY(0); opacity: 0.3; }
+      50% { transform: translateY(6px); opacity: 0.7; }
+    }
+
+    /* ============================================================
+       AMBIENT EFFECTS
+       ============================================================ */
+    .ambient-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.5;
+      transition: opacity 1.5s ease;
+    }
+
+    .glow-purple {
+      width: 200px;
+      height: 200px;
+      background: rgba(139, 92, 246, 0.08);
+      top: 10%;
+      right: -40px;
+    }
+
+    .glow-gold {
+      width: 160px;
+      height: 160px;
+      background: rgba(212, 168, 83, 0.05);
+      bottom: 20%;
+      left: -40px;
+    }
+
+    /* (swipe zone removed — using native scroll) */
+
+    /* ============================================================
+       EDIT INDICATOR
+       ============================================================ */
+    /* ============================================================
+       PER-SLIDE EDIT BUTTON
+       ============================================================ */
+    .slide-edit-btn {
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-dim);
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.5s ease 0.7s, border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+    }
+
+    .slide.in-view .slide-edit-btn {
+      opacity: 1;
+    }
+
+    .slide-edit-btn:hover {
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
+      background: var(--accent-dim-purple);
+    }
+
+    .slide-edit-btn svg {
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       EDIT MODAL OVERLAY
+       ============================================================ */
+    .edit-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .edit-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .edit-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .edit-sheet {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      background: var(--dark-gray);
+      border-radius: 24px 24px 0 0;
+      padding: 20px 24px calc(24px + env(safe-area-inset-bottom));
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .edit-overlay.open .edit-sheet {
+      transform: translateY(0);
+    }
+
+    .edit-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--mid-gray);
+      border-radius: 100px;
+      margin: 0 auto 20px;
+    }
+
+    .edit-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .edit-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.3px;
+    }
+
+    .edit-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .edit-close:hover {
+      border-color: rgba(255,255,255,0.2);
+      color: var(--white);
+    }
+
+    .edit-textarea {
+      width: 100%;
+      min-height: 120px;
+      background: var(--near-black);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 16px;
+      color: var(--text-light);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      resize: none;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .edit-textarea:focus {
+      border-color: var(--accent-purple);
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .edit-btn-reset {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: transparent;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .edit-btn-reset:hover {
+      border-color: rgba(255,255,255,0.15);
+      color: var(--white);
+    }
+
+    .edit-btn-save {
+      flex: 2;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+    }
+
+    .edit-btn-save:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.35);
+    }
+
+    /* ============================================================
+       PROGRESS LINE
+       ============================================================ */
+    .progress-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-gold));
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+      opacity: 0.6;
+    }
+
+    /* ============================================================
+       SLIDE COUNT
+       ============================================================ */
+    .slide-count {
+      position: absolute;
+      top: 62px;
+      right: 24px;
+      font-size: 11px;
+      color: var(--text-dim);
+      font-weight: 400;
+      z-index: 100;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Progress Line -->
+    <div class="progress-line" id="progressLine"></div>
+
+    <!-- Ambient Glows -->
+    <div class="ambient-glow glow-purple"></div>
+    <div class="ambient-glow glow-gold"></div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="top-bar-back" onclick="history.back()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </div>
+      <div class="top-bar-label">Essence</div>
+      <div style="width: 36px;"></div>
+    </div>
+
+    <!-- Side Dots -->
+    <div class="side-dots" id="sideDots"></div>
+
+    <!-- Slides (scroll-snap) -->
+    <div class="slides" id="slides">
+
+      <!-- 0: Cover -->
+      <div class="slide slide-cover" data-index="0">
+        <div class="slide-inner">
+          <div class="cover-avatar"><span></span></div>
+          <div class="cover-eyebrow">Your Essence</div>
+          <div class="cover-name">Radiant Rebel</div>
+          <div class="cover-tagline">The one who lights the room on fire just by walking in.</div>
+          <div class="cover-divider"></div>
+        </div>
+        <div class="scroll-hint">
+          <div class="scroll-hint-text">scroll to explore</div>
+          <div class="scroll-hint-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1: Essence -->
+      <div class="slide" data-index="1">
+        <div class="slide-inner">
+          <div class="insight-icon">&#10024;</div>
+          <div class="insight-eyebrow">Your Essence</div>
+          <div class="insight-quote">"You carry a frequency that makes people remember who they were before the world told them to be someone else."</div>
+          <button class="slide-edit-btn" onclick="openEdit(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Personalise</button>
+        </div>
+      </div>
+
+      <!-- 2: Superpower -->
+      <div class="slide" data-index="2">
+        <div class="slide-inner">
+          <div class="insight-icon">&#9889;</div>
+          <div class="insight-eyebrow">Your Superpower</div>
+          <div class="insight-text">You see through the performance. While everyone else is nodding along, you're the one who gently names the elephant. Not to destroy, but to set the room free.</div>
+          <button class="slide-edit-btn" onclick="openEdit(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Personalise</button>
+        </div>
+      </div>
+
+      <!-- 3: Vision -->
+      <div class="slide" data-index="3">
+        <div class="slide-inner">
+          <div class="insight-icon">&#128302;</div>
+          <div class="insight-eyebrow">Your Vision</div>
+          <div class="insight-text">A world where people stop performing and start playing. Where honesty is the currency and weirdness is the strategy. You're building permission structures, not businesses.</div>
+          <button class="slide-edit-btn" onclick="openEdit(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Personalise</button>
+        </div>
+      </div>
+
+      <!-- 4: North Star -->
+      <div class="slide" data-index="4">
+        <div class="slide-inner">
+          <div class="insight-icon">&#127775;</div>
+          <div class="insight-eyebrow gold">Your North Star</div>
+          <div class="insight-quote">"What if the thing you were shamed for is the exact thing the world is starving for?"</div>
+          <div class="insight-divider"></div>
+          <div class="insight-text-small">This is the question that drives everything you do. Your mission is to prove the answer is yes.</div>
+          <button class="slide-edit-btn" onclick="openEdit(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Personalise</button>
+        </div>
+      </div>
+
+      <!-- 5: Origin -->
+      <div class="slide" data-index="5">
+        <div class="slide-inner">
+          <div class="insight-eyebrow">Your Origin</div>
+          <div style="height: 16px;"></div>
+          <div class="origin-container">
+            <div class="origin-card">
+              <div class="origin-card-icon">&#129490;</div>
+              <div class="origin-card-label">Inner Child Desire</div>
+              <div class="origin-card-text">To be seen fully and loved anyway. Not the polished version, not the performance. The weird, intense, too-much version. That kid just wanted one person to say: "I see you, and you're not too much."</div>
+            </div>
+            <div class="origin-card wound">
+              <div class="origin-card-icon">&#129657;</div>
+              <div class="origin-card-label">Essence Wound</div>
+              <div class="origin-card-text">"Stop being so dramatic." You felt things deeply and named the unspoken, but were punished for your honesty.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6: Heroes -->
+      <div class="slide" data-index="6">
+        <div class="slide-inner">
+          <div class="insight-icon">&#10024;</div>
+          <div class="insight-eyebrow">Heroes Like You</div>
+          <div class="insight-text-small" style="margin-top: 0; margin-bottom: 20px;">You share essence with those who refused to dim their light.</div>
+          <div class="heroes-grid">
+            <div class="hero-chip">Russell Brand</div>
+            <div class="hero-chip">Brene Brown</div>
+            <div class="hero-chip">Robin Williams</div>
+            <div class="hero-chip">Frida Kahlo</div>
+            <div class="hero-chip">David Bowie</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7: Energetic Transmission -->
+      <div class="slide" data-index="7">
+        <div class="slide-inner">
+          <div class="deeper-card">
+            <div class="deeper-card-icon">&#9889;</div>
+            <div class="deeper-card-label">Energetic Transmission</div>
+            <div class="deeper-card-text">When you walk into a room, something shifts. People don't just notice you. They notice themselves. Your presence acts as a permission slip for others to drop the act and be real.</div>
+          </div>
+          <button class="slide-edit-btn" onclick="openEdit(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Personalise</button>
+        </div>
+      </div>
+
+      <!-- 8: Recognition Pattern -->
+      <div class="slide" data-index="8">
+        <div class="slide-inner">
+          <div class="deeper-card">
+            <div class="deeper-card-icon">&#127919;</div>
+            <div class="deeper-card-label">Recognition Pattern</div>
+            <div class="deeper-card-text">People are drawn to you in moments of transition. When the old story breaks and the new one hasn't formed yet, they find you. You don't fix them. You reflect who they already are underneath.</div>
+          </div>
+          <button class="slide-edit-btn" onclick="openEdit(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Personalise</button>
+        </div>
+      </div>
+
+      <!-- 9: Vision in Action -->
+      <div class="slide" data-index="9">
+        <div class="slide-inner">
+          <div class="deeper-card">
+            <div class="deeper-card-icon">&#128640;</div>
+            <div class="deeper-card-label">Vision in Action</div>
+            <div class="deeper-card-text">You build spaces where people experience their own power, not yours. Workshops that leave people different. Conversations that shift something permanently. Content that hits like a mirror, not a lecture.</div>
+          </div>
+          <button class="slide-edit-btn" onclick="openEdit(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Personalise</button>
+        </div>
+      </div>
+
+      <!-- 10: CTA -->
+      <div class="slide slide-cta" data-index="10">
+        <div class="slide-inner">
+          <div class="cta-icon">&#128302;</div>
+          <div class="cta-eyebrow">Poetic Vision</div>
+          <div class="cta-title">Your Future Awaits</div>
+          <div class="cta-desc">What if your joy was the funnel? What if your weirdness was the strategy? You weren't born to fit into boxes. You were born to make confetti out of them.</div>
+          <button class="cta-button">Start Your 7-Day Challenge</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="edit-overlay" id="editOverlay">
+      <div class="edit-backdrop" onclick="closeEdit()"></div>
+      <div class="edit-sheet">
+        <div class="edit-handle"></div>
+        <div class="edit-header">
+          <div class="edit-title" id="editTitle">Edit</div>
+          <div class="edit-close" onclick="closeEdit()">&times;</div>
+        </div>
+        <textarea class="edit-textarea" id="editTextarea" placeholder="Write your own version..."></textarea>
+        <div class="edit-actions">
+          <button class="edit-btn-reset" onclick="resetEdit()">Reset to default</button>
+          <button class="edit-btn-save" onclick="saveEdit()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slidesContainer = document.getElementById('slides');
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let current = 0;
+    const visited = new Set([0]);
+
+    // Build side dots
+    const dotsContainer = document.getElementById('sideDots');
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'side-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => {
+        slides[i].scrollIntoView({ behavior: 'smooth' });
+      };
+      dotsContainer.appendChild(dot);
+    }
+
+    // IntersectionObserver — fade in content + track current slide
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const index = parseInt(entry.target.dataset.index);
+        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+          entry.target.classList.add('in-view');
+          current = index;
+          visited.add(index);
+          updateDots();
+          updateProgress();
+        } else {
+          // Only remove in-view when fully out of view
+          if (entry.intersectionRatio < 0.1) {
+            entry.target.classList.remove('in-view');
+          }
+        }
+      });
+    }, {
+      root: slidesContainer,
+      threshold: [0.1, 0.5]
+    });
+
+    slides.forEach(slide => observer.observe(slide));
+
+    // Mark cover as in-view initially
+    slides[0].classList.add('in-view');
+
+    function updateDots() {
+      const dots = document.querySelectorAll('.side-dot');
+      dots.forEach((d, i) => {
+        d.className = 'side-dot';
+        if (i === current) d.classList.add('active');
+        else if (visited.has(i)) d.classList.add('visited');
+      });
+    }
+
+    function updateProgress() {
+      const progress = (current / (totalSlides - 1)) * 100;
+      document.getElementById('progressLine').style.width = progress + '%';
+    }
+
+    // Hide scroll hint after first scroll
+    slidesContainer.addEventListener('scroll', () => {
+      const hint = document.querySelector('.scroll-hint');
+      if (hint && slidesContainer.scrollTop > 50) {
+        hint.style.opacity = '0';
+        hint.style.transition = 'opacity 0.5s ease';
+      }
+    }, { passive: true });
+
+    // ============================================================
+    // Edit modal
+    // ============================================================
+    const overlay = document.getElementById('editOverlay');
+    const editTitle = document.getElementById('editTitle');
+    const editTextarea = document.getElementById('editTextarea');
+    let activeEditBtn = null;
+
+    function openEdit(btn) {
+      activeEditBtn = btn;
+      // Find the slide's eyebrow/label for the title
+      const slide = btn.closest('.slide');
+      const eyebrow = slide.querySelector('.insight-eyebrow, .deeper-card-label, .origin-card-label');
+      const label = eyebrow ? eyebrow.textContent : 'This Insight';
+      editTitle.textContent = 'Edit: ' + label;
+
+      // Find the main text content to pre-fill
+      const textEl = slide.querySelector('.insight-quote, .insight-text, .deeper-card-text, .origin-card-text');
+      editTextarea.value = textEl ? textEl.textContent.replace(/^"/, '').replace(/"$/, '') : '';
+
+      overlay.classList.add('open');
+      setTimeout(() => editTextarea.focus(), 400);
+    }
+
+    function closeEdit() {
+      overlay.classList.remove('open');
+      activeEditBtn = null;
+    }
+
+    function saveEdit() {
+      if (!activeEditBtn) return;
+      const slide = activeEditBtn.closest('.slide');
+      const textEl = slide.querySelector('.insight-quote, .insight-text, .deeper-card-text, .origin-card-text');
+      if (textEl && editTextarea.value.trim()) {
+        const isQuote = textEl.classList.contains('insight-quote');
+        textEl.textContent = isQuote ? '"' + editTextarea.value.trim() + '"' : editTextarea.value.trim();
+      }
+      closeEdit();
+    }
+
+    function resetEdit() {
+      editTextarea.value = '';
+      editTextarea.placeholder = 'Cleared. Save to reset to default.';
+    }
+
+    // Close on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeEdit();
+        e.stopPropagation();
+        return;
+      }
+    });
+
+    // Keyboard nav
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === ' ') {
+        e.preventDefault();
+        if (current < totalSlides - 1) slides[current + 1].scrollIntoView({ behavior: 'smooth' });
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (current > 0) slides[current - 1].scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  </script>
+</body>
+</html>
