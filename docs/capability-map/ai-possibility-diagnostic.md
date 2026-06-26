@@ -211,91 +211,91 @@ YOUR NEXT 3 MOVES:
 
 ## Capability → Tool Lookup Table
 
-This is the backend data the diagnostic uses. Each row maps a capability to its automation level and tool options.
+This is the backend data the diagnostic uses. Each row maps a capability to its automation level, tool options, and a "Browse more" link to [There's an AI for That](https://theresanaiforthat.com) (50K+ tools, 11K+ tasks) so users can explore alternatives.
 
 ### Finding & Attracting
 
-| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost |
-|-----------|---------|-------|-------------|-------------|-------------------|-------|------|
-| Monitor Reddit for buyer intent | Yes, fully | 5 🟢 | Claude Code (scheduled trigger) | n8n + Reddit API | Review leads, reply to good ones | 15 min | ~$20/mo |
-| Monitor social for brand mentions | Yes, fully | 5 🟢 | Mention, Brand24 | SparkToro (WEB) | Decide which to engage with | 10 min | $29-99/mo |
-| Write SEO blog posts | Yes, fully | 4 🟢 | Claude + Surfer SEO | ChatGPT, Firecrawl | Review, add personal stories | 30 min | Free (Claude only) to $89/mo (with SEO tools) |
-| Post to Instagram automatically | Yes, fully | 5 🟢 | Orior AI (auto-post) | Buffer, Later, Composio IG | Review content calendar | 15 min | €15/mo or free |
-| Post to LinkedIn | Yes, with setup | 4 🟢 | Composio LinkedIn | Buffer | Review post, approve | 5 min | Free |
-| Send cold outreach emails | Yes, with setup | 4 🟢 | Apollo.io + Resend | Instantly, Smartlead | Define ICP, review replies | 1-2 hrs | $0-49/mo |
-| Find email addresses from usernames | Yes, with setup | 4 🟢 | FullEnrich | Clay, Apollo | Verify, decide who to contact | 15 min | Pay-per-lead |
-| Send personalised DMs | Partially | 2 🟡 | Claude (draft) + manual send | Agent-drafted messages | Send each DM yourself (safest) | 0 min | Free |
-| Run Meta/Instagram ads | Yes, with setup | 4 🟢 | Meta Ads (MCP) + Higgsfield | Manual Ads Manager | Set budget, review performance | 30 min | Ad spend |
-| Run Google Ads | Yes, with setup | 3 🟡 | Google Ads (manual) | Claude for copy | Manage campaigns yourself | 1 hr | Ad spend |
-| Create ad creative (images/video) | Yes, fully | 5 🟢 | Higgsfield Marketing Studio | Orior, Canva | Choose which creative to use | 15 min | Varies |
-| Get listed on directories | Partially | 2 🟡 | Claude (research + draft descriptions) | Firecrawl (find directories) | Submit each listing yourself | 2-4 hrs | Free |
-| Set up referral program | Partially | 2 🟡 | Viral Loops, ReferralCandy | Manual "bring a friend" | Design incentives, promote it | 1-2 hrs | $0-49/mo |
-| Interview other creators for content | Partially | 2 🟡 | Claude (draft questions) | Riverside, Descript | Conduct the interview yourself | 30 min | Free-$24/mo |
-| WhatsApp broadcasts | Yes, with setup | 4 🟢 | WhatsApp Business API (Composio) | WhatsApp Business (free, manual) | Write messages, manage groups | 15 min | Free-$50/mo |
+| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost | Browse More |
+|-----------|---------|-------|-------------|-------------|-------------------|-------|------|------------|
+| Monitor Reddit for buyer intent | Yes, fully | 5 🟢 | Claude Code (scheduled trigger) | n8n + Reddit API | Review leads, reply to good ones | 15 min | ~$20/mo | [Social media monitoring](https://theresanaiforthat.com/task/social-media-analysis/) |
+| Monitor social for brand mentions | Yes, fully | 5 🟢 | Mention, Brand24 | SparkToro (WEB) | Decide which to engage with | 10 min | $29-99/mo | [Social media analysis](https://theresanaiforthat.com/task/social-media-analysis/) |
+| Write SEO blog posts | Yes, fully | 4 🟢 | Claude + Surfer SEO | ChatGPT, Firecrawl | Review, add personal stories | 30 min | Free to $89/mo | [SEO content](https://theresanaiforthat.com/task/seo-content/) |
+| Post to Instagram automatically | Yes, fully | 5 🟢 | Orior AI (auto-post) | Buffer, Later, Composio IG | Review content calendar | 15 min | €15/mo or free | [Social media posts](https://theresanaiforthat.com/task/social-media-posts/) |
+| Post to LinkedIn | Yes, with setup | 4 🟢 | Composio LinkedIn | Buffer | Review post, approve | 5 min | Free | [LinkedIn](https://theresanaiforthat.com/task/linkedin/) |
+| Send cold outreach emails | Yes, with setup | 4 🟢 | Apollo.io + Resend | Instantly, Smartlead | Define ICP, review replies | 1-2 hrs | $0-49/mo | [Cold emails](https://theresanaiforthat.com/task/cold-emails/) |
+| Find email addresses from usernames | Yes, with setup | 4 🟢 | FullEnrich | Clay, Apollo | Verify, decide who to contact | 15 min | Pay-per-lead | [Lead generation](https://theresanaiforthat.com/task/lead-generation/) |
+| Send personalised DMs | Partially | 2 🟡 | Claude (draft) + manual send | Agent-drafted messages | Send each DM yourself (safest) | 0 min | Free | [Sales](https://theresanaiforthat.com/task/sales/) |
+| Run Meta/Instagram ads | Yes, with setup | 4 🟢 | Meta Ads (MCP) + Higgsfield | Manual Ads Manager | Set budget, review performance | 30 min | Ad spend | [Ads](https://theresanaiforthat.com/task/ads/) |
+| Run Google Ads | Yes, with setup | 3 🟡 | Google Ads (manual) | Claude for copy | Manage campaigns yourself | 1 hr | Ad spend | [Ads](https://theresanaiforthat.com/task/ads/) |
+| Create ad creative (images/video) | Yes, fully | 5 🟢 | Higgsfield Marketing Studio | Orior, Canva | Choose which creative to use | 15 min | Varies | [Video ads](https://theresanaiforthat.com/task/video-ads/) |
+| Get listed on directories | Partially | 2 🟡 | Claude (research + draft descriptions) | Firecrawl (find directories) | Submit each listing yourself | 2-4 hrs | Free | [Marketing](https://theresanaiforthat.com/task/marketing/) |
+| Set up referral program | Partially | 2 🟡 | Viral Loops, ReferralCandy | Manual "bring a friend" | Design incentives, promote it | 1-2 hrs | $0-49/mo | [Customer engagement](https://theresanaiforthat.com/task/customer-engagement/) |
+| Interview other creators for content | Partially | 2 🟡 | Claude (draft questions) | Riverside, Descript | Conduct the interview yourself | 30 min | Free-$24/mo | [Content](https://theresanaiforthat.com/task/content/) |
+| WhatsApp broadcasts | Yes, with setup | 4 🟢 | WhatsApp Business API (Composio) | WhatsApp Business (free, manual) | Write messages, manage groups | 15 min | Free-$50/mo | [Messaging](https://theresanaiforthat.com/task/messaging/) |
 
 ### Converting & Closing
 
-| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost |
-|-----------|---------|-------|-------------|-------------|-------------------|-------|------|
-| Build a landing page | Partially | 3 🟡 | Claude (draft copy) + Carrd/Webflow | WordPress, Squarespace | Design decisions, publish | 1-2 hrs | $0-19/yr |
-| Set up online booking | Setup once | 1 ⚙️ | Cal.com | Calendly, Acuity, Mindbody | Configure availability, embed | 15 min | Free |
-| Accept payments | Setup once | 1 ⚙️ | Stripe | Square, PayPal | Connect bank, set prices | 15 min | Transaction fees |
-| Write email nurture sequence | Yes, fully | 4 🟢 | Claude + Kit/Resend | Mailchimp, ActiveCampaign | Review, personalise key emails | 1-2 hrs | Free-$29/mo |
-| Create a lead magnet | Yes, fully | 4 🟢 | Claude (draft) + Canva (design) | ChatGPT, Midjourney | Choose topic, review output | 1-2 hrs | Free |
-| Score and prioritize leads | Yes, with setup | 4 🟢 | Claude + CRM data | Apollo lead scoring | Define what "qualified" means | 30 min | Free |
-| Design/improve my offer | Partially | 2 🟡 | Claude with Value Equation | /offers skill, LLM Council | Make the strategic decisions | 30 min | Free |
-| Build a waitlist | Setup once | 1 ⚙️ | Carrd + email form | beehiiv landing page, Google Form | Set up page, share link | 30 min | Free |
+| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost | Browse More |
+|-----------|---------|-------|-------------|-------------|-------------------|-------|------|------------|
+| Build a landing page | Partially | 3 🟡 | Claude (draft copy) + Carrd/Webflow | WordPress, Squarespace | Design decisions, publish | 1-2 hrs | $0-19/yr | [Websites](https://theresanaiforthat.com/task/websites/) |
+| Set up online booking | Setup once | 1 ⚙️ | Cal.com | Calendly, Acuity, Mindbody | Configure availability, embed | 15 min | Free | [Scheduling](https://theresanaiforthat.com/task/scheduling/) |
+| Accept payments | Setup once | 1 ⚙️ | Stripe | Square, PayPal | Connect bank, set prices | 15 min | Transaction fees | [Finance](https://theresanaiforthat.com/task/finance/) |
+| Write email nurture sequence | Yes, fully | 4 🟢 | Claude + Kit/Resend | Mailchimp, ActiveCampaign | Review, personalise key emails | 1-2 hrs | Free-$29/mo | [Email writing](https://theresanaiforthat.com/task/email-writing/) |
+| Create a lead magnet | Yes, fully | 4 🟢 | Claude (draft) + Canva (design) | ChatGPT, Midjourney | Choose topic, review output | 1-2 hrs | Free | [Lead generation](https://theresanaiforthat.com/task/lead-generation/) |
+| Score and prioritize leads | Yes, with setup | 4 🟢 | Claude + CRM data | Apollo lead scoring | Define what "qualified" means | 30 min | Free | [B2B sales](https://theresanaiforthat.com/task/b2b-sales/) |
+| Design/improve my offer | Partially | 2 🟡 | Claude with Value Equation | /offers skill, LLM Council | Make the strategic decisions | 30 min | Free | [Business strategy](https://theresanaiforthat.com/task/business-strategy/) |
+| Build a waitlist | Setup once | 1 ⚙️ | Carrd + email form | beehiiv landing page, Google Form | Set up page, share link | 30 min | Free | [Websites](https://theresanaiforthat.com/task/websites/) |
 
 ### Content Creation
 
-| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost |
-|-----------|---------|-------|-------------|-------------|-------------------|-------|------|
-| Write social posts in my voice | Yes, fully | 4 🟢 | Claude + voice profile | ChatGPT, Jasper, Copy.ai | Review, add personal touch | 30 min | Free-$49/mo |
-| Generate images for posts | Yes, fully | 4 🟢 | Higgsfield, Canva | DALL-E, Midjourney (WEB) | Choose which to use | 5 min | Free-$15/mo |
-| Create short-form video | Yes, fully | 5 🟢 | Higgsfield Marketing Studio | Orior (lip-sync), InVideo AI (WEB) | Review, pick best takes | 15 min | Varies |
-| Create AI persona (not on camera) | Yes, with setup | 4 🟢 | Orior AI | Higgsfield Soul ID, HeyGen | Define character, provide references, review outputs | 30 min | €15/mo |
-| Write blog/SEO articles | Yes, fully | 4 🟢 | Claude + Surfer SEO | ChatGPT, Firecrawl | Add expertise, review | 30 min | Free-$89/mo |
-| Write newsletters | Yes, fully | 4 🟢 | Claude + Resend/beehiiv | Kit, Mailchimp, Substack (WEB) | Personal stories, review | 15 min | Free-$29/mo |
-| Plan a month of content | Yes, fully | 4 🟢 | Claude + Notion | ChatGPT, Trello | Approve the calendar | 30 min | Free |
-| Repurpose long-form into clips | Yes, fully | 5 🟢 | Higgsfield Viral Clip Generator | Opus Clip, manual | Pick which clips to post | 10 min | Varies |
-| Score video hooks before posting | Yes, fully | 5 🟢 | Higgsfield Virality Prediction | LLM Council (for text) | Decide whether to trust the score. Note: Higgsfield scores VIDEO only, not text posts | 2 min | Varies |
-| Schedule posts across platforms | Yes, fully | 5 🟢 | Orior (6 platforms) | Buffer, Later | Set schedule once | 15 min | Free-€15/mo |
+| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost | Browse More |
+|-----------|---------|-------|-------------|-------------|-------------------|-------|------|------------|
+| Write social posts in my voice | Yes, fully | 4 🟢 | Claude + voice profile | ChatGPT, Jasper, Copy.ai | Review, add personal touch | 30 min | Free-$49/mo | [Social media posts](https://theresanaiforthat.com/task/social-media-posts/) |
+| Generate images for posts | Yes, fully | 4 🟢 | Higgsfield, Canva | DALL-E, Midjourney (WEB) | Choose which to use | 5 min | Free-$15/mo | [Images](https://theresanaiforthat.com/task/images/) |
+| Create short-form video | Yes, fully | 5 🟢 | Higgsfield Marketing Studio | Orior (lip-sync), InVideo AI (WEB) | Review, pick best takes | 15 min | Varies | [Videos](https://theresanaiforthat.com/task/videos/) |
+| Create AI persona (not on camera) | Yes, with setup | 4 🟢 | Orior AI | Higgsfield Soul ID, HeyGen | Define character, provide references, review outputs | 30 min | €15/mo | [Avatars](https://theresanaiforthat.com/task/avatars/) |
+| Write blog/SEO articles | Yes, fully | 4 🟢 | Claude + Surfer SEO | ChatGPT, Firecrawl | Add expertise, review | 30 min | Free-$89/mo | [SEO content](https://theresanaiforthat.com/task/seo-content/) |
+| Write newsletters | Yes, fully | 4 🟢 | Claude + Resend/beehiiv | Kit, Mailchimp, Substack (WEB) | Personal stories, review | 15 min | Free-$29/mo | [Email writing](https://theresanaiforthat.com/task/email-writing/) |
+| Plan a month of content | Yes, fully | 4 🟢 | Claude + Notion | ChatGPT, Trello | Approve the calendar | 30 min | Free | [Content](https://theresanaiforthat.com/task/content/) |
+| Repurpose long-form into clips | Yes, fully | 5 🟢 | Higgsfield Viral Clip Generator | Opus Clip, manual | Pick which clips to post | 10 min | Varies | [Video editing](https://theresanaiforthat.com/task/video-editing/) |
+| Score video hooks before posting | Yes, fully | 5 🟢 | Higgsfield Virality Prediction | LLM Council (for text) | Decide whether to trust the score. Higgsfield = VIDEO only | 2 min | Varies | [Videos](https://theresanaiforthat.com/task/videos/) |
+| Schedule posts across platforms | Yes, fully | 5 🟢 | Orior (6 platforms) | Buffer, Later | Set schedule once | 15 min | Free-€15/mo | [Social media management](https://theresanaiforthat.com/task/social-media-management/) |
 
 ### Operations & Admin
 
-| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost |
-|-----------|---------|-------|-------------|-------------|-------------------|-------|------|
-| Draft follow-up emails | Yes, fully | 4 🟢 | Claude + Gmail (Composio) | ChatGPT + manual send | Review, approve send | 5 min | Free |
-| Generate invoices | Yes, fully | 4 🟢 | Claude /invoice skill | Stripe invoicing, Wave | Add line items, send | 2 min | Free |
-| Track contacts/leads | Yes, with setup | 4 🟢 | Notion, HubSpot (free) | Airtable, Google Sheets | Enter data (or auto-import) | 30 min | Free |
-| Manage calendar | Yes, with setup | 4 🟢 | Google Calendar (MCP) | Cal.com, Apple Calendar | Define your routines, AI can create/move events | 10 min | Free |
-| Track expenses | Yes, with setup | 3 🟡 | Xero (Composio) | QuickBooks, Wave (WEB) | Categorize, approve | 15 min | Free-$16/mo |
-| Create contracts/waivers | Partially | 3 🟡 | Claude (draft) + Dropbox Sign | DocuSign, PandaDoc | Review legal language, send | 30 min | $10-15/mo |
-| Manage tasks | Yes, with setup | 4 🟢 | Todoist (community MCP), Notion (MCP) | Trello, pen + paper | Decide priorities, AI can create/update/track | 10 min | Free |
+| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost | Browse More |
+|-----------|---------|-------|-------------|-------------|-------------------|-------|------|------------|
+| Draft follow-up emails | Yes, fully | 4 🟢 | Claude + Gmail (Composio) | ChatGPT + manual send | Review, approve send | 5 min | Free | [Email writing](https://theresanaiforthat.com/task/email-writing/) |
+| Generate invoices | Yes, fully | 4 🟢 | Claude /invoice skill | Stripe invoicing, Wave | Add line items, send | 2 min | Free | [Finance](https://theresanaiforthat.com/task/finance/) |
+| Track contacts/leads | Yes, with setup | 4 🟢 | Notion, HubSpot (free) | Airtable, Google Sheets | Enter data (or auto-import) | 30 min | Free | [CRM](https://theresanaiforthat.com/task/crm/) |
+| Manage calendar | Yes, with setup | 4 🟢 | Google Calendar (MCP) | Cal.com, Apple Calendar | Define your routines, AI can create/move events | 10 min | Free | [Scheduling](https://theresanaiforthat.com/task/scheduling/) |
+| Track expenses | Yes, with setup | 3 🟡 | Xero (Composio) | QuickBooks, Wave (WEB) | Categorize, approve | 15 min | Free-$16/mo | [Finance](https://theresanaiforthat.com/task/finance/) |
+| Create contracts/waivers | Partially | 3 🟡 | Claude (draft) + Dropbox Sign | DocuSign, PandaDoc | Review legal language, send | 30 min | $10-15/mo | [Legal](https://theresanaiforthat.com/task/legal/) |
+| Manage tasks | Yes, with setup | 4 🟢 | Todoist (community MCP), Notion (MCP) | Trello, pen + paper | Decide priorities, AI can create/update/track | 10 min | Free | [Task management](https://theresanaiforthat.com/task/task-management/) |
 
 ### Analytics & Tracking
 
-| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost |
-|-----------|---------|-------|-------------|-------------|-------------------|-------|------|
-| Website traffic analytics | Yes, with setup | 4 🟢 | Fathom (Composio) | Plausible, Google Analytics | Interpret the data | 10 min | $14/mo or free |
-| Social media analytics | Yes, with setup | 4 🟢 | Composio Instagram | Native IG/LinkedIn insights | Decide what to change | 5 min | Free |
-| Revenue tracking | Yes, with setup | 4 🟢 | Stripe (MCP) | Wave, Xero, spreadsheet | Review, plan ahead | 5 min | Free |
-| Ad performance tracking | Yes, with setup | 4 🟢 | Meta Ads (MCP) | Google Ads dashboard | Adjust budget/targeting | 5 min | Free |
-| Competitor monitoring | Yes, fully | 5 🟢 | Firecrawl + Claude | SimilarWeb, manual | Decide how to respond | 30 min | Free |
-| Weekly business summary | Yes, fully | 5 🟢 | Claude Code (scheduled) | ChatGPT + manual review | Read it, act on insights | 15 min | ~$20/mo |
+| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost | Browse More |
+|-----------|---------|-------|-------------|-------------|-------------------|-------|------|------------|
+| Website traffic analytics | Yes, with setup | 4 🟢 | Fathom (Composio) | Plausible, Google Analytics | Interpret the data | 10 min | $14/mo or free | [Data](https://theresanaiforthat.com/task/data/) |
+| Social media analytics | Yes, with setup | 4 🟢 | Composio Instagram | Native IG/LinkedIn insights | Decide what to change | 5 min | Free | [Social media analysis](https://theresanaiforthat.com/task/social-media-analysis/) |
+| Revenue tracking | Yes, with setup | 4 🟢 | Stripe (MCP) | Wave, Xero, spreadsheet | Review, plan ahead | 5 min | Free | [Finance](https://theresanaiforthat.com/task/finance/) |
+| Ad performance tracking | Yes, with setup | 4 🟢 | Meta Ads (MCP) | Google Ads dashboard | Adjust budget/targeting | 5 min | Free | [Ads](https://theresanaiforthat.com/task/ads/) |
+| Competitor monitoring | Yes, fully | 5 🟢 | Firecrawl + Claude | SimilarWeb, manual | Decide how to respond | 30 min | Free | [Competitive analysis](https://theresanaiforthat.com/task/competitive-analysis/) |
+| Weekly business summary | Yes, fully | 5 🟢 | Claude Code (scheduled) | ChatGPT + manual review | Read it, act on insights | 15 min | ~$20/mo | [Productivity](https://theresanaiforthat.com/task/productivity/) |
 
 ### Automation & Scale
 
-| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost |
-|-----------|---------|-------|-------------|-------------|-------------------|-------|------|
-| Auto-post content daily | Yes, fully | 5 🟢 | Orior AI (6 platforms) | Buffer + Claude | Review weekly, adjust | 30 min | €15/mo |
-| Monitor leads 24/7 | Yes, fully | 5 🟢 | Claude Code triggers | n8n + Reddit/social APIs | Review alerts, respond | 15 min | ~$20/mo |
-| Send triggered emails | Yes, with setup | 4 🟢 | Kit/ActiveCampaign | Resend + edge functions | Write the sequences once | 1-2 hrs | Free-$29/mo |
-| Auto-respond to IG comments | Yes, with setup | 4 🟢 | ManyChat | Chatfuel | Set up keyword triggers | 30 min | Free |
-| Generate weekly reports | Yes, fully | 5 🟢 | Claude Code (scheduled) | n8n + data sources | Read and act on them | 15 min | ~$20/mo |
-| Auto-respond to website enquiries | Yes, with setup | 4 🟢 | Intercom, Tidio, Crisp | ChatGPT custom GPT (embed), Chatbase | Define FAQs, review escalations | 1-2 hrs | Free-$29/mo |
-| Delegate to a VA | No, human only | 0 🔴 | Belay, Fiverr, local hire | Intern, assistant | Manage, train, review work | 2-4 hrs | $500+/mo |
-| Build workflow automations | Yes, with setup | 4 🟢 | n8n (visual builder) | Claude Code /loop | Design the workflow logic | 1-4 hrs | Free (self-hosted) |
+| Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost | Browse More |
+|-----------|---------|-------|-------------|-------------|-------------------|-------|------|------------|
+| Auto-post content daily | Yes, fully | 5 🟢 | Orior AI (6 platforms) | Buffer + Claude | Review weekly, adjust | 30 min | €15/mo | [Social media management](https://theresanaiforthat.com/task/social-media-management/) |
+| Monitor leads 24/7 | Yes, fully | 5 🟢 | Claude Code triggers | n8n + Reddit/social APIs | Review alerts, respond | 15 min | ~$20/mo | [Lead generation](https://theresanaiforthat.com/task/lead-generation/) |
+| Send triggered emails | Yes, with setup | 4 🟢 | Kit/ActiveCampaign | Resend + edge functions | Write the sequences once | 1-2 hrs | Free-$29/mo | [Email](https://theresanaiforthat.com/task/email/) |
+| Auto-respond to IG comments | Yes, with setup | 4 🟢 | ManyChat | manual | Set up keyword triggers | 30 min | Free | [Customer engagement](https://theresanaiforthat.com/task/customer-engagement/) |
+| Generate weekly reports | Yes, fully | 5 🟢 | Claude Code (scheduled) | n8n + data sources | Read and act on them | 15 min | ~$20/mo | [Data](https://theresanaiforthat.com/task/data/) |
+| Auto-respond to website enquiries | Yes, with setup | 4 🟢 | Intercom, Tidio, Crisp | ChatGPT custom GPT (embed), Chatbase | Define FAQs, review escalations | 1-2 hrs | Free-$29/mo | [Customer support](https://theresanaiforthat.com/task/customer-support/) |
+| Delegate to a VA | No, human only | 0 🔴 | Belay, Fiverr, local hire | Intern, assistant | Manage, train, review work | 2-4 hrs | $500+/mo | — |
+| Build workflow automations | Yes, with setup | 4 🟢 | n8n (visual builder) | Claude Code /loop | Design the workflow logic | 1-4 hrs | Free (self-hosted) | [Task automation](https://theresanaiforthat.com/task/task-automation/) |
 
 ---
 
