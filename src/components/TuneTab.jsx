@@ -132,7 +132,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const [savingMeal, setSavingMeal] = useState(null) // 'breakfast' | 'lunch' | 'dinner'
 
   // Drain logging state
-  const [showDrainForm, setShowDrainForm] = useState(false)
   const [drainCategory, setDrainCategory] = useState(null)
   const [drainNote, setDrainNote] = useState('')
   const [drainState, setDrainState] = useState(null) // 'sympathetic' | 'dorsal'
@@ -140,7 +139,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const [recentDrains, setRecentDrains] = useState([])
 
   // Stall logging state
-  const [showStallForm, setShowStallForm] = useState(false)
   const [stallCategory, setStallCategory] = useState(null)
   const [stallNote, setStallNote] = useState('')
   const [stallState, setStallState] = useState(null) // 'sympathetic' | 'dorsal'
@@ -563,7 +561,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setDrainCategory(null)
       setDrainNote('')
       setDrainState(null)
-      setShowDrainForm(false)
       setRegulationState(savedState) // show regulation exercises overlay
 
       // Refresh recent drains
@@ -609,7 +606,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setStallNote('')
       setStallState(null)
       setStallVoice(null)
-      setShowStallForm(false)
       setRegulationState(savedState) // show regulation exercises overlay
 
       const { data } = await supabase
@@ -1082,62 +1078,55 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         </div>
         <p className="tt-section-sub">What&apos;s depleting your energy? Drains pull you out of expression faster than practices can refill it.</p>
 
-        {!showDrainForm ? (
-          <button
-            className="tt-drain-log-btn"
-            onClick={() => { hapticLight(); setShowDrainForm(true) }}
-          >
-            + Log a drain
-          </button>
-        ) : (
-          <div className="tt-drain-form">
-            {/* Step 1: Category */}
-            <div className="tt-drain-categories">
-              {DRAIN_CATEGORIES.map(cat => (
+        <div className="tt-drain-form">
+          {/* Step 1: Category */}
+          <div className="tt-drain-categories">
+            {DRAIN_CATEGORIES.map(cat => (
+              <button
+                key={cat.id}
+                className={`tt-drain-cat-btn ${drainCategory === cat.id ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setDrainCategory(drainCategory === cat.id ? null : cat.id) }}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Step 2: Note (optional) */}
+          {drainCategory && (
+            <input
+              type="text"
+              className="tt-drain-note"
+              placeholder="What drained you? (optional)"
+              value={drainNote}
+              onChange={e => setDrainNote(e.target.value)}
+            />
+          )}
+
+          {/* Step 3: State check */}
+          {drainCategory && (
+            <div className="tt-drain-state">
+              <span className="tt-state-label">How did it leave you?</span>
+              <div className="tt-state-buttons">
                 <button
-                  key={cat.id}
-                  className={`tt-drain-cat-btn ${drainCategory === cat.id ? 'selected' : ''}`}
-                  onClick={() => { hapticLight(); setDrainCategory(cat.id) }}
+                  className={`tt-state-btn tt-state-activated ${drainState === 'sympathetic' ? 'selected' : ''}`}
+                  onClick={() => setDrainState('sympathetic')}
                 >
-                  <span>{cat.icon}</span>
-                  <span>{cat.label}</span>
+                  <span>😬</span> Activated
                 </button>
-              ))}
-            </div>
-
-            {/* Step 2: Note (optional) */}
-            {drainCategory && (
-              <input
-                type="text"
-                className="tt-drain-note"
-                placeholder="What drained you? (optional)"
-                value={drainNote}
-                onChange={e => setDrainNote(e.target.value)}
-              />
-            )}
-
-            {/* Step 3: State check */}
-            {drainCategory && (
-              <div className="tt-drain-state">
-                <span className="tt-state-label">How did it leave you?</span>
-                <div className="tt-state-buttons">
-                  <button
-                    className={`tt-state-btn tt-state-activated ${drainState === 'sympathetic' ? 'selected' : ''}`}
-                    onClick={() => setDrainState('sympathetic')}
-                  >
-                    <span>😬</span> Activated
-                  </button>
-                  <button
-                    className={`tt-state-btn tt-state-shutdown ${drainState === 'dorsal' ? 'selected' : ''}`}
-                    onClick={() => setDrainState('dorsal')}
-                  >
-                    <span>😶</span> Shutdown
-                  </button>
-                </div>
+                <button
+                  className={`tt-state-btn tt-state-shutdown ${drainState === 'dorsal' ? 'selected' : ''}`}
+                  onClick={() => setDrainState('dorsal')}
+                >
+                  <span>😶</span> Shutdown
+                </button>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Actions */}
+          {/* Actions */}
+          {drainCategory && (
             <div className="tt-drain-actions">
               <button
                 className="tt-drain-save"
@@ -1146,15 +1135,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
               >
                 {savingDrain ? 'Saving...' : 'Log Drain'}
               </button>
-              <button
-                className="tt-drain-cancel"
-                onClick={() => { setShowDrainForm(false); setDrainCategory(null); setDrainNote(''); setDrainState(null) }}
-              >
-                Cancel
-              </button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Recent drains list */}
         {recentDrains.length > 0 && (
@@ -1199,76 +1182,69 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         </div>
         <p className="tt-section-sub">Where did your protective voice win? Stalls erode safety and keep you stuck in the smaller version of yourself.</p>
 
-        {!showStallForm ? (
-          <button
-            className="tt-drain-log-btn tt-stall-log-btn"
-            onClick={() => { hapticLight(); setShowStallForm(true) }}
-          >
-            + Log a stall
-          </button>
-        ) : (
-          <div className="tt-drain-form">
-            <div className="tt-drain-categories">
-              {STALL_CATEGORIES.map(cat => (
+        <div className="tt-drain-form">
+          <div className="tt-drain-categories">
+            {STALL_CATEGORIES.map(cat => (
+              <button
+                key={cat.id}
+                className={`tt-drain-cat-btn ${stallCategory === cat.id ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setStallCategory(stallCategory === cat.id ? null : cat.id) }}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {stallCategory && (
+            <input
+              type="text"
+              className="tt-drain-note"
+              placeholder="What happened? (optional)"
+              value={stallNote}
+              onChange={e => setStallNote(e.target.value)}
+            />
+          )}
+
+          {stallCategory && (
+            <div className="tt-drain-state">
+              <span className="tt-state-label">How did it leave you?</span>
+              <div className="tt-state-buttons">
                 <button
-                  key={cat.id}
-                  className={`tt-drain-cat-btn ${stallCategory === cat.id ? 'selected' : ''}`}
-                  onClick={() => { hapticLight(); setStallCategory(cat.id) }}
+                  className={`tt-state-btn tt-state-activated ${stallState === 'sympathetic' ? 'selected' : ''}`}
+                  onClick={() => { setStallState('sympathetic'); setStallVoice(null) }}
                 >
-                  <span>{cat.icon}</span>
-                  <span>{cat.label}</span>
+                  <span>😬</span> Activated
                 </button>
-              ))}
+                <button
+                  className={`tt-state-btn tt-state-shutdown ${stallState === 'dorsal' ? 'selected' : ''}`}
+                  onClick={() => { setStallState('dorsal'); setStallVoice(null) }}
+                >
+                  <span>😶</span> Shutdown
+                </button>
+              </div>
             </div>
+          )}
 
-            {stallCategory && (
-              <input
-                type="text"
-                className="tt-drain-note"
-                placeholder="What happened? (optional)"
-                value={stallNote}
-                onChange={e => setStallNote(e.target.value)}
-              />
-            )}
-
-            {stallCategory && (
-              <div className="tt-drain-state">
-                <span className="tt-state-label">How did it leave you?</span>
-                <div className="tt-state-buttons">
+          {/* Voice picker — shows after state selection */}
+          {stallState && (
+            <div className="tt-stall-voice">
+              <span className="tt-state-label">Which voice showed up?</span>
+              <div className="tt-voice-buttons">
+                {VOICES_BY_STATE[stallState].map(v => (
                   <button
-                    className={`tt-state-btn tt-state-activated ${stallState === 'sympathetic' ? 'selected' : ''}`}
-                    onClick={() => { setStallState('sympathetic'); setStallVoice(null) }}
+                    key={v.id}
+                    className={`tt-voice-btn ${stallVoice === v.id ? 'selected' : ''}`}
+                    onClick={() => { hapticLight(); setStallVoice(v.id) }}
                   >
-                    <span>😬</span> Activated
+                    <span>{v.icon}</span> {v.name}
                   </button>
-                  <button
-                    className={`tt-state-btn tt-state-shutdown ${stallState === 'dorsal' ? 'selected' : ''}`}
-                    onClick={() => { setStallState('dorsal'); setStallVoice(null) }}
-                  >
-                    <span>😶</span> Shutdown
-                  </button>
-                </div>
+                ))}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Voice picker — shows after state selection */}
-            {stallState && (
-              <div className="tt-stall-voice">
-                <span className="tt-state-label">Which voice showed up?</span>
-                <div className="tt-voice-buttons">
-                  {VOICES_BY_STATE[stallState].map(v => (
-                    <button
-                      key={v.id}
-                      className={`tt-voice-btn ${stallVoice === v.id ? 'selected' : ''}`}
-                      onClick={() => { hapticLight(); setStallVoice(v.id) }}
-                    >
-                      <span>{v.icon}</span> {v.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
+          {stallCategory && (
             <div className="tt-drain-actions">
               <button
                 className="tt-drain-save tt-stall-save"
@@ -1277,15 +1253,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
               >
                 {savingStall ? 'Saving...' : 'Log Stall'}
               </button>
-              <button
-                className="tt-drain-cancel"
-                onClick={() => { setShowStallForm(false); setStallCategory(null); setStallNote(''); setStallState(null); setStallVoice(null) }}
-              >
-                Cancel
-              </button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {recentStalls.length > 0 && (
           <div className="tt-drain-list">
