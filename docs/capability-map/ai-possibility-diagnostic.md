@@ -19,12 +19,12 @@
 
 | Model | Examples | Unlocks |
 |-------|---------|---------|
-| **Services** | Coaching, consulting, freelance, agency | Sections: Outreach, Proposals, Client Management, Follow-up |
+| **Services** | Coaching, consulting, freelance, done-for-you | Sections: Outreach, Proposals, Client Management, Follow-up |
 | **Experiences** | Workshops, retreats, classes, events, ceremonies | Sections: Fill the Room, Booking, Post-Event, Community |
 | **Digital Products** | Courses, templates, memberships, communities | Sections: Content, Funnels, Email Sequences, Upsells |
 | **Physical Products** | E-commerce, handmade, dropship, retail | Sections: Product Listings, Ads, Inventory, Customer Service |
-| **Content** | Newsletter, YouTube, podcast, social media | Sections: Content Creation, Distribution, Monetization, Growth |
-| **Agency** | Marketing, design, dev, creative services | Sections: Lead Gen, Client Delivery, Reporting, Scaling |
+| **Content / Media** | Newsletter, YouTube, podcast, social media | Sections: Content Creation, Distribution, Monetization, Growth |
+| **Software / SaaS** | Apps, tools, platforms, marketplaces | Sections: Product-Led Growth, Onboarding, Retention, Support |
 
 *Most people are a mix. Pick your primary, we'll note the others.*
 
@@ -156,15 +156,16 @@ Each capability gets a card:
 └─────────────────────────────────────────────────┘
 ```
 
-### The 5 Automation Levels (shown on every card)
+### The 6 Automation Levels (shown on every card)
 
 | Level | Icon | Label | What It Means |
 |-------|------|-------|--------------|
-| 5 | 🟢 | **Runs itself** | AI does it end-to-end on a schedule. You review occasionally. (MCP tools) |
+| 5 | 🟢 | **Runs itself** | AI does it end-to-end on a schedule. You review occasionally. (MCP tools, scheduled triggers) |
 | 4 | 🟢 | **One-click** | AI does it when you ask. You click "approve." (API tools, connected) |
 | 3 | 🟡 | **Draft + paste** | AI creates the output. You paste it into the tool. (Web-only tools) |
-| 2 | 🟡 | **AI assists** | AI helps you think/plan, but you execute manually. (Strategy, frameworks) |
-| 1 | 🔴 | **Human only** | No AI path. You or someone on your team does this. (Physical, relational) |
+| 2 | 🟡 | **AI assists** | AI helps you think/plan, but you execute manually. (Strategy, creative direction) |
+| 1 | ⚙️ | **Setup once** | One-time configuration. Not an AI task, just needs doing once. (Connect account, set availability) |
+| 0 | 🔴 | **Human only** | Requires human judgment, physical presence, or relationship. No AI path. |
 
 ### The "Can AI Do This?" Answers
 
@@ -175,6 +176,7 @@ Every capability gets one of four honest answers:
 | **Yes, fully** | AI handles end-to-end. You review. | Write social posts, monitor Reddit, send email sequences |
 | **Yes, with setup** | AI handles it once you connect a tool or provide context | Run Meta Ads (need to connect account), generate video (need brand assets) |
 | **Partially** | AI does the creative/thinking part, you do the execution | Design a workshop curriculum (AI drafts, you refine), pricing strategy (AI analyzes, you decide) |
+| **Setup once** | Not an AI task. One-time configuration that just needs doing. | Connect Stripe, set up Cal.com availability, build a waitlist page |
 | **No, human only** | This requires human judgment, physical presence, or relationship | Run the actual workshop, build personal relationships, handle sensitive conversations |
 
 ---
@@ -217,7 +219,7 @@ This is the backend data the diagnostic uses. Each row maps a capability to its 
 |-----------|---------|-------|-------------|-------------|-------------------|-------|------|
 | Monitor Reddit for buyer intent | Yes, fully | 5 🟢 | Claude Code (scheduled trigger) | n8n + Reddit API | Review leads, reply to good ones | 15 min | ~$20/mo |
 | Monitor social for brand mentions | Yes, fully | 5 🟢 | Mention, Brand24 | SparkToro (WEB) | Decide which to engage with | 10 min | $29-99/mo |
-| Write SEO blog posts | Yes, fully | 4 🟢 | Claude + Surfer SEO | ChatGPT, Firecrawl | Review, add personal stories | 30 min | $49-89/mo |
+| Write SEO blog posts | Yes, fully | 4 🟢 | Claude + Surfer SEO | ChatGPT, Firecrawl | Review, add personal stories | 30 min | Free (Claude only) to $89/mo (with SEO tools) |
 | Post to Instagram automatically | Yes, fully | 5 🟢 | Orior AI (auto-post) | Buffer, Later, Composio IG | Review content calendar | 15 min | €15/mo or free |
 | Post to LinkedIn | Yes, with setup | 4 🟢 | Composio LinkedIn | Buffer | Review post, approve | 5 min | Free |
 | Send cold outreach emails | Yes, with setup | 4 🟢 | Apollo.io + Resend | Instantly, Smartlead | Define ICP, review replies | 1-2 hrs | $0-49/mo |
@@ -226,7 +228,7 @@ This is the backend data the diagnostic uses. Each row maps a capability to its 
 | Run Meta/Instagram ads | Yes, with setup | 4 🟢 | Meta Ads (MCP) + Higgsfield | Manual Ads Manager | Set budget, review performance | 30 min | Ad spend |
 | Run Google Ads | Yes, with setup | 3 🟡 | Google Ads (manual) | Claude for copy | Manage campaigns yourself | 1 hr | Ad spend |
 | Create ad creative (images/video) | Yes, fully | 5 🟢 | Higgsfield Marketing Studio | Orior, Canva | Choose which creative to use | 15 min | Varies |
-| Get listed on directories | No, human only | 1 🔴 | Manual submission | Claude drafts descriptions | Submit each listing yourself | 2-4 hrs | Free-$50 |
+| Get listed on directories | Partially | 2 🟡 | Claude (research + draft descriptions) | Firecrawl (find directories) | Submit each listing yourself | 2-4 hrs | Free |
 | Set up referral program | Partially | 2 🟡 | Viral Loops, ReferralCandy | Manual "bring a friend" | Design incentives, promote it | 1-2 hrs | $0-49/mo |
 | Interview other creators for content | Partially | 2 🟡 | Claude (draft questions) | Riverside, Descript | Conduct the interview yourself | 30 min | Free-$24/mo |
 | WhatsApp broadcasts | Yes, with setup | 4 🟢 | WhatsApp Business API (Composio) | WhatsApp Business (free, manual) | Write messages, manage groups | 15 min | Free-$50/mo |
@@ -236,13 +238,13 @@ This is the backend data the diagnostic uses. Each row maps a capability to its 
 | Capability | Can AI? | Level | Best Tool(s) | Alt Tool(s) | What You Still Do | Setup | Cost |
 |-----------|---------|-------|-------------|-------------|-------------------|-------|------|
 | Build a landing page | Partially | 3 🟡 | Claude (draft copy) + Carrd/Webflow | WordPress, Squarespace | Design decisions, publish | 1-2 hrs | $0-19/yr |
-| Set up online booking | No (config) | 1 🔴 | Cal.com | Calendly, Acuity, Mindbody | Configure availability, embed | 15 min | Free |
-| Accept payments | No (config) | 1 🔴 | Stripe | Square, PayPal | Connect bank, set prices | 15 min | Transaction fees |
+| Set up online booking | Setup once | 1 ⚙️ | Cal.com | Calendly, Acuity, Mindbody | Configure availability, embed | 15 min | Free |
+| Accept payments | Setup once | 1 ⚙️ | Stripe | Square, PayPal | Connect bank, set prices | 15 min | Transaction fees |
 | Write email nurture sequence | Yes, fully | 4 🟢 | Claude + Kit/Resend | Mailchimp, ActiveCampaign | Review, personalise key emails | 1-2 hrs | Free-$29/mo |
 | Create a lead magnet | Yes, fully | 4 🟢 | Claude (draft) + Canva (design) | ChatGPT, Midjourney | Choose topic, review output | 1-2 hrs | Free |
 | Score and prioritize leads | Yes, with setup | 4 🟢 | Claude + CRM data | Apollo lead scoring | Define what "qualified" means | 30 min | Free |
 | Design/improve my offer | Partially | 2 🟡 | Claude with Value Equation | /offers skill, LLM Council | Make the strategic decisions | 30 min | Free |
-| Build a waitlist | No (config) | 1 🔴 | Carrd + email form | beehiiv landing page, Google Form | Set up page, share link | 30 min | Free |
+| Build a waitlist | Setup once | 1 ⚙️ | Carrd + email form | beehiiv landing page, Google Form | Set up page, share link | 30 min | Free |
 
 ### Content Creation
 
@@ -251,12 +253,12 @@ This is the backend data the diagnostic uses. Each row maps a capability to its 
 | Write social posts in my voice | Yes, fully | 4 🟢 | Claude + voice profile | ChatGPT, Jasper, Copy.ai | Review, add personal touch | 30 min | Free-$49/mo |
 | Generate images for posts | Yes, fully | 4 🟢 | Higgsfield, Canva | DALL-E, Midjourney (WEB) | Choose which to use | 5 min | Free-$15/mo |
 | Create short-form video | Yes, fully | 5 🟢 | Higgsfield Marketing Studio | Orior (lip-sync), InVideo AI (WEB) | Review, pick best takes | 15 min | Varies |
-| Create AI persona (not on camera) | Yes, fully | 5 🟢 | Orior AI | Higgsfield Soul ID, HeyGen | Define the character, review | 30 min | €15/mo |
+| Create AI persona (not on camera) | Yes, with setup | 4 🟢 | Orior AI | Higgsfield Soul ID, HeyGen | Define character, provide references, review outputs | 30 min | €15/mo |
 | Write blog/SEO articles | Yes, fully | 4 🟢 | Claude + Surfer SEO | ChatGPT, Firecrawl | Add expertise, review | 30 min | Free-$89/mo |
 | Write newsletters | Yes, fully | 4 🟢 | Claude + Resend/beehiiv | Kit, Mailchimp, Substack (WEB) | Personal stories, review | 15 min | Free-$29/mo |
 | Plan a month of content | Yes, fully | 4 🟢 | Claude + Notion | ChatGPT, Trello | Approve the calendar | 30 min | Free |
 | Repurpose long-form into clips | Yes, fully | 5 🟢 | Higgsfield Viral Clip Generator | Opus Clip, manual | Pick which clips to post | 10 min | Varies |
-| Score content before posting | Yes, fully | 5 🟢 | Higgsfield Virality Prediction | LLM Council | Decide whether to trust the score | 2 min | Varies |
+| Score video hooks before posting | Yes, fully | 5 🟢 | Higgsfield Virality Prediction | LLM Council (for text) | Decide whether to trust the score. Note: Higgsfield scores VIDEO only, not text posts | 2 min | Varies |
 | Schedule posts across platforms | Yes, fully | 5 🟢 | Orior (6 platforms) | Buffer, Later | Set schedule once | 15 min | Free-€15/mo |
 
 ### Operations & Admin
@@ -266,10 +268,10 @@ This is the backend data the diagnostic uses. Each row maps a capability to its 
 | Draft follow-up emails | Yes, fully | 4 🟢 | Claude + Gmail (Composio) | ChatGPT + manual send | Review, approve send | 5 min | Free |
 | Generate invoices | Yes, fully | 4 🟢 | Claude /invoice skill | Stripe invoicing, Wave | Add line items, send | 2 min | Free |
 | Track contacts/leads | Yes, with setup | 4 🟢 | Notion, HubSpot (free) | Airtable, Google Sheets | Enter data (or auto-import) | 30 min | Free |
-| Manage calendar | No (config) | 1 🔴 | Google Calendar | Cal.com, Apple Calendar | Block time yourself | 5 min | Free |
+| Manage calendar | Yes, with setup | 4 🟢 | Google Calendar (MCP) | Cal.com, Apple Calendar | Define your routines, AI can create/move events | 10 min | Free |
 | Track expenses | Yes, with setup | 3 🟡 | Xero (Composio) | QuickBooks, Wave (WEB) | Categorize, approve | 15 min | Free-$16/mo |
 | Create contracts/waivers | Partially | 3 🟡 | Claude (draft) + Dropbox Sign | DocuSign, PandaDoc | Review legal language, send | 30 min | $10-15/mo |
-| Manage tasks | No (config) | 1 🔴 | Todoist (community MCP) | Notion, Trello, pen + paper | Decide what to do next | 5 min | Free |
+| Manage tasks | Yes, with setup | 4 🟢 | Todoist (community MCP), Notion (MCP) | Trello, pen + paper | Decide priorities, AI can create/update/track | 10 min | Free |
 
 ### Analytics & Tracking
 
@@ -291,7 +293,8 @@ This is the backend data the diagnostic uses. Each row maps a capability to its 
 | Send triggered emails | Yes, with setup | 4 🟢 | Kit/ActiveCampaign | Resend + edge functions | Write the sequences once | 1-2 hrs | Free-$29/mo |
 | Auto-respond to IG comments | Yes, with setup | 4 🟢 | ManyChat | Chatfuel | Set up keyword triggers | 30 min | Free |
 | Generate weekly reports | Yes, fully | 5 🟢 | Claude Code (scheduled) | n8n + data sources | Read and act on them | 15 min | ~$20/mo |
-| Delegate to a VA | No, human only | 1 🔴 | Belay, Fiverr, local hire | Intern, assistant | Manage, train, review work | 2-4 hrs | $500+/mo |
+| Auto-respond to website enquiries | Yes, with setup | 4 🟢 | Intercom, Tidio, Crisp | ChatGPT custom GPT (embed), Chatbase | Define FAQs, review escalations | 1-2 hrs | Free-$29/mo |
+| Delegate to a VA | No, human only | 0 🔴 | Belay, Fiverr, local hire | Intern, assistant | Manage, train, review work | 2-4 hrs | $500+/mo |
 | Build workflow automations | Yes, with setup | 4 🟢 | n8n (visual builder) | Claude Code /loop | Design the workflow logic | 1-4 hrs | Free (self-hosted) |
 
 ---
@@ -305,14 +308,16 @@ YOUR AI POSSIBILITY SCORE
 
 Of the [X] capabilities you selected:
 
-🟢  [Y] can be fully automated     (AI runs it, you review)
-🟡  [Z] AI assists, you execute    (AI drafts, you paste/send)  
-🔴  [W] human only                 (no AI shortcut)
+🟢  [Y] can be fully automated      (AI runs it, you review)
+🟡  [Z] AI assists, you execute     (AI drafts, you paste/send)
+⚙️  [V] one-time setup              (configure once, then done)
+🔴  [W] human only                  (no AI shortcut)
 
-Estimated time saved: [X] hours/week
-Estimated setup time: [X] hours total
-Estimated monthly cost: $[X]-$[Y]
+Total setup time: [sum of setup column] hours
+Estimated monthly cost: $[sum of cost column]
 ```
+
+*Note: "time saved" depends on how many hours you currently spend on each task. The report shows setup time and cost, which are calculable from the data. Time savings require your input on current workload.*
 
 ---
 
