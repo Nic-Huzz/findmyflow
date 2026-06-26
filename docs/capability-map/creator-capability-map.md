@@ -213,6 +213,143 @@ This maps 1:1 to the Experience Pipeline (Attract → Capture → Convert → De
 
 ---
 
+## Automation Classification: How Each Tool Connects
+
+Every tool falls into one of four categories based on how an AI agent can use it. This determines how much you can automate vs how much stays manual.
+
+### Legend
+
+| Icon | Category | What It Means |
+|------|----------|--------------|
+| **MCP** | MCP Server available | AI agent can use this tool directly via Model Context Protocol. Richest integration. Agent can read, write, and take actions. |
+| **API** | API key or OAuth required | Tool has an API. Connect via Composio (OAuth) or paste an API key. Agent can automate once connected. |
+| **WEB** | Web app only | No API or MCP. You use the tool's website/app manually. Agent can draft content but you copy-paste it in. |
+| **HUM** | Human-only | Must be done by a person. No automation path. |
+
+### Full Tool Classification
+
+| Tool | Category | MCP Available? | Composio Toolkit? | Notes |
+|------|----------|---------------|-------------------|-------|
+| **Higgsfield** | MCP | Yes (vendor MCP at mcp.higgsfield.ai) | Yes (connector) | Video, images, UGC, virality scoring, all via MCP |
+| **Stripe** | MCP | Yes (vendor MCP) | Yes (full toolkit) | Payments, invoices, subscriptions, customer data |
+| **Notion** | MCP | Yes (vendor MCP) | Yes | CRM alternative, task management, content calendar |
+| **Gmail** | MCP | Yes (Google MCP) | Yes (connected) | Send, read, label, draft emails |
+| **Google Drive** | MCP | Yes (Google MCP) | Yes (connected) | Read/write docs, sheets |
+| **Google Calendar** | MCP | Yes (Google MCP) | Yes | Scheduling, event management, availability |
+| **Meta Ads** | MCP | Yes (vendor MCP) | Yes (connected) | Create campaigns, read performance, manage ads |
+| **Supabase** | MCP | Yes (vendor MCP) | Yes | Database, auth, edge functions |
+| **Canva** | MCP | Yes (MCP Apps, launched Jan 2026) | Yes (connected) | Design generation, template rendering |
+| **Slack** | MCP | Yes (vendor MCP) | Yes | Messaging, notifications, community (if using Slack) |
+| **Cal.com** | API | Has API (API-first) | No toolkit yet | Booking, scheduling, availability |
+| **Instagram** | API | No MCP | Yes (Composio connected) | Publish posts, read metrics, profile data |
+| **Reddit** | API | No MCP | Yes (Composio connected) | Search, read posts/comments, post |
+| **Resend** | API | No MCP | Yes (Composio connected) | Send transactional + marketing email via API |
+| **Fathom** | API | No MCP | Yes (Composio connected) | Website analytics data |
+| **LinkedIn** | API | No MCP | Yes (Composio, not connected) | Post publishing via official API. Safe. |
+| **Calendly** | API | No MCP | Yes (Composio toolkit) | Booking links, availability, RSVPs |
+| **Xero** | API | No MCP | Yes (Composio toolkit) | Invoicing, bank reconciliation, P&L |
+| **QuickBooks** | API | No MCP | Yes (Composio toolkit) | Accounting, invoicing, expenses |
+| **ManyChat** | API | No MCP | Yes (Composio toolkit) | IG keyword triggers, DM flows, automations |
+| **WhatsApp Business** | API | No MCP | Yes (Composio toolkit) | Business messaging. API via Twilio/360dialog |
+| **Firecrawl** | API | No MCP (CLI tool) | Yes (Composio toolkit) | Web scraping, search, SEO research |
+| **Apollo.io** | API | No MCP | No (use API directly) | Lead database, email sequences, enrichment |
+| **n8n** | API | Community MCP | Self-hosted or cloud | Workflow automation, webhook triggers |
+| **Kit (ConvertKit)** | API | No MCP | No (use API directly) | Email sequences, automations, subscriber mgmt |
+| **Mailchimp** | API | No MCP | No (use API directly) | Email marketing, automations |
+| **ActiveCampaign** | API | No MCP | No (use API directly) | Email automation, CRM, sequences |
+| **Buffer** | API | No MCP | No (use API directly) | Social media scheduling |
+| **Later** | API | No MCP | No (use API directly) | Social media scheduling, visual planner |
+| **FullEnrich** | API | No MCP | No (use API directly) | Waterfall email enrichment |
+| **Clay** | API | No MCP | No (use API directly) | Lead enrichment pipelines |
+| **HeyGen** | API | No MCP | No (has API) | AI video avatars. API for enterprise |
+| **DALL-E** | API | No MCP | No (OpenAI API) | Image generation via API |
+| **Ahrefs** | API | No MCP | No (has API) | SEO tool. API on higher plans |
+| **Semrush** | API | No MCP | No (has API) | SEO tool. API on higher plans |
+| **beehiiv** | API | No MCP | No (has API) | Newsletter platform. API for subscribers |
+| **Webflow** | API | No MCP | No (has API) | Website builder. API for CMS |
+| **Squarespace** | API | No MCP | No (has API) | Website builder. Commerce + Contacts APIs |
+| **WordPress** | API | Community MCP | No | REST API. Headless CMS option |
+| **Typeform** | API | No MCP | No (has API) | Forms/surveys. API available |
+| **Google Forms** | API | No MCP | No (Google API) | Forms, waitlist capture, testimonial collection |
+| **Circle** | API | No MCP | No (has API) | Community platform. API available |
+| **Dropbox Sign** | API | No MCP | No (has API) | E-signatures (formerly HelloSign) |
+| **DocuSign** | API | No MCP | No (has API) | E-signatures. API available |
+| **PandaDoc** | API | No MCP | No (has API) | Contracts, proposals, e-signatures |
+| **Todoist** | API | Community MCP | No (has API) | Task management |
+| **PostHog** | API | No MCP | No (has API) | Product analytics, A/B testing |
+| **Telegram** | API | No MCP | No (Bot API) | Community groups, broadcast channels |
+| **Discord** | API | Community MCP | No (Bot API) | Community servers, voice channels |
+| **Orior AI** | WEB | No MCP, no public API | No | Create AI persona, generate content, auto-post from their UI |
+| **Midjourney** | WEB | No MCP, no API | No | Discord-based. Manual prompt-and-download |
+| **Surfer SEO** | WEB | No MCP, no API | No | Web app. Keyword research + optimization |
+| **Substack** | WEB | No MCP, no API | No | Web app. Manual posting |
+| **CapCut** | WEB | No MCP, no API | No | Video editing app. Manual |
+| **InVideo AI** | WEB | No MCP, no API | No | AI video generation. Web app |
+| **Carrd** | WEB | No MCP, no API | No | Landing page builder. Manual |
+| **Senja** | WEB | No MCP, no API | No | Testimonial collection. Web app |
+| **VideoAsk** | WEB | No MCP, no API | No | Interactive video forms. Web app |
+| **Mighty Networks** | WEB | No MCP, no API | No | Community platform |
+| **Expandi** | WEB | No MCP (web app) | No | LinkedIn automation. Use with caution |
+| **Wave** | WEB | No MCP, no API | No | Accounting (free tier limited) |
+| **VWO** | WEB | No MCP, no API | No | A/B testing. Web app |
+| **SparkToro** | WEB | No MCP, no API | No | Audience research. Web app |
+| **Trello** | API | No MCP | No (has API) | Task/project boards. REST API |
+
+### Summary by automation level
+
+| Category | Count | What It Means for You |
+|----------|-------|----------------------|
+| **MCP** (agent uses directly) | 10 | Richest automation. Agent reads, writes, acts. No copy-paste. Vendor-maintained. |
+| **API** (connect once, then automated) | 38 | Connect via Composio (OAuth) or API key. Agent automates after setup. |
+| **WEB** (manual with AI assist) | 14 | Agent drafts the content, you paste it into the tool's UI. |
+
+*Note: "Human-only" tasks (handwritten notes, in-person asks, physical setup) aren't tools, so they're not in this table. They appear in the capability sections above.*
+
+### The 10 MCP tools (richest automation)
+
+These tools have vendor-maintained MCP servers, meaning an AI agent can use them as naturally as it uses its own tools. No API wrangling, no copy-paste.
+
+1. **Higgsfield** — video, images, UGC, ads, virality scoring
+2. **Stripe** — payments, subscriptions, invoices, customer data
+3. **Notion** — CRM, tasks, content calendar, databases
+4. **Gmail** — send, read, draft, label emails
+5. **Google Drive** — read/write docs, sheets, files
+6. **Google Calendar** — scheduling, event management
+7. **Meta Ads** — create/manage ad campaigns, read performance
+8. **Supabase** — database, auth, edge functions
+9. **Canva** — design generation (MCP Apps, launched Jan 2026)
+10. **Slack** — messaging, notifications, community management
+
+*Community MCPs also exist for: WordPress, Todoist, n8n, Discord. These work but aren't vendor-maintained, so reliability varies.*
+
+### The "Composio bridge" (15 of the 38 API tools)
+
+These API tools have official Composio toolkits, making connection a 5-minute OAuth flow instead of custom API code:
+
+**Already connected:** Instagram, Reddit, Gmail, Resend, Fathom, Canva, Cloudflare, Miro
+
+**Available to connect:** Stripe, LinkedIn, Calendly, Xero, QuickBooks, ManyChat, WhatsApp Business, Firecrawl, and 500+ more
+
+*The other 23 API tools (Apollo, Kit, Mailchimp, etc.) have APIs but no Composio toolkit. You'd connect via API key or build a custom integration.*
+
+### The "draft and paste" tools (14 web-only)
+
+These tools have no API or MCP. The AI agent can draft the content (write the post, design the prompt, create the copy), but you manually paste it into the tool's web interface.
+
+Orior AI, Midjourney, Surfer SEO, Substack, CapCut, InVideo AI, Carrd, Senja, VideoAsk, Mighty Networks, Expandi, Wave, VWO, SparkToro
+
+**Tip:** For several of these, automatable alternatives exist. If automation matters, swap:
+- Midjourney (WEB) → DALL-E (API) or Higgsfield (MCP)
+- Substack (WEB) → beehiiv (API) or Resend (API)
+- Carrd (WEB) → Webflow (API) or WordPress (community MCP)
+- Wave (WEB) → Xero (API via Composio) or QuickBooks (API via Composio)
+- VWO (WEB) → PostHog (API)
+- SparkToro (WEB) → Reddit monitoring (API) + Firecrawl (API)
+- Mighty Networks (WEB) → Circle (API) or Discord (community MCP)
+- Senja (WEB) → Typeform (API) or Google Forms (API)
+
+---
+
 ## Personal Status Overlay
 
 To see which tools YOU currently have connected and your status per node, see `docs/capability-map/personal-status-overlay.md`. That doc shows:
