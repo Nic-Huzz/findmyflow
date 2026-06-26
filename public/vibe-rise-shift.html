@@ -465,6 +465,7 @@
       <div class="script-actions">
         <button class="btn-secondary" onclick="backToForm()">&#8592; Edit</button>
         <button class="btn-secondary" onclick="copyScript()">Copy</button>
+        <button class="btn-secondary" id="saveSessionBtn" style="display:none" onclick="saveSessionNotes()">Save Session</button>
         <button class="btn-primary" onclick="window.print()">Print</button>
       </div>
     </div>
@@ -605,7 +606,10 @@ if (params.has('admin')) {
     const genBtn = document.createElement('button');
     genBtn.className = 'btn-secondary';
     genBtn.textContent = 'Generate Script';
-    genBtn.onclick = () => generateScript();
+    genBtn.onclick = () => {
+      generateScript();
+      document.getElementById('saveSessionBtn').style.display = '';
+    };
     btnRow.appendChild(genBtn);
   });
 
@@ -1382,6 +1386,68 @@ function backToForm() {
   document.getElementById('form-view').style.display = 'block';
   document.getElementById('script-output').style.display = 'none';
   window.scrollTo(0, 0);
+}
+
+async function saveSessionNotes() {
+  const btn = document.getElementById('saveSessionBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  const getLive = id => (document.getElementById(id) || {}).value || '';
+
+  const data = {
+    client_name: getVal('clientName') || 'Unknown',
+    stuck_area: getVal('stuckArea'),
+    location: getLive('liveLocation'),
+    baseline_tension: getLive('liveBaseline'),
+    colour: getLive('liveColour'),
+    size: getLive('liveSize'),
+    shape: getLive('liveShape'),
+    texture: getLive('liveTexture'),
+    belief_voice: getLive('liveBeliefVoice'),
+    age: getLive('liveAge'),
+    origin_scene: getLive('liveOriginScene'),
+    protective_voice: getLive('liveVoice'),
+    counter_evidence: getLive('liveCounterEvidence'),
+    positive_location: getLive('livePositiveLocation'),
+    positive_feeling: getLive('livePositiveFeeling'),
+    positive_colour: getLive('livePositiveColour'),
+    positive_size: getLive('livePositiveSize'),
+    mismatch_nic: getLive('liveMismatchNic'),
+    mismatch_child: getLive('liveMismatchChild'),
+    new_tension: getLive('liveNewTension'),
+    new_feeling: getLive('liveNewFeeling'),
+    new_colour: getLive('liveNewColour'),
+    new_texture: getLive('liveNewTexture'),
+    daily_challenge: getLive('liveDailyChallenge'),
+    weekly_challenge: getLive('liveWeeklyChallenge'),
+  };
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/session_notes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#51CF66" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+      btn.style.background = 'rgba(81,207,102,0.15)';
+      btn.style.border = '1px solid rgba(81,207,102,0.3)';
+    } else {
+      btn.textContent = 'Error — try again';
+      btn.disabled = false;
+      setTimeout(() => btn.textContent = 'Save Session', 3000);
+    }
+  } catch (e) {
+    btn.textContent = 'Error — try again';
+    btn.disabled = false;
+    setTimeout(() => btn.textContent = 'Save Session', 3000);
+  }
 }
 
 function copyScript() {
