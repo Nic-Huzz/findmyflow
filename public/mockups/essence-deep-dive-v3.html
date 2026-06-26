@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essence Deep Dive - Glassmorphism/Futuristic</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #0a0015;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  /* Background orbs */
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-orb-1 {
+    width: 300px;
+    height: 300px;
+    background: rgba(94, 23, 235, 0.25);
+    top: -50px;
+    right: -80px;
+    animation: float1 8s ease-in-out infinite;
+  }
+
+  .bg-orb-2 {
+    width: 250px;
+    height: 250px;
+    background: rgba(233, 162, 59, 0.15);
+    bottom: 200px;
+    left: -60px;
+    animation: float2 10s ease-in-out infinite;
+  }
+
+  .bg-orb-3 {
+    width: 200px;
+    height: 200px;
+    background: rgba(94, 23, 235, 0.12);
+    bottom: -40px;
+    right: -40px;
+    animation: float1 12s ease-in-out infinite reverse;
+  }
+
+  @keyframes float1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-20px, 30px); }
+  }
+
+  @keyframes float2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(25px, -20px); }
+  }
+
+  /* --- HEADER --- */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(10, 0, 21, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(94, 23, 235, 0.15);
+  }
+
+  .header .back-btn {
+    background: none;
+    border: none;
+    color: #E9A23B;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: inherit;
+    font-weight: 500;
+  }
+
+  .header .title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .header .share-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  /* --- CONTENT --- */
+  .content {
+    padding: 20px 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* --- GLASS CARD BASE --- */
+  .glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  }
+
+  /* --- AVATAR SECTION --- */
+  .avatar-section {
+    padding: 36px 24px 28px;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .avatar-ring {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-ring::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, #5e17eb, #E9A23B, #5e17eb);
+    animation: spin 6s linear infinite;
+    z-index: 0;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .avatar-inner {
+    width: 154px;
+    height: 154px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a0a3e 0%, #0a0015 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    position: relative;
+    z-index: 1;
+    box-shadow: inset 0 0 40px rgba(94, 23, 235, 0.2);
+  }
+
+  .avatar-edit {
+    position: absolute;
+    top: 36px;
+    right: 24px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: all 0.2s;
+  }
+
+  .avatar-edit:hover {
+    border-color: #E9A23B;
+    color: #E9A23B;
+    background: rgba(233, 162, 59, 0.1);
+  }
+
+  .archetype-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    background: rgba(94, 23, 235, 0.15);
+    border: 1px solid rgba(94, 23, 235, 0.25);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #B794F4;
+    margin-bottom: 14px;
+  }
+
+  .archetype-badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #E9A23B;
+    box-shadow: 0 0 8px #E9A23B;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .avatar-name {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff 20%, #E9A23B 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .avatar-tagline {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.5;
+    font-style: italic;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  /* --- STAT GLASS CARDS --- */
+  .stat-card {
+    padding: 24px;
+    margin-bottom: 12px;
+  }
+
+  .stat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .stat-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+
+  .stat-icon.purple {
+    background: rgba(94, 23, 235, 0.2);
+    box-shadow: 0 0 16px rgba(94, 23, 235, 0.15);
+  }
+
+  .stat-icon.gold {
+    background: rgba(233, 162, 59, 0.2);
+    box-shadow: 0 0 16px rgba(233, 162, 59, 0.1);
+  }
+
+  .stat-icon.cyan {
+    background: rgba(34, 211, 238, 0.15);
+    box-shadow: 0 0 16px rgba(34, 211, 238, 0.1);
+  }
+
+  .stat-icon.rose {
+    background: rgba(244, 63, 94, 0.15);
+    box-shadow: 0 0 16px rgba(244, 63, 94, 0.1);
+  }
+
+  .stat-label-text {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .stat-edit {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+  }
+
+  .stat-edit:hover {
+    border-color: rgba(233, 162, 59, 0.4);
+    color: #E9A23B;
+    background: rgba(233, 162, 59, 0.06);
+  }
+
+  .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .stat-description {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* --- QUOTE SECTION --- */
+  .quote-section {
+    padding: 32px 24px;
+    margin-bottom: 12px;
+    text-align: center;
+    position: relative;
+  }
+
+  .quote-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: radial-gradient(ellipse at center, rgba(94, 23, 235, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .quote-glyph {
+    font-size: 40px;
+    color: rgba(94, 23, 235, 0.3);
+    margin-bottom: 12px;
+    font-family: Georgia, serif;
+    line-height: 0.5;
+  }
+
+  .quote-text {
+    font-size: 18px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.8);
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-section .stat-edit {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+  }
+
+  /* --- ENERGY BAR (decorative) --- */
+  .energy-bar {
+    height: 2px;
+    margin: 8px 16px 20px;
+    border-radius: 1px;
+    background: linear-gradient(90deg,
+      rgba(94, 23, 235, 0) 0%,
+      rgba(94, 23, 235, 0.5) 20%,
+      rgba(233, 162, 59, 0.5) 80%,
+      rgba(233, 162, 59, 0) 100%
+    );
+    position: relative;
+    z-index: 1;
+  }
+
+  .energy-bar::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 20%;
+    right: 20%;
+    height: 6px;
+    background: linear-gradient(90deg, rgba(94, 23, 235, 0.2), rgba(233, 162, 59, 0.2));
+    filter: blur(4px);
+    border-radius: 3px;
+  }
+
+  /* --- ORIGIN GRID --- */
+  .origin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .origin-card {
+    padding: 20px;
+    position: relative;
+  }
+
+  .origin-card .glow-line {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    height: 1px;
+  }
+
+  .origin-card:first-child .glow-line {
+    background: linear-gradient(90deg, transparent, rgba(94, 23, 235, 0.3), transparent);
+  }
+
+  .origin-card:last-child .glow-line {
+    background: linear-gradient(90deg, transparent, rgba(233, 162, 59, 0.3), transparent);
+  }
+
+  .origin-emoji {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .origin-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.3);
+    margin-bottom: 8px;
+  }
+
+  .origin-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .origin-text {
+    font-size: 12px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .origin-card .stat-edit {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    padding: 3px 10px;
+    font-size: 9px;
+  }
+
+  /* --- HEROES --- */
+  .heroes-section {
+    padding: 24px;
+    margin-bottom: 12px;
+  }
+
+  .heroes-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .heroes-label .stat-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .heroes-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .heroes-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hero-chip {
+    flex-shrink: 0;
+    padding: 8px 18px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-chip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  }
+
+  .hero-chip:hover {
+    background: rgba(94, 23, 235, 0.12);
+    border-color: rgba(94, 23, 235, 0.3);
+    color: #B794F4;
+    box-shadow: 0 0 20px rgba(94, 23, 235, 0.1);
+  }
+
+  /* --- DEEPER INSIGHTS --- */
+  .deeper-section {
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .deeper-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    font-family: inherit;
+  }
+
+  .deeper-toggle .toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .deeper-toggle .toggle-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(94, 23, 235, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    box-shadow: 0 0 12px rgba(94, 23, 235, 0.1);
+  }
+
+  .deeper-toggle .toggle-text {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .deeper-toggle .toggle-arrow {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 14px;
+    transition: transform 0.3s;
+  }
+
+  .deeper-toggle .toggle-arrow.open {
+    transform: rotate(180deg);
+  }
+
+  .deeper-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+  }
+
+  .deeper-content.open {
+    max-height: 2000px;
+  }
+
+  .insight-row {
+    padding: 20px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    position: relative;
+  }
+
+  .insight-row-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+
+  .insight-row:nth-child(1) .insight-row-title { color: #B794F4; }
+  .insight-row:nth-child(2) .insight-row-title { color: #E9A23B; }
+  .insight-row:nth-child(3) .insight-row-title { color: #22D3EE; }
+
+  .insight-row-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .insight-row .stat-edit {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+  }
+
+  /* --- CTA --- */
+  .cta-section {
+    padding: 40px 24px;
+    margin-bottom: 12px;
+    text-align: center;
+    position: relative;
+  }
+
+  .cta-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: radial-gradient(ellipse at bottom, rgba(94, 23, 235, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cta-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 28px;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 38px;
+    background: linear-gradient(135deg, #E9A23B 0%, #d4891f 100%);
+    color: #000;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 30px rgba(233, 162, 59, 0.25), 0 4px 16px rgba(233, 162, 59, 0.2);
+    transition: all 0.2s;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(233, 162, 59, 0.35), 0 8px 24px rgba(233, 162, 59, 0.25);
+  }
+
+  .cta-button .arrow {
+    font-size: 16px;
+  }
+
+  /* --- FLOATING PARTICLES --- */
+  .particle {
+    position: fixed;
+    width: 2px;
+    height: 2px;
+    background: rgba(233, 162, 59, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 15s linear infinite;
+  }
+
+  .particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; animation-duration: 18s; }
+  .particle:nth-child(2) { top: 40%; left: 80%; animation-delay: -3s; animation-duration: 22s; background: rgba(94, 23, 235, 0.4); }
+  .particle:nth-child(3) { top: 60%; left: 30%; animation-delay: -7s; animation-duration: 16s; }
+  .particle:nth-child(4) { top: 80%; left: 70%; animation-delay: -11s; animation-duration: 20s; background: rgba(94, 23, 235, 0.3); }
+  .particle:nth-child(5) { top: 15%; left: 60%; animation-delay: -5s; animation-duration: 25s; }
+  .particle:nth-child(6) { top: 50%; left: 45%; animation-delay: -9s; animation-duration: 19s; background: rgba(94, 23, 235, 0.35); }
+
+  @keyframes drift {
+    0% { transform: translate(0, 0) scale(1); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(50px, -80px) scale(0); opacity: 0; }
+  }
+
+  /* --- BOTTOM SAFE --- */
+  .bottom-spacer {
+    height: calc(20px + env(safe-area-inset-bottom, 0px));
+    position: relative;
+    z-index: 1;
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating particles -->
+<div class="particle"></div>
+<div class="particle"></div>
+<div class="particle"></div>
+<div class="particle"></div>
+<div class="particle"></div>
+<div class="particle"></div>
+
+<!-- Background orbs -->
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<div class="app-container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <button class="back-btn">&#8592; Back</button>
+    <span class="title">Essence</span>
+    <button class="share-btn">&#8599;</button>
+  </div>
+
+  <div class="content">
+
+    <!-- AVATAR -->
+    <div class="avatar-section glass">
+      <button class="avatar-edit">&#9998;</button>
+      <div class="avatar-ring">
+        <div class="avatar-inner">&#10024;</div>
+      </div>
+      <div class="archetype-badge">
+        <span class="dot"></span>
+        Essence Archetype
+      </div>
+      <h1 class="avatar-name">Radiant Rebel</h1>
+      <p class="avatar-tagline">The one who lights the room on fire just by walking in.</p>
+    </div>
+
+    <!-- ESSENCE QUOTE -->
+    <div class="quote-section glass">
+      <button class="stat-edit">Edit</button>
+      <div class="quote-glyph">&ldquo;</div>
+      <p class="quote-text">You were never meant to fit in. Your light is the thing that disrupts the room, and that disruption is the gift.</p>
+    </div>
+
+    <div class="energy-bar"></div>
+
+    <!-- SUPERPOWER -->
+    <div class="stat-card glass">
+      <div class="stat-header">
+        <div class="stat-label">
+          <div class="stat-icon purple">&#9889;</div>
+          <span class="stat-label-text">Superpower</span>
+        </div>
+        <button class="stat-edit">Edit</button>
+      </div>
+      <div class="stat-value">Magnetic Authenticity</div>
+      <p class="stat-description">You have an almost supernatural ability to walk into any room and make people feel permission to be themselves. Your energy is contagious because it comes from a place of total self-acceptance that most people spend their whole lives searching for.</p>
+    </div>
+
+    <!-- VISION -->
+    <div class="stat-card glass">
+      <div class="stat-header">
+        <div class="stat-label">
+          <div class="stat-icon gold">&#127775;</div>
+          <span class="stat-label-text">Vision</span>
+        </div>
+        <button class="stat-edit">Edit</button>
+      </div>
+      <p class="stat-description">A world where the misfits, the ones who never quite belonged, realize they were never broken. They were the ones brave enough to refuse the costume everyone else was wearing. You want to build spaces where that refusal is celebrated, not punished.</p>
+    </div>
+
+    <!-- NORTH STAR -->
+    <div class="stat-card glass">
+      <div class="stat-header">
+        <div class="stat-label">
+          <div class="stat-icon cyan">&#11088;</div>
+          <span class="stat-label-text">North Star</span>
+        </div>
+        <button class="stat-edit">Edit</button>
+      </div>
+      <div class="stat-value">Full permission to be alive.</div>
+      <p class="stat-description">Not performative aliveness, not Instagram aliveness. The kind where you wake up and your first thought is curiosity, not dread. Where your work feels like play and your play feels like purpose.</p>
+    </div>
+
+    <div class="energy-bar"></div>
+
+    <!-- ORIGIN STORY -->
+    <div class="origin-grid">
+      <div class="origin-card glass">
+        <button class="stat-edit">Edit</button>
+        <div class="origin-emoji">&#128118;</div>
+        <div class="origin-label">Inner Child</div>
+        <div class="origin-title">To be seen without performing</div>
+        <p class="origin-text">All you ever wanted was for someone to notice the real you, not the version you constructed to survive. The child who made up stories, who danced alone in their room, who saw magic everywhere.</p>
+        <div class="glow-line"></div>
+      </div>
+      <div class="origin-card glass">
+        <button class="stat-edit">Edit</button>
+        <div class="origin-emoji">&#128148;</div>
+        <div class="origin-label">Essence Wound</div>
+        <div class="origin-title">Told your fire was too much</div>
+        <p class="origin-text">You learned early that your natural intensity made people uncomfortable. So you turned down the volume, became skilled at reading rooms and adjusting, but you lost something essential.</p>
+        <div class="glow-line"></div>
+      </div>
+    </div>
+
+    <!-- HEROES -->
+    <div class="heroes-section glass">
+      <div class="heroes-label">
+        <div class="stat-icon purple" style="width: 28px; height: 28px; font-size: 13px;">&#128101;</div>
+        Heroes Like You
+      </div>
+      <div class="heroes-scroll">
+        <div class="hero-chip">Brene Brown</div>
+        <div class="hero-chip">Russell Brand</div>
+        <div class="hero-chip">Lady Gaga</div>
+        <div class="hero-chip">Robin Williams</div>
+        <div class="hero-chip">Frida Kahlo</div>
+      </div>
+    </div>
+
+    <!-- DEEPER INSIGHTS -->
+    <div class="deeper-section glass">
+      <button class="deeper-toggle" onclick="toggleDeeper()">
+        <div class="toggle-left">
+          <div class="toggle-icon">&#128270;</div>
+          <span class="toggle-text">Deeper Insights</span>
+        </div>
+        <span class="toggle-arrow" id="toggleArrow">&#9660;</span>
+      </button>
+      <div class="deeper-content" id="deeperContent">
+        <div class="insight-row">
+          <button class="stat-edit">Edit</button>
+          <div class="insight-row-title">Energetic Transmission</div>
+          <p class="insight-row-text">When you walk into a room, people feel it before you speak. Your transmission is warmth combined with danger. People feel simultaneously safe and electrified. This is because you carry both deep empathy and a refusal to pretend, and most humans have never experienced those two things at once.</p>
+        </div>
+        <div class="insight-row">
+          <button class="stat-edit">Edit</button>
+          <div class="insight-row-title">Recognition Pattern</div>
+          <p class="insight-row-text">You tend to be recognized first by other misfits, people who have also been told they were "too much." They find you like a signal in the noise. The mainstream catches up later, once enough misfits have gathered that your way of being becomes its own gravity.</p>
+        </div>
+        <div class="insight-row">
+          <button class="stat-edit">Edit</button>
+          <div class="insight-row-title">Vision In Action</div>
+          <p class="insight-row-text">Your vision comes alive in intimate, high-energy spaces: workshops, retreats, late-night conversations, creative collaborations. You are at your best when the container is small enough to feel dangerous and big enough to feel transformative. Think 12 people in a room, not 1200 in an arena.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section glass">
+      <h2 class="cta-title">Step Into Your Essence</h2>
+      <p class="cta-subtitle">Continue your journey and discover how your Radiant Rebel energy translates into the work you were born to do.</p>
+      <button class="cta-button">
+        Continue Journey <span class="arrow">&#8594;</span>
+      </button>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+
+</div>
+
+<script>
+  function toggleDeeper() {
+    const content = document.getElementById('deeperContent');
+    const arrow = document.getElementById('toggleArrow');
+    content.classList.toggle('open');
+    arrow.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

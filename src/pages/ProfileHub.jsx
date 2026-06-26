@@ -18,12 +18,12 @@ const ProfileHub = () => {
 
   const options = [
     {
-      id: 'settings',
-      icon: '⚙️',
-      title: 'User Settings',
-      description: 'Update your name, email, and notification preferences',
-      path: '/user-settings',
-      color: '#6c757d'
+      id: 'essence',
+      icon: '✨',
+      title: 'Essence Deep Dive',
+      description: 'Explore your essence archetype, strengths, and shadow',
+      path: '/archetypes/essence',
+      color: '#5e17eb'
     },
     {
       id: 'build-app',
@@ -32,6 +32,14 @@ const ProfileHub = () => {
       description: 'Scale your impact and income by building your own app',
       path: '/create/build-app/interest',
       color: '#E9A23B'
+    },
+    {
+      id: 'settings',
+      icon: '⚙️',
+      title: 'User Settings',
+      description: 'Update your name, email, and notification preferences',
+      path: '/user-settings',
+      color: '#6c757d'
     },
     ...(isAdmin ? [
       {

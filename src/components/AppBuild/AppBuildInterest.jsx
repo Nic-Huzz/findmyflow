@@ -51,6 +51,16 @@ export default function AppBuildInterest() {
       }, { onConflict: 'user_id' })
 
     if (error) console.error('Error saving interest:', error)
+
+    // Notify Huzz via email (fire-and-forget)
+    supabase.functions.invoke('notify-app-build-interest', {
+      body: {
+        userEmail: user.email,
+        userName: user.user_metadata?.display_name || user.user_metadata?.name || null,
+        userId: user.id,
+      },
+    }).catch((err) => console.error('Email notification failed:', err))
+
     setSubmitted(true)
     setSubmitting(false)
   }
