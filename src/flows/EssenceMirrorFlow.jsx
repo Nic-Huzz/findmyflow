@@ -484,21 +484,15 @@ export default function EssenceMirrorFlow() {
         const isLast = swipeIndex === roundIds.length - 1
         const globalIndex = roundIndex * 4 + swipeIndex
 
-        const advanceSwipe = () => {
-          if (swipeActionFired.current) return
-          swipeActionFired.current = true
+        const doAdvance = () => {
           if (isLast) {
             goToStep(nextStep, 0)
           } else {
             setSwipeIndex(swipeIndex + 1)
           }
-          // Reset after React processes the state update
-          requestAnimationFrame(() => { swipeActionFired.current = false })
         }
 
-        const goBackSwipe = () => {
-          if (swipeActionFired.current) return
-          swipeActionFired.current = true
+        const doGoBack = () => {
           if (swipeIndex > 0) {
             setSwipeIndex(swipeIndex - 1)
           } else if (roundIndex > 0) {
@@ -506,7 +500,22 @@ export default function EssenceMirrorFlow() {
           } else {
             goToStep(STEPS.HOOK)
           }
-          requestAnimationFrame(() => { swipeActionFired.current = false })
+        }
+
+        // Swipe-only guard: prevents swipe gesture from double-firing,
+        // but button clicks bypass this guard entirely
+        const swipeAdvance = () => {
+          if (swipeActionFired.current) return
+          swipeActionFired.current = true
+          doAdvance()
+          setTimeout(() => { swipeActionFired.current = false }, 400)
+        }
+
+        const swipeGoBack = () => {
+          if (swipeActionFired.current) return
+          swipeActionFired.current = true
+          doGoBack()
+          setTimeout(() => { swipeActionFired.current = false }, 400)
         }
 
         return (
@@ -517,8 +526,8 @@ export default function EssenceMirrorFlow() {
             onTouchEnd={(e) => {
               swipeTouchEndX.current = e.changedTouches[0].screenX
               const diff = swipeTouchStartX.current - swipeTouchEndX.current
-              if (diff > 50) advanceSwipe()
-              else if (diff < -50) goBackSwipe()
+              if (diff > 50) swipeAdvance()
+              else if (diff < -50) swipeGoBack()
             }}
           >
             {/* Progress dots for all 12 */}
@@ -562,7 +571,7 @@ export default function EssenceMirrorFlow() {
               <div className="em-swipe-actions">
                 <button
                   className="em-swipe-btn no"
-                  onClick={advanceSwipe}
+                  onClick={doAdvance}
                 >
                   Not me
                 </button>
@@ -570,13 +579,13 @@ export default function EssenceMirrorFlow() {
                   className="em-swipe-btn yes"
                   onClick={() => {
                     if (!isSelected) toggleSelection(selections, setSelections, currentId)
-                    advanceSwipe()
+                    doAdvance()
                   }}
                 >
                   That's me
                 </button>
               </div>
-              <button className="em-back-btn" onClick={goBackSwipe} style={{ marginTop: '0.5rem', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', cursor: 'pointer', fontFamily: 'inherit', width: '100%' }}>
+              <button className="em-back-btn" onClick={doGoBack} style={{ marginTop: '0.5rem', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', cursor: 'pointer', fontFamily: 'inherit', width: '100%' }}>
                 ← Back
               </button>
             </div>
