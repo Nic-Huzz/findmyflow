@@ -145,6 +145,35 @@ const EssenceProfile = () => {
     )
   }
 
+  // Guard: no essence mirror completed
+  if (!userData) {
+    return (
+      <div className="essence-profile-container">
+        <div className="ep-top-bar">
+          <button className="ep-top-back" onClick={() => navigate('/profile-hub')}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <div className="ep-top-label">Essence</div>
+          <div className="ep-top-spacer" />
+        </div>
+        <div className="ep-slide" style={{ height: '100vh', position: 'relative' }}>
+          <div className="ep-slide-inner" style={{ opacity: 1, transform: 'none' }}>
+            <div className="ep-insight-icon" style={{ fontSize: 48 }}>&#10024;</div>
+            <div className="ep-cover-name" style={{ fontSize: 28 }}>Discover Your Essence</div>
+            <div className="ep-text" style={{ marginBottom: 32 }}>
+              Complete the Essence Mirror to unlock your archetype profile, strengths, and deeper insights.
+            </div>
+            <button className="ep-cta-button" onClick={() => navigate('/essence-mirror')}>
+              Start Essence Mirror
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // Get archetype data
   const archetypeName = getEssenceDisplayName(userData)
   const originalName = userData?.essence_archetype || 'Unknown'
