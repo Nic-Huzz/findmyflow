@@ -33,7 +33,7 @@ const BEATS = {
 
 const HOOK_SLIDES = [
   { id: 'states', text: 'The state you live in decides the path you walk.', subtext: 'There are four states.', image: '/images/life-map-cropped.png' },
-  { id: 'school', text: 'School trained us to live in the bottom two:\nAnxious + Numb.', subtext: 'This app trains the top two:\nPeace + Vibe Rise.', goldSubtext: true },
+  { id: 'school', text: 'School trained us to live in the bottom two:\nPressure + Uninterested.', subtext: 'This app trains the top two:\nFun + Vibe Rise.', goldSubtext: true },
   { id: 'cta', text: 'So you live your ambitions faster.', subtext: 'Ready?' },
 ]
 
@@ -234,9 +234,9 @@ export default function PlaySkillsOnboarding() {
                   <rect x="415" y="481" width="190" height="176" fill="#f5deb3" rx="0"/>
                   <rect x="415" y="657" width="190" height="163" fill="#d5d5d5" rx="0"/>
                   <text x="510" y="290" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#3b1a8e" textAnchor="middle">Vibe Rise</text>
-                  <text x="510" y="430" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#065f46" textAnchor="middle">Peace</text>
-                  <text x="510" y="585" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#92400e" textAnchor="middle">Anxious</text>
-                  <text x="510" y="755" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#4b5563" textAnchor="middle">Shutdown</text>
+                  <text x="510" y="430" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#065f46" textAnchor="middle">Fun</text>
+                  <text x="510" y="585" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#92400e" textAnchor="middle">Pressure</text>
+                  <text x="510" y="755" fontFamily="Inter, sans-serif" fontSize="28" fontWeight="700" fill="#4b5563" textAnchor="middle">Uninterested</text>
                 </svg>
               </div>
             )}
