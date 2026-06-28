@@ -28,7 +28,9 @@ export default function LeagueOverview() {
   } = useLeagueData()
 
   // UI State
-  const [activeTab, setActiveTab] = useState('standings')
+  const [activeTab, setActiveTab] = useState('feed')
+  const [feedData, setFeedData] = useState(null)
+  const [feedLoading, setFeedLoading] = useState(false)
   const [showJoinModal, setShowJoinModal] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showSoloModal, setShowSoloModal] = useState(false)
@@ -74,6 +76,97 @@ export default function LeagueOverview() {
       .maybeSingle()
     return data?.display_name?.split(' ')[0] || user.email?.split('@')[0] || ''
   }
+
+  // ============================================
+  // Feed: yesterday's activity for all league members
+  // ============================================
+
+  const loadFeedData = useCallback(async () => {
+    if (!teams?.length || !league?.start_date) return
+    setFeedLoading(true)
+    try {
+      const allMemberIds = teams.flatMap(t =>
+        (t.fantasy_team_members || []).map(m => m.user_id)
+      )
+      if (allMemberIds.length === 0) { setFeedData({ days: [] }); return }
+
+      // Build list of days from season start to today
+      const now = new Date()
+      const today = now.toISOString().slice(0, 10)
+      const seasonStart = league.start_date // YYYY-MM-DD
+      const startDate = new Date(seasonStart + 'T00:00:00')
+
+      // If season hasn't started, show empty
+      if (startDate > now) {
+        setFeedData({ days: [] })
+        return
+      }
+
+      // Fetch aggregated activity via RPC (bypasses RLS)
+      const { data: activity } = await supabase.rpc('get_league_daily_activity', {
+        member_ids: allMemberIds,
+        since_date: seasonStart,
+      })
+
+      // Group by date
+      const dayMap = {}
+      const addDay = (dateStr) => {
+        if (!dayMap[dateStr]) {
+          dayMap[dateStr] = {}
+          allMemberIds.forEach(id => {
+            dayMap[dateStr][id] = { practices: 0, wahoos: 0, healing: 0 }
+          })
+        }
+      }
+
+      // Add today even if empty
+      addDay(today)
+
+      ;(activity || []).forEach(row => {
+        const dateStr = row.activity_date
+        if (!dateStr) return
+        addDay(dateStr)
+        const u = dayMap[dateStr]?.[row.user_id]
+        if (!u) return
+        const count = parseInt(row.checkin_count) || 0
+        if (row.checkin_type === 'daily') u.practices += count
+        else if (row.checkin_type === 'playlist') u.wahoos += count
+        else if (row.checkin_type === 'healing') u.healing += count
+      })
+
+      // Convert to sorted array (newest first)
+      const days = Object.entries(dayMap)
+        .sort(([a], [b]) => b.localeCompare(a))
+        .map(([dateStr, users]) => ({
+          date: dateStr,
+          label: dateStr === today ? 'Today' : new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+          isToday: dateStr === today,
+          players: Object.entries(users).map(([userId, stats]) => {
+            const teamEntry = teams.find(t => t.fantasy_team_members?.some(m => m.user_id === userId))
+            const total = stats.practices + stats.wahoos + stats.healing
+            return {
+              userId,
+              teamName: teamEntry?.name || 'Player',
+              avatar: memberAvatars?.[userId] || null,
+              ...stats,
+              total,
+              active: total > 0,
+            }
+          }).sort((a, b) => b.total - a.total),
+        }))
+
+      setFeedData({ days })
+    } catch (err) {
+      console.warn('Feed load error:', err)
+      setFeedData(null)
+    } finally {
+      setFeedLoading(false)
+    }
+  }, [teams, league, memberAvatars])
+
+  useEffect(() => {
+    if (activeTab === 'feed' && !feedData && teams?.length) loadFeedData()
+  }, [activeTab, feedData, teams, loadFeedData])
 
   // ============================================
   // Matchup helpers
@@ -614,18 +707,63 @@ export default function LeagueOverview() {
 
       {/* Tabs — immediately below matchup */}
       <div className="lo-tabs">
-        {['standings', 'schedule', 'rules'].map(tab => (
+        {['feed', 'standings', 'schedule', 'rules'].map(tab => (
           <button
             key={tab}
             className={`lo-tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => { hapticLight(); setActiveTab(tab) }}
           >
-            {tab === 'standings' ? 'Standings' : tab === 'schedule' ? 'Schedule' : 'Rules'}
+            {tab === 'feed' ? 'Feed' : tab === 'standings' ? 'Standings' : tab === 'schedule' ? 'Schedule' : 'Rules'}
           </button>
         ))}
       </div>
 
       {/* Tab Content */}
+      {activeTab === 'feed' && (
+        <section className="lo-section lo-feed">
+          {feedLoading ? (
+            <div className="lo-feed-loading"><div className="lo-spinner" /></div>
+          ) : !feedData?.days?.length ? (
+            <div className="lo-feed-empty">
+              <span className="lo-feed-empty-icon">📡</span>
+              <p>Season starts {league?.start_date ? new Date(league.start_date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) : 'soon'}. Activity will appear here on Day 1.</p>
+            </div>
+          ) : (
+            feedData.days.map(day => (
+              <div key={day.date} className="lo-feed-section">
+                <span className={`lo-feed-label ${day.isToday ? 'lo-feed-label--today' : ''}`}>
+                  {day.isToday ? `TODAY · ${day.label}` : day.label}
+                </span>
+                {day.players.map(p => (
+                  <div key={p.userId} className={`lo-feed-row ${!p.active ? 'lo-feed-row--inactive' : ''}`}>
+                    {p.avatar ? (
+                      <img src={p.avatar} alt="" className="lo-feed-avatar" />
+                    ) : (
+                      <div className="lo-feed-avatar lo-feed-avatar--fallback">{p.teamName.charAt(0)}</div>
+                    )}
+                    <div className="lo-feed-info">
+                      <span className="lo-feed-name">{p.teamName}</span>
+                      {p.active ? (
+                        <span className="lo-feed-stats">
+                          {[
+                            p.practices > 0 && `${p.practices} practice${p.practices !== 1 ? 's' : ''}`,
+                            p.wahoos > 0 && `${p.wahoos} wahoo${p.wahoos !== 1 ? 's' : ''}`,
+                            p.healing > 0 && `${p.healing} healing`,
+                          ].filter(Boolean).join(', ')}
+                        </span>
+                      ) : (
+                        <span className="lo-feed-stats lo-feed-stats--none">{day.isToday ? 'No activity yet' : 'No activity'}</span>
+                      )}
+                    </div>
+                    {p.active && <span className="lo-feed-dot" />}
+                  </div>
+                ))}
+              </div>
+            ))
+          )}
+        </section>
+      )}
+
       {activeTab === 'standings' && (
         <LeagueLeaderboard
           standings={standings}

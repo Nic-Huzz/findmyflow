@@ -557,6 +557,109 @@
   min-width: 60px; text-align: center;
 }
 
+/* === FEED === */
+.league-overview .lo-feed-loading {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.league-overview .lo-feed-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 48px 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.league-overview .lo-feed-empty-icon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.league-overview .lo-feed-label--today {
+  color: var(--brand-purple);
+}
+
+.league-overview .lo-feed-section {
+  margin-bottom: 24px;
+}
+
+.league-overview .lo-feed-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--brand-purple);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.league-overview .lo-feed-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+  background: white;
+  border: 1px solid #f1f3f5;
+}
+
+.league-overview .lo-feed-row--inactive {
+  opacity: 0.45;
+}
+
+.league-overview .lo-feed-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.league-overview .lo-feed-avatar--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--brand-purple), var(--brand-gold));
+  color: white;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.league-overview .lo-feed-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.league-overview .lo-feed-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.league-overview .lo-feed-stats {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.league-overview .lo-feed-stats--none {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.league-overview .lo-feed-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+
 /* === RULES === */
 .league-overview .lo-rules-title {
   font-size: 18px; font-weight: 800; margin: 0 0 16px; letter-spacing: -0.3px;
