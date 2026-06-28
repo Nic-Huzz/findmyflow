@@ -212,6 +212,9 @@ serve(async (req) => {
       return jsonResponse({ error: 'Missing photo_base64 or prompt' }, 400)
     }
 
+    // Compute input photo hash for echo detection
+    const inputSize = photo_base64.length
+
     // Try Gemini first, then GPT-4o
     let imageResult = await generateWithGemini(photo_base64, photo_mime, prompt)
     let failReason = imageResult ? null : 'gemini_failed'
@@ -219,6 +222,18 @@ serve(async (req) => {
     if (!imageResult) {
       imageResult = await generateWithGPT4o(photo_base64, photo_mime, prompt)
       if (!imageResult) failReason = 'both_failed'
+    }
+
+    // Detect echo: if the model returned the original photo instead of generating
+    if (imageResult) {
+      const outputSize = imageResult.base64.length
+      const sizeDiff = Math.abs(outputSize - inputSize) / Math.max(inputSize, 1)
+      if (sizeDiff < 0.05) {
+        // Less than 5% size difference — likely echoed the input photo back
+        console.warn(`Echo detected: input ${inputSize} bytes, output ${outputSize} bytes (${(sizeDiff * 100).toFixed(1)}% diff). Rejecting.`)
+        imageResult = null
+        failReason = 'echo_detected'
+      }
     }
 
     if (!imageResult) {
