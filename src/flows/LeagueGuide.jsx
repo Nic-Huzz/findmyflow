@@ -5,7 +5,7 @@
  * Follows the stage explainer pattern (ValidationExplainer, etc.)
  * Purely informational — no quest completion sync.
  */
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FANTASY_CATEGORIES, CATEGORY_KEYS } from '../lib/league/leagueConfig'
 import { hapticLight } from '../lib/haptics'
@@ -20,11 +20,6 @@ const CATEGORY_DESCRIPTIONS = {
 export default function LeagueGuide() {
   const navigate = useNavigate()
   const [currentSlide, setCurrentSlide] = useState(0)
-
-  useEffect(() => {
-    document.body.classList.add('hide-toolbar')
-    return () => document.body.classList.remove('hide-toolbar')
-  }, [])
 
   const slides = [
     {

@@ -36,6 +36,8 @@ import CreatorLogin from './components/CreatorLogin'
 import JourneyOnboarding from './components/onboarding/JourneyOnboarding'
 import PlaySkillsOnboarding from './components/onboarding/PlaySkillsOnboarding'
 const PlaySkillsIdentifier = lazy(() => import('./flows/PlaySkillsIdentifier'))
+const RuleBreakTree = lazy(() => import('./pages/RuleBreakTree'))
+const ScaleDiagnosticFlow = lazy(() => import('./flows/ScaleDiagnosticFlow'))
 import IdentifyTopicsFlow from './flows/IdentifyTopicsFlow'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import EssenceIdentify from './pages/EssenceIdentify'
@@ -238,6 +240,7 @@ const ExperienceCatalog = lazyRetry(() => import('./pages/ExperienceCatalog'))
 const CreatorHome = lazyRetry(() => import('./components/CreatorHome/CreatorHomeV2'))
 const ExperienceCreate = lazyRetry(() => import('./pages/ExperienceCreate'))
 const ExperienceDetail = lazyRetry(() => import('./pages/ExperienceDetail'))
+const NodeWorkspace = lazyRetry(() => import('./pages/NodeWorkspace'))
 const SolPage = lazyRetry(() => import('./pages/SolPage'))
 const FlowMapMockups = lazyRetry(() => import('./components/FlowMapMockups'))
 const ValidationFlowsManager = lazyRetry(() => import('./pages/ValidationFlowsManager'))
@@ -283,6 +286,10 @@ const AppBuildChallenge = lazyRetry(() => import('./components/AppBuild/AppBuild
 const AppBuildPrework = lazyRetry(() => import('./components/AppBuild/AppBuildPrework'))
 const AppBuildInterest = lazyRetry(() => import('./components/AppBuild/AppBuildInterest'))
 
+
+// Life Path States
+const LifePathTest = lazyRetry(() => import('./pages/LifePathTest'))
+const FacilitateLifePaths = lazyRetry(() => import('./pages/FacilitateLifePaths'))
 
 // Lazy-loaded - Public Play-List Feed
 const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
@@ -386,7 +393,8 @@ function ConditionalZarlo() {
   const isPreLaunch = location.pathname === '/pre-launch'
   const isRemarkableFlow = location.pathname === '/create/remarkable'
   const isCreateFlow = location.pathname.startsWith('/create/') && location.pathname !== '/create'
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow) return null
+  const isFacilitate = location.pathname.startsWith('/facilitate/')
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow || isFacilitate) return null
   return <ZarloWidget />
 }
 
@@ -419,6 +427,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/flow-finder-explainer' ||
                         location.pathname === '/play-list-explainer' ||
                         location.pathname === '/fantasy' ||
+                        location.pathname === '/league/guide' ||
                         location.pathname === '/healing-compass-workshop' ||
                         location.pathname === '/breathwork' ||
                         location.pathname === '/why-i-created-this' ||
@@ -439,6 +448,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/shift-scorecard' ||
                         location.pathname === '/movement-makers' ||
                         location.pathname === '/pre-launch' ||
+                        location.pathname.startsWith('/facilitate/') ||
                         (location.pathname.startsWith('/create/') &&
                          location.pathname !== '/create' &&
                          location.pathname !== '/create/experiences' &&
@@ -557,6 +567,8 @@ function AppRouter() {
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
               <Route path="/log-in" element={IS_CREATOR ? <CreatorLogin /> : <PersonaAssessment />} />
               <Route path="/unsubscribe" element={<Unsubscribe />} />
+              <Route path="/rule-break-tree" element={<Suspense fallback={<LoadingSpinner />}><RuleBreakTree /></Suspense>} />
+              <Route path="/scale-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><ScaleDiagnosticFlow /></Suspense>} />
 
               {/* Play-Skills Identifier - Standalone */}
               <Route path="/play-skills-identifier" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PlaySkillsIdentifier /></Suspense></AuthGate>} />
@@ -698,6 +710,8 @@ function AppRouter() {
             <Route path="/try/play-profile" element={<TryPlayProfile />} />
             <Route path="/try/essence-mirror" element={<TryEssenceMirror />} />
             <Route path="/try/career-clarity" element={<CareerClarityQuiz />} />
+            <Route path="/try/life-paths-test" element={<LifePathTest />} />
+            <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
 
             {/* Fantasy League Landing Page - Public */}
@@ -1012,6 +1026,13 @@ function AppRouter() {
               <CreateGate>
                 <AuthGate>
                   <ExperienceDetail />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/experience/:id/:nodeKey" element={
+              <CreateGate>
+                <AuthGate>
+                  <NodeWorkspace />
                 </AuthGate>
               </CreateGate>
             } />
