@@ -41,8 +41,8 @@ body.project-selector-active .bottom-toolbar {
   border-top: 1px solid var(--toolbar-border);
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  padding: 4px 16px calc(4px + env(safe-area-inset-bottom, 0px));
+  align-items: flex-start;
+  padding: 6px 16px calc(6px + env(safe-area-inset-bottom, 0px));
   z-index: 1000;
   box-shadow: var(--toolbar-shadow);
   overflow: hidden;
