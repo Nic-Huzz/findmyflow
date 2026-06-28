@@ -436,6 +436,7 @@ const EssenceProfile = () => {
           group={archetypeData.group}
           superpower={archetypeData.superpower}
           poeticLine={archetypeData.poetic_line}
+          poeticVision={archetypeData.poetic_vision}
           onClose={() => setShowAvatarModal(false)}
           onSaved={handleAvatarSaved}
         />

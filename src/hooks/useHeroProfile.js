@@ -212,6 +212,7 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
             group: essenceData?.group || 'Unknown',
             tagline: getEssenceFieldValue(profile, 'tagline', essenceData),
             poeticLine: getEssenceFieldValue(profile, 'essence', essenceData),
+            poeticVision: essenceData?.poetic_vision || '',
             superpower: getEssenceFieldValue(profile, 'superpower', essenceData),
             vision: getEssenceFieldValue(profile, 'vision', essenceData),
             northStar: getEssenceFieldValue(profile, 'north_star', essenceData),

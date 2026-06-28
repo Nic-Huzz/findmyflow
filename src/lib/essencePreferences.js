@@ -98,43 +98,17 @@ export function compressImage(file, maxDimension = 800, quality = 0.85) {
 }
 
 /**
- * Build an AI image prompt from archetype + project data
- * Styled as a mystical tarot card
+ * Build an AI image prompt from archetype data
+ * Matches the Essence Mirror onboarding prompt exactly
  */
-export function buildAvatarPrompt({ essenceName, superpower, poeticLine, skills, problems, persona }) {
-  const parts = [
-    `Create a tarot card illustration for an archetype called "The ${essenceName}".`,
-  ]
+export function buildAvatarPrompt({ essenceName, superpower, poeticLine, poeticVision }) {
+  return `Transform this person into a high-quality 3D animated movie character. Use ONLY their face and facial features as reference for likeness. Create a completely new heroic scene around them based on their archetype essence.
 
-  // Build narrative from their journey data
-  if (skills?.length) {
-    parts.push(`This person has gifts in: ${skills.join(', ')}.`)
-  }
-  if (problems?.length) {
-    parts.push(`They are called to solve: ${problems.join(', ')}.`)
-  }
-  if (persona) {
-    parts.push(`They serve and guide: ${persona}.`)
-  }
-  if (superpower) {
-    parts.push(`Their unique power: ${superpower}.`)
-  }
-  if (poeticLine) {
-    parts.push(`Their essence: "${poeticLine}".`)
-  }
+Their essence: "${essenceName}" - ${poeticLine || ''}
+Their superpower: ${superpower || ''}
+Their vision: ${poeticVision || ''}
 
-  parts.push(
-    'Use the attached photo of me as reference for the central figure — capture my likeness, features, and energy.',
-    'Style: Pixar-inspired 3D animation character portrait.',
-    'Warm cinematic lighting with purple and gold tones.',
-    'Expressive, big eyes with a confident smile.',
-    'Heroic but approachable pose — arms crossed or hands on hips.',
-    'Stylized background with glowing elements related to their gifts and mission.',
-    'Clean render, soft shadows, vibrant colors.',
-    'Square format, no text.'
-  )
-
-  return parts.join(' ')
+Create a dynamic pose and scene background that embodies this essence. The character should be in action or in their element, not just standing. Use warm cinematic lighting with purple and gold tones. Big expressive animated eyes. Heroic but approachable. Modern 3D animated feature film quality. Square composition.`
 }
 
 /**

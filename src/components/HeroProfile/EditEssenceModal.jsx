@@ -18,7 +18,7 @@ function EditEssenceModal({
   userId, userEmail, currentName, originalName, currentImage, originalImage,
   currentTagline, originalTagline,
   // Extra archetype data for prompt generator
-  group, superpower, poeticLine, skills, problems, persona,
+  group, superpower, poeticLine, poeticVision,
   onClose, onSaved
 }) {
   const [customName, setCustomName] = useState(currentName !== originalName ? currentName : '')
@@ -31,7 +31,6 @@ function EditEssenceModal({
   const [generating, setGenerating] = useState(false)
   const [attemptsUsed, setAttemptsUsed] = useState(0)
   const [selfieFile, setSelfieFile] = useState(null)
-  const [selfieStorageUrl, setSelfieStorageUrl] = useState(null)
   const [aiGeneratedUrl, setAiGeneratedUrl] = useState(null)
   const fileInputRef = useRef(null)
   const selfieInputRef = useRef(null)
@@ -126,9 +125,36 @@ function EditEssenceModal({
   const avatarPrompt = useMemo(() => {
     return buildAvatarPrompt({
       essenceName: customName.trim() || originalName,
-      superpower, poeticLine, skills, problems, persona
+      superpower, poeticLine, poeticVision
     })
-  }, [customName, originalName, superpower, poeticLine, skills, problems, persona])
+  }, [customName, originalName, superpower, poeticLine, poeticVision])
+
+  // Compress photo to base64 (max 1024px) — same as Essence Mirror
+  const compressToBase64 = (file) => new Promise((resolve, reject) => {
+    const img = new Image()
+    const blobUrl = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(blobUrl)
+      const MAX = 1024
+      let w = img.width, h = img.height
+      if (w > MAX || h > MAX) {
+        const ratio = Math.min(MAX / w, MAX / h)
+        w = Math.round(w * ratio)
+        h = Math.round(h * ratio)
+      }
+      const canvas = document.createElement('canvas')
+      canvas.width = w
+      canvas.height = h
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
+      resolve(dataUrl.split(',')[1])
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(blobUrl)
+      reject(new Error('Failed to load image for compression'))
+    }
+    img.src = blobUrl
+  })
 
   const handleGenerate = async (selfieOverride) => {
     const file = selfieOverride || selfieFile
@@ -143,21 +169,13 @@ function EditEssenceModal({
     setError(null)
 
     try {
-      // Upload selfie once, reuse URL for retries
-      let url = selfieStorageUrl
-      if (!url) {
-        url = await uploadEssenceAvatar(userId, file)
-        if (!url) {
-          setError('Failed to upload photo. Please try again.')
-          return
-        }
-        setSelfieStorageUrl(url)
-      }
+      // Compress to base64 and call generate-avatar-gemini (same as Essence Mirror)
+      const base64 = await compressToBase64(file)
 
-      // Call edge function
-      const { data, error: fnError } = await supabase.functions.invoke('generate-avatar', {
+      const { data, error: fnError } = await supabase.functions.invoke('generate-avatar-gemini', {
         body: {
-          selfie_url: url,
+          photo_base64: base64,
+          photo_mime: 'image/jpeg',
           prompt: avatarPrompt,
         },
       })
@@ -166,13 +184,8 @@ function EditEssenceModal({
         throw new Error(fnError.message || 'Generation failed')
       }
 
-      if (data?.error === 'content_policy') {
-        setError(data.message || "Generation couldn't complete. Try a different photo.")
-        return
-      }
-
       if (data?.error) {
-        setError(data.error)
+        setError(data?.message || "Generation couldn't complete. Try a different photo.")
         return
       }
 
@@ -202,7 +215,6 @@ function EditEssenceModal({
     setSelectedFile(null)
     setAiGeneratedUrl(null)
     setSelfieFile(null)
-    setSelfieStorageUrl(null)
     setPreviewUrl(originalImage)
     if (fileInputRef.current) fileInputRef.current.value = ''
     if (selfieInputRef.current) selfieInputRef.current.value = ''

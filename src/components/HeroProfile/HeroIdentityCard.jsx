@@ -72,10 +72,6 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
     ? `/images/archetypes/lead-magnet-essence/${essence.originalName.toLowerCase().replace(/\s+/g, '-')}.webp`
     : null
 
-  // Extract skill/problem names from projects for prompt generator
-  const skillNames = projects?.map(p => p.skill?.displayName).filter(Boolean) || []
-  const problemNames = projects?.map(p => p.problem?.displayName).filter(Boolean) || []
-  const personaName = projects?.[0]?.persona?.displayName || null
 
   return (
     <div className="hero-identity-card">
@@ -180,12 +176,12 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
           originalName={essence.originalName || essence.name}
           currentImage={imagePath}
           originalImage={originalImage}
+          currentTagline={essence.tagline}
+          originalTagline={essence.poeticLine}
           group={essence.group}
           superpower={essence.superpower}
           poeticLine={essence.poeticLine}
-          skills={skillNames}
-          problems={problemNames}
-          persona={personaName}
+          poeticVision={essence.poeticVision}
           onClose={() => setShowEditModal(false)}
           onSaved={() => {
             setImageError(false)

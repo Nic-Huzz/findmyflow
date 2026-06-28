@@ -112,14 +112,13 @@ export default function PriorityOnboardingCard({
     const archetypeData = essenceProfiles.essence_archetypes?.find(
       a => a.name.toLowerCase() === archName.toLowerCase()
     )
-    const skillLabels = skills?.map(s => s.cluster_label) || []
     return buildAvatarPrompt({
       essenceName: archName,
       superpower: archetypeData?.superpower || '',
       poeticLine: archetypeData?.poetic_line || '',
-      skills: skillLabels,
+      poeticVision: archetypeData?.poetic_vision || '',
     })
-  }, [essenceProfile, skills])
+  }, [essenceProfile])
 
   // Recurring skip: stored as the completedCount at time of skip.
   // If completedCount has advanced past that number, the skip is stale and step 1 resurfaces.
