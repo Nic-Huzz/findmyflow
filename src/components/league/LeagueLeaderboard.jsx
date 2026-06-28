@@ -15,7 +15,7 @@ const RANK_MEDALS = ['🥇', '🥈', '🥉']
 export default function LeagueLeaderboard({
   standings, matchups, userTeam, league, teams,
   getCurrentWeek, getWeekMatchups, getWeekDateRange,
-  fetchLiveTeamScores, memberNames,
+  fetchLiveTeamScores, memberNames, memberAvatars, memberEssenceNames,
   selectedWeek, liveMatchupScores,
 }) {
   const currentWeek = getCurrentWeek()
@@ -38,6 +38,20 @@ export default function LeagueLeaderboard({
   const getTeamNameById = useCallback((teamId) => {
     return getTeamById(teamId)?.name || 'TBD'
   }, [getTeamById])
+
+  const getTeamMemberId = useCallback((teamId) => {
+    return getTeamById(teamId)?.fantasy_team_members?.[0]?.user_id || null
+  }, [getTeamById])
+
+  const getTeamAvatar = useCallback((teamId) => {
+    const memberId = getTeamMemberId(teamId)
+    return memberId ? memberAvatars?.[memberId] : null
+  }, [getTeamMemberId, memberAvatars])
+
+  const getTeamEssenceName = useCallback((teamId) => {
+    const memberId = getTeamMemberId(teamId)
+    return memberId ? memberEssenceNames?.[memberId] : null
+  }, [getTeamMemberId, memberEssenceNames])
 
   // ============================================
   // Team expand handler
@@ -228,8 +242,23 @@ export default function LeagueLeaderboard({
                   <span className="ll-rank">
                     {!isUpcoming && index < 3 ? RANK_MEDALS[index] : !isUpcoming ? `#${index + 1}` : ''}
                   </span>
+                  {(() => {
+                    const avatar = getTeamAvatar(team.teamId)
+                    return avatar ? (
+                      <img src={avatar} alt="" className="ll-team-avatar" />
+                    ) : (
+                      <div className="ll-team-avatar ll-team-avatar--fallback">
+                        {team.teamName?.charAt(0) || '?'}
+                      </div>
+                    )
+                  })()}
                   <div className="ll-team-info">
-                    <span className="ll-team-name">{team.teamName}</span>
+                    <span className="ll-team-name">
+                      {team.teamName}
+                      {getTeamEssenceName(team.teamId) && (
+                        <span className="ll-essence-name">: {getTeamEssenceName(team.teamId)}</span>
+                      )}
+                    </span>
                     <span className="ll-team-record">
                       {team.memberCount > 1 ? `${team.memberCount} players · ` : ''}
                       {!isUpcoming && `${team.wins}W ${team.draws}D ${team.losses}L`}

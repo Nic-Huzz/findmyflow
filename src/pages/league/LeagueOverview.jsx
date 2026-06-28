@@ -24,7 +24,7 @@ export default function LeagueOverview() {
   const {
     loading, league, teams, userTeam, standings, matchups,
     isOnTeam, leagueExists, reloadTeams, getCurrentWeek, getWeekMatchups,
-    getWeekDateRange, fetchLiveTeamScores, memberNames,
+    getWeekDateRange, fetchLiveTeamScores, memberNames, memberAvatars, memberEssenceNames,
   } = useLeagueData()
 
   // UI State
@@ -91,6 +91,16 @@ export default function LeagueOverview() {
     const team = getTeamById(teamId)
     return (team?.fantasy_team_members || []).map(m => m.user_id)
   }, [getTeamById])
+
+  const getTeamAvatar = useCallback((teamId) => {
+    const memberId = getTeamById(teamId)?.fantasy_team_members?.[0]?.user_id
+    return memberId ? memberAvatars?.[memberId] : null
+  }, [getTeamById, memberAvatars])
+
+  const getTeamEssenceName = useCallback((teamId) => {
+    const memberId = getTeamById(teamId)?.fantasy_team_members?.[0]?.user_id
+    return memberId ? memberEssenceNames?.[memberId] : null
+  }, [getTeamById, memberEssenceNames])
 
   const getUserMatchup = useCallback((weekNum) => {
     if (!userTeam) return null
@@ -349,11 +359,25 @@ export default function LeagueOverview() {
           <button className="lo-week-btn" onClick={handleNextWeek} disabled={selectedWeek >= numWeeks}>→</button>
         </div>
 
-        {/* VS layout */}
+        {/* VS layout with avatars */}
         <div className="lo-matchup-teams">
-          <span className="lo-matchup-team-name">{getTeamNameById(oriented.myTeamId)}</span>
+          <div className="lo-matchup-player">
+            {getTeamAvatar(oriented.myTeamId) ? (
+              <img src={getTeamAvatar(oriented.myTeamId)} alt="" className="lo-matchup-avatar" />
+            ) : (
+              <div className="lo-matchup-avatar lo-matchup-avatar--fallback">{getTeamNameById(oriented.myTeamId).charAt(0)}</div>
+            )}
+            <span className="lo-matchup-team-name">{getTeamNameById(oriented.myTeamId)}</span>
+          </div>
           <span className="lo-matchup-vs">VS</span>
-          <span className="lo-matchup-team-name">{getTeamNameById(oriented.oppTeamId)}</span>
+          <div className="lo-matchup-player">
+            {getTeamAvatar(oriented.oppTeamId) ? (
+              <img src={getTeamAvatar(oriented.oppTeamId)} alt="" className="lo-matchup-avatar" />
+            ) : (
+              <div className="lo-matchup-avatar lo-matchup-avatar--fallback">{getTeamNameById(oriented.oppTeamId).charAt(0)}</div>
+            )}
+            <span className="lo-matchup-team-name">{getTeamNameById(oriented.oppTeamId)}</span>
+          </div>
         </div>
 
         {/* Category scores */}
@@ -563,7 +587,14 @@ export default function LeagueOverview() {
       <div className="lo-identity">
         {isOnTeam ? (
           <>
-            <span className="lo-identity-text">Playing as <strong>{userTeam.name}</strong></span>
+            <span className="lo-identity-text">
+              Playing as <strong>{userTeam.name}</strong>
+              {(() => {
+                const myStanding = standings.find(s => s.teamId === userTeam.id)
+                if (!myStanding || isUpcoming) return null
+                return <span className="lo-identity-record"> · {myStanding.wins}W {myStanding.draws}D {myStanding.losses}L</span>
+              })()}
+            </span>
             <button className="lo-invite-btn" onClick={handleShare}>Invite</button>
           </>
         ) : (
@@ -607,6 +638,8 @@ export default function LeagueOverview() {
           getWeekDateRange={getWeekDateRange}
           fetchLiveTeamScores={fetchLiveTeamScores}
           memberNames={memberNames}
+          memberAvatars={memberAvatars}
+          memberEssenceNames={memberEssenceNames}
           selectedWeek={selectedWeek}
           liveMatchupScores={liveMatchupScores}
         />
@@ -627,25 +660,38 @@ export default function LeagueOverview() {
                 {weekMatchups.length === 0 ? (
                   <p className="lo-no-matchups">Matchups TBD</p>
                 ) : (
-                  weekMatchups.map(m => (
-                    <div key={m.id} className="lo-matchup-row">
-                      <div className={`lo-matchup-team ${m.team_a_match_points === 3 ? 'winner' : ''}`}>
-                        <span className="lo-matchup-name">{getTeamNameById(m.team_a_id)}</span>
-                        {m.calculated_at && (
-                          <span className="lo-matchup-score">{m.team_a_categories_won}</span>
-                        )}
+                  weekMatchups.map(m => {
+                    const isMine = userTeam && (m.team_a_id === userTeam.id || m.team_b_id === userTeam.id)
+                    return (
+                      <div key={m.id} className={`lo-matchup-row ${isMine ? 'lo-matchup-row--mine' : ''}`}>
+                        <div className={`lo-matchup-team ${m.team_a_match_points === 3 ? 'winner' : ''}`}>
+                          {getTeamAvatar(m.team_a_id) ? (
+                            <img src={getTeamAvatar(m.team_a_id)} alt="" className="lo-schedule-avatar" />
+                          ) : (
+                            <div className="lo-schedule-avatar lo-schedule-avatar--fallback">{getTeamNameById(m.team_a_id).charAt(0)}</div>
+                          )}
+                          <span className="lo-matchup-name">{getTeamNameById(m.team_a_id)}</span>
+                          {m.calculated_at && (
+                            <span className="lo-matchup-score">{m.team_a_categories_won}</span>
+                          )}
+                        </div>
+                        <span className="lo-matchup-vs-text">
+                          {m.calculated_at ? `${m.team_a_match_points} - ${m.team_b_match_points}` : 'vs'}
+                        </span>
+                        <div className={`lo-matchup-team ${m.team_b_match_points === 3 ? 'winner' : ''}`}>
+                          {getTeamAvatar(m.team_b_id) ? (
+                            <img src={getTeamAvatar(m.team_b_id)} alt="" className="lo-schedule-avatar" />
+                          ) : (
+                            <div className="lo-schedule-avatar lo-schedule-avatar--fallback">{getTeamNameById(m.team_b_id).charAt(0)}</div>
+                          )}
+                          <span className="lo-matchup-name">{getTeamNameById(m.team_b_id)}</span>
+                          {m.calculated_at && (
+                            <span className="lo-matchup-score">{m.team_b_categories_won}</span>
+                          )}
+                        </div>
                       </div>
-                      <span className="lo-matchup-vs-text">
-                        {m.calculated_at ? `${m.team_a_match_points} - ${m.team_b_match_points}` : 'vs'}
-                      </span>
-                      <div className={`lo-matchup-team ${m.team_b_match_points === 3 ? 'winner' : ''}`}>
-                        <span className="lo-matchup-name">{getTeamNameById(m.team_b_id)}</span>
-                        {m.calculated_at && (
-                          <span className="lo-matchup-score">{m.team_b_categories_won}</span>
-                        )}
-                      </div>
-                    </div>
-                  ))
+                    )
+                  })
                 )}
               </div>
             )

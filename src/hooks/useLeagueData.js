@@ -30,6 +30,8 @@ export function useLeagueData() {
   const [contentSubmissions, setContentSubmissions] = useState([])
   const [error, setError] = useState(null)
   const [memberNames, setMemberNames] = useState({})
+  const [memberAvatars, setMemberAvatars] = useState({})
+  const [memberEssenceNames, setMemberEssenceNames] = useState({})
 
   // Derived
   const isOnTeam = !!userTeam
@@ -73,18 +75,33 @@ export function useLeagueData() {
       setMatchups(matchupsData)
       setStandings(standingsData)
 
-      // 3. Load member display names (via RPC to bypass RLS)
+      // 3. Load member display names + avatars
       const allMemberIds = (teamsData || []).flatMap(t =>
         (t.fantasy_team_members || []).map(m => m.user_id)
       )
       if (allMemberIds.length > 0) {
-        const { data: names } = await supabase
-          .rpc('get_member_display_names', { member_ids: allMemberIds })
+        const [{ data: names }, { data: avatarRows }] = await Promise.all([
+          supabase.rpc('get_member_display_names', { member_ids: allMemberIds }),
+          supabase.rpc('get_member_profiles', { member_ids: allMemberIds }),
+        ])
         const nameMap = {}
         ;(names || []).forEach(n => {
           nameMap[n.user_id] = n.display_name || 'Player'
         })
         setMemberNames(nameMap)
+        // Deduplicate: first row per user_id wins (most recent)
+        const avatarMap = {}
+        const essenceNameMap = {}
+        ;(avatarRows || []).forEach(r => {
+          if (!avatarMap[r.user_id] && r.custom_essence_image) {
+            avatarMap[r.user_id] = r.custom_essence_image
+          }
+          if (!essenceNameMap[r.user_id] && r.custom_essence_name) {
+            essenceNameMap[r.user_id] = r.custom_essence_name
+          }
+        })
+        setMemberAvatars(avatarMap)
+        setMemberEssenceNames(essenceNameMap)
       }
 
       // 4. Load content submissions if user is on a team
@@ -227,5 +244,7 @@ export function useLeagueData() {
     getWeekDateRange,
     fetchLiveTeamScores,
     memberNames,
+    memberAvatars,
+    memberEssenceNames,
   }
 }
