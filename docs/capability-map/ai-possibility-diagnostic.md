@@ -125,7 +125,119 @@
 
 ---
 
-## Step 4: The Possibility Report
+## Step 4: Preferences (filters for recommendations)
+
+*These shape which tools we recommend AND which TAAFT deep link we generate.*
+
+### 4a: Budget
+
+*"What's your budget for tools?"*
+
+| Answer | Effect on recommendations | TAAFT sort |
+|--------|-------------------------|------------|
+| **Free only** | Only show free tools. Flag paid-only capabilities as "needs budget." | `/price/` (cheapest first) |
+| **Under $50/mo** | Show free + affordable tools. Flag expensive ones. | `/price/` |
+| **Under $200/mo** | Show Tier 1-2 tools. Full range. | `/most-saved/` (best value) |
+| **Whatever it takes** | Show best-in-class regardless of cost. | `/top-rated/` |
+
+### 4b: Platform
+
+*"Where do you work?"*
+
+| Answer | Effect on recommendations | TAAFT prefix |
+|--------|-------------------------|-------------|
+| **Desktop / laptop** | Default recommendations | (none) |
+| **iPhone / iPad** | Prioritize tools with iOS apps | `/ios/` |
+| **Android** | Prioritize tools with Android apps | `/android/` |
+| **I use ChatGPT a lot** | Show GPT alternatives where available | `/gpts/` |
+| **I use Chrome extensions** | Show Chrome extension options | `/chrome/` |
+
+### 4c: Automation preference
+
+*"How much do you want AI to handle?"*
+
+| Answer | Effect on recommendations |
+|--------|-------------------------|
+| **Do it all for me** | Prioritize Level 5 (runs itself) tools. Show MCP-connected options first. |
+| **Draft it, I'll review** | Prioritize Level 4 (one-click approve) tools. |
+| **Just help me think** | Prioritize Level 2-3 tools. Show Claude/ChatGPT as primary, skip automation tools. |
+| **Show me everything** | No filter. Show all levels. |
+
+### Dynamic TAAFT Link Generation
+
+Every "Browse more" link in the report adapts based on answers:
+
+```javascript
+function buildBrowseLink(capability, budget, platform) {
+  // Map our capability to TAAFT task slug
+  const taskSlug = CAPABILITY_TO_TAAFT[capability]
+  
+  // Budget → sort
+  const sort = {
+    'free': 'price',
+    'under50': 'price', 
+    'under200': 'most-saved',
+    'unlimited': 'top-rated'
+  }[budget]
+  
+  // Platform → URL prefix
+  const prefix = {
+    'desktop': '',
+    'ios': 'ios/',
+    'android': 'android/',
+    'chatgpt': 'gpts/',
+    'chrome': 'chrome/'
+  }[platform]
+  
+  return `https://theresanaiforthat.com/${prefix}task/${taskSlug}/${sort}/`
+}
+
+// Example outputs:
+// Free + iPhone + marketing → theresanaiforthat.com/ios/task/marketing/price/
+// Under $200 + desktop + email → theresanaiforthat.com/task/email/most-saved/
+// Unlimited + ChatGPT + videos → theresanaiforthat.com/gpts/task/videos/top-rated/
+```
+
+### Capability → TAAFT Task Slug Mapping
+
+| Our Capability | TAAFT Task Slug | TAAFT Tool Count |
+|---------------|----------------|-----------------|
+| Social post drafting | `social-media-posts` | 500+ |
+| Instagram posting | `social-media-posts` | 500+ |
+| LinkedIn posting | `linkedin` | 200+ |
+| SEO blog posts | `seo-content` | 300+ |
+| Video content | `videos` | 1,041 |
+| Ad creative | `video-ads` | 200+ |
+| Email writing | `email-writing` | 145+ |
+| Email sequences | `email` | 145+ |
+| Lead generation | `lead-generation` | 400+ |
+| Cold email | `cold-emails` | 100+ |
+| CRM / contacts | `crm` | 200+ |
+| Landing pages | `websites` | 500+ |
+| Images | `images` | 3,341 |
+| AI persona / avatars | `avatars` | 100+ |
+| Scheduling | `scheduling` | 50+ |
+| Finance / invoicing | `finance` | 404 |
+| Task management | `task-management` | 85+ |
+| Customer support | `customer-support` | 300+ |
+| Analytics / data | `data` | 931 |
+| Marketing (general) | `marketing` | 2,443 |
+| Sales | `sales` | 747 |
+| Ads | `ads` | 200+ |
+| Competitor analysis | `competitive-analysis` | 100+ |
+| Content (general) | `content` | 600+ |
+| Productivity | `productivity` | 1,352 |
+| Social media mgmt | `social-media-management` | 200+ |
+| Video editing | `video-editing` | 300+ |
+| Legal | `legal` | 265 |
+| Business strategy | `business-strategy` | 208 |
+| Customer engagement | `customer-engagement` | 200+ |
+| Messaging | `messaging` | 100+ |
+| Task automation | `task-automation` | 101 |
+
+---
+
+## Step 5: The Possibility Report
 
 For each capability the user selected, show this:
 
@@ -136,6 +248,8 @@ For each capability the user selected, show this:
 │  YOUR AI POSSIBILITY REPORT                     │
 │  Business: [their model]                        │
 │  Focus: [their pain]                            │
+│  Budget: [their budget]                         │
+│  Platform: [their platform]                     │
 │  Generated: [date]                              │
 └─────────────────────────────────────────────────┘
 ```
@@ -153,6 +267,10 @@ Each capability gets a card:
 │  What you still do:  Review before publish       │
 │  Setup time:         15 minutes                  │
 │  Monthly cost:       €15                         │
+│                                                  │
+│  → Browse 500+ social media AI tools (filtered)  │
+│    [theresanaiforthat.com/ios/task/social-media-  │
+│     posts/price/]                                │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -181,7 +299,7 @@ Every capability gets one of four honest answers:
 
 ---
 
-## Step 5: "What Should I Do First?"
+## Step 6: "What Should I Do First?"
 
 After the report, rank their selected capabilities by:
 
@@ -212,6 +330,8 @@ YOUR NEXT 3 MOVES:
 ## Capability → Tool Lookup Table
 
 This is the backend data the diagnostic uses. Each row maps a capability to its automation level, tool options, and a "Browse more" link to [There's an AI for That](https://theresanaiforthat.com) (50K+ tools, 11K+ tasks) so users can explore alternatives.
+
+**Note:** The Browse More links below use default sort (`most-saved`). In the interactive version, these are dynamically generated using the user's budget + platform answers (see Step 4 above). E.g. a user who selected "Free only" + "iPhone" would see `/ios/task/marketing/price/` instead of `/task/marketing/most-saved`.
 
 ### Finding & Attracting
 
