@@ -67,3 +67,18 @@
 
 ## Next scan
 Run again tomorrow or use: `/schedule` to automate daily
+
+---
+
+## Scan log — June 28, 2026
+
+**Status: BLOCKED — no drafts generated**
+
+Reddit (www.reddit.com, old.reddit.com) and all archive APIs (pullpush.io, teddit.net, libreddit.de) are blocked by the cloud execution environment's network policy. WebSearch also cannot crawl reddit.com.
+
+**To fix:**
+- Option A: Run the monitor locally where Reddit is accessible.
+- Option B: Add reddit.com to the allowed domains in the Claude Code web environment network policy (see code.claude.com/docs).
+- Option C: Switch to Reddit's RSS feed as the data source — `https://www.reddit.com/r/findapath/new/.rss` — which may route differently through the proxy. Worth testing.
+
+June 22 drafts above are still unused if you haven't posted them.
