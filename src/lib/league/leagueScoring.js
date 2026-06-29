@@ -22,27 +22,27 @@ import { FANTASY_CATEGORIES, CATEGORY_KEYS, MATCH_POINTS } from './leagueConfig'
  * @returns {{ [categoryKey]: number }}
  */
 export async function calculateUserCategoryScores(userId, startDate, endDate, approvedContentPoints = 0) {
-  // Fetch all quest_completions for this user in the date range
-  const { data: completions, error } = await supabase
-    .from('quest_completions')
-    .select('quest_id, quest_category, points_earned, completed_at')
-    .eq('user_id', userId)
-    .gte('completed_at', startDate)
-    .lte('completed_at', endDate + 'T23:59:59.999Z')
+  // Use RPC to bypass RLS (allows reading opponent scores in league matchups)
+  const { data, error } = await supabase.rpc('get_league_scores', {
+    member_ids: [userId],
+    start_date: startDate,
+    end_date: endDate,
+  })
 
   if (error) {
     console.error('Error fetching completions for scoring:', error)
     return Object.fromEntries(CATEGORY_KEYS.map(k => [k, 0]))
   }
 
-  const scores = {}
+  const scores = Object.fromEntries(CATEGORY_KEYS.map(k => [k, 0]))
 
-  for (const [key, config] of Object.entries(FANTASY_CATEGORIES)) {
-    const categoryCompletions = completions.filter(c =>
-      config.dbFilter.includes(c.quest_category)
-    )
-    scores[key] = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-  }
+  ;(data || []).forEach(row => {
+    for (const [key, config] of Object.entries(FANTASY_CATEGORIES)) {
+      if (config.dbFilter.includes(row.quest_category)) {
+        scores[key] += parseInt(row.total_points) || 0
+      }
+    }
+  })
 
   return scores
 }
@@ -53,6 +53,7 @@ export async function calculateUserCategoryScores(userId, startDate, endDate, ap
 
 /**
  * Calculate team scores by summing member scores.
+ * Uses get_league_scores RPC to bypass RLS for cross-user reads.
  *
  * @param {string[]} memberUserIds - Array of user IDs on the team
  * @param {string} startDate
@@ -61,21 +62,34 @@ export async function calculateUserCategoryScores(userId, startDate, endDate, ap
  * @returns {{ [categoryKey]: number, members: { [userId]: { [categoryKey]: number } } }}
  */
 export async function calculateTeamScores(memberUserIds, startDate, endDate, contentPointsByUser = {}) {
+  // Single RPC call for all members (instead of N individual queries)
+  const { data, error } = await supabase.rpc('get_league_scores', {
+    member_ids: memberUserIds,
+    start_date: startDate,
+    end_date: endDate,
+  })
+
+  if (error) {
+    console.error('Error fetching team scores:', error)
+    return { ...Object.fromEntries(CATEGORY_KEYS.map(k => [k, 0])), members: {} }
+  }
+
   const memberScores = {}
   const teamTotals = Object.fromEntries(CATEGORY_KEYS.map(k => [k, 0]))
 
-  // Calculate each member's scores
-  await Promise.all(
-    memberUserIds.map(async (userId) => {
-      const userContentPoints = contentPointsByUser[userId] || 0
-      const scores = await calculateUserCategoryScores(userId, startDate, endDate, userContentPoints)
-      memberScores[userId] = scores
+  memberUserIds.forEach(id => {
+    memberScores[id] = Object.fromEntries(CATEGORY_KEYS.map(k => [k, 0]))
+  })
 
-      for (const key of CATEGORY_KEYS) {
-        teamTotals[key] += scores[key] || 0
+  ;(data || []).forEach(row => {
+    for (const [key, config] of Object.entries(FANTASY_CATEGORIES)) {
+      if (config.dbFilter.includes(row.quest_category)) {
+        const pts = parseInt(row.total_points) || 0
+        if (memberScores[row.user_id]) memberScores[row.user_id][key] += pts
+        teamTotals[key] += pts
       }
-    })
-  )
+    }
+  })
 
   return { ...teamTotals, members: memberScores }
 }
