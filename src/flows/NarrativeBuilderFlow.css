@@ -1,0 +1,363 @@
+/* NarrativeBuilderFlow — /create/narrative-builder */
+
+.nbf {
+  background: linear-gradient(180deg, #5e17eb 0%, #4a12c4 100%);
+  color: white;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+}
+
+.nbf-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.nbf-screen { animation: nbfFadeIn 0.4s ease; }
+@keyframes nbfFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nbf-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  gap: 1rem;
+}
+
+/* ── Badge ── */
+.nbf-badge {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  background: rgba(233,162,59,0.12);
+  border: 1px solid rgba(233,162,59,0.3);
+  border-radius: 100px;
+  color: #E9A23B;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.nbf-step-badge {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 1.25rem;
+  padding: 0.3rem 0.8rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ── Typography ── */
+.nbf-gold { color: #E9A23B; }
+
+.nbf-intro {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 70px);
+  padding-top: 0;
+}
+.nbf-intro-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.nbf-intro .nbf-cta {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.nbf-intro h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+.nbf-intro p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.65);
+  margin: 0 0 0.5rem;
+  max-width: 380px;
+}
+
+.nbf-heading {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+.nbf-prompt {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.55);
+  margin: 0 0 1rem;
+}
+
+/* ── Context card ── */
+.nbf-context-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.6);
+  font-style: italic;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Input fields ── */
+.nbf-input-group {
+  margin-bottom: 1.25rem;
+}
+
+.nbf-input-label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  color: rgba(255,255,255,0.85);
+}
+
+.nbf-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 14px;
+  color: white;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  font-family: inherit;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.nbf-input::placeholder {
+  color: rgba(255,255,255,0.3);
+}
+
+.nbf-input:focus {
+  outline: none;
+  border-color: rgba(233,162,59,0.5);
+}
+
+textarea.nbf-input {
+  min-height: 80px;
+}
+
+/* ── Toggle (First Step type) ── */
+.nbf-toggle-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.nbf-toggle-btn {
+  flex: 1;
+  padding: 0.75rem 0.5rem;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.nbf-toggle-btn:hover {
+  border-color: rgba(233,162,59,0.3);
+}
+
+.nbf-toggle-selected {
+  border-color: #E9A23B;
+  background: rgba(233,162,59,0.08);
+  color: #E9A23B;
+}
+
+/* ── Narrative output card ── */
+.nbf-narrative-card {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(233,162,59,0.25);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.nbf-narrative-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #E9A23B;
+  margin-bottom: 1.25rem;
+}
+
+.nbf-narrative-section {
+  margin-bottom: 1.25rem;
+}
+
+.nbf-narrative-section:last-child {
+  margin-bottom: 0;
+}
+
+.nbf-narrative-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(233,162,59,0.7);
+  margin-bottom: 0.35rem;
+}
+
+.nbf-narrative-text {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.85);
+  margin: 0;
+}
+
+.nbf-narrative-text em {
+  color: #E9A23B;
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ── Editable mode ── */
+.nbf-narrative-section textarea.nbf-input {
+  min-height: 60px;
+  font-size: 0.88rem;
+}
+
+/* ── Action buttons row ── */
+.nbf-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.nbf-btn-outline {
+  padding: 0.65rem 1rem;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.nbf-btn-outline:hover {
+  border-color: rgba(233,162,59,0.4);
+  color: #E9A23B;
+}
+
+.nbf-copied {
+  color: #34d399;
+  border-color: rgba(52,211,153,0.3);
+}
+
+/* ── Navigation ── */
+.nbf-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(transparent, rgba(74,18,196,1) 40%);
+  max-width: 480px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.nbf-nav .nbf-cta { flex: 1; }
+
+.nbf-back {
+  padding: 0.85rem 1rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.nbf-cta {
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(233,162,59,0.3);
+  font-family: inherit;
+}
+
+.nbf-cta:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Error ── */
+.nbf-error {
+  color: #ff9b9b;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+/* ── Spinner ── */
+.nbf-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  animation: nbfSpin 0.8s linear infinite;
+}
+@keyframes nbfSpin { to { transform: rotate(360deg); } }
+
+/* === MOBILE === */
+@media (max-width: 480px) {
+  .nbf-container { padding: 1.5rem 1.25rem calc(5rem + env(safe-area-inset-bottom, 0px)); }
+  .nbf-intro h1 { font-size: 1.75rem; }
+  .nbf-intro p { font-size: 1.05rem; line-height: 1.6; }
+  .nbf-heading { font-size: 1.5rem; }
+  .nbf-prompt { font-size: 1rem; line-height: 1.6; }
+  .nbf-cta { padding: 1rem 1.5rem; font-size: 1rem; min-height: 48px; width: 100%; }
+  .nbf-back { min-height: 48px; font-size: 0.95rem; }
+  .nbf-input { padding: 0.85rem 1rem; font-size: 0.92rem; min-height: 48px; }
+}

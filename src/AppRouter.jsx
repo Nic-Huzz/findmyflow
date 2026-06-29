@@ -38,6 +38,9 @@ import PlaySkillsOnboarding from './components/onboarding/PlaySkillsOnboarding'
 const PlaySkillsIdentifier = lazy(() => import('./flows/PlaySkillsIdentifier'))
 const RuleBreakTree = lazy(() => import('./pages/RuleBreakTree'))
 const ScaleDiagnosticFlow = lazy(() => import('./flows/ScaleDiagnosticFlow'))
+const NarrativeBuilderFlow = lazyRetry(() => import('./flows/NarrativeBuilderFlow'))
+const AccessArchitectureFlow = lazyRetry(() => import('./flows/AccessArchitectureFlow'))
+const FacilitatorScore = lazy(() => import('./pages/FacilitatorScore'))
 import IdentifyTopicsFlow from './flows/IdentifyTopicsFlow'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import EssenceIdentify from './pages/EssenceIdentify'
@@ -290,6 +293,7 @@ const AppBuildInterest = lazyRetry(() => import('./components/AppBuild/AppBuildI
 // Life Path States
 const LifePathTest = lazyRetry(() => import('./pages/LifePathTest'))
 const FacilitateLifePaths = lazyRetry(() => import('./pages/FacilitateLifePaths'))
+const TryLifePaths = lazyRetry(() => import('./flows/TryLifePaths'))
 
 // Lazy-loaded - Public Play-List Feed
 const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
@@ -710,7 +714,9 @@ function AppRouter() {
             <Route path="/try/play-profile" element={<TryPlayProfile />} />
             <Route path="/try/essence-mirror" element={<TryEssenceMirror />} />
             <Route path="/try/career-clarity" element={<CareerClarityQuiz />} />
+            <Route path="/try/facilitator-score" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />
             <Route path="/try/life-paths-test" element={<LifePathTest />} />
+            <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
 
@@ -1047,6 +1053,20 @@ function AppRouter() {
               <CreateGate>
                 <AuthGate>
                   <RemarkableFlow />
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/narrative-builder" element={
+              <CreateGate>
+                <AuthGate>
+                  <Suspense fallback={<LoadingSpinner />}><NarrativeBuilderFlow /></Suspense>
+                </AuthGate>
+              </CreateGate>
+            } />
+            <Route path="/create/access-architecture" element={
+              <CreateGate>
+                <AuthGate>
+                  <Suspense fallback={<LoadingSpinner />}><AccessArchitectureFlow /></Suspense>
                 </AuthGate>
               </CreateGate>
             } />

@@ -598,6 +598,33 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 </div>
               )}
 
+              {/* Scale Diagnostic — Can your rule break scale? */}
+              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                <div className="ch2-locked" onClick={() => navigate('/scale-diagnostic')} style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)' }}>
+                  <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Scale Diagnostic</div>
+                  <div className="ch2-locked-sub">Does it change the body AND can people talk about it? Score your experience across 4 quadrants.</div>
+                  <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Take the diagnostic →</div>
+                </div>
+              </div>
+
+              {/* Narrative Builder — How do you tell the story? */}
+              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                <div className="ch2-locked" onClick={() => navigate('/create/narrative-builder')} style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)' }}>
+                  <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Narrative Builder</div>
+                  <div className="ch2-locked-sub">Give your rule break tribal language, a first step, and a cosign. Build beats 3-5 of your story.</div>
+                  <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Build your narrative →</div>
+                </div>
+              </div>
+
+              {/* Access Architecture — Remove barriers */}
+              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                <div className="ch2-locked" onClick={() => navigate('/create/access-architecture')} style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)' }}>
+                  <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Access Architecture</div>
+                  <div className="ch2-locked-sub">Audit the 5 barriers between someone and your experience. Design a zero-friction on-ramp.</div>
+                  <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Audit my access →</div>
+                </div>
+              </div>
+
               <div className="ch2-id-divider" />
 
               {/* Your Model */}
