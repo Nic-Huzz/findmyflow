@@ -15,6 +15,7 @@ import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import { hapticLight } from '../../lib/haptics'
+import PositioningSummary from '../PositioningSummary'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
@@ -417,6 +418,15 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 )}
               </div>
 
+              {/* Positioning Summary */}
+              <PositioningSummary
+                userId={userId}
+                essenceName={essenceName}
+                skills={userSkills}
+                problems={userProblems}
+                remarkableAngle={remarkableAngle}
+              />
+
               {/* Sub-tabs: Playbook only (Inner Game locked for now) */}
               <div className="ch2-subtabs">
                 <button className={`ch2-subtab${identitySubTab === 'playbook' ? ' active' : ''}`} onClick={() => setIdentitySubTab('playbook')}>Playbook</button>
@@ -588,35 +598,6 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 </div>
               )}
 
-              {/* ═══ ACTIONS ═══ */}
-              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                <div className="ch2-label">Actions</div>
-                <div className="ch2-actions-grid">
-                  <div className="ch2-action-card" onClick={() => navigate('/create/plays')}>
-                    <div className="ch2-action-icon">⚡</div>
-                    <div className="ch2-action-info">
-                      <div className="ch2-action-title">Create</div>
-                      <div className="ch2-action-sub">Design a Lightning Strike that makes your movement impossible to ignore</div>
-                    </div>
-                    {activePlays.filter(p => p.challenge_source === 'strike').length > 0 && (
-                      <div className="ch2-action-count">{activePlays.filter(p => p.challenge_source === 'strike').length} active</div>
-                    )}
-                    <div className="ch2-action-arrow">›</div>
-                  </div>
-                  <div className="ch2-action-card" onClick={() => navigate('/create/bridge')}>
-                    <div className="ch2-action-icon">🌉</div>
-                    <div className="ch2-action-info">
-                      <div className="ch2-action-title">Bridge</div>
-                      <div className="ch2-action-sub">Find 5 people slightly ahead of you and build mutual value</div>
-                    </div>
-                    {bridgeCount.total > 0 && (
-                      <div className="ch2-action-count">{bridgeCount.contacted} of {bridgeCount.total}</div>
-                    )}
-                    <div className="ch2-action-arrow">›</div>
-                  </div>
-                </div>
-              </div>
-
               <div className="ch2-id-divider" />
 
               {/* Your Model */}
@@ -660,6 +641,35 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                   </div>
                 </div>
               )}
+
+              {/* ═══ ACTIONS ═══ */}
+              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                <div className="ch2-label">Actions</div>
+                <div className="ch2-actions-grid">
+                  <div className="ch2-action-card" onClick={() => navigate('/create/plays')}>
+                    <div className="ch2-action-icon">⚡</div>
+                    <div className="ch2-action-info">
+                      <div className="ch2-action-title">Create</div>
+                      <div className="ch2-action-sub">Design a Lightning Strike that makes your movement impossible to ignore</div>
+                    </div>
+                    {activePlays.filter(p => p.challenge_source === 'strike').length > 0 && (
+                      <div className="ch2-action-count">{activePlays.filter(p => p.challenge_source === 'strike').length} active</div>
+                    )}
+                    <div className="ch2-action-arrow">›</div>
+                  </div>
+                  <div className="ch2-action-card" onClick={() => navigate('/create/bridge')}>
+                    <div className="ch2-action-icon">🌉</div>
+                    <div className="ch2-action-info">
+                      <div className="ch2-action-title">Bridge</div>
+                      <div className="ch2-action-sub">Find 5 people slightly ahead of you and build mutual value</div>
+                    </div>
+                    {bridgeCount.total > 0 && (
+                      <div className="ch2-action-count">{bridgeCount.contacted} of {bridgeCount.total}</div>
+                    )}
+                    <div className="ch2-action-arrow">›</div>
+                  </div>
+                </div>
+              </div>
 
               </>}
 

@@ -114,8 +114,12 @@ export default function ExperiencePipeline({ experienceId, onBack }) {
               <div
                 className={`pl-vnode${isSelected ? ' selected' : ''}`}
                 onClick={() => {
-                  setSelectedKey(prev => prev === node.key ? null : node.key)
                   hapticLight()
+                  if (experience?.checklist_version === 'nodes') {
+                    navigate(`/create/experience/${experienceId}/${node.key}`)
+                  } else {
+                    setSelectedKey(prev => prev === node.key ? null : node.key)
+                  }
                 }}
               >
                 <div className={`pl-ring ${node.status}`}>
@@ -145,8 +149,8 @@ export default function ExperiencePipeline({ experienceId, onBack }) {
                 </div>
               </div>
 
-              {/* Expanded detail (accordion) */}
-              {isSelected && selectedNode && (
+              {/* Expanded detail (accordion) — legacy only */}
+              {isSelected && selectedNode && experience?.checklist_version !== 'nodes' && (
                 <PipelineNodeDetail
                   node={selectedNode}
                   experience={experience}

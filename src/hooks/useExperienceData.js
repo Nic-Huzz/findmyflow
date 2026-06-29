@@ -84,6 +84,7 @@ export function useCreateExperience() {
         experience_date: experience_date || null,
         previous_experience_id: previous_experience_id || runAgainFromId || null,
         status: 'upcoming',
+        checklist_version: 'nodes',
       }
       if (ticket_price != null) insertPayload.ticket_price = ticket_price
       if (experience_type) insertPayload.experience_type = experience_type

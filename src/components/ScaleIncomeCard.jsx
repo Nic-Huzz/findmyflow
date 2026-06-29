@@ -5,7 +5,7 @@
  * Toggle: "Will you pitch your next offer at this event?"
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight } from '../lib/haptics'
 import './ScaleIncomeCard.css'
@@ -62,14 +62,15 @@ export default function ScaleIncomeCard({ experienceId, userId, ticketPrice }) {
       .eq('id', experienceId)
   }
 
-  const handlePitchOtherChange = async (text) => {
+  const pitchSaveRef = useRef(null)
+  const handlePitchOtherChange = (text) => {
     setPitchOtherText(text)
     const type = text.trim() || 'other'
     setPitchOfferType(type)
-    await supabase
-      .from('experiences')
-      .update({ pitch_offer_type: type, pitch_next_offer: true })
-      .eq('id', experienceId)
+    if (pitchSaveRef.current) clearTimeout(pitchSaveRef.current)
+    pitchSaveRef.current = setTimeout(() => {
+      supabase.from('experiences').update({ pitch_offer_type: type, pitch_next_offer: true }).eq('id', experienceId)
+    }, 600)
   }
 
   if (loading || !model) return null

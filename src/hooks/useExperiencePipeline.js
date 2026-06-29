@@ -110,11 +110,10 @@ export default function useExperiencePipeline(experienceId) {
         .select('*')
         .eq('experience_id', experienceId).eq('user_id', userId)
         .order('created_at', { ascending: false }),
-      // Module completion: flow sessions (per-experience)
+      // Module completion: flow sessions (account-level — per-experience filtering done in NodeWorkspace)
       supabase.from('flow_sessions')
-        .select('flow_type')
-        .eq('user_id', userId)
-        .eq('experience_id', experienceId),
+        .select('flow_type, experience_id')
+        .eq('user_id', userId),
       // Module completion: products
       supabase.from('products')
         .select('money_model_tier')

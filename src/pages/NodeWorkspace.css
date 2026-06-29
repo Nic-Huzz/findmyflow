@@ -1,0 +1,134 @@
+/* ─── NodeWorkspace — Full-page pipeline node workspace ─── */
+
+.nw-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0f0a1a 0%, #1a0f2e 100%);
+  color: #fff;
+  padding: 0 1.25rem;
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.nw-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1rem 0;
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  touch-action: manipulation;
+}
+.nw-back:hover { color: rgba(255,255,255,0.8); }
+
+.nw-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.nw-node-icon {
+  font-size: 2rem;
+}
+
+.nw-node-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+}
+
+.nw-node-value {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.nw-node-value span {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+}
+
+.nw-content {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.nw-nudge {
+  padding: 0.75rem 1rem;
+  background: rgba(233,162,59,0.08);
+  border: 1px solid rgba(233,162,59,0.2);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.nw-nudge-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.5;
+}
+
+.nw-nudge-cta {
+  margin-top: 0.5rem;
+  padding: 6px 14px;
+  background: #E9A23B;
+  border: none;
+  border-radius: 8px;
+  color: #1a0b3d;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  touch-action: manipulation;
+}
+.nw-nudge-cta:hover { background: #d4912f; }
+
+.nw-log-btn {
+  width: 100%;
+  padding: 0.7rem;
+  background: rgba(94,23,235,0.15);
+  border: 1.5px solid rgba(94,23,235,0.3);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  touch-action: manipulation;
+  margin-bottom: 1rem;
+  transition: background 0.15s;
+}
+.nw-log-btn:active {
+  background: rgba(94,23,235,0.25);
+}
+
+.nw-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.nw-placeholder {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(255,255,255,0.3);
+  font-size: 14px;
+}
+
+.nw-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: rgba(255,255,255,0.3);
+  font-size: 14px;
+}

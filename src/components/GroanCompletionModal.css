@@ -62,6 +62,17 @@
 
 .gcm-form textarea:focus { outline: none; border-color: #5e17eb; background: white; }
 
+.gcm-identity-line {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #E9A23B;
+  margin: 0.75rem 0;
+  font-style: italic;
+  animation: fadeIn 0.5s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
 .gcm-gold-btn {
   display: block; width: 100%;
   background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);

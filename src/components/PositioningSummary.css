@@ -1,0 +1,145 @@
+/* PositioningSummary — Dark theme matching Identity tab (.ch2-id-inner) */
+
+.ps-card {
+  padding: 0 20px 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.ps-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.ps-icon { font-size: 1.3rem; }
+.ps-title {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #E9A23B;
+}
+.ps-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 2px;
+}
+
+.ps-field { margin-bottom: 0.75rem; }
+
+.ps-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 0.35rem;
+  line-height: 1.4;
+}
+
+.ps-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: inherit;
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.04);
+  resize: none;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.ps-input:focus {
+  outline: none;
+  border-color: rgba(94,23,235,0.5);
+  background: rgba(255,255,255,0.06);
+}
+
+.ps-input::placeholder { color: rgba(255,255,255,0.25); }
+
+.ps-generate {
+  width: 100%;
+  padding: 0.65rem;
+  background: #5e17eb;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+  transition: opacity 0.15s;
+}
+
+.ps-generate:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.ps-generate:active:not(:disabled) {
+  opacity: 0.85;
+}
+
+.ps-statement-card {
+  background: rgba(94,23,235,0.08);
+  border: 1px solid rgba(94,23,235,0.2);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.ps-statement-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #E9A23B;
+  margin-bottom: 0.5rem;
+}
+
+.ps-statement-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.9);
+  margin: 0;
+  font-weight: 500;
+}
+
+.ps-statement-edit {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.04);
+  resize: none;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.ps-statement-edit:focus {
+  outline: none;
+  border-color: rgba(94,23,235,0.5);
+}
+
+.ps-edit-btn, .ps-save-btn {
+  margin-top: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ps-save-btn {
+  background: #5e17eb;
+  border-color: #5e17eb;
+  color: #fff;
+}

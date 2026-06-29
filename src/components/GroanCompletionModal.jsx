@@ -31,6 +31,14 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [error, setError] = useState(null)
   const [showExplainer, setShowExplainer] = useState(false)
 
+  // Essence archetype for identity-linked celebration
+  const [essenceName, setEssenceName] = useState(null)
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('user_stage_progress').select('essence_name').eq('user_id', userId).maybeSingle()
+      .then(({ data }) => { if (data?.essence_name) setEssenceName(data.essence_name) })
+  }, [userId])
+
   // Nervous system state
   const [beforeState, setBeforeState] = useState(null)
   const [afterState, setAfterState] = useState(null)
@@ -250,6 +258,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 <span className="gcm-wahoo-desc">Neither scary nor alive</span>
               </button>
             </div>
+            {wahooClassification === 'wahoo' && essenceName && (
+              <div className="gcm-identity-line">That's the {essenceName} in you.</div>
+            )}
             <button
               className="gcm-gold-btn"
               disabled={!wahooClassification}

@@ -34,6 +34,7 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
   const [compoundingText, setCompoundingText] = useState('')
   const [learningText, setLearningText] = useState('')
   const [attentionHours, setAttentionHours] = useState('')
+  const [narrativeRevision, setNarrativeRevision] = useState('')
   const [saving, setSaving] = useState(false)
   const [savedReview, setSavedReview] = useState(null)
 
@@ -59,6 +60,7 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
           compounding_text: compoundingText.trim() || null,
           learning_text: learningText.trim() || null,
           attention_hours: attentionHours ? Number(attentionHours) : null,
+          narrative_revision: narrativeRevision.trim() || null,
         })
         .select()
         .single()
@@ -298,6 +300,23 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
               />
               <span className="wr-number-suffix">hours</span>
             </div>
+          </div>
+
+          {/* Q8: Your Story This Week (Identity Narrative Revision) */}
+          <div className="wr-question wr-question-narrative">
+            <div className="wr-question-top">
+              <span className="wr-question-icon">📖</span>
+              <span className="wr-question-label">Your Story This Week</span>
+            </div>
+            <p className="wr-question-text">Complete this sentence:</p>
+            <p className="wr-narrative-prompt">This week, the old me would have ___. Instead, I ___.</p>
+            <textarea
+              className="wr-textarea"
+              value={narrativeRevision}
+              onChange={e => setNarrativeRevision(e.target.value)}
+              placeholder="e.g. ...hidden from the hard conversation. Instead, I said what I actually felt."
+              rows={3}
+            />
           </div>
         </div>
 

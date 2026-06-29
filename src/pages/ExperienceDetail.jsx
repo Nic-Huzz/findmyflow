@@ -326,7 +326,7 @@ export default function ExperienceDetail() {
         <DnaInsightCard
           userId={user?.id}
           experience={experience}
-          checklistProgress={items.length > 0 ? Math.round(items.filter(i => i.completed).length / items.filter(i => !i.hidden).length * 100) : 0}
+          checklistProgress={items.filter(i => !i.is_hidden).length > 0 ? Math.round(items.filter(i => i.completed && !i.is_hidden).length / items.filter(i => !i.is_hidden).length * 100) : 0}
         />
 
         {/* Health Card (completed/archived experiences only) */}
