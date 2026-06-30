@@ -11,6 +11,7 @@ const getNativePush = async () => {
   return PushNotifications
 }
 
+
 // Check if running in Capacitor native shell
 export const isNativePushSupported = () => isNativeApp()
 
@@ -86,6 +87,7 @@ let nativeListenersRegistered = false
 let currentNativeUserId = null
 
 // Register for native push notifications (Capacitor)
+// Follows official Capacitor pattern: listeners FIRST, then register()
 export const registerNativePush = async (userId) => {
   console.log('[Notifications] Registering native push for user:', userId)
   const Push = await getNativePush()
@@ -93,16 +95,18 @@ export const registerNativePush = async (userId) => {
   // Always update the current user (so existing listeners save to correct account)
   currentNativeUserId = userId
 
-  // Register with APNs
-  await Push.register()
-
-  // Only add listeners once
+  // Set up listeners BEFORE calling register() (official Capacitor pattern)
+  // This ensures the registration token event is never missed
   if (!nativeListenersRegistered) {
     nativeListenersRegistered = true
 
     Push.addListener('registration', async (token) => {
       console.log('[Notifications] APNs device token:', token.value?.substring(0, 20) + '...')
-      await saveNativePushToken(currentNativeUserId, token.value)
+      try {
+        await saveNativePushToken(currentNativeUserId, token.value)
+      } catch (e) {
+        console.error('[Notifications] Failed to save token:', e)
+      }
     })
 
     Push.addListener('registrationError', (error) => {
@@ -119,6 +123,15 @@ export const registerNativePush = async (userId) => {
       if (url) window.location.href = url
     })
   }
+
+  // Register with APNs (token arrives via 'registration' listener above)
+  // Wrap with timeout so the UI can never hang if something goes wrong
+  await Promise.race([
+    Push.register(),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Push registration timed out after 10s')), 10000)
+    )
+  ])
 }
 
 // Save APNs device token to Supabase
