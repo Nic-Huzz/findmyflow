@@ -11,6 +11,15 @@ const getNativePush = async () => {
   return PushNotifications
 }
 
+// Race a promise against a timeout
+const withTimeout = (promise, ms, label) =>
+  Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)
+    )
+  ])
+
 
 // Check if running in Capacitor native shell
 export const isNativePushSupported = () => isNativeApp()
@@ -35,8 +44,8 @@ export const getNotificationPermission = () => {
 // Request notification permission from user
 export const requestNotificationPermission = async () => {
   if (isNativePushSupported()) {
-    const Push = await getNativePush()
-    const result = await Push.requestPermissions()
+    const Push = await withTimeout(getNativePush(), 5000, 'Loading push plugin')
+    const result = await withTimeout(Push.requestPermissions(), 10000, 'Requesting permissions')
     return result.receive === 'granted' ? 'granted' : 'denied'
   }
 
@@ -125,13 +134,7 @@ export const registerNativePush = async (userId) => {
   }
 
   // Register with APNs (token arrives via 'registration' listener above)
-  // Wrap with timeout so the UI can never hang if something goes wrong
-  await Promise.race([
-    Push.register(),
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Push registration timed out after 10s')), 10000)
-    )
-  ])
+  await withTimeout(Push.register(), 10000, 'APNs registration')
 }
 
 // Save APNs device token to Supabase
@@ -300,12 +303,15 @@ export const initializeNotifications = async (userId, vapidPublicKey) => {
   try {
     // Native app path
     if (isNativePushSupported()) {
-      const Push = await getNativePush()
-      const permStatus = await Push.checkPermissions()
+      const Push = await withTimeout(getNativePush(), 5000, 'Loading push plugin')
+      const permStatus = await withTimeout(Push.checkPermissions(), 5000, 'Checking permissions')
       const permission = permStatus.receive === 'granted' ? 'granted' : 'default'
 
       if (permission === 'granted' && userId) {
-        await registerNativePush(userId)
+        // Don't block app startup if APNs registration is slow
+        registerNativePush(userId).catch(e =>
+          console.warn('[Notifications] Background registration failed:', e.message)
+        )
         return { supported: true, permission: 'granted', subscribed: true, native: true }
       }
 

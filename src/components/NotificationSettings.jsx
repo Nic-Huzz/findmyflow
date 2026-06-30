@@ -9,7 +9,8 @@ import {
   requestNotificationPermission,
   subscribeToPushNotifications,
   unsubscribeFromPushNotifications,
-  showLocalNotification
+  showLocalNotification,
+  initializeNotifications
 } from '../lib/notifications'
 import InstallPWA from './InstallPWA'
 import './NotificationSettings.css'
@@ -60,24 +61,12 @@ function NotificationSettings() {
   }
 
   const checkNotificationStatus = async () => {
-    // Native app: check via Capacitor API
-    if (isNativePushSupported()) {
-      try {
-        const { PushNotifications } = await import('@capacitor/push-notifications')
-        const permStatus = await PushNotifications.checkPermissions()
-        const permission = permStatus.receive === 'granted' ? 'granted' : 'default'
-        setNotificationStatus({ supported: true, permission, subscribed: permission === 'granted' })
-      } catch {
-        setNotificationStatus({ supported: true, permission: 'default', subscribed: false })
-      }
-      return
-    }
-
-    // Web: check via browser APIs
-    const supported = isNotificationSupported()
-    const permission = getNotificationPermission()
-    const subscribed = permission === 'granted'
-    setNotificationStatus({ supported, permission, subscribed })
+    const result = await initializeNotifications(user?.id, VAPID_PUBLIC_KEY)
+    setNotificationStatus({
+      supported: result.supported !== false,
+      permission: result.permission || 'default',
+      subscribed: result.subscribed || false
+    })
   }
 
   const handleEnableNotifications = async () => {
