@@ -151,6 +151,10 @@ export const subscribeToPushNotifications = async (userId, vapidPublicKey) => {
   console.log('[Notifications] subscribeToPushNotifications called', { userId, hasVapidKey: !!vapidPublicKey })
 
   try {
+    // Ensure service worker is registered before awaiting .ready
+    // Without this, navigator.serviceWorker.ready hangs forever
+    await registerServiceWorker()
+
     console.log('[Notifications] Waiting for service worker ready...')
     const registration = await navigator.serviceWorker.ready
     console.log('[Notifications] Service worker ready:', registration.scope)
