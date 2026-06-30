@@ -72,9 +72,9 @@ Run again tomorrow or use: `/schedule` to automate daily
 
 ## Scan log — June 30, 2026
 
-**Status: BLOCKED — no drafts generated**
+**Status: BLOCKED — no drafts generated (confirmed twice this date)**
 
-Reddit remains blocked by the cloud execution environment's network policy for the third consecutive scan. Tested: direct API (curl, status 000), RSS feed (status 000), and WebSearch (returns "domain not accessible to our user agent"). All three routes fail identically.
+Reddit remains blocked by the cloud execution environment's network policy. Fourth consecutive blocked day. Both runs today confirmed: curl (status 000), WebFetch (explicit "unable to fetch" error), WebSearch (domain not accessible). All three routes fail identically, including RSS.
 
 **To fix (action required):**
 - Option A: Run the monitor locally where Reddit is accessible.
