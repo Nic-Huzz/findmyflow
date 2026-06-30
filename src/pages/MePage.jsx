@@ -516,33 +516,19 @@ export default function MePage() {
         </div>
       </section>
 
-      {/* Welcome card — first visit only, or essence-mirror CTA for returning users */}
-      {showWelcome && (
+      {/* Essence Mirror CTA — shown until user completes it */}
+      {!essenceMirrorDone && (
         <section className="welcome-banner">
+          <h3 className="welcome-banner-start-here">Start Here:</h3>
           <div className="welcome-banner-inner">
-            {!essenceMirrorDone ? (
-              <>
-                <div className="welcome-banner-icon">✨</div>
-                <h2 className="welcome-banner-title">Discover your essence</h2>
-                <p className="welcome-banner-text">
-                  Find out which archetype drives you. It takes 5 minutes and changes how you see yourself.
-                </p>
-                <button className="welcome-banner-cta" onClick={() => navigate('/essence-mirror?returnTo=/me')}>
-                  Start Essence Mirror <span>→</span>
-                </button>
-              </>
-            ) : (
-              <>
-                <div className="welcome-banner-icon">🏠</div>
-                <h2 className="welcome-banner-title">Welcome to your home base</h2>
-                <p className="welcome-banner-text">
-                  This is where your whole journey lives. Your flow river, quests, hero profile, and progress. Come back here anytime to see how far you've come.
-                </p>
-                <button className="welcome-banner-cta" onClick={dismissWelcome}>
-                  Got it, let's go <span>→</span>
-                </button>
-              </>
-            )}
+            <div className="welcome-banner-icon">✨</div>
+            <h2 className="welcome-banner-title">Discover your essence</h2>
+            <p className="welcome-banner-text">
+              Find out which archetype drives you. It takes 5 minutes and changes how you see yourself.
+            </p>
+            <button className="welcome-banner-cta" onClick={() => navigate('/essence-mirror?returnTo=/me')}>
+              Start Essence Mirror <span>→</span>
+            </button>
           </div>
         </section>
       )}

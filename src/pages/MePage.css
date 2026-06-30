@@ -240,6 +240,14 @@
 .me-page .welcome-banner {
   padding: 0 16px 24px;
 }
+.me-page .welcome-banner-start-here {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #E9A23B;
+  margin: 0 0 6px 4px;
+}
 .me-page .welcome-banner-inner {
   background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #E9A23B 100%);
   border-radius: 20px;
