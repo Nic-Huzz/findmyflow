@@ -70,6 +70,21 @@ Run again tomorrow or use: `/schedule` to automate daily
 
 ---
 
+## Scan log — June 30, 2026
+
+**Status: BLOCKED — no drafts generated**
+
+Reddit remains blocked by the cloud execution environment's network policy for the third consecutive scan. Tested: direct API (curl, status 000), RSS feed (status 000), and WebSearch (returns "domain not accessible to our user agent"). All three routes fail identically.
+
+**To fix (action required):**
+- Option A: Run the monitor locally where Reddit is accessible.
+- Option B: Add reddit.com to the allowed domains in the Claude Code web environment network policy at code.claude.com/docs.
+- Option C: Set up a local cron job or GitHub Action with Reddit API credentials that can reach Reddit, then push results to the repo.
+
+June 22 drafts are still available above if you haven't posted them yet.
+
+---
+
 ## Scan log — June 29, 2026
 
 **Status: BLOCKED — no drafts generated**
