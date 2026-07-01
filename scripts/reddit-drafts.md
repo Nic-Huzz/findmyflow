@@ -70,6 +70,23 @@ Run again tomorrow or use: `/schedule` to automate daily
 
 ---
 
+## Scan log — July 1, 2026
+
+**Status: BLOCKED — no drafts generated (5th consecutive blocked day)**
+
+Reddit remains inaccessible from the cloud execution environment. Both curl (exit 56, status 000) and WebFetch ("unable to fetch") fail. No new routes attempted — all previously-tested alternatives (old.reddit.com, RSS, WebSearch, Pushshift-style APIs) are also blocked.
+
+**This is a persistent environment-level network policy block, not a transient error.**
+
+**Action required to fix (same as before):**
+- Option A: Run the monitor locally where Reddit is accessible.
+- Option B: Add reddit.com to the allowed domains in the Claude Code web environment network policy at code.claude.com/docs.
+- Option C: Set up a GitHub Action (runs outside this environment) with Reddit API credentials to fetch posts and push results to the repo for Claude to draft from.
+
+June 22 drafts are still available above.
+
+---
+
 ## Scan log — June 30, 2026
 
 **Status: BLOCKED — no drafts generated (confirmed twice this date)**
