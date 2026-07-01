@@ -72,9 +72,9 @@ Run again tomorrow or use: `/schedule` to automate daily
 
 ## Scan log — July 1, 2026
 
-**Status: BLOCKED — no drafts generated (5th consecutive blocked day)**
+**Status: BLOCKED — no drafts generated (confirmed twice today; 6th consecutive blocked run)**
 
-Reddit remains inaccessible from the cloud execution environment. Both curl (exit 56, status 000) and WebFetch ("unable to fetch") fail. No new routes attempted — all previously-tested alternatives (old.reddit.com, RSS, WebSearch, Pushshift-style APIs) are also blocked.
+Reddit remains inaccessible from the cloud execution environment. All three routes tested and failed on both runs today: curl (exit 56, status 000), WebFetch ("unable to fetch"), WebSearch ("domain not accessible"). No new routes remain to try.
 
 **This is a persistent environment-level network policy block, not a transient error.**
 
