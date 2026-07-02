@@ -72,9 +72,9 @@ Run again tomorrow or use: `/schedule` to automate daily
 
 ## Scan log — July 2, 2026
 
-**Status: BLOCKED — no drafts generated (7th consecutive blocked run)**
+**Status: BLOCKED — no drafts generated (confirmed twice today; 8th consecutive blocked run)**
 
-Reddit remains inaccessible. curl (exit 56, HTTP 000) and WebFetch both fail. No change from previous days.
+Reddit remains inaccessible from the cloud execution environment. Confirmed twice today: curl (exit 56, status 000). No change from previous days.
 
 June 22 drafts are still available above.
 
