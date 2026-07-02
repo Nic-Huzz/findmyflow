@@ -79,25 +79,20 @@ export default function ChallengeIntro({ userId, onComplete }) {
           <p className="challenge-intro-body">{slide.body}</p>
         )}
         {slide.hasQuadrant && (
-          <div className="ci-quadrant">
-            <div className="ci-quad ci-quad-calm">
-              <span className="ci-quad-label">Fun</span>
-              <span className="ci-quad-sub">safe, but flat</span>
+          <div className="ci-tier-stack">
+            <div className="ci-tier ci-tier-vr">
+              <span className="ci-tier-name">Vibe Rise <span className="ci-tier-bracket ci-tier-bracket--vr">(Essence Archetype)</span></span>
             </div>
-            <div className="ci-quad ci-quad-vr">
-              <span className="ci-quad-label">Vibe Rise</span>
-              <span className="ci-quad-sub">expressing, safe</span>
+            <div className="ci-tier ci-tier-ventral">
+              <span className="ci-tier-name">Fun <span className="ci-tier-bracket">(Ventral Vagal)</span></span>
             </div>
-            <div className="ci-quad ci-quad-numb">
-              <span className="ci-quad-label">Uninterested</span>
-              <span className="ci-quad-sub">shutdown, not alive</span>
+            <div className="ci-tier ci-tier-sympathetic">
+              <span className="ci-tier-name">Pressure <span className="ci-tier-bracket">(Sympathetic)</span></span>
             </div>
-            <div className="ci-quad ci-quad-anxious">
-              <span className="ci-quad-label">Pressure</span>
-              <span className="ci-quad-sub">performing, unsafe</span>
+            <div className="ci-tier ci-tier-dorsal">
+              <span className="ci-tier-name">Auto-Pilot <span className="ci-tier-bracket">(Dorsal Vagal)</span></span>
             </div>
-            <span className="ci-axis ci-axis-y">Safety →</span>
-            <span className="ci-axis ci-axis-x">Expression →</span>
+            <p className="ci-tier-tagline">Three states are mapped. <span className="ci-tier-gold">We train the fourth.</span></p>
           </div>
         )}
         {slide.hasButton && (

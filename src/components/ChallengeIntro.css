@@ -110,80 +110,75 @@
   background: #E9A23B;
 }
 
-/* Quadrant (slide 3) */
-.ci-quadrant {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
+/* Tier Stack (slide 3) */
+.ci-tier-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   margin: 24px auto 0;
-  max-width: 340px;
-  padding-left: 20px;
+  max-width: 420px;
+  width: 100%;
   animation: introTextIn 0.6s ease 0.2s both;
 }
 
-.ci-quad {
+.ci-tier {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px 12px;
+  padding: 14px 18px;
+  min-height: 48px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.ci-quad-vr {
-  background: linear-gradient(135deg, rgba(94, 23, 235, 0.5), rgba(233, 162, 59, 0.5));
-  border-color: rgba(233, 162, 59, 0.4);
-  box-shadow: 0 0 24px rgba(233, 162, 59, 0.15);
+.ci-tier-vr {
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  border-color: rgba(233, 162, 59, 0.5);
+  box-shadow: 0 0 20px rgba(233, 162, 59, 0.15);
 }
 
-.ci-quad-label {
+.ci-tier-name {
   font-size: 13px;
   font-weight: 800;
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 1px;
+  white-space: nowrap;
 }
 
-.ci-quad-vr .ci-quad-label {
-  font-size: 14px;
-}
-
-.ci-quad-sub {
-  font-size: 11px;
+.ci-tier-desc {
+  font-size: 12px;
   font-style: italic;
   color: rgba(255, 255, 255, 0.5);
-  margin-top: 2px;
 }
 
-.ci-quad-vr .ci-quad-sub {
-  color: rgba(255, 255, 255, 0.7);
+.ci-tier-vr .ci-tier-desc {
+  color: rgba(255, 255, 255, 0.85);
 }
 
-.ci-axis {
-  position: absolute;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(233, 162, 59, 0.6);
+.ci-tier-tagline {
+  font-size: 14px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-top: 16px;
 }
 
-.ci-axis-y {
-  left: -36px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  transform-origin: center center;
-  white-space: nowrap;
+.ci-tier-bracket {
+  font-weight: 500;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.5px;
 }
 
-.ci-axis-x {
-  bottom: -26px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
+.ci-tier-bracket--vr {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ci-tier-gold {
+  color: #E9A23B;
+  font-weight: 700;
 }
 
 /* Reduced motion */
