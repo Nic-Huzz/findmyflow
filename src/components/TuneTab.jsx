@@ -646,14 +646,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       d.getDate() === now.getDate()
   }
 
-  // Average recovery time across this week's recovered drains + stalls
+  // Average recovery time across this week's recovered drains
   const avgRecoveryLabel = useMemo(() => {
-    const recovered = [...recentDrains, ...recentStalls].filter(d => d.recovered_at)
+    const recovered = recentDrains.filter(d => d.recovered_at)
     if (recovered.length === 0) return null
     const avgMins = Math.round(recovered.reduce((sum, d) =>
       sum + (new Date(d.recovered_at) - new Date(d.created_at)) / 60000, 0) / recovered.length)
     return avgMins < 60 ? `${avgMins}min` : `${Math.floor(avgMins / 60)}h ${avgMins % 60}m`
-  }, [recentDrains, recentStalls])
+  }, [recentDrains])
 
   const handleSaveRecovery = async () => {
     if (!recoveryItem || savingRecovery) return
@@ -676,12 +676,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .eq('id', recoveryItem.id)
       if (error) throw error
       hapticSuccess()
-      const updater = (list) => list.map(item =>
+      setRecentDrains(list => list.map(item =>
         item.id === recoveryItem.id ? { ...item, recovered_at: recoveredAt } : item
-      )
-      // Only update the list the item belongs to
-      if (recoveryItem.type === 'drain') setRecentDrains(updater)
-      else setRecentStalls(updater)
+      ))
       setRecoveryItem(null)
       setRecoveryActivities([])
       setRecoveryOther('')
@@ -1158,8 +1155,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                     <span className="tt-recovered-badge">✓ {formatRecoveryTime(drain.created_at, drain.recovered_at)}</span>
                   ) : drain.id && isToday(drain.created_at) ? (
                     <button
+                      type="button"
                       className="tt-recover-btn"
-                      onClick={() => { hapticLight(); setRecoveryItem({ ...drain, type: 'drain' }) }}
+                      onClick={(e) => { e.stopPropagation(); hapticLight(); setRecoveryItem({ ...drain, type: 'drain' }) }}
                     >
                       Recovered?
                     </button>
@@ -1271,16 +1269,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                   <span className={`tt-drain-item-state ${stall.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
                     {stall.after_state === 'dorsal' ? '😶' : '😬'}
                   </span>
-                  {stall.recovered_at ? (
-                    <span className="tt-recovered-badge">✓ {formatRecoveryTime(stall.created_at, stall.recovered_at)}</span>
-                  ) : stall.id && isToday(stall.created_at) ? (
-                    <button
-                      className="tt-recover-btn"
-                      onClick={() => { hapticLight(); setRecoveryItem({ ...stall, type: 'stall' }) }}
-                    >
-                      Recovered?
-                    </button>
-                  ) : null}
                 </div>
               )
             })}

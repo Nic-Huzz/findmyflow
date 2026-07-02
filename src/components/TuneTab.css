@@ -620,17 +620,22 @@
 }
 
 .tt-recover-btn {
-  padding: 4px 10px;
+  padding: 6px 12px;
   background: transparent;
   border: 1.5px solid #e9ecef;
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #6c757d;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 32px;
 }
 
 .tt-recover-btn:hover {
