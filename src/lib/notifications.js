@@ -44,9 +44,23 @@ export const getNotificationPermission = () => {
 // Request notification permission from user
 export const requestNotificationPermission = async () => {
   if (isNativePushSupported()) {
-    const Push = await withTimeout(getNativePush(), 5000, 'Loading push plugin')
-    const result = await withTimeout(Push.requestPermissions(), 10000, 'Requesting permissions')
-    return result.receive === 'granted' ? 'granted' : 'denied'
+    try {
+      const Push = await withTimeout(getNativePush(), 5000, 'Loading push plugin')
+
+      // Official Capacitor pattern: check first, only request if 'prompt'
+      let permStatus = await withTimeout(Push.checkPermissions(), 5000, 'Checking permissions')
+      console.log('[Notifications] Current permission status:', JSON.stringify(permStatus))
+
+      if (permStatus.receive === 'prompt') {
+        permStatus = await withTimeout(Push.requestPermissions(), 10000, 'Requesting permissions')
+        console.log('[Notifications] After request:', JSON.stringify(permStatus))
+      }
+
+      return permStatus.receive === 'granted' ? 'granted' : 'denied'
+    } catch (error) {
+      console.error('[Notifications] Native permission error:', JSON.stringify(error), error?.message, error?.code)
+      throw error
+    }
   }
 
   if (!isWebPushSupported()) {
@@ -334,7 +348,7 @@ export const initializeNotifications = async (userId, vapidPublicKey) => {
 
     return { supported: true, permission, subscribed: false }
   } catch (error) {
-    console.error('Error initializing notifications:', error)
+    console.error('Error initializing notifications:', JSON.stringify(error), error?.message, error?.code)
     return { supported: true, permission: 'default', subscribed: false, error }
   }
 }
