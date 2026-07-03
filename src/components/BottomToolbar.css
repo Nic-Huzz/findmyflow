@@ -42,7 +42,6 @@ body.project-selector-active .bottom-toolbar {
   justify-content: space-around;
   align-items: center;
   padding: 4px 16px;
-  padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
   z-index: 1000;
   box-shadow: var(--toolbar-shadow);
   overflow: hidden;
@@ -110,7 +109,7 @@ body.project-selector-active .bottom-toolbar {
 
 /* Ensure content doesn't get hidden behind toolbar */
 .has-bottom-toolbar {
-  padding-bottom: calc(var(--toolbar-height) + env(safe-area-inset-bottom, 0));
+  padding-bottom: var(--toolbar-height);
 }
 
 /* CRM Section Toolbar - Same white styling */

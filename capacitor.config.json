@@ -7,7 +7,7 @@
     "cleartext": false
   },
   "ios": {
-    "contentInset": "never",
+    "contentInset": "automatic",
     "backgroundColor": "#ffffff",
     "scrollEnabled": true,
     "allowsLinkPreview": false
