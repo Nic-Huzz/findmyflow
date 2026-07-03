@@ -70,6 +70,16 @@ Run again tomorrow or use: `/schedule` to automate daily
 
 ---
 
+## Scan log — July 3, 2026
+
+**Status: BLOCKED — no drafts generated (9th consecutive blocked run)**
+
+Reddit remains inaccessible from the cloud execution environment. Confirmed today: curl (exit 56, status 000). No change.
+
+June 22 drafts are still available above.
+
+---
+
 ## Scan log — July 2, 2026
 
 **Status: BLOCKED — no drafts generated (confirmed twice today; 8th consecutive blocked run)**
