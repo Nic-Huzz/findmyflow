@@ -36,13 +36,13 @@ body.project-selector-active .bottom-toolbar {
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(var(--toolbar-height) + env(safe-area-inset-bottom, 0px));
   background: var(--toolbar-bg);
   border-top: 1px solid var(--toolbar-border);
   display: flex;
   justify-content: space-around;
-  align-items: flex-start;
-  padding: 6px 16px 0;
+  align-items: center;
+  padding: 4px 16px;
+  padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
   z-index: 1000;
   box-shadow: var(--toolbar-shadow);
   overflow: hidden;
@@ -217,11 +217,11 @@ body.project-selector-active .bottom-toolbar {
 /* Responsive: mobile adjustments */
 @media (max-width: 480px) {
   :root {
-    --toolbar-height: 64px;
+    --toolbar-height: 52px;
   }
 
   .toolbar-item {
-    padding: 6px 8px;
+    padding: 4px 8px;
     min-width: 56px;
   }
 
