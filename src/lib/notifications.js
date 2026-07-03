@@ -1,15 +1,6 @@
 import { supabase } from './supabaseClient'
 import { isNativeApp } from './platform'
-
-// Lazy-load Capacitor Push plugin only when in native app
-let PushNotifications = null
-const getNativePush = async () => {
-  if (!PushNotifications) {
-    const mod = await import('@capacitor/push-notifications')
-    PushNotifications = mod.PushNotifications
-  }
-  return PushNotifications
-}
+import { PushNotifications } from '@capacitor/push-notifications'
 
 // Race a promise against a timeout
 const withTimeout = (promise, ms, label) =>
@@ -45,14 +36,12 @@ export const getNotificationPermission = () => {
 export const requestNotificationPermission = async () => {
   if (isNativePushSupported()) {
     try {
-      const Push = await withTimeout(getNativePush(), 5000, 'Loading push plugin')
-
       // Official Capacitor pattern: check first, only request if 'prompt'
-      let permStatus = await withTimeout(Push.checkPermissions(), 5000, 'Checking permissions')
+      let permStatus = await withTimeout(PushNotifications.checkPermissions(), 5000, 'Checking permissions')
       console.log('[Notifications] Current permission status:', JSON.stringify(permStatus))
 
       if (permStatus.receive === 'prompt') {
-        permStatus = await withTimeout(Push.requestPermissions(), 10000, 'Requesting permissions')
+        permStatus = await withTimeout(PushNotifications.requestPermissions(), 10000, 'Requesting permissions')
         console.log('[Notifications] After request:', JSON.stringify(permStatus))
       }
 
@@ -113,7 +102,6 @@ let currentNativeUserId = null
 // Follows official Capacitor pattern: listeners FIRST, then register()
 export const registerNativePush = async (userId) => {
   console.log('[Notifications] Registering native push for user:', userId)
-  const Push = await getNativePush()
 
   // Always update the current user (so existing listeners save to correct account)
   currentNativeUserId = userId
@@ -123,7 +111,7 @@ export const registerNativePush = async (userId) => {
   if (!nativeListenersRegistered) {
     nativeListenersRegistered = true
 
-    Push.addListener('registration', async (token) => {
+    PushNotifications.addListener('registration', async (token) => {
       console.log('[Notifications] APNs device token:', token.value?.substring(0, 20) + '...')
       try {
         await saveNativePushToken(currentNativeUserId, token.value)
@@ -132,15 +120,15 @@ export const registerNativePush = async (userId) => {
       }
     })
 
-    Push.addListener('registrationError', (error) => {
+    PushNotifications.addListener('registrationError', (error) => {
       console.error('[Notifications] Native push registration error:', error)
     })
 
-    Push.addListener('pushNotificationReceived', (notification) => {
+    PushNotifications.addListener('pushNotificationReceived', (notification) => {
       console.log('[Notifications] Foreground notification:', notification)
     })
 
-    Push.addListener('pushNotificationActionPerformed', (action) => {
+    PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
       console.log('[Notifications] Notification tapped:', action)
       const url = action.notification?.data?.url
       if (url) window.location.href = url
@@ -148,7 +136,7 @@ export const registerNativePush = async (userId) => {
   }
 
   // Register with APNs (token arrives via 'registration' listener above)
-  await withTimeout(Push.register(), 10000, 'APNs registration')
+  await withTimeout(PushNotifications.register(), 10000, 'APNs registration')
 }
 
 // Save APNs device token to Supabase
@@ -317,8 +305,7 @@ export const initializeNotifications = async (userId, vapidPublicKey) => {
   try {
     // Native app path
     if (isNativePushSupported()) {
-      const Push = await withTimeout(getNativePush(), 5000, 'Loading push plugin')
-      const permStatus = await withTimeout(Push.checkPermissions(), 5000, 'Checking permissions')
+      const permStatus = await withTimeout(PushNotifications.checkPermissions(), 5000, 'Checking permissions')
       const permission = permStatus.receive === 'granted' ? 'granted' : 'default'
 
       if (permission === 'granted' && userId) {
