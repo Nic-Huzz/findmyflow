@@ -10,7 +10,8 @@ import {
   subscribeToPushNotifications,
   unsubscribeFromPushNotifications,
   showLocalNotification,
-  initializeNotifications
+  initializeNotifications,
+  sendNotification
 } from '../lib/notifications'
 import InstallPWA from './InstallPWA'
 import './NotificationSettings.css'
@@ -138,17 +139,27 @@ function NotificationSettings() {
 
   const handleTestNotification = async () => {
     try {
-      await showLocalNotification(
-        '🔔 Test Notification',
-        {
+      if (isNativePushSupported()) {
+        // Native: local notifications aren't available, use server push
+        await sendNotification(user.id, {
+          title: 'Test Notification',
           body: 'This is what your notifications will look like!',
           tag: 'test',
-          url: '/challenge'
-        }
-      )
+          url: '/7-day-challenge'
+        })
+      } else {
+        await showLocalNotification(
+          'Test Notification',
+          {
+            body: 'This is what your notifications will look like!',
+            tag: 'test',
+            url: '/7-day-challenge'
+          }
+        )
+      }
     } catch (error) {
       console.error('Error showing test notification:', error)
-      alert('Please enable notifications first')
+      alert('Could not send test notification. Please try again.')
     }
   }
 

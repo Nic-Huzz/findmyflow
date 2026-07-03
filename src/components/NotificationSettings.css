@@ -2,6 +2,7 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 2rem;
+  padding-top: calc(2rem + env(safe-area-inset-top, 0px));
 }
 
 .back-to-challenge-btn {

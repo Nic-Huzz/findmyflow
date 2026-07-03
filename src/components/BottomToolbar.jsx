@@ -153,7 +153,8 @@ const HIDDEN_ROUTES = [
   '/shift-scorecard', // Public Shift Architecture audit scorecard
   '/experience-creators', // Experience Creator Matching (public lead magnet)
   '/scope-map', // Scope Map diagnostic flow
-  '/movement-makers' // Movement Makers landing page
+  '/movement-makers', // Movement Makers landing page
+  '/settings/' // Settings pages (notifications, etc.)
 ]
 
 function BottomToolbar() {
