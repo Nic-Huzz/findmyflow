@@ -5,7 +5,7 @@
  * - healing: Personal development, self-awareness, voices work
  * - courage: Visibility challenges, facing fears
  *
- * See: docs/scoring-system-refactor.md
+ * See: docs/architecture/scoring-system-refactor.md
  */
 
 import { getWeekStartLocal as getWeekStartDate } from './dateUtils'

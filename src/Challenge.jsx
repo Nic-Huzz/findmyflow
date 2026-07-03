@@ -363,6 +363,7 @@ function Challenge() {
   const [splinterCheckinData, setSplinterCheckinData] = useState(null)
   const [healingIntention, setHealingIntention] = useState(null)
   const [healingIntentionLoaded, setHealingIntentionLoaded] = useState(false)
+  const [lifePathStuckPoints, setLifePathStuckPoints] = useState([])
   const [showIntentionSetter, setShowIntentionSetter] = useState(false)
   const [showIntentionCheckin, setShowIntentionCheckin] = useState(false)
 
@@ -1199,7 +1200,20 @@ function Challenge() {
         setHealingIntention(data || null)
         setHealingIntentionLoaded(true)
       })
-  }, [user?.id])
+    // Load stuck points from life path session for healing intention suggestions
+    if (user?.email) {
+      supabase
+        .from('life_path_sessions')
+        .select('stuck_points')
+        .eq('client_email', user.email)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data?.stuck_points) setLifePathStuckPoints(data.stuck_points)
+        })
+    }
+  }, [user?.id, user?.email])
 
   // Handler for generating challenges from the Groan Matrix
   const handleGenerateChallenge = async (cellData) => {
@@ -2610,6 +2624,7 @@ function Challenge() {
       {showIntentionSetter && (
         <HealingIntentionSetter
           userId={user?.id}
+          stuckPoints={lifePathStuckPoints}
           onSave={(data) => {
             setHealingIntention(data)
             setShowIntentionSetter(false)

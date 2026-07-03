@@ -4,7 +4,7 @@
  * Calculates tag frequencies, weights, and bullet scores based on
  * the context (joy, meaning, direction) in which tags appear.
  *
- * Reference: docs/nikigai-weighting-functions.md
+ * Reference: docs/architecture/nikigai-weighting-functions.md
  */
 
 /**

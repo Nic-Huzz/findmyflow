@@ -15,7 +15,7 @@ import SplinterVisualization from './SplinterVisualization'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './HealingIntention.css'
 
-export default function HealingIntentionSetter({ userId, onSave, onClose }) {
+export default function HealingIntentionSetter({ userId, onSave, onClose, stuckPoints = [] }) {
   const [step, setStep] = useState('intention') // intention | location | shape | color | intensity
   const [intentionText, setIntentionText] = useState('')
   const [location, setLocation] = useState(null)
@@ -87,6 +87,26 @@ export default function HealingIntentionSetter({ userId, onSave, onClose }) {
               rows={3}
               autoFocus
             />
+            {/* Stuck point suggestions from life path */}
+            {stuckPoints.length > 0 && !intentionText.trim() && (
+              <div style={{ marginTop: 8, marginBottom: 8 }}>
+                <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 1, opacity: 0.4, marginBottom: 6 }}>From your life path</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  {stuckPoints.filter(sp => sp.reason).slice(0, 5).map(sp => {
+                    const reasonText = sp.reasonLabel ? sp.reasonLabel.toLowerCase() : 'avoiding'
+                    const suggestion = `I keep ${reasonText === 'too busy' ? 'saying I\'m too busy to' : reasonText === 'scared of failing' ? 'being scared to' : reasonText === 'waiting for the right time' ? 'waiting for the right time to' : reasonText === 'need more money' ? 'saying I need more money to' : reasonText === 'need to learn more' ? 'saying I need to learn more before I' : 'putting off'} ${sp.text.toLowerCase()}`
+                    return (
+                      <button key={sp.id} onClick={() => { setIntentionText(suggestion); hapticLight() }}
+                        style={{ padding: '8px 12px', borderRadius: 10, border: '1px solid rgba(233,162,59,0.2)', background: 'rgba(233,162,59,0.06)',
+                          color: 'inherit', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left', lineHeight: 1.4, opacity: 0.7,
+                          transition: 'opacity 0.15s' }}>
+                        {suggestion}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
             <button
               className="his-next"
               disabled={!intentionText.trim()}

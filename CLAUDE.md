@@ -53,7 +53,7 @@ Users arrive at Vibe Rise at **The Crack** or after sitting in **Head Full of Dr
 
 **App segmentation**: `/7-day-challenge` is for everyone. `/create` is specifically for experience creators. Vibe Seekers still use the app; if their flow turns out to be experience creation, they naturally enter the creator track.
 
-See `docs/zone-calibration-framework.md` for the full theoretical framework (Original IP: Huzz Hurrell).
+See `docs/frameworks/zone-calibration-framework.md` for the full theoretical framework (Original IP: Huzz Hurrell).
 
 ## Tech Stack
 
@@ -241,13 +241,13 @@ Key files: `src/flows/EssenceMirrorFlow.jsx`, `src/data/essenceArchetypes.js`, e
 
 3-question diagnostic at `/create` classifying users into: The Stream (specific + low self-knowledge), The Lake (broad + low), The Waterfall (specific + high), The River (broad + high). AI classification via Haiku edge function `classify-scope-map`. Stage-specific prescriptions route differently (Stream → Flow Finder, Lake/Waterfall/River → ExperienceCreate).
 
-Key files: `src/flows/ScopeMapFlow.jsx`, `src/components/ScopeMap.jsx` (2x2 SVG). DB: `scope_map_results`. Framework: `docs/root-and-reach-framework.md`. Original IP: Huzz Hurrell.
+Key files: `src/flows/ScopeMapFlow.jsx`, `src/components/ScopeMap.jsx` (2x2 SVG). DB: `scope_map_results`. Framework: `docs/frameworks/root-and-reach-framework.md`. Original IP: Huzz Hurrell.
 
 ### 5. Experience Creator Matching
 
 Users browse 59 experience creators organized by 6 business model archetypes, select who they resonate with, and receive a per-layer product suite recommendation (attraction/core/scale/continuity) with "hell yes or not quite" validation. 318-person corpus (75 founders + 243 non-founders). Pixar-style portraits via Gemini 3.1 Flash.
 
-Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/data/experienceCreatorOfferMap.json`, `public/images/creators/`. Brief: `docs/feature-brief-experience-creator-matching.md`.
+Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/data/experienceCreatorOfferMap.json`, `public/images/creators/`. Brief: `docs/features/matching-dna/feature-brief-experience-creator-matching.md`.
 
 ### 6. 7-Day Challenge System (Vibe Rise Maintenance Engine)
 
@@ -275,7 +275,7 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 Key files: `Challenge.jsx`, `useChallengeData.js`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `WahooDiscoveryFlow.jsx`, `WahooInspiration.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`, `WeeklyReview.jsx`, `WeeklyReviewCard.jsx`, `WeeklyReview.css`
 
-Key docs: `docs/vibe-rise-ecosystem-architecture.md`, `docs/vibe-rise-challenge-alignment.md`
+Key docs: `docs/frameworks/vibe-rise-ecosystem-architecture.md`, `docs/features/challenge/vibe-rise-challenge-alignment.md`
 
 ### 7. Wahoo Map (formerly Groan Matrix)
 
@@ -387,7 +387,7 @@ Smooth subsurface-scattering skin, large expressive eyes with visible iris detai
 slightly exaggerated proportions, volumetric atmospheric lighting with visible light rays, depth of field with subtle bokeh.
 ```
 
-Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhere in the image."` Use purple→gold brand gradients. See `docs/page-component-design-guide.md` section 7.
+Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhere in the image."` Use purple→gold brand gradients. See `docs/dev-guides/page-component-design-guide.md` section 7.
 
 ## Database Schema
 
@@ -444,15 +444,15 @@ When working on features, strategy, or content, read the relevant section of the
 
 ## Key Documentation
 
-- `docs/DEVELOPMENT_PATTERNS.md` - **Required reading for flow/challenge work**
-- `docs/page-component-design-guide.md` - **Required before creating/modifying UI**
-- `docs/root-and-reach-framework.md` - **Vibe Rise / River System** (Original IP)
-- `docs/root-and-reach-overview-prompt.md` - Shareable framework overview
-- `docs/feature-brief-experience-creator-matching.md` - Experience Creator Matching brief
+- `docs/dev-guides/DEVELOPMENT_PATTERNS.md` - **Required reading for flow/challenge work**
+- `docs/dev-guides/page-component-design-guide.md` - **Required before creating/modifying UI**
+- `docs/frameworks/root-and-reach-framework.md` - **Vibe Rise / River System** (Original IP)
+- `docs/frameworks/root-and-reach-overview-prompt.md` - Shareable framework overview
+- `docs/features/matching-dna/feature-brief-experience-creator-matching.md` - Experience Creator Matching brief
 - `docs/INDEX.md` - **Thematic index of all living docs**
-- `docs/scoring-system-refactor.md` - Points/scoring architecture
-- `docs/PUSH_NOTIFICATIONS.md` - Push notification setup
-- `docs/2026-01-29-priority-hierarchy.md` - Priority hierarchy and test milestones
+- `docs/architecture/scoring-system-refactor.md` - Points/scoring architecture
+- `docs/architecture/PUSH_NOTIFICATIONS.md` - Push notification setup
+- `docs/strategy/2026-01-29-priority-hierarchy.md` - Priority hierarchy and test milestones
 
 ## Links
 

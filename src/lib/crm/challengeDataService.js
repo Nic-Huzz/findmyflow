@@ -15,7 +15,7 @@
  * - nervous_system_responses → Pricing/visibility confidence
  * - funnel_metrics → Week-over-week trends
  *
- * @see docs/crm-challenge-data-mapping.md for full mapping documentation
+ * @see docs/architecture/crm-challenge-data-mapping.md for full mapping documentation
  */
 
 import { supabase } from '../supabaseClient'

@@ -13,6 +13,7 @@ const STEPS = {
   TAG_NEW: 'tag_new',
   READING: 'reading',
   WAHOOS: 'wahoos',
+  COMPLETE: 'complete',
 }
 
 const STEP_ORDER = Object.values(STEPS)
@@ -128,22 +129,28 @@ export default function FacilitateLifePaths() {
     }
     try {
       if (sessionId) {
-        await supabase.from('life_path_sessions').update(data).eq('id', sessionId)
+        const { error } = await supabase.from('life_path_sessions').update(data).eq('id', sessionId)
+        if (error) console.error('Life path update error:', error)
       } else {
-        const { data: rows } = await supabase.from('life_path_sessions').insert(data).select('id')
-        if (rows?.[0]?.id) setSessionId(rows[0].id)
+        const { data: rows, error } = await supabase.from('life_path_sessions').insert(data).select('id')
+        if (error) console.error('Life path insert error:', error)
+        else if (rows?.[0]?.id) setSessionId(rows[0].id)
       }
     } catch (e) {
       console.error('Life path save error:', e)
     }
   }, [clientName, clientEmail, currentCareer, careers, wahooSteps, safety, step, sessionId])
 
-  // Save on step transitions (debounced slightly to batch state updates)
+  // Save on meaningful changes (debounced)
+  const saveRef = useRef(saveSession)
+  saveRef.current = saveSession
+
+  const wahooCount = Object.values(wahooSteps).reduce((sum, arr) => sum + arr.length, 0)
   useEffect(() => {
     if (step === STEPS.CLIENT || !clientName.trim()) return
-    const timer = setTimeout(() => saveSession(), 500)
+    const timer = setTimeout(() => saveRef.current(), 500)
     return () => clearTimeout(timer)
-  }, [step, taggedCareers.length, safety])
+  }, [step, taggedCareers.length, safety, wahooCount, clientName])
 
   // ── Actions ──
   const addCareer = useCallback((label, fromSpring = false) => {
@@ -198,6 +205,8 @@ export default function FacilitateLifePaths() {
   }, [])
 
   const doReset = useCallback(() => {
+    // Save final state before resetting
+    saveRef.current()
     setCareers([])
     setSafety(0)
     setStep(STEPS.CLIENT)
@@ -603,18 +612,22 @@ export default function FacilitateLifePaths() {
           )}
 
           {/* ── Reading step (punchline in panel) ── */}
-          {isReading && hasGapPattern && (
+          {isReading && (
             <div className="flp-reading-panel">
-              <div className={`flp-punchline ${showPunchline ? 'visible' : ''}`}>
-                <p>We don't rise to the level of our ambitions.</p>
-                <p>We fall to the level that feels safe.</p>
-              </div>
-              <div className={`flp-punchline flp-punchline-2 ${showPunchline2 ? 'visible' : ''}`}>
-                Your current safety response is where you are now.<br />
-                Want help raising that level to the height of your ambitions?
-              </div>
+              {hasGapPattern && (
+                <>
+                  <div className={`flp-punchline ${showPunchline ? 'visible' : ''}`}>
+                    <p>We don't rise to the level of our ambitions.</p>
+                    <p>We fall to the level that feels safe.</p>
+                  </div>
+                  <div className={`flp-punchline flp-punchline-2 ${showPunchline2 ? 'visible' : ''}`}>
+                    Your current safety response is where you are now.<br />
+                    Want help raising that level to the height of your ambitions?
+                  </div>
+                </>
+              )}
               {showContinue && (
-                <button className="flp-advance-btn flp-breathing" onClick={advanceFromReading} style={{ marginTop: 16 }}>
+                <button className="flp-advance-btn" onClick={advanceFromReading} style={{ marginTop: 16 }}>
                   Continue →
                 </button>
               )}
@@ -657,7 +670,7 @@ export default function FacilitateLifePaths() {
           {/* ── Wahoo step ── */}
           {step === STEPS.WAHOOS && (
             <>
-              <div className="flp-section-title">Pick the one that pulls you most</div>
+              <div className="flp-panel-step-prompt">Which career path pulls you most?</div>
               <div className="flp-wahoo-career-list">
                 {careers.filter(c => c.predictedState).map(c => (
                   <div
@@ -673,8 +686,8 @@ export default function FacilitateLifePaths() {
 
               {selectedWahooId && (
                 <>
-                  <div className="flp-section-title">
-                    Wahoo steps toward {careers.find(c => c.id === selectedWahooId)?.label}
+                  <div className="flp-panel-step-prompt" style={{ fontSize: 14, marginBottom: 4 }}>
+                    If we broke down living the "{careers.find(c => c.id === selectedWahooId)?.label}" life path into tiny steps, what are they?
                   </div>
                   <div className="flp-wahoo-steps">
                     {(wahooSteps[selectedWahooId] || []).map((ws, i) => (
@@ -712,10 +725,28 @@ export default function FacilitateLifePaths() {
                 </>
               )}
 
+              <button className="flp-advance-btn" onClick={() => { saveRef.current(); setStep(STEPS.COMPLETE) }} style={{ width: '100%', marginTop: 16 }}>
+                Save & finish →
+              </button>
               <button className="flp-reset-btn" onClick={doReset}>
-                Done, reset for next participant (Shift+R)
+                Reset for next participant (Shift+R)
               </button>
             </>
+          )}
+
+          {/* ── Complete step ── */}
+          {step === STEPS.COMPLETE && (
+            <div className="flp-reading-panel">
+              <div className="flp-punchline visible">
+                <p>Session saved.</p>
+              </div>
+              <div className="flp-punchline flp-punchline-2 visible">
+                {clientName}'s life path map has been saved.
+              </div>
+              <button className="flp-advance-btn" onClick={doReset} style={{ marginTop: 24 }}>
+                New session →
+              </button>
+            </div>
           )}
 
           {/* Reset for input steps */}

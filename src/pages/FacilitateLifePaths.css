@@ -20,6 +20,46 @@
   color: #1a1a2e;
 }
 
+/* Purple theme: purple page chrome, white map */
+.flp-page.purple {
+  background: #5e17eb;
+  color: #fff;
+}
+
+.flp-page.purple .flp-panel {
+  background: #4a12c4;
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+
+.flp-page.purple .flp-map-area {
+  background: #fff;
+  border-radius: 12px;
+  margin: 8px;
+}
+
+.flp-page.purple .flp-map-header { color: rgba(0,0,0,0.5); }
+.flp-page.purple .flp-title { color: rgba(0,0,0,0.3); }
+.flp-page.purple .flp-step-dot { background: rgba(0,0,0,0.1); }
+.flp-page.purple .flp-theme-btn,
+.flp-page.purple .flp-shortcut-btn { border-color: rgba(0,0,0,0.1); color: rgba(0,0,0,0.4); }
+.flp-page.purple .flp-prompt-text { color: rgba(0,0,0,0.7); }
+
+.flp-page.purple .flp-input {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-color: rgba(255,255,255,0.15);
+}
+.flp-page.purple .flp-input::placeholder { color: rgba(255,255,255,0.35); }
+.flp-page.purple .flp-input:focus { border-color: #E9A23B; }
+
+.flp-page.purple .flp-career-list-item { background: rgba(255,255,255,0.06); }
+.flp-page.purple .flp-reset-btn { border-color: rgba(255,255,255,0.15); }
+
+.flp-page.purple .flp-punchline { color: #fff; }
+.flp-page.purple .flp-punchline-2 { color: rgba(255,255,255,0.6); }
+
+.flp-page.purple.flp-reading-mode { background: #4a12c4; }
+
 /* Reading mode deepens the background for dramatic effect */
 .flp-page.dark.flp-reading-mode {
   background: #000;
@@ -130,7 +170,7 @@
 }
 
 .flp-punchline {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 300;
   letter-spacing: 0.3px;
   line-height: 1.5;
@@ -139,7 +179,7 @@
 }
 
 .flp-punchline p {
-  margin: 0 0 12px;
+  margin: 0 0 16px;
 }
 
 .flp-punchline p:last-child {
@@ -159,10 +199,11 @@
 }
 
 .flp-punchline-2 {
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 22px;
+  font-weight: 300;
   font-style: normal;
-  letter-spacing: 0;
+  letter-spacing: 0.2px;
+  line-height: 1.5;
 }
 
 .flp-page.dark .flp-punchline-2 {
@@ -789,11 +830,11 @@
   .flp-advance-btn { font-size: 13px; padding: 10px 20px; }
 
   .flp-punchline {
-    font-size: 16px;
+    font-size: 22px;
   }
 
   .flp-punchline-2 {
-    font-size: 12px;
+    font-size: 16px;
   }
   .flp-map-header { padding: 8px 12px; }
   .flp-map-svg { padding: 0 8px 8px; }

@@ -3,8 +3,8 @@
  *
  * Extracts tags from user responses using Claude API via Supabase Edge Function
  *
- * Reference: docs/nikigai-auto-tagging-schema.md
- * Reference: docs/nikigai-tag-ambiguity-decision-tree.md
+ * Reference: docs/architecture/nikigai-auto-tagging-schema.md
+ * Reference: docs/architecture/nikigai-tag-ambiguity-decision-tree.md
  */
 
 import { supabase } from './supabaseClient.js'

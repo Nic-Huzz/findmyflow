@@ -3,7 +3,7 @@
  *
  * Groups items (responses/bullets) into meaningful clusters based on tag similarity
  *
- * Reference: docs/nikigai-clustering-quality-metrics.md
+ * Reference: docs/architecture/nikigai-clustering-quality-metrics.md
  */
 
 import { calculateClusterScore } from './weighting.js'

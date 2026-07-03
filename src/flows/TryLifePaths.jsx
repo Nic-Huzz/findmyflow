@@ -111,10 +111,12 @@ export default function TryLifePaths() {
     }
     try {
       if (sessionId) {
-        await supabase.from('life_path_sessions').update(data).eq('id', sessionId)
+        const { error } = await supabase.from('life_path_sessions').update(data).eq('id', sessionId)
+        if (error) console.error('Life path update error:', error)
       } else {
-        const { data: rows } = await supabase.from('life_path_sessions').insert(data).select('id')
-        if (rows?.[0]?.id) setSessionId(rows[0].id)
+        const { data: rows, error } = await supabase.from('life_path_sessions').insert(data).select('id')
+        if (error) console.error('Life path insert error:', error)
+        else if (rows?.[0]?.id) setSessionId(rows[0].id)
       }
     } catch (e) { console.error('Save error:', e) }
   }, [clientName, clientEmail, currentCareer, careers, wahooSteps, safety, step, sessionId])

@@ -294,6 +294,7 @@ const AppBuildInterest = lazyRetry(() => import('./components/AppBuild/AppBuildI
 const LifePathTest = lazyRetry(() => import('./pages/LifePathTest'))
 const FacilitateLifePaths = lazyRetry(() => import('./pages/FacilitateLifePaths'))
 const TryLifePaths = lazyRetry(() => import('./flows/TryLifePaths'))
+const LifePathWidgetTest = lazyRetry(() => import('./pages/LifePathWidgetTest'))
 
 // Lazy-loaded - Public Play-List Feed
 const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
@@ -398,7 +399,8 @@ function ConditionalZarlo() {
   const isRemarkableFlow = location.pathname === '/create/remarkable'
   const isCreateFlow = location.pathname.startsWith('/create/') && location.pathname !== '/create'
   const isFacilitate = location.pathname.startsWith('/facilitate/')
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow || isFacilitate) return null
+  const isLifePaths = location.pathname === '/life-paths'
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow || isFacilitate || isLifePaths) return null
   return <ZarloWidget />
 }
 
@@ -453,6 +455,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/movement-makers' ||
                         location.pathname === '/pre-launch' ||
                         location.pathname.startsWith('/facilitate/') ||
+                        location.pathname === '/life-paths' ||
                         (location.pathname.startsWith('/create/') &&
                          location.pathname !== '/create' &&
                          location.pathname !== '/create/experiences' &&
@@ -572,7 +575,7 @@ function AppRouter() {
               <Route path="/log-in" element={IS_CREATOR ? <CreatorLogin /> : <PersonaAssessment />} />
               <Route path="/unsubscribe" element={<Unsubscribe />} />
               <Route path="/rule-break-tree" element={<Suspense fallback={<LoadingSpinner />}><RuleBreakTree /></Suspense>} />
-              <Route path="/scale-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><ScaleDiagnosticFlow /></Suspense>} />
+              <Route path="/scale-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />
 
               {/* Play-Skills Identifier - Standalone */}
               <Route path="/play-skills-identifier" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PlaySkillsIdentifier /></Suspense></AuthGate>} />
@@ -717,6 +720,7 @@ function AppRouter() {
             <Route path="/try/facilitator-score" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />
             <Route path="/try/life-paths-test" element={<LifePathTest />} />
             <Route path="/try/life-paths" element={<TryLifePaths />} />
+            <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
 

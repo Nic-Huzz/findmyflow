@@ -1,11 +1,11 @@
 /**
- * FacilitatorScore.jsx — /try/facilitator-score
- * Public lead magnet: "Facilitator Capacity Score"
+ * FacilitatorScore.jsx — /try/facilitator-score AND /scale-diagnostic
+ * Unified flow: works both public (no auth, email capture) and logged-in (saves to profile, pulls RemarkableFlow data).
  *
- * 5-screen flow: Intro → Gate (Body + Culture) → Identity + Access → Email Capture → Results
- * No auth required. Email captured to lead_captures table.
+ * Public: Intro → Gate → Identity+Access → Email Capture → Results
+ * Logged-in: Intro (with rule break context) → Gate → Identity+Access → Results (saves to scale_diagnostics)
  */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import '../flows/ScaleDiagnosticFlow.css'
@@ -26,10 +26,10 @@ const QUADRANT_NAMES = {
 }
 
 const RECOMMENDATIONS = {
-  body: 'Add a body-based element. Even 5 minutes of breathwork, movement, or sensory experience transforms your product from informational to somatic.',
-  identity: 'Create identity language. What do your people call themselves? Give them a word that separates "before" and "after".',
-  culture: 'Build the content and community that normalises this practice. 10 pieces of content showing real people doing it. A community where it\'s the default, not the exception.',
-  access: 'Reduce friction. Free tier. No equipment. 5-minute entry point. The first experience should cost nothing and require nothing.',
+  body: 'Your experience lives in the head, not the body. People leave informed but unchanged. Add one somatic element: 5 minutes of breathwork, a cold splash, a movement sequence. The nervous system registers physical shifts, not intellectual ones.',
+  identity: 'People attend, enjoy, and forget. They don\'t leave with a new identity. Give them a word for what they are now: "I\'m someone who ___." Without that language, they\'re visitors, not members.',
+  culture: 'Your experience works but it doesn\'t spread. People won\'t bring it up at dinner. Build 10 pieces of content showing real people doing it. Create the community where this is the default, not the exception.',
+  access: 'Too many barriers between someone and their first experience. The person who needs this most is exhausted and overwhelmed. Can they start in 5 minutes with nothing? If not, you\'re only reaching people who are already well.',
 }
 
 const BODY_OPTIONS = [
@@ -72,22 +72,65 @@ export default function FacilitatorScore() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Scores
+  // Scores (declared first so useEffect can set them)
   const [scoreBody, setScoreBody] = useState(0)
   const [scoreCulture, setScoreCulture] = useState(0)
   const [scoreIdentity, setScoreIdentity] = useState(0)
   const [scoreAccess, setScoreAccess] = useState(0)
 
-  // Email capture
+  // Auth state — works both logged-in and public
+  const [user, setUser] = useState(null)
+  const [projectName, setProjectName] = useState('')
+  const [ruleBreak, setRuleBreak] = useState('')
+  const [existingDiagId, setExistingDiagId] = useState(null)
+
+  // Email capture (public only)
   const [email, setEmail] = useState('')
   const [emailSaving, setEmailSaving] = useState(false)
   const [emailError, setEmailError] = useState(null)
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const u = data?.user
+      if (!u) return
+      setUser(u)
+      // Pull RemarkableFlow data if logged in
+      supabase.from('remarkable_angles')
+        .select('project_name, ai_rule_statement')
+        .eq('user_id', u.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .then(({ data: angle }) => {
+          if (angle?.[0]) {
+            if (angle[0].project_name) setProjectName(angle[0].project_name)
+            if (angle[0].ai_rule_statement) setRuleBreak(angle[0].ai_rule_statement)
+          }
+        })
+      // Pre-fill from existing diagnostic
+      supabase.from('scale_diagnostics')
+        .select('id, score_body, score_culture, score_identity, score_access')
+        .eq('user_id', u.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .then(({ data: diag }) => {
+          if (diag?.[0]) {
+            setExistingDiagId(diag[0].id)
+            if (diag[0].score_body) setScoreBody(diag[0].score_body)
+            if (diag[0].score_culture) setScoreCulture(diag[0].score_culture)
+            if (diag[0].score_identity) setScoreIdentity(diag[0].score_identity)
+            if (diag[0].score_access) setScoreAccess(diag[0].score_access)
+          }
+        })
+    })
+  }, [])
+
+  const isLoggedIn = !!user
 
   // Share feedback
   const [copied, setCopied] = useState(false)
 
   // Computed
-  const totalScore = Math.round((scoreBody * scoreCulture * scoreIdentity * scoreAccess) / 625 * 100)
+  const totalScore = Math.round(((scoreBody + scoreCulture + scoreIdentity + scoreAccess) / 20) * 100)
 
   const getScoreColor = (score) => {
     if (score >= 75) return '#34d399'
@@ -153,6 +196,29 @@ export default function FacilitatorScore() {
     setStep(STEPS.RESULTS)
   }
 
+  // Save for logged-in users (to scale_diagnostics)
+  const saveForUser = async () => {
+    if (!user) return
+    const fields = {
+      score_body: scoreBody,
+      score_culture: scoreCulture,
+      score_identity: scoreIdentity,
+      score_access: scoreAccess,
+      gate_passed: scoreBody >= 4 && scoreCulture >= 4,
+      project_name: projectName || null,
+    }
+    try {
+      if (existingDiagId) {
+        await supabase.from('scale_diagnostics').update(fields).eq('id', existingDiagId)
+      } else {
+        const { data } = await supabase.from('scale_diagnostics').insert({ ...fields, user_id: user.id }).select('id').single()
+        if (data?.id) setExistingDiagId(data.id)
+      }
+    } catch (err) {
+      console.warn('Scale diagnostic save failed:', err.message)
+    }
+  }
+
   const handleSkipEmail = () => {
     setStep(STEPS.RESULTS)
   }
@@ -190,10 +256,17 @@ export default function FacilitatorScore() {
         <div className="sdf-container sdf-screen">
           <div className="sdf-intro">
             <div className="sdf-intro-content">
-              <div className="sdf-badge">Lead Magnet</div>
+              <div className="sdf-badge">Facilitator Capacity Score</div>
 
-              <h1>Facilitator <span className="sdf-gold">Capacity</span> Score</h1>
-              <p>Can your experience scale? 4 questions. 2 minutes.</p>
+              {ruleBreak && (
+                <div className="sdf-context-card" style={{ marginBottom: '1rem' }}>
+                  {projectName && <strong>{projectName}: </strong>}
+                  "{ruleBreak}"
+                </div>
+              )}
+
+              <h1>Can your experience <span className="sdf-gold">scale</span>?</h1>
+              <p>4 questions. 2 minutes. {isLoggedIn ? 'Your results save to your profile.' : 'Score your experience across 4 quadrants.'}</p>
             </div>
 
             <button className="sdf-cta" onClick={() => { hapticLight(); setStep(STEPS.GATE) }}>
@@ -218,6 +291,7 @@ export default function FacilitatorScore() {
           {/* Question A: Body */}
           <div className="sdf-question-section">
             <div className="sdf-question-label">Does your experience directly change how someone's body FEELS?</div>
+            <p className="sdf-question-why">Experiences that don't touch the body rarely scale beyond a niche. The nervous system registers physical shifts, not intellectual ones.</p>
             <div className="sdf-option-list">
               {BODY_OPTIONS.map(opt => (
                 <button
@@ -234,6 +308,7 @@ export default function FacilitatorScore() {
           {/* Question B: Culture */}
           <div className="sdf-question-section">
             <div className="sdf-question-label">Would someone who does this tell their friends unprompted?</div>
+            <p className="sdf-question-why">If people won't talk about it, it can't spread. Word-of-mouth is the only sustainable growth for experiences.</p>
             <div className="sdf-option-list">
               {CULTURE_OPTIONS.map(opt => (
                 <button
@@ -284,6 +359,7 @@ export default function FacilitatorScore() {
           {/* Identity */}
           <div className="sdf-question-section">
             <div className="sdf-question-label">Would someone describe themselves <span className="sdf-gold">differently</span> after doing this regularly?</div>
+            <p className="sdf-question-why">Without identity shift, people attend once and don't return. "I'm someone who does this" is the bridge from trying to belonging.</p>
             <div className="sdf-option-list">
               {IDENTITY_OPTIONS.map(opt => (
                 <button
@@ -300,6 +376,7 @@ export default function FacilitatorScore() {
           {/* Access */}
           <div className="sdf-question-section">
             <div className="sdf-question-label">Could someone start <span className="sdf-gold">today</span> with zero preparation, equipment, or expertise?</div>
+            <p className="sdf-question-why">Every prerequisite is a drop-off point. The easier the first step, the more people take it.</p>
             <div className="sdf-option-list">
               {ACCESS_OPTIONS.map(opt => (
                 <button
@@ -318,7 +395,16 @@ export default function FacilitatorScore() {
             <button
               className="sdf-cta"
               disabled={!bothSelected}
-              onClick={() => { hapticLight(); setStep(STEPS.EMAIL) }}
+              onClick={() => {
+                hapticLight()
+                if (isLoggedIn) {
+                  saveForUser()
+                  hapticSuccess()
+                  setStep(STEPS.RESULTS)
+                } else {
+                  setStep(STEPS.EMAIL)
+                }
+              }}
             >
               See my score
             </button>
@@ -493,7 +579,7 @@ export default function FacilitatorScore() {
                 boxSizing: 'border-box',
               }}
             >
-              Book a Capacity Call — $200
+              {isLoggedIn ? 'Back to Create Portal →' : 'Book a Capacity Call — $200'}
             </a>
 
             <button

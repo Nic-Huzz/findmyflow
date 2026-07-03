@@ -6,6 +6,15 @@ export const CAREER_X = 680 // All career endpoints at this X (v1: equal distanc
 
 export const STATES = ['vibe', 'peace', 'anxious', 'shutdown']
 
+export const STUCK_REASONS = [
+  { id: 'too_busy', label: 'Too busy', emoji: '⏰' },
+  { id: 'need_money', label: 'Need more money', emoji: '💰' },
+  { id: 'need_learn', label: 'Need to learn more', emoji: '📚' },
+  { id: 'scared', label: 'Scared of failing', emoji: '😰' },
+  { id: 'waiting', label: 'Waiting for the right time', emoji: '⏳' },
+  { id: 'dont_know', label: "Don't know where to start", emoji: '🤷' },
+]
+
 export const STATE_META = {
   vibe:     { y: 80,  color: '#E9A23B', label: 'Vibe Rise',     emoji: '🔥', felt: 'alive, lit up' },
   peace:    { y: 210, color: '#10b981', label: 'Fun',            emoji: '😌', felt: 'fun, settled' },

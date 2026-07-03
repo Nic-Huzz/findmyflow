@@ -11,7 +11,7 @@
  * - Each flow can evolve independently
  * - Extensible - easy to add new data sources
  *
- * See docs/BUSINESS_PROFILE_ARCHITECTURE.md for full architecture details.
+ * See docs/architecture/BUSINESS_PROFILE_ARCHITECTURE.md for full architecture details.
  */
 
 import { supabase } from './supabaseClient'
