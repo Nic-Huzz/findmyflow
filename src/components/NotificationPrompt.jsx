@@ -31,8 +31,19 @@ function NotificationPrompt({ onDismiss }) {
       return
     }
 
-    // Check permission
-    const currentPermission = getNotificationPermission()
+    // Check permission (async for native, sync for web)
+    let currentPermission = 'default'
+    if (isNativePushSupported()) {
+      try {
+        const { PushNotifications } = await import('@capacitor/push-notifications')
+        const status = await PushNotifications.checkPermissions()
+        currentPermission = status.receive === 'granted' ? 'granted' : 'default'
+      } catch {
+        currentPermission = 'default'
+      }
+    } else {
+      currentPermission = getNotificationPermission()
+    }
     setPermission(currentPermission)
 
     // Show prompt if permission not yet granted
