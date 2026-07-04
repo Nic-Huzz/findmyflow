@@ -746,9 +746,9 @@ export default function LeagueOverview() {
                       {p.active ? (
                         <span className="lo-feed-stats">
                           {[
-                            p.practices > 0 && `☀️ ${p.practices}`,
-                            p.wahoos > 0 && `🔥 ${p.wahoos}`,
-                            p.healing > 0 && `💚 ${p.healing}`,
+                            p.practices > 0 && `☀️ ${p.practices} Tune`,
+                            p.wahoos > 0 && `🔥 ${p.wahoos} Wahoos`,
+                            p.healing > 0 && `💚 ${p.healing} Healing`,
                           ].filter(Boolean).join('  ')}
                         </span>
                       ) : (
