@@ -261,9 +261,6 @@ export default function LifePathFlow() {
     setStuckPoints(prev => [...prev, newSp])
     setStuckInput('')
     setActiveReasonId(newSp.id)
-    // Auto-hide reason selector after 5s
-    clearTimeout(reasonTimerRef.current)
-    reasonTimerRef.current = setTimeout(() => setActiveReasonId(null), 5000)
     setTimeout(() => stuckInputRef.current?.focus(), 50)
   }, [stuckInput, selectedWahooId])
 
@@ -512,12 +509,10 @@ export default function LifePathFlow() {
                 </>
               ) : (
                 <>
-                  <div style={{ fontSize: 14, opacity: 0.4, letterSpacing: '0.5px', marginBottom: 16 }}>{currentCareer.label}</div>
-                  <div style={{ fontSize: 32, fontWeight: 300, color: STATE_META[currentCareer.state]?.color, marginBottom: 28 }}>
-                    {STATE_META[currentCareer.state]?.emoji} {STATE_META[currentCareer.state]?.label}
-                  </div>
-                  <div style={{ display: 'flex', gap: 6, marginBottom: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
-                    {STATES.map(s => {
+                  <div style={{ fontSize: 14, opacity: 0.4, letterSpacing: '0.5px', marginBottom: 12 }}>{currentCareer.label}</div>
+                  <div style={{ fontSize: 13, opacity: 0.45, marginBottom: 8 }}>Your body has four modes.</div>
+                  <div style={{ display: 'flex', gap: 6, marginBottom: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+                    {[...STATES].reverse().map(s => {
                       const m = STATE_META[s]
                       const isActive = s === currentCareer.state
                       return (
@@ -532,9 +527,8 @@ export default function LifePathFlow() {
                       )
                     })}
                   </div>
-                  <div style={{ fontSize: 14, opacity: 0.5, lineHeight: 1.7, maxWidth: 300, textAlign: 'center', marginBottom: 28 }}>
-                    <p style={{ margin: '0 0 10px' }}>Your body has four modes.</p>
-                    <p style={{ margin: '0 0 10px' }}>The one you spend the most time in decides which life paths feel possible.</p>
+                  <div style={{ fontSize: 14, opacity: 0.5, lineHeight: 1.7, maxWidth: 300, textAlign: 'center', marginBottom: 20 }}>
+                    <p style={{ margin: '0 0 8px' }}>The one you spend the most time in decides which life paths feel possible.</p>
                     <p style={{ margin: 0 }}>Right now, you're walking the <span style={{ color: STATE_META[currentCareer.state]?.color, opacity: 1 }}>{STATE_META[currentCareer.state]?.label}</span> path.</p>
                   </div>
                   <button className="flp-advance-btn" onClick={() => setStep(STEPS.ENTER)}>What else is out there? →</button>
@@ -616,10 +610,11 @@ export default function LifePathFlow() {
               {hasGapPattern && (
                 <>
                   <div className={`flp-punchline ${showPunchline ? 'visible' : ''}`}>
-                    <p>We don't rise to the level of our ambitions.</p><p>We fall to the level that feels safe.</p>
+                    <p>We don't rise to the level of our ambitions.</p><p>We fall to the level that feels emotionally safe.</p>
                   </div>
                   <div className={`flp-punchline flp-punchline-2 ${showPunchline2 ? 'visible' : ''}`}>
-                    Your current safety response is where you are now.<br />Want help raising that level to the height of your ambitions?
+                    <p style={{ margin: '0 0 12px' }}>The cone of light on your map is where you feel safe right now.</p>
+                    <p style={{ margin: 0 }}>Want help expanding it to reach the height of your ambitions?</p>
                   </div>
                 </>
               )}
@@ -721,7 +716,7 @@ export default function LifePathFlow() {
           {step === STEPS.STUCK_SPRING && selectedWahooId && (
             <div className="flp-panel-step">
               <div className="flp-panel-step-prompt">
-                Is that really all? What about things you've been too busy for? Waiting to save more for? Wanting to learn more before doing? Waiting for the right moment?
+                Is that really all? What are all the moments you felt inspired to do something but didn't end up actually doing it?
               </div>
               <div className="flp-input-row">
                 <input ref={stuckInputRef} className="flp-input" type="text" value={stuckInput}
@@ -819,8 +814,9 @@ export default function LifePathFlow() {
           {step === STEPS.COMPLETE && (
             <div className="flp-reading-panel">
               <div className="flp-punchline visible"><p>Your life path map is saved.</p></div>
-              <div style={{ fontSize: 14, opacity: 0.5, marginTop: 8 }}>
-                {(wahooSteps[selectedWahooId] || []).length > 0 && 'Your wahoo steps are now in your Play-List tab.'}
+              <div style={{ fontSize: 14, opacity: 0.5, lineHeight: 1.6, maxWidth: 320, textAlign: 'center', marginTop: 8 }}>
+                <p style={{ margin: '0 0 10px' }}>This app is designed to help you unlock the life paths above where you are now.</p>
+                <p style={{ margin: 0 }}>Your wahoos expand what feels possible. Your healing work removes what's been holding you back.</p>
               </div>
               <button className="flp-advance-btn" onClick={() => navigate('/7-day-challenge')} style={{ marginTop: 16 }}>
                 Back to challenge →

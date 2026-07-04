@@ -12,6 +12,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { useAuth } from '../../auth/AuthProvider'
 import confetti from 'canvas-confetti'
 import { getLevelConfig, LEVEL_CONFIG } from './LevelConfig'
 import DeepDiveCard from './DeepDiveCard'
@@ -25,6 +26,7 @@ import JourneyGraphPopup from '../JourneyGraphPopup'
 import './LevelTab.css'
 
 export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
+  const { user } = useAuth()
   // maxUnlockedLevel is the user's actual journey level from DB. currentLevel is which level they're viewing.
   const unlockedLevel = maxUnlockedLevel ?? currentLevel
   const config = getLevelConfig(currentLevel)
@@ -42,6 +44,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasPlaylistUpdate, setHasPlaylistUpdate] = useState(false)
   const [hasFlowDeepDive, setHasFlowDeepDive] = useState({}) // generic tracker for flow-based deep dives
   const [hasWoundMap, setHasWoundMap] = useState(false)
+  const [hasLifePaths, setHasLifePaths] = useState(false)
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
   const [hasPlaylistCompletion, setHasPlaylistCompletion] = useState(false)
@@ -162,6 +165,15 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           setHasWoundMap(true)
         }
       })
+    // Check if life paths session exists
+    if (user?.email) {
+      supabase
+        .from('life_path_sessions')
+        .select('id')
+        .eq('client_email', user.email)
+        .limit(1)
+        .then(({ data }) => { if (data?.length > 0) setHasLifePaths(true) })
+    }
     // Check if playskills exist (from /get-started, curiosity compass, or PlaySkillPicker)
     supabase
       .from('nikigai_clusters')
@@ -230,7 +242,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const levelQuests = [
     ...(config.zones ? [{ label: 'Zone Diagnosis', done: !!selectedZone }] : []),
     ...(config.deepDive ? [{ label: config.deepDive.name, done:
-      config.deepDive.id === 'hero_avatar' ? hasEssenceAvatar
+      config.deepDive.id === 'life_paths' ? hasLifePaths
+      : config.deepDive.id === 'hero_avatar' ? hasEssenceAvatar
       : config.deepDive.id === 'life_map' ? hasLifeMap
       : config.deepDive.id === 'healing_compass' ? hasHealingCompass
       : config.deepDive.id === 'career_clarity' ? hasCareerClarity
@@ -356,12 +369,13 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       </div>}
 
       {/* Deep Dive */}
-      <DeepDiveCard deepDive={config.deepDive} isCompleted={config.deepDive?.id === 'hero_avatar' ? hasEssenceAvatar : config.deepDive?.id === 'life_map' ? hasLifeMap : config.deepDive?.id === 'career_clarity' ? hasCareerClarity : config.deepDive?.id === 'healing_compass' ? hasHealingCompass : config.deepDive?.id === 'matrix_codes' ? !!hasFlowDeepDive['recognise_shadow_work'] : config.deepDive?.id === 'nervous_system' ? !!hasFlowDeepDive['nervous_system_map'] : config.deepDive?.id === 'limiting_belief_rewire' ? !!hasFlowDeepDive['limiting_belief_rewire'] : false} />
+      <DeepDiveCard deepDive={config.deepDive} isCompleted={config.deepDive?.id === 'life_paths' ? hasLifePaths : config.deepDive?.id === 'hero_avatar' ? hasEssenceAvatar : config.deepDive?.id === 'life_map' ? hasLifeMap : config.deepDive?.id === 'career_clarity' ? hasCareerClarity : config.deepDive?.id === 'healing_compass' ? hasHealingCompass : config.deepDive?.id === 'matrix_codes' ? !!hasFlowDeepDive['recognise_shadow_work'] : config.deepDive?.id === 'nervous_system' ? !!hasFlowDeepDive['nervous_system_map'] : config.deepDive?.id === 'limiting_belief_rewire' ? !!hasFlowDeepDive['limiting_belief_rewire'] : false} />
 
       {/* Extra Quests (Level-specific) */}
       {config.extraQuests?.map(quest => {
         const isCompleted =
-          quest.id === 'hero_avatar' ? hasEssenceAvatar
+          quest.id === 'life_paths' ? hasLifePaths
+          : quest.id === 'hero_avatar' ? hasEssenceAvatar
           : quest.id === 'wound_map' ? hasWoundMap
           : quest.id === 'curiosity_compass' ? hasCuriosityCompass
           : quest.id === 'find_wahoos' ? (hasWahoos || hasPlaySkills || hasCuriosityCompass)
@@ -371,7 +385,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           : quest.id === 'people_matching' ? hasPeopleMatching
           : quest.id === 'playlist_update' ? hasPlaylistUpdate
           : false
-        const isLocked = quest.lockedUntil === 'curiosity_compass' && !hasCuriosityCompass
+        const isLocked = (quest.lockedUntil === 'curiosity_compass' && !hasCuriosityCompass) || (quest.lockedUntil === 'life_paths' && !hasLifePaths)
 
         // Play-List Challenge with dot tracking (levels 1+)
         if (quest.id === 'playlist_challenge' && currentLevel > 0 && config.courageCount > 0) {
