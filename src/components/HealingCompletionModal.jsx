@@ -67,6 +67,19 @@ export default function HealingCompletionModal({ quest, userId, weeklyFocus, onC
     const type = quest.type?.toLowerCase()
     const hasMultiStepHandler = MULTI_STEP_QUEST_IDS.includes(quest.id) || quest.voiceType
 
+    // Checkbox quests get the simple "Mark Complete" button regardless of type
+    if (quest.inputType === 'checkbox') {
+      return (
+        <button
+          className="gcm-gold-btn"
+          onClick={() => handleQuestDone(quest, 'completed')}
+        >
+          Mark Complete
+        </button>
+      )
+    }
+
+    // Multi-step quest input components
     if (type === 'recognise' && hasMultiStepHandler) {
       return <RecogniseQuestInput quest={quest} weeklyFocus={weeklyFocus} onComplete={handleQuestDone} />
     }
@@ -78,18 +91,6 @@ export default function HealingCompletionModal({ quest, userId, weeklyFocus, onC
     }
     if (type === 'release') {
       return <ReleaseQuestInput quest={quest} onComplete={handleQuestDone} />
-    }
-
-    // Fallback for simple input types (checkbox, text, referral)
-    if (quest.inputType === 'checkbox') {
-      return (
-        <button
-          className="gcm-gold-btn"
-          onClick={() => handleQuestDone(quest, 'completed')}
-        >
-          Mark Complete
-        </button>
-      )
     }
 
     // Text / referral input

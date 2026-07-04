@@ -159,6 +159,16 @@
   margin: 0;
 }
 
+.league-leaderboard .ll-live-indicator {
+  display: block;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #10b981;
+  padding-top: 6px;
+}
+
 /* ============================================
    STANDINGS TABLE
    ============================================ */

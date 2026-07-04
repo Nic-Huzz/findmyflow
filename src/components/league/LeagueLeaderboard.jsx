@@ -26,6 +26,8 @@ export default function LeagueLeaderboard({
   const [expandedTeamScores, setExpandedTeamScores] = useState(null)
   const [loadingExpand, setLoadingExpand] = useState(false)
   const [expandedMiniMatchup, setExpandedMiniMatchup] = useState(null)
+  const [miniMatchupLiveScores, setMiniMatchupLiveScores] = useState({})
+  const [loadingMiniLive, setLoadingMiniLive] = useState(null)
 
   // ============================================
   // Helpers
@@ -52,6 +54,11 @@ export default function LeagueLeaderboard({
     const memberId = getTeamMemberId(teamId)
     return memberId ? memberEssenceNames?.[memberId] : null
   }, [getTeamMemberId, memberEssenceNames])
+
+  const getTeamMembers = useCallback((teamId) => {
+    const team = getTeamById(teamId)
+    return (team?.fantasy_team_members || []).map(m => m.user_id)
+  }, [getTeamById])
 
   // ============================================
   // Team expand handler
@@ -135,14 +142,66 @@ export default function LeagueLeaderboard({
         {weekMatchups.map(m => {
           const isExpanded = expandedMiniMatchup === m.id
           const isCalculated = !!m.calculated_at
+          const liveScores = miniMatchupLiveScores[m.id]
+          const isLoadingThis = loadingMiniLive === m.id
+
+          // Build category rows from calculated results or live scores
+          let categoryRows = null
+          if (isCalculated && m.category_results) {
+            categoryRows = m.category_results
+          } else if (liveScores) {
+            categoryRows = CATEGORY_KEYS.map(key => {
+              const aScore = liveScores.teamA?.[key] || 0
+              const bScore = liveScores.teamB?.[key] || 0
+              return {
+                category: key,
+                teamAScore: aScore,
+                teamBScore: bScore,
+                winner: aScore > bScore ? 'a' : bScore > aScore ? 'b' : null,
+              }
+            })
+          }
+
+          // Count category wins for live score display
+          let aWins = 0, bWins = 0
+          if (!isCalculated && categoryRows) {
+            categoryRows.forEach(r => {
+              if (r.winner === 'a') aWins++
+              if (r.winner === 'b') bWins++
+            })
+          }
 
           return (
             <div key={m.id} className={`ll-mini-matchup ${isExpanded ? 'll-mini-expanded' : ''}`}>
               <div
                 className="ll-mini-header"
-                onClick={() => {
+                onClick={async () => {
                   hapticLight()
-                  setExpandedMiniMatchup(isExpanded ? null : m.id)
+                  if (isExpanded) {
+                    setExpandedMiniMatchup(null)
+                    return
+                  }
+                  setExpandedMiniMatchup(m.id)
+                  // Fetch live scores for non-calculated matchups
+                  if (!isCalculated && !liveScores) {
+                    setLoadingMiniLive(m.id)
+                    try {
+                      const membersA = getTeamMembers(m.team_a_id)
+                      const membersB = getTeamMembers(m.team_b_id)
+                      const [scoresA, scoresB] = await Promise.all([
+                        fetchLiveTeamScores(membersA, selectedWeek),
+                        fetchLiveTeamScores(membersB, selectedWeek),
+                      ])
+                      setMiniMatchupLiveScores(prev => ({
+                        ...prev,
+                        [m.id]: { teamA: scoresA, teamB: scoresB },
+                      }))
+                    } catch {
+                      // silently fail
+                    } finally {
+                      setLoadingMiniLive(null)
+                    }
+                  }
                 }}
               >
                 <span className={`ll-mini-name ${isCalculated && m.team_a_match_points === 3 ? 'll-mini-winner' : ''}`}>
@@ -151,7 +210,9 @@ export default function LeagueLeaderboard({
                 <span className="ll-mini-score">
                   {isCalculated
                     ? `${m.team_a_categories_won} – ${m.team_b_categories_won}`
-                    : 'vs'
+                    : liveScores
+                      ? `${aWins} – ${bWins}`
+                      : 'vs'
                   }
                 </span>
                 <span className={`ll-mini-name ${isCalculated && m.team_b_match_points === 3 ? 'll-mini-winner' : ''}`}>
@@ -160,9 +221,9 @@ export default function LeagueLeaderboard({
                 <span className="ll-mini-chevron">{isExpanded ? '▲' : '▼'}</span>
               </div>
 
-              {isExpanded && isCalculated && m.category_results && (
+              {isExpanded && categoryRows && (
                 <div className="ll-mini-detail">
-                  {m.category_results.map(cr => {
+                  {categoryRows.map(cr => {
                     const cat = FANTASY_CATEGORIES[cr.category]
                     if (!cat) return null
                     return (
@@ -177,12 +238,13 @@ export default function LeagueLeaderboard({
                       </div>
                     )
                   })}
+                  {!isCalculated && <span className="ll-live-indicator">LIVE</span>}
                 </div>
               )}
 
-              {isExpanded && !isCalculated && (
+              {isExpanded && !categoryRows && isLoadingThis && (
                 <div className="ll-mini-detail">
-                  <p className="ll-mini-pending">Not yet calculated</p>
+                  <div className="ll-spinner" />
                 </div>
               )}
             </div>
