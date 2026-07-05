@@ -1,47 +1,30 @@
 /**
- * CreatorLogin.jsx — Simple auth page for the creator portal PWA
- * Email/password login + magic link. Dark theme. Redirects to /create after auth.
+ * CreatorLogin.jsx — Auth page for the creator portal PWA
+ * OTP code login (6-digit). Brand purple theme. Redirects to /create after auth.
  */
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
 export default function CreatorLogin() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [mode, setMode] = useState('password') // 'password' | 'magic'
+  const [step, setStep] = useState('email') // 'email' | 'code'
+  const [code, setCode] = useState(['', '', '', '', '', ''])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [magicSent, setMagicSent] = useState(false)
+  const codeRefs = useRef([])
 
-  async function handlePasswordLogin(e) {
+  async function handleEmailSubmit(e) {
     e.preventDefault()
-    if (!email || !password) return
-    setLoading(true)
-    setError(null)
-
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
-
-    if (authError) {
-      setError(authError.message)
-      setLoading(false)
-      return
-    }
-
-    navigate('/create', { replace: true })
-  }
-
-  async function handleMagicLink(e) {
-    e.preventDefault()
-    if (!email) return
+    if (!email.trim()) return
     setLoading(true)
     setError(null)
 
     const { error: authError } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/create` },
+      email: email.trim(),
+      options: { shouldCreateUser: true },
     })
 
     if (authError) {
@@ -50,14 +33,68 @@ export default function CreatorLogin() {
       return
     }
 
-    setMagicSent(true)
+    setStep('code')
     setLoading(false)
+  }
+
+  function handleCodeChange(index, value) {
+    if (value.length > 1) value = value.slice(-1)
+    if (value && !/^\d$/.test(value)) return
+
+    const next = [...code]
+    next[index] = value
+    setCode(next)
+
+    if (value && index < 5) {
+      codeRefs.current[index + 1]?.focus()
+    }
+
+    if (next.every(d => d) && next.join('').length === 6) {
+      verifyCode(next.join(''))
+    }
+  }
+
+  function handleCodeKeyDown(index, e) {
+    if (e.key === 'Backspace' && !code[index] && index > 0) {
+      codeRefs.current[index - 1]?.focus()
+    }
+  }
+
+  function handleCodePaste(e) {
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6)
+    if (pasted.length === 6) {
+      e.preventDefault()
+      const next = pasted.split('')
+      setCode(next)
+      verifyCode(pasted)
+    }
+  }
+
+  async function verifyCode(token) {
+    setLoading(true)
+    setError(null)
+
+    const { error: authError } = await supabase.auth.verifyOtp({
+      email: email.trim(),
+      token,
+      type: 'email',
+    })
+
+    if (authError) {
+      setError('Invalid code. Please try again.')
+      setCode(['', '', '', '', '', ''])
+      codeRefs.current[0]?.focus()
+      setLoading(false)
+      return
+    }
+
+    navigate('/create', { replace: true })
   }
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#0d0d1a',
+      background: 'linear-gradient(160deg, #0d0520 0%, #1a0a3e 50%, #0d0520 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -65,124 +102,144 @@ export default function CreatorLogin() {
     }}>
       <div style={{ width: '100%', maxWidth: 380 }}>
         {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: 28, fontWeight: 700, color: '#fff' }}>
-            Vibe Rise
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 14,
+            background: 'linear-gradient(135deg, #5e17eb, #E9A23B)',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            marginBottom: 16,
+            boxShadow: '0 4px 20px rgba(94, 23, 235, 0.4)',
+          }}>
+            <span style={{ color: '#fff', fontSize: 22, fontWeight: 700 }}>S</span>
           </div>
-          <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)', marginTop: 4 }}>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+            Scale
+          </div>
+          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>
             Creator Portal
           </div>
         </div>
 
-        {magicSent ? (
-          <div style={{ textAlign: 'center', padding: '24px 0' }}>
-            <div style={{ fontSize: 24, marginBottom: 12 }}>📧</div>
-            <div style={{ fontSize: 15, fontWeight: 600, color: '#fff', marginBottom: 8 }}>
-              Check your email
+        {step === 'email' ? (
+          <form onSubmit={handleEmailSubmit}>
+            <div style={{ fontSize: 18, fontWeight: 600, color: '#fff', textAlign: 'center', marginBottom: 6 }}>
+              Sign in
             </div>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', lineHeight: 1.5 }}>
-              We sent a sign-in link to <strong style={{ color: '#fff' }}>{email}</strong>. Click it to access the creator portal.
-            </div>
-          </div>
-        ) : (
-          <form onSubmit={mode === 'password' ? handlePasswordLogin : handleMagicLink}>
-            {/* Email */}
-            <div style={{ marginBottom: 12 }}>
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '14px 16px',
-                  borderRadius: 10,
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  background: 'rgba(255,255,255,0.05)',
-                  color: '#fff',
-                  fontSize: 15,
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                }}
-              />
+            <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', textAlign: 'center', marginBottom: 24 }}>
+              Enter your email and we'll send you a 6-digit code.
             </div>
 
-            {/* Password (only in password mode) */}
-            {mode === 'password' && (
-              <div style={{ marginBottom: 16 }}>
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '14px 16px',
-                    borderRadius: 10,
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    background: 'rgba(255,255,255,0.05)',
-                    color: '#fff',
-                    fontSize: 15,
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                  }}
-                />
-              </div>
-            )}
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              autoComplete="email"
+              autoFocus
+              style={{
+                width: '100%',
+                padding: '14px 16px',
+                borderRadius: 12,
+                border: '1px solid rgba(94, 23, 235, 0.3)',
+                background: 'rgba(255,255,255,0.06)',
+                color: '#fff',
+                fontSize: 15,
+                outline: 'none',
+                boxSizing: 'border-box',
+                marginBottom: 12,
+                transition: 'border-color 0.2s',
+              }}
+              onFocus={e => e.target.style.borderColor = '#5e17eb'}
+              onBlur={e => e.target.style.borderColor = 'rgba(94, 23, 235, 0.3)'}
+            />
 
-            {/* Error */}
             {error && (
               <div style={{
-                padding: '10px 14px',
-                borderRadius: 8,
-                background: 'rgba(239, 68, 68, 0.1)',
-                color: '#ef4444',
-                fontSize: 13,
-                marginBottom: 12,
+                padding: '10px 14px', borderRadius: 8,
+                background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444',
+                fontSize: 13, marginBottom: 12, textAlign: 'center',
               }}>
                 {error}
               </div>
             )}
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
               style={{
-                width: '100%',
-                padding: '14px',
-                borderRadius: 10,
+                width: '100%', padding: '14px', borderRadius: 12,
                 border: 'none',
-                background: '#5e17eb',
-                color: '#fff',
-                fontSize: 15,
-                fontWeight: 600,
+                background: 'linear-gradient(135deg, #5e17eb, #7c3aed)',
+                color: '#fff', fontSize: 15, fontWeight: 600,
                 cursor: loading ? 'wait' : 'pointer',
                 opacity: loading ? 0.6 : 1,
+                boxShadow: '0 4px 16px rgba(94, 23, 235, 0.3)',
               }}
             >
-              {loading ? 'Signing in...' : mode === 'password' ? 'Sign In' : 'Send Magic Link'}
-            </button>
-
-            {/* Mode toggle */}
-            <button
-              type="button"
-              onClick={() => setMode(mode === 'password' ? 'magic' : 'password')}
-              style={{
-                width: '100%',
-                marginTop: 10,
-                padding: '12px',
-                borderRadius: 10,
-                border: '1px solid rgba(255,255,255,0.1)',
-                background: 'transparent',
-                color: 'rgba(255,255,255,0.4)',
-                fontSize: 13,
-                cursor: 'pointer',
-              }}
-            >
-              {mode === 'password' ? 'Use magic link instead' : 'Use password instead'}
+              {loading ? 'Sending...' : 'Send Code'}
             </button>
           </form>
+        ) : (
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 18, fontWeight: 600, color: '#fff', marginBottom: 8 }}>
+              Enter your code
+            </div>
+            <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', lineHeight: 1.5, marginBottom: 28 }}>
+              We sent a 6-digit code to <strong style={{ color: '#fff' }}>{email}</strong>
+            </div>
+
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 20 }}>
+              {code.map((digit, i) => (
+                <input
+                  key={i}
+                  ref={el => { codeRefs.current[i] = el }}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={digit}
+                  onChange={e => handleCodeChange(i, e.target.value)}
+                  onKeyDown={e => handleCodeKeyDown(i, e)}
+                  onPaste={i === 0 ? handleCodePaste : undefined}
+                  autoFocus={i === 0}
+                  style={{
+                    width: 46, height: 56,
+                    textAlign: 'center', fontSize: 22,
+                    fontWeight: 700, fontFamily: 'monospace',
+                    border: `2px solid ${digit ? '#5e17eb' : 'rgba(255,255,255,0.15)'}`,
+                    borderRadius: 12, outline: 'none',
+                    color: '#fff',
+                    background: 'rgba(255,255,255,0.06)',
+                    transition: 'border-color 0.15s',
+                  }}
+                  onFocus={e => e.target.style.borderColor = '#5e17eb'}
+                  onBlur={e => e.target.style.borderColor = digit ? '#5e17eb' : 'rgba(255,255,255,0.15)'}
+                />
+              ))}
+            </div>
+
+            {error && (
+              <div style={{ color: '#ef4444', fontSize: 13, marginBottom: 12 }}>
+                {error}
+              </div>
+            )}
+
+            {loading && (
+              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14, marginBottom: 12 }}>
+                Verifying...
+              </div>
+            )}
+
+            <button
+              onClick={() => { setStep('email'); setCode(['', '', '', '', '', '']); setError(null) }}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: 'rgba(255,255,255,0.35)', fontSize: 13,
+                textDecoration: 'underline', textUnderlineOffset: 3,
+              }}
+            >
+              Use a different email
+            </button>
+          </div>
         )}
       </div>
     </div>
