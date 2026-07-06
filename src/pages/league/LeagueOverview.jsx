@@ -39,10 +39,6 @@ export default function LeagueOverview() {
   const [displayName, setDisplayName] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
 
-  // Interest state (for non-joined landing page)
-  const [interestSubmitted, setInterestSubmitted] = useState(false)
-  const [interestSubmitting, setInterestSubmitting] = useState(false)
-
   // Week state (lifted from LeagueLeaderboard so matchup card + standings stay in sync)
   const currentWeek = getCurrentWeek()
   const numWeeks = league?.num_weeks || 4
@@ -358,31 +354,6 @@ export default function LeagueOverview() {
     return diff > 0 ? diff : 0
   }
 
-  const handleExpressInterest = async () => {
-    if (!user?.id) return
-    setInterestSubmitting(true)
-    try {
-      const { error } = await supabase.from('league_signups').insert({
-        user_id: user.id,
-        name: user.email?.split('@')[0] || 'Player',
-        team_readiness: 'solo',
-      })
-      if (error) {
-        console.warn('Interest save failed:', error)
-        alert('Something went wrong. Please try again.')
-        setInterestSubmitting(false)
-        return
-      }
-      hapticSuccess()
-      setInterestSubmitted(true)
-    } catch (err) {
-      console.warn('Interest error:', err)
-      alert('Something went wrong. Please try again.')
-    } finally {
-      setInterestSubmitting(false)
-    }
-  }
-
   // ============================================
   // Render: Matchup Hero Card (promoted from LeagueLeaderboard)
   // ============================================
@@ -560,13 +531,13 @@ export default function LeagueOverview() {
 
         {/* Hero */}
         <div className="lo-land-hero">
-          <p className="lo-land-eyebrow">SEASON 1</p>
+          <p className="lo-land-eyebrow">SEASON 2</p>
           <h1 className="lo-land-h1">Think Fantasy Football<br />For Your Growth.</h1>
           <p className="lo-land-sub">
             Compete head-to-head each week. Score points for practices, wahoos, and healing you're already doing.
           </p>
-          <button className="lo-cta" onClick={() => document.getElementById('lo-interest')?.scrollIntoView({ behavior: 'smooth' })}>
-            I'm In <span>→</span>
+          <button className="lo-cta" onClick={() => setShowSoloModal(true)}>
+            Join the League <span>→</span>
           </button>
         </div>
 
@@ -621,7 +592,7 @@ export default function LeagueOverview() {
 
         {/* Season Details */}
         <div className="lo-land-section">
-          <p className="lo-land-label">SEASON 1</p>
+          <p className="lo-land-label">SEASON 2</p>
           <h2 className="lo-land-h2">Season Details</h2>
           <div className="lo-land-details">
             {[
@@ -639,27 +610,48 @@ export default function LeagueOverview() {
           </div>
         </div>
 
-        {/* Express Interest */}
+        {/* Join */}
         <div className="lo-land-section lo-land-interest" id="lo-interest">
-          {!interestSubmitted ? (
-            <>
-              <p className="lo-land-label">JOIN</p>
-              <h2 className="lo-land-h2">Express your interest.</h2>
-              <p className="lo-land-muted">Tap below and Nic will confirm your spot.</p>
-              <div className="lo-land-form">
-                <button className="lo-cta" onClick={handleExpressInterest} disabled={interestSubmitting}>
-                  {interestSubmitting ? 'Submitting...' : "I'm Interested →"}
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="lo-land-success">
-              <span className="lo-land-success-icon">🏆</span>
-              <h3>Interest received.</h3>
-              <p>Nic will confirm your spot shortly.</p>
-            </div>
-          )}
+          <p className="lo-land-label">JOIN</p>
+          <h2 className="lo-land-h2">Jump in. Season 2 is live.</h2>
+          <p className="lo-land-muted">Pick a display name and you're in. Takes 5 seconds.</p>
+          <div className="lo-land-form">
+            <button className="lo-cta" onClick={() => setShowSoloModal(true)}>
+              Join the League <span>→</span>
+            </button>
+          </div>
         </div>
+
+        {/* Solo Join Modal (reused from active view) */}
+        {showSoloModal && (
+          <div className="lo-modal-overlay" onClick={() => setShowSoloModal(false)}>
+            <div className="lo-modal" onClick={e => e.stopPropagation()}>
+              <div className="lo-modal-header">
+                <h3>Join the League</h3>
+                <button className="lo-modal-close" onClick={() => setShowSoloModal(false)}>×</button>
+              </div>
+              <div className="lo-modal-body">
+                <div className="lo-field">
+                  <label>Display Name (optional)</label>
+                  <input
+                    type="text"
+                    placeholder="Defaults to your first name"
+                    value={displayName}
+                    onChange={e => setDisplayName(e.target.value)}
+                    maxLength={30}
+                    autoFocus
+                  />
+                </div>
+                <div className="lo-modal-actions">
+                  <button className="lo-cancel" onClick={() => setShowSoloModal(false)}>Cancel</button>
+                  <button className="lo-save" onClick={handleJoinSolo} disabled={actionLoading}>
+                    {actionLoading ? 'Joining...' : 'Join'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
