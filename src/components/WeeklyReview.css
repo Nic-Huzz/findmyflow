@@ -25,8 +25,8 @@
 
 /* === MODAL === */
 .wr-modal {
-  background: white;
-  border-radius: 22px;
+  background: #ffffff;
+  border-radius: 16px;
   max-width: 480px;
   width: 100%;
   max-height: 85vh;
@@ -91,9 +91,9 @@
 /* Progress bar */
 .wr-progress {
   margin: 16px 24px 0;
-  height: 3px;
-  background: #f0f0f0;
-  border-radius: 3px;
+  height: 4px;
+  background: #f1f3f5;
+  border-radius: 4px;
   overflow: hidden;
 }
 
@@ -110,8 +110,8 @@
 }
 
 .wr-question {
-  background: #f9f8fc;
-  border-radius: 14px;
+  background: #f8f9fa;
+  border-radius: 12px;
   padding: 14px 16px;
   margin-bottom: 10px;
 }
@@ -155,16 +155,16 @@
 
 .wr-option-btn {
   flex: 1;
-  padding: 9px 10px;
-  border: 1.5px solid #e0dce8;
-  border-radius: 10px;
+  padding: 10px 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
   background: #ffffff;
   font-size: 13px;
   font-weight: 700;
   color: #495057;
   cursor: pointer;
   font-family: inherit;
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 
 .wr-option-btn.selected {
@@ -183,21 +183,22 @@
 .wr-textarea {
   width: 100%;
   min-height: 44px;
-  padding: 10px 12px;
-  border: 1.5px solid #e0dce8;
-  border-radius: 10px;
+  padding: 12px 14px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
   font-size: 16px;
   font-family: inherit;
   color: #1a1a2e;
   background: #ffffff;
   resize: none;
   outline: none;
-  transition: border-color 0.15s;
+  transition: all 0.2s;
   box-sizing: border-box;
 }
 
 .wr-textarea:focus {
   border-color: #5e17eb;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.08);
 }
 
 .wr-textarea-conditional {
@@ -213,20 +214,21 @@
 
 .wr-number-input {
   width: 72px;
-  padding: 9px 10px;
-  border: 1.5px solid #e0dce8;
-  border-radius: 10px;
+  padding: 10px 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
   font-size: 16px;
   font-family: inherit;
   color: #1a1a2e;
   background: #ffffff;
   text-align: center;
   outline: none;
-  transition: border-color 0.15s;
+  transition: all 0.2s;
 }
 
 .wr-number-input:focus {
   border-color: #5e17eb;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.08);
 }
 
 .wr-number-suffix {
@@ -261,7 +263,7 @@
   background: linear-gradient(135deg, #5e17eb, #7c3aed);
   color: #ffffff;
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -285,18 +287,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(135deg, rgba(94, 23, 235, 0.06), rgba(233, 162, 59, 0.06));
-  border: 1px solid rgba(94, 23, 235, 0.12);
-  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
   padding: 12px 14px;
-  margin: 0 0 12px;
+  margin: 0 4px 12px;
   cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   transition: all 0.2s;
 }
 
 .wr-cta-card:hover {
-  border-color: rgba(94, 23, 235, 0.25);
-  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.08);
+  border-color: rgba(94, 23, 235, 0.2);
 }
 
 .wr-cta-left {
@@ -391,7 +393,7 @@
   background: linear-gradient(135deg, #5e17eb, #E9A23B);
   color: #ffffff;
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -411,9 +413,9 @@
 
 .wr-share-done {
   padding: 12px;
-  background: none;
+  background: #ffffff;
   border: 2px solid #e9ecef;
-  border-radius: 14px;
+  border-radius: 12px;
   font-size: 14px;
   font-weight: 700;
   color: #6c757d;
