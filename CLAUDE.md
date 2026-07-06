@@ -181,9 +181,11 @@ docs/                         # Documentation files
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
-**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`
+**Life Paths**: `/life-paths` (widget, AuthGate), `/try/life-paths` (public), `/try/life-paths-test`, `/facilitate/life-paths`
+
+**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/experience/:id/:nodeKey` | Creator tools: `/create/plays`, `/create/bridge`, `/create/narrative-builder`, `/create/access-architecture`, `/create/attraction-stack`, `/create/marketing-campaign`, `/create/scale-income`, `/create/pay-rent`, `/create/remarkable`, `/create/inspiration`, `/create/experiences`, `/create/growth`, `/create/terminal`, `/create/profile`, `/create/build-app` (+ `/interest`, `/prework`, `/challenge/:number`)
 
 **Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching)
 
@@ -197,13 +199,13 @@ docs/                         # Documentation files
 
 **Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
+**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/essence-mirror`, `/try/career-clarity`, `/try/experience-creators`, `/try/life-paths`
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`
 
-**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share)
+**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/wound-map`, `/limiting-belief-rewire`, `/v/:shareToken` (public share)
 
-**CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
+**CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/calculators, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
 
 **Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`
 
@@ -328,6 +330,7 @@ Key services: `src/lib/crm/` (contentContext, promptTemplates, towerStats, csvIm
 - **Hero Profile** (`/hero-profile`): Project-specific hero profile with identity triad.
 - **Archetypes** (`/archetypes/essence`): Essence archetype profile, strengths, shadow aspects.
 - **Weekly Planning**: 4-phase cycle (Push, Flow, Rest, Launch). Purple gradient; gold selection.
+- **Life Paths**: Interactive life-path widget at `/life-paths` (AuthGate). Public trial at `/try/life-paths`. Facilitator view at `/facilitate/life-paths`. Integrated into Level 0 healing intention flow.
 
 ## Architecture Patterns
 
@@ -402,6 +405,9 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 
 ### Fantasy League
 `fantasy_leagues` | `fantasy_teams` | `fantasy_team_members` | `fantasy_matchups` | `league_content_submissions` | `league_content_reactions` | `league_signups`
+
+### Create Portal
+`experiences` (pitch_next_offer, upsell_strategy, upsell_answers, downsell_strategy, downsell_answers)
 
 ### Play Profile
 `founder_dna_results` | `founder_dna_sessions`
