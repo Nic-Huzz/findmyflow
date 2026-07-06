@@ -298,7 +298,7 @@ function Challenge() {
         setCurrentJourneyLevel(level)
         // Pre-unlock tabs based on DB state for Level 0
         if (level === 0) {
-          // Unlock Wahoo tab if wahoos identified (discovery flow / quick-add)
+          // Unlock Courage tab if wahoos identified (discovery flow / quick-add)
           // or legacy play-skills picked (PlaySkillPicker, pre-2026-06)
           Promise.all([
             supabase.from('groan_challenges')

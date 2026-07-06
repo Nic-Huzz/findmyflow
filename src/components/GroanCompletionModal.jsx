@@ -12,11 +12,16 @@ import './GroanCompletionModal.css'
 
 const PLAY_LIST_POINTS = 7
 
-// Wahoo classification → scary/wahoo score mapping
+// Wahoo classification → scary/wahoo score mapping (4 states)
 const WAHOO_SCORES = {
-  wahoo: { scary: 8, wahoo: 9 },       // Hell yes — edge crossing
-  vibe_rise: { scary: 3, wahoo: 8 },   // Felt alive — capacity grew
-  routine: { scary: 3, wahoo: 3 },      // Just did it — routine
+  vibe:     { scary: 8, wahoo: 9 },    // Vibe Rise — scared AND alive
+  peace:    { scary: 3, wahoo: 8 },    // Fun — alive, not scary
+  anxious:  { scary: 8, wahoo: 3 },    // Pressure — pushed too far
+  shutdown: { scary: 3, wahoo: 3 },    // Uninterested — flat
+  // Legacy compat
+  wahoo: { scary: 8, wahoo: 9 },
+  vibe_rise: { scary: 3, wahoo: 8 },
+  routine: { scary: 3, wahoo: 3 },
 }
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
@@ -44,7 +49,8 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [afterState, setAfterState] = useState(null)
 
   // Wahoo classification
-  const [wahooClassification, setWahooClassification] = useState(null) // 'wahoo' | 'vibe_rise' | 'routine'
+  const [wahooClassification, setWahooClassification] = useState(null)
+  const [identityStatement, setIdentityStatement] = useState('')
 
   // 3% reflection
   const [reflection, setReflection] = useState('')
@@ -100,6 +106,8 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           visibility_layer: challenge.visibility_layer,
           before_state: beforeState,
           after_state: afterState,
+          wahoo_classification: wahooClassification,
+          identity_statement: identityStatement || null,
           reflection,
         }),
       })
@@ -183,7 +191,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       }
 
       // Celebration based on classification
-      if (wahooClassification === 'wahoo') {
+      if (wahooClassification === 'vibe' || wahooClassification === 'wahoo') {
         confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#E9A23B', '#f5c55a', '#fbbf24'] })
         setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { y: 0.5 }, colors: ['#E9A23B', '#f5c55a'] }), 300)
       } else {
@@ -231,34 +239,48 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
         {step === 'wahoo_check' && (
           <>
-            <h2 className="gcm-title">Was that a Wahoo?</h2>
+            <h2 className="gcm-title">How did that feel?</h2>
             <div className="gcm-wahoo-options">
               <button
-                className={`gcm-wahoo-btn gcm-wahoo-hell-yes ${wahooClassification === 'wahoo' ? 'selected' : ''}`}
-                onClick={() => setWahooClassification('wahoo')}
+                className={`gcm-wahoo-btn gcm-wahoo-hell-yes ${wahooClassification === 'vibe' ? 'selected' : ''}`}
+                onClick={() => setWahooClassification('vibe')}
               >
                 <span className="gcm-wahoo-emoji">🔥</span>
-                <span className="gcm-wahoo-label">Hell yes</span>
-                <span className="gcm-wahoo-desc">Scared AND alive</span>
+                <span className="gcm-wahoo-label">Vibe Rise</span>
               </button>
               <button
-                className={`gcm-wahoo-btn gcm-wahoo-alive ${wahooClassification === 'vibe_rise' ? 'selected' : ''}`}
-                onClick={() => setWahooClassification('vibe_rise')}
+                className={`gcm-wahoo-btn gcm-wahoo-alive ${wahooClassification === 'peace' ? 'selected' : ''}`}
+                onClick={() => setWahooClassification('peace')}
               >
-                <span className="gcm-wahoo-emoji">⚡</span>
-                <span className="gcm-wahoo-label">Felt alive but not scary</span>
-                <span className="gcm-wahoo-desc">This is becoming your baseline</span>
+                <span className="gcm-wahoo-emoji">😌</span>
+                <span className="gcm-wahoo-label">Fun</span>
               </button>
               <button
-                className={`gcm-wahoo-btn gcm-wahoo-routine ${wahooClassification === 'routine' ? 'selected' : ''}`}
-                onClick={() => setWahooClassification('routine')}
+                className={`gcm-wahoo-btn ${wahooClassification === 'anxious' ? 'selected' : ''}`}
+                onClick={() => setWahooClassification('anxious')}
+                style={wahooClassification === 'anxious' ? { borderColor: '#ef4444', background: 'rgba(239,68,68,0.06)', color: '#ef4444' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">😐</span>
-                <span className="gcm-wahoo-label">Just did it</span>
-                <span className="gcm-wahoo-desc">Neither scary nor alive</span>
+                <span className="gcm-wahoo-emoji">😰</span>
+                <span className="gcm-wahoo-label">Pressure</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn ${wahooClassification === 'shutdown' ? 'selected' : ''}`}
+                onClick={() => setWahooClassification('shutdown')}
+                style={wahooClassification === 'shutdown' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">😶</span>
+                <span className="gcm-wahoo-label">Uninterested</span>
               </button>
             </div>
-            {wahooClassification === 'wahoo' && essenceName && (
+            {wahooClassification && (
+              <div className="gcm-identity-prompt">
+                <label className="gcm-identity-label">Now that I {challenge.title?.toLowerCase()}, I've proven I'm someone who...</label>
+                <input className="gcm-identity-input" type="text" value={identityStatement}
+                  onChange={e => setIdentityStatement(e.target.value)}
+                  placeholder="e.g. takes risks, shows up, backs themselves" />
+              </div>
+            )}
+            {wahooClassification === 'vibe' && essenceName && (
               <div className="gcm-identity-line">That's the {essenceName} in you.</div>
             )}
             <button

@@ -161,7 +161,7 @@ export const LEVEL_CONFIG = {
     zones: {
       topLeft: { name: 'Martyr Zone', description: 'Essence absent from service', boss: 'Controller (serving without self)' },
       diagonal: { name: 'Direction Sweet Spot (Nikigai)', description: 'Essence expressed in service' },
-      bottomRight: { name: 'Navel-Gazer Zone', description: 'Self-focused, no service', boss: 'Perfectionist / Auto-Pilot (self-absorbed)' },
+      bottomRight: { name: 'Dreamer Zone', description: 'Self-focused, no service', boss: 'Perfectionist / Auto-Pilot (self-absorbed)' },
     },
     essenceQuestion: 'What code is blocking your essence from moving?',
     courageCount: 2,
@@ -185,7 +185,7 @@ export const LEVEL_CONFIG = {
       type: 'enough',
     },
     zones: {
-      topLeft: { name: 'Over-Efforting Zone', description: 'High effort, never finish', boss: 'Controller / Ghost (never finish)' },
+      topLeft: { name: 'Grind Zone', description: 'High effort, never finish', boss: 'Controller / Ghost (never finish)' },
       diagonal: { name: 'Good Enough Sweet Spot', description: 'Ship, learn, iterate' },
       bottomRight: { name: 'Procrastinator Zone', description: 'Quality bar too high to start', boss: 'Perfectionist / Auto-Pilot (never start)' },
     },

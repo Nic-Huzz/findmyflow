@@ -774,8 +774,8 @@ export function useChallengeData() {
     setGroupMode(null)
     setShowOnboarding(false)
     setShowGroupSelection(false)
-    // Skip project selector — Level, Tune, Wahoo, Healing tabs all work without a project.
-    // User can create a project later from the Level tab onboarding steps.
+    // Skip project selector — Quests, Tune, Courage, Healing tabs all work without a project.
+    // User can create a project later from the Quests tab onboarding steps.
   }
 
   const handleCreateGroup = async () => {

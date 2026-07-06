@@ -327,10 +327,10 @@ export default function LifePathFlow() {
 
   // ── Save wahoos to groan_challenges ──
   const saveWahoosToGroan = useCallback(async () => {
-    if (!user?.id || !selectedWahooId) return
+    if (!user?.id || !selectedWahooId) return []
     const career = careers.find(c => c.id === selectedWahooId)
     const steps = wahooSteps[selectedWahooId] || []
-    const savedIndices = []
+    const savedEntries = [] // { idx, groanId }
     for (let i = 0; i < steps.length; i++) {
       const ws = steps[i]
       if (ws.savedToGroan) continue
@@ -356,20 +356,21 @@ export default function LifePathFlow() {
             reference_id: dbRecord.id,
             display_name: ws.text,
           }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
-          savedIndices.push(i)
+          savedEntries.push({ idx: i, groanId: dbRecord.id })
         }
       } catch (e) { console.error('Groan challenge save error:', e) }
     }
-    // Mark saved via proper setState
-    if (savedIndices.length > 0) {
+    // Mark saved via proper setState — store groan ID for quest_task linking
+    if (savedEntries.length > 0) {
       setWahooSteps(prev => {
         const updated = { ...prev }
         const arr = [...(updated[selectedWahooId] || [])]
-        savedIndices.forEach(idx => { arr[idx] = { ...arr[idx], savedToGroan: true } })
+        savedEntries.forEach(({ idx, groanId }) => { arr[idx] = { ...arr[idx], savedToGroan: groanId } })
         updated[selectedWahooId] = arr
         return updated
       })
     }
+    return savedEntries
   }, [user, selectedWahooId, careers, wahooSteps, stuckPoints])
 
   // ── Map careers ──
@@ -801,7 +802,10 @@ export default function LifePathFlow() {
 
               <button className="flp-advance-btn" style={{ width: '100%', marginTop: 16 }}
                 onClick={async () => {
-                  await saveWahoosToGroan()
+                  const saved = await saveWahoosToGroan()
+                  // Build groan ID lookup from returned entries (avoids stale closure)
+                  const groanIdByIdx = {}
+                  saved.forEach(({ idx, groanId }) => { groanIdByIdx[idx] = groanId })
                   // Create quest if one doesn't exist for this career
                   if (user?.id && selectedWahooId) {
                     const career = careers.find(c => c.id === selectedWahooId)
@@ -824,12 +828,18 @@ export default function LifePathFlow() {
                         const steps = wahooSteps[selectedWahooId] || []
                         const newTasks = steps.filter(ws => !existingTexts.has(ws.text.toLowerCase()))
                         if (newTasks.length > 0) {
-                          await supabase.from('quest_tasks').insert(newTasks.map((ws, i) => ({
-                            quest_id: questId, user_id: user.id, text: ws.text,
-                            is_courage_challenge: !!ws.savedToGroan,
-                            stuck_point_id: ws.fromStuckPoint || null,
-                            sort_order: (existingTasks?.length || 0) + i,
-                          })))
+                          await supabase.from('quest_tasks').insert(newTasks.map((ws, i) => {
+                            // Use groan ID from returned entries (fresh), fall back to state (for previously saved)
+                            const origIdx = steps.indexOf(ws)
+                            const groanId = groanIdByIdx[origIdx] || ((typeof ws.savedToGroan === 'string') ? ws.savedToGroan : null)
+                            return {
+                              quest_id: questId, user_id: user.id, text: ws.text,
+                              is_courage_challenge: !!groanId || !!ws.savedToGroan,
+                              groan_challenge_id: groanId,
+                              stuck_point_id: ws.fromStuckPoint || null,
+                              sort_order: (existingTasks?.length || 0) + i,
+                            }
+                          }))
                         }
                       }
                     }

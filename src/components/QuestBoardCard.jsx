@@ -77,7 +77,13 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       .update({ done: newDone, completed_at: newDone ? new Date().toISOString() : null })
       .eq('id', task.id)
     if (error) console.error('Toggle task error:', error)
-    else onUpdate?.()
+    // Sync courage challenge status if linked
+    if (task.groan_challenge_id) {
+      await supabase.from('groan_challenges')
+        .update({ status: newDone ? 'completed' : 'accepted', completed_at: newDone ? new Date().toISOString() : null })
+        .eq('id', task.groan_challenge_id)
+    }
+    onUpdate?.()
   }
 
   const closeQuest = async (reason) => {

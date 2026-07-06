@@ -1,25 +1,36 @@
-/* ── QuestBoardCard ── */
+/* ── QuestBoardCard ──
+   Matches Tune tab (tt-) / healing row (ht-) design language */
 
 .qbc {
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
   transition: all 0.2s ease;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+.qbc.qbc-expanded {
+  background: #f8f9fa;
+  border: 1.5px solid #e9ecef;
 }
 
 .qbc-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 12px;
+  padding: 14px 16px;
   cursor: pointer;
-  border-radius: 14px;
-  background: rgba(94, 23, 235, 0.06);
-  border: 1px solid rgba(94, 23, 235, 0.1);
-  transition: background 0.15s;
+  border-radius: 12px;
+  background: #f8f9fa;
+  border: 1.5px solid #e9ecef;
+  transition: all 0.2s;
 }
 
-.qbc-header:active { background: rgba(94, 23, 235, 0.1); }
+.qbc-header:active { background: #f0f1f3; }
+
+.qbc-expanded .qbc-header {
+  border-radius: 12px 12px 0 0;
+  border-bottom-color: transparent;
+}
 
 .qbc-state-dot {
   width: 10px;
@@ -32,7 +43,8 @@
 
 .qbc-label {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #1a1a2e;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -43,18 +55,18 @@
   margin-top: 2px;
 }
 
-.qbc-state-name { font-weight: 500; }
-.qbc-progress { opacity: 0.5; }
+.qbc-state-name { font-weight: 600; }
+.qbc-progress { color: #adb5bd; }
 
 .qbc-chevron {
   font-size: 14px;
-  opacity: 0.3;
+  color: #adb5bd;
   flex-shrink: 0;
 }
 
 /* ── Expanded body ── */
 .qbc-body {
-  padding: 8px 14px 14px;
+  padding: 10px 16px 16px;
   animation: qbcFadeIn 0.2s ease;
 }
 
@@ -63,98 +75,113 @@
   to { opacity: 1; }
 }
 
-/* ── Tasks ── */
+/* ── Tasks (matches ht-item-row pattern) ── */
 .qbc-tasks {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
   margin-bottom: 10px;
 }
 
 .qbc-task {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 0;
-  font-size: 14px;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: 15px;
+  border-bottom: 1px solid #f2f3f5;
 }
+
+.qbc-task:last-child { border-bottom: none; }
 
 .qbc-task.done { opacity: 0.4; }
 
 .qbc-check {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  border: 2px solid #d0d0d0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #dde0e5;
   background: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 12px;
+  font-size: 13px;
   font-family: inherit;
   color: inherit;
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 
 .qbc-check.checked {
-  background: #10b981;
-  border-color: #10b981;
+  background: #34d399;
+  border-color: #34d399;
   color: #fff;
 }
 
 .qbc-task-text {
   flex: 1;
+  font-weight: 600;
+  color: #1a1a2e;
 }
 
 .qbc-task.done .qbc-task-text {
   text-decoration: line-through;
+  color: #b8bbc6;
 }
 
 .qbc-courage-badge {
   font-size: 12px;
-  opacity: 0.6;
+  flex-shrink: 0;
 }
 
 /* ── Add task ── */
 .qbc-add-row {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   margin-bottom: 6px;
 }
 
 .qbc-input {
   flex: 1;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 15px;
   font-family: inherit;
-  border: 1px solid #e0e0e0;
-  background: #fafafa;
+  border: 2px solid #e9ecef;
+  background: #ffffff;
   outline: none;
   color: #1a1a2e;
+  transition: all 0.2s;
 }
 
-.qbc-input:focus { border-color: #5e17eb; }
-.qbc-input::placeholder { color: #aaa; }
+.qbc-input:focus {
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.08);
+}
+
+.qbc-input::placeholder { color: #adb5bd; }
 
 .qbc-add-btn {
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
   font-family: inherit;
   border: none;
-  background: #5e17eb;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   color: #fff;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.15s;
+  transition: all 0.2s;
 }
 
-.qbc-add-btn:hover { background: #7c3aed; }
-.qbc-add-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.qbc-add-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.qbc-add-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
 /* ── Courage toggle ── */
 .qbc-courage-toggle {
@@ -162,7 +189,8 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  opacity: 0.6;
+  font-weight: 600;
+  color: #6c757d;
   cursor: pointer;
   margin-bottom: 12px;
 }
@@ -175,53 +203,58 @@
 .qbc-close-trigger {
   background: none;
   border: none;
-  color: #999;
+  color: #adb5bd;
   font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   padding: 4px 0;
   font-family: inherit;
-  transition: color 0.15s;
+  transition: color 0.2s;
 }
 
-.qbc-close-trigger:hover { color: #666; }
+.qbc-close-trigger:hover { color: #6c757d; }
 
 .qbc-close-options {
-  margin-top: 8px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(0,0,0,0.06);
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid #f2f3f5;
 }
 
 .qbc-close-title {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #1a1a2e;
   margin-bottom: 8px;
 }
 
 .qbc-close-btn {
   display: block;
   width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  background: #fff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background: #ffffff;
   font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   text-align: left;
+  color: #495057;
   margin-bottom: 6px;
-  transition: background 0.15s;
+  transition: all 0.2s;
 }
 
-.qbc-close-btn:hover { background: #f5f5f5; }
-.qbc-close-btn.achieved { border-color: #10b981; }
-.qbc-close-btn.lost { border-color: #f59e0b; }
-.qbc-close-btn.paused { border-color: #6b7280; }
+.qbc-close-btn:hover { background: #f8f9fa; }
+.qbc-close-btn.achieved { border-color: #10b981; color: #059669; }
+.qbc-close-btn.lost { border-color: #f59e0b; color: #d97706; }
+.qbc-close-btn.paused { border-color: #6b7280; color: #6b7280; }
 
 .qbc-close-cancel {
   background: none;
   border: none;
-  color: #999;
+  color: #adb5bd;
   font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   padding: 6px 0;
   font-family: inherit;

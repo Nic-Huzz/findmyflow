@@ -11,7 +11,6 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../../auth/AuthProvider'
 import confetti from 'canvas-confetti'
@@ -24,6 +23,7 @@ import MilestoneCard from './MilestoneCard'
 import MilestoneCommitModal from './MilestoneCommitModal'
 import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
+import SweetSpotGraph from './SweetSpotGraph'
 import CapacityCard from './CapacityCard'
 import JourneyGraphPopup from '../JourneyGraphPopup'
 import './LevelTab.css'
@@ -48,6 +48,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasFlowDeepDive, setHasFlowDeepDive] = useState({}) // generic tracker for flow-based deep dives
   const [hasWoundMap, setHasWoundMap] = useState(false)
   const [hasLifePaths, setHasLifePaths] = useState(false)
+  const [lifePathCareers, setLifePathCareers] = useState([]) // careers from life_path_sessions
 
   // Quest board state
   const [quests, setQuests] = useState([])
@@ -56,7 +57,11 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [addQuestLabel, setAddQuestLabel] = useState('')
   const [addQuestState, setAddQuestState] = useState(null)
   const [addQuestSaving, setAddQuestSaving] = useState(false)
-  const navigate = useNavigate()
+  const [addQuestCareerId, setAddQuestCareerId] = useState(null) // career_id from life paths dropdown
+  const [addQuestCustom, setAddQuestCustom] = useState(false) // true = typing new path, false = picked from dropdown
+  const [activeStruggle, setActiveStruggle] = useState(null) // which struggle pill is open
+  const [allLevelProgress, setAllLevelProgress] = useState({}) // { level: { zone, milestone_completed, ... } }
+  const [zoneModalLevel, setZoneModalLevel] = useState(null) // which zone card modal is open
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
   const [hasPlaylistCompletion, setHasPlaylistCompletion] = useState(false)
@@ -106,11 +111,14 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   // Add quest
   const handleAddQuest = async () => {
     if (!addQuestLabel.trim() || !addQuestState || addQuestSaving) return
+    // Prevent duplicate quest labels
+    if (quests.some(q => q.label.toLowerCase() === addQuestLabel.trim().toLowerCase() && q.status === 'active')) return
     setAddQuestSaving(true)
     try {
       const { error } = await supabase.from('quests').insert({
         user_id: userId,
         label: addQuestLabel.trim(),
+        career_id: addQuestCareerId || null,
         predicted_state: addQuestState,
         status: 'active',
         sort_order: quests.length,
@@ -119,7 +127,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       else {
         setAddQuestLabel('')
         setAddQuestState(null)
+        setAddQuestCareerId(null)
         setShowAddQuest(false)
+        setAddQuestCustom(false)
         loadQuests()
       }
     } catch (e) { console.error('Add quest error:', e) }
@@ -234,13 +244,32 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
     if (user?.email) {
       supabase
         .from('life_path_sessions')
-        .select('id')
+        .select('id, careers, current_career, current_state')
         .eq('client_email', user.email)
+        .order('updated_at', { ascending: false })
         .limit(1)
-        .then(({ data }) => { if (data?.length > 0) setHasLifePaths(true) })
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data) {
+            setHasLifePaths(true)
+            if (data.careers?.length) setLifePathCareers(data.careers)
+          }
+        })
     }
     // Load quests + tasks
     loadQuests()
+    // Load all level progress for zone + milestone scroll strips
+    supabase
+      .from('user_level_progress')
+      .select('current_level, zone_diagnosis_zone, zone_diagnosis_boss, milestone_commitment, milestone_completed')
+      .eq('user_id', userId)
+      .then(({ data }) => {
+        if (data) {
+          const byLevel = {}
+          data.forEach(d => { byLevel[d.current_level] = d })
+          setAllLevelProgress(byLevel)
+        }
+      })
 
     // Check if playskills exist (from /get-started, curiosity compass, or PlaySkillPicker)
     supabase
@@ -374,21 +403,32 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
       {/* ══════ QUEST BOARD ══════ */}
 
-      {/* Your Journey */}
-      <div className="quest-section">
-        <h3 className="quest-section-title">Your Journey</h3>
-        {!hasLifeMap && (
-          <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story holds the answers.', icon: '📖' }} isCompleted={false} />
-        )}
-        <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={hasLifePaths} />
-        {!hasEssenceAvatar && (
-          <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
-        )}
-      </div>
+      {/* Your Journey — only show if any item is incomplete */}
+      {(!hasLifeMap || !hasLifePaths || !hasEssenceAvatar) && (
+        <div className="quest-section">
+          <div className="quest-section-header">
+            <span className="quest-section-icon">📖</span>
+            <span className="quest-section-title">Your Journey</span>
+          </div>
+          {!hasLifeMap && (
+            <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story holds the answers.', icon: '📖' }} isCompleted={false} />
+          )}
+          {!hasLifePaths && (
+            <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={false} />
+          )}
+          {!hasEssenceAvatar && (
+            <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
+          )}
+        </div>
+      )}
 
       {/* Active Quests */}
       <div className="quest-section">
-        <h3 className="quest-section-title">Your Active Quests</h3>
+        <div className="quest-section-header">
+          <span className="quest-section-icon">⚔️</span>
+          <span className="quest-section-title">Active Quests</span>
+        </div>
+        <p className="quest-section-sub">Life paths you're actively pursuing right now.</p>
         {quests.filter(q => q.status === 'active').length === 0 && (
           <div className="quest-empty">Complete your Life Paths exercise to identify quests, or add one manually.</div>
         )}
@@ -400,40 +440,187 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         ) : (
           <div className="quest-add-modal">
             <div className="quest-add-title">What life path are you pursuing?</div>
-            <input className="quest-add-input" type="text" value={addQuestLabel}
-              onChange={e => setAddQuestLabel(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && addQuestState && handleAddQuest()}
-              placeholder="e.g. Run retreats..." autoFocus />
-            <div className="quest-add-subtitle">What state does it trigger?</div>
-            <div className="quest-add-states">
-              {[...STATES].reverse().map(s => {
-                const m = STATE_META[s]
-                return (
-                  <button key={s} className={`quest-state-pill ${addQuestState === s ? 'active' : ''}`}
-                    style={{ borderColor: addQuestState === s ? m.color : 'transparent', color: addQuestState === s ? m.color : undefined,
-                      background: addQuestState === s ? `${m.color}15` : undefined }}
-                    onClick={() => setAddQuestState(s)}>
-                    {m.emoji} {m.label}
+            {lifePathCareers.length > 0 && !addQuestCustom ? (
+              <>
+                <select className="quest-add-select"
+                  value={addQuestLabel}
+                  onChange={e => {
+                    const career = lifePathCareers.find(c => c.label === e.target.value)
+                    setAddQuestLabel(e.target.value)
+                    setAddQuestCareerId(career?.id || null)
+                    if (career?.predictedState) setAddQuestState(career.predictedState)
+                  }}>
+                  <option value="">Select a life path...</option>
+                  {lifePathCareers
+                    .filter(c => !quests.some(q => q.career_id === c.id && q.status === 'active'))
+                    .map(c => <option key={c.id} value={c.label}>{c.label}</option>)}
+                </select>
+                <button className="quest-add-other" onClick={() => { setAddQuestCustom(true); setAddQuestLabel(''); setAddQuestState(null); setAddQuestCareerId(null) }}>
+                  Or add a new path...
+                </button>
+              </>
+            ) : (
+              <>
+                <input className="quest-add-input" type="text" value={addQuestLabel}
+                  onChange={e => setAddQuestLabel(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && addQuestState && handleAddQuest()}
+                  placeholder="e.g. Run retreats..." autoFocus />
+                {lifePathCareers.length > 0 && (
+                  <button className="quest-add-other" onClick={() => { setAddQuestCustom(false); setAddQuestLabel(''); setAddQuestState(null) }}>
+                    Pick from life paths...
                   </button>
-                )
-              })}
-            </div>
+                )}
+                <div className="quest-add-subtitle">What state does it trigger?</div>
+                <div className="quest-add-states">
+                  {[...STATES].reverse().map(s => {
+                    const m = STATE_META[s]
+                    const isActive = addQuestState === s
+                    return (
+                      <button key={s} className={`quest-state-pill ${isActive ? 'active' : ''}`}
+                        style={isActive ? { borderColor: m.color, color: m.color, background: `${m.color}10` } : undefined}
+                        onClick={() => setAddQuestState(s)}>
+                        {m.emoji} {m.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              </>
+            )}
             <div className="quest-add-actions">
               <button className="quest-add-submit" onClick={handleAddQuest}
                 disabled={!addQuestLabel.trim() || !addQuestState || addQuestSaving}>Add Quest</button>
-              <button className="quest-add-cancel" onClick={() => { setShowAddQuest(false); setAddQuestLabel(''); setAddQuestState(null) }}>Cancel</button>
+              <button className="quest-add-cancel" onClick={() => { setShowAddQuest(false); setAddQuestLabel(''); setAddQuestState(null); setAddQuestCareerId(null); setAddQuestCustom(false) }}>Cancel</button>
             </div>
           </div>
         )}
         <div className="quest-recommend">We recommend focusing on 1-3 quests at a time</div>
       </div>
 
-      {/* Completed quests + Life Map */}
-      {(quests.some(q => q.status !== 'active') || hasLifeMap) && (
+      {/* Struggle Pills */}
+      <div className="quest-section">
+        <div className="quest-section-header">
+          <span className="quest-section-icon">🧭</span>
+          <span className="quest-section-title">I need help with...</span>
+        </div>
+        <div className="struggle-pills">
+          <button className={`struggle-pill ${activeStruggle === 'direction' ? 'active' : ''}`}
+            onClick={() => setActiveStruggle(activeStruggle === 'direction' ? null : 'direction')}>
+            🧭 Should I start my own thing?
+          </button>
+          <button className={`struggle-pill ${activeStruggle === 'fear' ? 'active' : ''}`}
+            onClick={() => setActiveStruggle(activeStruggle === 'fear' ? null : 'fear')}>
+            😨 What's keeping me stuck?
+          </button>
+          <button className={`struggle-pill ${activeStruggle === 'subconscious' ? 'active' : ''}`}
+            onClick={() => setActiveStruggle(activeStruggle === 'subconscious' ? null : 'subconscious')}>
+            🔮 I want subconscious shifts
+          </button>
+        </div>
+
+        {activeStruggle === 'direction' && (
+          <div className="struggle-flows">
+            <DeepDiveCard deepDive={{ id: 'career_clarity', name: 'Career Clarity Quiz', route: '/career-clarity', narrative: 'Should you stay, pivot, or build?', icon: '🧭' }} isCompleted={hasCareerClarity} />
+          </div>
+        )}
+
+        {activeStruggle === 'fear' && (
+          <div className="struggle-flows">
+            <DeepDiveCard deepDive={{ id: 'wound_map', name: 'Map Your Origin Story', route: '/wound-map?returnTo=/7-day-challenge', narrative: 'What happened before you arrived here?', icon: '🗺️' }} isCompleted={hasWoundMap} />
+            <DeepDiveCard deepDive={{ id: 'matrix_codes', name: 'Matrix Codes', route: '/matrix-code-deep-dive', narrative: 'What permission are you missing?', icon: '🔓' }} isCompleted={!!hasFlowDeepDive['recognise_shadow_work']} />
+            <DeepDiveCard deepDive={{ id: 'nervous_system', name: 'NS Boundaries', route: '/nervous-system', narrative: 'Where does your nervous system say stop?', icon: '🧠' }} isCompleted={!!hasFlowDeepDive['nervous_system_map']} />
+          </div>
+        )}
+
+        {activeStruggle === 'subconscious' && (
+          <div className="struggle-flows">
+            <DeepDiveCard deepDive={{ id: 'healing_compass', name: 'Healing Compass', route: '/healing-compass', narrative: 'What does safety look like for you?', icon: '🧭' }} isCompleted={hasHealingCompass} />
+            <DeepDiveCard deepDive={{ id: 'limiting_belief_rewire', name: 'Limiting Belief Rewire', route: '/limiting-belief-rewire', narrative: 'What belief makes you burn out or stall?', icon: '🔮' }} isCompleted={!!hasFlowDeepDive['limiting_belief_rewire']} />
+          </div>
+        )}
+      </div>
+
+      {/* Zone Assessments — horizontal scroll */}
+      <div className="quest-section">
+        <div className="quest-section-header">
+          <span className="quest-section-icon">📊</span>
+          <span className="quest-section-title">Zone Assessments</span>
+        </div>
+        <div className="quest-scroll-strip">
+          {Object.entries(LEVEL_CONFIG).filter(([n]) => parseInt(n) >= 1 && parseInt(n) <= 8).map(([num, lvl]) => {
+            const n = parseInt(num)
+            const progress = allLevelProgress[n]
+            const hasZone = !!progress?.zone_diagnosis_zone
+            return (
+              <button key={n} className={`quest-scroll-card ${hasZone ? 'completed' : ''}`}
+                onClick={() => setZoneModalLevel(n)}>
+                <div className="quest-scroll-label">{lvl.name}</div>
+                {hasZone && <div className="quest-scroll-check">✅</div>}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Zone Modal */}
+      {zoneModalLevel && (() => {
+        const lvl = LEVEL_CONFIG[zoneModalLevel]
+        const progress = allLevelProgress[zoneModalLevel]
+        return (
+          <div className="quest-modal-overlay" onClick={() => setZoneModalLevel(null)}>
+            <div className="quest-modal" onClick={e => e.stopPropagation()}>
+              <button className="quest-modal-close" onClick={() => setZoneModalLevel(null)}>✕</button>
+              <h2 className="quest-modal-title">{lvl.name}</h2>
+              <p className="quest-modal-question">{lvl.question}</p>
+
+              {lvl.graph && lvl.zones && (
+                <div style={{ margin: '0 0 14px' }}>
+                  <SweetSpotGraph title={lvl.graph} yAxis={lvl.yAxis} xAxis={lvl.xAxis} zones={lvl.zones} />
+                </div>
+              )}
+
+              {progress?.zone_diagnosis_zone ? (
+                <div className="quest-modal-result">
+                  <div className="quest-modal-result-label">Your zone:</div>
+                  <div className="quest-modal-result-name">{lvl.zones?.[progress.zone_diagnosis_zone]?.name}</div>
+                  <div className="quest-modal-result-desc">{lvl.zones?.[progress.zone_diagnosis_zone]?.description}</div>
+                </div>
+              ) : null}
+
+              <a href={`/zone-diagnosis/${zoneModalLevel}?returnTo=/7-day-challenge`}
+                className="quest-modal-cta" style={{ textDecoration: 'none' }}>
+                {progress?.zone_diagnosis_zone ? 'Retake Zone Diagnosis' : 'Start Zone Diagnosis'} →
+              </a>
+
+              {lvl.zones?.[progress?.zone_diagnosis_zone]?.boss && (
+                <div className="quest-modal-boss">
+                  <div className="quest-modal-boss-label">Boss Fight:</div>
+                  <div className="quest-modal-boss-name">{lvl.zones[progress.zone_diagnosis_zone].boss}</div>
+                </div>
+              )}
+
+              {lvl.essenceQuestion && (
+                <p className="quest-modal-essence">{lvl.essenceQuestion}</p>
+              )}
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* Completed — journey items + closed quests */}
+      {(quests.some(q => q.status !== 'active') || hasLifeMap || hasLifePaths || hasEssenceAvatar) && (
         <div className="quest-section quest-completed-section">
-          <h3 className="quest-section-title">Completed</h3>
+          <div className="quest-section-header">
+            <span className="quest-section-icon">✅</span>
+            <span className="quest-section-title">Completed</span>
+          </div>
           {hasLifeMap && (
             <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story.', icon: '📖' }} isCompleted={true} />
+          )}
+          {hasLifePaths && (
+            <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={true} />
+          )}
+          {hasEssenceAvatar && (
+            <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Hero Avatar', route: '/essence-mirror', narrative: 'Your essence archetype.', icon: '🦸' }} isCompleted={true} />
           )}
           {quests.filter(q => q.status !== 'active').map(q => (
             <div key={q.id} className="quest-closed-item">
@@ -445,9 +632,27 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         </div>
       )}
 
-      <div className="quest-divider" />
+      {/* Graduation overlay (must be outside hidden wrapper) */}
+      {graduatedTo !== null && (
+        <div className="level-graduation-overlay" onClick={() => setGraduatedTo(null)}>
+          <div className="level-graduation-card" onClick={e => e.stopPropagation()}>
+            <div className="level-graduation-emoji">🎓</div>
+            <h2 className="level-graduation-title">Level {graduatedTo} Unlocked!</h2>
+            <p className="level-graduation-subtitle">
+              You completed Level {graduatedTo - 1}. Time for the next chapter.
+            </p>
+            <button className="level-graduation-btn" onClick={() => {
+              setGraduatedTo(null)
+              onLevelChange?.(graduatedTo)
+            }}>
+              Go to Level {graduatedTo}
+            </button>
+          </div>
+        </div>
+      )}
 
-      {/* ══════ OLD LEVEL CONTENT (kept for Stage 4 replacement) ══════ */}
+      {/* ══════ OLD LEVEL CONTENT (hidden, kept for backwards compat) ══════ */}
+      <div style={{ display: 'none' }}>
 
       {/* Level Selector */}
       <div className="level-selector">
@@ -656,25 +861,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       />
 
 
-      {/* Graduation overlay */}
-      {graduatedTo !== null && (
-        <div className="level-graduation-overlay" onClick={() => setGraduatedTo(null)}>
-          <div className="level-graduation-card" onClick={e => e.stopPropagation()}>
-            <div className="level-graduation-emoji">🎓</div>
-            <h2 className="level-graduation-title">Level {graduatedTo} Unlocked!</h2>
-            <p className="level-graduation-subtitle">
-              You completed Level {graduatedTo - 1}. Time for the next chapter.
-            </p>
-            <button className="level-graduation-btn" onClick={() => {
-              setGraduatedTo(null)
-              onLevelChange?.(graduatedTo)
-            }}>
-              Go to Level {graduatedTo}
-            </button>
-          </div>
-        </div>
-      )}
-
       {showJourney && (
         <JourneyGraphPopup
           isOpen={showJourney}
@@ -682,6 +868,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           currentLevel={currentLevel}
         />
       )}
+      </div>{/* end hidden wrapper */}
     </div>
   )
 }

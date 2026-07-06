@@ -134,6 +134,7 @@ src/
 │   ├── DailyCheckin.jsx      # Daily 4-state check-in overlay
 │   ├── WeeklyReview.jsx      # Weekly multiplier review wizard
 │   ├── WeeklyReviewCard.jsx  # Shareable weekly review card
+│   ├── QuestBoardCard.jsx    # Collapsible quest card (life path + tasks)
 │   ├── QuestCard.jsx         # Unified quest rendering
 │   ├── FlowMapRiver.jsx      # River visualization
 │   └── SeeYourFlow.jsx       # Journey mapping
@@ -221,13 +222,15 @@ docs/                         # Documentation files
 
 Stage flags: `alwaysAccessible`, `isUserLevel`, `isGroansStage`
 
-### 2. Journey Progression System (9 Levels)
+### 2. Quest Board + Zone Assessments
 
-Getting Set Up (0) → Identity (1) → Vulnerability (2) → Direction (3) → Enough (4) → Growth (5) → Execution (6) → Passion-Risk (7) → Play (8). Each level has: Sweet Spot graph, Zone Diagnosis flow, Deep Dive, Boss Fight, Milestone, 3 progress bars (quests/healing/courage).
+The old 9-level sequential system is flattened into a quest board. Quests = life paths being actively pursued (from Life Paths exercise or manually added). Each quest has tasks, some tagged as courage challenges (synced to `groan_challenges`).
+
+**Zone Assessments** (8 levels, browse-at-your-own-pace): Identity (1) → Vulnerability (2) → Direction (3) → Enough (4) → Growth (5) → Execution (6) → Passion-Risk (7) → Play (8). Each has a 2x2 Sweet Spot graph with 3 zones (topLeft/diagonal/bottomRight). Horizontal scroll strip on Quests tab, tap to open modal with graph + diagnosis CTA.
 
 **Zone Diagnosis** (`/zone-diagnosis/:levelNumber`): Graph → Zone Explainer → Zone Pick → Protective Voices (conditional) → Boss Reveal. Protective voices: topLeft = Performer/Controller/People Pleaser, bottomRight = Perfectionist/Ghost.
 
-Key files: `src/components/level/LevelConfig.js`, `LevelTab.jsx`, `SweetSpotGraph.jsx`, `src/flows/ZoneDiagnosisFlow.jsx`
+Key files: `src/components/level/LevelConfig.js`, `LevelTab.jsx`, `QuestBoardCard.jsx`, `SweetSpotGraph.jsx`, `src/flows/ZoneDiagnosisFlow.jsx`. DB: `quests`, `quest_tasks`, `user_level_progress`.
 
 ### 3. Essence Mirror (First-Time Onboarding)
 
@@ -251,15 +254,15 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 ### 6. 7-Day Challenge System (Vibe Rise Maintenance Engine)
 
-**Tabs**: Level → Tune → Play-list → Healing. Layout: Header (streak + Wahoo Counter ⚡ + score pills + Rise bar) → Category tabs → Tab content.
+**Tabs**: Quests → Tune → Courage → Healing. Layout: Header (streak + Wahoo Counter ⚡ + score pills + Rise bar) → Category tabs → Tab content.
 
 **Vibe Rise Equation**: `Sustained Vibe Rise = (Practices + Wahoos + Healing) ÷ (Drains)`. All state data flows through `nervous_system_checkins` table. Capacity Score (0-100) displayed on Level tab.
 
-**Level tab**: Journey progression (9 levels), zone diagnosis, boss fights, milestones, CapacityCard. Courage counts re-enabled (L1=1...L7=3, total 15 Wahoos). Level 0 quest "Unlock Your Wahoos" navigates to the Wahoo tab.
+**Quests tab** (`LevelTab.jsx`): Flat quest board replacing the old 9-level system. Sections: Your Journey (onboarding items, hidden once all complete) → Active Quests (life paths being pursued, with task checklists via `QuestBoardCard`) → I need help with... (struggle pills revealing deep dive flows) → Zone Assessments (horizontal scroll strip of 8 level cards with tap-to-open modals) → Completed (closed quests + finished journey items). Add Quest form: dropdown of life paths from `life_path_sessions` (auto-fills state) or manual entry with 4-state picker. Old level system hidden in `display: none` wrapper for backwards compat. DB: `quests`, `quest_tasks`.
 
 **Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 5 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown), Experience Check-in (predict activity outcomes, "How did it go?" closure, wahoo conversion). Weekly Focus "Value" category (renamed from "Boundary").
 
-**Play-list tab** (`PlayListTab.jsx`): First visit (no category wahoos, no playskills) → WahooDiscoveryFlow (3 category pages: Creation/Connection/Appearance, 1-5 wahoos each, pick first active). Otherwise → category bubbles + Active Wahoos + WahooCreator (free text + bucket list) + WahooInspiration ("Need inspiration?": play-skill chips → AI suggestions, Ikigai Mix skill × problem × persona gated by Life Map completion, future pillar row). Unlock/quest signal: `groan_challenges.wahoo_category` not null, OR'd with legacy play-skills rows.
+**Courage tab** (`PlayListTab.jsx`): First visit (no category wahoos, no playskills) → WahooDiscoveryFlow (3 category pages: Creation/Connection/Appearance, 1-5 wahoos each, pick first active). Otherwise → category bubbles + Active Wahoos + WahooCreator (free text + bucket list) + WahooInspiration ("Need inspiration?": play-skill chips → AI suggestions, Ikigai Mix skill × problem × persona gated by Life Map completion, future pillar row). Unlock/quest signal: `groan_challenges.wahoo_category` not null, OR'd with legacy play-skills rows.
 
 **Healing tab**: Recognise, Release, Rewire only (blockage clearing). After-only 4-state check-in (before step removed).
 
@@ -267,13 +270,13 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Daily check-in**: 4-state overlay on page load (Vibe Rise/Safe/Activated/Shutdown). Once per day, skippable.
 
-**"Was that a Wahoo?"**: Post-Wahoo classification: Hell yes (vibe_rise, gold confetti) / Felt alive (vibe_rise) / Just did it (ventral). User self-report replaces AI scores.
+**"How did that feel?"**: Post-courage completion 4-state classification: Vibe Rise (🔥, gold confetti) / Fun (😌) / Pressure (😰) / Uninterested (😶). Followed by identity statement prompt: "Now that I [wahoo], I've proven I'm someone who..." Saves `wahoo_classification` + `identity_statement` to `quest_completions.reflection_text` JSON.
 
 **Forgiving streak**: 1 day miss allowed without breaking streak.
 
 **Weekly Review**: Triggers Sunday/Monday, 7 multiplier questions (Environment, Network, Bet-Sizing, Identity, Compounding, Learning, Attention), 15 RP + 5 for sharing. Produces a shareable canvas card.
 
-Key files: `Challenge.jsx`, `useChallengeData.js`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `WahooDiscoveryFlow.jsx`, `WahooInspiration.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`, `WeeklyReview.jsx`, `WeeklyReviewCard.jsx`, `WeeklyReview.css`
+Key files: `Challenge.jsx`, `useChallengeData.js`, `LevelTab.jsx`, `QuestBoardCard.jsx`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `WahooDiscoveryFlow.jsx`, `WahooInspiration.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`, `WeeklyReview.jsx`, `WeeklyReviewCard.jsx`
 
 Key docs: `docs/frameworks/vibe-rise-ecosystem-architecture.md`, `docs/features/challenge/vibe-rise-challenge-alignment.md`
 
@@ -281,7 +284,7 @@ Key docs: `docs/frameworks/vibe-rise-ecosystem-architecture.md`, `docs/features/
 
 2D matrix: User skills × 5 visibility layers (Screen→Live→Money→Vulnerable→Authority). User-facing name: "Wahoo Map". Internal code: `GroanMatrix.jsx`.
 
-Workflow: generated → accepted → completed. Post-completion: "I Did It!" → 4-state NS check-in → "Was that a Wahoo?" (3 options) → 3% reflection → Share. Completed cells show "Done ×N" badge.
+Workflow: generated → accepted → completed. Post-completion: "I Did It!" → 4-state NS check-in → "How did that feel?" (4-state: Vibe Rise/Fun/Pressure/Uninterested) → Identity statement → 3% reflection → Share. Completed cells show "Done ×N" badge.
 
 ### 8. Play Profile (Founder DNA)
 

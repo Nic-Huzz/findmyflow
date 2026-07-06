@@ -62,6 +62,44 @@
 
 .gcm-form textarea:focus { outline: none; border-color: #5e17eb; background: white; }
 
+.gcm-identity-prompt {
+  margin: 1rem 0 0.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.gcm-identity-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.gcm-identity-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  font-size: 15px;
+  font-family: inherit;
+  color: #1a1a2e;
+  background: #f8f9fa;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.gcm-identity-input:focus {
+  border-color: #E9A23B;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(233, 162, 59, 0.1);
+}
+
+.gcm-identity-input::placeholder {
+  color: #adb5bd;
+}
+
 .gcm-identity-line {
   text-align: center;
   font-size: 0.95rem;
