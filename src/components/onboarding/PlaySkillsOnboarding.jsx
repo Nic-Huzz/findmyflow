@@ -40,7 +40,7 @@ const HOOK_SLIDES = [
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export default function PlaySkillsOnboarding() {
-  const { user, signInWithCode, verifyCode } = useAuth()
+  const { user, loading: authLoading, signInWithCode, verifyCode } = useAuth()
   const navigate = useNavigate()
 
   // Beat state
@@ -195,6 +195,9 @@ export default function PlaySkillsOnboarding() {
   }
 
   // ─── Render ───────────────────────────────────────────────────────────────
+
+  // Wait for auth to resolve before rendering (prevents flash of login screen)
+  if (authLoading) return null
 
   // BEAT 1: Hook slides
   if (currentBeat === BEATS.HOOK) {
