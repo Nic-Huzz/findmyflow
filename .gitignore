@@ -68,7 +68,6 @@ remotion/public/*.mp3
 xcuserdata/
 *.xcuserdatad/
 
-electron-dist/
-content-drafts/
-Superseeded/
-assets-archive/
+electron/dist/
+docs/content-drafts/
+docs/assets-archive/
