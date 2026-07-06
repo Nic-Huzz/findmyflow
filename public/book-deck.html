@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Flow — Chapter Deck</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: #08080f;
+    color: #e0e0e0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* Navigation */
+  .nav-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background: rgba(8,8,15,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    z-index: 100;
+  }
+  .nav-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+  }
+  .nav-title span {
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+  }
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .nav-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #888;
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-btn:hover { background: rgba(94,23,235,0.2); color: #fff; border-color: rgba(94,23,235,0.3); }
+  .nav-counter {
+    font-size: 12px;
+    color: #555;
+    min-width: 60px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .section-pill {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .section-crack { background: rgba(248,113,113,0.12); color: #f87171; }
+  .section-flood { background: rgba(56,189,248,0.12); color: #38bdf8; }
+  .section-diagonal { background: rgba(233,162,59,0.12); color: #E9A23B; }
+
+  /* Slide container */
+  .slides-wrapper {
+    position: absolute;
+    top: 56px; left: 0; right: 0; bottom: 0;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+  }
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Slide layout */
+  .slide-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 64px;
+    max-width: 55%;
+  }
+  .slide-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 32px 48px;
+    background: rgba(255,255,255,0.015);
+    border-left: 1px solid rgba(255,255,255,0.04);
+    overflow-y: auto;
+  }
+
+  /* Left side: chapter content */
+  .ch-number {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #555;
+    margin-bottom: 12px;
+  }
+  .ch-title {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    color: #f0f0f0;
+  }
+  .ch-epigraph {
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.6;
+    color: #999;
+    margin-bottom: 8px;
+    padding-left: 20px;
+    border-left: 2px solid rgba(94,23,235,0.3);
+  }
+  .ch-epigraph-date {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    color: #444;
+    padding-left: 20px;
+    margin-bottom: 32px;
+    font-style: normal;
+  }
+  .ch-description {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #bbb;
+    margin-bottom: 24px;
+  }
+  .ch-screenshot-line {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e0e0e0;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(94,23,235,0.08), rgba(233,162,59,0.05));
+    border: 1px solid rgba(94,23,235,0.15);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .ch-image-concept {
+    font-size: 12px;
+    color: #555;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .ch-image-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #444;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  /* Right side: raw material */
+  .raw-section {
+    margin-bottom: 28px;
+  }
+  .raw-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #555;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .raw-entry {
+    font-size: 13px;
+    line-height: 1.55;
+    color: #999;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.04);
+    margin-bottom: 8px;
+    border-left: 3px solid var(--branch-color, rgba(94,23,235,0.3));
+  }
+  .raw-entry .entry-date {
+    font-size: 10px;
+    color: #444;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .raw-entry.proto-ip {
+    background: rgba(94,23,235,0.04);
+    border-left-color: #5e17eb;
+  }
+  .proto-badge {
+    display: inline-block;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #a78bfa;
+    background: rgba(94,23,235,0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .branch-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .branch-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+
+  .connects-list {
+    list-style: none;
+  }
+  .connects-list li {
+    font-size: 12px;
+    color: #777;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    line-height: 1.4;
+  }
+  .connects-list li strong {
+    color: #aaa;
+  }
+
+  /* Story skeleton */
+  .skeleton-section {
+    margin-bottom: 28px;
+  }
+  .skeleton-beats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .beat {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.015);
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.2s;
+  }
+  .beat:hover {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.08);
+  }
+  .beat-marker {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .beat-scene .beat-marker { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .beat-tension .beat-marker { background: rgba(248,113,113,0.15); color: #f87171; }
+  .beat-turn .beat-marker { background: rgba(233,162,59,0.15); color: #E9A23B; }
+  .beat-land .beat-marker { background: rgba(74,222,128,0.15); color: #4ade80; }
+  .beat-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .beat-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .beat-scene .beat-label { color: #a78bfa; }
+  .beat-tension .beat-label { color: #f87171; }
+  .beat-turn .beat-label { color: #E9A23B; }
+  .beat-land .beat-label { color: #4ade80; }
+  .beat-voice {
+    font-size: 10px;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 3px;
+  }
+  .beat-text {
+    font-size: 12px;
+    color: #999;
+    line-height: 1.45;
+  }
+  .beat-5c {
+    font-size: 9px;
+    color: #444;
+    margin-top: 3px;
+  }
+
+  .skeleton-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.015);
+    border-radius: 8px;
+    flex-wrap: wrap;
+  }
+  .skeleton-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    color: #555;
+  }
+  .skeleton-legend-dot {
+    width: 6px; height: 6px;
+    border-radius: 2px;
+  }
+
+  /* Title slide */
+  .title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px;
+  }
+  .title-slide .book-title {
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #5e17eb 0%, #a78bfa 40%, #E9A23B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+    line-height: 1.05;
+  }
+  .title-slide .book-subtitle {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+  .title-slide .book-meta {
+    font-size: 12px;
+    color: #444;
+    line-height: 2;
+  }
+  .title-slide .book-concept {
+    font-size: 16px;
+    font-style: italic;
+    color: #888;
+    margin-bottom: 32px;
+    font-family: 'Crimson Pro', serif;
+  }
+
+  /* Section divider slide */
+  .section-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px;
+  }
+  .section-slide .section-number {
+    font-size: 120px;
+    font-weight: 900;
+    opacity: 0.06;
+    position: absolute;
+  }
+  .section-slide .section-name {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: #f0f0f0;
+  }
+  .section-slide .section-question {
+    font-size: 18px;
+    font-style: italic;
+    color: #888;
+    font-family: 'Crimson Pro', serif;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+  .section-slide .section-chapters {
+    font-size: 12px;
+    color: #444;
+    margin-top: 24px;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.03);
+    z-index: 100;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #5e17eb, #E9A23B);
+    transition: width 0.4s ease;
+  }
+
+  /* Keyboard hint */
+  .key-hint {
+    position: fixed;
+    bottom: 16px; right: 32px;
+    font-size: 10px;
+    color: #333;
+    z-index: 100;
+  }
+  .key-hint kbd {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+  }
+
+  /* Chapter list overlay */
+  .ch-list-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(8,8,15,0.95);
+    backdrop-filter: blur(20px);
+    z-index: 200;
+    display: none;
+    overflow-y: auto;
+    padding: 80px 40px;
+  }
+  .ch-list-overlay.visible { display: block; }
+  .ch-list-overlay h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #e0e0e0;
+  }
+  .ch-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+  }
+  .ch-list-item {
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .ch-list-item:hover {
+    background: rgba(94,23,235,0.1);
+    border-color: rgba(94,23,235,0.2);
+  }
+  .ch-list-item .cli-num { font-size: 10px; color: #555; }
+  .ch-list-item .cli-title { font-size: 13px; color: #ccc; font-weight: 600; margin-top: 2px; }
+  .ch-list-close {
+    position: fixed;
+    top: 24px; right: 32px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 201;
+  }
+
+  /* Framework reference slide */
+  .framework-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .framework-slide h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #e0e0e0;
+    margin-bottom: 32px;
+  }
+  .fw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    margin-bottom: 32px;
+  }
+  .fw-col {
+    text-align: left;
+  }
+  .fw-col-header {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #555;
+    margin-bottom: 12px;
+    font-weight: 600;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .fw-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+  .fw-dot {
+    width: 8px; height: 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .fw-label { color: #ccc; font-weight: 600; }
+  .fw-desc { color: #777; font-size: 11px; margin-top: 2px; }
+  .fw-arrow {
+    color: #444;
+    font-size: 16px;
+    margin: 0 4px;
+  }
+  .fw-mapping {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+  .fw-mapping th {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #555;
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-weight: 600;
+  }
+  .fw-mapping td {
+    font-size: 12px;
+    color: #999;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    vertical-align: top;
+  }
+  .fw-mapping td:first-child { color: #ccc; font-weight: 600; }
+  .fw-mapping .fw-voice { color: #555; font-style: italic; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <div class="nav-title"><span>Find Your Flow</span> — Chapter Deck</div>
+  <div class="nav-controls">
+    <button class="nav-btn" onclick="showChapterList()" title="All chapters">☰</button>
+    <button class="nav-btn" onclick="prevSlide()" title="Previous">←</button>
+    <span class="nav-counter" id="counter">1 / 13</span>
+    <button class="nav-btn" onclick="nextSlide()" title="Next">→</button>
+    <span class="section-pill section-crack" id="sectionPill">THE CRACK</span>
+  </div>
+</div>
+
+<div class="slides-wrapper" id="slidesWrapper"></div>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="key-hint"><kbd>←</kbd> <kbd>→</kbd> navigate &nbsp; <kbd>ESC</kbd> chapter list</div>
+
+<div class="ch-list-overlay" id="chapterList">
+  <button class="ch-list-close" onclick="hideChapterList()">×</button>
+  <h2>All Chapters</h2>
+  <div class="ch-list-grid" id="chapterListGrid"></div>
+</div>
+
+<script>
+const SLIDES = [
+  // Title slide
+  {
+    type: 'title',
+    section: 'intro'
+  },
+  // Framework reference slide
+  {
+    type: 'framework',
+    section: 'intro'
+  },
+  // Section 1 divider
+  {
+    type: 'section',
+    section: 'crack',
+    name: 'The Crack',
+    question: '"What happened to me, and what did it install?"',
+    chapters: 'Chapters 1-22 · The Installation Map'
+  },
+  // Chapter 1
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '01',
+    title: 'The Promise',
+    epigraph: 'Thesis to save the world: need to change culture from current capitalistic orientation.',
+    epigraphDate: '2022-09-26',
+    description: 'Everyone gets the same pitch. Work hard at school. Get into university. Get the job. Get the salary. Get the house. Then you\'ll be happy.\n\nI followed it perfectly.',
+    screenshotLine: null,
+    imageConcept: 'A golden road stretching forward, perfectly paved, lined with milestones.',
+    branch: 'Culture installs fear',
+    branchColor: '#fb923c',
+    confidence: 90,
+    rawEntries: [
+      { date: '2022-09-26', text: 'Current culture: identify with the external, driven to attain the external, ownership society, pain of work.' },
+      { date: '2023-09-26', text: 'We\'re conditioned our whole childhood to accept not loving what we do in name of a greater goal.' },
+      { date: '2025-05-10', text: 'We need to understand the trade we\'re making with work. Where we get lost is by working more for more money, but end up sacrificing the things that make us happy.' }
+    ],
+    connects: [
+      { ch: 'Ch 2', text: 'The promise breaks. The earthquake.' },
+      { ch: 'Ch 11', text: 'School installs the operating system that enables the promise.' },
+      { ch: 'Ch 62', text: '"We fall to the level of what feels safe." The promise IS the safety net.' }
+    ],
+    beats: {
+      scene: 'The pitch. The golden road. Work hard → university → job → salary → house → happy.',
+      tension: 'I followed it perfectly. Every milestone. Every checkbox.',
+      turn: 'The road was perfectly paved. But nobody told you where it goes.',
+      land: '<em style="color:#555">✍ Needs a screenshot line — currently setup chapter for Ch 2\'s payoff</em>',
+      fiveC: { context: 'The cultural pitch everyone receives', catalyst: 'You followed it', complication: 'It works — externally', change: null, consequence: 'Ch 2 delivers the consequence' }
+    }
+  },
+  // Chapter 2
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '02',
+    title: 'The Earthquake',
+    epigraph: 'Every stage of your dream, you only ever feel the same emotions.',
+    epigraphDate: '2022-09-26',
+    description: 'One month into my dream job, I felt nothing. Not tired. Not stressed. Nothing. The happiness they promised wasn\'t late. It was never coming.\n\nIt was like an earthquake hit every building of understanding I had and made them crumble.',
+    screenshotLine: 'The happiness they promised wasn\'t late. It was never coming.',
+    imageConcept: 'Buildings crumbling, golden road cracking open. Not apocalyptic — more like a snow globe that someone just shook.',
+    branch: 'Culture installs fear',
+    branchColor: '#fb923c',
+    confidence: 95,
+    rawEntries: [
+      { date: '2022-09-26', text: 'Lost passion for Rudder because I thought it was the answer for people like me only to find it didn\'t solve anything. Dark night of the soul.', protoIp: 'The Crack' },
+      { date: '2022-09-26', text: 'Spent all my time cramming every minute of every day to achieve an ROI. This is the one time of life that you have to explore.' },
+      { date: '2022-11-01', text: 'I realise now my crisis was triggered by recognising this is what capitalism built to. My struggle since has been trying to rationalise and fit in to make it work.' },
+      { date: '2022-10-22', text: 'Hedonic adaptation ensures the outer never changes the inner.' },
+      { date: '2022-11-01', text: 'I found myself spraying energy in every direction trying to find happiness. I realised I needed to direct it inward.' }
+    ],
+    connects: [
+      { ch: 'Ch 1', text: 'The promise that broke.' },
+      { ch: 'Ch 3', text: 'The questions that detonated after.' },
+      { ch: 'Ch 25', text: 'Head Full of Dreams. Where the earthquake leads.' },
+      { ch: 'Ch 50', text: 'Bottom Right on the Belief Graph. Maximum capability, minimum belief. Started here.' }
+    ],
+    beats: {
+      scene: 'One month into my dream job. The corner office. The salary. Everything I was told to want.',
+      tension: 'I felt nothing. Not tired. Not stressed. Nothing. The promise delivered everything — and changed nothing inside.',
+      turn: 'The happiness they promised wasn\'t late.',
+      land: 'It was never coming.',
+      fiveC: { context: 'Dream job, month one', catalyst: 'Feeling nothing despite having everything', complication: 'The external delivered but the internal didn\'t change', change: 'Realising the promise was structurally broken', consequence: 'Every building of understanding crumbles' }
+    }
+  },
+  // Chapter 3
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '03',
+    title: 'The Questions',
+    epigraph: 'My search for purpose was a search to end my suffering.',
+    epigraphDate: '2022-09-26',
+    description: 'Who am I? What\'s my purpose? What am I doing with my life? And why is everyone else still walking this path like it works?\n\nThese questions don\'t arrive politely. They detonate.',
+    screenshotLine: null,
+    imageConcept: 'Person standing in rubble, looking at their hands.',
+    branch: 'FLAGGED',
+    branchColor: '#666',
+    confidence: 70,
+    rawEntries: [
+      { date: '2022-09-26', text: 'My search for purpose was a search to end my suffering.', protoIp: 'The Crack' },
+      { date: '2024-09-16', text: 'Purpose is to be. Fulfilment is satisfying any motivations that supports that being. Mission is service of others.' },
+      { date: '2024-06-21', text: 'Difference between me and most: I have ambitions to change a system.' }
+    ],
+    connects: [
+      { ch: 'Ch 2', text: 'The earthquake that opened the questions.' },
+      { ch: 'Ch 4', text: 'You didn\'t choose this. The crack chose you.' }
+    ],
+    beats: {
+      scene: 'Standing in the rubble of the earthquake. The questions arriving.',
+      tension: 'Who am I? What\'s my purpose? And why is everyone else still walking like it works?',
+      turn: 'These questions don\'t arrive politely.',
+      land: 'They detonate.',
+      fiveC: { context: 'Post-earthquake disorientation', catalyst: 'The first real questions', complication: 'Can\'t un-ask them once asked', change: 'Identity begins dissolving', consequence: 'The search begins' }
+    }
+  },
+  // Chapter 4
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '04',
+    title: 'You Don\'t Choose the Crack',
+    epigraph: 'By being highly agreeable you have no identity because you\'re always fitting in to the environment.',
+    epigraphDate: '2022-11-01',
+    description: 'Nobody signs up for this. You don\'t decide to have an existential crisis on a Tuesday. The crack happens when the gap between who you\'re pretending to be and who you actually are gets too wide for your nervous system to hold.',
+    screenshotLine: null,
+    imageConcept: 'A mask with a crack running down the middle.',
+    branch: 'Body keeps the score',
+    branchColor: '#ef4444',
+    confidence: 85,
+    rawEntries: [
+      { date: '2024-08-17', text: 'Number 1 source of all fears: Our worth is dependent on our actions. Body is a vessel of beliefs. Beliefs create filter for reality.' },
+      { date: '2023-02-14', text: 'What stops us living authentically? 1) Fear. 2) Trauma (kinks in our nervous system). We are our own biggest hurdles.' }
+    ],
+    connects: [
+      { ch: 'Ch 3', text: 'The questions that preceded it.' },
+      { ch: 'Ch 5', text: 'Before the crack — the kid who had an essence.' }
+    ],
+    beats: {
+      scene: 'A Tuesday. An ordinary day. The crack arriving uninvited.',
+      tension: 'Nobody signs up for this. You don\'t decide to have an existential crisis.',
+      turn: 'The crack happens when the gap between who you\'re pretending to be and who you actually are...',
+      land: '...gets too wide for your nervous system to hold.',
+      fiveC: { context: 'An ordinary day', catalyst: 'The gap becoming unsustainable', complication: 'You didn\'t choose this', change: 'The mask can\'t hold', consequence: 'The crack chooses you' }
+    }
+  },
+  // Chapter 5
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '05',
+    title: 'Before the Crack',
+    epigraph: 'Kid software = love, joy, carefree. Conditioning removes it.',
+    epigraphDate: '2025-03-17',
+    description: 'Rewind. Before the earthquake, before the questions, before any of this. There was a kid.\n\nThat kid had an essence. Something that lit them up before anyone told them to stop.',
+    screenshotLine: null,
+    imageConcept: 'A child playing freely, glowing with light.',
+    branch: 'Our essence is love',
+    branchColor: '#f472b6',
+    confidence: 95,
+    rawEntries: [
+      { date: '2025-03-17', text: 'Kid software = love, joy, carefree. Conditioning removes it. To reach higher states of consciousness we need to re-embody states of the child.' },
+      { date: '2023-06-01', text: 'Children are the way they are because they don\'t fear consequences. Over-coming fear is the secret to being more child-like.' },
+      { date: '2024-09-07', text: 'What makes us unique? The combination of things that we love. There\'s no one on earth with your combination.' }
+    ],
+    connects: [
+      { ch: 'Ch 6', text: 'Essence defined.' },
+      { ch: 'Ch 33', text: 'The Kid Knew. Full circle.' },
+      { ch: 'Ch 47', text: 'Reclaim. Reconnect to this kid.' }
+    ],
+    beats: {
+      scene: 'Rewind. Before the earthquake. Before the questions. There was a kid.',
+      tension: 'That kid had something. Not a skill. Not a plan. An energy. Something that lit them up.',
+      turn: 'Before anyone told them to stop.',
+      land: '<em style="color:#555">✍ Your personal memory of what that kid loved — this is the seed of everything</em>',
+      fiveC: { context: 'Childhood, before conditioning', catalyst: 'Something lit you up', complication: 'You didn\'t know it was precious', change: 'The world was about to edit it', consequence: 'Ch 6-8 reveal what happened to it' }
+    }
+  },
+  // Chapter 6
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '06',
+    title: 'Essence',
+    epigraph: 'Our essence is love. However this essence becomes blocked by fear.',
+    epigraphDate: '2024-09-16',
+    description: 'Your essence is who you were before the world edited you. Not a skill. Not a job title. The energy underneath. The thing that made you come alive before you learned that coming alive wasn\'t safe.',
+    screenshotLine: null,
+    imageConcept: 'A light source inside a glass jar, warm and bright.',
+    branch: 'Our essence is love',
+    branchColor: '#f472b6',
+    confidence: 95,
+    rawEntries: [
+      { date: '2024-09-16', text: 'Our essence is love. However this essence becomes blocked by fear. Three reasons: 1) Survival. 2) Protection. 3) Conditioning. Return to love is the ultimate role of healing.', protoIp: 'The Water Model' },
+      { date: '2024-11-08', text: 'Journey is the most important piece. We choose that journey. Most important journey? Returning to love.' },
+      { date: '2023-09-15', text: 'Art is the natural expression of the spirit. It\'s opportunity to share a piece of itself.' }
+    ],
+    connects: [
+      { ch: 'Ch 5', text: 'The kid who had this essence.' },
+      { ch: 'Ch 7', text: 'Direction — where essence naturally goes.' },
+      { ch: 'Ch 21', text: 'The Essence Is Still There. Buried not broken.' },
+      { ch: 'Ch 75', text: 'Essence Louder Than Protection. The whole game.' }
+    ],
+    beats: {
+      scene: 'Name a moment when your essence was visible. Before the editing began.',
+      tension: 'Not a skill. Not a job title. The energy underneath. The thing that made you come alive.',
+      turn: 'Before you learned that coming alive wasn\'t safe.',
+      land: '<em style="color:#555">✍ Define essence in one sentence that the reader can apply to themselves</em>',
+      fiveC: { context: 'The pre-edited self', catalyst: 'Recognising it existed', complication: 'It got buried so gradually you didn\'t notice', change: 'Now you can name it', consequence: 'The search to recover it begins' }
+    }
+  },
+  // Chapter 7
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '07',
+    title: 'Direction',
+    epigraph: 'I believe we all have a purpose, a mission, a change to create in this life.',
+    epigraphDate: '2024-08-18',
+    description: 'You also had a direction. Not a career plan. A gravity. The problems that made you angry. The people you wanted to protect. The things your hands wanted to build.\n\nEssence is WHO you are. Direction is WHERE you\'d naturally go.',
+    screenshotLine: null,
+    imageConcept: 'A compass with a glowing needle, pointing toward something warm.',
+    branch: 'Our essence is love',
+    branchColor: '#f472b6',
+    confidence: 90,
+    rawEntries: [
+      { date: '2024-08-18', text: 'We all have a purpose, a mission, a change to create. The problem is school teaches us knowledge to work but never self-knowledge to identify what that purpose is.' },
+      { date: '2022-10-21', text: 'My role: taking life\'s wisdom and communicating them in digestible ways. Helping people upgrade their mental model.' },
+      { date: '2024-06-28', text: 'Game shop owner image: always knew I loved games. How it manifested is crazy.' }
+    ],
+    connects: [
+      { ch: 'Ch 6', text: 'Essence — who you are.' },
+      { ch: 'Ch 8', text: 'Then something happened to bury both.' },
+      { ch: 'Ch 34', text: 'Problems That Break Your Heart. Direction resurfacing.' },
+      { ch: 'Ch 37', text: 'The Intersection. Direction found.' }
+    ],
+    beats: {
+      scene: 'A moment when you felt a pull toward something — a problem, a person, a cause.',
+      tension: 'Not a career plan. A gravity. The problems that made you angry. The people you wanted to protect.',
+      turn: 'Essence is WHO you are. Direction is WHERE you\'d naturally go.',
+      land: 'You had both before anyone told you where to point them.',
+      fiveC: { context: 'The natural pull you had as a kid', catalyst: 'Recognising direction isn\'t chosen — it\'s felt', complication: 'Direction got hijacked by culture\'s version of success', change: 'Separating your gravity from their gravity', consequence: 'Now you know what was stolen' }
+    }
+  },
+  // Chapter 8
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '08',
+    title: 'Then Something Happened',
+    epigraph: 'All our wounds and programming can be simplified to making us feel safe + affiliation + status.',
+    epigraphDate: '2025-06-03',
+    description: 'You didn\'t wake up today and decide to have a protective voice and a limiting belief. Something happened between the time you were born and today that created them.',
+    screenshotLine: 'You didn\'t wake up today and decide to have a protective voice and a limiting belief.',
+    imageConcept: 'A shadow falling across the child from Chapter 5.',
+    branch: 'FLAGGED',
+    branchColor: '#666',
+    confidence: 50,
+    rawEntries: [
+      { date: '2024-04-29', text: 'The black nut/rock inside is part of me that doesn\'t feel safe to be myself. Fear of hurting others is also a fear of stepping into my power. Scared to be great.' },
+      { date: '2025-02-02', text: 'Conditioning is being given values and boundaries. We have natural instincts that create desires. Conditioning determines how we pursue them.' },
+      { date: '2025-06-03', text: 'All our wounds and programming can be simplified to making us feel safe + affiliation + status.' }
+    ],
+    connects: [
+      { ch: 'Ch 7', text: 'What was buried: essence + direction.' },
+      { ch: 'Ch 9', text: 'Stage 1 of the installation: infancy.' },
+      { ch: 'Ch 13', text: 'The Installation — the full picture.' },
+      { ch: 'Ch 19', text: 'Software, Not Identity — the reframe.' }
+    ],
+    beats: {
+      scene: 'Your specific "something happened" — the event or the thousand paper cuts.',
+      tension: 'You didn\'t wake up today and decide to have a protective voice and a limiting belief.',
+      turn: 'Something happened between the time you were born and today that created them.',
+      land: '<em style="color:#555">✍ Your specific "something happened" moment — the strongest screenshot line in the book is already here</em>',
+      fiveC: { context: 'Between birth and today', catalyst: 'A specific event or pattern of events', complication: 'It installed something you didn\'t choose', change: 'Seeing the installation for the first time', consequence: 'Ch 9-13 reveal HOW it happened stage by stage' }
+    }
+  },
+  // Chapter 9
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '09',
+    title: 'You Arrive',
+    epigraph: 'Humans are constant waves of emotions. We\'re emotional beings that think. Not thinking beings with emotions.',
+    epigraphDate: '2023-06-05',
+    description: 'Stage one: infancy. You arrived needing two things. To be seen. To be safe.\n\nIf you got both, you could explore. If you got seen but never settled, your nervous system learned: the world is chaos, stay alert. If you were safe but never seen, it learned: I\'m invisible, don\'t bother.',
+    screenshotLine: null,
+    imageConcept: 'Three infants. One in a storm, one in a warm home, one alone in a quiet room.',
+    branch: 'Safety is the foundation',
+    branchColor: '#f87171',
+    confidence: 95,
+    rawEntries: [
+      { date: '2024-10-01', text: 'Connection = how safe you feel + how much you feel seen. Being vulnerable = feeling seen. Listening = feeling safe.', protoIp: 'Safety x Expression' },
+      { date: '2023-12-11', text: 'Can your body build safety in an experience before it has the experience?' },
+      { date: '2024-07-27', text: 'Self-Work: feeling at peace in service. Jittering when receiving. Self worth related. Feeling worthy in service, unworthy when receiving.' }
+    ],
+    connects: [
+      { ch: 'Ch 8', text: 'Something happened. This is stage 1.' },
+      { ch: 'Ch 10', text: 'Stage 2: you learn what works.' },
+      { ch: 'Ch 62', text: '"We fall to the level of what feels safe." Starts here.' }
+    ],
+    beats: {
+      scene: 'An infant. Two needs. Nothing else.',
+      tension: 'If you got both — seen AND safe — you could explore. If one was missing, your NS learned a rule.',
+      turn: 'Seen but never settled: the world is chaos, stay alert. Safe but never seen: I\'m invisible, don\'t bother.',
+      land: 'Your first two needs wrote the first line of your operating system.',
+      fiveC: { context: 'Infancy — pure need', catalyst: 'How caregivers responded', complication: 'The NS wrote a rule based on what it received', change: 'Realising the rule was written before you could speak', consequence: 'Stage 2 builds on this rule' }
+    }
+  },
+  // Chapter 10
+  {
+    type: 'chapter',
+    section: 'crack',
+    number: '10',
+    title: 'You Learn What Works',
+    epigraph: 'Everything we do is to feel an emotion. Emotion is based off story we tell ourselves.',
+    epigraphDate: '2022-10-12',
+    description: 'Stage two: childhood. You expressed yourself. The world responded.\n\nIf the response was love, you kept going. If your full expression cost you connection, you learned: being myself is dangerous. Edit. Perform. Adapt.',
+    screenshotLine: null,
+    imageConcept: 'A child reaching out, one hand receiving warmth, the other being pushed away.',
+    branch: 'Safety is the foundation',
+    branchColor: '#f87171',
+    confidence: 90,
+    rawEntries: [
+      { date: '2022-10-12', text: 'Everything we do is to feel an emotion. We like hobbies our dad does because it makes us feel accepted.' },
+      { date: '2022-11-06', text: 'Fear is what holds me back from expressing more love with my family.' },
+      { date: '2023-09-28', text: 'We hide the parts we love the most because we love them so much we don\'t want them to be hurt.' }
+    ],
+    connects: [
+      { ch: 'Ch 9', text: 'Stage 1: you arrive.' },
+      { ch: 'Ch 11', text: 'Stage 3: school installs the OS.' },
+      { ch: 'Ch 38', text: 'Essence vs Protective — the two responses you learned here.' }
+    ],
+    beats: {
+      scene: 'Childhood. You expressed yourself. The world responded.',
+      tension: 'If the response was love, you kept going. If your full expression cost you connection...',
+      turn: '...you learned: being myself is dangerous.',
+      land: 'Edit. Perform. Adapt.',
+      fiveC: { context: 'Childhood expression', catalyst: 'The world\'s first response to who you really are', complication: 'Expression cost connection', change: 'You learned to edit yourself', consequence: 'The performer/ghost/perfectionist seeds are planted' }
+    }
+  }
+];
+
+// Render slides
+const wrapper = document.getElementById('slidesWrapper');
+const listGrid = document.getElementById('chapterListGrid');
+
+SLIDES.forEach((slide, i) => {
+  const el = document.createElement('div');
+  el.className = `slide ${i === 0 ? 'active' : ''}`;
+  el.dataset.index = i;
+  el.dataset.section = slide.section;
+
+  if (slide.type === 'title') {
+    el.innerHTML = `
+      <div class="title-slide">
+        <div class="book-title">Find Your Flow</div>
+        <div class="book-concept">"If you live in Vibe Rise, you will find your flow."</div>
+        <div class="book-subtitle">Chapter Writing Deck — 72 chapters, one idea per page</div>
+        <div class="book-meta">
+          Original IP: Huzz Hurrell<br>
+          Format: Derek Sivers meets picture book<br>
+          Voice: 1am Huzz explaining to a friend<br>
+          196 thought entries (2022-2025) as epigraphs<br><br>
+          <span style="color:#555">→ Arrow keys to navigate</span><br>
+          <span style="color:#555">Each chapter: 4-beat skeleton (Scene → Tension → Turn → Land)</span>
+        </div>
+      </div>
+    `;
+  } else if (slide.type === 'framework') {
+    el.innerHTML = `
+      <div class="framework-slide">
+        <h2>Story Skeleton — Quick Reference</h2>
+        <table class="fw-mapping">
+          <thead>
+            <tr>
+              <th>4 Beats</th>
+              <th>Huzz Voice</th>
+              <th>5 C's</th>
+              <th>3 Principles</th>
+              <th>Energy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="color:#a78bfa">S</span> Scene</td>
+              <td class="fw-voice">"So there I was..."</td>
+              <td>Context</td>
+              <td>Engage the Audience</td>
+              <td>Ground me</td>
+            </tr>
+            <tr>
+              <td><span style="color:#f87171">T</span> Tension</td>
+              <td class="fw-voice">"And the thing is..."</td>
+              <td>Catalyst + Complication</td>
+              <td>Show the Challenge</td>
+              <td>Pull me in</td>
+            </tr>
+            <tr>
+              <td><span style="color:#E9A23B">↻</span> Turn</td>
+              <td class="fw-voice">"But here's what I realised..."</td>
+              <td>Change</td>
+              <td>Show the Change</td>
+              <td>Flip it</td>
+            </tr>
+            <tr>
+              <td><span style="color:#4ade80">.</span> Land</td>
+              <td class="fw-voice">"That's the whole thing."</td>
+              <td>Consequence</td>
+              <td>Show the Change</td>
+              <td>Brick it</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:32px;font-size:12px;color:#555;max-width:600px;line-height:1.7;">
+          <strong style="color:#888;">Punchy chapters (1 page):</strong> Catalyst + Complication compress into one Tension beat.<br>
+          <strong style="color:#888;">Longer chapters (3-5 pages):</strong> Expand into all 5 C's. Give Catalyst its own moment before Complication hits.<br>
+          <strong style="color:#888;">The test:</strong> Read aloud. Sounds like 1am Huzz? Keep. Sounds like an author? Rewrite.
+        </div>
+      </div>
+    `;
+  } else if (slide.type === 'section') {
+    el.innerHTML = `
+      <div class="section-slide">
+        <div class="section-number">${slide.name === 'The Crack' ? '1' : slide.name === 'The Flood' ? '2' : '3'}</div>
+        <div class="section-name">${slide.name}</div>
+        <div class="section-question">${slide.question}</div>
+        <div class="section-chapters">${slide.chapters}</div>
+      </div>
+    `;
+  } else if (slide.type === 'chapter') {
+    const branchTag = slide.branch === 'FLAGGED'
+      ? `<div class="branch-tag" style="background:rgba(255,255,255,0.04);color:#888"><div class="branch-dot" style="background:#666"></div>FLAGGED (${slide.confidence}%)</div>`
+      : `<div class="branch-tag" style="background:${slide.branchColor}12;color:${slide.branchColor}"><div class="branch-dot" style="background:${slide.branchColor}"></div>${slide.branch} (${slide.confidence}%)</div>`;
+
+    el.innerHTML = `
+      <div class="slide-left">
+        <div class="ch-number">Chapter ${slide.number}</div>
+        <div class="ch-title">${slide.title}</div>
+        <div class="ch-epigraph">${slide.epigraph}</div>
+        <div class="ch-epigraph-date">— ${slide.epigraphDate}</div>
+        <div class="ch-description">${slide.description.replace(/\n\n/g, '<br><br>')}</div>
+        ${slide.screenshotLine ? `<div class="ch-screenshot-line">"${slide.screenshotLine}"</div>` : ''}
+        <div class="ch-image-concept">
+          <div class="ch-image-label">Pixar Image Concept</div>
+          ${slide.imageConcept}
+        </div>
+      </div>
+      <div class="slide-right" style="--branch-color: ${slide.branchColor}">
+        ${branchTag}
+        ${slide.beats ? `
+        <div class="skeleton-section">
+          <div class="raw-label">Story Skeleton</div>
+          <div class="skeleton-beats">
+            <div class="beat beat-scene">
+              <div class="beat-marker">S</div>
+              <div class="beat-content">
+                <div class="beat-label">Scene</div>
+                <div class="beat-voice">"So there I was..."</div>
+                <div class="beat-text">${slide.beats.scene}</div>
+                ${slide.beats.fiveC?.context ? `<div class="beat-5c">5C Context: ${slide.beats.fiveC.context}</div>` : ''}
+              </div>
+            </div>
+            <div class="beat beat-tension">
+              <div class="beat-marker">T</div>
+              <div class="beat-content">
+                <div class="beat-label">Tension</div>
+                <div class="beat-voice">"And the thing is..."</div>
+                <div class="beat-text">${slide.beats.tension}</div>
+                ${slide.beats.fiveC?.complication ? `<div class="beat-5c">5C Catalyst + Complication: ${slide.beats.fiveC.catalyst || ''} → ${slide.beats.fiveC.complication}</div>` : ''}
+              </div>
+            </div>
+            <div class="beat beat-turn">
+              <div class="beat-marker">↻</div>
+              <div class="beat-content">
+                <div class="beat-label">Turn</div>
+                <div class="beat-voice">"But here's what I realised..."</div>
+                <div class="beat-text">${slide.beats.turn}</div>
+                ${slide.beats.fiveC?.change ? `<div class="beat-5c">5C Change: ${slide.beats.fiveC.change}</div>` : ''}
+              </div>
+            </div>
+            <div class="beat beat-land">
+              <div class="beat-marker">.</div>
+              <div class="beat-content">
+                <div class="beat-label">Land</div>
+                <div class="beat-voice">"That's the whole thing."</div>
+                <div class="beat-text">${slide.beats.land}</div>
+                ${slide.beats.fiveC?.consequence ? `<div class="beat-5c">5C Consequence: ${slide.beats.fiveC.consequence}</div>` : ''}
+              </div>
+            </div>
+          </div>
+          <div class="skeleton-legend">
+            <div class="skeleton-legend-item"><div class="skeleton-legend-dot" style="background:#a78bfa"></div>Engage (Context)</div>
+            <div class="skeleton-legend-item"><div class="skeleton-legend-dot" style="background:#f87171"></div>Challenge (Catalyst + Complication)</div>
+            <div class="skeleton-legend-item"><div class="skeleton-legend-dot" style="background:#E9A23B"></div>Change</div>
+            <div class="skeleton-legend-item"><div class="skeleton-legend-dot" style="background:#4ade80"></div>Consequence (Brick)</div>
+          </div>
+        </div>
+        ` : ''}
+        <div class="raw-section">
+          <div class="raw-label">Raw Material (Thought Entries)</div>
+          ${slide.rawEntries.map(e => `
+            <div class="raw-entry ${e.protoIp ? 'proto-ip' : ''}">
+              ${e.protoIp ? `<div class="proto-badge">Proto-IP: ${e.protoIp}</div>` : ''}
+              <div class="entry-date">${e.date}</div>
+              ${e.text}
+            </div>
+          `).join('')}
+        </div>
+        <div class="raw-section">
+          <div class="raw-label">Connects To</div>
+          <ul class="connects-list">
+            ${slide.connects.map(c => `<li><strong>${c.ch}:</strong> ${c.text}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    `;
+
+    // Add to chapter list
+    const listItem = document.createElement('div');
+    listItem.className = 'ch-list-item';
+    listItem.innerHTML = `<div class="cli-num">Chapter ${slide.number}</div><div class="cli-title">${slide.title}</div>`;
+    listItem.onclick = () => { goToSlide(i); hideChapterList(); };
+    listGrid.appendChild(listItem);
+  }
+
+  wrapper.appendChild(el);
+});
+
+// Navigation
+let current = 0;
+const total = SLIDES.length;
+
+function updateUI() {
+  document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+  document.getElementById('progressFill').style.width = `${((current + 1) / total) * 100}%`;
+
+  const section = SLIDES[current].section;
+  const pill = document.getElementById('sectionPill');
+  pill.className = 'section-pill';
+  if (section === 'crack') { pill.classList.add('section-crack'); pill.textContent = 'THE CRACK'; }
+  else if (section === 'flood') { pill.classList.add('section-flood'); pill.textContent = 'THE FLOOD'; }
+  else if (section === 'diagonal') { pill.classList.add('section-diagonal'); pill.textContent = 'THE DIAGONAL'; }
+  else { pill.textContent = ''; pill.style.display = 'none'; }
+  if (section !== 'intro') pill.style.display = '';
+}
+
+function goToSlide(n) {
+  if (n < 0 || n >= total || n === current) return;
+  const prev = document.querySelector('.slide.active');
+  const next = wrapper.children[n];
+  if (prev) { prev.classList.remove('active'); prev.classList.add('exit-left'); setTimeout(() => prev.classList.remove('exit-left'), 500); }
+  next.classList.add('active');
+  current = n;
+  updateUI();
+}
+
+function nextSlide() { goToSlide(current + 1); }
+function prevSlide() { goToSlide(current - 1); }
+
+function showChapterList() { document.getElementById('chapterList').classList.add('visible'); }
+function hideChapterList() { document.getElementById('chapterList').classList.remove('visible'); }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'Escape') {
+    const list = document.getElementById('chapterList');
+    if (list.classList.contains('visible')) hideChapterList();
+    else showChapterList();
+  }
+});
+
+updateUI();
+</script>
+</body>
+</html>

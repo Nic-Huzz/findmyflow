@@ -802,7 +802,38 @@ export default function LifePathFlow() {
               <button className="flp-advance-btn" style={{ width: '100%', marginTop: 16 }}
                 onClick={async () => {
                   await saveWahoosToGroan()
-                  // Delay save to let React flush the savedToGroan state update
+                  // Create quest if one doesn't exist for this career
+                  if (user?.id && selectedWahooId) {
+                    const career = careers.find(c => c.id === selectedWahooId)
+                    if (career) {
+                      const { data: existing } = await supabase.from('quests')
+                        .select('id').eq('user_id', user.id).eq('career_id', selectedWahooId).limit(1)
+                      let questId = existing?.[0]?.id
+                      if (!questId) {
+                        const { data: newQuest } = await supabase.from('quests').insert({
+                          user_id: user.id, label: career.label, career_id: selectedWahooId,
+                          predicted_state: career.predictedState, status: 'active',
+                        }).select('id').single()
+                        questId = newQuest?.id
+                      }
+                      if (questId) {
+                        // Get existing task texts to prevent duplicates
+                        const { data: existingTasks } = await supabase.from('quest_tasks')
+                          .select('text').eq('quest_id', questId)
+                        const existingTexts = new Set((existingTasks || []).map(t => t.text.toLowerCase()))
+                        const steps = wahooSteps[selectedWahooId] || []
+                        const newTasks = steps.filter(ws => !existingTexts.has(ws.text.toLowerCase()))
+                        if (newTasks.length > 0) {
+                          await supabase.from('quest_tasks').insert(newTasks.map((ws, i) => ({
+                            quest_id: questId, user_id: user.id, text: ws.text,
+                            is_courage_challenge: !!ws.savedToGroan,
+                            stuck_point_id: ws.fromStuckPoint || null,
+                            sort_order: (existingTasks?.length || 0) + i,
+                          })))
+                        }
+                      }
+                    }
+                  }
                   setTimeout(() => { saveRef.current({ step: 'complete' }); setStep(STEPS.COMPLETE) }, 200)
                 }}>
                 Save & finish →

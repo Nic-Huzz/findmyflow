@@ -262,7 +262,7 @@ export default function ScaleDiagnosticFlow() {
         <div className="sdf-container sdf-screen">
           <div className="sdf-intro">
             <div className="sdf-intro-content">
-              <div className="sdf-badge">Scale Diagnostic</div>
+              <div className="sdf-badge">Scale Score</div>
 
               {ruleBreak && (
                 <div className="sdf-context-card">

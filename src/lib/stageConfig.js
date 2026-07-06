@@ -47,15 +47,15 @@ export const STAGE_CONFIG = {
   },
   [STAGES.GROANS]: {
     id: 0.5,
-    name: 'Wahoo',
-    shortName: 'Wahoo',
+    name: 'Courage',
+    shortName: 'Courage',
     description: 'Challenges that push you past your comfort zone to grow',
     icon: '🎮',
     color: '#6d26d7', // purple→gold ombre
     requiredFlows: [],
     milestones: [],
     groanChallenge: null,
-    tabLabel: 'Wahoo',
+    tabLabel: 'Courage',
     upsellPrompt: null,
     externalLink: null,
     isUserLevel: true,

@@ -145,6 +145,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [payRentModel, setPayRentModel] = useState(null)
   const [remarkableAngle, setRemarkableAngle] = useState(null)
   const [blowUpReadiness, setBlowUpReadiness] = useState(null)
+  const [hasReach, setHasReach] = useState(false)
+  const [hasGrowth, setHasGrowth] = useState(false)
+  const [hasScaleScore, setHasScaleScore] = useState(false)
   const [essenceAvatar, setEssenceAvatar] = useState(null)
   const [essenceName, setEssenceName] = useState(null)
   const [userSkills, setUserSkills] = useState([])
@@ -230,6 +233,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         { data: wmData },
         { data: lbData },
         { data: readinessData },
+        { data: reachData },
+        { data: growthData },
+        { data: scaleScoreData },
       ] = await Promise.all([
         supabase.from('scope_map_results').select('stage').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('experience_creator_selections').select('dominant_archetype, product_suite, selected_creators').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
@@ -246,6 +252,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         supabase.from('journey_onboarding_selections').select('id').eq('user_id', userId).then(({ data, error }) => ({ data: data?.length >= 4 ? { id: 'complete' } : null, error })),
         supabase.from('healing_compass_responses').select('id, created_at').eq('user_id', userId).eq('flow_version', 2).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('blow_up_readiness').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+        supabase.from('narrative_builders').select('id').eq('user_id', userId).limit(1).maybeSingle(),
+        supabase.from('access_architectures').select('id').eq('user_id', userId).limit(1).maybeSingle(),
+        supabase.from('scale_diagnostics').select('id, branch').eq('user_id', userId).limit(1).maybeSingle(),
       ])
 
       setScopeResult(scope || null)
@@ -259,6 +268,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       setWoundMapData(wmData || null)
       setLimitingBeliefData(lbData || null)
       setBlowUpReadiness(readinessData || null)
+      setHasReach(!!reachData?.id)
+      setHasGrowth(!!growthData?.id)
+      setHasScaleScore(!!scaleScoreData?.id)
       const allSkills = (skillsData || []).map(s => ({ label: s.cluster_label, fav: s.is_favourite }))
       const allProblems = (problemsData || []).map(p => ({ label: p.cluster_label, fav: p.is_favourite }))
       const hasFavSkills = allSkills.some(s => s.fav)
@@ -436,10 +448,10 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               {/* ═══ PLAYBOOK SUB-TAB ═══ */}
               {identitySubTab === 'playbook' && <>
 
-              {/* Blow Up Brand */}
+              {/* Remarkable Results */}
               {remarkableAngle ? (
                 <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                  <div className="ch2-label">Blow Up Brand</div>
+                  <div className="ch2-label">Remarkable Results</div>
 
                   {/* AI Rule Break Statement */}
                   {remarkableAngle.ai_rule_statement && (
@@ -533,9 +545,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               ) : (
                 <div className="ch2-id-section" style={{ paddingTop: 14 }}>
                   <div className="ch2-locked" onClick={() => navigate('/create/remarkable')}>
-                    <div className="ch2-locked-title">Blow Up Brand</div>
-                    <div className="ch2-locked-sub">What assumption do you break? What's your remarkable angle?</div>
-                    <div className="ch2-locked-cta">Find Your Angle →</div>
+                    <div className="ch2-locked-title">Remarkable Results</div>
+                    <div className="ch2-locked-sub">What do you do differently that gets unexpected results? Find your rule break.</div>
+                    <div className="ch2-locked-cta">Find your rule break →</div>
                   </div>
                 </div>
               )}
@@ -598,30 +610,33 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 </div>
               )}
 
-              {/* Scale Diagnostic — Can your rule break scale? */}
+              {/* Remarkable Reach — locked until Remarkable Results complete */}
               <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                <div className="ch2-locked" onClick={() => navigate('/scale-diagnostic')} style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)' }}>
-                  <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Scale Diagnostic</div>
-                  <div className="ch2-locked-sub">Does it change the body AND can people talk about it? Score your experience across 4 quadrants.</div>
-                  <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Take the diagnostic →</div>
+                <div className="ch2-locked" onClick={remarkableAngle ? () => navigate('/create/narrative-builder') : undefined}
+                  style={{ borderColor: remarkableAngle ? 'rgba(233,162,59,0.3)' : 'rgba(255,255,255,0.08)', background: remarkableAngle ? 'rgba(233,162,59,0.05)' : 'rgba(255,255,255,0.02)', cursor: remarkableAngle ? 'pointer' : 'default', opacity: remarkableAngle ? 1 : 0.45 }}>
+                  <div className="ch2-locked-title" style={{ color: remarkableAngle ? '#E9A23B' : 'rgba(255,255,255,0.4)' }}>Remarkable Reach {!remarkableAngle && '🔒'}</div>
+                  <div className="ch2-locked-sub">{remarkableAngle ? 'How does your story spread? Delivery vehicle, tribal language, and cosign.' : 'Complete Remarkable Results first.'}</div>
+                  {remarkableAngle && <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Build your reach →</div>}
                 </div>
               </div>
 
-              {/* Narrative Builder — How do you tell the story? */}
+              {/* Remarkable Growth — locked until Remarkable Reach complete */}
               <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                <div className="ch2-locked" onClick={() => navigate('/create/narrative-builder')} style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)' }}>
-                  <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Narrative Builder</div>
-                  <div className="ch2-locked-sub">Give your rule break tribal language, a first step, and a cosign. Build beats 3-5 of your story.</div>
-                  <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Build your narrative →</div>
+                <div className="ch2-locked" onClick={hasReach ? () => navigate('/create/access-architecture') : undefined}
+                  style={{ borderColor: hasReach ? 'rgba(233,162,59,0.3)' : 'rgba(255,255,255,0.08)', background: hasReach ? 'rgba(233,162,59,0.05)' : 'rgba(255,255,255,0.02)', cursor: hasReach ? 'pointer' : 'default', opacity: hasReach ? 1 : 0.45 }}>
+                  <div className="ch2-locked-title" style={{ color: hasReach ? '#E9A23B' : 'rgba(255,255,255,0.4)' }}>Remarkable Growth {!hasReach && '🔒'}</div>
+                  <div className="ch2-locked-sub">{hasReach ? 'Audit the 5 barriers between someone and your experience. Design a zero-friction on-ramp.' : 'Complete Remarkable Reach first.'}</div>
+                  {hasReach && <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Audit my barriers →</div>}
                 </div>
               </div>
 
-              {/* Access Architecture — Remove barriers */}
+              {/* Scale Score — locked until Remarkable Growth complete */}
               <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                <div className="ch2-locked" onClick={() => navigate('/create/access-architecture')} style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)' }}>
-                  <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Access Architecture</div>
-                  <div className="ch2-locked-sub">Audit the 5 barriers between someone and your experience. Design a zero-friction on-ramp.</div>
-                  <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Audit my access →</div>
+                <div className="ch2-locked" onClick={hasGrowth ? () => navigate('/scale-diagnostic') : undefined}
+                  style={{ borderColor: hasGrowth ? 'rgba(233,162,59,0.3)' : 'rgba(255,255,255,0.08)', background: hasGrowth ? 'rgba(233,162,59,0.05)' : 'rgba(255,255,255,0.02)', cursor: hasGrowth ? 'pointer' : 'default', opacity: hasGrowth ? 1 : 0.45 }}>
+                  <div className="ch2-locked-title" style={{ color: hasGrowth ? '#E9A23B' : 'rgba(255,255,255,0.4)' }}>Scale Score {!hasGrowth && '🔒'}</div>
+                  <div className="ch2-locked-sub">{hasGrowth ? '3-pillar diagnostic: Return, Break, Tribal. Pulls from your previous work. Will your experience scale?' : 'Complete Remarkable Growth first.'}</div>
+                  {hasGrowth && <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Score my experience →</div>}
                 </div>
               </div>
 
@@ -1032,7 +1047,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             { label: 'Your Skills', sub: 'Retake Play-Skills flow', path: '/play-skills-identifier' },
             { label: 'North Stars', sub: 'Redo Experience Creator Matching', path: '/experience-creators' },
             { label: 'Your Position', sub: 'Retake Scope Map diagnostic', path: '/scope-map' },
-            { label: 'Blow Up Brand', sub: 'Redo the Remarkable flow', path: '/create/remarkable' },
+            { label: 'Remarkable Results', sub: 'Redo the rule break flow', path: '/create/remarkable' },
             { label: 'Pay Rent', sub: 'Explore how creators pay rent', path: '/create/pay-rent' },
             { label: 'Scale Income', sub: 'Redo attraction / core / continuity', path: '/create/scale-income' },
           ].map(item => (

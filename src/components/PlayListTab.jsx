@@ -187,7 +187,7 @@ export default function PlayListTab({
                 <span className="plt-item-check"></span>
                 <div className="plt-item-body">
                   <div className="plt-item-name">{pick.display_name}</div>
-                  <div className="plt-item-meta">{pick._source_label || 'Wahoo'}</div>
+                  <div className="plt-item-meta">{pick._source_label || 'Courage'}</div>
                 </div>
                 <button
                   className="plt-item-action"

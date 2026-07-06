@@ -1,9 +1,10 @@
 /**
  * NarrativeBuilderFlow.jsx — /create/narrative-builder
- * "Phase 3: How do you tell the story?"
+ * "Remarkable Reach: How does your story spread?"
  *
- * 4-screen flow: Intro → Tribal Language → First Step → Cosign → Output Narrative
- * Beats 1-2 (Wound + Reframe) pre-filled from RemarkableFlow. User fills beats 3-5.
+ * Flow: Intro → Vehicle Discovery → Tribal Language → Cosign → Output
+ * Pulls Remarkable Results (rule break) data. Vehicle discovery educates on 3 types of reach.
+ * First Step removed — lives in Remarkable Growth (AccessArchitectureFlow).
  */
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -14,11 +15,17 @@ import './NarrativeBuilderFlow.css'
 
 const STEPS = {
   INTRO: 'intro',
+  VEHICLE: 'vehicle',
   LANGUAGE: 'language',
-  FIRST_STEP: 'first_step',
   COSIGN: 'cosign',
   OUTPUT: 'output',
 }
+
+const VEHICLE_TYPE_OPTIONS = [
+  { key: 'results', label: 'My results ARE my content', desc: 'What I do is so unexpected that posting it is enough. The result IS the story.', example: 'Wim Hof posting ice baths. CrossFit posting garage workouts. Daybreaker posting sober sunrise dance.' },
+  { key: 'new_medium', label: 'Take it somewhere new', desc: 'My industry delivers via studios, retreats, or apps. I go somewhere nobody in my category goes.', example: 'Gabor Mate took psychiatry to documentaries. Sara Auster took sound healing to MoMA and Apple. Emily Fletcher took meditation to Google\'s boardroom.' },
+  { key: 'new_action', label: 'Do something new where I already am', desc: 'Everyone\'s on the same platforms. I do something nobody in my category does there.', example: 'Nicole LePera gave away psychology free on Instagram when every psychologist charges $200/hr. Logan and Jake Paul posted their daily lives on YouTube before anyone else. Jackass filmed stunts before TikTok existed. The window closes once others copy it.' },
+]
 
 export default function NarrativeBuilderFlow() {
   const { user } = useAuth()
@@ -31,22 +38,25 @@ export default function NarrativeBuilderFlow() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Context from earlier flows
+  // Context from Remarkable Results
   const [projectName, setProjectName] = useState('')
   const [woundProblem, setWoundProblem] = useState('')
   const [assumption, setAssumption] = useState('')
   const [combinationInsight, setCombinationInsight] = useState('')
   const [ruleStatement, setRuleStatement] = useState('')
   const [oneLiner, setOneLiner] = useState('')
-  const [culturePriority, setCulturePriority] = useState(false)
-  const [accessPriority, setAccessPriority] = useState(false)
+  const [remarkScore, setRemarkScore] = useState(0)
 
-  // User inputs (beats 3-5)
+  // Vehicle discovery
+  const [vehicleType, setVehicleType] = useState('')
+  const [vehicleDesc, setVehicleDesc] = useState('')
+
+  // Tribal language
   const [tribalLanguage, setTribalLanguage] = useState('')
   const [identityLabel, setIdentityLabel] = useState('')
   const [feelingName, setFeelingName] = useState('')
-  const [firstStepType, setFirstStepType] = useState('')
-  const [firstStepDesc, setFirstStepDesc] = useState('')
+
+  // Cosign
   const [cosignTargets, setCosignTargets] = useState('')
   const [cosignExisting, setCosignExisting] = useState('')
   const [cosignDream, setCosignDream] = useState('')
@@ -62,8 +72,8 @@ export default function NarrativeBuilderFlow() {
   // Editable narrative sections (for output screen)
   const [editWound, setEditWound] = useState('')
   const [editDiscovery, setEditDiscovery] = useState('')
+  const [editVehicle, setEditVehicle] = useState('')
   const [editLanguage, setEditLanguage] = useState('')
-  const [editFirstStep, setEditFirstStep] = useState('')
   const [editCosign, setEditCosign] = useState('')
 
   // Fetch existing data
@@ -73,18 +83,11 @@ export default function NarrativeBuilderFlow() {
       try {
         const [
           { data: angleData },
-          { data: diagData },
           { data: nbData },
         ] = await Promise.all([
           supabase
             .from('remarkable_angles')
-            .select('project_name, wound_problem, assumption, combination_insight, ai_rule_statement, extreme_action_plan')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(1),
-          supabase
-            .from('scale_diagnostics')
-            .select('score_culture, score_access')
+            .select('project_name, wound_problem, assumption, combination_insight, ai_rule_statement, extreme_action_plan, score_unique, score_share, score_simple')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(1),
@@ -96,7 +99,7 @@ export default function NarrativeBuilderFlow() {
             .limit(1),
         ])
 
-        // Pull context from RemarkableFlow
+        // Pull context from Remarkable Results
         const angle = angleData?.[0]
         if (angle) {
           if (angle.project_name) setProjectName(angle.project_name)
@@ -105,13 +108,8 @@ export default function NarrativeBuilderFlow() {
           if (angle.combination_insight) setCombinationInsight(angle.combination_insight)
           if (angle.ai_rule_statement) setRuleStatement(angle.ai_rule_statement)
           if (angle.extreme_action_plan) setOneLiner(angle.extreme_action_plan)
-        }
-
-        // Check Scale Diagnostic priorities
-        const diag = diagData?.[0]
-        if (diag) {
-          if (diag.score_culture < 4) setCulturePriority(true)
-          if (diag.score_access < 4) setAccessPriority(true)
+          const rs = (angle.score_unique || 0) * (angle.score_share || 0) * (angle.score_simple || 0)
+          setRemarkScore(rs)
         }
 
         // Pre-fill for returning users
@@ -120,14 +118,15 @@ export default function NarrativeBuilderFlow() {
           setExistingRecord(existing)
           if (existing.tribal_language) setTribalLanguage(existing.tribal_language)
           if (existing.identity_label) setIdentityLabel(existing.identity_label)
-          if (existing.first_step_type) setFirstStepType(existing.first_step_type)
-          if (existing.first_step_desc) setFirstStepDesc(existing.first_step_desc)
           if (existing.cosign_targets?.length) setCosignTargets(existing.cosign_targets.join(', '))
           if (existing.cosign_existing) setCosignExisting(existing.cosign_existing)
           if (existing.project_name && !angle?.project_name) setProjectName(existing.project_name)
+          // Vehicle fields (new — gracefully handle old records without them)
+          if (existing.vehicle_type) setVehicleType(existing.vehicle_type)
+          if (existing.vehicle_desc) setVehicleDesc(existing.vehicle_desc)
         }
       } catch (err) {
-        console.warn('NarrativeBuilderFlow data load failed:', err.message)
+        console.warn('RemarkableReach data load failed:', err.message)
       } finally {
         setLoading(false)
       }
@@ -146,8 +145,14 @@ export default function NarrativeBuilderFlow() {
   const buildNarrative = () => {
     const wound = `I was ${woundProblem || '[your problem]'} until ${combinationInsight || '[your insight]'}.`
     const discovery = `I discovered that ${assumption || '[the assumption]'} is actually ${ruleStatement || '[your rule break]'}.`
-    const lang = `We call this ${tribalLanguage || feelingName || '[your language]'}. People who do this are ${identityLabel || '[your people]'}. The feeling you've had but couldn't name? That's ${oneLiner || '[your one-liner]'}.`
-    const fs = firstStepDesc || '[your first step]'
+    const vehicle = vehicleType === 'results'
+      ? `My results speak for themselves. When I post what happens, people can't help sharing it.`
+      : vehicleType === 'new_medium'
+      ? `I deliver this via ${vehicleDesc || '[your new medium]'}, somewhere nobody in my category goes.`
+      : vehicleType === 'new_action'
+      ? `On ${vehicleDesc || '[platform]'}, I do something nobody in my category does.`
+      : ''
+    const lang = `We call this ${tribalLanguage || feelingName || '[your language]'}. People who do this are ${identityLabel || '[your people]'}.`
     const co = cosignExisting
       ? `${cosignExisting} already does this.`
       : cosignDream
@@ -155,17 +160,17 @@ export default function NarrativeBuilderFlow() {
         : cosignTargets
           ? `Admired by: ${cosignTargets}`
           : ''
-    return { wound, discovery, language: lang, firstStep: fs, cosign: co }
+    return { wound, discovery, vehicle, language: lang, cosign: co }
   }
 
-  // Initialize editable fields when reaching output (only if not already populated from a previous visit)
+  // Initialize editable fields when reaching output
   useEffect(() => {
     if (step === STEPS.OUTPUT && !editWound) {
       const n = buildNarrative()
       setEditWound(n.wound)
       setEditDiscovery(n.discovery)
+      setEditVehicle(n.vehicle)
       setEditLanguage(n.language)
-      setEditFirstStep(n.firstStep)
       setEditCosign(n.cosign)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -177,8 +182,8 @@ export default function NarrativeBuilderFlow() {
       project_name: projectName || null,
       tribal_language: [tribalLanguage, feelingName].filter(Boolean).join('\n') || null,
       identity_label: identityLabel || null,
-      first_step_type: firstStepType || null,
-      first_step_desc: firstStepDesc || null,
+      vehicle_type: vehicleType || null,
+      vehicle_desc: vehicleDesc || null,
       cosign_targets: cosignTargets ? cosignTargets.split(',').map(s => s.trim()).filter(Boolean) : null,
       cosign_existing: cosignExisting || (cosignDream ? `Dream: ${cosignDream}` : null),
     }
@@ -200,14 +205,14 @@ export default function NarrativeBuilderFlow() {
     if (!user || saving) return
     setSaving(true)
     try {
-      const generatedNarrative = [editWound, editDiscovery, editLanguage, editFirstStep, editCosign].filter(Boolean).join('\n\n')
+      const generatedNarrative = [editWound, editDiscovery, editVehicle, editLanguage, editCosign].filter(Boolean).join('\n\n')
 
       const fields = {
         project_name: projectName || null,
         tribal_language: [tribalLanguage, feelingName].filter(Boolean).join('\n') || null,
         identity_label: identityLabel || null,
-        first_step_type: firstStepType || null,
-        first_step_desc: firstStepDesc || null,
+        vehicle_type: vehicleType || null,
+        vehicle_desc: vehicleDesc || null,
         cosign_targets: cosignTargets ? cosignTargets.split(',').map(s => s.trim()).filter(Boolean) : null,
         cosign_existing: cosignExisting || (cosignDream ? `Dream: ${cosignDream}` : null),
         generated_narrative: generatedNarrative,
@@ -240,11 +245,11 @@ export default function NarrativeBuilderFlow() {
       'THE DISCOVERY',
       editDiscovery,
       '',
+      'THE VEHICLE',
+      editVehicle,
+      '',
       'THE LANGUAGE',
       editLanguage,
-      '',
-      'THE FIRST STEP',
-      editFirstStep,
       editCosign ? '\nTHE COSIGN\n' + editCosign : '',
     ].filter(Boolean).join('\n')
 
@@ -271,7 +276,7 @@ export default function NarrativeBuilderFlow() {
         <div className="nbf-container nbf-screen">
           <div className="nbf-intro">
             <div className="nbf-intro-content">
-              <div className="nbf-badge">Narrative Builder</div>
+              <div className="nbf-badge">Remarkable Reach</div>
 
               {ruleStatement && (
                 <div className="nbf-context-card">
@@ -280,18 +285,12 @@ export default function NarrativeBuilderFlow() {
                 </div>
               )}
 
-              <h1>How do you tell <span className="nbf-gold">the story</span>?</h1>
-              <p>You know your rule break. Now give it language, a first step, and a cosign.</p>
-
-              {culturePriority && (
-                <div className="nbf-context-card" style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.06)' }}>
-                  Your Scale Diagnostic flagged Culture as a priority. The language you build here directly addresses that.
-                </div>
-              )}
+              <h1>How does your story <span className="nbf-gold">spread</span>?</h1>
+              <p>You have your rule break. Now let's figure out how it reaches people: your delivery vehicle, tribal language, and cosign.</p>
             </div>
 
-            <button className="nbf-cta" onClick={() => { hapticLight(); setStep(STEPS.LANGUAGE) }}>
-              Build your narrative
+            <button className="nbf-cta" onClick={() => { hapticLight(); setStep(STEPS.VEHICLE) }}>
+              Build your reach
             </button>
           </div>
         </div>
@@ -299,14 +298,77 @@ export default function NarrativeBuilderFlow() {
     )
   }
 
-  // ── SCREEN 2: TRIBAL LANGUAGE ──
+  // ── SCREEN 2: VEHICLE DISCOVERY ──
+  if (step === STEPS.VEHICLE) {
+    const hasStrongResult = remarkScore >= 27 || (ruleStatement && ruleStatement.length > 20)
+
+    return (
+      <div className="nbf">
+        <div className="nbf-container nbf-screen">
+          <div className="nbf-step-badge">Delivery Vehicle</div>
+          <h2 className="nbf-heading">Your results can reach people in <span className="nbf-gold">3 ways</span></h2>
+
+          {hasStrongResult && (
+            <div className="nbf-context-card" style={{ borderColor: 'rgba(52,211,153,0.3)', background: 'rgba(52,211,153,0.06)' }}>
+              Your Remarkable Results score suggests your rule break is strong. Your results may already BE your content. But a vehicle break can accelerate the spread.
+            </div>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+            {VEHICLE_TYPE_OPTIONS.map(opt => (
+              <button
+                key={opt.key}
+                className={`nbf-vehicle-card ${vehicleType === opt.key ? 'nbf-vehicle-selected' : ''}`}
+                onClick={() => { hapticLight(); setVehicleType(opt.key) }}
+              >
+                <div className="nbf-vehicle-label">{opt.label}</div>
+                <div className="nbf-vehicle-desc">{opt.desc}</div>
+                <div className="nbf-vehicle-example">{opt.example}</div>
+              </button>
+            ))}
+          </div>
+
+          {vehicleType && vehicleType !== 'results' && (
+            <div className="nbf-input-group">
+              <div className="nbf-input-label">
+                {vehicleType === 'new_medium'
+                  ? 'Where would you take your experience that nobody in your category goes?'
+                  : 'What would you do on [Instagram/YouTube/TikTok/podcast] that nobody in your category does?'}
+              </div>
+              <input
+                className="nbf-input"
+                placeholder={vehicleType === 'new_medium'
+                  ? 'e.g., corporate offices, museums, documentary, scientific journal'
+                  : 'e.g., free daily exercises, behind-the-scenes of real sessions, weekly challenges'}
+                value={vehicleDesc}
+                onChange={e => setVehicleDesc(e.target.value)}
+              />
+            </div>
+          )}
+
+          <div className="nbf-nav">
+            <button className="nbf-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
+            <button
+              className="nbf-cta"
+              disabled={!vehicleType || (vehicleType !== 'results' && !vehicleDesc.trim())}
+              onClick={() => { hapticLight(); setStep(STEPS.LANGUAGE) }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 3: TRIBAL LANGUAGE ──
   if (step === STEPS.LANGUAGE) {
     const canProceed = identityLabel.trim() || tribalLanguage.trim()
 
     return (
       <div className="nbf">
         <div className="nbf-container nbf-screen">
-          <div className="nbf-step-badge">Beat 3 · Language</div>
+          <div className="nbf-step-badge">Tribal Language</div>
           <h2 className="nbf-heading">Give your people <span className="nbf-gold">words</span></h2>
 
           {ruleStatement && (
@@ -347,77 +409,7 @@ export default function NarrativeBuilderFlow() {
           </div>
 
           <div className="nbf-nav">
-            <button className="nbf-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
-            <button
-              className="nbf-cta"
-              disabled={!canProceed}
-              onClick={() => { hapticLight(); setStep(STEPS.FIRST_STEP) }}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── SCREEN 3: FIRST STEP ──
-  if (step === STEPS.FIRST_STEP) {
-    const canProceed = firstStepType && firstStepDesc.trim()
-
-    return (
-      <div className="nbf">
-        <div className="nbf-container nbf-screen">
-          <div className="nbf-step-badge">Beat 4 · First Step</div>
-          <h2 className="nbf-heading">What's the <span className="nbf-gold">first thing</span> someone does?</h2>
-
-          {accessPriority && (
-            <div className="nbf-context-card" style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.06)' }}>
-              Your Scale Diagnostic flagged Access. Make this as friction-free as possible.
-            </div>
-          )}
-
-          <div className="nbf-toggle-group">
-            <button
-              className={`nbf-toggle-btn ${firstStepType === 'step' ? 'nbf-toggle-selected' : ''}`}
-              onClick={() => { hapticLight(); setFirstStepType('step') }}
-            >
-              They can try it today, zero prep
-            </button>
-            <button
-              className={`nbf-toggle-btn ${firstStepType === 'window' ? 'nbf-toggle-selected' : ''}`}
-              onClick={() => { hapticLight(); setFirstStepType('window') }}
-            >
-              They need to learn about it first
-            </button>
-          </div>
-
-          {firstStepType === 'step' && (
-            <div className="nbf-input-group">
-              <div className="nbf-input-label">Describe it in one sentence.</div>
-              <input
-                className="nbf-input"
-                placeholder='e.g., "Do 3 breaths with me right now."'
-                value={firstStepDesc}
-                onChange={e => setFirstStepDesc(e.target.value)}
-              />
-            </div>
-          )}
-
-          {firstStepType === 'window' && (
-            <div className="nbf-input-group">
-              <div className="nbf-input-label">What book, video, or free resource introduces them?</div>
-              <input
-                className="nbf-input"
-                placeholder='e.g., "Watch this 5-min video."'
-                value={firstStepDesc}
-                onChange={e => setFirstStepDesc(e.target.value)}
-              />
-            </div>
-          )}
-
-          <div className="nbf-nav">
-            <button className="nbf-back" onClick={() => setStep(STEPS.LANGUAGE)}>Back</button>
+            <button className="nbf-back" onClick={() => setStep(STEPS.VEHICLE)}>Back</button>
             <button
               className="nbf-cta"
               disabled={!canProceed}
@@ -436,7 +428,7 @@ export default function NarrativeBuilderFlow() {
     return (
       <div className="nbf">
         <div className="nbf-container nbf-screen">
-          <div className="nbf-step-badge">Beat 5 · Cosign</div>
+          <div className="nbf-step-badge">Cosign</div>
           <h2 className="nbf-heading">Who makes your audience <span className="nbf-gold">trust</span> this?</h2>
 
           <div className="nbf-input-group">
@@ -470,12 +462,12 @@ export default function NarrativeBuilderFlow() {
           </div>
 
           <div className="nbf-nav">
-            <button className="nbf-back" onClick={() => setStep(STEPS.FIRST_STEP)}>Back</button>
+            <button className="nbf-back" onClick={() => setStep(STEPS.LANGUAGE)}>Back</button>
             <button
               className="nbf-cta"
               onClick={() => { hapticLight(); setStep(STEPS.OUTPUT) }}
             >
-              See my narrative
+              See my reach strategy
             </button>
           </div>
         </div>
@@ -483,12 +475,12 @@ export default function NarrativeBuilderFlow() {
     )
   }
 
-  // ── SCREEN 5: OUTPUT — YOUR NARRATIVE ──
+  // ── SCREEN 5: OUTPUT — YOUR REACH STRATEGY ──
   if (step === STEPS.OUTPUT) {
     return (
       <div className="nbf">
         <div className="nbf-container nbf-screen">
-          <div className="nbf-badge">Your Story</div>
+          <div className="nbf-badge">Your Reach Strategy</div>
 
           {projectName && (
             <div className="nbf-context-card">
@@ -497,7 +489,7 @@ export default function NarrativeBuilderFlow() {
           )}
 
           <div className="nbf-narrative-card">
-            <div className="nbf-narrative-title">Your Narrative</div>
+            <div className="nbf-narrative-title">Your Story</div>
 
             <div className="nbf-narrative-section">
               <div className="nbf-narrative-label">The Wound</div>
@@ -518,20 +510,20 @@ export default function NarrativeBuilderFlow() {
             </div>
 
             <div className="nbf-narrative-section">
+              <div className="nbf-narrative-label">The Vehicle</div>
+              {editing ? (
+                <textarea className="nbf-input" value={editVehicle} onChange={e => setEditVehicle(e.target.value)} rows={2} />
+              ) : (
+                <p className="nbf-narrative-text">{editVehicle}</p>
+              )}
+            </div>
+
+            <div className="nbf-narrative-section">
               <div className="nbf-narrative-label">The Language</div>
               {editing ? (
                 <textarea className="nbf-input" value={editLanguage} onChange={e => setEditLanguage(e.target.value)} rows={3} />
               ) : (
                 <p className="nbf-narrative-text">{editLanguage}</p>
-              )}
-            </div>
-
-            <div className="nbf-narrative-section">
-              <div className="nbf-narrative-label">The First Step</div>
-              {editing ? (
-                <textarea className="nbf-input" value={editFirstStep} onChange={e => setEditFirstStep(e.target.value)} rows={2} />
-              ) : (
-                <p className="nbf-narrative-text">{editFirstStep}</p>
               )}
             </div>
 
@@ -560,7 +552,7 @@ export default function NarrativeBuilderFlow() {
 
           <div className="nbf-nav">
             <button className="nbf-back" onClick={() => {
-              setEditWound(''); setEditDiscovery(''); setEditLanguage(''); setEditFirstStep(''); setEditCosign('')
+              setEditWound(''); setEditDiscovery(''); setEditVehicle(''); setEditLanguage(''); setEditCosign('')
               setStep(STEPS.COSIGN)
             }}>Back</button>
             <button

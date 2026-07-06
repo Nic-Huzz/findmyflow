@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rule Break Tree — Evolution of Innovation</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: radial-gradient(ellipse at center, #0d0a1a 0%, #07060b 65%);
+      color: #fff;
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header { text-align: center; padding: 1rem 1rem 0.3rem; position: relative; z-index: 10; }
+    .header h1 {
+      font-size: 1.4rem; font-weight: 800;
+      background: linear-gradient(135deg, #5e17eb, #E9A23B);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .header p { font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 0.15rem; }
+
+    .filters {
+      display: flex; justify-content: center; gap: 0.3rem;
+      padding: 0.4rem 0.8rem; flex-wrap: wrap; position: relative; z-index: 10;
+    }
+    .filter-pill {
+      padding: 0.25rem 0.55rem; border-radius: 20px; border: 1.5px solid;
+      background: transparent; color: rgba(255,255,255,0.5);
+      font-size: 0.63rem; font-weight: 600; cursor: pointer;
+      transition: all 0.3s; letter-spacing: 0.3px; font-family: inherit;
+    }
+    .filter-pill:hover { color: rgba(255,255,255,0.8); }
+    .filter-pill.active { color: #fff; }
+    .filter-pill.stub { opacity: 0.5; }
+    .filter-pill.stub.active { opacity: 0.7; }
+    .filter-all { border-color: rgba(255,255,255,0.3); margin-right: 0.2rem; }
+    .filter-all.active { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.5); }
+
+    #tree-container { flex: 1; position: relative; }
+    svg { width: 100%; height: 100%; }
+
+    .decade-ring { fill: none; stroke: rgba(255,255,255,0.04); stroke-width: 1; }
+    .decade-label { fill: rgba(255,255,255,0.10); font-size: 9px; text-anchor: middle; }
+    .primal-ring { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 1; stroke-dasharray: 3 6; }
+
+    .branch-line { fill: none; stroke-width: 2; stroke-linecap: round; transition: opacity 0.5s; }
+    .merge-line {
+      fill: none; stroke-width: 1.8; stroke-dasharray: 8 5; opacity: 0.5;
+      animation: dashFlow 15s linear infinite; transition: opacity 0.5s;
+    }
+    @keyframes dashFlow { to { stroke-dashoffset: -200; } }
+    .merge-label-bg { fill: rgba(7,6,11,0.85); transition: opacity 0.5s; }
+    .merge-label-text {
+      fill: #E9A23B; font-size: 8px; font-weight: 600;
+      text-anchor: middle; pointer-events: none; transition: opacity 0.5s;
+    }
+
+    .node-group { cursor: pointer; transition: opacity 0.5s; }
+    .node-glow { opacity: 0; transition: opacity 0.25s; }
+    .node-group:hover .node-glow { opacity: 0.5; }
+    .node-circle { stroke-width: 2; transition: stroke-width 0.2s; }
+    .node-group:hover .node-circle { stroke-width: 3; }
+    .node-label {
+      fill: rgba(255,255,255,0.8); font-size: 9px; font-weight: 600;
+      text-anchor: middle; pointer-events: none;
+    }
+    .node-year {
+      fill: rgba(255,255,255,0.3); font-size: 8px;
+      text-anchor: middle; pointer-events: none;
+    }
+
+    .origin-glow { animation: originGlow 4s ease-in-out infinite; }
+    @keyframes originGlow {
+      0%, 100% { r: 32; opacity: 0.06; }
+      50% { r: 44; opacity: 0.02; }
+    }
+    .origin-pulse { animation: pulse 3.5s ease-in-out infinite; }
+    @keyframes pulse {
+      0%, 100% { r: 22; opacity: 0.10; }
+      50% { r: 30; opacity: 0.04; }
+    }
+
+    .primal-label {
+      font-size: 9px; font-weight: 700; text-anchor: middle;
+      text-transform: uppercase; letter-spacing: 1.2px; pointer-events: none;
+    }
+    .stub-ring { fill: none; stroke-dasharray: 2 3; stroke-width: 1; opacity: 0.3; }
+    .bridge-label {
+      fill: rgba(255,255,255,0.5); font-size: 8px; font-weight: 600;
+      text-anchor: middle; pointer-events: none;
+    }
+    .industry-label {
+      font-size: 10px; font-weight: 700; text-anchor: middle;
+      text-transform: uppercase; letter-spacing: 2px; opacity: 0.35;
+      transition: opacity 0.5s;
+    }
+
+    .zoom-controls {
+      position: absolute; top: 0.6rem; right: 0.8rem;
+      display: flex; flex-direction: column; gap: 0.3rem; z-index: 20;
+    }
+    .zoom-btn {
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15); background: rgba(12,10,22,0.8);
+      color: rgba(255,255,255,0.6); font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-family: inherit; transition: all 0.2s; backdrop-filter: blur(8px);
+    }
+    .zoom-btn:hover { background: rgba(94,23,235,0.3); color: #fff; border-color: rgba(94,23,235,0.5); }
+
+    .hidden { opacity: 0.03 !important; pointer-events: none !important; }
+
+    .tooltip {
+      position: absolute; background: rgba(12,10,22,0.95);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 12px;
+      padding: 0.85rem 1rem; max-width: 300px; pointer-events: none;
+      opacity: 0; transition: opacity 0.2s; z-index: 100;
+      backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .tooltip.visible { opacity: 1; }
+    .tt-who { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.4rem; }
+    .tt-rule { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-bottom: 0.25rem; line-height: 1.4; }
+    .tt-rule b { color: rgba(255,255,255,0.35); font-weight: 600; }
+    .tt-break { font-size: 0.85rem; font-weight: 600; line-height: 1.4; }
+    .tt-break b { color: #E9A23B; font-weight: 700; }
+    .tt-merge { font-size: 0.7rem; color: #E9A23B; margin-top: 0.4rem; font-weight: 600; padding-top: 0.35rem; border-top: 1px solid rgba(233,162,59,0.2); }
+    .tt-desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.4; }
+
+    .legend {
+      position: absolute; bottom: 0.8rem; left: 0.8rem;
+      display: flex; gap: 0.75rem; font-size: 0.65rem;
+      color: rgba(255,255,255,0.3); z-index: 10; flex-wrap: wrap; max-width: 50%;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.25rem; }
+    .legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .legend-dash { width: 16px; height: 0; border-top: 2px dashed #E9A23B; opacity: 0.5; }
+    .legend-stub { width: 7px; height: 7px; border-radius: 50%; border: 1.5px dashed; }
+
+    .formula {
+      position: absolute; bottom: 0.8rem; right: 0.8rem;
+      background: rgba(94,23,235,0.08); border: 1px solid rgba(94,23,235,0.15);
+      border-radius: 10px; padding: 0.55rem 0.8rem;
+      font-size: 0.62rem; color: rgba(255,255,255,0.4);
+      max-width: 300px; line-height: 1.6; z-index: 10;
+    }
+    .formula strong { color: #E9A23B; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Rule Break Tree</h1>
+    <p>From hunter-gatherer to AI. Each fork is a broken assumption. Where branches merge, new industries are born.</p>
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <div id="tree-container">
+    <div class="tooltip" id="tooltip"></div>
+    <div class="zoom-controls">
+      <button class="zoom-btn" id="zoom-in">+</button>
+      <button class="zoom-btn" id="zoom-out">&minus;</button>
+      <button class="zoom-btn" id="zoom-fit">&#9673;</button>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.5)"></div>Primal</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>Rule break</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#E9A23B"></div>Industry merge</div>
+    <div class="legend-item"><div class="legend-dash"></div>Merge line</div>
+    <div class="legend-item"><div class="legend-stub" style="border-color:rgba(255,255,255,0.3)"></div>Unmapped</div>
+  </div>
+
+  <div class="formula">
+    <strong>Rule Break Probability</strong> = Assumption Age &times; Adjacent Breaks &times; Capability Unlock &times; Pain Intensity &times; Two-Worlds Proximity
+  </div>
+
+  <script>
+  // ═══════════════════════════════════════════
+  //  DATA — 10 Primal Branches, 8 Industries
+  // ═══════════════════════════════════════════
+
+  const S = 2 * Math.PI / 10 // 36° step for 10 primals
+
+  const PRIMALS = [
+    { id: 'movement',    label: 'Movement',    angle: -Math.PI/2,         color: '#7c3aed', extended: true,
+      desc: 'Walking, running, migrating. The need to move beyond what legs allow.' },
+    { id: 'nourishment', label: 'Nourishment', angle: -Math.PI/2 + S,     color: '#22c55e', extended: true,
+      desc: 'Foraging, hunting, cooking, preserving. Fuelling the vessel.' },
+    { id: 'tools',       label: 'Tools',       angle: -Math.PI/2 + 2*S,   color: '#0ea5e9', extended: true,
+      desc: 'Stone, bone, wood. Extending the body\'s capability.' },
+    { id: 'status',      label: 'Status',      angle: -Math.PI/2 + 3*S,   color: '#e879f9', extended: true,
+      desc: 'Body decoration, ochre, beads. Signalling identity and worth.' },
+    { id: 'bonds',       label: 'Bonds',       angle: -Math.PI/2 + 4*S,   color: '#f472b6', extended: true,
+      desc: 'Tribe, family, language, cooperation. The need to belong.' },
+    { id: 'shelter',     label: 'Shelter',      angle: -Math.PI/2 + 5*S,   color: '#38bdf8', extended: true,
+      desc: 'Caves, huts, settlements. Protection from the elements.' },
+    { id: 'story',       label: 'Story',        angle: -Math.PI/2 + 6*S,   color: '#fb923c', extended: true,
+      desc: 'Cave paintings, oral tradition, ritual. Making meaning of experience.' },
+    { id: 'fire',        label: 'Fire',         angle: -Math.PI/2 + 7*S,   color: '#f59e0b', extended: true,
+      desc: 'Warmth, cooking, light, protection, gathering. The original multi-tool.' },
+    { id: 'healing',     label: 'Healing',      angle: -Math.PI/2 + 8*S,   color: '#a78bfa', extended: true,
+      desc: 'Herbs, touch, ceremony, shamanism. Restoring body and spirit.' },
+    { id: 'threat',      label: 'Threat',       angle: -Math.PI/2 + 9*S,   color: '#ef4444', extended: true,
+      desc: 'Scanning, defending, weapon-making. Surviving what hunts you.' },
+  ]
+
+  const PRIMAL_INDUSTRIES = {
+    movement: ['cars'], tools: ['tech', 'ai'], fire: ['energy'], story: ['media'],
+    nourishment: ['food'], status: ['fashion'], bonds: ['comms'], shelter: ['property'], healing: ['medicine'], threat: ['defense'],
+  }
+
+  const INDUSTRIES = {
+    cars:   { primal: 'movement', color: '#7c3aed', label: 'AUTOMOBILES',
+              baseAngle: -Math.PI/2 },
+    tech:   { primal: 'tools',    color: '#00b4d8', label: 'TECHNOLOGY',
+              baseAngle: -Math.PI/2 + 2*S - 0.08 },
+    ai:     { primal: 'tools',    color: '#ec4899', label: 'INTELLIGENCE',
+              baseAngle: -Math.PI/2 + 2*S + 0.15 },
+    energy: { primal: 'fire',     color: '#f59e0b', label: 'ENERGY',
+              baseAngle: -Math.PI/2 + 7*S + 0.05 },
+    media:  { primal: 'story',    color: '#fb923c', label: 'MEDIA & STORY',
+              baseAngle: -Math.PI/2 + 6*S + 0.03 },
+    food:   { primal: 'nourishment', color: '#22c55e', label: 'FOOD & AGRICULTURE',
+              baseAngle: -Math.PI/2 + S + 0.04 },
+    comms:  { primal: 'bonds',   color: '#f472b6', label: 'COMMUNICATIONS',
+              baseAngle: -Math.PI/2 + 4*S + 0.04 },
+    medicine: { primal: 'healing', color: '#a78bfa', label: 'MEDICINE',
+              baseAngle: -Math.PI/2 + 8*S + 0.04 },
+    fashion: { primal: 'status', color: '#e879f9', label: 'FASHION & STATUS',
+              baseAngle: -Math.PI/2 + 3*S + 0.04 },
+    property: { primal: 'shelter', color: '#38bdf8', label: 'PROPERTY & SHELTER',
+              baseAngle: -Math.PI/2 + 5*S + 0.04 },
+    defense: { primal: 'threat', color: '#ef4444', label: 'DEFENCE & SECURITY',
+              baseAngle: -Math.PI/2 + 9*S + 0.04 },
+  }
+
+  const bridges = [
+    { id: 'b-movement', label: 'Horse &\nWheel', primal: 'movement', branch: 'cars', color: '#7c3aed',
+      desc: 'Domesticating animals (~4000 BC) and the wheel (~3500 BC) broke the rule that speed requires your own legs.' },
+    { id: 'b-tools', label: 'Metal &\nMachinery', primal: 'tools', branch: 'tools', color: '#0ea5e9',
+      desc: 'Bronze, iron, printing press, steam engine. Each broke the rule that human hands set the limit.' },
+    { id: 'b-fire', label: 'Coal &\nOil', primal: 'fire', branch: 'energy', color: '#f59e0b',
+      desc: 'Fossil fuels broke the rule that energy must come from your immediate surroundings.' },
+    { id: 'b-story', label: 'Script &\nAlphabet', primal: 'story', branch: 'media', color: '#fb923c',
+      desc: 'Writing (~3200 BC) broke the rule that knowledge must live in a human mind. The alphabet (~1050 BC) made literacy portable.' },
+    { id: 'b-nourishment', label: 'Agriculture\n& Grain', primal: 'nourishment', branch: 'food', color: '#22c55e',
+      desc: 'The agricultural revolution (~10,000 BC) broke the rule that food must be hunted or gathered daily. Cultivation created surplus and settlement.' },
+    { id: 'b-bonds', label: 'Language\n& Signal', primal: 'bonds', branch: 'comms', color: '#f472b6',
+      desc: 'Spoken language (~100,000 BC) broke the rule that communication requires physical demonstration. Smoke signals and drums extended range beyond shouting distance.' },
+    { id: 'b-healing', label: 'Herbalism\n& Surgery', primal: 'healing', branch: 'medicine', color: '#a78bfa',
+      desc: 'Systematic herbalism and trepanation (~7,000 BC) broke the rule that healing is purely spiritual. The body became something to intervene upon.' },
+    { id: 'b-status', label: 'Adornment\n& Silk', primal: 'status', branch: 'fashion', color: '#e879f9',
+      desc: 'Ochre body painting (~100,000 BC) created the first external identity signal. The Silk Road (~130 BC) made status wearable and tradeable across continents.' },
+    { id: 'b-shelter', label: 'Concrete\n& Glass', primal: 'shelter', branch: 'property', color: '#38bdf8',
+      desc: 'Roman concrete (~150 BC) freed builders from block constraints. Gothic architecture (1144) transferred weight to buttresses, turning walls into windows.' },
+    { id: 'b-threat', label: 'Gunpowder\n& Fortress', primal: 'threat', branch: 'defense', color: '#ef4444',
+      desc: 'Gunpowder at Crecy (1346) made the body irrelevant as a weapon. Fortification responded, creating the arms race loop that defines security to this day.' },
+  ]
+
+  // ── Industry Nodes ──
+  const industryNodes = [
+    // ── Cars (13 nodes, corrected dates) ──
+    { id: 'car-1886', label: 'Motorcar', year: 1886, branch: 'cars',
+      assumption: 'Fast travel requires animals',
+      ruleBreak: 'Internal combustion engine replaces the horse',
+      who: 'Karl Benz' },
+    { id: 'car-1913', label: 'Assembly\nLine', year: 1913, branch: 'cars',
+      assumption: 'Cars are luxury items for the wealthy',
+      ruleBreak: 'Moving assembly line drops Model T price by 4x over a decade',
+      who: 'Henry Ford' },
+    { id: 'car-1919', label: 'Consumer\nFinancing', year: 1919, branch: 'cars', type: 'merge',
+      assumption: 'You must save up and pay cash for a car',
+      ruleBreak: 'Installment loans decouple car access from wealth. Ford actively opposed it on moral grounds.',
+      who: 'GMAC / GM', mergeWith: 'finance' },
+    { id: 'car-1924', label: 'Style &\nChoice', year: 1924, branch: 'cars',
+      assumption: 'Any colour, as long as it\'s black',
+      ruleBreak: 'Annual models, colours, price tiers. Cars as identity.',
+      who: 'Alfred Sloan / GM' },
+    { id: 'car-1956', label: 'Interstate\nHighways', year: 1956, branch: 'cars', type: 'merge',
+      assumption: 'Long-distance travel belongs to rail',
+      ruleBreak: '$25B federal investment builds 41,000 miles of highway. Car becomes infrastructure of American life.',
+      who: 'Eisenhower', mergeWith: 'government' },
+    { id: 'car-1959', label: 'Small\nCars', year: 1959, branch: 'cars',
+      assumption: 'Cars must be big, powerful, American',
+      ruleBreak: 'Small, efficient, characterful. The people\'s car.',
+      who: 'VW Beetle / Think Small' },
+    { id: 'car-1966', label: 'Safety\nRevolution', year: 1966, branch: 'cars', type: 'merge',
+      assumption: 'Safety is the driver\'s responsibility, not the manufacturer\'s',
+      ruleBreak: 'Federal safety standards: seatbelts, crash testing, NHTSA created. 453,000+ lives saved.',
+      who: 'Ralph Nader / NHTSA', mergeWith: 'legal' },
+    { id: 'car-1973', label: 'Lean\nManufacturing', year: 1973, branch: 'cars', type: 'merge',
+      assumption: 'More production = more efficiency. Factory should always run at maximum.',
+      ruleBreak: 'Just-in-time, zero waste, kaizen. Inverted Ford\'s logic. Became the global manufacturing standard.',
+      who: 'Taiichi Ohno / Toyota', mergeWith: 'manufacturing' },
+    { id: 'car-1990', label: 'SUV\nBoom', year: 1990, branch: 'cars',
+      assumption: 'The family vehicle is a sedan or station wagon',
+      ruleBreak: 'Light truck loophole enables larger, higher-margin vehicles. SUVs displace sedans entirely.',
+      who: 'Ford Explorer' },
+    { id: 'car-1997', label: 'Hybrid\nPower', year: 1997, branch: 'cars',
+      assumption: 'Cars must burn only gasoline',
+      ruleBreak: 'Electric motor + gas engine. Double the efficiency.',
+      who: 'Toyota Prius' },
+    { id: 'car-2008', label: 'Desirable\nEVs', year: 2008, branch: 'cars', type: 'merge',
+      assumption: 'Electric cars are slow, ugly, and impractical',
+      ruleBreak: 'A luxury sports car that happens to be electric',
+      who: 'Tesla', mergeWith: 'energy' },
+    { id: 'car-2010', label: 'Ride\nAccess', year: 2010, branch: 'cars', type: 'merge',
+      assumption: 'You must own a car to have one available',
+      ruleBreak: 'Summon a car from your phone in minutes',
+      who: 'Uber', mergeWith: 'tech' },
+    { id: 'car-2020', label: 'Self-\nDriving', year: 2020, branch: 'cars', type: 'merge',
+      assumption: 'A human must be driving the car',
+      ruleBreak: 'AI drives. Human rides. First driverless commercial service, Phoenix.',
+      who: 'Waymo', mergeWith: 'ai' },
+
+    // ── Technology (10 nodes) ──
+    { id: 'tech-1971', label: 'Micro-\nprocessor', year: 1971, branch: 'tech',
+      assumption: 'Computing power requires large, expensive hardware',
+      ruleBreak: 'An entire CPU on a single chip. Computing becomes cheap and embeddable.',
+      who: 'Intel 4004 / Ted Hoff' },
+    { id: 'tech-1975', label: 'Personal\nComputer', year: 1975, branch: 'tech',
+      assumption: 'Computers are room-sized machines for corporations',
+      ruleBreak: 'A computer on every desk, in every home',
+      who: 'Altair 8800 / Apple' },
+    { id: 'tech-1984', label: 'GUI', year: 1984, branch: 'tech',
+      assumption: 'Computers require memorising text commands to operate',
+      ruleBreak: 'Point and click. Visual metaphors (desktop, folders, trash) make computing intuitive.',
+      who: 'Apple Macintosh' },
+    { id: 'tech-1991', label: 'World\nWide Web', year: 1991, branch: 'tech',
+      assumption: 'Information requires physical distribution',
+      ruleBreak: 'Instant global information access via hyperlinks',
+      who: 'Tim Berners-Lee' },
+    { id: 'tech-1995', label: 'Commercial\nInternet', year: 1995, branch: 'tech',
+      assumption: 'The internet is for academics and military, not consumers',
+      ruleBreak: 'Browser becomes the gateway to commerce, news, and communication. IPO valued at $2.9B on day one.',
+      who: 'Netscape' },
+    { id: 'tech-1998', label: 'Search\nEngine', year: 1998, branch: 'tech',
+      assumption: 'Finding information online requires knowing where to look',
+      ruleBreak: 'PageRank indexes the entire web. Any question, one text box.',
+      who: 'Google / Brin & Page' },
+    { id: 'tech-2006', label: 'Cloud\nComputing', year: 2006, branch: 'tech',
+      assumption: 'Software requires buying and maintaining your own servers',
+      ruleBreak: 'Rent computing by the hour. Startups launch for thousands, not millions.',
+      who: 'Amazon Web Services' },
+    { id: 'tech-2007', label: 'Smart-\nphone', year: 2007, branch: 'tech',
+      assumption: 'Phones are for calls. Computers are for computing.',
+      ruleBreak: 'A powerful computer in your pocket, always connected',
+      who: 'Apple iPhone' },
+    { id: 'tech-2008a', label: 'App\nStore', year: 2008, branch: 'tech',
+      assumption: 'Software is distributed on discs or downloaded from websites',
+      ruleBreak: 'One-tap install. Any developer can reach millions. Creates the app economy.',
+      who: 'Apple App Store' },
+    { id: 'tech-2004', label: 'Social\nPlatform', year: 2004, branch: 'tech', type: 'merge',
+      assumption: 'Software is a tool you use alone. Identity lives offline.',
+      ruleBreak: 'The platform IS the social graph. Software organises real-world relationships at scale.',
+      who: 'Facebook / Zuckerberg', mergeWith: 'media' },
+
+    // ── Energy (8 nodes) ──
+    { id: 'energy-1776', label: 'Steam\nEngine', year: 1776, branch: 'energy',
+      assumption: 'Work requires muscles: human, animal, or water/wind',
+      ruleBreak: 'Heat becomes mechanical motion on demand. Powers factories, mines, and mills anywhere.',
+      who: 'James Watt' },
+    { id: 'energy-1882', label: 'DC\nGrid', year: 1882, branch: 'energy',
+      assumption: 'Power must be generated where it\'s used',
+      ruleBreak: 'Centralised generation, distributed delivery via copper wire',
+      who: 'Edison / Pearl Street' },
+    { id: 'energy-1893', label: 'AC\nPower', year: 1893, branch: 'energy',
+      assumption: 'Electricity can only travel short distances (DC limitation)',
+      ruleBreak: 'Alternating current transmits power hundreds of miles. Lights the World\'s Fair.',
+      who: 'Tesla / Westinghouse' },
+    { id: 'energy-1954', label: 'Solar\nCells', year: 1954, branch: 'energy',
+      assumption: 'Energy requires burning something',
+      ruleBreak: 'Direct sunlight to electricity. No combustion.',
+      who: 'Bell Labs' },
+    { id: 'energy-1956', label: 'Nuclear\nPower', year: 1956, branch: 'energy',
+      assumption: 'Energy scale is limited by how much fuel you can burn',
+      ruleBreak: 'Splitting atoms releases millions of times more energy per gram than coal.',
+      who: 'Calder Hall, UK' },
+    { id: 'energy-1991', label: 'Li-ion\nBattery', year: 1991, branch: 'energy',
+      assumption: 'Batteries are heavy, weak, and short-lived',
+      ruleBreak: 'Light, powerful, rechargeable. Portable energy.',
+      who: 'Sony / Goodenough' },
+    { id: 'energy-2008', label: 'Shale\nBoom', year: 2008, branch: 'energy',
+      assumption: 'Oil and gas trapped in shale rock are inaccessible',
+      ruleBreak: 'Hydraulic fracturing unlocks vast reserves. US becomes world\'s top oil producer.',
+      who: 'US Shale Boom / Devon Energy' },
+    { id: 'energy-2017', label: 'Grid-Scale\nStorage', year: 2017, branch: 'energy', type: 'merge',
+      assumption: 'Renewables are unreliable because the sun sets and the wind stops',
+      ruleBreak: 'Massive battery installations store solar/wind energy for on-demand dispatch.',
+      who: 'Tesla Powerpack / SA', mergeWith: 'tech' },
+
+    // ── Intelligence (3 nodes) ──
+    { id: 'ai-1997', label: 'Deep\nBlue', year: 1997, branch: 'ai',
+      assumption: 'Machines cannot outthink humans at complex tasks',
+      ruleBreak: 'Computer defeats world chess champion',
+      who: 'IBM' },
+    { id: 'ai-2012', label: 'Deep\nLearning', year: 2012, branch: 'ai',
+      assumption: 'AI must be hand-coded with explicit rules',
+      ruleBreak: 'Neural networks learn patterns from raw data',
+      who: 'Hinton / AlexNet' },
+    { id: 'ai-2016', label: 'AlphaGo', year: 2016, branch: 'ai',
+      assumption: 'Intuition-based games like Go are beyond machine capability',
+      ruleBreak: 'AI defeats world Go champion. Superhuman pattern recognition without explicit programming.',
+      who: 'DeepMind / Google' },
+    { id: 'ai-2017', label: 'Trans-\nformer', year: 2017, branch: 'ai',
+      assumption: 'Sequences must be processed one element at a time (RNNs)',
+      ruleBreak: 'Attention mechanisms process all tokens in parallel. Scales to any size. Enabled GPT, DALL-E, Claude.',
+      who: 'Vaswani / Google Brain' },
+    { id: 'ai-2020', label: 'GPT-3 /\nScaling', year: 2020, branch: 'ai',
+      assumption: 'AI intelligence requires human-designed architecture, not just scale',
+      ruleBreak: '175 billion parameters. Few-shot learning emerges from scale alone. No task-specific training needed.',
+      who: 'OpenAI' },
+    { id: 'ai-2022', label: 'ChatGPT /\nConsumer AI', year: 2022, branch: 'ai', type: 'merge',
+      assumption: 'AI requires technical expertise to operate',
+      ruleBreak: 'Natural language interface makes AI accessible to everyone. 100M users in 2 months.',
+      who: 'OpenAI', mergeWith: 'comms' },
+
+    // ── Media & Story (10 nodes) ──
+    { id: 'media-1440', label: 'Printing\nPress', year: 1440, branch: 'media', type: 'merge',
+      assumption: 'Reproducing a written work requires a human to copy it by hand',
+      ruleBreak: 'Mechanical reproduction. One author reaches thousands. Book cost drops 300x in 50 years.',
+      who: 'Gutenberg', mergeWith: 'tools' },
+    { id: 'media-1826', label: 'Photo-\ngraphy', year: 1826, branch: 'media',
+      assumption: 'Visual representation requires an artist\'s interpretation and skill',
+      ruleBreak: 'Reality captured mechanically. The image IS the moment, not a rendering of it.',
+      who: 'Niépce' },
+    { id: 'media-1895', label: 'Film &\nCinema', year: 1895, branch: 'media',
+      assumption: 'Story is either text or live performance requiring physical presence',
+      ruleBreak: 'Moving images capture performance and replay it anywhere, anytime. Unlimited audience.',
+      who: 'Lumière Brothers' },
+    { id: 'media-1920', label: 'Radio\nBroadcast', year: 1920, branch: 'media', type: 'merge',
+      assumption: 'Story requires a physical medium (paper, film) that must be manufactured and shipped',
+      ruleBreak: 'Story transmits through air, simultaneously, to anyone with a receiver. The first push medium.',
+      who: 'KDKA Pittsburgh', mergeWith: 'energy' },
+    { id: 'media-1948', label: 'Television', year: 1948, branch: 'media',
+      assumption: 'The most powerful storytelling (film) requires leaving home and paying each time',
+      ruleBreak: 'Moving-image story enters the home, free at point of use, funded by advertisers. 1 million US households by 1948.',
+      who: 'CBS / NBC / RCA' },
+    { id: 'media-1991', label: 'Web\nPublishing', year: 1991, branch: 'media', type: 'merge',
+      assumption: 'Stories are published by institutions. Audiences consume passively.',
+      ruleBreak: 'Anyone can publish to a global audience at near-zero cost. Author/audience distinction collapses.',
+      who: 'Tim Berners-Lee', mergeWith: 'tech' },
+    { id: 'media-2004', label: 'Social\nMedia', year: 2004, branch: 'media',
+      assumption: 'Story flows one direction: creators to audiences. Audiences are witnesses.',
+      ruleBreak: 'Every person becomes a broadcaster. The audience IS the content. Social graph replaces editors.',
+      who: 'Facebook (2004) / YouTube (2005)' },
+    { id: 'media-2007', label: 'On-Demand\nStreaming', year: 2007, branch: 'media', type: 'merge',
+      assumption: 'Content is scheduled by broadcasters. You watch what\'s on.',
+      ruleBreak: 'Any content, on demand, any device. Platforms become studios, bypassing Hollywood gatekeeping.',
+      who: 'Netflix Streaming', mergeWith: 'tech' },
+    { id: 'media-2018', label: 'Algorithmic\nShort-Form', year: 2018, branch: 'media', type: 'merge',
+      assumption: 'Story has beginning, middle, end. Platforms surface content by who you follow.',
+      ruleBreak: 'Story collapses to 15-60 seconds. Algorithm replaces social graph. Content finds the audience.',
+      who: 'TikTok', mergeWith: 'tech' },
+    { id: 'media-2022', label: 'AI-Generated\nContent', year: 2022, branch: 'media', type: 'merge',
+      assumption: 'Story requires a human author. Creativity is definitionally human.',
+      ruleBreak: 'Language and image models produce narrative at zero marginal cost. Authorship becomes unresolved.',
+      who: 'ChatGPT / Midjourney', mergeWith: 'ai' },
+
+    // ── Food & Agriculture (9 nodes) ──
+    { id: 'food-1730', label: 'Crop\nRotation', year: 1730, branch: 'food',
+      assumption: 'Fields must lie fallow every other year to recover',
+      ruleBreak: 'Four-course rotation (wheat, turnips, barley, clover) eliminates fallow. Yields double.',
+      who: 'Townshend / Norfolk' },
+    { id: 'food-1810', label: 'Canning', year: 1810, branch: 'food',
+      assumption: 'Food must be eaten fresh, dried, or salted. Preservation is limited.',
+      ruleBreak: 'Sealed containers and heat sterilisation preserve food for years. Armies and navies transform.',
+      who: 'Nicolas Appert' },
+    { id: 'food-1834', label: 'Mechanical\nReaper', year: 1834, branch: 'food',
+      assumption: 'Harvesting grain requires many hands wielding scythes',
+      ruleBreak: 'One machine replaces dozens of labourers. Frees workers for industry.',
+      who: 'Cyrus McCormick' },
+    { id: 'food-1876', label: 'Refrig-\neration', year: 1876, branch: 'food', type: 'merge',
+      assumption: 'Perishable food can only travel as far as ice lasts',
+      ruleBreak: 'Mechanical refrigeration ships meat across oceans. Cold chain creates global food trade.',
+      who: 'Carl von Linde', mergeWith: 'energy' },
+    { id: 'food-1948', label: 'Fast\nFood', year: 1948, branch: 'food',
+      assumption: 'Restaurant meals require time, skilled cooks, and table service',
+      ruleBreak: 'Assembly-line kitchen, limited menu, 30-second service. Food as standardised commodity.',
+      who: 'McDonald Brothers' },
+    { id: 'food-1968', label: 'Green\nRevolution', year: 1968, branch: 'food',
+      assumption: 'Crop yields have natural limits set by the plant variety',
+      ruleBreak: 'Dwarf wheat and rice varieties triple yields. Saves an estimated billion lives.',
+      who: 'Norman Borlaug' },
+    { id: 'food-1994', label: 'GMO\nCrops', year: 1994, branch: 'food',
+      assumption: 'Crop traits can only be changed through generations of selective breeding',
+      ruleBreak: 'Direct gene insertion creates pest resistance, herbicide tolerance, and enhanced nutrition.',
+      who: 'Flavr Savr / Calgene' },
+    { id: 'food-2002', label: 'Organic\nMovement', year: 2002, branch: 'food',
+      assumption: 'Industrial scale and chemical inputs are the only way to feed the world',
+      ruleBreak: 'Consumers pay premium for chemical-free. Counter-rule-break: rejecting the industrial assumption.',
+      who: 'Whole Foods / USDA Organic' },
+    { id: 'food-2013', label: 'Delivery\nApps', year: 2013, branch: 'food', type: 'merge',
+      assumption: 'Getting restaurant food requires going to the restaurant',
+      ruleBreak: 'Any restaurant, any meal, delivered in 30 minutes via phone. Kitchens decouple from dining rooms.',
+      who: 'DoorDash / Uber Eats', mergeWith: 'tech' },
+
+    // ── Communications (9 nodes) ──
+    { id: 'comms-1775', label: 'Postal\nService', year: 1775, branch: 'comms',
+      assumption: 'Messages travel only as fast as a person can carry them',
+      ruleBreak: 'Organised relay network delivers letters across a nation reliably. Correspondence becomes normal.',
+      who: 'Royal Mail / USPS' },
+    { id: 'comms-1844', label: 'Telegraph', year: 1844, branch: 'comms',
+      assumption: 'A message cannot travel faster than a horse or ship',
+      ruleBreak: 'Electrical signals transmit words instantly over wire. Distance collapses for the first time.',
+      who: 'Samuel Morse' },
+    { id: 'comms-1876', label: 'Telephone', year: 1876, branch: 'comms',
+      assumption: 'Remote communication requires encoding messages into code (Morse)',
+      ruleBreak: 'The human voice itself travels over wire. Conversation without presence.',
+      who: 'Alexander G. Bell' },
+    { id: 'comms-1901', label: 'Wireless\nTelegraph', year: 1901, branch: 'comms',
+      assumption: 'Electronic communication requires a physical wire between sender and receiver',
+      ruleBreak: 'Radio waves carry signals across the Atlantic. No cable needed.',
+      who: 'Guglielmo Marconi' },
+    { id: 'comms-1971', label: 'Email', year: 1971, branch: 'comms', type: 'merge',
+      assumption: 'Written correspondence requires paper, envelopes, and days of transit',
+      ruleBreak: 'Electronic text messages arrive in seconds, anywhere on the network. Free to send.',
+      who: 'Ray Tomlinson', mergeWith: 'tech' },
+    { id: 'comms-1983', label: 'Mobile\nPhone', year: 1983, branch: 'comms',
+      assumption: 'Phone calls require being near a fixed telephone on the wall',
+      ruleBreak: 'Carry a phone with you. Reachable anywhere within cell coverage.',
+      who: 'Motorola DynaTAC' },
+    { id: 'comms-1992', label: 'Text\nMessage', year: 1992, branch: 'comms',
+      assumption: 'Phones are for voice. Written messages need a computer.',
+      ruleBreak: '160 characters, instant, asynchronous. Becomes the dominant communication mode for a generation.',
+      who: 'Neil Papworth / SMS' },
+    { id: 'comms-2009', label: 'Messaging\nApps', year: 2009, branch: 'comms', type: 'merge',
+      assumption: 'Messaging costs money per text via carrier networks',
+      ruleBreak: 'Internet-based messaging is free, global, and multimedia. Replaces SMS and even voice calls.',
+      who: 'WhatsApp', mergeWith: 'tech' },
+    { id: 'comms-2020', label: 'Video\nCalling', year: 2020, branch: 'comms', type: 'merge',
+      assumption: 'Serious meetings and events require physical presence',
+      ruleBreak: 'Pandemic forces adoption. Video becomes the default for work, education, and socialising.',
+      who: 'Zoom', mergeWith: 'tech' },
+
+    // ── Medicine (8 nodes) ──
+    { id: 'med-1867', label: 'Antiseptic\nSurgery', year: 1867, branch: 'medicine',
+      assumption: 'Wound infection is caused by bad air or divine punishment',
+      ruleBreak: 'Carbolic acid kills germs on contact. Surgical mortality drops from 50% to 15%.',
+      who: 'Joseph Lister' },
+    { id: 'med-1882', label: 'Germ\nTheory', year: 1882, branch: 'medicine',
+      assumption: 'Diseases arise spontaneously or from miasma (bad air)',
+      ruleBreak: 'Specific microorganisms cause specific diseases. Prevention becomes possible.',
+      who: 'Koch / Pasteur' },
+    { id: 'med-1928', label: 'Anti-\nbiotics', year: 1928, branch: 'medicine',
+      assumption: 'Bacterial infections are untreatable and often fatal',
+      ruleBreak: 'Penicillin mould kills bacteria. Transforms surgery, childbirth, and wound care.',
+      who: 'Alexander Fleming' },
+    { id: 'med-1955', label: 'Mass\nVaccines', year: 1955, branch: 'medicine',
+      assumption: 'Epidemic diseases are inevitable facts of life',
+      ruleBreak: 'Population-wide vaccination eliminates polio from the Western hemisphere. Smallpox eradicated by 1980.',
+      who: 'Jonas Salk' },
+    { id: 'med-1952', label: 'Psychiatric\nDrugs', year: 1952, branch: 'medicine',
+      assumption: 'Mental illness is untreatable; patients must be confined',
+      ruleBreak: 'Chlorpromazine calms psychosis chemically. Asylums begin to close. Mental health becomes medical.',
+      who: 'Laborit / Delay' },
+    { id: 'med-2003', label: 'Human\nGenome', year: 2003, branch: 'medicine', type: 'merge',
+      assumption: 'Treating disease means treating symptoms, not root causes',
+      ruleBreak: 'Complete DNA map enables precision medicine. Treatment becomes personalised to your genes.',
+      who: 'Human Genome Project', mergeWith: 'tech' },
+    { id: 'med-2020', label: 'mRNA\nVaccines', year: 2020, branch: 'medicine', type: 'merge',
+      assumption: 'Vaccine development takes 10-15 years of laboratory work',
+      ruleBreak: 'Programmable mRNA platform designs vaccines in days. Tested and deployed in under a year.',
+      who: 'BioNTech / Moderna', mergeWith: 'tech' },
+    { id: 'med-2015', label: 'Tele-\nmedicine', year: 2015, branch: 'medicine', type: 'merge',
+      assumption: 'A doctor must be physically present to diagnose and treat',
+      ruleBreak: 'Video consultations, remote monitoring, AI triage. Healthcare decouples from geography.',
+      who: 'Teladoc / Various', mergeWith: 'tech' },
+
+    // ── Fashion & Status (6 nodes) ──
+    { id: 'fashion-1852', label: 'Department\nStore', year: 1852, branch: 'fashion',
+      assumption: 'Fashion is bespoke, gatekept by tailors, available only to the wealthy',
+      ruleBreak: 'Fixed prices, open browsing, no obligation to buy. Status signalling goes mass-market.',
+      who: 'Boucicaut / Le Bon Marché' },
+    { id: 'fashion-1858', label: 'Fashion\nHouse', year: 1858, branch: 'fashion',
+      assumption: 'The dressmaker serves the client\'s taste. Clothing has no author.',
+      ruleBreak: 'Worth designs what women should wear, sews his name into every garment. The first branded label.',
+      who: 'Charles Worth' },
+    { id: 'fashion-1916', label: 'Cosmetics\nIndustry', year: 1916, branch: 'fashion', type: 'merge',
+      assumption: 'Cosmetics are for stage performance. Respectable women don\'t paint.',
+      ruleBreak: 'Hollywood links cosmetics to aspirational celebrity identity. Beauty becomes consumer culture.',
+      who: 'Max Factor', mergeWith: 'media' },
+    { id: 'fashion-1975', label: 'Fast\nFashion', year: 1975, branch: 'fashion',
+      assumption: 'Fashion runs on two to four seasonal collections per year',
+      ruleBreak: 'Design to shelf in 5 weeks. Weekly collections. Trend becomes a disposable commodity.',
+      who: 'Zara / Amancio Ortega' },
+    { id: 'fashion-2013', label: 'Influencer\nEconomy', year: 2013, branch: 'fashion', type: 'merge',
+      assumption: 'Status requires inherited wealth, celebrity, or institutional gatekeepers',
+      ruleBreak: 'Ordinary people monetise attention directly. A following becomes a balance sheet entry.',
+      who: 'Instagram / IZEA', mergeWith: 'media' },
+    { id: 'fashion-2021', label: 'Creator\nEconomy', year: 2021, branch: 'fashion', type: 'merge',
+      assumption: 'Personal brand supplements a job title. You signal status through your employer.',
+      ruleBreak: 'Audience becomes the asset. Follower count, not CV, determines market rate.',
+      who: 'Substack / Creator Fund', mergeWith: 'tech' },
+
+    // ── Property & Shelter (6 nodes) ──
+    { id: 'property-1885', label: 'Steel\nSkyscraper', year: 1885, branch: 'property',
+      assumption: 'A building\'s walls hold it up. Height limited by how thick you can make the base.',
+      ruleBreak: 'Steel skeleton carries all load. Walls become curtains. Buildings rise without widening.',
+      who: 'Jenney / Home Insurance Bldg' },
+    { id: 'property-1908', label: 'Kit\nHomes', year: 1908, branch: 'property', type: 'merge',
+      assumption: 'A house is built on-site by craftsmen who source materials locally',
+      ruleBreak: 'Pre-cut every component, catalogue it, ship by rail. 75,000 homes sold by 1940.',
+      who: 'Sears Modern Homes', mergeWith: 'media' },
+    { id: 'property-1947', label: 'Mass\nSuburbia', year: 1947, branch: 'property', type: 'merge',
+      assumption: 'Each house is custom-built. Construction is a craft, not a process.',
+      ruleBreak: '26 specialised teams, one house every 16 minutes. Invented the modern suburb as a scalable product.',
+      who: 'Levitt / Levittown', mergeWith: 'cars' },
+    { id: 'property-2008', label: 'Airbnb', year: 2008, branch: 'property', type: 'merge',
+      assumption: 'Accommodation is a service from licensed hospitality businesses owning dedicated property',
+      ruleBreak: 'Any spare room is inventory. Peer-to-peer trust replaces institutional credentials.',
+      who: 'Chesky & Gebbia', mergeWith: 'tech' },
+    { id: 'property-2011', label: 'Smart\nHome', year: 2011, branch: 'property', type: 'merge',
+      assumption: 'A home\'s systems are manually controlled, passive, and dumb',
+      ruleBreak: 'Sensors and ML let the home observe and self-optimise. The thermostat learns your schedule.',
+      who: 'Nest Labs / Fadell', mergeWith: 'tech' },
+    { id: 'property-2021', label: '3D Printed\nHomes', year: 2021, branch: 'property', type: 'merge',
+      assumption: 'Construction requires skilled tradespeople assembling components on site',
+      ruleBreak: 'Robotic gantry extrudes concrete layer by layer from a digital file. Shell printed in 5-7 days.',
+      who: 'ICON / Austin TX', mergeWith: 'tech' },
+
+    // ── Defence & Security (7 nodes) ──
+    { id: 'defense-1617', label: 'Standing\nArmies', year: 1617, branch: 'defense',
+      assumption: 'Armies are temporary. You raise levies when war comes, disband when it ends.',
+      ruleBreak: 'Permanently paid, drilled professional army. Defence becomes an institution, not a seasonal hire.',
+      who: 'Gustavus Adolphus / Sweden' },
+    { id: 'defense-1688', label: 'Insurance /\nRisk Transfer', year: 1688, branch: 'defense',
+      assumption: 'If a ship sinks, the merchant bears the entire loss. Risk is personal and catastrophic.',
+      ruleBreak: 'Organised marketplace for spreading risk across underwriters. Security becomes a product you buy.',
+      who: 'Lloyd\'s Coffee House' },
+    { id: 'defense-1945', label: 'Nuclear\nWeapons', year: 1945, branch: 'defense',
+      assumption: 'A large enough army can always counter a threat. Security scales with manpower.',
+      ruleBreak: 'One device annihilates a city. MAD replaces strategy with deterrence. The planet is the battlefield.',
+      who: 'Manhattan Project / Trinity' },
+    { id: 'defense-1968', label: 'CCTV /\nSurveillance', year: 1968, branch: 'defense',
+      assumption: 'Security requires a human observer present at the location',
+      ruleBreak: 'Cameras surveil continuously without officers. Deterrence through visibility, not presence.',
+      who: 'Olean, NY / First US system' },
+    { id: 'defense-1988', label: 'Cyber-\nsecurity', year: 1988, branch: 'defense', type: 'merge',
+      assumption: 'Networks are infrastructure like roads. The internet is for sharing, not attacking.',
+      ruleBreak: 'Self-replicating code infects 6,000 machines in 24 hours. Code itself is a weapon. CERT created.',
+      who: 'Morris Worm / Cornell', mergeWith: 'tech' },
+    { id: 'defense-2001', label: 'Armed\nDrones', year: 2001, branch: 'defense', type: 'merge',
+      assumption: 'Killing in warfare requires a soldier present at risk',
+      ruleBreak: 'Remotely piloted aircraft fires missile from thousands of miles away. Zero physical risk to operator.',
+      who: 'MQ-1 Predator / CIA', mergeWith: 'ai' },
+    { id: 'defense-2017', label: 'AI Mass\nSurveillance', year: 2017, branch: 'defense', type: 'merge',
+      assumption: 'Surveillance catches criminals after evidence of wrongdoing. You watch specific suspects.',
+      ruleBreak: 'Facial recognition, voice printing, iris scanning at population scale. Predictive and pre-emptive.',
+      who: 'China / Xinjiang IJOP', mergeWith: 'ai' },
+  ]
+
+  // Branch links (chronological chains)
+  const branchLinks = [
+    ['b-movement','car-1886'],['car-1886','car-1913'],['car-1913','car-1919'],
+    ['car-1919','car-1924'],['car-1924','car-1956'],['car-1956','car-1959'],
+    ['car-1959','car-1966'],['car-1966','car-1973'],['car-1973','car-1990'],
+    ['car-1990','car-1997'],['car-1997','car-2008'],['car-2008','car-2010'],
+    ['car-2010','car-2020'],
+
+    ['b-tools','tech-1971'],['tech-1971','tech-1975'],['tech-1975','tech-1984'],
+    ['tech-1984','tech-1991'],['tech-1991','tech-1995'],['tech-1995','tech-1998'],
+    ['tech-1998','tech-2004'],['tech-2004','tech-2006'],['tech-2006','tech-2007'],
+    ['tech-2007','tech-2008a'],
+    ['b-tools','ai-1997'],['ai-1997','ai-2012'],['ai-2012','ai-2016'],['ai-2016','ai-2017'],['ai-2017','ai-2020'],['ai-2020','ai-2022'],
+
+    ['b-fire','energy-1776'],['energy-1776','energy-1882'],['energy-1882','energy-1893'],
+    ['energy-1893','energy-1954'],['energy-1954','energy-1956'],['energy-1956','energy-1991'],
+    ['energy-1991','energy-2008'],['energy-2008','energy-2017'],
+
+    ['b-story','media-1440'],['media-1440','media-1826'],['media-1826','media-1895'],
+    ['media-1895','media-1920'],['media-1920','media-1948'],['media-1948','media-1991'],
+    ['media-1991','media-2004'],['media-2004','media-2007'],['media-2007','media-2018'],
+    ['media-2018','media-2022'],
+
+    ['b-nourishment','food-1730'],['food-1730','food-1810'],['food-1810','food-1834'],
+    ['food-1834','food-1876'],['food-1876','food-1948'],['food-1948','food-1968'],
+    ['food-1968','food-1994'],['food-1994','food-2002'],['food-2002','food-2013'],
+
+    ['b-bonds','comms-1775'],['comms-1775','comms-1844'],['comms-1844','comms-1876'],
+    ['comms-1876','comms-1901'],['comms-1901','comms-1971'],['comms-1971','comms-1983'],
+    ['comms-1983','comms-1992'],['comms-1992','comms-2009'],['comms-2009','comms-2020'],
+
+    ['b-healing','med-1867'],['med-1867','med-1882'],['med-1882','med-1928'],
+    ['med-1928','med-1952'],['med-1952','med-1955'],['med-1955','med-2003'],
+    ['med-2003','med-2015'],['med-2015','med-2020'],
+
+    ['b-status','fashion-1852'],['fashion-1852','fashion-1858'],['fashion-1858','fashion-1916'],
+    ['fashion-1916','fashion-1975'],['fashion-1975','fashion-2013'],['fashion-2013','fashion-2021'],
+
+    ['b-shelter','property-1885'],['property-1885','property-1908'],['property-1908','property-1947'],
+    ['property-1947','property-2008'],['property-2008','property-2011'],['property-2011','property-2021'],
+
+    ['b-threat','defense-1617'],['defense-1617','defense-1688'],['defense-1688','defense-1945'],
+    ['defense-1945','defense-1968'],['defense-1968','defense-1988'],['defense-1988','defense-2001'],
+    ['defense-2001','defense-2017'],
+  ]
+
+  // Cross-industry merges (only for mapped branches)
+  const mergeLinks = [
+    { from: 'energy-1991', to: 'car-2008',  label: 'Battery tech\nenables Tesla' },
+    { from: 'tech-2007',   to: 'car-2010',  label: 'Smartphone\nenables Uber' },
+    { from: 'ai-2016',     to: 'car-2020',  label: 'Computer vision\nenables Waymo' },
+    // Story merges
+    { from: 'energy-1893', to: 'media-1920', label: 'AC power grid\nenables broadcast' },
+    { from: 'tech-1991',   to: 'media-1991', label: 'Same event:\nWeb = new story' },
+    { from: 'tech-1991',   to: 'media-2007', label: 'Broadband web\nenables streaming' },
+    { from: 'tech-2007',   to: 'media-2018', label: 'Smartphone\nenables TikTok' },
+    { from: 'ai-2022',     to: 'media-2022', label: 'ChatGPT enables\nAI content' },
+    // Tech ↔ Media merge
+    { from: 'tech-2004',   to: 'media-2004', label: 'Platform infra\nenables social' },
+    // Energy ↔ Tech merge
+    { from: 'tech-2006',   to: 'energy-2017', label: 'Cloud + software\nmanage grid' },
+    // Food merges
+    { from: 'energy-1776', to: 'food-1834',  label: 'Steam power\nmechanises farms' },
+    { from: 'energy-1776', to: 'food-1876',  label: 'Steam compressors\nenable cold chain' },
+    { from: 'tech-2007',   to: 'food-2013',  label: 'Smartphone\nenables delivery' },
+    // Comms merges
+    { from: 'tech-1971',   to: 'comms-1983',  label: 'Microprocessor\nenables mobile' },
+    { from: 'tech-1991',   to: 'comms-1971',  label: 'Internet\nscales email' },
+    { from: 'tech-2007',   to: 'comms-2009',  label: 'Smartphone\nenables WhatsApp' },
+    { from: 'tech-2006',   to: 'comms-2020',  label: 'Cloud infra\nenables Zoom' },
+    // Medicine merges
+    { from: 'tech-1975',   to: 'med-2003',   label: 'Computing power\nmaps genome' },
+    { from: 'tech-1998',   to: 'med-2020',   label: 'Genomic computing\naccelerates mRNA' },
+    { from: 'car-1956',    to: 'food-1948',  label: 'Highway system\nenables fast food' },
+    // Status merges
+    { from: 'media-1895',  to: 'fashion-1916', label: 'Hollywood creates\nbeauty culture' },
+    { from: 'media-2004',  to: 'fashion-2013', label: 'Social media\ncreates influencers' },
+    { from: 'tech-2006',   to: 'fashion-2021', label: 'Cloud platforms\nenable creators' },
+    // Shelter merges
+    { from: 'car-1913',    to: 'property-1947', label: 'Assembly line\nthinking → suburbs' },
+    { from: 'tech-2007',   to: 'property-2008', label: 'Smartphone\nenables Airbnb' },
+    { from: 'tech-2007',   to: 'property-2011', label: 'IoT + smartphone\n→ smart home' },
+    // Threat merges
+    { from: 'ai-2012',     to: 'defense-2017',  label: 'Deep learning\nenables AI surveillance' },
+    { from: 'tech-2007',   to: 'med-2015',   label: 'Smartphone\nenables telehealth' },
+  ]
+
+  // ═══════════════════════════════════════════
+  //  LAYOUT
+  // ═══════════════════════════════════════════
+
+  const container = document.getElementById('tree-container')
+  const W = container.clientWidth, H = container.clientHeight
+  const cx = W / 2, cy = H / 2
+  const maxR = Math.min(W, H) * 0.44
+  const PRIMAL_R = 70, BRIDGE_R = 120
+  // Piecewise scale: pre-1850 compressed (Story's early nodes), post-1850 expanded (modern industry)
+  const yearScale = d3.scaleLinear()
+    .domain([1400, 1850, 2030])
+    .range([BRIDGE_R + 35, BRIDGE_R + 75, maxR])
+
+  const nodeMap = {}
+  const origin = { id: 'origin', x: cx, y: cy, type: 'origin', label: 'Human\nExperience' }
+  nodeMap['origin'] = origin
+
+  PRIMALS.forEach(p => {
+    p.x = cx + Math.cos(p.angle) * PRIMAL_R
+    p.y = cy + Math.sin(p.angle) * PRIMAL_R
+    nodeMap[p.id] = p
+  })
+
+  bridges.forEach(b => {
+    const angle = PRIMALS.find(p => p.id === b.primal).angle
+    b.x = cx + Math.cos(angle) * BRIDGE_R
+    b.y = cy + Math.sin(angle) * BRIDGE_R
+    b.angle = angle
+    nodeMap[b.id] = b
+  })
+
+  // Position industry nodes: year = radius, branch = angle, then push overlaps apart
+  industryNodes.forEach(n => {
+    const ind = INDUSTRIES[n.branch]
+    if (!ind) return
+    const siblings = industryNodes.filter(m => m.branch === n.branch)
+    const idx = siblings.indexOf(n)
+    const spread = Math.min(0.08, 1.0 / Math.max(siblings.length - 1, 1))
+    const totalSpread = (siblings.length - 1) * spread
+    n.angle = ind.baseAngle - totalSpread / 2 + idx * spread
+    n.r = yearScale(n.year)
+    n.x = cx + Math.cos(n.angle) * n.r
+    n.y = cy + Math.sin(n.angle) * n.r
+    n.industry = n.branch
+    nodeMap[n.id] = n
+  })
+
+  // Push apart overlapping nodes within each branch (20 passes for thorough separation)
+  Object.keys(INDUSTRIES).forEach(branchKey => {
+    const siblings = industryNodes.filter(m => m.branch === branchKey)
+    for (let pass = 0; pass < 20; pass++) {
+      for (let i = 1; i < siblings.length; i++) {
+        const a = siblings[i - 1], b = siblings[i]
+        const dx = b.x - a.x, dy = b.y - a.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < 32) {
+          const nudge = 0.02
+          a.angle -= nudge
+          b.angle += nudge
+          a.x = cx + Math.cos(a.angle) * a.r
+          a.y = cy + Math.sin(a.angle) * a.r
+          b.x = cx + Math.cos(b.angle) * b.r
+          b.y = cy + Math.sin(b.angle) * b.r
+        }
+      }
+    }
+  })
+
+  // ═══════════════════════════════════════════
+  //  FILTERS
+  // ═══════════════════════════════════════════
+
+  const allBranches = new Set()
+  Object.keys(INDUSTRIES).forEach(k => allBranches.add(k))
+  PRIMALS.filter(p => !p.extended).forEach(p => allBranches.add(p.id))
+  const activeBranches = new Set(allBranches)
+
+  const filtersEl = document.getElementById('filters')
+
+  const allBtn = document.createElement('button')
+  allBtn.className = 'filter-pill filter-all active'
+  allBtn.textContent = 'All'
+  allBtn.addEventListener('click', () => {
+    const allActive = activeBranches.size === allBranches.size
+    if (allActive) {
+      activeBranches.clear()
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'))
+    } else {
+      allBranches.forEach(b => activeBranches.add(b))
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.add('active'))
+    }
+    allBtn.classList.toggle('active', !allActive)
+    updateVisibility()
+  })
+  filtersEl.appendChild(allBtn)
+
+  const PILL_CONFIG = [
+    { id: 'cars',   label: 'Cars',     color: '#7c3aed' },
+    { id: 'tech',   label: 'Tech',     color: '#00b4d8' },
+    { id: 'ai',     label: 'AI',       color: '#ec4899' },
+    { id: 'energy', label: 'Energy',   color: '#f59e0b' },
+    { id: 'media',  label: 'Story',    color: '#fb923c' },
+    { id: 'food',   label: 'Food',     color: '#22c55e' },
+    { id: 'comms',  label: 'Comms',    color: '#f472b6' },
+    { id: 'medicine', label: 'Medicine', color: '#a78bfa' },
+    { id: 'fashion',     label: 'Status',      color: '#e879f9' },
+    { id: 'property',    label: 'Shelter',      color: '#38bdf8' },
+    { id: 'defense',     label: 'Threat',       color: '#ef4444' },
+  ]
+
+  PILL_CONFIG.forEach(cfg => {
+    const btn = document.createElement('button')
+    btn.className = `filter-pill active${cfg.stub ? ' stub' : ''}`
+    btn.textContent = cfg.label
+    btn.dataset.branch = cfg.id
+    btn.style.borderColor = cfg.color
+    btn.style.background = cfg.color + '25'
+    btn.addEventListener('click', () => {
+      const isActive = activeBranches.has(cfg.id)
+      if (isActive) activeBranches.delete(cfg.id); else activeBranches.add(cfg.id)
+      btn.classList.toggle('active', !isActive)
+      btn.style.background = !isActive ? cfg.color + '25' : 'transparent'
+      allBtn.classList.toggle('active', activeBranches.size === allBranches.size)
+      updateVisibility()
+    })
+    filtersEl.appendChild(btn)
+  })
+
+  // ═══════════════════════════════════════════
+  //  RENDER
+  // ═══════════════════════════════════════════
+
+  const svg = d3.select('#tree-container').append('svg').attr('width', W).attr('height', H)
+  const g = svg.append('g')
+
+  const zoomBehavior = d3.zoom().scaleExtent([0.3, 10]).on('zoom', e => g.attr('transform', e.transform))
+  svg.call(zoomBehavior)
+
+  document.getElementById('zoom-in').addEventListener('click', () =>
+    svg.transition().duration(300).call(zoomBehavior.scaleBy, 1.6))
+  document.getElementById('zoom-out').addEventListener('click', () =>
+    svg.transition().duration(300).call(zoomBehavior.scaleBy, 0.625))
+  document.getElementById('zoom-fit').addEventListener('click', () =>
+    svg.transition().duration(500).call(zoomBehavior.transform, d3.zoomIdentity))
+
+  // Stars
+  for (let i = 0; i < 120; i++) {
+    g.append('circle')
+      .attr('cx', cx + (Math.random() - 0.5) * W * 1.5)
+      .attr('cy', cy + (Math.random() - 0.5) * H * 1.5)
+      .attr('r', Math.random() * 1 + 0.2)
+      .attr('fill', `rgba(255,255,255,${Math.random() * 0.10 + 0.02})`)
+  }
+
+  // Origin glow
+  g.append('circle').attr('class','origin-glow').attr('cx',cx).attr('cy',cy).attr('r',32).attr('fill','rgba(94,23,235,0.08)')
+  g.append('circle').attr('class','origin-glow').attr('cx',cx).attr('cy',cy).attr('r',50).attr('fill','rgba(233,162,59,0.03)').style('animation-delay','-2s')
+
+  // Rings
+  g.append('circle').attr('class','primal-ring').attr('cx',cx).attr('cy',cy).attr('r',PRIMAL_R)
+  ;[1500,1800,1880,1920,1960,2000].forEach(yr => {
+    const r = yearScale(yr)
+    g.append('circle').attr('class','decade-ring').attr('cx',cx).attr('cy',cy).attr('r',r)
+    g.append('text').attr('class','decade-label').attr('x',cx).attr('y',cy - r + 12).text(yr)
+  })
+
+  // Origin → primal lines
+  PRIMALS.forEach(p => {
+    g.append('line').attr('class','branch-line')
+      .attr('x1',cx).attr('y1',cy).attr('x2',p.x).attr('y2',p.y)
+      .attr('stroke',p.color).attr('opacity',0.25).attr('data-primal',p.id)
+  })
+
+  // Primal → bridge lines
+  bridges.forEach(b => {
+    const p = nodeMap[b.primal]
+    g.append('line').attr('class','branch-line')
+      .attr('x1',p.x).attr('y1',p.y).attr('x2',b.x).attr('y2',b.y)
+      .attr('stroke',b.color).attr('opacity',0.25).attr('data-primal',b.primal)
+  })
+
+  // Branch lines
+  branchLinks.forEach(([sId, tId]) => {
+    const s = nodeMap[sId], t = nodeMap[tId]
+    if (!s || !t) return
+    const branch = t.branch || t.industry
+    const col = INDUSTRIES[branch]?.color || '#888'
+    const mx = (s.x+t.x)/2, my = (s.y+t.y)/2, dx = t.x-s.x, dy = t.y-s.y
+    g.append('path').attr('class','branch-line')
+      .attr('d', `M${s.x},${s.y} Q${mx+dy*0.05},${my-dx*0.05} ${t.x},${t.y}`)
+      .attr('stroke',col).attr('opacity',0.45).attr('data-branch',branch)
+  })
+
+  // Merge lines
+  mergeLinks.forEach(ml => {
+    const s = nodeMap[ml.from], t = nodeMap[ml.to]
+    if (!s || !t) return
+    const mx = (s.x+t.x)/2, my = (s.y+t.y)/2
+    const cpx = mx + (cx-mx)*0.35, cpy = my + (cy-my)*0.35
+    g.append('path').attr('class','merge-line')
+      .attr('d', `M${s.x},${s.y} Q${cpx},${cpy} ${t.x},${t.y}`)
+      .attr('stroke','#E9A23B').attr('data-merge',`${ml.from}__${ml.to}`)
+    const lx = (s.x+2*cpx+t.x)/4, ly = (s.y+2*cpy+t.y)/4
+    const lines = ml.label.split('\n'), lh = 10, bgH = lines.length*lh+5
+    g.append('rect').attr('class','merge-label-bg')
+      .attr('x',lx-46).attr('y',ly-bgH/2).attr('width',92).attr('height',bgH).attr('rx',3)
+      .attr('data-merge',`${ml.from}__${ml.to}`)
+    lines.forEach((line,i) => {
+      g.append('text').attr('class','merge-label-text')
+        .attr('x',lx).attr('y',ly-bgH/2+9+i*lh).text(line)
+        .attr('data-merge',`${ml.from}__${ml.to}`)
+    })
+  })
+
+  // Industry labels
+  Object.entries(INDUSTRIES).forEach(([key, ind]) => {
+    const nodes = industryNodes.filter(n => n.branch === key)
+    const spread = Math.min(0.06, 0.7 / Math.max(nodes.length-1, 1))
+    const midAngle = ind.baseAngle
+    g.append('text').attr('class','industry-label')
+      .attr('x', cx + Math.cos(midAngle) * (maxR + 28))
+      .attr('y', cy + Math.sin(midAngle) * (maxR + 28))
+      .attr('fill',ind.color).text(ind.label).attr('data-branch',key)
+  })
+
+  // ── Tooltip ──
+  const tooltip = document.getElementById('tooltip')
+  function showTip(d, evt) {
+    let html = ''
+    if (d.who) {
+      const col = d.type === 'merge' ? '#E9A23B' : (INDUSTRIES[d.branch]?.color || '#fff')
+      html = `<div class="tt-who" style="color:${col}">${d.who} &middot; ${d.year}</div>`
+      html += `<div class="tt-rule"><b>The rule: </b>${d.assumption}</div>`
+      html += `<div class="tt-break"><b>The break: </b>${d.ruleBreak}</div>`
+      if (d.mergeWith) html += `<div class="tt-merge">&#9889; Merge: ${d.branch} &times; ${d.mergeWith}</div>`
+    } else if (d.desc) {
+      html = `<div class="tt-who" style="color:${d.color||'#fff'}">${(d.label||'').replace(/\n/g,' ')}</div>`
+      html += `<div class="tt-desc">${d.desc}</div>`
+    }
+    if (!html) return
+    tooltip.innerHTML = html; tooltip.classList.add('visible'); posTip(evt)
+  }
+  function posTip(e) {
+    const r = container.getBoundingClientRect()
+    let x = e.clientX-r.left+16, y = e.clientY-r.top-10
+    if (x+310>r.width) x = e.clientX-r.left-316
+    if (y+140>r.height) y -= 120; if (y<0) y = 10
+    tooltip.style.left = x+'px'; tooltip.style.top = y+'px'
+  }
+  function hideTip() { tooltip.classList.remove('visible') }
+
+  // ═══════════════════════════════════════════
+  //  NODES
+  // ═══════════════════════════════════════════
+
+  // Origin
+  const og = g.append('g').attr('class','node-group').attr('transform',`translate(${cx},${cy})`)
+  og.append('circle').attr('class','origin-pulse').attr('r',22).attr('fill','rgba(255,255,255,0.08)')
+  og.append('circle').attr('r',16).attr('fill','#0d0a1a').attr('stroke','rgba(255,255,255,0.5)').attr('stroke-width',2)
+  og.append('circle').attr('r',5).attr('fill','rgba(255,255,255,0.85)')
+  origin.label.split('\n').forEach((l,i) => {
+    og.append('text').attr('class','node-label').attr('y',28+i*12).text(l)
+  })
+
+  // Primals
+  PRIMALS.forEach(p => {
+    const pg = g.append('g').attr('class','node-group')
+      .attr('transform',`translate(${p.x},${p.y})`).attr('data-primal',p.id)
+    if (p.extended) {
+      pg.append('circle').attr('class','node-glow').attr('r',16).attr('fill',p.color)
+      pg.append('circle').attr('r',10).attr('fill','#0d0a1a').attr('stroke',p.color).attr('stroke-width',2)
+      pg.append('circle').attr('r',3.5).attr('fill',p.color).attr('opacity',0.6)
+    } else {
+      pg.append('circle').attr('class','stub-ring').attr('r',12).attr('stroke',p.color)
+      pg.append('circle').attr('r',5).attr('fill','#0d0a1a').attr('stroke',p.color).attr('stroke-width',1.5).attr('opacity',0.5)
+    }
+    const lx = Math.cos(p.angle)*22, ly = Math.sin(p.angle)*22
+    pg.append('text').attr('class','primal-label').attr('x',lx).attr('y',ly+4)
+      .attr('fill',p.color).attr('opacity',p.extended?0.8:0.4).text(p.label)
+    pg.on('mouseenter',e=>showTip(p,e)).on('mousemove',e=>posTip(e)).on('mouseleave',hideTip)
+  })
+
+  // Bridges
+  bridges.forEach(b => {
+    const bg = g.append('g').attr('class','node-group')
+      .attr('transform',`translate(${b.x},${b.y})`).attr('data-primal',b.primal)
+    bg.append('circle').attr('class','node-glow').attr('r',14).attr('fill',b.color)
+    bg.append('circle').attr('r',7).attr('fill','#0d0a1a').attr('stroke',b.color).attr('stroke-width',1.5).attr('opacity',0.6)
+    b.label.split('\n').forEach((l,i) => {
+      bg.append('text').attr('class','bridge-label').attr('y',16+i*11).text(l)
+    })
+    bg.on('mouseenter',e=>showTip(b,e)).on('mousemove',e=>posTip(e)).on('mouseleave',hideTip)
+  })
+
+  // Industry nodes
+  industryNodes.forEach(n => {
+    const ind = INDUSTRIES[n.branch]
+    if (!ind) return
+    const isMerge = n.type === 'merge'
+    const r = isMerge ? 8 : 6
+    const ng = g.append('g').attr('class','node-group')
+      .attr('transform',`translate(${n.x},${n.y})`).attr('data-branch',n.branch)
+    ng.append('circle').attr('class','node-glow').attr('r',r+10).attr('fill',isMerge?'#E9A23B':ind.color)
+    ng.append('circle').attr('class','node-circle').attr('r',r).attr('fill','#0d0a1a').attr('stroke',isMerge?'#E9A23B':ind.color)
+    if (isMerge) ng.append('circle').attr('r',3).attr('fill','#E9A23B')
+    ng.append('text').attr('class','node-year').attr('y',-(r+4)).text(n.year)
+    n.label.split('\n').forEach((l,i) => {
+      ng.append('text').attr('class','node-label').attr('y',r+13+i*11).text(l)
+    })
+    ng.on('mouseenter',e=>showTip(n,e)).on('mousemove',e=>posTip(e)).on('mouseleave',hideTip)
+      .on('touchstart',e=>{e.preventDefault();showTip(n,e.touches[0])})
+  })
+
+  // ═══════════════════════════════════════════
+  //  VISIBILITY
+  // ═══════════════════════════════════════════
+
+  function updateVisibility() {
+    g.selectAll('[data-branch]').each(function() {
+      d3.select(this).classed('hidden', !activeBranches.has(d3.select(this).attr('data-branch')))
+    })
+    g.selectAll('[data-primal]').each(function() {
+      const el = d3.select(this), pid = el.attr('data-primal')
+      const children = PRIMAL_INDUSTRIES[pid] || []
+      const visible = children.length === 0
+        ? activeBranches.has(pid)
+        : children.some(ci => activeBranches.has(ci))
+      el.classed('hidden', !visible)
+    })
+    mergeLinks.forEach(ml => {
+      const fb = nodeMap[ml.from]?.branch || nodeMap[ml.from]?.industry
+      const tb = nodeMap[ml.to]?.branch || nodeMap[ml.to]?.industry
+      g.selectAll(`[data-merge="${ml.from}__${ml.to}"]`).classed('hidden', !(activeBranches.has(fb) && activeBranches.has(tb)))
+    })
+  }
+
+  let resizeTimer
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer)
+    resizeTimer = setTimeout(() => location.reload(), 400)
+  })
+  </script>
+</body>
+</html>

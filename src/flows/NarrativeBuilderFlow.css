@@ -121,7 +121,7 @@
   padding: 0.75rem 1rem;
   font-size: 0.85rem;
   line-height: 1.45;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.75);
   font-style: italic;
   margin-bottom: 1.25rem;
 }
@@ -196,6 +196,56 @@ textarea.nbf-input {
   border-color: #E9A23B;
   background: rgba(233,162,59,0.08);
   color: #E9A23B;
+}
+
+/* ── Vehicle discovery cards ── */
+.nbf-vehicle-card {
+  text-align: left;
+  padding: 1rem 1.1rem;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: inherit;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nbf-vehicle-card:hover {
+  border-color: rgba(233,162,59,0.3);
+}
+
+.nbf-vehicle-selected {
+  border-color: #E9A23B;
+  background: rgba(233,162,59,0.08);
+}
+
+.nbf-vehicle-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  color: white;
+}
+
+.nbf-vehicle-selected .nbf-vehicle-label {
+  color: #E9A23B;
+}
+
+.nbf-vehicle-desc {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 0.4rem;
+}
+
+.nbf-vehicle-example {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
 }
 
 /* ── Narrative output card ── */

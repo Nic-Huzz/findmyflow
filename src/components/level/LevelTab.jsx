@@ -10,11 +10,14 @@
  * Created: 2026-03-27
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../../auth/AuthProvider'
 import confetti from 'canvas-confetti'
 import { getLevelConfig, LEVEL_CONFIG } from './LevelConfig'
+import { STATES, STATE_META } from '../LifePathMap/lifePaths'
+import QuestBoardCard from '../QuestBoardCard'
 import DeepDiveCard from './DeepDiveCard'
 import BossFightCard from './BossFightCard'
 import MilestoneCard from './MilestoneCard'
@@ -45,6 +48,15 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasFlowDeepDive, setHasFlowDeepDive] = useState({}) // generic tracker for flow-based deep dives
   const [hasWoundMap, setHasWoundMap] = useState(false)
   const [hasLifePaths, setHasLifePaths] = useState(false)
+
+  // Quest board state
+  const [quests, setQuests] = useState([])
+  const [questTasks, setQuestTasks] = useState({}) // { questId: [tasks] }
+  const [showAddQuest, setShowAddQuest] = useState(false)
+  const [addQuestLabel, setAddQuestLabel] = useState('')
+  const [addQuestState, setAddQuestState] = useState(null)
+  const [addQuestSaving, setAddQuestSaving] = useState(false)
+  const navigate = useNavigate()
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
   const [hasPlaylistCompletion, setHasPlaylistCompletion] = useState(false)
@@ -60,6 +72,59 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [showCommitModal, setShowCommitModal] = useState(false)
   const [showReflectModal, setShowReflectModal] = useState(false)
   const [graduatedTo, setGraduatedTo] = useState(null)
+
+  // Load quests + tasks
+  const loadQuests = useCallback(async () => {
+    if (!userId) return
+    const { data: questData } = await supabase
+      .from('quests')
+      .select('*')
+      .eq('user_id', userId)
+      .order('sort_order', { ascending: true })
+    if (questData) {
+      setQuests(questData)
+      // Load tasks for all quests
+      const questIds = questData.map(q => q.id)
+      if (questIds.length > 0) {
+        const { data: taskData } = await supabase
+          .from('quest_tasks')
+          .select('*')
+          .in('quest_id', questIds)
+          .order('sort_order', { ascending: true })
+        if (taskData) {
+          const grouped = {}
+          taskData.forEach(t => {
+            if (!grouped[t.quest_id]) grouped[t.quest_id] = []
+            grouped[t.quest_id].push(t)
+          })
+          setQuestTasks(grouped)
+        }
+      }
+    }
+  }, [userId])
+
+  // Add quest
+  const handleAddQuest = async () => {
+    if (!addQuestLabel.trim() || !addQuestState || addQuestSaving) return
+    setAddQuestSaving(true)
+    try {
+      const { error } = await supabase.from('quests').insert({
+        user_id: userId,
+        label: addQuestLabel.trim(),
+        predicted_state: addQuestState,
+        status: 'active',
+        sort_order: quests.length,
+      })
+      if (error) console.error('Add quest error:', error)
+      else {
+        setAddQuestLabel('')
+        setAddQuestState(null)
+        setShowAddQuest(false)
+        loadQuests()
+      }
+    } catch (e) { console.error('Add quest error:', e) }
+    setAddQuestSaving(false)
+  }
 
   useEffect(() => {
     if (!userId) {
@@ -174,6 +239,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         .limit(1)
         .then(({ data }) => { if (data?.length > 0) setHasLifePaths(true) })
     }
+    // Load quests + tasks
+    loadQuests()
+
     // Check if playskills exist (from /get-started, curiosity compass, or PlaySkillPicker)
     supabase
       .from('nikigai_clusters')
@@ -303,6 +371,84 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
   return (
     <div className="level-tab">
+
+      {/* ══════ QUEST BOARD ══════ */}
+
+      {/* Your Journey */}
+      <div className="quest-section">
+        <h3 className="quest-section-title">Your Journey</h3>
+        {!hasLifeMap && (
+          <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story holds the answers.', icon: '📖' }} isCompleted={false} />
+        )}
+        <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={hasLifePaths} />
+        {!hasEssenceAvatar && (
+          <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
+        )}
+      </div>
+
+      {/* Active Quests */}
+      <div className="quest-section">
+        <h3 className="quest-section-title">Your Active Quests</h3>
+        {quests.filter(q => q.status === 'active').length === 0 && (
+          <div className="quest-empty">Complete your Life Paths exercise to identify quests, or add one manually.</div>
+        )}
+        {quests.filter(q => q.status === 'active').map(q => (
+          <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} userId={userId} onUpdate={loadQuests} />
+        ))}
+        {!showAddQuest ? (
+          <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Quest</button>
+        ) : (
+          <div className="quest-add-modal">
+            <div className="quest-add-title">What life path are you pursuing?</div>
+            <input className="quest-add-input" type="text" value={addQuestLabel}
+              onChange={e => setAddQuestLabel(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && addQuestState && handleAddQuest()}
+              placeholder="e.g. Run retreats..." autoFocus />
+            <div className="quest-add-subtitle">What state does it trigger?</div>
+            <div className="quest-add-states">
+              {[...STATES].reverse().map(s => {
+                const m = STATE_META[s]
+                return (
+                  <button key={s} className={`quest-state-pill ${addQuestState === s ? 'active' : ''}`}
+                    style={{ borderColor: addQuestState === s ? m.color : 'transparent', color: addQuestState === s ? m.color : undefined,
+                      background: addQuestState === s ? `${m.color}15` : undefined }}
+                    onClick={() => setAddQuestState(s)}>
+                    {m.emoji} {m.label}
+                  </button>
+                )
+              })}
+            </div>
+            <div className="quest-add-actions">
+              <button className="quest-add-submit" onClick={handleAddQuest}
+                disabled={!addQuestLabel.trim() || !addQuestState || addQuestSaving}>Add Quest</button>
+              <button className="quest-add-cancel" onClick={() => { setShowAddQuest(false); setAddQuestLabel(''); setAddQuestState(null) }}>Cancel</button>
+            </div>
+          </div>
+        )}
+        <div className="quest-recommend">We recommend focusing on 1-3 quests at a time</div>
+      </div>
+
+      {/* Completed quests + Life Map */}
+      {(quests.some(q => q.status !== 'active') || hasLifeMap) && (
+        <div className="quest-section quest-completed-section">
+          <h3 className="quest-section-title">Completed</h3>
+          {hasLifeMap && (
+            <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story.', icon: '📖' }} isCompleted={true} />
+          )}
+          {quests.filter(q => q.status !== 'active').map(q => (
+            <div key={q.id} className="quest-closed-item">
+              <span className="quest-closed-icon">{q.close_reason === 'achieved' ? '🎉' : q.close_reason === 'lost_interest' ? '🤔' : '⏳'}</span>
+              <span className="quest-closed-label">{q.label}</span>
+              <span className="quest-closed-status">{q.close_reason === 'achieved' ? 'Achieved' : q.close_reason === 'lost_interest' ? 'Lost interest' : 'Paused'}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="quest-divider" />
+
+      {/* ══════ OLD LEVEL CONTENT (kept for Stage 4 replacement) ══════ */}
+
       {/* Level Selector */}
       <div className="level-selector">
         {Object.entries(LEVEL_CONFIG).map(([num, lvl]) => {
@@ -411,7 +557,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Wahoo')}
+                  onClick={() => onNavigateTab?.('Courage')}
                   style={{ cursor: 'pointer' }}
                 >
                   {courageDone > 0 ? `${courageDone}/${courageTarget}` : 'Start'}

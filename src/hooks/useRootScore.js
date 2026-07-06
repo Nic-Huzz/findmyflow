@@ -16,10 +16,10 @@ import { supabase } from '../lib/supabaseClient'
 const ROOT_ITEMS = [
   {
     key: 'blow_up_brand',
-    label: 'Blow Up Brand',
+    label: 'Remarkable Results',
     node: 'attract',
-    prescription: "You haven't defined what makes you different yet. Complete the Blow Up Brand flow to find your remarkable angle.",
-    action: { label: 'Find Your Angle', route: '/create/remarkable' },
+    prescription: "You haven't defined what makes you different yet. Complete Remarkable Results to find your rule break.",
+    action: { label: 'Find Your Rule Break', route: '/create/remarkable' },
   },
   {
     key: 'leads_strategy',
@@ -73,7 +73,7 @@ export default function useRootScore(userId) {
         offerRes,
         contactsRes,
       ] = await Promise.all([
-        // 1. Blow Up Brand — has remarkable angle?
+        // 1. Remarkable Results — has remarkable angle?
         supabase.from('remarkable_angles')
           .select('id', { count: 'exact', head: true })
           .eq('user_id', userId),

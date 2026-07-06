@@ -285,7 +285,7 @@ function Challenge() {
   // Dynamic level detection
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
-  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Level', 'Tune']))
+  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Quests', 'Tune']))
   useEffect(() => {
     if (!user?.id) return
     supabase
@@ -307,7 +307,7 @@ function Challenge() {
               .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
           ]).then(([wahoos, skills]) => {
             if (wahoos.data?.length > 0 || skills.data?.length > 0) {
-              setUnlockedTabs(prev => new Set([...prev, 'Wahoo']))
+              setUnlockedTabs(prev => new Set([...prev, 'Courage']))
             }
           })
           // Unlock Healing if any healing quest completed
@@ -395,7 +395,7 @@ function Challenge() {
 
   // Load Flow Finder data for Play-list problem/persona mapping
   useEffect(() => {
-    if (activeCategory === 'Wahoo' && user?.id && !flowFinderData) {
+    if (activeCategory === 'Courage' && user?.id && !flowFinderData) {
       fetchFlowFinderData(user.id).then(result => {
         if (result?.data) setFlowFinderData(result.data)
       })
@@ -1332,7 +1332,7 @@ function Challenge() {
     if (!groanCellContext) return null
     // When on Play-list and user has mapped a problem, enrich with problem/persona context
     // but keep sourceType as 'skill' so the challenge appears on the skills matrix
-    if (activeCategory === 'Wahoo' && groanCellContext.sourceType === 'skill' && mappedProblemId && mappedProblemId !== 'not_specified') {
+    if (activeCategory === 'Courage' && groanCellContext.sourceType === 'skill' && mappedProblemId && mappedProblemId !== 'not_specified') {
       const problem = mappedProblemId === 'custom'
         ? { id: null, label: customProblem || 'Custom problem' }
         : flowFinderData?.problems?.find(p => p.id === mappedProblemId)
@@ -1665,7 +1665,7 @@ function Challenge() {
   let filteredQuests = challengeData?.quests?.filter(q => {
     if (q.archived) return false
     // Play-list and Tune tabs handle their own content via standalone components
-    if (activeCategory === 'Wahoo') return false
+    if (activeCategory === 'Courage') return false
     if (activeCategory === 'Tune') return false
     return q.category === activeCategory
   }) || []
@@ -1956,7 +1956,7 @@ function Challenge() {
         {/* Groans Summary */}
         {activeCategory === 'GroansSummary' && (
           <GroansSummary
-            onBack={() => setActiveCategory('Wahoo')}
+            onBack={() => setActiveCategory('Courage')}
             progress={progress}
             completions={completions}
           />
@@ -1974,7 +1974,7 @@ function Challenge() {
         {activeCategory !== 'GroansSummary' && activeCategory !== 'HealingSummary' && (
           <>
         {/* Artifact Progress — hidden on Play-list tab */}
-        {artifactProgress && activeCategory !== 'Wahoo' && activeCategory !== 'Healing' && (() => {
+        {artifactProgress && activeCategory !== 'Courage' && activeCategory !== 'Healing' && (() => {
           const stageConfig = null
 
           // Healing: per-frequency title and description
@@ -2098,7 +2098,7 @@ function Challenge() {
         )}
 
         {/* Play-list Tab — Wahoo challenges */}
-        {activeCategory === 'Wahoo' && (
+        {activeCategory === 'Courage' && (
           <PlayListTab
             userId={user?.id}
             currentVisibilityLayer={getLevelConfig(currentJourneyLevel)?.visibilityLayer || 'screen'}
@@ -2198,7 +2198,7 @@ function Challenge() {
         )}
 
         {/* Level Tab */}
-        {activeCategory === 'Level' && (
+        {activeCategory === 'Quests' && (
           <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} capacityRefresh={capacityRefresh} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
             setUnlockedTabs(prev => new Set([...prev, tab]))
             setActiveCategory(tab)
@@ -2319,7 +2319,7 @@ function Challenge() {
                 )}
 
                 {/* Play-list: Required problem/persona mapping for skills-only matrix */}
-                {activeCategory === 'Wahoo' && !selectedGroanChallenge && groanCellContext?.sourceType === 'skill' && groanCellContext?.visibilityLayer && (
+                {activeCategory === 'Courage' && !selectedGroanChallenge && groanCellContext?.sourceType === 'skill' && groanCellContext?.visibilityLayer && (
                   <div className="groan-mapping-step">
                     <label className="groan-custom-label">Which problem does this skill address?</label>
                     <select

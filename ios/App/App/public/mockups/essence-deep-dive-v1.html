@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essence Deep Dive - Cinematic/Editorial</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #000;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* --- STICKY HEADER --- */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .header .back-btn {
+    background: none;
+    border: none;
+    color: #E9A23B;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+  }
+
+  .header .title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .header .share-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  /* --- HERO SECTION --- */
+  .hero {
+    position: relative;
+    height: 520px;
+    overflow: hidden;
+  }
+
+  .hero-image-area {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a0a3e 0%, #0d0d0d 50%, #2a1000 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-avatar {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    box-shadow: 0 0 80px rgba(94, 23, 235, 0.4), 0 0 160px rgba(233, 162, 59, 0.15);
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 280px;
+    background: linear-gradient(to top, #000 0%, rgba(0,0,0,0.8) 40%, transparent 100%);
+    z-index: 3;
+  }
+
+  .hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 28px 32px;
+    z-index: 4;
+  }
+
+  .archetype-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #E9A23B;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .archetype-name {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #fff 30%, #E9A23B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .archetype-tagline {
+    font-size: 16px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .edit-avatar-btn {
+    position: absolute;
+    bottom: 140px;
+    right: 28px;
+    z-index: 5;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* --- SECTION STYLING --- */
+  .section {
+    padding: 48px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    position: relative;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #E9A23B;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .section-content {
+    font-size: 18px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 300;
+  }
+
+  .section-content strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .edit-btn {
+    position: absolute;
+    top: 48px;
+    right: 28px;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .edit-btn:hover {
+    border-color: #E9A23B;
+    color: #E9A23B;
+  }
+
+  /* --- QUOTE SECTION --- */
+  .quote-section {
+    padding: 56px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    text-align: center;
+    position: relative;
+  }
+
+  .quote-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(94, 23, 235, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .quote-mark {
+    font-size: 64px;
+    color: rgba(94, 23, 235, 0.3);
+    line-height: 0.5;
+    margin-bottom: 20px;
+    font-family: Georgia, serif;
+  }
+
+  .quote-text {
+    font-size: 22px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 300;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* --- SUPERPOWER SECTION --- */
+  .superpower-section {
+    background: linear-gradient(180deg, rgba(94, 23, 235, 0.06) 0%, rgba(0,0,0,0) 100%);
+  }
+
+  .superpower-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .superpower-icon {
+    font-size: 14px;
+  }
+
+  .superpower-text {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    color: #fff;
+  }
+
+  .superpower-description {
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* --- ORIGIN SECTION --- */
+  .origin-section {
+    padding: 48px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .origin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 4px;
+  }
+
+  .origin-card {
+    padding: 24px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    position: relative;
+  }
+
+  .origin-card:first-child {
+    border-radius: 16px 4px 4px 16px;
+  }
+
+  .origin-card:last-child {
+    border-radius: 4px 16px 16px 4px;
+  }
+
+  .origin-card-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(233, 162, 59, 0.7);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .origin-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .origin-card-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .origin-card .edit-btn {
+    position: absolute;
+    top: 16px;
+    right: 12px;
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+
+  /* --- HEROES SECTION --- */
+  .heroes-section {
+    padding: 48px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .heroes-row {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .heroes-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hero-chip {
+    flex-shrink: 0;
+    padding: 10px 20px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .hero-chip:hover {
+    background: rgba(94, 23, 235, 0.15);
+    border-color: rgba(94, 23, 235, 0.3);
+  }
+
+  /* --- DEEPER INSIGHTS --- */
+  .deeper-section {
+    padding: 48px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .deeper-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    width: 100%;
+    font-family: inherit;
+  }
+
+  .deeper-toggle-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #E9A23B;
+    font-weight: 600;
+  }
+
+  .deeper-toggle-icon {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.3);
+    transition: transform 0.3s;
+  }
+
+  .deeper-toggle-icon.open {
+    transform: rotate(180deg);
+  }
+
+  .deeper-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+  }
+
+  .deeper-content.open {
+    max-height: 2000px;
+  }
+
+  .insight-block {
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .insight-block:last-child {
+    border-bottom: none;
+  }
+
+  .insight-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+
+  .insight-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 300;
+  }
+
+  /* --- CINEMATIC DIVIDER --- */
+  .cinematic-divider {
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cinematic-divider::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+      rgba(94, 23, 235, 0.1) 0%,
+      rgba(233, 162, 59, 0.08) 50%,
+      rgba(94, 23, 235, 0.05) 100%
+    );
+  }
+
+  .cinematic-divider .line {
+    position: absolute;
+    top: 50%;
+    left: 28px;
+    right: 28px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(233, 162, 59, 0.3), transparent);
+  }
+
+  /* --- CTA SECTION --- */
+  .cta-section {
+    padding: 48px 28px 80px;
+    text-align: center;
+    position: relative;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at bottom center, rgba(94, 23, 235, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cta-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-subtitle {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 32px;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #E9A23B 0%, #d4891f 100%);
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: inherit;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 8px 32px rgba(233, 162, 59, 0.3);
+    transition: all 0.2s;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(233, 162, 59, 0.4);
+  }
+
+  .cta-button .arrow {
+    font-size: 18px;
+  }
+
+  /* --- SCROLL REVEAL ANIMATION --- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- STICKY HEADER -->
+  <div class="header">
+    <button class="back-btn">&#8592; Back</button>
+    <span class="title">Essence</span>
+    <button class="share-btn">&#8599;</button>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-image-area">
+      <div class="hero-avatar">&#10024;</div>
+    </div>
+    <div class="hero-gradient-overlay"></div>
+    <div class="hero-content">
+      <div class="archetype-label">Your Essence Archetype</div>
+      <h1 class="archetype-name">Radiant Rebel</h1>
+      <p class="archetype-tagline">The one who lights the room on fire just by walking in.</p>
+    </div>
+    <button class="edit-avatar-btn" title="Change avatar">&#9998;</button>
+  </div>
+
+  <!-- ESSENCE QUOTE -->
+  <div class="quote-section reveal">
+    <div class="quote-mark">&ldquo;</div>
+    <p class="quote-text">You were never meant to fit in. Your light is the thing that disrupts the room, and that disruption is the gift.</p>
+    <button class="edit-btn">Edit</button>
+  </div>
+
+  <!-- SUPERPOWER -->
+  <div class="section superpower-section reveal">
+    <div class="section-label superpower-label">
+      <span class="superpower-icon">&#9889;</span>
+      <span>Superpower</span>
+    </div>
+    <div class="superpower-text">Magnetic Authenticity</div>
+    <p class="superpower-description">You have an almost supernatural ability to walk into any room and make people feel permission to be themselves. Your energy is contagious because it comes from a place of total self-acceptance that most people spend their whole lives searching for.</p>
+    <button class="edit-btn">Edit</button>
+  </div>
+
+  <!-- VISION -->
+  <div class="section reveal">
+    <div class="section-label">Vision</div>
+    <p class="section-content">A world where the misfits, the ones who never quite belonged, realize they were never broken. They were the ones brave enough to refuse the costume everyone else was wearing. You want to build spaces where that refusal is celebrated, not punished.</p>
+    <button class="edit-btn">Edit</button>
+  </div>
+
+  <!-- CINEMATIC DIVIDER -->
+  <div class="cinematic-divider">
+    <div class="line"></div>
+  </div>
+
+  <!-- NORTH STAR -->
+  <div class="section reveal">
+    <div class="section-label">North Star</div>
+    <p class="section-content"><strong>Full permission to be alive.</strong> Not performative aliveness, not Instagram aliveness. The kind where you wake up and your first thought is curiosity, not dread. Where your work feels like play and your play feels like purpose.</p>
+    <button class="edit-btn">Edit</button>
+  </div>
+
+  <!-- ORIGIN STORY -->
+  <div class="origin-section reveal">
+    <div class="section-label" style="margin-bottom: 20px;">Origin Story</div>
+    <div class="origin-grid">
+      <div class="origin-card">
+        <div class="origin-card-label">Inner Child</div>
+        <div class="origin-card-title">To be seen without performing</div>
+        <p class="origin-card-text">All you ever wanted was for someone to notice the real you, not the version you constructed to survive. The child who made up stories, who danced alone in their room, who saw magic everywhere.</p>
+        <button class="edit-btn">Edit</button>
+      </div>
+      <div class="origin-card">
+        <div class="origin-card-label">Essence Wound</div>
+        <div class="origin-card-title">Told your fire was too much</div>
+        <p class="origin-card-text">You learned early that your natural intensity made people uncomfortable. So you turned down the volume. You became skilled at reading rooms and adjusting, but you lost something essential in the translation.</p>
+        <button class="edit-btn">Edit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEROES -->
+  <div class="heroes-section reveal">
+    <div class="section-label" style="margin-bottom: 20px;">Heroes Like You</div>
+    <div class="heroes-row">
+      <div class="hero-chip">Brene Brown</div>
+      <div class="hero-chip">Russell Brand</div>
+      <div class="hero-chip">Lady Gaga</div>
+      <div class="hero-chip">Robin Williams</div>
+      <div class="hero-chip">Frida Kahlo</div>
+    </div>
+  </div>
+
+  <!-- DEEPER INSIGHTS -->
+  <div class="deeper-section reveal">
+    <button class="deeper-toggle" onclick="toggleDeeper()">
+      <span class="deeper-toggle-label">Deeper Insights</span>
+      <span class="deeper-toggle-icon" id="deeperIcon">&#9660;</span>
+    </button>
+    <div class="deeper-content" id="deeperContent">
+      <div class="insight-block">
+        <div class="insight-title">Energetic Transmission</div>
+        <p class="insight-text">When you walk into a room, people feel it before you speak. Your transmission is warmth combined with danger. People feel simultaneously safe and electrified. This is because you carry both deep empathy and a refusal to pretend, and most humans have never experienced those two things at once.</p>
+        <button class="edit-btn" style="position: relative; top: 12px; right: 0; float: right;">Edit</button>
+      </div>
+      <div class="insight-block">
+        <div class="insight-title">Recognition Pattern</div>
+        <p class="insight-text">You tend to be recognized first by other misfits, people who have also been told they were "too much." They find you like a signal in the noise. The mainstream catches up later, once enough misfits have gathered that your way of being becomes its own gravity.</p>
+        <button class="edit-btn" style="position: relative; top: 12px; right: 0; float: right;">Edit</button>
+      </div>
+      <div class="insight-block">
+        <div class="insight-title">Vision In Action</div>
+        <p class="insight-text">Your vision comes alive in intimate, high-energy spaces: workshops, retreats, late-night conversations, creative collaborations. You are at your best when the container is small enough to feel dangerous and big enough to feel transformative. Think 12 people in a room, not 1200 in an arena.</p>
+        <button class="edit-btn" style="position: relative; top: 12px; right: 0; float: right;">Edit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section reveal">
+    <h2 class="cta-title">Step Into Your Essence</h2>
+    <p class="cta-subtitle">Continue your journey and discover how your Radiant Rebel energy translates into the work you were born to do.</p>
+    <button class="cta-button">
+      Continue Journey <span class="arrow">&#8594;</span>
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // Toggle deeper insights
+  function toggleDeeper() {
+    const content = document.getElementById('deeperContent');
+    const icon = document.getElementById('deeperIcon');
+    content.classList.toggle('open');
+    icon.classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

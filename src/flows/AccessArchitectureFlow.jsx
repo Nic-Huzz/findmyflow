@@ -32,7 +32,7 @@ const RECOMMENDATIONS = {
   time: 'Design a 5-minute micro-version. The cold shower challenge. The 3-breath exercise. The one-question journal.',
   friction: 'Remove prerequisites. Ship without equipment. Make it work on a phone.',
   cognitive: 'Embed defaults. "Start here" not "choose from 12 options." One path, not a menu.',
-  identity: 'This isn\'t an access problem, it\'s a culture problem. You need the Narrative Builder (Beat 3: Language, Beat 5: Cosign).',
+  identity: 'This isn\'t a growth problem, it\'s a culture problem. You need Remarkable Reach (tribal language + cosign).',
 }
 
 const PRICE_OPTIONS = [
@@ -79,7 +79,7 @@ const PRICE_HINT = { threshold: 4, text: 'What\'s the free or low-cost entry poi
 const TIME_HINT = { threshold: 4, text: 'Can you create a micro-version? The first taste, not the full meal.' }
 const FRICTION_HINT = { threshold: 4, text: 'Each additional prerequisite is a drop-off point.' }
 const COGNITIVE_HINT = { threshold: 4, text: 'Can you embed defaults? The fewer choices, the more people start.' }
-const IDENTITY_HINT = { threshold: 4, text: 'This is your culture gap, not your access gap. Go to the Narrative Builder.' }
+const IDENTITY_HINT = { threshold: 4, text: 'This is your culture gap, not your growth gap. Go to Remarkable Reach.' }
 
 const ONRAMP_EXAMPLES = [
   '"Do 3 breaths with me right now" (breathwork)',
@@ -166,13 +166,13 @@ export default function AccessArchitectureFlow() {
           if (angle.ai_rule_statement) setRuleBreak(angle.ai_rule_statement)
         }
 
-        // Scale Diagnostic context
+        // Scale Score context
         const diag = diagData?.[0]
         if (diag) {
           setGatePassed(diag.gate_passed)
         }
 
-        // Narrative Builder first step (pre-fill on-ramp)
+        // Remarkable Reach first step (pre-fill on-ramp)
         const narrative = narrativeData?.[0]
         if (narrative?.first_step_desc) {
           setNarrativeFirstStep(narrative.first_step_desc)
@@ -311,7 +311,7 @@ export default function AccessArchitectureFlow() {
         <div className="aaf-container aaf-screen">
           <div className="aaf-intro">
             <div className="aaf-intro-content">
-              <div className="aaf-badge">Access Architecture</div>
+              <div className="aaf-badge">Remarkable Growth</div>
 
               {ruleBreak && (
                 <div className="aaf-context-card">
@@ -321,17 +321,17 @@ export default function AccessArchitectureFlow() {
               )}
 
               <h1>Make it impossible <span className="aaf-gold">not to try</span></h1>
-              <p>If someone is exhausted, depleted, and in dorsal vagal, can they still access your experience? If not, you have an access gap.</p>
+              <p>Every barrier you remove is a growth lever. The easier it is to start, the faster your experience spreads.</p>
 
               {gatePassed === false && (
                 <div className="aaf-context-card" style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.06)' }}>
-                  Your Scale Diagnostic found a ceiling. Reducing barriers here can help.
+                  Your Scale Score found a ceiling. Reducing barriers here can help.
                 </div>
               )}
             </div>
 
             <button className="aaf-cta" onClick={() => { hapticLight(); setStep(STEPS.AUDIT) }}>
-              Audit my access
+              Audit my growth barriers
             </button>
           </div>
         </div>
@@ -346,7 +346,7 @@ export default function AccessArchitectureFlow() {
     return (
       <div className="aaf">
         <div className="aaf-container aaf-screen">
-          <div className="aaf-step-badge">Access Audit</div>
+          <div className="aaf-step-badge">Growth Audit</div>
           <h2 className="aaf-heading">5 barriers between someone and <span className="aaf-gold">your experience</span></h2>
 
           {/* Price */}
@@ -475,7 +475,7 @@ export default function AccessArchitectureFlow() {
     return (
       <div className="aaf">
         <div className="aaf-container aaf-screen">
-          <div className="aaf-badge">Your Access Score</div>
+          <div className="aaf-badge">Your Growth Score</div>
 
           {(projectName || ruleBreak) && (
             <div className="aaf-context-card">
@@ -487,7 +487,7 @@ export default function AccessArchitectureFlow() {
 
           <h2 className="aaf-result-headline">
             {gaps.length === 0
-              ? 'Low friction. Your access is strong.'
+              ? 'Low friction. Your growth potential is strong.'
               : `${gaps.length} barrier${gaps.length > 1 ? 's' : ''} between someone and your experience.`
             }
           </h2>
@@ -546,7 +546,7 @@ export default function AccessArchitectureFlow() {
 
           {narrativeFirstStep && (
             <div className="aaf-context-card">
-              From your Narrative Builder: "{narrativeFirstStep}"
+              From your Remarkable Reach: "{narrativeFirstStep}"
             </div>
           )}
 

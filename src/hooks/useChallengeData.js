@@ -34,19 +34,20 @@ const DEFAULT_GROUP_ID = 'aaaaaaaa-0000-0000-0000-000000000001'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
-  'play-list': 'Wahoo',
-  'playlist': 'Wahoo',
-  'wahoo': 'Wahoo',
-  'priority': 'Level',
-  'level': 'Level',
-  'quests': 'Level',         // backward compat
-  'business': 'Level',       // backward compat — Business now at /create route
-  'create': 'Level',         // backward compat — Create now at /create route
-  'groans': 'Wahoo',         // backward compat — Groans absorbed into Wahoo
+  'play-list': 'Courage',
+  'playlist': 'Courage',
+  'wahoo': 'Courage',        // backward compat
+  'courage': 'Courage',
+  'priority': 'Quests',
+  'level': 'Quests',         // backward compat
+  'quests': 'Quests',
+  'business': 'Quests',      // backward compat
+  'create': 'Quests',        // backward compat
+  'groans': 'Courage',       // backward compat
   'healing': 'Healing',
-  'tracker': 'Wahoo',        // backward compat — Tracker tab removed
+  'tracker': 'Courage',      // backward compat
   'tune': 'Tune',
-  'bonus': 'Tune',           // backward compat — Bonus archived, redirects to Tune
+  'bonus': 'Tune',           // backward compat
   'leaderboard': 'Leaderboard',
   'summary': 'GroansSummary',
   'healing-summary': 'HealingSummary'
@@ -135,7 +136,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Tune', 'Wahoo', 'Healing', 'Level']
+  const categories = ['Quests', 'Tune', 'Courage', 'Healing']
   const lockedCategories = new Set([]) // All tabs unlocked
   const BONUS_PERCENTAGE = 5 // kept for legacy tab completion bonus logic
 

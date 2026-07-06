@@ -304,7 +304,7 @@ export default function RemarkableFlow() {
         <div className="rmk-container rmk-screen">
           <div className="rmk-intro">
             <div className="rmk-intro-content">
-              <div className="rmk-badge">Blow Up Your Brand</div>
+              <div className="rmk-badge">Remarkable Results</div>
               {existingAngle ? (
                 <>
                   <h1>Welcome back. Let's <span className="rmk-gold">sharpen</span> your angle.</h1>

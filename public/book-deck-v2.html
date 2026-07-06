@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Flow — Chapter Deck</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: #08080f;
+    color: #e0e0e0;
+    overflow: hidden;
+    height: 100vh; width: 100vw;
+  }
+
+  /* ── Nav bar ── */
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px;
+    background: rgba(8,8,15,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.04); z-index: 100;
+  }
+  .nav-title { font-size: 13px; font-weight: 600; color: #888; }
+  .nav-title span { background: linear-gradient(135deg,#5e17eb,#E9A23B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+  .nav-controls { display: flex; align-items: center; gap: 8px; }
+  .nav-btn {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    color: #888; width: 34px; height: 34px; border-radius: 8px; font-size: 15px;
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+  }
+  .nav-btn:hover { background: rgba(94,23,235,0.2); color: #fff; border-color: rgba(94,23,235,0.3); }
+  .nav-btn.active { background: rgba(94,23,235,0.25); color: #a78bfa; border-color: rgba(94,23,235,0.4); }
+  .nav-counter { font-size: 12px; color: #555; min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; }
+  .section-pill { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; padding: 4px 12px; border-radius: 12px; font-weight: 600; }
+  .section-crack { background: rgba(248,113,113,0.12); color: #f87171; }
+  .section-flood { background: rgba(56,189,248,0.12); color: #38bdf8; }
+  .section-diagonal { background: rgba(233,162,59,0.12); color: #E9A23B; }
+  .progress-stat { font-size: 10px; color: #444; margin-left: 8px; }
+
+  /* ── Slides ── */
+  .slides-wrapper { position: absolute; top: 56px; left: 0; right: 0; bottom: 0; overflow: hidden; }
+  .slide {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    display: flex; opacity: 0; transform: translateX(60px);
+    transition: opacity 0.45s ease, transform 0.45s ease; pointer-events: none;
+  }
+  .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+  .slide.exit-left { opacity: 0; transform: translateX(-60px); }
+  .slide.exit-right { opacity: 0; transform: translateX(60px); }
+
+  .slide-left {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 48px 56px; max-width: 54%; overflow-y: auto;
+  }
+  .slide-right {
+    flex: 1; display: flex; flex-direction: column; justify-content: flex-start;
+    padding: 32px 40px; background: rgba(255,255,255,0.015);
+    border-left: 1px solid rgba(255,255,255,0.04); overflow-y: auto;
+  }
+
+  /* ── Chapter content (left) ── */
+  .ch-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .ch-number { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: #555; }
+  .ch-status-dot { width: 8px; height: 8px; border-radius: 50%; cursor: pointer; transition: all 0.2s; }
+  .ch-status-dot.not-started { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); }
+  .ch-status-dot.drafting { background: #E9A23B; box-shadow: 0 0 8px rgba(233,162,59,0.4); }
+  .ch-status-dot.done { background: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,0.4); }
+  .ch-title { font-size: clamp(28px,3.5vw,44px); font-weight: 800; line-height: 1.1; margin-bottom: 20px; color: #f0f0f0; }
+  .ch-epigraph { font-family: 'Crimson Pro',serif; font-size: 17px; font-style: italic; line-height: 1.6; color: #999; margin-bottom: 6px; padding-left: 18px; border-left: 2px solid rgba(94,23,235,0.3); }
+  .ch-epigraph-date { font-family: 'Inter',sans-serif; font-size: 10px; color: #444; padding-left: 18px; margin-bottom: 28px; font-style: normal; }
+  .ch-description { font-size: 15px; line-height: 1.7; color: #bbb; margin-bottom: 20px; }
+  .ch-screenshot-line {
+    font-size: 15px; font-weight: 600; color: #e0e0e0; padding: 14px 18px;
+    background: linear-gradient(135deg,rgba(94,23,235,0.08),rgba(233,162,59,0.05));
+    border: 1px solid rgba(94,23,235,0.15); border-radius: 12px; margin-bottom: 20px; line-height: 1.5;
+  }
+  .ch-image-concept { font-size: 12px; color: #555; padding: 10px 14px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.04); margin-bottom: 12px; }
+  .ch-image-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #444; margin-bottom: 4px; font-weight: 600; }
+  .pixar-copy-btn {
+    font-size: 10px; color: #555; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s; margin-top: 6px; display: inline-block;
+  }
+  .pixar-copy-btn:hover { background: rgba(94,23,235,0.15); color: #a78bfa; border-color: rgba(94,23,235,0.3); }
+  .pixar-copy-btn.copied { color: #4ade80; border-color: rgba(74,222,128,0.3); }
+
+  /* ── Right side ── */
+  .raw-section { margin-bottom: 24px; }
+  .raw-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 10px; font-weight: 600; }
+  .raw-entry {
+    font-size: 12px; line-height: 1.5; color: #999; padding: 10px 14px;
+    background: rgba(255,255,255,0.02); border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.04); margin-bottom: 6px;
+    border-left: 3px solid var(--branch-color, rgba(94,23,235,0.3));
+  }
+  .raw-entry .entry-date { font-size: 10px; color: #444; margin-bottom: 3px; font-weight: 500; }
+  .raw-entry.proto-ip { background: rgba(94,23,235,0.04); border-left-color: #5e17eb; }
+  .proto-badge { display: inline-block; font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: #a78bfa; background: rgba(94,23,235,0.15); padding: 2px 6px; border-radius: 4px; margin-bottom: 3px; font-weight: 600; }
+  .branch-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; padding: 4px 10px; border-radius: 8px; font-weight: 600; margin-bottom: 14px; }
+  .branch-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .connects-list { list-style: none; }
+  .connects-list li { font-size: 12px; color: #777; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.03); line-height: 1.4; }
+  .connects-list li strong { color: #aaa; }
+  .connect-link { color: #a78bfa; cursor: pointer; text-decoration: none; transition: color 0.2s; }
+  .connect-link:hover { color: #c4b5fd; text-decoration: underline; }
+
+  /* ── Story skeleton ── */
+  .skeleton-section { margin-bottom: 24px; }
+  .skeleton-beats { display: flex; flex-direction: column; gap: 5px; }
+  .beat {
+    display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px;
+    border-radius: 9px; background: rgba(255,255,255,0.015);
+    border: 1px solid rgba(255,255,255,0.04); transition: all 0.2s; position: relative;
+  }
+  .beat:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+  .beat-marker {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+  }
+  .beat-scene .beat-marker { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .beat-tension .beat-marker { background: rgba(248,113,113,0.15); color: #f87171; }
+  .beat-turn .beat-marker { background: rgba(233,162,59,0.15); color: #E9A23B; }
+  .beat-land .beat-marker { background: rgba(74,222,128,0.15); color: #4ade80; }
+  .beat-content { flex: 1; min-width: 0; }
+  .beat-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 1px; }
+  .beat-scene .beat-label { color: #a78bfa; }
+  .beat-tension .beat-label { color: #f87171; }
+  .beat-turn .beat-label { color: #E9A23B; }
+  .beat-land .beat-label { color: #4ade80; }
+  .beat-voice { font-size: 10px; color: #555; font-style: italic; margin-bottom: 2px; }
+  .beat-text { font-size: 12px; color: #999; line-height: 1.4; }
+  .beat-5c { font-size: 9px; color: #444; margin-top: 2px; }
+
+  /* Writing mode */
+  .beat.writing-mode { border-color: rgba(94,23,235,0.2); }
+  .beat-textarea {
+    width: 100%; min-height: 60px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px; color: #e0e0e0; font-family: 'Crimson Pro',serif; font-size: 14px;
+    line-height: 1.6; padding: 10px 12px; resize: vertical; margin-top: 6px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .beat-textarea:focus { border-color: rgba(94,23,235,0.4); }
+  .beat-textarea::placeholder { color: #444; font-style: italic; }
+  .writing-toggle {
+    font-size: 9px; color: #555; cursor: pointer; padding: 2px 6px;
+    border-radius: 4px; transition: all 0.2s; position: absolute; top: 8px; right: 8px;
+  }
+  .writing-toggle:hover { color: #a78bfa; background: rgba(94,23,235,0.1); }
+
+  .skeleton-legend {
+    display: flex; gap: 12px; margin-top: 8px; padding: 6px 10px;
+    background: rgba(255,255,255,0.015); border-radius: 8px; flex-wrap: wrap;
+  }
+  .skeleton-legend-item { display: flex; align-items: center; gap: 4px; font-size: 9px; color: #555; }
+  .skeleton-legend-dot { width: 6px; height: 6px; border-radius: 2px; }
+
+  /* ── Title slide ── */
+  .title-slide { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px; }
+  .title-slide .book-title { font-size: clamp(44px,7vw,76px); font-weight: 900; background: linear-gradient(135deg,#5e17eb 0%,#a78bfa 40%,#E9A23B 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; line-height: 1.05; }
+  .title-slide .book-subtitle { font-size: 17px; color: #666; margin-bottom: 36px; }
+  .title-slide .book-meta { font-size: 12px; color: #444; line-height: 2; }
+  .title-slide .book-concept { font-size: 16px; font-style: italic; color: #888; margin-bottom: 28px; font-family: 'Crimson Pro',serif; }
+
+  /* ── Section divider ── */
+  .section-slide { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px; }
+  .section-slide .section-number { font-size: 120px; font-weight: 900; opacity: 0.06; position: absolute; }
+  .section-slide .section-name { font-size: clamp(34px,5vw,52px); font-weight: 800; margin-bottom: 14px; color: #f0f0f0; }
+  .section-slide .section-question { font-size: 17px; font-style: italic; color: #888; font-family: 'Crimson Pro',serif; max-width: 500px; line-height: 1.6; }
+  .section-slide .section-chapters { font-size: 12px; color: #444; margin-top: 20px; }
+
+  /* ── Framework slide ── */
+  .framework-slide { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 40px; text-align: center; max-width: 900px; margin: 0 auto; }
+  .framework-slide h2 { font-size: 22px; font-weight: 800; color: #e0e0e0; margin-bottom: 28px; }
+  .fw-mapping { width: 100%; border-collapse: collapse; }
+  .fw-mapping th { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; padding: 8px 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); font-weight: 600; }
+  .fw-mapping td { font-size: 12px; color: #999; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.03); vertical-align: top; }
+  .fw-mapping td:first-child { color: #ccc; font-weight: 600; }
+  .fw-mapping .fw-voice { color: #555; font-style: italic; font-size: 11px; }
+
+  /* ── Bird's eye view ── */
+  .birds-eye {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(8,8,15,0.96); backdrop-filter: blur(20px);
+    z-index: 200; display: none; overflow-y: auto; padding: 72px 32px 40px;
+  }
+  .birds-eye.visible { display: block; }
+  .birds-eye-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px; position: sticky; top: 0; z-index: 1;
+    background: rgba(8,8,15,0.95); padding: 8px 0;
+  }
+  .birds-eye-header h2 { font-size: 18px; font-weight: 700; color: #e0e0e0; }
+  .birds-eye-stats { display: flex; gap: 16px; }
+  .birds-eye-stat { font-size: 11px; color: #666; }
+  .birds-eye-stat strong { color: #aaa; }
+  .be-close { background: none; border: none; color: #888; font-size: 22px; cursor: pointer; }
+  .be-section-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #555;
+    margin: 24px 0 12px; font-weight: 600; padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .be-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .be-card {
+    padding: 10px 14px; background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05); border-radius: 10px;
+    cursor: pointer; transition: all 0.2s; position: relative;
+  }
+  .be-card:hover { background: rgba(94,23,235,0.08); border-color: rgba(94,23,235,0.2); transform: translateY(-1px); }
+  .be-card-num { font-size: 10px; color: #555; font-weight: 500; }
+  .be-card-title { font-size: 12px; color: #ccc; font-weight: 600; margin-top: 2px; line-height: 1.3; }
+  .be-card-status {
+    position: absolute; top: 10px; right: 10px; width: 7px; height: 7px; border-radius: 50%;
+  }
+  .be-card-status.not-started { background: rgba(255,255,255,0.08); }
+  .be-card-status.drafting { background: #E9A23B; }
+  .be-card-status.done { background: #4ade80; }
+  .be-card-branch { font-size: 9px; color: #555; margin-top: 4px; }
+
+  /* ── Progress bar ── */
+  .progress-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.03); z-index: 100; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg,#5e17eb,#E9A23B); transition: width 0.4s ease; }
+
+  /* ── Key hint ── */
+  .key-hint { position: fixed; bottom: 12px; right: 24px; font-size: 10px; color: #333; z-index: 100; }
+  .key-hint kbd { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); padding: 2px 5px; border-radius: 4px; font-family: 'Inter',sans-serif; font-size: 10px; }
+
+  /* ── Export overlay ── */
+  .export-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(8,8,15,0.96); z-index: 300; display: none;
+    padding: 60px; overflow-y: auto;
+  }
+  .export-overlay.visible { display: block; }
+  .export-content { max-width: 700px; margin: 0 auto; }
+  .export-content h2 { font-size: 20px; font-weight: 700; color: #e0e0e0; margin-bottom: 16px; }
+  .export-textarea {
+    width: 100%; min-height: 400px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; color: #ccc; font-family: 'Crimson Pro',serif; font-size: 14px; line-height: 1.7;
+    padding: 20px; resize: vertical;
+  }
+  .export-actions { display: flex; gap: 12px; margin-top: 16px; }
+  .export-btn {
+    padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .export-btn-primary { background: linear-gradient(135deg,#5e17eb,#7c3aed); border: none; color: #fff; }
+  .export-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(94,23,235,0.3); }
+  .export-btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #aaa; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <div class="nav-title"><span>Find Your Flow</span> — Chapter Deck</div>
+  <div class="nav-controls">
+    <button class="nav-btn" onclick="toggleBirdsEye()" title="Bird's eye view">▦</button>
+    <button class="nav-btn" id="writingModeBtn" onclick="toggleWritingMode()" title="Writing mode">✎</button>
+    <button class="nav-btn" onclick="exportMarkdown()" title="Export to markdown">↓</button>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,0.06);margin:0 4px"></div>
+    <button class="nav-btn" onclick="prevSlide()" title="Previous (←)">←</button>
+    <span class="nav-counter" id="counter">1 / 80</span>
+    <button class="nav-btn" onclick="nextSlide()" title="Next (→)">→</button>
+    <span class="section-pill section-crack" id="sectionPill">THE CRACK</span>
+    <span class="progress-stat" id="progressStat"></span>
+  </div>
+</div>
+
+<div class="slides-wrapper" id="slidesWrapper"></div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="key-hint"><kbd>←</kbd><kbd>→</kbd> nav &nbsp;<kbd>B</kbd> bird's eye &nbsp;<kbd>W</kbd> write &nbsp;<kbd>1-3</kbd> status</div>
+
+<div class="birds-eye" id="birdsEye">
+  <div class="birds-eye-header">
+    <h2>All Chapters</h2>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="birds-eye-stats" id="beStats"></div>
+      <button class="be-close" onclick="toggleBirdsEye()">×</button>
+    </div>
+  </div>
+  <div id="beContent"></div>
+</div>
+
+<div class="export-overlay" id="exportOverlay">
+  <div class="export-content">
+    <h2>Export — Written Chapters</h2>
+    <textarea class="export-textarea" id="exportText" readonly></textarea>
+    <div class="export-actions">
+      <button class="export-btn export-btn-primary" onclick="copyExport()">Copy to clipboard</button>
+      <button class="export-btn export-btn-secondary" onclick="closeExport()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="book-deck-data.js"></script>
+<script>
+// ── State ──
+let current = 0;
+let writingMode = false;
+const total = SLIDES.length;
+const PIXAR_STYLE = `Pixar 3D cinematic animation style — the EXACT rendering quality of Pixar's Inside Out 2, Soul, and Coco. Smooth subsurface-scattering skin, large expressive eyes with visible iris detail and specular highlights, slightly exaggerated proportions, volumetric atmospheric lighting with visible light rays, depth of field with subtle bokeh.`;
+
+// Status: stored in localStorage
+function getStatus(chNum) { return localStorage.getItem(`fyf-status-${chNum}`) || 'not-started'; }
+function setStatus(chNum, status) { localStorage.setItem(`fyf-status-${chNum}`, status); }
+function cycleStatus(chNum) {
+  const states = ['not-started','drafting','done'];
+  const cur = states.indexOf(getStatus(chNum));
+  const next = states[(cur+1)%3];
+  setStatus(chNum, next);
+  return next;
+}
+
+// Writing: stored in localStorage
+function getDraft(chNum, beat) { return localStorage.getItem(`fyf-draft-${chNum}-${beat}`) || ''; }
+function saveDraft(chNum, beat, text) { localStorage.setItem(`fyf-draft-${chNum}-${beat}`, text); }
+
+// ── Slide index map (chapter number → slide index) ──
+const chapterSlideMap = {};
+SLIDES.forEach((s,i) => { if (s.type === 'chapter') chapterSlideMap[s.number] = i; });
+
+// ── Render slides ──
+const wrapper = document.getElementById('slidesWrapper');
+
+SLIDES.forEach((slide, i) => {
+  const el = document.createElement('div');
+  el.className = `slide ${i === 0 ? 'active' : ''}`;
+  el.dataset.index = i;
+  el.dataset.section = slide.section;
+
+  if (slide.type === 'title') {
+    el.innerHTML = `<div class="title-slide">
+      <div class="book-title">Find Your Flow</div>
+      <div class="book-concept">"If you live in Vibe Rise, you will find your flow."</div>
+      <div class="book-subtitle">Chapter Writing Deck — 80 chapters, one idea per page</div>
+      <div class="book-meta">
+        Original IP: Huzz Hurrell<br>Format: Derek Sivers meets picture book<br>
+        Voice: 1am Huzz explaining to a friend<br>196 thought entries (2022-2025) as epigraphs<br><br>
+        <span style="color:#555">Each chapter: 4-beat skeleton (Scene → Tension → Turn → Land)</span><br>
+        <span style="color:#555">→ Arrow keys to navigate · B for bird's eye · W for writing mode</span>
+      </div></div>`;
+  } else if (slide.type === 'framework') {
+    el.innerHTML = `<div class="framework-slide">
+      <h2>Story Skeleton — Quick Reference</h2>
+      <table class="fw-mapping"><thead><tr>
+        <th>4 Beats</th><th>Huzz Voice</th><th>5 C's</th><th>3 Principles</th><th>Energy</th>
+      </tr></thead><tbody>
+        <tr><td><span style="color:#a78bfa">S</span> Scene</td><td class="fw-voice">"So there I was..."</td><td>Context</td><td>Engage the Audience</td><td>Ground me</td></tr>
+        <tr><td><span style="color:#f87171">T</span> Tension</td><td class="fw-voice">"And the thing is..."</td><td>Catalyst + Complication</td><td>Show the Challenge</td><td>Pull me in</td></tr>
+        <tr><td><span style="color:#E9A23B">↻</span> Turn</td><td class="fw-voice">"But here's what I realised..."</td><td>Change</td><td>Show the Change</td><td>Flip it</td></tr>
+        <tr><td><span style="color:#4ade80">.</span> Land</td><td class="fw-voice">"That's the whole thing."</td><td>Consequence</td><td>Show the Change</td><td>Brick it</td></tr>
+      </tbody></table>
+      <div style="margin-top:28px;font-size:12px;color:#555;max-width:600px;line-height:1.7;">
+        <strong style="color:#888;">Punchy chapters (1 page):</strong> Catalyst + Complication compress into one Tension beat.<br>
+        <strong style="color:#888;">Longer chapters (3-5 pages):</strong> Expand into all 5 C's.<br>
+        <strong style="color:#888;">The test:</strong> Read aloud. Sounds like 1am Huzz? Keep. Sounds like an author? Rewrite.
+      </div></div>`;
+  } else if (slide.type === 'section') {
+    const num = slide.name === 'The Crack' ? '1' : slide.name === 'The Flood' ? '2' : '3';
+    el.innerHTML = `<div class="section-slide">
+      <div class="section-number">${num}</div>
+      <div class="section-name">${slide.name}</div>
+      <div class="section-question">${slide.question}</div>
+      <div class="section-chapters">${slide.chapters}</div></div>`;
+  } else if (slide.type === 'chapter') {
+    const status = getStatus(slide.number);
+    const branchTag = slide.branch === 'FLAGGED'
+      ? `<div class="branch-tag" style="background:rgba(255,255,255,0.04);color:#888"><div class="branch-dot" style="background:#666"></div>FLAGGED (${slide.confidence}%)</div>`
+      : `<div class="branch-tag" style="background:${slide.branchColor}12;color:${slide.branchColor}"><div class="branch-dot" style="background:${slide.branchColor}"></div>${slide.branch} (${slide.confidence}%)</div>`;
+
+    el.innerHTML = `
+      <div class="slide-left">
+        <div class="ch-header">
+          <div class="ch-number">Chapter ${slide.number}</div>
+          <div class="ch-status-dot ${status}" data-ch="${slide.number}" onclick="handleStatusClick(this)" title="Click to change status: not started → drafting → done"></div>
+        </div>
+        <div class="ch-title">${slide.title}</div>
+        <div class="ch-epigraph">${slide.epigraph}</div>
+        <div class="ch-epigraph-date">— ${slide.epigraphDate}</div>
+        <div class="ch-description">${slide.description.replace(/\n\n/g, '<br><br>')}</div>
+        ${slide.screenshotLine ? `<div class="ch-screenshot-line">"${slide.screenshotLine}"</div>` : ''}
+        <div class="ch-image-concept">
+          <div class="ch-image-label">Pixar Image Concept</div>
+          ${slide.imageConcept}
+          <button class="pixar-copy-btn" data-ch-num="${slide.number}" onclick="copyPixarForChapter(this)">Copy full prompt</button>
+        </div>
+      </div>
+      <div class="slide-right" style="--branch-color: ${slide.branchColor}">
+        ${branchTag}
+        ${slide.beats ? renderBeats(slide) : ''}
+        <div class="raw-section">
+          <div class="raw-label">Raw Material (Thought Entries)</div>
+          ${slide.rawEntries.map(e => `
+            <div class="raw-entry ${e.protoIp ? 'proto-ip' : ''}">
+              ${e.protoIp ? `<div class="proto-badge">Proto-IP: ${e.protoIp}</div>` : ''}
+              <div class="entry-date">${e.date}</div>${e.text}
+            </div>`).join('')}
+        </div>
+        <div class="raw-section">
+          <div class="raw-label">Connects To</div>
+          <ul class="connects-list">
+            ${slide.connects.map(c => {
+              const targetNum = c.num || c.ch.replace('Ch ','').trim();
+              const targetIdx = chapterSlideMap[targetNum];
+              return targetIdx !== undefined
+                ? `<li><strong><a class="connect-link" onclick="goToSlide(${targetIdx})">${c.ch}</a>:</strong> ${c.text}</li>`
+                : `<li><strong>${c.ch}:</strong> ${c.text}</li>`;
+            }).join('')}
+          </ul>
+        </div>
+      </div>`;
+  }
+  wrapper.appendChild(el);
+});
+
+function renderBeats(slide) {
+  const beats = [
+    { key: 'scene', cls: 'beat-scene', marker: 'S', label: 'Scene', voice: '"So there I was..."', text: slide.beats.scene, fiveC: slide.beats.fiveC?.context ? `5C Context: ${slide.beats.fiveC.context}` : '' },
+    { key: 'tension', cls: 'beat-tension', marker: 'T', label: 'Tension', voice: '"And the thing is..."', text: slide.beats.tension, fiveC: slide.beats.fiveC?.complication ? `5C Catalyst + Complication: ${slide.beats.fiveC.catalyst||''} → ${slide.beats.fiveC.complication}` : '' },
+    { key: 'turn', cls: 'beat-turn', marker: '↻', label: 'Turn', voice: '"But here\'s what I realised..."', text: slide.beats.turn, fiveC: slide.beats.fiveC?.change ? `5C Change: ${slide.beats.fiveC.change}` : '' },
+    { key: 'land', cls: 'beat-land', marker: '.', label: 'Land', voice: '"That\'s the whole thing."', text: slide.beats.land, fiveC: slide.beats.fiveC?.consequence ? `5C Consequence: ${slide.beats.fiveC.consequence}` : '' },
+  ];
+  return `<div class="skeleton-section">
+    <div class="raw-label">Story Skeleton</div>
+    <div class="skeleton-beats">
+      ${beats.map(b => {
+        const draft = getDraft(slide.number, b.key);
+        return `<div class="beat ${b.cls} ${writingMode ? 'writing-mode' : ''}" data-ch="${slide.number}" data-beat="${b.key}">
+          <div class="beat-marker">${b.marker}</div>
+          <div class="beat-content">
+            <div class="beat-label">${b.label}</div>
+            <div class="beat-voice">${b.voice}</div>
+            <div class="beat-text">${b.text}</div>
+            ${b.fiveC ? `<div class="beat-5c">${b.fiveC}</div>` : ''}
+            <div class="beat-writing" style="display:${writingMode?'block':'none'}">
+              <textarea class="beat-textarea" placeholder="Write your ${b.label.toLowerCase()} here..." oninput="saveDraft('${slide.number}','${b.key}',this.value)">${draft}</textarea>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="skeleton-legend">
+      <div class="skeleton-legend-item"><div class="skeleton-legend-dot" style="background:#a78bfa"></div>Engage (Context)</div>
+      <div class="skeleton-legend-item"><div class="skeleton-legend-dot" style="background:#f87171"></div>Challenge (Catalyst + Complication)</div>
+      <div class="skeleton-legend-item"><div class="skeleton-legend-dot" style="background:#E9A23B"></div>Change</div>
+      <div class="skeleton-legend-item"><div class="skeleton-legend-dot" style="background:#4ade80"></div>Consequence (Brick)</div>
+    </div>
+  </div>`;
+}
+
+// ── Navigation ──
+function updateUI() {
+  document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+  document.getElementById('progressFill').style.width = `${((current+1)/total)*100}%`;
+  const section = SLIDES[current].section;
+  const pill = document.getElementById('sectionPill');
+  pill.className = 'section-pill';
+  if (section === 'crack') { pill.classList.add('section-crack'); pill.textContent = 'THE CRACK'; pill.style.display = ''; }
+  else if (section === 'flood') { pill.classList.add('section-flood'); pill.textContent = 'THE FLOOD'; pill.style.display = ''; }
+  else if (section === 'diagonal') { pill.classList.add('section-diagonal'); pill.textContent = 'THE DIAGONAL'; pill.style.display = ''; }
+  else { pill.style.display = 'none'; }
+  updateProgressStat();
+}
+
+function goToSlide(n) {
+  if (n < 0 || n >= total || n === current) return;
+  const direction = n > current ? 'left' : 'right';
+  const prev = document.querySelector('.slide.active');
+  const next = wrapper.children[n];
+  if (prev) { prev.classList.remove('active'); prev.classList.add(direction === 'left' ? 'exit-left' : 'exit-right'); setTimeout(() => { prev.classList.remove('exit-left','exit-right'); }, 500); }
+  next.classList.add('active');
+  // Reset scroll on right panel
+  const rightPanel = next.querySelector('.slide-right');
+  if (rightPanel) rightPanel.scrollTop = 0;
+  current = n;
+  updateUI();
+}
+function nextSlide() { goToSlide(current + 1); }
+function prevSlide() { goToSlide(current - 1); }
+
+// ── Status ──
+function handleStatusClick(dot) {
+  const ch = dot.dataset.ch;
+  const newStatus = cycleStatus(ch);
+  dot.className = `ch-status-dot ${newStatus}`;
+  updateProgressStat();
+  updateBirdsEyeStatus();
+}
+function updateProgressStat() {
+  let done = 0, drafting = 0, total = 0;
+  SLIDES.forEach(s => { if (s.type === 'chapter') { total++; const st = getStatus(s.number); if (st==='done') done++; if (st==='drafting') drafting++; }});
+  document.getElementById('progressStat').textContent = `${done}/${total} done · ${drafting} drafting`;
+}
+
+// ── Bird's eye ──
+function toggleBirdsEye() {
+  const be = document.getElementById('birdsEye');
+  be.classList.toggle('visible');
+  if (be.classList.contains('visible')) renderBirdsEye();
+}
+function renderBirdsEye() {
+  const content = document.getElementById('beContent');
+  let html = '';
+  let currentSection = '';
+  const sectionNames = { crack: 'Section 1: The Crack', flood: 'Section 2: The Flood', diagonal: 'Section 3: The Diagonal' };
+  let sectionCards = '';
+
+  SLIDES.forEach((s, i) => {
+    if (s.type === 'chapter') {
+      if (s.section !== currentSection) {
+        if (sectionCards) html += `<div class="be-grid">${sectionCards}</div>`;
+        sectionCards = '';
+        currentSection = s.section;
+        html += `<div class="be-section-label">${sectionNames[s.section] || s.section}</div>`;
+      }
+      const status = getStatus(s.number);
+      sectionCards += `<div class="be-card" onclick="goToSlide(${i});toggleBirdsEye()">
+        <div class="be-card-status ${status}"></div>
+        <div class="be-card-num">Ch ${s.number}</div>
+        <div class="be-card-title">${s.title}</div>
+        <div class="be-card-branch" style="color:${s.branchColor}">${s.branch === 'FLAGGED' ? '⚑ Flagged' : s.branch}</div>
+      </div>`;
+    }
+  });
+  if (sectionCards) html += `<div class="be-grid">${sectionCards}</div>`;
+
+  content.innerHTML = html;
+  updateBirdsEyeStats();
+}
+function updateBirdsEyeStats() {
+  let done=0,drafting=0,notStarted=0;
+  SLIDES.forEach(s => { if (s.type==='chapter') { const st=getStatus(s.number); if(st==='done')done++; else if(st==='drafting')drafting++; else notStarted++; }});
+  document.getElementById('beStats').innerHTML = `
+    <div class="birds-eye-stat"><strong>${done}</strong> done</div>
+    <div class="birds-eye-stat"><strong>${drafting}</strong> drafting</div>
+    <div class="birds-eye-stat"><strong>${notStarted}</strong> not started</div>`;
+}
+function updateBirdsEyeStatus() {
+  document.querySelectorAll('.be-card-status').forEach(dot => {
+    const card = dot.closest('.be-card');
+    if (!card) return;
+    const numText = card.querySelector('.be-card-num')?.textContent;
+    if (!numText) return;
+    const num = numText.replace('Ch ','');
+    dot.className = `be-card-status ${getStatus(num)}`;
+  });
+  updateBirdsEyeStats();
+}
+
+// ── Writing mode ──
+function toggleWritingMode() {
+  writingMode = !writingMode;
+  document.getElementById('writingModeBtn').classList.toggle('active', writingMode);
+  document.querySelectorAll('.beat-writing').forEach(el => { el.style.display = writingMode ? 'block' : 'none'; });
+  document.querySelectorAll('.beat').forEach(el => { el.classList.toggle('writing-mode', writingMode); });
+}
+
+// ── Pixar prompt copy ──
+function copyPixarForChapter(btn) {
+  const chNum = btn.dataset.chNum;
+  const slide = SLIDES.find(s => s.type === 'chapter' && s.number === chNum);
+  if (!slide) return;
+  const prompt = `${PIXAR_STYLE}\n\nScene: ${slide.imageConcept}\n\nPurple (#5e17eb) to Gold (#E9A23B) brand gradient in lighting or environment. No text or words anywhere in the image.`;
+  navigator.clipboard.writeText(prompt).then(() => {
+    btn.textContent = 'Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy full prompt'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── Export ──
+function exportMarkdown() {
+  let md = '# Find Your Flow — Draft Export\n\n';
+  SLIDES.forEach(s => {
+    if (s.type !== 'chapter') return;
+    const beats = ['scene','tension','turn','land'];
+    const hasDraft = beats.some(b => getDraft(s.number, b));
+    if (!hasDraft) return;
+    md += `## Chapter ${s.number}: ${s.title}\n\n`;
+    md += `> *${s.epigraph}*\n> — ${s.epigraphDate}\n\n`;
+    beats.forEach(b => {
+      const draft = getDraft(s.number, b);
+      if (draft) md += `**${b.charAt(0).toUpperCase()+b.slice(1)}:** ${draft}\n\n`;
+    });
+    md += '---\n\n';
+  });
+  if (md.split('##').length <= 1) { md += '*No chapters drafted yet. Use Writing Mode (W) to start writing.*\n'; }
+  document.getElementById('exportText').value = md;
+  document.getElementById('exportOverlay').classList.add('visible');
+}
+function copyExport() {
+  const textarea = document.getElementById('exportText');
+  navigator.clipboard.writeText(textarea.value);
+}
+function closeExport() { document.getElementById('exportOverlay').classList.remove('visible'); }
+
+// ── Keyboard ──
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'TEXTAREA') return; // don't capture when typing
+  const be = document.getElementById('birdsEye');
+  const exp = document.getElementById('exportOverlay');
+  if (e.key === 'Escape') {
+    if (exp.classList.contains('visible')) { closeExport(); return; }
+    if (be.classList.contains('visible')) { toggleBirdsEye(); return; }
+  }
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'b' || e.key === 'B') toggleBirdsEye();
+  if (e.key === 'w' || e.key === 'W') toggleWritingMode();
+  // Status shortcuts: 1=not started, 2=drafting, 3=done
+  if (['1','2','3'].includes(e.key) && SLIDES[current]?.type === 'chapter') {
+    const ch = SLIDES[current].number;
+    const states = {1:'not-started',2:'drafting',3:'done'};
+    setStatus(ch, states[e.key]);
+    const dot = document.querySelector(`.slide.active .ch-status-dot[data-ch="${ch}"]`);
+    if (dot) dot.className = `ch-status-dot ${states[e.key]}`;
+    updateProgressStat();
+  }
+});
+
+// ── Init ──
+updateUI();
+</script>
+</body>
+</html>

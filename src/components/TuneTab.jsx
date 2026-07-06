@@ -69,7 +69,7 @@ const EXPERIENCE_OUTCOMES = [
   { id: 'bored', label: 'Bored', emoji: '😶' },
   { id: 'stressful', label: 'Stressful', emoji: '😬' },
   { id: 'fun', label: 'Fun', emoji: '😊' },
-  { id: 'wahoo', label: 'Wahoo', emoji: '⚡' },
+  { id: 'wahoo', label: 'Courage', emoji: '⚡' },
 ]
 
 const WAHOO_CATEGORIES = [

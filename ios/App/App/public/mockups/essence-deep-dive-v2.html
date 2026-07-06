@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essence Deep Dive - Card Journal</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #F5F0E8;
+    color: #2D2420;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    background: #F5F0E8;
+  }
+
+  /* Paper texture overlay */
+  .app-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* --- HEADER --- */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(245, 240, 232, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .header .back-btn {
+    background: none;
+    border: none;
+    color: #5e17eb;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: inherit;
+    font-weight: 500;
+  }
+
+  .header .title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2D2420;
+  }
+
+  .header .share-btn {
+    background: none;
+    border: none;
+    color: #5e17eb;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  /* --- CONTENT WRAPPER --- */
+  .content {
+    padding: 20px 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* --- AVATAR CARD --- */
+  .avatar-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 32px 24px 28px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .avatar-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(135deg, rgba(94, 23, 235, 0.06) 0%, rgba(233, 162, 59, 0.06) 100%);
+    border-radius: 24px 24px 0 0;
+  }
+
+  .avatar-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 4px 16px rgba(94, 23, 235, 0.2);
+  }
+
+  .edit-avatar {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(94, 23, 235, 0.08);
+    border: none;
+    color: #5e17eb;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .avatar-name {
+    font-size: 28px;
+    font-weight: 800;
+    color: #2D2420;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-tagline {
+    font-size: 15px;
+    color: #8A7B6B;
+    line-height: 1.5;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  /* --- HANDWRITTEN ACCENT --- */
+  .handwritten {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-style: italic;
+    color: #5e17eb;
+  }
+
+  /* --- JOURNAL CARD --- */
+  .journal-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 14px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 16px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+
+  .journal-card::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 20px 0 0 20px;
+  }
+
+  .journal-card.purple::after {
+    background: linear-gradient(to bottom, #5e17eb, #8B5CF6);
+  }
+
+  .journal-card.gold::after {
+    background: linear-gradient(to bottom, #E9A23B, #F0C060);
+  }
+
+  .journal-card.warm::after {
+    background: linear-gradient(to bottom, #D97706, #B45309);
+  }
+
+  .journal-card.rose::after {
+    background: linear-gradient(to bottom, #E11D48, #F43F5E);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .card-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-label-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .card-label-icon.purple {
+    background: rgba(94, 23, 235, 0.1);
+  }
+
+  .card-label-icon.gold {
+    background: rgba(233, 162, 59, 0.15);
+  }
+
+  .card-label-icon.warm {
+    background: rgba(217, 119, 6, 0.1);
+  }
+
+  .card-label-icon.rose {
+    background: rgba(225, 29, 72, 0.1);
+  }
+
+  .card-label-text {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #8A7B6B;
+  }
+
+  .card-edit-btn {
+    background: none;
+    border: 1px solid #E8E0D4;
+    color: #8A7B6B;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .card-edit-btn:hover {
+    border-color: #5e17eb;
+    color: #5e17eb;
+    background: rgba(94, 23, 235, 0.04);
+  }
+
+  .card-body {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #4A3F35;
+  }
+
+  .card-body strong {
+    color: #2D2420;
+    font-weight: 700;
+  }
+
+  /* --- QUOTE CARD --- */
+  .quote-card {
+    background: linear-gradient(135deg, rgba(94, 23, 235, 0.04) 0%, rgba(233, 162, 59, 0.04) 100%);
+    border: 1px solid rgba(94, 23, 235, 0.08);
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-bottom: 14px;
+    text-align: center;
+    position: relative;
+  }
+
+  .quote-card .quote-mark {
+    font-family: Georgia, serif;
+    font-size: 48px;
+    color: rgba(94, 23, 235, 0.2);
+    line-height: 0.5;
+    margin-bottom: 16px;
+  }
+
+  .quote-card .quote-text {
+    font-size: 18px;
+    line-height: 1.65;
+    color: #3D3028;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+
+  .quote-card .card-edit-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
+  /* --- ORIGIN GRID --- */
+  .origin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .origin-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 16px rgba(0, 0, 0, 0.05);
+  }
+
+  .origin-card .origin-emoji {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .origin-card .origin-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #B8A898;
+    margin-bottom: 8px;
+  }
+
+  .origin-card .origin-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2D2420;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .origin-card .origin-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #8A7B6B;
+  }
+
+  .origin-card .card-edit-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 3px 10px;
+    font-size: 10px;
+  }
+
+  /* --- HEROES SECTION --- */
+  .heroes-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 16px rgba(0, 0, 0, 0.05);
+  }
+
+  .heroes-card .card-label {
+    margin-bottom: 16px;
+  }
+
+  .heroes-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .heroes-chip {
+    padding: 8px 16px;
+    background: #FAF7F2;
+    border: 1px solid #E8E0D4;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4A3F35;
+    transition: all 0.2s;
+  }
+
+  .heroes-chip:hover {
+    background: rgba(94, 23, 235, 0.06);
+    border-color: rgba(94, 23, 235, 0.2);
+    color: #5e17eb;
+  }
+
+  /* --- DEEPER INSIGHTS --- */
+  .deeper-section {
+    background: #fff;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 16px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+
+  .deeper-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    font-family: inherit;
+  }
+
+  .deeper-toggle .toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .deeper-toggle .toggle-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(94, 23, 235, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .deeper-toggle .toggle-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #8A7B6B;
+  }
+
+  .deeper-toggle .toggle-arrow {
+    color: #B8A898;
+    font-size: 16px;
+    transition: transform 0.3s;
+  }
+
+  .deeper-toggle .toggle-arrow.open {
+    transform: rotate(180deg);
+  }
+
+  .deeper-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+  }
+
+  .deeper-content.open {
+    max-height: 2000px;
+  }
+
+  .insight-entry {
+    padding: 20px 24px;
+    border-top: 1px solid #F0EBE3;
+    position: relative;
+  }
+
+  .insight-entry-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #5e17eb;
+    margin-bottom: 8px;
+  }
+
+  .insight-entry-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #4A3F35;
+  }
+
+  .insight-entry .card-edit-btn {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+  }
+
+  /* --- WASHI TAPE DECORATION --- */
+  .washi-tape {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #5e17eb, #8B5CF6, #E9A23B, #F0C060);
+    margin: 24px 0;
+    opacity: 0.3;
+  }
+
+  /* --- CTA SECTION --- */
+  .cta-card {
+    background: linear-gradient(135deg, #5e17eb 0%, #7C3AED 50%, #E9A23B 100%);
+    border-radius: 24px;
+    padding: 36px 28px;
+    text-align: center;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(94, 23, 235, 0.2);
+  }
+
+  .cta-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .cta-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .cta-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 24px;
+    line-height: 1.5;
+    position: relative;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 36px;
+    background: #fff;
+    color: #5e17eb;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: inherit;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  /* --- BOTTOM SAFE AREA --- */
+  .bottom-spacer {
+    height: env(safe-area-inset-bottom, 20px);
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <button class="back-btn">&#8592; Back</button>
+    <span class="title">Your Essence</span>
+    <button class="share-btn">&#8599;</button>
+  </div>
+
+  <div class="content">
+
+    <!-- AVATAR CARD -->
+    <div class="avatar-card">
+      <button class="edit-avatar">&#9998;</button>
+      <div class="avatar-circle">&#10024;</div>
+      <h1 class="avatar-name">Radiant Rebel</h1>
+      <p class="avatar-tagline">The one who lights the room on fire just by walking in.</p>
+    </div>
+
+    <!-- ESSENCE QUOTE -->
+    <div class="quote-card">
+      <button class="card-edit-btn">Edit</button>
+      <div class="quote-mark">&ldquo;</div>
+      <p class="quote-text">You were never meant to fit in. Your light is the thing that disrupts the room, and that disruption is the gift.</p>
+    </div>
+
+    <!-- SUPERPOWER -->
+    <div class="journal-card purple">
+      <div class="card-header">
+        <div class="card-label">
+          <div class="card-label-icon purple">&#9889;</div>
+          <span class="card-label-text">Superpower</span>
+        </div>
+        <button class="card-edit-btn">Edit</button>
+      </div>
+      <div class="card-body">
+        <strong>Magnetic Authenticity</strong> &mdash; You have an almost supernatural ability to walk into any room and make people feel permission to be themselves. Your energy is contagious because it comes from a place of total self-acceptance that most people spend their whole lives searching for.
+      </div>
+    </div>
+
+    <!-- VISION -->
+    <div class="journal-card gold">
+      <div class="card-header">
+        <div class="card-label">
+          <div class="card-label-icon gold">&#127775;</div>
+          <span class="card-label-text">Vision</span>
+        </div>
+        <button class="card-edit-btn">Edit</button>
+      </div>
+      <div class="card-body">
+        A world where the misfits, the ones who never quite belonged, realize they were never broken. They were the ones brave enough to refuse the costume everyone else was wearing. You want to build spaces where that refusal is celebrated, not punished.
+      </div>
+    </div>
+
+    <div class="washi-tape"></div>
+
+    <!-- NORTH STAR -->
+    <div class="journal-card warm">
+      <div class="card-header">
+        <div class="card-label">
+          <div class="card-label-icon warm">&#11088;</div>
+          <span class="card-label-text">North Star</span>
+        </div>
+        <button class="card-edit-btn">Edit</button>
+      </div>
+      <div class="card-body">
+        <strong>Full permission to be alive.</strong> Not performative aliveness, not Instagram aliveness. The kind where you wake up and your first thought is curiosity, not dread. Where your work feels like play and your play feels like purpose.
+      </div>
+    </div>
+
+    <!-- ORIGIN STORY -->
+    <div class="origin-grid">
+      <div class="origin-card">
+        <button class="card-edit-btn">Edit</button>
+        <div class="origin-emoji">&#128118;</div>
+        <div class="origin-label">Inner Child</div>
+        <div class="origin-title">To be seen without performing</div>
+        <p class="origin-text">All you ever wanted was for someone to notice the real you, not the version you constructed to survive. The child who made up stories, who danced alone in their room.</p>
+      </div>
+      <div class="origin-card">
+        <button class="card-edit-btn">Edit</button>
+        <div class="origin-emoji">&#128148;</div>
+        <div class="origin-label">Essence Wound</div>
+        <div class="origin-title">Told your fire was too much</div>
+        <p class="origin-text">You learned early that your natural intensity made people uncomfortable. So you turned down the volume, became skilled at reading rooms and adjusting.</p>
+      </div>
+    </div>
+
+    <!-- HEROES -->
+    <div class="heroes-card">
+      <div class="card-label">
+        <div class="card-label-icon purple">&#128101;</div>
+        <span class="card-label-text">Heroes Like You</span>
+      </div>
+      <div class="heroes-chips">
+        <div class="heroes-chip">Brene Brown</div>
+        <div class="heroes-chip">Russell Brand</div>
+        <div class="heroes-chip">Lady Gaga</div>
+        <div class="heroes-chip">Robin Williams</div>
+        <div class="heroes-chip">Frida Kahlo</div>
+      </div>
+    </div>
+
+    <!-- DEEPER INSIGHTS -->
+    <div class="deeper-section">
+      <button class="deeper-toggle" onclick="toggleDeeper()">
+        <div class="toggle-left">
+          <div class="toggle-icon">&#128270;</div>
+          <span class="toggle-label">Deeper Insights</span>
+        </div>
+        <span class="toggle-arrow" id="toggleArrow">&#9660;</span>
+      </button>
+      <div class="deeper-content" id="deeperContent">
+        <div class="insight-entry">
+          <button class="card-edit-btn">Edit</button>
+          <div class="insight-entry-title">Energetic Transmission</div>
+          <p class="insight-entry-text">When you walk into a room, people feel it before you speak. Your transmission is warmth combined with danger. People feel simultaneously safe and electrified. This is because you carry both deep empathy and a refusal to pretend, and most humans have never experienced those two things at once.</p>
+        </div>
+        <div class="insight-entry">
+          <button class="card-edit-btn">Edit</button>
+          <div class="insight-entry-title">Recognition Pattern</div>
+          <p class="insight-entry-text">You tend to be recognized first by other misfits, people who have also been told they were "too much." They find you like a signal in the noise. The mainstream catches up later, once enough misfits have gathered that your way of being becomes its own gravity.</p>
+        </div>
+        <div class="insight-entry">
+          <button class="card-edit-btn">Edit</button>
+          <div class="insight-entry-title">Vision In Action</div>
+          <p class="insight-entry-text">Your vision comes alive in intimate, high-energy spaces: workshops, retreats, late-night conversations, creative collaborations. You are at your best when the container is small enough to feel dangerous and big enough to feel transformative.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="washi-tape"></div>
+
+    <!-- CTA -->
+    <div class="cta-card">
+      <h2 class="cta-title">Step Into Your Essence</h2>
+      <p class="cta-subtitle">Continue your journey and discover how your Radiant Rebel energy translates into the work you were born to do.</p>
+      <button class="cta-button">
+        Continue Journey &#8594;
+      </button>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+
+</div>
+
+<script>
+  function toggleDeeper() {
+    const content = document.getElementById('deeperContent');
+    const arrow = document.getElementById('toggleArrow');
+    content.classList.toggle('open');
+    arrow.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

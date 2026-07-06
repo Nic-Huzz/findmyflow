@@ -1,0 +1,228 @@
+/* ── QuestBoardCard ── */
+
+.qbc {
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+}
+
+.qbc-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  border-radius: 14px;
+  background: rgba(94, 23, 235, 0.06);
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  transition: background 0.15s;
+}
+
+.qbc-header:active { background: rgba(94, 23, 235, 0.1); }
+
+.qbc-state-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.qbc-info { flex: 1; min-width: 0; }
+
+.qbc-label {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qbc-meta {
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.qbc-state-name { font-weight: 500; }
+.qbc-progress { opacity: 0.5; }
+
+.qbc-chevron {
+  font-size: 14px;
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+
+/* ── Expanded body ── */
+.qbc-body {
+  padding: 8px 14px 14px;
+  animation: qbcFadeIn 0.2s ease;
+}
+
+@keyframes qbcFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Tasks ── */
+.qbc-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.qbc-task {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.qbc-task.done { opacity: 0.4; }
+
+.qbc-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #d0d0d0;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-family: inherit;
+  color: inherit;
+  transition: all 0.15s;
+}
+
+.qbc-check.checked {
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
+}
+
+.qbc-task-text {
+  flex: 1;
+}
+
+.qbc-task.done .qbc-task-text {
+  text-decoration: line-through;
+}
+
+.qbc-courage-badge {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* ── Add task ── */
+.qbc-add-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.qbc-input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  outline: none;
+  color: #1a1a2e;
+}
+
+.qbc-input:focus { border-color: #5e17eb; }
+.qbc-input::placeholder { color: #aaa; }
+
+.qbc-add-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  background: #5e17eb;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.qbc-add-btn:hover { background: #7c3aed; }
+.qbc-add-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── Courage toggle ── */
+.qbc-courage-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  opacity: 0.6;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.qbc-courage-toggle input[type="checkbox"] {
+  accent-color: #E9A23B;
+}
+
+/* ── Close quest ── */
+.qbc-close-trigger {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: inherit;
+  transition: color 0.15s;
+}
+
+.qbc-close-trigger:hover { color: #666; }
+
+.qbc-close-options {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.qbc-close-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.qbc-close-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  margin-bottom: 6px;
+  transition: background 0.15s;
+}
+
+.qbc-close-btn:hover { background: #f5f5f5; }
+.qbc-close-btn.achieved { border-color: #10b981; }
+.qbc-close-btn.lost { border-color: #f59e0b; }
+.qbc-close-btn.paused { border-color: #6b7280; }
+
+.qbc-close-cancel {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 6px 0;
+  font-family: inherit;
+}

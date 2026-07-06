@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Path States - Design Mockup</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Theme variables */
+body.dark {
+  background: #0a0a14;
+  color: #e0e0e0;
+  --bg: #0a0a14;
+  --panel-bg: #0f0f1c;
+  --panel-border: #1a1a30;
+  --input-bg: #1a1a30;
+  --input-border: #252545;
+  --text-dim: #555;
+  --text-dimmer: #444;
+  --text-muted: #666;
+  --text-faint: #333;
+  --cone-opacity: 1;
+  --parked-opacity: 0.12;
+  --band-opacity: 0.025;
+  --guide-opacity: 0.1;
+  --label-dim-opacity: 0.5;
+  --zone-label-color: rgba(233, 162, 59, 0.5);
+  --zone-dark-color: rgba(167, 139, 250, 0.35);
+}
+
+body.light {
+  background: #f5f5f0;
+  color: #1a1a2e;
+  --bg: #f5f5f0;
+  --panel-bg: #ffffff;
+  --panel-border: #e0e0d8;
+  --input-bg: #f0f0ea;
+  --input-border: #d0d0c8;
+  --text-dim: #999;
+  --text-dimmer: #aaa;
+  --text-muted: #888;
+  --text-faint: #ccc;
+  --cone-opacity: 0.7;
+  --parked-opacity: 0.08;
+  --band-opacity: 0.06;
+  --guide-opacity: 0.15;
+  --label-dim-opacity: 0.6;
+  --zone-label-color: rgba(180, 120, 20, 0.6);
+  --zone-dark-color: rgba(100, 80, 160, 0.4);
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+.canvas-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px;
+  min-width: 0;
+}
+
+.canvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.canvas-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+}
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--panel-border);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.theme-toggle:hover {
+  color: var(--text-muted);
+  border-color: var(--text-muted);
+}
+
+.punchline {
+  font-size: 14px;
+  color: #555;
+  font-style: italic;
+  transition: all 0.8s ease;
+}
+
+.punchline.visible { color: #a78bfa; }
+
+.svg-wrap {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+.svg-wrap svg {
+  width: 100%;
+  height: 100%;
+}
+
+.legend {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-line {
+  width: 20px;
+  height: 0;
+  border-top: 2px dashed;
+  flex-shrink: 0;
+}
+
+/* Controls */
+.controls {
+  width: 320px;
+  flex-shrink: 0;
+  background: var(--panel-bg);
+  border-left: 1px solid var(--panel-border);
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ctrl-section h3 {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-row input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--input-bg);
+  outline: none;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#safetySlider::-webkit-slider-thumb {
+  background: #E9A23B;
+  box-shadow: 0 0 8px rgba(233, 162, 59, 0.4);
+}
+
+#walkSlider::-webkit-slider-thumb {
+  background: #a78bfa;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
+}
+
+.slider-value {
+  font-size: 22px;
+  font-weight: 700;
+  min-width: 48px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.slider-value.gold { color: #E9A23B; }
+.slider-value.purple { color: #a78bfa; }
+
+.slider-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* Career list */
+.career-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.career-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 13px;
+}
+
+.career-item:hover { background: rgba(255,255,255,0.04); }
+.career-item.selected { background: rgba(94, 23, 235, 0.12); }
+
+.career-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.career-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.career-badges {
+  display: flex;
+  gap: 4px;
+}
+
+.career-badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.career-badge.realistic {
+  background: rgba(233, 162, 59, 0.15);
+  color: #E9A23B;
+}
+
+.career-badge.parked {
+  background: rgba(255,255,255,0.05);
+  color: #555;
+}
+
+.career-badge.in-cone {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+.career-badge.outside {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  opacity: 0.6;
+}
+
+/* Career detail */
+.career-detail {
+  padding: 10px 10px 14px;
+  margin-top: -2px;
+  margin-bottom: 4px;
+  background: rgba(94, 23, 235, 0.06);
+  border-radius: 0 0 8px 8px;
+  display: none;
+}
+
+.career-detail.open { display: block; }
+
+.detail-row {
+  margin-bottom: 10px;
+}
+
+.detail-row label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #555;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.state-chips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.state-chip {
+  padding: 4px 10px;
+  border-radius: 10px;
+  border: 1px solid;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+}
+
+.state-chip:hover { transform: scale(1.05); }
+
+.state-chip.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.toggle-row {
+  display: flex;
+  gap: 4px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  font-size: 11px;
+  cursor: pointer;
+  background: transparent;
+  color: #666;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.toggle-btn.active {
+  border-color: #E9A23B;
+  color: #E9A23B;
+  background: rgba(233, 162, 59, 0.08);
+}
+
+.remove-btn {
+  font-size: 11px;
+  color: #ef4444;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: inherit;
+  opacity: 0.6;
+}
+
+.remove-btn:hover { opacity: 1; }
+
+.add-row {
+  display: flex;
+  gap: 6px;
+}
+
+.add-row input {
+  flex: 1;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: #e0e0e0;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+}
+
+.add-row input:focus { border-color: #5e17eb; }
+.add-row input::placeholder { color: #444; }
+
+.btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.btn-primary { background: #5e17eb; color: white; }
+.btn-primary:hover { background: #7c3aed; }
+
+.btn-ghost {
+  background: transparent;
+  color: #666;
+  border: 1px solid var(--input-border);
+  width: 100%;
+}
+
+.btn-ghost:hover { border-color: #444; color: #999; }
+
+.info-text {
+  font-size: 11px;
+  color: var(--text-dimmer);
+  line-height: 1.5;
+}
+
+svg text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+</style>
+</head>
+
+<body>
+<div class="layout">
+  <div class="canvas-area">
+    <div class="canvas-header">
+      <span class="canvas-title">Life Path States</span>
+      <span class="punchline" id="punchline">This gap isn't ability. It's safety.</span>
+      <button class="theme-toggle" id="themeToggle">☀️ Light</button>
+    </div>
+
+    <div class="svg-wrap">
+      <svg id="viz" viewBox="-10 0 860 600" preserveAspectRatio="xMidYMid meet" overflow="visible">
+        <defs>
+          <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="turbulence" baseFrequency="0.015" numOctaves="3" seed="3" result="turb" />
+            <feDisplacementMap in="SourceGraphic" in2="turb" scale="2.5" />
+          </filter>
+
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          <filter id="coneBlur" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur stdDeviation="10" />
+          </filter>
+
+          <marker id="driftArrow" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#a78bfa" opacity="0.7" />
+          </marker>
+
+          <radialGradient id="trunkGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#E9A23B" stop-opacity="0.25" />
+            <stop offset="100%" stop-color="#E9A23B" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <g id="scene"></g>
+      </svg>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#E9A23B"></div> Vibe Rise</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> Peace</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> Anxious</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6b7280"></div> Shutdown</div>
+      <div class="legend-item"><div class="legend-line" style="border-color:#a78bfa"></div> Drift</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="ctrl-section">
+      <h3>Felt Safety (Cone Width)</h3>
+      <div class="slider-row">
+        <input type="range" id="safetySlider" min="0" max="100" value="0" />
+        <span class="slider-value gold" id="safetyValue">0%</span>
+      </div>
+      <div class="slider-label">The cone starts at the states of the "realistic" careers. Each wahoo widens it, sweeping in more paths.</div>
+    </div>
+
+    <div class="ctrl-section">
+      <h3>Wahoo Progress (Drift)</h3>
+      <div class="slider-row">
+        <input type="range" id="walkSlider" min="0" max="100" value="0" />
+        <span class="slider-value purple" id="walkValue">0%</span>
+      </div>
+      <div class="slider-label">After walking a path, its LIVED state may differ from predicted. 3 demo careers have drift pre-set.</div>
+    </div>
+
+    <div class="ctrl-section">
+      <h3>Careers</h3>
+      <div class="career-list" id="careerList"></div>
+    </div>
+
+    <div class="ctrl-section">
+      <h3>Add Career</h3>
+      <div class="add-row">
+        <input type="text" id="addInput" placeholder="e.g. Run retreats" />
+        <button class="btn btn-primary" id="addBtn">+</button>
+      </div>
+    </div>
+
+    <div class="ctrl-section">
+      <button class="btn btn-ghost" id="resetBtn">Reset to defaults</button>
+    </div>
+
+    <div class="ctrl-section">
+      <p class="info-text">
+        <strong>How it works:</strong> The cone starts where the "realistic" careers sit (usually shutdown/anxious). Dreams above (peace/vibe rise) are in the dark. Wahoos widen the cone upward, sweeping in the dreams.<br /><br />
+        Click a career to change its state, toggle realistic/parked, or set a lived state for drift.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Constants ──
+const TRUNK_X = 60
+const TRUNK_Y = 300
+const CAREER_X = 680  // All career endpoints at this X (v1: equal distance)
+
+const STATES = ['vibe', 'peace', 'anxious', 'shutdown']
+const STATE_META = {
+  vibe:     { y: 80,  color: '#E9A23B', label: 'Vibe Rise', emoji: '🔥', felt: 'alive, lit up' },
+  peace:    { y: 210, color: '#10b981', label: 'Peace',     emoji: '😌', felt: 'fun, settled' },
+  anxious:  { y: 380, color: '#ef4444', label: 'Anxious',   emoji: '😰', felt: 'stressed' },
+  shutdown: { y: 520, color: '#6b7280', label: 'Shutdown',  emoji: '😶', felt: 'bored, flat' },
+}
+
+const EMOJIS = ['🎯','🎨','🎤','📖','🌴','🏔️','💡','🎸','🧘','🚀','✨','🛠️','🎬','🌊','🔮']
+
+// ── State ──
+let state = getDefaults()
+let selectedId = null
+
+function getDefaults() {
+  return {
+    safety: 0,         // 0-1: how much the cone has widened beyond initial
+    walkProgress: 0,   // 0-1: drives predicted→lived drift
+    careers: [
+      // Step 1: "realistic" careers — define where the cone starts
+      { id: 'c1', label: 'Stay in corporate',    emoji: '💼', predictedState: 'shutdown', livedState: null, realistic: true },
+      { id: 'c2', label: 'Freelance consulting',  emoji: '💻', predictedState: 'anxious',  livedState: null, realistic: true },
+      // Step 2: "parked" careers — outside the initial cone
+      { id: 'c3', label: 'Start a podcast',       emoji: '🎙️', predictedState: 'peace',    livedState: 'vibe', realistic: false },
+      { id: 'c4', label: 'Write a book',          emoji: '📖', predictedState: 'peace',    livedState: null, realistic: false },
+      { id: 'c5', label: 'Teach workshops',        emoji: '🎤', predictedState: 'vibe',     livedState: 'anxious', realistic: false },
+      { id: 'c6', label: 'Run retreats',           emoji: '🏔️', predictedState: 'vibe',     livedState: 'vibe', realistic: false },
+      { id: 'c7', label: 'Open a healing studio',  emoji: '🧘', predictedState: 'peace',    livedState: null, realistic: false },
+      { id: 'c8', label: 'Move countries',         emoji: '🌴', predictedState: 'vibe',     livedState: null, realistic: false },
+    ],
+    nextId: 9,
+  }
+}
+
+// ── Helpers ──
+function stateY(s) { return STATE_META[s].y }
+function stateColor(s) { return STATE_META[s].color }
+function lerp(a, b, t) { return a + (b - a) * Math.max(0, Math.min(1, t)) }
+
+function currentY(career, wp) {
+  const py = stateY(career.predictedState)
+  if (!career.livedState || career.livedState === career.predictedState) return py
+  return lerp(py, stateY(career.livedState), wp)
+}
+
+function currentColor(career, wp) {
+  if (!career.livedState || wp < 0.5) return stateColor(career.predictedState)
+  return stateColor(career.livedState)
+}
+
+// Stagger careers in the same state band so they don't overlap
+function computeOffsets() {
+  const groups = {}
+  state.careers.forEach(c => {
+    const s = c.predictedState
+    if (!groups[s]) groups[s] = []
+    groups[s].push(c.id)
+  })
+  const offsets = {}
+  Object.entries(groups).forEach(([s, ids]) => {
+    const spacing = 24
+    const total = (ids.length - 1) * spacing
+    ids.forEach((id, i) => {
+      offsets[id] = ids.length <= 1 ? 0 : (i * spacing - total / 2)
+    })
+  })
+  return offsets
+}
+
+// Compute the cone from realistic careers
+function computeCone(safety) {
+  const realistic = state.careers.filter(c => c.realistic)
+  if (realistic.length === 0) return { centerY: 300, topY: 0, botY: 600 }
+
+  const ys = realistic.map(c => stateY(c.predictedState))
+  const minY = Math.min(...ys)
+  const maxY = Math.max(...ys)
+  const centerY = (minY + maxY) / 2
+  const minSpread = (maxY - minY) / 2 + 40  // padding to fully cover realistic careers
+
+  // At safety=1, cover the full state range plus padding
+  const allYs = STATES.map(s => STATE_META[s].y)
+  const globalMin = Math.min(...allYs) - 30
+  const globalMax = Math.max(...allYs) + 30
+  const maxSpread = Math.max(Math.abs(globalMax - centerY), Math.abs(globalMin - centerY))
+
+  const spread = lerp(minSpread, maxSpread, safety)
+
+  return {
+    centerY,
+    topY: centerY - spread,
+    botY: centerY + spread,
+  }
+}
+
+function isInCone(careerY, cone) {
+  return careerY >= cone.topY && careerY <= cone.botY
+}
+
+// Cubic bezier from trunk to endpoint
+function branchPath(endX, endY) {
+  const dx = endX - TRUNK_X
+  return `M ${TRUNK_X} ${TRUNK_Y} C ${TRUNK_X + dx * 0.35} ${TRUNK_Y}, ${TRUNK_X + dx * 0.65} ${endY}, ${endX} ${endY}`
+}
+
+// Small decorative sub-branches
+function subBranches(endX, endY, index, color, opacity) {
+  let html = ''
+  const count = 2 + (index % 2)
+  for (let i = 0; i < count; i++) {
+    const frac = 0.55 + i * 0.18
+    const sx = TRUNK_X + (endX - TRUNK_X) * frac
+    const sy = TRUNK_Y + (endY - TRUNK_Y) * frac
+    const seed = (index * 7 + i * 13) % 17
+    const angle = ((seed / 17) - 0.5) * 1.2
+    const len = 18 + (seed % 12)
+    const bx = sx + len * Math.cos(angle)
+    const by = sy + len * Math.sin(angle) + (endY < TRUNK_Y ? -8 : 8)
+    html += `<path d="M ${sx.toFixed(1)} ${sy.toFixed(1)} Q ${((sx+bx)/2).toFixed(1)} ${(by-4).toFixed(1)}, ${bx.toFixed(1)} ${by.toFixed(1)}" fill="none" stroke="${color}" stroke-width="1.2" opacity="${(opacity*0.4).toFixed(2)}" stroke-linecap="round" />`
+  }
+  return html
+}
+
+// ── Render ──
+function render() {
+  const scene = document.getElementById('scene')
+  let html = ''
+  const wp = state.walkProgress
+  const offsets = computeOffsets()
+  const cone = computeCone(state.safety)
+
+  // Theme-aware opacities
+  const isLight = document.body.classList.contains('light')
+  const T = {
+    bandFill:      isLight ? 0.08  : 0.025,
+    guideLine:     isLight ? 0.25  : 0.1,
+    guideWidth:    isLight ? 1     : 0.5,
+    stateLabel:    isLight ? 0.75  : 0.5,
+    feltLabel:     isLight ? 0.5   : 0.3,
+    parkedBranch:  isLight ? 0.3   : 0.12,
+    parkedDot:     isLight ? 0.35  : 0.15,
+    parkedLabel:   isLight ? 0.45  : 0.2,
+    litBranch:     isLight ? 0.9   : 0.85,
+    coneEdge:      isLight ? 0.3   : 0.12,
+    conePeak:      isLight ? 0.14  : 0.18,
+    coneMid:       isLight ? 0.09  : 0.12,
+    coneTail:      isLight ? 0.04  : 0.05,
+    zoneSafe:      isLight ? 'rgba(160,100,10,0.55)' : 'rgba(233,162,59,0.35)',
+    zoneDark:      isLight ? 'rgba(80,60,140,0.5)'   : 'rgba(167,139,250,0.25)',
+    future:        isLight ? '#aaa' : '#333',
+    youLabel:      isLight ? 0.5   : 0.35,
+  }
+
+  // 1. State band backgrounds + labels
+  STATES.forEach(s => {
+    const m = STATE_META[s]
+    const bandH = 90
+    html += `<rect x="${TRUNK_X}" y="${m.y - bandH/2}" width="${CAREER_X - TRUNK_X + 120}" height="${bandH}" rx="4" fill="${m.color}" opacity="${T.bandFill}" />`
+    html += `<line x1="${TRUNK_X}" y1="${m.y}" x2="${CAREER_X + 120}" y2="${m.y}" stroke="${m.color}" stroke-width="${T.guideWidth}" opacity="${T.guideLine}" stroke-dasharray="4,8" />`
+    html += `<text x="${TRUNK_X - 8}" y="${m.y - 10}" text-anchor="end" fill="${m.color}" font-size="11" font-weight="700" opacity="${T.stateLabel}" letter-spacing="1">${m.label.toUpperCase()}</text>`
+    html += `<text x="${TRUNK_X - 8}" y="${m.y + 5}" text-anchor="end" fill="${m.color}" font-size="9" opacity="${T.feltLabel}">${m.felt}</text>`
+  })
+
+  // 2. Cone of light — triangle from trunk to cone range at career plane
+  const coneGradId = 'coneGrad_' + Math.round(state.safety * 100) + (isLight ? 'L' : 'D')
+  html += `<defs>`
+  html += `<linearGradient id="${coneGradId}" x1="0" y1="0" x2="1" y2="0">`
+  html += `<stop offset="0%" stop-color="#E9A23B" stop-opacity="${T.conePeak}" />`
+  html += `<stop offset="50%" stop-color="#E9A23B" stop-opacity="${T.coneMid}" />`
+  html += `<stop offset="85%" stop-color="#E9A23B" stop-opacity="${T.coneTail}" />`
+  html += `<stop offset="100%" stop-color="#E9A23B" stop-opacity="0" />`
+  html += `</linearGradient>`
+  html += `</defs>`
+
+  const coneEndX = CAREER_X + 60
+  html += `<path d="M ${TRUNK_X} ${TRUNK_Y} L ${coneEndX} ${cone.topY} L ${coneEndX} ${cone.botY} Z" fill="url(#${coneGradId})" filter="url(#coneBlur)" />`
+  // Cone edges
+  html += `<line x1="${TRUNK_X}" y1="${TRUNK_Y}" x2="${coneEndX}" y2="${cone.topY}" stroke="#E9A23B" stroke-width="${isLight ? 1 : 0.5}" opacity="${T.coneEdge}" />`
+  html += `<line x1="${TRUNK_X}" y1="${TRUNK_Y}" x2="${coneEndX}" y2="${cone.botY}" stroke="#E9A23B" stroke-width="${isLight ? 1 : 0.5}" opacity="${T.coneEdge}" />`
+
+  // Zone labels
+  const coneMidX = TRUNK_X + (coneEndX - TRUNK_X) * 0.4
+  const coneMidY = (TRUNK_Y + cone.centerY) / 2
+  html += `<text x="${coneMidX}" y="${coneMidY}" text-anchor="middle" fill="${T.zoneSafe}" font-size="11" font-weight="600" font-style="italic">what feels safe</text>`
+
+  if (cone.topY > 60) {
+    const darkY = Math.max(cone.topY - 30, 50)
+    const darkX = TRUNK_X + (coneEndX - TRUNK_X) * 0.5
+    html += `<text x="${darkX}" y="${darkY}" text-anchor="middle" fill="${T.zoneDark}" font-size="11" font-weight="600" font-style="italic">what doesn't feel safe yet</text>`
+  }
+
+  // 3. Career branches — draw parked first, in-cone on top
+  const sorted = [...state.careers].sort((a, b) => {
+    const aBaseY = stateY(a.predictedState) + (offsets[a.id] || 0)
+    const bBaseY = stateY(b.predictedState) + (offsets[b.id] || 0)
+    const aIn = isInCone(aBaseY, cone) ? 1 : 0
+    const bIn = isInCone(bBaseY, cone) ? 1 : 0
+    return aIn - bIn
+  })
+
+  sorted.forEach((career) => {
+    const offset = offsets[career.id] || 0
+    const baseY = stateY(career.predictedState) + offset
+    const cy = currentY(career, wp) + offset
+    const endX = CAREER_X
+    const color = currentColor(career, wp)
+    const inCone = isInCone(baseY, cone)
+    const opacity = inCone ? T.litBranch : T.parkedBranch
+    const strokeW = inCone ? 2.8 : (isLight ? 1.5 : 1.2)
+
+    // Ghost line (drift)
+    const hasDrift = career.livedState && career.livedState !== career.predictedState && wp > 0
+    if (hasDrift) {
+      const ghostY = stateY(career.predictedState) + offset
+      const ghostPath = branchPath(endX, ghostY)
+      const ghostColor = stateColor(career.predictedState)
+      const ghostOp = inCone ? (isLight ? 0.35 : 0.2) : (isLight ? 0.15 : 0.06)
+      html += `<path d="${ghostPath}" fill="none" stroke="${ghostColor}" stroke-width="1.5" stroke-dasharray="5,4" opacity="${ghostOp}" filter="url(#wobble)" />`
+      html += `<circle cx="${endX}" cy="${ghostY}" r="3" fill="${ghostColor}" opacity="${ghostOp}" />`
+      if (wp > 0.15) {
+        const arrowOp = Math.min(wp * 0.6, 0.5)
+        html += `<line x1="${endX + 14}" y1="${ghostY}" x2="${endX + 14}" y2="${cy}" stroke="#a78bfa" stroke-width="1.5" opacity="${arrowOp.toFixed(2)}" marker-end="url(#driftArrow)" />`
+      }
+    }
+
+    // Main branch
+    html += `<path d="${branchPath(endX, cy)}" fill="none" stroke="${color}" stroke-width="${strokeW}" opacity="${opacity.toFixed(2)}" stroke-linecap="round" filter="url(#wobble)" />`
+
+    // Sub-branches
+    const idx = state.careers.indexOf(career)
+    html += subBranches(endX, cy, idx, color, opacity)
+
+    // Endpoint dot
+    if (inCone) {
+      html += `<circle cx="${endX}" cy="${cy}" r="14" fill="${color}" opacity="0.1" />`
+      html += `<circle cx="${endX}" cy="${cy}" r="7" fill="${color}" opacity="0.9" filter="url(#glow)" />`
+    } else {
+      html += `<circle cx="${endX}" cy="${cy}" r="${isLight ? 5 : 4}" fill="${color}" opacity="${T.parkedDot}" />`
+    }
+
+    // Label
+    const labelOp = inCone ? 0.9 : T.parkedLabel
+    const labelSz = inCone ? 12 : 11
+    const labelWt = inCone ? '600' : (isLight ? '500' : '400')
+    html += `<text x="${endX + 16}" y="${cy + 4}" fill="${color}" font-size="${labelSz}" font-weight="${labelWt}" opacity="${labelOp.toFixed(2)}">${career.emoji} ${career.label}</text>`
+
+    // Drift label
+    if (hasDrift && wp > 0.5 && inCone) {
+      const pLabel = STATE_META[career.predictedState].label
+      const lLabel = STATE_META[career.livedState].label
+      const dir = stateY(career.livedState) < stateY(career.predictedState) ? '↑' : '↓'
+      html += `<text x="${endX + 16}" y="${cy + 18}" fill="#a78bfa" font-size="9" opacity="0.6">${pLabel} → ${lLabel} ${dir}</text>`
+    }
+  })
+
+  // 4. Trunk marker
+  html += `<circle cx="${TRUNK_X}" cy="${TRUNK_Y}" r="28" fill="url(#trunkGlow)" />`
+  html += `<circle cx="${TRUNK_X}" cy="${TRUNK_Y}" r="6" fill="#E9A23B" filter="url(#glow)" />`
+  html += `<circle cx="${TRUNK_X}" cy="${TRUNK_Y}" r="3" fill="#fff" opacity="0.8" />`
+  html += `<text x="${TRUNK_X}" y="${TRUNK_Y + 24}" text-anchor="middle" fill="#E9A23B" font-size="10" font-weight="700" letter-spacing="2" opacity="0.6">TODAY</text>`
+  html += `<text x="${TRUNK_X}" y="${TRUNK_Y - 18}" text-anchor="middle" fill="${isLight ? '#333' : '#fff'}" font-size="10" font-weight="500" opacity="${T.youLabel}">you</text>`
+
+  // 5. Future label
+  html += `<text x="${CAREER_X + 100}" y="${580}" text-anchor="end" fill="${T.future}" font-size="10" letter-spacing="2" font-weight="600">THE FUTURE →</text>`
+
+  scene.innerHTML = html
+
+  // Punchline: show when vibe-rise careers exist outside cone and realistic careers are low-state
+  const hasOutsideVibe = state.careers.some(c => {
+    const y = stateY(c.predictedState) + (offsets[c.id] || 0)
+    return !isInCone(y, cone) && c.predictedState === 'vibe'
+  })
+  const hasRealisticLow = state.careers.some(c => c.realistic && (c.predictedState === 'shutdown' || c.predictedState === 'anxious'))
+  document.getElementById('punchline').classList.toggle('visible', hasOutsideVibe && hasRealisticLow)
+
+  renderCareerList(cone, offsets)
+}
+
+// ── Career List ──
+function renderCareerList(cone, offsets) {
+  const list = document.getElementById('careerList')
+  let html = ''
+
+  state.careers.forEach(career => {
+    const color = stateColor(career.predictedState)
+    const baseY = stateY(career.predictedState) + (offsets[career.id] || 0)
+    const inCone = isInCone(baseY, cone)
+    const isSelected = selectedId === career.id
+
+    html += `<div class="career-item ${isSelected ? 'selected' : ''}" data-id="${career.id}">`
+    html += `  <div class="career-dot" style="background:${color};${inCone ? `box-shadow:0 0 6px ${color}` : 'opacity:0.3'}"></div>`
+    html += `  <span class="career-label">${career.emoji} ${career.label}</span>`
+    html += `  <span class="career-badges">`
+    html += `    <span class="career-badge ${career.realistic ? 'realistic' : 'parked'}">${career.realistic ? 'step 1' : 'step 2'}</span>`
+    html += `    <span class="career-badge ${inCone ? 'in-cone' : 'outside'}">${inCone ? 'lit' : 'dark'}</span>`
+    html += `  </span>`
+    html += `</div>`
+
+    // Detail panel
+    html += `<div class="career-detail ${isSelected ? 'open' : ''}" data-detail="${career.id}">`
+
+    // Realistic / Parked toggle
+    html += `<div class="detail-row"><label>Named in</label><div class="toggle-row">`
+    html += `<button class="toggle-btn ${career.realistic ? 'active' : ''}" data-career="${career.id}" data-action="realistic" data-val="true">Step 1 (realistic)</button>`
+    html += `<button class="toggle-btn ${!career.realistic ? 'active' : ''}" data-career="${career.id}" data-action="realistic" data-val="false">Step 2 (parked)</button>`
+    html += `</div></div>`
+
+    // Predicted state
+    html += `<div class="detail-row"><label>Predicted State</label><div class="state-chips">`
+    STATES.forEach(s => {
+      const m = STATE_META[s]
+      const active = career.predictedState === s
+      html += `<button class="state-chip ${active ? 'active' : ''}" data-career="${career.id}" data-action="predicted" data-state="${s}" style="border-color:${m.color};${active ? `background:${m.color}` : `color:${m.color}`}">${m.emoji} ${m.label}</button>`
+    })
+    html += `</div></div>`
+
+    // Lived state
+    html += `<div class="detail-row"><label>Lived State (after wahoos)</label><div class="state-chips">`
+    const noLived = !career.livedState
+    html += `<button class="state-chip ${noLived ? 'active' : ''}" data-career="${career.id}" data-action="lived" data-state="null" style="border-color:#444;${noLived ? 'background:#333;color:#aaa' : 'color:#555'}">not yet</button>`
+    STATES.forEach(s => {
+      const m = STATE_META[s]
+      const active = career.livedState === s
+      html += `<button class="state-chip ${active ? 'active' : ''}" data-career="${career.id}" data-action="lived" data-state="${s}" style="border-color:${m.color};${active ? `background:${m.color}` : `color:${m.color}`}">${m.emoji} ${m.label}</button>`
+    })
+    html += `</div></div>`
+
+    html += `<button class="remove-btn" data-career="${career.id}" data-action="remove">Remove this career</button>`
+    html += `</div>`
+  })
+
+  list.innerHTML = html
+
+  // Wire events
+  list.querySelectorAll('.career-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.id
+      selectedId = selectedId === id ? null : id
+      render()
+    })
+  })
+
+  list.querySelectorAll('.state-chip').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const { career: id, action, state: s } = el.dataset
+      const career = state.careers.find(c => c.id === id)
+      if (!career) return
+      if (action === 'predicted') career.predictedState = s
+      if (action === 'lived') career.livedState = s === 'null' ? null : s
+      render()
+    })
+  })
+
+  list.querySelectorAll('.toggle-btn').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const { career: id, val } = el.dataset
+      const career = state.careers.find(c => c.id === id)
+      if (career) {
+        career.realistic = val === 'true'
+        render()
+      }
+    })
+  })
+
+  list.querySelectorAll('.remove-btn').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const id = el.dataset.career
+      state.careers = state.careers.filter(c => c.id !== id)
+      if (selectedId === id) selectedId = null
+      render()
+    })
+  })
+}
+
+// ── Wire controls ──
+document.getElementById('safetySlider').addEventListener('input', e => {
+  state.safety = parseInt(e.target.value) / 100
+  document.getElementById('safetyValue').textContent = e.target.value + '%'
+  render()
+})
+
+document.getElementById('walkSlider').addEventListener('input', e => {
+  state.walkProgress = parseInt(e.target.value) / 100
+  document.getElementById('walkValue').textContent = e.target.value + '%'
+  render()
+})
+
+document.getElementById('addBtn').addEventListener('click', addCareer)
+document.getElementById('addInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addCareer()
+})
+
+function addCareer() {
+  const input = document.getElementById('addInput')
+  const label = input.value.trim()
+  if (!label) return
+
+  const emoji = EMOJIS[state.nextId % EMOJIS.length]
+  state.careers.push({
+    id: 'c' + state.nextId++,
+    label,
+    emoji,
+    predictedState: 'peace',
+    livedState: null,
+    realistic: false,
+  })
+
+  input.value = ''
+  render()
+}
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  state = getDefaults()
+  selectedId = null
+  document.getElementById('safetySlider').value = 0
+  document.getElementById('safetyValue').textContent = '0%'
+  document.getElementById('walkSlider').value = 0
+  document.getElementById('walkValue').textContent = '0%'
+  render()
+})
+
+// ── Theme toggle ──
+document.body.classList.add('dark')
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const isDark = document.body.classList.contains('dark')
+  document.body.classList.remove(isDark ? 'dark' : 'light')
+  document.body.classList.add(isDark ? 'light' : 'dark')
+  document.getElementById('themeToggle').textContent = isDark ? '🌙 Dark' : '☀️ Light'
+  render()
+})
+
+// ── Go ──
+render()
+</script>
+</body>
+</html>

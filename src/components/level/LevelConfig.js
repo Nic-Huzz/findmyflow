@@ -37,7 +37,7 @@ export const LEVEL_CONFIG = {
         route: null,
         narrative: 'Open your Wahoo space and name what would light you up.',
         icon: '🔥',
-        navigateTo: 'Wahoo',
+        navigateTo: 'Courage',
         lockedUntil: 'life_paths',
       },
       {
@@ -310,7 +310,7 @@ export function getLevelConfig(level) {
         ? 'Complete your first Wahoo.'
         : `Complete ${config.courageCount} Wahoo${config.courageCount > 1 ? 's' : ''}.`,
       icon: '🔥',
-      navigateTo: 'Wahoo',
+      navigateTo: 'Courage',
     })
   }
 
