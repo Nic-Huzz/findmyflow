@@ -83,6 +83,23 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
         .update({ status: newDone ? 'completed' : 'accepted', completed_at: newDone ? new Date().toISOString() : null })
         .eq('id', task.groan_challenge_id)
     }
+    // Award/revoke 3 RP for regular (non-courage) task completion
+    if (newDone && !task.is_courage_challenge) {
+      await supabase.from('quest_completions').insert({
+        user_id: userId,
+        quest_id: `quest_task_${task.id}`,
+        quest_category: 'Quests',
+        quest_type: 'Practice',
+        points_earned: 3,
+        challenge_day: 0,
+        project_id: null,
+      })
+    }
+    if (!newDone && !task.is_courage_challenge) {
+      await supabase.from('quest_completions').delete()
+        .eq('user_id', userId)
+        .eq('quest_id', `quest_task_${task.id}`)
+    }
     onUpdate?.()
   }
 
@@ -92,7 +109,21 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       .update({ status, close_reason: reason, updated_at: new Date().toISOString() })
       .eq('id', quest.id)
     if (error) console.error('Close quest error:', error)
-    else { setShowClose(false); onUpdate?.() }
+    else {
+      // Award 10 RP for achieving a quest (0 for lost interest/paused)
+      if (reason === 'achieved') {
+        await supabase.from('quest_completions').insert({
+          user_id: userId,
+          quest_id: `quest_achieved_${quest.id}`,
+          quest_category: 'Quests',
+          quest_type: 'Practice',
+          points_earned: 10,
+          challenge_day: 0,
+          project_id: null,
+        })
+      }
+      setShowClose(false); onUpdate?.()
+    }
   }
 
   return (

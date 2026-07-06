@@ -125,6 +125,16 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       })
       if (error) console.error('Add quest error:', error)
       else {
+        // Award 2 RP for adding a quest
+        await supabase.from('quest_completions').insert({
+          user_id: userId,
+          quest_id: `quest_created_${Date.now()}`,
+          quest_category: 'Quests',
+          quest_type: 'Practice',
+          points_earned: 2,
+          challenge_day: 0,
+          project_id: null,
+        })
         setAddQuestLabel('')
         setAddQuestState(null)
         setAddQuestCareerId(null)
