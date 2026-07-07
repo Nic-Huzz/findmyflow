@@ -42,46 +42,31 @@ export default function HealingIntentionsList({ userId }) {
 
   const handleStartStandalone = async () => {
     if (!standaloneText.trim()) return
-    // Create a standalone quest_task (no quest) for the healing flow
-    const { data, error } = await supabase.from('quest_tasks').insert({
-      quest_id: null,
+    // Find or create a "Healing Work" quest to anchor the task
+    let healingQuestId = null
+    const { data: existing } = await supabase.from('quests')
+      .select('id').eq('user_id', userId).eq('label', 'Healing Work').eq('status', 'active').limit(1)
+    if (existing?.length > 0) {
+      healingQuestId = existing[0].id
+    } else {
+      const { data: newQuest } = await supabase.from('quests').insert({
+        user_id: userId,
+        label: 'Healing Work',
+        predicted_state: 'anxious',
+        status: 'active',
+      }).select('id').single()
+      healingQuestId = newQuest?.id
+    }
+    if (!healingQuestId) return
+    const { data: task } = await supabase.from('quest_tasks').insert({
+      quest_id: healingQuestId,
       user_id: userId,
       text: standaloneText.trim(),
       is_courage_challenge: true,
       sort_order: 0,
     }).select('id').single()
-
-    if (error) {
-      // quest_id is NOT NULL — need a quest. Create a "Healing" quest if none exists
-      let healingQuestId = null
-      const { data: existing } = await supabase.from('quests')
-        .select('id').eq('user_id', userId).eq('label', 'Healing Work').eq('status', 'active').limit(1)
-      if (existing?.length > 0) {
-        healingQuestId = existing[0].id
-      } else {
-        const { data: newQuest } = await supabase.from('quests').insert({
-          user_id: userId,
-          label: 'Healing Work',
-          predicted_state: 'anxious',
-          status: 'active',
-        }).select('id').single()
-        healingQuestId = newQuest?.id
-      }
-      if (healingQuestId) {
-        const { data: task } = await supabase.from('quest_tasks').insert({
-          quest_id: healingQuestId,
-          user_id: userId,
-          text: standaloneText.trim(),
-          is_courage_challenge: true,
-          sort_order: 0,
-        }).select('id').single()
-        if (task) {
-          setStandaloneTaskId(task.id)
-          setShowStandaloneFlow(true)
-        }
-      }
-    } else if (data) {
-      setStandaloneTaskId(data.id)
+    if (task) {
+      setStandaloneTaskId(task.id)
       setShowStandaloneFlow(true)
     }
   }
