@@ -216,9 +216,10 @@ export default function WahooDiscoveryFlow({
 
       // 3. Create quest_tasks for wahoos with quest links
       for (const cat of CATEGORY_PAGES) {
-        const items = cleanEntries(cat.id)
-        items.forEach((title, i) => {
-          const questId = entryQuests[cat.id]?.[entries[cat.id].findIndex(e => e.trim() === title)]
+        entries[cat.id].forEach((raw, i) => {
+          const title = raw.trim()
+          if (!title) return
+          const questId = entryQuests[cat.id]?.[i]
           const groanId = savedRef.current[`${cat.id}:${title}`]
           if (questId && groanId) {
             supabase.from('quest_tasks').insert({
