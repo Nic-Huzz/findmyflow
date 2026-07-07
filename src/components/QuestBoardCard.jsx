@@ -239,13 +239,29 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
               <div className="qbc-healing-prompt-actions">
                 <button className="qbc-healing-prompt-yes"
                   onClick={() => { setHealingTaskId(healingPromptTaskId); setHealingPromptTaskId(null) }}>
-                  Yes, dig in 💚
+                  Deep dive now 💚
+                </button>
+                <button className="qbc-healing-prompt-later"
+                  onClick={async () => {
+                    // Create a minimal healing_intention so it shows on Healing tab
+                    try {
+                      await supabase.from('healing_intentions').upsert({
+                        quest_task_id: healingPromptTaskId,
+                        user_id: userId,
+                        healing_stage: 'in_progress',
+                        updated_at: new Date().toISOString(),
+                      }, { onConflict: 'quest_task_id' })
+                    } catch (e) { /* non-blocking */ }
+                    setHealingPromptTaskId(null)
+                  }}>
+                  Later
                 </button>
                 <button className="qbc-healing-prompt-no"
                   onClick={() => setHealingPromptTaskId(null)}>
-                  No, just do it ⚡
+                  No thanks
                 </button>
               </div>
+              <div className="qbc-healing-prompt-hint">You can always start from the Healing tab</div>
             </div>
           )}
 
