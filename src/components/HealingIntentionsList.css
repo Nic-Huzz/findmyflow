@@ -232,6 +232,35 @@
   margin-top: 6px;
 }
 
+/* Quest Selector */
+.qs-container {
+  margin-bottom: 12px;
+}
+
+.qs-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+}
+
+.qs-new {
+  margin-bottom: 12px;
+}
+
+.qs-new-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+}
+
+.qs-new-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 /* Completed section */
 .hil-completed {
   opacity: 0.55;

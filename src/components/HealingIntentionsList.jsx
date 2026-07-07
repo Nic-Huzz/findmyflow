@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import HealingFlowModal from './HealingFlowModal'
+import QuestSelector from './QuestSelector'
 import './HealingIntentionsList.css'
 
 const PATTERN_META = {
@@ -24,7 +25,9 @@ export default function HealingIntentionsList({ userId }) {
   const [showStandaloneFlow, setShowStandaloneFlow] = useState(false)
   const [standaloneText, setStandaloneText] = useState('')
   const [standaloneTaskId, setStandaloneTaskId] = useState(null)
-  const [resumeIntention, setResumeIntention] = useState(null) // existing intention to resume
+  const [standaloneQuestId, setStandaloneQuestId] = useState(null)
+  const [showQuestPicker, setShowQuestPicker] = useState(false)
+  const [resumeIntention, setResumeIntention] = useState(null)
 
   const loadIntentions = () => {
     if (!userId) return
@@ -42,26 +45,16 @@ export default function HealingIntentionsList({ userId }) {
 
   useEffect(() => { loadIntentions() }, [userId])
 
-  const handleStartStandalone = async () => {
+  const handleExploreClick = () => {
     if (!standaloneText.trim()) return
-    // Find or create a "Healing Work" quest to anchor the task
-    let healingQuestId = null
-    const { data: existing } = await supabase.from('quests')
-      .select('id').eq('user_id', userId).eq('label', 'Healing Work').eq('status', 'active').limit(1)
-    if (existing?.length > 0) {
-      healingQuestId = existing[0].id
-    } else {
-      const { data: newQuest } = await supabase.from('quests').insert({
-        user_id: userId,
-        label: 'Healing Work',
-        predicted_state: 'anxious',
-        status: 'active',
-      }).select('id').single()
-      healingQuestId = newQuest?.id
-    }
-    if (!healingQuestId) return
+    setShowQuestPicker(true)
+  }
+
+  const handleQuestSelected = async (questId) => {
+    if (!questId || !standaloneText.trim()) return
+    setStandaloneQuestId(questId)
     const { data: task } = await supabase.from('quest_tasks').insert({
-      quest_id: healingQuestId,
+      quest_id: questId,
       user_id: userId,
       text: standaloneText.trim(),
       is_courage_challenge: true,
@@ -70,6 +63,7 @@ export default function HealingIntentionsList({ userId }) {
     if (task) {
       setStandaloneTaskId(task.id)
       setShowStandaloneFlow(true)
+      setShowQuestPicker(false)
     }
   }
 
@@ -171,15 +165,20 @@ export default function HealingIntentionsList({ userId }) {
               className="hil-add-input"
               type="text"
               value={standaloneText}
-              onChange={e => setStandaloneText(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleStartStandalone()}
+              onChange={e => { setStandaloneText(e.target.value); if (showQuestPicker) setShowQuestPicker(false) }}
               placeholder="e.g. I'm scared of charging money..."
             />
-            <button className="hil-add-btn" onClick={handleStartStandalone} disabled={!standaloneText.trim()}>
+            <button className="hil-add-btn" onClick={handleExploreClick} disabled={!standaloneText.trim()}>
               Explore
             </button>
           </div>
-          <div className="hil-add-hint">Or tag a courage challenge in your quests to start</div>
+          {showQuestPicker && (
+            <QuestSelector userId={userId} value={standaloneQuestId}
+              onChange={(id) => handleQuestSelected(id)} />
+          )}
+          {!showQuestPicker && (
+            <div className="hil-add-hint">Or tag a courage challenge in your quests to start</div>
+          )}
         </div>
       </div>
 

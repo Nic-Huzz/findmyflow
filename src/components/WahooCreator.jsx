@@ -17,6 +17,7 @@ import { supabase } from '../lib/supabaseClient'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import QuestSelector from './QuestSelector'
 import './WahooCreator.css'
 
 const WAHOO_CATEGORIES = [
@@ -37,6 +38,7 @@ export default function WahooCreator({
   const [wahooCategory, setWahooCategory] = useState(null)
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState(null)
+  const [linkedQuestId, setLinkedQuestId] = useState(null)
   const successTimerRef = useRef(null)
 
   useEffect(() => {
@@ -75,6 +77,20 @@ export default function WahooCreator({
         display_name: challenge.title,
       }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
       if (pickError) throw pickError
+
+      // Link to quest if selected
+      if (linkedQuestId && dbRecord) {
+        try {
+          await supabase.from('quest_tasks').insert({
+            quest_id: linkedQuestId,
+            user_id: userId,
+            text: challenge.title,
+            is_courage_challenge: true,
+            groan_challenge_id: dbRecord.id,
+            sort_order: 0,
+          })
+        } catch (e) { /* non-blocking */ }
+      }
 
       hapticSuccess()
       onWahooAccepted?.()
@@ -195,6 +211,9 @@ export default function WahooCreator({
             ))}
           </div>
         </div>
+
+        <QuestSelector userId={userId} value={linkedQuestId}
+          onChange={(id) => setLinkedQuestId(id)} />
 
         {error && <p className="wc-error">{error}</p>}
 
