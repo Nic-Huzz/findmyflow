@@ -726,8 +726,8 @@ export default function LeagueOverview() {
                 <span className={`lo-feed-label ${day.isToday ? 'lo-feed-label--today' : ''}`}>
                   {day.isToday ? `TODAY · ${day.label}` : day.label}
                 </span>
-                {day.players.map(p => (
-                  <div key={p.userId} className={`lo-feed-row ${!p.active ? 'lo-feed-row--inactive' : ''}`}>
+                {day.players.filter(p => p.active).map(p => (
+                  <div key={p.userId} className="lo-feed-row">
                     {p.avatar ? (
                       <img src={p.avatar} alt="" className="lo-feed-avatar" />
                     ) : (
@@ -735,21 +735,22 @@ export default function LeagueOverview() {
                     )}
                     <div className="lo-feed-info">
                       <span className="lo-feed-name">{p.teamName}</span>
-                      {p.active ? (
-                        <span className="lo-feed-stats">
-                          {[
-                            p.practices > 0 && `☀️ ${p.practices} Tune`,
-                            p.wahoos > 0 && `🔥 ${p.wahoos} Wahoos`,
-                            p.healing > 0 && `💚 ${p.healing} Healing`,
-                          ].filter(Boolean).join('  ')}
-                        </span>
-                      ) : (
-                        <span className="lo-feed-stats lo-feed-stats--none">{day.isToday ? 'No activity yet' : 'No activity'}</span>
-                      )}
+                      <span className="lo-feed-stats">
+                        {[
+                          p.practices > 0 && `☀️ ${p.practices} Tune`,
+                          p.wahoos > 0 && `🔥 ${p.wahoos} Wahoos`,
+                          p.healing > 0 && `💚 ${p.healing} Healing`,
+                        ].filter(Boolean).join('  ')}
+                      </span>
                     </div>
-                    {p.active && <span className="lo-feed-dot" />}
+                    <span className="lo-feed-dot" />
                   </div>
                 ))}
+                {day.players.filter(p => p.active).length === 0 && (
+                  <div className="lo-feed-row lo-feed-row--inactive">
+                    <span className="lo-feed-stats lo-feed-stats--none">No activity{day.isToday ? ' yet' : ''}</span>
+                  </div>
+                )}
               </div>
             ))
           )}
