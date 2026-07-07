@@ -430,7 +430,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           {!hasEssenceAvatar && (
             <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
           )}
-          {!(hasWahoos || hasPlaySkills) && (
+          {!(hasWahoos || hasPlaySkills) && hasLifePaths && (
             <div className="level-deep-dive" onClick={() => setUnlockExplainer('courage')} style={{ cursor: 'pointer' }}>
               <div className="level-dd-icon">🔥</div>
               <div className="level-dd-info">
@@ -440,7 +440,17 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               <span className="level-dd-status start">Start</span>
             </div>
           )}
-          {!hasHealingCompletion && (
+          {!(hasWahoos || hasPlaySkills) && !hasLifePaths && (
+            <div className="level-deep-dive" style={{ opacity: 0.5 }}>
+              <div className="level-dd-icon">🔒</div>
+              <div className="level-dd-info">
+                <div className="level-dd-name">Unlock Your Courage Tab</div>
+                <div className="level-dd-narrative">Complete Life Paths first.</div>
+              </div>
+              <span className="level-dd-status locked">Locked</span>
+            </div>
+          )}
+          {!hasHealingCompletion && hasLifePaths && (
             <div className="level-deep-dive" onClick={() => setUnlockExplainer('healing')} style={{ cursor: 'pointer' }}>
               <div className="level-dd-icon">💚</div>
               <div className="level-dd-info">
@@ -448,6 +458,16 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
                 <div className="level-dd-narrative">Remove what's blocking your path.</div>
               </div>
               <span className="level-dd-status start">Start</span>
+            </div>
+          )}
+          {!hasHealingCompletion && !hasLifePaths && (
+            <div className="level-deep-dive" style={{ opacity: 0.5 }}>
+              <div className="level-dd-icon">🔒</div>
+              <div className="level-dd-info">
+                <div className="level-dd-name">Unlock Your Healing Tab</div>
+                <div className="level-dd-narrative">Complete Life Paths first.</div>
+              </div>
+              <span className="level-dd-status locked">Locked</span>
             </div>
           )}
         </div>
