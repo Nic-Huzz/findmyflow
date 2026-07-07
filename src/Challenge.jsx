@@ -1889,52 +1889,7 @@ function Challenge() {
         })}
       </div>
 
-      {/* Healing Intention Card */}
-      {activeCategory === 'Healing' && healingIntentionLoaded && (
-        <HealingIntentionCard
-          intention={healingIntention}
-          dayOfWeek={Math.min(7, Math.max(1, new Date().getDay() || 7))}
-          weeklyPoints={getCategoryPoints('Healing')?.total || 0}
-          onSetIntention={() => setShowIntentionSetter(true)}
-          onCheckIn={() => setShowIntentionCheckin(true)}
-        />
-      )}
-
-      {/* Frequency tabs for Healing */}
-      {activeCategory === 'Healing' && (
-        <div className="stage-tabs-wrapper">
-          <div className="stage-tabs-container healing-frequency-tabs">
-            <div className="stage-tabs">
-              {[
-                { id: 'daily', label: 'Daily', icon: '☀️', color: '#5e17eb' },
-                { id: 'weekly', label: 'Weekly', icon: '📅', color: '#5e17eb' },
-                { id: 'explainer', label: 'Explainers', icon: '📖', color: '#5e17eb' }
-              ].map(tab => {
-                const isActive = activeFrequencyFilter === tab.id
-                const activeStyles = isActive ? {
-                  background: 'linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%)',
-                  borderColor: '#5e17eb',
-                  color: 'white'
-                } : {}
-                return (
-                  <button
-                    key={tab.id}
-                    className={`stage-tab available ${isActive ? 'active' : ''}`}
-                    onClick={() => tab.route ? navigate(tab.route) : setActiveFrequencyFilter(tab.id)}
-                    style={{ '--stage-color': tab.color, ...activeStyles }}
-                  >
-                    <span className="tab-icon">{tab.icon}</span>
-                    <span className="tab-label">{tab.label}</span>
-                  </button>
-                )
-              })}
-            </div>
-            <div className="progress-line">
-              <div className="progress-fill" style={{ width: '100%' }} />
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Healing tab — new per-task intentions only, no legacy cards */}
 
       <div className="challenge-content">
         {/* Weekly Review CTA */}
@@ -2109,98 +2064,9 @@ function Challenge() {
           />
         )}
 
-        {/* Healing Intentions from Quests */}
+        {/* Healing tab — per-task healing intentions */}
         {activeCategory === 'Healing' && (
           <HealingIntentionsList userId={user?.id} />
-        )}
-
-        {/* Healing Quests (legacy exercises) */}
-        {activeCategory === 'Healing' && displayQuests.length > 0 && (
-          <div className="quest-section">
-            <h2 className="section-title">Healing</h2>
-            {['Recognise', 'Release', 'Rewire', 'Rest'].filter(rType =>
-              activeRTypeFilter === 'All' || activeRTypeFilter === rType
-            ).map(rType => {
-              const rTypeQuests = displayQuests
-                .filter(q => q.type === rType)
-                .sort((a, b) => {
-                  if (a.frequency === 'daily' && b.frequency !== 'daily') return -1
-                  if (a.frequency !== 'daily' && b.frequency === 'daily') return 1
-                  return 0
-                })
-              if (rTypeQuests.length === 0) return null
-
-              return (
-                <div key={rType} className="quest-subsection healing-rows">
-                  <h3 className="subsection-title">{rType}</h3>
-                  <div className="healing-row-list">
-                    {rTypeQuests.filter(quest => quest.id !== 'release_daily_challenge').map(quest => {
-                      const completed = isQuestCompletedToday(quest.id, quest)
-                      const isCompleting = completingQuestId === quest.id
-                      const streak = quest.frequency === 'daily' ? getDailyStreak(quest.id) : null
-                      const dayLabels = quest.frequency === 'daily' ? getDayLabels() : null
-
-                      return (
-                        <div key={quest.id} className={`ht-item-row ${completed ? 'done' : ''}`}>
-                          <span className={`ht-item-check ${completed ? 'done' : ''}`}>
-                            {completed ? '✓' : ''}
-                          </span>
-                          <div className="ht-item-body">
-                            <div className="ht-item-name" onClick={() => quest.description && setHealingInfoQuest(quest)} style={quest.description ? { cursor: 'pointer' } : undefined}>
-                              {quest.id === 'rewire_behavior_change' && userArchetypes.essence ? `Embody Your Essence: ${userArchetypes.essence}` : quest.name}
-                              {quest.description && <span className="tt-info-icon">ⓘ</span>}
-                            </div>
-                            <div className="ht-item-meta">
-                              <span className="ht-item-type">{quest.type}</span>
-                              <span className="ht-item-sep">·</span>
-                              <span className="ht-pts">{quest.points}pts</span>
-                            </div>
-                            {streak && dayLabels && (
-                              <div className="ht-streak-dots">
-                                {dayLabels.map((day, i) => (
-                                  <div key={i} className="ht-streak-day">
-                                    <span className={`ht-streak-dot ${streak[i] ? 'filled' : ''}`} />
-                                    <span className="ht-streak-label">{day}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                          {completed && quest.flow_route && quest.frequency === 'explainer' ? (
-                            <a
-                              href={`${quest.flow_route}?returnTo=/7-day-challenge`}
-                              className="ht-item-action reread-action"
-                              style={{ textDecoration: 'none', textAlign: 'center' }}
-                            >
-                              Read Again
-                            </a>
-                          ) : completed && quest.flow_route ? (
-                            <a
-                              href={`${quest.flow_route}?returnTo=/7-day-challenge`}
-                              className="ht-item-action reread-action"
-                              style={{ textDecoration: 'none', textAlign: 'center' }}
-                            >
-                              View Results
-                            </a>
-                          ) : completed ? (
-                            <span className="ht-item-action done-action">Done</span>
-                          ) : (
-                            <button
-                              className="ht-item-action"
-                              disabled={isCompleting}
-                              onClick={() => { setHealingInfoQuest(null); setHealingModalQuest(quest) }}
-                            >
-                              {isCompleting ? '...' : 'Complete'}
-                            </button>
-                          )}
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
         )}
 
         {/* Level Tab */}

@@ -1,11 +1,13 @@
 /**
- * HealingIntentionsList — Shows active healing intentions from quests
- * Renders at top of Healing tab, above legacy exercises.
+ * HealingIntentionsList — Full Healing tab content
+ * Shows active healing intentions from quests.
+ * Empty state: lets users identify a fear directly.
  * CSS prefix: hil-
  */
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import HealingFlowModal from './HealingFlowModal'
 import './HealingIntentionsList.css'
 
 const PATTERN_META = {
@@ -18,8 +20,11 @@ const PATTERN_META = {
 export default function HealingIntentionsList({ userId }) {
   const [intentions, setIntentions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [showStandaloneFlow, setShowStandaloneFlow] = useState(false)
+  const [standaloneText, setStandaloneText] = useState('')
+  const [standaloneTaskId, setStandaloneTaskId] = useState(null)
 
-  useEffect(() => {
+  const loadIntentions = () => {
     if (!userId) return
     supabase
       .from('healing_intentions')
@@ -31,28 +36,72 @@ export default function HealingIntentionsList({ userId }) {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [userId])
+  }
 
-  if (loading || intentions.length === 0) return null
+  useEffect(() => { loadIntentions() }, [userId])
+
+  const handleStartStandalone = async () => {
+    if (!standaloneText.trim()) return
+    // Create a standalone quest_task (no quest) for the healing flow
+    const { data, error } = await supabase.from('quest_tasks').insert({
+      quest_id: null,
+      user_id: userId,
+      text: standaloneText.trim(),
+      is_courage_challenge: true,
+      sort_order: 0,
+    }).select('id').single()
+
+    if (error) {
+      // quest_id is NOT NULL — need a quest. Create a "Healing" quest if none exists
+      let healingQuestId = null
+      const { data: existing } = await supabase.from('quests')
+        .select('id').eq('user_id', userId).eq('label', 'Healing Work').eq('status', 'active').limit(1)
+      if (existing?.length > 0) {
+        healingQuestId = existing[0].id
+      } else {
+        const { data: newQuest } = await supabase.from('quests').insert({
+          user_id: userId,
+          label: 'Healing Work',
+          predicted_state: 'anxious',
+          status: 'active',
+        }).select('id').single()
+        healingQuestId = newQuest?.id
+      }
+      if (healingQuestId) {
+        const { data: task } = await supabase.from('quest_tasks').insert({
+          quest_id: healingQuestId,
+          user_id: userId,
+          text: standaloneText.trim(),
+          is_courage_challenge: true,
+          sort_order: 0,
+        }).select('id').single()
+        if (task) {
+          setStandaloneTaskId(task.id)
+          setShowStandaloneFlow(true)
+        }
+      }
+    } else if (data) {
+      setStandaloneTaskId(data.id)
+      setShowStandaloneFlow(true)
+    }
+  }
+
+  if (loading) return null
 
   const active = intentions.filter(i => !i.outcome)
   const completed = intentions.filter(i => i.outcome)
 
   return (
     <div className="hil-container">
+      {/* Header */}
       <div className="hil-section">
         <div className="hil-section-header">
           <span className="hil-section-icon">💚</span>
-          <span className="hil-section-title">Your Healing Work</span>
+          <span className="hil-section-title">Healing</span>
         </div>
-        <p className="hil-section-sub">Fears you're actively working through, anchored to your quests.</p>
+        <p className="hil-section-sub">Removing what blocks your path. Each fear you name and work through expands what feels possible.</p>
 
-        {active.length === 0 && (
-          <div className="hil-empty">
-            No active healing work. Tag a courage challenge in your quests and explore the fear to start.
-          </div>
-        )}
-
+        {/* Active intentions */}
         {active.map(intention => {
           const pm = PATTERN_META[intention.pattern]
           const taskText = intention.quest_tasks?.text || 'Unknown task'
@@ -92,8 +141,28 @@ export default function HealingIntentionsList({ userId }) {
             </div>
           )
         })}
+
+        {/* Add new — always visible */}
+        <div className="hil-add-section">
+          <div className="hil-add-label">What's blocking you?</div>
+          <div className="hil-add-row">
+            <input
+              className="hil-add-input"
+              type="text"
+              value={standaloneText}
+              onChange={e => setStandaloneText(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleStartStandalone()}
+              placeholder="e.g. I'm scared of charging money..."
+            />
+            <button className="hil-add-btn" onClick={handleStartStandalone} disabled={!standaloneText.trim()}>
+              Explore
+            </button>
+          </div>
+          <div className="hil-add-hint">Or tag a courage challenge in your quests to start</div>
+        </div>
       </div>
 
+      {/* Resolved */}
       {completed.length > 0 && (
         <div className="hil-section hil-completed">
           <div className="hil-section-header">
@@ -118,6 +187,17 @@ export default function HealingIntentionsList({ userId }) {
             )
           })}
         </div>
+      )}
+
+      {/* Standalone healing flow modal */}
+      {showStandaloneFlow && standaloneTaskId && (
+        <HealingFlowModal
+          taskText={standaloneText}
+          userId={userId}
+          questTaskId={standaloneTaskId}
+          onComplete={() => { setShowStandaloneFlow(false); setStandaloneText(''); setStandaloneTaskId(null); loadIntentions() }}
+          onClose={() => { setShowStandaloneFlow(false); setStandaloneText(''); setStandaloneTaskId(null) }}
+        />
       )}
     </div>
   )
