@@ -87,10 +87,10 @@ export const PLATFORM_OPTIONS = [
 ]
 
 export const AUTOMATION_OPTIONS = [
-  { key: 'full', label: 'Do it all for me', minLevel: 4 },
-  { key: 'review', label: "Draft it, I'll review", minLevel: 3 },
-  { key: 'think', label: 'Just help me think', minLevel: 0 },
-  { key: 'all', label: 'Show me everything', minLevel: 0 },
+  { key: 'full', label: 'Do it all for me', minLevel: 4, maxLevel: 5 },
+  { key: 'review', label: "Draft it, I'll review", minLevel: 3, maxLevel: 5 },
+  { key: 'think', label: 'Just help me think', minLevel: 0, maxLevel: 3 },
+  { key: 'all', label: 'Show me everything', minLevel: 0, maxLevel: 5 },
 ]
 
 // Each capability: what drill-down keys surface it, then the card data
@@ -175,9 +175,6 @@ export const CAPABILITIES = [
   { id: 'ai_persona', triggers: ['persona'], canAI: 'Yes, with setup', level: 4, levelLabel: 'One-click', levelIcon: 'green',
     title: 'Create AI persona (not on camera)', bestTool: 'Orior AI', altTools: 'Higgsfield Soul ID, HeyGen',
     youDo: 'Define character, provide references', setup: '30 min', cost: '\u20AC15/mo', taaftSlug: 'avatars' },
-  { id: 'blog_seo', triggers: ['longform', 'seo'], canAI: 'Yes, fully', level: 4, levelLabel: 'One-click', levelIcon: 'green',
-    title: 'Write blog/SEO articles', bestTool: 'Claude + Surfer SEO', altTools: 'ChatGPT, Firecrawl',
-    youDo: 'Add expertise, review', setup: '30 min', cost: 'Free-$89/mo', taaftSlug: 'seo-content' },
   { id: 'newsletters', triggers: ['newsletter'], canAI: 'Yes, fully', level: 4, levelLabel: 'One-click', levelIcon: 'green',
     title: 'Write newsletters', bestTool: 'Claude + Resend/beehiiv', altTools: 'Kit, Mailchimp, Substack',
     youDo: 'Personal stories, review', setup: '15 min', cost: 'Free-$29/mo', taaftSlug: 'email-writing' },
@@ -230,7 +227,7 @@ export const CAPABILITIES = [
   { id: 'competitor_mon', triggers: ['competitors'], canAI: 'Yes, fully', level: 5, levelLabel: 'Runs itself', levelIcon: 'green',
     title: 'Competitor monitoring', bestTool: 'Firecrawl + Claude', altTools: 'SimilarWeb, manual',
     youDo: 'Decide how to respond', setup: '30 min', cost: 'Free', taaftSlug: 'competitive-analysis' },
-  { id: 'weekly_summary', triggers: ['reporting', 'analytics'], canAI: 'Yes, fully', level: 5, levelLabel: 'Runs itself', levelIcon: 'green',
+  { id: 'weekly_summary', triggers: ['reporting', 'website', 'social_analytics', 'revenue', 'ad_perf', 'competitors'], canAI: 'Yes, fully', level: 5, levelLabel: 'Runs itself', levelIcon: 'green',
     title: 'Weekly business summary', bestTool: 'Claude Code (scheduled)', altTools: 'ChatGPT + manual review',
     youDo: 'Read it, act on insights', setup: '15 min', cost: '~$20/mo', taaftSlug: 'productivity' },
 
@@ -286,14 +283,15 @@ export function buildBrowseLink(taaftSlug, budget = 'under200', platform = 'desk
  * Get capabilities matching selected drill-down keys, filtered by automation preference
  */
 export function getMatchingCapabilities(selectedKeys, automationPref = 'all') {
-  const minLevel = AUTOMATION_OPTIONS.find(o => o.key === automationPref)?.minLevel || 0
+  const pref = AUTOMATION_OPTIONS.find(o => o.key === automationPref)
+  const minLevel = pref?.minLevel ?? 0
+  const maxLevel = pref?.maxLevel ?? 5
   const seen = new Set()
   return CAPABILITIES.filter(cap => {
     if (seen.has(cap.id)) return false
     const matches = cap.triggers.some(t => selectedKeys.includes(t))
     if (!matches) return false
-    if (automationPref === 'full' && cap.level < 4) return false
-    if (automationPref === 'review' && cap.level < 3) return false
+    if (cap.level < minLevel || cap.level > maxLevel) return false
     seen.add(cap.id)
     return true
   })

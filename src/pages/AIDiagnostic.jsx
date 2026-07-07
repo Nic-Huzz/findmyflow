@@ -79,7 +79,7 @@ export default function AIDiagnostic() {
     setEmailError(null)
 
     try {
-      await supabase.from('lead_captures').insert({
+      const { error } = await supabase.from('lead_captures').insert({
         email,
         source: 'ai-diagnostic',
         metadata: {
@@ -92,10 +92,17 @@ export default function AIDiagnostic() {
           capabilities_count: results.length,
         },
       })
+      if (error) {
+        console.warn('Lead capture failed:', error.message)
+        // Still show results even if capture fails — don't block the user
+      }
       hapticSuccess()
       setStep(STEPS.RESULTS)
     } catch (err) {
-      setEmailError('Something went wrong. Try again.')
+      // Network error — still show results
+      console.warn('Lead capture error:', err)
+      hapticSuccess()
+      setStep(STEPS.RESULTS)
     } finally {
       setEmailSaving(false)
     }
@@ -508,6 +515,14 @@ export default function AIDiagnostic() {
             <h2 style={{ fontSize: 18, fontWeight: 700, margin: '32px 0 16px' }}>
               Full report ({results.length} capabilities)
             </h2>
+            {results.length === 0 && (
+              <div style={{ textAlign: 'center', padding: '32px 0', color: 'rgba(255,255,255,0.5)' }}>
+                <p>No capabilities matched your current filters.</p>
+                <button className="cta-button secondary" onClick={() => { setAutomation('all'); generateResults(); }}>
+                  Show all automation levels
+                </button>
+              </div>
+            )}
             <div className="cap-cards">
               {results.map(cap => {
                 const browseUrl = buildBrowseLink(cap.taaftSlug, budget, platform)
