@@ -261,9 +261,14 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
                     </button>
                   </>
                 ) : (
-                  <button className="hfm-deeper-btn hfm-deeper-primary" onClick={handleNext}>
-                    I've booked, continue →
-                  </button>
+                  <>
+                    <button className="hfm-deeper-btn hfm-deeper-primary" onClick={handleNext}>
+                      I've booked, continue →
+                    </button>
+                    <button className="hfm-deeper-btn hfm-deeper-skip" onClick={() => setClickedBook(false)}>
+                      See options again
+                    </button>
+                  </>
                 )}
               </div>
             </div>
