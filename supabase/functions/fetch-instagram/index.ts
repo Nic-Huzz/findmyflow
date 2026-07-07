@@ -213,7 +213,11 @@ serve(async (req) => {
         // 5. For each post, fetch insights and upsert
         for (const post of allPosts) {
           let postReach = 0, postViews = 0, postShares = 0, postSaves = 0
+          let postSkipRate: number | null = null, postAvgWatchTime: number | null = null, postTotalWatchTime: number | null = null
 
+          const isReel = post.media_product_type === 'REELS'
+
+          // Base metrics (all post types)
           try {
             const postInsights = await composioExecute(
               'INSTAGRAM_GET_IG_MEDIA_INSIGHTS',
@@ -236,12 +240,37 @@ serve(async (req) => {
               }
             }
           } catch (e) {
-            // Per-post insights can fail for older posts or stories
             console.warn(`Post insights failed for ${post.id}:`, e.message)
           }
 
-          // Insert new posts (skip if already exists to preserve experience_id tags)
-          await supabase.from('instagram_posts').upsert({
+          // Reel-specific metrics (separate call so failure doesn't break base metrics)
+          if (isReel) {
+            try {
+              const reelInsights = await composioExecute(
+                'INSTAGRAM_GET_IG_MEDIA_INSIGHTS',
+                composio_connection_id,
+                {
+                  ig_media_id: post.id,
+                  metric: ['reels_skip_rate', 'ig_reels_avg_watch_time', 'ig_reels_video_view_total_time'],
+                },
+                user_id
+              )
+
+              const reelMetrics = reelInsights.data || reelInsights || []
+              if (Array.isArray(reelMetrics)) {
+                for (const m of reelMetrics) {
+                  const val = (m.values?.[0]?.value) ?? (m.total_value?.value) ?? null
+                  if (m.name === 'reels_skip_rate' && val !== null) postSkipRate = val
+                  if (m.name === 'ig_reels_avg_watch_time' && val !== null) postAvgWatchTime = val
+                  if (m.name === 'ig_reels_video_view_total_time' && val !== null) postTotalWatchTime = val
+                }
+              }
+            } catch (e) {
+              console.warn(`Reel metrics failed for ${post.id}:`, e.message)
+            }
+          }
+
+          const postData = {
             user_id,
             ig_media_id: post.id,
             caption: post.caption || null,
@@ -256,25 +285,22 @@ serve(async (req) => {
             saves: postSaves,
             reach: postReach,
             views: postViews,
+            skip_rate: postSkipRate,
+            avg_watch_time: postAvgWatchTime,
+            total_watch_time: postTotalWatchTime,
             updated_at: new Date().toISOString(),
-          }, {
+          }
+
+          // Insert new posts (skip if already exists to preserve experience_id tags)
+          await supabase.from('instagram_posts').upsert(postData, {
             onConflict: 'user_id,ig_media_id',
             ignoreDuplicates: true,
           })
 
           // Update metrics on existing posts (preserves experience_id)
+          const { user_id: _u, ig_media_id: _m, ...updateData } = postData
           await supabase.from('instagram_posts')
-            .update({
-              caption: post.caption || null,
-              like_count: post.like_count || 0,
-              comments_count: post.comments_count || 0,
-              shares: postShares,
-              saves: postSaves,
-              reach: postReach,
-              views: postViews,
-              thumbnail_url: post.thumbnail_url || post.media_url || null,
-              updated_at: new Date().toISOString(),
-            })
+            .update(updateData)
             .eq('user_id', user_id)
             .eq('ig_media_id', post.id)
         }
