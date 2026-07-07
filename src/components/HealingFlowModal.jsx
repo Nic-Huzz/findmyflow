@@ -42,27 +42,38 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, onComp
     }
   }
 
-  const handleSave = async () => {
+  // Save progress on each step (upsert so partial progress is kept)
+  const saveProgress = async (isFinal = false) => {
+    const insightText = (originText.trim() && fearText.trim() && patternMeta)
+      ? `When "${originText.trim().slice(0, 80)}" happened, your ${patternMeta.name} was created to keep you safe. But that was then. "${taskText}" is now.`
+      : null
+
+    const row = {
+      quest_task_id: questTaskId,
+      user_id: userId,
+      pattern: pattern || null,
+      fear_text: fearText.trim() || null,
+      origin_text: originText.trim() || null,
+      insight_text: insightText,
+      rewire_text: rewireText.trim() || null,
+      expectation_text: expectationText.trim() || null,
+      healing_stage: isFinal ? 'recognised' : 'in_progress',
+      updated_at: new Date().toISOString(),
+    }
+
+    await supabase.from('healing_intentions')
+      .upsert(row, { onConflict: 'quest_task_id' })
+      .catch(() => {})
+  }
+
+  const handleFinalSave = async () => {
     if (saving) return
     setSaving(true)
     try {
-      const insightText = `When "${originText.trim().slice(0, 80)}" happened, your ${patternMeta?.name || 'protective voice'} was created to keep you safe. But that was then. "${taskText}" is now.`
-
-      const { error } = await supabase.from('healing_intentions').insert({
-        quest_task_id: questTaskId,
-        user_id: userId,
-        pattern,
-        fear_text: fearText.trim(),
-        origin_text: originText.trim(),
-        insight_text: insightText,
-        rewire_text: rewireText.trim(),
-        expectation_text: expectationText.trim(),
-        healing_stage: 'recognised',
-      })
-      if (error) throw error
+      await saveProgress(true)
 
       // Award RP
-      await supabase.from('quest_completions').insert({
+      supabase.from('quest_completions').insert({
         user_id: userId,
         quest_id: `healing_flow_${questTaskId}`,
         quest_category: 'Healing',
@@ -70,7 +81,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, onComp
         points_earned: 5,
         challenge_day: 0,
         project_id: null,
-      })
+      }).catch(() => {})
 
       hapticSuccess()
       onComplete?.()
@@ -82,10 +93,12 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, onComp
 
   const handleNext = () => {
     if (step === 7) {
-      handleSave()
+      handleFinalSave()
       return
     }
     hapticLight()
+    // Auto-save progress when advancing past steps with data
+    if (step >= 1 && pattern) saveProgress()
     setStep(step + 1)
   }
 
@@ -195,10 +208,10 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, onComp
                 <p className="hfm-education-bold">That's why somatic work creates shifts that thinking alone can't.</p>
               </div>
               <div className="hfm-deeper-options">
-                <a href="https://calendly.com/huzz-nichuzz/30min" target="_blank" rel="noopener noreferrer"
-                  className="hfm-deeper-btn hfm-deeper-primary">
+                <button className="hfm-deeper-btn hfm-deeper-primary"
+                  onClick={() => { window.open('https://calendly.com/huzz-nichuzz/30min', '_blank', 'noopener,noreferrer'); handleNext() }}>
                   Book a session with Huzz
-                </a>
+                </button>
                 <button className="hfm-deeper-btn hfm-deeper-secondary" disabled>
                   Self-guided release (coming soon)
                 </button>

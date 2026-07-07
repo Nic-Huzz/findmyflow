@@ -73,7 +73,8 @@ export default function HealingIntentionsList({ userId }) {
 
   if (loading) return null
 
-  const active = intentions.filter(i => !i.outcome)
+  const active = intentions.filter(i => !i.outcome && i.healing_stage !== 'in_progress')
+  const inProgress = intentions.filter(i => i.healing_stage === 'in_progress')
   const completed = intentions.filter(i => i.outcome)
 
   return (
