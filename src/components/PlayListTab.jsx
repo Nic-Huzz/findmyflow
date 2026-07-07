@@ -136,16 +136,24 @@ export default function PlayListTab({
   }
 
   const fetchActiveChallenges = async () => {
+    // Fetch all picks (not just current week) — wahoos persist until completed
     const { data } = await supabase
       .from('priority_weekly_picks')
       .select('*')
       .eq('user_id', userId)
-      .eq('week_start_date', getWeekStartLocal())
       .eq('pick_type', 'groan')
+      .order('week_start_date', { ascending: false })
 
     if (data) {
+      // Deduplicate by reference_id (keep most recent pick)
+      const seen = new Set()
+      const unique = data.filter(pick => {
+        if (seen.has(pick.reference_id)) return false
+        seen.add(pick.reference_id)
+        return true
+      })
       // Enrich with source label from groan_challenges
-      const enriched = await Promise.all(data.map(async pick => {
+      const enriched = await Promise.all(unique.map(async pick => {
         const { data: challenge } = await supabase
           .from('groan_challenges')
           .select('source_label, status')
