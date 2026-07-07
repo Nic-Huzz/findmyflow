@@ -48,6 +48,7 @@ import ChallengeIntro from './components/ChallengeIntro'
 import DailyCheckin from './components/DailyCheckin'
 import WeeklyReview from './components/WeeklyReview'
 import LevelTab from './components/level/LevelTab'
+import HealingIntentionsList from './components/HealingIntentionsList'
 import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
@@ -2108,7 +2109,12 @@ function Challenge() {
           />
         )}
 
-        {/* Healing Quests */}
+        {/* Healing Intentions from Quests */}
+        {activeCategory === 'Healing' && (
+          <HealingIntentionsList userId={user?.id} />
+        )}
+
+        {/* Healing Quests (legacy exercises) */}
         {activeCategory === 'Healing' && displayQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Healing</h2>
