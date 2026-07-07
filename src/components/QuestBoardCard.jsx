@@ -21,6 +21,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const [healingTaskId, setHealingTaskId] = useState(null) // which task's healing modal is open
   const [healingTaskText, setHealingTaskText] = useState('')
   const [healingPromptTaskId, setHealingPromptTaskId] = useState(null) // show "explore fear?" prompt
+  const [healingPromptStep, setHealingPromptStep] = useState('ask') // 'ask' | 'when'
   const [healingIntentions, setHealingIntentions] = useState({}) // { taskId: healingIntention }
   const [outcomeTaskId, setOutcomeTaskId] = useState(null) // show outcome prompt after completion
   const inputRef = useRef(null)
@@ -233,17 +234,32 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           )}
 
           {/* Healing prompt (Option C) — appears after adding a courage task */}
-          {healingPromptTaskId && (
+          {healingPromptTaskId && healingPromptStep === 'ask' && (
             <div className="qbc-healing-prompt">
               <div className="qbc-healing-prompt-text">Want to explore what makes this scary?</div>
               <div className="qbc-healing-prompt-actions">
                 <button className="qbc-healing-prompt-yes"
-                  onClick={() => { setHealingTaskId(healingPromptTaskId); setHealingPromptTaskId(null) }}>
-                  Deep dive now 💚
+                  onClick={() => setHealingPromptStep('when')}>
+                  Yes, dig in 💚
+                </button>
+                <button className="qbc-healing-prompt-no"
+                  onClick={() => { setHealingPromptTaskId(null); setHealingPromptStep('ask') }}>
+                  No, just do it ⚡
+                </button>
+              </div>
+            </div>
+          )}
+
+          {healingPromptTaskId && healingPromptStep === 'when' && (
+            <div className="qbc-healing-prompt">
+              <div className="qbc-healing-prompt-text">Deep dive now?</div>
+              <div className="qbc-healing-prompt-actions">
+                <button className="qbc-healing-prompt-yes"
+                  onClick={() => { setHealingTaskId(healingPromptTaskId); setHealingPromptTaskId(null); setHealingPromptStep('ask') }}>
+                  Now 💚
                 </button>
                 <button className="qbc-healing-prompt-later"
                   onClick={async () => {
-                    // Create a minimal healing_intention so it shows on Healing tab
                     try {
                       await supabase.from('healing_intentions').upsert({
                         quest_task_id: healingPromptTaskId,
@@ -253,6 +269,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
                       }, { onConflict: 'quest_task_id' })
                     } catch (e) { /* non-blocking */ }
                     setHealingPromptTaskId(null)
+                    setHealingPromptStep('ask')
                   }}>
                   Later
                 </button>
