@@ -491,6 +491,23 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   // Reconnect quest completed via HealingCompletionModal
   const handleReconnectComplete = (q, data) => {
     setHealingModalQuest(null)
+
+    // Weekly Focus / Peak State SETUP: don't score, just save the intention and refresh
+    const isSetup = data?.quest_type === 'weekly_focus_setup' || data?.quest_type === 'peak_state_setup'
+    if (isSetup) {
+      if (data.quest_type === 'weekly_focus_setup') setWeeklyFocus(data)
+      if (data.quest_type === 'peak_state_setup') setPeakState(data)
+      // Refresh completions so the row shows updated state
+      supabase
+        .from('quest_completions')
+        .select('quest_id, completed_at')
+        .eq('user_id', userId)
+        .in('quest_category', ['Tune', 'Healing'])
+        .gte('completed_at', getWeekStartLocal())
+        .then(({ data: rows }) => { if (rows) setCompletions(rows) })
+      return
+    }
+
     // Forward to Challenge.jsx's handleQuestComplete for scoring/celebrations
     onQuestComplete?.(q, data)
     // Refresh completions
@@ -503,7 +520,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       .then(({ data: rows }) => {
         if (rows) setCompletions(rows)
       })
-    // Refresh weekly focus (in case setup just completed)
+    // Refresh weekly focus (in case daily honour just completed)
     if (q?.id === 'rewire_weekly_focus') {
       supabase
         .from('quest_completions')
