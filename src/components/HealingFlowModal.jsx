@@ -29,6 +29,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
   const [originText, setOriginText] = useState(existingData?.origin_text || '')
   const [rewireText, setRewireText] = useState(existingData?.rewire_text || '')
   const [expectationText, setExpectationText] = useState(existingData?.expectation_text || '')
+  const [clickedBook, setClickedBook] = useState(false)
   const [saving, setSaving] = useState(false)
 
   const patternMeta = PATTERNS.find(p => p.id === pattern)
@@ -246,16 +247,24 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
                 <p className="hfm-education-bold">That's why somatic work creates shifts that thinking alone can't.</p>
               </div>
               <div className="hfm-deeper-options">
-                <button className="hfm-deeper-btn hfm-deeper-primary"
-                  onClick={() => { window.open('https://calendly.com/huzz-nichuzz/30min', '_blank', 'noopener,noreferrer'); handleNext() }}>
-                  Book a session with Huzz
-                </button>
-                <button className="hfm-deeper-btn hfm-deeper-secondary" disabled>
-                  Self-guided release (coming soon)
-                </button>
-                <button className="hfm-deeper-btn hfm-deeper-skip" onClick={handleNext}>
-                  Continue on my own →
-                </button>
+                {!clickedBook ? (
+                  <>
+                    <button className="hfm-deeper-btn hfm-deeper-primary"
+                      onClick={() => { window.open('https://calendly.com/huzz-nichuzz/30min', '_blank', 'noopener,noreferrer'); setClickedBook(true) }}>
+                      Book a session with Huzz
+                    </button>
+                    <button className="hfm-deeper-btn hfm-deeper-secondary" disabled>
+                      Self-guided release (coming soon)
+                    </button>
+                    <button className="hfm-deeper-btn hfm-deeper-skip" onClick={handleNext}>
+                      Continue on my own →
+                    </button>
+                  </>
+                ) : (
+                  <button className="hfm-deeper-btn hfm-deeper-primary" onClick={handleNext}>
+                    I've booked, continue →
+                  </button>
+                )}
               </div>
             </div>
           )}

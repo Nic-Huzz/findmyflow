@@ -219,9 +219,10 @@
 
 /* === INSIGHT CARD === */
 .hfm-insight-card {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 18px 16px;
+  background: transparent;
+  border-left: 3px solid #5e17eb;
+  border-radius: 0;
+  padding: 0 0 0 16px;
   line-height: 1.6;
   font-size: 15px;
   color: #495057;
@@ -244,9 +245,10 @@
 
 /* === EDUCATION (Step 6) === */
 .hfm-education {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 16px;
+  background: transparent;
+  border-left: 3px solid #E9A23B;
+  border-radius: 0;
+  padding: 0 0 0 16px;
   margin-bottom: 16px;
   line-height: 1.6;
   font-size: 14px;

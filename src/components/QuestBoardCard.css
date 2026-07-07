@@ -9,27 +9,23 @@
 }
 
 .qbc.qbc-expanded {
-  background: #f8f9fa;
-  border: 1.5px solid #e9ecef;
+  background: transparent;
 }
 
 .qbc-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 14px 0;
   cursor: pointer;
-  border-radius: 12px;
-  background: #f8f9fa;
-  border: 1.5px solid #e9ecef;
+  border-bottom: 1px solid #f2f3f5;
   transition: all 0.2s;
 }
 
-.qbc-header:active { background: #f0f1f3; }
+.qbc-header:active { opacity: 0.7; }
 
 .qbc-expanded .qbc-header {
-  border-radius: 12px 12px 0 0;
-  border-bottom-color: transparent;
+  border-bottom-color: #f2f3f5;
 }
 
 .qbc-state-dot {

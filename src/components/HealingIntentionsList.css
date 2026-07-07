@@ -58,24 +58,23 @@
 
 /* Card */
 .hil-card {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 8px;
-  border: 1.5px solid transparent;
+  background: transparent;
+  padding: 14px 0;
+  margin-bottom: 0;
+  border: none;
+  border-bottom: 1px solid #f2f3f5;
 }
 
 .hil-card:last-child {
-  margin-bottom: 0;
+  border-bottom: none;
 }
 
 .hil-card-clickable {
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s;
 }
 
 .hil-card-clickable:hover {
-  border-color: rgba(94, 23, 235, 0.2);
   background: rgba(94, 23, 235, 0.02);
 }
 
