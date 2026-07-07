@@ -26,6 +26,14 @@ const ProfileHub = () => {
       color: '#5e17eb'
     },
     {
+      id: 'scale-impact',
+      icon: '🚀',
+      title: 'Scale My Impact + Income',
+      description: 'Tools for experience creators to fill rooms and build a business',
+      path: '/create',
+      color: '#E9A23B'
+    },
+    {
       id: 'build-app',
       icon: '🔨',
       title: 'Build an App',
