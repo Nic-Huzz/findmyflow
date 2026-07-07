@@ -562,6 +562,10 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             onClick={() => setActiveStruggle(activeStruggle === 'fear' ? null : 'fear')}>
             😨 What's keeping me stuck?
           </button>
+          <button className={`struggle-pill ${activeStruggle === 'scale' ? 'active' : ''}`}
+            onClick={() => setActiveStruggle(activeStruggle === 'scale' ? null : 'scale')}>
+            🚀 Scaling my experiences
+          </button>
         </div>
 
         {activeStruggle === 'direction' && (
@@ -575,6 +579,12 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <DeepDiveCard deepDive={{ id: 'wound_map', name: 'Map Your Origin Story', route: '/wound-map?returnTo=/7-day-challenge', narrative: 'What happened before you arrived here?', icon: '🗺️' }} isCompleted={hasWoundMap} />
             <DeepDiveCard deepDive={{ id: 'matrix_codes', name: 'Matrix Codes', route: '/matrix-code-deep-dive', narrative: 'What permission are you missing?', icon: '🔓' }} isCompleted={!!hasFlowDeepDive['recognise_shadow_work']} />
             <DeepDiveCard deepDive={{ id: 'nervous_system', name: 'NS Boundaries', route: '/nervous-system', narrative: 'Where does your nervous system say stop?', icon: '🧠' }} isCompleted={!!hasFlowDeepDive['nervous_system_map']} />
+          </div>
+        )}
+
+        {activeStruggle === 'scale' && (
+          <div className="struggle-flows">
+            <DeepDiveCard deepDive={{ id: 'scale_portal', name: 'Scale My Impact + Income', route: '/create', narrative: 'Tools for experience creators to fill rooms and build a business.', icon: '🚀' }} isCompleted={false} />
           </div>
         )}
       </div>
