@@ -42,20 +42,22 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, onComp
         const insightText = (d.originText?.trim() && d.fearText?.trim())
           ? `When "${d.originText.trim().slice(0, 80)}" happened, your protective voice was created to keep you safe. But that was then. "${taskText}" is now.`
           : null
-        supabase.from('healing_intentions')
-          .upsert({
-            quest_task_id: questTaskId,
-            user_id: userId,
-            pattern: d.pattern,
-            fear_text: d.fearText?.trim() || null,
-            origin_text: d.originText?.trim() || null,
-            insight_text: insightText,
-            rewire_text: d.rewireText?.trim() || null,
-            expectation_text: d.expectationText?.trim() || null,
-            healing_stage: 'in_progress',
-            updated_at: new Date().toISOString(),
-          }, { onConflict: 'quest_task_id' })
-          .catch(() => {})
+        try {
+          supabase.from('healing_intentions')
+            .upsert({
+              quest_task_id: questTaskId,
+              user_id: userId,
+              pattern: d.pattern,
+              fear_text: d.fearText?.trim() || null,
+              origin_text: d.originText?.trim() || null,
+              insight_text: insightText,
+              rewire_text: d.rewireText?.trim() || null,
+              expectation_text: d.expectationText?.trim() || null,
+              healing_stage: 'in_progress',
+              updated_at: new Date().toISOString(),
+            }, { onConflict: 'quest_task_id' })
+            .then(() => {})
+        } catch (e) { /* fire-and-forget */ }
       }
     }
   }, [])
@@ -92,9 +94,10 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, onComp
       updated_at: new Date().toISOString(),
     }
 
-    await supabase.from('healing_intentions')
-      .upsert(row, { onConflict: 'quest_task_id' })
-      .catch(() => {})
+    try {
+      await supabase.from('healing_intentions')
+        .upsert(row, { onConflict: 'quest_task_id' })
+    } catch (e) { /* fire-and-forget */ }
   }
 
   const handleFinalSave = async () => {
