@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { STATES, STATE_META } from './LifePathMap/lifePaths'
+import './HealingIntentionsList.css' // shares qs- styles
 
 export default function QuestSelector({ userId, value, onChange }) {
   const [quests, setQuests] = useState([])
