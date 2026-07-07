@@ -256,12 +256,8 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
                   }}>
                   Later
                 </button>
-                <button className="qbc-healing-prompt-no"
-                  onClick={() => setHealingPromptTaskId(null)}>
-                  No thanks
-                </button>
               </div>
-              <div className="qbc-healing-prompt-hint">You can always start from the Healing tab</div>
+              <div className="qbc-healing-prompt-hint">You can always continue from the Healing tab</div>
             </div>
           )}
 
