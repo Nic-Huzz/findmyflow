@@ -244,7 +244,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         supabase.from('founder_dna_results').select('dna_code, archetype, matched_founder').eq('user_id', userId).order('completed_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('creator_assessments').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('user_stage_progress').select('pay_rent_model, current_journey_level, hero_avatar_url').eq('user_id', userId).maybeSingle(),
-        supabase.from('remarkable_angles').select('id, wound_problem, assumption, rule_identified, combination_insight, different, experience, extreme_action_plan, project_name, score_unique, score_share, score_simple, ai_rule_statement, ai_remarkable_bio, ai_tribe_statement').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+        supabase.from('remarkable_angles').select('id, wound_problem, assumption, rule_identified, combination_insight, different, experience, extreme_action_plan, project_name, score_unique, score_share, score_simple, ai_rule_statement, ai_remarkable_bio, ai_tribe_statement, branch, score_ancestral, score_body').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('contact_experiences').select('contact_id, experience_id').eq('user_id', userId),
         supabase.from('lead_flow_profiles').select('essence_archetype, custom_essence_image, custom_essence_name').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('quest_completions').select('points_earned').eq('user_id', userId).eq('quest_category', 'Movement'),
