@@ -128,7 +128,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
     }
 
     if (newDone && !task.is_courage_challenge) {
-      await supabase.from('quest_completions').insert({
+      supabase.from('quest_completions').insert({
         user_id: userId,
         quest_id: `quest_task_${task.id}`,
         quest_category: 'Quests',
@@ -136,12 +136,13 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
         points_earned: 3,
         challenge_day: 0,
         project_id: null,
-      })
+      }).catch(() => {})
     }
     if (!newDone && !task.is_courage_challenge) {
-      await supabase.from('quest_completions').delete()
+      supabase.from('quest_completions').delete()
         .eq('user_id', userId)
         .eq('quest_id', `quest_task_${task.id}`)
+        .catch(() => {})
     }
 
     // Show outcome prompt if task has healing intention with expectation
@@ -158,7 +159,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       .update({ outcome, updated_at: new Date().toISOString() })
       .eq('quest_task_id', taskId)
     // Bonus 2 RP for completing outcome check
-    await supabase.from('quest_completions').insert({
+    supabase.from('quest_completions').insert({
       user_id: userId,
       quest_id: `healing_outcome_${taskId}`,
       quest_category: 'Healing',
@@ -166,7 +167,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       points_earned: 2,
       challenge_day: 0,
       project_id: null,
-    })
+    }).catch(() => {})
     setOutcomeTaskId(null)
     onUpdate?.()
   }
@@ -179,7 +180,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
     if (error) console.error('Close quest error:', error)
     else {
       if (reason === 'achieved') {
-        await supabase.from('quest_completions').insert({
+        supabase.from('quest_completions').insert({
           user_id: userId,
           quest_id: `quest_achieved_${quest.id}`,
           quest_category: 'Quests',
@@ -187,7 +188,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           points_earned: 10,
           challenge_day: 0,
           project_id: null,
-        })
+        }).catch(() => {})
       }
       setShowClose(false); onUpdate?.()
     }
