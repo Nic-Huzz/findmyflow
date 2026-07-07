@@ -46,7 +46,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 20px 0;
+  padding: 20px 24px 0;
 }
 
 .hfm-header-left {
@@ -85,7 +85,7 @@
 
 /* === PROGRESS === */
 .hfm-progress {
-  margin: 14px 20px 0;
+  margin: 14px 24px 0;
   height: 4px;
   background: #f1f3f5;
   border-radius: 4px;
@@ -101,7 +101,7 @@
 
 /* === BODY === */
 .hfm-body {
-  padding: 16px 20px;
+  padding: 16px 24px;
   flex: 1;
 }
 
@@ -321,7 +321,7 @@
 .hfm-footer {
   display: flex;
   gap: 8px;
-  padding: 0 20px 20px;
+  padding: 0 24px 20px;
 }
 
 .hfm-back {
