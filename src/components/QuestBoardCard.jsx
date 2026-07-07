@@ -1,13 +1,15 @@
 /**
  * QuestBoardCard — Collapsible quest card for the Quests tab.
  * Shows a life path being actively pursued with its tasks.
+ * Option C: after courage tag, prompts "Want to explore what makes this scary?"
  */
 
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { STATE_META } from './LifePathMap/lifePaths'
 import { supabase } from '../lib/supabaseClient'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../lib/dateUtils'
+import HealingFlowModal from './HealingFlowModal'
 import './QuestBoardCard.css'
 
 export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
@@ -16,18 +18,39 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const [isCourage, setIsCourage] = useState(false)
   const [saving, setSaving] = useState(false)
   const [showClose, setShowClose] = useState(false)
+  const [healingTaskId, setHealingTaskId] = useState(null) // which task's healing modal is open
+  const [healingTaskText, setHealingTaskText] = useState('')
+  const [healingPromptTaskId, setHealingPromptTaskId] = useState(null) // show "explore fear?" prompt
+  const [healingIntentions, setHealingIntentions] = useState({}) // { taskId: healingIntention }
+  const [outcomeTaskId, setOutcomeTaskId] = useState(null) // show outcome prompt after completion
   const inputRef = useRef(null)
 
   const stateMeta = STATE_META[quest.predicted_state]
   const completedCount = tasks.filter(t => t.done).length
   const totalCount = tasks.length
 
+  // Load healing intentions for all tasks
+  useEffect(() => {
+    if (!tasks.length) return
+    const taskIds = tasks.map(t => t.id)
+    supabase
+      .from('healing_intentions')
+      .select('quest_task_id, pattern, healing_stage, expectation_text, outcome')
+      .in('quest_task_id', taskIds)
+      .then(({ data }) => {
+        if (data) {
+          const byTask = {}
+          data.forEach(h => { byTask[h.quest_task_id] = h })
+          setHealingIntentions(byTask)
+        }
+      })
+  }, [tasks])
+
   const addTask = async () => {
     if (!taskInput.trim() || saving) return
     setSaving(true)
     try {
       let groanId = null
-      // If tagged as courage challenge, create groan_challenges entry
       if (isCourage) {
         const { data: dbRecord } = await createGroanChallenge({
           userId,
@@ -53,18 +76,38 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
         }
       }
 
-      const { error } = await supabase.from('quest_tasks').insert({
+      const { data: insertedTask, error } = await supabase.from('quest_tasks').insert({
         quest_id: quest.id,
         user_id: userId,
         text: taskInput.trim(),
         is_courage_challenge: isCourage,
         groan_challenge_id: groanId,
         sort_order: totalCount,
-      })
+      }).select('id').single()
+
       if (error) console.error('Add task error:', error)
       else {
+        const savedText = taskInput.trim()
         setTaskInput('')
         setIsCourage(false)
+
+        // Option C: if courage tagged, show healing prompt
+        if (isCourage && insertedTask?.id) {
+          setHealingPromptTaskId(insertedTask.id)
+          setHealingTaskText(savedText)
+        }
+
+        // Award 2 RP for adding a quest task
+        await supabase.from('quest_completions').insert({
+          user_id: userId,
+          quest_id: `quest_created_${Date.now()}`,
+          quest_category: 'Quests',
+          quest_type: 'Practice',
+          points_earned: 2,
+          challenge_day: 0,
+          project_id: null,
+        })
+
         onUpdate?.()
       }
     } catch (e) { console.error('Add task error:', e) }
@@ -77,13 +120,13 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       .update({ done: newDone, completed_at: newDone ? new Date().toISOString() : null })
       .eq('id', task.id)
     if (error) console.error('Toggle task error:', error)
-    // Sync courage challenge status if linked
+
     if (task.groan_challenge_id) {
       await supabase.from('groan_challenges')
         .update({ status: newDone ? 'completed' : 'accepted', completed_at: newDone ? new Date().toISOString() : null })
         .eq('id', task.groan_challenge_id)
     }
-    // Award/revoke 3 RP for regular (non-courage) task completion
+
     if (newDone && !task.is_courage_challenge) {
       await supabase.from('quest_completions').insert({
         user_id: userId,
@@ -100,6 +143,31 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
         .eq('user_id', userId)
         .eq('quest_id', `quest_task_${task.id}`)
     }
+
+    // Show outcome prompt if task has healing intention with expectation
+    const hi = healingIntentions[task.id]
+    if (newDone && hi?.expectation_text && !hi?.outcome) {
+      setOutcomeTaskId(task.id)
+    }
+
+    onUpdate?.()
+  }
+
+  const handleOutcome = async (taskId, outcome) => {
+    await supabase.from('healing_intentions')
+      .update({ outcome, updated_at: new Date().toISOString() })
+      .eq('quest_task_id', taskId)
+    // Bonus 2 RP for completing outcome check
+    await supabase.from('quest_completions').insert({
+      user_id: userId,
+      quest_id: `healing_outcome_${taskId}`,
+      quest_category: 'Healing',
+      quest_type: 'Practice',
+      points_earned: 2,
+      challenge_day: 0,
+      project_id: null,
+    })
+    setOutcomeTaskId(null)
     onUpdate?.()
   }
 
@@ -110,7 +178,6 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       .eq('id', quest.id)
     if (error) console.error('Close quest error:', error)
     else {
-      // Award 10 RP for achieving a quest (0 for lost interest/paused)
       if (reason === 'achieved') {
         await supabase.from('quest_completions').insert({
           user_id: userId,
@@ -128,7 +195,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
 
   return (
     <div className={`qbc ${expanded ? 'qbc-expanded' : ''}`}>
-      {/* Collapsed header — always visible */}
+      {/* Collapsed header */}
       <div className="qbc-header" onClick={() => setExpanded(!expanded)}>
         <div className="qbc-state-dot" style={{ background: stateMeta?.color || '#6b7280' }} />
         <div className="qbc-info">
@@ -154,8 +221,43 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
                   </button>
                   <span className="qbc-task-text">{task.text}</span>
                   {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                  {healingIntentions[task.id] && (
+                    <span className="qbc-healing-badge"
+                      onClick={(e) => { e.stopPropagation(); setHealingTaskId(task.id); setHealingTaskText(task.text) }}>
+                      💚
+                    </span>
+                  )}
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Healing prompt (Option C) — appears after adding a courage task */}
+          {healingPromptTaskId && (
+            <div className="qbc-healing-prompt">
+              <div className="qbc-healing-prompt-text">Want to explore what makes this scary?</div>
+              <div className="qbc-healing-prompt-actions">
+                <button className="qbc-healing-prompt-yes"
+                  onClick={() => { setHealingTaskId(healingPromptTaskId); setHealingPromptTaskId(null) }}>
+                  Yes, dig in 💚
+                </button>
+                <button className="qbc-healing-prompt-no"
+                  onClick={() => setHealingPromptTaskId(null)}>
+                  No, just do it ⚡
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Outcome prompt — appears after completing a task with healing expectation */}
+          {outcomeTaskId && (
+            <div className="qbc-outcome-prompt">
+              <div className="qbc-outcome-text">Did the positive outcome happen?</div>
+              <div className="qbc-outcome-actions">
+                <button className="qbc-outcome-btn qbc-outcome-yes" onClick={() => handleOutcome(outcomeTaskId, 'yes')}>Yes</button>
+                <button className="qbc-outcome-btn qbc-outcome-no" onClick={() => handleOutcome(outcomeTaskId, 'no')}>No</button>
+                <button className="qbc-outcome-btn qbc-outcome-better" onClick={() => handleOutcome(outcomeTaskId, 'something_better')}>Something better</button>
+              </div>
             </div>
           )}
 
@@ -194,6 +296,17 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
             </div>
           )}
         </div>
+      )}
+
+      {/* Healing Flow Modal */}
+      {healingTaskId && (
+        <HealingFlowModal
+          taskText={healingTaskText}
+          userId={userId}
+          questTaskId={healingTaskId}
+          onComplete={() => { setHealingTaskId(null); setHealingTaskText(''); onUpdate?.() }}
+          onClose={() => { setHealingTaskId(null); setHealingTaskText('') }}
+        />
       )}
     </div>
   )

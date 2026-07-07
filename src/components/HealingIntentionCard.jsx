@@ -22,7 +22,7 @@ export default function HealingIntentionCard({ intention, dayOfWeek = 1, weeklyP
           <span className="hic-header-icon">💜</span>
           <div className="hic-header-text">
             <span className="hic-header-title">Weekly Healing Focus</span>
-            <span className="hic-header-sub">Building your safety</span>
+            <span className="hic-header-sub">Removing what blocks your path</span>
           </div>
         </div>
         <p className="hic-empty-text">Set this week's intention to orient your healing quests.</p>
@@ -59,7 +59,7 @@ export default function HealingIntentionCard({ intention, dayOfWeek = 1, weeklyP
           <span className="hic-header-icon">✅</span>
           <div className="hic-header-text">
             <span className="hic-header-title">Weekly Check-in Complete</span>
-            <span className="hic-header-sub">Building your safety</span>
+            <span className="hic-header-sub">Removing what blocks your path</span>
           </div>
         </div>
         <div className="hic-comparison">
@@ -93,7 +93,7 @@ export default function HealingIntentionCard({ intention, dayOfWeek = 1, weeklyP
           <SplinterVisualization {...startProps} compact animate />
         </div>
         <div className="hic-header-text">
-          <span className="hic-header-title">Building Your Safety</span>
+          <span className="hic-header-title">Removing What Blocks Your Path</span>
           <span className="hic-header-sub">This week's focus</span>
         </div>
         <div className="hic-weekly-points">{weeklyPoints}<span>RP</span></div>

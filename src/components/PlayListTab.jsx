@@ -266,7 +266,7 @@ export default function PlayListTab({
     <div className="playlist-tab">
       {/* Expression Header + Category Bubbles */}
       <div className="plt-expression-header">
-        <div className="plt-expression-tagline">Each Wahoo increases your capacity for expression</div>
+        <div className="plt-expression-tagline">Actions that expand what feels possible for your path</div>
         <div className="plt-category-bubbles">
           {WAHOO_CATEGORIES.map(cat => {
             const items = categoryWahoos[cat.id] || []

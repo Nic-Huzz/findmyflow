@@ -135,6 +135,103 @@
   flex-shrink: 0;
 }
 
+.qbc-healing-badge {
+  font-size: 12px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* ── Healing prompt (Option C) ── */
+.qbc-healing-prompt {
+  background: rgba(94, 23, 235, 0.04);
+  border: 1.5px solid rgba(94, 23, 235, 0.12);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  animation: qbcFadeIn 0.2s ease;
+}
+
+.qbc-healing-prompt-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 10px;
+}
+
+.qbc-healing-prompt-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.qbc-healing-prompt-yes {
+  flex: 1;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.qbc-healing-prompt-no {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background: #fff;
+  color: #6c757d;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ── Outcome prompt ── */
+.qbc-outcome-prompt {
+  background: rgba(16, 185, 129, 0.04);
+  border: 1.5px solid rgba(16, 185, 129, 0.15);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  animation: qbcFadeIn 0.2s ease;
+}
+
+.qbc-outcome-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 10px;
+}
+
+.qbc-outcome-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.qbc-outcome-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.qbc-outcome-yes { color: #059669; }
+.qbc-outcome-yes:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.04); }
+
+.qbc-outcome-no { color: #6b7280; }
+.qbc-outcome-no:hover { border-color: #6b7280; }
+
+.qbc-outcome-better { color: #E9A23B; }
+.qbc-outcome-better:hover { border-color: #E9A23B; background: rgba(233, 162, 59, 0.04); }
+
 /* ── Add task ── */
 .qbc-add-row {
   display: flex;

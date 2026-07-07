@@ -1,0 +1,391 @@
+/**
+ * HealingFlowModal.css
+ * Matches Tune tab (tt-) design system.
+ * CSS prefix: hfm-
+ */
+
+/* === OVERLAY === */
+.hfm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: hfmFadeIn 0.2s ease;
+}
+
+@keyframes hfmFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* === MODAL === */
+.hfm-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+  animation: hfmSlideUp 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes hfmSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === HEADER === */
+.hfm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 0;
+}
+
+.hfm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hfm-header-icon {
+  font-size: 1.4rem;
+}
+
+.hfm-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5e17eb;
+}
+
+.hfm-task-name {
+  font-size: 13px;
+  color: #6c757d;
+  margin-top: 1px;
+}
+
+.hfm-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #adb5bd;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+/* === PROGRESS === */
+.hfm-progress {
+  margin: 14px 20px 0;
+  height: 4px;
+  background: #f1f3f5;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.hfm-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* === BODY === */
+.hfm-body {
+  padding: 16px 20px;
+  flex: 1;
+}
+
+.hfm-step {
+  animation: hfmStepIn 0.2s ease;
+}
+
+@keyframes hfmStepIn {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.hfm-step-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: #adb5bd;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.hfm-question {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 6px;
+  line-height: 1.3;
+}
+
+.hfm-sub {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+/* === PATTERN CARDS === */
+.hfm-patterns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hfm-pattern-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.hfm-pattern-card:hover {
+  border-color: rgba(94, 23, 235, 0.3);
+}
+
+.hfm-pattern-card.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.04);
+}
+
+.hfm-pattern-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.hfm-pattern-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hfm-pattern-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.hfm-pattern-desc {
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+/* === TEXTAREA === */
+.hfm-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px 14px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #1a1a2e;
+  background: #ffffff;
+  resize: none;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.hfm-textarea:focus {
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.08);
+}
+
+.hfm-textarea::placeholder {
+  color: #adb5bd;
+}
+
+/* === INSIGHT CARD === */
+.hfm-insight-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 18px 16px;
+  line-height: 1.6;
+  font-size: 15px;
+  color: #495057;
+}
+
+.hfm-insight-card p {
+  margin: 0 0 10px;
+}
+
+.hfm-insight-card p:last-child {
+  margin: 0;
+}
+
+.hfm-insight-but {
+  font-weight: 700;
+  color: #5e17eb;
+  font-size: 16px;
+  margin-top: 14px !important;
+}
+
+/* === EDUCATION (Step 6) === */
+.hfm-education {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  font-size: 14px;
+  color: #495057;
+}
+
+.hfm-education p {
+  margin: 0 0 8px;
+}
+
+.hfm-education p:last-child {
+  margin: 0;
+}
+
+.hfm-education-bold {
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.hfm-deeper-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hfm-deeper-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+  transition: all 0.2s;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.hfm-deeper-primary {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #ffffff;
+  border: none;
+}
+
+.hfm-deeper-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.hfm-deeper-secondary {
+  background: #ffffff;
+  color: #6c757d;
+  border: 2px solid #e9ecef;
+}
+
+.hfm-deeper-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hfm-deeper-skip {
+  background: none;
+  color: #5e17eb;
+  border: none;
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* === FOOTER === */
+.hfm-footer {
+  display: flex;
+  gap: 8px;
+  padding: 0 20px 20px;
+}
+
+.hfm-back {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background: #ffffff;
+  color: #6c757d;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.hfm-next {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.hfm-next:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.hfm-next:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 380px) {
+  .hfm-modal {
+    padding: 0;
+    max-height: 95vh;
+  }
+
+  .hfm-question {
+    font-size: 16px;
+  }
+
+  .hfm-pattern-card {
+    padding: 12px 14px;
+  }
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  .hfm-overlay,
+  .hfm-modal,
+  .hfm-step,
+  .hfm-next,
+  .hfm-deeper-primary,
+  .hfm-textarea {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
