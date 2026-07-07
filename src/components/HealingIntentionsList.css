@@ -110,6 +110,11 @@
   flex-shrink: 0;
 }
 
+.hil-stage-progress {
+  color: #E9A23B;
+  background: rgba(233, 162, 59, 0.08);
+}
+
 .hil-outcome-badge {
   font-size: 12px;
   font-weight: 700;

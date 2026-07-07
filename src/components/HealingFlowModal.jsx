@@ -6,7 +6,7 @@
  * CSS prefix: hfm-
  */
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './HealingFlowModal.css'
@@ -28,6 +28,37 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, onComp
   const [saving, setSaving] = useState(false)
 
   const patternMeta = PATTERNS.find(p => p.id === pattern)
+
+  // Save on unmount (e.g. iOS tab switch, modal closed externally)
+  const dataRef = useRef({ pattern, fearText, originText, rewireText, expectationText, step })
+  useEffect(() => {
+    dataRef.current = { pattern, fearText, originText, rewireText, expectationText, step }
+  }, [pattern, fearText, originText, rewireText, expectationText, step])
+
+  useEffect(() => {
+    return () => {
+      const d = dataRef.current
+      if (d.pattern && d.step > 1) {
+        const insightText = (d.originText?.trim() && d.fearText?.trim())
+          ? `When "${d.originText.trim().slice(0, 80)}" happened, your protective voice was created to keep you safe. But that was then. "${taskText}" is now.`
+          : null
+        supabase.from('healing_intentions')
+          .upsert({
+            quest_task_id: questTaskId,
+            user_id: userId,
+            pattern: d.pattern,
+            fear_text: d.fearText?.trim() || null,
+            origin_text: d.originText?.trim() || null,
+            insight_text: insightText,
+            rewire_text: d.rewireText?.trim() || null,
+            expectation_text: d.expectationText?.trim() || null,
+            healing_stage: 'in_progress',
+            updated_at: new Date().toISOString(),
+          }, { onConflict: 'quest_task_id' })
+          .catch(() => {})
+      }
+    }
+  }, [])
 
   const canContinue = () => {
     switch (step) {

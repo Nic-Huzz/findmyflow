@@ -87,7 +87,34 @@ export default function HealingIntentionsList({ userId }) {
         </div>
         <p className="hil-section-sub">Removing what blocks your path. Each fear you name and work through expands what feels possible.</p>
 
-        {/* Active intentions */}
+        {/* In-progress intentions (partial) */}
+        {inProgress.map(intention => {
+          const pm = PATTERN_META[intention.pattern]
+          const taskText = intention.quest_tasks?.text || 'Unknown task'
+          const questLabel = intention.quest_tasks?.quests?.label || ''
+          return (
+            <div key={intention.id} className="hil-card">
+              <div className="hil-card-header">
+                <span className="hil-pattern-icon">{pm?.icon || '💚'}</span>
+                <div className="hil-card-info">
+                  <div className="hil-card-task">{taskText}</div>
+                  {questLabel && <div className="hil-card-quest">{questLabel}</div>}
+                </div>
+                <span className="hil-stage-badge hil-stage-progress">In progress</span>
+              </div>
+              {intention.fear_text && (
+                <div className="hil-card-body">
+                  <div className="hil-field">
+                    <span className="hil-field-label">Fear:</span>
+                    <span className="hil-field-value">{intention.fear_text}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
+
+        {/* Active intentions (recognised) */}
         {active.map(intention => {
           const pm = PATTERN_META[intention.pattern]
           const taskText = intention.quest_tasks?.text || 'Unknown task'
