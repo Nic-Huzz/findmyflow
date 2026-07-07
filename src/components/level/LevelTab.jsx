@@ -62,6 +62,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [activeStruggle, setActiveStruggle] = useState(null) // which struggle pill is open
   const [allLevelProgress, setAllLevelProgress] = useState({}) // { level: { zone, milestone_completed, ... } }
   const [zoneModalLevel, setZoneModalLevel] = useState(null) // which zone card modal is open
+  const [unlockExplainer, setUnlockExplainer] = useState(null) // 'courage' | 'healing' | null
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
   const [hasPlaylistCompletion, setHasPlaylistCompletion] = useState(false)
@@ -430,10 +431,24 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
           )}
           {!(hasWahoos || hasPlaySkills) && (
-            <DeepDiveCard deepDive={{ id: 'find_wahoos', name: 'Unlock Your Courage Tab', route: '#Courage', narrative: 'Name what would light you up.', icon: '🔥' }} isCompleted={false} onNavigate={onNavigateTab} />
+            <div className="level-deep-dive" onClick={() => setUnlockExplainer('courage')} style={{ cursor: 'pointer' }}>
+              <div className="level-dd-icon">🔥</div>
+              <div className="level-dd-info">
+                <div className="level-dd-name">Unlock Your Courage Tab</div>
+                <div className="level-dd-narrative">Name what would light you up.</div>
+              </div>
+              <span className="level-dd-status start">Start</span>
+            </div>
           )}
           {!hasHealingCompletion && (
-            <DeepDiveCard deepDive={{ id: 'healing_task', name: 'Unlock Your Healing Tab', route: '#Healing', narrative: 'Complete your first healing quest.', icon: '💚' }} isCompleted={false} onNavigate={onNavigateTab} />
+            <div className="level-deep-dive" onClick={() => setUnlockExplainer('healing')} style={{ cursor: 'pointer' }}>
+              <div className="level-dd-icon">💚</div>
+              <div className="level-dd-info">
+                <div className="level-dd-name">Unlock Your Healing Tab</div>
+                <div className="level-dd-narrative">Remove what's blocking your path.</div>
+              </div>
+              <span className="level-dd-status start">Start</span>
+            </div>
           )}
         </div>
       )}
@@ -445,10 +460,10 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           <span className="quest-section-title">Active Quests</span>
         </div>
         <p className="quest-section-sub">Life paths you're actively pursuing right now.</p>
-        {quests.filter(q => q.status === 'active').length === 0 && (
+        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && (
           <div className="quest-empty">Complete your Life Paths exercise to identify quests, or add one manually.</div>
         )}
-        {quests.filter(q => q.status === 'active').map(q => (
+        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').map(q => (
           <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} userId={userId} onUpdate={loadQuests} />
         ))}
         {!showAddQuest ? (
@@ -631,6 +646,43 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               <span className="quest-closed-status">{q.close_reason === 'achieved' ? 'Achieved' : q.close_reason === 'lost_interest' ? 'Lost interest' : 'Paused'}</span>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Unlock explainer modals */}
+      {unlockExplainer === 'courage' && (
+        <div className="quest-modal-overlay" onClick={() => setUnlockExplainer(null)}>
+          <div className="quest-modal" onClick={e => e.stopPropagation()}>
+            <button className="quest-modal-close" onClick={() => setUnlockExplainer(null)}>✕</button>
+            <h2 className="quest-modal-title">⚡ Your Courage Tab</h2>
+            <p className="quest-modal-question" style={{ fontStyle: 'italic', color: '#E9A23B' }}>Actions that expand what feels possible for your path.</p>
+            <p className="quest-modal-question">Every time you do something that scares you a little, your nervous system learns: "Oh, that was actually safe."</p>
+            <p className="quest-modal-question">The more you prove this, the bigger the life paths that feel possible.</p>
+            <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
+            <p className="quest-modal-question">Name experiences you'd love to have that scare you a little. Host a silent disco. Post a vulnerable video. Cold-call a stranger.</p>
+            <p className="quest-modal-question">Each one is a rep in the gym, training your system that expressing yourself this way is safe.</p>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Courage') }}>
+              Open Courage Tab →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {unlockExplainer === 'healing' && (
+        <div className="quest-modal-overlay" onClick={() => setUnlockExplainer(null)}>
+          <div className="quest-modal" onClick={e => e.stopPropagation()}>
+            <button className="quest-modal-close" onClick={() => setUnlockExplainer(null)}>✕</button>
+            <h2 className="quest-modal-title">💚 Your Healing Tab</h2>
+            <p className="quest-modal-question" style={{ fontStyle: 'italic', color: '#5e17eb' }}>Removing what blocks your path.</p>
+            <p className="quest-modal-question">Every fear you feel has a source. A moment in your past where expressing yourself like this felt unsafe.</p>
+            <p className="quest-modal-question">Your nervous system remembers. It created a protective voice to stop you from ever feeling that way again. That voice is why you hesitate, avoid, and play small.</p>
+            <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
+            <p className="quest-modal-question">Name the fear. Identify the pattern. Trace it to its origin. Rewrite what's true now.</p>
+            <p className="quest-modal-question">Understanding the pattern is the first step. Releasing it is the second.</p>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Healing') }}>
+              Open Healing Tab →
+            </button>
+          </div>
         </div>
       )}
 
