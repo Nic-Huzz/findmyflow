@@ -68,6 +68,15 @@
   margin-bottom: 0;
 }
 
+.hil-card-clickable {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.hil-card-clickable:hover {
+  border: 1.5px solid rgba(94, 23, 235, 0.2);
+}
+
 .hil-card-done {
   opacity: 0.6;
 }

@@ -18,13 +18,17 @@ const PATTERNS = [
   { id: 'perfectionist', name: 'The Perfectionist', icon: '🎯', desc: 'You wait until it\'s perfect. Nothing is ever ready.' },
 ]
 
-export default function HealingFlowModal({ taskText, userId, questTaskId, onComplete, onClose }) {
-  const [step, setStep] = useState(1)
-  const [pattern, setPattern] = useState(null)
-  const [fearText, setFearText] = useState('')
-  const [originText, setOriginText] = useState('')
-  const [rewireText, setRewireText] = useState('')
-  const [expectationText, setExpectationText] = useState('')
+export default function HealingFlowModal({ taskText, userId, questTaskId, existingData, onComplete, onClose }) {
+  // Resume from existing data if provided
+  const resumeStep = existingData
+    ? (existingData.expectation_text ? 7 : existingData.rewire_text ? 6 : existingData.origin_text ? 4 : existingData.fear_text ? 3 : existingData.pattern ? 2 : 1)
+    : 1
+  const [step, setStep] = useState(resumeStep)
+  const [pattern, setPattern] = useState(existingData?.pattern || null)
+  const [fearText, setFearText] = useState(existingData?.fear_text || '')
+  const [originText, setOriginText] = useState(existingData?.origin_text || '')
+  const [rewireText, setRewireText] = useState(existingData?.rewire_text || '')
+  const [expectationText, setExpectationText] = useState(existingData?.expectation_text || '')
   const [saving, setSaving] = useState(false)
 
   const patternMeta = PATTERNS.find(p => p.id === pattern)

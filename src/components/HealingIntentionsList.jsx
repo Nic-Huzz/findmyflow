@@ -23,6 +23,7 @@ export default function HealingIntentionsList({ userId }) {
   const [showStandaloneFlow, setShowStandaloneFlow] = useState(false)
   const [standaloneText, setStandaloneText] = useState('')
   const [standaloneTaskId, setStandaloneTaskId] = useState(null)
+  const [resumeIntention, setResumeIntention] = useState(null) // existing intention to resume
 
   const loadIntentions = () => {
     if (!userId) return
@@ -87,20 +88,21 @@ export default function HealingIntentionsList({ userId }) {
         </div>
         <p className="hil-section-sub">Removing what blocks your path. Each fear you name and work through expands what feels possible.</p>
 
-        {/* In-progress intentions (partial) */}
+        {/* In-progress intentions (partial) — tap to resume */}
         {inProgress.map(intention => {
           const pm = PATTERN_META[intention.pattern]
           const taskText = intention.quest_tasks?.text || 'Unknown task'
           const questLabel = intention.quest_tasks?.quests?.label || ''
           return (
-            <div key={intention.id} className="hil-card">
+            <div key={intention.id} className="hil-card hil-card-clickable"
+              onClick={() => setResumeIntention(intention)}>
               <div className="hil-card-header">
                 <span className="hil-pattern-icon">{pm?.icon || '💚'}</span>
                 <div className="hil-card-info">
                   <div className="hil-card-task">{taskText}</div>
                   {questLabel && <div className="hil-card-quest">{questLabel}</div>}
                 </div>
-                <span className="hil-stage-badge hil-stage-progress">In progress</span>
+                <span className="hil-stage-badge hil-stage-progress">Continue →</span>
               </div>
               {intention.fear_text && (
                 <div className="hil-card-body">
@@ -210,6 +212,18 @@ export default function HealingIntentionsList({ userId }) {
           questTaskId={standaloneTaskId}
           onComplete={() => { setShowStandaloneFlow(false); setStandaloneText(''); setStandaloneTaskId(null); loadIntentions() }}
           onClose={() => { setShowStandaloneFlow(false); setStandaloneText(''); setStandaloneTaskId(null) }}
+        />
+      )}
+
+      {/* Resume healing flow modal */}
+      {resumeIntention && (
+        <HealingFlowModal
+          taskText={resumeIntention.quest_tasks?.text || ''}
+          userId={userId}
+          questTaskId={resumeIntention.quest_task_id}
+          existingData={resumeIntention}
+          onComplete={() => { setResumeIntention(null); loadIntentions() }}
+          onClose={() => setResumeIntention(null)}
         />
       )}
     </div>
