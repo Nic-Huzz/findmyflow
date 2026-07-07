@@ -30,6 +30,8 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const totalCount = tasks.length
 
   // Load healing intentions for all tasks
+  // Stable dependency: join task IDs into a string so it only re-fetches when tasks actually change
+  const taskIdKey = tasks.map(t => t.id).join(',')
   useEffect(() => {
     if (!tasks.length) return
     const taskIds = tasks.map(t => t.id)
@@ -44,7 +46,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           setHealingIntentions(byTask)
         }
       })
-  }, [tasks])
+  }, [taskIdKey])
 
   const addTask = async () => {
     if (!taskInput.trim() || saving) return
