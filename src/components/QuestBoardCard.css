@@ -138,7 +138,6 @@
 .qbc-healing-badge {
   font-size: 12px;
   flex-shrink: 0;
-  cursor: pointer;
 }
 
 /* ── Healing prompt (Option C) ── */

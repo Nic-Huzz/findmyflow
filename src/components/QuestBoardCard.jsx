@@ -222,10 +222,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
                   <span className="qbc-task-text">{task.text}</span>
                   {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
                   {healingIntentions[task.id] && (
-                    <span className="qbc-healing-badge"
-                      onClick={(e) => { e.stopPropagation(); setHealingTaskId(task.id); setHealingTaskText(task.text) }}>
-                      💚
-                    </span>
+                    <span className="qbc-healing-badge" title="Healing flow completed">💚</span>
                   )}
                 </div>
               ))}
