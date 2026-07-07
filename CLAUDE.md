@@ -187,7 +187,7 @@ docs/                         # Documentation files
 
 **Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
 
-**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`
+**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/remarkable` (Remarkable Results), `/create/narrative-builder` (Remarkable Reach), `/create/access-architecture` (Remarkable Growth), `/create/scale-diagnostic` (Scale Score, old `/scale-diagnostic` redirects), `/try/facilitator-score` (Scale Score public lead magnet)
 
 **Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching)
 
@@ -209,7 +209,7 @@ docs/                         # Documentation files
 
 **CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
 
-**Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`
+**Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`, `/scale-diagnostic` → `/create/scale-diagnostic`
 
 ## Key Features
 
@@ -326,7 +326,23 @@ Three towers:
 
 Key services: `src/lib/crm/` (contentContext, promptTemplates, towerStats, csvImportService, ecosystemService)
 
-### 12. Other Features
+### 12. Creator Playbook Pipeline (Creator Portal)
+
+Sequential flow: each unlocks after the previous is completed. Three card states in `CreatorHomeV2.jsx`: completed (compact row with tick), unlocked (gold CTA card), locked (dimmed with lock icon).
+
+1. **Remarkable Results** (`/create/remarkable`, `RemarkableFlow.jsx`): Find your rule break. Problem → Assumption → Two Worlds → Different → Experience → Compression. Saves to `remarkable_angles`. Produces: rule break statement, remarkability score (U×S×S). Readiness card embeds as collapsible row inside this section.
+
+2. **Remarkable Reach** (`/create/narrative-builder`, `NarrativeBuilderFlow.jsx`): How does your story spread? 8 screens: Intro → Vehicle Deep-Dive (3 screens: Results/New Medium/New Action, each with education, reference creators, anchored diagnostic 1-5, durability badge) → Vehicle Summary ("what would make this a 5?" for each type, pick primary) → Tribal Language (5 questions extracting language from behavior) → Cosign (venue/person/co-facilitator) → Output. All fields mandatory. Saves to `narrative_builders` (includes `vehicle_type`, `vehicle_desc`).
+
+3. **Remarkable Growth** (`/create/access-architecture`, `AccessArchitectureFlow.jsx`): Remove barriers. 5-barrier audit (Price, Time, Friction, Decisions, Identity) with inline recommendations under each score bar → On-Ramp Design with 5-point criteria checklist from audit scores (pass/fail per barrier). Saves to `access_architectures`.
+
+4. **Scale Score** (`/create/scale-diagnostic` + `/try/facilitator-score`, `FacilitatorScore.jsx`): 3-pillar Phase 3 diagnostic (RETURN · BREAK · TRIBAL). Branch selection (10 branches) → 6 questions with branch-specific examples (Ancestral, Body, Identity, Shareability, Format, Rule Break result). Pulls rule break data for logged-in users. Score /15, Phase classification (12+ Phase 3, 9-11 Strong, 6-8 Phase 2.5, <6 Phase 2). Public mode works as standalone lead magnet with email capture. Old `/scale-diagnostic` redirects. Saves to `scale_diagnostics`.
+
+**Positioning Summary** (`PositioningSummary.jsx`): Lives at bottom of Playbook tab (after Your Model, before Actions). Two inputs (life quake + transformation) → AI-generated positioning statement. Collapsed state when statement exists (shows output only with "Edit ↓" toggle). Saves to `lead_flow_profiles`.
+
+Sequential locking: Reach locked until `remarkable_angles` exists, Growth locked until `narrative_builders` exists, Scale Score locked until `access_architectures` exists.
+
+### 13. Other Features
 
 - **Money Model Flows**: 6 flows in `MoneyModelFlowBase.jsx` + `moneyModelConfigs.js`. Each wrapper ~35 lines.
 - **Zarlo AI Co-Founder**: Floating widget on all pages. Streams responses, context-aware. Engine: `zarloEngine.js`, `zarloPageContent.js`.
@@ -386,6 +402,7 @@ Import `src/styles/flow-base.css`. Classes: `.primary-button`, `.secondary-butto
 ## Writing Style
 
 - **Never use em dashes** (`—` or `--`) in user-facing copy. Use commas, full stops, or rephrase instead. Em dashes are a tell-tale sign of AI-generated text.
+- **Write so a 12-year-old would understand.** No jargon in user-facing copy. Replace technical terms with plain language (e.g., "Cognitive Load" → "Decisions", "dorsal vagal" → "at their lowest", "growth lever" → "means more people try it"). Use concrete examples instead of abstract descriptions.
 
 ## Pixar Image Generation Style
 
@@ -418,6 +435,9 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 
 ### Challenge & Review
 `experience_checkins` | `weekly_reviews` | `healing_intentions` (quest_task_id FK, pattern, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
+
+### Blow Up Brand Pipeline
+`remarkable_angles` | `narrative_builders` (vehicle_type, vehicle_desc) | `access_architectures` | `scale_diagnostics` (score_body, score_culture, score_identity, score_ancestral, score_format, score_irreplaceable, score_rulebreak, branch, total_score, phase_classification) | `lead_captures` (email, source, scores)
 
 ### Other
 `user_subscriptions` (Stripe) | `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
