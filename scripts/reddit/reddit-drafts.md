@@ -70,6 +70,14 @@ Run again tomorrow or use: `/schedule` to automate daily
 
 ---
 
+## Scan log — July 7, 2026
+
+**Status: BLOCKED — no drafts generated (17th consecutive blocked run)**
+
+Reddit remains inaccessible. Proxy now returns explicit `403 Forbidden` to CONNECT tunnel (policy denial) — previously logged as curl exit 56/status 000, same underlying block. WebFetch and WebSearch also fail. No change in outcome.
+
+---
+
 ## Scan log — July 6, 2026 (run 2)
 
 **Status: BLOCKED — no drafts generated (16th consecutive blocked run)**
