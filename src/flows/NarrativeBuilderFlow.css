@@ -198,6 +198,193 @@ textarea.nbf-input {
   color: #E9A23B;
 }
 
+/* ── Education & references ── */
+.nbf-edu {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.75);
+  margin: 0 0 1rem;
+}
+
+.nbf-insight {
+  background: rgba(233,162,59,0.06);
+  border-left: 3px solid rgba(233,162,59,0.4);
+  border-radius: 0 10px 10px 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 1.25rem;
+}
+
+.nbf-insight-warn {
+  background: rgba(239,68,68,0.06);
+  border-left-color: rgba(239,68,68,0.4);
+}
+
+.nbf-ref-section {
+  margin-bottom: 1.25rem;
+}
+
+.nbf-ref-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.6rem;
+}
+
+.nbf-ref-item {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.65);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.nbf-ref-item:last-child { border-bottom: none; }
+.nbf-ref-item strong { color: rgba(255,255,255,0.9); }
+
+/* ── Diagnostic options ── */
+.nbf-diag-label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+  color: rgba(255,255,255,0.9);
+}
+
+.nbf-diag-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+}
+
+.nbf-diag-option {
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: inherit;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nbf-diag-option:hover { border-color: rgba(233,162,59,0.25); }
+
+.nbf-diag-selected {
+  border-color: #E9A23B;
+  background: rgba(233,162,59,0.08);
+  color: #E9A23B;
+}
+
+/* ── Durability badge ── */
+.nbf-durability {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  font-weight: 600;
+}
+
+.nbf-dur-long {
+  background: rgba(52,211,153,0.08);
+  color: rgba(52,211,153,0.8);
+  border: 1px solid rgba(52,211,153,0.15);
+}
+
+.nbf-dur-mid {
+  background: rgba(233,162,59,0.08);
+  color: rgba(233,162,59,0.8);
+  border: 1px solid rgba(233,162,59,0.15);
+}
+
+.nbf-dur-short {
+  background: rgba(239,68,68,0.08);
+  color: rgba(239,68,68,0.7);
+  border: 1px solid rgba(239,68,68,0.15);
+}
+
+/* ── Score bars (summary) ── */
+.nbf-score-section {
+  margin-bottom: 1.25rem;
+}
+
+.nbf-score-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.nbf-score-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.nbf-score-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.nbf-score-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.nbf-score-val {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── "Make it a 5" cards (summary) ── */
+.nbf-five-card {
+  background: rgba(255,255,255,0.03);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.nbf-five-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.nbf-five-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+}
+
+.nbf-five-score {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 /* ── Vehicle discovery cards ── */
 .nbf-vehicle-card {
   text-align: left;

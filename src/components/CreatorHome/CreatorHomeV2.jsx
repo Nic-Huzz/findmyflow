@@ -21,6 +21,7 @@ import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
 import InstagramConnect from '../pipeline/InstagramConnect'
 import BrandPulseCard from '../pipeline/BrandPulseCard'
+import ContentIntel from '../pipeline/ContentIntel'
 import RootReachCard from '../pipeline/RootReachCard'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
@@ -99,6 +100,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
   const [showAllPast, setShowAllPast] = useState(false)
   const [showBlowUpMore, setShowBlowUpMore] = useState(false)
+  const [showReadiness, setShowReadiness] = useState(false)
   const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
 
   // Creator detail modal
@@ -430,15 +432,6 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 )}
               </div>
 
-              {/* Positioning Summary */}
-              <PositioningSummary
-                userId={userId}
-                essenceName={essenceName}
-                skills={userSkills}
-                problems={userProblems}
-                remarkableAngle={remarkableAngle}
-              />
-
               {/* Sub-tabs: Playbook only (Inner Game locked for now) */}
               <div className="ch2-subtabs">
                 <button className={`ch2-subtab${identitySubTab === 'playbook' ? ' active' : ''}`} onClick={() => setIdentitySubTab('playbook')}>Playbook</button>
@@ -552,92 +545,142 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 </div>
               )}
 
-              {/* Readiness Card — shows after completing RemarkableFlow */}
-              {blowUpReadiness && (
-                <div className="ch2-id-section ch2-readiness-card" style={{ paddingTop: 14 }}>
-                  <div className="ch2-label">Your Readiness</div>
-                  <div className="ch2-readiness-layers">
-                    <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer1_status}`}>
-                      <span className="ch2-readiness-dot" />
-                      <div className="ch2-readiness-info">
-                        <span className="ch2-readiness-name">Distilled</span>
-                        <span className="ch2-readiness-hint">
-                          {blowUpReadiness.layer1_status === 'green'
-                            ? remarkableAngle?.extreme_action_plan || 'Your method is compressed'
-                            : 'Keep running experiences. Capture 3% after each.'}
-                        </span>
-                      </div>
+              {/* Readiness — inline inside Results section */}
+              {blowUpReadiness && remarkableAngle && (
+                <div className="ch2-id-section" style={{ paddingTop: 0, paddingBottom: 8 }}>
+                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => setShowReadiness(!showReadiness)}>
+                    <div className="ch2-biz-icon">🔋</div>
+                    <div className="ch2-biz-info">
+                      <div className="ch2-biz-label">Readiness</div>
+                      <div className="ch2-biz-val">{blowUpReadiness.all_ready ? 'Ready for a format change' : 'Still building'}</div>
                     </div>
-                    <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer2_status}`}>
-                      <span className="ch2-readiness-dot" />
-                      <div className="ch2-readiness-info">
-                        <span className="ch2-readiness-name">Proven</span>
-                        <span className="ch2-readiness-hint">
-                          {blowUpReadiness.layer2_status === 'green'
-                            ? `${blowUpReadiness.proof_count === '50_plus' ? '50+' : '10-50'} people experienced it`
-                            : blowUpReadiness.layer2_status === 'amber'
-                              ? '1-10 people so far. Keep going.'
-                              : 'Run 5 experiences. Capture one 3% improvement after each.'}
-                        </span>
-                      </div>
-                    </div>
-                    <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer3_status}`}>
-                      <span className="ch2-readiness-dot" />
-                      <div className="ch2-readiness-info">
-                        <span className="ch2-readiness-name">Ceiling</span>
-                        <span className="ch2-readiness-hint">
-                          {blowUpReadiness.ceiling_type === 'reach'
-                            ? 'Reach ceiling. Your method is ready for a bigger container.'
-                            : blowUpReadiness.ceiling_type === 'credibility'
-                              ? 'Credibility ceiling. You need proof that scales.'
-                              : 'Keep filling the room you\'re in.'}
-                        </span>
-                      </div>
-                    </div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>{showReadiness ? '↑' : '↓'}</div>
                   </div>
-                  {blowUpReadiness.all_ready ? (
-                    <div className="ch2-readiness-verdict ch2-readiness-ready">
-                      Ready for a format change. Time to choose your vehicle.
-                    </div>
-                  ) : (
-                    <div className="ch2-readiness-verdict ch2-readiness-building">
-                      Keep building. The 3% chain turns good into undeniable.
+                  {showReadiness && (
+                    <div style={{ paddingTop: 6 }}>
+                      <div className="ch2-readiness-layers">
+                        <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer1_status}`}>
+                          <span className="ch2-readiness-dot" />
+                          <div className="ch2-readiness-info">
+                            <span className="ch2-readiness-name">Distilled</span>
+                            <span className="ch2-readiness-hint">
+                              {blowUpReadiness.layer1_status === 'green'
+                                ? remarkableAngle?.extreme_action_plan || 'Your method is compressed'
+                                : 'Keep running experiences. Capture 3% after each.'}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer2_status}`}>
+                          <span className="ch2-readiness-dot" />
+                          <div className="ch2-readiness-info">
+                            <span className="ch2-readiness-name">Proven</span>
+                            <span className="ch2-readiness-hint">
+                              {blowUpReadiness.layer2_status === 'green'
+                                ? `${blowUpReadiness.proof_count === '50_plus' ? '50+' : '10-50'} people experienced it`
+                                : blowUpReadiness.layer2_status === 'amber'
+                                  ? '1-10 people so far. Keep going.'
+                                  : 'Run 5 experiences. Capture one 3% improvement after each.'}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer3_status}`}>
+                          <span className="ch2-readiness-dot" />
+                          <div className="ch2-readiness-info">
+                            <span className="ch2-readiness-name">Ceiling</span>
+                            <span className="ch2-readiness-hint">
+                              {blowUpReadiness.ceiling_type === 'reach'
+                                ? 'Reach ceiling. Your method is ready for a bigger container.'
+                                : blowUpReadiness.ceiling_type === 'credibility'
+                                  ? 'Credibility ceiling. You need proof that scales.'
+                                  : 'Keep filling the room you\'re in.'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <button className="ch2-readiness-retake" onClick={() => navigate('/create/remarkable')}>
+                        Retake assessment →
+                      </button>
                     </div>
                   )}
-                  <button className="ch2-readiness-retake" onClick={() => navigate('/create/remarkable')}>
-                    Retake assessment →
-                  </button>
                 </div>
               )}
 
-              {/* Remarkable Reach — locked until Remarkable Results complete */}
-              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                <div className="ch2-locked" onClick={remarkableAngle ? () => navigate('/create/narrative-builder') : undefined}
-                  style={{ borderColor: remarkableAngle ? 'rgba(233,162,59,0.3)' : 'rgba(255,255,255,0.08)', background: remarkableAngle ? 'rgba(233,162,59,0.05)' : 'rgba(255,255,255,0.02)', cursor: remarkableAngle ? 'pointer' : 'default', opacity: remarkableAngle ? 1 : 0.45 }}>
-                  <div className="ch2-locked-title" style={{ color: remarkableAngle ? '#E9A23B' : 'rgba(255,255,255,0.4)' }}>Remarkable Reach {!remarkableAngle && '🔒'}</div>
-                  <div className="ch2-locked-sub">{remarkableAngle ? 'How does your story spread? Delivery vehicle, tribal language, and cosign.' : 'Complete Remarkable Results first.'}</div>
-                  {remarkableAngle && <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Build your reach →</div>}
-                </div>
+              {/* Remarkable Reach */}
+              <div className="ch2-id-section" style={{ paddingTop: 10 }}>
+                {hasReach ? (
+                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => navigate('/create/narrative-builder')}>
+                    <div className="ch2-biz-icon">📡</div>
+                    <div className="ch2-biz-info">
+                      <div className="ch2-biz-label">Remarkable Reach</div>
+                      <div className="ch2-biz-val">Vehicle, language, and cosign mapped</div>
+                    </div>
+                    <div className="ch2-biz-status ch2-st-done">✓</div>
+                  </div>
+                ) : remarkableAngle ? (
+                  <div className="ch2-locked" onClick={() => navigate('/create/narrative-builder')}
+                    style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)', cursor: 'pointer' }}>
+                    <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Remarkable Reach</div>
+                    <div className="ch2-locked-sub">How do people hear about you? Find your strongest vehicle, your language, and who gives your audience permission.</div>
+                    <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Build your reach →</div>
+                  </div>
+                ) : (
+                  <div className="ch2-locked" style={{ opacity: 0.45 }}>
+                    <div className="ch2-locked-title" style={{ color: 'rgba(255,255,255,0.4)' }}>Remarkable Reach 🔒</div>
+                    <div className="ch2-locked-sub">Complete Remarkable Results first.</div>
+                  </div>
+                )}
               </div>
 
-              {/* Remarkable Growth — locked until Remarkable Reach complete */}
-              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                <div className="ch2-locked" onClick={hasReach ? () => navigate('/create/access-architecture') : undefined}
-                  style={{ borderColor: hasReach ? 'rgba(233,162,59,0.3)' : 'rgba(255,255,255,0.08)', background: hasReach ? 'rgba(233,162,59,0.05)' : 'rgba(255,255,255,0.02)', cursor: hasReach ? 'pointer' : 'default', opacity: hasReach ? 1 : 0.45 }}>
-                  <div className="ch2-locked-title" style={{ color: hasReach ? '#E9A23B' : 'rgba(255,255,255,0.4)' }}>Remarkable Growth {!hasReach && '🔒'}</div>
-                  <div className="ch2-locked-sub">{hasReach ? 'Audit the 5 barriers between someone and your experience. Design a zero-friction on-ramp.' : 'Complete Remarkable Reach first.'}</div>
-                  {hasReach && <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Audit my barriers →</div>}
-                </div>
+              {/* Remarkable Growth */}
+              <div className="ch2-id-section" style={{ paddingTop: 10 }}>
+                {hasGrowth ? (
+                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => navigate('/create/access-architecture')}>
+                    <div className="ch2-biz-icon">🚀</div>
+                    <div className="ch2-biz-info">
+                      <div className="ch2-biz-label">Remarkable Growth</div>
+                      <div className="ch2-biz-val">5 barriers audited, on-ramp designed</div>
+                    </div>
+                    <div className="ch2-biz-status ch2-st-done">✓</div>
+                  </div>
+                ) : hasReach ? (
+                  <div className="ch2-locked" onClick={() => navigate('/create/access-architecture')}
+                    style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)', cursor: 'pointer' }}>
+                    <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Remarkable Growth</div>
+                    <div className="ch2-locked-sub">Audit the 5 barriers between someone and your experience. Design a zero-friction on-ramp.</div>
+                    <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Audit my barriers →</div>
+                  </div>
+                ) : (
+                  <div className="ch2-locked" style={{ opacity: 0.45 }}>
+                    <div className="ch2-locked-title" style={{ color: 'rgba(255,255,255,0.4)' }}>Remarkable Growth 🔒</div>
+                    <div className="ch2-locked-sub">Complete Remarkable Reach first.</div>
+                  </div>
+                )}
               </div>
 
-              {/* Scale Score — locked until Remarkable Growth complete */}
-              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                <div className="ch2-locked" onClick={hasGrowth ? () => navigate('/scale-diagnostic') : undefined}
-                  style={{ borderColor: hasGrowth ? 'rgba(233,162,59,0.3)' : 'rgba(255,255,255,0.08)', background: hasGrowth ? 'rgba(233,162,59,0.05)' : 'rgba(255,255,255,0.02)', cursor: hasGrowth ? 'pointer' : 'default', opacity: hasGrowth ? 1 : 0.45 }}>
-                  <div className="ch2-locked-title" style={{ color: hasGrowth ? '#E9A23B' : 'rgba(255,255,255,0.4)' }}>Scale Score {!hasGrowth && '🔒'}</div>
-                  <div className="ch2-locked-sub">{hasGrowth ? '3-pillar diagnostic: Return, Break, Tribal. Pulls from your previous work. Will your experience scale?' : 'Complete Remarkable Growth first.'}</div>
-                  {hasGrowth && <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Score my experience →</div>}
-                </div>
+              {/* Scale Score */}
+              <div className="ch2-id-section" style={{ paddingTop: 10 }}>
+                {hasScaleScore ? (
+                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => navigate('/create/scale-diagnostic')}>
+                    <div className="ch2-biz-icon">📊</div>
+                    <div className="ch2-biz-info">
+                      <div className="ch2-biz-label">Scale Score</div>
+                      <div className="ch2-biz-val">3-pillar diagnostic complete</div>
+                    </div>
+                    <div className="ch2-biz-status ch2-st-done">✓</div>
+                  </div>
+                ) : hasGrowth ? (
+                  <div className="ch2-locked" onClick={() => navigate('/create/scale-diagnostic')}
+                    style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)', cursor: 'pointer' }}>
+                    <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Scale Score</div>
+                    <div className="ch2-locked-sub">Will your experience scale? 3-pillar diagnostic that pulls from your previous work.</div>
+                    <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Score my experience →</div>
+                  </div>
+                ) : (
+                  <div className="ch2-locked" style={{ opacity: 0.45 }}>
+                    <div className="ch2-locked-title" style={{ color: 'rgba(255,255,255,0.4)' }}>Scale Score 🔒</div>
+                    <div className="ch2-locked-sub">Complete Remarkable Growth first.</div>
+                  </div>
+                )}
               </div>
 
               <div className="ch2-id-divider" />
@@ -683,6 +726,15 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                   </div>
                 </div>
               )}
+
+              {/* Positioning Summary */}
+              <PositioningSummary
+                userId={userId}
+                essenceName={essenceName}
+                skills={userSkills}
+                problems={userProblems}
+                remarkableAngle={remarkableAngle}
+              />
 
               {/* ═══ ACTIONS ═══ */}
               <div className="ch2-id-section" style={{ paddingTop: 14 }}>
@@ -964,6 +1016,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           {/* Instagram Integration */}
           <InstagramConnect />
           <BrandPulseCard />
+          <ContentIntel />
 
           {/* KPIs */}
           <div className="ch2-kpi-grid">

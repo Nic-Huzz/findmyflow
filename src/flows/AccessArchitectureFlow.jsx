@@ -23,16 +23,16 @@ const BARRIER_LABELS = {
   price: 'Price',
   time: 'Time',
   friction: 'Friction',
-  cognitive: 'Cognitive Load',
+  cognitive: 'Decisions',
   identity: 'Identity',
 }
 
 const RECOMMENDATIONS = {
-  price: 'Create a free tier, a free challenge, or a "pay what you can" entry. The first experience should cost nothing.',
-  time: 'Design a 5-minute micro-version. The cold shower challenge. The 3-breath exercise. The one-question journal.',
-  friction: 'Remove prerequisites. Ship without equipment. Make it work on a phone.',
-  cognitive: 'Embed defaults. "Start here" not "choose from 12 options." One path, not a menu.',
-  identity: 'This isn\'t a growth problem, it\'s a culture problem. You need Remarkable Reach (tribal language + cosign).',
+  price: 'The first experience should cost nothing. Create a free version, a free challenge, or a "pay what you can" option.',
+  time: 'Create a 5-minute version. The cold shower challenge. The 3-breath exercise. The one-question journal. Give them a taste, not the full meal.',
+  friction: 'Every extra step you add is a person who drops off. Remove anything they need before they can start. No equipment. No signup. No preparation.',
+  cognitive: 'Give them one button, not a menu. "Start here" instead of "choose from 12 options." The fewer decisions, the more people begin.',
+  identity: 'This isn\'t about making it easier to find you. It\'s about making it feel normal to try. Go back to Remarkable Reach and work on your tribal language and cosign.',
 }
 
 const PRICE_OPTIONS = [
@@ -68,25 +68,26 @@ const COGNITIVE_OPTIONS = [
 ]
 
 const IDENTITY_OPTIONS = [
-  { value: 5, label: 'Not at all' },
-  { value: 4, label: 'Slightly' },
-  { value: 3, label: 'Moderately' },
-  { value: 2, label: 'Yes, it\'s niche' },
-  { value: 1, label: 'Very. Strong stigma' },
+  { value: 5, label: 'No. They\'d happily tell anyone' },
+  { value: 4, label: 'Maybe a little. Depends who' },
+  { value: 3, label: 'They\'d tell close friends but not coworkers' },
+  { value: 2, label: 'Yes. Most people would think it\'s strange' },
+  { value: 1, label: 'Definitely. There\'s real stigma around this' },
 ]
 
-const PRICE_HINT = { threshold: 4, text: 'What\'s the free or low-cost entry point? If none, design one.' }
-const TIME_HINT = { threshold: 4, text: 'Can you create a micro-version? The first taste, not the full meal.' }
-const FRICTION_HINT = { threshold: 4, text: 'Each additional prerequisite is a drop-off point.' }
-const COGNITIVE_HINT = { threshold: 4, text: 'Can you embed defaults? The fewer choices, the more people start.' }
-const IDENTITY_HINT = { threshold: 4, text: 'This is your culture gap, not your growth gap. Go to Remarkable Reach.' }
+const PRICE_HINT = { threshold: 4, text: 'Can someone try it for free? If not, that\'s the first barrier to fix.' }
+const TIME_HINT = { threshold: 4, text: 'Can you make a version that takes 5 minutes or less? Give them a taste, not the full meal.' }
+const FRICTION_HINT = { threshold: 4, text: 'Every extra thing they need before starting is another person who won\'t bother.' }
+const COGNITIVE_HINT = { threshold: 4, text: 'Too many choices stops people from starting. Can you make it one click?' }
+const IDENTITY_HINT = { threshold: 4, text: 'People feel weird doing this. That\'s not a marketing problem. Go back to Remarkable Reach.' }
 
 const ONRAMP_EXAMPLES = [
-  '"Do 3 breaths with me right now" (breathwork)',
-  '"Skip breakfast tomorrow" (fasting)',
-  '"Light a candle tonight instead of turning on the overhead light" (circadian)',
-  '"Show up Saturday 9am. Walk if you want. It\'s free." (parkrun)',
-  '"Download the app and tap check in" (Vibe Rise)',
+  { text: 'Do 3 breaths with me right now', category: 'breathwork' },
+  { text: 'Show up Saturday 6am. We give you headphones. Dance or just watch. Free.', category: 'silent disco' },
+  { text: 'Skip breakfast tomorrow', category: 'fasting' },
+  { text: 'Show up Saturday 9am. Walk if you want. It\'s free.', category: 'parkrun' },
+  { text: 'Light a candle tonight instead of turning on the overhead light', category: 'circadian' },
+  { text: 'Download the app and tap check in', category: 'Vibe Rise' },
 ]
 
 export default function AccessArchitectureFlow() {
@@ -321,7 +322,7 @@ export default function AccessArchitectureFlow() {
               )}
 
               <h1>Make it impossible <span className="aaf-gold">not to try</span></h1>
-              <p>Every barrier you remove is a growth lever. The easier it is to start, the faster your experience spreads.</p>
+              <p>Every barrier you remove means more people try it. The easier it is to start, the faster your experience spreads.</p>
 
               {gatePassed === false && (
                 <div className="aaf-context-card" style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.06)' }}>
@@ -492,7 +493,7 @@ export default function AccessArchitectureFlow() {
             }
           </h2>
 
-          {/* Score bars */}
+          {/* Score bars with inline recommendations */}
           <div className="aaf-results-section">
             {scoreItems.map(item => (
               <div
@@ -509,17 +510,12 @@ export default function AccessArchitectureFlow() {
                     style={{ width: `${(item.score / 5) * 100}%` }}
                   />
                 </div>
+                {gaps.includes(item.key) && (
+                  <p className="aaf-score-bar-rec">{RECOMMENDATIONS[item.key]}</p>
+                )}
               </div>
             ))}
           </div>
-
-          {/* Gap recommendations */}
-          {gaps.length > 0 && gaps.map(gap => (
-            <div key={gap} className="aaf-gap-card">
-              <div className="aaf-gap-label">{BARRIER_LABELS[gap]}</div>
-              <p className="aaf-gap-text">{RECOMMENDATIONS[gap]}</p>
-            </div>
-          ))}
 
           <div className="aaf-nav">
             <button className="aaf-back" onClick={() => setStep(STEPS.AUDIT)}>Back</button>
@@ -541,8 +537,8 @@ export default function AccessArchitectureFlow() {
       <div className="aaf">
         <div className="aaf-container aaf-screen">
           <div className="aaf-step-badge">Your On-Ramp</div>
-          <h2 className="aaf-heading">Design a first step someone in <span className="aaf-gold">dorsal vagal</span> could do</h2>
-          <p className="aaf-prompt">Free. Zero friction. Zero decisions. Under 5 minutes.</p>
+          <h2 className="aaf-heading">Design a first step that passes <span className="aaf-gold">all 5 tests</span></h2>
+          <p className="aaf-prompt">If someone exhausted on the couch could do it, you've nailed it.</p>
 
           {narrativeFirstStep && (
             <div className="aaf-context-card">
@@ -550,8 +546,32 @@ export default function AccessArchitectureFlow() {
             </div>
           )}
 
+          {/* 5 barrier criteria from their audit */}
+          <div className="aaf-criteria-list">
+            <div className={`aaf-criteria-item ${priceScore >= 4 ? 'aaf-criteria-pass' : 'aaf-criteria-fail'}`}>
+              <span className="aaf-criteria-icon">{priceScore >= 4 ? '✓' : '✗'}</span>
+              <span className="aaf-criteria-text">Free or under $20</span>
+            </div>
+            <div className={`aaf-criteria-item ${timeScore >= 4 ? 'aaf-criteria-pass' : 'aaf-criteria-fail'}`}>
+              <span className="aaf-criteria-icon">{timeScore >= 4 ? '✓' : '✗'}</span>
+              <span className="aaf-criteria-text">Under 5 minutes</span>
+            </div>
+            <div className={`aaf-criteria-item ${frictionScore >= 4 ? 'aaf-criteria-pass' : 'aaf-criteria-fail'}`}>
+              <span className="aaf-criteria-icon">{frictionScore >= 4 ? '✓' : '✗'}</span>
+              <span className="aaf-criteria-text">Nothing to prepare or bring</span>
+            </div>
+            <div className={`aaf-criteria-item ${cognitiveScore >= 4 ? 'aaf-criteria-pass' : 'aaf-criteria-fail'}`}>
+              <span className="aaf-criteria-icon">{cognitiveScore >= 4 ? '✓' : '✗'}</span>
+              <span className="aaf-criteria-text">One step to start, no choices</span>
+            </div>
+            <div className={`aaf-criteria-item ${identityScore >= 4 ? 'aaf-criteria-pass' : 'aaf-criteria-fail'}`}>
+              <span className="aaf-criteria-icon">{identityScore >= 4 ? '✓' : '✗'}</span>
+              <span className="aaf-criteria-text">Wouldn't feel weird telling a friend</span>
+            </div>
+          </div>
+
           <div className="aaf-onramp-section">
-            <div className="aaf-input-label">My free, zero-friction, zero-decision, under-5-minute entry point is:</div>
+            <div className="aaf-input-label">Describe an on-ramp that passes all 5.</div>
             <textarea
               className="aaf-input"
               placeholder="Describe the simplest way someone can experience your work..."
@@ -562,8 +582,12 @@ export default function AccessArchitectureFlow() {
           </div>
 
           <div className="aaf-examples">
+            <div className="aaf-examples-label">Examples that pass all 5</div>
             {ONRAMP_EXAMPLES.map((ex, i) => (
-              <div key={i} className="aaf-example">{ex}</div>
+              <div key={i} className="aaf-example">
+                <span className="aaf-example-text">"{ex.text}"</span>
+                <span className="aaf-example-cat">{ex.category}</span>
+              </div>
             ))}
           </div>
 

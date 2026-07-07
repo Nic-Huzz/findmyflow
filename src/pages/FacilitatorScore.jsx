@@ -1,5 +1,5 @@
 /**
- * FacilitatorScore.jsx — /try/facilitator-score AND /scale-diagnostic
+ * FacilitatorScore.jsx — /try/facilitator-score AND /create/scale-diagnostic
  * Scale Score v2: 3-pillar Phase 3 diagnostic (RETURN · BREAK · TRIBAL).
  *
  * Public: Intro → Branch → RETURN (2Q) → TRIBAL (2Q) → BREAK (1Q + pulled rule break) → Email → Results
@@ -39,29 +39,120 @@ const BRANCHES = [
   { key: 'threat',      label: 'Threat',      icon: '\u2694\uFE0F', desc: 'Courage, fear-facing, resilience, safety', creators: 0 },
 ]
 
-// ── Question options ──
-const ANCESTRAL_OPTIONS = [
-  { value: 1, label: 'Not really. It\'s a modern invention.' },
-  { value: 2, label: 'Loosely inspired by something ancestral.' },
-  { value: 3, label: 'It includes a recognisable ancestral element.' },
-  { value: 4, label: 'Direct return of an ancestral practice, modern container.' },
-  { value: 5, label: 'The experience IS the ancestral practice.' },
+// ── Branch-specific examples for each question ──
+const BRANCH_EXAMPLES = {
+  movement: {
+    ancestral: ['fitness apps, online PT', 'gym classes with some bodyweight', 'running, swimming, martial arts', 'CrossFit, obstacle races, cold plunge', 'barefoot running, wrestling, group hunts'],
+    body: ['exercise theory videos', 'light stretching, warm-up drills', 'a tough workout, HIIT class', 'cold plunge, intense bootcamp, altitude training', 'multi-day endurance challenge, extreme cold exposure'],
+    identity: ['a drop-in class', 'a memorable PT session', '"I did a Tough Mudder once"', '"I\'m a CrossFitter," "I do cold plunge every morning"', '"I\'m an ultra-runner," "I\'m a martial artist"'],
+    format: ['studio class, Zoom workout', 'outdoor instead of indoor', 'yoga + live DJ, fitness + silent disco', 'headset-guided training, gamified challenges', 'sober dance party at sunrise, wilderness bootcamp'],
+    rulebreak: ['standard fitness results', 'slightly faster progress', 'surprising body composition changes', '"wait, you healed your back doing THAT?"', 'results doctors say shouldn\'t be possible'],
+  },
+  healing: {
+    ancestral: ['therapy apps, online counseling', 'guided meditation apps, journaling prompts', 'breathwork, sound healing, group circles', 'sweat lodges, plant medicine ceremony, fasting retreats', 'sitting in silence, grief rituals, laying on of hands'],
+    body: ['talk therapy, a lecture', 'guided visualization, gentle meditation', 'sound bath, yin yoga, reiki', 'intense breathwork, cold exposure, somatic release', 'multi-day silent retreat, ayahuasca, extended fasting'],
+    identity: ['a therapy session', 'a workshop they remember', '"I did a breathwork session once"', '"I\'m a breather," "I do plant medicine"', '"I\'m a healer," "I hold space"'],
+    format: ['therapy room, Zoom session', 'outdoor sessions, walking therapy', 'breathwork + live music, therapy + nature', 'headset breathwork journeys, therapy via podcast', 'ceremony in a museum, healing at a music festival'],
+    rulebreak: ['expected healing outcomes', 'faster recovery than usual', 'emotional breakthroughs people talk about', '"wait, one session did THAT?"', 'results that challenge what medicine says is possible'],
+  },
+  bonds: {
+    ancestral: ['networking apps, LinkedIn events', 'team-building workshops', 'group dinners, community circles', 'men\'s/women\'s circles, fireside gatherings', 'tribal councils, communal feasts, rites of passage'],
+    body: ['a networking event', 'a workshop with some movement', 'group activities, partner exercises', 'deep sharing circles, trust falls, vulnerability challenges', 'multi-day immersion, sleeping rough together, physical ordeals'],
+    identity: ['a meetup', 'a memorable dinner party', '"I\'m part of a men\'s group"', '"I\'m in a brotherhood," "I\'m a circle keeper"', '"this community IS my family"'],
+    format: ['meetups, Zoom calls', 'outdoor gatherings instead of offices', 'dinner + deep conversation, hikes + sharing', 'wilderness retreats, 24-hour challenges together', 'co-living experiments, year-long initiations'],
+    rulebreak: ['people make a friend or two', 'deeper connections than expected', 'strangers crying together after 2 hours', '"I\'ve known these people 3 hours and I trust them more than friends I\'ve had for years"', 'lifelong bonds from a single weekend'],
+  },
+  story: {
+    ancestral: ['content creation courses, blogging tools', 'storytelling workshops', 'live spoken word, open mic nights', 'campfire storytelling, oral history circles', 'myths told around fire, passing down lineage stories'],
+    body: ['watching a presentation', 'feeling moved by a talk', 'goosebumps during a live performance', 'full-body response to a story, crying, shaking', 'cathartic release, feeling physically different after sharing your story'],
+    identity: ['attending a show', 'a talk they quote later', '"I told my story on stage once"', '"I\'m a storyteller," "I\'m a spoken word artist"', '"my story IS my work"'],
+    format: ['blog post, YouTube video', 'live stream instead of edited', 'documentary + live Q&A, story + music', 'immersive theater, story walks through a city', 'audience becomes the story, no stage at all'],
+    rulebreak: ['a good story well told', 'a story that sticks with people', 'people share it with friends unprompted', '"that story changed how I see my own life"', 'people say the story healed something in them'],
+  },
+  nourishment: {
+    ancestral: ['meal kit delivery, nutrition apps', 'cooking classes with some tradition', 'communal cooking, fermentation, foraging', 'fasting retreats, ancestral diet programs, fire-cooked feasts', 'hunting and preparing your own food, eating only what grows near you'],
+    body: ['learning about nutrition', 'trying a new recipe', 'a cooking class where you eat what you make', 'a fast that resets your digestion, a feast that changes your palette', 'multi-day fast, a diet shift that changes your bloodwork'],
+    identity: ['a cooking class', 'a memorable meal', '"I did a 3-day fast once"', '"I\'m a sourdough baker," "I fast regularly"', '"food IS my medicine"'],
+    format: ['recipe blog, cooking video', 'outdoor cooking instead of kitchen', 'cooking + music, food + storytelling', 'foraging + cooking in the wild, farm-to-fire dinner', 'guests grow, harvest, and cook their own meal from scratch'],
+    rulebreak: ['a tasty meal', 'healthier than expected', 'people change their diet after one experience', '"I haven\'t eaten processed food since that retreat"', 'bloodwork improvements doctors can\'t explain'],
+  },
+  fire: {
+    ancestral: ['LED mood lighting, sound machines', 'candle-lit yoga, ambient playlists', 'fire circles, drumming sessions', 'sweat lodge ceremonies, fire walking, cacao ceremony', 'tending a fire all night, sunrise rituals, solstice gatherings'],
+    body: ['a relaxing ambiance', 'mild warmth, gentle sensory shift', 'heat exposure, drumming vibrations through the body', 'fire walking, sweat lodge, intense heat ceremony', 'altered states from sustained fire-gazing, overnight vigils'],
+    identity: ['attending an event', 'a memorable ceremony', '"I walked on fire once"', '"I keep a daily fire ritual," "I\'m a firekeeper"', '"ceremony IS how I live"'],
+    format: ['workshop in a studio', 'outdoor instead of indoor', 'fire + breathwork, ceremony + live music', 'firewalking at a corporate event, ceremony in a gallery', 'an all-night fire that people discover at dawn in a public space'],
+    rulebreak: ['a nice atmosphere', 'people feel more relaxed', 'people describe it as transformative', '"I can\'t explain what happened but something shifted"', 'measurable changes in stress, sleep, or pain after one session'],
+  },
+  tools: {
+    ancestral: ['SaaS products, online courses', 'mentorship programs, skill workshops', 'apprenticeships, hands-on building', 'craft guilds, tool-making, building with your hands', 'flintknapping, weaving, shelter-building from raw materials'],
+    body: ['watching a tutorial', 'light hands-on practice', 'building something physical, getting your hands dirty', 'exhausting physical build, hours of focused craft', 'building something from raw materials over days'],
+    identity: ['taking a course', 'learning a useful skill', '"I built my own furniture"', '"I\'m a maker," "I build things"', '"I create with my hands every day, it\'s who I am"'],
+    format: ['online course, YouTube tutorial', 'in-person workshop instead of video', 'build + community dinner, maker space + mentorship', 'wilderness building challenges, live-streamed craft', 'apprenticeship where you live with the craftsperson'],
+    rulebreak: ['they learn a new skill', 'they build something better than expected', 'they solve a problem nobody thought they could', '"a beginner built THAT in one weekend?"', 'they create something a professional would charge thousands for'],
+  },
+  status: {
+    ancestral: ['personal branding courses, LinkedIn optimization', 'confidence workshops, public speaking', 'style transformation, creative expression', 'rites of passage, initiation ceremonies, vision quests', 'earning your place through demonstrated skill in front of the tribe'],
+    body: ['a personal branding talk', 'a confidence exercise', 'performing in front of people, style makeover', 'public challenge, standing in front of strangers and being seen', 'a physical test that proves something to yourself and witnesses'],
+    identity: ['a workshop', 'a memorable coaching session', '"I did a vision quest"', '"I\'m someone who shows up fully," "I found my edge"', '"that experience made me who I am"'],
+    format: ['coaching call, online course', 'outdoor challenge instead of classroom', 'style + storytelling, fashion + ceremony', 'public initiation, filmed transformation', 'a rite of passage with real stakes witnessed by strangers'],
+    rulebreak: ['a confidence boost', 'noticeable behavior change', 'people around them ask "what happened to you?"', '"they walked in one person and walked out another"', 'a permanent identity shift from a single experience'],
+  },
+  shelter: {
+    ancestral: ['interior design apps, Pinterest boards', 'space organization workshops', 'communal builds, garden design, natural materials', 'earthship building, off-grid cabins, permaculture design', 'building a shelter from the land with your hands, sleeping in what you made'],
+    body: ['browsing design inspiration', 'rearranging a room', 'building with your hands, gardening', 'full-day build in nature, sleeping in your creation', 'multi-day shelter build, exposure to elements'],
+    identity: ['an interior design class', 'a satisfying reorganization', '"I built a cabin once"', '"I live off-grid," "I design with nature"', '"I build homes from the earth"'],
+    format: ['blog, Pinterest, YouTube', 'in-person workshop instead of video', 'build + communal meal, design + nature walk', 'live-in build retreat, design + sleep in your creation', 'arrive with nothing, leave having built your shelter from scratch'],
+    rulebreak: ['a nicer looking room', 'a space that feels noticeably different', 'guests say "I feel different in this room"', '"sleeping in a space I built with my hands changed something in me"', 'measurable improvements in sleep, stress, or wellbeing from the space'],
+  },
+  threat: {
+    ancestral: ['resilience courses, fear workshops', 'confidence challenges, public speaking', 'martial arts, cold exposure, heights', 'fear-facing rituals, survival training, night walks', 'facing real danger together, hunting, defending the group'],
+    body: ['learning about fear', 'mild nervousness, butterflies', 'adrenaline rush, elevated heart rate', 'full fight-or-flight activation, shaking, crying, then calm', 'sustained exposure that rewires your nervous system over days'],
+    identity: ['a workshop on courage', 'a challenge they remember', '"I jumped out of a plane once"', '"I face my fears regularly," "I\'m someone who doesn\'t back down"', '"I\'m fearless. That experience proved it."'],
+    format: ['online course, video training', 'outdoor instead of classroom', 'obstacle course + sharing circle, boxing + breathwork', 'wilderness survival, 24-hour solo in the dark', 'real-stakes challenge where failure has consequences'],
+    rulebreak: ['a small confidence boost', 'more brave than before', 'a shift in how they relate to fear', '"I haven\'t been afraid of the same things since"', 'a complete rewiring of their fear response from one experience'],
+  },
+}
+
+// Fallback examples (used if no branch selected)
+const DEFAULT_EXAMPLES = {
+  ancestral: ['app-based coaching, online courses', 'journaling, guided meditation apps', 'group singing, cooking together, cold water', 'breathwork circles, fire ceremonies, fasting retreats', 'dancing together, sitting in silence, running in nature'],
+  body: ['a lecture, a webinar', 'guided visualization, light stretching', 'yoga class, sound bath', 'cold plunge, intense breathwork, ecstatic dance', 'multi-day fasting, silent retreat, ayahuasca'],
+  identity: ['a one-off workshop', 'a memorable talk', '"I did a silent retreat once"', '"I\'m a CrossFitter," "I\'m a cold plunger"', '"I\'m a breathwork facilitator," "I\'m a burner"'],
+  format: ['studio class, Zoom session', 'outdoor instead of indoor', 'yoga + live DJ, therapy + wilderness', 'headset breathwork, therapy via podcast', 'sober dance party at sunrise'],
+  rulebreak: ['', '', '', '', ''],
+}
+
+// Build options dynamically from branch
+function getOptions(type, baseLabels, branch) {
+  const examples = (branch && BRANCH_EXAMPLES[branch]?.[type]) || DEFAULT_EXAMPLES[type]
+  return baseLabels.map((label, i) => ({
+    value: i + 1,
+    label: examples[i] ? `${label} (e.g., ${examples[i]})` : label,
+  }))
+}
+
+const ANCESTRAL_LABELS = [
+  'Not really. It\'s a modern invention.',
+  'Loosely inspired. There\'s a thread back to something ancient.',
+  'It includes something humans have always done.',
+  'It\'s an ancient practice in a modern setting.',
+  'It IS the practice. Humans did this exact thing for thousands of years.',
 ]
 
-const BODY_OPTIONS = [
-  { value: 1, label: 'Not at all. It\'s purely informational.' },
-  { value: 2, label: 'Slightly. Some relaxation or energy.' },
-  { value: 3, label: 'Moderately. Noticeable physical shift.' },
-  { value: 4, label: 'Strongly. Real physiological change.' },
-  { value: 5, label: 'Intensely. They feel it in their bones.' },
+const BODY_LABELS = [
+  'Not at all. It\'s purely informational.',
+  'Slightly. Some relaxation or energy.',
+  'Noticeable physical shift.',
+  'Real physiological change.',
+  'They feel it for days. Their body remembers.',
 ]
 
-const IDENTITY_OPTIONS = [
-  { value: 1, label: 'No. They attend and leave.' },
-  { value: 2, label: 'Slightly. They might think about it.' },
-  { value: 3, label: 'Somewhat. It becomes part of their story.' },
-  { value: 4, label: 'Yes. They start saying "I\'m someone who ___."' },
-  { value: 5, label: 'Completely. It defines how they see themselves.' },
+const IDENTITY_LABELS = [
+  'No. They attend and leave.',
+  'They might think about it later.',
+  'It becomes part of their story.',
+  'They start saying "I\'m someone who ___."',
+  'It defines how they see themselves.',
 ]
 
 const SHAREABILITY_OPTIONS = [
@@ -69,23 +160,23 @@ const SHAREABILITY_OPTIONS = [
   { value: 2, label: 'They might, if the topic came up.' },
   { value: 3, label: 'They\'d probably bring it up naturally.' },
   { value: 4, label: 'They\'d tell friends unprompted.' },
-  { value: 5, label: 'They can\'t shut up about it.' },
+  { value: 5, label: 'They can\'t shut up about it. They post about it without being asked.' },
 ]
 
-const FORMAT_OPTIONS = [
-  { value: 1, label: 'Same format everyone in my category uses.' },
-  { value: 2, label: 'A slight variation on what exists.' },
-  { value: 3, label: 'A notable twist on the standard delivery.' },
-  { value: 4, label: 'A genuinely different delivery vehicle.' },
-  { value: 5, label: 'A format that doesn\'t exist yet in my category.' },
+const FORMAT_LABELS = [
+  'Same format everyone in my category uses.',
+  'A slight variation on what exists.',
+  'A notable twist on the standard delivery.',
+  'A genuinely different delivery vehicle.',
+  'A format nobody in my category has done.',
 ]
 
-const RULEBREAK_OPTIONS = [
-  { value: 1, label: 'The result is expected for this type of experience.' },
-  { value: 2, label: 'The result is slightly better than people expect.' },
-  { value: 3, label: 'The result surprises people when they hear about it.' },
-  { value: 4, label: 'People say "wait, really?" when they hear the result.' },
-  { value: 5, label: 'The result is so unexpected people don\'t believe it until they try.' },
+const RULEBREAK_LABELS = [
+  'The result is expected for this type of experience.',
+  'The result is slightly better than people expect.',
+  'The result surprises people when they hear about it.',
+  'People say "wait, really?" when they hear the result.',
+  'The result is so unexpected people don\'t believe it until they try.',
 ]
 
 // ── Pillar definitions ──
@@ -323,6 +414,12 @@ export default function FacilitatorScore() {
             <button className="sdf-cta" onClick={() => { hapticLight(); setStep(STEPS.BRANCH) }}>
               Score my experience
             </button>
+            {isLoggedIn && (
+              <button className="sdf-back" style={{ display: 'block', margin: '0.75rem auto 0', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.88rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
+                onClick={() => window.history.back()}>
+                ← Back
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -378,7 +475,7 @@ export default function FacilitatorScore() {
             <div className="sdf-question-label">Does your experience return something humans did for 100,000+ years?</div>
             <p className="sdf-question-why">For 100,000 years humans moved in groups, cooked over fire, told stories in circles, faced fears together. The experiences that scale are the ones that give this back in a modern container.</p>
             <div className="sdf-option-list">
-              {ANCESTRAL_OPTIONS.map(opt => (
+              {getOptions('ancestral', ANCESTRAL_LABELS, selectedBranch).map(opt => (
                 <button key={opt.value} className={`sdf-option-btn ${scoreAncestral === opt.value ? 'sdf-option-selected' : ''}`}
                   onClick={() => { hapticLight(); setScoreAncestral(opt.value) }}>{opt.label}</button>
               ))}
@@ -389,7 +486,7 @@ export default function FacilitatorScore() {
             <div className="sdf-question-label">After your experience, does the participant's body feel <span className="sdf-gold">physically different</span>?</div>
             <p className="sdf-question-why">You can learn something in your head and forget it by Tuesday. But trembling, sweating, tears, goosebumps: those get encoded differently. It's why you remember your first cold plunge but not last week's podcast.</p>
             <div className="sdf-option-list">
-              {BODY_OPTIONS.map(opt => (
+              {getOptions('body', BODY_LABELS, selectedBranch).map(opt => (
                 <button key={opt.value} className={`sdf-option-btn ${scoreBody === opt.value ? 'sdf-option-selected' : ''}`}
                   onClick={() => { hapticLight(); setScoreBody(opt.value) }}>{opt.label}</button>
               ))}
@@ -420,7 +517,7 @@ export default function FacilitatorScore() {
             <div className="sdf-question-label">Would participants start calling themselves <span className="sdf-gold">something new</span>?</div>
             <p className="sdf-question-why">Identity isn't a label. It's a CHOICE that reflects a VALUE. "I'm a CrossFitter" means "I choose hard over easy." "I'm a Daybreaker" means "I choose joy without substances." What do participants CHOOSE by doing your experience?</p>
             <div className="sdf-option-list">
-              {IDENTITY_OPTIONS.map(opt => (
+              {getOptions('identity', IDENTITY_LABELS, selectedBranch).map(opt => (
                 <button key={opt.value} className={`sdf-option-btn ${scoreIdentity === opt.value ? 'sdf-option-selected' : ''}`}
                   onClick={() => { hapticLight(); setScoreIdentity(opt.value) }}>{opt.label}</button>
               ))}
@@ -476,7 +573,7 @@ export default function FacilitatorScore() {
             <div className="sdf-question-label">Is your <span className="sdf-gold">delivery vehicle</span> new, or is it the same format everyone else uses?</div>
             <p className="sdf-question-why">Gabor Mate had the same insight for 44 years. It blew up when the FORMAT changed (documentary). Wim Hof taught the same method for decades. It blew up when a scientific paper validated it. The blow-up is almost never a content change. It's a vehicle change.</p>
             <div className="sdf-option-list">
-              {FORMAT_OPTIONS.map(opt => (
+              {getOptions('format', FORMAT_LABELS, selectedBranch).map(opt => (
                 <button key={opt.value} className={`sdf-option-btn ${scoreFormat === opt.value ? 'sdf-option-selected' : ''}`}
                   onClick={() => { hapticLight(); setScoreFormat(opt.value) }}>{opt.label}</button>
               ))}
@@ -493,7 +590,7 @@ export default function FacilitatorScore() {
             <div className="sdf-question-label">Does your experience produce a result <span className="sdf-gold">so unexpected</span> people can't help talking about it?</div>
             <p className="sdf-question-why">A rule break isn't about being controversial. It's about producing a result the industry says shouldn't be possible. "I walked on fire and felt unstoppable." "I breathed for 90 minutes and healed a trauma I'd had for 20 years." The more unexpected the result, the more it spreads.</p>
             <div className="sdf-option-list">
-              {RULEBREAK_OPTIONS.map(opt => (
+              {getOptions('rulebreak', RULEBREAK_LABELS, selectedBranch).map(opt => (
                 <button key={opt.value} className={`sdf-option-btn ${scoreRulebreak === opt.value ? 'sdf-option-selected' : ''}`}
                   onClick={() => { hapticLight(); setScoreRulebreak(opt.value) }}>{opt.label}</button>
               ))}

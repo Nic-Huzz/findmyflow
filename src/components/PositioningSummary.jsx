@@ -19,6 +19,7 @@ export default function PositioningSummary({ userId, essenceName, skills, proble
   const [editingStatement, setEditingStatement] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [loaded, setLoaded] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const saveTimerRef = useRef(null)
   const profileIdRef = useRef(null)
 
@@ -98,6 +99,7 @@ export default function PositioningSummary({ userId, essenceName, skills, proble
       const result = data?.statement || ''
       setStatement(result)
       setEditingStatement(false)
+      setExpanded(true)
 
       // Save to DB
       if (profileIdRef.current) {
@@ -116,6 +118,7 @@ export default function PositioningSummary({ userId, essenceName, skills, proble
         remarkableAngle,
       })
       setStatement(fallback)
+      setExpanded(true)
       if (profileIdRef.current) {
         await supabase.from('lead_flow_profiles').update({ positioning_statement: fallback }).eq('id', profileIdRef.current)
       }
@@ -137,14 +140,33 @@ export default function PositioningSummary({ userId, essenceName, skills, proble
   const canGenerate = lifeQuake.trim().length > 5 && transformation.trim().length > 5
   const hasStatement = statement.trim().length > 0
 
+  // Collapsed state: show statement only with edit/expand controls
+  if (hasStatement && !expanded) {
+    return (
+      <div className="ps-card">
+        <div className="ps-header" onClick={() => setExpanded(true)} style={{ cursor: 'pointer' }}>
+          <span className="ps-icon">🎯</span>
+          <div style={{ flex: 1 }}>
+            <div className="ps-title">Your Positioning</div>
+          </div>
+          <span className="ps-expand-toggle">Edit ↓</span>
+        </div>
+        <div className="ps-statement-card">
+          <p className="ps-statement-text">{statement}</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="ps-card">
-      <div className="ps-header">
+      <div className="ps-header" onClick={hasStatement ? () => setExpanded(false) : undefined} style={{ cursor: hasStatement ? 'pointer' : 'default' }}>
         <span className="ps-icon">🎯</span>
-        <div>
+        <div style={{ flex: 1 }}>
           <div className="ps-title">Your Positioning</div>
           <div className="ps-sub">Who you help and why they come to you</div>
         </div>
+        {hasStatement && <span className="ps-expand-toggle">Collapse ↑</span>}
       </div>
 
       {/* Life Quake question */}
@@ -154,7 +176,7 @@ export default function PositioningSummary({ userId, essenceName, skills, proble
           className="ps-input"
           value={lifeQuake}
           onChange={e => handleLifeQuakeChange(e.target.value)}
-          placeholder="e.g. They just burned out from corporate, they've tried therapy and it didn't work, they moved somewhere new and feel lost..."
+          placeholder="e.g. Just left a decade-long job"
           rows={2}
           maxLength={300}
         />
@@ -167,7 +189,7 @@ export default function PositioningSummary({ userId, essenceName, skills, proble
           className="ps-input"
           value={transformation}
           onChange={e => handleTransformationChange(e.target.value)}
-          placeholder="e.g. Like they have permission to play again, connected to a tribe, clear on what to build next..."
+          placeholder="e.g. Grounded and clear on what's next"
           rows={2}
           maxLength={300}
         />

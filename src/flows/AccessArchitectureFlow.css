@@ -237,6 +237,13 @@
   background: rgba(233,162,59,0.06);
 }
 
+.aaf-score-bar-rec {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.65);
+  margin: 0.4rem 0 0;
+}
+
 /* ── Result headline ── */
 .aaf-result-headline {
   font-size: 1.3rem;
@@ -269,6 +276,45 @@
   line-height: 1.5;
   color: rgba(255,255,255,0.7);
   margin: 0;
+}
+
+/* ── On-ramp criteria checklist ── */
+.aaf-criteria-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.aaf-criteria-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.aaf-criteria-pass {
+  color: rgba(52,211,153,0.85);
+  background: rgba(52,211,153,0.06);
+}
+
+.aaf-criteria-fail {
+  color: rgba(248,113,113,0.85);
+  background: rgba(248,113,113,0.06);
+}
+
+.aaf-criteria-icon {
+  font-size: 0.9rem;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.aaf-criteria-text {
+  flex: 1;
 }
 
 /* ── On-ramp design ── */
@@ -312,14 +358,42 @@ textarea.aaf-input {
 }
 
 .aaf-examples {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
+}
+
+.aaf-examples-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.5rem;
 }
 
 .aaf-example {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  margin-bottom: 0.35rem;
+}
+
+.aaf-example-text {
   font-size: 0.82rem;
-  color: rgba(255,255,255,0.35);
-  line-height: 1.5;
-  padding-left: 0.5rem;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.7);
+  flex: 1;
+}
+
+.aaf-example-cat {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(233,162,59,0.6);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ── Navigation ── */

@@ -575,7 +575,8 @@ function AppRouter() {
               <Route path="/log-in" element={IS_CREATOR ? <CreatorLogin /> : <PersonaAssessment />} />
               <Route path="/unsubscribe" element={<Unsubscribe />} />
               <Route path="/rule-break-tree" element={<Suspense fallback={<LoadingSpinner />}><RuleBreakTree /></Suspense>} />
-              <Route path="/scale-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />
+              <Route path="/create/scale-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />
+              <Route path="/scale-diagnostic" element={<Navigate to="/create/scale-diagnostic" replace />} />
 
               {/* Play-Skills Identifier - Standalone */}
               <Route path="/play-skills-identifier" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PlaySkillsIdentifier /></Suspense></AuthGate>} />

@@ -102,7 +102,7 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   pointer-events: none;
 }
 
-.ch2-id-section { padding: 0 20px 16px; position: relative; z-index: 2; }
+.ch2-id-section { padding: 0 20px 10px; position: relative; z-index: 2; }
 .ch2-id-divider { height: 1px; margin: 4px 20px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
 
 /* Hero — purple card with depth, matches original header treatment */
@@ -444,7 +444,7 @@ body[data-theme="dark"] .bottom-toolbar .toolbar-item.active .toolbar-icon {
   .ch2-id-avatar { width: 60px; height: 60px; }
   .ch2-id-avatar-empty { width: 60px; height: 60px; }
   .ch2-id-name { font-size: 17px; }
-  .ch2-id-section { padding: 0 14px 12px; }
+  .ch2-id-section { padding: 0 14px 8px; }
   .ch2-id-divider { margin: 0 14px; }
   .ch2-id-footer { padding: 0 14px 12px; }
   .ch2-tagline { font-size: 13px; }
