@@ -284,6 +284,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
                 onChange={e => setExpectationText(e.target.value)}
                 placeholder="e.g. They say yes, we shake hands, and I feel proud of myself..."
                 rows={3} />
+              <p className="hfm-trick">Secret trick: Now tell yourself this before you do it and watch anxiety turn into excitement</p>
             </div>
           )}
         </div>

@@ -217,6 +217,15 @@
   color: #adb5bd;
 }
 
+.hfm-trick {
+  font-size: 12px;
+  font-weight: 600;
+  color: #E9A23B;
+  font-style: italic;
+  margin: 8px 0 0;
+  line-height: 1.4;
+}
+
 /* === INSIGHT CARD === */
 .hfm-insight-card {
   background: transparent;
