@@ -38,6 +38,7 @@ import PlaySkillsOnboarding from './components/onboarding/PlaySkillsOnboarding'
 const PlaySkillsIdentifier = lazy(() => import('./flows/PlaySkillsIdentifier'))
 const RuleBreakTree = lazy(() => import('./pages/RuleBreakTree'))
 const ScaleDiagnosticFlow = lazy(() => import('./flows/ScaleDiagnosticFlow'))
+const AIDiagnostic = lazy(() => import('./pages/AIDiagnostic'))
 const NarrativeBuilderFlow = lazyRetry(() => import('./flows/NarrativeBuilderFlow'))
 const AccessArchitectureFlow = lazyRetry(() => import('./flows/AccessArchitectureFlow'))
 const FacilitatorScore = lazy(() => import('./pages/FacilitatorScore'))
@@ -719,6 +720,7 @@ function AppRouter() {
             <Route path="/try/essence-mirror" element={<TryEssenceMirror />} />
             <Route path="/try/career-clarity" element={<CareerClarityQuiz />} />
             <Route path="/try/facilitator-score" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />
+            <Route path="/try/ai-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><AIDiagnostic /></Suspense>} />
             <Route path="/try/life-paths-test" element={<LifePathTest />} />
             <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
