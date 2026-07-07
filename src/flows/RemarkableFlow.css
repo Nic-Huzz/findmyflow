@@ -302,10 +302,11 @@
 }
 
 .rmk-problem-selected {
-  border-color: #E9A23B;
-  background: rgba(233,162,59,0.08);
+  border-color: #E9A23B !important;
+  background: rgba(233,162,59,0.15) !important;
   color: #E9A23B;
 }
+.rmk-problem-selected span { color: #E9A23B; }
 
 /* ── Skills hint ── */
 .rmk-skills-hint {

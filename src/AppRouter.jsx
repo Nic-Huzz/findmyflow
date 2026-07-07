@@ -457,7 +457,7 @@ function ConditionalBottomToolbar() {
                         location.pathname.startsWith('/facilitate/') ||
                         location.pathname === '/life-paths' ||
                         (location.pathname.startsWith('/create/') &&
-                         location.pathname !== '/create' &&
+                         location.pathname !== '/create/' &&
                          location.pathname !== '/create/experiences' &&
                          location.pathname !== '/create/growth' &&
                          location.pathname !== '/create/terminal' &&

@@ -2,8 +2,8 @@
  * FacilitatorScore.jsx — /try/facilitator-score AND /create/scale-diagnostic
  * Scale Score v2: 3-pillar Phase 3 diagnostic (RETURN · BREAK · TRIBAL).
  *
- * Public: Intro → Branch → RETURN (2Q) → TRIBAL (2Q) → BREAK (1Q + pulled rule break) → Email → Results
- * Logged-in: Same flow but pulls rule break from Remarkable Results, shows access context, saves to scale_diagnostics
+ * Public: Intro → Branch → RETURN (2Q) → TRIBAL (2Q) → BREAK (2Q) → Email → Results
+ * Logged-in (report card): Intro → Single-page report card (read-only, links to source flows) → Results
  *
  * 3 Pillars:
  *   RETURN — Does it align with 100K-year-old biology? (Ancestral + Body)
@@ -11,12 +11,14 @@
  *   TRIBAL — Does it create a tribe? (Identity + Shareability)
  */
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import '../flows/ScaleDiagnosticFlow.css'
 
 const STEPS = {
   INTRO: 'intro',
+  REPORT: 'report',
   BRANCH: 'branch',
   RETURN: 'return',
   TRIBAL: 'tribal',
@@ -193,6 +195,7 @@ const PILLAR_RECOMMENDATIONS = {
 }
 
 export default function FacilitatorScore() {
+  const navigate = useNavigate()
   const [step, setStepRaw] = useState(STEPS.INTRO)
   const setStep = (next) => { setStepRaw(next); window.scrollTo({ top: 0, behavior: 'smooth' }) }
 
@@ -219,6 +222,8 @@ export default function FacilitatorScore() {
   const [ruleBreak, setRuleBreak] = useState('')
   const [existingDiagId, setExistingDiagId] = useState(null)
   const [accessScore, setAccessScore] = useState(null)
+  const [hasReportData, setHasReportData] = useState(false)
+  const [pullSources, setPullSources] = useState({})
 
   // Email capture
   const [email, setEmail] = useState('')
@@ -227,55 +232,103 @@ export default function FacilitatorScore() {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(async ({ data }) => {
       const u = data?.user
       if (!u) return
       setUser(u)
 
-      // Pull Remarkable Results data
-      supabase.from('remarkable_angles')
-        .select('project_name, ai_rule_statement, wound_problem, score_unique, score_share, score_simple')
-        .eq('user_id', u.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .then(({ data: angle }) => {
-          if (angle?.[0]) {
-            if (angle[0].project_name) setProjectName(angle[0].project_name)
-            if (angle[0].ai_rule_statement) setRuleBreak(angle[0].ai_rule_statement)
-          }
-        })
+      const [
+        { data: angleData },
+        { data: reachData },
+        { data: accessData },
+        { data: diagData },
+      ] = await Promise.all([
+        supabase.from('remarkable_angles')
+          .select('project_name, ai_rule_statement, wound_problem, score_unique, score_share, score_simple, branch, score_ancestral, score_body')
+          .eq('user_id', u.id).order('created_at', { ascending: false }).limit(1),
+        supabase.from('narrative_builders')
+          .select('identity_label, vehicle_type')
+          .eq('user_id', u.id).order('created_at', { ascending: false }).limit(1),
+        supabase.from('access_architectures')
+          .select('price_score, time_score, friction_score, cognitive_score, identity_score')
+          .eq('user_id', u.id).order('created_at', { ascending: false }).limit(1),
+        supabase.from('scale_diagnostics')
+          .select('id, score_body, score_culture, score_identity, score_ancestral, score_format, score_rulebreak, branch')
+          .eq('user_id', u.id).order('created_at', { ascending: false }).limit(1),
+      ])
 
-      // Pull access context
-      supabase.from('access_architectures')
-        .select('score_price, score_time, score_friction, score_cognitive, score_identity')
-        .eq('user_id', u.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .then(({ data: access }) => {
-          if (access?.[0]) {
-            const avg = Math.round(((access[0].score_price || 0) + (access[0].score_time || 0) + (access[0].score_friction || 0) + (access[0].score_cognitive || 0) + (access[0].score_identity || 0)) / 5 * 10) / 10
-            setAccessScore(avg)
-          }
-        })
+      const angle = angleData?.[0]
+      const reach = reachData?.[0]
+      const access = accessData?.[0]
+      const diag = diagData?.[0]
+      const sources = {}
 
-      // Pre-fill from existing diagnostic
-      supabase.from('scale_diagnostics')
-        .select('id, score_body, score_culture, score_identity, score_ancestral, score_format, score_rulebreak, branch')
-        .eq('user_id', u.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .then(({ data: diag }) => {
-          if (diag?.[0]) {
-            setExistingDiagId(diag[0].id)
-            if (diag[0].score_body) setScoreBody(diag[0].score_body)
-            if (diag[0].score_culture) setScoreShareability(diag[0].score_culture)
-            if (diag[0].score_identity) setScoreIdentity(diag[0].score_identity)
-            if (diag[0].score_ancestral) setScoreAncestral(diag[0].score_ancestral)
-            if (diag[0].score_format) setScoreFormat(diag[0].score_format)
-            if (diag[0].score_rulebreak) setScoreRulebreak(diag[0].score_rulebreak)
-            if (diag[0].branch) setSelectedBranch(diag[0].branch)
-          }
-        })
+      if (angle) {
+        if (angle.project_name) setProjectName(angle.project_name)
+        if (angle.ai_rule_statement) setRuleBreak(angle.ai_rule_statement)
+
+        // Q1 Ancestral — direct pull
+        if (angle.score_ancestral) {
+          setScoreAncestral(angle.score_ancestral)
+          sources.ancestral = 'Remarkable Results'
+        }
+        // Q2 Body — direct pull
+        if (angle.score_body) {
+          setScoreBody(angle.score_body)
+          sources.body = 'Remarkable Results'
+        }
+        // Branch — direct pull
+        if (angle.branch) {
+          setSelectedBranch(angle.branch)
+          sources.branch = 'Remarkable Results'
+        }
+        // Q6 Rule Break — map remarkability score to 1-5
+        if (angle.score_unique && angle.score_share && angle.score_simple) {
+          const rmk = angle.score_unique * angle.score_share * angle.score_simple
+          const rb = rmk >= 64 ? 5 : rmk >= 27 ? 4 : rmk >= 8 ? 3 : rmk >= 3 ? 2 : 1
+          setScoreRulebreak(rb)
+          sources.rulebreak = 'Remarkable Results'
+        }
+      }
+
+      if (reach) {
+        // Q3 Identity — infer from identity_label
+        if (reach.identity_label?.trim()) {
+          setScoreIdentity(4)
+          sources.identity = 'Remarkable Reach'
+        }
+        // Q5 Format — map vehicle type
+        if (reach.vehicle_type) {
+          const fmap = { results: 2, new_action: 3, new_medium: 4 }
+          setScoreFormat(fmap[reach.vehicle_type] || 2)
+          sources.format = 'Remarkable Reach'
+        }
+      }
+
+      if (access) {
+        const avg = Math.round(((access.price_score || 0) + (access.time_score || 0) + (access.friction_score || 0) + (access.cognitive_score || 0) + (access.identity_score || 0)) / 5 * 10) / 10
+        setAccessScore(avg)
+        // Q4 Shareability — infer from identity barrier (inverted proxy)
+        if (access.identity_score) {
+          setScoreShareability(access.identity_score)
+          sources.shareability = 'Remarkable Growth'
+        }
+      }
+
+      // Existing diagnostic fills gaps only (fresh flow data takes priority)
+      if (diag) {
+        setExistingDiagId(diag.id)
+        if (diag.score_ancestral && !sources.ancestral) { setScoreAncestral(diag.score_ancestral); sources.ancestral = 'Previous Scale Score' }
+        if (diag.score_body && !sources.body) { setScoreBody(diag.score_body); sources.body = 'Previous Scale Score' }
+        if (diag.score_identity && !sources.identity) { setScoreIdentity(diag.score_identity); sources.identity = 'Previous Scale Score' }
+        if (diag.score_culture && !sources.shareability) { setScoreShareability(diag.score_culture); sources.shareability = 'Previous Scale Score' }
+        if (diag.score_format && !sources.format) { setScoreFormat(diag.score_format); sources.format = 'Previous Scale Score' }
+        if (diag.score_rulebreak && !sources.rulebreak) { setScoreRulebreak(diag.score_rulebreak); sources.rulebreak = 'Previous Scale Score' }
+        if (diag.branch && !angle?.branch) setSelectedBranch(diag.branch)
+      }
+
+      setPullSources(sources)
+      setHasReportData(!!angle?.score_ancestral || !!angle?.score_body)
     })
   }, [])
 
@@ -395,24 +448,35 @@ export default function FacilitatorScore() {
 
               <h1>Will your experience <span className="sdf-gold">scale</span>?</h1>
 
-              <div style={{ textAlign: 'left', maxWidth: 380, margin: '0 auto', fontSize: '0.88rem', lineHeight: 1.65, color: 'rgba(255,255,255,0.65)' }}>
-                <p style={{ margin: '0 0 0.75rem' }}>
-                  Your brain and body run on software that's 100,000 years old. Every invention since then made life more convenient. Less walking, less cooking, less face-to-face.
-                </p>
-                <p style={{ margin: '0 0 0.75rem' }}>
-                  That worked great until it didn't. When convenience goes too far, people start paying to do the hard thing again. CrossFit. Cold plunge. Dancing sober at sunrise.
-                </p>
-                <p style={{ margin: '0 0 0.75rem', color: 'rgba(255,255,255,0.85)' }}>
-                  <strong>The experiences that scale give people back what convenience took away.</strong>
-                </p>
-                <p style={{ margin: 0 }}>
-                  3 pillars. 6 questions. 2 minutes.
-                </p>
-              </div>
+              {hasReportData ? (
+                <div style={{ textAlign: 'left', maxWidth: 380, margin: '0 auto', fontSize: '0.88rem', lineHeight: 1.65, color: 'rgba(255,255,255,0.65)' }}>
+                  <p style={{ margin: '0 0 0.75rem' }}>
+                    We've pulled your answers from Remarkable Results, Reach, and Growth. Review each pillar, adjust anything that's changed, and see your score.
+                  </p>
+                  <p style={{ margin: 0 }}>
+                    3 pillars. 6 questions. Already filled in.
+                  </p>
+                </div>
+              ) : (
+                <div style={{ textAlign: 'left', maxWidth: 380, margin: '0 auto', fontSize: '0.88rem', lineHeight: 1.65, color: 'rgba(255,255,255,0.65)' }}>
+                  <p style={{ margin: '0 0 0.75rem' }}>
+                    Your brain and body run on software that's 100,000 years old. Every invention since then made life more convenient. Less walking, less cooking, less face-to-face.
+                  </p>
+                  <p style={{ margin: '0 0 0.75rem' }}>
+                    That worked great until it didn't. When convenience goes too far, people start paying to do the hard thing again. CrossFit. Cold plunge. Dancing sober at sunrise.
+                  </p>
+                  <p style={{ margin: '0 0 0.75rem', color: 'rgba(255,255,255,0.85)' }}>
+                    <strong>The experiences that scale give people back what convenience took away.</strong>
+                  </p>
+                  <p style={{ margin: 0 }}>
+                    3 pillars. 6 questions. 2 minutes.
+                  </p>
+                </div>
+              )}
             </div>
 
-            <button className="sdf-cta" onClick={() => { hapticLight(); setStep(STEPS.BRANCH) }}>
-              Score my experience
+            <button className="sdf-cta" onClick={() => { hapticLight(); setStep(hasReportData ? STEPS.REPORT : STEPS.BRANCH) }}>
+              {hasReportData ? 'Review my score' : 'Score my experience'}
             </button>
             {isLoggedIn && (
               <button className="sdf-back" style={{ display: 'block', margin: '0.75rem auto 0', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.88rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
@@ -427,7 +491,82 @@ export default function FacilitatorScore() {
   }
 
   // ═══════════════════════════════════════════════════════════════
-  // SCREEN 2: BRANCH SELECTION
+  // REPORT CARD MODE — read-only, links back to source flows
+  // ═══════════════════════════════════════════════════════════════
+  if (step === STEPS.REPORT) {
+    const allScored = scoreAncestral > 0 && scoreBody > 0 && scoreIdentity > 0 && scoreShareability > 0 && scoreFormat > 0 && scoreRulebreak > 0
+
+    const reportItem = (question, score, labels, source, editPath, editLabel) => (
+      <div className="sdf-report-item">
+        <div className="sdf-report-q">{question}</div>
+        {score > 0 ? (
+          <>
+            <div className="sdf-report-answer">
+              <span className="sdf-report-score">{score}/5</span>
+              <span className="sdf-report-text">{labels[score - 1]}</span>
+            </div>
+            {source && <div className="sdf-source-badge">{source}</div>}
+            <span className="sdf-report-edit" onClick={() => navigate(editPath)}>Change in {editLabel} →</span>
+          </>
+        ) : (
+          <div className="sdf-report-missing" onClick={() => navigate(editPath)}>
+            Not answered yet. Complete {editLabel} →
+          </div>
+        )}
+      </div>
+    )
+
+    return (
+      <div className="sdf">
+        <div className="sdf-container sdf-screen">
+          <div className="sdf-badge">Scale Score</div>
+          <h2 className="sdf-heading" style={{ fontSize: '1.3rem', marginBottom: '0.25rem' }}>Your <span className="sdf-gold">report card</span></h2>
+          <p className="sdf-prompt" style={{ marginBottom: '1.25rem' }}>Pulled from your earlier flows. To change an answer, go back to the flow where you answered it.</p>
+
+          {/* ── RETURN PILLAR ── */}
+          <div className="sdf-report-pillar" style={{ borderLeftColor: '#34d399' }}>
+            <div className="sdf-report-pillar-header">
+              <div className="sdf-report-pillar-label" style={{ color: '#34d399' }}>Return</div>
+              {pillarReturn > 0 && <div className="sdf-report-pillar-score" style={{ color: '#34d399' }}>{pillarReturn}/5</div>}
+            </div>
+            {reportItem('Does your experience return something humans did for 100,000+ years?', scoreAncestral, ANCESTRAL_LABELS, pullSources.ancestral, '/create/remarkable', 'Remarkable Results')}
+            {reportItem('Does the body feel physically different after?', scoreBody, BODY_LABELS, pullSources.body, '/create/remarkable', 'Remarkable Results')}
+          </div>
+
+          {/* ── TRIBAL PILLAR ── */}
+          <div className="sdf-report-pillar" style={{ borderLeftColor: '#a78bfa' }}>
+            <div className="sdf-report-pillar-header">
+              <div className="sdf-report-pillar-label" style={{ color: '#a78bfa' }}>Tribal</div>
+              {pillarTribal > 0 && <div className="sdf-report-pillar-score" style={{ color: '#a78bfa' }}>{pillarTribal}/5</div>}
+            </div>
+            {reportItem('Would participants start calling themselves something new?', scoreIdentity, IDENTITY_LABELS, pullSources.identity, '/create/narrative-builder', 'Remarkable Reach')}
+            {reportItem('Would participants tell friends without being asked?', scoreShareability, SHAREABILITY_OPTIONS.map(o => o.label), pullSources.shareability, '/create/access-architecture', 'Remarkable Growth')}
+          </div>
+
+          {/* ── BREAK PILLAR ── */}
+          <div className="sdf-report-pillar" style={{ borderLeftColor: '#E9A23B' }}>
+            <div className="sdf-report-pillar-header">
+              <div className="sdf-report-pillar-label" style={{ color: '#E9A23B' }}>Break</div>
+              {pillarBreak > 0 && <div className="sdf-report-pillar-score" style={{ color: '#E9A23B' }}>{pillarBreak}/5</div>}
+            </div>
+            {reportItem('Is your delivery vehicle new?', scoreFormat, FORMAT_LABELS, pullSources.format, '/create/narrative-builder', 'Remarkable Reach')}
+            {reportItem('Does your experience produce a result so unexpected people can\'t help talking about it?', scoreRulebreak, RULEBREAK_LABELS, pullSources.rulebreak, '/create/remarkable', 'Remarkable Results')}
+          </div>
+
+          <div className="sdf-nav">
+            <button className="sdf-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
+            <button className="sdf-cta" disabled={!allScored}
+              onClick={() => { hapticLight(); saveForUser(); hapticSuccess(); setStep(STEPS.RESULTS) }}>
+              See my score
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // SCREEN 2: BRANCH SELECTION (public / no prior data)
   // ═══════════════════════════════════════════════════════════════
   if (step === STEPS.BRANCH) {
     return (
@@ -468,11 +607,12 @@ export default function FacilitatorScore() {
     return (
       <div className="sdf">
         <div className="sdf-container sdf-screen">
-          <div className="sdf-step-badge">Step 2 of 4 \u00b7 Return</div>
+          <div className="sdf-step-badge">Step 2 of 4 · Return</div>
           <h2 className="sdf-heading" style={{ color: '#34d399' }}>Does it align with our <span style={{ color: 'white' }}>100,000-year-old</span> biology?</h2>
 
           <div className="sdf-question-section">
             <div className="sdf-question-label">Does your experience return something humans did for 100,000+ years?</div>
+            {pullSources.ancestral && <div className="sdf-source-badge">Pulled from {pullSources.ancestral}</div>}
             <p className="sdf-question-why">For 100,000 years humans moved in groups, cooked over fire, told stories in circles, faced fears together. The experiences that scale are the ones that give this back in a modern container.</p>
             <div className="sdf-option-list">
               {getOptions('ancestral', ANCESTRAL_LABELS, selectedBranch).map(opt => (
@@ -484,6 +624,7 @@ export default function FacilitatorScore() {
 
           <div className="sdf-question-section">
             <div className="sdf-question-label">After your experience, does the participant's body feel <span className="sdf-gold">physically different</span>?</div>
+            {pullSources.body && <div className="sdf-source-badge">Pulled from {pullSources.body}</div>}
             <p className="sdf-question-why">You can learn something in your head and forget it by Tuesday. But trembling, sweating, tears, goosebumps: those get encoded differently. It's why you remember your first cold plunge but not last week's podcast.</p>
             <div className="sdf-option-list">
               {getOptions('body', BODY_LABELS, selectedBranch).map(opt => (
@@ -510,11 +651,12 @@ export default function FacilitatorScore() {
     return (
       <div className="sdf">
         <div className="sdf-container sdf-screen">
-          <div className="sdf-step-badge">Step 3 of 4 \u00b7 Tribal</div>
+          <div className="sdf-step-badge">Step 3 of 4 · Tribal</div>
           <h2 className="sdf-heading" style={{ color: '#a78bfa' }}>Does it create a <span style={{ color: 'white' }}>tribe</span>?</h2>
 
           <div className="sdf-question-section">
             <div className="sdf-question-label">Would participants start calling themselves <span className="sdf-gold">something new</span>?</div>
+            {pullSources.identity && <div className="sdf-source-badge">Recommended from {pullSources.identity}</div>}
             <p className="sdf-question-why">Identity isn't a label. It's a CHOICE that reflects a VALUE. "I'm a CrossFitter" means "I choose hard over easy." "I'm a Daybreaker" means "I choose joy without substances." What do participants CHOOSE by doing your experience?</p>
             <div className="sdf-option-list">
               {getOptions('identity', IDENTITY_LABELS, selectedBranch).map(opt => (
@@ -540,6 +682,7 @@ export default function FacilitatorScore() {
 
           <div className="sdf-question-section">
             <div className="sdf-question-label">Would participants tell friends <span className="sdf-gold">without being asked</span>?</div>
+            {pullSources.shareability && <div className="sdf-source-badge">Recommended from {pullSources.shareability}</div>}
             <p className="sdf-question-why">Shareable experiences have 3 elements: a surprising TRANSFORMATION ("I cried for 20 minutes"), an unexpected DELIVERY ("silent disco on a beach at sunrise"), and WITNESSES ("with 200 strangers"). The stronger each element, the more people talk.</p>
             <div className="sdf-option-list">
               {SHAREABILITY_OPTIONS.map(opt => (
@@ -566,11 +709,12 @@ export default function FacilitatorScore() {
     return (
       <div className="sdf">
         <div className="sdf-container sdf-screen">
-          <div className="sdf-step-badge">Step 4 of 4 \u00b7 Break</div>
+          <div className="sdf-step-badge">Step 4 of 4 · Break</div>
           <h2 className="sdf-heading" style={{ color: '#E9A23B' }}>Does it create results in <span style={{ color: 'white' }}>unexpected</span> ways?</h2>
 
           <div className="sdf-question-section">
             <div className="sdf-question-label">Is your <span className="sdf-gold">delivery vehicle</span> new, or is it the same format everyone else uses?</div>
+            {pullSources.format && <div className="sdf-source-badge">Recommended from {pullSources.format}</div>}
             <p className="sdf-question-why">Gabor Mate had the same insight for 44 years. It blew up when the FORMAT changed (documentary). Wim Hof taught the same method for decades. It blew up when a scientific paper validated it. The blow-up is almost never a content change. It's a vehicle change.</p>
             <div className="sdf-option-list">
               {getOptions('format', FORMAT_LABELS, selectedBranch).map(opt => (
@@ -588,6 +732,7 @@ export default function FacilitatorScore() {
               </div>
             )}
             <div className="sdf-question-label">Does your experience produce a result <span className="sdf-gold">so unexpected</span> people can't help talking about it?</div>
+            {pullSources.rulebreak && <div className="sdf-source-badge">Recommended from {pullSources.rulebreak}</div>}
             <p className="sdf-question-why">A rule break isn't about being controversial. It's about producing a result the industry says shouldn't be possible. "I walked on fire and felt unstoppable." "I breathed for 90 minutes and healed a trauma I'd had for 20 years." The more unexpected the result, the more it spreads.</p>
             <div className="sdf-option-list">
               {getOptions('rulebreak', RULEBREAK_LABELS, selectedBranch).map(opt => (

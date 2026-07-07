@@ -15,9 +15,75 @@ import { onRemarkableComplete } from '../lib/brain/autoPopulate'
 import dnaData from '../../public/data/experienceCreatorDNA.json'
 import './RemarkableFlow.css'
 
+const BRANCHES = [
+  { key: 'movement',    label: 'Movement',    icon: '\u{1F3C3}', desc: 'Fitness, dance, cold exposure, physical challenge' },
+  { key: 'nourishment', label: 'Nourishment', icon: '\u{1F37D}\uFE0F', desc: 'Food, cooking, fasting, nutrition' },
+  { key: 'tools',       label: 'Tools/Tech',  icon: '\u{1F6E0}\uFE0F', desc: 'Skills, education, problem-solving, AI' },
+  { key: 'status',      label: 'Status',      icon: '\u2728', desc: 'Identity, craft, reputation, self-expression' },
+  { key: 'bonds',       label: 'Bonds',       icon: '\u{1F91D}', desc: 'Relationships, community, gathering, friendship' },
+  { key: 'shelter',     label: 'Shelter',     icon: '\u{1F3E0}', desc: 'Space design, environments, co-living' },
+  { key: 'story',       label: 'Story',       icon: '\u{1F4D6}', desc: 'Narrative, storytelling, live content, media' },
+  { key: 'fire',        label: 'Fire/Energy', icon: '\u{1F525}', desc: 'Ceremony, lighting, ritual, frequency' },
+  { key: 'healing',     label: 'Healing',     icon: '\u{1F49C}', desc: 'Therapy, breathwork, somatic, plant medicine' },
+  { key: 'threat',      label: 'Threat',      icon: '\u2694\uFE0F', desc: 'Courage, fear-facing, resilience, safety' },
+]
+
+const ANCESTRAL_EXAMPLES = {
+  movement:    ['fitness apps, online PT', 'gym classes with some bodyweight', 'running, swimming, martial arts', 'CrossFit, obstacle races, cold plunge', 'barefoot running, wrestling, group hunts'],
+  healing:     ['therapy apps, online counseling', 'guided meditation apps, journaling prompts', 'breathwork, sound healing, group circles', 'sweat lodges, plant medicine ceremony, fasting retreats', 'sitting in silence, grief rituals, laying on of hands'],
+  bonds:       ['networking apps, LinkedIn events', 'team-building workshops', 'group dinners, community circles', 'men\'s/women\'s circles, fireside gatherings', 'tribal councils, communal feasts, rites of passage'],
+  story:       ['content creation courses, blogging tools', 'storytelling workshops', 'live spoken word, open mic nights', 'campfire storytelling, oral history circles', 'myths told around fire, passing down lineage stories'],
+  nourishment: ['meal kit delivery, nutrition apps', 'cooking classes with some tradition', 'communal cooking, fermentation, foraging', 'fasting retreats, ancestral diet programs, fire-cooked feasts', 'hunting and preparing your own food, eating only what grows near you'],
+  fire:        ['LED mood lighting, sound machines', 'candle-lit yoga, ambient playlists', 'fire circles, drumming sessions', 'sweat lodge ceremonies, fire walking, cacao ceremony', 'tending a fire all night, sunrise rituals, solstice gatherings'],
+  tools:       ['SaaS products, online courses', 'mentorship programs, skill workshops', 'apprenticeships, hands-on building', 'craft guilds, tool-making, building with your hands', 'flintknapping, weaving, shelter-building from raw materials'],
+  status:      ['personal branding courses, LinkedIn optimization', 'confidence workshops, public speaking', 'style transformation, creative expression', 'rites of passage, initiation ceremonies, vision quests', 'earning your place through demonstrated skill in front of the tribe'],
+  shelter:     ['interior design apps, Pinterest boards', 'space organization workshops', 'communal builds, garden design, natural materials', 'earthship building, off-grid cabins, permaculture design', 'building a shelter from the land with your hands, sleeping in what you made'],
+  threat:      ['resilience courses, fear workshops', 'confidence challenges, public speaking', 'martial arts, cold exposure, heights', 'fear-facing rituals, survival training, night walks', 'facing real danger together, hunting, defending the group'],
+}
+
+const BODY_EXAMPLES = {
+  movement:    ['exercise theory videos', 'light stretching, warm-up drills', 'a tough workout, HIIT class', 'cold plunge, intense bootcamp, altitude training', 'multi-day endurance challenge, extreme cold exposure'],
+  healing:     ['talk therapy, a lecture', 'guided visualization, gentle meditation', 'sound bath, yin yoga, reiki', 'intense breathwork, cold exposure, somatic release', 'multi-day silent retreat, ayahuasca, extended fasting'],
+  bonds:       ['a networking event', 'a workshop with some movement', 'group activities, partner exercises', 'deep sharing circles, trust falls, vulnerability challenges', 'multi-day immersion, sleeping rough together, physical ordeals'],
+  story:       ['watching a presentation', 'feeling moved by a talk', 'goosebumps during a live performance', 'full-body response to a story, crying, shaking', 'cathartic release, feeling physically different after sharing your story'],
+  nourishment: ['learning about nutrition', 'trying a new recipe', 'a cooking class where you eat what you make', 'a fast that resets your digestion, a feast that changes your palette', 'multi-day fast, a diet shift that changes your bloodwork'],
+  fire:        ['a relaxing ambiance', 'mild warmth, gentle sensory shift', 'heat exposure, drumming vibrations through the body', 'fire walking, sweat lodge, intense heat ceremony', 'altered states from sustained fire-gazing, overnight vigils'],
+  tools:       ['watching a tutorial', 'light hands-on practice', 'building something physical, getting your hands dirty', 'exhausting physical build, hours of focused craft', 'building something from raw materials over days'],
+  status:      ['a personal branding talk', 'a confidence exercise', 'performing in front of people, style makeover', 'public challenge, standing in front of strangers and being seen', 'a physical test that proves something to yourself and witnesses'],
+  shelter:     ['browsing design inspiration', 'rearranging a room', 'building with your hands, gardening', 'full-day build in nature, sleeping in your creation', 'multi-day shelter build, exposure to elements'],
+  threat:      ['learning about fear', 'mild nervousness, butterflies', 'adrenaline rush, elevated heart rate', 'full fight-or-flight activation, shaking, crying, then calm', 'sustained exposure that rewires your nervous system over days'],
+}
+
+const ANCESTRAL_LABELS = [
+  'Not really. It\'s a modern invention.',
+  'Loosely inspired. There\'s a thread back to something ancient.',
+  'It includes something humans have always done.',
+  'It\'s an ancient practice in a modern setting.',
+  'It IS the practice. Humans did this exact thing for thousands of years.',
+]
+
+const BODY_LABELS = [
+  'Not at all. It\'s purely informational.',
+  'Slightly. Some relaxation or energy.',
+  'Noticeable physical shift.',
+  'Real physiological change.',
+  'They feel it for days. Their body remembers.',
+]
+
+function getBranchOptions(type, labels, branch) {
+  const examples = (branch && (type === 'ancestral' ? ANCESTRAL_EXAMPLES : BODY_EXAMPLES)[branch]) || null
+  return labels.map((label, i) => ({
+    value: i + 1,
+    label: examples ? `${label} (e.g., ${examples[i]})` : label,
+  }))
+}
+
 const STEPS = {
   INTRO: 'intro',
   PROJECTS: 'projects',
+  BRANCH: 'branch',
+  ANCESTRAL: 'ancestral',
+  BODY: 'body',
   PROBLEM: 'problem',
   ASSUMPTION: 'assumption',
   TWO_WORLDS: 'two_worlds',
@@ -55,6 +121,11 @@ export default function RemarkableFlow() {
   const [projectType, setProjectType] = useState('') // 'one_thing' | 'separate'
   const [selectedItems, setSelectedItems] = useState([])
   const [projectName, setProjectName] = useState('')
+
+  // User inputs — Branch + Foundation
+  const [selectedBranch, setSelectedBranch] = useState('')
+  const [scoreAncestral, setScoreAncestral] = useState(0)
+  const [scoreBody, setScoreBody] = useState(0)
 
   // User inputs — Distillation
   const [problem, setProblem] = useState('')
@@ -120,7 +191,7 @@ export default function RemarkableFlow() {
             .limit(1),
           supabase
             .from('remarkable_angles')
-            .select('id, wound_problem, assumption, rule_identified, combination_insight, different, experience, extreme_action_plan, project_name, score_unique, score_share, score_simple, ai_rule_statement, ai_remarkable_bio')
+            .select('id, wound_problem, assumption, rule_identified, combination_insight, different, experience, extreme_action_plan, project_name, score_unique, score_share, score_simple, ai_rule_statement, ai_remarkable_bio, branch, score_ancestral, score_body')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(1),
@@ -151,6 +222,9 @@ export default function RemarkableFlow() {
           if (angle.score_unique) setScoreUnique(angle.score_unique)
           if (angle.score_share) setScoreShare(angle.score_share)
           if (angle.score_simple) setScoreSimple(angle.score_simple)
+          if (angle.branch) setSelectedBranch(angle.branch)
+          if (angle.score_ancestral) setScoreAncestral(angle.score_ancestral)
+          if (angle.score_body) setScoreBody(angle.score_body)
           // Legacy fallback: parse rule_identified if new columns are empty
           if (!angle.assumption && angle.rule_identified?.includes('Assumption: ')) {
             const parts = angle.rule_identified.split(' | ')
@@ -196,6 +270,9 @@ export default function RemarkableFlow() {
     if (scoreUnique) fields.score_unique = scoreUnique
     if (scoreShare) fields.score_share = scoreShare
     if (scoreSimple) fields.score_simple = scoreSimple
+    if (selectedBranch) fields.branch = selectedBranch
+    if (scoreAncestral) fields.score_ancestral = scoreAncestral
+    if (scoreBody) fields.score_body = scoreBody
 
     if (savedAngleId) {
       supabase.from('remarkable_angles').update(fields).eq('id', savedAngleId)
@@ -253,6 +330,9 @@ export default function RemarkableFlow() {
         score_unique: scoreUnique || null,
         score_share: scoreShare || null,
         score_simple: scoreSimple || null,
+        branch: selectedBranch || null,
+        score_ancestral: scoreAncestral || null,
+        score_body: scoreBody || null,
         rule_identified: `Project: ${projectName} | Problem: ${problem} | Assumption: ${assumption} | Two worlds: ${twoWorlds} | Different: ${different} | Experience: ${experience} | One-liner: ${compression} | Score: ${scoreUnique}x${scoreShare}x${scoreSimple}=${scoreUnique * scoreShare * scoreSimple}`,
         ai_rule_statement: editedRuleBreak || aiResult?.rule_statement || null,
         ai_remarkable_bio: aiResult?.remarkable_bio || null,
@@ -431,10 +511,99 @@ export default function RemarkableFlow() {
             <button
               className="rmk-cta"
               disabled={!canProceed}
-              onClick={() => { hapticLight(); setStep(STEPS.PROBLEM) }}
+              onClick={() => { hapticLight(); setStep(STEPS.BRANCH) }}
             >
               Next
             </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 1B: BRANCH SELECTION ──
+  if (step === STEPS.BRANCH) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Foundation</div>
+          <h2 className="rmk-heading">Which <span className="rmk-gold">branch</span> does your experience sit on?</h2>
+          <p className="rmk-prompt">This shapes the examples you'll see throughout the flow.</p>
+
+          <div>
+            {BRANCHES.map(b => (
+              <button key={b.key}
+                className={`rmk-problem-btn ${selectedBranch === b.key ? 'rmk-problem-selected' : ''}`}
+                style={{ marginBottom: '0.4rem' }}
+                onClick={() => { hapticLight(); setSelectedBranch(b.key) }}>
+                <span style={{ fontWeight: 700 }}>{b.icon} {b.label}</span>
+                <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginLeft: 8, fontWeight: 400 }}>{b.desc}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.PROJECTS)}>Back</button>
+            <button className="rmk-cta" disabled={!selectedBranch}
+              onClick={() => { hapticLight(); setStep(STEPS.ANCESTRAL) }}>Next</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 1C: ANCESTRAL ──
+  if (step === STEPS.ANCESTRAL) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Foundation</div>
+          <h2 className="rmk-heading">Does your experience return something humans did for <span className="rmk-gold">100,000+ years</span>?</h2>
+          <p className="rmk-prompt">For 100,000 years humans moved in groups, cooked over fire, told stories in circles, faced fears together. The experiences that scale give this back in a modern container.</p>
+
+          <div>
+            {getBranchOptions('ancestral', ANCESTRAL_LABELS, selectedBranch).map(opt => (
+              <button key={opt.value}
+                className={`rmk-problem-btn ${scoreAncestral === opt.value ? 'rmk-problem-selected' : ''}`}
+                onClick={() => { hapticLight(); setScoreAncestral(opt.value) }}>
+                {opt.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.BRANCH)}>Back</button>
+            <button className="rmk-cta" disabled={!scoreAncestral}
+              onClick={() => { hapticLight(); setStep(STEPS.BODY) }}>Next</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 1D: BODY ──
+  if (step === STEPS.BODY) {
+    return (
+      <div className="rmk">
+        <div className="rmk-container rmk-screen">
+          <div className="rmk-step-badge">Foundation</div>
+          <h2 className="rmk-heading">After your experience, does the body feel <span className="rmk-gold">physically different</span>?</h2>
+          <p className="rmk-prompt">You can learn something in your head and forget it by Tuesday. But trembling, sweating, tears, goosebumps: those get encoded differently. The body remembers what the mind forgets.</p>
+
+          <div>
+            {getBranchOptions('body', BODY_LABELS, selectedBranch).map(opt => (
+              <button key={opt.value}
+                className={`rmk-problem-btn ${scoreBody === opt.value ? 'rmk-problem-selected' : ''}`}
+                onClick={() => { hapticLight(); setScoreBody(opt.value) }}>
+                {opt.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="rmk-nav">
+            <button className="rmk-back" onClick={() => setStep(STEPS.ANCESTRAL)}>Back</button>
+            <button className="rmk-cta" disabled={!scoreBody}
+              onClick={() => { hapticLight(); setStep(STEPS.PROBLEM) }}>Next</button>
           </div>
         </div>
       </div>
@@ -482,7 +651,7 @@ export default function RemarkableFlow() {
           />
 
           <div className="rmk-nav">
-            <button className="rmk-back" onClick={() => setStep(STEPS.PROJECTS)}>Back</button>
+            <button className="rmk-back" onClick={() => setStep(STEPS.BODY)}>Back</button>
             <button
               className="rmk-cta"
               disabled={!problem || problem.trim().length < 5}

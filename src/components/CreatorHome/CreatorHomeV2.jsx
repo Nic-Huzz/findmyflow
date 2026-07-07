@@ -451,7 +451,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                     <div className="ch2-tagline">{remarkableAngle.ai_rule_statement}</div>
                   )}
 
-                  {/* Primary 3: One-liner, Experience, Different */}
+                  {/* One-liner (always visible) */}
                   {remarkableAngle.extreme_action_plan && (
                     <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
                       <div className="ch2-biz-icon">💎</div>
@@ -461,31 +461,31 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                       </div>
                     </div>
                   )}
-                  {remarkableAngle.experience && (
-                    <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
-                      <div className="ch2-biz-icon">🎪</div>
-                      <div className="ch2-biz-info">
-                        <div className="ch2-biz-label">The Experience</div>
-                        <div className="ch2-biz-val">{remarkableAngle.experience}</div>
-                      </div>
-                    </div>
-                  )}
-                  {remarkableAngle.different && (
-                    <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
-                      <div className="ch2-biz-icon">✨</div>
-                      <div className="ch2-biz-info">
-                        <div className="ch2-biz-label">How You're Different</div>
-                        <div className="ch2-biz-val">{remarkableAngle.different}</div>
-                      </div>
-                    </div>
-                  )}
 
-                  {/* See more */}
+                  {/* Expandable details */}
                   {!showBlowUpMore && (
                     <span className="ch2-see-more" onClick={() => setShowBlowUpMore(true)}>see more</span>
                   )}
                   {showBlowUpMore && (
                     <>
+                      {remarkableAngle.experience && (
+                        <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
+                          <div className="ch2-biz-icon">🎪</div>
+                          <div className="ch2-biz-info">
+                            <div className="ch2-biz-label">The Experience</div>
+                            <div className="ch2-biz-val">{remarkableAngle.experience}</div>
+                          </div>
+                        </div>
+                      )}
+                      {remarkableAngle.different && (
+                        <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
+                          <div className="ch2-biz-icon">✨</div>
+                          <div className="ch2-biz-info">
+                            <div className="ch2-biz-label">How You're Different</div>
+                            <div className="ch2-biz-val">{remarkableAngle.different}</div>
+                          </div>
+                        </div>
+                      )}
                       {remarkableAngle.assumption && (
                         <div className="ch2-biz-row">
                           <div className="ch2-biz-icon">🔥</div>

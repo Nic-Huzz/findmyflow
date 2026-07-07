@@ -382,6 +382,8 @@ export default function NarrativeBuilderFlow() {
             </div>
           </div>
 
+          <div className="nbf-durability nbf-dur-long">Durability: Decades. Hard to copy because the result itself is one-of-a-kind.</div>
+
           <div className="nbf-diag-label">When you describe what you do, what's the typical reaction?</div>
           <div className="nbf-diag-options">
             {RESULTS_DIAGNOSTIC.map(opt => (
@@ -391,8 +393,6 @@ export default function NarrativeBuilderFlow() {
               </button>
             ))}
           </div>
-
-          <div className="nbf-durability nbf-dur-long">Durability: Decades. Hard to copy because the result itself is one-of-a-kind.</div>
 
           <div className="nbf-nav">
             <button className="nbf-back" onClick={() => setStep(STEPS.INTRO)}>Back</button>
@@ -437,6 +437,8 @@ export default function NarrativeBuilderFlow() {
             </div>
           </div>
 
+          <div className="nbf-durability nbf-dur-mid">Durability: Years. New until others follow you into the same channel.</div>
+
           <div className="nbf-diag-label">Where does everyone in your field show up? Are you in the same places?</div>
           <div className="nbf-diag-options">
             {MEDIUM_DIAGNOSTIC.map(opt => (
@@ -446,8 +448,6 @@ export default function NarrativeBuilderFlow() {
               </button>
             ))}
           </div>
-
-          <div className="nbf-durability nbf-dur-mid">Durability: Years. New until others follow you into the same channel.</div>
 
           <div className="nbf-nav">
             <button className="nbf-back" onClick={() => setStep(STEPS.VEHICLE_RESULTS)}>Back</button>
@@ -488,6 +488,8 @@ export default function NarrativeBuilderFlow() {
             </div>
           </div>
 
+          <div className="nbf-durability nbf-dur-short">Durability: Short. The window closes once others copy it.</div>
+
           <div className="nbf-insight">
             The first person blows up. The second gets a fraction. The tenth gets almost nothing. By the hundredth, it's invisible. Every person who copies the idea makes it less remarkable for the next. That's why speed matters here more than anywhere else.
           </div>
@@ -505,8 +507,6 @@ export default function NarrativeBuilderFlow() {
               </button>
             ))}
           </div>
-
-          <div className="nbf-durability nbf-dur-short">Durability: Short. The window closes once others copy it.</div>
 
           <div className="nbf-nav">
             <button className="nbf-back" onClick={() => setStep(STEPS.VEHICLE_MEDIUM)}>Back</button>
@@ -583,7 +583,7 @@ export default function NarrativeBuilderFlow() {
           <div className="nbf-nav">
             <button className="nbf-back" onClick={() => setStep(STEPS.VEHICLE_ACTION)}>Back</button>
             <button className="nbf-cta"
-              disabled={!fiveResults.trim() || !fiveMedium.trim() || !fiveAction.trim() || !vehicleType}
+              disabled={!vehicleType}
               onClick={() => { hapticLight(); setStep(STEPS.LANGUAGE) }}>Next</button>
           </div>
         </div>
