@@ -176,6 +176,15 @@ export default function CreateGate({ children }) {
                 if (error && error.code !== '23505') {
                   console.error('Waitlist insert failed:', error.message)
                 }
+                // Notify Huzz via email (fire-and-forget)
+                supabase.functions.invoke('notify-app-build-interest', {
+                  body: {
+                    userEmail: user.email,
+                    userName: user.user_metadata?.display_name || user.user_metadata?.name || null,
+                    userId: user.id,
+                    source: 'creator-portal',
+                  },
+                }).catch(() => {})
               }}
             >
               Join the waitlist

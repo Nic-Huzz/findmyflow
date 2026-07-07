@@ -21,7 +21,9 @@ serve(async (req) => {
   }
 
   try {
-    const { userEmail, userName, userId } = await req.json()
+    const { userEmail, userName, userId, source } = await req.json()
+
+    const subjectPrefix = source === 'creator-portal' ? 'Scale Portal interest' : 'Build an App interest'
 
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -32,10 +34,10 @@ serve(async (req) => {
       body: JSON.stringify({
         from: 'Vibe Rise <huzz@nichuzz.com>',
         to: NOTIFY_EMAILS,
-        subject: `Build an App interest: ${userName || userEmail || 'Unknown'}`,
+        subject: `${subjectPrefix}: ${userName || userEmail || 'Unknown'}`,
         html: `
           <div style="font-family: -apple-system, sans-serif; padding: 20px; max-width: 500px;">
-            <h2 style="color: #E9A23B; margin-bottom: 8px;">New "Build an App" Interest</h2>
+            <h2 style="color: #E9A23B; margin-bottom: 8px;">New ${source === 'creator-portal' ? 'Scale Portal' : 'Build an App'} Interest</h2>
             <p><strong>Name:</strong> ${userName || 'Not set'}</p>
             <p><strong>Email:</strong> ${userEmail || 'Not set'}</p>
             <p><strong>User ID:</strong> ${userId || 'Unknown'}</p>
