@@ -414,7 +414,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       {/* ══════ QUEST BOARD ══════ */}
 
       {/* Your Journey — only show if any item is incomplete */}
-      {(!hasLifeMap || !hasLifePaths || !hasEssenceAvatar) && (
+      {(!hasLifeMap || !hasLifePaths || !hasEssenceAvatar || !hasWahoos || !hasHealingCompletion) && (
         <div className="quest-section">
           <div className="quest-section-header">
             <span className="quest-section-icon">📖</span>
@@ -428,6 +428,12 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           )}
           {!hasEssenceAvatar && (
             <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
+          )}
+          {!hasWahoos && (
+            <DeepDiveCard deepDive={{ id: 'find_wahoos', name: 'Unlock Your Courage Tab', route: null, narrative: 'Name what would light you up.', icon: '🔥', navigateTo: 'Courage' }} isCompleted={false} onNavigate={onNavigateTab} />
+          )}
+          {!hasHealingCompletion && (
+            <DeepDiveCard deepDive={{ id: 'healing_task', name: 'Unlock Your Healing Tab', route: null, narrative: 'Complete your first healing quest.', icon: '💚', navigateTo: 'Healing' }} isCompleted={false} onNavigate={onNavigateTab} />
           )}
         </div>
       )}
@@ -616,8 +622,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         )
       })()}
 
-      {/* Completed — journey items + closed quests */}
-      {(quests.some(q => q.status !== 'active') || hasLifeMap || hasLifePaths || hasEssenceAvatar) && (
+      {/* Completed — Life Map, Life Paths (viewable), closed quests */}
+      {(quests.some(q => q.status !== 'active') || hasLifeMap || hasLifePaths) && (
         <div className="quest-section quest-completed-section">
           <div className="quest-section-header">
             <span className="quest-section-icon">✅</span>
@@ -628,9 +634,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           )}
           {hasLifePaths && (
             <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={true} />
-          )}
-          {hasEssenceAvatar && (
-            <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Hero Avatar', route: '/essence-mirror', narrative: 'Your essence archetype.', icon: '🦸' }} isCompleted={true} />
           )}
           {quests.filter(q => q.status !== 'active').map(q => (
             <div key={q.id} className="quest-closed-item">
