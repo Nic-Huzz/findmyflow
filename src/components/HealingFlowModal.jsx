@@ -111,16 +111,18 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
     try {
       await saveProgress(true)
 
-      // Award RP
-      supabase.from('quest_completions').insert({
-        user_id: userId,
-        quest_id: `healing_flow_${questTaskId}`,
-        quest_category: 'Healing',
-        quest_type: 'Rewire',
-        points_earned: 5,
-        challenge_day: 0,
-        project_id: null,
-      }).catch(() => {})
+      // Award RP (fire-and-forget)
+      try {
+        await supabase.from('quest_completions').insert({
+          user_id: userId,
+          quest_id: `healing_flow_${questTaskId}`,
+          quest_category: 'Healing',
+          quest_type: 'Rewire',
+          points_earned: 5,
+          challenge_day: 0,
+          project_id: null,
+        })
+      } catch (e2) { /* non-blocking */ }
 
       hapticSuccess()
       onComplete?.()
