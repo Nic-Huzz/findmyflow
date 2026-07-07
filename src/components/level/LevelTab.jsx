@@ -527,10 +527,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             onClick={() => setActiveStruggle(activeStruggle === 'fear' ? null : 'fear')}>
             😨 What's keeping me stuck?
           </button>
-          <button className={`struggle-pill ${activeStruggle === 'subconscious' ? 'active' : ''}`}
-            onClick={() => setActiveStruggle(activeStruggle === 'subconscious' ? null : 'subconscious')}>
-            🔮 I want subconscious shifts
-          </button>
         </div>
 
         {activeStruggle === 'direction' && (
@@ -544,13 +540,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <DeepDiveCard deepDive={{ id: 'wound_map', name: 'Map Your Origin Story', route: '/wound-map?returnTo=/7-day-challenge', narrative: 'What happened before you arrived here?', icon: '🗺️' }} isCompleted={hasWoundMap} />
             <DeepDiveCard deepDive={{ id: 'matrix_codes', name: 'Matrix Codes', route: '/matrix-code-deep-dive', narrative: 'What permission are you missing?', icon: '🔓' }} isCompleted={!!hasFlowDeepDive['recognise_shadow_work']} />
             <DeepDiveCard deepDive={{ id: 'nervous_system', name: 'NS Boundaries', route: '/nervous-system', narrative: 'Where does your nervous system say stop?', icon: '🧠' }} isCompleted={!!hasFlowDeepDive['nervous_system_map']} />
-          </div>
-        )}
-
-        {activeStruggle === 'subconscious' && (
-          <div className="struggle-flows">
-            <DeepDiveCard deepDive={{ id: 'healing_compass', name: 'Healing Compass', route: '/healing-compass', narrative: 'What does safety look like for you?', icon: '🧭' }} isCompleted={hasHealingCompass} />
-            <DeepDiveCard deepDive={{ id: 'limiting_belief_rewire', name: 'Limiting Belief Rewire', route: '/limiting-belief-rewire', narrative: 'What belief makes you burn out or stall?', icon: '🔮' }} isCompleted={!!hasFlowDeepDive['limiting_belief_rewire']} />
           </div>
         )}
       </div>
