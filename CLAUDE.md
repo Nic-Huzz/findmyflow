@@ -134,7 +134,10 @@ src/
 │   ├── DailyCheckin.jsx      # Daily 4-state check-in overlay
 │   ├── WeeklyReview.jsx      # Weekly multiplier review wizard
 │   ├── WeeklyReviewCard.jsx  # Shareable weekly review card
-│   ├── QuestBoardCard.jsx    # Collapsible quest card (life path + tasks)
+│   ├── QuestBoardCard.jsx    # Collapsible quest card (life path + tasks + healing prompt)
+│   ├── QuestSelector.jsx     # Reusable quest picker dropdown (used by Healing + Courage)
+│   ├── HealingFlowModal.jsx  # 7-step per-task healing flow
+│   ├── HealingIntentionsList.jsx # Healing tab content (intentions + standalone input)
 │   ├── QuestCard.jsx         # Unified quest rendering
 │   ├── FlowMapRiver.jsx      # River visualization
 │   └── SeeYourFlow.jsx       # Journey mapping
@@ -262,11 +265,15 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 5 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown), Experience Check-in (predict activity outcomes, "How did it go?" closure, wahoo conversion). Weekly Focus "Value" category (renamed from "Boundary").
 
-**Courage tab** (`PlayListTab.jsx`): First visit (no category wahoos, no playskills) → WahooDiscoveryFlow (3 category pages: Creation/Connection/Appearance, 1-5 wahoos each, pick first active). Otherwise → category bubbles + Active Wahoos + WahooCreator (free text + bucket list) + WahooInspiration ("Need inspiration?": play-skill chips → AI suggestions, Ikigai Mix skill × problem × persona gated by Life Map completion, future pillar row). Unlock/quest signal: `groan_challenges.wahoo_category` not null, OR'd with legacy play-skills rows.
+**Courage tab** (`PlayListTab.jsx`): "Actions that expand what feels possible for your path." First visit → WahooDiscoveryFlow (3 category pages). Otherwise → category bubbles + Active Wahoos (persist across weeks until completed) + WahooCreator (free text + category + optional QuestSelector to link to life path) + WahooInspiration. Unlock/quest signal: `groan_challenges.wahoo_category` not null, OR'd with legacy play-skills rows.
 
-**Healing tab**: Recognise, Release, Rewire only (blockage clearing). After-only 4-state check-in (before step removed).
+**Healing tab** (`HealingIntentionsList.jsx`): Per-task healing intentions anchored to quests. Shows active intentions (collapsible cards with pattern/fear/rewire/expectation), in-progress items (tap to resume), resolved items (with outcome). "What's blocking you?" input opens `QuestSelector` to pick a life path, then `HealingFlowModal` (7-step flow: Pattern → Fear → Origin → Insight → Rewire → Go Deeper → Expect the Best). Old Recognise/Release/Rewire exercises removed. DB: `healing_intentions` table linked to `quest_tasks`.
 
-**Scoring**: Points are RP (Rise Points). Header pills: ☀️ Tune (green) | 🔥 Wahoos (gold) | 💜 Healing (purple). State values: dorsal=-2, sympathetic=-1, ventral=+1, vibe_rise=+2.
+**Per-task healing flow** (`HealingFlowModal.jsx`): Triggered from QuestBoardCard when user tags courage challenge (two-step prompt: "Want to explore?" → "Now or Later?"). 7 steps with auto-save on each advance + save-on-unmount. Step 6 offers Book session with Huzz (Calendly) / Self-guided release (coming soon). Step 7 "Expect the best" with anxiety→excitement trick. Post-task-completion asks "Did the positive outcome happen?" (Yes/No/Something better). Completion stages: in_progress → recognised → released.
+
+**QuestSelector** (`QuestSelector.jsx`): Reusable dropdown for picking or creating a quest. Used by HealingIntentionsList standalone input and WahooCreator. Ensures all courage challenges and healing intentions link back to a life path.
+
+**Scoring**: Points are RP (Rise Points). Header pills: ☀️ Tune (green) | 🔥 Wahoos (gold) | 💜 Healing (purple). State values: dorsal=-2, sympathetic=-1, ventral=+1, vibe_rise=+2. Quest RP: add task=2, complete task=3, achieve quest=10, healing flow=5, outcome check=2. Levels: Getting Started (0) → Habit Builder (100) → Strong Foundation (500) → Vibe Rise (1250) → Vibe Master (2750) → Movement Maker (5750).
 
 **Daily check-in**: 4-state overlay on page load (Vibe Rise/Safe/Activated/Shutdown). Once per day, skippable.
 
@@ -276,7 +283,7 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Weekly Review**: Triggers Sunday/Monday, 7 multiplier questions (Environment, Network, Bet-Sizing, Identity, Compounding, Learning, Attention), 15 RP + 5 for sharing. Produces a shareable canvas card.
 
-Key files: `Challenge.jsx`, `useChallengeData.js`, `LevelTab.jsx`, `QuestBoardCard.jsx`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `WahooDiscoveryFlow.jsx`, `WahooInspiration.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `HealingCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`, `WeeklyReview.jsx`, `WeeklyReviewCard.jsx`
+Key files: `Challenge.jsx`, `useChallengeData.js`, `LevelTab.jsx`, `QuestBoardCard.jsx`, `HealingFlowModal.jsx`, `HealingIntentionsList.jsx`, `QuestSelector.jsx`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `WahooDiscoveryFlow.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`, `WeeklyReview.jsx`, `WeeklyReviewCard.jsx`
 
 Key docs: `docs/frameworks/vibe-rise-ecosystem-architecture.md`, `docs/features/challenge/vibe-rise-challenge-alignment.md`
 
@@ -410,7 +417,7 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `founder_dna_results` | `founder_dna_sessions`
 
 ### Challenge & Review
-`experience_checkins` | `weekly_reviews`
+`experience_checkins` | `weekly_reviews` | `healing_intentions` (quest_task_id FK, pattern, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
 
 ### Other
 `user_subscriptions` (Stripe) | `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
