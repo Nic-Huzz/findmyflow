@@ -255,7 +255,20 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
               <div className="qbc-healing-prompt-text">Deep dive now?</div>
               <div className="qbc-healing-prompt-actions">
                 <button className="qbc-healing-prompt-yes"
-                  onClick={() => { setHealingTaskId(healingPromptTaskId); setHealingPromptTaskId(null); setHealingPromptStep('ask') }}>
+                  onClick={async () => {
+                    // Create minimal healing_intention so it persists even if flow is closed early
+                    try {
+                      await supabase.from('healing_intentions').upsert({
+                        quest_task_id: healingPromptTaskId,
+                        user_id: userId,
+                        healing_stage: 'in_progress',
+                        updated_at: new Date().toISOString(),
+                      }, { onConflict: 'quest_task_id' })
+                    } catch (e) { /* non-blocking */ }
+                    setHealingTaskId(healingPromptTaskId)
+                    setHealingPromptTaskId(null)
+                    setHealingPromptStep('ask')
+                  }}>
                   Now 💚
                 </button>
                 <button className="qbc-healing-prompt-later"

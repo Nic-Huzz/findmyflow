@@ -296,16 +296,21 @@
 .qbc-courage-toggle {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
+  gap: 8px;
+  font-size: 14px;
   font-weight: 600;
   color: #6c757d;
   cursor: pointer;
   margin-bottom: 12px;
+  padding: 10px 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .qbc-courage-toggle input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
   accent-color: #E9A23B;
+  cursor: pointer;
 }
 
 /* ── Close quest ── */
