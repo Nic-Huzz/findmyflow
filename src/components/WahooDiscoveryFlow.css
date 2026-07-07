@@ -87,8 +87,67 @@
 .wahoo-discovery-flow .wdf-inputs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   margin-bottom: 10px;
+}
+
+.wahoo-discovery-flow .wdf-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wahoo-discovery-flow .wdf-quest-select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1.5px solid #e9ecef;
+  font-size: 13px;
+  font-family: inherit;
+  color: #6c757d;
+  background: #ffffff;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23adb5bd' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+  outline: none;
+}
+
+.wahoo-discovery-flow .wdf-quest-select:focus {
+  border-color: #5e17eb;
+}
+
+.wahoo-discovery-flow .wdf-new-quest {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.wahoo-discovery-flow .wdf-new-quest-states {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.wahoo-discovery-flow .wdf-state-pill {
+  padding: 6px 12px;
+  border-radius: 100px;
+  border: 1.5px solid #e9ecef;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #ffffff;
+  color: #6c757d;
+  font-family: inherit;
+}
+
+.wahoo-discovery-flow .wdf-new-quest-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .wahoo-discovery-flow .wdf-input {

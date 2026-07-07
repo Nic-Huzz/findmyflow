@@ -14,12 +14,14 @@
  * Created: 2026-06-12
  */
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { STATES, STATE_META } from './LifePathMap/lifePaths'
 import './WahooDiscoveryFlow.css'
+import './HealingIntentionsList.css' // qs- styles
 
 const MAX_PER_CATEGORY = 5
 
@@ -65,10 +67,66 @@ export default function WahooDiscoveryFlow({
   const [selected, setSelected] = useState(null) // { category, index }
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
+  // Quest linking per wahoo entry
+  const [entryQuests, setEntryQuests] = useState({
+    creation: [null],
+    connection: [null],
+    appearance: [null],
+  })
+  const [quests, setQuests] = useState([])
+  const [showNewQuest, setShowNewQuest] = useState(false)
+  const [newQuestLabel, setNewQuestLabel] = useState('')
+  const [newQuestState, setNewQuestState] = useState(null)
+  const [newQuestSaving, setNewQuestSaving] = useState(false)
+  const lastQuestId = useRef(null) // auto-fill from previous selection
   // Dedupe guard so a retry after partial failure never double-saves
   const savedRef = useRef({}) // key `${category}:${title}` -> challenge id
   // Remembers the pick across an error retry (state updates are async)
   const pendingPickRef = useRef(null)
+
+  // Load quests once
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('quests')
+      .select('id, label')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .neq('label', 'Healing Work')
+      .order('sort_order', { ascending: true })
+      .then(({ data }) => { if (data) setQuests(data) })
+  }, [userId])
+
+  function updateEntryQuest(catId, index, questId) {
+    lastQuestId.current = questId
+    setEntryQuests(prev => {
+      const next = [...prev[catId]]
+      next[index] = questId
+      return { ...prev, [catId]: next }
+    })
+  }
+
+  async function handleCreateQuest() {
+    if (!newQuestLabel.trim() || !newQuestState || newQuestSaving) return
+    setNewQuestSaving(true)
+    try {
+      const { data } = await supabase.from('quests').insert({
+        user_id: userId,
+        label: newQuestLabel.trim(),
+        predicted_state: newQuestState,
+        status: 'active',
+        sort_order: quests.length,
+      }).select('id, label').single()
+      if (data) {
+        setQuests(prev => [...prev, data])
+        lastQuestId.current = data.id
+        setShowNewQuest(false)
+        setNewQuestLabel('')
+        setNewQuestState(null)
+      }
+    } catch (e) { console.error('Create quest error:', e) }
+    setNewQuestSaving(false)
+  }
 
   const page = CATEGORY_PAGES[step]
   const cleanEntries = (catId) =>
@@ -89,6 +147,11 @@ export default function WahooDiscoveryFlow({
       prev[catId].length >= MAX_PER_CATEGORY
         ? prev
         : { ...prev, [catId]: [...prev[catId], ''] }
+    )
+    setEntryQuests(prev =>
+      prev[catId].length >= MAX_PER_CATEGORY
+        ? prev
+        : { ...prev, [catId]: [...prev[catId], lastQuestId.current] }
     )
   }
 
@@ -149,6 +212,25 @@ export default function WahooDiscoveryFlow({
           })
           if (pickError) throw pickError
         }
+      }
+
+      // 3. Create quest_tasks for wahoos with quest links
+      for (const cat of CATEGORY_PAGES) {
+        const items = cleanEntries(cat.id)
+        items.forEach((title, i) => {
+          const questId = entryQuests[cat.id]?.[entries[cat.id].findIndex(e => e.trim() === title)]
+          const groanId = savedRef.current[`${cat.id}:${title}`]
+          if (questId && groanId) {
+            supabase.from('quest_tasks').insert({
+              quest_id: questId,
+              user_id: userId,
+              text: title,
+              is_courage_challenge: true,
+              groan_challenge_id: groanId,
+              sort_order: 0,
+            }).then(() => {}).catch(() => {})
+          }
+        })
       }
 
       hapticSuccess()
@@ -267,17 +349,60 @@ export default function WahooDiscoveryFlow({
 
         <div className="wdf-inputs">
           {entries[page.id].map((value, i) => (
-            <input
-              key={i}
-              className="wdf-input"
-              placeholder={i === 0 ? 'Something that would make you go "wahoo!"...' : 'Add another...'}
-              value={value}
-              maxLength={120}
-              autoFocus={i === 0 && step === 0}
-              onChange={e => updateEntry(page.id, i, e.target.value)}
-            />
+            <div key={i} className="wdf-input-group">
+              <input
+                className="wdf-input"
+                placeholder={i === 0 ? 'Something that would make you go "wahoo!"...' : 'Add another...'}
+                value={value}
+                maxLength={120}
+                autoFocus={i === 0 && step === 0}
+                onChange={e => updateEntry(page.id, i, e.target.value)}
+              />
+              {value.trim() && quests.length > 0 && (
+                <select className="wdf-quest-select" value={entryQuests[page.id]?.[i] || ''}
+                  onChange={e => {
+                    if (e.target.value === '__new__') { setShowNewQuest(true); return }
+                    updateEntryQuest(page.id, i, e.target.value || null)
+                  }}>
+                  <option value="">Life path (optional)</option>
+                  {quests.map(q => <option key={q.id} value={q.id}>{q.label}</option>)}
+                  <option value="__new__">+ New life path...</option>
+                </select>
+              )}
+            </div>
           ))}
         </div>
+
+        {/* New quest inline form */}
+        {showNewQuest && (
+          <div className="wdf-new-quest">
+            <input className="wdf-input" type="text" value={newQuestLabel}
+              onChange={e => setNewQuestLabel(e.target.value)}
+              placeholder="Life path name..." autoFocus />
+            <div className="wdf-new-quest-states">
+              {[...STATES].reverse().map(s => {
+                const m = STATE_META[s]
+                return (
+                  <button key={s} className={`wdf-state-pill ${newQuestState === s ? 'selected' : ''}`}
+                    style={newQuestState === s ? { borderColor: m.color, color: m.color, background: `${m.color}10` } : undefined}
+                    onClick={() => setNewQuestState(s)}>
+                    {m.emoji} {m.label}
+                  </button>
+                )
+              })}
+            </div>
+            <div className="wdf-new-quest-actions">
+              <button className="wdf-primary-btn" style={{ fontSize: 14, padding: '10px 16px' }}
+                disabled={!newQuestLabel.trim() || !newQuestState || newQuestSaving}
+                onClick={handleCreateQuest}>
+                {newQuestSaving ? 'Creating...' : 'Create'}
+              </button>
+              <button className="wdf-text-btn" onClick={() => { setShowNewQuest(false); setNewQuestLabel(''); setNewQuestState(null) }}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
 
         {entries[page.id].length < MAX_PER_CATEGORY && (
           <button className="wdf-add-btn" onClick={() => addEntry(page.id)}>
