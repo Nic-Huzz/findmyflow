@@ -125,6 +125,12 @@
   background: rgba(233, 162, 59, 0.08);
 }
 
+.hil-chevron {
+  font-size: 14px;
+  color: #adb5bd;
+  flex-shrink: 0;
+}
+
 .hil-outcome-badge {
   font-size: 12px;
   font-weight: 700;

@@ -20,6 +20,7 @@ const PATTERN_META = {
 export default function HealingIntentionsList({ userId }) {
   const [intentions, setIntentions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [expandedId, setExpandedId] = useState(null) // which card is expanded
   const [showStandaloneFlow, setShowStandaloneFlow] = useState(false)
   const [standaloneText, setStandaloneText] = useState('')
   const [standaloneTaskId, setStandaloneTaskId] = useState(null)
@@ -121,38 +122,43 @@ export default function HealingIntentionsList({ userId }) {
           const pm = PATTERN_META[intention.pattern]
           const taskText = intention.quest_tasks?.text || 'Unknown task'
           const questLabel = intention.quest_tasks?.quests?.label || ''
+          const isExpanded = expandedId === intention.id
           return (
             <div key={intention.id} className="hil-card">
-              <div className="hil-card-header">
+              <div className="hil-card-header hil-card-clickable"
+                onClick={() => setExpandedId(isExpanded ? null : intention.id)}>
                 <span className="hil-pattern-icon">{pm?.icon || '💚'}</span>
                 <div className="hil-card-info">
                   <div className="hil-card-task">{taskText}</div>
                   {questLabel && <div className="hil-card-quest">{questLabel}</div>}
                 </div>
                 <span className="hil-stage-badge">Recognised</span>
+                <span className="hil-chevron">{isExpanded ? '▴' : '▾'}</span>
               </div>
-              <div className="hil-card-body">
-                <div className="hil-field">
-                  <span className="hil-field-label">Fear:</span>
-                  <span className="hil-field-value">{intention.fear_text}</span>
-                </div>
-                <div className="hil-field">
-                  <span className="hil-field-label">Pattern:</span>
-                  <span className="hil-field-value">{pm?.name || intention.pattern}</span>
-                </div>
-                {intention.rewire_text && (
+              {isExpanded && (
+                <div className="hil-card-body">
                   <div className="hil-field">
-                    <span className="hil-field-label">Rewire:</span>
-                    <span className="hil-field-value">{intention.rewire_text}</span>
+                    <span className="hil-field-label">Fear:</span>
+                    <span className="hil-field-value">{intention.fear_text}</span>
                   </div>
-                )}
-                {intention.expectation_text && (
                   <div className="hil-field">
-                    <span className="hil-field-label">Expecting:</span>
-                    <span className="hil-field-value">{intention.expectation_text}</span>
+                    <span className="hil-field-label">Pattern:</span>
+                    <span className="hil-field-value">{pm?.name || intention.pattern}</span>
                   </div>
-                )}
-              </div>
+                  {intention.rewire_text && (
+                    <div className="hil-field">
+                      <span className="hil-field-label">Rewire:</span>
+                      <span className="hil-field-value">{intention.rewire_text}</span>
+                    </div>
+                  )}
+                  {intention.expectation_text && (
+                    <div className="hil-field">
+                      <span className="hil-field-label">Expecting:</span>
+                      <span className="hil-field-value">{intention.expectation_text}</span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )
         })}
