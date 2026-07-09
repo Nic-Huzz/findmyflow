@@ -365,11 +365,16 @@ export default function CreatorHome() {
     .reverse()
 
   // Gate: redirect to Experience Creator Matching if not completed
+  // Skip first render to avoid race condition when arriving from the flow
+  const [gateChecked, setGateChecked] = useState(false)
   useEffect(() => {
-    if (!loading && !expLoading && !creatorSelection && userId) {
-      navigate('/experience-creators', { replace: true })
+    if (!loading && !expLoading && userId) {
+      if (!creatorSelection && gateChecked) {
+        navigate('/experience-creators', { replace: true })
+      }
+      setGateChecked(true)
     }
-  }, [loading, expLoading, creatorSelection, userId, navigate])
+  }, [loading, expLoading, creatorSelection, userId, navigate, gateChecked])
 
   if (loading || expLoading) {
     return (

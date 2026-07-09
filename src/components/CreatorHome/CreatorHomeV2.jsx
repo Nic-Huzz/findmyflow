@@ -328,11 +328,18 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
     .map((e, i) => ({ num: past.filter(x => x.three_percent_note).length - i, note: e.three_percent_note, name: e.name, date: e.experience_date, attendees: e.attendee_count }))
 
   // ── Gate ────────────────────────────────────────────────────────────────
+  // Only redirect if data has fully loaded AND no selection exists.
+  // Skip if we just arrived (loading still true) to avoid race condition
+  // where the flow saves data but the fetch hasn't picked it up yet.
+  const [gateChecked, setGateChecked] = useState(false)
   useEffect(() => {
-    if (!loading && !expLoading && !creatorSelection && userId) {
-      navigate('/experience-creators', { replace: true })
+    if (!loading && !expLoading && userId) {
+      if (!creatorSelection && gateChecked) {
+        navigate('/experience-creators', { replace: true })
+      }
+      setGateChecked(true)
     }
-  }, [loading, expLoading, creatorSelection, userId, navigate])
+  }, [loading, expLoading, creatorSelection, userId, navigate, gateChecked])
 
   if (loading || expLoading) {
     return <div className="ch2"><div className="ch2-loading"><div className="ch2-spinner" /></div></div>
