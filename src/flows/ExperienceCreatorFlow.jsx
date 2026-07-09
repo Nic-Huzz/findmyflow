@@ -567,20 +567,12 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
                   <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
                   <div className="ecf-creator-info">
                     <div className="ecf-creator-name">{c.name}</div>
-                    {r ? (
-                      <div className="ecf-trigger-tags">
-                        {r.rule_broken?.present === 'yes' && <span className="ecf-trigger-tag">Rule Break {showAnswers ? <span className="ecf-answer-inline">{r.rule_broken.evidence}</span> : <BlurredText width={70} />}</span>}
-                        {r.unexpected_combination?.present === 'yes' && <span className="ecf-trigger-tag">Unexpected Combo {showAnswers ? <span className="ecf-answer-inline">{r.unexpected_combination.evidence}</span> : <BlurredText width={70} />}</span>}
-                        {(r.extreme_action?.present === 'yes' || r.extreme_action?.present === 'partial') && <span className="ecf-trigger-tag">Extreme Action {showAnswers ? <span className="ecf-answer-inline">{r.extreme_action?.evidence}</span> : <BlurredText width={70} />}</span>}
-                        {r.stupid_simplicity?.present === 'yes' && <span className="ecf-trigger-tag">Extreme Simplicity {showAnswers ? <span className="ecf-answer-inline">{r.stupid_simplicity.evidence}</span> : <BlurredText width={70} />}</span>}
+                    {showAnswers ? (
+                      <div className="ecf-answer-text">
+                        {r?.remarkable_headline || g?.remarkable_thing || 'No data available.'}
                       </div>
-                    ) : showAnswers && g?.remarkable_thing ? (
-                      <div className="ecf-answer-text">{g.remarkable_thing}</div>
                     ) : (
-                      <div className="ecf-trigger-tags">
-                        <span className="ecf-trigger-tag">Rule Break <BlurredText width={70} /></span>
-                        <span className="ecf-trigger-tag">Unexpected Combo <BlurredText width={70} /></span>
-                      </div>
+                      <BlurredText width={160} />
                     )}
                   </div>
                 </div>
