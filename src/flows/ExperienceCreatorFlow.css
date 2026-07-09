@@ -927,6 +927,21 @@
   font-weight: 400;
   margin-left: 4px;
 }
+.ecf-trigger-tag--stacked {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+}
+.ecf-tag-label {
+  flex-shrink: 0;
+  min-width: 80px;
+}
+.ecf-tag-answer {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 400;
+}
 
 /* Blurred text */
 .ecf-blurred {

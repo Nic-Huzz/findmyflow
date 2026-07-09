@@ -529,23 +529,27 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
             <p className="ecf-teaser-sub">The triggers that made the world pay attention.</p>
             {selectedCreators.map(c => {
               const r = remarkableCreators[c.name]
+              const g = growthCreators[c.name]
               return (
                 <div key={c.name} className="ecf-creator-row">
                   <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
                   <div className="ecf-creator-info">
                     <div className="ecf-creator-name">{c.name}</div>
-                    <div className="ecf-trigger-tags">
-                      {r?.rule_broken?.present === 'yes' && <span className="ecf-trigger-tag">Rule Break {showAnswers ? <span className="ecf-answer-inline">{r.rule_broken.evidence}</span> : <BlurredText width={70} />}</span>}
-                      {r?.unexpected_combination?.present === 'yes' && <span className="ecf-trigger-tag">Unexpected Combo {showAnswers ? <span className="ecf-answer-inline">{r.unexpected_combination.evidence}</span> : <BlurredText width={70} />}</span>}
-                      {r && r.extreme_action?.present !== 'no' && <span className="ecf-trigger-tag">Extreme Action {showAnswers ? <span className="ecf-answer-inline">{r.extreme_action?.evidence}</span> : <BlurredText width={70} />}</span>}
-                      {r?.stupid_simplicity?.present === 'yes' && <span className="ecf-trigger-tag">Extreme Simplicity {showAnswers ? <span className="ecf-answer-inline">{r.stupid_simplicity.evidence}</span> : <BlurredText width={70} />}</span>}
-                      {!r && (
-                        <>
-                          <span className="ecf-trigger-tag">Rule Break <BlurredText width={70} /></span>
-                          <span className="ecf-trigger-tag">Unexpected Combo <BlurredText width={70} /></span>
-                        </>
-                      )}
-                    </div>
+                    {r ? (
+                      <div className="ecf-trigger-tags">
+                        {r.rule_broken?.present === 'yes' && <span className="ecf-trigger-tag">Rule Break {showAnswers ? <span className="ecf-answer-inline">{r.rule_broken.evidence}</span> : <BlurredText width={70} />}</span>}
+                        {r.unexpected_combination?.present === 'yes' && <span className="ecf-trigger-tag">Unexpected Combo {showAnswers ? <span className="ecf-answer-inline">{r.unexpected_combination.evidence}</span> : <BlurredText width={70} />}</span>}
+                        {r.extreme_action?.present !== 'no' && <span className="ecf-trigger-tag">Extreme Action {showAnswers ? <span className="ecf-answer-inline">{r.extreme_action?.evidence}</span> : <BlurredText width={70} />}</span>}
+                        {r.stupid_simplicity?.present === 'yes' && <span className="ecf-trigger-tag">Extreme Simplicity {showAnswers ? <span className="ecf-answer-inline">{r.stupid_simplicity.evidence}</span> : <BlurredText width={70} />}</span>}
+                      </div>
+                    ) : showAnswers && g?.remarkable_thing ? (
+                      <div className="ecf-answer-text">{g.remarkable_thing}</div>
+                    ) : (
+                      <div className="ecf-trigger-tags">
+                        <span className="ecf-trigger-tag">Rule Break <BlurredText width={70} /></span>
+                        <span className="ecf-trigger-tag">Unexpected Combo <BlurredText width={70} /></span>
+                      </div>
+                    )}
                   </div>
                 </div>
               )
@@ -567,9 +571,9 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
                   <div className="ecf-creator-info">
                     <div className="ecf-creator-name">{c.name}</div>
                     <div className="ecf-trigger-tags">
-                      <span className="ecf-trigger-tag">Attraction {showAnswers && o?.attraction?.length ? <span className="ecf-answer-inline">{o.attraction.join(', ')}</span> : <BlurredText width={80} />}</span>
-                      <span className="ecf-trigger-tag">Core {showAnswers && o?.core?.length ? <span className="ecf-answer-inline">{o.core.join(', ')}</span> : <BlurredText width={80} />}</span>
-                      <span className="ecf-trigger-tag">Continuity {showAnswers && o?.continuity?.length ? <span className="ecf-answer-inline">{o.continuity.join(', ')}</span> : <BlurredText width={80} />}</span>
+                      <span className="ecf-trigger-tag ecf-trigger-tag--stacked"><span className="ecf-tag-label">Attraction</span> {showAnswers && o?.attraction?.length ? <span className="ecf-tag-answer">{o.attraction.join(', ')}</span> : <BlurredText width={80} />}</span>
+                      <span className="ecf-trigger-tag ecf-trigger-tag--stacked"><span className="ecf-tag-label">Core</span> {showAnswers && o?.core?.length ? <span className="ecf-tag-answer">{o.core.join(', ')}</span> : <BlurredText width={80} />}</span>
+                      <span className="ecf-trigger-tag ecf-trigger-tag--stacked"><span className="ecf-tag-label">Continuity</span> {showAnswers && o?.continuity?.length ? <span className="ecf-tag-answer">{o.continuity.join(', ')}</span> : <BlurredText width={80} />}</span>
                     </div>
                   </div>
                 </div>
