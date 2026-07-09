@@ -54,6 +54,79 @@ const EMAIL_TEMPLATES: Record<string, Record<string, { subject: string, body: (t
     day_5: { subject: "{{name}}, the missing piece in your strategy", body: () => '' },
     day_7: { subject: "Your personalized roadmap is waiting, {{name}}", body: () => '' }
   },
+  creator_nurture: {
+    day_0: {
+      subject: "I quit my job because of one experience",
+      body: (t) => `
+<p style="margin:0 0 16px;">I was 26, sitting in a VC firm in Sydney, and I'd known for 3 years the job wasn't it.</p>
+<p style="margin:0 0 16px;">Not in a dramatic way. More like a slow leak. Every Sunday night, a knot in my stomach. Every Monday morning, the same thought: "there has to be more than this."</p>
+<p style="margin:0 0 16px;">I'd spent $30K on 52 courses trying to figure out "what's next." None of them worked. Because the problem wasn't information. The problem was I didn't feel safe enough to act on what I already knew.</p>
+<p style="margin:0 0 16px;">Then I did one breathwork session on a beach in Bali. 90 minutes. No PowerPoint. No workbook.</p>
+<p style="margin:0 0 16px;">Within 6 weeks I was living in Bali. Within 3 months I'd quit the job. Within 6 months I was funding my life running silent discos on beaches across South-East Asia.</p>
+<p style="margin:0 0 16px;">One experience cracked everything open. I've spent the last 3 years trying to understand WHY.</p>
+<p style="margin:0 0 16px;">If you're an experience creator, I think you'll find what I learned pretty useful. More tomorrow.</p>
+${ctaButton('See the Experience Portal →', 'https://create.nichuzz.com/create')}
+<p style="margin:0 0 4px;">Much Love,</p>
+<p style="margin:0;font-weight:600;">Huzz</p>
+<p style="margin:16px 0 0;font-size:13px;color:#999;">P.S. Tomorrow I'll tell you about the 48-hour problem. It's the thing that makes most workshops feel life-changing in the moment but change nothing long-term.</p>`
+    },
+    day_1: {
+      subject: "The 48-hour problem",
+      body: (t) => `
+<p style="margin:0 0 16px;">Here's what nobody talks about in the healing space.</p>
+<p style="margin:0 0 16px;">People come to your workshop. They cry. They shake. They have a genuine breakthrough. They leave saying "that was life-changing."</p>
+<p style="margin:0 0 16px;">Then 48 hours later, they're back to the same patterns.</p>
+<p style="margin:0 0 16px;">Think of it like trying to renovate a house by just painting the walls. It looks amazing for a week. Then the cracks come back. Because the foundation hasn't changed.</p>
+<p style="margin:0 0 16px;">The neuroscience is specific. For a pattern to actually change at the subconscious level, 4 conditions need to be met simultaneously. Most modalities hit 1 or 2 by accident. Almost none hit all 4 by design.</p>
+<p style="margin:0 0 16px;">The facilitators whose participants actually change? They combine mind + body + structured action + repetition. Whether they know it or not.</p>
+${ctaButton('See the Experience Portal →', 'https://create.nichuzz.com/create')}
+<p style="margin:0 0 4px;">Much Love,</p>
+<p style="margin:0;font-weight:600;">Huzz</p>
+<p style="margin:16px 0 0;font-size:13px;color:#999;">P.S. Next email I'll break down the 4 types of experience creators. Knowing your type changes what you should build first.</p>`
+    },
+    day_3: {
+      subject: "There are 4 types of experience creators",
+      body: (t) => `
+<p style="margin:0 0 16px;">After studying 100 experience creators, I noticed something. They all fit into one of 4 types. And the type determines what they should build first.</p>
+<p style="margin:0 0 16px;"><strong>The Stream.</strong> You know exactly what experience you want to create but you're early. Your move: run 10 experiences. Charge something. Learn by doing.</p>
+<p style="margin:0 0 16px;"><strong>The Lake.</strong> You've been doing this for a while but you feel stuck. Lots of skills, lots of ideas, no clear direction. Your move: stop adding. Start subtracting.</p>
+<p style="margin:0 0 16px;"><strong>The Waterfall.</strong> You have deep expertise but your audience is too narrow. Your move: find the adjacent audience who needs what you already have.</p>
+<p style="margin:0 0 16px;"><strong>The River.</strong> You're already running experiences and people love your work. But you can't scale without burning out. Your move: build the system.</p>
+<p style="margin:0 0 16px;">Most creators try to solve a River problem when they're actually a Stream. Or a Waterfall problem when they're actually a Lake.</p>
+${ctaButton('Find your type in the Portal →', 'https://create.nichuzz.com/create')}
+<p style="margin:0 0 4px;">Much Love,</p>
+<p style="margin:0;font-weight:600;">Huzz</p>
+<p style="margin:16px 0 0;font-size:13px;color:#999;">P.S. Next email is my favourite. It's about the worst workshop I ever attended.</p>`
+    },
+    day_5: {
+      subject: "The worst workshop I ever attended",
+      body: (t) => `
+<p style="margin:0 0 16px;">True story. I once went to a yoga class where the teacher spent 45 minutes talking about chakra alignment theory before we did a single pose.</p>
+<p style="margin:0 0 16px;">45 minutes. Sitting on a mat. I could feel my soul leaving my body.</p>
+<p style="margin:0 0 16px;">Now compare that to a circus school. Circus school doesn't start with "let me explain the physics of trapeze." It starts with "grab the bar and swing."</p>
+<p style="margin:0 0 16px;">The best experience creators I've studied all work like circus schools, not yoga lectures. They create a container where the experience comes first and the understanding follows.</p>
+<p style="margin:0 0 16px;">That's the difference between an experience people attend and an experience people can't stop talking about.</p>
+<p style="margin:0 0 16px;">Play first. Groan second. Insight third.</p>
+${ctaButton('Design your first experience →', 'https://create.nichuzz.com/create')}
+<p style="margin:0 0 4px;">Much Love,</p>
+<p style="margin:0;font-weight:600;">Huzz</p>
+<p style="margin:16px 0 0;font-size:13px;color:#999;">P.S. Last email tomorrow. I'll share the 3 findings from studying 100 experience creators that changed how I think about this entire industry.</p>`
+    },
+    day_7: {
+      subject: "I studied 100 experience creators. Here's what I found.",
+      body: (t) => `
+<p style="margin:0 0 16px;">Over the last 3 years I've studied 100 experience creators. From Wim Hof to Tony Robbins to a breathwork facilitator in Byron Bay who went from free sessions to $5K weekends.</p>
+<p style="margin:0 0 16px;">What separates the 3% who build movements from the 97% who stay stuck at 15 participants? It comes down to 3 things:</p>
+<p style="margin:0 0 16px;"><strong>1. They figured out how to pay rent while they built.</strong> The ones who made it found bridge income that matched their archetype.</p>
+<p style="margin:0 0 16px;"><strong>2. They triggered at least one remarkability trigger.</strong> Every creator who "blew up" either broke a rule, created an unexpected combination, did something extreme, made it stupidly simple, or produced an impossible result.</p>
+<p style="margin:0 0 16px;"><strong>3. They built a 3-layer offer stack.</strong> Attraction (gets them in the door), Core (where the shift happens), Continuity (recurring revenue).</p>
+<p style="margin:0 0 16px;">The Experience Portal scores you against all 100 creators and shows you exactly where your gaps are.</p>
+${ctaButton('See your score →', 'https://create.nichuzz.com/create')}
+<p style="margin:0 0 4px;">Much Love,</p>
+<p style="margin:0;font-weight:600;">Huzz</p>
+<p style="margin:16px 0 0;font-size:13px;color:#999;">P.S. This was the last email in this series. If any of it resonated, reply and tell me which type you are (Stream, Lake, Waterfall, or River). I read every reply.</p>`
+    }
+  },
   nervous_system: {
     day_0: { subject: "{{name}}, your {{archetype}} pattern revealed", body: () => '' },
     day_1: { subject: "Why knowing your pattern isn't enough", body: () => '' },

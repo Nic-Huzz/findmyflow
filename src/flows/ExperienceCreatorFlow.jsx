@@ -300,8 +300,9 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
     try {
       const archId = chosenArchetype || dominantArchetype || 'workshop'
       const baseOffers = ARCHETYPE_OFFERS[archId] || ARCHETYPE_OFFERS.workshop
+      const cleanEmail = tryEmail.trim().toLowerCase()
       await supabase.from('experience_creator_leads').insert({
-        email: tryEmail.trim().toLowerCase(),
+        email: cleanEmail,
         selected_creators: [...selected],
         dominant_archetype: archId,
         product_suite: {
@@ -310,6 +311,17 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
           continuity: baseOffers.continuity?.name,
         },
       })
+      // Enroll in creator nurture email sequence
+      supabase.functions.invoke('enroll-email-sequence', {
+        body: {
+          email: cleanEmail,
+          sequence_type: 'creator_nurture',
+          personalization_tokens: {
+            name: cleanEmail.split('@')[0],
+            archetype: archId,
+          }
+        }
+      }).catch(() => {}) // fire-and-forget, don't block UI
       setTrySaved(true)
       hapticSuccess()
       onComplete?.()

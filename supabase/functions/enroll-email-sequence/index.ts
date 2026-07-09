@@ -37,6 +37,13 @@ const EMAIL_SCHEDULES: Record<string, Record<string, number>> = {
     day_7: 7,
     day_10: 10,
     day_14: 14
+  },
+  creator_nurture: {
+    day_0: 0,
+    day_1: 1,
+    day_3: 3,
+    day_5: 5,
+    day_7: 7
   }
 }
 
