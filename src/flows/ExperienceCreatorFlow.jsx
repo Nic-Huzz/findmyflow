@@ -188,10 +188,10 @@ function buildCreatorData() {
 
 export default function ExperienceCreatorFlow({ embedded = false, onComplete }) {
   const { user } = useAuth()
-  const { hasSubscription } = useSubscription()
+  const { hasSubscription, loading: subLoading } = useSubscription()
   const navigate = useNavigate()
   const isTryRoute = embedded || window.location.pathname.startsWith('/try/')
-  const showAnswers = !isTryRoute && user && hasSubscription
+  const showAnswers = !isTryRoute && user && hasSubscription && !subLoading
   const [screen, setScreen] = useState('browse') // 'browse' | 'result'
   const [selected, setSelected] = useState(new Set())
   const [loading, setLoading] = useState(false)

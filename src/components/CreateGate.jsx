@@ -7,6 +7,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
+import { checkSubscription } from '../lib/subscriptionService'
 import './CreateGate.css'
 
 const CREATORS = [
@@ -57,23 +58,8 @@ export default function CreateGate({ children }) {
         return
       }
 
-      const { data, error } = await supabase
-        .from('user_subscriptions')
-        .select('status, plan_type')
-        .eq('user_id', user.id)
-        .maybeSingle()
-
-      if (error) {
-        // On query failure, keep loading rather than wrongly denying access
-        console.error('Subscription check failed:', error.message)
-        setLoading(false)
-        return
-      }
-
-      const active = data?.status === 'active' &&
-        (data?.plan_type === 'creator' || data?.plan_type === 'pro')
-
-      setHasAccess(active)
+      const { active, plan } = await checkSubscription(user.id)
+      setHasAccess(active && (plan === 'creator' || plan === 'pro'))
       setLoading(false)
     }
 

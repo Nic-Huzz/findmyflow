@@ -1078,14 +1078,18 @@ function AppRouter() {
               </CreateGate>
             } />
             <Route path="/create/attraction-stack" element={
-              <AuthGate>
-                <ExperienceAttractionStack />
-              </AuthGate>
+              <CreateGate>
+                <AuthGate>
+                  <ExperienceAttractionStack />
+                </AuthGate>
+              </CreateGate>
             } />
             <Route path="/create/marketing-campaign" element={
-              <AuthGate>
-                <ExperienceMarketingCampaign />
-              </AuthGate>
+              <CreateGate>
+                <AuthGate>
+                  <ExperienceMarketingCampaign />
+                </AuthGate>
+              </CreateGate>
             } />
             <Route path="/create/scale-income" element={
               <CreateGate>
