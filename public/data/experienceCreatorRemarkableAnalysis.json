@@ -4,7 +4,10 @@
     "model": "claude-opus-4-20250514 (sub-agents) + manual analysis",
     "count": 57,
     "note": "57 creators. 20 manually analyzed. 37 verified via web research by sub-agents with 85%+ confidence.",
-    "merged": "2026-04-26"
+    "merged": "2026-04-26",
+    "rule_break_layers_added": "2026-07-09",
+    "rule_break_layers_count": 33,
+    "rule_break_layers_note": "3-layer rule break analysis: philosophy (assumption rejected), product (tangible experience), marketing (how people first hear). Product is the most important layer."
   },
   "creators": {
     "Brené Brown": {
@@ -35,7 +38,10 @@
         "confidence": 90
       },
       "extreme_action_rule_connection": "same_moment",
-      "remarkable_headline": "A shame researcher who spent 8 years studying the thing everyone hides from, then got on stage and shared her own."
+      "remarkable_headline": "A shame researcher who spent 8 years studying the thing everyone hides from, then got on stage and shared her own.",
+      "rule_break_philosophy": "Academic researchers stay behind the data and never show personal weakness on stage",
+      "rule_break_product": "A TEDx talk where a shame researcher shared her own breakdown on stage, plus a licensed facilitator training (Dare to Lead) for organisations",
+      "rule_break_marketing": "Her 2010 TEDxHouston talk going viral to 60M+ views, proving that vulnerability from a researcher is more compelling than polished expertise"
     },
     "Wim Hof": {
       "rule_broken": {
@@ -65,7 +71,10 @@
         "confidence": 95
       },
       "extreme_action_rule_connection": "inseparable",
-      "remarkable_headline": "A grieving father who sat in freezing water every day for decades until scientists proved his breathing could control the immune system."
+      "remarkable_headline": "A grieving father who sat in freezing water every day for decades until scientists proved his breathing could control the immune system.",
+      "rule_break_philosophy": "You cannot consciously control your autonomic nervous system or immune response",
+      "rule_break_product": "A breathing protocol plus progressive cold exposure training that anyone can learn in a weekend",
+      "rule_break_marketing": "Setting Guinness World Records in ice: climbing Everest in shorts, swimming under Arctic ice"
     },
     "Tony Robbins": {
       "rule_broken": {
@@ -95,7 +104,10 @@
         "confidence": 88
       },
       "extreme_action_rule_connection": "inseparable",
-      "remarkable_headline": "A janitor's son who figured out how to do therapy with 10,000 people at once by making them walk on fire."
+      "remarkable_headline": "A janitor's son who figured out how to do therapy with 10,000 people at once by making them walk on fire.",
+      "rule_break_philosophy": "Therapeutic change requires years of private one-on-one sessions",
+      "rule_break_product": "4-day arena events where 10,000 people walk on fire together as a breakthrough intervention",
+      "rule_break_marketing": "Late-night 'Personal Power' infomercials reaching millions of households in the 1990s"
     },
     "Phil Jackson": {
       "rule_broken": {
@@ -125,7 +137,10 @@
         "confidence": 97
       },
       "extreme_action_rule_connection": "inseparable",
-      "remarkable_headline": "The NBA coach who won 11 championships by teaching millionaire athletes to sit in silence and breathe."
+      "remarkable_headline": "The NBA coach who won 11 championships by teaching millionaire athletes to sit in silence and breathe.",
+      "rule_break_philosophy": "Winning requires dominance and aggression, not stillness and surrender",
+      "rule_break_product": "Pre-game meditation circles and Lakota sage-burning rituals with NBA players in the locker room",
+      "rule_break_marketing": "Winning 11 NBA championships while being called 'The Zen Master' by the press"
     },
     "John Gottman": {
       "rule_broken": {
@@ -245,7 +260,10 @@
         "confidence": 88
       },
       "extreme_action_rule_connection": "sequential",
-      "remarkable_headline": "A doctor who spent 12 years with the most hopeless addicts and said the question is never why the addiction but always why the pain."
+      "remarkable_headline": "A doctor who spent 12 years with the most hopeless addicts and said the question is never why the addiction but always why the pain.",
+      "rule_break_philosophy": "Addiction is a brain disease to be treated with medication, not a response to childhood pain",
+      "rule_break_product": "Medical appointments in Vancouver's Downtown Eastside where he asked addicts 'What happened to you?' instead of prescribing drugs",
+      "rule_break_marketing": "The documentary 'Wisdom of Trauma' gaining 2 million views in 6 days"
     },
     "Lin-Manuel Miranda": {
       "rule_broken": {
@@ -305,7 +323,10 @@
         "confidence": 82
       },
       "extreme_action_rule_connection": "inseparable",
-      "remarkable_headline": "A therapist who recorded real couples therapy sessions and published them for millions to hear."
+      "remarkable_headline": "A therapist who recorded real couples therapy sessions and published them for millions to hear.",
+      "rule_break_philosophy": "Therapy sessions are confidential and should never be shared publicly",
+      "rule_break_product": "A podcast ('Where Should We Begin?') featuring real, unscripted couples therapy sessions with anonymous couples",
+      "rule_break_marketing": "Two TED talks on desire and infidelity that reframed taboo relationship topics for millions"
     },
     "Adriene Mishler": {
       "rule_broken": {
@@ -485,7 +506,10 @@
         "confidence": 65
       },
       "extreme_action_rule_connection": "separate",
-      "remarkable_headline": "A conflict mediator who proved that how you gather people is itself an act of leadership."
+      "remarkable_headline": "A conflict mediator who proved that how you gather people is itself an act of leadership.",
+      "rule_break_philosophy": "How you gather people is logistics, not leadership",
+      "rule_break_product": "High-stakes facilitation sessions applying war-zone conflict resolution techniques to corporate meetings and dinner parties",
+      "rule_break_marketing": "'The Art of Gathering' book codifying her methods for anyone hosting any kind of event"
     },
     "Holly Whitaker": {
       "rule_broken": {
@@ -545,7 +569,10 @@
         "confidence": 90
       },
       "extreme_action_rule_connection": "inseparable",
-      "remarkable_headline": "A London fishmonger's daughter who lived in a Himalayan cave for 12 years to prove women can achieve what Buddhist tradition said they couldn't."
+      "remarkable_headline": "A London fishmonger's daughter who lived in a Himalayan cave for 12 years to prove women can achieve what Buddhist tradition said they couldn't.",
+      "rule_break_philosophy": "Women cannot achieve the highest spiritual attainments in Tibetan Buddhism",
+      "rule_break_product": "A 12-year solitary cave retreat at 13,000 feet, sleeping upright in a 3-foot wooden box",
+      "rule_break_marketing": "Vicki Mackenzie's biography 'Cave in the Snow' told her story to international audiences"
     },
     "Elizabeth Gilbert": {
       "rule_broken": {
@@ -605,7 +632,10 @@
         "confidence": 85
       },
       "extreme_action_rule_connection": "sequential",
-      "remarkable_headline": "A former monk who became Will Smith's spiritual adviser and translated ancient wisdom for a scrolling generation."
+      "remarkable_headline": "A former monk who became Will Smith's spiritual adviser and translated ancient wisdom for a scrolling generation.",
+      "rule_break_philosophy": "Ancient wisdom belongs in monasteries and temples, not on social media",
+      "rule_break_product": "60-second viral videos translating 3,000-year-old Vedic principles into shareable social media content",
+      "rule_break_marketing": "A single Facebook video ('Before You Feel Pressure') reaching 300 million views"
     },
     "Alain de Botton": {
       "name": "Alain de Botton",
@@ -875,7 +905,10 @@
         "evidence": "Universe Has Your Back sold 1M+ copies. Named by Oprah next-generation thought leader. SuperSoul 100",
         "confidence": 94
       },
-      "remarkable_headline": "A 25-year-old nightclub publicist with a cocaine problem got sober, started teaching a 1970s spiritual text, and Oprah called her the next generation's thought leader"
+      "remarkable_headline": "A 25-year-old nightclub publicist with a cocaine problem got sober, started teaching a 1970s spiritual text, and Oprah called her the next generation's thought leader",
+      "rule_break_philosophy": "Spiritual teachers need decades of study and pristine credentials to teach",
+      "rule_break_product": "Living-room workshops teaching A Course in Miracles to young New Yorkers, led by a 25-year-old former nightclub publicist in recovery",
+      "rule_break_marketing": "Oprah naming her 'next-generation thought leader' and open storytelling about her cocaine addiction as her credential"
     },
     "Gloria Steinem": {
       "name": "Gloria Steinem",
@@ -1747,7 +1780,10 @@
         "confidence": 92
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A suicidally depressed man who slept on park benches became the world's most recognized living spiritual teacher by writing about presence in language so simple a child could understand it."
+      "remarkable_headline": "A suicidally depressed man who slept on park benches became the world's most recognized living spiritual teacher by writing about presence in language so simple a child could understand it.",
+      "rule_break_philosophy": "Spiritual awakening requires years of disciplined practice and study",
+      "rule_break_product": "A book ('The Power of Now') written in language so simple a child could understand presence, with no lineage or tradition attached",
+      "rule_break_marketing": "Oprah co-hosting a 10-week live online class on 'A New Earth' that drew 35 million viewers"
     },
     "Deepak Chopra": {
       "rule_broken": {
@@ -1777,7 +1813,10 @@
         "confidence": 85
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A licensed medical doctor who walked away from conventional medicine to bridge Eastern and Western healing, then licensed his methodology everywhere."
+      "remarkable_headline": "A licensed medical doctor who walked away from conventional medicine to bridge Eastern and Western healing, then licensed his methodology everywhere.",
+      "rule_break_philosophy": "Western medicine and Eastern healing are incompatible systems",
+      "rule_break_product": "A 21-day guided meditation program co-created with Oprah, blending Ayurvedic principles with neuroscience",
+      "rule_break_marketing": "Leading with his MD credentials to make ancient Ayurvedic practices feel safe and scientific to mainstream Western audiences"
     },
     "Jack Kornfield": {
       "rule_broken": {
@@ -1807,7 +1846,10 @@
         "confidence": 88
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "One of the very first Westerners to ordain as a Buddhist monk in the Thai forest tradition, then co-founded two of America's most important meditation centers."
+      "remarkable_headline": "One of the very first Westerners to ordain as a Buddhist monk in the Thai forest tradition, then co-founded two of America's most important meditation centers.",
+      "rule_break_philosophy": "Buddhist practice must stay within its Asian cultural container to be authentic",
+      "rule_break_product": "Insight Meditation Society and Spirit Rock: Western meditation centres with systematic teacher training programs that democratised Buddhist practice",
+      "rule_break_marketing": "Books that combined the authority of a Thai forest monk lineage with vulnerable stories of his own psychological struggles"
     },
     "Sam Harris": {
       "rule_broken": {
@@ -1837,7 +1879,10 @@
         "confidence": 85
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "One of the world's most prominent atheists became one of its most prominent meditation teachers."
+      "remarkable_headline": "One of the world's most prominent atheists became one of its most prominent meditation teachers.",
+      "rule_break_philosophy": "Meditation is inherently religious and requires spiritual belief",
+      "rule_break_product": "The Waking Up app: daily guided meditation stripped of all religious framing, taught as a rational investigation of consciousness",
+      "rule_break_marketing": "Being one of the world's most prominent atheists publicly advocating for meditation as science, not spirituality"
     },
     "Thich Nhat Hanh": {
       "rule_broken": {
@@ -1867,7 +1912,10 @@
         "confidence": 95
       },
       "extreme_action_rule_connection": "same_moment",
-      "remarkable_headline": "A Vietnamese monk exiled from his country was nominated for the Nobel Prize by MLK and built the largest Buddhist monastery in Europe."
+      "remarkable_headline": "A Vietnamese monk exiled from his country was nominated for the Nobel Prize by MLK and built the largest Buddhist monastery in Europe.",
+      "rule_break_philosophy": "Spiritual practice is separate from social and political action",
+      "rule_break_product": "Plum Village: a monastery where every activity (eating, walking, washing dishes) is practiced as meditation, open to laypeople for retreats",
+      "rule_break_marketing": "MLK nominating him for the Nobel Peace Prize after his anti-war activism during the Vietnam War"
     },
     "Seane Corn": {
       "rule_broken": {
@@ -1897,7 +1945,10 @@
         "confidence": 60
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A nightclub kid from the East Village who turned yoga into a vehicle for frontline social justice activism."
+      "remarkable_headline": "A nightclub kid from the East Village who turned yoga into a vehicle for frontline social justice activism.",
+      "rule_break_philosophy": "Yoga is personal wellness, not a vehicle for social justice",
+      "rule_break_product": "Off the Mat Into the World: a training program that turns yoga teachers into frontline social justice activists, raising over $3.5M",
+      "rule_break_marketing": "Teaching yoga to exploited youth at shelters before she had any platform or public profile"
     },
     "Joe Dispenza": {
       "rule_broken": {
@@ -1927,7 +1978,10 @@
         "confidence": 88
       },
       "extreme_action_rule_connection": "same_moment",
-      "remarkable_headline": "A chiropractor who broke his back, healed through meditation, then proved thousands of others could measurably change their brain chemistry."
+      "remarkable_headline": "A chiropractor who broke his back, healed through meditation, then proved thousands of others could measurably change their brain chemistry.",
+      "rule_break_philosophy": "The mind cannot physically heal the body without medical intervention",
+      "rule_break_product": "Multi-day meditation retreats where thousands of participants attempt to measurably change their brain chemistry and gene expression",
+      "rule_break_marketing": "His personal story of healing 6 compressed vertebrae through meditation alone, refusing surgery"
     },
     "Aubrey Marcus": {
       "rule_broken": {
@@ -1957,7 +2011,10 @@
         "confidence": 65
       },
       "extreme_action_rule_connection": "related",
-      "remarkable_headline": "A supplement CEO who sold to Unilever then made his most important work donation-based."
+      "remarkable_headline": "A supplement CEO who sold to Unilever then made his most important work donation-based.",
+      "rule_break_philosophy": "Your most important work should be your most profitable work",
+      "rule_break_product": "Fit For Service: a donation-based coaching fellowship combining breathwork, plant medicine integration, and purpose training",
+      "rule_break_marketing": "Selling Onnit to Unilever for a reported $100M+ then making his next venture donation-based"
     },
     "Ram Dass": {
       "rule_broken": {
@@ -1987,7 +2044,10 @@
         "confidence": 90
       },
       "extreme_action_rule_connection": "same_moment",
-      "remarkable_headline": "A Harvard professor who got fired for taking LSD, went to India, came back renamed, and gave all the money away."
+      "remarkable_headline": "A Harvard professor who got fired for taking LSD, went to India, came back renamed, and gave all the money away.",
+      "rule_break_philosophy": "A Harvard professor's credibility comes from the institution, not from inner transformation",
+      "rule_break_product": "'Be Here Now': a handwritten, illustrated book that reads like a psychedelic scripture, with all profits donated",
+      "rule_break_marketing": "Getting fired from Harvard for taking LSD, going to India, and coming back with a new name and no interest in money"
     },
     "Sadhguru": {
       "rule_broken": {
@@ -2017,7 +2077,10 @@
         "confidence": 90
       },
       "extreme_action_rule_connection": "related",
-      "remarkable_headline": "A businessman who had a mystical experience at 25, then built a volunteer army delivering his teachings across 100+ countries."
+      "remarkable_headline": "A businessman who had a mystical experience at 25, then built a volunteer army delivering his teachings across 100+ countries.",
+      "rule_break_philosophy": "Yoga requires a guru's constant personal guidance and cannot be standardised",
+      "rule_break_product": "Inner Engineering: a standardised 7-session program culminating in Shambhavi Mahamudra Kriya, deliverable by trained volunteers worldwide",
+      "rule_break_marketing": "Riding a motorcycle 30,000 km across 26 nations at age 64 for the Save Soil campaign"
     },
     "Marianne Williamson": {
       "rule_broken": {
@@ -2047,7 +2110,10 @@
         "confidence": 80
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A college dropout and former cabaret singer who made A Course in Miracles a mainstream bestseller by speaking about God in the language of feelings."
+      "remarkable_headline": "A college dropout and former cabaret singer who made A Course in Miracles a mainstream bestseller by speaking about God in the language of feelings.",
+      "rule_break_philosophy": "You need theological credentials to teach spiritual texts to the public",
+      "rule_break_product": "Free weekly lectures translating A Course in Miracles into the language of heartbreak and emotional honesty, in LA for years",
+      "rule_break_marketing": "Appearing on Oprah after publishing 'A Return to Love', selling over a million copies overnight"
     },
     "Mooji": {
       "rule_broken": {
@@ -2077,7 +2143,10 @@
         "confidence": 85
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A Jamaican street artist with no formal spiritual credentials who built a 30-hectare ashram purely through the power of sitting in a chair and asking one question."
+      "remarkable_headline": "A Jamaican street artist with no formal spiritual credentials who built a 30-hectare ashram purely through the power of sitting in a chair and asking one question.",
+      "rule_break_philosophy": "Spiritual authority requires formal lineage credentials and institutional backing",
+      "rule_break_product": "Free, unedited satsangs where a former street artist sits in a chair and asks one question ('Who am I?') until seekers see through their identity",
+      "rule_break_marketing": "Full-length satsang videos on YouTube with zero production value that generated millions of views and global retreat demand"
     },
     "Yung Pueblo": {
       "rule_broken": {
@@ -2107,7 +2176,10 @@
         "confidence": 90
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "An Ecuadorian immigrant who got clean from addiction, sat in silence for thousands of hours, and became a NYT bestselling poet by posting plain text on Instagram."
+      "remarkable_headline": "An Ecuadorian immigrant who got clean from addiction, sat in silence for thousands of hours, and became a NYT bestselling poet by posting plain text on Instagram.",
+      "rule_break_philosophy": "Poetry requires literary sophistication, visual design, and cultural gatekeeping",
+      "rule_break_product": "Plain black text on white background: daily Instagram posts distilling thousands of hours of Vipassana meditation into 2-3 sentence poems",
+      "rule_break_marketing": "The most visually boring content on Instagram going viral because the words were so honest people screenshot them"
     },
     "Sahara Rose": {
       "rule_broken": {
@@ -2137,7 +2209,10 @@
         "confidence": 70
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A 21-year-old with an eating disorder who cold-emailed Deepak Chopra and built the world's first dharma coaching certification."
+      "remarkable_headline": "A 21-year-old with an eating disorder who cold-emailed Deepak Chopra and built the world's first dharma coaching certification.",
+      "rule_break_philosophy": "You need decades of lineage study to teach ancient Eastern wisdom",
+      "rule_break_product": "Dharma Coaching Institute: a 6-month certification that trains coaches to help clients find their soul's purpose using a modernised framework",
+      "rule_break_marketing": "Cold-emailing Deepak Chopra at 21 and getting him to write the foreword to her first book"
     },
     "Sri Sri Ravi Shankar": {
       "rule_broken": {
@@ -2167,7 +2242,10 @@
         "confidence": 92
       },
       "extreme_action_rule_connection": "related",
-      "remarkable_headline": "Built an organization across 180 countries with no marketing budget, no paid instructors, and one breathing technique."
+      "remarkable_headline": "Built an organization across 180 countries with no marketing budget, no paid instructors, and one breathing technique.",
+      "rule_break_philosophy": "Scaling a spiritual practice requires paid teachers and marketing budgets",
+      "rule_break_product": "The Happiness Program: a standardised breathwork course (Sudarshan Kriya) delivered entirely by volunteer instructors who teach for free",
+      "rule_break_marketing": "Building to 180 countries with no advertising budget, purely through word of mouth and volunteer networks"
     },
     "Vishen Lakhiani": {
       "rule_broken": {
@@ -2197,7 +2275,10 @@
         "confidence": 88
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A broke engineer who built a $100M consciousness university from a Starbucks without taking a single dollar of outside funding."
+      "remarkable_headline": "A broke engineer who built a $100M consciousness university from a Starbucks without taking a single dollar of outside funding.",
+      "rule_break_philosophy": "Personal growth content must come from your own expertise and lineage",
+      "rule_break_product": "Mindvalley: an online university with 100+ 'Quests' curating the world's best teachers onto one membership platform",
+      "rule_break_marketing": "Bootstrapping from a Starbucks in New York, selling other people's courses via Google Ads before creating any of his own"
     },
     "Michael Singer": {
       "rule_broken": {
@@ -2227,7 +2308,10 @@
         "confidence": 92
       },
       "extreme_action_rule_connection": "same_moment",
-      "remarkable_headline": "A meditator hiding in the Florida woods who accidentally built a billion-dollar software company by saying yes to whatever life brought."
+      "remarkable_headline": "A meditator hiding in the Florida woods who accidentally built a billion-dollar software company by saying yes to whatever life brought.",
+      "rule_break_philosophy": "Spiritual teaching is a career you plan, not something that happens by saying yes to life",
+      "rule_break_product": "Temple of the Universe: a free weekly meditation centre in the Florida woods, open to anyone, running for 50+ years",
+      "rule_break_marketing": "'The Untethered Soul' spreading by pure word of mouth for 5 years before exploding after Oprah's Super Soul Sunday"
     },
     "Michael Beckwith": {
       "rule_broken": {
@@ -2257,7 +2341,10 @@
         "confidence": 88
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A man who turned a living room prayer group into a 9,000-person spiritual community that became Oprah's favourite church."
+      "remarkable_headline": "A man who turned a living room prayer group into a 9,000-person spiritual community that became Oprah's favourite church.",
+      "rule_break_philosophy": "Building a spiritual community requires institutional infrastructure before you start",
+      "rule_break_product": "Agape International Spiritual Center: weekly services blending New Thought, music, and Life Visioning meditation for 9,000 members",
+      "rule_break_marketing": "Being featured as a teacher in 'The Secret' (2006), bringing global visibility overnight"
     },
     "Radha Agrawal": {
       "rule_broken": {
@@ -2287,7 +2374,10 @@
         "confidence": 88
       },
       "extreme_action_rule_connection": "same_moment",
-      "remarkable_headline": "A woman who lost her company to a hostile takeover and responded by throwing a sober dance party at 6am that became a million-person global movement."
+      "remarkable_headline": "A woman who lost her company to a hostile takeover and responded by throwing a sober dance party at 6am that became a million-person global movement.",
+      "rule_break_philosophy": "Community celebration and nightlife require alcohol and late-night settings",
+      "rule_break_product": "Daybreaker: sober morning dance parties starting at 6am with live DJs, yoga, and community in warehouses and rooftops",
+      "rule_break_marketing": "Instagram-friendly sunrise events that attendees photograph and share before the workday starts"
     },
     "Meghan Pappenheim": {
       "rule_broken": {
@@ -2317,7 +2407,10 @@
         "confidence": 80
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A 20-year-old New Yorker who moved to Bali and built the world's most beloved yoga festival by planting a village first."
+      "remarkable_headline": "A 20-year-old New Yorker who moved to Bali and built the world's most beloved yoga festival by planting a village first.",
+      "rule_break_philosophy": "You build the festival first, then hope a community forms around it",
+      "rule_break_product": "The Yoga Barn ecosystem: a year-round wellness village (25+ daily classes, restaurants, galleries) that feeds into the annual BaliSpirit Festival",
+      "rule_break_marketing": "Being a 20-year-old outsider who built community infrastructure (directory, studio, cafe) in Ubud for years before the festival existed"
     },
     "Jeff Krasno": {
       "rule_broken": {
@@ -2347,7 +2440,10 @@
         "confidence": 65
       },
       "extreme_action_rule_connection": "none",
-      "remarkable_headline": "A music industry guy who looked at a yoga mat and saw a festival stage."
+      "remarkable_headline": "A music industry guy who looked at a yoga mat and saw a festival stage.",
+      "rule_break_philosophy": "Wellness and entertainment are separate industries with separate audiences",
+      "rule_break_product": "Wanderlust Festival: a multi-day event combining yoga, live music, and outdoor adventure in mountain resort settings",
+      "rule_break_marketing": "Applying music festival production skills (from his record label) to yoga, making wellness feel like a concert experience"
     },
     "Gabrielle Roth": {
       "rule_broken": {
@@ -2377,7 +2473,10 @@
         "confidence": 85
       },
       "extreme_action_rule_connection": "related",
-      "remarkable_headline": "A dancer told she would never dance again who turned her recovery into a method practiced in 50+ countries."
+      "remarkable_headline": "A dancer told she would never dance again who turned her recovery into a method practiced in 50+ countries.",
+      "rule_break_philosophy": "Healing requires talking, not moving, and dance is performance, not therapy",
+      "rule_break_product": "5Rhythms: a structured freeform movement practice (Flowing, Staccato, Chaos, Lyrical, Stillness) practiced as group meditation on a dance floor",
+      "rule_break_marketing": "A dancer told she would never dance again turning her rehabilitation into a certified method taught in 50+ countries"
     },
     "Larry Harvey": {
       "rule_broken": {
@@ -2407,7 +2506,10 @@
         "confidence": 95
       },
       "extreme_action_rule_connection": "same_moment",
-      "remarkable_headline": "A failed landscaper who burned a stick figure on a beach and accidentally built a civilisation with its own constitution."
+      "remarkable_headline": "A failed landscaper who burned a stick figure on a beach and accidentally built a civilisation with its own constitution.",
+      "rule_break_philosophy": "Events need organisers, rules, and commercial sponsors to function at scale",
+      "rule_break_product": "Burning Man: a temporary city of 80,000 in the Nevada desert with no spectators, no advertising, and 10 guiding principles instead of rules",
+      "rule_break_marketing": "Burning an 8-foot wooden man on a beach with 20 friends and showing up every year until 80,000 people did too"
     }
   }
 }
