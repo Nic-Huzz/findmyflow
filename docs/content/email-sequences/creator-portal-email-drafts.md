@@ -37,23 +37,21 @@ P.S. If anything breaks or feels weird, just reply to this email. I read every o
 
 **Subject:** The thing nobody teaches facilitators
 
-Quick story.
+**Try this now:** Go to /create, pick an experience, and hit "Design with AI." You'll have a complete runsheet in 30 seconds.
 
-I used to run breathwork sessions on a beach in Bali. People would cry, shake, have genuine breakthroughs. They'd leave saying "that was the most incredible experience of my life."
+Here's why that matters.
 
-Then I'd see them 3 weeks later and they'd be right back where they started.
+I used to run events where people would leave saying "that was incredible." Then I'd check in 3 weeks later. Same patterns. Nothing had actually changed.
 
-I thought I was bad at my job. Turns out, the problem wasn't me. It was that my experiences were structurally incomplete.
+Took me 200+ experiences to figure out the problem wasn't me. It was the structure. Most events nail the body OR the mind. Almost none nail both at the same time, in the right order, with a plan for what happens after.
 
-Most healing modalities nail the body OR the mind. Almost none nail both at the same time, in the right order, with a plan for what happens after.
+The AI Designer structures your runsheet around 4 conditions that neuroscience says need to happen simultaneously for a shift to stick. It took me years to learn this. The tool does it in 30 seconds.
 
-That's what the AI Experience Designer does. It structures your runsheet around the 4 conditions that neuroscience says need to happen simultaneously for a shift to actually stick.
-
-**Try it:** Go to /create, pick an experience, and hit "Design with AI." Select your modality, your audience, and the shift you want to create. You'll get a complete runsheet in about 30 seconds.
-
-It's the thing I wish I had 200 experiences ago.
+Go try it. You'll see what I mean.
 
 Much Love, Huzz
+
+P.S. Tomorrow I'm going to tell you about the voice in your head that's stopping you from creating your first experience. You'll recognise it immediately.
 
 ---
 
@@ -83,6 +81,8 @@ But the hardest part is clicking "create." Everything after that is just followi
 
 Much Love, Huzz
 
+P.S. In a few days I'll show you the offer stack that took me from $5 tickets to $50 a head. It's simpler than you think.
+
 ---
 
 ### Email 4 (Day 7): "From free sessions to $5K weekends"
@@ -110,6 +110,8 @@ Most creators skip the attraction offer and wonder why nobody shows up. Or they 
 The math changes fast when you get all three layers working.
 
 Much Love, Huzz
+
+P.S. Your trial wraps up in a few days. Next email I'll check in on how it's going. No pressure, just want to make sure you're getting value.
 
 ---
 
@@ -172,7 +174,11 @@ That research turned into everything I build now.
 
 If you're an experience creator, I think you'll find what I learned pretty useful. More tomorrow.
 
+If you want a head start, [the Experience Portal](link) has all of it built into one system. But no rush. This week I'll break down the three biggest things I found.
+
 Much Love, Huzz
+
+P.S. Tomorrow I'll tell you about the 48-hour problem. It's the thing that makes most workshops feel life-changing in the moment but change nothing long-term.
 
 ---
 
@@ -198,15 +204,17 @@ NLP nails the mind but skips the body. Breathwork nails the body but skips the m
 
 The facilitators whose participants actually change? They combine mind + body + structured action + repetition. Whether they know it or not.
 
-That's what I built the portal around. More on that later this week.
+That's what I built [the Experience Portal](link) around. Every runsheet it generates is structured to hit all 4. More on that later this week.
 
 Much Love, Huzz
+
+P.S. Next email I'll break down the 4 types of experience creators. Knowing your type changes what you should build first.
 
 ---
 
 ### Email V3 (Day 3): "Which type are you?"
 
-**Subject:** There are 3 types of experience creators
+**Subject:** There are 4 types of experience creators
 
 After studying 100 experience creators, I noticed something.
 
@@ -224,9 +232,11 @@ Most creators try to solve a River problem when they're actually a Stream. Or a 
 
 Knowing your type saves you months of building the wrong thing.
 
-(The quiz you took already gave you a clue. The portal goes deeper.)
+(The quiz you took already gave you a clue. [The Experience Portal](link) goes deeper and shows you exactly what to build for your type.)
 
 Much Love, Huzz
+
+P.S. Next email is my favourite. It's about the worst workshop I ever attended and what it taught me about designing experiences people can't stop talking about.
 
 ---
 
@@ -252,7 +262,11 @@ If your workshops feel like yoga lectures, you're not broken. You just need to f
 
 Play first. Groan second. Insight third.
 
+[The Experience Portal](link) has a runsheet builder that structures your events this way automatically. But even without it, just flipping the order in your next workshop will change how people respond.
+
 Much Love, Huzz
+
+P.S. Last email tomorrow. I'll share the 3 findings from studying 100 experience creators that changed how I think about this entire industry.
 
 ---
 
@@ -276,10 +290,10 @@ It comes down to 3 things:
 
 I built the Experience Portal around these 3 findings. Every tool in there maps back to one of them.
 
-If you want to see how your experience stacks up, the portal scores you against all 100 creators and shows you exactly where your gaps are.
+If you want to see how your experience stacks up, [the Experience Portal](link) scores you against all 100 creators and shows you exactly where your gaps are.
 
-[Link to landing page]
-
-No pitch. Just a tool I wish I'd had when I started.
+It's the tool I wish I'd had when I started.
 
 Much Love, Huzz
+
+P.S. This was the last email in this series. If any of it resonated, reply and tell me which type you are (Stream, Lake, Waterfall, or River). I read every reply.

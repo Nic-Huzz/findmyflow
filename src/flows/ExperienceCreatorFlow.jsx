@@ -318,7 +318,7 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
   // Save to Supabase and navigate
   const saveModel = async () => {
     if (!user?.id) {
-      navigate('/get-started')
+      navigate('/create')
       return
     }
     setLoading(true)
@@ -344,7 +344,7 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
         productSuite: suite,
       })
       hapticSuccess()
-      navigate('/me')
+      navigate('/create')
     } catch (err) {
       console.error('Error saving:', err)
     } finally {
@@ -570,8 +570,8 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
               trySaved ? (
                 <div className="ecf-try-saved">
                   <p className="ecf-try-saved-text">You're on the list! We'll send you access soon.</p>
-                  <button className="ecf-save-btn" onClick={() => navigate('/get-started')}>
-                    Get Started →
+                  <button className="ecf-save-btn" onClick={() => navigate('/create')}>
+                    Go to Creator Portal →
                   </button>
                 </div>
               ) : (
@@ -592,9 +592,9 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
               )
             ) : (
               <>
-                <p className="ecf-gate-text">Sign up for the Creator Portal to unlock the full breakdown of how your picks built their careers.</p>
-                <button className="ecf-save-btn" onClick={() => navigate('/me')}>
-                  View Your Profile →
+                <p className="ecf-gate-text">Go to the Creator Portal to unlock the full breakdown of how your picks built their careers.</p>
+                <button className="ecf-save-btn" onClick={() => navigate('/create')}>
+                  Go to Creator Portal →
                 </button>
               </>
             )}
