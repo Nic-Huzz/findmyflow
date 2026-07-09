@@ -568,11 +568,16 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
                   <div className="ecf-creator-info">
                     <div className="ecf-creator-name">{c.name}</div>
                     {showAnswers ? (
-                      <div className="ecf-answer-text">
-                        {r?.remarkable_headline || g?.remarkable_thing || 'No data available.'}
-                      </div>
+                      <>
+                        <span className="ecf-trigger-tag">Rule Break</span>
+                        <div className="ecf-answer-text">
+                          {r?.rule_broken?.evidence || g?.remarkable_thing || 'No data available.'}
+                        </div>
+                      </>
                     ) : (
-                      <BlurredText width={160} />
+                      <div className="ecf-trigger-tags">
+                        <span className="ecf-trigger-tag">Rule Break <BlurredText width={120} /></span>
+                      </div>
                     )}
                   </div>
                 </div>
