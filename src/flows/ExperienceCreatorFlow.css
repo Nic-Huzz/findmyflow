@@ -914,6 +914,20 @@
   margin-bottom: 4px;
 }
 
+/* Revealed answer text (for paid users) */
+.ecf-answer-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+  margin-top: 4px;
+}
+.ecf-answer-inline {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
 /* Blurred text */
 .ecf-blurred {
   display: inline-block;

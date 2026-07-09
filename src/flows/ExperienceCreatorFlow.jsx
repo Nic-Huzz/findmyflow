@@ -9,6 +9,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { onCreatorMatchingComplete } from '../lib/brain/autoPopulate'
+import { useSubscription } from '../hooks/useSubscription'
 import './ExperienceCreatorFlow.css'
 
 // ── Data imports ──
@@ -187,8 +188,10 @@ function buildCreatorData() {
 
 export default function ExperienceCreatorFlow({ embedded = false, onComplete }) {
   const { user } = useAuth()
+  const { hasSubscription } = useSubscription()
   const navigate = useNavigate()
   const isTryRoute = embedded || window.location.pathname.startsWith('/try/')
+  const showAnswers = !isTryRoute && user && hasSubscription
   const [screen, setScreen] = useState('browse') // 'browse' | 'result'
   const [selected, setSelected] = useState(new Set())
   const [loading, setLoading] = useState(false)
@@ -489,7 +492,7 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
 
           <div className="ecf-result-header">
             <h1>Your <span className="ecf-hero-gold">Picks</span></h1>
-            <p className="ecf-result-sub">Here's what we know about the creators you chose. Sign up to unlock the full breakdown.</p>
+            <p className="ecf-result-sub">{showAnswers ? 'Here\'s the full breakdown of how your picks built their careers.' : 'Here\'s what we know about the creators you chose. Sign up to unlock the full breakdown.'}</p>
           </div>
 
           {/* ═══ SECTION 1: How Did They Pay Rent? ═══ */}
@@ -499,15 +502,22 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
               <h2 className="ecf-teaser-title">How Did They Pay Rent?</h2>
             </div>
             <p className="ecf-teaser-sub">Before they blew up, they had to survive. Here's how.</p>
-            {selectedCreators.map(c => (
-              <div key={c.name} className="ecf-creator-row">
-                <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
-                <div className="ecf-creator-info">
-                  <div className="ecf-creator-name">{c.name}</div>
-                  <BlurredText width={160} />
+            {selectedCreators.map(c => {
+              const g = growthCreators[c.name]
+              return (
+                <div key={c.name} className="ecf-creator-row">
+                  <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
+                  <div className="ecf-creator-info">
+                    <div className="ecf-creator-name">{c.name}</div>
+                    {showAnswers && g?.first_step ? (
+                      <div className="ecf-answer-text">{g.first_step}</div>
+                    ) : (
+                      <BlurredText width={160} />
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
           {/* ═══ SECTION 2: How Did They Blow Up Their Brand? ═══ */}
@@ -525,10 +535,10 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
                   <div className="ecf-creator-info">
                     <div className="ecf-creator-name">{c.name}</div>
                     <div className="ecf-trigger-tags">
-                      {r?.rule_broken?.present === 'yes' && <span className="ecf-trigger-tag">Rule Break <BlurredText width={70} /></span>}
-                      {r?.unexpected_combination?.present === 'yes' && <span className="ecf-trigger-tag">Unexpected Combo <BlurredText width={70} /></span>}
-                      {r?.extreme_action?.present !== 'no' && <span className="ecf-trigger-tag">Extreme Action <BlurredText width={70} /></span>}
-                      {r?.stupid_simplicity?.present === 'yes' && <span className="ecf-trigger-tag">Extreme Simplicity <BlurredText width={70} /></span>}
+                      {r?.rule_broken?.present === 'yes' && <span className="ecf-trigger-tag">Rule Break {showAnswers ? <span className="ecf-answer-inline">{r.rule_broken.evidence}</span> : <BlurredText width={70} />}</span>}
+                      {r?.unexpected_combination?.present === 'yes' && <span className="ecf-trigger-tag">Unexpected Combo {showAnswers ? <span className="ecf-answer-inline">{r.unexpected_combination.evidence}</span> : <BlurredText width={70} />}</span>}
+                      {r?.extreme_action?.present !== 'no' && <span className="ecf-trigger-tag">Extreme Action {showAnswers ? <span className="ecf-answer-inline">{r.extreme_action.evidence}</span> : <BlurredText width={70} />}</span>}
+                      {r?.stupid_simplicity?.present === 'yes' && <span className="ecf-trigger-tag">Extreme Simplicity {showAnswers ? <span className="ecf-answer-inline">{r.stupid_simplicity.evidence}</span> : <BlurredText width={70} />}</span>}
                       {!r && (
                         <>
                           <span className="ecf-trigger-tag">Rule Break <BlurredText width={70} /></span>
@@ -549,19 +559,22 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
               <h2 className="ecf-teaser-title">How Did They Scale Their Income?</h2>
             </div>
             <p className="ecf-teaser-sub">The three layers every experience creator needs.</p>
-            {selectedCreators.map(c => (
-              <div key={c.name} className="ecf-creator-row">
-                <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
-                <div className="ecf-creator-info">
-                  <div className="ecf-creator-name">{c.name}</div>
-                  <div className="ecf-trigger-tags">
-                    <span className="ecf-trigger-tag">Attraction <BlurredText width={80} /></span>
-                    <span className="ecf-trigger-tag">Core <BlurredText width={80} /></span>
-                    <span className="ecf-trigger-tag">Continuity <BlurredText width={80} /></span>
+            {selectedCreators.map(c => {
+              const o = offerCreators[c.name]
+              return (
+                <div key={c.name} className="ecf-creator-row">
+                  <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
+                  <div className="ecf-creator-info">
+                    <div className="ecf-creator-name">{c.name}</div>
+                    <div className="ecf-trigger-tags">
+                      <span className="ecf-trigger-tag">Attraction {showAnswers && o?.attraction?.length ? <span className="ecf-answer-inline">{o.attraction.join(', ')}</span> : <BlurredText width={80} />}</span>
+                      <span className="ecf-trigger-tag">Core {showAnswers && o?.core?.length ? <span className="ecf-answer-inline">{o.core.join(', ')}</span> : <BlurredText width={80} />}</span>
+                      <span className="ecf-trigger-tag">Continuity {showAnswers && o?.continuity?.length ? <span className="ecf-answer-inline">{o.continuity.join(', ')}</span> : <BlurredText width={80} />}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
           {/* ═══ CTA ═══ */}
