@@ -75,7 +75,7 @@ serve(async (req) => {
       .from('public_leads')
       .select('id')
       .eq('email', email)
-      .single()
+      .maybeSingle()
 
     if (existingLead) {
       leadId = existingLead.id
@@ -128,7 +128,13 @@ serve(async (req) => {
     }
 
     // Schedule all emails in the sequence
-    const schedule = EMAIL_SCHEDULES[sequence_type] || EMAIL_SCHEDULES.money_model
+    if (!EMAIL_SCHEDULES[sequence_type]) {
+      return new Response(
+        JSON.stringify({ error: `Unknown sequence_type: ${sequence_type}` }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+    const schedule = EMAIL_SCHEDULES[sequence_type]
     const now = new Date()
     const emailsToSchedule = Object.entries(schedule).map(([emailKey, daysDelay]) => {
       const scheduledFor = new Date(now)

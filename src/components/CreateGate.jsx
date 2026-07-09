@@ -63,7 +63,10 @@ export default function CreateGate({ children }) {
       setLoading(false)
     }
 
-    checkAccess()
+    checkAccess().catch(() => {
+      setHasAccess(false)
+      setLoading(false)
+    })
   }, [user?.id, authLoading])
 
   if (loading) {
