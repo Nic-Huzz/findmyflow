@@ -509,8 +509,8 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
                   <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
                   <div className="ecf-creator-info">
                     <div className="ecf-creator-name">{c.name}</div>
-                    {showAnswers && g?.first_step ? (
-                      <div className="ecf-answer-text">{g.first_step}</div>
+                    {showAnswers && g?.early_growth ? (
+                      <div className="ecf-answer-text">{g.early_growth}</div>
                     ) : (
                       <BlurredText width={160} />
                     )}
