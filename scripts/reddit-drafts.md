@@ -1,4 +1,4 @@
-# Reddit Comment Drafts — 2026-07-08
+# Reddit Comment Drafts — 2026-07-09
 
 *Review, edit in your voice, then approve for posting. Max 2 per day.*
 
@@ -8,9 +8,9 @@
 
 **Reason:** Reddit is blocked by this environment's network policy.
 
-Both `www.reddit.com` and the Pushshift/PullPush alternative (`pullpush.io`) return `403 Forbidden` at the proxy level. The WebSearch tool also cannot access reddit.com.
+Both `www.reddit.com` and the WebSearch tool (which also cannot access reddit.com per Anthropic's crawler policy) are unavailable. Exit code 56 on direct curl confirms the proxy is still blocking outbound connections to Reddit.
 
-**To fix this:** The remote execution environment needs reddit.com added to its network allowlist. You can configure this in the Claude Code on the web environment settings. See https://code.claude.com/docs/en/claude-code-on-the-web for how environments and network policies work.
+**To fix this:** The remote execution environment needs reddit.com added to its network allowlist. Configure this in the Claude Code on the web environment settings at https://code.claude.com/docs/en/claude-code-on-the-web.
 
 **Until then:** This routine cannot fetch posts or produce drafts.
 
