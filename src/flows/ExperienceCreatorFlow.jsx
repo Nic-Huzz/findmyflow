@@ -537,7 +537,7 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
                     <div className="ecf-trigger-tags">
                       {r?.rule_broken?.present === 'yes' && <span className="ecf-trigger-tag">Rule Break {showAnswers ? <span className="ecf-answer-inline">{r.rule_broken.evidence}</span> : <BlurredText width={70} />}</span>}
                       {r?.unexpected_combination?.present === 'yes' && <span className="ecf-trigger-tag">Unexpected Combo {showAnswers ? <span className="ecf-answer-inline">{r.unexpected_combination.evidence}</span> : <BlurredText width={70} />}</span>}
-                      {r?.extreme_action?.present !== 'no' && <span className="ecf-trigger-tag">Extreme Action {showAnswers ? <span className="ecf-answer-inline">{r.extreme_action.evidence}</span> : <BlurredText width={70} />}</span>}
+                      {r && r.extreme_action?.present !== 'no' && <span className="ecf-trigger-tag">Extreme Action {showAnswers ? <span className="ecf-answer-inline">{r.extreme_action?.evidence}</span> : <BlurredText width={70} />}</span>}
                       {r?.stupid_simplicity?.present === 'yes' && <span className="ecf-trigger-tag">Extreme Simplicity {showAnswers ? <span className="ecf-answer-inline">{r.stupid_simplicity.evidence}</span> : <BlurredText width={70} />}</span>}
                       {!r && (
                         <>
