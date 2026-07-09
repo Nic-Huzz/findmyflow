@@ -478,11 +478,11 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
   const revenueCreators = revenueData?.creators || {}
 
   const REVENUE_LABELS = {
-    day_job_side_project: '💼 Day Job + Side Project',
-    one_on_one_service: '🤝 1:1 Service',
-    free_events_paid_elsewhere: '🎁 Free Events, Paid Elsewhere',
-    small_group_paid: '🎪 Small Group Paid',
-    institutional_salary: '🏛️ Institutional Salary',
+    day_job_side_project: '💼  Day Job + Side Project',
+    one_on_one_service: '🤝  1:1 Service',
+    free_events_paid_elsewhere: '🎁  Free Events, Paid Elsewhere',
+    small_group_paid: '🎪  Small Group Paid',
+    institutional_salary: '🏛️  Institutional Salary',
   }
 
   // Helper for blurred text

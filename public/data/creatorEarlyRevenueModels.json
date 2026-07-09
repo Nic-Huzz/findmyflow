@@ -11,8 +11,8 @@
     ]
   },
   "creators": {
-    "Bren\u00e9 Brown": {
-      "name": "Bren\u00e9 Brown",
+    "Brené Brown": {
+      "name": "Brené Brown",
       "early_revenue_model": "institutional_salary",
       "early_revenue_description": "Drew a University of Houston professor salary for 15 years while conducting her vulnerability and shame research."
     },
@@ -276,8 +276,8 @@
       "early_revenue_model": "day_job_side_project",
       "early_revenue_description": "Kept her preschool teaching job while building The Budgetnista as a side project."
     },
-    "V\u00e1clav Havel": {
-      "name": "V\u00e1clav Havel",
+    "Václav Havel": {
+      "name": "Václav Havel",
       "early_revenue_model": "small_group_paid",
       "early_revenue_description": "Earned royalties and fees from theatre productions at the Theatre on the Balustrade in Prague."
     },
@@ -300,6 +300,121 @@
       "name": "Tara Brach",
       "early_revenue_model": "one_on_one_service",
       "early_revenue_description": "Maintained a private clinical psychology practice while leading meditation gatherings."
+    },
+    "Eckhart Tolle": {
+      "name": "Eckhart Tolle",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Taught German and Spanish at a London language school. Gave private spiritual counseling sessions on the side before self-publishing The Power of Now in 1997."
+    },
+    "Deepak Chopra": {
+      "name": "Deepak Chopra",
+      "early_revenue_model": "institutional_salary",
+      "early_revenue_description": "Practiced as a licensed endocrinologist for years before pivoting to Ayurvedic medicine after meeting Maharishi Mahesh Yogi in 1985."
+    },
+    "Jack Kornfield": {
+      "name": "Jack Kornfield",
+      "early_revenue_model": "institutional_salary",
+      "early_revenue_description": "Joined the Peace Corps after Dartmouth, then ordained as a Buddhist monk in Thailand. Co-founded Insight Meditation Society in 1975 and Spirit Rock in 1988."
+    },
+    "Sam Harris": {
+      "name": "Sam Harris",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Completed a PhD in cognitive neuroscience at UCLA while writing. Published The End of Faith in 2004, funded by academic work and book advances."
+    },
+    "Thich Nhat Hanh": {
+      "name": "Thich Nhat Hanh",
+      "early_revenue_model": "institutional_salary",
+      "early_revenue_description": "Ordained as a monk at 16 in Vietnam. Lived within monastic institutions his entire life, supported by the sangha and later by Plum Village community."
+    },
+    "Seane Corn": {
+      "name": "Seane Corn",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Waitressed at Life Cafe in the East Village while building her yoga teaching practice. Moved to LA and grew through word of mouth."
+    },
+    "Joe Dispenza": {
+      "name": "Joe Dispenza",
+      "early_revenue_model": "one_on_one_service",
+      "early_revenue_description": "Ran a chiropractic practice for years. After healing his own broken spine through meditation, began incorporating mind-body work into his clinical practice."
+    },
+    "Aubrey Marcus": {
+      "name": "Aubrey Marcus",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Ran a marketing company, then founded Onnit supplements in 2010. Used his podcast and Joe Rogan's endorsement to build the brand."
+    },
+    "Ram Dass": {
+      "name": "Ram Dass",
+      "early_revenue_model": "institutional_salary",
+      "early_revenue_description": "Harvard psychology professor until fired in 1963. Lived off savings and donations while traveling to India. Gave away all royalties from Be Here Now."
+    },
+    "Sadhguru": {
+      "name": "Sadhguru",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Ran poultry farms, a construction business, and a brickworks in his 20s. Founded Isha Foundation in 1992, teaching yoga for free to anyone who showed up."
+    },
+    "Marianne Williamson": {
+      "name": "Marianne Williamson",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Ran a metaphysical bookshop in Houston, sang cabaret. Moved to LA and began lecturing weekly on A Course in Miracles, building a loyal following."
+    },
+    "Mooji": {
+      "name": "Mooji",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Worked as a street artist in London doing charcoal portraits. After meeting Papaji in India in 1993, began giving free satsangs when seekers gathered."
+    },
+    "Yung Pueblo": {
+      "name": "Yung Pueblo",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Worked various jobs after getting clean from drugs through Vipassana in 2012. Began posting plain text poems on Instagram in 2015 while working."
+    },
+    "Sahara Rose": {
+      "name": "Sahara Rose",
+      "early_revenue_model": "free_events_paid_elsewhere",
+      "early_revenue_description": "After healing her own health crisis through Ayurveda at 21, cold-emailed Deepak Chopra and began writing. Published Idiot's Guide to Ayurveda at 26, funded by book advances."
+    },
+    "Sri Sri Ravi Shankar": {
+      "name": "Sri Sri Ravi Shankar",
+      "early_revenue_model": "free_events_paid_elsewhere",
+      "early_revenue_description": "After developing Sudarshan Kriya, taught it for free through volunteer-run Art of Living courses. The foundation operates on donations and course fees."
+    },
+    "Vishen Lakhiani": {
+      "name": "Vishen Lakhiani",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Started selling other people's meditation courses online from a Starbucks in New York with $700. Used Google Ads and email marketing to bootstrap Mindvalley."
+    },
+    "Michael Singer": {
+      "name": "Michael Singer",
+      "early_revenue_model": "free_events_paid_elsewhere",
+      "early_revenue_description": "Went into seclusion in the Florida woods after a spiritual awakening at 24. Founded Temple of the Universe as a free meditation center. Accidentally built a billion-dollar software company by saying yes to opportunities."
+    },
+    "Michael Beckwith": {
+      "name": "Michael Beckwith",
+      "early_revenue_model": "free_events_paid_elsewhere",
+      "early_revenue_description": "Started Agape International with a small prayer group in his living room in 1986. Grew through word of mouth and weekly consistency for 20 years."
+    },
+    "Radha Agrawal": {
+      "name": "Radha Agrawal",
+      "early_revenue_model": "small_group_paid",
+      "early_revenue_description": "After losing her company to a hostile takeover, threw the first Daybreaker sober morning dance party with a $2,500 budget. 180 friends showed up. Bootstrapped to a seven-figure business."
+    },
+    "Meghan Pappenheim": {
+      "name": "Meghan Pappenheim",
+      "early_revenue_model": "small_group_paid",
+      "early_revenue_description": "Moved to Bali at 20, built an online community directory. Opened The Yoga Barn in 2007 with two studios, growing through grassroots community building."
+    },
+    "Jeff Krasno": {
+      "name": "Jeff Krasno",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Co-founded a record label (Velour Recordings) in NYC. After watching his wife's yoga retreats, combined event production skills with wellness to create Wanderlust festival."
+    },
+    "Gabrielle Roth": {
+      "name": "Gabrielle Roth",
+      "early_revenue_model": "small_group_paid",
+      "early_revenue_description": "After a knee injury ended her dance career, began teaching movement at Esalen. Spent a decade experimenting with what became the 5Rhythms method in small groups."
+    },
+    "Larry Harvey": {
+      "name": "Larry Harvey",
+      "early_revenue_model": "day_job_side_project",
+      "early_revenue_description": "Worked as a landscaper in Portland. Burned an 8-foot wooden man on Baker Beach in 1986 with about 20 friends. Kept showing up until 80,000 people did too."
     }
   }
 }
