@@ -243,7 +243,10 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Michael Jordan's stardom and Bulls championships"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpSubPattern": "content_vehicle",
+      "blowUpPatternNote": "Jordan's stardom was the bridge. Championships were the content vehicle."
     },
     {
       "name": "Tenzin Palmo",
@@ -354,7 +357,10 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Vicki Mackenzie's book"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpSubPattern": "portable",
+      "blowUpPatternNote": "Vicki Mackenzie's biography was the bridge. Cave in the Snow made her portable."
     },
     {
       "name": "Gabor Mate",
@@ -465,7 +471,10 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Documentary platform"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpSubPattern": "content_vehicle",
+      "blowUpPatternNote": "Documentary platform was the bridge. Film was the content vehicle."
     },
     {
       "name": "Tony Robbins",
@@ -582,7 +591,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Infomercial TV format"
-      }
+      },
+      "blowUpMetaPattern": "content_vehicle",
+      "blowUpPatternNote": "Infomercials were the content vehicle. No single bridge person."
     },
     {
       "name": "Wim Hof",
@@ -692,7 +703,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "2014 PNAS publication"
-      }
+      },
+      "blowUpMetaPattern": "portable",
+      "blowUpPatternNote": "PNAS study made the method scientifically portable."
     },
     {
       "name": "Esther Perel",
@@ -802,7 +815,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Podcast platform"
-      }
+      },
+      "blowUpMetaPattern": "content_vehicle",
+      "blowUpPatternNote": "Podcast was the new content vehicle after 25 years of practice."
     },
     {
       "name": "Priya Parker",
@@ -912,7 +927,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "2018 book publication"
-      }
+      },
+      "blowUpMetaPattern": "portable",
+      "blowUpPatternNote": "The Art of Gathering codified her facilitation method into a portable book."
     },
     {
       "name": "Jay Shetty",
@@ -1023,7 +1040,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "2016 Facebook video algorithm"
-      }
+      },
+      "blowUpMetaPattern": "content_vehicle",
+      "blowUpPatternNote": "Facebook video algorithm was the content vehicle."
     },
     {
       "name": "Gabby Bernstein",
@@ -1133,7 +1152,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Oprah SuperSoul 100"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpPatternNote": "Oprah SuperSoul 100 was the bridge."
     },
     {
       "name": "Eckhart Tolle",
@@ -1243,7 +1264,10 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Oprah's 2008 webcast"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpSubPattern": "portable",
+      "blowUpPatternNote": "Oprah was the bridge. The Power of Now was already portable."
     },
     {
       "name": "Deepak Chopra",
@@ -1354,7 +1378,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "1993 Oprah appearance"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpPatternNote": "Oprah 1993 appearance was the bridge."
     },
     {
       "name": "Jack Kornfield",
@@ -1464,7 +1490,9 @@
       "bridgeAmplified": {
         "flag": false,
         "bridge": null
-      }
+      },
+      "blowUpMetaPattern": "category",
+      "blowUpPatternNote": "Created the American meditation center category (IMS, Spirit Rock)."
     },
     {
       "name": "Sam Harris",
@@ -1575,7 +1603,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Book award and PEN recognition"
-      }
+      },
+      "blowUpMetaPattern": "portable",
+      "blowUpPatternNote": "Waking Up app made secular meditation portable."
     },
     {
       "name": "Thich Nhat Hanh",
@@ -1685,7 +1715,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "MLK's 1967 Nobel Prize nomination"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpPatternNote": "MLK's Nobel nomination was the bridge."
     },
     {
       "name": "Seane Corn",
@@ -1795,7 +1827,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Yoga Journal cover"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpPatternNote": "Yoga Journal cover was the bridge."
     },
     {
       "name": "Joe Dispenza",
@@ -1905,7 +1939,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "2004 What the Bleep film"
-      }
+      },
+      "blowUpMetaPattern": "content_vehicle",
+      "blowUpPatternNote": "What the Bleep documentary was the content vehicle."
     },
     {
       "name": "Aubrey Marcus",
@@ -2016,7 +2052,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Joe Rogan friendship and podcast"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpPatternNote": "Joe Rogan was the bridge."
     },
     {
       "name": "Ram Dass",
@@ -2126,7 +2164,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Harvard credentials + Timothy Leary association"
-      }
+      },
+      "blowUpMetaPattern": "portable",
+      "blowUpPatternNote": "Be Here Now made Eastern spirituality portable for the West."
     },
     {
       "name": "Sadhguru",
@@ -2236,7 +2276,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "YouTube algorithm and Rally for Rivers campaigns"
-      }
+      },
+      "blowUpMetaPattern": "content_vehicle",
+      "blowUpPatternNote": "YouTube + Rally for Rivers campaign was the content vehicle."
     },
     {
       "name": "Marianne Williamson",
@@ -2347,7 +2389,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Oprah dedicated full show to A Return to Love"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpPatternNote": "Oprah dedicated full show to A Return to Love."
     },
     {
       "name": "Mooji",
@@ -2457,7 +2501,9 @@
       "bridgeAmplified": {
         "flag": false,
         "bridge": null
-      }
+      },
+      "blowUpMetaPattern": "content_vehicle",
+      "blowUpPatternNote": "YouTube satsang videos were the content vehicle."
     },
     {
       "name": "Yung Pueblo",
@@ -2568,7 +2614,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Instagram algorithm"
-      }
+      },
+      "blowUpMetaPattern": "content_vehicle",
+      "blowUpPatternNote": "Instagram algorithm was the content vehicle."
     },
     {
       "name": "Sahara Rose",
@@ -2679,7 +2727,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Deepak Chopra endorsement"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpPatternNote": "Deepak Chopra endorsement was the bridge."
     },
     {
       "name": "Sri Sri Ravi Shankar",
@@ -2789,7 +2839,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Scientific research collaboration"
-      }
+      },
+      "blowUpMetaPattern": "category",
+      "blowUpPatternNote": "Created the volunteer-run breathing course category globally."
     },
     {
       "name": "Vishen Lakhiani",
@@ -2899,7 +2951,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "NYT bestseller status"
-      }
+      },
+      "blowUpMetaPattern": "portable",
+      "blowUpPatternNote": "Mindvalley made curated personal growth portable as a platform."
     },
     {
       "name": "Michael Singer",
@@ -3010,7 +3064,10 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Oprah's Super Soul Sunday feature"
-      }
+      },
+      "blowUpMetaPattern": "bridge",
+      "blowUpSubPattern": "portable",
+      "blowUpPatternNote": "Oprah was the bridge. The Untethered Soul was already portable."
     },
     {
       "name": "Michael Beckwith",
@@ -3120,7 +3177,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "The Secret documentary"
-      }
+      },
+      "blowUpMetaPattern": "content_vehicle",
+      "blowUpPatternNote": "The Secret documentary was the content vehicle."
     },
     {
       "name": "Radha Agrawal",
@@ -3231,7 +3290,9 @@
       "bridgeAmplified": {
         "flag": false,
         "bridge": null
-      }
+      },
+      "blowUpMetaPattern": "category",
+      "blowUpPatternNote": "Created sober morning dance party category."
     },
     {
       "name": "Meghan Pappenheim",
@@ -3342,7 +3403,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Bali as spiritual destination + luxury traveler networks"
-      }
+      },
+      "blowUpMetaPattern": "category",
+      "blowUpPatternNote": "Created the Bali wellness destination category."
     },
     {
       "name": "Jeff Krasno",
@@ -3453,7 +3516,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Music industry background + festival culture"
-      }
+      },
+      "blowUpMetaPattern": "category",
+      "blowUpPatternNote": "Created yoga + music festival category."
     },
     {
       "name": "Gabrielle Roth",
@@ -3563,7 +3628,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "Esalen Institute mentorship"
-      }
+      },
+      "blowUpMetaPattern": "portable",
+      "blowUpPatternNote": "5Rhythms method codified into a certifiable, portable practice."
     },
     {
       "name": "Larry Harvey",
@@ -3673,7 +3740,9 @@
       "bridgeAmplified": {
         "flag": false,
         "bridge": null
-      }
+      },
+      "blowUpMetaPattern": "category",
+      "blowUpPatternNote": "Created the participatory burn/gifting festival category."
     },
     {
       "name": "Brené Brown",
@@ -3774,7 +3843,9 @@
       "bridgeAmplified": {
         "flag": true,
         "bridge": "TEDx platform and viral distribution"
-      }
+      },
+      "blowUpMetaPattern": "content_vehicle",
+      "blowUpPatternNote": "TEDx talk was the content vehicle."
     }
   ]
 }
